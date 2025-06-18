@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 import { visualizer } from "rollup-plugin-visualizer";
-import critical from "rollup-plugin-critical";
+import { beasties } from "vite-plugin-beasties";
 import compression from "vite-plugin-compression";
 import { defineConfig, type UserConfigExport } from "vitest/config";
 
@@ -32,23 +32,14 @@ const config: UserConfigExport = defineConfig({
 		}),
 
 		// Bundle visualizer
-{
-			// name property removed to avoid conflict
-			...critical({
-				criticalUrl: '/',
-				criticalBase: './dist/',
-				criticalPages: [
-					{
-						uri: 'index.html',
-						template: 'index.html'
-					}
-				],
-				// Adjust Puppeteer arguments if necessary, e.g., for running in a CI environment without a sandbox
-				puppeteerArgs: ['--no-sandbox', '--disable-setuid-sandbox']
-			}),
-			enforce: 'post',
-		} as never,
-		visualizer({ open: false, gzipSize: true, brotliSize: true }) as never,
+    beasties({
+      options: {
+        preload: 'swap',
+        // inlineFonts: true, // Example: default false
+        // preloadFonts: true, // Example: default true
+      }
+		}),
+    visualizer({ open: false, gzipSize: true, brotliSize: true }) as never,
 	],
 
 	server: {
