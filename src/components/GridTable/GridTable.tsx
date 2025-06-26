@@ -11,13 +11,11 @@ import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import ShakingWrapper from "../GridShake/GridShake";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
-// import { useDialog } from "../../context/dialog-utils"; // Moved
-// import { useUrlSync } from "../../hooks/useUrlSync"; // Moved
 
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 interface GridTableProps {
-	grid: Grid | null | undefined; // Allow grid to be null or undefined
-	resetGridAction: () => void; // Renamed from resetGrid for clarity, matches prop for GridTableButtons
+	grid: Grid | null | undefined;
+	resetGridAction: () => void;
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
@@ -54,21 +52,9 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
-		const hasModulesInGrid = useGridStore(selectHasModulesInGrid); // Still needed for GridControlButtons
-		// const { setIsSharedGrid } = useGridStore(); // No longer needed here
-
-		// Hooks for button logic - MOVED to GridTableButtons
-		// const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
-		// const { updateUrlForShare, updateUrlForReset } = useUrlSync();
-
-		// Handlers for GridTableButtons - MOVED to GridTableButtons
-		// const handleShowInstructions = useCallback(() => {...}, []);
-		// const handleShowAboutPage = useCallback(() => {...}, []);
-		// const handleShareClick = useCallback(() => {...}, []);
-		// const handleResetGrid = useCallback(() => {...}, []);
+		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 
 		// Calculate derived values from the grid.
-		// This hook is now called unconditionally before any early returns.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
 			() => {
 				if (!grid || !grid.cells) {
@@ -147,8 +133,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						resetGridAction={resetGridAction}
 						updateUrlForShare={updateUrlForShare}
 						updateUrlForReset={updateUrlForReset}
-						// onShowInstructions, onShowAbout, onShare, onReset are now internal to GridTableButtons
-						// isSharedGrid, hasModulesInGrid, isFirstVisit are now accessed via store/hooks within GridTableButtons
 					/>
 				</div>
 			</ShakingWrapper>
