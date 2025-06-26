@@ -61,7 +61,7 @@ const MainAppContentInternal: FC<{
 		clearPatternNoFitTech,
 		handleForceCurrentPnfOptimize,
 	} = useOptimize();
-	useUrlSync();
+	const { updateUrlForShare, updateUrlForReset } = useUrlSync(); // Destructure functions
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
@@ -133,6 +133,8 @@ const MainAppContentInternal: FC<{
 							deActivateRow={deActivateRow}
 							ref={appLayoutGridTableRef}
 							resetGridAction={resetGrid}
+							updateUrlForShare={updateUrlForShare}
+							updateUrlForReset={updateUrlForReset}
 						/>
 					</div>
 					{!isSharedGrid &&

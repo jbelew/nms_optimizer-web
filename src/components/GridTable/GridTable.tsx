@@ -22,6 +22,8 @@ interface GridTableProps {
 	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
 	shared: boolean; // This is isSharedGridProp, used for GridCell
+	updateUrlForShare: () => string;
+	updateUrlForReset: () => void;
 }
 
 /**
@@ -37,7 +39,19 @@ interface GridTableProps {
  * @param {boolean} props.shared - Indicates if the grid is in a shared/read-only state.
  */
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
-	({ grid, activateRow, deActivateRow, solving, shared: isSharedGridProp, resetGridAction }, ref) => {
+	(
+		{
+			grid,
+			activateRow,
+			deActivateRow,
+			solving,
+			shared: isSharedGridProp,
+			resetGridAction,
+			updateUrlForShare,
+			updateUrlForReset,
+		},
+		ref
+	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid); // Still needed for GridControlButtons
@@ -131,6 +145,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					<GridTableButtons
 						solving={solving}
 						resetGridAction={resetGridAction}
+						updateUrlForShare={updateUrlForShare}
+						updateUrlForReset={updateUrlForReset}
 						// onShowInstructions, onShowAbout, onShare, onReset are now internal to GridTableButtons
 						// isSharedGrid, hasModulesInGrid, isFirstVisit are now accessed via store/hooks within GridTableButtons
 					/>

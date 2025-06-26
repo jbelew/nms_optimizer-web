@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
-import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore, selectHasModulesInGrid } from "../../store/GridStore"; // Removed selectIsSharedGrid
 
 interface GridTableButtonsProps {
@@ -25,18 +24,21 @@ interface GridTableButtonsProps {
 	solving: boolean; // Still passed as a prop for now
 	// isFirstVisit: boolean; // Will get from useDialog
 	resetGridAction: () => void; // Renamed from onReset, specific action from parent
+	updateUrlForShare: () => string;
+	updateUrlForReset: () => void;
 }
 
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
 	resetGridAction,
+	updateUrlForShare,
+	updateUrlForReset,
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
 
 	// Internalize dialog and URL logic
 	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
-	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const { setIsSharedGrid } = useGridStore(); // For resetGrid
 	const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid); // Get isSharedGrid from store directly
@@ -61,8 +63,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	}, [openDialog]);
 
 	const handleShareClick = useCallback(() => {
-		const shareUrl = updateUrlForShare();
-		const newWindow = window.open(shareUrl, "_blank", "noopener,noreferrer");
+		const shareUrl = updateUrlForShare(); // This will be passed as a prop
+		const newWindow = window.open(shareUrl, "_blank", "noopener,noreferrer"); // Placeholder, will be updated
 		ReactGA.event({ category: "User Interactions", action: "shareLink" });
 		if (newWindow) newWindow.focus();
 	}, [updateUrlForShare]);
@@ -70,7 +72,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const handleResetGrid = useCallback(() => {
 		ReactGA.event({ category: "User Interactions", action: "resetGrid" });
 		resetGridAction(); // Call the passed-in reset action
-		updateUrlForReset();
+		updateUrlForReset(); // This will be passed as a prop
 		setIsSharedGrid(false);
 	}, [resetGridAction, setIsSharedGrid, updateUrlForReset]);
 
