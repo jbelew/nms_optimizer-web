@@ -47,7 +47,7 @@ jobs: # Renamed job for clarity
             type=sha
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5 # Updated to v5
+        uses: docker/build-push-action@v6 # Updated to v5
         with:
           context: .
           file: ./Dockerfile
