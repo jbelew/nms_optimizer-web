@@ -231,7 +231,7 @@ const App: FC = () => {
 		document.querySelectorAll("link[rel='alternate'][hreflang]").forEach((tag) => tag.remove());
 
 		supportedLanguages.forEach((lang) => {
-			if (lang === "dev") return; // Skip dev language
+			if (lang === "dev" || lang === "cimode") return; // Skip pseudo-languages
 
 			const params = new URLSearchParams(currentSearch);
 			params.set("lng", lang);
