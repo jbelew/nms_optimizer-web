@@ -109,7 +109,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 								/>
 							))}
 							{/* Wrap GridControlButtons in a div with role="gridcell" */}
-							<div aria-colindex={totalAriaColumnCount}>
+							<div role="gridcell" aria-colindex={totalAriaColumnCount}>
 								<GridControlButtons
 									rowIndex={rowIndex}
 									activateRow={activateRow}
@@ -128,12 +128,14 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							</div>
 						</div>
 					))}
-					<GridTableButtons
-						solving={solving}
-						resetGridAction={resetGridAction}
-						updateUrlForShare={updateUrlForShare}
-						updateUrlForReset={updateUrlForReset}
-					/>
+					<div role="row">
+						<GridTableButtons
+							solving={solving}
+							resetGridAction={resetGridAction}
+							updateUrlForShare={updateUrlForShare}
+							updateUrlForReset={updateUrlForReset}
+						/>
+					</div>
 				</div>
 			</ShakingWrapper>
 		);
