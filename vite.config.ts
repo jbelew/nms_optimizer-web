@@ -9,12 +9,16 @@ import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import critical from "rollup-plugin-critical";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 
 export default defineConfig(() => {
 	return {
 		plugins: [
 			react(),
 			tailwindcss(),
+
+			// Defer non-critical stylesheets first
+			deferStylesheetsPlugin(),
 
 			critical({
 				criticalBase: 'dist/',
