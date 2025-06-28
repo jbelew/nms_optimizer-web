@@ -7,7 +7,8 @@ import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
-import critical from "rollup-plugin-critical"
+import critical from "rollup-plugin-critical";
+import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
 export default defineConfig(() => {
 	return {
@@ -22,7 +23,7 @@ export default defineConfig(() => {
 				criticalConfig: {
 					inline: false,
 					base: 'dist/',
-					extract: false,
+					extract: false, // Ensure this is present if inline is false and we expect a file
 					width: 375,
 					height: 667,
 				},
@@ -41,6 +42,10 @@ export default defineConfig(() => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
+
+			// The custom plugin must run AFTER compression to operate on the final, compressed files (by re-doing parts of it)
+			// or rather, to operate on the final HTML and then re-compress THAT.
+			inlineCriticalCssPlugin(),
 
 			visualizer({ open: false, gzipSize: true, brotliSize: true }),
 		],

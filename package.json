@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build --mode production && node scripts/inline-critical.js",
+		"build": "tsc -b && vite build --mode production",
 		"build:docker": "DOCKER=true vite build --mode docker",
 		"lint:fix": "eslint . --fix",
 		"lint": "eslint .",
