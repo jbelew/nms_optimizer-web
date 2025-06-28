@@ -38,6 +38,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nms-optimizer-web"
           heroku_email: "john.belew@gmail.com"
+          branch: main
 
       - name: Set Heroku Config
         run: heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
