@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -28,25 +28,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: main
-
-      - name: Ensure Git is on main branch
-        run: |
-          git fetch origin main
-          git checkout main
+      - uses: actions/checkout@v2
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      - name: Add Heroku remote
-        run: git remote add heroku https://git.heroku.com/nms-optimizer-web.git
-
-      - name: Push to Heroku
-        run: git push heroku main:refs/heads/main --force
+      - uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "nms-optimizer-web"
+          heroku_email: "john.belew@gmail.com"
 
       - name: Set Heroku Config
         run: heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
-
