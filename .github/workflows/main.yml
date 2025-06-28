@@ -29,6 +29,14 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Ensure Git is on main branch
+        run: |
+          git fetch origin main
+          git checkout main
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -39,6 +47,7 @@ jobs:
           heroku_app_name: "nms-optimizer-web"
           heroku_email: "john.belew@gmail.com"
           branch: main
+          dontuseforce: true
 
       - name: Set Heroku Config
         run: heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
