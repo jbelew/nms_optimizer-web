@@ -41,13 +41,12 @@ jobs:
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      - uses: akhileshns/heroku-deploy@v4
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "nms-optimizer-web"
-          heroku_email: "john.belew@gmail.com"
-          branch: main
-          dontuseforce: true
+      - name: Add Heroku remote
+        run: git remote add heroku https://git.heroku.com/nms-optimizer-web.git
+
+      - name: Push to Heroku
+        run: git push heroku main:refs/heads/main --force
 
       - name: Set Heroku Config
         run: heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
+
