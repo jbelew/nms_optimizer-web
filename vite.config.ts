@@ -7,23 +7,27 @@ import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
-
-
-
+import critical from "rollup-plugin-critical"
 
 export default defineConfig(() => {
-
-
 	return {
 		plugins: [
 			react(),
 			tailwindcss(),
-			// splashScreen({
-			// 	logoSrc: "assets/svg/favicon.svg",
-			// 	splashBg: "#000000",
-			// 	loaderBg: "#00A2C7",
-			// 	loaderType: "line",
-			// }),
+
+			critical({
+				criticalBase: 'dist/',
+				criticalUrl: 'https://nms-optimizer.app',
+				criticalPages: [{ uri: '/', template: 'index' }],
+				criticalConfig: {
+					inline: false,
+					base: 'dist/',
+					extract: false,
+					width: 375,
+					height: 667,
+				},
+			}),
+
 			compression({
 				algorithm: "brotliCompress",
 				ext: ".br",
@@ -48,7 +52,6 @@ export default defineConfig(() => {
 
 		css: {
 			transformer: "lightningcss",
-
 		},
 
 		build: {

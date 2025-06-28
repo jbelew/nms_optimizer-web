@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build --mode production",
+		"build": "tsc -b && vite build --mode production && node scripts/inline-critical.js",
 		"build:docker": "DOCKER=true vite build --mode docker",
 		"lint:fix": "eslint . --fix",
 		"lint": "eslint .",
@@ -62,6 +62,7 @@
 		"@vitest/ui": "^3.2.4",
 		"autoprefixer": "^10.4.21",
 		"browserslist": "^4.25.0",
+		"critical": "^7.2.1",
 		"eslint": "^8.57.1",
 		"eslint-config-airbnb": "^19.0.4",
 		"eslint-config-prettier": "^10.1.5",

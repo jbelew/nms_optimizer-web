@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const distDir = path.resolve(__dirname, "../dist");
 const htmlPath = path.join(distDir, "index.html");
-const criticalCSSPath = path.join(distDir, "index.html_critical.min.css");
+const criticalCSSPath = path.join(distDir, "index_critical.min.css");
 
 const htmlContent = fs.readFileSync(htmlPath, "utf-8");
 const criticalCSS = fs.readFileSync(criticalCSSPath, "utf-8");

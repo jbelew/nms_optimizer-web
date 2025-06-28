@@ -23,6 +23,6 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["src", "src/**/*.test.ts", "src/**/*.test.tsx"],
+	"include": ["src", "types", "src/**/*.test.ts", "src/**/*.test.tsx"],
 	"types": ["vitest/globals"]
 }
