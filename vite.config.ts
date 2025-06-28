@@ -1,9 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-// import browserslist from "browserslist";
-// import { browserslistToTargets } from "lightningcss";
-// import { colorScheme } from "vite-plugin-color-scheme";
-// import { splashScreen } from "vite-plugin-splash-screen";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
@@ -11,27 +7,32 @@ import critical from "rollup-plugin-critical";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+	const isDocker = mode === "docker";
+
 	return {
 		plugins: [
 			react(),
 			tailwindcss(),
 
-			// Defer non-critical stylesheets first
-			deferStylesheetsPlugin(),
-
-			critical({
-				criticalBase: 'dist/',
-				criticalUrl: 'https://nms-optimizer.app',
-				criticalPages: [{ uri: '/', template: 'index' }],
-				criticalConfig: {
-					inline: false,
-					base: 'dist/',
-					extract: false, // Ensure this is present if inline is false and we expect a file
-					width: 375,
-					height: 667,
-				},
-			}),
+			// Conditionally apply defer and critical plugins
+			...(!isDocker
+				? [
+					deferStylesheetsPlugin(),
+					critical({
+						criticalBase: "dist/",
+						criticalUrl: "https://nms-optimizer.app",
+						criticalPages: [{ uri: "/", template: "index" }],
+						criticalConfig: {
+							inline: false,
+							base: "dist/",
+							extract: false,
+							width: 375,
+							height: 667,
+						},
+					}),
+				]
+				: []),
 
 			compression({
 				algorithm: "brotliCompress",
@@ -39,7 +40,6 @@ export default defineConfig(() => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-
 			compression({
 				algorithm: "gzip",
 				ext: ".gz",
@@ -47,9 +47,12 @@ export default defineConfig(() => {
 				deleteOriginFile: false,
 			}),
 
-			// The custom plugin must run AFTER compression to operate on the final, compressed files (by re-doing parts of it)
-			// or rather, to operate on the final HTML and then re-compress THAT.
-			inlineCriticalCssPlugin(),
+			// Conditionally apply defer and critical plugins
+			...(!isDocker
+				? [
+					inlineCriticalCssPlugin()
+				]
+				: []),
 
 			visualizer({ open: false, gzipSize: true, brotliSize: true }),
 		],
