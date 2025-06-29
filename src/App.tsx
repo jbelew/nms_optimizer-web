@@ -160,7 +160,7 @@ const MainAppContentInternal: FC<{
 								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
 							</ScrollArea>
 						) : (
-							<aside className="items-start flex-grow-0 flex-shrink-0 w-full pt-8">
+							<aside className="flex-grow w-full pt-8" style={{ minHeight: "550px" }}>
 								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
 							</aside>
 						))}

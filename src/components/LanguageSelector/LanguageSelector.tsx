@@ -11,7 +11,7 @@ import deFlagPath from "../../assets/svg/flags/de.svg";
 import esFlagPath from "../../assets/svg/flags/es.svg";
 import frFlagPath from "../../assets/svg/flags/fr.svg";
 import usFlagPath from "../../assets/svg/flags/us.svg";
-import xxFlagPath from "../../assets/svg/flags/xx.svg"; // A generic fallback SVG
+import xxFlagPath from "../../assets/svg/flags/xx.svg";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 
 interface LanguageFlagPaths {

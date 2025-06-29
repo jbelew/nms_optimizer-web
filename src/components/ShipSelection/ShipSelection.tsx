@@ -7,11 +7,9 @@ import PropTypes from "prop-types";
 import React, { useCallback, useMemo } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
-
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import {
 	type ShipTypeDetail,
-	// useFetchShipTypesSuspense, // Removed: Data will come from store
 	useShipTypesStore,
 } from "../../hooks/useShipTypes";
 import { createGrid, type Grid, useGridStore } from "../../store/GridStore";
@@ -79,23 +77,13 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger disabled={solving}>
 				{isSmallAndUp ? (
-					<Button
-						size="2"
-						variant="soft"
-						aria-label="Select ship type"
-						className="cursor-pointer !p-2"
-					>
+					<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
 						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
 						<Separator orientation="vertical" color="cyan" decorative />
 						<DropdownMenu.TriggerIcon />
 					</Button>
 				) : (
-					<Button
-						size="1"
-						variant="soft"
-						aria-label="Select ship type"
-						className="!cursor-pointer !mt-1"
-					>
+					<Button size="1" variant="soft" aria-label="Select ship type" className="!mt-1">
 						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
 					</Button>
 				)}
