@@ -19,7 +19,6 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({ markd
 				className="flex w-full justigfy-center flex-items-center"
 				style={{ flexGrow: "1", height: "80vh" }}
 			>
-				{/* <Spinner className="dialogSpinner__spinner" /> */}
 			</div>
 		);
 	}

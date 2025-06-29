@@ -239,7 +239,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			/>
 			{modules.some((module) => module.type === "reward") ? (
 				<Accordion.Root
-					className="flex-1 pt-1 pb-1 font-medium border-b-1 AccordionRoot"
+					className="flex-1 pt-1 pb-1 text-sm font-medium sm:text-base border-b-1 AccordionRoot"
 					style={{ borderColor: "var(--accent-track)" }}
 					type="single"
 					collapsible
@@ -272,7 +272,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					</Accordion.Item>
 				</Accordion.Root>
 			) : (
-				<Text as="label" htmlFor={tech} className="flex-1 block pt-1 font-medium techRow__label">
+				<Text
+					as="label"
+					htmlFor={tech}
+					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
+				>
 					{translatedTechName}
 					<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 				</Text>

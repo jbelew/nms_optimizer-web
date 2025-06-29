@@ -128,7 +128,7 @@ const MainAppContentInternal: FC<{
 								{t("platformLabel")}
 							</span>
 							<span
-								className="self-start flex-1 min-w-0 mt-[3] sm:mt-0"
+								className="self-start flex-1 min-w-0 mt-[2] sm:mt-0"
 								style={{
 									textWrap: "balance",
 									visibility: gridTableTotalWidth ? "visible" : "hidden",

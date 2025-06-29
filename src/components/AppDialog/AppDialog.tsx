@@ -86,9 +86,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 					<Dialog.Overlay className="appDialog__overlay" />
 					<Dialog.Content className="appDialog__content" style={{ paddingTop: "var(--space-3)" }}>
 						<Dialog.Title className="flex items-start gap-2 text-xl sm:text-2xl heading-styled">
-							{IconComponent && (
-								<IconComponent className="w-6 h-6 mt-0 sm:mt-1" style={style} />
-							)}
+							{IconComponent && <IconComponent className="w-6 h-6 mt-0 sm:mt-1" style={style} />}
 							{title}
 						</Dialog.Title>
 						<Dialog.Description className="hidden appDialog__description">
