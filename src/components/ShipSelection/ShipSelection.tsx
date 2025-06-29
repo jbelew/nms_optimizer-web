@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import {
 	type ShipTypeDetail,
-	useFetchShipTypesSuspense,
+	// useFetchShipTypesSuspense, // Removed: Data will come from store
 	useShipTypesStore,
 } from "../../hooks/useShipTypes";
 import { createGrid, type Grid, useGridStore } from "../../store/GridStore";
@@ -130,22 +130,32 @@ interface ShipTypesDropdownProps {
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 	({ selectedShipType, handleOptionSelect, solving }) => {
-		const shipTypes = useFetchShipTypesSuspense();
+		// Get shipTypes from the store.
+		// This assumes MainAppContentInternal has already ensured data is fetched via Suspense.
+		const shipTypes = useShipTypesStore((state) => state.shipTypes);
 		const { t } = useTranslation();
 
 		const groupedShipTypes = useMemo(() => {
+			// Add a guard for when shipTypes might initially be null from the store
+			if (!shipTypes) {
+				return {};
+			}
 			return Object.entries(shipTypes).reduce(
 				(acc, [key, details]) => {
 					const type = details.type;
 					if (!acc[type]) {
 						acc[type] = [];
 					}
-					acc[type].push({ key, details });
+					acc[type].push({ key, details }); // 'details' is already ShipTypeDetail
 					return acc;
 				},
 				{} as Record<string, { key: string; details: ShipTypeDetail }[]>
 			);
-		}, [shipTypes]);
+		}, [shipTypes]); // Dependency is now shipTypes from the store
+
+		if (!shipTypes || Object.keys(shipTypes).length === 0) {
+			return <DropdownMenu.Item disabled>{t("loading") || "Loading..."}</DropdownMenu.Item>;
+		}
 
 		return (
 			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>

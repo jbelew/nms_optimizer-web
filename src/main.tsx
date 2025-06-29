@@ -1,25 +1,19 @@
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";
+
 // Include just the colors you use, for example `ruby`, `teal`, and `slate`.
 // Remember to import the gray tint that matches your theme setting.
 import "@radix-ui/themes/tokens/colors/cyan.css";
-import "@radix-ui/themes/tokens/colors/purple.css";
 import "@radix-ui/themes/tokens/colors/gray.css";
-import "@radix-ui/themes/tokens/colors/amber.css";
-import "@radix-ui/themes/tokens/colors/blue.css";
-import "@radix-ui/themes/tokens/colors/green.css";
-import "@radix-ui/themes/tokens/colors/iris.css";
-import "@radix-ui/themes/tokens/colors/jade.css";
-import "@radix-ui/themes/tokens/colors/orange.css";
-import "@radix-ui/themes/tokens/colors/red.css";
-import "@radix-ui/themes/tokens/colors/sky.css";
-import "@radix-ui/themes/tokens/colors/teal.css";
-import "@radix-ui/themes/tokens/colors/yellow.css";
+import "@radix-ui/themes/tokens/colors/purple.css";
+
 // Rest of the CSS
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
+
 // Main App CSS
 import "./index.css";
+
 // i18n
 import "./i18n/i18n"; // Initialize i18next
 

@@ -32,7 +32,19 @@ const TechTreeComponent = lazy(() => import("./components/TechTree/TechTree"));
 // --- Page Content (for dialogs) ---
 import ChangelogContent from "./components/AppDialog/ChangeLogContent";
 import MarkdownContentRenderer from "./components/AppDialog/MarkdownContentRenderer";
+
 import React from "react";
+
+import "@radix-ui/themes/tokens/colors/amber.css";
+import "@radix-ui/themes/tokens/colors/blue.css";
+import "@radix-ui/themes/tokens/colors/green.css";
+import "@radix-ui/themes/tokens/colors/iris.css";
+import "@radix-ui/themes/tokens/colors/jade.css";
+import "@radix-ui/themes/tokens/colors/orange.css";
+import "@radix-ui/themes/tokens/colors/red.css";
+import "@radix-ui/themes/tokens/colors/sky.css";
+import "@radix-ui/themes/tokens/colors/teal.css";
+import "@radix-ui/themes/tokens/colors/yellow.css";
 
 /**
  * Renders the main application content.
