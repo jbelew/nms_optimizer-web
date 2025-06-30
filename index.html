@@ -27,12 +27,18 @@
 		/>
 
 		<style>
+			html {
+				scrollbar-gutter: stable;
+			}
+
 			body {
 				background-color: #000;
 			}
+
 			.visually-hidden h1 {
 				font-size: 2em; /* Explicitly define font-size for h1 inside visually-hidden to prevent future browser default changes */
 			}
+
 			.visually-hidden {
 				position: absolute;
 				width: 1px;
@@ -43,6 +49,11 @@
 				clip: rect(0, 0, 0, 0);
 				border: 0;
 				white-space: nowrap;
+			}
+
+			.vpss-logo svg {
+				height: 64px;
+				width: 64px;
 			}
 		</style>
 

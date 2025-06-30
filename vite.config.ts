@@ -4,11 +4,12 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import critical from "rollup-plugin-critical";
-import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+// import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
+import { splashScreen } from "vite-plugin-splash-screen";
+
 import fs from "fs";
 import path from "path";
-// import { createHtmlPlugin } from "vite-plugin-html";
 
 // Function to read version from package.json
 function getAppVersion() {
@@ -39,14 +40,12 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			react(),
 			tailwindcss(),
-			// createHtmlPlugin({
-			// 	inject: {
-			// 		data: {
-			// 			APP_VERSION: appVersion, // Pass APP_VERSION to index.html for GA
-			// 		},
-			// 	},
-			// }),
-			// Conditionally apply defer and critical plugins
+			splashScreen({
+				logoSrc: "assets/svg/loader.svg",
+				splashBg: "#000000",
+				loaderBg: "#00A2C7",
+				loaderType: "dots",
+			}),
 			...(!isDocker
 				? [
 					deferStylesheetsPlugin(),
@@ -81,7 +80,7 @@ export default defineConfig(({ mode }) => {
 			// Conditionally apply defer and critical plugins
 			...(!isDocker
 				? [
-					inlineCriticalCssPlugin()
+					// inlineCriticalCssPlugin()
 				]
 				: []),
 
@@ -130,9 +129,9 @@ export default defineConfig(({ mode }) => {
 						if (
 							id.includes("ga4")
 						) { return "ga4"; }
-						if (
-							id.includes("radix")
-						) { return "radix"; }
+						// if (
+						// 	id.includes("radix")
+						// ) { return "radix"; }
 						return "vendor";
 					},
 					assetFileNames: (assetInfo) => {

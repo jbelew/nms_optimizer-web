@@ -18,13 +18,12 @@ const resources = {
 	de: { translation: de },
 };
 
-// eslint-disable-next-line import/no-named-as-default-member
 void i18n
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
 		supportedLngs: languages,
-		preload: languages, // Not required in browser, safe to omit
+		preload: languages,
 		fallbackLng: "en",
 		debug: process.env.NODE_ENV === "development",
 		detection: {

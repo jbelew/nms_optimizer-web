@@ -1,14 +1,14 @@
 // src/App.tsx
 
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, lazy, Suspense, useCallback, useEffect, useMemo, useRef } from "react"; // Added useRef
+import { type FC, lazy, useCallback, useEffect, useMemo, useRef } from "react"; // Added useRef
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes, useLocation } from "react-router-dom";
 // import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import AppDialog from "./components/AppDialog/AppDialog";
-import AppLoadingFallback from "./components/AppLoadingFallback/AppLoadingFallback";
+// import AppLoadingFallback from "./components/AppLoadingFallback/AppLoadingFallback";
 import ErrorContent from "./components/AppDialog/ErrorContent";
 import OptimizationAlertDialog from "./components/AppDialog/OptimizationAlertDialog";
 import AppFooter from "./components/AppFooter/AppFooter";
@@ -25,6 +25,7 @@ import { useFetchShipTypesSuspense, useShipTypesStore } from "./hooks/useShipTyp
 import { useUrlSync } from "./hooks/useUrlSync";
 import { useGridStore } from "./store/GridStore";
 import { useOptimizeStore } from "./store/OptimizeStore";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 // --- Page Components ---
 const TechTreeComponent = lazy(() => import("./components/TechTree/TechTree"));
@@ -82,8 +83,11 @@ const MainAppContentInternal: FC<{
 		isLarge,
 	} = useAppLayout();
 
-	// --- Dialog Handlers ---
+	useEffect(() => {
+		hideSplashScreen();
+	}, []);
 
+	// --- Dialog Handlers ---
 	const handleShowChangelog = useCallback(() => {
 		openDialog("changelog");
 	}, [openDialog]);
@@ -325,11 +329,11 @@ const App: FC = () => {
 	return (
 		<>
 			<DialogProvider>
-				<Suspense fallback={<AppLoadingFallback />}>
-					{/* <FadeIn> */}
-					<MainAppContent buildVersion={build} />
-					{/* </FadeIn> */}
-				</Suspense>
+				{/* <Suspense fallback={<AppLoadingFallback />}> */}
+				{/* <FadeIn> */}
+				<MainAppContent buildVersion={build} />
+				{/* </FadeIn> */}
+				{/* </Suspense> */}
 			</DialogProvider>
 
 			{/* Routes now render null for dialog-controlled pages */}
