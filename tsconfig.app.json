@@ -23,6 +23,10 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
+	"files": [
+		"src/vite-env.d.ts"
+		// Add other specific global files if necessary
+	],
 	"include": ["src", "types", "src/**/*.test.ts", "src/**/*.test.tsx"],
-	"types": ["vitest/globals"]
+	"types": ["vitest/globals", "vite/client"]
 }

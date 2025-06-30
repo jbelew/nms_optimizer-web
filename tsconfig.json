@@ -1,4 +1,10 @@
 {
+	"compilerOptions": {
+		"types": ["vite/client"],
+		// It's good practice to define other root-level options if needed,
+		// but for now, let's just add types.
+		// Adding "skipLibCheck": true here might also be an option if errors persist in dependencies.
+	},
 	"files": [],
 	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

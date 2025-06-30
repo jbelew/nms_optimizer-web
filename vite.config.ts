@@ -6,15 +6,48 @@ import compression from "vite-plugin-compression";
 import critical from "rollup-plugin-critical";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
+import fs from "fs";
+import path from "path";
+import { createHtmlPlugin } from "vite-plugin-html";
+
+// Function to read version from package.json
+function getAppVersion() {
+	const packageJsonPath = path.resolve(__dirname, "package.json");
+	try {
+		const packageJsonContent = fs.readFileSync(packageJsonPath, "utf-8");
+		const packageJson = JSON.parse(packageJsonContent);
+		if (packageJson && packageJson.version) {
+			console.log(`APP_VERSION successfully read from package.json: ${packageJson.version}`);
+			return packageJson.version;
+		} else {
+			console.error("Version not found in package.json");
+		}
+	} catch (error) {
+		console.error("Failed to read or parse package.json", error);
+	}
+	return "unknown"; // Fallback version
+}
 
 export default defineConfig(({ mode }) => {
 	const isDocker = mode === "docker";
+	const appVersion = getAppVersion();
+	console.log(`Using APP_VERSION for build: ${appVersion}`);
 
 	return {
+		define: {
+			// Make app version available to JS code (e.g., AppHeader.tsx)
+			__APP_VERSION__: JSON.stringify(appVersion),
+		},
 		plugins: [
 			react(),
 			tailwindcss(),
-
+			createHtmlPlugin({
+				inject: {
+					data: {
+						APP_VERSION: appVersion, // Pass APP_VERSION to index.html for GA
+					},
+				},
+			}),
 			// Conditionally apply defer and critical plugins
 			...(!isDocker
 				? [
@@ -72,12 +105,10 @@ export default defineConfig(({ mode }) => {
 			cssCodeSplit: true,
 			sourcemap: true,
 			cssMinify: "lightningcss",
-
 			rollupOptions: {
 				output: {
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
-
 						if (
 							id.includes("react-markdown") ||
 							id.includes("remark-") ||
@@ -91,22 +122,15 @@ export default defineConfig(({ mode }) => {
 							id.includes("trough") ||
 							id.includes("decode-named-character-reference") ||
 							id.includes("parse-entities")
-						) {
-							return "markdown";
-						}
-
+						) { return "markdown"; }
 						if (
 							id.includes("i18next") ||
 							id.includes("react-i18next") ||
 							id.includes("@formatjs") ||
 							id.includes("intl-messageformat")
-						) {
-							return "i18n";
-						}
-
+						) { return "i18n"; }
 						return "vendor";
 					},
-
 					assetFileNames: (assetInfo) => {
 						if (assetInfo.name?.endsWith(".css")) {
 							return "assets/[name]-[hash].css";

@@ -7,7 +7,7 @@ import React from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 
-import { APP_VERSION } from "../../constants";
+// import { APP_VERSION } from "../../constants"; // Replaced by global __APP_VERSION__
 import LanguageSelector from "../LanguageSelector/LanguageSelector"; // Import the new component
 import RhombusIcon from "../icons/RhombusIcon"; // Import the new component
 
@@ -55,7 +55,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 			<h2 className="items-center text-xs sm:text-base header__title">
 				<strong>{t("appHeader.subTitle")}</strong>
-				<span className="font-thin"> {APP_VERSION}</span>&nbsp;&nbsp;
+				<span className="font-thin"> {__APP_VERSION__}</span>&nbsp;&nbsp;
 				<Tooltip content={t("buttons.changelog")}>
 					<IconButton
 						className="shadow-sm"
