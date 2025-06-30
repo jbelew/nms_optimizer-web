@@ -85,7 +85,7 @@ export default defineConfig(({ mode }) => {
 				]
 				: []),
 
-			visualizer({ open: false, gzipSize: true, brotliSize: true }),
+			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
 		],
 
 		server: {
@@ -127,6 +127,12 @@ export default defineConfig(({ mode }) => {
 							id.includes("@formatjs") ||
 							id.includes("intl-messageformat")
 						) { return "i18n"; }
+						if (
+							id.includes("ga4")
+						) { return "ga4"; }
+						if (
+							id.includes("radix")
+						) { return "radix"; }
 						return "vendor";
 					},
 					assetFileNames: (assetInfo) => {
