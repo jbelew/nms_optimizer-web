@@ -254,7 +254,9 @@ const App: FC = () => {
 			case "/changelog":
 				pageTitle = `${t("dialogs.titles.changelog")} - ${appName}`;
 				break;
-			// Add other cases as needed
+			case "/translation":
+				pageTitle = `${t("dialogs.titles.translationRequest")} - ${appName}`;
+				break;
 			default:
 				pageTitle = appName;
 		}
@@ -301,7 +303,7 @@ const App: FC = () => {
 				document.head.appendChild(defaultLink);
 			}
 		});
-	}, [location.pathname, location.search, t, i18n.language]); // Added i18n.language to dependencies as t() output can change
+	}, [location.pathname, location.search, t]); // Added i18n.language to dependencies as t() output can change
 
 	const errorDialogContent = useMemo(() => <ErrorContent />, []);
 
