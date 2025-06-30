@@ -1,7 +1,7 @@
 // src/App.tsx
 
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, lazy, Suspense, useCallback, useEffect, useMemo } from "react";
+import { type FC, lazy, Suspense, useCallback, useEffect, useMemo, useRef } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -236,6 +236,8 @@ const App: FC = () => {
 		// This effect runs once on App mount for GA initialization.
 	}, [build]); // Added build to dependency array
 
+	const initialPageViewSentRef = useRef(false);
+
 	// Combined Effect for page view tracking, hreflang tags, and title updates
 	useEffect(() => {
 		// Set document title based on the current path first
@@ -262,6 +264,21 @@ const App: FC = () => {
 				pageTitle = appName;
 		}
 		document.title = pageTitle;
+
+		// Send page view to GA using the updated title
+		// Only send if it's not the initial page view (which is handled by ReactGA.initialize's config)
+		if (initialPageViewSentRef.current) {
+			ReactGA.send({
+				hitType: "pageview",
+				page: location.pathname + location.search,
+				title: pageTitle,
+			});
+		} else {
+			// For the very first run of this effect (initial load),
+			// ReactGA.initialize() is expected to have already sent the page_view via its 'config' command.
+			// So, we just mark that the initial view processing by this effect is done.
+			initialPageViewSentRef.current = true;
+		}
 
 		// Send page view to GA using the updated title
 		ReactGA.send({
