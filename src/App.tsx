@@ -222,28 +222,62 @@ const App: FC = () => {
 	const { t } = useTranslation();
 
 	// Build version, now defined at the App level
-	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
+	// Uses __APP_VERSION__ injected by Vite from package.json (see vite.config.ts and vite-env.d.ts)
+	const build: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const location = useLocation();
 	const { showError, setShowError } = useOptimizeStore();
 
 	useEffect(() => {
-		ReactGA.initialize(TRACKING_ID);
+		ReactGA.initialize(TRACKING_ID, {
+			testMode: import.meta.env.DEV,
+			gaOptions: { app_version: build },
+		});
 		// This effect runs once on App mount for GA initialization.
-	}, []);
+	}, [build]); // Added build to dependency array
 
+	// Combined Effect for page view tracking, hreflang tags, and title updates
 	useEffect(() => {
+		// Set document title based on the current path first
+		const appName = t("appName");
+		let pageTitle = appName; // Default title
+
+		switch (location.pathname) {
+			case "/":
+				pageTitle = appName;
+				break;
+			case "/instructions":
+				pageTitle = `${t("dialogs.titles.instructions")} - ${appName}`;
+				break;
+			case "/about":
+				pageTitle = `${t("dialogs.titles.about")} - ${appName}`;
+				break;
+			case "/changelog":
+				pageTitle = `${t("dialogs.titles.changelog")} - ${appName}`;
+				break;
+			// Add other cases as needed
+			default:
+				pageTitle = appName;
+		}
+		document.title = pageTitle;
+
+		// Send page view to GA using the updated title
+		ReactGA.send({
+			hitType: "pageview",
+			page: location.pathname + location.search,
+			title: pageTitle,
+		});
+
 		// Manage hreflang tags
 		const supportedLanguages = i18n.options.supportedLngs || [];
-		const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en"; // Get the first fallback language
+		const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en";
 		const currentPath = location.pathname;
-		const currentSearch = location.search; // Get current query parameters
+		const currentSearch = location.search;
 		const baseUrl = window.location.origin;
 
-		// Remove existing hreflang tags to prevent duplicates on re-renders
 		document.querySelectorAll("link[rel='alternate'][hreflang]").forEach((tag) => tag.remove());
 
 		supportedLanguages.forEach((lang) => {
-			if (lang === "dev" || lang === "cimode") return; // Skip pseudo-languages
+			if (lang === "dev" || lang === "cimode") return;
 
 			const params = new URLSearchParams(currentSearch);
 			params.set("lng", lang);
@@ -255,10 +289,9 @@ const App: FC = () => {
 			link.href = href;
 			document.head.appendChild(link);
 
-			// Set x-default to the primary fallback language URL
 			if (lang === defaultLanguage) {
 				const defaultParams = new URLSearchParams(currentSearch);
-				defaultParams.set("lng", defaultLanguage); // Or omit for true default if server handles root path language detection
+				defaultParams.set("lng", defaultLanguage);
 				const xDefaultHref = `${baseUrl}${currentPath}?${defaultParams.toString()}`;
 
 				const defaultLink = document.createElement("link");
@@ -268,26 +301,7 @@ const App: FC = () => {
 				document.head.appendChild(defaultLink);
 			}
 		});
-
-		// Set document title based on the current path
-		const appName = t("appName");
-		switch (location.pathname) {
-			case "/":
-				document.title = appName;
-				break;
-			case "/instructions":
-				document.title = `${t("dialogs.titles.instructions")} - ${appName}`;
-				break;
-			case "/about":
-				document.title = `${t("dialogs.titles.about")} - ${appName}`;
-				break;
-			case "/changelog":
-				document.title = `${t("dialogs.titles.changelog")} - ${appName}`;
-				break;
-			default:
-				document.title = appName; // Default title
-		}
-	}, [location.pathname, location.search, t]);
+	}, [location.pathname, location.search, t, i18n.language]); // Added i18n.language to dependencies as t() output can change
 
 	const errorDialogContent = useMemo(() => <ErrorContent />, []);
 
