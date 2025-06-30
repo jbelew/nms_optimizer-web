@@ -21,7 +21,7 @@ const ChangeLogContent: React.FC = () => {
 				for up to date model build information.
 			</p>
 
-			<h2 className="pt-2 appDialog__subheading">Version 2.91 (2025-06-26)</h2>
+			<h2 className="pt-2 appDialog__subheading">Version 2.9.1 (2025-06-26)</h2>
 			<ul className="appDialog__list">
 				<li className="appDialog__listItem">
 					Refactored Grid Table Buttons to use pure CSS positioning. Should address React
