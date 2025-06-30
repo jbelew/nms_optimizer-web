@@ -225,16 +225,17 @@ const App: FC = () => {
 	// Uses __APP_VERSION__ injected by Vite from package.json (see vite.config.ts and vite-env.d.ts)
 	// const build: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
+	const appVersion: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const location = useLocation();
 	const { showError, setShowError } = useOptimizeStore();
 
 	useEffect(() => {
 		ReactGA.initialize(TRACKING_ID, {
 			testMode: import.meta.env.DEV,
-			gaOptions: { app_version: build },
+			gaOptions: { app_version: appVersion },
 		});
 		// This effect runs once on App mount for GA initialization.
-	}, [build]); // Added build to dependency array
+	}, [appVersion, build]); // Added build to dependency array
 
 	const initialPageViewSentRef = useRef(false);
 
