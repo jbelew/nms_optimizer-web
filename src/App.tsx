@@ -227,12 +227,15 @@ const App: FC = () => {
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 	const location = useLocation();
 	const { showError, setShowError } = useOptimizeStore();
+	const gaInitialized = useRef(false);
 
 	useEffect(() => {
+		if (gaInitialized.current) return;
 		ReactGA.initialize(TRACKING_ID, {
 			testMode: import.meta.env.DEV,
 			gaOptions: { app_version: appVersion },
 		});
+		gaInitialized.current = true;
 		// This effect runs once on App mount for GA initialization.
 	}, [appVersion, build]); // Added build to dependency array
 
