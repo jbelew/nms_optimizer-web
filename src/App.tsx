@@ -223,7 +223,8 @@ const App: FC = () => {
 
 	// Build version, now defined at the App level
 	// Uses __APP_VERSION__ injected by Vite from package.json (see vite.config.ts and vite-env.d.ts)
-	const build: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
+	// const build: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
+	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 	const location = useLocation();
 	const { showError, setShowError } = useOptimizeStore();
 

@@ -8,7 +8,7 @@ import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import fs from "fs";
 import path from "path";
-import { createHtmlPlugin } from "vite-plugin-html";
+// import { createHtmlPlugin } from "vite-plugin-html";
 
 // Function to read version from package.json
 function getAppVersion() {
@@ -17,7 +17,6 @@ function getAppVersion() {
 		const packageJsonContent = fs.readFileSync(packageJsonPath, "utf-8");
 		const packageJson = JSON.parse(packageJsonContent);
 		if (packageJson && packageJson.version) {
-			console.log(`APP_VERSION successfully read from package.json: ${packageJson.version}`);
 			return packageJson.version;
 		} else {
 			console.error("Version not found in package.json");
@@ -31,7 +30,6 @@ function getAppVersion() {
 export default defineConfig(({ mode }) => {
 	const isDocker = mode === "docker";
 	const appVersion = getAppVersion();
-	console.log(`Using APP_VERSION for build: ${appVersion}`);
 
 	return {
 		define: {
@@ -41,13 +39,13 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			react(),
 			tailwindcss(),
-			createHtmlPlugin({
-				inject: {
-					data: {
-						APP_VERSION: appVersion, // Pass APP_VERSION to index.html for GA
-					},
-				},
-			}),
+			// createHtmlPlugin({
+			// 	inject: {
+			// 		data: {
+			// 			APP_VERSION: appVersion, // Pass APP_VERSION to index.html for GA
+			// 		},
+			// 	},
+			// }),
 			// Conditionally apply defer and critical plugins
 			...(!isDocker
 				? [
