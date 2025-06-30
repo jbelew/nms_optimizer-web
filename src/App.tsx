@@ -1,7 +1,7 @@
 // src/App.tsx
 
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, lazy, Suspense, useCallback, useEffect, useMemo, useRef } from "react";
+import { type FC, lazy, Suspense, useCallback, useEffect, useMemo, useRef } from "react"; // Added useRef
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -223,9 +223,8 @@ const App: FC = () => {
 
 	// Build version, now defined at the App level
 	// Uses __APP_VERSION__ injected by Vite from package.json (see vite.config.ts and vite-env.d.ts)
-	// const build: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
-	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 	const appVersion: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
+	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 	const location = useLocation();
 	const { showError, setShowError } = useOptimizeStore();
 
@@ -237,7 +236,7 @@ const App: FC = () => {
 		// This effect runs once on App mount for GA initialization.
 	}, [appVersion, build]); // Added build to dependency array
 
-	const initialPageViewSentRef = useRef(false);
+	const initialPageViewSentRef = useRef(false); // Ensuring this is the single, correct declaration
 
 	// Combined Effect for page view tracking, hreflang tags, and title updates
 	useEffect(() => {
@@ -261,6 +260,7 @@ const App: FC = () => {
 			case "/translation":
 				pageTitle = `${t("dialogs.titles.translationRequest")} - ${appName}`;
 				break;
+			// Add other cases as needed
 			default:
 				pageTitle = appName;
 		}
@@ -280,13 +280,6 @@ const App: FC = () => {
 			// So, we just mark that the initial view processing by this effect is done.
 			initialPageViewSentRef.current = true;
 		}
-
-		// Send page view to GA using the updated title
-		ReactGA.send({
-			hitType: "pageview",
-			page: location.pathname + location.search,
-			title: pageTitle,
-		});
 
 		// Manage hreflang tags
 		const supportedLanguages = i18n.options.supportedLngs || [];
