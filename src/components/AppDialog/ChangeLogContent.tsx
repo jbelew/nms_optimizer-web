@@ -21,6 +21,17 @@ const ChangeLogContent: React.FC = () => {
 				for up to date model build information.
 			</p>
 
+			<h2 className="pt-2 appDialog__subheading">Version 2.9.2 (2025-07-01)</h2>
+			<ul className="appDialog__list">
+				<li className="appDialog__listItem">
+					Increased button hotspot sizes to improve mobile touch interaction.
+				</li>
+				<li className="appDialog__listItem">Added branded splash screen on app launch.</li>
+				<li className="appDialog__listItem">
+					Additional UI refinements and internal code cleanup.
+				</li>
+			</ul>
+
 			<h2 className="pt-2 appDialog__subheading">Version 2.9.1 (2025-06-26)</h2>
 			<ul className="appDialog__list">
 				<li className="appDialog__listItem">
