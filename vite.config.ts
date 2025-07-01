@@ -129,9 +129,9 @@ export default defineConfig(({ mode }) => {
 						if (
 							id.includes("ga4")
 						) { return "ga4"; }
-						// if (
-						// 	id.includes("radix")
-						// ) { return "radix"; }
+						if (
+							id.includes("radix")
+						) { return "radix"; }
 						return "vendor";
 					},
 					assetFileNames: (assetInfo) => {
