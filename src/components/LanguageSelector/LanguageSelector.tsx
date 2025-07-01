@@ -49,8 +49,10 @@ const LanguageSelector: React.FC = () => {
 
 	const handleLanguageChange = (langCode: string) => {
 		void i18n.changeLanguage(langCode);
-		ReactGA.event("language_selection", {
-			language: langCode,
+		ReactGA.event({
+			category: "User Interactions",
+			action: "Language Selection",
+			label: langCode,
 		});
 	};
 

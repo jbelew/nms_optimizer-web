@@ -1,4 +1,4 @@
-import type { PluginOption } from "vite";
+import type { PluginOption, ResolvedConfig } from "vite";
 import fs from "node:fs/promises";
 import path from "node:path";
 import zlib from "node:zlib";
@@ -26,7 +26,7 @@ export default function inlineCriticalCssPlugin(options?: Options): PluginOption
 		htmlFileName = "index.html",
 	} = options || {};
 
-	let viteConfig: any; // To store resolved Vite config
+	let viteConfig: ResolvedConfig; // To store resolved Vite config
 
 	return {
 		name: "vite-plugin-inline-critical-css",
