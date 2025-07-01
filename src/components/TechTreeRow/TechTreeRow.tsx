@@ -200,7 +200,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@x2.$1"); // Also handle fallback
 
 	return (
-		<div className="flex gap-2 mt-2 mb-2 ml-1 items-top optimizationButton">
+		<div className="flex gap-2 mt-2 mb-2 ml-0 sm:ml-1 items-top optimizationButton">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
 				<IconButton

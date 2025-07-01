@@ -49,7 +49,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 				<Tooltip content={t("gridControls.activateRow")}>
 					<IconButton
 						size={iconButtonSize}
-						variant="soft"
+						variant="surface"
 						className={`shadow-md ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid}
@@ -63,7 +63,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 			{isLastActiveRow && (
 				<Tooltip content={t("gridControls.deactivateRow")}>
 					<IconButton
-						variant="soft"
+						variant="surface"
 						size={iconButtonSize}
 						className={`shadow-md ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}

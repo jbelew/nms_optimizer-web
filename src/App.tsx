@@ -120,7 +120,7 @@ const MainAppContentInternal: FC<{
 						ref={appLayoutContainerRef}
 					>
 						<header
-							className="flex flex-wrap items-center gap-2 mb-2 text-xl sm:mb-4 sm:text-2xl heading-styled"
+							className="flex flex-wrap items-center gap-2 mb-3 text-xl sm:mb-4 sm:text-2xl heading-styled"
 							style={{ maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined }}
 						>
 							{!isSharedGrid && (
@@ -132,7 +132,7 @@ const MainAppContentInternal: FC<{
 								{t("platformLabel")}
 							</span>
 							<span
-								className="self-start flex-1 min-w-0 mt-[2] sm:mt-0"
+								className="self-start flex-1 min-w-0 mt-[6] sm:mt-0"
 								style={{
 									textWrap: "balance",
 									visibility: gridTableTotalWidth ? "visible" : "hidden",

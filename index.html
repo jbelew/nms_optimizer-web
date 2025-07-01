@@ -7,7 +7,18 @@
 		<title>No Man's Sky Technology Layout Optimizer AI</title>
 
 		<!-- Preferred favicon format -->
-		<link rel="icon" href="/assets/svg/favicon.svg" type="image/svg+xml" />
+		<link
+			rel="icon"
+			href="/assets/svg/favicon-light.svg"
+			type="image/svg+xml"
+			media="(prefers-color-scheme: light)"
+		/>
+		<link
+			rel="icon"
+			href="/assets/svg/favicon-dark.svg"
+			type="image/svg+xml"
+			media="(prefers-color-scheme: dark)"
+		/>
 
 		<!-- Fallback PNG favicons -->
 		<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
@@ -52,8 +63,15 @@
 			}
 
 			.vpss-logo svg {
-				height: 64px;
-				width: 64px;
+				height: 48px;
+				width: 48px;
+			}
+
+			@media (max-width: 639px) {
+				.vpss-logo svg {
+					height: 48px;
+					width: 48px;
+				}
 			}
 		</style>
 

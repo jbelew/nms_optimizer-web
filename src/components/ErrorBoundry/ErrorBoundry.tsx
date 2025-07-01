@@ -2,6 +2,7 @@
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import ReactGA from "react-ga4";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 interface Props {
 	children: ReactNode;
@@ -69,6 +70,7 @@ class ErrorBoundary extends Component<Props, State> {
 		// console.log("ErrorBoundary render. State:", JSON.parse(JSON.stringify(this.state)));
 		if (this.state.hasError) {
 			console.log("ErrorBoundary render: hasError is true. Rendering fallback UI.");
+			hideSplashScreen();
 			return (
 				<main className="flex flex-col items-center justify-center lg:min-h-screen">
 					<section className="relative mx-auto border rounded-none shadow-lg app lg:rounded-xl lg:shadow-xl backdrop-blur-xl bg-white/5">

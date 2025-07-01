@@ -63,7 +63,7 @@ const LanguageSelector: React.FC = () => {
 				<IconButton
 					variant="soft"
 					radius="full"
-					size={isSmallAndUp ? "2" : "1"}
+					size={isSmallAndUp ? "2" : "2"}
 					aria-label={t("languageInfo.changeLanguage") || "Change language"}
 				>
 					<img

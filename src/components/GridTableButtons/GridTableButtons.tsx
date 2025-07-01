@@ -4,7 +4,7 @@ import {
 	ResetIcon,
 	Share2Icon,
 } from "@radix-ui/react-icons";
-import { Button } from "@radix-ui/themes";
+import { Button, IconButton } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
@@ -71,46 +71,84 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		<>
 			<div role="gridcell" className="col-span-7 mt-2 sm:mt-3">
 				{/* This div will contain the left-aligned buttons */}
-				<Button
-					size={isSmallAndUp ? "2" : "1"}
-					variant={isFirstVisit ? "solid" : "soft"}
-					className={`gridTable__button gridTable__button--instructions shadow-md !mr-2 p-0  ${
-						isFirstVisit ? "button--glow" : ""
-					}`}
-					onClick={handleShowInstructions}
-					aria-label={t("buttons.instructions")}
-				>
-					<QuestionMarkCircledIcon />
-					<span className="hidden sm:inline">{t("buttons.instructions")}</span>
-				</Button>
-				<Button
-					size={isSmallAndUp ? "2" : "1"}
-					variant="soft"
-					className={`gridTable__button gridTable__button--about shadow-md !mr-2`}
-					onClick={handleShowAboutPage}
-					aria-label={t("buttons.about")}
-				>
-					<InfoCircledIcon />
-					<span className="hidden sm:inline">{t("buttons.about")}</span>
-				</Button>
-				{!isSharedGrid && (
+				{isSmallAndUp ? (
 					<Button
-						size={isSmallAndUp ? "2" : "1"}
-						variant="soft"
-						className="shadow-md gridTable__button gridTable__button--changelog"
-						onClick={handleShareClick}
-						disabled={solving || !hasModulesInGrid}
-						aria-label={t("buttons.share")}
+						size="2"
+						variant={isFirstVisit ? "solid" : "soft"}
+						className={`gridTable__button gridTable__button--instructions shadow-md !mr-2  ${
+							isFirstVisit ? "button--glow" : ""
+						}`}
+						onClick={handleShowInstructions}
+						aria-label={t("buttons.instructions")}
 					>
-						<Share2Icon />
-						<span className="hidden sm:inline">{t("buttons.share")}</span>
+						<QuestionMarkCircledIcon />
+						<span className="hidden sm:inline">{t("buttons.instructions")}</span>
 					</Button>
+				) : (
+					<IconButton
+						size="2"
+						variant={isFirstVisit ? "solid" : "soft"}
+						className={`gridTable__button gridTable__button--instructions shadow-md !mr-2  ${
+							isFirstVisit ? "button--glow" : ""
+						}`}
+						onClick={handleShowInstructions}
+						aria-label={t("buttons.instructions")}
+					>
+						<QuestionMarkCircledIcon />
+					</IconButton>
 				)}
+				{isSmallAndUp ? (
+					<Button
+						size="2"
+						variant="soft"
+						className={`gridTable__button gridTable__button--about shadow-md !mr-2`}
+						onClick={handleShowAboutPage}
+						aria-label={t("buttons.about")}
+					>
+						<InfoCircledIcon />
+						<span className="hidden sm:inline">{t("buttons.about")}</span>
+					</Button>
+				) : (
+					<IconButton
+						size="2"
+						variant="soft"
+						className={`gridTable__button gridTable__button--about shadow-md !mr-2`}
+						onClick={handleShowAboutPage}
+						aria-label={t("buttons.about")}
+					>
+						<InfoCircledIcon />
+					</IconButton>
+				)}
+				{!isSharedGrid &&
+					(isSmallAndUp ? (
+						<Button
+							size="2"
+							variant="soft"
+							className="shadow-md gridTable__button gridTable__button--changelog"
+							onClick={handleShareClick}
+							disabled={solving || !hasModulesInGrid}
+							aria-label={t("buttons.share")}
+						>
+							<Share2Icon />
+							<span className="hidden sm:inline">{t("buttons.share")}</span>
+						</Button>
+					) : (
+						<IconButton
+							size="2"
+							variant="soft"
+							className="shadow-md gridTable__button gridTable__button--changelog"
+							onClick={handleShareClick}
+							disabled={solving || !hasModulesInGrid}
+							aria-label={t("buttons.share")}
+						>
+							<Share2Icon />
+						</IconButton>
+					))}
 			</div>
 
 			<div role="gridcell" className="flex justify-end col-span-3 mt-2 sm:mt-3">
 				<Button
-					size={isSmallAndUp ? "2" : "1"}
+					size="2"
 					className={`gridTable__button gridTable__button--reset shadow-md`}
 					variant="solid"
 					onClick={handleResetGrid}
