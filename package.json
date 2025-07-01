@@ -15,11 +15,9 @@
 		"coverage:merge": "vitest coverage merge",
 		"coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
 		"test:ci": "vitest run --coverage",
-		"postinstall": "npm run build",
 		"start": "node server.js",
 		"heroku-postbuild": "vite build",
-		"postbuild": "",
-		"analyze": "npm run build"
+		"analyze": "vite build --config vite.config.analyze.ts"
 	},
 	"dependencies": {
 		"@radix-ui/react-icons": "^1.3.2",

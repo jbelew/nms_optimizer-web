@@ -1,7 +1,7 @@
 // src/App.tsx
 
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, lazy, useCallback, useEffect, useMemo, useRef } from "react"; // Added useRef
+import { type FC, useCallback, useEffect, useMemo, useRef } from "react"; // Added useRef
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -28,7 +28,8 @@ import { useOptimizeStore } from "./store/OptimizeStore";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 // --- Page Components ---
-const TechTreeComponent = lazy(() => import("./components/TechTree/TechTree"));
+// const TechTreeComponent = lazy(() => import("./components/TechTree/TechTree"));
+import TechTreeComponent from "./components/TechTree/TechTree";
 
 // --- Page Content (for dialogs) ---
 import ChangelogContent from "./components/AppDialog/ChangeLogContent";

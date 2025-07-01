@@ -84,7 +84,7 @@ export default defineConfig(({ mode }) => {
 				]
 				: []),
 
-			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
+			visualizer({ open: true, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
 		],
 
 		server: {
@@ -106,6 +106,14 @@ export default defineConfig(({ mode }) => {
 				output: {
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
+
+						if (
+							id.includes("react-dom") ||
+							id.includes("react-router-dom") ||
+							id.includes("react")
+						) {
+							return "react-core";
+						}
 
 						if (
 							id.includes("react-markdown") ||
