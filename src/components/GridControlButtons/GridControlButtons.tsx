@@ -50,7 +50,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					<IconButton
 						size={iconButtonSize}
 						variant="surface"
-						className={`shadow-md ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={`shadow-sm ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid}
 						aria-label={t("gridControls.activateRow")}
@@ -65,7 +65,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					<IconButton
 						variant="surface"
 						size={iconButtonSize}
-						className={`shadow-md ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={` ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}
 						disabled={hasModulesInGrid}
 						aria-label={t("gridControls.deactivateRow")}

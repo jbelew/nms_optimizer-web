@@ -43,176 +43,175 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
 
-		/**
-		 * Handles a click on the cell.
-		 *
-		 * @param event - The event object
-		 */
-		const handleClick = useCallback(
-			(event: React.MouseEvent) => {
-				if (isSharedGrid) {
-					return;
-				}
-
-				if (longPressTriggered) {
-					event.stopPropagation(); // Prevents unintended click after long press
-					return;
-				}
-
-				if (event.ctrlKey || event.metaKey) {
-					toggleCellActive(rowIndex, columnIndex);
-				} else {
-					if (totalSupercharged >= 4 && !cell.supercharged) {
-						setShaking(true);
-						setTimeout(() => {
-							setShaking(false);
-						}, 500);
-						return; // Exit after initiating shake, don't toggle supercharge
-					}
-					toggleCellSupercharged(rowIndex, columnIndex);
-				}
-			},
-			[
-				isSharedGrid,
-				longPressTriggered,
-				toggleCellActive,
-				rowIndex,
-				columnIndex,
-				totalSupercharged,
-				cell.supercharged,
-				toggleCellSupercharged,
-				setShaking,
-			]
-		);
-
-		/**
-		 * Handles a touch start on the cell.
-		 */
-		const handleTouchStart = useCallback(() => {
-			longPressTimer.current = setTimeout(() => {
-				setLongPressTriggered(true);
-				// Ensure interaction is allowed
-				if (isSharedGrid) {
-					// Clear timer if interaction is not allowed but timer started
-					if (longPressTimer.current) clearTimeout(longPressTimer.current);
-					return;
-				}
-				toggleCellActive(rowIndex, columnIndex);
-			}, 1000); // Standard long press duration is 1000ms (1 second)
-		}, [isSharedGrid, toggleCellActive, rowIndex, columnIndex]);
-
-		/**
-		 * Handles a touch end on the cell.
-		 */
-		const handleTouchEnd = useCallback(() => {
-			if (longPressTimer.current) {
-				clearTimeout(longPressTimer.current);
+	/**
+	 * Handles a click on the cell.
+	 *
+	 * @param event - The event object
+	 */
+	const handleClick = useCallback(
+		(event: React.MouseEvent) => {
+			if (isSharedGrid) {
+				return;
 			}
-			setTimeout(() => setLongPressTriggered(false), 50);
-		}, []); // No dependencies, so empty array
 
-		/**
-		 * Handles a context menu on the cell.
-		 *
-		 * @param event - The event object
-		 */
-		const handleContextMenu = useCallback((event: React.MouseEvent) => {
-			event.preventDefault();
-		}, []);
+			if (longPressTriggered) {
+				event.stopPropagation(); // Prevents unintended click after long press
+				return;
+			}
 
-		const handleKeyDown = useCallback(
-			(event: React.KeyboardEvent) => {
-				if (event.key === " " || event.key === "Enter") {
-					// Prevent default spacebar scroll and enter key form submission
-					event.preventDefault();
-					// Cast to React.MouseEvent; not strictly necessary for handleClick's current signature
-					// but good practice if handleClick expected more specific event properties.
-					handleClick(event as unknown as React.MouseEvent);
+			if (event.ctrlKey || event.metaKey) {
+				toggleCellActive(rowIndex, columnIndex);
+			} else {
+				if (totalSupercharged >= 4 && !cell.supercharged) {
+					setShaking(true);
+					setTimeout(() => {
+						setShaking(false);
+					}, 500);
+					return; // Exit after initiating shake, don't toggle supercharge
 				}
-			},
-			[handleClick]
-		);
+				toggleCellSupercharged(rowIndex, columnIndex);
+			}
+		},
+		[
+			isSharedGrid,
+			longPressTriggered,
+			toggleCellActive,
+			rowIndex,
+			columnIndex,
+			totalSupercharged,
+			cell.supercharged,
+			toggleCellSupercharged,
+			setShaking,
+		]
+	);
 
-		// Directly select the color for the current cell's tech from the store.
-		// This makes the component reactive to changes in the tech color mapping for this specific tech.
-		const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
-		const techColor = useMemo(() => {
-			// If there's no specific tech color from the store (it's falsy) AND the cell is supercharged,
-			// override to "purple". Otherwise, use the color from the store.
-			return !currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
-		}, [currentTechColorFromStore, cell.supercharged]);
+	/**
+	 * Handles a touch start on the cell.
+	 */
+	const handleTouchStart = useCallback(() => {
+		longPressTimer.current = setTimeout(() => {
+			setLongPressTriggered(true);
+			// Ensure interaction is allowed
+			if (isSharedGrid) {
+				// Clear timer if interaction is not allowed but timer started
+				if (longPressTimer.current) clearTimeout(longPressTimer.current);
+				return;
+			}
+			toggleCellActive(rowIndex, columnIndex);
+		}, 750); // Standard long press duration is 1000ms (1 second)
+	}, [isSharedGrid, toggleCellActive, rowIndex, columnIndex]);
 
-		const cellClassName = useMemo(() => {
-			const classes = [
-				"gridCell",
-				"gridCell--interactive",
-				"shadow-md",
-				"sm:border-2",
-				"border-1",
-				"rounded-sm",
-				"sm:rounded-md",
-			];
-			if (cell.supercharged) classes.push("gridCell--supercharged");
-			classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
-			if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
-			if (cell.supercharged && cell.image) classes.push("gridCell--glow");
-			if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
-			return classes.join(" ");
-		}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label]);
+	/**
+	 * Handles a touch end on the cell.
+	 */
+	const handleTouchEnd = useCallback(() => {
+		if (longPressTimer.current) {
+			clearTimeout(longPressTimer.current);
+		}
+		setTimeout(() => setLongPressTriggered(false), 50);
+	}, []); // No dependencies, so empty array
 
-		// Get the upgrade priority for the current cell
-		const upGradePriority = getUpgradePriority(cell.label);
-		const backgroundImageStyle = useMemo(
-			() =>
-				cell.image
-					? `image-set(url(/assets/img/${cell.image}) 1x, url(/assets/img/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`
-					: "none",
-			[cell.image]
-		);
+	/**
+	 * Handles a context menu on the cell.
+	 *
+	 * @param event - The event object
+	 */
+	const handleContextMenu = useCallback((event: React.MouseEvent) => {
+		event.preventDefault();
+	}, []);
 
-		const cellElementStyle = useMemo(
-			() => ({
-				backgroundImage: backgroundImageStyle,
-			}),
-			[backgroundImageStyle]
-		);
-		const cellElement = (
-			<div
-				role="gridcell"
-				aria-colindex={columnIndex + 1}
-				tabIndex={isSharedGrid ? -1 : 0} // Make cell focusable if not shared
-				data-accent-color={techColor}
-				onContextMenu={handleContextMenu}
-				onClick={handleClick}
-				onTouchStart={handleTouchStart}
-				onTouchEnd={handleTouchEnd}
-				onTouchCancel={handleTouchEnd}
-				onKeyDown={handleKeyDown}
-				className={cellClassName}
-				style={cellElementStyle}
-			>
-				{cell.label && ( // Conditionally render the label span
-					<span className="mt-1 text-1xl md:text-3xl lg:text-4xl gridCell__label">
-						{upGradePriority > 0 ? upGradePriority : null}
-					</span>
-				)}
-			</div>
-		);
+	const handleKeyDown = useCallback(
+		(event: React.KeyboardEvent) => {
+			if (event.key === " " || event.key === "Enter") {
+				// Prevent default spacebar scroll and enter key form submission
+				event.preventDefault();
+				// Cast to React.MouseEvent; not strictly necessary for handleClick's current signature
+				// but good practice if handleClick expected more specific event properties.
+				handleClick(event as unknown as React.MouseEvent);
+			}
+		},
+		[handleClick]
+	);
 
-		// Determine tooltip content: use translated string if image exists, otherwise original label.
-		// Fallback to cell.label if translation is not found or if cell.image is not present.
-		const tooltipContent = cell.image
-			? t(`modules.${cell.image}`, { defaultValue: cell.label })
-			: cell.label;
-		return tooltipContent ? (
-			<Tooltip content={tooltipContent} delayDuration={500}>
-				{cellElement}
-			</Tooltip>
-		) : (
-			cellElement
-		);
-	}
-);
+	// Directly select the color for the current cell's tech from the store.
+	// This makes the component reactive to changes in the tech color mapping for this specific tech.
+	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
+	const techColor = useMemo(() => {
+		// If there's no specific tech color from the store (it's falsy) AND the cell is supercharged,
+		// override to "purple". Otherwise, use the color from the store.
+		return !currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
+	}, [currentTechColorFromStore, cell.supercharged]);
+
+	const cellClassName = useMemo(() => {
+		const classes = [
+			"gridCell",
+			"gridCell--interactive",
+			"shadow-md",
+			"sm:border-2",
+			"border-1",
+			"rounded-sm",
+			"sm:rounded-md",
+		];
+		if (cell.supercharged) classes.push("gridCell--supercharged");
+		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
+		if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
+		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
+		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
+		return classes.join(" ");
+	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label]);
+
+	// Get the upgrade priority for the current cell
+	const upGradePriority = getUpgradePriority(cell.label);
+	const backgroundImageStyle = useMemo(
+		() =>
+			cell.image
+				? `image-set(url(/assets/img/${cell.image}) 1x, url(/assets/img/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`
+				: "none",
+		[cell.image]
+	);
+
+	const cellElementStyle = useMemo(
+		() => ({
+			backgroundImage: backgroundImageStyle,
+		}),
+		[backgroundImageStyle]
+	);
+	const cellElement = (
+		<div
+			role="gridcell"
+			aria-colindex={columnIndex + 1}
+			tabIndex={isSharedGrid ? -1 : 0} // Make cell focusable if not shared
+			data-accent-color={techColor}
+			onContextMenu={handleContextMenu}
+			onClick={handleClick}
+			onTouchStart={handleTouchStart}
+			onTouchEnd={handleTouchEnd}
+			onTouchCancel={handleTouchEnd}
+			onKeyDown={handleKeyDown}
+			className={cellClassName}
+			style={cellElementStyle}
+		>
+			{cell.label && ( // Conditionally render the label span
+				<span className="mt-1 text-1xl md:text-3xl lg:text-4xl gridCell__label">
+					{upGradePriority > 0 ? upGradePriority : null}
+				</span>
+			)}
+		</div>
+	);
+
+	// Determine tooltip content: use translated string if image exists, otherwise original label.
+	// Fallback to cell.label if translation is not found or if cell.image is not present.
+	const tooltipContent = cell.image
+		? t(`modules.${cell.image}`, { defaultValue: cell.label })
+		: cell.label;
+	return tooltipContent ? (
+		<Tooltip content={tooltipContent} delayDuration={500}>
+			{cellElement}
+		</Tooltip>
+	) : (
+		cellElement
+	);
+});
 
 // Set display name for better debugging in React DevTools
 GridCell.displayName = "GridCell";
