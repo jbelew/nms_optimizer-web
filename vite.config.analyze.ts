@@ -4,7 +4,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import critical from "rollup-plugin-critical";
-// import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { splashScreen } from "vite-plugin-splash-screen";
 
@@ -80,7 +80,7 @@ export default defineConfig(({ mode }) => {
 			// Conditionally apply defer and critical plugins
 			...(!isDocker
 				? [
-					// inlineCriticalCssPlugin()
+					inlineCriticalCssPlugin()
 				]
 				: []),
 

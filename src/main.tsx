@@ -4,7 +4,7 @@ import "@radix-ui/themes/tokens/base.css";
 // Include just the colors you use, for example `ruby`, `teal`, and `slate`.
 // Remember to import the gray tint that matches your theme setting.
 import "@radix-ui/themes/tokens/colors/cyan.css";
-import "@radix-ui/themes/tokens/colors/gray.css";
+import "@radix-ui/themes/tokens/colors/sage.css";
 import "@radix-ui/themes/tokens/colors/purple.css";
 
 // Rest of the CSS
@@ -30,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<BrowserRouter>
 			<ErrorBoundary>
-				<Theme appearance="dark" panelBackground="translucent" accentColor="cyan">
+				<Theme appearance="dark" panelBackground="translucent" accentColor="cyan" grayColor="sage">
 					<Suspense
 						fallback={
 							<main className="flex flex-col items-center justify-center lg:min-h-screen">
