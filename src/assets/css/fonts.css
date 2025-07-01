@@ -1,24 +1,24 @@
 /* src/assets/css/fonts.css */
 @font-face {
-  font-family: "GeoNMS";
-  src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+	font-family: "GeoNMS";
+	src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-  font-family: "Raleway";
-  src: url("/assets/fonts/Raleway-VariableFont_wght.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+	font-family: "Raleway";
+	src: url("/assets/fonts/Raleway-VariableFont_wght.woff2") format("woff2");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-  font-family: "Acumin Pro Condensed";
-  src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
-  font-weight: 600; /* Semibold */
-  font-style: normal;
-  font-display: swap;
+	font-family: "Acumin Pro Condensed";
+	src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
+	font-weight: 600; /* Semibold */
+	font-style: normal;
+	font-display: swap;
 }

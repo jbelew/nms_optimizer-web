@@ -75,7 +75,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Button
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !shadow-sm !mr-2  ${
+						className={`gridTable__button gridTable__button--instructions !shadow-md !mr-2  ${
 							isFirstVisit ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -88,7 +88,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<IconButton
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !shadow-sm !mr-2  ${
+						className={`gridTable__button gridTable__button--instructions !shadow-md !mr-2  ${
 							isFirstVisit ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -101,7 +101,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Button
 						size="2"
 						variant="soft"
-						className={`gridTable__button gridTable__button--about !shadow-sm !mr-2`}
+						className={`gridTable__button gridTable__button--about !shadow-md !mr-2`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
 					>
@@ -112,7 +112,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<IconButton
 						size="2"
 						variant="soft"
-						className={`gridTable__button gridTable__button--about !shadow-sm !mr-2`}
+						className={`gridTable__button gridTable__button--about !shadow-md !mr-2`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
 					>
@@ -124,7 +124,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						<Button
 							size="2"
 							variant="soft"
-							className="!shadow-sm gridTable__button gridTable__button--changelog"
+							className="!shadow-md gridTable__button gridTable__button--changelog"
 							onClick={handleShareClick}
 							disabled={solving || !hasModulesInGrid}
 							aria-label={t("buttons.share")}
@@ -136,7 +136,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						<IconButton
 							size="2"
 							variant="soft"
-							className="!shadow-sm gridTable__button gridTable__button--changelog"
+							className="!shadow-md gridTable__button gridTable__button--changelog"
 							onClick={handleShareClick}
 							disabled={solving || !hasModulesInGrid}
 							aria-label={t("buttons.share")}
@@ -149,7 +149,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 			<div role="gridcell" className="flex justify-end col-span-3 mt-2 sm:mt-3">
 				<Button
 					size="2"
-					className={`gridTable__button gridTable__button--reset !shadow-sm`}
+					className={`gridTable__button gridTable__button--reset !shadow-md`}
 					variant="solid"
 					onClick={handleResetGrid}
 					disabled={solving}

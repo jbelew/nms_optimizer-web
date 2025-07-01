@@ -74,13 +74,18 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger disabled={solving}>
 				{isSmallAndUp ? (
-					<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
+					<Button size="2" variant="soft" aria-label="Select ship type" className="!shadow-md !p-2">
 						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
 						<Separator orientation="vertical" color="cyan" decorative />
 						<DropdownMenu.TriggerIcon />
 					</Button>
 				) : (
-					<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
+					<IconButton
+						size="2"
+						variant="soft"
+						aria-label="Select ship type"
+						className="!shadow-md !mt-1"
+					>
 						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
 					</IconButton>
 				)}

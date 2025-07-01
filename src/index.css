@@ -7,8 +7,8 @@
 @font-face {
 	font-family: "GeosansLight";
 	src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
-	font-weight: normal;
-	font-style: normal;
+	font-weight: 700;
+	font-style: bold;
 	font-display: swap;
 }
 
@@ -34,17 +34,8 @@
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
 	--font-family-geosans: "GeosansLight", sans-serif; /* Added for GeosansLight */
 	--letter-spacing-wide: 0.2rem; /* Added for common letter-spacing */
-	--font-weight-bold: 700; /* Added for common bold weight */
+	--font-weight-bold: 600; /* Added for common bold weight */
 	--color-background: var(--gary-a1);
-}
-
-.flag-icons {
-	font-family:
-		system-ui,
-		Apple Color Emoji,
-		Segoe UI Emoji,
-		Noto Color Emoji,
-		sans-serif;
 }
 
 /* Variables for our grid CLAMP calculations */
@@ -84,7 +75,7 @@ body {
 	font-weight: 400;
 	text-transform: uppercase;
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
-	-webkit-text-stroke: 0.75px;
+	-webkit-text-stroke: 0.8px;
 }
 
 .app {
