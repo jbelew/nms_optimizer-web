@@ -24,11 +24,9 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			try {
 				let response = await fetch(`/locales/${langToFetch}/${markdownFileName}.md`);
 				if (!response.ok && langToFetch !== defaultLang && markdownFileName !== "changelog") {
-					// If current language file not found, try default language (unless it's the changelog)
 					console.warn(`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`);
 					response = await fetch(`/locales/${defaultLang}/${markdownFileName}.md`);
 				}
-
 				if (!response.ok) {
 					throw new Error(
 						`Failed to load ${markdownFileName}.md for language: ${lang} or ${defaultLang}. Status: ${response.status}`

@@ -29,10 +29,14 @@ export interface TechTreeRowProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	/** Boolean indicating if an optimization process is currently active. */
 	solving: boolean;
-	/** Array of modules associated with this technology. */
-	modules: { label: string; id: string; image: string; type?: string }[];
 	/** The filename of the image representing the technology (e.g., "hyperdrive.webp"). Null if no specific image. */
 	techImage: string | null;
+	/** Function to check if the grid is full. */
+	isGridFull: boolean;
+	/** Boolean indicating if there are any reward modules. */
+	hasRewardModules: boolean;
+	/** Filtered array of reward modules. */
+	rewardModules: { label: string; id: string; image: string; type?: string }[];
 }
 
 function round(value: number, decimals: number) {
@@ -121,12 +125,13 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	tech,
 	handleOptimize,
 	solving,
-	modules,
 	techImage,
+	isGridFull,
+	hasRewardModules,
+	rewardModules,
 }) => {
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const isGridFull = useGridStore((state) => state.isGridFull);
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
 	const {
 		max_bonus,
@@ -145,7 +150,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 
 	let tooltipLabel: string;
 
-	if (isGridFull() && !hasTechInGrid) {
+	if (isGridFull && !hasTechInGrid) {
 		tooltipLabel = t("techTree.tooltips.gridFull");
 	} else {
 		tooltipLabel = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
@@ -159,7 +164,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		};
 	}, [tech, clearCheckedModules]);
 
-	const isOptimizeButtonDisabled = (isGridFull() && !hasTechInGrid) || solving;
+	const isOptimizeButtonDisabled = (isGridFull && !hasTechInGrid) || solving;
 
 	const handleReset = () => {
 		handleResetGridTech(tech);
@@ -175,7 +180,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	};
 
 	const handleOptimizeClick = async () => {
-		if (isGridFull() && !hasTechInGrid) {
+		if (isGridFull && !hasTechInGrid) {
 			setShaking(true); // Trigger the shake
 			setTimeout(() => {
 				// TODO: Consider making this a configurable constant or part of the shake store
@@ -237,7 +242,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				src={imagePath}
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
-			{modules.some((module) => module.type === "reward") ? (
+			{hasRewardModules ? (
 				<Accordion.Root
 					className="flex-1 pt-1 pb-1 text-sm font-medium sm:text-base border-b-1 AccordionRoot"
 					style={{ borderColor: "var(--accent-track)" }}
@@ -252,9 +257,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 							</Text>
 						</AccordionTrigger>
 						<Accordion.Content className="pl-1 AccordionContent">
-							{modules
-								.filter((module) => module.type === "reward")
-								.map((module) => (
+							{rewardModules.map((module) => (
 									<div key={module.id} className="flex items-start gap-2 AccordionContentText">
 										<Checkbox
 											className="!pt-1 ml-1 CheckboxRoot"

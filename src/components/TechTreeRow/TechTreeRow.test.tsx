@@ -130,8 +130,10 @@ describe("TechTreeRow", () => {
 		tech: "hyperdrive",
 		handleOptimize: mockHandleOptimize,
 		solving: false,
-		modules: [],
 		techImage: "hyperdrive.webp",
+		isGridFull: mockIsGridFull(),
+		hasRewardModules: false,
+		rewardModules: [],
 	};
 
 	test("renders the label and optimize button with initial icon", () => {

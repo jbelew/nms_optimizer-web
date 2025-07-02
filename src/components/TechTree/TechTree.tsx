@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useShipTypesStore } from "../../hooks/useShipTypes";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
+import { useGridStore } from "../../store/GridStore"; // Import useGridStore
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
@@ -18,6 +19,7 @@ interface TechTreeModule {
 	label: string;
 	id: string;
 	image: string;
+	type?: string;
 }
 
 interface TechTreeItem {
@@ -71,11 +73,12 @@ interface TechTreeSectionProps {
 	index: number;
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
+	isGridFull: () => boolean; // Add isGridFull prop
 	// selectedShipType is no longer passed to TechTreeRow, but TechTreeSection might still receive it if needed elsewhere.
 }
 
 const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
-	({ type, technologies, handleOptimize, solving }) => {
+	({ type, technologies, handleOptimize, solving, isGridFull }) => {
 		// selectedShipType is kept here if TechTreeSection needs it for other things
 		const { t } = useTranslation();
 		// Determine the image path from the typeImageMap
@@ -96,16 +99,22 @@ const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 				<Separator orientation="horizontal" size="4" className="mt-2 mb-4 sidebar__separator" />
 
 				{/* Render each technology as a TechTreeRow */}
-				{technologies.map((tech) => (
-					<TechTreeRow
-						key={tech.key}
-						tech={tech.key}
-						handleOptimize={handleOptimize}
-						solving={solving}
-						modules={tech.modules}
-						techImage={tech.image} // Pass the tech.image here
-					/>
-				))}
+				{technologies.map((tech) => {
+					const rewardModules = tech.modules.filter((module) => module.type === "reward");
+					const hasRewardModules = rewardModules.length > 0;
+					return (
+						<TechTreeRow
+							key={tech.key}
+							tech={tech.key}
+							handleOptimize={handleOptimize}
+							solving={solving}
+							techImage={tech.image} // Pass the tech.image here
+							isGridFull={isGridFull()} // Pass isGridFull down
+							hasRewardModules={hasRewardModules} // Pass hasRewardModules
+							rewardModules={rewardModules} // Pass rewardModules
+						/>
+					);
+				})}
 			</div>
 		);
 	}
@@ -124,6 +133,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
 		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
+		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 
 		// Correctly map and add modules to each technology object
 		const processedTechTree = useMemo(() => {
@@ -164,6 +174,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 						handleOptimize={handleOptimize}
 						solving={solving}
 						index={index}
+						isGridFull={isGridFull} // Pass isGridFull down
 					/>
 				)),
 			[processedTechTree, handleOptimize, solving]

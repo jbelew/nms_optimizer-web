@@ -16,7 +16,7 @@
 }
 
 @font-face {
-	font-family: "Acumin Pro Condensed";
+	font-family: "Acumin";
 	src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
 	font-weight: 600; /* Semibold */
 	font-style: normal;
