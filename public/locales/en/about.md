@@ -21,17 +21,17 @@ The optimization process blends deterministic patterns with adaptive algorithms 
 
 ## Tech Stack
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-**Backend Solver:** Python, Flask, TensorFlow, NumPy, custom simulated annealing implementation, and heuristic scoring
-**Testing:** Vitest, Python Unittest
-**Deployment:** Heroku (Hosting) and Cloudflare (DNS and CDN)
-**Automation:** GitHub Actions (CI/CD)
+**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI\
+**Backend Solver:** Python, Flask, TensorFlow, NumPy, custom simulated annealing implementation, and heuristic scoring\
+**Testing:** Vitest, Python Unittest\
+**Deployment:** Heroku (Hosting) and Cloudflare (DNS and CDN)\
+**Automation:** GitHub Actions (CI/CD)\
 **Analytics:** Google Analytics
 
 ## Repositories
 
-- Web UI: [nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-- Backend: [nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Web UI: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
 ## Some Fun History
 

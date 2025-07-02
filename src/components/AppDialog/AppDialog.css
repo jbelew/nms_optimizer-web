@@ -60,65 +60,6 @@
 	padding-right: calc(var(--spacing) * 4);
 }
 
-/* Element: Subheading (replaces styling for h2 within appDialog__body) */
-.appDialog__container h2 {
-	filter: drop-shadow(0 0 4px var(--accent-a2));
-	margin-bottom: calc(var(--spacing) * 0.25);
-	color: var(--accent-11);
-	/* margin-right: 1rem; Removed as parent .appDialog__body now handles scrollbar padding */
-	font-weight: var(--font-weight-bold);
-	font-size: var(--text-lg);
-}
-
-/* Modifier or specific rule for non-first subheading */
-.appDialog__container h2:not(:first-of-type) {
-	margin-top: calc(var(--spacing) * 2);
-}
-
-/* Element: Text/Paragraph (replaces styling for p within appDialog__body) */
-.appDialog__container p {
-	margin-top: 0rem;
-	margin-bottom: calc(var(--spacing) * 2);
-}
-
-.appDialog__container blockquote {
-	margin-top: calc(var(--spacing) * 2);
-	margin-bottom: calc(var(--spacing) * 4);
-	padding-left: calc(var(--spacing) * 4);
-	border-left: 4px solid var(--accent-track);
-}
-
-/* Element: List (replaces styling for ul within appDialog__body) */
-.appDialog__container ul,
-ol {
-	list-style-type: disc;
-	padding-left: 1rem;
-	margin-bottom: calc(var(--spacing) * 2);
-}
-
-/* Element: List Item (replaces styling for li within appDialog__list) */
-.appDialog__container li {
-	margin-bottom: calc(var(--spacing) * 1);
-}
-
-.appDialog__container a {
-	text-decoration-line: underline;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
-	text-decoration-color: currentColor;
-	transition:
-		text-decoration-thickness 0.2s ease,
-		color 0.2s ease;
-}
-
-.appDialog__container a:hover {
-	color: var(--accent-11);
-	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
-}
-
-/* --- Animations --- */
-
 /* Overlay Animations */
 .appDialog__overlay[data-state="open"] {
 	animation: appDialog__overlay-show 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;

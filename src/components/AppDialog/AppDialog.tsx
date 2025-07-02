@@ -92,7 +92,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						<Dialog.Description className="hidden appDialog__description">
 							This dialog contains information.
 						</Dialog.Description>
-						<div className="text-sm appDialog__container">{content}</div>
+						<div className="appDialog__container">{content}</div>
 						<Dialog.Close asChild>
 							<IconButton
 								variant="soft"

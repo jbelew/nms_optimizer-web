@@ -32,7 +32,6 @@ import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 import TechTreeComponent from "./components/TechTree/TechTree";
 
 // --- Page Content (for dialogs) ---
-import ChangelogContent from "./components/AppDialog/ChangeLogContent";
 import MarkdownContentRenderer from "./components/AppDialog/MarkdownContentRenderer";
 
 import React from "react";
@@ -102,7 +101,10 @@ const MainAppContentInternal: FC<{
 		() => <MarkdownContentRenderer markdownFileName="instructions" />,
 		[]
 	);
-	const changelogDialogContent = useMemo(() => <ChangelogContent />, []);
+	const changelogDialogContent = useMemo(
+		() => <MarkdownContentRenderer markdownFileName="changelog" />,
+		[]
+	);
 	const translationRequestDialogContent = useMemo(
 		() => <MarkdownContentRenderer markdownFileName="translation-request" />,
 		[]

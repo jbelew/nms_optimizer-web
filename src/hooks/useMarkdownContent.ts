@@ -19,11 +19,19 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			setIsLoading(true);
 			setError(null);
 			const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
+			const langToFetch = markdownFileName === "changelog" ? "en" : lang;
+			const defaultLang = (i18n.options.fallbackLng as string[])[0] || "en"; // Assuming 'en' is the default fallback
 			try {
-				const response = await fetch(`/locales/${lang}/${markdownFileName}.md`);
+				let response = await fetch(`/locales/${langToFetch}/${markdownFileName}.md`);
+				if (!response.ok && langToFetch !== defaultLang && markdownFileName !== "changelog") {
+					// If current language file not found, try default language (unless it's the changelog)
+					console.warn(`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`);
+					response = await fetch(`/locales/${defaultLang}/${markdownFileName}.md`);
+				}
+
 				if (!response.ok) {
 					throw new Error(
-						`Failed to load ${markdownFileName}.md for language: ${lang}. Status: ${response.status}`
+						`Failed to load ${markdownFileName}.md for language: ${lang} or ${defaultLang}. Status: ${response.status}`
 					);
 				}
 				const text = await response.text();
