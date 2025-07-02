@@ -48,7 +48,7 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 		 * @returns {T} The result of the promise if successful.
 		 */
 		read(): T {
-			// eslint-disable-next-line @typescript-eslint/only-throw-error
+			 
 			if (status === "pending") throw suspender; // Throw promise for suspense
 			if (status === "error") throw error; // Throw the error if it occurred
 			if (result === undefined || result === null) {

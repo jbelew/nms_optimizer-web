@@ -45,7 +45,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			}
 		};
 		void loadMarkdown();
-	}, [i18n.language, markdownFileName]);
+	}, [i18n.language, markdownFileName, i18n.options.fallbackLng]);
 
 	return { markdown, isLoading, error };
 };

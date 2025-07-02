@@ -29,7 +29,7 @@ function getAppVersion() {
 }
 
 export default defineConfig(({ mode }) => {
-	const isDocker = mode === "docker";
+	const doCritical = mode === "critical";
 	const appVersion = getAppVersion();
 
 	return {
@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			...(!isDocker
+			...(doCritical
 				? [
 					deferStylesheetsPlugin(),
 					critical({
@@ -78,7 +78,7 @@ export default defineConfig(({ mode }) => {
 			}),
 
 			// Conditionally apply defer and critical plugins
-			...(!isDocker
+			...(doCritical
 				? [
 					inlineCriticalCssPlugin()
 				]
