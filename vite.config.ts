@@ -29,7 +29,7 @@ function getAppVersion() {
 }
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical";
+	const doCritical = mode === "critical" || mode === "production";
 	const appVersion = getAppVersion();
 
 	return {
