@@ -35,7 +35,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					onClick={() => {
 						ReactGA.event({
 							category: "User Interactions",
-							action: "show_translation_request_dialog",
+							action: "showTranslations",
 						});
 						openDialog("translation");
 					}}
