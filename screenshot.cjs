@@ -939,22 +939,25 @@ const puppeteer = require("puppeteer");
 		);
 	});
 
-	await page.goto("http://localhost:5173", { waitUntil: "networkidle0" });
+	await page.goto("http://nms-optimizer.app", { waitUntil: "networkidle0" });
 	await page.screenshot({ path: "public/assets/img/screenshots/screenshot.png", fullPage: true });
+	console.log("Taking standard screenshot ...");
 	await page.screenshot({
 		path: "public/assets/img/screenshots/screenshot_desktop.png",
 		fullPage: true,
 	});
 
 	await page.setViewport({ width: 375, height: 667 });
-	await page.goto("http://localhost:5173", { waitUntil: "networkidle0" });
+	await page.goto("http://nms-optimizer.app", { waitUntil: "networkidle0" });
+	console.log("Taking mobile screenshot ...");
 	await page.screenshot({
 		path: "public/assets/img/screenshots/screenshot_mobile.png",
 		fullPage: false,
 	});
 
 	await page.setViewport({ width: 800, height: 1280 });
-	await page.goto("http://localhost:5173", { waitUntil: "networkidle0" });
+	await page.goto("http://nms-optimizer.app", { waitUntil: "networkidle0" });
+	console.log("Taking tablet screenshot ...");
 	await page.screenshot({
 		path: "public/assets/img/screenshots/screenshot_tablet.png",
 		fullPage: false,

@@ -39,7 +39,11 @@ body::before {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: image-set(url("/assets/img/background.webp") 1x) center/cover no-repeat;
+	background: image-set(
+			url("/assets/img/background.webp") 1x,
+			url("/assets/img/background@2x.webp") 2x
+		)
+		center/cover no-repeat;
 	z-index: -1;
 }
 

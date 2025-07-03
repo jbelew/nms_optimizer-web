@@ -283,6 +283,7 @@ const App: FC = () => {
 				hitType: "pageview",
 				page: location.pathname + location.search,
 				title: pageTitle,
+				app_version: appVersion,
 			});
 		} else {
 			// For the very first run of this effect (initial load),
