@@ -26,6 +26,7 @@ import { useUrlSync } from "./hooks/useUrlSync";
 import { useGridStore } from "./store/GridStore";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+import { reportWebVitals } from "./reportWebVitals";
 
 // --- Page Components ---
 // const TechTreeComponent = lazy(() => import("./components/TechTree/TechTree"));
@@ -244,6 +245,7 @@ const App: FC = () => {
 		});
 		gaInitialized.current = true;
 		// This effect runs once on App mount for GA initialization.
+		reportWebVitals();
 	}, [appVersion, build]); // Added build to dependency array
 
 	const initialPageViewSentRef = useRef(false); // Ensuring this is the single, correct declaration
