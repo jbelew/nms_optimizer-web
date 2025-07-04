@@ -241,8 +241,8 @@ const App: FC = () => {
 		if (gaInitialized.current) return;
 		ReactGA.initialize(TRACKING_ID, {
 			testMode: import.meta.env.DEV,
-			gaOptions: { app_version: appVersion },
 		});
+		ReactGA.set({ app_version: appVersion });
 		gaInitialized.current = true;
 		// This effect runs once on App mount for GA initialization.
 		reportWebVitals();
