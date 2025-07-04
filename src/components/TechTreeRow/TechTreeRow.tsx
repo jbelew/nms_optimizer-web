@@ -199,7 +199,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const baseImagePath = "/assets/img/buttons/";
 	const fallbackImage = `${baseImagePath}infra.webp`;
 	const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
-	// If techImage is "hyperdrive.webp", imagePath2x will be "/assets/img/buttons/hyperdrive@x2.webp"
 	const imagePath2x = techImage
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@x2.$1")}`
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@x2.$1"); // Also handle fallback
