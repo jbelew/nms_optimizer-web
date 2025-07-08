@@ -39,8 +39,8 @@ app.use(
 			} else {
 				// For other static assets in "dist" that might not be versioned
 				// (e.g., images copied directly from public, favicons, manifest.json)
-				// A shorter cache time, e.g., 1 day. Adjust as needed.
-				res.setHeader("Cache-Control", "public, max-age=86400");
+				// A longer cache time, e.g., 1 year.
+				res.setHeader("Cache-Control", "public, max-age=31536000");
 			}
 		},
 	})
