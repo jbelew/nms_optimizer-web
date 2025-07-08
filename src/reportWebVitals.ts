@@ -1,7 +1,7 @@
-import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
 import ReactGA from 'react-ga4';
 
-const sendToGA = ({ name, delta, value, id }) => {
+const sendToGA = ({ name, delta, id }: Metric) => {
   ReactGA.event({
     category: 'Web Vitals',
     action: name,

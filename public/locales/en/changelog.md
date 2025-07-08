@@ -4,6 +4,10 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 2.9.4 (2025-07-08)
+
+- Replaced AI German translations with proper human-reviewed versions, courtesy of **Slathibatfas**.
+
 ## Version 2.9.3 (2025-07-01)
 
 - Broke down scanner modules into seperate entities for starships per user request.
