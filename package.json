@@ -12,6 +12,7 @@
 		"preview": "vite preview",
 		"screenshot": "node screenshot.cjs",
 		"test": "vitest run --coverage",
+		"test:ci": "vitest run",
 		"coverage:merge": "vitest coverage merge",
 		"coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
 		"start": "node server.js",
