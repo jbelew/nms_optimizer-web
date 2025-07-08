@@ -177,7 +177,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 						isGridFull={isGridFull} // Pass isGridFull down
 					/>
 				)),
-			[processedTechTree, handleOptimize, solving]
+			[processedTechTree, handleOptimize, solving, isGridFull]
 		);
 
 		return <>{renderedTechTree}</>;

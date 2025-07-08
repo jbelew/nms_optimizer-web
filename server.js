@@ -5,19 +5,16 @@ import path from "path";
 
 // Get the current directory from the module URL
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 const app = express();
 
 // Redirect traffic from Heroku to your custom domain
 app.use((req, res, next) => {
 	const host = req.headers.host;
 	const targetHost = "nms-optimizer.app";
-
-	// Only redirect if on the Heroku domain
 	if (host && host !== targetHost) {
 		return res.redirect(301, `https://${targetHost}${req.originalUrl}`);
 	}
-
 	next();
 });
 
@@ -51,7 +48,13 @@ app.use(
 
 // Handle React/Vite history mode (SPA routing)
 app.get("/*splat", async (req, res) => {
-	res.sendFile(path.join(__dirname, "dist", "index.html"));
+	// If path has an extension, but wasn't served by static middleware, it's a 404.
+	if (path.extname(req.path)) {
+		res.status(404).send("Not Found");
+	} else {
+		// Otherwise, serve SPA entrypoint
+		res.sendFile(path.join(__dirname, "dist", "index.html"));
+	}
 });
 
 // Use the PORT environment variable provided by Heroku or fallback to 3000 locally

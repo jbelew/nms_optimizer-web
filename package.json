@@ -14,7 +14,6 @@
 		"test": "vitest run --coverage",
 		"coverage:merge": "vitest coverage merge",
 		"coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
-		"test:ci": "vitest run --coverage",
 		"start": "node server.js",
 		"heroku-postbuild": "vite build",
 		"analyze": "vite build --config vite.config.analyze.ts"
