@@ -1,7 +1,7 @@
 import { type FC, useEffect, useMemo, useRef } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import ErrorContent from "./components/AppDialog/ErrorContent";
@@ -30,6 +30,7 @@ import "@radix-ui/themes/tokens/colors/yellow.css";
  */
 const App: FC = () => {
 	const { t } = useTranslation();
+	const navigate = useNavigate(); // Correct placement for navigate initialization
 
 	const appVersion: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
@@ -61,6 +62,16 @@ const App: FC = () => {
 	 * - Manages SEO-related `hreflang` link tags for different languages.
 	 */
 	useEffect(() => {
+		// Grid/Platform check and redirect
+		const currentParams = new URLSearchParams(location.search); // Correct placement
+		if (currentParams.has('grid') && !currentParams.has('platform')) {
+			// Invalid shared URL: grid is present but platform is missing
+			currentParams.delete('grid'); // Remove the grid param
+			// Navigate to the cleaned URL
+			navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
+			return; // Exit early as the URL has changed and useEffect will re-run
+		}
+
 		const appName = t("appName");
 		let pageTitle = appName;
 
@@ -96,6 +107,24 @@ const App: FC = () => {
 			initialPageViewSentRef.current = true;
 		}
 
+		// Canonical Tag Logic
+		const canonicalLink = document.querySelector('link[rel="canonical"]');
+		let canonicalUrl = window.location.origin + location.pathname;
+
+		// Use the same currentParams from the beginning of the useEffect
+		if (currentParams.has('grid')) {
+			canonicalUrl += `?grid=${currentParams.get('grid')}`;
+		}
+
+		if (canonicalLink) {
+			canonicalLink.setAttribute('href', canonicalUrl);
+		} else {
+			const link = document.createElement('link');
+			link.setAttribute('rel', 'canonical');
+			link.setAttribute('href', canonicalUrl);
+			document.head.appendChild(link);
+		}
+
 		const supportedLanguages = i18n.options.supportedLngs || [];
 		const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en";
 		const currentPath = location.pathname;
@@ -129,7 +158,7 @@ const App: FC = () => {
 				document.head.appendChild(defaultLink);
 			}
 		});
-	}, [appVersion, location.pathname, location.search, t]);
+	}, [appVersion, location.pathname, location.search, t, navigate]); // Added navigate to dependencies
 
 	const errorDialogContent = useMemo(() => <ErrorContent />, []);
 
