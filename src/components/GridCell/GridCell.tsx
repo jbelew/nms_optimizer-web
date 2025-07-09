@@ -1,16 +1,15 @@
 import "./GridCell.css";
 
 import { Tooltip } from "@radix-ui/themes";
-import PropTypes from "prop-types"; // Import PropTypes
-import React, { memo, useCallback, useMemo, useRef, useState } from "react"; // Import useCallback, memo, and useMemo
+import PropTypes from "prop-types";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore, selectTotalSuperchargedCells } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
 
-// Moved outside the component to prevent re-creation on each render
-// This function is pure and only depends on its input.
+// This pure function is defined outside the component to prevent re-creation on each render.
 const getUpgradePriority = (label: string | undefined): number => {
 	if (!label) return 0;
 	const lowerLabel = label.toLowerCase();
@@ -27,12 +26,10 @@ interface GridCellProps {
 
 /**
  * A memoized component that displays a single cell in the grid.
- *
- * @param rowIndex - The row index of the cell
- * @param columnIndex - The column index of the cell
- * @param cell - The cell object, containing properties like label, supercharged, active, and image
+ * @param {number} rowIndex - The row index of the cell.
+ * @param {number} columnIndex - The column index of the cell.
+ * @param {boolean} isSharedGrid - Flag indicating if the grid is in shared/read-only mode.
  */
-
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useGridStore((state) => state.grid.cells[rowIndex][columnIndex]);
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
@@ -40,7 +37,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
 	const longPressTriggered = useRef(false);
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
-	const { setShaking } = useShakeStore(); // Get setShaking from the store
+	const { setShaking } = useShakeStore();
 	const { t } = useTranslation();
 
 	/**
@@ -84,10 +81,21 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		]
 	);
 
+	useEffect(() => {
+		const handler = (e: TouchEvent) => {
+			if ((e.target as HTMLElement).closest(".gridCell")) {
+				e.preventDefault();
+			}
+		};
+
+		document.addEventListener("touchstart", handler, { passive: false });
+		return () => document.removeEventListener("touchstart", handler);
+	}, []);
+
 	/**
 	 * Handles a touch start on the cell.
 	 */
-	const handleTouchStart = useCallback((event: React.TouchEvent) => {
+	const handleTouchStart = useCallback(() => {
 		longPressTimer.current = setTimeout(() => {
 			longPressTriggered.current = true;
 			// Ensure interaction is allowed
@@ -97,7 +105,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 			toggleCellActive(rowIndex, columnIndex);
-		}, 750); // Standard long press duration is 1000ms (1 second)
+		}, 750); // Long press duration
 	}, [isSharedGrid, toggleCellActive, rowIndex, columnIndex]);
 
 	/**
@@ -107,13 +115,11 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		if (longPressTimer.current) {
 			clearTimeout(longPressTimer.current);
 		}
-					if (longPressTriggered.current) {
-				event.preventDefault(); // Prevent default behavior after a long press
-				longPressTriggered.current = false; // Reset immediately
-			}
+		if (longPressTriggered.current) {
+			event.preventDefault(); // Prevent default behavior after a long press
+			longPressTriggered.current = false; // Reset immediately
+		}
 	}, []);
-
-	
 
 	const handleKeyDown = useCallback(
 		(event: React.KeyboardEvent) => {
@@ -155,7 +161,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		return classes.join(" ");
 	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label]);
 
-	// Get the upgrade priority for the current cell
 	const upGradePriority = getUpgradePriority(cell.label);
 	const backgroundImageStyle = useMemo(
 		() =>
@@ -188,7 +193,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			className={cellClassName}
 			style={cellElementStyle}
 		>
-			{cell.label && ( // Conditionally render the label span
+			{cell.label && (
 				<span className="mt-1 text-1xl md:text-3xl lg:text-4xl gridCell__label">
 					{upGradePriority > 0 ? upGradePriority : null}
 				</span>
@@ -210,10 +215,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	);
 });
 
-// Set display name for better debugging in React DevTools
 GridCell.displayName = "GridCell";
 
-// Add PropTypes for runtime validation
 GridCell.propTypes = {
 	rowIndex: PropTypes.number.isRequired,
 	columnIndex: PropTypes.number.isRequired,
