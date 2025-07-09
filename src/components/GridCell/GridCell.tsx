@@ -151,6 +151,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			"border-1",
 			"rounded-sm",
 			"sm:rounded-md",
+			"select-none",
 		];
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
