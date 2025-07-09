@@ -5,18 +5,14 @@ import { useGridStore } from "../store/GridStore";
 import { useBreakpoint } from "./useBreakpoint";
 
 interface AppLayout {
-	// Ref for the container whose height is measured (e.g., div.gridContainer__container)
 	containerRef: React.RefObject<HTMLDivElement | null>;
-	// Ref for the actual GridTable element, used for total width calculations
 	gridTableRef: React.RefObject<HTMLDivElement | null>;
-	gridHeight: number | null; // Height of the containerRef element
-	gridTableTotalWidth: number | undefined; // Total width of the GridTable
+	gridHeight: number | null;
+	gridTableTotalWidth: number | undefined;
 	isLarge: boolean;
 }
 
-// Constants for delays and default values
-const INITIAL_MEASUREMENT_DELAY = 150; // Unified delay for all initial measurements
-const GRID_TABLE_WIDTH_ADJUSTMENT = -40; // Add your desired adjustment value here (e.g., -10, 5)
+const GRID_TABLE_WIDTH_ADJUSTMENT = -40;
 
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -24,70 +20,63 @@ export const useAppLayout = (): AppLayout => {
 	const [gridHeight, setGridHeight] = useState<number | null>(null);
 	const [gridTableTotalWidth, setGridTableTotalWidth] = useState<number | undefined>(undefined);
 	const isLarge = useBreakpoint("1024px");
-	const { isSharedGrid } = useGridStore(); // `grid` is no longer needed here
+	const { isSharedGrid } = useGridStore();
 
-	// Effect for gridHeight
 	useEffect(() => {
-		const elementToObserve = containerRef.current; // Capture the element for this effect run
+		const elementToObserveHeight = containerRef.current;
+		const elementToObserveWidth = gridTableRef.current;
 
-		const updateHeight = () => {
-			if (isLarge && !isSharedGrid && elementToObserve) {
-				setGridHeight(elementToObserve.getBoundingClientRect().height);
-			} else {
-				setGridHeight(null); // Reset height if not large or is shared
+		const updateMeasurements = (entries?: ResizeObserverEntry[]) => {
+			let newGridHeight: number | null = null;
+			let newGridTableTotalWidth: number | undefined = undefined;
+
+			// Prioritize ResizeObserver entries if available
+			if (entries) {
+				for (const entry of entries) {
+					if (entry.target === elementToObserveHeight) {
+						if (isLarge && !isSharedGrid) {
+							newGridHeight = entry.contentRect.height;
+						}
+					} else if (entry.target === elementToObserveWidth) {
+						newGridTableTotalWidth = entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT;
+					}
+				}
 			}
+
+			// Fallback for initial measurement or if specific elements weren't in entries
+			// This part should only execute if the values haven't been set by entries
+			// or if it's the initial call without entries.
+			if (newGridHeight === null && isLarge && !isSharedGrid && elementToObserveHeight) {
+				newGridHeight = elementToObserveHeight.getBoundingClientRect().height;
+			}
+			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
+				newGridTableTotalWidth = elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT;
+			}
+
+			setGridHeight(newGridHeight);
+			setGridTableTotalWidth(newGridTableTotalWidth);
 		};
 
-		if (!elementToObserve) {
-			updateHeight(); // Ensure state is correctly set (e.g., nullified) if no element
-			return;
+		// Initial measurement using requestAnimationFrame
+		const initialUpdateFrameId = requestAnimationFrame(() => updateMeasurements());
+
+		const observer = new ResizeObserver((entries) => {
+			// Pass entries to the updateMeasurements function
+			updateMeasurements(entries);
+		});
+
+		if (elementToObserveHeight) {
+			observer.observe(elementToObserveHeight);
+		}
+		if (elementToObserveWidth) {
+			observer.observe(elementToObserveWidth);
 		}
 
-		// Perform initial update with a slight delay to allow for rendering and styling.
-		const initialUpdateTimerId = setTimeout(updateHeight, INITIAL_MEASUREMENT_DELAY);
-
-		const observer = new ResizeObserver(updateHeight);
-		observer.observe(elementToObserve);
-
 		return () => {
-			clearTimeout(initialUpdateTimerId);
-			observer.unobserve(elementToObserve);
+			cancelAnimationFrame(initialUpdateFrameId);
 			observer.disconnect();
 		};
-		// containerRef.current is included to re-run the effect if the actual DOM node changes.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isLarge, isSharedGrid, containerRef.current]);
-
-	// Effect for gridTableTotalWidth (uses gridTableRef)
-	useEffect(() => {
-		const tableElementToObserve = gridTableRef.current; // Capture the element for this effect run
-
-		const updateGridTableTotalWidth = () => {
-			if (!tableElementToObserve) {
-				setGridTableTotalWidth(undefined); // Reset width if no element
-				return;
-			}
-			// Apply adjustment
-			setGridTableTotalWidth(tableElementToObserve.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT);
-		};
-
-		if (!tableElementToObserve) {
-			updateGridTableTotalWidth(); // Ensure state is correctly set if no element
-			return;
-		}
-
-		// Perform initial update with a delay.
-		const initialUpdateTimerId = setTimeout(updateGridTableTotalWidth, INITIAL_MEASUREMENT_DELAY);
-
-		const observer = new ResizeObserver(updateGridTableTotalWidth);
-		observer.observe(tableElementToObserve);
-
-		return () => {
-			clearTimeout(initialUpdateTimerId);
-			observer.unobserve(tableElementToObserve);
-			observer.disconnect();
-		}; // eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [gridTableRef.current]);
+	}, [isLarge, isSharedGrid, containerRef, gridTableRef]);
 
 	return {
 		containerRef,

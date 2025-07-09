@@ -108,30 +108,42 @@ const App: FC = () => {
 		}
 
 		// Canonical Tag Logic
-		const canonicalLink = document.querySelector('link[rel="canonical"]');
+		let canonicalLink = document.querySelector('link[rel="canonical"]');
 		let canonicalUrl = window.location.origin + location.pathname;
 
-		// Use the same currentParams from the beginning of the useEffect
 		if (currentParams.has("grid")) {
 			canonicalUrl += `?grid=${currentParams.get("grid")}`;
 		}
 
-		if (canonicalLink) {
+		if (!canonicalLink) {
+			canonicalLink = document.createElement("link");
+			canonicalLink.setAttribute("rel", "canonical");
+			document.head.appendChild(canonicalLink);
+		}
+		if (canonicalLink.getAttribute("href") !== canonicalUrl) {
 			canonicalLink.setAttribute("href", canonicalUrl);
-		} else {
-			const link = document.createElement("link");
-			link.setAttribute("rel", "canonical");
-			link.setAttribute("href", canonicalUrl);
-			document.head.appendChild(link);
 		}
 
+		// Hreflang Tags Logic
 		const supportedLanguages = i18n.options.supportedLngs || [];
 		const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en";
 		const currentPath = location.pathname;
 		const currentSearch = location.search;
 		const baseUrl = window.location.origin;
 
-		document.querySelectorAll("link[rel='alternate'][hreflang]").forEach((tag) => tag.remove());
+		// Get existing hreflang tags
+		const existingHreflangTags = Array.from(
+			document.querySelectorAll("link[rel='alternate'][hreflang]")
+		);
+		const existingHreflangMap = new Map<string, HTMLLinkElement>();
+		existingHreflangTags.forEach((tag) => {
+			const hreflang = tag.getAttribute("hreflang");
+			if (hreflang) {
+				existingHreflangMap.set(hreflang, tag as HTMLLinkElement);
+			}
+		});
+
+		const newHreflangUrls = new Map<string, string>();
 
 		supportedLanguages.forEach((lang) => {
 			if (lang === "dev" || lang === "cimode") return;
@@ -139,25 +151,35 @@ const App: FC = () => {
 			const params = new URLSearchParams(currentSearch);
 			params.set("lng", lang);
 			const href = `${baseUrl}${currentPath}?${params.toString()}`;
-
-			const link = document.createElement("link");
-			link.rel = "alternate";
-			link.hreflang = lang;
-			link.href = href;
-			document.head.appendChild(link);
+			newHreflangUrls.set(lang, href);
 
 			if (lang === defaultLanguage) {
 				const defaultParams = new URLSearchParams(currentSearch);
 				defaultParams.set("lng", defaultLanguage);
 				const xDefaultHref = `${baseUrl}${currentPath}?${defaultParams.toString()}`;
-
-				const defaultLink = document.createElement("link");
-				defaultLink.rel = "alternate";
-				defaultLink.hreflang = "x-default";
-				defaultLink.href = xDefaultHref;
-				document.head.appendChild(defaultLink);
+				newHreflangUrls.set("x-default", xDefaultHref);
 			}
 		});
+
+		// Update or create hreflang tags
+		newHreflangUrls.forEach((href, lang) => {
+			let linkTag = existingHreflangMap.get(lang);
+			if (linkTag) {
+				if (linkTag.getAttribute("href") !== href) {
+					linkTag.setAttribute("href", href);
+				}
+				existingHreflangMap.delete(lang); // Mark as processed
+			} else {
+				linkTag = document.createElement("link");
+				linkTag.rel = "alternate";
+				linkTag.hreflang = lang;
+				linkTag.href = href;
+				document.head.appendChild(linkTag);
+			}
+		});
+
+		// Remove any remaining (unprocessed) existing hreflang tags
+		existingHreflangMap.forEach((tag) => tag.remove());
 	}, [appVersion, location.pathname, location.search, t, navigate]); // Added navigate to dependencies
 
 	const errorDialogContent = useMemo(() => <ErrorContent />, []);

@@ -85,11 +85,15 @@ const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 		const imagePath = typeImageMap[type] ? `/assets/img/sidebar/${typeImageMap[type]}` : null;
 		return (
 			<div className="mb-6 lg:mb-6 last:mb-0 sidebar__section">
-				<div className="flex items-center">
+				<div className="flex items-start">
 					{/* Conditionally render the image if imagePath is available */}
 					{imagePath &&
 						typeImageMap[type] && ( // Ensure type exists in map before rendering image
-							<img src={imagePath} alt={type} className="ml-1 h-[24] w-[32] mr-2 opacity-25" />
+							<img
+								src={imagePath}
+								alt={type}
+								className="sm:mt-1 ml-1 h-[24] w-[32] mr-2 opacity-25"
+							/>
 						)}
 					<h2 className="text-xl sm:text-2xl heading-styled">
 						{t(`techTree.categories.${type}`).toUpperCase()}

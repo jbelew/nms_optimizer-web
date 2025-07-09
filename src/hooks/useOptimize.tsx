@@ -67,8 +67,13 @@ function isApiResponse(value: unknown): value is ApiResponse {
 	}
 
 	// Check for optional properties (if they exist, they must be numbers)
-	if (Object.prototype.hasOwnProperty.call(obj, "max_bonus") && typeof obj.max_bonus !== "number") return false;
-	if (Object.prototype.hasOwnProperty.call(obj, "solved_bonus") && typeof obj.solved_bonus !== "number") return false;
+	if (Object.prototype.hasOwnProperty.call(obj, "max_bonus") && typeof obj.max_bonus !== "number")
+		return false;
+	if (
+		Object.prototype.hasOwnProperty.call(obj, "solved_bonus") &&
+		typeof obj.solved_bonus !== "number"
+	)
+		return false;
 
 	return true;
 }
@@ -92,14 +97,17 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const element = gridContainerRef.current;
 			const offset = 8;
 
-			const elementRect = element.getBoundingClientRect();
-			const absoluteElementTop = elementRect.top + window.pageYOffset;
-			const targetScrollPosition = absoluteElementTop - offset;
+			const scrollIntoView = () => {
+				const elementRect = element.getBoundingClientRect();
+				const absoluteElementTop = elementRect.top + window.pageYOffset;
+				const targetScrollPosition = absoluteElementTop - offset;
 
-			window.scrollTo({
-				top: targetScrollPosition,
-				behavior: "smooth",
-			});
+				window.scrollTo({
+					top: targetScrollPosition,
+					behavior: "smooth",
+				});
+			};
+			requestAnimationFrame(scrollIntoView);
 		}
 	}, [isLarge, solving]);
 
