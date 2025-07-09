@@ -38,7 +38,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
 	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
-	const [longPressTriggered, setLongPressTriggered] = useState(false);
+	const longPressTriggered = useRef(false);
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
@@ -54,7 +54,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 
-			if (longPressTriggered) {
+			if (longPressTriggered.current) {
 				event.stopPropagation(); // Prevents unintended click after long press
 				return;
 			}
@@ -74,7 +74,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		},
 		[
 			isSharedGrid,
-			longPressTriggered,
 			toggleCellActive,
 			rowIndex,
 			columnIndex,
@@ -91,7 +90,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const handleTouchStart = useCallback((event: React.TouchEvent) => {
 		event.preventDefault();
 		longPressTimer.current = setTimeout(() => {
-			setLongPressTriggered(true);
+			longPressTriggered.current = true;
 			// Ensure interaction is allowed
 			if (isSharedGrid) {
 				// Clear timer if interaction is not allowed but timer started
@@ -105,21 +104,17 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	/**
 	 * Handles a touch end on the cell.
 	 */
-	const handleTouchEnd = useCallback(() => {
+	const handleTouchEnd = useCallback((event: React.TouchEvent) => {
 		if (longPressTimer.current) {
 			clearTimeout(longPressTimer.current);
 		}
-		setTimeout(() => setLongPressTriggered(false), 50);
-	}, []); // No dependencies, so empty array
-
-	/**
-	 * Handles a context menu on the cell.
-	 *
-	 * @param event - The event object
-	 */
-	const handleContextMenu = useCallback((event: React.MouseEvent) => {
-		event.preventDefault();
+					if (longPressTriggered.current) {
+				event.preventDefault(); // Prevent default behavior after a long press
+				longPressTriggered.current = false; // Reset immediately
+			}
 	}, []);
+
+	
 
 	const handleKeyDown = useCallback(
 		(event: React.KeyboardEvent) => {
@@ -182,8 +177,10 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			role="gridcell"
 			aria-colindex={columnIndex + 1}
 			tabIndex={isSharedGrid ? -1 : 0} // Make cell focusable if not shared
+			contentEditable={false}
+			draggable={false}
 			data-accent-color={techColor}
-			onContextMenu={handleContextMenu}
+			onContextMenu={(e) => e.preventDefault()}
 			onClick={handleClick}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}

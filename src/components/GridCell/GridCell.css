@@ -5,11 +5,18 @@
 	width: var(--grid-cell-size);
 	height: var(--grid-cell-size);
 
-	
+	/* Prevent text selection */
+	user-select: none;
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE/Edge */
+
+	/* Prevent callout menu on iOS tap-hold */
+	-webkit-touch-callout: none;
 
 	/* Render settings */
 	image-rendering: high-quality;
-	touch-action: manipulation;
+	touch-action: none;
 }
 
 .gridCell:focus-visible {
@@ -26,6 +33,10 @@
 		0px 0px 4px rgba(0, 0, 0, 0.75);
 	color: var(--gray-a12);
 	font-family: "Acumin";
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 }
 
 .gridCell--interactive {
