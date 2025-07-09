@@ -16,7 +16,6 @@
 
 	/* Render settings */
 	image-rendering: high-quality;
-	touch-action: none;
 }
 
 .gridCell:focus-visible {
