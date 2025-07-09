@@ -5,21 +5,11 @@
 	width: var(--grid-cell-size);
 	height: var(--grid-cell-size);
 
-	/* Prevent text selection */
-	user-select: none;
-	-webkit-user-select: none; /* Safari */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE/Edge */
-
-	/* Prevent callout menu on iOS tap-hold */
-	-webkit-touch-callout: none;
-
-	/* Optional: Prevent drag */
-	-webkit-user-drag: none;
-	user-drag: none;
+	
 
 	/* Render settings */
 	image-rendering: high-quality;
+	touch-action: manipulation;
 }
 
 .gridCell:focus-visible {

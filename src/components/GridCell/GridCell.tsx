@@ -88,7 +88,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	/**
 	 * Handles a touch start on the cell.
 	 */
-	const handleTouchStart = useCallback(() => {
+	const handleTouchStart = useCallback((event: React.TouchEvent) => {
+		event.preventDefault();
 		longPressTimer.current = setTimeout(() => {
 			setLongPressTriggered(true);
 			// Ensure interaction is allowed
@@ -151,7 +152,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			"border-1",
 			"rounded-sm",
 			"sm:rounded-md",
-			"select-none",
 		];
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
