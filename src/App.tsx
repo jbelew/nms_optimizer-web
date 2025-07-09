@@ -64,9 +64,9 @@ const App: FC = () => {
 	useEffect(() => {
 		// Grid/Platform check and redirect
 		const currentParams = new URLSearchParams(location.search); // Correct placement
-		if (currentParams.has('grid') && !currentParams.has('platform')) {
+		if (currentParams.has("grid") && !currentParams.has("platform")) {
 			// Invalid shared URL: grid is present but platform is missing
-			currentParams.delete('grid'); // Remove the grid param
+			currentParams.delete("grid"); // Remove the grid param
 			// Navigate to the cleaned URL
 			navigate(`${location.pathname}?${currentParams.toString()}`, { replace: true });
 			return; // Exit early as the URL has changed and useEffect will re-run
@@ -112,16 +112,16 @@ const App: FC = () => {
 		let canonicalUrl = window.location.origin + location.pathname;
 
 		// Use the same currentParams from the beginning of the useEffect
-		if (currentParams.has('grid')) {
-			canonicalUrl += `?grid=${currentParams.get('grid')}`;
+		if (currentParams.has("grid")) {
+			canonicalUrl += `?grid=${currentParams.get("grid")}`;
 		}
 
 		if (canonicalLink) {
-			canonicalLink.setAttribute('href', canonicalUrl);
+			canonicalLink.setAttribute("href", canonicalUrl);
 		} else {
-			const link = document.createElement('link');
-			link.setAttribute('rel', 'canonical');
-			link.setAttribute('href', canonicalUrl);
+			const link = document.createElement("link");
+			link.setAttribute("rel", "canonical");
+			link.setAttribute("href", canonicalUrl);
 			document.head.appendChild(link);
 		}
 

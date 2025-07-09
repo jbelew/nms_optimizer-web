@@ -6,5 +6,9 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
-	plugins: [require("@tailwindcss/typography")],
+	plugins: [],
+	safelist: [
+		{ pattern: /data-state-.*/ },
+		{ pattern: /data-side-.*/ },
+	],
 };

@@ -29,7 +29,7 @@ function getAppVersion() {
 }
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical" || mode === "production";
+	const doCritical = mode === "critical";
 	// const doCritical = mode === "critical"
 	const appVersion = getAppVersion();
 
@@ -107,7 +107,12 @@ export default defineConfig(({ mode }) => {
 				output: {
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
-
+						if (id.includes("@radix-ui/themes/tokens/colors/")) {
+							return "radix-colors";
+						}
+						if (id.includes("@radix-ui/themes")) {
+							return "radix-themes";
+						}
 						if (
 							id.includes("react-markdown") ||
 							id.includes("remark-") ||
@@ -134,6 +139,7 @@ export default defineConfig(({ mode }) => {
 						if (
 							id.includes("radix")
 						) { return "radix"; }
+
 						return "vendor";
 					},
 					assetFileNames: (assetInfo) => {
