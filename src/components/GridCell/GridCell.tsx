@@ -1,15 +1,16 @@
 import "./GridCell.css";
 
 import { Tooltip } from "@radix-ui/themes";
-import PropTypes from "prop-types";
-import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import PropTypes from "prop-types"; // Import PropTypes
+import React, { memo, useCallback, useMemo, useRef, useState } from "react"; // Import useCallback, memo, and useMemo
 import { useTranslation } from "react-i18next";
 
 import { useGridStore, selectTotalSuperchargedCells } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
 
-// This pure function is defined outside the component to prevent re-creation on each render.
+// Moved outside the component to prevent re-creation on each render
+// This function is pure and only depends on its input.
 const getUpgradePriority = (label: string | undefined): number => {
 	if (!label) return 0;
 	const lowerLabel = label.toLowerCase();
@@ -26,18 +27,20 @@ interface GridCellProps {
 
 /**
  * A memoized component that displays a single cell in the grid.
- * @param {number} rowIndex - The row index of the cell.
- * @param {number} columnIndex - The column index of the cell.
- * @param {boolean} isSharedGrid - Flag indicating if the grid is in shared/read-only mode.
+ *
+ * @param rowIndex - The row index of the cell
+ * @param columnIndex - The column index of the cell
+ * @param cell - The cell object, containing properties like label, supercharged, active, and image
  */
+
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useGridStore((state) => state.grid.cells[rowIndex][columnIndex]);
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
 	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
-	const longPressTriggered = useRef(false);
+	const [longPressTriggered, setLongPressTriggered] = useState(false);
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
-	const { setShaking } = useShakeStore();
+	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
 
 	/**
@@ -51,7 +54,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 
-			if (longPressTriggered.current) {
+			if (longPressTriggered) {
 				event.stopPropagation(); // Prevents unintended click after long press
 				return;
 			}
@@ -71,6 +74,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		},
 		[
 			isSharedGrid,
+			longPressTriggered,
 			toggleCellActive,
 			rowIndex,
 			columnIndex,
@@ -81,23 +85,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		]
 	);
 
-	useEffect(() => {
-		const handler = (e: TouchEvent) => {
-			if ((e.target as HTMLElement).closest(".gridCell")) {
-				e.preventDefault();
-			}
-		};
-
-		document.addEventListener("touchstart", handler, { passive: false });
-		return () => document.removeEventListener("touchstart", handler);
-	}, []);
-
 	/**
 	 * Handles a touch start on the cell.
 	 */
 	const handleTouchStart = useCallback(() => {
 		longPressTimer.current = setTimeout(() => {
-			longPressTriggered.current = true;
+			setLongPressTriggered(true);
 			// Ensure interaction is allowed
 			if (isSharedGrid) {
 				// Clear timer if interaction is not allowed but timer started
@@ -105,20 +98,26 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 			toggleCellActive(rowIndex, columnIndex);
-		}, 750); // Long press duration
+		}, 750); // Standard long press duration is 1000ms (1 second)
 	}, [isSharedGrid, toggleCellActive, rowIndex, columnIndex]);
 
 	/**
 	 * Handles a touch end on the cell.
 	 */
-	const handleTouchEnd = useCallback((event: React.TouchEvent) => {
+	const handleTouchEnd = useCallback(() => {
 		if (longPressTimer.current) {
 			clearTimeout(longPressTimer.current);
 		}
-		if (longPressTriggered.current) {
-			event.preventDefault(); // Prevent default behavior after a long press
-			longPressTriggered.current = false; // Reset immediately
-		}
+		setTimeout(() => setLongPressTriggered(false), 50);
+	}, []); // No dependencies, so empty array
+
+	/**
+	 * Handles a context menu on the cell.
+	 *
+	 * @param event - The event object
+	 */
+	const handleContextMenu = useCallback((event: React.MouseEvent) => {
+		event.preventDefault();
 	}, []);
 
 	const handleKeyDown = useCallback(
@@ -161,6 +160,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		return classes.join(" ");
 	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label]);
 
+	// Get the upgrade priority for the current cell
 	const upGradePriority = getUpgradePriority(cell.label);
 	const backgroundImageStyle = useMemo(
 		() =>
@@ -181,10 +181,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			role="gridcell"
 			aria-colindex={columnIndex + 1}
 			tabIndex={isSharedGrid ? -1 : 0} // Make cell focusable if not shared
-			contentEditable={false}
-			draggable={false}
 			data-accent-color={techColor}
-			onContextMenu={(e) => e.preventDefault()}
+			onContextMenu={handleContextMenu}
 			onClick={handleClick}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
@@ -193,7 +191,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			className={cellClassName}
 			style={cellElementStyle}
 		>
-			{cell.label && (
+			{cell.label && ( // Conditionally render the label span
 				<span className="mt-1 text-1xl md:text-3xl lg:text-4xl gridCell__label">
 					{upGradePriority > 0 ? upGradePriority : null}
 				</span>
@@ -215,8 +213,10 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	);
 });
 
+// Set display name for better debugging in React DevTools
 GridCell.displayName = "GridCell";
 
+// Add PropTypes for runtime validation
 GridCell.propTypes = {
 	rowIndex: PropTypes.number.isRequired,
 	columnIndex: PropTypes.number.isRequired,
