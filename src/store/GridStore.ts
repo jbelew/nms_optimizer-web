@@ -4,6 +4,7 @@ import { persist, type StorageValue } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { useTechStore } from "./TechStore";
+import { type Module } from "../hooks/useTechTree.tsx";
 
 // --- Define the specific function type we are debouncing ---
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
@@ -86,7 +87,7 @@ export type ApiResponse = {
 };
 
 // --- Utility functions (createEmptyCell, createGrid) ---
-export const createEmptyCell = (supercharged = false, active = true): Cell => ({
+export const createEmptyCell = (supercharged = false, active = false): Cell => ({
 	active,
 	adjacency: false,
 	adjacency_bonus: 0.0,
@@ -104,7 +105,7 @@ export const createEmptyCell = (supercharged = false, active = true): Cell => ({
 
 export const createGrid = (width: number, height: number): Grid => ({
 	cells: Array.from({ length: height }, () =>
-		Array.from({ length: width }, () => createEmptyCell(false, true))
+		Array.from({ length: width }, () => createEmptyCell(false, false))
 	),
 	width,
 	height,
@@ -115,6 +116,9 @@ export type GridStore = {
 	grid: Grid;
 	result: ApiResponse | null;
 	isSharedGrid: boolean;
+	gridFixed: boolean;
+	superchargedFixed: boolean;
+	initialGridDefinition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined;
 	setGrid: (grid: Grid) => void;
 	resetGrid: () => void;
 	setGridAndResetAuxiliaryState: (newGrid: Grid) => void; // New action
@@ -129,8 +133,13 @@ export type GridStore = {
 	setCellActive: (rowIndex: number, columnIndex: number, active: boolean) => void;
 	setCellSupercharged: (rowIndex: number, columnIndex: number, supercharged: boolean) => void;
 	setIsSharedGrid: (isShared: boolean) => void;
+	setGridFixed: (fixed: boolean) => void;
+	setSuperchargedFixed: (fixed: boolean) => void;
+	setInitialGridDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined) => void;
+	setGridFromInitialDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
 	selectTotalSuperchargedCells: () => number;
 	selectHasModulesInGrid: () => boolean;
+	applyModulesToGrid: (modules: Module[]) => void;
 };
 
 // --- Create Debounced Storage ---
@@ -163,7 +172,7 @@ const debouncedStorage = {
 
 			if (isUrlLikelyShared && name === "grid-storage") {
 				// If it's a shared grid URL, ignore localStorage for initial hydration
-				// by returning null. This forces the store to use its default initial state.
+				// by returning null. This forces the store to use its its default initial state.
 				// The useUrlSync hook will then populate the grid from the URL.
 				return null;
 			}
@@ -195,6 +204,9 @@ export const useGridStore = create<GridStore>()(
 			grid: createGrid(10, 6),
 			result: null,
 			isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"), // Initialize based on current URL
+			gridFixed: false,
+			superchargedFixed: false,
+			initialGridDefinition: undefined,
 
 			setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
 
@@ -211,11 +223,11 @@ export const useGridStore = create<GridStore>()(
 
 			setGridAndResetAuxiliaryState: (newGrid) => {
 				set((state) => {
-					state.grid = newGrid; // Set the fully prepared grid
+					state.grid = newGrid;
 					state.result = null;
-					state.isSharedGrid = false; // A new grid selection means it's not a shared link being viewed
+					state.isSharedGrid = false;
 				});
-				useTechStore.getState().clearResult(); // Clear associated tech results
+				useTechStore.getState().clearResult();
 			},
 
 			setResult: (result, tech) => {
@@ -347,6 +359,75 @@ export const useGridStore = create<GridStore>()(
 				const grid = get().grid;
 				if (!grid || !grid.cells) return false;
 				return grid.cells.flat().some((cell) => cell.module !== null);
+			},
+
+			setGridFixed: (fixed) => set({ gridFixed: fixed }),
+			setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
+			setInitialGridDefinition: (definition) => set({ initialGridDefinition: definition }),
+
+			setGridFromInitialDefinition: (definition) => {
+				set((state) => {
+					if (definition) {
+						const newCells: Cell[][] = definition.grid.map((row) =>
+							row.map((moduleData) => {
+								const baseCell = createEmptyCell();
+								if (moduleData && Object.keys(moduleData).length > 0) {
+									return {
+										...baseCell,
+										active: moduleData.active ?? baseCell.active,
+										adjacency: moduleData.adjacency ?? baseCell.adjacency,
+										adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
+										bonus: moduleData.bonus ?? baseCell.bonus,
+										image: moduleData.image ?? baseCell.image,
+										module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
+										label: moduleData.label ?? baseCell.label,
+										sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
+										supercharged: moduleData.supercharged ?? baseCell.supercharged,
+										tech: moduleData.tech ?? baseCell.tech,
+										type: moduleData.type ?? baseCell.type,
+										value: moduleData.value ?? baseCell.value,
+									};
+								} else {
+									return baseCell;
+								}
+							})
+						);
+						state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
+						state.gridFixed = definition.gridFixed;
+						state.superchargedFixed = definition.superchargedFixed;
+					}
+				});
+			},
+
+			applyModulesToGrid: (modules: (Module | null)[]) => {
+				set((state) => {
+					modules.forEach((moduleData, index) => {
+						const rowIndex = Math.floor(index / state.grid.width);
+						const colIndex = index % state.grid.width;
+						const cell = state.grid.cells[rowIndex]?.[colIndex];
+						if (cell) {
+							if (moduleData) {
+								// Create a new cell based on the existing one, then merge moduleData
+								Object.assign(cell, {
+									active: moduleData.active || false,
+									adjacency: moduleData.adjacency || false,
+									adjacency_bonus: moduleData.adjacency_bonus || 0,
+									bonus: moduleData.bonus || 0,
+									image: moduleData.image || null,
+									module: moduleData.id || null,
+									label: moduleData.label || "",
+									sc_eligible: moduleData.sc_eligible || false,
+									supercharged: moduleData.supercharged || false,
+									tech: moduleData.tech || null,
+									type: moduleData.type || "",
+									value: moduleData.value || 0,
+								});
+							} else {
+								Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));
+							}
+						}
+					});
+				});
 			},
 		})),
 		// --- Persist Configuration ---

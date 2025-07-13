@@ -38,6 +38,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
 	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
+	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
+	const gridFixed = useGridStore((state) => state.gridFixed);
 	const [longPressTriggered, setLongPressTriggered] = useState(false);
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
@@ -60,7 +62,20 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			}
 
 			if (event.ctrlKey || event.metaKey) {
+				if (gridFixed) {
+					setShaking(true);
+					setTimeout(() => {
+						setShaking(false);
+					}, 500);
+					return; // Exit after initiating shake, don't toggle active
+				}
 				toggleCellActive(rowIndex, columnIndex);
+			} else if (superchargedFixed) {
+				setShaking(true);
+				setTimeout(() => {
+					setShaking(false);
+				}, 500);
+				return; // Exit after initiating shake, don't toggle supercharge
 			} else {
 				if (totalSupercharged >= 4 && !cell.supercharged) {
 					setShaking(true);
@@ -82,6 +97,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			cell.supercharged,
 			toggleCellSupercharged,
 			setShaking,
+			superchargedFixed,
+			gridFixed,
 		]
 	);
 
@@ -165,7 +182,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const backgroundImageStyle = useMemo(
 		() =>
 			cell.image
-				? `image-set(url(/assets/img/${cell.image}) 1x, url(/assets/img/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`
+				? `image-set(url(/assets/img/grid/${cell.image}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`
 				: "none",
 		[cell.image]
 	);
@@ -202,7 +219,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	// Determine tooltip content: use translated string if image exists, otherwise original label.
 	// Fallback to cell.label if translation is not found or if cell.image is not present.
 	const tooltipContent = cell.image
-		? t(`modules.${cell.image}`, { defaultValue: cell.label })
+		? t(`modules.${cell.image.split('/').pop()}`, { defaultValue: cell.label })
 		: cell.label;
 	return tooltipContent ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>

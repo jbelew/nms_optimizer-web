@@ -37,6 +37,8 @@ export interface TechTreeRowProps {
 	hasRewardModules: boolean;
 	/** Filtered array of reward modules. */
 	rewardModules: { label: string; id: string; image: string; type?: string }[];
+	/** The currently selected ship type. */
+	selectedShipType: string;
 }
 
 function round(value: number, decimals: number) {
@@ -129,6 +131,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	isGridFull,
 	hasRewardModules,
 	rewardModules,
+	selectedShipType,
 }) => {
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
@@ -145,8 +148,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const techMaxBonus = max_bonus?.[tech] ?? 0;
 	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
 
-	// Use techImage for translation key, fallback to tech id if techImage is null
-	const translatedTechName = techImage ? t(`technologies.${techImage}`) : t(`technologies.${tech}`);
+	// Use tech and selectedShipType for translation key
+	const translatedTechName = t(`technologies.${selectedShipType}.${tech}`);
 
 	let tooltipLabel: string;
 
@@ -196,7 +199,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 
 	const currentCheckedModules = checkedModules[tech] || [];
 
-	const baseImagePath = "/assets/img/buttons/";
+	const baseImagePath = "/assets/img/tech/";
 	const fallbackImage = `${baseImagePath}infra.webp`;
 	const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
 	const imagePath2x = techImage
@@ -257,19 +260,19 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						</AccordionTrigger>
 						<Accordion.Content className="pl-1 AccordionContent">
 							{rewardModules.map((module) => (
-									<div key={module.id} className="flex items-start gap-2 AccordionContentText">
-										<Checkbox
-											className="!pt-1 ml-1 CheckboxRoot"
-											variant="soft"
-											id={module.id}
-											checked={currentCheckedModules.includes(module.id)}
-											onClick={() => handleCheckboxChange(module.id)}
-										/>
-										<label className="Label" htmlFor={module.id}>
-											{t(`modules.${module.image}`, { defaultValue: module.label })}
-										</label>
-									</div>
-								))}
+								<div key={module.id} className="flex items-start gap-2 AccordionContentText">
+									<Checkbox
+										className="!pt-1 ml-1 CheckboxRoot"
+										variant="soft"
+										id={module.id}
+										checked={currentCheckedModules.includes(module.id)}
+										onClick={() => handleCheckboxChange(module.id)}
+									/>
+									<label className="Label" htmlFor={module.id}>
+										{t(`modules.${module.id}`, { defaultValue: module.label })}
+									</label>
+								</div>
+							))}
 						</Accordion.Content>
 					</Accordion.Item>
 				</Accordion.Root>

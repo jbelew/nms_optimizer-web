@@ -9,13 +9,11 @@ import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { type ShipTypeDetail, useShipTypesStore } from "../../hooks/useShipTypes";
-import { createGrid, type Grid, useGridStore } from "../../store/GridStore";
+import { createGrid, useGridStore } from "../../store/GridStore";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;
 const DEFAULT_GRID_WIDTH = 6;
-const FREIGHTER_KEYWORD = "freighter";
-const FREIGHTER_INACTIVE_ROW_INDICES = [4, 5]; // 0-indexed rows to deactivate for freighters
 
 interface ShipSelectionProps {
 	solving: boolean;
@@ -41,30 +39,11 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 
 				setSelectedShipType(option);
 
+				// When the ship type changes, we reset the grid to a default blank state.
+				// Any special grid layouts (like for freighters) are now handled by the API
+				// when fetching the tech tree for that ship type.
 				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-				let newCells = initialGrid.cells;
-
-				// Deactivate middle rows if freighter is selected
-				if (option.toLowerCase().includes(FREIGHTER_KEYWORD)) {
-					newCells = initialGrid.cells.map((row, rIndex) => {
-						if (FREIGHTER_INACTIVE_ROW_INDICES.includes(rIndex)) {
-							return row.map((cell) => ({
-								...cell,
-								active: false,
-								supercharged: false,
-							}));
-						}
-						return row;
-					});
-				}
-
-				const finalGridPayload: Grid = {
-					cells: newCells,
-					width: initialGrid.width,
-					height: initialGrid.height,
-				};
-
-				setGridAndResetAuxiliaryState(finalGridPayload);
+				setGridAndResetAuxiliaryState(initialGrid);
 			}
 		},
 		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState]
@@ -152,9 +131,9 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 					<React.Fragment key={type}>
 						{groupIndex > 0 && <DropdownMenu.Separator />}
-						<DropdownMenu.Label>
+						{/* <DropdownMenu.Label>
 							<span className="shipSelection__header">{t(`platformTypes.${type}`)}</span>
-						</DropdownMenu.Label>
+						</DropdownMenu.Label> */}
 						{items.map(({ key }) => (
 							<DropdownMenu.RadioItem
 								key={key}

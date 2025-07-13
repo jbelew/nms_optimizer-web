@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ReactGA from "react-ga4";
 
 import { API_URL } from "../constants";
-import { type ApiResponse, type Grid, useGridStore } from "../store/GridStore";
+import { createEmptyCell, type ApiResponse, type Grid, useGridStore } from "../store/GridStore";
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { useTechStore } from "../store/TechStore";
 import { useBreakpoint } from "./useBreakpoint";
@@ -128,25 +128,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 					cells: grid.cells.map((row) =>
 						row.map((cell) =>
 							cell.tech === tech
-								? {
-										...cell,
-										module: null,
-										label: "",
-										type: "",
-										bonus: 0.0,
-										adjacency_bonus: 0.0,
-										total: 0.0,
-										value: 0,
-										image: null,
-										adjacency: false,
-										sc_eligible: false,
-										tech: null,
-									}
+								? { ...createEmptyCell(cell.supercharged, cell.active) }
 								: cell
 						)
 					),
 				};
 
+				console.log("DEBUG: Sending grid to API:", updatedGrid);
 				const response = await fetch(API_URL + "optimize", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },

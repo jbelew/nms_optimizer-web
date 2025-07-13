@@ -15,14 +15,12 @@ import { useGridStore, selectHasModulesInGrid } from "../../store/GridStore";
 
 interface GridTableButtonsProps {
 	solving: boolean;
-	resetGridAction: () => void;
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
 }
 
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
-	resetGridAction,
 	updateUrlForShare,
 	updateUrlForReset,
 }) => {
@@ -30,7 +28,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const { t } = useTranslation();
 
 	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
-	const { setIsSharedGrid } = useGridStore();
+	const { setIsSharedGrid, initialGridDefinition } = useGridStore();
 	const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
@@ -62,10 +60,17 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	const handleResetGrid = useCallback(() => {
 		ReactGA.event({ category: "User Interactions", action: "resetGrid" });
-		resetGridAction();
+
+		if (initialGridDefinition) {
+			useGridStore.getState().setGridFromInitialDefinition(initialGridDefinition);
+		} else {
+			// Fallback to a completely empty grid if no initial definition is available
+			useGridStore.getState().resetGrid();
+		}
+
 		updateUrlForReset();
 		setIsSharedGrid(false);
-	}, [resetGridAction, setIsSharedGrid, updateUrlForReset]);
+	}, [initialGridDefinition, updateUrlForReset, setIsSharedGrid]);
 
 	return (
 		<>

@@ -39,7 +39,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({
 
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "520px";
 
-	const { grid, activateRow, deActivateRow, resetGrid, isSharedGrid } = useGridStore();
+	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog } = useDialog();
 
 	const selectedShipType = useShipTypesStore((state) => state.selectedShipType);
@@ -132,7 +132,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({
 							activateRow={activateRow}
 							deActivateRow={deActivateRow}
 							ref={appLayoutGridTableRef}
-							resetGridAction={resetGrid}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
 						/>

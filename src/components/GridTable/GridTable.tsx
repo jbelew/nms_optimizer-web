@@ -15,7 +15,6 @@ import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 interface GridTableProps {
 	grid: Grid | null | undefined;
-	resetGridAction: () => void;
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
@@ -44,7 +43,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			deActivateRow,
 			solving,
 			shared: isSharedGridProp,
-			resetGridAction,
 			updateUrlForShare,
 			updateUrlForReset,
 		},
@@ -131,7 +129,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					<div role="row">
 						<GridTableButtons
 							solving={solving}
-							resetGridAction={resetGridAction}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
 						/>

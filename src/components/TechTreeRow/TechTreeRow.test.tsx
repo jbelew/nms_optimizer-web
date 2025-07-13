@@ -19,16 +19,25 @@ vi.mock("../../store/ShakeStore");
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => {
+		t: (key: string, options?: { defaultValue?: string }) => {
 			if (key.startsWith("technologies.")) {
-				// e.g., technologies.hyperdrive.webp -> hyperdrive.webp
-				// or technologies.hyperdrive -> hyperdrive
-				return key.substring("technologies.".length);
+				const parts = key.split(".");
+				// Expecting format: technologies.shipType.techKey
+				if (parts.length === 3) {
+					return `${parts[1]}.${parts[2]}`;
+				}
+				return key; // Fallback for unexpected format
 			}
 			if (key.startsWith("modules.")) {
-				return key.substring("modules.".length); // Returns image name, e.g., "module_image.webp"
+				const parts = key.split(".");
+				// Expecting format: modules.moduleId
+				if (parts.length === 2) {
+					return parts[1];
+				}
+				return key; // Fallback for unexpected format
 			}
-			return key; // Return the key itself for other translations
+			// For other keys, return the key itself or defaultValue if provided
+			return options?.defaultValue || key;
 		},
 	}),
 }));
@@ -127,13 +136,14 @@ describe("TechTreeRow", () => {
 	});
 
 	const defaultProps: TechTreeRowProps = {
-		tech: "hyperdrive",
+		tech: "hyper",
 		handleOptimize: mockHandleOptimize,
 		solving: false,
 		techImage: "hyperdrive.webp",
 		isGridFull: mockIsGridFull(),
 		hasRewardModules: false,
 		rewardModules: [],
+		selectedShipType: "standard", // Add selectedShipType
 	};
 
 	test("renders the label and optimize button with initial icon", () => {
@@ -144,8 +154,7 @@ describe("TechTreeRow", () => {
 		);
 
 		// The label is now constructed from selectedShipType and tech by the mock
-		// It will use techImage if available, otherwise tech id, based on the mock's transformation
-		const expectedLabel = defaultProps.techImage ? defaultProps.techImage : defaultProps.tech;
+		const expectedLabel = `${defaultProps.selectedShipType}.${defaultProps.tech}`;
 		expect(screen.getByText(expectedLabel)).toBeInTheDocument();
 
 		// The optimize button's aria-label is now based on mocked t() output
@@ -165,7 +174,7 @@ describe("TechTreeRow", () => {
 			</RadixTooltip.Provider>
 		);
 
-		const expectedLabel = defaultProps.techImage ? defaultProps.techImage : defaultProps.tech;
+		const expectedLabel = `${defaultProps.selectedShipType}.${defaultProps.tech}`;
 		const optimizeButton = screen.getByLabelText(`techTree.tooltips.solve ${expectedLabel}`);
 		fireEvent.click(optimizeButton);
 

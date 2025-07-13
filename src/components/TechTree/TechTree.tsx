@@ -2,7 +2,7 @@
 import "./TechTree.css";
 
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Separator } from "@radix-ui/themes";
+import { Button, Separator } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -30,7 +30,7 @@ interface TechTreeItem {
 }
 
 interface TechTree {
-	[key: string]: TechTreeItem[];
+	[key: string]: TechTreeItem[] | TechTree;
 }
 
 // --- Image Map (This is the key part) ---
@@ -74,11 +74,11 @@ interface TechTreeSectionProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
 	isGridFull: () => boolean; // Add isGridFull prop
-	// selectedShipType is no longer passed to TechTreeRow, but TechTreeSection might still receive it if needed elsewhere.
+	selectedShipType: string; // Add selectedShipType prop
 }
 
 const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
-	({ type, technologies, handleOptimize, solving, isGridFull }) => {
+	({ type, technologies, handleOptimize, solving, isGridFull, selectedShipType }) => {
 		// selectedShipType is kept here if TechTreeSection needs it for other things
 		const { t } = useTranslation();
 		// Determine the image path from the typeImageMap
@@ -116,6 +116,7 @@ const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 							isGridFull={isGridFull()} // Pass isGridFull down
 							hasRewardModules={hasRewardModules} // Pass hasRewardModules
 							rewardModules={rewardModules} // Pass rewardModules
+							selectedShipType={selectedShipType} // Pass selectedShipType
 						/>
 					);
 				})}
@@ -133,16 +134,31 @@ TechTreeSection.propTypes = {
 	solving: PropTypes.bool.isRequired,
 };
 
+import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
+
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
 		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
+		const { applyRecommendedBuild } = useRecommendedBuild(techTree);
+		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
+
+		useEffect(() => {
+			if (techTree.grid_definition) {
+				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
+				const flattenedGrid = techTree.grid_definition.grid.flat();
+				applyModulesToGrid(flattenedGrid);
+				setGridFixed(techTree.grid_definition.gridFixed);
+				setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
+			}
+		}, [techTree.grid_definition, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
 
 		// Correctly map and add modules to each technology object
 		const processedTechTree = useMemo(() => {
-			const result: TechTree = {};
-			Object.entries(techTree).forEach(([category, technologies]) => {
+				const result: TechTree = {};
+				Object.entries(techTree).forEach(([category, technologies]) => {
+					if (category === "recommended_build" || category === "grid" || category === "grid_definition") return;
 				// Ensure 'technologies' is an array before attempting to map over it.
 				// If it's not an array (e.g., undefined, null, or some other type from the API),
 				// default to an empty array to prevent the .map error.
@@ -174,17 +190,25 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 					<TechTreeSection
 						key={type}
 						type={type}
-						technologies={technologies}
+						technologies={technologies as TechTreeItem[]}
 						handleOptimize={handleOptimize}
 						solving={solving}
 						index={index}
 						isGridFull={isGridFull} // Pass isGridFull down
+						selectedShipType={selectedShipType} // Pass selectedShipType down
 					/>
 				)),
-			[processedTechTree, handleOptimize, solving, isGridFull]
+			[processedTechTree, handleOptimize, solving, isGridFull, selectedShipType]
 		);
 
-		return <>{renderedTechTree}</>;
+		return (
+			<>
+				{techTree.recommended_build && (
+					<Button onClick={applyRecommendedBuild}>View Recommended Build</Button>
+				)}
+				{renderedTechTree}
+			</>
+		);
 	}
 );
 TechTreeContent.displayName = "TechTreeContent";
