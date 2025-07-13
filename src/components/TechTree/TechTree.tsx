@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useShipTypesStore } from "../../hooks/useShipTypes";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
-import { useGridStore } from "../../store/GridStore"; // Import useGridStore
+import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; // Import useGridStore
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
@@ -143,22 +143,34 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 		const { applyRecommendedBuild } = useRecommendedBuild(techTree);
 		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
+		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 
 		useEffect(() => {
-			if (techTree.grid_definition) {
+			if (techTree.grid_definition && !hasModulesInGrid) {
 				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
 				const flattenedGrid = techTree.grid_definition.grid.flat();
 				applyModulesToGrid(flattenedGrid);
 				setGridFixed(techTree.grid_definition.gridFixed);
 				setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
 			}
-		}, [techTree.grid_definition, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
+		}, [
+			techTree.grid_definition,
+			applyModulesToGrid,
+			setGridFixed,
+			setSuperchargedFixed,
+			hasModulesInGrid,
+		]);
 
 		// Correctly map and add modules to each technology object
 		const processedTechTree = useMemo(() => {
-				const result: TechTree = {};
-				Object.entries(techTree).forEach(([category, technologies]) => {
-					if (category === "recommended_build" || category === "grid" || category === "grid_definition") return;
+			const result: TechTree = {};
+			Object.entries(techTree).forEach(([category, technologies]) => {
+				if (
+					category === "recommended_build" ||
+					category === "grid" ||
+					category === "grid_definition"
+				)
+					return;
 				// Ensure 'technologies' is an array before attempting to map over it.
 				// If it's not an array (e.g., undefined, null, or some other type from the API),
 				// default to an empty array to prevent the .map error.
