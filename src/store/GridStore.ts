@@ -409,18 +409,18 @@ export const useGridStore = create<GridStore>()(
 							if (moduleData) {
 								// Create a new cell based on the existing one, then merge moduleData
 								Object.assign(cell, {
-									active: moduleData.active || false,
-									adjacency: moduleData.adjacency || false,
-									adjacency_bonus: moduleData.adjacency_bonus || 0,
-									bonus: moduleData.bonus || 0,
-									image: moduleData.image || null,
-									module: moduleData.id || null,
-									label: moduleData.label || "",
-									sc_eligible: moduleData.sc_eligible || false,
-									supercharged: moduleData.supercharged || false,
-									tech: moduleData.tech || null,
-									type: moduleData.type || "",
-									value: moduleData.value || 0,
+									active: moduleData.active ?? cell.active,
+									adjacency: moduleData.adjacency ?? cell.adjacency,
+									adjacency_bonus: moduleData.adjacency_bonus ?? cell.adjacency_bonus,
+									bonus: moduleData.bonus ?? cell.bonus,
+									image: moduleData.image ?? cell.image,
+									module: moduleData.id ?? cell.module,
+									label: moduleData.label ?? cell.label,
+									sc_eligible: moduleData.sc_eligible ?? cell.sc_eligible,
+									supercharged: moduleData.supercharged ?? cell.supercharged,
+									tech: moduleData.tech ?? cell.tech,
+									type: moduleData.type ?? cell.type,
+									value: moduleData.value ?? cell.value,
 								});
 							} else {
 								Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));

@@ -219,7 +219,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	// Determine tooltip content: use translated string if image exists, otherwise original label.
 	// Fallback to cell.label if translation is not found or if cell.image is not present.
 	const tooltipContent = cell.image
-		? t(`modules.${cell.image.split("/").pop()}`, { defaultValue: cell.label })
+		? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
+				defaultValue: cell.label,
+			})
 		: cell.label;
 	return cell.module && cell.active ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>

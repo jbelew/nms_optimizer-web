@@ -238,18 +238,25 @@ const deserialize = async (
 				newGrid.cells[r][c].sc_eligible = false;
 
 				if (moduleId && techName) {
-					const moduleData = modulesMap[techName]?.[moduleId];
-					if (moduleData) {
-						newGrid.cells[r][c].module = moduleData.id;
-						newGrid.cells[r][c].label = moduleData.label;
-						newGrid.cells[r][c].image = moduleData.image;
-						newGrid.cells[r][c].bonus = moduleData.bonus || 0.0;
-						newGrid.cells[r][c].value = moduleData.value || 0;
-						newGrid.cells[r][c].adjacency = moduleData.adjacency;
-						newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible;
+					const techModules = modulesMap[techName];
+					if (techModules) {
+						const moduleData = techModules[moduleId];
+						if (moduleData) {
+							newGrid.cells[r][c].module = moduleData.id;
+							newGrid.cells[r][c].label = moduleData.label;
+							newGrid.cells[r][c].image = moduleData.image;
+							newGrid.cells[r][c].bonus = moduleData.bonus ?? 0.0;
+							newGrid.cells[r][c].value = moduleData.value ?? 0;
+							newGrid.cells[r][c].adjacency = moduleData.adjacency ?? false;
+							newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible ?? false;
+						} else {
+							console.warn(
+								`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`
+							);
+						}
 					} else {
 						console.warn(
-							`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`
+							`Tech category not found for tech: ${techName}. Cell state might be incomplete.`
 						);
 					}
 				}

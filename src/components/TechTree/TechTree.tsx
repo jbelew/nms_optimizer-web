@@ -1,7 +1,7 @@
 // src/components/TechTree/TechTree.tsx
 import "./TechTree.css";
 
-import { ExclamationTriangleIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
+import { ExclamationTriangleIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import { Button, Callout, DropdownMenu, Em, Separator, Strong, Text } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
@@ -134,6 +134,7 @@ import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
 
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
+		const { t } = useTranslation();
 		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
@@ -215,20 +216,19 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 			<>
 				{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
 					<Callout.Root variant="soft" mb="4" size="1" highContrast>
-						<Callout.Icon>
-							<InfoCircledIcon style={{ color: "var(--amber-track)" }} />
-						</Callout.Icon>
+						<Callout.Icon>🧪</Callout.Icon>
 						<Callout.Text>
 							<Text>
-								<Strong>Exocraft</Strong> and <Strong>Exosuits</Strong> include{" "}
-								<Em>"experimental"</Em> recommended builds
-							</Text>
-							<br />
+								<Strong>{t("techTree.recommendedBuilds.exocraftLabel")}</Strong> and{" "}
+								<Strong>{t("techTree.recommendedBuilds.exosuitLabel")}</Strong> include{" "}
+								<Em>&quot;{t("techTree.recommendedBuilds.experimentalLabel")}&quot;</Em> recommended
+								builds
+							</Text>{" "}
 							{techTree.recommended_builds && techTree.recommended_builds.length > 1 ? (
 								<DropdownMenu.Root>
 									<DropdownMenu.Trigger>
 										<Button mt="3">
-											Select a Recommeded Build
+											{t("techTree.recommendedBuilds.selectBuildButton")}
 											<Separator orientation="vertical" size="1" />
 											<DropdownMenu.TriggerIcon />
 										</Button>
@@ -251,7 +251,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 									}
 								>
 									<MagicWandIcon style={{ color: "var(--amber-11)" }} />
-									Apply Recommended Build
+									{t("techTree.recommendedBuilds.applyBuildButton")}
 								</Button>
 							)}
 						</Callout.Text>
