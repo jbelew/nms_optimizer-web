@@ -102,8 +102,8 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 					console.warn(
 						`Selected ship type "${currentSelected}" is not valid. Resetting to "standard".`
 					);
-					// This will update the state, localStorage, and the URL.
-					state.setSelectedShipType("standard");
+					// This will update the state and localStorage, but not the URL, to prevent a loop.
+					state.setSelectedShipType("standard", false);
 				}
 				return data;
 			})
