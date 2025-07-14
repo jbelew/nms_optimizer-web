@@ -25,7 +25,8 @@ export interface TechTreeItem {
 	key: string;
 	modules: Module[];
 	image: string | null;
-	color: string; // Add color property
+	color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky"; // Add color property
+	module_count: number;
 }
 
 export interface RecommendedBuild {

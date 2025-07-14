@@ -269,12 +269,12 @@
 			"jetpack": "Jetpack",
 			"boots": "Rocket Boots",
 			"skiff": "Exo Skiff",
-			"exocraft": "Exocraft Summoning Unit",
+			"exocraft": "Exocraft Summoning",
 			"hazmat": "Haz-Mat Gauntlets",
 			"nutrient": "Nutrient Ingestor",
 			"refiner": "Personal Refiner",
 			"trade": "Trade Rocket",
-			"translator": "Automatic Translation Devices"
+			"translator": "Automatic Translation"
 		}
 	},
 	"modules": {
@@ -505,12 +505,12 @@
 			"jetpack-upgrade": "Jetpack Upgrade",
 			"boots": "Rocket Boots",
 			"skiff": "Exo Skiff",
-			"exocraft": "Exocraft Summoning Unit",
+			"exocraft": "Exocraft Summoning",
 			"hazmat": "Haz-Mat Gauntlets",
 			"nutrient": "Nutrient Ingestor",
 			"refiner": "Personal Refiner",
 			"trade": "Trade Rocket",
-			"translator": "Automatic Translation Devices"
+			"translator": "Automatic Translation"
 		}
 	}
 }

@@ -6,6 +6,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ## Version 3.0.0 beta 2 (2025-07-14)
 
+- Added module count indicator for each technology type.
+- Addressed untrapped loop that was causing browser crashes.
+- Updated translation files.
+
+## Version 3.0.0 beta 2 (2025-07-14)
+
 - Added support for mutliple recommended builds per platform.
 - Added missing category icon assets.
 - Corrected some typos on label text elements.

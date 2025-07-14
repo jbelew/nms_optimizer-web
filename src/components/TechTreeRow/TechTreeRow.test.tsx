@@ -151,6 +151,8 @@ describe("TechTreeRow", () => {
 		hasRewardModules: false,
 		rewardModules: [],
 		selectedShipType: "standard", // Add selectedShipType
+		moduleCount: 5, // Add moduleCount
+		techColor: "red", // Add techColor
 	};
 
 	test("renders the label and optimize button with initial icon", () => {

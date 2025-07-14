@@ -10,7 +10,7 @@ import {
 	ResetIcon,
 	UpdateIcon,
 } from "@radix-ui/react-icons";
-import { Avatar, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/themes";
+import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/themes";
 import { Accordion } from "radix-ui";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -39,6 +39,36 @@ export interface TechTreeRowProps {
 	rewardModules: { label: string; id: string; image: string; type?: string }[];
 	/** The currently selected ship type. */
 	selectedShipType: string;
+	/** The count of modules for the technology. */
+	moduleCount: number;
+	/** The color associated with the technology. */
+	techColor:
+		| "gray"
+		| "gold"
+		| "bronze"
+		| "brown"
+		| "yellow"
+		| "amber"
+		| "orange"
+		| "tomato"
+		| "red"
+		| "ruby"
+		| "crimson"
+		| "pink"
+		| "plum"
+		| "purple"
+		| "violet"
+		| "iris"
+		| "indigo"
+		| "blue"
+		| "cyan"
+		| "teal"
+		| "jade"
+		| "green"
+		| "grass"
+		| "lime"
+		| "mint"
+		| "sky";
 }
 
 function round(value: number, decimals: number) {
@@ -131,6 +161,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	isGridFull,
 	hasRewardModules,
 	rewardModules,
+	moduleCount,
+	techColor,
 }) => {
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
@@ -242,6 +274,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				alt={translatedTechName}
 				fallback="IK"
 				src={imagePath}
+				color={techColor}
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
 			{hasRewardModules ? (
@@ -255,6 +288,15 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						<AccordionTrigger>
 							<Text className="techRow__label">
 								{translatedTechName}
+								<Badge
+									ml="1"
+									className="align-top"
+									variant="soft"
+									radius="medium"
+									color={techColor}
+								>
+									{moduleCount + currentCheckedModules.length}
+								</Badge>
 								<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 							</Text>
 						</AccordionTrigger>
@@ -283,6 +325,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
 				>
 					{translatedTechName}
+					<Badge ml="1" className="align-top" variant="soft" radius="medium" color={techColor}>
+						{moduleCount + currentCheckedModules.length}
+					</Badge>
 					<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 				</Text>
 			)}

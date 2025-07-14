@@ -14,16 +14,9 @@ import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; //
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
-import { type Module } from "../../hooks/useTechTree";
+import { type TechTreeItem } from "../../hooks/useTechTree";
 
-// Define interfaces to ensure type safety
-interface TechTreeItem {
-	label: string;
-	key: string;
-	modules: Module[];
-	image: string | null; // Add image property
-	color: string;
-}
+
 
 // --- Image Map (This is the key part) ---
 type TypeImageMap = {
@@ -113,6 +106,8 @@ const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 							hasRewardModules={hasRewardModules} // Pass hasRewardModules
 							rewardModules={rewardModules} // Pass rewardModules
 							selectedShipType={selectedShipType} // Pass selectedShipType
+							moduleCount={tech.module_count} // Pass module_count
+							techColor={tech.color} // Pass tech.color
 						/>
 					);
 				})}
