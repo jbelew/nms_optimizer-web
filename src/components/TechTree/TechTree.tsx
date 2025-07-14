@@ -2,10 +2,10 @@
 import "./TechTree.css";
 
 import { ExclamationTriangleIcon, MagicWandIcon } from "@radix-ui/react-icons";
-import { Button, Callout, DropdownMenu, Em, Separator, Strong, Text } from "@radix-ui/themes";
+import { Button, Callout, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useShipTypesStore } from "../../hooks/useShipTypes";
@@ -218,12 +218,14 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 					<Callout.Root variant="soft" mb="4" size="1" highContrast>
 						<Callout.Icon>🧪</Callout.Icon>
 						<Callout.Text>
-							<Text>
-								<Strong>{t("techTree.recommendedBuilds.exocraftLabel")}</Strong> and{" "}
-								<Strong>{t("techTree.recommendedBuilds.exosuitLabel")}</Strong> include{" "}
-								<Em>&quot;{t("techTree.recommendedBuilds.experimentalLabel")}&quot;</Em> recommended
-								builds
-							</Text>{" "}
+							<Trans
+								i18nKey="techTree.recommendedBuilds.summary"
+								components={{
+									1: <Strong />,
+									3: <Strong />,
+									5: <Em />,
+								}}
+							/>{" "}
 							{techTree.recommended_builds && techTree.recommended_builds.length > 1 ? (
 								<DropdownMenu.Root>
 									<DropdownMenu.Trigger>

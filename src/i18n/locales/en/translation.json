@@ -129,11 +129,9 @@
 			"Movement Systems": "Movement Systems"
 		},
 		"recommendedBuilds": {
-			"exocraftLabel": "Exocraft",
-			"exosuitLabel": "Exosuits",
-			"experimentalLabel": "experimental",
-			"selectBuildButton": "Select a Recommended Build",
-			"applyBuildButton": "Apply Recommended Build"
+			"selectBuildButton": "Select a Build",
+			"applyBuildButton": "Apply Build",
+			"summary": "<1>Exocraft</1> and <3>Exosuits</3> include <5>\"experimental\"</5> recommended builds"
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",
