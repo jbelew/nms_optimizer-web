@@ -286,7 +286,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				>
 					<Accordion.Item className="AccordionItem" value="item-1">
 						<AccordionTrigger>
-							<Text className="techRow__label" wrap="balance">
+							<Text className="techRow__label">
 								{translatedTechName}
 								<Badge
 									ml="1"
@@ -326,7 +326,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					as="label"
 					htmlFor={tech}
 					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
-					wrap="balance"
+				
 				>
 					{translatedTechName}
 					<Badge
