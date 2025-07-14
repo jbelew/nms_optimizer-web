@@ -87,7 +87,7 @@ export type ApiResponse = {
 };
 
 // --- Utility functions (createEmptyCell, createGrid) ---
-export const createEmptyCell = (supercharged = false, active = false): Cell => ({
+export const createEmptyCell = (supercharged = false, active = true): Cell => ({
 	active,
 	adjacency: false,
 	adjacency_bonus: 0.0,
@@ -105,7 +105,7 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
 
 export const createGrid = (width: number, height: number): Grid => ({
 	cells: Array.from({ length: height }, () =>
-		Array.from({ length: width }, () => createEmptyCell(false, false))
+		Array.from({ length: width }, () => createEmptyCell())
 	),
 	width,
 	height,

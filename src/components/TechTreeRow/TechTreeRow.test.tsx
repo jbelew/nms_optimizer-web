@@ -19,12 +19,16 @@ vi.mock("../../store/ShakeStore");
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string, options?: { defaultValue?: string }) => {
+		t: (key: string, options?: { defaultValue?: string; tech?: string }) => {
 			if (key.startsWith("technologies.")) {
 				const parts = key.split(".");
 				// Expecting format: technologies.shipType.techKey
 				if (parts.length === 3) {
 					return `${parts[1]}.${parts[2]}`;
+				}
+				// Handle "technologies.hyperdrive" directly for the label test
+				if (key === "technologies.hyperdrive") {
+					return "standard.hyperdrive";
 				}
 				return key; // Fallback for unexpected format
 			}
@@ -35,6 +39,9 @@ vi.mock("react-i18next", () => ({
 					return parts[1];
 				}
 				return key; // Fallback for unexpected format
+			}
+			if (key === "techTree.tooltips.solve" && options?.tech) {
+				return `techTree.tooltips.solve ${options.tech}`;
 			}
 			// For other keys, return the key itself or defaultValue if provided
 			return options?.defaultValue || key;
