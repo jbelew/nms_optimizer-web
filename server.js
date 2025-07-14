@@ -34,8 +34,8 @@ app.use(
 				// For versioned assets (JS, CSS, fonts, images with hashes)
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 			} else if (fileName === "index.html") {
-				// For index.html, no-cache to ensure freshness for SPA routing fallbacks.
-				res.setHeader("Cache-Control", "no-cache");
+				// For index.html, ensure no caching to always get the latest version.
+				res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			} else {
 				// For other static assets in "dist" that might not be versioned
 				// (e.g., images copied directly from public, favicons, manifest.json)

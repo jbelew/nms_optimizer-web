@@ -40,8 +40,18 @@ export const useSeoAndTitle = () => {
         let canonicalUrl = window.location.origin + location.pathname;
         const currentParams = new URLSearchParams(location.search);
 
+        // Remove specific parameters that should not affect the canonical URL
+        currentParams.delete("platform");
+        currentParams.delete("ship");
+
         if (currentParams.has("grid")) {
             canonicalUrl += `?grid=${currentParams.get("grid")}`;
+        }
+
+        // If there are any remaining parameters, append them to the canonical URL
+        const remainingParams = currentParams.toString();
+        if (remainingParams) {
+            canonicalUrl += `${currentParams.has("grid") ? "&" : "?"}${remainingParams}`;
         }
 
         if (!canonicalLink) {
