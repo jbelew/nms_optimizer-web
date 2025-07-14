@@ -1,8 +1,8 @@
 // src/components/TechTree/TechTree.tsx
 import "./TechTree.css";
 
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Button, Separator } from "@radix-ui/themes";
+import { ExclamationTriangleIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
+import { Button, Callout, Separator, Text, Strong, Em } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -216,8 +216,23 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		return (
 			<>
 				{techTree.recommended_build && (
-					<Button onClick={applyRecommendedBuild}>View Recommended Build</Button>
+					<Callout.Root variant="soft" mb="4" highContrast>
+						<Callout.Icon>
+							<InfoCircledIcon />
+						</Callout.Icon>
+						<Callout.Text>
+							<Text as="p">
+								<Strong>Exocraft</Strong> and <Strong>Exosuits</Strong> include{" "}
+								<Em>"experimental"</Em> recommended builds
+							</Text>
+							<Button mt="3" onClick={applyRecommendedBuild}>
+								<MagicWandIcon />
+								View Recommended Build
+							</Button>
+						</Callout.Text>
+					</Callout.Root>
 				)}
+
 				{renderedTechTree}
 			</>
 		);

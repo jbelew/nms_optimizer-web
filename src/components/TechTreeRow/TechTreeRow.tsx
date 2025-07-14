@@ -131,7 +131,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	isGridFull,
 	hasRewardModules,
 	rewardModules,
-	selectedShipType,
 }) => {
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
@@ -148,8 +147,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const techMaxBonus = max_bonus?.[tech] ?? 0;
 	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
 
-	// Use tech and selectedShipType for translation key
-	const translatedTechName = t(`technologies.${selectedShipType}.${tech}`);
+	// Use techImage to build a more descriptive translation key, falling back to the tech key if image is not available.
+	const translationKeyPart = techImage ? techImage.replace(/\.\w+$/, "").replace(/\//g, ".") : tech;
+	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
 	let tooltipLabel: string;
 

@@ -153,8 +153,10 @@ describe("TechTreeRow", () => {
 			</RadixTooltip.Provider>
 		);
 
-		// The label is now constructed from selectedShipType and tech by the mock
-		const expectedLabel = `${defaultProps.selectedShipType}.${defaultProps.tech}`;
+		// The label is now constructed from selectedShipType and the transformed techImage by the mock
+		const expectedLabel = `${defaultProps.selectedShipType}.${
+			defaultProps.techImage ? defaultProps.techImage.replace(/\.\w+$/, "") : defaultProps.tech
+		}`;
 		expect(screen.getByText(expectedLabel)).toBeInTheDocument();
 
 		// The optimize button's aria-label is now based on mocked t() output
@@ -174,7 +176,9 @@ describe("TechTreeRow", () => {
 			</RadixTooltip.Provider>
 		);
 
-		const expectedLabel = `${defaultProps.selectedShipType}.${defaultProps.tech}`;
+		const expectedLabel = `${defaultProps.selectedShipType}.${
+			defaultProps.techImage ? defaultProps.techImage.replace(/\.\w+$/, "") : defaultProps.tech
+		}`;
 		const optimizeButton = screen.getByLabelText(`techTree.tooltips.solve ${expectedLabel}`);
 		fireEvent.click(optimizeButton);
 

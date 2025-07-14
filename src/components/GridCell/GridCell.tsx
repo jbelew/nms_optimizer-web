@@ -14,9 +14,9 @@ import { useTechStore } from "../../store/TechStore";
 const getUpgradePriority = (label: string | undefined): number => {
 	if (!label) return 0;
 	const lowerLabel = label.toLowerCase();
-	if (lowerLabel.includes("theta")) return 1;
-	if (lowerLabel.includes("tau")) return 2;
-	if (lowerLabel.includes("sigma")) return 3;
+	if (lowerLabel.includes(" theta")) return 1;
+	if (lowerLabel.includes(" tau")) return 2;
+	if (lowerLabel.includes(" sigma")) return 3;
 	return 0;
 };
 interface GridCellProps {
@@ -219,9 +219,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	// Determine tooltip content: use translated string if image exists, otherwise original label.
 	// Fallback to cell.label if translation is not found or if cell.image is not present.
 	const tooltipContent = cell.image
-		? t(`modules.${cell.image.split('/').pop()}`, { defaultValue: cell.label })
+		? t(`modules.${cell.image.split("/").pop()}`, { defaultValue: cell.label })
 		: cell.label;
-	return tooltipContent ? (
+	return cell.module ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>
 			{cellElement}
 		</Tooltip>
