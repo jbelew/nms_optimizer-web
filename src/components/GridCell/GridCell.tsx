@@ -221,7 +221,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const tooltipContent = cell.image
 		? t(`modules.${cell.image.split("/").pop()}`, { defaultValue: cell.label })
 		: cell.label;
-	return cell.module ? (
+	return cell.module && cell.active ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>
 			{cellElement}
 		</Tooltip>
