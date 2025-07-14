@@ -97,7 +97,7 @@
 		"nomad": "Nomad",
 		"pilgram": "Pilgram",
 		"roamer": "Roamer",
-		"naution": "Naution",
+		"nautilon": "Nautilon",
 		"colossus": "Colossus",
 		"minotaur": "Minotaur",
 		"exosuit": "Exosuit"
@@ -222,7 +222,7 @@
 			"power": "Power Resonator",
 			"humboldt": "Humboldt Drive",
 			"tethys": "Tethys Beam",
-			"naution": "Naution Cannon",
+			"nautilon": "Nautilon Cannon",
 			"sonar": "Hi-Powered Sonar",
 			"dredging": "Dredging Laser",
 			"environment": "Environment Control Unit",

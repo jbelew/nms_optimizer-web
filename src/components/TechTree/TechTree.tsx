@@ -48,6 +48,9 @@ const typeImageMap: TypeImageMap = {
 	Scanners: "scanners.webp",
 	Utilities: "secondary.webp",
 	Propulsion: "propulsion.webp",
+	"Hazard Protection": "hazard.webp",
+	"Life Support": "health.webp",
+	"Movement Systems": "movement.webp",
 };
 
 interface TechTreeComponentProps {
@@ -151,6 +154,8 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
 				const flattenedGrid = techTree.grid_definition.grid.flat();
 				applyModulesToGrid(flattenedGrid);
+			}
+			if (techTree.grid_definition) {
 				setGridFixed(techTree.grid_definition.gridFixed);
 				setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
 			}
