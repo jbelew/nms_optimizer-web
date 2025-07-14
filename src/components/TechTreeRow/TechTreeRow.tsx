@@ -249,7 +249,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					disabled={isOptimizeButtonDisabled}
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
 					id={tech}
-					className={`techRow__resetButton !shadow-sm ${!isOptimizeButtonDisabled ? "!cursor-pointer" : ""}`.trim()}
+					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "!cursor-pointer" : ""}`.trim()}
 				>
 					<OptimizeIconComponent />
 				</IconButton>
@@ -261,7 +261,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					onClick={handleReset}
 					disabled={!hasTechInGrid || solving}
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton !shadow-sm ${hasTechInGrid && !solving ? "!cursor-pointer" : ""}`.trim()}
+					className={`techRow__resetButton ${hasTechInGrid && !solving ? "!cursor-pointer" : ""}`.trim()}
 				>
 					<ResetIcon />
 				</IconButton>
@@ -326,7 +326,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					as="label"
 					htmlFor={tech}
 					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
-				
 				>
 					{translatedTechName}
 					<Badge
