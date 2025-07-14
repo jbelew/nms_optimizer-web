@@ -13,6 +13,7 @@ interface RowControlButtonProps {
 	hasModulesInGrid: boolean;
 	isFirstInactiveRow: boolean;
 	isLastActiveRow: boolean;
+	gridFixed: boolean;
 }
 
 /**
@@ -35,6 +36,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	hasModulesInGrid,
 	isFirstInactiveRow,
 	isLastActiveRow,
+	gridFixed,
 }) => {
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
@@ -52,7 +54,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						variant="surface"
 						className={`shadow-sm ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
-						disabled={hasModulesInGrid}
+						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.activateRow")}
 					>
 						<PlusIcon />
@@ -67,7 +69,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						size={iconButtonSize}
 						className={` ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}
-						disabled={hasModulesInGrid}
+						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.deactivateRow")}
 					>
 						<MinusIcon />

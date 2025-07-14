@@ -46,7 +46,8 @@ const typeImageMap: TypeImageMap = {
 	"Secondary Weapons": "secondary.webp",
 	"Fleet Upgrades": "upgrade.webp",
 	Scanners: "scanners.webp",
-	Utilities: "utilities.webp",
+	Utilities: "secondary.webp",
+	Propulsion: "propulsion.webp",
 };
 
 interface TechTreeComponentProps {
@@ -218,15 +219,16 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 				{techTree.recommended_build && (
 					<Callout.Root variant="soft" mb="4" highContrast>
 						<Callout.Icon>
-							<InfoCircledIcon />
+							<InfoCircledIcon style={{ color: "var(--amber-track)" }} />
 						</Callout.Icon>
 						<Callout.Text>
-							<Text as="p">
+							<Text>
 								<Strong>Exocraft</Strong> and <Strong>Exosuits</Strong> include{" "}
 								<Em>"experimental"</Em> recommended builds
 							</Text>
+							<br />
 							<Button mt="3" onClick={applyRecommendedBuild}>
-								<MagicWandIcon />
+								<MagicWandIcon style={{ color: "var(--amber-11)" }} />
 								View Recommended Build
 							</Button>
 						</Callout.Text>

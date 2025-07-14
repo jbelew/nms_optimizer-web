@@ -480,3 +480,5 @@ export const selectHasModulesInGrid = (state: GridStore): boolean => {
 	}
 	return false;
 };
+
+export const selectGridFixed = (state: GridStore): boolean => state.gridFixed;

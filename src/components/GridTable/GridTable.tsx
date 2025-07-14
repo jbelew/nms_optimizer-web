@@ -5,7 +5,7 @@ import React, { useMemo } from "react"; // Removed useCallback
 import { useTranslation } from "react-i18next";
 // import ReactGA from "react-ga4"; // No longer used directly here
 
-import { type Grid, selectHasModulesInGrid, useGridStore } from "../../store/GridStore";
+import { type Grid, selectHasModulesInGrid, useGridStore, selectGridFixed } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
@@ -51,6 +51,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
+		const gridFixed = useGridStore(selectGridFixed);
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
@@ -122,6 +123,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 										rowIndex === lastActiveRowIndex &&
 										rowIndex >= grid.cells.length - 3 // Keep this specific condition if it's intended
 									}
+									gridFixed={gridFixed}
 								/>
 							</div>
 						</div>
