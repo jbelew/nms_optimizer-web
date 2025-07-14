@@ -4,13 +4,7 @@ import { useGridStore, createGrid, createEmptyCell } from "../store/GridStore";
 import type { TechTree, Module, RecommendedBuild, TechTreeItem } from "./useTechTree";
 
 export const useRecommendedBuild = (techTree: TechTree) => {
-	const {
-		setGrid,
-		resetGrid,
-		setGridFromInitialDefinition,
-		setIsSharedGrid,
-		initialGridDefinition,
-	} = useGridStore.getState();
+	const { setGrid, resetGrid, setIsSharedGrid } = useGridStore.getState();
 
 	const modulesMap = useMemo(() => {
 		const map = new Map<string, Module>();
@@ -86,14 +80,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 				setGrid(newGrid);
 			}
 		},
-		[
-			initialGridDefinition,
-			modulesMap,
-			resetGrid,
-			setGrid,
-			setGridFromInitialDefinition,
-			setIsSharedGrid,
-		]
+		[modulesMap, resetGrid, setGrid, setIsSharedGrid]
 	);
 
 	return { applyRecommendedBuild };

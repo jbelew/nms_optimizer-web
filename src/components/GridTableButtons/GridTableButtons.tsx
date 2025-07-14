@@ -80,7 +80,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Button
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions!mr-2  ${
+						className={`gridTable__button gridTable__button--instructions !mr-2  ${
 							isFirstVisit ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
