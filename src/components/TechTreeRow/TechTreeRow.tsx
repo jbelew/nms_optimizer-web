@@ -291,6 +291,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 								<Badge
 									ml="1"
 									className="align-top"
+									{...(!hasTechInGrid && { highContrast: true })}
 									variant="soft"
 									radius="medium"
 									color={techColor}
@@ -325,7 +326,14 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
 				>
 					{translatedTechName}
-					<Badge ml="1" className="align-top" variant="soft" radius="medium" color={techColor}>
+					<Badge
+						ml="1"
+						className="align-top"
+						{...(!hasTechInGrid && { highContrast: true })}
+						variant="soft"
+						radius="medium"
+						color={techColor}
+					>
 						{moduleCount + currentCheckedModules.length}
 					</Badge>
 					<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />

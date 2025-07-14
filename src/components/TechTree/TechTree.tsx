@@ -16,8 +16,6 @@ import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
 import { type TechTreeItem } from "../../hooks/useTechTree";
 
-
-
 // --- Image Map (This is the key part) ---
 type TypeImageMap = {
 	[key: string]: string;
@@ -220,7 +218,8 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 									3: <Strong />,
 									5: <Em />,
 								}}
-							/>{" "}
+							/>
+							<br />
 							{techTree.recommended_builds && techTree.recommended_builds.length > 1 ? (
 								<DropdownMenu.Root>
 									<DropdownMenu.Trigger>
