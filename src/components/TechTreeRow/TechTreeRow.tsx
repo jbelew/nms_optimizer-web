@@ -123,7 +123,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 		return (
 			<Tooltip content={t("techTree.tooltips.insufficientSpace")}>
 				<ExclamationTriangleIcon
-					className="inline-block w-5 h-5 ml-1 align-text-bottom"
+					className="inline-block w-4 h-4 ml-1 align-text-top"
 					style={{ color: "var(--red-a8)" }}
 				/>
 			</Tooltip>
@@ -133,7 +133,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 		return (
 			<Tooltip content={t("techTree.tooltips.validSolve")}>
 				<Crosshair2Icon
-					className="inline-block w-5 h-5 ml-1 align-text-bottom"
+					className="inline-block w-4 h-4 ml-1 align-text-top"
 					style={{ color: "var(--gray-a10)" }}
 				/>
 			</Tooltip>
@@ -143,7 +143,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 	return (
 		<Tooltip content={t("techTree.tooltips.boostedSolve")}>
 			<LightningBoltIcon
-				className="inline-block w-5 h-5 ml-1 align-text-bottom"
+				className="inline-block w-4 h-4 ml-1 align-text-top"
 				style={{ color: "var(--amber-a8)" }}
 			/>
 		</Tooltip>
@@ -239,7 +239,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
 
 	return (
-		<div className="flex gap-2 mt-2 mb-2 ml-0 sm:ml-1 items-top optimizationButton">
+		<div className="flex gap-2 mt-2 mb-2 ml-0 mr-1 sm:ml-1 items-top optimizationButton">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
 				<IconButton
@@ -286,7 +286,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				>
 					<Accordion.Item className="AccordionItem" value="item-1">
 						<AccordionTrigger>
-							<Text className="techRow__label">
+							<Text className="techRow__label" wrap="balance">
 								{translatedTechName}
 								<Badge
 									ml="1"
@@ -326,6 +326,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					as="label"
 					htmlFor={tech}
 					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
+					wrap="balance"
 				>
 					{translatedTechName}
 					<Badge
