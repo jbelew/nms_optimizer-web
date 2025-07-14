@@ -4,6 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0.0 beta 2 (2025-07-14)
+
+- Added support for mutliple recommended builds per platform.
+- Added missing category icon assets.
+- Corrected some typos on label text elements.
+
 ## Version 3.0.0 beta (2025-07-13)
 
 - Added experimental support for Exosuits and Exocraft.

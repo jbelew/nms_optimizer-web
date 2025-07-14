@@ -28,30 +28,24 @@ export interface TechTreeItem {
 	color: string; // Add color property
 }
 
+export interface RecommendedBuild {
+	title: string;
+	layout: ({
+		tech: string;
+		module: string;
+		supercharged?: boolean;
+		active?: boolean;
+		adjacency_bonus?: boolean;
+	} | null)[][];
+}
+
 export interface TechTree {
 	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
-	recommended_build?: {
-		layout: ({
-			tech: string;
-			module: string;
-			supercharged?: boolean;
-			active?: boolean;
-			adjacency_bonus?: boolean;
-		} | null)[][];
-	};
+	recommended_builds?: RecommendedBuild[];
 	[key: string]:
 		| TechTreeItem[]
-		| TechTree
 		| { grid: Module[][] }
-		| {
-				layout: ({
-					tech: string;
-					module: string;
-					supercharged?: boolean;
-					active?: boolean;
-					adjacency_bonus?: boolean;
-				} | null)[][];
-		  }
+		| RecommendedBuild[]
 		| undefined;
 }
 
@@ -146,7 +140,9 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 			const categoryItems = techTree[category];
 			if (Array.isArray(categoryItems)) {
 				categoryItems.forEach((tech) => {
-					colors[tech.key] = tech.color;
+					if ("key" in tech && "color" in tech) {
+						colors[tech.key] = tech.color;
+					}
 				});
 			}
 		}

@@ -10,6 +10,7 @@ import { useOptimizeStore } from "./store/OptimizeStore";
 
 import "@radix-ui/themes/tokens/colors/amber.css";
 import "@radix-ui/themes/tokens/colors/blue.css";
+import "@radix-ui/themes/tokens/colors/crimson.css";
 import "@radix-ui/themes/tokens/colors/green.css";
 import "@radix-ui/themes/tokens/colors/iris.css";
 import "@radix-ui/themes/tokens/colors/jade.css";

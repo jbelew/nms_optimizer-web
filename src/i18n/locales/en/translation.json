@@ -92,16 +92,17 @@
 		"standard-mt": "Standard / Royal Multi-Tools",
 		"atlantid": "Atlantid Multi-Tools",
 		"sentinel-mt": "Sentinel Multi-Tools",
-		"staves": "Voltaic / Expedition Staves",
-		"freighter": "Freighters",
-		"nomad": "Nomad",
-		"pilgram": "Pilgram",
-		"roamer": "Roamer",
-		"nautilon": "Nautilon",
-		"colossus": "Colossus",
-		"minotaur": "Minotaur",
+		"staves": "Voltaic / Expedition Staff",
+		"freighter": "Freighter",
+		"nomad": "Nomad Exocraft",
+		"pilgrim": "Pilgrim Exocraft",
+		"roamer": "Roamer Exocraft",
+		"nautilon": "Nautilon Exocraft",
+		"colossus": "Colossus Exocraft",
+		"minotaur": "Minotaur Exocraft",
 		"exosuit": "Exosuit"
 	},
+
 	"techTree": {
 		"loading": "LOADING TECH!",
 		"tooltips": {
@@ -240,7 +241,8 @@
 			"hardframe-right": "Hardframe Right Arm",
 			"liquidator-right": "Liquidator Right Arm",
 			"minotaur": "Minotaur Cannon",
-			"precision": "Precision Minotaur Laser"
+			"precision": "Precision Minotaur Laser",
+			"mineral": "Mineral Processing Rig"
 		},
 		"exosuit": {
 			"aeration": "Aeration Membrane",

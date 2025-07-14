@@ -2,7 +2,7 @@
 import "./TechTree.css";
 
 import { ExclamationTriangleIcon, InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
-import { Button, Callout, Separator, Text, Strong, Em } from "@radix-ui/themes";
+import { Button, Callout, DropdownMenu, Em, Separator, Strong, Text } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,23 +14,15 @@ import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; //
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
-// Define interfaces to ensure type safety
-interface TechTreeModule {
-	label: string;
-	id: string;
-	image: string;
-	type?: string;
-}
+import { type Module } from "../../hooks/useTechTree";
 
+// Define interfaces to ensure type safety
 interface TechTreeItem {
 	label: string;
 	key: string;
-	modules: TechTreeModule[];
+	modules: Module[];
 	image: string | null; // Add image property
-}
-
-interface TechTree {
-	[key: string]: TechTreeItem[] | TechTree;
+	color: string;
 }
 
 // --- Image Map (This is the key part) ---
@@ -167,19 +159,16 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 			hasModulesInGrid,
 		]);
 
-		// Correctly map and add modules to each technology object
 		const processedTechTree = useMemo(() => {
-			const result: TechTree = {};
+			const result: { [key: string]: TechTreeItem[] } = {};
 			Object.entries(techTree).forEach(([category, technologies]) => {
 				if (
-					category === "recommended_build" ||
+					category === "recommended_builds" ||
 					category === "grid" ||
 					category === "grid_definition"
 				)
 					return;
-				// Ensure 'technologies' is an array before attempting to map over it.
-				// If it's not an array (e.g., undefined, null, or some other type from the API),
-				// default to an empty array to prevent the .map error.
+
 				const safeTechnologies = Array.isArray(technologies) ? technologies : [];
 				if (!Array.isArray(technologies)) {
 					console.warn(
@@ -188,12 +177,15 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 					);
 				}
 
-				// Map and ensure properties, then sort by label
 				const mappedAndSortedTechnologies = safeTechnologies
+					.filter(
+						(tech): tech is TechTreeItem =>
+							typeof tech === "object" && tech !== null && "key" in tech
+					)
 					.map((tech: TechTreeItem) => ({
 						...tech,
-						modules: tech.modules || [], // Handle cases where modules might be missing
-						image: tech.image || null, // Handle cases where image might be missing
+						modules: tech.modules || [],
+						image: tech.image || null,
 					}))
 					.sort((a, b) => a.label.localeCompare(b.label));
 
@@ -221,7 +213,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 
 		return (
 			<>
-				{techTree.recommended_build && (
+				{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
 					<Callout.Root variant="soft" mb="4" size="1" highContrast>
 						<Callout.Icon>
 							<InfoCircledIcon style={{ color: "var(--amber-track)" }} />
@@ -232,10 +224,36 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 								<Em>"experimental"</Em> recommended builds
 							</Text>
 							<br />
-							<Button mt="3" mb="1" onClick={applyRecommendedBuild}>
-								<MagicWandIcon style={{ color: "var(--amber-11)" }} />
-								View Recommended Build
-							</Button>
+							{techTree.recommended_builds && techTree.recommended_builds.length > 1 ? (
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger>
+										<Button mt="3">
+											Select a Recommeded Build
+											<Separator orientation="vertical" size="1" />
+											<DropdownMenu.TriggerIcon />
+										</Button>
+									</DropdownMenu.Trigger>
+									<DropdownMenu.Content>
+										{techTree.recommended_builds.map((build, index) => (
+											<DropdownMenu.Item key={index} onClick={() => applyRecommendedBuild(build)}>
+												{build.title}
+											</DropdownMenu.Item>
+										))}
+									</DropdownMenu.Content>
+								</DropdownMenu.Root>
+							) : (
+								<Button
+									mt="3"
+									mb="1"
+									onClick={() =>
+										techTree.recommended_builds &&
+										applyRecommendedBuild(techTree.recommended_builds[0])
+									}
+								>
+									<MagicWandIcon style={{ color: "var(--amber-11)" }} />
+									Apply Recommended Build
+								</Button>
+							)}
 						</Callout.Text>
 					</Callout.Root>
 				)}

@@ -4,7 +4,7 @@ import { useGridStore, type Grid, createGrid } from "../store/GridStore"; // Imp
 import { API_URL } from "../constants";
 import { useShipTypesStore } from "./useShipTypes";
 import { useTechStore } from "../store/TechStore"; // <--- Import useTechStore
-import { type Module, type TechTree } from "./useTechTree";
+import { type Module, type TechTree, type TechTreeItem } from "./useTechTree";
 
 // --- Utility Functions (RLE Compress/Decompress) ---
 export const compressRLE = (input: string): string => {
@@ -197,10 +197,12 @@ const deserialize = async (
 			const techTreeItems = techTreeData[techCategory];
 			if (Array.isArray(techTreeItems)) {
 				for (const techTreeItem of techTreeItems) {
-					colors[techTreeItem.key] = techTreeItem.color; // Extract color
-					modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
-					for (const module of techTreeItem.modules) {
-						modulesMap[techTreeItem.key][module.id] = module;
+					if (typeof techTreeItem === 'object' && techTreeItem !== null && 'key' in techTreeItem) {
+						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
+						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
+						for (const module of (techTreeItem as TechTreeItem).modules) {
+							modulesMap[techTreeItem.key][module.id] = module;
+						}
 					}
 				}
 			}
