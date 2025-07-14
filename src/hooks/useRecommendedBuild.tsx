@@ -4,7 +4,13 @@ import { useGridStore, createGrid, createEmptyCell } from "../store/GridStore";
 import type { TechTree, Module, RecommendedBuild, TechTreeItem } from "./useTechTree";
 
 export const useRecommendedBuild = (techTree: TechTree) => {
-	const setGrid = useGridStore((state) => state.setGrid);
+	const {
+		setGrid,
+		resetGrid,
+		setGridFromInitialDefinition,
+		setIsSharedGrid,
+		initialGridDefinition,
+	} = useGridStore.getState();
 
 	const modulesMap = useMemo(() => {
 		const map = new Map<string, Module>();
@@ -14,7 +20,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 			const categoryItems = techTree[category];
 			if (Array.isArray(categoryItems)) {
 				for (const tech of categoryItems) {
-					if (typeof tech === 'object' && tech !== null && 'key' in tech && 'modules' in tech) {
+					if (typeof tech === "object" && tech !== null && "key" in tech && "modules" in tech) {
 						for (const module of (tech as TechTreeItem).modules) {
 							map.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
 						}
@@ -28,17 +34,18 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	const applyRecommendedBuild = useCallback(
 		(build: RecommendedBuild) => {
 			if (build && build.layout) {
+				// Perform a full grid reset before applying the recommended build
+				resetGrid();
+				setIsSharedGrid(false);
+
 				const newGrid = createGrid(10, 6);
-				const layout = build.layout as (
-					| {
-							tech: string;
-							module: string;
-							supercharged?: boolean;
-							active?: boolean;
-							adjacency_bonus?: boolean;
-					  }
-					| null
-				)[][];
+				const layout = build.layout as ({
+					tech: string;
+					module: string;
+					supercharged?: boolean;
+					active?: boolean;
+					adjacency_bonus?: boolean;
+				} | null)[][];
 
 				for (let r = 0; r < layout.length; r++) {
 					for (let c = 0; c < layout[r].length; c++) {
@@ -61,11 +68,17 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 									newGrid.cells[r][c].adjacency_bonus = cellData.adjacency_bonus ? 1.0 : 0.0;
 								} else {
 									// If module not found, reset the cell but preserve active/supercharged status from cellData
-									Object.assign(newGrid.cells[r][c], createEmptyCell(cellData.supercharged ?? false, cellData.active ?? false));
+									Object.assign(
+										newGrid.cells[r][c],
+										createEmptyCell(cellData.supercharged ?? false, cellData.active ?? false)
+									);
 								}
 							} else {
 								// If cellData.tech or cellData.module are missing, reset the cell
-								Object.assign(newGrid.cells[r][c], createEmptyCell(cellData.supercharged ?? false, cellData.active ?? false));
+								Object.assign(
+									newGrid.cells[r][c],
+									createEmptyCell(cellData.supercharged ?? false, cellData.active ?? false)
+								);
 							}
 						}
 					}
@@ -73,7 +86,14 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 				setGrid(newGrid);
 			}
 		},
-		[modulesMap, setGrid]
+		[
+			initialGridDefinition,
+			modulesMap,
+			resetGrid,
+			setGrid,
+			setGridFromInitialDefinition,
+			setIsSharedGrid,
+		]
 	);
 
 	return { applyRecommendedBuild };
