@@ -298,7 +298,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 								>
 									{moduleCount + currentCheckedModules.length}
 								</Badge>
-								<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+								{hasTechInGrid && (
+									<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+								)}
 							</Text>
 						</AccordionTrigger>
 						<Accordion.Content className="pl-1 AccordionContent">
@@ -336,7 +338,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					>
 						{moduleCount + currentCheckedModules.length}
 					</Badge>
-					<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+					{hasTechInGrid && (
+						<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+					)}
 				</Text>
 			)}
 		</div>
