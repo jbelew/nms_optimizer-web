@@ -170,6 +170,8 @@
 			"wormhole": "Scanners"
 		},
 		"multi-tool": {
+			"hijacked": "Hijacked Laser",
+			"mining-laser": "Mining Laser",
 			"mining-beam": "Mining Beam",
 			"analysis": "Analysis Visor",
 			"fishing": "Fishing Rig",
