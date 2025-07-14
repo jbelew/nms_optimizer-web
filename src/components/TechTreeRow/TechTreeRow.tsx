@@ -203,8 +203,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const fallbackImage = `${baseImagePath}infra.webp`;
 	const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
 	const imagePath2x = techImage
-		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@x2.$1")}`
-		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@x2.$1"); // Also handle fallback
+		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
+		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
 
 	return (
 		<div className="flex gap-2 mt-2 mb-2 ml-0 sm:ml-1 items-top optimizationButton">
