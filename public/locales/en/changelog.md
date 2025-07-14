@@ -4,6 +4,11 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0.0 beta (2025-07-13)
+
+- Added experimental support for Exosuits and Exocraft.
+- Lot's of code clean-up and refactoring.
+
 ## Version 2.9.4 (2025-07-08)
 
 - Replaced AI German translations with proper human-reviewed versions, courtesy of **Slathibatfas**.
