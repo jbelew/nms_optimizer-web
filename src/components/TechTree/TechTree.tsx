@@ -217,7 +217,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		return (
 			<>
 				{techTree.recommended_build && (
-					<Callout.Root variant="soft" mb="4" highContrast>
+					<Callout.Root variant="soft" mb="4" size="1" highContrast>
 						<Callout.Icon>
 							<InfoCircledIcon style={{ color: "var(--amber-track)" }} />
 						</Callout.Icon>
@@ -227,7 +227,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 								<Em>"experimental"</Em> recommended builds
 							</Text>
 							<br />
-							<Button mt="3" onClick={applyRecommendedBuild}>
+							<Button mt="3" mb="1" onClick={applyRecommendedBuild}>
 								<MagicWandIcon style={{ color: "var(--amber-11)" }} />
 								View Recommended Build
 							</Button>
