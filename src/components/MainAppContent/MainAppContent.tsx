@@ -144,11 +144,11 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({
 									height: gridHeight ? `${gridHeight}px` : DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 								}}
 							>
-								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
+								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} gridContainerRef={gridContainerRef} />
 							</ScrollArea>
 						) : (
 							<aside className="flex-grow w-full pt-8" style={{ minHeight: "550px" }}>
-								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
+								<TechTreeComponent handleOptimize={handleOptimize} solving={solving} gridContainerRef={gridContainerRef} />
 							</aside>
 						))}
 				</section>

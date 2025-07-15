@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useGridStore, createGrid, createEmptyCell } from "../store/GridStore";
 import type { TechTree, Module, RecommendedBuild, TechTreeItem } from "./useTechTree";
 
-export const useRecommendedBuild = (techTree: TechTree) => {
+export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.MutableRefObject<HTMLDivElement | null>) => {
 	const { setGrid, resetGrid, setIsSharedGrid } = useGridStore.getState();
 
 	const modulesMap = useMemo(() => {
@@ -78,9 +78,27 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 					}
 				}
 				setGrid(newGrid);
+
+				// Scroll to the top of the grid container after applying the build
+				if (gridContainerRef.current) {
+					const element = gridContainerRef.current;
+					const offset = 8; // Same offset as in useOptimize.tsx
+
+					const scrollIntoView = () => {
+						const elementRect = element.getBoundingClientRect();
+						const absoluteElementTop = elementRect.top + window.pageYOffset;
+						const targetScrollPosition = absoluteElementTop - offset;
+
+						window.scrollTo({
+							top: targetScrollPosition,
+							behavior: "smooth",
+						});
+					};
+					requestAnimationFrame(scrollIntoView);
+				}
 			}
 		},
-		[modulesMap, resetGrid, setGrid, setIsSharedGrid]
+		[modulesMap, resetGrid, setGrid, setIsSharedGrid, gridContainerRef]
 	);
 
 	return { applyRecommendedBuild };

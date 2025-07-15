@@ -39,6 +39,7 @@ const typeImageMap: TypeImageMap = {
 interface TechTreeComponentProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
+	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -127,12 +128,12 @@ import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
 import { useAnalytics } from "../../hooks/useAnalytics";
 
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
-	({ handleOptimize, solving }) => {
+	({ handleOptimize, solving, gridContainerRef }) => {
 		const { t } = useTranslation();
 		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
-		const { applyRecommendedBuild } = useRecommendedBuild(techTree);
+		const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 		const { sendEvent } = useAnalytics();
