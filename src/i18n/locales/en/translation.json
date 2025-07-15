@@ -131,7 +131,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Select a Build",
 			"applyBuildButton": "Apply Build",
-			"summary": "<1>Exocraft</1> and <3>Exosuits</3> include <5>\"experimental\"</5> recommended builds"
+			"summary": "Platforms with <1>fixed Supercharger slots</1> now include <5>\"experimental\"</5> recommended builds"
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",

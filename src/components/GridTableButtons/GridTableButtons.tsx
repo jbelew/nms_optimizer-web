@@ -6,7 +6,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
 import React, { useCallback } from "react";
-import ReactGA from "react-ga4";
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
@@ -26,6 +26,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
+	const { sendEvent } = useAnalytics();
 
 	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
 	const { setIsSharedGrid, initialGridDefinition } = useGridStore();
@@ -37,29 +38,29 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		if (isFirstVisit) {
 			onFirstVisitInstructionsDialogOpened();
 		}
-		ReactGA.event({
+		sendEvent({
 			category: "User Interactions",
 			action: "showInstructions",
 		});
-	}, [openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened]);
+	}, [openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened, sendEvent]);
 
 	const handleShowAboutPage = useCallback(() => {
 		openDialog("about");
-		ReactGA.event({
+		sendEvent({
 			category: "User Interactions",
 			action: "showAbout",
 		});
-	}, [openDialog]);
+	}, [openDialog, sendEvent]);
 
 	const handleShareClick = useCallback(() => {
 		const shareUrl = updateUrlForShare();
 		const newWindow = window.open(shareUrl, "_blank", "noopener,noreferrer");
-		ReactGA.event({ category: "User Interactions", action: "shareLink" });
+		sendEvent({ category: "User Interactions", action: "shareLink" });
 		if (newWindow) newWindow.focus();
-	}, [updateUrlForShare]);
+	}, [updateUrlForShare, sendEvent]);
 
 	const handleResetGrid = useCallback(() => {
-		ReactGA.event({ category: "User Interactions", action: "resetGrid" });
+		sendEvent({ category: "User Interactions", action: "resetGrid" });
 
 		if (initialGridDefinition) {
 			useGridStore.getState().setGridFromInitialDefinition(initialGridDefinition);
@@ -70,7 +71,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 		updateUrlForReset();
 		setIsSharedGrid(false);
-	}, [initialGridDefinition, updateUrlForReset, setIsSharedGrid]);
+	}, [initialGridDefinition, updateUrlForReset, setIsSharedGrid, sendEvent]);
 
 	return (
 		<>

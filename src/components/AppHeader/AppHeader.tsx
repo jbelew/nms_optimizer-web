@@ -4,7 +4,7 @@ import "./AppHeader.css";
 import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import React from "react";
-import ReactGA from "react-ga4";
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
 // import { APP_VERSION } from "../../constants"; // Replaced by global __APP_VERSION__
@@ -21,6 +21,7 @@ interface AppHeaderProps {
 const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
+	const { sendEvent } = useAnalytics();
 
 	return (
 		<header className="relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 header lg:rounded-t-xl">
@@ -33,7 +34,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					variant="ghost"
 					aria-label={t("translationRequest.openDialogLabel") || "Open translation request dialog"}
 					onClick={() => {
-						ReactGA.event({
+												sendEvent({
 							category: "User Interactions",
 							action: "showTranslations",
 						});
@@ -71,7 +72,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						size="2"
 						aria-label={t("buttons.changelog")}
 						onClick={() => {
-							ReactGA.event({
+							sendEvent({
 								category: "User Interactions",
 								action: "showChangelog",
 							});

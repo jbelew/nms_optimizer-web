@@ -1,7 +1,7 @@
 import { Button } from "@radix-ui/themes";
-import ReactGA from "react-ga4";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useAnalytics } from "../../hooks/useAnalytics";
 
 /**
  * A Radix UI Button component that links to the BuyMeACoffee page when clicked.
@@ -10,11 +10,12 @@ import { useBreakpoint } from "../../hooks/useBreakpoint";
  */
 export default function BuyMeACoffee() {
 	const isLargeScreen = useBreakpoint("1024px"); // Tailwind's 'lg' breakpoint
+	const { sendEvent } = useAnalytics();
 	const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 
 		// Send the Google Analytics event
-		ReactGA.event({
+		sendEvent({
 			category: "User Interactions",
 			action: "BuyMeACoffeeClick",
 			label: "Buy Me a Coffee Button",

@@ -1,14 +1,13 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import ReactGA from "react-ga4";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
 import { useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
+import { useAnalytics } from "../../hooks/useAnalytics";
 
 // Mock external modules and hooks
-vi.mock("react-ga4");
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string) => {
@@ -21,6 +20,9 @@ vi.mock("react-i18next", () => ({
 }));
 vi.mock("../../hooks/useBreakpoint");
 vi.mock("../../context/dialog-utils");
+vi.mock("../../hooks/useAnalytics");
+
+let mockSendEvent: Mock;
 
 
 
@@ -103,7 +105,11 @@ describe("GridTableButtons", () => {
 		(useDialog as Mock).mockReturnValue({
 			openDialog: vi.fn(),
 			isFirstVisit: false,
-			onFirstVisitInstructionsDialogOpened: vi.fn(),
+							onFirstVisitInstructionsDialogOpened: vi.fn(),
+		});
+		mockSendEvent = vi.fn();
+		(useAnalytics as Mock).mockReturnValue({
+			sendEvent: mockSendEvent,
 		});
 
 		// Reset the internal mock state for useGridStore before each test
@@ -153,7 +159,7 @@ describe("GridTableButtons", () => {
 
 		expect(openDialog).toHaveBeenCalledWith("instructions");
 		expect(onFirstVisitInstructionsDialogOpened).toHaveBeenCalled();
-		expect(ReactGA.event).toHaveBeenCalledWith({
+		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "showInstructions",
 		});
@@ -165,7 +171,7 @@ describe("GridTableButtons", () => {
 		fireEvent.click(screen.getByLabelText("buttons.about"));
 
 		expect(openDialog).toHaveBeenCalledWith("about");
-		expect(ReactGA.event).toHaveBeenCalledWith({
+		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "showAbout",
 		});
@@ -178,7 +184,7 @@ describe("GridTableButtons", () => {
 
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
 		expect(windowOpenSpy).toHaveBeenCalledWith("http://share.url", "_blank", "noopener,noreferrer");
-		expect(ReactGA.event).toHaveBeenCalledWith({
+		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "shareLink",
 		});

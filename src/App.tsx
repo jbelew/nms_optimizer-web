@@ -20,6 +20,8 @@ import "@radix-ui/themes/tokens/colors/sky.css";
 import "@radix-ui/themes/tokens/colors/teal.css";
 import "@radix-ui/themes/tokens/colors/yellow.css";
 
+import ReactGA from "react-ga4";
+
 // Import the new custom hooks
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
@@ -39,7 +41,8 @@ const App: FC = () => {
 	const { showError, setShowError } = useOptimizeStore();
 
 	// Use the new custom hooks
-	useAnalytics(appVersion);
+	useAnalytics();
+	ReactGA.set({ app_version: appVersion });
 	useSeoAndTitle();
 	useUrlValidation();
 

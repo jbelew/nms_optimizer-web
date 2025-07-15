@@ -5,7 +5,7 @@ import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo } from "react";
-import ReactGA from "react-ga4";
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { type ShipTypeDetail, useShipTypesStore } from "../../hooks/useShipTypes";
@@ -26,16 +26,19 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 		(state) => state.setGridAndResetAuxiliaryState
 	);
 	const isSmallAndUp = useBreakpoint("640px");
+	const { sendEvent } = useAnalytics();
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
 			// Only proceed if the selection is actually different from the current state.
 			// This prevents unnecessary grid resets, especially on initial page load
-			// if an action dispatches with the already-selected ship type.
-			if (option !== selectedShipType) {
-				ReactGA.event("platform_selection", {
-					platform: option,
-				});
+					// if an action dispatches with the already-selected ship type.
+				if (option !== selectedShipType) {
+					sendEvent({
+						category: "User Interactions",
+						action: "platform_selection",
+						platform: option,
+					});
 
 				setSelectedShipType(option);
 
@@ -46,7 +49,7 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 				setGridAndResetAuxiliaryState(initialGrid);
 			}
 		},
-		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState]
+		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent]
 	);
 
 	return (

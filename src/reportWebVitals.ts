@@ -1,21 +1,39 @@
-import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
-import ReactGA from 'react-ga4';
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
 
-const sendToGA = ({ name, delta, id }: Metric) => {
-  ReactGA.event({
+export function reportWebVitals(sendEvent: (event: { category: string; action: string; label: string; value: number; nonInteraction: boolean; }) => void) {
+  onCLS((metric) => sendEvent({
     category: 'Web Vitals',
-    action: name,
-    // Google Analytics metrics must be integers, so the value is rounded.
-    label: id, // id unique to current page load
-    value: Math.round(name === 'CLS' ? delta * 1000 : delta), // values must be integers
-    nonInteraction: true, // avoids affecting bounce rate
-  });
-}
-
-export function reportWebVitals() {
-  onCLS(sendToGA);
-  onINP(sendToGA);
-  onFCP(sendToGA);
-  onLCP(sendToGA);
-  onTTFB(sendToGA);
+    action: metric.name,
+    label: metric.id,
+    value: Math.round((metric.name as string) === 'CLS' ? metric.delta * 1000 : metric.delta),
+    nonInteraction: true,
+  }));
+  onINP((metric) => sendEvent({
+    category: 'Web Vitals',
+    action: metric.name,
+    label: metric.id,
+    value: Math.round((metric.name as string) === 'CLS' ? metric.delta * 1000 : metric.delta),
+    nonInteraction: true,
+  }));
+  onFCP((metric) => sendEvent({
+    category: 'Web Vitals',
+    action: metric.name,
+    label: metric.id,
+    value: Math.round((metric.name as string) === 'CLS' ? metric.delta * 1000 : metric.delta),
+    nonInteraction: true,
+  }));
+  onLCP((metric) => sendEvent({
+    category: 'Web Vitals',
+    action: metric.name,
+    label: metric.id,
+    value: Math.round((metric.name as string) === 'CLS' ? metric.delta * 1000 : metric.delta),
+    nonInteraction: true,
+  }));
+  onTTFB((metric) => sendEvent({
+    category: 'Web Vitals',
+    action: metric.name,
+    label: metric.id,
+    value: Math.round((metric.name as string) === 'CLS' ? metric.delta * 1000 : metric.delta),
+    nonInteraction: true,
+  }));
 }

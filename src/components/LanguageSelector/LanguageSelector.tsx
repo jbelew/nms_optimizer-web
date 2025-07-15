@@ -3,7 +3,7 @@ import "./LanguageSelector.css";
 
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import React, { useMemo } from "react";
-import ReactGA from "react-ga4";
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
 // Import your SVG flag components
@@ -31,6 +31,7 @@ const LanguageSelector: React.FC = () => {
 	const isSmallAndUp = useBreakpoint("640px");
 	const { t, i18n } = useTranslation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
+	const { sendEvent } = useAnalytics();
 
 	const supportedLanguages = useMemo(() => {
 		const availableLanguageCodes = Object.keys(i18n.services.resourceStore.data || {});
@@ -49,7 +50,7 @@ const LanguageSelector: React.FC = () => {
 
 	const handleLanguageChange = (langCode: string) => {
 		void i18n.changeLanguage(langCode);
-		ReactGA.event({
+		sendEvent({
 			category: "User Interactions",
 			action: "languageSelection",
 			label: langCode,

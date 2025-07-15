@@ -1,6 +1,6 @@
 // src/hooks/useOptimize.tsx
 import { useCallback, useEffect, useRef, useState } from "react";
-import ReactGA from "react-ga4";
+import { useAnalytics } from "./useAnalytics";
 
 import { API_URL } from "../constants";
 import { createEmptyCell, type ApiResponse, type Grid, useGridStore } from "../store/GridStore";
@@ -82,6 +82,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const { setGrid, setResult, grid } = useGridStore();
 	const [solving, setSolving] = useState<boolean>(false);
 	const gridContainerRef = useRef<HTMLDivElement>(null);
+	const { sendEvent } = useAnalytics();
 	const {
 		// showError, // Not used within this hook if not returned
 		setShowError: setShowErrorStore,
@@ -168,7 +169,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 					if (data.solve_method === "Pattern No Fit" && data.grid === null && !forced) {
 						setPatternNoFitTech(tech);
-						ReactGA.event("no_fit_warning", {
+						sendEvent({
+							category: "User Interactions",
+							action: "no_fit_warning",
 							platform: selectedShipType,
 							tech: tech,
 						});
@@ -193,7 +196,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 						}
 
 						console.log("Response from API:", data);
-						ReactGA.event("optimize_tech", {
+						sendEvent({
+							category: "User Interactions",
+							action: "optimize_tech",
 							platform: selectedShipType,
 							tech: tech,
 							solve_method: data.solve_method,
@@ -210,16 +215,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				setSolving(false);
 			}
 		},
-		[
-			grid,
-			setGrid,
-			setResult,
-			setShowErrorStore,
-			checkedModules,
-			selectedShipType,
-			patternNoFitTech,
-			setPatternNoFitTech,
-		]
+		[setShowErrorStore, patternNoFitTech, setPatternNoFitTech, grid, selectedShipType, checkedModules, sendEvent, setResult, setGrid]
 	);
 
 	const clearPatternNoFitTech = useCallback(() => {

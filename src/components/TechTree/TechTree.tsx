@@ -124,6 +124,7 @@ TechTreeSection.propTypes = {
 };
 
 import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
+import { useAnalytics } from "../../hooks/useAnalytics";
 
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
@@ -134,6 +135,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		const { applyRecommendedBuild } = useRecommendedBuild(techTree);
 		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
+		const { sendEvent } = useAnalytics();
 
 		useEffect(() => {
 			if (techTree.grid_definition && !hasModulesInGrid) {
@@ -231,7 +233,17 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content>
 										{techTree.recommended_builds.map((build, index) => (
-											<DropdownMenu.Item key={index} onClick={() => applyRecommendedBuild(build)}>
+											<DropdownMenu.Item
+												key={index}
+												onClick={() => {
+													applyRecommendedBuild(build);
+													sendEvent({
+														category: "Recommended Build",
+														action: "apply_build",
+														label: build.title,
+													});
+												}}
+											>
 												{build.title}
 											</DropdownMenu.Item>
 										))}
@@ -241,10 +253,17 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 								<Button
 									mt="3"
 									mb="1"
-									onClick={() =>
-										techTree.recommended_builds &&
-										applyRecommendedBuild(techTree.recommended_builds[0])
-									}
+									onClick={() => {
+										if (techTree.recommended_builds) {
+											const build = techTree.recommended_builds[0];
+											applyRecommendedBuild(build);
+											sendEvent({
+												category: "Recommended Build",
+												action: "apply_build",
+												label: build.title,
+											});
+										}
+									}}
 								>
 									<MagicWandIcon style={{ color: "var(--amber-11)" }} />
 									{t("techTree.recommendedBuilds.applyBuildButton")}
