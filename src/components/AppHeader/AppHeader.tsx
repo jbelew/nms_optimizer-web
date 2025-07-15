@@ -25,22 +25,26 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 		<header className="relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 header lg:rounded-t-xl">
 			<div className="!absolute !top-2 !right-4 sm:!top-4 sm:!right-8 z-10 flex items-center">
 				<LanguageSelector />
-				<IconButton
-					className="!ml-px !hidden sm:!inline"
-					color="amber"
-					radius="full"
-					variant="ghost"
-					aria-label={t("translationRequest.openDialogLabel") || "Open translation request dialog"}
-					onClick={() => {
-						sendEvent({
-							category: "User Interactions",
-							action: "showTranslations",
-						});
-						openDialog("translation");
-					}}
-				>
-					<InfoCircledIcon />
-				</IconButton>
+				<Tooltip content={t("translationRequest.openDialogLabel")}>
+					<IconButton
+						className="!ml-px !hidden sm:!inline"
+						color="amber"
+						radius="full"
+						variant="ghost"
+						aria-label={
+							t("translationRequest.openDialogLabel") || "Open translation request dialog"
+						}
+						onClick={() => {
+							sendEvent({
+								category: "User Interactions",
+								action: "showTranslations",
+							});
+							openDialog("translation");
+						}}
+					>
+						<InfoCircledIcon />
+					</IconButton>
+				</Tooltip>
 			</div>
 			<h1 className="text-2xl sm:text-4xl header__logo--text">NO MAN&apos;S SKY</h1>
 
@@ -77,7 +81,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							onShowChangelog();
 						}}
 					>
-						<CounterClockwiseClockIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+						<CounterClockwiseClockIcon className="mt-[2px] sm:mt-[1px] w-4 h-4 sm:w-5 sm:h-5" />
 					</IconButton>
 				</Tooltip>
 			</Heading>
