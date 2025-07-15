@@ -338,14 +338,14 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			/>
 			{hasRewardModules ? (
 				<Accordion.Root
-					className="flex-1 pt-1 pb-1 text-sm font-medium sm:text-base border-b-1 AccordionRoot"
+					className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
 					style={{ borderColor: "var(--accent-track)" }}
 					type="single"
 					collapsible
 				>
 					<Accordion.Item className="AccordionItem" value="item-1">
 						<AccordionTrigger>
-							<Text as="label" wrap="balance" weight="medium" size={{ initial: "2", sm: "3" }}>
+							<Text as="label" wrap="pretty" weight="medium" size={{ initial: "2", sm: "3" }}>
 								{translatedTechName}
 								<TechInfoBadges
 									hasTechInGrid={hasTechInGrid}
@@ -367,9 +367,15 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 										checked={currentCheckedModules.includes(module.id)}
 										onClick={() => handleCheckboxChange(module.id)}
 									/>
-									<label className="Label" htmlFor={module.id}>
+									<Text
+										as="label"
+										wrap="pretty"
+										weight="medium"
+										size={{ initial: "2", sm: "3" }}
+										htmlFor={module.id}
+									>
 										{t(`modules.${module.id}`, { defaultValue: module.label })}
-									</label>
+									</Text>
 								</div>
 							))}
 						</Accordion.Content>
@@ -377,7 +383,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				</Accordion.Root>
 			) : (
 				<Text
-					wrap="balance"
+					as="label"
+					wrap="pretty"
 					weight="medium"
 					size={{ initial: "2", sm: "3" }}
 					htmlFor={tech}
