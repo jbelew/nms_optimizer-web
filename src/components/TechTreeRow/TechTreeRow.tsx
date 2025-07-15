@@ -301,7 +301,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 													backgroundColor: "var(--gray-a2)",
 													color: "var(--gray-a8)",
 												}
-											: { backgroundColor: "var(--accent-a4)" }
+											: { backgroundColor: "var(--accent-a3)" }
 									}
 								>
 									{moduleCount + currentCheckedModules.length}
@@ -349,7 +349,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 										backgroundColor: "var(--gray-a2)",
 										color: "var(--gray-a8)",
 									}
-								: { backgroundColor: "var(--accent-a4)" }
+								: { backgroundColor: "var(--accent-a3)" }
 						}
 					>
 						{moduleCount + currentCheckedModules.length}
