@@ -290,13 +290,19 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 								{translatedTechName}
 								<Badge
 									ml="1"
-									className="align-top"
-									{...(!hasTechInGrid && { highContrast: true })}
-									variant="soft"
+									className="!font-mono align-top"
+									size="1"
 									radius="medium"
-									color={techColor}
-									{...(!hasTechInGrid && { highContrast: true })}
-									{...(hasTechInGrid && { style: { backgroundColor: "var(--accent-a2)" } })}
+									variant={hasTechInGrid ? "soft" : "surface"}
+									color={hasTechInGrid ? "gray" : techColor}
+									style={
+										hasTechInGrid
+											? {
+													backgroundColor: "var(--gray-a2)",
+													color: "var(--gray-a8)",
+												}
+											: { backgroundColor: "var(--accent-a4)" }
+									}
 								>
 									{moduleCount + currentCheckedModules.length}
 								</Badge>
@@ -332,12 +338,19 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					{translatedTechName}
 					<Badge
 						ml="1"
-						className="align-top"
-						variant="soft"
+						className="!font-mono align-top"
+						size="1"
 						radius="medium"
-						color={techColor}
-						{...(!hasTechInGrid && { highContrast: true })}
-						{...(hasTechInGrid && { style: { backgroundColor: "var(--accent-a2)" } })}
+						variant={hasTechInGrid ? "soft" : "surface"}
+						color={hasTechInGrid ? "gray" : techColor}
+						style={
+							hasTechInGrid
+								? {
+										backgroundColor: "var(--gray-a2)",
+										color: "var(--gray-a8)",
+									}
+								: { backgroundColor: "var(--accent-a4)" }
+						}
 					>
 						{moduleCount + currentCheckedModules.length}
 					</Badge>
