@@ -377,7 +377,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				</Accordion.Root>
 			) : (
 				<Text
-					as="label"
 					wrap="balance"
 					weight="medium"
 					size={{ initial: "2", sm: "3" }}
