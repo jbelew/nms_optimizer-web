@@ -295,6 +295,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 									variant="soft"
 									radius="medium"
 									color={techColor}
+									{...(!hasTechInGrid && { highContrast: true })}
+									{...(hasTechInGrid && { style: { backgroundColor: "var(--accent-a2)" } })}
 								>
 									{moduleCount + currentCheckedModules.length}
 								</Badge>
@@ -331,10 +333,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					<Badge
 						ml="1"
 						className="align-top"
-						{...(!hasTechInGrid && { highContrast: true })}
 						variant="soft"
 						radius="medium"
 						color={techColor}
+						{...(!hasTechInGrid && { highContrast: true })}
+						{...(hasTechInGrid && { style: { backgroundColor: "var(--accent-a2)" } })}
 					>
 						{moduleCount + currentCheckedModules.length}
 					</Badge>
