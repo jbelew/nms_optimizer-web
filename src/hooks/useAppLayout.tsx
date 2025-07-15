@@ -1,5 +1,5 @@
 // src/hooks/useAppLayout.tsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 import { useGridStore } from "../store/GridStore";
 import { useBreakpoint } from "./useBreakpoint";
@@ -22,13 +22,13 @@ export const useAppLayout = (): AppLayout => {
 	const isLarge = useBreakpoint("1024px");
 	const { isSharedGrid } = useGridStore();
 
-	useEffect(() => {
-		const elementToObserveHeight = containerRef.current;
-		const elementToObserveWidth = gridTableRef.current;
-
-		const updateMeasurements = (entries?: ResizeObserverEntry[]) => {
+	const updateMeasurements = useCallback(
+		(entries?: ResizeObserverEntry[]) => {
 			let newGridHeight: number | null = null;
 			let newGridTableTotalWidth: number | undefined = undefined;
+
+			const elementToObserveHeight = containerRef.current;
+			const elementToObserveWidth = gridTableRef.current;
 
 			// Prioritize ResizeObserver entries if available
 			if (entries) {
@@ -55,8 +55,11 @@ export const useAppLayout = (): AppLayout => {
 
 			setGridHeight(newGridHeight);
 			setGridTableTotalWidth(newGridTableTotalWidth);
-		};
+		},
+		[isLarge, isSharedGrid, setGridHeight, setGridTableTotalWidth, containerRef, gridTableRef]
+	);
 
+	useEffect(() => {
 		// Initial measurement using requestAnimationFrame
 		const initialUpdateFrameId = requestAnimationFrame(() => updateMeasurements());
 
@@ -65,18 +68,18 @@ export const useAppLayout = (): AppLayout => {
 			updateMeasurements(entries);
 		});
 
-		if (elementToObserveHeight) {
-			observer.observe(elementToObserveHeight);
+		if (containerRef.current) {
+			observer.observe(containerRef.current);
 		}
-		if (elementToObserveWidth) {
-			observer.observe(elementToObserveWidth);
+		if (gridTableRef.current) {
+			observer.observe(gridTableRef.current);
 		}
 
 		return () => {
 			cancelAnimationFrame(initialUpdateFrameId);
 			observer.disconnect();
 		};
-	}, [isLarge, isSharedGrid, containerRef, gridTableRef]);
+	}, [updateMeasurements]);
 
 	return {
 		containerRef,

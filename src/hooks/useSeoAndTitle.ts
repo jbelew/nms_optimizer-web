@@ -83,24 +83,25 @@ export const useSeoAndTitle = () => {
         });
 
         const newHreflangUrls = new Map<string, string>();
+        const baseUrlObject = new URL(baseUrl + currentPath); // Create URL object once
 
         supportedLanguages.forEach((lang) => {
             if (lang === "dev" || lang === "cimode") return;
 
-            const params = new URLSearchParams(currentSearch);
+            const params = new URLSearchParams(currentSearch); // Start with current search params
             params.delete("platform"); // Remove platform param
             params.delete("grid");     // Remove grid param
             params.set("lng", lang);
-            const href = `${baseUrl}${currentPath}?${params.toString()}`;
-            newHreflangUrls.set(lang, href);
+            baseUrlObject.search = params.toString(); // Update search params
+            newHreflangUrls.set(lang, baseUrlObject.toString());
 
             if (lang === defaultLanguage) {
                 const defaultParams = new URLSearchParams(currentSearch);
                 defaultParams.delete("platform"); // Remove platform param
                 defaultParams.delete("grid");     // Remove grid param
                 defaultParams.set("lng", defaultLanguage);
-                const xDefaultHref = `${baseUrl}${currentPath}?${defaultParams.toString()}`;
-                newHreflangUrls.set("x-default", xDefaultHref);
+                baseUrlObject.search = defaultParams.toString();
+                newHreflangUrls.set("x-default", baseUrlObject.toString());
             }
         });
 

@@ -121,7 +121,7 @@ export type GridStore = {
 	initialGridDefinition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined;
 	setGrid: (grid: Grid) => void;
 	resetGrid: () => void;
-	setGridAndResetAuxiliaryState: (newGrid: Grid) => void; // New action
+	setGridAndResetAuxiliaryState: (newGrid: Grid) => void;
 	setResult: (result: ApiResponse | null, tech: string) => void;
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;
@@ -459,11 +459,26 @@ export const useGridStore = create<GridStore>()(
 
 // --- Selectors ---
 export const selectTotalSuperchargedCells = (state: GridStore): number => {
-	return state.grid.cells.flat().filter((c) => c.supercharged).length;
+	let count = 0;
+	for (const row of state.grid.cells) {
+		for (const cell of row) {
+			if (cell.supercharged) {
+				count++;
+			}
+		}
+	}
+	return count;
 };
 
 export const selectHasModulesInGrid = (state: GridStore): boolean => {
-	return state.grid.cells.flat().some((cell) => cell.module !== null);
+	for (const row of state.grid.cells) {
+		for (const cell of row) {
+			if (cell.module !== null) {
+				return true;
+			}
+		}
+	}
+	return false;
 };
 
 export const selectGridFixed = (state: GridStore): boolean => state.gridFixed;
