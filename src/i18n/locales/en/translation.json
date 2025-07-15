@@ -131,7 +131,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Select a Recommended Build",
 			"applyBuildButton": "Apply Recommended Build",
-			"summary": "Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds"
+			"summary": "Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",

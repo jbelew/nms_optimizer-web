@@ -84,7 +84,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 					)}
 				</div>
 			) : (
-				<Callout.Root variant="soft" mb="4" size="1" highContrast>
+				<Callout.Root variant="soft" mb="4" mr="0" size="1" highContrast>
 					<Callout.Icon>🧪</Callout.Icon>
 					<Callout.Text>
 						<Trans

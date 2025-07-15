@@ -163,7 +163,10 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 									)}
 								</>
 							) : (
-								<aside className="flex-grow w-full pt-8" style={{ minHeight: "550px" }}>
+								<aside
+									className={`flex-grow w-full ${techTree.recommended_builds && techTree.recommended_builds.length > 0 ? "pt-4" : "pt-8"}`}
+									style={{ minHeight: "550px" }}
+								>
 									{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
 										<RecommendedBuild
 											techTree={techTree}
