@@ -46,12 +46,6 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 			<div className="flex items-center w-full gap-2 m-1 mb-2">
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
-				{/* <img
-					src={Ship}
-					alt="Icon"
-					className="flex-shrink-0 w-4 h-4 sm:w-4 sm:h-4"
-					style={{ color: "var(--accent-track)" }}
-				/> */}
 				<RhombusIcon
 					className="flex-shrink-0 w-4 h-4 sm:w-4 sm:h-4"
 					style={{ color: "var(--accent-track)" }}
@@ -63,7 +57,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				wrap="pretty"
 				align="center"
 				as="h2"
-				size={{ initial: "2", sm: "4" }}
+				size={{ initial: "2", sm: "3" }}
 				className="header__title"
 			>
 				<strong>{t("appHeader.subTitle")}</strong>
