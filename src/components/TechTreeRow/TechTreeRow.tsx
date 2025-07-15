@@ -363,7 +363,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 										/>
 										<Text
 											as="label"
-											wrap="pretty"
+											wrap="balance"
 											weight="medium"
 											size={{ initial: "2", sm: "3" }}
 											htmlFor={module.id}
