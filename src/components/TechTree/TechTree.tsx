@@ -1,11 +1,11 @@
 // src/components/TechTree/TechTree.tsx
 import "./TechTree.css";
 
-import { ExclamationTriangleIcon, MagicWandIcon } from "@radix-ui/react-icons";
-import { Button, Callout, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Separator } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useShipTypesStore } from "../../hooks/useShipTypes";
@@ -39,7 +39,6 @@ const typeImageMap: TypeImageMap = {
 interface TechTreeComponentProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -124,19 +123,15 @@ TechTreeSection.propTypes = {
 	solving: PropTypes.bool.isRequired,
 };
 
-import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
-import { useAnalytics } from "../../hooks/useAnalytics";
+
 
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
-	({ handleOptimize, solving, gridContainerRef }) => {
-		const { t } = useTranslation();
+	({ handleOptimize, solving }) => {
 		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
-		const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
-		const { sendEvent } = useAnalytics();
 
 		useEffect(() => {
 			if (techTree.grid_definition && !hasModulesInGrid) {
@@ -210,70 +205,6 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 
 		return (
 			<>
-				{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
-					<Callout.Root variant="soft" mb="4" size="1" highContrast>
-						<Callout.Icon>🧪</Callout.Icon>
-						<Callout.Text>
-							<Trans
-								i18nKey="techTree.recommendedBuilds.summary"
-								components={{
-									1: <Strong />,
-									3: <Strong />,
-									5: <Em />,
-								}}
-							/>
-							<br />
-							{techTree.recommended_builds && techTree.recommended_builds.length > 1 ? (
-								<DropdownMenu.Root>
-									<DropdownMenu.Trigger>
-										<Button mt="3">
-											{t("techTree.recommendedBuilds.selectBuildButton")}
-											<Separator orientation="vertical" size="1" />
-											<DropdownMenu.TriggerIcon />
-										</Button>
-									</DropdownMenu.Trigger>
-									<DropdownMenu.Content>
-										{techTree.recommended_builds.map((build, index) => (
-											<DropdownMenu.Item
-												key={index}
-												onClick={() => {
-													applyRecommendedBuild(build);
-													sendEvent({
-														category: "Recommended Build",
-														action: "apply_build",
-														label: build.title,
-													});
-												}}
-											>
-												{build.title}
-											</DropdownMenu.Item>
-										))}
-									</DropdownMenu.Content>
-								</DropdownMenu.Root>
-							) : (
-								<Button
-									mt="3"
-									mb="1"
-									onClick={() => {
-										if (techTree.recommended_builds) {
-											const build = techTree.recommended_builds[0];
-											applyRecommendedBuild(build);
-											sendEvent({
-												category: "Recommended Build",
-												action: "apply_build",
-												label: build.title,
-											});
-										}
-									}}
-								>
-									<MagicWandIcon style={{ color: "var(--amber-11)" }} />
-									{t("techTree.recommendedBuilds.applyBuildButton")}
-								</Button>
-							)}
-						</Callout.Text>
-					</Callout.Root>
-				)}
-
 				{renderedTechTree}
 			</>
 		);

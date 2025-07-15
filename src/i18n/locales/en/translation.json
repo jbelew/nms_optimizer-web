@@ -129,9 +129,9 @@
 			"Movement Systems": "Movement Systems"
 		},
 		"recommendedBuilds": {
-			"selectBuildButton": "Select a Build",
-			"applyBuildButton": "Apply Build",
-			"summary": "Platforms with <1>fixed Supercharger slots</1> now include <5>\"experimental\"</5> recommended builds"
+			"selectBuildButton": "Select a Recommended Build",
+			"applyBuildButton": "Apply Recommended Build",
+			"summary": "Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds"
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",
