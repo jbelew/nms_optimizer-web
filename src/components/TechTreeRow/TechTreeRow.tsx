@@ -123,7 +123,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 		return (
 			<Tooltip content={t("techTree.tooltips.insufficientSpace")}>
 				<ExclamationTriangleIcon
-					className="inline-block w-4 h-4 ml-1 align-text-top"
+					className="inline-block mt-[8px] align-text-top"
 					style={{ color: "var(--red-a8)" }}
 				/>
 			</Tooltip>
@@ -133,7 +133,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 		return (
 			<Tooltip content={t("techTree.tooltips.validSolve")}>
 				<Crosshair2Icon
-					className="inline-block w-4 h-4 ml-1 align-text-top"
+					className="inline-block mt-[7px] align-text-top"
 					style={{ color: "var(--gray-a10)" }}
 				/>
 			</Tooltip>
@@ -143,7 +143,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 	return (
 		<Tooltip content={t("techTree.tooltips.boostedSolve")}>
 			<LightningBoltIcon
-				className="inline-block w-4 h-4 ml-1 align-text-top"
+				className="inline-block w-4 h-4 mt-[6px] align-text-top"
 				style={{ color: "var(--amber-a8)" }}
 			/>
 		</Tooltip>
@@ -270,8 +270,12 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		}) => {
 			return (
 				<>
+					{hasTechInGrid && (
+						<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+					)}
 					<Badge
 						ml="1"
+						mt="1"
 						className="!font-mono align-top"
 						size="1"
 						radius="medium"
@@ -288,9 +292,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					>
 						{moduleCount + currentCheckedModulesLength}
 					</Badge>
-					{hasTechInGrid && (
-						<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
-					)}
 				</>
 			);
 		}
@@ -337,69 +338,77 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
 			{hasRewardModules ? (
-				<Accordion.Root
-					className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
-					style={{ borderColor: "var(--accent-track)" }}
-					type="single"
-					collapsible
-				>
-					<Accordion.Item className="AccordionItem" value="item-1">
-						<AccordionTrigger>
-							<Text as="label" wrap="pretty" weight="medium" size={{ initial: "2", sm: "3" }}>
-								{translatedTechName}
-								<TechInfoBadges
-									hasTechInGrid={hasTechInGrid}
-									techColor={techColor}
-									moduleCount={moduleCount}
-									currentCheckedModulesLength={currentCheckedModules.length}
-									techMaxBonus={techMaxBonus}
-									techSolvedBonus={techSolvedBonus}
-								/>
-							</Text>
-						</AccordionTrigger>
-						<Accordion.Content className="pl-1 AccordionContent">
-							{rewardModules.map((module) => (
-								<div key={module.id} className="flex items-start gap-2 AccordionContentText">
-									<Checkbox
-										className="!pt-1 ml-1 CheckboxRoot"
-										variant="soft"
-										id={module.id}
-										checked={currentCheckedModules.includes(module.id)}
-										onClick={() => handleCheckboxChange(module.id)}
-									/>
-									<Text
-										as="label"
-										wrap="pretty"
-										weight="medium"
-										size={{ initial: "2", sm: "3" }}
-										htmlFor={module.id}
-									>
-										{t(`modules.${module.id}`, { defaultValue: module.label })}
-									</Text>
-								</div>
-							))}
-						</Accordion.Content>
-					</Accordion.Item>
-				</Accordion.Root>
+				<>
+					<Accordion.Root
+						className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
+						style={{ borderColor: "var(--accent-track)" }}
+						type="single"
+						collapsible
+					>
+						<Accordion.Item className="AccordionItem" value="item-1">
+							<AccordionTrigger>
+								<Text as="label" wrap="balance" weight="medium" size={{ initial: "2", sm: "3" }}>
+									{translatedTechName}
+								</Text>
+							</AccordionTrigger>
+							<Accordion.Content className="pl-1 AccordionContent">
+								{rewardModules.map((module) => (
+									<div key={module.id} className="flex items-start gap-2 AccordionContentText">
+										<Checkbox
+											className="!pt-1 ml-1 CheckboxRoot"
+											variant="soft"
+											id={module.id}
+											checked={currentCheckedModules.includes(module.id)}
+											onClick={() => handleCheckboxChange(module.id)}
+										/>
+										<Text
+											as="label"
+											wrap="pretty"
+											weight="medium"
+											size={{ initial: "2", sm: "3" }}
+											htmlFor={module.id}
+										>
+											{t(`modules.${module.id}`, { defaultValue: module.label })}
+										</Text>
+									</div>
+								))}
+							</Accordion.Content>
+						</Accordion.Item>
+					</Accordion.Root>
+					<div className="flex justify-end">
+						<TechInfoBadges
+							hasTechInGrid={hasTechInGrid}
+							techColor={techColor}
+							moduleCount={moduleCount}
+							currentCheckedModulesLength={currentCheckedModules.length}
+							techMaxBonus={techMaxBonus}
+							techSolvedBonus={techSolvedBonus}
+						/>
+					</div>
+				</>
 			) : (
-				<Text
-					as="label"
-					wrap="pretty"
-					weight="medium"
-					size={{ initial: "2", sm: "3" }}
-					htmlFor={tech}
-					className="flex-1 block pt-1 techRow__label"
-				>
-					{translatedTechName}
-					<TechInfoBadges
-						hasTechInGrid={hasTechInGrid}
-						techColor={techColor}
-						moduleCount={moduleCount}
-						currentCheckedModulesLength={currentCheckedModules.length}
-						techMaxBonus={techMaxBonus}
-						techSolvedBonus={techSolvedBonus}
-					/>
-				</Text>
+				<>
+					<Text
+						as="label"
+						wrap="balance"
+						weight="medium"
+						size={{ initial: "2", sm: "3" }}
+						htmlFor={tech}
+						className="flex-1 block pt-1 techRow__label"
+					>
+						{translatedTechName}
+					</Text>
+					<div className="flex justify-end">
+						<TechInfoBadges
+							hasTechInGrid={hasTechInGrid}
+							techColor={techColor}
+							moduleCount={moduleCount}
+							currentCheckedModulesLength={currentCheckedModules.length}
+							techMaxBonus={techMaxBonus}
+							techSolvedBonus={techSolvedBonus}
+						/>
+					</div>
+				</>
 			)}
 		</div>
 	);
