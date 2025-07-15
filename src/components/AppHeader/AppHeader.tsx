@@ -2,7 +2,7 @@
 import "./AppHeader.css";
 
 import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import { IconButton, Separator, Tooltip, Heading } from "@radix-ui/themes";
 import React from "react";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
@@ -32,7 +32,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					variant="ghost"
 					aria-label={t("translationRequest.openDialogLabel") || "Open translation request dialog"}
 					onClick={() => {
-												sendEvent({
+						sendEvent({
 							category: "User Interactions",
 							action: "showTranslations",
 						});
@@ -59,7 +59,13 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
 			</div>
 
-			<h2 className="items-center text-sm sm:text-base header__title">
+			<Heading
+				wrap="pretty"
+				align="center"
+				as="h2"
+				size={{ initial: "2", sm: "4" }}
+				className="header__title"
+			>
 				<strong>{t("appHeader.subTitle")}</strong>
 				<span className="font-thin"> v{__APP_VERSION__}</span>&nbsp;&nbsp;
 				<Tooltip content={t("buttons.changelog")}>
@@ -80,7 +86,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						<CounterClockwiseClockIcon className="w-4 h-4 sm:w-5 sm:h-5" />
 					</IconButton>
 				</Tooltip>
-			</h2>
+			</Heading>
 		</header>
 	);
 };

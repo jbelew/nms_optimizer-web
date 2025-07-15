@@ -207,12 +207,15 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		clearTechSolvedBonus(tech);
 	}, [tech, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus]);
 
-	const handleCheckboxChange = useCallback((moduleId: string) => {
-		setCheckedModules(tech, (prevChecked = []) => {
-			const isChecked = prevChecked.includes(moduleId);
-			return isChecked ? prevChecked.filter((id) => id !== moduleId) : [...prevChecked, moduleId];
-		});
-	}, [tech, setCheckedModules]);
+	const handleCheckboxChange = useCallback(
+		(moduleId: string) => {
+			setCheckedModules(tech, (prevChecked = []) => {
+				const isChecked = prevChecked.includes(moduleId);
+				return isChecked ? prevChecked.filter((id) => id !== moduleId) : [...prevChecked, moduleId];
+			});
+		},
+		[tech, setCheckedModules]
+	);
 
 	const handleOptimizeClick = useCallback(async () => {
 		if (isGridFull && !hasTechInGrid) {
@@ -227,7 +230,16 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			clearTechSolvedBonus(tech);
 			await handleOptimize(tech);
 		}
-	}, [isGridFull, hasTechInGrid, setShaking, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus, handleOptimize, tech]);
+	}, [
+		isGridFull,
+		hasTechInGrid,
+		setShaking,
+		handleResetGridTech,
+		clearTechMaxBonus,
+		clearTechSolvedBonus,
+		handleOptimize,
+		tech,
+	]);
 
 	const currentCheckedModules = checkedModules[tech] || [];
 
@@ -239,45 +251,53 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
 
 	interface TechInfoBadgesProps {
-	hasTechInGrid: boolean;
-	techColor: TechTreeRowProps["techColor"];
-	moduleCount: number;
-	currentCheckedModulesLength: number;
-	techMaxBonus: number;
-	techSolvedBonus: number;
-}
-
-const TechInfoBadges: React.FC<TechInfoBadgesProps> = React.memo(
-	({ hasTechInGrid, techColor, moduleCount, currentCheckedModulesLength, techMaxBonus, techSolvedBonus }) => {
-		return (
-			<>
-				<Badge
-					ml="1"
-					className="!font-mono align-top"
-					size="1"
-					radius="medium"
-					variant={hasTechInGrid ? "soft" : "surface"}
-					color={hasTechInGrid ? "gray" : techColor}
-					style={
-						hasTechInGrid
-							? {
-									backgroundColor: "var(--gray-a2)",
-									color: "var(--gray-a8)",								}
-							: { backgroundColor: "var(--accent-a3)" }
-					}
-				>
-					{moduleCount + currentCheckedModulesLength}
-				</Badge>
-				{hasTechInGrid && (
-					<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
-				)}
-			</>
-		);
+		hasTechInGrid: boolean;
+		techColor: TechTreeRowProps["techColor"];
+		moduleCount: number;
+		currentCheckedModulesLength: number;
+		techMaxBonus: number;
+		techSolvedBonus: number;
 	}
-);
-TechInfoBadges.displayName = "TechInfoBadges";
 
-return (
+	const TechInfoBadges: React.FC<TechInfoBadgesProps> = React.memo(
+		({
+			hasTechInGrid,
+			techColor,
+			moduleCount,
+			currentCheckedModulesLength,
+			techMaxBonus,
+			techSolvedBonus,
+		}) => {
+			return (
+				<>
+					<Badge
+						ml="1"
+						className="!font-mono align-top"
+						size="1"
+						radius="medium"
+						variant={hasTechInGrid ? "soft" : "surface"}
+						color={hasTechInGrid ? "gray" : techColor}
+						style={
+							hasTechInGrid
+								? {
+										backgroundColor: "var(--gray-a2)",
+										color: "var(--gray-a8)",
+									}
+								: { backgroundColor: "var(--accent-a3)" }
+						}
+					>
+						{moduleCount + currentCheckedModulesLength}
+					</Badge>
+					{hasTechInGrid && (
+						<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+					)}
+				</>
+			);
+		}
+	);
+	TechInfoBadges.displayName = "TechInfoBadges";
+
+	return (
 		<div className="flex gap-2 mt-2 mb-2 ml-0 mr-1 sm:ml-1 items-top optimizationButton">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
@@ -325,7 +345,7 @@ return (
 				>
 					<Accordion.Item className="AccordionItem" value="item-1">
 						<AccordionTrigger>
-							<Text className="techRow__label" wrap="pretty">
+							<Text as="label" wrap="balance" weight="medium" size={{ initial: "2", sm: "3" }}>
 								{translatedTechName}
 								<TechInfoBadges
 									hasTechInGrid={hasTechInGrid}
@@ -358,9 +378,11 @@ return (
 			) : (
 				<Text
 					as="label"
-					wrap="pretty"
+					wrap="balance"
+					weight="medium"
+					size={{ initial: "2", sm: "3" }}
 					htmlFor={tech}
-					className="flex-1 block pt-1 text-sm font-medium sm:text-base techRow__label"
+					className="flex-1 block pt-1 techRow__label"
 				>
 					{translatedTechName}
 					<TechInfoBadges
