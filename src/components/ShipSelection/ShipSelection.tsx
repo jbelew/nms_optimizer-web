@@ -134,9 +134,6 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 					<React.Fragment key={type}>
 						{groupIndex > 0 && <DropdownMenu.Separator />}
-						{/* <DropdownMenu.Label>
-							<span className="shipSelection__header">{t(`platformTypes.${type}`)}</span>
-						</DropdownMenu.Label> */}
 						{items.map(({ key }) => (
 							<DropdownMenu.RadioItem
 								key={key}

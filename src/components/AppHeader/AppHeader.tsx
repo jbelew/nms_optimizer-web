@@ -7,10 +7,8 @@ import React from "react";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
-// import { APP_VERSION } from "../../constants"; // Replaced by global __APP_VERSION__
-import LanguageSelector from "../LanguageSelector/LanguageSelector"; // Import the new component
-import RhombusIcon from "../icons/RhombusIcon"; // Import the new component
-// import Ship from "../../assets/svg/ship.svg";
+import LanguageSelector from "../LanguageSelector/LanguageSelector";
+import RhombusIcon from "../icons/RhombusIcon";
 
 import { useDialog } from "../../context/dialog-utils";
 

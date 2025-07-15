@@ -1,6 +1,3 @@
-// src/components/AppFooter/AppFooter.tsx
-// import "./AppFooter.css"; // Uncommented, assuming it will be used or remove if not needed.
-
 import { Separator } from "@radix-ui/themes";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";

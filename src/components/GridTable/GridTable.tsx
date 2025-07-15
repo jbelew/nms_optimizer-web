@@ -1,7 +1,7 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.css";
 
-import React, { useMemo } from "react"; // Removed useCallback
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 // import ReactGA from "react-ga4"; // No longer used directly here
 

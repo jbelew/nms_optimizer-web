@@ -101,8 +101,8 @@ COPY --from=frontend-builder --chown=${APP_USER}:${APP_GROUP} /app/frontend/dist
 COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/requirements.txt /opt/app/backend_app/requirements.txt
 
 # Copy all .py files from the root of the backend repository and the debugging_utils directory
-COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/*.py /opt/app/backend_app/
-COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/training/*.* /opt/app/backend_app/training/
+COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src/*.py /opt/app/backend_app/
+COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src/training/*.* /opt/app/backend_app/training/
 
 # Copy installed Python dependencies (site-packages) from the backend-deps-installer stage
 COPY --from=backend-deps-installer /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
