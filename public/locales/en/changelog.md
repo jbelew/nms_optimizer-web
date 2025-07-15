@@ -4,6 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0.0 beta 4 (2025-07-15)
+
+- Refactored stores and hooks for significantly improved memory usage and performance.
+- Improved placement of the "Recommended Build" button for better visibility and accessibility.
+- Enhanced visual presentation of TechTree badges.
+
 ## Version 3.0.0 beta 3 (2025-07-14)
 
 - Added module count indicator for each technology type.
