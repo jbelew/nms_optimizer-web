@@ -130,25 +130,41 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		const selectedShipType = usePlatformStore((state) => state.selectedPlatform); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
-		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
+		const { setGridDefinitionAndApplyModules } = useGridStore.getState();
 		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 
+		const stringifiedGridDefinition = useMemo(() => {
+			return techTree.grid_definition ? JSON.stringify(techTree.grid_definition) : null;
+		}, [techTree.grid_definition]);
+
+		const initialGridApplied = React.useRef(false);
+
 		useEffect(() => {
-			if (techTree.grid_definition && !hasModulesInGrid) {
+			// Only apply the initial grid definition if it hasn't been applied yet
+			// and if the grid is currently empty (no modules have been placed by the user).
+			// Also, ensure the grid_definition exists and has actually changed content-wise.
+			if (
+				techTree.grid_definition &&
+				!hasModulesInGrid &&
+				!initialGridApplied.current
+			) {
 				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
-				const flattenedGrid = techTree.grid_definition.grid.flat();
-				applyModulesToGrid(flattenedGrid);
-			}
-			if (techTree.grid_definition) {
-				setGridFixed(techTree.grid_definition.gridFixed);
-				setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
+				console.log("useEffect dependencies:", {
+					stringifiedGridDefinition: stringifiedGridDefinition,
+					hasModulesInGrid: hasModulesInGrid,
+					initialGridApplied: initialGridApplied.current,
+				});
+				setGridDefinitionAndApplyModules(techTree.grid_definition);
+				initialGridApplied.current = true;
 			}
 		}, [
-			techTree.grid_definition,
-			applyModulesToGrid,
-			setGridFixed,
-			setSuperchargedFixed,
+			// Dependencies:
+			// stringifiedGridDefinition: The memoized stringified grid definition.
+			// hasModulesInGrid: A boolean indicating if the grid currently has modules.
+			// setGridDefinitionAndApplyModules: The action to apply the grid definition.
+			stringifiedGridDefinition, // Use the memoized string
 			hasModulesInGrid,
+			setGridDefinitionAndApplyModules,
 		]);
 
 		const processedTechTree = useMemo(() => {

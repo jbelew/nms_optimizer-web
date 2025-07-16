@@ -138,6 +138,7 @@ export type GridStore = {
 	setSuperchargedFixed: (fixed: boolean) => void;
 	setInitialGridDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined) => void;
 	setGridFromInitialDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
+	setGridDefinitionAndApplyModules: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
 	selectTotalSuperchargedCells: () => number;
 	selectHasModulesInGrid: () => boolean;
 	applyModulesToGrid: (modules: Module[]) => void;
@@ -407,7 +408,39 @@ export const useGridStore = create<GridStore>()(
 				});
 			},
 
-			applyModulesToGrid: (modules: (Module | null)[]) => {
+			setGridDefinitionAndApplyModules: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => {
+		set((state) => {
+			const newCells: Cell[][] = definition.grid.map((row) =>
+				row.map((moduleData) => {
+					const baseCell = createEmptyCell();
+					if (moduleData && Object.keys(moduleData).length > 0) {
+						return {
+							...baseCell,
+							active: moduleData.active ?? baseCell.active,
+							adjacency: moduleData.adjacency ?? baseCell.adjacency,
+							adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
+							bonus: moduleData.bonus ?? baseCell.bonus,
+							image: moduleData.image ?? baseCell.image,
+							module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
+							label: moduleData.label ?? baseCell.label,
+							sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
+							supercharged: moduleData.supercharged ?? baseCell.supercharged,
+							tech: moduleData.tech ?? baseCell.tech,
+							type: moduleData.type ?? baseCell.type,
+							value: moduleData.value ?? baseCell.value,
+						};
+					} else {
+						return baseCell;
+					}
+				})
+			);
+			state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
+			state.gridFixed = definition.gridFixed;
+			state.superchargedFixed = definition.superchargedFixed;
+		});
+	},
+
+	applyModulesToGrid: (modules: (Module | null)[]) => {
 				set((state) => {
 					modules.forEach((moduleData, index) => {
 						const rowIndex = Math.floor(index / state.grid.width);
@@ -448,6 +481,8 @@ export const useGridStore = create<GridStore>()(
 					isSharedGrid: state.isSharedGrid,
 					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
 				};
+				// Also update the PlatformStore's localStorage key directly
+				localStorage.setItem("selectedPlatform", usePlatformStore.getState().selectedPlatform);
 				console.log("GridStore: Persisting data:", dataToPersist);
 				return dataToPersist;
 			},
@@ -459,6 +494,7 @@ export const useGridStore = create<GridStore>()(
 			merge: (persistedState, currentState) => {
 				const stateFromStorage = persistedState as Partial<GridStore>; // Cast persistedState
 				const currentUrlHasGrid = new URLSearchParams(getWindowSearch()).has("grid");
+
 				return {
 					...currentState, // Default state from create()
 					...stateFromStorage, // State from localStorage (if getItem didn't return null)

@@ -132,7 +132,7 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
 	const { setTechColors } = useTechStore();
-	const { setInitialGridDefinition } = useGridStore.getState();
+	const { initialGridDefinition, setInitialGridDefinition } = useGridStore.getState();
 
 	// Extract and set tech colors when the tech tree is available
 	useEffect(() => {
@@ -149,12 +149,11 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 		setTechColors(colors);
 
-		// Set the initial grid definition in GridStore
-		// Only apply the initial grid if the grid is currently empty.
-		if (techTree.grid_definition) {
+		// Set the initial grid definition in GridStore if it's not already set or if it has changed
+		if (techTree.grid_definition && JSON.stringify(techTree.grid_definition) !== JSON.stringify(initialGridDefinition)) {
 			setInitialGridDefinition(techTree.grid_definition);
 		}
-	}, [techTree, setTechColors, setInitialGridDefinition]);
+	}, [techTree, setTechColors, initialGridDefinition, setInitialGridDefinition]);
 
 	return techTree;
 }
