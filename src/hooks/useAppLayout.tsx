@@ -24,8 +24,8 @@ export const useAppLayout = (): AppLayout => {
 
 	const updateMeasurements = useCallback(
 		(entries?: ResizeObserverEntry[]) => {
-			let newGridHeight: number | null = null;
-			let newGridTableTotalWidth: number | undefined = undefined;
+			let newGridHeight: number | null = gridHeight; // Initialize with current state
+			let newGridTableTotalWidth: number | undefined = gridTableTotalWidth; // Initialize with current state
 
 			const elementToObserveHeight = containerRef.current;
 			const elementToObserveWidth = gridTableRef.current;
@@ -46,17 +46,22 @@ export const useAppLayout = (): AppLayout => {
 			// Fallback for initial measurement or if specific elements weren't in entries
 			// This part should only execute if the values haven't been set by entries
 			// or if it's the initial call without entries.
-			if (newGridHeight === null && isLarge && !isSharedGrid && elementToObserveHeight) {
+			if (newGridHeight === gridHeight && isLarge && !isSharedGrid && elementToObserveHeight) {
 				newGridHeight = elementToObserveHeight.getBoundingClientRect().height;
 			}
-			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
+			if (newGridTableTotalWidth === gridTableTotalWidth && elementToObserveWidth) {
 				newGridTableTotalWidth = elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT;
 			}
 
-			setGridHeight(newGridHeight);
-			setGridTableTotalWidth(newGridTableTotalWidth);
+			// Only update state if values have actually changed
+			if (newGridHeight !== gridHeight) {
+				setGridHeight(newGridHeight);
+			}
+			if (newGridTableTotalWidth !== gridTableTotalWidth) {
+				setGridTableTotalWidth(newGridTableTotalWidth);
+			}
 		},
-		[isLarge, isSharedGrid, setGridHeight, setGridTableTotalWidth, containerRef, gridTableRef]
+		[isLarge, isSharedGrid, gridHeight, gridTableTotalWidth] // Removed containerRef, gridTableRef
 	);
 
 	useEffect(() => {

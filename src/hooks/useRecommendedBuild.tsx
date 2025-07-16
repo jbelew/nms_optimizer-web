@@ -28,7 +28,7 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 	const applyRecommendedBuild = useCallback(
 		(build: RecommendedBuild) => {
 			if (build && build.layout) {
-								const newGrid = createGrid(10, 6);
+				const newGrid = createGrid(10, 6);
 				const layout = build.layout as ({
 					tech: string;
 					module: string;
@@ -58,6 +58,7 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 										adjacency: module.adjacency ?? false,
 										sc_eligible: module.sc_eligible ?? false,
 										adjacency_bonus: cellData.adjacency_bonus ? 1.0 : 0.0,
+										type: module.type ?? "", // Add the missing 'type' property
 									};
 								}
 							}

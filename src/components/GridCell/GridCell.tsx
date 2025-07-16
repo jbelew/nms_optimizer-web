@@ -42,6 +42,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const gridFixed = useGridStore((state) => state.gridFixed);
 	const [longPressTriggered, setLongPressTriggered] = useState(false);
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null); // New ref for shake timeout
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
 
@@ -61,27 +62,30 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 
+			// Function to handle shaking and its timeout
+			const triggerShake = () => {
+				setShaking(true);
+				if (shakeTimeoutRef.current) {
+					clearTimeout(shakeTimeoutRef.current);
+				}
+				shakeTimeoutRef.current = setTimeout(() => {
+					setShaking(false);
+					shakeTimeoutRef.current = null; // Clear the ref after timeout
+				}, 500);
+			};
+
 			if (event.ctrlKey || event.metaKey) {
 				if (gridFixed) {
-					setShaking(true);
-					setTimeout(() => {
-						setShaking(false);
-					}, 500);
+					triggerShake();
 					return; // Exit after initiating shake, don't toggle active
 				}
 				toggleCellActive(rowIndex, columnIndex);
 			} else if (superchargedFixed) {
-				setShaking(true);
-				setTimeout(() => {
-					setShaking(false);
-				}, 500);
+				triggerShake();
 				return; // Exit after initiating shake, don't toggle supercharge
 			} else {
 				if (totalSupercharged >= 4 && !cell.supercharged) {
-					setShaking(true);
-					setTimeout(() => {
-						setShaking(false);
-					}, 500);
+					triggerShake();
 					return; // Exit after initiating shake, don't toggle supercharge
 				}
 				toggleCellSupercharged(rowIndex, columnIndex);

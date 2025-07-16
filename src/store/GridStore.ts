@@ -405,38 +405,38 @@ export const useGridStore = create<GridStore>()(
 			},
 
 			setGridDefinitionAndApplyModules: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => {
-		set((state) => {
-			const newCells: Cell[][] = definition.grid.map((row) =>
-				row.map((moduleData) => {
-					const baseCell = createEmptyCell();
-					if (moduleData && Object.keys(moduleData).length > 0) {
-						return {
-							...baseCell,
-							active: moduleData.active ?? baseCell.active,
-							adjacency: moduleData.adjacency ?? baseCell.adjacency,
-							adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
-							bonus: moduleData.bonus ?? baseCell.bonus,
-							image: moduleData.image ?? baseCell.image,
-							module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
-							label: moduleData.label ?? baseCell.label,
-							sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
-							supercharged: moduleData.supercharged ?? baseCell.supercharged,
-							tech: moduleData.tech ?? baseCell.tech,
-							type: moduleData.type ?? baseCell.type,
-							value: moduleData.value ?? baseCell.value,
-						};
-					} else {
-						return baseCell;
-					}
-				})
-			);
-			state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
-			state.gridFixed = definition.gridFixed;
-			state.superchargedFixed = definition.superchargedFixed;
-		});
-	},
+				set((state) => {
+					const newCells: Cell[][] = definition.grid.map((row) =>
+						row.map((moduleData) => {
+							const baseCell = createEmptyCell();
+							if (moduleData && Object.keys(moduleData).length > 0) {
+								return {
+									...baseCell,
+									active: moduleData.active ?? baseCell.active,
+									adjacency: moduleData.adjacency ?? baseCell.adjacency,
+									adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
+									bonus: moduleData.bonus ?? baseCell.bonus,
+									image: moduleData.image ?? baseCell.image,
+									module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
+									label: moduleData.label ?? baseCell.label,
+									sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
+									supercharged: moduleData.supercharged ?? baseCell.supercharged,
+									tech: moduleData.tech ?? baseCell.tech,
+									type: moduleData.type ?? baseCell.type,
+									value: moduleData.value ?? baseCell.value,
+								};
+							} else {
+								return baseCell;
+							}
+						})
+					);
+					state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
+					state.gridFixed = definition.gridFixed;
+					state.superchargedFixed = definition.superchargedFixed;
+				});
+			},
 
-	applyModulesToGrid: (modules: (Module | null)[]) => {
+			applyModulesToGrid: (modules: (Module | null)[]) => {
 				set((state) => {
 					modules.forEach((moduleData, index) => {
 						const rowIndex = Math.floor(index / state.grid.width);
@@ -469,9 +469,9 @@ export const useGridStore = create<GridStore>()(
 		})),
 		// --- Persist Configuration ---
 		{
-			name: "grid-storage_v3",
+			name: "app-state_v3",
 			storage: debouncedStorage, // Use the storage object with the specifically debounced setItem
-						partialize: (state) => {
+			partialize: (state) => {
 				const dataToPersist = {
 					grid: state.grid,
 					isSharedGrid: state.isSharedGrid,
