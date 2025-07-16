@@ -138,6 +138,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							ref={appLayoutGridTableRef}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
+							techTreeGridDefinition={techTree.grid_definition} // Pass the techTree.grid_definition
 						/>
 					</div>
 					{!isSharedGrid && (

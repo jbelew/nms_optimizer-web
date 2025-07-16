@@ -13,6 +13,8 @@ import ShakingWrapper from "../GridShake/GridShake";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
+import type { Module } from "../../hooks/useTechTree"; // Import Module type
+
 interface GridTableProps {
 	grid: Grid | null | undefined;
 	activateRow: (rowIndex: number) => void;
@@ -21,6 +23,7 @@ interface GridTableProps {
 	shared: boolean; // This is isSharedGridProp, used for GridCell
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
+	techTreeGridDefinition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }; // Add this prop
 }
 
 /**
@@ -33,7 +36,7 @@ interface GridTableProps {
  * @param {(rowIndex: number) => void} props.activateRow - Function to activate an entire row.
  * @param {(rowIndex: number) => void} props.deActivateRow - Function to deactivate an entire row.
  * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
- * @param {boolean} props.shared - Indicates if the grid is in a shared/read-only state.
+ * @param {boolean} props.props.shared - Indicates if the grid is in a shared/read-only state.
  */
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	(
@@ -45,6 +48,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			shared: isSharedGridProp,
 			updateUrlForShare,
 			updateUrlForReset,
+			techTreeGridDefinition, // Destructure the new prop
 		},
 		ref
 	) => {
@@ -133,6 +137,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							solving={solving}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
+							techTreeGridDefinition={techTreeGridDefinition} // Pass the new prop
 						/>
 					</div>
 				</div>

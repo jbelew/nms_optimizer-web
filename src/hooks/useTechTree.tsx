@@ -116,7 +116,7 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 		});
 
 		// Store the promise in the cache
-		cache.set(cacheKey, createResource(promise));
+		cache.set(cacheKey, createResource<TechTree>(promise));
 	}
 
 	// Return the cached resource

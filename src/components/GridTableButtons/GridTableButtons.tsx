@@ -12,24 +12,27 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
 import { useGridStore, selectHasModulesInGrid } from "../../store/GridStore";
+import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
 
 interface GridTableButtonsProps {
 	solving: boolean;
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
+	techTreeGridDefinition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }; // Add this prop
 }
 
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
 	updateUrlForShare,
 	updateUrlForReset,
+	techTreeGridDefinition, // Destructure the new prop
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 
 	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
-	const { setIsSharedGrid, initialGridDefinition } = useGridStore();
+	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
 	const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
@@ -62,8 +65,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid" });
 
-		if (initialGridDefinition) {
-			useGridStore.getState().setGridFromInitialDefinition(initialGridDefinition);
+		if (techTreeGridDefinition) { // Use techTreeGridDefinition here
+			useGridStore.getState().setGridDefinitionAndApplyModules(techTreeGridDefinition);
 		} else {
 			// Fallback to a completely empty grid if no initial definition is available
 			useGridStore.getState().resetGrid();
@@ -71,7 +74,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 		updateUrlForReset();
 		setIsSharedGrid(false);
-	}, [initialGridDefinition, updateUrlForReset, setIsSharedGrid, sendEvent]);
+	}, [techTreeGridDefinition, updateUrlForReset, setIsSharedGrid, sendEvent]); // Update dependencies
 
 	return (
 		<>
@@ -136,7 +139,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							aria-label={t("buttons.share")}
 						>
 							<Share2Icon />
-							<span className="hidden sm:inline">{t("buttons.share")}</span>
+							<span className="hidden sm:inline">{t("buttons.share")}
+							</span>
 						</Button>
 					) : (
 						<IconButton
