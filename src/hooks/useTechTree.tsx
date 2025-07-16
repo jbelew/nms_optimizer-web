@@ -99,7 +99,7 @@ const cache = new Map<string, Resource<TechTree>>(); // Store successful fetches
  * Fetches a tech tree by ship type and stores it in the cache.
  * If the resource is already in the cache, it will return the cached version.
  * @param {string} shipType - The type of ship to fetch the tech tree for. Defaults to "standard".
- * @returns {Resource<TechTree>} An object with a read method that can be used with React Suspense.
+ * @returns {Resource<T>} An object with a read method that can be used with React Suspense.
  */
 function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	const cacheKey = shipType;
@@ -132,7 +132,7 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
 	const { setTechColors } = useTechStore();
-	const { initialGridDefinition, setInitialGridDefinition } = useGridStore.getState();
+	const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
 
 	// Extract and set tech colors when the tech tree is available
 	useEffect(() => {
@@ -149,11 +149,14 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 		setTechColors(colors);
 
-		// Set the initial grid definition in GridStore if it's not already set or if it has changed
-		if (techTree.grid_definition && JSON.stringify(techTree.grid_definition) !== JSON.stringify(initialGridDefinition)) {
-			setInitialGridDefinition(techTree.grid_definition);
+		// Apply the grid definition if available
+		if (techTree.grid_definition) {
+			const flattenedModules = techTree.grid_definition.grid.flat();
+			applyModulesToGrid(flattenedModules);
+			setGridFixed(techTree.grid_definition.gridFixed);
+			setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
 		}
-	}, [techTree, setTechColors, initialGridDefinition, setInitialGridDefinition]);
+	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
 
 	return techTree;
 }

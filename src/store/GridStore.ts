@@ -188,7 +188,6 @@ const debouncedStorage = {
 
 			console.log("GridStore: Retrieved data from localStorage:", parsedData);
 
-			
 
 			return parsedData;
 		} catch (e) {

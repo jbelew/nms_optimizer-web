@@ -123,8 +123,6 @@ TechTreeSection.propTypes = {
 	solving: PropTypes.bool.isRequired,
 };
 
-
-
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
 		const selectedShipType = usePlatformStore((state) => state.selectedPlatform); // Get selectedShipType from the store
@@ -143,28 +141,16 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 			// Only apply the initial grid definition if it hasn't been applied yet
 			// and if the grid is currently empty (no modules have been placed by the user).
 			// Also, ensure the grid_definition exists and has actually changed content-wise.
-			if (
-				techTree.grid_definition &&
-				!hasModulesInGrid &&
-				!initialGridApplied.current
-			) {
+			if (techTree.grid_definition && !hasModulesInGrid && !initialGridApplied.current) {
 				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
-				console.log("useEffect dependencies:", {
-					stringifiedGridDefinition: stringifiedGridDefinition,
-					hasModulesInGrid: hasModulesInGrid,
-					initialGridApplied: initialGridApplied.current,
-				});
 				setGridDefinitionAndApplyModules(techTree.grid_definition);
 				initialGridApplied.current = true;
 			}
 		}, [
-			// Dependencies:
-			// stringifiedGridDefinition: The memoized stringified grid definition.
-			// hasModulesInGrid: A boolean indicating if the grid currently has modules.
-			// setGridDefinitionAndApplyModules: The action to apply the grid definition.
-			stringifiedGridDefinition, // Use the memoized string
+			stringifiedGridDefinition,
 			hasModulesInGrid,
 			setGridDefinitionAndApplyModules,
+			techTree.grid_definition,
 		]);
 
 		const processedTechTree = useMemo(() => {
@@ -219,11 +205,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 			[processedTechTree, handleOptimize, solving, isGridFull, selectedShipType]
 		);
 
-		return (
-			<>
-				{renderedTechTree}
-			</>
-		);
+		return <>{renderedTechTree}</>;
 	}
 );
 TechTreeContent.displayName = "TechTreeContent";
