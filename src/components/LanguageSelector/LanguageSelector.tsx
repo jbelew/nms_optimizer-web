@@ -64,9 +64,9 @@ const LanguageSelector: React.FC = () => {
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				<IconButton
-					variant="soft"
+					variant="surface"
 					radius="full"
-					size={isSmallAndUp ? "2" : "2"}
+					size={isSmallAndUp ? "2" : "1"}
 					aria-label={t("languageInfo.changeLanguage") || "Change language"}
 				>
 					<img
