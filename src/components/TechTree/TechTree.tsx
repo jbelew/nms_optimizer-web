@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
-import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; // Import useGridStore
+import { useGridStore } from "../../store/GridStore"; // Import useGridStore
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
@@ -131,40 +131,33 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 		const { setGridDefinitionAndApplyModules } = useGridStore.getState();
-		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
+		
+
+		
 
 		const stringifiedGridDefinition = useMemo(() => {
 			return techTree.grid_definition ? JSON.stringify(techTree.grid_definition) : null;
 		}, [techTree.grid_definition]);
 
-		const initialGridApplied = React.useRef(false);
+		const lastProcessedGridDefinition = React.useRef<string | null>(null);
 
 		useEffect(() => {
-			// Only apply the initial grid definition if it hasn't been applied yet
-			// and if the grid is currently empty (no modules have been placed by the user).
-			// Also, ensure the grid_definition exists and has actually changed content-wise.
+			// Apply the grid definition if it exists and has changed content-wise.
 			if (
 				techTree.grid_definition &&
-				!hasModulesInGrid &&
-				!initialGridApplied.current
+				stringifiedGridDefinition !== lastProcessedGridDefinition.current
 			) {
 				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
-				console.log("useEffect dependencies:", {
-					stringifiedGridDefinition: stringifiedGridDefinition,
-					hasModulesInGrid: hasModulesInGrid,
-					initialGridApplied: initialGridApplied.current,
-				});
 				setGridDefinitionAndApplyModules(techTree.grid_definition);
-				initialGridApplied.current = true;
+				lastProcessedGridDefinition.current = stringifiedGridDefinition;
 			}
 		}, [
 			// Dependencies:
 			// stringifiedGridDefinition: The memoized stringified grid definition.
-			// hasModulesInGrid: A boolean indicating if the grid currently has modules.
 			// setGridDefinitionAndApplyModules: The action to apply the grid definition.
 			stringifiedGridDefinition, // Use the memoized string
-			hasModulesInGrid,
 			setGridDefinitionAndApplyModules,
+			selectedShipType, // Add selectedShipType to dependencies to trigger on platform change
 		]);
 
 		const processedTechTree = useMemo(() => {
