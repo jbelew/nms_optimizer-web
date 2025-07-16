@@ -7,7 +7,7 @@ import { createEmptyCell, type ApiResponse, type Grid, useGridStore } from "../s
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { useTechStore } from "../store/TechStore";
 import { useBreakpoint } from "./useBreakpoint";
-import { useShipTypesStore } from "./useShipTypes";
+import { usePlatformStore } from "../store/PlatformStore";
 
 interface UseOptimizeReturn {
 	solving: boolean;
@@ -90,7 +90,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setPatternNoFitTech,
 	} = useOptimizeStore();
 	const { checkedModules } = useTechStore();
-	const selectedShipType = useShipTypesStore((state) => state.selectedShipType);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isLarge = useBreakpoint("1024px");
 
 	useEffect(() => {

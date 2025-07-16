@@ -41,7 +41,6 @@
 			"-(( Decrypting legacy tech artifacts! ))-",
 			"-(( Optimizing the optimization! ))-",
 			"-(( Harmonizing upgrade stack interactions! ))-",
-			"-(( If you think you can fit more than two weapons in here, you're high on NipNip! ))-",
 			"-(( I'm a highly trained Convolutional Neural Network, not a miracle worker! ))-"
 		]
 	},
@@ -499,7 +498,7 @@
 			"rebuilt": "Rebuilt Exosuit Module",
 			"remembrance": "Remembrance",
 			"protection": "Shield Lattice",
-			"shield-upgrade": "Shield Lattice Upgrade",
+			"protection-upgrade": "Shield Lattice Upgrade",
 			"starseed": "Star Seed",
 			"jetpack": "Jetpack",
 			"jetpack-upgrade": "Jetpack Upgrade",
@@ -510,7 +509,15 @@
 			"nutrient": "Nutrient Ingestor",
 			"refiner": "Personal Refiner",
 			"trade": "Trade Rocket",
-			"translator": "Automatic Translation"
+			"artemis-translator": "Artemis' Translator",
+			"simple": "Simple Translator",
+			"superior": "Superior Translator",
+			"advanced": "Advanced Translator",
+			"airburst": "Airburst Engine",
+			"recycler": "Oxygen Recycler",
+			"neural": "Neural Stimulator",
+			"waterjets": "Efficient Waterjets",
+			"rerouter": "Oxygen Rerouter"
 		}
 	}
 }

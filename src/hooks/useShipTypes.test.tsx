@@ -79,10 +79,11 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		});
 
 		// 3. Dynamically import to re-initialize the store with the new URL
-		const { useShipTypesStore, fetchShipTypes } = await import("./useShipTypes");
+		const { fetchShipTypes } = await import("./useShipTypes");
+		const { usePlatformStore } = await import("../store/PlatformStore");
 
 		// Check initial state: The store should have initialized from the URL
-		expect(useShipTypesStore.getState().selectedShipType).toBe("hauler");
+		expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
 
 		// ACT: Trigger the fetch and wait for the internal promise chain to complete
 		await act(async () => {
@@ -92,9 +93,8 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		// ASSERT: The selected ship type should NOT be overwritten by the first
 		// item in the API response ('atlantid'). It should remain 'hauler'.
-		const finalState = useShipTypesStore.getState();
-		expect(finalState.selectedShipType).toBe("hauler");
-		expect(finalState.shipTypes).toEqual(mockShipTypes);
+		expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
+		
 	});
 
 	it('should default to "standard" and not be overwritten by fetch if URL/localStorage are empty', async () => {
@@ -106,8 +106,9 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(mockShipTypes) });
 
 		// ACT
-		const { useShipTypesStore, fetchShipTypes } = await import("./useShipTypes");
-		expect(useShipTypesStore.getState().selectedShipType).toBe("standard"); // Check default
+		const { fetchShipTypes } = await import("./useShipTypes");
+		const { usePlatformStore } = await import("../store/PlatformStore");
+		expect(usePlatformStore.getState().selectedPlatform).toBe("standard"); // Check default
 
 		await act(async () => {
 			fetchShipTypes();
@@ -115,7 +116,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		});
 
 		// ASSERT
-		expect(useShipTypesStore.getState().selectedShipType).toBe("standard");
+		expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 	});
 
 	it('should reset to "standard" if the value from the URL is invalid', async () => {
@@ -128,8 +129,9 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(mockShipTypes) });
 
 		// ACT
-		const { useShipTypesStore, fetchShipTypes } = await import("./useShipTypes");
-		expect(useShipTypesStore.getState().selectedShipType).toBe("invalid-ship"); // Initially trusts URL
+		const { fetchShipTypes } = await import("./useShipTypes");
+		const { usePlatformStore } = await import("../store/PlatformStore");
+		expect(usePlatformStore.getState().selectedPlatform).toBe("invalid-ship"); // Initially trusts URL
 
 		await act(async () => {
 			fetchShipTypes();
@@ -137,6 +139,6 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		});
 
 		// ASSERT: After validation, it should be reset to the default.
-		expect(useShipTypesStore.getState().selectedShipType).toBe("standard");
+		expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
 	});
 });

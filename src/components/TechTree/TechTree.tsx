@@ -8,7 +8,7 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { useShipTypesStore } from "../../hooks/useShipTypes";
+import { usePlatformStore } from "../../store/PlatformStore";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
 import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; // Import useGridStore
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
@@ -127,7 +127,7 @@ TechTreeSection.propTypes = {
 
 const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 	({ handleOptimize, solving }) => {
-		const selectedShipType = useShipTypesStore((state) => state.selectedShipType); // Get selectedShipType from the store
+		const selectedShipType = usePlatformStore((state) => state.selectedPlatform); // Get selectedShipType from the store
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 		const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();

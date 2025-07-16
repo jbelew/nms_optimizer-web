@@ -4,6 +4,7 @@ import { persist, type StorageValue } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { useTechStore } from "./TechStore";
+import { usePlatformStore } from "./PlatformStore";
 import { type Module } from "../hooks/useTechTree.tsx";
 
 // --- Define the specific function type we are debouncing ---
@@ -146,7 +147,7 @@ export type GridStore = {
 const debouncedStorage = {
 	// Use the specific debounceSetItem function
 	setItem: debounceSetItem(
-		(name: string, value: StorageValue<Partial<GridStore>>): Promise<void> => {
+		(name: string, value: StorageValue<Partial<GridStore>>) => {
 			try {
 				const storageValue = JSON.stringify(value);
 				localStorage.setItem(name, storageValue);
@@ -165,26 +166,27 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
-			const currentUrlParams = new URLSearchParams(window.location.search);
-			const platformFromUrl = currentUrlParams.get("platform");
-			const storedPlatform = localStorage.getItem("selectedPlatform"); // This is the key useShipTypesStore uses
-
-			// If there's a platform in the URL and it doesn't match the stored platform,
-			// or if there's a 'grid' param in the URL (shared grid),
-			// then we should ignore the stored grid to prevent mismatches.
-			if (
-				(platformFromUrl && platformFromUrl !== storedPlatform) ||
-				currentUrlParams.has("grid")
-			) {
-				console.log("GridStore: Ignoring localStorage due to URL platform mismatch or shared grid.");
+			const storedData = localStorage.getItem(name);
+			if (!storedData) {
+				console.log(`GridStore: No stored data found for key: ${name}`);
 				return null;
 			}
+			const parsedData = JSON.parse(storedData) as StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
+			console.log("GridStore: Retrieved data from localStorage:", parsedData);
 
-			const str = localStorage.getItem(name);
-			if (!str) {
-				return null;
+			// Get the current platform from the PlatformStore
+			const currentPlatform = usePlatformStore.getState().selectedPlatform;
+			console.log("GridStore: Current platform from PlatformStore:", currentPlatform);
+
+			// Check if the stored platform matches the current platform
+			if (parsedData.state && parsedData.state.selectedPlatform && parsedData.state.selectedPlatform !== currentPlatform) {
+				console.warn(
+					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${parsedData.state.selectedPlatform}, Current: ${currentPlatform}`
+				);
+				return null; // Discard stored data if platforms don't match
 			}
-			return JSON.parse(str) as StorageValue<Partial<GridStore>>;
+
+			return parsedData;
 		} catch (e) {
 			console.error("Failed to load from localStorage:", e);
 			return null;
@@ -435,13 +437,17 @@ export const useGridStore = create<GridStore>()(
 		})),
 		// --- Persist Configuration ---
 		{
-			name: "grid-storage",
+			name: "grid-storage_v3",
 			storage: debouncedStorage, // Use the storage object with the specifically debounced setItem
-			partialize: (state) => ({
-				grid: state.grid,
-				isSharedGrid: state.isSharedGrid,
-				// Note: 'result' is not persisted, which is often intended for transient API responses.
-			}),
+						partialize: (state) => {
+				const dataToPersist = {
+					grid: state.grid,
+					isSharedGrid: state.isSharedGrid,
+					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
+				};
+				console.log("GridStore: Persisting data:", dataToPersist);
+				return dataToPersist;
+			},
 			/**
 			 * Custom merge function to ensure `isSharedGrid` is always
 			 * determined by the URL at the time of hydration, overriding any

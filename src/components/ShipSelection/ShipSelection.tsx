@@ -9,6 +9,7 @@ import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { type ShipTypeDetail, useShipTypesStore } from "../../hooks/useShipTypes";
+import { usePlatformStore } from "../../store/PlatformStore";
 import { createGrid, useGridStore } from "../../store/GridStore";
 
 // --- Constants for Grid Configuration ---
@@ -20,8 +21,8 @@ interface ShipSelectionProps {
 }
 
 const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
-	const selectedShipType = useShipTypesStore((state) => state.selectedShipType);
-	const setSelectedShipType = useShipTypesStore((state) => state.setSelectedShipType);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
 	const setGridAndResetAuxiliaryState = useGridStore(
 		(state) => state.setGridAndResetAuxiliaryState
 	);

@@ -2,6 +2,7 @@
 import { create } from "zustand";
 
 import { API_URL } from "../constants";
+import { usePlatformStore } from "../store/PlatformStore";
 
 // Define the structure for the details of a single ship type
 export interface ShipTypeDetail {
@@ -89,12 +90,13 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 			.then((data: ShipTypes) => {
 				// Log the data to the console
 				console.log("Fetched ship types:", data);
-				const state = useShipTypesStore.getState();
-				state.setShipTypes(data);
+				const shipTypesState = useShipTypesStore.getState();
+				shipTypesState.setShipTypes(data);
 
 				// After fetching, validate that the current selection is a valid type.
 				// The initial selection is set by the store's create function from the URL or localStorage.
-				const currentSelected = state.selectedShipType;
+				const platformState = usePlatformStore.getState();
+				const currentSelected = platformState.selectedPlatform;
 				const availableTypes = Object.keys(data);
 
 				// If the current selection is not in the fetched list, reset to "standard".
@@ -103,7 +105,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 						`Selected ship type "${currentSelected}" is not valid. Resetting to "standard".`
 					);
 					// This will update the state and localStorage, but not the URL, to prevent a loop.
-					state.setSelectedShipType("standard", false);
+					platformState.setSelectedPlatform("standard", false);
 				}
 				return data;
 			})
@@ -136,88 +138,12 @@ export function useFetchShipTypesSuspense(): ShipTypes {
 // --- Zustand Store ---
 export interface ShipTypesState {
 	shipTypes: ShipTypes | null;
-	selectedShipType: string;
-	setSelectedShipType: (shipType: string, updateUrl?: boolean) => void; // Add optional flag
 	setShipTypes: (shipTypes: ShipTypes) => void;
 }
 
-const LOCAL_STORAGE_KEY = "selectedPlatform";
-
 export const useShipTypesStore = create<ShipTypesState>((set) => {
-	// --- Logic to read initial state and update URL/localStorage if needed ---
-	const urlParams = new URLSearchParams(window.location.search);
-	const platformFromUrl = urlParams.get("platform");
-	const platformFromStorage = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-	let initialShipType: string;
-	let updateUrlNeeded = false;
-	let updateStorageNeeded = false;
-
-	if (platformFromUrl) {
-		// 1. Priority: URL parameter (for shared links)
-		initialShipType = platformFromUrl;
-		// Ensure localStorage matches the URL param
-		if (platformFromStorage !== initialShipType) {
-			localStorage.setItem(LOCAL_STORAGE_KEY, initialShipType);
-			console.log(
-				`useShipTypesStore: Initialized from URL param '${initialShipType}', updated localStorage.`
-			);
-		} else {
-			console.log(`useShipTypesStore: Initialized from URL param '${initialShipType}'.`);
-		}
-	} else if (platformFromStorage) {
-		// 2. Priority: LocalStorage (user's last selection)
-		initialShipType = platformFromStorage;
-		updateUrlNeeded = true; // Update URL to reflect the stored value
-		console.log(
-			`useShipTypesStore: Initialized from localStorage '${initialShipType}', will update URL.`
-		);
-	} else {
-		// 3. Fallback: Default to "standard"
-		initialShipType = "standard";
-		updateUrlNeeded = true; // Update URL with the default
-		updateStorageNeeded = true; // Store the default
-		// console.log(`useShipTypesStore: No URL param or localStorage found. Defaulting to '${initialShipType}', will update URL and localStorage.`);
-	}
-
-	// Update the URL *after* determining the initial state, only if needed
-	if (updateUrlNeeded) {
-		const url = new URL(window.location.href);
-		url.searchParams.set("platform", initialShipType);
-		// Use replaceState so navigating back doesn't go to the URL without the param
-		window.history.replaceState({}, "", url.toString());
-		// console.log("useShipTypesStore: Updated URL.");
-	}
-
-	// Update localStorage if needed (only when defaulting)
-	if (updateStorageNeeded) {
-		localStorage.setItem(LOCAL_STORAGE_KEY, initialShipType);
-		// console.log("useShipTypesStore: Updated localStorage with default.");
-	}
-	// --- End of initial state logic ---
-
 	return {
 		shipTypes: null, // Initialize as null
-		selectedShipType: initialShipType, // Use the determined initial type
 		setShipTypes: (shipTypes) => set({ shipTypes }), // Add this line
-		setSelectedShipType: (shipType, updateUrl = true) => {
-			// Default updateUrl to true
-			set({ selectedShipType: shipType });
-
-			// Update localStorage
-			localStorage.setItem(LOCAL_STORAGE_KEY, shipType);
-			console.log(
-				`useShipTypesStore: Set selectedShipType to '${shipType}' and updated localStorage.`
-			);
-
-			if (updateUrl) {
-				const url = new URL(window.location.href);
-				url.searchParams.set("platform", shipType);
-				// Use pushState for user-driven changes to add to history
-				// if the change wasn't from a popstate event itself.
-				window.history.pushState({}, "", url.toString());
-				console.log(`useShipTypesStore: Updated URL for '${shipType}'.`);
-			}
-		},
 	};
 });

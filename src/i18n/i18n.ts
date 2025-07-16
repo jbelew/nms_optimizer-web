@@ -23,7 +23,7 @@ void i18n
 		supportedLngs: languages,
 		preload: languages,
 		fallbackLng: "en",
-		debug: process.env.NODE_ENV === "development",
+		debug: process.env.NODE_ENV === "production",
 		detection: {
 			order: ["querystring", "cookie", "localStorage", "sessionStorage", "navigator", "htmlTag"],
 			caches: ["localStorage", "cookie"],

@@ -7,7 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize";
-import { useFetchShipTypesSuspense, useShipTypesStore } from "../../hooks/useShipTypes";
+import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
+import { usePlatformStore } from "../../store/PlatformStore";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
 import { useGridStore } from "../../store/GridStore";
@@ -44,7 +45,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 	const [recommendedBuildHeight, setRecommendedBuildHeight] = useState(0);
 
-	const selectedShipType = useShipTypesStore((state) => state.selectedShipType);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	// Call useFetchShipTypesSuspense to ensure data is fetched/cached and to trigger Suspense.
 	// The actual shipTypes data is typically consumed by child components (e.g., ShipSelection)
 	// which also call this hook and benefit from the cache, or potentially via a store if it were populated there.

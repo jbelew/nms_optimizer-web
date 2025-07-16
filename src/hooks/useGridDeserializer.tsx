@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 import { useGridStore, type Grid, createGrid } from "../store/GridStore"; // Import Cell type
 import { API_URL } from "../constants";
-import { useShipTypesStore } from "./useShipTypes";
+import { usePlatformStore } from "../store/PlatformStore";
 import { useTechStore } from "../store/TechStore"; // <--- Import useTechStore
 import { type Module, type TechTree, type TechTreeItem } from "./useTechTree";
 
@@ -278,7 +278,7 @@ const deserialize = async (
 // --- React Hook (useGridDeserializer) ---
 export const useGridDeserializer = () => {
 	const { setGrid, grid, setIsSharedGrid } = useGridStore();
-	const selectedShipType = useShipTypesStore((state) => state.selectedShipType);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { setTechColors } = useTechStore(); // <-- Get setTechColors from the store
 
 	const serializeGrid = useCallback((): string => {

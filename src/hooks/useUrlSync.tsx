@@ -2,7 +2,7 @@
 import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGridStore } from "../store/GridStore";
-import { useShipTypesStore } from "./useShipTypes";
+import { usePlatformStore } from "../store/PlatformStore";
 import { useGridDeserializer } from "./useGridDeserializer";
 
 /**
@@ -12,8 +12,8 @@ import { useGridDeserializer } from "./useGridDeserializer";
 export const useUrlSync = () => {
   const navigate = useNavigate();
   const { setIsSharedGrid, isSharedGrid } = useGridStore();
-  const selectedShipTypeFromStore = useShipTypesStore((state) => state.selectedShipType);
-  const setSelectedShipTypeInStore = useShipTypesStore((state) => state.setSelectedShipType);
+  const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
+  const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
   const { serializeGrid, deserializeGrid } = useGridDeserializer();
 
   // Effect to handle initial URL state and popstate events
