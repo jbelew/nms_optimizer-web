@@ -128,14 +128,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 					...grid,
 					cells: grid.cells.map((row) =>
 						row.map((cell) =>
-							cell.tech === tech
-								? { ...createEmptyCell(cell.supercharged, cell.active) }
-								: cell
+							cell.tech === tech ? { ...createEmptyCell(cell.supercharged, cell.active) } : cell
 						)
 					),
 				};
 
-				console.log("DEBUG: Sending grid to API:", updatedGrid);
 				const response = await fetch(API_URL + "optimize", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -215,7 +212,17 @@ export const useOptimize = (): UseOptimizeReturn => {
 				setSolving(false);
 			}
 		},
-		[setShowErrorStore, patternNoFitTech, setPatternNoFitTech, grid, selectedShipType, checkedModules, sendEvent, setResult, setGrid]
+		[
+			setShowErrorStore,
+			patternNoFitTech,
+			setPatternNoFitTech,
+			grid,
+			selectedShipType,
+			checkedModules,
+			sendEvent,
+			setResult,
+			setGrid,
+		]
 	);
 
 	const clearPatternNoFitTech = useCallback(() => {

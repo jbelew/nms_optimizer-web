@@ -14,6 +14,7 @@ import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/th
 import { Accordion } from "radix-ui";
 import React, { useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useBreakpoint } from "../../hooks/useBreakpoint"; // This line is already present and correct
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
@@ -249,6 +250,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const imagePath2x = techImage
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
+	const isSmallAndUp = useBreakpoint("640px");
 
 	interface TechInfoBadgesProps {
 		hasTechInGrid: boolean;
@@ -347,7 +349,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					>
 						<Accordion.Item className="AccordionItem" value="item-1">
 							<AccordionTrigger>
-								<Text as="label" wrap="balance" weight="medium" size={{ initial: "2", sm: "3" }}>
+								<Text as="label" wrap="balance" weight="medium" size={isSmallAndUp ? "3" : "2"}>
 									{translatedTechName}
 								</Text>
 							</AccordionTrigger>
@@ -365,7 +367,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 											as="label"
 											wrap="balance"
 											weight="medium"
-											size={{ initial: "2", sm: "3" }}
+											size={isSmallAndUp ? "3" : "2"}
 											htmlFor={module.id}
 										>
 											{t(`modules.${module.id}`, { defaultValue: module.label })}
@@ -392,7 +394,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						as="label"
 						wrap="balance"
 						weight="medium"
-						size={{ initial: "2", sm: "3" }}
+						size={isSmallAndUp ? "3" : "2"}
 						htmlFor={tech}
 						className="flex-1 block pt-1 techRow__label"
 					>

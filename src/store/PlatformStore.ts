@@ -9,7 +9,6 @@ interface PlatformState {
 const LOCAL_STORAGE_KEY = "selectedPlatform";
 
 export const usePlatformStore = create<PlatformState>((set) => {
-	console.log("PlatformStore: Initializing...");
 	// --- Logic to read initial state and update URL/localStorage if needed ---
 	const urlParams = new URLSearchParams(window.location.search);
 	const platformFromUrl = urlParams.get("platform");
