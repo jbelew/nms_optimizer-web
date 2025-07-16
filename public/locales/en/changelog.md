@@ -4,6 +4,10 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0.0 beta 5 (2025-07-16)
+
+- Refactored localStorage logic to improve reliability and consistency across sessions.
+
 ## Version 3.0.0 beta 4 (2025-07-15)
 
 - Refactored stores and hooks for significantly improved memory usage and performance.
