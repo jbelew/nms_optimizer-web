@@ -69,7 +69,7 @@
 	"footer": {
 		"issuePrompt": "Something off with your solve or found a bug? <1>Open an issue on GitHub</1> and let us know!",
 		"builtBy": "Built by jbelew (void23 | QQ9Y-EJRS-P8KGW) • {{buildVersion}}",
-		"supportPrompt": "If you found this application useful, consider supporting its development with: "
+		"supportPrompt": "If you found this application useful, consider supporting its development with "
 	},
 	"translationRequest": {
 		"prompt": "Looking for volunteer translators! Click <1>here</1> for more information.",

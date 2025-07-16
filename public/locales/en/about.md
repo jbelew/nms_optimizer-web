@@ -1,6 +1,6 @@
 ## Overview
 
-This web application provides an interactive interface for optimizing technology layouts in the game _No Man's Sky_, specifically for starships, multi-tools, and freighters. The tool focuses on identifying the **best tech layouts** by maximizing adjacency bonuses and leveraging supercharged slots—core strategies for achieving the **best starship layout**, **best multi-tool layout**, or **best freighter layout**.
+This web application provides an interactive interface for optimizing technology layouts in the game _No Man's Sky_, specifically for Starships, Multi-tools, Exocraft, and Exosuits. The tool focuses on identifying the **best tech layouts** by maximizing adjacency bonuses and leveraging supercharged slots—core strategies for achieving the **best Starship layout**, **best Multi-tool layout**, **best Exocraft layout**, or **best Exosuit layout**.
 
 ## How It Works
 
@@ -11,7 +11,7 @@ The optimization process blends deterministic patterns with adaptive algorithms 
 1.  **Pattern-Based Pre-Solve:** Begins with a curated library of hand-tested layout patterns, optimizing for maximum adjacency bonuses across different grid types.
 2.  **AI-Guided Placement (ML Inference):** If a viable configuration includes supercharged slots, the tool invokes a TensorFlow model trained on 16,000+ grids to predict optimal placement.
 3.  **Simulated Annealing (Refinement):** Refines the layout through stochastic search—swapping modules and shifting positions to boost adjacency scoring while avoiding local optima.
-4.  **Result Presentation:** Outputs the highest-scoring configuration, including score breakdowns and visual layout recommendations for starships, multi-tools, and freighters.
+4.  **Result Presentation:** Outputs the highest-scoring configuration, including score breakdowns and visual layout recommendations for Starships, Multi-tools, Exocraft, and Exosuits.
 
 ## Features
 

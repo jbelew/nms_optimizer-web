@@ -13,7 +13,7 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
 	return (
-		<footer className="flex flex-col items-center justify-center gap-1 p-4 text-xs text-center lg:pb-0 sm:text-sm">
+		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-xs text-center lg:pb-0 sm:text-sm">
 			<div className="gap-1 font-light">
 				<Trans
 					i18nKey="footer.issuePrompt"
