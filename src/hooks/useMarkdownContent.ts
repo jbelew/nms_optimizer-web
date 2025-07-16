@@ -10,10 +10,6 @@ export interface MarkdownContentState {
 
 const markdownCache = new Map<string, string>();
 
-export const clearMarkdownCache = () => {
-    markdownCache.clear();
-};
-
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");
