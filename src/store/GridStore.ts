@@ -172,7 +172,6 @@ const debouncedStorage = {
 				return null;
 			}
 			const parsedData = JSON.parse(storedData) as StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
-			console.log("GridStore: Retrieved data from localStorage:", parsedData);
 
 			// Get the current platform from the PlatformStore
 			const currentPlatform = usePlatformStore.getState().selectedPlatform;
@@ -185,6 +184,10 @@ const debouncedStorage = {
 				);
 				return null; // Discard stored data if platforms don't match
 			}
+
+			console.log("GridStore: Retrieved data from localStorage:", parsedData);
+
+			
 
 			return parsedData;
 		} catch (e) {
