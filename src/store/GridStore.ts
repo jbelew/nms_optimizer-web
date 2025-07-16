@@ -165,15 +165,18 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
-			// Check if the current URL indicates a shared grid.
-			// We look for the presence of 'grid' and 'platform' parameters.
 			const currentUrlParams = new URLSearchParams(window.location.search);
-			const isUrlLikelyShared = currentUrlParams.has("grid");
+			const platformFromUrl = currentUrlParams.get("platform");
+			const storedPlatform = localStorage.getItem("selectedPlatform"); // This is the key useShipTypesStore uses
 
-			if (isUrlLikelyShared && name === "grid-storage") {
-				// If it's a shared grid URL, ignore localStorage for initial hydration
-				// by returning null. This forces the store to use its its default initial state.
-				// The useUrlSync hook will then populate the grid from the URL.
+			// If there's a platform in the URL and it doesn't match the stored platform,
+			// or if there's a 'grid' param in the URL (shared grid),
+			// then we should ignore the stored grid to prevent mismatches.
+			if (
+				(platformFromUrl && platformFromUrl !== storedPlatform) ||
+				currentUrlParams.has("grid")
+			) {
+				console.log("GridStore: Ignoring localStorage due to URL platform mismatch or shared grid.");
 				return null;
 			}
 
