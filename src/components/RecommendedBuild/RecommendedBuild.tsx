@@ -83,9 +83,9 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 			{isLarge ? (
 				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
 			) : (
-				<Callout.Root variant="soft" mb="4" mr="0" size="1" highContrast>
+				<Callout.Root mb="4" mr="0" size="1" highContrast>
 					<Callout.Icon>🧪</Callout.Icon>
-					<Callout.Text trim="start">
+					<Callout.Text wrap="pretty" trim="start">
 						<Trans
 							i18nKey="techTree.recommendedBuilds.summary"
 							components={{

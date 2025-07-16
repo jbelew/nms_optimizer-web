@@ -128,9 +128,13 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const handleTouchEnd = useCallback(() => {
 		if (longPressTimer.current) {
 			clearTimeout(longPressTimer.current);
+			longPressTimer.current = null; // Clear the ref
 		}
 		setTimeout(() => setLongPressTriggered(false), 50);
-	}, []); // No dependencies, so empty array
+		// If you need to clear this timeout on unmount, you'd need another ref or a useEffect cleanup
+		// For a 50ms timeout, it's less critical for memory leaks on unmount, but good practice.
+		// For now, we'll assume the component will likely be mounted for 50ms after touch end.
+	}, []);
 
 	/**
 	 * Handles a context menu on the cell.

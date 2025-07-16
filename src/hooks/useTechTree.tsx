@@ -95,6 +95,10 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 
 const cache = new Map<string, Resource<TechTree>>(); // Store successful fetches
 
+export const clearTechTreeCache = () => {
+    cache.clear();
+};
+
 /**
  * Fetches a tech tree by ship type and stores it in the cache.
  * If the resource is already in the cache, it will return the cached version.

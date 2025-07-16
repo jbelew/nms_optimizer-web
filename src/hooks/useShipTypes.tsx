@@ -63,6 +63,10 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 // Store successful fetches - Note: The type parameter for Resource is now the updated ShipTypes
 const cache = new Map<string, Resource<ShipTypes>>();
 
+export const clearShipTypesCache = () => {
+    cache.clear();
+};
+
 /**
  * Fetches ship types and stores them in the cache.
  *
