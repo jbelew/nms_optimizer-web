@@ -186,9 +186,6 @@ const debouncedStorage = {
 				return null; // Discard stored data if platforms don't match
 			}
 
-			console.log("GridStore: Retrieved data from localStorage:", parsedData);
-
-
 			return parsedData;
 		} catch (e) {
 			console.error("Failed to load from localStorage:", e);
@@ -482,7 +479,6 @@ export const useGridStore = create<GridStore>()(
 				};
 				// Also update the PlatformStore's localStorage key directly
 				localStorage.setItem("selectedPlatform", usePlatformStore.getState().selectedPlatform);
-				console.log("GridStore: Persisting data:", dataToPersist);
 				return dataToPersist;
 			},
 			/**

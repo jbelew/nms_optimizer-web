@@ -142,7 +142,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 			// and if the grid is currently empty (no modules have been placed by the user).
 			// Also, ensure the grid_definition exists and has actually changed content-wise.
 			if (techTree.grid_definition && !hasModulesInGrid && !initialGridApplied.current) {
-				console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
+				// console.log("TechTree: Applying grid from API response:", techTree.grid_definition);
 				setGridDefinitionAndApplyModules(techTree.grid_definition);
 				initialGridApplied.current = true;
 			}
