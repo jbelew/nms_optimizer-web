@@ -19,18 +19,11 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	techTree,
 	gridContainerRef,
 	isLarge,
-	onHeightChange,
 }) => {
 	const { t } = useTranslation();
 	const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 	const { sendEvent } = useAnalytics();
 	const componentRef = React.useRef<HTMLDivElement>(null);
-
-	React.useEffect(() => {
-		if (componentRef.current) {
-			onHeightChange(componentRef.current.offsetHeight);
-		}
-	}, [onHeightChange, techTree.recommended_builds, isLarge]);
 
 	const builds = techTree.recommended_builds || [];
 

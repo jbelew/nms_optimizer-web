@@ -1,5 +1,5 @@
 // src/hooks/useAppLayout.tsx
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useGridStore } from "../store/GridStore";
 import { useBreakpoint } from "./useBreakpoint";
@@ -22,13 +22,13 @@ export const useAppLayout = (): AppLayout => {
 	const isLarge = useBreakpoint("1024px");
 	const { isSharedGrid } = useGridStore();
 
-	const updateMeasurements = useCallback(
-		(entries?: ResizeObserverEntry[]) => {
-			let newGridHeight: number | null = gridHeight; // Initialize with current state
-			let newGridTableTotalWidth: number | undefined = gridTableTotalWidth; // Initialize with current state
+	useEffect(() => {
+		const elementToObserveHeight = containerRef.current;
+		const elementToObserveWidth = gridTableRef.current;
 
-			const elementToObserveHeight = containerRef.current;
-			const elementToObserveWidth = gridTableRef.current;
+		const updateMeasurements = (entries?: ResizeObserverEntry[]) => {
+			let newGridHeight: number | null = null;
+			let newGridTableTotalWidth: number | undefined = undefined;
 
 			// Prioritize ResizeObserver entries if available
 			if (entries) {
@@ -46,25 +46,17 @@ export const useAppLayout = (): AppLayout => {
 			// Fallback for initial measurement or if specific elements weren't in entries
 			// This part should only execute if the values haven't been set by entries
 			// or if it's the initial call without entries.
-			if (newGridHeight === gridHeight && isLarge && !isSharedGrid && elementToObserveHeight) {
+			if (newGridHeight === null && isLarge && !isSharedGrid && elementToObserveHeight) {
 				newGridHeight = elementToObserveHeight.getBoundingClientRect().height;
 			}
-			if (newGridTableTotalWidth === gridTableTotalWidth && elementToObserveWidth) {
+			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
 				newGridTableTotalWidth = elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT;
 			}
 
-			// Only update state if values have actually changed
-			if (newGridHeight !== gridHeight) {
-				setGridHeight(newGridHeight);
-			}
-			if (newGridTableTotalWidth !== gridTableTotalWidth) {
-				setGridTableTotalWidth(newGridTableTotalWidth);
-			}
-		},
-		[isLarge, isSharedGrid, gridHeight, gridTableTotalWidth] // Removed containerRef, gridTableRef
-	);
+			setGridHeight(newGridHeight);
+			setGridTableTotalWidth(newGridTableTotalWidth);
+		};
 
-	useEffect(() => {
 		// Initial measurement using requestAnimationFrame
 		const initialUpdateFrameId = requestAnimationFrame(() => updateMeasurements());
 
@@ -73,18 +65,18 @@ export const useAppLayout = (): AppLayout => {
 			updateMeasurements(entries);
 		});
 
-		if (containerRef.current) {
-			observer.observe(containerRef.current);
+		if (elementToObserveHeight) {
+			observer.observe(elementToObserveHeight);
 		}
-		if (gridTableRef.current) {
-			observer.observe(gridTableRef.current);
+		if (elementToObserveWidth) {
+			observer.observe(elementToObserveWidth);
 		}
 
 		return () => {
 			cancelAnimationFrame(initialUpdateFrameId);
 			observer.disconnect();
 		};
-	}, [updateMeasurements]);
+	}, [isLarge, isSharedGrid, containerRef, gridTableRef]);
 
 	return {
 		containerRef,
