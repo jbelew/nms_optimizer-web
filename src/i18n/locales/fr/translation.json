@@ -62,7 +62,7 @@
 			"title": "Alerte d'optimisation !",
 			"warning": "-kzzkt- Attention ! -kzzkt-",
 			"insufficientSpace": "Il n'y a pas assez d'espace pour placer efficacement tous les modules pour la technologie <1>{{technologyName}}</1>. Cela se produit généralement lorsque trop de technologies sont sélectionnées pour votre plateforme.",
-			"forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probably à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
+			"forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probablement à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
 			"cancelButton": "Annuler",
 			"forceOptimizeButton": "Forcer l'optimisation"
 		}
@@ -127,10 +127,10 @@
 			"Hazard Protection": "Protection contre les Dangers",
 			"Movement Systems": "Systèmes de Mouvement"
 		},
-		"recommendedBuilds": {
-			"selectBuildButton": "Sélectionner une configuration",
-			"applyBuildButton": "Appliquer la configuration",
-			"summary": "[new]Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
+		"recommendedLoads": {
+			"selectLoadButton": "Sélectionner une configuration",
+			"applyLoadButton": "Appliquer la configuration",
+			"summary": "Les plateformes avec des <1>emplacements de suralimentation fixes</1> supportent des configurations <5>\"recommandées\"</5>."
 		},
 		"error": {
 			"title": "-kzzkt- Erreur ! -kzzkt-",
@@ -277,11 +277,11 @@
 		}
 	},
 	"modules": {
-		"PC": "[new]Photonix Core",
-		"SB": "[new]Tentacled Figurine",
-		"SP": "[new]Sputtering Starship Trail",
-		"TT": "[new]Temporal Starship Trail",
-		"RB": "[new]Rocket Boots",
+		"PC": "Noyau Photonix",
+		"SB": "Figurine Tentaculée",
+		"SP": "Traînée de vaisseau spatial crépitante",
+		"TT": "Traînée de vaisseau spatial temporelle",
+		"RB": "Bottes-roquettes",
 		"starship": {
 			"cyclotron": "Baliste à Cyclotron",
 			"dyson": "Pompe Dyson",
@@ -331,13 +331,13 @@
 			"artemis": "Figurine d'Artémis",
 			"polo": "Figurine de Polo",
 			"squid": "Figurine tentaculée",
-			"sputtering-trail": "Trainée de vaisseau spatial crépitante",
-			"cadmium-trail": "Trainée de vaisseau spatial en cadmium",
-			"emeril-trail": "Trainée de vaisseau spatial en émeril",
-			"temporal-trail": "Trainée de vaisseau spatial temporelle",
-			"stealth-trail": "Trainée de vaisseau spatial furtive",
-			"golden-trail": "Trainée de vaisseau spatial dorée",
-			"chromatic-trail": "Trainée de vaisseau spatial chromatique",
+			"sputtering-trail": "Traînée de vaisseau spatial crépitante",
+			"cadmium-trail": "Traînée de vaisseau spatial en cadmium",
+			"emeril-trail": "Traînée de vaisseau spatial en émeril",
+			"temporal-trail": "Traînée de vaisseau spatial temporelle",
+			"stealth-trail": "Traînée de vaisseau spatial furtive",
+			"golden-trail": "Traînée de vaisseau spatial dorée",
+			"chromatic-trail": "Traînée de vaisseau spatial chromatique",
 			"teleport": "Récepteur de téléportation",
 			"cannon": "Canon Sentinelle",
 			"aeron": "Boucliers Aeron",
@@ -431,6 +431,7 @@
 			"drift": "Suspension Drift",
 			"mining": "Laser Minier",
 			"mounted": "Canon Monté",
+			"mounted-upgrade": "Amélioration de Canon Monté",
 			"flamethrower": "Lance-flammes Monté",
 			"thermal": "Tampon Thermique",
 			"cold": "Chauffe-eau Mégawatt",
@@ -502,15 +503,15 @@
 			"nutrient": "Ingestor de Nutriments",
 			"refiner": "Raffineur Personnel",
 			"trade": "Fusée de Commerce",
-			"artemis-translator": "[new]Artemis' Translator",
-			"simple": "[new]Simple Translator",
-			"superior": "[new]Superior Translator",
-			"advanced": "[new]Advanced Translator",
-			"airburst": "[new]Airburst Engine",
-			"recycler": "[new]Oxygen Recycler",
-			"neural": "[new]Neural Stimulator",
-			"waterjets": "[new]Efficient Waterjets",
-			"rerouter": "[new]Oxygen Rerouter"
+			"artemis-translator": "Traducteur d'Artémis",
+			"simple": "Traducteur Simple",
+			"superior": "Traducteur Supérieur",
+			"advanced": "Traducteur Avancé",
+			"airburst": "Moteur à éclatement",
+			"recycler": "Recycleur d'oxygène",
+			"neural": "Stimulateur neural",
+			"waterjets": "Hydropropulseurs efficaces",
+			"rerouter": "Rerouteur d'oxygène"
 		}
 	}
 }

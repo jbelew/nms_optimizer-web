@@ -38,7 +38,7 @@
 			"-(( Keine Sorge, ich kenne da jemanden! ))-",
 			"-(( Verbinde mit Anomalie-Schemata! ))-",
 			"-(( Kompiliere Multithread-Tech-Stack! ))-",
-			"-(( Entschlüssele alte Tech-Artefakte! ))-",
+			"-(( Entschlüssle alte Tech-Artefakte! ))-",
 			"-(( Optimiere die Optimierung! ))-",
 			"-(( Harmonisiere Upgrade-Stack-Interaktionen! ))-",
 			"-(( Wenn du denkst, du kannst mehr als zwei Waffen hier reinquetschen, bist du high auf NipNip! ))-",
@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Wähle einen Build aus",
 			"applyBuildButton": "Build anwenden",
-			"summary": "[new]Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
+			"summary": "Plattformen mit <1>festen Supercharger-Slots</1> unterstützen <5>„empfohlene“</5> Builds."
 		},
 		"error": {
 			"title": "-kzzkt- Fehler! -kzzkt-",
@@ -227,7 +227,7 @@
 			"power": "Leistungsresonator",
 			"humboldt": "Humboldt-Antrieb",
 			"tethys": "Tethys-Strahl",
-			"nautilon": "Nautilon-Kanone",
+			"nautilon": "Nautilon-Exocraft",
 			"sonar": "Hochleistungs-Sonar",
 			"dredging": "Baggerlaser",
 			"environment": "Umgebungssteuereinheit",
@@ -277,11 +277,11 @@
 		}
 	},
 	"modules": {
-		"PC": "[new]Photonix Core",
-		"SB": "[new]Tentacled Figurine",
-		"SP": "[new]Sputtering Starship Trail",
-		"TT": "[new]Temporal Starship Trail",
-		"RB": "[new]Rocket Boots",
+		"PC": "Photonix Core",
+		"SB": "Tentakelvormige Figur",
+		"SP": "Stotternde Raumschiffspur",
+		"TT": "Temporale Raumschiffspur",
+		"RB": "Raketenstiefel",
 		"starship": {
 			"cyclotron": "Zyklotron-Balliste",
 			"dyson": "Dyson-Pumpe",
@@ -514,15 +514,15 @@
 			"nutrient": "Nährstoff-Aufnehmer",
 			"refiner": "Persönlicher Raffiner",
 			"trade": "Handelsrakete",
-			"artemis-translator": "[new]Artemis' Translator",
-			"simple": "[new]Simple Translator",
-			"superior": "[new]Superior Translator",
-			"advanced": "[new]Advanced Translator",
-			"airburst": "[new]Airburst Engine",
-			"recycler": "[new]Oxygen Recycler",
-			"neural": "[new]Neural Stimulator",
-			"waterjets": "[new]Efficient Waterjets",
-			"rerouter": "[new]Oxygen Rerouter"
+			"artemis-translator": "Artemis' Übersetzer",
+			"simple": "Einfacher Übersetzer",
+			"superior": "Überlegener Übersetzer",
+			"advanced": "Fortgeschrittener Übersetzer",
+			"airburst": "Luftstoß-Triebwerk",
+			"recycler": "Sauerstoff-Recycler",
+			"neural": "Neuralstimulator",
+			"waterjets": "Effiziente Wasserstrahlen",
+			"rerouter": "Sauerstoff-Umleiter"
 		}
 	}
 }

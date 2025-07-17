@@ -4,6 +4,13 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0. RC1 (2025-07-17)
+
+- Fixed a browser crash caused by a numeric precision issue in Radix UI.
+- Refined mobile interaction patterns on the grid to account for changes in iOS long-press behavior.
+- Applied numerous UI fixes and visual enhancements.
+- Updated translation files to reflect recent changes and new features.
+
 ## Version 3.0.0 beta 5 (2025-07-16)
 
 - Refactored localStorage logic to improve reliability and consistency across sessions.

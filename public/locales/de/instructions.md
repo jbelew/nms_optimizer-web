@@ -10,10 +10,11 @@ Falls du noch Slots freischaltest oder Upgrades sammelst, kann das Tool trotzdem
 
 ## Grundlegende Nutzung
 
-- **Klicke oder tippe** auf den ⚙️-Button, um deinen Raumschiff- oder Multi-Werkzeug-Typ auszuwählen.
-- **Klicke oder tippe** auf eine Zelle, um ihren _überladenen_ Zustand umzuschalten (maximal 4).
-- **Strg-Klick / ⌘-Klick (oder langes Drücken auf Touchscreen-Geräten)**, um einzelne Zellen zu aktivieren/deaktivieren.
-- Verwende die **Reihenaktivierungs-Buttons**, um Reihen zu aktivieren/deaktivieren. Diese Buttons sind deaktiviert, sobald Module platziert wurden, bis du auf **Raster zurücksetzen** klickst.
+- Klicken oder tippen Sie auf die Schaltfläche ⚙️, um Ihren **Plattformtyp** auszuwählen.
+- Klicken oder doppeltippen Sie auf eine Zelle, um ihren **aufgeladenen** Zustand umzuschalten (bis zu 4 pro Raster).
+- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf Touchscreens), um einzelne Zellen zu aktivieren oder zu deaktivieren.
+- Verwenden Sie die **Zeilen-Umschaltflächen**, um ganze Zeilen zu aktivieren oder zu deaktivieren. Diese Schaltflächen sind **deaktiviert, nachdem Module platziert wurden**, und werden wieder aktiviert, wenn Sie **Raster zurücksetzen** drücken.
+> **Hinweis:** Exosuits und Exocraft haben einen festen Rasterzustand – ihre Zellen können nicht geändert werden.
 
 ## Nutzungstipps
 

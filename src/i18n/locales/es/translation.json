@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Seleccionar una Configuración",
 			"applyBuildButton": "Aplicar Configuración",
-			"summary": "[new]Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
+			"summary": "Las plataformas con <1>ranuras de sobrecarga fijas</1> son compatibles con configuraciones <5>\"recomendadas\"</5>."
 		},
 		"error": {
 			"title": "-kzzkt- ¡Error! -kzzkt-",
@@ -277,11 +277,11 @@
 		}
 	},
 	"modules": {
-		"PC": "[new]Photonix Core",
-		"SB": "[new]Tentacled Figurine",
-		"SP": "[new]Sputtering Starship Trail",
-		"TT": "[new]Temporal Starship Trail",
-		"RB": "[new]Rocket Boots",
+		"PC": "Núcleo Photonix",
+		"SB": "Figurita Tentaculada",
+		"SP": "Estela de Nave Estelar Balbuceante",
+		"TT": "Estela de Nave Estelar Temporal",
+		"RB": "Botas Cohete",
 		"starship": {
 			"cyclotron": "Balista de Ciclón",
 			"dyson": "Bomba Dyson",
@@ -514,15 +514,15 @@
 			"nutrient": "Ingestor de Nutrientes",
 			"refiner": "Refinador Personal",
 			"trade": "Cohete de Comercio",
-			"artemis-translator": "[new]Artemis' Translator",
-			"simple": "[new]Simple Translator",
-			"superior": "[new]Superior Translator",
-			"advanced": "[new]Advanced Translator",
-			"airburst": "[new]Airburst Engine",
-			"recycler": "[new]Oxygen Recycler",
-			"neural": "[new]Neural Stimulator",
-			"waterjets": "[new]Efficient Waterjets",
-			"rerouter": "[new]Oxygen Rerouter"
+			"artemis-translator": "Traductor de Artemis",
+			"simple": "Traductor Simple",
+			"superior": "Traductor Superior",
+			"advanced": "Traductor Avanzado",
+			"airburst": "Motor de Ráfaga de Aire",
+			"recycler": "Reciclador de Oxígeno",
+			"neural": "Estimulador Neural",
+			"waterjets": "Hidropropulsores Eficientes",
+			"rerouter": "Redirigidor de Oxígeno"
 		}
 	}
 }

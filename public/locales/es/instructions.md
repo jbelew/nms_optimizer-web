@@ -8,12 +8,13 @@ Esta herramienta es para **jugadores avanzados** que optimizan sus diseños tecn
 
 Si aún estás desbloqueando espacios o reuniendo mejoras, la herramienta aún puede ofrecer información, pero está diseñada principalmente para **objetos completamente equipados y mejorados**.
 
-## Uso básico
+## Uso Básico
 
-- **Haz clic o toca** el botón ⚙️ para seleccionar tu tipo de nave estelar o multiherramienta.
-- **Haz clic o toca** una celda para alternar su estado _Sobrecargado_ (un máximo de 4).
-- **Ctrl-Clic / ⌘-Clic (o mantén pulsado en dispositivos con pantalla táctil)** para habilitar/deshabilitar celdas individuales.
-- Usa los **botones de activación de fila** para habilitar/deshabilitar filas. Estos botones se deshabilitan una vez que se colocan los módulos, hasta que presiones **Reiniciar cuadrícula**.
+- Haz **clic o toca** el botón ⚙️ para seleccionar tu tipo de **plataforma**.
+- Haz **clic o doble toque** en una celda para alternar su estado **sobrecargado** (hasta 4 por cuadrícula).
+- Haz **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o un **solo toque** (en pantallas táctiles) para habilitar o deshabilitar celdas individuales.
+- Usa los **botones de alternancia de fila** para habilitar o deshabilitar filas completas. Estos botones están **desactivados después de colocar los módulos** y se vuelven a habilitar cuando presionas **Restablecer cuadrícula**.
+> **Nota:** Los exotrajes y exocraft tienen un estado de cuadrícula fijo; sus celdas no se pueden modificar.
 
 ## Consejos de uso
 

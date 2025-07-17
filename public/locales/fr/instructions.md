@@ -10,10 +10,11 @@ Si vous déverrouillez encore des emplacements ou rassemblez des améliorations,
 
 ## Utilisation de base
 
-- **Cliquez ou appuyez** sur le bouton ⚙️ pour sélectionner votre type de vaisseau spatial ou de multi-outil.
-- **Cliquez ou appuyez** sur une cellule pour activer ou désactiver son état _Surchargé_ (un maximum de 4).
-- **Ctrl-Clic / ⌘-Clic (ou appui long sur les appareils à écran tactile)** pour activer/désactiver des cellules individuelles.
-- Utilisez les **boutons d'activation de rangée** pour activer/désactiver des rangées. Ces boutons sont désactivés une fois les modules placés, jusqu'à ce que vous appuyiez sur **Réinitialiser la grille**.
+- **Cliquez ou appuyez** sur le bouton ⚙️ pour sélectionner votre type de **plateforme**.
+- **Cliquez ou double-cliquez** sur une cellule pour basculer son état **surchargé** (jusqu'à 4 par grille).
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou un **simple toucher** (sur les écrans tactiles) pour activer ou désactiver des cellules individuelles.
+- Utilisez les **boutons de bascule de ligne** pour activer ou désactiver des lignes entières. Ces boutons sont **désactivés après le placement des modules** et réactivés lorsque vous appuyez sur **Réinitialiser la grille**.
+  > **Note :** Les exosuits et les exonefs ont un état de grille fixe — leurs cellules ne peuvent pas être modifiées.
 
 ## Conseils d'utilisation
 
