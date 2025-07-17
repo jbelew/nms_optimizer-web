@@ -109,19 +109,21 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	/**
 	 * Handles a touch start on the cell.
 	 */
-	const handleTouchStart = useCallback((event: React.TouchEvent) => {
-		event.preventDefault(); // Prevent default touch behavior (like text selection)
-		longPressTimer.current = setTimeout(() => {
-			setLongPressTriggered(true);
-			// Ensure interaction is allowed
-			if (isSharedGrid) {
-				// Clear timer if interaction is not allowed but timer started
-				if (longPressTimer.current) clearTimeout(longPressTimer.current);
-				return;
-			}
-			toggleCellActive(rowIndex, columnIndex);
-		}, 750); // Standard long press duration is 1000ms (1 second)
-	}, [isSharedGrid, toggleCellActive, rowIndex, columnIndex]);
+	const handleTouchStart = useCallback(
+		(event: React.TouchEvent) => {
+			event.preventDefault(); // Crucial for suppressing iOS default long press behavior
+
+			longPressTimer.current = setTimeout(() => {
+				setLongPressTriggered(true);
+				if (isSharedGrid) {
+					if (longPressTimer.current) clearTimeout(longPressTimer.current);
+					return;
+				}
+				toggleCellActive(rowIndex, columnIndex);
+			}, 750);
+		},
+		[isSharedGrid, toggleCellActive, rowIndex, columnIndex]
+	);
 
 	/**
 	 * Handles a touch end on the cell.
@@ -211,7 +213,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			data-accent-color={techColor}
 			onContextMenu={handleContextMenu}
 			onClick={handleClick}
-			onTouchStart={handleTouchStart}
+			onTouchStartCapture={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
 			onTouchCancel={handleTouchEnd}
 			onKeyDown={handleKeyDown}
