@@ -46,6 +46,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const { t } = useTranslation();
 
 	const lastTapTime = useRef(0);
+	const isTouchDevice = useRef(typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0));
+	const tapTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	/**
 	 * Handles a click on the cell.
@@ -57,9 +59,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			if (isSharedGrid) {
 				return;
 			}
-
-			const currentTime = new Date().getTime();
-			const tapLength = currentTime - lastTapTime.current;
 
 			// Function to handle shaking and its timeout
 			const triggerShake = () => {
@@ -73,25 +72,49 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				}, 500);
 			};
 
-			if (event.ctrlKey || event.metaKey || (tapLength < 300 && tapLength > 0)) {
-				// Double tap or Ctrl/Meta key for toggling active state
-				if (gridFixed) {
+			const handleSuperchargeToggle = () => {
+				if (superchargedFixed) {
 					triggerShake();
-					return; // Exit after initiating shake, don't toggle active
+					return;
 				}
-				toggleCellActive(rowIndex, columnIndex);
-			} else if (superchargedFixed) {
-				triggerShake();
-				return; // Exit after initiating shake, don't toggle supercharge
-			} else {
-				// Single tap for toggling supercharged state
 				if (totalSupercharged >= 4 && !cell.supercharged) {
 					triggerShake();
-					return; // Exit after initiating shake, don't toggle supercharge
+					return;
 				}
 				toggleCellSupercharged(rowIndex, columnIndex);
+			};
+
+			const handleActiveToggle = () => {
+				if (gridFixed) {
+					triggerShake();
+					return;
+				}
+				toggleCellActive(rowIndex, columnIndex);
+			};
+
+			if (isTouchDevice.current) {
+				if (!tapTimeout.current) {
+					tapTimeout.current = setTimeout(() => {
+						tapTimeout.current = null;
+						handleActiveToggle(); // Single tap
+					}, 300);
+				} else {
+					clearTimeout(tapTimeout.current);
+					tapTimeout.current = null;
+					handleSuperchargeToggle(); // Double tap
+				}
+			} else {
+				// Mouse logic
+				const currentTime = new Date().getTime();
+				const tapLength = currentTime - lastTapTime.current;
+
+				if (event.ctrlKey || event.metaKey || (tapLength < 300 && tapLength > 0)) {
+					handleActiveToggle();
+				} else {
+					handleSuperchargeToggle();
+				}
+				lastTapTime.current = currentTime;
 			}
-			lastTapTime.current = currentTime;
 		},
 		[
 			isSharedGrid,
