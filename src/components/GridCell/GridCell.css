@@ -55,11 +55,6 @@
 	background-color: var(--accent-a3);
 }
 
-.gridCell--touched {
-	border-color: var(--accent-a11);
-	background-color: var(--accent-track);
-}
-
 .gridCell--active:hover {
 	background-color: var(--accent-a4);
 }
@@ -123,4 +118,9 @@
 		box-shadow: 0 0 4px 2px var(--accent-a6);
 		border-color: var(--accent-12);
 	}
+}
+
+.gridCell--touched {
+	border-color: var(--accent-a11) !important;
+	background-color: var(--accent-track) !important;
 }
