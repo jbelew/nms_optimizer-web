@@ -12,7 +12,6 @@ interface RecommendedBuildProps {
 	techTree: TechTree;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	isLarge: boolean;
-	onHeightChange: (height: number) => void;
 }
 
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({

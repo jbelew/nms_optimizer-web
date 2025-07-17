@@ -1,6 +1,6 @@
 // src/components/app/MainAppContent.tsx
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, useCallback, useEffect, useMemo, useState } from "react";
+import { type FC, useCallback, useEffect, useMemo } from "react";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 import { useTranslation } from "react-i18next";
 
@@ -38,11 +38,10 @@ type MainAppContentInternalProps = {
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "520px";
 
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog } = useDialog();
-
-	const [, setRecommendedBuildHeight] = useState(0);
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	// Call useFetchShipTypesSuspense to ensure data is fetched/cached and to trigger Suspense.
@@ -62,6 +61,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
+		gridHeight,
 		gridTableTotalWidth, // Destructure the new total width
 		isLarge,
 	} = useAppLayout();
@@ -144,12 +144,11 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							{isLarge ? (
 								<>
 									<ScrollArea
-										className="p-4 mb-1 rounded-md shadow-md gridContainer__sidebar backdrop-blur-xl"
+										className={`gridContainer__sidebar p-4 mb-1 shadow-md rounded-md backdrop-blur-xl`}
 										style={{
-											height:
-												techTree.recommended_builds && techTree.recommended_builds.length > 0
-													? "473px" // shorter if RecommendedBuild is shown
-													: "522px", // full height otherwise
+											height: gridHeight
+												? `${gridHeight - (techTree.recommended_builds && techTree.recommended_builds.length > 0 ? 52 : 0)}px`
+												: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 										}}
 									>
 										<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
@@ -159,7 +158,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 											techTree={techTree}
 											gridContainerRef={gridContainerRef}
 											isLarge={isLarge}
-											onHeightChange={setRecommendedBuildHeight}
 										/>
 									)}
 								</>
@@ -173,7 +171,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 											techTree={techTree}
 											gridContainerRef={gridContainerRef}
 											isLarge={isLarge}
-											onHeightChange={setRecommendedBuildHeight}
 										/>
 									)}
 									<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
