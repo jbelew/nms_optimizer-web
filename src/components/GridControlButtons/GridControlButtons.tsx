@@ -53,7 +53,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						size={iconButtonSize}
 						variant="outline"
 						radius="full"
-						className={`shadow-sm ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.activateRow")}
@@ -69,7 +69,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						variant="outline"
 						size={iconButtonSize}
 						radius="full"
-						className={` ${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.deactivateRow")}

@@ -109,7 +109,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	/**
 	 * Handles a touch start on the cell.
 	 */
-	const handleTouchStart = useCallback(() => {
+	const handleTouchStart = useCallback((event: React.TouchEvent) => {
+		event.preventDefault(); // Prevent default touch behavior (like text selection)
 		longPressTimer.current = setTimeout(() => {
 			setLongPressTriggered(true);
 			// Ensure interaction is allowed
@@ -125,7 +126,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	/**
 	 * Handles a touch end on the cell.
 	 */
-	const handleTouchEnd = useCallback(() => {
+	const handleTouchEnd = useCallback((event: React.TouchEvent) => {
+		event.preventDefault(); // Prevent default touch behavior
 		if (longPressTimer.current) {
 			clearTimeout(longPressTimer.current);
 			longPressTimer.current = null; // Clear the ref
