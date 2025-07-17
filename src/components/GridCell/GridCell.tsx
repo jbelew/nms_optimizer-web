@@ -50,7 +50,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const isTouchDevice = useRef(
 		typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
 	);
-	const tapTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	const handleTouchStart = useCallback(() => {
 		setIsTouching(true);
@@ -103,26 +102,31 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				toggleCellActive(rowIndex, columnIndex);
 			};
 
-			if (isTouchDevice.current) {
-				if (!tapTimeout.current) {
-					tapTimeout.current = setTimeout(() => {
-						tapTimeout.current = null;
-						handleActiveToggle(); // Single tap
-					}, 250);
-				} else {
-					clearTimeout(tapTimeout.current);
-					tapTimeout.current = null;
-					handleSuperchargeToggle(); // Double tap
-				}
-			} else {
-				// Mouse logic
+			const handleTap = () => {
 				const currentTime = new Date().getTime();
+				const timeSinceLastTap = currentTime - lastTapTime.current;
+
+				if (timeSinceLastTap < 250 && timeSinceLastTap > 0) {
+					handleSuperchargeToggle();
+					lastTapTime.current = 0;
+				} else {
+					handleActiveToggle();
+					lastTapTime.current = currentTime;
+				}
+			};
+
+			const handleMouseClick = () => {
 				if (event.ctrlKey || event.metaKey) {
 					handleActiveToggle();
 				} else {
 					handleSuperchargeToggle();
 				}
-				lastTapTime.current = currentTime;
+			};
+
+			if (isTouchDevice.current) {
+				handleTap();
+			} else {
+				handleMouseClick();
 			}
 		},
 		[
