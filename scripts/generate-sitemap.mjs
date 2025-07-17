@@ -9,10 +9,10 @@ const __dirname = path.dirname(__filename);
 
 const pages = [
     { path: "src/components/MainAppContent/MainAppContent.tsx", url: "https://nms-optimizer.app/" },
-    { path: "public/locales/en/about.md", url: "https://nms-optimizer.app/about" },
-    { path: "public/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog" },
-    { path: "public/locales/en/instructions.md", url: "https://nms-optimizer.app/instructions" },
-    { path: "public/locales/en/translation-request.md", url: "https://nms-optimizer.app/translation" },
+    { path: "public/assets/locales/en/about.md", url: "https://nms-optimizer.app/about" },
+    { path: "public/assets/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog" },
+    { path: "public/assets/locales/en/instructions.md", url: "https://nms-optimizer.app/instructions" },
+    { path: "public/assets/locales/en/translation-request.md", url: "https://nms-optimizer.app/translation" },
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

@@ -34,10 +34,10 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			}
 
 			try {
-				let response = await fetch(`/locales/${langToFetch}/${markdownFileName}.md`);
+				let response = await fetch(`/assets/locales/${langToFetch}/${markdownFileName}.md`);
 				if (!response.ok && langToFetch !== defaultLang && markdownFileName !== "changelog") {
 					console.warn(`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`);
-					response = await fetch(`/locales/${defaultLang}/${markdownFileName}.md`);
+					response = await fetch(`/assets/locales/${defaultLang}/${markdownFileName}.md`);
 				}
 				if (!response.ok) {
 					throw new Error(

@@ -1,5 +1,5 @@
 User-agent: *
 Disallow: /*.js$
-Disallow: /public/locales/
+Disallow: /assets/locales/
 
 Sitemap: https://nms-optimizer.app/sitemap.xml

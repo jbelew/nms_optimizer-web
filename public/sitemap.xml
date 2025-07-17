@@ -9,12 +9,12 @@
   <url>
     <loc>https://nms-optimizer.app/about</loc>
     <lastmod>2025-07-17</lastmod>
-    <priority>1.0</priority>
+    <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>https://nms-optimizer.app/changelog</loc>
-    <lastmod>2025-07-16</lastmod>
+    <lastmod>2025-07-17</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
