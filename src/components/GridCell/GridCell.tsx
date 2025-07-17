@@ -2,7 +2,7 @@ import "./GridCell.css";
 
 import { Tooltip } from "@radix-ui/themes";
 import PropTypes from "prop-types"; // Import PropTypes
-import React, { memo, useCallback, useMemo, useRef, useState } from "react"; // Import useCallback, memo, and useMemo
+import React, { memo, useCallback, useMemo, useRef } from "react"; // Import useCallback, memo, and useMemo
 import { useTranslation } from "react-i18next";
 
 import { useGridStore, selectTotalSuperchargedCells } from "../../store/GridStore";
