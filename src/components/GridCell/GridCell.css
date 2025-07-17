@@ -55,6 +55,11 @@
 	background-color: var(--accent-a3);
 }
 
+.gridCell--touched {
+	border-color: var(--accent-a11);
+	background-color: var(--accent-track);
+}
+
 .gridCell--active:hover {
 	background-color: var(--accent-a4);
 }

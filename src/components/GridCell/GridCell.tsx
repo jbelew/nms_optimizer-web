@@ -40,14 +40,25 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
-	
+	const [isTouching, setIsTouching] = React.useState(false);
+
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null); // New ref for shake timeout
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
 
 	const lastTapTime = useRef(0);
-	const isTouchDevice = useRef(typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0));
+	const isTouchDevice = useRef(
+		typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+	);
 	const tapTimeout = useRef<NodeJS.Timeout | null>(null);
+
+	const handleTouchStart = useCallback(() => {
+		setIsTouching(true);
+	}, []);
+
+	const handleTouchEnd = useCallback(() => {
+		setIsTouching(false);
+	}, []);
 
 	/**
 	 * Handles a click on the cell.
@@ -107,7 +118,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				// Mouse logic
 				const currentTime = new Date().getTime();
 
-				if (event.ctrlKey || event.metaKey ) {
+				if (event.ctrlKey || event.metaKey) {
 					handleActiveToggle();
 				} else {
 					handleSuperchargeToggle();
@@ -172,11 +183,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		];
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
+		if (isTouching) classes.push("gridCell--touched");
 		if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
 		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
 		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
 		return classes.join(" ");
-	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label]);
+	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label, isTouching]);
 
 	// Get the upgrade priority for the current cell
 	const upGradePriority = getUpgradePriority(cell.label);
@@ -202,7 +214,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			data-accent-color={techColor}
 			onContextMenu={handleContextMenu}
 			onClick={handleClick}
-			
+			onTouchStart={handleTouchStart}
+			onTouchEnd={handleTouchEnd}
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
 			style={cellElementStyle}
