@@ -40,11 +40,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
-	const [longPressTriggered, setLongPressTriggered] = useState(false);
-	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+	
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null); // New ref for shake timeout
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
+
+	const lastTapTime = useRef(0);
 
 	/**
 	 * Handles a click on the cell.
@@ -57,10 +58,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 
-			if (longPressTriggered) {
-				event.stopPropagation(); // Prevents unintended click after long press
-				return;
-			}
+			const currentTime = new Date().getTime();
+			const tapLength = currentTime - lastTapTime.current;
 
 			// Function to handle shaking and its timeout
 			const triggerShake = () => {
@@ -74,7 +73,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				}, 500);
 			};
 
-			if (event.ctrlKey || event.metaKey) {
+			if (event.ctrlKey || event.metaKey || (tapLength < 300 && tapLength > 0)) {
+				// Double tap or Ctrl/Meta key for toggling active state
 				if (gridFixed) {
 					triggerShake();
 					return; // Exit after initiating shake, don't toggle active
@@ -84,16 +84,17 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				triggerShake();
 				return; // Exit after initiating shake, don't toggle supercharge
 			} else {
+				// Single tap for toggling supercharged state
 				if (totalSupercharged >= 4 && !cell.supercharged) {
 					triggerShake();
 					return; // Exit after initiating shake, don't toggle supercharge
 				}
 				toggleCellSupercharged(rowIndex, columnIndex);
 			}
+			lastTapTime.current = currentTime;
 		},
 		[
 			isSharedGrid,
-			longPressTriggered,
 			toggleCellActive,
 			rowIndex,
 			columnIndex,
@@ -106,37 +107,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		]
 	);
 
-	/**
-	 * Handles a touch start on the cell.
-	 */
-	const handleTouchStart = useCallback(
-		(event: React.TouchEvent) => {
-			longPressTimer.current = setTimeout(() => {
-				setLongPressTriggered(true);
-				event.preventDefault(); // Prevent default touch behavior (like text selection) only on long press
-				if (isSharedGrid) {
-					if (longPressTimer.current) clearTimeout(longPressTimer.current);
-					return;
-				}
-				toggleCellActive(rowIndex, columnIndex);
-			}, 750);
-		},
-		[isSharedGrid, toggleCellActive, rowIndex, columnIndex]
-	);
-
-	/**
-	 * Handles a touch end on the cell.
-	 */
-	const handleTouchEnd = useCallback(() => {
-		if (longPressTimer.current) {
-			clearTimeout(longPressTimer.current);
-			longPressTimer.current = null; // Clear the ref
-		}
-		setTimeout(() => setLongPressTriggered(false), 50);
-		// If you need to clear this timeout on unmount, you'd need another ref or a useEffect cleanup
-		// For a 50ms timeout, it's less critical for memory leaks on unmount, but good practice.
-		// For now, we'll assume the component will likely be mounted for 50ms after touch end.
-	}, []);
+	
 
 	/**
 	 * Handles a context menu on the cell.
@@ -211,9 +182,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			data-accent-color={techColor}
 			onContextMenu={handleContextMenu}
 			onClick={handleClick}
-			onTouchStart={handleTouchStart}
-			onTouchEnd={handleTouchEnd}
-			onTouchCancel={handleTouchEnd}
+			
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
 			style={cellElementStyle}
