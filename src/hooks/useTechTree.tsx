@@ -136,7 +136,7 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
 	const { setTechColors } = useTechStore();
-	const { applyModulesToGrid, setGridFixed, setSuperchargedFixed } = useGridStore.getState();
+	const { applyModulesToGrid, setGridFixed, setSuperchargedFixed, selectHasModulesInGrid } = useGridStore.getState();
 
 	// Extract and set tech colors when the tech tree is available
 	useEffect(() => {
@@ -153,14 +153,14 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 		setTechColors(colors);
 
-		// Apply the grid definition if available
-		if (techTree.grid_definition) {
+		// Apply the grid definition if available AND the grid is currently empty
+		if (techTree.grid_definition && !selectHasModulesInGrid()) {
 			const flattenedModules = techTree.grid_definition.grid.flat();
 			applyModulesToGrid(flattenedModules);
 			setGridFixed(techTree.grid_definition.gridFixed);
 			setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
 		}
-	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
+	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed, selectHasModulesInGrid]);
 
 	return techTree;
 }
