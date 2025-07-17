@@ -124,3 +124,7 @@
 	border-color: var(--accent-a11) !important;
 	background-color: var(--accent-track) !important;
 }
+
+.gridCell--supercharged.gridCell--touched {
+	background-color: var(--purple-track) !important;
+}
