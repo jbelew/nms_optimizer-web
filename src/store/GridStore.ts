@@ -268,9 +268,9 @@ export const useGridStore = create<GridStore>()(
 			toggleCellSupercharged: (rowIndex, columnIndex) =>
 				set((state) => {
 					const cell = state.grid.cells[rowIndex]?.[columnIndex];
-					if (cell?.active) {
+					// if (cell?.active) {
 						cell.supercharged = !cell.supercharged;
-					}
+					// }
 				}),
 
 			setCellActive: (rowIndex, columnIndex, active) => {

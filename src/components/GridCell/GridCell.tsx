@@ -117,7 +117,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			} else {
 				// Mouse logic
 				const currentTime = new Date().getTime();
-
 				if (event.ctrlKey || event.metaKey) {
 					handleActiveToggle();
 				} else {
