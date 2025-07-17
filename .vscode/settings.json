@@ -8,5 +8,6 @@
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"[typescript]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
-	}
+	},
+	"python.analysis.enablePytestSupport": false
 }

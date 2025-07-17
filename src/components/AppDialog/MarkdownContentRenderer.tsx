@@ -38,7 +38,7 @@ const components: object = {
 	),
 	li: ({ children }: { children: React.ReactNode }) => (
 		<li>
-			<Text as="span" size={{ initial: "2", sm: "3" }}>
+			<Text as="p" size={{ initial: "2", sm: "3" }}>
 				{children}
 			</Text>
 		</li>

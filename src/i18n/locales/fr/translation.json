@@ -62,7 +62,7 @@
 			"title": "Alerte d'optimisation !",
 			"warning": "-kzzkt- Attention ! -kzzkt-",
 			"insufficientSpace": "Il n'y a pas assez d'espace pour placer efficacement tous les modules pour la technologie <1>{{technologyName}}</1>. Cela se produit généralement lorsque trop de technologies sont sélectionnées pour votre plateforme.",
-			"forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probablement à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
+			"forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probably à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
 			"cancelButton": "Annuler",
 			"forceOptimizeButton": "Forcer l'optimisation"
 		}
@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Sélectionner une configuration",
 			"applyBuildButton": "Appliquer la configuration",
-			"summary": "<1>Exocraft</1> et <3>Exosuits</3> incluent des configurations recommandées <5>\"expérimentales\"</5>"
+			"summary": "[new]Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
 		},
 		"error": {
 			"title": "-kzzkt- Erreur ! -kzzkt-",
@@ -277,6 +277,11 @@
 		}
 	},
 	"modules": {
+		"PC": "[new]Photonix Core",
+		"SB": "[new]Tentacled Figurine",
+		"SP": "[new]Sputtering Starship Trail",
+		"TT": "[new]Temporal Starship Trail",
+		"RB": "[new]Rocket Boots",
 		"starship": {
 			"cyclotron": "Baliste à Cyclotron",
 			"dyson": "Pompe Dyson",
@@ -497,7 +502,15 @@
 			"nutrient": "Ingestor de Nutriments",
 			"refiner": "Raffineur Personnel",
 			"trade": "Fusée de Commerce",
-			"translator": "Dispositifs de Traduction Automatique"
+			"artemis-translator": "[new]Artemis' Translator",
+			"simple": "[new]Simple Translator",
+			"superior": "[new]Superior Translator",
+			"advanced": "[new]Advanced Translator",
+			"airburst": "[new]Airburst Engine",
+			"recycler": "[new]Oxygen Recycler",
+			"neural": "[new]Neural Stimulator",
+			"waterjets": "[new]Efficient Waterjets",
+			"rerouter": "[new]Oxygen Rerouter"
 		}
 	}
 }

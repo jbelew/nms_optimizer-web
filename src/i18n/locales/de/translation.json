@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Wähle einen Build aus",
 			"applyBuildButton": "Build anwenden",
-			"summary": "<1>Exocraft</1> und <3>Exo-Anzüge</3> enthalten <5>„experimentelle“</5> empfohlene Builds"
+			"summary": "[new]Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
 		},
 		"error": {
 			"title": "-kzzkt- Fehler! -kzzkt-",
@@ -277,6 +277,11 @@
 		}
 	},
 	"modules": {
+		"PC": "[new]Photonix Core",
+		"SB": "[new]Tentacled Figurine",
+		"SP": "[new]Sputtering Starship Trail",
+		"TT": "[new]Temporal Starship Trail",
+		"RB": "[new]Rocket Boots",
 		"starship": {
 			"cyclotron": "Zyklotron-Balliste",
 			"dyson": "Dyson-Pumpe",
@@ -509,7 +514,15 @@
 			"nutrient": "Nährstoff-Aufnehmer",
 			"refiner": "Persönlicher Raffiner",
 			"trade": "Handelsrakete",
-			"translator": "Automatische Übersetzungsgeräte"
+			"artemis-translator": "[new]Artemis' Translator",
+			"simple": "[new]Simple Translator",
+			"superior": "[new]Superior Translator",
+			"advanced": "[new]Advanced Translator",
+			"airburst": "[new]Airburst Engine",
+			"recycler": "[new]Oxygen Recycler",
+			"neural": "[new]Neural Stimulator",
+			"waterjets": "[new]Efficient Waterjets",
+			"rerouter": "[new]Oxygen Rerouter"
 		}
 	}
 }

@@ -11,6 +11,7 @@
 		"build:images": "node scripts/process-images.mjs",
 		"lint:fix": "eslint . --fix",
 		"lint": "eslint .",
+		"sitemap": "node scripts/generate-sitemap.mjs",
 		"preview": "vite preview",
 		"screenshot": "node screenshot.cjs",
 		"test": "vitest run --coverage",

@@ -71,7 +71,7 @@ const LanguageSelector: React.FC = () => {
 				>
 					<img
 						src={currentFlagPath}
-						alt={currentLanguage}
+						alt={t("languageInfo.changeLanguage") || "Change language"}
 						className="w-[16] h-[12] sm:w-[20] sm:h-[14]"
 					/>
 				</IconButton>

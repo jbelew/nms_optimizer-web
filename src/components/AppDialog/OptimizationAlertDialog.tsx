@@ -70,7 +70,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 							variant="soft"
 							color="gray"
 							onClick={onClose}
-							aria-label={t("optimizationAlert.cancelButton")}
+							aria-label={t("dialogs.optimizationAlert.cancelButton")}
 						>
 							{t("dialogs.optimizationAlert.cancelButton")}
 						</Button>
@@ -82,7 +82,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 							onClick={() => {
 								void handleForceOptimizeClick();
 							}}
-							aria-label={t("optimizationAlert.forceOptimizeButton")}
+							aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
 						>
 							{t("dialogs.optimizationAlert.forceOptimizeButton")}
 						</Button>

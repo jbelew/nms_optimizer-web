@@ -10,10 +10,11 @@ If you're still unlocking slots or gathering upgrades, the tool can still offer 
 
 ## Basic Usage
 
-- **Click or Tap** the ⚙️ button to select your Starship or Multi-tool type.
-- **Click or Double Tap** a cell to toggle its _Supercharged_ state (a maximum of 4).
-- **Ctrl-Click / ⌘-Click or Single Tap on touchscreen devices)** to enable/disable individual cells.
-- Use the **row activation buttons** to enable/disable rows. These buttons are disabled once modules are placed, until you press **Reset Grid**.
+- **Click or tap** the ⚙️ button to select your **Platform** type.
+- **Click or double-tap** a cell to toggle its **Supercharged** state (up to 4 per grid).
+- **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on touchscreens) to enable or disable individual cells.
+- Use the **row toggle buttons** to enable or disable entire rows. These buttons are **disabled after modules are placed**, and re-enabled when you press **Reset Grid**.
+> **Note:** Exosuits and Exocraft have a fixed grid state — their cells cannot be modified.
 
 ## Usage Tips
 

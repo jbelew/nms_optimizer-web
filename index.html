@@ -47,21 +47,7 @@
 				font-family: "GeosansLight", "Raleway", sans-serif;
 			}
 
-			.visually-hidden h1 {
-				font-size: 2em; /* Explicitly define font-size for h1 inside visually-hidden to prevent future browser default changes */
-			}
-
-			.visually-hidden {
-				position: absolute;
-				width: 1px;
-				height: 1px;
-				margin: -1px;
-				padding: 0;
-				overflow: hidden;
-				clip: rect(0, 0, 0, 0);
-				border: 0;
-				white-space: nowrap;
-			}
+			
 
 			.vpss-logo svg {
 				height: 48px;
@@ -169,98 +155,7 @@
 	</head>
 
 	<body>
-		<main class="visually-hidden">
-			<section>
-				<h1>No Man's Sky Technology Layout Optimizer AI</h1>
-				<p>
-					This web application helps players of No Man's Sky figure out the best module arrangement
-					to design optimal
-					<strong>Starship layouts</strong>, <strong>Multitool builds</strong>, <strong>Exocraft layouts</strong>, and <strong>Exosuit builds</strong>. It automatically
-					calculates the ideal <strong>module placement</strong> to maximize crucial in-game
-					mechanics like <strong>adjacency bonuses</strong> (achieved by grouping similar
-					technologies for synergistic effects) and the powerful boosts from
-					<strong>supercharged slots</strong>. Understanding how to best utilize these features,
-					especially supercharged slots, is key to achieving peak performance, and this tool makes
-					that complex process simple.
-				</p>
-			</section>
-
-			<section>
-				<h2>How the Optimizer Works</h2>
-				<p>
-					Figuring out the absolute best <strong>module placement</strong> with over 479 million
-					layout permutations for a full grid is no small feat. This tool blends deterministic
-					patterns, machine learning, and simulated annealing to deliver top-tier
-					<strong>Starship build</strong>, <strong>Multitool layout</strong>, <strong>Exocraft build</strong>, and <strong>Exosuit layout</strong> suggestions in under
-					five seconds. It considers all factors including <strong>adjacency bonuses</strong> and
-					the strategic use of <strong>supercharged slots</strong>.
-				</p>
-				<ul>
-					<li>
-						<strong>Pattern-Based Pre-Solve:</strong> Uses curated, hand-tested layouts for known
-						configurations to improve adjacency bonuses.
-					</li>
-					<li>
-						<strong>AI-Guided Placement:</strong> A TensorFlow model predicts optimal
-						<strong>module placement</strong>, especially when supercharged slots are present, to
-						maximize their potent effects.
-					</li>
-					<li>
-						<strong>Simulated Annealing:</strong> Final refinement phase to escape local optima and
-						ensure the highest score possible for your specific inventory.
-					</li>
-				</ul>
-			</section>
-
-			<section>
-				<h2>Key Features</h2>
-				<ul>
-					<li>
-						<strong>Comprehensive Grid Optimization:</strong> Full support for standard,
-						<strong>supercharged</strong>, and inactive slots to find the true optimal layout.
-					</li>
-					<li>
-						<strong>Strategic Supercharged Slot Utilization:</strong> Beyond just recognizing
-						supercharged slots, the optimizer intelligently determines whether to place core
-						technologies (like a main weapon) or their best upgrades onto these high-boost slots,
-						navigating the complex trade-offs to maximize your specific build goals (e.g., damage,
-						range, or efficiency). This mirrors expert player strategies but with computational
-						precision.
-					</li>
-					<li>
-						<strong>Machine Learning Inference:</strong> Trained on over 16,000+ historical grid
-						layouts to identify powerful patterns.
-					</li>
-					<li>
-						<strong>Advanced Simulated Annealing:</strong> For meticulous layout refinement ensuring
-						every percentage point of performance is squeezed out.
-					</li>
-				</ul>
-			</section>
-
-			<section>
-				<h2>Technology Stack</h2>
-				<p>
-					<strong>Frontend:</strong> TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI<br />
-					<strong>Backend:</strong> Python, Flask, TensorFlow, NumPy, heuristic solvers<br />
-					<strong>Deployment:</strong> Heroku + Cloudflare<br />
-					<strong>Automation:</strong> GitHub Actions, Google Analytics
-				</p>
-			</section>
-
-			<section>
-				<h2>Why Use This Tool?</h2>
-				<p>
-					Stop guessing on tech placement and unlock your gear's true potential! Whether you're
-					aiming for a max-damage <strong>Starship build</strong>, the ultimate scan range with a
-					perfect <strong>Multitool layout</strong>, an optimized <strong>Exocraft</strong>, or a robust <strong>Exosuit</strong>, or trying to figure out the best way to use
-					your limited supercharged slots, this optimizer demystifies the complex rules of
-					<strong>adjacency bonuses</strong> and <strong>supercharged slot</strong> interactions. It
-					provides a clear, efficient way to plan your upgrades with confidence and achieve top-tier
-					performance without hours of manual trial-and-error.
-				</p>
-			</section>
-		</main>
+		
 
 		<div id="root"></div>
 		<script type="module" src="/src/main.tsx"></script>
