@@ -59,6 +59,17 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		setIsTouching(false);
 	}, []);
 
+	const triggerShake = useCallback(() => {
+		setShaking(true);
+		if (shakeTimeoutRef.current) {
+			clearTimeout(shakeTimeoutRef.current);
+		}
+		shakeTimeoutRef.current = setTimeout(() => {
+			setShaking(false);
+			shakeTimeoutRef.current = null; // Clear the ref after timeout
+		}, 500);
+	}, [setShaking]);
+
 	/**
 	 * Handles a click on the cell.
 	 *
@@ -70,19 +81,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				return;
 			}
 
-			// Function to handle shaking and its timeout
-			const triggerShake = () => {
-				setShaking(true);
-				if (shakeTimeoutRef.current) {
-					clearTimeout(shakeTimeoutRef.current);
-				}
-				shakeTimeoutRef.current = setTimeout(() => {
-					setShaking(false);
-					shakeTimeoutRef.current = null; // Clear the ref after timeout
-				}, 500);
-			};
-
 			const handleSuperchargeToggle = () => {
+				console.log("handleSuperchargeToggle called\t");
 				if (superchargedFixed) {
 					triggerShake();
 					return;
@@ -106,10 +106,15 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				const currentTime = new Date().getTime();
 				const timeSinceLastTap = currentTime - lastTapTime.current;
 
-				if (timeSinceLastTap < 250 && timeSinceLastTap > 0) {
+				if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
+					// Double tap
+					// Undo the single-click's active toggle
+					handleActiveToggle();
+					// Then apply the supercharge toggle
 					handleSuperchargeToggle();
 					lastTapTime.current = 0;
 				} else {
+					// Single tap
 					handleActiveToggle();
 					lastTapTime.current = currentTime;
 				}
@@ -137,9 +142,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			totalSupercharged,
 			cell.supercharged,
 			toggleCellSupercharged,
-			setShaking,
 			superchargedFixed,
 			gridFixed,
+			triggerShake,
 		]
 	);
 

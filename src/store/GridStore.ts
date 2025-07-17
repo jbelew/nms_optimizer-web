@@ -250,27 +250,31 @@ export const useGridStore = create<GridStore>()(
 			toggleCellActive: (rowIndex, columnIndex) => {
 				set((state) => {
 					const cell = state.grid.cells[rowIndex]?.[columnIndex];
+					if (cell.supercharged) {
+						return;
+					}
 					if (cell && (!cell.active || !cell.module)) {
 						cell.active = !cell.active;
-						if (!cell.active) {
-							cell.supercharged = false;
-						}
-					} else if (cell && cell.module) {
-						console.warn(
-							`Cannot deactivate cell [${rowIndex}, ${columnIndex}] because it contains a module.`
-						);
 					} else {
 						console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
 					}
 				});
 			},
 
+
 			toggleCellSupercharged: (rowIndex, columnIndex) =>
 				set((state) => {
 					const cell = state.grid.cells[rowIndex]?.[columnIndex];
+					if (!cell) {
+						console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+						return;
+					}
+					if (!cell.active) {
+						return;
+					}
 					cell.supercharged = !cell.supercharged;
-					cell.active = true;
 				}),
+
 
 			setCellActive: (rowIndex, columnIndex, active) => {
 				set((state) => {
