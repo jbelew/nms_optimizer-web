@@ -40,13 +40,15 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
-	
+
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null); // New ref for shake timeout
 	const { setShaking } = useShakeStore(); // Get setShaking from the store
 	const { t } = useTranslation();
 
 	const lastTapTime = useRef(0);
-	const isTouchDevice = useRef(typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0));
+	const isTouchDevice = useRef(
+		typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+	);
 	const tapTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	/**
@@ -93,22 +95,22 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			};
 
 			if (isTouchDevice.current) {
+				handleActiveToggle();
 				if (!tapTimeout.current) {
 					tapTimeout.current = setTimeout(() => {
-						tapTimeout.current = null;
-						handleActiveToggle(); // Single tap
+						tapTimeout.current = null; // Single tap
 					}, 300);
 				} else {
 					clearTimeout(tapTimeout.current);
 					tapTimeout.current = null;
+					handleActiveToggle();
 					handleSuperchargeToggle(); // Double tap
 				}
 			} else {
 				// Mouse logic
 				const currentTime = new Date().getTime();
-				const tapLength = currentTime - lastTapTime.current;
 
-				if (event.ctrlKey || event.metaKey || (tapLength < 300 && tapLength > 0)) {
+				if (event.ctrlKey || event.metaKey) {
 					handleActiveToggle();
 				} else {
 					handleSuperchargeToggle();
@@ -129,8 +131,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			gridFixed,
 		]
 	);
-
-	
 
 	/**
 	 * Handles a context menu on the cell.
@@ -205,7 +205,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			data-accent-color={techColor}
 			onContextMenu={handleContextMenu}
 			onClick={handleClick}
-			
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
 			style={cellElementStyle}
