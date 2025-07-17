@@ -292,7 +292,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 								: { backgroundColor: "var(--accent-a3)" }
 						}
 					>
-						{moduleCount + currentCheckedModulesLength}
+						x{moduleCount + currentCheckedModulesLength}
 					</Badge>
 				</>
 			);
