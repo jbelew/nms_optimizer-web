@@ -51,7 +51,7 @@ describe('toggleCellSupercharged action in GridStore', () => {
     expect(finalCell.active).toBe(true); // Ensure active status didn't change
   });
 
-  it('should not supercharge an inactive cell', () => {
+  it('should supercharge an inactive cell', () => {
     modifyGridSetup(grid => {
       grid.cells[2][2].active = false;
       grid.cells[2][2].supercharged = false;
@@ -62,13 +62,12 @@ describe('toggleCellSupercharged action in GridStore', () => {
     });
 
     const finalCell = useGridStore.getState().grid.cells[2][2];
-    expect(finalCell.supercharged).toBe(false); // Should remain false
+    expect(finalCell.supercharged).toBe(true); // Should become true
     expect(finalCell.active).toBe(false); // Should remain inactive
   });
 
-  it('should not de-supercharge an inactive, supercharged cell (edge case)', () => {
+  it('should de-supercharge an inactive, supercharged cell', () => {
     // This is an edge case: an inactive cell that is somehow supercharged.
-    // The current logic of toggleCellSupercharged only acts if cell.active is true.
     modifyGridSetup(grid => {
       grid.cells[0][1].active = false;
       grid.cells[0][1].supercharged = true;
@@ -79,7 +78,7 @@ describe('toggleCellSupercharged action in GridStore', () => {
     });
 
     const finalCell = useGridStore.getState().grid.cells[0][1];
-    expect(finalCell.supercharged).toBe(true); // Should remain true as it's inactive
+    expect(finalCell.supercharged).toBe(false); // Should become false
     expect(finalCell.active).toBe(false);
   });
 });
