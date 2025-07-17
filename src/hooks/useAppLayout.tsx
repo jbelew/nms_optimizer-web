@@ -50,7 +50,7 @@ export const useAppLayout = (): AppLayout => {
 				newGridHeight = elementToObserveHeight.getBoundingClientRect().height;
 			}
 			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
-				newGridTableTotalWidth = elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT;
+				newGridTableTotalWidth = Math.round(elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT);
 			}
 
 			setGridHeight(newGridHeight);

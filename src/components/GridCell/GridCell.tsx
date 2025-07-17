@@ -107,19 +107,10 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				const timeSinceLastTap = currentTime - lastTapTime.current;
 
 				if (timeSinceLastTap < 250 && timeSinceLastTap > 0) {
-					// Double tap: Toggle supercharged status
 					handleSuperchargeToggle();
 					lastTapTime.current = 0;
 				} else {
-					// Single tap
-					if (cell.supercharged) {
-						// If supercharged, disable supercharged and disable cell
-						toggleCellSupercharged(rowIndex, columnIndex); // Disable supercharged
-						toggleCellActive(rowIndex, columnIndex);       // Disable cell
-					} else {
-						// If not supercharged, just toggle active status
-						handleActiveToggle();
-					}
+					handleActiveToggle();
 					lastTapTime.current = currentTime;
 				}
 			};
