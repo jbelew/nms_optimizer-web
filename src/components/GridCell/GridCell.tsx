@@ -97,7 +97,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 					tapTimeout.current = setTimeout(() => {
 						tapTimeout.current = null;
 						handleActiveToggle(); // Single tap
-					}, 200);
+					}, 250);
 				} else {
 					clearTimeout(tapTimeout.current);
 					tapTimeout.current = null;
