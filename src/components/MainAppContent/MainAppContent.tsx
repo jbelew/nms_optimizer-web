@@ -144,7 +144,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							{isLarge ? (
 								<>
 									<ScrollArea
-										className={`gridContainer__sidebar p-4 mb-1 shadow-md rounded-md backdrop-blur-xl`}
+										className={`gridContainer__sidebar p-4  shadow-md rounded-md backdrop-blur-xl`}
 										style={{
 											height: gridHeight
 												? `${gridHeight - (techTree.recommended_builds && techTree.recommended_builds.length > 0 ? 52 : 0)}px`
@@ -154,11 +154,13 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 										<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
 									</ScrollArea>
 									{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
-										<RecommendedBuild
-											techTree={techTree}
-											gridContainerRef={gridContainerRef}
-											isLarge={isLarge}
-										/>
+										<div className="mt-1">
+											<RecommendedBuild
+												techTree={techTree}
+												gridContainerRef={gridContainerRef}
+												isLarge={isLarge}
+											/>
+										</div>
 									)}
 								</>
 							) : (
