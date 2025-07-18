@@ -50,7 +50,7 @@ app.use(
 app.get("/*splat", async (req, res) => {
 	// If path has an extension, but wasn't served by static middleware, it's a 404.
 	if (path.extname(req.path)) {
-		res.status(404).send("Not Found");
+		res.status(404).sendFile(path.join(__dirname, "dist", "404.html"));
 	} else {
 		// Otherwise, serve SPA entrypoint
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
