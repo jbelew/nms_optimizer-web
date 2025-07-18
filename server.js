@@ -33,7 +33,7 @@ app.use(
 			if (versionedAssetPattern.test(fileName)) {
 				// For versioned assets (JS, CSS, fonts, images with hashes)
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-			} else if (fileName === "index.html" || fileName.endsWith(".md")) {
+			} else if (fileName === "index.html" || fileName.endsWith(".md") || fileName === "robots.txt") {
 				// For index.html and markdown files, ensure no caching to always get the latest version.
 				res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			} else {
@@ -53,6 +53,7 @@ app.get("/*splat", async (req, res) => {
 		res.status(404).send("Not Found");
 	} else {
 		// Otherwise, serve SPA entrypoint
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.sendFile(path.join(__dirname, "dist", "index.html"));
 	}
 });
