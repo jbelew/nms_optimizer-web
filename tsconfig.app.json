@@ -27,6 +27,7 @@
 		"src/vite-env.d.ts"
 		// Add other specific global files if necessary
 	],
-	"include": ["src", "types", "src/**/*.test.ts", "src/**/*.test.tsx"],
-	"types": ["vitest/globals", "vite/client"]
+	"include": ["src", "types"],
+	"exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"],
+	"types": ["vite/client"]
 }

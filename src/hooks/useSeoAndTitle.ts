@@ -37,22 +37,18 @@ export const useSeoAndTitle = () => {
 
         // Canonical Tag Logic
         let canonicalLink = document.querySelector('link[rel="canonical"]');
-        let canonicalUrl = window.location.origin + location.pathname;
-        const currentParams = new URLSearchParams(location.search);
+        const canonicalUrlObject = new URL(window.location.origin + location.pathname);
+        const canonicalParams = new URLSearchParams(location.search);
 
         // Remove specific parameters that should not affect the canonical URL
-        currentParams.delete("platform");
-        currentParams.delete("ship");
+        canonicalParams.delete("platform");
+        canonicalParams.delete("ship");
 
-        if (currentParams.has("grid")) {
-            canonicalUrl += `?grid=${currentParams.get("grid")}`;
+        // Only append parameters if they exist
+        if (canonicalParams.toString()) {
+            canonicalUrlObject.search = canonicalParams.toString();
         }
-
-        // If there are any remaining parameters, append them to the canonical URL
-        const remainingParams = currentParams.toString();
-        if (remainingParams) {
-            canonicalUrl += `${currentParams.has("grid") ? "&" : "?"}${remainingParams}`;
-        }
+        const canonicalUrl = canonicalUrlObject.toString();
 
         if (!canonicalLink) {
             canonicalLink = document.createElement("link");
@@ -66,9 +62,7 @@ export const useSeoAndTitle = () => {
         // Hreflang Tags Logic
         const supportedLanguages = i18n.options.supportedLngs || [];
         const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en";
-        const currentPath = location.pathname;
-        const currentSearch = location.search;
-        const baseUrl = window.location.origin;
+        
 
         // Get existing hreflang tags
         const existingHreflangTags = Array.from(
@@ -83,25 +77,26 @@ export const useSeoAndTitle = () => {
         });
 
         const newHreflangUrls = new Map<string, string>();
-        const baseUrlObject = new URL(baseUrl + currentPath); // Create URL object once
 
         supportedLanguages.forEach((lang) => {
             if (lang === "dev" || lang === "cimode") return;
 
-            const params = new URLSearchParams(currentSearch); // Start with current search params
+            const url = new URL(location.pathname + location.search, window.location.origin);
+            const params = url.searchParams;
+
             params.delete("platform"); // Remove platform param
             params.delete("grid");     // Remove grid param
             params.set("lng", lang);
-            baseUrlObject.search = params.toString(); // Update search params
-            newHreflangUrls.set(lang, baseUrlObject.toString());
+
+            newHreflangUrls.set(lang, url.toString());
 
             if (lang === defaultLanguage) {
-                const defaultParams = new URLSearchParams(currentSearch);
-                defaultParams.delete("platform"); // Remove platform param
-                defaultParams.delete("grid");     // Remove grid param
+                const defaultUrl = new URL(location.pathname + location.search, window.location.origin);
+                const defaultParams = defaultUrl.searchParams;
+                defaultParams.delete("platform");
+                defaultParams.delete("grid");
                 defaultParams.set("lng", defaultLanguage);
-                baseUrlObject.search = defaultParams.toString();
-                newHreflangUrls.set("x-default", baseUrlObject.toString());
+                newHreflangUrls.set("x-default", defaultUrl.toString());
             }
         });
 

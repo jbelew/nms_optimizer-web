@@ -478,6 +478,8 @@ export const useGridStore = create<GridStore>()(
 				const dataToPersist = {
 					grid: state.grid,
 					isSharedGrid: state.isSharedGrid,
+					gridFixed: state.gridFixed,
+					superchargedFixed: state.superchargedFixed,
 					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
 				};
 				// Also update the PlatformStore's localStorage key directly
