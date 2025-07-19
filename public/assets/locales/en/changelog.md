@@ -1,13 +1,13 @@
 ## Model Status
 
-See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main/training/trained_models) for up to date model build information.
+See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main/src/training/trained_models) for up to date model build information.
 
 ---
 
 ## Version 3.0. RC2 (2025-07-17)
 
 - Increased solve window size for Bolt Caster from 3x3 to 3x4 based on user feedback.
-- Updated recommended Exosuit build. 
+- Updated recommended Exosuit build.
 
 ## Version 3.0. RC1 (2025-07-17)
 
