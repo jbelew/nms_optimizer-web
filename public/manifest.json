@@ -35,7 +35,7 @@
 			"label": "Main application view on tablet."
 		},
 		{
-			"src": "/assets/img/screenshot_mobile.png",
+			"src": "/assets/img/screenshots/screenshot_mobile.png",
 			"sizes": "375x667",
 			"type": "image/png",
 			"platform": "mobile",

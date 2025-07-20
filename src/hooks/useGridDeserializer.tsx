@@ -234,7 +234,7 @@ const deserialize = async (
 				newGrid.cells[r][c].image = null;
 				newGrid.cells[r][c].bonus = 0.0;
 				newGrid.cells[r][c].value = 0;
-				newGrid.cells[r][c].adjacency = false;
+				newGrid.cells[r][c].adjacency = "none";
 				newGrid.cells[r][c].adjacency_bonus = adjBonusChar === "T" ? 1.0 : 0.0;
 				newGrid.cells[r][c].sc_eligible = false;
 
@@ -248,7 +248,7 @@ const deserialize = async (
 							newGrid.cells[r][c].image = moduleData.image;
 							newGrid.cells[r][c].bonus = moduleData.bonus ?? 0.0;
 							newGrid.cells[r][c].value = moduleData.value ?? 0;
-							newGrid.cells[r][c].adjacency = moduleData.adjacency ?? false;
+							newGrid.cells[r][c].adjacency = moduleData.adjacency ?? "none";
 							newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible ?? false;
 						} else {
 							console.warn(

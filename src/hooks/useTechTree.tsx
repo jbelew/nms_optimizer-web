@@ -7,7 +7,7 @@ import { useTechStore } from "../store/TechStore";
 
 export interface Module {
 	active: boolean;
-	adjacency: boolean;
+	adjacency: string;
 	adjacency_bonus: number;
 	bonus: number;
 	id: string;
@@ -37,7 +37,7 @@ export interface RecommendedBuild {
 		module: string;
 		supercharged?: boolean;
 		active?: boolean;
-		adjacency_bonus?: boolean;
+		adjacency_bonus?: number;
 	} | null)[][];
 }
 

@@ -56,7 +56,7 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 										image: module.image ?? null,
 										bonus: module.bonus ?? 0,
 										value: module.value ?? 0,
-										adjacency: module.adjacency ?? false,
+										adjacency: module.adjacency ?? "none",
 										sc_eligible: module.sc_eligible ?? false,
 										adjacency_bonus: cellData.adjacency_bonus ? 1.0 : 0.0,
 										type: module.type ?? "", // Add the missing 'type' property

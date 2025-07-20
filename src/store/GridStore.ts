@@ -60,7 +60,7 @@ function debounceSetItem(
 // --- Define types (Cell, Grid, ApiResponse) ---
 export type Cell = {
 	active: boolean;
-	adjacency: boolean;
+	adjacency: string;
 	adjacency_bonus: number;
 	bonus: number;
 	image: string | null;
@@ -90,7 +90,7 @@ export type ApiResponse = {
 // --- Utility functions (createEmptyCell, createGrid) ---
 export const createEmptyCell = (supercharged = false, active = true): Cell => ({
 	active,
-	adjacency: false,
+	adjacency: "none",
 	adjacency_bonus: 0.0,
 	bonus: 0.0,
 	image: null,
