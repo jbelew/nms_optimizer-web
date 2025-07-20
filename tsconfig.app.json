@@ -21,7 +21,11 @@
 		"noUnusedParameters": true,
 		"erasableSyntaxOnly": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUncheckedSideEffectImports": true
+		"noUncheckedSideEffectImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true
 	},
 	"files": [
 		"src/vite-env.d.ts"

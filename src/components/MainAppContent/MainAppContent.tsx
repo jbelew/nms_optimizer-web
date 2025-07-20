@@ -1,7 +1,7 @@
 // src/components/app/MainAppContent.tsx
 import { ScrollArea } from "@radix-ui/themes";
-import { type FC, useCallback, useEffect, useMemo } from "react";
-import React from "react";
+import type { FC } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -38,7 +38,7 @@ type MainAppContentInternalProps = {
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "520px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
 
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog } = useDialog();
@@ -61,10 +61,16 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
-		gridHeight,
-		gridTableTotalWidth, // Destructure the new total width
 		isLarge,
 	} = useAppLayout();
+
+	const scrollAreaHeight = useMemo(() => {
+		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
+		if (techTree.recommended_builds && techTree.recommended_builds.length > 0) {
+			return `${baseHeight - 52}px`;
+		}
+		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
+	}, [techTree.recommended_builds]);
 
 	useEffect(() => {
 		hideSplashScreen();
@@ -95,20 +101,17 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 	return (
 		<main className="flex flex-col items-center justify-center lg:min-h-screen">
-			<section className="relative mx-auto border rounded-none app lg:rounded-xl bg-white/5 backdrop-blur-xl">
+			<section className="relative mx-auto border rounded-none app bg-white/5 backdrop-blur-xl lg:rounded-xl">
 				<AppHeader onShowChangelog={handleShowChangelog} />
 				<section
-					className="flex flex-col items-start p-4 pt-2 gridContainer sm:pt-4 sm:p-8 lg:flex-row"
+					className="flex flex-col items-start p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row"
 					ref={gridContainerRef}
 				>
 					<div
 						className="flex-grow w-auto gridContainer__container lg:flex-shrink-0"
 						ref={appLayoutContainerRef}
 					>
-						<header
-							className="flex flex-wrap items-center gap-2 mb-3 text-xl sm:mb-4 sm:text-2xl heading-styled"
-							style={{ maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined }}
-						>
+						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">
 							{!isSharedGrid && (
 								<span className="self-start flex-shrink-0 shadow-sm">
 									<ShipSelection solving={solving} />
@@ -118,10 +121,9 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								{t("platformLabel")}
 							</span>
 							<span
-								className="self-start flex-1 min-w-0 mt-[6] sm:mt-0"
+								className="mt-[6] min-w-0 flex-1 self-start sm:mt-0"
 								style={{
 									textWrap: "balance",
-									visibility: gridTableTotalWidth ? "visible" : "hidden",
 								}}
 							>
 								{t(`platforms.${selectedShipType}`)}
@@ -144,11 +146,9 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							{isLarge ? (
 								<>
 									<ScrollArea
-										className={`gridContainer__sidebar p-4  shadow-md rounded-md backdrop-blur-xl`}
+										className={`gridContainer__sidebar rounded-md p-4 shadow-md backdrop-blur-xl`}
 										style={{
-											height: gridHeight
-												? `${gridHeight - (techTree.recommended_builds && techTree.recommended_builds.length > 0 ? 52 : 0)}px`
-												: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
+											height: scrollAreaHeight,
 										}}
 									>
 										<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
@@ -165,7 +165,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								</>
 							) : (
 								<aside
-									className={`flex-grow w-full ${techTree.recommended_builds && techTree.recommended_builds.length > 0 ? "pt-4" : "pt-8"}`}
+									className={`w-full flex-grow ${techTree.recommended_builds && techTree.recommended_builds.length > 0 ? "pt-4" : "pt-8"}`}
 									style={{ minHeight: "550px" }}
 								>
 									{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (

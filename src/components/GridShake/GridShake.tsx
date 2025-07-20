@@ -21,6 +21,7 @@ const ShakingWrapper: React.FC<ShakingWrapperProps> = ({ shaking, children, dura
 			return () => clearTimeout(timeout);
 		} else {
 			setIsShaking(false);
+			return;
 		}
 	}, [shaking, duration]);
 

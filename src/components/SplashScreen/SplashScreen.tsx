@@ -76,6 +76,7 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 					element.removeEventListener("animationend", handleAnimationEnd as EventListener);
 				};
 			}
+			return;
 		}, [status, cssBlock, onHidden]);
 
 		if (status === "hidden" || status === "pending") {

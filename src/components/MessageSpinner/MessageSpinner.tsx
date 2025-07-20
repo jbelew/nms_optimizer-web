@@ -52,6 +52,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 			// Ensure state is reset if conditions aren't met
 			setShowAdditionalMessage(false);
 			setCurrentRandomMessage("");
+			return;
 		}
 		// Depend on both isVisible and showRandomMessages
 	}, [isVisible, showRandomMessages, t]);
