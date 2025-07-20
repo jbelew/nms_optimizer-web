@@ -35,10 +35,10 @@ export const useAppLayout = (): AppLayout => {
 				for (const entry of entries) {
 					if (entry.target === elementToObserveHeight) {
 						if (isLarge && !isSharedGrid) {
-							newGridHeight = entry.contentRect.height;
+							newGridHeight = Math.round(entry.contentRect.height);
 						}
 					} else if (entry.target === elementToObserveWidth) {
-						newGridTableTotalWidth = entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT;
+						newGridTableTotalWidth = Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT);
 					}
 				}
 			}
@@ -47,14 +47,16 @@ export const useAppLayout = (): AppLayout => {
 			// This part should only execute if the values haven't been set by entries
 			// or if it's the initial call without entries.
 			if (newGridHeight === null && isLarge && !isSharedGrid && elementToObserveHeight) {
-				newGridHeight = elementToObserveHeight.getBoundingClientRect().height;
+				newGridHeight = Math.round(elementToObserveHeight.getBoundingClientRect().height);
 			}
 			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
 				newGridTableTotalWidth = Math.round(elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT);
 			}
 
-			setGridHeight(newGridHeight);
-			setGridTableTotalWidth(newGridTableTotalWidth);
+			setGridHeight((prevHeight) => (prevHeight !== newGridHeight ? newGridHeight : prevHeight));
+			setGridTableTotalWidth((prevWidth) =>
+				prevWidth !== newGridTableTotalWidth ? newGridTableTotalWidth : prevWidth
+			);
 		};
 
 		// Initial measurement using requestAnimationFrame
