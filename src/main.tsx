@@ -1,16 +1,12 @@
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";
-
 import "@radix-ui/themes/tokens/colors/cyan.css";
 import "@radix-ui/themes/tokens/colors/sage.css";
 import "@radix-ui/themes/tokens/colors/purple.css";
-
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
-
 // Main App CSS
 import "./index.css";
-
 // i18n
 import "./i18n/i18n"; // Initialize i18next
 

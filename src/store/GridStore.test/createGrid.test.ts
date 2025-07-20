@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createGrid, createEmptyCell } from '../GridStore';
+
+import { createEmptyCell,createGrid } from '../GridStore';
 
 describe('createGrid', () => {
   it('should create a grid with the specified width and height', () => {

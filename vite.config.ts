@@ -1,15 +1,15 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import fs from "fs";
+import path from "path";
+import critical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
-import critical from "rollup-plugin-critical";
-import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
-import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { splashScreen } from "vite-plugin-splash-screen";
 
-import fs from "fs";
-import path from "path";
+import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
+import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
 // Function to read version from package.json
 function getAppVersion() {

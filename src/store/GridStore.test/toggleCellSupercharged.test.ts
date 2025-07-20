@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useGridStore, createGrid, createEmptyCell, type Grid } from '../GridStore';
 import { act } from '@testing-library/react';
+import { beforeEach,describe, expect, it } from 'vitest';
+
+import { createEmptyCell, createGrid, type Grid,useGridStore } from '../GridStore';
 
 describe('toggleCellSupercharged action in GridStore', () => {
   beforeEach(() => {

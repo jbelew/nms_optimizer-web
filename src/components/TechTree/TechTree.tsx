@@ -8,13 +8,12 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { usePlatformStore } from "../../store/PlatformStore";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
+import { type TechTreeItem } from "../../hooks/useTechTree";
 import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; // Import useGridStore
+import { usePlatformStore } from "../../store/PlatformStore";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
-
-import { type TechTreeItem } from "../../hooks/useTechTree";
 
 // --- Image Map (This is the key part) ---
 type TypeImageMap = {

@@ -1,13 +1,13 @@
-import {
-	useEffect,
-	useState,
-	type CSSProperties,
-	useRef,
-	useImperativeHandle,
-	forwardRef,
-} from "react";
-
 import "./SplashScreen.css";
+
+import {
+	type CSSProperties,
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useRef,
+	useState,
+} from "react";
 
 export interface SplashScreenHandle {
 	hide: () => void;

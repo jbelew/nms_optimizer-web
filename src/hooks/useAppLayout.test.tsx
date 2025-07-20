@@ -1,9 +1,10 @@
-import { render, screen, act } from '@testing-library/react';
+import { act,render, screen } from '@testing-library/react';
+import React from 'react';
 import { vi } from 'vitest';
+
+import { useGridStore } from '../store/GridStore';
 import { useAppLayout } from './useAppLayout';
 import { useBreakpoint } from './useBreakpoint';
-import { useGridStore } from '../store/GridStore';
-import React from 'react';
 
 // Mock ResizeObserver
 let resizeObserverCallback: ResizeObserverCallback;

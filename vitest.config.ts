@@ -7,6 +7,14 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     tsconfig: './tsconfig.vitest.json',
     include: ['src/**/*.test.{ts,tsx}'],
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        minThreads: 1,
+        maxThreads: 4,
+      },
+    },
+    css: true,
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],

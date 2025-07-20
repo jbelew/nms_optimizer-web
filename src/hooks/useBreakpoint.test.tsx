@@ -1,5 +1,6 @@
-import { renderHook, act } from '@testing-library/react';
+import { act,renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
+
 import { useBreakpoint } from './useBreakpoint';
 
 describe('useBreakpoint', () => {

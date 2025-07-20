@@ -1,4 +1,4 @@
-import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
+import { onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
 
 export function reportWebVitals(sendEvent: (event: { category: string; action: string; label: string; value: number; nonInteraction: boolean; }) => void) {
   onCLS((metric) => sendEvent({

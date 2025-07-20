@@ -1,13 +1,13 @@
 /// <reference types="@testing-library/jest-dom" />
-import React from 'react';
-import { render, screen, fireEvent } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
+import { fireEvent,render, screen } from "@testing-library/react";
+import React from "react";
+import { beforeEach, describe, expect, it, type Mock,vi } from "vitest";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
+import { useAnalytics } from "../../hooks/useAnalytics";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
-import { useAnalytics } from "../../hooks/useAnalytics";
 
 // Mock external modules and hooks
 vi.mock("react-i18next", () => ({
@@ -26,8 +26,6 @@ vi.mock("../../hooks/useAnalytics");
 
 let mockSendEvent: Mock;
 
-
-
 // Define a type for the mocked useGridStore function
 interface MockUseGridStore {
 	_setMockState: (isShared: boolean, hasModules: boolean, initialGridDef?: unknown) => void;
@@ -36,7 +34,6 @@ interface MockUseGridStore {
 
 // Mock useGridStore and selectHasModulesInGrid
 vi.mock("../../store/GridStore", async () => {
-
 	const mockSetIsSharedGrid = vi.fn();
 	const mockApplyModulesToGrid = vi.fn();
 	const mockSetGridFixed = vi.fn();
@@ -92,7 +89,6 @@ describe("GridTableButtons", () => {
 	const mockUpdateUrlForShare = vi.fn(() => "http://share.url");
 	const mockUpdateUrlForReset = vi.fn();
 	// Get the mocked setIsSharedGrid from the mocked module (which is a vi.fn() mock)
-	
 
 	const defaultProps = {
 		solving: false,
@@ -107,7 +103,7 @@ describe("GridTableButtons", () => {
 		(useDialog as Mock).mockReturnValue({
 			openDialog: vi.fn(),
 			isFirstVisit: false,
-							onFirstVisitInstructionsDialogOpened: vi.fn(),
+			onFirstVisitInstructionsDialogOpened: vi.fn(),
 		});
 		mockSendEvent = vi.fn();
 		(useAnalytics as Mock).mockReturnValue({
@@ -192,6 +188,4 @@ describe("GridTableButtons", () => {
 		});
 		windowOpenSpy.mockRestore();
 	});
-
-	
 });

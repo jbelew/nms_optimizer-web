@@ -1,8 +1,9 @@
-import { renderHook, act } from '@testing-library/react';
-import { vi } from 'vitest';
-import { useSeoAndTitle } from './useSeoAndTitle';
-import { useLocation } from 'react-router-dom';
+import { renderHook } from '@testing-library/react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import { vi } from 'vitest';
+
+import { useSeoAndTitle } from './useSeoAndTitle';
 
 // Mock react-router-dom's useLocation
 vi.mock('react-router-dom', () => ({

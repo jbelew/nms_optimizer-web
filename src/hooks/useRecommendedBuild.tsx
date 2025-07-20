@@ -1,7 +1,8 @@
 // src/hooks/useRecommendedBuild.tsx
 import { useCallback, useMemo } from "react";
-import { useGridStore, createGrid, createEmptyCell } from "../store/GridStore";
-import type { TechTree, Module, RecommendedBuild, TechTreeItem } from "./useTechTree";
+
+import { createEmptyCell,createGrid, useGridStore } from "../store/GridStore";
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 
 export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.MutableRefObject<HTMLDivElement | null>) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();

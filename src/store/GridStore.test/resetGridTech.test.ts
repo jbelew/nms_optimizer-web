@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useGridStore, createGrid, createEmptyCell, type Cell } from '../GridStore';
 import { act } from '@testing-library/react';
+import { beforeEach,describe, expect, it } from 'vitest';
+
+import { type Cell,createEmptyCell, createGrid, useGridStore } from '../GridStore';
 
 describe('resetGridTech action in GridStore', () => {
   const gridWidth = 3;

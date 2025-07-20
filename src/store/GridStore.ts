@@ -3,9 +3,9 @@ import { create } from "zustand";
 import { persist, type StorageValue } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { useTechStore } from "./TechStore";
-import { usePlatformStore } from "./PlatformStore";
 import { type Module } from "../hooks/useTechTree.tsx";
+import { usePlatformStore } from "./PlatformStore";
+import { useTechStore } from "./TechStore";
 
 // --- Define the specific function type we are debouncing ---
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;

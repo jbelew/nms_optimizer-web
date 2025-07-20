@@ -1,13 +1,3 @@
-import { type FC, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { Route, Routes } from "react-router-dom";
-
-import AppDialog from "./components/AppDialog/AppDialog";
-import ErrorContent from "./components/AppDialog/ErrorContent";
-import { MainAppContent } from "./components/MainAppContent/MainAppContent";
-import { DialogProvider } from "./context/DialogContext";
-import { useOptimizeStore } from "./store/OptimizeStore";
-
 import "@radix-ui/themes/tokens/colors/amber.css";
 import "@radix-ui/themes/tokens/colors/blue.css";
 import "@radix-ui/themes/tokens/colors/crimson.css";
@@ -20,12 +10,20 @@ import "@radix-ui/themes/tokens/colors/sky.css";
 import "@radix-ui/themes/tokens/colors/teal.css";
 import "@radix-ui/themes/tokens/colors/yellow.css";
 
+import { type FC, useMemo } from "react";
 import ReactGA from "react-ga4";
+import { useTranslation } from "react-i18next";
+import { Route, Routes } from "react-router-dom";
 
+import AppDialog from "./components/AppDialog/AppDialog";
+import ErrorContent from "./components/AppDialog/ErrorContent";
+import { MainAppContent } from "./components/MainAppContent/MainAppContent";
+import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
 import { useUrlValidation } from "./hooks/useUrlValidation";
+import { useOptimizeStore } from "./store/OptimizeStore";
 
 /**
  * The main application component. It sets up routing, analytics, internationalization,

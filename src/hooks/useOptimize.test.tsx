@@ -1,13 +1,14 @@
-import { renderHook, act } from '@testing-library/react';
+import { act,renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
-import { useOptimize } from './useOptimize';
-import { useAnalytics } from './useAnalytics';
+
+import { API_URL } from '../constants';
 import { useGridStore } from '../store/GridStore';
 import { useOptimizeStore } from '../store/OptimizeStore';
-import { useTechStore } from '../store/TechStore';
 import { usePlatformStore } from '../store/PlatformStore';
+import { useTechStore } from '../store/TechStore';
+import { useAnalytics } from './useAnalytics';
 import { useBreakpoint } from './useBreakpoint';
-import { API_URL } from '../constants';
+import { useOptimize } from './useOptimize';
 
 // Mock all external dependencies
 vi.mock('./useAnalytics');

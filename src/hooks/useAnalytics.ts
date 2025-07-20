@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import ReactGA from "react-ga4";
 import { useLocation } from "react-router-dom";
-import { reportWebVitals } from "../reportWebVitals";
+
 import { TRACKING_ID } from "../constants";
+import { reportWebVitals } from "../reportWebVitals";
 
 interface GA4Event {
     category: string;

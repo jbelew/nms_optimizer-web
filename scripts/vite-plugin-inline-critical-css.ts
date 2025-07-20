@@ -1,8 +1,9 @@
-import type { PluginOption, ResolvedConfig } from "vite";
 import fs from "node:fs/promises";
 import path from "node:path";
-import zlib from "node:zlib";
 import { promisify } from "node:util";
+import zlib from "node:zlib";
+
+import type { PluginOption, ResolvedConfig } from "vite";
 
 const gzip = promisify(zlib.gzip);
 const brotliCompress = promisify(zlib.brotliCompress);

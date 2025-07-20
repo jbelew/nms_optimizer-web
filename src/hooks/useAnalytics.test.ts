@@ -1,10 +1,11 @@
-import { renderHook, act } from '@testing-library/react';
-import { useAnalytics } from './useAnalytics';
+import { act,renderHook } from '@testing-library/react';
 import ReactGA from 'react-ga4';
-import { reportWebVitals } from '../reportWebVitals';
-import { TRACKING_ID } from '../constants';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { vi } from 'vitest';
+
+import { TRACKING_ID } from '../constants';
+import { reportWebVitals } from '../reportWebVitals';
+import { useAnalytics } from './useAnalytics';
 
 // Mock ReactGA and reportWebVitals
 vi.mock('react-ga4');

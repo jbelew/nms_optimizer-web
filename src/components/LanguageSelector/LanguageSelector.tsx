@@ -3,7 +3,6 @@ import "./LanguageSelector.css";
 
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import React, { useMemo } from "react";
-import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
 // Import your SVG flag components
@@ -12,6 +11,7 @@ import esFlagPath from "../../assets/svg/flags/es.svg";
 import frFlagPath from "../../assets/svg/flags/fr.svg";
 import usFlagPath from "../../assets/svg/flags/us.svg";
 import xxFlagPath from "../../assets/svg/flags/xx.svg";
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 
 interface LanguageFlagPaths {

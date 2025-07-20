@@ -1,8 +1,9 @@
 // src/hooks/useTechTree.tsx
-import { API_URL } from "../constants";
-import { useTechStore } from "../store/TechStore";
-import { useGridStore } from "../store/GridStore";
 import { useEffect } from "react";
+
+import { API_URL } from "../constants";
+import { useGridStore } from "../store/GridStore";
+import { useTechStore } from "../store/TechStore";
 
 export interface Module {
 	active: boolean;

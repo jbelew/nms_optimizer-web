@@ -6,13 +6,13 @@ import {
 } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
 import React, { useCallback } from "react";
-import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
-import { useGridStore, selectHasModulesInGrid } from "../../store/GridStore";
+import { useAnalytics } from "../../hooks/useAnalytics";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
+import { selectHasModulesInGrid,useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {
 	solving: boolean;

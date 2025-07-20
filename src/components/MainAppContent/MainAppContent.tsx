@@ -1,27 +1,27 @@
 // src/components/app/MainAppContent.tsx
 import { ScrollArea } from "@radix-ui/themes";
 import { type FC, useCallback, useEffect, useMemo } from "react";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useUrlSync } from "../../hooks/useUrlSync";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
+import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
+import { usePlatformStore } from "../../store/PlatformStore";
 import AppDialog from "../AppDialog/AppDialog";
 import MarkdownContentRenderer from "../AppDialog/MarkdownContentRenderer";
 import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
+import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import ShipSelection from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
-import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
-import React from "react";
 
 /** Props for the MainAppContentInternal component. */
 type MainAppContentInternalProps = {

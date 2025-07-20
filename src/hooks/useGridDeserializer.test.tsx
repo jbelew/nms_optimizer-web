@@ -1,6 +1,7 @@
-import { serialize } from "./useGridDeserializer";
-import type { Grid, Cell } from "../store/GridStore"; // Import Cell type
 import { describe, expect, it, vi } from "vitest";
+
+import type { Cell,Grid } from "../store/GridStore"; // Import Cell type
+import { serialize } from "./useGridDeserializer";
 // Import Cell type
 
 // --- Mock constants.ts ---

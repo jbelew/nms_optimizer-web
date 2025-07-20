@@ -1,7 +1,7 @@
 import { Button } from "@radix-ui/themes";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useAnalytics } from "../../hooks/useAnalytics";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 
 /**
  * A Radix UI Button component that links to the BuyMeACoffee page when clicked.

@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { useGridStore, createGrid, createEmptyCell, type Grid } from '../GridStore';
 import { act } from '@testing-library/react'; // Or 'react-dom/test-utils' if not using RTL
+import { beforeEach,describe, expect, it } from 'vitest';
+
+import { createEmptyCell, createGrid, type Grid,useGridStore } from '../GridStore';
 
 // Using the actual store, resetting state for each test.
 

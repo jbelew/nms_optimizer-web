@@ -1,4 +1,4 @@
-import type { Plugin, IndexHtmlTransformResult, HtmlTagDescriptor } from 'vite';
+import type { HtmlTagDescriptor,IndexHtmlTransformResult, Plugin } from 'vite';
 
 export default function deferStylesheetsPlugin(): Plugin {
 	const pluginName = 'vite-plugin-defer-stylesheets';

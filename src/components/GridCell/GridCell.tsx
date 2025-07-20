@@ -5,7 +5,7 @@ import PropTypes from "prop-types"; // Import PropTypes
 import React, { memo, useCallback, useMemo, useRef } from "react"; // Import useCallback, memo, and useMemo
 import { useTranslation } from "react-i18next";
 
-import { useGridStore, selectTotalSuperchargedCells } from "../../store/GridStore";
+import { selectTotalSuperchargedCells, useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
 

@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
 import { useTranslation } from 'react-i18next';
+import { vi } from 'vitest';
+
 import { useMarkdownContent } from './useMarkdownContent';
 
 // Mock react-i18next's useTranslation

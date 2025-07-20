@@ -3,22 +3,20 @@ import "./GridTable.css";
 
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-// import ReactGA from "react-ga4"; // No longer used directly here
 
+import type { Module } from "../../hooks/useTechTree"; // Import Module type
 import {
 	type Grid,
+	selectGridFixed,
 	selectHasModulesInGrid,
 	useGridStore,
-	selectGridFixed,
 } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import ShakingWrapper from "../GridShake/GridShake";
-import MessageSpinner from "../MessageSpinner/MessageSpinner";
-
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
-import type { Module } from "../../hooks/useTechTree"; // Import Module type
+import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
 interface GridTableProps {
 	grid: Grid | null | undefined;

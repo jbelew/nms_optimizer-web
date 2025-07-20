@@ -1,13 +1,13 @@
 // src/hooks/useOptimize.tsx
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAnalytics } from "./useAnalytics";
 
 import { API_URL } from "../constants";
-import { createEmptyCell, type ApiResponse, type Grid, useGridStore } from "../store/GridStore";
+import { type ApiResponse, createEmptyCell, type Grid, useGridStore } from "../store/GridStore";
 import { useOptimizeStore } from "../store/OptimizeStore";
-import { useTechStore } from "../store/TechStore";
-import { useBreakpoint } from "./useBreakpoint";
 import { usePlatformStore } from "../store/PlatformStore";
+import { useTechStore } from "../store/TechStore";
+import { useAnalytics } from "./useAnalytics";
+import { useBreakpoint } from "./useBreakpoint";
 
 interface UseOptimizeReturn {
 	solving: boolean;

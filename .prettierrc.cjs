@@ -8,4 +8,16 @@ module.exports = {
   arrowParens: "always",
   endOfLine: "lf",
   bracketSameLine: false,
+  plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  importOrder: [
+    "<TYPES>",
+    "^(react|react-dom)$",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/(.*)$",
+    "",
+    "^[./]",
+  ],
+  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
+  importOrderTypeScriptVersion: "5.0.0",
 };

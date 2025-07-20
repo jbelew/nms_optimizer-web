@@ -5,12 +5,13 @@ import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo } from "react";
-import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
+
+import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { type ShipTypeDetail, useShipTypesStore } from "../../hooks/useShipTypes";
-import { usePlatformStore } from "../../store/PlatformStore";
 import { createGrid, useGridStore } from "../../store/GridStore";
+import { usePlatformStore } from "../../store/PlatformStore";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;

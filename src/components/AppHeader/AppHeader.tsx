@@ -2,15 +2,14 @@
 import "./AppHeader.css";
 
 import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { IconButton, Separator, Tooltip, Heading } from "@radix-ui/themes";
+import { Heading,IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import React from "react";
-import { useAnalytics } from "../../hooks/useAnalytics";
 import { useTranslation } from "react-i18next";
 
-import LanguageSelector from "../LanguageSelector/LanguageSelector";
-import RhombusIcon from "../icons/RhombusIcon";
-
 import { useDialog } from "../../context/dialog-utils";
+import { useAnalytics } from "../../hooks/useAnalytics";
+import RhombusIcon from "../icons/RhombusIcon";
+import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 interface AppHeaderProps {
 	onShowChangelog: () => void;
