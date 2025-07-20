@@ -5,12 +5,8 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { Module } from "../../hooks/useTechTree"; // Import Module type
-import {
-	type Grid,
-	selectGridFixed,
-	selectHasModulesInGrid,
-	useGridStore,
-} from "../../store/GridStore";
+import type { Grid } from "../../store/GridStore";
+import { selectGridFixed, selectHasModulesInGrid, useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
