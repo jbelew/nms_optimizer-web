@@ -261,7 +261,6 @@ export const useGridStore = create<GridStore>()(
 				});
 			},
 
-
 			toggleCellSupercharged: (rowIndex, columnIndex) =>
 				set((state) => {
 					const cell = state.grid.cells[rowIndex]?.[columnIndex];
@@ -274,7 +273,6 @@ export const useGridStore = create<GridStore>()(
 					}
 					cell.supercharged = !cell.supercharged;
 				}),
-
 
 			setCellActive: (rowIndex, columnIndex, active) => {
 				set((state) => {

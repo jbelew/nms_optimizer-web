@@ -26,7 +26,33 @@ export interface TechTreeItem {
 	key: string;
 	modules: Module[];
 	image: string | null;
-	color: "gray" | "gold" | "bronze" | "brown" | "yellow" | "amber" | "orange" | "tomato" | "red" | "ruby" | "crimson" | "pink" | "plum" | "purple" | "violet" | "iris" | "indigo" | "blue" | "cyan" | "teal" | "jade" | "green" | "grass" | "lime" | "mint" | "sky"; // Add color property
+	color:
+		| "gray"
+		| "gold"
+		| "bronze"
+		| "brown"
+		| "yellow"
+		| "amber"
+		| "orange"
+		| "tomato"
+		| "red"
+		| "ruby"
+		| "crimson"
+		| "pink"
+		| "plum"
+		| "purple"
+		| "violet"
+		| "iris"
+		| "indigo"
+		| "blue"
+		| "cyan"
+		| "teal"
+		| "jade"
+		| "green"
+		| "grass"
+		| "lime"
+		| "mint"
+		| "sky"; // Add color property
 	module_count: number;
 }
 
@@ -44,11 +70,7 @@ export interface RecommendedBuild {
 export interface TechTree {
 	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
 	recommended_builds?: RecommendedBuild[];
-	[key: string]:
-		| TechTreeItem[]
-		| { grid: Module[][] }
-		| RecommendedBuild[]
-		| undefined;
+	[key: string]: TechTreeItem[] | { grid: Module[][] } | RecommendedBuild[] | undefined;
 }
 
 type Resource<T> = {
@@ -97,7 +119,7 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 const cache = new Map<string, Resource<TechTree>>(); // Store successful fetches
 
 export const clearTechTreeCache = () => {
-    cache.clear();
+	cache.clear();
 };
 
 /**
@@ -111,13 +133,15 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	// Check if the resource is already in the cache
 	if (!cache.has(cacheKey)) {
 		// Create a promise to fetch the tech tree
-		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then((res) => {
+		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
 			// Check for HTTP errors
 			if (!res.ok) {
 				throw new Error(`HTTP error! status: ${res.status}`);
 			}
 			// Return the JSON response
-			return res.json();
+			const data = await res.json();
+			console.log("Fetched tech tree:", data);
+			return data;
 		});
 
 		// Store the promise in the cache
@@ -136,8 +160,10 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
-	const { setTechColors } = useTechStore();
-	const { applyModulesToGrid, setGridFixed, setSuperchargedFixed, selectHasModulesInGrid } = useGridStore.getState();
+	const setTechColors = useTechStore((state) => state.setTechColors);
+	const applyModulesToGrid = useGridStore((state) => state.applyModulesToGrid);
+	const setGridFixed = useGridStore((state) => state.setGridFixed);
+	const setSuperchargedFixed = useGridStore((state) => state.setSuperchargedFixed);
 
 	// Extract and set tech colors when the tech tree is available
 	useEffect(() => {
@@ -155,13 +181,13 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		setTechColors(colors);
 
 		// Apply the grid definition if available AND the grid is currently empty
-		if (techTree.grid_definition && !selectHasModulesInGrid()) {
+		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
 			const flattenedModules = techTree.grid_definition.grid.flat();
 			applyModulesToGrid(flattenedModules);
 			setGridFixed(techTree.grid_definition.gridFixed);
 			setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
 		}
-	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed, selectHasModulesInGrid]);
+	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
 
 	return techTree;
 }
