@@ -1,8 +1,8 @@
 // src/components/AppDialog/ShareLinkDialog.tsx
 import type { FC } from "react";
 import { useState } from "react";
-import { CheckIcon, CopyIcon, ExternalLinkIcon, Share2Icon } from "@radix-ui/react-icons";
-import { Button, Dialog, Flex, Link, Text, TextArea } from "@radix-ui/themes";
+import { CheckIcon, CopyIcon, Cross2Icon, ExternalLinkIcon, Share2Icon } from "@radix-ui/react-icons";
+import { Button, Dialog, Flex, IconButton, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 interface ShareLinkDialogProps {
@@ -41,18 +41,18 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					{t("dialogs.titles.shareLink")}
 				</Dialog.Title>
 				<Dialog.Description size="2" mb="4">
-					<Text as="p" mb="4">
+					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
 						{t("dialogs.shareLink.description")}
 					</Text>
 					<TextArea value={shareUrl} variant="surface" color="cyan" readOnly rows={8} />
-					<Text as="p" size="2" mt="2" mb="4" align="right">
+					<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
 						<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 							{t("dialogs.shareLink.openLink")}
 							<ExternalLinkIcon className="inline-block ml-1" />
 						</Link>
 					</Text>
 				</Dialog.Description>
-				<Flex gap="3" mt="4" justify="end">
+				<Flex gap="2" mt="4" justify="end">
 					<Dialog.Close>
 						<Button variant="soft" onClick={onClose}>
 							{t("dialogs.shareLink.closeButton")}
@@ -63,6 +63,16 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 						{copied ? t("dialogs.shareLink.copiedButton") : t("dialogs.shareLink.copyButton")}
 					</Button>
 				</Flex>
+				<Dialog.Close>
+					<IconButton
+						variant="soft"
+						color="cyan"
+						className="appDialog__close"
+						aria-label="Close dialog"
+					>
+						<Cross2Icon />
+					</IconButton>
+				</Dialog.Close>
 			</Dialog.Content>
 		</Dialog.Root>
 	);

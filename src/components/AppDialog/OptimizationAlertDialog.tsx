@@ -64,7 +64,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 						/>
 					</span>
 				</Dialog.Description>
-				<Flex gap="3" mt="4" justify="end">
+				<Flex gap="2" mt="4" justify="end">
 					<Dialog.Close>
 						<Button
 							variant="soft"
