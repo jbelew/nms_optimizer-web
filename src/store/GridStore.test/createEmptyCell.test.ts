@@ -10,7 +10,7 @@ describe('createEmptyCell() createEmptyCell method', () => {
       const cell = createEmptyCell();
       expect(cell).toEqual({
         active: true,
-        adjacency: false,
+        adjacency: "none",
         adjacency_bonus: 0.0,
         bonus: 0.0,
         image: null,
