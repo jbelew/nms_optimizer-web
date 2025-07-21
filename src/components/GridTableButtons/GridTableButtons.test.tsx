@@ -48,7 +48,6 @@ vi.mock("../../store/GridStore", async () => {
 
 	const mockStore = {
 		isSharedGrid: mockIsSharedGrid,
-		hasModulesInGrid: mockHasModulesInGrid,
 		initialGridDefinition: mockInitialGridDefinition,
 		grid: mockGrid, // Add the mock grid here
 		setIsSharedGrid: mockSetIsSharedGrid,
@@ -57,13 +56,14 @@ vi.mock("../../store/GridStore", async () => {
 		setSuperchargedFixed: mockSetSuperchargedFixed,
 		resetGrid: mockResetGrid,
 		setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
+		selectHasModulesInGrid: vi.fn(() => mockHasModulesInGrid), // Mock as a function
 		getState: vi.fn(() => mockStore),
 		_setMockState: (isShared: boolean, hasModules: boolean, initialGridDef?: unknown) => {
 			mockIsSharedGrid = isShared;
 			mockHasModulesInGrid = hasModules;
 			mockInitialGridDefinition = initialGridDef;
 			mockStore.isSharedGrid = mockIsSharedGrid;
-			mockStore.hasModulesInGrid = mockHasModulesInGrid;
+			mockStore.selectHasModulesInGrid.mockReturnValue(mockHasModulesInGrid); // Update the mock function's return value
 			mockStore.initialGridDefinition = mockInitialGridDefinition;
 			mockStore.grid = mockGrid; // Update the grid in the mock store
 		},

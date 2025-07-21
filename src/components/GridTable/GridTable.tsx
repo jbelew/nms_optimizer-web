@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import type { Module } from "../../hooks/useTechTree"; // Import Module type
 import type { Grid } from "../../store/GridStore";
-import { selectGridFixed, selectHasModulesInGrid, useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
@@ -53,8 +53,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
-		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
-		const gridFixed = useGridStore(selectGridFixed);
+		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+		const gridFixed = useGridStore((state) => state.gridFixed);
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(

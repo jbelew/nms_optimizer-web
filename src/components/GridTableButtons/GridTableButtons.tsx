@@ -12,7 +12,7 @@ import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
-import { selectHasModulesInGrid,useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {
 	solving: boolean;
@@ -33,7 +33,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
 	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
-	const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
+	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const handleShowInstructions = useCallback(() => {

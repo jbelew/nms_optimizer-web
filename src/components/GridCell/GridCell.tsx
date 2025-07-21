@@ -5,7 +5,7 @@ import PropTypes from "prop-types"; // Import PropTypes
 import React, { memo, useCallback, useMemo, useRef } from "react"; // Import useCallback, memo, and useMemo
 import { useTranslation } from "react-i18next";
 
-import { selectTotalSuperchargedCells, useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
 
@@ -37,7 +37,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const cell = useGridStore((state) => state.grid.cells[rowIndex][columnIndex]);
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
 	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
-	const totalSupercharged = useGridStore(selectTotalSuperchargedCells);
+	const totalSupercharged = useGridStore((state) => state.selectTotalSuperchargedCells());
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
 	const [isTouching, setIsTouching] = React.useState(false);

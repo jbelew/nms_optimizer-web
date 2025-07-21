@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
 import { type TechTreeItem } from "../../hooks/useTechTree";
-import { selectHasModulesInGrid, useGridStore } from "../../store/GridStore"; // Import useGridStore
+import { useGridStore } from "../../store/GridStore"; // Import useGridStore
 import { usePlatformStore } from "../../store/PlatformStore";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
@@ -128,7 +128,7 @@ const TechTreeContent: React.FC<TechTreeComponentProps> = React.memo(
 		const techTree = useFetchTechTreeSuspense(selectedShipType); // Pass selectedShipType to useFetchTechTreeSuspense
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 		const { setGridDefinitionAndApplyModules } = useGridStore.getState();
-		const hasModulesInGrid = useGridStore(selectHasModulesInGrid);
+		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 
 		const stringifiedGridDefinition = useMemo(() => {
 			return techTree.grid_definition ? JSON.stringify(techTree.grid_definition) : null;

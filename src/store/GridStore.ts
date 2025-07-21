@@ -503,28 +503,4 @@ export const useGridStore = create<GridStore>()(
 	)
 );
 
-// --- Selectors ---
-export const selectTotalSuperchargedCells = (state: GridStore): number => {
-	let count = 0;
-	for (const row of state.grid.cells) {
-		for (const cell of row) {
-			if (cell.supercharged) {
-				count++;
-			}
-		}
-	}
-	return count;
-};
 
-export const selectHasModulesInGrid = (state: GridStore): boolean => {
-	for (const row of state.grid.cells) {
-		for (const cell of row) {
-			if (cell.module !== null) {
-				return true;
-			}
-		}
-	}
-	return false;
-};
-
-export const selectGridFixed = (state: GridStore): boolean => state.gridFixed;
