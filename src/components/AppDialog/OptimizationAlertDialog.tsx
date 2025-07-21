@@ -82,6 +82,8 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 								void handleForceOptimizeClick();
 							}}
 							aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
+							variant="soft"
+							size="1"
 						>
 							{t("dialogs.optimizationAlert.forceOptimizeButton")}
 						</Button>

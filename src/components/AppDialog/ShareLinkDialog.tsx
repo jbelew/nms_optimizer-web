@@ -76,6 +76,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<IconButton
 						variant="soft"
 						color="cyan"
+						size="1"
 						className="appDialog__close"
 						aria-label="Close dialog"
 					>

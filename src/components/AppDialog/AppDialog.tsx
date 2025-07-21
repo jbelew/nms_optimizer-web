@@ -88,14 +88,15 @@ const AppDialog: React.FC<AppDialogProps> = ({
 					</span>
 					<Separator mt="2" size="4" orientation="horizontal" decorative />
 				</Dialog.Title>
-				<Dialog.Description>
-					<div className="appDialog__container max-h-[70vh] overflow-y-auto">{content}</div>
+				<Dialog.Description className="overflow-y-auto appDialog__container">
+					{content}
 				</Dialog.Description>
 
 				<Dialog.Close>
 					<IconButton
 						variant="soft"
 						color="cyan"
+						size="1"
 						className="appDialog__close"
 						aria-label="Close dialog"
 					>

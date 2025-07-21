@@ -13,7 +13,7 @@
 .appDialog__close {
 	position: absolute;
 	top: 8px;
-	right: 8px;
+	right: 4px;
 }
 
 .appDialog__content--markdown {
@@ -23,6 +23,10 @@
 
 .appDialog__content {
 	border: 1px solid var(--cyan-1);
+}
+
+.appDialog__container {
+	max-height: 80vh;
 }
 
 /* Element: Body (was appDialog__article) - Main content area within the dialog */
