@@ -86,7 +86,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 							}}
 						/>
 						<br />
-						{renderBuildButton({ mt: "3", mb: "1" })}
+						{renderBuildButton({ mt: "3", mb: "0" })}
 					</Callout.Text>
 				</Callout.Root>
 			)}

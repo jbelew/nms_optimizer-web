@@ -1,7 +1,7 @@
 // src/components/app/MainAppContent.tsx
-import { ScrollArea } from "@radix-ui/themes";
 import type { FC } from "react";
 import React, { useCallback, useEffect, useMemo } from "react";
+import { ScrollArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -111,7 +111,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						className="flex-grow w-auto gridContainer__container lg:flex-shrink-0"
 						ref={appLayoutContainerRef}
 					>
-						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">
+						<header className="flex flex-wrap items-center gap-2 mb-4 text-xl heading-styled sm:mb-4 sm:text-2xl">
 							{!isSharedGrid && (
 								<span className="self-start flex-shrink-0 shadow-sm">
 									<ShipSelection solving={solving} />
