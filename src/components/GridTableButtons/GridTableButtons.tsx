@@ -1,17 +1,17 @@
+import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
+import React, { useCallback } from "react";
 import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 	ResetIcon,
 	Share2Icon,
 } from "@radix-ui/react-icons";
-import { Button, IconButton } from "@radix-ui/themes";
-import React, { useCallback } from "react";
+import { Button, IconButton, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
 import { useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {
@@ -28,6 +28,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	techTreeGridDefinition, // Destructure the new prop
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
+	const isLargeAndUp = useBreakpoint("1024px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 
@@ -79,6 +80,11 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	return (
 		<>
+			{!isLargeAndUp && (
+				<div role="gridcell" className="col-span-11 mt-3 mb-1">
+					<Separator size="4" orientation="horizontal" decorative />
+				</div>
+			)}
 			<div role="gridcell" className="col-span-7 gap-2 mt-2 sm:mt-3">
 				{/* This div will contain the left-aligned buttons */}
 				{isSmallAndUp ? (
@@ -156,7 +162,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					))}
 			</div>
 
-			<div role="gridcell" className="flex justify-end col-span-3 mt-2 sm:mt-3 lg:col-span-3">
+			<div role="gridcell" className="flex justify-end col-span-4 mt-2 sm:mt-3 lg:col-span-3">
 				<Button
 					size="2"
 					className={`gridTable__button gridTable__button--reset`}
