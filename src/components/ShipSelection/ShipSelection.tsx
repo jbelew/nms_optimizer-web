@@ -9,7 +9,8 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { type ShipTypeDetail, useShipTypesStore } from "../../hooks/useShipTypes";
+import type { ShipTypeDetail } from "../../hooks/useShipTypes";
+import { useShipTypesStore } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 
@@ -34,13 +35,13 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 		(option: string) => {
 			// Only proceed if the selection is actually different from the current state.
 			// This prevents unnecessary grid resets, especially on initial page load
-					// if an action dispatches with the already-selected ship type.
-				if (option !== selectedShipType) {
-					sendEvent({
-						category: "User Interactions",
-						action: "platform_selection",
-						platform: option,
-					});
+			// if an action dispatches with the already-selected ship type.
+			if (option !== selectedShipType) {
+				sendEvent({
+					category: "User Interactions",
+					action: "platform_selection",
+					platform: option,
+				});
 
 				setSelectedShipType(option);
 
@@ -59,18 +60,13 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 			<DropdownMenu.Trigger disabled={solving}>
 				{isSmallAndUp ? (
 					<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
-						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+						<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
 						<Separator orientation="vertical" color="cyan" decorative />
 						<DropdownMenu.TriggerIcon />
 					</Button>
 				) : (
-					<IconButton
-						size="2"
-						variant="soft"
-						aria-label="Select ship type"
-						className="!shadow-md !mt-1"
-					>
-						<GearIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+					<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
+						<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
 					</IconButton>
 				)}
 			</DropdownMenu.Trigger>
