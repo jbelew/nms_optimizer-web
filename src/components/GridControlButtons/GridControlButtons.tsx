@@ -1,7 +1,7 @@
 // RowControlButton.tsx
+import React from "react";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { IconButton, Tooltip } from "@radix-ui/themes";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
@@ -51,8 +51,8 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 				<Tooltip content={t("gridControls.activateRow")}>
 					<IconButton
 						size={iconButtonSize}
-						variant="outline"
-						radius="full"
+						variant="surface"
+						radius="large"
 						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
@@ -66,9 +66,9 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 			{isLastActiveRow && (
 				<Tooltip content={t("gridControls.deactivateRow")}>
 					<IconButton
-						variant="outline"
+						variant="surface"
 						size={iconButtonSize}
-						radius="full"
+						radius="large"
 						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
