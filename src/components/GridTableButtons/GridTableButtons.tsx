@@ -82,7 +82,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		<>
 			{!isLargeAndUp && (
 				<div role="gridcell" className="col-span-11 mt-3 mb-1">
-					<Separator size="4" orientation="horizontal" decorative />
+					<Separator size="4" color="cyan" orientation="horizontal" decorative />
 				</div>
 			)}
 			<div role="gridcell" className="col-span-7 gap-2 mt-2 sm:mt-3">
