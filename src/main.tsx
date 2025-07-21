@@ -17,13 +17,16 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
+import { DialogProvider } from "./context/DialogContext";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<BrowserRouter>
 			<ErrorBoundary>
 				<Theme appearance="dark" panelBackground="translucent" accentColor="cyan" grayColor="sage">
-					<App />
+					<DialogProvider>
+						<App />
+					</DialogProvider>
 				</Theme>
 			</ErrorBoundary>
 		</BrowserRouter>

@@ -1,7 +1,7 @@
 // src/components/AppDialog/OptimizationAlertDialog.tsx
+import type { FC } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Button, Dialog, Flex } from "@radix-ui/themes";
-import type { FC } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 interface OptimizationAlertDialogProps {
@@ -38,7 +38,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 			}}
 		>
 			<Dialog.Content maxWidth="500px">
-				<Dialog.Title className="text-xl sm:text-2xl heading-styled">
+				<Dialog.Title className="text-xl heading-styled sm:text-2xl">
 					<ExclamationTriangleIcon className="inline w-6 h-6" style={{ color: "var(--amber-9)" }} />{" "}
 					{t("dialogs.titles.optimizationAlert")} {/* Use existing title key */}
 				</Dialog.Title>
@@ -68,7 +68,6 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 					<Dialog.Close>
 						<Button
 							variant="soft"
-							color="gray"
 							onClick={onClose}
 							aria-label={t("dialogs.optimizationAlert.cancelButton")}
 						>

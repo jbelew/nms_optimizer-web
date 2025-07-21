@@ -17,8 +17,9 @@ import { Route, Routes } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import ErrorContent from "./components/AppDialog/ErrorContent";
+import ShareLinkDialog from "./components/AppDialog/ShareLinkDialog"; // Import ShareLinkDialog
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
-import { DialogProvider } from "./context/DialogContext";
+import { useDialog } from "./context/dialog-utils"; // Import useDialog
 // Import the new custom hooks
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
@@ -37,6 +38,7 @@ const App: FC = () => {
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 
 	const { showError, setShowError } = useOptimizeStore();
+	const { activeDialog, closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
 	// Use the new custom hooks
 	useAnalytics();
@@ -48,9 +50,7 @@ const App: FC = () => {
 
 	return (
 		<>
-			<DialogProvider>
-				<MainAppContent buildVersion={build} />
-			</DialogProvider>
+			<MainAppContent buildVersion={build} />
 
 			<Routes>
 				<Route path="/" element={null} />
@@ -66,6 +66,13 @@ const App: FC = () => {
 				content={errorDialogContent}
 				titleKey="dialogs.titles.serverError"
 				title={t("dialogs.titles.serverError")}
+			/>
+
+			{/* Render ShareLinkDialog conditionally */}
+			<ShareLinkDialog
+				isOpen={activeDialog === "shareLink"}
+				shareUrl={shareUrl || ""}
+				onClose={closeDialog}
 			/>
 		</>
 	);

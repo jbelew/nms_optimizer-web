@@ -58,10 +58,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	const handleShareClick = useCallback(() => {
 		const shareUrl = updateUrlForShare();
-		const newWindow = window.open(shareUrl, "_blank", "noopener,noreferrer");
+		openDialog("shareLink", { shareUrl });
 		sendEvent({ category: "User Interactions", action: "shareLink" });
-		if (newWindow) newWindow.focus();
-	}, [updateUrlForShare, sendEvent]);
+	}, [updateUrlForShare, openDialog, sendEvent]);
 
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid" });

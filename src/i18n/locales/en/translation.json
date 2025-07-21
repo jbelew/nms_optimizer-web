@@ -54,7 +54,8 @@
 			"changelog": "Changelog",
 			"serverError": "Server Error!",
 			"optimizationAlert": "Optimization Alert",
-			"translationRequest": "Translators Needed!"
+			"translationRequest": "Translators Needed!",
+			"shareLink": "Share Grid Layout"
 		},
 		"optimizationAlert": {
 			"title": "Optimization Alert!",
@@ -63,6 +64,12 @@
 			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it will probably fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the result.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Force Optimize"
+		},
+		"shareLink": {
+			"description": "Copy the link below to share your current grid layout. Please note that this URL is a snapshot and will not update automatically.",
+			"copyButton": "Copy Link",
+			"copiedButton": "Copied!",
+			"closeButton": "Close"
 		}
 	},
 	"footer": {

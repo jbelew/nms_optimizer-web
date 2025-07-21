@@ -13,6 +13,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const navigate = useNavigate();
 
 	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
+	const [shareUrl, setShareUrl] = useState<string>("");
 	const [isFirstVisit, setIsFirstVisit] = useState(
 		() => !localStorage.getItem("hasVisitedNMSOptimizer")
 	);
@@ -20,7 +21,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	// Effect to sync dialog state with URL
 	useEffect(() => {
 		const path = location.pathname.substring(1); // remove leading '/'
-		if (path === "about" || path === "instructions" || path === "changelog" || path === "translation") {
+		if (path === "about" || path === "instructions" || path === "changelog" || path === "translation" || path === "shareLink") {
 			setActiveDialog(path);
 		} else {
 			setActiveDialog(null);
@@ -28,7 +29,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	}, [location.pathname]);
 
 	const openDialog = useCallback(
-		(dialog: NonNullable<DialogType>) => {
+		(dialog: NonNullable<DialogType>, data?: { shareUrl?: string }) => {
+			if (data?.shareUrl) {
+				setShareUrl(data.shareUrl);
+			}
 			navigate(`/${dialog}`);
 		},
 		[navigate]
@@ -37,6 +41,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const closeDialog = useCallback(() => {
 		if (activeDialog) {
 			navigate("/");
+			setShareUrl(""); // Clear shareUrl when closing dialog
 		}
 	}, [activeDialog, navigate]);
 
@@ -53,6 +58,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		closeDialog,
 		isFirstVisit,
 		onFirstVisitInstructionsDialogOpened,
+		shareUrl,
 	};
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;

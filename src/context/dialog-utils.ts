@@ -2,14 +2,15 @@
 import { createContext, useContext } from "react";
 
 // --- Context Definition ---
-export type DialogType = "about" | "instructions" | "changelog" | "translation" | null;
+export type DialogType = "about" | "instructions" | "changelog" | "translation" | "shareLink" | null;
 
 export interface DialogContextType {
 	activeDialog: DialogType;
-	openDialog: (dialog: NonNullable<DialogType>) => void;
+	openDialog: (dialog: NonNullable<DialogType>, data?: { shareUrl?: string }) => void;
 	closeDialog: () => void;
 	isFirstVisit: boolean;
 	onFirstVisitInstructionsDialogOpened: () => void;
+	shareUrl?: string;
 }
 
 export const DialogContext = createContext<DialogContextType | undefined>(undefined);
