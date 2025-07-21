@@ -4,6 +4,16 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.0 (2025-07-20)
+
+**It's a wrap, my work is done here!**
+
+- Removed dynamic sizing feature due to instability and infinite loop issues.
+- Fixed multiple test failures and refined TechTree store logic.
+- Improved consistency in grid types and corrected various spelling errors.
+- Cleaned up console logs and removed unnecessary visual elements (e.g. double shadow).
+- Refactored and streamlined store-related code.
+
 ## Version 3.0. RC2 (2025-07-17)
 
 - Increased solve window size for Bolt Caster from 3x3 to 3x4 based on user feedback.
