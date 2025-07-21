@@ -25,9 +25,10 @@
 	border: 1px solid var(--cyan-1);
 }
 
-.appDialog__container {
-	max-height: 60vh;
-}
+/* .appDialog__container {
+	height: 80vh;
+	max-height: 90vh;
+} */
 
 /* Element: Body (was appDialog__article) - Main content area within the dialog */
 .appDialog__container article {

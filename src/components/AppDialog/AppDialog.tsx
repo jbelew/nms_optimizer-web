@@ -80,7 +80,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 			open={isOpen} // Control open state
 			onOpenChange={(open) => !open && onClose()}
 		>
-			<Dialog.Content className="appDialog__content--markdown">
+			<Dialog.Content className="appDialog__content--markdown flex max-h-[80vh] flex-col">
 				<Dialog.Title>
 					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
 						{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
@@ -88,7 +88,8 @@ const AppDialog: React.FC<AppDialogProps> = ({
 					</span>
 					<Separator mt="2" size="4" orientation="horizontal" decorative />
 				</Dialog.Title>
-				<Dialog.Description className="overflow-y-auto appDialog__container">
+
+				<Dialog.Description className="flex-1 pr-4 mt-4 overflow-y-auto">
 					{content}
 				</Dialog.Description>
 
@@ -97,7 +98,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						variant="soft"
 						color="cyan"
 						size="1"
-						className="appDialog__close"
+						className="mt-4 appDialog__close"
 						aria-label="Close dialog"
 					>
 						<Cross2Icon />
