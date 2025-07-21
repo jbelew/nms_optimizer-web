@@ -11,7 +11,7 @@ import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 } from "@radix-ui/react-icons";
-import { Dialog, IconButton } from "@radix-ui/themes";
+import { Dialog, IconButton, Separator } from "@radix-ui/themes";
 
 interface AppDialogProps {
 	onClose: () => void;
@@ -86,6 +86,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
 						{title}
 					</span>
+					<Separator mt="2" size="4" orientation="horizontal" decorative />
 				</Dialog.Title>
 				<Dialog.Description>
 					<div className="appDialog__container max-h-[70vh] overflow-y-auto">{content}</div>

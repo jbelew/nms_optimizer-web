@@ -8,7 +8,7 @@ const ErrorContent: React.FC = () => {
 			<span className="block pb-2 text-xl font-semibold tracking-widest text-center errorContent__title">
 				{t("errorContent.signalDisruption")}
 			</span>
-			<p className="pt-1 text-base text-center appContent__text">
+			<p className="pt-1 text-base appContent__text">
 				<Trans
 					i18nKey="errorContent.serverErrorDetails"
 					components={{

@@ -42,7 +42,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 				}
 			}}
 		>
-			<Dialog.Content className="appDialog__content--foo">
+			<Dialog.Content className="appDialog__content">
 				<Dialog.Title className="text-xl heading-styled sm:text-2xl">
 					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
 						<Share2Icon className="inline w-6 h-6" style={{ color: "var(--accent-9)" }} />
