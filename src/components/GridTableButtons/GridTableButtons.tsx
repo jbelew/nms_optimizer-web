@@ -1,3 +1,5 @@
+import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
+import React, { useCallback } from "react";
 import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
@@ -5,13 +7,11 @@ import {
 	Share2Icon,
 } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
-import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
 import { useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {
@@ -65,7 +65,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid" });
 
-		if (techTreeGridDefinition) { // Use techTreeGridDefinition here
+		if (techTreeGridDefinition) {
+			// Use techTreeGridDefinition here
 			useGridStore.getState().setGridDefinitionAndApplyModules(techTreeGridDefinition);
 		} else {
 			// Fallback to a completely empty grid if no initial definition is available
@@ -84,7 +85,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Button
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2  ${
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${
 							isFirstVisit ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -97,7 +98,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<IconButton
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2  ${
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${
 							isFirstVisit ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -139,8 +140,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							aria-label={t("buttons.share")}
 						>
 							<Share2Icon />
-							<span className="hidden sm:inline">{t("buttons.share")}
-							</span>
+							<span className="hidden sm:inline">{t("buttons.share")}</span>
 						</Button>
 					) : (
 						<IconButton
@@ -156,10 +156,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					))}
 			</div>
 
-			<div role="gridcell" className="flex justify-end col-span-3 mt-2 sm:mt-3">
+			<div role="gridcell" className="flex justify-end col-span-4 mt-2 sm:mt-3 lg:col-span-3">
 				<Button
 					size="2"
-					className={`gridTable__button gridTable__button--reset `}
+					className={`gridTable__button gridTable__button--reset`}
 					variant="solid"
 					onClick={handleResetGrid}
 					disabled={solving}
