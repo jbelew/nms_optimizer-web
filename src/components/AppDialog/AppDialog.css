@@ -26,7 +26,7 @@
 }
 
 .appDialog__container {
-	max-height: 80vh;
+	max-height: 60vh;
 }
 
 /* Element: Body (was appDialog__article) - Main content area within the dialog */
