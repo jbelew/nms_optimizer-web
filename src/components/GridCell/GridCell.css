@@ -42,7 +42,7 @@
 }
 
 .gridCell--inactive {
-	border-color: var(--gray-a6);
+	border-color: var(--gray-a7);
 	background-color: var(--gray-a3);
 }
 
