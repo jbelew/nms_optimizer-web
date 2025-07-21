@@ -13,6 +13,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 - Improved consistency in grid types and corrected various spelling errors.
 - Cleaned up console logs and removed unnecessary visual elements (e.g. double shadow).
 - Refactored and streamlined store-related code.
+- Added a "Share Grid" dialog interstational and refactored Dialog Boxes throughout.
 
 ## Version 3.0. RC2 (2025-07-17)
 
