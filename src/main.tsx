@@ -29,3 +29,9 @@ createRoot(document.getElementById("root")!).render(
 		</BrowserRouter>
 	</StrictMode>
 );
+
+// Hide the static content from screen readers after the app has been rendered.
+const staticContent = document.querySelector("main.visually-hidden");
+if (staticContent) {
+	staticContent.setAttribute("aria-hidden", "true");
+}

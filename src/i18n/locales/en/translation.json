@@ -124,6 +124,8 @@
 			"Propulsion": "Propulsion",
 			"Life Support": "Health & Life Support",
 			"Hazard Protection": "Hazard Protection",
+			"Quest Rewards": "Quest Rewards",
+			"Upgrade Modules": "Upgrade Modules",
 			"Movement Systems": "Movement Systems"
 		},
 		"recommendedBuilds": {

@@ -1,5 +1,3 @@
-import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
-import React, { useCallback } from "react";
 import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
@@ -7,11 +5,13 @@ import {
 	Share2Icon,
 } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
+import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
+import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
 import { useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {

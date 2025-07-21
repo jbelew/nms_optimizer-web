@@ -33,6 +33,8 @@ const typeImageMap: TypeImageMap = {
 	"Hazard Protection": "hazard.webp",
 	"Life Support": "health.webp",
 	"Movement Systems": "movement.webp",
+	"Quest Rewards": "secondary2.webp",
+	"Upgrade Modules": "upgrade.webp",
 };
 
 interface TechTreeComponentProps {
