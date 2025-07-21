@@ -1,7 +1,7 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
+import React from "react";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 import { Button, Callout, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
-import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
@@ -22,7 +22,6 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	const { t } = useTranslation();
 	const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 	const { sendEvent } = useAnalytics();
-	const componentRef = React.useRef<HTMLDivElement>(null);
 
 	const builds = techTree.recommended_builds || [];
 
@@ -71,7 +70,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	};
 
 	return (
-		<div ref={componentRef}>
+		<div>
 			{isLarge ? (
 				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
 			) : (
