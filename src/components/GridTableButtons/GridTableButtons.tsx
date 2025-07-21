@@ -156,7 +156,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					))}
 			</div>
 
-			<div role="gridcell" className="flex justify-end col-span-4 mt-2 sm:mt-3 lg:col-span-3">
+			<div role="gridcell" className="flex justify-end col-span-3 mt-2 sm:mt-3 lg:col-span-3">
 				<Button
 					size="2"
 					className={`gridTable__button gridTable__button--reset`}
