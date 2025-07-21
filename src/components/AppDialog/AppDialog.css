@@ -18,11 +18,11 @@
 
 .appDialog__content--markdown {
 	padding-right: 8px;
-	border: 1px solid var(--cyan-1);
+	border: 1px solid var(--cyan-0);
 }
 
 .appDialog__content {
-	border: 1px solid var(--cyan-1);
+	border: 1px solid var(--cyan-0);
 }
 
 /* .appDialog__container {
