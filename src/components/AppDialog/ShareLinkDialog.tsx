@@ -1,7 +1,14 @@
 // src/components/AppDialog/ShareLinkDialog.tsx
+
 import type { FC } from "react";
 import { useState } from "react";
-import { CheckIcon, CopyIcon, Cross2Icon, ExternalLinkIcon, Share2Icon } from "@radix-ui/react-icons";
+import {
+	CheckIcon,
+	CopyIcon,
+	Cross2Icon,
+	ExternalLinkIcon,
+	Share2Icon,
+} from "@radix-ui/react-icons";
 import { Button, Dialog, Flex, IconButton, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -35,10 +42,12 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 				}
 			}}
 		>
-			<Dialog.Content maxWidth="500px">
+			<Dialog.Content className="appDialog__content--foo">
 				<Dialog.Title className="text-xl heading-styled sm:text-2xl">
-					<Share2Icon className="inline w-6 h-6" style={{ color: "var(--accent-9)" }} />{" "}
-					{t("dialogs.titles.shareLink")}
+					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
+						<Share2Icon className="inline w-6 h-6" style={{ color: "var(--accent-9)" }} />
+						{t("dialogs.titles.shareLink")}
+					</span>
 				</Dialog.Title>
 				<Dialog.Description size="2" mb="4">
 					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">

@@ -37,7 +37,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 				}
 			}}
 		>
-			<Dialog.Content maxWidth="500px">
+			<Dialog.Content maxWidth="500px" className="appDialog__content">
 				<Dialog.Title className="text-xl heading-styled sm:text-2xl">
 					<ExclamationTriangleIcon className="inline w-6 h-6" style={{ color: "var(--amber-9)" }} />{" "}
 					{t("dialogs.titles.optimizationAlert")} {/* Use existing title key */}

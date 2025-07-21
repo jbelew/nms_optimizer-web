@@ -1,7 +1,8 @@
 // src/components/InfoDialog/InfoDialog.tsx
 import "./AppDialog.css";
 
-import * as Dialog from "@radix-ui/react-dialog";
+import type { ReactNode } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
 	CounterClockwiseClockIcon,
 	Cross2Icon,
@@ -10,8 +11,7 @@ import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 } from "@radix-ui/react-icons";
-import { IconButton, Theme } from "@radix-ui/themes";
-import React, { type ReactNode, useCallback, useEffect } from "react";
+import { Dialog, IconButton } from "@radix-ui/themes";
 
 interface AppDialogProps {
 	onClose: () => void;
@@ -79,33 +79,29 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		<Dialog.Root
 			open={isOpen} // Control open state
 			onOpenChange={(open) => !open && onClose()}
-			modal={true} // Keep it modal
 		>
-			<Dialog.Portal>
-				<Theme appearance="dark">
-					<Dialog.Overlay className="appDialog__overlay" />
-					<Dialog.Content className="appDialog__content" style={{ paddingTop: "var(--space-3)" }}>
-						<Dialog.Title className="flex items-start gap-2 text-xl sm:text-2xl heading-styled">
-							{IconComponent && <IconComponent className="w-6 h-6 mt-0 sm:mt-1" style={style} />}
-							{title}
-						</Dialog.Title>
-						<Dialog.Description className="hidden appDialog__description">
-							This dialog contains information.
-						</Dialog.Description>
-						<div className="appDialog__container">{content}</div>
-						<Dialog.Close asChild>
-							<IconButton
-								variant="soft"
-								color="cyan"
-								className="appDialog__close"
-								aria-label="Close dialog"
-							>
-								<Cross2Icon />
-							</IconButton>
-						</Dialog.Close>
-					</Dialog.Content>
-				</Theme>
-			</Dialog.Portal>
+			<Dialog.Content className="appDialog__content--markdown">
+				<Dialog.Title>
+					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
+						{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
+						{title}
+					</span>
+				</Dialog.Title>
+				<Dialog.Description>
+					<div className="appDialog__container max-h-[70vh] overflow-y-auto">{content}</div>
+				</Dialog.Description>
+
+				<Dialog.Close>
+					<IconButton
+						variant="soft"
+						color="cyan"
+						className="appDialog__close"
+						aria-label="Close dialog"
+					>
+						<Cross2Icon />
+					</IconButton>
+				</Dialog.Close>
+			</Dialog.Content>
 		</Dialog.Root>
 	);
 };
