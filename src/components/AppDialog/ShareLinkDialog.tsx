@@ -1,8 +1,8 @@
 // src/components/AppDialog/ShareLinkDialog.tsx
 import type { FC } from "react";
-import { CheckIcon, CopyIcon, Share2Icon } from "@radix-ui/react-icons";
-import { Button, Dialog, Flex, Text, TextArea } from "@radix-ui/themes";
 import { useState } from "react";
+import { CheckIcon, CopyIcon, ExternalLinkIcon, Share2Icon } from "@radix-ui/react-icons";
+import { Button, Dialog, Flex, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 interface ShareLinkDialogProps {
@@ -44,7 +44,13 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<Text as="p" mb="4">
 						{t("dialogs.shareLink.description")}
 					</Text>
-					<TextArea value={shareUrl} variant="surface" color="cyan" readOnly rows={6} />
+					<TextArea value={shareUrl} variant="surface" color="cyan" readOnly rows={8} />
+					<Text as="p" size="2" mt="2" mb="4" align="right">
+						<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
+							{t("dialogs.shareLink.openLink")}
+							<ExternalLinkIcon className="inline-block ml-1" />
+						</Link>
+					</Text>
 				</Dialog.Description>
 				<Flex gap="3" mt="4" justify="end">
 					<Dialog.Close>

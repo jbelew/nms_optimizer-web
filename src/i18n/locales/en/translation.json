@@ -69,7 +69,8 @@
 			"description": "Copy the link below to share your current grid layout. Please note that this URL is a snapshot and will not update automatically.",
 			"copyButton": "Copy Link",
 			"copiedButton": "Copied!",
-			"closeButton": "Close"
+			"closeButton": "Close",
+			"openLink": "Open Link"
 		}
 	},
 	"footer": {

@@ -21,7 +21,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	// Effect to sync dialog state with URL
 	useEffect(() => {
 		const path = location.pathname.substring(1); // remove leading '/'
-		if (path === "about" || path === "instructions" || path === "changelog" || path === "translation" || path === "shareLink") {
+		if (path === "about" || path === "instructions" || path === "changelog" || path === "translation") {
 			setActiveDialog(path);
 		} else {
 			setActiveDialog(null);
@@ -29,21 +29,23 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	}, [location.pathname]);
 
 	const openDialog = useCallback(
-		(dialog: NonNullable<DialogType>, data?: { shareUrl?: string }) => {
+		(dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string }) => {
 			if (data?.shareUrl) {
 				setShareUrl(data.shareUrl);
+			} else {
+				navigate(`/${dialog}`);
 			}
-			navigate(`/${dialog}`);
 		},
 		[navigate]
 	);
 
 	const closeDialog = useCallback(() => {
-		if (activeDialog) {
+		if (shareUrl) {
+			setShareUrl("");
+		} else if (activeDialog) {
 			navigate("/");
-			setShareUrl(""); // Clear shareUrl when closing dialog
 		}
-	}, [activeDialog, navigate]);
+	}, [activeDialog, navigate, shareUrl]);
 
 	const onFirstVisitInstructionsDialogOpened = useCallback(() => {
 		if (isFirstVisit) {

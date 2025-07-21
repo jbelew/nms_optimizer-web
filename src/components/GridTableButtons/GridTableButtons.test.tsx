@@ -176,16 +176,15 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
-		const windowOpenSpy = vi.spyOn(window, "open").mockReturnValue(null);
+		const { openDialog } = useDialog();
 		render(<GridTableButtons {...defaultProps} />);
 		fireEvent.click(screen.getByLabelText("buttons.share"));
 
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
-		expect(windowOpenSpy).toHaveBeenCalledWith("http://share.url", "_blank", "noopener,noreferrer");
+		expect(openDialog).toHaveBeenCalledWith(null, { shareUrl: "http://share.url" });
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "shareLink",
 		});
-		windowOpenSpy.mockRestore();
 	});
 });

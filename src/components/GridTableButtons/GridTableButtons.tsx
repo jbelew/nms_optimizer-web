@@ -58,7 +58,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	const handleShareClick = useCallback(() => {
 		const shareUrl = updateUrlForShare();
-		openDialog("shareLink", { shareUrl });
+		openDialog(null, { shareUrl });
 		sendEvent({ category: "User Interactions", action: "shareLink" });
 	}, [updateUrlForShare, openDialog, sendEvent]);
 

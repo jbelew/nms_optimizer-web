@@ -38,7 +38,7 @@ const App: FC = () => {
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 
 	const { showError, setShowError } = useOptimizeStore();
-	const { activeDialog, closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
+	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
 	// Use the new custom hooks
 	useAnalytics();
@@ -70,7 +70,7 @@ const App: FC = () => {
 
 			{/* Render ShareLinkDialog conditionally */}
 			<ShareLinkDialog
-				isOpen={activeDialog === "shareLink"}
+				isOpen={!!shareUrl}
 				shareUrl={shareUrl || ""}
 				onClose={closeDialog}
 			/>
