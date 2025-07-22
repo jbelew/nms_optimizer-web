@@ -31,9 +31,6 @@
 	gap: calc(var(--spacing) * 4);
 }
 
-.appDialog__content--scrollBar {
-}
-
 /* Element: Title */
 .appDialog__title {
 	letter-spacing: var(--letter-spacing-wide);

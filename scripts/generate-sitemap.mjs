@@ -28,7 +28,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 			return `<url>
     <loc>${page.url}</loc>
     <lastmod>${lastmod}</lastmod>
-    <priority>${page.url.endsWith("/") ? "1.0" : "0.8"}</priority>
+    <priority>${page.url.endsWith("/") ? "1.0" : "1.0"}</priority>
     <changefreq>weekly</changefreq>
   </url>`;
 		})
