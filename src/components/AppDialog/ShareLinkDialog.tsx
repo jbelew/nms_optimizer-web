@@ -45,7 +45,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<TextArea
 						size={{ initial: "2", sm: "3" }}
 						value={shareUrl}
-						aria-disabled
+						readOnly
 						rows={8}
 						// style={{ color: "var(--accent-track) !important" }}
 					/>
