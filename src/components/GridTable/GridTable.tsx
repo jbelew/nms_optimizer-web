@@ -1,11 +1,13 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.css";
 
-import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-
 import type { Module } from "../../hooks/useTechTree"; // Import Module type
 import type { Grid } from "../../store/GridStore";
+import React, { useMemo } from "react";
+import { Separator } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";
@@ -55,6 +57,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { t } = useTranslation();
 		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 		const gridFixed = useGridStore((state) => state.gridFixed);
+		const isLarge = useBreakpoint("1024px");
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
@@ -92,6 +95,10 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					showRandomMessages={true}
 					initialMessage={t("gridTable.optimizing")}
 				/>
+				{!isLarge && (
+					<Separator size="4" color="cyan" orientation="horizontal" decorative className="mb-4" />
+				)}
+
 				<div
 					ref={ref}
 					role="grid"
@@ -131,6 +138,11 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							</div>
 						</div>
 					))}
+					{!isLarge && (
+						<div className="col-span-11 mt-3">
+							<Separator size="4" color="cyan" orientation="horizontal" decorative />
+						</div>
+					)}
 					<div role="row">
 						<GridTableButtons
 							solving={solving}

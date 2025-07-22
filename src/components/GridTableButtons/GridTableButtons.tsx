@@ -6,7 +6,7 @@ import {
 	ResetIcon,
 	Share2Icon,
 } from "@radix-ui/react-icons";
-import { Button, IconButton, Separator } from "@radix-ui/themes";
+import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -28,7 +28,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	techTreeGridDefinition, // Destructure the new prop
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
-	const isLargeAndUp = useBreakpoint("1024px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 
@@ -79,11 +78,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	return (
 		<>
-			{!isLargeAndUp && (
-				<div role="gridcell" className="col-span-11 mt-3">
-					<Separator size="4" orientation="horizontal" decorative />
-				</div>
-			)}
 			<div role="gridcell" className="col-span-6 gap-2 mt-3">
 				{/* This div will contain the left-aligned buttons */}
 				{isSmallAndUp ? (
