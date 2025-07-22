@@ -1,7 +1,7 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
 import React from "react";
 import { MagicWandIcon } from "@radix-ui/react-icons";
-import { Button, Callout, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
+import { Button, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
@@ -74,21 +74,26 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 			{isLarge ? (
 				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
 			) : (
-				<Callout.Root mb="2" mt="4" size="1" highContrast>
-					<Callout.Icon>🧪</Callout.Icon>
-					<Callout.Text wrap="pretty" trim="start">
-						<Trans
-							i18nKey="techTree.recommendedBuilds.summary"
-							components={{
-								1: <Strong />,
-								3: <Strong />,
-								5: <Em />,
-							}}
-						/>
-						<br />
-						{renderBuildButton({ mt: "3", mb: "0" })}
-					</Callout.Text>
-				</Callout.Root>
+				<div
+					className="p-4 mt-4 mb-4 text-sm rounded-md sm:text-base"
+					style={{ backgroundColor: "var(--accent-a3)" }}
+				>
+					<div className="flex items-start">
+						<span className="mr-2">🧪</span>
+						<div>
+							<Trans
+								i18nKey="techTree.recommendedBuilds.summary"
+								components={{
+									1: <Strong />,
+									3: <Strong />,
+									5: <Em />,
+								}}
+							/>
+							<br />
+							{renderBuildButton({ mt: "3", mb: "0" })}
+						</div>
+					</div>
+				</div>
 			)}
 		</div>
 	);
