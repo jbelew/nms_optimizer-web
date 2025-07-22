@@ -111,7 +111,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						className="flex-grow w-auto gridContainer__container lg:flex-shrink-0"
 						ref={appLayoutContainerRef}
 					>
-						<header className="flex flex-wrap items-center gap-2 mb-4 text-xl heading-styled sm:mb-4 sm:text-2xl">
+						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">
 							{!isSharedGrid && (
 								<span className="self-start flex-shrink-0 shadow-sm">
 									<ShipSelection solving={solving} />
@@ -131,7 +131,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						</header>
 
 						{!isLarge && (
-							<div role="gridcell" className="col-span-11 mt-4 mb-4 sm:mt-2">
+							<div role="gridcell" className="col-span-11 mb-4">
 								<Separator size="4" orientation="horizontal" decorative />
 							</div>
 						)}
