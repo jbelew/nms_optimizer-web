@@ -10,11 +10,11 @@ If you're still unlocking slots or gathering upgrades, the tool can still offer 
 
 ## Basic Usage
 
-- **Click or tap** the ⚙️ button to select your **Platform** type.
+- **Click or tap** the ⚙️ button to select your **Technology** type.
 - **Click or double-tap** a cell to toggle its **Supercharged** state (up to 4 per grid).
 - **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on touchscreens) to enable or disable individual cells.
 - Use the **row toggle buttons** to enable or disable entire rows. These buttons are **disabled after modules are placed**, and re-enabled when you press **Reset Grid**.
-> **Note:** Exosuits and Exocraft have a fixed grid state — their cells cannot be modified.
+  > **Note:** Exosuits and Exocraft have a fixed grid state — their cells cannot be modified.
 
 ## Usage Tips
 

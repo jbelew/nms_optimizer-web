@@ -60,7 +60,7 @@
 		"optimizationAlert": {
 			"title": "Optimization Alert!",
 			"warning": "-kzzkt- Warning! -kzzkt-",
-			"insufficientSpace": "There isn't enough space to effectively place all modules for the technology <1>{{technologyName}}</1>. This usually happens when too many technologies are selected for your platform.",
+			"insufficientSpace": "There isn't enough space to effectively place all modules for the technology <1>{{technologyName}}</1>. This usually happens when too many technologies are selected for your technology.",
 			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it will probably fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the result.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Force Optimize"
@@ -82,7 +82,7 @@
 		"prompt": "Looking for volunteer translators! Click <1>here</1> for more information.",
 		"openDialogLabel": "Translators needed!"
 	},
-	"platformLabel": "PLATFORM:",
+	"platformLabel": "TECHNOLOGY:",
 	"unknownPlatform": "Unknown ({{platformKey}})",
 	"platformTypes": {
 		"Starship": "Starships",
@@ -139,7 +139,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Select a Recommended Build",
 			"applyBuildButton": "Apply Recommended Build",
-			"summary": "Platforms with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
+			"summary": "Technologies with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",
