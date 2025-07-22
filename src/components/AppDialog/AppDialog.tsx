@@ -4,17 +4,11 @@ import "./AppDialog.css";
 import type { ReactNode } from "react";
 import React, { useCallback, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-	CounterClockwiseClockIcon,
-	Cross2Icon,
-	ExclamationTriangleIcon,
-	GlobeIcon,
-	InfoCircledIcon,
-	QuestionMarkCircledIcon,
-	Share2Icon,
-} from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+
+import { getDialogIconAndStyle } from "../../utils/dialogIconMapping";
 
 interface AppDialogProps {
 	onClose: () => void;
@@ -23,21 +17,6 @@ interface AppDialogProps {
 	isOpen: boolean;
 	content: ReactNode;
 }
-
-const iconMap: Record<string, React.ElementType> = {
-	"dialogs.titles.instructions": QuestionMarkCircledIcon,
-	"dialogs.titles.changelog": CounterClockwiseClockIcon,
-	"dialogs.titles.about": InfoCircledIcon,
-	"dialogs.titles.serverError": ExclamationTriangleIcon,
-	"dialogs.titles.translationRequest": GlobeIcon,
-	"dialogs.titles.shareLink": Share2Icon,
-	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
-};
-
-const iconStyle: Record<string, { color: string }> = {
-	"dialogs.titles.serverError": { color: "var(--red-9)" },
-	default: { color: "var(--accent-11)" },
-};
 
 /**
  * A Dialog component for displaying information to the user.
@@ -79,8 +58,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 
 	const { t } = useTranslation();
 
-	const IconComponent = titleKey ? iconMap[titleKey] : null;
-	const style = titleKey ? iconStyle[titleKey] || iconStyle.default : iconStyle.default;
+	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
 
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
