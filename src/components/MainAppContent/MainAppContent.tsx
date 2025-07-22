@@ -139,6 +139,8 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
 							techTreeGridDefinition={techTree.grid_definition} // Pass the techTree.grid_definition
+							techTree={techTree}
+							gridContainerRef={gridContainerRef}
 						/>
 					</div>
 					{!isSharedGrid && (
@@ -168,13 +170,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 									className={`w-full flex-grow ${techTree.recommended_builds && techTree.recommended_builds.length > 0 ? "pt-4" : "pt-8"}`}
 									style={{ minHeight: "550px" }}
 								>
-									{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
-										<RecommendedBuild
-											techTree={techTree}
-											gridContainerRef={gridContainerRef}
-											isLarge={isLarge}
-										/>
-									)}
+									
 									<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
 								</aside>
 							)}
