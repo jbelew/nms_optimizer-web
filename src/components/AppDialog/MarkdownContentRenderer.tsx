@@ -46,6 +46,9 @@ const components: object = {
 	),
 	code: ({ children }: { children: React.ReactNode }) => <Code variant="soft">{children}</Code>,
 	kbd: ({ children }: { children: React.ReactNode }) => <Kbd>{children}</Kbd>,
+	img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
+		<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
+	),
 	hr: () => <Separator size="4" color="cyan" orientation="horizontal" decorative mb="2" />,
 };
 
