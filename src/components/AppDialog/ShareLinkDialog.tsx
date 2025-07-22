@@ -42,7 +42,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
 						{t("dialogs.shareLink.description")}
 					</Text>
-					<TextArea value={shareUrl} readOnly rows={8} />
+					<TextArea size={{ initial: "2", sm: "3" }} value={shareUrl} readOnly rows={8} />
 					<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
 						<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 							{t("dialogs.shareLink.openLink")}
