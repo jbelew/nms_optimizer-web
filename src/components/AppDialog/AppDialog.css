@@ -1,3 +1,38 @@
+/* src/components/AppDialog/AppDialog.css */
+
+/* Element: Overlay */
+.appDialog__overlay {
+	background-color: black;
+	position: fixed;
+	inset: 0;
+}
+
+/* Element: Content */
+.appDialog__content {
+	/* background-color: var(--color-panel-solid); */
+	background-color: var(--cyan-5);
+	border-radius: 8px;
+	box-shadow:
+		hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+		hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90vw;
+	max-width: 512px;
+	max-height: 80vh;
+	padding: calc(var(--spacing) * 4);
+	padding-right: calc(var(--spacing) * 2);
+	padding-bottom: calc(var(--spacing) * 6);
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--spacing) * 4);
+}
+
+.appDialog__content--scrollBar {
+}
+
 /* Element: Title */
 .appDialog__title {
 	letter-spacing: var(--letter-spacing-wide);
@@ -6,34 +41,88 @@
 	text-transform: uppercase;
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 	-webkit-text-stroke: 0.75px;
-	margin-right: 1rem;
+	margin-right: 1rem; /* Kept for alignment, as title is likely outside the scrollable container */
 }
 
 /* Element: Close Button */
 .appDialog__close {
 	position: absolute;
 	top: 8px;
-	right: 4px;
+	right: 8px;
 }
 
-.appDialog__content--markdown {
-	padding-right: 8px;
-	border: 1px solid var(--cyan-0);
+/* Element: Container */
+.appDialog__container {
+	overflow-y: auto;
+	flex-grow: 1;
 }
-
-.appDialog__content {
-	border: 1px solid var(--cyan-0);
-}
-
-/* .appDialog__container {
-	height: 80vh;
-	max-height: 90vh;
-} */
 
 /* Element: Body (was appDialog__article) - Main content area within the dialog */
 .appDialog__container article {
 	font-size: var(--text-base);
 	padding-right: calc(var(--spacing) * 4);
+}
+
+/* Overlay Animations */
+.appDialog__overlay[data-state="open"] {
+	animation: appDialog__overlay-show 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.appDialog__overlay[data-state="closed"] {
+	animation: appDialog__overlay-hide 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Content Animations */
+.appDialog__content[data-state="open"] {
+	animation: appDialog__content-show 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.appDialog__content[data-state="closed"] {
+	animation: appDialog__content-hide 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- Keyframes --- */
+
+/* Keyframes: Overlay Show */
+@keyframes appDialog__overlay-show {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 0.5;
+	}
+}
+
+/* Keyframes: Content Show */
+@keyframes appDialog__content-show {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+/* Keyframes: Overlay Hide */
+@keyframes appDialog__overlay-hide {
+	from {
+		opacity: 0.5;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+/* Keyframes: Content Hide */
+@keyframes appDialog__content-hide {
+	from {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.96); /* Reverse of show animation */
+	}
 }
 
 @media (max-width: 640px) {

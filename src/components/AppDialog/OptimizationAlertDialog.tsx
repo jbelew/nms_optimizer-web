@@ -1,7 +1,10 @@
 // src/components/AppDialog/OptimizationAlertDialog.tsx
 import type { FC } from "react";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Button, Dialog, Flex } from "@radix-ui/themes";
+
+import { Button, Flex } from "@radix-ui/themes";
+import AppDialog from "./AppDialog";
+import * as Dialog from "@radix-ui/react-dialog";
+
 import { Trans, useTranslation } from "react-i18next";
 
 interface OptimizationAlertDialogProps {
@@ -29,20 +32,12 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	};
 
 	return (
-		<Dialog.Root
-			open={isOpen}
-			onOpenChange={(openStatus) => {
-				if (!openStatus) {
-					onClose();
-				}
-			}}
-		>
-			<Dialog.Content maxWidth="500px" className="appDialog__content">
-				<Dialog.Title className="text-xl heading-styled sm:text-2xl">
-					<ExclamationTriangleIcon className="inline w-6 h-6" style={{ color: "var(--amber-9)" }} />{" "}
-					{t("dialogs.titles.optimizationAlert")} {/* Use existing title key */}
-				</Dialog.Title>
-				<Dialog.Description size="2" mb="4">
+		<AppDialog
+			isOpen={isOpen}
+			onClose={onClose}
+			titleKey="dialogs.titles.optimizationAlert"
+			content={
+				<>
 					<span className="block pb-2 text-xl font-semibold tracking-widest text-center errorContent__title">
 						{t("dialogs.optimizationAlert.warning")}
 					</span>
@@ -63,34 +58,32 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 							}}
 						/>
 					</span>
-				</Dialog.Description>
-				<Flex gap="2" mt="4" justify="end">
-					<Dialog.Close>
-						<Button
-							variant="soft"
-							onClick={onClose}
-							aria-label={t("dialogs.optimizationAlert.cancelButton")}
-						>
-							{t("dialogs.optimizationAlert.cancelButton")}
-						</Button>
-					</Dialog.Close>
-					<Dialog.Close>
-						<Button
-							// Wrap the async call and use 'void' to explicitly ignore the promise
-							// for the onClick handler, which expects a void return.
-							onClick={() => {
-								void handleForceOptimizeClick();
-							}}
-							aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
-							variant="soft"
-							size="1"
-						>
-							{t("dialogs.optimizationAlert.forceOptimizeButton")}
-						</Button>
-					</Dialog.Close>
-				</Flex>
-			</Dialog.Content>
-		</Dialog.Root>
+					<Flex gap="2" mt="4" justify="end">
+						<Dialog.Close asChild>
+							<Button
+								variant="soft"
+								onClick={onClose}
+								aria-label={t("dialogs.optimizationAlert.cancelButton")}
+							>
+								{t("dialogs.optimizationAlert.cancelButton")}
+							</Button>
+						</Dialog.Close>
+						<Dialog.Close asChild>
+							<Button
+								onClick={() => {
+									void handleForceOptimizeClick();
+								}}
+								aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
+								variant="soft"
+								size="1"
+							>
+								{t("dialogs.optimizationAlert.forceOptimizeButton")}
+							</Button>
+						</Dialog.Close>
+					</Flex>
+				</>
+			}
+		/>
 	);
 };
 

@@ -3,6 +3,7 @@ import "./AppDialog.css";
 
 import type { ReactNode } from "react";
 import React, { useCallback, useEffect } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 import {
 	CounterClockwiseClockIcon,
 	Cross2Icon,
@@ -10,8 +11,10 @@ import {
 	GlobeIcon,
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
+	Share2Icon,
 } from "@radix-ui/react-icons";
-import { Dialog, IconButton, Separator } from "@radix-ui/themes";
+import { IconButton, Separator, Theme } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 interface AppDialogProps {
 	onClose: () => void;
@@ -27,6 +30,7 @@ const iconMap: Record<string, React.ElementType> = {
 	"dialogs.titles.about": InfoCircledIcon,
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.translationRequest": GlobeIcon,
+	"dialogs.titles.shareLink": Share2Icon,
 };
 
 const iconStyle: Record<string, { color: string }> = {
@@ -72,39 +76,43 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		return () => window.removeEventListener("keydown", handleEscapeKey);
 	}, [handleEscapeKey]);
 
+	const { t } = useTranslation();
+
 	const IconComponent = titleKey ? iconMap[titleKey] : null;
 	const style = titleKey ? iconStyle[titleKey] || iconStyle.default : iconStyle.default;
 
 	return (
-		<Dialog.Root
-			open={isOpen} // Control open state
-			onOpenChange={(open) => !open && onClose()}
-		>
-			<Dialog.Content className="appDialog__content--markdown flex max-h-[72vh] w-[512px] max-w-[72vw] flex-col">
-				<Dialog.Title className="pr-4">
-					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
-						{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
-						{title}
-					</span>
-					<Separator mt="2" size="4" orientation="horizontal" decorative />
-				</Dialog.Title>
+		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<Dialog.Portal>
+				<Theme appearance="dark">
+					<Dialog.Overlay className="appDialog__overlay" />
+					<Dialog.Content className="appDialog__content">
+						<Dialog.Title>
+							<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
+								{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
+								{titleKey ? t(titleKey) : title}
+							</span>
+							<Separator mt="2" size="4" orientation="horizontal" decorative />
+						</Dialog.Title>
 
-				<Dialog.Description className="flex-1 pr-4 mt-4 overflow-y-auto">
-					{content}
-				</Dialog.Description>
+						<Dialog.Description className="flex-1 pr-4 overflow-y-auto">
+							{content}
+						</Dialog.Description>
 
-				<Dialog.Close>
-					<IconButton
-						variant="soft"
-						color="cyan"
-						size="1"
-						className="mt-4 appDialog__close"
-						aria-label="Close dialog"
-					>
-						<Cross2Icon />
-					</IconButton>
-				</Dialog.Close>
-			</Dialog.Content>
+						<Dialog.Close asChild>
+							<IconButton
+								variant="soft"
+								color="cyan"
+								size="1"
+								className="appDialog__close"
+								aria-label="Close dialog"
+							>
+								<Cross2Icon />
+							</IconButton>
+						</Dialog.Close>
+					</Dialog.Content>
+				</Theme>
+			</Dialog.Portal>
 		</Dialog.Root>
 	);
 };
