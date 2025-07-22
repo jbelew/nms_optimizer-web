@@ -1,7 +1,7 @@
 // src/components/app/MainAppContent.tsx
 import type { FC } from "react";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { ScrollArea } from "@radix-ui/themes";
+import { ScrollArea, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -121,7 +121,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								{t("platformLabel")}
 							</span>
 							<span
-								className="mt-[6] min-w-0 flex-1 self-start sm:mt-0"
+								className="mt-[8px] min-w-0 flex-1 self-start sm:mt-[0px]"
 								style={{
 									textWrap: "balance",
 								}}
@@ -129,6 +129,12 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								{t(`platforms.${selectedShipType}`)}
 							</span>
 						</header>
+
+						{!isLarge && (
+							<div role="gridcell" className="col-span-11 mt-4 mb-4 sm:mt-2">
+								<Separator size="4" orientation="horizontal" decorative />
+							</div>
+						)}
 						<GridTable
 							grid={grid}
 							solving={solving}
