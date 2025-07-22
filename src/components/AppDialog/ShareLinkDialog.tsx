@@ -2,16 +2,12 @@
 
 import type { FC } from "react";
 import { useState } from "react";
-import {
-	CheckIcon,
-	CopyIcon,
-	ExternalLinkIcon,
-} from "@radix-ui/react-icons";
+import * as Dialog from "@radix-ui/react-dialog";
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import AppDialog from "./AppDialog";
-import * as Dialog from "@radix-ui/react-dialog";
 
+import AppDialog from "./AppDialog";
 
 interface ShareLinkDialogProps {
 	isOpen: boolean;
@@ -46,7 +42,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
 						{t("dialogs.shareLink.description")}
 					</Text>
-					<TextArea value={shareUrl} variant="surface" color="cyan" readOnly rows={8} />
+					<TextArea value={shareUrl} readOnly rows={8} />
 					<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
 						<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 							{t("dialogs.shareLink.openLink")}

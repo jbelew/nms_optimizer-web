@@ -31,6 +31,7 @@ const iconMap: Record<string, React.ElementType> = {
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.translationRequest": GlobeIcon,
 	"dialogs.titles.shareLink": Share2Icon,
+	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 };
 
 const iconStyle: Record<string, { color: string }> = {
@@ -92,7 +93,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 								{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
 								{titleKey ? t(titleKey) : title}
 							</span>
-							<Separator mt="2" size="4" orientation="horizontal" decorative />
+							<Separator mt="2" mr="2" size="4" orientation="horizontal" decorative />
 						</Dialog.Title>
 
 						<Dialog.Description className="flex-1 pr-4 overflow-y-auto">

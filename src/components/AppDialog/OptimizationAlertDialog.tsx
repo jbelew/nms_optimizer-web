@@ -1,11 +1,10 @@
 // src/components/AppDialog/OptimizationAlertDialog.tsx
 import type { FC } from "react";
-
-import { Button, Flex } from "@radix-ui/themes";
-import AppDialog from "./AppDialog";
 import * as Dialog from "@radix-ui/react-dialog";
-
+import { Button, Flex } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
+
+import AppDialog from "./AppDialog";
 
 interface OptimizationAlertDialogProps {
 	isOpen: boolean;
@@ -74,8 +73,6 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 									void handleForceOptimizeClick();
 								}}
 								aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
-								variant="soft"
-								size="1"
 							>
 								{t("dialogs.optimizationAlert.forceOptimizeButton")}
 							</Button>
