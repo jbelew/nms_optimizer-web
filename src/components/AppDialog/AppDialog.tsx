@@ -88,12 +88,12 @@ const AppDialog: React.FC<AppDialogProps> = ({
 				<Theme appearance="dark">
 					<Dialog.Overlay className="appDialog__overlay" />
 					<Dialog.Content className="appDialog__content">
-						<Dialog.Title>
+						<Dialog.Title className="mr-2">
 							<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
 								{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
 								{titleKey ? t(titleKey) : title}
 							</span>
-							<Separator mt="2" mr="2" size="4" orientation="horizontal" decorative />
+							<Separator mt="2" size="4" orientation="horizontal" decorative />
 						</Dialog.Title>
 
 						<Dialog.Description className="flex-1 pr-4 overflow-y-auto">

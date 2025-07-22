@@ -1,7 +1,7 @@
 // src/components/AppDialog/OptimizationAlertDialog.tsx
 import type { FC } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Button, Flex } from "@radix-ui/themes";
+import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import AppDialog from "./AppDialog";
@@ -40,7 +40,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 					<span className="block pb-2 text-xl font-semibold tracking-widest text-center errorContent__title">
 						{t("dialogs.optimizationAlert.warning")}
 					</span>
-					<span className="block mb-2">
+					<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
 						<Trans
 							i18nKey="dialogs.optimizationAlert.insufficientSpace"
 							values={{ technologyName }}
@@ -48,15 +48,15 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 								1: <span className="font-bold uppercase" style={{ color: "var(--accent-11)" }} />,
 							}}
 						/>
-					</span>
-					<span className="block">
+					</Text>
+					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
 						<Trans
 							i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
 							components={{
 								1: <strong />,
 							}}
 						/>
-					</span>
+					</Text>
 					<Flex gap="2" mt="4" justify="end">
 						<Dialog.Close asChild>
 							<Button
