@@ -80,7 +80,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 			open={isOpen} // Control open state
 			onOpenChange={(open) => !open && onClose()}
 		>
-			<Dialog.Content className="appDialog__content--markdown flex max-h-[70vh] w-[512px] max-w-[72vw] flex-col">
+			<Dialog.Content className="appDialog__content--markdown flex max-h-[72vh] w-[512px] max-w-[72vw] flex-col">
 				<Dialog.Title className="pr-4">
 					<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
 						{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
