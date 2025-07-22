@@ -1,8 +1,8 @@
 // src/components/LanguageSelector/LanguageSelector.tsx
 import "./LanguageSelector.css";
 
-import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import React, { useMemo } from "react";
+import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 // Import your SVG flag components
@@ -64,15 +64,14 @@ const LanguageSelector: React.FC = () => {
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				<IconButton
-					variant="surface"
-					radius="full"
+					variant="soft"
 					size={isSmallAndUp ? "2" : "1"}
 					aria-label={t("languageInfo.changeLanguage") || "Change language"}
 				>
 					<img
 						src={currentFlagPath}
 						alt={t("languageInfo.changeLanguage") || "Change language"}
-						className="w-[16] h-[12] sm:w-[20] sm:h-[14]"
+						className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
 					/>
 				</IconButton>
 			</DropdownMenu.Trigger>

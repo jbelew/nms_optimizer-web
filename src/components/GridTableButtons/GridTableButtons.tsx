@@ -84,7 +84,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Separator size="4" orientation="horizontal" decorative />
 				</div>
 			)}
-			<div role="gridcell" className="col-span-7 gap-2 mt-3">
+			<div role="gridcell" className="col-span-6 gap-2 mt-3">
 				{/* This div will contain the left-aligned buttons */}
 				{isSmallAndUp ? (
 					<Button
@@ -161,7 +161,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					))}
 			</div>
 
-			<div role="gridcell" className="flex justify-end col-span-4 mt-3 lg:col-span-3">
+			<div role="gridcell" className="flex justify-end col-span-5 mt-3 lg:col-span-4">
 				<Button
 					size="2"
 					className={`gridTable__button gridTable__button--reset`}
