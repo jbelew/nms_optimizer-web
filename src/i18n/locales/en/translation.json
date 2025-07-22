@@ -204,7 +204,7 @@
 			"paralysis": "Paralysis Mortar",
 			"personal": "Personal Forcefield",
 			"terrian": "Terrain Manipulator",
-			"runic-laser": "Runic Laser"
+			"runic": "Runic Lens"
 		},
 		"other": {
 			"freighter-hyper": "Freighter Hyperdrive",
@@ -415,7 +415,7 @@
 			"paralysis": "Paralysis Mortar",
 			"personal": "Personal Forcefield",
 			"terrian": "Terrain Manipulator",
-			"runic-laser": "Runic Laser",
+			"runic-lens": "Runic Lens",
 			"hijacked": "Hijacked Laser"
 		},
 		"other": {
