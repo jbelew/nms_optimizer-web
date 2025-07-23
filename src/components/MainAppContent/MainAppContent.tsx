@@ -78,15 +78,16 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	);
 
 	return (
-		<main className="flex flex-col items-center justify-center lg:min-h-screen">
-			<section className="relative mx-auto border rounded-none app bg-white/5 backdrop-blur-xl lg:rounded-xl">
+		<main className="flex flex-col items-center justify-center min-h-[100dvh] lg:min-h-screen">
+			<section className="w-full border rounded-none sm:w-auto app bg-white/5 backdrop-blur-xl lg:rounded-xl">
 				<AppHeader onShowChangelog={handleShowChangelog} />
+
 				<section
 					className="flex flex-col items-start p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row"
 					ref={gridContainerRef}
 				>
 					<div
-						className="flex-grow w-auto gridContainer__container lg:flex-shrink-0"
+						className="flex-grow w-full lg:w-auto lg:flex-shrink-0 gridContainer__container"
 						ref={appLayoutContainerRef}
 					>
 						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">

@@ -27,7 +27,7 @@
 	--grid-max-size: 64px;
 	--grid-gap-min-size: 2px;
 	--grid-gap-max-size: 8px;
-	--grid-cell-size: clamp(var(--grid-min-size), 7.5vw, var(--grid-max-size));
+	--grid-cell-size: clamp(var(--grid-min-size), 7.45vw, var(--grid-max-size));
 	--grid-gap: clamp(var(--grid-gap-min-size), 1vw, var(--grid-gap-max-size));
 }
 
