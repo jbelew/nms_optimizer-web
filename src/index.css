@@ -1,26 +1,33 @@
+/* Tailwind base, theme, and utilities layers */
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+/* Global box-sizing reset */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
 /* Optional: Tailwind Typography plugin */
 
 /* Apply custom font styles using Tailwind's @layer directive */
-
 .radix-themes {
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
 	--font-family-geosans: "GeosansLight", sans-serif; /* Added for GeosansLight */
 	--letter-spacing-wide: 0.2rem; /* Added for common letter-spacing */
 	--font-weight-bold: 600; /* Added for common bold weight */
-	--color-background: var(--gary-a1);
+	--color-background: var(--gray-a1); /* Fixed typo: was --gary-a1 */
 }
 
-/* Variables for our grid CLAMP calculations */
+/* Variables for grid CLAMP calculations */
 :root {
 	--grid-min-size: 26px;
 	--grid-max-size: 64px;
 	--grid-gap-min-size: 2px;
 	--grid-gap-max-size: 8px;
-	--grid-cell-size: clamp(var(--grid-min-size), 7.45vw, var(--grid-max-size));
+	--grid-cell-size: clamp(var(--grid-min-size), 7.5vw, var(--grid-max-size));
 	--grid-gap: clamp(var(--grid-gap-min-size), 1vw, var(--grid-gap-max-size));
 }
 

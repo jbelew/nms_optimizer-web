@@ -75,27 +75,29 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
 			) : (
 				<div
-					className="p-2 my-4 text-sm rounded-md sm:text-base"
-					style={{ backgroundColor: "var(--accent-a3)" }}
+					className="flex items-start p-2 text-sm rounded-md sm:text-base bg-[var(--accent-a3)]"
 				>
-					<div className="flex items-start">
-						<span className="mr-2" role="img" aria-label="experiment icon">🧪</span>
-						<div>
-							<Trans
-								i18nKey="techTree.recommendedBuilds.summary"
-								components={{
-									1: <Strong />,
-									3: <Strong />,
-									5: <Em />,
-								}}
-							/>
-							<div className="mt-2">
-								{renderBuildButton({ mb: "2" })}
-							</div>
+					<span
+						className="mr-2 shrink-0"
+						role="img"
+						aria-label="experiment icon"
+					>
+						🧪
+					</span>
+					<div className="flex-1">
+						<Trans
+							i18nKey="techTree.recommendedBuilds.summary"
+							components={{
+								1: <Strong />,
+								3: <Strong />,
+								5: <Em />,
+							}}
+						/>
+						<div className="mt-3">
+							{renderBuildButton({ mb: "2", className: "w-full justify-center" })}
 						</div>
 					</div>
 				</div>
-
 			)}
 		</>
 

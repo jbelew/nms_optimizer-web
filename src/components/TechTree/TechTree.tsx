@@ -97,25 +97,25 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 					)}
 				</>
 			) : (
-				<aside
-					className={`${(techTree.recommended_builds && techTree.recommended_builds.length > 0) ? "mt-0" : "mt-8"
-						}`}
-					style={{ minHeight: "550px" }}
-				>
-					{hasRecommendedBuilds && (
-						<RecommendedBuild
+				<>
+					<div className="mt-4">
+						{hasRecommendedBuilds && (
+							<RecommendedBuild
+								techTree={techTree}
+								gridContainerRef={gridContainerRef}
+								isLarge={isLarge}
+							/>
+						)}
+					</div>
+					<div className="mt-4">
+						<TechTreeContent
+							handleOptimize={handleOptimize}
+							solving={solving}
 							techTree={techTree}
-							gridContainerRef={gridContainerRef}
-							isLarge={isLarge}
+							selectedShipType={selectedShipType}
 						/>
-					)}
-					<TechTreeContent
-						handleOptimize={handleOptimize}
-						solving={solving}
-						techTree={techTree}
-						selectedShipType={selectedShipType}
-					/>
-				</aside>
+					</div>
+				</>
 			)}
 		</>
 	);
