@@ -7,7 +7,6 @@ import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize";
-import { } from "../../hooks/useShipTypes";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -17,7 +16,7 @@ import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
-import ShipSelection from "../ShipSelection/ShipSelection";
+import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 
 /** Props for the MainAppContentInternal component. */
@@ -49,7 +48,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
-		isLarge,
 	} = useAppLayout();
 
 	useEffect(() => {
@@ -128,9 +126,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								handleOptimize={handleOptimize}
 								solving={solving}
 								gridContainerRef={gridContainerRef}
-								isLarge={isLarge}
-								// The techTree prop is fetched within TechTreeContainer, so an empty object is passed here.
-								techTree={{}} />
+							/>
 						</div>
 					)}
 				</section>

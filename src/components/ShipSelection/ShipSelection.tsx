@@ -2,15 +2,14 @@
 import "./ShipSelection.css";
 
 import { GearIcon } from "@radix-ui/react-icons";
-import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
-import PropTypes from "prop-types";
-import React, { useCallback, useMemo, Suspense } from "react";
+import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
+import React, { Suspense, useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import type { ShipTypeDetail } from "../../hooks/useShipTypes";
-import { useShipTypesStore, useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
+import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes";
+import { fetchShipTypes } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 
@@ -22,7 +21,34 @@ interface ShipSelectionProps {
 	solving: boolean;
 }
 
-const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
+const shipTypesResource = fetchShipTypes(); // Start fetching immediately
+
+/**
+ * A skeleton component that mimics the ShipSelection trigger button,
+ * but shows a spinner. Used as a Suspense fallback.
+ */
+const ShipSelectionLoadingState = () => {
+	const isSmallAndUp = useBreakpoint("640px");
+
+	return (
+		<>
+			{isSmallAndUp ? (
+				<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2" disabled>
+					<Spinner size="3" />
+					<Separator orientation="vertical" color="gray" decorative />
+					<DropdownMenu.TriggerIcon />
+				</Button>
+			) : (
+				<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1" disabled>
+					<Spinner size="3" />
+				</IconButton>
+			)}
+		</>
+	);
+};
+
+const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
+	const shipTypes = shipTypesResource.read(); // This will suspend the component
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
 	const setGridAndResetAuxiliaryState = useGridStore(
@@ -31,14 +57,22 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
 
-	// Call useFetchShipTypesSuspense here to trigger data fetching for ship types
-	useFetchShipTypesSuspense();
+	// This validation logic is moved up from the old SuspensefulShipTypesDropdown
+	useEffect(() => {
+		const platformState = usePlatformStore.getState();
+		const currentSelected = platformState.selectedPlatform;
+		const availableTypes = Object.keys(shipTypes);
+
+		if (availableTypes.length > 0 && !availableTypes.includes(currentSelected)) {
+			console.warn(
+				`Selected ship type "${currentSelected}" is not valid. Resetting to "standard".`
+			);
+			platformState.setSelectedPlatform("standard", false);
+		}
+	}, [shipTypes]);
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
-			// Only proceed if the selection is actually different from the current state.
-			// This prevents unnecessary grid resets, especially on initial page load
-			// if an action dispatches with the already-selected ship type.
 			if (option !== selectedShipType) {
 				sendEvent({
 					category: "User Interactions",
@@ -48,9 +82,6 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 
 				setSelectedShipType(option);
 
-				// When the ship type changes, we reset the grid to a default blank state.
-				// Any special grid layouts (like for freighters) are now handled by the API
-				// when fetching the tech tree for that ship type.
 				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
 				setGridAndResetAuxiliaryState(initialGrid);
 			}
@@ -59,59 +90,56 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 	);
 
 	return (
-		<Suspense fallback={<div>Loading Ship Types...</div>}>
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger disabled={solving}>
-				{isSmallAndUp ? (
-					<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
-						<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
-						<Separator orientation="vertical" color="cyan" decorative />
-						<DropdownMenu.TriggerIcon />
-					</Button>
-				) : (
-					<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
-						<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
-					</IconButton>
-				)}
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content color="cyan" className="shipSelection__dropdownMenu">
-
-				<ShipTypesDropdown
-					selectedShipType={selectedShipType}
-					handleOptionSelect={handleOptionSelect}
-					solving={solving}
-				/>
-
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-		</Suspense>
+		<>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger disabled={solving}>
+					{isSmallAndUp ? (
+						<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
+							<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
+							<Separator orientation="vertical" color="cyan" decorative />
+							<DropdownMenu.TriggerIcon />
+						</Button>
+					) : (
+						<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
+							<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
+						</IconButton>
+					)}
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content color="cyan" className="shipSelection__dropdownMenu">
+					<ShipTypesDropdown
+						selectedShipType={selectedShipType}
+						handleOptionSelect={handleOptionSelect}
+						solving={solving}
+						shipTypes={shipTypes}
+					/>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+		</>
 	);
 });
-ShipSelection.displayName = "ShipSelection";
-ShipSelection.propTypes = {
-	solving: PropTypes.bool.isRequired,
+ShipSelectionInternal.displayName = "ShipSelectionInternal";
+
+export const ShipSelection: React.FC<ShipSelectionProps> = (props) => {
+	return (
+		<Suspense fallback={<ShipSelectionLoadingState />}>
+			<ShipSelectionInternal {...props} />
+		</Suspense>
+	);
 };
+ShipSelection.displayName = "ShipSelection";
 
 interface ShipTypesDropdownProps {
 	selectedShipType: string;
 	handleOptionSelect: (option: string) => void;
 	solving: boolean;
+	shipTypes: ShipTypes;
 }
 
-/**
- * Dropdown menu for selecting a ship type, grouped by category.
- *
- * @param selectedShipType - The currently selected ship type key.
- * @param handleOptionSelect - Callback when a different ship type is selected.
- * @param solving - Boolean indicating if the solving process is active, to disable items.
- */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
-	({ selectedShipType, handleOptionSelect, solving }) => {
-		const shipTypes = useShipTypesStore((state) => state.shipTypes);
+	({ selectedShipType, handleOptionSelect, solving, shipTypes }) => {
 		const { t } = useTranslation();
 
 		const groupedShipTypes = useMemo(() => {
-			// Add a guard for when shipTypes might initially be null from the store
 			if (!shipTypes) {
 				return {};
 			}
@@ -121,12 +149,12 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 					if (!acc[type]) {
 						acc[type] = [];
 					}
-					acc[type].push({ key, details }); // 'details' is already ShipTypeDetail
+					acc[type].push({ key, details });
 					return acc;
 				},
 				{} as Record<string, { key: string; details: ShipTypeDetail }[]>
 			);
-		}, [shipTypes]); // Dependency is now shipTypes from the store
+		}, [shipTypes]);
 
 		if (!shipTypes || Object.keys(shipTypes).length === 0) {
 			return <DropdownMenu.Item disabled>{t("loading") || "Loading..."}</DropdownMenu.Item>;
@@ -136,6 +164,7 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 					<React.Fragment key={type}>
+
 						{groupIndex > 0 && <DropdownMenu.Separator />}
 						{items.map(({ key }) => (
 							<DropdownMenu.RadioItem
@@ -154,10 +183,3 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 	}
 );
 ShipTypesDropdown.displayName = "ShipTypesDropdown";
-ShipTypesDropdown.propTypes = {
-	selectedShipType: PropTypes.string.isRequired,
-	handleOptionSelect: PropTypes.func.isRequired,
-	solving: PropTypes.bool.isRequired,
-};
-
-export default ShipSelection;

@@ -70,12 +70,12 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	};
 
 	return (
-		<div>
+		<>
 			{isLarge ? (
 				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
 			) : (
 				<div
-					className="p-4 mt-4 mb-4 text-sm rounded-md sm:text-base"
+					className="p-4 pb-6 my-4 text-sm rounded-md sm:text-base"
 					style={{ backgroundColor: "var(--accent-a3)" }}
 				>
 					<div className="flex items-start">
@@ -95,7 +95,8 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 					</div>
 				</div>
 			)}
-		</div>
+		</>
+
 	);
 };
 
