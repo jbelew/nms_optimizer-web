@@ -29,18 +29,17 @@ const components: object = {
 	blockquote: ({ children }: { children: React.ReactNode }) => <Blockquote mt="2" mb="2">{children}</Blockquote>,
 	ul: ({ children }: { children: React.ReactNode }) => (
 		<Box asChild mb="2">
-			<ul className="pl-6 list-disc">{children}</ul>
+			<ul className="pl-6 text-sm list-disc sm:text-base">{children}</ul>
 		</Box>
 	),
 	ol: ({ children }: { children: React.ReactNode }) => (
 		<Box asChild mb="2">
-			<ol className="pl-6 list-decimal">{children}</ol>
+			<ol className="pl-6 text-sm list-decimal sm:text-base ">{children}</ol>
 		</Box>
 	),
 	li: ({ children }: { children: React.ReactNode }) => (
-		<li><Text size={{ initial: "2", sm: "3" }}>
+		<li className="mb-1">
 			{children}
-		</Text>
 		</li>
 	),
 	code: ({ children }: { children: React.ReactNode }) => <Code variant="soft">{children}</Code>,

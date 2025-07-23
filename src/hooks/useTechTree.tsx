@@ -27,32 +27,32 @@ export interface TechTreeItem {
 	modules: Module[];
 	image: string | null;
 	color:
-		| "gray"
-		| "gold"
-		| "bronze"
-		| "brown"
-		| "yellow"
-		| "amber"
-		| "orange"
-		| "tomato"
-		| "red"
-		| "ruby"
-		| "crimson"
-		| "pink"
-		| "plum"
-		| "purple"
-		| "violet"
-		| "iris"
-		| "indigo"
-		| "blue"
-		| "cyan"
-		| "teal"
-		| "jade"
-		| "green"
-		| "grass"
-		| "lime"
-		| "mint"
-		| "sky"; // Add color property
+	| "gray"
+	| "gold"
+	| "bronze"
+	| "brown"
+	| "yellow"
+	| "amber"
+	| "orange"
+	| "tomato"
+	| "red"
+	| "ruby"
+	| "crimson"
+	| "pink"
+	| "plum"
+	| "purple"
+	| "violet"
+	| "iris"
+	| "indigo"
+	| "blue"
+	| "cyan"
+	| "teal"
+	| "jade"
+	| "green"
+	| "grass"
+	| "lime"
+	| "mint"
+	| "sky"; // Add color property
 	module_count: number;
 }
 
@@ -161,9 +161,8 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
 	const setTechColors = useTechStore((state) => state.setTechColors);
-	const applyModulesToGrid = useGridStore((state) => state.applyModulesToGrid);
-	const setGridFixed = useGridStore((state) => state.setGridFixed);
-	const setSuperchargedFixed = useGridStore((state) => state.setSuperchargedFixed);
+	const setInitialGridDefinition = useGridStore((state) => state.setInitialGridDefinition);
+	const setGridFromInitialDefinition = useGridStore((state) => state.setGridFromInitialDefinition);
 
 	// Extract and set tech colors when the tech tree is available
 	useEffect(() => {
@@ -180,15 +179,14 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 		setTechColors(colors);
 
-		
-	// Apply the grid definition if available AND the grid is currently empty
+		// Apply the grid definition if available AND the grid is currently empty
 		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
-			const flattenedModules = techTree.grid_definition.grid.flat();
-			applyModulesToGrid(flattenedModules);
-			setGridFixed(techTree.grid_definition.gridFixed);
-			setSuperchargedFixed(techTree.grid_definition.superchargedFixed);
+			// 1. Set the initial definition so reset works correctly.
+			setInitialGridDefinition(techTree.grid_definition);
+			// 2. Apply this definition to the current grid state using the unified store logic.
+			setGridFromInitialDefinition(techTree.grid_definition);
 		}
-	}, [techTree, setTechColors, applyModulesToGrid, setGridFixed, setSuperchargedFixed]);
+	}, [techTree, setTechColors, setInitialGridDefinition, setGridFromInitialDefinition]);
 
 	return techTree;
 }

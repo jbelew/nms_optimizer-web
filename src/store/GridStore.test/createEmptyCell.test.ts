@@ -9,7 +9,7 @@ describe('createEmptyCell() createEmptyCell method', () => {
       // This test checks that the default cell is created as expected.
       const cell = createEmptyCell();
       expect(cell).toEqual({
-        active: true,
+        active: false,
         adjacency: "none",
         adjacency_bonus: 0.0,
         bonus: 0.0,
@@ -29,7 +29,7 @@ describe('createEmptyCell() createEmptyCell method', () => {
       // This test checks that the supercharged property is set correctly.
       const cell = createEmptyCell(true);
       expect(cell.supercharged).toBe(true);
-      expect(cell.active).toBe(true);
+      expect(cell.active).toBe(false);
     });
 
     it('should create a cell with active set to false when active argument is false', () => {

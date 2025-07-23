@@ -27,7 +27,7 @@ describe('createGrid', () => {
   });
 
   it('should initialize all cells with default properties', () => {
-    const defaultCell = createEmptyCell(false, true);
+    const defaultCell = createEmptyCell(false, false);
 
     // Test case 1: 1x1 grid
     const grid1x1 = createGrid(1, 1);

@@ -88,7 +88,7 @@ export type ApiResponse = {
 };
 
 // --- Utility functions (createEmptyCell, createGrid) ---
-export const createEmptyCell = (supercharged = false, active = true): Cell => ({
+export const createEmptyCell = (supercharged = false, active = false): Cell => ({
 	active,
 	adjacency: "none",
 	adjacency_bonus: 0.0,
@@ -111,6 +111,44 @@ export const createGrid = (width: number, height: number): Grid => ({
 	width,
 	height,
 });
+
+/**
+ * Creates a grid cell from module data.
+ * @param {Module} moduleData - The module data to create the cell from.
+ * @returns {Cell} A new cell object.
+ */
+const createCellFromModuleData = (moduleData: Module): Cell => {
+	// Directly construct the cell to ensure all properties are set correctly.
+	// A cell is active unless moduleData.active is explicitly false.
+	// This handles empty objects `{}` as active, available slots.
+	return {
+		active: moduleData?.active !== false,
+		adjacency: moduleData?.adjacency ?? "none",
+		adjacency_bonus: moduleData?.adjacency_bonus ?? 0.0,
+		bonus: moduleData?.bonus ?? 0.0,
+		image: moduleData?.image ?? null,
+		module: moduleData?.id ?? null,
+		label: moduleData?.label ?? "",
+		sc_eligible: moduleData?.sc_eligible ?? false,
+		supercharged: moduleData?.supercharged === true,
+		tech: moduleData?.tech ?? null,
+		total: 0.0, // This is calculated later, so default is 0.0
+		type: moduleData?.type ?? "",
+		value: moduleData?.value ?? 0,
+	};
+};
+
+/**
+ * Resets a cell to its empty state while preserving its active and supercharged status.
+ * This is a mutating function intended for use within an Immer-powered action.
+ * @param {Cell} cell - The cell to reset.
+ */
+const resetCellContent = (cell: Cell) => {
+	const { active, supercharged } = cell;
+	const emptyCell = createEmptyCell(supercharged, active);
+	// Using Object.assign to mutate the original cell object
+	Object.assign(cell, emptyCell);
+};
 
 // --- Zustand Store Interface (GridStore) ---
 export type GridStore = {
@@ -138,7 +176,6 @@ export type GridStore = {
 	setSuperchargedFixed: (fixed: boolean) => void;
 	setInitialGridDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined) => void;
 	setGridFromInitialDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
-	setGridDefinitionAndApplyModules: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
 	selectTotalSuperchargedCells: () => number;
 	selectHasModulesInGrid: () => boolean;
 	applyModulesToGrid: (modules: Module[]) => void;
@@ -174,14 +211,18 @@ const debouncedStorage = {
 			}
 			const parsedData = JSON.parse(storedData) as StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
 
-			// Get the current platform from the PlatformStore
-			const currentPlatform = usePlatformStore.getState().selectedPlatform;
-			console.log("GridStore: Current platform from PlatformStore:", currentPlatform);
+			// Determine the authoritative platform on initial load to avoid race conditions.
+			// Priority: URL parameter > localStorage > default.
+			const urlParams = new URLSearchParams(getWindowSearch());
+			const platformFromUrl = urlParams.get("platform");
+			const platformFromStorage = localStorage.getItem("selectedPlatform");
+			const currentPlatform = platformFromUrl || platformFromStorage || "standard";
+			const storedGridPlatform = parsedData.state?.selectedPlatform;
 
 			// Check if the stored platform matches the current platform
-			if (parsedData.state && parsedData.state.selectedPlatform && parsedData.state.selectedPlatform !== currentPlatform) {
+			if (storedGridPlatform && storedGridPlatform !== currentPlatform) {
 				console.warn(
-					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${parsedData.state.selectedPlatform}, Current: ${currentPlatform}`
+					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${storedGridPlatform}, Current: ${currentPlatform}`
 				);
 				return null; // Discard stored data if platforms don't match
 			}
@@ -204,270 +245,228 @@ const getWindowSearch = () =>
 // --- Create the store using persist and immer middleware ---
 export const useGridStore = create<GridStore>()(
 	persist(
-		immer((set, get) => ({
-			// --- State properties ---
-			grid: createGrid(10, 6),
-			result: null,
-			isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"), // Initialize based on current URL
-			gridFixed: false,
-			superchargedFixed: false,
-			initialGridDefinition: undefined,
+		immer((set, get) => {
+			// Helper function to apply a grid definition to the state.
+			// This ensures that both initial population and reset use the exact same logic.
+			const applyGridDefinition = (
+				state: GridStore,
+				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+			) => {
+				const newCells: Cell[][] = definition.grid.map((row) => row.map(createCellFromModuleData));
+				// Mutate the existing grid object's properties to prevent re-render loops.
+				state.grid.cells = newCells;
+				state.grid.width = newCells[0]?.length ?? 0;
+				state.grid.height = newCells.length;
+				state.gridFixed = definition.gridFixed;
+				state.superchargedFixed = definition.superchargedFixed;
+			};
 
-			setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
+			return {
+				// --- State properties ---
+				grid: createGrid(10, 6),
+				result: null,
+				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"), // Initialize based on current URL
+				gridFixed: false,
+				superchargedFixed: false,
+				initialGridDefinition: undefined,
 
-			setGrid: (grid) => set({ grid }),
+				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
 
-			resetGrid: () => {
-				set((state) => {
-					state.grid = createGrid(state.grid.width, state.grid.height);
-					state.result = null;
-					state.isSharedGrid = false;
-				});
-				useTechStore.getState().clearResult();
-			},
+				setGrid: (grid) => set({ grid }),
 
-			setGridAndResetAuxiliaryState: (newGrid) => {
-				set((state) => {
-					state.grid = newGrid;
-					state.result = null;
-					state.isSharedGrid = false;
-				});
-				useTechStore.getState().clearResult();
-			},
-
-			setResult: (result, tech) => {
-				const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } = useTechStore.getState();
-				set((state) => {
-					state.result = result;
-				});
-				if (result) {
-					setTechMaxBonus(tech, result.max_bonus);
-					setTechSolvedBonus(tech, result.solved_bonus);
-					setTechSolveMethod(tech, result.solve_method);
-				}
-			},
-
-			toggleCellActive: (rowIndex, columnIndex) => {
-				set((state) => {
-					const cell = state.grid.cells[rowIndex]?.[columnIndex];
-					if (cell.supercharged) {
-						return;
-					}
-					if (cell && (!cell.active || !cell.module)) {
-						cell.active = !cell.active;
-					} else {
-						console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
-					}
-				});
-			},
-
-			toggleCellSupercharged: (rowIndex, columnIndex) =>
-				set((state) => {
-					const cell = state.grid.cells[rowIndex]?.[columnIndex];
-					if (!cell) {
-						console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
-						return;
-					}
-					if (!cell.active) {
-						return;
-					}
-					cell.supercharged = !cell.supercharged;
-				}),
-
-			setCellActive: (rowIndex, columnIndex, active) => {
-				set((state) => {
-					const cell = state.grid.cells[rowIndex]?.[columnIndex];
-					if (cell) {
-						cell.active = active;
-						if (!active) {
-							cell.supercharged = false;
+				resetGrid: () => {
+					set((state) => {
+						const definition = state.initialGridDefinition;
+						if (definition) {
+							// Use the helper to apply the initial definition
+							applyGridDefinition(state, definition);
+						} else {
+							// Fallback: create a new empty grid, but mutate the existing
+							// grid object to prevent potential re-render loops.
+							const newGrid = createGrid(state.grid.width, state.grid.height);
+							state.grid.cells = newGrid.cells;
+							state.gridFixed = false;
+							state.superchargedFixed = false;
 						}
-					}
-				});
-			},
-
-			setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
-				set((state) => {
-					const cell = state.grid.cells[rowIndex]?.[columnIndex];
-					if (cell) {
-						if (cell.active || (!cell.active && !supercharged)) {
-							cell.supercharged = supercharged;
-						}
-					}
-				});
-			},
-
-			activateRow: (rowIndex: number) => {
-				set((state) => {
-					if (state.grid.cells[rowIndex]) {
-						state.grid.cells[rowIndex].forEach((cell: Cell) => {
-							cell.active = true;
-						});
-					}
-				});
-			},
-
-			deActivateRow: (rowIndex: number) => {
-				set((state) => {
-					if (state.grid.cells[rowIndex]) {
-						state.grid.cells[rowIndex].forEach((cell: Cell) => {
-							cell.active = false;
-							cell.supercharged = false;
-						});
-					}
-				});
-			},
-
-			hasTechInGrid: (tech: string): boolean => {
-				const grid = get().grid;
-				return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
-			},
-
-			isGridFull: (): boolean => {
-				const grid = get().grid;
-				let hasActiveCells = false;
-				for (const row of grid.cells) {
-					for (const cell of row) {
-						if (cell.active) {
-							hasActiveCells = true;
-							if (cell.module === null) {
-								return false; // Found an active cell without a module, so not full
-							}
-						}
-					}
-				}
-				// If loop completes: all active cells had modules OR no active cells were found.
-				// Returns true if there were active cells and all were full, false otherwise.
-				return hasActiveCells;
-			},
-
-			resetGridTech: (tech: string) => {
-				set((state) => {
-					state.grid.cells.forEach((row: Cell[]) => {
-						row.forEach((cell: Cell) => {
-							if (cell.tech === tech) {
-								// Preserve active and supercharged status from the original cell
-								// createEmptyCell will handle resetting other fields, including setting tech to null.
-								Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));
-							}
-						});
+						state.result = null;
+						state.isSharedGrid = false;
 					});
-				});
-			},
+					useTechStore.getState().clearResult();
+				},
 
-			selectTotalSuperchargedCells: () => {
-				const grid = get().grid;
-				if (!grid || !grid.cells) return 0;
-				return grid.cells.flat().filter((c) => c.supercharged).length;
-			},
+				setGridAndResetAuxiliaryState: (newGrid) => {
+					set((state) => {
+						state.grid = newGrid;
+						state.result = null;
+						state.isSharedGrid = false;
+					});
+					useTechStore.getState().clearResult();
+				},
 
-			selectHasModulesInGrid: () => {
-				const grid = get().grid;
-				if (!grid || !grid.cells) return false;
-				return grid.cells.flat().some((cell) => cell.module !== null);
-			},
-
-			setGridFixed: (fixed) => set({ gridFixed: fixed }),
-			setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
-			setInitialGridDefinition: (definition) => set({ initialGridDefinition: definition }),
-
-			setGridFromInitialDefinition: (definition) => {
-				set((state) => {
-					if (definition) {
-						const newCells: Cell[][] = definition.grid.map((row) =>
-							row.map((moduleData) => {
-								const baseCell = createEmptyCell();
-								if (moduleData && Object.keys(moduleData).length > 0) {
-									return {
-										...baseCell,
-										active: moduleData.active ?? baseCell.active,
-										adjacency: moduleData.adjacency ?? baseCell.adjacency,
-										adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
-										bonus: moduleData.bonus ?? baseCell.bonus,
-										image: moduleData.image ?? baseCell.image,
-										module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
-										label: moduleData.label ?? baseCell.label,
-										sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
-										supercharged: moduleData.supercharged ?? baseCell.supercharged,
-										tech: moduleData.tech ?? baseCell.tech,
-										type: moduleData.type ?? baseCell.type,
-										value: moduleData.value ?? baseCell.value,
-									};
-								} else {
-									return baseCell;
-								}
-							})
-						);
-						state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
-						state.gridFixed = definition.gridFixed;
-						state.superchargedFixed = definition.superchargedFixed;
+				setResult: (result, tech) => {
+					const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } = useTechStore.getState();
+					set((state) => {
+						state.result = result;
+					});
+					if (result) {
+						setTechMaxBonus(tech, result.max_bonus);
+						setTechSolvedBonus(tech, result.solved_bonus);
+						setTechSolveMethod(tech, result.solve_method);
 					}
-				});
-			},
+				},
 
-			setGridDefinitionAndApplyModules: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => {
-				set((state) => {
-					const newCells: Cell[][] = definition.grid.map((row) =>
-						row.map((moduleData) => {
-							const baseCell = createEmptyCell();
-							if (moduleData && Object.keys(moduleData).length > 0) {
-								return {
-									...baseCell,
-									active: moduleData.active ?? baseCell.active,
-									adjacency: moduleData.adjacency ?? baseCell.adjacency,
-									adjacency_bonus: moduleData.adjacency_bonus ?? baseCell.adjacency_bonus,
-									bonus: moduleData.bonus ?? baseCell.bonus,
-									image: moduleData.image ?? baseCell.image,
-									module: moduleData.id ?? baseCell.module, // Use moduleData.id for module, fallback to baseCell.module
-									label: moduleData.label ?? baseCell.label,
-									sc_eligible: moduleData.sc_eligible ?? baseCell.sc_eligible,
-									supercharged: moduleData.supercharged ?? baseCell.supercharged,
-									tech: moduleData.tech ?? baseCell.tech,
-									type: moduleData.type ?? baseCell.type,
-									value: moduleData.value ?? baseCell.value,
-								};
-							} else {
-								return baseCell;
-							}
-						})
-					);
-					state.grid = { cells: newCells, width: newCells[0].length, height: newCells.length };
-					state.gridFixed = definition.gridFixed;
-					state.superchargedFixed = definition.superchargedFixed;
-				});
-			},
+				toggleCellActive: (rowIndex, columnIndex) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (cell.supercharged) {
+							return;
+						}
+						if (cell && (!cell.active || !cell.module)) {
+							cell.active = !cell.active;
+						} else {
+							console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+						}
+					});
+				},
 
-			applyModulesToGrid: (modules: (Module | null)[]) => {
-				set((state) => {
-					modules.forEach((moduleData, index) => {
-						const rowIndex = Math.floor(index / state.grid.width);
-						const colIndex = index % state.grid.width;
-						const cell = state.grid.cells[rowIndex]?.[colIndex];
+				toggleCellSupercharged: (rowIndex, columnIndex) =>
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (!cell) {
+							console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+							return;
+						}
+						if (!cell.active) {
+							return;
+						}
+						cell.supercharged = !cell.supercharged;
+					}),
+
+				setCellActive: (rowIndex, columnIndex, active) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 						if (cell) {
-							if (moduleData) {
-								// Create a new cell based on the existing one, then merge moduleData
-								Object.assign(cell, {
-									active: moduleData.active ?? cell.active,
-									adjacency: moduleData.adjacency ?? cell.adjacency,
-									adjacency_bonus: moduleData.adjacency_bonus ?? cell.adjacency_bonus,
-									bonus: moduleData.bonus ?? cell.bonus,
-									image: moduleData.image ?? cell.image,
-									module: moduleData.id ?? cell.module,
-									label: moduleData.label ?? cell.label,
-									sc_eligible: moduleData.sc_eligible ?? cell.sc_eligible,
-									supercharged: moduleData.supercharged ?? cell.supercharged,
-									tech: moduleData.tech ?? cell.tech,
-									type: moduleData.type ?? cell.type,
-									value: moduleData.value ?? cell.value,
-								});
-							} else {
-								Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));
+							cell.active = active;
+							if (!active) {
+								cell.supercharged = false;
 							}
 						}
 					});
-				});
-			},
-		})),
+				},
+
+				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (cell) {
+							// An inactive cell can only be un-supercharged.
+							if (cell.active || !supercharged) cell.supercharged = supercharged;
+						}
+					});
+				},
+
+				activateRow: (rowIndex: number) => {
+					set((state) => {
+						if (state.grid.cells[rowIndex]) {
+							state.grid.cells[rowIndex].forEach((cell: Cell) => {
+								cell.active = true;
+							});
+						}
+					});
+				},
+
+				deActivateRow: (rowIndex: number) => {
+					set((state) => {
+						if (state.grid.cells[rowIndex]) {
+							state.grid.cells[rowIndex].forEach((cell: Cell) => {
+								cell.active = false;
+								cell.supercharged = false;
+							});
+						}
+					});
+				},
+
+				hasTechInGrid: (tech: string): boolean => {
+					const grid = get().grid;
+					return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
+				},
+
+				isGridFull: (): boolean => {
+					const activeCells = get().grid.cells.flat().filter((cell) => cell.active);
+
+					// If there are no active cells, the grid is not considered "full".
+					if (activeCells.length === 0) {
+						return false;
+					}
+
+					// The grid is full if every active cell has a module.
+					return activeCells.every((cell) => cell.module !== null);
+				},
+
+				resetGridTech: (tech: string) => {
+					set((state) => {
+						state.grid.cells.forEach((row: Cell[]) => {
+							row.forEach((cell: Cell) => {
+								if (cell.tech === tech) resetCellContent(cell);
+							});
+						});
+					});
+				},
+
+				selectTotalSuperchargedCells: () => {
+					const grid = get().grid;
+					if (!grid || !grid.cells) return 0;
+					return grid.cells.flat().filter((c) => c.supercharged).length;
+				},
+
+				selectHasModulesInGrid: () => {
+					const grid = get().grid;
+					if (!grid || !grid.cells) return false;
+					return grid.cells.flat().some((cell) => cell.module !== null);
+				},
+
+				setGridFixed: (fixed) => set({ gridFixed: fixed }),
+				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
+				setInitialGridDefinition: (definition) => set({ initialGridDefinition: definition }),
+
+				setGridFromInitialDefinition: (definition) => {
+					set((state) => {
+						// Use the same helper here to ensure consistency
+						applyGridDefinition(state, definition);
+					});
+				},
+
+				applyModulesToGrid: (modules: (Module | null)[]) => {
+					set((state) => {
+						modules.forEach((moduleData, index) => {
+							const rowIndex = Math.floor(index / state.grid.width);
+							const colIndex = index % state.grid.width;
+							const cell = state.grid.cells[rowIndex]?.[colIndex];
+							if (cell) {
+								if (moduleData) {
+									// Create a new cell based on the existing one, then merge moduleData
+									Object.assign(cell, {
+										active: moduleData.active ?? cell.active,
+										adjacency: moduleData.adjacency ?? cell.adjacency,
+										adjacency_bonus: moduleData.adjacency_bonus ?? cell.adjacency_bonus,
+										bonus: moduleData.bonus ?? cell.bonus,
+										image: moduleData.image ?? cell.image,
+										module: moduleData.id ?? cell.module,
+										label: moduleData.label ?? cell.label,
+										sc_eligible: moduleData.sc_eligible ?? cell.sc_eligible,
+										supercharged: moduleData.supercharged ?? cell.supercharged,
+										tech: moduleData.tech ?? cell.tech,
+										type: moduleData.type ?? cell.type,
+										value: moduleData.value ?? cell.value,
+									});
+								} else {
+									resetCellContent(cell);
+								}
+							}
+						});
+					});
+				}
+			};
+		}),
 		// --- Persist Configuration ---
 		{
 			name: "app-state_v3",
@@ -478,10 +477,9 @@ export const useGridStore = create<GridStore>()(
 					isSharedGrid: state.isSharedGrid,
 					gridFixed: state.gridFixed,
 					superchargedFixed: state.superchargedFixed,
+					initialGridDefinition: state.initialGridDefinition, // <-- THE FIX: Persist the definition
 					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
 				};
-				// Also update the PlatformStore's localStorage key directly
-				localStorage.setItem("selectedPlatform", usePlatformStore.getState().selectedPlatform);
 				return dataToPersist;
 			},
 			/**
@@ -490,7 +488,7 @@ export const useGridStore = create<GridStore>()(
 			 * persisted value for this specific flag.
 			 */
 			merge: (persistedState, currentState) => {
-				const stateFromStorage = persistedState as Partial<GridStore>; // Cast persistedState
+				const stateFromStorage = persistedState as Partial<GridStore>;
 				const currentUrlHasGrid = new URLSearchParams(getWindowSearch()).has("grid");
 
 				return {
@@ -498,9 +496,8 @@ export const useGridStore = create<GridStore>()(
 					...stateFromStorage, // State from localStorage (if getItem didn't return null)
 					isSharedGrid: currentUrlHasGrid, // Always prioritize URL for this flag
 				};
+
 			},
 		}
 	)
 );
-
-
