@@ -59,6 +59,7 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 	);
 
 	return (
+		<Suspense fallback={<div>Loading Ship Types...</div>}>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger disabled={solving}>
 				{isSmallAndUp ? (
@@ -74,15 +75,16 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 				)}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content color="cyan" className="shipSelection__dropdownMenu">
-				<Suspense fallback={<div>Loading Ship Types...</div>}>
-					<ShipTypesDropdown
-						selectedShipType={selectedShipType}
-						handleOptionSelect={handleOptionSelect}
-						solving={solving}
-					/>
-				</Suspense>
+
+				<ShipTypesDropdown
+					selectedShipType={selectedShipType}
+					handleOptionSelect={handleOptionSelect}
+					solving={solving}
+				/>
+
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
+		</Suspense>
 	);
 });
 ShipSelection.displayName = "ShipSelection";

@@ -34,14 +34,9 @@ type MainAppContentInternalProps = {
  */
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
-
-
-
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog } = useDialog();
-
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-
 	const {
 		solving,
 		handleOptimize,
@@ -97,6 +92,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						ref={appLayoutContainerRef}
 					>
 						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">
+
 							{!isSharedGrid && (
 								<span className="self-start flex-shrink-0">
 									<ShipSelection solving={solving} />
@@ -133,7 +129,8 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								solving={solving}
 								gridContainerRef={gridContainerRef}
 								isLarge={isLarge}
-							/>
+								// The techTree prop is fetched within TechTreeContainer, so an empty object is passed here.
+								techTree={{}} />
 						</div>
 					)}
 				</section>
