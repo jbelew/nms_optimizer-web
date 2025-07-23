@@ -199,7 +199,7 @@ const debouncedStorage = {
 				return Promise.reject(new Error(String(e)));
 			}
 		},
-		500
+		1000
 	),
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
