@@ -38,8 +38,9 @@ const components: object = {
 		</Box>
 	),
 	li: ({ children }: { children: React.ReactNode }) => (
-		<li>
+		<li><Text size={{ initial: "2", sm: "3" }}>
 			{children}
+		</Text>
 		</li>
 	),
 	code: ({ children }: { children: React.ReactNode }) => <Code variant="soft">{children}</Code>,
