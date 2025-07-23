@@ -17,12 +17,14 @@ interface GridTableButtonsProps {
 	solving: boolean;
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
+	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
 	updateUrlForShare,
 	updateUrlForReset,
+	gridContainerRef,
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -63,7 +65,23 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		useGridStore.getState().resetGrid();
 		updateUrlForReset();
 		setIsSharedGrid(false);
-	}, [updateUrlForReset, setIsSharedGrid, sendEvent]);
+		if (gridContainerRef.current) {
+			const element = gridContainerRef.current;
+			const offset = 8; // Same offset as in useOptimize.tsx and useRecommendedBuild.tsx
+
+			const scrollIntoView = () => {
+				const elementRect = element.getBoundingClientRect();
+				const absoluteElementTop = elementRect.top + window.pageYOffset;
+				const targetScrollPosition = absoluteElementTop - offset;
+
+				window.scrollTo({
+					top: targetScrollPosition,
+					behavior: "smooth",
+				});
+			};
+			requestAnimationFrame(scrollIntoView);
+		}
+	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef]);
 
 	return (
 		<>

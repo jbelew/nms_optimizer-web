@@ -23,6 +23,7 @@ interface GridTableProps {
 	shared: boolean; // This is isSharedGridProp, used for GridCell
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
+	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -47,6 +48,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			shared: isSharedGridProp,
 			updateUrlForShare,
 			updateUrlForReset,
+			gridContainerRef,
 			},
 			ref
 	) => {
@@ -145,6 +147,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							solving={solving}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
+							gridContainerRef={gridContainerRef}
 						/>
 					</div>
 				</div>

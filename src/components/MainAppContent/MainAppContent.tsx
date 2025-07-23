@@ -119,6 +119,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							ref={appLayoutGridTableRef}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
+							gridContainerRef={gridContainerRef}
 
 						/>
 					</div>
