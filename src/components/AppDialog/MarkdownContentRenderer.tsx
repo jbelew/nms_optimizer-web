@@ -1,5 +1,5 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
-import { Blockquote, Box, Code, Heading, Kbd, Link, Separator,Text } from "@radix-ui/themes";
+import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -26,7 +26,7 @@ const components: object = {
 		</Link>
 	),
 	strong: ({ children }: { children: React.ReactNode }) => <Text weight="bold">{children}</Text>,
-	blockquote: ({ children }: { children: React.ReactNode }) => <Blockquote>{children}</Blockquote>,
+	blockquote: ({ children }: { children: React.ReactNode }) => <Blockquote mt="2" mb="2">{children}</Blockquote>,
 	ul: ({ children }: { children: React.ReactNode }) => (
 		<Box asChild mb="2">
 			<ul className="pl-6 list-disc">{children}</ul>
@@ -39,9 +39,7 @@ const components: object = {
 	),
 	li: ({ children }: { children: React.ReactNode }) => (
 		<li>
-			<Text as="p" size={{ initial: "2", sm: "3" }}>
-				{children}
-			</Text>
+			{children}
 		</li>
 	),
 	code: ({ children }: { children: React.ReactNode }) => <Code variant="soft">{children}</Code>,

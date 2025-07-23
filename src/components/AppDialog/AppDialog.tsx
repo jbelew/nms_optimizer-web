@@ -74,8 +74,10 @@ const AppDialog: React.FC<AppDialogProps> = ({
 							<Separator mt="2" size="4" orientation="horizontal" decorative />
 						</Dialog.Title>
 
-						<Dialog.Description className="flex-1 pr-4 overflow-y-auto">
-							{content}
+						<Dialog.Description asChild>
+							<section className="flex-1 pr-4 overflow-y-auto">
+								{content}
+							</section>
 						</Dialog.Description>
 
 						<Dialog.Close asChild>

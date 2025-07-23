@@ -1,10 +1,7 @@
 // src/components/TechTree/TechTree.tsx
-import "./TechTree.css";
-
-
 import { ScrollArea } from "@radix-ui/themes";
 import React, { Suspense, useMemo } from "react";
-
+import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
@@ -13,7 +10,6 @@ import ErrorBoundary from "../ErrorBoundry/ErrorBoundry";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
-import { t } from "i18next";
 
 // --- Type Definitions ---
 interface TechTreeProps {
@@ -29,6 +25,7 @@ interface TechTreeProps {
 const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
+	const { t } = useTranslation();
 
 	return (
 		<>
@@ -101,7 +98,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 				</>
 			) : (
 				<aside
-					className={`flex-grow w-full ${(techTree.recommended_builds && techTree.recommended_builds.length > 0) ? "mt-0" : "mt-8"
+					className={`${(techTree.recommended_builds && techTree.recommended_builds.length > 0) ? "mt-0" : "mt-8"
 						}`}
 					style={{ minHeight: "550px" }}
 				>
