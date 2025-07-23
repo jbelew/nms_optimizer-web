@@ -2,6 +2,7 @@
 import { create } from "zustand";
 
 import { API_URL } from "../constants";
+import { usePlatformStore } from "../store/PlatformStore";
 
 
 // Define the structure for the details of a single ship type
@@ -96,6 +97,10 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 				console.log("Fetched ship types:", data);
 				const shipTypesState = useShipTypesStore.getState();
 				shipTypesState.setShipTypes(data);
+
+				// Initialize the PlatformStore with valid ship types
+				usePlatformStore.getState().initializePlatform(Object.keys(data));
+
 				return data;
 			})
 			.catch((error) => {

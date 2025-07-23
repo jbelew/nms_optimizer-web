@@ -56,14 +56,18 @@
 				font-display: swap;
 			}
 			html {
-				scrollbar-gutter: stable;
+				text-rendering: optimizeLegibility;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 				overflow-y: hidden;
 				overflow-x: hidden;
+				scrollbar-gutter: stable;
 			}
 
 			body {
+				min-height: 100dvh;
+				width: 100dvw;
 				background-color: #000;
-				font-family: "GeosansLight", "Raleway", sans-serif;
 			}
 
 			.vpss-logo svg {
@@ -92,7 +96,7 @@
 				clip: rect(0, 0, 0, 0);
 				border: 0;
 				white-space: nowrap;
-			}			
+			}
 		</style>
 
 		<link
@@ -186,14 +190,14 @@
 	</head>
 
 	<body>
-
 		<main class="visually-hidden">
 			<section>
 				<h1>No Man's Sky Technology Layout Optimizer AI</h1>
 				<p>
-					This web application, the NMS Optimizer, helps players of No Man's Sky figure out the best module arrangement
-					to design optimal
-					<strong>Starship layouts</strong>, <strong>Multitool builds</strong>, <strong>Exocraft layouts</strong>, and <strong>Exosuit builds</strong>. It automatically
+					This web application, the NMS Optimizer, helps players of No Man's Sky figure out the best
+					module arrangement to design optimal
+					<strong>Starship layouts</strong>, <strong>Multitool builds</strong>,
+					<strong>Exocraft layouts</strong>, and <strong>Exosuit builds</strong>. It automatically
 					calculates the ideal <strong>module placement</strong> to maximize crucial in-game
 					mechanics like <strong>adjacency bonuses</strong> (achieved by grouping similar
 					technologies for synergistic effects) and the powerful boosts from
@@ -209,7 +213,8 @@
 					Figuring out the absolute best <strong>module placement</strong> with over 479 million
 					layout permutations for a full grid is no small feat. This tool blends deterministic
 					patterns, machine learning, and simulated annealing to deliver top-tier
-					<strong>Starship build</strong>, <strong>Multitool layout</strong>, <strong>Exocraft build</strong>, and <strong>Exosuit layout</strong> suggestions in under
+					<strong>Starship build</strong>, <strong>Multitool layout</strong>,
+					<strong>Exocraft build</strong>, and <strong>Exosuit layout</strong> suggestions in under
 					five seconds. It considers all factors including <strong>adjacency bonuses</strong> and
 					the strategic use of <strong>supercharged slots</strong>.
 				</p>
@@ -271,8 +276,9 @@
 				<p>
 					Stop guessing on tech placement and unlock your gear's true potential! Whether you're
 					aiming for a max-damage <strong>Starship build</strong>, the ultimate scan range with a
-					perfect <strong>Multitool layout</strong>, an optimized <strong>Exocraft</strong>, or a robust <strong>Exosuit</strong>, or trying to figure out the best way to use
-					your limited supercharged slots, this optimizer demystifies the complex rules of
+					perfect <strong>Multitool layout</strong>, an optimized <strong>Exocraft</strong>, or a
+					robust <strong>Exosuit</strong>, or trying to figure out the best way to use your limited
+					supercharged slots, this optimizer demystifies the complex rules of
 					<strong>adjacency bonuses</strong> and <strong>supercharged slot</strong> interactions. It
 					provides a clear, efficient way to plan your upgrades with confidence and achieve top-tier
 					performance without hours of manual trial-and-error.

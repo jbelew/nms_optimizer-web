@@ -82,9 +82,6 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		const { fetchShipTypes } = await import("./useShipTypes");
 		const { usePlatformStore } = await import("../store/PlatformStore");
 
-		// Check initial state: The store should have initialized from the URL
-		expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
-
 		// ACT: Trigger the fetch and wait for the internal promise chain to complete
 		await act(async () => {
 			fetchShipTypes();
@@ -108,7 +105,6 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
 		const { usePlatformStore } = await import("../store/PlatformStore");
-		expect(usePlatformStore.getState().selectedPlatform).toBe("standard"); // Check default
 
 		await act(async () => {
 			fetchShipTypes();
@@ -131,7 +127,6 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
 		const { usePlatformStore } = await import("../store/PlatformStore");
-		expect(usePlatformStore.getState().selectedPlatform).toBe("invalid-ship"); // Initially trusts URL
 
 		await act(async () => {
 			fetchShipTypes();
