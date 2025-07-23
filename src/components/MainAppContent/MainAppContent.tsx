@@ -108,6 +108,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								{t(`platforms.${selectedShipType}`)}
 							</span>
 						</header>
+
 						<GridTable
 							grid={grid}
 							solving={solving}
