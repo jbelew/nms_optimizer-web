@@ -1,7 +1,6 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.css";
 
-import type { Module, TechTree } from "../../hooks/useTechTree"; // Import Module type
 import type { Grid } from "../../store/GridStore";
 import React, { useMemo } from "react";
 import { Separator } from "@radix-ui/themes";
@@ -15,7 +14,6 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import ShakingWrapper from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
-import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 
 interface GridTableProps {
 	grid: Grid | null | undefined;
@@ -25,9 +23,6 @@ interface GridTableProps {
 	shared: boolean; // This is isSharedGridProp, used for GridCell
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
-	techTreeGridDefinition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }; // Add this prop
-	techTree: TechTree;
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -52,11 +47,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			shared: isSharedGridProp,
 			updateUrlForShare,
 			updateUrlForReset,
-			techTreeGridDefinition, // Destructure the new prop
-			techTree,
-			gridContainerRef,
-		},
-		ref
+			},
+			ref
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
@@ -153,21 +145,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							solving={solving}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
-							techTreeGridDefinition={techTreeGridDefinition} // Pass the new prop
 						/>
 					</div>
-
-					{!isLarge && techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
-						<div role="row">
-							<div className="col-span-11">
-								<RecommendedBuild
-									techTree={techTree}
-									gridContainerRef={gridContainerRef}
-									isLarge={isLarge}
-								/>
-							</div>
-						</div>
-					)}
 				</div>
 			</ShakingWrapper>
 		);

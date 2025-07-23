@@ -1,15 +1,13 @@
 // src/components/app/MainAppContent.tsx
 import type { FC } from "react";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { ScrollArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize";
-import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
-import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
+import { } from "../../hooks/useShipTypes";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -19,7 +17,6 @@ import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
-import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import ShipSelection from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 
@@ -38,16 +35,13 @@ type MainAppContentInternalProps = {
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
+
 
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog } = useDialog();
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	// Call useFetchShipTypesSuspense to ensure data is fetched/cached and to trigger Suspense.
-	// The actual shipTypes data is typically consumed by child components (e.g., ShipSelection)
-	// which also call this hook and benefit from the cache, or potentially via a store if it were populated there.
-	useFetchShipTypesSuspense();
+
 	const {
 		solving,
 		handleOptimize,
@@ -57,20 +51,11 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		handleForceCurrentPnfOptimize,
 	} = useOptimize();
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync(); // Destructure functions
-	const techTree = useFetchTechTreeSuspense(selectedShipType);
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
 		isLarge,
 	} = useAppLayout();
-
-	const scrollAreaHeight = useMemo(() => {
-		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
-		if (techTree.recommended_builds && techTree.recommended_builds.length > 0) {
-			return `${baseHeight - 52}px`;
-		}
-		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
-	}, [techTree.recommended_builds]);
 
 	useEffect(() => {
 		hideSplashScreen();
@@ -138,42 +123,17 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							ref={appLayoutGridTableRef}
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
-							techTreeGridDefinition={techTree.grid_definition} // Pass the techTree.grid_definition
-							techTree={techTree}
-							gridContainerRef={gridContainerRef}
+
 						/>
 					</div>
 					{!isSharedGrid && (
 						<div className="flex flex-col w-full lg:ml-4">
-							{isLarge ? (
-								<>
-									<ScrollArea
-										className={`gridContainer__sidebar rounded-md p-4 shadow-md backdrop-blur-xl`}
-										style={{
-											height: scrollAreaHeight,
-										}}
-									>
-										<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
-									</ScrollArea>
-									{techTree.recommended_builds && techTree.recommended_builds.length > 0 && (
-										<div className="mt-1">
-											<RecommendedBuild
-												techTree={techTree}
-												gridContainerRef={gridContainerRef}
-												isLarge={isLarge}
-											/>
-										</div>
-									)}
-								</>
-							) : (
-								<aside
-									className={`w-full flex-grow ${techTree.recommended_builds && techTree.recommended_builds.length > 0 ? "pt-4" : "pt-8"}`}
-									style={{ minHeight: "550px" }}
-								>
-									
-									<TechTreeComponent handleOptimize={handleOptimize} solving={solving} />
-								</aside>
-							)}
+							<TechTreeComponent
+								handleOptimize={handleOptimize}
+								solving={solving}
+								gridContainerRef={gridContainerRef}
+								isLarge={isLarge}
+							/>
 						</div>
 					)}
 				</section>
@@ -220,7 +180,8 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				title={t("dialogs.titles.translationRequest")}
 				content={translationRequestDialogContent}
 			/>
-		</main>
+		</main >
+
 	);
 };
 

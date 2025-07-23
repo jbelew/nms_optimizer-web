@@ -4,13 +4,13 @@ import "./ShipSelection.css";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import type { ShipTypeDetail } from "../../hooks/useShipTypes";
-import { useShipTypesStore } from "../../hooks/useShipTypes";
+import { useShipTypesStore, useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 
@@ -30,6 +30,9 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 	);
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
+
+	// Call useFetchShipTypesSuspense here to trigger data fetching for ship types
+	useFetchShipTypesSuspense();
 
 	const handleOptionSelect = useCallback(
 		(option: string) => {
@@ -71,11 +74,13 @@ const ShipSelection: React.FC<ShipSelectionProps> = React.memo(({ solving }) => 
 				)}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content color="cyan" className="shipSelection__dropdownMenu">
-				<ShipTypesDropdown
-					selectedShipType={selectedShipType}
-					handleOptionSelect={handleOptionSelect}
-					solving={solving}
-				/>
+				<Suspense fallback={<div>Loading Ship Types...</div>}>
+					<ShipTypesDropdown
+						selectedShipType={selectedShipType}
+						handleOptionSelect={handleOptionSelect}
+						solving={solving}
+					/>
+				</Suspense>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	);
@@ -100,8 +105,6 @@ interface ShipTypesDropdownProps {
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 	({ selectedShipType, handleOptionSelect, solving }) => {
-		// Get shipTypes from the store.
-		// This assumes MainAppContentInternal has already ensured data is fetched via Suspense.
 		const shipTypes = useShipTypesStore((state) => state.shipTypes);
 		const { t } = useTranslation();
 

@@ -1,4 +1,3 @@
-import type { Module } from "../../hooks/useTechTree.tsx"; // Explicitly add .tsx extension
 import React, { useCallback } from "react";
 import {
 	InfoCircledIcon,
@@ -18,14 +17,12 @@ interface GridTableButtonsProps {
 	solving: boolean;
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
-	techTreeGridDefinition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }; // Add this prop
 }
 
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
 	updateUrlForShare,
 	updateUrlForReset,
-	techTreeGridDefinition, // Destructure the new prop
 }) => {
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -63,18 +60,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid" });
-
-		if (techTreeGridDefinition) {
-			// Use techTreeGridDefinition here
-			useGridStore.getState().setGridDefinitionAndApplyModules(techTreeGridDefinition);
-		} else {
-			// Fallback to a completely empty grid if no initial definition is available
-			useGridStore.getState().resetGrid();
-		}
-
+		useGridStore.getState().resetGrid();
 		updateUrlForReset();
 		setIsSharedGrid(false);
-	}, [techTreeGridDefinition, updateUrlForReset, setIsSharedGrid, sendEvent]); // Update dependencies
+	}, [updateUrlForReset, setIsSharedGrid, sendEvent]);
 
 	return (
 		<>

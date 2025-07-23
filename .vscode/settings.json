@@ -9,5 +9,8 @@
 	"[typescript]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
-	"python.analysis.enablePytestSupport": false
+	"python.analysis.enablePytestSupport": false,
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	}
 }

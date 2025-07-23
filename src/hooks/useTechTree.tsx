@@ -180,7 +180,8 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 		setTechColors(colors);
 
-		// Apply the grid definition if available AND the grid is currently empty
+		
+	// Apply the grid definition if available AND the grid is currently empty
 		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
 			const flattenedModules = techTree.grid_definition.grid.flat();
 			applyModulesToGrid(flattenedModules);
