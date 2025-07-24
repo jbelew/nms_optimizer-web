@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+
 import { useTranslation } from "react-i18next";
 import { Separator } from "@radix-ui/themes";
 
@@ -102,10 +102,4 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 );
 
 TechTreeSection.displayName = "TechTreeSection";
-TechTreeSection.propTypes = {
-	type: PropTypes.string.isRequired,
-	technologies: PropTypes.array.isRequired,
-	index: PropTypes.number.isRequired,
-	handleOptimize: PropTypes.func.isRequired,
-	solving: PropTypes.bool.isRequired,
-};
+

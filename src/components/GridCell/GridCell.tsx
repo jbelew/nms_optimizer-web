@@ -1,7 +1,7 @@
 import "./GridCell.css";
 
 import { Tooltip } from "@radix-ui/themes";
-import PropTypes from "prop-types"; // Import PropTypes
+
 import React, { memo, useCallback, useMemo, useRef } from "react"; // Import useCallback, memo, and useMemo
 import { useTranslation } from "react-i18next";
 
@@ -256,10 +256,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 GridCell.displayName = "GridCell";
 
 // Add PropTypes for runtime validation
-GridCell.propTypes = {
-	rowIndex: PropTypes.number.isRequired,
-	columnIndex: PropTypes.number.isRequired,
-	isSharedGrid: PropTypes.bool.isRequired,
-};
+
 
 export default GridCell;

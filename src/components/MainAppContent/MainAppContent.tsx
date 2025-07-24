@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAppLayout } from "../../hooks/useAppLayout";
+import { useAppLayout } from "../../hooks/useAppLayout.tsx";
 import { useOptimize } from "../../hooks/useOptimize";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
@@ -48,6 +48,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
+		gridTableTotalWidth, // Destructure the new total width
 	} = useAppLayout();
 
 	useEffect(() => {
@@ -83,15 +84,15 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				<AppHeader onShowChangelog={handleShowChangelog} />
 
 				<section
-					className="flex flex-col items-start p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row"
+					className="flex flex-col items-center p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
 				>
 					<div
-						className="flex-grow w-full lg:w-auto lg:flex-shrink-0 gridContainer__container"
+						className="w-fit lg:w-auto lg:flex-shrink-0 gridContainer__container"
 						ref={appLayoutContainerRef}
 					>
-						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl">
-
+						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl"
+							style={{ maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined }}>
 							{!isSharedGrid && (
 								<span className="self-start flex-shrink-0">
 									<ShipSelection solving={solving} />
@@ -120,9 +121,11 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							updateUrlForShare={updateUrlForShare}
 							updateUrlForReset={updateUrlForReset}
 							gridContainerRef={gridContainerRef}
-
 						/>
+
+
 					</div>
+
 					{!isSharedGrid && (
 						<div className="flex flex-col w-full lg:ml-4">
 							<TechTreeComponent
@@ -132,6 +135,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							/>
 						</div>
 					)}
+
 				</section>
 			</section>
 

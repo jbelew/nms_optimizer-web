@@ -11,7 +11,7 @@ interface MarkdownContentRendererProps {
 
 const components: object = {
 	h2: ({ children }: { children: React.ReactNode }) => (
-		<Heading trim="end" color="cyan" as="h2" mb="2" className="!text-base sm:!text-lg">
+		<Heading trim="end" color="cyan" as="h2" mb="3" className="!text-base sm:!text-lg">
 			{children}
 		</Heading>
 	),

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import PropTypes from "prop-types";
+
 
 import { useGridStore } from "../../store/GridStore";
 import { TechTreeSection } from "./TechTreeSection";
@@ -73,9 +73,4 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 );
 
 TechTreeContent.displayName = "TechTreeContent";
-TechTreeContent.propTypes = {
-	handleOptimize: PropTypes.func.isRequired,
-	solving: PropTypes.bool.isRequired,
-	techTree: PropTypes.object.isRequired,
-	selectedShipType: PropTypes.string.isRequired,
-};
+

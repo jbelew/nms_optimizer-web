@@ -49,8 +49,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			updateUrlForShare,
 			updateUrlForReset,
 			gridContainerRef,
-			},
-			ref
+		},
+		ref
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
@@ -94,6 +94,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					showRandomMessages={true}
 					initialMessage={t("gridTable.optimizing")}
 				/>
+
 				{!isLarge && (
 					<Separator size="4" color="cyan" orientation="horizontal" decorative className="mb-4" />
 				)}
@@ -117,7 +118,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 								/>
 							))}
 							{/* Wrap GridControlButtons in a div with role="gridcell" */}
-							<div role="gridcell" aria-colindex={totalAriaColumnCount}>
+							<div role="gridcell" className="w-[32px]" aria-colindex={totalAriaColumnCount}>
 								<GridControlButtons
 									rowIndex={rowIndex}
 									activateRow={activateRow}

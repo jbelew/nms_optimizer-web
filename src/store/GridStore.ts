@@ -116,6 +116,7 @@ export const resetCellContent = (cell: Cell) => {
 };
 
 export type GridStore = {
+	version: number; // Add version property
 	grid: Grid;
 	result: ApiResponse | null;
 	isSharedGrid: boolean;
@@ -224,6 +225,7 @@ export const useGridStore = create<GridStore>()(
 			};
 
 			return {
+				version: 1, // Initialize version to 1
 				grid: createGrid(10, 6),
 				result: null,
 				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
@@ -422,6 +424,7 @@ export const useGridStore = create<GridStore>()(
 		}),
 		{
 			name: "gridState",
+			version: 1, // Current version of the storage schema
 			storage: debouncedStorage,
 			partialize: (state) => {
 				const dataToPersist = {
@@ -433,6 +436,13 @@ export const useGridStore = create<GridStore>()(
 					selectedPlatform: usePlatformStore.getState().selectedPlatform,
 				};
 				return dataToPersist;
+			},
+			migrate: (persistedState: unknown, version: number) => {
+				const state = persistedState as Partial<GridStore>;
+				if (version === 0) {
+					return state;
+				}
+				return state;
 			},
 			merge: (persistedState, currentState) => {
 				const stateFromStorage = persistedState as Partial<GridStore>;

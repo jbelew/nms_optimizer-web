@@ -39,8 +39,8 @@ const TechTreeSkeleton: React.FC = () => {
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="flex-grow w-full pt-8" style={{ minHeight: "550px" }}>
-					<MessageSpinner isInset={false} isVisible={true} initialMessage={t("techTree.loading")} />
+				<aside className="flex-grow w-full pt-8" style={{ minHeight: "50vh" }}>
+					<MessageSpinner isInset={false} isVisible={true} initialMessage={""} />
 				</aside>
 			)}
 		</>
@@ -98,7 +98,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 				</>
 			) : (
 				<>
-					<div className="mt-4">
+					<div className="mt-4 sm:mt-5">
 						{hasRecommendedBuilds && (
 							<RecommendedBuild
 								techTree={techTree}

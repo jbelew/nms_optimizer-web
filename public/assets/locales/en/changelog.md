@@ -4,9 +4,15 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.0 (2025-07-20)
+## Version 3.1 (2025-07-24)
 
 **It's a wrap, my work is done here!**
+
+- Completed a final pass to ensure complete data consistency flow from API to grid display.
+- Fixed lingering bugs related to `localStorage` behavior.
+- Traced and identified a persistent crash issue—ultimately caused by a driver/Chrome hardware acceleration conflict.
+
+## Version 3.0 (2025-07-20)
 
 - Removed dynamic sizing feature due to instability and infinite loop issues.
 - Fixed multiple test failures and refined TechTree store logic.

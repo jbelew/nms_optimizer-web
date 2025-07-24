@@ -26,7 +26,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	updateUrlForReset,
 	gridContainerRef,
 }) => {
-	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
+	const isSmallAndUp = useBreakpoint("140px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 
@@ -158,26 +158,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							<Share2Icon />
 						</IconButton>
 					))}
-				{/* Debug Button */}
-				{/* <Button
-					size="2"
-					variant="soft"
-					onClick={() => {
-						const gridState = useGridStore.getState();
-						const platformState = usePlatformStore.getState();
-						const dataToPersist = {
-							grid: gridState.grid,
-							isSharedGrid: gridState.isSharedGrid,
-							gridFixed: gridState.gridFixed,
-							superchargedFixed: gridState.superchargedFixed,
-							selectedPlatform: platformState.selectedPlatform,
-						};
-						console.log(dataToPersist);
-					}}
-					aria-label="Log Initial Grid Definition"
-				>
-					Debug Grid
-				</Button> */}
 			</div>
 
 			<div role="gridcell" className="flex justify-end col-span-5 mt-3 lg:col-span-4">

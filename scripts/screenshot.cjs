@@ -11,7 +11,7 @@ const puppeteer = require("puppeteer");
 		// Set localStorage for the target origin before any of its scripts run
 		await page.evaluateOnNewDocument(() => {
 			localStorage.setItem(
-				"app-state_v3",
+				"gridState",
 				JSON.stringify({
 					state: {
 						grid: {
@@ -478,12 +478,12 @@ const puppeteer = require("puppeteer");
 										adjacency: "none",
 										adjacency_bonus: 1,
 										bonus: 0,
-										image: "exosuit/remembrance.webp",
-										module: "RM",
-										label: "Remembrance",
+										image: "exosuit/exocraft.webp",
+										module: "ES",
+										label: "Exosuit Summoning Unit",
 										sc_eligible: false,
 										supercharged: false,
-										tech: "remembrance",
+										tech: "exocraft",
 										total: 0,
 										type: "core",
 										value: 0,
@@ -827,12 +827,12 @@ const puppeteer = require("puppeteer");
 										adjacency: "none",
 										adjacency_bonus: 1,
 										bonus: 0,
-										image: "exosuit/starseed.webp",
-										module: "SS",
-										label: "Star Seed",
+										image: "exosuit/remembrance.webp",
+										module: "RM",
+										label: "Remembrance",
 										sc_eligible: false,
 										supercharged: false,
-										tech: "starseed",
+										tech: "remembrance",
 										total: 0,
 										type: "core",
 										value: 0,
@@ -842,12 +842,12 @@ const puppeteer = require("puppeteer");
 										adjacency: "none",
 										adjacency_bonus: 1,
 										bonus: 0,
-										image: "exosuit/denier.webp",
-										module: "MD",
-										label: "Mark of the Denier",
+										image: "exosuit/starseed.webp",
+										module: "SS",
+										label: "Star Seed",
 										sc_eligible: false,
 										supercharged: false,
-										tech: "denier",
+										tech: "starseed",
 										total: 0,
 										type: "core",
 										value: 0,
@@ -933,6 +933,209 @@ const puppeteer = require("puppeteer");
 							height: 6,
 						},
 						isSharedGrid: false,
+						gridFixed: false,
+						superchargedFixed: true,
+						initialGridDefinition: {
+							grid: [
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+										supercharged: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+								],
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+										supercharged: true,
+									},
+									{
+										active: true,
+									},
+								],
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+										supercharged: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+								],
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+								],
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+								],
+								[
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+									{
+										active: true,
+									},
+								],
+							],
+							gridFixed: false,
+							superchargedFixed: true,
+						},
 						selectedPlatform: "exosuit",
 					},
 					version: 0,
