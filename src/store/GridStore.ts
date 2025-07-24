@@ -469,7 +469,7 @@ export const useGridStore = create<GridStore>()(
 		}),
 		// --- Persist Configuration ---
 		{
-			name: "app-state_v3",
+			name: "app-state_v3.1",
 			storage: debouncedStorage, // Use the storage object with the specifically debounced setItem
 			partialize: (state) => {
 				const dataToPersist = {
