@@ -486,6 +486,7 @@ export const useGridStore = create<GridStore>()(
 					isSharedGrid: state.isSharedGrid,
 					gridFixed: state.gridFixed,
 					superchargedFixed: state.superchargedFixed,
+					initialGridDefinition: state.initialGridDefinition, // Persist initialGridDefinition
 					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
 				};
 				return dataToPersist;
@@ -503,6 +504,7 @@ export const useGridStore = create<GridStore>()(
 					...currentState, // Default state from create()
 					...stateFromStorage, // State from localStorage (if getItem didn't return null)
 					isSharedGrid: currentUrlHasGrid, // Always prioritize URL for this flag
+					initialGridDefinition: stateFromStorage.initialGridDefinition || currentState.initialGridDefinition, // Merge initialGridDefinition
 				};
 
 			},

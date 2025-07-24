@@ -1,4 +1,3 @@
-// src/hooks/useOptimize.tsx
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { API_URL } from "../constants";
@@ -13,50 +12,36 @@ interface UseOptimizeReturn {
 	solving: boolean;
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
-	// showError: boolean; // No longer returned by this hook
-	// setShowError: React.Dispatch<React.SetStateAction<boolean>>; // No longer returned by this hook
 	patternNoFitTech: string | null;
-	clearPatternNoFitTech: () => void; // To allow UI to clear the PNF state (e.g., on dialog cancel)
-	// New handler for the dialog's "Force Optimize" action
+	clearPatternNoFitTech: () => void;
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 }
 
 interface ApiErrorData {
 	message?: string;
-	// Add other potential error fields if known
 }
 
-// Type guard for ApiErrorData
 function isApiErrorData(value: unknown): value is ApiErrorData {
 	if (typeof value === "object" && value !== null) {
-		// Check if 'message' is either a string or not present (which is fine for an optional property)
-		// or if it's explicitly undefined.
 		const potential = value as { message?: unknown };
 		return typeof potential.message === "string" || typeof potential.message === "undefined";
 	}
 	return false;
 }
 
-// Type guard for ApiResponse
-// Note: This assumes the structure of ApiResponse based on its usage.
-// For a more robust solution, ensure this guard accurately reflects the ApiResponse interface from GridStore.ts.
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) {
 		return false;
 	}
-	const obj = value as Record<string, unknown>; // Cast to a general object for property access
+	const obj = value as Record<string, unknown>;
 
-	// Check for mandatory properties and their types
 	if (typeof obj.solve_method !== "string") {
 		return false;
 	}
 
-	// Check for 'grid' property: can be null or an object.
-	// A more detailed 'isGrid' type guard would be better if Grid structure is complex.
 	if (obj.grid !== null) {
-		if (typeof obj.grid !== "object" || !obj.grid) return false; // Ensure grid is an object if not null
+		if (typeof obj.grid !== "object" || !obj.grid) return false;
 		const gridCandidate = obj.grid as Record<string, unknown>;
-		// Basic check for Grid structure
 		if (
 			!Array.isArray(gridCandidate.cells) ||
 			typeof gridCandidate.width !== "number" ||
@@ -66,7 +51,6 @@ function isApiResponse(value: unknown): value is ApiResponse {
 		}
 	}
 
-	// Check for optional properties (if they exist, they must be numbers)
 	if (Object.prototype.hasOwnProperty.call(obj, "max_bonus") && typeof obj.max_bonus !== "number")
 		return false;
 	if (
@@ -84,7 +68,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const gridContainerRef = useRef<HTMLDivElement>(null);
 	const { sendEvent } = useAnalytics();
 	const {
-		// showError, // Not used within this hook if not returned
 		setShowError: setShowErrorStore,
 		patternNoFitTech,
 		setPatternNoFitTech,
@@ -112,13 +95,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 		}
 	}, [isLarge, solving]);
 
-	// --- Optimization Request Logic ---
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
 			setSolving(true);
-			setShowErrorStore(false); // Clear previous errors
+			setShowErrorStore(false);
 
-			// If forcing or re-optimizing a tech that previously hit PNF, clear its PNF status.
 			if (forced || patternNoFitTech === tech) {
 				setPatternNoFitTech(null);
 			}
@@ -150,8 +131,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 					let finalErrorMessage = `Failed to fetch data: ${response.status} ${response.statusText}`;
 
 					if (isApiErrorData(errorJson)) {
-						// If errorJson.message is a non-empty string, use it.
-						// Otherwise, the default finalErrorMessage is used.
 						if (errorJson.message) {
 							finalErrorMessage = errorJson.message;
 						}
@@ -162,7 +141,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				const responseDataUnknown: unknown = await response.json();
 
 				if (isApiResponse(responseDataUnknown)) {
-					const data: ApiResponse = responseDataUnknown; // Now data is safely typed
+					const data: ApiResponse = responseDataUnknown;
 
 					if (data.solve_method === "Pattern No Fit" && data.grid === null && !forced) {
 						setPatternNoFitTech(tech);
@@ -172,14 +151,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 							platform: selectedShipType,
 							tech: tech,
 						});
-						// Do not set grid or result yet, wait for user to force
 					} else {
-						// This block handles:
-						// 1. Successful solve (not "Pattern No Fit")
-						// 2. Successful FORCED solve
-						// 3. API returning "Pattern No Fit" but with a grid (unexpected, but handled)
 						if (patternNoFitTech === tech) {
-							// Clear PNF if it was for the current tech
 							setPatternNoFitTech(null);
 						}
 						setResult(data, tech);
@@ -206,7 +179,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				}
 			} catch (error) {
 				console.error("Error during optimization:", error);
-				setResult(null, tech); // Clear any previous results for this tech on error
+				setResult(null, tech);
 				setShowErrorStore(true);
 			} finally {
 				setSolving(false);
@@ -229,12 +202,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setPatternNoFitTech(null);
 	}, [setPatternNoFitTech]);
 
-	// New callback specifically for the PNF dialog's "Force" action
 	const handleForceCurrentPnfOptimize = useCallback(async () => {
-		// patternNoFitTech is from the useOptimizeStore()
 		if (patternNoFitTech) {
 			await handleOptimize(patternNoFitTech, true);
-			// handleOptimize will internally call setPatternNoFitTech(null) when forced
 		}
 	}, [patternNoFitTech, handleOptimize]);
 
@@ -242,8 +212,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 		solving,
 		handleOptimize,
 		gridContainerRef,
-		// showError, // Removed from return
-		// setShowError, // Removed from return
 		patternNoFitTech,
 		clearPatternNoFitTech,
 		handleForceCurrentPnfOptimize,

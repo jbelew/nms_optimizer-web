@@ -15,7 +15,7 @@
 		"preview": "vite preview",
 		"screenshot": "node screenshot.cjs",
 		"test": "vitest run --coverage",
-		"test:e2e": "npm run build && npm start > /dev/null 2>&1 & E2E_SERVER_PID=$! && sleep 5 && vitest run --config ./vitest.e2e.config.ts && kill $E2E_SERVER_PID",
+		"test:e2e": "npm run build && playwright test",
 		"test:e2e:vitest": "vitest run --config ./vitest.e2e.config.ts",
 		"test:ci": "vitest run",
 		"coverage:merge": "vitest coverage merge",
@@ -100,6 +100,7 @@
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-html": "^3.2.2",
 		"vite-plugin-splash-screen": "^0.2.0",
+		"vite-plugin-markdown": "^2.1.0",
 		"vitest": "^3.2.4"
 	}
 }

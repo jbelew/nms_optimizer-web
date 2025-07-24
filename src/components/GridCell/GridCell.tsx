@@ -229,7 +229,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			style={cellElementStyle}
 		>
 			{cell.label && ( // Conditionally render the label span
-				<span className="mt-1 text-1xl md:text-3xl lg:text-4xl gridCell__label">
+				<span className="mt-1 text-2xl sm:text-3xl lg:text-4xl gridCell__label">
 					{upGradePriority > 0 ? upGradePriority : null}
 				</span>
 			)}
@@ -240,8 +240,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	// Fallback to cell.label if translation is not found or if cell.image is not present.
 	const tooltipContent = cell.image
 		? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
-				defaultValue: cell.label,
-			})
+			defaultValue: cell.label,
+		})
 		: cell.label;
 	return cell.module && cell.active ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>

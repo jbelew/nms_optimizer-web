@@ -1,10 +1,9 @@
-// src/hooks/useGridDeserializer.tsx
 import { useCallback } from "react";
 
 import { API_URL } from "../constants";
-import { createGrid,type Grid, useGridStore } from "../store/GridStore"; // Import Cell type
+import { createGrid,type Grid, useGridStore } from "../store/GridStore";
 import { usePlatformStore } from "../store/PlatformStore";
-import { useTechStore } from "../store/TechStore"; // <--- Import useTechStore
+import { useTechStore } from "../store/TechStore";
 import { type Module, type TechTree, type TechTreeItem } from "./useTechTree";
 
 // --- Utility Functions (RLE Compress/Decompress) ---
@@ -94,11 +93,10 @@ export const serialize = (grid: Grid): string => {
 	);
 };
 
-// --- CHANGE: Add setTechColors as an argument ---
 const deserialize = async (
 	serializedGrid: string,
 	shipType: string,
-	setTechColors: (colors: { [key: string]: string }) => void // <-- Add parameter
+	setTechColors: (colors: { [key: string]: string }) => void
 ): Promise<Grid | null> => {
 	try {
 		if (!serializedGrid) {
@@ -191,7 +189,6 @@ const deserialize = async (
 		}
 		const techTreeData: TechTree = await modulesResponse.json();
 
-		// --- CHANGE: Extract and set tech colors ---
 		const colors: { [key: string]: string } = {};
 		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};
 		for (const techCategory in techTreeData) {
@@ -208,8 +205,7 @@ const deserialize = async (
 				}
 			}
 		}
-		setTechColors(colors); // <-- Set colors in the store
-		// --- End Color Change ---
+		setTechColors(colors);
 
 		const newGrid = createGrid(10, 6);
 
@@ -280,7 +276,7 @@ const deserialize = async (
 export const useGridDeserializer = () => {
 	const { setGrid, grid, setIsSharedGrid } = useGridStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { setTechColors } = useTechStore(); // <-- Get setTechColors from the store
+	const { setTechColors } = useTechStore();
 
 	const serializeGrid = useCallback((): string => {
 		return serialize(grid);
@@ -289,7 +285,6 @@ export const useGridDeserializer = () => {
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {
 			console.log("Attempting to deserialize:", serializedGrid);
-			// --- CHANGE: Pass setTechColors to deserialize ---
 			const newGrid = await deserialize(serializedGrid, selectedShipType, setTechColors);
 			if (newGrid) {
 				console.log("Deserialization successful, setting grid and colors.");
@@ -298,10 +293,9 @@ export const useGridDeserializer = () => {
 			} else {
 				console.error("Deserialization failed, grid not set.");
 			}
-			// --- End Change ---
 		},
 		[setGrid, selectedShipType, setIsSharedGrid, setTechColors]
-	); // <-- Add setTechColors dependency
+	);
 
 	return { serializeGrid, deserializeGrid };
 };
