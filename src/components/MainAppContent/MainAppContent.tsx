@@ -88,7 +88,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 					ref={gridContainerRef}
 				>
 					<div
-						className="w-fit lg:w-auto lg:flex-shrink-0 gridContainer__container"
+						className="w-full lg:w-auto lg:flex-shrink-0 gridContainer__container"
 						ref={appLayoutContainerRef}
 					>
 						<header className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl"
