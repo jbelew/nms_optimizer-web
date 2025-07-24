@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 interface PlatformState {
 	selectedPlatform: string;
-	setSelectedPlatform: (platform: string, updateUrl?: boolean) => void;
+	setSelectedPlatform: (platform: string, validShipTypes: string[], updateUrl?: boolean) => void;
 	initializePlatform: (validShipTypes: string[]) => void;
 }
 
@@ -11,7 +11,11 @@ const LOCAL_STORAGE_KEY = "selectedPlatform";
 
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value
-	setSelectedPlatform: (platform, updateUrl = true) => {
+	setSelectedPlatform: (platform, validShipTypes, updateUrl = true) => {
+		if (!validShipTypes.includes(platform)) {
+			console.warn(`Attempted to set invalid platform: ${platform}. Falling back to standard.`);
+			platform = "standard";
+		}
 		set({ selectedPlatform: platform });
 		localStorage.setItem(LOCAL_STORAGE_KEY, platform);
 

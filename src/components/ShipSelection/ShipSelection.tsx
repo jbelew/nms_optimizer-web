@@ -67,7 +67,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 			console.warn(
 				`Selected ship type "${currentSelected}" is not valid. Resetting to "standard".`
 			);
-			platformState.setSelectedPlatform("standard", false);
+			platformState.setSelectedPlatform("standard", availableTypes, false);
 		}
 	}, [shipTypes]);
 
@@ -80,13 +80,13 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					platform: option,
 				});
 
-				setSelectedShipType(option);
+				setSelectedShipType(option, Object.keys(shipTypes));
 
 				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
 				setGridAndResetAuxiliaryState(initialGrid);
 			}
 		},
-		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent]
+		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent, shipTypes]
 	);
 
 	return (

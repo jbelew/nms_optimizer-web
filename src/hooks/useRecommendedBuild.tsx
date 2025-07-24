@@ -1,7 +1,7 @@
 // src/hooks/useRecommendedBuild.tsx
 import { useCallback, useMemo } from "react";
 
-import { createEmptyCell,createGrid, useGridStore } from "../store/GridStore";
+import { createEmptyCell, createGrid, useGridStore, resetCellContent } from "../store/GridStore";
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { isValidRecommendedBuild } from "../utils/typeValidation";
 
@@ -50,24 +50,31 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 							// Initialize with empty cell, then apply specific overrides
 							let cell = createEmptyCell(cellData.supercharged ?? false, cellData.active ?? true);
 
+							// Ensure tech and module are empty strings if not provided
+							cell.tech = cellData.tech ?? "";
+							cell.module = cellData.module ?? "";
+
 							if (cellData.tech && cellData.module) {
 								const module = modulesMap.get(`${cellData.tech}/${cellData.module}`);
 								if (module) {
 									cell = {
 										...cell,
-										tech: cellData.tech,
-										module: module.id,
 										label: module.label ?? "",
 										image: module.image ?? null,
 										bonus: module.bonus ?? 0,
 										value: module.value ?? 0,
 										adjacency: module.adjacency ?? "none",
 										sc_eligible: module.sc_eligible ?? false,
-										adjacency_bonus: typeof cellData.adjacency_bonus === 'number' ? cellData.adjacency_bonus : 0.0,
-										type: module.type ?? "", // Add the missing 'type' property
+									type: module.type ?? "", // Add the missing 'type' property
 									};
+								} else {
+									// If module not found, reset the cell to empty state
+									resetCellContent(cell);
 								}
 							}
+							// Adjacency bonus is also from cellData, so it should be assigned outside the module check
+							cell.adjacency_bonus = typeof cellData.adjacency_bonus === 'number' ? cellData.adjacency_bonus : 0.0;
+
 							newGrid.cells[r][c] = cell;
 						} else {
 							// If cellData is null, ensure the cell is empty and inactive/not supercharged by default

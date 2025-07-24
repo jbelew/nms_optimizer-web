@@ -12,6 +12,9 @@ vi.mock('../store/GridStore', () => ({
   },
   createGrid: vi.fn(),
   createEmptyCell: vi.fn(),
+  resetCellContent: vi.fn((cell) => {
+    Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));
+  }),
 }));
 
 describe('useRecommendedBuild', () => {
@@ -36,7 +39,7 @@ describe('useRecommendedBuild', () => {
       height,
     }));
     (createEmptyCell as vi.Mock).mockImplementation((supercharged = false, active = false) => ({
-      tech: '', module: '', label: '', image: null, bonus: 0, value: 0, adjacency: false, sc_eligible: false, supercharged, active, adjacency_bonus: 0.0, type: ''
+      tech: null, module: null, label: '', image: null, bonus: 0, value: 0, adjacency: false, sc_eligible: false, supercharged, active, adjacency_bonus: 0.0, type: ''
     }));
 
     scrollToMock = vi.fn();
@@ -100,7 +103,7 @@ describe('useRecommendedBuild', () => {
       adjacency_bonus: 0.0,
     }));
     expect(newGrid.cells[0][1]).toEqual(expect.objectContaining({
-      tech: '', // Should be empty cell
+      tech: null, // Should be empty cell
     }));
   });
 
@@ -156,8 +159,8 @@ describe('useRecommendedBuild', () => {
     expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
     const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
     expect(newGrid.cells[0][0]).toEqual(expect.objectContaining({
-      tech: '', // Should be empty cell if module not found
-      module: '',
+      tech: null, // Should be null if module not found
+      module: null,
     }));
   });
 });

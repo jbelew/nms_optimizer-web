@@ -143,7 +143,7 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
  * This is a mutating function intended for use within an Immer-powered action.
  * @param {Cell} cell - The cell to reset.
  */
-const resetCellContent = (cell: Cell) => {
+export const resetCellContent = (cell: Cell) => {
 	const { active, supercharged } = cell;
 	const emptyCell = createEmptyCell(supercharged, active);
 	// Using Object.assign to mutate the original cell object

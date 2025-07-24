@@ -100,6 +100,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 
 				// Initialize the PlatformStore with valid ship types
 				usePlatformStore.getState().initializePlatform(Object.keys(data));
+				usePlatformStore.getState().setSelectedPlatform(usePlatformStore.getState().selectedPlatform, Object.keys(data), false);
 
 				return data;
 			})

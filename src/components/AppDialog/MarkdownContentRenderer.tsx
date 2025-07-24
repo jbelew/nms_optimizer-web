@@ -11,12 +11,12 @@ interface MarkdownContentRendererProps {
 
 const components: object = {
 	h2: ({ children }: { children: React.ReactNode }) => (
-		<Heading trim="end" color="cyan" as="h2" size={{ initial: "3", sm: "4" }} mb="2">
+		<Heading trim="end" color="cyan" as="h2" mb="2" className="!text-base sm:!text-lg">
 			{children}
 		</Heading>
 	),
 	p: ({ children }: { children: React.ReactNode }) => (
-		<Text as="p" size={{ initial: "2", sm: "3" }} mb="2">
+		<Text as="p" className="text-sm sm:text-base" mb="2">
 			{children}
 		</Text>
 	),

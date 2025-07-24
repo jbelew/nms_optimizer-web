@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useGridStore } from "../store/GridStore";
 import { usePlatformStore } from "../store/PlatformStore";
 import { useGridDeserializer } from "./useGridDeserializer";
+import { useFetchShipTypesSuspense } from "./useShipTypes";
 
 /**
  * Hook to synchronize application state (selected platform, grid)
@@ -16,6 +17,7 @@ export const useUrlSync = () => {
   const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
   const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
   const { serializeGrid, deserializeGrid } = useGridDeserializer();
+  const shipTypes = useFetchShipTypesSuspense();
 
   // Effect to handle initial URL state and popstate events
   useEffect(() => {
@@ -26,7 +28,7 @@ export const useUrlSync = () => {
 
       // Sync platform from URL to store
       if (platformFromUrl && platformFromUrl !== selectedShipTypeFromStore) {
-        setSelectedShipTypeInStore(platformFromUrl, false);
+        setSelectedShipTypeInStore(platformFromUrl, Object.keys(shipTypes), false);
       }
 
       // Sync grid from URL to store
@@ -49,7 +51,7 @@ export const useUrlSync = () => {
       clearTimeout(timerId); // Ensure the timeout is cleared on unmount
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [selectedShipTypeFromStore, setSelectedShipTypeInStore, deserializeGrid, setIsSharedGrid, isSharedGrid]);
+  }, [selectedShipTypeFromStore, setSelectedShipTypeInStore, deserializeGrid, setIsSharedGrid, isSharedGrid, shipTypes]);
 
   // Function to update URL when sharing
   const updateUrlForShare = useCallback(() => {
