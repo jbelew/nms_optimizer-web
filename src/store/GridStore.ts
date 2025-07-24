@@ -1,4 +1,3 @@
-// src/store/GridStore.ts
 import { create } from "zustand";
 import { persist, type StorageValue } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -7,21 +6,8 @@ import { type Module } from "../hooks/useTechTree.tsx";
 import { usePlatformStore } from "./PlatformStore";
 import { useTechStore } from "./TechStore";
 
-// --- Define the specific function type we are debouncing ---
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
-/**
- * Creates a debounced version of the specific setItem function that delays
- * calling the original function until `msToWait` milliseconds have passed
- * since the last time the debounced function was called.
- *
- * This is useful for debouncing the storage of the grid state to prevent
- * excessive writes to the browser's storage.
- *
- * @param {SetItemFunction} setItemFn The specific setItem function to debounce
- * @param {number} msToWait The number of milliseconds to wait
- * @returns {(name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>} A debounced version of the setItem function
- */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number
@@ -30,21 +16,16 @@ function debounceSetItem(
 
 	return (name: string, value: StorageValue<Partial<GridStore>>): Promise<void> => {
 		return new Promise<void>((resolve, reject) => {
-			// Cancel the existing timeout if it exists
 			if (timeoutId !== null) {
 				clearTimeout(timeoutId);
 			}
 
-			// Set a new timeout for the wait period
 			timeoutId = window.setTimeout(() => {
-				// Use an async IIFE and apply `void` to its result to ensure
-				// the function passed to setTimeout effectively returns void.
 				void (async () => {
 					try {
 						await setItemFn(name, value);
-						resolve(); // Resolve the outer promise when the debounced function completes
+						resolve();
 					} catch (e) {
-						// Ensure that an Error object is rejected
 						if (e instanceof Error) {
 							reject(e);
 						} else {
@@ -57,7 +38,6 @@ function debounceSetItem(
 	};
 }
 
-// --- Define types (Cell, Grid, ApiResponse) ---
 export type Cell = {
 	active: boolean;
 	adjacency: string;
@@ -81,13 +61,12 @@ export type Grid = {
 };
 
 export type ApiResponse = {
-	grid: Grid | null; // Grid can be null if "Pattern No Fit"
+	grid: Grid | null;
 	max_bonus: number;
 	solved_bonus: number;
 	solve_method: string;
 };
 
-// --- Utility functions (createEmptyCell, createGrid) ---
 export const createEmptyCell = (supercharged = false, active = false): Cell => ({
 	active,
 	adjacency: "none",
@@ -112,15 +91,7 @@ export const createGrid = (width: number, height: number): Grid => ({
 	height,
 });
 
-/**
- * Creates a grid cell from module data.
- * @param {Module} moduleData - The module data to create the cell from.
- * @returns {Cell} A new cell object.
- */
 const createCellFromModuleData = (moduleData: Module): Cell => {
-	// Directly construct the cell to ensure all properties are set correctly.
-	// A cell is active unless moduleData.active is explicitly false.
-	// This handles empty objects `{}` as active, available slots.
 	return {
 		active: moduleData?.active !== false,
 		adjacency: moduleData?.adjacency ?? "none",
@@ -132,25 +103,18 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
 		sc_eligible: moduleData?.sc_eligible ?? false,
 		supercharged: moduleData?.supercharged === true,
 		tech: moduleData?.tech ?? null,
-		total: 0.0, // This is calculated later, so default is 0.0
+		total: 0.0,
 		type: moduleData?.type ?? "",
 		value: moduleData?.value ?? 0,
 	};
 };
 
-/**
- * Resets a cell to its empty state while preserving its active and supercharged status.
- * This is a mutating function intended for use within an Immer-powered action.
- * @param {Cell} cell - The cell to reset.
- */
 export const resetCellContent = (cell: Cell) => {
 	const { active, supercharged } = cell;
 	const emptyCell = createEmptyCell(supercharged, active);
-	// Using Object.assign to mutate the original cell object
 	Object.assign(cell, emptyCell);
 };
 
-// --- Zustand Store Interface (GridStore) ---
 export type GridStore = {
 	grid: Grid;
 	result: ApiResponse | null;
@@ -181,9 +145,7 @@ export type GridStore = {
 	applyModulesToGrid: (modules: Module[]) => void;
 };
 
-// --- Create Debounced Storage ---
 const debouncedStorage = {
-	// Use the specific debounceSetItem function
 	setItem: debounceSetItem(
 		(name: string, value: StorageValue<Partial<GridStore>>) => {
 			try {
@@ -192,7 +154,6 @@ const debouncedStorage = {
 				return Promise.resolve();
 			} catch (e) {
 				console.error("Failed to save to localStorage:", e);
-				// Ensure that an Error object is rejected
 				if (e instanceof Error) {
 					return Promise.reject(e);
 				}
@@ -204,7 +165,6 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
-			// Clean up old app-state keys
 			for (let i = 0; i < localStorage.length; i++) {
 				const key = localStorage.key(i);
 				if (key && key.startsWith("app-state") && key !== name) {
@@ -220,20 +180,17 @@ const debouncedStorage = {
 			}
 			const parsedData = JSON.parse(storedData) as StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
 
-			// Determine the authoritative platform on initial load to avoid race conditions.
-			// Priority: URL parameter > localStorage > default.
 			const urlParams = new URLSearchParams(getWindowSearch());
 			const platformFromUrl = urlParams.get("platform");
 			const platformFromStorage = localStorage.getItem("selectedPlatform");
 			const currentPlatform = platformFromUrl || platformFromStorage || "standard";
 			const storedGridPlatform = parsedData.state?.selectedPlatform;
 
-			// Check if the stored platform matches the current platform
 			if (storedGridPlatform && storedGridPlatform !== currentPlatform) {
 				console.warn(
 					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${storedGridPlatform}, Current: ${currentPlatform}`
 				);
-				return null; // Discard stored data if platforms don't match
+				return null;
 			}
 
 			return parsedData;
@@ -251,18 +208,14 @@ const debouncedStorage = {
 const getWindowSearch = () =>
 	typeof window === "undefined" || !window.location ? "" : window.location.search;
 
-// --- Create the store using persist and immer middleware ---
 export const useGridStore = create<GridStore>()(
 	persist(
 		immer((set, get) => {
-			// Helper function to apply a grid definition to the state.
-			// This ensures that both initial population and reset use the exact same logic.
 			const applyGridDefinition = (
 				state: GridStore,
 				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
 			) => {
 				const newCells: Cell[][] = definition.grid.map((row) => row.map(createCellFromModuleData));
-				// Mutate the existing grid object's properties to prevent re-render loops.
 				state.grid.cells = newCells;
 				state.grid.width = newCells[0]?.length ?? 0;
 				state.grid.height = newCells.length;
@@ -271,10 +224,9 @@ export const useGridStore = create<GridStore>()(
 			};
 
 			return {
-				// --- State properties ---
 				grid: createGrid(10, 6),
 				result: null,
-				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"), // Initialize based on current URL
+				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
 				gridFixed: false,
 				superchargedFixed: false,
 				initialGridDefinition: undefined,
@@ -287,11 +239,8 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						const definition = state.initialGridDefinition;
 						if (definition) {
-							// Use the helper to apply the initial definition
 							applyGridDefinition(state, definition);
 						} else {
-							// Fallback: create a new empty grid, but mutate the existing
-							// grid object to prevent potential re-render loops.
 							const newGrid = createGrid(state.grid.width, state.grid.height);
 							state.grid.cells = newGrid.cells;
 							state.gridFixed = false;
@@ -367,7 +316,6 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 						if (cell) {
-							// An inactive cell can only be un-supercharged.
 							if (cell.active || !supercharged) cell.supercharged = supercharged;
 						}
 					});
@@ -402,12 +350,10 @@ export const useGridStore = create<GridStore>()(
 				isGridFull: (): boolean => {
 					const activeCells = get().grid.cells.flat().filter((cell) => cell.active);
 
-					// If there are no active cells, the grid is not considered "full".
 					if (activeCells.length === 0) {
 						return false;
 					}
 
-					// The grid is full if every active cell has a module.
 					return activeCells.every((cell) => cell.module !== null);
 				},
 
@@ -439,7 +385,6 @@ export const useGridStore = create<GridStore>()(
 
 				setGridFromInitialDefinition: (definition) => {
 					set((state) => {
-						// Use the same helper here to ensure consistency
 						applyGridDefinition(state, definition);
 					});
 				},
@@ -452,7 +397,6 @@ export const useGridStore = create<GridStore>()(
 							const cell = state.grid.cells[rowIndex]?.[colIndex];
 							if (cell) {
 								if (moduleData) {
-									// Create a new cell based on the existing one, then merge moduleData
 									Object.assign(cell, {
 										active: moduleData.active ?? cell.active,
 										adjacency: moduleData.adjacency ?? cell.adjacency,
@@ -476,35 +420,29 @@ export const useGridStore = create<GridStore>()(
 				},
 			};
 		}),
-		// --- Persist Configuration ---
 		{
 			name: "gridState",
-			storage: debouncedStorage, // Use the storage object with the specifically debounced setItem
+			storage: debouncedStorage,
 			partialize: (state) => {
 				const dataToPersist = {
 					grid: state.grid,
 					isSharedGrid: state.isSharedGrid,
 					gridFixed: state.gridFixed,
 					superchargedFixed: state.superchargedFixed,
-					initialGridDefinition: state.initialGridDefinition, // Persist initialGridDefinition
-					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
+					initialGridDefinition: state.initialGridDefinition,
+					selectedPlatform: usePlatformStore.getState().selectedPlatform,
 				};
 				return dataToPersist;
 			},
-			/**
-			 * Custom merge function to ensure `isSharedGrid` is always
-			 * determined by the URL at the time of hydration, overriding any
-			 * persisted value for this specific flag.
-			 */
 			merge: (persistedState, currentState) => {
 				const stateFromStorage = persistedState as Partial<GridStore>;
 				const currentUrlHasGrid = new URLSearchParams(getWindowSearch()).has("grid");
 
 				return {
-					...currentState, // Default state from create()
-					...stateFromStorage, // State from localStorage (if getItem didn't return null)
-					isSharedGrid: currentUrlHasGrid, // Always prioritize URL for this flag
-					initialGridDefinition: stateFromStorage.initialGridDefinition || currentState.initialGridDefinition, // Merge initialGridDefinition
+					...currentState,
+					...stateFromStorage,
+					isSharedGrid: currentUrlHasGrid,
+					initialGridDefinition: stateFromStorage.initialGridDefinition || currentState.initialGridDefinition,
 				};
 
 			},
