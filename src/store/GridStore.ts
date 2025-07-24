@@ -204,6 +204,15 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
+			// Clean up old app-state keys
+			for (let i = 0; i < localStorage.length; i++) {
+				const key = localStorage.key(i);
+				if (key && key.startsWith("app-state") && key !== name) {
+					console.log(`GridStore: Removing old app-state key: ${key}`);
+					localStorage.removeItem(key);
+				}
+			}
+
 			const storedData = localStorage.getItem(name);
 			if (!storedData) {
 				console.log(`GridStore: No stored data found for key: ${name}`);
@@ -469,7 +478,7 @@ export const useGridStore = create<GridStore>()(
 		}),
 		// --- Persist Configuration ---
 		{
-			name: "app-state_v3.1",
+			name: "gridState",
 			storage: debouncedStorage, // Use the storage object with the specifically debounced setItem
 			partialize: (state) => {
 				const dataToPersist = {
@@ -477,7 +486,6 @@ export const useGridStore = create<GridStore>()(
 					isSharedGrid: state.isSharedGrid,
 					gridFixed: state.gridFixed,
 					superchargedFixed: state.superchargedFixed,
-					// initialGridDefinition: state.initialGridDefinition,
 					selectedPlatform: usePlatformStore.getState().selectedPlatform, // Add selectedPlatform to persisted state
 				};
 				return dataToPersist;
