@@ -91,9 +91,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<Button
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${
-							isFirstVisit ? "button--glow" : ""
-						}`}
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${isFirstVisit ? "button--glow" : ""
+							}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
 					>
@@ -104,9 +103,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<IconButton
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${
-							isFirstVisit ? "button--glow" : ""
-						}`}
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${isFirstVisit ? "button--glow" : ""
+							}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
 					>
@@ -160,6 +158,26 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							<Share2Icon />
 						</IconButton>
 					))}
+				{/* Debug Button */}
+				{/* <Button
+					size="2"
+					variant="soft"
+					onClick={() => {
+						const gridState = useGridStore.getState();
+						const platformState = usePlatformStore.getState();
+						const dataToPersist = {
+							grid: gridState.grid,
+							isSharedGrid: gridState.isSharedGrid,
+							gridFixed: gridState.gridFixed,
+							superchargedFixed: gridState.superchargedFixed,
+							selectedPlatform: platformState.selectedPlatform,
+						};
+						console.log(dataToPersist);
+					}}
+					aria-label="Log Initial Grid Definition"
+				>
+					Debug Grid
+				</Button> */}
 			</div>
 
 			<div role="gridcell" className="flex justify-end col-span-5 mt-3 lg:col-span-4">

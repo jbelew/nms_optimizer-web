@@ -345,9 +345,9 @@ export const useGridStore = create<GridStore>()(
 				setCellActive: (rowIndex, columnIndex, active) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (cell) {
+							if (cell) {
 							cell.active = active;
-							if (!active) {
+								if (!active) {
 								cell.supercharged = false;
 							}
 						}
@@ -357,16 +357,16 @@ export const useGridStore = create<GridStore>()(
 				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (cell) {
+							if (cell) {
 							// An inactive cell can only be un-supercharged.
-							if (cell.active || !supercharged) cell.supercharged = supercharged;
-						}
+								if (cell.active || !supercharged) cell.supercharged = supercharged;
+							}
 					});
 				},
 
 				activateRow: (rowIndex: number) => {
 					set((state) => {
-						if (state.grid.cells[rowIndex]) {
+							if (state.grid.cells[rowIndex]) {
 							state.grid.cells[rowIndex].forEach((cell: Cell) => {
 								cell.active = true;
 							});
@@ -376,7 +376,7 @@ export const useGridStore = create<GridStore>()(
 
 				deActivateRow: (rowIndex: number) => {
 					set((state) => {
-						if (state.grid.cells[rowIndex]) {
+							if (state.grid.cells[rowIndex]) {
 							state.grid.cells[rowIndex].forEach((cell: Cell) => {
 								cell.active = false;
 								cell.supercharged = false;
@@ -464,7 +464,7 @@ export const useGridStore = create<GridStore>()(
 							}
 						});
 					});
-				}
+				},
 			};
 		}),
 		// --- Persist Configuration ---

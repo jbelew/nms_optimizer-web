@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react";
 
 import { createEmptyCell,createGrid, useGridStore } from "../store/GridStore";
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
+import { isValidRecommendedBuild } from "../utils/typeValidation";
 
 export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.MutableRefObject<HTMLDivElement | null>) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
@@ -28,6 +29,10 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 
 	const applyRecommendedBuild = useCallback(
 		(build: RecommendedBuild) => {
+			if (!isValidRecommendedBuild(build)) {
+				console.error("Invalid RecommendedBuild object received:", build);
+				return;
+			}
 			if (build && build.layout) {
 				const newGrid = createGrid(10, 6);
 				const layout = build.layout as ({
@@ -58,7 +63,7 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 										value: module.value ?? 0,
 										adjacency: module.adjacency ?? "none",
 										sc_eligible: module.sc_eligible ?? false,
-										adjacency_bonus: cellData.adjacency_bonus ? 1.0 : 0.0,
+										adjacency_bonus: typeof cellData.adjacency_bonus === 'number' ? cellData.adjacency_bonus : 0.0,
 										type: module.type ?? "", // Add the missing 'type' property
 									};
 								}

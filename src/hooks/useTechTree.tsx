@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { API_URL } from "../constants";
 import { useGridStore } from "../store/GridStore";
 import { useTechStore } from "../store/TechStore";
+import { isValidRecommendedBuild } from "../utils/typeValidation";
 
 export interface Module {
 	active: boolean;
@@ -59,8 +60,8 @@ export interface TechTreeItem {
 export interface RecommendedBuild {
 	title: string;
 	layout: ({
-		tech: string;
-		module: string;
+		tech?: string | null;
+		module?: string | null;
 		supercharged?: boolean;
 		active?: boolean;
 		adjacency_bonus?: number;
@@ -141,6 +142,17 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 			// Return the JSON response
 			const data = await res.json();
 			console.log("Fetched tech tree:", data);
+
+			// Validate recommended builds within the fetched tech tree
+			if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
+				data.recommended_builds = data.recommended_builds.filter((build: RecommendedBuild) => {
+					if (!isValidRecommendedBuild(build)) {
+						console.error("Invalid recommended build found in tech tree:", build);
+						return false; // Filter out invalid builds
+					}
+					return true;
+				});
+			}
 			return data;
 		});
 

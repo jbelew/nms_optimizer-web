@@ -35,7 +35,7 @@ describe('useRecommendedBuild', () => {
       width,
       height,
     }));
-    (createEmptyCell as vi.Mock).mockImplementation((supercharged = false, active = true) => ({
+    (createEmptyCell as vi.Mock).mockImplementation((supercharged = false, active = false) => ({
       tech: '', module: '', label: '', image: null, bonus: 0, value: 0, adjacency: false, sc_eligible: false, supercharged, active, adjacency_bonus: 0.0, type: ''
     }));
 
@@ -70,10 +70,10 @@ describe('useRecommendedBuild', () => {
 
   it('should apply a recommended build and set the grid', () => {
     const mockBuild: RecommendedBuild = {
-      name: 'Test Build',
+      title: 'Test Build',
       layout: [
-        [{ tech: 'boltcaster', module: 'S1', supercharged: true, active: true, adjacency_bonus: true }, null],
-        [null, { tech: 'shield', module: 'X1', supercharged: false, active: true, adjacency_bonus: false }],
+        [{ tech: 'boltcaster', module: 'S1', supercharged: true, active: true, adjacency_bonus: 1.0 }, null],
+        [null, { tech: 'shield', module: 'X1', supercharged: false, active: true, adjacency_bonus: 0.0 }],
       ],
     };
 
@@ -106,7 +106,7 @@ describe('useRecommendedBuild', () => {
 
   it('should scroll to grid container after applying build', () => {
     const mockBuild: RecommendedBuild = {
-      name: 'Test Build',
+      title: 'Test Build',
       layout: [
         [{ tech: 'boltcaster', module: 'S1' }],
       ],
@@ -134,14 +134,14 @@ describe('useRecommendedBuild', () => {
     expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
 
     act(() => {
-      result.current.applyRecommendedBuild({ name: 'Empty', layout: null });
+      result.current.applyRecommendedBuild({ title: 'Empty', layout: null });
     });
     expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
   });
 
   it('should handle missing module in layout', () => {
     const mockBuild: RecommendedBuild = {
-      name: 'Test Build',
+      title: 'Test Build',
       layout: [
         [{ tech: 'nonexistent', module: 'module', supercharged: false, active: true }],
       ],
