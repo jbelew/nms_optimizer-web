@@ -102,7 +102,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								{t("platformLabel")}
 							</span>
 							<span
-								className="mt-[8px] min-w-0 flex-1 self-start sm:mt-[0px]"
+								className="mt-[7px] min-w-0 flex-1 self-start sm:mt-[0px]"
 								style={{
 									textWrap: "balance",
 								}}
