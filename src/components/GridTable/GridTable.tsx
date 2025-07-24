@@ -118,7 +118,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 								/>
 							))}
 							{/* Wrap GridControlButtons in a div with role="gridcell" */}
-							<div role="gridcell" className="w-[32px]" aria-colindex={totalAriaColumnCount}>
+							<div role="gridcell" className="w-[24px] sm:w-[32px]" aria-colindex={totalAriaColumnCount}>
 								<GridControlButtons
 									rowIndex={rowIndex}
 									activateRow={activateRow}
