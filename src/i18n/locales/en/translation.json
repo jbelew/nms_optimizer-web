@@ -82,7 +82,7 @@
 		"prompt": "Looking for volunteer translators! Click <1>here</1> for more information.",
 		"openDialogLabel": "Translators needed!"
 	},
-	"platformLabel": "TECHNOLOGY:",
+	"platformLabel": "PLATFORM:",
 	"unknownPlatform": "Unknown ({{platformKey}})",
 	"platformTypes": {
 		"Starship": "Starships",
