@@ -1,5 +1,5 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
-import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
+import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text, Em } from "@radix-ui/themes";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
@@ -16,7 +16,7 @@ const components: object = {
 		</Heading>
 	),
 	p: ({ children }: { children: React.ReactNode }) => (
-		<Text as="p" className="text-sm sm:text-base" mb="2">
+		<Text as="p" mb="2">
 			{children}
 		</Text>
 	),
@@ -29,12 +29,12 @@ const components: object = {
 	blockquote: ({ children }: { children: React.ReactNode }) => <Blockquote mt="2" mb="2">{children}</Blockquote>,
 	ul: ({ children }: { children: React.ReactNode }) => (
 		<Box asChild mb="2">
-			<ul className="pl-6 text-sm list-disc sm:text-base">{children}</ul>
+			<ul className="pl-6 list-disc">{children}</ul>
 		</Box>
 	),
 	ol: ({ children }: { children: React.ReactNode }) => (
 		<Box asChild mb="2">
-			<ol className="pl-6 text-sm list-decimal sm:text-base ">{children}</ol>
+			<ol className="pl-6 list-decimal">{children}</ol>
 		</Box>
 	),
 	li: ({ children }: { children: React.ReactNode }) => (
@@ -56,7 +56,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({ markd
 	if (isLoading) {
 		return (
 			<div
-				className="flex w-full justigfy-center flex-items-center"
+				className="flex w-full justigfy-center flex-items-center "
 				style={{ flexGrow: "1", height: "80vh" }}
 			></div>
 		);
@@ -67,7 +67,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({ markd
 	}
 
 	return (
-		<article className="text-base">
+		<article className="text-sm sm:text-base">
 			<ReactMarkdown components={components}>{markdown}</ReactMarkdown>
 		</article>
 	);
