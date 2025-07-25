@@ -130,7 +130,7 @@
 		"recommendedLoads": {
 			"selectLoadButton": "Sélectionner une configuration",
 			"applyLoadButton": "Appliquer la configuration",
-			"summary": "Les plateformes avec des <1>emplacements de suralimentation fixes</1> supportent des configurations <5>\"recommandées\"</5>."
+			"summary": "Les plateformes avec des <1>emplacements de suralimentation fixes</1> supportent des <5>configurations recommandées</5>."
 		},
 		"error": {
 			"title": "-kzzkt- Erreur ! -kzzkt-",

@@ -1,9 +1,10 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
 import React from "react";
-import { MagicWandIcon } from "@radix-ui/react-icons";
-import { Button, DropdownMenu, Em, Separator, Strong } from "@radix-ui/themes";
+import { MagicWandIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { Button, DropdownMenu, IconButton, Link, Separator, Strong } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
+import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
 import { type TechTree } from "../../hooks/useTechTree";
@@ -20,6 +21,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	isLarge,
 }) => {
 	const { t } = useTranslation();
+	const { openDialog } = useDialog();
 	const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 	const { sendEvent } = useAnalytics();
 
@@ -32,6 +34,10 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 			action: "apply_build",
 			label: build.title,
 		});
+	};
+
+	const handleOpenInstructions = () => {
+		openDialog("instructions", { section: "section-3" });
 	};
 
 	const renderBuildButton = (buttonProps?: React.ComponentProps<typeof Button>) => {
@@ -72,7 +78,18 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	return (
 		<>
 			{isLarge ? (
-				<div className="flex justify-center mt-4">{renderBuildButton()}</div>
+				<div className="flex items-center justify-center gap-2 mt-5">
+					{renderBuildButton()}
+					<IconButton
+						variant="ghost"
+						size="2"
+						radius="full"
+						aria-label={t("buttons.changelog")}
+						onClick={handleOpenInstructions}
+					>
+						<QuestionMarkCircledIcon className="w-5 h-5" />
+					</IconButton>
+				</div>
 			) : (
 				<div
 					className="flex items-start p-2 text-sm rounded-md sm:text-base bg-[var(--accent-a3)]"
@@ -90,7 +107,14 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 							components={{
 								1: <Strong />,
 								3: <Strong />,
-								5: <Em />,
+								5: <Link
+									href="#"
+									underline="hover"
+									onClick={(e) => {
+										e.preventDefault(); // Prevent jump to top
+										handleOpenInstructions();
+									}}
+								/>,
 							}}
 						/>
 						<div className="mt-3">

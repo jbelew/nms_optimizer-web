@@ -139,7 +139,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Select a Recommended Build",
 			"applyBuildButton": "Apply Recommended Build",
-			"summary": "Technologies with <1>fixed Supercharger slots</1> support <5>\"recommended\"</5> builds."
+			"summary": "Technologies with <1>fixed Supercharger slots</1> support <5>recommended builds</5>."
 		},
 		"error": {
 			"title": "-kzzkt- Error! -kzzkt-",

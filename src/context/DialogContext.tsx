@@ -14,6 +14,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
 	const [shareUrl, setShareUrl] = useState<string>("");
+	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [isFirstVisit, setIsFirstVisit] = useState(
 		() => !localStorage.getItem("hasVisitedNMSOptimizer")
 	);
@@ -29,11 +30,16 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	}, [location.pathname]);
 
 	const openDialog = useCallback(
-		(dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string }) => {
+		(dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string; section?: string }) => {
 			if (data?.shareUrl) {
 				setShareUrl(data.shareUrl);
 			} else {
 				navigate(`/${dialog}`);
+			}
+			if (data?.section) {
+				setSectionToScrollTo(data.section);
+			} else {
+				setSectionToScrollTo(undefined);
 			}
 		},
 		[navigate]
@@ -45,6 +51,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		} else if (activeDialog) {
 			navigate("/");
 		}
+		setSectionToScrollTo(undefined);
 	}, [activeDialog, navigate, shareUrl]);
 
 	const onFirstVisitInstructionsDialogOpened = useCallback(() => {
@@ -61,6 +68,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		isFirstVisit,
 		onFirstVisitInstructionsDialogOpened,
 		shareUrl,
+		sectionToScrollTo,
 	};
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;

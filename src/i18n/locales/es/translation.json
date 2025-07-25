@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Seleccionar una Configuración",
 			"applyBuildButton": "Aplicar Configuración",
-			"summary": "Las plataformas con <1>ranuras de sobrecarga fijas</1> son compatibles con configuraciones <5>\"recomendadas\"</5>."
+			"summary": "Las plataformas con <1>ranuras de sobrecarga fijas</1> son compatibles con <5>configuraciones recomendadas</5>."
 		},
 		"error": {
 			"title": "-kzzkt- ¡Error! -kzzkt-",

@@ -16,6 +16,7 @@ interface TechTreeProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
 	gridContainerRef: React.RefObject<HTMLDivElement | null>;
+	gridTableTotalWidth: number | undefined;
 }
 
 /**
@@ -53,7 +54,7 @@ const TechTreeSkeleton: React.FC = () => {
  * the entire component (including the RecommendedBuild button) is replaced
  * by the Suspense fallback, solving the stale UI issue.
  */
-const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gridContainerRef }) => {
+const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gridContainerRef, gridTableTotalWidth }) => {
 	const isLarge = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
 	const techTree = useFetchTechTreeSuspense(selectedShipType);
@@ -97,7 +98,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 					)}
 				</>
 			) : (
-				<>
+				<aside style={{ width: gridTableTotalWidth }}>
 					<div className="mt-4 sm:mt-5">
 						{hasRecommendedBuilds && (
 							<RecommendedBuild
@@ -115,7 +116,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 							selectedShipType={selectedShipType}
 						/>
 					</div>
-				</>
+				</aside>
 			)}
 		</>
 	);

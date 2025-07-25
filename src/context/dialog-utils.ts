@@ -6,11 +6,12 @@ export type DialogType = "about" | "instructions" | "changelog" | "translation" 
 
 export interface DialogContextType {
 	activeDialog: DialogType;
-	openDialog: (dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string }) => void;
+	openDialog: (dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string; section?: string }) => void;
 	closeDialog: () => void;
 	isFirstVisit: boolean;
 	onFirstVisitInstructionsDialogOpened: () => void;
 	shareUrl: string;
+	sectionToScrollTo: string | undefined;
 }
 
 export const DialogContext = createContext<DialogContextType | undefined>(undefined);

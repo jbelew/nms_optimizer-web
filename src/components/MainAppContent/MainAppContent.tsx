@@ -34,7 +34,7 @@ type MainAppContentInternalProps = {
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
-	const { activeDialog, openDialog, closeDialog } = useDialog();
+	const { activeDialog, openDialog, closeDialog, sectionToScrollTo } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
 		solving,
@@ -66,8 +66,8 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		[]
 	);
 	const instructionsDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="instructions" />,
-		[]
+		() => <MarkdownContentRenderer markdownFileName="instructions" targetSectionId={sectionToScrollTo} />,
+		[sectionToScrollTo]
 	);
 	const changelogDialogContent = useMemo(
 		() => <MarkdownContentRenderer markdownFileName="changelog" />,
@@ -132,6 +132,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 								handleOptimize={handleOptimize}
 								solving={solving}
 								gridContainerRef={gridContainerRef}
+								gridTableTotalWidth={gridTableTotalWidth}
 							/>
 						</div>
 					)}

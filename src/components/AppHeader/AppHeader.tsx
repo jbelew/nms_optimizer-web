@@ -67,7 +67,6 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<span className="font-thin"> v{__APP_VERSION__}</span>&nbsp;&nbsp;
 				<Tooltip content={t("buttons.changelog")}>
 					<IconButton
-						className="shadow-sm"
 						variant="ghost"
 						radius="full"
 						size="2"

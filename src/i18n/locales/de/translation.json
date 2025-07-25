@@ -130,7 +130,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Wähle einen Build aus",
 			"applyBuildButton": "Build anwenden",
-			"summary": "Plattformen mit <1>festen Supercharger-Slots</1> unterstützen <5>„empfohlene“</5> Builds."
+			"summary": "Plattformen mit <1>festen Supercharger-Slots</1> unterstützen <5>empfohlene Builds</5>."
 		},
 		"error": {
 			"title": "-kzzkt- Fehler! -kzzkt-",

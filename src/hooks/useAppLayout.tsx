@@ -12,7 +12,7 @@ interface AppLayout {
 	isLarge: boolean;
 }
 
-const GRID_TABLE_WIDTH_ADJUSTMENT = -40;
+const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);
