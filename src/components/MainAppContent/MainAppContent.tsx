@@ -80,7 +80,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 	return (
 		<main className="flex flex-col items-center justify-center min-h-[100dvh] lg:min-h-screen">
-			<section className="w-full border rounded-none sm:w-auto app bg-white/5 backdrop-blur-xl lg:rounded-xl">
+			<section className="w-auto rounded-none app bg-white/5 backdrop-blur-xl lg:rounded-xl">
 				<AppHeader onShowChangelog={handleShowChangelog} />
 
 				<section
