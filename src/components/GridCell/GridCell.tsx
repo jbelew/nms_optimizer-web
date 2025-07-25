@@ -229,7 +229,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			style={cellElementStyle}
 		>
 			{cell.label && ( // Conditionally render the label span
-				<span className="mt-1 text-2xl sm:text-3xl lg:text-4xl gridCell__label">
+				<span className="mt-1 text-1xl sm:text-3xl lg:text-4xl gridCell__label">
 					{upGradePriority > 0 ? upGradePriority : null}
 				</span>
 			)}
