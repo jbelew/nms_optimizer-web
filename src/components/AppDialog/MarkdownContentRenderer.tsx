@@ -1,5 +1,5 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
-import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text, Em } from "@radix-ui/themes";
+import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
