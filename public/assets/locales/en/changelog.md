@@ -4,6 +4,15 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.2 (2025-07-26)
+
+**It's a wrap, my work is done here!**
+
+- Final UI pass to standardize color usage and component presentation.
+- Added solve score percentages to tooltips on solve quality icons.
+- Simplified CSS to mitigate a hardware acceleration bug in Chrome.
+- Added a section on "Recommended Builds" to the Instructions dialog.
+
 ## Version 3.1 (2025-07-24)
 
 **It's a wrap, my work is done here!**
