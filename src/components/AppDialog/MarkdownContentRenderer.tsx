@@ -46,7 +46,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({ markd
 				h2IdMapRef.current.set(children, id);
 			}
 			return (
-				<Heading trim="end" color="cyan" as="h2" mb="3" className="!text-base sm:!text-lg" id={id}>
+				<Heading trim="end" as="h2" mb="3" className="!text-base sm:!text-lg" id={id} style={{ color: "var(--accent-a11)" }}>
 					{children}
 				</Heading>
 			);
@@ -79,7 +79,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({ markd
 			</li>
 		),
 		code: ({ children }: { children?: React.ReactNode }) => <Code variant="soft">{children}</Code>,
-	kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
+		kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
 		img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
 			<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
 		),

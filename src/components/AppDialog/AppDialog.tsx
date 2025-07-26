@@ -63,7 +63,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<Dialog.Portal>
-				<Theme appearance="dark" panelBackground="translucent" accentColor="cyan" grayColor="sage">
+				<Theme>
 					<Dialog.Overlay className="appDialog__overlay" />
 					<Dialog.Content className="appDialog__content">
 						<Dialog.Title className="mr-2">
@@ -83,7 +83,6 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						<Dialog.Close asChild>
 							<IconButton
 								variant="soft"
-								color="cyan"
 								size="1"
 								className="appDialog__close"
 								aria-label="Close dialog"

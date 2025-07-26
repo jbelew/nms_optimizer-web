@@ -28,7 +28,7 @@ const iconMap: Record<string, React.ElementType<IconProps>> = {
 
 const iconStyle: Record<string, CSSProperties> = {
 	"dialogs.titles.serverError": { color: "var(--red-9)" },
-	default: { color: "var(--accent-11)" },
+	default: { color: "var(--accent-indicator)" },
 };
 
 /**

@@ -2,7 +2,7 @@
 import "./AppHeader.css";
 
 import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { Heading,IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
