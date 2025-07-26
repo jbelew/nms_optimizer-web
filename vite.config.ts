@@ -29,7 +29,7 @@ function getAppVersion() {
 }
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical" || mode === "production";
+	const doCritical = mode === "critical";
 	// const doCritical = mode === "critical"
 	const appVersion = getAppVersion();
 
@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
 					deferStylesheetsPlugin(),
 					critical({
 						criticalBase: "dist/",
-						criticalUrl: "https://nms-optimizer.app",
+						criticalUrl: "http://localhost:4173",
 						criticalPages: [{ uri: "/", template: "index" }],
 						criticalConfig: {
 							inline: false,

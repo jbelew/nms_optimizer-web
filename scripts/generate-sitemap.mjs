@@ -6,16 +6,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const pages = [
-	{ path: "src/components/MainAppContent/MainAppContent.tsx", url: "https://nms-optimizer.app/" },
-	{ path: "src/assets/locales/en/about.md", url: "https://nms-optimizer.app/about" },
-	{ path: "public/assets/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog" },
+	{ path: "src/components/MainAppContent/MainAppContent.tsx", url: "https://nms-optimizer.app/", priority: "1.0" },
+	{ path: "src/assets/locales/en/about.md", url: "https://nms-optimizer.app/about", priority: "1.0" },
+	{ path: "public/assets/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog", priority: "0.7" },
 	{
 		path: "public/assets/locales/en/instructions.md",
 		url: "https://nms-optimizer.app/instructions",
+		priority: "0.9"
 	},
 	{
 		path: "public/assets/locales/en/translation-request.md",
 		url: "https://nms-optimizer.app/translation",
+		priority: "0.6"
 	},
 ];
 
@@ -28,7 +30,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 			return `<url>
     <loc>${page.url}</loc>
     <lastmod>${lastmod}</lastmod>
-    <priority>${page.url.endsWith("/") ? "1.0" : "1.0"}</priority>
+    <priority>${page.priority}</priority>
     <changefreq>weekly</changefreq>
   </url>`;
 		})

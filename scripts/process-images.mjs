@@ -29,7 +29,21 @@ const imageDirs = [
 	},
 ];
 
+const singleImages = [
+	{
+		sourceFile: "source_images/background.png",
+		outputDir: "public/assets/img",
+		resolutions: [
+			{ width: 1920, suffix: "" },
+			{ width: 3840, suffix: "@2x" },
+		],
+		webpOptions: { quality: 75 },
+	},
+];
+
+
 async function processImages() {
+	// Process directories
 	for (const { sourceDir, outputDir, resolutions } of imageDirs) {
 		try {
 			await mkdir(outputDir, { recursive: true });
@@ -92,6 +106,28 @@ async function processImages() {
 			console.log(`Images in ${sourceDir} processed successfully!`);
 		} catch (error) {
 			console.error(`Error processing images in ${sourceDir}:`, error);
+		}
+	}
+
+	// Process single images
+	for (const { sourceFile, outputDir, resolutions, webpOptions } of singleImages) {
+		try {
+			await mkdir(outputDir, { recursive: true });
+			const ext = path.extname(sourceFile);
+			const filename = path.basename(sourceFile, ext);
+
+			for (const res of resolutions) {
+				const newFilename = `${filename}${res.suffix}.webp`;
+				const outputPath = path.join(outputDir, newFilename);
+
+				await sharp(sourceFile)
+					.resize({ width: res.width })
+					.webp(webpOptions)
+					.toFile(outputPath);
+			}
+			console.log(`Image ${sourceFile} processed successfully!`);
+		} catch (error) {
+			console.error(`Error processing image ${sourceFile}:`, error);
 		}
 	}
 }
