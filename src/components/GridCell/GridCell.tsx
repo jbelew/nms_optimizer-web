@@ -183,9 +183,10 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		const classes = [
 			"gridCell",
 			"gridCell--interactive",
-			"shadow-md",
 			"sm:border-2",
 			"border-1",
+			"shadow-sm/25",
+			"sm:shadow-md/25",
 			"rounded-sm",
 			"sm:rounded-md",
 		];

@@ -12,7 +12,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/themes";
 import { Accordion } from "radix-ui";
-import React, { useCallback,useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint"; // This line is already present and correct
@@ -44,32 +44,32 @@ export interface TechTreeRowProps {
 	moduleCount: number;
 	/** The color associated with the technology. */
 	techColor:
-		| "gray"
-		| "gold"
-		| "bronze"
-		| "brown"
-		| "yellow"
-		| "amber"
-		| "orange"
-		| "tomato"
-		| "red"
-		| "ruby"
-		| "crimson"
-		| "pink"
-		| "plum"
-		| "purple"
-		| "violet"
-		| "iris"
-		| "indigo"
-		| "blue"
-		| "cyan"
-		| "teal"
-		| "jade"
-		| "green"
-		| "grass"
-		| "lime"
-		| "mint"
-		| "sky";
+	| "gray"
+	| "gold"
+	| "bronze"
+	| "brown"
+	| "yellow"
+	| "amber"
+	| "orange"
+	| "tomato"
+	| "red"
+	| "ruby"
+	| "crimson"
+	| "pink"
+	| "plum"
+	| "purple"
+	| "violet"
+	| "iris"
+	| "indigo"
+	| "blue"
+	| "cyan"
+	| "teal"
+	| "jade"
+	| "green"
+	| "grass"
+	| "lime"
+	| "mint"
+	| "sky";
 }
 
 function round(value: number, decimals: number) {
@@ -286,9 +286,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						style={
 							hasTechInGrid
 								? {
-										backgroundColor: "var(--gray-a2)",
-										color: "var(--gray-a8)",
-									}
+									backgroundColor: "var(--gray-a2)",
+									color: "var(--gray-a8)",
+								}
 								: { backgroundColor: "var(--accent-a3)" }
 						}
 					>
@@ -343,7 +343,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				<>
 					<Accordion.Root
 						className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
-						style={{ borderColor: "var(--accent-track)" }}
+						style={{ borderColor: "var(--accent-a6)" }}
 						type="single"
 						collapsible
 					>
