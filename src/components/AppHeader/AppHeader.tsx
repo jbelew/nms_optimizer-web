@@ -60,10 +60,10 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				wrap="balance"
 				align="center"
 				as="h2"
-				size={{ initial: "2", sm: "4" }}
+				size={{ initial: "2", sm: "3" }}
 				className="header__title w-fit"
 			>
-				<strong>{t("appHeader.subTitle")}</strong>
+				<strong >{t("appHeader.subTitle")}</strong>
 				<span className="font-light"> v{__APP_VERSION__}</span>&nbsp;&nbsp;
 				<Tooltip content={t("buttons.changelog")}>
 					<IconButton
