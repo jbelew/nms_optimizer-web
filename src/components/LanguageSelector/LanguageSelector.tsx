@@ -79,7 +79,6 @@ const LanguageSelector: React.FC = () => {
 			<DropdownMenu.Content
 				sideOffset={5}
 				align="end"
-			// style={{ backgroundColor: "var(--accent-2)" }}
 			>
 				<DropdownMenu.Label className="selectLanguage__header">
 					{t("languageInfo.selectLanguage") || "Select Language"}
