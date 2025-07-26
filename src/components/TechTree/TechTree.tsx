@@ -108,7 +108,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 							/>
 						)}
 					</div>
-					<div className="mt-4">
+					<div className={`${!hasRecommendedBuilds ? "mt-8" : "mt-4"}`}>
 						<TechTreeContent
 							handleOptimize={handleOptimize}
 							solving={solving}
