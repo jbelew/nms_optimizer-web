@@ -57,7 +57,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 							Select Build
 						</DropdownMenu.Label>
 						{builds.map((build, index) => (
-							<DropdownMenu.Item key={index} onClick={() => handleApply(build)}>
+							<DropdownMenu.Item className="font-medium" key={index} onClick={() => handleApply(build)}>
 								{build.title}
 							</DropdownMenu.Item>
 						))}
