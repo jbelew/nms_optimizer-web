@@ -93,7 +93,6 @@ body {
 
 .gridContainer__sidebar {
 	width: 388px;
-	background-color: var(--accent-a1);
 	border: 1px solid var(--gray-a2);
 	box-shadow:
 		inset 0 0 8px rgba(255, 255, 255, 0.05),

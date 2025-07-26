@@ -80,8 +80,8 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 			)}
 			<Text
 				className={`text-sm font-semibold text-center shadow-sm sm:text-normal messageSpinner__random ${displayRandomMessage
-						? "messageSpinner__random--visible"
-						: "messageSpinner__random--hidden"
+					? "messageSpinner__random--visible"
+					: "messageSpinner__random--hidden"
 					}`}
 			>
 				{displayRandomMessage ? currentRandomMessage : "\u00A0"}

@@ -33,8 +33,8 @@ const TechTreeSkeleton: React.FC = () => {
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="p-4 rounded-md shadow-md gridContainer__sidebar backdrop-blur-xl"
-					style={{ height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT }}
+					className="p-4 rounded-md shadow-md gridContainer__sidebar"
+					style={{ height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, backgroundColor: "var(--color-panel-translucent)" }}
 				>
 					<MessageSpinner isInset={true} isVisible={true} initialMessage={t("techTree.loading")} />
 				</ScrollArea>
