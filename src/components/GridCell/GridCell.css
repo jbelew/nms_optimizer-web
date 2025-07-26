@@ -18,7 +18,7 @@
 	-webkit-user-drag: none;
 
 	/* Render settings */
-	image-rendering: high-quality;
+	/* image-rendering: high-quality; */
 }
 
 .gridCell:focus-visible {
@@ -111,11 +111,11 @@
 
 @keyframes pulseGlow {
 	from {
-		box-shadow: 0 0 4px 0px var(--accent-a3);
+		/* box-shadow: 0 0 4px 0px var(--accent-a3); */
 		border-color: var(--accent-track);
 	}
 	to {
-		box-shadow: 0 0 4px 2px var(--accent-a6);
+		/* box-shadow: 0 0 4px 2px var(--accent-a6); */
 		border-color: var(--accent-12);
 	}
 }
