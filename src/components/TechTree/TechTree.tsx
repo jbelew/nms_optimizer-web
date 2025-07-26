@@ -98,7 +98,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 					)}
 				</>
 			) : (
-				<aside style={{ width: gridTableTotalWidth }}>
+				<div style={{ width: gridTableTotalWidth }}>
 					<div className="mt-4 sm:mt-5">
 						{hasRecommendedBuilds && (
 							<RecommendedBuild
@@ -116,7 +116,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 							selectedShipType={selectedShipType}
 						/>
 					</div>
-				</aside>
+				</div>
 			)}
 		</>
 	);

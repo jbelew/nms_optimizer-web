@@ -136,7 +136,7 @@ interface ShipTypesDropdownProps {
 }
 
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
-	({ selectedShipType, handleOptionSelect, solving, shipTypes }) => {
+	({ selectedShipType, handleOptionSelect, shipTypes }) => {
 		const { t } = useTranslation();
 
 		const groupedShipTypes = useMemo(() => {
@@ -156,10 +156,6 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 			);
 		}, [shipTypes]);
 
-		if (!shipTypes || Object.keys(shipTypes).length === 0) {
-			return <DropdownMenu.Item disabled>{t("loading") || "Loading..."}</DropdownMenu.Item>;
-		}
-
 		return (
 			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
@@ -170,8 +166,7 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 							<DropdownMenu.RadioItem
 								key={key}
 								value={key}
-								className="font-medium last:mb-2"
-								disabled={solving}
+								className="font-medium"
 							>
 								{t(`platforms.${key}`)}
 							</DropdownMenu.RadioItem>
@@ -182,4 +177,5 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 		);
 	}
 );
+
 ShipTypesDropdown.displayName = "ShipTypesDropdown";

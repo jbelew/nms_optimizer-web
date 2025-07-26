@@ -80,14 +80,13 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 	return (
 		<main className="flex flex-col items-center justify-center min-h-[100dvh] lg:min-h-screen">
-			<section className="w-auto rounded-none shadow-none app backdrop-blur-xl lg:shadow-xl lg:rounded-xl" style={{ backgroundColor: "var(--color-panel-translucent)" }}>
+			<div className="w-auto rounded-none shadow-none app backdrop-blur-xl lg:shadow-xl lg:rounded-xl" style={{ backgroundColor: "var(--color-panel-translucent)" }}>
 				<AppHeader onShowChangelog={handleShowChangelog} />
-
 				<section
 					className="flex flex-col items-center p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
 				>
-					<div
+					<article
 						className="w-full lg:w-auto lg:flex-shrink-0 gridContainer__container"
 						ref={appLayoutContainerRef}
 					>
@@ -122,23 +121,22 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							updateUrlForReset={updateUrlForReset}
 							gridContainerRef={gridContainerRef}
 						/>
-
-
-					</div>
+						
+					</article>
 
 					{!isSharedGrid && (
-						<div className="flex flex-col w-full lg:ml-4">
+						<aside className="flex flex-col w-full lg:ml-4">
 							<TechTreeComponent
 								handleOptimize={handleOptimize}
 								solving={solving}
 								gridContainerRef={gridContainerRef}
 								gridTableTotalWidth={gridTableTotalWidth}
 							/>
-						</div>
+						</aside>
 					)}
 
 				</section>
-			</section>
+			</div>
 
 			<AppFooter buildVersion={buildVersion} />
 
