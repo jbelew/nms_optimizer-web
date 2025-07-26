@@ -53,6 +53,9 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
+						<DropdownMenu.Label className="shipSelection__header">
+							Select Build
+						</DropdownMenu.Label>
 						{builds.map((build, index) => (
 							<DropdownMenu.Item key={index} onClick={() => handleApply(build)}>
 								{build.title}

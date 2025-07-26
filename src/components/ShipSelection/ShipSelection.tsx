@@ -106,6 +106,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					)}
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content className="shipSelection__dropdownMenu">
+					<DropdownMenu.Label className="shipSelection__header">
+						Select Platform
+					</DropdownMenu.Label>
 					<ShipTypesDropdown
 						selectedShipType={selectedShipType}
 						handleOptionSelect={handleOptionSelect}
