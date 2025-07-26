@@ -65,7 +65,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	// Conditionally add classes based on isInset
 	const containerClasses = `
-    flex flex-col items-center justify-center bg-opacity-50
+    flex flex-col items-center justify-center
     ${isInset ? "absolute inset-0" : ""}
   `;
 
@@ -79,11 +79,10 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 				</Text>
 			)}
 			<Text
-				className={`text-sm font-semibold text-center shadow-sm sm:text-normal messageSpinner__random ${
-					displayRandomMessage
+				className={`text-sm font-semibold text-center shadow-sm sm:text-normal messageSpinner__random ${displayRandomMessage
 						? "messageSpinner__random--visible"
 						: "messageSpinner__random--hidden"
-				}`}
+					}`}
 			>
 				{displayRandomMessage ? currentRandomMessage : "\u00A0"}
 			</Text>

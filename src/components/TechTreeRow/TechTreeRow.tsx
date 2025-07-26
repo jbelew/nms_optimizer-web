@@ -343,7 +343,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				<>
 					<Accordion.Root
 						className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
-						style={{ borderColor: "var(--accent-a6)" }}
+						style={{ borderColor: "var(--accent-track)" }}
 						type="single"
 						collapsible
 					>

@@ -78,8 +78,8 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="p-4 rounded-md shadow-md gridContainer__sidebar backdrop-blur-xl"
-						style={{ height: scrollAreaHeight }}
+						className="p-4 rounded-md shadow gridContainer__sidebar"
+						style={{ height: scrollAreaHeight, backgroundColor: "var(--color-panel-translucent)" }}
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}
