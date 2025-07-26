@@ -122,7 +122,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 
 	if (roundedMaxBonus < 100) {
 		return (
-			<Tooltip content={t("techTree.tooltips.insufficientSpace")}>
+			<Tooltip content={t("techTree.tooltips.insufficientSpace") + " -" + Math.round((100 - roundedMaxBonus) * 100) / 100 + "%"}>
 				<ExclamationTriangleIcon
 					className="inline-block mt-[8px] align-text-top"
 					style={{ color: "var(--red-a8)" }}
@@ -142,12 +142,12 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 	}
 	// roundedMaxBonus > 100
 	return (
-		<Tooltip content={t("techTree.tooltips.boostedSolve")}>
+		<Tooltip content={t("techTree.tooltips.boostedSolve") + " +" + Math.round((roundedMaxBonus - 100) * 100) / 100 + "%"}>
 			<LightningBoltIcon
 				className="inline-block w-4 h-4 mt-[6px] align-text-top"
 				style={{ color: "var(--amber-a8)" }}
 			/>
-		</Tooltip>
+		</Tooltip >
 	);
 };
 
@@ -222,7 +222,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		if (isGridFull && !hasTechInGrid) {
 			setShaking(true); // Trigger the shake
 			setTimeout(() => {
-				// TODO: Consider making this a configurable constant or part of the shake store
 				setShaking(false); // Stop the shake after a delay
 			}, 500); // Adjust the duration as needed
 		} else {
