@@ -57,7 +57,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			</div>
 
 			<Heading
-				wrap="balance"
+				wrap="pretty"
 				align="center"
 				as="h2"
 				size={{ initial: "2", sm: "3" }}
