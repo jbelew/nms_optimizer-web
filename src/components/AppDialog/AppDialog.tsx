@@ -63,7 +63,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<Dialog.Portal>
-				<Theme>
+				<Theme >
 					<Dialog.Overlay className="appDialog__overlay" />
 					<Dialog.Content className="appDialog__content">
 						<Dialog.Title className="mr-2">

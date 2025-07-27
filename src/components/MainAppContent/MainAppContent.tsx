@@ -80,7 +80,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 	return (
 		<main className="flex flex-col items-center justify-center min-h-[100dvh] lg:min-h-screen">
-			<div className="w-auto rounded-none shadow-none app backdrop-blur-xl lg:shadow-xl lg:rounded-xl" style={{ backgroundColor: "var(--color-panel-translucent)" }}>
+			<div className="w-auto rounded-none shadow-none app backdrop-blur-2xl lg:shadow-xl lg:rounded-xl" style={{ backgroundColor: "var(--color-panel-translucent)" }}>
 				<AppHeader onShowChangelog={handleShowChangelog} />
 				<section
 					className="flex flex-col items-center p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
@@ -121,7 +121,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 							updateUrlForReset={updateUrlForReset}
 							gridContainerRef={gridContainerRef}
 						/>
-						
+
 					</article>
 
 					{!isSharedGrid && (

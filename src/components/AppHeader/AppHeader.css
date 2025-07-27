@@ -1,8 +1,6 @@
 .header {
-	/* border-bottom: 1px solid var(--gray-a5); */
 	background-image: linear-gradient(to bottom, var(--color-panel-solid), rgba(0, 0, 0, 0));
 	overflow: hidden;
-	/* box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.05); */
 }
 
 .header__logo--text {
@@ -17,13 +15,13 @@
 .header__title {
 	font-weight: 700;
 	color: var(--gray-12);
-	filter: drop-shadow(0 0 4px var(--accent-3));
+	filter: drop-shadow(0 0 4px var(--accent-a2));
 }
 
 .header__title strong {
 	font-weight: 700;
 	color: var(--gray-12);
-	filter: drop-shadow(0 0 8px var(--accent-a6));
+	filter: drop-shadow(0 0 8px var(--accent-surface));
 }
 
 .selectLanguage__header {
