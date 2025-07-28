@@ -97,6 +97,7 @@
 }
 
 .gridCell--glow {
+	box-shadow: 0 0 4px 2px var(--accent-indicator);
 	animation: pulseGlow 1s infinite alternate ease-in-out;
 }
 
