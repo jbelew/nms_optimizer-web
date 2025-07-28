@@ -51,12 +51,12 @@
 }
 
 .gridCell--empty {
-	background-color: var(--gray-a3);
+	background-color: var(--accent-a3);
 	border-color: var(--accent-a1);
 }
 
 .gridCell--empty:hover {
-	background-color: var(--gray-a4);
+	background-color: var(--accent-a4);
 }
 
 .gridCell--inactive {
@@ -148,7 +148,7 @@
 	position: absolute;
 	width: 10%;
 	height: 10%;
-	border: 1px solid var(--gray-a8);
+	border: 1px solid var(--accent-a8);
 	pointer-events: none;
 }
 
