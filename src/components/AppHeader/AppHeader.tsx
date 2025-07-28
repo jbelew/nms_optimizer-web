@@ -26,7 +26,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<LanguageSelector />
 				<Tooltip content={t("translationRequest.openDialogLabel")}>
 					<IconButton
-						className="!ml-px !hidden sm:!inline"
+						className="!ml-px !hidden sm:!inline w-6 h-6"
 						color="amber"
 						radius="full"
 						variant="ghost"
@@ -41,7 +41,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							openDialog("translation");
 						}}
 					>
-						<InfoCircledIcon />
+						<InfoCircledIcon className="w-5 h-5" />
 					</IconButton>
 				</Tooltip>
 			</div>

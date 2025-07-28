@@ -187,9 +187,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			"border-1",
 			"shadow-sm",
 			"sm:shadow-md",
-			"rounded-sm",
-			"sm:rounded-md",
+			"relative"
 		];
+		if (!cell.module) classes.push("gridCell--empty")
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
 		if (isTouching) classes.push("gridCell--touched");
@@ -197,17 +197,20 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
 		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
 		return classes.join(" ");
-	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label, isTouching]);
+	}, [cell.supercharged, cell.active, cell.adjacency_bonus, cell.image, cell.label, cell.module, isTouching]);
 
 	// Get the upgrade priority for the current cell
 	const upGradePriority = getUpgradePriority(cell.label);
-	const backgroundImageStyle = useMemo(
-		() =>
-			cell.image
-				? `image-set(url(/assets/img/grid/${cell.image}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`
-				: "none",
-		[cell.image]
-	);
+	const backgroundImageStyle = useMemo(() => {
+		if (!cell.module && cell.active) {
+			// Use a generic "empty" image for cells without a module
+			return `image-set(url(/assets/img/grid/empty.webp) 1x, url(/assets/img/grid/empty@2x.webp) 2x)`;
+		}
+		if (cell.image) {
+			return `image-set(url(/assets/img/grid/${cell.image}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
+		}
+		return "none";
+	}, [cell.module, cell.active, cell.image]);
 
 	const cellElementStyle = useMemo(
 		() => ({
@@ -215,6 +218,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		}),
 		[backgroundImageStyle]
 	);
+
 	const cellElement = (
 		<div
 			role="gridcell"
@@ -229,6 +233,14 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			className={cellClassName}
 			style={cellElementStyle}
 		>
+			{!cell.supercharged && (
+				<>
+					<span className="corner top-left"></span>
+					<span className="corner top-right"></span>
+					<span className="corner bottom-left"></span>
+					<span className="corner bottom-right"></span>
+				</>
+			)}
 			{cell.label && ( // Conditionally render the label span
 				<span className="mt-1 text-1xl sm:text-3xl lg:text-4xl gridCell__label">
 					{upGradePriority > 0 ? upGradePriority : null}

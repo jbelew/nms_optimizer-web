@@ -41,15 +41,6 @@
 	cursor: pointer;
 }
 
-.gridCell--inactive {
-	border-color: var(--gray-a6);
-	background-color: var(--gray-a2);
-}
-
-.gridCell--inactive:hover {
-	background-color: var(--gray-a4);
-}
-
 .gridCell--active {
 	border-color: var(--accent-track);
 	background-color: var(--accent-a3);
@@ -57,6 +48,24 @@
 
 .gridCell--active:hover {
 	background-color: var(--accent-a4);
+}
+
+.gridCell--empty {
+	background-color: var(--gray-a3);
+	border-color: var(--accent-a1);
+}
+
+.gridCell--empty:hover {
+	background-color: var(--gray-a4);
+}
+
+.gridCell--inactive {
+	border-color: var(--gray-a1);
+	background-color: var(--gray-a2);
+}
+
+.gridCell--inactive:hover {
+	background-color: var(--gray-a3);
 }
 
 .gridCell--active[data-accent-color="white"] {
@@ -125,6 +134,48 @@
 	background-color: var(--accent-track) !important;
 }
 
+.gridCell--empy.gridCell--touched {
+	border-color: var(--gray-a11) !important;
+	background-color: var(--gray-track) !important;
+}
+
 .gridCell--supercharged.gridCell--touched {
+	border-color: var(--purple-a11) !important;
 	background-color: var(--purple-track) !important;
+}
+
+.gridCell--empty .corner {
+	position: absolute;
+	width: 10%;
+	height: 10%;
+	border: 1px solid var(--gray-a8);
+	pointer-events: none;
+}
+
+.gridCell--empty .top-left {
+	top: 0;
+	left: 0;
+	border-right: none;
+	border-bottom: none;
+}
+
+.gridCell--empty .top-right {
+	top: 0;
+	right: 0;
+	border-left: none;
+	border-bottom: none;
+}
+
+.gridCell--empty .bottom-left {
+	bottom: 0;
+	left: 0;
+	border-right: none;
+	border-top: none;
+}
+
+.gridCell--empty .bottom-right {
+	bottom: 0;
+	right: 0;
+	border-left: none;
+	border-top: none;
 }
