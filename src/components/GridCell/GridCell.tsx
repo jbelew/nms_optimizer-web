@@ -189,7 +189,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			"relative",
 		];
 		// classes.push(cell.module || cell.supercharged ? "sm:border-2 border-1" : "");
-		if (!cell.module) classes.push("gridCell--empty")
+		if (!cell.module && cell.active) classes.push("gridCell--empty")
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
 		if (isTouching) classes.push("gridCell--touched");
