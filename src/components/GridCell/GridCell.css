@@ -65,7 +65,7 @@
 }
 
 .gridCell--inactive:hover {
-	background-color: var(--gray-a3);
+	background-color: var(--gray-a2);
 }
 
 .gridCell--active[data-accent-color="white"] {
