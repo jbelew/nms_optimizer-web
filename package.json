@@ -26,6 +26,7 @@
 		"start": "node server.js",
 		"heroku-postbuild": "vite build",
 		"analyze": "vite build --config vite.config.analyze.ts",
+		"release": "standard-version",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -102,6 +103,7 @@
 		"tailwindcss": "^4.1.10",
 		"typescript": "~5.8.3",
 		"typescript-eslint": "^8.35.0",
+		"standard-version": "^9.3.2",
 		"vite": "^6.3.5",
 		"vite-plugin-color-scheme": "^0.0.1",
 		"vite-plugin-compression": "^0.5.1",
@@ -113,6 +115,9 @@
 	"config": {
 		"commitizen": {
 			"path": "./node_modules/cz-conventional-changelog"
+		},
+		"standard-version": {
+			"tag-prefix": "v"
 		}
 	}
 }
