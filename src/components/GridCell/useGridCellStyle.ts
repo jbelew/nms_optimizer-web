@@ -1,0 +1,77 @@
+import { useMemo } from "react";
+import { useTechStore } from "../../store/TechStore";
+import type { Cell } from "../../store/GridStore";
+
+export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
+	const currentTechColorFromStore = useTechStore((state) =>
+		state.getTechColor(cell.tech ?? "")
+	);
+
+	const techColor = useMemo(() => {
+		return !currentTechColorFromStore && cell.supercharged
+			? "purple"
+			: currentTechColorFromStore;
+	}, [currentTechColorFromStore, cell.supercharged]);
+
+	const cellClassName = useMemo(() => {
+		const classes = [
+			"gridCell",
+			"gridCell--interactive",
+			"sm:border-2 border-1",
+			"shadow-sm",
+			"sm:shadow-md",
+			"relative",
+		];
+		if (!cell.module && cell.active) classes.push("gridCell--empty");
+		if (cell.supercharged) classes.push("gridCell--supercharged");
+		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
+		if (isTouching) classes.push("gridCell--touched");
+		if (cell.adjacency_bonus === 0 && cell.image)
+			classes.push("gridCell--black");
+		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
+		if (cell.label)
+			classes.push(
+				"flex",
+				"items-center",
+				"justify-center",
+				"w-full",
+				"h-full"
+			);
+		return classes.join(" ");
+	}, [
+		cell.supercharged,
+		cell.active,
+		cell.adjacency_bonus,
+		cell.image,
+		cell.label,
+		cell.module,
+		isTouching,
+	]);
+
+	const backgroundImageStyle = useMemo(() => {
+		if (!cell.module && cell.active && !cell.supercharged) {
+			return `image-set(url(/assets/img/grid/empty-accent.webp) 1x, url(/assets/img/grid/empty-accent@2x.webp) 2x)`;
+		}
+		if (!cell.module && cell.supercharged) {
+			return `image-set(url(/assets/img/grid/empty-supercharged.webp) 1x, url(/assets/img/grid/empty-supercharged@2x.webp) 2x)`;
+		}
+		if (cell.image) {
+			return `image-set(url(/assets/img/grid/${
+				cell.image
+			}) 1x, url(/assets/img/grid/${cell.image.replace(
+				/\.webp$/,
+				"@2x.webp"
+			)}) 2x)`;
+		}
+		return "none";
+	}, [cell.module, cell.active, cell.image, cell.supercharged]);
+
+	const cellElementStyle = useMemo(
+		() => ({
+			backgroundImage: backgroundImageStyle,
+		}),
+		[backgroundImageStyle]
+	);
+
+	return { techColor, cellClassName, cellElementStyle };
+};

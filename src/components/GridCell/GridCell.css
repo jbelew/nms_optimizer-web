@@ -97,17 +97,15 @@
 }
 
 .gridCell--glow {
-	box-shadow: 0 0 1px 1px var(--accent-indicator);
+	box-shadow: 0 0 1px 1px var(--accent-a6);
 	animation: pulseGlow 1s infinite alternate ease-in-out;
 }
 
 @keyframes pulseGlow {
 	from {
-		/* box-shadow: 0 0 4px 0px var(--accent-a3); */
 		border-color: var(--accent-track);
 	}
 	to {
-		/* box-shadow: 0 0 4px 2px var(--accent-a6); */
 		border-color: var(--accent-12);
 	}
 }
@@ -128,7 +126,7 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-a7);
+	border: 1px solid var(--accent-a6);
 	position: absolute;
 	width: 15%;
 	height: 15%;
@@ -164,7 +162,7 @@
 }
 
 .gridCell--inactive .corner {
-	border: 1px solid var(--gray-a7);
+	border: 1px solid var(--gray-a6);
 	position: absolute;
 	width: 15%;
 	height: 15%;
