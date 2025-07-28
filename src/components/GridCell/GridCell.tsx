@@ -204,7 +204,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	const backgroundImageStyle = useMemo(() => {
 		if (!cell.module && cell.active) {
 			// Use a generic "empty" image for cells without a module
-			return `image-set(url(/assets/img/grid/empty.webp) 1x, url(/assets/img/grid/empty@2x.webp) 2x)`;
+			// return `image-set(url(/assets/img/grid/empty.webp) 1x, url(/assets/img/grid/empty@2x.webp) 2x)`;
 		}
 		if (cell.image) {
 			return `image-set(url(/assets/img/grid/${cell.image}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
@@ -214,7 +214,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 
 	const cellElementStyle = useMemo(
 		() => ({
-			backgroundBlendMode: "screen", backgroundImage: backgroundImageStyle,
+			backgroundImage: backgroundImageStyle,
 		}),
 		[backgroundImageStyle]
 	);

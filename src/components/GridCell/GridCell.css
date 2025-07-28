@@ -145,7 +145,7 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-indicator);
+	border: 1px solid var(--accent-a6);
 	position: absolute;
 	width: 10%;
 	height: 10%;
