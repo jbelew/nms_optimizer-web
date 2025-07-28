@@ -1,0 +1,51 @@
+name: Create GitHub Release
+
+on: 
+  push:
+    tags:
+      - 'v*.*.*' # Triggers on pushes to tags like v1.0.0, v1.0.1, etc.
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to create a release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to fetch all history for changelog generation
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          # Get the previous tag to generate changelog from the last release
+          # If no previous tag, generate from the first commit
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 @^ || git rev-list --max-parents=0 HEAD)
+          CHANGELOG_CONTENT=$(conventional-changelog -p angular -r 0 -l $PREVIOUS_TAG -u ${{ github.ref_name }})
+          # Escape newlines and double quotes for multiline output
+          echo "CHANGELOG_CONTENT<<EOF"
+          echo "$CHANGELOG_CONTENT"
+          echo "EOF"
+        shell: bash >> {output}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.CHANGELOG_CONTENT }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
