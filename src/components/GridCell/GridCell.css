@@ -96,24 +96,6 @@
 	background-color: var(--gray-a4);
 }
 
-@media (min-width: 640px) {
-	/* Transitions only on desktop */
-	.gridCell--inactive:hover,
-	.gridCell--active:hover,
-	.gridCell--supercharged:hover,
-	.gridCell--black:hover {
-		transition: background-color 0.25s ease;
-	}
-
-	.gridCell--black:hover {
-		transition: border-color 0.25s ease;
-	}
-
-	.gridCell--active[data-accent-color="white"] {
-		border-width: 2px;
-	}
-}
-
 .gridCell--glow {
 	animation: pulseGlow 1s infinite alternate ease-in-out;
 }
@@ -145,7 +127,7 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-a6);
+	border: 1px solid var(--accent-a8);
 	position: absolute;
 	width: 15%;
 	height: 15%;
@@ -181,7 +163,7 @@
 }
 
 .gridCell--inactive .corner {
-	border: 1px solid var(--gray-a6);
+	border: 1px solid var(--gray-a8);
 	position: absolute;
 	width: 15%;
 	height: 15%;
@@ -214,4 +196,32 @@
 	right: 0;
 	border-left: none;
 	border-top: none;
+}
+
+@media (min-width: 640px) {
+	/* Transitions only on desktop */
+	.gridCell--inactive:hover,
+	.gridCell--active:hover,
+	.gridCell--supercharged:hover,
+	.gridCell--black:hover {
+		transition: background-color 0.25s ease;
+	}
+
+	.gridCell--black:hover {
+		transition: border-color 0.25s ease;
+	}
+
+	.gridCell--active[data-accent-color="white"] {
+		border-width: 2px;
+	}
+
+	.gridCell--empty .corner {
+		width: 10%;
+		height: 10%;
+	}
+
+	.gridCell--inactive .corner {
+		width: 10%;
+		height: 10%;
+	}
 }
