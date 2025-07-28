@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": ["vite/client"],
+		"types": ["vite/client", "vitest"]
 		// It's good practice to define other root-level options if needed,
 		// but for now, let's just add types.
 		// Adding "skipLibCheck": true here might also be an option if errors persist in dependencies.
