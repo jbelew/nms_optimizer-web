@@ -202,15 +202,19 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	// Get the upgrade priority for the current cell
 	const upGradePriority = getUpgradePriority(cell.label);
 	const backgroundImageStyle = useMemo(() => {
-		if (!cell.module && cell.active) {
+		if (!cell.module && cell.active && !cell.supercharged) {
 			// Use a generic "empty" image for cells without a module
-			return `image-set(url(/assets/img/grid/empty.webp) 1x, url(/assets/img/grid/empty@2x.webp) 2x)`;
+			return `image-set(url(/assets/img/grid/empty-accent.webp) 1x, url(/assets/img/grid/empty-accent@2x.webp) 2x)`;
+		}
+		if (!cell.module && cell.supercharged) {
+			// Use a generic "empty" image for cells without a module
+			return `image-set(url(/assets/img/grid/empty-supercharged.webp) 1x, url(/assets/img/grid/empty-supercharged@2x.webp) 2x)`;
 		}
 		if (cell.image) {
 			return `image-set(url(/assets/img/grid/${cell.image}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
 		}
 		return "none";
-	}, [cell.module, cell.active, cell.image]);
+	}, [cell.module, cell.active, cell.image, cell.supercharged]);
 
 	const cellElementStyle = useMemo(
 		() => ({
