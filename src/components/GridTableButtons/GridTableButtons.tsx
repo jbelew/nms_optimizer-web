@@ -85,14 +85,15 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 
 	return (
 		<>
-			<div role="gridcell" className="col-span-6 gap-2 mt-3">
+			<div role="gridcell" className="col-span-6 mt-3 gap-2">
 				{/* This div will contain the left-aligned buttons */}
 				{isSmallAndUp ? (
 					<Button
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${isFirstVisit ? "button--glow" : ""
-							}`}
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${
+							isFirstVisit ? "button--glow" : ""
+						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
 					>
@@ -103,8 +104,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					<IconButton
 						size="2"
 						variant={isFirstVisit ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${isFirstVisit ? "button--glow" : ""
-							}`}
+						className={`gridTable__button gridTable__button--instructions !mr-2 ${
+							isFirstVisit ? "button--glow" : ""
+						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
 					>
@@ -160,7 +162,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					))}
 			</div>
 
-			<div role="gridcell" className="flex justify-end col-span-5 mt-3 lg:col-span-4">
+			<div role="gridcell" className="col-span-5 mt-3 flex justify-end lg:col-span-4">
 				<Button
 					size="2"
 					className={`gridTable__button gridTable__button--reset`}

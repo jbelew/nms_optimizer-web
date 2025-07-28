@@ -37,7 +37,7 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 			titleKey="dialogs.titles.optimizationAlert"
 			content={
 				<>
-					<span className="block pb-2 text-xl font-semibold tracking-widest text-center errorContent__title">
+					<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 						{t("dialogs.optimizationAlert.warning")}
 					</span>
 					<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">

@@ -1,9 +1,8 @@
 import React, { useMemo } from "react";
 
-
+import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree";
 import { useGridStore } from "../../store/GridStore";
 import { TechTreeSection } from "./TechTreeSection";
-import { type TechTreeItem, type TechTree } from "../../hooks/useTechTree";
 
 interface TechTreeContentProps {
 	handleOptimize: (tech: string) => Promise<void>;
@@ -73,4 +72,3 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 );
 
 TechTreeContent.displayName = "TechTreeContent";
-

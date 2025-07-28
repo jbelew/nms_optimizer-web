@@ -1,8 +1,9 @@
 // src/context/DialogContext.tsx
+import type { DialogType } from "./dialog-utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { DialogContext, type DialogType } from "./dialog-utils";
+import { DialogContext } from "./dialog-utils";
 
 /**
  * Provider component that manages the state and logic for routed dialogs.
@@ -22,7 +23,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	// Effect to sync dialog state with URL
 	useEffect(() => {
 		const path = location.pathname.substring(1); // remove leading '/'
-		if (path === "about" || path === "instructions" || path === "changelog" || path === "translation") {
+		if (
+			path === "about" ||
+			path === "instructions" ||
+			path === "changelog" ||
+			path === "translation"
+		) {
 			setActiveDialog(path);
 		} else {
 			setActiveDialog(null);

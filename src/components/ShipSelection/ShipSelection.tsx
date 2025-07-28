@@ -1,14 +1,14 @@
 // src/components/ShipSelection/ShipSelection.tsx
 import "./ShipSelection.css";
 
+import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes";
+import React, { Suspense, useCallback, useEffect, useMemo } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
-import React, { Suspense, useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes";
 import { fetchShipTypes } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -39,7 +39,13 @@ const ShipSelectionLoadingState = () => {
 					<DropdownMenu.TriggerIcon />
 				</Button>
 			) : (
-				<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1" disabled>
+				<IconButton
+					size="2"
+					variant="soft"
+					aria-label="Select ship type"
+					className="!mt-1"
+					disabled
+				>
 					<Spinner size="3" />
 				</IconButton>
 			)}
@@ -95,20 +101,18 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				<DropdownMenu.Trigger disabled={solving}>
 					{isSmallAndUp ? (
 						<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
-							<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
+							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 							<Separator orientation="vertical" color="cyan" decorative />
 							<DropdownMenu.TriggerIcon />
 						</Button>
 					) : (
 						<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
-							<GearIcon className="w-4 h-4 sm:h-5 sm:w-5" />
+							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						</IconButton>
 					)}
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content className="shipSelection__dropdownMenu">
-					<DropdownMenu.Label className="shipSelection__header">
-						Select Platform
-					</DropdownMenu.Label>
+					<DropdownMenu.Label className="shipSelection__header">Select Platform</DropdownMenu.Label>
 					<ShipTypesDropdown
 						selectedShipType={selectedShipType}
 						handleOptionSelect={handleOptionSelect}
@@ -163,14 +167,9 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 					<React.Fragment key={type}>
-
 						{groupIndex > 0 && <DropdownMenu.Separator />}
 						{items.map(({ key }) => (
-							<DropdownMenu.RadioItem
-								key={key}
-								value={key}
-								className="font-medium"
-							>
+							<DropdownMenu.RadioItem key={key} value={key} className="font-medium">
 								{t(`platforms.${key}`)}
 							</DropdownMenu.RadioItem>
 						))}

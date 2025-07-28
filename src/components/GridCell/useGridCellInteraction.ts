@@ -1,7 +1,8 @@
+import type { Cell } from "../../store/GridStore";
 import { useCallback, useRef, useState } from "react";
+
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
-import type { Cell } from "../../store/GridStore";
 
 export const useGridCellInteraction = (
 	cell: Cell,
@@ -10,12 +11,8 @@ export const useGridCellInteraction = (
 	isSharedGrid: boolean
 ) => {
 	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
-	const toggleCellSupercharged = useGridStore(
-		(state) => state.toggleCellSupercharged
-	);
-	const totalSupercharged = useGridStore((state) =>
-		state.selectTotalSuperchargedCells()
-	);
+	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
+	const totalSupercharged = useGridStore((state) => state.selectTotalSuperchargedCells());
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
 	const [isTouching, setIsTouching] = useState(false);
@@ -25,8 +22,7 @@ export const useGridCellInteraction = (
 
 	const lastTapTime = useRef(0);
 	const isTouchDevice = useRef(
-		typeof window !== "undefined" &&
-			("ontouchstart" in window || navigator.maxTouchPoints > 0)
+		typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
 	);
 
 	const handleTouchStart = useCallback(() => {

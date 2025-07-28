@@ -1,11 +1,13 @@
 /// <reference types="@testing-library/jest-dom" />
 
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "../../store/GridStore";
+// Import the component after mocks are defined
+import GridCell from "./GridCell";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 let mockCellState = {
@@ -49,9 +51,6 @@ vi.mock("@radix-ui/themes", () => ({
 	Tooltip: ({ children }: { children: React.ReactNode }) => <div>{children}</div>, // Render children directly
 }));
 
-// Import the component after mocks are defined
-import GridCell from './GridCell';
-
 describe("GridCell", () => {
 	const mockToggleCellSupercharged = vi.fn();
 	const mockToggleCellActive = vi.fn();
@@ -81,35 +80,30 @@ describe("GridCell", () => {
 		});
 
 		// Mock useGridCellInteraction to return dummy handlers
-		(useGridCellInteraction as unknown as vi.Mock).mockImplementation((cell, rowIndex, columnIndex, isSharedGrid) => ({
-			isTouching: false,
-			handleClick: (event: React.MouseEvent) => {
-				if (isSharedGrid) return;
-				if (event.ctrlKey) {
-					mockToggleCellActive(rowIndex, columnIndex);
-				} else if (cell.active) {
-					mockToggleCellSupercharged(rowIndex, columnIndex);
-				}
-			},
-			handleContextMenu: vi.fn(),
-			handleKeyDown: vi.fn(),
-			handleTouchStart: vi.fn(),
-			handleTouchEnd: vi.fn(),
-		}));
+		(useGridCellInteraction as unknown as vi.Mock).mockImplementation(
+			(cell, rowIndex, columnIndex, isSharedGrid) => ({
+				isTouching: false,
+				handleClick: (event: React.MouseEvent) => {
+					if (isSharedGrid) return;
+					if (event.ctrlKey) {
+						mockToggleCellActive(rowIndex, columnIndex);
+					} else if (cell.active) {
+						mockToggleCellSupercharged(rowIndex, columnIndex);
+					}
+				},
+				handleContextMenu: vi.fn(),
+				handleKeyDown: vi.fn(),
+				handleTouchStart: vi.fn(),
+				handleTouchEnd: vi.fn(),
+			})
+		);
 	});
 
 	const renderComponent = (cellOverrides = {}, props = {}) => {
 		// Mutate mockCellState with overrides before rendering
 		Object.assign(mockCellState, cellOverrides);
 
-		return render(
-			<GridCell
-				rowIndex={0}
-				columnIndex={0}
-				isSharedGrid={false}
-				{...props}
-			/>
-		);
+		return render(<GridCell rowIndex={0} columnIndex={0} isSharedGrid={false} {...props} />);
 	};
 
 	it("renders correctly", () => {
@@ -189,12 +183,12 @@ describe("GridCell", () => {
 	it("renders corner elements when not supercharged", () => {
 		renderComponent({ supercharged: false });
 		const cellElement = screen.getByRole("gridcell");
-		expect(cellElement.querySelector('.corner.top-left')).toBeInTheDocument();
+		expect(cellElement.querySelector(".corner.top-left")).toBeInTheDocument();
 	});
 
 	it("does not render corner elements when supercharged", () => {
 		renderComponent({ supercharged: true });
 		const cellElement = screen.getByRole("gridcell");
-		expect(cellElement.querySelector('.corner.top-left')).not.toBeInTheDocument();
+		expect(cellElement.querySelector(".corner.top-left")).not.toBeInTheDocument();
 	});
 });

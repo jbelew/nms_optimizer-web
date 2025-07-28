@@ -2,11 +2,11 @@
 import { create } from "zustand";
 
 interface ShakeState {
-  shaking: boolean;
-  setShaking: (shaking: boolean) => void;
+	shaking: boolean;
+	setShaking: (shaking: boolean) => void;
 }
 
 export const useShakeStore = create<ShakeState>((set) => ({
-  shaking: false,
-  setShaking: (shaking) => set({ shaking }),
+	shaking: false,
+	setShaking: (shaking) => set({ shaking }),
 }));

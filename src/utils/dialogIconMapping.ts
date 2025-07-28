@@ -1,7 +1,7 @@
 // src/utils/dialogIconMapping.ts
 
-import type { CSSProperties } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
+import type { CSSProperties } from "react";
 import {
 	CounterClockwiseClockIcon,
 	ExclamationTriangleIcon,

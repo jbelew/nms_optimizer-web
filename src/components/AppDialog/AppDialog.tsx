@@ -63,21 +63,19 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<Dialog.Portal>
-				<Theme >
+				<Theme>
 					<Dialog.Overlay className="appDialog__overlay" />
 					<Dialog.Content className="appDialog__content">
 						<Dialog.Title className="mr-2">
-							<span className="flex items-center gap-2 text-xl heading-styled sm:text-2xl">
-								{IconComponent && <IconComponent className="inline w-6 h-6" style={style} />}
+							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
+								{IconComponent && <IconComponent className="inline h-6 w-6" style={style} />}
 								{titleKey ? t(titleKey) : title}
 							</span>
 							<Separator mt="2" size="4" orientation="horizontal" decorative />
 						</Dialog.Title>
 
 						<Dialog.Description asChild>
-							<section className="flex-1 pr-4 overflow-y-auto">
-								{content}
-							</section>
+							<section className="flex-1 overflow-y-auto pr-4">{content}</section>
 						</Dialog.Description>
 
 						<Dialog.Close asChild>

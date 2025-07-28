@@ -38,7 +38,9 @@ export const useAppLayout = (): AppLayout => {
 							newGridHeight = Math.round(entry.contentRect.height);
 						}
 					} else if (entry.target === elementToObserveWidth) {
-						newGridTableTotalWidth = Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT);
+						newGridTableTotalWidth = Math.round(
+							entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT
+						);
 					}
 				}
 			}
@@ -50,7 +52,9 @@ export const useAppLayout = (): AppLayout => {
 				newGridHeight = Math.round(elementToObserveHeight.getBoundingClientRect().height);
 			}
 			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
-				newGridTableTotalWidth = Math.round(elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT);
+				newGridTableTotalWidth = Math.round(
+					elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT
+				);
 			}
 
 			setGridHeight((prevHeight) => (prevHeight !== newGridHeight ? newGridHeight : prevHeight));

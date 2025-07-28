@@ -1,11 +1,14 @@
 // src/hooks/useRecommendedBuild.tsx
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { useCallback, useMemo } from "react";
 
-import { createEmptyCell, createGrid, useGridStore, resetCellContent } from "../store/GridStore";
-import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
+import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../store/GridStore";
 import { isValidRecommendedBuild } from "../utils/typeValidation";
 
-export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.MutableRefObject<HTMLDivElement | null>) => {
+export const useRecommendedBuild = (
+	techTree: TechTree,
+	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>
+) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
 
 	const modulesMap = useMemo(() => {
@@ -65,7 +68,7 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 										value: module.value ?? 0,
 										adjacency: module.adjacency ?? "none",
 										sc_eligible: module.sc_eligible ?? false,
-									type: module.type ?? "", // Add the missing 'type' property
+										type: module.type ?? "", // Add the missing 'type' property
 									};
 								} else {
 									// If module not found, reset the cell to empty state
@@ -73,7 +76,8 @@ export const useRecommendedBuild = (techTree: TechTree, gridContainerRef: React.
 								}
 							}
 							// Adjacency bonus is also from cellData, so it should be assigned outside the module check
-							cell.adjacency_bonus = typeof cellData.adjacency_bonus === 'number' ? cellData.adjacency_bonus : 0.0;
+							cell.adjacency_bonus =
+								typeof cellData.adjacency_bonus === "number" ? cellData.adjacency_bonus : 0.0;
 
 							newGrid.cells[r][c] = cell;
 						} else {

@@ -1,8 +1,8 @@
 // src/components/MessageSpinner/MessageSpinner.tsx
 import "./MessageSpinner.css";
 
-import { Spinner, Text } from "@radix-ui/themes";
 import React, { useEffect, useState } from "react";
+import { Spinner, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 interface MessageSpinnerProps {
@@ -74,15 +74,16 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 			<Spinner className="messageSpinner__spinner" />
 
 			{initialMessage && (
-				<Text className="pt-4 text-xl text-center sm:text-2xl messageSpinner__header">
+				<Text className="messageSpinner__header pt-4 text-center text-xl sm:text-2xl">
 					{initialMessage}
 				</Text>
 			)}
 			<Text
-				className={`text-sm font-semibold text-center shadow-sm sm:text-normal messageSpinner__random ${displayRandomMessage
-					? "messageSpinner__random--visible"
-					: "messageSpinner__random--hidden"
-					}`}
+				className={`sm:text-normal messageSpinner__random text-center text-sm font-semibold shadow-sm ${
+					displayRandomMessage
+						? "messageSpinner__random--visible"
+						: "messageSpinner__random--hidden"
+				}`}
 			>
 				{displayRandomMessage ? currentRandomMessage : "\u00A0"}
 			</Text>

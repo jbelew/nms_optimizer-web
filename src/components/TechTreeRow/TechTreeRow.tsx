@@ -1,6 +1,7 @@
 // src/components/TechTreeRow/TechTreeRow.tsx
 import "./TechTreeRow.css";
 
+import React, { useCallback, useEffect } from "react";
 import {
 	ChevronDownIcon,
 	Crosshair2Icon,
@@ -12,7 +13,6 @@ import {
 } from "@radix-ui/react-icons";
 import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/themes";
 import { Accordion } from "radix-ui";
-import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint"; // This line is already present and correct
@@ -44,32 +44,32 @@ export interface TechTreeRowProps {
 	moduleCount: number;
 	/** The color associated with the technology. */
 	techColor:
-	| "gray"
-	| "gold"
-	| "bronze"
-	| "brown"
-	| "yellow"
-	| "amber"
-	| "orange"
-	| "tomato"
-	| "red"
-	| "ruby"
-	| "crimson"
-	| "pink"
-	| "plum"
-	| "purple"
-	| "violet"
-	| "iris"
-	| "indigo"
-	| "blue"
-	| "cyan"
-	| "teal"
-	| "jade"
-	| "green"
-	| "grass"
-	| "lime"
-	| "mint"
-	| "sky";
+		| "gray"
+		| "gold"
+		| "bronze"
+		| "brown"
+		| "yellow"
+		| "amber"
+		| "orange"
+		| "tomato"
+		| "red"
+		| "ruby"
+		| "crimson"
+		| "pink"
+		| "plum"
+		| "purple"
+		| "violet"
+		| "iris"
+		| "indigo"
+		| "blue"
+		| "cyan"
+		| "teal"
+		| "jade"
+		| "green"
+		| "grass"
+		| "lime"
+		| "mint"
+		| "sky";
 }
 
 function round(value: number, decimals: number) {
@@ -122,9 +122,16 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 
 	if (roundedMaxBonus < 100) {
 		return (
-			<Tooltip content={t("techTree.tooltips.insufficientSpace") + " -" + Math.round((100 - roundedMaxBonus) * 100) / 100 + "%"}>
+			<Tooltip
+				content={
+					t("techTree.tooltips.insufficientSpace") +
+					" -" +
+					Math.round((100 - roundedMaxBonus) * 100) / 100 +
+					"%"
+				}
+			>
 				<ExclamationTriangleIcon
-					className="inline-block mt-[8px] align-text-top"
+					className="mt-[8px] inline-block align-text-top"
 					style={{ color: "var(--red-a8)" }}
 				/>
 			</Tooltip>
@@ -134,7 +141,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 		return (
 			<Tooltip content={t("techTree.tooltips.validSolve")}>
 				<Crosshair2Icon
-					className="inline-block mt-[7px] align-text-top"
+					className="mt-[7px] inline-block align-text-top"
 					style={{ color: "var(--gray-a10)" }}
 				/>
 			</Tooltip>
@@ -142,12 +149,19 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 	}
 	// roundedMaxBonus > 100
 	return (
-		<Tooltip content={t("techTree.tooltips.boostedSolve") + " +" + Math.round((roundedMaxBonus - 100) * 100) / 100 + "%"}>
+		<Tooltip
+			content={
+				t("techTree.tooltips.boostedSolve") +
+				" +" +
+				Math.round((roundedMaxBonus - 100) * 100) / 100 +
+				"%"
+			}
+		>
 			<LightningBoltIcon
-				className="inline-block w-4 h-4 mt-[6px] align-text-top"
+				className="mt-[6px] inline-block h-4 w-4 align-text-top"
 				style={{ color: "var(--amber-a8)" }}
 			/>
-		</Tooltip >
+		</Tooltip>
 	);
 };
 
@@ -277,7 +291,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					<Badge
 						ml="1"
 						mt="1"
-						className="!font-mono align-top"
+						className="align-top !font-mono"
 						size="1"
 						radius="full"
 						variant={hasTechInGrid ? "soft" : "surface"}
@@ -285,9 +299,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						style={
 							hasTechInGrid
 								? {
-									backgroundColor: "var(--gray-a2)",
-									color: "var(--gray-a8)",
-								}
+										backgroundColor: "var(--gray-a2)",
+										color: "var(--gray-a8)",
+									}
 								: { backgroundColor: "var(--accent-a3)" }
 						}
 					>
@@ -300,7 +314,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	TechInfoBadges.displayName = "TechInfoBadges";
 
 	return (
-		<div className="flex gap-2 mt-2 mb-2 ml-0 mr-1 sm:ml-1 items-top optimizationButton">
+		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
 				<IconButton
@@ -341,7 +355,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			{hasRewardModules ? (
 				<>
 					<Accordion.Root
-						className="flex-1 pt-1 pb-1 border-b-1 AccordionRoot"
+						className="AccordionRoot flex-1 border-b-1 pt-1 pb-1"
 						style={{ borderColor: "var(--accent-track)" }}
 						type="single"
 						collapsible
@@ -352,11 +366,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 									{translatedTechName}
 								</Text>
 							</AccordionTrigger>
-							<Accordion.Content className="pl-1 AccordionContent">
+							<Accordion.Content className="AccordionContent pl-1">
 								{rewardModules.map((module) => (
-									<div key={module.id} className="flex items-start gap-2 AccordionContentText">
+									<div key={module.id} className="AccordionContentText flex items-start gap-2">
 										<Checkbox
-											className="!pt-1 ml-1 CheckboxRoot"
+											className="CheckboxRoot ml-1 !pt-1"
 											variant="soft"
 											id={module.id}
 											checked={currentCheckedModules.includes(module.id)}
@@ -395,7 +409,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						weight="medium"
 						size={isSmallAndUp ? "3" : "2"}
 						htmlFor={tech}
-						className="flex-1 block pt-1 techRow__label"
+						className="techRow__label block flex-1 pt-1"
 					>
 						{translatedTechName}
 					</Text>

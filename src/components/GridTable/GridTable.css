@@ -1,11 +1,11 @@
 .gridTable {
-  display: grid;
-  grid-template-columns: repeat(10, var(--grid-cell-size)) auto;
-  grid-template-rows: repeat(6, var(--grid-cell-size));
-  gap: var(--grid-gap);
-  width: fit-content;
+	display: grid;
+	grid-template-columns: repeat(10, var(--grid-cell-size)) auto;
+	grid-template-rows: repeat(6, var(--grid-cell-size));
+	gap: var(--grid-gap);
+	width: fit-content;
 }
 
 [role="row"] {
-  display: contents; /* This allows children to be direct grid items */
+	display: contents; /* This allows children to be direct grid items */
 }

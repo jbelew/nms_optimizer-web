@@ -1,10 +1,9 @@
 import React from "react";
-
-import { useTranslation } from "react-i18next";
 import { Separator } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
-import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 import { type TechTreeItem } from "../../hooks/useTechTree";
+import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
 // --- Image Map (This is the key part) ---
 type TypeImageMap = {
@@ -58,7 +57,7 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 		// Determine the image path from the typeImageMap
 		const imagePath = typeImageMap[type] ? `/assets/img/sidebar/${typeImageMap[type]}` : null;
 		return (
-			<div className="mb-6 lg:mb-6 last:mb-0 sidebar__section">
+			<div className="sidebar__section mb-6 last:mb-0 lg:mb-6">
 				<div className="flex items-start">
 					{/* Conditionally render the image if imagePath is available */}
 					{imagePath &&
@@ -66,15 +65,15 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 							<img
 								src={imagePath}
 								alt={type}
-								className="sm:mt-1 ml-1 h-[24] w-[32] mr-2 opacity-25"
+								className="mr-2 ml-1 h-[24] w-[32] opacity-25 sm:mt-1"
 							/>
 						)}
-					<h2 className="text-xl sm:text-2xl heading-styled">
+					<h2 className="heading-styled text-xl sm:text-2xl">
 						{t(`techTree.categories.${type}`).toUpperCase()}
 					</h2>
 				</div>
 
-				<Separator orientation="horizontal" size="4" className="mt-2 mb-4 sidebar__separator" />
+				<Separator orientation="horizontal" size="4" className="sidebar__separator mt-2 mb-4" />
 
 				{/* Render each technology as a TechTreeRow */}
 				{technologies.map((tech) => {
@@ -102,4 +101,3 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 );
 
 TechTreeSection.displayName = "TechTreeSection";
-

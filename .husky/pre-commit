@@ -1,0 +1,5 @@
+npm run format
+npm run lint:fix
+npm run typecheck
+npm test
+npm run sitemap

@@ -44,7 +44,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 
 	return (
 		<div
-			className="flex items-center justify-center h-full" // Ensure full height and center content
+			className="flex h-full items-center justify-center" // Ensure full height and center content
 			data-is-grid-control-column="true" // Added data attribute for selection
 		>
 			{isFirstInactiveRow && (

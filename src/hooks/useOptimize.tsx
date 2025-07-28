@@ -1,7 +1,8 @@
+import type { ApiResponse, Grid } from "../store/GridStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { API_URL } from "../constants";
-import { type ApiResponse, createEmptyCell, type Grid, useGridStore } from "../store/GridStore";
+import { createEmptyCell, useGridStore } from "../store/GridStore";
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { usePlatformStore } from "../store/PlatformStore";
 import { useTechStore } from "../store/TechStore";

@@ -1,5 +1,5 @@
-import { Separator, Link } from "@radix-ui/themes";
 import React from "react";
+import { Link, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
@@ -12,7 +12,7 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
 	return (
-		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-xs text-center lg:pb-0 sm:text-sm">
+		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-center text-xs sm:text-sm lg:pb-0">
 			<div className="font-light">
 				<Trans
 					i18nKey="footer.issuePrompt"

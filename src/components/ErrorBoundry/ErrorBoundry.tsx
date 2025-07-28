@@ -1,8 +1,10 @@
-// src/components/ErrorBoundary/ErrorBoundary.tsx
-import { Component, type ErrorInfo, type ReactNode } from "react";
+import type { ErrorInfo, ReactNode } from "react";
+import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import ReactGA from "react-ga4";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
+// src/components/ErrorBoundary/ErrorBoundary.tsx
 
 interface Props {
 	children: ReactNode;
@@ -54,14 +56,14 @@ class ErrorBoundary extends Component<Props, State> {
 
 			return (
 				<main className="flex flex-col items-center justify-center lg:min-h-screen">
-					<section className="w-auto rounded-none shadow-none app bg-white/5 backdrop-blur-xl lg:shadow-xl lg:rounded-xl">
-						<div className="flex flex-col items-center justify-center h-full p-8 text-center text-gray-50">
+					<section className="app w-auto rounded-none bg-white/5 shadow-none backdrop-blur-xl lg:rounded-xl lg:shadow-xl">
+						<div className="flex h-full flex-col items-center justify-center p-8 text-center text-gray-50">
 							<ExclamationTriangleIcon
-								className="w-16 h-16 shadow-md"
+								className="h-16 w-16 shadow-md"
 								style={{ color: "var(--red-track)" }}
 							/>
 							<h1
-								className="block text-2xl font-semibold tracking-widest text-center errorContent__title"
+								className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
 								style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
 							>
 								-kzzkt- Error! -kzzkt-
@@ -70,7 +72,7 @@ class ErrorBoundary extends Component<Props, State> {
 								Something went wrong. Please try reloading the page.
 							</h2>
 							<div
-								className="w-full font-mono text-xs text-left lg:text-base"
+								className="w-full text-left font-mono text-xs lg:text-base"
 								style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
 							>
 								{error?.message && (

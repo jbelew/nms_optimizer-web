@@ -26,7 +26,7 @@ const ShakingWrapper: React.FC<ShakingWrapperProps> = ({ shaking, children, dura
 	}, [shaking, duration]);
 
 	return (
-		<div className={`relative gridTable__shakeWrapper ${isShaking ? "shake" : ""}`}>{children}</div>
+		<div className={`gridTable__shakeWrapper relative ${isShaking ? "shake" : ""}`}>{children}</div>
 	);
 };
 

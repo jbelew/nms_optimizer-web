@@ -91,7 +91,6 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		// ASSERT: The selected ship type should NOT be overwritten by the first
 		// item in the API response ('atlantid'). It should remain 'hauler'.
 		expect(usePlatformStore.getState().selectedPlatform).toBe("hauler");
-		
 	});
 
 	it('should default to "standard" and not be overwritten by fetch if URL/localStorage are empty', async () => {

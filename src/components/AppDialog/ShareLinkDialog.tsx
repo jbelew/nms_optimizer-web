@@ -52,7 +52,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 					<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
 						<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 							{t("dialogs.shareLink.openLink")}
-							<ExternalLinkIcon className="inline-block ml-1" />
+							<ExternalLinkIcon className="ml-1 inline-block" />
 						</Link>
 					</Text>
 					<Flex gap="2" mt="4" justify="end">

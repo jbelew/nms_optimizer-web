@@ -1,7 +1,8 @@
+import type { Grid } from "../store/GridStore";
 import { useCallback } from "react";
 
 import { API_URL } from "../constants";
-import { createGrid,type Grid, useGridStore } from "../store/GridStore";
+import { createGrid, useGridStore } from "../store/GridStore";
 import { usePlatformStore } from "../store/PlatformStore";
 import { useTechStore } from "../store/TechStore";
 import { type Module, type TechTree, type TechTreeItem } from "./useTechTree";
@@ -195,7 +196,7 @@ const deserialize = async (
 			const techTreeItems = techTreeData[techCategory];
 			if (Array.isArray(techTreeItems)) {
 				for (const techTreeItem of techTreeItems) {
-					if (typeof techTreeItem === 'object' && techTreeItem !== null && 'key' in techTreeItem) {
+					if (typeof techTreeItem === "object" && techTreeItem !== null && "key" in techTreeItem) {
 						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
 						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
 						for (const module of (techTreeItem as TechTreeItem).modules) {

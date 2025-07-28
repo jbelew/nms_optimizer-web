@@ -10,7 +10,8 @@ import "@radix-ui/themes/tokens/colors/sky.css";
 import "@radix-ui/themes/tokens/colors/teal.css";
 import "@radix-ui/themes/tokens/colors/yellow.css";
 
-import { type FC, useMemo } from "react";
+import type { FC } from "react";
+import { useMemo } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
@@ -20,6 +21,7 @@ import ErrorContent from "./components/AppDialog/ErrorContent";
 import ShareLinkDialog from "./components/AppDialog/ShareLinkDialog"; // Import ShareLinkDialog
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
+
 // Import the new custom hooks
 import { useAnalytics } from "./hooks/useAnalytics";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
@@ -69,11 +71,7 @@ const App: FC = () => {
 			/>
 
 			{/* Render ShareLinkDialog conditionally */}
-			<ShareLinkDialog
-				isOpen={!!shareUrl}
-				shareUrl={shareUrl || ""}
-				onClose={closeDialog}
-			/>
+			<ShareLinkDialog isOpen={!!shareUrl} shareUrl={shareUrl || ""} onClose={closeDialog} />
 		</>
 	);
 };

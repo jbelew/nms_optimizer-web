@@ -1,9 +1,9 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.css";
 
+import React from "react";
 import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
-import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -21,12 +21,12 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { sendEvent } = useAnalytics();
 
 	return (
-		<header className="relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 header lg:rounded-t-xl">
-			<div className="!absolute !top-2 !right-4 sm:!top-4 sm:!right-8 z-10 flex items-center">
+		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
+			<div className="!absolute !top-2 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
 				<LanguageSelector />
 				<Tooltip content={t("translationRequest.openDialogLabel")}>
 					<IconButton
-						className="!ml-px !hidden sm:!inline w-6 h-6"
+						className="!ml-px !hidden h-6 w-6 sm:!inline"
 						color="amber"
 						radius="full"
 						variant="ghost"
@@ -41,16 +41,16 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							openDialog("translation");
 						}}
 					>
-						<InfoCircledIcon className="w-5 h-5" />
+						<InfoCircledIcon className="h-5 w-5" />
 					</IconButton>
 				</Tooltip>
 			</div>
-			<h1 className="text-2xl sm:text-4xl header__logo--text">NO MAN&apos;S SKY</h1>
+			<h1 className="header__logo--text text-2xl sm:text-4xl">NO MAN&apos;S SKY</h1>
 
-			<div className="flex items-center w-full gap-2 m-1 mb-2">
+			<div className="m-1 mb-2 flex w-full items-center gap-2">
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
 				<RhombusIcon
-					className="flex-shrink-0 w-4 h-4 sm:w-4 sm:h-4"
+					className="h-4 w-4 flex-shrink-0 sm:h-4 sm:w-4"
 					style={{ color: "var(--accent-track)" }}
 				/>
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
@@ -63,7 +63,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				size={{ initial: "2", sm: "3" }}
 				className="header__title w-fit"
 			>
-				<strong >{t("appHeader.subTitle")}</strong>
+				<strong>{t("appHeader.subTitle")}</strong>
 				<span className="font-light"> v{__APP_VERSION__}</span>&nbsp;&nbsp;
 				<Tooltip content={t("buttons.changelog")}>
 					<IconButton
@@ -79,7 +79,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							onShowChangelog();
 						}}
 					>
-						<CounterClockwiseClockIcon className="mt-[2px] sm:mt-[1px] w-4 h-4 sm:w-5 sm:h-5" />
+						<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
 					</IconButton>
 				</Tooltip>
 			</Heading>

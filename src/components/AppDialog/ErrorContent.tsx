@@ -4,11 +4,11 @@ import { Trans, useTranslation } from "react-i18next";
 const ErrorContent: React.FC = () => {
 	const { t } = useTranslation();
 	return (
-		<div className="flex flex-col items-center justify-center h-full p-4">
-			<span className="block pb-2 text-xl font-semibold tracking-widest text-center errorContent__title">
+		<div className="flex h-full flex-col items-center justify-center p-4">
+			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
-			<p className="pt-1 text-base appContent__text">
+			<p className="appContent__text pt-1 text-base">
 				<Trans
 					i18nKey="errorContent.serverErrorDetails"
 					components={{

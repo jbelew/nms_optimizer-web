@@ -1,17 +1,13 @@
-import { useMemo } from "react";
-import { useTechStore } from "../../store/TechStore";
 import type { Cell } from "../../store/GridStore";
+import { useMemo } from "react";
 
+import { useTechStore } from "../../store/TechStore";
 
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
-	const currentTechColorFromStore = useTechStore((state) =>
-		state.getTechColor(cell.tech ?? "")
-	);
+	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
 
 	const techColor = useMemo(() => {
-		return !currentTechColorFromStore && cell.supercharged
-			? "purple"
-			: currentTechColorFromStore;
+		return !currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
 	}, [currentTechColorFromStore, cell.supercharged]);
 
 	const cellClassName = useMemo(() => {
@@ -27,20 +23,11 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
 		if (isTouching) classes.push("gridCell--touched");
-		if (cell.adjacency_bonus === 0 && cell.image)
-			classes.push("gridCell--black");
+		if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
 		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
-		if (cell.label)
-			classes.push(
-				"flex",
-				"items-center",
-				"justify-center",
-				"w-full",
-				"h-full"
-			);
+		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
 		return classes.join(" ");
 	}, [
-
 		cell.supercharged,
 		cell.active,
 		cell.adjacency_bonus,
@@ -58,11 +45,9 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 			return `image-set(url(/assets/img/grid/empty-supercharged.webp) 1x, url(/assets/img/grid/empty-supercharged@2x.webp) 2x)`;
 		}
 		if (cell.image) {
-			return `image-set(url(/assets/img/grid/${cell.image
-				}) 1x, url(/assets/img/grid/${cell.image.replace(
-					/\.webp$/,
-					"@2x.webp"
-				)}) 2x)`;
+			return `image-set(url(/assets/img/grid/${
+				cell.image
+			}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
 		}
 		return "none";
 	}, [cell.module, cell.active, cell.image, cell.supercharged]);

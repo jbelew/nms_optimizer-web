@@ -1,7 +1,8 @@
 /// <reference types="@testing-library/jest-dom" />
-import { fireEvent,render, screen } from "@testing-library/react";
+import type { Mock } from "vitest";
 import React from "react";
-import { beforeEach, describe, expect, it, type Mock,vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";

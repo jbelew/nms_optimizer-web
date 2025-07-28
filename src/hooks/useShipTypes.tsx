@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { API_URL } from "../constants";
 import { usePlatformStore } from "../store/PlatformStore";
 
-
 export interface ShipTypeDetail {
 	label: string;
 	type: string;
@@ -47,7 +46,7 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 const cache = new Map<string, Resource<ShipTypes>>();
 
 export const clearShipTypesCache = () => {
-    cache.clear();
+	cache.clear();
 };
 
 export function fetchShipTypes(): Resource<ShipTypes> {
@@ -68,7 +67,13 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 				shipTypesState.setShipTypes(data);
 
 				usePlatformStore.getState().initializePlatform(Object.keys(data));
-				usePlatformStore.getState().setSelectedPlatform(usePlatformStore.getState().selectedPlatform, Object.keys(data), false);
+				usePlatformStore
+					.getState()
+					.setSelectedPlatform(
+						usePlatformStore.getState().selectedPlatform,
+						Object.keys(data),
+						false
+					);
 
 				return data;
 			})

@@ -1,5 +1,6 @@
+import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
-import { persist, type StorageValue } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { type Module } from "../hooks/useTechTree.tsx";
@@ -122,7 +123,9 @@ export type GridStore = {
 	isSharedGrid: boolean;
 	gridFixed: boolean;
 	superchargedFixed: boolean;
-	initialGridDefinition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined;
+	initialGridDefinition:
+		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+		| undefined;
 	setGrid: (grid: Grid) => void;
 	resetGrid: () => void;
 	setGridAndResetAuxiliaryState: (newGrid: Grid) => void;
@@ -139,30 +142,33 @@ export type GridStore = {
 	setIsSharedGrid: (isShared: boolean) => void;
 	setGridFixed: (fixed: boolean) => void;
 	setSuperchargedFixed: (fixed: boolean) => void;
-	setInitialGridDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; } | undefined) => void;
-	setGridFromInitialDefinition: (definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean; }) => void;
+	setInitialGridDefinition: (
+		definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean } | undefined
+	) => void;
+	setGridFromInitialDefinition: (definition: {
+		grid: Module[][];
+		gridFixed: boolean;
+		superchargedFixed: boolean;
+	}) => void;
 	selectTotalSuperchargedCells: () => number;
 	selectHasModulesInGrid: () => boolean;
 	applyModulesToGrid: (modules: Module[]) => void;
 };
 
 const debouncedStorage = {
-	setItem: debounceSetItem(
-		(name: string, value: StorageValue<Partial<GridStore>>) => {
-			try {
-				const storageValue = JSON.stringify(value);
-				localStorage.setItem(name, storageValue);
-				return Promise.resolve();
-			} catch (e) {
-				console.error("Failed to save to localStorage:", e);
-				if (e instanceof Error) {
-					return Promise.reject(e);
-				}
-				return Promise.reject(new Error(String(e)));
+	setItem: debounceSetItem((name: string, value: StorageValue<Partial<GridStore>>) => {
+		try {
+			const storageValue = JSON.stringify(value);
+			localStorage.setItem(name, storageValue);
+			return Promise.resolve();
+		} catch (e) {
+			console.error("Failed to save to localStorage:", e);
+			if (e instanceof Error) {
+				return Promise.reject(e);
 			}
-		},
-		1000
-	),
+			return Promise.reject(new Error(String(e)));
+		}
+	}, 1000),
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
@@ -179,7 +185,9 @@ const debouncedStorage = {
 				console.log(`GridStore: No stored data found for key: ${name}`);
 				return null;
 			}
-			const parsedData = JSON.parse(storedData) as StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
+			const parsedData = JSON.parse(storedData) as StorageValue<
+				Partial<GridStore> & { selectedPlatform?: string }
+			>;
 
 			const urlParams = new URLSearchParams(getWindowSearch());
 			const platformFromUrl = urlParams.get("platform");
@@ -264,7 +272,8 @@ export const useGridStore = create<GridStore>()(
 				},
 
 				setResult: (result, tech) => {
-					const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } = useTechStore.getState();
+					const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } =
+						useTechStore.getState();
 					set((state) => {
 						state.result = result;
 					});
@@ -350,7 +359,9 @@ export const useGridStore = create<GridStore>()(
 				},
 
 				isGridFull: (): boolean => {
-					const activeCells = get().grid.cells.flat().filter((cell) => cell.active);
+					const activeCells = get()
+						.grid.cells.flat()
+						.filter((cell) => cell.active);
 
 					if (activeCells.length === 0) {
 						return false;
@@ -452,9 +463,9 @@ export const useGridStore = create<GridStore>()(
 					...currentState,
 					...stateFromStorage,
 					isSharedGrid: currentUrlHasGrid,
-					initialGridDefinition: stateFromStorage.initialGridDefinition || currentState.initialGridDefinition,
+					initialGridDefinition:
+						stateFromStorage.initialGridDefinition || currentState.initialGridDefinition,
 				};
-
 			},
 		}
 	)

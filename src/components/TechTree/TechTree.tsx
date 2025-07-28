@@ -1,15 +1,15 @@
 // src/components/TechTree/TechTree.tsx
-import { ScrollArea } from "@radix-ui/themes";
 import React, { Suspense, useMemo } from "react";
+import { ScrollArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import ErrorBoundary from "../ErrorBoundry/ErrorBoundry";
+import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
-import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
 // --- Type Definitions ---
 interface TechTreeProps {
@@ -33,14 +33,17 @@ const TechTreeSkeleton: React.FC = () => {
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="p-4 rounded-md shadow-md gridContainer__sidebar"
-					style={{ height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, backgroundColor: "var(--color-panel-translucent)" }}
+					className="gridContainer__sidebar rounded-md p-4 shadow-md"
+					style={{
+						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
+						backgroundColor: "var(--color-panel-translucent)",
+					}}
 				>
 					<MessageSpinner isInset={true} isVisible={true} initialMessage={t("techTree.loading")} />
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="flex-grow w-full pt-8" style={{ minHeight: "50vh" }}>
+				<aside className="w-full flex-grow pt-8" style={{ minHeight: "50vh" }}>
 					<MessageSpinner isInset={false} isVisible={true} initialMessage={""} />
 				</aside>
 			)}
@@ -54,7 +57,12 @@ const TechTreeSkeleton: React.FC = () => {
  * the entire component (including the RecommendedBuild button) is replaced
  * by the Suspense fallback, solving the stale UI issue.
  */
-const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gridContainerRef, gridTableTotalWidth }) => {
+const TechTreeWithData: React.FC<TechTreeProps> = ({
+	handleOptimize,
+	solving,
+	gridContainerRef,
+	gridTableTotalWidth,
+}) => {
 	const isLarge = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
 	const techTree = useFetchTechTreeSuspense(selectedShipType);
@@ -78,7 +86,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({ handleOptimize, solving, gr
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="p-4 rounded-md shadow-md gridContainer__sidebar"
+						className="gridContainer__sidebar rounded-md p-4 shadow-md"
 						style={{ height: scrollAreaHeight, backgroundColor: "var(--color-panel-translucent)" }}
 					>
 						<TechTreeContent

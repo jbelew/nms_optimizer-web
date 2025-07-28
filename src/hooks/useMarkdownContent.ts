@@ -13,7 +13,6 @@ export interface MarkdownContentState {
 const markdownCache = new Map<string, string>();
 
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
-
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -45,7 +44,9 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			try {
 				let response = await fetch(`/assets/locales/${langToFetch}/${markdownFileName}.md`);
 				if (!response.ok && langToFetch !== defaultLang && markdownFileName !== "changelog") {
-					console.warn(`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`);
+					console.warn(
+						`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`
+					);
 					response = await fetch(`/assets/locales/${defaultLang}/${markdownFileName}.md`);
 				}
 				if (!response.ok) {

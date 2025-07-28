@@ -53,11 +53,13 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
-						<DropdownMenu.Label className="shipSelection__header">
-							Select Build
-						</DropdownMenu.Label>
+						<DropdownMenu.Label className="shipSelection__header">Select Build</DropdownMenu.Label>
 						{builds.map((build, index) => (
-							<DropdownMenu.Item className="font-medium" key={index} onClick={() => handleApply(build)}>
+							<DropdownMenu.Item
+								className="font-medium"
+								key={index}
+								onClick={() => handleApply(build)}
+							>
 								{build.title}
 							</DropdownMenu.Item>
 						))}
@@ -81,7 +83,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	return (
 		<>
 			{isLarge ? (
-				<div className="flex items-center justify-center gap-2 mt-5">
+				<div className="mt-5 flex items-center justify-center gap-2">
 					{renderBuildButton()}
 					<IconButton
 						variant="ghost"
@@ -90,18 +92,12 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						aria-label={t("buttons.changelog")}
 						onClick={handleOpenInstructions}
 					>
-						<QuestionMarkCircledIcon className="w-5 h-5" />
+						<QuestionMarkCircledIcon className="h-5 w-5" />
 					</IconButton>
 				</div>
 			) : (
-				<div
-					className="flex items-start p-2 text-sm rounded-md sm:text-base bg-[var(--accent-a3)]"
-				>
-					<span
-						className="mr-2 shrink-0"
-						role="img"
-						aria-label="experiment icon"
-					>
+				<div className="flex items-start rounded-md bg-[var(--accent-a3)] p-2 text-sm sm:text-base">
+					<span className="mr-2 shrink-0" role="img" aria-label="experiment icon">
 						🧪
 					</span>
 					<div className="flex-1">
@@ -110,14 +106,16 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 							components={{
 								1: <Strong />,
 								3: <Strong />,
-								5: <Link
-									href="#"
-									underline="hover"
-									onClick={(e) => {
-										e.preventDefault(); // Prevent jump to top
-										handleOpenInstructions();
-									}}
-								/>,
+								5: (
+									<Link
+										href="#"
+										underline="hover"
+										onClick={(e) => {
+											e.preventDefault(); // Prevent jump to top
+											handleOpenInstructions();
+										}}
+									/>
+								),
 							}}
 						/>
 						<div className="mt-3">
@@ -127,7 +125,6 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 				</div>
 			)}
 		</>
-
 	);
 };
 
