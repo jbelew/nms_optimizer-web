@@ -127,7 +127,7 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-a8);
+	border: 1px solid var(--accent-a7);
 	position: absolute;
 	width: 15%;
 	height: 15%;
@@ -163,7 +163,7 @@
 }
 
 .gridCell--inactive .corner {
-	border: 1px solid var(--gray-a8);
+	border: 1px solid var(--gray-a7);
 	position: absolute;
 	width: 15%;
 	height: 15%;
