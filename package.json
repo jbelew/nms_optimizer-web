@@ -1,7 +1,7 @@
 {
 	"name": "nms_optimizer",
 	"private": true,
-	"version": "3.2",
+	"version": "3.21",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -42,7 +42,8 @@
 		"rehype-external-links": "^3.0.0",
 		"vite-preload": "^1.0.4",
 		"web-vitals": "^5.0.3",
-		"zustand": "^5.0.5"
+		"zustand": "^5.0.5",
+		"helmet": "^7.1.0"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.29.0",

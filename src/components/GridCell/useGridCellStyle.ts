@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useTechStore } from "../../store/TechStore";
 import type { Cell } from "../../store/GridStore";
 
+
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const currentTechColorFromStore = useTechStore((state) =>
 		state.getTechColor(cell.tech ?? "")
@@ -39,6 +40,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 			);
 		return classes.join(" ");
 	}, [
+
 		cell.supercharged,
 		cell.active,
 		cell.adjacency_bonus,
@@ -56,12 +58,11 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 			return `image-set(url(/assets/img/grid/empty-supercharged.webp) 1x, url(/assets/img/grid/empty-supercharged@2x.webp) 2x)`;
 		}
 		if (cell.image) {
-			return `image-set(url(/assets/img/grid/${
-				cell.image
-			}) 1x, url(/assets/img/grid/${cell.image.replace(
-				/\.webp$/,
-				"@2x.webp"
-			)}) 2x)`;
+			return `image-set(url(/assets/img/grid/${cell.image
+				}) 1x, url(/assets/img/grid/${cell.image.replace(
+					/\.webp$/,
+					"@2x.webp"
+				)}) 2x)`;
 		}
 		return "none";
 	}, [cell.module, cell.active, cell.image, cell.supercharged]);
