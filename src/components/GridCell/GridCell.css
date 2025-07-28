@@ -134,7 +134,7 @@
 	background-color: var(--accent-track) !important;
 }
 
-.gridCell--empy.gridCell--touched {
+.gridCell--empty.gridCell--touched {
 	border-color: var(--gray-a11) !important;
 	background-color: var(--gray-track) !important;
 }
