@@ -1,6 +1,10 @@
 import type { Cell } from "../../store/GridStore";
 import { useMemo } from "react";
 
+import emptyAccent1x from "../../assets/img/empty-accent.webp";
+import emptyAccent2x from "../../assets/img/empty-accent@2x.webp";
+import emptySupercharged1x from "../../assets/img/empty-supercharged.webp";
+import emptySupercharged2x from "../../assets/img/empty-supercharged@2x.webp";
 import { useTechStore } from "../../store/TechStore";
 
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
@@ -39,10 +43,10 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 
 	const backgroundImageStyle = useMemo(() => {
 		if (!cell.module && cell.active && !cell.supercharged) {
-			return `image-set(url(/assets/img/grid/empty-accent.webp) 1x, url(/assets/img/grid/empty-accent@2x.webp) 2x)`;
+			return `image-set(url(${emptyAccent1x}) 1x, url(${emptyAccent2x}) 2x)`;
 		}
 		if (!cell.module && cell.supercharged) {
-			return `image-set(url(/assets/img/grid/empty-supercharged.webp) 1x, url(/assets/img/grid/empty-supercharged@2x.webp) 2x)`;
+			return `image-set(url(${emptySupercharged1x}) 1x, url(${emptySupercharged2x}) 2x)`;
 		}
 		if (cell.image) {
 			return `image-set(url(/assets/img/grid/${
