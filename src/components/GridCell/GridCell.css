@@ -42,7 +42,7 @@
 }
 
 .gridCell--active {
-	border-color: var(--accent-track);
+	border-color: var(--accent-indicator);
 	background-color: var(--accent-a3);
 }
 
@@ -52,7 +52,7 @@
 
 .gridCell--empty {
 	background-color: var(--accent-a3);
-	border-color: var(--accent-a1);
+	border-color: var(--accent-a2);
 }
 
 .gridCell--empty:hover {
@@ -60,12 +60,12 @@
 }
 
 .gridCell--inactive {
-	border-color: var(--gray-a1);
+	border-color: var(--gray-a2);
 	background-color: var(--gray-a2);
 }
 
 .gridCell--inactive:hover {
-	background-color: var(--gray-a2);
+	background-color: var(--gray-a4);
 }
 
 .gridCell--active[data-accent-color="white"] {
@@ -145,10 +145,10 @@
 }
 
 .gridCell--empty .corner {
+	border: 1px solid var(--accent-indicator);
 	position: absolute;
 	width: 10%;
 	height: 10%;
-	border: 1px solid var(--accent-indicator);
 	pointer-events: none;
 }
 

@@ -214,7 +214,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 
 	const cellElementStyle = useMemo(
 		() => ({
-			backgroundBlendMode: "multiply", backgroundImage: backgroundImageStyle,
+			backgroundBlendMode: "screen", backgroundImage: backgroundImageStyle,
 		}),
 		[backgroundImageStyle]
 	);
