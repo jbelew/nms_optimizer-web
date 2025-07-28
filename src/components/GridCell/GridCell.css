@@ -65,7 +65,7 @@
 }
 
 .gridCell--inactive:hover {
-	background-color: var(--gray-a4);
+	background-color: var(--gray-a3);
 }
 
 .gridCell--active[data-accent-color="white"] {
@@ -147,8 +147,8 @@
 .gridCell--empty .corner {
 	border: 1px solid var(--accent-a6);
 	position: absolute;
-	width: 10%;
-	height: 10%;
+	width: 15%;
+	height: 15%;
 	pointer-events: none;
 }
 
