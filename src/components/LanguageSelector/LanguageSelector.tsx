@@ -73,6 +73,7 @@ const LanguageSelector: React.FC = () => {
 						alt={t("languageInfo.changeLanguage") || "Change language"}
 						className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
 					/>
+
 				</IconButton>
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content sideOffset={5} align="end">
@@ -82,7 +83,7 @@ const LanguageSelector: React.FC = () => {
 				<DropdownMenu.RadioGroup value={currentLanguage} onValueChange={handleLanguageChange}>
 					{supportedLanguages.map(({ code, label, flagPath }) => (
 						<DropdownMenu.RadioItem key={code} value={code}>
-							<img src={flagPath} alt={label} className="mr-2 h-auto w-5" />
+							<img src={flagPath} alt={label} className="w-5 h-auto mr-2" />
 							<span className="ml-1 font-medium">{label}</span>
 						</DropdownMenu.RadioItem>
 					))}
