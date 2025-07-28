@@ -134,7 +134,7 @@
 	background-color: var(--accent-track) !important;
 }
 
-.gridCell--empty.gridCell--touched {
+.gridCell--inactive.gridCell--touched {
 	border-color: var(--gray-a11) !important;
 	background-color: var(--gray-track) !important;
 }
