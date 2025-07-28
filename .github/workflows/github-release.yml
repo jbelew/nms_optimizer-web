@@ -37,7 +37,7 @@ jobs:
           echo "CHANGELOG_CONTENT<<EOF"
           echo "$CHANGELOG_CONTENT"
           echo "EOF"
-        shell: bash >> {output}
+        shell: bash
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

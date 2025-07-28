@@ -1,4 +1,3 @@
-
 # No Man's Sky Technology Layout Optimizer AI (Web UI)
 
 ## CI/CD Status
@@ -15,6 +14,7 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 ![Screenshot](https://github.com/jbelew/nms_optimizer-web/blob/main/public/assets/img/screenshots/screenshot.png?raw=true)
 
 ### **Tech Stack**
+
 - **React**
 - **Zustand**
 - **Tailwind CSS**
@@ -64,7 +64,7 @@ To override the default service endpoint, update the VITE_API_URL value in your 
 version: "3.8"
 
 services:
-  app: 
+  app:
     image: ghcr.io/jbelew/nms-optimizer-app:${TAG:-latest}
     container_name: nms_optimizer_app
     build:
@@ -76,5 +76,3 @@ services:
       - VITE_API_URL=/api/
     restart: unless-stopped
 ```
-
-Test change for release.
