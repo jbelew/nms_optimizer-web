@@ -148,7 +148,7 @@
 	position: absolute;
 	width: 10%;
 	height: 10%;
-	border: 1px solid var(--accent-a8);
+	border: 1px solid var(--accent-indicator);
 	pointer-events: none;
 }
 
