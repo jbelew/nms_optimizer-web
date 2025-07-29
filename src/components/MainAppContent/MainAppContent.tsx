@@ -86,28 +86,28 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	return (
 		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
 			<div
-				className="w-full rounded-none shadow-none app backdrop-blur-2xl lg:rounded-xl lg:shadow-xl sm:w-fit"
+				className="app w-full rounded-none shadow-none backdrop-blur-2xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--color-panel-translucent)" }}
 			>
 				<AppHeader onShowChangelog={handleShowChangelog} />
 				<section
-					className="flex flex-col items-center p-4 pt-2 gridContainer sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
+					className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
 				>
 					<article
-						className="w-full gridContainer__container lg:w-auto lg:flex-shrink-0"
+						className="gridContainer__container w-full lg:w-auto lg:flex-shrink-0"
 						ref={appLayoutContainerRef}
 					>
 						<header
-							className="flex flex-wrap items-center gap-2 mb-3 text-xl heading-styled sm:mb-4 sm:text-2xl"
+							className="heading-styled mb-3 flex flex-wrap items-center gap-2 text-xl sm:mb-4 sm:text-2xl"
 							style={{ maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined }}
 						>
 							{!isSharedGrid && (
-								<span className="self-start flex-shrink-0">
+								<span className="flex-shrink-0 self-start">
 									<ShipSelection solving={solving} />
 								</span>
 							)}
-							<span className="self-start hidden sm:inline" style={{ color: "var(--accent-11)" }}>
+							<span className="hidden self-start sm:inline" style={{ color: "var(--accent-11)" }}>
 								{t("platformLabel")}
 							</span>
 							<span
@@ -134,7 +134,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 					</article>
 
 					{!isSharedGrid && (
-						<aside className="flex flex-col w-full lg:ml-4">
+						<aside className="flex w-full flex-col lg:ml-4">
 							<TechTreeComponent
 								handleOptimize={handleOptimize}
 								solving={solving}
