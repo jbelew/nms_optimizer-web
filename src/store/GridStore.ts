@@ -307,7 +307,7 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 						if (!cell.active) {
-							cell.active = true;
+							return;
 						}
 						cell.supercharged = !cell.supercharged;
 					}),
