@@ -1,4 +1,24 @@
-# Unreleased (2025-07-29)
+## [3.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.6...v3.2.7) (2025-07-29)
+
+
+### Bug Fixes
+
+* **gridcell:** fix for failing tests ([1d7a362](https://github.com/jbelew/nms_optimizer-web/commit/1d7a362faf56f34329625d4a2838ee8acd94d8c6))
+
+
+### Features
+
+* **gridstore:** update toggleCellActive behavior and tests ([8e5c35c](https://github.com/jbelew/nms_optimizer-web/commit/8e5c35c45e31b471d11ae885b77e837cba88ace1))
+* **gridstore:** update toggleCellSupercharged tests ([152da72](https://github.com/jbelew/nms_optimizer-web/commit/152da729629c9277170cb0be155f486ff0443b4e))
+
+
+### Performance Improvements
+
+* **background:** added preload for the mobile version of the background ([fcf6ddb](https://github.com/jbelew/nms_optimizer-web/commit/fcf6ddb9c0fca6ef205fd5c1ab4450ede71fa95e))
+
+
+
+## [3.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.5...v3.2.6) (2025-07-29)
 
 
 
