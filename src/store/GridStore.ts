@@ -124,8 +124,8 @@ export type GridStore = {
 	gridFixed: boolean;
 	superchargedFixed: boolean;
 	initialGridDefinition:
-		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
-		| undefined;
+	| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+	| undefined;
 	setGrid: (grid: Grid) => void;
 	resetGrid: () => void;
 	setGridAndResetAuxiliaryState: (newGrid: Grid) => void;
@@ -287,10 +287,11 @@ export const useGridStore = create<GridStore>()(
 				toggleCellActive: (rowIndex, columnIndex) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (cell.supercharged) {
-							return;
-						}
+
 						if (cell && (!cell.active || !cell.module)) {
+							if (cell.supercharged) {
+								cell.supercharged = !cell.supercharged;
+							}
 							cell.active = !cell.active;
 						} else {
 							console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
