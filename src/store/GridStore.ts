@@ -124,8 +124,8 @@ export type GridStore = {
 	gridFixed: boolean;
 	superchargedFixed: boolean;
 	initialGridDefinition:
-		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
-		| undefined;
+	| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+	| undefined;
 	setGrid: (grid: Grid) => void;
 	resetGrid: () => void;
 	setGridAndResetAuxiliaryState: (newGrid: Grid) => void;
@@ -306,7 +306,7 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 						if (!cell.active) {
-							return;
+							cell.active = true;
 						}
 						cell.supercharged = !cell.supercharged;
 					}),
