@@ -52,7 +52,7 @@
 
 .gridCell--empty {
 	background-color: var(--accent-a3);
-	border-color: var(--accent-a2);
+	border-color: var(--accent-a1);
 }
 
 .gridCell--empty:hover {
@@ -60,8 +60,8 @@
 }
 
 .gridCell--inactive {
-	border-color: var(--gray-a2);
 	background-color: var(--gray-a3);
+	border-color: var(--gray-a1);
 }
 
 .gridCell--inactive:hover {
@@ -126,10 +126,10 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-a6);
+	border: 1px solid var(--accent-track);
 	position: absolute;
-	width: 15%;
-	height: 15%;
+	width: 10%;
+	height: 10%;
 	pointer-events: none;
 }
 
@@ -162,7 +162,7 @@
 }
 
 .gridCell--inactive .corner {
-	border: 1px solid var(--gray-a6);
+	border: 1px solid var(--gray-track);
 	position: absolute;
 	width: 15%;
 	height: 15%;
