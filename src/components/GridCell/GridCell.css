@@ -126,7 +126,7 @@
 }
 
 .gridCell--empty .corner {
-	border: 1px solid var(--accent-track);
+	border: 1px solid var(--accent-a6);
 	position: absolute;
 	width: 10%;
 	height: 10%;
@@ -162,7 +162,7 @@
 }
 
 .gridCell--inactive .corner {
-	border: 1px solid var(--gray-track);
+	border: 1px solid var(--gray-a6);
 	position: absolute;
 	width: 15%;
 	height: 15%;
@@ -215,7 +215,7 @@
 	}
 
 	.gridCell--glow {
-		box-shadow: 0 0 4px 2px var(--accent-indicator);
+		box-shadow: 0 0 2px 2px var(--accent-a8);
 	}
 
 	.gridCell--empty .corner {
