@@ -49,9 +49,8 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 			return `image-set(url(${emptySupercharged1x}) 1x, url(${emptySupercharged2x}) 2x)`;
 		}
 		if (cell.image) {
-			return `image-set(url(/assets/img/grid/${
-				cell.image
-			}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
+			return `image-set(url(/assets/img/grid/${cell.image
+				}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
 		}
 		return "none";
 	}, [cell.module, cell.active, cell.image, cell.supercharged]);

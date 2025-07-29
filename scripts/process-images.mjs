@@ -1,6 +1,6 @@
-import sharp from "sharp";
-import { readdir, mkdir, stat } from "fs/promises";
+import { mkdir, readdir, stat } from "fs/promises";
 import path from "path";
+import sharp from "sharp";
 
 const imageDirs = [
 	{
@@ -37,10 +37,9 @@ const singleImages = [
 			{ width: 1920, suffix: "" },
 			{ width: 3840, suffix: "@2x" },
 		],
-		webpOptions: { quality: 75 },
+		webpOptions: { quality: 60, effort: 6 },
 	},
 ];
-
 
 async function processImages() {
 	// Process directories
@@ -84,7 +83,7 @@ async function processImages() {
 							right: paddingRight,
 							background: { r: 0, g: 0, b: 0, alpha: 0 },
 						})
-						.webp({ quality: 80 })
+						.webp({ quality: res.suffix === "@2x" ? 60 : 75, effort: 6 })
 						.toFile(outputPath);
 				}
 			};
@@ -120,10 +119,7 @@ async function processImages() {
 				const newFilename = `${filename}${res.suffix}.webp`;
 				const outputPath = path.join(outputDir, newFilename);
 
-				await sharp(sourceFile)
-					.resize({ width: res.width })
-					.webp(webpOptions)
-					.toFile(outputPath);
+				await sharp(sourceFile).resize({ width: res.width }).webp(webpOptions).toFile(outputPath);
 			}
 			console.log(`Image ${sourceFile} processed successfully!`);
 		} catch (error) {

@@ -12,8 +12,8 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 
 	return (
-		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-center text-xs sm:text-sm lg:pb-0">
-			<div className="font-light">
+		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-xs font-light text-center sm:text-sm lg:pb-0">
+			<div>
 				<Trans
 					i18nKey="footer.issuePrompt"
 					components={{
@@ -21,7 +21,9 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 							<Link
 								href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 								target="_blank"
+								underline="always"
 								rel="noopener noreferrer"
+								style={{ color: "var(--accent-11)" }}
 							/>
 						),
 					}}
@@ -30,7 +32,7 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 				{t("footer.builtBy", { buildVersion: buildVersion })}
 			</div>
 			<Separator decorative size="3" />
-			<div className="flex flex-wrap items-center justify-center gap-1 font-light">
+			<div className="flex flex-wrap items-center justify-center gap-1">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
 			</div>
