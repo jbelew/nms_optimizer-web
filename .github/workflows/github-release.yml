@@ -29,10 +29,7 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          # Get the previous tag to generate changelog from the last release
-          # If no previous tag, generate from the first commit
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 @^ || git rev-list --max-parents=0 HEAD)
-          CHANGELOG_CONTENT=$(npx conventional-changelog -p angular -r 0 -l $PREVIOUS_TAG -u ${{ github.ref_name }})
+          CHANGELOG_CONTENT=$(cat CHANGELOG.md)
           # Escape newlines and double quotes for multiline output
           echo "CHANGELOG_CONTENT<<EOF"
           echo "$CHANGELOG_CONTENT"
