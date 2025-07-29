@@ -80,6 +80,13 @@
 				z-index: -1;
 			}
 
+			/* Mobile (≤600px): swap in the mobile image */
+			@media (max-width: 600px) {
+				body::before {
+					background: url("/assets/img/background@mobile.webp") center/cover no-repeat;
+				}
+			}
+
 			body {
 				min-height: 100dvh;
 				width: 100dvw;

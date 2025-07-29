@@ -36,6 +36,7 @@ const singleImages = [
 		resolutions: [
 			{ width: 1920, suffix: "" },
 			{ width: 3840, suffix: "@2x" },
+			{ width: 640, height: 1136, suffix: "@mobile" },
 		],
 		webpOptions: { quality: 60, effort: 6 },
 	},
@@ -119,7 +120,17 @@ async function processImages() {
 				const newFilename = `${filename}${res.suffix}.webp`;
 				const outputPath = path.join(outputDir, newFilename);
 
-				await sharp(sourceFile).resize({ width: res.width }).webp(webpOptions).toFile(outputPath);
+				if (res.suffix === "@mobile") {
+					await sharp(sourceFile)
+						.resize(res.width, res.height, { fit: 'cover', position: 'center' })
+						.webp(webpOptions)
+						.toFile(outputPath);
+				} else {
+					await sharp(sourceFile)
+						.resize({ width: res.width })
+						.webp(webpOptions)
+						.toFile(outputPath);
+				}
 			}
 			console.log(`Image ${sourceFile} processed successfully!`);
 		} catch (error) {
