@@ -1,6 +1,6 @@
 ## Overview
 
-This web application, the NMS optimizer, helps players of No Man's Sky figure out the best module arrangement to design optimal **Starship layouts**, **Multitool builds**, **Exocraft layouts**, and **Exosuit builds**. It automatically calculates the ideal **module placement** to maximize crucial in-game mechanics like **adjacency bonuses** (achieved by grouping similar technologies for synergistic effects) and the powerful boosts from **supercharged slots**. Understanding how to best utilize these features, especially supercharged slots, is key to achieving peak performance, and this tool makes that complex process simple.
+This web application, the NMS Optimizer, helps players of No Man's Sky figure out the best module arrangement to design optimal **Starship layouts**, **Multitool builds**, **Exocraft layouts**, and **Exosuit builds**. It automatically calculates the ideal **module placement** to maximize crucial in-game mechanics like **adjacency bonuses** (achieved by grouping similar technologies for synergistic effects) and the powerful boosts from **supercharged slots**. Understanding how to best utilize these features, especially supercharged slots, is key to achieving peak performance, and this tool makes that complex process simple.
 
 ## How It Works
 
