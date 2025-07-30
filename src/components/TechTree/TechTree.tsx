@@ -36,7 +36,7 @@ const TechTreeSkeleton: React.FC = () => {
 					className="gridContainer__sidebar rounded-md p-4 shadow-md"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
-						backgroundColor: "var(--color-panel-translucent)",
+						backgroundColor: "var(--gray-a2)",
 					}}
 				>
 					<MessageSpinner isInset={true} isVisible={true} initialMessage={t("techTree.loading")} />
@@ -87,7 +87,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 				<>
 					<ScrollArea
 						className="gridContainer__sidebar rounded-md p-4 shadow-md"
-						style={{ height: scrollAreaHeight, backgroundColor: "var(--color-panel-translucent)" }}
+						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a3)" }}
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}
