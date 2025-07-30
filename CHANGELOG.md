@@ -1,3 +1,26 @@
+# [3.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.8...v3.3.0) (2025-07-30)
+
+
+### Bug Fixes
+
+* **release:** use full CHANGELOG.md for release body and revert toggleCellActive tests\n\n- Modified `.github/workflows/github-release.yml` to use the entire `CHANGELOG.md` file as the release body.\n- Reverted tests in `src/store/GridStore.test/toggleCellActive.test.ts` to align with the previous `toggleCellActive` functionality.\n- Reverted `toggleCellActive` logic in `src/store/GridStore.ts` to its previous state. ([c017b21](https://github.com/jbelew/nms_optimizer-web/commit/c017b219ca161b14000611d8de07c24dea7a83bd))
+
+
+### Reverts
+
+* Revert "fix(gridcell): fix for failing tests" ([ab3b168](https://github.com/jbelew/nms_optimizer-web/commit/ab3b168ccd3e508a72d3e560d6e197a1dabc8033))
+
+
+
+## [3.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.7...v3.2.8) (2025-07-29)
+
+
+### Bug Fixes
+
+* **husky:** auto-stage prettier changes and update changelog on version\n\n- Modified `.husky/pre-commit` to automatically stage changes made by `prettier`.\n- Added `preversion` script to `package.json` to update and stage `CHANGELOG.md` before `npm version` creates a new version commit. ([243be1e](https://github.com/jbelew/nms_optimizer-web/commit/243be1e88c0f7c475a591c0c0d74dfd033bc44b3))
+
+
+
 ## [3.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.6...v3.2.7) (2025-07-29)
 
 
