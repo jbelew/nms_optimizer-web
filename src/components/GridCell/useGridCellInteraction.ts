@@ -54,16 +54,14 @@ export const useGridCellInteraction = (
 				const currentTime = new Date().getTime();
 				const timeSinceLastTap = currentTime - lastTapTime.current;
 
-				if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
+				if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
 					// Double tap
 					if (superchargedFixed) {
 						console.log("Double tap: superchargedFixed is true. Triggering shake and reverting.");
 						triggerShake();
 						revertCellTap(rowIndex, columnIndex);
 					} else if (gridFixed || (totalSupercharged >= 4 && !cell.supercharged)) {
-						console.log(
-							"Double tap: gridFixed or 4 supercharged limit reached. Triggering shake and reverting."
-						);
+						console.log("Double tap: gridFixed or 4 supercharged limit reached. Triggering shake and reverting.");
 						triggerShake();
 						revertCellTap(rowIndex, columnIndex);
 					} else {
@@ -74,9 +72,7 @@ export const useGridCellInteraction = (
 				} else {
 					// Single tap
 					if (gridFixed || (superchargedFixed && cell.supercharged)) {
-						console.log(
-							"Single tap: gridFixed or superchargedFixed on supercharged cell. Triggering shake."
-						);
+						console.log("Single tap: gridFixed or superchargedFixed on supercharged cell. Triggering shake.");
 						triggerShake();
 					} else {
 						console.log("Single tap: Valid. Calling handleCellTap.");
