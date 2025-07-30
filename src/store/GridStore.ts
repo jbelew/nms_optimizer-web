@@ -117,6 +117,10 @@ export const resetCellContent = (cell: Cell) => {
 };
 
 export type GridStore = {
+	handleCellTap: (rowIndex: number, columnIndex: number) => void;
+	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
+	revertCellTap: (rowIndex: number, columnIndex: number) => void;
+	_initialCellStateForTap?: Cell | null;
 	version: number; // Add version property
 	grid: Grid;
 	result: ApiResponse | null;
@@ -240,6 +244,7 @@ export const useGridStore = create<GridStore>()(
 				gridFixed: false,
 				superchargedFixed: false,
 				initialGridDefinition: undefined,
+				_initialCellStateForTap: null,
 
 				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
 
@@ -284,7 +289,7 @@ export const useGridStore = create<GridStore>()(
 					}
 				},
 
-				handleCellTap: (rowIndex, columnIndex) => {
+				handleCellTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 						if (cell) {
@@ -297,7 +302,7 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
-				handleCellDoubleTap: (rowIndex, columnIndex) => {
+				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const initialCellState = state._initialCellStateForTap;
 						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
@@ -309,81 +314,7 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
-				revertCellTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (initialCellState && currentCell) {
-							currentCell.active = initialCellState.active;
-							currentCell.supercharged = initialCellState.supercharged;
-						}
-						state._initialCellStateForTap = null;
-					});
-				},
-
-				handleCellTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (cell) {
-							state._initialCellStateForTap = { ...cell };
-							cell.active = !cell.active;
-							if (!cell.active) {
-								cell.supercharged = false;
-							}
-						}
-					});
-				},
-
-				handleCellDoubleTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (initialCellState && currentCell) {
-							currentCell.supercharged = !initialCellState.supercharged;
-							currentCell.active = true;
-						}
-						state._initialCellStateForTap = null;
-					});
-				},
-
-				revertCellTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (initialCellState && currentCell) {
-							currentCell.active = initialCellState.active;
-							currentCell.supercharged = initialCellState.supercharged;
-						}
-						state._initialCellStateForTap = null;
-					});
-				},
-
-				handleCellTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (cell) {
-							state._initialCellStateForTap = { ...cell };
-							cell.active = !cell.active;
-							if (!cell.active) {
-								cell.supercharged = false;
-							}
-						}
-					});
-				},
-
-				handleCellDoubleTap: (rowIndex, columnIndex) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-						if (initialCellState && currentCell) {
-							currentCell.supercharged = !initialCellState.supercharged;
-							currentCell.active = true;
-						}
-						state._initialCellStateForTap = null;
-					});
-				},
-
-				revertCellTap: (rowIndex, columnIndex) => {
+				revertCellTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const initialCellState = state._initialCellStateForTap;
 						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];

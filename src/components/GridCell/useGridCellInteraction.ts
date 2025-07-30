@@ -33,7 +33,6 @@ export const useGridCellInteraction = (
 
 	const triggerShake = useCallback(() => {
 		setShaking(true);
-		console.log("Shaking triggered.");
 		if (shakeTimeoutRef.current) {
 			clearTimeout(shakeTimeoutRef.current);
 		}
@@ -44,9 +43,8 @@ export const useGridCellInteraction = (
 	}, [setShaking]);
 
 	const handleClick = useCallback(
-		(event: React.MouseEvent) => {
+		() => {
 			if (isSharedGrid) {
-				console.log("handleClick: isSharedGrid is true, returning.");
 				return;
 			}
 
@@ -57,25 +55,20 @@ export const useGridCellInteraction = (
 				if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
 					// Double tap
 					if (superchargedFixed) {
-						console.log("Double tap: superchargedFixed is true. Triggering shake and reverting.");
 						triggerShake();
 						revertCellTap(rowIndex, columnIndex);
 					} else if (gridFixed || (totalSupercharged >= 4 && !cell.supercharged)) {
-						console.log("Double tap: gridFixed or 4 supercharged limit reached. Triggering shake and reverting.");
 						triggerShake();
 						revertCellTap(rowIndex, columnIndex);
 					} else {
-						console.log("Double tap: valid, calling handleCellDoubleTap.");
 						handleCellDoubleTap(rowIndex, columnIndex);
 					}
 					lastTapTime.current = 0; // Reset after double tap
 				} else {
 					// Single tap
 					if (gridFixed || (superchargedFixed && cell.supercharged)) {
-						console.log("Single tap: gridFixed or superchargedFixed on supercharged cell. Triggering shake.");
 						triggerShake();
 					} else {
-						console.log("Single tap: Valid. Calling handleCellTap.");
 						handleCellTap(rowIndex, columnIndex);
 					}
 					lastTapTime.current = currentTime;
@@ -107,7 +100,7 @@ export const useGridCellInteraction = (
 		(event: React.KeyboardEvent) => {
 			if (event.key === " " || event.key === "Enter") {
 				event.preventDefault();
-				handleClick(event as unknown as React.MouseEvent);
+				handleClick();
 			}
 		},
 		[handleClick]
