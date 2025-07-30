@@ -29,11 +29,10 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          CHANGELOG_CONTENT=$(cat CHANGELOG.md)
-          # Escape newlines and double quotes for multiline output
-          echo "CHANGELOG_CONTENT<<EOF"
-          echo "$CHANGELOG_CONTENT"
-          echo "EOF"
+          LATEST_CHANGELOG=$(awk '/^# \[/{if(p)exit; p=1} p' CHANGELOG.md | sed -e '1d' -e '$d')
+          echo "changelog_content<<EOF" >> $GITHUB_OUTPUT
+          echo "$LATEST_CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Create GitHub Release
@@ -41,7 +40,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          body: ${{ steps.changelog.outputs.CHANGELOG_CONTENT }}
+          body: ${{ steps.changelog.outputs.changelog_content }}
           draft: false
           prerelease: false
         env:
