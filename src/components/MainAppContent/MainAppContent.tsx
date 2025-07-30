@@ -48,7 +48,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
-		gridTableTotalWidth, // Destructure the new total width
+		gridTableTotalWidth,
 	} = useAppLayout();
 
 	useEffect(() => {
@@ -86,7 +86,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	return (
 		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
 			<div
-				className="app w-full rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
+				className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--color-panel-translucent)" }}
 			>
 				<AppHeader onShowChangelog={handleShowChangelog} />
