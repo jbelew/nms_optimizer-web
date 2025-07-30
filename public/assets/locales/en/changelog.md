@@ -4,9 +4,14 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.2 (2025-07-26)
+## Version 3.3 (2025-07-30)
 
 **It's a wrap, my work is done here!**
+
+- Updated grid presentation.
+- Corrected issues with Sentinel Multi-tools and the Minotaur AI build.
+
+## Version 3.2 (2025-07-26)
 
 - Final UI pass to standardize color usage and component presentation.
 - Added solve score percentages to tooltips on solve quality icons.
