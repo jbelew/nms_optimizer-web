@@ -10,8 +10,9 @@ export const useGridCellInteraction = (
 	columnIndex: number,
 	isSharedGrid: boolean
 ) => {
-	const toggleCellActive = useGridStore((state) => state.toggleCellActive);
-	const toggleCellSupercharged = useGridStore((state) => state.toggleCellSupercharged);
+	const handleCellTap = useGridStore((state) => state.handleCellTap);
+	const handleCellDoubleTap = useGridStore((state) => state.handleCellDoubleTap);
+	const revertCellTap = useGridStore((state) => state.revertCellTap);
 	const totalSupercharged = useGridStore((state) => state.selectTotalSuperchargedCells());
 	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 	const gridFixed = useGridStore((state) => state.gridFixed);
@@ -21,9 +22,6 @@ export const useGridCellInteraction = (
 	const { setShaking } = useShakeStore();
 
 	const lastTapTime = useRef(0);
-	const isTouchDevice = useRef(
-		typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
-	);
 
 	const handleTouchStart = useCallback(() => {
 		setIsTouching(true);
@@ -35,6 +33,7 @@ export const useGridCellInteraction = (
 
 	const triggerShake = useCallback(() => {
 		setShaking(true);
+		console.log("Shaking triggered.");
 		if (shakeTimeoutRef.current) {
 			clearTimeout(shakeTimeoutRef.current);
 		}
@@ -47,68 +46,60 @@ export const useGridCellInteraction = (
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {
 			if (isSharedGrid) {
+				console.log("handleClick: isSharedGrid is true, returning.");
 				return;
 			}
-
-			const handleSuperchargeToggle = () => {
-				if (superchargedFixed) {
-					triggerShake();
-					return;
-				}
-				if (totalSupercharged >= 4 && !cell.supercharged) {
-					triggerShake();
-					return;
-				}
-				toggleCellSupercharged(rowIndex, columnIndex);
-			};
-
-			const handleActiveToggle = () => {
-				if (gridFixed) {
-					triggerShake();
-					return;
-				}
-				toggleCellActive(rowIndex, columnIndex);
-			};
 
 			const handleTap = () => {
 				const currentTime = new Date().getTime();
 				const timeSinceLastTap = currentTime - lastTapTime.current;
 
-				if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
-					handleActiveToggle();
-					handleSuperchargeToggle();
-					lastTapTime.current = 0;
+				if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
+					// Double tap
+					if (superchargedFixed) {
+						console.log("Double tap: superchargedFixed is true. Triggering shake and reverting.");
+						triggerShake();
+						revertCellTap(rowIndex, columnIndex);
+					} else if (gridFixed || (totalSupercharged >= 4 && !cell.supercharged)) {
+						console.log(
+							"Double tap: gridFixed or 4 supercharged limit reached. Triggering shake and reverting."
+						);
+						triggerShake();
+						revertCellTap(rowIndex, columnIndex);
+					} else {
+						console.log("Double tap: valid, calling handleCellDoubleTap.");
+						handleCellDoubleTap(rowIndex, columnIndex);
+					}
+					lastTapTime.current = 0; // Reset after double tap
 				} else {
-					handleActiveToggle();
+					// Single tap
+					if (gridFixed || (superchargedFixed && cell.supercharged)) {
+						console.log(
+							"Single tap: gridFixed or superchargedFixed on supercharged cell. Triggering shake."
+						);
+						triggerShake();
+					} else {
+						console.log("Single tap: Valid. Calling handleCellTap.");
+						handleCellTap(rowIndex, columnIndex);
+					}
 					lastTapTime.current = currentTime;
 				}
 			};
 
-			const handleMouseClick = () => {
-				if (event.ctrlKey || event.metaKey) {
-					handleActiveToggle();
-				} else {
-					handleSuperchargeToggle();
-				}
-			};
-
-			if (isTouchDevice.current) {
-				handleTap();
-			} else {
-				handleMouseClick();
-			}
+			handleTap();
 		},
 		[
 			isSharedGrid,
-			toggleCellActive,
 			rowIndex,
 			columnIndex,
+			handleCellTap,
+			handleCellDoubleTap,
+			revertCellTap,
 			totalSupercharged,
 			cell.supercharged,
-			toggleCellSupercharged,
-			superchargedFixed,
-			gridFixed,
 			triggerShake,
+			gridFixed,
+			superchargedFixed,
 		]
 	);
 

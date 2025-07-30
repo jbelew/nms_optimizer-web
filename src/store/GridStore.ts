@@ -284,6 +284,117 @@ export const useGridStore = create<GridStore>()(
 					}
 				},
 
+				handleCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (cell) {
+							state._initialCellStateForTap = { ...cell };
+							cell.active = !cell.active;
+							if (!cell.active) {
+								cell.supercharged = false;
+							}
+						}
+					});
+				},
+
+				handleCellDoubleTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.supercharged = !initialCellState.supercharged;
+							currentCell.active = true;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
+				revertCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.active = initialCellState.active;
+							currentCell.supercharged = initialCellState.supercharged;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
+				handleCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (cell) {
+							state._initialCellStateForTap = { ...cell };
+							cell.active = !cell.active;
+							if (!cell.active) {
+								cell.supercharged = false;
+							}
+						}
+					});
+				},
+
+				handleCellDoubleTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.supercharged = !initialCellState.supercharged;
+							currentCell.active = true;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
+				revertCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.active = initialCellState.active;
+							currentCell.supercharged = initialCellState.supercharged;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
+				handleCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (cell) {
+							state._initialCellStateForTap = { ...cell };
+							cell.active = !cell.active;
+							if (!cell.active) {
+								cell.supercharged = false;
+							}
+						}
+					});
+				},
+
+				handleCellDoubleTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.supercharged = !initialCellState.supercharged;
+							currentCell.active = true;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
+				revertCellTap: (rowIndex, columnIndex) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+						if (initialCellState && currentCell) {
+							currentCell.active = initialCellState.active;
+							currentCell.supercharged = initialCellState.supercharged;
+						}
+						state._initialCellStateForTap = null;
+					});
+				},
+
 				toggleCellActive: (rowIndex, columnIndex) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
