@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import ReactGA from "react-ga4";
-import { useLocation } from "react-router-dom";
 
 import { TRACKING_ID } from "../constants";
 import { reportWebVitals } from "../reportWebVitals";
@@ -25,9 +24,7 @@ interface GA4Event {
  * Custom hook for handling Google Analytics initialization and pageview tracking.
  */
 export const useAnalytics = () => {
-	const location = useLocation();
 	const gaInitialized = useRef(false);
-	const initialPageViewSentRef = useRef(false);
 
 	const sendEvent = (event: GA4Event) => {
 		ReactGA.event(event);
@@ -41,26 +38,13 @@ export const useAnalytics = () => {
 		if (gaInitialized.current) return;
 		ReactGA.initialize(TRACKING_ID, {
 			testMode: import.meta.env.DEV,
+			gtagOptions: {
+				send_page_view: false, // Disable automatic page view collection
+			},
 		});
 		gaInitialized.current = true;
 		reportWebVitals(sendEvent);
 	}, []);
-
-	/**
-	 * Sends pageview events to Google Analytics on navigation.
-	 */
-	useEffect(() => {
-		if (initialPageViewSentRef.current) {
-			sendEvent({
-				category: "Page View",
-				action: "page_view",
-				page: location.pathname + location.search,
-				title: document.title, // Use current document title
-			});
-		} else {
-			initialPageViewSentRef.current = true;
-		}
-	}, [location.pathname, location.search]);
 
 	return { sendEvent };
 };
