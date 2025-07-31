@@ -3,11 +3,8 @@ import { useMemo } from "react";
 
 import { useTechStore } from "../../store/TechStore";
 
-export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
-	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
-	const fillColor = cell.supercharged ? "#C150FF2D" : "#00BEFD28";
-
-	const emptySvg = `data:image/svg+xml;utf8,${encodeURIComponent(`<?xml version="1.0" standalone="no"?>
+const emptySvgTemplate = (fillColor: string) =>
+	`data:image/svg+xml;utf8,${encodeURIComponent(`<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -36,6 +33,12 @@ fill="${fillColor}" stroke="none">
 -79 41 -79 80 0 24 7 40 27 57 34 28 65 29 100 2z"/>
 </g>
 </svg>`)}`;
+
+export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
+	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
+	const fillColor = cell.supercharged ? "#C150FF2D" : "#00BEFD28";
+
+	const emptySvg = useMemo(() => emptySvgTemplate(fillColor), [fillColor]);
 
 	const techColor = useMemo(() => {
 		return !currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
