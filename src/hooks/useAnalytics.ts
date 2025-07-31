@@ -39,7 +39,7 @@ export const useAnalytics = () => {
 		ReactGA.initialize(TRACKING_ID, {
 			testMode: import.meta.env.DEV,
 			gtagOptions: {
-				send_page_view: false, // Disable automatic page view collection
+				send_page_view: true, // Enable automatic page view collection
 			},
 		});
 		gaInitialized.current = true;

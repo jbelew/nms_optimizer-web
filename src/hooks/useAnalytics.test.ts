@@ -25,7 +25,7 @@ describe("useAnalytics", () => {
 		expect(ReactGA.initialize).toHaveBeenCalledTimes(1);
 		expect(ReactGA.initialize).toHaveBeenCalledWith(TRACKING_ID, {
 			testMode: false,
-			gtagOptions: { send_page_view: false },
+			gtagOptions: { send_page_view: true },
 		});
 		expect(reportWebVitals).toHaveBeenCalledTimes(1);
 
@@ -49,7 +49,7 @@ describe("useAnalytics", () => {
 		renderHook(() => useAnalytics());
 		expect(ReactGA.initialize).toHaveBeenCalledWith(TRACKING_ID, {
 			testMode: true,
-			gtagOptions: { send_page_view: false },
+			gtagOptions: { send_page_view: true },
 		});
 	});
 

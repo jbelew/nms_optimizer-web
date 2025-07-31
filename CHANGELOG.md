@@ -1,4 +1,35 @@
-# [3.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.8...v3.3.0) (2025-07-30)
+## [3.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.2...v3.4.3) (2025-07-31)
+
+
+
+## [3.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.1...v3.4.2) (2025-07-31)
+
+
+
+## [3.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.0...v3.4.1) (2025-07-31)
+
+
+
+# [3.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.3.2...v3.4.0) (2025-07-31)
+
+
+### Bug Fixes
+
+* **analytics:** updated GA analytics implementation ([5ae221f](https://github.com/jbelew/nms_optimizer-web/commit/5ae221f15f2a57d8ef44bbcbfc0f9eecada2448c))
+* **gridcell:** addressed failing tests ([3b7ffa7](https://github.com/jbelew/nms_optimizer-web/commit/3b7ffa7fd5fcd73bea2876de298e520a51ae2682))
+
+
+### Performance Improvements
+
+* **gridcell:** improved performance of the "empty" SVG rendering ([55d0c34](https://github.com/jbelew/nms_optimizer-web/commit/55d0c34429398e337654bbaedfcde4e3529bcd2f))
+
+
+
+## [3.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v3.3.1...v3.3.2) (2025-07-30)
+
+
+
+## [3.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.2.8...v3.3.1) (2025-07-30)
 
 
 ### Bug Fixes
