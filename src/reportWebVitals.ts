@@ -7,16 +7,18 @@ type SendEventFunction = (event: {
 	label: string;
 	value: number;
 	nonInteraction: boolean;
+	metric_name?: string;
 }) => void;
 
 // Helper to create and send the event object.
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
 		category: "Web Vitals",
-		action: metric.name,
+		action: "web_vitals", // Generic action for web vitals
 		label: metric.id,
 		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
 		nonInteraction: true,
+		metric_name: metric.name, // Specific metric name as a custom parameter
 	});
 };
 

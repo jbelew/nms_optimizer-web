@@ -17,6 +17,7 @@ interface GA4Event {
 	solve_method?: string;
 	page?: string;
 	title?: string;
+	metric_name?: string;
 	// Add any other custom parameters as needed
 }
 
