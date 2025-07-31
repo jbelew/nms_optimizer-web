@@ -120,6 +120,7 @@ export type GridStore = {
 	handleCellTap: (rowIndex: number, columnIndex: number) => void;
 	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
 	revertCellTap: (rowIndex: number, columnIndex: number) => void;
+	clearInitialCellStateForTap: () => void;
 	_initialCellStateForTap?: Cell | null;
 	version: number; // Add version property
 	grid: Grid;
@@ -326,11 +327,17 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
+				clearInitialCellStateForTap: () => {
+					set((state) => {
+						state._initialCellStateForTap = null;
+					});
+				},
+
 				toggleCellActive: (rowIndex, columnIndex) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
 						if (cell.supercharged) {
-							return;
+							cell.supercharged = !cell.supercharged;
 						}
 						if (cell && (!cell.active || !cell.module)) {
 							cell.active = !cell.active;
@@ -348,7 +355,7 @@ export const useGridStore = create<GridStore>()(
 							return;
 						}
 						if (!cell.active) {
-							return;
+							cell.active = true;
 						}
 						cell.supercharged = !cell.supercharged;
 					}),

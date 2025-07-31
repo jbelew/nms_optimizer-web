@@ -15,7 +15,7 @@
 		"preview": "vite preview",
 		"screenshot": "node scripts/screenshot.cjs",
 		"test": "vitest run --coverage",
-		"test:e2e": "npm run build && playwright test",
+		"test:e2e": "npm run build && npx playwright test",
 		"test:e2e:vitest": "vitest run --config ./vitest.e2e.config.ts",
 		"test:ci": "vitest run",
 		"typecheck": "tsc --noEmit",
@@ -32,6 +32,7 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
+		"@playwright/test": "^1.54.1",
 		"@radix-ui/react-icons": "^1.3.2",
 		"@radix-ui/themes": "^3.2.1",
 		"express": "^5.1.0",

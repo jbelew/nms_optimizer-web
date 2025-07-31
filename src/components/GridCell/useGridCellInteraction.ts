@@ -1,8 +1,11 @@
-import type { Cell } from "../../store/GridStore";
+import type { Cell, GridStore } from "../../store/GridStore";
 import { useCallback, useRef, useState } from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
+
+// DEV FLAG: Set to true to make mouse clicks behave like touch taps for testing.
+const MOUSE_AS_TAP_ENABLED = false;
 
 export const useGridCellInteraction = (
 	cell: Cell,
@@ -10,25 +13,38 @@ export const useGridCellInteraction = (
 	columnIndex: number,
 	isSharedGrid: boolean
 ) => {
-	const handleCellTap = useGridStore((state) => state.handleCellTap);
-	const handleCellDoubleTap = useGridStore((state) => state.handleCellDoubleTap);
-	const revertCellTap = useGridStore((state) => state.revertCellTap);
-	const totalSupercharged = useGridStore((state) => state.selectTotalSuperchargedCells());
-	const superchargedFixed = useGridStore((state) => state.superchargedFixed);
-	const gridFixed = useGridStore((state) => state.gridFixed);
+	const handleCellTap = useGridStore((state: GridStore) => state.handleCellTap);
+	const handleCellDoubleTap = useGridStore((state: GridStore) => state.handleCellDoubleTap);
+	const revertCellTap = useGridStore((state: GridStore) => state.revertCellTap);
+	const clearInitialCellStateForTap = useGridStore(
+		(state: GridStore) => state.clearInitialCellStateForTap
+	);
+	const toggleCellActive = useGridStore((state: GridStore) => state.toggleCellActive);
+	const toggleCellSupercharged = useGridStore((state: GridStore) => state.toggleCellSupercharged);
+	const totalSupercharged = useGridStore((state: GridStore) =>
+		state.selectTotalSuperchargedCells()
+	);
+	const superchargedFixed = useGridStore((state: GridStore) => state.superchargedFixed);
+	const gridFixed = useGridStore((state: GridStore) => state.gridFixed);
 	const [isTouching, setIsTouching] = useState(false);
 
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const { setShaking } = useShakeStore();
 
 	const lastTapTime = useRef(0);
+	const isTouchInteraction = useRef(false);
 
 	const handleTouchStart = useCallback(() => {
+		isTouchInteraction.current = true;
 		setIsTouching(true);
 	}, []);
 
 	const handleTouchEnd = useCallback(() => {
 		setIsTouching(false);
+		// Reset after a short delay. onClick fires after onTouchEnd.
+		setTimeout(() => {
+			isTouchInteraction.current = false;
+		}, 200);
 	}, []);
 
 	const triggerShake = useCallback(() => {
@@ -43,39 +59,60 @@ export const useGridCellInteraction = (
 	}, [setShaking]);
 
 	const handleClick = useCallback(
-		() => {
+		(event: React.MouseEvent) => {
 			if (isSharedGrid) {
 				return;
 			}
 
-			const handleTap = () => {
-				const currentTime = new Date().getTime();
-				const timeSinceLastTap = currentTime - lastTapTime.current;
-
-				if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
-					// Double tap
-					if (superchargedFixed) {
+			// Mouse-specific logic
+			if (!isTouchInteraction.current && !MOUSE_AS_TAP_ENABLED) {
+				if (event.ctrlKey || event.metaKey) {
+					// Ctrl/Cmd + Click: Toggle Active
+					if (gridFixed) {
 						triggerShake();
-						revertCellTap(rowIndex, columnIndex);
-					} else if (gridFixed || (totalSupercharged >= 4 && !cell.supercharged)) {
-						triggerShake();
-						revertCellTap(rowIndex, columnIndex);
 					} else {
-						handleCellDoubleTap(rowIndex, columnIndex);
+						toggleCellActive(rowIndex, columnIndex);
 					}
-					lastTapTime.current = 0; // Reset after double tap
 				} else {
-					// Single tap
-					if (gridFixed || (superchargedFixed && cell.supercharged)) {
+					// Normal Click: Toggle Supercharged
+					const isInvalidSuperchargeToggle =
+						superchargedFixed || gridFixed || (totalSupercharged >= 4 && !cell.supercharged);
+					if (isInvalidSuperchargeToggle) {
 						triggerShake();
 					} else {
-						handleCellTap(rowIndex, columnIndex);
+						toggleCellSupercharged(rowIndex, columnIndex);
 					}
-					lastTapTime.current = currentTime;
 				}
-			};
+				return;
+			}
 
-			handleTap();
+			// Touch-specific logic (single/double tap)
+			const currentTime = new Date().getTime();
+			const timeSinceLastTap = currentTime - lastTapTime.current;
+
+			if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
+				// Double tap
+				lastTapTime.current = 0; // Reset after double tap
+				const isInvalidDoubleTap =
+					superchargedFixed || gridFixed || (totalSupercharged >= 4 && !cell.supercharged);
+
+				if (isInvalidDoubleTap) {
+					triggerShake();
+					revertCellTap(rowIndex, columnIndex);
+				} else {
+					handleCellDoubleTap(rowIndex, columnIndex);
+				}
+			} else {
+				// Single tap
+				lastTapTime.current = currentTime;
+				const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
+				if (isInvalidSingleTap) {
+					triggerShake();
+					clearInitialCellStateForTap();
+				} else {
+					handleCellTap(rowIndex, columnIndex);
+				}
+			}
 		},
 		[
 			isSharedGrid,
@@ -84,6 +121,9 @@ export const useGridCellInteraction = (
 			handleCellTap,
 			handleCellDoubleTap,
 			revertCellTap,
+			clearInitialCellStateForTap,
+			toggleCellActive,
+			toggleCellSupercharged,
 			totalSupercharged,
 			cell.supercharged,
 			triggerShake,
@@ -100,18 +140,24 @@ export const useGridCellInteraction = (
 		(event: React.KeyboardEvent) => {
 			if (event.key === " " || event.key === "Enter") {
 				event.preventDefault();
-				handleClick();
+				if (isSharedGrid) return;
+
+				if (gridFixed) {
+					triggerShake();
+				} else {
+					toggleCellActive(rowIndex, columnIndex);
+				}
 			}
 		},
-		[handleClick]
+		[isSharedGrid, gridFixed, triggerShake, toggleCellActive, rowIndex, columnIndex]
 	);
 
 	return {
 		isTouching,
 		handleClick,
 		handleContextMenu,
-		handleKeyDown,
 		handleTouchStart,
 		handleTouchEnd,
+		handleKeyDown,
 	};
 };

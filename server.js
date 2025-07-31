@@ -61,5 +61,5 @@ app.get("/*splat", async (req, res) => {
 // Use the PORT environment variable provided by Heroku or fallback to 3000 locally
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
+	console.log(`Server running on port ${PORT} (from server.js)`);
 });
