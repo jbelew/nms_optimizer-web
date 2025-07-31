@@ -4,9 +4,16 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.3 (2025-07-30)
-
 **It's a wrap, my work is done here!**
+
+## Version 3.4 (2025-07-31)
+
+- Updated mobile grid cell interations. 
+- Updated Google Analytics implementation.
+- Improved performance of empty grid cell rendering.
+- Fixed test issues related to GridCell interactions.
+
+## Version 3.3 (2025-07-30)
 
 - Updated grid presentation.
 - Corrected issues with Sentinel Multi-tools and the Minotaur AI build.
