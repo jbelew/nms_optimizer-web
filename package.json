@@ -28,7 +28,7 @@
 		"preversion": "npm run changelog && git add CHANGELOG.md",
 		"postversion": "git push origin main --follow-tags",
 		"analyze": "vite build --config vite.config.analyze.ts",
-		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
 		"prepare": "husky"
 	},
 	"dependencies": {
