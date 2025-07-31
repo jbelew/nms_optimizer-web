@@ -29,7 +29,7 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          LATEST_CHANGELOG=$(awk '/^# \[/{if(p)exit; p=1} p' CHANGELOG.md | sed -e '1d' -e '$d')
+          LATEST_CHANGELOG=$(sed -n '0,/^# \[/d; /^# \[/,$d; p' CHANGELOG.md)
           echo "changelog_content<<EOF" >> $GITHUB_OUTPUT
           echo "$LATEST_CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
