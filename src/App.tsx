@@ -23,10 +23,10 @@ import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
 // Import the new custom hooks
-import { useAnalytics } from "./hooks/useAnalytics";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
 import { useUrlValidation } from "./hooks/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
+import { initializeAnalytics } from "./utils/analytics";
 
 /**
  * The main application component. It sets up routing, analytics, internationalization,
@@ -43,7 +43,7 @@ const App: FC = () => {
 	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
 	// Use the new custom hooks
-	useAnalytics();
+	initializeAnalytics();
 	ReactGA.set({ app_version: appVersion });
 	useSeoAndTitle();
 	useUrlValidation();
