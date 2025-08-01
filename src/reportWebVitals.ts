@@ -14,7 +14,7 @@ type SendEventFunction = (event: {
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
 		category: "Web Vitals",
-		action: "web_vitals", // Generic action for web vitals
+		action: `web_vitals_${metric.name}`, // Specific action for each web vital metric
 		label: metric.id,
 		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
 		nonInteraction: true,

@@ -1,3 +1,11 @@
+## [3.4.5](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.4...v3.4.5) (2025-08-01)
+
+
+
+## [3.4.4](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.3...v3.4.4) (2025-07-31)
+
+
+
 ## [3.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.2...v3.4.3) (2025-07-31)
 
 

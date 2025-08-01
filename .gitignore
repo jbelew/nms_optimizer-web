@@ -26,6 +26,6 @@ coverage/*
 
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
-vite.config.js
 stats.html
 lighthouse-report.html
+test-results/*

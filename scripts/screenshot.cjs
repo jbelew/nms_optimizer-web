@@ -1,7 +1,10 @@
 const puppeteer = require("puppeteer");
 
+console.log("Screenshot script started.");
+
 (async () => {
-	const browser = await puppeteer.launch({ headless: "new" });
+	console.log("Attempting to launch browser...");
+	const browser = await puppeteer.launch({ headless: "new", dumpio: true });
 	const page = await browser.newPage();
 
 	try {
@@ -1167,6 +1170,8 @@ const puppeteer = require("puppeteer");
 			path: "public/assets/img/screenshots/screenshot_tablet.png",
 			fullPage: false,
 		});
+	} catch (error) {
+		console.error("Screenshot script failed:", error);
 	} finally {
 		await browser.close();
 	}
