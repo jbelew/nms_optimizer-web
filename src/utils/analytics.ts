@@ -29,6 +29,7 @@ export const initializeAnalytics = () => {
 			send_page_view: true,
 		},
 	});
+	ReactGA.set({ app_version: __APP_VERSION__ });
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
