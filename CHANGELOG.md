@@ -1,4 +1,16 @@
-## [3.4.5](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.4...v3.4.5) (2025-08-01)
+## [3.4.6](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.4...v3.4.6) (2025-08-02)
+
+
+### Bug Fixes
+
+* **analytics:** Enable analytics in development mode ([4eaee67](https://github.com/jbelew/nms_optimizer-web/commit/4eaee67cb11de8fc8f4c8eda5085864c41b011c8))
+* **analytics:** Update event tracking to new GA4 signature ([9eef1cf](https://github.com/jbelew/nms_optimizer-web/commit/9eef1cf8b482d8fab2f5807ad04538fe4df8aef8))
+* **analytics:** updated web_vitals GA4 tag ([276482d](https://github.com/jbelew/nms_optimizer-web/commit/276482dd30b65191edbd7e984b2697578398ceb7))
+
+
+### Features
+
+* **analytics:** Enhance analytics events and error boundary for better debugging ([a16f29b](https://github.com/jbelew/nms_optimizer-web/commit/a16f29b23cfd8065328339ee6805114c2d94de6c))
 
 
 
