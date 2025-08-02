@@ -4,17 +4,10 @@ import { TRACKING_ID } from "../constants";
 import { reportWebVitals } from "../reportWebVitals";
 
 interface GA4Event {
-	category: string;
-	action: string;
-	label?: string;
-	value?: number;
-	nonInteraction?: boolean;
-	platform?: string;
-	tech?: string;
-	solve_method?: string;
-	page?: string;
-	title?: string;
-	metric_name?: string;
+	name: string;
+	params: {
+		[key: string]: string | number | boolean | undefined;
+	};
 }
 
 let gaInitialized = false;
@@ -30,6 +23,6 @@ export const initializeAnalytics = () => {
 	reportWebVitals(sendEvent);
 };
 
-export const sendEvent = (event: GA4Event) => {
-	ReactGA.event(event);
+export const sendEvent = ({ name, params }: GA4Event) => {
+	ReactGA.event(name, params);
 };

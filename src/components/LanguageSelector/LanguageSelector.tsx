@@ -51,9 +51,11 @@ const LanguageSelector: React.FC = () => {
 	const handleLanguageChange = (langCode: string) => {
 		void i18n.changeLanguage(langCode);
 		sendEvent({
-			category: "User Interactions",
-			action: "languageSelection",
-			label: langCode,
+			name: "languageSelection",
+			params: {
+				category: "User Interactions",
+				label: langCode,
+			},
 		});
 	};
 

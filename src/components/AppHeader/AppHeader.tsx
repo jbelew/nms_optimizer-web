@@ -35,8 +35,10 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						}
 						onClick={() => {
 							sendEvent({
-								category: "User Interactions",
-								action: "showTranslations",
+								name: "showTranslations",
+								params: {
+									category: "User Interactions",
+								},
 							});
 							openDialog("translation");
 						}}
@@ -73,8 +75,10 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						aria-label={t("buttons.changelog")}
 						onClick={() => {
 							sendEvent({
-								category: "User Interactions",
-								action: "showChangelog",
+								name: "showChangelog",
+								params: {
+									category: "User Interactions",
+								},
 							});
 							onShowChangelog();
 						}}

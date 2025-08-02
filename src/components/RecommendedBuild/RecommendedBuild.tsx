@@ -30,9 +30,11 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	const handleApply = (build: (typeof builds)[number]) => {
 		applyRecommendedBuild(build);
 		sendEvent({
-			category: "Recommended Build",
-			action: "apply_build",
-			label: build.title,
+			name: "apply_build",
+			params: {
+				category: "Recommended Build",
+				label: build.title,
+			},
 		});
 	};
 

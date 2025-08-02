@@ -41,27 +41,41 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 			onFirstVisitInstructionsDialogOpened();
 		}
 		sendEvent({
-			category: "User Interactions",
-			action: "showInstructions",
+			name: "showInstructions",
+			params: {
+				category: "User Interactions",
+			},
 		});
 	}, [openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened, sendEvent]);
 
 	const handleShowAboutPage = useCallback(() => {
 		openDialog("about");
 		sendEvent({
-			category: "User Interactions",
-			action: "showAbout",
+			name: "showAbout",
+			params: {
+				category: "User Interactions",
+			},
 		});
 	}, [openDialog, sendEvent]);
 
 	const handleShareClick = useCallback(() => {
 		const shareUrl = updateUrlForShare();
 		openDialog(null, { shareUrl });
-		sendEvent({ category: "User Interactions", action: "shareLink" });
+		sendEvent({
+			name: "shareLink",
+			params: {
+				category: "User Interactions",
+			},
+		});
 	}, [updateUrlForShare, openDialog, sendEvent]);
 
 	const handleResetGrid = useCallback(() => {
-		sendEvent({ category: "User Interactions", action: "resetGrid" });
+		sendEvent({
+			name: "resetGrid",
+			params: {
+				category: "User Interactions",
+			},
+		});
 		useGridStore.getState().resetGrid();
 		updateUrlForReset();
 		setIsSharedGrid(false);
