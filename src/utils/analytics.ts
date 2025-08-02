@@ -22,7 +22,6 @@ let gaInitialized = false;
 export const initializeAnalytics = () => {
 	if (gaInitialized) return;
 	ReactGA.initialize(TRACKING_ID, {
-		testMode: import.meta.env.DEV,
 		gtagOptions: {
 			send_page_view: true,
 		},
