@@ -161,6 +161,7 @@ describe("GridTableButtons", () => {
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "showInstructions",
+			value: 1,
 		});
 	});
 
@@ -173,6 +174,7 @@ describe("GridTableButtons", () => {
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "showAbout",
+			value: 1,
 		});
 	});
 
@@ -186,6 +188,7 @@ describe("GridTableButtons", () => {
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "shareLink",
+			value: 1,
 		});
 	});
 });

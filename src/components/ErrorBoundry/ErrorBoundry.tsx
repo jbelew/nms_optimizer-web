@@ -37,11 +37,13 @@ class ErrorBoundary extends Component<Props, State> {
 			console.error("ErrorBoundary: Failed to clear localStorage.", e);
 		}
 
-		ReactGA.event({
+		ReactGA.event(error.name, {
 			category: "Error",
 			action: "ErrorBoundary Catch",
-			label: `${error.name}: ${error.message} - ${errorInfo.componentStack?.split("\n")[1]?.trim() || "N/A"}`,
+			label: error.message,
 			nonInteraction: true,
+			componentStack: errorInfo.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
+			stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
 		});
 
 		this.setState({ errorInfo });

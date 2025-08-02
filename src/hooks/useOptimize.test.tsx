@@ -133,6 +133,7 @@ describe("useOptimize", () => {
 				platform: "standard",
 				tech: "techA",
 				solve_method: "Success",
+				value: 1,
 			});
 			expect(setPatternNoFitTechMock).not.toHaveBeenCalled();
 		});
@@ -162,6 +163,7 @@ describe("useOptimize", () => {
 				action: "no_fit_warning",
 				platform: "standard",
 				tech: "techB",
+				value: 1,
 			});
 		});
 

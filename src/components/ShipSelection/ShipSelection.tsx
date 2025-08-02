@@ -81,11 +81,10 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 		(option: string) => {
 			if (option !== selectedShipType) {
 				sendEvent({
-					name: "platform_selection",
-					params: {
-						category: "User Interactions",
-						platform: option,
-					},
+					category: "User Interactions",
+					action: "platform_selection",
+					platform: option,
+					value: 1,
 				});
 
 				setSelectedShipType(option, Object.keys(shipTypes));

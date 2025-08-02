@@ -16,11 +16,10 @@ export default function BuyMeACoffee() {
 
 		// Send the Google Analytics event
 		sendEvent({
-			name: "BuyMeACoffeeClick",
-			params: {
-				category: "User Interactions",
-				label: "Buy Me a Coffee Button",
-			},
+			category: "User Interactions",
+			action: "BuyMeACoffeeClick",
+			label: "Buy Me a Coffee Button",
+			value: 1,
 		});
 
 		// Delay to ensure GA event is captured

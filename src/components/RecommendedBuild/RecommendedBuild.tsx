@@ -8,6 +8,7 @@ import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
 import { type TechTree } from "../../hooks/useTechTree";
+import { usePlatformStore } from "../../store/PlatformStore";
 
 interface RecommendedBuildProps {
 	techTree: TechTree;
@@ -24,17 +25,18 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	const { openDialog } = useDialog();
 	const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
 	const { sendEvent } = useAnalytics();
+	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 
 	const builds = techTree.recommended_builds || [];
 
 	const handleApply = (build: (typeof builds)[number]) => {
 		applyRecommendedBuild(build);
 		sendEvent({
-			name: "apply_build",
-			params: {
-				category: "Recommended Build",
-				label: build.title,
-			},
+			category: "Recommended Build",
+			action: "apply_build",
+			build: build.title,
+			platform: selectedPlatform,
+			value: 1,
 		});
 	};
 

@@ -147,12 +147,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 					if (data.solve_method === "Pattern No Fit" && data.grid === null && !forced) {
 						setPatternNoFitTech(tech);
 						sendEvent({
-							name: "no_fit_warning",
-							params: {
-								category: "User Interactions",
-								platform: selectedShipType,
-								tech: tech,
-							},
+							category: "User Interactions",
+							action: "no_fit_warning",
+							platform: selectedShipType,
+							tech: tech,
+							value: 1,
 						});
 					} else {
 						if (patternNoFitTech === tech) {
@@ -170,13 +169,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 						console.log("Response from API:", data);
 						sendEvent({
-							name: "optimize_tech",
-							params: {
-								category: "User Interactions",
-								platform: selectedShipType,
-								tech: tech,
-								solve_method: data.solve_method,
-							},
+							category: "User Interactions",
+							action: "optimize_tech",
+							platform: selectedShipType,
+							tech: tech,
+							solve_method: data.solve_method,
+							value: 1,
 						});
 					}
 				} else {
