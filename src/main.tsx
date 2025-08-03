@@ -10,7 +10,7 @@ import "./index.css";
 // i18n
 import "./i18n/i18n"; // Initialize i18next
 
-import { StrictMode } from "react"; // Added Suspense
+import { StrictMode } from "react";
 import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";

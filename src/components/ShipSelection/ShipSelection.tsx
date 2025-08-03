@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { fetchShipTypes } from "../../hooks/useShipTypes";
+import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 
@@ -20,8 +20,6 @@ const DEFAULT_GRID_WIDTH = 6;
 interface ShipSelectionProps {
 	solving: boolean;
 }
-
-const shipTypesResource = fetchShipTypes(); // Start fetching immediately
 
 /**
  * A skeleton component that mimics the ShipSelection trigger button,
@@ -54,7 +52,7 @@ const ShipSelectionLoadingState = () => {
 };
 
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
-	const shipTypes = shipTypesResource.read(); // This will suspend the component
+	const shipTypes = useFetchShipTypesSuspense(); // This will suspend the component
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
 	const setGridAndResetAuxiliaryState = useGridStore(

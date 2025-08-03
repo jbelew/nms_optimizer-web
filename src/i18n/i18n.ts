@@ -1,22 +1,12 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
-
-import de from "./locales/de/translation.json";
-import en from "./locales/en/translation.json";
-import es from "./locales/es/translation.json";
-import fr from "./locales/fr/translation.json";
 
 const languages = ["en", "es", "fr", "de"];
 
-const resources = {
-	en: { translation: en },
-	es: { translation: es },
-	fr: { translation: fr },
-	de: { translation: de },
-};
-
 void i18n
+	.use(Backend)
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
@@ -28,7 +18,9 @@ void i18n
 			order: ["querystring", "cookie", "localStorage", "sessionStorage", "navigator", "htmlTag"],
 			caches: ["localStorage", "cookie"],
 		},
-		resources,
+		backend: {
+			loadPath: "/locales/{{lng}}/{{ns}}.json",
+		},
 		interpolation: {
 			escapeValue: false,
 		},
