@@ -1,3 +1,12 @@
+## [3.4.12](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.11...v3.4.12) (2025-08-03)
+
+
+### Bug Fixes
+
+* **release:** Refine changelog extraction in GitHub Action ([80e7ea7](https://github.com/jbelew/nms_optimizer-web/commit/80e7ea73436e903f3d28ce402813e5801eaba712))
+
+
+
 ## [3.4.11](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.10...v3.4.11) (2025-08-03)
 
 
