@@ -19,7 +19,7 @@ void i18n
 			caches: ["localStorage", "cookie"],
 		},
 		backend: {
-			loadPath: "/locales/{{lng}}/{{ns}}.json",
+			loadPath: "/assets/locales/{{lng}}/{{ns}}.json",
 		},
 		interpolation: {
 			escapeValue: false,

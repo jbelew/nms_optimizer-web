@@ -87,7 +87,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 				<>
 					<ScrollArea
 						className="gridContainer__sidebar rounded-md p-4 shadow-md"
-						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a3)" }}
+						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a2)" }}
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}
