@@ -1,3 +1,12 @@
+## [3.4.10](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.9...v3.4.10) (2025-08-03)
+
+
+### Features
+
+* Enhance GA, optimize performance, and improve build process ([96c436d](https://github.com/jbelew/nms_optimizer-web/commit/96c436d21f58a5416acae87d5aa8a5a065c73137))
+
+
+
 ## [3.4.9](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.8...v3.4.9) (2025-08-03)
 
 
