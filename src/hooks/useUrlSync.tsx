@@ -42,13 +42,10 @@ export const useUrlSync = () => {
 		};
 
 		// Initial check on mount, delayed slightly to allow router to initialize
-		const timerId = setTimeout(() => {
-			handlePopState();
-		}, 0);
+		handlePopState();
 
 		window.addEventListener("popstate", handlePopState);
 		return () => {
-			clearTimeout(timerId); // Ensure the timeout is cleared on unmount
 			window.removeEventListener("popstate", handlePopState);
 		};
 	}, [
