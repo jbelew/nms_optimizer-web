@@ -40,7 +40,8 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 			content={
 				<>
 					<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
-						{t("dialogs.shareLink.description")}
+						{t("dialogs.shareLink.description")} <strong>Tip:</strong> Bookmark the link it to
+						easily return to this layout later.
 					</Text>
 					<TextArea
 						size={{ initial: "2", sm: "3" }}

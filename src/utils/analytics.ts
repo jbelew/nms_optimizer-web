@@ -18,6 +18,7 @@ interface GA4Event {
 	build?: string;
 	componentStack?: string;
 	stackTrace?: string;
+	app_version?: string;
 }
 
 let gaInitialized = false;
