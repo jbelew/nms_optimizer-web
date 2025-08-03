@@ -1,3 +1,27 @@
+## [3.4.8](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.7...v3.4.8) (2025-08-03)
+
+
+### Bug Fixes
+
+* Generate changelog after version bump ([0417b6c](https://github.com/jbelew/nms_optimizer-web/commit/0417b6cb3eb5d89b0fc32a314ff61569ccb355d3))
+* **performance:** remove unnecessary setTimeout in useUrlSync ([4274936](https://github.com/jbelew/nms_optimizer-web/commit/42749368e0c6638df1684a0b14895993e6c20058))
+
+
+
+## [3.4.7](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.6...v3.4.7) (2025-08-03)
+
+
+### Bug Fixes
+
+* **analytics:** added app_version to web vitals metrics ([2e8f164](https://github.com/jbelew/nms_optimizer-web/commit/2e8f16443f763279f048b3a5b9a9a64adbefaec6))
+
+
+### Features
+
+* Leverage app_version in Google Analytics ([01167a5](https://github.com/jbelew/nms_optimizer-web/commit/01167a530ad173b5c283b15ae1a771ebc4084dbd))
+
+
+
 ## [3.4.6](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.5...v3.4.6) (2025-08-02)
 
 
