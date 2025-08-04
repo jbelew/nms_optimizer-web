@@ -28,4 +28,6 @@ tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
 stats.html
 lighthouse-report.html
-test-results/*
+
+playwright-report
+test-results
