@@ -1,4 +1,4 @@
-import type { GA4Event } from "./utils/analytics";
+import type { GA4Event } from "./analytics";
 import type { Metric } from "web-vitals";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 

@@ -1,7 +1,7 @@
 import ReactGA from "react-ga4";
 
 import { TRACKING_ID } from "../constants";
-import { reportWebVitals } from "../reportWebVitals";
+import { reportWebVitals } from "./reportWebVitals";
 
 export interface GA4Event {
 	category: string;
