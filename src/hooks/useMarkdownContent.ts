@@ -23,13 +23,12 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			setIsLoading(true);
 			setError(null);
 
-			if (markdownFileName === "about") {
+			const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
+			if (markdownFileName === "about" && lang === "en") {
 				setMarkdown(aboutMarkdown);
 				setIsLoading(false);
 				return;
 			}
-
-			const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
 			const langToFetch = markdownFileName === "changelog" ? "en" : lang;
 			const defaultLang = (i18n.options.fallbackLng as string[])[0] || "en"; // Assuming 'en' is the default fallback
 

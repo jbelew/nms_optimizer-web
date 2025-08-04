@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics";
-import RhombusIcon from "../icons/RhombusIcon";
+import RhombusIcon from "../Icons/RhombusIcon";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 interface AppHeaderProps {
