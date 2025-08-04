@@ -1,15 +1,3 @@
-import "@radix-ui/themes/tokens/colors/amber.css";
-import "@radix-ui/themes/tokens/colors/blue.css";
-import "@radix-ui/themes/tokens/colors/crimson.css";
-import "@radix-ui/themes/tokens/colors/green.css";
-import "@radix-ui/themes/tokens/colors/iris.css";
-import "@radix-ui/themes/tokens/colors/jade.css";
-import "@radix-ui/themes/tokens/colors/orange.css";
-import "@radix-ui/themes/tokens/colors/red.css";
-import "@radix-ui/themes/tokens/colors/sky.css";
-import "@radix-ui/themes/tokens/colors/teal.css";
-import "@radix-ui/themes/tokens/colors/yellow.css";
-
 import type { FC } from "react";
 import { useMemo } from "react";
 import ReactGA from "react-ga4";

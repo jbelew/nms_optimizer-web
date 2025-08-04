@@ -11,6 +11,8 @@ import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 
+// We need the colors once TechTree loads
+
 // --- Type Definitions ---
 interface TechTreeProps {
 	handleOptimize: (tech: string) => Promise<void>;

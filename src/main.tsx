@@ -3,6 +3,17 @@ import "@radix-ui/themes/tokens/base.css";
 import "@radix-ui/themes/tokens/colors/cyan.css";
 import "@radix-ui/themes/tokens/colors/sage.css";
 import "@radix-ui/themes/tokens/colors/purple.css";
+import "@radix-ui/themes/tokens/colors/amber.css";
+import "@radix-ui/themes/tokens/colors/blue.css";
+import "@radix-ui/themes/tokens/colors/crimson.css";
+import "@radix-ui/themes/tokens/colors/green.css";
+import "@radix-ui/themes/tokens/colors/iris.css";
+import "@radix-ui/themes/tokens/colors/jade.css";
+import "@radix-ui/themes/tokens/colors/orange.css";
+import "@radix-ui/themes/tokens/colors/red.css";
+import "@radix-ui/themes/tokens/colors/sky.css";
+import "@radix-ui/themes/tokens/colors/teal.css";
+import "@radix-ui/themes/tokens/colors/yellow.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
