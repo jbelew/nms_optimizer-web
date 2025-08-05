@@ -1,3 +1,17 @@
+# [3.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.12...v3.5.0) (2025-08-05)
+
+
+### Bug Fixes
+
+* **performance:** removed Critical CSS functionality from the build ([956ea38](https://github.com/jbelew/nms_optimizer-web/commit/956ea38a002b27e84a227872436b599a0fd8ebf9))
+
+
+### Features
+
+* **scoring:** added support for group adjacency across multiple tech types ([bac995b](https://github.com/jbelew/nms_optimizer-web/commit/bac995bec9ef2ed06fc439057354f681051a07e3))
+
+
+
 ## [3.4.12](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.11...v3.4.12) (2025-08-03)
 
 
