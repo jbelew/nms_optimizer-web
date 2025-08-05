@@ -6,6 +6,11 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 **It's a wrap, my work is done here!**
 
+## Version 3.5 (2025-08-05)
+
+* **performance:** Removed Critical CSS functionality from the build ([956ea38](https://github.com/jbelew/nms_optimizer-web/commit/956ea38a002b27e84a227872436b599a0fd8ebf9))
+* **scoring:** Added support for group adjacency across multiple tech types ([bac995b](https://github.com/jbelew/nms_optimizer-web/commit/bac995bec9ef2ed06fc439057354f681051a07e3))
+
 ## Version 3.4 (2025-07-31)
 
 - Updated mobile grid cell interations.
