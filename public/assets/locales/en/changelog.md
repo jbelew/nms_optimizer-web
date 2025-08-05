@@ -8,7 +8,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ## Version 3.4 (2025-07-31)
 
-- Updated mobile grid cell interations. 
+- Updated mobile grid cell interations.
 - Updated Google Analytics implementation.
 - Improved performance of empty grid cell rendering.
 - Fixed test issues related to GridCell interactions.
@@ -126,7 +126,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 ## Version 2.80 (2025-05-22)
 
 - Some final UI refinements and optimizations.
-- Renamed app to **No Man's Sky Technology Layout Optimizer AI**.
+- Renamed app to **No Man's Sky Technology Layout Optimizer**.
 
 ## Version 2.75 (2025-05-16)
 
