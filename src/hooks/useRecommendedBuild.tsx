@@ -3,7 +3,7 @@ import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "./useTech
 import { useCallback, useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../store/GridStore";
-import { isValidRecommendedBuild } from "../utils/typeValidation";
+import { isValidRecommendedBuild } from "../utils/recommendedBuildValidation";
 
 export const useRecommendedBuild = (
 	techTree: TechTree,
