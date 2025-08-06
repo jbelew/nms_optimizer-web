@@ -1,3 +1,12 @@
+## [3.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.5.0...v3.5.1) (2025-08-06)
+
+
+### Features
+
+* **analytics:** added tracking of supercharged usage for future reporting idea ([82f0fff](https://github.com/jbelew/nms_optimizer-web/commit/82f0fffdd86476259d2862ebd719a809ee275c2b))
+
+
+
 # [3.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.4.12...v3.5.0) (2025-08-05)
 
 
