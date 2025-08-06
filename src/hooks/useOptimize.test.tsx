@@ -109,6 +109,40 @@ describe("useOptimize", () => {
 			const mockApiResponse = {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
+				max_bonus: 101,
+				solved_bonus: 90,
+			};
+			fetchSpy.mockResolvedValueOnce({
+				ok: true,
+				json: () => Promise.resolve(mockApiResponse),
+			});
+
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("techA");
+			});
+
+			expect(result.current.solving).toBe(false);
+			expect(setGridMock).toHaveBeenCalledWith(mockApiResponse.grid);
+			expect(setResultMock).toHaveBeenCalledWith(mockApiResponse, "techA");
+			expect(setShowErrorStoreMock).toHaveBeenCalledWith(false);
+			expect(sendEventMock).toHaveBeenCalledWith({
+				category: "User Interactions",
+				action: "optimize_tech",
+				platform: "standard",
+				tech: "techA",
+				solve_method: "Success",
+				value: 1,
+				supercharged: true,
+			});
+			expect(setPatternNoFitTechMock).not.toHaveBeenCalled();
+		});
+
+		it("should successfully optimize with supercharged false", async () => {
+			const mockApiResponse = {
+				solve_method: "Success",
+				grid: { cells: [[]], width: 1, height: 1 },
 				max_bonus: 100,
 				solved_bonus: 90,
 			};

@@ -174,10 +174,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 							tech: tech,
 							solve_method: data.solve_method,
 							value: 1,
-							supercharged:
-								typeof data.solved_bonus === "number" &&
-								typeof data.max_bonus === "number" &&
-								data.solved_bonus > data.max_bonus,
+							supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
 						});
 					}
 				} else {
