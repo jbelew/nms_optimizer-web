@@ -12,6 +12,7 @@ export interface GA4Event {
 	platform?: string;
 	tech?: string;
 	solve_method?: string;
+	supercharged?: boolean;
 	page?: string;
 	title?: string;
 	metric_name?: string;

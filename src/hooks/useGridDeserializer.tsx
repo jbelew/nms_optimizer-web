@@ -72,7 +72,7 @@ export const serialize = (grid: Grid): string => {
 				: " ";
 
 			// Adjacency Bonus status
-			adjBonusString += (cell.adjacency_bonus ?? 0) > 0 ? "T" : "F";
+			adjBonusString += (cell.adjacency_bonus ?? 0) != 0 ? "T" : "F";
 		}
 	}
 

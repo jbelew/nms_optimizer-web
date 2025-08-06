@@ -59,7 +59,6 @@ function isApiResponse(value: unknown): value is ApiResponse {
 		typeof obj.solved_bonus !== "number"
 	)
 		return false;
-
 	return true;
 }
 
@@ -175,6 +174,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 							tech: tech,
 							solve_method: data.solve_method,
 							value: 1,
+							supercharged:
+								typeof data.solved_bonus === "number" &&
+								typeof data.max_bonus === "number" &&
+								data.solved_bonus > data.max_bonus,
 						});
 					}
 				} else {

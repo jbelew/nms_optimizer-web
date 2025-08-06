@@ -134,6 +134,7 @@ describe("useOptimize", () => {
 				tech: "techA",
 				solve_method: "Success",
 				value: 1,
+				supercharged: false,
 			});
 			expect(setPatternNoFitTechMock).not.toHaveBeenCalled();
 		});
