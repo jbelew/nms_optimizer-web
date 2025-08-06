@@ -36,6 +36,9 @@ export const useSeoAndTitle = () => {
 		}
 		document.title = pageTitle;
 
+		// Set the lang attribute on the html tag
+		document.documentElement.lang = i18n.language;
+
 		// Canonical Tag Logic
 		let canonicalLink = document.querySelector('link[rel="canonical"]');
 		const canonicalUrlObject = new URL(window.location.origin + location.pathname);
