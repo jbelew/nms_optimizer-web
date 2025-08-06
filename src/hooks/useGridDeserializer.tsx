@@ -26,7 +26,7 @@ export const compressRLE = (input: string): string => {
 	return compressed;
 };
 
-const decompressRLE = (input: string): string => {
+export const decompressRLE = (input: string): string => {
 	if (!input) return "";
 	let decompressed = "";
 	let i = 0;
@@ -94,7 +94,7 @@ export const serialize = (grid: Grid): string => {
 	);
 };
 
-const deserialize = async (
+export const deserialize = async (
 	serializedGrid: string,
 	shipType: string,
 	setTechColors: (colors: { [key: string]: string }) => void
