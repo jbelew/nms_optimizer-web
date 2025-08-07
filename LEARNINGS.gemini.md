@@ -82,3 +82,23 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 ### Refine & Reflect
 
 *   **Reflection:** The `replace` tool is very sensitive to exact string matching. It's crucial to always read the file content immediately before attempting a `replace` operation to ensure the `old_string` is precisely what's in the file, including all whitespace and surrounding context. This will prevent "0 occurrences found" errors.
+
+## 2025-08-06: JSDoc Updates for TechTree Components
+
+### Perceive & Understand
+
+*   **Request:** The user requested to update JSDoc instructions in `.gemini.md` and then review `src/components/TechTree/TechTree.tsx` for JSDoc compliance.
+*   **Context:** I identified that `TechTreeWithData` was missing `@param` tags and `TechTreeComponent` was missing JSDoc entirely.
+
+### Reason & Plan
+
+*   **Plan:** I proposed to add JSDoc to `TechTreeComponent` and update the JSDoc for `TechTreeWithData` to include `@param` tags.
+*   **Action:** The user approved the plan.
+
+### Act & Implement
+
+*   **Action:** I used the `replace` tool to add the missing JSDoc to `TechTreeComponent` and update the JSDoc for `TechTreeWithData`.
+
+### Refine & Reflect
+
+*   **Reflection:** Successfully applied JSDoc updates, ensuring better code documentation and adherence to established guidelines. This reinforces the importance of thorough documentation for code readability and maintainability.

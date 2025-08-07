@@ -58,6 +58,12 @@ const TechTreeSkeleton: React.FC = () => {
  * It's designed to be wrapped in a Suspense boundary. When it suspends,
  * the entire component (including the RecommendedBuild button) is replaced
  * by the Suspense fallback, solving the stale UI issue.
+ *
+ * @param {object} props - The component props.
+ * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
+ * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
+ * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
+ * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
@@ -132,7 +138,17 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	);
 };
 
-// --- Main Exported Component (Manages layout and suspense) ---
+/**
+ * TechTreeComponent is the main entry point for the Tech Tree feature.
+ * It manages the overall layout, error boundaries, and suspense for data loading.
+ * It displays a skeleton loader while the tech tree data is being fetched.
+ *
+ * @param {object} props - The component props.
+ * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
+ * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
+ * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
+ * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
+ */
 const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
 	return (
 		<ErrorBoundary>
