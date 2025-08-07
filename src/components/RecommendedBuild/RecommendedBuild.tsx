@@ -5,7 +5,7 @@ import { Button, DropdownMenu, IconButton, Link, Separator, Strong } from "@radi
 import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
 import { type TechTree } from "../../hooks/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";

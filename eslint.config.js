@@ -10,9 +10,13 @@ export default tseslint.config(
 	{ ignores: ["dist"] },
 	{
 		extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
-		files: ["**/*.{ts,tsx}"],
+		files: ["src/**/*.{ts,tsx}"],
 		languageOptions: {
 			ecmaVersion: 2020,
+			parserOptions: {
+				project: ["./tsconfig.app.json"],
+				tsconfigRootDir: import.meta.dirname,
+			},
 			globals: {
 				...globals.browser,
 				...globals.node,
@@ -23,7 +27,31 @@ export default tseslint.config(
 			"react-refresh": reactRefresh,
 			"jsx-a11y": jsxA11y,
 		},
-		 rules: {
+		rules: {
+			...reactHooks.configs.recommended.rules,
+			"react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+		},
+	},
+	{
+		extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
+		files: ["src/**/*.test.{ts,tsx}"],
+		languageOptions: {
+			ecmaVersion: 2020,
+			parserOptions: {
+				project: ["./tsconfig.vitest.json"],
+				tsconfigRootDir: import.meta.dirname,
+			},
+			globals: {
+				...globals.browser,
+				...globals.node,
+			},
+		},
+		plugins: {
+			"react-hooks": reactHooks,
+			"react-refresh": reactRefresh,
+			"jsx-a11y": jsxA11y,
+		},
+		rules: {
 			...reactHooks.configs.recommended.rules,
 			"react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
 		},

@@ -1,0 +1,68 @@
+// src/components/MainAppContent/MainAppContent.tsx
+import "./MainAppContent.css";
+
+import type { FC } from "react";
+import { Suspense, lazy } from "react";
+
+import { useDialog } from "../../context/dialog-utils";
+import { useUrlState } from "../../hooks/useUrlState";
+import AppFooter from "../AppFooter/AppFooter";
+import AppHeader from "../AppHeader/AppHeader";
+import GridShake from "../GridShake/GridShake";
+import GridTable from "../GridTable/GridTable";
+import MessageSpinner from "../MessageSpinner/MessageSpinner";
+import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
+import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
+import ShipSelection from "../ShipSelection/ShipSelection";
+import SplashScreen from "../SplashScreen/SplashScreen";
+
+const LazyTechTree = lazy(() => import("../TechTree/TechTree"));
+
+interface MainAppContentProps {
+	buildVersion: string;
+}
+
+export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
+	const { openDialog } = useDialog();
+	const { urlState, setUrlState, patternNoFitTech, setPatternNoFitTech } = useUrlState();
+
+	const handleForceOptimize = async () => {
+		// Logic to force optimize, potentially ignoring the no-fit technology
+		console.log("Force optimize requested");
+		// Here you would call the actual optimization logic with a flag to ignore the check
+		setPatternNoFitTech(null); // Close the dialog after forcing
+	};
+
+	return (
+		<div className="app-container">
+			<SplashScreen />
+			<AppHeader buildVersion={buildVersion} />
+
+			<main className="app-content">
+				<div className="grid-.container">
+					<div className="grid-controls">
+						<ShipSelection urlState={urlState} setUrlState={setUrlState} />
+						<RecommendedBuild />
+					</div>
+					<GridShake>
+						<GridTable urlState={urlState} setUrlState={setUrlState} />
+					</GridShake>
+				</div>
+				<div className="tech-tree-container">
+					<Suspense fallback={<MessageSpinner />}>
+						<LazyTechTree urlState={urlState} setUrlState={setUrlState} />
+					</Suspense>
+				</div>
+			</main>
+
+			<AppFooter openDialog={openDialog} />
+
+			<OptimizationAlertDialog
+				isOpen={!!patternNoFitTech}
+				technologyName={patternNoFitTech?.name || null}
+				onClose={() => setPatternNoFitTech(null)} // Simple close action
+				onForceOptimize={handleForceOptimize} // Pass the force optimize handler
+			/>
+		</div>
+	);
+};

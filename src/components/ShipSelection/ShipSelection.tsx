@@ -7,7 +7,7 @@ import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";

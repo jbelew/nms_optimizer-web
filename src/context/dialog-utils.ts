@@ -2,7 +2,13 @@
 import { createContext, useContext } from "react";
 
 // --- Context Definition ---
-export type DialogType = "about" | "instructions" | "changelog" | "translation" | null;
+export type DialogType =
+	| "about"
+	| "instructions"
+	| "changelog"
+	| "translation"
+	| "user-stats"
+	| null;
 
 export interface DialogContextType {
 	activeDialog: DialogType;

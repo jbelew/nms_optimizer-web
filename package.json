@@ -52,6 +52,7 @@
 		"react-i18next": "^15.5.3",
 		"react-markdown": "^10.1.0",
 		"react-router-dom": "^7.6.3",
+		"recharts": "^3.1.2",
 		"rehype-external-links": "^3.0.0",
 		"vite-preload": "^1.0.4",
 		"web-vitals": "^5.0.3",

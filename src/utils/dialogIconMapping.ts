@@ -7,6 +7,7 @@ import {
 	ExclamationTriangleIcon,
 	GlobeIcon,
 	InfoCircledIcon,
+	PieChartIcon,
 	QuestionMarkCircledIcon,
 	Share2Icon,
 } from "@radix-ui/react-icons";
@@ -23,6 +24,7 @@ const iconMap: Record<string, React.ElementType<IconProps>> = {
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.translationRequest": GlobeIcon,
 	"dialogs.titles.shareLink": Share2Icon,
+	"dialogs.titles.userStats": PieChartIcon,
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 };
 

@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
@@ -7,7 +7,6 @@ import { Route, Routes } from "react-router-dom";
 import AppDialog from "./components/AppDialog/AppDialog";
 import ErrorContent from "./components/AppDialog/ErrorContent";
 import ShareLinkDialog from "./components/AppDialog/ShareLinkDialog"; // Import ShareLinkDialog
-import UserStatsDialog from "./components/AppDialog/UserStatsDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
@@ -24,7 +23,6 @@ import { initializeAnalytics } from "./utils/analytics";
  */
 const App: FC = () => {
 	const { t } = useTranslation();
-	const [isUserStatsOpen, setIsUserStatsOpen] = useState(false);
 
 	const appVersion: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
@@ -42,7 +40,7 @@ const App: FC = () => {
 
 	return (
 		<>
-			<MainAppContent buildVersion={build} onOpenUserStats={() => setIsUserStatsOpen(true)} />
+			<MainAppContent buildVersion={build} />
 
 			<Routes>
 				<Route path="/" element={null} />
@@ -62,7 +60,6 @@ const App: FC = () => {
 
 			{/* Render ShareLinkDialog conditionally */}
 			<ShareLinkDialog isOpen={!!shareUrl} shareUrl={shareUrl || ""} onClose={closeDialog} />
-			<UserStatsDialog isOpen={isUserStatsOpen} onClose={() => setIsUserStatsOpen(false)} />
 		</>
 	);
 };

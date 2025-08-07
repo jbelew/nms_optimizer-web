@@ -6,12 +6,14 @@ import { useGridStore } from "../store/GridStore";
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { usePlatformStore } from "../store/PlatformStore";
 import { useTechStore } from "../store/TechStore";
-import { useAnalytics } from "./useAnalytics";
+import { useAnalytics } from "./useAnalytics/useAnalytics";
 import { useBreakpoint } from "./useBreakpoint";
 import { useOptimize } from "./useOptimize";
 
 // Mock all external dependencies
-vi.mock("./useAnalytics");
+vi.mock("./useAnalytics/useAnalytics", () => ({
+	useAnalytics: vi.fn(),
+}));
 vi.mock("../store/GridStore");
 vi.mock("../store/OptimizeStore");
 vi.mock("../store/TechStore");

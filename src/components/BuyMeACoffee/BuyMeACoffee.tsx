@@ -1,6 +1,6 @@
 import { Button } from "@radix-ui/themes";
 
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 
 /**

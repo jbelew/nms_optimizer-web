@@ -9,7 +9,7 @@ import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 

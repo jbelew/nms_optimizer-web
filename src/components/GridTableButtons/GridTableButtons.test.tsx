@@ -5,7 +5,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
@@ -23,7 +23,9 @@ vi.mock("react-i18next", () => ({
 }));
 vi.mock("../../hooks/useBreakpoint");
 vi.mock("../../context/dialog-utils");
-vi.mock("../../hooks/useAnalytics");
+vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
+	useAnalytics: vi.fn(),
+}));
 
 let mockSendEvent: Mock;
 

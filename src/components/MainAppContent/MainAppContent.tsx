@@ -23,6 +23,7 @@ import TechTreeComponent from "../TechTree/TechTree";
 type MainAppContentInternalProps = {
 	/** The build version of the application, to be displayed in the footer. */
 	buildVersion: string;
+	onOpenUserStats: () => void;
 };
 
 /**
@@ -31,7 +32,10 @@ type MainAppContentInternalProps = {
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  * @param {MainAppContentInternalProps} props - The props for the component.
  */
-const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
+const MainAppContentInternal: FC<MainAppContentInternalProps> = ({
+	buildVersion,
+	onOpenUserStats,
+}) => {
 	const { t } = useTranslation();
 	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog, sectionToScrollTo } = useDialog();
@@ -60,6 +64,10 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		openDialog("changelog");
 	}, [openDialog]);
 
+	const handleOpenUserStats = useCallback(() => {
+		onOpenUserStats();
+	}, [onOpenUserStats]);
+
 	// Memoize content elements for dialogs
 	const aboutDialogContent = useMemo(
 		() => <MarkdownContentRenderer markdownFileName="about" />,
@@ -82,6 +90,10 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		() => <MarkdownContentRenderer markdownFileName="translation-request" />,
 		[]
 	);
+	const userStatsDialogContent = useMemo(
+		() => <MarkdownContentRenderer markdownFileName="user-stats" />,
+		[]
+	);
 
 	return (
 		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
@@ -89,7 +101,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				className="app rounded-none shadow-none backdrop-blur-2xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--color-panel-translucent)" }}
 			>
-				<AppHeader onShowChangelog={handleShowChangelog} />
+				<AppHeader onShowChangelog={handleShowChangelog} onOpenUserStats={handleOpenUserStats} />
 				<section
 					className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
@@ -186,6 +198,14 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				titleKey="dialogs.titles.translationRequest" // You'll need to add this key to your i18n files
 				title={t("dialogs.titles.translationRequest")}
 				content={translationRequestDialogContent}
+			/>
+			{/* Dialog for "User Stats" information */}
+			<AppDialog
+				isOpen={activeDialog === "user-stats"}
+				onClose={closeDialog}
+				titleKey="dialogs.titles.userStats"
+				title={t("dialogs.titles.userStats")}
+				content={userStatsDialogContent}
 			/>
 		</main>
 	);

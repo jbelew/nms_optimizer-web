@@ -16,7 +16,8 @@
 		"about": "About",
 		"share": "Share",
 		"resetGrid": "Reset Grid",
-		"changelog": "Changelog"
+		"changelog": "Changelog",
+		"userStats": "User Statistics"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!"
@@ -55,7 +56,17 @@
 			"serverError": "Server Error!",
 			"optimizationAlert": "Optimization Alert",
 			"translationRequest": "Translators Needed!",
-			"shareLink": "Share Grid Layout"
+			"shareLink": "Share Grid Layout",
+			"userStats": "User Statistics"
+		},
+		"userStats": {
+			"noDataForChart": "No data available for this chart.",
+			"description": "This dialog displays aggregated user statistics based on interactions with the optimizer, highlighting the most commonly supercharged technologies for Starships and Multi-Tools.",
+			"loading": "Loading user statistics...",
+			"error": "Failed to load user statistics. Please try again later.",
+			"starshipChartTitle": "Starship Technologies",
+			"multitoolChartTitle": "Multi-tool Technologies",
+			"closeButton": "Close"
 		},
 		"optimizationAlert": {
 			"title": "Optimization Alert!",
@@ -193,6 +204,7 @@
 			"survey": "Survey Device",
 			"blaze-javelin": "Blaze Javelin",
 			"boltcaster": "Boltcaster",
+			"bolt-caster": "Boltcaster",
 			"geology": "Geology Cannon",
 			"neutron": "Neutron Cannon",
 			"plasma-launcher": "Plasma Launcher",

@@ -2,20 +2,21 @@
 import "./AppHeader.css";
 
 import React from "react";
-import { CounterClockwiseClockIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { CounterClockwiseClockIcon, InfoCircledIcon, PieChartIcon } from "@radix-ui/react-icons";
 import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import RhombusIcon from "../Icons/RhombusIcon";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 interface AppHeaderProps {
 	onShowChangelog: () => void;
+	onOpenUserStats: () => void;
 }
 
-const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
+const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUserStats }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
@@ -82,6 +83,25 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						}}
 					>
 						<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+					</IconButton>
+				</Tooltip>
+				&nbsp;
+				<Tooltip content={t("buttons.userStats")}>
+					<IconButton
+						variant="ghost"
+						radius="full"
+						size="2"
+						aria-label={t("buttons.userStats")}
+						onClick={() => {
+							sendEvent({
+								category: "User Interactions",
+								action: "showUserStats",
+								value: 1,
+							});
+							onOpenUserStats();
+						}}
+					>
+						<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
 					</IconButton>
 				</Tooltip>
 			</Heading>
