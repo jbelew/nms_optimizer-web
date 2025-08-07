@@ -14,4 +14,4 @@ This document contains the backlog of tasks for the NMS Optimizer application.
 
 ## Technical Debt
 
-*   [No known technical debt]
+*   Missing tests for `useGridDeserializer.tsx`.

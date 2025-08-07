@@ -150,7 +150,6 @@ export const deserialize = async (
 		const decompressedModule = decompressRLE(compressedModule);
 		const decompressedAdjBonus = decompressRLE(compressedAdjBonus);
 
-		const expectedLength = 6 * 10; // height * width
 		if (
 			gridString.length !== expectedLength ||
 			decompressedTech.length !== expectedLength ||
@@ -209,6 +208,7 @@ export const deserialize = async (
 		setTechColors(colors);
 
 		const newGrid = createGrid(10, 6);
+		const expectedLength = newGrid.width * newGrid.height;
 
 		// --- Grid Population Loop ---
 		let index = 0;

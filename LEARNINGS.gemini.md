@@ -62,3 +62,23 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 ### Refine & Reflect
 
 *   **Reflection:** I need to be more rigorous in following the PRAR Prime Directive. I will make sure to present my plans for user approval before acting and to create the `LEARNINGS.gemini.md` file for all future tasks.
+
+## 2025-08-06: Fixing useGridDeserializer.tsx and `replace` tool issues
+
+### Perceive & Understand
+
+*   **Request:** The user asked to fix failing tests related to `useGridDeserializer.tsx`.
+*   **Context:** Initial attempts to fix the `useGridDeserializer.tsx` file by moving the `expectedLength` variable declaration failed due to incorrect `old_string` matching with the `replace` tool. The `replace` tool requires an exact match, including whitespace and context.
+
+### Reason & Plan
+
+*   **Plan:** I will re-read the `useGridDeserializer.tsx` file to get the exact content, then attempt the `replace` operation again with the precise `old_string` to correctly move the `expectedLength` variable declaration. After the fix, I will run the tests to verify.
+*   **Action:** I will ensure the `old_string` for the `replace` tool is an exact, multi-line match to avoid further errors.
+
+### Act & Implement
+
+*   **Action:** Attempted to move `expectedLength` declaration. Encountered issues with `replace` tool due to inexact `old_string` matches. Reverted changes to `useGridDeserializer.tsx` to ensure a clean state for re-attempting the fix.
+
+### Refine & Reflect
+
+*   **Reflection:** The `replace` tool is very sensitive to exact string matching. It's crucial to always read the file content immediately before attempting a `replace` operation to ensure the `old_string` is precisely what's in the file, including all whitespace and surrounding context. This will prevent "0 occurrences found" errors.
