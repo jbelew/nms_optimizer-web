@@ -82,10 +82,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		() => <MarkdownContentRenderer markdownFileName="translation-request" />,
 		[]
 	);
-	const userStatsDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="user-stats" />,
-		[]
-	);
 
 	return (
 		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
@@ -197,7 +193,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				onClose={closeDialog}
 				titleKey="dialogs.titles.userStats"
 				title={t("dialogs.titles.userStats")}
-				content={userStatsDialogContent}
+				content={null}
 			/>
 		</main>
 	);
