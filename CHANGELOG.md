@@ -1,3 +1,17 @@
+## [3.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.0...v3.6.1) (2025-08-08)
+
+
+### Bug Fixes
+
+* **tech:** fixed spelling error with pulse-spitter tech. Made userstats a route ([6d314a2](https://github.com/jbelew/nms_optimizer-web/commit/6d314a2ef2bb74c317b7188c2ab85b0388721361))
+
+
+### Features
+
+* **styling:** some additional UI enhancements ([cf6de1b](https://github.com/jbelew/nms_optimizer-web/commit/cf6de1b3c37e1193d3673ff59d7a5e8ee9be96a3))
+
+
+
 # [3.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.5.1...v3.6.0) (2025-08-08)
 
 
