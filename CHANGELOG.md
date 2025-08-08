@@ -1,3 +1,16 @@
+# [3.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.5.1...v3.6.0) (2025-08-08)
+
+
+### Features
+
+* Add comprehensive unit tests for useGridDeserializer hook ([3293db1](https://github.com/jbelew/nms_optimizer-web/commit/3293db1d655ab226a4f95d9964a7e7b734119fb6))
+* **analytics:** send supercharged event ([a7b1293](https://github.com/jbelew/nms_optimizer-web/commit/a7b12934be1eea3ed9a80727b7822f99729c3d3d))
+* enhance SEO and add project documentation ([8c7c68e](https://github.com/jbelew/nms_optimizer-web/commit/8c7c68e4f9aef0abf09449f2443600d72fc76550))
+* **instructions:** added quick mobile instructions under the grid table ([52c0e28](https://github.com/jbelew/nms_optimizer-web/commit/52c0e2807fc1475f4f2599dd6c6c8614dc0808f6))
+* **userstats:** added the User Statistics dialog ([e43bfa3](https://github.com/jbelew/nms_optimizer-web/commit/e43bfa35817c26e14e4e01702721dd99bf6ff6f5))
+
+
+
 ## [3.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.5.0...v3.5.1) (2025-08-06)
 
 
