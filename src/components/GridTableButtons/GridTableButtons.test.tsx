@@ -105,8 +105,8 @@ describe("GridTableButtons", () => {
 		(useBreakpoint as Mock).mockReturnValue(true); // Default to smallAndUp
 		(useDialog as Mock).mockReturnValue({
 			openDialog: vi.fn(),
-			isFirstVisit: false,
-			onFirstVisitInstructionsDialogOpened: vi.fn(),
+			tutorialFinished: false,
+			markTutorialFinished: vi.fn(),
 		});
 		mockSendEvent = vi.fn();
 		(useAnalytics as Mock).mockReturnValue({
@@ -148,18 +148,18 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShowInstructions and tracks GA event on instructions button click", () => {
-		const { openDialog, onFirstVisitInstructionsDialogOpened } = useDialog();
+		const { openDialog, markTutorialFinished } = useDialog();
 		(useDialog as Mock).mockReturnValue({
 			openDialog,
-			isFirstVisit: true,
-			onFirstVisitInstructionsDialogOpened,
+			tutorialFinished: false,
+			markTutorialFinished,
 		});
 
 		render(<GridTableButtons {...defaultProps} />);
 		fireEvent.click(screen.getByLabelText("buttons.instructions"));
 
 		expect(openDialog).toHaveBeenCalledWith("instructions");
-		expect(onFirstVisitInstructionsDialogOpened).toHaveBeenCalled();
+		expect(markTutorialFinished).toHaveBeenCalled();
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "User Interactions",
 			action: "showInstructions",

@@ -17,8 +17,8 @@ export interface DialogContextType {
 		data?: { shareUrl?: string; section?: string }
 	) => void;
 	closeDialog: () => void;
-	isFirstVisit: boolean;
-	onFirstVisitInstructionsDialogOpened: () => void;
+	tutorialFinished: boolean;
+	markTutorialFinished: () => void;
 	shareUrl: string;
 	sectionToScrollTo: string | undefined;
 }

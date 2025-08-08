@@ -16,9 +16,22 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
-	const [isFirstVisit, setIsFirstVisit] = useState(
-		() => !localStorage.getItem("hasVisitedNMSOptimizer")
-	);
+	const [tutorialFinished, setTutorialFinished] = useState(() => {
+		const oldKey = "hasVisitedNMSOptimizer";
+		const newKey = "tutorialFinished";
+		const oldVal = localStorage.getItem(oldKey);
+		const newVal = localStorage.getItem(newKey);
+
+		if (newVal === "true") {
+			return true;
+		} else if (oldVal === "true") {
+			localStorage.setItem(newKey, "true");
+			localStorage.removeItem(oldKey);
+			return true;
+		} else {
+			return false;
+		}
+	});
 
 	// Effect to sync dialog state with URL
 	useEffect(() => {
@@ -61,19 +74,19 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		setSectionToScrollTo(undefined);
 	}, [activeDialog, navigate, shareUrl]);
 
-	const onFirstVisitInstructionsDialogOpened = useCallback(() => {
-		if (isFirstVisit) {
-			setIsFirstVisit(false);
-			localStorage.setItem("hasVisitedNMSOptimizer", "true");
+	const markTutorialFinished = useCallback(() => {
+		if (!tutorialFinished) {
+			setTutorialFinished(true);
+			localStorage.setItem("tutorialFinished", "true");
 		}
-	}, [isFirstVisit]);
+	}, [tutorialFinished]);
 
 	const value = {
 		activeDialog,
 		openDialog,
 		closeDialog,
-		isFirstVisit,
-		onFirstVisitInstructionsDialogOpened,
+		tutorialFinished,
+		markTutorialFinished,
 		shareUrl,
 		sectionToScrollTo,
 	};

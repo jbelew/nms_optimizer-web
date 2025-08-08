@@ -1,3 +1,12 @@
+## Uso Básico
+
+- **Haz clic o pulsa** el icono ⚙️ para seleccionar tu **Tecnología**.
+- **Haz clic o doble clic** en una celda para marcarla como **Sobreacargada** (hasta 4 por rejilla).
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o un **solo toque** (en dispositivos móviles) para alternar el estado **activo** de una celda; las celdas activas pueden contener módulos.
+- Utiliza los **botones de alternancia de fila** para habilitar o deshabilitar filas enteras. Los botones de alternancia de fila se **deshabilitan una vez que se colocan los módulos** y se vuelven a habilitar cuando pulsas **Restablecer Rejilla**.
+
+> 💡 **Nota:** Los Exotrajes y Exocargueros tienen configuraciones de rejilla fijas. Las celdas de los Exocargueros no se pueden modificar en absoluto. En los Exotrajes, solo puedes alternar las celdas a activas o inactivas; no se admite cambiar la distribución de las celdas sobreacargadas.
+
 ## Antes de Empezar
 
 Esta herramienta es para **jugadores avanzados** que optimizan la distribución de la tecnología en su plataforma para conseguir la máxima eficiencia. Funciona mejor cuando:
@@ -7,15 +16,6 @@ Esta herramienta es para **jugadores avanzados** que optimizan la distribución 
 - Posees un **juego completo de tres módulos de mejora** por cada tecnología aplicable.
 
 Si aún estás desbloqueando celdas o recolectando módulos, la herramienta puede proporcionarte información útil, pero está diseñada principalmente para **plataformas totalmente mejoradas**.
-
-## Uso Básico
-
-- **Haz clic o pulsa** el icono ⚙️ para seleccionar tu **Tecnología**.
-- **Haz clic o doble clic** en una celda para marcarla como **Sobreacargada** (hasta 4 por rejilla).
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o un **solo toque** (en dispositivos móviles) para alternar el estado **activo** de una celda; las celdas activas pueden contener módulos.
-- Utiliza los **botones de alternancia de fila** para habilitar o deshabilitar filas enteras. Los botones de alternancia de fila se **deshabilitan una vez que se colocan los módulos** y se vuelven a habilitar cuando pulsas **Restablecer Rejilla**.
-
-> 💡 **Nota:** Los Exotrajes y Exocargueros tienen configuraciones de rejilla fijas. Las celdas de los Exocargueros no se pueden modificar en absoluto. En los Exotrajes, solo puedes alternar las celdas a activas o inactivas; no se admite cambiar la distribución de las celdas sobreacargadas.
 
 ## Configuraciones Recomendadas
 

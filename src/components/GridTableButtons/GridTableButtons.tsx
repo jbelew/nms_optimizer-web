@@ -30,22 +30,22 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 
-	const { openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened } = useDialog();
+	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
 	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const handleShowInstructions = useCallback(() => {
 		openDialog("instructions");
-		if (isFirstVisit) {
-			onFirstVisitInstructionsDialogOpened();
+		if (!tutorialFinished) {
+			markTutorialFinished();
 		}
 		sendEvent({
 			category: "User Interactions",
 			action: "showInstructions",
 			value: 1,
 		});
-	}, [openDialog, isFirstVisit, onFirstVisitInstructionsDialogOpened, sendEvent]);
+	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent]);
 
 	const handleShowAboutPage = useCallback(() => {
 		openDialog("about");
@@ -92,9 +92,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 				{isSmallAndUp ? (
 					<Button
 						size="2"
-						variant={isFirstVisit ? "solid" : "soft"}
+						variant={!tutorialFinished ? "solid" : "soft"}
 						className={`gridTable__button gridTable__button--instructions !mr-2 ${
-							isFirstVisit ? "button--glow" : ""
+							!tutorialFinished ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
@@ -105,9 +105,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 				) : (
 					<IconButton
 						size="2"
-						variant={isFirstVisit ? "solid" : "soft"}
+						variant={!tutorialFinished ? "solid" : "soft"}
 						className={`gridTable__button gridTable__button--instructions !mr-2 ${
-							isFirstVisit ? "button--glow" : ""
+							!tutorialFinished ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}

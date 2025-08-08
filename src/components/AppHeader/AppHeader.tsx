@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import RhombusIcon from "../Icons/RhombusIcon";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
@@ -19,10 +20,29 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
+	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
 			<div className="!absolute !top-2 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
+				<Tooltip content={t("buttons.userStats")}>
+					<IconButton
+						variant="soft"
+						size={isSmallAndUp ? "2" : "1"}
+						className="!mr-1 sm:!mr-2"
+						aria-label={t("buttons.userStats")}
+						onClick={() => {
+							sendEvent({
+								category: "User Interactions",
+								action: "showUserStats",
+								value: 1,
+							});
+							openDialog("userstats");
+						}}
+					>
+						<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+					</IconButton>
+				</Tooltip>
 				<LanguageSelector />
 				<Tooltip content={t("translationRequest.openDialogLabel")}>
 					<IconButton
@@ -56,6 +76,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					style={{ color: "var(--accent-track)" }}
 				/>
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
+				{/* Tooltip button absolutely positioned to the right */}
 			</div>
 
 			<Heading
@@ -68,45 +89,25 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<strong>{t("appHeader.subTitle")}</strong>
 				<span className="font-light"> v{__APP_VERSION__}</span>
 
-				<div className="mt-1 ml-0 block sm:ml-1 sm:inline">
-					<Tooltip content={t("buttons.changelog")}>
-						<IconButton
-							variant="ghost"
-							radius="full"
-							size="1"
-							aria-label={t("buttons.changelog")}
-							onClick={() => {
-								sendEvent({
-									category: "User Interactions",
-									action: "showChangelog",
-									value: 1,
-								});
-								onShowChangelog();
-							}}
-						>
-							<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
-						</IconButton>
-					</Tooltip>
-					<Tooltip content={t("buttons.userStats")}>
-						<IconButton
-							variant="ghost"
-							radius="full"
-							size="1"
-							className="!ml-1 sm:!ml-0"
-							aria-label={t("buttons.userStats")}
-							onClick={() => {
-								sendEvent({
-									category: "User Interactions",
-									action: "showUserStats",
-									value: 1,
-								});
-								openDialog("userstats");
-							}}
-						>
-							<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
-						</IconButton>
-					</Tooltip>
-				</div>
+				<Tooltip content={t("buttons.changelog")}>
+					<IconButton
+						variant="ghost"
+						radius="full"
+						size="1"
+						className="!ml-[0px]"
+						aria-label={t("buttons.changelog")}
+						onClick={() => {
+							sendEvent({
+								category: "User Interactions",
+								action: "showChangelog",
+								value: 1,
+							});
+							onShowChangelog();
+						}}
+					>
+						<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+					</IconButton>
+				</Tooltip>
 			</Heading>
 		</header>
 	);

@@ -1,3 +1,12 @@
+## Basic Usage
+
+- **Click or tap** the ⚙️ icon to select your **Technology**.
+- **Click or double-tap** a cell to mark it as **Supercharged** (up to 4 per grid).
+- **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on mobile) to toggle a cell’s **active** state — active cells can hold modules.
+- Use the **row toggle buttons** to enable or disable entire rows. Row toggles are **disabled once modules are placed**, and re-enabled when you press **Reset Grid**.
+
+> 💡 **Note:** Exosuits and Exocraft have fixed grid configurations. Exocraft cells cannot be modified at all. On Exosuits, you can only toggle cells active or inactive; changing the supercharged layout is not supported.
+
 ## Before You Begin
 
 This tool is for **endgame players** optimizing their platform’s technology layout for maximum efficiency. It works best when:
@@ -7,15 +16,6 @@ This tool is for **endgame players** optimizing their platform’s technology la
 - You own a **full set of three upgrade modules** per applicable technology.
 
 If you're still unlocking cells or collecting modules, the tool can still provide insights — but it's primarily designed for **fully upgraded platforms**.
-
-## Basic Usage
-
-- **Click or tap** the ⚙️ icon to select your **Technology**.
-- **Click or double-tap** a cell to mark it as **Supercharged** (up to 4 per grid).
-- **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on mobile) to toggle a cell’s **active** state — active cells can hold modules.
-- Use the **row toggle buttons** to enable or disable entire rows. Row toggles are **disabled once modules are placed**, and re-enabled when you press **Reset Grid**.
-
-> 💡 **Note:** Exosuits and Exocraft have fixed grid configurations. Exocraft cells cannot be modified at all. On Exosuits, you can only toggle cells active or inactive; changing the supercharged layout is not supported.
 
 ## Recommended Builds
 

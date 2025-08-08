@@ -1,3 +1,12 @@
+## Utilisation de base
+
+- **Cliquez ou appuyez** sur l'icône ⚙️ pour sélectionner votre **Technologie**.
+- **Cliquez ou double-cliquez** sur une cellule pour la marquer comme **Surchargée** (jusqu'à 4 par grille).
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou un **simple appui** (sur mobile) pour activer ou désactiver l'état d'une cellule — les cellules actives peuvent contenir des modules.
+- Utilisez les **boutons de bascule de ligne** pour activer ou désactiver des lignes entières. Les bascules de ligne sont **désactivées une fois les modules placés** et réactivées lorsque vous appuyez sur **Réinitialiser la grille**.
+
+> 💡 **Remarque :** Les Exosuits et les Exocrafts ont des configurations de grille fixes. Les cellules des Exocrafts ne peuvent pas être modifiées du tout. Sur les Exosuits, vous ne pouvez qu'activer ou désactiver les cellules ; la modification de la disposition des cellules surchargées n'est pas prise en charge.
+
 ## Avant de commencer
 
 Cet outil est destiné aux **joueurs avancés** qui optimisent la disposition de la technologie sur leur plateforme pour une efficacité maximale. Il fonctionne mieux lorsque :
@@ -7,15 +16,6 @@ Cet outil est destiné aux **joueurs avancés** qui optimisent la disposition de
 - Vous possédez un **ensemble complet de trois modules d'amélioration** par technologie applicable.
 
 Si vous êtes encore en train de débloquer des cellules ou de collecter des modules, l'outil peut toujours fournir des informations, mais il est principalement conçu pour les **plateformes entièrement améliorées**.
-
-## Utilisation de base
-
-- **Cliquez ou appuyez** sur l'icône ⚙️ pour sélectionner votre **Technologie**.
-- **Cliquez ou double-cliquez** sur une cellule pour la marquer comme **Surchargée** (jusqu'à 4 par grille).
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou un **simple appui** (sur mobile) pour activer ou désactiver l'état d'une cellule — les cellules actives peuvent contenir des modules.
-- Utilisez les **boutons de bascule de ligne** pour activer ou désactiver des lignes entières. Les bascules de ligne sont **désactivées une fois les modules placés** et réactivées lorsque vous appuyez sur **Réinitialiser la grille**.
-
-> 💡 **Remarque :** Les Exosuits et les Exocrafts ont des configurations de grille fixes. Les cellules des Exocrafts ne peuvent pas être modifiées du tout. Sur les Exosuits, vous ne pouvez qu'activer ou désactiver les cellules ; la modification de la disposition des cellules surchargées n'est pas prise en charge.
 
 ## Configurations recommandées
 

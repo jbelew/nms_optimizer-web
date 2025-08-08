@@ -7,6 +7,7 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useDialog } from "../../context/dialog-utils";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
@@ -61,6 +62,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const isLarge = useBreakpoint("1024px");
 		const isTouchDevice =
 			typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+		const { tutorialFinished } = useDialog();
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
@@ -151,7 +153,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							className="col-span-11 mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
 							style={{ color: "var(--gray-12)" }}
 						>
-							{isTouchDevice && !superchargedFixed && (
+							{isTouchDevice && !superchargedFixed && !tutorialFinished && (
 								<Callout.Root className="mt-2 mb-4" size="1">
 									<Callout.Icon>
 										<InfoCircledIcon />

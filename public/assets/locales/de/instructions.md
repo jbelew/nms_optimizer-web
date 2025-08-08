@@ -1,3 +1,12 @@
+## Grundlegende Bedienung
+
+- **Klicke oder tippe** auf das ⚙️-Symbol, um deine **Technologie** auszuwählen.
+- **Klicke oder doppel-tippe** auf eine Zelle, um sie als **Supercharged** zu markieren (bis zu 4 pro Raster).
+- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf dem Handy), um den **aktiven** Status einer Zelle umzuschalten — aktive Zellen können Module aufnehmen.
+- Verwende die **Reihen-Umschaltknöpfe**, um ganze Reihen zu aktivieren oder zu deaktivieren. Reihen-Umschalter sind **deaktiviert, sobald Module platziert wurden**, und werden wieder aktiviert, wenn du auf **Raster zurücksetzen** drückst.
+
+> 💡 **Hinweis:** Exosuits und Exocraft haben feste Rasterkonfigurationen. Exocraft-Zellen können überhaupt nicht verändert werden. Bei Exosuits kannst du nur Zellen aktivieren oder deaktivieren; das Ändern des Supercharged-Layouts wird nicht unterstützt.
+
 ## Bevor du startest
 
 Dieses Tool ist für **Endgame-Spieler**, die das Technologie-Layout ihrer Plattform für maximale Effizienz optimieren wollen. Es funktioniert am besten, wenn:
@@ -7,15 +16,6 @@ Dieses Tool ist für **Endgame-Spieler**, die das Technologie-Layout ihrer Platt
 - Du einen **vollständigen Satz von drei Upgrade-Modulen** für jede anwendbare Technologie besitzt.
 
 Wenn du noch Zellen freischaltest oder Module sammelst, kann das Tool trotzdem Einblicke geben — es wurde aber in erster Linie für **vollständig aufgerüstete Plattformen** entwickelt.
-
-## Grundlegende Bedienung
-
-- **Klicke oder tippe** auf das ⚙️-Symbol, um deine **Technologie** auszuwählen.
-- **Klicke oder doppel-tippe** auf eine Zelle, um sie als **Supercharged** zu markieren (bis zu 4 pro Raster).
-- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf dem Handy), um den **aktiven** Status einer Zelle umzuschalten — aktive Zellen können Module aufnehmen.
-- Verwende die **Reihen-Umschaltknöpfe**, um ganze Reihen zu aktivieren oder zu deaktivieren. Reihen-Umschalter sind **deaktiviert, sobald Module platziert wurden**, und werden wieder aktiviert, wenn du auf **Raster zurücksetzen** drückst.
-
-> 💡 **Hinweis:** Exosuits und Exocraft haben feste Rasterkonfigurationen. Exocraft-Zellen können überhaupt nicht verändert werden. Bei Exosuits kannst du nur Zellen aktivieren oder deaktivieren; das Ändern des Supercharged-Layouts wird nicht unterstützt.
 
 ## Empfohlene Konfigurationen
 
