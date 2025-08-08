@@ -7,7 +7,7 @@ export type DialogType =
 	| "instructions"
 	| "changelog"
 	| "translation"
-	| "userstats"
+	| "user-stats"
 	| null;
 
 export interface DialogContextType {

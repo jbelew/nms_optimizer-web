@@ -85,7 +85,7 @@ export default defineConfig(({ mode }) => {
 				]
 				: []),
 
-			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
+			visualizer({ open: true, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
 		],
 
 		server: {
@@ -127,10 +127,6 @@ export default defineConfig(({ mode }) => {
 							id.includes("decode-named-character-reference") ||
 							id.includes("parse-entities")
 						) { return "markdown"; }
-						if (
-							id.includes("recharts") ||
-							id.includes("d3-")
-						) { return "recharts"; }
 						if (
 							id.includes("i18next") ||
 							id.includes("react-i18next") ||

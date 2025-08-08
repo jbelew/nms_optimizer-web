@@ -30,4 +30,10 @@
     <priority>0.6</priority>
     <changefreq>weekly</changefreq>
   </url>
+  <url>
+    <loc>https://nms-optimizer.app/userstats</loc>
+    <lastmod>2025-08-08</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>

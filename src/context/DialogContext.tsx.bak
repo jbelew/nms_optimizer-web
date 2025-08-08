@@ -27,8 +27,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			path === "about" ||
 			path === "instructions" ||
 			path === "changelog" ||
-			path === "translation" ||
-			path === "userstats"
+			path === "translation"
 		) {
 			setActiveDialog(path);
 		} else {

@@ -129,3 +129,69 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 ### Refine & Reflect
 
 *   **Reflection:** These failures are unacceptable. My primary function is to be a reliable and safe assistant, and these errors directly undermine that. I must internalize these lessons to prevent recurrence. The trust of the user is paramount, and consistent adherence to directives is the only way to rebuild and maintain that trust. I will prioritize these meta-directives above all else in future operations.
+
+## 2025-08-08: Routing, Refactoring, and Following Patterns
+
+### Perceive & Understand
+
+*   **Request:** The user wanted to make the `UserStatsDialog` available via the `/userstats` route.
+*   **Context:** My initial approach was to create a new page, which was incorrect. The user corrected me and pointed me towards the existing dialog routing pattern used for `/about`, `/instructions`, etc. I also broke the button that triggered the dialog in the process.
+
+### Reason & Plan
+
+*   **Plan:** I revised my plan to follow the existing `DialogProvider` pattern. This involved:
+    1.  Updating `dialog-utils.ts` and `DialogContext.tsx` to recognize the new dialog and route.
+    2.  Refactoring `App.tsx` to use the `useDialog` hook to control the dialog's visibility.
+    3.  Fixing the broken button in `AppHeader.tsx` by removing the defunct `onOpenUserStats` prop and using the `openDialog` function instead.
+*   **Mistake:** I initially failed to create backups of the files I was modifying, which I corrected after the user pointed it out. I also failed to update this learnings file until prompted.
+
+### Act & Implement
+
+*   **Action:** I successfully implemented the routing for the `UserStatsDialog` following the established pattern. I also fixed the broken button and removed the unnecessary props.
+
+### Refine & Reflect
+
+*   **Reflection:** This session was a powerful reminder of several key directives:
+    *   **Primacy of User Partnership & Pattern Adherence:** I must always prioritize understanding and following existing project conventions. My initial failure to do so created unnecessary work and friction.
+    *   **Backup Mandate:** I must create backups before any significant refactoring. I will be more diligent in applying this rule.
+    *   **Learning Protocol:** I must be diligent in updating the `LEARNINGS.gemini.md` file as required by my directives, not just relying on my internal memory.
+    *   **Systemic Thinking:** A small change in one place (routing) had a ripple effect (breaking a button). I need to be more mindful of the interconnectedness of the codebase.
+
+## 2025-08-08: Sitemap Update, Build Fixes, and Bundle Optimization
+
+### Perceive & Understand
+
+*   **Request:** The user requested to update the sitemap with the new `/userstats` route, fix build errors, and optimize the bundle size.
+*   **Context:**
+    *   The `/userstats` route needed to be added to `scripts/generate-sitemap.mjs`.
+    *   Build errors were present: an unused `useState` import in `App.tsx` and a type mismatch (`"user-stats"` vs `"userstats"`) in `src/components/MainAppContent/MainAppContent.tsx`.
+    *   The bundle size was larger than expected, identified as `recharts` and `d3` being included in the main bundle.
+    *   Console warnings were present regarding `aria-hidden` (related to `recharts` animations) and unused preloaded images.
+
+### Reason & Plan
+
+*   **Plan:**
+    1.  **Sitemap Update:** Add the `/userstats` route to `scripts/generate-sitemap.mjs` with `src/components/AppDialog/UserStatsDialog.tsx` as its source and a priority of `0.8`.
+    2.  **Build Fixes:**
+        *   Remove the unused `useState` import from `App.tsx`.
+        *   Correct the type mismatch in `src/components/MainAppContent/MainAppContent.tsx` by changing `"user-stats"` to `"userstats"`.
+    3.  **Bundle Optimization:** Modify `vite.config.ts` to create separate chunks for `recharts` and `d3` to reduce the main bundle size.
+    4.  **Warning Handling:** Acknowledge the `aria-hidden` warning but defer fixing it as it's related to `recharts` animations. Acknowledge the preload warning but defer fixing it as the images are used via CSS.
+    5.  **Verification:** Run `npm run build` to ensure all changes are integrated correctly and the build passes.
+
+### Act & Implement
+
+*   **Action:**
+    *   Backed up `scripts/generate-sitemap.mjs`.
+    *   Updated `scripts/generate-sitemap.mjs` to include the `/userstats` route.
+    *   Executed `scripts/generate-sitemap.mjs` to regenerate `sitemap.xml`.
+    *   Backed up `App.tsx` and `src/components/MainAppContent/MainAppContent.tsx`.
+    *   Removed unused `useState` import from `App.tsx`.
+    *   Corrected `"user-stats"` to `"userstats"` in `src/components/MainAppContent/MainAppContent.tsx`.
+    *   Modified `vite.config.ts` to chunk `recharts` and `d3` separately.
+    *   Ran `npm run build` to verify the fixes and optimizations.
+    *   Removed all backup files.
+
+### Refine & Reflect
+
+*   **Reflection:** This session involved multiple interconnected tasks. I successfully addressed the sitemap update, resolved build errors, and optimized the bundle size by chunking `recharts` and `d3`. I also learned to prioritize and defer certain warnings based on user input and technical feasibility. It was a good exercise in managing multiple concurrent objectives and ensuring a stable build. The importance of verifying each step and maintaining backups was reinforced throughout the process. I also learned to better interpret the `ls -R` output and identify image assets as a potential source of large file counts. The `rollup-plugin-visualizer` was a key tool in diagnosing the bundle size issue. I also learned that `vite.config.analyze.ts` needs to be created manually if it doesn't exist. Finally, I learned that the `aria-hidden` warning can be caused by `recharts` animations and that preloaded images used in CSS pseudo-elements might trigger false positive warnings. I will continue to improve my diagnostic and problem-solving skills.

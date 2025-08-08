@@ -19,6 +19,11 @@ const pages = [
 		url: "https://nms-optimizer.app/translation",
 		priority: "0.6"
 	},
+	{
+		path: "src/components/AppDialog/UserStatsDialog.tsx",
+		url: "https://nms-optimizer.app/userstats",
+		priority: "0.8"
+	},
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

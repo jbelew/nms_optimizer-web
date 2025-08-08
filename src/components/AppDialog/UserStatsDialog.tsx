@@ -22,7 +22,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const { data, loading, error } = useUserStats();
 	const { techColors, loading: colorsLoading, error: colorsError } = useTechTreeColors();
 
-	const STARSHIP_TYPES = ["standard", "sentinel", "solar", "living"];
+	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
 
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
@@ -128,7 +128,11 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 						{t("dialogs.userStats.description")}
 					</Text>
 					<Flex direction="column" gap="4">
-						{(loading || colorsLoading) && <Text>{t("dialogs.userStats.loading")}</Text>}
+						{(loading || colorsLoading) && (
+							<Text align="center" style={{ color: "var(--accent-track)" }}>
+								{t("dialogs.userStats.loading")}
+							</Text>
+						)}
 						{(error || colorsError) && <Text color="red">{t("dialogs.userStats.error")}</Text>}
 						{!(loading || colorsLoading || error || colorsError) && (
 							<>

@@ -13,10 +13,9 @@ import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 interface AppHeaderProps {
 	onShowChangelog: () => void;
-	onOpenUserStats: () => void;
 }
 
-const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUserStats }) => {
+const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
@@ -69,12 +68,12 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUs
 				<strong>{t("appHeader.subTitle")}</strong>
 				<span className="font-light"> v{__APP_VERSION__}</span>
 
-				<div className="mt-1 ml-0 block lg:ml-1 lg:inline">
+				<div className="mt-1 ml-0 block sm:ml-1 sm:inline">
 					<Tooltip content={t("buttons.changelog")}>
 						<IconButton
 							variant="ghost"
 							radius="full"
-							size="2"
+							size="1"
 							aria-label={t("buttons.changelog")}
 							onClick={() => {
 								sendEvent({
@@ -88,12 +87,12 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUs
 							<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
 						</IconButton>
 					</Tooltip>
-					&nbsp;
 					<Tooltip content={t("buttons.userStats")}>
 						<IconButton
 							variant="ghost"
 							radius="full"
-							size="2"
+							size="1"
+							className="!ml-1 sm:!ml-0"
 							aria-label={t("buttons.userStats")}
 							onClick={() => {
 								sendEvent({
@@ -101,7 +100,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUs
 									action: "showUserStats",
 									value: 1,
 								});
-								onOpenUserStats();
+								openDialog("userstats");
 							}}
 						>
 							<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
