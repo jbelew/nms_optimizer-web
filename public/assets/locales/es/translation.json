@@ -69,6 +69,22 @@
             "forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar optimización\"</1> para una solución más intensiva, pero probablemente no encontrará un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar el resultado.",
             "cancelButton": "Cancelar",
             "forceOptimizeButton": "Forzar optimización"
+        },
+        "userStats": {
+            "noDataForChart": "No hay datos disponibles para este gráfico.",
+            "description": "Este diálogo muestra estadísticas de usuario agregadas basadas en interacciones con el optimizador, destacando las tecnologías más comúnmente sobrealimentadas para naves espaciales y herramientas múltiples.",
+            "loading": "Cargando estadísticas de usuario ...",
+            "error": "No se pudo cargar estadísticas de usuario. Vuelva a intentarlo más tarde.",
+            "starshipChartTitle": "Tecnologías de nave de naves",
+            "multitoolChartTitle": "Tecnologías múltiples",
+            "closeButton": "Cerca"
+        },
+        "shareLink": {
+            "description": "Copie el siguiente enlace para compartir su diseño de cuadrícula actual. Tenga en cuenta que esta URL es una instantánea y no se actualizará automáticamente.",
+            "copyButton": "Enlace de copia",
+            "copiedButton": "¡Copiado!",
+            "closeButton": "Cerca",
+            "openLink": "Enlace abierto"
         }
     },
     "footer": {
