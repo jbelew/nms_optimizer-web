@@ -130,7 +130,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 								}}
 							/>
 						</Callout.Text>
-						<div>{renderBuildButton({ mb: "0", className: "w-full justify-center" })}</div>
+						<div>{renderBuildButton({ mt: "0", mb: "1", className: "w-full justify-center" })}</div>
 					</Callout.Root>
 				</>
 			)}
