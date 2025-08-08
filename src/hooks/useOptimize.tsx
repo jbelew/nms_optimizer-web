@@ -167,11 +167,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 						}
 
 						console.log("Response from API:", data);
+						const gaTech =
+							tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
 						sendEvent({
 							category: "User Interactions",
 							action: "optimize_tech",
 							platform: selectedShipType,
-							tech: tech,
+							tech: gaTech,
 							solve_method: data.solve_method,
 							value: 1,
 							supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
