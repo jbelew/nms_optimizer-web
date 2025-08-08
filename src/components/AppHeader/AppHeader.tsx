@@ -22,12 +22,12 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
-			<div className="!absolute !top-2 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
+			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
 				<Tooltip content={t("buttons.userStats")}>
 					<IconButton
 						variant="ghost"
 						radius="full"
-						className="!mr-1 sm:!mr-2"
+						className="!mr-0 sm:!mr-2"
 						aria-label={t("buttons.userStats")}
 						onClick={() => {
 							sendEvent({
@@ -65,7 +65,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Tooltip> */}
 			</div>
 
-			<h1 className="header__logo--text text-2xl [word-spacing:-0.5rem] sm:text-4xl sm:[word-spacing:-.25rem]">
+			<h1 className="header__logo--text text-2xl [word-spacing:-.25rem] sm:text-4xl">
 				NO MAN&apos;S SKY
 			</h1>
 
