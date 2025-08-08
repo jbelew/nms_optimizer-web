@@ -90,7 +90,7 @@ export const useGridCellInteraction = (
 			const currentTime = new Date().getTime();
 			const timeSinceLastTap = currentTime - lastTapTime.current;
 
-			if (timeSinceLastTap < 500 && timeSinceLastTap > 0) {
+			if (timeSinceLastTap < 400 && timeSinceLastTap > 0) {
 				// Double tap
 				lastTapTime.current = 0; // Reset after double tap
 				const isInvalidDoubleTap =

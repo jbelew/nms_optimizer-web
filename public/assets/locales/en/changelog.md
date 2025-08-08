@@ -6,6 +6,13 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 **It's a wrap, my work is done here!**
 
+## Version 3.6 (2025-08-07)
+
+- Added a **User Statistics** dialog showing which technologies are most frequently supercharged.  
+- Added instructional text below the grid for users on touch devices.  
+- Fixed a major issue in the Pulse Engine CNN model.  
+- Various UI enhancements and improvements.
+
 ## Version 3.5 (2025-08-05)
 
 * **performance:** Removed Critical CSS functionality from the build ([956ea38](https://github.com/jbelew/nms_optimizer-web/commit/956ea38a002b27e84a227872436b599a0fd8ebf9))
