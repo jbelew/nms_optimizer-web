@@ -59,18 +59,41 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 				>
 					{t(titleKey)}
 				</Heading>
-				<ResponsiveContainer width="100%" height={232}>
+				<ResponsiveContainer width="100%" height={240}>
 					<PieChart>
 						<Pie
 							data={chartData}
 							cx="50%"
 							cy="50%"
-							outerRadius={100}
-							innerRadius={60}
+							innerRadius="50%"
+							outerRadius="100%"
 							paddingAngle={0}
-							fill="#8884d8"
 							dataKey="value"
-							label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
+							label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+								const RADIAN = Math.PI / 180;
+								const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+								const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
+								const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+
+								return (
+									<text
+										x={x}
+										y={y}
+										fill="white"
+										textAnchor="middle"
+										dominantBaseline="central"
+										fontSize={14}
+									>
+										<tspan x={x} dy="-0.4em">
+											{name}
+										</tspan>
+										<tspan x={x} dy="1.2em">
+											{percent ? `${(percent * 100).toFixed(0)}%` : ""}
+										</tspan>
+									</text>
+								);
+							}}
+							labelLine={false}
 						>
 							{chartData.map((entry, index) => (
 								<Cell

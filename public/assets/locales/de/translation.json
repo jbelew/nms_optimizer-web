@@ -19,7 +19,7 @@
 		"changelog": "Änderungsprotokoll"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMIERE!"
+		"tapInstructions": "Einmal tippen, um eine Zelle zu deaktivieren, oder zweimal tippen, um sie als supercharged zu markieren"
 	},
 	"gridControls": {
 		"activateRow": "Reihe aktivieren",

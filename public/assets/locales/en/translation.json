@@ -20,7 +20,8 @@
 		"userStats": "User Statistics"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMIZING!"
+		"optimizing": "OPTIMIZING!",
+		"tapInstructions": "Tap once to disable a cell, or double-tap to mark it as supercharged."
 	},
 	"gridControls": {
 		"activateRow": "Activate Row",

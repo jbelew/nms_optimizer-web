@@ -57,6 +57,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 		const gridFixed = useGridStore((state) => state.gridFixed);
 		const isLarge = useBreakpoint("1024px");
+		const isTouchDevice =
+			typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
@@ -143,8 +145,18 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						</div>
 					))}
 					{!isLarge && (
-						<div className="col-span-11 mt-3">
-							<Separator size="4" color="cyan" orientation="horizontal" decorative />
+						<div
+							className="col-span-11 mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
+							style={{ color: "var(--gray-12)" }}
+						>
+							{isTouchDevice && <div>{t("gridTable.tapInstructions")}</div>}
+							<Separator
+								size="4"
+								color="cyan"
+								orientation="horizontal"
+								className="mt-2"
+								decorative
+							/>
 						</div>
 					)}
 					<div role="row">

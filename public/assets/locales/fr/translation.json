@@ -19,7 +19,8 @@
 		"changelog": "Historique des modifications"
 	},
 	"gridTable": {
-		"optimizing": "OPTIMISATION !"
+		"optimizing": "OPTIMISATION !",
+		"tapInstructions": "Appuyez une fois pour désactiver une cellule, ou appuyez deux fois pour la marquer comme surchargée"
 	},
 	"gridControls": {
 		"activateRow": "Activer la rangée",

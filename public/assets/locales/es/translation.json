@@ -19,7 +19,8 @@
 		"changelog": "Registro de cambios"
 	},
 	"gridTable": {
-		"optimizing": "¡OPTIMIZANDO!"
+		"optimizing": "¡OPTIMIZANDO!",
+		"tapInstructions": "Toca una vez para deshabilitar una celda, o toca dos veces para marcarla como supercargada"
 	},
 	"gridControls": {
 		"activateRow": "Activar fila",

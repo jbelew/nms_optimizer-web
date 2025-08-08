@@ -47,6 +47,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUs
 					</IconButton>
 				</Tooltip>
 			</div>
+
 			<h1 className="header__logo--text text-2xl sm:text-4xl">NO MAN&apos;S SKY</h1>
 
 			<div className="m-1 mb-2 flex w-full items-center gap-2">
@@ -66,44 +67,47 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog, onOpenUs
 				className="header__title w-fit"
 			>
 				<strong>{t("appHeader.subTitle")}</strong>
-				<span className="font-light"> v{__APP_VERSION__}</span>&nbsp;&nbsp;
-				<Tooltip content={t("buttons.changelog")}>
-					<IconButton
-						variant="ghost"
-						radius="full"
-						size="2"
-						aria-label={t("buttons.changelog")}
-						onClick={() => {
-							sendEvent({
-								category: "User Interactions",
-								action: "showChangelog",
-								value: 1,
-							});
-							onShowChangelog();
-						}}
-					>
-						<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
-					</IconButton>
-				</Tooltip>
-				&nbsp;
-				<Tooltip content={t("buttons.userStats")}>
-					<IconButton
-						variant="ghost"
-						radius="full"
-						size="2"
-						aria-label={t("buttons.userStats")}
-						onClick={() => {
-							sendEvent({
-								category: "User Interactions",
-								action: "showUserStats",
-								value: 1,
-							});
-							onOpenUserStats();
-						}}
-					>
-						<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
-					</IconButton>
-				</Tooltip>
+				<span className="font-light"> v{__APP_VERSION__}</span>
+
+				<div className="mt-1 ml-0 block lg:ml-1 lg:inline">
+					<Tooltip content={t("buttons.changelog")}>
+						<IconButton
+							variant="ghost"
+							radius="full"
+							size="2"
+							aria-label={t("buttons.changelog")}
+							onClick={() => {
+								sendEvent({
+									category: "User Interactions",
+									action: "showChangelog",
+									value: 1,
+								});
+								onShowChangelog();
+							}}
+						>
+							<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+						</IconButton>
+					</Tooltip>
+					&nbsp;
+					<Tooltip content={t("buttons.userStats")}>
+						<IconButton
+							variant="ghost"
+							radius="full"
+							size="2"
+							aria-label={t("buttons.userStats")}
+							onClick={() => {
+								sendEvent({
+									category: "User Interactions",
+									action: "showUserStats",
+									value: 1,
+								});
+								onOpenUserStats();
+							}}
+						>
+							<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+						</IconButton>
+					</Tooltip>
+				</div>
 			</Heading>
 		</header>
 	);

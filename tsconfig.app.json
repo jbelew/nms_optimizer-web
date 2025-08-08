@@ -32,6 +32,6 @@
 		// Add other specific global files if necessary
 	],
 	"include": ["src", "types"],
-	"exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"],
+	"exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "/tmp"],
 	"types": ["vite/client"]
 }
