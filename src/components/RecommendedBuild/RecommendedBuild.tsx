@@ -1,7 +1,15 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
 import React from "react";
 import { MagicWandIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import { Button, DropdownMenu, IconButton, Link, Separator, Strong } from "@radix-ui/themes";
+import {
+	Button,
+	Callout,
+	DropdownMenu,
+	IconButton,
+	Link,
+	Separator,
+	Strong,
+} from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -50,7 +58,6 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
 						<Button {...buttonProps}>
-							<MagicWandIcon style={{ color: "var(--amber-11)" }} />
 							{t("techTree.recommendedBuilds.selectBuildButton")}
 							<Separator orientation="vertical" size="1" />
 							<DropdownMenu.TriggerIcon />
@@ -75,7 +82,6 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 		if (builds.length === 1) {
 			return (
 				<Button {...buttonProps} onClick={() => handleApply(builds[0])}>
-					<MagicWandIcon style={{ color: "var(--amber-11)" }} />
 					{t("techTree.recommendedBuilds.applyBuildButton")}
 				</Button>
 			);
@@ -100,33 +106,33 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 					</IconButton>
 				</div>
 			) : (
-				<div className="flex items-start rounded-md bg-[var(--accent-a3)] p-2 text-sm sm:text-base">
-					<span className="mr-2 shrink-0" role="img" aria-label="experiment icon">
-						🧪
-					</span>
-					<div className="flex-1">
-						<Trans
-							i18nKey="techTree.recommendedBuilds.summary"
-							components={{
-								1: <Strong />,
-								3: <Strong />,
-								5: (
-									<Link
-										href="#"
-										underline="hover"
-										onClick={(e) => {
-											e.preventDefault(); // Prevent jump to top
-											handleOpenInstructions();
-										}}
-									/>
-								),
-							}}
-						/>
-						<div className="mt-3">
-							{renderBuildButton({ mb: "2", className: "w-full justify-center" })}
-						</div>
-					</div>
-				</div>
+				<>
+					<Callout.Root size="1">
+						<Callout.Icon>
+							<MagicWandIcon />
+						</Callout.Icon>
+						<Callout.Text size={{ initial: "2", sm: "3" }}>
+							<Trans
+								i18nKey="techTree.recommendedBuilds.summary"
+								components={{
+									1: <Strong />,
+									3: <Strong />,
+									5: (
+										<Link
+											href="#"
+											underline="always"
+											onClick={(e) => {
+												e.preventDefault(); // Prevent jump to top
+												handleOpenInstructions();
+											}}
+										/>
+									),
+								}}
+							/>
+						</Callout.Text>
+						<div>{renderBuildButton({ mb: "0", className: "w-full justify-center" })}</div>
+					</Callout.Root>
+				</>
 			)}
 		</>
 	);

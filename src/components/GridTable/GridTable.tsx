@@ -3,7 +3,8 @@ import "./GridTable.css";
 
 import type { Grid } from "../../store/GridStore";
 import React, { useMemo } from "react";
-import { Separator } from "@radix-ui/themes";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint";
@@ -56,6 +57,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { t } = useTranslation();
 		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 		const gridFixed = useGridStore((state) => state.gridFixed);
+		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
 		const isTouchDevice =
 			typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
@@ -149,7 +151,16 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							className="col-span-11 mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
 							style={{ color: "var(--gray-12)" }}
 						>
-							{isTouchDevice && <div>{t("gridTable.tapInstructions")}</div>}
+							{isTouchDevice && !superchargedFixed && (
+								<Callout.Root className="mt-2 mb-4" size="1">
+									<Callout.Icon>
+										<InfoCircledIcon />
+									</Callout.Icon>
+									<Callout.Text size={{ initial: "2", sm: "3" }}>
+										{t("gridTable.tapInstructions")}
+									</Callout.Text>
+								</Callout.Root>
+							)}
 							<Separator
 								size="4"
 								color="cyan"
