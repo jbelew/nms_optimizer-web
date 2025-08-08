@@ -2,13 +2,12 @@
 import "./AppHeader.css";
 
 import React from "react";
-import { CounterClockwiseClockIcon, InfoCircledIcon, PieChartIcon } from "@radix-ui/react-icons";
+import { CounterClockwiseClockIcon, PieChartIcon } from "@radix-ui/react-icons";
 import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint";
 import RhombusIcon from "../Icons/RhombusIcon";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
@@ -20,15 +19,14 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
-	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
 			<div className="!absolute !top-2 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
 				<Tooltip content={t("buttons.userStats")}>
 					<IconButton
-						variant="soft"
-						size={isSmallAndUp ? "2" : "1"}
+						variant="ghost"
+						radius="full"
 						className="!mr-1 sm:!mr-2"
 						aria-label={t("buttons.userStats")}
 						onClick={() => {
@@ -40,13 +38,13 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							openDialog("userstats");
 						}}
 					>
-						<PieChartIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+						<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
 				</Tooltip>
 				<LanguageSelector />
-				<Tooltip content={t("translationRequest.openDialogLabel")}>
+				{/* <Tooltip content={t("translationRequest.openDialogLabel")}>
 					<IconButton
-						className="!ml-px !hidden h-6 w-6 sm:!inline"
+						className="!ml-2 !hidden h-6 w-6 sm:!inline"
 						color="amber"
 						radius="full"
 						variant="ghost"
@@ -62,9 +60,9 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							openDialog("translation");
 						}}
 					>
-						<InfoCircledIcon className="h-5 w-5" />
+						<InfoCircledIcon className="w-4 h-4 sm:h-5 sm:w-5" />
 					</IconButton>
-				</Tooltip>
+				</Tooltip> */}
 			</div>
 
 			<h1 className="header__logo--text text-2xl [word-spacing:-0.5rem] sm:text-4xl sm:[word-spacing:-.25rem]">
