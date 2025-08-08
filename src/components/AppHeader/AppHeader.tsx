@@ -4,7 +4,7 @@ import "./AppHeader.css";
 import React from "react";
 import { CounterClockwiseClockIcon, InfoCircledIcon, PieChartIcon } from "@radix-ui/react-icons";
 import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
@@ -67,7 +67,9 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Tooltip>
 			</div>
 
-			<h1 className="header__logo--text text-2xl sm:text-4xl">NO MAN&apos;S SKY</h1>
+			<h1 className="header__logo--text text-2xl [word-spacing:-0.5rem] sm:text-4xl sm:[word-spacing:-.25rem]">
+				NO MAN&apos;S SKY
+			</h1>
 
 			<div className="m-1 mb-2 flex w-full items-center gap-2">
 				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
@@ -86,9 +88,16 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				size={{ initial: "2", sm: "3" }}
 				className="header__title w-fit"
 			>
-				<strong>{t("appHeader.subTitle")}</strong>
-				<span className="font-light"> v{__APP_VERSION__}</span>
-
+				<Trans
+					i18nKey="appHeader.subTitle"
+					components={{
+						1: <span className="font-mono" style={{ color: "var(--accent-11)" }} />,
+					}}
+				/>
+				<span className="font-light" style={{ color: "var(--gray-11)" }}>
+					{" "}
+					v{__APP_VERSION__}
+				</span>
 				<Tooltip content={t("buttons.changelog")}>
 					<IconButton
 						variant="ghost"
@@ -105,7 +114,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							onShowChangelog();
 						}}
 					>
-						<CounterClockwiseClockIcon className="mt-[2px] h-4 w-4 sm:mt-[1px] sm:h-5 sm:w-5" />
+						<CounterClockwiseClockIcon className="mt-[1px] h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
 				</Tooltip>
 			</Heading>
