@@ -69,6 +69,22 @@
             "forceOptimizeSuggestion": "Du kannst <1>\"Optimierung erzwingen\"</1> für eine intensivere Lösung versuchen, aber es wird wahrscheinlich keine optimale Anordnung geben. Erwäge, deine Technologien neu zu ordnen oder zu reduzieren, um das Ergebnis zu verbessern.",
             "cancelButton": "Abbrechen",
             "forceOptimizeButton": "Optimierung erzwingen"
+        },
+        "userStats": {
+            "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
+            "description": "In diesem Dialogfeld werden aggregierte Benutzerstatistiken angezeigt, die auf Interaktionen mit dem Optimierer basieren und die am häufigsten aufgeladenen Technologien für Starships und Multi-Tools hervorheben.",
+            "loading": "Benutzerstatistiken laden ...",
+            "error": "Benutzerstatistiken nicht laden. Bitte versuchen Sie es später erneut.",
+            "starshipChartTitle": "Starship -Technologien",
+            "multitoolChartTitle": "Multi-Tool-Technologien",
+            "closeButton": "Schließen"
+        },
+        "shareLink": {
+            "description": "Kopieren Sie den folgenden Link, um Ihr aktuelles Netzlayout zu teilen. Bitte beachten Sie, dass diese URL ein Schnappschuss ist und nicht automatisch aktualisiert wird.",
+            "copyButton": "Link kopieren",
+            "copiedButton": "Kopiert!",
+            "closeButton": "Schließen",
+            "openLink": "Open Link"
         }
     },
     "footer": {
@@ -512,7 +528,7 @@
             "rebuilt": "Wiederaufgebautes Exo-Anzug-Modul",
             "remembrance": "Erinnerung",
             "protection": "Schildgitter",
-        "shield-upgrade": "Schildgitter-Upgrade",
+            "shield-upgrade": "Schildgitter-Upgrade",
             "starseed": "Sternensaat",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Jetpack-Upgrade",
@@ -531,7 +547,8 @@
             "recycler": "Sauerstoff-Recycler",
             "neural": "Neuralstimulator",
             "waterjets": "Effiziente Wasserstrahlen",
-            "rerouter": "Sauerstoff-Umleiter"
+            "rerouter": "Sauerstoff-Umleiter",
+            "protection-upgrade": "Schildgitter -Upgrade"
         }
     }
 }

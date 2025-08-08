@@ -69,6 +69,22 @@
             "forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probablement à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
             "cancelButton": "Annuler",
             "forceOptimizeButton": "Forcer l'optimisation"
+        },
+        "userStats": {
+            "noDataForChart": "Aucune donnée disponible pour ce graphique.",
+            "description": "Cette boîte de dialogue affiche des statistiques utilisateur agrégées en fonction des interactions avec l'optimiseur, mettant en évidence les technologies les plus courantes pour les vaisseaux et les multi-outils.",
+            "loading": "Chargement des statistiques des utilisateurs ...",
+            "error": "Impossible de charger les statistiques de l'utilisateur. Veuillez réessayer plus tard.",
+            "starshipChartTitle": "Starship Technologies",
+            "multitoolChartTitle": "Technologies multi-outils",
+            "closeButton": "Fermer"
+        },
+        "shareLink": {
+            "description": "Copiez le lien ci-dessous pour partager votre mise en page actuelle de la grille. Veuillez noter que cette URL est un instantané et ne metra pas à jour automatiquement.",
+            "copyButton": "Copier le lien",
+            "copiedButton": "Copié!",
+            "closeButton": "Fermer",
+            "openLink": "Lien ouvert"
         }
     },
     "footer": {
@@ -142,6 +158,11 @@
             "title": "-kzzkt- Erreur ! -kzzkt-",
             "message": "Problème de chargement de l'arbre technologique !",
             "details": "Détails de l'erreur : {{details}}"
+        },
+        "recommendedBuilds": {
+            "selectBuildButton": "Sélectionnez une version recommandée",
+            "applyBuildButton": "Appliquer la construction recommandée",
+            "summary": "Technologies avec <1> SLOTS SUPERCIRGERS FIXE </1> Prise en charge <5> Builds recommandés </5>."
         }
     },
     "technologies": {
