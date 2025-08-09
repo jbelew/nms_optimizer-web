@@ -9,6 +9,20 @@
         "changeLanguage": "Changer la langue",
         "selectLanguage": "Sélectionner la langue"
     },
+    "seo": {
+        "defaultDescription": "The NMS Optimizer helps you design the perfect Starship, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+        "defaultKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
+        "homeDescription": "The NMS Optimizer helps you design the perfect Starship, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+        "homeKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
+        "instructionsDescription": "Learn how to use the No Man's Sky Technology Layout Optimizer AI to create the best builds for your Starship, Multitool, Exocraft, and Exosuit. Follow these instructions to get started.",
+        "instructionsKeywords": "No Man's Sky, NMS, instructions, how to, guide, tutorial, optimizer help, layout tool help",
+        "aboutDescription": "Learn more about the No Man's Sky Technology Layout Optimizer AI, a tool designed to help players create optimal technology layouts for their gear in No Man's Sky.",
+        "aboutKeywords": "No Man's Sky, NMS, about, optimizer, layout tool, project, jbelew",
+        "changelogDescription": "See the latest updates and changes to the No Man's Sky Technology Layout Optimizer AI. View the full changelog to see what's new.",
+        "changelogKeywords": "No Man's Sky, NMS, changelog, updates, new features, release notes, optimizer changes",
+        "translationDescription": "Help translate the No Man's Sky Technology Layout Optimizer AI into your language. We are looking for volunteers to help with translations.",
+        "translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help"
+    },
     "appName": "IA d'optimisation d'agencement de technologie de No Man's Sky",
     "loadingMessage": "Activation de la liaison montante !",
     "buttons": {
