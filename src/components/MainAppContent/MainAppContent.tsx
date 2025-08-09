@@ -33,7 +33,7 @@ type MainAppContentInternalProps = {
  */
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
-	const { grid, activateRow, deActivateRow, isSharedGrid } = useGridStore();
+	const { activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { activeDialog, openDialog, closeDialog, sectionToScrollTo } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
@@ -121,7 +121,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						</header>
 
 						<GridTable
-							grid={grid}
 							solving={solving}
 							shared={isSharedGrid}
 							activateRow={activateRow}

@@ -20,6 +20,8 @@ import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
 
+const EMPTY_ARRAY: string[] = [];
+
 /**
  * Props for the TechTreeRow component.
  */
@@ -248,7 +250,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		tech,
 	]);
 
-	const currentCheckedModules = useTechStore((state) => state.checkedModules[tech] || []);
+	const currentCheckedModules = useTechStore((state) => state.checkedModules[tech] || EMPTY_ARRAY);
 
 	const baseImagePath = "/assets/img/tech/";
 	const fallbackImage = `${baseImagePath}infra.webp`;

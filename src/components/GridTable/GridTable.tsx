@@ -1,7 +1,6 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.css";
 
-import type { Grid } from "../../store/GridStore";
 import React, { useMemo } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout, Separator } from "@radix-ui/themes";
@@ -18,7 +17,6 @@ import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
 interface GridTableProps {
-	grid: Grid | null | undefined;
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
@@ -34,7 +32,6 @@ interface GridTableProps {
  * renders control buttons for rows.
  *
  * @param {GridTableProps} props - The props for the component.
- * @param {Grid | null | undefined} props.grid - The grid data to display.
  * @param {(rowIndex: number) => void} props.activateRow - Function to activate an entire row.
  * @param {(rowIndex: number) => void} props.deActivateRow - Function to deactivate an entire row.
  * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
@@ -43,7 +40,6 @@ interface GridTableProps {
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	(
 		{
-			grid,
 			activateRow,
 			deActivateRow,
 			solving,
@@ -56,6 +52,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
+		const grid = useGridStore((state) => state.grid);
 		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 		const gridFixed = useGridStore((state) => state.gridFixed);
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
