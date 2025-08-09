@@ -9,11 +9,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 const app = express();
 
-// Redirect traffic from Heroku to your custom domain
+const targetHost = "nms-optimizer.app";
+
+// Redirect traffic from Heroku (or elsewhere) to your custom domain
 app.use((req, res, next) => {
-	const host = req.headers.host;
-	const targetHost = "nms-optimizer.app";
-	if (host && host !== targetHost) {
+	const host = req.headers.host?.toLowerCase();
+	if (host && host !== targetHost.toLowerCase()) {
 		return res.redirect(301, `https://${targetHost}${req.originalUrl}`);
 	}
 	next();
@@ -43,55 +44,80 @@ app.use(
 	})
 );
 
+// Simple in-memory cache for index.html content
+let cachedIndexHtml = null;
+let cachedIndexHtmlMTimeMs = 0;
+const indexPath = path.join(__dirname, "dist", "index.html");
+
+function escapeHtmlAttr(str) {
+	return str.replace(/&/g, "&amp;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;");
+}
+
 // Handle React/Vite history mode (SPA routing)
 app.get("/*splat", async (req, res) => {
 	// If path has an extension, but wasn't served by static middleware, it's a 404.
 	if (path.extname(req.path)) {
 		res.status(404).sendFile(path.join(__dirname, "dist", "404.html"));
-	} else {
-		try {
-			const indexPath = path.join(__dirname, "dist", "index.html");
-			let indexHtml = await fs.promises.readFile(indexPath, "utf8");
+		return;
+	}
 
-			// Determine the protocol from the x-forwarded-proto header (for Heroku)
-			const protocol = req.headers["x-forwarded-proto"] || req.protocol;
-			const host = req.get("host");
-			const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
-			const canonicalParams = fullUrl.searchParams;
-
-			// Remove parameters that should not affect the canonical URL
-			canonicalParams.delete("platform");
-			canonicalParams.delete("ship");
-			canonicalParams.delete("grid");
-
-			fullUrl.search = canonicalParams.toString();
-			const canonicalUrl = fullUrl.href;
-
-			// Update the canonical link tag
-			const canonicalLinkRegex = /<link\s+rel=\"canonical\"\s+href=\"[^\"]*\"\s*\/?>/i;
-			const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
-			if (canonicalLinkRegex.test(indexHtml)) {
-				indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
-			} else {
-				indexHtml = indexHtml.replace(/<\/head>/i, `	${canonicalTag}\n</head>`);
-			}
-
-			// Also update the og:url meta tag
-			const ogUrlRegex = /<meta\s+property=\"og:url\"\s+content=\"[^\"]*\"\s*\/?>/i;
-			const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
-			if (ogUrlRegex.test(indexHtml)) {
-				indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
-			} else {
-				// If it doesn't exist for some reason, add it.
-				indexHtml = indexHtml.replace(/<\/head>/i, `	${ogUrlTag}\n</head>`);
-			}
-
-			res.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
-			res.send(indexHtml);
-		} catch (error) {
-			console.error("Error modifying and serving index.html:", error);
-			res.status(500).send("Internal Server Error");
+	try {
+		// Check if index.html has changed on disk, reload if so
+		const stat = await fs.promises.stat(indexPath);
+		if (!cachedIndexHtml || stat.mtimeMs > cachedIndexHtmlMTimeMs) {
+			cachedIndexHtml = await fs.promises.readFile(indexPath, "utf8");
+			cachedIndexHtmlMTimeMs = stat.mtimeMs;
 		}
+
+		let indexHtml = cachedIndexHtml;
+
+		// Determine protocol (Heroku sets x-forwarded-proto)
+		const protocol = (req.headers["x-forwarded-proto"] || req.protocol).split(",")[0].trim();
+		const host = req.get("host");
+		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
+		const canonicalParams = fullUrl.searchParams;
+
+		// Remove parameters that should not affect the canonical URL
+		canonicalParams.delete("platform");
+		canonicalParams.delete("ship");
+		canonicalParams.delete("grid");
+
+		fullUrl.search = canonicalParams.toString();
+
+		const canonicalUrl = fullUrl.href;
+
+		// Escape URL for HTML attribute injection
+		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
+
+		// Flexible regex to find <link rel="canonical" ...>
+		const canonicalLinkRegex = /<link[^>]*rel=["']canonical["'][^>]*>/i;
+		const canonicalTag = `<link rel="canonical" href="${escapedCanonicalUrl}" />`;
+
+		if (canonicalLinkRegex.test(indexHtml)) {
+			indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
+		} else {
+			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
+		}
+
+		// Flexible regex to find <meta property="og:url" ...>
+		const ogUrlRegex = /<meta[^>]*property=["']og:url["'][^>]*>/i;
+		const ogUrlTag = `<meta property="og:url" content="${escapedCanonicalUrl}" />`;
+
+		if (ogUrlRegex.test(indexHtml)) {
+			indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
+		} else {
+			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
+		}
+
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.send(indexHtml);
+	} catch (error) {
+		console.error("Error modifying and serving index.html:", error);
+		res.status(500).send("Internal Server Error");
 	}
 });
 
