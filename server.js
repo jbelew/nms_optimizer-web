@@ -1,8 +1,8 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
-import fs from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
 
 // Get the current directory from the module URL
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,20 +27,16 @@ app.use(
 		orderPreference: ["br", "gz"],
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
-
-			// Regex to check for typical Vite hash pattern (e.g., index-a1b2c3d4.js)
 			const versionedAssetPattern = /-[0-9a-zA-Z]{8}\.(js|css|woff2|webp|svg|png|jpg|jpeg|gif)$/i;
-
 			if (versionedAssetPattern.test(fileName)) {
-				// For versioned assets (JS, CSS, fonts, images with hashes)
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-			} else if (fileName === "index.html" || fileName.endsWith(".md") || fileName === "robots.txt") {
-				// For index.html and markdown files, ensure no caching to always get the latest version.
+			} else if (
+				fileName === "index.html" ||
+				fileName.endsWith(".md") ||
+				fileName === "robots.txt"
+			) {
 				res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			} else {
-				// For other static assets in "dist" that might not be versioned
-				// (e.g., images copied directly from public, favicons, manifest.json)
-				// Ensure freshness by revalidating with the server.
 				res.setHeader("Cache-Control", "no-cache, must-revalidate");
 			}
 		},
@@ -57,8 +53,10 @@ app.get("/*splat", async (req, res) => {
 			const indexPath = path.join(__dirname, "dist", "index.html");
 			let indexHtml = await fs.promises.readFile(indexPath, "utf8");
 
-			// Construct canonical URL using the request protocol and host
-			const fullUrl = new URL(req.originalUrl, `${req.protocol}://${req.get("host")}`);
+			// Determine the protocol from the x-forwarded-proto header (for Heroku)
+			const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+			const host = req.get("host");
+			const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
 			const canonicalParams = fullUrl.searchParams;
 
 			// Remove parameters that should not affect the canonical URL
@@ -71,18 +69,19 @@ app.get("/*splat", async (req, res) => {
 
 			// Inject canonical link tag right before the closing </head> tag
 			const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
-			indexHtml = indexHtml.replace("</head>", `\t${canonicalTag}\n\t</head>`);
+			indexHtml = indexHtml.replace(/<\/head>/i, `	${canonicalTag}\n</head>`);
 
 			// Also update the og:url meta tag
-			const ogUrlRegex = /<meta property="og:url" content="[^"]*" \/>/;
+			const ogUrlRegex = /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i;
 			const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
 			if (ogUrlRegex.test(indexHtml)) {
 				indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
 			} else {
-				indexHtml = indexHtml.replace("</head>", `\t${ogUrlTag}\n\t</head>`);
+				// If it doesn't exist for some reason, add it.
+				indexHtml = indexHtml.replace(/<\/head>/i, `	${ogUrlTag}\n</head>`);
 			}
 
-			res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			res.setHeader("Cache-control", "no-cache, no-store, must-revalidate");
 			res.send(indexHtml);
 		} catch (error) {
 			console.error("Error modifying and serving index.html:", error);
