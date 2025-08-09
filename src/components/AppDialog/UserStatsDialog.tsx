@@ -117,7 +117,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 				>
 					{t(titleKey)}
 				</Heading>
-				<ResponsiveContainer width="100%" height={240}>
+				<ResponsiveContainer width="100%" height={248}>
 					<PieChart>
 						<Pie
 							data={chartData}
@@ -139,14 +139,15 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 										y={y}
 										fill="white"
 										textAnchor="middle"
-										dominantBaseline="central"
+										dominantBaseline="middle"
 										fontSize={14}
+										fontWeight="medium"
 									>
 										<tspan x={x} dy="-0.4em">
 											{name}
 										</tspan>
 										<tspan x={x} dy="1.2em">
-											{percent ? `${(percent * 100).toFixed(0)}%` : ""}
+											{percent && percent * 100 >= 6 ? `${(percent * 100).toFixed(0)}%` : ""}
 										</tspan>
 									</text>
 								);
