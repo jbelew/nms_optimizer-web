@@ -182,17 +182,10 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
-	const {
-		max_bonus,
-		clearTechMaxBonus,
-		solved_bonus,
-		clearTechSolvedBonus,
-		checkedModules,
-		setCheckedModules,
-		clearCheckedModules,
-	} = useTechStore();
-	const techMaxBonus = max_bonus?.[tech] ?? 0;
-	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
+	const { clearTechMaxBonus, clearTechSolvedBonus, setCheckedModules, clearCheckedModules } =
+		useTechStore();
+	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
+	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
 
 	// Use techImage to build a more descriptive translation key, falling back to the tech key if image is not available.
 	const translationKeyPart = techImage ? techImage.replace(/\.\w+$/, "").replace(/\//g, ".") : tech;
@@ -255,7 +248,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		tech,
 	]);
 
-	const currentCheckedModules = checkedModules[tech] || [];
+	const currentCheckedModules = useTechStore((state) => state.checkedModules[tech] || []);
 
 	const baseImagePath = "/assets/img/tech/";
 	const fallbackImage = `${baseImagePath}infra.webp`;
