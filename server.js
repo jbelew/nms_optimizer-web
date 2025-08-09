@@ -4,14 +4,17 @@ import { fileURLToPath } from "url";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
 
-// Get the current directory from the module URL
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+
 const app = express();
+
+// Trust proxies like Cloudflare and Heroku for x-forwarded-* headers
+app.set("trust proxy", true);
 
 const targetHost = "nms-optimizer.app";
 
-// Redirect traffic from Heroku (or elsewhere) to your custom domain
+// Redirect non-target hosts to your domain (case-insensitive)
 app.use((req, res, next) => {
 	const host = req.headers.host?.toLowerCase();
 	if (host && host !== targetHost.toLowerCase()) {
@@ -20,7 +23,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Serve static files from the dist directory with compression support
+// Serve static assets with gzip and brotli support
 app.use(
 	"/",
 	expressStaticGzip(path.join(__dirname, "dist"), {
@@ -44,7 +47,7 @@ app.use(
 	})
 );
 
-// Simple in-memory cache for index.html content
+// Cache index.html in memory and reload if changed on disk
 let cachedIndexHtml = null;
 let cachedIndexHtmlMTimeMs = 0;
 const indexPath = path.join(__dirname, "dist", "index.html");
@@ -57,16 +60,15 @@ function escapeHtmlAttr(str) {
 		.replace(/>/g, "&gt;");
 }
 
-// Handle React/Vite history mode (SPA routing)
 app.get("/*splat", async (req, res) => {
-	// If path has an extension, but wasn't served by static middleware, it's a 404.
+	// Return 404 for requests with file extensions not served statically
 	if (path.extname(req.path)) {
 		res.status(404).sendFile(path.join(__dirname, "dist", "404.html"));
 		return;
 	}
 
 	try {
-		// Check if index.html has changed on disk, reload if so
+		// Reload index.html if file changed
 		const stat = await fs.promises.stat(indexPath);
 		if (!cachedIndexHtml || stat.mtimeMs > cachedIndexHtmlMTimeMs) {
 			cachedIndexHtml = await fs.promises.readFile(indexPath, "utf8");
@@ -75,25 +77,23 @@ app.get("/*splat", async (req, res) => {
 
 		let indexHtml = cachedIndexHtml;
 
-		// Determine protocol (Heroku sets x-forwarded-proto)
-		const protocol = (req.headers["x-forwarded-proto"] || req.protocol).split(",")[0].trim();
+		// Use trusted req.protocol with fallback and normalization
+		let protocol = req.protocol || "http";
+		protocol = protocol.toLowerCase();
+		if (protocol !== "http" && protocol !== "https") protocol = "http";
+
 		const host = req.get("host");
 		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
-		const canonicalParams = fullUrl.searchParams;
 
-		// Remove parameters that should not affect the canonical URL
-		canonicalParams.delete("platform");
-		canonicalParams.delete("ship");
-		canonicalParams.delete("grid");
-
-		fullUrl.search = canonicalParams.toString();
+		// Remove non-canonical query params
+		fullUrl.searchParams.delete("platform");
+		fullUrl.searchParams.delete("ship");
+		fullUrl.searchParams.delete("grid");
 
 		const canonicalUrl = fullUrl.href;
-
-		// Escape URL for HTML attribute injection
 		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
 
-		// Flexible regex to find <link rel="canonical" ...>
+		// Replace or insert canonical link tag (flexible regex)
 		const canonicalLinkRegex = /<link[^>]*rel=["']canonical["'][^>]*>/i;
 		const canonicalTag = `<link rel="canonical" href="${escapedCanonicalUrl}" />`;
 
@@ -103,7 +103,7 @@ app.get("/*splat", async (req, res) => {
 			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
 		}
 
-		// Flexible regex to find <meta property="og:url" ...>
+		// Replace or insert og:url meta tag (flexible regex)
 		const ogUrlRegex = /<meta[^>]*property=["']og:url["'][^>]*>/i;
 		const ogUrlTag = `<meta property="og:url" content="${escapedCanonicalUrl}" />`;
 
@@ -121,7 +121,6 @@ app.get("/*splat", async (req, res) => {
 	}
 });
 
-// Use the PORT environment variable provided by Heroku or fallback to 3000 locally
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT} (from server.js)`);
