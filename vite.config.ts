@@ -129,6 +129,7 @@ export default defineConfig(({ mode }) => {
 						) { return "markdown"; }
 						if (
 							id.includes("recharts") ||
+							id.includes("decimal") ||
 							id.includes("d3-")
 						) { return "recharts"; }
 						if (
@@ -137,6 +138,10 @@ export default defineConfig(({ mode }) => {
 							id.includes("@formatjs") ||
 							id.includes("intl-messageformat")
 						) { return "i18n"; }
+						if (
+							id.includes("zustand") ||
+							id.includes("immer")
+						) { return "zustand"; }
 						if (
 							id.includes("ga4")
 						) { return "ga4"; }
