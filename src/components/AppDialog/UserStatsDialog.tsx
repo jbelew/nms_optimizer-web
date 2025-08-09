@@ -53,7 +53,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
 
-		return rawData
+		const aggregated = rawData
 			.filter((item) => item.supercharged === "true" && shipTypes.includes(item.ship_type))
 			.reduce(
 				(acc, curr) => {
@@ -67,6 +67,26 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 				},
 				[] as { name: string; value: number }[]
 			);
+
+		const totalValue = aggregated.reduce((sum, item) => sum + item.value, 0);
+		const threshold = 0.02;
+
+		const aboveThreshold: { name: string; value: number }[] = [];
+		let otherValue = 0;
+
+		aggregated.forEach((item) => {
+			if (item.value / totalValue < threshold) {
+				otherValue += item.value;
+			} else {
+				aboveThreshold.push(item);
+			}
+		});
+
+		if (otherValue > 0) {
+			aboveThreshold.push({ name: "other", value: otherValue });
+		}
+
+		return aboveThreshold;
 	};
 
 	/**
