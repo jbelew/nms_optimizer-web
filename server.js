@@ -1,5 +1,6 @@
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -52,9 +53,41 @@ app.get("/*splat", async (req, res) => {
 	if (path.extname(req.path)) {
 		res.status(404).sendFile(path.join(__dirname, "dist", "404.html"));
 	} else {
-		// Otherwise, serve SPA entrypoint
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.sendFile(path.join(__dirname, "dist", "index.html"));
+		try {
+			const indexPath = path.join(__dirname, "dist", "index.html");
+			let indexHtml = await fs.promises.readFile(indexPath, "utf8");
+
+			// Construct canonical URL using the request protocol and host
+			const fullUrl = new URL(req.originalUrl, `${req.protocol}://${req.get("host")}`);
+			const canonicalParams = fullUrl.searchParams;
+
+			// Remove parameters that should not affect the canonical URL
+			canonicalParams.delete("platform");
+			canonicalParams.delete("ship");
+			canonicalParams.delete("grid");
+
+			fullUrl.search = canonicalParams.toString();
+			const canonicalUrl = fullUrl.href;
+
+			// Inject canonical link tag right before the closing </head> tag
+			const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
+			indexHtml = indexHtml.replace("</head>", `\t${canonicalTag}\n\t</head>`);
+
+			// Also update the og:url meta tag
+			const ogUrlRegex = /<meta property="og:url" content="[^"]*" \/>/;
+			const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
+			if (ogUrlRegex.test(indexHtml)) {
+				indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
+			} else {
+				indexHtml = indexHtml.replace("</head>", `\t${ogUrlTag}\n\t</head>`);
+			}
+
+			res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			res.send(indexHtml);
+		} catch (error) {
+			console.error("Error modifying and serving index.html:", error);
+			res.status(500).send("Internal Server Error");
+		}
 	}
 });
 

@@ -92,31 +92,6 @@ export const useSeoAndTitle = () => {
 		// Set the lang attribute on the html tag
 		document.documentElement.lang = i18n.language;
 
-		// Canonical Tag Logic
-		let canonicalLink = document.querySelector('link[rel="canonical"]');
-		const canonicalUrlObject = new URL(window.location.origin + location.pathname);
-		const canonicalParams = new URLSearchParams(location.search);
-
-		// Remove specific parameters that should not affect the canonical URL
-		canonicalParams.delete("platform");
-		canonicalParams.delete("ship");
-
-		// Only append parameters if they exist
-		if (canonicalParams.toString()) {
-			canonicalUrlObject.search = canonicalParams.toString();
-		}
-		const canonicalUrl = canonicalUrlObject.toString();
-
-		if (!canonicalLink) {
-			canonicalLink = document.createElement("link");
-			canonicalLink.setAttribute("rel", "canonical");
-			document.head.appendChild(canonicalLink);
-		}
-		if (canonicalLink.getAttribute("href") !== canonicalUrl) {
-			canonicalLink.setAttribute("href", canonicalUrl);
-		}
-		updatePropertyMetaTag("og:url", canonicalUrl);
-
 		// Hreflang Tags Logic
 		const supportedLanguages = i18n.options.supportedLngs || [];
 		const defaultLanguage = (i18n.options.fallbackLng as string[])[0] || "en";
