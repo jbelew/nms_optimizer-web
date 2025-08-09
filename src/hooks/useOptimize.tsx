@@ -86,9 +86,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 				const absoluteElementTop = elementRect.top + window.pageYOffset;
 				const targetScrollPosition = absoluteElementTop - offset;
 
-				window.scrollTo({
-					top: targetScrollPosition,
-					behavior: "smooth",
+				requestAnimationFrame(() => {
+					window.scrollTo({
+						top: targetScrollPosition,
+						behavior: "smooth",
+					});
 				});
 			};
 			requestAnimationFrame(scrollIntoView);

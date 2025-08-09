@@ -76,9 +76,11 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 				const absoluteElementTop = elementRect.top + window.pageYOffset;
 				const targetScrollPosition = absoluteElementTop - offset;
 
-				window.scrollTo({
-					top: targetScrollPosition,
-					behavior: "smooth",
+				requestAnimationFrame(() => {
+					window.scrollTo({
+						top: targetScrollPosition,
+						behavior: "smooth",
+					});
 				});
 			};
 			requestAnimationFrame(scrollIntoView);
