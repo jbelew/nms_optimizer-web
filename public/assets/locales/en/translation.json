@@ -21,7 +21,9 @@
 		"changelogDescription": "See the latest updates and changes to the No Man's Sky Technology Layout Optimizer AI. View the full changelog to see what's new.",
 		"changelogKeywords": "No Man's Sky, NMS, changelog, updates, new features, release notes, optimizer changes",
 		"translationDescription": "Help translate the No Man's Sky Technology Layout Optimizer AI into your language. We are looking for volunteers to help with translations.",
-		"translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help"
+		"translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help",
+		"userStatsDescription": "View aggregated user statistics for No Man's Sky. See the most popular and effective supercharged technology layouts for Starships and Multi-tools based on user data.",
+		"userStatsKeywords": "No Man's Sky, NMS, user statistics, stats, data, popular builds, best builds, supercharged slots, technology layouts, community data"
 	},
 	"appName": "No Man's Sky Technology Layout Optimizer AI",
 	"loadingMessage": "Activating Uplink!",

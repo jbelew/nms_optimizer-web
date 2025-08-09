@@ -75,6 +75,11 @@ export const useSeoAndTitle = () => {
 				pageDescription = t("seo.translationDescription");
 				pageKeywords = t("seo.translationKeywords");
 				break;
+			case "/userstats":
+				pageTitle = `${t("dialogs.titles.userStats")} - ${appName}`;
+				pageDescription = t("seo.userStatsDescription");
+				pageKeywords = t("seo.userStatsKeywords");
+				break;
 			default:
 				pageTitle = appName;
 		}

@@ -236,3 +236,32 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     *   **Directive Adherence is Paramount:** I must treat all directives, especially stored user preferences like creating backups, as non-negotiable. My failure to do so was a serious error.
     *   **Explicit Confirmation is Mandatory:** I must always present my plan and wait for an explicit "Proceed" or "Yes" from the user before taking any action that modifies a file. Stating my intention is not enough.
     *   **Trust is Earned:** My reliability depends on my ability to follow instructions precisely. I will be much more rigorous in my adherence to all directives going forward to rebuild and maintain user trust.
+
+## 2025-08-09: Debugging Server-Side Redirects and Middleware
+
+### Perceive & Understand
+
+*   **Request:** The user reported that the server-side canonical URL and redirect logic in `server.js` was not working correctly, particularly for the root `/` path. This led to a long and complex debugging session.
+
+### Reason & Plan
+
+*   **Initial Plan:** My initial fixes involved making the tag injection logic more robust. However, these fixes failed because my understanding of the Express.js middleware execution order was incorrect. I did not realize the static file middleware was executing before my dynamic handler.
+*   **Revised Plan:** I proposed restructuring the server to place a dynamic page-serving middleware *before* the static asset middleware. This involved several iterations:
+    1.  An incorrect attempt using `app.get('/*')`, which the user corrected, noting this pattern is problematic in Express 5.
+    2.  A correct approach using `app.use()` to create a middleware that intercepts all requests, inspects them, and handles page requests while passing asset requests to the next middleware.
+*   **Debugging:** After applying the correct structure, the redirect logic appeared to fail intermittently. This led to a debugging phase where we investigated browser caching (which was part of the problem) and attempted to add server-side logging.
+
+### Act & Implement
+
+*   **Action:** I made several attempts to fix `server.js` using a combination of `replace` and `write_file`.
+*   **Action:** The user and I worked together to diagnose the issue, correctly identifying a browser caching problem with 301 redirects.
+*   **Action:** The final, correct server structure was implemented using an `app.use()` middleware placed before the `expressStaticGzip` middleware.
+
+### Refine & Reflect
+
+*   **Reflection:** This was a difficult but important learning experience with several key takeaways:
+    *   **Middleware Order is Paramount:** In Express or any similar framework, the order of middleware is the most critical factor in how a request is handled. A static server placed before a dynamic handler will always intercept requests for existing files.
+    *   **Trust User Expertise:** The user's knowledge of their own stack (specifically Express 5 routing) was crucial and corrected a flawed assumption on my part. I must be more diligent in verifying framework-specific behavior.
+    *   **Browser Caching is a Likely Culprit:** When dealing with redirects (especially 301s) or other cacheable responses, browser caching should be the first suspect during debugging. Always recommend testing in a private/incognito window as a primary diagnostic step.
+    *   **Tool Idiosyncrasies:** My repeated failures with the `replace` tool highlight the need for extreme precision with its inputs, especially regarding whitespace and escaping. For complex modifications, `write_file` is often a safer and more reliable choice.
+    *   **The "Heisenbug":** The final resolution was mysterious, as the issue resolved itself before a debugging `console.log` was even successfully added. This serves as a reminder that sometimes, the act of restarting a server or some other environmental factor can resolve an issue, and not every "fix" has a clear, causal link.
