@@ -16,26 +16,21 @@ function debounceSetItem(
 	let timeoutId: number | null = null;
 
 	return (name: string, value: StorageValue<Partial<GridStore>>): Promise<void> => {
-		return new Promise<void>((resolve, reject) => {
-			if (timeoutId !== null) {
-				clearTimeout(timeoutId);
-			}
+		if (timeoutId !== null) {
+			clearTimeout(timeoutId);
+		}
 
-			timeoutId = window.setTimeout(() => {
-				void (async () => {
-					try {
-						await setItemFn(name, value);
-						resolve();
-					} catch (e) {
-						if (e instanceof Error) {
-							reject(e);
-						} else {
-							reject(new Error(String(e)));
-						}
-					}
-				})();
-			}, msToWait);
-		});
+		timeoutId = window.setTimeout(() => {
+			void (async () => {
+				try {
+					await setItemFn(name, value);
+				} catch (e) {
+					console.error("Failed to save to localStorage", e);
+				}
+			})();
+		}, msToWait);
+
+		return Promise.resolve();
 	};
 }
 
