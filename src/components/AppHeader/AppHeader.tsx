@@ -22,7 +22,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
-			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-4 sm:!right-8">
+			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
 				<Tooltip content={t("buttons.userStats")}>
 					<IconButton
 						variant="ghost"

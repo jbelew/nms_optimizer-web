@@ -12,11 +12,29 @@ import AppDialog from "./AppDialog";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"];
 
+/**
+ * Props for the UserStatsDialog component.
+ */
 interface UserStatsDialogProps {
+	/**
+	 *  Indicates whether the dialog is open or closed.
+	 */
 	isOpen: boolean;
+	/**
+	 * Callback function to be called when the dialog is closed.
+	 */
 	onClose: () => void;
 }
 
+/**
+ * UserStatsDialog component displays user statistics in a dialog.
+ * It aggregates and visualizes data related to starship and multitool usage.
+ *
+ * @param {UserStatsDialogProps} props - The props for the component.
+ * @param {boolean} props.isOpen - Indicates whether the dialog is open or closed.
+ * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
+ * @returns {FC<UserStatsDialogProps>} The UserStatsDialog component.
+ */
 const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();
 	const { data, loading, error } = useUserStats();
@@ -25,6 +43,13 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
 
+	/**
+	 * Aggregates user statistics data based on supercharged status and ship types.
+	 *
+	 * @param {UserStat[] | null} rawData - The raw user statistics data.
+	 * @param {string[]} shipTypes - An array of ship types to filter by.
+	 * @returns {{ name: string; value: number }[]} Aggregated data for charting.
+	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
 
@@ -44,6 +69,13 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 			);
 	};
 
+	/**
+	 * Renders a PieChart component with the given data and title.
+	 *
+	 * @param {{ name: string; value: number }[]} chartData - The data to be displayed in the chart.
+	 * @param {string} titleKey - The translation key for the chart title.
+	 * @returns {JSX.Element} The rendered PieChart component.
+	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {
 			return <Text>{t("dialogs.userStats.noDataForChart")}</Text>;

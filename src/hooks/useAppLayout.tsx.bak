@@ -45,11 +45,26 @@ export const useAppLayout = (): AppLayout => {
 				}
 			}
 
+			// Fallback for initial measurement or if specific elements weren't in entries
+			// This part should only execute if the values haven't been set by entries
+			// or if it's the initial call without entries.
+			if (newGridHeight === null && isLarge && !isSharedGrid && elementToObserveHeight) {
+				newGridHeight = Math.round(elementToObserveHeight.getBoundingClientRect().height);
+			}
+			if (newGridTableTotalWidth === undefined && elementToObserveWidth) {
+				newGridTableTotalWidth = Math.round(
+					elementToObserveWidth.offsetWidth + GRID_TABLE_WIDTH_ADJUSTMENT
+				);
+			}
+
 			setGridHeight((prevHeight) => (prevHeight !== newGridHeight ? newGridHeight : prevHeight));
 			setGridTableTotalWidth((prevWidth) =>
 				prevWidth !== newGridTableTotalWidth ? newGridTableTotalWidth : prevWidth
 			);
 		};
+
+		// Initial measurement using requestAnimationFrame
+		const initialUpdateFrameId = requestAnimationFrame(() => updateMeasurements());
 
 		const observer = new ResizeObserver((entries) => {
 			// Pass entries to the updateMeasurements function
@@ -64,6 +79,7 @@ export const useAppLayout = (): AppLayout => {
 		}
 
 		return () => {
+			cancelAnimationFrame(initialUpdateFrameId);
 			observer.disconnect();
 		};
 	}, [isLarge, isSharedGrid, containerRef, gridTableRef]);
