@@ -55,6 +55,12 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 
 		const aggregated = rawData
 			.filter((item) => item.supercharged === "true" && shipTypes.includes(item.ship_type))
+			.map((item) => {
+				if (item.technology === "pulse-splitter") {
+					return { ...item, technology: "pulse-spitter" };
+				}
+				return item;
+			})
 			.reduce(
 				(acc, curr) => {
 					const existing = acc.find((item) => item.name === curr.technology);
