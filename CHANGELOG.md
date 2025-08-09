@@ -1,3 +1,22 @@
+# [3.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.2...v3.7.0) (2025-08-09)
+
+
+### Features
+
+* **i18n:** add translations for seo content ([8eb35de](https://github.com/jbelew/nms_optimizer-web/commit/8eb35dedcc5a373ee8d4178a009bc92742709718))
+* **seo:** dynamically update meta tags for improved SEO ([c070b38](https://github.com/jbelew/nms_optimizer-web/commit/c070b38d0744537888f781e17566c6986efbc684))
+* **seo:** improve on-page SEO with new content and keywords ([d2a350f](https://github.com/jbelew/nms_optimizer-web/commit/d2a350ff35ad2bb480d8fd6099277dd4ea0009e3))
+
+
+### Performance Improvements
+
+* **app:** Comprehensive INP and rendering performance fixes ([806545f](https://github.com/jbelew/nms_optimizer-web/commit/806545fe2b0b538996e63a1369df0c52d6efabc3))
+* **app:** Comprehensive INP, rendering, and layout performance fixes ([26d6864](https://github.com/jbelew/nms_optimizer-web/commit/26d68642bf29ffb5ebf99d576bec976e097d80c7))
+* **render:** Optimize component rendering to improve INP ([4230a63](https://github.com/jbelew/nms_optimizer-web/commit/4230a6355e3666e9304733407ff18606a1c2e093))
+* **techtree:** Use selectors for useTechStore in TechTreeRow ([836576a](https://github.com/jbelew/nms_optimizer-web/commit/836576a18a782771d06ed9e268ebad73563eddcf))
+
+
+
 ## [3.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.1...v3.6.2) (2025-08-09)
 
 
