@@ -6,6 +6,16 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 **It's a wrap, my work is done here!**
 
+## Version 3.7 (2025-08-09)
+
+- Improved SEO with dynamic meta tags and updated keywords.  
+- Added analytics tracking for Photonix Core solves.  
+- Improved input delay, rendering, and layout performance throughout the app.  
+- Optimized Tech Tree state management for better responsiveness.  
+- Fixed a spelling error in Pulse Spitter tech.  
+- Made user statistics accessible via a dedicated route.  
+- Added UI styling improvements.  
+
 ## Version 3.6 (2025-08-07)
 
 - Added a **User Statistics** dialog showing which technologies are most frequently supercharged.  
