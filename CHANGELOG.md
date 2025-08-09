@@ -1,3 +1,12 @@
+## [3.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.0...v3.7.1) (2025-08-09)
+
+
+### Features
+
+* Fix canonical tag generation for SEO ([e24613b](https://github.com/jbelew/nms_optimizer-web/commit/e24613bae089daf5a31088fff143a6460d908f9d))
+
+
+
 # [3.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.2...v3.7.0) (2025-08-09)
 
 

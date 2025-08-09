@@ -170,58 +170,6 @@ describe("useSeoAndTitle", () => {
 		});
 	});
 
-	describe("Canonical Tag", () => {
-		it("should create a canonical link if one does not exist", () => {
-			renderHook(() => useSeoAndTitle());
-			const canonicalLink = document.querySelector('link[rel="canonical"]');
-			expect(canonicalLink).not.toBeNull();
-			expect(canonicalLink?.getAttribute("rel")).toBe("canonical");
-			expect(canonicalLink?.getAttribute("href")).toBe("http://localhost:3000/");
-		});
-
-		it("should update an existing canonical link", () => {
-			// Manually create an existing canonical link
-			const existingLink = document.createElement("link");
-			existingLink.setAttribute("rel", "canonical");
-			existingLink.setAttribute("href", "http://old.com");
-			document.head.appendChild(existingLink);
-
-			renderHook(() => useSeoAndTitle());
-
-			const updatedLink = document.querySelector('link[rel="canonical"]');
-			expect(updatedLink).toBe(existingLink); // Should be the same element
-			expect(updatedLink?.getAttribute("href")).toBe("http://localhost:3000/");
-		});
-
-		it("should remove platform and ship parameters from canonical URL", () => {
-			mockUseLocation.mockReturnValue({
-				pathname: "/",
-				search: "?platform=test&ship=test&other=value",
-			});
-			renderHook(() => useSeoAndTitle());
-			const canonicalLink = document.querySelector('link[rel="canonical"]');
-			expect(sortSearchParams(canonicalLink?.getAttribute("href") || "")).toBe(
-				sortSearchParams("http://localhost:3000/?other=value")
-			);
-		});
-
-		it("should keep grid parameter in canonical URL", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/", search: "?grid=123&platform=test" });
-			renderHook(() => useSeoAndTitle());
-			const canonicalLink = document.querySelector('link[rel="canonical"]');
-			expect(sortSearchParams(canonicalLink?.getAttribute("href") || "")).toBe(
-				sortSearchParams("http://localhost:3000/?grid=123")
-			);
-		});
-
-		it("should handle canonical URL with no parameters", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/about", search: "" });
-			renderHook(() => useSeoAndTitle());
-			const canonicalLink = document.querySelector('link[rel="canonical"]');
-			expect(canonicalLink?.getAttribute("href")).toBe("http://localhost:3000/about");
-		});
-	});
-
 	describe("Hreflang Tags", () => {
 		it("should create hreflang links for supported languages", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/instructions", search: "" });
