@@ -10,17 +10,17 @@
         "selectLanguage": "Seleccionar idioma"
     },
     "seo": {
-        "defaultDescription": "The NMS Optimizer helps you design the perfect Starship, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+        "defaultDescription": "El Optimizador de NMS te ayuda a diseñar la disposición perfecta de Nave, Multiherramienta, Exocraft o Exotraje en No Man's Sky. Utiliza herramientas de optimización inteligentes para maximizar las bonificaciones de adyacencia, las ranuras supercargadas y el rendimiento general.",
         "defaultKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "homeDescription": "The NMS Optimizer helps you design the perfect Starship, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+        "homeDescription": "El Optimizador de NMS te ayuda a diseñar la disposición perfecta de Nave, Multiherramienta, Exocraft o Exotraje en No Man's Sky. Utiliza herramientas de optimización inteligentes para maximizar las bonificaciones de adyacencia, las ranuras supercargadas y el rendimiento general.",
         "homeKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "instructionsDescription": "Learn how to use the No Man's Sky Technology Layout Optimizer AI to create the best builds for your Starship, Multitool, Exocraft, and Exosuit. Follow these instructions to get started.",
+        "instructionsDescription": "Aprende a usar la IA del Optimizador de Diseño de Tecnología de No Man's Sky para crear las mejores configuraciones para tu Nave, Multiherramienta, Exocraft y Exotraje. Sigue estas instrucciones para empezar.",
         "instructionsKeywords": "No Man's Sky, NMS, instructions, how to, guide, tutorial, optimizer help, layout tool help",
-        "aboutDescription": "Learn more about the No Man's Sky Technology Layout Optimizer AI, a tool designed to help players create optimal technology layouts for their gear in No Man's Sky.",
+        "aboutDescription": "Obtén más información sobre la IA del Optimizador de Diseño de Tecnología de No Man's Sky, una herramienta diseñada para ayudar a los jugadores a crear diseños de tecnología óptimos para su equipo en No Man's Sky.",
         "aboutKeywords": "No Man's Sky, NMS, about, optimizer, layout tool, project, jbelew",
-        "changelogDescription": "See the latest updates and changes to the No Man's Sky Technology Layout Optimizer AI. View the full changelog to see what's new.",
+        "changelogDescription": "Consulta las últimas actualizaciones y cambios en la IA del Optimizador de Diseño de Tecnología de No Man's Sky. Consulta el registro de cambios completo para ver las novedades.",
         "changelogKeywords": "No Man's Sky, NMS, changelog, updates, new features, release notes, optimizer changes",
-        "translationDescription": "Help translate the No Man's Sky Technology Layout Optimizer AI into your language. We are looking for volunteers to help with translations.",
+        "translationDescription": "Ayuda a traducir la IA del Optimizador de Diseño de Tecnología de No Man's Sky a tu idioma. Buscamos voluntarios que ayuden con las traducciones.",
         "translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help"
     },
     "appName": "IA Optimizador de Diseño de Tecnología de No Man's Sky",
