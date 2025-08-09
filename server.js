@@ -68,7 +68,7 @@ app.get("/*splat", async (req, res) => {
 			const canonicalUrl = fullUrl.href;
 
 			// Update the canonical link tag
-			const canonicalLinkRegex = /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i;
+			const canonicalLinkRegex = /<link\s+rel=\"canonical\"\s+href=\"[^\"]*\"\s*\/?>/i;
 			const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
 			if (canonicalLinkRegex.test(indexHtml)) {
 				indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
@@ -77,7 +77,7 @@ app.get("/*splat", async (req, res) => {
 			}
 
 			// Also update the og:url meta tag
-			const ogUrlRegex = /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i;
+			const ogUrlRegex = /<meta\s+property=\"og:url\"\s+content=\"[^\"]*\"\s*\/?>/i;
 			const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
 			if (ogUrlRegex.test(indexHtml)) {
 				indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
