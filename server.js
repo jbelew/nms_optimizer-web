@@ -23,7 +23,78 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Serve static assets with gzip and brotli support
+// Cache index.html in memory and reload if changed on disk
+let cachedIndexHtml = null;
+let cachedIndexHtmlMTimeMs = 0;
+const indexPath = path.join(__dirname, "dist", "index.html");
+
+function escapeHtmlAttr(str) {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;");
+}
+
+// Middleware to handle page requests and inject dynamic tags
+app.use(async (req, res, next) => {
+	// Pass asset requests (with file extensions) or non-GET requests to the next middleware
+	if (path.extname(req.path) || req.method !== "GET") {
+		return next();
+	}
+
+	// Handle page requests
+	try {
+		const stat = await fs.promises.stat(indexPath);
+		if (!cachedIndexHtml || stat.mtimeMs > cachedIndexHtmlMTimeMs) {
+			cachedIndexHtml = await fs.promises.readFile(indexPath, "utf8");
+			cachedIndexHtmlMTimeMs = stat.mtimeMs;
+		}
+
+		let indexHtml = cachedIndexHtml;
+
+		let protocol = req.protocol || "http";
+		protocol = protocol.toLowerCase();
+		if (protocol !== "http" && protocol !== "https") protocol = "http";
+
+		const host = req.get("host");
+		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
+
+		fullUrl.searchParams.delete("platform");
+		fullUrl.searchParams.delete("ship");
+		fullUrl.searchParams.delete("grid");
+
+		const canonicalUrl = fullUrl.href;
+		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
+
+		const canonicalLinkRegex = /<link[^>]*rel=[\"']canonical[\"'][^>]*>/i;
+		const canonicalTag = `<link rel="canonical" href="${escapedCanonicalUrl}" />`;
+
+		if (canonicalLinkRegex.test(indexHtml)) {
+			indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
+		} else {
+			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
+		}
+
+		const ogUrlRegex = /<meta[^>]*property=[\"']og:url[\"'][^>]*>/i;
+		const ogUrlTag = `<meta property="og:url" content="${escapedCanonicalUrl}" />`;
+
+		if (ogUrlRegex.test(indexHtml)) {
+			indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
+		} else {
+			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
+		}
+
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.send(indexHtml);
+	} catch (error) {
+		console.error("Error modifying and serving index.html:", error);
+		res.status(500).send("Internal Server Error");
+	}
+});
+
+// Serve static assets. This runs for requests passed on by the middleware above.
 app.use(
 	"/",
 	expressStaticGzip(path.join(__dirname, "dist"), {
@@ -46,80 +117,6 @@ app.use(
 		},
 	})
 );
-
-// Cache index.html in memory and reload if changed on disk
-let cachedIndexHtml = null;
-let cachedIndexHtmlMTimeMs = 0;
-const indexPath = path.join(__dirname, "dist", "index.html");
-
-function escapeHtmlAttr(str) {
-	return str.replace(/&/g, "&amp;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#39;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;");
-}
-
-app.get("/*splat", async (req, res) => {
-	// Return 404 for requests with file extensions not served statically
-	if (path.extname(req.path)) {
-		res.status(404).sendFile(path.join(__dirname, "dist", "404.html"));
-		return;
-	}
-
-	try {
-		// Reload index.html if file changed
-		const stat = await fs.promises.stat(indexPath);
-		if (!cachedIndexHtml || stat.mtimeMs > cachedIndexHtmlMTimeMs) {
-			cachedIndexHtml = await fs.promises.readFile(indexPath, "utf8");
-			cachedIndexHtmlMTimeMs = stat.mtimeMs;
-		}
-
-		let indexHtml = cachedIndexHtml;
-
-		// Use trusted req.protocol with fallback and normalization
-		let protocol = req.protocol || "http";
-		protocol = protocol.toLowerCase();
-		if (protocol !== "http" && protocol !== "https") protocol = "http";
-
-		const host = req.get("host");
-		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
-
-		// Remove non-canonical query params
-		fullUrl.searchParams.delete("platform");
-		fullUrl.searchParams.delete("ship");
-		fullUrl.searchParams.delete("grid");
-
-		const canonicalUrl = fullUrl.href;
-		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
-
-		// Replace or insert canonical link tag (flexible regex)
-		const canonicalLinkRegex = /<link[^>]*rel=["']canonical["'][^>]*>/i;
-		const canonicalTag = `<link rel="canonical" href="${escapedCanonicalUrl}" />`;
-
-		if (canonicalLinkRegex.test(indexHtml)) {
-			indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
-		} else {
-			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
-		}
-
-		// Replace or insert og:url meta tag (flexible regex)
-		const ogUrlRegex = /<meta[^>]*property=["']og:url["'][^>]*>/i;
-		const ogUrlTag = `<meta property="og:url" content="${escapedCanonicalUrl}" />`;
-
-		if (ogUrlRegex.test(indexHtml)) {
-			indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
-		} else {
-			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
-		}
-
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.send(indexHtml);
-	} catch (error) {
-		console.error("Error modifying and serving index.html:", error);
-		res.status(500).send("Internal Server Error");
-	}
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
