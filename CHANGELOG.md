@@ -1,3 +1,14 @@
+## [3.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.1...v3.6.2) (2025-08-09)
+
+
+### Bug Fixes
+
+* **analytics:** added specific tracking for Photonix Core in solves ([a1e3e74](https://github.com/jbelew/nms_optimizer-web/commit/a1e3e74fe255631abac077827a854237ddeec71d))
+* **depends:** reviewed and updated build dependancies ([2f21fac](https://github.com/jbelew/nms_optimizer-web/commit/2f21facdfd9b3214b7f9440bdc4a86eddecfe96d))
+* **user-stats:** Prevent unnecessary user-stats.md request ([f45211c](https://github.com/jbelew/nms_optimizer-web/commit/f45211cb934abca2011d903e433b761644cbd7ec))
+
+
+
 ## [3.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.6.0...v3.6.1) (2025-08-08)
 
 
