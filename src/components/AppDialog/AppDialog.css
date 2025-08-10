@@ -18,16 +18,16 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 92vw;
-	max-width: 512px;
-	max-height: 72vh;
+	width: clamp(280px, 90vw, 520px);
+	max-height: 80vh; /* or clamp(60vh, 80vh, 90vh) */
 	padding: calc(var(--spacing) * 4);
 	padding-right: calc(var(--spacing) * 2);
-	padding-top: calc(var(--spacing) * 3);
+	padding-top: calc(var(--spacing) * 4);
 	padding-bottom: calc(var(--spacing) * 6);
 	display: flex;
 	flex-direction: column;
 	gap: calc(var(--spacing) * 4);
+	box-sizing: border-box;
 }
 
 /* Element: Title */
