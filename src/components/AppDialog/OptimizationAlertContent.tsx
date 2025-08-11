@@ -43,7 +43,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 					}}
 				/>
 			</Text>
-			<Flex gap="2" mt="4" justify="end">
+			<Flex gap="2" mt="6" justify="end">
 				<Dialog.Close asChild>
 					<Button
 						variant="soft"

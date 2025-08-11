@@ -2,7 +2,7 @@
 import type { UserStat } from "../../hooks/useUserStats/useUserStats";
 import type { FC } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Button, Flex, Heading, Text } from "@radix-ui/themes";
+import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
@@ -149,9 +149,28 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 			</Text>
 			<Flex direction="column" gap="4">
 				{(loading || colorsLoading) && (
-					<Text align="center" style={{ color: "var(--accent-track)" }}>
-						{t("dialogs.userStats.loading")}
-					</Text>
+					<>
+						<Heading
+							trim="end"
+							as="h2"
+							mb="3"
+							className="!text-base sm:!text-lg"
+							style={{ color: "var(--accent-a11)" }}
+						>
+							<Skeleton>Starship Technologies</Skeleton>
+						</Heading>
+						<Skeleton height="248px" width="100%" />
+						<Heading
+							trim="end"
+							as="h2"
+							mb="3"
+							className="!text-base sm:!text-lg"
+							style={{ color: "var(--accent-a11)" }}
+						>
+							<Skeleton>Multi-tool Technologies</Skeleton>
+						</Heading>
+						<Skeleton height="248px" width="100%" />
+					</>
 				)}
 				{(error || colorsError) && <Text color="red">{t("dialogs.userStats.error")}</Text>}
 				{!(loading || colorsLoading || error || colorsError) && (
