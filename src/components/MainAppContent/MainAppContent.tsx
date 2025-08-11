@@ -1,6 +1,6 @@
 // src/components/app/MainAppContent.tsx
 import type { FC } from "react";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -10,8 +10,6 @@ import { useOptimize } from "../../hooks/useOptimize";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
-import AppDialog from "../AppDialog/AppDialog";
-import MarkdownContentRenderer from "../AppDialog/MarkdownContentRenderer";
 import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
@@ -34,7 +32,7 @@ type MainAppContentInternalProps = {
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 	const { activateRow, deActivateRow, isSharedGrid } = useGridStore();
-	const { activeDialog, openDialog, closeDialog, sectionToScrollTo } = useDialog();
+	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
 		solving,
@@ -59,29 +57,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const handleShowChangelog = useCallback(() => {
 		openDialog("changelog");
 	}, [openDialog]);
-
-	// Memoize content elements for dialogs
-	const aboutDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="about" />,
-		[]
-	);
-	const instructionsDialogContent = useMemo(
-		() => (
-			<MarkdownContentRenderer
-				markdownFileName="instructions"
-				targetSectionId={sectionToScrollTo}
-			/>
-		),
-		[sectionToScrollTo]
-	);
-	const changelogDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="changelog" />,
-		[]
-	);
-	const translationRequestDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="translation-request" />,
-		[]
-	);
 
 	return (
 		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
@@ -153,46 +128,6 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				technologyName={patternNoFitTech}
 				onClose={clearPatternNoFitTech}
 				onForceOptimize={handleForceCurrentPnfOptimize}
-			/>
-			{/* Dialog for "About" information */}
-			<AppDialog
-				isOpen={activeDialog === "about"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.about"
-				title={t("dialogs.titles.about")}
-				content={aboutDialogContent}
-			/>
-			{/* Dialog for "Instructions" information */}
-			<AppDialog
-				isOpen={activeDialog === "instructions"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.instructions"
-				title={t("dialogs.titles.instructions")}
-				content={instructionsDialogContent}
-			/>
-			{/* Dialog for "Changelog" information */}
-			<AppDialog
-				isOpen={activeDialog === "changelog"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.changelog"
-				title={t("dialogs.titles.changelog")}
-				content={changelogDialogContent}
-			/>
-			{/* Dialog for "Translation Request" information */}
-			<AppDialog
-				isOpen={activeDialog === "translation"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.translationRequest" // You'll need to add this key to your i18n files
-				title={t("dialogs.titles.translationRequest")}
-				content={translationRequestDialogContent}
-			/>
-			{/* Dialog for "User Stats" information */}
-			<AppDialog
-				isOpen={activeDialog === "userstats"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.userStats"
-				title={t("dialogs.titles.userStats")}
-				content={null}
 			/>
 		</main>
 	);

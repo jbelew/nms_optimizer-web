@@ -7,8 +7,9 @@ import { Route, Routes } from "react-router-dom";
 import AppDialog from "./components/AppDialog/AppDialog";
 import ErrorContent from "./components/AppDialog/ErrorContent";
 import ShareLinkDialog from "./components/AppDialog/ShareLinkDialog"; // Import ShareLinkDialog
-import UserStatsDialog from "./components/AppDialog/UserStatsDialog";
+
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
+import { RoutedDialogs } from "./components/RoutedDialogs/RoutedDialogs";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
 // Import the new custom hooks
@@ -29,7 +30,7 @@ const App: FC = () => {
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 
 	const { showError, setShowError } = useOptimizeStore();
-	const { activeDialog, closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
+	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
 	// Use the new custom hooks
 	initializeAnalytics();
@@ -62,7 +63,8 @@ const App: FC = () => {
 
 			{/* Render ShareLinkDialog conditionally */}
 			<ShareLinkDialog isOpen={!!shareUrl} shareUrl={shareUrl || ""} onClose={closeDialog} />
-			<UserStatsDialog isOpen={activeDialog === "userstats"} onClose={closeDialog} />
+
+			<RoutedDialogs />
 		</>
 	);
 };
