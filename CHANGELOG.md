@@ -1,9 +1,24 @@
-## [3.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.0...v3.7.1) (2025-08-09)
+## [3.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.0...v3.7.2) (2025-08-12)
+
+
+### Bug Fixes
+
+* **server:** another attempt to fix canonical tags! ([f7eb9bf](https://github.com/jbelew/nms_optimizer-web/commit/f7eb9bf533871c147503fd309d1abd4666715d24))
+* **server:** attempting to get dynamic canonical tags working ([dd78000](https://github.com/jbelew/nms_optimizer-web/commit/dd78000dbde8429adef80af18c8234897277c7b7))
+* **server:** fix for canonical tag generation ([3916b87](https://github.com/jbelew/nms_optimizer-web/commit/3916b874ec481ceb924ad586d05a8e27575a3897))
+* **server:** more canonical issues! ([0773777](https://github.com/jbelew/nms_optimizer-web/commit/0773777ddd188ed6f3100e32e69c0336e5822f68))
+* **server:** still working on consistant canonical generation ([f5ee99c](https://github.com/jbelew/nms_optimizer-web/commit/f5ee99c157405f739dc9c769f3dc1dfcdf4e4eaa))
+* **userstats:** better spacing of the piecdhart labels ([ff2e394](https://github.com/jbelew/nms_optimizer-web/commit/ff2e394e16972abee981093ec2be2e49d2f3d2cd))
 
 
 ### Features
 
+* Combine misspelled multi-tool stats ([0aa0863](https://github.com/jbelew/nms_optimizer-web/commit/0aa0863648dede84ced4fb60fd691802c412a477))
 * Fix canonical tag generation for SEO ([e24613b](https://github.com/jbelew/nms_optimizer-web/commit/e24613bae089daf5a31088fff143a6460d908f9d))
+* **seo:** add metadata for user stats page ([15e82a7](https://github.com/jbelew/nms_optimizer-web/commit/15e82a7256d45e90c9cc0a3f4a921345861e9239))
+* Standardize dialog component implementation ([8ea0a98](https://github.com/jbelew/nms_optimizer-web/commit/8ea0a983717db83fa9a6e43981bd26aee1d02997))
+* Standardize UserStatsDialog component ([2ae6183](https://github.com/jbelew/nms_optimizer-web/commit/2ae6183c2a23012a0146e0e5d3ac4426f2e5d123))
+* **userstats:** grouped tech with < 2% into an "other" category ([3f3e8f4](https://github.com/jbelew/nms_optimizer-web/commit/3f3e8f43838aac939ceb6650e3d976188d76d3f3))
 
 
 
