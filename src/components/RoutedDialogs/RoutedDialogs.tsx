@@ -1,6 +1,6 @@
 // src/components/RoutedDialogs/RoutedDialogs.tsx
 import type { FC } from "react";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";

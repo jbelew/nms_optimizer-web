@@ -4,7 +4,7 @@ console.log("Screenshot script started.");
 
 (async () => {
 	console.log("Attempting to launch browser...");
-	const browser = await puppeteer.launch({ headless: "new", dumpio: true });
+	const browser = await puppeteer.launch({ headless: "new", dumpio: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] });
 	const page = await browser.newPage();
 
 	try {
@@ -17,1134 +17,1137 @@ console.log("Screenshot script started.");
 				"gridState",
 				JSON.stringify({
 					state: {
-						grid: {
-							cells: [
-								[
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 0,
-										bonus: 0,
-										image: "exosuit/refiner.webp",
-										module: "PR",
-										label: "Personal Refiner",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "refiner",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 0,
-										bonus: 0,
-										image: "exosuit/skiff.webp",
-										module: "ES",
-										label: "Exo Skiff",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "skiff",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 0,
-										bonus: 0,
-										image: "exosuit/hazmat.webp",
-										module: "HG",
-										label: "Haz-Mat Gauntlets",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "hazmat",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/rebuilt.webp",
-										module: "Xb",
-										label: "Rebuilt Exosuit Module Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "rebuilt",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/forbidden.webp",
-										module: "Xa",
-										label: "Forbidden Exosuit Module Theta",
-										sc_eligible: true,
-										supercharged: true,
-										tech: "forbidden",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/defense.webp",
-										module: "Xb",
-										label: "Defense Systems Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "defense",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/coolant-upgrade.webp",
-										module: "Xb",
-										label: "Coolant Network Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "coolant",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/hazard.webp",
-										module: "HP",
-										label: "Hazard Protection",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "hazard",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/anomaly.webp",
-										module: "AS",
-										label: "Anomaly Suppressor",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "anomaly",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/toxin-upgrade.webp",
-										module: "Xb",
-										label: "Toxin Suppressor Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "toxin",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-								],
-								[
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/nutrient.webp",
-										module: "NI",
-										label: "Nutrient Ingestor",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "nutrient",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/jetpack.webp",
-										module: "JP",
-										label: "Jetpack",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/waterjets.webp",
-										module: "WJ",
-										label: "Efficient Water Jets",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/rebuilt.webp",
-										module: "Xa",
-										label: "Rebuilt Exosuit Module Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "rebuilt",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/forbidden.webp",
-										module: "Xb",
-										label: "Forbidden Exosuit Module Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "forbidden",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/defense.webp",
-										module: "Xa",
-										label: "Defense Systems Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "defense",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/coolant-upgrade.webp",
-										module: "Xa",
-										label: "Coolant Network Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "coolant",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/protection.webp",
-										module: "SL",
-										label: "Sheild Lattice",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "protection",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/protection-upgrade.webp",
-										module: "Xa",
-										label: "Sheild Lattice Upgrade Theta",
-										sc_eligible: true,
-										supercharged: true,
-										tech: "protection",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/toxin-upgrade.webp",
-										module: "Xa",
-										label: "Toxin Suppressor Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "toxin",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-								],
-								[
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/airburst.webp",
-										module: "AB",
-										label: "Airburst Engine",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/jetpack-upgrade.webp",
-										module: "Xb",
-										label: "Jetpack Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/jetpack-upgrade.webp",
-										module: "Xa",
-										label: "Jetpack Upgrade Theta",
-										sc_eligible: true,
-										supercharged: true,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/rebuilt.webp",
-										module: "Xc",
-										label: "Rebuilt Exosuit Module Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "rebuilt",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/forbidden.webp",
-										module: "Xc",
-										label: "Forbidden Exosuit Module Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "forbidden",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/defense.webp",
-										module: "Xc",
-										label: "Defense Systems Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "defense",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/coolant-upgrade.webp",
-										module: "Xc",
-										label: "Coolant Network Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "coolant",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/protection-upgrade.webp",
-										module: "Xb",
-										label: "Sheild Lattice Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "protection",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/protection-upgrade.webp",
-										module: "Xc",
-										label: "Sheild Lattice Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "protection",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/toxin-upgrade.webp",
-										module: "Xc",
-										label: "Toxin Suppressor Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "toxin",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-								],
-								[
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/exocraft.webp",
-										module: "ES",
-										label: "Exosuit Summoning Unit",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "exocraft",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.1,
-										image: "exosuit/neural.webp",
-										module: "NS",
-										label: "Neural Stimulator",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/jetpack-upgrade.webp",
-										module: "Xc",
-										label: "Jetpack Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "jetpack",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/artemis-translator.webp",
-										module: "Ta",
-										label: "Artemis' Translator",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "translators",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/simple.webp",
-										module: "Tb",
-										label: "Simple Translator",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "translators",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/aeration-upgrade.webp",
-										module: "Xb",
-										label: "Aeration Membrane Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "aeration",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/radiation-upgrade.webp",
-										module: "Xb",
-										label: "Radiation Deflector Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "radiation",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/coolant.webp",
-										module: "CN",
-										label: "Coolant Networt",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "coolant",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/toxin.webp",
-										module: "TS",
-										label: "Toxin Suppressor",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "toxin",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/thermic-upgrade.webp",
-										module: "Xb",
-										label: "Thermic Layer Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "thermic",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-								],
-								[
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/life-upgrade.webp",
-										module: "Xc",
-										label: "Life Support Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.29,
-										image: "exosuit/life-upgrade.webp",
-										module: "Xb",
-										label: "Life Support Upgrade Tau",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 0,
-										bonus: 0,
-										image: "exosuit/rerouter.webp",
-										module: "RR",
-										label: "Oxygen Rereouter",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/superior.webp",
-										module: "Tc",
-										label: "Superior Translator",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "translators",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/advanced.webp",
-										module: "Td",
-										label: "Advanced Translator",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "translators",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/aeration-upgrade.webp",
-										module: "Xa",
-										label: "Aeration Membrane Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "aeration",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/radiation-upgrade.webp",
-										module: "Xa",
-										label: "Radiation Deflector Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "radiation",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/radiation.webp",
-										module: "RD",
-										label: "Radiation Deflector",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "radiation",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/thermic.webp",
-										module: "TL",
-										label: "Thermic Layer",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "thermic",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/thermic-upgrade.webp",
-										module: "Xa",
-										label: "Thermic Layer Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "thermic",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-								],
-								[
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.3,
-										image: "exosuit/life-upgrade.webp",
-										module: "Xa",
-										label: "Life Support Upgrade Theta",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/life.webp",
-										module: "LS",
-										label: "Life Support",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "lesser",
-										adjacency_bonus: 1,
-										bonus: 0.1,
-										image: "exosuit/recycler.webp",
-										module: "OR",
-										label: "Oxygen Recycler",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "life",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/remembrance.webp",
-										module: "RM",
-										label: "Remembrance",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "remembrance",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/starseed.webp",
-										module: "SS",
-										label: "Star Seed",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "starseed",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/aeration-upgrade.webp",
-										module: "Xc",
-										label: "Aeration Membrane Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "aeration",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 1,
-										image: "exosuit/aeration.webp",
-										module: "AM",
-										label: "Aeration Membrane",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "aeration",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/radiation-upgrade.webp",
-										module: "Xc",
-										label: "Radiation Deflector Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "radiation",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "greater",
-										adjacency_bonus: 1,
-										bonus: 0.28,
-										image: "exosuit/thermic-upgrade.webp",
-										module: "Xc",
-										label: "Thermic Layer Upgrade Sigma",
-										sc_eligible: true,
-										supercharged: false,
-										tech: "thermic",
-										total: 0,
-										type: "bonus",
-										value: 0,
-									},
-									{
-										active: true,
-										adjacency: "none",
-										adjacency_bonus: 1,
-										bonus: 0,
-										image: "exosuit/pressure.webp",
-										module: "PM",
-										label: "Pressure Membrane",
-										sc_eligible: false,
-										supercharged: false,
-										tech: "pressure",
-										total: 0,
-										type: "core",
-										value: 0,
-									},
-								],
-							],
-							width: 10,
-							height: 6,
-						},
-						isSharedGrid: false,
-						gridFixed: false,
-						superchargedFixed: true,
-						initialGridDefinition: {
-							grid: [
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-										supercharged: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-								],
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-										supercharged: true,
-									},
-									{
-										active: true,
-									},
-								],
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-										supercharged: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-								],
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-								],
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-								],
-								[
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-									{
-										active: true,
-									},
-								],
-							],
-							gridFixed: false,
-							superchargedFixed: true,
-						},
-						selectedPlatform: "exosuit",
+
+    "grid": {
+        "cells": [
+            [
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/pilot.webp",
+                    "label": "Pilot Interface",
+                    "module": "PI",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "pilot",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.07,
+                    "bonus": 0.04,
+                    "image": "starship/q-resonator.webp",
+                    "label": "Q-Resonator",
+                    "module": "QR",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "infra",
+                    "total": 0.0428,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": -0.02,
+                    "bonus": 1,
+                    "image": "starship/luminance.webp",
+                    "label": "Luminance Drive",
+                    "module": "PE",
+                    "sc_eligible": true,
+                    "supercharged": true,
+                    "tech": "pulse",
+                    "total": 1.225,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.16,
+                    "bonus": 1.1,
+                    "image": "starship/photonix.webp",
+                    "label": "Photonix Core",
+                    "module": "PC",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "pulse",
+                    "total": 1.276,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0,
+                    "image": "starship/instability.webp",
+                    "label": "Instability Drive",
+                    "module": "ID",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "pulse",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0002,
+                    "bonus": 0.01,
+                    "image": "starship/anti-gravity.webp",
+                    "label": "Anti-Gravity Well",
+                    "module": "LT",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0.0102,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.1,
+                    "bonus": 0,
+                    "image": "starship/efficient.webp",
+                    "label": "Efficient Thrusters",
+                    "module": "EF",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/aquajets.webp",
+                    "label": "Aqua-Jets",
+                    "module": "AJ",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "aqua",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/apollo.webp",
+                    "label": "Apollo Figurine",
+                    "module": "AP",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "bobble",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/atlas.webp",
+                    "label": "Atlas Figurine",
+                    "module": "AT",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "bobble",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                }
+            ],
+            [
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.13,
+                    "bonus": 0.4,
+                    "image": "starship/infra-upgrade.webp",
+                    "label": "Infraknife Accelerator Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "infra",
+                    "total": 0.452,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 1,
+                    "image": "starship/infra.webp",
+                    "label": "Infraknife Accelerator",
+                    "module": "IK",
+                    "sc_eligible": true,
+                    "supercharged": true,
+                    "tech": "infra",
+                    "total": 1.475,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.1,
+                    "bonus": 0,
+                    "image": "starship/sublight.webp",
+                    "label": "Sub-Light Amplifier",
+                    "module": "SL",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "pulse",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.24,
+                    "bonus": 1.14,
+                    "image": "starship/pulse-upgrade.webp",
+                    "label": "Pulse Engine Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "pulse",
+                    "total": 1.4136,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 1.13,
+                    "image": "starship/pulse-upgrade.webp",
+                    "label": "Pulse Engine Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": true,
+                    "tech": "pulse",
+                    "total": 1.6667,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.16,
+                    "bonus": 0.29,
+                    "image": "starship/launch-upgrade.webp",
+                    "label": "Launch Thruster Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0.3364,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 0.3,
+                    "image": "starship/launch-upgrade.webp",
+                    "label": "Launch Thruster Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0.354,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.4,
+                    "image": "starship/phase-upgrade.webp",
+                    "label": "Phase Beam Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "phase",
+                    "total": 0.448,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.1,
+                    "bonus": 0.38,
+                    "image": "starship/phase-upgrade.webp",
+                    "label": "Phase Beam Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "phase",
+                    "total": 0.418,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/nada.webp",
+                    "label": "Nada Figurine",
+                    "module": "NA",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "bobble",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                }
+            ],
+            [
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.38,
+                    "image": "starship/infra-upgrade.webp",
+                    "label": "Infraknife Accelerator Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "infra",
+                    "total": 0.4256,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.13,
+                    "bonus": 0.39,
+                    "image": "starship/infra-upgrade.webp",
+                    "label": "Infraknife Accelerator Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "infra",
+                    "total": 0.4407,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.07,
+                    "bonus": 0,
+                    "image": "starship/emeril-trail.webp",
+                    "label": "Emeril Starship Trail",
+                    "module": "ET",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 1.12,
+                    "image": "starship/pulse-upgrade.webp",
+                    "label": "Pulse Engine Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": true,
+                    "tech": "pulse",
+                    "total": 1.568,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 1.07,
+                    "image": "starship/flight-assist.webp",
+                    "label": "Flight Assist Override",
+                    "module": "FA",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "pulse",
+                    "total": 1.1984,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0,
+                    "image": "starship/recharger.webp",
+                    "label": "Launch Atuo-Charger",
+                    "module": "RC",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.28,
+                    "image": "starship/launch-upgrade.webp",
+                    "label": "Launch Thruster Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "launch",
+                    "total": 0.3136,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.1,
+                    "bonus": 0.39,
+                    "image": "starship/phase-upgrade.webp",
+                    "label": "Phase Beam Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "phase",
+                    "total": 0.429,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0302,
+                    "bonus": 1,
+                    "image": "starship/phase-beam.webp",
+                    "label": "Phase Beam",
+                    "module": "PB",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "phase",
+                    "total": 1.0302,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/null.webp",
+                    "label": "-null- Figurine",
+                    "module": "NB",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "bobble",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                }
+            ],
+            [
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.06,
+                    "bonus": 1,
+                    "image": "starship/rocket.webp",
+                    "label": "Rocket Launger",
+                    "module": "RL",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "rocket",
+                    "total": 1.06,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.13,
+                    "bonus": 0,
+                    "image": "starship/cadmium-trail.webp",
+                    "label": "Cadmium Starship Trail",
+                    "module": "CT",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.24,
+                    "bonus": 0.06,
+                    "image": "starship/polo.webp",
+                    "label": "Polo Figurine",
+                    "module": "PB",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0.3,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.13,
+                    "bonus": 0,
+                    "image": "starship/stealth-trail.webp",
+                    "label": "Stealth Starship Trail",
+                    "module": "ST",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.07,
+                    "bonus": 0,
+                    "image": "starship/atlantid.webp",
+                    "label": "Atlantid Drive",
+                    "module": "AD",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0601,
+                    "bonus": 0.01,
+                    "image": "starship/crimson.webp",
+                    "label": "Crimson Core",
+                    "module": "HD",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0.0701,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0401,
+                    "bonus": 0,
+                    "image": "starship/cadmium.webp",
+                    "label": "Cadmium Drive",
+                    "module": "CD",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0001,
+                    "bonus": 0.01,
+                    "image": "starship/aeron.webp",
+                    "label": "Aeron Shields",
+                    "module": "DS",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "shield",
+                    "total": 0.0101,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.04,
+                    "bonus": 0.07,
+                    "image": "starship/fourier.webp",
+                    "label": "Fourier De-Limiter",
+                    "module": "FD",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "phase",
+                    "total": 0.0728,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/cargo.webp",
+                    "label": "Cargo Scan Deflector",
+                    "module": "CD",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "cargo_scanner",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                }
+            ],
+            [
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.07,
+                    "bonus": 0.056,
+                    "image": "starship/tubes.webp",
+                    "label": "Large Rocket Tubes",
+                    "module": "LR",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "rocket",
+                    "total": 0.0599,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 0,
+                    "image": "starship/chromatic-trail.webp",
+                    "label": "Chromatic Starship Trail",
+                    "module": "RT",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.25,
+                    "bonus": 0.05,
+                    "image": "starship/artemis.webp",
+                    "label": "Artemis Figurine",
+                    "module": "AB",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0.0625,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 0,
+                    "image": "starship/golden-trail.webp",
+                    "label": "Golden Starship Trail",
+                    "module": "GT",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0601,
+                    "bonus": 0,
+                    "image": "starship/emeril.webp",
+                    "label": "Emeril Drive",
+                    "module": "ED",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.19,
+                    "bonus": 0.32,
+                    "image": "starship/hyper-upgrade.webp",
+                    "label": "Crimson Core Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0.3808,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.15,
+                    "bonus": 0.31,
+                    "image": "starship/hyper-upgrade.webp",
+                    "label": "Crimson Core Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0.3565,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.16,
+                    "bonus": 0.3,
+                    "image": "starship/shield-upgrade.webp",
+                    "label": "Shield Upgrade Theta",
+                    "module": "Xa",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "shield",
+                    "total": 0.348,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.07,
+                    "image": "starship/ablative.webp",
+                    "label": "Ablative Armor",
+                    "module": "AA",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "shield",
+                    "total": 0.0784,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/conflict.webp",
+                    "label": "Conflict Scanner",
+                    "module": "CS",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "conflict_scanner",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                }
+            ],
+            [
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/teleport.webp",
+                    "label": "Teleport Receiver",
+                    "module": "TP",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "teleporter",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0,
+                    "image": "starship/temporal-trail.webp",
+                    "label": "Temporal Starship Trail",
+                    "module": "TT",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.18,
+                    "bonus": 0.05,
+                    "image": "starship/squid.webp",
+                    "label": "Tentacled Figurine",
+                    "module": "SB",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0.059,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0,
+                    "image": "starship/sputtering-trail.webp",
+                    "label": "Sputtering Starship Trail",
+                    "module": "SP",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "trails",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "lesser",
+                    "adjacency_bonus": 0.0301,
+                    "bonus": 0,
+                    "image": "starship/indium.webp",
+                    "label": "Indium Drive",
+                    "module": "ID",
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.15,
+                    "bonus": 0.3,
+                    "image": "starship/hyper-upgrade.webp",
+                    "label": "Crimson Core Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0.345,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0,
+                    "image": "starship/emergency.webp",
+                    "label": "Emergency Warp Unit",
+                    "module": "EW",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "hyper",
+                    "total": 0,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.29,
+                    "image": "starship/shield-upgrade.webp",
+                    "label": "Shield Upgrade Tau",
+                    "module": "Xb",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "shield",
+                    "total": 0.3248,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "greater",
+                    "adjacency_bonus": 0.12,
+                    "bonus": 0.28,
+                    "image": "starship/shield-upgrade.webp",
+                    "label": "Shield Upgrade Sigma",
+                    "module": "Xc",
+                    "sc_eligible": true,
+                    "supercharged": false,
+                    "tech": "shield",
+                    "total": 0.3136,
+                    "type": "bonus",
+                    "value": 0
+                },
+                {
+                    "active": true,
+                    "adjacency": "none",
+                    "adjacency_bonus": 0,
+                    "bonus": 0,
+                    "image": "starship/economy.webp",
+                    "label": "Economy Scanner",
+                    "module": "ES",
+                    "module_position": [
+                        9,
+                        5
+                    ],
+                    "sc_eligible": false,
+                    "supercharged": false,
+                    "tech": "economy_scanner",
+                    "total": 0,
+                    "type": "core",
+                    "value": 0
+                }
+            ]
+        ],
+        "height": 6,
+        "width": 10
+    },
+    "isSharedGrid": false,
+    "gridFixed": false,
+    "superchargedFixed": false,
+    "initialGridDefinition": {
+        "grid": [
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ],
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ],
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ],
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ],
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ],
+            [
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                },
+                {
+                    "active": true
+                }
+            ]
+        ],
+        "gridFixed": false,
+        "superchargedFixed": false
+    },
+    "selectedPlatform": "sentinel"
+
 					},
 					version: 0,
 				})
 			);
-			localStorage.setItem("selectedPlatform", "exosuit");
+			localStorage.setItem("selectedPlatform", "sentinel");
 		});
 
 		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
@@ -1157,6 +1160,15 @@ console.log("Screenshot script started.");
 
 		await page.setViewport({ width: 375, height: 667 });
 		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
+		// Inject CSS to hide scrollbars for the mobile screenshot
+		await page.addStyleTag({ content: `
+			body::-webkit-scrollbar {
+				display: none;
+			}
+			html::-webkit-scrollbar {
+				display: none;
+			}
+		` });
 		console.log("Taking mobile screenshot ...");
 		await page.screenshot({
 			path: "public/assets/img/screenshots/screenshot_mobile.png",
@@ -1165,6 +1177,15 @@ console.log("Screenshot script started.");
 
 		await page.setViewport({ width: 800, height: 1280 });
 		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
+		// Inject CSS to hide scrollbars for the tablet screenshot
+		await page.addStyleTag({ content: `
+			body::-webkit-scrollbar {
+				display: none;
+			}
+			html::-webkit-scrollbar {
+				display: none;
+			}
+		` });
 		console.log("Taking tablet screenshot ...");
 		await page.screenshot({
 			path: "public/assets/img/screenshots/screenshot_tablet.png",

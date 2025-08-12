@@ -38,7 +38,16 @@ const App: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const errorDialogContent = useMemo(() => <ErrorContent />, []);
+	const errorDialogContent = useMemo(
+		() => (
+			<ErrorContent
+				onClose={function (): void {
+					throw new Error("Function not implemented.");
+				}}
+			/>
+		),
+		[]
+	);
 
 	return (
 		<>
