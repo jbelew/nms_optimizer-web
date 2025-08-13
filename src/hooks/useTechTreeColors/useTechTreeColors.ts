@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 import { API_URL } from "../../constants";
-import { type TechTree } from "../useTechTree"; // Assuming TechTree interface is defined here
+import { type TechTree } from "../useTechTree/useTechTree"; // Assuming TechTree interface is defined here
 
 export const useTechTreeColors = () => {
 	const [techColors, setTechColors] = useState<Record<string, string>>({});

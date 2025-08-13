@@ -14,8 +14,8 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useRecommendedBuild } from "../../hooks/useRecommendedBuild";
-import { type TechTree } from "../../hooks/useTechTree";
+import { useRecommendedBuild } from "../../hooks/useRecommendedBuild/useRecommendedBuild";
+import { type TechTree } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 
 interface RecommendedBuildProps {

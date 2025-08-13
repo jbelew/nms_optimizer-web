@@ -2,10 +2,10 @@
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useGridStore } from "../store/GridStore";
-import { usePlatformStore } from "../store/PlatformStore";
-import { useGridDeserializer } from "./useGridDeserializer";
-import { useFetchShipTypesSuspense } from "./useShipTypes";
+import { useGridStore } from "../../store/GridStore";
+import { usePlatformStore } from "../../store/PlatformStore";
+import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
+import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**
  * Hook to synchronize application state (selected platform, grid)

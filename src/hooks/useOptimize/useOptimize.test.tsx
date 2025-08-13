@@ -2,24 +2,26 @@ import type { Mock, MockInstance } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { API_URL } from "../constants";
-import { useGridStore } from "../store/GridStore";
-import { useOptimizeStore } from "../store/OptimizeStore";
-import { usePlatformStore } from "../store/PlatformStore";
-import { useTechStore } from "../store/TechStore";
-import { useBreakpoint } from "./useBreakpoint";
+import { API_URL } from "../../constants";
+import { useGridStore } from "../../store/GridStore";
+import { useOptimizeStore } from "../../store/OptimizeStore";
+import { usePlatformStore } from "../../store/PlatformStore";
+import { useTechStore } from "../../store/TechStore";
+import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 import { useOptimize } from "./useOptimize";
-import { useAnalytics } from "./useAnalytics/useAnalytics";
+import { useAnalytics } from "../useAnalytics/useAnalytics";
 
 // Mock all external dependencies
-vi.mock("./useAnalytics/useAnalytics");
-vi.mock("../store/GridStore");
-vi.mock("../store/OptimizeStore");
-vi.mock("../store/TechStore");
-vi.mock("../store/PlatformStore"); // This line is already present and correct
-vi.mock("../useBreakpoint", () => ({ useBreakpoint: vi.fn(() => mockUseBreakpointReturnValue) }));
-vi.mock("../constants", () => ({
+vi.mock("../useAnalytics/useAnalytics");
+vi.mock("../../store/GridStore");
+vi.mock("../../store/OptimizeStore");
+vi.mock("../../store/TechStore");
+vi.mock("../../store/PlatformStore"); // This line is already present and correct
+vi.mock("../useBreakpoint/useBreakpoint", () => ({
+	useBreakpoint: vi.fn(() => mockUseBreakpointReturnValue),
+}));
+vi.mock("../../constants", () => ({
 	API_URL: "http://mock-api.com/",
 }));
 

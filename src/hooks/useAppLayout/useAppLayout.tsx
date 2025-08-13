@@ -1,8 +1,8 @@
 // src/hooks/useAppLayout.tsx
 import { useEffect, useRef, useState } from "react";
 
-import { useGridStore } from "../store/GridStore";
-import { useBreakpoint } from "./useBreakpoint";
+import { useGridStore } from "../../store/GridStore";
+import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 interface AppLayout {
 	containerRef: React.RefObject<HTMLDivElement | null>;

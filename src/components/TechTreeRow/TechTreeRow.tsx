@@ -15,7 +15,7 @@ import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/th
 import { Accordion } from "radix-ui";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";

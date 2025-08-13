@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
 
-import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree";
+import {
+	type TechTree,
+	type TechTreeItem,
+} from "../../hooks/useTechTree/useTechTree";
 import { useGridStore } from "../../store/GridStore";
 import { TechTreeSection } from "./TechTreeSection";
 

@@ -3,16 +3,16 @@ import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../store/GridStore";
-import { usePlatformStore, type PlatformState } from "../store/PlatformStore";
-import { useGridDeserializer } from "./useGridDeserializer";
-import { useFetchShipTypesSuspense } from "./useShipTypes";
+import { useGridStore } from "../../store/GridStore";
+import { usePlatformStore, type PlatformState } from "../../store/PlatformStore";
+import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
+import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 import { useUrlSync } from "./useUrlSync";
 
-vi.mock("../store/GridStore");
-vi.mock("../store/PlatformStore");
-vi.mock("./useGridDeserializer");
-vi.mock("./useShipTypes");
+vi.mock("../../store/GridStore");
+vi.mock("../../store/PlatformStore");
+vi.mock("../useGridDeserializer/useGridDeserializer");
+vi.mock("../useShipTypes/useShipTypes");
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
 	const original = await vi.importActual("react-router-dom");

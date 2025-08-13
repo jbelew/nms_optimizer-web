@@ -1,4 +1,4 @@
-import type { RecommendedBuild } from "../hooks/useTechTree";
+import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
 
 /**
  * Type guard to check if an object conforms to the RecommendedBuild interface.

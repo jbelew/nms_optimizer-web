@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAppLayout } from "../../hooks/useAppLayout";
-import { useOptimize } from "../../hooks/useOptimize";
-import { useUrlSync } from "../../hooks/useUrlSync";
+import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
+import { useOptimize } from "../../hooks/useOptimize/useOptimize";
+import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";

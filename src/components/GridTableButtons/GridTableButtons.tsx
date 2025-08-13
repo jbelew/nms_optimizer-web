@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 
 interface GridTableButtonsProps {

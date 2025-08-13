@@ -7,7 +7,7 @@ import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import GridCell from "../GridCell/GridCell";

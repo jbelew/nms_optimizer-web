@@ -13,8 +13,8 @@ import { RoutedDialogs } from "./components/RoutedDialogs/RoutedDialogs";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
 // Import the new custom hooks
-import { useSeoAndTitle } from "./hooks/useSeoAndTitle";
-import { useUrlValidation } from "./hooks/useUrlValidation";
+import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
+import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { initializeAnalytics } from "./utils/analytics";
 

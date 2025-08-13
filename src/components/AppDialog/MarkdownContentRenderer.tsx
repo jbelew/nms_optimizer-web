@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
 
-import { useMarkdownContent } from "../../hooks/useMarkdownContent";
+import { useMarkdownContent } from "../../hooks/useMarkdownContent/useMarkdownContent";
 
 interface MarkdownContentRendererProps {
 	markdownFileName: string;

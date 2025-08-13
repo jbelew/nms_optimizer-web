@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-import i18n from "../i18n/i18n";
+import i18n from "../../i18n/i18n";
 
 /**
  * Updates a meta tag with the given name and content.

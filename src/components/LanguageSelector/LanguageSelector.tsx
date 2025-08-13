@@ -12,7 +12,7 @@ import frFlagPath from "../../assets/svg/flags/fr.svg";
 import usFlagPath from "../../assets/svg/flags/us.svg";
 import xxFlagPath from "../../assets/svg/flags/xx.svg";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 
 interface LanguageFlagPaths {
 	[key: string]: string; // Path to the SVG

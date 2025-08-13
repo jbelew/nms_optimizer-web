@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { type Module } from "../hooks/useTechTree";
+import { type Module } from "../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "./PlatformStore";
 import { useTechStore } from "./TechStore";
 

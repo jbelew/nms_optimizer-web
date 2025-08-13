@@ -4,7 +4,7 @@ import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
 import { IconButton, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 
 interface RowControlButtonProps {
 	rowIndex: number;

@@ -2,7 +2,7 @@ import React from "react";
 import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { type TechTreeItem } from "../../hooks/useTechTree";
+import { type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
 // --- Image Map (This is the key part) ---

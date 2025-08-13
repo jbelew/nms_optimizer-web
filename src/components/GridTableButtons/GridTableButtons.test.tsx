@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
 
@@ -21,7 +21,7 @@ vi.mock("react-i18next", () => ({
 		},
 	}),
 }));
-vi.mock("../../hooks/useBreakpoint");
+vi.mock("../../hooks/useBreakpoint/useBreakpoint");
 vi.mock("../../context/dialog-utils");
 vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: vi.fn(),

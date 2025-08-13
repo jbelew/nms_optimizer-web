@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-import { API_URL } from "../constants";
-import { useGridStore } from "../store/GridStore";
-import { useTechStore } from "../store/TechStore";
-import { isValidRecommendedBuild } from "../utils/recommendedBuildValidation";
+import { API_URL } from "../../constants";
+import { useGridStore } from "../../store/GridStore";
+import { useTechStore } from "../../store/TechStore";
+import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
 export interface Module {
 	active: boolean;

@@ -3,8 +3,8 @@ import React, { Suspense, useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { useFetchTechTreeSuspense } from "../../hooks/useTechTree";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import ErrorBoundary from "../ErrorBoundry/ErrorBoundry";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";

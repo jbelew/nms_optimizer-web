@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-import { API_URL } from "../constants";
-import { usePlatformStore } from "../store/PlatformStore";
+import { API_URL } from "../../constants";
+import { usePlatformStore } from "../../store/PlatformStore";
 
 export interface ShipTypeDetail {
 	label: string;

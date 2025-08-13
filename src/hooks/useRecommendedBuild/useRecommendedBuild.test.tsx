@@ -1,12 +1,20 @@
-import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
+import type {
+	RecommendedBuild,
+	TechTree,
+	TechTreeItem,
+} from "../useTechTree/useTechTree";
 import { act, renderHook } from "@testing-library/react";
 import { vi, Mock } from "vitest";
 
-import { createEmptyCell, createGrid, useGridStore } from "../store/GridStore";
+import {
+	createEmptyCell,
+	createGrid,
+	useGridStore,
+} from "../../store/GridStore";
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
-vi.mock("../store/GridStore", () => ({
+vi.mock("../../store/GridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(),
 	},

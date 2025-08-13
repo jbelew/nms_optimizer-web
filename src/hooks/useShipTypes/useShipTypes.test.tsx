@@ -2,7 +2,7 @@ import { act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the API_URL constant
-vi.mock("../constants", () => ({
+vi.mock("../../constants", () => ({
 	API_URL: "http://mock-api.com/",
 }));
 
@@ -80,7 +80,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		// 3. Dynamically import to re-initialize the store with the new URL
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../store/PlatformStore");
+		const { usePlatformStore } = await import("../../store/PlatformStore");
 
 		// ACT: Trigger the fetch and wait for the internal promise chain to complete
 		await act(async () => {
@@ -103,7 +103,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../store/PlatformStore");
+		const { usePlatformStore } = await import("../../store/PlatformStore");
 
 		await act(async () => {
 			fetchShipTypes();
@@ -125,7 +125,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../store/PlatformStore");
+		const { usePlatformStore } = await import("../../store/PlatformStore");
 
 		await act(async () => {
 			fetchShipTypes();
