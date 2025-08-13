@@ -131,12 +131,13 @@ export default defineConfig(({ }) => {
 			},
 		},
 
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    setupFiles: '.vitest/setup',
-    include: ['**/test.{ts,tsx}']
-  }
+		test: {
+			globals: true,
+			environment: 'happy-dom',
+			setupFiles: '.vitest/setup',
+			root: '.',
+			include: ['src/**/*.{test,spec}.{ts,tsx}']
+		}
 
 	};
 });
