@@ -1,61 +1,62 @@
 import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
-import { useShakeStore } from "../../store/ShakeStore";
+import { Cell } from "../../store/GridStore";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
-// Mock the GridStore and its actions
-vi.mock("../../store/GridStore", () => ({
-	useGridStore: vi.fn(),
-}));
+// Mock stores
+vi.mock("../../store/GridStore");
+vi.mock("../../store/ShakeStore");
 
-// Mock the ShakeStore
-vi.mock("../../store/ShakeStore", () => ({
-	useShakeStore: vi.fn(),
-}));
+// We need to import from the mocked modules
+import { useGridStore } from "../../store/GridStore";
+import { useShakeStore } from "../../store/ShakeStore";
+
+// Define mock functions
+const mockHandleCellTap = vi.fn();
+const mockHandleCellDoubleTap = vi.fn();
+const mockRevertCellTap = vi.fn();
+const mockToggleCellActive = vi.fn();
+const mockToggleCellSupercharged = vi.fn();
+const mockClearInitialCellStateForTap = vi.fn();
+const mockSetShaking = vi.fn();
+const mockSelectTotalSuperchargedCells = vi.fn(() => 0);
+
+const mockUseGridStore = useGridStore as unknown as Mock;
+const mockUseShakeStore = useShakeStore as unknown as Mock;
 
 describe("useGridCellInteraction", () => {
-	let mockHandleCellTap: vi.Mock;
-	let mockHandleCellDoubleTap: vi.Mock;
-	let mockRevertCellTap: vi.Mock;
-	let mockSelectTotalSuperchargedCells: vi.Mock;
-	let mockSetShaking: vi.Mock;
-	let mockToggleCellActive: vi.Mock;
-	let mockToggleCellSupercharged: vi.Mock;
-	let mockClearInitialCellStateForTap: vi.Mock;
+	const baseMockGridStoreState = {
+		handleCellTap: mockHandleCellTap,
+		handleCellDoubleTap: mockHandleCellDoubleTap,
+		revertCellTap: mockRevertCellTap,
+		selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
+		superchargedFixed: false,
+		gridFixed: false,
+		toggleCellActive: mockToggleCellActive,
+		toggleCellSupercharged: mockToggleCellSupercharged,
+		clearInitialCellStateForTap: mockClearInitialCellStateForTap,
+	};
 
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.useFakeTimers();
 
-		mockHandleCellTap = vi.fn();
-		mockHandleCellDoubleTap = vi.fn();
-		mockRevertCellTap = vi.fn();
-		mockSelectTotalSuperchargedCells = vi.fn(() => 0);
-		mockSetShaking = vi.fn();
-		mockToggleCellActive = vi.fn();
-		mockToggleCellSupercharged = vi.fn();
-		mockClearInitialCellStateForTap = vi.fn();
-
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) => {
-			const state = {
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
-				superchargedFixed: false,
-				gridFixed: false,
-				toggleCellActive: mockToggleCellActive,
-				toggleCellSupercharged: mockToggleCellSupercharged,
-				clearInitialCellStateForTap: mockClearInitialCellStateForTap,
-			};
-			return selector(state);
+		// Reset mocks to default state before each test
+		mockUseGridStore.mockImplementation((selector) => {
+			if (typeof selector === "function") {
+				return selector(baseMockGridStoreState);
+			}
+			return baseMockGridStoreState;
 		});
 
-		(useShakeStore as unknown as vi.Mock).mockImplementation(() => ({
-			setShaking: mockSetShaking,
-		}));
+		mockUseShakeStore.mockImplementation((selector) => {
+			const state = { setShaking: mockSetShaking };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
 	});
 
 	afterEach(() => {
@@ -69,7 +70,7 @@ describe("useGridCellInteraction", () => {
 			supercharged: false,
 			module: "some-module",
 			...cellOverrides,
-		} as Cell; // Cast to any to allow partial Cell type for testing
+		} as Cell;
 
 		return renderHook(() => useGridCellInteraction(cell, 0, 0, isSharedGrid));
 	};
@@ -102,16 +103,14 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if superchargedFixed on double tap", () => {
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) =>
-			selector({
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
-				superchargedFixed: true,
-				gridFixed: false,
-			})
-		);
+		mockUseGridStore.mockImplementation((selector) => {
+			const state = { ...baseMockGridStoreState, superchargedFixed: true };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
+
 		const { result } = renderGridCellHook();
 		act(() => {
 			result.current.handleTouchStart(); // Enable touch interaction
@@ -127,17 +126,14 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if gridFixed on double tap", () => {
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) =>
-			selector({
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
-				superchargedFixed: false,
-				gridFixed: true,
-				clearInitialCellStateForTap: mockClearInitialCellStateForTap,
-			})
-		);
+		mockUseGridStore.mockImplementation((selector) => {
+			const state = { ...baseMockGridStoreState, gridFixed: true };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
+
 		const { result } = renderGridCellHook();
 		act(() => {
 			result.current.handleTouchStart(); // Enable touch interaction
@@ -153,16 +149,14 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if totalSupercharged >= 4 and cell is not supercharged on double tap", () => {
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) =>
-			selector({
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: vi.fn(() => 4),
-				superchargedFixed: false,
-				gridFixed: false,
-			})
-		);
+		mockUseGridStore.mockImplementation((selector) => {
+			const state = { ...baseMockGridStoreState, selectTotalSuperchargedCells: () => 4 };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
+
 		const { result } = renderGridCellHook({ supercharged: false });
 		act(() => {
 			result.current.handleTouchStart(); // Enable touch interaction
@@ -178,16 +172,14 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should trigger shake and not call handleCellTap if gridFixed on single tap", () => {
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) =>
-			selector({
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
-				superchargedFixed: false,
-				gridFixed: true,
-			})
-		);
+		mockUseGridStore.mockImplementation((selector) => {
+			const state = { ...baseMockGridStoreState, gridFixed: true };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
+
 		const { result } = renderGridCellHook();
 		act(() => {
 			result.current.handleClick({ ctrlKey: false, metaKey: false } as React.MouseEvent);
@@ -200,17 +192,14 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should trigger shake and not call handleCellTap if superchargedFixed and cell is supercharged on single tap", () => {
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) =>
-			selector({
-				handleCellTap: mockHandleCellTap,
-				handleCellDoubleTap: mockHandleCellDoubleTap,
-				revertCellTap: mockRevertCellTap,
-				selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
-				superchargedFixed: true,
-				gridFixed: false,
-				clearInitialCellStateForTap: mockClearInitialCellStateForTap,
-			})
-		);
+		mockUseGridStore.mockImplementation((selector) => {
+			const state = { ...baseMockGridStoreState, superchargedFixed: true };
+			if (typeof selector === "function") {
+				return selector(state);
+			}
+			return state;
+		});
+
 		const { result } = renderGridCellHook({ supercharged: true });
 		act(() => {
 			result.current.handleClick({ ctrlKey: false, metaKey: false } as React.MouseEvent);
@@ -218,7 +207,7 @@ describe("useGridCellInteraction", () => {
 		vi.advanceTimersByTime(500);
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
 		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // For shake timeout
+		vi.advanceTimersByTime(500); // for shake timeout
 		expect(mockSetShaking).toHaveBeenCalledWith(false);
 	});
 

@@ -1,55 +1,80 @@
 import { act, renderHook } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, MockInstance } from "vitest";
 
 import { useBreakpoint } from "./useBreakpoint";
 
+// Helper to mock window.matchMedia
+const createMatchMediaMock = (matches: boolean) => {
+	// Use a more specific type for listeners
+	const listeners: Array<((this: MediaQueryList, ev: MediaQueryListEvent) => void)> = [];
+
+	const addEventListenerMock = vi.fn(function (this: MediaQueryList, type: string, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+		if (type === 'change') {
+			listeners.push(listener);
+		}
+	});
+
+	const removeEventListenerMock = vi.fn(function (this: MediaQueryList, type: string, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+		if (type === 'change') {
+			const index = listeners.indexOf(listener);
+			if (index > -1) {
+				listeners.splice(index, 1);
+			}
+		}
+	});
+
+	return {
+		matches,
+		media: '',
+		onchange: null,
+		addEventListener: addEventListenerMock,
+		removeEventListener: removeEventListenerMock,
+		// Alias for older methods
+		addListener: vi.fn(function (this: MediaQueryList, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+			listeners.push(listener);
+		}),
+    removeListener: vi.fn(function (this: MediaQueryList, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+			const index = listeners.indexOf(listener);
+			if (index > -1) {
+				listeners.splice(index, 1);
+			}
+		}),
+		dispatchEvent: vi.fn(function (this: MediaQueryList, event: Partial<MediaQueryListEvent>) {
+			// Call listeners with the correct 'this' context
+			listeners.forEach((listener) => listener.call(this, event as MediaQueryListEvent));
+			return true;
+		}),
+	};
+};
+
+
+
 describe("useBreakpoint", () => {
-	let matchMediaSpy: vi.SpyInstance;
-	let addEventListenerSpy: vi.SpyInstance;
-	let removeEventListenerSpy: vi.SpyInstance;
-	let mockMediaQueryList: Partial<MediaQueryList>;
+	let matchMediaMock: ReturnType<typeof createMatchMediaMock>;
+	let matchMediaSpy: MockInstance;
 
 	beforeEach(() => {
-		// Reset mocks before each test
 		vi.clearAllMocks();
-
-		// Mock MediaQueryList methods
-		addEventListenerSpy = vi.fn();
-		removeEventListenerSpy = vi.fn();
-
-		mockMediaQueryList = {
-			matches: false,
-			media: "",
-			onchange: null,
-			addEventListener: addEventListenerSpy,
-			removeEventListener: removeEventListenerSpy,
-			dispatchEvent: vi.fn(),
-		};
-
-		// Mock window.matchMedia
-		matchMediaSpy = vi
-			.spyOn(window, "matchMedia")
-			.mockReturnValue(mockMediaQueryList as MediaQueryList);
+		matchMediaMock = createMatchMediaMock(false); // Default to not matching
+		matchMediaSpy = vi.spyOn(window, 'matchMedia').mockReturnValue(matchMediaMock as MediaQueryList);
 	});
 
 	it("should return initial match state based on window.matchMedia", () => {
-		mockMediaQueryList.matches = true;
+		matchMediaMock.matches = true;
 		const { result } = renderHook(() => useBreakpoint("768px"));
 		expect(result.current).toBe(true);
 		expect(matchMediaSpy).toHaveBeenCalledWith("(min-width: 768px)");
 	});
 
 	it("should update match state when media query changes", () => {
-		mockMediaQueryList.matches = false;
+		matchMediaMock.matches = false;
 		const { result } = renderHook(() => useBreakpoint("768px"));
 		expect(result.current).toBe(false);
 
 		// Simulate a change event
 		act(() => {
-			mockMediaQueryList.matches = true;
-			// Call the handler that was registered with addEventListener
-			const handler = addEventListenerSpy.mock.calls[0][1];
-			handler({ matches: true } as MediaQueryListEvent);
+			matchMediaMock.matches = true;
+			matchMediaMock.dispatchEvent({ matches: true } as MediaQueryListEvent);
 		});
 
 		expect(result.current).toBe(true);
@@ -57,19 +82,19 @@ describe("useBreakpoint", () => {
 
 	it("should remove event listener on unmount", () => {
 		const { unmount } = renderHook(() => useBreakpoint("768px"));
-		expect(addEventListenerSpy).toHaveBeenCalledTimes(1);
+		expect(matchMediaMock.addEventListener).toHaveBeenCalledTimes(1);
 
 		unmount();
 
-		expect(removeEventListenerSpy).toHaveBeenCalledTimes(1);
-		expect(removeEventListenerSpy).toHaveBeenCalledWith(
+		expect(matchMediaMock.removeEventListener).toHaveBeenCalledTimes(1);
+		expect(matchMediaMock.removeEventListener).toHaveBeenCalledWith(
 			"change",
-			addEventListenerSpy.mock.calls[0][1]
+			matchMediaMock.addEventListener.mock.calls[0][1]
 		);
 	});
 
 	it("should handle different breakpoints", () => {
-		mockMediaQueryList.matches = false;
+		matchMediaMock.matches = false;
 		const { result, rerender } = renderHook(({ bp }) => useBreakpoint(bp), {
 			initialProps: { bp: "480px" },
 		});
@@ -77,13 +102,13 @@ describe("useBreakpoint", () => {
 		expect(matchMediaSpy).toHaveBeenCalledWith("(min-width: 480px)");
 
 		// Rerender with a new breakpoint
-		mockMediaQueryList.matches = true; // Simulate it matching the new breakpoint
+		matchMediaMock.matches = true; // Simulate it matching the new breakpoint
 		rerender({ bp: "1024px" });
 
 		expect(result.current).toBe(true);
 		expect(matchMediaSpy).toHaveBeenCalledWith("(min-width: 1024px)");
 		// Ensure old listener is removed and new one is added
-		expect(removeEventListenerSpy).toHaveBeenCalledTimes(1);
-		expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
+		expect(matchMediaMock.removeEventListener).toHaveBeenCalledTimes(1);
+		expect(matchMediaMock.addEventListener).toHaveBeenCalledTimes(2);
 	});
 });

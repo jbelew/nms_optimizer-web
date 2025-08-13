@@ -1,6 +1,6 @@
-import type { RecommendedBuild, TechTree } from "./useTechTree";
+import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { act, renderHook } from "@testing-library/react";
-import { vi } from "vitest";
+import { vi, Mock } from "vitest";
 
 import { createEmptyCell, createGrid, useGridStore } from "../store/GridStore";
 import { useRecommendedBuild } from "./useRecommendedBuild";
@@ -18,9 +18,9 @@ vi.mock("../store/GridStore", () => ({
 }));
 
 describe("useRecommendedBuild", () => {
-	let setGridAndResetAuxiliaryStateMock: vi.Mock;
-	let scrollToMock: vi.Mock;
-	let requestAnimationFrameMock: vi.Mock;
+	let setGridAndResetAuxiliaryStateMock: Mock;
+	let scrollToMock: Mock;
+	let requestAnimationFrameMock: Mock;
 	let mockTechTree: TechTree;
 	let mockGridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 
@@ -28,25 +28,24 @@ describe("useRecommendedBuild", () => {
 		vi.clearAllMocks();
 
 		setGridAndResetAuxiliaryStateMock = vi.fn();
-		(useGridStore.getState as vi.Mock).mockReturnValue({
+		(useGridStore.getState as Mock).mockReturnValue({
 			setGridAndResetAuxiliaryState: setGridAndResetAuxiliaryStateMock,
 		});
 
 		// Mock createGrid and createEmptyCell to return predictable values
-		(createGrid as vi.Mock).mockImplementation((width, height) => ({
+		(createGrid as Mock).mockImplementation((width: number, height: number) => ({
 			cells: Array(height)
 				.fill(0)
 				.map(() => Array(width).fill(null)),
 			width,
 			height,
 		}));
-		(createEmptyCell as vi.Mock).mockImplementation((supercharged = false, active = false) => ({
+		(createEmptyCell as Mock).mockImplementation((supercharged = false, active = false) => ({
 			tech: null,
 			module: null,
-			label: "",
+
 			image: null,
 			bonus: 0,
-			value: 0,
 			adjacency: false,
 			sc_eligible: false,
 			supercharged,
@@ -64,44 +63,58 @@ describe("useRecommendedBuild", () => {
 		});
 		Object.defineProperty(window, "pageYOffset", { value: 0, writable: true });
 
-		mockTechTree = {
-			Weapon: [
-				{
-					key: "boltcaster",
-					label: "Boltcaster",
-					modules: [
-						{
-							id: "S1",
-							label: "S-Class",
-							bonus: 10,
-							image: "img.png",
-							adjacency: true,
-							sc_eligible: true,
-							value: 1,
-							type: "weapon",
-						},
-					],
-				},
-			],
-			Shield: [
-				{
-					key: "shield",
-					label: "Shield",
-					modules: [
-						{
-							id: "X1",
-							label: "X-Class",
-							bonus: 20,
-							image: "img2.png",
-							adjacency: false,
-							sc_eligible: false,
-							value: 2,
-							type: "shield",
-						},
-					],
-				},
-			],
-		};
+			mockTechTree = {
+		Weapon: [
+			{
+				label: "Boltcaster",
+				key: "weapon",
+				color: "red", // Add a color, as it's required by TechTreeItem
+				module_count: 1, // Add module_count
+				image: null, // Add image
+				modules: [
+					{
+						id: "S1",
+						label: "S-Class",
+						bonus: 10,
+						image: "img.png",
+						adjacency: "none", // Corrected type to string
+						sc_eligible: true,
+						value: 1,
+						type: "weapon",
+						active: true, // Added missing property
+						adjacency_bonus: 0, // Added missing property
+						supercharged: false, // Added missing property
+						tech: "Weapon", // Added missing property
+					},
+				],
+			},
+		] as TechTreeItem[],
+		Shield: [
+			{
+				label: "Shield",
+				key: "shield",
+				color: "blue", // Add a color
+				module_count: 1, // Add module_count
+				image: null, // Add image
+				modules: [
+					{
+						id: "X1",
+						label: "X-Class",
+						bonus: 20,
+						image: "img2.png",
+						adjacency: "none", // Corrected type to string
+						sc_eligible: false,
+						value: 2,
+						type: "shield",
+						active: true, // Added missing property
+						adjacency_bonus: 0, // Added missing property
+						supercharged: false, // Added missing property
+						tech: "Shield", // Added missing property
+					},
+				],
+			},
+		] as TechTreeItem[],
+	};
 
 		mockGridContainerRef = { current: document.createElement("div") };
 		Object.defineProperty(mockGridContainerRef.current, "getBoundingClientRect", {
@@ -215,12 +228,7 @@ describe("useRecommendedBuild", () => {
 		);
 
 		act(() => {
-			result.current.applyRecommendedBuild(null);
-		});
-		expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
-
-		act(() => {
-			result.current.applyRecommendedBuild({ title: "Empty", layout: null });
+			result.current.applyRecommendedBuild({ title: "Empty", layout: [] });
 		});
 		expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
 	});

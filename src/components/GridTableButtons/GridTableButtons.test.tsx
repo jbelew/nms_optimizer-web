@@ -59,6 +59,7 @@ vi.mock("../../store/GridStore", async () => {
 		setSuperchargedFixed: mockSetSuperchargedFixed,
 		resetGrid: mockResetGrid,
 		setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
+		hasModulesInGrid: mockHasModulesInGrid,
 		selectHasModulesInGrid: vi.fn(() => mockHasModulesInGrid), // Mock as a function
 		getState: vi.fn(() => mockStore),
 		_setMockState: (isShared: boolean, hasModules: boolean, initialGridDef?: unknown) => {
@@ -98,6 +99,7 @@ describe("GridTableButtons", () => {
 		resetGridAction: mockResetGridAction,
 		updateUrlForShare: mockUpdateUrlForShare,
 		updateUrlForReset: mockUpdateUrlForReset,
+		gridContainerRef: { current: null },
 	};
 
 	beforeEach(() => {

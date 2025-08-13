@@ -1,10 +1,10 @@
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useGridStore } from "../store/GridStore";
-import { usePlatformStore } from "../store/PlatformStore";
+import { usePlatformStore, type PlatformState } from "../store/PlatformStore";
 import { useGridDeserializer } from "./useGridDeserializer";
 import { useFetchShipTypesSuspense } from "./useShipTypes";
 import { useUrlSync } from "./useUrlSync";
@@ -32,22 +32,22 @@ describe("useUrlSync", () => {
 		vi.clearAllMocks();
 		window.history.pushState({}, "", "/");
 
-		(useGridStore as unknown as vi.Mock).mockReturnValue({
+		(useGridStore as unknown as Mock).mockReturnValue({
 			isSharedGrid: false,
 			setIsSharedGrid: mockSetIsSharedGrid,
 		});
-		(usePlatformStore as unknown as vi.Mock).mockImplementation((selector) => {
+		(usePlatformStore as unknown as Mock).mockImplementation((selector: (state: PlatformState) => PlatformState[keyof PlatformState]) => {
 			const state = {
 				selectedPlatform: "test-platform",
 				setSelectedPlatform: mockSetSelectedPlatform,
 			};
 			return selector(state);
 		});
-		(useGridDeserializer as unknown as vi.Mock).mockReturnValue({
+		(useGridDeserializer as unknown as Mock).mockReturnValue({
 			serializeGrid: mockSerializeGrid,
 			deserializeGrid: mockDeserializeGrid,
 		});
-		(useFetchShipTypesSuspense as unknown as vi.Mock).mockReturnValue({
+		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
 			"test-platform": { label: "Test Platform", type: "Starship" },
 		});
 	});
@@ -76,7 +76,7 @@ describe("useUrlSync", () => {
 
 	it("should set platform from URL on initial load", () => {
 		window.history.pushState({}, "", "/?grid=serialized-grid&platform=new-platform");
-		(useFetchShipTypesSuspense as unknown as vi.Mock).mockReturnValue({
+		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
 			"new-platform": { label: "New Platform", type: "Starship" },
 		});
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });

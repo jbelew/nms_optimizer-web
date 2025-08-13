@@ -22,11 +22,11 @@ export const useRecommendedBuild = (
 					if (
 						typeof tech === "object" &&
 						tech !== null &&
-						"key" in tech &&
+						"label" in tech &&
 						"modules" in tech
 					) {
 						for (const module of (tech as TechTreeItem).modules) {
-							map.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
+							map.set(`${(tech as TechTreeItem).label.toLowerCase()}/${module.id}`, module);
 						}
 					}
 				}
@@ -41,14 +41,14 @@ export const useRecommendedBuild = (
 				console.error("Invalid RecommendedBuild object received:", build);
 				return;
 			}
-			if (build && build.layout) {
+			if (build && build.layout && build.layout.length > 0) {
 				const newGrid = createGrid(10, 6);
 				const layout = build.layout as ({
 					tech: string;
 					module: string;
 					supercharged?: boolean;
 					active?: boolean;
-					adjacency_bonus?: boolean;
+					adjacency_bonus?: number;
 				} | null)[][];
 
 				for (let r = 0; r < layout.length; r++) {
@@ -85,11 +85,7 @@ export const useRecommendedBuild = (
 									resetCellContent(cell);
 								}
 							}
-							// Adjacency bonus is also from cellData, so it should be assigned outside the module check
-							cell.adjacency_bonus =
-								typeof cellData.adjacency_bonus === "number"
-									? cellData.adjacency_bonus
-									: 0.0;
+							cell.adjacency_bonus = cellData.adjacency_bonus ?? 0.0;
 
 							newGrid.cells[r][c] = cell;
 						} else {

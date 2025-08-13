@@ -30,8 +30,8 @@ const sortSearchParams = (url: string) => {
 };
 
 describe("useSeoAndTitle", () => {
-	const mockUseLocation = useLocation as vi.Mock;
-	const mockUseTranslation = useTranslation as vi.Mock;
+	const mockUseLocation = useLocation as Mock;
+	const mockUseTranslation = useTranslation as Mock;
 
 	let originalAppendChild: (node: Node) => Node;
 	let originalQuerySelector: (selectors: string) => Element | null;
