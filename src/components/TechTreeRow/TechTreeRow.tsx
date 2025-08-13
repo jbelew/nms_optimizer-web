@@ -190,7 +190,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
 
 	// Use techImage to build a more descriptive translation key, falling back to the tech key if image is not available.
-	const translationKeyPart = techImage ? techImage.replace(/\.\w+$/, "").replace(/\//g, ".") : tech;
+	const translationKeyPart = techImage
+		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
+		: tech;
 	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
 	let tooltipLabel: string;
@@ -221,7 +223,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		(moduleId: string) => {
 			setCheckedModules(tech, (prevChecked = []) => {
 				const isChecked = prevChecked.includes(moduleId);
-				return isChecked ? prevChecked.filter((id) => id !== moduleId) : [...prevChecked, moduleId];
+				return isChecked
+					? prevChecked.filter((id) => id !== moduleId)
+					: [...prevChecked, moduleId];
 			});
 		},
 		[tech, setCheckedModules]
@@ -250,7 +254,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		tech,
 	]);
 
-	const currentCheckedModules = useTechStore((state) => state.checkedModules[tech] || EMPTY_ARRAY);
+	const currentCheckedModules = useTechStore(
+		(state) => state.checkedModules[tech] || EMPTY_ARRAY
+	);
 
 	const baseImagePath = "/assets/img/tech/";
 	const fallbackImage = `${baseImagePath}infra.webp`;
@@ -281,7 +287,10 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			return (
 				<>
 					{hasTechInGrid && (
-						<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+						<BonusStatusIcon
+							techMaxBonus={techMaxBonus}
+							techSolvedBonus={techSolvedBonus}
+						/>
 					)}
 					<Badge
 						ml="1"
@@ -357,13 +366,21 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					>
 						<Accordion.Item className="AccordionItem" value="item-1">
 							<AccordionTrigger>
-								<Text as="label" wrap="balance" weight="medium" size={isSmallAndUp ? "3" : "2"}>
+								<Text
+									as="label"
+									wrap="balance"
+									weight="medium"
+									size={isSmallAndUp ? "3" : "2"}
+								>
 									{translatedTechName}
 								</Text>
 							</AccordionTrigger>
 							<Accordion.Content className="AccordionContent pl-1">
 								{rewardModules.map((module) => (
-									<div key={module.id} className="AccordionContentText flex items-start gap-2">
+									<div
+										key={module.id}
+										className="AccordionContentText flex items-start gap-2"
+									>
 										<Checkbox
 											className="CheckboxRoot ml-1 !pt-1"
 											variant="soft"
@@ -378,7 +395,9 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 											size={isSmallAndUp ? "3" : "2"}
 											htmlFor={module.id}
 										>
-											{t(`modules.${module.id}`, { defaultValue: module.label })}
+											{t(`modules.${module.id}`, {
+												defaultValue: module.label,
+											})}
 										</Text>
 									</div>
 								))}

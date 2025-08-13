@@ -64,7 +64,9 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
-						<DropdownMenu.Label className="shipSelection__header">Select Build</DropdownMenu.Label>
+						<DropdownMenu.Label className="shipSelection__header">
+							Select Build
+						</DropdownMenu.Label>
 						{builds.map((build, index) => (
 							<DropdownMenu.Item
 								className="font-medium"
@@ -130,7 +132,13 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 								}}
 							/>
 						</Callout.Text>
-						<div>{renderBuildButton({ mt: "0", mb: "1", className: "w-full justify-center" })}</div>
+						<div>
+							{renderBuildButton({
+								mt: "0",
+								mb: "1",
+								className: "w-full justify-center",
+							})}
+						</div>
 					</Callout.Root>
 				</>
 			)}

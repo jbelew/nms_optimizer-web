@@ -58,7 +58,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
 		const isTouchDevice =
-			typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+			typeof window !== "undefined" &&
+			("ontouchstart" in window || navigator.maxTouchPoints > 0);
 		const { tutorialFinished } = useDialog();
 
 		// Calculate derived values from the grid.
@@ -69,7 +70,9 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					return { firstInactiveRowIndex: -1, lastActiveRowIndex: -1 };
 				}
 				return {
-					firstInactiveRowIndex: grid.cells.findIndex((r) => r.every((cell) => !cell.active)),
+					firstInactiveRowIndex: grid.cells.findIndex((r) =>
+						r.every((cell) => !cell.active)
+					),
 					lastActiveRowIndex: grid.cells
 						.map((r) => r.some((cell) => cell.active))
 						.lastIndexOf(true),
@@ -99,7 +102,13 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 				/>
 
 				{!isLarge && (
-					<Separator size="4" color="cyan" orientation="horizontal" decorative className="mb-4" />
+					<Separator
+						size="4"
+						color="cyan"
+						orientation="horizontal"
+						decorative
+						className="mb-4"
+					/>
 				)}
 
 				<div
@@ -133,7 +142,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 									hasModulesInGrid={hasModulesInGrid}
 									// Use pre-calculated indices for these checks
 									isFirstInactiveRow={
-										row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
+										row.every((cell) => !cell.active) &&
+										rowIndex === firstInactiveRowIndex
 									}
 									isLastActiveRow={
 										row.some((cell) => cell.active) &&

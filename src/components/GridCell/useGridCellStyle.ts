@@ -41,7 +41,9 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const emptySvg = useMemo(() => emptySvgTemplate(fillColor), [fillColor]);
 
 	const techColor = useMemo(() => {
-		return !currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
+		return !currentTechColorFromStore && cell.supercharged
+			? "purple"
+			: currentTechColorFromStore;
 	}, [currentTechColorFromStore, cell.supercharged]);
 
 	const cellClassName = useMemo(() => {

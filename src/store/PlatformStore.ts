@@ -13,7 +13,9 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value
 	setSelectedPlatform: (platform, validShipTypes, updateUrl = true) => {
 		if (!validShipTypes.includes(platform)) {
-			console.warn(`Attempted to set invalid platform: ${platform}. Falling back to standard.`);
+			console.warn(
+				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
+			);
 			platform = "standard";
 		}
 		set({ selectedPlatform: platform });

@@ -70,12 +70,24 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			</h1>
 
 			<div className="m-1 mb-2 flex w-full items-center gap-2">
-				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
+				<Separator
+					size="1"
+					orientation="horizontal"
+					color="cyan"
+					decorative
+					className="flex-1"
+				/>
 				<RhombusIcon
 					className="h-4 w-4 flex-shrink-0 sm:h-4 sm:w-4"
 					style={{ color: "var(--accent-track)" }}
 				/>
-				<Separator size="1" orientation="horizontal" color="cyan" decorative className="flex-1" />
+				<Separator
+					size="1"
+					orientation="horizontal"
+					color="cyan"
+					decorative
+					className="flex-1"
+				/>
 				{/* Tooltip button absolutely positioned to the right */}
 			</div>
 

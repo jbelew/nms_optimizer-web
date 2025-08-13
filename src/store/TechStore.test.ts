@@ -5,11 +5,13 @@ import { useTechStore } from "./TechStore";
 describe("TechStore", () => {
 	beforeEach(() => {
 		// Reset the store before each test
-		useTechStore.setState({
-			tech: null,
-			error: null,
-			loading: false,
-		});
+		useTechStore.setState(() => ({
+			max_bonus: {},
+			solved_bonus: {},
+			solve_method: {},
+			techColors: {},
+			checkedModules: {}, // Add closing parenthesis here
+		}));
 	});
 
 	it("should have a default state", () => {

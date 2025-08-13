@@ -34,7 +34,12 @@ createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<BrowserRouter>
 			<ErrorBoundary>
-				<Theme appearance="dark" panelBackground="translucent" accentColor="cyan" grayColor="sage">
+				<Theme
+					appearance="dark"
+					panelBackground="translucent"
+					accentColor="cyan"
+					grayColor="sage"
+				>
 					<DialogProvider>
 						<App />
 					</DialogProvider>

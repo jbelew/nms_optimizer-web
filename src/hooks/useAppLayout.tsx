@@ -45,7 +45,9 @@ export const useAppLayout = (): AppLayout => {
 				}
 			}
 
-			setGridHeight((prevHeight) => (prevHeight !== newGridHeight ? newGridHeight : prevHeight));
+			setGridHeight((prevHeight) =>
+				prevHeight !== newGridHeight ? newGridHeight : prevHeight
+			);
 			setGridTableTotalWidth((prevWidth) =>
 				prevWidth !== newGridTableTotalWidth ? newGridTableTotalWidth : prevWidth
 			);

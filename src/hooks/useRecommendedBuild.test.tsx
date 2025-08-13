@@ -105,13 +105,24 @@ describe("useRecommendedBuild", () => {
 
 		mockGridContainerRef = { current: document.createElement("div") };
 		Object.defineProperty(mockGridContainerRef.current, "getBoundingClientRect", {
-			value: () => ({ top: 100, height: 0, width: 0, x: 0, y: 0, right: 0, bottom: 0, left: 0 }),
+			value: () => ({
+				top: 100,
+				height: 0,
+				width: 0,
+				x: 0,
+				y: 0,
+				right: 0,
+				bottom: 0,
+				left: 0,
+			}),
 			configurable: true,
 		});
 	});
 
 	it("should return applyRecommendedBuild function", () => {
-		const { result } = renderHook(() => useRecommendedBuild(mockTechTree, mockGridContainerRef));
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
 		expect(typeof result.current.applyRecommendedBuild).toBe("function");
 	});
 
@@ -131,12 +142,20 @@ describe("useRecommendedBuild", () => {
 				],
 				[
 					null,
-					{ tech: "shield", module: "X1", supercharged: false, active: true, adjacency_bonus: 0.0 },
+					{
+						tech: "shield",
+						module: "X1",
+						supercharged: false,
+						active: true,
+						adjacency_bonus: 0.0,
+					},
 				],
 			],
 		};
 
-		const { result } = renderHook(() => useRecommendedBuild(mockTechTree, mockGridContainerRef));
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
 
 		act(() => {
 			result.current.applyRecommendedBuild(mockBuild);
@@ -175,7 +194,9 @@ describe("useRecommendedBuild", () => {
 			layout: [[{ tech: "boltcaster", module: "S1" }]],
 		};
 
-		const { result } = renderHook(() => useRecommendedBuild(mockTechTree, mockGridContainerRef));
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
 
 		act(() => {
 			result.current.applyRecommendedBuild(mockBuild);
@@ -189,7 +210,9 @@ describe("useRecommendedBuild", () => {
 	});
 
 	it("should not apply build if build or layout is null", () => {
-		const { result } = renderHook(() => useRecommendedBuild(mockTechTree, mockGridContainerRef));
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
 
 		act(() => {
 			result.current.applyRecommendedBuild(null);
@@ -205,10 +228,14 @@ describe("useRecommendedBuild", () => {
 	it("should handle missing module in layout", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
-			layout: [[{ tech: "nonexistent", module: "module", supercharged: false, active: true }]],
+			layout: [
+				[{ tech: "nonexistent", module: "module", supercharged: false, active: true }],
+			],
 		};
 
-		const { result } = renderHook(() => useRecommendedBuild(mockTechTree, mockGridContainerRef));
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
 
 		act(() => {
 			result.current.applyRecommendedBuild(mockBuild);

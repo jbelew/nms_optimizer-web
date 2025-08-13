@@ -76,7 +76,9 @@ export const useGridCellInteraction = (
 				} else {
 					// Normal Click: Toggle Supercharged
 					const isInvalidSuperchargeToggle =
-						superchargedFixed || gridFixed || (totalSupercharged >= 4 && !cell.supercharged);
+						superchargedFixed ||
+						gridFixed ||
+						(totalSupercharged >= 4 && !cell.supercharged);
 					if (isInvalidSuperchargeToggle) {
 						triggerShake();
 					} else {
@@ -94,7 +96,9 @@ export const useGridCellInteraction = (
 				// Double tap
 				lastTapTime.current = 0; // Reset after double tap
 				const isInvalidDoubleTap =
-					superchargedFixed || gridFixed || (totalSupercharged >= 4 && !cell.supercharged);
+					superchargedFixed ||
+					gridFixed ||
+					(totalSupercharged >= 4 && !cell.supercharged);
 
 				if (isInvalidDoubleTap) {
 					triggerShake();

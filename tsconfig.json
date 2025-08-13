@@ -1,10 +1,22 @@
 {
 	"compilerOptions": {
-		"types": ["vite/client", "vitest"]
-		// It's good practice to define other root-level options if needed,
-		// but for now, let's just add types.
-		// Adding "skipLibCheck": true here might also be an option if errors persist in dependencies.
+		"baseUrl": "./src",
+		"target": "esnext",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
 	},
-	"files": [],
-	"references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+	"include": ["src"],
+	"exclude": ["node_modules", "**/tmp", "/tmp", "**/dist"]
 }

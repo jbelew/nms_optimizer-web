@@ -19,7 +19,12 @@ export const useRecommendedBuild = (
 			const categoryItems = techTree[category];
 			if (Array.isArray(categoryItems)) {
 				for (const tech of categoryItems) {
-					if (typeof tech === "object" && tech !== null && "key" in tech && "modules" in tech) {
+					if (
+						typeof tech === "object" &&
+						tech !== null &&
+						"key" in tech &&
+						"modules" in tech
+					) {
 						for (const module of (tech as TechTreeItem).modules) {
 							map.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
 						}
@@ -51,14 +56,19 @@ export const useRecommendedBuild = (
 						const cellData = layout[r][c];
 						if (cellData) {
 							// Initialize with empty cell, then apply specific overrides
-							let cell = createEmptyCell(cellData.supercharged ?? false, cellData.active ?? true);
+							let cell = createEmptyCell(
+								cellData.supercharged ?? false,
+								cellData.active ?? true
+							);
 
 							// Ensure tech and module are empty strings if not provided
 							cell.tech = cellData.tech ?? "";
 							cell.module = cellData.module ?? "";
 
 							if (cellData.tech && cellData.module) {
-								const module = modulesMap.get(`${cellData.tech}/${cellData.module}`);
+								const module = modulesMap.get(
+									`${cellData.tech}/${cellData.module}`
+								);
 								if (module) {
 									cell = {
 										...cell,
@@ -77,7 +87,9 @@ export const useRecommendedBuild = (
 							}
 							// Adjacency bonus is also from cellData, so it should be assigned outside the module check
 							cell.adjacency_bonus =
-								typeof cellData.adjacency_bonus === "number" ? cellData.adjacency_bonus : 0.0;
+								typeof cellData.adjacency_bonus === "number"
+									? cellData.adjacency_bonus
+									: 0.0;
 
 							newGrid.cells[r][c] = cell;
 						} else {

@@ -31,7 +31,13 @@ const ShipSelectionLoadingState = () => {
 	return (
 		<>
 			{isSmallAndUp ? (
-				<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2" disabled>
+				<Button
+					size="2"
+					variant="soft"
+					aria-label="Select ship type"
+					className="!p-2"
+					disabled
+				>
 					<Spinner size="3" />
 					<Separator orientation="vertical" color="gray" decorative />
 					<DropdownMenu.TriggerIcon />
@@ -99,19 +105,31 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger disabled={solving}>
 					{isSmallAndUp ? (
-						<Button size="2" variant="soft" aria-label="Select ship type" className="!p-2">
+						<Button
+							size="2"
+							variant="soft"
+							aria-label="Select ship type"
+							className="!p-2"
+						>
 							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 							<Separator orientation="vertical" color="cyan" decorative />
 							<DropdownMenu.TriggerIcon />
 						</Button>
 					) : (
-						<IconButton size="2" variant="soft" aria-label="Select ship type" className="!mt-1">
+						<IconButton
+							size="2"
+							variant="soft"
+							aria-label="Select ship type"
+							className="!mt-1"
+						>
 							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						</IconButton>
 					)}
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content className="shipSelection__dropdownMenu">
-					<DropdownMenu.Label className="shipSelection__header">Select Platform</DropdownMenu.Label>
+					<DropdownMenu.Label className="shipSelection__header">
+						Select Platform
+					</DropdownMenu.Label>
 					<ShipTypesDropdown
 						selectedShipType={selectedShipType}
 						handleOptionSelect={handleOptionSelect}

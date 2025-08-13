@@ -128,7 +128,10 @@ export const useSeoAndTitle = () => {
 			newHreflangUrls.set(lang, url.toString());
 
 			if (lang === defaultLanguage) {
-				const defaultUrl = new URL(location.pathname + location.search, window.location.origin);
+				const defaultUrl = new URL(
+					location.pathname + location.search,
+					window.location.origin
+				);
 				const defaultParams = defaultUrl.searchParams;
 				defaultParams.delete("platform");
 				defaultParams.delete("grid");

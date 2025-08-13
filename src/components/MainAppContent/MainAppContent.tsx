@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAppLayout } from "../../hooks/useAppLayout.tsx";
+import { useAppLayout } from "../../hooks/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize";
 import { useUrlSync } from "../../hooks/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
@@ -75,14 +75,21 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 					>
 						<header
 							className="heading-styled mb-3 flex flex-wrap items-center gap-2 text-xl sm:mb-4 sm:text-2xl"
-							style={{ maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined }}
+							style={{
+								maxWidth: gridTableTotalWidth
+									? `${gridTableTotalWidth}px`
+									: undefined,
+							}}
 						>
 							{!isSharedGrid && (
 								<span className="flex-shrink-0 self-start">
 									<ShipSelection solving={solving} />
 								</span>
 							)}
-							<span className="hidden self-start sm:inline" style={{ color: "var(--accent-11)" }}>
+							<span
+								className="hidden self-start sm:inline"
+								style={{ color: "var(--accent-11)" }}
+							>
 								{t("platformLabel")}
 							</span>
 							<span

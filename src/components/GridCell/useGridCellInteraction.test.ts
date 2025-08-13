@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
@@ -258,7 +258,10 @@ describe("useGridCellInteraction", () => {
 
 	it("should call handleClick on enter key down", () => {
 		const { result } = renderGridCellHook();
-		const mockEvent = { key: "Enter", preventDefault: vi.fn() } as unknown as React.KeyboardEvent;
+		const mockEvent = {
+			key: "Enter",
+			preventDefault: vi.fn(),
+		} as unknown as React.KeyboardEvent;
 		act(() => {
 			result.current.handleKeyDown(mockEvent);
 		});

@@ -252,7 +252,10 @@ describe("useOptimize", () => {
 			expect(result.current.solving).toBe(false);
 			expect(setShowErrorStoreMock).toHaveBeenCalledWith(true);
 			expect(setResultMock).toHaveBeenCalledWith(null, "techD");
-			expect(consoleErrorSpy).toHaveBeenCalledWith("Error during optimization:", expect.any(Error));
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				"Error during optimization:",
+				expect.any(Error)
+			);
 			expect(consoleErrorSpy.mock.calls[0][1].message).toContain(
 				"Optimization failed due to server error."
 			);
@@ -275,7 +278,10 @@ describe("useOptimize", () => {
 			expect(result.current.solving).toBe(false);
 			expect(setShowErrorStoreMock).toHaveBeenCalledWith(true);
 			expect(setResultMock).toHaveBeenCalledWith(null, "techE");
-			expect(consoleErrorSpy).toHaveBeenCalledWith("Error during optimization:", expect.any(Error));
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				"Error during optimization:",
+				expect.any(Error)
+			);
 			expect(consoleErrorSpy.mock.calls[0][1].message).toContain(
 				"Failed to fetch data: 400 Bad Request"
 			);
@@ -315,7 +321,10 @@ describe("useOptimize", () => {
 			expect(result.current.solving).toBe(false);
 			expect(setShowErrorStoreMock).toHaveBeenCalledWith(true);
 			expect(setResultMock).toHaveBeenCalledWith(null, "techG");
-			expect(consoleErrorSpy).toHaveBeenCalledWith("Error during optimization:", expect.any(Error));
+			expect(consoleErrorSpy).toHaveBeenCalledWith(
+				"Error during optimization:",
+				expect.any(Error)
+			);
 			expect(consoleErrorSpy.mock.calls[0][1].message).toContain(
 				"Invalid API response structure for successful optimization."
 			);
@@ -404,7 +413,16 @@ describe("useOptimize", () => {
 			// Attach a mock DOM element to the ref
 			const mockDiv = document.createElement("div");
 			Object.defineProperty(mockDiv, "getBoundingClientRect", {
-				value: () => ({ top: 100, height: 0, width: 0, x: 0, y: 0, right: 0, bottom: 0, left: 0 }),
+				value: () => ({
+					top: 100,
+					height: 0,
+					width: 0,
+					x: 0,
+					y: 0,
+					right: 0,
+					bottom: 0,
+					left: 0,
+				}),
 				configurable: true,
 			});
 			act(() => {

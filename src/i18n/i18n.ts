@@ -15,7 +15,14 @@ void i18n
 		fallbackLng: "en",
 		debug: process.env.NODE_ENV === "development",
 		detection: {
-			order: ["querystring", "cookie", "localStorage", "sessionStorage", "navigator", "htmlTag"],
+			order: [
+				"querystring",
+				"cookie",
+				"localStorage",
+				"sessionStorage",
+				"navigator",
+				"htmlTag",
+			],
 			caches: ["localStorage", "cookie"],
 		},
 		backend: {

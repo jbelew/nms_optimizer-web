@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
@@ -97,7 +97,10 @@ describe("useSeoAndTitle", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("My App");
@@ -111,7 +114,10 @@ describe("useSeoAndTitle", () => {
 					if (key === "dialogs.titles.instructions") return "Instructions";
 					return key;
 				}),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("Instructions - My App");
@@ -125,7 +131,10 @@ describe("useSeoAndTitle", () => {
 					if (key === "dialogs.titles.about") return "About";
 					return key;
 				}),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("About - My App");
@@ -139,7 +148,10 @@ describe("useSeoAndTitle", () => {
 					if (key === "dialogs.titles.changelog") return "Changelog";
 					return key;
 				}),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("Changelog - My App");
@@ -153,7 +165,10 @@ describe("useSeoAndTitle", () => {
 					if (key === "dialogs.titles.translationRequest") return "Translation Request";
 					return key;
 				}),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("Translation Request - My App");
@@ -163,7 +178,10 @@ describe("useSeoAndTitle", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/unknown", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
-				i18n: { language: "en-US", options: { supportedLngs: ["en"], fallbackLng: ["en"] } },
+				i18n: {
+					language: "en-US",
+					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
+				},
 			});
 			renderHook(() => useSeoAndTitle());
 			expect(document.title).toBe("My App");

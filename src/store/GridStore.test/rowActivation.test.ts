@@ -82,7 +82,9 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 			const originalOtherRows: Cell[][] = [];
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
-					originalOtherRows.push(JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r])));
+					originalOtherRows.push(
+						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r]))
+					);
 				}
 			}
 
@@ -137,7 +139,9 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 			const originalOtherRows: Cell[][] = [];
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
-					originalOtherRows.push(JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r])));
+					originalOtherRows.push(
+						JSON.parse(JSON.stringify(useGridStore.getState().grid.cells[r]))
+					);
 				}
 			}
 

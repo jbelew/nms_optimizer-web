@@ -42,7 +42,8 @@ class ErrorBoundary extends Component<Props, State> {
 			action: "ErrorBoundary Catch",
 			label: error.message,
 			nonInteraction: true,
-			componentStack: errorInfo.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
+			componentStack:
+				errorInfo.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
 			stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
 		});
 

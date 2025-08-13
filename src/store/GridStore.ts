@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { type Module } from "../hooks/useTechTree.tsx";
+import { type Module } from "../hooks/useTechTree";
 import { usePlatformStore } from "./PlatformStore";
 import { useTechStore } from "./TechStore";
 
@@ -224,7 +224,9 @@ export const useGridStore = create<GridStore>()(
 				state: GridStore,
 				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
 			) => {
-				const newCells: Cell[][] = definition.grid.map((row) => row.map(createCellFromModuleData));
+				const newCells: Cell[][] = definition.grid.map((row) =>
+					row.map(createCellFromModuleData)
+				);
 				state.grid.cells = newCells;
 				state.grid.width = newCells[0]?.length ?? 0;
 				state.grid.height = newCells.length;
@@ -438,7 +440,8 @@ export const useGridStore = create<GridStore>()(
 
 				setGridFixed: (fixed) => set({ gridFixed: fixed }),
 				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
-				setInitialGridDefinition: (definition) => set({ initialGridDefinition: definition }),
+				setInitialGridDefinition: (definition) =>
+					set({ initialGridDefinition: definition }),
 
 				setGridFromInitialDefinition: (definition) => {
 					set((state) => {
@@ -457,7 +460,8 @@ export const useGridStore = create<GridStore>()(
 									Object.assign(cell, {
 										active: moduleData.active ?? cell.active,
 										adjacency: moduleData.adjacency ?? cell.adjacency,
-										adjacency_bonus: moduleData.adjacency_bonus ?? cell.adjacency_bonus,
+										adjacency_bonus:
+											moduleData.adjacency_bonus ?? cell.adjacency_bonus,
 										bonus: moduleData.bonus ?? cell.bonus,
 										image: moduleData.image ?? cell.image,
 										module: moduleData.id ?? cell.module,
@@ -508,7 +512,8 @@ export const useGridStore = create<GridStore>()(
 					...stateFromStorage,
 					isSharedGrid: currentUrlHasGrid,
 					initialGridDefinition:
-						stateFromStorage.initialGridDefinition || currentState.initialGridDefinition,
+						stateFromStorage.initialGridDefinition ||
+						currentState.initialGridDefinition,
 				};
 			},
 		}

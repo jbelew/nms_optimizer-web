@@ -90,7 +90,9 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 					<ol className="list-decimal pl-6">{children}</ol>
 				</Box>
 			),
-			li: ({ children }: { children?: React.ReactNode }) => <li className="mb-1">{children}</li>,
+			li: ({ children }: { children?: React.ReactNode }) => (
+				<li className="mb-1">{children}</li>
+			),
 			code: ({ children }: { children?: React.ReactNode }) => (
 				<Code variant="soft">{children}</Code>
 			),
@@ -98,7 +100,9 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
 				<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
 			),
-			hr: () => <Separator size="4" color="cyan" orientation="horizontal" decorative mb="2" />,
+			hr: () => (
+				<Separator size="4" color="cyan" orientation="horizontal" decorative mb="2" />
+			),
 		}),
 		[]
 	);

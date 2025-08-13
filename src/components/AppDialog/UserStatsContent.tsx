@@ -93,7 +93,15 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 							outerRadius="100%"
 							paddingAngle={0}
 							dataKey="value"
-							label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+							label={({
+								cx,
+								cy,
+								midAngle,
+								innerRadius,
+								outerRadius,
+								percent,
+								name,
+							}) => {
 								const RADIAN = Math.PI / 180;
 								const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
 								const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
@@ -113,7 +121,9 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 											{name}
 										</tspan>
 										<tspan x={x} dy="1.2em">
-											{percent && percent * 100 >= 6 ? `${(percent * 100).toFixed(0)}%` : ""}
+											{percent && percent * 100 >= 6
+												? `${(percent * 100).toFixed(0)}%`
+												: ""}
 										</tspan>
 									</text>
 								);

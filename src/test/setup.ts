@@ -1,6 +1,6 @@
 // src/setup.ts
 
-import "@testing-library/jest-dom"; // Adds custom matchers like toBeInTheDocument()
+import "@testing-library/jest-dom"; // Adds custom matchers like toBeInTheDocument(
 
 import { vi } from "vitest";
 

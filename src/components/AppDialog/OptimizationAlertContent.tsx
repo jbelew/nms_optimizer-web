@@ -31,7 +31,12 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 					i18nKey="dialogs.optimizationAlert.insufficientSpace"
 					values={{ technologyName }}
 					components={{
-						1: <span className="font-bold uppercase" style={{ color: "var(--accent-11)" }} />,
+						1: (
+							<span
+								className="font-bold uppercase"
+								style={{ color: "var(--accent-11)" }}
+							/>
+						),
 					}}
 				/>
 			</Text>

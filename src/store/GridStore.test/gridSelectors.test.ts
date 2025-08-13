@@ -52,7 +52,9 @@ describe("Grid Store Selectors", () => {
 			expect(state.selectTotalSuperchargedCells()).toBe(0); // Initial check
 
 			const currentStoredGrid = useGridStore.getState().grid;
-			const modifiedCells = currentStoredGrid.cells.map((row) => row.map((cell) => ({ ...cell })));
+			const modifiedCells = currentStoredGrid.cells.map((row) =>
+				row.map((cell) => ({ ...cell }))
+			);
 			modifiedCells[0][0].supercharged = true;
 			const gridWithModification = { ...currentStoredGrid, cells: modifiedCells };
 			state.setGrid(gridWithModification);
@@ -68,7 +70,9 @@ describe("Grid Store Selectors", () => {
 			expect(state.selectTotalSuperchargedCells()).toBe(2); // Initial check
 
 			const currentStoredGrid = useGridStore.getState().grid;
-			const modifiedCells = currentStoredGrid.cells.map((row) => row.map((cell) => ({ ...cell })));
+			const modifiedCells = currentStoredGrid.cells.map((row) =>
+				row.map((cell) => ({ ...cell }))
+			);
 			modifiedCells[0][0].supercharged = false;
 			const gridWithModification = { ...currentStoredGrid, cells: modifiedCells };
 			state.setGrid(gridWithModification);

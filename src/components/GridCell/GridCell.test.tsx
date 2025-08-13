@@ -2,9 +2,10 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useGridStore } from "../../store/GridStore";
+import { TechState, useTechStore } from "../../store/TechStore";
 // Import the component after mocks are defined
 import GridCell from "./GridCell";
 
@@ -30,12 +31,12 @@ vi.mock("../../store/ShakeStore", () => ({
 }));
 
 vi.mock("../../store/TechStore", () => ({
-	useTechStore: vi.fn((selector) => selector({ getTechColor: vi.fn(() => "blue") })),
+	useTechStore: vi.fn(),
 }));
 
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key, options) => options?.defaultValue || key,
+		t: (key: string, options?: { defaultValue?: string }) => options?.defaultValue || key,
 	}),
 }));
 
@@ -60,15 +61,40 @@ describe("GridCell", () => {
 		};
 
 		// Mock useGridStore to return a specific cell state and actions
-		(useGridStore as unknown as vi.Mock).mockImplementation((selector) => {
-			const state = {
-				grid: { cells: [[mockCellState]] },
-				selectTotalSuperchargedCells: vi.fn(() => 0),
-				superchargedFixed: false,
-				gridFixed: false,
-			};
-			return selector(state);
-		});
+		(useGridStore as unknown as Mock).mockImplementation(
+			(selector: (state: unknown) => unknown) => {
+				const state = {
+					grid: { cells: [[mockCellState]] },
+					selectTotalSuperchargedCells: vi.fn(() => 0),
+					superchargedFixed: false,
+					gridFixed: false,
+				};
+				return selector(state);
+			}
+		);
+
+		(useTechStore as unknown as Mock).mockImplementation(
+			(selector: (state: TechState) => unknown) => {
+				const state: TechState = {
+					max_bonus: {},
+					solved_bonus: {},
+					solve_method: {},
+					techColors: {},
+					checkedModules: {},
+					clearTechMaxBonus: vi.fn(),
+					setTechMaxBonus: vi.fn(),
+					clearTechSolvedBonus: vi.fn(),
+					setTechSolvedBonus: vi.fn(),
+					setTechSolveMethod: vi.fn(),
+					setTechColors: vi.fn(),
+					getTechColor: vi.fn(() => "blue"),
+					setCheckedModules: vi.fn(),
+					clearCheckedModules: vi.fn(),
+					clearResult: vi.fn(),
+				};
+				return selector(state);
+			}
+		);
 	});
 
 	const renderComponent = (cellOverrides = {}, props = {}) => {

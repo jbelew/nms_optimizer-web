@@ -1,5 +1,5 @@
 import { act } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createEmptyCell, createGrid, useGridStore } from "../GridStore";
 

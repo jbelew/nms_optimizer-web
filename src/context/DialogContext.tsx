@@ -50,7 +50,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	}, [location.pathname]);
 
 	const openDialog = useCallback(
-		(dialog: NonNullable<DialogType> | null, data?: { shareUrl?: string; section?: string }) => {
+		(
+			dialog: NonNullable<DialogType> | null,
+			data?: { shareUrl?: string; section?: string }
+		) => {
 			if (data?.shareUrl) {
 				setShareUrl(data.shareUrl);
 			} else {

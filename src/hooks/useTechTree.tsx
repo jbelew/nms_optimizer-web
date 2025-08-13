@@ -117,13 +117,15 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 			console.log("Fetched tech tree:", data);
 
 			if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
-				data.recommended_builds = data.recommended_builds.filter((build: RecommendedBuild) => {
-					if (!isValidRecommendedBuild(build)) {
-						console.error("Invalid recommended build found in tech tree:", build);
-						return false;
+				data.recommended_builds = data.recommended_builds.filter(
+					(build: RecommendedBuild) => {
+						if (!isValidRecommendedBuild(build)) {
+							console.error("Invalid recommended build found in tech tree:", build);
+							return false;
+						}
+						return true;
 					}
-					return true;
-				});
+				);
 			}
 			return data;
 		});
@@ -138,7 +140,9 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	const techTree = fetchTechTree(shipType).read();
 	const setTechColors = useTechStore((state) => state.setTechColors);
 	const setInitialGridDefinition = useGridStore((state) => state.setInitialGridDefinition);
-	const setGridFromInitialDefinition = useGridStore((state) => state.setGridFromInitialDefinition);
+	const setGridFromInitialDefinition = useGridStore(
+		(state) => state.setGridFromInitialDefinition
+	);
 
 	useEffect(() => {
 		const colors: { [key: string]: string } = {};

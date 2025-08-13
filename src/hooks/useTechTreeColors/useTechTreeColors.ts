@@ -18,7 +18,9 @@ export const useTechTreeColors = () => {
 				]);
 
 				if (!starshipResponse.ok) {
-					throw new Error(`HTTP error! status: ${starshipResponse.status} for standard tech tree`);
+					throw new Error(
+						`HTTP error! status: ${starshipResponse.status} for standard tech tree`
+					);
 				}
 				if (!multitoolResponse.ok) {
 					throw new Error(

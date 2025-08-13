@@ -73,7 +73,11 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 					</h2>
 				</div>
 
-				<Separator orientation="horizontal" size="4" className="sidebar__separator mt-2 mb-4" />
+				<Separator
+					orientation="horizontal"
+					size="4"
+					className="sidebar__separator mt-2 mb-4"
+				/>
 
 				{/* Render each technology as a TechTreeRow */}
 				{technologies.map((tech) => {

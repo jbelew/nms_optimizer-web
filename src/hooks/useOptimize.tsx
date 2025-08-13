@@ -111,7 +111,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 					...grid,
 					cells: grid.cells.map((row) =>
 						row.map((cell) =>
-							cell.tech === tech ? { ...createEmptyCell(cell.supercharged, cell.active) } : cell
+							cell.tech === tech
+								? { ...createEmptyCell(cell.supercharged, cell.active) }
+								: cell
 						)
 					),
 				};
@@ -170,7 +172,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 						console.log("Response from API:", data);
 						const gaTech =
-							tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
+							tech === "pulse" && checkedModules[tech]?.includes("PC")
+								? "photonix"
+								: tech;
 						sendEvent({
 							category: "User Interactions",
 							action: "optimize_tech",
@@ -178,7 +182,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 							tech: gaTech,
 							solve_method: data.solve_method,
 							value: 1,
-							supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
+							supercharged:
+								typeof data.max_bonus === "number" && data.max_bonus > 100,
 						});
 					}
 				} else {

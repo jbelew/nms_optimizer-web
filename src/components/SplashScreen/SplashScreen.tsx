@@ -14,7 +14,9 @@ interface SplashScreenProps {
 
 const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 	({ minDurationMs = 0, onHidden }, ref) => {
-		const [status, setStatus] = useState<"pending" | "visible" | "hiding" | "hidden">("pending");
+		const [status, setStatus] = useState<"pending" | "visible" | "hiding" | "hidden">(
+			"pending"
+		);
 		const elementRef = useRef<HTMLDivElement>(null);
 		const renderedAtRef = useRef<number>(0);
 		const cssBlock = "SplashScreen"; // BEM Block name, also used for URL param
@@ -60,14 +62,20 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 					if (event.animationName === `${cssBlock}-hide`) {
 						setStatus("hidden");
 						onHidden?.();
-						element.removeEventListener("animationend", handleAnimationEnd as EventListener);
+						element.removeEventListener(
+							"animationend",
+							handleAnimationEnd as EventListener
+						);
 					}
 				};
 				element.addEventListener("animationend", handleAnimationEnd as EventListener);
 				element.classList.add(`${cssBlock}--hidden`); // Trigger animation
 
 				return () => {
-					element.removeEventListener("animationend", handleAnimationEnd as EventListener);
+					element.removeEventListener(
+						"animationend",
+						handleAnimationEnd as EventListener
+					);
 				};
 			}
 			return;

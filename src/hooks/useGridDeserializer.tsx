@@ -141,7 +141,9 @@ export const deserialize = async (
 				moduleMapString,
 			].some((part) => part === undefined)
 		) {
-			console.error("Invalid serialized grid format. Missing parts. Skipping deserialization.");
+			console.error(
+				"Invalid serialized grid format. Missing parts. Skipping deserialization."
+			);
 			return null;
 		}
 
@@ -198,7 +200,11 @@ export const deserialize = async (
 			const techTreeItems = techTreeData[techCategory];
 			if (Array.isArray(techTreeItems)) {
 				for (const techTreeItem of techTreeItems) {
-					if (typeof techTreeItem === "object" && techTreeItem !== null && "key" in techTreeItem) {
+					if (
+						typeof techTreeItem === "object" &&
+						techTreeItem !== null &&
+						"key" in techTreeItem
+					) {
 						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
 						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
 						for (const module of (techTreeItem as TechTreeItem).modules) {

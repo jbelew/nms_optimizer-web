@@ -56,7 +56,9 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 		const promise = fetch(`${API_URL}platforms`)
 			.then((res) => {
 				if (!res.ok) {
-					console.error(`HTTP error fetching ship types: ${res.status} ${res.statusText}`);
+					console.error(
+						`HTTP error fetching ship types: ${res.status} ${res.statusText}`
+					);
 					throw new Error(`HTTP error! status: ${res.status}`);
 				}
 				return res.json();

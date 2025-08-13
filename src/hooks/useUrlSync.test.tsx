@@ -80,7 +80,11 @@ describe("useUrlSync", () => {
 			"new-platform": { label: "New Platform", type: "Starship" },
 		});
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
-		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform", ["new-platform"], false);
+		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
+			"new-platform",
+			["new-platform"],
+			false
+		);
 	});
 
 	it("should handle popstate events", () => {
@@ -92,6 +96,10 @@ describe("useUrlSync", () => {
 		});
 
 		expect(mockDeserializeGrid).toHaveBeenCalledWith("new-serialized-grid");
-		expect(mockSetSelectedPlatform).toHaveBeenCalledWith("new-platform", ["test-platform"], false);
+		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
+			"new-platform",
+			["test-platform"],
+			false
+		);
 	});
 });

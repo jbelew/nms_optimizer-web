@@ -68,7 +68,9 @@ const AppDialog: React.FC<AppDialogProps> = ({
 					<Dialog.Content className="appDialog__content">
 						<Dialog.Title className="mr-2">
 							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
-								{IconComponent && <IconComponent className="inline h-6 w-6" style={style} />}
+								{IconComponent && (
+									<IconComponent className="inline h-6 w-6" style={style} />
+								)}
 								{titleKey ? t(titleKey) : title}
 							</span>
 							<Separator mt="2" size="4" orientation="horizontal" decorative />

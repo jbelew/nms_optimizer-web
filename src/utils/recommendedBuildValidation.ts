@@ -48,7 +48,11 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 					return false;
 				}
 				// Check for optional properties and their types
-				if ("tech" in cellData && typeof cellData.tech !== "string" && cellData.tech !== null) {
+				if (
+					"tech" in cellData &&
+					typeof cellData.tech !== "string" &&
+					cellData.tech !== null
+				) {
 					console.error(
 						"Validation Error: RecommendedBuild layout cell 'tech' property is not a string or null. Cell data:",
 						cellData

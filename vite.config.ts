@@ -2,14 +2,11 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
-import critical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import { splashScreen } from "vite-plugin-splash-screen";
 
-import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
-import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
 // Function to read version from package.json
 function getAppVersion() {
@@ -28,8 +25,7 @@ function getAppVersion() {
 	return "unknown"; // Fallback version
 }
 
-export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical" // || mode === "production";
+export default defineConfig(({ }) => {
 	// const doCritical = mode === "critical"
 	const appVersion = getAppVersion();
 
@@ -47,24 +43,6 @@ export default defineConfig(({ mode }) => {
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			...(doCritical
-				? [
-					deferStylesheetsPlugin(),
-					critical({
-						criticalBase: "dist/",
-						criticalUrl: "https://nms-optimizer.app",
-						criticalPages: [{ uri: "/", template: "index" }],
-						criticalConfig: {
-							inline: false,
-							base: "dist/",
-							extract: false,
-							width: 375,
-							height: 667,
-						},
-					}),
-				]
-				: []),
-
 			compression({
 				algorithm: "brotliCompress",
 				ext: ".br",
@@ -77,14 +55,6 @@ export default defineConfig(({ mode }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-
-			// Conditionally apply defer and critical plugins
-			...(doCritical
-				? [
-					inlineCriticalCssPlugin()
-				]
-				: []),
-
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
 		],
 
@@ -160,6 +130,13 @@ export default defineConfig(({ mode }) => {
 				},
 			},
 		},
+
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: '.vitest/setup',
+    include: ['**/test.{ts,tsx}']
+  }
 
 	};
 });
