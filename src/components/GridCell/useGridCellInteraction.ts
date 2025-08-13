@@ -7,6 +7,24 @@ import { useShakeStore } from "../../store/ShakeStore";
 // DEV FLAG: Set to true to make mouse clicks behave like touch taps for testing.
 const MOUSE_AS_TAP_ENABLED = false;
 
+/**
+ * Custom hook for handling user interactions (clicks, touches, keyboard) with a grid cell.
+ * It manages single tap, double tap, and keyboard interactions, and integrates with
+ * the grid and shake stores to update cell states and trigger visual feedback.
+ *
+ * @param {Cell} cell - The cell object representing the current grid cell.
+ * @param {number} rowIndex - The row index of the cell.
+ * @param {number} columnIndex - The column index of the cell.
+ * @param {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
+ * @returns {{
+ *   isTouching: boolean;
+ *   handleClick: (event: React.MouseEvent) => void;
+ *   handleContextMenu: (event: React.MouseEvent) => void;
+ *   handleTouchStart: () => void;
+ *   handleTouchEnd: () => void;
+ *   handleKeyDown: (event: React.KeyboardEvent) => void;
+ * }} An object containing interaction handlers and the `isTouching` state.
+ */
 export const useGridCellInteraction = (
 	cell: Cell,
 	rowIndex: number,
@@ -34,11 +52,19 @@ export const useGridCellInteraction = (
 	const lastTapTime = useRef(0);
 	const isTouchInteraction = useRef(false);
 
+	/**
+	 * Handles the touch start event for a grid cell.
+	 * Sets `isTouchInteraction` to true and `isTouching` to true.
+	 */
 	const handleTouchStart = useCallback(() => {
 		isTouchInteraction.current = true;
 		setIsTouching(true);
 	}, []);
 
+	/**
+	 * Handles the touch end event for a grid cell.
+	 * Sets `isTouching` to false and resets `isTouchInteraction` after a short delay.
+	 */
 	const handleTouchEnd = useCallback(() => {
 		setIsTouching(false);
 		// Reset after a short delay. onClick fires after onTouchEnd.
@@ -47,6 +73,10 @@ export const useGridCellInteraction = (
 		}, 200);
 	}, []);
 
+	/**
+	 * Triggers a visual shake animation on the grid.
+	 * Sets `setShaking` to true and then to false after a 500ms timeout.
+	 */
 	const triggerShake = useCallback(() => {
 		setShaking(true);
 		if (shakeTimeoutRef.current) {

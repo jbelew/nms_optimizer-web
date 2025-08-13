@@ -74,6 +74,12 @@ export interface TechTreeRowProps {
 		| "sky";
 }
 
+/**
+ * Rounds a number to a specified number of decimal places.
+ * @param {number} value - The number to round.
+ * @param {number} decimals - The number of decimal places.
+ * @returns {number} The rounded number.
+ */
 function round(value: number, decimals: number) {
 	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
 }
