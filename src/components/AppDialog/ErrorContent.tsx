@@ -7,6 +7,14 @@ interface ErrorContentProps {
 	onClose: () => void;
 }
 
+/**
+ * ErrorContent component displays an error message and provides a link to report issues.
+ * It is typically used within a dialog.
+ *
+ * @param {ErrorContentProps} props - The props for the ErrorContent component.
+ * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
+ * @returns {JSX.Element} The rendered ErrorContent component.
+ */
 const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
 	return (

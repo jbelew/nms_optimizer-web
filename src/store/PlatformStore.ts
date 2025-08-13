@@ -1,7 +1,7 @@
 // src/store/PlatformStore.ts
 import { create } from "zustand";
 
-interface PlatformState {
+export interface PlatformState {
 	selectedPlatform: string;
 	setSelectedPlatform: (platform: string, validShipTypes: string[], updateUrl?: boolean) => void;
 	initializePlatform: (validShipTypes: string[]) => void;

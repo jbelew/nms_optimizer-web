@@ -3,6 +3,11 @@ import { useMemo } from "react";
 
 import { useTechStore } from "../../store/TechStore";
 
+/**
+ * Generates an SVG string for an empty grid cell with a specified fill color.
+ * @param {string} fillColor - The fill color for the SVG.
+ * @returns {string} The data URI for the SVG image.
+ */
 const emptySvgTemplate = (fillColor: string) =>
 	`data:image/svg+xml;utf8,${encodeURIComponent(`<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
@@ -34,6 +39,14 @@ fill="${fillColor}" stroke="none">
 </g>
 </svg>`)}`;
 
+/**
+ * Custom hook for determining the styling of a grid cell.
+ * Calculates `techColor`, `cellClassName`, and `cellElementStyle` based on cell properties.
+ *
+ * @param {Cell} cell - The grid cell object.
+ * @param {boolean} isTouching - Indicates if the cell is currently being touched (for touch devices).
+ * @returns {{ techColor: string | undefined; cellClassName: string; cellElementStyle: React.CSSProperties; }} Styling properties for the grid cell.
+ */
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
 	const fillColor = cell.supercharged ? "#C150FF2D" : "#00BEFD28";

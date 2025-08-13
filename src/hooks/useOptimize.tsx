@@ -22,6 +22,12 @@ interface ApiErrorData {
 	message?: string;
 }
 
+/**
+ * Type guard to check if a given value is of type ApiErrorData.
+ *
+ * @param {unknown} value - The value to check.
+ * @returns {value is ApiErrorData} True if the value is ApiErrorData, false otherwise.
+ */
 function isApiErrorData(value: unknown): value is ApiErrorData {
 	if (typeof value === "object" && value !== null) {
 		const potential = value as { message?: unknown };
@@ -30,6 +36,12 @@ function isApiErrorData(value: unknown): value is ApiErrorData {
 	return false;
 }
 
+/**
+ * Type guard to check if a given value is of type ApiResponse.
+ *
+ * @param {unknown} value - The value to check.
+ * @returns {value is ApiResponse} True if the value is ApiResponse, false otherwise.
+ */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) {
 		return false;
@@ -62,6 +74,12 @@ function isApiResponse(value: unknown): value is ApiResponse {
 	return true;
 }
 
+/**
+ * Custom hook for managing optimization logic, including API calls, state management,
+ * and integration with other stores.
+ *
+ * @returns {UseOptimizeReturn} An object containing optimization state and handlers.
+ */
 export const useOptimize = (): UseOptimizeReturn => {
 	const { setGrid, setResult, grid } = useGridStore();
 	const [solving, setSolving] = useState<boolean>(false);
@@ -81,6 +99,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const element = gridContainerRef.current;
 			const offset = 8;
 
+			/**
+			 * Scrolls the grid container into view with a smooth behavior.
+			 */
 			const scrollIntoView = () => {
 				const elementRect = element.getBoundingClientRect();
 				const absoluteElementTop = elementRect.top + window.pageYOffset;
@@ -97,6 +118,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 		}
 	}, [isLarge, solving]);
 
+	/**
+	 * Handles the optimization process, making an API call and updating the grid state.
+	 *
+	 * @param {string} tech - The technology to optimize.
+	 * @param {boolean} [forced=false] - Whether the optimization is forced (e.g., after a PNF).
+	 */
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
 			setSolving(true);
@@ -210,10 +237,16 @@ export const useOptimize = (): UseOptimizeReturn => {
 		]
 	);
 
+	/**
+	 * Clears the patternNoFitTech state.
+	 */
 	const clearPatternNoFitTech = useCallback(() => {
 		setPatternNoFitTech(null);
 	}, [setPatternNoFitTech]);
 
+	/**
+	 * Forces optimization for the current patternNoFitTech if it is set.
+	 */
 	const handleForceCurrentPnfOptimize = useCallback(async () => {
 		if (patternNoFitTech) {
 			await handleOptimize(patternNoFitTech, true);

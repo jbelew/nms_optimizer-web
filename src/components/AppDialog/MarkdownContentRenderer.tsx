@@ -10,6 +10,15 @@ interface MarkdownContentRendererProps {
 	targetSectionId?: string;
 }
 
+/**
+ * MarkdownContentRenderer component fetches and renders markdown content.
+ * It also handles scrolling to a specific section if `targetSectionId` is provided.
+ *
+ * @param {MarkdownContentRendererProps} props - The props for the MarkdownContentRenderer component.
+ * @param {string} props.markdownFileName - The name of the markdown file to fetch.
+ * @param {string} [props.targetSectionId] - The ID of the section to scroll to after rendering.
+ * @returns {JSX.Element} The rendered MarkdownContentRenderer component.
+ */
 const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,

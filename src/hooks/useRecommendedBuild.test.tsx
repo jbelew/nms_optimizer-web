@@ -17,6 +17,9 @@ vi.mock("../store/GridStore", () => ({
 	}),
 }));
 
+/**
+ * Test suite for the `useRecommendedBuild` hook.
+ */
 describe("useRecommendedBuild", () => {
 	let setGridAndResetAuxiliaryStateMock: Mock;
 	let scrollToMock: Mock;
@@ -24,6 +27,9 @@ describe("useRecommendedBuild", () => {
 	let mockTechTree: TechTree;
 	let mockGridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 
+	/**
+	 * Sets up mocks and initializes test environment before each test.
+	 */
 	beforeEach(() => {
 		vi.clearAllMocks();
 
@@ -132,6 +138,9 @@ describe("useRecommendedBuild", () => {
 		});
 	});
 
+	/**
+	 * Verifies that the `applyRecommendedBuild` function is returned by the hook.
+	 */
 	it("should return applyRecommendedBuild function", () => {
 		const { result } = renderHook(() =>
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
@@ -139,6 +148,9 @@ describe("useRecommendedBuild", () => {
 		expect(typeof result.current.applyRecommendedBuild).toBe("function");
 	});
 
+	/**
+	 * Tests that a recommended build is correctly applied to the grid.
+	 */
 	it("should apply a recommended build and set the grid", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
@@ -201,6 +213,9 @@ describe("useRecommendedBuild", () => {
 		);
 	});
 
+	/**
+	 * Verifies that the grid container scrolls into view after applying a build.
+	 */
 	it("should scroll to grid container after applying build", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
@@ -222,6 +237,9 @@ describe("useRecommendedBuild", () => {
 		});
 	});
 
+	/**
+	 * Ensures that no build is applied if the provided build or layout is null or empty.
+	 */
 	it("should not apply build if build or layout is null", () => {
 		const { result } = renderHook(() =>
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
@@ -233,6 +251,9 @@ describe("useRecommendedBuild", () => {
 		expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
 	});
 
+	/**
+	 * Tests the handling of missing modules within the recommended build layout.
+	 */
 	it("should handle missing module in layout", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",

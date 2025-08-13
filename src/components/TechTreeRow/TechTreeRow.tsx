@@ -15,7 +15,7 @@ import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/th
 import { Accordion } from "radix-ui";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint"; // This line is already present and correct
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
@@ -318,7 +318,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	TechInfoBadges.displayName = "TechInfoBadges";
 
 	return (
-		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
+		<div className="flex gap-2 mt-2 mb-2 ml-0 mr-1 items-top optimizationButton sm:ml-1">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
 				<IconButton
@@ -359,7 +359,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			{hasRewardModules ? (
 				<>
 					<Accordion.Root
-						className="AccordionRoot flex-1 border-b-1 pt-1 pb-1"
+						className="flex-1 pt-1 pb-1 AccordionRoot border-b-1"
 						style={{ borderColor: "var(--accent-track)" }}
 						type="single"
 						collapsible
@@ -375,11 +375,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 									{translatedTechName}
 								</Text>
 							</AccordionTrigger>
-							<Accordion.Content className="AccordionContent pl-1">
+							<Accordion.Content className="pl-1 AccordionContent">
 								{rewardModules.map((module) => (
 									<div
 										key={module.id}
-										className="AccordionContentText flex items-start gap-2"
+										className="flex items-start gap-2 AccordionContentText"
 									>
 										<Checkbox
 											className="CheckboxRoot ml-1 !pt-1"
@@ -423,7 +423,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						weight="medium"
 						size={isSmallAndUp ? "3" : "2"}
 						htmlFor={tech}
-						className="techRow__label block flex-1 pt-1"
+						className="flex-1 block pt-1 techRow__label"
 					>
 						{translatedTechName}
 					</Text>

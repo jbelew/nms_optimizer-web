@@ -22,12 +22,18 @@ vi.mock("react-router-dom", async () => {
 	};
 });
 
+/**
+ * Test suite for the `useUrlSync` hook.
+ */
 describe("useUrlSync", () => {
 	const mockSetIsSharedGrid = vi.fn();
 	const mockSetSelectedPlatform = vi.fn();
 	const mockSerializeGrid = vi.fn();
 	const mockDeserializeGrid = vi.fn();
 
+	/**
+	 * Sets up mocks and initializes test environment before each test.
+	 */
 	beforeEach(() => {
 		vi.clearAllMocks();
 		window.history.pushState({}, "", "/");
@@ -40,6 +46,7 @@ describe("useUrlSync", () => {
 			const state = {
 				selectedPlatform: "test-platform",
 				setSelectedPlatform: mockSetSelectedPlatform,
+				initializePlatform: vi.fn(), // Add this line
 			};
 			return selector(state);
 		});
@@ -52,6 +59,9 @@ describe("useUrlSync", () => {
 		});
 	});
 
+	/**
+	 * Verifies that the URL is correctly updated for sharing a grid.
+	 */
 	it("should update URL for sharing", () => {
 		mockSerializeGrid.mockReturnValue("serialized-grid");
 		const { result } = renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
@@ -61,6 +71,9 @@ describe("useUrlSync", () => {
 		expect(url.searchParams.get("platform")).toBe("test-platform");
 	});
 
+	/**
+	 * Verifies that the URL is correctly updated for resetting the grid.
+	 */
 	it("should update URL for reset", () => {
 		window.history.pushState({}, "", "/?grid=some-grid&platform=test-platform");
 		const { result } = renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
@@ -68,12 +81,18 @@ describe("useUrlSync", () => {
 		expect(mockNavigate).toHaveBeenCalledWith("/?platform=test-platform", { replace: true });
 	});
 
+	/**
+	 * Tests that the grid is deserialized from the URL on initial load.
+	 */
 	it("should deserialize grid from URL on initial load", () => {
 		window.history.pushState({}, "", "/?grid=serialized-grid&platform=test-platform");
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
 		expect(mockDeserializeGrid).toHaveBeenCalledWith("serialized-grid");
 	});
 
+	/**
+	 * Tests that the platform is set from the URL on initial load.
+	 */
 	it("should set platform from URL on initial load", () => {
 		window.history.pushState({}, "", "/?grid=serialized-grid&platform=new-platform");
 		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
@@ -87,6 +106,9 @@ describe("useUrlSync", () => {
 		);
 	});
 
+	/**
+	 * Tests that the hook correctly handles popstate events (browser history navigation).
+	 */
 	it("should handle popstate events", () => {
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
 

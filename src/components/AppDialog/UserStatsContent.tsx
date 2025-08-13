@@ -15,6 +15,14 @@ interface UserStatsContentProps {
 	onClose: () => void;
 }
 
+/**
+ * UserStatsContent component displays user statistics related to starship and multi-tool technologies.
+ * It fetches data, aggregates it, and renders pie charts.
+ *
+ * @param {UserStatsContentProps} props - The props for the UserStatsContent component.
+ * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
+ * @returns {JSX.Element} The rendered UserStatsContent component.
+ */
 export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
 	const { data, loading, error } = useUserStats();
@@ -23,6 +31,15 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
 
+	/**
+	 * Aggregates raw user statistics data for charting.
+	 * Filters data by ship type, corrects technology names, and groups by technology,
+	 * combining less frequent technologies into an "other" category.
+	 *
+	 * @param {UserStat[] | null} rawData - The raw user statistics data.
+	 * @param {string[]} shipTypes - An array of ship types to filter by.
+	 * @returns {{ name: string; value: number }[]} Aggregated data suitable for charting.
+	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
 
@@ -68,6 +85,13 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 		return aboveThreshold;
 	};
 
+	/**
+	 * Renders a pie chart based on the provided data.
+	 *
+	 * @param {{ name: string; value: number }[]} chartData - The data to be displayed in the chart.
+	 * @param {string} titleKey - The translation key for the chart title.
+	 * @returns {JSX.Element} The rendered chart component.
+	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {
 			return <Text>{t("dialogs.userStats.noDataForChart")}</Text>;

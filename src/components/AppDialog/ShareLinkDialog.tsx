@@ -11,6 +11,17 @@ interface ShareLinkDialogProps {
 	onClose: () => void;
 }
 
+/**
+ * ShareLinkDialog component displays a dialog for sharing a link.
+ * It uses the `AppDialog` component to render the dialog and `ShareLinkContent`
+ * to display the shareable URL and related actions.
+ *
+ * @param {ShareLinkDialogProps} props - The props for the ShareLinkDialog component.
+ * @param {boolean} props.isOpen - Controls the visibility of the dialog.
+ * @param {string} props.shareUrl - The URL to be shared.
+ * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
+ * @returns {JSX.Element} The rendered ShareLinkDialog component.
+ */
 const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }) => {
 	const { t } = useTranslation();
 

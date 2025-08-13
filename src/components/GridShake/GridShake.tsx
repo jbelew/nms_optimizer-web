@@ -9,6 +9,16 @@ interface ShakingWrapperProps {
 	duration: number;
 }
 
+/**
+ * ShakingWrapper component applies a shaking animation to its children when the `shaking` prop is true.
+ * The shaking effect lasts for a specified `duration`.
+ *
+ * @param {ShakingWrapperProps} props - The props for the ShakingWrapper component.
+ * @param {boolean} props.shaking - If true, the component will shake.
+ * @param {React.ReactNode} props.children - The content to be rendered inside the shaking wrapper.
+ * @param {number} props.duration - The duration of the shaking animation in milliseconds.
+ * @returns {JSX.Element} The rendered ShakingWrapper component.
+ */
 const ShakingWrapper: React.FC<ShakingWrapperProps> = ({ shaking, children, duration }) => {
 	const [isShaking, setIsShaking] = React.useState(false);
 

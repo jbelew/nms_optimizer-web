@@ -11,10 +11,22 @@ interface ShareLinkContentProps {
 	onClose: () => void;
 }
 
+/**
+ * ShareLinkContent component displays a shareable URL and provides options to copy it or open it in a new tab.
+ *
+ * @param {ShareLinkContentProps} props - The props for the ShareLinkContent component.
+ * @param {string} props.shareUrl - The URL to be shared.
+ * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
+ * @returns {JSX.Element} The rendered ShareLinkContent component.
+ */
 export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose }) => {
 	const { t } = useTranslation();
 	const [copied, setCopied] = useState(false);
 
+	/**
+	 * Handles the click event for the copy button.
+	 * Copies the `shareUrl` to the clipboard and provides visual feedback.
+	 */
 	const handleCopyClick = async () => {
 		try {
 			await navigator.clipboard.writeText(shareUrl);

@@ -1,22 +1,24 @@
+import type { Mock, MockInstance } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, type Mock, vi, type MockInstance } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { API_URL } from "../constants";
 import { useGridStore } from "../store/GridStore";
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { usePlatformStore } from "../store/PlatformStore";
 import { useTechStore } from "../store/TechStore";
-import { useAnalytics } from "./useAnalytics/useAnalytics";
 import { useBreakpoint } from "./useBreakpoint";
+
 import { useOptimize } from "./useOptimize";
+import { useAnalytics } from "./useAnalytics/useAnalytics";
 
 // Mock all external dependencies
 vi.mock("./useAnalytics/useAnalytics");
 vi.mock("../store/GridStore");
 vi.mock("../store/OptimizeStore");
 vi.mock("../store/TechStore");
-vi.mock("../store/PlatformStore");
-vi.mock("./useBreakpoint");
+vi.mock("../store/PlatformStore"); // This line is already present and correct
+vi.mock("../useBreakpoint", () => ({ useBreakpoint: vi.fn(() => mockUseBreakpointReturnValue) }));
 vi.mock("../constants", () => ({
 	API_URL: "http://mock-api.com/",
 }));
@@ -28,6 +30,7 @@ const mockUseGridStoreSetResult = vi.fn();
 const mockUseOptimizeStoreSetShowError = vi.fn();
 const mockUseOptimizeStoreSetPatternNoFitTech = vi.fn();
 const mockUseTechStoreCheckedModules = {}; // This is a value, not a function
+const mockUseBreakpoint = useBreakpoint as unknown as Mock;
 const mockUsePlatformStoreReturnValue = "standard"; // This is a value, not a function
 const mockUseBreakpointReturnValue = true; // This is a value, not a function
 const mockWindowScrollTo = vi.fn();
@@ -36,17 +39,21 @@ const mockWindowCancelAnimationFrame = vi.fn();
 const mockConsoleError = vi.fn();
 
 // Cast mocked hooks
-// Removed: const mockUseAnalytics = useAnalytics as unknown as Mock;
 const mockUseGridStore = useGridStore as unknown as Mock;
 const mockUseOptimizeStore = useOptimizeStore as unknown as Mock;
 const mockUseTechStore = useTechStore as unknown as Mock;
 const mockUsePlatformStore = usePlatformStore as unknown as Mock;
-const mockUseBreakpoint = useBreakpoint as unknown as Mock;
 
+/**
+ * Test suite for the `useOptimize` hook.
+ */
 describe("useOptimize", () => {
 	let fetchSpy: MockInstance<typeof global.fetch>;
 	let requestAnimationFrameCallback: FrameRequestCallback | null;
 
+	/**
+	 * Resets all mocks and sets up the testing environment before each test.
+	 */
 	beforeEach(() => {
 		vi.clearAllMocks();
 
@@ -65,7 +72,7 @@ describe("useOptimize", () => {
 		fetchSpy = vi.spyOn(global, "fetch");
 
 		// Mock console.error
-		mockConsoleError.mockImplementation(() => { });
+		mockConsoleError.mockImplementation(() => {});
 		vi.spyOn(console, "error").mockImplementation(mockConsoleError);
 
 		// Mock useAnalytics
@@ -105,25 +112,30 @@ describe("useOptimize", () => {
 		// Mock usePlatformStore
 		mockUsePlatformStore.mockReturnValue(mockUsePlatformStoreReturnValue);
 
-		// Mock useBreakpoint
-		mockUseBreakpoint.mockReturnValue(mockUseBreakpointReturnValue);
-
 		// Mock window.scrollTo and requestAnimationFrame
 		Object.defineProperty(window, "scrollTo", { value: mockWindowScrollTo, writable: true });
 
 		requestAnimationFrameCallback = null;
 		Object.defineProperty(window, "requestAnimationFrame", {
-			value: mockWindowRequestAnimationFrame.mockImplementation((cb: FrameRequestCallback) => {
-				requestAnimationFrameCallback = cb;
-				return 1;
-			}),
+			value: mockWindowRequestAnimationFrame.mockImplementation(
+				(cb: FrameRequestCallback) => {
+					requestAnimationFrameCallback = cb;
+					return 1;
+				}
+			),
 			writable: true,
 		});
-		Object.defineProperty(window, "cancelAnimationFrame", { value: mockWindowCancelAnimationFrame, writable: true });
+		Object.defineProperty(window, "cancelAnimationFrame", {
+			value: mockWindowCancelAnimationFrame,
+			writable: true,
+		});
 		Object.defineProperty(window, "pageYOffset", { value: 0, writable: true });
 	});
 
 	afterEach(() => {
+		/**
+		 * Restores all mocks after each test.
+		 */
 		vi.restoreAllMocks();
 	});
 
@@ -134,6 +146,9 @@ describe("useOptimize", () => {
 		expect(result.current.gridContainerRef.current).toBeNull();
 	});
 
+	/**
+	 * Test suite for the `handleOptimize` function within the `useOptimize` hook.
+	 */
 	describe("handleOptimize", () => {
 		it("should successfully optimize and update grid/result", async () => {
 			const mockApiResponse = {
@@ -142,7 +157,9 @@ describe("useOptimize", () => {
 				max_bonus: 101,
 				solved_bonus: 90,
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -173,7 +190,9 @@ describe("useOptimize", () => {
 				max_bonus: 100,
 				solved_bonus: 90,
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -202,7 +221,9 @@ describe("useOptimize", () => {
 				solve_method: "Pattern No Fit",
 				grid: null,
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -241,7 +262,9 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -258,7 +281,12 @@ describe("useOptimize", () => {
 			const mockErrorResponse = {
 				message: "Optimization failed due to server error.",
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockErrorResponse), { status: 500, statusText: "Internal Server Error" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockErrorResponse), {
+					status: 500,
+					statusText: "Internal Server Error",
+				})
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -279,7 +307,9 @@ describe("useOptimize", () => {
 		});
 
 		it("should handle API error without message", async () => {
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify({}), { status: 400, statusText: "Bad Request" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify({}), { status: 400, statusText: "Bad Request" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -319,7 +349,12 @@ describe("useOptimize", () => {
 		});
 
 		it("should handle invalid API response structure", async () => {
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify({ not_a_valid_response: true }), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify({ not_a_valid_response: true }), {
+					status: 200,
+					statusText: "OK",
+				})
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -340,6 +375,9 @@ describe("useOptimize", () => {
 		});
 	});
 
+	/**
+	 * Test suite for the `clearPatternNoFitTech` function within the `useOptimize` hook.
+	 */
 	describe("clearPatternNoFitTech", () => {
 		it("should clear patternNoFitTech state", () => {
 			// Simulate PNF being set initially
@@ -365,6 +403,9 @@ describe("useOptimize", () => {
 		});
 	});
 
+	/**
+	 * Test suite for the `handleForceCurrentPnfOptimize` function within the `useOptimize` hook.
+	 */
 	describe("handleForceCurrentPnfOptimize", () => {
 		it("should call handleOptimize with forced true if patternNoFitTech is set", async () => {
 			// Simulate PNF being set initially
@@ -384,7 +425,9 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			const { result } = renderHook(() => useOptimize());
 
@@ -421,6 +464,9 @@ describe("useOptimize", () => {
 		});
 	});
 
+	/**
+	 * Test suite for the scrolling behavior within the `useOptimize` hook.
+	 */
 	describe("scrolling behavior", () => {
 		it.skip("should scroll to gridContainerRef when solving and not large screen", async () => {
 			// Simulate not large screen
@@ -452,7 +498,9 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			await act(async () => {
 				await result.current.handleOptimize("techJ");
@@ -487,7 +535,9 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" }));
+			fetchSpy.mockResolvedValueOnce(
+				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
+			);
 
 			await act(async () => {
 				await result.current.handleOptimize("techK");

@@ -8,6 +8,11 @@ import { useGridStore } from "../../store/GridStore";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
+/**
+ * Determines the upgrade priority based on the technology label.
+ * @param {string | undefined} label - The label of the technology.
+ * @returns {number} The priority (1 for Theta, 2 for Tau, 3 for Sigma), or 0 if not found.
+ */
 const getUpgradePriority = (label: string | undefined): number => {
 	if (!label) return 0;
 	const lowerLabel = label.toLowerCase();
@@ -23,6 +28,16 @@ interface GridCellProps {
 	isSharedGrid: boolean;
 }
 
+/**
+ * GridCell component represents a single cell in the technology grid.
+ * It displays the technology icon, handles user interactions, and applies styling.
+ *
+ * @param {GridCellProps} props - The props for the GridCell component.
+ * @param {number} props.rowIndex - The row index of the cell.
+ * @param {number} props.columnIndex - The column index of the cell.
+ * @param {boolean} props.isSharedGrid - Indicates if the grid is in a shared (read-only) state.
+ * @returns {JSX.Element} The rendered GridCell component.
+ */
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useGridStore((state) => state.grid.cells[rowIndex][columnIndex]);
 	const { t } = useTranslation();

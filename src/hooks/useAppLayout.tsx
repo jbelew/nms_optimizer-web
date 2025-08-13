@@ -14,6 +14,13 @@ interface AppLayout {
 
 const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 
+/**
+ * Custom hook for managing application layout, specifically grid dimensions and responsiveness.
+ * It observes the size of the main container and grid table to dynamically adjust layout.
+ *
+ * @returns {AppLayout} An object containing refs for the container and grid table,
+ *                      and state for grid height, grid table total width, and large screen status.
+ */
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gridTableRef = useRef<HTMLDivElement>(null);
@@ -26,6 +33,12 @@ export const useAppLayout = (): AppLayout => {
 		const elementToObserveHeight = containerRef.current;
 		const elementToObserveWidth = gridTableRef.current;
 
+		/**
+		 * Updates the measurements (height and width) of the observed elements.
+		 * This function is called by the ResizeObserver.
+		 *
+		 * @param {ResizeObserverEntry[]} [entries] - Optional array of ResizeObserverEntry objects.
+		 */
 		const updateMeasurements = (entries?: ResizeObserverEntry[]) => {
 			let newGridHeight: number | null = null;
 			let newGridTableTotalWidth: number | undefined = undefined;
