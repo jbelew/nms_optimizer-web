@@ -20,6 +20,17 @@ interface GridTableButtonsProps {
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
+/**
+ * GridTableButtons component provides a set of control buttons for the grid.
+ * These include buttons for showing instructions, about page, sharing the grid, and resetting the grid.
+ *
+ * @param {GridTableButtonsProps} props - The props for the GridTableButtons component.
+ * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
+ * @param {() => string} props.updateUrlForShare - Function to generate the shareable URL.
+ * @param {() => void} props.updateUrlForReset - Function to reset the URL.
+ * @param {React.MutableRefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scrolling.
+ * @returns {JSX.Element} The rendered GridTableButtons component.
+ */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	solving,
 	updateUrlForShare,
@@ -35,6 +46,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
+	/**
+	 * Handles the click event for the "Instructions" button.
+	 * Opens the instructions dialog and marks the tutorial as finished if it wasn't already.
+	 */
 	const handleShowInstructions = useCallback(() => {
 		openDialog("instructions");
 		if (!tutorialFinished) {
@@ -47,6 +62,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		});
 	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent]);
 
+	/**
+	 * Handles the click event for the "About" button.
+	 * Opens the about dialog.
+	 */
 	const handleShowAboutPage = useCallback(() => {
 		openDialog("about");
 		sendEvent({
@@ -56,12 +75,20 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 		});
 	}, [openDialog, sendEvent]);
 
+	/**
+	 * Handles the click event for the "Share" button.
+	 * Generates a shareable URL and opens the share link dialog.
+	 */
 	const handleShareClick = useCallback(() => {
 		const shareUrl = updateUrlForShare();
 		openDialog(null, { shareUrl });
 		sendEvent({ category: "User Interactions", action: "shareLink", value: 1 });
 	}, [updateUrlForShare, openDialog, sendEvent]);
 
+	/**
+	 * Handles the click event for the "Reset Grid" button.
+	 * Resets the grid to its initial state, updates the URL, and scrolls to the top of the grid.
+	 */
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid", value: 1 });
 		useGridStore.getState().resetGrid();

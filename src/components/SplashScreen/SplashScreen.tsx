@@ -12,6 +12,16 @@ interface SplashScreenProps {
 	onHidden?: () => void; // Callback when fully hidden and removed
 }
 
+/**
+ * SplashScreen component displays a loading screen with an animation.
+ * It can be programmatically hidden after a minimum duration.
+ *
+ * @param {SplashScreenProps} props - The props for the SplashScreen component.
+ * @param {number} [props.minDurationMs=0] - The minimum duration in milliseconds the splash screen should be visible.
+ * @param {() => void} [props.onHidden] - Callback function to be called when the splash screen is fully hidden and removed from the DOM.
+ * @param {React.Ref<SplashScreenHandle>} ref - Ref to expose `hide` method.
+ * @returns {JSX.Element | null} The rendered SplashScreen component, or null if hidden.
+ */
 const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 	({ minDurationMs = 0, onHidden }, ref) => {
 		const [status, setStatus] = useState<"pending" | "visible" | "hiding" | "hidden">(

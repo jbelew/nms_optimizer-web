@@ -14,8 +14,15 @@ interface MessageSpinnerProps {
 }
 
 /**
- * MessageSpinner component that displays a loading spinner overlay.
- * Can optionally show random messages after a delay for longer operations.
+ * MessageSpinner component displays a loading spinner overlay with an initial message.
+ * It can optionally show random messages after a delay for longer operations.
+ *
+ * @param {MessageSpinnerProps} props - The props for the MessageSpinner component.
+ * @param {boolean} props.isVisible - Controls the visibility of the spinner.
+ * @param {boolean} [props.isInset=true] - If true, the spinner will be absolutely positioned and cover its parent.
+ * @param {string} props.initialMessage - The message to display immediately with the spinner.
+ * @param {boolean} [props.showRandomMessages=false] - If true, random messages will appear after a delay.
+ * @returns {JSX.Element | null} The rendered MessageSpinner component, or null if not visible.
  */
 const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	isInset = true,

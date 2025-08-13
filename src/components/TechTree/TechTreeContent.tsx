@@ -15,6 +15,11 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 	({ handleOptimize, solving, techTree, selectedShipType }) => {
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
 
+		/**
+		 * Memoized and processed version of the tech tree.
+		 * Filters out non-technology categories, ensures correct types, and sorts technologies alphabetically.
+		 * @type {Record<string, TechTreeItem[]>}
+		 */
 		const processedTechTree = useMemo(() => {
 			const result: { [key: string]: TechTreeItem[] } = {};
 			Object.entries(techTree).forEach(([category, technologies]) => {
@@ -50,6 +55,11 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 			return result;
 		}, [techTree]);
 
+		/**
+		 * Memoized array of `TechTreeSection` components to be rendered.
+		 * Each section represents a category of technologies.
+		 * @type {JSX.Element[]}
+		 */
 		const renderedTechTree = useMemo(
 			() =>
 				Object.entries(processedTechTree).map(([type, technologies], index) => (

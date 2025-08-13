@@ -57,6 +57,15 @@ const ShipSelectionLoadingState = () => {
 	);
 };
 
+/**
+ * ShipSelectionInternal component allows users to select a ship type (platform).
+ * It fetches available ship types, manages the selected type, and updates the grid accordingly.
+ * This component is memoized to prevent unnecessary re-renders.
+ *
+ * @param {ShipSelectionProps} props - The props for the ShipSelectionInternal component.
+ * @param {boolean} props.solving - Indicates if an optimization calculation is in progress, which disables selection.
+ * @returns {JSX.Element} The rendered ShipSelectionInternal component.
+ */
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
 	const shipTypes = useFetchShipTypesSuspense(); // This will suspend the component
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -81,6 +90,11 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 		}
 	}, [shipTypes]);
 
+	/**
+	 * Handles the selection of a new ship type from the dropdown.
+	 * Updates the selected ship type in the store and resets the grid.
+	 * @param {string} option - The selected ship type code.
+	 */
 	const handleOptionSelect = useCallback(
 		(option: string) => {
 			if (option !== selectedShipType) {
@@ -159,10 +173,25 @@ interface ShipTypesDropdownProps {
 	shipTypes: ShipTypes;
 }
 
+/**
+ * ShipTypesDropdown component renders the dropdown menu for selecting ship types.
+ * It groups ship types by their category and displays them as radio items.
+ *
+ * @param {ShipTypesDropdownProps} props - The props for the ShipTypesDropdown component.
+ * @param {string} props.selectedShipType - The currently selected ship type.
+ * @param {(option: string) => void} props.handleOptionSelect - Callback function for when a ship type is selected.
+ * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
+ * @param {ShipTypes} props.shipTypes - The available ship types data.
+ * @returns {JSX.Element} The rendered ShipTypesDropdown component.
+ */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 	({ selectedShipType, handleOptionSelect, shipTypes }) => {
 		const { t } = useTranslation();
 
+		/**
+		 * Memoized grouping of ship types by their category.
+		 * @type {Record<string, { key: string; details: ShipTypeDetail }[]>}
+		 */
 		const groupedShipTypes = useMemo(() => {
 			if (!shipTypes) {
 				return {};

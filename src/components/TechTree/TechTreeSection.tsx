@@ -27,19 +27,6 @@ const typeImageMap: TypeImageMap = {
 	"Upgrade Modules": "upgrade.webp",
 };
 
-/**
- * TechTreeSection component renders a section of the tech tree.
- *
- * @param {Object} props - Component properties.
- * @param {string} props.type - The type of technology.
- * @param {TechTreeItem[]} props.technologies - Array of technology items.
- * @param {number} props.index - The index of the section.
- * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to handle optimization.
- * @param {boolean} props.solving - Indicates whether solving is in progress.
- * @param {string} props.selectedShipType - The selected ship type.
- *
- * @returns {JSX.Element} - The rendered component.
- */
 interface TechTreeSectionProps {
 	type: string;
 	technologies: TechTreeItem[];
@@ -50,6 +37,20 @@ interface TechTreeSectionProps {
 	selectedShipType: string; // Add selectedShipType prop
 }
 
+/**
+ * TechTreeSection component renders a section of the tech tree, grouping technologies by type.
+ * It displays a header with an optional image and a list of `TechTreeRow` components.
+ *
+ * @param {TechTreeSectionProps} props - The props for the TechTreeSection component.
+ * @param {string} props.type - The category type of the technologies (e.g., "Weaponry", "Hyperdrive").
+ * @param {TechTreeItem[]} props.technologies - An array of technology items belonging to this section.
+ * @param {number} props.index - The index of this section (used for internal mapping, not directly rendered).
+ * @param {(tech: string) => Promise<void>} props.handleOptimize - Callback function to trigger optimization for a specific technology.
+ * @param {boolean} props.solving - Indicates if an optimization calculation is currently in progress.
+ * @param {() => boolean} props.isGridFull - A function that returns true if the grid is full, disabling certain actions.
+ * @param {string} props.selectedShipType - The currently selected ship type, used for filtering or context.
+ * @returns {JSX.Element} The rendered TechTreeSection component.
+ */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 	({ type, technologies, handleOptimize, solving, isGridFull, selectedShipType }) => {
 		// selectedShipType is kept here if TechTreeSection needs it for other things
@@ -80,8 +81,8 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 				/>
 
 				{/* Render each technology as a TechTreeRow */}
-				{technologies.map((tech) => {
-					const rewardModules = tech.modules.filter((module) => module.type === "reward");
+				{technologies.map((tech: TechTreeItem) => {
+					const rewardModules = tech.modules.filter((module: { type: string; }) => module.type === "reward");
 					const hasRewardModules = rewardModules.length > 0;
 					return (
 						<TechTreeRow

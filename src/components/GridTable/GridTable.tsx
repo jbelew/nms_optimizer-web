@@ -27,15 +27,20 @@ interface GridTableProps {
 }
 
 /**
- * A table component that displays a grid of cells, where each cell can be in
- * one of three states: normal, active, or supercharged. The component also
- * renders control buttons for rows.
+ * GridTableInternal component displays the main technology grid.
+ * It renders individual `GridCell` components and `GridControlButtons` for managing rows.
+ * It also handles shaking animations, displays a message spinner during optimization, and provides instructions for touch devices.
  *
- * @param {GridTableProps} props - The props for the component.
- * @param {(rowIndex: number) => void} props.activateRow - Function to activate an entire row.
- * @param {(rowIndex: number) => void} props.deActivateRow - Function to deactivate an entire row.
- * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
- * @param {boolean} props.props.shared - Indicates if the grid is in a shared/read-only state.
+ * @param {GridTableProps} props - The props for the GridTableInternal component.
+ * @param {(rowIndex: number) => void} props.activateRow - Callback to activate a specific row.
+ * @param {(rowIndex: number) => void} props.deActivateRow - Callback to deactivate a specific row.
+ * @param {boolean} props.solving - Indicates if an optimization calculation is currently in progress.
+ * @param {boolean} props.shared - Indicates if the grid is in a shared (read-only) state.
+ * @param {() => string} props.updateUrlForShare - Function to update the URL for sharing the grid state.
+ * @param {() => void} props.updateUrlForReset - Function to update the URL for resetting the grid state.
+ * @param {React.MutableRefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container HTML element.
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the main grid table div.
+ * @returns {JSX.Element} The rendered GridTableInternal component.
  */
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	(

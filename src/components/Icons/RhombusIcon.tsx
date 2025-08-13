@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * RhombusIcon component renders an SVG rhombus icon.
+ * It accepts standard SVG properties.
+ *
+ * @param {React.SVGProps<SVGSVGElement>} props - The SVG properties for the icon.
+ * @returns {JSX.Element} The rendered RhombusIcon component.
+ */
 const RhombusIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 	<svg
 		width="24"

@@ -35,7 +35,7 @@ const TechTreeSkeleton: React.FC = () => {
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="gridContainer__sidebar rounded-md p-4 shadow-md"
+					className="p-4 rounded-md shadow-md gridContainer__sidebar"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 						backgroundColor: "var(--gray-a2)",
@@ -49,7 +49,7 @@ const TechTreeSkeleton: React.FC = () => {
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="w-full flex-grow pt-8" style={{ minHeight: "50vh" }}>
+				<aside className="flex-grow w-full pt-8" style={{ minHeight: "50vh" }}>
 					<MessageSpinner isInset={false} isVisible={true} initialMessage={""} />
 				</aside>
 			)}
@@ -63,7 +63,7 @@ const TechTreeSkeleton: React.FC = () => {
  * the entire component (including the RecommendedBuild button) is replaced
  * by the Suspense fallback, solving the stale UI issue.
  *
- * @param {object} props - The component props.
+ * @param {TechTreeProps} props - The component props.
  * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
  * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
@@ -98,7 +98,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="gridContainer__sidebar rounded-md p-4 shadow-md"
+						className="p-4 rounded-md shadow-md gridContainer__sidebar"
 						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a2)" }}
 					>
 						<TechTreeContent

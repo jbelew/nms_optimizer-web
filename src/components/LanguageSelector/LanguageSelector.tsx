@@ -27,6 +27,10 @@ const languageFlagPaths: LanguageFlagPaths = {
 	// Add other languages and their flag classes
 };
 
+/**
+ * LanguageSelector component allows users to change the application's language.
+ * It displays a dropdown with flags and names of supported languages.
+ */
 const LanguageSelector: React.FC = () => {
 	const isSmallAndUp = useBreakpoint("640px");
 	const { t, i18n } = useTranslation();
@@ -48,6 +52,11 @@ const LanguageSelector: React.FC = () => {
 			.sort((a, b) => a.label.localeCompare(b.label));
 	}, [i18n]);
 
+	/**
+	 * Handles the language change event.
+	 * Changes the i18n language and sends an analytics event.
+	 * @param {string} langCode - The language code to change to.
+	 */
 	const handleLanguageChange = (langCode: string) => {
 		void i18n.changeLanguage(langCode);
 		sendEvent({

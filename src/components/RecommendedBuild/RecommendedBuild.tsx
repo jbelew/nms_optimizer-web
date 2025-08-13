@@ -24,6 +24,16 @@ interface RecommendedBuildProps {
 	isLarge: boolean;
 }
 
+/**
+ * RecommendedBuild component displays and allows applying recommended technology builds.
+ * It provides options to select and apply different builds based on the available tech tree.
+ *
+ * @param {RecommendedBuildProps} props - The props for the RecommendedBuild component.
+ * @param {TechTree} props.techTree - The technology tree data containing recommended builds.
+ * @param {React.MutableRefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scrolling after applying a build.
+ * @param {boolean} props.isLarge - Indicates if the current screen size is large or larger.
+ * @returns {JSX.Element} The rendered RecommendedBuild component.
+ */
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	techTree,
 	gridContainerRef,
@@ -37,6 +47,10 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 
 	const builds = techTree.recommended_builds || [];
 
+	/**
+	 * Handles applying a selected recommended build.
+	 * @param {(typeof builds)[number]} build - The build object to apply.
+	 */
 	const handleApply = (build: (typeof builds)[number]) => {
 		applyRecommendedBuild(build);
 		sendEvent({
@@ -48,10 +62,19 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 		});
 	};
 
+	/**
+	 * Handles opening the instructions dialog, specifically to the section about recommended builds.
+	 */
 	const handleOpenInstructions = () => {
 		openDialog("instructions", { section: "section-3" });
 	};
 
+	/**
+	 * Renders the appropriate button for applying a recommended build.
+	 * If there are multiple builds, it renders a dropdown menu. If only one, a direct button.
+	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Optional props to pass to the Button component.
+	 * @returns {JSX.Element | null} The rendered button or dropdown, or null if no builds are available.
+	 */
 	const renderBuildButton = (buttonProps?: React.ComponentProps<typeof Button>) => {
 		if (builds.length > 1) {
 			return (

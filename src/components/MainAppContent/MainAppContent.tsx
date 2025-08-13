@@ -54,6 +54,10 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	}, []);
 
 	// --- Dialog Handlers ---
+	/**
+	 * Handles the action to show the changelog dialog.
+	 * Opens the 'changelog' dialog.
+	 */
 	const handleShowChangelog = useCallback(() => {
 		openDialog("changelog");
 	}, [openDialog]);

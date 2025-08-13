@@ -8,6 +8,10 @@ import AppDialog from "../AppDialog/AppDialog";
 import MarkdownContentRenderer from "../AppDialog/MarkdownContentRenderer";
 import UserStatsDialog from "../AppDialog/UserStatsDialog";
 
+/**
+ * RoutedDialogs component manages and renders various application dialogs based on the active dialog state.
+ * It uses `AppDialog` and `UserStatsDialog` to display different types of content.
+ */
 export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();
 	const { activeDialog, closeDialog, sectionToScrollTo } = useDialog();
