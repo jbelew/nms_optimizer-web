@@ -29,8 +29,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Sets up mocks and initializes test environment before each test.
-	 */
-	beforeEach(() => {
+	 */ beforeEach(() => {
 		vi.clearAllMocks();
 
 		setGridAndResetAuxiliaryStateMock = vi.fn();
@@ -140,8 +139,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Verifies that the `applyRecommendedBuild` function is returned by the hook.
-	 */
-	it("should return applyRecommendedBuild function", () => {
+	 */ it("should return applyRecommendedBuild function", () => {
 		const { result } = renderHook(() =>
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
@@ -150,8 +148,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Tests that a recommended build is correctly applied to the grid.
-	 */
-	it("should apply a recommended build and set the grid", () => {
+	 */ it("should apply a recommended build and set the grid", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
 			layout: [
@@ -228,12 +225,106 @@ describe("useRecommendedBuild", () => {
 	});
 
 	/**
+	 * Regression test for modulesMap key mismatch.
+	 * Ensures that modules are correctly applied when mockBuild.tech matches mockTechTree.key.
+	 */ it("should correctly apply modules when build tech matches techTree key", () => {
+		const mockBuild: RecommendedBuild = {
+			title: "Key Match Test",
+			layout: [
+				[
+					{
+						tech: "weapon", // Matches mockTechTree.Weapon.key
+						module: "S1",
+						supercharged: false,
+						active: true,
+						adjacency_bonus: 0.0,
+					},
+				],
+			],
+		};
+
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
+
+		act(() => {
+			result.current.applyRecommendedBuild(mockBuild);
+		});
+
+		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
+		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
+		expect(newGrid.cells[0][0]).toEqual(
+			expect.objectContaining({
+				tech: "weapon",
+				module: "S1",
+				label: "S-Class",
+				image: "img.png",
+				bonus: 10,
+				value: 1,
+				adjacency: "none",
+				sc_eligible: true,
+				type: "weapon",
+				supercharged: false,
+				active: true,
+				adjacency_bonus: 0.0,
+			})
+		);
+	});
+
+	/**
+	 * Regression test for cell.module being "" instead of null.
+	 * Ensures that empty cells have their module property set to null.
+	 */ it("should set cell.module to null for empty cells in recommended build", () => {
+		const mockBuild: RecommendedBuild = {
+			title: "Empty Cell Test",
+			layout: [
+				[
+					{
+						tech: "weapon",
+						module: "S1",
+						supercharged: false,
+						active: true,
+						adjacency_bonus: 0.0,
+					},
+					{
+						// This cell has no module, so its module property should be null
+						tech: null,
+						module: null,
+						supercharged: false,
+						active: true,
+						adjacency_bonus: 0.0,
+					},
+				],
+			],
+		};
+
+		const { result } = renderHook(() =>
+			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		);
+
+		act(() => {
+			result.current.applyRecommendedBuild(mockBuild);
+		});
+
+		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
+		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
+		expect(newGrid.cells[0][1]).toEqual(
+			expect.objectContaining({
+				tech: null,
+				module: null,
+				supercharged: false,
+				active: true,
+				adjacency_bonus: 0.0,
+			})
+		);
+	});
+
+	/**
 	 * Verifies that the grid container scrolls into view after applying a build.
-	 */
-	it("should scroll to grid container after applying build", () => {
+	 */ it("should scroll to grid container after applying build", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
-			layout: [[{ tech: "boltcaster", module: "S1" }]],
+			layout: [[{ tech: "weapon", module: "S1" }]], // Updated tech to "weapon"
 		};
 
 		const { result } = renderHook(() =>
@@ -253,8 +344,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Ensures that no build is applied if the provided build or layout is null or empty.
-	 */
-	it("should not apply build if build or layout is null", () => {
+	 */ it("should not apply build if build or layout is null", () => {
 		const { result } = renderHook(() =>
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
@@ -267,8 +357,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Tests the handling of missing modules within the recommended build layout.
-	 */
-	it("should handle missing module in layout", () => {
+	 */ it("should handle missing module in layout", () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
 			layout: [
