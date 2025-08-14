@@ -29,6 +29,10 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
 import { DialogProvider } from "./context/DialogContext";
+import { initializeAnalytics } from "./utils/analytics";
+
+// Initialize analytics
+initializeAnalytics();
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>

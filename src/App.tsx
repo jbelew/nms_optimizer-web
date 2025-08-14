@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { useMemo } from "react";
-import ReactGA from "react-ga4";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
 
@@ -16,7 +15,6 @@ import { useDialog } from "./context/dialog-utils"; // Import useDialog
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
-import { initializeAnalytics } from "./utils/analytics";
 
 /**
  * The main application component. It sets up routing, analytics, internationalization,
@@ -26,27 +24,18 @@ import { initializeAnalytics } from "./utils/analytics";
 const App: FC = () => {
 	const { t } = useTranslation();
 
-	const appVersion: string = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "devmode";
 	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
 
 	const { showError, setShowError } = useOptimizeStore();
 	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
 	// Use the new custom hooks
-	initializeAnalytics();
-	ReactGA.set({ app_version: appVersion });
 	useSeoAndTitle();
 	useUrlValidation();
 
 	const errorDialogContent = useMemo(
-		() => (
-			<ErrorContent
-				onClose={function (): void {
-					throw new Error("Function not implemented.");
-				}}
-			/>
-		),
-		[]
+		() => <ErrorContent onClose={() => setShowError(false)} />,
+		[setShowError]
 	);
 
 	return (
