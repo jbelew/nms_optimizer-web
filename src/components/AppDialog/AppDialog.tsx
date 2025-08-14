@@ -10,6 +10,14 @@ import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "../../utils/dialogIconMapping";
 
+const ROUTED_DIALOG_TITLE_KEYS = [
+	"about",
+	"instructions",
+	"userStats",
+	"changelog",
+	"translations",
+];
+
 /**
  * @interface AppDialogProps
  * @property {() => void} onClose - Callback to be called when the dialog is closed.
@@ -81,7 +89,17 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						</Dialog.Title>
 
 						<Dialog.Description asChild>
-							<section className="flex-1 overflow-y-auto pr-4">{content}</section>
+							<section
+								className={`flex-1 overflow-y-auto ${
+									ROUTED_DIALOG_TITLE_KEYS.includes(
+										(titleKey || "").split(".").pop() || ""
+									)
+										? "pr-4"
+										: "pr-2"
+								}`}
+							>
+								{content}
+							</section>
 						</Dialog.Description>
 
 						<Dialog.Close asChild>

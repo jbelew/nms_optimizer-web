@@ -2,7 +2,7 @@
 
 /* Element: Overlay */
 .appDialog__overlay {
-	background-color: var(--color-background);
+	background-color: var(--color-panel-solid);
 	position: fixed;
 	inset: 0;
 }
@@ -44,8 +44,8 @@
 /* Element: Close Button */
 .appDialog__close {
 	position: absolute;
-	top: 8px;
-	right: 8px;
+	top: 8x;
+	right: 10px;
 }
 
 /* Element: Container */
