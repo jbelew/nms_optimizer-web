@@ -1,16 +1,14 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { Cell } from "../../store/GridStore";
+// We need to import from the mocked modules
+import { Cell, useGridStore } from "../../store/GridStore";
+import { useShakeStore } from "../../store/ShakeStore";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 // Mock stores
 vi.mock("../../store/GridStore");
 vi.mock("../../store/ShakeStore");
-
-// We need to import from the mocked modules
-import { useGridStore } from "../../store/GridStore";
-import { useShakeStore } from "../../store/ShakeStore";
 
 // Define mock functions
 const mockHandleCellTap = vi.fn();

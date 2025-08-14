@@ -1,16 +1,8 @@
-import type {
-	RecommendedBuild,
-	TechTree,
-	TechTreeItem,
-} from "../useTechTree/useTechTree";
+import type { RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
 import { act, renderHook } from "@testing-library/react";
-import { vi, Mock } from "vitest";
+import { Mock, vi } from "vitest";
 
-import {
-	createEmptyCell,
-	createGrid,
-	useGridStore,
-} from "../../store/GridStore";
+import { createEmptyCell, createGrid, useGridStore } from "../../store/GridStore";
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
@@ -77,58 +69,58 @@ describe("useRecommendedBuild", () => {
 		});
 		Object.defineProperty(window, "pageYOffset", { value: 0, writable: true });
 
-			mockTechTree = {
-		Weapon: [
-			{
-				label: "Boltcaster",
-				key: "weapon",
-				color: "red", // Add a color, as it's required by TechTreeItem
-				module_count: 1, // Add module_count
-				image: null, // Add image
-				modules: [
-					{
-						id: "S1",
-						label: "S-Class",
-						bonus: 10,
-						image: "img.png",
-						adjacency: "none", // Corrected type to string
-						sc_eligible: true,
-						value: 1,
-						type: "weapon",
-						active: true, // Added missing property
-						adjacency_bonus: 0, // Added missing property
-						supercharged: false, // Added missing property
-						tech: "Weapon", // Added missing property
-					},
-				],
-			},
-		] as TechTreeItem[],
-		Shield: [
-			{
-				label: "Shield",
-				key: "shield",
-				color: "blue", // Add a color
-				module_count: 1, // Add module_count
-				image: null, // Add image
-				modules: [
-					{
-						id: "X1",
-						label: "X-Class",
-						bonus: 20,
-						image: "img2.png",
-						adjacency: "none", // Corrected type to string
-						sc_eligible: false,
-						value: 2,
-						type: "shield",
-						active: true, // Added missing property
-						adjacency_bonus: 0, // Added missing property
-						supercharged: false, // Added missing property
-						tech: "Shield", // Added missing property
-					},
-				],
-			},
-		] as TechTreeItem[],
-	};
+		mockTechTree = {
+			Weapon: [
+				{
+					label: "Boltcaster",
+					key: "weapon",
+					color: "red", // Add a color, as it's required by TechTreeItem
+					module_count: 1, // Add module_count
+					image: null, // Add image
+					modules: [
+						{
+							id: "S1",
+							label: "S-Class",
+							bonus: 10,
+							image: "img.png",
+							adjacency: "none", // Corrected type to string
+							sc_eligible: true,
+							value: 1,
+							type: "weapon",
+							active: true, // Added missing property
+							adjacency_bonus: 0, // Added missing property
+							supercharged: false, // Added missing property
+							tech: "Weapon", // Added missing property
+						},
+					],
+				},
+			] as TechTreeItem[],
+			Shield: [
+				{
+					label: "Shield",
+					key: "shield",
+					color: "blue", // Add a color
+					module_count: 1, // Add module_count
+					image: null, // Add image
+					modules: [
+						{
+							id: "X1",
+							label: "X-Class",
+							bonus: 20,
+							image: "img2.png",
+							adjacency: "none", // Corrected type to string
+							sc_eligible: false,
+							value: 2,
+							type: "shield",
+							active: true, // Added missing property
+							adjacency_bonus: 0, // Added missing property
+							supercharged: false, // Added missing property
+							tech: "Shield", // Added missing property
+						},
+					],
+				},
+			] as TechTreeItem[],
+		};
 
 		mockGridContainerRef = { current: document.createElement("div") };
 		Object.defineProperty(mockGridContainerRef.current, "getBoundingClientRect", {

@@ -338,7 +338,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	TechInfoBadges.displayName = "TechInfoBadges";
 
 	return (
-		<div className="flex gap-2 mt-2 mb-2 ml-0 mr-1 items-top optimizationButton sm:ml-1">
+		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
 			{/* Optimize Button */}
 			<Tooltip delayDuration={1000} content={tooltipLabel}>
 				<IconButton
@@ -379,7 +379,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 			{hasRewardModules ? (
 				<>
 					<Accordion.Root
-						className="flex-1 pt-1 pb-1 AccordionRoot border-b-1"
+						className="AccordionRoot flex-1 border-b-1 pt-1 pb-1"
 						style={{ borderColor: "var(--accent-track)" }}
 						type="single"
 						collapsible
@@ -395,11 +395,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 									{translatedTechName}
 								</Text>
 							</AccordionTrigger>
-							<Accordion.Content className="pl-1 AccordionContent">
+							<Accordion.Content className="AccordionContent pl-1">
 								{rewardModules.map((module) => (
 									<div
 										key={module.id}
-										className="flex items-start gap-2 AccordionContentText"
+										className="AccordionContentText flex items-start gap-2"
 									>
 										<Checkbox
 											className="CheckboxRoot ml-1 !pt-1"
@@ -443,7 +443,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						weight="medium"
 						size={isSmallAndUp ? "3" : "2"}
 						htmlFor={tech}
-						className="flex-1 block pt-1 techRow__label"
+						className="techRow__label block flex-1 pt-1"
 					>
 						{translatedTechName}
 					</Text>

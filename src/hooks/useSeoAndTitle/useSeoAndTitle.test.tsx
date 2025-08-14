@@ -97,8 +97,8 @@ describe("useSeoAndTitle", () => {
 		/**
 		 * Restores original DOM methods and mocks after each test.
 		 */
-		// Restore original DOM methods
-		document.head.appendChild = originalAppendChild as any;
+		// Restore original DOM methods. Type assertion is needed because the mock changes the type slightly.
+		document.head.appendChild = originalAppendChild as typeof document.head.appendChild;
 		document.querySelector = originalQuerySelector;
 		document.querySelectorAll = originalQuerySelectorAll;
 		document.createElement = originalCreateElement;
@@ -112,9 +112,9 @@ describe("useSeoAndTitle", () => {
 	 */
 	describe("Document Title", () => {
 		/**
-	 * Verifies that the document title is set correctly for the default path.
-	 */
-	it("should set document title for default path", () => {
+		 * Verifies that the document title is set correctly for the default path.
+		 */
+		it("should set document title for default path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
@@ -128,9 +128,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that the document title is set correctly for the instructions path.
-	 */
-	it("should set document title for instructions path", () => {
+		 * Verifies that the document title is set correctly for the instructions path.
+		 */
+		it("should set document title for instructions path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/instructions", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => {
@@ -148,9 +148,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that the document title is set correctly for the about path.
-	 */
-	it("should set document title for about path", () => {
+		 * Verifies that the document title is set correctly for the about path.
+		 */
+		it("should set document title for about path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/about", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => {
@@ -168,9 +168,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that the document title is set correctly for the changelog path.
-	 */
-	it("should set document title for changelog path", () => {
+		 * Verifies that the document title is set correctly for the changelog path.
+		 */
+		it("should set document title for changelog path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/changelog", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => {
@@ -188,9 +188,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that the document title is set correctly for the translation path.
-	 */
-	it("should set document title for translation path", () => {
+		 * Verifies that the document title is set correctly for the translation path.
+		 */
+		it("should set document title for translation path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/translation", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => {
@@ -208,9 +208,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that the document title defaults to the app name for unknown paths.
-	 */
-	it("should set document title to appName for unknown path", () => {
+		 * Verifies that the document title defaults to the app name for unknown paths.
+		 */
+		it("should set document title to appName for unknown path", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/unknown", search: "" });
 			mockUseTranslation.mockReturnValue({
 				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
@@ -229,9 +229,9 @@ describe("useSeoAndTitle", () => {
 	 */
 	describe("Hreflang Tags", () => {
 		/**
-	 * Verifies that hreflang links are created for all supported languages.
-	 */
-	it("should create hreflang links for supported languages", () => {
+		 * Verifies that hreflang links are created for all supported languages.
+		 */
+		it("should create hreflang links for supported languages", () => {
 			mockUseLocation.mockReturnValue({ pathname: "/instructions", search: "" });
 			renderHook(() => useSeoAndTitle());
 
@@ -275,9 +275,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that existing hreflang links are updated correctly.
-	 */
-	it("should update existing hreflang links", () => {
+		 * Verifies that existing hreflang links are updated correctly.
+		 */
+		it("should update existing hreflang links", () => {
 			// Manually create existing hreflang links
 			const existingEnLink = document.createElement("link");
 			existingEnLink.setAttribute("rel", "alternate");
@@ -333,9 +333,9 @@ describe("useSeoAndTitle", () => {
 		});
 
 		/**
-	 * Verifies that old, no longer needed hreflang links are removed.
-	 */
-	it("should remove old hreflang links that are no longer needed", () => {
+		 * Verifies that old, no longer needed hreflang links are removed.
+		 */
+		it("should remove old hreflang links that are no longer needed", () => {
 			// Manually create an old hreflang link that won't be updated
 			const oldLink = document.createElement("link");
 			oldLink.setAttribute("rel", "alternate");

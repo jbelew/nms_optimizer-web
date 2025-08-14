@@ -1,6 +1,7 @@
 // src/components/ShipSelection/ShipSelection.tsx
 import "./ShipSelection.css";
 
+import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useCallback, useEffect, useMemo } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
@@ -8,10 +9,6 @@ import { useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import type {
-	ShipTypeDetail,
-	ShipTypes,
-} from "../../hooks/useShipTypes/useShipTypes";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";

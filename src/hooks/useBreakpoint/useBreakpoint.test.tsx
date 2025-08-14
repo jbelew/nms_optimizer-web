@@ -1,21 +1,29 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, it, expect, beforeEach, vi, MockInstance } from "vitest";
+import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 
 import { useBreakpoint } from "./useBreakpoint";
 
 // Helper to mock window.matchMedia
 const createMatchMediaMock = (matches: boolean) => {
 	// Use a more specific type for listeners
-	const listeners: Array<((this: MediaQueryList, ev: MediaQueryListEvent) => void)> = [];
+	const listeners: Array<(this: MediaQueryList, ev: MediaQueryListEvent) => void> = [];
 
-	const addEventListenerMock = vi.fn(function (this: MediaQueryList, type: string, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
-		if (type === 'change') {
+	const addEventListenerMock = vi.fn(function (
+		this: MediaQueryList,
+		type: string,
+		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+	) {
+		if (type === "change") {
 			listeners.push(listener);
 		}
 	});
 
-	const removeEventListenerMock = vi.fn(function (this: MediaQueryList, type: string, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
-		if (type === 'change') {
+	const removeEventListenerMock = vi.fn(function (
+		this: MediaQueryList,
+		type: string,
+		listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+	) {
+		if (type === "change") {
 			const index = listeners.indexOf(listener);
 			if (index > -1) {
 				listeners.splice(index, 1);
@@ -25,15 +33,21 @@ const createMatchMediaMock = (matches: boolean) => {
 
 	return {
 		matches,
-		media: '',
+		media: "",
 		onchange: null,
 		addEventListener: addEventListenerMock,
 		removeEventListener: removeEventListenerMock,
 		// Alias for older methods
-		addListener: vi.fn(function (this: MediaQueryList, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+		addListener: vi.fn(function (
+			this: MediaQueryList,
+			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+		) {
 			listeners.push(listener);
 		}),
-    removeListener: vi.fn(function (this: MediaQueryList, listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void) {
+		removeListener: vi.fn(function (
+			this: MediaQueryList,
+			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
+		) {
 			const index = listeners.indexOf(listener);
 			if (index > -1) {
 				listeners.splice(index, 1);
@@ -47,8 +61,6 @@ const createMatchMediaMock = (matches: boolean) => {
 	};
 };
 
-
-
 describe("useBreakpoint", () => {
 	let matchMediaMock: ReturnType<typeof createMatchMediaMock>;
 	let matchMediaSpy: MockInstance;
@@ -56,7 +68,9 @@ describe("useBreakpoint", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		matchMediaMock = createMatchMediaMock(false); // Default to not matching
-		matchMediaSpy = vi.spyOn(window, 'matchMedia').mockReturnValue(matchMediaMock as MediaQueryList);
+		matchMediaSpy = vi
+			.spyOn(window, "matchMedia")
+			.mockReturnValue(matchMediaMock as MediaQueryList);
 	});
 
 	it("should return initial match state based on window.matchMedia", () => {

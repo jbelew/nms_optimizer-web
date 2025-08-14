@@ -44,7 +44,7 @@ const TechTreeSkeleton: React.FC = () => {
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="p-4 rounded-md shadow-md gridContainer__sidebar"
+					className="gridContainer__sidebar rounded-md p-4 shadow-md"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 						backgroundColor: "var(--gray-a2)",
@@ -58,7 +58,7 @@ const TechTreeSkeleton: React.FC = () => {
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="flex-grow w-full pt-8" style={{ minHeight: "50vh" }}>
+				<aside className="w-full flex-grow pt-8" style={{ minHeight: "50vh" }}>
 					<SuspenseSkeleton />
 				</aside>
 			)}
@@ -107,7 +107,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="p-4 rounded-md shadow-md gridContainer__sidebar"
+						className="gridContainer__sidebar rounded-md p-4 shadow-md"
 						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a2)" }}
 					>
 						<TechTreeContent

@@ -99,7 +99,9 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 
 				{/* Render each technology as a TechTreeRow */}
 				{technologies.map((tech: TechTreeItem) => {
-					const rewardModules = tech.modules.filter((module: { type: string; }) => module.type === "reward");
+					const rewardModules = tech.modules.filter(
+						(module: { type: string }) => module.type === "reward"
+					);
 					const hasRewardModules = rewardModules.length > 0;
 					return (
 						<TechTreeRow

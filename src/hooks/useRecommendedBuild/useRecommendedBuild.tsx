@@ -1,18 +1,8 @@
 // src/hooks/useRecommendedBuild.tsx
-import type {
-	Module,
-	RecommendedBuild,
-	TechTree,
-	TechTreeItem,
-} from "../useTechTree/useTechTree";
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
 import { useCallback, useMemo } from "react";
 
-import {
-	createEmptyCell,
-	createGrid,
-	resetCellContent,
-	useGridStore,
-} from "../../store/GridStore";
+import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
 /**
@@ -48,7 +38,10 @@ export const useRecommendedBuild = (
 						"modules" in tech
 					) {
 						for (const module of (tech as TechTreeItem).modules) {
-							map.set(`${(tech as TechTreeItem).label.toLowerCase()}/${module.id}`, module);
+							map.set(
+								`${(tech as TechTreeItem).label.toLowerCase()}/${module.id}`,
+								module
+							);
 						}
 					}
 				}

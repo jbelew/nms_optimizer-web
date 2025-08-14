@@ -1,10 +1,11 @@
+import type { PlatformState } from "../../store/PlatformStore";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useGridStore } from "../../store/GridStore";
-import { usePlatformStore, type PlatformState } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/PlatformStore";
 import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 import { useUrlSync } from "./useUrlSync";
@@ -42,14 +43,16 @@ describe("useUrlSync", () => {
 			isSharedGrid: false,
 			setIsSharedGrid: mockSetIsSharedGrid,
 		});
-		(usePlatformStore as unknown as Mock).mockImplementation((selector: (state: PlatformState) => PlatformState[keyof PlatformState]) => {
-			const state = {
-				selectedPlatform: "test-platform",
-				setSelectedPlatform: mockSetSelectedPlatform,
-				initializePlatform: vi.fn(), // Add this line
-			};
-			return selector(state);
-		});
+		(usePlatformStore as unknown as Mock).mockImplementation(
+			(selector: (state: PlatformState) => PlatformState[keyof PlatformState]) => {
+				const state = {
+					selectedPlatform: "test-platform",
+					setSelectedPlatform: mockSetSelectedPlatform,
+					initializePlatform: vi.fn(), // Add this line
+				};
+				return selector(state);
+			}
+		);
 		(useGridDeserializer as unknown as Mock).mockReturnValue({
 			serializeGrid: mockSerializeGrid,
 			deserializeGrid: mockDeserializeGrid,

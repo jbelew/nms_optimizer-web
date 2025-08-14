@@ -5,11 +5,7 @@ import { API_URL } from "../../constants";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
-import {
-	type Module,
-	type TechTree,
-	type TechTreeItem,
-} from "../useTechTree/useTechTree";
+import { type Module, type TechTree, type TechTreeItem } from "../useTechTree/useTechTree";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).

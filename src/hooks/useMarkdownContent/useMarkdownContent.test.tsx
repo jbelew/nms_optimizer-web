@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
-import { describe, it, expect, beforeEach, afterEach, vi, Mock, MockInstance } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, Mock, MockInstance, vi } from "vitest";
 
 import { useMarkdownContent } from "./useMarkdownContent";
 
@@ -37,7 +37,9 @@ describe("useMarkdownContent", () => {
 	});
 
 	it("should fetch markdown content successfully", async () => {
-		fetchSpy.mockResolvedValueOnce(new Response("# Test Markdown", { status: 200, statusText: "OK" }));
+		fetchSpy.mockResolvedValueOnce(
+			new Response("# Test Markdown", { status: 200, statusText: "OK" })
+		);
 
 		const { result } = renderHook(() => useMarkdownContent("test-file"));
 
@@ -56,7 +58,9 @@ describe("useMarkdownContent", () => {
 	});
 
 	it("should use cached content if available", async () => {
-		fetchSpy.mockResolvedValueOnce(new Response("# Cached Markdown", { status: 200, statusText: "OK" }));
+		fetchSpy.mockResolvedValueOnce(
+			new Response("# Cached Markdown", { status: 200, statusText: "OK" })
+		);
 
 		// First render to populate cache
 		const { result, rerender } = renderHook(() => useMarkdownContent("cached-file"));
@@ -74,7 +78,9 @@ describe("useMarkdownContent", () => {
 	});
 
 	it("should handle fetch error", async () => {
-		fetchSpy.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" }));
+		fetchSpy.mockResolvedValueOnce(
+			new Response(null, { status: 404, statusText: "Not Found" })
+		);
 
 		const { result } = renderHook(() => useMarkdownContent("non-existent-file"));
 
@@ -98,7 +104,9 @@ describe("useMarkdownContent", () => {
 
 		fetchSpy
 			.mockResolvedValueOnce(new Response(null, { status: 404, statusText: "Not Found" })) // French not found
-			.mockResolvedValueOnce(new Response("# English Fallback", { status: 200, statusText: "OK" })); // English found
+			.mockResolvedValueOnce(
+				new Response("# English Fallback", { status: 200, statusText: "OK" })
+			); // English found
 
 		const { result } = renderHook(() => useMarkdownContent("localized-file"));
 
@@ -121,7 +129,9 @@ describe("useMarkdownContent", () => {
 			t: (key: string) => key,
 		});
 
-		fetchSpy.mockResolvedValueOnce(new Response("# Changelog EN", { status: 200, statusText: "OK" }));
+		fetchSpy.mockResolvedValueOnce(
+			new Response("# Changelog EN", { status: 200, statusText: "OK" })
+		);
 
 		const { result } = renderHook(() => useMarkdownContent("changelog"));
 

@@ -1,4 +1,4 @@
-import { GA4Event, sendEvent } from "../../utils/analytics";
+import { sendEvent } from "../../utils/analytics";
 
 /**
  * Custom hook for handling Google Analytics event tracking.
