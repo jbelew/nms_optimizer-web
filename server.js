@@ -61,10 +61,6 @@ app.use(async (req, res, next) => {
 		const host = req.get("host");
 		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
 
-		fullUrl.searchParams.delete("platform");
-		fullUrl.searchParams.delete("ship");
-		fullUrl.searchParams.delete("grid");
-
 		const canonicalUrl = fullUrl.href;
 		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
 
