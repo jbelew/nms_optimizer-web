@@ -10,6 +10,14 @@ import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "../../utils/dialogIconMapping";
 
+/**
+ * @interface AppDialogProps
+ * @property {() => void} onClose - Callback to be called when the dialog is closed.
+ * @property {string} [title] - The title of the dialog.
+ * @property {string} [titleKey] - The translation key for the title.
+ * @property {boolean} isOpen - Whether the dialog is open.
+ * @property {ReactNode} content - The content to be displayed in the dialog.
+ */
 interface AppDialogProps {
 	onClose: () => void;
 	title?: string;
@@ -19,14 +27,10 @@ interface AppDialogProps {
 }
 
 /**
- * A Dialog component for displaying information to the user.
+ * A reusable dialog component for displaying various types of content.
  *
- * @param {AppDialogProps} props
- * @prop {() => void} onClose - A callback to be called when the dialog is closed.
- * @prop {string} [title="Information"] - The title of the dialog.
- * @prop {ReactNode} content - The content to be displayed in the dialog.
- *
- * @returns {ReactElement}
+ * @param {AppDialogProps} props - The props for the component.
+ * @returns {React.ReactElement} - The rendered dialog component.
  */
 const AppDialog: React.FC<AppDialogProps> = ({
 	onClose,

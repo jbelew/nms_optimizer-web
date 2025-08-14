@@ -4,12 +4,21 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../../constants";
 import { type TechTree } from "../useTechTree/useTechTree"; // Assuming TechTree interface is defined here
 
+/**
+ * Custom hook to fetch the tech tree colors from the API.
+ *
+ * @returns {{techColors: Record<string, string>, loading: boolean, error: string | null}}
+ *          An object containing the tech colors, loading state, and error state.
+ */
 export const useTechTreeColors = () => {
 	const [techColors, setTechColors] = useState<Record<string, string>>({});
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
+		/**
+		 * Fetches the tech tree colors from the API.
+		 */
 		const fetchColors = async () => {
 			try {
 				const [starshipResponse, multitoolResponse] = await Promise.all([

@@ -17,7 +17,10 @@ import { GridTable } from "../GridTable/GridTable";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 
-/** Props for the MainAppContentInternal component. */
+/**
+ * @typedef {object} MainAppContentInternalProps
+ * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
+ */
 type MainAppContentInternalProps = {
 	/** The build version of the application, to be displayed in the footer. */
 	buildVersion: string;
@@ -53,10 +56,9 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		hideSplashScreen();
 	}, []);
 
-	// --- Dialog Handlers ---
 	/**
-	 * Handles the action to show the changelog dialog.
-	 * Opens the 'changelog' dialog.
+	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
+	 * @returns {void}
 	 */
 	const handleShowChangelog = useCallback(() => {
 		openDialog("changelog");

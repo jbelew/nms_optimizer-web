@@ -8,8 +8,12 @@ import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer"
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**
- * Hook to synchronize application state (selected platform, grid)
- * with the browser URL query parameters.
+ * Custom hook to synchronize the application's state (selected platform, grid)
+ * with the browser's URL query parameters. It handles both reading from the URL
+ * on initial load and updating the URL when state changes.
+ *
+ * @returns {{updateUrlForShare: () => string, updateUrlForReset: () => void}}
+ *          An object containing functions to update the URL for sharing and resetting the grid.
  */
 export const useUrlSync = () => {
 	const navigate = useNavigate();

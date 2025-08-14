@@ -8,6 +8,9 @@ import { DialogContext } from "./dialog-utils";
 /**
  * Provider component that manages the state and logic for routed dialogs.
  * It syncs the active dialog with the URL.
+ *
+ * @param {{children: React.ReactNode}} props - The props for the component.
+ * @returns {JSX.Element} The rendered provider.
  */
 export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const location = useLocation();
@@ -33,7 +36,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 	});
 
-	// Effect to sync dialog state with URL
+	/**
+	 * Effect to sync dialog state with URL.
+	 */
 	useEffect(() => {
 		const path = location.pathname.substring(1); // remove leading '/'
 		if (
@@ -49,6 +54,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 	}, [location.pathname]);
 
+	/**
+	 * Opens a dialog.
+	 *
+	 * @param {NonNullable<DialogType>|null} dialog - The dialog to open.
+	 * @param {{shareUrl?: string, section?: string}} [data] - Additional data for the dialog.
+	 */
 	const openDialog = useCallback(
 		(
 			dialog: NonNullable<DialogType> | null,
@@ -68,6 +79,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		[navigate]
 	);
 
+	/**
+	 * Closes the currently active dialog.
+	 */
 	const closeDialog = useCallback(() => {
 		if (shareUrl) {
 			setShareUrl("");
@@ -77,6 +91,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		setSectionToScrollTo(undefined);
 	}, [activeDialog, navigate, shareUrl]);
 
+	/**
+	 * Marks the tutorial as finished.
+	 */
 	const markTutorialFinished = useCallback(() => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);

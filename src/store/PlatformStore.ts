@@ -1,6 +1,12 @@
 // src/store/PlatformStore.ts
 import { create } from "zustand";
 
+/**
+ * @interface PlatformState
+ * @property {string} selectedPlatform - The currently selected platform.
+ * @property {(platform: string, validShipTypes: string[], updateUrl?: boolean) => void} setSelectedPlatform - Function to set the selected platform.
+ * @property {(validShipTypes: string[]) => void} initializePlatform - Function to initialize the platform state.
+ */
 export interface PlatformState {
 	selectedPlatform: string;
 	setSelectedPlatform: (platform: string, validShipTypes: string[], updateUrl?: boolean) => void;
@@ -9,6 +15,9 @@ export interface PlatformState {
 
 const LOCAL_STORAGE_KEY = "selectedPlatform";
 
+/**
+ * Zustand store for managing the state of the selected platform.
+ */
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value
 	setSelectedPlatform: (platform, validShipTypes, updateUrl = true) => {

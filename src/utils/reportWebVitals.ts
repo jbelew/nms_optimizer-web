@@ -6,7 +6,12 @@ declare const __APP_VERSION__: string;
 
 type SendEventFunction = (event: GA4Event) => void;
 
-// Helper to create and send the event object.
+/**
+ * Sends a web vitals metric to Google Analytics.
+ *
+ * @param {Metric} metric - The web vitals metric to send.
+ * @param {SendEventFunction} sendEvent - The function to send the event.
+ */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
 		action: `web_vitals_${metric.name}`,
@@ -19,6 +24,12 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	});
 };
 
+/**
+ * Reports web vitals metrics to Google Analytics.
+ *
+ * @param {SendEventFunction} sendEvent - The function to send the event.
+ * @returns {void}
+ */
 export function reportWebVitals(sendEvent: SendEventFunction) {
 	onCLS((metric) => sendVitalsMetric(metric, sendEvent));
 	onINP((metric) => sendVitalsMetric(metric, sendEvent));

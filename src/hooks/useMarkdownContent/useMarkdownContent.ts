@@ -4,6 +4,12 @@ import { useTranslation } from "react-i18next";
 
 import aboutMarkdown from "/src/assets/locales/en/about.md?raw";
 
+/**
+ * @interface MarkdownContentState
+ * @property {string} markdown - The markdown content.
+ * @property {boolean} isLoading - Whether the content is loading.
+ * @property {string|null} error - Any error that occurred while loading the content.
+ */
 export interface MarkdownContentState {
 	markdown: string;
 	isLoading: boolean;
@@ -12,6 +18,12 @@ export interface MarkdownContentState {
 
 const markdownCache = new Map<string, string>();
 
+/**
+ * Custom hook to fetch markdown content from a file.
+ *
+ * @param {string} markdownFileName - The name of the markdown file to fetch.
+ * @returns {MarkdownContentState} An object containing the markdown content, loading state, and error state.
+ */
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");

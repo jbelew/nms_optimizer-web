@@ -108,7 +108,9 @@ const AccordionTrigger = React.forwardRef(
 AccordionTrigger.displayName = "AccordionTrigger";
 
 /**
- * Props for the BonusStatusIcon component.
+ * @interface BonusStatusIconProps
+ * @property {number} techMaxBonus - The maximum potential bonus for the technology.
+ * @property {number} techSolvedBonus - The bonus achieved from the current solved state for the technology.
  */
 interface BonusStatusIconProps {
 	/** The maximum potential bonus for the technology. */
@@ -119,6 +121,9 @@ interface BonusStatusIconProps {
 
 /**
  * Displays an icon indicating the status of the technology's bonus based on solved and max values.
+ *
+ * @param {BonusStatusIconProps} props - The props for the component.
+ * @returns {JSX.Element|null} The rendered icon or null.
  */
 const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSolvedBonus }) => {
 	const { t } = useTranslation();
@@ -272,6 +277,15 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
 	const isSmallAndUp = useBreakpoint("640px");
 
+	/**
+	 * @interface TechInfoBadgesProps
+	 * @property {boolean} hasTechInGrid - Whether the technology is in the grid.
+	 * @property {TechTreeRowProps["techColor"]} techColor - The color of the technology.
+	 * @property {number} moduleCount - The number of modules for the technology.
+	 * @property {number} currentCheckedModulesLength - The number of currently checked modules.
+	 * @property {number} techMaxBonus - The maximum potential bonus for the technology.
+	 * @property {number} techSolvedBonus - The bonus achieved from the current solved state for the technology.
+	 */
 	interface TechInfoBadgesProps {
 		hasTechInGrid: boolean;
 		techColor: TechTreeRowProps["techColor"];

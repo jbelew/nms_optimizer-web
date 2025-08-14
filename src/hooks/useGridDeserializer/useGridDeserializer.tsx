@@ -11,7 +11,12 @@ import {
 	type TechTreeItem,
 } from "../useTechTree/useTechTree";
 
-// --- Utility Functions (RLE Compress/Decompress) ---
+/**
+ * Compresses a string using Run-Length Encoding (RLE).
+ *
+ * @param {string} input - The string to compress.
+ * @returns {string} The compressed string.
+ */
 export const compressRLE = (input: string): string => {
 	if (!input) return "";
 	let compressed = "";
@@ -30,6 +35,12 @@ export const compressRLE = (input: string): string => {
 	return compressed;
 };
 
+/**
+ * Decompresses a string using Run-Length Encoding (RLE).
+ *
+ * @param {string} input - The string to decompress.
+ * @returns {string} The decompressed string.
+ */
 export const decompressRLE = (input: string): string => {
 	if (!input) return "";
 	let decompressed = "";
@@ -48,7 +59,12 @@ export const decompressRLE = (input: string): string => {
 	return decompressed;
 };
 
-// --- Grid Serialization/Deserialization Logic ---
+/**
+ * Serializes the grid state into a compressed string.
+ *
+ * @param {Grid} grid - The grid to serialize.
+ * @returns {string} The serialized grid string.
+ */
 export const serialize = (grid: Grid): string => {
 	let gridString = ""; // Raw grid string (0, 1, 2)
 	let techString = "";
@@ -98,6 +114,14 @@ export const serialize = (grid: Grid): string => {
 	);
 };
 
+/**
+ * Deserializes a compressed string into a grid state.
+ *
+ * @param {string} serializedGrid - The serialized grid string.
+ * @param {string} shipType - The type of ship.
+ * @param {(colors: { [key: string]: string }) => void} setTechColors - Function to set the tech colors.
+ * @returns {Promise<Grid|null>} A promise that resolves to the deserialized grid or null if an error occurs.
+ */
 export const deserialize = async (
 	serializedGrid: string,
 	shipType: string,
@@ -283,7 +307,12 @@ export const deserialize = async (
 	}
 };
 
-// --- React Hook (useGridDeserializer) ---
+/**
+ * Custom hook for serializing and deserializing the grid state.
+ *
+ * @returns {{serializeGrid: () => string, deserializeGrid: (serializedGrid: string) => Promise<void>}}
+ *          An object containing the serialize and deserialize functions.
+ */
 export const useGridDeserializer = () => {
 	const { setGrid, grid, setIsSharedGrid } = useGridStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);

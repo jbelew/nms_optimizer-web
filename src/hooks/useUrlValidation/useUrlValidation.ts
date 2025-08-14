@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 /**
  * Custom hook for validating URL parameters and performing necessary redirections.
+ * This hook checks for invalid combinations of URL parameters (e.g., `grid` without `platform`)
+ * and corrects the URL by navigating to a cleaned version.
  */
 export const useUrlValidation = () => {
 	const location = useLocation();

@@ -10,7 +10,9 @@ import { useGridCellStyle } from "./useGridCellStyle";
 
 /**
  * Determines the upgrade priority based on the technology label.
- * @param {string | undefined} label - The label of the technology.
+ * This is used to display a number on the cell for certain upgrades.
+ *
+ * @param {string|undefined} label - The label of the technology.
  * @returns {number} The priority (1 for Theta, 2 for Tau, 3 for Sigma), or 0 if not found.
  */
 const getUpgradePriority = (label: string | undefined): number => {
@@ -22,6 +24,12 @@ const getUpgradePriority = (label: string | undefined): number => {
 	return 0;
 };
 
+/**
+ * @interface GridCellProps
+ * @property {number} rowIndex - The row index of the cell.
+ * @property {number} columnIndex - The column index of the cell.
+ * @property {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
+ */
 interface GridCellProps {
 	rowIndex: number;
 	columnIndex: number;

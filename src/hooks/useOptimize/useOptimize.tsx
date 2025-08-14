@@ -9,6 +9,15 @@ import { useTechStore } from "../../store/TechStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
+/**
+ * @interface UseOptimizeReturn
+ * @property {boolean} solving - Whether an optimization is in progress.
+ * @property {(tech: string, forced?: boolean) => Promise<void>} handleOptimize - Function to handle the optimization process.
+ * @property {React.MutableRefObject<HTMLDivElement|null>} gridContainerRef - Ref to the grid container.
+ * @property {string|null} patternNoFitTech - The technology for which a "Pattern No Fit" occurred.
+ * @property {() => void} clearPatternNoFitTech - Function to clear the patternNoFitTech state.
+ * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to force optimization for the current patternNoFitTech.
+ */
 interface UseOptimizeReturn {
 	solving: boolean;
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
@@ -18,6 +27,10 @@ interface UseOptimizeReturn {
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 }
 
+/**
+ * @interface ApiErrorData
+ * @property {string} [message] - The error message from the API.
+ */
 interface ApiErrorData {
 	message?: string;
 }
@@ -94,6 +107,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isLarge = useBreakpoint("1024px");
 
+	/**
+	 * Effect to scroll the grid container into view when solving on smaller screens.
+	 */
 	useEffect(() => {
 		if (solving && gridContainerRef.current && !isLarge) {
 			const element = gridContainerRef.current;

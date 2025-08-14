@@ -14,6 +14,13 @@ import { TechTreeContent } from "./TechTreeContent";
 // We need the colors once TechTree loads
 
 // --- Type Definitions ---
+/**
+ * @interface TechTreeProps
+ * @property {(tech: string) => Promise<void>} handleOptimize - Function to call when optimizing a tech.
+ * @property {boolean} solving - Indicates if the optimizer is currently solving.
+ * @property {React.RefObject<HTMLDivElement|null>} gridContainerRef - Ref to the grid container for scroll management.
+ * @property {number|undefined} gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
+ */
 interface TechTreeProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
@@ -24,6 +31,7 @@ interface TechTreeProps {
 /**
  * A skeleton loader for the TechTreeComponent. It mimics the layout of the
  * final component to prevent Cumulative Layout Shift (CLS) during loading.
+ * @returns {JSX.Element} The rendered skeleton component.
  */
 const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");

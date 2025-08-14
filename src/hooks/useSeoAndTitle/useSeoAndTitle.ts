@@ -37,7 +37,9 @@ const updatePropertyMetaTag = (property: string, content: string) => {
 };
 
 /**
- * Custom hook for managing document title and SEO-related hreflang/canonical tags.
+ * Custom hook for managing the document title and SEO-related meta tags.
+ * This hook updates the document's title, meta description, keywords,
+ * Open Graph tags, and hreflang links based on the current route and language.
  */
 export const useSeoAndTitle = () => {
 	const { t } = useTranslation();
