@@ -11,9 +11,7 @@
 .appDialog__content {
 	background-color: var(--color-panel-solid);
 	border-radius: 8px;
-	box-shadow:
-		hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
-		hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+	box-shadow: var(--shadow-6);
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -44,8 +42,8 @@
 /* Element: Close Button */
 .appDialog__close {
 	position: absolute;
-	top: 8x;
-	right: 10px;
+	top: 10px;
+	right: 8px;
 }
 
 /* Element: Container */
