@@ -62,6 +62,7 @@ app.use(async (req, res, next) => {
 		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
 
 		fullUrl.searchParams.delete("platform");
+		fullUrl.searchParams.delete("ship");
 		fullUrl.searchParams.delete("grid");
 
 		const canonicalUrl = fullUrl.href;
@@ -101,7 +102,8 @@ app.use(
 		orderPreference: ["br", "gz"],
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
-			const versionedAssetPattern = /-[0-9a-zA-Z]{8}\.(js|css|woff2|webp|svg|png|jpg|jpeg|gif)$/i;
+			const versionedAssetPattern =
+				/-[0-9a-zA-Z]{8}\.(js|css|woff2|webp|svg|png|jpg|jpeg|gif)$/i;
 			if (versionedAssetPattern.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 			} else if (
