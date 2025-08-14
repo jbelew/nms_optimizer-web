@@ -2,7 +2,7 @@
 
 /* Element: Overlay */
 .appDialog__overlay {
-	background-color: var(--color-panel-solid);
+	background-color: var(--black-a9);
 	position: fixed;
 	inset: 0;
 }
