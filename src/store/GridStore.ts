@@ -614,6 +614,8 @@ export const useGridStore = create<GridStore>()(
 
 if (import.meta.env.VITE_E2E_TESTING) {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-ignore - for e2e testing
 	window.useGridStore = useGridStore;
+	// @ts-expect-error - For e2e testing
+	window.handleCellDoubleTap = useGridStore.getState().handleCellDoubleTap;
 }

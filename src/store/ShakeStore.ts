@@ -18,3 +18,9 @@ export const useShakeStore = create<ShakeState>((set) => ({
 	shaking: false,
 	setShaking: (shaking) => set({ shaking }),
 }));
+
+if (import.meta.env.VITE_E2E_TESTING) {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	window.useShakeStore = useShakeStore;
+}

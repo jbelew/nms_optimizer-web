@@ -279,3 +279,56 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 3.  Updated the "Backup Mandate" to require a backup for *any* modification, removing the ambiguity.
 4.  This process of error, correction, and logging reinforces the importance of strictly adhering to my own protocols.
 ---
+## 2025-08-14: E2E Test Fixes and Additions
+
+### Perceive & Understand
+
+*   **Request:** The user requested to get the e2e tests working, and then to add new test cases for double-tap and single-tap interactions.
+*   **Context:**
+    *   Initial attempts to run e2e tests failed due to an incorrect understanding of the project's `playwright.config.ts` and `package.json` scripts. I initially tried to manually start the dev server, then manually build, instead of using the `npm run test:e2e` script which handles both.
+    *   The `should trigger shake when attempting to supercharge beyond 4 cells` test was failing inconsistently. This was due to a race condition between Playwright's `page.evaluate` direct store manipulation and React's state updates, and later, due to relying on a transient CSS class for assertion.
+    *   The `should double-tap a cell to supercharge it` test was failing inconsistently. This was due to:
+        *   Incorrect simulation of touch events (using `click()` instead of `tap()`, then `dispatchEvent` instead of `page.touch.down/up`).
+        *   Misunderstanding of the `useGridCellInteraction.ts` logic, specifically the `isTouchInteraction` ref and the `lastTapTime` calculation.
+        *   The `dblclick()` method also proved inconsistent due to the application's internal double-tap detection logic.
+        *   The `handleCellDoubleTap` function's dependency on `_initialCellStateForTap` being set by `handleCellTap`.
+    *   The user guided me to expose `useShakeStore` and `handleCellDoubleTap` to the `window` object for direct testing, and to use `page.evaluate` to call these functions, bypassing UI interaction timing issues.
+
+### Reason & Plan
+
+*   **Plan (Initial Test Fixes):**
+    1.  Correctly identify and use the `npm run test:e2e` script.
+    2.  For the "shake" test, increase `page.waitForTimeout` after `page.evaluate` to allow React to re-render.
+    3.  For the "shake" test, switch from asserting on a transient CSS class to asserting on the internal `shaking` state of `useShakeStore`. This required exposing `useShakeStore` to the `window` object for e2e testing.
+*   **Plan (Double-tap Test):**
+    1.  Add a new test case for double-tap.
+    2.  Initially attempt to simulate double-tap via UI interactions (`page.tap()` twice, then `cell.dblclick()`).
+    3.  Upon inconsistency, expose `handleCellDoubleTap` to the `window` object for e2e testing.
+    4.  Modify the test to directly call `window.useGridStore.getState().handleCellTap()` followed by `window.handleCellDoubleTap()` to simulate the full double-tap sequence and bypass UI timing issues.
+*   **Plan (Single-tap Test):**
+    1.  Add a new test case for single-tap.
+    2.  Simulate single-tap using `cell.tap()`.
+
+### Act & Implement
+
+*   **Action:**
+    *   Successfully ran `npm run test:e2e`.
+    *   Increased `page.waitForTimeout` in the "shake" test.
+    *   Exposed `useShakeStore` to `window` in `src/store/ShakeStore.ts`.
+    *   Modified the "shake" test to assert on `window.useShakeStore.getState().shaking`.
+    *   Added the "double-tap" test.
+    *   Attempted various UI-based double-tap simulations (`page.tap()` twice, `cell.dblclick()`).
+    *   Exposed `handleCellDoubleTap` to `window` in `src/store/GridStore.ts`.
+    *   Modified the "double-tap" test to directly call `window.useGridStore.getState().handleCellTap()` and `window.handleCellDoubleTap()`.
+    *   Added the "single-tap" test using `cell.tap()`.
+    *   Confirmed all 6 tests are consistently passing.
+
+### Refine & Reflect
+
+*   **Reflection:** This task was a significant learning experience, highlighting several critical points:
+    *   **Importance of Project Conventions:** Always prioritize understanding and using the project's established scripts and configurations (e.g., `npm run test:e2e`, `playwright.config.ts`). My initial failures stemmed from not adhering to this.
+    *   **Testing Internal State for Robustness:** For complex UI interactions with intricate timing or state dependencies, directly testing the underlying store's state or functions (via `page.evaluate` and exposed test-only globals) is far more reliable and consistent than relying on UI-level assertions or simulated events. This bypasses the non-determinism of browser event loops and React's rendering cycles.
+    *   **Understanding Application Logic Deeply:** Debugging the double-tap issue required a deep dive into `useGridCellInteraction.ts` and `GridStore.ts` to understand the precise sequence of state updates and dependencies (`_initialCellStateForTap`). This reinforces the need for thorough code analysis.
+    *   **Strategic Use of Test-Only Globals:** Exposing specific store functions or states to the `window` object, guarded by `import.meta.env.VITE_E2E_TESTING`, is a powerful technique for creating stable and reliable e2e tests without polluting production code. This is a valuable pattern for testing complex React/Zustand applications.
+    *   **Patience and Iteration:** Debugging inconsistent e2e tests requires patience, systematic elimination of variables, and iterative refinement of the test approach.
+    *   **User Guidance is Invaluable:** The user's direct guidance and hints were crucial in navigating the complexities of this task and correcting my misunderstandings. I must continue to listen carefully and learn from their expertise.
