@@ -34,14 +34,11 @@ export const useRecommendedBuild = (
 					if (
 						typeof tech === "object" &&
 						tech !== null &&
-						"label" in tech &&
+						"key" in tech &&
 						"modules" in tech
 					) {
 						for (const module of (tech as TechTreeItem).modules) {
-							map.set(
-								`${(tech as TechTreeItem).label.toLowerCase()}/${module.id}`,
-								module
-							);
+							map.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
 						}
 					}
 				}
@@ -49,7 +46,6 @@ export const useRecommendedBuild = (
 		}
 		return map;
 	}, [techTree]);
-
 	/**
 	 * Applies a recommended build to the grid.
 	 *
@@ -61,6 +57,7 @@ export const useRecommendedBuild = (
 				console.error("Invalid RecommendedBuild object received:", build);
 				return;
 			}
+
 			if (build && build.layout && build.layout.length > 0) {
 				const newGrid = createGrid(10, 6);
 				const layout = build.layout as ({
@@ -81,9 +78,9 @@ export const useRecommendedBuild = (
 								cellData.active ?? true
 							);
 
-							// Ensure tech and module are empty strings if not provided
-							cell.tech = cellData.tech ?? "";
-							cell.module = cellData.module ?? "";
+							// Ensure tech and module are null if not provided
+							cell.tech = cellData.tech ?? null;
+							cell.module = cellData.module ?? null;
 
 							if (cellData.tech && cellData.module) {
 								const module = modulesMap.get(

@@ -508,7 +508,6 @@ export const useGridStore = create<GridStore>()(
 
 					return activeCells.every((cell) => cell.module !== null);
 				},
-
 				resetGridTech: (tech: string) => {
 					set((state) => {
 						state.grid.cells.forEach((row: Cell[]) => {
@@ -612,3 +611,9 @@ export const useGridStore = create<GridStore>()(
 		}
 	)
 );
+
+if (import.meta.env.VITE_E2E_TESTING) {
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	window.useGridStore = useGridStore;
+}

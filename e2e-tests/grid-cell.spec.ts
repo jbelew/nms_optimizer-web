@@ -2,10 +2,33 @@ import { test, expect } from '@playwright/test';
 
 test.describe('GridCell Tap Interactions', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/'); // Navigate to your application using baseURL from playwright.config.ts
-    await page.waitForLoadState('networkidle'); // Wait for network to be idle
-    // Optionally, wait for the grid to be visible or loaded
+    await page.goto('/?platform=standard');
+    await page.waitForLoadState('networkidle');
+
     await expect(page.locator('.gridTable')).toBeVisible();
+
+    const gridCell = page.locator('.grid-cell').first();
+    const styles = await gridCell.evaluate((element) => {
+      const computedStyle = window.getComputedStyle(element);
+      return {
+        opacity: computedStyle.opacity,
+        width: computedStyle.width,
+        height: computedStyle.height,
+        pointerEvents: computedStyle.pointerEvents,
+        transform: computedStyle.transform,
+        display: computedStyle.display,
+        visibility: computedStyle.visibility,
+      };
+    });
+
+    console.log('Computed styles of .grid-cell:', styles);
+
+    try {
+      await gridCell.click();
+      console.log('Clicked on the first grid cell.');
+    } catch (error) {
+      console.error('Could not click on the first grid cell:', error);
+    }
   });
 
   test('should handle single tap on a grid cell', async ({ page }) => {

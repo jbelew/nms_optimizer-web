@@ -52,7 +52,7 @@ describe("useRecommendedBuild", () => {
 
 			image: null,
 			bonus: 0,
-			adjacency: false,
+			adjacency: "none",
 			sc_eligible: false,
 			supercharged,
 			active,
@@ -157,7 +157,7 @@ describe("useRecommendedBuild", () => {
 			layout: [
 				[
 					{
-						tech: "boltcaster",
+						tech: "weapon",
 						module: "S1",
 						supercharged: true,
 						active: true,
@@ -190,11 +190,18 @@ describe("useRecommendedBuild", () => {
 		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
 		expect(newGrid.cells[0][0]).toEqual(
 			expect.objectContaining({
-				tech: "boltcaster",
+				tech: "weapon",
 				module: "S1",
 				supercharged: true,
 				active: true,
 				adjacency_bonus: 1.0,
+				label: "S-Class",
+				image: "img.png",
+				bonus: 10,
+				value: 1,
+				adjacency: "none",
+				sc_eligible: true,
+				type: "weapon",
 			})
 		);
 		expect(newGrid.cells[1][1]).toEqual(
@@ -204,6 +211,13 @@ describe("useRecommendedBuild", () => {
 				supercharged: false,
 				active: true,
 				adjacency_bonus: 0.0,
+				label: "X-Class",
+				image: "img2.png",
+				bonus: 20,
+				value: 2,
+				adjacency: "none",
+				sc_eligible: false,
+				type: "shield",
 			})
 		);
 		expect(newGrid.cells[0][1]).toEqual(
