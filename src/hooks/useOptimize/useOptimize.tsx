@@ -143,6 +143,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
 			setSolving(true);
+			// Yield to the main thread to allow UI updates (e.g., loading indicators) to render.
+			await new Promise((resolve) => setTimeout(resolve, 0));
 			setShowErrorStore(false);
 
 			if (forced || patternNoFitTech === tech) {
