@@ -15,12 +15,24 @@ import {
 } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
+/**
+ * Custom hook to handle the application of recommended builds to the grid.
+ *
+ * @param {TechTree} techTree - The tech tree data.
+ * @param {React.MutableRefObject<HTMLDivElement|null>} gridContainerRef - Ref to the grid container for scrolling.
+ * @returns {{applyRecommendedBuild: (build: RecommendedBuild) => void}}
+ *          An object containing the function to apply a recommended build.
+ */
 export const useRecommendedBuild = (
 	techTree: TechTree,
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>
 ) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
 
+	/**
+	 * A memoized map of all modules, indexed by a composite key of `tech/moduleId`.
+	 * @type {Map<string, Module>}
+	 */
 	const modulesMap = useMemo(() => {
 		const map = new Map<string, Module>();
 		if (!techTree) return map;
@@ -45,6 +57,11 @@ export const useRecommendedBuild = (
 		return map;
 	}, [techTree]);
 
+	/**
+	 * Applies a recommended build to the grid.
+	 *
+	 * @param {RecommendedBuild} build - The recommended build to apply.
+	 */
 	const applyRecommendedBuild = useCallback(
 		(build: RecommendedBuild) => {
 			if (!isValidRecommendedBuild(build)) {

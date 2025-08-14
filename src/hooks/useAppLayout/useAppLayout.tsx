@@ -4,6 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { useGridStore } from "../../store/GridStore";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
+/**
+ * @interface AppLayout
+ * @property {React.RefObject<HTMLDivElement|null>} containerRef - A ref for the main container element.
+ * @property {React.RefObject<HTMLDivElement|null>} gridTableRef - A ref for the grid table element.
+ * @property {number|null} gridHeight - The height of the grid.
+ * @property {number|undefined} gridTableTotalWidth - The total width of the grid table.
+ * @property {boolean} isLarge - Whether the screen is large.
+ */
 interface AppLayout {
 	containerRef: React.RefObject<HTMLDivElement | null>;
 	gridTableRef: React.RefObject<HTMLDivElement | null>;

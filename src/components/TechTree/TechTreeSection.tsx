@@ -5,11 +5,18 @@ import { useTranslation } from "react-i18next";
 import { type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
-// --- Image Map (This is the key part) ---
+/**
+ * @typedef {object} TypeImageMap
+ * @property {string} [key] - The key is the technology type, and the value is the image file name.
+ */
 type TypeImageMap = {
 	[key: string]: string;
 };
 
+/**
+ * A map of technology types to their corresponding image file names.
+ * @type {TypeImageMap}
+ */
 const typeImageMap: TypeImageMap = {
 	Weaponry: "weaponry.webp",
 	"Defensive Systems": "defensive.webp",
@@ -27,6 +34,16 @@ const typeImageMap: TypeImageMap = {
 	"Upgrade Modules": "upgrade.webp",
 };
 
+/**
+ * @interface TechTreeSectionProps
+ * @property {string} type - The category type of the technologies.
+ * @property {TechTreeItem[]} technologies - An array of technology items in this section.
+ * @property {number} index - The index of this section.
+ * @property {(tech: string) => Promise<void>} handleOptimize - Callback to trigger optimization.
+ * @property {boolean} solving - Indicates if an optimization is in progress.
+ * @property {() => boolean} isGridFull - Function that returns true if the grid is full.
+ * @property {string} selectedShipType - The currently selected ship type.
+ */
 interface TechTreeSectionProps {
 	type: string;
 	technologies: TechTreeItem[];

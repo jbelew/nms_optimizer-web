@@ -12,11 +12,20 @@ import {
 	Share2Icon,
 } from "@radix-ui/react-icons";
 
+/**
+ * @interface DialogIconAndStyle
+ * @property {React.ElementType<IconProps>|null} IconComponent - The icon component to render.
+ * @property {CSSProperties} style - The style to apply to the icon.
+ */
 interface DialogIconAndStyle {
 	IconComponent: React.ElementType<IconProps> | null;
 	style: CSSProperties;
 }
 
+/**
+ * A map of dialog title keys to their corresponding icon components.
+ * @type {Record<string, React.ElementType<IconProps>>}
+ */
 const iconMap: Record<string, React.ElementType<IconProps>> = {
 	"dialogs.titles.instructions": QuestionMarkCircledIcon,
 	"dialogs.titles.changelog": CounterClockwiseClockIcon,
@@ -28,6 +37,10 @@ const iconMap: Record<string, React.ElementType<IconProps>> = {
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 };
 
+/**
+ * A map of dialog title keys to their corresponding icon styles.
+ * @type {Record<string, CSSProperties>}
+ */
 const iconStyle: Record<string, CSSProperties> = {
 	"dialogs.titles.serverError": { color: "var(--red-9)" },
 	default: { color: "var(--accent-indicator)" },

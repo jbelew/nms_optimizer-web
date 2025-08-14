@@ -7,6 +7,13 @@ import {
 import { useGridStore } from "../../store/GridStore";
 import { TechTreeSection } from "./TechTreeSection";
 
+/**
+ * @interface TechTreeContentProps
+ * @property {(tech: string) => Promise<void>} handleOptimize - Function to call when optimizing a tech.
+ * @property {boolean} solving - Indicates if the optimizer is currently solving.
+ * @property {TechTree} techTree - The tech tree data.
+ * @property {string} selectedShipType - The currently selected ship type.
+ */
 interface TechTreeContentProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
@@ -14,6 +21,12 @@ interface TechTreeContentProps {
 	selectedShipType: string;
 }
 
+/**
+ * Renders the main content of the tech tree, processing and displaying the sections.
+ *
+ * @param {TechTreeContentProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered tech tree content.
+ */
 export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 	({ handleOptimize, solving, techTree, selectedShipType }) => {
 		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here

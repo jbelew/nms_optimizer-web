@@ -1,6 +1,24 @@
 // src/store/TechStore.ts
 import { create } from "zustand";
 
+/**
+ * @interface TechState
+ * @property {{[key: string]: number}} max_bonus - A map of technology keys to their maximum potential bonus.
+ * @property {{[key: string]: number}} solved_bonus - A map of technology keys to their solved bonus.
+ * @property {{[key: string]: string}} solve_method - A map of technology keys to the method used to solve them.
+ * @property {{[key: string]: string}} techColors - A map of technology keys to their colors.
+ * @property {{[key: string]: string[]}} checkedModules - A map of technology keys to their checked modules.
+ * @property {(tech: string) => void} clearTechMaxBonus - Function to clear the max bonus for a technology.
+ * @property {(tech: string, bonus: number) => void} setTechMaxBonus - Function to set the max bonus for a technology.
+ * @property {(tech: string) => void} clearTechSolvedBonus - Function to clear the solved bonus for a technology.
+ * @property {(tech: string, bonus: number) => void} setTechSolvedBonus - Function to set the solved bonus for a technology.
+ * @property {(tech: string, method: string) => void} setTechSolveMethod - Function to set the solve method for a technology.
+ * @property {(colors: {[key: string]: string}) => void} setTechColors - Function to set the tech colors.
+ * @property {(tech: string) => string|undefined} getTechColor - Function to get the color for a technology.
+ * @property {(tech: string, updater: (prev?: string[]) => string[]) => void} setCheckedModules - Function to set the checked modules for a technology.
+ * @property {(tech: string) => void} clearCheckedModules - Function to clear the checked modules for a technology.
+ * @property {() => void} clearResult - Function to clear the result state.
+ */
 export interface TechState {
 	max_bonus: { [key: string]: number };
 	solved_bonus: { [key: string]: number };
@@ -19,6 +37,9 @@ export interface TechState {
 	clearResult: () => void; // Add clearResult to the TechState interface
 }
 
+/**
+ * Zustand store for managing the state of technologies.
+ */
 export const useTechStore = create<TechState>((set, get) => ({
 	// Note the 'get' parameter
 	max_bonus: {},

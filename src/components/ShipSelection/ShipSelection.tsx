@@ -20,13 +20,19 @@ import { usePlatformStore } from "../../store/PlatformStore";
 const DEFAULT_GRID_HEIGHT = 10;
 const DEFAULT_GRID_WIDTH = 6;
 
+/**
+ * @interface ShipSelectionProps
+ * @property {boolean} solving - Indicates if an optimization calculation is in progress.
+ */
 interface ShipSelectionProps {
 	solving: boolean;
 }
 
 /**
  * A skeleton component that mimics the ShipSelection trigger button,
- * but shows a spinner. Used as a Suspense fallback.
+ * showing a spinner. Used as a Suspense fallback.
+ *
+ * @returns {JSX.Element} The rendered loading state component.
  */
 const ShipSelectionLoadingState = () => {
 	const isSmallAndUp = useBreakpoint("640px");
@@ -169,6 +175,13 @@ export const ShipSelection: React.FC<ShipSelectionProps> = (props) => {
 };
 ShipSelection.displayName = "ShipSelection";
 
+/**
+ * @interface ShipTypesDropdownProps
+ * @property {string} selectedShipType - The currently selected ship type.
+ * @property {(option: string) => void} handleOptionSelect - Callback for when a ship type is selected.
+ * @property {boolean} solving - Indicates if an optimization calculation is in progress.
+ * @property {ShipTypes} shipTypes - The available ship types data.
+ */
 interface ShipTypesDropdownProps {
 	selectedShipType: string;
 	handleOptionSelect: (option: string) => void;
