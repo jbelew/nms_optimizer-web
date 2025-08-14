@@ -21,24 +21,6 @@ const updateMetaTag = (name: string, content: string) => {
 };
 
 /**
- * Updates a link tag with the given rel and href.
- * If the tag doesn't exist, it creates it.
- * @param rel - The rel attribute of the link tag.
- * @param href - The href attribute of the link tag.
- */
-const updateLinkTag = (rel: string, href: string) => {
-	let linkTag = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
-	if (!linkTag) {
-		linkTag = document.createElement("link");
-		linkTag.setAttribute("rel", rel);
-		document.head.appendChild(linkTag);
-	}
-	if (linkTag.getAttribute("href") !== href) {
-		linkTag.setAttribute("href", href);
-	}
-};
-
-/**
  * Updates a meta tag with the given property and content.
  * If the tag doesn't exist, it creates it.
  * @param property - The property of the meta tag.
@@ -113,11 +95,6 @@ export const useSeoAndTitle = () => {
 		updatePropertyMetaTag("og:description", pageDescription);
 		updateMetaTag("twitter:title", pageTitle);
 		updateMetaTag("twitter:description", pageDescription);
-
-		// Set the canonical and og:url to the current full URL
-		const canonicalUrl = window.location.href;
-		updateLinkTag("canonical", canonicalUrl);
-		updatePropertyMetaTag("og:url", canonicalUrl);
 
 		// Set the lang attribute on the html tag
 		document.documentElement.lang = i18n.language;
