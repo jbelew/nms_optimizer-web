@@ -9,6 +9,7 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import ErrorBoundary from "../ErrorBoundry/ErrorBoundry";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
+import { SuspenseSkeleton } from "./SuspenseSkeleton";
 import { TechTreeContent } from "./TechTreeContent";
 
 // We need the colors once TechTree loads
@@ -50,7 +51,7 @@ const TechTreeSkeleton: React.FC = () => {
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
 				<aside className="flex-grow w-full pt-8" style={{ minHeight: "50vh" }}>
-					<MessageSpinner isInset={false} isVisible={true} initialMessage={""} />
+					<SuspenseSkeleton />
 				</aside>
 			)}
 		</>
@@ -119,22 +120,24 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 				</>
 			) : (
 				<div style={{ width: gridTableTotalWidth }}>
-					<div className="mt-4 sm:mt-5">
-						{hasRecommendedBuilds && (
-							<RecommendedBuild
+					<div>
+						<div className="mt-4 sm:mt-5">
+							{hasRecommendedBuilds && (
+								<RecommendedBuild
+									techTree={techTree}
+									gridContainerRef={gridContainerRef}
+									isLarge={isLarge}
+								/>
+							)}
+						</div>
+						<div className={`${!hasRecommendedBuilds ? "mt-8" : "mt-4"}`}>
+							<TechTreeContent
+								handleOptimize={handleOptimize}
+								solving={solving}
 								techTree={techTree}
-								gridContainerRef={gridContainerRef}
-								isLarge={isLarge}
+								selectedShipType={selectedShipType}
 							/>
-						)}
-					</div>
-					<div className={`${!hasRecommendedBuilds ? "mt-8" : "mt-4"}`}>
-						<TechTreeContent
-							handleOptimize={handleOptimize}
-							solving={solving}
-							techTree={techTree}
-							selectedShipType={selectedShipType}
-						/>
+						</div>
 					</div>
 				</div>
 			)}

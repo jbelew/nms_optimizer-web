@@ -1,10 +1,34 @@
 {
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always"
-	},
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"python.analysis.enablePytestSupport": false
+  // Formatter settings
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  // ESLint auto-fix on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+
+  // TypeScript SDK
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Python
+  "python.analysis.enablePytestSupport": false,
+
+  // Exclude temp folders from VS Code
+  "files.exclude": {
+    "**/tmp": true,
+    "**/dist": true,
+    "**/node_modules": true
+  },
+
+  // Exclude temp folders from searches
+  "search.exclude": {
+    "**/tmp": true,
+    "**/dist": true,
+    "**/node_modules": true
+  },
+
+  // Optional: Prevent TS server from using files in temp directories
+  "typescript.preferences.excludeDirectories": ["**/tmp"]
 }
