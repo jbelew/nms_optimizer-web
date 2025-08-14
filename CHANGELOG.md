@@ -1,3 +1,12 @@
+## [3.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.3...v3.7.4) (2025-08-14)
+
+
+### Bug Fixes
+
+* **recommendedbuilds:** fixes [#48](https://github.com/jbelew/nms_optimizer-web/issues/48). Recommended builds were failing due to a label mismatch ([6886b48](https://github.com/jbelew/nms_optimizer-web/commit/6886b484063a5cbb294380353d704bc5be2ded09))
+
+
+
 ## [3.7.3](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.2...v3.7.3) (2025-08-14)
 
 
