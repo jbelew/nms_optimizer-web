@@ -90,7 +90,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Popover.Root>
 					<Popover.Trigger>
 						<img
-							className="h-4 flex-shrink-0 cursor-pointer sm:h-5"
+							className="h-4 flex-shrink-0 sm:h-5"
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
 							onClick={() => {
