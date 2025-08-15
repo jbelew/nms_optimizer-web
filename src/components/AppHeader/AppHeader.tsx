@@ -93,6 +93,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							className="h-4 flex-shrink-0 sm:h-5"
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
+							alt="No Man's Sky Atlas Logo"
 							onClick={() => {
 								sendEvent({
 									category: "User Interactions",

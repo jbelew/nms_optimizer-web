@@ -102,7 +102,10 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			})
 		: cell.label;
 
-	return cell.module && cell.active && !isSharedGrid ? (
+	const shouldShowTooltip =
+		cell.module && cell.active && !isSharedGrid && !("ontouchstart" in window);
+
+	return shouldShowTooltip ? (
 		<Tooltip content={tooltipContent} delayDuration={500}>
 			{cellElement}
 		</Tooltip>

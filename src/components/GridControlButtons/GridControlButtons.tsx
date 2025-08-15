@@ -16,6 +16,19 @@ interface RowControlButtonProps {
 	gridFixed: boolean;
 }
 
+const TooltipWrapper = ({
+	show,
+	content,
+	children,
+}: {
+	show: boolean;
+	content: string;
+	children: React.ReactNode;
+}) => {
+	if (!show) return children;
+	return <Tooltip content={content}>{children}</Tooltip>;
+};
+
 /**
  * GridControlButtons component provides buttons to activate or deactivate a row in the grid.
  * The buttons are conditionally rendered based on whether the row is the first inactive row or the last active row.
@@ -43,6 +56,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const iconButtonSize = isMediumOrLarger ? "2" : "1";
+	const showTooltip = !("ontouchstart" in window);
 
 	return (
 		<div
@@ -50,7 +64,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 			data-is-grid-control-column="true" // Added data attribute for selection
 		>
 			{isFirstInactiveRow && (
-				<Tooltip content={t("gridControls.activateRow")}>
+				<TooltipWrapper show={showTooltip} content={t("gridControls.activateRow")}>
 					<IconButton
 						size={iconButtonSize}
 						radius="full"
@@ -62,11 +76,11 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					>
 						<PlusIcon />
 					</IconButton>
-				</Tooltip>
+				</TooltipWrapper>
 			)}
 
 			{isLastActiveRow && (
-				<Tooltip content={t("gridControls.deactivateRow")}>
+				<TooltipWrapper show={showTooltip} content={t("gridControls.deactivateRow")}>
 					<IconButton
 						variant="surface"
 						radius="full"
@@ -78,7 +92,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					>
 						<MinusIcon />
 					</IconButton>
-				</Tooltip>
+				</TooltipWrapper>
 			)}
 		</div>
 	);

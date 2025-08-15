@@ -11,7 +11,7 @@ import {
 	ResetIcon,
 	UpdateIcon,
 } from "@radix-ui/react-icons";
-import { Avatar, Badge, Checkbox, IconButton, Text, Tooltip } from "@radix-ui/themes";
+import { Avatar, Badge, Checkbox, IconButton, Popover, Text, Tooltip } from "@radix-ui/themes";
 import { Accordion } from "radix-ui";
 import { useTranslation } from "react-i18next";
 
@@ -135,46 +135,59 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 
 	if (roundedMaxBonus < 100) {
 		return (
-			<Tooltip
-				content={
-					t("techTree.tooltips.insufficientSpace") +
-					" -" +
-					Math.round((100 - roundedMaxBonus) * 100) / 100 +
-					"%"
-				}
-			>
-				<ExclamationTriangleIcon
-					className="mt-[8px] inline-block align-text-top"
-					style={{ color: "var(--red-a8)" }}
-				/>
-			</Tooltip>
+			<Popover.Root>
+				<Popover.Trigger>
+					<ExclamationTriangleIcon
+						className="mt-[8px] inline-block align-text-top"
+						style={{ color: "var(--red-a8)" }}
+					/>
+				</Popover.Trigger>
+				<Popover.Content size="1">
+					<Text as="span" className="text-sm sm:text-base">
+						{t("techTree.tooltips.insufficientSpace") +
+							" -" +
+							Math.round((100 - roundedMaxBonus) * 100) / 100 +
+							"%"}
+					</Text>
+				</Popover.Content>
+			</Popover.Root>
 		);
 	}
 	if (roundedMaxBonus === 100) {
 		return (
-			<Tooltip content={t("techTree.tooltips.validSolve")}>
-				<Crosshair2Icon
-					className="mt-[7px] inline-block align-text-top"
-					style={{ color: "var(--gray-a10)" }}
-				/>
-			</Tooltip>
+			<Popover.Root>
+				<Popover.Trigger>
+					<Crosshair2Icon
+						className="mt-[7px] inline-block align-text-top"
+						style={{ color: "var(--gray-a10)" }}
+					/>
+				</Popover.Trigger>
+				<Popover.Content size="1">
+					<Text
+						as="span"
+						className="text-sm sm:text-base"
+					>{`${t("techTree.tooltips.validSolve")} `}</Text>
+				</Popover.Content>
+			</Popover.Root>
 		);
 	}
 	// roundedMaxBonus > 100
 	return (
-		<Tooltip
-			content={
-				t("techTree.tooltips.boostedSolve") +
-				" +" +
-				Math.round((roundedMaxBonus - 100) * 100) / 100 +
-				"%"
-			}
-		>
-			<LightningBoltIcon
-				className="mt-[6px] inline-block h-4 w-4 align-text-top"
-				style={{ color: "var(--amber-a8)" }}
-			/>
-		</Tooltip>
+		<Popover.Root>
+			<Popover.Trigger>
+				<LightningBoltIcon
+					className="mt-[6px] inline-block h-4 w-4 align-text-top"
+					style={{ color: "var(--amber-a8)" }}
+				/>
+			</Popover.Trigger>
+			<Popover.Content size="1">
+				<Text as="span" className="text-sm sm:text-base">
+					{`${t("techTree.tooltips.boostedSolve")} +${
+						Math.round((roundedMaxBonus - 100) * 100) / 100
+					}%`}
+				</Text>
+			</Popover.Content>
+		</Popover.Root>
 	);
 };
 
