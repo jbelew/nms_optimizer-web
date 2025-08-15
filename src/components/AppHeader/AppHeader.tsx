@@ -94,8 +94,8 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							style={{ color: "var(--accent-track)" }}
 						/>
 					</Popover.Trigger>
-					<Popover.Content>
-						<DataList.Root>
+					<Popover.Content size="1">
+						<DataList.Root size="1">
 							<Header className="nmsFont--header text-lg">Ityanianat</Header>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
