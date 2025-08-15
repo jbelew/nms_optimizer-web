@@ -1,3 +1,17 @@
+## [3.7.5](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.4...v3.7.5) (2025-08-15)
+
+
+### Features
+
+* **error messages:** fixed error boundaries in the tech tree ([b4cab56](https://github.com/jbelew/nms_optimizer-web/commit/b4cab5648e7e3ec55268ef880063057b17e0cc4b))
+
+
+### Performance Improvements
+
+* **optimize:** a quick fix to address INP issues with the useOptimize buttons ([ca16c93](https://github.com/jbelew/nms_optimizer-web/commit/ca16c937d4b806e425369738f73e3e0687b9d4c2))
+
+
+
 ## [3.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.3...v3.7.4) (2025-08-14)
 
 
