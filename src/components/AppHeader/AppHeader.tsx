@@ -96,14 +96,14 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Trigger>
 					<Popover.Content size="1">
 						<DataList.Root size="1">
-							<Header className="nmsFont--header text-lg">Ityanianat</Header>
+							<Header className="nmsFont--header text-base">Ityanianat</Header>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
 								<DataList.Value>
 									<Code>0CEE:0085:0CCF:040D</Code>
 								</DataList.Value>
 							</DataList.Item>
-							<Header className="nmsFont--header text-lg">Odyalutai</Header>
+							<Header className="nmsFont--header text-base">Odyalutai</Header>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">
 									Faye Sigma Fishing Resort
