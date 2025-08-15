@@ -1,10 +1,11 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { ScrollArea } from "@radix-ui/themes";
 import ReactGA from "react-ga4";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
-// src/components/ErrorBoundary/ErrorBoundary.tsx
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 
 interface Props {
 	children: ReactNode;
@@ -16,12 +17,57 @@ interface State {
 	errorInfo?: ErrorInfo;
 }
 
+const ErrorFallback = () => {
+	const isLarge = useBreakpoint("1024px");
+
+	return isLarge ? (
+		<ScrollArea
+			className="gridContainer__sidebar rounded-md p-4 shadow-md"
+			style={{ height: "526px", backgroundColor: "var(--accent-a2)" }}
+		>
+			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
+				<ExclamationTriangleIcon
+					className="h-16 w-16 flex-shrink-0 shadow-md"
+					style={{ color: "var(--red-track)" }}
+				/>
+				<h1
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest break-words"
+					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
+				>
+					-kzzkt- Error! -kzzkt-
+				</h1>
+				<h2 className="pb-4 font-semibold">
+					Something went wrong. Please try reloading the page.
+				</h2>
+			</div>
+		</ScrollArea>
+	) : (
+		<div className="mt-8">
+			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
+				<ExclamationTriangleIcon
+					className="h-16 w-16 flex-shrink-0 shadow-md"
+					style={{ color: "var(--red-track)" }}
+				/>
+				<h1
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest break-words"
+					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
+				>
+					-kzzkt- Error! -kzzkt-
+				</h1>
+				<h2 className="pb-4 font-semibold">
+					Something went wrong. Please try reloading the page.
+				</h2>
+			</div>
+		</div>
+	);
+};
+
 /**
  * ErrorBoundary component catches JavaScript errors anywhere in its child component tree,
  * logs those errors, and displays a fallback UI instead of the component tree that crashed.
  * It also attempts to clear localStorage and sends a Google Analytics event on error.
  */
-class ErrorBoundary extends Component<Props, State> {
+class ErrorBoundaryInset extends Component<Props, State> {
 	/**
 	 * Creates an instance of ErrorBoundary.
 	 * @param {Props} props - The props for the ErrorBoundary component.
@@ -70,63 +116,16 @@ class ErrorBoundary extends Component<Props, State> {
 	}
 
 	render() {
-		const { hasError, error, errorInfo } = this.state;
+		const { hasError } = this.state;
 
 		if (hasError) {
 			console.log("ErrorBoundary: Rendering fallback UI.");
 			hideSplashScreen();
 
-			return (
-				<main className="flex flex-col items-center justify-center lg:min-h-screen">
-					<section className="app w-auto rounded-none bg-white/5 shadow-none backdrop-blur-xl lg:rounded-xl lg:shadow-xl">
-						<div className="flex h-full flex-col items-center justify-center p-8 text-center text-gray-50">
-							<ExclamationTriangleIcon
-								className="h-16 w-16 shadow-md"
-								style={{ color: "var(--red-track)" }}
-							/>
-							<h1
-								className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
-								style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
-							>
-								-kzzkt- Error! -kzzkt-
-							</h1>
-							<h2 className="pb-4 font-semibold">
-								Something went wrong. Please try reloading the page.
-							</h2>
-							<div
-								className="w-full text-left font-mono text-xs lg:text-base"
-								style={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}
-							>
-								{error?.message && (
-									<p>
-										<strong>Error:</strong> {error.message}
-									</p>
-								)}
-								{error?.stack && (
-									<>
-										<p className="mt-2">
-											<strong>Stack Trace:</strong>
-										</p>
-										{error.stack}
-									</>
-								)}
-								{errorInfo?.componentStack && (
-									<>
-										<p className="mt-2">
-											<strong>Component Stack:</strong>
-										</p>
-										{errorInfo.componentStack}
-									</>
-								)}
-							</div>
-						</div>
-					</section>
-				</main>
-			);
+			return <ErrorFallback />;
 		}
-
 		return this.props.children;
 	}
 }
 
-export default ErrorBoundary;
+export default ErrorBoundaryInset;

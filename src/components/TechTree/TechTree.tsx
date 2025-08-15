@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
-import ErrorBoundary from "../ErrorBoundry/ErrorBoundry";
+import ErrorBoundaryInset from "../ErrorBoundry/ErrorBoundryInset";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { SuspenseSkeleton } from "./SuspenseSkeleton";
@@ -53,6 +53,7 @@ const TechTreeSkeleton: React.FC = () => {
 					<MessageSpinner
 						isInset={true}
 						isVisible={true}
+						useNMSFont={true}
 						initialMessage={t("techTree.loading")}
 					/>
 				</ScrollArea>
@@ -165,12 +166,21 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  */
 const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
-	return (
-		<ErrorBoundary>
+	const isLarge = useBreakpoint("1024px");
+	return isLarge ? (
+		<ErrorBoundaryInset>
 			<Suspense fallback={<TechTreeSkeleton />}>
 				<TechTreeWithData {...props} />
 			</Suspense>
-		</ErrorBoundary>
+		</ErrorBoundaryInset>
+	) : (
+		<div className="mt-8">
+			<ErrorBoundaryInset>
+				<Suspense fallback={<TechTreeSkeleton />}>
+					<TechTreeWithData {...props} />
+				</Suspense>
+			</ErrorBoundaryInset>
+		</div>
 	);
 };
 

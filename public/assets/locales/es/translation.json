@@ -137,7 +137,7 @@
         "exosuit": "Exotraje"
     },
     "techTree": {
-        "loading": "¡CARGANDO TECNOLOGÍA!",
+        "loading": "¡CARGANDO TECNOLOGÍA",
         "tooltips": {
             "insufficientSpace": "¡Espacio insuficiente!",
             "validSolve": "¡Solución válida!",

@@ -34,3 +34,12 @@
 	text-transform: uppercase;
 	-webkit-text-stroke: 0.75px;
 }
+
+.nmsFont--header {
+	font-family: "NMS", sans-serif;
+	color: var(--accent-track);
+}
+
+.nmsFont {
+	font-family: "NMS", sans-serif;
+}

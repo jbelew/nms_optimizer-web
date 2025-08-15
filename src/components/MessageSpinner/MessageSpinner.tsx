@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 interface MessageSpinnerProps {
 	isVisible: boolean;
 	isInset?: boolean;
+	useNMSFont?: boolean;
 	initialMessage: string;
 	showRandomMessages?: boolean;
 	color?: string;
@@ -28,11 +29,12 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	isInset = true,
 	isVisible,
 	initialMessage,
+	useNMSFont,
 	showRandomMessages = false,
 }) => {
 	const [showAdditionalMessage, setShowAdditionalMessage] = useState(false);
 	const [currentRandomMessage, setCurrentRandomMessage] = useState<string>("");
-	const { t } = useTranslation();
+	const { t } = useTranslation(); // Destructure useNMSFont from props
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout | null = null;
@@ -81,7 +83,9 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 			<Spinner className="messageSpinner__spinner" />
 
 			{initialMessage && (
-				<Text className="messageSpinner__header pt-4 text-center text-xl sm:text-2xl">
+				<Text
+					className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 text-center text-xl sm:text-2xl`}
+				>
 					{initialMessage}
 				</Text>
 			)}

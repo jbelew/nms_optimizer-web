@@ -7,6 +7,13 @@
 	-webkit-text-stroke: 0.75px;
 }
 
+.messageSpinner__header--nms {
+	font-family: var(--font-family-nms);
+	font-weight: 400;
+	text-transform: uppercase;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
 .messageSpinner__spinner {
 	height: 4rem;
 	width: 4rem;

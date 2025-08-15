@@ -137,7 +137,7 @@
         "exosuit": "Exosuit"
     },
     "techTree": {
-        "loading": "CHARGEMENT DE LA TECHNOLOGIE !",
+        "loading": "CHARGEMENT DE LA TECHNOLOGIE",
         "tooltips": {
             "insufficientSpace": "Espace insuffisant !",
             "validSolve": "Résolution valide !",

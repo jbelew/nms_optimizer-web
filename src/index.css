@@ -15,7 +15,8 @@
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
-	--font-family-geosans: "GeosansLight", sans-serif; /* Added for GeosansLight */
+	--font-family-geosans: "GeosansLight", Helvetica, Arial, sans-serif;
+	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.2rem; /* Added for common letter-spacing */
 	--font-weight-bold: 600; /* Added for common bold weight */
 	--color-background: var(--gray-a1); /* Fixed typo: was --gary-a1 */

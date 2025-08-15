@@ -22,3 +22,11 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+@font-face {
+	font-family: "NMS";
+	src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
+	font-weight: 400; /* Semibold */
+	font-style: normal;
+	font-display: swap;
+}

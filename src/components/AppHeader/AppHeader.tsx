@@ -3,7 +3,8 @@ import "./AppHeader.css";
 
 import React from "react";
 import { CounterClockwiseClockIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import { Code, DataList, Heading, IconButton, Popover, Separator, Tooltip } from "@radix-ui/themes";
+import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -85,10 +86,40 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					decorative
 					className="flex-1"
 				/>
-				<RhombusIcon
-					className="h-4 w-4 flex-shrink-0 sm:h-4 sm:w-4"
-					style={{ color: "var(--accent-track)" }}
-				/>
+
+				<Popover.Root>
+					<Popover.Trigger>
+						<RhombusIcon
+							className="h-4 w-4 flex-shrink-0 cursor-pointer sm:h-4 sm:w-4"
+							style={{ color: "var(--accent-track)" }}
+						/>
+					</Popover.Trigger>
+					<Popover.Content>
+						<DataList.Root>
+							<Header className="nmsFont--header text-lg">Ityanianat</Header>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
+								<DataList.Value>
+									<Code>0CEE:0085:0CCF:040D</Code>
+								</DataList.Value>
+							</DataList.Item>
+							<Header className="nmsFont--header text-lg">Odyalutai</Header>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont">
+									Faye Sigma Fishing Resort
+								</DataList.Label>
+								<DataList.Value>
+									<Code>07EE:008A:07EF:03E9</Code>
+								</DataList.Value>
+								<DataList.Label className="nmsFont">Sanctum Zero</DataList.Label>
+								<DataList.Value>
+									<Code>07E9:0088:07ED:0404</Code>
+								</DataList.Value>
+							</DataList.Item>
+						</DataList.Root>
+					</Popover.Content>
+				</Popover.Root>
+
 				<Separator
 					size="1"
 					orientation="horizontal"

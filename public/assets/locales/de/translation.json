@@ -137,7 +137,7 @@
         "exosuit": "Exo-Anzug"
     },
     "techTree": {
-        "loading": "TECHNOLOGIE WIRD GELADEN!",
+        "loading": "TECHNOLOGIE WIRD GELADEN",
         "tooltips": {
             "insufficientSpace": "Nicht genug Platz!",
             "validSolve": "Gültige Lösung!",
