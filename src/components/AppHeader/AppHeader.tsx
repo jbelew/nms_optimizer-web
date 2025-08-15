@@ -93,6 +93,13 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							className="h-4 flex-shrink-0 cursor-pointer sm:h-5"
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
+							onClick={() => {
+								sendEvent({
+									category: "User Interactions",
+									action: "foundSecret",
+									value: 1,
+								});
+							}}
 						/>
 					</Popover.Trigger>
 					<Popover.Content size="1">
