@@ -7,9 +7,9 @@ import { Code, DataList, Heading, IconButton, Popover, Separator, Tooltip } from
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
+import nmslogo from "../../assets/img/nms-icon.webp";
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import RhombusIcon from "../Icons/RhombusIcon";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 interface AppHeaderProps {
@@ -89,9 +89,10 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 				<Popover.Root>
 					<Popover.Trigger>
-						<RhombusIcon
-							className="h-4 w-4 flex-shrink-0 cursor-pointer sm:h-4 sm:w-4"
+						<img
+							className="h-4 flex-shrink-0 cursor-pointer sm:h-5"
 							style={{ color: "var(--accent-track)" }}
+							src={nmslogo}
 						/>
 					</Popover.Trigger>
 					<Popover.Content size="1">
