@@ -4,7 +4,7 @@ Cette application web fournit une interface interactive pour optimiser les agenc
 
 ## Comment ça marche
 
-> Comment résoudre un problème avec 479 millions de permutations possibles en moins de 5 secondes ?
+> Comment résoudre un problème avec ~8.32 × 10⁸¹ de permutations possibles en moins de 5 secondes ?
 
 Le processus d'optimisation combine des motifs déterministes avec des algorithmes adaptatifs adaptés aux grilles de modules technologiques de No Man's Sky :
 
@@ -21,11 +21,11 @@ Le processus d'optimisation combine des motifs déterministes avec des algorithm
 
 ## Pile technologique
 
-**Frontend :** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI  
-**Solveur Backend :** Python, Flask, TensorFlow, NumPy, implémentation personnalisée du recuit simulé et score heuristique  
-**Tests :** Vitest, Python Unittest  
-**Déploiement :** Heroku (Hébergement) et Cloudflare (DNS et CDN)  
-**Automatisation :** GitHub Actions (CI/CD)  
+**Frontend :** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+**Solveur Backend :** Python, Flask, TensorFlow, NumPy, implémentation personnalisée du recuit simulé et score heuristique
+**Tests :** Vitest, Python Unittest
+**Déploiement :** Heroku (Hébergement) et Cloudflare (DNS et CDN)
+**Automatisation :** GitHub Actions (CI/CD)
 **Analyse :** Google Analytics
 
 ## Dépôts

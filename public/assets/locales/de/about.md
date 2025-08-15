@@ -4,7 +4,7 @@ Diese Webanwendung bietet eine interaktive Oberfläche zur Optimierung von Techn
 
 ## Funktionsweise
 
-> Wie löst man ein Problem mit 479 Millionen möglichen Permutationen in unter 5 Sekunden?
+> Wie löst man ein Problem mit ~8.32 × 10⁸¹ möglichen Permutationen in unter 5 Sekunden?
 
 Der Optimierungsprozess kombiniert deterministische Muster mit adaptiven Algorithmen, die auf die Technologie-Modulraster von No Man's Sky zugeschnitten sind:
 
@@ -21,11 +21,11 @@ Der Optimierungsprozess kombiniert deterministische Muster mit adaptiven Algorit
 
 ## Technologie-Stack
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI  
-**Backend-Solver:** Python, Flask, TensorFlow, NumPy, kundenspezifische Implementierung von simuliertem Annealing und heuristischer Bewertung  
-**Tests:** Vitest, Python Unittest  
-**Bereitstellung:** Heroku (Hosting) und Cloudflare (DNS und CDN)  
-**Automatisierung:** GitHub Actions (CI/CD)  
+**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+**Backend-Solver:** Python, Flask, TensorFlow, NumPy, kundenspezifische Implementierung von simuliertem Annealing und heuristischer Bewertung
+**Tests:** Vitest, Python Unittest
+**Bereitstellung:** Heroku (Hosting) und Cloudflare (DNS und CDN)
+**Automatisierung:** GitHub Actions (CI/CD)
 **Analysen:** Google Analytics
 
 ## Repositories

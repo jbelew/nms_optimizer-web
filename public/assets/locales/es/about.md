@@ -4,7 +4,7 @@ Esta aplicación web proporciona una interfaz interactiva para optimizar los dis
 
 ## Cómo funciona
 
-> ¿Cómo se resuelve un problema con 479 millones de posibles permutaciones en menos de 5 segundos?
+> ¿Cómo se resuelve un problema con ~8.32 × 10⁸¹ de posibles permutaciones en menos de 5 segundos?
 
 El proceso de optimización combina patrones deterministas con algoritmos adaptativos adaptados a las cuadrículas de módulos de tecnología de No Man's Sky:
 
@@ -21,11 +21,11 @@ El proceso de optimización combina patrones deterministas con algoritmos adapta
 
 ## Pila tecnológica
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI  
-**Backend Solver:** Python, Flask, TensorFlow, NumPy, implementación personalizada de recocido simulado y puntuación heurística  
-**Pruebas:** Vitest, Python Unittest  
-**Implementación:** Heroku (Alojamiento) y Cloudflare (DNS y CDN)  
-**Automatización:** GitHub Actions (CI/CD)  
+**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+**Backend Solver:** Python, Flask, TensorFlow, NumPy, implementación personalizada de recocido simulado y puntuación heurística
+**Pruebas:** Vitest, Python Unittest
+**Implementación:** Heroku (Alojamiento) y Cloudflare (DNS y CDN)
+**Automatización:** GitHub Actions (CI/CD)
 **Análisis:** Google Analytics
 
 ## Repositorios

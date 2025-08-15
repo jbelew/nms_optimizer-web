@@ -4,9 +4,9 @@ This web application, the NMS Optimizer, helps players of No Man's Sky figure ou
 
 ## How It Works
 
-> How do you solve a problem with 479 million possible permutations in under 5 seconds?
+> How do you solve a problem with ~8.32 × 10⁸¹ possible permutations (that’s 82 digits long!) in under five seconds?
 
-Figuring out the absolute best **module placement** with over 479 million layout permutations for a full grid is no small feat. This tool blends deterministic patterns, machine learning, and simulated annealing to deliver top-tier **Starship build**, **Multitool layout**, **Exocraft build**, and **Exosuit layout** suggestions in under five seconds. It considers all factors including **adjacency bonuses** and the strategic use of **supercharged slots**.
+Figuring out the absolute best **module placement** with so many possible layout permutations for a full grid is no small feat. This tool blends deterministic patterns, machine learning, and simulated annealing to deliver top-tier **Starship build**, **Multitool layout**, **Exocraft build**, and **Exosuit layout** suggestions in under five seconds. It considers all factors including **adjacency bonuses** and the strategic use of **supercharged slots**.
 
 1.  **Pattern-Based Pre-Solve:** Begins with a curated library of hand-tested layout patterns, optimizing for maximum adjacency bonuses across different grid types.
 2.  **AI-Guided Placement (ML Inference):** If a viable configuration includes supercharged slots, the tool invokes a TensorFlow model trained on 16,000+ grids to predict optimal placement.
