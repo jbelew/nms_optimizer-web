@@ -106,18 +106,28 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background: image-set(
-						url("/assets/img/background.webp") 1x,
-						url("/assets/img/background@2x.webp") 2x
-					)
-					center/cover no-repeat;
+				/* Set all background properties except image */
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+
+				/* Default desktop image-set */
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
+
 				z-index: -1;
+
+				/* Keep it in its own GPU layer to prevent repaint flicker */
+				will-change: transform;
+				transform: translateZ(0);
 			}
 
-			/* Mobile (≤600px): swap in the mobile image */
+			/* Mobile (≤600px): swap only the background-image, not the whole background */
 			@media (max-width: 600px) {
 				body::before {
-					background: url("/assets/img/background@mobile.webp") center/cover no-repeat;
+					background-image: url("/assets/img/background@mobile.webp");
 				}
 			}
 
@@ -156,22 +166,10 @@
 			}
 		</style>
 
-		<link
-			rel="preload"
-			href="/assets/img/background.webp"
-			as="image"
-			type="image/webp"
-			fetchpriority="high"
-		/>
-
-		<link
-			rel="preload"
-			href="/assets/img/background@mobile.webp"
-			as="image"
-			type="image/webp"
-			media="(max-width: 600px)"
-			fetchpriority="high"
-		/>
+		<!-- Preload images so iOS Safari has them ready -->
+		<link rel="preload" as="image" href="/assets/img/background.webp" />
+		<link rel="preload" as="image" href="/assets/img/background@2x.webp" />
+		<link rel="preload" as="image" href="/assets/img/background@mobile.webp" />
 
 		<!-- Fonts -->
 		<link
