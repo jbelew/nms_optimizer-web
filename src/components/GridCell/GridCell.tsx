@@ -4,6 +4,7 @@ import React, { memo } from "react";
 import { Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import EmptyCellIcon from "../../assets/svg/EmptyCellIcon";
 import { useGridStore } from "../../store/GridStore";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
@@ -59,7 +60,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		handleTouchEnd,
 	} = useGridCellInteraction(cell, rowIndex, columnIndex, isSharedGrid);
 
-	const { techColor, cellClassName, cellElementStyle } = useGridCellStyle(cell, isTouching);
+	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
+		useGridCellStyle(cell, isTouching);
 
 	const upGradePriority = getUpgradePriority(cell.label);
 
@@ -77,6 +79,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			className={cellClassName}
 			style={cellElementStyle}
 		>
+			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
 			{!cell.supercharged && (
 				<>
 					<span className="corner top-left"></span>
