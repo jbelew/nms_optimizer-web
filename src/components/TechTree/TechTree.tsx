@@ -174,7 +174,7 @@ const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
 			</Suspense>
 		</ErrorBoundaryInset>
 	) : (
-		<div className="mt-8">
+		<div>
 			<ErrorBoundaryInset>
 				<Suspense fallback={<TechTreeSkeleton />}>
 					<TechTreeWithData {...props} />
