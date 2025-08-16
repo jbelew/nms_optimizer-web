@@ -1,3 +1,23 @@
+## [3.7.6](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.5...v3.7.6) (2025-08-16)
+
+
+### Bug Fixes
+
+* **background:** forgot to uncomment the initial background color setting ([dda6584](https://github.com/jbelew/nms_optimizer-web/commit/dda658401deeabb3b8919dd299e10be62b00185e))
+* **minotaur:** added proper minotaur laser images ([20e0704](https://github.com/jbelew/nms_optimizer-web/commit/20e0704a27a5ff8c132624ff369a25ce345a45b2))
+* **popover:** possible fix for weird sizing on iOS ([c7a60e3](https://github.com/jbelew/nms_optimizer-web/commit/c7a60e36f863fdb0fe4a719c5ff6d96235ddc28f))
+* **ui:** fixed a spacing regression ([0b21400](https://github.com/jbelew/nms_optimizer-web/commit/0b214005e45a924835404846d85c3ae46a6745ad))
+* **ui:** one more color change ([ce48aab](https://github.com/jbelew/nms_optimizer-web/commit/ce48aab50bf1940edaf571b024f9eed6dd241bfe))
+
+
+### Features
+
+* Add g4 event to popover trigger ([ae3e2f9](https://github.com/jbelew/nms_optimizer-web/commit/ae3e2f9ab6d62c6eb0e1442b3031cccffa8504e2))
+* **tecttree:** updated interaction patterns for a better mobile experience ([e8fcaa1](https://github.com/jbelew/nms_optimizer-web/commit/e8fcaa178f43811796d7c2ac9da53793829115ce))
+* **tooltips:** depricated tooltip for popovers on mobile ([28b15f1](https://github.com/jbelew/nms_optimizer-web/commit/28b15f18cd78f639f11ccf0fdd4f01eda5f1f087))
+
+
+
 ## [3.7.5](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.4...v3.7.5) (2025-08-15)
 
 
