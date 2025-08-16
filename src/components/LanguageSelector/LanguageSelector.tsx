@@ -112,7 +112,7 @@ const LanguageSelector: React.FC = () => {
 				<DropdownMenu.Item onClick={handleRequestTranslationClick}>
 					<InfoCircledIcon
 						className="mr-2 h-auto w-5"
-						style={{ color: "var(--accent-track)" }}
+						style={{ color: "var(--accent-a11)" }}
 					/>
 					{t("translationRequest.openDialogLabel")}
 				</DropdownMenu.Item>
