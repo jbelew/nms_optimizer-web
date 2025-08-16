@@ -86,7 +86,7 @@ app.use(async (req, res, next) => {
 			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
 		}
 
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Cache-Control", "no-cache, must-revalidate");
 		res.send(indexHtml);
 	} catch (error) {
 		console.error("Error modifying and serving index.html:", error);
@@ -111,7 +111,7 @@ app.use(
 				fileName.endsWith(".md") ||
 				fileName === "robots.txt"
 			) {
-				res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				res.setHeader("Cache-Control", "no-cache, must-revalidate");
 			} else {
 				res.setHeader("Cache-Control", "no-cache, must-revalidate");
 			}
