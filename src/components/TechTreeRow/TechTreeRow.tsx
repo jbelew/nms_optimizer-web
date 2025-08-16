@@ -1,24 +1,15 @@
-// src/components/TechTreeRow/TechTreeRow.tsx
 import "./TechTreeRow.css";
 
 import React, { useCallback, useEffect } from "react";
-import {
-	ChevronDownIcon,
-	Crosshair2Icon,
-	DoubleArrowLeftIcon,
-	ExclamationTriangleIcon,
-	LightningBoltIcon,
-	ResetIcon,
-	UpdateIcon,
-} from "@radix-ui/react-icons";
-import { Avatar, Badge, Checkbox, IconButton, Popover, Text, Tooltip } from "@radix-ui/themes";
-import { Accordion } from "radix-ui";
+import { Avatar } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechStore } from "../../store/TechStore";
+import { ActionButtons } from "./ActionButtons";
+import { TechInfo } from "./TechInfo";
+import { TechInfoBadges } from "./TechInfoBadges";
 
 const EMPTY_ARRAY: string[] = [];
 
@@ -75,120 +66,6 @@ export interface TechTreeRowProps {
 }
 
 /**
- * Rounds a number to a specified number of decimal places.
- * @param {number} value - The number to round.
- * @param {number} decimals - The number of decimal places.
- * @returns {number} The rounded number.
- */
-function round(value: number, decimals: number) {
-	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
-}
-
-/**
- * A forwardRef-wrapped Accordion.Trigger component to be used within the TechTreeRow.
- * This is defined outside the main component to prevent re-creation on every render of TechTreeRow.
- */
-const AccordionTrigger = React.forwardRef(
-	(
-		{ children, className, ...props }: { children: React.ReactNode; className?: string },
-		forwardedRef: React.Ref<HTMLButtonElement>
-	) => (
-		<Accordion.Header className="AccordionHeader">
-			<Accordion.Trigger
-				className={`AccordionTrigger ${className || ""}`}
-				{...props}
-				ref={forwardedRef}
-			>
-				{children}
-				<ChevronDownIcon className="AccordionChevron" aria-hidden />
-			</Accordion.Trigger>
-		</Accordion.Header>
-	)
-);
-AccordionTrigger.displayName = "AccordionTrigger";
-
-/**
- * @interface BonusStatusIconProps
- * @property {number} techMaxBonus - The maximum potential bonus for the technology.
- * @property {number} techSolvedBonus - The bonus achieved from the current solved state for the technology.
- */
-interface BonusStatusIconProps {
-	/** The maximum potential bonus for the technology. */
-	techMaxBonus: number;
-	/** The bonus achieved from the current solved state for the technology. */
-	techSolvedBonus: number;
-}
-
-/**
- * Displays an icon indicating the status of the technology's bonus based on solved and max values.
- *
- * @param {BonusStatusIconProps} props - The props for the component.
- * @returns {JSX.Element|null} The rendered icon or null.
- */
-const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSolvedBonus }) => {
-	const { t } = useTranslation();
-	if (techSolvedBonus <= 0) {
-		return null;
-	}
-
-	const roundedMaxBonus = round(techMaxBonus, 2);
-
-	if (roundedMaxBonus < 100) {
-		return (
-			<Popover.Root>
-				<Popover.Trigger>
-					<ExclamationTriangleIcon
-						className="mt-[8px] inline-block align-text-top"
-						style={{ color: "var(--red-a8)" }}
-					/>
-				</Popover.Trigger>
-				<Popover.Content size="1">
-					<Text className="text-sm sm:text-base">
-						{t("techTree.tooltips.insufficientSpace") +
-							" -" +
-							Math.round((100 - roundedMaxBonus) * 100) / 100 +
-							"%"}
-					</Text>
-				</Popover.Content>
-			</Popover.Root>
-		);
-	}
-	if (roundedMaxBonus === 100) {
-		return (
-			<Popover.Root>
-				<Popover.Trigger>
-					<Crosshair2Icon
-						className="mt-[7px] inline-block align-text-top"
-						style={{ color: "var(--gray-a10)" }}
-					/>
-				</Popover.Trigger>
-				<Popover.Content size="1">
-					<Text className="text-sm sm:text-base">{`${t("techTree.tooltips.validSolve")} `}</Text>
-				</Popover.Content>
-			</Popover.Root>
-		);
-	}
-	// roundedMaxBonus > 100
-	return (
-		<Popover.Root>
-			<Popover.Trigger>
-				<LightningBoltIcon
-					className="mt-[6px] inline-block h-4 w-4 align-text-top"
-					style={{ color: "var(--amber-a8)" }}
-				/>
-			</Popover.Trigger>
-			<Popover.Content size="1">
-				<Text className="text-sm sm:text-base">
-					{`${t("techTree.tooltips.boostedSolve")} +${
-						Math.round((roundedMaxBonus - 100) * 100) / 100
-					}%`}
-				</Text>
-			</Popover.Content>
-		</Popover.Root>
-	);
-};
-
-/**
  * Renders a single row in the technology tree, allowing users to optimize, reset, and view module details.
  */
 const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
@@ -209,6 +86,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		useTechStore();
 	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
 	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
+	const { setShaking } = useShakeStore();
 
 	// Use techImage to build a more descriptive translation key, falling back to the tech key if image is not available.
 	const translationKeyPart = techImage
@@ -216,23 +94,11 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: tech;
 	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
-	let tooltipLabel: string;
-
-	if (isGridFull && !hasTechInGrid) {
-		tooltipLabel = t("techTree.tooltips.gridFull");
-	} else {
-		tooltipLabel = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
-	}
-	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : DoubleArrowLeftIcon;
-	const { setShaking } = useShakeStore();
-
 	useEffect(() => {
 		return () => {
 			clearCheckedModules(tech);
 		};
 	}, [tech, clearCheckedModules]);
-
-	const isOptimizeButtonDisabled = (isGridFull && !hasTechInGrid) || solving;
 
 	const handleReset = useCallback(() => {
 		handleResetGridTech(tech);
@@ -284,99 +150,20 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
 	const imagePath2x = techImage
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
-		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1"); // Also handle fallback
-	const isSmallAndUp = useBreakpoint("640px");
-
-	/**
-	 * @interface TechInfoBadgesProps
-	 * @property {boolean} hasTechInGrid - Whether the technology is in the grid.
-	 * @property {TechTreeRowProps["techColor"]} techColor - The color of the technology.
-	 * @property {number} moduleCount - The number of modules for the technology.
-	 * @property {number} currentCheckedModulesLength - The number of currently checked modules.
-	 * @property {number} techMaxBonus - The maximum potential bonus for the technology.
-	 * @property {number} techSolvedBonus - The bonus achieved from the current solved state for the technology.
-	 */
-	interface TechInfoBadgesProps {
-		hasTechInGrid: boolean;
-		techColor: TechTreeRowProps["techColor"];
-		moduleCount: number;
-		currentCheckedModulesLength: number;
-		techMaxBonus: number;
-		techSolvedBonus: number;
-	}
-
-	const TechInfoBadges: React.FC<TechInfoBadgesProps> = React.memo(
-		({
-			hasTechInGrid,
-			techColor,
-			moduleCount,
-			currentCheckedModulesLength,
-			techMaxBonus,
-			techSolvedBonus,
-		}) => {
-			return (
-				<>
-					{hasTechInGrid && (
-						<BonusStatusIcon
-							techMaxBonus={techMaxBonus}
-							techSolvedBonus={techSolvedBonus}
-						/>
-					)}
-					<Badge
-						ml="1"
-						mt="1"
-						className="align-top !font-mono"
-						size="1"
-						radius="full"
-						variant={hasTechInGrid ? "soft" : "surface"}
-						color={hasTechInGrid ? "gray" : techColor}
-						style={
-							hasTechInGrid
-								? {
-										backgroundColor: "var(--gray-a2)",
-										color: "var(--gray-a8)",
-									}
-								: { backgroundColor: "var(--accent-a3)" }
-						}
-					>
-						x{moduleCount + currentCheckedModulesLength}
-					</Badge>
-				</>
-			);
-		}
-	);
-	TechInfoBadges.displayName = "TechInfoBadges";
+		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
 
 	return (
 		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
-			{/* Optimize Button */}
-			<Tooltip delayDuration={1000} content={tooltipLabel}>
-				<IconButton
-					onClick={() => {
-						void handleOptimizeClick();
-					}}
-					disabled={isOptimizeButtonDisabled}
-					aria-label={`${tooltipLabel} ${translatedTechName}`}
-					id={tech}
-					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "!cursor-pointer" : ""}`.trim()}
-				>
-					<OptimizeIconComponent />
-				</IconButton>
-			</Tooltip>
+			<ActionButtons
+				tech={tech}
+				hasTechInGrid={hasTechInGrid}
+				isGridFull={isGridFull}
+				solving={solving}
+				translatedTechName={translatedTechName}
+				handleOptimizeClick={handleOptimizeClick}
+				handleReset={handleReset}
+			/>
 
-			{/* Reset Button */}
-			<Tooltip delayDuration={1000} content={t("techTree.tooltips.reset")}>
-				<IconButton
-					onClick={handleReset}
-					disabled={!hasTechInGrid || solving}
-					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton ${hasTechInGrid && !solving ? "!cursor-pointer" : ""}`.trim()}
-				>
-					<ResetIcon />
-				</IconButton>
-			</Tooltip>
-
-			{/* Avatar with srcSet */}
 			<Avatar
 				size="2"
 				radius="full"
@@ -386,89 +173,27 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				color={techColor}
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
-			{hasRewardModules ? (
-				<>
-					<Accordion.Root
-						className="AccordionRoot flex-1 border-b-1 pt-1 pb-1"
-						style={{ borderColor: "var(--accent-track)" }}
-						type="single"
-						collapsible
-					>
-						<Accordion.Item className="AccordionItem" value="item-1">
-							<AccordionTrigger>
-								<Text
-									as="label"
-									wrap="balance"
-									weight="medium"
-									size={isSmallAndUp ? "3" : "2"}
-								>
-									{translatedTechName}
-								</Text>
-							</AccordionTrigger>
-							<Accordion.Content className="AccordionContent pl-1">
-								{rewardModules.map((module) => (
-									<div
-										key={module.id}
-										className="AccordionContentText flex items-start gap-2"
-									>
-										<Checkbox
-											className="CheckboxRoot ml-1 !pt-1"
-											variant="soft"
-											id={module.id}
-											checked={currentCheckedModules.includes(module.id)}
-											onClick={() => handleCheckboxChange(module.id)}
-										/>
-										<Text
-											as="label"
-											wrap="balance"
-											weight="medium"
-											size={isSmallAndUp ? "3" : "2"}
-											htmlFor={module.id}
-										>
-											{t(`modules.${module.id}`, {
-												defaultValue: module.label,
-											})}
-										</Text>
-									</div>
-								))}
-							</Accordion.Content>
-						</Accordion.Item>
-					</Accordion.Root>
-					<div className="flex justify-end">
-						<TechInfoBadges
-							hasTechInGrid={hasTechInGrid}
-							techColor={techColor}
-							moduleCount={moduleCount}
-							currentCheckedModulesLength={currentCheckedModules.length}
-							techMaxBonus={techMaxBonus}
-							techSolvedBonus={techSolvedBonus}
-						/>
-					</div>
-				</>
-			) : (
-				<>
-					<Text
-						as="label"
-						wrap="balance"
-						weight="medium"
-						size={isSmallAndUp ? "3" : "2"}
-						htmlFor={tech}
-						className="techRow__label block flex-1 pt-1"
-					>
-						{translatedTechName}
-					</Text>
-					<div className="flex justify-end">
-						<TechInfoBadges
-							hasTechInGrid={hasTechInGrid}
-							techColor={techColor}
-							moduleCount={moduleCount}
-							currentCheckedModulesLength={currentCheckedModules.length}
-							techMaxBonus={techMaxBonus}
-							techSolvedBonus={techSolvedBonus}
-						/>
-					</div>
-				</>
-			)}
+
+			<div className="flex flex-1 items-start justify-between">
+				<TechInfo
+					tech={tech}
+					translatedTechName={translatedTechName}
+					hasRewardModules={hasRewardModules}
+					rewardModules={rewardModules}
+					currentCheckedModules={currentCheckedModules}
+					handleCheckboxChange={handleCheckboxChange}
+				/>
+				<div className="flex justify-end">
+					<TechInfoBadges
+						hasTechInGrid={hasTechInGrid}
+						techColor={techColor}
+						moduleCount={moduleCount}
+						currentCheckedModulesLength={currentCheckedModules.length}
+						techMaxBonus={techMaxBonus}
+						techSolvedBonus={techSolvedBonus}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 };

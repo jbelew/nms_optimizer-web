@@ -49,7 +49,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		// Reset the URL to a clean state
 		Object.defineProperty(window, "location", {
-			value: new URL("http://localhost:3000"),
+			value: new URL(process.env.VITE_API_URL as string),
 			writable: true,
 		});
 

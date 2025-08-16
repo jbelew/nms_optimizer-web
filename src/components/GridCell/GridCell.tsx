@@ -1,11 +1,12 @@
 import "./GridCell.css";
 
 import React, { memo } from "react";
-import { Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import EmptyCellIcon from "../../assets/svg/EmptyCellIcon";
-import { useGridStore } from "../../store/GridStore";
+import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { useGridStore } from "@/store/GridStore";
+
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
@@ -102,13 +103,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			})
 		: cell.label;
 
-	const shouldShowTooltip =
-		cell.module && cell.active && !isSharedGrid && !("ontouchstart" in window);
+	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
 
-	return shouldShowTooltip ? (
-		<Tooltip content={tooltipContent} delayDuration={500}>
+	return isTooltipVisible ? (
+		<ConditionalTooltip label={tooltipContent ?? ""} delayDuration={500}>
 			{cellElement}
-		</Tooltip>
+		</ConditionalTooltip>
 	) : (
 		cellElement
 	);

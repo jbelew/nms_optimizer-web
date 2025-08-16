@@ -58,6 +58,12 @@ export default defineConfig(({ }) => {
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
 		],
 
+		resolve: {
+			alias: {
+				"@": path.resolve(__dirname, "./src"),
+			},
+		},
+
 		server: {
 			host: "0.0.0.0",
 			port: 5173,

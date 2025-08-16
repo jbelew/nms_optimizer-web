@@ -1,10 +1,11 @@
 // RowControlButton.tsx
 import React from "react";
 import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
-import { IconButton, Tooltip } from "@radix-ui/themes";
+import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 interface RowControlButtonProps {
 	rowIndex: number;
@@ -15,19 +16,6 @@ interface RowControlButtonProps {
 	isLastActiveRow: boolean;
 	gridFixed: boolean;
 }
-
-const TooltipWrapper = ({
-	show,
-	content,
-	children,
-}: {
-	show: boolean;
-	content: string;
-	children: React.ReactNode;
-}) => {
-	if (!show) return children;
-	return <Tooltip content={content}>{children}</Tooltip>;
-};
 
 /**
  * GridControlButtons component provides buttons to activate or deactivate a row in the grid.
@@ -56,7 +44,6 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const iconButtonSize = isMediumOrLarger ? "2" : "1";
-	const showTooltip = !("ontouchstart" in window);
 
 	return (
 		<div
@@ -64,7 +51,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 			data-is-grid-control-column="true" // Added data attribute for selection
 		>
 			{isFirstInactiveRow && (
-				<TooltipWrapper show={showTooltip} content={t("gridControls.activateRow")}>
+				<ConditionalTooltip label={t("gridControls.activateRow")}>
 					<IconButton
 						size={iconButtonSize}
 						radius="full"
@@ -76,11 +63,11 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					>
 						<PlusIcon />
 					</IconButton>
-				</TooltipWrapper>
+				</ConditionalTooltip>
 			)}
 
 			{isLastActiveRow && (
-				<TooltipWrapper show={showTooltip} content={t("gridControls.deactivateRow")}>
+				<ConditionalTooltip label={t("gridControls.deactivateRow")}>
 					<IconButton
 						variant="surface"
 						radius="full"
@@ -92,7 +79,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 					>
 						<MinusIcon />
 					</IconButton>
-				</TooltipWrapper>
+				</ConditionalTooltip>
 			)}
 		</div>
 	);

@@ -2,8 +2,10 @@
 import "./LanguageSelector.css";
 
 import React, { useMemo } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 // Import your SVG flag components
 import deFlagPath from "../../assets/svg/flags/de.svg";
@@ -34,6 +36,7 @@ const languageFlagPaths: LanguageFlagPaths = {
 const LanguageSelector: React.FC = () => {
 	const isSmallAndUp = useBreakpoint("640px");
 	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
 
@@ -65,6 +68,10 @@ const LanguageSelector: React.FC = () => {
 			label: langCode,
 			value: 1,
 		});
+	};
+
+	const handleRequestTranslationClick = () => {
+		navigate("/translation");
 	};
 
 	const currentFlagPath =
@@ -101,6 +108,11 @@ const LanguageSelector: React.FC = () => {
 						</DropdownMenu.RadioItem>
 					))}
 				</DropdownMenu.RadioGroup>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item onClick={handleRequestTranslationClick}>
+					<InfoCircledIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+					{t("translationRequest.openDialogLabel")}
+				</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	);

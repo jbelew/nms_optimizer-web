@@ -1,6 +1,6 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
 import React from "react";
-import { MagicWandIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { InfoCircledIcon, MagicWandIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import {
 	Button,
 	Callout,
@@ -81,6 +81,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
 						<Button {...buttonProps}>
+							<MagicWandIcon />
 							{t("techTree.recommendedBuilds.selectBuildButton")}
 							<Separator orientation="vertical" size="1" />
 							<DropdownMenu.TriggerIcon />
@@ -107,6 +108,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 		if (builds.length === 1) {
 			return (
 				<Button {...buttonProps} onClick={() => handleApply(builds[0])}>
+					<MagicWandIcon />
 					{t("techTree.recommendedBuilds.applyBuildButton")}
 				</Button>
 			);
@@ -134,7 +136,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 				<>
 					<Callout.Root size="1">
 						<Callout.Icon>
-							<MagicWandIcon />
+							<InfoCircledIcon />
 						</Callout.Icon>
 						<Callout.Text size={{ initial: "2", sm: "3" }}>
 							<Trans

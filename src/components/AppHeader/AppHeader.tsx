@@ -3,14 +3,15 @@ import "./AppHeader.css";
 
 import React from "react";
 import { CounterClockwiseClockIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { Code, DataList, Heading, IconButton, Popover, Separator, Tooltip } from "@radix-ui/themes";
+import { Code, DataList, Heading, IconButton, Popover, Separator } from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
-import nmslogo from "../../assets/img/nms-icon.webp";
-import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import LanguageSelector from "../LanguageSelector/LanguageSelector";
+import nmslogo from "@/assets/img/nms-icon.webp";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
+import { useDialog } from "@/context/dialog-utils";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 
 interface AppHeaderProps {
 	onShowChangelog: () => void;
@@ -32,12 +33,12 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
 			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
-				<Tooltip content={t("buttons.userStats")}>
+				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton
 						variant="ghost"
 						radius="full"
 						className="!mr-0 sm:!mr-2"
-						aria-label={t("buttons.userStats")}
+						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							sendEvent({
 								category: "User Interactions",
@@ -49,9 +50,9 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					>
 						<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
-				</Tooltip>
+				</ConditionalTooltip>
 				<LanguageSelector />
-				{/* <Tooltip content={t("translationRequest.openDialogLabel")}>
+				{/* <ConditionalTooltip label={t("translationRequest.openDialogLabel")}>
 					<IconButton
 						className="!ml-2 !hidden h-6 w-6 sm:!inline"
 						color="amber"
@@ -71,7 +72,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					>
 						<InfoCircledIcon className="w-4 h-4 sm:h-5 sm:w-5" />
 					</IconButton>
-				</Tooltip> */}
+				</ConditionalTooltip> */}
 			</div>
 
 			<h1 className="header__logo--text text-2xl [word-spacing:-.25rem] sm:text-4xl">
@@ -156,13 +157,13 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					{" "}
 					v{__APP_VERSION__}
 				</span>
-				<Tooltip content={t("buttons.changelog")}>
+				<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 					<IconButton
 						variant="ghost"
 						radius="full"
 						size="1"
 						className="!ml-[0px]"
-						aria-label={t("buttons.changelog")}
+						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							sendEvent({
 								category: "User Interactions",
@@ -174,7 +175,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					>
 						<CounterClockwiseClockIcon className="mt-[1px] h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
-				</Tooltip>
+				</ConditionalTooltip>
 			</Heading>
 		</header>
 	);
