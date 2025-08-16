@@ -148,7 +148,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Tests that a recommended build is correctly applied to the grid.
-	 */ it("should apply a recommended build and set the grid", () => {
+	 */ it("should apply a recommended build and set the grid", async () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
 			layout: [
@@ -179,8 +179,8 @@ describe("useRecommendedBuild", () => {
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
-			result.current.applyRecommendedBuild(mockBuild);
+		await act(async () => {
+			await result.current.applyRecommendedBuild(mockBuild);
 		});
 
 		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
@@ -227,7 +227,10 @@ describe("useRecommendedBuild", () => {
 	/**
 	 * Regression test for modulesMap key mismatch.
 	 * Ensures that modules are correctly applied when mockBuild.tech matches mockTechTree.key.
-	 */ it("should correctly apply modules when build tech matches techTree key", () => {
+	 */ /**
+	 * Regression test for modulesMap key mismatch.
+	 * Ensures that modules are correctly applied when build tech matches techTree key.
+	 */ it("should correctly apply modules when build tech matches techTree key", async () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Key Match Test",
 			layout: [
@@ -247,8 +250,8 @@ describe("useRecommendedBuild", () => {
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
-			result.current.applyRecommendedBuild(mockBuild);
+		await act(async () => {
+			await result.current.applyRecommendedBuild(mockBuild);
 		});
 
 		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
@@ -274,7 +277,7 @@ describe("useRecommendedBuild", () => {
 	/**
 	 * Regression test for cell.module being "" instead of null.
 	 * Ensures that empty cells have their module property set to null.
-	 */ it("should set cell.module to null for empty cells in recommended build", () => {
+	 */ it("should set cell.module to null for empty cells in recommended build", async () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Empty Cell Test",
 			layout: [
@@ -302,8 +305,8 @@ describe("useRecommendedBuild", () => {
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
-			result.current.applyRecommendedBuild(mockBuild);
+		await act(async () => {
+			await result.current.applyRecommendedBuild(mockBuild);
 		});
 
 		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);
@@ -321,7 +324,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Verifies that the grid container scrolls into view after applying a build.
-	 */ it("should scroll to grid container after applying build", () => {
+	 */ it("should scroll to grid container after applying build", async () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
 			layout: [[{ tech: "weapon", module: "S1" }]], // Updated tech to "weapon"
@@ -331,8 +334,8 @@ describe("useRecommendedBuild", () => {
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
-			result.current.applyRecommendedBuild(mockBuild);
+		await act(async () => {
+			await result.current.applyRecommendedBuild(mockBuild);
 		});
 
 		expect(requestAnimationFrameMock).toHaveBeenCalled();
@@ -344,12 +347,12 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Ensures that no build is applied if the provided build or layout is null or empty.
-	 */ it("should not apply build if build or layout is null", () => {
+	 */ it("should not apply build if build or layout is null", async () => {
 		const { result } = renderHook(() =>
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
+		await act(async () => {
 			result.current.applyRecommendedBuild({ title: "Empty", layout: [] });
 		});
 		expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
@@ -357,7 +360,7 @@ describe("useRecommendedBuild", () => {
 
 	/**
 	 * Tests the handling of missing modules within the recommended build layout.
-	 */ it("should handle missing module in layout", () => {
+	 */ it("should handle missing module in layout", async () => {
 		const mockBuild: RecommendedBuild = {
 			title: "Test Build",
 			layout: [
@@ -369,8 +372,8 @@ describe("useRecommendedBuild", () => {
 			useRecommendedBuild(mockTechTree, mockGridContainerRef)
 		);
 
-		act(() => {
-			result.current.applyRecommendedBuild(mockBuild);
+		await act(async () => {
+			await result.current.applyRecommendedBuild(mockBuild);
 		});
 
 		expect(setGridAndResetAuxiliaryStateMock).toHaveBeenCalledTimes(1);

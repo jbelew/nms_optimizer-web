@@ -89,9 +89,10 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	 * Handles the click event for the "Reset Grid" button.
 	 * Resets the grid to its initial state, updates the URL, and scrolls to the top of the grid.
 	 */
-	const handleResetGrid = useCallback(() => {
+	const handleResetGrid = useCallback(async () => {
 		sendEvent({ category: "User Interactions", action: "resetGrid", value: 1 });
-		useGridStore.getState().resetGrid();
+		useGridStore.getState().resetGrid(); // Now synchronous
+		await new Promise((resolve) => setTimeout(resolve, 0)); // Yield control
 		updateUrlForReset();
 		setIsSharedGrid(false);
 		if (gridContainerRef.current) {
@@ -99,11 +100,11 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 			const offset = 8; // Same offset as in useOptimize.tsx and useRecommendedBuild.tsx
 
 			const scrollIntoView = () => {
-				const elementRect = element.getBoundingClientRect();
-				const absoluteElementTop = elementRect.top + window.pageYOffset;
-				const targetScrollPosition = absoluteElementTop - offset;
-
 				requestAnimationFrame(() => {
+					const elementRect = element.getBoundingClientRect();
+					const absoluteElementTop = elementRect.top + window.pageYOffset;
+					const targetScrollPosition = absoluteElementTop - offset;
+
 					window.scrollTo({
 						top: targetScrollPosition,
 						behavior: "smooth",

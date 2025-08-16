@@ -52,7 +52,7 @@ export const useRecommendedBuild = (
 	 * @param {RecommendedBuild} build - The recommended build to apply.
 	 */
 	const applyRecommendedBuild = useCallback(
-		(build: RecommendedBuild) => {
+		async (build: RecommendedBuild) => {
 			if (!isValidRecommendedBuild(build)) {
 				console.error("Invalid RecommendedBuild object received:", build);
 				return;
@@ -110,6 +110,7 @@ export const useRecommendedBuild = (
 							newGrid.cells[r][c] = createEmptyCell();
 						}
 					}
+					await new Promise((resolve) => setTimeout(resolve, 0)); // Yield after each row
 				}
 				setGridAndResetAuxiliaryState(newGrid);
 
@@ -119,11 +120,11 @@ export const useRecommendedBuild = (
 					const offset = 8; // Same offset as in useOptimize.tsx
 
 					const scrollIntoView = () => {
-						const elementRect = element.getBoundingClientRect();
-						const absoluteElementTop = elementRect.top + window.pageYOffset;
-						const targetScrollPosition = absoluteElementTop - offset;
-
 						requestAnimationFrame(() => {
+							const elementRect = element.getBoundingClientRect();
+							const absoluteElementTop = elementRect.top + window.pageYOffset;
+							const targetScrollPosition = absoluteElementTop - offset;
+
 							window.scrollTo({
 								top: targetScrollPosition,
 								behavior: "smooth",

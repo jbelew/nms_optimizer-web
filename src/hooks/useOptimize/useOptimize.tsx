@@ -119,11 +119,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 			 * Scrolls the grid container into view with a smooth behavior.
 			 */
 			const scrollIntoView = () => {
-				const elementRect = element.getBoundingClientRect();
-				const absoluteElementTop = elementRect.top + window.pageYOffset;
-				const targetScrollPosition = absoluteElementTop - offset;
-
 				requestAnimationFrame(() => {
+					const elementRect = element.getBoundingClientRect();
+					const absoluteElementTop = elementRect.top + window.pageYOffset;
+					const targetScrollPosition = absoluteElementTop - offset;
+
 					window.scrollTo({
 						top: targetScrollPosition,
 						behavior: "smooth",
