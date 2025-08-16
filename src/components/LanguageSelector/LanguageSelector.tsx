@@ -109,7 +109,7 @@ const LanguageSelector: React.FC = () => {
 					))}
 				</DropdownMenu.RadioGroup>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item onClick={handleRequestTranslationClick}>
+				<DropdownMenu.Item onClick={handleRequestTranslationClick} className="font-medium">
 					<InfoCircledIcon
 						className="mr-2 h-auto w-5"
 						style={{ color: "var(--accent-a11)" }}
