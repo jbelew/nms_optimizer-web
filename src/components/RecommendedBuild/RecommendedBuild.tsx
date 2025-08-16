@@ -129,7 +129,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						aria-label={t("buttons.changelog")}
 						onClick={handleOpenInstructions}
 					>
-						<QuestionMarkCircledIcon className="h-5 w-5" />
+						<QuestionMarkCircledIcon />
 					</IconButton>
 				</div>
 			) : (
