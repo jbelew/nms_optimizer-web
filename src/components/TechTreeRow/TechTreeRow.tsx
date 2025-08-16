@@ -143,7 +143,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 					/>
 				</Popover.Trigger>
 				<Popover.Content size="1">
-					<Text as="span" className="text-sm sm:text-base">
+					<Text className="text-sm sm:text-base">
 						{t("techTree.tooltips.insufficientSpace") +
 							" -" +
 							Math.round((100 - roundedMaxBonus) * 100) / 100 +
@@ -163,10 +163,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 					/>
 				</Popover.Trigger>
 				<Popover.Content size="1">
-					<Text
-						as="span"
-						className="text-sm sm:text-base"
-					>{`${t("techTree.tooltips.validSolve")} `}</Text>
+					<Text className="text-sm sm:text-base">{`${t("techTree.tooltips.validSolve")} `}</Text>
 				</Popover.Content>
 			</Popover.Root>
 		);
@@ -181,7 +178,7 @@ const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({ techMaxBonus, techSol
 				/>
 			</Popover.Trigger>
 			<Popover.Content size="1">
-				<Text as="span" className="text-sm sm:text-base">
+				<Text className="text-sm sm:text-base">
 					{`${t("techTree.tooltips.boostedSolve")} +${
 						Math.round((roundedMaxBonus - 100) * 100) / 100
 					}%`}
