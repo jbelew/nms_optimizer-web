@@ -2,7 +2,7 @@
 import "./LanguageSelector.css";
 
 import React, { useMemo } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { GlobeIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -110,10 +110,7 @@ const LanguageSelector: React.FC = () => {
 				</DropdownMenu.RadioGroup>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item onClick={handleRequestTranslationClick} className="font-medium">
-					<InfoCircledIcon
-						className="mr-2 h-auto w-5"
-						style={{ color: "var(--accent-a11)" }}
-					/>
+					<GlobeIcon className="mr-2 h-auto w-5" style={{ color: "var(--accent-a11)" }} />
 					{t("translationRequest.openDialogLabel")}
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>
