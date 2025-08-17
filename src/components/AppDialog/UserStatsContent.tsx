@@ -1,15 +1,84 @@
 // src/components/AppDialog/UserStatsContent.tsx
-import type { UserStat } from "../../hooks/useUserStats/useUserStats";
-import type { FC } from "react";
+import type { UserStat } from "@/hooks/useUserStats/useUserStats";
+import { FC, lazy, Suspense } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-import { useTechTreeColors } from "../../hooks/useTechTreeColors/useTechTreeColors";
-import { useUserStats } from "../../hooks/useUserStats/useUserStats";
+import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
+import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"];
+
+const LazyRechartsChart = lazy(async () => {
+	const recharts = await import("recharts");
+	return {
+		default: ({
+			chartData,
+			techColors,
+			COLORS,
+		}: {
+			chartData: { name: string; value: number }[];
+			techColors: Record<string, string>;
+			COLORS: string[];
+		}) => (
+			<recharts.ResponsiveContainer width="100%" height={248}>
+				<recharts.PieChart>
+					<recharts.Pie
+						data={chartData}
+						cx="50%"
+						cy="50%"
+						innerRadius="50%"
+						outerRadius="100%"
+						paddingAngle={0}
+						dataKey="value"
+						label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+							const RADIAN = Math.PI / 180;
+							const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+							const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
+							const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+
+							return (
+								<text
+									x={x}
+									y={y}
+									fill="white"
+									textAnchor="middle"
+									dominantBaseline="middle"
+									fontSize={14}
+									fontWeight="medium"
+								>
+									<tspan x={x} dy="-0.4em">
+										{name}
+									</tspan>
+									<tspan x={x} dy="1.2em">
+										{percent && percent * 100 >= 6
+											? `${(percent * 100).toFixed(0)}%`
+											: ""}
+									</tspan>
+								</text>
+							);
+						}}
+						labelLine={false}
+					>
+						{chartData.map((entry: { name: string; value: number }, index: number) => (
+							<recharts.Cell
+								key={`cell-${index}`}
+								fill={
+									techColors[entry.name]
+										? `var(--${techColors[entry.name]}-track)`
+										: COLORS[index % COLORS.length]
+								}
+								stroke="black"
+								strokeWidth={1}
+							/>
+						))}
+					</recharts.Pie>
+				</recharts.PieChart>
+			</recharts.ResponsiveContainer>
+		),
+	};
+});
 
 interface UserStatsContentProps {
 	onClose: () => void;
@@ -107,68 +176,13 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 				>
 					{t(titleKey)}
 				</Heading>
-				<ResponsiveContainer width="100%" height={248}>
-					<PieChart>
-						<Pie
-							data={chartData}
-							cx="50%"
-							cy="50%"
-							innerRadius="50%"
-							outerRadius="100%"
-							paddingAngle={0}
-							dataKey="value"
-							label={({
-								cx,
-								cy,
-								midAngle,
-								innerRadius,
-								outerRadius,
-								percent,
-								name,
-							}) => {
-								const RADIAN = Math.PI / 180;
-								const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-								const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
-								const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
-
-								return (
-									<text
-										x={x}
-										y={y}
-										fill="white"
-										textAnchor="middle"
-										dominantBaseline="middle"
-										fontSize={14}
-										fontWeight="medium"
-									>
-										<tspan x={x} dy="-0.4em">
-											{name}
-										</tspan>
-										<tspan x={x} dy="1.2em">
-											{percent && percent * 100 >= 6
-												? `${(percent * 100).toFixed(0)}%`
-												: ""}
-										</tspan>
-									</text>
-								);
-							}}
-							labelLine={false}
-						>
-							{chartData.map((entry, index) => (
-								<Cell
-									key={`cell-${index}`}
-									fill={
-										techColors[entry.name]
-											? `var(--${techColors[entry.name]}-track)`
-											: COLORS[index % COLORS.length]
-									}
-									stroke="black"
-									strokeWidth={1}
-								/>
-							))}
-						</Pie>
-					</PieChart>
-				</ResponsiveContainer>
+				<Suspense fallback={<Skeleton height="248px" width="100%" />}>
+					<LazyRechartsChart
+						chartData={chartData}
+						techColors={techColors}
+						COLORS={COLORS}
+					/>
+				</Suspense>
 			</>
 		);
 	};

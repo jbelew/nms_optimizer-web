@@ -56,6 +56,7 @@ export default defineConfig(({ }) => {
 				deleteOriginFile: false,
 			}),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
+			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.json', template: 'raw-data' }),
 		],
 
 		resolve: {

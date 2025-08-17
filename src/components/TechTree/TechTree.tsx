@@ -1,71 +1,20 @@
 // src/components/TechTree/TechTree.tsx
-import React, { Suspense, useMemo } from "react";
+import React, { useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import ErrorBoundaryInset from "../ErrorBoundry/ErrorBoundryInset";
-import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
-import { SuspenseSkeleton } from "./SuspenseSkeleton";
 import { TechTreeContent } from "./TechTreeContent";
 
-// We need the colors once TechTree loads
-
-// --- Type Definitions ---
-/**
- * @interface TechTreeProps
- * @property {(tech: string) => Promise<void>} handleOptimize - Function to call when optimizing a tech.
- * @property {boolean} solving - Indicates if the optimizer is currently solving.
- * @property {React.RefObject<HTMLDivElement|null>} gridContainerRef - Ref to the grid container for scroll management.
- * @property {number|undefined} gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
- */
 interface TechTreeProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
 	gridContainerRef: React.RefObject<HTMLDivElement | null>;
 	gridTableTotalWidth: number | undefined;
 }
-
-/**
- * A skeleton loader for the TechTreeComponent. It mimics the layout of the
- * final component to prevent Cumulative Layout Shift (CLS) during loading.
- * @returns {JSX.Element} The rendered skeleton component.
- */
-const TechTreeSkeleton: React.FC = () => {
-	const isLarge = useBreakpoint("1024px");
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
-	const { t } = useTranslation();
-
-	return (
-		<>
-			{isLarge ? (
-				// Skeleton for large screens: A scroll area with a fixed height.
-				<ScrollArea
-					className="gridContainer__sidebar rounded-md p-4 shadow-md"
-					style={{
-						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
-						backgroundColor: "var(--gray-a2)",
-					}}
-				>
-					<MessageSpinner
-						isInset={true}
-						isVisible={true}
-						useNMSFont={true}
-						initialMessage={t("techTree.loading")}
-					/>
-				</ScrollArea>
-			) : (
-				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="w-full flex-grow pt-8" style={{ minHeight: "50vh" }}>
-					<SuspenseSkeleton />
-				</aside>
-			)}
-		</>
-	);
-};
 
 /**
  * This component fetches the tech tree data and renders the complete layout.
@@ -166,21 +115,10 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  */
 const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
-	const isLarge = useBreakpoint("1024px");
-	return isLarge ? (
+	return (
 		<ErrorBoundaryInset>
-			<Suspense fallback={<TechTreeSkeleton />}>
-				<TechTreeWithData {...props} />
-			</Suspense>
+			<TechTreeWithData {...props} />
 		</ErrorBoundaryInset>
-	) : (
-		<div>
-			<ErrorBoundaryInset>
-				<Suspense fallback={<TechTreeSkeleton />}>
-					<TechTreeWithData {...props} />
-				</Suspense>
-			</ErrorBoundaryInset>
-		</div>
 	);
 };
 

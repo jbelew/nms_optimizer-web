@@ -75,6 +75,10 @@ async function runLighthouseAudit() {
 		});
 		lhrForSummary = lhr; // Assign destructured lhr for summary
 
+		const jsonReportPath = path.join(process.cwd(), "lighthouse-report.json");
+		fs.writeFileSync(jsonReportPath, JSON.stringify(lhrForSummary, null, 2));
+		console.log(`Lighthouse JSON report saved to ${jsonReportPath}`);
+
 		if (!htmlReportString) {
 			// This check is important to ensure Lighthouse returned the report string
 			throw new Error("Lighthouse did not return an HTML report string.");

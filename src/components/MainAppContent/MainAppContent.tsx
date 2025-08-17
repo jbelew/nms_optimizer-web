@@ -1,6 +1,5 @@
 // src/components/app/MainAppContent.tsx
-import type { FC } from "react";
-import React, { useCallback, useEffect } from "react";
+import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -15,7 +14,9 @@ import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
-import TechTreeComponent from "../TechTree/TechTree";
+import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
+
+const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 
 /**
  * @typedef {object} MainAppContentInternalProps
@@ -122,12 +123,14 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 					{!isSharedGrid && (
 						<aside className="flex w-full flex-col lg:ml-4">
-							<TechTreeComponent
-								handleOptimize={handleOptimize}
-								solving={solving}
-								gridContainerRef={gridContainerRef}
-								gridTableTotalWidth={gridTableTotalWidth}
-							/>
+							<Suspense fallback={<TechTreeSkeleton />}>
+								<TechTreeComponent
+									handleOptimize={handleOptimize}
+									solving={solving}
+									gridContainerRef={gridContainerRef}
+									gridTableTotalWidth={gridTableTotalWidth}
+								/>
+							</Suspense>
 						</aside>
 					)}
 				</section>
