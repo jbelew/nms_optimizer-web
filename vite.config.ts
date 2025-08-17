@@ -1,12 +1,15 @@
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import PluginCritical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import { splashScreen } from "vite-plugin-splash-screen";
 
+import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
+import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
 // Function to read version from package.json
 function getAppVersion() {
@@ -25,8 +28,8 @@ function getAppVersion() {
 	return "unknown"; // Fallback version
 }
 
-export default defineConfig(({ }) => {
-	// const doCritical = mode === "critical"
+export default defineConfig(({ mode }) => {
+	const doCritical = mode === "critical" || mode === "production";
 	const appVersion = getAppVersion();
 
 	return {
@@ -43,6 +46,17 @@ export default defineConfig(({ }) => {
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
+			...(doCritical
+				? [
+						deferStylesheetsPlugin(),
+						PluginCritical({
+							criticalBase: "dist/",
+							criticalUrl: "https://nms-optimizer.app",
+							criticalPages: [{ uri: "/", template: "index" }],
+							criticalConfig: {},
+						}),
+					]
+				: []),
 			compression({
 				algorithm: "brotliCompress",
 				ext: ".br",
@@ -55,8 +69,18 @@ export default defineConfig(({ }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.html' }),
-			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: 'stats.json', template: 'raw-data' }),
+
+			// Conditionally apply defer and critical plugins
+			...(doCritical ? [inlineCriticalCssPlugin()] : []),
+
+			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
+			visualizer({
+				open: false,
+				gzipSize: true,
+				brotliSize: true,
+				filename: "stats.json",
+				template: "raw-data",
+			}),
 		],
 
 		resolve: {
@@ -87,6 +111,12 @@ export default defineConfig(({ }) => {
 						if (id.includes("@radix-ui/themes/tokens/colors/")) {
 							return "radix-colors";
 						}
+						// if (id.includes("@radix-ui/themes/components.css")) {
+						// 	return "radix-components";
+						// }
+						if (id.includes("@radix-ui/themes/utilities.css")) {
+							return "radix-utilities";
+						}
 						if (id.includes("@radix-ui/themes")) {
 							return "radix-themes";
 						}
@@ -103,28 +133,33 @@ export default defineConfig(({ }) => {
 							id.includes("trough") ||
 							id.includes("decode-named-character-reference") ||
 							id.includes("parse-entities")
-						) { return "markdown"; }
+						) {
+							return "markdown";
+						}
 						if (
 							id.includes("recharts") ||
 							id.includes("decimal") ||
 							id.includes("d3-")
-						) { return "recharts"; }
+						) {
+							return "recharts";
+						}
 						if (
 							id.includes("i18next") ||
 							id.includes("react-i18next") ||
 							id.includes("@formatjs") ||
 							id.includes("intl-messageformat")
-						) { return "i18n"; }
-						if (
-							id.includes("zustand") ||
-							id.includes("immer")
-						) { return "zustand"; }
-						if (
-							id.includes("ga4")
-						) { return "ga4"; }
-						if (
-							id.includes("radix")
-						) { return "radix"; }
+						) {
+							return "i18n";
+						}
+						if (id.includes("zustand") || id.includes("immer")) {
+							return "zustand";
+						}
+						if (id.includes("ga4")) {
+							return "ga4";
+						}
+						if (id.includes("radix")) {
+							return "radix";
+						}
 
 						return "vendor";
 					},
@@ -140,11 +175,10 @@ export default defineConfig(({ }) => {
 
 		test: {
 			globals: true,
-			environment: 'happy-dom',
-			setupFiles: '.vitest/setup',
-			root: '.',
-			include: ['src/**/*.{test,spec}.{ts,tsx}']
-		}
-
+			environment: "happy-dom",
+			setupFiles: ".vitest/setup",
+			root: ".",
+			include: ["src/**/*.{test,spec}.{ts,tsx}"],
+		},
 	};
 });

@@ -1,7 +1,16 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
-import React, { useEffect, useRef } from "react";
-import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
-import ReactMarkdown from "react-markdown";
+import React, { lazy, Suspense, useEffect, useRef } from "react";
+import {
+	Blockquote,
+	Box,
+	Code,
+	Heading,
+	Kbd,
+	Link,
+	Separator,
+	Skeleton,
+	Text,
+} from "@radix-ui/themes";
 
 import { useMarkdownContent } from "../../hooks/useMarkdownContent/useMarkdownContent";
 
@@ -9,6 +18,8 @@ interface MarkdownContentRendererProps {
 	markdownFileName: string;
 	targetSectionId?: string;
 }
+
+const LazyReactMarkdown = lazy(() => import("react-markdown"));
 
 /**
  * MarkdownContentRenderer component fetches and renders markdown content.
@@ -116,22 +127,15 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 		[]
 	);
 
-	if (isLoading) {
-		return (
-			<div
-				className="justigfy-center flex-items-center flex w-full"
-				style={{ flexGrow: "1", height: "80vh" }}
-			></div>
-		);
-	}
-
 	if (error) {
 		return <div>Error: {error}</div>;
 	}
 
 	return (
 		<article className="text-sm sm:text-base">
-			<ReactMarkdown components={components}>{markdown}</ReactMarkdown>
+			<Suspense fallback={<Skeleton height="80vh" width="100%" />}>
+				<LazyReactMarkdown components={components}>{markdown}</LazyReactMarkdown>
+			</Suspense>
 		</article>
 	);
 };

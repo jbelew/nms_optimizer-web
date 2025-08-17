@@ -97,6 +97,7 @@
 		"puppeteer": "^24.15.0",
 		"puppeteer-core": "^24.14.0",
 		"require": "^2.4.20",
+		"rollup-plugin-critical": "^1.0.15",
 		"rollup-plugin-visualizer": "^6.0.3",
 		"sharp": "^0.34.3",
 		"start-server-and-test": "^2.0.12",
