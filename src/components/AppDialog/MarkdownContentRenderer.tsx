@@ -1,18 +1,10 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
 import React, { lazy, Suspense, useEffect, useRef } from "react";
-import {
-	Blockquote,
-	Box,
-	Code,
-	Heading,
-	Kbd,
-	Link,
-	Separator,
-	Skeleton,
-	Text,
-} from "@radix-ui/themes";
+import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
+
+import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
 
 interface MarkdownContentRendererProps {
 	markdownFileName: string;
@@ -134,9 +126,9 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	return (
 		<article className="text-sm sm:text-base">
 			{isLoading ? (
-				<Skeleton height="80vh" width="100%" />
+				<LoremIpsumSkeleton />
 			) : (
-				<Suspense fallback={<Skeleton height="80vh" width="100%" />}>
+				<Suspense fallback={<LoremIpsumSkeleton />}>
 					<LazyReactMarkdown components={components}>{markdown}</LazyReactMarkdown>
 				</Suspense>
 			)}
