@@ -23,12 +23,11 @@ dist-ssr
 *.sw?
 coverage/*
 
+lighthouse-report.html
+lighthouse-report.json
+playwright-report
+stats.html
+stats.json
+test-results
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
-stats.html
-lighthouse-report.html
-
-playwright-report
-test-results
-stats.json
-stats.json
