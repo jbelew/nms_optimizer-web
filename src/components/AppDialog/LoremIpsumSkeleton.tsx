@@ -3,7 +3,7 @@ import { Skeleton, Text } from "@radix-ui/themes";
 
 const LoremIpsumSkeleton: React.FC = () => {
 	return (
-		<>
+		<article className="text-sm sm:text-base">
 			<Text as="p" mb="4">
 				<Skeleton>
 					Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula
@@ -12,7 +12,6 @@ const LoremIpsumSkeleton: React.FC = () => {
 					eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo,
 					fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
 					imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-					<br />
 				</Skeleton>
 			</Text>
 
@@ -28,7 +27,6 @@ const LoremIpsumSkeleton: React.FC = () => {
 			</Text>
 
 			<Text as="p" mb="4">
-				{" "}
 				<Skeleton>
 					Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit
 					amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus
@@ -68,7 +66,7 @@ const LoremIpsumSkeleton: React.FC = () => {
 					euismod orci, ac
 				</Skeleton>
 			</Text>
-		</>
+		</article>
 	);
 };
 
