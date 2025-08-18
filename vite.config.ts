@@ -120,7 +120,7 @@ export default defineConfig(({ mode }) => {
 							id.includes("zwitch") ||
 							id.includes("bail") ||
 							id.includes("trough") ||
-							id.includes("decode-named-character-reference") ||
+							                            id.includes("decode-named-character-reference") ||
 							id.includes("parse-entities") ||
 							id.includes("recharts") ||
 							id.includes("decimal") ||

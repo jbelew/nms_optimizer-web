@@ -5910,4 +5910,1235 @@ File                                                 | % Stmts | % Branch | % Fu
 [33;1m nms_optimizer-web/src/store                        [0m | [33;1m  64.96[0m | [32;1m   84.25[0m | [33;1m  61.53[0m | [33;1m  64.96[0m | [31;1m                                                            [0m 
 [33;1m  GridStore.ts                                      [0m | [33;1m  58.85[0m | [32;1m      84[0m | [33;1m  54.05[0m | [33;1m  58.85[0m | [31;1m...1,454-463,466-472,536,539-542,545-573,592-597,608,618-621[0m 
 [32;1m  OptimizeStore.ts                                  [0m | [32;1m    100[0m | [32;1m     100[0m | [31;1m      0[0m | [32;1m    100[0m | [33;1m                                                            [0m 
-[33;1m  PlatformStor
+[33;1m  PlatformStore.ts                                  [0m | [33;1m     78[0m | [33;1m   66.66[0m | [32;1m    100[0m | [33;1m     78[0m | [31;1m25-29,34-37,54-55                                           [0m 
+[33;1m  ShakeStore.ts                                     [0m | [33;1m     75[0m | [33;1m      50[0m | [31;1m      0[0m | [33;1m     75[0m | [31;1m25-26                                                       [0m 
+[32;1m  TechStore.ts                                      [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m nms_optimizer-web/src/test                         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  setup.ts                                          [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-26                                                        [0m 
+[33;1m nms_optimizer-web/src/utils                        [0m | [33;1m  65.06[0m | [32;1m     100[0m | [31;1m  28.57[0m | [33;1m  65.06[0m | [31;1m                                                            [0m 
+[31;1m  analytics.ts                                      [0m | [31;1m  31.57[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  31.57[0m | [31;1m54-63,72-74                                                 [0m 
+[31;1m  dialogIconMapping.ts                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m5-59                                                        [0m 
+[31;1m  isTouchDevice.ts                                  [0m | [31;1m  33.33[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  33.33[0m | [31;1m7-8                                                         [0m 
+[32;1m  recommendedBuildValidation.ts                     [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m  reportWebVitals.ts                                [0m | [31;1m  15.78[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  15.78[0m | [31;1m16-25,34-39                                                 [0m 
+-----------------------------------------------------|---------|----------|---------|---------|--------------------------------------------------------------
+[?25h[1G[0K⠙[1G[0K
+> nms_optimizer@3.7.6 sitemap
+> node scripts/generate-sitemap.mjs
+
+[1G[0KSitemap generated successfully!
+[1G[0K⠙[1G[0K[main 72b72a5] fix(skeleton): fixed CLS on skeleton component on mobile screen sizes
+ 5 files changed, 37243 insertions(+), 32999 deletions(-)
+ create mode 100644 lighthouse-report.
+[?25h[1G[0K⠙[1G[0K[?2004h]0;jbelew@Alienware: ~/projects/nms_optimizer-web[01;32mjbelew@Alienware[00m:[01;34m~/projects/nms_optimizer-web[00m$ npx czo[C[C[C[Cgit add .[K[K[K[K[K[K[K[K[Knpm run build
+[?2004l
+> nms_optimizer@3.7.6 build
+> tsc -b && vite build --mode production
+
+[1G[0K[36mvite v6.3.5 [32mbuilding for production...[36m[39m
+[2K[1Gtransforming (1) [2msrc/main.tsx[22m[2K[1Gtransforming (7) [2mnode_modules/@radix-ui/themes/tokens/base.css[22m[2K[1Gtransforming (30) [2mnode_modules/@radix-ui/themes/dist/esm/components/index.js[22m[2K[1G[2K[1Gtransforming (34) [2mnode_modules/react/jsx-runtime.js[22m[2K[1G[2K[1Gtransforming (51) [2msrc/context/dialog-utils.ts[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1Gtransforming (121) [2mnode_modules/i18next-http-backend/esm/request.js[22m[2K[1G[2K[1Gtransforming (216) [2mnode_modules/web-vitals/dist/web-vitals.js[22m[2K[1G[2K[1Gtransforming (226) [2mnode_modules/react-ga4/dist/ga4.js[22m[2K[1Gtransforming (255) [2mnode_modules/zustand/esm/vanilla.mjs[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1Gtransforming (338) [2mnode_modules/react-markdown/index.js[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1Gtransforming (341) [2mnode_modules/void-elements/index.js[22m[2K[1Gtransforming (376) [2mnode_modules/react-remove-scroll/dist/es2015/UI.js[22m[2K[1Gtransforming (466) [2msrc/assets/svg/EmptyCellIcon.tsx[22m[2K[1Gtransforming (573) [2mnode_modules/recharts/es6/util/LogUtils.js[22m[2K[1Gtransforming (673) [2mnode_modules/reselect/dist/reselect.mjs[22m[2K[1Gtransforming (698) [2mnode_modules/es-toolkit/dist/compat/predicate/isPlainObject.js[22m[2K[1Gtransforming (1001) [2mnode_modules/react-is/index.js[22m[2K[1Gtransforming (1093) [2mnode_modules/es-toolkit/dist/compat/predicate/isSymbol.js[22m[2K[1Gtransforming (1245) [2mnode_modules/es-toolkit/compat/omit.js[22m[2K[1Gtransforming (1354) [2mnode_modules/micromark-core-commonmark/lib/attention.js[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[32m✓[39m 1383 modules transformed.
+[2K[1Grendering chunks (1)...[2K[1Grendering chunks (2)...[2K[1Grendering chunks (3)...[2K[1Grendering chunks (4)...[2K[1Grendering chunks (5)...[2K[1Grendering chunks (6)...[2K[1Grendering chunks (7)...[2K[1Grendering chunks (8)...[2K[1Grendering chunks (9)...[2K[1Grendering chunks (10)...[2K[1Grendering chunks (11)...[2K[1Grendering chunks (12)...[2K[1Grendering chunks (13)...[2K[1Grendering chunks (14)...[2K[1Grendering chunks (15)...[vite-plugin-defer-stylesheets] Deferred 4 stylesheets and prepared noscript fallbacks.
+[2K[1G[2K[1Gcomputing gzip size (0)...[2K[1Gcomputing gzip size (1)...[2K[1Gcomputing gzip size (2)...[2K[1Gcomputing gzip size (3)...[2K[1Gcomputing gzip size (4)...[2K[1Gcomputing gzip size (5)...[2K[1Gcomputing gzip size (6)...[2K[1Gcomputing gzip size (7)...[2K[1Gcomputing gzip size (8)...[2K[1Gcomputing gzip size (9)...[2K[1Gcomputing gzip size (10)...[2K[1Gcomputing gzip size (11)...[2K[1Gcomputing gzip size (12)...[2K[1Gcomputing gzip size (13)...[2K[1Gcomputing gzip size (14)...[2K[1Gcomputing gzip size (15)...[2K[1Gcomputing gzip size (16)...[2K[1Gcomputing gzip size (17)...[2K[1Gcomputing gzip size (18)...[2K[1Gcomputing gzip size (19)...[2K[1G[2mdist/[22m[32mindex.html                                  [39m[1m[2m 16.08 kB[22m[1m[22m[2m │ gzip:   5.23 kB[22m
+[2mdist/[22m[2massets/[22m[35mTechTree-D4KkaeBN.css                [39m[1m[2m  0.98 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-CXcivNNg.css                   [39m[1m[2m 30.03 kB[22m[1m[22m[2m │ gzip:   6.59 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-colors-CuEYGI6Z.css            [39m[1m[2m 50.46 kB[22m[1m[22m[2m │ gzip:  12.36 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-utilities-Dxc1owyv.css         [39m[1m[2m172.61 kB[22m[1m[22m[2m │ gzip:  17.40 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-themes-Csm87pkU.css            [39m[1m[2m418.37 kB[22m[1m[22m[2m │ gzip:  35.83 kB[22m
+[2mdist/[22m[2massets/[22m[36mErrorContent-FiZWPufN.js             [39m[1m[2m  0.94 kB[22m[1m[22m[2m │ gzip:   0.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mShareLinkDialog-Do59gLyX.js          [39m[1m[2m  1.72 kB[22m[1m[22m[2m │ gzip:   0.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mMarkdownContentRenderer-B3CXcuvT.js  [39m[1m[2m  7.87 kB[22m[1m[22m[2m │ gzip:   3.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mRoutedDialogs-B9tFPy4n.js            [39m[1m[2m  9.42 kB[22m[1m[22m[2m │ gzip:   3.72 kB[22m
+[2mdist/[22m[2massets/[22m[36mzustand-B-p4oMDQ.js                  [39m[1m[2m 10.46 kB[22m[1m[22m[2m │ gzip:   4.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mga4-BSKb8mqd.js                      [39m[1m[2m 12.76 kB[22m[1m[22m[2m │ gzip:   4.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mTechTree-B0izK7uC.js                 [39m[1m[2m 16.57 kB[22m[1m[22m[2m │ gzip:   5.97 kB[22m
+[2mdist/[22m[2massets/[22m[36mradix-themes-Cj-O419h.js             [39m[1m[2m 37.49 kB[22m[1m[22m[2m │ gzip:   9.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-_uNCK7gj.js                    [39m[1m[2m 62.17 kB[22m[1m[22m[2m │ gzip:  20.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mi18n-BE3jeZ5Q.js                     [39m[1m[2m 69.38 kB[22m[1m[22m[2m │ gzip:  22.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-CzOtDeVg.js                    [39m[1m[2m 73.54 kB[22m[1m[22m[2m │ gzip:  21.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mradix-BxSiiMjj.js                    [39m[1m[2m106.47 kB[22m[1m[22m[2m │ gzip:  31.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-DI1ixPzD.js                   [39m[1m[33m787.09 kB[39m[22m[2m │ gzip: 236.67 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+Generating critical CSS from https://nms-optimizer.app/ to index_critical.min.css
+[32m✓ built in 16.70s[39m
+[vite-plugin-inline-critical-css] Starting critical CSS inlining...
+[vite-plugin-inline-critical-css] Output directory: dist
+[vite-plugin-inline-critical-css] HTML file path: /home/jbelew/projects/nms_optimizer-web/dist/index.html
+[vite-plugin-inline-critical-css] Critical CSS file path: /home/jbelew/projects/nms_optimizer-web/dist/index_critical.min.css
+[vite-plugin-inline-critical-css] Inlined critical CSS before the first stylesheet link.
+[vite-plugin-inline-critical-css] Successfully inlined critical CSS into /home/jbelew/projects/nms_optimizer-web/dist/index.html
+[vite-plugin-inline-critical-css] Successfully re-compressed /home/jbelew/projects/nms_optimizer-web/dist/index.html.gz
+[vite-plugin-inline-critical-css] Successfully re-compressed /home/jbelew/projects/nms_optimizer-web/dist/index.html.br
+
+[36m✨ [vite-plugin-compression]:algorithm=gzip[39m - compressed file successfully: 
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/TechTree-B0izK7uC.js.gz[39m           [2m16.18kb / gzip: 5.83kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/ga4-BSKb8mqd.js.gz[39m                [2m12.46kb / gzip: 4.40kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CXcivNNg.css.gz[39m             [2m29.33kb / gzip: 6.41kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/en/translation.json.gz[39m    [2m21.84kb / gzip: 5.87kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/fr/translation.json.gz[39m    [2m29.71kb / gzip: 6.91kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/de/translation.json.gz[39m    [2m27.37kb / gzip: 6.87kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Cj-O419h.js.gz[39m       [2m36.61kb / gzip: 9.28kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-colors-CuEYGI6Z.css.gz[39m      [2m49.28kb / gzip: 11.77kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/zustand-B-p4oMDQ.js.gz[39m            [2m10.22kb / gzip: 4.15kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index.html.gz[39m                            [2m15.70kb / gzip: 5.11kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index_critical.min.css.gz[39m                [2m25.71kb / gzip: 6.95kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/es/translation.json.gz[39m    [2m28.93kb / gzip: 6.67kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-_uNCK7gj.js.gz[39m              [2m60.71kb / gzip: 19.65kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/i18n-BE3jeZ5Q.js.gz[39m               [2m67.75kb / gzip: 21.98kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CzOtDeVg.js.gz[39m              [2m71.82kb / gzip: 20.63kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-BxSiiMjj.js.gz[39m              [2m103.97kb / gzip: 30.49kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-utilities-Dxc1owyv.css.gz[39m   [2m168.56kb / gzip: 16.89kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Csm87pkU.css.gz[39m      [2m408.56kb / gzip: 34.36kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/vendor-DI1ixPzD.js.gz[39m             [2m768.64kb / gzip: 230.71kb[22m
+
+
+
+[36m✨ [vite-plugin-compression]:algorithm=brotliCompress[39m - compressed file successfully: 
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/TechTree-B0izK7uC.js.br[39m           [2m16.18kb / brotliCompress: 5.21kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CXcivNNg.css.br[39m             [2m29.33kb / brotliCompress: 5.62kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/de/translation.json.br[39m    [2m27.37kb / brotliCompress: 6.26kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/en/translation.json.br[39m    [2m21.84kb / brotliCompress: 5.07kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/es/translation.json.br[39m    [2m28.93kb / brotliCompress: 5.96kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/fr/translation.json.br[39m    [2m29.71kb / brotliCompress: 6.24kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-colors-CuEYGI6Z.css.br[39m      [2m49.28kb / brotliCompress: 8.50kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Cj-O419h.js.br[39m       [2m36.61kb / brotliCompress: 8.02kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/zustand-B-p4oMDQ.js.br[39m            [2m10.22kb / brotliCompress: 3.84kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index.html.br[39m                            [2m15.70kb / brotliCompress: 4.19kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/ga4-BSKb8mqd.js.br[39m                [2m12.46kb / brotliCompress: 3.89kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index_critical.min.css.br[39m                [2m25.71kb / brotliCompress: 4.98kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/i18n-BE3jeZ5Q.js.br[39m               [2m67.75kb / brotliCompress: 19.70kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-_uNCK7gj.js.br[39m              [2m60.71kb / brotliCompress: 16.97kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CzOtDeVg.js.br[39m              [2m71.82kb / brotliCompress: 18.40kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-BxSiiMjj.js.br[39m              [2m103.97kb / brotliCompress: 26.63kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-utilities-Dxc1owyv.css.br[39m   [2m168.56kb / brotliCompress: 8.21kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Csm87pkU.css.br[39m      [2m408.56kb / brotliCompress: 22.61kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/vendor-DI1ixPzD.js.br[39m             [2m768.64kb / brotliCompress: 192.55kb[22m
+
+
+[1G[0K⠙[1G[0K[?2004h]0;jbelew@Alienware: ~/projects/nms_optimizer-web[01;32mjbelew@Alienware[00m:[01;34m~/projects/nms_optimizer-web[00m$ npm run build
+[?2004l
+> nms_optimizer@3.7.6 build
+> tsc -b && vite build --mode production
+
+[1G[0K[36mvite v6.3.5 [32mbuilding for production...[36m[39m
+[2K[1Gtransforming (1) [2msrc/main.tsx[22m[2K[1Gtransforming (7) [2mnode_modules/@radix-ui/themes/tokens/colors/cyan.css[22m[2K[1Gtransforming (33) [2mnode_modules/react-router/dist/development/index.mjs[22m[2K[1G[2K[1G[2K[1Gtransforming (40) [2m commonjsHelpers.js[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1Gtransforming (116) [2mnode_modules/react-router/dist/development/chunk-IFMMFE4R.mjs[22m[2K[1G[2K[1G[2K[1Gtransforming (211) [2mnode_modules/react-router/node_modules/cookie/dist/index.js[22m[2K[1Gtransforming (237) [2mnode_modules/react-dom/client.js[22m[2K[1Gtransforming (314) [2mnode_modules/@radix-ui/themes/dist/esm/props/gap.props.js[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1Gtransforming (338) [2mnode_modules/react-markdown/index.js[22m[2K[1Gtransforming (382) [2mnode_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js[22m[2K[1Gtransforming (469) [2mnode_modules/@floating-ui/core/dist/floating-ui.core.mjs[22m[2K[1Gtransforming (472) [2mnode_modules/use-callback-ref/dist/es2015/index.js[22m[2K[1Gtransforming (574) [2mnode_modules/recharts/es6/util/LogUtils.js[22m[2K[1Gtransforming (673) [2mnode_modules/reselect/dist/reselect.mjs[22m[2K[1Gtransforming (744) [2mnode_modules/eventemitter3/index.mjs[22m[2K[1Gtransforming (1004) [2mnode_modules/detect-node-es/esm/browser.js[22m[2K[1Gtransforming (1095) [2mnode_modules/es-toolkit/dist/compat/predicate/isSymbol.js[22m[2K[1Gtransforming (1245) [2mnode_modules/es-toolkit/compat/omit.js[22m[2K[1Gtransforming (1351) [2mnode_modules/d3-color/src/color.js[22m[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[2K[1G[32m✓[39m 1383 modules transformed.
+[2K[1Grendering chunks (1)...[2K[1Grendering chunks (2)...[2K[1Grendering chunks (3)...[2K[1Grendering chunks (4)...[2K[1Grendering chunks (5)...[2K[1Grendering chunks (6)...[2K[1Grendering chunks (7)...[2K[1Grendering chunks (8)...[2K[1Grendering chunks (9)...[2K[1Grendering chunks (10)...[2K[1Grendering chunks (11)...[2K[1Grendering chunks (12)...[2K[1Grendering chunks (13)...[2K[1Grendering chunks (14)...[2K[1Grendering chunks (15)...[2K[1Grendering chunks (16)...[vite-plugin-defer-stylesheets] Deferred 4 stylesheets and prepared noscript fallbacks.
+[2K[1G[2K[1Gcomputing gzip size (0)...[2K[1Gcomputing gzip size (1)...[2K[1Gcomputing gzip size (2)...[2K[1Gcomputing gzip size (3)...[2K[1Gcomputing gzip size (4)...[2K[1Gcomputing gzip size (5)...[2K[1Gcomputing gzip size (6)...[2K[1Gcomputing gzip size (7)...[2K[1Gcomputing gzip size (8)...[2K[1Gcomputing gzip size (9)...[2K[1Gcomputing gzip size (10)...[2K[1Gcomputing gzip size (11)...[2K[1Gcomputing gzip size (12)...[2K[1Gcomputing gzip size (13)...[2K[1Gcomputing gzip size (14)...[2K[1Gcomputing gzip size (15)...[2K[1Gcomputing gzip size (16)...[2K[1Gcomputing gzip size (17)...[2K[1Gcomputing gzip size (18)...[2K[1Gcomputing gzip size (19)...[2K[1Gcomputing gzip size (20)...[2K[1G[2mdist/[22m[32mindex.html                                  [39m[1m[2m 16.08 kB[22m[1m[22m[2m │ gzip:   5.23 kB[22m
+[2mdist/[22m[2massets/[22m[35mTechTree-D4KkaeBN.css                [39m[1m[2m  0.98 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[35mindex-CXcivNNg.css                   [39m[1m[2m 30.03 kB[22m[1m[22m[2m │ gzip:   6.59 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-colors-CuEYGI6Z.css            [39m[1m[2m 50.46 kB[22m[1m[22m[2m │ gzip:  12.36 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-utilities-Dxc1owyv.css         [39m[1m[2m172.61 kB[22m[1m[22m[2m │ gzip:  17.40 kB[22m
+[2mdist/[22m[2massets/[22m[35mradix-themes-Csm87pkU.css            [39m[1m[2m418.37 kB[22m[1m[22m[2m │ gzip:  35.83 kB[22m
+[2mdist/[22m[2massets/[22m[36mErrorContent-DP3xfLkG.js             [39m[1m[2m  0.94 kB[22m[1m[22m[2m │ gzip:   0.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mShareLinkDialog-EgqhyPG8.js          [39m[1m[2m  1.72 kB[22m[1m[22m[2m │ gzip:   0.84 kB[22m
+[2mdist/[22m[2massets/[22m[36mMarkdownContentRenderer-DC46xpTa.js  [39m[1m[2m  7.87 kB[22m[1m[22m[2m │ gzip:   3.75 kB[22m
+[2mdist/[22m[2massets/[22m[36mRoutedDialogs-D_6UGQ6Z.js            [39m[1m[2m  9.44 kB[22m[1m[22m[2m │ gzip:   3.73 kB[22m
+[2mdist/[22m[2massets/[22m[36mzustand-C_TAHBk5.js                  [39m[1m[2m 10.46 kB[22m[1m[22m[2m │ gzip:   4.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mga4-BSKb8mqd.js                      [39m[1m[2m 12.76 kB[22m[1m[22m[2m │ gzip:   4.51 kB[22m
+[2mdist/[22m[2massets/[22m[36mTechTree-DhQrnx9O.js                 [39m[1m[2m 16.57 kB[22m[1m[22m[2m │ gzip:   5.98 kB[22m
+[2mdist/[22m[2massets/[22m[36mradix-themes-BoeYJuD1.js             [39m[1m[2m 37.49 kB[22m[1m[22m[2m │ gzip:   9.59 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DfCyZZtF.js                    [39m[1m[2m 62.17 kB[22m[1m[22m[2m │ gzip:  20.16 kB[22m
+[2mdist/[22m[2massets/[22m[36mi18n-t_-AaK4x.js                     [39m[1m[2m 69.38 kB[22m[1m[22m[2m │ gzip:  22.54 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DBniT-R7.js                    [39m[1m[2m 73.55 kB[22m[1m[22m[2m │ gzip:  21.18 kB[22m
+[2mdist/[22m[2massets/[22m[36mradix-DD8DNDr8.js                    [39m[1m[2m106.47 kB[22m[1m[22m[2m │ gzip:  31.28 kB[22m
+[2mdist/[22m[2massets/[22m[36mvendor-3iMdx8JC.js                   [39m[1m[2m373.95 kB[22m[1m[22m[2m │ gzip: 124.25 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-DJVaRJO8.js                    [39m[1m[2m411.80 kB[22m[1m[22m[2m │ gzip: 110.20 kB[22m
+Generating critical CSS from https://nms-optimizer.app/ to index_critical.min.css
+[32m✓ built in 16.60s[39m
+[vite-plugin-inline-critical-css] Starting critical CSS inlining...
+[vite-plugin-inline-critical-css] Output directory: dist
+[vite-plugin-inline-critical-css] HTML file path: /home/jbelew/projects/nms_optimizer-web/dist/index.html
+[vite-plugin-inline-critical-css] Critical CSS file path: /home/jbelew/projects/nms_optimizer-web/dist/index_critical.min.css
+[vite-plugin-inline-critical-css] Inlined critical CSS before the first stylesheet link.
+[vite-plugin-inline-critical-css] Successfully inlined critical CSS into /home/jbelew/projects/nms_optimizer-web/dist/index.html
+[vite-plugin-inline-critical-css] Successfully re-compressed /home/jbelew/projects/nms_optimizer-web/dist/index.html.gz
+
+[36m✨ [vite-plugin-compression]:algorithm=gzip[39m - compressed file successfully: 
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/TechTree-DhQrnx9O.js.gz[39m           [2m16.18kb / gzip: 5.83kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/ga4-BSKb8mqd.js.gz[39m                [2m12.46kb / gzip: 4.40kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CXcivNNg.css.gz[39m             [2m29.33kb / gzip: 6.41kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/de/translation.json.gz[39m    [2m27.37kb / gzip: 6.87kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/en/translation.json.gz[39m    [2m21.84kb / gzip: 5.87kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/es/translation.json.gz[39m    [2m28.93kb / gzip: 6.67kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/fr/translation.json.gz[39m    [2m29.71kb / gzip: 6.91kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-colors-CuEYGI6Z.css.gz[39m      [2m49.28kb / gzip: 11.77kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-BoeYJuD1.js.gz[39m       [2m36.61kb / gzip: 9.28kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/zustand-C_TAHBk5.js.gz[39m            [2m10.22kb / gzip: 4.15kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index.html.gz[39m                            [2m15.70kb / gzip: 5.11kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index_critical.min.css.gz[39m                [2m25.71kb / gzip: 6.95kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DBniT-R7.js.gz[39m              [2m71.83kb / gzip: 20.64kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/i18n-t_-AaK4x.js.gz[39m               [2m67.75kb / gzip: 21.98kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DfCyZZtF.js.gz[39m              [2m60.71kb / gzip: 19.65kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-DD8DNDr8.js.gz[39m              [2m103.97kb / gzip: 30.49kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-utilities-Dxc1owyv.css.gz[39m   [2m168.56kb / gzip: 16.89kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Csm87pkU.css.gz[39m      [2m408.56kb / gzip: 34.36kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DJVaRJO8.js.gz[39m              [2m402.15kb / gzip: 107.37kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/vendor-3iMdx8JC.js.gz[39m             [2m365.18kb / gzip: 121.19kb[22m
+
+
+[vite-plugin-inline-critical-css] Successfully re-compressed /home/jbelew/projects/nms_optimizer-web/dist/index.html.br
+
+[36m✨ [vite-plugin-compression]:algorithm=brotliCompress[39m - compressed file successfully: 
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/TechTree-DhQrnx9O.js.br[39m           [2m16.18kb / brotliCompress: 5.20kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/ga4-BSKb8mqd.js.br[39m                [2m12.46kb / brotliCompress: 3.89kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-CXcivNNg.css.br[39m             [2m29.33kb / brotliCompress: 5.62kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/de/translation.json.br[39m    [2m27.37kb / brotliCompress: 6.26kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/es/translation.json.br[39m    [2m28.93kb / brotliCompress: 5.96kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/fr/translation.json.br[39m    [2m29.71kb / brotliCompress: 6.24kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-BoeYJuD1.js.br[39m       [2m36.61kb / brotliCompress: 8.03kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-colors-CuEYGI6Z.css.br[39m      [2m49.28kb / brotliCompress: 8.50kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index.html.br[39m                            [2m15.70kb / brotliCompress: 4.17kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/locales/en/translation.json.br[39m    [2m21.84kb / brotliCompress: 5.07kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/zustand-C_TAHBk5.js.br[39m            [2m10.22kb / brotliCompress: 3.85kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/i18n-t_-AaK4x.js.br[39m               [2m67.75kb / brotliCompress: 19.77kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/index_critical.min.css.br[39m                [2m25.71kb / brotliCompress: 4.98kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DBniT-R7.js.br[39m              [2m71.83kb / brotliCompress: 18.39kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DfCyZZtF.js.br[39m              [2m60.71kb / brotliCompress: 17.02kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-utilities-Dxc1owyv.css.br[39m   [2m168.56kb / brotliCompress: 8.21kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-DD8DNDr8.js.br[39m              [2m103.97kb / brotliCompress: 26.66kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/radix-themes-Csm87pkU.css.br[39m      [2m408.56kb / brotliCompress: 22.61kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/vendor-3iMdx8JC.js.br[39m             [2m365.18kb / brotliCompress: 104.00kb[22m
+[2mdist/[22m[94m/home/jbelew/projects/nms_optimizer-web/assets/index-DJVaRJO8.js.br[39m              [2m402.15kb / brotliCompress: 89.29kb[22m
+
+
+[1G[0K⠙[1G[0K[?2004h]0;jbelew@Alienware: ~/projects/nms_optimizer-web[01;32mjbelew@Alienware[00m:[01;34m~/projects/nms_optimizer-web[00m$ npm run build[7Px czo[C[C[C[Cgit add .npm run devode scripts/lighthouse-audit.cjs [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Knpm run preview
+[?2004l
+> nms_optimizer@3.7.6 preview
+> vite preview
+
+[1G[0K  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.31.60.33:[1m4173[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+^C
+[?2004h]0;jbelew@Alienware: ~/projects/nms_optimizer-web[01;32mjbelew@Alienware[00m:[01;34m~/projects/nms_optimizer-web[00m$ git add .
+[?2004l[?2004h]0;jbelew@Alienware: ~/projects/nms_optimizer-web[01;32mjbelew@Alienware[00m:[01;34m~/projects/nms_optimizer-web[00m$ npx cz
+[?2004l[1G[0K⠙[1G[0Kcz-cli@4.3.1, cz-conventional-changelog@3.3.0
+
+[?25l[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m[2m(Use arrow keys)[22m
+[36m❯ feat:     A new feature[39m 
+  fix:      A bug fix 
+  docs:     Documentation only changes 
+  style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+  refactor: A code change that neither fixes a bug nor adds a feature 
+  perf:     A code change that improves performance 
+  test:     Adding missing tests or correcting existing tests 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m
+  feat:     A new feature 
+[36m❯ fix:      A bug fix[39m 
+  docs:     Documentation only changes 
+  style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+  refactor: A code change that neither fixes a bug nor adds a feature 
+  perf:     A code change that improves performance 
+  test:     Adding missing tests or correcting existing tests 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m
+  feat:     A new feature 
+  fix:      A bug fix 
+[36m❯ docs:     Documentation only changes[39m 
+  style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+  refactor: A code change that neither fixes a bug nor adds a feature 
+  perf:     A code change that improves performance 
+  test:     Adding missing tests or correcting existing tests 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m
+  feat:     A new feature 
+  fix:      A bug fix 
+  docs:     Documentation only changes 
+[36m❯ style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)[39m 
+  refactor: A code change that neither fixes a bug nor adds a feature 
+  perf:     A code change that improves performance 
+  test:     Adding missing tests or correcting existing tests 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m
+  fix:      A bug fix 
+  docs:     Documentation only changes 
+  style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+[36m❯ refactor: A code change that neither fixes a bug nor adds a feature[39m 
+  perf:     A code change that improves performance 
+  test:     Adding missing tests or correcting existing tests 
+  build:    Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm) 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m
+  docs:     Documentation only changes 
+  style:    Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc) 
+  refactor: A code change that neither fixes a bug nor adds a feature 
+[36m❯ perf:     A code change that improves performance[39m 
+  test:     Adding missing tests or correcting existing tests 
+  build:    Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm) 
+  ci:       Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) 
+[2m(Move up and down to reveal more choices)[22m[41D[41C[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[32m?[39m [1mSelect the type of change that you're committing:[22m[0m [0m[36mperf:     A code change that improves performance[39m[101D[101C
+[?25h[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0m[88D[88C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0ml[89D[89C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mla[90D[90C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlaz[91D[91C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlazy[92D[92C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlazyl[93D[93C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlazylo[94D[94C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlazyloa[95D[95C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0mlazyload[96D[96C[2K[G[32m?[39m [1mWhat is the scope of this change (e.g. component or file name): (press enter to skip)[22m[0m [0m[36mlazyload[39m[96D[96C
+[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(0) [39m[5D[5C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(1) M[39m[6D[6C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(2) Mo[39m[7D[7C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(3) Mor[39m[8D[8C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(4) More[39m[9D[9C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(4) More [39m[10D[10C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(6) More p[39m[11D[11C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(7) More pe[39m[12D[12C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(8) More per[39m[13D[13C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(9) More perf[39m[14D[14C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(10) More perfo[39m[16D[16C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(11) More perfor[39m[17D[17C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(12) More perform[39m[18D[18C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(13) More performa[39m[19D[19C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(14) More performan[39m[20D[20C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(15) More performanc[39m[21D[21C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(16) More performance[39m[22D[22C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(16) More performance [39m[23D[23C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(18) More performance e[39m[24D[24C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(19) More performance en[39m[25D[25C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(20) More performance enc[39m[26D[26C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(21) More performance ench[39m[27D[27C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(22) More performance encha[39m[28D[28C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(23) More performance enchan[39m[29D[29C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(24) More performance enchanc[39m[30D[30C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(25) More performance enchance[39m[31D[31C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(26) More performance enchancem[39m[32D[32C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(27) More performance enchanceme[39m[33D[33C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(28) More performance enchancemen[39m[34D[34C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(29) More performance enchancement[39m[35D[35C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(30) More performance enchancements[39m[36D[36C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(30) More performance enchancements.[39m[37D[37C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(30) More performance enchancements[39m[36D[36C[2K[1A[2K[G[32m?[39m [1mWrite a short, imperative tense description of the change (max 84 chars):[22m
+[1m[22m[0m [0m[32m(30) more performance enchancements[39m[36D[36C
+[32m?[39m [1mProvide a longer description of the change: (press enter to skip)[22m
+[1m[22m[0m [0m[1D[1C[2K[1A[2K[G[32m?[39m [1mProvide a longer description of the change: (press enter to skip)[22m
+[1m[22m[0m [0m[1D[1C
+[32m?[39m [1mAre there any breaking changes?[22m[0m [0m[2m(y/N) [22m[40D[40C[2K[G[32m?[39m [1mAre there any breaking changes?[22m[0m [0m[36mNo[39m[36D[36C
+[32m?[39m [1mDoes this change affect any open issues?[22m[0m [0m[2m(y/N) [22m[49D[49C[2K[G[32m?[39m [1mDoes this change affect any open issues?[22m[0m [0m[36mNo[39m[45D[45C
+
+> nms_optimizer@3.7.6 format
+> prettier --write ./src
+
+[1G[0Ksrc/App.tsx[2K[1G[90msrc/App.tsx[39m 154ms (unchanged)
+src/assets/css/fonts.css[2K[1G[90msrc/assets/css/fonts.css[39m 39ms (unchanged)
+src/assets/fonts/AcuminProCond-Semibold.ttf[2K[1Gsrc/assets/fonts/geonms-webfont.woff[2K[1Gsrc/assets/fonts/Raleway-VariableFont_wght.ttf[2K[1Gsrc/assets/img/nms-icon.webp[2K[1Gsrc/assets/locales/en/about.md[2K[1G[90msrc/assets/locales/en/about.md[39m 65ms (unchanged)
+src/assets/svg/EmptyCellIcon.tsx[2K[1G[90msrc/assets/svg/EmptyCellIcon.tsx[39m 30ms (unchanged)
+src/assets/svg/flags/de.svg[2K[1Gsrc/assets/svg/flags/es.svg[2K[1Gsrc/assets/svg/flags/fr.svg[2K[1Gsrc/assets/svg/flags/us.svg[2K[1Gsrc/assets/svg/flags/xx.svg[2K[1Gsrc/components/AppDialog/AppDialog.css[2K[1G[90msrc/components/AppDialog/AppDialog.css[39m 40ms (unchanged)
+src/components/AppDialog/AppDialog.tsx[2K[1G[90msrc/components/AppDialog/AppDialog.tsx[39m 55ms (unchanged)
+src/components/AppDialog/ErrorContent.tsx[2K[1G[90msrc/components/AppDialog/ErrorContent.tsx[39m 31ms (unchanged)
+src/components/AppDialog/LoremIpsumSkeleton.tsx[2K[1G[90msrc/components/AppDialog/LoremIpsumSkeleton.tsx[39m 25ms (unchanged)
+src/components/AppDialog/MarkdownContentRenderer.tsx[2K[1G[90msrc/components/AppDialog/MarkdownContentRenderer.tsx[39m 59ms (unchanged)
+src/components/AppDialog/OptimizationAlertContent.tsx[2K[1G[90msrc/components/AppDialog/OptimizationAlertContent.tsx[39m 25ms (unchanged)
+src/components/AppDialog/OptimizationAlertDialog.tsx[2K[1G[90msrc/components/AppDialog/OptimizationAlertDialog.tsx[39m 28ms (unchanged)
+src/components/AppDialog/ShareLinkContent.tsx[2K[1G[90msrc/components/AppDialog/ShareLinkContent.tsx[39m 41ms (unchanged)
+src/components/AppDialog/ShareLinkDialog.tsx[2K[1G[90msrc/components/AppDialog/ShareLinkDialog.tsx[39m 22ms (unchanged)
+src/components/AppDialog/UserStatsContent.tsx[2K[1G[90msrc/components/AppDialog/UserStatsContent.tsx[39m 73ms (unchanged)
+src/components/AppDialog/UserStatsDialog.tsx[2K[1G[90msrc/components/AppDialog/UserStatsDialog.tsx[39m 20ms (unchanged)
+src/components/AppFooter/AppFooter.css[2K[1G[90msrc/components/AppFooter/AppFooter.css[39m 14ms (unchanged)
+src/components/AppFooter/AppFooter.tsx[2K[1G[90msrc/components/AppFooter/AppFooter.tsx[39m 27ms (unchanged)
+src/components/AppHeader/AppHeader.css[2K[1G[90msrc/components/AppHeader/AppHeader.css[39m 19ms (unchanged)
+src/components/AppHeader/AppHeader.tsx[2K[1G[90msrc/components/AppHeader/AppHeader.tsx[39m 43ms (unchanged)
+src/components/BuyMeACoffee/BuyMeACoffee.tsx[2K[1G[90msrc/components/BuyMeACoffee/BuyMeACoffee.tsx[39m 30ms (unchanged)
+src/components/ConditionalTooltip/ConditionalTooltip.tsx[2K[1G[90msrc/components/ConditionalTooltip/ConditionalTooltip.tsx[39m 21ms (unchanged)
+src/components/ConditionalTooltip/index.ts[2K[1G[90msrc/components/ConditionalTooltip/index.ts[39m 15ms (unchanged)
+src/components/ErrorBoundry/ErrorBoundry.tsx[2K[1G[90msrc/components/ErrorBoundry/ErrorBoundry.tsx[39m 42ms (unchanged)
+src/components/ErrorBoundry/ErrorBoundryInset.tsx[2K[1G[90msrc/components/ErrorBoundry/ErrorBoundryInset.tsx[39m 29ms (unchanged)
+src/components/GridCell/GridCell.css[2K[1G[90msrc/components/GridCell/GridCell.css[39m 36ms (unchanged)
+src/components/GridCell/GridCell.test.tsx[2K[1G[90msrc/components/GridCell/GridCell.test.tsx[39m 51ms (unchanged)
+src/components/GridCell/GridCell.tsx[2K[1G[90msrc/components/GridCell/GridCell.tsx[39m 65ms (unchanged)
+src/components/GridCell/useGridCellInteraction.test.ts[2K[1G[90msrc/components/GridCell/useGridCellInteraction.test.ts[39m 128ms (unchanged)
+src/components/GridCell/useGridCellInteraction.ts[2K[1G[90msrc/components/GridCell/useGridCellInteraction.ts[39m 57ms (unchanged)
+src/components/GridCell/useGridCellStyle.ts[2K[1G[90msrc/components/GridCell/useGridCellStyle.ts[39m 33ms (unchanged)
+src/components/GridControlButtons/GridControlButtons.tsx[2K[1G[90msrc/components/GridControlButtons/GridControlButtons.tsx[39m 27ms (unchanged)
+src/components/GridShake/GridShake.css[2K[1G[90msrc/components/GridShake/GridShake.css[39m 17ms (unchanged)
+src/components/GridShake/GridShake.tsx[2K[1G[90msrc/components/GridShake/GridShake.tsx[39m 21ms (unchanged)
+src/components/GridTable/GridTable.css[2K[1G[90msrc/components/GridTable/GridTable.css[39m 15ms (unchanged)
+src/components/GridTable/GridTable.tsx[2K[1G[90msrc/components/GridTable/GridTable.tsx[39m 47ms (unchanged)
+src/components/GridTableButtons/GridTableButtons.test.tsx[2K[1G[90msrc/components/GridTableButtons/GridTableButtons.test.tsx[39m 47ms (unchanged)
+src/components/GridTableButtons/GridTableButtons.tsx[2K[1G[90msrc/components/GridTableButtons/GridTableButtons.tsx[39m 37ms (unchanged)
+src/components/Icons/RhombusIcon.tsx[2K[1G[90msrc/components/Icons/RhombusIcon.tsx[39m 14ms (unchanged)
+src/components/LanguageSelector/LanguageSelector.css[2K[1G[90msrc/components/LanguageSelector/LanguageSelector.css[39m 14ms (unchanged)
+src/components/LanguageSelector/LanguageSelector.tsx[2K[1G[90msrc/components/LanguageSelector/LanguageSelector.tsx[39m 41ms (unchanged)
+src/components/MainAppContent/MainAppContent.tsx[2K[1G[90msrc/components/MainAppContent/MainAppContent.tsx[39m 49ms (unchanged)
+src/components/MessageSpinner/MessageSpinner.css[2K[1G[90msrc/components/MessageSpinner/MessageSpinner.css[39m 24ms (unchanged)
+src/components/MessageSpinner/MessageSpinner.tsx[2K[1G[90msrc/components/MessageSpinner/MessageSpinner.tsx[39m 34ms (unchanged)
+src/components/RecommendedBuild/RecommendedBuild.tsx[2K[1G[90msrc/components/RecommendedBuild/RecommendedBuild.tsx[39m 36ms (unchanged)
+src/components/RoutedDialogs/RoutedDialogs.tsx[2K[1G[90msrc/components/RoutedDialogs/RoutedDialogs.tsx[39m 23ms (unchanged)
+src/components/ShipSelection/ShipSelection.css[2K[1G[90msrc/components/ShipSelection/ShipSelection.css[39m 14ms (unchanged)
+src/components/ShipSelection/ShipSelection.tsx[2K[1G[90msrc/components/ShipSelection/ShipSelection.tsx[39m 44ms (unchanged)
+src/components/SplashScreen/SplashScreen.css[2K[1G[90msrc/components/SplashScreen/SplashScreen.css[39m 25ms (unchanged)
+src/components/SplashScreen/SplashScreen.tsx[2K[1G[90msrc/components/SplashScreen/SplashScreen.tsx[39m 35ms (unchanged)
+src/components/TechTree/SuspenseSkeleton.tsx[2K[1G[90msrc/components/TechTree/SuspenseSkeleton.tsx[39m 21ms (unchanged)
+src/components/TechTree/TechTree.tsx[2K[1G[90msrc/components/TechTree/TechTree.tsx[39m 27ms (unchanged)
+src/components/TechTree/TechTreeContent.tsx[2K[1G[90msrc/components/TechTree/TechTreeContent.tsx[39m 30ms (unchanged)
+src/components/TechTree/TechTreeSection.tsx[2K[1G[90msrc/components/TechTree/TechTreeSection.tsx[39m 40ms (unchanged)
+src/components/TechTree/TechTreeSkeleton.tsx[2K[1G[90msrc/components/TechTree/TechTreeSkeleton.tsx[39m 20ms (unchanged)
+src/components/TechTreeRow/ActionButtons.tsx[2K[1G[90msrc/components/TechTreeRow/ActionButtons.tsx[39m 41ms (unchanged)
+src/components/TechTreeRow/BonusStatusIcon.tsx[2K[1G[90msrc/components/TechTreeRow/BonusStatusIcon.tsx[39m 25ms (unchanged)
+src/components/TechTreeRow/index.ts[2K[1G[90msrc/components/TechTreeRow/index.ts[39m 10ms (unchanged)
+src/components/TechTreeRow/TechInfo.tsx[2K[1G[90msrc/components/TechTreeRow/TechInfo.tsx[39m 30ms (unchanged)
+src/components/TechTreeRow/TechInfoBadges.tsx[2K[1G[90msrc/components/TechTreeRow/TechInfoBadges.tsx[39m 17ms (unchanged)
+src/components/TechTreeRow/TechTreeRow.css[2K[1G[90msrc/components/TechTreeRow/TechTreeRow.css[39m 20ms (unchanged)
+src/components/TechTreeRow/TechTreeRow.tsx[2K[1G[90msrc/components/TechTreeRow/TechTreeRow.tsx[39m 33ms (unchanged)
+src/constants.ts[2K[1G[90msrc/constants.ts[39m 10ms (unchanged)
+src/context/dialog-utils.ts[2K[1G[90msrc/context/dialog-utils.ts[39m 15ms (unchanged)
+src/context/DialogContext.tsx[2K[1G[90msrc/context/DialogContext.tsx[39m 23ms (unchanged)
+src/hooks/useAnalytics/useAnalytics.test.ts[2K[1G[90msrc/hooks/useAnalytics/useAnalytics.test.ts[39m 18ms (unchanged)
+src/hooks/useAnalytics/useAnalytics.ts[2K[1G[90msrc/hooks/useAnalytics/useAnalytics.ts[39m 13ms (unchanged)
+src/hooks/useAppLayout/useAppLayout.tsx[2K[1G[90msrc/hooks/useAppLayout/useAppLayout.tsx[39m 26ms (unchanged)
+src/hooks/useBreakpoint/useBreakpoint.test.tsx[2K[1G[90msrc/hooks/useBreakpoint/useBreakpoint.test.tsx[39m 36ms (unchanged)
+src/hooks/useBreakpoint/useBreakpoint.tsx[2K[1G[90msrc/hooks/useBreakpoint/useBreakpoint.tsx[39m 16ms (unchanged)
+src/hooks/useGridDeserializer/useGridDeserializer.tsx[2K[1G[90msrc/hooks/useGridDeserializer/useGridDeserializer.tsx[39m 58ms (unchanged)
+src/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2K[1G[90msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[39m 34ms (unchanged)
+src/hooks/useMarkdownContent/useMarkdownContent.ts[2K[1G[90msrc/hooks/useMarkdownContent/useMarkdownContent.ts[39m 25ms (unchanged)
+src/hooks/useOptimize/useOptimize.test.tsx[2K[1G[90msrc/hooks/useOptimize/useOptimize.test.tsx[39m 82ms (unchanged)
+src/hooks/useOptimize/useOptimize.tsx[2K[1G[90msrc/hooks/useOptimize/useOptimize.tsx[39m 44ms (unchanged)
+src/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2K[1G[90msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[39m 43ms (unchanged)
+src/hooks/useRecommendedBuild/useRecommendedBuild.tsx[2K[1G[90msrc/hooks/useRecommendedBuild/useRecommendedBuild.tsx[39m 32ms (unchanged)
+src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2K[1G[90msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[39m 93ms (unchanged)
+src/hooks/useSeoAndTitle/useSeoAndTitle.ts[2K[1G[90msrc/hooks/useSeoAndTitle/useSeoAndTitle.ts[39m 46ms (unchanged)
+src/hooks/useShipTypes/useShipTypes.test.tsx[2K[1G[90msrc/hooks/useShipTypes/useShipTypes.test.tsx[39m 42ms (unchanged)
+src/hooks/useShipTypes/useShipTypes.tsx[2K[1G[90msrc/hooks/useShipTypes/useShipTypes.tsx[39m 28ms (unchanged)
+src/hooks/useTechTree/useTechTree.tsx[2K[1G[90msrc/hooks/useTechTree/useTechTree.tsx[39m 42ms (unchanged)
+src/hooks/useTechTreeColors/useTechTreeColors.ts[2K[1G[90msrc/hooks/useTechTreeColors/useTechTreeColors.ts[39m 26ms (unchanged)
+src/hooks/useUrlSync/useUrlSync.test.tsx[2K[1G[90msrc/hooks/useUrlSync/useUrlSync.test.tsx[39m 31ms (unchanged)
+src/hooks/useUrlSync/useUrlSync.tsx[2K[1G[90msrc/hooks/useUrlSync/useUrlSync.tsx[39m 24ms (unchanged)
+src/hooks/useUrlValidation/useUrlValidation.ts[2K[1G[90msrc/hooks/useUrlValidation/useUrlValidation.ts[39m 17ms (unchanged)
+src/hooks/useUserStats/useUserStats.test.ts[2K[1G[90msrc/hooks/useUserStats/useUserStats.test.ts[39m 22ms (unchanged)
+src/hooks/useUserStats/useUserStats.ts[2K[1G[90msrc/hooks/useUserStats/useUserStats.ts[39m 17ms (unchanged)
+src/i18n/i18n.ts[2K[1G[90msrc/i18n/i18n.ts[39m 13ms (unchanged)
+src/index.css[2K[1G[90msrc/index.css[39m 19ms (unchanged)
+src/main.tsx[2K[1G[90msrc/main.tsx[39m 15ms (unchanged)
+src/store/GridStore.test/createEmptyCell.test.ts[2K[1G[90msrc/store/GridStore.test/createEmptyCell.test.ts[39m 29ms (unchanged)
+src/store/GridStore.test/createGrid.test.ts[2K[1G[90msrc/store/GridStore.test/createGrid.test.ts[39m 18ms (unchanged)
+src/store/GridStore.test/gridSelectors.test.ts[2K[1G[90msrc/store/GridStore.test/gridSelectors.test.ts[39m 44ms (unchanged)
+src/store/GridStore.test/handleCellDoubleTap.test.ts[2K[1G[90msrc/store/GridStore.test/handleCellDoubleTap.test.ts[39m 35ms (unchanged)
+src/store/GridStore.test/handleCellTap.test.ts[2K[1G[90msrc/store/GridStore.test/handleCellTap.test.ts[39m 27ms (unchanged)
+src/store/GridStore.test/hasTechInGrid.test.ts[2K[1G[90msrc/store/GridStore.test/hasTechInGrid.test.ts[39m 34ms (unchanged)
+src/store/GridStore.test/isGridFull.test.ts[2K[1G[90msrc/store/GridStore.test/isGridFull.test.ts[39m 38ms (unchanged)
+src/store/GridStore.test/resetGridTech.test.ts[2K[1G[90msrc/store/GridStore.test/resetGridTech.test.ts[39m 40ms (unchanged)
+src/store/GridStore.test/revertCellTap.test.ts[2K[1G[90msrc/store/GridStore.test/revertCellTap.test.ts[39m 22ms (unchanged)
+src/store/GridStore.test/rowActivation.test.ts[2K[1G[90msrc/store/GridStore.test/rowActivation.test.ts[39m 34ms (unchanged)
+src/store/GridStore.ts[2K[1G[90msrc/store/GridStore.ts[39m 81ms (unchanged)
+src/store/OptimizeStore.ts[2K[1G[90msrc/store/OptimizeStore.ts[39m 14ms (unchanged)
+src/store/PlatformStore.ts[2K[1G[90msrc/store/PlatformStore.ts[39m 17ms (unchanged)
+src/store/ShakeStore.ts[2K[1G[90msrc/store/ShakeStore.ts[39m 14ms (unchanged)
+src/store/TechStore.test.ts[2K[1G[90msrc/store/TechStore.test.ts[39m 24ms (unchanged)
+src/store/TechStore.ts[2K[1G[90msrc/store/TechStore.ts[39m 29ms (unchanged)
+src/test/setup.ts[2K[1G[90msrc/test/setup.ts[39m 14ms (unchanged)
+src/utils/analytics.ts[2K[1G[90msrc/utils/analytics.ts[39m 15ms (unchanged)
+src/utils/dialogIconMapping.ts[2K[1G[90msrc/utils/dialogIconMapping.ts[39m 14ms (unchanged)
+src/utils/isTouchDevice.ts[2K[1G[90msrc/utils/isTouchDevice.ts[39m 11ms (unchanged)
+src/utils/recommendedBuildValidation.test.ts[2K[1G[90msrc/utils/recommendedBuildValidation.test.ts[39m 28ms (unchanged)
+src/utils/recommendedBuildValidation.ts[2K[1G[90msrc/utils/recommendedBuildValidation.ts[39m 17ms (unchanged)
+src/utils/reportWebVitals.ts[2K[1G[90msrc/utils/reportWebVitals.ts[39m 17ms (unchanged)
+src/vite-env.d.ts[2K[1G[90msrc/vite-env.d.ts[39m 11ms (unchanged)
+[1G[0K⠙[1G[0K
+> nms_optimizer@3.7.6 lint:fix
+> eslint . --fix
+
+[1G[0K[1G[0K⠙[1G[0K
+> nms_optimizer@3.7.6 typecheck
+> tsc --noEmit
+
+[1G[0K[1G[0K⠙[1G[0K
+> nms_optimizer@3.7.6 test
+> vitest run --coverage
+
+[1G[0K[?25l
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90m/home/jbelew/projects/nms_optimizer-web[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[?2026h
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m [queued][22m
+
+[2m Test Files [22m[1m[32m0 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m0 passed[39m[22m[90m (0)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m907ms
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 0/4[22m
+
+[2m Test Files [22m[1m[32m0 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m0 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.45s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/hooks/useUserStats/useUserStats.test.ts[2m > [22m[2museUserStats[2m > [22m[2mshould return initial state correctly
+[22m[39mAn update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 1/4[22m
+
+[2m Test Files [22m[1m[32m0 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.55s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 0/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 2/4[22m
+
+[2m Test Files [22m[1m[32m0 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m2 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.66s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/hooks/useShipTypes/useShipTypes.test.tsx[2m > [22m[2museShipTypes Store and Fetch Logic[2m > [22m[2mshould respect the URL parameter for selectedShipType even after fetching all types
+[22m[39mFetched ship types: {
+  atlantid: { label: [32m'Atlantid'[39m, type: [32m'Starship'[39m },
+  hauler: { label: [32m'Hauler'[39m, type: [32m'Starship'[39m },
+  sentinel: { label: [32m'Sentinel'[39m, type: [32m'Starship'[39m }
+}
+
+[90mstdout[2m | src/hooks/useShipTypes/useShipTypes.test.tsx[2m > [22m[2museShipTypes Store and Fetch Logic[2m > [22m[2mshould default to "standard" and not be overwritten by fetch if URL/localStorage are empty
+[22m[39mFetched ship types: {
+  atlantid: { label: [32m'Atlantid'[39m, type: [32m'Starship'[39m },
+  standard: { label: [32m'Standard'[39m, type: [32m'Starship'[39m }
+}
+
+[90mstdout[2m | src/hooks/useShipTypes/useShipTypes.test.tsx[2m > [22m[2museShipTypes Store and Fetch Logic[2m > [22m[2mshould reset to "standard" if the value from the URL is invalid
+[22m[39mFetched ship types: {
+  atlantid: { label: [32m'Atlantid'[39m, type: [32m'Starship'[39m },
+  standard: { label: [32m'Standard'[39m, type: [32m'Starship'[39m }
+}
+
+ [32m✓[39m src/hooks/useUserStats/useUserStats.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 0/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 1/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 0/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 0/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m1 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m5 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.86s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useShipTypes/useShipTypes.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 3/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 1/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m3 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.96s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m > [22m[2museMarkdownContent[2m > [22m[2mshould handle fetch error
+[22m[39mError loading non-existent-file.md: Error: Failed to load non-existent-file.md for language: en or en. Status: 404
+    at loadMarkdown [90m(/home/jbelew/projects/nms_optimizer-web/[39msrc/hooks/useMarkdownContent/useMarkdownContent.ts:68:12[90m)[39m
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 3/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 1/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m3 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.96s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 3/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 1/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m3 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.96s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m > [22m[2museMarkdownContent[2m > [22m[2mshould fall back to default language if specific language not found
+[22m[39mMarkdown for localized-file not found for language fr, falling back to en.
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 3/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 1/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m3 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m1.96s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/components/GridCell/GridCell.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 4/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 0/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m4 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m22 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.06s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m > [22m[2museMarkdownContent[2m > [22m[2mshould handle network error during fetch
+[22m[39mError loading network-error-file.md: TypeError: Network request failed
+    at [90m/home/jbelew/projects/nms_optimizer-web/[39msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx:148:34
+    at [90mfile:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:155:11
+    at [90mfile:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:752:26
+    at [90mfile:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1897:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1863:10[90m)[39m
+    at runTest [90m(file:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1574:12[90m)[39m
+    at runSuite [90m(file:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1729:8[90m)[39m
+    at runSuite [90m(file:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1729:8[90m)[39m
+    at runFiles [90m(file:///home/jbelew/projects/nms_optimizer-web/[39mnode_modules/[4m@vitest[24m/runner/dist/chunk-hooks.js:1787:3[90m)[39m
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 4/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 0/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m4 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m22 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.06s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx[2m > [22m[2museOptimize[2m > [22m[2mhandleOptimize[2m > [22m[2mshould successfully optimize and update grid/result
+[22m[39mResponse from API: {
+  solve_method: [32m'Success'[39m,
+  grid: { cells: [ [] ], width: [33m1[39m, height: [33m1[39m },
+  max_bonus: [33m101[39m,
+  solved_bonus: [33m90[39m
+}
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 4/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 0/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m4 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m22 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.06s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx[2m > [22m[2museOptimize[2m > [22m[2mhandleOptimize[2m > [22m[2mshould successfully optimize with supercharged false
+[22m[39mResponse from API: {
+  solve_method: [32m'Success'[39m,
+  grid: { cells: [ [] ], width: [33m1[39m, height: [33m1[39m },
+  max_bonus: [33m100[39m,
+  solved_bonus: [33m90[39m
+}
+
+[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx[2m > [22m[2museOptimize[2m > [22m[2mhandleOptimize[2m > [22m[2mshould clear PNF state on forced optimization
+[22m[39mResponse from API: {
+  solve_method: [32m'Success'[39m,
+  grid: { cells: [ [] ], width: [33m1[39m, height: [33m1[39m }
+}
+
+[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx[2m > [22m[2museOptimize[2m > [22m[2mhandleForceCurrentPnfOptimize[2m > [22m[2mshould call handleOptimize with forced true if patternNoFitTech is set
+[22m[39mResponse from API: {
+  solve_method: [32m'Success'[39m,
+  grid: { cells: [ [] ], width: [33m1[39m, height: [33m1[39m }
+}
+
+[90mstdout[2m | src/hooks/useOptimize/useOptimize.test.tsx[2m > [22m[2museOptimize[2m > [22m[2mscrolling behavior[2m > [22m[2mshould not scroll when solving and is large screen
+[22m[39mResponse from API: {
+  solve_method: [32m'Success'[39m,
+  grid: { cells: [ [] ], width: [33m1[39m, height: [33m1[39m }
+}
+
+ [32m✓[39m src/hooks/useMarkdownContent/useMarkdownContent.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m 0/8[22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 5/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m5 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m29 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.27s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useOptimize/useOptimize.test.tsx [2m([22m[2m15 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[32m 161[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m 1/8[22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 15/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m6 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m39 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (47)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.37s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/components/GridCell/GridCell.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m 3/8[22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 15/15[22m
+[1m[33m ❯ [39m[22msrc/hooks/useRecommendedBuild/useRecommendedBuild.test.tsx[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/hooks/useShipTypes/useShipTypes.test.tsx[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUserStats/useUserStats.test.ts[2m 4/4[22m
+
+[2m Test Files [22m[1m[32m6 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m41 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (47)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.46s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/components/GridTableButtons/GridTableButtons.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/components/GridTableButtons/GridTableButtons.test.tsx[2m 8/8[22m
+[1m[33m ❯ [39m[22msrc/hooks/useMarkdownContent/useMarkdownContent.test.tsx[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/hooks/useOptimize/useOptimize.test.tsx[2m 15/15[22m
+
+[2m Test Files [22m[1m[32m7 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m46 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (47)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m2.87s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useBreakpoint/useBreakpoint.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m7 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m46 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (47)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.19s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/components/GridCell/useGridCellInteraction.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useBreakpoint/useBreakpoint.test.tsx[2m 0/4[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m7 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m46 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (51)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.39s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 1/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useBreakpoint/useBreakpoint.test.tsx[2m 0/4[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m7 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m47 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (64)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.49s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useBreakpoint/useBreakpoint.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m src/components/GridCell/useGridCellInteraction.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useBreakpoint/useBreakpoint.test.tsx[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 0/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m9 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m63 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (75)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.59s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/handleCellTap.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 0/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 1/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m9 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m64 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (79)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.69s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/handleCellTap.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 10/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 0/3[22m
+
+[2m Test Files [22m[1m[32m10 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m77 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (82)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.89s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx
+[22m[39mError: connect ECONNREFUSED 127.0.0.1:3000
+[90m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)[39m {
+  errno: [33m-111[39m,
+  code: [32m'ECONNREFUSED'[39m,
+  syscall: [32m'connect'[39m,
+  address: [32m'127.0.0.1'[39m,
+  port: [33m3000[39m
+}
+
+[90mstderr[2m | src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx
+[22m[39mError: connect ECONNREFUSED 127.0.0.1:3000
+[90m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)[39m {
+  errno: [33m-111[39m,
+  code: [32m'ECONNREFUSED'[39m,
+  syscall: [32m'connect'[39m,
+  address: [32m'127.0.0.1'[39m,
+  port: [33m3000[39m
+}
+
+[90mstderr[2m | src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx
+[22m[39mError: connect ECONNREFUSED 127.0.0.1:3000
+[90m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)[39m {
+  errno: [33m-111[39m,
+  code: [32m'ECONNREFUSED'[39m,
+  syscall: [32m'connect'[39m,
+  address: [32m'127.0.0.1'[39m,
+  port: [33m3000[39m
+}
+
+[90mstderr[2m | src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx
+[22m[39mError: connect ECONNREFUSED 127.0.0.1:3000
+[90m    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)[39m {
+  errno: [33m-111[39m,
+  code: [32m'ECONNREFUSED'[39m,
+  syscall: [32m'connect'[39m,
+  address: [32m'127.0.0.1'[39m,
+  port: [33m3000[39m
+}
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 10/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 0/3[22m
+
+[2m Test Files [22m[1m[32m10 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m77 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (82)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.89s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/revertCellTap.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+[90mstdout[2m | src/hooks/useUrlSync/useUrlSync.test.tsx
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 10/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 0/3[22m
+
+[2m Test Files [22m[1m[32m10 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m77 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (82)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.89s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m src/store/GridStore.test/revertCellTap.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+[90mstdout[2m | src/store/GridStore.test/resetGridTech.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 11/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m 0/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m 0/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 3/3[22m
+
+[2m Test Files [22m[1m[32m12 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m81 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (96)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m3.99s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/hooks/useUrlSync/useUrlSync.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/components/GridCell/useGridCellInteraction.test.ts[2m 13/13[22m
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 11/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellTap.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m 1/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 3/3[22m
+
+[2m Test Files [22m[1m[32m13 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m87 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (96)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m4.09s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/resetGridTech.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/hooks/useSeoAndTitle/useSeoAndTitle.test.tsx[2m 11/11[22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m 9/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/revertCellTap.test.ts[2m 3/3[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m14 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m95 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (96)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m4.60s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/hooks/useAnalytics/useAnalytics.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createEmptyCell.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m 9/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m14 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m95 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (96)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m4.91s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/createEmptyCell.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/hooks/useAnalytics/useAnalytics.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useUrlSync/useUrlSync.test.tsx[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createEmptyCell.test.ts[2m 1/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/resetGridTech.test.ts[2m 9/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m14 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m96 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (105)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.01s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/createEmptyCell.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+[90mstdout[2m | src/store/GridStore.test/rowActivation.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/hooks/useAnalytics/useAnalytics.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createEmptyCell.test.ts[2m 9/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m 0/6[22m
+[1m[33m ❯ [39m[22msrc/utils/recommendedBuildValidation.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m15 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m104 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (111)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.11s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/hooks/useAnalytics/useAnalytics.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createEmptyCell.test.ts[2m 9/9[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m 0/6[22m
+[1m[33m ❯ [39m[22msrc/utils/recommendedBuildValidation.test.ts[2m 0/15[22m
+
+[2m Test Files [22m[1m[32m15 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m104 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (126)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.31s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/rowActivation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/hooks/useAnalytics/useAnalytics.test.ts[2m 0/2[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/isGridFull.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/rowActivation.test.ts[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/utils/recommendedBuildValidation.test.ts[2m 1/15[22m
+
+[2m Test Files [22m[1m[32m16 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m111 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (128)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.43s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/utils/recommendedBuildValidation.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/hooks/useAnalytics/useAnalytics.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createGrid.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/isGridFull.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m127 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (128)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.53s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/handleCellDoubleTap.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createGrid.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m 0/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/isGridFull.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m127 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (133)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.73s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/isGridFull.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createGrid.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/handleCellDoubleTap.test.ts[2m 1/5[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/isGridFull.test.ts[2m 0/9[22m
+
+[2m Test Files [22m[1m[32m18 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m128 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (142)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.83s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/handleCellDoubleTap.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+[90mstdout[2m | src/store/GridStore.test/createGrid.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/createGrid.test.ts[2m 0/2[22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/isGridFull.test.ts[2m 1/9[22m
+
+[2m Test Files [22m[1m[32m19 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m133 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (144)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m5.93s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/isGridFull.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m src/store/GridStore.test/createGrid.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/hasTechInGrid.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m21 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m143 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (144)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m6.24s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/gridSelectors.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/hasTechInGrid.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m21 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m143 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (144)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m6.44s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstdout[2m | src/store/GridStore.test/hasTechInGrid.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+[90mstdout[2m | src/store/GridStore.test/gridSelectors.test.ts
+[22m[39mGridStore: No stored data found for key: gridState
+
+
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/gridSelectors.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/store/GridStore.test/hasTechInGrid.test.ts[2m 1/7[22m
+[1m[33m ❯ [39m[22msrc/store/TechStore.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m21 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m144 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (151)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m6.54s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/GridStore.test/hasTechInGrid.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/store/GridStore.test/gridSelectors.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+
+
+[1m[33m ❯ [39m[22msrc/store/TechStore.test.ts[2m 1/8[22m
+
+[2m Test Files [22m[1m[32m23 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m167 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (175)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m6.64s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/store/TechStore.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+
+
+
+[2m Test Files [22m[1m[32m24 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m[1m[32m174 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (175)[39m
+[2m   Start at [22m12:20:15
+[2m   Duration [22m7.06s
+[?2026l[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K
+[2m Test Files [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m      Tests [22m [1m[32m174 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (175)[39m
+[2m   Start at [22m 12:20:14
+[2m   Duration [22m 7.81s[2m (transform 1.44s, setup 4.28s, collect 8.11s, tests 2.08s, environment 12.59s, prepare 5.22s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-----------------------------------------------------|---------|----------|---------|---------|--------------------------------------------------------------
+File                                                 | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                            
+-----------------------------------------------------|---------|----------|---------|---------|--------------------------------------------------------------
+[31;1mAll files                                           [0m | [31;1m  20.94[0m | [33;1m   77.09[0m | [33;1m  59.86[0m | [31;1m  20.94[0m | [31;1m                                                            [0m 
+[31;1m nms_optimizer-web                                  [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  playwright.config.ts                              [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-77                                                        [0m 
+[31;1m  postcss.config.cjs                                [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-14                                                        [0m 
+[31;1m  server.js                                         [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-130                                                       [0m 
+[31;1m  tailwind.config.js                                [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-14                                                        [0m 
+[31;1m nms_optimizer-web/__mocks__                        [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  styleMock.js                                      [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1                                                           [0m 
+[31;1m nms_optimizer-web/e2e-tests                        [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  vitest.setup.js                                   [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-13                                                        [0m 
+[31;1m nms_optimizer-web/scripts                          [0m | [31;1m      0[0m | [31;1m   16.66[0m | [31;1m  16.66[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  deferStylesheetsPlugin.ts                         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-97                                                        [0m 
+[31;1m  generate-sitemap.mjs                              [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-47                                                        [0m 
+[31;1m  lighthouse-audit.cjs                              [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-150                                                       [0m 
+[31;1m  process-images.mjs                                [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-124                                                       [0m 
+[31;1m  screenshot.cjs                                    [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-1199                                                      [0m 
+[31;1m  vite-plugin-inline-critical-css.ts                [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-117                                                       [0m 
+[31;1m nms_optimizer-web/src                              [0m | [31;1m   2.88[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m   2.88[0m | [31;1m                                                            [0m 
+[31;1m  App.tsx                                           [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-76                                                        [0m 
+[32;1m  constants.ts                                      [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m  main.tsx                                          [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-60                                                        [0m 
+[31;1m nms_optimizer-web/src/assets/svg                   [0m | [31;1m  13.33[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  13.33[0m | [31;1m                                                            [0m 
+[31;1m  EmptyCellIcon.tsx                                 [0m | [31;1m  13.33[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  13.33[0m | [31;1m9-22                                                        [0m 
+[31;1m nms_optimizer-web/src/components/AppDialog         [0m | [31;1m      0[0m | [32;1m      90[0m | [32;1m     90[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  AppDialog.tsx                                     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-122                                                       [0m 
+[31;1m  ErrorContent.tsx                                  [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-51                                                        [0m 
+[31;1m  LoremIpsumSkeleton.tsx                            [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-73                                                        [0m 
+[31;1m  MarkdownContentRenderer.tsx                       [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-166                                                       [0m 
+[31;1m  OptimizationAlertContent.tsx                      [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-88                                                        [0m 
+[31;1m  OptimizationAlertDialog.tsx                       [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-54                                                        [0m 
+[31;1m  ShareLinkContent.tsx                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-71                                                        [0m 
+[31;1m  ShareLinkDialog.tsx                               [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-39                                                        [0m 
+[31;1m  UserStatsContent.tsx                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-240                                                       [0m 
+[31;1m  UserStatsDialog.tsx                               [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-43                                                        [0m 
+[31;1m nms_optimizer-web/src/components/AppFooter         [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  AppFooter.tsx                                     [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-53                                                        [0m 
+[31;1m nms_optimizer-web/src/components/AppHeader         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  AppHeader.tsx                                     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-186                                                       [0m 
+[31;1m nms_optimizer-web/src/components/BuyMeACoffee      [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  BuyMeACoffee.tsx                                  [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-38                                                        [0m 
+[31;1m nms_optimizer-web/src/components/ConditionalTooltip[0m | [31;1m  23.52[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  23.52[0m | [31;1m                                                            [0m 
+[31;1m  ConditionalTooltip.tsx                            [0m | [31;1m  18.75[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  18.75[0m | [31;1m20-35                                                       [0m 
+[32;1m  index.ts                                          [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m nms_optimizer-web/src/components/ErrorBoundry      [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  ErrorBoundry.tsx                                  [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-132                                                       [0m 
+[31;1m  ErrorBoundryInset.tsx                             [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-131                                                       [0m 
+[32;1m nms_optimizer-web/src/components/GridCell          [0m | [32;1m  94.31[0m | [33;1m   70.37[0m | [32;1m    100[0m | [32;1m  94.31[0m | [31;1m                                                            [0m 
+[32;1m  GridCell.tsx                                      [0m | [32;1m  94.28[0m | [33;1m      50[0m | [32;1m    100[0m | [32;1m  94.28[0m | [31;1m104,109-111                                                 [0m 
+[32;1m  useGridCellInteraction.ts                         [0m | [32;1m  93.61[0m | [32;1m   88.37[0m | [32;1m    100[0m | [32;1m  93.61[0m | [31;1m101-105,111,115-116,180                                     [0m 
+[32;1m  useGridCellStyle.ts                               [0m | [32;1m  96.22[0m | [33;1m      50[0m | [32;1m    100[0m | [32;1m  96.22[0m | [31;1m20,57                                                       [0m 
+[31;1m nms_optimizer-web/src/components/GridControlButtons[0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  GridControlButtons.tsx                            [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-88                                                        [0m 
+[31;1m nms_optimizer-web/src/components/GridShake         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  GridShake.tsx                                     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-45                                                        [0m 
+[31;1m nms_optimizer-web/src/components/GridTable         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  GridTable.tsx                                     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-202                                                       [0m 
+[33;1m nms_optimizer-web/src/components/GridTableButtons  [0m | [33;1m  67.56[0m | [33;1m   61.53[0m | [32;1m    100[0m | [33;1m  67.56[0m | [31;1m                                                            [0m 
+[33;1m  GridTableButtons.tsx                              [0m | [33;1m  67.56[0m | [33;1m   61.53[0m | [32;1m    100[0m | [33;1m  67.56[0m | [31;1m93-115,136-146,160-168,184-193                              [0m 
+[31;1m nms_optimizer-web/src/components/Icons             [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  RhombusIcon.tsx                                   [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m10-28                                                       [0m 
+[31;1m nms_optimizer-web/src/components/LanguageSelector  [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  LanguageSelector.tsx                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-121                                                       [0m 
+[31;1m nms_optimizer-web/src/components/MainAppContent    [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  MainAppContent.tsx                                [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-156                                                       [0m 
+[31;1m nms_optimizer-web/src/components/MessageSpinner    [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  MessageSpinner.tsx                                [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-105                                                       [0m 
+[31;1m nms_optimizer-web/src/components/RecommendedBuild  [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  RecommendedBuild.tsx                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-174                                                       [0m 
+[31;1m nms_optimizer-web/src/components/RoutedDialogs     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  RoutedDialogs.tsx                                 [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-94                                                        [0m 
+[31;1m nms_optimizer-web/src/components/ShipSelection     [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  ShipSelection.tsx                                 [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-242                                                       [0m 
+[31;1m nms_optimizer-web/src/components/SplashScreen      [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  SplashScreen.tsx                                  [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-118                                                       [0m 
+[31;1m nms_optimizer-web/src/components/TechTree          [0m | [31;1m      0[0m | [31;1m      40[0m | [31;1m     40[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  SuspenseSkeleton.tsx                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-34                                                        [0m 
+[31;1m  TechTree.tsx                                      [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-125                                                       [0m 
+[31;1m  TechTreeContent.tsx                               [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-97                                                        [0m 
+[31;1m  TechTreeSection.tsx                               [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-127                                                       [0m 
+[31;1m  TechTreeSkeleton.tsx                              [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-39                                                        [0m 
+[31;1m nms_optimizer-web/src/components/TechTreeRow       [0m | [31;1m      0[0m | [31;1m   33.33[0m | [31;1m  33.33[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  ActionButtons.tsx                                 [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-67                                                        [0m 
+[31;1m  BonusStatusIcon.tsx                               [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-100                                                       [0m 
+[31;1m  TechInfo.tsx                                      [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-104                                                       [0m 
+[31;1m  TechInfoBadges.tsx                                [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-65                                                        [0m 
+[31;1m  TechTreeRow.tsx                                   [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-204                                                       [0m 
+[31;1m  index.ts                                          [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1                                                           [0m 
+[31;1m nms_optimizer-web/src/context                      [0m | [31;1m   3.33[0m | [32;1m     100[0m | [33;1m     50[0m | [31;1m   3.33[0m | [31;1m                                                            [0m 
+[31;1m  DialogContext.tsx                                 [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-115                                                       [0m 
+[31;1m  dialog-utils.ts                                   [0m | [31;1m  33.33[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  33.33[0m | [31;1m46-51                                                       [0m 
+[32;1m nms_optimizer-web/src/hooks/useAnalytics           [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[32;1m  useAnalytics.ts                                   [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m nms_optimizer-web/src/hooks/useAppLayout           [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  useAppLayout.tsx                                  [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-101                                                       [0m 
+[32;1m nms_optimizer-web/src/hooks/useBreakpoint          [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[32;1m  useBreakpoint.tsx                                 [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m nms_optimizer-web/src/hooks/useGridDeserializer    [0m | [31;1m   3.83[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m   3.83[0m | [31;1m                                                            [0m 
+[31;1m  useGridDeserializer.tsx                           [0m | [31;1m   3.83[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m   3.83[0m | [31;1m17-32,41-56,65-111,122-304,313-337                          [0m 
+[32;1m nms_optimizer-web/src/hooks/useMarkdownContent     [0m | [32;1m  86.44[0m | [33;1m   72.22[0m | [32;1m    100[0m | [32;1m  86.44[0m | [31;1m                                                            [0m 
+[32;1m  useMarkdownContent.ts                             [0m | [32;1m  86.44[0m | [33;1m   72.22[0m | [32;1m    100[0m | [32;1m  86.44[0m | [31;1m40-43,50-53                                                 [0m 
+[32;1m nms_optimizer-web/src/hooks/useOptimize            [0m | [32;1m   83.5[0m | [33;1m   73.33[0m | [33;1m     75[0m | [32;1m   83.5[0m | [31;1m                                                            [0m 
+[32;1m  useOptimize.tsx                                   [0m | [32;1m   83.5[0m | [33;1m   73.33[0m | [33;1m     75[0m | [32;1m   83.5[0m | [31;1m49-50,60-61,76-77,115-134,158-162,212-216,221               [0m 
+[32;1m nms_optimizer-web/src/hooks/useRecommendedBuild    [0m | [32;1m  96.96[0m | [33;1m      70[0m | [32;1m    100[0m | [32;1m  96.96[0m | [31;1m                                                            [0m 
+[32;1m  useRecommendedBuild.tsx                           [0m | [32;1m  96.96[0m | [33;1m      70[0m | [32;1m    100[0m | [32;1m  96.96[0m | [31;1m57-59                                                       [0m 
+[32;1m nms_optimizer-web/src/hooks/useSeoAndTitle         [0m | [32;1m  96.74[0m | [32;1m   86.36[0m | [32;1m    100[0m | [32;1m  96.74[0m | [31;1m                                                            [0m 
+[32;1m  useSeoAndTitle.ts                                 [0m | [32;1m  96.74[0m | [32;1m   86.36[0m | [32;1m    100[0m | [32;1m  96.74[0m | [31;1m81-84                                                       [0m 
+[33;1m nms_optimizer-web/src/hooks/useShipTypes           [0m | [33;1m  70.51[0m | [32;1m    87.5[0m | [33;1m     50[0m | [33;1m  70.51[0m | [31;1m                                                            [0m 
+[33;1m  useShipTypes.tsx                                  [0m | [33;1m  70.51[0m | [32;1m    87.5[0m | [33;1m     50[0m | [33;1m  70.51[0m | [31;1m51-52,57-63,73-74,88-92,112-116,131-132                     [0m 
+[31;1m nms_optimizer-web/src/hooks/useTechTree            [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  useTechTree.tsx                                   [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-225                                                       [0m 
+[31;1m nms_optimizer-web/src/hooks/useTechTreeColors      [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  useTechTreeColors.ts                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m2-73                                                        [0m 
+[32;1m nms_optimizer-web/src/hooks/useUrlSync             [0m | [32;1m  96.42[0m | [32;1m    92.3[0m | [32;1m    100[0m | [32;1m  96.42[0m | [31;1m                                                            [0m 
+[32;1m  useUrlSync.tsx                                    [0m | [32;1m  96.42[0m | [32;1m    92.3[0m | [32;1m    100[0m | [32;1m  96.42[0m | [31;1m43-44                                                       [0m 
+[31;1m nms_optimizer-web/src/hooks/useUrlValidation       [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  useUrlValidation.ts                               [0m | [31;1m      0[0m | [31;1m       0[0m | [31;1m      0[0m | [31;1m      0[0m | [31;1m1-22                                                        [0m 
+[32;1m nms_optimizer-web/src/hooks/useUserStats           [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[32;1m  useUserStats.ts                                   [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[32;1m nms_optimizer-web/src/i18n                         [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[32;1m  i18n.ts                                           [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[33;1m nms_optimizer-web/src/store                        [0m | [33;1m  64.96[0m | [32;1m   84.25[0m | [33;1m  61.53[0m | [33;1m  64.96[0m | [31;1m                                                            [0m 
+[33;1m  GridStore.ts                                      [0m | [33;1m  58.85[0m | [32;1m      84[0m | [33;1m  54.05[0m | [33;1m  58.85[0m | [31;1m...1,454-463,466-472,536,539-542,545-573,592-597,608,618-621[0m 
+[32;1m  OptimizeStore.ts                                  [0m | [32;1m    100[0m | [32;1m     100[0m | [31;1m      0[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[33;1m  PlatformStore.ts                                  [0m | [33;1m     78[0m | [33;1m   66.66[0m | [32;1m    100[0m | [33;1m     78[0m | [31;1m25-29,34-37,54-55                                           [0m 
+[33;1m  ShakeStore.ts                                     [0m | [33;1m     75[0m | [33;1m      50[0m | [31;1m      0[0m | [33;1m     75[0m | [31;1m25-26                                                       [0m 
+[32;1m  TechStore.ts                                      [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                                                            [0m 
+[31;1m nms_optimizer-web/src/test                         [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m                                                            [0m 
+[31;1m  setup.ts                                          [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m3-26                                                        [0m 
+[33;1m nms_optimizer-web/src/utils                        [0m | [33;1m  65.06[0m | [32;1m     100[0m | [31;1m  28.57[0m | [33;1m  65.06[0m | [31;1m                                                            [0m 
+[31;1m  analytics.ts                                      [0m | [31;1m  31.57[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  31.57[0m | [31;1m54-63,72-74                                                 [0m 
+[31;1m  dialogIconMapping.ts                              [0m | [31;1m      0[0m | [32;1m     100[0m | [32;1m    100[0m | [31;1m      0[0m | [31;1m5-59                                                        [0m 
+[31;1m  isTouchDevice.ts                                  [0m | [31;1m  33.33[0m | [32;1m
