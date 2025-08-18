@@ -23,8 +23,8 @@ const imageDirs = [
 		sourceDir: "source_images/sidebar",
 		outputDir: "public/assets/img/sidebar",
 		resolutions: [
-			{ width: 64, height: 48, suffix: "" },
-			{ width: 128, height: 96, suffix: "@2x" },
+			{ width: 36, height: 24, suffix: "" },
+			{ width: 72, height: 48, suffix: "@2x" },
 		],
 	},
 ];
@@ -64,26 +64,8 @@ async function processImages() {
 					const newFilename = `${filename}${res.suffix}.webp`;
 					const outputPath = path.join(targetDir, newFilename);
 
-					// Only trim for sidebar images
-					let image = sourceDir.includes("sidebar") ? sharp(filePath).trim() : sharp(filePath);
-
-					// Get metadata after trimming (if applied) to calculate aspect ratio
-					const metadata = await image.metadata();
-					const originalWidth = metadata.width;
-					const originalHeight = metadata.height;
-
-					const resizedWidth = Math.round((originalWidth / originalHeight) * res.height);
-					const paddingRight = Math.max(0, res.width - resizedWidth);
-
-					await image
-						.resize({ height: res.height, fit: "contain", position: "left" })
-						.extend({
-							top: 0,
-							left: 0,
-							bottom: 0,
-							right: paddingRight,
-							background: { r: 0, g: 0, b: 0, alpha: 0 },
-						})
+					await sharp(filePath)
+						.resize(res.width, res.height)
 						.webp({ quality: res.suffix === "@2x" ? 60 : 75, effort: 6 })
 						.toFile(outputPath);
 				}
