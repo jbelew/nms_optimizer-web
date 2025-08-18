@@ -31,6 +31,8 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	const h2CounterRef = useRef(0);
 	const h2IdMapRef = useRef(new Map<React.ReactNode, string>());
 
+	const articleRef = useRef<HTMLElement>(null);
+
 	// Reset the counter and map when markdownFileName changes
 	useEffect(() => {
 		h2CounterRef.current = 0;
@@ -40,16 +42,43 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	// Scroll to the target section when markdown is loaded and targetSectionId is present
 	useEffect(() => {
 		if (!isLoading && !error && markdown && targetSectionId) {
-			// Add a small delay to ensure the DOM is updated after markdown rendering
-			const timer = setTimeout(() => {
+			const articleElement = articleRef.current;
+			if (!articleElement) {
+				return; // Article element not yet mounted
+			}
+
+			const scrollIfTargetExists = () => {
 				const targetElement = document.getElementById(targetSectionId);
 				if (targetElement) {
 					targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+					return true; // Scrolled successfully
 				}
-			}, 100); // 100ms delay
-			return () => clearTimeout(timer); // Cleanup the timer
+				return false; // Target not found yet
+			};
+
+			// Try to scroll immediately in case it's already rendered
+			if (scrollIfTargetExists()) {
+				return;
+			}
+
+			// If not found, set up a MutationObserver
+			const observer = new MutationObserver((mutationsList, observer) => {
+				// Check if the target element is now in the DOM
+				if (scrollIfTargetExists()) {
+					observer.disconnect(); // Stop observing once found and scrolled
+				}
+			});
+
+			// Start observing the article element for changes in its children
+			observer.observe(articleElement, { childList: true, subtree: true });
+
+			// Cleanup function for the useEffect
+			return () => {
+				observer.disconnect();
+			};
 		}
-		return; // Explicitly return void when the condition is not met
+		// Cleanup for when conditions are not met (e.g., isLoading becomes true again)
+		return () => {};
 	}, [isLoading, error, markdown, targetSectionId]);
 
 	const components = React.useMemo(
@@ -124,7 +153,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	}
 
 	return (
-		<article className="text-sm sm:text-base">
+		<article ref={articleRef} className="text-sm sm:text-base">
 			{isLoading ? (
 				<LoremIpsumSkeleton />
 			) : (
