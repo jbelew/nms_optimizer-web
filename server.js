@@ -3,6 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
+import etag from "etag";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
@@ -86,7 +87,14 @@ app.use(async (req, res, next) => {
 			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
 		}
 
+		const etagValue = etag(indexHtml);
+		res.setHeader("ETag", etagValue);
 		res.setHeader("Cache-Control", "no-cache, must-revalidate");
+
+		if (req.headers["if-none-match"] === etagValue) {
+			return res.status(304).end();
+		}
+
 		res.send(indexHtml);
 	} catch (error) {
 		console.error("Error modifying and serving index.html:", error);
@@ -104,20 +112,20 @@ app.use(
 			const fileName = path.basename(filePath);
 			const versionedAssetPattern =
 				/-[0-9a-zA-Z]{8}\.(js|css|woff2|webp|svg|png|jpg|jpeg|gif)$/i;
+			const knownStaticExtensions =
+				/\.(ico|json|svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|eot)$/i;
+
 			if (versionedAssetPattern.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-			} else if (
-				fileName === "index.html" ||
-				fileName.endsWith(".md") ||
-				fileName === "robots.txt"
-			) {
-				res.setHeader("Cache-Control", "no-cache, must-revalidate");
+			} else if (knownStaticExtensions.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 1 day
 			} else {
 				res.setHeader("Cache-Control", "no-cache, must-revalidate");
 			}
 		},
 	})
 );
+
 
 // 404 handler
 app.use((req, res) => {
