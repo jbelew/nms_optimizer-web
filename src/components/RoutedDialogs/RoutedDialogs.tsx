@@ -1,12 +1,14 @@
 // src/components/RoutedDialogs/RoutedDialogs.tsx
 import type { FC } from "react";
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import AppDialog from "../AppDialog/AppDialog";
-import MarkdownContentRenderer from "../AppDialog/MarkdownContentRenderer";
+import LoremIpsumSkeleton from "../AppDialog/LoremIpsumSkeleton";
 import UserStatsDialog from "../AppDialog/UserStatsDialog";
+
+const MarkdownContentRenderer = lazy(() => import("../AppDialog/MarkdownContentRenderer"));
 
 /**
  * RoutedDialogs component manages and renders various application dialogs based on the active dialog state.
@@ -47,7 +49,9 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.about"
 				title={t("dialogs.titles.about")}
-				content={aboutDialogContent}
+				content={
+					<Suspense fallback={<LoremIpsumSkeleton />}>{aboutDialogContent}</Suspense>
+				}
 			/>
 			{/* Dialog for "Instructions" information */}
 			<AppDialog
@@ -55,7 +59,11 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.instructions"
 				title={t("dialogs.titles.instructions")}
-				content={instructionsDialogContent}
+				content={
+					<Suspense fallback={<LoremIpsumSkeleton />}>
+						{instructionsDialogContent}
+					</Suspense>
+				}
 			/>
 			{/* Dialog for "Changelog" information */}
 			<AppDialog
@@ -63,7 +71,9 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.changelog"
 				title={t("dialogs.titles.changelog")}
-				content={changelogDialogContent}
+				content={
+					<Suspense fallback={<LoremIpsumSkeleton />}>{changelogDialogContent}</Suspense>
+				}
 			/>
 			{/* Dialog for "Translation Request" information */}
 			<AppDialog
@@ -71,7 +81,11 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.translationRequest"
 				title={t("dialogs.titles.translationRequest")}
-				content={translationRequestDialogContent}
+				content={
+					<Suspense fallback={<LoremIpsumSkeleton />}>
+						{translationRequestDialogContent}
+					</Suspense>
+				}
 			/>
 			{/* Dialog for "User Stats" information */}
 			<UserStatsDialog isOpen={activeDialog === "userstats"} onClose={closeDialog} />

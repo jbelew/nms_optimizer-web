@@ -108,18 +108,7 @@ export default defineConfig(({ mode }) => {
 				output: {
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
-						if (id.includes("@radix-ui/themes/tokens/colors/")) {
-							return "radix-colors";
-						}
-						// if (id.includes("@radix-ui/themes/components.css")) {
-						// 	return "radix-components";
-						// }
-						if (id.includes("@radix-ui/themes/utilities.css")) {
-							return "radix-utilities";
-						}
-						if (id.includes("@radix-ui/themes")) {
-							return "radix-themes";
-						}
+
 						if (
 							id.includes("react-markdown") ||
 							id.includes("remark-") ||
@@ -132,16 +121,25 @@ export default defineConfig(({ mode }) => {
 							id.includes("bail") ||
 							id.includes("trough") ||
 							id.includes("decode-named-character-reference") ||
-							id.includes("parse-entities")
-						) {
-							return "markdown";
-						}
-						if (
+							id.includes("parse-entities") ||
 							id.includes("recharts") ||
 							id.includes("decimal") ||
 							id.includes("d3-")
 						) {
-							return "recharts";
+							return; // Let Vite handle lazy-loading for these
+						}
+
+						if (id.includes("@radix-ui/themes/tokens/colors/")) {
+							return "radix-colors";
+						}
+						// if (id.includes("@radix-ui/themes/components.css")) {
+						// 	return "radix-components";
+						// }
+						if (id.includes("@radix-ui/themes/utilities.css")) {
+							return "radix-utilities";
+						}
+						if (id.includes("@radix-ui/themes")) {
+							return "radix-themes";
 						}
 						if (
 							id.includes("i18next") ||
