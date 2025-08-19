@@ -76,27 +76,25 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 					)}
 				</>
 			) : (
-				<div>
-					<div>
-						<div className="mt-4 sm:mt-5">
-							{hasRecommendedBuilds && (
-								<RecommendedBuild
-									techTree={techTree}
-									gridContainerRef={gridContainerRef}
-									isLarge={isLarge}
-								/>
-							)}
-						</div>
-						<div className={`${!hasRecommendedBuilds ? "mt-8" : "mt-4"}`}>
-							<TechTreeContent
-								handleOptimize={handleOptimize}
-								solving={solving}
+				<>
+					<div className="mt-4 sm:mt-5">
+						{hasRecommendedBuilds && (
+							<RecommendedBuild
 								techTree={techTree}
-								selectedShipType={selectedShipType}
+								gridContainerRef={gridContainerRef}
+								isLarge={isLarge}
 							/>
-						</div>
+						)}
 					</div>
-				</div>
+					<div className={`${!hasRecommendedBuilds ? "mt-8" : "mt-4"}`}>
+						<TechTreeContent
+							handleOptimize={handleOptimize}
+							solving={solving}
+							techTree={techTree}
+							selectedShipType={selectedShipType}
+						/>
+					</div>
+				</>
 			)}
 		</>
 	);

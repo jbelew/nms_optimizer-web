@@ -133,39 +133,36 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 					</IconButton>
 				</div>
 			) : (
-				<>
-					<Callout.Root size="1">
-						<Callout.Icon>
-							<InfoCircledIcon />
-						</Callout.Icon>
-						<Callout.Text size={{ initial: "2", sm: "3" }}>
-							<Trans
-								i18nKey="techTree.recommendedBuilds.summary"
-								components={{
-									1: <Strong />,
-									3: <Strong />,
-									5: (
-										<Link
-											href="#"
-											underline="always"
-											onClick={(e) => {
-												e.preventDefault(); // Prevent jump to top
-												handleOpenInstructions();
-											}}
-										/>
-									),
-								}}
-							/>
-						</Callout.Text>
+				<Callout.Root size="1">
+					<Callout.Icon>
+						<InfoCircledIcon />
+					</Callout.Icon>
+					<Callout.Text size={{ initial: "2", sm: "3" }}>
+						<Trans
+							i18nKey="techTree.recommendedBuilds.summary"
+							components={{
+								1: <Strong />,
+								3: <Strong />,
+								5: (
+									<Link
+										href="#"
+										underline="always"
+										onClick={(e) => {
+											e.preventDefault(); // Prevent jump to top
+											handleOpenInstructions();
+										}}
+									/>
+								),
+							}}
+						/>
 						<div>
 							{renderBuildButton({
-								mt: "0",
+								mt: "2",
 								mb: "1",
-								className: "w-full justify-center",
 							})}
 						</div>
-					</Callout.Root>
-				</>
+					</Callout.Text>
+				</Callout.Root>
 			)}
 		</>
 	);

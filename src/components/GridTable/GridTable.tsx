@@ -162,7 +162,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					))}
 					{!isLarge && (
 						<div role="row">
-							<div className="col-span-full mt-1 max-w-full text-sm">
+							<div className="col-span-full mt-1 text-sm">
 								{isTouchDevice && !superchargedFixed && !tutorialFinished && (
 									<Callout.Root className="mt-2 mb-4" size="1">
 										<Callout.Icon>
