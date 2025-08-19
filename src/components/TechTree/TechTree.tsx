@@ -32,7 +32,6 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
 	solving,
 	gridContainerRef,
-	gridTableTotalWidth,
 }) => {
 	const isLarge = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
@@ -77,7 +76,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 					)}
 				</>
 			) : (
-				<div style={{ width: gridTableTotalWidth }}>
+				<div>
 					<div>
 						<div className="mt-4 sm:mt-5">
 							{hasRecommendedBuilds && (

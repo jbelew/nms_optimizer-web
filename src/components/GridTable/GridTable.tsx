@@ -162,16 +162,13 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					))}
 					{!isLarge && (
 						<div role="row">
-							<div
-								className="col-span-full mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
-								style={{ color: "var(--gray-12)" }}
-							>
+							<div className="col-span-full mt-1 max-w-full text-sm">
 								{isTouchDevice && !superchargedFixed && !tutorialFinished && (
 									<Callout.Root className="mt-2 mb-4" size="1">
 										<Callout.Icon>
 											<InfoCircledIcon />
 										</Callout.Icon>
-										<Callout.Text size={{ initial: "2", sm: "3" }}>
+										<Callout.Text>
 											{t("gridTable.tapInstructions")}
 										</Callout.Text>
 									</Callout.Root>
