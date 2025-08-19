@@ -5,7 +5,14 @@ import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 
 // DEV FLAG: Set to true to make mouse clicks behave like touch taps for testing.
-const MOUSE_AS_TAP_ENABLED = false;
+const MOUSE_AS_TAP_ENABLED = true;
+
+// To track double taps correctly across all cells, we need a shared reference.
+// A tap on one cell should not be considered the first tap of a double tap on another.
+let lastTapInfo = {
+	time: 0,
+	cell: [-1, -1], // [rowIndex, columnIndex]
+};
 
 /**
  * Custom hook for handling user interactions (clicks, touches, keyboard) with a grid cell.
@@ -49,7 +56,6 @@ export const useGridCellInteraction = (
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const { setShaking } = useShakeStore();
 
-	const lastTapTime = useRef(0);
 	const isTouchInteraction = useRef(false);
 
 	/**
@@ -120,11 +126,13 @@ export const useGridCellInteraction = (
 
 			// Touch-specific logic (single/double tap)
 			const currentTime = new Date().getTime();
-			const timeSinceLastTap = currentTime - lastTapTime.current;
+			const timeSinceLastTap = currentTime - lastTapInfo.time;
+			const isSameCell =
+				lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
 
-			if (timeSinceLastTap < 400 && timeSinceLastTap > 0) {
-				// Double tap
-				lastTapTime.current = 0; // Reset after double tap
+			if (isSameCell && timeSinceLastTap < 400 && timeSinceLastTap > 0) {
+				// Double tap on the same cell
+				lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
 				const isInvalidDoubleTap =
 					superchargedFixed ||
 					gridFixed ||
@@ -137,8 +145,8 @@ export const useGridCellInteraction = (
 					handleCellDoubleTap(rowIndex, columnIndex);
 				}
 			} else {
-				// Single tap
-				lastTapTime.current = currentTime;
+				// Single tap or tap on a different cell
+				lastTapInfo = { time: currentTime, cell: [rowIndex, columnIndex] };
 				const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
 				if (isInvalidSingleTap) {
 					triggerShake();
