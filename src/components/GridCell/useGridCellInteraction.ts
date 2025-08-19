@@ -5,7 +5,7 @@ import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 
 // DEV FLAG: Set to true to make mouse clicks behave like touch taps for testing.
-const MOUSE_AS_TAP_ENABLED = true;
+const MOUSE_AS_TAP_ENABLED = false;
 
 // To track double taps correctly across all cells, we need a shared reference.
 // A tap on one cell should not be considered the first tap of a double tap on another.
