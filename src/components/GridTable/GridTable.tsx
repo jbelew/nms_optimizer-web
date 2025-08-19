@@ -161,27 +161,29 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						</div>
 					))}
 					{!isLarge && (
-						<div
-							className="col-span-full mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
-							style={{ color: "var(--gray-12)" }}
-						>
-							{isTouchDevice && !superchargedFixed && !tutorialFinished && (
-								<Callout.Root className="mt-2 mb-4" size="1">
-									<Callout.Icon>
-										<InfoCircledIcon />
-									</Callout.Icon>
-									<Callout.Text size={{ initial: "2", sm: "3" }}>
-										{t("gridTable.tapInstructions")}
-									</Callout.Text>
-								</Callout.Root>
-							)}
-							<Separator
-								size="4"
-								color="cyan"
-								orientation="horizontal"
-								className="mt-2"
-								decorative
-							/>
+						<div role="row">
+							<div
+								className="col-span-full mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
+								style={{ color: "var(--gray-12)" }}
+							>
+								{isTouchDevice && !superchargedFixed && !tutorialFinished && (
+									<Callout.Root className="mt-2 mb-4" size="1">
+										<Callout.Icon>
+											<InfoCircledIcon />
+										</Callout.Icon>
+										<Callout.Text size={{ initial: "2", sm: "3" }}>
+											{t("gridTable.tapInstructions")}
+										</Callout.Text>
+									</Callout.Root>
+								)}
+								<Separator
+									size="4"
+									color="cyan"
+									orientation="horizontal"
+									className="mt-2"
+									decorative
+								/>
+							</div>
 						</div>
 					)}
 					<div role="row">
