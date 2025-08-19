@@ -162,7 +162,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					))}
 					{!isLarge && (
 						<div
-							className="col-span-11 mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
+							className="col-span-full mt-1 text-center text-xs font-medium sm:text-sm md:text-base"
 							style={{ color: "var(--gray-12)" }}
 						>
 							{isTouchDevice && !superchargedFixed && !tutorialFinished && (
