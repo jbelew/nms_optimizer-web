@@ -23,14 +23,14 @@
 .messageSpinner__spinner {
 	height: 4rem;
 	width: 4rem;
-	filter: drop-shadow(0 0 8px var(--accent-track));
+	filter: drop-shadow(0 2px 4px var(--accent-a2));
 }
 
 .messageSpinner__spinner--accent {
 	/* color: var(--accent-indicator); */
 	height: 4rem;
 	width: 4rem;
-	filter: drop-shadow(0 0 8px var(--accent-track));
+	filter: drop-shadow(0 2px 4px var(--accent-a2));
 }
 
 .messageSpinner__spinner--big {
