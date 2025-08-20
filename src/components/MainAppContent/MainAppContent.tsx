@@ -55,14 +55,11 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	} = useAppLayout();
 
 	useEffect(() => {
-		hideSplashScreen();
-	}, []);
-
-	useEffect(() => {
 		if (isSharedGrid) {
 			// If it's a shared grid, the tech tree is not actively loading,
 			// so ensure the loading spinner is hidden.
 			useTechTreeLoadingStore.getState().setLoading(false);
+			hideSplashScreen();
 		}
 	}, [isSharedGrid]);
 

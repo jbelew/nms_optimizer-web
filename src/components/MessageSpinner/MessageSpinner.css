@@ -27,7 +27,7 @@
 }
 
 .messageSpinner__spinner--accent {
-	color: var(--accent-track);
+	/* color: var(--accent-track); */
 	height: 4rem;
 	width: 4rem;
 	filter: drop-shadow(0 2px 4px var(--accent-a2));

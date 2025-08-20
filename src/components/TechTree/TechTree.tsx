@@ -1,6 +1,7 @@
 // src/components/TechTree/TechTree.tsx
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
@@ -50,6 +51,10 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		}
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 	}, [hasRecommendedBuilds]);
+
+	useEffect(() => {
+		hideSplashScreen();
+	}, []);
 
 	return (
 		<>
