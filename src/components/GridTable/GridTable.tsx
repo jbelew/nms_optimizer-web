@@ -10,6 +10,7 @@ import { useDialog } from "../../context/dialog-utils";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
+import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import ShakingWrapper from "../GridShake/GridShake";
@@ -66,6 +67,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			typeof window !== "undefined" &&
 			("ontouchstart" in window || navigator.maxTouchPoints > 0);
 		const { tutorialFinished } = useDialog();
+		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 		// Calculate derived values from the grid.
 		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
@@ -101,9 +103,12 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		return (
 			<ShakingWrapper shaking={shaking} duration={500}>
 				<MessageSpinner
-					isVisible={solving}
-					showRandomMessages={true}
-					initialMessage={t("gridTable.optimizing")}
+					isVisible={solving || isTechTreeLoading}
+					showRandomMessages={solving}
+					useNMSFont={isTechTreeLoading}
+					initialMessage={
+						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
+					}
 				/>
 
 				{!isLarge && (
@@ -122,7 +127,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					aria-label="Technology Grid"
 					aria-rowcount={grid.cells.length}
 					aria-colcount={totalAriaColumnCount}
-					className={`gridTable ${solving ? "opacity-50" : ""}`}
+					className={`gridTable ${solving || isTechTreeLoading ? "opacity-50" : ""}`}
 				>
 					{grid.cells.map((row, rowIndex) => (
 						<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>

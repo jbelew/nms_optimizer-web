@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
 import { useTechStore } from "../../store/TechStore";
+import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
 /**
@@ -97,7 +98,7 @@ export interface RecommendedBuild {
 
 /**
  * @interface TechTree
- * @property {{grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}} [grid_definition] - The initial grid definition.
+ * @property {{grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}} [grid_definition] - The a list of recommended builds.
  * @property {RecommendedBuild[]} [recommended_builds] - A list of recommended builds.
  * @property {TechTreeItem[]} [key: string] - A list of tech tree items for a given category.
  */
@@ -160,26 +161,35 @@ export const clearTechTreeCache = () => {
 function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
-		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
-			if (!res.ok) {
-				throw new Error(`HTTP error! status: ${res.status}`);
-			}
-			const data = await res.json();
-			console.log("Fetched tech tree:", data);
+		const { setLoading } = useTechTreeLoadingStore.getState();
+		setLoading(true);
+		const promise = fetch(`${API_URL}tech_tree/${shipType}`)
+			.then(async (res) => {
+				if (!res.ok) {
+					throw new Error(`HTTP error! status: ${res.status}`);
+				}
+				const data = await res.json();
+				console.log("Fetched tech tree:", data);
 
-			if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
-				data.recommended_builds = data.recommended_builds.filter(
-					(build: RecommendedBuild) => {
-						if (!isValidRecommendedBuild(build)) {
-							console.error("Invalid recommended build found in tech tree:", build);
-							return false;
+				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
+					data.recommended_builds = data.recommended_builds.filter(
+						(build: RecommendedBuild) => {
+							if (!isValidRecommendedBuild(build)) {
+								console.error(
+									"Invalid recommended build found in tech tree:",
+									build
+								);
+								return false;
+							}
+							return true;
 						}
-						return true;
-					}
-				);
-			}
-			return data;
-		});
+					);
+				}
+				return data;
+			})
+			.finally(() => {
+				setLoading(false);
+			});
 
 		cache.set(cacheKey, createResource<TechTree>(promise));
 	}

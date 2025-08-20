@@ -1,5 +1,4 @@
 import { ScrollArea } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
@@ -8,7 +7,6 @@ import { SuspenseSkeleton } from "./SuspenseSkeleton";
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
-	const { t } = useTranslation();
 
 	return (
 		<>
@@ -21,12 +19,7 @@ export const TechTreeSkeleton: React.FC = () => {
 						backgroundColor: "var(--gray-a2)",
 					}}
 				>
-					<MessageSpinner
-						isInset={true}
-						isVisible={true}
-						useNMSFont={true}
-						initialMessage={t("techTree.loading")}
-					/>
+					<MessageSpinner isInset={true} isVisible={true} />
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.

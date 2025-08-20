@@ -9,9 +9,10 @@
 
 .messageSpinner__header--nms {
 	font-family: var(--font-family-nms);
+	color: var(--gray-a11);
 	font-weight: 400;
 	text-transform: uppercase;
-	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .messageSpinner__spinner {

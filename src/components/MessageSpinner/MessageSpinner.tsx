@@ -9,7 +9,7 @@ interface MessageSpinnerProps {
 	isVisible: boolean;
 	isInset?: boolean;
 	useNMSFont?: boolean;
-	initialMessage: string;
+	initialMessage?: string;
 	showRandomMessages?: boolean;
 	color?: string;
 }
@@ -82,22 +82,18 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 		<div className={containerClasses.trim()}>
 			<Spinner className="messageSpinner__spinner" />
 
-			{initialMessage && (
+			{initialMessage !== undefined && initialMessage !== null && (
 				<Text
 					className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 text-center text-xl sm:text-2xl`}
 				>
 					{initialMessage}
 				</Text>
 			)}
-			<Text
-				className={`sm:text-normal messageSpinner__random text-center text-sm font-semibold shadow-sm ${
-					displayRandomMessage
-						? "messageSpinner__random--visible"
-						: "messageSpinner__random--hidden"
-				}`}
-			>
-				{displayRandomMessage ? currentRandomMessage : "\u00A0"}
-			</Text>
+			{displayRandomMessage && (
+				<Text className="sm:text-normal messageSpinner__random messageSpinner__random--visible text-center text-sm font-semibold shadow-sm">
+					{currentRandomMessage}
+				</Text>
+			)}
 		</div>
 	);
 };
