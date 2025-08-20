@@ -92,7 +92,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const handleResetGrid = useCallback(async () => {
 		sendEvent({ category: "User Interactions", action: "resetGrid", value: 1 });
 		useGridStore.getState().resetGrid(); // Now synchronous
-		await new Promise((resolve) => setTimeout(resolve, 0)); // Yield control
 		updateUrlForReset();
 		setIsSharedGrid(false);
 		if (gridContainerRef.current) {

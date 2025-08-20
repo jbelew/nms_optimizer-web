@@ -9,6 +9,7 @@ import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
@@ -56,6 +57,14 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	useEffect(() => {
 		hideSplashScreen();
 	}, []);
+
+	useEffect(() => {
+		if (isSharedGrid) {
+			// If it's a shared grid, the tech tree is not actively loading,
+			// so ensure the loading spinner is hidden.
+			useTechTreeLoadingStore.getState().setLoading(false);
+		}
+	}, [isSharedGrid]);
 
 	/**
 	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
