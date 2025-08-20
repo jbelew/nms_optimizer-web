@@ -11,6 +11,12 @@
 	font-family: var(--font-family-nms);
 	font-weight: 400;
 	text-transform: uppercase;
+	color: var(--accent-2);
+	text-shadow:
+		-1px -1px 0 var(--accent-11),
+		1px -1px 0 var(--accent-11),
+		-1px 1px 0 var(--accent-11),
+		1px 1px 0 var(--accent-11);
 	filter: drop-shadow(0 0 8px var(--accent-track));
 }
 
