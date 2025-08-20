@@ -22,14 +22,35 @@
 	--color-background: var(--gray-a1); /* Fixed typo: was --gary-a1 */
 }
 
-/* Variables for grid CLAMP calculations */
 :root {
-	--grid-min-size: 26px;
-	--grid-max-size: 64px;
-	--grid-gap-min-size: 2px;
-	--grid-gap-max-size: 8px;
-	--grid-cell-size: clamp(var(--grid-min-size), 7.45vw, var(--grid-max-size));
-	--grid-gap: clamp(var(--grid-gap-min-size), 1vw, var(--grid-gap-max-size));
+	--grid-columns-flex: 10; /* number of resizable columns */
+	--grid-column-fixed: 24px; /* fixed width of column 11 */
+	--grid-padding: 16px;
+
+	--grid-gap-min: 2px;
+	--grid-gap-max: 8px;
+
+	--grid-cell-min: 24px;
+	--grid-cell-max: 64px;
+
+	/* Available width = viewport - left/right padding */
+	--grid-container-width: calc(100vw - (2 * var(--grid-padding)));
+
+	/* Gap scales, but clamped */
+	--grid-gap: clamp(var(--grid-gap-min), 1vw, var(--grid-gap-max));
+
+	/* Formula: (container - fixed - gaps) / flex-cols, clamped */
+	--grid-cell-size: clamp(
+		var(--grid-cell-min),
+		calc(
+			(
+					var(--grid-container-width) - var(--grid-column-fixed) -
+						((var(--grid-columns-flex)) * var(--grid-gap))
+				) /
+				var(--grid-columns-flex)
+		),
+		var(--grid-cell-max)
+	);
 }
 
 html {

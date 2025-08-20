@@ -137,7 +137,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							{/* Wrap GridControlButtons in a div with role="gridcell" */}
 							<div
 								role="gridcell"
-								className="w-[24px] sm:w-[32px]"
+								className="w-[24px]"
 								aria-colindex={totalAriaColumnCount}
 							>
 								<GridControlButtons
@@ -160,6 +160,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							</div>
 						</div>
 					))}
+
 					{!isLarge && (
 						<div role="row">
 							<div className="col-span-full mt-1 text-sm">
@@ -183,6 +184,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							</div>
 						</div>
 					)}
+
 					<div role="row">
 						<GridTableButtons
 							solving={solving}
