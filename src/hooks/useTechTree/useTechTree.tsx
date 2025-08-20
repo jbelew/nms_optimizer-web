@@ -163,33 +163,26 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	if (!cache.has(cacheKey)) {
 		const { setLoading } = useTechTreeLoadingStore.getState();
 		setLoading(true);
-		const promise = fetch(`${API_URL}tech_tree/${shipType}`)
-			.then(async (res) => {
-				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
-				}
-				const data = await res.json();
-				console.log("Fetched tech tree:", data);
+		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
+			if (!res.ok) {
+				throw new Error(`HTTP error! status: ${res.status}`);
+			}
+			const data = await res.json();
+			console.log("Fetched tech tree:", data);
 
-				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
-					data.recommended_builds = data.recommended_builds.filter(
-						(build: RecommendedBuild) => {
-							if (!isValidRecommendedBuild(build)) {
-								console.error(
-									"Invalid recommended build found in tech tree:",
-									build
-								);
-								return false;
-							}
-							return true;
+			if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
+				data.recommended_builds = data.recommended_builds.filter(
+					(build: RecommendedBuild) => {
+						if (!isValidRecommendedBuild(build)) {
+							console.error("Invalid recommended build found in tech tree:", build);
+							return false;
 						}
-					);
-				}
-				return data;
-			})
-			.finally(() => {
-				setLoading(false);
-			});
+						return true;
+					}
+				);
+			}
+			return data;
+		});
 
 		cache.set(cacheKey, createResource<TechTree>(promise));
 	}
@@ -230,6 +223,11 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 			setGridFromInitialDefinition(techTree.grid_definition);
 		}
 	}, [techTree, setTechColors, setInitialGridDefinition, setGridFromInitialDefinition]);
+
+	useEffect(() => {
+		// Set loading to false after the techTree data has been processed and rendered
+		useTechTreeLoadingStore.getState().setLoading(false);
+	}, [techTree]); // Dependency on techTree ensures it runs after data is available
 
 	return techTree;
 }

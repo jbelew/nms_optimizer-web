@@ -80,7 +80,11 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	return (
 		<div className={containerClasses.trim()}>
-			<Spinner className="messageSpinner__spinner" />
+			{initialMessage === undefined || initialMessage === null ? (
+				<Spinner className="messageSpinner__spinner" />
+			) : (
+				<Spinner className="messageSpinner__spinner--accent" />
+			)}
 
 			{initialMessage !== undefined && initialMessage !== null && (
 				<Text
@@ -89,8 +93,15 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 					{initialMessage}
 				</Text>
 			)}
-			{displayRandomMessage && (
-				<Text className="sm:text-normal messageSpinner__random messageSpinner__random--visible text-center text-sm font-semibold shadow-sm">
+
+			{showRandomMessages && (
+				<Text
+					className={`sm:text-normal messageSpinner__random text-center text-sm font-semibold shadow-sm ${
+						displayRandomMessage
+							? "messageSpinner__random--visible"
+							: "messageSpinner__random--hidden"
+					}`}
+				>
 					{currentRandomMessage}
 				</Text>
 			)}
