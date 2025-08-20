@@ -9,7 +9,6 @@
 
 .messageSpinner__header--nms {
 	font-family: var(--font-family-nms);
-	color: var(--gray-a12);
 	font-weight: 400;
 	text-transform: uppercase;
 	filter: drop-shadow(0 0 8px var(--accent-track));
