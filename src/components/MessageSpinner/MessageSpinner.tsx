@@ -74,7 +74,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	// Conditionally add classes based on isInset
 	const containerClasses = `
-    flex flex-col items-center justify-center z-10
+    flex flex-col items-center justify-center z-10 
     ${isInset ? "absolute inset-0" : ""}
   `;
 
