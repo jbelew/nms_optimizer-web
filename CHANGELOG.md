@@ -1,3 +1,43 @@
+# [3.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.6...v3.8.0) (2025-08-21)
+
+
+### Bug Fixes
+
+* **404:** fixed the missing, custom 404 page ([e8cfb87](https://github.com/jbelew/nms_optimizer-web/commit/e8cfb87d892938b434ccd5ea303dcf981e85a18a))
+* **404:** updated error message color ([e21a7ab](https://github.com/jbelew/nms_optimizer-web/commit/e21a7abdc5e4b747b9c94776d847cb71dddeaa43))
+* **applayout:** one last fix ([41f44c5](https://github.com/jbelew/nms_optimizer-web/commit/41f44c58521a714e403eead4c97c677804db4602))
+* **applayout:** removed computed / dyanmic width sizing ([3c7fb40](https://github.com/jbelew/nms_optimizer-web/commit/3c7fb40ca6e991b1e96320a247919d69825073e2))
+* **callout:** another attempt to fix the callout sizing bug ([741cfa7](https://github.com/jbelew/nms_optimizer-web/commit/741cfa73373c93ba2e01f2bb7b3093000a246b86))
+* **callout:** touch instruction text callout wasn't sizing properly in landscape ([d545166](https://github.com/jbelew/nms_optimizer-web/commit/d54516664f31fada297e72158062650e49837ce4))
+* **dialogs:** fixed content targeting in the dialogs ([f16373d](https://github.com/jbelew/nms_optimizer-web/commit/f16373d12419dcbaebcf9f1a293dfe857ddd48f8))
+* **gidcell:** forgot to disable debug flag on last push ([dbaf1f5](https://github.com/jbelew/nms_optimizer-web/commit/dbaf1f5fc39394c36ec2009c4289fac6f6a28eae))
+* **gridcell:** improved grid cell double tap to only act on the same cell as the first tap ([7aeb73e](https://github.com/jbelew/nms_optimizer-web/commit/7aeb73e6cf93a334bdcf1f7212742f4ddf4b49c1))
+* **images:** fixed the proportions of the sidebar images ([322f8ee](https://github.com/jbelew/nms_optimizer-web/commit/322f8eec978ab8e7e08f8e6a7ffdc5c0a74aa129))
+* **layout:** fixed a nagging, responsive layout issue. only a few pixels, but I noticed ([07f8749](https://github.com/jbelew/nms_optimizer-web/commit/07f8749105fd3b8205e5d44407c60210a63319e4))
+* **messagespinner:** the component wasn't deactivating on shared grid urls ([f6792a7](https://github.com/jbelew/nms_optimizer-web/commit/f6792a75e089fc1efaa3d8f30c1a5e43f7895bbc))
+* **mobile:** a better experience for slower, mobile users ([3aebfbb](https://github.com/jbelew/nms_optimizer-web/commit/3aebfbb924c9c4b03f59b6f31000c29d981d8dae))
+* **preload:** better background preload strategy ([2bbcddf](https://github.com/jbelew/nms_optimizer-web/commit/2bbcddf2d10f7abdaceba9175ce74d1b1f395e65))
+* **server:** fixed cache control headers ([73fc6f6](https://github.com/jbelew/nms_optimizer-web/commit/73fc6f6bf609351643741ea4688db999c0099418))
+* **sidebar:** last commit on this project, evah! ([1ceb727](https://github.com/jbelew/nms_optimizer-web/commit/1ceb72718915dae83c39275f8d2c56006953777c))
+* **skeleton:** fixed CLS on skeleton component on mobile screen sizes ([72b72a5](https://github.com/jbelew/nms_optimizer-web/commit/72b72a5822b55c9a13669a3d7b23ed2543200d6e))
+* **techtree:** added missing srcset declaration to techtree category images ([433e283](https://github.com/jbelew/nms_optimizer-web/commit/433e28362476fb45c885c7ff6a79ff5721b1fdf9))
+
+
+### Performance Improvements
+
+* **critical:** disabled critical css for testing ([044a04d](https://github.com/jbelew/nms_optimizer-web/commit/044a04d71bf01f436f4a8ada6d82917f32042734))
+* **critical:** turned it on again ([130dd44](https://github.com/jbelew/nms_optimizer-web/commit/130dd444dc14e2d21c1b6d405021703f8896c32e))
+* **dialogs:** a better skeleton experience ([84b21d8](https://github.com/jbelew/nms_optimizer-web/commit/84b21d80ee34cb69f18193ae2f8d6f25bb0f027b))
+* **hooks:** updated hook click handlers ([1a6273b](https://github.com/jbelew/nms_optimizer-web/commit/1a6273b71d88b86693569c31c1299ee7a2007a98))
+* **lazyloading:** fixed some lazy loading misses ([601d563](https://github.com/jbelew/nms_optimizer-web/commit/601d563fc3dd21040089b9569239f92b24368ffb))
+* **lazyload:** more performance enchancements ([546de07](https://github.com/jbelew/nms_optimizer-web/commit/546de07ed54f81c788c16358d092f35cdc6f9c39))
+* **markdown:** re-anbled lazy loading the component and added skeleton for content load ([f64fee4](https://github.com/jbelew/nms_optimizer-web/commit/f64fee470be09900f5bed8985c42753a181ea450))
+* **markdown:** reverting lazy loading the markdown component for now ([62f7bab](https://github.com/jbelew/nms_optimizer-web/commit/62f7bab14ad585af30d8221c2b6435ee77070131))
+* **server:** updated cache settings ([8bb5e5e](https://github.com/jbelew/nms_optimizer-web/commit/8bb5e5ef2f8e535113ac157dd0e328169ee26a7a))
+* **splashscreen:** moved hidesplashscreen to after when the techtree first loads ([214aa4e](https://github.com/jbelew/nms_optimizer-web/commit/214aa4ef4c3c19d005a1891b324e8fded4111cfb))
+
+
+
 ## [3.7.6](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.5...v3.7.6) (2025-08-16)
 
 
