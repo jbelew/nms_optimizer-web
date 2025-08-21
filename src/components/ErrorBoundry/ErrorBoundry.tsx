@@ -90,8 +90,10 @@ class ErrorBoundary extends Component<Props, State> {
 							>
 								-kzzkt- Error! -kzzkt-
 							</h1>
-							<h2 className="pb-4 font-semibold">
-								Something went wrong. Please try reloading the page.
+							<h2 className="pb-4">
+								Something went wrong. You may be viewing an{" "}
+								<strong>outdated version</strong> of this page. Please{" "}
+								<strong>reload</strong> to get the latest updates.
 							</h2>
 							<div
 								className="w-full text-left font-mono text-xs lg:text-base"
