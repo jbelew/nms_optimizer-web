@@ -103,6 +103,13 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 					</Heading>
 				);
 			},
+			h3: ({ children }: { children?: React.ReactNode }) => {
+				return (
+					<Heading as="h3" className="!text-sm sm:!text-base">
+						{children}
+					</Heading>
+				);
+			},
 			p: ({ children }: { children?: React.ReactNode }) => (
 				<Text as="p" mb="2">
 					{children}

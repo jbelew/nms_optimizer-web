@@ -6,7 +6,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 **It's a wrap, my work is done here!**
 
-## Version 3.7 (2025-08-20)
+## Version 3.8 (2025-08-20)
 
 ### Bug Fixes
 - Fixed missing custom 404 page and improved its error styling.
