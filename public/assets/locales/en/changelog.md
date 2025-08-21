@@ -6,21 +6,42 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 **It's a wrap, my work is done here!**
 
+## Version 3.7 (2025-08-20)
+
+### Bug Fixes
+- Fixed missing custom 404 page and improved its error styling.
+- Improved app layout responsiveness and removed dynamic width glitches.
+- Fixed callout sizing issues, especially in landscape mode.
+- Corrected dialog content targeting and grid cell tap behavior.
+- Fixed sidebar image proportions and skeleton loading on mobile.
+- Improved spinner behavior on shared grid URLs.
+- Better mobile experience for slower devices.
+- Fixed preload strategy, cache headers, and responsive layout quirks.
+- Updated techtree category images with missing `srcset`.
+
+### Performance Improvements
+- Refined critical CSS loading strategy.
+- Optimized dialog and markdown loading with skeletons and lazy loading.
+- Improved hook click handlers and background preload.
+- Enhanced lazy loading for images and content.
+- Updated server cache settings for faster loads.
+- Adjusted splash screen timing for smoother techtree loading.
+
 ## Version 3.7 (2025-08-09)
 
-- Improved SEO with dynamic meta tags and updated keywords.  
-- Added analytics tracking for Photonix Core solves.  
-- Improved input delay, rendering, and layout performance throughout the app.  
-- Optimized Tech Tree state management for better responsiveness.  
-- Fixed a spelling error in Pulse Spitter tech.  
-- Made user statistics accessible via a dedicated route.  
-- Added UI styling improvements.  
+- Improved SEO with dynamic meta tags and updated keywords.
+- Added analytics tracking for Photonix Core solves.
+- Improved input delay, rendering, and layout performance throughout the app.
+- Optimized Tech Tree state management for better responsiveness.
+- Fixed a spelling error in Pulse Spitter tech.
+- Made user statistics accessible via a dedicated route.
+- Added UI styling improvements.
 
 ## Version 3.6 (2025-08-07)
 
-- Added a **User Statistics** dialog showing which technologies are most frequently supercharged.  
-- Added instructional text below the grid for users on touch devices.  
-- Fixed a major issue in the Pulse Engine CNN model.  
+- Added a **User Statistics** dialog showing which technologies are most frequently supercharged.
+- Added instructional text below the grid for users on touch devices.
+- Fixed a major issue in the Pulse Engine CNN model.
 - Various UI enhancements and improvements.
 
 ## Version 3.5 (2025-08-05)
