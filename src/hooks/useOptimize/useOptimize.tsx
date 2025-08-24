@@ -96,7 +96,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			socket.once("connect", () => {
-				console.log("Connected to WebSocket server.");
+				console.debug("Connected to WebSocket server.");
 				socket.emit("optimize", {
 					ship: selectedShipType,
 					tech,
@@ -124,7 +124,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
 						setResult(data, tech);
-						if (data.grid) setGrid(data.grid);
+						if (data.grid) {
+							console.log("Optimization Result Grid:", data.grid);
+							setGrid(data.grid);
+						}
 					}
 				} else {
 					console.error("Invalid API response:", data);
@@ -140,7 +143,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			});
 
 			socket.once("disconnect", (reason) => {
-				console.log("Socket disconnected:", reason);
+				console.debug("Socket disconnected:", reason);
 				cleanup();
 			});
 		},
