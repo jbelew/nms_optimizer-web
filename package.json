@@ -103,6 +103,7 @@
 		"rollup-plugin-critical": "^1.0.15",
 		"rollup-plugin-visualizer": "^6.0.3",
 		"sharp": "^0.34.3",
+		"socket.io-mock": "^1.3.2",
 		"start-server-and-test": "^2.0.12",
 		"tailwindcss": "^4.1.10",
 		"typescript": "~5.8.3",
