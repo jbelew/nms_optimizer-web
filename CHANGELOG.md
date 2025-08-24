@@ -1,3 +1,17 @@
+# [3.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.8.0...v3.9.0) (2025-08-24)
+
+
+### Bug Fixes
+
+* **websokets:** trying to get websockets working on heroku ([c413fcf](https://github.com/jbelew/nms_optimizer-web/commit/c413fcf7e59f93a019ea11cea6b8baeb5b80142c))
+
+
+### Features
+
+* Add tests for WebSocket implementation of useOptimize hook ([4fd1f17](https://github.com/jbelew/nms_optimizer-web/commit/4fd1f1715364a0c68f299089bf5aaa929721ca8e))
+
+
+
 # [3.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.7.6...v3.8.0) (2025-08-21)
 
 
