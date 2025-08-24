@@ -2,7 +2,7 @@
 import "./MessageSpinner.css";
 
 import React, { useEffect, useState } from "react";
-import { Spinner, Text } from "@radix-ui/themes";
+import { Progress, Spinner, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 interface MessageSpinnerProps {
@@ -12,6 +12,7 @@ interface MessageSpinnerProps {
 	initialMessage?: string;
 	showRandomMessages?: boolean;
 	color?: string;
+	progressPercent?: number;
 }
 
 /**
@@ -31,9 +32,10 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	initialMessage,
 	useNMSFont,
 	showRandomMessages = false,
+	progressPercent,
 }) => {
-	const [showAdditionalMessage, setShowAdditionalMessage] = useState(false);
-	const [currentRandomMessage, setCurrentRandomMessage] = useState<string>("");
+	const [, setShowAdditionalMessage] = useState(false);
+	const [, setCurrentRandomMessage] = useState<string>("");
 	const { t } = useTranslation(); // Destructure useNMSFont from props
 
 	useEffect(() => {
@@ -70,11 +72,10 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	if (!isVisible) return null;
 
 	// Determine if the random message should be displayed based on state and props
-	const displayRandomMessage = showRandomMessages && showAdditionalMessage;
 
 	// Conditionally add classes based on isInset
 	const containerClasses = `
-    flex flex-col items-center justify-center z-10 
+    flex flex-col items-center justify-center z-10
     ${isInset ? "absolute inset-0" : ""}
   `;
 
@@ -88,13 +89,21 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 			{initialMessage !== undefined && initialMessage !== null && (
 				<Text
-					className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 text-center text-xl sm:text-2xl`}
+					className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 pb-2 text-center text-xl sm:text-2xl`}
 				>
 					{initialMessage}
 				</Text>
 			)}
 
-			{showRandomMessages && (
+			<div className="w-1/3">
+				{isVisible && progressPercent !== undefined && progressPercent > 0 ? (
+					<Progress value={Math.min(progressPercent, 100)} variant="surface" />
+				) : (
+					<div className="h-[6px]" />
+				)}
+			</div>
+
+			{/* {showRandomMessages && (
 				<Text
 					className={`sm:text-normal messageSpinner__random text-center text-sm font-semibold shadow-sm ${
 						displayRandomMessage
@@ -104,7 +113,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 				>
 					{currentRandomMessage}
 				</Text>
-			)}
+			)} */}
 		</div>
 	);
 };

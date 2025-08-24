@@ -10,6 +10,7 @@ import { useTechStore } from "../../store/TechStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useOptimize } from "./useOptimize";
+import { io } from "socket.io-client"; // Import io for mocking
 
 // Mock all external dependencies
 vi.mock("../useAnalytics/useAnalytics");
@@ -21,7 +22,8 @@ vi.mock("../useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => mockUseBreakpointReturnValue),
 }));
 vi.mock("../../constants", () => ({
-	API_URL: "http://mock-api.com/",
+	WS_URL: "ws://mock-ws.com/",
+	API_URL: "http://mock-api.com/", // Keep API_URL for other tests if needed
 }));
 
 // Define mock functions
@@ -45,18 +47,31 @@ const mockUseOptimizeStore = useOptimizeStore as unknown as Mock;
 const mockUseTechStore = useTechStore as unknown as Mock;
 const mockUsePlatformStore = usePlatformStore as unknown as Mock;
 
-/**
- * Test suite for the `useOptimize` hook.
- */
+// Mock socket.io-client
+vi.mock("socket.io-client", () => {
+	const mockSocket = {
+		on: vi.fn(),
+		emit: vi.fn(),
+		disconnect: vi.fn(),
+	};
+	return {
+		io: vi.fn(() => mockSocket),
+	};
+});
+
+// Cast mocked io
+const mockIo = io as unknown as Mock;
+
 describe("useOptimize", () => {
-	let fetchSpy: MockInstance<typeof global.fetch>;
 	let requestAnimationFrameCallback: FrameRequestCallback | null;
+	let mockSocketInstance: { on: Mock; emit: Mock; disconnect: Mock }; // Rename to avoid confusion
 
 	/**
 	 * Resets all mocks and sets up the testing environment before each test.
 	 */
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.useFakeTimers(); // Use fake timers
 
 		// Reset mock functions
 		mockUseAnalyticsSendEvent.mockClear();
@@ -69,12 +84,18 @@ describe("useOptimize", () => {
 		mockWindowCancelAnimationFrame.mockClear();
 		mockConsoleError.mockClear();
 
-		// Mock global fetch
-		fetchSpy = vi.spyOn(global, "fetch");
-
 		// Mock console.error
 		mockConsoleError.mockImplementation(() => {});
 		vi.spyOn(console, "error").mockImplementation(mockConsoleError);
+
+		// Reset mockIo and capture the mockSocket instance
+		mockIo.mockClear();
+		mockSocketInstance = {
+			on: vi.fn(),
+			emit: vi.fn(),
+			disconnect: vi.fn(),
+		};
+		mockIo.mockReturnValue(mockSocketInstance);
 
 		// Mock useAnalytics
 		vi.mocked(useAnalytics).mockReturnValue({ sendEvent: mockUseAnalyticsSendEvent });
@@ -138,6 +159,7 @@ describe("useOptimize", () => {
 		 * Restores all mocks after each test.
 		 */
 		vi.restoreAllMocks();
+		vi.useRealTimers(); // Use real timers
 	});
 
 	it("should return initial state correctly", () => {
@@ -149,8 +171,7 @@ describe("useOptimize", () => {
 
 	/**
 	 * Test suite for the `handleOptimize` function within the `useOptimize` hook.
-	 */
-	describe("handleOptimize", () => {
+	 */	describe("handleOptimize", () => {
 		it("should successfully optimize and update grid/result", async () => {
 			const mockApiResponse = {
 				solve_method: "Success",
@@ -158,17 +179,66 @@ describe("useOptimize", () => {
 				max_bonus: 101,
 				solved_bonus: 90,
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techA");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
 			});
 
+			// Simulate connection and optimization request
+			act(() => {
+				result.current.handleOptimize("techA");
+			});
+
+			// Expect solving to be true immediately after calling handleOptimize
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			// Simulate socket connection
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			// Expect emit to be called
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techA",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			// Simulate progress update
+			expect(progressCallback).toBeDefined();
+			act(() => {
+				progressCallback!({ progress_percent: 50 });
+			});
+			expect(result.current.progressPercent).toBe(50);
+
+			// Simulate optimization result
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockApiResponse);
+			});
+
+			// Expect solving to be false and progress to be reset after result
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseGridStoreSetGrid).toHaveBeenCalledWith(mockApiResponse.grid);
 			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(mockApiResponse, "techA");
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(false);
@@ -191,17 +261,59 @@ describe("useOptimize", () => {
 				max_bonus: 100,
 				solved_bonus: 90,
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techA");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techA");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techA",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			expect(progressCallback).toBeDefined();
+			act(() => {
+				progressCallback!({ progress_percent: 75 });
+			});
+			expect(result.current.progressPercent).toBe(75);
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockApiResponse);
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseGridStoreSetGrid).toHaveBeenCalledWith(mockApiResponse.grid);
 			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(mockApiResponse, "techA");
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(false);
@@ -222,17 +334,59 @@ describe("useOptimize", () => {
 				solve_method: "Pattern No Fit",
 				grid: null,
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techB");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techB");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techB",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			expect(progressCallback).toBeDefined();
+			act(() => {
+				progressCallback!({ progress_percent: 25 });
+			});
+			expect(result.current.progressPercent).toBe(25);
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockApiResponse);
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseOptimizeStoreSetPatternNoFitTech).toHaveBeenCalledWith("techB");
 			expect(mockUseGridStoreSetGrid).not.toHaveBeenCalled();
 			expect(mockUseGridStoreSetResult).not.toHaveBeenCalled();
@@ -263,15 +417,58 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techC", true); // Forced optimization
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
 			});
+
+			act(() => {
+				result.current.handleOptimize("techC", true); // Forced optimization
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techC",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: true,
+			});
+
+			expect(progressCallback).toBeDefined();
+			act(() => {
+				progressCallback!({ progress_percent: 80 });
+			});
+			expect(result.current.progressPercent).toBe(80);
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockApiResponse);
+			});
+
+			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
 
 			expect(mockUseOptimizeStoreSetPatternNoFitTech).toHaveBeenCalledWith(null); // PNF should be cleared
 			expect(mockUseGridStoreSetGrid).toHaveBeenCalledWith(mockApiResponse.grid);
@@ -282,104 +479,215 @@ describe("useOptimize", () => {
 			const mockErrorResponse = {
 				message: "Optimization failed due to server error.",
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockErrorResponse), {
-					status: 500,
-					statusText: "Internal Server Error",
-				})
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techD");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techD");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techD",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockErrorResponse);
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(true);
 			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(null, "techD");
 			expect(mockConsoleError).toHaveBeenCalledWith(
-				"Error during optimization:",
-				expect.any(Error)
-			);
-			expect(mockConsoleError.mock.calls[0][1].message).toContain(
-				"Optimization failed due to server error."
+				"Invalid API response structure for successful optimization:",
+				mockErrorResponse
 			);
 		});
 
 		it("should handle API error without message", async () => {
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify({}), { status: 400, statusText: "Bad Request" })
-			);
-
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techE");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techE");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techE",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!({}); // Simulate empty error response
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(true);
 			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(null, "techE");
 			expect(mockConsoleError).toHaveBeenCalledWith(
-				"Error during optimization:",
-				expect.any(Error)
-			);
-			expect(mockConsoleError.mock.calls[0][1].message).toContain(
-				"Failed to fetch data: 400 Bad Request"
+				"Invalid API response structure for successful optimization:",
+				{}
 			);
 		});
 
 		it("should handle network error", async () => {
-			fetchSpy.mockRejectedValueOnce(new TypeError("Failed to fetch"));
-
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techF");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techF");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectErrorCallback).toBeDefined();
+			act(() => {
+				connectErrorCallback!(new Error("Network error"));
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(true);
-			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(null, "techF");
 			expect(mockConsoleError).toHaveBeenCalledWith(
-				"Error during optimization:",
-				expect.any(TypeError)
+				"WebSocket connection error:",
+				expect.any(Error)
 			);
-			expect(mockConsoleError.mock.calls[0][1].message).toContain("Failed to fetch");
+			expect(mockConsoleError.mock.calls[0][1].message).toContain("Network error");
 		});
 
 		it("should handle invalid API response structure", async () => {
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify({ not_a_valid_response: true }), {
-					status: 200,
-					statusText: "OK",
-				})
-			);
-
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleOptimize("techG");
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
+			});
+
+			act(() => {
+				result.current.handleOptimize("techG");
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techG",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: false,
+			});
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!({ not_a_valid_response: true });
 			});
 
 			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseOptimizeStoreSetShowError).toHaveBeenCalledWith(true);
 			expect(mockUseGridStoreSetResult).toHaveBeenCalledWith(null, "techG");
 			expect(mockConsoleError).toHaveBeenCalledWith(
-				"Error during optimization:",
-				expect.any(Error)
-			);
-			expect(mockConsoleError.mock.calls[0][1].message).toContain(
-				"Invalid API response structure for successful optimization."
+				"Invalid API response structure for successful optimization:",
+				{ not_a_valid_response: true }
 			);
 		});
 	});
 
 	/**
 	 * Test suite for the `clearPatternNoFitTech` function within the `useOptimize` hook.
-	 */
-	describe("clearPatternNoFitTech", () => {
+	 */	describe("clearPatternNoFitTech", () => {
 		it("should clear patternNoFitTech state", () => {
 			// Simulate PNF being set initially
 			mockUseOptimizeStore.mockImplementation((selector) => {
@@ -406,8 +714,7 @@ describe("useOptimize", () => {
 
 	/**
 	 * Test suite for the `handleForceCurrentPnfOptimize` function within the `useOptimize` hook.
-	 */
-	describe("handleForceCurrentPnfOptimize", () => {
+	 */	describe("handleForceCurrentPnfOptimize", () => {
 		it("should call handleOptimize with forced true if patternNoFitTech is set", async () => {
 			// Simulate PNF being set initially
 			mockUseOptimizeStore.mockImplementation((selector) => {
@@ -426,30 +733,59 @@ describe("useOptimize", () => {
 				solve_method: "Success",
 				grid: { cells: [[]], width: 1, height: 1 },
 			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
 
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleForceCurrentPnfOptimize();
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
 			});
 
-			// Verify that handleOptimize was called with the correct arguments
-			// This implicitly tests that the PNF tech was passed and forced was true
-			expect(fetchSpy).toHaveBeenCalledWith(
-				API_URL + "optimize",
-				expect.objectContaining({
-					body: JSON.stringify({
-						ship: "standard",
-						tech: "techI",
-						player_owned_rewards: [],
-						grid: { cells: [], width: 0, height: 0 },
-						forced: true,
-					}),
-				})
-			);
+			act(() => {
+				result.current.handleForceCurrentPnfOptimize();
+			});
+
+			expect(result.current.solving).toBe(true);
+			expect(result.current.progressPercent).toBe(0);
+
+			expect(connectCallback).toBeDefined();
+			act(() => {
+				connectCallback!();
+			});
+
+			expect(mockSocketInstance.emit).toHaveBeenCalledWith("optimize", {
+				ship: "standard",
+				tech: "techI",
+				player_owned_rewards: {},
+				grid: { cells: [], width: 0, height: 0 },
+				forced: true,
+			});
+
+			expect(progressCallback).toBeDefined();
+			act(() => {
+				progressCallback!({ progress_percent: 90 });
+			});
+			expect(result.current.progressPercent).toBe(90);
+
+			expect(resultCallback).toBeDefined();
+			act(() => {
+				resultCallback!(mockApiResponse);
+			});
+
+			expect(result.current.solving).toBe(false);
+			expect(result.current.progressPercent).toBe(0);
+			expect(mockSocketInstance.disconnect).toHaveBeenCalled();
+
 			expect(mockUseOptimizeStoreSetPatternNoFitTech).toHaveBeenCalledWith(null); // Should be cleared after forced optimize
 		});
 
@@ -457,19 +793,33 @@ describe("useOptimize", () => {
 			// PNF is null by default in beforeEach
 			const { result } = renderHook(() => useOptimize());
 
-			await act(async () => {
-				await result.current.handleForceCurrentPnfOptimize();
+			// Capture callbacks after renderHook
+			let connectCallback: Function | undefined;
+			let progressCallback: Function | undefined;
+			let resultCallback: Function | undefined;
+			let connectErrorCallback: Function | undefined;
+			let disconnectCallback: Function | undefined;
+
+			mockSocketInstance.on.mockImplementation((event, cb) => {
+				if (event === "connect") connectCallback = cb;
+				if (event === "progress") progressCallback = cb;
+				if (event === "optimization_result") resultCallback = cb;
+				if (event === "connect_error") connectErrorCallback = cb;
+				if (event === "disconnect") disconnectCallback = cb;
 			});
 
-			expect(fetchSpy).not.toHaveBeenCalled();
+			act(() => {
+				result.current.handleForceCurrentPnfOptimize();
+			});
+
+			expect(mockSocketInstance.emit).not.toHaveBeenCalled();
 		});
 	});
 
 	/**
 	 * Test suite for the scrolling behavior within the `useOptimize` hook.
-	 */
-	describe("scrolling behavior", () => {
-		it.skip("should scroll to gridContainerRef when solving and not large screen", async () => {
+	 */	describe("scrolling behavior", () => {
+		it("should scroll to gridContainerRef when solving and not large screen", async () => {
 			// Simulate not large screen
 			mockUseBreakpoint.mockReturnValue(false);
 
@@ -495,17 +845,11 @@ describe("useOptimize", () => {
 			});
 
 			// Trigger solving state
-			const mockApiResponse = {
-				solve_method: "Success",
-				grid: { cells: [[]], width: 1, height: 1 },
-			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
-
-			await act(async () => {
-				await result.current.handleOptimize("techJ");
+			act(() => {
+				result.current.handleOptimize("techJ");
 			});
+
+			await vi.advanceTimersByTimeAsync(0); // Allow useEffect to run
 
 			// Manually trigger the requestAnimationFrame callback
 			act(() => {
@@ -532,17 +876,11 @@ describe("useOptimize", () => {
 				result.current.gridContainerRef.current = mockDiv;
 			});
 
-			const mockApiResponse = {
-				solve_method: "Success",
-				grid: { cells: [[]], width: 1, height: 1 },
-			};
-			fetchSpy.mockResolvedValueOnce(
-				new Response(JSON.stringify(mockApiResponse), { status: 200, statusText: "OK" })
-			);
-
-			await act(async () => {
-				await result.current.handleOptimize("techK");
+			act(() => {
+				result.current.handleOptimize("techK");
 			});
+
+			await vi.advanceTimersByTimeAsync(0); // Allow useEffect to run
 
 			// Manually trigger the requestAnimationFrame callback if it was captured
 			act(() => {

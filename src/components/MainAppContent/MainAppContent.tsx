@@ -41,6 +41,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
 		solving,
+		progressPercent,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,
@@ -117,6 +118,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 
 						<GridTable
 							solving={solving}
+							progressPercent={progressPercent}
 							shared={isSharedGrid}
 							activateRow={activateRow}
 							deActivateRow={deActivateRow}

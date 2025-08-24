@@ -52,6 +52,7 @@
 		"react-router-dom": "^7.6.3",
 		"recharts": "^3.1.2",
 		"rehype-external-links": "^3.0.0",
+		"socket.io-client": "^4.8.1",
 		"vite-preload": "^1.0.4",
 		"web-vitals": "^5.0.3",
 		"zustand": "^5.0.5"

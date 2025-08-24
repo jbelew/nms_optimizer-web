@@ -1,7 +1,8 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
-import { API_URL } from "../../constants";
+import { WS_URL } from "../../constants";
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -20,33 +21,12 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
  */
 interface UseOptimizeReturn {
 	solving: boolean;
+	progressPercent: number;
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	patternNoFitTech: string | null;
 	clearPatternNoFitTech: () => void;
 	handleForceCurrentPnfOptimize: () => Promise<void>;
-}
-
-/**
- * @interface ApiErrorData
- * @property {string} [message] - The error message from the API.
- */
-interface ApiErrorData {
-	message?: string;
-}
-
-/**
- * Type guard to check if a given value is of type ApiErrorData.
- *
- * @param {unknown} value - The value to check.
- * @returns {value is ApiErrorData} True if the value is ApiErrorData, false otherwise.
- */
-function isApiErrorData(value: unknown): value is ApiErrorData {
-	if (typeof value === "object" && value !== null) {
-		const potential = value as { message?: unknown };
-		return typeof potential.message === "string" || typeof potential.message === "undefined";
-	}
-	return false;
 }
 
 /**
@@ -96,6 +76,7 @@ function isApiResponse(value: unknown): value is ApiResponse {
 export const useOptimize = (): UseOptimizeReturn => {
 	const { setGrid, setResult, grid } = useGridStore();
 	const [solving, setSolving] = useState<boolean>(false);
+	const [progressPercent, setProgressPercent] = useState<number>(0);
 	const gridContainerRef = useRef<HTMLDivElement>(null);
 	const { sendEvent } = useAnalytics();
 	const {
@@ -163,83 +144,96 @@ export const useOptimize = (): UseOptimizeReturn => {
 					),
 				};
 
-				const response = await fetch(API_URL + "optimize", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
+				const socket: Socket = io(WS_URL);
+
+				socket.on("connect", () => {
+					console.log("Connected to WebSocket server.");
+					socket.emit("optimize", {
 						ship: selectedShipType,
 						tech,
 						player_owned_rewards: checkedModules[tech] || [],
 						grid: updatedGrid,
 						forced,
-					}),
+					});
 				});
 
-				if (!response.ok) {
-					const errorJson: unknown = await response.json();
-					let finalErrorMessage = `Failed to fetch data: ${response.status} ${response.statusText}`;
+				socket.on("progress", (data: { progress_percent: number }) => {
+					setProgressPercent(data.progress_percent);
+				});
 
-					if (isApiErrorData(errorJson)) {
-						if (errorJson.message) {
-							finalErrorMessage = errorJson.message;
-						}
-					}
-					throw new Error(finalErrorMessage);
-				}
-
-				const responseDataUnknown: unknown = await response.json();
-
-				if (isApiResponse(responseDataUnknown)) {
-					const data: ApiResponse = responseDataUnknown;
-
-					if (data.solve_method === "Pattern No Fit" && data.grid === null && !forced) {
-						setPatternNoFitTech(tech);
-						sendEvent({
-							category: "User Interactions",
-							action: "no_fit_warning",
-							platform: selectedShipType,
-							tech: tech,
-							value: 1,
-						});
-					} else {
-						if (patternNoFitTech === tech) {
-							setPatternNoFitTech(null);
-						}
-						setResult(data, tech);
-						if (data.grid) {
-							setGrid(data.grid);
+				socket.on("optimization_result", (data: unknown) => {
+					if (isApiResponse(data)) {
+						if (
+							data.solve_method === "Pattern No Fit" &&
+							data.grid === null &&
+							!forced
+						) {
+							setPatternNoFitTech(tech);
+							sendEvent({
+								category: "User Interactions",
+								action: "no_fit_warning",
+								platform: selectedShipType,
+								tech: tech,
+								value: 1,
+							});
 						} else {
-							console.warn(
-								"API response did not contain a grid for a successful or forced solve. Grid not updated.",
-								data
-							);
-						}
+							if (patternNoFitTech === tech) {
+								setPatternNoFitTech(null);
+							}
+							setResult(data, tech);
+							if (data.grid) {
+								setGrid(data.grid);
+							} else {
+								console.warn(
+									"API response did not contain a grid for a successful or forced solve. Grid not updated.",
+									data
+								);
+							}
 
-						console.log("Response from API:", data);
-						const gaTech =
-							tech === "pulse" && checkedModules[tech]?.includes("PC")
-								? "photonix"
-								: tech;
-						sendEvent({
-							category: "User Interactions",
-							action: "optimize_tech",
-							platform: selectedShipType,
-							tech: gaTech,
-							solve_method: data.solve_method,
-							value: 1,
-							supercharged:
-								typeof data.max_bonus === "number" && data.max_bonus > 100,
-						});
+							console.log("Response from API:", data);
+							const gaTech =
+								tech === "pulse" && checkedModules[tech]?.includes("PC")
+									? "photonix"
+									: tech;
+							sendEvent({
+								category: "User Interactions",
+								action: "optimize_tech",
+								platform: selectedShipType,
+								tech: gaTech,
+								solve_method: data.solve_method,
+								value: 1,
+								supercharged:
+									typeof data.max_bonus === "number" && data.max_bonus > 100,
+							});
+						}
+					} else {
+						console.error(
+							"Invalid API response structure for successful optimization:",
+							data
+						);
+						setShowErrorStore(true);
 					}
-				} else {
-					throw new Error("Invalid API response structure for successful optimization.");
-				}
+					setSolving(false);
+					setProgressPercent(0); // Reset progress
+					socket.disconnect();
+				});
+
+				socket.on("connect_error", (error: Error) => {
+					console.error("WebSocket connection error:", error);
+					setShowErrorStore(true);
+					setSolving(false);
+					setProgressPercent(0); // Reset progress
+				});
+
+				socket.on("disconnect", (reason: Socket.DisconnectReason) => {
+					console.log("Disconnected from WebSocket server:", reason);
+					setSolving(false);
+					setProgressPercent(0); // Reset progress
+				});
 			} catch (error) {
 				console.error("Error during optimization:", error);
 				setResult(null, tech);
 				setShowErrorStore(true);
-			} finally {
-				setSolving(false);
 			}
 		},
 		[
@@ -273,6 +267,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	return {
 		solving,
+		progressPercent,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,

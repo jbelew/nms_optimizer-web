@@ -21,6 +21,7 @@ interface GridTableProps {
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
+	progressPercent: number;
 	shared: boolean; // This is isSharedGridProp, used for GridCell
 	updateUrlForShare: () => string;
 	updateUrlForReset: () => void;
@@ -49,6 +50,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			activateRow,
 			deActivateRow,
 			solving,
+			progressPercent,
 			shared: isSharedGridProp,
 			updateUrlForShare,
 			updateUrlForReset,
@@ -109,6 +111,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					initialMessage={
 						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
 					}
+					progressPercent={progressPercent}
 				/>
 
 				{!isLarge && (
