@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nms-optimizer.app/</loc>
-    <lastmod>2025-08-20</lastmod>
+    <lastmod>2025-08-24</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://nms-optimizer.app/changelog</loc>
-    <lastmod>2025-08-21</lastmod>
+    <lastmod>2025-08-24</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
