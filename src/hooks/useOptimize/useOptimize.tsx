@@ -144,7 +144,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 					),
 				};
 
-				const socket: Socket = io(WS_URL);
+				const socket: Socket = io(WS_URL, {
+					transports: ["websocket"],
+				});
 
 				socket.on("connect", () => {
 					console.log("Connected to WebSocket server.");
