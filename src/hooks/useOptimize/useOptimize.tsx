@@ -128,8 +128,22 @@ export const useOptimize = (): UseOptimizeReturn => {
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
 						setResult(data, tech);
+						const gaTech =
+							tech === "pulse" && checkedModules[tech]?.includes("PC")
+								? "photonix"
+								: tech;
 						if (data.grid) {
 							console.log("Optimization Result Grid:", data.grid);
+							sendEvent({
+								category: "User Interactions",
+								action: "optimize_tech",
+								platform: selectedShipType,
+								tech: gaTech,
+								solve_method: data.solve_method,
+								value: 1,
+								supercharged:
+									typeof data.max_bonus === "number" && data.max_bonus > 100,
+							});
 							setGrid(data.grid);
 						}
 					}
