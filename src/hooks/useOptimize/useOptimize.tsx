@@ -103,11 +103,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 					player_owned_rewards: checkedModules[tech] || [],
 					grid: updatedGrid,
 					forced,
+					// send_grid_updates: false,
 				});
 			});
 
-			socket.on("progress", (data: { progress_percent: number }) => {
+			socket.on("progress", (data: { progress_percent: number; best_grid?: Grid }) => {
 				setProgressPercent(data.progress_percent);
+				if (data.best_grid) {
+					setGrid(data.best_grid);
+				}
 			});
 
 			socket.once("optimization_result", (data: unknown) => {
