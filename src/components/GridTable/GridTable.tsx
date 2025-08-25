@@ -104,6 +104,16 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 		return (
 			<ShakingWrapper shaking={shaking} duration={500}>
+				{!isLarge && (
+					<Separator
+						size="4"
+						color="cyan"
+						orientation="horizontal"
+						decorative
+						className={`mb-4 ${solving || isTechTreeLoading ? "opacity-50" : ""}`}
+					/>
+				)}
+
 				<MessageSpinner
 					isVisible={solving || isTechTreeLoading}
 					showRandomMessages={solving}
@@ -114,23 +124,13 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					progressPercent={progressPercent}
 				/>
 
-				{!isLarge && (
-					<Separator
-						size="4"
-						color="cyan"
-						orientation="horizontal"
-						decorative
-						className="mb-4"
-					/>
-				)}
-
 				<div
 					ref={ref}
 					role="grid"
 					aria-label="Technology Grid"
 					aria-rowcount={grid.cells.length}
 					aria-colcount={totalAriaColumnCount}
-					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
+					className={`gridTable ${solving || isTechTreeLoading ? "opacity-50" : ""}`}
 				>
 					{grid.cells.map((row, rowIndex) => (
 						<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>

@@ -55,7 +55,11 @@
 /* Override for smaller devices (iPhones) */
 @media (max-width: 640px) {
 	.messageSpinner__spinner {
-		height: 3rem;
-		width: 3rem;
+		height: 2rem;
+		width: 2rem;
+	}
+	.messageSpinner__spinner--accent {
+		height: 2rem;
+		width: 2rem;
 	}
 }
