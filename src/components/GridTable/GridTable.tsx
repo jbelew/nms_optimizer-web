@@ -130,7 +130,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					aria-label="Technology Grid"
 					aria-rowcount={grid.cells.length}
 					aria-colcount={totalAriaColumnCount}
-					className={`gridTable ${solving || isTechTreeLoading ? "opacity-50" : ""}`}
+					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 				>
 					{grid.cells.map((row, rowIndex) => (
 						<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>
