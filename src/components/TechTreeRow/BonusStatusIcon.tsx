@@ -45,7 +45,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			<Popover.Root>
 				<Popover.Trigger>
 					<ExclamationTriangleIcon
-						className="mt-[8px] inline-block align-text-top"
+						className="mt-[8px] inline-block cursor-pointer align-text-top"
 						style={{ color: "var(--red-a8)" }}
 					/>
 				</Popover.Trigger>
@@ -65,7 +65,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			<Popover.Root>
 				<Popover.Trigger>
 					<Crosshair2Icon
-						className="mt-[7px] inline-block align-text-top"
+						className="mt-[7px] inline-block cursor-pointer align-text-top"
 						style={{ color: "var(--gray-a10)" }}
 					/>
 				</Popover.Trigger>
@@ -84,7 +84,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		<Popover.Root>
 			<Popover.Trigger>
 				<LightningBoltIcon
-					className="mt-[6px] inline-block h-4 w-4 align-text-top"
+					className="mt-[6px] inline-block h-4 w-4 cursor-pointer align-text-top"
 					style={{ color: "var(--amber-a8)" }}
 				/>
 			</Popover.Trigger>
