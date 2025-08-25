@@ -21,14 +21,14 @@
 	],
 	"screenshots": [
 		{
-			"src": "/assets/img/screenshot_desktop.png",
+			"src": "/assets/img/screenshots/screenshot_desktop.png",
 			"sizes": "1280x824",
 			"type": "image/png",
 			"platform": "desktop",
 			"label": "Main application view showing the technology grid on desktop."
 		},
 		{
-			"src": "/assets/img/screenshot_tablet.png",
+			"src": "/assets/img/screenshots/screenshot_tablet.png",
 			"sizes": "800x1280",
 			"type": "image/png",
 			"platform": "tablet",
