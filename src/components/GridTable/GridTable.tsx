@@ -110,7 +110,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						color="cyan"
 						orientation="horizontal"
 						decorative
-						className={`mb-4 ${solving || isTechTreeLoading ? "opacity-50" : ""}`}
+						className={`mb-4 ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 					/>
 				)}
 
