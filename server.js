@@ -67,7 +67,7 @@ app.use(
 		index: false, // handled by SPA middleware
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
-			const hashedAsset = /-[0-9a-fA-F]{8}\./; // Vite hashed files
+			const hashedAsset = /-[0-9a-zA-Z]{8}\./; // Vite hashed files
 
 			if (hashedAsset.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
