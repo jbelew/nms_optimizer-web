@@ -41,7 +41,7 @@ function escapeHtmlAttr(str) {
 // Middleware to handle page requests and inject dynamic tags
 app.use(async (req, res, next) => {
 	// Pass asset requests (with file extensions) or non-GET requests to the next middleware
-	if (path.extname(req.path) || req.method !== "GET") {
+	if (/\.[^/]+$/.test(req.path) || req.method !== "GET") {
 		return next();
 	}
 
