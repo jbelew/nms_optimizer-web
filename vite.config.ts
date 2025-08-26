@@ -29,7 +29,7 @@ function getAppVersion() {
 }
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical"; //|| mode === "production";
+	const doCritical = mode === "critical" || mode === "production";
 	const appVersion = getAppVersion();
 
 	return {
@@ -49,12 +49,12 @@ export default defineConfig(({ mode }) => {
 			...(doCritical
 				? [
 						deferStylesheetsPlugin(),
-						PluginCritical({
-							criticalBase: "dist/",
-							criticalUrl: "https://nms-optimizer.app",
-							criticalPages: [{ uri: "/", template: "index" }],
-							criticalConfig: {},
-						}),
+						// PluginCritical({
+						// 	criticalBase: "dist/",
+						// 	criticalUrl: "https://nms-optimizer.app",
+						// 	criticalPages: [{ uri: "/", template: "index" }],
+						// 	criticalConfig: {},
+						// }),
 					]
 				: []),
 			compression({
@@ -71,7 +71,9 @@ export default defineConfig(({ mode }) => {
 			}),
 
 			// Conditionally apply defer and critical plugins
-			...(doCritical ? [inlineCriticalCssPlugin()] : []),
+			...(doCritical
+				? [inlineCriticalCssPlugin({ criticalCssFileName: "../critical/index_critical.min.css" })]
+				: []),
 
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({

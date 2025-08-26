@@ -37,6 +37,22 @@ const updatePropertyMetaTag = (property: string, content: string) => {
 };
 
 /**
+ * Updates a link tag with the given rel and href.
+ * If the tag doesn't exist, it creates it.
+ * @param rel - The rel attribute of the link tag.
+ * @param href - The href attribute of the link tag.
+ */
+const updateLinkTag = (rel: string, href: string) => {
+	let linkTag = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+	if (!linkTag) {
+		linkTag = document.createElement("link");
+		linkTag.setAttribute("rel", rel);
+		document.head.appendChild(linkTag);
+	}
+	linkTag.setAttribute("href", href);
+};
+
+/**
  * Custom hook for managing the document title and SEO-related meta tags.
  * This hook updates the document's title, meta description, keywords,
  * Open Graph tags, and hreflang links based on the current route and language.
@@ -95,6 +111,14 @@ export const useSeoAndTitle = () => {
 		updatePropertyMetaTag("og:description", pageDescription);
 		updateMetaTag("twitter:title", pageTitle);
 		updateMetaTag("twitter:description", pageDescription);
+
+		// Canonical URL Logic
+		const canonicalUrl = new URL(location.pathname + location.search, window.location.origin);
+		canonicalUrl.searchParams.delete("platform");
+		canonicalUrl.searchParams.delete("ship");
+		canonicalUrl.searchParams.delete("grid");
+		updateLinkTag("canonical", canonicalUrl.href);
+		updatePropertyMetaTag("og:url", canonicalUrl.href);
 
 		// Set the lang attribute on the html tag
 		document.documentElement.lang = i18n.language;

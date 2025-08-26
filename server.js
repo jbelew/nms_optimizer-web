@@ -55,6 +55,7 @@ app.use(async (req, res, next) => {
 
 		let indexHtml = cachedIndexHtml;
 
+		/*
 		let protocol = req.protocol || "http";
 		protocol = protocol.toLowerCase();
 		if (protocol !== "http" && protocol !== "https") protocol = "http";
@@ -69,8 +70,8 @@ app.use(async (req, res, next) => {
 		const canonicalUrl = fullUrl.href;
 		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
 
-		const canonicalLinkRegex = /<link[^>]*rel=["']canonical["'][^>]*>/i;
-		const canonicalTag = `<link rel="canonical" href="${escapedCanonicalUrl}" />`;
+		const canonicalLinkRegex = /<link[^>]*rel=[\"']canonical[\"'][^>]*>/i;
+		const canonicalTag = `<link rel=\"canonical\" href=\"${escapedCanonicalUrl}\" />`;
 
 		if (canonicalLinkRegex.test(indexHtml)) {
 			indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
@@ -78,14 +79,15 @@ app.use(async (req, res, next) => {
 			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
 		}
 
-		const ogUrlRegex = /<meta[^>]*property=["']og:url["'][^>]*>/i;
-		const ogUrlTag = `<meta property="og:url" content="${escapedCanonicalUrl}" />`;
+		const ogUrlRegex = /<meta[^>]*property=[\"']og:url[\"'][^>]*>/i;
+		const ogUrlTag = `<meta property=\"og:url\" content=\"${escapedCanonicalUrl}\" />`;
 
 		if (ogUrlRegex.test(indexHtml)) {
 			indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
 		} else {
 			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
 		}
+		*/
 
 		const etagValue = etag(indexHtml);
 		res.setHeader("ETag", etagValue);
