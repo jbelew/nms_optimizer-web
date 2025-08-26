@@ -110,6 +110,7 @@ app.use(
 	expressStaticGzip(path.join(__dirname, "dist"), {
 		enableBrotli: true,
 		orderPreference: ["br", "gz"],
+		index: false, // Let our custom middleware handle index.html
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
 
