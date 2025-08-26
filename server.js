@@ -42,7 +42,34 @@ app.get(/.*/, async (req, res, next) => {
 
 	try {
 		const indexHtml = await loadIndexHtml();
-		const indexEtag = etag(indexHtml);
+
+		// --- Canonical URL Logic ---
+		const fullUrl = new URL(req.originalUrl, `${req.protocol}://${req.headers.host}`);
+		fullUrl.searchParams.delete("platform");
+		fullUrl.searchParams.delete("ship");
+		fullUrl.searchParams.delete("grid");
+		const canonicalUrl = fullUrl.href;
+
+		let modifiedHtml = indexHtml;
+		const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
+		const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
+
+		// Replace or add canonical link
+		if (modifiedHtml.includes('<link rel="canonical"')) {
+			modifiedHtml = modifiedHtml.replace(/<link rel="canonical"[^>]*>/, canonicalTag);
+		} else {
+			modifiedHtml = modifiedHtml.replace("</head>", `  ${canonicalTag}\n</head>`);
+		}
+
+		// Replace or add og:url meta tag
+		if (modifiedHtml.includes('<meta property="og:url"')) {
+			modifiedHtml = modifiedHtml.replace(/<meta property="og:url"[^>]*>/, ogUrlTag);
+		} else {
+			modifiedHtml = modifiedHtml.replace("</head>", `  ${ogUrlTag}\n</head>`);
+		}
+		// --- End Canonical URL Logic ---
+
+		const indexEtag = etag(modifiedHtml);
 
 		res.setHeader("ETag", indexEtag);
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -51,7 +78,7 @@ app.get(/.*/, async (req, res, next) => {
 			return res.status(304).end();
 		}
 
-		res.type("html").send(indexHtml);
+		res.type("html").send(modifiedHtml);
 	} catch (err) {
 		console.error("Error serving index.html:", err);
 		res.status(500).send("Internal Server Error");
