@@ -1,3 +1,20 @@
+## [3.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.9.0...v3.9.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* **analytics:** re-added missing optimize_tech event ([8245e5a](https://github.com/jbelew/nms_optimizer-web/commit/8245e5ae22ebf83cc8b7ca20efaec0aedd2844a8))
+* **cursors:** updated the cursor behavior for bonus status icons ([388817e](https://github.com/jbelew/nms_optimizer-web/commit/388817e2c7ef64ad4e2762a643ab2993b46ea88c))
+* **icons:** moving Apple standard icons to the root level ([3dd4607](https://github.com/jbelew/nms_optimizer-web/commit/3dd460733bb9986dfab4fe7ae509a9a23950c1a6))
+* **manifest:** fixed incorrect image paths in the manifest ([ad0bfb9](https://github.com/jbelew/nms_optimizer-web/commit/ad0bfb94bc496700d346f9c5f6191f8a14ee181a))
+
+
+### Features
+
+* **useoptimize:** users can now visualize solves on the grid on larger screens ([7f99404](https://github.com/jbelew/nms_optimizer-web/commit/7f994043ba0f61879a0afc54b0d421db86807548))
+
+
+
 # [3.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.8.0...v3.9.0) (2025-08-24)
 
 
