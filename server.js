@@ -110,17 +110,17 @@ app.use(
 		orderPreference: ["br", "gz"],
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
-			const versionedAssetPattern =
-				/-[0-9a-zA-Z]{8}\.(js|css|woff2|webp|svg|png|jpg|jpeg|gif)$/i;
-			const knownStaticExtensions =
-				/\.(ico|json|svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|eot)$/i;
 
-			if (versionedAssetPattern.test(fileName)) {
+			// Vite-generated assets have a hash in their filename (e.g., index-a1b2c3d4.js).
+			// These files are immutable and can be cached for a long time.
+			const hashedAssetPattern = /-[0-9a-fA-F]{8}\./;
+
+			if (hashedAssetPattern.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-			} else if (knownStaticExtensions.test(fileName)) {
-				res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 1 day
 			} else {
-				res.setHeader("Cache-Control", "no-cache, must-revalidate");
+				// For non-hashed assets, use a shorter cache duration.
+				// This applies to files copied from the `public` directory (e.g., favicon.ico).
+				res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
 			}
 		},
 	})
