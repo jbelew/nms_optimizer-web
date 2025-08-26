@@ -37,6 +37,7 @@ async function loadIndexHtml() {
 }
 
 // SPA fallback for non-asset GET requests
+const KNOWN_ROUTES = ["/", "/instructions", "/about", "/changelog", "/translation", "/userstats"];
 app.get(/.*/, async (req, res, next) => {
 	if (/\.[^/]+$/.test(req.path)) return next(); // static asset, skip
 
@@ -44,11 +45,18 @@ app.get(/.*/, async (req, res, next) => {
 		const indexHtml = await loadIndexHtml();
 
 		// --- Canonical URL Logic ---
-		const fullUrl = new URL(req.originalUrl, `${req.protocol}://${req.headers.host}`);
-		fullUrl.searchParams.delete("platform");
-		fullUrl.searchParams.delete("ship");
-		fullUrl.searchParams.delete("grid");
-		const canonicalUrl = fullUrl.href;
+		const baseUrl = `${req.protocol}://${req.headers.host}`;
+		let canonicalUrl;
+
+		if (KNOWN_ROUTES.includes(req.path)) {
+			const url = new URL(req.originalUrl, baseUrl);
+			url.searchParams.delete("platform");
+			url.searchParams.delete("ship");
+			url.searchParams.delete("grid");
+			canonicalUrl = url.href;
+		} else {
+			canonicalUrl = new URL("/", baseUrl).href;
+		}
 
 		let modifiedHtml = indexHtml;
 		const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
@@ -84,6 +92,7 @@ app.get(/.*/, async (req, res, next) => {
 		res.status(500).send("Internal Server Error");
 	}
 });
+
 
 // Serve static assets
 app.use(
