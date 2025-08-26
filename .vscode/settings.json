@@ -1,36 +1,37 @@
 {
-  // Formatter settings
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+	// Formatter settings
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
 
-  // ESLint auto-fix on save
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  },
+	// ESLint auto-fix on save
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always"
+	},
 
-  // TypeScript SDK
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
+	// TypeScript SDK
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
 
-  // Python
-  "python.analysis.enablePytestSupport": false,
+	// Python
+	"python.analysis.enablePytestSupport": false,
 
-  // Exclude temp folders from VS Code
-  "files.exclude": {
-    "**/tmp": true,
-    "**/tmp/tsconfig.json": true,
-    "**/dist": true,
-    "**/node_modules": true
-  },
+	// Exclude temp folders from VS Code
+	"files.exclude": {
+		"**/tmp": true,
+		"**/dist": true,
+		"**/node_modules": true
+	},
 
-  // Exclude temp folders from searches
-  "search.exclude": {
-    "**/tmp": true,
-    "**/tmp/tsconfig.json": true,
-    "**/dist": true,
-    "**/node_modules": true
-  },
+	// Exclude temp folders from searches
+	"search.exclude": {
+		"**/tmp": true,
+		"**/dist": true,
+		"**/node_modules": true
+	},
 
-  // Optional: Prevent TS server from using files in temp directories
-  "typescript.preferences.excludeDirectories": ["**/tmp"]
+	// Exclude temp folders from problems
+	"problems.excludePatterns": ["**/tmp/**"],
+
+	// Optional: Prevent TS server from using files in temp directories
+	"typescript.preferences.excludeDirectories": ["**/tmp"]
 }
