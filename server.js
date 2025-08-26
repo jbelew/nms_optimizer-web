@@ -43,11 +43,14 @@ app.get(/.*/, async (req, res, next) => {
 
 	try {
 		const indexHtml = await loadIndexHtml();
+		let modifiedHtml = indexHtml;
 
-		// --- Canonical URL Logic ---
+		// --- SEO Tags Injection ---
 		const baseUrl = `${req.protocol}://${req.headers.host}`;
-		let canonicalUrl;
+		const tagsToInject = [];
 
+		// 1. Canonical URL Logic
+		let canonicalUrl;
 		if (KNOWN_ROUTES.includes(req.path)) {
 			const url = new URL(req.originalUrl, baseUrl);
 			url.searchParams.delete("platform");
@@ -57,25 +60,29 @@ app.get(/.*/, async (req, res, next) => {
 		} else {
 			canonicalUrl = new URL("/", baseUrl).href;
 		}
+		tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
+		tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
 
-		let modifiedHtml = indexHtml;
-		const canonicalTag = `<link rel="canonical" href="${canonicalUrl}" />`;
-		const ogUrlTag = `<meta property="og:url" content="${canonicalUrl}" />`;
+		// 2. Hreflang Tags Logic
+		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de"];
+		SUPPORTED_LANGUAGES.forEach(lang => {
+			const url = new URL(req.originalUrl, baseUrl);
+			url.searchParams.set('lng', lang);
+			url.searchParams.delete("platform");
+			url.searchParams.delete("ship");
+			url.searchParams.delete("grid");
+			tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
+		});
 
-		// Replace or add canonical link
-		if (modifiedHtml.includes('<link rel="canonical"')) {
-			modifiedHtml = modifiedHtml.replace(/<link rel="canonical"[^>]*>/, canonicalTag);
-		} else {
-			modifiedHtml = modifiedHtml.replace("</head>", `  ${canonicalTag}\n</head>`);
-		}
+		const defaultUrl = new URL(req.originalUrl, baseUrl);
+		defaultUrl.searchParams.set('lng', 'en'); // Assuming 'en' is the default
+		defaultUrl.searchParams.delete("platform");
+		defaultUrl.searchParams.delete("ship");
+		defaultUrl.searchParams.delete("grid");
+		tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`);
 
-		// Replace or add og:url meta tag
-		if (modifiedHtml.includes('<meta property="og:url"')) {
-			modifiedHtml = modifiedHtml.replace(/<meta property="og:url"[^>]*>/, ogUrlTag);
-		} else {
-			modifiedHtml = modifiedHtml.replace("</head>", `  ${ogUrlTag}\n</head>`);
-		}
-		// --- End Canonical URL Logic ---
+		// Inject all tags before the closing </head> tag
+		modifiedHtml = modifiedHtml.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
 
 		const indexEtag = etag(modifiedHtml);
 
@@ -108,7 +115,7 @@ app.use(
 			if (hashedAsset.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 			} else {
-				res.setHeader("Cache-Control", "public, max-age=86400");
+				res.setHeader("Cache-control", "public, max-age=86400");
 			}
 		},
 	})
