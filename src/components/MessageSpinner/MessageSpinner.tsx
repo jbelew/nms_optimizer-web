@@ -88,20 +88,22 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 			)}
 
 			{initialMessage !== undefined && initialMessage !== null && (
-				<Text
-					className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 pb-2 text-center text-xl sm:text-2xl`}
-				>
-					{initialMessage}
-				</Text>
-			)}
+				<>
+					<Text
+						className={`messageSpinner__header${useNMSFont ? "--nms" : ""} pt-4 pb-2 text-center text-xl sm:text-2xl`}
+					>
+						{initialMessage}
+					</Text>
 
-			<div className="mb-10 w-1/3 lg:mb-18">
-				{isVisible && progressPercent !== undefined && progressPercent > 0 ? (
-					<Progress value={Math.min(progressPercent, 100)} variant="soft" />
-				) : (
-					<div className="h-[6px]" />
-				)}
-			</div>
+					<div className="mb-10 w-1/3 lg:mb-18">
+						{isVisible && progressPercent !== undefined && progressPercent > 0 ? (
+							<Progress value={Math.min(progressPercent, 100)} variant="soft" />
+						) : (
+							<div className="h-[6px]" />
+						)}
+					</div>
+				</>
+			)}
 
 			{/* {showRandomMessages && (
 				<Text

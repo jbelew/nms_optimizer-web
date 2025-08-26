@@ -38,58 +38,36 @@ export const useAppLayout = (): AppLayout => {
 	const { isSharedGrid } = useGridStore();
 
 	useEffect(() => {
-		const elementToObserveHeight = containerRef.current;
-		const elementToObserveWidth = gridTableRef.current;
-
-		/**
-		 * Updates the measurements (height and width) of the observed elements.
-		 * This function is called by the ResizeObserver.
-		 *
-		 * @param {ResizeObserverEntry[]} [entries] - Optional array of ResizeObserverEntry objects.
-		 */
-		const updateMeasurements = (entries?: ResizeObserverEntry[]) => {
-			let newGridHeight: number | null = null;
-			let newGridTableTotalWidth: number | undefined = undefined;
-
-			// Prioritize ResizeObserver entries if available
-			if (entries) {
-				for (const entry of entries) {
-					if (entry.target === elementToObserveHeight) {
-						if (isLarge && !isSharedGrid) {
-							newGridHeight = Math.round(entry.contentRect.height);
-						}
-					} else if (entry.target === elementToObserveWidth) {
-						newGridTableTotalWidth = Math.round(
-							entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT
-						);
-					}
-				}
-			}
-
-			setGridHeight((prevHeight) =>
-				prevHeight !== newGridHeight ? newGridHeight : prevHeight
-			);
-			setGridTableTotalWidth((prevWidth) =>
-				prevWidth !== newGridTableTotalWidth ? newGridTableTotalWidth : prevWidth
-			);
-		};
+		const containerElement = containerRef.current;
+		const gridTableElement = gridTableRef.current;
 
 		const observer = new ResizeObserver((entries) => {
-			// Pass entries to the updateMeasurements function
-			updateMeasurements(entries);
+			for (const entry of entries) {
+				if (entry.target === containerElement) {
+					if (isLarge && !isSharedGrid) {
+						setGridHeight(Math.round(entry.contentRect.height));
+					} else {
+						setGridHeight(null);
+					}
+				} else if (entry.target === gridTableElement) {
+					setGridTableTotalWidth(
+						Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT)
+					);
+				}
+			}
 		});
 
-		if (elementToObserveHeight) {
-			observer.observe(elementToObserveHeight);
+		if (containerElement) {
+			observer.observe(containerElement);
 		}
-		if (elementToObserveWidth) {
-			observer.observe(elementToObserveWidth);
+		if (gridTableElement) {
+			observer.observe(gridTableElement);
 		}
 
 		return () => {
 			observer.disconnect();
 		};
-	}, [isLarge, isSharedGrid, containerRef, gridTableRef]);
+	}, [isLarge, isSharedGrid]);
 
 	return {
 		containerRef,

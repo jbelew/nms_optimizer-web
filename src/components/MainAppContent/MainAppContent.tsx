@@ -1,5 +1,5 @@
 // src/components/app/MainAppContent.tsx
-import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
+import React, { FC, Suspense, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
@@ -15,9 +15,8 @@ import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
+import TechTreeComponent from "../TechTree/TechTree";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
-
-const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 
 /**
  * @typedef {object} MainAppContentInternalProps

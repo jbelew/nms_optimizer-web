@@ -103,7 +103,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					player_owned_rewards: checkedModules[tech] || [],
 					grid: updatedGrid,
 					forced,
-					// send_grid_updates: false,
+					send_grid_updates: isLarge,
 				});
 			});
 
@@ -176,6 +176,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			setResult,
 			setGrid,
 			resetProgress,
+			isLarge,
 		]
 	);
 

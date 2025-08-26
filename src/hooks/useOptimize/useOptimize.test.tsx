@@ -176,6 +176,7 @@ describe("useOptimize", () => {
 				player_owned_rewards: ["module1"],
 				grid: expectedGrid,
 				forced: false,
+				send_grid_updates: true,
 			});
 		});
 

@@ -149,12 +149,12 @@ export default defineConfig(({ mode }) => {
 						) {
 							return "i18n";
 						}
-						if (id.includes("zustand") || id.includes("immer")) {
-							return "zustand";
-						}
-						if (id.includes("ga4")) {
-							return "ga4";
-						}
+						// if (id.includes("zustand") || id.includes("immer")) {
+						// 	return "zustand";
+						// }
+						// if (id.includes("ga4")) {
+						// 	return "ga4";
+						// }
 						if (id.includes("radix")) {
 							return "radix";
 						}
