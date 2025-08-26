@@ -81,7 +81,7 @@
 		"mime": "^4.0.7",
 		"postcss": "^8.5.5",
 		"prettier": "^3.5.3",
-		"puppeteer-core": "^24.14.0",
+		"puppeteer-core": "^24.17.0",
 		"require": "^2.4.20",
 		"rollup-plugin-critical": "^1.0.15",
 		"rollup-plugin-visualizer": "^6.0.3",
