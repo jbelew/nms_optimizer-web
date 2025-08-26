@@ -1,2 +1,3 @@
-name = "nms-optimizer-web" type = "javascript" # use "javascript" for simple Pages deployments
+name = "nms-optimizer-web"
+type = "javascript"
 compatibility_date = "2025-08-26"
