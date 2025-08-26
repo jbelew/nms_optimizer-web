@@ -1,141 +1,89 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import etag from "etag";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
-import etag from "etag";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 
 const app = express();
+app.set("trust proxy", true); // Trust Heroku/Cloudflare proxies
 
-// Trust proxies like Cloudflare and Heroku for x-forwarded-* headers
-app.set("trust proxy", true);
-
-const targetHost = "nms-optimizer.app";
-
-// Redirect non-target hosts to your domain (case-insensitive)
+// Redirect non-canonical hosts
+const TARGET_HOST = "nms-optimizer.app";
 app.use((req, res, next) => {
 	const host = req.headers.host?.toLowerCase();
-	if (host && host !== targetHost.toLowerCase()) {
-		return res.redirect(301, `https://${targetHost}${req.originalUrl}`);
+	if (host && host !== TARGET_HOST.toLowerCase()) {
+		return res.redirect(301, `https://${TARGET_HOST}${req.originalUrl}`);
 	}
 	next();
 });
 
-// Cache index.html in memory and reload if changed on disk
-let cachedIndexHtml = null;
-let cachedIndexHtmlMTimeMs = 0;
-const indexPath = path.join(__dirname, "dist", "index.html");
+const DIST_DIR = path.join(__dirname, "dist");
+const INDEX_PATH = path.join(DIST_DIR, "index.html");
 
-function escapeHtmlAttr(str) {
-	return str
-		.replace(/&/g, "&amp;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#39;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;");
+// Cache index.html in memory
+let cachedIndex = null;
+let cachedIndexMTime = 0;
+
+async function loadIndexHtml() {
+	const stat = await fs.promises.stat(INDEX_PATH);
+	if (!cachedIndex || stat.mtimeMs > cachedIndexMTime) {
+		cachedIndex = await fs.promises.readFile(INDEX_PATH, "utf8");
+		cachedIndexMTime = stat.mtimeMs;
+	}
+	return cachedIndex;
 }
 
-// Middleware to handle page requests and inject dynamic tags
-app.use(async (req, res, next) => {
-	// Pass asset requests (with file extensions) or non-GET requests to the next middleware
-	if (/\.[^/]+$/.test(req.path) || req.method !== "GET") {
-		return next();
-	}
+// SPA fallback for non-asset GET requests
+app.get(/.*/, async (req, res, next) => {
+	if (/\.[^/]+$/.test(req.path)) return next(); // static asset, skip
 
-	// Handle page requests
 	try {
-		const stat = await fs.promises.stat(indexPath);
-		if (!cachedIndexHtml || stat.mtimeMs > cachedIndexHtmlMTimeMs) {
-			cachedIndexHtml = await fs.promises.readFile(indexPath, "utf8");
-			cachedIndexHtmlMTimeMs = stat.mtimeMs;
-		}
+		const indexHtml = await loadIndexHtml();
+		const indexEtag = etag(indexHtml);
 
-		let indexHtml = cachedIndexHtml;
-
-		/*
-		let protocol = req.protocol || "http";
-		protocol = protocol.toLowerCase();
-		if (protocol !== "http" && protocol !== "https") protocol = "http";
-
-		const host = req.get("host");
-		const fullUrl = new URL(req.originalUrl, `${protocol}://${host}`);
-
-		fullUrl.searchParams.delete("platform");
-		fullUrl.searchParams.delete("ship");
-		fullUrl.searchParams.delete("grid");
-
-		const canonicalUrl = fullUrl.href;
-		const escapedCanonicalUrl = escapeHtmlAttr(canonicalUrl);
-
-		const canonicalLinkRegex = /<link[^>]*rel=[\"']canonical[\"'][^>]*>/i;
-		const canonicalTag = `<link rel=\"canonical\" href=\"${escapedCanonicalUrl}\" />`;
-
-		if (canonicalLinkRegex.test(indexHtml)) {
-			indexHtml = indexHtml.replace(canonicalLinkRegex, canonicalTag);
-		} else {
-			indexHtml = indexHtml.replace(/<\/head>/i, `    ${canonicalTag}\n</head>`);
-		}
-
-		const ogUrlRegex = /<meta[^>]*property=[\"']og:url[\"'][^>]*>/i;
-		const ogUrlTag = `<meta property=\"og:url\" content=\"${escapedCanonicalUrl}\" />`;
-
-		if (ogUrlRegex.test(indexHtml)) {
-			indexHtml = indexHtml.replace(ogUrlRegex, ogUrlTag);
-		} else {
-			indexHtml = indexHtml.replace(/<\/head>/i, `    ${ogUrlTag}\n</head>`);
-		}
-		*/
-
-		const etagValue = etag(indexHtml);
-		res.setHeader("ETag", etagValue);
+		res.setHeader("ETag", indexEtag);
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
-		if (req.headers["if-none-match"] === etagValue) {
+		if (req.headers["if-none-match"] === indexEtag) {
 			return res.status(304).end();
 		}
 
-		res.send(indexHtml);
-	} catch (error) {
-		console.error("Error modifying and serving index.html:", error);
+		res.type("html").send(indexHtml);
+	} catch (err) {
+		console.error("Error serving index.html:", err);
 		res.status(500).send("Internal Server Error");
 	}
 });
 
-// Serve static assets. This runs for requests passed on by the middleware above.
+// Serve static assets
 app.use(
 	"/",
-	expressStaticGzip(path.join(__dirname, "dist"), {
+	expressStaticGzip(DIST_DIR, {
 		enableBrotli: true,
 		orderPreference: ["br", "gz"],
-		index: false, // Let our custom middleware handle index.html
+		index: false, // handled by SPA middleware
 		setHeaders: (res, filePath) => {
 			const fileName = path.basename(filePath);
+			const hashedAsset = /-[0-9a-fA-F]{8}\./; // Vite hashed files
 
-			// Vite-generated assets have a hash in their filename (e.g., index-a1b2c3d4.js).
-			// These files are immutable and can be cached for a long time.
-			const hashedAssetPattern = /-[0-9a-fA-F]{8}\./;
-
-			if (hashedAssetPattern.test(fileName)) {
+			if (hashedAsset.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 			} else {
-				// For non-hashed assets, use a shorter cache duration.
-				// This applies to files copied from the `public` directory (e.g., favicon.ico).
-				res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
+				res.setHeader("Cache-Control", "public, max-age=86400");
 			}
 		},
 	})
 );
 
-
-// 404 handler
+// Optional 404 fallback for missing assets
 app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+	res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT} (from server.js)`);
+	console.log(`Server running on port ${PORT}`);
 });
