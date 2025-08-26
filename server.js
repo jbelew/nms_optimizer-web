@@ -65,8 +65,12 @@ app.get(/.*/, async (req, res, next) => {
 
 		// 2. Hreflang Tags Logic
 		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de"];
+        const isKnownRoute = KNOWN_ROUTES.includes(req.path);
+        const pathForHreflang = isKnownRoute ? req.path : "/";
+        const searchForHreflang = isKnownRoute ? new URL(req.originalUrl, baseUrl).search : "";
+
 		SUPPORTED_LANGUAGES.forEach(lang => {
-			const url = new URL(req.originalUrl, baseUrl);
+			const url = new URL(pathForHreflang + searchForHreflang, baseUrl);
 			url.searchParams.set('lng', lang);
 			url.searchParams.delete("platform");
 			url.searchParams.delete("ship");
@@ -74,7 +78,7 @@ app.get(/.*/, async (req, res, next) => {
 			tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
 		});
 
-		const defaultUrl = new URL(req.originalUrl, baseUrl);
+		const defaultUrl = new URL(pathForHreflang + searchForHreflang, baseUrl);
 		defaultUrl.searchParams.set('lng', 'en'); // Assuming 'en' is the default
 		defaultUrl.searchParams.delete("platform");
 		defaultUrl.searchParams.delete("ship");
