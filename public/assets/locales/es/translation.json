@@ -108,7 +108,7 @@
     },
     "translationRequest": {
         "prompt": "¡Se buscan traductores voluntarios! Haz clic <1>aquí</1> para más información.",
-        "openDialogLabel": "Abrir información de solicitud de traducción"
+        "openDialogLabel": "¡Se necesitan traductores!"
     },
     "platformLabel": "PLATAFORMA:",
     "unknownPlatform": "Desconocido ({{platformKey}})",
