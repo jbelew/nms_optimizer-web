@@ -96,7 +96,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			socket.once("connect", () => {
-				console.debug("Connected to WebSocket server.");
+				// console.debug("Connected to WebSocket server.");
 				socket.emit("optimize", {
 					ship: selectedShipType,
 					tech,
@@ -160,8 +160,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 				cleanup();
 			});
 
-			socket.once("disconnect", (reason) => {
-				console.debug("Socket disconnected:", reason);
+			socket.once("disconnect", () => {
+				// console.debug("Socket disconnected:", reason);
 				cleanup();
 			});
 		},
