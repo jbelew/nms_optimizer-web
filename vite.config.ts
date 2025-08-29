@@ -38,7 +38,11 @@ export default defineConfig(({ mode }) => {
 			__APP_VERSION__: JSON.stringify(appVersion),
 		},
 		plugins: [
-			react(),
+			react({
+				babel: {
+					plugins: ["babel-plugin-react-compiler"],
+				},
+			}),
 			tailwindcss(),
 			splashScreen({
 				logoSrc: "assets/svg/loader.svg",
