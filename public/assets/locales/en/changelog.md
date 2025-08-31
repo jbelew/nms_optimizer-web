@@ -4,14 +4,18 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-**It's a wrap, my work is done here!**
+## Coming Soon (2025-08-31)
+
+I thought I was finished here... **until Corvettes showed up**. Once the bugs around Corvette technology are sorted (and there are plenty right now), I’ll build the new models and roll out a release.
 
 ## Version 3.9 (2025-08-24)
+
 - Optimization now runs over WebSockets, providing real-time progress updates directly in the UI.
 
 ## Version 3.8 (2025-08-20)
 
 ### Bug Fixes
+
 - Fixed missing custom 404 page and improved its error styling.
 - Improved app layout responsiveness and removed dynamic width glitches.
 - Fixed callout sizing issues, especially in landscape mode.
@@ -23,6 +27,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 - Updated techtree category images with missing `srcset`.
 
 ### Performance Improvements
+
 - Refined critical CSS loading strategy.
 - Optimized dialog and markdown loading with skeletons and lazy loading.
 - Improved hook click handlers and background preload.
@@ -49,8 +54,8 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ## Version 3.5 (2025-08-05)
 
-* **performance:** Removed Critical CSS functionality from the build ([956ea38](https://github.com/jbelew/nms_optimizer-web/commit/956ea38a002b27e84a227872436b599a0fd8ebf9))
-* **scoring:** Added support for group adjacency across multiple tech types ([bac995b](https://github.com/jbelew/nms_optimizer-web/commit/bac995bec9ef2ed06fc439057354f681051a07e3))
+- **performance:** Removed Critical CSS functionality from the build ([956ea38](https://github.com/jbelew/nms_optimizer-web/commit/956ea38a002b27e84a227872436b599a0fd8ebf9))
+- **scoring:** Added support for group adjacency across multiple tech types ([bac995b](https://github.com/jbelew/nms_optimizer-web/commit/bac995bec9ef2ed06fc439057354f681051a07e3))
 
 ## Version 3.4 (2025-07-31)
 
