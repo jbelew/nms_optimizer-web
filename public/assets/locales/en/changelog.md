@@ -4,7 +4,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Coming Soon (2025-08-31)
+## Corvettes Coming Soon (2025-08-31)
 
 I thought I was finished here... **until Corvettes showed up**. Once the bugs around Corvette technology are sorted (and there are plenty right now), I’ll build the new models and roll out a release.
 
