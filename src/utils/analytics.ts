@@ -1,6 +1,3 @@
-import ReactGA from "react-ga4";
-
-import { TRACKING_ID } from "../constants";
 import { reportWebVitals } from "./reportWebVitals";
 
 /**
@@ -52,23 +49,45 @@ let gaInitialized = false;
  */
 export const initializeAnalytics = () => {
 	if (gaInitialized) return;
-	ReactGA.initialize(TRACKING_ID, {
-		gtagOptions: {
-			send_page_view: true,
-		},
-	});
-	ReactGA.set({ app_version: __APP_VERSION__ });
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
 
 /**
- * Sends an event to Google Analytics.
+ * Sends an event to the analytics server.
  *
  * @param {GA4Event} event - The event to send.
  * @returns {void}
  */
+const getClientId = () => {
+    let clientId = localStorage.getItem('ga_client_id');
+    if (!clientId) {
+        clientId = crypto.randomUUID();
+        localStorage.setItem('ga_client_id', clientId);
+    }
+    return clientId;
+};
+
 export const sendEvent = (event: GA4Event) => {
 	const { action, ...params } = event;
-	ReactGA.event(action, params);
+
+    const analyticsUrl = import.meta.env.VITE_ANALYTICS_URL;
+    if (!analyticsUrl) {
+        console.error('VITE_ANALYTICS_URL is not defined');
+        return;
+    }
+
+    fetch(`${analyticsUrl}/api/analytics`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            client_id: getClientId(),
+            eventName: action,
+            eventParams: params,
+        }),
+    }).catch(error => {
+        console.error('Error sending analytics event:', error);
+    });
 };
