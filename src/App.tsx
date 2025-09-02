@@ -7,6 +7,7 @@ import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
+import { usePageViewTracker } from "./hooks/usePageViewTracker/usePageViewTracker";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
@@ -37,6 +38,7 @@ const App: FC = () => {
 	// Use the new custom hooks
 	useSeoAndTitle();
 	useUrlValidation();
+	usePageViewTracker();
 
 	return (
 		<>

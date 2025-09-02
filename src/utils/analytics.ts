@@ -60,34 +60,38 @@ export const initializeAnalytics = () => {
  * @returns {void}
  */
 const getClientId = () => {
-    let clientId = localStorage.getItem('ga_client_id');
-    if (!clientId) {
-        clientId = crypto.randomUUID();
-        localStorage.setItem('ga_client_id', clientId);
-    }
-    return clientId;
+	let clientId = localStorage.getItem("ga_client_id");
+	if (!clientId) {
+		clientId = crypto.randomUUID();
+		localStorage.setItem("ga_client_id", clientId);
+	}
+	return clientId;
 };
 
 export const sendEvent = (event: GA4Event) => {
 	const { action, ...params } = event;
 
-    const analyticsUrl = import.meta.env.VITE_ANALYTICS_URL;
-    if (!analyticsUrl) {
-        console.error('VITE_ANALYTICS_URL is not defined');
-        return;
-    }
+	const analyticsUrl = import.meta.env.VITE_ANALYTICS_URL;
+	console.log(analyticsUrl);
+	if (!analyticsUrl) {
+		console.error("VITE_ANALYTICS_URL is not defined");
+		return;
+	}
 
-    fetch(`${analyticsUrl}/api/analytics`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            client_id: getClientId(),
-            eventName: action,
-            eventParams: params,
-        }),
-    }).catch(error => {
-        console.error('Error sending analytics event:', error);
-    });
+	fetch(`${analyticsUrl}api/analytics`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		// Use `keepalive` to ensure the request is sent even if the page is being unloaded.
+		// This is crucial for reporting web vitals, which can be sent at the end of a session.
+		keepalive: true,
+		body: JSON.stringify({
+			client_id: getClientId(),
+			eventName: action,
+			eventParams: params,
+		}),
+	}).catch((error) => {
+		console.error("Error sending analytics event:", error);
+	});
 };
