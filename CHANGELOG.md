@@ -1,3 +1,29 @@
+# [3.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.9.1...v3.10.0) (2025-09-03)
+
+
+### Bug Fixes
+
+* **server:** a fix for vite hash regex ([23c8b59](https://github.com/jbelew/nms_optimizer-web/commit/23c8b59fb6b022d8b814fbce2b530ae1ca3d8052))
+* **server:** addressing false 404's on / routes ([41812bb](https://github.com/jbelew/nms_optimizer-web/commit/41812bbb99e06d794e1cbb101c5f88e40dba3ed0))
+* **server:** fix for "greedy" cache control settings overriding my config ([3234105](https://github.com/jbelew/nms_optimizer-web/commit/3234105bbdf47402e27a676c715efb6bc1907e28))
+* **server:** fix for stale index.html page ([e475b70](https://github.com/jbelew/nms_optimizer-web/commit/e475b702e3398e9251e17b20ac91dd89edc43604))
+* **server:** one last canonical url fix ([857fc86](https://github.com/jbelew/nms_optimizer-web/commit/857fc86d52515fff15947ac970f89a373b9c2a3e))
+* **server:** one more tweak to the hashed file regex ([f4d9c6a](https://github.com/jbelew/nms_optimizer-web/commit/f4d9c6ae6545c391c830613195cb3ccac61d0ca3))
+* **server:** setting explicit routes to prevent soft 404's ([bfb34bd](https://github.com/jbelew/nms_optimizer-web/commit/bfb34bdfd1efd26f9c65441cafa6f2b1dc456e75))
+* **server:** still struggling with the express code ([f650583](https://github.com/jbelew/nms_optimizer-web/commit/f650583f1e39666005956db328ae4f7e8608e2a7))
+
+
+### Features
+
+* **corvettes:** added initial support for corvettes ([b4d3613](https://github.com/jbelew/nms_optimizer-web/commit/b4d3613afeae28ba138e2f837376f50af6359eef))
+
+
+### Performance Improvements
+
+* **server:** caching changes ([bac2ae9](https://github.com/jbelew/nms_optimizer-web/commit/bac2ae97b9df9f6110d77ef5cc8ae73b0384c75a))
+
+
+
 ## [3.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.9.0...v3.9.1) (2025-08-26)
 
 
