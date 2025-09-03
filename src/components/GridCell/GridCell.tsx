@@ -12,18 +12,48 @@ import { useGridCellStyle } from "./useGridCellStyle";
 
 /**
  * Determines the upgrade priority based on the technology label.
- * This is used to display a number on the cell for certain upgrades.
+ * This is used to display a number or code on the cell for certain upgrades.
  *
  * @param {string|undefined} label - The label of the technology.
- * @returns {number} The priority (1 for Theta, 2 for Tau, 3 for Sigma), or 0 if not found.
+ * @returns {string} The priority ("1", "2", "3" for upgrades; "B1", "B2", "B3" for boosters), or "" if not applicable.
  */
-const getUpgradePriority = (label: string | undefined): number => {
-	if (!label) return 0;
+
+const getUpgradePriority = (label: string | undefined): string => {
+	if (!label) return "";
+
 	const lowerLabel = label.toLowerCase();
-	if (lowerLabel.includes(" theta")) return 1;
-	if (lowerLabel.includes(" tau")) return 2;
-	if (lowerLabel.includes(" sigma")) return 3;
-	return 0;
+	const isUpgrade = lowerLabel.includes("upgrade");
+	const isBooster =
+		lowerLabel.includes("booster") ||
+		lowerLabel.includes("habitation") ||
+		lowerLabel.includes("array") ||
+		lowerLabel.includes("arcadia") ||
+		lowerLabel.includes("ion") ||
+		lowerLabel.includes("deflector") ||
+		lowerLabel.includes("mag-field") ||
+		lowerLabel.includes("torpedo") ||
+		lowerLabel.includes("landing");
+	const isReactor = lowerLabel.includes("reactor");
+
+	if (isUpgrade || isBooster || isReactor) {
+		if (lowerLabel.includes("theta")) {
+			if (isUpgrade) return "1";
+			if (isBooster) return "C1";
+			if (isReactor) return "R1";
+		}
+		if (lowerLabel.includes("tau")) {
+			if (isUpgrade) return "2";
+			if (isBooster) return "C2";
+			if (isReactor) return "R2";
+		}
+		if (lowerLabel.includes("sigma")) {
+			if (isUpgrade) return "3";
+			if (isBooster) return "C3";
+			if (isReactor) return "R3";
+		}
+	}
+
+	return "";
 };
 
 /**
@@ -91,7 +121,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 			)}
 			{cell.label && (
 				<span className="text-1xl gridCell__label mt-1 sm:text-3xl lg:text-4xl">
-					{upGradePriority > 0 ? upGradePriority : null}
+					{upGradePriority ? upGradePriority : null}
 				</span>
 			)}
 		</div>

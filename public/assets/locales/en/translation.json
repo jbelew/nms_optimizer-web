@@ -134,7 +134,8 @@
 		"nautilon": "Nautilon Exocraft",
 		"colossus": "Colossus Exocraft",
 		"minotaur": "Minotaur Exocraft",
-		"exosuit": "Exosuit"
+		"exosuit": "Exosuit",
+		"corvette": "Corvette (Beta)"
 	},
 
 	"techTree": {
@@ -185,8 +186,8 @@
 			"rocket": "Rocket Launcher",
 			"shield": "Starship Shields",
 			"hyper": "Hyperdrive",
-			"launch": "Launch Thruster",
-			"pulse": "Pulse Engine",
+			"launch": "Launch Thrusters",
+			"pulse": "Pulse Engines",
 			"aquajet": "Aqua-Jets",
 			"bobble": "Figurines",
 			"scanner": "Scanners",
@@ -313,6 +314,11 @@
 			"refiner": "Personal Refiner",
 			"trade": "Trade Rocket",
 			"translator": "Automatic Translation"
+		},
+		"corvette": {
+			"cockpit": "Corvette Cockpit",
+			"ceto": "Ceto-Class Reactor",
+			"habitation": "Habitation Modules"
 		}
 	},
 	"modules": {

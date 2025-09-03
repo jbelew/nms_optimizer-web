@@ -156,7 +156,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 						solving={solving}
 						shipTypes={shipTypes}
 					/>
-					<DropdownMenu.Label>Corvettes (Coming Soon!)</DropdownMenu.Label>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</>
