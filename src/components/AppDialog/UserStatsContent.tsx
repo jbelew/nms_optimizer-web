@@ -99,6 +99,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 
 	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
+	const CORVETTE_TYPES = ["corvette"];
 
 	/**
 	 * Aggregates raw user statistics data for charting.
@@ -189,6 +190,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 
 	const starshipData = aggregateData(data, STARSHIP_TYPES);
 	const multitoolData = aggregateData(data, MULTITOOL_TYPES);
+	const corvetteData = aggregateData(data, CORVETTE_TYPES);
 
 	return (
 		<>
@@ -225,6 +227,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 					<>
 						{renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}
 						{renderChart(multitoolData, "dialogs.userStats.multitoolChartTitle")}
+						{renderChart(corvetteData, "dialogs.userStats.corvetteChartTitle")}
 					</>
 				)}
 			</Flex>

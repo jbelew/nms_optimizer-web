@@ -78,11 +78,12 @@
 		},
 		"userStats": {
 			"noDataForChart": "No data available for this chart.",
-			"description": "This dialog displays aggregated user statistics based on interactions with the optimizer, highlighting the most commonly supercharged technologies for Starships and Multi-Tools.",
+			"description": "This dialog displays aggregated user statistics based on interactions with the optimizer, highlighting the most commonly supercharged technologies for Starships, Multi-Tools, and Corvettes.",
 			"loading": "Loading user statistics...",
 			"error": "Failed to load user statistics. Please try again later.",
 			"starshipChartTitle": "Starship Technologies",
 			"multitoolChartTitle": "Multi-tool Technologies",
+			"corvetteChartTitle": "Corvette Technologies",
 			"closeButton": "Close"
 		},
 		"optimizationAlert": {
