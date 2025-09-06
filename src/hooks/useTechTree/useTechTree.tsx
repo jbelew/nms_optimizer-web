@@ -256,7 +256,15 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	}, [techTree]); // Dependency on techTree ensures it runs after data is available
 
 	const processedTechTree = Object.entries(techTree).reduce((acc, [category, items]) => {
-		if (Array.isArray(items)) {
+		if (category === "recommended_builds") {
+			acc[category] = items as RecommendedBuild[]; // Explicitly cast to RecommendedBuild[]
+		} else if (category === "grid_definition") {
+			acc[category] = items as {
+				grid: Module[][];
+				gridFixed: boolean;
+				superchargedFixed: boolean;
+			}; // Explicitly cast to grid_definition type
+		} else if (Array.isArray(items)) {
 			const uniqueKeys = new Set<string>();
 			acc[category] = items.filter((item): item is TechTreeItem => {
 				if (typeof item === "object" && item !== null && "key" in item) {
