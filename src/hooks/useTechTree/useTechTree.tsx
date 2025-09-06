@@ -163,8 +163,6 @@ export const clearTechTreeCache = () => {
 function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
-		const { setLoading } = useTechTreeLoadingStore.getState();
-		setLoading(true);
 		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
 			if (!res.ok) {
 				throw new Error(`HTTP error! status: ${res.status}`);

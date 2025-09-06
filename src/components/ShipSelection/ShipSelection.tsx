@@ -2,7 +2,7 @@
 import "./ShipSelection.css";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useEffect, useMemo } from "react";
+import React, { Suspense, useCallback, useMemo } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -81,20 +81,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	);
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
-
-	// This validation logic is moved up from the old SuspensefulShipTypesDropdown
-	useEffect(() => {
-		const platformState = usePlatformStore.getState();
-		const currentSelected = platformState.selectedPlatform;
-		const availableTypes = Object.keys(shipTypes);
-
-		if (availableTypes.length > 0 && !availableTypes.includes(currentSelected)) {
-			console.warn(
-				`Selected ship type "${currentSelected}" is not valid. Resetting to "standard".`
-			);
-			platformState.setSelectedPlatform("standard", availableTypes, false);
-		}
-	}, [shipTypes]);
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.

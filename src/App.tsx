@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
 
@@ -9,8 +9,10 @@ import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
+import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
+import { usePlatformStore } from "./store/PlatformStore";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
@@ -37,6 +39,13 @@ const App: FC = () => {
 	// Use the new custom hooks
 	useSeoAndTitle();
 	useUrlValidation();
+
+	const shipTypes = useFetchShipTypesSuspense();
+	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
+
+	useEffect(() => {
+		initializePlatform(Object.keys(shipTypes));
+	}, [shipTypes, initializePlatform]);
 
 	return (
 		<>
