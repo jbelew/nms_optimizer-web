@@ -43,7 +43,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 		patternNoFitTech,
 		setPatternNoFitTech,
 	} = useOptimizeStore();
-	const { checkedModules } = useTechStore();
+	const { checkedModules, techGroups, activeGroups } = useTechStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
 	const isLarge = useBreakpoint("1024px");
@@ -96,15 +96,20 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			socket.once("connect", () => {
-				// console.debug("Connected to WebSocket server.");
-				socket.emit("optimize", {
+				const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
+
+				const payload = {
 					ship: selectedShipType,
 					tech,
 					player_owned_rewards: checkedModules[tech] || [],
 					grid: updatedGrid,
 					forced,
 					send_grid_updates: isLarge,
-				});
+					solve_type,
+				};
+
+				console.debug("Connected to WebSocket server -- ", payload);
+				socket.emit("optimize", payload);
 			});
 
 			socket.on("progress", (data: { progress_percent: number; best_grid?: Grid }) => {
@@ -177,6 +182,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 			setGrid,
 			resetProgress,
 			isLarge,
+			techGroups,
+			activeGroups,
 		]
 	);
 

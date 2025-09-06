@@ -40,9 +40,8 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = React.memo(
 					/>
 				)}
 				<Badge
-					ml="1"
 					mt="1"
-					className="align-top !font-mono"
+					className="!ml-0 align-top !font-mono"
 					size="1"
 					radius="full"
 					variant={hasTechInGrid ? "soft" : "surface"}

@@ -44,6 +44,7 @@ export interface Module {
  * @property {string|null} image - The image file for the technology.
  * @property {string} color - The color associated with the technology.
  * @property {number} module_count - The number of modules for this technology.
+ * @property {string} [type] - The type of the technology, e.g., 'normal' or 'max'.
  */
 export interface TechTreeItem {
 	label: string;
@@ -78,6 +79,7 @@ export interface TechTreeItem {
 		| "mint"
 		| "sky";
 	module_count: number;
+	type?: string;
 }
 
 /**
@@ -198,7 +200,8 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
-	const setTechColors = useTechStore((state) => state.setTechColors);
+	const { setTechColors, setTechGroups, setActiveGroup } = useTechStore();
+
 	const setInitialGridDefinition = useGridStore((state) => state.setInitialGridDefinition);
 	const setGridFromInitialDefinition = useGridStore(
 		(state) => state.setGridFromInitialDefinition
@@ -206,28 +209,72 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 	useEffect(() => {
 		const colors: { [key: string]: string } = {};
+		const techGroups: { [key: string]: TechTreeItem[] } = {};
+		const activeGroups: { [key: string]: string } = {};
+
 		for (const category in techTree) {
 			const categoryItems = techTree[category];
 			if (Array.isArray(categoryItems)) {
 				categoryItems.forEach((tech) => {
 					if ("key" in tech && "color" in tech) {
 						colors[tech.key] = tech.color;
+
+						if (!techGroups[tech.key]) {
+							techGroups[tech.key] = [];
+						}
+						techGroups[tech.key].push(tech as TechTreeItem);
+
+						if (!activeGroups[tech.key]) {
+							activeGroups[tech.key] = tech.type || "normal";
+						}
 					}
 				});
 			}
 		}
+
 		setTechColors(colors);
+		setTechGroups(techGroups);
+
+		Object.entries(activeGroups).forEach(([tech, groupType]) => {
+			setActiveGroup(tech, groupType);
+		});
 
 		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
 			setInitialGridDefinition(techTree.grid_definition);
 			setGridFromInitialDefinition(techTree.grid_definition);
 		}
-	}, [techTree, setTechColors, setInitialGridDefinition, setGridFromInitialDefinition]);
+	}, [
+		techTree,
+		setTechColors,
+		setTechGroups,
+		setActiveGroup,
+		setInitialGridDefinition,
+		setGridFromInitialDefinition,
+	]);
 
 	useEffect(() => {
 		// Set loading to false after the techTree data has been processed and rendered
 		useTechTreeLoadingStore.getState().setLoading(false);
 	}, [techTree]); // Dependency on techTree ensures it runs after data is available
 
-	return techTree;
+	const processedTechTree = Object.entries(techTree).reduce((acc, [category, items]) => {
+		if (Array.isArray(items)) {
+			const uniqueKeys = new Set<string>();
+			acc[category] = items.filter((item): item is TechTreeItem => {
+				if (typeof item === "object" && item !== null && "key" in item) {
+					if (uniqueKeys.has(item.key)) {
+						return false;
+					}
+					uniqueKeys.add(item.key);
+					return true;
+				}
+				return false;
+			});
+		} else {
+			acc[category] = items;
+		}
+		return acc;
+	}, {} as TechTree);
+
+	return processedTechTree;
 }

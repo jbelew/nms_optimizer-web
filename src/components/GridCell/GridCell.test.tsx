@@ -81,6 +81,8 @@ describe("GridCell", () => {
 					solve_method: {},
 					techColors: {},
 					checkedModules: {},
+					techGroups: {},
+					activeGroups: {},
 					clearTechMaxBonus: vi.fn(),
 					setTechMaxBonus: vi.fn(),
 					clearTechSolvedBonus: vi.fn(),
@@ -91,6 +93,8 @@ describe("GridCell", () => {
 					setCheckedModules: vi.fn(),
 					clearCheckedModules: vi.fn(),
 					clearResult: vi.fn(),
+					setTechGroups: vi.fn(),
+					setActiveGroup: vi.fn(),
 				};
 				return selector(state);
 			}

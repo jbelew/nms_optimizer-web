@@ -67,7 +67,11 @@ describe("useOptimize", () => {
 			patternNoFitTech: null,
 			setPatternNoFitTech: vi.fn(),
 		});
-		mockUseTechStore.mockReturnValue({ checkedModules: {} });
+		mockUseTechStore.mockReturnValue({
+			checkedModules: {},
+			techGroups: {},
+			activeGroups: {},
+		});
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
 		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn() });
@@ -128,7 +132,11 @@ describe("useOptimize", () => {
 				setResult: vi.fn(),
 				grid,
 			});
-			mockUseTechStore.mockReturnValue({ checkedModules });
+			mockUseTechStore.mockReturnValue({
+				checkedModules,
+				techGroups: { "Test Tech": ["module1"] },
+				activeGroups: { "Test Tech": "group1" },
+			});
 			mockUsePlatformStore.mockReturnValue(selectedShipType);
 
 			const { result } = renderHook(() => useOptimize());

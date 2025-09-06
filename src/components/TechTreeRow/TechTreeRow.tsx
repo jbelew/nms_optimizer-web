@@ -1,7 +1,7 @@
 import "./TechTreeRow.css";
 
-import React, { useCallback, useEffect } from "react";
-import { Avatar } from "@radix-ui/themes";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { Avatar, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "../../store/GridStore";
@@ -27,14 +27,8 @@ export interface TechTreeRowProps {
 	techImage: string | null;
 	/** Function to check if the grid is full. */
 	isGridFull: boolean;
-	/** Boolean indicating if there are any reward modules. */
-	hasRewardModules: boolean;
-	/** Filtered array of reward modules. */
-	rewardModules: { label: string; id: string; image: string; type?: string }[];
 	/** The currently selected ship type. */
 	selectedShipType: string;
-	/** The count of modules for the technology. */
-	moduleCount: number;
 	/** The color associated with the technology. */
 	techColor:
 		| "gray"
@@ -74,16 +68,36 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	solving,
 	techImage,
 	isGridFull,
-	hasRewardModules,
-	rewardModules,
-	moduleCount,
 	techColor,
 }) => {
 	const { t } = useTranslation();
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
-	const { clearTechMaxBonus, clearTechSolvedBonus, setCheckedModules, clearCheckedModules } =
-		useTechStore();
+	const {
+		clearTechMaxBonus,
+		clearTechSolvedBonus,
+		setCheckedModules,
+		clearCheckedModules,
+		techGroups,
+		activeGroups,
+		setActiveGroup,
+	} = useTechStore();
+
+	const activeGroup = useMemo(() => {
+		const groupType = activeGroups[tech] || "normal";
+		return techGroups[tech]?.find((g) => g.type === groupType) || techGroups[tech]?.[0];
+	}, [tech, activeGroups, techGroups]);
+
+	const rewardModules = useMemo(() => {
+		return (
+			activeGroup?.modules.filter((m) => m.type === "reward") ||
+			([] as { label: string; id: string; image: string; type?: string }[])
+		);
+	}, [activeGroup]);
+
+	const hasRewardModules = rewardModules.length > 0;
+	const moduleCount = activeGroup?.module_count || 0;
+
 	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
 	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
 	const { setShaking } = useShakeStore();
@@ -152,6 +166,8 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
 
+	const hasMultipleGroups = (techGroups[tech]?.length || 0) > 1;
+
 	return (
 		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
 			<ActionButtons
@@ -174,16 +190,21 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
 
-			<div className="flex flex-1 items-start justify-between">
-				<TechInfo
-					tech={tech}
-					translatedTechName={translatedTechName}
-					hasRewardModules={hasRewardModules}
-					rewardModules={rewardModules}
-					currentCheckedModules={currentCheckedModules}
-					handleCheckboxChange={handleCheckboxChange}
-				/>
-				<div className="flex justify-end">
+			<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
+				{/* First column */}
+				<div className="flex justify-start">
+					<TechInfo
+						tech={tech}
+						translatedTechName={translatedTechName}
+						hasRewardModules={hasRewardModules}
+						rewardModules={rewardModules}
+						currentCheckedModules={currentCheckedModules}
+						handleCheckboxChange={handleCheckboxChange}
+					/>
+				</div>
+
+				{/* Right-hand group */}
+				<div className="flex items-start justify-end gap-2">
 					<TechInfoBadges
 						hasTechInGrid={hasTechInGrid}
 						techColor={techColor}
@@ -192,6 +213,16 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						techMaxBonus={techMaxBonus}
 						techSolvedBonus={techSolvedBonus}
 					/>
+
+					{hasMultipleGroups && (
+						<Switch
+							mt="1"
+							checked={activeGroups[tech] === "max"}
+							onCheckedChange={(checked) =>
+								setActiveGroup(tech, checked ? "max" : "normal")
+							}
+						/>
+					)}
 				</div>
 			</div>
 		</div>

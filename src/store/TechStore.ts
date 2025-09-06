@@ -1,6 +1,8 @@
 // src/store/TechStore.ts
 import { create } from "zustand";
 
+import { TechTreeItem } from "../hooks/useTechTree/useTechTree";
+
 /**
  * @interface TechState
  * @property {{[key: string]: number}} max_bonus - A map of technology keys to their maximum potential bonus.
@@ -8,6 +10,8 @@ import { create } from "zustand";
  * @property {{[key: string]: string}} solve_method - A map of technology keys to the method used to solve them.
  * @property {{[key: string]: string}} techColors - A map of technology keys to their colors.
  * @property {{[key: string]: string[]}} checkedModules - A map of technology keys to their checked modules.
+ * @property {{[key: string]: TechTreeItem[]}} techGroups - A map of technology keys to their tech groups.
+ * @property {{[key: string]: string}} activeGroups - A map of technology keys to their active group.
  * @property {(tech: string) => void} clearTechMaxBonus - Function to clear the max bonus for a technology.
  * @property {(tech: string, bonus: number) => void} setTechMaxBonus - Function to set the max bonus for a technology.
  * @property {(tech: string) => void} clearTechSolvedBonus - Function to clear the solved bonus for a technology.
@@ -18,6 +22,8 @@ import { create } from "zustand";
  * @property {(tech: string, updater: (prev?: string[]) => string[]) => void} setCheckedModules - Function to set the checked modules for a technology.
  * @property {(tech: string) => void} clearCheckedModules - Function to clear the checked modules for a technology.
  * @property {() => void} clearResult - Function to clear the result state.
+ * @property {(techGroups: {[key: string]: TechTreeItem[]}) => void} setTechGroups - Function to set the tech groups.
+ * @property {(tech: string, groupType: string) => void} setActiveGroup - Function to set the active group for a technology.
  */
 export interface TechState {
 	max_bonus: { [key: string]: number };
@@ -25,6 +31,8 @@ export interface TechState {
 	solve_method: { [key: string]: string };
 	techColors: { [key: string]: string };
 	checkedModules: { [key: string]: string[] };
+	techGroups: { [key: string]: TechTreeItem[] };
+	activeGroups: { [key: string]: string };
 	clearTechMaxBonus: (tech: string) => void;
 	setTechMaxBonus: (tech: string, bonus: number) => void;
 	clearTechSolvedBonus: (tech: string) => void;
@@ -34,7 +42,9 @@ export interface TechState {
 	getTechColor: (tech: string) => string | undefined;
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
 	clearCheckedModules: (tech: string) => void;
-	clearResult: () => void; // Add clearResult to the TechState interface
+	clearResult: () => void;
+	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
+	setActiveGroup: (tech: string, groupType: string) => void;
 }
 
 /**
@@ -47,6 +57,8 @@ export const useTechStore = create<TechState>((set, get) => ({
 	solve_method: {},
 	techColors: {},
 	checkedModules: {},
+	techGroups: {},
+	activeGroups: {},
 	clearTechMaxBonus: (tech) =>
 		set((state) => ({
 			max_bonus: { ...state.max_bonus, [tech]: 0 },
@@ -81,4 +93,9 @@ export const useTechStore = create<TechState>((set, get) => ({
 			checkedModules: { ...state.checkedModules, [tech]: [] },
 		})),
 	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
+	setTechGroups: (techGroups) => set({ techGroups }),
+	setActiveGroup: (tech, groupType) =>
+		set((state) => ({
+			activeGroups: { ...state.activeGroups, [tech]: groupType },
+		})),
 }));

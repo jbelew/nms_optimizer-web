@@ -99,27 +99,18 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 				/>
 
 				{/* Render each technology as a TechTreeRow */}
-				{technologies.map((tech: TechTreeItem) => {
-					const rewardModules = tech.modules.filter(
-						(module: { type: string }) => module.type === "reward"
-					);
-					const hasRewardModules = rewardModules.length > 0;
-					return (
-						<TechTreeRow
-							key={tech.key}
-							tech={tech.key}
-							handleOptimize={handleOptimize}
-							solving={solving}
-							techImage={tech.image} // Pass the tech.image here
-							isGridFull={isGridFull()} // Pass isGridFull down
-							hasRewardModules={hasRewardModules} // Pass hasRewardModules
-							rewardModules={rewardModules} // Pass rewardModules
-							selectedShipType={selectedShipType} // Pass selectedShipType
-							moduleCount={tech.module_count} // Pass module_count
-							techColor={tech.color} // Pass tech.color
-						/>
-					);
-				})}
+				{technologies.map((tech: TechTreeItem) => (
+					<TechTreeRow
+						key={tech.key}
+						tech={tech.key}
+						handleOptimize={handleOptimize}
+						solving={solving}
+						techImage={tech.image} // Pass the tech.image here
+						isGridFull={isGridFull()} // Pass isGridFull down
+						selectedShipType={selectedShipType} // Pass selectedShipType
+						techColor={tech.color} // Pass tech.color
+					/>
+				))}
 			</div>
 		);
 	}

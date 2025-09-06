@@ -60,7 +60,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({
 
 	return (
 		<Accordion.Root
-			className="AccordionRoot flex-1 border-b-1 pt-1 pb-1"
+			className="AccordionRoot flex-1 border-b-1 pt-[3px] pb-[3px]"
 			style={{ borderColor: "var(--accent-track)" }}
 			type="single"
 			collapsible

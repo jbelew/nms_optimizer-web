@@ -32,7 +32,8 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("deflector") ||
 		lowerLabel.includes("mag-field") ||
 		lowerLabel.includes("torpedo") ||
-		lowerLabel.includes("landing");
+		lowerLabel.includes("landing") ||
+		lowerLabel.includes("deadeye");
 	const isReactor = lowerLabel.includes("reactor");
 
 	if (isUpgrade || isBooster || isReactor) {
