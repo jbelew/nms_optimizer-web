@@ -26,7 +26,7 @@ interface TechTreeContentProps {
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 	({ handleOptimize, solving, techTree, selectedShipType }) => {
-		const isGridFull = useGridStore((state) => state.isGridFull); // Calculate isGridFull once here
+		const isGridFull = useGridStore((state) => state.isGridFull()); // Calculate isGridFull once here
 
 		/**
 		 * Memoized and processed version of the tech tree.

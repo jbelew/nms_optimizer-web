@@ -41,7 +41,7 @@ const typeImageMap: TypeImageMap = {
  * @property {number} index - The index of this section.
  * @property {(tech: string) => Promise<void>} handleOptimize - Callback to trigger optimization.
  * @property {boolean} solving - Indicates if an optimization is in progress.
- * @property {() => boolean} isGridFull - Function that returns true if the grid is full.
+ * @property {boolean} isGridFull - Boolean that returns true if the grid is full.
  * @property {string} selectedShipType - The currently selected ship type.
  */
 interface TechTreeSectionProps {
@@ -50,7 +50,7 @@ interface TechTreeSectionProps {
 	index: number;
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
-	isGridFull: () => boolean; // Add isGridFull prop
+	isGridFull: boolean; // Add isGridFull prop
 	selectedShipType: string; // Add selectedShipType prop
 }
 
@@ -64,7 +64,7 @@ interface TechTreeSectionProps {
  * @param {number} props.index - The index of this section (used for internal mapping, not directly rendered).
  * @param {(tech: string) => Promise<void>} props.handleOptimize - Callback function to trigger optimization for a specific technology.
  * @param {boolean} props.solving - Indicates if an optimization calculation is currently in progress.
- * @param {() => boolean} props.isGridFull - A function that returns true if the grid is full, disabling certain actions.
+ * @param {boolean} props.isGridFull - A boolean that is true if the grid is full, disabling certain actions.
  * @param {string} props.selectedShipType - The currently selected ship type, used for filtering or context.
  * @returns {JSX.Element} The rendered TechTreeSection component.
  */
@@ -106,7 +106,7 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 						handleOptimize={handleOptimize}
 						solving={solving}
 						techImage={tech.image} // Pass the tech.image here
-						isGridFull={isGridFull()} // Pass isGridFull down
+						isGridFull={isGridFull} // Pass isGridFull down
 						selectedShipType={selectedShipType} // Pass selectedShipType
 						techColor={tech.color} // Pass tech.color
 					/>

@@ -204,7 +204,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 				</div>
 
 				{/* Right-hand group */}
-				<div className="flex items-start justify-end gap-2">
+				<div className="flex items-start justify-end gap-1">
 					<TechInfoBadges
 						hasTechInGrid={hasTechInGrid}
 						techColor={techColor}
@@ -217,6 +217,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					{hasMultipleGroups && (
 						<Switch
 							mt="1"
+							ml="1"
 							checked={activeGroups[tech] === "max"}
 							onCheckedChange={(checked) =>
 								setActiveGroup(tech, checked ? "max" : "normal")

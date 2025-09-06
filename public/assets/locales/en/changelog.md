@@ -4,7 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.10 (2025-08-02)
+## Version 3.11 (2025-09-06)
+
+- Corvettes now support both **cosmetic** and **min/max** solves.
+  *Note: space is limited, so you’ll only be able to fit two or three min/max solves — choose carefully!*
+
+## Version 3.10 (2025-09-02)
 
 - Added **beta support for Corvettes**. Right now, space is too limited to allow even a partial build using the current approach, but this update lays the groundwork. I’ll be exploring solutions that don’t disrupt the existing models and ML functionality over the next few days, so check back soon.
 
