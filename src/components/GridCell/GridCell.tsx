@@ -121,8 +121,14 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 				</>
 			)}
 			{cell.label && (
-				<span className="text-1xl gridCell__label mt-1 sm:text-3xl lg:text-4xl">
-					{upGradePriority ? upGradePriority : null}
+				<span
+					className={`text-1xl gridCell__label mt-1 sm:text-3xl lg:text-4xl ${
+						upGradePriority?.length > 1
+							? "gridCell__label--corvette"
+							: "gridCell__label"
+					}`}
+				>
+					{upGradePriority ?? null}
 				</span>
 			)}
 		</div>
