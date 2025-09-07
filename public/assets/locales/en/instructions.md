@@ -17,6 +17,19 @@ This tool is for **endgame players** optimizing their platform’s technology la
 
 If you're still unlocking cells or collecting modules, the tool can still provide insights — but it's primarily designed for **fully upgraded platforms**.
 
+## Information on Corvettes
+
+Corvettes work a little differently from other tech platforms — instead of just one set of upgrades, they can have up to three.
+
+- **Cosmetic upgrades** are shown as `Cn`.
+- **Reactor upgrades** are shown as `Rn`.
+
+The solver will also suggest the best Cosmetic upgrades if you’d rather prioritize performance over looks — though in practice, the trade-offs are pretty minimal most of the time.
+
+Keep in mind that a fully upgraded Corvette tech sub-system takes up **a lot** of space. The switches to the right of each Corvette technology let you choose between a **Cosmetic solve** (arranging the items you already have, with minimal tweaks) or a **min/max solve** (fully optimized for performance).
+
+With a full 60 technology slots, you’ll typically only have space for three or four **min/max solves**, so choose wisely.
+
 ## Recommended Builds
 
 For platforms like **Exosuits** and **Exocraft**, where the supercharged cells are fixed, the number of viable layouts is **extremely limited**. Instead of dealing with billions of permutations as we do for starships or multi-tools, we’re working with just a handful of best-case possibilities.
@@ -33,7 +46,7 @@ If you have feedback or want to suggest alternate configurations, feel free to [
 
 Supercharged cells provide major bonuses but are limited — every placement matters. **Avoid blindly matching your in-game supercharged layout.** For best results:
 
-- **Start with one high-impact technology** — one that fits your play style and benefits from two or three supercharged cells, such as _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_, or _Neutron Cannon_.  
+- **Start with one high-impact technology** — one that fits your play style and benefits from two or three supercharged cells, such as _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_, or _Neutron Cannon_.
   Mark those cells as supercharged, then solve.
 - **Use your remaining supercharged cells** for a second priority tech like _Hyperdrive_, _Scanner_, or _Mining Beam_, and solve again. Spreading bonuses usually beats stacking them all on one tech.
 - After your core techs are solved, shift focus to those with **larger module counts** (e.g. _Hyperdrive_, _Starship Trails_) before running out of contiguous space.
