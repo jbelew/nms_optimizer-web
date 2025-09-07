@@ -1,3 +1,20 @@
+# [3.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.10.0...v3.11.0) (2025-09-07)
+
+
+### Bug Fixes
+
+* **messagespinner:** a small spacing fix ([4e56251](https://github.com/jbelew/nms_optimizer-web/commit/4e56251aa0f5fbfcfcea4dbd03d8ae9fcb0976f4))
+* **messagespinner:** fixed a react rendering issue surrounding loading the tech tree ([56f7fc2](https://github.com/jbelew/nms_optimizer-web/commit/56f7fc29c4bd19c3a726982ada5b0c094c6ca242))
+* **recommendedbuilds:** fix for incorrectltly filtering out recommendedbuilds data ([d6970f8](https://github.com/jbelew/nms_optimizer-web/commit/d6970f86e8281668e01ccc14357da6f8c45bf9d8))
+
+
+### Features
+
+* **corvettes:** added support for both cosmetic and min/max solves for corvettes ([024d32c](https://github.com/jbelew/nms_optimizer-web/commit/024d32cfca863da1410fdf10ac8596aa95ded0a5))
+* **userstats:** added corvette data to the dialog ([0595431](https://github.com/jbelew/nms_optimizer-web/commit/0595431ff792d9f1ea818b4a4f20fe065c79bde7))
+
+
+
 # [3.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.9.1...v3.10.0) (2025-09-03)
 
 
