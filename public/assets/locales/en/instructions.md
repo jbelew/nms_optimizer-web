@@ -19,14 +19,14 @@ If you're still unlocking cells or collecting modules, the tool can still provid
 
 ## Information on Corvettes
 
-Corvettes work a little differently from other tech platforms — instead of just one set of upgrades, they can have up to three.
+Corvettes work a little differently from other platforms — instead of just one set of upgrades, they can have up to three.
 
 - **Cosmetic upgrades** are shown as `Cn`.
 - **Reactor upgrades** are shown as `Rn`.
 
 The solver will also suggest the best Cosmetic upgrades if you’d rather prioritize performance over looks — though in practice, the trade-offs are pretty minimal most of the time.
 
-Keep in mind that a fully upgraded Corvette tech sub-system takes up **a lot** of space. The switches to the right of each Corvette technology let you choose between a **Cosmetic solve** (arranging the items you already have, with minimal tweaks) or a **min/max solve** (fully optimized for performance).
+Keep in mind that a fully upgraded Corvette tech sub-system takes up **a lot** of space. The switches to the right of each Corvette technology let you choose between a **Cosmetic solve**, arranging the items automatically placed in technology slot with minimal tweaks and additions, or a **min/max solve** fully optimized for performance.
 
 With a full 60 technology slots, you’ll typically only have space for three or four **min/max solves**, so choose wisely.
 
