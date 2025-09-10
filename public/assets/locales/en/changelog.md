@@ -4,10 +4,15 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.12 (2025-09-10)
+
+- Refactored and cleaned-up the services layer.
+- Added initial 8k models for Corvette "propulsion" systems ... Hyper, Launch, Pulse, and Photonix.
+
 ## Version 3.11 (2025-09-06)
 
 - Corvettes now support both **cosmetic** and **min/max** solves.
-  *Note: space is limited, so you’ll only be able to fit two or three min/max solves — choose carefully!*
+  _Note: space is limited, so you’ll only be able to fit two or three min/max solves — choose carefully!_
 
 ## Version 3.10 (2025-09-02)
 
