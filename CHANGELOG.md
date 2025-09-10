@@ -1,3 +1,12 @@
+# [3.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.11.0...v3.12.0) (2025-09-10)
+
+
+### Features
+
+* **gridcell:** added some color to cosmetic parts gridcell priority labels ([210bb8d](https://github.com/jbelew/nms_optimizer-web/commit/210bb8d27d9f6f01022435069673ea3d6c751ea9))
+
+
+
 # [3.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.10.0...v3.11.0) (2025-09-07)
 
 
