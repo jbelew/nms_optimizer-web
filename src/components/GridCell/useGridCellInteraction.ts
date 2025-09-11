@@ -1,4 +1,4 @@
-import type { Cell, GridStore } from "../../store/GridStore";
+import type { Cell } from "../../store/GridStore";
 import { useCallback, useRef, useState } from "react";
 
 import { useGridStore } from "../../store/GridStore";
@@ -38,19 +38,18 @@ export const useGridCellInteraction = (
 	columnIndex: number,
 	isSharedGrid: boolean
 ) => {
-	const handleCellTap = useGridStore((state: GridStore) => state.handleCellTap);
-	const handleCellDoubleTap = useGridStore((state: GridStore) => state.handleCellDoubleTap);
-	const revertCellTap = useGridStore((state: GridStore) => state.revertCellTap);
-	const clearInitialCellStateForTap = useGridStore(
-		(state: GridStore) => state.clearInitialCellStateForTap
-	);
-	const toggleCellActive = useGridStore((state: GridStore) => state.toggleCellActive);
-	const toggleCellSupercharged = useGridStore((state: GridStore) => state.toggleCellSupercharged);
-	const totalSupercharged = useGridStore((state: GridStore) =>
-		state.selectTotalSuperchargedCells()
-	);
-	const superchargedFixed = useGridStore((state: GridStore) => state.superchargedFixed);
-	const gridFixed = useGridStore((state: GridStore) => state.gridFixed);
+	const {
+		handleCellTap,
+		handleCellDoubleTap,
+		revertCellTap,
+		clearInitialCellStateForTap,
+		toggleCellActive,
+		toggleCellSupercharged,
+		selectTotalSuperchargedCells,
+		superchargedFixed,
+		gridFixed,
+	} = useGridStore.getState();
+	const totalSupercharged = selectTotalSuperchargedCells();
 	const [isTouching, setIsTouching] = useState(false);
 
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);

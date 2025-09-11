@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
-import { useGridStore } from "@/store/GridStore";
+import { useCell } from "@/hooks/useCell/useCell";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
@@ -80,7 +80,7 @@ interface GridCellProps {
  * @returns {JSX.Element} The rendered GridCell component.
  */
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
-	const cell = useGridStore((state) => state.grid.cells[rowIndex][columnIndex]);
+	const cell = useCell(rowIndex, columnIndex);
 	const { t } = useTranslation();
 
 	const {

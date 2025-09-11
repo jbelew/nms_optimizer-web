@@ -4,7 +4,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
 import { TechState, useTechStore } from "../../store/TechStore";
 // Import the component after mocks are defined
 import GridCell from "./GridCell";
@@ -19,10 +18,31 @@ let mockCellState = {
 	tech: "some-tech",
 };
 
-// Mock the GridStore and its actions
-vi.mock("../../store/GridStore", () => ({
-	useGridStore: vi.fn(),
+import { useCell } from "@/hooks/useCell/useCell";
+
+// Mock the useCell hook
+vi.mock("../../hooks/useCell/useCell", () => ({
+	useCell: vi.fn(),
 }));
+
+// Mock the GridStore and its actions
+vi.mock("../../store/GridStore", () => {
+	const mockState = {
+		handleCellTap: vi.fn(),
+		handleCellDoubleTap: vi.fn(),
+		revertCellTap: vi.fn(),
+		clearInitialCellStateForTap: vi.fn(),
+		toggleCellActive: vi.fn(),
+		toggleCellSupercharged: vi.fn(),
+		selectTotalSuperchargedCells: vi.fn(() => 0),
+		superchargedFixed: false,
+		gridFixed: false,
+	};
+	const useGridStore = vi.fn(() => mockState);
+	// @ts-expect-error - Mocking getState
+	useGridStore.getState = () => mockState;
+	return { useGridStore };
+});
 
 vi.mock("../../store/ShakeStore", () => ({
 	useShakeStore: vi.fn(() => ({
@@ -60,18 +80,8 @@ describe("GridCell", () => {
 			tech: "some-tech",
 		};
 
-		// Mock useGridStore to return a specific cell state and actions
-		(useGridStore as unknown as Mock).mockImplementation(
-			(selector: (state: unknown) => unknown) => {
-				const state = {
-					grid: { cells: [[mockCellState]] },
-					selectTotalSuperchargedCells: vi.fn(() => 0),
-					superchargedFixed: false,
-					gridFixed: false,
-				};
-				return selector(state);
-			}
-		);
+		// Mock useCell to return a specific cell state
+		(useCell as unknown as Mock).mockReturnValue(mockCellState);
 
 		(useTechStore as unknown as Mock).mockImplementation(
 			(selector: (state: TechState) => unknown) => {
