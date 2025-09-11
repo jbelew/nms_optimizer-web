@@ -96,7 +96,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	}, [activeGroup]);
 
 	const hasRewardModules = rewardModules.length > 0;
-	const moduleCount = activeGroup?.module_count || 0;
+	const moduleCount = (activeGroup?.module_count || 0) - rewardModules.length;
 
 	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
 	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
