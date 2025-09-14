@@ -34,6 +34,12 @@ interface TechInfoProps {
 	handleCheckboxChange: (moduleId: string) => void;
 }
 
+/**
+ * Renders the information for a tech tree row, including the name and any reward modules.
+ *
+ * @param {TechInfoProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered tech info.
+ */
 export const TechInfo: React.FC<TechInfoProps> = ({
 	translatedTechName,
 	hasRewardModules,

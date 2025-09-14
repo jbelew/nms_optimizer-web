@@ -2,6 +2,11 @@ import type { JSX } from "react";
 import { useMemo } from "react";
 import { Flex, Skeleton } from "@radix-ui/themes";
 
+/**
+ * A skeleton component that displays a loading state for the tech tree.
+ *
+ * @returns {JSX.Element} The rendered skeleton component.
+ */
 export function SuspenseSkeleton() {
 	const skeletons = useMemo(() => {
 		const totalSections = 3 + Math.floor(Math.random() * 3); // 3–5 sections

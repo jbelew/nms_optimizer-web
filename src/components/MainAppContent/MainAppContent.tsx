@@ -18,10 +18,6 @@ import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 
-/**
- * @typedef {object} MainAppContentInternalProps
- * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
- */
 type MainAppContentInternalProps = {
 	/** The build version of the application, to be displayed in the footer. */
 	buildVersion: string;
@@ -31,7 +27,6 @@ type MainAppContentInternalProps = {
  * The core component that renders the main application content.
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
- * @param {MainAppContentInternalProps} props - The props for the component.
  */
 const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();

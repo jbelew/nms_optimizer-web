@@ -69,7 +69,6 @@ const ShipSelectionLoadingState = () => {
  * This component is memoized to prevent unnecessary re-renders.
  *
  * @param {ShipSelectionProps} props - The props for the ShipSelectionInternal component.
- * @param {boolean} props.solving - Indicates if an optimization calculation is in progress, which disables selection.
  * @returns {JSX.Element} The rendered ShipSelectionInternal component.
  */
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
@@ -149,6 +148,13 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 });
 ShipSelectionInternal.displayName = "ShipSelectionInternal";
 
+/**
+ * ShipSelection component is a wrapper that provides a Suspense fallback
+ * for the ShipSelectionInternal component.
+ *
+ * @param {ShipSelectionProps} props - The props for the ShipSelection component.
+ * @returns {JSX.Element} The rendered ShipSelection component with Suspense.
+ */
 export const ShipSelection: React.FC<ShipSelectionProps> = (props) => {
 	return (
 		<Suspense fallback={<ShipSelectionLoadingState />}>
@@ -177,10 +183,6 @@ interface ShipTypesDropdownProps {
  * It groups ship types by their category and displays them as radio items.
  *
  * @param {ShipTypesDropdownProps} props - The props for the ShipTypesDropdown component.
- * @param {string} props.selectedShipType - The currently selected ship type.
- * @param {(option: string) => void} props.handleOptionSelect - Callback function for when a ship type is selected.
- * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
- * @param {ShipTypes} props.shipTypes - The available ship types data.
  * @returns {JSX.Element} The rendered ShipTypesDropdown component.
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(

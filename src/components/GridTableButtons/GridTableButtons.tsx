@@ -25,10 +25,6 @@ interface GridTableButtonsProps {
  * These include buttons for showing instructions, about page, sharing the grid, and resetting the grid.
  *
  * @param {GridTableButtonsProps} props - The props for the GridTableButtons component.
- * @param {boolean} props.solving - Indicates if an optimization calculation is in progress.
- * @param {() => string} props.updateUrlForShare - Function to generate the shareable URL.
- * @param {() => void} props.updateUrlForReset - Function to reset the URL.
- * @param {React.MutableRefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scrolling.
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({

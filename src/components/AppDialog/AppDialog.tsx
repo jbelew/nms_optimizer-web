@@ -37,7 +37,6 @@ interface AppDialogProps {
 /**
  * A reusable dialog component for displaying various types of content.
  *
- * @param {AppDialogProps} props - The props for the component.
  * @returns {React.ReactElement} - The rendered dialog component.
  */
 const AppDialog: React.FC<AppDialogProps> = ({

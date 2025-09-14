@@ -16,6 +16,12 @@ interface ActionButtonsProps {
 	handleReset: () => void;
 }
 
+/**
+ * Renders the action buttons for a tech tree row (optimize/update and reset).
+ *
+ * @param {ActionButtonsProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered action buttons.
+ */
 export const ActionButtons: React.FC<ActionButtonsProps> = ({
 	tech,
 	hasTechInGrid,

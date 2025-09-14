@@ -17,6 +17,11 @@ interface State {
 	errorInfo?: ErrorInfo;
 }
 
+/**
+ * A fallback component to be displayed when an error is caught by the ErrorBoundary.
+ *
+ * @returns {JSX.Element} The rendered fallback component.
+ */
 const ErrorFallback = () => {
 	const isLarge = useBreakpoint("1024px");
 

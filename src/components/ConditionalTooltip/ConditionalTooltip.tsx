@@ -16,6 +16,12 @@ interface ConditionalTooltipProps {
 	delayDuration?: number;
 }
 
+/**
+ * A tooltip that is only displayed on non-touch devices.
+ *
+ * @param {ConditionalTooltipProps} props - The props for the component.
+ * @returns {React.ReactElement} - The rendered component.
+ */
 export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
 	children,
 	label,

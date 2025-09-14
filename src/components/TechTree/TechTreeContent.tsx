@@ -22,6 +22,10 @@ interface TechTreeContentProps {
  * Renders the main content of the tech tree, processing and displaying the sections.
  *
  * @param {TechTreeContentProps} props - The props for the component.
+ * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
+ * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
+ * @param {TechTree} props.techTree - The tech tree data.
+ * @param {string} props.selectedShipType - The currently selected ship type.
  * @returns {JSX.Element} The rendered tech tree content.
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(

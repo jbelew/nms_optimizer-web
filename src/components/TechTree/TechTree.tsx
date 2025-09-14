@@ -23,7 +23,7 @@ interface TechTreeProps {
  * the entire component (including the RecommendedBuild button) is replaced
  * by the Suspense fallback, solving the stale UI issue.
  *
- * @param {TechTreeProps} props - The component props.
+ * @param {object} props - The component props.
  * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
  * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
@@ -115,6 +115,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
  * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
+ * @returns {JSX.Element} The rendered TechTreeComponent component.
  */
 const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
 	return (

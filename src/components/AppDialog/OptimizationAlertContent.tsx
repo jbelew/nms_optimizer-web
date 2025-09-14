@@ -15,9 +15,6 @@ interface OptimizationAlertContentProps {
  * and provides options to cancel or force optimize.
  *
  * @param {OptimizationAlertContentProps} props - The props for the OptimizationAlertContent component.
- * @param {string} props.technologyName - The name of the technology that needs more space.
- * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
- * @param {() => Promise<void>} props.onForceOptimize - Callback function to be called when force optimize is selected.
  * @returns {JSX.Element} The rendered OptimizationAlertContent component.
  */
 export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({

@@ -9,6 +9,13 @@ import { useTechStore } from "./TechStore";
 
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
+/**
+ * Creates a debounced version of a setItem function.
+ *
+ * @param setItemFn The function to debounce.
+ * @param msToWait The number of milliseconds to wait before invoking the function.
+ * @returns A debounced version of the setItem function.
+ */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number
@@ -133,6 +140,12 @@ export const createGrid = (width: number, height: number): Grid => ({
 	height,
 });
 
+/**
+ * Creates a cell from module data.
+ *
+ * @param moduleData The module data to create the cell from.
+ * @returns The created cell.
+ */
 const createCellFromModuleData = (moduleData: Module): Cell => {
 	return {
 		active: moduleData?.active !== false,
@@ -301,6 +314,11 @@ const debouncedStorage = {
 	},
 };
 
+/**
+ * Returns the search property of the window's location object.
+ *
+ * @returns The search property of the window's location object, or an empty string if the window or location are not defined.
+ */
 const getWindowSearch = () =>
 	typeof window === "undefined" || !window.location ? "" : window.location.search;
 
@@ -313,6 +331,12 @@ const getWindowSearch = () =>
 export const useGridStore = create<GridStore>()(
 	persist(
 		immer((set, get) => {
+			/**
+			 * Applies a grid definition to the state.
+			 *
+			 * @param state The current state.
+			 * @param definition The grid definition to apply.
+			 */
 			const applyGridDefinition = (
 				state: GridStore,
 				definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }

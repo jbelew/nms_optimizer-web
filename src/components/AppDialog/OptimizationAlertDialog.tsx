@@ -18,10 +18,6 @@ interface OptimizationAlertDialogProps {
  * to display the specific alert message.
  *
  * @param {OptimizationAlertDialogProps} props - The props for the OptimizationAlertDialog component.
- * @param {boolean} props.isOpen - Controls the visibility of the dialog.
- * @param {string | null} props.technologyName - The name of the technology causing the alert, or null if not applicable.
- * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
- * @param {() => Promise<void>} props.onForceOptimize - Callback function to be called when force optimize is selected.
  * @returns {JSX.Element | null} The rendered OptimizationAlertDialog component, or null if `technologyName` is null.
  */
 const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({

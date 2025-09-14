@@ -22,7 +22,6 @@ interface AppHeaderProps {
  * It includes the application title, a language selector, and buttons for user statistics and changelog.
  *
  * @param {AppHeaderProps} props - The props for the AppHeaderInternal component.
- * @param {() => void} props.onShowChangelog - Callback function to be called when the changelog button is clicked.
  * @returns {JSX.Element} The rendered AppHeaderInternal component.
  */
 const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {

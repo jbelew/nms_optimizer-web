@@ -22,6 +22,12 @@ interface TechInfoBadgesProps {
 	techSolvedBonus: number;
 }
 
+/**
+ * Renders badges for a tech tree row, including a bonus status icon and a module count.
+ *
+ * @param {TechInfoBadgesProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered tech info badges.
+ */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = React.memo(
 	({
 		hasTechInGrid,

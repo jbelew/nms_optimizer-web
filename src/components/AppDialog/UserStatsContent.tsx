@@ -89,7 +89,6 @@ interface UserStatsContentProps {
  * It fetches data, aggregates it, and renders pie charts.
  *
  * @param {UserStatsContentProps} props - The props for the UserStatsContent component.
- * @param {() => void} props.onClose - Callback function to be called when the dialog is closed.
  * @returns {JSX.Element} The rendered UserStatsContent component.
  */
 export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {

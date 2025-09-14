@@ -1,6 +1,11 @@
 import React from "react";
 import { Skeleton, Text } from "@radix-ui/themes";
 
+/**
+ * A skeleton component that displays lorem ipsum text.
+ *
+ * @returns {React.ReactElement} The rendered skeleton component.
+ */
 const LoremIpsumSkeleton: React.FC = () => {
 	return (
 		<article className="text-sm sm:text-base">

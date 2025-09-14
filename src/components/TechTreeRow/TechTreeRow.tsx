@@ -61,6 +61,9 @@ export interface TechTreeRowProps {
 
 /**
  * Renders a single row in the technology tree, allowing users to optimize, reset, and view module details.
+ *
+ * @param {TechTreeRowProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered tech tree row.
  */
 const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 	tech,

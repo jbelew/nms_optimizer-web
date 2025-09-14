@@ -70,6 +70,10 @@ const LanguageSelector: React.FC = () => {
 		});
 	};
 
+	/**
+	 * Handles the click event for the "Request Translation" button.
+	 * Navigates to the translation page.
+	 */
 	const handleRequestTranslationClick = () => {
 		navigate("/translation");
 	};

@@ -59,13 +59,6 @@ interface TechTreeSectionProps {
  * It displays a header with an optional image and a list of `TechTreeRow` components.
  *
  * @param {TechTreeSectionProps} props - The props for the TechTreeSection component.
- * @param {string} props.type - The category type of the technologies (e.g., "Weaponry", "Hyperdrive").
- * @param {TechTreeItem[]} props.technologies - An array of technology items belonging to this section.
- * @param {number} props.index - The index of this section (used for internal mapping, not directly rendered).
- * @param {(tech: string) => Promise<void>} props.handleOptimize - Callback function to trigger optimization for a specific technology.
- * @param {boolean} props.solving - Indicates if an optimization calculation is currently in progress.
- * @param {boolean} props.isGridFull - A boolean that is true if the grid is full, disabling certain actions.
- * @param {string} props.selectedShipType - The currently selected ship type, used for filtering or context.
  * @returns {JSX.Element} The rendered TechTreeSection component.
  */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(

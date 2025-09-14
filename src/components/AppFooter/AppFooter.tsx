@@ -13,7 +13,6 @@ interface AppFooterProps {
  * It includes links for issues, build version information, and a "Buy Me a Coffee" component.
  *
  * @param {AppFooterProps} props - The props for the AppFooterInternal component.
- * @param {string} props.buildVersion - The build version of the application.
  * @returns {JSX.Element} The rendered AppFooterInternal component.
  */
 const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
@@ -48,6 +47,9 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 	);
 };
 
+/**
+ * A memoized version of the AppFooterInternal component.
+ */
 const AppFooter = React.memo(AppFooterInternal);
 
 export default AppFooter;

@@ -20,7 +20,12 @@ export interface UseOptimizeReturn {
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 }
 
-// Type guard for ApiResponse
+/**
+ * Type guard for ApiResponse
+ *
+ * @param {unknown} value - The value to check.
+ * @returns {value is ApiResponse} - Whether the value is an ApiResponse.
+ */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
 	const obj = value as Record<string, unknown>;

@@ -5,17 +5,8 @@ import { useTranslation } from "react-i18next";
 import AppDialog from "./AppDialog";
 import { UserStatsContent } from "./UserStatsContent";
 
-/**
- * Props for the UserStatsDialog component.
- */
 interface UserStatsDialogProps {
-	/**
-	 *  Indicates whether the dialog is open or closed.
-	 */
 	isOpen: boolean;
-	/**
-	 * Callback function to be called when the dialog is closed.
-	 */
 	onClose: () => void;
 }
 
@@ -24,7 +15,7 @@ interface UserStatsDialogProps {
  * It serves as a wrapper around the AppDialog component, providing the specific content for user stats.
  *
  * @param {UserStatsDialogProps} props - The props for the component.
- * @returns {FC<UserStatsDialogProps>} The UserStatsDialog component.
+ * @returns {JSX.Element} The UserStatsDialog component.
  */
 const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();

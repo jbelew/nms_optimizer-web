@@ -23,13 +23,6 @@ interface RowControlButtonProps {
  * They are disabled if there are any modules in the grid or if the grid is fixed.
  *
  * @param {RowControlButtonProps} props - The props for the GridControlButtons component.
- * @param {number} props.rowIndex - The index of the row this control button is associated with.
- * @param {(rowIndex: number) => void} props.activateRow - Function to call when activating a row.
- * @param {(rowIndex: number) => void} props.deActivateRow - Function to call when deactivating a row.
- * @param {boolean} props.hasModulesInGrid - True if there are any modules currently placed in the grid.
- * @param {boolean} props.isFirstInactiveRow - True if this row is the first available inactive row.
- * @param {boolean} props.isLastActiveRow - True if this row is the last active row.
- * @param {boolean} props.gridFixed - True if the grid is currently in a fixed (read-only) state.
  * @returns {JSX.Element} The rendered GridControlButtons component.
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({

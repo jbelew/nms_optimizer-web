@@ -24,12 +24,12 @@ let lastTapInfo = {
  * @param {number} columnIndex - The column index of the cell.
  * @param {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
  * @returns {{
- *   isTouching: boolean;
- *   handleClick: (event: React.MouseEvent) => void;
- *   handleContextMenu: (event: React.MouseEvent) => void;
- *   handleTouchStart: () => void;
- *   handleTouchEnd: () => void;
- *   handleKeyDown: (event: React.KeyboardEvent) => void;
+ * isTouching: boolean;
+ * handleClick: (event: React.MouseEvent) => void;
+ * handleContextMenu: (event: React.MouseEvent) => void;
+ * handleTouchStart: () => void;
+ * handleTouchEnd: () => void;
+ * handleKeyDown: (event: React.KeyboardEvent) => void;
  * }} An object containing interaction handlers and the `isTouching` state.
  */
 export const useGridCellInteraction = (

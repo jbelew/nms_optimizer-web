@@ -4,6 +4,11 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { SuspenseSkeleton } from "./SuspenseSkeleton";
 
+/**
+ * A skeleton component that displays a loading state for the tech tree.
+ *
+ * @returns {JSX.Element} The rendered skeleton component.
+ */
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";

@@ -29,9 +29,6 @@ interface RecommendedBuildProps {
  * It provides options to select and apply different builds based on the available tech tree.
  *
  * @param {RecommendedBuildProps} props - The props for the RecommendedBuild component.
- * @param {TechTree} props.techTree - The technology tree data containing recommended builds.
- * @param {React.MutableRefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scrolling after applying a build.
- * @param {boolean} props.isLarge - Indicates if the current screen size is large or larger.
  * @returns {JSX.Element} The rendered RecommendedBuild component.
  */
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
