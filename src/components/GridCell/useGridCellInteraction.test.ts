@@ -48,8 +48,8 @@ describe("useGridCellInteraction", () => {
 			return baseMockGridStoreState;
 		});
 
-		// Also mock the getState method
-		mockUseGridStore.getState = () => baseMockGridStoreState;
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => baseMockGridStoreState;
 
 		mockUseShakeStore.mockImplementation((selector) => {
 			const state = { setShaking: mockSetShaking };
@@ -104,11 +104,11 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if superchargedFixed on double tap", () => {
-		// @ts-expect-error - Mocking getState
-		mockUseGridStore.getState = () => ({
-			...baseMockGridStoreState,
-			superchargedFixed: true,
-		});
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => ({
+				...baseMockGridStoreState,
+				superchargedFixed: true,
+			});
 
 		const { result } = renderGridCellHook();
 		act(() => {
@@ -125,8 +125,8 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if gridFixed on double tap", () => {
-		// @ts-expect-error - Mocking getState
-		mockUseGridStore.getState = () => ({ ...baseMockGridStoreState, gridFixed: true });
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => ({ ...baseMockGridStoreState, gridFixed: true });
 
 		const { result } = renderGridCellHook();
 		act(() => {
@@ -143,11 +143,11 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should call revertCellTap and trigger shake if totalSupercharged >= 4 and cell is not supercharged on double tap", () => {
-		// @ts-expect-error - Mocking getState
-		mockUseGridStore.getState = () => ({
-			...baseMockGridStoreState,
-			selectTotalSuperchargedCells: () => 4,
-		});
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => ({
+				...baseMockGridStoreState,
+				selectTotalSuperchargedCells: vi.fn(() => 4),
+			});
 
 		const { result } = renderGridCellHook({ supercharged: false });
 		act(() => {
@@ -164,8 +164,8 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should trigger shake and not call handleCellTap if gridFixed on single tap", () => {
-		// @ts-expect-error - Mocking getState
-		mockUseGridStore.getState = () => ({ ...baseMockGridStoreState, gridFixed: true });
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => ({ ...baseMockGridStoreState, gridFixed: true });
 
 		const { result } = renderGridCellHook();
 		act(() => {
@@ -179,11 +179,11 @@ describe("useGridCellInteraction", () => {
 	});
 
 	it("should trigger shake and not call handleCellTap if superchargedFixed and cell is supercharged on single tap", () => {
-		// @ts-expect-error - Mocking getState
-		mockUseGridStore.getState = () => ({
-			...baseMockGridStoreState,
-			superchargedFixed: true,
-		});
+		(useGridStore as unknown as { getState: () => typeof baseMockGridStoreState }).getState =
+			() => ({
+				...baseMockGridStoreState,
+				superchargedFixed: true,
+			});
 
 		const { result } = renderGridCellHook({ supercharged: true });
 		act(() => {

@@ -4,6 +4,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
+import { useCell } from "@/hooks/useCell/useCell";
+
 import { TechState, useTechStore } from "../../store/TechStore";
 // Import the component after mocks are defined
 import GridCell from "./GridCell";
@@ -17,8 +19,6 @@ let mockCellState = {
 	adjacency_bonus: 1,
 	tech: "some-tech",
 };
-
-import { useCell } from "@/hooks/useCell/useCell";
 
 // Mock the useCell hook
 vi.mock("../../hooks/useCell/useCell", () => ({
