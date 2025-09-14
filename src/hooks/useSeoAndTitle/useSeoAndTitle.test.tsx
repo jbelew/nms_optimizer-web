@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
@@ -20,8 +20,6 @@ vi.mock("react-i18next", () => ({
 	},
 }));
 
-// Helper function to sort URL search parameters for consistent comparison
-
 /**
  * Test suite for the `useSeoAndTitle` hook.
  */
@@ -29,26 +27,11 @@ describe("useSeoAndTitle", () => {
 	const mockUseLocation = useLocation as Mock;
 	const mockUseTranslation = useTranslation as Mock;
 
-	let originalAppendChild: (node: Node) => Node;
-	let originalQuerySelector: (selectors: string) => Element | null;
-	let originalQuerySelectorAll: (selectors: string) => NodeListOf<Element>;
-	let originalCreateElement: (tagName: string) => HTMLElement;
-	let originalRemove: () => void;
-	let originalURLSearchParams: typeof URLSearchParams;
-
 	/**
 	 * Sets up mocks and initializes test environment before each test.
 	 */
 	beforeEach(() => {
 		vi.clearAllMocks();
-
-		// Store original DOM methods
-		originalAppendChild = document.head.appendChild;
-		originalQuerySelector = document.querySelector;
-		originalQuerySelectorAll = document.querySelectorAll;
-		originalCreateElement = document.createElement;
-		originalRemove = HTMLLinkElement.prototype.remove;
-		originalURLSearchParams = global.URLSearchParams;
 
 		// Reset document.head content before each test
 		document.head.innerHTML = "";
@@ -59,12 +42,6 @@ describe("useSeoAndTitle", () => {
 			writable: true,
 		});
 		Object.defineProperty(document, "title", { value: "", writable: true });
-
-		// Mock URLSearchParams constructor
-		Object.defineProperty(global, "URLSearchParams", {
-			value: vi.fn((init) => new originalURLSearchParams(init)),
-			writable: true,
-		});
 
 		// Default mocks for useLocation and useTranslation
 		mockUseLocation.mockReturnValue({ pathname: "/", search: "" });
@@ -81,16 +58,6 @@ describe("useSeoAndTitle", () => {
 	});
 
 	afterEach(() => {
-		/**
-		 * Restores original DOM methods and mocks after each test.
-		 */
-		// Restore original DOM methods. Type assertion is needed because the mock changes the type slightly.
-		document.head.appendChild = originalAppendChild as typeof document.head.appendChild;
-		document.querySelector = originalQuerySelector;
-		document.querySelectorAll = originalQuerySelectorAll;
-		document.createElement = originalCreateElement;
-		HTMLLinkElement.prototype.remove = originalRemove;
-		global.URLSearchParams = originalURLSearchParams;
 		vi.restoreAllMocks();
 	});
 

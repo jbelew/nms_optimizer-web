@@ -78,6 +78,7 @@ describe("useMarkdownContent", () => {
 	});
 
 	it("should handle fetch error", async () => {
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		fetchSpy.mockResolvedValueOnce(
 			new Response(null, { status: 404, statusText: "Not Found" })
 		);
@@ -91,9 +92,11 @@ describe("useMarkdownContent", () => {
 		});
 
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
+		consoleErrorSpy.mockRestore();
 	});
 
 	it("should fall back to default language if specific language not found", async () => {
+		const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 		mockUseTranslation.mockReturnValue({
 			i18n: {
 				language: "fr-FR",
@@ -118,6 +121,7 @@ describe("useMarkdownContent", () => {
 		expect(fetchSpy).toHaveBeenCalledTimes(2);
 		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/fr/localized-file.md");
 		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/en/localized-file.md");
+		consoleWarnSpy.mockRestore();
 	});
 
 	it("should always fetch changelog in English", async () => {
@@ -145,6 +149,7 @@ describe("useMarkdownContent", () => {
 	});
 
 	it("should handle network error during fetch", async () => {
+		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		fetchSpy.mockRejectedValueOnce(new TypeError("Network request failed"));
 
 		const { result } = renderHook(() => useMarkdownContent("network-error-file"));
@@ -156,5 +161,6 @@ describe("useMarkdownContent", () => {
 		});
 
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
+		consoleErrorSpy.mockRestore();
 	});
 });

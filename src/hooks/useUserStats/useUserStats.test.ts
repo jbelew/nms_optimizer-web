@@ -9,12 +9,14 @@ describe("useUserStats", () => {
 		vi.resetAllMocks();
 	});
 
-	it("should return initial state correctly", () => {
+	it("should return initial state correctly", async () => {
 		const { result } = renderHook(() => useUserStats());
 
-		expect(result.current.data).toBeNull();
-		expect(result.current.loading).toBe(true);
-		expect(result.current.error).toBeNull();
+		await waitFor(() => {
+			expect(result.current.data).toBeNull();
+			expect(result.current.loading).toBe(true);
+			expect(result.current.error).toBeNull();
+		});
 	});
 
 	it("should fetch data successfully", async () => {

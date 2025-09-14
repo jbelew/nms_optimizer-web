@@ -216,6 +216,7 @@ describe("useOptimize", () => {
 
 	describe("error and cleanup handling", () => {
 		it("should handle connection error", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			const setShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockReturnValue({
 				setShowError: setShowErrorMock,
@@ -240,9 +241,11 @@ describe("useOptimize", () => {
 			expect(setShowErrorMock).toHaveBeenCalledWith(true);
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.disconnect).toHaveBeenCalled();
+			consoleErrorSpy.mockRestore();
 		});
 
 		it("should handle invalid API response", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			const setShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockReturnValue({
 				setShowError: setShowErrorMock,
@@ -267,6 +270,7 @@ describe("useOptimize", () => {
 			expect(setShowErrorMock).toHaveBeenCalledWith(true);
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.disconnect).toHaveBeenCalled();
+			consoleErrorSpy.mockRestore();
 		});
 	});
 

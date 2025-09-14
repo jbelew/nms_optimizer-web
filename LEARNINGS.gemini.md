@@ -332,3 +332,35 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     *   **Strategic Use of Test-Only Globals:** Exposing specific store functions or states to the `window` object, guarded by `import.meta.env.VITE_E2E_TESTING`, is a powerful technique for creating stable and reliable e2e tests without polluting production code. This is a valuable pattern for testing complex React/Zustand applications.
     *   **Patience and Iteration:** Debugging inconsistent e2e tests requires patience, systematic elimination of variables, and iterative refinement of the test approach.
     *   **User Guidance is Invaluable:** The user's direct guidance and hints were crucial in navigating the complexities of this task and correcting my misunderstandings. I must continue to listen carefully and learn from their expertise.
+---
+## 2025-09-14: Systematic Test Suite Cleanup
+
+### Perceive & Understand
+
+*   **Request:** The user asked me to fix "weird" tests in `useSeoAndTitle.test.tsx`, which they believed were obsolete after moving logic to `server.js`.
+*   **Context:** The initial request led to a broader investigation of the test suite's health. I discovered several issues beyond the initial scope:
+    1.  The `useSeoAndTitle` hook was still in use for client-side title updates, but its tests were trying to make network calls, causing `ECONNREFUSED` errors.
+    2.  The test for `useUserStats` was triggering React `act()` warnings due to unhandled asynchronous state updates.
+    3.  The test output was noisy with expected `console.error` and `console.warn` messages from tests designed to verify error handling.
+
+### Reason & Plan
+
+*   **Plan:** I formulated a multi-step plan to address each issue systematically.
+    1.  **`useSeoAndTitle` Fix:** Refactor the hook to get its `i18n` instance from the `useTranslation()` hook instead of a direct import, thus breaking the dependency chain that led to network requests in the test environment. Update the tests to reflect the hook's simplified, client-side-only responsibilities.
+    2.  **`act()` Warning Fix:** In `useUserStats.test.ts`, wrap the test assertions in a `waitFor` block to correctly handle the asynchronous state updates from the hook's `useEffect`.
+    3.  **Console Noise Fix:** In `useMarkdownContent.test.tsx` and `useOptimize.test.tsx`, identify the specific tests that were intentionally triggering errors and warnings. In those tests, spy on and temporarily mock `console.error` and `console.warn` to silence the expected output, making the test logs cleaner.
+    4.  **Verification:** After each change, run the entire test suite (`npm run test`) to ensure the fix was effective and introduced no regressions. Finally, run the linter (`npm run lint`) and type checker (`npm run typecheck`) to confirm overall code quality.
+
+### Act & Implement
+
+*   **Action:** I executed the plan step-by-step, applying fixes to `useSeoAndTitle.ts`, `useSeoAndTitle.test.tsx`, `useUserStats.test.ts`, `useMarkdownContent.test.tsx`, and `useOptimize.test.tsx`.
+*   **Action:** After each significant change, I ran the test suite to validate the fix.
+*   **Action:** After all issues were resolved, I ran the linter and type checker, both of which passed successfully.
+
+### Refine & Reflect
+
+*   **Reflection:** This session was a great exercise in holistic codebase maintenance.
+    *   **Look Beyond the Initial Request:** A simple-sounding request to "fix weird tests" uncovered multiple, distinct issues. It's important to analyze the *symptoms* (like test output) thoroughly rather than just addressing the user's initial diagnosis.
+    *   **Test Hygiene is Crucial:** A clean, quiet test suite is a healthy one. Unhandled warnings (`act()`), unexpected side effects (network calls), and noisy console logs can hide real problems. Systematically eliminating these issues improves the reliability and maintainability of the tests.
+    *   **Isolate Dependencies:** The `ECONNREFUSED` error was a classic example of a component being too tightly coupled to a specific implementation (the `i18n` instance with an HTTP backend). Refactoring the hook to use dependency injection (via the `useTranslation` hook) made it more modular and easier to test in isolation. This is a key principle to apply going forward.
+    *   **Systematic Verification:** The iterative process of "fix one thing, then run all tests" was effective in ensuring that each change was a clear improvement and did not introduce new problems.
