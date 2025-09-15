@@ -70,7 +70,7 @@ app.get(/.*/, async (req, res, next) => {
 		tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
 
 		// 2. Hreflang Tags Logic
-		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de"];
+		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
 		if (KNOWN_ROUTES.includes(req.path)) {
 			const pathForHreflang = req.path;
 
@@ -80,9 +80,11 @@ app.get(/.*/, async (req, res, next) => {
 			hreflangSearchParams.delete("ship");
 			hreflangSearchParams.delete("grid");
 			hreflangSearchParams.delete("lng");
-			const searchForHreflang = hreflangSearchParams.toString() ? `?${hreflangSearchParams.toString()}` : "";
+			const searchForHreflang = hreflangSearchParams.toString()
+				? `?${hreflangSearchParams.toString()}`
+				: "";
 
-			SUPPORTED_LANGUAGES.forEach(lang => {
+			SUPPORTED_LANGUAGES.forEach((lang) => {
 				const url = new URL(pathForHreflang + searchForHreflang, baseUrl);
 				url.searchParams.set("lng", lang);
 				tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
@@ -90,7 +92,9 @@ app.get(/.*/, async (req, res, next) => {
 
 			const defaultUrl = new URL(pathForHreflang + searchForHreflang, baseUrl);
 			defaultUrl.searchParams.set("lng", "en"); // Assuming 'en' is the default
-			tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`);
+			tagsToInject.push(
+				`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`
+			);
 		}
 
 		// Inject all tags before the closing </head> tag
@@ -111,7 +115,6 @@ app.get(/.*/, async (req, res, next) => {
 		res.status(500).send("Internal Server Error");
 	}
 });
-
 
 // Serve static assets
 app.use(
