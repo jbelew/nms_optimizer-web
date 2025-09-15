@@ -48,14 +48,20 @@ app.get(/.*/, async (req, res, next) => {
 		// --- SEO Tags Injection ---
 		const baseUrl = `${req.protocol}://${req.headers.host}`;
 		const tagsToInject = [];
+		const requestUrl = new URL(req.originalUrl, baseUrl);
 
 		// 1. Canonical URL Logic
 		let canonicalUrl;
 		if (KNOWN_ROUTES.includes(req.path)) {
-			const url = new URL(req.originalUrl, baseUrl);
+			const url = new URL(requestUrl.href);
 			url.searchParams.delete("platform");
 			url.searchParams.delete("ship");
 			url.searchParams.delete("grid");
+
+			// If no language is specified on a known route, set 'en' as default for the canonical URL.
+			if (!url.searchParams.has("lng")) {
+				url.searchParams.set("lng", "en");
+			}
 			canonicalUrl = url.href;
 		} else {
 			canonicalUrl = new URL("/", baseUrl).href;
@@ -65,25 +71,27 @@ app.get(/.*/, async (req, res, next) => {
 
 		// 2. Hreflang Tags Logic
 		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de"];
-        const isKnownRoute = KNOWN_ROUTES.includes(req.path);
-        const pathForHreflang = isKnownRoute ? req.path : "/";
-        const searchForHreflang = isKnownRoute ? new URL(req.originalUrl, baseUrl).search : "";
+		if (KNOWN_ROUTES.includes(req.path)) {
+			const pathForHreflang = req.path;
 
-		SUPPORTED_LANGUAGES.forEach(lang => {
-			const url = new URL(pathForHreflang + searchForHreflang, baseUrl);
-			url.searchParams.set('lng', lang);
-			url.searchParams.delete("platform");
-			url.searchParams.delete("ship");
-			url.searchParams.delete("grid");
-			tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
-		});
+			// Create a clean search string for hreflang, preserving only non-SEO, non-language params.
+			const hreflangSearchParams = new URLSearchParams(requestUrl.search);
+			hreflangSearchParams.delete("platform");
+			hreflangSearchParams.delete("ship");
+			hreflangSearchParams.delete("grid");
+			hreflangSearchParams.delete("lng");
+			const searchForHreflang = hreflangSearchParams.toString() ? `?${hreflangSearchParams.toString()}` : "";
 
-		const defaultUrl = new URL(pathForHreflang + searchForHreflang, baseUrl);
-		defaultUrl.searchParams.set('lng', 'en'); // Assuming 'en' is the default
-		defaultUrl.searchParams.delete("platform");
-		defaultUrl.searchParams.delete("ship");
-		defaultUrl.searchParams.delete("grid");
-		tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`);
+			SUPPORTED_LANGUAGES.forEach(lang => {
+				const url = new URL(pathForHreflang + searchForHreflang, baseUrl);
+				url.searchParams.set("lng", lang);
+				tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
+			});
+
+			const defaultUrl = new URL(pathForHreflang + searchForHreflang, baseUrl);
+			defaultUrl.searchParams.set("lng", "en"); // Assuming 'en' is the default
+			tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`);
+		}
 
 		// Inject all tags before the closing </head> tag
 		modifiedHtml = modifiedHtml.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
