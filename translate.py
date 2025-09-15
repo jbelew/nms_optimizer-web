@@ -13,6 +13,21 @@ def get_missing_keys(master_dict, target_dict):
                 missing_keys[key] = nested_missing_keys
     return missing_keys
 
+def remove_extra_keys(master_dict, target_dict):
+    keys_to_remove = []
+    for key, value in target_dict.items():
+        if key not in master_dict:
+            keys_to_remove.append(key)
+        elif isinstance(value, dict) and isinstance(master_dict.get(key), dict):
+            remove_extra_keys(master_dict[key], value)
+            if not value:  # If the dictionary becomes empty after removing keys
+                keys_to_remove.append(key)
+
+    for key in keys_to_remove:
+        del target_dict[key]
+    return target_dict
+
+
 def translate_and_update(missing_keys, target_data, lang):
     translator = GoogleTranslator(source='en', target=lang)
     for key, value in missing_keys.items():
@@ -42,18 +57,20 @@ def main():
         with open(target_filepath, 'r', encoding='utf-8') as f:
             target_data = json.load(f)
 
-        missing_keys = get_missing_keys(master_data, target_data)
+        # Remove keys from target that are not in master
+        updated_target_data = remove_extra_keys(master_data, target_data)
+
+        missing_keys = get_missing_keys(master_data, updated_target_data)
 
         if missing_keys:
             print(f"Missing keys for {lang}:")
             print(json.dumps(missing_keys, indent=2, ensure_ascii=False))
-            translate_and_update(missing_keys, target_data, lang)
+            translate_and_update(missing_keys, updated_target_data, lang)
 
-            with open(target_filepath, 'w', encoding='utf-8') as f:
-                json.dump(target_data, f, indent=4, ensure_ascii=False)
-            print(f"Updated {target_filepath}")
-        else:
-            print(f"No missing keys for {lang}.")
+        with open(target_filepath, 'w', encoding='utf-8') as f:
+            json.dump(updated_target_data, f, indent=4, ensure_ascii=False)
+        print(f"Updated and cleaned {target_filepath}")
+
 
 if __name__ == "__main__":
     main()

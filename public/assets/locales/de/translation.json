@@ -1,30 +1,13 @@
 {
     "appHeader": {
-        "subTitle": "KI zur Technologie-Layout-Optimierung",
-        "changeLanguage": "Sprache ändern",
-        "selectLanguageLabel": "Sprache auswählen"
+        "subTitle": "KI zur Technologie-Layout-Optimierung"
     },
     "languageInfo": {
         "nativeName": "Deutsch",
         "changeLanguage": "Sprache ändern",
         "selectLanguage": "Sprache auswählen"
     },
-    "seo": {
-        "defaultDescription": "Der NMS-Optimierer hilft Ihnen beim Entwerfen des perfekten Layouts für Raumschiffe, Multitools, Exocrafts oder Exosuits in No Man's Sky. Verwenden Sie intelligente Optimierungstools, um Adjazenzboni, aufgeladene Slots und die Gesamtleistung zu maximieren.",
-        "defaultKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "homeDescription": "Der NMS-Optimierer hilft Ihnen beim Entwerfen des perfekten Layouts für Raumschiffe, Multitools, Exocrafts oder Exosuits in No Man's Sky. Verwenden Sie intelligente Optimierungstools, um Adjazenzboni, aufgeladene Slots und die Gesamtleistung zu maximieren.",
-        "homeKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "instructionsDescription": "Erfahren Sie, wie Sie die No Man's Sky Technology Layout Optimizer AI verwenden, um die besten Builds für Ihr Raumschiff, Multitool, Exocraft und Exosuit zu erstellen. Befolgen Sie diese Anweisungen, um loszulegen.",
-        "instructionsKeywords": "No Man's Sky, NMS, instructions, how to, guide, tutorial, optimizer help, layout tool help",
-        "aboutDescription": "Erfahren Sie mehr über die No Man's Sky Technology Layout Optimizer AI, ein Tool, das Spielern hilft, optimale Technologielayouts für ihre Ausrüstung in No Man's Sky zu erstellen.",
-        "aboutKeywords": "No Man's Sky, NMS, about, optimizer, layout tool, project, jbelew",
-        "changelogDescription": "Sehen Sie sich die neuesten Updates und Änderungen an der No Man's Sky Technology Layout Optimizer AI an. Sehen Sie sich das vollständige Änderungsprotokoll an, um zu sehen, was neu ist.",
-        "changelogKeywords": "No Man's Sky, NMS, changelog, updates, new features, release notes, optimizer changes",
-        "translationDescription": "Helfen Sie mit, die No Man's Sky Technology Layout Optimizer AI in Ihre Sprache zu übersetzen. Wir suchen Freiwillige, die bei Übersetzungen helfen.",
-        "translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help"
-    },
     "appName": "No Man's Sky Technologie-Layout-Optimierer KI",
-    "loadingMessage": "Uplink wird aktiviert!",
     "buttons": {
         "instructions": "Anleitung",
         "about": "Über",
@@ -77,7 +60,6 @@
             "userStats": "Benutzerstatistik"
         },
         "optimizationAlert": {
-            "title": "Optimierungswarnung!",
             "warning": "-kzzkt- Warnung! -kzzkt-",
             "insufficientSpace": "Es ist nicht genug Platz vorhanden, um alle Module für die Technologie <1>{{technologyName}}</1> effektiv zu platzieren. Dies geschieht normalerweise, wenn zu viele Technologien für deine Plattform ausgewählt sind.",
             "forceOptimizeSuggestion": "Du kannst <1>\"Optimierung erzwingen\"</1> für eine intensivere Lösung versuchen, aber es wird wahrscheinlich keine optimale Anordnung geben. Erwäge, deine Technologien neu zu ordnen oder zu reduzieren, um das Ergebnis zu verbessern.",
@@ -87,11 +69,11 @@
         "userStats": {
             "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
             "description": "In diesem Dialogfeld werden aggregierte Benutzerstatistiken angezeigt, die auf Interaktionen mit dem Optimierer basieren und die am häufigsten aufgeladenen Technologien für Starships und Multi-Tools hervorheben.",
-            "loading": "Benutzerstatistiken laden ...",
             "error": "Benutzerstatistiken nicht laden. Bitte versuchen Sie es später erneut.",
             "starshipChartTitle": "Starship -Technologien",
             "multitoolChartTitle": "Multi-Tool-Technologien",
-            "closeButton": "Schließen"
+            "closeButton": "Schließen",
+            "corvetteChartTitle": "Corvette -Technologien"
         },
         "shareLink": {
             "description": "Kopieren Sie den folgenden Link, um Ihr aktuelles Netzlayout zu teilen. Bitte beachten Sie, dass diese URL ein Schnappschuss ist und nicht automatisch aktualisiert wird.",
@@ -107,17 +89,9 @@
         "supportPrompt": "Wenn du diese Anwendung nützlich fandest, kannst du, wenn du möchtest, ihre Entwicklung hier unterstützen: "
     },
     "translationRequest": {
-        "prompt": "Suche freiwillige Übersetzer! Klicke <1>hier</1> für weitere Informationen.",
         "openDialogLabel": "Übersetzer benötigt!"
     },
     "platformLabel": "PLATTFORM:",
-    "unknownPlatform": "({{platformKey}}) ubekannt",
-    "platformTypes": {
-        "Starship": "Raumschiffe",
-        "Multi-Tool": "Multiwerkzeuge",
-        "Exocraft": "Exocraft",
-        "Other": "Andere"
-    },
     "platforms": {
         "standard": "Standard / Exotische Raumschiffe",
         "sentinel": "Wächterkampfschiffe",
@@ -134,7 +108,8 @@
         "nautilon": "Nautilon-Exocraft",
         "colossus": "Koloss-Exocraft",
         "minotaur": "Minotaurus-Exocraft",
-        "exosuit": "Exo-Anzug"
+        "exosuit": "Exo-Anzug",
+        "corvette": "Corvette (Beta)"
     },
     "techTree": {
         "loading": "TECHNOLOGIE WIRD GELADEN",
@@ -167,11 +142,6 @@
             "selectBuildButton": "Wähle einen Build aus",
             "applyBuildButton": "Build anwenden",
             "summary": "Plattformen mit <1>festen Supercharger-Slots</1> unterstützen <5>empfohlene Builds</5>."
-        },
-        "error": {
-            "title": "-kzzkt- Fehler! -kzzkt-",
-            "message": "Problem beim Laden des Technologiebaums!",
-            "details": "Fehlerdetails: {{details}}"
         }
     },
     "technologies": {
@@ -231,7 +201,6 @@
             "paralysis": "Paralysemörser",
             "personal": "Eigenes Kraftfeld",
             "terrian": "Terrainmanipulator",
-            "runic-laser": "Runenlinse",
             "bolt-caster": "Boltcaster",
             "runic": "Runenobjektiv"
         },
@@ -284,7 +253,8 @@
             "liquidator-right": "Liquidator-Rechter Arm",
             "minotaur": "Minotaurus-Kanone",
             "precision": "Präzisions-Minotaurus-Laser",
-            "mineral": "Mineralverarbeitungsanlage"
+            "mineral": "Mineralverarbeitungsanlage",
+            "minotaur-laser": "Minotaur -Laser"
         },
         "exosuit": {
             "aeration": "Belüftungsmembran",
@@ -312,6 +282,11 @@
             "refiner": "Persönlicher Raffiner",
             "trade": "Handelsrakete",
             "translator": "Automatische Übersetzungsgeräte"
+        },
+        "corvette": {
+            "cockpit": "Corvette -Cockpit",
+            "ceto": "Ceto-Klasse-Reaktor",
+            "habitation": "Wohnsitzmodule"
         }
     },
     "modules": {
@@ -444,7 +419,6 @@
             "paralysis": "Paralyse-Mörser",
             "personal": "Eigenes Kraftfeld",
             "terrian": "Terrainmanipulator",
-            "runic-laser": "Runenlinse",
             "hijacked": "Gekaperter Laser",
             "runic-lens": "Runenobjektiv"
         },
@@ -542,7 +516,6 @@
             "rebuilt": "Wiederaufgebautes Exo-Anzug-Modul",
             "remembrance": "Erinnerung",
             "protection": "Schildgitter",
-            "shield-upgrade": "Schildgitter-Upgrade",
             "starseed": "Sternensaat",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Jetpack-Upgrade",

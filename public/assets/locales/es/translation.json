@@ -1,30 +1,13 @@
 {
     "appHeader": {
-        "subTitle": "IA Optimizador de Diseño de Tecnología",
-        "changeLanguage": "Cambiar idioma",
-        "selectLanguageLabel": "Seleccionar idioma"
+        "subTitle": "IA Optimizador de Diseño de Tecnología"
     },
     "languageInfo": {
         "nativeName": "Español (Generado por IA)",
         "changeLanguage": "Cambiar idioma",
         "selectLanguage": "Seleccionar idioma"
     },
-    "seo": {
-        "defaultDescription": "El Optimizador de NMS te ayuda a diseñar la disposición perfecta de Nave, Multiherramienta, Exocraft o Exotraje en No Man's Sky. Utiliza herramientas de optimización inteligentes para maximizar las bonificaciones de adyacencia, las ranuras supercargadas y el rendimiento general.",
-        "defaultKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "homeDescription": "El Optimizador de NMS te ayuda a diseñar la disposición perfecta de Nave, Multiherramienta, Exocraft o Exotraje en No Man's Sky. Utiliza herramientas de optimización inteligentes para maximizar las bonificaciones de adyacencia, las ranuras supercargadas y el rendimiento general.",
-        "homeKeywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool",
-        "instructionsDescription": "Aprende a usar la IA del Optimizador de Diseño de Tecnología de No Man's Sky para crear las mejores configuraciones para tu Nave, Multiherramienta, Exocraft y Exotraje. Sigue estas instrucciones para empezar.",
-        "instructionsKeywords": "No Man's Sky, NMS, instructions, how to, guide, tutorial, optimizer help, layout tool help",
-        "aboutDescription": "Obtén más información sobre la IA del Optimizador de Diseño de Tecnología de No Man's Sky, una herramienta diseñada para ayudar a los jugadores a crear diseños de tecnología óptimos para su equipo en No Man's Sky.",
-        "aboutKeywords": "No Man's Sky, NMS, about, optimizer, layout tool, project, jbelew",
-        "changelogDescription": "Consulta las últimas actualizaciones y cambios en la IA del Optimizador de Diseño de Tecnología de No Man's Sky. Consulta el registro de cambios completo para ver las novedades.",
-        "changelogKeywords": "No Man's Sky, NMS, changelog, updates, new features, release notes, optimizer changes",
-        "translationDescription": "Ayuda a traducir la IA del Optimizador de Diseño de Tecnología de No Man's Sky a tu idioma. Buscamos voluntarios que ayuden con las traducciones.",
-        "translationKeywords": "No Man's Sky, NMS, translation, translate, localization, volunteer, help"
-    },
     "appName": "IA Optimizador de Diseño de Tecnología de No Man's Sky",
-    "loadingMessage": "¡Activando enlace ascendente!",
     "buttons": {
         "instructions": "Instrucciones",
         "about": "Acerca de",
@@ -77,7 +60,6 @@
             "userStats": "Estadísticas de usuario"
         },
         "optimizationAlert": {
-            "title": "¡Alerta de optimización!",
             "warning": "-kzzkt- ¡Advertencia! -kzzkt-",
             "insufficientSpace": "No hay suficiente espacio para colocar eficazmente todos los módulos para la tecnología <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías para tu plataforma.",
             "forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar optimización\"</1> para una solución más intensiva, pero probablemente no encontrará un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar el resultado.",
@@ -87,11 +69,11 @@
         "userStats": {
             "noDataForChart": "No hay datos disponibles para este gráfico.",
             "description": "Este diálogo muestra estadísticas de usuario agregadas basadas en interacciones con el optimizador, destacando las tecnologías más comúnmente sobrealimentadas para naves espaciales y herramientas múltiples.",
-            "loading": "Cargando estadísticas de usuario ...",
             "error": "No se pudo cargar estadísticas de usuario. Vuelva a intentarlo más tarde.",
             "starshipChartTitle": "Tecnologías de nave de naves",
             "multitoolChartTitle": "Tecnologías múltiples",
-            "closeButton": "Cerca"
+            "closeButton": "Cerca",
+            "corvetteChartTitle": "Corvette Technologies"
         },
         "shareLink": {
             "description": "Copie el siguiente enlace para compartir su diseño de cuadrícula actual. Tenga en cuenta que esta URL es una instantánea y no se actualizará automáticamente.",
@@ -107,17 +89,9 @@
         "supportPrompt": "Si encontraste útil esta aplicación, considera apoyar su desarrollo con: "
     },
     "translationRequest": {
-        "prompt": "¡Se buscan traductores voluntarios! Haz clic <1>aquí</1> para más información.",
         "openDialogLabel": "¡Se necesitan traductores!"
     },
     "platformLabel": "PLATAFORMA:",
-    "unknownPlatform": "Desconocido ({{platformKey}})",
-    "platformTypes": {
-        "Starship": "Naves estelares",
-        "Multi-Tool": "Multiherramientas",
-        "Exocraft": "Exocraft",
-        "Other": "Otro"
-    },
     "platforms": {
         "standard": "Naves Estelares Estándar / Exóticas",
         "sentinel": "Interceptores Centinela",
@@ -134,7 +108,8 @@
         "nautilon": "Exocraft Nautilon",
         "colossus": "Exocraft Coloso",
         "minotaur": "Exocraft Minotauro",
-        "exosuit": "Exotraje"
+        "exosuit": "Exotraje",
+        "corvette": "Corvette (beta)"
     },
     "techTree": {
         "loading": "¡CARGANDO TECNOLOGÍA",
@@ -167,11 +142,6 @@
             "selectBuildButton": "Seleccionar una Configuración",
             "applyBuildButton": "Aplicar Configuración",
             "summary": "Las plataformas con <1>ranuras de sobrecarga fijas</1> son compatibles con <5>configuraciones recomendadas</5>."
-        },
-        "error": {
-            "title": "-kzzkt- ¡Error! -kzzkt-",
-            "message": "¡Problema al cargar el árbol de tecnología!",
-            "details": "Detalles del error: {{details}}"
         }
     },
     "technologies": {
@@ -230,7 +200,6 @@
             "paralysis": "Mortero de Parálisis",
             "personal": "Campo de Fuerza Personal",
             "terrian": "Manipulador de Terreno",
-            "runic-laser": "Láser Rúnico",
             "hijacked": "Láser Secuestrado",
             "bolt-caster": "Cazador",
             "runic": "Lente rúnica"
@@ -284,7 +253,8 @@
             "liquidator-right": "Brazo Derecho de Liquidador",
             "minotaur": "Cañón Minotauro",
             "precision": "Láser de Minotauro de Precisión",
-            "mineral": "Plataforma de Procesamiento de Minerales"
+            "mineral": "Plataforma de Procesamiento de Minerales",
+            "minotaur-laser": "Láser de minotauro"
         },
         "exosuit": {
             "aeration": "Membrana de Aireación",
@@ -312,6 +282,11 @@
             "refiner": "Refinador Personal",
             "trade": "Cohete de Comercio",
             "translator": "Dispositivos de Traducción Automática"
+        },
+        "corvette": {
+            "cockpit": "Cabina de corvette",
+            "ceto": "Reactor de clase ceto",
+            "habitation": "Módulos de habitación"
         }
     },
     "modules": {
@@ -444,7 +419,6 @@
             "paralysis": "Mortero de Parálisis",
             "personal": "Campo de Fuerza Personal",
             "terrian": "Manipulador de Terreno",
-            "runic-laser": "Láser Rúnico",
             "hijacked": "Láser Secuestrado",
             "runic-lens": "Lente rúnica"
         },
@@ -542,7 +516,6 @@
             "rebuilt": "Módulo de Exotraje Reconstruido",
             "remembrance": "Remembranza",
             "protection": "Malla de Escudo",
-            "shield-upgrade": "Mejora de Malla de Escudo",
             "starseed": "Semilla Estelar",
             "jetpack": "Mochila Propulsora",
             "jetpack-upgrade": "Mejora de Mochila Propulsora",
