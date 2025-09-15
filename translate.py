@@ -2,6 +2,7 @@ import json
 import os
 from deep_translator import GoogleTranslator
 
+
 def get_missing_keys(master_dict, target_dict):
     missing_keys = {}
     for key, value in master_dict.items():
@@ -12,6 +13,7 @@ def get_missing_keys(master_dict, target_dict):
             if nested_missing_keys:
                 missing_keys[key] = nested_missing_keys
     return missing_keys
+
 
 def remove_extra_keys(master_dict, target_dict):
     keys_to_remove = []
@@ -29,7 +31,7 @@ def remove_extra_keys(master_dict, target_dict):
 
 
 def translate_and_update(missing_keys, target_data, lang):
-    translator = GoogleTranslator(source='en', target=lang)
+    translator = GoogleTranslator(source="en", target=lang)
     for key, value in missing_keys.items():
         if isinstance(value, dict):
             if key not in target_data:
@@ -43,19 +45,24 @@ def translate_and_update(missing_keys, target_data, lang):
             except Exception as e:
                 print(f"Error translating '{value}' for {lang}: {e}")
 
+
 def main():
     locales_dir = "public/assets/locales"
     master_lang = "en"
-    other_langs = ["de", "es", "fr"]
+    other_langs = ["de", "es", "fr", "pt"]
 
     master_filepath = os.path.join(locales_dir, master_lang, "translation.json")
-    with open(master_filepath, 'r', encoding='utf-8') as f:
+    with open(master_filepath, "r", encoding="utf-8") as f:
         master_data = json.load(f)
 
     for lang in other_langs:
         target_filepath = os.path.join(locales_dir, lang, "translation.json")
-        with open(target_filepath, 'r', encoding='utf-8') as f:
-            target_data = json.load(f)
+        os.makedirs(os.path.dirname(target_filepath), exist_ok=True)
+        try:
+            with open(target_filepath, "r", encoding="utf-8") as f:
+                target_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            target_data = {}
 
         # Remove keys from target that are not in master
         updated_target_data = remove_extra_keys(master_data, target_data)
@@ -67,7 +74,7 @@ def main():
             print(json.dumps(missing_keys, indent=2, ensure_ascii=False))
             translate_and_update(missing_keys, updated_target_data, lang)
 
-        with open(target_filepath, 'w', encoding='utf-8') as f:
+        with open(target_filepath, "w", encoding="utf-8") as f:
             json.dump(updated_target_data, f, indent=4, ensure_ascii=False)
         print(f"Updated and cleaned {target_filepath}")
 

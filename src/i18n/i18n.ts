@@ -3,7 +3,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-const languages = ["en", "es", "fr", "de"];
+const languages = ["en", "es", "fr", "de", "pt"];
 
 void i18n
 	.use(Backend)
