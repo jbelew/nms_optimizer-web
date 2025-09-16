@@ -39,9 +39,7 @@
             "-(( Compilation de la pile technologique multi-thread ! ))-",
             "-(( Déchiffrement des artefacts technologiques hérités ! ))-",
             "-(( Optimisation de l'optimisation ! ))-",
-            "-(( Harmonisation des interactions de pile d'améliorations ! ))-",
-            "-(( Si vous pensez pouvoir y mettre plus de deux armes ici, vous êtes sous l'effet du NipNip ! ))-",
-            "-(( Je suis un réseau neuronal convolutif hautement entraîné, pas un faiseur de miracles ! ))-"
+            "-(( Harmonisation des interactions de pile d'améliorations ! ))-"
         ]
     },
     "errorContent": {
@@ -59,21 +57,21 @@
             "shareLink": "Partager la disposition de la grille",
             "userStats": "Statistiques des utilisateurs"
         },
-        "optimizationAlert": {
-            "warning": "-kzzkt- Attention ! -kzzkt-",
-            "insufficientSpace": "Il n'y a pas assez d'espace pour placer efficacement tous les modules pour la technologie <1>{{technologyName}}</1>. Cela se produit généralement lorsque trop de technologies sont sélectionnées pour votre plateforme.",
-            "forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probablement à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
-            "cancelButton": "Annuler",
-            "forceOptimizeButton": "Forcer l'optimisation"
-        },
         "userStats": {
             "noDataForChart": "Aucune donnée disponible pour ce graphique.",
             "description": "Cette boîte de dialogue affiche des statistiques utilisateur agrégées en fonction des interactions avec l'optimiseur, mettant en évidence les technologies les plus courantes pour les vaisseaux et les multi-outils.",
             "error": "Impossible de charger les statistiques de l'utilisateur. Veuillez réessayer plus tard.",
             "starshipChartTitle": "Starship Technologies",
             "multitoolChartTitle": "Technologies multi-outils",
-            "closeButton": "Fermer",
-            "corvetteChartTitle": "Corvette Technologies"
+            "corvetteChartTitle": "Corvette Technologies",
+            "closeButton": "Fermer"
+        },
+        "optimizationAlert": {
+            "warning": "-kzzkt- Attention ! -kzzkt-",
+            "insufficientSpace": "Il n'y a pas assez d'espace pour placer efficacement tous les modules pour la technologie <1>{{technologyName}}</1>. Cela se produit généralement lorsque trop de technologies sont sélectionnées pour votre plateforme.",
+            "forceOptimizeSuggestion": "Vous pouvez essayer <1>\"Forcer l'optimisation\"</1> pour une résolution plus intensive, mais cela échouera probablement à trouver un agencement optimal. Considérez de réorganiser vos technologies ou de sélectionner moins pour améliorer le résultat.",
+            "cancelButton": "Annuler",
+            "forceOptimizeButton": "Forcer l'optimisation"
         },
         "shareLink": {
             "description": "Copiez le lien ci-dessous pour partager votre mise en page actuelle de la grille. Veuillez noter que cette URL est un instantané et ne metra pas à jour automatiquement.",
@@ -134,9 +132,9 @@
             "Propulsion": "Propulsion",
             "Life Support": "Santé & Support Vital",
             "Hazard Protection": "Protection contre les Dangers",
-            "Movement Systems": "Systèmes de Mouvement",
             "Quest Rewards": "Récompenses de quête",
-            "Upgrade Modules": "Modules de mise à niveau"
+            "Upgrade Modules": "Modules de mise à niveau",
+            "Movement Systems": "Systèmes de Mouvement"
         },
         "recommendedBuilds": {
             "selectBuildButton": "Sélectionnez une version recommandée",
@@ -190,6 +188,7 @@
             "survey": "Dispositif d'arpentage",
             "blaze-javelin": "Javelot ardent",
             "boltcaster": "Boulonneur",
+            "bolt-caster": "Casse-pied",
             "geology": "Canon de géologie",
             "neutron": "Canon à neutrons",
             "plasma-launcher": "Lance-plasma",
@@ -201,7 +200,6 @@
             "paralysis": "Mortier de paralysie",
             "personal": "Champ de force personnel",
             "terrian": "Manipulateur de terrain",
-            "bolt-caster": "Casse-pied",
             "runic": "Lentille runique"
         },
         "other": {
@@ -252,9 +250,9 @@
             "hardframe-right": "Bras Droit Hardframe",
             "liquidator-right": "Bras Droit Liquidator",
             "minotaur": "Canon Minotaure",
+            "minotaur-laser": "Laser Minotaure",
             "precision": "Laser Minotaure de Précision",
-            "mineral": "Installation de Traitement des Minéraux",
-            "minotaur-laser": "Laser Minotaure"
+            "mineral": "Installation de Traitement des Minéraux"
         },
         "exosuit": {
             "aeration": "Membrane d'Aération",
@@ -419,19 +417,11 @@
             "paralysis": "Mortier de paralysie",
             "personal": "Champ de force personnel",
             "terrian": "Manipulateur de terrain",
-            "hijacked": "Laser détourné",
-            "runic-lens": "Lentille runique"
+            "runic-lens": "Lentille runique",
+            "hijacked": "Laser détourné"
         },
         "other": {
             "freighter-hyper": "Hyperpropulseur",
-            "freighter-scanner": "Scanner interstellaire",
-            "freighter-matter": "Faisceau de matière",
-            "fleet-fuel": "Efficacité carburant de flotte",
-            "fleet-speed": "Vitesse d'expédition de flotte",
-            "fleet-combat": "Combat et défense de flotte",
-            "fleet-exploration": "Exploration et science de flotte",
-            "fleet-mining": "Minage et industriel de flotte",
-            "fleet-trade": "Minage et industriel de flotte",
             "freighter-hyperdrive": "Hyperdrive",
             "freighter-temporal": "Ordinateur de chaîne temporelle",
             "freighter-reality": "Réalité de la réalité",
@@ -440,7 +430,15 @@
             "freighter-amplified": "Bouliement de déformation amplifié",
             "freighter-warpcore": "Résonateur de noyau de guerre",
             "freighter-chromatic": "Boundage de chaîne chromatique",
-            "freighter-upgrade": "Mise à niveau hyperdrive"
+            "freighter-upgrade": "Mise à niveau hyperdrive",
+            "freighter-scanner": "Scanner interstellaire",
+            "freighter-matter": "Faisceau de matière",
+            "fleet-fuel": "Efficacité carburant de flotte",
+            "fleet-speed": "Vitesse d'expédition de flotte",
+            "fleet-combat": "Combat et défense de flotte",
+            "fleet-exploration": "Exploration et science de flotte",
+            "fleet-mining": "Minage et industriel de flotte",
+            "fleet-trade": "Minage et industriel de flotte"
         },
         "exocraft": {
             "fusion": "Moteur à Fusion",
@@ -452,6 +450,8 @@
             "grip": "Suspension Grip Boost",
             "drift": "Suspension Drift",
             "mining": "Laser Minier",
+            "advanced-mining": "Laser exocraft avancé",
+            "mining-upgrade": "Mise à niveau laser de minage Exocraft",
             "mounted": "Canon Monté",
             "mounted-upgrade": "Amélioration de Canon Monté",
             "flamethrower": "Lance-flammes Monté",
@@ -490,9 +490,7 @@
             "precision": "Laser Minotaure de Précision",
             "osmatic": "Générateur Osmotique",
             "servos": "Servos Auto-graissants",
-            "liquidator-upgrade": "Amélioration Lance-flammes",
-            "advanced-mining": "Laser exocraft avancé",
-            "mining-upgrade": "Mise à niveau laser de minage Exocraft"
+            "liquidator-upgrade": "Amélioration Lance-flammes"
         },
         "exosuit": {
             "aeration": "Membrane d'Aération",
@@ -516,6 +514,7 @@
             "rebuilt": "Module d'Exosuit Reconstruit",
             "remembrance": "Souvenir",
             "protection": "Treillis de Bouclier",
+            "protection-upgrade": "Mise à niveau du réseau de bouclier",
             "starseed": "Graine Étoile",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Amélioration de Jetpack",
@@ -534,8 +533,7 @@
             "recycler": "Recycleur d'oxygène",
             "neural": "Stimulateur neural",
             "waterjets": "Hydropropulseurs efficaces",
-            "rerouter": "Rerouteur d'oxygène",
-            "protection-upgrade": "Mise à niveau du réseau de bouclier"
+            "rerouter": "Rerouteur d'oxygène"
         }
     }
 }

@@ -17,8 +17,8 @@
         "userStats": "Benutzerstatistik"
     },
     "gridTable": {
-        "tapInstructions": "Einmal tippen, um eine Zelle zu deaktivieren, oder zweimal tippen, um sie als supercharged zu markieren",
-        "optimizing": "Optimierung!"
+        "optimizing": "Optimierung!",
+        "tapInstructions": "Einmal tippen, um eine Zelle zu deaktivieren, oder zweimal tippen, um sie als supercharged zu markieren"
     },
     "gridControls": {
         "activateRow": "Reihe aktivieren",
@@ -39,9 +39,7 @@
             "-(( Kompiliere Multithread-Tech-Stack! ))-",
             "-(( Entschlüssle alte Tech-Artefakte! ))-",
             "-(( Optimiere die Optimierung! ))-",
-            "-(( Harmonisiere Upgrade-Stack-Interaktionen! ))-",
-            "-(( Wenn du denkst, du kannst mehr als zwei Waffen hier reinquetschen, bist du high auf NipNip! ))-",
-            "-(( Ich bin ein hochtrainiertes, konvolutionelles, neuronales Netz, kein Wunderheiler! ))-"
+            "-(( Harmonisiere Upgrade-Stack-Interaktionen! ))-"
         ]
     },
     "errorContent": {
@@ -59,21 +57,21 @@
             "shareLink": "Rasterlayout teilen",
             "userStats": "Benutzerstatistik"
         },
-        "optimizationAlert": {
-            "warning": "-kzzkt- Warnung! -kzzkt-",
-            "insufficientSpace": "Es ist nicht genug Platz vorhanden, um alle Module für die Technologie <1>{{technologyName}}</1> effektiv zu platzieren. Dies geschieht normalerweise, wenn zu viele Technologien für deine Plattform ausgewählt sind.",
-            "forceOptimizeSuggestion": "Du kannst <1>\"Optimierung erzwingen\"</1> für eine intensivere Lösung versuchen, aber es wird wahrscheinlich keine optimale Anordnung geben. Erwäge, deine Technologien neu zu ordnen oder zu reduzieren, um das Ergebnis zu verbessern.",
-            "cancelButton": "Abbrechen",
-            "forceOptimizeButton": "Optimierung erzwingen"
-        },
         "userStats": {
             "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
             "description": "In diesem Dialogfeld werden aggregierte Benutzerstatistiken angezeigt, die auf Interaktionen mit dem Optimierer basieren und die am häufigsten aufgeladenen Technologien für Starships und Multi-Tools hervorheben.",
             "error": "Benutzerstatistiken nicht laden. Bitte versuchen Sie es später erneut.",
             "starshipChartTitle": "Starship -Technologien",
             "multitoolChartTitle": "Multi-Tool-Technologien",
-            "closeButton": "Schließen",
-            "corvetteChartTitle": "Corvette -Technologien"
+            "corvetteChartTitle": "Corvette -Technologien",
+            "closeButton": "Schließen"
+        },
+        "optimizationAlert": {
+            "warning": "-kzzkt- Warnung! -kzzkt-",
+            "insufficientSpace": "Es ist nicht genug Platz vorhanden, um alle Module für die Technologie <1>{{technologyName}}</1> effektiv zu platzieren. Dies geschieht normalerweise, wenn zu viele Technologien für deine Plattform ausgewählt sind.",
+            "forceOptimizeSuggestion": "Du kannst <1>\"Optimierung erzwingen\"</1> für eine intensivere Lösung versuchen, aber es wird wahrscheinlich keine optimale Anordnung geben. Erwäge, deine Technologien neu zu ordnen oder zu reduzieren, um das Ergebnis zu verbessern.",
+            "cancelButton": "Abbrechen",
+            "forceOptimizeButton": "Optimierung erzwingen"
         },
         "shareLink": {
             "description": "Kopieren Sie den folgenden Link, um Ihr aktuelles Netzlayout zu teilen. Bitte beachten Sie, dass diese URL ein Schnappschuss ist und nicht automatisch aktualisiert wird.",
@@ -134,9 +132,9 @@
             "Propulsion": "Antrieb",
             "Life Support": "Gesundheit & Lebenserhaltung",
             "Hazard Protection": "Gefahrenschutz",
-            "Movement Systems": "Bewegungssysteme",
             "Quest Rewards": "Quest -Belohnungen",
-            "Upgrade Modules": "Upgrade Module"
+            "Upgrade Modules": "Upgrade Module",
+            "Movement Systems": "Bewegungssysteme"
         },
         "recommendedBuilds": {
             "selectBuildButton": "Wähle einen Build aus",
@@ -190,6 +188,7 @@
             "survey": "Analysevisier",
             "blaze-javelin": "Glutspeer",
             "boltcaster": "Blitzwerfer",
+            "bolt-caster": "Boltcaster",
             "geology": "Geologiekanone",
             "neutron": "Neutronenkanone",
             "plasma-launcher": "Plasmawerfer",
@@ -201,7 +200,6 @@
             "paralysis": "Paralysemörser",
             "personal": "Eigenes Kraftfeld",
             "terrian": "Terrainmanipulator",
-            "bolt-caster": "Boltcaster",
             "runic": "Runenobjektiv"
         },
         "other": {
@@ -252,9 +250,9 @@
             "hardframe-right": "Hardframe-Rechter Arm",
             "liquidator-right": "Liquidator-Rechter Arm",
             "minotaur": "Minotaurus-Kanone",
+            "minotaur-laser": "Minotaur -Laser",
             "precision": "Präzisions-Minotaurus-Laser",
-            "mineral": "Mineralverarbeitungsanlage",
-            "minotaur-laser": "Minotaur -Laser"
+            "mineral": "Mineralverarbeitungsanlage"
         },
         "exosuit": {
             "aeration": "Belüftungsmembran",
@@ -419,8 +417,8 @@
             "paralysis": "Paralyse-Mörser",
             "personal": "Eigenes Kraftfeld",
             "terrian": "Terrainmanipulator",
-            "hijacked": "Gekaperter Laser",
-            "runic-lens": "Runenobjektiv"
+            "runic-lens": "Runenobjektiv",
+            "hijacked": "Gekaperter Laser"
         },
         "other": {
             "freighter-hyper": "Hyperantrieb",
@@ -516,6 +514,7 @@
             "rebuilt": "Wiederaufgebautes Exo-Anzug-Modul",
             "remembrance": "Erinnerung",
             "protection": "Schildgitter",
+            "protection-upgrade": "Schildgitter -Upgrade",
             "starseed": "Sternensaat",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Jetpack-Upgrade",
@@ -534,8 +533,7 @@
             "recycler": "Sauerstoff-Recycler",
             "neural": "Neuralstimulator",
             "waterjets": "Effiziente Wasserstrahlen",
-            "rerouter": "Sauerstoff-Umleiter",
-            "protection-upgrade": "Schildgitter -Upgrade"
+            "rerouter": "Sauerstoff-Umleiter"
         }
     }
 }

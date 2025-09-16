@@ -39,9 +39,7 @@
             "-(( ¡Compilando pila de tecnología multihilo! ))-",
             "-(( ¡Descifrando artefactos de tecnología heredada! ))-",
             "-(( ¡Optimizando la optimización! ))-",
-            "-(( ¡Armonizando interacciones de pila de mejoras! ))-",
-            "-(( Si crees que puedes meter más de dos armas aquí, ¡estás drogado con NipNip! ))-",
-            "-(( Soy una Red Neuronal Convolucional altamente entrenada, ¡no un milagro! ))-"
+            "-(( ¡Armonizando interacciones de pila de mejoras! ))-"
         ]
     },
     "errorContent": {
@@ -59,21 +57,21 @@
             "shareLink": "Compartir el diseño de la cuadrícula",
             "userStats": "Estadísticas de usuario"
         },
-        "optimizationAlert": {
-            "warning": "-kzzkt- ¡Advertencia! -kzzkt-",
-            "insufficientSpace": "No hay suficiente espacio para colocar eficazmente todos los módulos para la tecnología <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías para tu plataforma.",
-            "forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar optimización\"</1> para una solución más intensiva, pero probablemente no encontrará un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar el resultado.",
-            "cancelButton": "Cancelar",
-            "forceOptimizeButton": "Forzar optimización"
-        },
         "userStats": {
             "noDataForChart": "No hay datos disponibles para este gráfico.",
             "description": "Este diálogo muestra estadísticas de usuario agregadas basadas en interacciones con el optimizador, destacando las tecnologías más comúnmente sobrealimentadas para naves espaciales y herramientas múltiples.",
             "error": "No se pudo cargar estadísticas de usuario. Vuelva a intentarlo más tarde.",
             "starshipChartTitle": "Tecnologías de nave de naves",
             "multitoolChartTitle": "Tecnologías múltiples",
-            "closeButton": "Cerca",
-            "corvetteChartTitle": "Corvette Technologies"
+            "corvetteChartTitle": "Corvette Technologies",
+            "closeButton": "Cerca"
+        },
+        "optimizationAlert": {
+            "warning": "-kzzkt- ¡Advertencia! -kzzkt-",
+            "insufficientSpace": "No hay suficiente espacio para colocar eficazmente todos los módulos para la tecnología <1>{{technologyName}}</1>. Esto suele ocurrir cuando se seleccionan demasiadas tecnologías para tu plataforma.",
+            "forceOptimizeSuggestion": "Puedes intentar <1>\"Forzar optimización\"</1> para una solución más intensiva, pero probablemente no encontrará un diseño óptimo. Considera reordenar tus tecnologías o seleccionar menos para mejorar el resultado.",
+            "cancelButton": "Cancelar",
+            "forceOptimizeButton": "Forzar optimización"
         },
         "shareLink": {
             "description": "Copie el siguiente enlace para compartir su diseño de cuadrícula actual. Tenga en cuenta que esta URL es una instantánea y no se actualizará automáticamente.",
@@ -134,9 +132,9 @@
             "Propulsion": "Propulsión",
             "Life Support": "Salud y Soporte Vital",
             "Hazard Protection": "Protección contra Peligros",
-            "Movement Systems": "Sistemas de Movimiento",
             "Quest Rewards": "Recompensas de misiones",
-            "Upgrade Modules": "Módulos de actualización"
+            "Upgrade Modules": "Módulos de actualización",
+            "Movement Systems": "Sistemas de Movimiento"
         },
         "recommendedBuilds": {
             "selectBuildButton": "Seleccionar una Configuración",
@@ -181,6 +179,7 @@
             "wormhole": "Escáneres"
         },
         "multi-tool": {
+            "hijacked": "Láser Secuestrado",
             "mining-laser": "Rayo Minero",
             "mining-beam": "Rayo Minero",
             "analysis": "Visor de Análisis",
@@ -189,6 +188,7 @@
             "survey": "Dispositivo de Levantamiento",
             "blaze-javelin": "Jabalina Ígnea",
             "boltcaster": "Lanzador de Rayos",
+            "bolt-caster": "Cazador",
             "geology": "Cañón de Geología",
             "neutron": "Cañón de Neutrones",
             "plasma-launcher": "Lanzador de Plasma",
@@ -200,8 +200,6 @@
             "paralysis": "Mortero de Parálisis",
             "personal": "Campo de Fuerza Personal",
             "terrian": "Manipulador de Terreno",
-            "hijacked": "Láser Secuestrado",
-            "bolt-caster": "Cazador",
             "runic": "Lente rúnica"
         },
         "other": {
@@ -252,9 +250,9 @@
             "hardframe-right": "Brazo Derecho de Armazón Reforzado",
             "liquidator-right": "Brazo Derecho de Liquidador",
             "minotaur": "Cañón Minotauro",
+            "minotaur-laser": "Láser de minotauro",
             "precision": "Láser de Minotauro de Precisión",
-            "mineral": "Plataforma de Procesamiento de Minerales",
-            "minotaur-laser": "Láser de minotauro"
+            "mineral": "Plataforma de Procesamiento de Minerales"
         },
         "exosuit": {
             "aeration": "Membrana de Aireación",
@@ -419,8 +417,8 @@
             "paralysis": "Mortero de Parálisis",
             "personal": "Campo de Fuerza Personal",
             "terrian": "Manipulador de Terreno",
-            "hijacked": "Láser Secuestrado",
-            "runic-lens": "Lente rúnica"
+            "runic-lens": "Lente rúnica",
+            "hijacked": "Láser Secuestrado"
         },
         "other": {
             "freighter-hyper": "Hiperpropulsor",
@@ -516,6 +514,7 @@
             "rebuilt": "Módulo de Exotraje Reconstruido",
             "remembrance": "Remembranza",
             "protection": "Malla de Escudo",
+            "protection-upgrade": "Actualización de redes de escudo",
             "starseed": "Semilla Estelar",
             "jetpack": "Mochila Propulsora",
             "jetpack-upgrade": "Mejora de Mochila Propulsora",
@@ -534,8 +533,7 @@
             "recycler": "Reciclador de Oxígeno",
             "neural": "Estimulador Neural",
             "waterjets": "Hidropropulsores Eficientes",
-            "rerouter": "Redirigidor de Oxígeno",
-            "protection-upgrade": "Actualización de redes de escudo"
+            "rerouter": "Redirigidor de Oxígeno"
         }
     }
 }

@@ -24,6 +24,24 @@
         "activateRow": "Ative a linha",
         "deactivateRow": "Desative a linha"
     },
+    "messageSpinner": {
+        "randomMessages": [
+            "-(( Asking the Atlas for guidance! ))-",
+            "-(( Recalibrating supercharge node alignments! ))-",
+            "-(( Harmonizing upgrade stack interactions! ))-",
+            "-(( Polishing the chrome! ))-",
+            "-(( Just a few more calculations... honest! ))-",
+            "-(( Attempting to refine the solution! ))-",
+            "-(( Debugging plasma injector routines! ))-",
+            "-(( Checking for Geknip residue! ))-",
+            "-(( Don't worry, I know a guy! ))-",
+            "-(( Interfacing with Anomaly schematics! ))-",
+            "-(( Compiling multi-threaded tech stack! ))-",
+            "-(( Decrypting legacy tech artifacts! ))-",
+            "-(( Optimizing the optimization! ))-",
+            "-(( I'm a highly trained Convolutional Neural Network, not a miracle worker! ))-"
+        ]
+    },
     "errorContent": {
         "signalDisruption": "–Kzzkt - interrupção do sinal! –Kzzkt–",
         "serverErrorDetails": "<strong> O servidor retornou um erro ao tentar otimizar seu layout. </strong> Se o problema persistir, considere <1> arquivar um relatório de bug </1>."
@@ -517,6 +535,5 @@
             "waterjets": "Jatos de água eficientes",
             "rerouter": "Oxigênio Rerouter"
         }
-    },
-    "messageSpinner": {}
+    }
 }
