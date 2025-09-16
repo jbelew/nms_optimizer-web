@@ -1,15 +1,19 @@
 # Crowdin configuration file
 # See https://developer.crowdin.com/cli/configuration/
 
-# The project_id and api_token are sensitive and should be stored as environment variables
-# You will need to create a Crowdin project and get these values
 project_id_env: "CROWDIN_PROJECT_ID"
 api_token_env: "CROWDIN_PERSONAL_TOKEN"
 base_path: "."
 
-# The files to be translated
 files:
-    - source: "/public/assets/locales/en/translation.json"
-      translation: "/public/assets/locales/%two_letters_code%/%original_file_name%"
-      # The %locale% placeholder will be replaced with the language code (e.g., "de", "es", "fr")
-      # The %original_file_name% placeholder will be replaced with "translation.json"
+  - source: "public/assets/locales/en/translation.json"
+    translation: "public/assets/locales/%two_letters_code%/%original_file_name%"
+
+    # Map Crowdin regional locales to your repo folders
+    languages_mapping:
+      two_letters_code:
+        fr-FR: fr
+        es-ES: es
+        de-DE: de
+        pt-PT: pt
+
