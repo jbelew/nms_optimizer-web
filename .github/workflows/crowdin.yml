@@ -19,7 +19,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Crowdin Action
-              uses: crowdin/github-action@v1
+              uses: crowdin/github-action@v4
               with:
                   # Crowdin authentication
                   config: crowdin.yml
@@ -27,7 +27,7 @@ jobs:
                   token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
                   # GitHub authentication (PAT)
-                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
 
                   # Sync options
                   upload_sources: true
