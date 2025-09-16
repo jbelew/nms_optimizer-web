@@ -18,7 +18,7 @@ Translations are managed using [`i18next`](https://www.i18next.com/), with simpl
 
 If you want the easiest way to contribute:
 
-1. **Sign up for Crowdin** at [https://crowdin.com](https://crowdin.com) and request access to the NMS Optimizer project.
+1. **Sign up for Crowdin** at [https://crowdin.com](https://crowdin.com/project/nms-optimizer) and request access to the NMS Optimizer project.
 2. Once approved, you can **edit existing translations directly in the web UI**, or upload your own translations.
 3. Crowdin handles different languages and ensures your updates are synced with the app automatically.
 4. You can focus on **proofing existing translations** or adding new ones in your language.

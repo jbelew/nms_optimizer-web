@@ -18,7 +18,7 @@ Les traductions sont gérées à l'aide de [`i18next`](https://www.i18next.com/)
 
 Si vous voulez le moyen le plus simple de contribuer :
 
-1. **Inscrivez-vous sur Crowdin** à [https://crowdin.com](https://crowdin.com) et demandez l'accès au projet NMS Optimizer.
+1. **Inscrivez-vous sur Crowdin** à [https://crowdin.com](https://crowdin.com/project/nms-optimizer) et demandez l'accès au projet NMS Optimizer.
 2. Une fois approuvé, vous pouvez **modifier les traductions existantes directement dans l'interface utilisateur web**, ou télécharger vos propres traductions.
 3. Crowdin gère différentes langues et s'assure que vos mises à jour sont synchronisées automatiquement avec l'application.
 4. Vous pouvez vous concentrer sur la **relecture des traductions existantes** ou en ajouter de nouvelles dans votre langue.
