@@ -5,8 +5,7 @@ on:
     branches:
       - main
   schedule:
-    # Run the workflow every day at midnight UTC
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # every day at midnight UTC
 
 jobs:
   sync:
@@ -21,23 +20,35 @@ jobs:
 
       - name: Crowdin Action
         uses: crowdin/github-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
-          # The CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN are stored as repository secrets
+          # Crowdin authentication
+          config: crowdin.yml
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-          # Upload sources to Crowdin
-          upload_sources: true
+          # GitHub authentication (needed for PRs)
+          github_token: ${{ secrets.GH_PAT }}
 
-          # Download translations from Crowdin
+          # Sync options
+          upload_sources: true
           download_translations: true
 
-          # Create a pull request with the new translations
+          # PR options
           create_pull_request: true
           pull_request_title: "New Crowdin Translations"
-          pull_request_body: "This pull request contains the latest translations from Crowdin for your users."
+          pull_request_body: "This pull request contains the latest translations from Crowdin."
           pull_request_base_branch_name: "main"
+
+          # Use a fixed branch for all Crowdin updates
           localization_branch_name: "crowdin-translations"
+
+          # Optional: label the PR
           pull_request_labels: "translation"
+
+      - name: Close dangling PR if branch deleted
+        if: ${{ always() }}
+        uses: peter-evans/close-pull-request@v4
+        with:
+          # Only attempt to close PRs from the Crowdin branch
+          pull-request-number: ${{ github.event.pull_request.number || '' }}
+          comment: "Closing this PR because the Crowdin branch no longer exists."
