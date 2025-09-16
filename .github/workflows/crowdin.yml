@@ -18,28 +18,37 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Crowdin Action
-              uses: crowdin/github-action@v1
+            - name: Install Crowdin CLI
+              run: |
+                  curl -LO https://github.com/crowdin/cli/releases/latest/download/crowdin-linux-64bit.tar.gz
+                  tar -xzf crowdin-linux-64bit.tar.gz
+                  sudo mv crowdin /usr/local/bin/
+
+            - name: Ensure Crowdin branch exists
+              env:
+                  CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+              run: |
+                  crowdin branch add name main || echo "Branch already exists"
+
+            - name: Crowdin Upload / Download
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+                  CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+              run: |
+                  # Upload sources
+                  crowdin upload sources --project-id $CROWDIN_PROJECT_ID --token $CROWDIN_PERSONAL_TOKEN
+
+                  # Download translations
+                  crowdin download --project-id $CROWDIN_PROJECT_ID --token $CROWDIN_PERSONAL_TOKEN
+
+            - name: Create / Update Crowdin PR
+              uses: peter-evans/create-pull-request@v5
               with:
-                  # Crowdin authentication
-                  config: crowdin.yml
-                  project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
-                  token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-
-                  # Sync options
-                  upload_sources: true
-                  download_translations: true
-
-                  # PR options
-                  create_pull_request: true
-                  pull_request_title: "New Crowdin Translations"
-                  pull_request_body: "This pull request contains the latest translations from Crowdin."
-                  pull_request_base_branch_name: "main"
-                  localization_branch_name: "crowdin-translations"
-                  pull_request_labels: "translation"
-
-                  # Ensure Crowdin uses the correct branch for sources/translations
-                  add_crowdin_branch: true
-                  crowdin_branch_name: main
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  commit-message: "Update translations from Crowdin"
+                  branch: crowdin-translations
+                  base: main
+                  title: "New Crowdin Translations"
+                  body: "This pull request contains the latest translations from Crowdin."
+                  labels: "translation"
