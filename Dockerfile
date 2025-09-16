@@ -35,7 +35,7 @@ RUN echo "Attempting to clone backend repository..." && \
     ls -la /app/backend/ && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \
     cat /app/backend/requirements.txt || echo "Failed to cat requirements.txt"
- 
+
 # Build wheels for Python dependencies from the cloned repo's requirements.txt
 RUN echo "--- Attempting to build wheels from /app/backend/requirements.txt ---" && \
     mkdir /app/wheels && \
@@ -102,7 +102,7 @@ COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/requir
 
 # Copy all .py files from the root of the backend repository and the debugging_utils directory
 COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src/*.py /opt/app/backend_app/
-COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src/training/*.* /opt/app/backend_app/training/
+COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/scripts/training/*.* /opt/app/backend_app/training/
 
 # Copy installed Python dependencies (site-packages) from the backend-deps-installer stage
 COPY --from=backend-deps-installer /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages

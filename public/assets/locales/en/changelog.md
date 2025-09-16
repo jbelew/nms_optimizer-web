@@ -4,6 +4,11 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 3.13 (2025-09-10)
+
+- Refactored and cleaned-up the services layer.
+- Added initial 8k models for Corvette "propulsion" systems ... Hyper, Launch, Pulse, and Photonix.
+
 ## Version 3.12 (2025-09-10)
 
 - Refactored and cleaned-up the services layer.
