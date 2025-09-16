@@ -1,3 +1,26 @@
+# [3.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.12.0...v3.13.0) (2025-09-16)
+
+
+### Bug Fixes
+
+* **badges:** fixed module counts ([81f475a](https://github.com/jbelew/nms_optimizer-web/commit/81f475a34b8fecfb47c27f74e6766d2934bfcf56))
+* Correct Crowdin workflow file ([f160bf2](https://github.com/jbelew/nms_optimizer-web/commit/f160bf2594397e06f6bdfae1dc2fd6c40de8a578))
+* Correct Crowdin workflow to pass GITHUB_TOKEN ([c45e983](https://github.com/jbelew/nms_optimizer-web/commit/c45e9838b3f8ccd91dd58aa489aa721dfdcf2aa4))
+* **seo:** possible fix for pages not being indexed properly ([0c86df4](https://github.com/jbelew/nms_optimizer-web/commit/0c86df475f395e3e08ba93062e828e1ff7655dac))
+
+
+### Features
+
+* Add and update JSDocs ([d56e312](https://github.com/jbelew/nms_optimizer-web/commit/d56e312c85b4a7abd60c8a8ae3bf2ff1e4ce1e8e))
+* Add Crowdin integration for translations ([032c4a2](https://github.com/jbelew/nms_optimizer-web/commit/032c4a26e0929e096bf716e1218b68c89b822eab))
+* Add Crowdin integration for translations ([bd3f05b](https://github.com/jbelew/nms_optimizer-web/commit/bd3f05bd33f953f6853a6410fe3f31bdb78a26fc))
+* Optimize GridCell rendering to improve INP ([a93c898](https://github.com/jbelew/nms_optimizer-web/commit/a93c89863c2ce8646893124b9c372474f370cc8a))
+* Synchronize and translate all localized .md files ([1a5bf31](https://github.com/jbelew/nms_optimizer-web/commit/1a5bf319cd875e8e08984124df94fb34c7818d5d))
+* **translations:** trying crowdin support ([44a7360](https://github.com/jbelew/nms_optimizer-web/commit/44a73607b447b89509907dbb9e3069cc23ccff5e))
+* **userstats:** added color defs for photonix and other ([6e11291](https://github.com/jbelew/nms_optimizer-web/commit/6e11291dbf2125c8547c68e8d030ee9a1cb6849d))
+
+
+
 # [3.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.11.0...v3.12.0) (2025-09-10)
 
 
