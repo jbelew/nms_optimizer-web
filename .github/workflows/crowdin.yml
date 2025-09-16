@@ -45,8 +45,3 @@ jobs:
           # Optional: label the PR
           pull_request_labels: "translation"
 
-      - name: Close dangling Crowdin PRs
-        uses: peter-evans/close-pull-request@v4.3.0
-        with:
-          branch: crowdin-translations
-          comment: "Closing this PR because the Crowdin branch no longer exists."
