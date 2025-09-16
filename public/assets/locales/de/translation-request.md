@@ -18,7 +18,7 @@ Die meisten Zeichenketten sind kurze UI-Beschriftungen, Tooltips oder lustige St
 
 Wenn Sie den einfachsten Weg zum Beitragen suchen:
 
-1. **Melden Sie sich bei Crowdin** unter [https://crowdin.com](https://crowdin.com) an und beantragen Sie den Zugriff auf das NMS-Optimierer-Projekt.
+1. **Melden Sie sich bei Crowdin** unter [https://crowdin.com](https://crowdin.com/project/nms-optimizer) an und beantragen Sie den Zugriff auf das NMS-Optimierer-Projekt.
 2. Nach der Genehmigung können Sie **bestehende Übersetzungen direkt in der Web-Benutzeroberfläche bearbeiten** oder Ihre eigenen Übersetzungen hochladen.
 3. Crowdin verwaltet verschiedene Sprachen und stellt sicher, dass Ihre Updates automatisch mit der App synchronisiert werden.
 4. Sie können sich auf das **Korrekturlesen bestehender Übersetzungen** oder das Hinzufügen neuer in Ihrer Sprache konzentrieren.
