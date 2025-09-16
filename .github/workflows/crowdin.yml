@@ -22,7 +22,7 @@ jobs:
       - name: Crowdin Action
         uses: crowdin/github-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
           # The CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN are stored as repository secrets
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
