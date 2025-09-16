@@ -25,6 +25,18 @@ The Python solver for this project can be found [here](https://github.com/jbelew
 
 ---
 
+### **Contributing**
+
+#### **Translations**
+
+This project uses [Crowdin](https://crowdin.com/) to manage translations. If you would like to contribute to the translation of this application, please visit our Crowdin project page and join the translation team.
+
+[**Contribute to Translations on Crowdin**](https://crowdin.com/project/your-project-name)
+
+We appreciate your help in making this application accessible to a wider audience!
+
+---
+
 ### **Local Installation Instructions**
 
 To run this project locally, follow these steps:
