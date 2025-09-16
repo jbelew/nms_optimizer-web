@@ -31,7 +31,7 @@ The Python solver for this project can be found [here](https://github.com/jbelew
 
 This project uses [Crowdin](https://crowdin.com/) to manage translations. If you would like to contribute to the translation of this application, please visit our Crowdin project page and join the translation team.
 
-[**Contribute to Translations on Crowdin**](https://crowdin.com/project/your-project-name)
+[**Contribute to Translations on Crowdin**](https://crowdin.com/project/nms-optimizer)
 
 We appreciate your help in making this application accessible to a wider audience!
 
@@ -43,26 +43,26 @@ To run this project locally, follow these steps:
 
 1. **Clone the repository:**
 
-   ```sh
-   git clone https://github.com/jbelew/nms_optimizer-web.git
-   cd nms_optimizer-web
-   ```
+    ```sh
+    git clone https://github.com/jbelew/nms_optimizer-web.git
+    cd nms_optimizer-web
+    ```
 
 2. **Install dependencies:**
 
-   Make sure you have [Node.js](https://nodejs.org/) installed. Then, install the necessary dependencies with:
+    Make sure you have [Node.js](https://nodejs.org/) installed. Then, install the necessary dependencies with:
 
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    ```
 
 3. **Run the development server:**
 
-   Start the development server with:
+    Start the development server with:
 
-   ```sh
-   npm run dev
-   ```
+    ```sh
+    npm run dev
+    ```
 
 The app runs at http://localhost:5173 by default. In development mode, it expects the backend service to be available at http://127.0.0.1:5000/.
 
