@@ -19,7 +19,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Crowdin Action
-              uses: crowdin/github-action@v4
+              uses: crowdin/github-action@1.15.0
               with:
                   # Crowdin authentication
                   config: crowdin.yml
