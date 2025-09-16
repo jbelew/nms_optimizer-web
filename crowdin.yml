@@ -1,10 +1,6 @@
-project_id_env: "CROWDIN_PROJECT_ID"
-api_token_env: "CROWDIN_PERSONAL_TOKEN"
-base_path: "./public/assets/locales"
-
 files:
-  - source: "en/translation.json"
-    translation: "%two_letters_code%/translation.json"
+  - source: "public/assets/locales/en/translation.json"
+    translation: "public/assets/locales/%two_letters_code%/translation.json"
 
 languages_mapping:
   two_letters_code:
