@@ -18,13 +18,12 @@ jobs:
 
       - name: Crowdin Action
         uses: crowdin/github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # The CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN are stored as repository secrets
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-
-          # The GITHUB_TOKEN is required for the action to create a pull request
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
           # Upload sources to Crowdin
           upload_sources: true
