@@ -39,9 +39,9 @@ export default defineConfig(({ mode }) => {
 		},
 		plugins: [
 			react({
-				babel: {
-					plugins: ["babel-plugin-react-compiler"],
-				},
+				// babel: {
+				// 	plugins: ["babel-plugin-react-compiler"],
+				// },
 			}),
 			tailwindcss(),
 			splashScreen({
