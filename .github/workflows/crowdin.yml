@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Debug
+        run: env | grep INPUT
+
       - name: Crowdin Action
         uses: crowdin/github-action@v1
         with:
