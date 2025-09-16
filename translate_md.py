@@ -38,7 +38,11 @@ def translate_markdown_file(input_file, output_file, target_lang):
     for chunk in chunks:
         if chunk.strip():
             try:
-                translated_chunks.append(translator.translate(chunk))
+                translated_chunk = translator.translate(chunk)
+                if translated_chunk is None:
+                    translated_chunks.append(chunk)
+                else:
+                    translated_chunks.append(translated_chunk)
             except Exception as e:
                 print(f"Error translating chunk: {chunk}")
                 print(f"Error: {e}")
@@ -46,7 +50,7 @@ def translate_markdown_file(input_file, output_file, target_lang):
         else:
             translated_chunks.append(chunk)
 
-    translated_content = "".join(translated_chunks)
+    translated_content = "".join(str(c) for c in translated_chunks)
 
     # Restore code blocks
     for i, block in enumerate(code_blocks):
