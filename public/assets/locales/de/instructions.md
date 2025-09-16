@@ -1,48 +1,62 @@
-## Grundlegende Bedienung
+## Grundlegende Verwendung
 
-- **Klicke oder tippe** auf das ⚙️-Symbol, um deine **Technologie** auszuwählen.
-- **Klicke oder doppel-tippe** auf eine Zelle, um sie als **Supercharged** zu markieren (bis zu 4 pro Raster).
-- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf dem Handy), um den **aktiven** Status einer Zelle umzuschalten — aktive Zellen können Module aufnehmen.
-- Verwende die **Reihen-Umschaltknöpfe**, um ganze Reihen zu aktivieren oder zu deaktivieren. Reihen-Umschalter sind **deaktiviert, sobald Module platziert wurden**, und werden wieder aktiviert, wenn du auf **Raster zurücksetzen** drückst.
+- **Klicken oder tippen** Sie auf das ⚙️-Symbol, um Ihre **Technologie** auszuwählen.
+- **Klicken oder doppeltippen** Sie auf eine Zelle, um sie als **aufgeladen** zu markieren (bis zu 4 pro Raster).
+- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einzelnes Tippen** (auf dem Handy), um den **aktiven** Zustand einer Zelle umzuschalten – aktive Zellen können Module aufnehmen.
+- Verwenden Sie die **Zeilen-Umschalttasten**, um ganze Zeilen zu aktivieren oder zu deaktivieren. Zeilen-Umschalter werden **deaktiviert, sobald Module platziert sind**, und wieder aktiviert, wenn Sie **Raster zurücksetzen** drücken.
 
-> 💡 **Hinweis:** Exosuits und Exocraft haben feste Rasterkonfigurationen. Exocraft-Zellen können überhaupt nicht verändert werden. Bei Exosuits kannst du nur Zellen aktivieren oder deaktivieren; das Ändern des Supercharged-Layouts wird nicht unterstützt.
+> 💡 **Hinweis:** Exosuits und Exocraft haben feste Rasterkonfigurationen. Exocraft-Zellen können überhaupt nicht modifiziert werden. Bei Exosuits können Sie Zellen nur aktiv oder inaktiv schalten; das Ändern des aufgeladenen Layouts wird nicht unterstützt.
 
-## Bevor du startest
+## Bevor Sie beginnen
 
-Dieses Tool ist für **Endgame-Spieler**, die das Technologie-Layout ihrer Plattform für maximale Effizienz optimieren wollen. Es funktioniert am besten, wenn:
+Dieses Tool ist für **Endgame-Spieler**, die das Technologie-Layout ihrer Plattform für maximale Effizienz optimieren. Es funktioniert am besten, wenn:
 
-- Du **die meisten oder alle Zellen** auf deiner Plattform (Raumschiff, Exosuit, Exocraft oder Multi-Tool) freigeschaltet hast.
-- Du Zugriff auf **alle relevanten Technologien** hast.
-- Du einen **vollständigen Satz von drei Upgrade-Modulen** für jede anwendbare Technologie besitzt.
+- Sie **die meisten oder alle Zellen** auf Ihrer Plattform (Raumschiff, Exosuit, Exocraft oder Multi-Tool) freigeschaltet haben.
+- Sie Zugriff auf **alle relevanten Technologien** haben.
+- Sie einen **vollständigen Satz von drei Upgrade-Modulen** pro anwendbarer Technologie besitzen.
 
-Wenn du noch Zellen freischaltest oder Module sammelst, kann das Tool trotzdem Einblicke geben — es wurde aber in erster Linie für **vollständig aufgerüstete Plattformen** entwickelt.
+Wenn Sie noch Zellen freischalten oder Module sammeln, kann das Tool dennoch Einblicke geben – aber es ist hauptsächlich für **vollständig aufgerüstete Plattformen** konzipiert.
 
-## Empfohlene Konfigurationen
+## Informationen zu Korvetten
 
-Bei Plattformen wie **Exosuits** und **Exocraft**, bei denen die Supercharged-Zellen festgelegt sind, ist die Anzahl der sinnvollen Layouts **extrem begrenzt**. Anstatt mit Milliarden von Permutationen wie bei Raumschiffen oder Multi-Tools zu arbeiten, haben wir es hier nur mit einer Handvoll der besten Möglichkeiten zu tun.
+Korvetten funktionieren etwas anders als andere Plattformen – anstatt nur eines Satzes von Upgrades können sie bis zu drei haben.
 
-Dies ermöglicht es dem Tool, **empfohlene Konfigurationen** anzubieten — sorgfältig ausgewählte und stark meinungsbasierte Layouts, die die besten verfügbaren Kombinationen widerspiegeln. Das System unterstützt auch **mehrere Konfigurationen pro Plattform**, die auf verschiedene Anwendungsfälle zugeschnitten sind. Zum Beispiel:
+- **Kosmetische Upgrades** werden als `Cn` angezeigt.
+- **Reaktor-Upgrades** werden als `Rn` angezeigt.
 
-- Der **Minotaurus** enthält sowohl eine **Allzweck-Konfiguration** (für den Fall, dass du ihn aktiv steuerst) als auch eine **dedizierte KI-Unterstützungskonfiguration** (optimiert für den Ferneinsatz).
+Der Löser schlägt auch die besten kosmetischen Upgrades vor, wenn Sie die Leistung über das Aussehen stellen möchten – obwohl die Kompromisse in der Praxis die meiste Zeit ziemlich gering sind.
 
-Andere Plattformen könnten **in Zukunft spezialisierte Varianten** enthalten — wie ein **Pilgrim-Renn-Setup** oder ein **Exosuit mit Scanner-Boost** — abhängig vom Feedback und der Nachfrage der Nutzer.
+Denken Sie daran, dass ein vollständig aufgerüstetes Corvette-Tech-Subsystem **viel** Platz beansprucht. Die Schalter rechts neben jeder Corvette-Technologie ermöglichen es Ihnen, zwischen einer **kosmetischen Lösung**, bei der die automatisch im Technologie-Slot platzierten Gegenstände mit minimalen Anpassungen und Ergänzungen angeordnet werden, oder einer **Min/Max-Lösung** zu wählen, die vollständig auf Leistung optimiert ist.
 
-Wenn du Feedback hast oder alternative Konfigurationen vorschlagen möchtest, kannst du gerne [eine Diskussion starten](https://github.com/jbelew/nms_optimizer-web/discussions) — diese Konfigurationen werden kuratiert, nicht automatisch generiert, und der Input der Community hilft, sie besser zu machen.
+Mit vollen 60 Technologie-Slots haben Sie normalerweise nur Platz für drei oder vier **Min/Max-Lösungen**, also wählen Sie mit Bedacht.
 
-## Tipps zur Verwendung
+## Empfohlene Builds
 
-Supercharged-Zellen bieten große Boni, sind aber begrenzt — jede Platzierung zählt. **Vermeide es, dein Supercharged-Layout im Spiel blind zu kopieren.** Für die besten Ergebnisse:
+Für Plattformen wie **Exosuits** und **Exocraft**, bei denen die aufgeladenen Zellen festgelegt sind, ist die Anzahl der realisierbaren Layouts **extrem begrenzt**. Anstatt mit Milliarden von Permutationen wie bei Raumschiffen oder Multi-Tools zu arbeiten, haben wir es nur mit einer Handvoll der besten Möglichkeiten zu tun.
 
-- **Beginne mit einer Technologie mit hoher Wirkung** — einer, die zu deinem Spielstil passt und von zwei oder drei Supercharged-Zellen profitiert, wie z.B. _Impulsantrieb_, _Impuls-Spitter_, _Infrarot-Klingenbeschleuniger_ oder _Neutronenkanone_. Markiere diese Zellen als Supercharged und löse dann.
-- **Verwende deine verbleibenden Supercharged-Zellen** für eine zweite vorrangige Technologie wie _Hyperantrieb_, _Scanner_ oder _Minenlaser_, und löse erneut. Boni zu verteilen ist in der Regel besser, als sie alle auf eine Technologie zu stapeln.
-- Nachdem deine Kern-Technologien gelöst sind, konzentriere dich auf diejenigen mit **größerer Modulanzahl** (z.B. _Hyperantrieb_, _Raumschiff-Spuren_), bevor dir der zusammenhängende Platz ausgeht.
-- Der Solver übernimmt die Schwerstarbeit — deine Aufgabe ist es, die **Technologien basierend auf deiner Spielweise zu priorisieren**.
+Dies ermöglicht es dem Tool, **empfohlene Builds** anzubieten – sorgfältig handverlesene und sehr meinungsstarke Layouts, die die besten verfügbaren Kombinationen widerspiegeln. Das System unterstützt auch **mehrere Builds pro Plattform**, die auf unterschiedliche Anwendungsfälle zugeschnitten sind. Zum Beispiel:
 
-Wenn der Platz im Raster knapp wird, musst du möglicherweise **einige Technologien zurücksetzen** und sie in einer anderen Reihenfolge lösen, um die gefürchtete **Optimierungs-Warnung** zu vermeiden. Mit einem voll aufgerüsteten Raumschiff bleibt dir oft nur eine offene Zelle — oder gar keine, wenn du einen **Abfangjäger** optimierst.
+- Der **Minotaurus** enthält sowohl einen **Allzweck-Build** (wenn Sie ihn aktiv steuern) als auch einen **dedizierten KI-Support-Build** (optimiert für den Remote-Einsatz).
+
+Andere Plattformen können in Zukunft **spezialisierte Varianten** enthalten – wie ein **Pilgrim-Renn-Setup** oder einen **Scanner-verstärkten Exosuit** – je nach Benutzer-Feedback und Nachfrage.
+
+Wenn Sie Feedback haben oder alternative Konfigurationen vorschlagen möchten, können Sie gerne [eine Diskussion starten](https://github.com/jbelew/nms_optimizer-web/discussions) – diese Builds werden kuratiert, nicht automatisch generiert, und Community-Input hilft, sie zu verbessern.
+
+## Nutzungstipps
+
+Aufgeladene Zellen bieten erhebliche Boni, sind aber begrenzt – jede Platzierung ist wichtig. **Vermeiden Sie es, Ihr aufgeladenes Layout im Spiel blind nachzubilden.** Für beste Ergebnisse:
+
+- **Beginnen Sie mit einer hochwirksamen Technologie** – einer, die zu Ihrem Spielstil passt und von zwei oder drei aufgeladenen Zellen profitiert, wie z. B. _Puls-Motor_, _Puls-Spucker_, _Infra-Messer-Beschleuniger_ oder _Neutronenkanone_.
+  Markieren Sie diese Zellen als aufgeladen und lösen Sie dann.
+- **Verwenden Sie Ihre verbleibenden aufgeladenen Zellen** für eine zweite Prioritätstechnologie wie _Hyperantrieb_, _Scanner_ oder _Bergbaustrahl_ und lösen Sie erneut. Das Verteilen von Boni ist in der Regel besser, als sie alle auf eine Technologie zu stapeln.
+- Nachdem Ihre Kerntechnologien gelöst sind, verlagern Sie den Fokus auf diejenigen mit **größerer Modulanzahl** (z. B. _Hyperantrieb_, _Raumschiff-Spuren_), bevor der zusammenhängende Platz ausgeht.
+- Der Löser übernimmt die schwere Arbeit – Ihre Aufgabe ist es, **Technologien zu priorisieren**, basierend darauf, wie Sie spielen.
+
+Wenn der Gitterplatz knapp wird, müssen Sie möglicherweise **einige Technologien zurücksetzen** und sie in einer anderen Reihenfolge lösen, um den gefürchteten **Optimierungsalarm** zu vermeiden. Mit einem vollständig aufgerüsteten Raumschiff haben Sie oft nur noch eine offene Zelle – oder gar keine, wenn Sie einen **Interceptor** optimieren.
 
 ## Profi-Tipp
 
-Hinter der Platzierung steckt echte Mathematik. Der Solver arbeitet innerhalb fester Fenster, die darauf basieren, wie viele Module eine Technologie benötigt, und wählt in der Regel das effizienteste Layout, ohne Platz zu verschwenden. Aber wenn die Dinge nicht passen:
+Hinter der Platzierung steckt echte Mathematik. Der Löser arbeitet in festen Fenstern, basierend darauf, wie viele Module eine Technologie benötigt, und wählt im Allgemeinen das effizienteste Layout, ohne Platz zu verschwenden. Aber wenn die Dinge nicht übereinstimmen:
 
-- Versuche, **einige Zellen zu deaktivieren**, um den Solver in Richtung eines besseren Fensters zu lenken.
-- Eine kleine Anpassung kann wichtige Platzierungszonen freimachen und dein finales Layout verbessern.
+- Versuchen Sie, **einige Zellen zu deaktivieren**, um den Löser zu einem besseren Fenster zu führen.
+- Eine kleine Anpassung kann wichtige Platzierungszonen freimachen und Ihr endgültiges Layout verbessern.

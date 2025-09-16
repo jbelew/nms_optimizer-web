@@ -1,48 +1,62 @@
-## Utilisation de base
+## Utilisation de Base
 
 - **Cliquez ou appuyez** sur l'icône ⚙️ pour sélectionner votre **Technologie**.
-- **Cliquez ou double-cliquez** sur une cellule pour la marquer comme **Surchargée** (jusqu'à 4 par grille).
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou un **simple appui** (sur mobile) pour activer ou désactiver l'état d'une cellule — les cellules actives peuvent contenir des modules.
-- Utilisez les **boutons de bascule de ligne** pour activer ou désactiver des lignes entières. Les bascules de ligne sont **désactivées une fois les modules placés** et réactivées lorsque vous appuyez sur **Réinitialiser la grille**.
+- **Cliquez ou double-cliquez** sur une cellule pour la marquer comme **Suralimentée** (jusqu'à 4 par grille).
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou **un seul appui** (sur mobile) pour basculer l'état **actif** d'une cellule — les cellules actives peuvent contenir des modules.
+- Utilisez les **boutons de basculement de rangée** pour activer ou désactiver des rangées entières. Les bascules de rangée sont **désactivées une fois les modules placés** et réactivées lorsque vous appuyez sur **Réinitialiser la Grille**.
 
-> 💡 **Remarque :** Les Exosuits et les Exocrafts ont des configurations de grille fixes. Les cellules des Exocrafts ne peuvent pas être modifiées du tout. Sur les Exosuits, vous ne pouvez qu'activer ou désactiver les cellules ; la modification de la disposition des cellules surchargées n'est pas prise en charge.
+> 💡 **Remarque :** Les Exotrajes et les Exocrafts ont des configurations de grille fixes. Les cellules d'Exocraft ne peuvent pas être modifiées du tout. Sur les Exotrajes, vous ne pouvez que basculer l'état des cellules entre actif et inactif ; la modification de la disposition suralimentée n'est pas prise en charge.
 
-## Avant de commencer
+## Avant de Commencer
 
-Cet outil est destiné aux **joueurs avancés** qui optimisent la disposition de la technologie sur leur plateforme pour une efficacité maximale. Il fonctionne mieux lorsque :
+Cet outil est destiné aux **joueurs de fin de partie** qui optimisent la disposition technologique de leur plateforme pour une efficacité maximale. Il fonctionne mieux lorsque :
 
-- Vous avez débloqué **la plupart ou toutes les cellules** sur votre plateforme (Vaisseau, Exosuit, Exocraft ou Multi-outil).
+- Vous avez débloqué **la plupart ou la totalité des cellules** de votre plateforme (Vaisseau, Exotraje, Exocraft ou Multi-outil).
 - Vous avez accès à **toutes les technologies pertinentes**.
 - Vous possédez un **ensemble complet de trois modules d'amélioration** par technologie applicable.
 
-Si vous êtes encore en train de débloquer des cellules ou de collecter des modules, l'outil peut toujours fournir des informations, mais il est principalement conçu pour les **plateformes entièrement améliorées**.
+Si vous êtes encore en train de débloquer des cellules ou de collecter des modules, l'outil peut tout de même fournir des informations, mais il est principalement conçu pour les **plateformes entièrement améliorées**.
 
-## Configurations recommandées
+## Informations sur les Corvettes
 
-Pour les plateformes comme les **Exosuits** et les **Exocrafts**, où les cellules surchargées sont fixes, le nombre de dispositions viables est **extrêmement limité**. Au lieu de traiter des milliards de permutations comme nous le faisons pour les vaisseaux ou les multi-outils, nous travaillons avec seulement une poignée des meilleures possibilités.
+Les corvettes fonctionnent un peu différemment des autres plateformes — au lieu d'un seul ensemble d'améliorations, elles peuvent en avoir jusqu'à trois.
 
-Cela permet à l'outil d'offrir des **configurations recommandées**— des dispositions soigneusement sélectionnées et très subjectives reflétant les meilleures combinaisons disponibles. Le système prend également en charge **plusieurs configurations par plateforme**, adaptées à différents cas d'utilisation. Par exemple :
+- Les **améliorations cosmétiques** sont affichées comme `Cn`.
+- Les **améliorations de réacteur** sont affichées comme `Rn`.
 
-- Le **Minotaure** comprend à la fois une **configuration polyvalente** (pour quand vous le pilotez activement) et une **configuration de support IA dédiée** (optimisée pour le déploiement à distance).
+Le solveur suggérera également les meilleures améliorations cosmétiques si vous préférez privilégier les performances à l'apparence — bien que dans la pratique, les compromis soient assez minimes la plupart du temps.
 
-D'autres plateformes pourraient inclure des **variantes spécialisées à l'avenir** — comme une **configuration de course pour le Pèlerin** ou un **Exosuit avec scanner amélioré** — en fonction des commentaires et de la demande des utilisateurs.
+Gardez à l'esprit qu'un sous-système technologique de corvette entièrement amélioré prend **beaucoup** de place. Les interrupteurs à droite de chaque technologie de corvette vous permettent de choisir entre une **solution cosmétique**, organisant les éléments placés automatiquement dans l'emplacement technologique avec des ajustements et des ajouts minimes, ou une **solution min/max** entièrement optimisée pour les performances.
 
-Si vous avez des commentaires ou souhaitez suggérer des configurations alternatives, n'hésitez pas à [lancer une discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — ces configurations sont sélectionnées, pas générées automatiquement, et la contribution de la communauté aide à les améliorer.
+Avec 60 emplacements technologiques complets, vous n'aurez généralement de la place que pour three ou quatre **solutions min/max**, alors choisissez judicieusement.
 
-## Conseils d'utilisation
+## Constructions Recommandées
 
-Les cellules surchargées offrent des bonus majeurs mais sont limitées — chaque placement compte. **Évitez de reproduire aveuglément votre disposition surchargée dans le jeu.** Pour de meilleurs résultats :
+Pour les plateformes comme les **Exotrajes** et les **Exocrafts**, où les cellules suralimentées sont fixes, le nombre de dispositions viables est **extrêmement limité**. Au lieu de traiter des milliards de permutations comme nous le faisons pour les vaisseaux ou les multi-outils, nous ne travaillons qu'avec une poignée des meilleures possibilités.
 
-- **Commencez par une technologie à fort impact** — une qui correspond à votre style de jeu et bénéficie de deux ou trois cellules surchargées, comme le _Moteur à impulsion_, le _Lanceur à impulsion_, l'_Accélérateur à infra-couteau_ ou le _Canon à neutrons_. Marquez ces cellules comme surchargées, puis résolvez.
-- **Utilisez vos cellules surchargées restantes** pour une deuxième technologie prioritaire comme l'_Hyperpropulseur_, le _Scanner_ ou le _Faisceau minier_, et résolvez à nouveau. Répartir les bonus est généralement plus efficace que de les empiler tous sur une seule technologie.
-- Une fois que vos technologies principales sont résolues, concentrez-vous sur celles avec un **plus grand nombre de modules** (par exemple, _Hyperpropulseur_, _Traînées de vaisseau_) avant de manquer d'espace contigu.
-- Le solveur fait le gros du travail — votre tâche est de **prioriser les technologies** en fonction de la façon dont vous jouez.
+Cela permet à l'outil de proposer des **constructions recommandées** — des dispositions soigneusement sélectionnées et très avisées qui reflètent les meilleures combinaisons disponibles. Le système prend également en charge **plusieurs constructions par plateforme**, adaptées à différents cas d'utilisation. Par exemple :
 
-Lorsque l'espace de la grille devient serré, vous devrez peut-être **réinitialiser quelques technologies** et les résoudre dans un ordre différent pour éviter la redoutée **Alerte d'optimisation**. Avec un vaisseau entièrement amélioré, il ne vous restera souvent qu'une seule cellule ouverte — ou aucune si vous optimisez un **Intercepteur**.
+- Le **Minotaure** comprend à la fois une **construction à usage général** (pour lorsque vous le pilotez activement) et une **construction de soutien IA dédiée** (optimisée pour le déploiement à distance).
 
-## Astuce de pro
+D'autres plateformes pourraient inclure des **variantes spécialisées à l'avenir** — comme une **configuration de course Pilgrim** ou un **Exotraje amélioré par scanner** — en fonction des commentaires et de la demande des utilisateurs.
 
-Il y a de vraies maths derrière le placement. Le solveur fonctionne dans des fenêtres fixes basées sur le nombre de modules requis par une technologie et choisit généralement la disposition la plus efficace sans gaspiller d'espace. Mais si les choses ne s'alignent pas :
+Si vous avez des commentaires ou si vous souhaitez suggérer d'autres configurations, n'hésitez pas à [lancer une discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — ces constructions sont sélectionnées, non générées automatiquement, et la contribution de la communauté aide à les améliorer.
+
+## Conseils d'Utilisation
+
+Les cellules suralimentées offrent des bonus importants mais sont limitées — chaque emplacement compte. **Évitez de reproduire aveuglément votre disposition suralimentée en jeu.** Pour de meilleurs résultats :
+
+- **Commencez par une technologie à fort impact** — une qui correspond à votre style de jeu et bénéficie de deux ou trois cellules suralimentées, comme le _Moteur à Impulsion_, le _Cracheur à Impulsion_, l' _Accélérateur d'Infra-couteau_ ou le _Canon à Neutrons_.
+  Marquez ces cellules comme suralimentées, puis résolvez.
+- **Utilisez vos cellules suralimentées restantes** pour une deuxième technologie prioritaire comme l' _Hyperpropulseur_, le _Scanner_ ou le _Rayon d'Extraction_, et résolvez à nouveau. Répartir les bonus est généralement préférable à les empiler tous sur une seule technologie.
+- Une fois vos technologies de base résolues, concentrez-vous sur celles qui ont un **plus grand nombre de modules** (par exemple, _Hyperpropulseur_, _Traînées de Vaisseau_) avant de manquer d'espace contigu.
+- Le solveur fait le gros du travail — votre tâche consiste à **prioriser les technologies** en fonction de votre façon de jouer.
+
+Lorsque l'espace de la grille se resserre, vous devrez peut-être **réinitialiser quelques technologies** et les résoudre dans un ordre différent pour éviter la redoutée **Alerte d'Optimisation**. Avec un vaisseau entièrement amélioré, il ne vous restera souvent qu'une seule cellule ouverte — ou aucune si vous optimisez un **Intercepteur**.
+
+## Conseil de Pro
+
+Il y a de vraies mathématiques derrière le placement. Le solveur fonctionne dans des fenêtres fixes basées sur le nombre de modules requis par une technologie et choisit généralement la disposition la plus efficace sans gaspiller d'espace. Mais si les choses ne s'alignent pas :
 
 - Essayez de **désactiver quelques cellules** pour guider le solveur vers une meilleure fenêtre.
 - Un petit ajustement peut libérer des zones de placement clés et améliorer votre disposition finale.

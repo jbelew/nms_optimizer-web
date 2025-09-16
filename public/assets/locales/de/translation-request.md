@@ -1,41 +1,62 @@
-## Hilfe bei der Übersetzung des NMS Optimizers
+# Helfen Sie bei der Übersetzung des NMS-Optimierers
 
-Die App ist derzeit nur auf Englisch verfügbar, aber Analysen zeigen Besucher aus aller Welt. Ich würde sie gerne der globalen _No Man's Sky_-Community zugänglicher machen – und hier kommst du ins Spiel.
+Analysen zeigen Besucher aus der ganzen Welt, und ich würde es gerne der globalen No Man's Sky-Community zugänglicher machen – und hier kommen Sie ins Spiel.
 
-## Wie du helfen kannst
+## Wie Sie helfen können
 
-Ich suche bilinguale Spieler, die bei der Übersetzung der App helfen möchten – insbesondere beim Bearbeiten und Korrekturlesen der KI-generierten **französischen**, **deutschen** und **spanischen** Übersetzungen, oder um andere Sprachen mit starken NMS-Spieler-Communities zu bearbeiten.
+Ich suche zweisprachige Spieler, die bei der Übersetzung der App helfen – insbesondere beim **Bearbeiten und Korrekturlesen der KI-generierten französischen, deutschen und spanischen Übersetzungen** oder bei der Arbeit an anderen Sprachen mit starken NMS-Spieler-Communitys.
 
-Du musst kein professioneller Übersetzer sein – nur fließend sprechen, mit dem Spiel vertraut sein und bereit sein, zu helfen. Es wird definitiv besser sein als dieses ChatGPT-Durcheinander! Du wirst namentlich erwähnt (oder bleibst auf Wunsch anonym).
+Sie müssen kein professioneller Übersetzer sein – nur fließend, mit dem Spiel vertraut und bereit zu helfen. Es wird definitiv besser sein als dieses ChatGPT-Chaos! Sie werden genannt (oder bleiben anonym, wenn Sie es vorziehen).
 
 Die meisten Zeichenketten sind kurze UI-Beschriftungen, Tooltips oder lustige Statusmeldungen.
 
-Übersetzungen werden mit [`i18next`](https://www.i18next.com/) verwaltet, mit einfachen JSON- und Markdown-Dateien.
+Übersetzungen werden mit [`i18next`](https://www.i18next.com/) und einfachen JSON- und Markdown-Dateien verwaltet. Wir verwenden auch **Crowdin**, um kollaborative Übersetzungsbeiträge zu verwalten.
 
-## Wenn du mit GitHub vertraut bist
+---
 
-**Fork das Repo:**  
- [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+## Verwendung von Crowdin (empfohlen)
 
-**Aktualisiere oder erstelle die Übersetzungsdateien:**
+Wenn Sie den einfachsten Weg zum Beitragen suchen:
 
-- Applikations-UI-Beschriftungen befinden sich unter `/src/i18n/locales/[language_code]/translation.json`.
-- Inhalte größerer Dialogfelder werden als reine Markdown-Dateien unter `/public/locales/[language_code]/` gespeichert.
+1. **Melden Sie sich bei Crowdin** unter [https://crowdin.com](https://crowdin.com) an und beantragen Sie den Zugriff auf das NMS-Optimierer-Projekt.
+2. Nach der Genehmigung können Sie **bestehende Übersetzungen direkt in der Web-Benutzeroberfläche bearbeiten** oder Ihre eigenen Übersetzungen hochladen.
+3. Crowdin verwaltet verschiedene Sprachen und stellt sicher, dass Ihre Updates automatisch mit der App synchronisiert werden.
+4. Sie können sich auf das **Korrekturlesen bestehender Übersetzungen** oder das Hinzufügen neuer in Ihrer Sprache konzentrieren.
 
-Du kannst vorhandene Dateien aktualisieren oder einen neuen Ordner für deine Sprache unter Verwendung des [ISO 639-1 Codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) (z.B. `de` für Deutsch) erstellen. Kopiere die relevanten Markdown- und JSON-Dateien in diesen Ordner und aktualisiere den Inhalt entsprechend.
+> Crowdin verwendet Standard-[ISO-Sprachcodes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` für Französisch, `de` für Deutsch, `es` für Spanisch usw.
 
-> _Beispiel:_ Erstelle `/public/locales/de/about.md` für Dialoginhalte und `/src/i18n/locales/de/translation.json` für UI-Beschriftungen.
+Dies ist der empfohlene Ansatz, wenn Sie mit GitHub nicht vertraut sind oder möchten, dass Ihre Änderungen sofort in der App angezeigt werden.
 
-Sende einen **Pull Request**, wenn du fertig bist.
+---
 
-## Keine Lust auf Pull Requests?
+## Wenn Sie mit GitHub vertraut sind
 
-Kein Problem – gehe einfach zur [GitHub Discussions Seite](https://github.com/jbelew/nms_optimizer-web/discussions) und starte einen neuen Thread.
+**Forken Sie das Repo:**
+[github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 
-Du kannst deine Übersetzungen dort einfügen oder Fragen stellen, wenn du nicht sicher bist, wo du anfangen sollst. Ich kümmere mich dann darum.
+**Aktualisieren oder erstellen Sie die Übersetzungsdateien:**
 
-## Hinweise
+- Die UI-Beschriftungen der Anwendung befinden sich in `/src/i18n/locales/[language_code]/translation.json`.
+- Größere Dialogfeldinhalte werden als reine Markdown-Dateien in `/public/locales/[language_code]/` gespeichert.
 
-`randomMessages` ist genau das – eine Liste zufälliger Nachrichten, die angezeigt werden, wenn die Optimierung länger als ein paar Sekunden dauert. Du musst nicht alle übersetzen, überlege dir einfach ein paar, die in deiner Sprache Sinn ergeben.
+Sie können vorhandene Dateien aktualisieren oder einen neuen Ordner für Ihre Sprache mit dem [ISO 639-1-Code](https://en.wikipedia.org/wiki/List_of-ISO_639-1-codes) (z. B. `de` für Deutsch) erstellen. Kopieren Sie die relevanten Markdown- und JSON-Dateien in diesen Ordner und aktualisieren Sie den Inhalt entsprechend.
 
-Vielen Dank, dass du dazu beiträgst, den _No Man's Sky Technology Layout Optimizer AI_ für alle besser zu machen! Lass mich wissen, wenn du Fragen hast – helfe gerne.
+> _Beispiel:_ Erstellen Sie `/public/locales/de/about.md` für Dialoginhalte und `/src/i18n/locales/de/translation.json` für UI-Beschriftungen.
+
+**Senden Sie eine Pull-Anfrage**, wenn Sie fertig sind.
+
+---
+
+## Keine Lust auf Pull-Anfragen?
+
+Kein Problem – gehen Sie einfach zur [GitHub-Diskussionsseite](https://github.com/jbelew/nms_optimizer-web/discussions) und starten Sie ein neues Thema.
+
+Sie können Ihre Übersetzungen dort einfügen oder Fragen stellen, wenn Sie nicht sicher sind, wo Sie anfangen sollen. Ich übernehme es von dort.
+
+---
+
+## Notizen
+
+`randomMessages` ist genau das – eine Liste von zufälligen Nachrichten, die angezeigt werden, wenn die Optimierung länger als ein paar Sekunden dauert. Sie müssen nicht alle übersetzen, sondern nur ein paar, die in Ihrer Sprache Sinn ergeben.
+
+Vielen Dank, dass Sie dazu beitragen, den No Man's Sky Technology Layout Optimizer AI für alle besser zu machen! Lassen Sie mich wissen, wenn Sie Fragen haben – ich helfe gerne.
