@@ -26,9 +26,6 @@ jobs:
           project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
           token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
-          # GitHub authentication (needed for PRs)
-          github_token: ${{ secrets.GH_PAT }}
-
           # Sync options
           upload_sources: true
           download_translations: true
@@ -44,4 +41,3 @@ jobs:
 
           # Optional: label the PR
           pull_request_labels: "translation"
-
