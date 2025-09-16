@@ -1,17 +1,14 @@
-# Crowdin configuration file
-# See https://developer.crowdin.com/cli/configuration/
-
 project_id_env: "CROWDIN_PROJECT_ID"
 api_token_env: "CROWDIN_PERSONAL_TOKEN"
-base_path: "."
+base_path: "./public/assets/locales"
 
 files:
-    - source: "public/assets/locales/en/translation.json"
-      translation: "public/assets/locales/%two_letters_code%/%original_file_name%"
+  - source: "en/translation.json"
+    translation: "%two_letters_code%/translation.json"
 
 languages_mapping:
-    two_letters_code:
-        fr-FR: fr
-        es-ES: es
-        de-DE: de
-        pt-PT: pt
+  two_letters_code:
+    fr-FR: fr
+    es-ES: es
+    de-DE: de
+    pt-PT: pt
