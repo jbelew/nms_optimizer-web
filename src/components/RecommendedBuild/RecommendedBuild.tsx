@@ -18,6 +18,12 @@ import { useRecommendedBuild } from "../../hooks/useRecommendedBuild/useRecommen
 import { type TechTree } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 
+/**
+ * @interface RecommendedBuildProps
+ * @property {TechTree} techTree - The tech tree data, which may contain recommended builds.
+ * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
+ * @property {boolean} isLarge - Indicates if the screen is large, used for responsive layout.
+ */
 interface RecommendedBuildProps {
 	techTree: TechTree;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;

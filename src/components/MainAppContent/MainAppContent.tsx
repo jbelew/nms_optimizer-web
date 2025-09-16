@@ -18,8 +18,10 @@ import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 
+/**
+ * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
+ */
 type MainAppContentInternalProps = {
-	/** The build version of the application, to be displayed in the footer. */
 	buildVersion: string;
 };
 

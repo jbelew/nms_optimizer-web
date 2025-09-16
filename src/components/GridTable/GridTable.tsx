@@ -17,6 +17,17 @@ import ShakingWrapper from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
+/**
+ * @interface GridTableProps
+ * @property {(rowIndex: number) => void} activateRow - Function to activate a specific row in the grid.
+ * @property {(rowIndex: number) => void} deActivateRow - Function to deactivate a specific row in the grid.
+ * @property {boolean} solving - Indicates if the optimization process is currently running.
+ * @property {number} progressPercent - The progress percentage of the optimization process.
+ * @property {boolean} shared - Indicates if the grid is in a shared, read-only state.
+ * @property {() => string} updateUrlForShare - Function that generates and returns a shareable URL for the current grid state.
+ * @property {() => void} updateUrlForReset - Function that resets the grid to its default state.
+ * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
+ */
 interface GridTableProps {
 	activateRow: (rowIndex: number) => void;
 	deActivateRow: (rowIndex: number) => void;

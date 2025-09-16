@@ -13,6 +13,10 @@ import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 
+/**
+ * @interface AppHeaderProps
+ * @property {() => void} onShowChangelog - Callback function to be invoked when the changelog button is clicked.
+ */
 interface AppHeaderProps {
 	onShowChangelog: () => void;
 }

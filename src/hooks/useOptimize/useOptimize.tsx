@@ -41,6 +41,20 @@ function isApiResponse(value: unknown): value is ApiResponse {
 	return true;
 }
 
+/**
+ * Manages the optimization process by communicating with a WebSocket server.
+ * It handles sending optimization requests, receiving progress updates, and processing the final results.
+ * It also manages UI state related to the optimization, such as loading indicators and error states.
+ *
+ * @returns {UseOptimizeReturn} An object containing state and functions for the optimization process.
+ * @property {boolean} solving - True if an optimization is currently in progress.
+ * @property {number} progressPercent - The percentage completion of the current optimization.
+ * @property {(tech: string, forced?: boolean) => Promise<void>} handleOptimize - Function to initiate an optimization for a given technology.
+ * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref for the grid container, used for scrolling on smaller screens.
+ * @property {string | null} patternNoFitTech - The technology that failed to fit using the pattern-based solver, offering a forced solve.
+ * @property {() => void} clearPatternNoFitTech - Function to clear the `patternNoFitTech` state.
+ * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to run a forced optimization for the technology that previously failed to fit.
+ */
 export const useOptimize = (): UseOptimizeReturn => {
 	const { setGrid, setResult, grid } = useGridStore();
 	const {

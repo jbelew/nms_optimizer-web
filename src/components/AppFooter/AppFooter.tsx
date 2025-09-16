@@ -4,6 +4,10 @@ import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
 
+/**
+ * @interface AppFooterProps
+ * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
+ */
 interface AppFooterProps {
 	buildVersion: string;
 }

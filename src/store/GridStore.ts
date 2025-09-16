@@ -177,39 +177,39 @@ export const resetCellContent = (cell: Cell) => {
 
 /**
  * @typedef {object} GridStore
- * @property {(rowIndex: number, columnIndex: number) => void} handleCellTap - Handles tapping on a cell.
- * @property {(rowIndex: number, columnIndex: number) => void} handleCellDoubleTap - Handles double tapping on a cell.
- * @property {(rowIndex: number, columnIndex: number) => void} revertCellTap - Reverts the last tap on a cell.
- * @property {() => void} clearInitialCellStateForTap - Clears the initial cell state for a tap.
- * @property {Cell|null} [_initialCellStateForTap] - The initial state of a cell before a tap.
- * @property {number} version - The version of the store.
- * @property {Grid} grid - The current grid state.
- * @property {ApiResponse|null} result - The result of the last optimization.
- * @property {boolean} isSharedGrid - Whether the grid is from a shared link.
- * @property {boolean} gridFixed - Whether the grid layout is fixed.
- * @property {boolean} superchargedFixed - Whether the supercharged cells are fixed.
- * @property {{grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}|undefined} initialGridDefinition - The initial definition of the grid.
- * @property {(grid: Grid) => void} setGrid - Sets the grid state.
- * @property {() => void} resetGrid - Resets the grid to its initial state.
- * @property {(newGrid: Grid) => void} setGridAndResetAuxiliaryState - Sets the grid and resets auxiliary state.
- * @property {(result: ApiResponse|null, tech: string) => void} setResult - Sets the result of an optimization.
- * @property {(rowIndex: number) => void} activateRow - Activates a row of cells.
- * @property {(rowIndex: number) => void} deActivateRow - Deactivates a row of cells.
- * @property {(tech: string) => boolean} hasTechInGrid - Checks if a technology is in the grid.
- * @property {() => boolean} isGridFull - Checks if the grid is full.
- * @property {(tech: string) => void} resetGridTech - Resets the technology in the grid.
- * @property {(rowIndex: number, columnIndex: number) => void} toggleCellActive - Toggles the active state of a cell.
- * @property {(rowIndex: number, columnIndex: number) => void} toggleCellSupercharged - Toggles the supercharged state of a cell.
- * @property {(rowIndex: number, columnIndex: number, active: boolean) => void} setCellActive - Sets the active state of a cell.
- * @property {(rowIndex: number, columnIndex: number, supercharged: boolean) => void} setCellSupercharged - Sets the supercharged state of a cell.
- * @property {(isShared: boolean) => void} setIsSharedGrid - Sets whether the grid is from a shared link.
- * @property {(fixed: boolean) => void} setGridFixed - Sets whether the grid layout is fixed.
- * @property {(fixed: boolean) => void} setSuperchargedFixed - Sets whether the supercharged cells are fixed.
- * @property {(definition: {grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}|undefined) => void} setInitialGridDefinition - Sets the initial definition of the grid.
- * @property {(definition: {grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}) => void} setGridFromInitialDefinition - Sets the grid from an initial definition.
- * @property {() => number} selectTotalSuperchargedCells - Selects the total number of supercharged cells.
- * @property {() => boolean} selectHasModulesInGrid - Selects whether the grid has modules.
- * @property {(modules: Module[]) => void} applyModulesToGrid - Applies a list of modules to the grid.
+ * @property {(rowIndex: number, columnIndex: number) => void} handleCellTap - Handles single tap on a cell, toggling its active state.
+ * @property {(rowIndex: number, columnIndex: number) => void} handleCellDoubleTap - Handles double tap on a cell, toggling its supercharged state.
+ * @property {(rowIndex: number, columnIndex: number) => void} revertCellTap - Reverts the last tap action on a cell to its initial state.
+ * @property {() => void} clearInitialCellStateForTap - Clears the temporary initial cell state used for tap/double-tap logic.
+ * @property {Cell|null} [_initialCellStateForTap] - Internal state: stores a cell's state before a tap to handle double-tap logic.
+ * @property {number} version - The version of the store's schema, used for persistence migration.
+ * @property {Grid} grid - The main grid object containing the state of all cells.
+ * @property {ApiResponse|null} result - The API response from the last successful optimization.
+ * @property {boolean} isSharedGrid - True if the current grid state was loaded from a shared URL.
+ * @property {boolean} gridFixed - True if the grid's dimensions (active/inactive cells) are fixed.
+ * @property {boolean} superchargedFixed - True if the locations of supercharged cells are fixed.
+ * @property {{grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}|undefined} initialGridDefinition - The initial grid layout definition, used for resetting.
+ * @property {(grid: Grid) => void} setGrid - Action to directly set the entire grid state.
+ * @property {() => void} resetGrid - Action to reset the grid to its initial definition or an empty state.
+ * @property {(newGrid: Grid) => void} setGridAndResetAuxiliaryState - Action to set a new grid while also resetting related state like results.
+ * @property {(result: ApiResponse|null, tech: string) => void} setResult - Action to set the optimization result and update related tech stats.
+ * @property {(rowIndex: number) => void} activateRow - Action to activate all cells in a specific row.
+ * @property {(rowIndex: number) => void} deActivateRow - Action to deactivate all cells in a specific row.
+ * @property {(tech: string) => boolean} hasTechInGrid - Selector to check if a specific technology is present in the grid.
+ * @property {() => boolean} isGridFull - Selector to check if all active cells in the grid are filled with modules.
+ * @property {(tech: string) => void} resetGridTech - Action to remove all instances of a specific technology from the grid.
+ * @property {(rowIndex: number, columnIndex: number) => void} toggleCellActive - Action to toggle the active state of a single cell.
+ * @property {(rowIndex: number, columnIndex: number) => void} toggleCellSupercharged - Action to toggle the supercharged state of a single cell.
+ * @property {(rowIndex: number, columnIndex: number, active: boolean) => void} setCellActive - Action to explicitly set the active state of a cell.
+ * @property {(rowIndex: number, columnIndex: number, supercharged: boolean) => void} setCellSupercharged - Action to explicitly set the supercharged state of a cell.
+ * @property {(isShared: boolean) => void} setIsSharedGrid - Action to set the `isSharedGrid` flag.
+ * @property {(fixed: boolean) => void} setGridFixed - Action to set the `gridFixed` flag.
+ * @property {(fixed: boolean) => void} setSuperchargedFixed - Action to set the `superchargedFixed` flag.
+ * @property {(definition: {grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}|undefined) => void} setInitialGridDefinition - Action to set the initial grid definition from a tech tree.
+ * @property {(definition: {grid: Module[][], gridFixed: boolean, superchargedFixed: boolean}) => void} setGridFromInitialDefinition - Action to build the grid state from a given definition.
+ * @property {() => number} selectTotalSuperchargedCells - Selector to get the total count of supercharged cells.
+ * @property {() => boolean} selectHasModulesInGrid - Selector to check if any cell in the grid contains a module.
+ * @property {(modules: Module[]) => void} applyModulesToGrid - Action to apply a list of modules to the grid, used for recommended builds.
  */
 export type GridStore = {
 	handleCellTap: (rowIndex: number, columnIndex: number) => void;

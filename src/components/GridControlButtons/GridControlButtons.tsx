@@ -7,6 +7,16 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
+/**
+ * @interface RowControlButtonProps
+ * @property {number} rowIndex - The index of the row these buttons control.
+ * @property {(rowIndex: number) => void} activateRow - Function to activate the row.
+ * @property {(rowIndex: number) => void} deActivateRow - Function to deactivate the row.
+ * @property {boolean} hasModulesInGrid - True if any cell in the grid contains a module, used to disable buttons.
+ * @property {boolean} isFirstInactiveRow - True if this row is the first one that is completely inactive.
+ * @property {boolean} isLastActiveRow - True if this row is the last one that has at least one active cell.
+ * @property {boolean} gridFixed - True if the grid dimensions are fixed, disabling the buttons.
+ */
 interface RowControlButtonProps {
 	rowIndex: number;
 	activateRow: (rowIndex: number) => void;

@@ -31,7 +31,7 @@ const RoutedDialogs = lazy(() =>
 const App: FC = () => {
 	const { t } = useTranslation();
 
-	const build: string = (import.meta.env.VITE_BUILD_VERSION as string) ?? "devmode";
+	const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
 	const { showError, setShowError } = useOptimizeStore();
 	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
