@@ -18,7 +18,7 @@
     },
     "gridTable": {
         "optimizing": "OPTIMISATION !",
-        "tapInstructions": "Appuyez une fois pour désactiver une cellule, ou appuyez deux fois pour la marquer comme surchargée"
+        "tapInstructions": "Appuyez une fois pour désactiver une cellule, ou appuyez deux fois pour la marquer comme surchargée."
     },
     "gridControls": {
         "activateRow": "Activer la rangée",
@@ -61,9 +61,9 @@
             "noDataForChart": "Aucune donnée disponible pour ce graphique.",
             "description": "Cette boîte de dialogue affiche des statistiques utilisateur agrégées en fonction des interactions avec l'optimiseur, mettant en évidence les technologies les plus courantes pour les vaisseaux et les multi-outils.",
             "error": "Impossible de charger les statistiques de l'utilisateur. Veuillez réessayer plus tard.",
-            "starshipChartTitle": "Starship Technologies",
+            "starshipChartTitle": "Technologies de Starship",
             "multitoolChartTitle": "Technologies multi-outils",
-            "corvetteChartTitle": "Corvette Technologies",
+            "corvetteChartTitle": "Technologies Corvette",
             "closeButton": "Fermer"
         },
         "optimizationAlert": {
@@ -89,7 +89,7 @@
     "translationRequest": {
         "openDialogLabel": "Traducteurs recherchés !"
     },
-    "platformLabel": "PLATEFORME:",
+    "platformLabel": "PLATEFORME :",
     "platforms": {
         "standard": "Vaisseaux spatiaux standard / exotiques",
         "sentinel": "Intercepteurs Sentinelle",
@@ -106,7 +106,7 @@
         "nautilon": "Exocraft Nautilon",
         "colossus": "Exocraft Colosse",
         "minotaur": "Exocraft Minotaure",
-        "exosuit": "Exosuit",
+        "exosuit": "Costume",
         "corvette": "Corvette (bêta)"
     },
     "techTree": {
@@ -125,7 +125,7 @@
             "Hyperdrive": "Hyperpropulseur",
             "Utilities": "Utilitaires",
             "Weaponry": "Armement",
-            "Scanners": "Scanners",
+            "Scanners": "Scanner",
             "Mining": "Minage",
             "Secondary Weapons": "Armes secondaires",
             "Fleet Upgrades": "Améliorations de flotte",
@@ -156,7 +156,7 @@
             "pulse": "Moteur à impulsion",
             "aquajet": "Aqua-Jets",
             "bobble": "Figurines",
-            "scanner": "Scanners",
+            "scanner": "Scanner",
             "economy": "Scanner d'économie",
             "cargo": "Déflecteur de scan de cargo",
             "conflict": "Scanner de conflit",
@@ -422,7 +422,7 @@
         },
         "other": {
             "freighter-hyper": "Hyperpropulseur",
-            "freighter-hyperdrive": "Hyperdrive",
+            "freighter-hyperdrive": "Hyperpropulsion",
             "freighter-temporal": "Ordinateur de chaîne temporelle",
             "freighter-reality": "Réalité de la réalité",
             "freighter-resonance": "Matrice de résonance",

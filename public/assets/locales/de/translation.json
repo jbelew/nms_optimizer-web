@@ -78,7 +78,7 @@
             "copyButton": "Link kopieren",
             "copiedButton": "Kopiert!",
             "closeButton": "Schließen",
-            "openLink": "Open Link"
+            "openLink": "Link öffnen"
         }
     },
     "footer": {
@@ -288,7 +288,7 @@
         }
     },
     "modules": {
-        "PC": "Photonix Core",
+        "PC": "Photonix-Kern",
         "SB": "Tentakelvormige Figur",
         "SP": "Stotternde Raumschiffspur",
         "TT": "Temporale Raumschiffspur",
