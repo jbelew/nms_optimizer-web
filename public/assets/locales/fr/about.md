@@ -42,4 +42,4 @@ Arrêtez de deviner le placement technologique et déverrouillez le véritable p
 
 Voici un aperçu d'une ** première version ** de l'interface utilisateur - fonctionnellement solide mais visuellement minime. La version actuelle est une mise à niveau majeure de la conception, de la convivialité et de la clarté, aidant les joueurs à trouver rapidement la ** meilleure mise en page ** pour tout navire ou outil.
 
-! [Prototype précoce de No Man's Sky Layout Optimizer Interface] (/ Assets / IMG / Captures / ScreenShot_V03.png)
+! [Prototype précoce de No Man's Sky Layout Optimizer Interface] (/assets/img/screenshots/screenshot_v03.png)

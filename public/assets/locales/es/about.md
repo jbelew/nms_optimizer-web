@@ -42,4 +42,4 @@ Descubrir la mejor colocación del módulo ** ** con tantas permutaciones de dis
 
 Aquí hay un vistazo a una versión temprana ** de la UI, funcionalmente sólida pero visualmente mínima. La versión actual es una actualización importante en diseño, usabilidad y claridad, lo que ayuda a los jugadores a encontrar rápidamente el mejor diseño ** para cualquier barco o herramienta.
 
-! [Prototipo temprano de la interfaz de usuario de Optimizer de diseño de Sky de No Man's Sky] (/Assets/IMG/Screenshots/Screenshot_v03.png)
+! [Prototipo temprano de la interfaz de usuario de Optimizer de diseño de Sky de No Man's Sky] (/assets/img/screenshots/screenshot_v03.png)

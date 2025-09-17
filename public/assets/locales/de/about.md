@@ -42,4 +42,4 @@ Hören Sie auf, die Tech -Platzierung zu erraten, und schalte das wahre Potenzia
 
 Hier ist ein Blick auf eine ** frühe Version ** der Benutzeroberfläche - funktional solide, aber visuell minimal. Die aktuelle Version ist ein großes Upgrade von Design, Benutzerfreundlichkeit und Klarheit und hilft den Spielern dabei, das beste Layout ** für jedes Schiff oder Werkzeug schnell zu finden.
 
-! [Früher Prototyp der Sky Layout -Optimierer -Benutzeroberfläche des Niemands -Layout -Optimierers] (/Assets/IMG/Screenshots/Screenshot_V03.Png)
+! [Früher Prototyp der Sky Layout -Optimierer -Benutzeroberfläche des Niemands -Layout -Optimierers] (/assets/img/screenshots/screenshot_v03.png)
