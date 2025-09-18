@@ -1,6 +1,6 @@
 import "./TechTreeRow.css";
 
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Avatar, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -80,7 +80,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		clearTechMaxBonus,
 		clearTechSolvedBonus,
 		setCheckedModules,
-		clearCheckedModules,
 		techGroups,
 		activeGroups,
 		setActiveGroup,
@@ -111,12 +110,6 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 		: tech;
 	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
-	useEffect(() => {
-		return () => {
-			clearCheckedModules(tech);
-		};
-	}, [tech, clearCheckedModules]);
-
 	const handleReset = useCallback(() => {
 		handleResetGridTech(tech);
 		clearTechMaxBonus(tech);
@@ -131,6 +124,13 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 					? prevChecked.filter((id) => id !== moduleId)
 					: [...prevChecked, moduleId];
 			});
+		},
+		[tech, setCheckedModules]
+	);
+
+	const handleAllCheckboxesChange = useCallback(
+		(moduleIds: string[]) => {
+			setCheckedModules(tech, () => moduleIds);
 		},
 		[tech, setCheckedModules]
 	);
@@ -215,6 +215,10 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						currentCheckedModulesLength={currentCheckedModules.length}
 						techMaxBonus={techMaxBonus}
 						techSolvedBonus={techSolvedBonus}
+						modules={activeGroup?.modules || []}
+						currentCheckedModules={currentCheckedModules}
+						handleCheckboxChange={handleCheckboxChange}
+						handleAllCheckboxesChange={handleAllCheckboxesChange}
 					/>
 
 					{hasMultipleGroups && (

@@ -93,7 +93,20 @@ export const useTechStore = create<TechState>((set, get) => ({
 			checkedModules: { ...state.checkedModules, [tech]: [] },
 		})),
 	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
-	setTechGroups: (techGroups) => set({ techGroups }),
+	setTechGroups: (techGroups) => {
+		const initialCheckedModules = Object.keys(techGroups).reduce(
+			(acc, tech) => {
+				const group = techGroups[tech]?.[0];
+				if (group) {
+					acc[tech] = group.modules.map((m) => m.id);
+				}
+				return acc;
+			},
+			{} as { [key: string]: string[] }
+		);
+
+		set({ techGroups, checkedModules: initialCheckedModules });
+	},
 	setActiveGroup: (tech, groupType) =>
 		set((state) => ({
 			activeGroups: { ...state.activeGroups, [tech]: groupType },

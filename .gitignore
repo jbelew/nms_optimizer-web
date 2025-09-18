@@ -30,3 +30,6 @@ stats.html
 test-results
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
+
+*storybook.log
+storybook-static

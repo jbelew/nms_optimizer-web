@@ -4,7 +4,7 @@ import { ScrollArea } from "@radix-ui/themes";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
+import { TechTree, useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import ErrorBoundaryInset from "../ErrorBoundry/ErrorBoundryInset";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
@@ -22,6 +22,7 @@ interface TechTreeProps {
 	solving: boolean;
 	gridContainerRef: React.RefObject<HTMLDivElement | null>;
 	gridTableTotalWidth: number | undefined;
+	techTree?: TechTree; // Optional techTree prop
 }
 
 /**
@@ -40,15 +41,17 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
 	solving,
 	gridContainerRef,
+	techTree: techTreeProp,
 }) => {
 	const isLarge = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
-	const techTree = useFetchTechTreeSuspense(selectedShipType);
+	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
+	const techTree = techTreeProp || fetchedTechTree;
 
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
 
 	const hasRecommendedBuilds =
-		techTree.recommended_builds && techTree.recommended_builds.length > 0;
+		techTree?.recommended_builds && techTree.recommended_builds.length > 0;
 
 	const scrollAreaHeight = useMemo(() => {
 		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
