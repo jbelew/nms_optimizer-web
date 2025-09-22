@@ -1,37 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nms-optimizer.app/?lng=en</loc>
+    <loc>https://nms-optimizer.app/</loc>
     <lastmod>2025-09-16</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/about?lng=en</loc>
+    <loc>https://nms-optimizer.app/es</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/about</loc>
     <lastmod>2025-09-08</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/changelog?lng=en</loc>
+    <loc>https://nms-optimizer.app/es/about</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/about</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/about</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/about</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/changelog</loc>
     <lastmod>2025-09-16</lastmod>
     <priority>0.7</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/instructions?lng=en</loc>
+    <loc>https://nms-optimizer.app/es/changelog</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/changelog</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/changelog</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/changelog</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/instructions</loc>
     <lastmod>2025-09-08</lastmod>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/translation?lng=en</loc>
+    <loc>https://nms-optimizer.app/es/instructions</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/instructions</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/instructions</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/instructions</loc>
+    <lastmod>2025-09-08</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/translation</loc>
     <lastmod>2025-09-16</lastmod>
     <priority>0.6</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://nms-optimizer.app/userstats?lng=en</loc>
+    <loc>https://nms-optimizer.app/es/translation</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/translation</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/translation</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/translation</loc>
+    <lastmod>2025-09-16</lastmod>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/userstats</loc>
+    <lastmod>2025-09-14</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/es/userstats</loc>
+    <lastmod>2025-09-14</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/userstats</loc>
+    <lastmod>2025-09-14</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/userstats</loc>
+    <lastmod>2025-09-14</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/userstats</loc>
     <lastmod>2025-09-14</lastmod>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>

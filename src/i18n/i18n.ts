@@ -16,6 +16,7 @@ void i18n
 		debug: process.env.NODE_ENV === "development",
 		detection: {
 			order: [
+				"path",
 				"querystring",
 				"cookie",
 				"localStorage",
@@ -24,6 +25,7 @@ void i18n
 				"htmlTag",
 			],
 			caches: ["localStorage", "cookie"],
+			lookupFromPathIndex: 1,
 		},
 		backend: {
 			loadPath: "/assets/locales/{{lng}}/{{ns}}.json",
