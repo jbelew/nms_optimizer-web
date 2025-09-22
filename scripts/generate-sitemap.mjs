@@ -26,22 +26,31 @@ const pages = [
 	},
 ];
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${pages
-		.map((page) => {
-			const stats = fs.statSync(path.join(__dirname, "..", page.path));
-			const lastmod = stats.mtime.toISOString().split("T")[0];
-			const url = new URL(page.url);
-			url.searchParams.set("lng", "en");
-			return `<url>
+const languages = ["en", "es", "fr", "de", "pt"];
+
+const urlEntries = pages.flatMap((page) => {
+	const stats = fs.statSync(path.join(__dirname, "..", page.path));
+	const lastmod = stats.mtime.toISOString().split("T")[0];
+
+	return languages.map((lang) => {
+		const url = new URL(page.url);
+		if (lang !== "en") {
+			// Prepend the language code to the path
+			url.pathname = `/${lang}${url.pathname === "/" ? "" : url.pathname}`;
+		}
+
+		return `  <url>
     <loc>${url.href}</loc>
     <lastmod>${lastmod}</lastmod>
     <priority>${page.priority}</priority>
     <changefreq>weekly</changefreq>
   </url>`;
-		})
-		.join("\n  ")}
+	});
+});
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlEntries.join("\n")}
 </urlset>`;
 
 fs.writeFileSync(path.join(__dirname, "..", "public", "sitemap.xml"), sitemap);

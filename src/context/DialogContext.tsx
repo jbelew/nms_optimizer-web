@@ -1,7 +1,8 @@
 // src/context/DialogContext.tsx
 import type { DialogType } from "./dialog-utils";
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { DialogContext } from "./dialog-utils";
 
@@ -15,6 +16,8 @@ import { DialogContext } from "./dialog-utils";
 export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const { i18n } = useTranslation();
+	const params = useParams();
 
 	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
 	const [shareUrl, setShareUrl] = useState<string>("");
@@ -40,19 +43,30 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Effect to sync dialog state with URL.
 	 */
 	useEffect(() => {
-		const path = location.pathname.substring(1); // remove leading '/'
+		const pathParts = location.pathname.split("/").filter(Boolean);
+		const langParam = params.lang; // From the URL, e.g., 'fr'
+		let dialogPath: DialogType;
+
+		if (langParam) {
+			// URL is like /fr/about
+			dialogPath = (pathParts[1] as DialogType) || null;
+		} else {
+			// URL is like /about
+			dialogPath = (pathParts[0] as DialogType) || null;
+		}
+
 		if (
-			path === "about" ||
-			path === "instructions" ||
-			path === "changelog" ||
-			path === "translation" ||
-			path === "userstats"
+			dialogPath === "about" ||
+			dialogPath === "instructions" ||
+			dialogPath === "changelog" ||
+			dialogPath === "translation" ||
+			dialogPath === "userstats"
 		) {
-			setActiveDialog(path);
+			setActiveDialog(dialogPath);
 		} else {
 			setActiveDialog(null);
 		}
-	}, [location.pathname]);
+	}, [location.pathname, params.lang]);
 
 	/**
 	 * Opens a dialog.
@@ -65,10 +79,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			dialog: NonNullable<DialogType> | null,
 			data?: { shareUrl?: string; section?: string }
 		) => {
+			const lang = (i18n.language || "en").split("-")[0];
 			if (data?.shareUrl) {
 				setShareUrl(data.shareUrl);
-			} else {
-				navigate(`/${dialog}`);
+			} else if (dialog) {
+				const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
+				navigate(path);
 			}
 			if (data?.section) {
 				setSectionToScrollTo(data.section);
@@ -76,20 +92,22 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 				setSectionToScrollTo(undefined);
 			}
 		},
-		[navigate]
+		[navigate, i18n.language]
 	);
 
 	/**
 	 * Closes the currently active dialog.
 	 */
 	const closeDialog = useCallback(() => {
+		const lang = (i18n.language || "en").split("-")[0];
 		if (shareUrl) {
 			setShareUrl("");
 		} else if (activeDialog) {
-			navigate("/");
+			const path = lang === "en" ? "/" : `/${lang}`;
+			navigate(path);
 		}
 		setSectionToScrollTo(undefined);
-	}, [activeDialog, navigate, shareUrl]);
+	}, [activeDialog, navigate, shareUrl, i18n.language]);
 
 	/**
 	 * Marks the tutorial as finished.

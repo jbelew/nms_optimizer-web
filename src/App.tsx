@@ -53,12 +53,21 @@ const App: FC = () => {
 
 			<Suspense fallback={null}>
 				<Routes>
+					{/* English (default) routes */}
 					<Route path="/" element={null} />
 					<Route path="/changelog" element={null} />
 					<Route path="/instructions" element={null} />
 					<Route path="/about" element={null} />
 					<Route path="/translation" element={null} />
 					<Route path="/userstats" element={null} />
+
+					{/* Other language routes */}
+					<Route path="/:lang(es|fr|de|pt)" element={null} />
+					<Route path="/:lang(es|fr|de|pt)/changelog" element={null} />
+					<Route path="/:lang(es|fr|de|pt)/instructions" element={null} />
+					<Route path="/:lang(es|fr|de|pt)/about" element={null} />
+					<Route path="/:lang(es|fr|de|pt)/translation" element={null} />
+					<Route path="/:lang(es|fr|de|pt)/userstats" element={null} />
 				</Routes>
 
 				<AppDialog

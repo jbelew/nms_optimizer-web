@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // Import your SVG flag components
 import deFlagPath from "../../assets/svg/flags/de.svg";
@@ -39,6 +39,8 @@ const LanguageSelector: React.FC = () => {
 	const isSmallAndUp = useBreakpoint("640px");
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
+	const location = useLocation();
+	const params = useParams();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
 
@@ -59,15 +61,27 @@ const LanguageSelector: React.FC = () => {
 
 	/**
 	 * Handles the language change event.
-	 * Changes the i18n language and sends an analytics event.
-	 * @param {string} langCode - The language code to change to.
+	 * Navigates to the URL with the new language code.
+	 * @param {string} newLang - The language code to change to.
 	 */
-	const handleLanguageChange = (langCode: string) => {
-		void i18n.changeLanguage(langCode);
+	const handleLanguageChange = (newLang: string) => {
+		const { lang } = params;
+		let basePath = location.pathname;
+
+		// If a language prefix exists in the current path, remove it to get the base path.
+		if (lang) {
+			basePath = location.pathname.substring(lang.length + 1) || "/";
+		}
+
+		// Construct the new path. No prefix for English.
+		const newPath = newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
+
+		navigate(newPath);
+
 		sendEvent({
 			category: "User Interactions",
 			action: "languageSelection",
-			label: langCode,
+			label: newLang,
 			value: 1,
 		});
 	};
@@ -77,7 +91,9 @@ const LanguageSelector: React.FC = () => {
 	 * Navigates to the translation page.
 	 */
 	const handleRequestTranslationClick = () => {
-		navigate("/translation");
+		const lang = (i18n.language || "en").split("-")[0];
+		const path = lang === "en" ? "/translation" : `/${lang}/translation`;
+		navigate(path);
 	};
 
 	const currentFlagPath =

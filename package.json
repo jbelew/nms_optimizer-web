@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "npm run sitemap && tsc -b && vite build --mode production",
+		"build": "tsc -b && vite build --mode production",
 		"build:docker": "DOCKER=true vite build --mode docker",
 		"build:critical": "tsc -b && vite build --mode critical",
 		"build:e2e": "vite build --mode e2e",
@@ -24,7 +24,7 @@
 		"coverage:merge": "vitest coverage merge",
 		"coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
 		"start": "node server.js",
-		"heroku-postbuild": "npm run sitemap && vite build",
+		"heroku-postbuild": "vite build",
 		"preversion": "",
 		"version": "npm run changelog && git add CHANGELOG.md",
 		"postversion": "git push origin main --follow-tags",
