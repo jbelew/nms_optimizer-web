@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import React, { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
@@ -29,7 +29,23 @@ const RoutedDialogs = lazy(() =>
  * @returns {JSX.Element} The rendered App component.
  */
 const App: FC = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const location = useLocation();
+
+	useEffect(() => {
+		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
+		const pathParts = location.pathname.split("/").filter((p) => p);
+
+		let lang = "en";
+		if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
+			lang = pathParts[0];
+		}
+
+		const currentLang = i18n.language.split("-")[0];
+		if (currentLang !== lang) {
+			i18n.changeLanguage(lang);
+		}
+	}, [location.pathname, i18n]);
 
 	const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
@@ -68,6 +84,7 @@ const App: FC = () => {
 					<Route path="/:lang(es|fr|de|pt)/about" element={null} />
 					<Route path="/:lang(es|fr|de|pt)/translation" element={null} />
 					<Route path="/:lang(es|fr|de|pt)/userstats" element={null} />
+					<Route path="*" element={null} />
 				</Routes>
 
 				<AppDialog

@@ -73,7 +73,8 @@ const LanguageSelector: React.FC = () => {
 			basePath = location.pathname.substring(langCand.length + 1) || "/";
 		}
 
-		const newPath = newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
+		const newPath =
+			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
 
 		void i18n.changeLanguage(newLang);
 		navigate(newPath);
