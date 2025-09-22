@@ -1,4 +1,4 @@
-# Help Translate the NMS Optimizer
+## Help Translate the NMS Optimizer
 
 Analytics show visitors from all over the world and I’d love to make it more accessible to the global No Man’s Sky community — and that’s where you come in.
 

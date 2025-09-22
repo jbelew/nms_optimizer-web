@@ -1,4 +1,4 @@
-# Ajude a Traduzir o Otimizador NMS
+## Ajude a Traduzir o Otimizador NMS
 
 As análises mostram visitantes de todo o mundo e eu adoraria torná-lo mais acessível para a comunidade global de No Man's Sky — e é aí que você entra.
 
