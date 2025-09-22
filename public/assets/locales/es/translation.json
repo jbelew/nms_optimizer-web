@@ -1,6 +1,6 @@
 {
     "appHeader": {
-        "subTitle": "IA Optimizador de Diseño de Tecnología"
+        "subTitle": "<1>IA</1> Optimizador de Diseño de Tecnología"
     },
     "languageInfo": {
         "nativeName": "Español (Generado por IA)",
@@ -18,7 +18,7 @@
     },
     "gridTable": {
         "optimizing": "¡OPTIMIZANDO!",
-        "tapInstructions": "Toca una vez para deshabilitar una celda, o toca dos veces para marcarla como supercargada"
+        "tapInstructions": "Toca una vez para deshabilitar una celda, o toca dos veces para marcarla como supercargada."
     },
     "gridControls": {
         "activateRow": "Activar fila",
@@ -63,7 +63,7 @@
             "error": "No se pudo cargar estadísticas de usuario. Vuelva a intentarlo más tarde.",
             "starshipChartTitle": "Tecnologías de nave de naves",
             "multitoolChartTitle": "Tecnologías múltiples",
-            "corvetteChartTitle": "Corvette Technologies",
+            "corvetteChartTitle": "Tecnologías de Corvette",
             "closeButton": "Cerca"
         },
         "optimizationAlert": {
