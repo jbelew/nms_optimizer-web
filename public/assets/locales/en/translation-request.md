@@ -12,8 +12,6 @@ Most strings are short UI labels, tooltips, or fun status messages.
 
 Translations are managed using [`i18next`](https://www.i18next.com/), with simple JSON and Markdown files. We also use **Crowdin** to manage collaborative translation contributions.
 
----
-
 ## Using Crowdin (Recommended)
 
 If you want the easiest way to contribute:
@@ -26,8 +24,6 @@ If you want the easiest way to contribute:
 > Crowdin uses standard [ISO language codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` for French, `de` for German, `es` for Spanish, etc.
 
 This is the recommended approach if you’re not familiar with GitHub or want your changes reflected immediately in the app.
-
----
 
 ## If You're Comfortable With GitHub
 
@@ -45,15 +41,11 @@ You can update existing files or create a new folder for your language using the
 
 **Submit a pull request** when you're done.
 
----
-
 ## Not Into Pull Requests?
 
 No problem — just head over to the [GitHub Discussions page](https://github.com/jbelew/nms_optimizer-web/discussions) and start a new thread.
 
 You can paste your translations there or ask questions if you’re not sure where to begin. I’ll take it from there.
-
----
 
 ## Notes
 

@@ -12,8 +12,6 @@ Die meisten Zeichenketten sind kurze UI-Beschriftungen, Tooltips oder lustige St
 
 Übersetzungen werden mit [`i18next`](https://www.i18next.com/) und einfachen JSON- und Markdown-Dateien verwaltet. Wir verwenden auch **Crowdin**, um kollaborative Übersetzungsbeiträge zu verwalten.
 
----
-
 ## Verwendung von Crowdin (empfohlen)
 
 Wenn Sie den einfachsten Weg zum Beitragen suchen:
@@ -26,8 +24,6 @@ Wenn Sie den einfachsten Weg zum Beitragen suchen:
 > Crowdin verwendet Standard-[ISO-Sprachcodes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` für Französisch, `de` für Deutsch, `es` für Spanisch usw.
 
 Dies ist der empfohlene Ansatz, wenn Sie mit GitHub nicht vertraut sind oder möchten, dass Ihre Änderungen sofort in der App angezeigt werden.
-
----
 
 ## Wenn Sie mit GitHub vertraut sind
 
@@ -45,15 +41,11 @@ Sie können vorhandene Dateien aktualisieren oder einen neuen Ordner für Ihre S
 
 **Senden Sie eine Pull-Anfrage**, wenn Sie fertig sind.
 
----
-
 ## Keine Lust auf Pull-Anfragen?
 
 Kein Problem – gehen Sie einfach zur [GitHub-Diskussionsseite](https://github.com/jbelew/nms_optimizer-web/discussions) und starten Sie ein neues Thema.
 
 Sie können Ihre Übersetzungen dort einfügen oder Fragen stellen, wenn Sie nicht sicher sind, wo Sie anfangen sollen. Ich übernehme es von dort.
-
----
 
 ## Notizen
 

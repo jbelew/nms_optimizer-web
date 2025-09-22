@@ -49,7 +49,7 @@ app.get(/.*/, async (req, res, next) => {
 		let modifiedHtml = indexHtml;
 
 		// --- SEO Tags Injection ---
-		const baseUrl = `${req.protocol}://${req.headers.host}`;
+		const baseUrl = `https://${req.headers.host}`;
 		const tagsToInject = [];
 
 		const pathParts = req.path.split("/").filter(Boolean);

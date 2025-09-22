@@ -4,7 +4,11 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.13 (2025-09-16) – Waiting for Model Data
+## Version 3.14 (2025-09-22) – Waiting for Model Data
+
+- Updated language selection to use routes instead of query parameters.
+
+## Version 3.13 (2025-09-16)
 
 - Added support for **Portuguese**
 - Completed a thorough audit of existing translations
