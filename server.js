@@ -58,15 +58,15 @@ app.get(/.*/, async (req, res, next) => {
 		const lang = OTHER_LANGUAGES.includes(langFromPath) ? langFromPath : "en";
 		const pagePathParts = OTHER_LANGUAGES.includes(langFromPath) ? pathParts.slice(1) : pathParts;
 		const pagePath = pagePathParts.join("/");
-		const basePath = `/${pagePath}`;
+		let basePath = `/${pagePath}`;
+		if (basePath === "/") basePath = ""; // Avoid double slashes for root
 
 		const isKnownDialog = KNOWN_DIALOGS.includes(pagePath);
 		const isRoot = pagePath === "";
 
 		// 1. Canonical URL Logic
 		const canonicalUrlBuilder = new URL(req.originalUrl, baseUrl);
-		canonicalUrlBuilder.pathname = lang === "en" ? basePath : `/${lang}${basePath}`;
-		if (canonicalUrlBuilder.pathname === "//") canonicalUrlBuilder.pathname = "/";
+		canonicalUrlBuilder.pathname = lang === "en" ? basePath || "/" : `/${lang}${basePath}`;
 		canonicalUrlBuilder.searchParams.delete("platform");
 		canonicalUrlBuilder.searchParams.delete("ship");
 		canonicalUrlBuilder.searchParams.delete("grid");
@@ -80,8 +80,7 @@ app.get(/.*/, async (req, res, next) => {
 			const hreflangUrlBuilder = new URL(canonicalUrl);
 
 			// English (and x-default)
-			hreflangUrlBuilder.pathname = basePath;
-			if (hreflangUrlBuilder.pathname === "//") hreflangUrlBuilder.pathname = "/";
+			hreflangUrlBuilder.pathname = basePath || "/";
 			tagsToInject.push(`<link rel="alternate" hreflang="en" href="${hreflangUrlBuilder.href}" />`);
 			tagsToInject.push(
 				`<link rel="alternate" hreflang="x-default" href="${hreflangUrlBuilder.href}" />`
@@ -89,7 +88,7 @@ app.get(/.*/, async (req, res, next) => {
 
 			// Other languages
 			OTHER_LANGUAGES.forEach((langCode) => {
-				hreflangUrlBuilder.pathname = `/${langCode}${basePath === "/" ? "" : basePath}`;
+				hreflangUrlBuilder.pathname = `/${langCode}${basePath}`;
 				tagsToInject.push(
 					`<link rel="alternate" hreflang="${langCode}" href="${hreflangUrlBuilder.href}" />`
 				);

@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { DropdownMenu, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Import your SVG flag components
 import deFlagPath from "../../assets/svg/flags/de.svg";
@@ -40,9 +40,9 @@ const LanguageSelector: React.FC = () => {
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const params = useParams();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
+	const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 
 	const supportedLanguages = useMemo(() => {
 		const availableLanguageCodes = Object.keys(i18n.services.resourceStore.data || {});
@@ -61,21 +61,21 @@ const LanguageSelector: React.FC = () => {
 
 	/**
 	 * Handles the language change event.
-	 * Navigates to the URL with the new language code.
+	 * Navigates to the URL with the new language code and updates i18n state.
 	 * @param {string} newLang - The language code to change to.
 	 */
 	const handleLanguageChange = (newLang: string) => {
-		const { lang } = params;
+		const pathParts = location.pathname.split("/").filter(Boolean);
+		const langCand = pathParts[0];
 		let basePath = location.pathname;
 
-		// If a language prefix exists in the current path, remove it to get the base path.
-		if (lang) {
-			basePath = location.pathname.substring(lang.length + 1) || "/";
+		if (OTHER_LANGUAGES.includes(langCand)) {
+			basePath = location.pathname.substring(langCand.length + 1) || "/";
 		}
 
-		// Construct the new path. No prefix for English.
 		const newPath = newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
 
+		void i18n.changeLanguage(newLang);
 		navigate(newPath);
 
 		sendEvent({

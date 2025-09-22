@@ -2,9 +2,11 @@
 import type { DialogType } from "./dialog-utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { DialogContext } from "./dialog-utils";
+
+const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 
 /**
  * Provider component that manages the state and logic for routed dialogs.
@@ -17,7 +19,6 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { i18n } = useTranslation();
-	const params = useParams();
 
 	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
 	const [shareUrl, setShareUrl] = useState<string>("");
@@ -44,14 +45,14 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 */
 	useEffect(() => {
 		const pathParts = location.pathname.split("/").filter(Boolean);
-		const langParam = params.lang; // From the URL, e.g., 'fr'
-		let dialogPath: DialogType;
+		const langCand = pathParts[0];
+		let dialogPath: DialogType = null;
 
-		if (langParam) {
-			// URL is like /fr/about
+		if (OTHER_LANGUAGES.includes(langCand)) {
+			// Path is like /fr/about or /fr
 			dialogPath = (pathParts[1] as DialogType) || null;
 		} else {
-			// URL is like /about
+			// Path is like /about or /
 			dialogPath = (pathParts[0] as DialogType) || null;
 		}
 
@@ -66,7 +67,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		} else {
 			setActiveDialog(null);
 		}
-	}, [location.pathname, params.lang]);
+	}, [location.pathname]);
 
 	/**
 	 * Opens a dialog.
