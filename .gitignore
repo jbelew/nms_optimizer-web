@@ -30,3 +30,4 @@ stats.html
 test-results
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
+stats.json
