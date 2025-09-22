@@ -32,8 +32,10 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 		.map((page) => {
 			const stats = fs.statSync(path.join(__dirname, "..", page.path));
 			const lastmod = stats.mtime.toISOString().split("T")[0];
+			const url = new URL(page.url);
+			url.searchParams.set("lng", "en");
 			return `<url>
-    <loc>${page.url}</loc>
+    <loc>${url.href}</loc>
     <lastmod>${lastmod}</lastmod>
     <priority>${page.priority}</priority>
     <changefreq>weekly</changefreq>
