@@ -1,3 +1,12 @@
+## [3.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.0...v3.14.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* **recommended builds:** fixed href / content targeting in the recommended build component ([582fa64](https://github.com/jbelew/nms_optimizer-web/commit/582fa64510de85f26adcf9a34223ae16a95422d9))
+
+
+
 # [3.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.13.0...v3.14.0) (2025-09-22)
 
 
