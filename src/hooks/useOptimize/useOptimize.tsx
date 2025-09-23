@@ -120,7 +120,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				const payload = {
 					ship: selectedShipType,
 					tech,
-					player_owned_rewards: checkedModules[tech] || [],
+					available_modules: checkedModules[tech] || [],
 					grid: updatedGrid,
 					forced,
 					send_grid_updates: isLarge,

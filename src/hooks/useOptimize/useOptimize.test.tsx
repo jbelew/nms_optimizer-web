@@ -134,7 +134,7 @@ describe("useOptimize", () => {
 			});
 			mockUseTechStore.mockReturnValue({
 				checkedModules,
-				techGroups: { "Test Tech": ["module1"] },
+				techGroups: { "Test Tech": ["module1", "module2"] },
 				activeGroups: { "Test Tech": "group1" },
 			});
 			mockUsePlatformStore.mockReturnValue(selectedShipType);
@@ -181,10 +181,11 @@ describe("useOptimize", () => {
 			expect(mockSocket.emit).toHaveBeenCalledWith("optimize", {
 				ship: selectedShipType,
 				tech: tech,
-				player_owned_rewards: ["module1"],
+				available_modules: ["module1"],
 				grid: expectedGrid,
 				forced: false,
 				send_grid_updates: true,
+				solve_type: "group1",
 			});
 		});
 

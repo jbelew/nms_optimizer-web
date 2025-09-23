@@ -1,3 +1,40 @@
+# [3.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.1...v3.15.0) (2025-09-23)
+
+
+### Bug Fixes
+
+* **markdown:** some small formatting changes ([4e760b0](https://github.com/jbelew/nms_optimizer-web/commit/4e760b0460a4e2db70cce77e088aa84576fa0082))
+
+
+
+## [3.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.0...v3.14.1) (2025-09-22)
+
+
+### Bug Fixes
+
+* **recommended builds:** fixed href / content targeting in the recommended build component ([582fa64](https://github.com/jbelew/nms_optimizer-web/commit/582fa64510de85f26adcf9a34223ae16a95422d9))
+
+
+
+# [3.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.13.0...v3.14.0) (2025-09-22)
+
+
+### Bug Fixes
+
+* **about:** fixed corrupted markdown formatting in the localized dialog files ([e27b3f4](https://github.com/jbelew/nms_optimizer-web/commit/e27b3f435b1640366025514276b7591f470d701a))
+* **about:** fixed the screenshot link in the localized about.md content ([f9446be](https://github.com/jbelew/nms_optimizer-web/commit/f9446be03263b95850ad82a4410e5caab9ce7302))
+* **build:** regenerate sitemap during build process ([0891d3c](https://github.com/jbelew/nms_optimizer-web/commit/0891d3c7ae570b177dc46abca98b0f492906da6a))
+* **react-compiler:** disabled the react-compiler because it was interfering with i18next ([85e6b32](https://github.com/jbelew/nms_optimizer-web/commit/85e6b322b893d1a042ef6cadc172849752f7a5b6))
+* **seo:** align sitemap with build process and canonical URLs ([b752766](https://github.com/jbelew/nms_optimizer-web/commit/b752766d9e3c2988f4ea9569c5cb4c678f3d8d90))
+
+
+### Features
+
+* **i18n:** implement path-based internationalization ([0988543](https://github.com/jbelew/nms_optimizer-web/commit/09885435b6224c124e46ef3f196b13f1de58811d))
+* **i18n:** implement path-based internationalization ([4cba847](https://github.com/jbelew/nms_optimizer-web/commit/4cba8479bb8bc72b45d36ea478e370166bd050a5))
+
+
+
 # [3.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.12.0...v3.13.0) (2025-09-16)
 
 

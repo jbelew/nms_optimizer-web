@@ -1,4 +1,4 @@
-# Aidez à Traduire l'Optimiseur NMS
+## Aidez à Traduire l'Optimiseur NMS
 
 Les analyses montrent des visiteurs du monde entier et j'aimerais le rendre plus accessible à la communauté mondiale de No Man's Sky — et c'est là que vous intervenez.
 
@@ -12,8 +12,6 @@ La plupart des chaînes sont de courtes étiquettes d'interface utilisateur, des
 
 Les traductions sont gérées à l'aide de [`i18next`](https://www.i18next.com/), avec de simples fichiers JSON et Markdown. Nous utilisons également **Crowdin** pour gérer les contributions de traduction collaboratives.
 
----
-
 ## Utiliser Crowdin (Recommandé)
 
 Si vous voulez le moyen le plus simple de contribuer :
@@ -26,8 +24,6 @@ Si vous voulez le moyen le plus simple de contribuer :
 > Crowdin utilise les codes de langue [ISO](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) standard : `fr` pour le français, `de` pour l'allemand, `es` pour l'espagnol, etc.
 
 C'est l'approche recommandée si vous n'êtes pas familier avec GitHub ou si vous souhaitez que vos modifications soient immédiatement prises en compte dans l'application.
-
----
 
 ## Si Vous êtes à l'aise avec GitHub
 
@@ -45,15 +41,11 @@ Vous pouvez mettre à jour les fichiers existants ou créer un nouveau dossier p
 
 **Soumettez une pull request** lorsque vous avez terminé.
 
----
-
 ## Pas fan des Pull Requests ?
 
 Pas de problème — rendez-vous simplement sur la [page des Discussions GitHub](https://github.com/jbelew/nms_optimizer-web/discussions) et lancez un nouveau fil de discussion.
 
 Vous pouvez y coller vos traductions ou poser des questions si vous n'êtes pas sûr de par où commencer. Je m'en occuperai à partir de là.
-
----
 
 ## Remarques
 

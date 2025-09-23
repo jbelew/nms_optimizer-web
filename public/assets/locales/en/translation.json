@@ -535,5 +535,11 @@
             "waterjets": "Efficient Waterjets",
             "rerouter": "Oxygen Rerouter"
         }
+    },
+    "moduleSelection": {
+        "core": "Core Module (required)",
+        "bonus": "Bonus Modules",
+        "upgrade": "Upgrade Modules",
+        "cosmetic": "Cosmetic Modules"
     }
 }

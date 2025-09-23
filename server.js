@@ -37,7 +37,10 @@ async function loadIndexHtml() {
 }
 
 // SPA fallback for non-asset GET requests
-const KNOWN_ROUTES = ["/", "/instructions", "/about", "/changelog", "/translation", "/userstats"];
+const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
+const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
+const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation", "userstats"];
+
 app.get(/.*/, async (req, res, next) => {
 	if (/\.[^/]+$/.test(req.path)) return next(); // static asset, skip
 
@@ -46,55 +49,50 @@ app.get(/.*/, async (req, res, next) => {
 		let modifiedHtml = indexHtml;
 
 		// --- SEO Tags Injection ---
-		const baseUrl = `${req.protocol}://${req.headers.host}`;
+		const baseUrl = `https://${req.headers.host}`;
 		const tagsToInject = [];
-		const requestUrl = new URL(req.originalUrl, baseUrl);
+
+		const pathParts = req.path.split("/").filter(Boolean);
+		const langFromPath = pathParts[0];
+
+		const lang = OTHER_LANGUAGES.includes(langFromPath) ? langFromPath : "en";
+		const pagePathParts = OTHER_LANGUAGES.includes(langFromPath) ? pathParts.slice(1) : pathParts;
+		const pagePath = pagePathParts.join("/");
+		let basePath = `/${pagePath}`;
+		if (basePath === "/") basePath = ""; // Avoid double slashes for root
+
+		const isKnownDialog = KNOWN_DIALOGS.includes(pagePath);
+		const isRoot = pagePath === "";
 
 		// 1. Canonical URL Logic
-		let canonicalUrl;
-		if (KNOWN_ROUTES.includes(req.path)) {
-			const url = new URL(requestUrl.href);
-			url.searchParams.delete("platform");
-			url.searchParams.delete("ship");
-			url.searchParams.delete("grid");
-
-			// If no language is specified on a known route, set 'en' as default for the canonical URL.
-			if (!url.searchParams.has("lng")) {
-				url.searchParams.set("lng", "en");
-			}
-			canonicalUrl = url.href;
-		} else {
-			canonicalUrl = new URL("/", baseUrl).href;
-		}
+		const canonicalUrlBuilder = new URL(req.originalUrl, baseUrl);
+		canonicalUrlBuilder.pathname = lang === "en" ? basePath || "/" : `/${lang}${basePath}`;
+		canonicalUrlBuilder.searchParams.delete("platform");
+		canonicalUrlBuilder.searchParams.delete("ship");
+		canonicalUrlBuilder.searchParams.delete("grid");
+		canonicalUrlBuilder.searchParams.delete("lng"); // No longer needed
+		const canonicalUrl = canonicalUrlBuilder.href;
 		tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
 		tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
 
 		// 2. Hreflang Tags Logic
-		const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
-		if (KNOWN_ROUTES.includes(req.path)) {
-			const pathForHreflang = req.path;
+		if (isKnownDialog || isRoot) {
+			const hreflangUrlBuilder = new URL(canonicalUrl);
 
-			// Create a clean search string for hreflang, preserving only non-SEO, non-language params.
-			const hreflangSearchParams = new URLSearchParams(requestUrl.search);
-			hreflangSearchParams.delete("platform");
-			hreflangSearchParams.delete("ship");
-			hreflangSearchParams.delete("grid");
-			hreflangSearchParams.delete("lng");
-			const searchForHreflang = hreflangSearchParams.toString()
-				? `?${hreflangSearchParams.toString()}`
-				: "";
-
-			SUPPORTED_LANGUAGES.forEach((lang) => {
-				const url = new URL(pathForHreflang + searchForHreflang, baseUrl);
-				url.searchParams.set("lng", lang);
-				tagsToInject.push(`<link rel="alternate" hreflang="${lang}" href="${url.href}" />`);
-			});
-
-			const defaultUrl = new URL(pathForHreflang + searchForHreflang, baseUrl);
-			defaultUrl.searchParams.set("lng", "en"); // Assuming 'en' is the default
+			// English (and x-default)
+			hreflangUrlBuilder.pathname = basePath || "/";
+			tagsToInject.push(`<link rel="alternate" hreflang="en" href="${hreflangUrlBuilder.href}" />`);
 			tagsToInject.push(
-				`<link rel="alternate" hreflang="x-default" href="${defaultUrl.href}" />`
+				`<link rel="alternate" hreflang="x-default" href="${hreflangUrlBuilder.href}" />`
 			);
+
+			// Other languages
+			OTHER_LANGUAGES.forEach((langCode) => {
+				hreflangUrlBuilder.pathname = `/${langCode}${basePath}`;
+				tagsToInject.push(
+					`<link rel="alternate" hreflang="${langCode}" href="${hreflangUrlBuilder.href}" />`
+				);
+			});
 		}
 
 		// Inject all tags before the closing </head> tag

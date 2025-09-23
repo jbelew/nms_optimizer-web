@@ -8,6 +8,16 @@ import { useTranslation } from "react-i18next";
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 
+interface PieLabelRenderProps {
+	cx: number;
+	cy: number;
+	midAngle: number;
+	innerRadius: number;
+	outerRadius: number;
+	percent: number;
+	name: string;
+}
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"];
 
 const LazyRechartsChart = lazy(async () => {
@@ -46,16 +56,23 @@ const LazyRechartsChart = lazy(async () => {
 							outerRadius="100%"
 							paddingAngle={0}
 							dataKey="value"
-							label={({
-								cx,
-								cy,
-								midAngle,
-								innerRadius,
-								outerRadius,
-								percent,
-								name,
-							}) => {
+							label={(props: unknown) => {
+								const {
+									cx: cx_,
+									cy: cy_,
+									midAngle,
+									innerRadius: innerRadius_,
+									outerRadius: outerRadius_,
+									percent,
+									name,
+								} = props as PieLabelRenderProps;
+
 								const RADIAN = Math.PI / 180;
+								const innerRadius = parseFloat(innerRadius_ as unknown as string);
+								const outerRadius = parseFloat(outerRadius_ as unknown as string);
+								const cx = parseFloat(cx_ as unknown as string);
+								const cy = parseFloat(cy_ as unknown as string);
+
 								const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
 								const x = cx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
 								const y = cy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);

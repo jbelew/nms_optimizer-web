@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { Avatar, Badge, Checkbox, CheckboxGroup, Popover, Separator } from "@radix-ui/themes";
+import { Avatar, Button, Checkbox, CheckboxGroup, Dialog, Separator } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { TechTreeRowProps } from "./TechTreeRow";
@@ -27,6 +28,7 @@ interface TechInfoBadgesProps {
 	currentCheckedModules: string[];
 	handleCheckboxChange: (moduleId: string) => void;
 	handleAllCheckboxesChange: (moduleIds: string[]) => void;
+	translatedTechName: string;
 }
 
 /**
@@ -45,7 +47,9 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	currentCheckedModules,
 	handleCheckboxChange,
 	handleAllCheckboxesChange,
+	translatedTechName,
 }) => {
+	const { t } = useTranslation();
 	const baseImagePath = "/assets/img/grid/";
 	const fallbackImage = `${baseImagePath}infra.webp`;
 
@@ -53,6 +57,28 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	const coreModuleIds = useMemo(() => {
 		return modules.filter((module) => module.type === "core").map((module) => module.id);
 	}, [modules]);
+
+	const groupedModules = useMemo(() => {
+		const groups: { [key: string]: typeof modules } = {
+			core: [],
+			bonus: [],
+			upgrade: [],
+			cosmetic: [],
+		};
+
+		modules.forEach((module) => {
+			const type = module.type || "upgrade"; // Default to upgrade if type is not specified
+			if (groups[type]) {
+				groups[type].push(module);
+			} else {
+				groups.upgrade.push(module); // Or handle unknown types
+			}
+		});
+
+		return groups;
+	}, [modules]);
+
+	const groupOrder = ["core", "bonus", "upgrade", "cosmetic"];
 
 	const effectiveCheckedModules = useMemo(() => {
 		const checked = new Set(currentCheckedModules);
@@ -101,75 +127,84 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 		}
 	};
 
-	// The `currentCheckedModules` prop is already available and used.
-
 	return (
 		<>
 			{hasTechInGrid && (
 				<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 			)}
-			<Popover.Root>
-				<Popover.Trigger>
-					<Badge
+			<Dialog.Root>
+				<Dialog.Trigger>
+					<Button
 						mt="1"
-						className="!ml-0 align-top !font-mono"
-						size="2"
-						radius="full"
-						variant={hasTechInGrid ? "soft" : "surface"}
+						className="!ml-1 align-top !font-mono"
+						size="1"
+						radius="medium"
+						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
-						style={
-							hasTechInGrid
-								? {
-										backgroundColor: "var(--gray-a2)",
-										color: "var(--gray-a8)",
-									}
-								: { backgroundColor: "var(--accent-a3)" }
-						}
+						disabled={modules.length === 1}
 					>
 						x{currentCheckedModulesLength}
-					</Badge>
-				</Popover.Trigger>
-				<Popover.Content>
+					</Button>
+				</Dialog.Trigger>
+				<Dialog.Content maxWidth="384px">
+					<Dialog.Title className="heading__styled text-xl sm:text-2xl">
+						{translatedTechName} MODULES
+					</Dialog.Title>
+					<Dialog.Description>
+						<Checkbox
+							ref={selectAllCheckboxRef}
+							checked={allModulesSelected}
+							onCheckedChange={handleSelectAllChange}
+						/>
+						<span className="ml-3">Select All</span>
+						<Separator className="mt-2 mb-4" size="4" />
+					</Dialog.Description>
 					<CheckboxGroup.Root
 						value={effectiveCheckedModules}
 						onValueChange={handleValueChange}
 					>
-						<div className="selectLanguage__header mb-2 flex items-center">
-							<Checkbox
-								ref={selectAllCheckboxRef}
-								checked={allModulesSelected}
-								onCheckedChange={handleSelectAllChange}
-							/>
-							<span className="ml-3">Available Modules</span>
-						</div>
-						<Separator className="mb-3" size="4" />
 						<div className="flex flex-col gap-2">
-							{modules.map((module) => {
-								const imagePath = module.image
-									? `${baseImagePath}${module.image}`
-									: fallbackImage;
-								return (
-									<div className="flex items-center gap-2">
-										<CheckboxGroup.Item
-											value={module.id}
-											disabled={coreModuleIds.includes(module.id)}
-										/>{" "}
-										<Avatar
-											size="1"
-											radius="full"
-											alt={module.label}
-											fallback="IK"
-											src={imagePath}
-											color={techColor}
-										/>
-										{module.label}
-									</div>
-								);
-							})}
+							{groupOrder.map(
+								(groupName) =>
+									groupedModules[groupName].length > 0 && (
+										<div key={groupName}>
+											<div
+												className="mb-2 font-bold capitalize"
+												style={{ color: "var(--accent-a11)" }}
+											>
+												{t(`moduleSelection.${groupName}`)}
+											</div>
+											{groupedModules[groupName].map((module) => {
+												const imagePath = module.image
+													? `${baseImagePath}${module.image}`
+													: fallbackImage;
+												return (
+													<div className="mb-2 flex items-center gap-2">
+														<CheckboxGroup.Item
+															value={module.id}
+															disabled={coreModuleIds.includes(
+																module.id
+															)}
+														/>{" "}
+														<Avatar
+															size="1"
+															radius="full"
+															alt={module.label}
+															fallback="IK"
+															src={imagePath}
+															color={techColor}
+														/>
+														{module.label}
+													</div>
+												);
+											})}
+										</div>
+									)
+							)}
 						</div>
 					</CheckboxGroup.Root>
-				</Popover.Content>
-			</Popover.Root>
+				</Dialog.Content>
+			</Dialog.Root>
 		</>
 	);
 };
