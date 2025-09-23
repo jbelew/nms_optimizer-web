@@ -29,7 +29,7 @@ interface BonusStatusIconProps {
  * @param {BonusStatusIconProps} props - The props for the component.
  * @returns {JSX.Element|null} The rendered icon or null.
  */
-export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
+export const TechTreeRowBonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	techMaxBonus,
 	techSolvedBonus,
 }) => {

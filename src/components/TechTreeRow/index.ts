@@ -1,1 +1,1 @@
-export * from "./TechTreeRow";
+export { TechTreeRowContainer as TechTreeRow } from "./TechTreeRowContainer";

@@ -40,7 +40,7 @@ interface TechInfoProps {
  * @param {TechInfoProps} props - The props for the component.
  * @returns {JSX.Element} The rendered tech info.
  */
-export const TechInfo: React.FC<TechInfoProps> = ({
+export const TechTreeRowTechInfo: React.FC<TechInfoProps> = ({
 	translatedTechName,
 	hasRewardModules,
 	rewardModules,

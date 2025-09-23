@@ -22,7 +22,7 @@ interface ActionButtonsProps {
  * @param {ActionButtonsProps} props - The props for the component.
  * @returns {JSX.Element} The rendered action buttons.
  */
-export const ActionButtons: React.FC<ActionButtonsProps> = ({
+export const TechTreeRowActionButtons: React.FC<ActionButtonsProps> = ({
 	tech,
 	hasTechInGrid,
 	isGridFull,

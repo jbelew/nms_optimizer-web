@@ -3,7 +3,7 @@ import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
-import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
+import { TechTreeRow } from "../TechTreeRow";
 
 /**
  * @typedef {object} TypeImageMap
