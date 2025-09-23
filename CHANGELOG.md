@@ -1,3 +1,12 @@
+# [3.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.1...v3.15.0) (2025-09-23)
+
+
+### Bug Fixes
+
+* **markdown:** some small formatting changes ([4e760b0](https://github.com/jbelew/nms_optimizer-web/commit/4e760b0460a4e2db70cce77e088aa84576fa0082))
+
+
+
 ## [3.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.0...v3.14.1) (2025-09-22)
 
 
