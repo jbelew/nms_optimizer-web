@@ -63,6 +63,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 			core: [],
 			bonus: [],
 			upgrade: [],
+			reactor: [],
 			cosmetic: [],
 		};
 
@@ -78,7 +79,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 		return groups;
 	}, [modules]);
 
-	const groupOrder = ["core", "bonus", "upgrade", "cosmetic"];
+	const groupOrder = ["core", "bonus", "upgrade", "reactor", "cosmetic"];
 
 	const effectiveCheckedModules = useMemo(() => {
 		const checked = new Set(currentCheckedModules);
@@ -111,19 +112,49 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	};
 
 	const handleValueChange = (newValues: string[]) => {
-		const oldValues = new Set(effectiveCheckedModules);
-		const newValuesSet = new Set(newValues);
+		const oldValues = new Set(currentCheckedModules);
+		const newValuesSet = new Set(newValues.filter((id) => !coreModuleIds.includes(id)));
 
-		let changedId: string | undefined;
+		const added = [...newValuesSet].filter((id) => !oldValues.has(id));
+		const removed = [...oldValues].filter((id) => !newValuesSet.has(id));
 
-		if (newValues.length > effectiveCheckedModules.length) {
-			changedId = newValues.find((id) => !oldValues.has(id));
-		} else {
-			changedId = effectiveCheckedModules.find((id) => !newValuesSet.has(id));
-		}
+		if (added.length > 0) {
+			// User checked a box. The disabling logic should prevent out-of-order checks.
+			handleCheckboxChange(added[0]);
+		} else if (removed.length > 0) {
+			// User unchecked a box.
+			const removedId = removed[0];
+			const module = modules.find((m) => m.id === removedId);
 
-		if (changedId && !coreModuleIds.includes(changedId)) {
-			handleCheckboxChange(changedId);
+			// Start with the new values from the checkbox group
+			const finalNewValues = new Set(newValues.filter((id) => !coreModuleIds.includes(id)));
+
+			if (module) {
+				const groupName = module.type || "upgrade";
+				if (
+					groupName === "upgrade" ||
+					groupName === "cosmetic" ||
+					groupName === "reactor"
+				) {
+					const label = module.label;
+					if (label.includes("Theta")) {
+						const tauModule = groupedModules[groupName].find((m) =>
+							m.label.includes("Tau")
+						);
+						const sigmaModule = groupedModules[groupName].find((m) =>
+							m.label.includes("Sigma")
+						);
+						if (tauModule) finalNewValues.delete(tauModule.id);
+						if (sigmaModule) finalNewValues.delete(sigmaModule.id);
+					} else if (label.includes("Tau")) {
+						const sigmaModule = groupedModules[groupName].find((m) =>
+							m.label.includes("Sigma")
+						);
+						if (sigmaModule) finalNewValues.delete(sigmaModule.id);
+					}
+				}
+			}
+			handleAllCheckboxesChange(Array.from(finalNewValues));
 		}
 	};
 
@@ -178,13 +209,48 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 												const imagePath = module.image
 													? `${baseImagePath}${module.image}`
 													: fallbackImage;
+
+												const isCore = coreModuleIds.includes(module.id);
+												let isDisabled = isCore;
+
+												if (
+													groupName === "upgrade" ||
+													groupName === "cosmetic" ||
+													groupName === "reactor"
+												) {
+													const label = module.label;
+													const order = ["Theta", "Tau", "Sigma"];
+
+													let rankIndex = -1;
+													if (label.includes("Theta")) rankIndex = 0;
+													else if (label.includes("Tau")) rankIndex = 1;
+													else if (label.includes("Sigma")) rankIndex = 2;
+
+													if (rankIndex > 0) {
+														const prerequisiteRank =
+															order[rankIndex - 1];
+														const prerequisiteModule = groupedModules[
+															groupName
+														].find((m) =>
+															m.label.includes(prerequisiteRank)
+														);
+
+														if (
+															prerequisiteModule &&
+															!currentCheckedModules.includes(
+																prerequisiteModule.id
+															)
+														) {
+															isDisabled = true;
+														}
+													}
+												}
+
 												return (
-													<div className="mb-2 flex items-center gap-2">
+													<div className="mb-2 flex items-center gap-2 font-medium">
 														<CheckboxGroup.Item
 															value={module.id}
-															disabled={coreModuleIds.includes(
-																module.id
-															)}
+															disabled={isDisabled}
 														/>{" "}
 														<Avatar
 															size="1"

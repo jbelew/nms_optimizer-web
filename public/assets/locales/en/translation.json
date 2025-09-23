@@ -540,6 +540,7 @@
         "core": "Core Module (required)",
         "bonus": "Bonus Modules",
         "upgrade": "Upgrade Modules",
+        "reactor": "Reactor Modules",
         "cosmetic": "Cosmetic Modules"
     }
 }
