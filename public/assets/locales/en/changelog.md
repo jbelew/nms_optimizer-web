@@ -4,7 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
-## Version 3.14 (2025-09-22) – Waiting for Model Data
+## Version 3.15 (2025-09-23)
+
+- Refactored ML model architecture to improve solve accuracy.
+- Rebuilt all models with full, 16k datasets.
+
+## Version 3.14 (2025-09-22)
 
 - Updated language selection to use routes instead of query parameters.
 
