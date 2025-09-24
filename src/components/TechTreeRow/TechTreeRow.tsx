@@ -220,6 +220,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 						handleCheckboxChange={handleCheckboxChange}
 						handleAllCheckboxesChange={handleAllCheckboxesChange}
 						translatedTechName={translatedTechName}
+						handleOptimizeClick={handleOptimizeClick}
 					/>
 
 					{hasMultipleGroups && (
