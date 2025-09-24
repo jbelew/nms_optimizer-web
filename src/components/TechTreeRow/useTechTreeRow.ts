@@ -11,12 +11,14 @@ import { useTechOptimization } from "./useTechOptimization";
 const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: string }[] = [];
 
 /**
- * A coordinator hook that brings together all the logic for the TechTreeRow component.
- * It uses specialized hooks for module management and optimization, and handles any other
- * data fetching and transformations.
+ * A coordinator hook that orchestrates all the logic for the TechTreeRow component.
+ * It consumes specialized hooks for module management (`useTechModuleManagement`) and
+ * optimization (`useTechOptimization`), fetches data from stores, and computes derived state.
+ * This provides a single, clean interface for the presentational `TechTreeRow` component.
  *
- * @param props - The props passed to the TechTreeRow component.
- * @returns An object containing all the necessary data and functions for rendering the row.
+ * @param props - The props passed to the `TechTreeRow` component.
+ * @returns A comprehensive object containing all state and callbacks required by the `TechTreeRow`
+ * and its children, abstracting away the underlying implementation details.
  */
 export const useTechTreeRow = ({
 	tech,

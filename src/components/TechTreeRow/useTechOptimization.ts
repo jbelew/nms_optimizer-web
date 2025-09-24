@@ -5,13 +5,17 @@ import { useShakeStore } from "@/store/ShakeStore";
 import { useTechStore } from "@/store/TechStore";
 
 /**
- * Custom hook for managing the optimization logic for a technology.
+ * Manages the optimization and reset logic for a technology.
+ * It handles interactions with the grid, tech, and shake stores, and provides
+ * callbacks for optimizing or resetting a technology's state.
  *
- * @param tech - The technology identifier.
- * @param handleOptimize - The async function to call when optimizing.
- * @param isGridFull - Boolean indicating if the grid is full.
- * @param hasTechInGrid - Boolean indicating if the tech is already in the grid.
- * @returns An object containing the `handleOptimizeClick` and `handleReset` functions.
+ * @param tech - The unique identifier for the technology.
+ * @param handleOptimize - The async function passed from the parent to run the optimization.
+ * @param isGridFull - Boolean indicating if the grid is currently full.
+ * @param hasTechInGrid - Boolean indicating if the technology is already placed in the grid.
+ * @returns An object containing the handlers for optimization and reset actions.
+ * @property {() => Promise<void>} handleOptimizeClick - The callback to trigger an optimization.
+ * @property {() => void} handleReset - The callback to reset the technology's state in the grid.
  */
 export const useTechOptimization = (
 	tech: string,

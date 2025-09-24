@@ -36,6 +36,14 @@ interface ModuleSelectionDialogProps {
 	techColor: TechTreeRowProps["techColor"];
 }
 
+/**
+ * Renders the content of the module selection dialog.
+ * This component is responsible for displaying the list of available modules,
+ * allowing the user to select them, and triggering the optimization.
+ *
+ * @param props - The props for the component, containing module data and handlers.
+ * @returns The rendered dialog content.
+ */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	translatedTechName,
 	groupedModules,

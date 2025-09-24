@@ -3,11 +3,19 @@ import { useMemo } from "react";
 import { useTechStore } from "@/store/TechStore";
 
 /**
- * Custom hook for managing the module selection logic within a technology tree row.
+ * Manages the state and logic for module selection within a technology tree row.
+ * This includes grouping modules, handling checkbox states, and managing dependencies
+ * between modules (e.g., Sigma -> Tau -> Theta).
  *
- * @param tech - The technology identifier.
- * @param modules - The list of modules associated with the technology.
- * @returns An object containing module management state and functions.
+ * @param tech - The unique identifier for the technology.
+ * @param modules - The list of all modules available for the technology.
+ * @returns An object containing the state and handlers for module management.
+ * @property {string[]} currentCheckedModules - An array of IDs for the currently selected modules.
+ * @property {object} groupedModules - Modules grouped by their type (core, bonus, upgrade, etc.).
+ * @property {boolean} allModulesSelected - True if all non-core modules are selected.
+ * @property {boolean} isIndeterminate - True for the "select all" checkbox's indeterminate state.
+ * @property {(newValues: string[]) => void} handleValueChange - Handler for the checkbox group's value change.
+ * @property {(checked: boolean | "indeterminate") => void} handleSelectAllChange - Handler for the "select all" checkbox.
  */
 export const useTechModuleManagement = (
 	tech: string,
