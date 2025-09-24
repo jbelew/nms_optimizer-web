@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { Mock, describe, expect, it, vi } from "vitest";
 
 import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechTreeRow } from "./useTechTreeRow";
@@ -23,26 +23,13 @@ vi.mock("./useTechOptimization", () => ({
 	})),
 }));
 
-vi.mock("@/store/GridStore", () => ({
-	useGridStore: vi.fn(() => vi.fn()),
-}));
-
-vi.mock("@/store/TechStore", () => ({
-	useTechStore: vi.fn(() => ({
-		techGroups: { testTech: [{ modules: [] }] },
-		activeGroups: {},
-		setActiveGroup: vi.fn(),
-		max_bonus: {},
-		solved_bonus: {},
-		checkedModules: {},
-		setCheckedModules: vi.fn(),
-	})),
-}));
+vi.mock("@/store/GridStore");
+vi.mock("@/store/TechStore");
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key) => key, // Just return the key for simplicity
+		t: (key: string) => key, // Just return the key for simplicity
 	}),
 }));
 
@@ -56,7 +43,22 @@ const mockProps: TechTreeRowProps = {
 	techColor: "blue",
 };
 
+import { useGridStore } from "@/store/GridStore";
+import { useTechStore } from "@/store/TechStore";
+
 describe("useTechTreeRow", () => {
+	beforeEach(() => {
+		(useGridStore as unknown as Mock).mockReturnValue(vi.fn());
+		(useTechStore as unknown as Mock).mockReturnValue({
+			techGroups: { testTech: [{ modules: [] }] },
+			activeGroups: {},
+			setActiveGroup: vi.fn(),
+			max_bonus: {},
+			solved_bonus: {},
+			checkedModules: {},
+			setCheckedModules: vi.fn(),
+		});
+	});
 	it("should return the correct data shape", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
 

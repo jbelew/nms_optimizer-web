@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { Mock, describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/GridStore";
 import { useShakeStore } from "@/store/ShakeStore";
@@ -20,12 +20,12 @@ describe("useTechOptimization", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		useGridStore.mockImplementation((selector) => {
-			const state = { resetGridTech: mockResetGridTech };
-			return selector(state);
-		});
-		useShakeStore.mockReturnValue({ setShaking: mockSetShaking });
-		useTechStore.mockReturnValue({
+		(useGridStore as unknown as Mock).mockImplementation(
+			(selector: (state: { resetGridTech: () => void }) => unknown) =>
+				selector({ resetGridTech: mockResetGridTech })
+		);
+		(useShakeStore as unknown as Mock).mockReturnValue({ setShaking: mockSetShaking });
+		(useTechStore as unknown as Mock).mockReturnValue({
 			clearTechMaxBonus: mockClearTechMaxBonus,
 			clearTechSolvedBonus: mockClearTechSolvedBonus,
 		});

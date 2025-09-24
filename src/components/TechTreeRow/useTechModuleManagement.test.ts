@@ -1,14 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { Mock, describe, expect, it, vi } from "vitest";
 
 import { useTechStore } from "@/store/TechStore";
 
 import { useTechModuleManagement } from "./useTechModuleManagement";
 
 // Mock the tech store
-vi.mock("@/store/TechStore", () => ({
-	useTechStore: vi.fn(),
-}));
+vi.mock("@/store/TechStore");
 
 const mockModules = [
 	{ id: "core1", label: "Core 1", image: "", type: "core" },
@@ -22,7 +20,7 @@ const mockModules = [
 
 describe("useTechModuleManagement", () => {
 	it("should group modules correctly", () => {
-		useTechStore.mockReturnValue({
+		(useTechStore as unknown as Mock).mockReturnValue({
 			checkedModules: {},
 			setCheckedModules: vi.fn(),
 		});
@@ -40,7 +38,7 @@ describe("useTechModuleManagement", () => {
 
 	it("should handle selecting and deselecting all non-core modules", () => {
 		const setCheckedModules = vi.fn();
-		useTechStore.mockReturnValue({
+		(useTechStore as unknown as Mock).mockReturnValue({
 			checkedModules: { testTech: ["core1"] },
 			setCheckedModules,
 		});
@@ -77,7 +75,7 @@ describe("useTechModuleManagement", () => {
 
 	it("should handle dependency chains for upgrades", () => {
 		const setCheckedModules = vi.fn();
-		useTechStore.mockReturnValue({
+		(useTechStore as unknown as Mock).mockReturnValue({
 			checkedModules: { testTech: ["core1", "upgradeC", "upgradeB"] },
 			setCheckedModules,
 		});

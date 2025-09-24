@@ -90,7 +90,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					checked={allModulesSelected}
 					onCheckedChange={handleSelectAllChange}
 				/>
-				<span className="ml-4">Select All</span>
+				<span className="ml-3">Select All</span>
 				<Separator className="mt-2 mb-4" size="4" />
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
@@ -119,7 +119,6 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 										fallback="IK"
 										src={imagePath}
 										color={techColor}
-										className="ml-1"
 									/>
 									{module.label}
 								</div>
@@ -127,7 +126,10 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
+				<CheckboxGroup.Root
+					value={currentCheckedModules}
+					onValueChange={handleValueChange}
+				>
 					{groupOrder
 						.filter((g) => g !== "core")
 						.map(
@@ -161,9 +163,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 													const prerequisiteRank = order[rankIndex - 1];
 													const prerequisiteModule = groupedModules[
 														groupName
-													].find((m) =>
-														m.label.includes(prerequisiteRank)
-													);
+													].find((m) => m.label.includes(prerequisiteRank));
 													if (
 														prerequisiteModule &&
 														!currentCheckedModules.includes(
@@ -177,7 +177,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 											return (
 												<label
 													key={module.id}
-													className="mb-2 flex items-center gap-2 font-medium transition-colors duration-200 hover:text-[var(--accent-a12)]"
+													className="mb-2 flex items-center gap-2 font-medium hover:text-[var(--accent-a12)] transition-colors duration-200"
 													style={{ cursor: "pointer" }}
 												>
 													<CheckboxGroup.Item
@@ -191,7 +191,6 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 														fallback="IK"
 														src={imagePath}
 														color={techColor}
-														className="ml-1"
 													/>
 													{module.label}
 												</label>
