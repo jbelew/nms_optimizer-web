@@ -7,6 +7,13 @@ import { useTechTreeRow } from "./useTechTreeRow";
 
 type TechInfoBadgesProps = ReturnType<typeof useTechTreeRow>;
 
+/**
+ * Renders the badges for the tech tree row, including the bonus status icon
+ * and the trigger for the module selection dialog.
+ *
+ * @param props - The props for the component, derived from the `useTechTreeRow` hook.
+ * @returns The rendered badges.
+ */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	hasTechInGrid,
 	techColor,
