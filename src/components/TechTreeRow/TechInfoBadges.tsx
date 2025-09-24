@@ -1,147 +1,21 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import {
-	Avatar,
-	Button,
-	Checkbox,
-	CheckboxGroup,
-	Dialog,
-	IconButton,
-	Separator,
-} from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import React from "react";
+import { Button, Dialog } from "@radix-ui/themes";
 
 import { BonusStatusIcon } from "./BonusStatusIcon";
-import { TechTreeRowProps } from "./TechTreeRow";
+import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
+import { useTechTreeRow } from "./useTechTreeRow";
 
-interface TechInfoBadgesProps {
-	hasTechInGrid: boolean;
-	techColor: TechTreeRowProps["techColor"];
-	moduleCount: number;
-	currentCheckedModulesLength: number;
-	techMaxBonus: number;
-	techSolvedBonus: number;
-	modules: { label: string; id: string; image: string; type?: string }[];
-	currentCheckedModules: string[];
-	handleCheckboxChange: (moduleId: string) => void;
-	handleAllCheckboxesChange: (moduleIds: string[]) => void;
-	translatedTechName: string;
-	handleOptimizeClick: () => Promise<void>;
-}
+type TechInfoBadgesProps = ReturnType<typeof useTechTreeRow>;
 
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	hasTechInGrid,
 	techColor,
-	currentCheckedModulesLength,
 	techMaxBonus,
 	techSolvedBonus,
 	modules,
 	currentCheckedModules,
-	handleCheckboxChange,
-	handleAllCheckboxesChange,
-	translatedTechName,
-	handleOptimizeClick,
+	...props
 }) => {
-	const { t } = useTranslation();
-	const baseImagePath = "/assets/img/grid/";
-	const fallbackImage = `${baseImagePath}infra.webp`;
-
-	const coreModuleIds = useMemo(
-		() => modules.filter((m) => m.type === "core").map((m) => m.id),
-		[modules]
-	);
-
-	const nonCoreModuleIds = useMemo(
-		() => modules.filter((m) => m.type !== "core").map((m) => m.id),
-		[modules]
-	);
-
-	const groupedModules = useMemo(() => {
-		const groups: { [key: string]: typeof modules } = {
-			core: [],
-			bonus: [],
-			upgrade: [],
-			reactor: [],
-			cosmetic: [],
-		};
-
-		modules.forEach((module) => {
-			const type = module.type || "upgrade";
-			if (groups[type]) {
-				groups[type].push(module);
-			} else {
-				groups.upgrade.push(module);
-			}
-		});
-
-		return groups;
-	}, [modules]);
-
-	const groupOrder = ["core", "bonus", "upgrade", "reactor", "cosmetic"];
-
-	const allModulesSelected = nonCoreModuleIds.every((id) => currentCheckedModules.includes(id));
-	const isIndeterminate = currentCheckedModules.length > 0 && !allModulesSelected;
-
-	const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
-
-	useEffect(() => {
-		if (selectAllCheckboxRef.current) {
-			const inputElement =
-				selectAllCheckboxRef.current.querySelector('input[type="checkbox"]');
-			if (inputElement instanceof HTMLInputElement) {
-				inputElement.indeterminate = isIndeterminate;
-			}
-		}
-	}, [isIndeterminate]);
-
-	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
-		if (checked) {
-			handleAllCheckboxesChange([...nonCoreModuleIds, ...coreModuleIds]);
-		} else {
-			handleAllCheckboxesChange(coreModuleIds);
-		}
-	};
-
-	const handleValueChange = (newValues: string[]) => {
-		const oldValues = new Set(currentCheckedModules);
-		const newValuesSet = new Set(newValues);
-
-		const added = [...newValuesSet].filter((id) => !oldValues.has(id));
-		const removed = [...oldValues].filter((id) => !newValuesSet.has(id));
-
-		if (added.length > 0) {
-			handleCheckboxChange(added[0]);
-		} else if (removed.length > 0) {
-			const finalNewValues = new Set(newValuesSet);
-
-			for (const removedId of removed) {
-				const module = modules.find((m) => m.id === removedId);
-				if (module) {
-					const groupName = module.type || "upgrade";
-					if (["upgrade", "cosmetic", "reactor"].includes(groupName)) {
-						const label = module.label;
-						if (label.includes("Theta")) {
-							const tauModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Tau")
-							);
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Sigma")
-							);
-							if (tauModule) finalNewValues.delete(tauModule.id);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
-						} else if (label.includes("Tau")) {
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Sigma")
-							);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
-						}
-					}
-				}
-			}
-			handleAllCheckboxesChange(Array.from(finalNewValues));
-		}
-	};
-
 	return (
 		<>
 			{hasTechInGrid && (
@@ -158,154 +32,14 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						color={hasTechInGrid ? "gray" : techColor}
 						disabled={modules.length === 1}
 					>
-						x{currentCheckedModulesLength}
+						x{currentCheckedModules.length}
 					</Button>
 				</Dialog.Trigger>
-				<Dialog.Content maxWidth="400px">
-					<Dialog.Title className="heading__styled text-xl sm:text-2xl">
-						{translatedTechName} SELECTION
-					</Dialog.Title>
-
-					<Dialog.Close>
-						<IconButton
-							variant="soft"
-							size="1"
-							className="appDialog__close"
-							aria-label="Close dialog"
-						>
-							<Cross2Icon />
-						</IconButton>
-					</Dialog.Close>
-					<Dialog.Description>
-						<Checkbox
-							ref={selectAllCheckboxRef}
-							checked={allModulesSelected}
-							onCheckedChange={handleSelectAllChange}
-						/>
-						<span className="ml-3">Select All</span>
-						<Separator className="mt-2 mb-4" size="4" />
-					</Dialog.Description>
-					<div className="flex flex-col gap-2">
-						{groupedModules["core"].length > 0 && (
-							<div key="core">
-								<div
-									className="mb-2 font-bold capitalize"
-									style={{ color: "var(--accent-a11)" }}
-								>
-									{t(`moduleSelection.core`)}
-								</div>
-								{groupedModules["core"].map((module) => {
-									const imagePath = module.image
-										? `${baseImagePath}${module.image}`
-										: fallbackImage;
-									return (
-										<div
-											key={module.id}
-											className="mb-2 flex items-center gap-2 font-medium"
-										>
-											<Checkbox checked={true} disabled={true} />
-											<Avatar
-												size="1"
-												radius="full"
-												alt={module.label}
-												fallback="IK"
-												src={imagePath}
-												color={techColor}
-											/>
-											{module.label}
-										</div>
-									);
-								})}
-							</div>
-						)}
-						<CheckboxGroup.Root
-							value={currentCheckedModules}
-							onValueChange={handleValueChange}
-						>
-							{groupOrder
-								.filter((g) => g !== "core")
-								.map(
-									(groupName) =>
-										groupedModules[groupName].length > 0 && (
-											<div key={groupName}>
-												<div
-													className="mb-2 font-bold capitalize"
-													style={{ color: "var(--accent-a11)" }}
-												>
-													{t(`moduleSelection.${groupName}`)}
-												</div>
-												{groupedModules[groupName].map((module) => {
-													const imagePath = module.image
-														? `${baseImagePath}${module.image}`
-														: fallbackImage;
-													let isDisabled = false;
-													if (
-														["upgrade", "cosmetic", "reactor"].includes(
-															groupName
-														)
-													) {
-														const label = module.label;
-														const order = ["Theta", "Tau", "Sigma"];
-														let rankIndex = -1;
-														if (label.includes("Theta")) rankIndex = 0;
-														else if (label.includes("Tau"))
-															rankIndex = 1;
-														else if (label.includes("Sigma"))
-															rankIndex = 2;
-
-														if (rankIndex > 0) {
-															const prerequisiteRank =
-																order[rankIndex - 1];
-															const prerequisiteModule =
-																groupedModules[groupName].find(
-																	(m) =>
-																		m.label.includes(
-																			prerequisiteRank
-																		)
-																);
-															if (
-																prerequisiteModule &&
-																!currentCheckedModules.includes(
-																	prerequisiteModule.id
-																)
-															) {
-																isDisabled = true;
-															}
-														}
-													}
-													return (
-														<label
-															key={module.id}
-															className="mb-2 flex items-center gap-2 font-medium hover:text-[var(--accent-a12)] transition-colors duration-200"
-															style={{ cursor: "pointer" }}
-														>
-															<CheckboxGroup.Item
-																value={module.id}
-																disabled={isDisabled}
-															/>
-															<Avatar
-																size="1"
-																radius="full"
-																alt={module.label}
-																fallback="IK"
-																src={imagePath}
-																color={techColor}
-															/>
-															{module.label}
-														</label>
-													);
-												})}
-											</div>
-										)
-								)}
-						</CheckboxGroup.Root>
-					</div>
-					<div className="mt-4 flex justify-end">
-						<Dialog.Close>
-							<Button onClick={handleOptimizeClick}>Optimize</Button>
-						</Dialog.Close>
-					</div>
-				</Dialog.Content>
+				<ModuleSelectionDialog
+					{...props}
+					techColor={techColor}
+					currentCheckedModules={currentCheckedModules}
+				/>
 			</Dialog.Root>
 		</>
 	);

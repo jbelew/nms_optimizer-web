@@ -1,17 +1,12 @@
 import "./TechTreeRow.css";
 
-import React, { useCallback, useMemo } from "react";
+import React from "react";
 import { Avatar, Switch } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
 
-import { useGridStore } from "../../store/GridStore";
-import { useShakeStore } from "../../store/ShakeStore";
-import { useTechStore } from "../../store/TechStore";
 import { ActionButtons } from "./ActionButtons";
 import { TechInfo } from "./TechInfo";
 import { TechInfoBadges } from "./TechInfoBadges";
-
-const EMPTY_ARRAY: string[] = [];
+import { useTechTreeRow } from "./useTechTreeRow";
 
 /**
  * Props for the TechTreeRow component.
@@ -61,115 +56,31 @@ export interface TechTreeRowProps {
 
 /**
  * Renders a single row in the technology tree, allowing users to optimize, reset, and view module details.
+ * This component is now a pure presentational component that delegates all its logic to the useTechTreeRow hook.
  *
  * @param {TechTreeRowProps} props - The props for the component.
  * @returns {JSX.Element} The rendered tech tree row.
  */
-const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
-	tech,
-	handleOptimize,
-	solving,
-	techImage,
-	isGridFull,
-	techColor,
-}) => {
-	const { t } = useTranslation();
-	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
+const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
+	const { tech, isGridFull } = props;
+	const hookProps = useTechTreeRow(props);
 	const {
-		clearTechMaxBonus,
-		clearTechSolvedBonus,
-		setCheckedModules,
-		techGroups,
+		hasTechInGrid,
+		solving,
+		translatedTechName,
+		handleOptimizeClick,
+		handleReset,
+		imagePath,
+		techColor,
+		imagePath2x,
+		hasRewardModules,
+		rewardModules,
+		currentCheckedModules,
+		handleCheckboxChange,
+		hasMultipleGroups,
 		activeGroups,
 		setActiveGroup,
-	} = useTechStore();
-
-	const activeGroup = useMemo(() => {
-		const groupType = activeGroups[tech] || "normal";
-		return techGroups[tech]?.find((g) => g.type === groupType) || techGroups[tech]?.[0];
-	}, [tech, activeGroups, techGroups]);
-
-	const rewardModules = useMemo(() => {
-		return (
-			activeGroup?.modules.filter((m) => m.type === "reward") ||
-			([] as { label: string; id: string; image: string; type?: string }[])
-		);
-	}, [activeGroup]);
-
-	const hasRewardModules = rewardModules.length > 0;
-	const moduleCount = (activeGroup?.module_count || 0) - rewardModules.length;
-
-	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
-	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
-	const { setShaking } = useShakeStore();
-
-	// Use techImage to build a more descriptive translation key, falling back to the tech key if image is not available.
-	const translationKeyPart = techImage
-		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
-		: tech;
-	const translatedTechName = t(`technologies.${translationKeyPart}`);
-
-	const handleReset = useCallback(() => {
-		handleResetGridTech(tech);
-		clearTechMaxBonus(tech);
-		clearTechSolvedBonus(tech);
-	}, [tech, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus]);
-
-	const handleCheckboxChange = useCallback(
-		(moduleId: string) => {
-			setCheckedModules(tech, (prevChecked = []) => {
-				const isChecked = prevChecked.includes(moduleId);
-				return isChecked
-					? prevChecked.filter((id) => id !== moduleId)
-					: [...prevChecked, moduleId];
-			});
-		},
-		[tech, setCheckedModules]
-	);
-
-	const handleAllCheckboxesChange = useCallback(
-		(moduleIds: string[]) => {
-			setCheckedModules(tech, () => moduleIds);
-		},
-		[tech, setCheckedModules]
-	);
-
-	const handleOptimizeClick = useCallback(async () => {
-		if (isGridFull && !hasTechInGrid) {
-			setShaking(true); // Trigger the shake
-			setTimeout(() => {
-				setShaking(false); // Stop the shake after a delay
-			}, 500); // Adjust the duration as needed
-		} else {
-			handleResetGridTech(tech);
-			clearTechMaxBonus(tech);
-			clearTechSolvedBonus(tech);
-			await handleOptimize(tech);
-		}
-	}, [
-		isGridFull,
-		hasTechInGrid,
-		setShaking,
-		handleResetGridTech,
-		clearTechMaxBonus,
-		clearTechSolvedBonus,
-		handleOptimize,
-		tech,
-	]);
-
-	const currentCheckedModules = useTechStore(
-		(state) => state.checkedModules[tech] || EMPTY_ARRAY
-	);
-
-	const baseImagePath = "/assets/img/tech/";
-	const fallbackImage = `${baseImagePath}infra.webp`;
-	const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
-	const imagePath2x = techImage
-		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
-		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
-
-	const hasMultipleGroups = (techGroups[tech]?.length || 0) > 1;
+	} = hookProps;
 
 	return (
 		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
@@ -208,20 +119,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = ({
 
 				{/* Right-hand group */}
 				<div className="flex items-start justify-end gap-1">
-					<TechInfoBadges
-						hasTechInGrid={hasTechInGrid}
-						techColor={techColor}
-						moduleCount={moduleCount}
-						currentCheckedModulesLength={currentCheckedModules.length}
-						techMaxBonus={techMaxBonus}
-						techSolvedBonus={techSolvedBonus}
-						modules={activeGroup?.modules || []}
-						currentCheckedModules={currentCheckedModules}
-						handleCheckboxChange={handleCheckboxChange}
-						handleAllCheckboxesChange={handleAllCheckboxesChange}
-						translatedTechName={translatedTechName}
-						handleOptimizeClick={handleOptimizeClick}
-					/>
+					<TechInfoBadges {...hookProps} />
 
 					{hasMultipleGroups && (
 						<Switch
