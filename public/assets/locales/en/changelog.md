@@ -8,7 +8,9 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 - Added the ability to choose which modules are included in a solve.
 - Improved simulated annealing for faster performance and better solve quality.
-- Expanded training data for the Corvette Hyperdrive ML model to **36k samples**, aiming for higher accuracy with this complex layout.
+- ~~Expanded training data for the Corvette Hyperdrive ML model to **36k samples**, aiming for higher accuracy with this complex layout~~.
+- Removed the Corvette Hyperdrive ML model. The layout is just too complex and causing server timeout issues.
+
 
 ## Version 3.15 (2025-09-23)
 

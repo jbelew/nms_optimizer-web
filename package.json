@@ -59,6 +59,7 @@
 		"react-markdown": "^10.1.0",
 		"react-router-dom": "^7.6.3",
 		"recharts": "^3.1.2",
+		"remark-gfm": "^4.0.1",
 		"socket.io-client": "^4.8.1",
 		"web-vitals": "^5.0.3",
 		"zustand": "^5.0.5"

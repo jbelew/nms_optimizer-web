@@ -1,6 +1,7 @@
 // src/components/AppDialog/MarkdownContentRenderer.tsx
 import React, { lazy, useEffect, useRef } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
+import remarkGfm from "remark-gfm";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
@@ -121,6 +122,9 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			strong: ({ children }: { children?: React.ReactNode }) => (
 				<Text weight="bold">{children}</Text>
 			),
+			del: ({ children }: { children?: React.ReactNode }) => (
+				<Text style={{ textDecoration: "line-through" }}>{children}</Text>
+			),
 			blockquote: ({ children }: { children?: React.ReactNode }) => (
 				<Blockquote mt="2" mb="2">
 					{children}
@@ -162,7 +166,9 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			{isLoading ? (
 				<LoremIpsumSkeleton />
 			) : (
-				<LazyReactMarkdown components={components}>{markdown}</LazyReactMarkdown>
+				<LazyReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+					{markdown}
+				</LazyReactMarkdown>
 			)}
 		</article>
 	);
