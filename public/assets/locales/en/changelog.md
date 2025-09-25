@@ -4,6 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 4.0 (2025-09-25)
+
+- Added support for selecting which modules to include in a solve.
+- Improved both performance and solve quality of the simulated annealing algorithm.
+- Increased training samples for ML models to improve accuracy.
+
 ## Version 3.15 (2025-09-23)
 
 - Refactored ML model architecture to improve solve accuracy.

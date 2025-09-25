@@ -77,7 +77,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	}, [isIndeterminate]);
 
 	return (
-		<Dialog.Content size="2">
+		<Dialog.Content size="2" maxHeight={{ initial: "80vh", sm: "92vh" }}>
 			<Dialog.Title className="heading__styled flex items-start text-xl sm:text-2xl">
 				<Avatar
 					size="2"
@@ -89,7 +89,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					srcSet={`${techImagePath} 1x, ${techImagePath2x} 2x`}
 				/>
 				<span className="mt-[3px] ml-2 text-xl sm:mt-[0px] sm:text-2xl">
-					{translatedTechName} SELECTION
+					{t("moduleSelection.title", { techName: translatedTechName })}
 				</span>
 			</Dialog.Title>
 
@@ -98,22 +98,26 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					variant="soft"
 					size="1"
 					className="appDialog__close"
-					aria-label="Close dialog"
+					aria-label={t("moduleSelection.closeDialogLabel")}
 				>
 					<Cross2Icon />
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
-				<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
-					<strong>WARNING!</strong> If your solve doesn’t include all modules, the system
-					will skip most optimization steps and the results may not be the best possible.
-				</Text>
+				<Text
+					className="text-sm sm:text-base"
+					as="p"
+					mb="3"
+					dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+				/>
 				<Checkbox
 					ref={selectAllCheckboxRef}
 					checked={allModulesSelected}
 					onCheckedChange={handleSelectAllChange}
 				/>
-				<span className="ml-3">Select All</span>
+				<Text ml="2" className="text-sm font-medium sm:text-base">
+					{t("moduleSelection.selectAll")}
+				</Text>
 				<Separator className="mt-2 mb-4" size="4" />
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
@@ -228,15 +232,21 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 						)}
 				</CheckboxGroup.Root>
 				{groupedModules["cosmetic"]?.length > 0 && (
-					<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
-						Specific <strong>Cosmetic</strong> modules are just recommendations for
-						fully maximizing stats. Don&apos;t let this list limit your design ideas!
-					</Text>
+					<Text
+						className="text-sm sm:text-base"
+						as="p"
+						mb="2"
+						dangerouslySetInnerHTML={{
+							__html: t("moduleSelection.cosmeticInfo"),
+						}}
+					/>
 				)}
 			</div>
 			<div className="flex justify-end">
 				<Dialog.Close>
-					<Button onClick={handleOptimizeClick}>Optimize</Button>
+					<Button onClick={handleOptimizeClick}>
+						{t("moduleSelection.optimizeButton")}
+					</Button>
 				</Dialog.Close>
 			</div>
 		</Dialog.Content>

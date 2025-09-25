@@ -49,7 +49,6 @@ export const useGridCellInteraction = (
 		superchargedFixed,
 		gridFixed,
 	} = useGridStore.getState();
-	const totalSupercharged = selectTotalSuperchargedCells();
 	const [isTouching, setIsTouching] = useState(false);
 
 	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -110,6 +109,7 @@ export const useGridCellInteraction = (
 					}
 				} else {
 					// Normal Click: Toggle Supercharged
+					const totalSupercharged = selectTotalSuperchargedCells();
 					const isInvalidSuperchargeToggle =
 						superchargedFixed ||
 						gridFixed ||
@@ -132,6 +132,7 @@ export const useGridCellInteraction = (
 			if (isSameCell && timeSinceLastTap < 400 && timeSinceLastTap > 0) {
 				// Double tap on the same cell
 				lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
+				const totalSupercharged = selectTotalSuperchargedCells();
 				const isInvalidDoubleTap =
 					superchargedFixed ||
 					gridFixed ||
@@ -165,11 +166,11 @@ export const useGridCellInteraction = (
 			clearInitialCellStateForTap,
 			toggleCellActive,
 			toggleCellSupercharged,
-			totalSupercharged,
 			cell.supercharged,
 			triggerShake,
 			gridFixed,
 			superchargedFixed,
+			selectTotalSuperchargedCells,
 		]
 	);
 
