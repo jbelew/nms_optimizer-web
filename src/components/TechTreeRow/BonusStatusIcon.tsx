@@ -1,6 +1,6 @@
 import React from "react";
 import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@radix-ui/react-icons";
-import { Popover, Text } from "@radix-ui/themes";
+import { Popover, Text, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 /**
@@ -34,6 +34,13 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	techSolvedBonus,
 }) => {
 	const { t } = useTranslation();
+	const [isTouchDevice, setIsTouchDevice] = React.useState(false);
+
+	React.useEffect(() => {
+		const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+		setIsTouchDevice(touch);
+	}, []);
+
 	if (techSolvedBonus <= 0) {
 		return null;
 	}
@@ -41,60 +48,78 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	const roundedMaxBonus = round(techMaxBonus, 2);
 
 	if (roundedMaxBonus < 100) {
-		return (
-			<Popover.Root>
-				<Popover.Trigger>
-					<ExclamationTriangleIcon
-						className="mt-[8px] inline-block cursor-pointer align-text-top"
-						style={{ color: "var(--red-a8)" }}
-					/>
-				</Popover.Trigger>
-				<Popover.Content size="1" maxWidth="300px">
-					<Text as="p" trim="both" size="1">
-						{t("techTree.tooltips.insufficientSpace") +
-							" -" +
-							Math.round((100 - roundedMaxBonus) * 100) / 100 +
-							"%"}
-					</Text>
-				</Popover.Content>
-			</Popover.Root>
+		const icon = (
+			<ExclamationTriangleIcon
+				className="mt-[8px] inline-block cursor-pointer align-text-top"
+				style={{ color: "var(--red-a8)" }}
+			/>
 		);
+		const tooltipContent = (
+			<Text size="1">
+				{t("techTree.tooltips.insufficientSpace") +
+					" -" +
+					Math.round((100 - roundedMaxBonus) * 100) / 100 +
+					"%"}
+			</Text>
+		);
+
+		if (isTouchDevice) {
+			return (
+				<Popover.Root>
+					<Popover.Trigger>{icon}</Popover.Trigger>
+					<Popover.Content size="1" maxWidth="300px">
+						{tooltipContent}
+					</Popover.Content>
+				</Popover.Root>
+			);
+		}
+		return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
 	}
 	if (roundedMaxBonus === 100) {
+		const icon = (
+			<Crosshair2Icon
+				className="mt-[7px] inline-block cursor-pointer align-text-top"
+				style={{ color: "var(--gray-a10)" }}
+			/>
+		);
+		const tooltipContent = <Text size="1">{`${t("techTree.tooltips.validSolve")} `}</Text>;
+
+		if (isTouchDevice) {
+			return (
+				<Popover.Root>
+					<Popover.Trigger>{icon}</Popover.Trigger>
+					<Popover.Content size="1" maxWidth="300px">
+						{tooltipContent}
+					</Popover.Content>
+				</Popover.Root>
+			);
+		}
+		return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
+	}
+	// roundedMaxBonus > 100
+	const icon = (
+		<LightningBoltIcon
+			className="mt-[6px] inline-block h-4 w-4 cursor-pointer align-text-top"
+			style={{ color: "var(--amber-a8)" }}
+		/>
+	);
+	const tooltipContent = (
+		<Text size="1">
+			{`${t("techTree.tooltips.boostedSolve")} +${
+				Math.round((roundedMaxBonus - 100) * 100) / 100
+			}%`}
+		</Text>
+	);
+
+	if (isTouchDevice) {
 		return (
 			<Popover.Root>
-				<Popover.Trigger>
-					<Crosshair2Icon
-						className="mt-[7px] inline-block cursor-pointer align-text-top"
-						style={{ color: "var(--gray-a10)" }}
-					/>
-				</Popover.Trigger>
+				<Popover.Trigger>{icon}</Popover.Trigger>
 				<Popover.Content size="1" maxWidth="300px">
-					<Text
-						as="p"
-						trim="both"
-						size="1"
-					>{`${t("techTree.tooltips.validSolve")} `}</Text>
+					{tooltipContent}
 				</Popover.Content>
 			</Popover.Root>
 		);
 	}
-	// roundedMaxBonus > 100
-	return (
-		<Popover.Root>
-			<Popover.Trigger>
-				<LightningBoltIcon
-					className="mt-[6px] inline-block h-4 w-4 cursor-pointer align-text-top"
-					style={{ color: "var(--amber-a8)" }}
-				/>
-			</Popover.Trigger>
-			<Popover.Content size="1" maxWidth="300px">
-				<Text as="p" trim="both" size="1">
-					{`${t("techTree.tooltips.boostedSolve")} +${
-						Math.round((roundedMaxBonus - 100) * 100) / 100
-					}%`}
-				</Text>
-			</Popover.Content>
-		</Popover.Root>
-	);
+	return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
 import { BonusStatusIcon } from "./BonusStatusIcon";
@@ -21,6 +22,8 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	techSolvedBonus,
 	modules,
 	currentCheckedModules,
+	techImage,
+	solving,
 	...props
 }) => {
 	return (
@@ -37,15 +40,17 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						radius="medium"
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
-						disabled={modules.length === 1}
+						disabled={modules.length === 1 || solving}
 					>
 						x{currentCheckedModules.length}
+						<OpenInNewWindowIcon />
 					</Button>
 				</Dialog.Trigger>
 				<ModuleSelectionDialog
 					{...props}
 					techColor={techColor}
 					currentCheckedModules={currentCheckedModules}
+					techImage={techImage}
 				/>
 			</Dialog.Root>
 		</>

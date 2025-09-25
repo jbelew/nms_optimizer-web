@@ -5,7 +5,6 @@
 .heading__styled {
 	letter-spacing: var(--letter-spacing-wide);
 	font-family: var(--font-family-geosans);
-	color: var(--accent-a11);
 	font-weight: 400;
 	text-transform: uppercase;
 	filter: drop-shadow(0 2px 4px var(--accent-a2));

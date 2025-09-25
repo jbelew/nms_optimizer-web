@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { Mock, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, Mock, vi } from "vitest";
 
 import { useTechStore } from "@/store/TechStore";
 
@@ -25,9 +25,7 @@ describe("useTechModuleManagement", () => {
 			setCheckedModules: vi.fn(),
 		});
 
-		const { result } = renderHook(() =>
-			useTechModuleManagement("testTech", mockModules)
-		);
+		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
 		expect(result.current.groupedModules.core).toHaveLength(1);
 		expect(result.current.groupedModules.bonus).toHaveLength(1);
@@ -43,9 +41,7 @@ describe("useTechModuleManagement", () => {
 			setCheckedModules,
 		});
 
-		const { result } = renderHook(() =>
-			useTechModuleManagement("testTech", mockModules)
-		);
+		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
 		act(() => {
 			result.current.handleSelectAllChange(true);
@@ -80,9 +76,7 @@ describe("useTechModuleManagement", () => {
 			setCheckedModules,
 		});
 
-		const { result } = renderHook(() =>
-			useTechModuleManagement("testTech", mockModules)
-		);
+		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
 		// Deselecting Tau should also deselect Theta
 		act(() => {

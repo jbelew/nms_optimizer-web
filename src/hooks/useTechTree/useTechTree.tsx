@@ -34,6 +34,7 @@ export interface Module {
 	tech: string;
 	type: string;
 	value: number;
+	checked?: boolean;
 }
 
 /**

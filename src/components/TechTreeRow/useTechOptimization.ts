@@ -44,14 +44,7 @@ export const useTechOptimization = (
 			handleReset();
 			await handleOptimize(tech);
 		}
-	}, [
-		isGridFull,
-		hasTechInGrid,
-		setShaking,
-		handleReset,
-		handleOptimize,
-		tech,
-	]);
+	}, [isGridFull, hasTechInGrid, setShaking, handleReset, handleOptimize, tech]);
 
 	return { handleOptimizeClick, handleReset };
 };

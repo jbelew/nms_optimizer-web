@@ -119,9 +119,7 @@ export const useTechModuleManagement = (
 		}
 	};
 
-	const allModulesSelected = nonCoreModuleIds.every((id) =>
-		currentCheckedModules.includes(id)
-	);
+	const allModulesSelected = nonCoreModuleIds.every((id) => currentCheckedModules.includes(id));
 	const isIndeterminate = currentCheckedModules.length > 0 && !allModulesSelected;
 
 	return {

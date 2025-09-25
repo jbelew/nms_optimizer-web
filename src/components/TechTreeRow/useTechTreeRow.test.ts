@@ -1,5 +1,8 @@
 import { renderHook } from "@testing-library/react";
-import { Mock, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, Mock, vi } from "vitest";
+
+import { useGridStore } from "@/store/GridStore";
+import { useTechStore } from "@/store/TechStore";
 
 import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechTreeRow } from "./useTechTreeRow";
@@ -43,9 +46,6 @@ const mockProps: TechTreeRowProps = {
 	techColor: "blue",
 };
 
-import { useGridStore } from "@/store/GridStore";
-import { useTechStore } from "@/store/TechStore";
-
 describe("useTechTreeRow", () => {
 	beforeEach(() => {
 		(useGridStore as unknown as Mock).mockReturnValue(vi.fn());
@@ -82,9 +82,7 @@ describe("useTechTreeRow", () => {
 	});
 
 	it("should use fallback image when techImage is null", () => {
-		const { result } = renderHook(() =>
-			useTechTreeRow({ ...mockProps, techImage: null })
-		);
+		const { result } = renderHook(() => useTechTreeRow({ ...mockProps, techImage: null }));
 		expect(result.current.imagePath).toBe("/assets/img/tech/infra.webp");
 		expect(result.current.imagePath2x).toBe("/assets/img/tech/infra@2x.webp");
 	});

@@ -98,7 +98,7 @@ export const useTechStore = create<TechState>((set, get) => ({
 			(acc, tech) => {
 				const group = techGroups[tech]?.[0];
 				if (group) {
-					acc[tech] = group.modules.map((m) => m.id);
+					acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
 				}
 				return acc;
 			},

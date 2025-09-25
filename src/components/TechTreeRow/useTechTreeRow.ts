@@ -32,14 +32,8 @@ export const useTechTreeRow = ({
 
 	// State from stores
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const {
-		techGroups,
-		activeGroups,
-		setActiveGroup,
-		max_bonus,
-		solved_bonus,
-		setCheckedModules,
-	} = useTechStore();
+	const { techGroups, activeGroups, setActiveGroup, max_bonus, solved_bonus, setCheckedModules } =
+		useTechStore();
 
 	const techMaxBonus = max_bonus?.[tech] ?? 0;
 	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
@@ -52,10 +46,7 @@ export const useTechTreeRow = ({
 
 	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
 
-	const rewardModules = useMemo(
-		() => modules.filter((m) => m.type === "reward"),
-		[modules]
-	);
+	const rewardModules = useMemo(() => modules.filter((m) => m.type === "reward"), [modules]);
 	const hasRewardModules = rewardModules.length > 0;
 	const moduleCount = (activeGroup?.module_count || 0) - rewardModules.length;
 
@@ -122,6 +113,7 @@ export const useTechTreeRow = ({
 		activeGroup,
 		activeGroups,
 		solving,
+		techImage,
 
 		// Module management
 		currentCheckedModules,

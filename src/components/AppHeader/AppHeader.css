@@ -9,7 +9,7 @@
 	font-weight: 400;
 	text-transform: uppercase;
 	filter: drop-shadow(0 0 8px var(--accent-track));
-	-webkit-text-stroke: 1px;
+	-webkit-text-stroke: 2px;
 }
 
 .header__title {

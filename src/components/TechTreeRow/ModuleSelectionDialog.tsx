@@ -8,6 +8,7 @@ import {
 	Dialog,
 	IconButton,
 	Separator,
+	Text,
 } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -34,6 +35,7 @@ interface ModuleSelectionDialogProps {
 	allModulesSelected: boolean;
 	isIndeterminate: boolean;
 	techColor: TechTreeRowProps["techColor"];
+	techImage: string | null;
 }
 
 /**
@@ -54,9 +56,15 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	allModulesSelected,
 	isIndeterminate,
 	techColor,
+	techImage,
 }) => {
 	const { t } = useTranslation();
 	const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
+
+	const techImagePath = techImage ? `/assets/img/tech/${techImage}` : fallbackImage;
+	const techImagePath2x = techImage
+		? `/assets/img/tech/${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
+		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
 
 	useEffect(() => {
 		if (selectAllCheckboxRef.current) {
@@ -69,9 +77,20 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	}, [isIndeterminate]);
 
 	return (
-		<Dialog.Content maxWidth="400px">
-			<Dialog.Title className="heading__styled text-xl sm:text-2xl">
-				{translatedTechName} SELECTION
+		<Dialog.Content size="2">
+			<Dialog.Title className="heading__styled flex items-start text-xl sm:text-2xl">
+				<Avatar
+					size="2"
+					radius="full"
+					alt={translatedTechName}
+					fallback="IK"
+					src={techImagePath}
+					color={techColor}
+					srcSet={`${techImagePath} 1x, ${techImagePath2x} 2x`}
+				/>
+				<span className="mt-[3px] ml-2 text-xl sm:mt-[0px] sm:text-2xl">
+					{translatedTechName} SELECTION
+				</span>
 			</Dialog.Title>
 
 			<Dialog.Close>
@@ -85,6 +104,10 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
+				<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
+					<strong>WARNING!</strong> If your solve doesn’t include all modules, the system
+					will skip most optimization steps and the results may not be the best possible.
+				</Text>
 				<Checkbox
 					ref={selectAllCheckboxRef}
 					checked={allModulesSelected}
@@ -126,10 +149,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root
-					value={currentCheckedModules}
-					onValueChange={handleValueChange}
-				>
+				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
 					{groupOrder
 						.filter((g) => g !== "core")
 						.map(
@@ -142,7 +162,12 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 										>
 											{t(`moduleSelection.${groupName}`)}
 										</div>
-										{groupedModules[groupName].map((module) => {
+										{(groupName === "bonus"
+											? [...groupedModules[groupName]].sort((a, b) =>
+													a.label.localeCompare(b.label)
+												)
+											: groupedModules[groupName]
+										).map((module) => {
 											const imagePath = module.image
 												? `${baseImagePath}${module.image}`
 												: fallbackImage;
@@ -163,7 +188,9 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 													const prerequisiteRank = order[rankIndex - 1];
 													const prerequisiteModule = groupedModules[
 														groupName
-													].find((m) => m.label.includes(prerequisiteRank));
+													].find((m) =>
+														m.label.includes(prerequisiteRank)
+													);
 													if (
 														prerequisiteModule &&
 														!currentCheckedModules.includes(
@@ -177,7 +204,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 											return (
 												<label
 													key={module.id}
-													className="mb-2 flex items-center gap-2 font-medium hover:text-[var(--accent-a12)] transition-colors duration-200"
+													className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base"
 													style={{ cursor: "pointer" }}
 												>
 													<CheckboxGroup.Item
@@ -188,7 +215,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 														size="1"
 														radius="full"
 														alt={module.label}
-														fallback="IK"
+														fallback={module.id}
 														src={imagePath}
 														color={techColor}
 													/>
@@ -200,8 +227,14 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 								)
 						)}
 				</CheckboxGroup.Root>
+				{groupedModules["cosmetic"]?.length > 0 && (
+					<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+						Specific <strong>Cosmetic</strong> modules are just recommendations for
+						fully maximizing stats. Don&apos;t let this list limit your design ideas!
+					</Text>
+				)}
 			</div>
-			<div className="mt-4 flex justify-end">
+			<div className="flex justify-end">
 				<Dialog.Close>
 					<Button onClick={handleOptimizeClick}>Optimize</Button>
 				</Dialog.Close>

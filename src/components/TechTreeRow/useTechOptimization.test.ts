@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { Mock, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, Mock, vi } from "vitest";
 
 import { useGridStore } from "@/store/GridStore";
 import { useShakeStore } from "@/store/ShakeStore";
