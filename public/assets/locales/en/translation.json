@@ -543,10 +543,10 @@
 		"reactor": "Reactor Modules",
 		"cosmetic": "Cosmetic Modules",
 		"title": "{{techName}} SELECTION",
-		"warning": "<strong>WARNING!</strong> If your solve doesn’t include all modules, the system will skip most optimization steps and the results may not be the best possible.",
+		"warning": "<strong>WARNING!</strong> If your solve doesn’t include all modules, the Optimizer will skip most steps and the results may not represent the best possible solve.",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
-		"cosmeticInfo": "Specific <strong>Cosmetic</strong> modules are only suggestions for fully maximizing stats. <i>Don’t let this list limit your design ideas!</i> Just be sure to select the same number of Cosmetic modules you’ve installed on your Corvette for the best solve possible.",
+		"cosmeticInfo": "Suggested <strong>Cosmetic</strong> modules help maximize stats. <i>Don’t let this list limit your design ideas!</i> Just match the number of Cosmetic modules on your Corvette for the best solve.",
 		"optimizeButton": "Optimize"
 	}
 }

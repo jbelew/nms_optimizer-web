@@ -6,9 +6,9 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ## Version 4.0 (2025-09-25)
 
-- Added support for selecting which modules to include in a solve.
-- Improved both performance and solve quality of the simulated annealing algorithm.
-- Increased training samples for ML models to improve accuracy.
+- Added the ability to choose which modules are included in a solve.
+- Improved simulated annealing for faster performance and better solve quality.
+- Expanded training data for the Corvette Hyperdrive ML model to **36k samples**, aiming for higher accuracy with this complex layout.
 
 ## Version 3.15 (2025-09-23)
 
