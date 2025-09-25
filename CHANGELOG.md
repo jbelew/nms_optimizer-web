@@ -1,3 +1,12 @@
+# [4.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.15.0...v4.0.0) (2025-09-25)
+
+
+### Features
+
+* **techtree:** added upgrade selection order to the modules selection ui ([1630f77](https://github.com/jbelew/nms_optimizer-web/commit/1630f777ac74744a0344c5d63f9f711c583a0119))
+
+
+
 # [3.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.14.1...v3.15.0) (2025-09-23)
 
 
