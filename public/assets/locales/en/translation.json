@@ -546,7 +546,7 @@
 		"warning": "<strong>WARNING!</strong> If your solve doesn’t include all modules, the Optimizer will skip most steps and the results may not represent the best possible solve.",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
-		"cosmeticInfo": "Suggested <strong>Cosmetic</strong> modules help maximize stats. <i>Don’t let this list limit your design ideas!</i> Just match the number of Cosmetic modules on your Corvette for the best solve.",
+		"cosmeticInfo": "Suggested <strong>Cosmetic</strong> modules can help slightly boost your final stats, but <i>don’t let them limit your design ideas!</i> Just match the number of Cosmetic modules on your Corvette for the best possible solve.",
 		"optimizeButton": "Optimize"
 	}
 }
