@@ -77,7 +77,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	}, [isIndeterminate]);
 
 	return (
-		<Dialog.Content size="2" maxHeight={{ initial: "80vh", sm: "92vh" }}>
+		<Dialog.Content size="2">
 			<Dialog.Title className="heading__styled flex items-start text-xl sm:text-2xl">
 				<Avatar
 					size="2"
@@ -88,7 +88,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					color={techColor}
 					srcSet={`${techImagePath} 1x, ${techImagePath2x} 2x`}
 				/>
-				<span className="mt-[3px] ml-2 text-xl sm:mt-[0px] sm:text-2xl">
+				<span className="mt-[2px] ml-2 text-xl sm:mt-[0px] sm:text-2xl">
 					{t("moduleSelection.title", { techName: translatedTechName })}
 				</span>
 			</Dialog.Title>
