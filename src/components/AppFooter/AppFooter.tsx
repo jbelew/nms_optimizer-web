@@ -20,7 +20,7 @@ interface AppFooterProps {
  * @returns {JSX.Element} The rendered AppFooterInternal component.
  */
 const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
-	const { t } = useTranslation();
+	useTranslation();
 
 	return (
 		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-center text-xs font-light sm:text-sm lg:pb-0">
@@ -40,7 +40,15 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 					}}
 				/>
 				<br />
-				{t("footer.builtBy", { buildVersion: buildVersion })}
+				Built by jbelew (
+				<a
+					href="https://www.linkedin.com/in/jobelew/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Looking for work BTW!
+				</a>
+				) • {buildVersion}
 			</div>
 			<Separator decorative size="3" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
