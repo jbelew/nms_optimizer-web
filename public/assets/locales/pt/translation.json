@@ -546,7 +546,7 @@
 		"warning": "<strong> Aviso! </strong> Se a sua resolução não incluir todos os módulos, o otimizador pulará a maioria das etapas e os resultados podem não representar a melhor resolução possível.",
 		"selectAll": "Selecione tudo",
 		"closeDialogLabel": "Fechar diálogo",
-		"cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i> não os deixe limitar suas idéias de design!",
+		"cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
 		"optimizeButton": "Otimizar"
 	}
 }

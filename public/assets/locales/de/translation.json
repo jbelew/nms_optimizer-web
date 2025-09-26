@@ -546,7 +546,7 @@
         "warning": "<strong> WARNUNG! </strong> Wenn Ihre Lösung nicht alle Module enthält, überspringt der Optimierer die meisten Schritte und die Ergebnisse sind möglicherweise nicht die bestmögliche Lösung.",
         "selectAll": "Wählen Sie alle aus",
         "closeDialogLabel": "Dialog schließen",
-        "cosmeticInfo": "Vorgeschlagene <strong> Cosmetic </strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i> Lassen Sie sie Ihre Designideen nicht einschränken!",
+        "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
         "optimizeButton": "Optimieren"
     }
 }
