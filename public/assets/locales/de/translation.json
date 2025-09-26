@@ -535,5 +535,18 @@
             "waterjets": "Effiziente Wasserstrahlen",
             "rerouter": "Sauerstoff-Umleiter"
         }
+    },
+    "moduleSelection": {
+        "core": "Kernmodul (erforderlich)",
+        "bonus": "Bonusmodule",
+        "upgrade": "Upgrade Module",
+        "reactor": "Reaktormodule",
+        "cosmetic": "Kosmetische Module",
+        "title": "{{techName}} Auswahl",
+        "warning": "<strong> WARNUNG! </strong> Wenn Ihre Lösung nicht alle Module enthält, überspringt der Optimierer die meisten Schritte und die Ergebnisse sind möglicherweise nicht die bestmögliche Lösung.",
+        "selectAll": "Wählen Sie alle aus",
+        "closeDialogLabel": "Dialog schließen",
+        "cosmeticInfo": "Vorgeschlagene <strong> Cosmetic </strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i> Lassen Sie sie Ihre Designideen nicht einschränken!",
+        "optimizeButton": "Optimieren"
     }
 }

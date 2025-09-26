@@ -18,10 +18,12 @@ import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
 import "./index.css";
+import "./components/Toast/Toast.css";
 // i18n
 import "./i18n/i18n"; // Initialize i18next
 
 import { StrictMode } from "react";
+import * as Toast from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -44,9 +46,15 @@ createRoot(document.getElementById("root")!).render(
 					accentColor="cyan"
 					grayColor="sage"
 				>
-					<DialogProvider>
-						<App />
-					</DialogProvider>
+					<Toast.Provider>
+						<Toast.Provider swipeDirection="right">
+							<DialogProvider>
+								<App />
+							</DialogProvider>
+							<Toast.Viewport className="ToastViewport" />
+						</Toast.Provider>{" "}
+						<Toast.Viewport />
+					</Toast.Provider>
 				</Theme>
 			</ErrorBoundary>
 		</BrowserRouter>

@@ -535,5 +535,18 @@
             "waterjets": "Hydropropulseurs efficaces",
             "rerouter": "Rerouteur d'oxygène"
         }
+    },
+    "moduleSelection": {
+        "core": "Module de base (requis)",
+        "bonus": "Modules bonus",
+        "upgrade": "Modules de mise à niveau",
+        "reactor": "Modules de réacteur",
+        "cosmetic": "Modules cosmétiques",
+        "title": "Sélection {{techName}}",
+        "warning": "<strong> AVERTISSEMENT! </strong> Si votre résolution n'inclut pas tous les modules, l'optimiseur sautera la plupart des étapes et les résultats peuvent ne pas représenter la meilleure résolution possible.",
+        "selectAll": "Sélectionnez tout",
+        "closeDialogLabel": "Fermer le dialogue",
+        "cosmeticInfo": "Les modules <strong> Cosmetic </strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i> ne les laissez pas limiter vos idées de conception! </i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
+        "optimizeButton": "Optimiser"
     }
 }

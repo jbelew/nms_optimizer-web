@@ -2,7 +2,7 @@
 import "./ShipSelection.css";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useMemo } from "react";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { NmsToast } from "../Toast/Toast";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;
@@ -80,6 +81,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	);
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
+	const [toastOpen, setToastOpen] = useState(false);
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
@@ -95,6 +97,10 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					platform: option,
 					value: 1,
 				});
+
+				if (option === "corvette") {
+					setToastOpen(true);
+				}
 
 				setSelectedShipType(option, Object.keys(shipTypes));
 
@@ -143,6 +149,12 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					/>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
+			<NmsToast
+				open={toastOpen}
+				onOpenChange={setToastOpen}
+				title="Corvette Warning!"
+				description="Corvettes currently have a bug that cause layouts to randomly reset! We recommend not spending too much time optimizing them until it’s fixed."
+			/>
 		</>
 	);
 });
