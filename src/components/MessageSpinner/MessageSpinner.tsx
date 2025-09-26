@@ -93,7 +93,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 						{initialMessage}
 					</Text>
 
-					<div className="w-1/3">
+					<div className="w-1/2 sm:w-1/3">
 						{isVisible && progressPercent !== undefined ? (
 							<div className="mb-10 lg:mb-18">
 								<Progress value={Math.min(progressPercent, 100)} variant="soft" />
