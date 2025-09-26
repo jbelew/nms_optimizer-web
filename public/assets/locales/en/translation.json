@@ -537,13 +537,13 @@
 		}
 	},
 	"moduleSelection": {
-		"core": "Core Module (required)",
+		"core": "Core Module",
 		"bonus": "Bonus Modules",
 		"upgrade": "Upgrade Modules",
 		"reactor": "Reactor Modules",
 		"cosmetic": "Cosmetic Modules",
 		"title": "{{techName}} SELECTION",
-		"warning": "<strong>WARNING!</strong> If your solve doesn’t include all modules, the Optimizer will skip most steps and the results may not represent the best possible solve.",
+		"warning": "Default module selections are just suggestions. <strong>Select All</strong> if you want to fully maximize this technology. Choose wisely! You’ll probably only have space for 2 or 3 maxed technologies in your layout.",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "Suggested <strong>Cosmetic</strong> modules can help slightly boost your final stats, but <i>don’t let them limit your design ideas!</i> Just match the number of Cosmetic modules on your Corvette for the best possible solve.",

@@ -12,6 +12,7 @@ import {
 } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { usePlatformStore } from "../../store/PlatformStore";
 import { TechTreeRowProps } from "./TechTreeRow";
 
 const groupOrder = ["core", "bonus", "upgrade", "reactor", "cosmetic"];
@@ -60,6 +61,8 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 }) => {
 	const { t } = useTranslation();
 	const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const isCorvette = selectedShipType === "corvette";
 
 	const techImagePath = techImage ? `/assets/img/tech/${techImage}` : fallbackImage;
 	const techImagePath2x = techImage
@@ -104,12 +107,14 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
-				<Text
-					className="text-sm sm:text-base"
-					as="p"
-					mb="3"
-					dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-				/>
+				{isCorvette && (
+					<Text
+						className="text-sm sm:text-base"
+						as="p"
+						mb="3"
+						dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+					/>
+				)}
 				<Checkbox
 					ref={selectAllCheckboxRef}
 					checked={allModulesSelected}
@@ -121,7 +126,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				<Separator className="mt-2 mb-4" size="4" />
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
-				{groupedModules["core"].length > 0 && (
+				{!isCorvette && groupedModules["core"].length > 0 && (
 					<div key="core">
 						<div
 							className="mb-2 font-bold capitalize"
@@ -154,82 +159,76 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					</div>
 				)}
 				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
-					{groupOrder
-						.filter((g) => g !== "core")
-						.map(
-							(groupName) =>
-								groupedModules[groupName].length > 0 && (
-									<div key={groupName}>
-										<div
-											className="mb-2 font-bold capitalize"
-											style={{ color: "var(--accent-a11)" }}
-										>
-											{t(`moduleSelection.${groupName}`)}
-										</div>
-										{(groupName === "bonus"
-											? [...groupedModules[groupName]].sort((a, b) =>
-													a.label.localeCompare(b.label)
-												)
-											: groupedModules[groupName]
-										).map((module) => {
-											const imagePath = module.image
-												? `${baseImagePath}${module.image}`
-												: fallbackImage;
-											let isDisabled = false;
-											if (
-												["upgrade", "cosmetic", "reactor"].includes(
-													groupName
-												)
-											) {
-												const label = module.label;
-												const order = ["Theta", "Tau", "Sigma"];
-												let rankIndex = -1;
-												if (label.includes("Theta")) rankIndex = 0;
-												else if (label.includes("Tau")) rankIndex = 1;
-												else if (label.includes("Sigma")) rankIndex = 2;
+					{(isCorvette ? groupOrder : groupOrder.filter((g) => g !== "core")).map(
+						(groupName) =>
+							groupedModules[groupName].length > 0 && (
+								<div key={groupName}>
+									<div
+										className="mb-2 font-bold capitalize"
+										style={{ color: "var(--accent-a11)" }}
+									>
+										{t(`moduleSelection.${groupName}`)}
+									</div>
+									{(groupName === "bonus"
+										? [...groupedModules[groupName]].sort((a, b) =>
+												a.label.localeCompare(b.label)
+											)
+										: groupedModules[groupName]
+									).map((module) => {
+										const imagePath = module.image
+											? `${baseImagePath}${module.image}`
+											: fallbackImage;
+										let isDisabled = false;
+										if (
+											["upgrade", "cosmetic", "reactor"].includes(groupName)
+										) {
+											const label = module.label;
+											const order = ["Theta", "Tau", "Sigma"];
+											let rankIndex = -1;
+											if (label.includes("Theta")) rankIndex = 0;
+											else if (label.includes("Tau")) rankIndex = 1;
+											else if (label.includes("Sigma")) rankIndex = 2;
 
-												if (rankIndex > 0) {
-													const prerequisiteRank = order[rankIndex - 1];
-													const prerequisiteModule = groupedModules[
-														groupName
-													].find((m) =>
-														m.label.includes(prerequisiteRank)
-													);
-													if (
-														prerequisiteModule &&
-														!currentCheckedModules.includes(
-															prerequisiteModule.id
-														)
-													) {
-														isDisabled = true;
-													}
+											if (rankIndex > 0) {
+												const prerequisiteRank = order[rankIndex - 1];
+												const prerequisiteModule = groupedModules[
+													groupName
+												].find((m) => m.label.includes(prerequisiteRank));
+												if (
+													prerequisiteModule &&
+													!currentCheckedModules.includes(
+														prerequisiteModule.id
+													)
+												) {
+													isDisabled = true;
 												}
 											}
-											return (
-												<label
-													key={module.id}
-													className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base"
-													style={{ cursor: "pointer" }}
-												>
-													<CheckboxGroup.Item
-														value={module.id}
-														disabled={isDisabled}
-													/>
-													<Avatar
-														size="1"
-														radius="full"
-														alt={module.label}
-														fallback={module.id}
-														src={imagePath}
-														color={techColor}
-													/>
-													{module.label}
-												</label>
-											);
-										})}
-									</div>
-								)
-						)}
+										}
+										return (
+											<label
+												key={module.id}
+												className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base"
+												style={{ cursor: "pointer" }}
+											>
+												<CheckboxGroup.Item
+													value={module.id}
+													disabled={isDisabled}
+												/>
+												<Avatar
+													size="1"
+													radius="full"
+													alt={module.label}
+													fallback={module.id}
+													src={imagePath}
+													color={techColor}
+												/>
+												{module.label}
+											</label>
+										);
+									})}
+								</div>
+							)
+					)}
 				</CheckboxGroup.Root>
 				{groupedModules["cosmetic"]?.length > 0 && (
 					<Text

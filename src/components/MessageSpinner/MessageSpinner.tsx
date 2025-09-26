@@ -97,7 +97,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 						{isVisible && progressPercent !== undefined ? (
 							<div className="mb-10 lg:mb-18">
 								<Progress value={Math.min(progressPercent, 100)} variant="soft" />
-								<div className="flex justify-center pt-3">
+								<div className="flex justify-center pt-3 font-medium">
 									<Text className="text-sm">{status || "\u00A0"}</Text>
 								</div>
 							</div>

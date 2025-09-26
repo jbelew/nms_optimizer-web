@@ -10,6 +10,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 - Corrected a regression in Bolt-caster module data that impacted solve quality.
 - Improved progress visualization for simulated annealing reheat operations.
 - Optimized simulated annealing parameters to reduce solve times.
+- Additional messaging and UI improvements.
 
 ## Version 4.0 (2025-09-25)
 
@@ -17,7 +18,6 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 - Improved simulated annealing for faster performance and better solve quality.
 - ~~Expanded training data for the Corvette Hyperdrive ML model to **36k samples**, aiming for higher accuracy with this complex layout~~.
 - Removed the Corvette Hyperdrive ML model. The layout is just too complex and causing server timeout issues.
-
 
 ## Version 3.15 (2025-09-23)
 
