@@ -107,23 +107,26 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
-				{isCorvette && (
-					<Text
-						className="text-sm sm:text-base"
-						as="p"
-						mb="3"
-						dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-					/>
-				)}
-				<Checkbox
-					ref={selectAllCheckboxRef}
-					checked={allModulesSelected}
-					onCheckedChange={handleSelectAllChange}
-				/>
-				<Text ml="2" className="text-sm font-medium sm:text-base">
-					{t("moduleSelection.selectAll")}
-				</Text>
-				<Separator className="mt-2 mb-4" size="4" />
+				<div>
+					{isCorvette && (
+						<div className="mb-2 text-sm sm:text-base">
+							<span
+								dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+							/>
+						</div>
+					)}
+					<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base">
+						<Checkbox
+							ref={selectAllCheckboxRef}
+							checked={allModulesSelected}
+							onCheckedChange={handleSelectAllChange}
+						/>
+						<Text ml="2" className="text-sm font-medium sm:text-base">
+							{t("moduleSelection.selectAll")}
+						</Text>
+					</label>
+					<Separator className="mt-2 mb-4" size="4" />
+				</div>
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
 				{!isCorvette && groupedModules["core"].length > 0 && (
@@ -233,7 +236,6 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				{groupedModules["cosmetic"]?.length > 0 && (
 					<Text
 						className="text-sm sm:text-base"
-						as="p"
 						mb="2"
 						dangerouslySetInnerHTML={{
 							__html: t("moduleSelection.cosmeticInfo"),
