@@ -13,6 +13,7 @@ interface MessageSpinnerProps {
 	showRandomMessages?: boolean;
 	color?: string;
 	progressPercent?: number;
+	status?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	useNMSFont,
 	showRandomMessages = false,
 	progressPercent,
+	status,
 }) => {
 	const [, setShowAdditionalMessage] = useState(false);
 	const [, setCurrentRandomMessage] = useState<string>("");
@@ -93,11 +95,12 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 					<div className="w-1/3">
 						{isVisible && progressPercent !== undefined ? (
-							<Progress
-								value={Math.min(progressPercent, 100)}
-								variant="soft"
-								className="mb-10 lg:mb-18"
-							/>
+							<div className="mb-10 lg:mb-18">
+								<Progress value={Math.min(progressPercent, 100)} variant="soft" />
+								<div className="flex justify-center pt-3">
+									<Text className="text-sm">{status || "\u00A0"}</Text>
+								</div>
+							</div>
 						) : (
 							<div className="h-[6px]" />
 						)}

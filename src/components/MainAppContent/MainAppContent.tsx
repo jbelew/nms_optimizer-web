@@ -38,6 +38,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 	const {
 		solving,
 		progressPercent,
+		status,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,
@@ -115,6 +116,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 						<GridTable
 							solving={solving}
 							progressPercent={progressPercent}
+							status={status}
 							shared={isSharedGrid}
 							activateRow={activateRow}
 							deActivateRow={deActivateRow}

@@ -13,6 +13,7 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 export interface UseOptimizeReturn {
 	solving: boolean;
 	progressPercent: number;
+	status?: string;
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	patternNoFitTech: string | null;
@@ -69,11 +70,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
-	const gridContainerRef = useRef<HTMLDivElement>(null);
+	const [status, setStatus] = useState<string | undefined>();
+	const gridContainerRef = useRef<HTMLDivElement | null>(null);
 
 	const resetProgress = useCallback(() => {
 		setSolving(false);
 		setProgressPercent(0);
+		setStatus(undefined);
 	}, []);
 
 	// Scroll into view when solving on smaller screens
@@ -131,12 +134,22 @@ export const useOptimize = (): UseOptimizeReturn => {
 				socket.emit("optimize", payload);
 			});
 
-			socket.on("progress", (data: { progress_percent: number; best_grid?: Grid }) => {
-				setProgressPercent(data.progress_percent);
-				if (data.best_grid) {
-					setGrid(data.best_grid);
+			socket.on(
+				"progress",
+				(data: { progress_percent: number; best_grid?: Grid; status?: string }) => {
+					setProgressPercent(data.progress_percent);
+					if (
+						data.status &&
+						data.status !== "in_progress" &&
+						data.status !== "new_best"
+					) {
+						setStatus(data.status);
+					}
+					if (data.best_grid) {
+						setGrid(data.best_grid);
+					}
 				}
-			});
+			);
 
 			socket.once("optimization_result", (data: unknown) => {
 				if (isApiResponse(data)) {
@@ -218,6 +231,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	return {
 		solving,
 		progressPercent,
+		status,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,
