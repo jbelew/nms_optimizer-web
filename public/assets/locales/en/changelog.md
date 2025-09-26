@@ -4,6 +4,13 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 4.0.1 (2025-09-26)
+
+- Fixed a mapping issue with Corvettes and the Weaponry ML models.
+- Corrected a regression in Bolt-caster module data that impacted solve quality.
+- Improved progress visualization for simulated annealing reheat operations.
+- Optimized simulated annealing parameters to reduce solve times.
+
 ## Version 4.0 (2025-09-25)
 
 - Added the ability to choose which modules are included in a solve.
