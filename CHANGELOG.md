@@ -1,3 +1,17 @@
+## [4.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.0...v4.0.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* **module selection:** some minor UI fixes for mobile ([f2d4af8](https://github.com/jbelew/nms_optimizer-web/commit/f2d4af848482a8fc1143bb17f129fe1143fa3d1f))
+
+
+### Features
+
+* **mardown:** added strikethrough support to the markdown renderer ([57b2b93](https://github.com/jbelew/nms_optimizer-web/commit/57b2b934bf3f7e7c35d8857ecd9ea12be7c2b0d2))
+
+
+
 # [4.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v3.15.0...v4.0.0) (2025-09-25)
 
 
