@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import {
 	Avatar,
+	Blockquote,
 	Button,
 	Checkbox,
 	CheckboxGroup,
@@ -109,11 +110,10 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 			<Dialog.Description>
 				<div className="mb-2">
 					{isCorvette && (
-						<div className="mb-3 text-sm sm:text-base">
-							<span
-								dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-							/>
-						</div>
+						<div
+							className="mb-3 text-sm sm:text-base"
+							dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+						/>
 					)}
 					<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base">
 						<Checkbox
@@ -181,8 +181,10 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 										{t(`moduleSelection.${groupName}`)}
 									</div>{" "}
 									{groupName === "cosmetic" && (
-										<div
-											className="mb-3 text-sm font-light sm:text-base"
+										<Blockquote
+											className="text-sm sm:text-base"
+											mb="3"
+											mt="1"
 											dangerouslySetInnerHTML={{
 												__html: t("moduleSelection.cosmeticInfo"),
 											}}
