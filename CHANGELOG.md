@@ -1,3 +1,21 @@
+## [4.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.1...v4.0.2) (2025-09-27)
+
+
+### Bug Fixes
+
+* **messagespinner:** fix for the status message wrapping ([8b58188](https://github.com/jbelew/nms_optimizer-web/commit/8b5818897fc11fd4fd73dd7ca121866c56af24c4))
+* **moduleselection:** fixed html rendering issue ([1f66137](https://github.com/jbelew/nms_optimizer-web/commit/1f66137ed6109f0c651cdb4706bdfad4bdde4cfe))
+
+
+### Features
+
+* **messagespinner:** better status message during the solve process ([df1b98d](https://github.com/jbelew/nms_optimizer-web/commit/df1b98d584e31f21972963fd7585ac8f2729b12e))
+* **messaging:** additional messaging and UI refinements ([f749710](https://github.com/jbelew/nms_optimizer-web/commit/f749710aefb8e78b172c910a42ac7a39c5b0c86f))
+* **messaging:** improved messaging around module selection ([1f10283](https://github.com/jbelew/nms_optimizer-web/commit/1f102836313b3506cfc5e452533ac5ab8473a968))
+* **toast:** added a toast component and a warning about Corvette layout bugs ([c815f3e](https://github.com/jbelew/nms_optimizer-web/commit/c815f3e548fe751d81c38c3a72febc70c2be4289))
+
+
+
 ## [4.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.0...v4.0.1) (2025-09-26)
 
 
