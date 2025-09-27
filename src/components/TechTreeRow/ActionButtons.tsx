@@ -14,6 +14,7 @@ interface ActionButtonsProps {
 	translatedTechName: string;
 	handleOptimizeClick: () => void;
 	handleReset: () => void;
+	currentCheckedModules: string[];
 }
 
 /**
@@ -30,6 +31,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 	translatedTechName,
 	handleOptimizeClick,
 	handleReset,
+	currentCheckedModules,
 }) => {
 	const { t } = useTranslation();
 
@@ -40,7 +42,8 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 		tooltipLabel = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
 	}
 	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : DoubleArrowLeftIcon;
-	const isOptimizeButtonDisabled = (isGridFull && !hasTechInGrid) || solving;
+	const isOptimizeButtonDisabled =
+		(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;
 
 	return (
 		<>

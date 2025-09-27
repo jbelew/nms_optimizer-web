@@ -153,7 +153,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				open={toastOpen}
 				onOpenChange={setToastOpen}
 				title="Corvette Warning!"
-				description="Corvettes currently have a bug that cause layouts to randomly reset! We recommend not spending too much time optimizing them until it’s fixed."
+				description="Corvettes currently have a bug that causes layouts to randomly reset! We recommend not spending too much time optimizing them until it’s fixed."
 			/>
 		</>
 	);

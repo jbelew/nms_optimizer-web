@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { TechTreeRowProps } from "./TechTreeRow";
 
-const groupOrder = ["core", "bonus", "upgrade", "reactor", "cosmetic"];
+const groupOrder = ["core", "bonus", "upgrade", "atlantid", "reactor", "cosmetic"];
 const baseImagePath = "/assets/img/grid/";
 const fallbackImage = `${baseImagePath}infra.webp`;
 
@@ -107,9 +107,9 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
-				<div>
+				<div className="mb-2">
 					{isCorvette && (
-						<div className="mb-2 text-sm sm:text-base">
+						<div className="mb-3 text-sm sm:text-base">
 							<span
 								dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
 							/>
@@ -119,13 +119,19 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 						<Checkbox
 							ref={selectAllCheckboxRef}
 							checked={allModulesSelected}
-							onCheckedChange={handleSelectAllChange}
+							onCheckedChange={(checked) => {
+								if (isCorvette && !checked) {
+									handleValueChange([]);
+								} else {
+									handleSelectAllChange(checked);
+								}
+							}}
 						/>
 						<Text ml="2" className="text-sm font-medium sm:text-base">
 							{t("moduleSelection.selectAll")}
 						</Text>
 					</label>
-					<Separator className="mt-2 mb-4" size="4" />
+					<Separator size="4" className="mt-2" />
 				</div>
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
@@ -164,14 +170,24 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
 					{(isCorvette ? groupOrder : groupOrder.filter((g) => g !== "core")).map(
 						(groupName) =>
-							groupedModules[groupName].length > 0 && (
+							groupedModules[groupName]?.length > 0 && (
 								<div key={groupName}>
 									<div
-										className="mb-2 font-bold capitalize"
+										className={`font-bold capitalize ${
+											groupName !== "cosmetic" ? "mb-2" : "mb-0"
+										}`}
 										style={{ color: "var(--accent-a11)" }}
 									>
 										{t(`moduleSelection.${groupName}`)}
-									</div>
+									</div>{" "}
+									{groupName === "cosmetic" && (
+										<div
+											className="mb-3 text-sm font-light sm:text-base"
+											dangerouslySetInnerHTML={{
+												__html: t("moduleSelection.cosmeticInfo"),
+											}}
+										/>
+									)}
 									{(groupName === "bonus"
 										? [...groupedModules[groupName]].sort((a, b) =>
 												a.label.localeCompare(b.label)
@@ -183,7 +199,9 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 											: fallbackImage;
 										let isDisabled = false;
 										if (
-											["upgrade", "cosmetic", "reactor"].includes(groupName)
+											["upgrade", "cosmetic", "reactor", "atlantid"].includes(
+												groupName
+											)
 										) {
 											const label = module.label;
 											const order = ["Theta", "Tau", "Sigma"];
@@ -233,19 +251,13 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 							)
 					)}
 				</CheckboxGroup.Root>
-				{groupedModules["cosmetic"]?.length > 0 && (
-					<Text
-						className="text-sm sm:text-base"
-						mb="2"
-						dangerouslySetInnerHTML={{
-							__html: t("moduleSelection.cosmeticInfo"),
-						}}
-					/>
-				)}
 			</div>
-			<div className="flex justify-end">
+			<div className="mt-2 flex justify-end">
 				<Dialog.Close>
-					<Button onClick={handleOptimizeClick}>
+					<Button
+						onClick={handleOptimizeClick}
+						disabled={currentCheckedModules.length === 0}
+					>
 						{t("moduleSelection.optimizeButton")}
 					</Button>
 				</Dialog.Close>

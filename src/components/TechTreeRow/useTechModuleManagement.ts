@@ -44,6 +44,7 @@ export const useTechModuleManagement = (
 			upgrade: [],
 			reactor: [],
 			cosmetic: [],
+			atlantid: [],
 		};
 
 		modules.forEach((module) => {
@@ -95,7 +96,7 @@ export const useTechModuleManagement = (
 				const module = modules.find((m) => m.id === removedId);
 				if (module) {
 					const groupName = module.type || "upgrade";
-					if (["upgrade", "cosmetic", "reactor"].includes(groupName)) {
+					if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
 						const label = module.label;
 						if (label.includes("Theta")) {
 							const tauModule = groupedModules[groupName].find((m) =>

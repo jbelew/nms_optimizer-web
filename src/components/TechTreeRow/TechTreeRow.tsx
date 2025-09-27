@@ -92,6 +92,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 				translatedTechName={translatedTechName}
 				handleOptimizeClick={handleOptimizeClick}
 				handleReset={handleReset}
+				currentCheckedModules={currentCheckedModules}
 			/>
 
 			<Avatar
