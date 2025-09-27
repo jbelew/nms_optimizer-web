@@ -99,7 +99,7 @@
 }
 
 .gridCell--black {
-	border-color: var(--gray-6);
+	border-color: var(--gray-6) !important;
 	background-color: var(--gray-a3);
 }
 
