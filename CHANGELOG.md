@@ -1,3 +1,19 @@
+# [4.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.2...v4.1.0) (2025-09-28)
+
+
+### Bug Fixes
+
+* **gridcell:** fix for when a cell has the white techcolor but no adjacency ([1005244](https://github.com/jbelew/nms_optimizer-web/commit/100524466a23804c2dc85554f86b0f2a4a022814))
+* **modulegroup:** fix linting and typescript issues ([2e60cbb](https://github.com/jbelew/nms_optimizer-web/commit/2e60cbb81749dde6232d16b38874dce35f250e1c))
+
+
+### Features
+
+* **module dialog:** some minor UI improvements ([234b70c](https://github.com/jbelew/nms_optimizer-web/commit/234b70c2898a9e620340ce0c3dc34d94f4f1468a))
+* **moduleselectiondialog:** unified dialog close functional to restore previous state ([7b09dfc](https://github.com/jbelew/nms_optimizer-web/commit/7b09dfce3b7dd965b0877f24739d6f3d2dc1423c))
+
+
+
 ## [4.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.1...v4.0.2) (2025-09-27)
 
 
