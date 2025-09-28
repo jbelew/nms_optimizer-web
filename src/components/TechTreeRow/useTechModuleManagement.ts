@@ -130,5 +130,6 @@ export const useTechModuleManagement = (
 		isIndeterminate,
 		handleValueChange,
 		handleSelectAllChange,
+		handleAllCheckboxesChange,
 	};
 };

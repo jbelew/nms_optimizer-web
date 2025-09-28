@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -38,6 +38,7 @@ interface ModuleSelectionDialogProps {
 	isIndeterminate: boolean;
 	techColor: TechTreeRowProps["techColor"];
 	techImage: string | null;
+	handleAllCheckboxesChange: (moduleIds: string[]) => void;
 }
 
 /**
@@ -59,11 +60,18 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	isIndeterminate,
 	techColor,
 	techImage,
+	handleAllCheckboxesChange,
 }) => {
 	const { t } = useTranslation();
 	const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
+
+	const [initialCheckedModules] = useState(currentCheckedModules);
+
+	const handleCancelClick = () => {
+		handleAllCheckboxesChange(initialCheckedModules);
+	};
 
 	const techImagePath = techImage ? `/assets/img/tech/${techImage}` : fallbackImage;
 	const techImagePath2x = techImage
@@ -108,31 +116,29 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				</IconButton>
 			</Dialog.Close>
 			<Dialog.Description>
-				<div className="mb-2">
-					{isCorvette && (
-						<div
-							className="mb-3 text-sm sm:text-base"
-							dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
-						/>
-					)}
-					<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base">
-						<Checkbox
-							ref={selectAllCheckboxRef}
-							checked={allModulesSelected}
-							onCheckedChange={(checked) => {
-								if (isCorvette && !checked) {
-									handleValueChange([]);
-								} else {
-									handleSelectAllChange(checked);
-								}
-							}}
-						/>
-						<Text ml="2" className="text-sm font-medium sm:text-base">
-							{t("moduleSelection.selectAll")}
-						</Text>
-					</label>
-					<Separator size="4" className="mt-2" />
-				</div>
+				{isCorvette && (
+					<span
+						className="mb-3 block text-sm sm:text-base"
+						dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+					/>
+				)}
+				<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base">
+					<Checkbox
+						ref={selectAllCheckboxRef}
+						checked={allModulesSelected}
+						onCheckedChange={(checked) => {
+							if (isCorvette && !checked) {
+								handleValueChange([]);
+							} else {
+								handleSelectAllChange(checked);
+							}
+						}}
+					/>
+					<Text ml="2" className="text-sm font-medium sm:text-base">
+						{t("moduleSelection.selectAll")}
+					</Text>
+				</label>
+				<Separator size="4" className="mt-2" mb="3" />
 			</Dialog.Description>
 			<div className="flex flex-col gap-2">
 				{!isCorvette && groupedModules["core"].length > 0 && (
@@ -254,7 +260,12 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 					)}
 				</CheckboxGroup.Root>
 			</div>
-			<div className="mt-2 flex justify-end">
+			<div className="mt-2 flex justify-end gap-3">
+				<Dialog.Close>
+					<Button variant="soft" onClick={handleCancelClick}>
+						{t("moduleSelection.cancelButton")}
+					</Button>
+				</Dialog.Close>
 				<Dialog.Close>
 					<Button
 						onClick={handleOptimizeClick}

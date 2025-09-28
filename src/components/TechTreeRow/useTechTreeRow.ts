@@ -65,6 +65,7 @@ export const useTechTreeRow = ({
 		isIndeterminate,
 		handleValueChange,
 		handleSelectAllChange,
+		handleAllCheckboxesChange,
 	} = useTechModuleManagement(tech, modules);
 
 	// Other logic specific to TechTreeRow
@@ -75,10 +76,6 @@ export const useTechTreeRow = ({
 				? prevChecked.filter((id) => id !== moduleId)
 				: [...prevChecked, moduleId];
 		});
-	};
-
-	const handleAllCheckboxesChange = (moduleIds: string[]) => {
-		setCheckedModules(tech, () => moduleIds);
 	};
 
 	// Translation and image paths
