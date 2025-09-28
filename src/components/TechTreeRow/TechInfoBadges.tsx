@@ -3,7 +3,7 @@ import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
 import { BonusStatusIcon } from "./BonusStatusIcon";
-import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
+import { ModuleSelectionDialog } from "../ModuleSelectionDialog";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 type TechInfoBadgesProps = ReturnType<typeof useTechTreeRow>;
