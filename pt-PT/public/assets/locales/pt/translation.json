@@ -548,6 +548,7 @@
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don’t let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
-		"optimizeButton": "Optimize"
+		"optimizeButton": "Optimize",
+		"cancelButton": "Cancel"
 	}
 }
