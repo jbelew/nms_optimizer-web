@@ -4,6 +4,12 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 4.1.0 (2025-09-28)
+
+- Improved Module Selection Dialog interactions.
+- Added full AI model for corrected Bolt-caster layout.
+- Numerous minor bug fixes and UI improvements.
+
 ## Version 4.0.1 (2025-09-26)
 
 - Fixed a mapping issue with Corvettes and the Weaponry ML models.
