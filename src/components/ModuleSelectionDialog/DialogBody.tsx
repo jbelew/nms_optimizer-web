@@ -1,16 +1,10 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import type { ModuleSelectionDialogProps } from "./index";
+import React, { useCallback, useEffect, useRef } from "react";
+import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import {
-	Checkbox,
-	Separator,
-	Text,
-	CheckboxGroup,
-	Avatar,
-} from "@radix-ui/themes";
+
 import { usePlatformStore } from "../../store/PlatformStore";
 import { ModuleGroup } from "./ModuleGroup";
-import type { ModuleSelectionDialogProps } from "./index";
-import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 
 const groupOrder = ["core", "bonus", "upgrade", "atlantid", "reactor", "cosmetic"];
 const baseImagePath = "/assets/img/grid/";
@@ -19,17 +13,16 @@ const fallbackImage = `${baseImagePath}infra.webp`;
 /**
  * Props for the DialogBody component.
  */
-export interface DialogBodyProps
-	extends Pick<
-		ModuleSelectionDialogProps,
-		| "groupedModules"
-		| "currentCheckedModules"
-		| "handleValueChange"
-		| "handleSelectAllChange"
-		| "allModulesSelected"
-		| "isIndeterminate"
-		| "techColor"
-	> {}
+export type DialogBodyProps = Pick<
+	ModuleSelectionDialogProps,
+	| "groupedModules"
+	| "currentCheckedModules"
+	| "handleValueChange"
+	| "handleSelectAllChange"
+	| "allModulesSelected"
+	| "isIndeterminate"
+	| "techColor"
+>;
 
 /**
  * Renders the main body of the module selection dialog.
@@ -126,10 +119,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root
-					value={currentCheckedModules}
-					onValueChange={handleValueChange}
-				>
+				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
 					{(isCorvette ? groupOrder : groupOrder.filter((g) => g !== "core")).map(
 						(groupName) =>
 							groupedModules[groupName]?.length > 0 && (

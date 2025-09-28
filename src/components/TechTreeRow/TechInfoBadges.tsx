@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
-import { BonusStatusIcon } from "./BonusStatusIcon";
 import { ModuleSelectionDialog } from "../ModuleSelectionDialog";
+import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 type TechInfoBadgesProps = ReturnType<typeof useTechTreeRow>;
@@ -26,12 +26,14 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	solving,
 	...props
 }) => {
+	const [isOpen, setIsOpen] = useState(false);
+
 	return (
 		<>
 			{hasTechInGrid && (
 				<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 			)}
-			<Dialog.Root>
+			<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
 				<Dialog.Trigger>
 					<Button
 						mt="1"
@@ -46,12 +48,14 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						<OpenInNewWindowIcon />
 					</Button>
 				</Dialog.Trigger>
-				<ModuleSelectionDialog
-					{...props}
-					techColor={techColor}
-					currentCheckedModules={currentCheckedModules}
-					techImage={techImage}
-				/>
+				{isOpen && (
+					<ModuleSelectionDialog
+						{...props}
+						techColor={techColor}
+						currentCheckedModules={currentCheckedModules}
+						techImage={techImage}
+					/>
+				)}
 			</Dialog.Root>
 		</>
 	);

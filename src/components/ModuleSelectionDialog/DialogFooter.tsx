@@ -1,6 +1,6 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Button, Dialog } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 /**
  * Props for the DialogFooter component.

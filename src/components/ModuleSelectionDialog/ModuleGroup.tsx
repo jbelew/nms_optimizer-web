@@ -1,12 +1,10 @@
-import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { Blockquote } from "@radix-ui/themes";
-import { ModuleCheckbox } from "./ModuleCheckbox";
-import type { Module } from "./index";
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import type { Module } from "./index";
+import React, { useMemo } from "react";
+import { Blockquote } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
-const baseImagePath = "/assets/img/grid/";
-const fallbackImage = `${baseImagePath}infra.webp`;
+import { ModuleCheckbox } from "./ModuleCheckbox";
 
 /**
  * Props for the ModuleGroup component.
@@ -68,9 +66,7 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	return (
 		<div>
 			<div
-				className={`font-bold capitalize ${
-					groupName !== "cosmetic" ? "mb-2" : "mb-0"
-				}`}
+				className={`font-bold capitalize ${groupName !== "cosmetic" ? "mb-2" : "mb-0"}`}
 				style={{ color: "var(--accent-a11)" }}
 			>
 				{t(`moduleSelection.${groupName}`)}
@@ -87,8 +83,9 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 			)}
 			{sortedModules.map((module) => {
 				const prerequisiteId = dependencyMap.get(module.id);
-				const isDisabled =
-					prerequisiteId ? !currentCheckedModules.includes(prerequisiteId) : false;
+				const isDisabled = prerequisiteId
+					? !currentCheckedModules.includes(prerequisiteId)
+					: false;
 
 				return (
 					<ModuleCheckbox

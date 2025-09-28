@@ -1,9 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Dialog } from "@radix-ui/themes";
-import { ModuleSelectionDialog } from "./index";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+
 import { usePlatformStore } from "../../store/PlatformStore";
+import { ModuleSelectionDialog } from "./index";
 
 // Mocking external dependencies
 vi.mock("react-i18next", () => ({
@@ -48,8 +49,7 @@ const defaultProps = {
 };
 
 const renderDialog = (props = {}) => {
-	// @ts-ignore
-	usePlatformStore.mockReturnValue("explorer");
+	(usePlatformStore as unknown as Mock).mockReturnValue("explorer");
 	return render(
 		<Dialog.Root open={true}>
 			<ModuleSelectionDialog {...defaultProps} {...props} />
@@ -79,10 +79,8 @@ describe("ModuleSelectionDialog", () => {
 		renderDialog();
 		const bonusModules = screen.getByText("bonus").parentElement?.querySelectorAll("label");
 		expect(bonusModules).not.toBeNull();
-		// @ts-ignore
-		expect(bonusModules[0]).toHaveTextContent("Alpha Bonus");
-		// @ts-ignore
-		expect(bonusModules[1]).toHaveTextContent("Beta Bonus");
+		expect(bonusModules![0]).toHaveTextContent("Alpha Bonus");
+		expect(bonusModules![1]).toHaveTextContent("Beta Bonus");
 	});
 
 	it("disables an upgrade module if its prerequisite is not selected", () => {

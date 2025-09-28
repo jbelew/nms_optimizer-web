@@ -1,8 +1,8 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { Avatar, Dialog, IconButton } from "@radix-ui/themes";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import React from "react";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Avatar, Dialog, IconButton } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 const fallbackImage = "/assets/img/grid/infra.webp";
 

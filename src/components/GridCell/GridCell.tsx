@@ -35,22 +35,26 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("landing") ||
 		lowerLabel.includes("deadeye");
 	const isReactor = lowerLabel.includes("reactor");
+	const isForbidden = lowerLabel.includes("forbidden");
 
-	if (isUpgrade || isBooster || isReactor) {
+	if (isUpgrade || isBooster || isReactor || isForbidden) {
 		if (lowerLabel.includes("theta")) {
 			if (isUpgrade) return "1";
 			if (isBooster) return "C1";
 			if (isReactor) return "R1";
+			if (isForbidden) return "F1";
 		}
 		if (lowerLabel.includes("tau")) {
 			if (isUpgrade) return "2";
 			if (isBooster) return "C2";
 			if (isReactor) return "R2";
+			if (isForbidden) return "F2";
 		}
 		if (lowerLabel.includes("sigma")) {
 			if (isUpgrade) return "3";
 			if (isBooster) return "C3";
 			if (isReactor) return "R3";
+			if (isForbidden) return "F3";
 		}
 	}
 

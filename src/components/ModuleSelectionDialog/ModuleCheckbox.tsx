@@ -1,7 +1,7 @@
+import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import type { Module } from "./index";
 import React from "react";
 import { Avatar, CheckboxGroup } from "@radix-ui/themes";
-import type { Module } from "./index";
-import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 
 const baseImagePath = "/assets/img/grid/";
 const fallbackImage = `${baseImagePath}infra.webp`;

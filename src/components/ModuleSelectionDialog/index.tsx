@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from "react";
+import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import React, { useCallback, useState } from "react";
 import { Dialog } from "@radix-ui/themes";
 
-import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import { DialogHeader } from "./DialogHeader";
 import { DialogBody } from "./DialogBody";
 import { DialogFooter } from "./DialogFooter";
+import { DialogHeader } from "./DialogHeader";
 
 /**
  * Represents a single technology module.
