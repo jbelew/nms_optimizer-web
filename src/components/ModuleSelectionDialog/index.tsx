@@ -1,5 +1,5 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { Dialog } from "@radix-ui/themes";
 
 import { DialogBody } from "./DialogBody";
@@ -37,7 +37,6 @@ export interface ModuleSelectionDialogProps {
 	isIndeterminate: boolean;
 	techColor: TechTreeRowProps["techColor"];
 	techImage: string | null;
-	handleAllCheckboxesChange: (moduleIds: string[]) => void;
 }
 
 /**
@@ -60,14 +59,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	isIndeterminate,
 	techColor,
 	techImage,
-	handleAllCheckboxesChange,
 }) => {
-	const [initialCheckedModules] = useState(currentCheckedModules);
-
-	const handleCancelClick = useCallback(() => {
-		handleAllCheckboxesChange(initialCheckedModules);
-	}, [handleAllCheckboxesChange, initialCheckedModules]);
-
 	return (
 		<Dialog.Content size="2">
 			<DialogHeader
@@ -91,7 +83,6 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 			/>
 
 			<DialogFooter
-				handleCancelClick={handleCancelClick}
 				handleOptimizeClick={handleOptimizeClick}
 				isOptimizeDisabled={currentCheckedModules.length === 0}
 			/>

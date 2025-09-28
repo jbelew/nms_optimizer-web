@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
@@ -27,13 +27,33 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	...props
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [initialModules, setInitialModules] = useState<string[]>([]);
+	const optimizeClickedRef = useRef(false);
+
+	const handleOpenChange = (open: boolean) => {
+		if (open) {
+			setInitialModules(currentCheckedModules);
+			optimizeClickedRef.current = false;
+		} else {
+			// Dialog is closing
+			if (!optimizeClickedRef.current) {
+				props.handleAllCheckboxesChange(initialModules);
+			}
+		}
+		setIsOpen(open);
+	};
+
+	const handleOptimizeWrapper = async () => {
+		optimizeClickedRef.current = true;
+		await props.handleOptimizeClick();
+	};
 
 	return (
 		<>
 			{hasTechInGrid && (
 				<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
 			)}
-			<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+			<Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
 				<Dialog.Trigger>
 					<Button
 						mt="1"
@@ -54,6 +74,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						techColor={techColor}
 						currentCheckedModules={currentCheckedModules}
 						techImage={techImage}
+						handleOptimizeClick={handleOptimizeWrapper}
 					/>
 				)}
 			</Dialog.Root>

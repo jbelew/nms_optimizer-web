@@ -45,7 +45,6 @@ const defaultProps = {
 	isIndeterminate: true,
 	techColor: "blue" as const,
 	techImage: "hyperdrive.png",
-	handleAllCheckboxesChange: vi.fn(),
 };
 
 const renderDialog = (props = {}) => {
@@ -125,14 +124,5 @@ describe("ModuleSelectionDialog", () => {
 		const optimizeButton = screen.getByRole("button", { name: /optimizeButton/i });
 		fireEvent.click(optimizeButton);
 		expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
-	});
-
-	it("calls handleAllCheckboxesChange with initial state on cancel", () => {
-		renderDialog();
-		const cancelButton = screen.getByRole("button", { name: /cancelButton/i });
-		fireEvent.click(cancelButton);
-		expect(defaultProps.handleAllCheckboxesChange).toHaveBeenCalledWith(
-			defaultProps.currentCheckedModules
-		);
 	});
 });

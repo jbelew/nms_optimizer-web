@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
  */
 export interface DialogFooterProps {
 	handleOptimizeClick: () => Promise<void>;
-	handleCancelClick: () => void;
 	isOptimizeDisabled: boolean;
 }
 
@@ -17,7 +16,6 @@ export interface DialogFooterProps {
  * @returns {JSX.Element} The rendered dialog footer.
  */
 export const DialogFooter: React.FC<DialogFooterProps> = ({
-	handleCancelClick,
 	handleOptimizeClick,
 	isOptimizeDisabled,
 }) => {
@@ -26,9 +24,7 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
 	return (
 		<div className="mt-2 flex justify-end gap-3">
 			<Dialog.Close>
-				<Button variant="soft" onClick={handleCancelClick}>
-					{t("moduleSelection.cancelButton")}
-				</Button>
+				<Button variant="soft">{t("moduleSelection.cancelButton")}</Button>
 			</Dialog.Close>
 			<Dialog.Close>
 				<Button onClick={handleOptimizeClick} disabled={isOptimizeDisabled}>
