@@ -55,20 +55,22 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			/>
 		);
 		const tooltipContent = (
-			<Text size="1">
+			<>
 				{t("techTree.tooltips.insufficientSpace") +
 					" -" +
 					Math.round((100 - roundedMaxBonus) * 100) / 100 +
 					"%"}
-			</Text>
+			</>
 		);
 
 		if (isTouchDevice) {
 			return (
 				<Popover.Root>
 					<Popover.Trigger>{icon}</Popover.Trigger>
-					<Popover.Content size="1" maxWidth="300px">
-						{tooltipContent}
+					<Popover.Content size="1">
+						<Text as="p" trim="both" size="1">
+							{tooltipContent}
+						</Text>
 					</Popover.Content>
 				</Popover.Root>
 			);
@@ -82,14 +84,17 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 				style={{ color: "var(--gray-a10)" }}
 			/>
 		);
-		const tooltipContent = <Text size="1">{`${t("techTree.tooltips.validSolve")} `}</Text>;
+
+		const tooltipContent = `${t("techTree.tooltips.validSolve")} `;
 
 		if (isTouchDevice) {
 			return (
 				<Popover.Root>
 					<Popover.Trigger>{icon}</Popover.Trigger>
 					<Popover.Content size="1" maxWidth="300px">
-						{tooltipContent}
+						<Text as="p" trim="both" size="1">
+							{tooltipContent}
+						</Text>
 					</Popover.Content>
 				</Popover.Root>
 			);
@@ -104,11 +109,11 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		/>
 	);
 	const tooltipContent = (
-		<Text size="1">
+		<>
 			{`${t("techTree.tooltips.boostedSolve")} +${
 				Math.round((roundedMaxBonus - 100) * 100) / 100
 			}%`}
-		</Text>
+		</>
 	);
 
 	if (isTouchDevice) {
@@ -116,7 +121,9 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			<Popover.Root>
 				<Popover.Trigger>{icon}</Popover.Trigger>
 				<Popover.Content size="1" maxWidth="300px">
-					{tooltipContent}
+					<Text as="p" trim="both" size="1">
+						{tooltipContent}
+					</Text>
 				</Popover.Content>
 			</Popover.Root>
 		);
