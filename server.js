@@ -65,12 +65,7 @@ app.get(/.*/, async (req, res, next) => {
 		const isRoot = pagePath === "";
 
 		// 1. Canonical URL Logic
-		const canonicalUrlBuilder = new URL(req.originalUrl, baseUrl);
-		canonicalUrlBuilder.pathname = lang === "en" ? basePath || "/" : `/${lang}${basePath}`;
-		canonicalUrlBuilder.searchParams.delete("platform");
-		canonicalUrlBuilder.searchParams.delete("ship");
-		canonicalUrlBuilder.searchParams.delete("grid");
-		canonicalUrlBuilder.searchParams.delete("lng"); // No longer needed
+		const canonicalUrlBuilder = new URL(basePath || "/", baseUrl);
 		const canonicalUrl = canonicalUrlBuilder.href;
 		tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
 		tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);

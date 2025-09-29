@@ -34,7 +34,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 
 	return (
 		<>
-			<Dialog.Title className="heading__styled flex items-start text-xl sm:text-2xl">
+			<Dialog.Title className="moduleSelection__heading--styled flex items-start text-xl sm:text-2xl">
 				<Avatar
 					size="2"
 					radius="full"
@@ -53,7 +53,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 				<IconButton
 					variant="soft"
 					size="1"
-					className="appDialog__close"
+					className="moduleSelection__close"
 					aria-label={t("moduleSelection.closeDialogLabel")}
 				>
 					<Cross2Icon />

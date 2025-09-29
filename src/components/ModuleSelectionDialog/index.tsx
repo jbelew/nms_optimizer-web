@@ -6,6 +6,8 @@ import { DialogBody } from "./DialogBody";
 import { DialogFooter } from "./DialogFooter";
 import { DialogHeader } from "./DialogHeader";
 
+import "./ModuleSelectionDialog.css";
+
 /**
  * Represents a single technology module.
  */
@@ -14,6 +16,7 @@ export interface Module {
 	id: string;
 	image: string;
 	type?: string;
+	checked?: boolean;
 }
 
 /**
