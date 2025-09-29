@@ -64,13 +64,17 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 	techImage,
 }) => {
 	return (
-		<Dialog.Content size="2">
+		<Dialog.Content
+			size={{ initial: "1", sm: "2" }}
+			// className="moduleSelection__content flex flex-col"
+		>
 			<DialogHeader
 				translatedTechName={translatedTechName}
 				techImage={techImage}
 				techColor={techColor}
 			/>
 
+			{/* <div className="flex-1 overflow-y-auto pr-4 mb-4"> */}
 			<Dialog.Description className="sr-only">
 				Select modules to include in the optimization calculation.
 			</Dialog.Description>
@@ -84,6 +88,7 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
 				isIndeterminate={isIndeterminate}
 				techColor={techColor}
 			/>
+			{/* </div> */}
 
 			<DialogFooter
 				handleOptimizeClick={handleOptimizeClick}
