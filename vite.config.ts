@@ -138,9 +138,9 @@ export default defineConfig(({ mode }) => {
 						if (id.includes("@radix-ui/themes/tokens/colors/")) {
 							return "radix-colors";
 						}
-						// if (id.includes("@radix-ui/themes/components.css")) {
-						// 	return "radix-components";
-						// }
+						if (id.includes("@radix-ui/themes/components.css")) {
+							return "radix-components";
+						}
 						if (id.includes("@radix-ui/themes/utilities.css")) {
 							return "radix-utilities";
 						}
@@ -155,12 +155,6 @@ export default defineConfig(({ mode }) => {
 						) {
 							return "i18n";
 						}
-						// if (id.includes("zustand") || id.includes("immer")) {
-						// 	return "zustand";
-						// }
-						// if (id.includes("ga4")) {
-						// 	return "ga4";
-						// }
 						if (id.includes("radix")) {
 							return "radix";
 						}

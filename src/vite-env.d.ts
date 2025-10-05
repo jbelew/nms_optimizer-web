@@ -15,3 +15,5 @@ declare const __APP_VERSION__: string;
 interface Window {
 	useGridStore: typeof import("./store/GridStore").useGridStore;
 }
+
+declare module "@/wasm/solver.js";
