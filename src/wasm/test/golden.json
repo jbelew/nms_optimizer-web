@@ -1,0 +1,1941 @@
+{
+	"inputs": {
+		"grid": {
+			"width": 10,
+			"height": 6,
+			"cells": [
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 0,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 1,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 2,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 3,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 4,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 5,
+						"adjacency": false
+					}
+				]
+			]
+		},
+		"ship": "sentinel",
+		"modules": [
+			{
+				"id": "CB",
+				"label": "Cyclotron Ballista",
+				"tech": "cyclotron",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/cyclotron.webp"
+			},
+			{
+				"id": "QR",
+				"label": "Dyson Pump",
+				"tech": "cyclotron",
+				"type": "bonus",
+				"bonus": 0.04,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/dyson.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Cyclotron Ballista Upgrade Theta",
+				"tech": "cyclotron",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/cyclotron-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Cyclotron Ballista Upgrade Tau",
+				"tech": "cyclotron",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/cyclotron-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Cyclotron Ballista Upgrade Sigma",
+				"tech": "cyclotron",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/cyclotron-upgrade.webp"
+			},
+			{
+				"id": "IK",
+				"label": "Infraknife Accelerator",
+				"tech": "infra",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra.webp"
+			},
+			{
+				"id": "QR",
+				"label": "Q-Resonator",
+				"tech": "infra",
+				"type": "bonus",
+				"bonus": 0.04,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/q-resonator.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Infraknife Accelerator Upgrade Theta",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Infraknife Accelerator Upgrade Tau",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Infraknife Accelerator Upgrade Sigma",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			},
+			{
+				"id": "PB",
+				"label": "Phase Beam",
+				"tech": "phase",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/phase-beam.webp"
+			},
+			{
+				"id": "FD",
+				"label": "Fourier De-Limiter",
+				"tech": "phase",
+				"type": "bonus",
+				"bonus": 0.07,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/fourier.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Phase Beam Upgrade Theta",
+				"tech": "phase",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/phase-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Phase Beam Upgrade Tau",
+				"tech": "phase",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/phase-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Phase Beam Upgrade Sigma",
+				"tech": "phase",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/phase-upgrade.webp"
+			},
+			{
+				"id": "PE",
+				"label": "Positron Ejector",
+				"tech": "positron",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/positron.webp"
+			},
+			{
+				"id": "FS",
+				"label": "Fragment Supercharger",
+				"tech": "positron",
+				"type": "bonus",
+				"bonus": 0.04,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/fragment.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Positron Ejector Upgrade Theta",
+				"tech": "positron",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/positron-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Positron Ejector Upgrade Tau",
+				"tech": "positron",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/positron-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Positron Ejector Upgrade Sigma",
+				"tech": "positron",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/positron-upgrade.webp"
+			},
+			{
+				"id": "RL",
+				"label": "Rocket Launger",
+				"tech": "rocket",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/rocket.webp"
+			},
+			{
+				"id": "LR",
+				"label": "Large Rocket Tubes",
+				"tech": "rocket",
+				"type": "bonus",
+				"bonus": 0.056,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/tubes.webp"
+			},
+			{
+				"id": "PC",
+				"label": "Sentinel Cannon",
+				"tech": "photon",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/cannon.webp"
+			},
+			{
+				"id": "NO",
+				"label": "Nonlinear Optics",
+				"tech": "photon",
+				"type": "bonus",
+				"bonus": 0.04,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/nonlinear.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Photon Cannon Upgrade Theta",
+				"tech": "photon",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/photon-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Photon Cannon Upgrade Tau",
+				"tech": "photon",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/photon-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Photon Cannon Upgrade Sigma",
+				"tech": "photon",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/photon-upgrade.webp"
+			},
+			{
+				"id": "DS",
+				"label": "Aeron Shields",
+				"tech": "shield",
+				"type": "core",
+				"bonus": 0.01,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/aeron.webp"
+			},
+			{
+				"id": "AA",
+				"label": "Ablative Armor",
+				"tech": "shield",
+				"type": "bonus",
+				"bonus": 0.07,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/ablative.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Shield Upgrade Theta",
+				"tech": "shield",
+				"type": "upgrade",
+				"bonus": 0.3,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/shield-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Shield Upgrade Tau",
+				"tech": "shield",
+				"type": "upgrade",
+				"bonus": 0.29,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/shield-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Shield Upgrade Sigma",
+				"tech": "shield",
+				"type": "upgrade",
+				"bonus": 0.28,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/shield-upgrade.webp"
+			},
+			{
+				"id": "LT",
+				"label": "Anti-Gravity Well",
+				"tech": "launch",
+				"type": "core",
+				"bonus": 0.01,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/anti-gravity.webp"
+			},
+			{
+				"id": "EF",
+				"label": "Efficient Thrusters",
+				"tech": "launch",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/efficient.webp"
+			},
+			{
+				"id": "RC",
+				"label": "Launch Atuo-Charger",
+				"tech": "launch",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/recharger.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Launch Thruster Upgrade Theta",
+				"tech": "launch",
+				"type": "upgrade",
+				"bonus": 0.3,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/launch-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Launch Thruster Upgrade Tau",
+				"tech": "launch",
+				"type": "upgrade",
+				"bonus": 0.29,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/launch-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Launch Thruster Upgrade Sigma",
+				"tech": "launch",
+				"type": "upgrade",
+				"bonus": 0.28,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/launch-upgrade.webp"
+			},
+			{
+				"id": "HD",
+				"label": "Crimson Core",
+				"tech": "hyper",
+				"type": "core",
+				"bonus": 0.01,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/crimson.webp"
+			},
+			{
+				"id": "AD",
+				"label": "Atlantid Drive",
+				"tech": "hyper",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "lesser",
+				"sc_eligible": false,
+				"image": "starship/atlantid.webp"
+			},
+			{
+				"id": "CD",
+				"label": "Cadmium Drive",
+				"tech": "hyper",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "lesser",
+				"sc_eligible": false,
+				"image": "starship/cadmium.webp"
+			},
+			{
+				"id": "ED",
+				"label": "Emeril Drive",
+				"tech": "hyper",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "lesser",
+				"sc_eligible": false,
+				"image": "starship/emeril.webp"
+			},
+			{
+				"id": "ID",
+				"label": "Indium Drive",
+				"tech": "hyper",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "lesser",
+				"sc_eligible": false,
+				"image": "starship/indium.webp"
+			},
+			{
+				"id": "EW",
+				"label": "Emergency Warp Unit",
+				"tech": "hyper",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/emergency.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Crimson Core Upgrade Theta",
+				"tech": "hyper",
+				"type": "upgrade",
+				"bonus": 0.32,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/hyper-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Crimson Core Upgrade Tau",
+				"tech": "hyper",
+				"type": "upgrade",
+				"bonus": 0.31,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/hyper-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Crimson Core Upgrade Sigma",
+				"tech": "hyper",
+				"type": "upgrade",
+				"bonus": 0.3,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/hyper-upgrade.webp"
+			},
+			{
+				"id": "PE",
+				"label": "Luminance Drive",
+				"tech": "pulse",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "lesser",
+				"sc_eligible": true,
+				"image": "starship/luminance.webp"
+			},
+			{
+				"id": "PC",
+				"label": "Photonix Core",
+				"tech": "pulse",
+				"type": "bonus",
+				"bonus": 1.1,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/photonix.webp"
+			},
+			{
+				"id": "FA",
+				"label": "Flight Assist Override",
+				"tech": "pulse",
+				"type": "bonus",
+				"bonus": 1.07,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/flight-assist.webp"
+			},
+			{
+				"id": "SL",
+				"label": "Sub-Light Amplifier",
+				"tech": "pulse",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/sublight.webp"
+			},
+			{
+				"id": "ID",
+				"label": "Instability Drive",
+				"tech": "pulse",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/instability.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Pulse Engine Upgrade Theta",
+				"tech": "pulse",
+				"type": "upgrade",
+				"bonus": 1.14,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/pulse-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Pulse Engine Upgrade Tau",
+				"tech": "pulse",
+				"type": "upgrade",
+				"bonus": 1.13,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/pulse-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Pulse Engine Upgrade Sigma",
+				"tech": "pulse",
+				"type": "upgrade",
+				"bonus": 1.12,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/pulse-upgrade.webp"
+			},
+			{
+				"id": "AJ",
+				"label": "Aqua-Jets",
+				"tech": "aqua",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/aquajets.webp"
+			},
+			{
+				"id": "AP",
+				"label": "Apollo Figurine",
+				"tech": "bobble",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/apollo.webp"
+			},
+			{
+				"id": "AT",
+				"label": "Atlas Figurine",
+				"tech": "bobble",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/atlas.webp"
+			},
+			{
+				"id": "NA",
+				"label": "Nada Figurine",
+				"tech": "bobble",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/nada.webp"
+			},
+			{
+				"id": "NB",
+				"label": "-null- Figurine",
+				"tech": "bobble",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/null.webp"
+			},
+			{
+				"id": "PI",
+				"label": "Pilot Interface",
+				"tech": "pilot",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/pilot.webp"
+			},
+			{
+				"id": "CS",
+				"label": "Conflict Scanner",
+				"tech": "conflict_scanner",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/conflict.webp"
+			},
+			{
+				"id": "ES",
+				"label": "Economy Scanner",
+				"tech": "economy_scanner",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/economy.webp"
+			},
+			{
+				"id": "CD",
+				"label": "Cargo Scan Deflector",
+				"tech": "cargo_scanner",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/cargo.webp"
+			},
+			{
+				"id": "AB",
+				"label": "Artemis Figurine",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.05,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/artemis.webp"
+			},
+			{
+				"id": "PB",
+				"label": "Polo Figurine",
+				"tech": "trails",
+				"type": "core",
+				"bonus": 0.06,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/polo.webp"
+			},
+			{
+				"id": "SB",
+				"label": "Tentacled Figurine",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.05,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/squid.webp"
+			},
+			{
+				"id": "SP",
+				"label": "Sputtering Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/sputtering-trail.webp"
+			},
+			{
+				"id": "CT",
+				"label": "Cadmium Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/cadmium-trail.webp"
+			},
+			{
+				"id": "ET",
+				"label": "Emeril Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/emeril-trail.webp"
+			},
+			{
+				"id": "TT",
+				"label": "Temporal Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/temporal-trail.webp"
+			},
+			{
+				"id": "ST",
+				"label": "Stealth Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/stealth-trail.webp"
+			},
+			{
+				"id": "GT",
+				"label": "Golden Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/golden-trail.webp"
+			},
+			{
+				"id": "RT",
+				"label": "Chromatic Starship Trail",
+				"tech": "trails",
+				"type": "bonus",
+				"bonus": 0.0,
+				"adjacency": "greater",
+				"sc_eligible": false,
+				"image": "starship/chromatic-trail.webp"
+			},
+			{
+				"id": "TP",
+				"label": "Teleport Receiver",
+				"tech": "teleporter",
+				"type": "core",
+				"bonus": 0.0,
+				"adjacency": "none",
+				"sc_eligible": false,
+				"image": "starship/teleport.webp"
+			}
+		],
+		"tech": "infra",
+		"tech_modules": [
+			{
+				"id": "IK",
+				"label": "Infraknife Accelerator",
+				"tech": "infra",
+				"type": "core",
+				"bonus": 1.0,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra.webp"
+			},
+			{
+				"id": "QR",
+				"label": "Q-Resonator",
+				"tech": "infra",
+				"type": "bonus",
+				"bonus": 0.04,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/q-resonator.webp"
+			},
+			{
+				"id": "Xa",
+				"label": "Infraknife Accelerator Upgrade Theta",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.4,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			},
+			{
+				"id": "Xb",
+				"label": "Infraknife Accelerator Upgrade Tau",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.39,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			},
+			{
+				"id": "Xc",
+				"label": "Infraknife Accelerator Upgrade Sigma",
+				"tech": "infra",
+				"type": "upgrade",
+				"bonus": 0.38,
+				"adjacency": "greater",
+				"sc_eligible": true,
+				"image": "starship/infra-upgrade.webp"
+			}
+		],
+		"params": {
+			"initial_temperature": 1.0,
+			"cooling_rate": 0.95,
+			"stopping_temperature": 0.001,
+			"iterations_per_temp": 5,
+			"initial_swap_probability": 0.6,
+			"final_swap_probability": 0.1,
+			"start_from_current_grid": false,
+			"max_processing_time": 5,
+			"max_steps_without_improvement": 50,
+			"reheat_factor": 0.2
+		}
+	},
+	"output": {
+		"grid": {
+			"width": 10,
+			"height": 6,
+			"cells": [
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 0,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": "QR",
+						"tech": "infra",
+						"x": 7,
+						"y": 0,
+						"adjacency": "greater"
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": "IK",
+						"tech": "infra",
+						"x": 8,
+						"y": 0,
+						"adjacency": "greater"
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": "Xb",
+						"tech": "infra",
+						"x": 9,
+						"y": 0,
+						"adjacency": "greater"
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 1,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": "Xa",
+						"tech": "infra",
+						"x": 8,
+						"y": 1,
+						"adjacency": "greater"
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": "Xc",
+						"tech": "infra",
+						"x": 9,
+						"y": 1,
+						"adjacency": "greater"
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 2,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 2,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 3,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 3,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 4,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 4,
+						"adjacency": false
+					}
+				],
+				[
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 0,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 1,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 2,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 3,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 4,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 5,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 6,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 7,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 8,
+						"y": 5,
+						"adjacency": false
+					},
+					{
+						"active": true,
+						"supercharged": false,
+						"module_id": null,
+						"tech": null,
+						"x": 9,
+						"y": 5,
+						"adjacency": false
+					}
+				]
+			]
+		},
+		"score": 2.541099999999999
+	}
+}
