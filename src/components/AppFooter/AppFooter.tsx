@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Separator } from "@radix-ui/themes";
+import { Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
@@ -29,10 +29,10 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 					i18nKey="footer.issuePrompt"
 					components={{
 						1: (
-							<Link
+							<a
 								href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 								target="_blank"
-								underline="always"
+								className="underline"
 								rel="noopener noreferrer"
 								style={{ color: "var(--accent-11)" }}
 							/>
@@ -45,6 +45,7 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
 					rel="noopener noreferrer"
+					className="underline"
 				>
 					Looking for work BTW!
 				</a>
