@@ -2,7 +2,7 @@
 import "./ShipSelection.css";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useMemo, useState, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -82,6 +82,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
 	const [toastOpen, setToastOpen] = useState(false);
+	const [isPending, startTransition] = useTransition();
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
@@ -102,19 +103,28 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					setToastOpen(true);
 				}
 
-				setSelectedShipType(option, Object.keys(shipTypes));
+				startTransition(() => {
+					setSelectedShipType(option, Object.keys(shipTypes));
 
-				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-				setGridAndResetAuxiliaryState(initialGrid);
+					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
+					setGridAndResetAuxiliaryState(initialGrid);
+				});
 			}
 		},
-		[selectedShipType, setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent, shipTypes]
+		[
+			selectedShipType,
+			setSelectedShipType,
+			setGridAndResetAuxiliaryState,
+			sendEvent,
+			shipTypes,
+			startTransition,
+		]
 	);
 
 	return (
 		<>
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger disabled={solving}>
+				<DropdownMenu.Trigger disabled={solving || isPending}>
 					{isSmallAndUp ? (
 						<Button
 							size="2"

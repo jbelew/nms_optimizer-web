@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useTransition } from "react";
 import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
@@ -36,6 +36,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const isSmallAndUp = useBreakpoint("140px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
+	const [isPending, startTransition] = useTransition();
 
 	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
 	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
@@ -85,11 +86,15 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	 * Handles the click event for the "Reset Grid" button.
 	 * Resets the grid to its initial state, updates the URL, and scrolls to the top of the grid.
 	 */
-	const handleResetGrid = useCallback(async () => {
+	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid", value: 1 });
-		useGridStore.getState().resetGrid(); // Now synchronous
-		updateUrlForReset();
-		setIsSharedGrid(false);
+
+		startTransition(() => {
+			useGridStore.getState().resetGrid();
+			updateUrlForReset();
+			setIsSharedGrid(false);
+		});
+
 		if (gridContainerRef.current) {
 			const element = gridContainerRef.current;
 			const offset = 8; // Same offset as in useOptimize.tsx and useRecommendedBuild.tsx
@@ -108,7 +113,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 			};
 			requestAnimationFrame(scrollIntoView);
 		}
-	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef]);
+	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef, startTransition]);
 
 	return (
 		<>
@@ -195,7 +200,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					className={`gridTable__button gridTable__button--reset`}
 					variant="solid"
 					onClick={handleResetGrid}
-					disabled={solving}
+					disabled={solving || isPending}
 					aria-label={t("buttons.resetGrid")}
 				>
 					<ResetIcon />

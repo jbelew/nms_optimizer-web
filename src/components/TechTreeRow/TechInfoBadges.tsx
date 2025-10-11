@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
@@ -29,18 +29,24 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
+	const [isPending, startTransition] = useTransition();
 
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
 			setInitialModules(currentCheckedModules);
 			optimizeClickedRef.current = false;
+			startTransition(() => {
+				setIsOpen(open);
+			});
 		} else {
 			// Dialog is closing
-			if (!optimizeClickedRef.current) {
-				props.handleAllCheckboxesChange(initialModules);
-			}
+			startTransition(() => {
+				if (!optimizeClickedRef.current) {
+					props.handleAllCheckboxesChange(initialModules);
+				}
+				setIsOpen(open);
+			});
 		}
-		setIsOpen(open);
 	};
 
 	const handleOptimizeWrapper = async () => {
@@ -62,7 +68,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						radius="medium"
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
-						disabled={modules.length === 1 || solving}
+						disabled={modules.length === 1 || solving || isPending}
 					>
 						x{currentCheckedModules.length}
 						<OpenInNewWindowIcon />
