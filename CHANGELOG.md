@@ -1,3 +1,17 @@
+## [4.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.0...v4.1.1) (2025-10-11)
+
+
+### Bug Fixes
+
+* **badgestatusicon:** fixed text size for mobile ([9003594](https://github.com/jbelew/nms_optimizer-web/commit/900359476795dbd807646a65d3d49f835babc214))
+* **footer:** some minor a11y fixes ([ee9825d](https://github.com/jbelew/nms_optimizer-web/commit/ee9825d894f94f7daf0d6be203db9e129d8c7e8e))
+* **moduleselectiondialog:** some minor sizing fixes ([d1524aa](https://github.com/jbelew/nms_optimizer-web/commit/d1524aa80ba3917b62de3b6a9bebf1134f86616f))
+* **performance:** some small fixes for INP issues ([e582c30](https://github.com/jbelew/nms_optimizer-web/commit/e582c30f07575b1db8ff1939bae698fdbc4956da))
+* **server:** another fix for canonical url generation ([4f9fae2](https://github.com/jbelew/nms_optimizer-web/commit/4f9fae2b8f984476067412d2353e70f809bf47ba))
+* **server:** fix for canonical url generation ([e67c0cf](https://github.com/jbelew/nms_optimizer-web/commit/e67c0cfcbdbacc7574306549453ffe7acb3be7ea))
+
+
+
 # [4.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.0.2...v4.1.0) (2025-09-28)
 
 
