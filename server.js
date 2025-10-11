@@ -97,7 +97,7 @@ app.get(/.*/, async (req, res, next) => {
 		const indexEtag = etag(modifiedHtml);
 
 		res.setHeader("ETag", indexEtag);
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Cache-Control", "no-cache");
 
 		if (req.headers["if-none-match"] === indexEtag) {
 			return res.status(304).end();
