@@ -133,7 +133,11 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 							className="!p-2"
 						>
 							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-							<Separator orientation="vertical" color="cyan" decorative />
+							<Separator
+								orientation="vertical"
+								color={solving || isPending ? "gray" : "cyan"}
+								decorative
+							/>
 							<DropdownMenu.TriggerIcon />
 						</Button>
 					) : (

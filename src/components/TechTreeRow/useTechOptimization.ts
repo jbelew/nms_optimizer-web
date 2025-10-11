@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useTransition } from "react";
 
 import { useGridStore } from "@/store/GridStore";
 import { useShakeStore } from "@/store/ShakeStore";
@@ -26,14 +26,17 @@ export const useTechOptimization = (
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
 	const { clearTechMaxBonus, clearTechSolvedBonus } = useTechStore();
 	const { setShaking } = useShakeStore();
+	const [isResetting, startResetTransition] = useTransition();
 
 	const handleReset = useCallback(() => {
-		handleResetGridTech(tech);
-		clearTechMaxBonus(tech);
-		clearTechSolvedBonus(tech);
-	}, [tech, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus]);
+		startResetTransition(() => {
+			handleResetGridTech(tech);
+			clearTechMaxBonus(tech);
+			clearTechSolvedBonus(tech);
+		});
+	}, [tech, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus, startResetTransition]);
 
-	const handleOptimizeClick = useCallback(async () => {
+	const handleOptimizeClick = useCallback(() => {
 		if (isGridFull && !hasTechInGrid) {
 			setShaking(true);
 			setTimeout(() => {
@@ -42,9 +45,9 @@ export const useTechOptimization = (
 		} else {
 			// We need to reset everything before optimizing
 			handleReset();
-			await handleOptimize(tech);
+			handleOptimize(tech);
 		}
 	}, [isGridFull, hasTechInGrid, setShaking, handleReset, handleOptimize, tech]);
 
-	return { handleOptimizeClick, handleReset };
+	return { handleOptimizeClick, handleReset, isResetting };
 };

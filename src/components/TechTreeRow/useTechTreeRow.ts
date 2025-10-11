@@ -51,7 +51,7 @@ export const useTechTreeRow = ({
 	const moduleCount = (activeGroup?.module_count || 0) - rewardModules.length;
 
 	// Specialized hooks
-	const { handleOptimizeClick, handleReset } = useTechOptimization(
+	const { handleOptimizeClick, handleReset, isResetting } = useTechOptimization(
 		tech,
 		handleOptimize,
 		isGridFull,
@@ -111,6 +111,7 @@ export const useTechTreeRow = ({
 		activeGroups,
 		solving,
 		techImage,
+		isResetting,
 
 		// Module management
 		currentCheckedModules,

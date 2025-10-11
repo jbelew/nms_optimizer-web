@@ -80,6 +80,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 		hasMultipleGroups,
 		activeGroups,
 		setActiveGroup,
+		isResetting,
 	} = hookProps;
 
 	return (
@@ -93,6 +94,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 				handleOptimizeClick={handleOptimizeClick}
 				handleReset={handleReset}
 				currentCheckedModules={currentCheckedModules}
+				isResetting={isResetting}
 			/>
 
 			<Avatar

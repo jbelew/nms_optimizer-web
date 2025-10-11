@@ -15,6 +15,7 @@ interface ActionButtonsProps {
 	handleOptimizeClick: () => void;
 	handleReset: () => void;
 	currentCheckedModules: string[];
+	isResetting: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 	handleOptimizeClick,
 	handleReset,
 	currentCheckedModules,
+	isResetting,
 }) => {
 	const { t } = useTranslation();
 
@@ -64,7 +66,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 			<ConditionalTooltip label={t("techTree.tooltips.reset")}>
 				<IconButton
 					onClick={handleReset}
-					disabled={!hasTechInGrid || solving}
+					disabled={!hasTechInGrid || solving || isResetting}
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
 					className={`techRow__resetButton ${hasTechInGrid && !solving ? "!cursor-pointer" : ""}`.trim()}
 				>
