@@ -36,7 +36,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const isSmallAndUp = useBreakpoint("140px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
-	const [isPending, startTransition] = useTransition();
+	const [isResetPending, startResetTransition] = useTransition();
+	const [isInfoPending, startInfoTransition] = useTransition();
+	const [isSharePending, startShareTransition] = useTransition();
 
 	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
 	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
@@ -48,39 +50,45 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	 * Opens the instructions dialog and marks the tutorial as finished if it wasn't already.
 	 */
 	const handleShowInstructions = useCallback(() => {
-		openDialog("instructions");
-		if (!tutorialFinished) {
-			markTutorialFinished();
-		}
+		startInfoTransition(() => {
+			openDialog("instructions");
+			if (!tutorialFinished) {
+				markTutorialFinished();
+			}
+		});
 		sendEvent({
 			category: "User Interactions",
 			action: "showInstructions",
 			value: 1,
 		});
-	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent]);
+	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent, startInfoTransition]);
 
 	/**
 	 * Handles the click event for the "About" button.
 	 * Opens the about dialog.
 	 */
 	const handleShowAboutPage = useCallback(() => {
-		openDialog("about");
+		startInfoTransition(() => {
+			openDialog("about");
+		});
 		sendEvent({
 			category: "User Interactions",
 			action: "showAbout",
 			value: 1,
 		});
-	}, [openDialog, sendEvent]);
+	}, [openDialog, sendEvent, startInfoTransition]);
 
 	/**
 	 * Handles the click event for the "Share" button.
 	 * Generates a shareable URL and opens the share link dialog.
 	 */
 	const handleShareClick = useCallback(() => {
-		const shareUrl = updateUrlForShare();
-		openDialog(null, { shareUrl });
+		startShareTransition(() => {
+			const shareUrl = updateUrlForShare();
+			openDialog(null, { shareUrl });
+		});
 		sendEvent({ category: "User Interactions", action: "shareLink", value: 1 });
-	}, [updateUrlForShare, openDialog, sendEvent]);
+	}, [updateUrlForShare, openDialog, sendEvent, startShareTransition]);
 
 	/**
 	 * Handles the click event for the "Reset Grid" button.
@@ -89,7 +97,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 	const handleResetGrid = useCallback(() => {
 		sendEvent({ category: "User Interactions", action: "resetGrid", value: 1 });
 
-		startTransition(() => {
+		startResetTransition(() => {
 			useGridStore.getState().resetGrid();
 			updateUrlForReset();
 			setIsSharedGrid(false);
@@ -113,7 +121,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 			};
 			requestAnimationFrame(scrollIntoView);
 		}
-	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef, startTransition]);
+	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef, startResetTransition]);
 
 	return (
 		<>
@@ -128,6 +136,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
+						disabled={isInfoPending}
 					>
 						<QuestionMarkCircledIcon />
 						<span className="hidden sm:inline">{t("buttons.instructions")}</span>
@@ -141,6 +150,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						}`}
 						onClick={handleShowInstructions}
 						aria-label={t("buttons.instructions")}
+						disabled={isInfoPending}
 					>
 						<QuestionMarkCircledIcon />
 					</IconButton>
@@ -152,6 +162,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						className={`gridTable__button gridTable__button--about !mr-2`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
+						disabled={isInfoPending}
 					>
 						<InfoCircledIcon />
 						<span className="hidden sm:inline">{t("buttons.about")}</span>
@@ -163,6 +174,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 						className={`gridTable__button gridTable__button--about !mr-2`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
+						disabled={isInfoPending}
 					>
 						<InfoCircledIcon />
 					</IconButton>
@@ -174,7 +186,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							variant="soft"
 							className="gridTable__button gridTable__button--changelog"
 							onClick={handleShareClick}
-							disabled={solving || !hasModulesInGrid}
+							disabled={solving || !hasModulesInGrid || isSharePending}
 							aria-label={t("buttons.share")}
 						>
 							<Share2Icon />
@@ -186,7 +198,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 							variant="soft"
 							className="gridTable__button gridTable__button--changelog"
 							onClick={handleShareClick}
-							disabled={solving || !hasModulesInGrid}
+							disabled={solving || !hasModulesInGrid || isSharePending}
 							aria-label={t("buttons.share")}
 						>
 							<Share2Icon />
@@ -200,7 +212,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({
 					className={`gridTable__button gridTable__button--reset`}
 					variant="solid"
 					onClick={handleResetGrid}
-					disabled={solving || isPending}
+					disabled={solving || isResetPending}
 					aria-label={t("buttons.resetGrid")}
 				>
 					<ResetIcon />
