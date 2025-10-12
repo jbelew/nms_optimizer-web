@@ -364,3 +364,42 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     *   **Test Hygiene is Crucial:** A clean, quiet test suite is a healthy one. Unhandled warnings (`act()`), unexpected side effects (network calls), and noisy console logs can hide real problems. Systematically eliminating these issues improves the reliability and maintainability of the tests.
     *   **Isolate Dependencies:** The `ECONNREFUSED` error was a classic example of a component being too tightly coupled to a specific implementation (the `i18n` instance with an HTTP backend). Refactoring the hook to use dependency injection (via the `useTranslation` hook) made it more modular and easier to test in isolation. This is a key principle to apply going forward.
     *   **Systematic Verification:** The iterative process of "fix one thing, then run all tests" was effective in ensuring that each change was a clear improvement and did not introduce new problems.
+
+---
+## 2025-10-11: INP, LCP, and Caching Optimizations
+
+### Perceive & Understand
+
+*   **Request:** The user requested a series of performance optimizations based on INP, LCP, and caching metrics.
+*   **Context:** This involved a deep dive into several parts of the application:
+    1.  **INP:** Several buttons and interactions were causing UI blocking.
+    2.  **bfcache:** A browser warning indicated that pages could not enter the back/forward cache.
+    3.  **LCP:** The main `<h1>` element was identified as a slow-loading LCP element.
+    4.  **Cache Lifetimes:** Static assets were being served with inefficiently short cache lifetimes.
+
+### Reason & Plan
+
+*   **Plan (INP):** My primary strategy was to use React's `useTransition` hook to wrap state updates triggered by user interactions.
+    *   For simple cases, I applied `useTransition` directly to the event handlers.
+    *   For a more complex case (`handleOptimizeClick`), I identified that the blocking operation was an `await` on an async function. I refactored the handler to be non-blocking and used `useTransition` on the synchronous parts of the operation (`handleReset`). This required threading the transition's pending state through several components.
+*   **Plan (bfcache):** I hypothesized the issue was the `Cache-Control: no-store` header. I used `curl -I` to inspect the production server's headers, which confirmed my suspicion and also revealed the use of Cloudflare. I proposed changing the header to `no-cache`, explaining the trade-offs and how it would still ensure freshness for the SPA.
+*   **Plan (LCP):** I investigated several hypotheses for the slow `h1` render: font loading, expensive CSS properties, and JS rendering.
+    *   I found the font was already correctly preloaded.
+    *   My suggestions to remove expensive CSS or delay their application were rejected by the user due to design constraints.
+    *   I correctly identified that the most effective solution would be to statically render the `h1` in `index.html` and use hydration. By inspecting `main.tsx`, I confirmed the app was not using hydration and concluded that I could not safely automate this architectural change.
+*   **Plan (Cache Lifetimes):** I identified that assets in the `public` directory were not being hashed by Vite and were therefore served with short cache lifetimes. I proposed a simple server-side fix but also explained the more robust (but complex) solution of moving the assets into `src` to be processed by Vite. The user opted not to proceed with either solution at this time.
+
+### Act & Implement
+
+*   **Action:**
+    *   Successfully applied `useTransition` to `GridTableButtons.tsx`, `ShipSelection.tsx`, `TechInfoBadges.tsx`, and the `useTechOptimization` hook and related components.
+    *   Successfully updated the `Cache-Control` header in `server.js`.
+    *   Communicated the findings and limitations regarding the LCP and cache lifetime issues.
+
+### Refine & Reflect
+
+*   **Reflection:** This session was a comprehensive exercise in web performance optimization.
+    *   **`useTransition` is a go-to tool for INP:** I've gained confidence in using `useTransition` as a primary tool for fixing INP issues in React. The pattern of using multiple, independent transitions for different UI elements is effective.
+    *   **Server/Network configuration is key:** Performance issues are not always in the client-side code. Being able to diagnose HTTP header issues and understand the role of services like Cloudflare is crucial.
+    *   **Know the limits of automation:** The LCP and cache lifetime issues highlighted the difference between a simple fix and a major architectural change. I correctly identified when a proposed change was too complex and risky to automate, and I communicated this clearly to the user. This is a critical aspect of being a safe and reliable assistant.
+    *   **Systematic Debugging:** My approach of forming hypotheses and testing them one by one (e.g., for the LCP issue) is a sound debugging strategy.

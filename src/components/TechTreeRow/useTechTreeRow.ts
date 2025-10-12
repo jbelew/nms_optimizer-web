@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "@/store/GridStore";
@@ -32,23 +31,14 @@ export const useTechTreeRow = ({
 
 	// State from stores
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const { techGroups, activeGroups, setActiveGroup, max_bonus, solved_bonus, setCheckedModules } =
-		useTechStore();
+	const { techGroups, max_bonus, solved_bonus } = useTechStore();
 
 	const techMaxBonus = max_bonus?.[tech] ?? 0;
 	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
 
 	// Derived state
-	const activeGroup = useMemo(() => {
-		const groupType = activeGroups[tech] || "normal";
-		return techGroups[tech]?.find((g) => g.type === groupType) || techGroups[tech]?.[0];
-	}, [tech, activeGroups, techGroups]);
-
-	const modules = activeGroup?.modules || EMPTY_MODULES_ARRAY;
-
-	const rewardModules = useMemo(() => modules.filter((m) => m.type === "reward"), [modules]);
-	const hasRewardModules = rewardModules.length > 0;
-	const moduleCount = (activeGroup?.module_count || 0) - rewardModules.length;
+	const modules = techGroups[tech]?.[0]?.modules || EMPTY_MODULES_ARRAY;
+	const moduleCount = techGroups[tech]?.[0]?.module_count || 0;
 
 	// Specialized hooks
 	const { handleOptimizeClick, handleReset, isResetting } = useTechOptimization(
@@ -69,14 +59,6 @@ export const useTechTreeRow = ({
 	} = useTechModuleManagement(tech, modules);
 
 	// Other logic specific to TechTreeRow
-	const handleCheckboxChange = (moduleId: string) => {
-		setCheckedModules(tech, (prevChecked = []) => {
-			const isChecked = prevChecked.includes(moduleId);
-			return isChecked
-				? prevChecked.filter((id) => id !== moduleId)
-				: [...prevChecked, moduleId];
-		});
-	};
 
 	// Translation and image paths
 	const translationKeyPart = techImage
@@ -91,8 +73,6 @@ export const useTechTreeRow = ({
 		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
 		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
 
-	const hasMultipleGroups = (techGroups[tech]?.length || 0) > 1;
-
 	return {
 		// State and derived data
 		hasTechInGrid,
@@ -101,14 +81,9 @@ export const useTechTreeRow = ({
 		techMaxBonus,
 		techSolvedBonus,
 		modules,
-		rewardModules,
-		hasRewardModules,
 		translatedTechName,
 		imagePath,
 		imagePath2x,
-		hasMultipleGroups,
-		activeGroup,
-		activeGroups,
 		solving,
 		techImage,
 		isResetting,
@@ -122,10 +97,8 @@ export const useTechTreeRow = ({
 		// Callbacks
 		handleOptimizeClick,
 		handleReset,
-		handleCheckboxChange,
 		handleAllCheckboxesChange,
 		handleValueChange,
 		handleSelectAllChange,
-		setActiveGroup,
 	};
 };

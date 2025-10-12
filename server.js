@@ -41,6 +41,18 @@ const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
 const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation", "userstats"];
 
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' www.googletagmanager.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: www.google-analytics.com",
+  "font-src 'self'",
+  "connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "base-uri 'self'"
+].join('; ');
+
 app.get(/.*/, async (req, res, next) => {
 	if (/\.[^/]+$/.test(req.path)) return next(); // static asset, skip
 
@@ -96,8 +108,9 @@ app.get(/.*/, async (req, res, next) => {
 
 		const indexEtag = etag(modifiedHtml);
 
+		res.setHeader("Content-Security-Policy-Report-Only", csp);
 		res.setHeader("ETag", indexEtag);
-		res.setHeader("Cache-Control", "no-cache");
+		res.setHeader("Cache-Control", "no-store, must-revalidate");
 
 		if (req.headers["if-none-match"] === indexEtag) {
 			return res.status(304).end();

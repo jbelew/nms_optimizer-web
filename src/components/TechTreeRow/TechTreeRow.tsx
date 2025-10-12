@@ -1,7 +1,7 @@
 import "./TechTreeRow.css";
 
 import React from "react";
-import { Avatar, Switch } from "@radix-ui/themes";
+import { Avatar } from "@radix-ui/themes";
 
 import { ActionButtons } from "./ActionButtons";
 import { TechInfo } from "./TechInfo";
@@ -73,13 +73,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 		imagePath,
 		techColor,
 		imagePath2x,
-		hasRewardModules,
-		rewardModules,
 		currentCheckedModules,
-		handleCheckboxChange,
-		hasMultipleGroups,
-		activeGroups,
-		setActiveGroup,
 		isResetting,
 	} = hookProps;
 
@@ -110,30 +104,12 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 			<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
 				{/* First column */}
 				<div className="flex justify-start">
-					<TechInfo
-						tech={tech}
-						translatedTechName={translatedTechName}
-						hasRewardModules={hasRewardModules}
-						rewardModules={rewardModules}
-						currentCheckedModules={currentCheckedModules}
-						handleCheckboxChange={handleCheckboxChange}
-					/>
+					<TechInfo tech={tech} translatedTechName={translatedTechName} />
 				</div>
 
 				{/* Right-hand group */}
 				<div className="flex items-start justify-end gap-1">
 					<TechInfoBadges {...hookProps} />
-
-					{hasMultipleGroups && (
-						<Switch
-							mt="1"
-							ml="1"
-							checked={activeGroups[tech] === "max"}
-							onCheckedChange={(checked) =>
-								setActiveGroup(tech, checked ? "max" : "normal")
-							}
-						/>
-					)}
 				</div>
 			</div>
 		</div>

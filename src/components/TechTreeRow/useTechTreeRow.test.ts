@@ -51,12 +51,8 @@ describe("useTechTreeRow", () => {
 		(useGridStore as unknown as Mock).mockReturnValue(vi.fn());
 		(useTechStore as unknown as Mock).mockReturnValue({
 			techGroups: { testTech: [{ modules: [] }] },
-			activeGroups: {},
-			setActiveGroup: vi.fn(),
 			max_bonus: {},
 			solved_bonus: {},
-			checkedModules: {},
-			setCheckedModules: vi.fn(),
 		});
 	});
 	it("should return the correct data shape", () => {
