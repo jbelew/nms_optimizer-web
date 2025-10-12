@@ -1,3 +1,5 @@
+@use '../../styles/mixins';
+
 .ToastRoot {
 	align-items: center;
 	background-color: var(--color-panel-solid);
@@ -11,15 +13,10 @@
 }
 
 .ToastTitle {
+	@include mixins.heading-styled;
 	color: var(--accent-11);
-	filter: drop-shadow(0 2px 4px rgb(0 0 0 / 25%));
-	font-family: var(--font-family-geosans);
 	font-size: 15px;
-	font-weight: 400;
 	grid-area: title;
-	letter-spacing: var(--letter-spacing-wide);
-	-webkit-text-stroke: 0.75px;
-	text-transform: uppercase;
 }
 
 .ToastDescription {

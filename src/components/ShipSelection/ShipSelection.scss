@@ -1,12 +1,10 @@
+@use '../../styles/mixins';
+
 .shipSelection {
   &__header {
+    @include mixins.heading-styled;
+
     color: var(--accent-11);
-    filter: drop-shadow(0 0 4px var(--accent-a2));
-    font-family: var(--font-family-geosans);
     font-size: var(--text-base);
-    font-weight: 400;
-    letter-spacing: var(--letter-spacing-wide);
-    -webkit-text-stroke: 0.75px;
-    text-transform: uppercase;
   }
 }

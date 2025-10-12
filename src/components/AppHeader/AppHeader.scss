@@ -1,3 +1,4 @@
+@use '../../styles/mixins';
 .header {
 	background-image: linear-gradient(to bottom, var(--color-panel-solid), rgb(0 0 0 / 0%));
 	overflow: hidden;
@@ -26,14 +27,9 @@
 
 // Non-nested classes
 .selectLanguage__header {
-	font-family: var(--font-family-geosans);
-	letter-spacing: var(--letter-spacing-wide);
-	filter: drop-shadow(0 0 4px var(--accent-a2));
+	@include mixins.heading-styled;
 	color: var(--accent-11);
-	font-weight: 400;
 	font-size: var(--text-base);
-	text-transform: uppercase;
-	-webkit-text-stroke: 0.75px;
 }
 
 .nmsFont--header {

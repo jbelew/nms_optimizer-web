@@ -1,3 +1,4 @@
+@use '../../styles/mixins';
 /* Keyframes for AppDialog animations */
 @keyframes appDialog__overlay-show {
   from {
@@ -82,13 +83,8 @@
   }
 
   &__title {
-    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 25%));
-    font-family: var(--font-family-geosans);
-    font-weight: 400;
-    letter-spacing: var(--letter-spacing-wide);
+    @include mixins.heading-styled;
     margin-right: 1rem;
-    -webkit-text-stroke: 0.75px;
-    text-transform: uppercase;
   }
 
   &__close {
