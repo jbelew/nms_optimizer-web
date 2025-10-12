@@ -43,7 +43,7 @@ const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation", "use
 
 const csp = [
   "default-src 'self'",
-  "script-src 'self' www.googletagmanager.com",
+  "script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline' 'sha256-p4soyAMXJc2V3d+5xb9TcQ7h5W678DUehNFnO3RL+Ww='",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: www.google-analytics.com",
   "font-src 'self'",
