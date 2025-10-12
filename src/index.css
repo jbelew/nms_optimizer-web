@@ -10,21 +10,24 @@
 	box-sizing: border-box;
 }
 
-/* Optional: Tailwind Typography plugin */
-
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
 	--font-family-geosans: "GeosansLight", Helvetica, Arial, sans-serif;
 	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
-	--letter-spacing-wide: 0.2rem; /* Added for common letter-spacing */
-	--font-weight-bold: 600; /* Added for common bold weight */
-	--color-background: var(--gray-a1); /* Fixed typo: was --gary-a1 */
+	--letter-spacing-wide: 0.225rem;
+	/* Added for common letter-spacing */
+	--font-weight-bold: 600;
+	/* Added for common bold weight */
+	--color-background: var(--gray-a1);
+	/* Fixed typo: was --gary-a1 */
 }
 
 :root {
-	--grid-columns-flex: 10; /* number of resizable columns */
-	--grid-column-fixed: 24px; /* fixed width of column 11 */
+	--grid-columns-flex: 10;
+	/* number of resizable columns */
+	--grid-column-fixed: 24px;
+	/* fixed width of column 11 */
 	--grid-padding: 16px;
 
 	--grid-gap-min: 2px;
@@ -106,13 +109,15 @@ body {
 	from {
 		box-shadow: 0 0 4px 0px var(--accent-a3);
 	}
+
 	to {
 		box-shadow: 0 0 4px 2px var(--accent-a7);
 	}
 }
 
 .warningDialog__title {
-	font-family: var(--font-family-geosans); /* Use variable */
+	font-family: var(--font-family-geosans);
+	/* Use variable */
 	filter: drop-shadow(0 0 4px var(--accent-6));
 	letter-spacing: var(--letter-spacing-wide);
 	text-transform: uppercase;
@@ -127,6 +132,7 @@ footer a {
 	100% {
 		filter: drop-shadow(0 0 6px var(--accent-a7));
 	}
+
 	50% {
 		filter: drop-shadow(0 0 12px var(--accent-a7));
 	}

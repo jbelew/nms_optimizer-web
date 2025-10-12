@@ -1,19 +1,19 @@
-@use '../../styles/mixins';
+@use "../../styles/mixins";
 
 .moduleSelection {
-  &__heading--styled {
-    @include mixins.heading-styled;
+	&__heading--styled {
+		@include mixins.heading-styled;
 
-    line-height: 1.5em;
-  }
+		line-height: 1.5em;
+	}
 
-  &__close {
-    position: absolute;
-    right: 8px;
-    top: 10px;
-  }
+	&__close {
+		position: absolute;
+		right: 8px;
+		top: 10px;
+	}
 
-  &__content {
-    max-height: 80vh;
-  }
+	&__content {
+		max-height: 80vh;
+	}
 }

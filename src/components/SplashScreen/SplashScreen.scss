@@ -1,73 +1,89 @@
 .SplashScreen {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  inset: 0;
-  justify-content: center;
-  opacity: 1;
-  position: fixed;
-  z-index: 99999;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	inset: 0;
+	justify-content: center;
+	opacity: 1;
+	position: fixed;
+	z-index: 99999;
 
-  &--hidden {
-    animation: SplashScreen-hide 500ms forwards;
-    pointer-events: none;
-  }
+	&--hidden {
+		animation: SplashScreen-hide 500ms forwards;
+		pointer-events: none;
+	}
 
-  &__loader {
-    display: inline-block;
-    height: 10px;
-    position: relative;
-    width: 72px;
-  }
+	&__loader {
+		display: inline-block;
+		height: 10px;
+		position: relative;
+		width: 72px;
+	}
 
-  &__dot {
-    animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    background: var(--vpss-bg-loader, #00a2c7);
-    border-radius: 50%;
-    height: 10px;
-    position: absolute;
-    width: 10px;
+	&__dot {
+		animation-timing-function: cubic-bezier(0, 1, 1, 0);
+		background: var(--vpss-bg-loader, #00a2c7);
+		border-radius: 50%;
+		height: 10px;
+		position: absolute;
+		width: 10px;
 
-    &:nth-child(1) {
-      animation: SplashScreen-dot1 0.6s infinite;
-      left: 8px;
-    }
+		&:nth-child(1) {
+			animation: SplashScreen-dot1 0.6s infinite;
+			left: 8px;
+		}
 
-    &:nth-child(2) {
-      animation: SplashScreen-dot2 0.6s infinite;
-      left: 8px;
-    }
+		&:nth-child(2) {
+			animation: SplashScreen-dot2 0.6s infinite;
+			left: 8px;
+		}
 
-    &:nth-child(3) {
-      animation: SplashScreen-dot2 0.6s infinite;
-      left: 32px;
-    }
+		&:nth-child(3) {
+			animation: SplashScreen-dot2 0.6s infinite;
+			left: 32px;
+		}
 
-    &:nth-child(4) {
-      animation: SplashScreen-dot3 0.6s infinite;
-      left: 56px;
-    }
-  }
+		&:nth-child(4) {
+			animation: SplashScreen-dot3 0.6s infinite;
+			left: 56px;
+		}
+	}
 }
 
 // Keyframes for SplashScreen animations
 @keyframes SplashScreen-hide {
-  from { opacity: 1; }
-  to { opacity: 0; }
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
 }
 
 @keyframes SplashScreen-dot1 {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 @keyframes SplashScreen-dot2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(24px, 0); }
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(24px, 0);
+	}
 }
 
 @keyframes SplashScreen-dot3 {
-  0% { transform: scale(1); }
-  100% { transform: scale(0); }
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
 }

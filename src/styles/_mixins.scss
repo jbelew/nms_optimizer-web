@@ -1,8 +1,8 @@
 @mixin heading-styled {
-  filter: drop-shadow(0 2px 4px var(--accent-a2));
-  font-family: var(--font-family-geosans);
-  font-weight: 400;
-  letter-spacing: var(--letter-spacing-wide);
-  -webkit-text-stroke: 0.8px;
-  text-transform: uppercase;
+	filter: drop-shadow(0 2px 4px var(--accent-a2));
+	font-family: var(--font-family-geosans);
+	font-weight: 600;
+	letter-spacing: var(--letter-spacing-wide);
+	-webkit-text-stroke: 0.8px;
+	text-transform: uppercase;
 }
