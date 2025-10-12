@@ -1,5 +1,5 @@
 // src/components/MessageSpinner/MessageSpinner.tsx
-import "./MessageSpinner.css";
+import "./MessageSpinner.scss";
 
 import React, { useEffect, useState } from "react";
 import { Progress, Spinner, Text } from "@radix-ui/themes";

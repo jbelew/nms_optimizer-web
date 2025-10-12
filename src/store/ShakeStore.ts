@@ -6,7 +6,7 @@ import { create } from "zustand";
  * @property {boolean} shaking - Whether the component should be shaking.
  * @property {(shaking: boolean) => void} setShaking - Function to set the shaking state.
  */
-interface ShakeState {
+export interface ShakeState {
 	shaking: boolean;
 	setShaking: (shaking: boolean) => void;
 }

@@ -1,6 +1,7 @@
 npm run format
 git add -u
 npm run lint:fix
+npm run lint:css:fix
 npm run typecheck
 npm test
 npm run sitemap

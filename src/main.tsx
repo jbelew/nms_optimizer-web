@@ -18,7 +18,7 @@ import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
 import "./index.css";
-import "./components/Toast/Toast.css";
+import "./components/Toast/Toast.scss";
 // i18n
 import "./i18n/i18n"; // Initialize i18next
 

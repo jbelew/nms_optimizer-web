@@ -1,4 +1,4 @@
-import "./SplashScreen.css";
+import "./SplashScreen.scss";
 
 import type { CSSProperties } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";

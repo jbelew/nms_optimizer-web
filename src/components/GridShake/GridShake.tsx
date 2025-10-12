@@ -1,5 +1,5 @@
 // ShakingWrapper.tsx
-import "./GridShake.css";
+import "./GridShake.scss";
 
 import React, { useEffect } from "react";
 

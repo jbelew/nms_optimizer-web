@@ -1,0 +1,59 @@
+.messageSpinner {
+	&__header {
+		filter: drop-shadow(0 2px 4px var(--accent-a2));
+		font-family: var(--font-family-geosans);
+		font-weight: 400;
+		letter-spacing: var(--letter-spacing-wide);
+		-webkit-text-stroke: 0.8px;
+		text-transform: uppercase;
+
+		&--nms {
+			filter: drop-shadow(0 2px 4px var(--accent-a2));
+
+			// Note: This modifier had very similar styles to the base.
+			// Sass would allow further optimization here with @extend if needed.
+			font-family: var(--font-family-geosans);
+			font-weight: 400;
+			letter-spacing: var(--letter-spacing-wide);
+			-webkit-text-stroke: 0.75px;
+			text-transform: uppercase;
+		}
+	}
+
+	&__spinner {
+		filter: drop-shadow(0 2px 4px var(--accent-a2));
+		height: 4rem;
+		width: 4rem;
+
+		&--big {
+			height: 6rem;
+			width: 6rem;
+		}
+
+		&--accent {
+			/* color: var(--accent-indicator); */
+			height: 4rem;
+			width: 4rem;
+			filter: drop-shadow(0 2px 4px var(--accent-a2));
+		}
+
+		@media (width <= 640px) {
+			height: 2rem;
+			width: 2rem;
+		}
+	}
+
+	&__random {
+		min-height: 1.5em;
+		transition: color 0.25s ease-in-out;
+		user-select: none;
+
+		&--visible {
+			color: var(--amber-9);
+		}
+
+		&--hidden {
+			color: transparent;
+		}
+	}
+}

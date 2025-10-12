@@ -1,8 +1,8 @@
 .gridTable {
 	display: grid;
+	gap: var(--grid-gap);
 	grid-template-columns: repeat(10, var(--grid-cell-size)) auto;
 	grid-template-rows: repeat(6, var(--grid-cell-size));
-	gap: var(--grid-gap);
 	width: fit-content;
 }
 

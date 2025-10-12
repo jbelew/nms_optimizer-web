@@ -1,5 +1,5 @@
 // src/components/InfoDialog/InfoDialog.tsx
-import "./AppDialog.css";
+import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
 import React, { useCallback, useEffect } from "react";

@@ -1,0 +1,143 @@
+/* Keyframes for AppDialog animations */
+@keyframes appDialog__overlay-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.5;
+  }
+}
+@keyframes appDialog__content-show {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes appDialog__overlay-hide {
+  from {
+    opacity: 0.5;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+@keyframes appDialog__content-hide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+/* Main component block */
+.appDialog {
+  &__overlay {
+    background-color: var(--black-a9);
+    inset: 0;
+    position: fixed;
+
+    &[data-state="open"] {
+      animation: appDialog__overlay-show 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    &[data-state="closed"] {
+      animation: appDialog__overlay-hide 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  }
+
+  &__content {
+    background-color: var(--color-panel-solid);
+    border-radius: 8px;
+    box-shadow: var(--shadow-6);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
+    left: 50%;
+    max-height: 80vh;
+    padding: calc(var(--spacing) * 4) calc(var(--spacing) * 2) calc(var(--spacing) * 6) calc(var(--spacing) * 4);
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(280px, 90vw, 520px);
+
+    &[data-state="open"] {
+      animation: appDialog__content-show 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    &[data-state="closed"] {
+      animation: appDialog__content-hide 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  }
+
+  &__title {
+    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 25%));
+    font-family: var(--font-family-geosans);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-wide);
+    margin-right: 1rem;
+    -webkit-text-stroke: 0.75px;
+    text-transform: uppercase;
+  }
+
+  &__close {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+  }
+
+  &__container {
+    flex-grow: 1;
+    overflow-y: auto;
+
+    article {
+      font-size: var(--text-base);
+      padding-right: calc(var(--spacing) * 4);
+      @media (width <= 640px) {
+        font-size: var(--text-small);
+      }
+    }
+
+    h2 {
+      @media (width <= 640px) {
+        font-size: var(--text-base);
+      }
+    }
+  }
+}
+
+/* Styles for related components */
+.errorContent {
+  &__icon {
+    color: var(--red-9);
+  }
+
+  &__title {
+    color: var(--amber-9);
+    font-family: var(--font-family-geosans);
+    -webkit-text-stroke: 0.8px;
+  }
+
+  &__text {
+    color: var(--accent-11);
+  }
+}
+
+.dialogSpinner {
+  &__spinner {
+    filter: drop-shadow(0 0 4px var(--accent-a2));
+    height: 4rem;
+    width: 4rem;
+  }
+}

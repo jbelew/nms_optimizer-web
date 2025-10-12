@@ -1,5 +1,5 @@
 // src/components/GridTable/GridTable.tsx
-import "./GridTable.css";
+import "./GridTable.scss";
 
 import React, { useMemo } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";

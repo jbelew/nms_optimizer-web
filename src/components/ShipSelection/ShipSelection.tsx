@@ -1,5 +1,5 @@
 // src/components/ShipSelection/ShipSelection.tsx
-import "./ShipSelection.css";
+import "./ShipSelection.scss";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useCallback, useMemo, useState, useTransition } from "react";

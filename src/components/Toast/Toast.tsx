@@ -1,6 +1,6 @@
 import * as Toast from "@radix-ui/react-toast";
 
-import "./Toast.css";
+import "./Toast.scss";
 
 type ToastProps = {
 	open: boolean;

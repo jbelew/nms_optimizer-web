@@ -6,7 +6,7 @@ import { Dialog, Theme } from "@radix-ui/themes";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { ModuleSelectionDialog } from "./index";
 
-import "./ModuleSelectionDialog.css";
+import "./ModuleSelectionDialog.scss";
 
 // Helper function to group modules, adapted from useTechModuleManagement.ts
 const groupModules = (modules: Module[]): GroupedModules => {

@@ -1,4 +1,4 @@
-import "./GridCell.css";
+import "./GridCell.scss";
 
 import React, { memo } from "react";
 import { useTranslation } from "react-i18next";

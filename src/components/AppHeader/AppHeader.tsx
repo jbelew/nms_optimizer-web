@@ -1,5 +1,5 @@
 // src/components/AppHeader/AppHeader.tsx
-import "./AppHeader.css";
+import "./AppHeader.scss";
 
 import React from "react";
 import { CounterClockwiseClockIcon, PieChartIcon } from "@radix-ui/react-icons";

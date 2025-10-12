@@ -1,0 +1,21 @@
+.moduleSelection {
+  &__heading--styled {
+    filter: drop-shadow(0 2px 4px var(--accent-a2));
+    font-family: var(--font-family-geosans);
+    font-weight: 400;
+    letter-spacing: var(--letter-spacing-wide);
+    line-height: 1.5em;
+    -webkit-text-stroke: 0.8px;
+    text-transform: uppercase;
+  }
+
+  &__close {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+  }
+
+  &__content {
+    max-height: 80vh;
+  }
+}

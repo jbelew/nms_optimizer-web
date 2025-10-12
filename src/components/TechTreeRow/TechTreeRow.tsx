@@ -1,4 +1,4 @@
-import "./TechTreeRow.css";
+import "./TechTreeRow.scss";
 
 import React from "react";
 import { Avatar } from "@radix-ui/themes";

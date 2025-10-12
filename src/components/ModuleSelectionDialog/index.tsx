@@ -6,7 +6,7 @@ import { DialogBody } from "./DialogBody";
 import { DialogFooter } from "./DialogFooter";
 import { DialogHeader } from "./DialogHeader";
 
-import "./ModuleSelectionDialog.css";
+import "./ModuleSelectionDialog.scss";
 
 /**
  * Represents a single technology module.

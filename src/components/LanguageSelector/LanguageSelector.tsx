@@ -1,5 +1,5 @@
 // src/components/LanguageSelector/LanguageSelector.tsx
-import "./LanguageSelector.css";
+import "./LanguageSelector.scss";
 
 import React, { useMemo } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
