@@ -35,3 +35,4 @@ tsconfig.tsbuildinfo
 storybook-static
 stats.json
 scripts/dedup.ts
+stats.json
