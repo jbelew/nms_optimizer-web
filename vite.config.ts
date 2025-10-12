@@ -17,15 +17,12 @@ function getAppVersion() {
 	try {
 		const packageJsonContent = fs.readFileSync(packageJsonPath, "utf-8");
 		const packageJson = JSON.parse(packageJsonContent);
-		if (packageJson && packageJson.version) {
-			return packageJson.version;
-		} else {
-			console.error("Version not found in package.json");
-		}
+		if (packageJson && packageJson.version) return packageJson.version;
+		console.error("Version not found in package.json");
 	} catch (error) {
 		console.error("Failed to read or parse package.json", error);
 	}
-	return "unknown"; // Fallback version
+	return "unknown";
 }
 
 export default defineConfig(({ mode }) => {
@@ -34,15 +31,10 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		define: {
-			// Make app version available to JS code (e.g., AppHeader.tsx)
 			__APP_VERSION__: JSON.stringify(appVersion),
 		},
 		plugins: [
-			react({
-				// babel: {
-				// 	plugins: ["babel-plugin-react-compiler"],
-				// },
-			}),
+			react(),
 			tailwindcss(),
 			splashScreen({
 				logoSrc: "assets/svg/loader.svg",
@@ -52,14 +44,14 @@ export default defineConfig(({ mode }) => {
 			}),
 			...(doCritical
 				? [
-						deferStylesheetsPlugin(),
-						PluginCritical({
-							criticalBase: "dist/",
-							criticalUrl: "https://nms-optimizer.app",
-							criticalPages: [{ uri: "/", template: "index" }],
-							criticalConfig: {},
-						}),
-					]
+					deferStylesheetsPlugin(),
+					PluginCritical({
+						criticalBase: "dist/",
+						criticalUrl: "https://nms-optimizer.app",
+						criticalPages: [{ uri: "/", template: "index" }],
+						criticalConfig: {},
+					}),
+				]
 				: []),
 			compression({
 				algorithm: "brotliCompress",
@@ -73,12 +65,9 @@ export default defineConfig(({ mode }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-
-			// Conditionally apply defer and critical plugins
 			...(doCritical
 				? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
 				: []),
-
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
@@ -88,22 +77,20 @@ export default defineConfig(({ mode }) => {
 				template: "raw-data",
 			}),
 		],
-
 		resolve: {
 			alias: {
 				"@": path.resolve(__dirname, "./src"),
+				react: path.resolve(__dirname, "node_modules/react"),
+				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 			},
+			dedupe: ["react", "react-dom"], // <- critical for singleton React
 		},
-
-		server: {
-			host: "0.0.0.0",
-			port: 5173,
+		optimizeDeps: {
+			include: ["react", "react-dom"],
+			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
 		},
-
-		css: {
-			transformer: "lightningcss",
-		},
-
+		server: { host: "0.0.0.0", port: 5173 },
+		css: { transformer: "lightningcss" },
 		build: {
 			target: "esnext",
 			minify: "esbuild",
@@ -115,6 +102,7 @@ export default defineConfig(({ mode }) => {
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
 
+						// Markdown ecosystem
 						if (
 							id.includes("react-markdown") ||
 							id.includes("remark-") ||
@@ -127,56 +115,40 @@ export default defineConfig(({ mode }) => {
 							id.includes("bail") ||
 							id.includes("trough") ||
 							id.includes("decode-named-character-reference") ||
-							id.includes("parse-entities") ||
-							id.includes("recharts") ||
-							id.includes("decimal") ||
-							id.includes("d3-")
-						) {
-							return; // Let Vite handle lazy-loading for these
-						}
+							id.includes("parse-entities")
+						)
+							return "markdown";
 
-						if (id.includes("@radix-ui/themes/tokens/colors/")) {
-							return "radix-colors";
-						}
-						// if (id.includes("@radix-ui/themes/components.css")) {
-						// 	return "radix-components";
-						// }
-						if (id.includes("@radix-ui/themes/utilities.css")) {
-							return "radix-utilities";
-						}
-						if (id.includes("@radix-ui/themes")) {
-							return "radix-themes";
-						}
+						// Radix Themes (tokens/utilities)
+						if (id.includes("@radix-ui/themes/tokens/colors/")) return "radix-colors";
+						if (id.includes("@radix-ui/themes/utilities.css")) return "radix-utilities";
+						if (id.includes("@radix-ui/themes")) return "radix-themes";
+
+						// i18n
 						if (
 							id.includes("i18next") ||
 							id.includes("react-i18next") ||
 							id.includes("@formatjs") ||
 							id.includes("intl-messageformat")
-						) {
+						)
 							return "i18n";
-						}
-						// if (id.includes("zustand") || id.includes("immer")) {
-						// 	return "zustand";
-						// }
-						// if (id.includes("ga4")) {
-						// 	return "ga4";
-						// }
-						if (id.includes("radix")) {
-							return "radix";
-						}
+
+						// Additional large libs
+						if (id.includes("lodash")) return "lodash";
+						if (id.includes("d3-")) return "d3";
+						if (id.includes("recharts")) return "recharts";
+
+						if (id.includes("radix")) return "radix";
 
 						return "vendor";
 					},
-					assetFileNames: (assetInfo) => {
-						if (assetInfo.name?.endsWith(".css")) {
-							return "assets/[name]-[hash].css";
-						}
-						return "assets/[name]-[hash].[ext]";
-					},
+					assetFileNames: (assetInfo) =>
+						assetInfo.name?.endsWith(".css")
+							? "assets/[name]-[hash].css"
+							: "assets/[name]-[hash].[ext]",
 				},
 			},
 		},
-
 		test: {
 			globals: true,
 			environment: "happy-dom",
