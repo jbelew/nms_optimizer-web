@@ -1,3 +1,21 @@
+## [4.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.1...v4.1.2) (2025-10-12)
+
+
+### Bug Fixes
+
+* **csp:** more CSP config changes ([0f62d60](https://github.com/jbelew/nms_optimizer-web/commit/0f62d60fb2c7677bf087166e960017816a7c3d17))
+* **inp:** some additional fixes to improve INP metrics ([cfc6a3f](https://github.com/jbelew/nms_optimizer-web/commit/cfc6a3fa4a98f8e82bc268a926b112fa9b64360d))
+* **inp:** some additional inp fixes for the techtreerow buttons ([fe977c8](https://github.com/jbelew/nms_optimizer-web/commit/fe977c8a552ed7871671a505ea4f67455947f5b5))
+* **postcss:** ported custom CSS over to SCSS ([fefd99f](https://github.com/jbelew/nms_optimizer-web/commit/fefd99f02d59e58e41d3e07cbff3603050028041))
+* **techtree:** remove old "accordian" functionality from the code base ([f6d53c3](https://github.com/jbelew/nms_optimizer-web/commit/f6d53c35b41f82562763eb4289727bdd0c084367))
+
+
+### Features
+
+* **csp:** attempting to implement CSP ([3f61be0](https://github.com/jbelew/nms_optimizer-web/commit/3f61be0d2b03bc718558b50990891cbbc82e07b2))
+
+
+
 ## [4.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.0...v4.1.1) (2025-10-11)
 
 
