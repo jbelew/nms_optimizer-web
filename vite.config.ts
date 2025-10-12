@@ -44,14 +44,14 @@ export default defineConfig(({ mode }) => {
 			}),
 			...(doCritical
 				? [
-					deferStylesheetsPlugin(),
-					PluginCritical({
-						criticalBase: "dist/",
-						criticalUrl: "https://nms-optimizer.app",
-						criticalPages: [{ uri: "/", template: "index" }],
-						criticalConfig: {},
-					}),
-				]
+						deferStylesheetsPlugin(),
+						PluginCritical({
+							criticalBase: "dist/",
+							criticalUrl: "https://nms-optimizer.app",
+							criticalPages: [{ uri: "/", template: "index" }],
+							criticalConfig: {},
+						}),
+					]
 				: []),
 			compression({
 				algorithm: "brotliCompress",
@@ -93,60 +93,58 @@ export default defineConfig(({ mode }) => {
 		css: { transformer: "lightningcss" },
 		build: {
 			target: "esnext",
-			minify: "esbuild",
+			minify: "terser",
 			cssCodeSplit: true,
 			sourcemap: false,
 			cssMinify: "lightningcss",
 			rollupOptions: {
 				output: {
-					manualChunks(id) {
-						if (!id.includes("node_modules")) return;
-
-						// Markdown ecosystem
-						if (
-							id.includes("react-markdown") ||
-							id.includes("remark-") ||
-							id.includes("rehype-") ||
-							id.includes("micromark") ||
-							id.includes("mdast-") ||
-							id.includes("unist-") ||
-							id.includes("vfile") ||
-							id.includes("zwitch") ||
-							id.includes("bail") ||
-							id.includes("trough") ||
-							id.includes("decode-named-character-reference") ||
-							id.includes("parse-entities")
-						)
-							return "markdown";
-
-						// Radix Themes (tokens/utilities)
-						if (id.includes("@radix-ui/themes/tokens/colors/")) return "radix-colors";
-						if (id.includes("@radix-ui/themes/utilities.css")) return "radix-utilities";
-						if (id.includes("@radix-ui/themes")) return "radix-themes";
-
-						// i18n
-						if (
-							id.includes("i18next") ||
-							id.includes("react-i18next") ||
-							id.includes("@formatjs") ||
-							id.includes("intl-messageformat")
-						)
-							return "i18n";
-
-						// Additional large libs
-						if (id.includes("lodash")) return "lodash";
-						if (id.includes("d3-")) return "d3";
-						if (id.includes("recharts")) return "recharts";
-
-						if (id.includes("radix")) return "radix";
-
-						return "vendor";
-					},
-					assetFileNames: (assetInfo) =>
-						assetInfo.name?.endsWith(".css")
-							? "assets/[name]-[hash].css"
-							: "assets/[name]-[hash].[ext]",
-				},
+										manualChunks(id) {
+											if (!id.includes("node_modules")) return;
+					
+											// Markdown ecosystem
+											if (
+												id.includes("react-markdown") ||
+												id.includes("remark-") ||
+												id.includes("rehype-") ||
+												id.includes("micromark") ||
+												id.includes("mdast-") ||							
+												id.includes("unist-") ||
+												id.includes("vfile") ||
+												id.includes("zwitch") ||
+												id.includes("bail") ||
+												id.includes("trough") ||
+												id.includes("decode-named-character-reference") ||
+												id.includes("parse-entities")
+											)
+												return "markdown";
+					
+											// Radix Themes (tokens/utilities)
+											if (id.includes("@radix-ui/themes/tokens/colors/")) return "radix-colors";
+											if (id.includes("@radix-ui/themes/utilities.css")) return "radix-utilities";
+											if (id.includes("@radix-ui/themes")) return "radix-themes";
+					
+											// i18n
+											if (
+												id.includes("i18next") ||
+												id.includes("react-i18next") ||
+												id.includes("@formatjs") ||
+												id.includes("intl-messageformat")
+											)
+												return "i18n";
+					
+											// Additional large libs
+											if (id.includes("lodash")) return "lodash";
+											if (id.includes("d3-")) return "d3";
+											if (id.includes("recharts")) return "recharts";
+											if (id.includes("radix")) return "radix";
+					
+											return "vendor";
+										},
+										assetFileNames: (assetInfo) =>
+											assetInfo.name?.endsWith(".css")
+												? "assets/[name]-[hash].css"
+												: "assets/[name]-[hash].[ext]",				},
 			},
 		},
 		test: {
