@@ -22,7 +22,7 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
 	const { t } = useTranslation();
 
 	return (
-		<div className="mt-2 flex justify-end gap-3">
+		<div className="mt-2 mb-2 flex justify-end gap-2">
 			<Dialog.Close>
 				<Button variant="soft">{t("moduleSelection.cancelButton")}</Button>
 			</Dialog.Close>

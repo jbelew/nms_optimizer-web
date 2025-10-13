@@ -268,7 +268,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 					</>
 				)}
 			</Flex>
-			<Flex gap="2" mt="4" justify="end">
+			<Flex gap="2" mt="4" mb="2" justify="end">
 				<Dialog.Close asChild>
 					<Button variant="soft" onClick={onClose}>
 						{t("dialogs.userStats.closeButton")}
