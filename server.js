@@ -110,7 +110,7 @@ app.get(/.*/, async (req, res, next) => {
 
 		res.setHeader("Content-Security-Policy-Report-Only", csp);
 		res.setHeader("ETag", indexEtag);
-		res.setHeader("Cache-Control", "no-store, must-revalidate");
+		res.setHeader("Cache-Control", "no-cache");
 
 		if (req.headers["if-none-match"] === indexEtag) {
 			return res.status(304).end();

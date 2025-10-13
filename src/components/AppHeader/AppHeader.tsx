@@ -55,27 +55,6 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</IconButton>
 				</ConditionalTooltip>
 				<LanguageSelector />
-				{/* <ConditionalTooltip label={t("translationRequest.openDialogLabel")}>
-					<IconButton
-						className="!ml-2 !hidden h-6 w-6 sm:!inline"
-						color="amber"
-						radius="full"
-						variant="ghost"
-						aria-label={
-							t("translationRequest.openDialogLabel") || "Open translation request dialog"
-						}
-						onClick={() => {
-							sendEvent({
-								category: "User Interactions",
-								action: "showTranslations",
-								value: 1,
-							});
-							openDialog("translation");
-						}}
-					>
-						<InfoCircledIcon className="w-4 h-4 sm:h-5 sm:w-5" />
-					</IconButton>
-				</ConditionalTooltip> */}
 			</div>
 
 			<h1 className="header__logo--text text-2xl [word-spacing:-.25rem] sm:text-4xl">
@@ -94,7 +73,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Popover.Root>
 					<Popover.Trigger>
 						<img
-							className="h-4 flex-shrink-0 sm:h-5"
+							className="h-4 w-3 flex-shrink-0 sm:h-5 sm:w-4"
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
 							alt="No Man's Sky Atlas Logo"
