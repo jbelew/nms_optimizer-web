@@ -112,7 +112,7 @@
     "postcss": "^8.5.6",
     "postcss-merge-rules": "^7.0.6",
     "prettier": "^3.5.3",
-    "puppeteer-core": "^24.17.0",
+    "puppeteer-core": "^24.24.1",
     "require": "^2.4.20",
     "rollup-plugin-critical": "^1.0.15",
     "rollup-plugin-visualizer": "^6.0.3",
