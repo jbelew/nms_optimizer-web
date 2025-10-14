@@ -83,7 +83,7 @@
 	},
 	"footer": {
 		"issuePrompt": "Algo com sua solução ou encontrou um bug? <1> Abra um problema no github </1> e informe -nos!",
-		"builtBy": "Construído por Jbelew (void23 | qq9y-ejrs-p8kgw) • {{BuildVersion}}",
+		"builtBy": "Built by jbelew (Looking for Work BTW!) • {{buildVersion}}",
 		"supportPrompt": "Se você achou esse aplicativo útil, considere apoiar seu desenvolvimento com"
 	},
 	"translationRequest": {
@@ -112,7 +112,7 @@
 	"techTree": {
 		"loading": "Carregando dados da plataforma ...",
 		"tooltips": {
-			"insufficientSpace": "Espaço insuficiente!",
+			"insufficientSpace": "Incomplete Solve!",
 			"validSolve": "Solve válido!",
 			"boostedSolve": "Boosted Resolve!",
 			"gridFull": "Grade cheia!",
@@ -537,16 +537,18 @@
 		}
 	},
 	"moduleSelection": {
-		"core": "Módulo Core (necessário)",
-		"bonus": "Módulos de bônus",
-		"upgrade": "Módulos de atualização",
-		"reactor": "Módulos do reator",
-		"cosmetic": "Módulos cosméticos",
-		"title": "{{techName}} Seleção",
-		"warning": "<strong> Aviso! </strong> Se a sua resolução não incluir todos os módulos, o otimizador pulará a maioria das etapas e os resultados podem não representar a melhor resolução possível.",
-		"selectAll": "Selecione tudo",
-		"closeDialogLabel": "Fechar diálogo",
-		"cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
-		"optimizeButton": "Otimizar"
+		"core": "Core Module",
+		"bonus": "Bonus Modules",
+		"upgrade": "Upgrade Modules",
+		"reactor": "Reactor Modules",
+		"atlantid": "Atlantid Modules",
+		"cosmetic": "Cosmetic Modules",
+		"title": "{{techName}} SELECTION",
+		"warning": "Default selections for Corvettes are suggestions. Use <strong>Select All</strong> to fully maximize this technology, but keep in mind — you’ll usually only have space for <strong>2–3</strong> maxed technologies in your layout.",
+		"selectAll": "Select All",
+		"closeDialogLabel": "Close dialog",
+		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don’t let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
+		"optimizeButton": "Optimize",
+		"cancelButton": "Cancel"
 	}
 }
