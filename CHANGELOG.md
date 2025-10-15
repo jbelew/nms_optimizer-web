@@ -1,3 +1,17 @@
+# [4.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.2...v4.2.0) (2025-10-15)
+
+
+### Bug Fixes
+
+* **docker:** fixes for docker build issues ([66d631b](https://github.com/jbelew/nms_optimizer-web/commit/66d631b7773764a1a3ab5e2ea88acbb242f8f47f)), closes [#90](https://github.com/jbelew/nms_optimizer-web/issues/90)
+
+
+### Performance Improvements
+
+* **server:** changes to cache-control headers ([02f0cae](https://github.com/jbelew/nms_optimizer-web/commit/02f0cae207b56c21b5da27c8ff55ef41ce4eff1d))
+
+
+
 ## [4.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.1...v4.1.2) (2025-10-12)
 
 
