@@ -74,17 +74,13 @@ To override the default service endpoint, update the VITE_API_URL value in your 
 
 ```
 version: "3.8"
-
 services:
   app:
     image: ghcr.io/jbelew/nms-optimizer-app:${TAG:-latest}
     container_name: nms_optimizer_app
     build:
       context: .
-      args:
-        VITE_API_URL: /api/
     ports:
-      - "8016:80" # Maps host port 8016 to Nginx's port 80 in the container
-      - VITE_API_URL=/api/
+      - "8016:80"
     restart: unless-stopped
 ```
