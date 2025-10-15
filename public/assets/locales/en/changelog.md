@@ -4,6 +4,15 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 4.2.0 (2025-10-15)
+
+- Improved input responsiveness (INP), including Tech Tree buttons.
+- Removed deprecated Tech Tree “accordion” functionality and code.
+- Ported custom CSS to SCSS for better maintainability.
+- Implemented initial CSP support for improved security.
+- Updated Cache-Control headers for better caching behavior.
+- Fixed Docker build issues for smoother container setup.
+
 ## Version 4.1.0 (2025-09-28)
 
 - Improved Module Selection Dialog interactions.
