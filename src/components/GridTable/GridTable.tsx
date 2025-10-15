@@ -1,7 +1,7 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -11,8 +11,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import GridCell from "../GridCell/GridCell";
-import GridControlButtons from "../GridControlButtons/GridControlButtons";
+import GridRow from "../GridRow/GridRow";
 import ShakingWrapper from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
@@ -66,7 +65,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	) => {
 		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
-		const grid = useGridStore((state) => state.grid);
+		const gridHeight = useGridStore((state) => state.grid.height);
+		const gridWidth = useGridStore((state) => state.grid.width);
 		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 		const gridFixed = useGridStore((state) => state.gridFixed);
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
@@ -77,27 +77,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { tutorialFinished } = useDialog();
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
-		// Calculate derived values from the grid.
-		const { firstInactiveRowIndex, lastActiveRowIndex } = useMemo(
-			() => {
-				if (!grid || !grid.cells) {
-					// Return default values if grid is not available
-					return { firstInactiveRowIndex: -1, lastActiveRowIndex: -1 };
-				}
-				return {
-					firstInactiveRowIndex: grid.cells.findIndex((r) =>
-						r.every((cell) => !cell.active)
-					),
-					lastActiveRowIndex: grid.cells
-						.map((r) => r.some((cell) => cell.active))
-						.lastIndexOf(true),
-				};
-			},
-			[grid] // Depend on the whole grid object for safety
-		);
-
 		// Early return if grid is not available. This is now safe as hooks are called above.
-		if (!grid || !grid.cells) {
+		if (!gridHeight || !gridWidth) {
 			// Render a minimal div if ref is strictly needed for layout, or a loading message.
 			return <div ref={ref} className="gridTable-empty"></div>;
 		}
@@ -105,8 +86,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		// Determine column count for ARIA properties.
 		// This assumes all data rows have the same number of cells.
 		// Add 1 for the GridControlButtons column.
-		const dataCellColumnCount = grid.cells[0]?.length ?? 0;
-		const totalAriaColumnCount = dataCellColumnCount + 1;
+		const totalAriaColumnCount = gridWidth + 1;
 
 		return (
 			<ShakingWrapper shaking={shaking} duration={500}>
@@ -135,45 +115,20 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					ref={ref}
 					role="grid"
 					aria-label="Technology Grid"
-					aria-rowcount={grid.cells.length}
+					aria-rowcount={gridHeight}
 					aria-colcount={totalAriaColumnCount}
 					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 				>
-					{grid.cells.map((row, rowIndex) => (
-						<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>
-							{row.map((_, columnIndex) => (
-								<GridCell
-									key={`${rowIndex}-${columnIndex}`}
-									rowIndex={rowIndex}
-									columnIndex={columnIndex} // Use the renamed prop
-									isSharedGrid={isSharedGridProp}
-								/>
-							))}
-							{/* Wrap GridControlButtons in a div with role="gridcell" */}
-							<div
-								role="gridcell"
-								className="w-[24px]"
-								aria-colindex={totalAriaColumnCount}
-							>
-								<GridControlButtons
-									rowIndex={rowIndex}
-									activateRow={activateRow}
-									deActivateRow={deActivateRow}
-									hasModulesInGrid={hasModulesInGrid}
-									// Use pre-calculated indices for these checks
-									isFirstInactiveRow={
-										row.every((cell) => !cell.active) &&
-										rowIndex === firstInactiveRowIndex
-									}
-									isLastActiveRow={
-										row.some((cell) => cell.active) &&
-										rowIndex === lastActiveRowIndex &&
-										rowIndex >= grid.cells.length - 3 // Keep this specific condition if it's intended
-									}
-									gridFixed={gridFixed}
-								/>
-							</div>
-						</div>
+					{Array.from({ length: gridHeight }).map((_, rowIndex) => (
+						<GridRow
+							key={rowIndex}
+							rowIndex={rowIndex}
+							isSharedGrid={isSharedGridProp}
+							activateRow={activateRow}
+							deActivateRow={deActivateRow}
+							hasModulesInGrid={hasModulesInGrid}
+							gridFixed={gridFixed}
+						/>
 					))}
 
 					{!isLarge && (

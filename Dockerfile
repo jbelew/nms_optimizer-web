@@ -73,7 +73,7 @@ RUN groupadd -r ${APP_GROUP} && useradd -r -g ${APP_GROUP} -d /opt/app -s /sbin/
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     supervisor \
-    && pip install --no-cache-dir gunicorn \
+    && pip install --no-cache-dir gunicorn gevent \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
@@ -100,9 +100,9 @@ COPY --from=frontend-builder --chown=${APP_USER}:${APP_GROUP} /app/frontend/dist
 # Copy requirements.txt first (though it's not strictly needed if site-packages are copied, it's good for reference)
 COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/requirements.txt /opt/app/backend_app/requirements.txt
 
-# Copy all .py files from the root of the backend repository and the debugging_utils directory
-COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src/*.py /opt/app/backend_app/
-COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/scripts/training/*.* /opt/app/backend_app/training/
+# Copy the entire backend source and scripts directories
+COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src /opt/app/backend_app/src
+COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/scripts /opt/app/backend_app/scripts
 
 # Copy installed Python dependencies (site-packages) from the backend-deps-installer stage
 COPY --from=backend-deps-installer /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages

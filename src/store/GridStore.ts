@@ -252,7 +252,9 @@ export type GridStore = {
 	}) => void;
 	selectTotalSuperchargedCells: () => number;
 	selectHasModulesInGrid: () => boolean;
-	applyModulesToGrid: (modules: Module[]) => void;
+	selectFirstInactiveRowIndex: () => number;
+	selectLastActiveRowIndex: () => number;
+	applyModulesToGrid: (modules: (Module | null)[]) => void;
 };
 
 const debouncedStorage = {
@@ -552,6 +554,18 @@ export const useGridStore = create<GridStore>()(
 					const grid = get().grid;
 					if (!grid || !grid.cells) return false;
 					return grid.cells.flat().some((cell) => cell.module !== null);
+				},
+
+				selectFirstInactiveRowIndex: () => {
+					const grid = get().grid;
+					if (!grid || !grid.cells) return 0;
+					return grid.cells.findIndex((r) => r.every((cell) => !cell.active));
+				},
+
+				selectLastActiveRowIndex: () => {
+					const grid = get().grid;
+					if (!grid || !grid.cells) return -1;
+					return grid.cells.map((r) => r.some((cell) => cell.active)).lastIndexOf(true);
 				},
 
 				setGridFixed: (fixed) => set({ gridFixed: fixed }),
