@@ -21,7 +21,7 @@ interface PieLabelRenderProps {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"];
 
 const LazyRechartsChart = lazy(async () => {
-	const recharts = await import("recharts");
+	const { ResponsiveContainer, PieChart, Pie, Cell } = await import("recharts");
 	return {
 		default: ({
 			chartData,
@@ -46,9 +46,9 @@ const LazyRechartsChart = lazy(async () => {
 			};
 
 			return (
-				<recharts.ResponsiveContainer width="100%" height={248}>
-					<recharts.PieChart>
-						<recharts.Pie
+				<ResponsiveContainer width="100%" height={248}>
+					<PieChart>
+						<Pie
 							data={chartData}
 							cx="50%"
 							cy="50%"
@@ -102,7 +102,7 @@ const LazyRechartsChart = lazy(async () => {
 						>
 							{chartData.map(
 								(entry: { name: string; value: number }, index: number) => (
-									<recharts.Cell
+									<Cell
 										key={`cell-${index}`}
 										fill={getCellFill(entry, index)}
 										stroke="black"
@@ -110,9 +110,9 @@ const LazyRechartsChart = lazy(async () => {
 									/>
 								)
 							)}
-						</recharts.Pie>
-					</recharts.PieChart>
-				</recharts.ResponsiveContainer>
+						</Pie>
+					</PieChart>
+				</ResponsiveContainer>
 			);
 		},
 	};
