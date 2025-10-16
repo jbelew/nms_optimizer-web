@@ -21,7 +21,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
 coverage/*
+.venv/*
 
 lighthouse-report.html
 lighthouse-report.json
@@ -35,3 +37,4 @@ tsconfig.tsbuildinfo
 *storybook.log
 storybook-static
 scripts/dedup.ts
+
