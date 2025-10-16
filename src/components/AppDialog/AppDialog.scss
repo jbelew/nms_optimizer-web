@@ -92,6 +92,11 @@
 		}
 	}
 
+	&__scrollable-content {
+		mask-image: linear-gradient(to bottom, transparent, #000 1%, #000 98%, transparent);
+		mask-image: linear-gradient(to bottom, transparent, #000 1%, #000 98%, transparent);
+	}
+
 	&__title {
 		@include mixins.heading-styled;
 

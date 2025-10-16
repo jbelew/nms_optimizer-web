@@ -89,7 +89,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 
 						<Dialog.Description asChild>
 							<section
-								className={`flex-1 overflow-y-auto ${
+								className={`appDialog__scrollable-content flex-1 overflow-y-auto ${
 									ROUTED_DIALOG_TITLE_KEYS.includes(
 										(titleKey || "").split(".").pop() || ""
 									)
