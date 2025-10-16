@@ -1,3 +1,7 @@
+## [4.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.2.0...v4.2.1) (2025-10-16)
+
+
+
 # [4.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.1.2...v4.2.0) (2025-10-15)
 
 
