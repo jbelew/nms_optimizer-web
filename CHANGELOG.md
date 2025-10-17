@@ -1,3 +1,17 @@
+# [4.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.2.1...v4.3.0) (2025-10-17)
+
+
+### Features
+
+* **focus mode:** added a new focus mode for those with visual or reading challenges ([50b6151](https://github.com/jbelew/nms_optimizer-web/commit/50b61515ff5410c794139eb9730b04d573d1f4e9))
+
+
+### Performance Improvements
+
+* **fonts:** did some "glyph" removal on the main Raleway font asset ([cb6e02e](https://github.com/jbelew/nms_optimizer-web/commit/cb6e02ee931eeacc1f9d5492075cd1d6bc5b0806))
+
+
+
 ## [4.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.2.0...v4.2.1) (2025-10-16)
 
 
