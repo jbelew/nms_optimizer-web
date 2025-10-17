@@ -176,8 +176,8 @@
 	}
 
 	&--glow {
-		animation: pulseGlow 1s infinite alternate ease-in-out;
-		box-shadow: 0 0 1px 1px var(--accent-a8);
+		animation: pulseGlow 0.75s infinite alternate ease-in-out;
+		box-shadow: 0 0 2px 1px var(--accent-track);
 	}
 
 	&--touched {

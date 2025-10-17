@@ -1,7 +1,7 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
 import {
 	Code,
@@ -23,6 +23,7 @@ import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useA11yStore } from "@/store/A11yStore";
 
 /**
  * @interface AppHeaderProps
@@ -44,23 +45,9 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
-	const [a11yMode, setA11yMode] = useState(() => {
-		try {
-			const storedValue = localStorage.getItem("nms-optimizer-a11y-mode");
-			return storedValue ? JSON.parse(storedValue) : false;
-		} catch (error) {
-			console.error("Error reading from localStorage", error);
-			return false;
-		}
-	});
+	const { a11yMode, setA11yMode, toggleA11yMode } = useA11yStore();
 
 	useEffect(() => {
-		try {
-			localStorage.setItem("nms-optimizer-a11y-mode", JSON.stringify(a11yMode));
-		} catch (error) {
-			console.error("Error writing to localStorage", error);
-		}
-
 		if (a11yMode) {
 			document.body.classList.add("a11y-font");
 		} else {
@@ -78,7 +65,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							variant={a11yMode ? "solid" : "surface"}
 							radius="full"
 							aria-label={t("buttons.accessibility") ?? ""}
-							onClick={() => setA11yMode(!a11yMode)}
+							onClick={toggleA11yMode}
 						>
 							<EyeOpenIcon />
 						</IconButton>

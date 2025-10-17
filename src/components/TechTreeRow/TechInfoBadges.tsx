@@ -2,6 +2,8 @@ import React, { useRef, useState, useTransition } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
+import { useA11yStore } from "@/store/A11yStore";
+
 import { ModuleSelectionDialog } from "../ModuleSelectionDialog";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
@@ -26,6 +28,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	solving,
 	...props
 }) => {
+	const { a11yMode } = useA11yStore();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
@@ -66,6 +69,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						className="!ml-1 align-top !font-mono"
 						size="1"
 						radius="medium"
+						highContrast={a11yMode}
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
 						disabled={modules.length === 1 || solving || isPending}

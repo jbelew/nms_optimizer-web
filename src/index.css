@@ -125,16 +125,16 @@ body.a11y-font .heading-styled {
 }
 
 .button--glow {
-	animation: buttonGlow 1s infinite alternate ease-in-out;
+	animation: buttonGlow 0.5s infinite alternate ease-in-out;
 }
 
 @keyframes buttonGlow {
 	from {
-		box-shadow: 0 0 4px 0px var(--accent-a3);
+		box-shadow: 0 0 4px 0px var(--accent-a0);
 	}
 
 	to {
-		box-shadow: 0 0 4px 2px var(--accent-a7);
+		box-shadow: 0 0 4px 2px var(--accent-track);
 	}
 }
 
