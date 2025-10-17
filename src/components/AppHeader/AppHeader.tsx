@@ -71,21 +71,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
 			<div className="!absolute !top-3 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
-				{isLg ? (
-					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<Text as="label" size="1" className="cursor-pointer">
-							<Flex gap="1" align="center">
-								<Switch
-									size="1"
-									checked={a11yMode}
-									onCheckedChange={setA11yMode}
-									aria-label={t("buttons.accessibility") ?? ""}
-								/>
-								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
-							</Flex>
-						</Text>
-					</ConditionalTooltip>
-				) : (
+				{!isLg && (
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<IconButton
 							size="1"
@@ -100,6 +86,20 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				)}
 			</div>
 			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
+				{isLg && (
+					<Text as="label" size="2" className="!mr-3 cursor-pointer" color="cyan">
+						<Flex gap="1" align="center">
+							<Switch
+								size="1"
+								checked={a11yMode}
+								onCheckedChange={setA11yMode}
+								aria-label={t("buttons.accessibility") ?? ""}
+							/>
+							Focus Mode
+						</Flex>
+					</Text>
+				)}
+
 				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton
 						variant="ghost"
