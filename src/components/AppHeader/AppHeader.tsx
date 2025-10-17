@@ -1,9 +1,19 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React from "react";
-import { CounterClockwiseClockIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { Code, DataList, Heading, IconButton, Popover, Separator } from "@radix-ui/themes";
+import React, { useEffect, useState } from "react";
+import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import {
+	Code,
+	DataList,
+	Flex,
+	Heading,
+	IconButton,
+	Popover,
+	Separator,
+	Switch,
+	Text,
+} from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -12,6 +22,7 @@ import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 /**
  * @interface AppHeaderProps
@@ -32,9 +43,62 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
+	const isLg = useBreakpoint("1024px");
+	const [a11yMode, setA11yMode] = useState(() => {
+		try {
+			const storedValue = localStorage.getItem("nms-optimizer-a11y-mode");
+			return storedValue ? JSON.parse(storedValue) : false;
+		} catch (error) {
+			console.error("Error reading from localStorage", error);
+			return false;
+		}
+	});
+
+	useEffect(() => {
+		try {
+			localStorage.setItem("nms-optimizer-a11y-mode", JSON.stringify(a11yMode));
+		} catch (error) {
+			console.error("Error writing to localStorage", error);
+		}
+
+		if (a11yMode) {
+			document.body.classList.add("a11y-font");
+		} else {
+			document.body.classList.remove("a11y-font");
+		}
+	}, [a11yMode]);
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
+			<div className="!absolute !top-3 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
+				{isLg ? (
+					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
+						<Text as="label" size="1" className="cursor-pointer">
+							<Flex gap="1" align="center">
+								<Switch
+									size="1"
+									checked={a11yMode}
+									onCheckedChange={setA11yMode}
+									aria-label={t("buttons.accessibility") ?? ""}
+								/>
+								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+							</Flex>
+						</Text>
+					</ConditionalTooltip>
+				) : (
+					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
+						<IconButton
+							size="1"
+							variant={a11yMode ? "solid" : "surface"}
+							radius="full"
+							aria-label={t("buttons.accessibility") ?? ""}
+							onClick={() => setA11yMode(!a11yMode)}
+						>
+							<EyeOpenIcon />
+						</IconButton>
+					</ConditionalTooltip>
+				)}
+			</div>
 			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
 				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton

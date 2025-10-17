@@ -23,6 +23,11 @@
 	/* Fixed typo: was --gary-a1 */
 }
 
+body.a11y-font .radix-themes {
+	--default-font-family: "AtkinsonHyperlegibleNext", Helvetica, Arial, sans-serif;
+	--accent-9: #11809c;
+}
+
 :root {
 	--grid-columns-flex: 10;
 	/* number of resizable columns */
@@ -70,6 +75,14 @@ body {
 	overflow-x: hidden;
 }
 
+@media (min-width: 1024px) {
+	/* body.a11y-font {
+		transform: scale(1.1);
+		transform-origin: top center;
+		width: 100%;
+	} */
+}
+
 .heading-styled {
 	letter-spacing: var(--letter-spacing-wide);
 	font-family: var(--font-family-geosans);
@@ -77,6 +90,16 @@ body {
 	text-transform: uppercase;
 	filter: drop-shadow(0 2px 4px var(--accent-a2));
 	-webkit-text-stroke: 0.8px;
+}
+
+body.a11y-font .heading-styled {
+	letter-spacing: normal;
+	font-family: var(--default-font-family);
+	transform: scaleY(1.1);
+	font-weight: 700;
+	text-transform: uppercase;
+	filter: drop-shadow(0 2px 4px var(--accent-a2));
+	-webkit-text-stroke: 0px;
 }
 
 .app {

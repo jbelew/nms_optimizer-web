@@ -30,3 +30,17 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+@font-face {
+	font-family: "Lexend";
+	src: url("/assets/fonts/Lexend-VariableFont_wght.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Atkinson";
+	src: url("/assets/fonts/AtkinsonHyperlegible-Regular.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}

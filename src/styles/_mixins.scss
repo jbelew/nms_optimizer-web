@@ -5,4 +5,13 @@
 	letter-spacing: var(--letter-spacing-wide);
 	-webkit-text-stroke: 1px;
 	text-transform: uppercase;
+
+	body.a11y-font & {
+		filter: drop-shadow(0 2px 4px var(--accent-a2));
+		font-family: var(--font-family-normal);
+		font-weight: 600;
+		letter-spacing: normal;
+		-webkit-text-stroke: 0;
+		text-transform: uppercase;
+	}
 }

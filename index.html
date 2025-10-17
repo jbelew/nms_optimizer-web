@@ -90,7 +90,21 @@
 				font-display: swap;
 			}
 
-			html {
+			            			@font-face {
+			            				font-family: "AtkinsonHyperlegibleNext";
+			            				src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2") format("woff2-variations");
+			            				font-weight: 100 900;
+			            				font-style: normal;
+			            				font-display: swap;
+			            			}
+
+			            			@font-face {
+			            				font-family: "AtkinsonHyperlegibleNext";
+			            				src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2") format("woff2-variations");
+			            				font-weight: 100 900;
+			            				font-style: italic;
+			            				font-display: swap;
+			            			}			html {
 				text-rendering: optimizeLegibility;
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
@@ -127,6 +141,11 @@
 				body::before {
 					background-image: url("/assets/img/background@mobile.webp");
 				}
+			}
+
+			body.a11y-font::before {
+				background-image: none !important;
+				background-color: #101B20;
 			}
 
 			body {
@@ -197,6 +216,7 @@
 			type="font/woff2"
 			crossorigin="anonymous"
 		/>
+
 
 		<!-- Preconnect -->
 		<link
