@@ -14,7 +14,8 @@
 		"share": "Share",
 		"resetGrid": "Reset Grid",
 		"changelog": "Changelog",
-		"userStats": "User Statistics"
+		"userStats": "User Statistics",
+		"accessibility": "Focus Mode"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
