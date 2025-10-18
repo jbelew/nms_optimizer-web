@@ -3,17 +3,7 @@ import "./AppHeader.scss";
 
 import React, { useEffect } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import {
-	Code,
-	DataList,
-	Flex,
-	Heading,
-	IconButton,
-	Popover,
-	Separator,
-	Switch,
-	Text,
-} from "@radix-ui/themes";
+import { Code, DataList, Heading, IconButton, Popover, Separator } from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -45,7 +35,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
-	const { a11yMode, setA11yMode, toggleA11yMode } = useA11yStore();
+	const { a11yMode, toggleA11yMode } = useA11yStore();
 
 	useEffect(() => {
 		if (a11yMode) {
@@ -57,7 +47,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 	return (
 		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
-			<div className="!absolute !top-3 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
+			<div className="!absolute !top-4 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
 				{!isLg && (
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<IconButton
@@ -72,26 +62,13 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</ConditionalTooltip>
 				)}
 			</div>
-			<div className="!absolute !top-3 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
-				{isLg && (
-					<Text as="label" size="2" className="!mr-3 cursor-pointer" color="cyan">
-						<Flex gap="1" align="center">
-							<Switch
-								size="1"
-								checked={a11yMode}
-								onCheckedChange={setA11yMode}
-								aria-label={t("buttons.accessibility") ?? ""}
-							/>
-							Focus Mode
-						</Flex>
-					</Text>
-				)}
-
+			<div className="!absolute !top-4 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
 				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton
-						variant="ghost"
+						variant="soft"
 						radius="full"
-						className="!mr-0 sm:!mr-2"
+						className="!mr-1 sm:!mr-2"
+						size={isLg ? "2" : "1"}
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							sendEvent({
@@ -105,7 +82,21 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
 				</ConditionalTooltip>
+
 				<LanguageSelector />
+
+				{isLg && (
+					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
+						<IconButton
+							variant={a11yMode ? "solid" : "surface"}
+							radius="full"
+							aria-label={t("buttons.accessibility") ?? ""}
+							onClick={toggleA11yMode}
+						>
+							<EyeOpenIcon />
+						</IconButton>
+					</ConditionalTooltip>
+				)}
 			</div>
 
 			<h1 className="header__logo--text text-2xl [word-spacing:-.25rem] sm:text-4xl">
@@ -195,7 +186,7 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						variant="ghost"
 						radius="full"
 						size="1"
-						className="!ml-[0px]"
+						className="!ml-1"
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							sendEvent({
