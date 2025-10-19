@@ -12,7 +12,7 @@ jobs:
     outputs:
       conclusion: ${{ steps.get_workflow_info.outputs.conclusion }}
       head_sha: ${{ steps.get_workflow_info.outputs.head_sha }}
-      next_release_version: ${{ steps.get_release_version.outputs.next_release_version }}
+      next_release_version: ${{ steps.read_version_file.outputs.version }}
     steps:
       - name: Get workflow run conclusion and commit SHA
         id: get_workflow_info
@@ -30,15 +30,21 @@ jobs:
             core.setOutput('conclusion', conclusion);
             core.setOutput('head_sha', headSha);
 
-      - name: Get next release version from Release workflow outputs
-        id: get_release_version
+      - name: Download Release Version Artifact
+        id: download_version_artifact
         if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
-        uses: actions/github-script@v7
+        uses: actions/download-artifact@v4
         with:
-          script: |
-            const nextReleaseVersion = context.payload.workflow_run.output.job_outputs.release.next_release_version;
-            console.log(`Next Release Version: ${nextReleaseVersion}`);
-            core.setOutput('next_release_version', nextReleaseVersion);
+          name: release-version
+          path: ./
+
+      - name: Read Release Version from file
+        id: read_version_file
+        if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
+        run: |
+          VERSION=$(cat version.txt)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Next Release Version from artifact: $VERSION"
 
   test:
     runs-on: ubuntu-latest
