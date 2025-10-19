@@ -11,10 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       conclusion: ${{ steps.get_workflow_info.outputs.conclusion }}
-      head_sha: ${{ steps.get_workflow_info.outputs.head_sha }}
       app_version: ${{ steps.get_app_version.outputs.version }}
     steps:
-      - name: Get workflow run conclusion and commit SHA
+      - name: Get workflow run conclusion
         id: get_workflow_info
         uses: actions/github-script@v7
         with:
@@ -25,16 +24,14 @@ jobs:
               run_id: context.payload.workflow_run.id
             });
             const conclusion = workflowRun.conclusion;
-            const headSha = workflowRun.head_commit.id;
             console.log(`Workflow run conclusion: ${conclusion}`);
             core.setOutput('conclusion', conclusion);
-            core.setOutput('head_sha', headSha);
 
-      - name: Checkout code to get package.json
+      - name: Checkout main branch to get package.json
         if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.get_workflow_info.outputs.head_sha }}
+          ref: main # Checkout main branch directly
           token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
 
       - name: Get App Version from package.json
@@ -53,7 +50,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ needs.get_release_info.outputs.head_sha }}
+          ref: main # Checkout main branch directly
           token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
 
       - name: Set up Node.js
@@ -78,7 +75,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ needs.get_release_info.outputs.head_sha }}
+          ref: main # Checkout main branch directly
           token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
 
       - name: Install Heroku CLI
