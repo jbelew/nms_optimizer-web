@@ -1,3 +1,12 @@
+## [4.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.0...v4.3.1) (2025-10-19)
+
+
+### Features
+
+* **a11y:** fixes to ensure 100 LH score in focus mode ([8885c0f](https://github.com/jbelew/nms_optimizer-web/commit/8885c0f8cbe1bd1f26719a01dee178bed2fb8dff))
+
+
+
 # [4.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.2.1...v4.3.0) (2025-10-17)
 
 
