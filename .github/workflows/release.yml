@@ -24,17 +24,20 @@ jobs:
       - name: Install dependencies
         run: npm clean-install
       - name: Release
-        id: semantic_release
+        id: semantic_release # Add an ID to the step to capture its outputs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_OUTPUT=$(npx semantic-release --json)
-          echo "$RELEASE_OUTPUT" > release.json
+          # Run semantic-release and capture its output
+          RELEASE_LOG=$(npx semantic-release)
+          echo "$RELEASE_LOG"
           
-          if jq -e '.nextRelease.version' release.json >/dev/null; then
-            VERSION=$(jq -r '.nextRelease.version' release.json)
+          # Extract the next release version from the log
+          VERSION=$(echo "$RELEASE_LOG" | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')
+          
+          if [ -n "$VERSION" ]; then
             echo "next_release_version=$VERSION" >> $GITHUB_OUTPUT
             echo "Release version: $VERSION"
           else
-            echo "No new release was published."
+            echo "No new release was published or version could not be extracted."
           fi
