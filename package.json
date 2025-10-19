@@ -1,7 +1,7 @@
 {
   "name": "nms_optimizer",
   "private": true,
-  "version": "4.3.8",
+  "version": "4.3.9",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,3 +1,10 @@
+## [4.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.8...v4.3.9) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** simplifying the approach to passing semver to use a text file ([d65dc10](https://github.com/jbelew/nms_optimizer-web/commit/d65dc103bfb0df04c6c082ce5f16455f9dfe6007))
+
 ## [4.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.7...v4.3.8) (2025-10-19)
 
 
