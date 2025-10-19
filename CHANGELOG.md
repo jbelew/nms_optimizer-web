@@ -1,3 +1,10 @@
+## [4.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.2...v4.3.3) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** fix for semver not updating the package.json ([bb0fd2e](https://github.com/jbelew/nms_optimizer-web/commit/bb0fd2ead6db6e498436deb71b24f9105ece19ad))
+
 ## [4.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.1...v4.3.2) (2025-10-19)
 
 
