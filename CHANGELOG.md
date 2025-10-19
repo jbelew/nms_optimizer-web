@@ -1,3 +1,10 @@
+## [4.3.11](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.10...v4.3.11) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** one more fscking try! ([e0e7f00](https://github.com/jbelew/nms_optimizer-web/commit/e0e7f008fc9863579a43fe7838bd4ac7b24895cb))
+
 ## [4.3.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.9...v4.3.10) (2025-10-19)
 
 
