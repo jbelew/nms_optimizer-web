@@ -1,3 +1,10 @@
+## [4.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.1...v4.3.2) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** added semver support to the ci pipeline ([6fee315](https://github.com/jbelew/nms_optimizer-web/commit/6fee31569807ed5820ae0b4677ab8a873ad2c2cf))
+
 ## [4.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.0...v4.3.1) (2025-10-19)
 
 
@@ -486,6 +493,3 @@
 
 * **background:** added preload for the mobile version of the background ([fcf6ddb](https://github.com/jbelew/nms_optimizer-web/commit/fcf6ddb9c0fca6ef205fd5c1ab4450ede71fa95e))
 * **gridcell:** improved performance of the "empty" SVG rendering ([55d0c34](https://github.com/jbelew/nms_optimizer-web/commit/55d0c34429398e337654bbaedfcde4e3529bcd2f))
-
-
-
