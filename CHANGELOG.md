@@ -1,3 +1,10 @@
+## [4.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.7...v4.3.8) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** still trying to pass semver between build steps ([61f96ad](https://github.com/jbelew/nms_optimizer-web/commit/61f96ad635546a7be94e375751080add94382d75))
+
 ## [4.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.6...v4.3.7) (2025-10-19)
 
 
