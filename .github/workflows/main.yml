@@ -33,6 +33,13 @@ jobs:
         with:
           ref: main # Checkout main branch directly
           token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+          fetch-depth: 0 # Fetch full history to ensure latest is available
+
+      - name: Ensure latest main branch is fetched # Re-adding this step
+        if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
+        run: |
+          git pull origin main
+          git reset --hard origin/main
 
       - name: Get App Version from package.json
         id: get_app_version
