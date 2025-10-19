@@ -12,7 +12,7 @@ jobs:
     outputs:
       conclusion: ${{ steps.get_workflow_info.outputs.conclusion }}
       head_sha: ${{ steps.get_workflow_info.outputs.head_sha }}
-      next_release_version: ${{ steps.read_version_file.outputs.version }}
+      app_version: ${{ steps.get_app_version.outputs.version }}
     steps:
       - name: Get workflow run conclusion and commit SHA
         id: get_workflow_info
@@ -30,21 +30,20 @@ jobs:
             core.setOutput('conclusion', conclusion);
             core.setOutput('head_sha', headSha);
 
-      - name: Download Release Version Artifact
-        id: download_version_artifact
+      - name: Checkout code to get package.json
         if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
-        uses: actions/download-artifact@v4
+        uses: actions/checkout@v4
         with:
-          name: release-version
-          path: ./
+          ref: ${{ steps.get_workflow_info.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
 
-      - name: Read Release Version from file
-        id: read_version_file
+      - name: Get App Version from package.json
+        id: get_app_version
         if: ${{ steps.get_workflow_info.outputs.conclusion == 'success' }}
         run: |
-          VERSION=$(cat version.txt)
+          VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Next Release Version from artifact: $VERSION"
+          echo "App Version from package.json: $VERSION"
 
   test:
     runs-on: ubuntu-latest
@@ -69,7 +68,7 @@ jobs:
         run: npm run test:ci
 
       - name: Build application with semantic version
-        run: VITE_APP_VERSION=${{ needs.get_release_info.outputs.next_release_version }} npm run build
+        run: VITE_APP_VERSION=${{ needs.get_release_info.outputs.app_version }} npm run build
 
   deploy:
     runs-on: ubuntu-latest
@@ -95,5 +94,5 @@ jobs:
         run: |
           # Set VITE_BUILD_VERSION to the GitHub Actions run number (build identifier)
           heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
-          # Set VITE_APP_VERSION to the semantic version from semantic-release
-          heroku config:set VITE_APP_VERSION=${{ needs.get_release_info.outputs.next_release_version }} --app nms-optimizer-web
+          # Set VITE_APP_VERSION to the semantic version from package.json
+          heroku config:set VITE_APP_VERSION=${{ needs.get_release_info.outputs.app_version }} --app nms-optimizer-web

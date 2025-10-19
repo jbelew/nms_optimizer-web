@@ -10,8 +10,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    outputs:
-      next_release_version: ${{ steps.semantic_release.outputs.next_release_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,29 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm clean-install
       - name: Release
-        id: semantic_release # Add an ID to the step to capture its outputs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Run semantic-release and capture its output
-          RELEASE_LOG=$(npx semantic-release)
-          echo "$RELEASE_LOG"
-          
-          # Extract the next release version from the log
-          VERSION=$(echo "$RELEASE_LOG" | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')
-          
-          if [ -n "$VERSION" ]; then
-            echo "next_release_version=$VERSION" >> $GITHUB_OUTPUT
-            echo "Release version: $VERSION"
-            echo "$VERSION" > version.txt # Write version to file
-          else
-            echo "No new release was published or version could not be extracted."
-            echo "unknown" > version.txt # Write fallback version to file
-          fi
-
-      - name: Upload Release Version Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-version
-          path: version.txt
-          if-no-files-found: ignore
+        run: npx semantic-release
