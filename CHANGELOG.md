@@ -1,3 +1,10 @@
+## [4.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.6...v4.3.7) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** trying to extract app version to pass to the build ([5fb280d](https://github.com/jbelew/nms_optimizer-web/commit/5fb280d5bae7e19d9e84ac3c423ec0421961f342))
+
 ## [4.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.5...v4.3.6) (2025-10-19)
 
 
