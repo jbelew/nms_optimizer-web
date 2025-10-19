@@ -1,3 +1,10 @@
+## [4.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.3...v4.3.4) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** updated github actions to support semver properly ([1baba96](https://github.com/jbelew/nms_optimizer-web/commit/1baba968b516e6ba4998bc79191ac12618036536))
+
 ## [4.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.2...v4.3.3) (2025-10-19)
 
 
