@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 from deep_translator import GoogleTranslator
@@ -47,9 +48,30 @@ def translate_and_update(missing_keys, target_data, lang):
 
 
 def main():
-    locales_dir = "public/assets/locales"
-    master_lang = "en"
-    other_langs = ["de", "es", "fr", "pt"]
+    parser = argparse.ArgumentParser(
+        description="Translate missing keys in localization files."
+    )
+    parser.add_argument(
+        "--locales-dir",
+        type=str,
+        default="public/assets/locales",
+        help="The directory where the locale files are stored.",
+    )
+    parser.add_argument(
+        "--master-lang",
+        type=str,
+        default="en",
+        help="The master language to translate from.",
+    )
+    args = parser.parse_args()
+
+    locales_dir = args.locales_dir
+    master_lang = args.master_lang
+    other_langs = [
+        d
+        for d in os.listdir(locales_dir)
+        if os.path.isdir(os.path.join(locales_dir, d)) and d != master_lang
+    ]
 
     master_filepath = os.path.join(locales_dir, master_lang, "translation.json")
     with open(master_filepath, "r", encoding="utf-8") as f:
