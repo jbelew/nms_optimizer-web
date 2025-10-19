@@ -11,23 +11,10 @@ import { splashScreen } from "vite-plugin-splash-screen";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
-// Function to read version from package.json
-function getAppVersion() {
-	const packageJsonPath = path.resolve(__dirname, "package.json");
-	try {
-		const packageJsonContent = fs.readFileSync(packageJsonPath, "utf-8");
-		const packageJson = JSON.parse(packageJsonContent);
-		if (packageJson && packageJson.version) return packageJson.version;
-		console.error("Version not found in package.json");
-	} catch (error) {
-		console.error("Failed to read or parse package.json", error);
-	}
-	return "unknown";
-}
-
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
-	const appVersion = getAppVersion();
+	// Use an environment variable for the app version, defaulting to 'unknown'
+	const appVersion = process.env.VITE_APP_VERSION || "unknown";
 
 	return {
 		define: {

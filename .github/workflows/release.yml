@@ -10,6 +10,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    outputs:
+      next_release_version: ${{ steps.semantic_release.outputs.next_release_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,6 +24,17 @@ jobs:
       - name: Install dependencies
         run: npm clean-install
       - name: Release
+        id: semantic_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: |
+          RELEASE_OUTPUT=$(npx semantic-release --json)
+          echo "$RELEASE_OUTPUT" > release.json
+          
+          if jq -e '.nextRelease.version' release.json >/dev/null; then
+            VERSION=$(jq -r '.nextRelease.version' release.json)
+            echo "next_release_version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Release version: $VERSION"
+          else
+            echo "No new release was published."
+          fi
