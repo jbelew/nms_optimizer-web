@@ -1,3 +1,10 @@
+## [4.3.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.9...v4.3.10) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** one more try, going back to using the bumped package.json ([5bd1c4e](https://github.com/jbelew/nms_optimizer-web/commit/5bd1c4ec1f9f383b6c3660d57eb213406d46a156))
+
 ## [4.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.8...v4.3.9) (2025-10-19)
 
 
