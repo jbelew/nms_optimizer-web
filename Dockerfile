@@ -12,6 +12,7 @@ RUN npm ci --ignore-scripts
 
 # Copy the rest of the frontend source
 COPY . ./
+
 RUN npm run build:docker # Assumes output to /app/frontend/dist
 
 # Stage 2: Prepare Backend (nms_optimizer-service from GitHub)
@@ -31,6 +32,7 @@ ARG BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
 ARG BACKEND_REPO_BRANCH=main # Or a specific commit/tag
 RUN echo "Attempting to clone backend repository..." && \
     git clone --branch ${BACKEND_REPO_BRANCH} --depth 1 ${BACKEND_REPO_URL} . && \
+    rm -rf .git && \
     echo "--- Contents of /app/backend after clone: ---" && \
     ls -la /app/backend/ && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \

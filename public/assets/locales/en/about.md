@@ -26,12 +26,12 @@ Stop guessing on tech placement and unlock your gear's true potential! Whether y
 
 ## Tech Stack
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI\
-**Backend Solver:** Python, Flask, TensorFlow, NumPy, custom simulated annealing implementation, and heuristic scoring\
-**Testing:** Vitest, Python Unittest\
-**Deployment:** Heroku (Hosting) and Cloudflare (DNS and CDN)\
-**Automation:** GitHub Actions (CI/CD)\
-**Analytics:** Google Analytics
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend Solver:** Python, Flask, TensorFlow, NumPy, custom simulated annealing implementation, and heuristic scoring
+- **Testing:** Vitest, Python Unittest
+- **Deployment:** Heroku (Hosting) and Cloudflare (DNS and CDN)
+- **Automation:** GitHub Actions (CI/CD)
+- **Analytics:** Google Analytics
 
 ## Repositories
 

@@ -14,7 +14,8 @@
         "share": "Teilen",
         "resetGrid": "Raster zurücksetzen",
         "changelog": "Änderungsprotokoll",
-        "userStats": "Benutzerstatistik"
+        "userStats": "Benutzerstatistik",
+        "accessibility": "Fokusmodus"
     },
     "gridTable": {
         "optimizing": "Optimierung!",
@@ -547,6 +548,8 @@
         "selectAll": "Wählen Sie alle aus",
         "closeDialogLabel": "Dialog schließen",
         "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
-        "optimizeButton": "Optimieren"
+        "optimizeButton": "Optimieren",
+        "atlantid": "Atlantis-Module",
+        "cancelButton": "Stornieren"
     }
 }

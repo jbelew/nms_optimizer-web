@@ -14,7 +14,8 @@
         "share": "Compartir",
         "resetGrid": "Reiniciar cuadrícula",
         "changelog": "Registro de cambios",
-        "userStats": "Estadísticas de usuario"
+        "userStats": "Estadísticas de usuario",
+        "accessibility": "Modo de enfoque"
     },
     "gridTable": {
         "optimizing": "¡OPTIMIZANDO!",
@@ -547,6 +548,8 @@
         "selectAll": "Seleccionar todo",
         "closeDialogLabel": "Diálogo de cierre",
         "cosmeticInfo": "Los módulos sugeridos <strong>cosméticos</strong> pueden ayudar a aumentar ligeramente sus estadísticas finales, ¡pero <i>no permita que limiten sus ideas de diseño!</i> simplemente coincidan con la cantidad de módulos cosméticos en su Corvette para la mejor solución posible.",
-        "optimizeButton": "Optimizar"
+        "optimizeButton": "Optimizar",
+        "atlantid": "Módulos Atlántida",
+        "cancelButton": "Cancelar"
     }
 }

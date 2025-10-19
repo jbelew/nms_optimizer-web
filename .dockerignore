@@ -2,54 +2,29 @@
 .git
 .gitignore
 
-# Docker
-Dockerfile
-.dockerignore
-compose.yml
-
 # Node
 node_modules
-npm-debug.log
-yarn-error.log
 
 # Python
+.venv
 __pycache__
-*.pyc
-venv/
-.venv/
 
 # Build artifacts
 dist
-build
 coverage
 playwright-report
 test-results
 
-# Editor and OS files
+# Local development
+.env.development
+.env.e2e
+.env.test
+jules-scratch
+stats.html
+stats.json
+
+# IDE
 .vscode
-.idea
+
+# OS
 .DS_Store
-*.swo
-*~
-
-# Env files
-.env.*
-!/.env.production
-!/.env.docker
-
-# Documentation and local scripts
-docs/
-jules-scratch/
-README.md
-CHANGELOG.md
-find_unused_keys.py
-translate_md.py
-translate.py
-scripts/lighthouse-audit.cjs
-scripts/screenshot.cjs
-
-# Other
-Aptfile
-Procfile
-.slugignore
-LICENSE

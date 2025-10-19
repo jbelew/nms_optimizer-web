@@ -14,7 +14,8 @@
         "share": "Partager",
         "resetGrid": "Réinitialiser la grille",
         "changelog": "Historique des modifications",
-        "userStats": "Statistiques des utilisateurs"
+        "userStats": "Statistiques des utilisateurs",
+        "accessibility": "Mode de mise au point"
     },
     "gridTable": {
         "optimizing": "OPTIMISATION !",
@@ -547,6 +548,8 @@
         "selectAll": "Sélectionnez tout",
         "closeDialogLabel": "Fermer le dialogue",
         "cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
-        "optimizeButton": "Optimiser"
+        "optimizeButton": "Optimiser",
+        "atlantid": "Modules Atlantides",
+        "cancelButton": "Annuler"
     }
 }
