@@ -36,20 +36,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { data: jobs } = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.payload.workflow_run.id
-            });
-            const releaseJob = jobs.jobs.find(job => job.name === 'Release');
-            if (releaseJob && releaseJob.outputs) {
-              const nextReleaseVersion = releaseJob.outputs.find(output => output.name === 'next_release_version').value;
-              console.log(`Next Release Version: ${nextReleaseVersion}`);
-              core.setOutput('next_release_version', nextReleaseVersion);
-            } else {
-              console.log('Release job or its outputs not found.');
-              core.setOutput('next_release_version', 'unknown'); // Fallback
-            }
+            const nextReleaseVersion = context.payload.workflow_run.output.job_outputs.release.next_release_version;
+            console.log(`Next Release Version: ${nextReleaseVersion}`);
+            core.setOutput('next_release_version', nextReleaseVersion);
 
   test:
     runs-on: ubuntu-latest
