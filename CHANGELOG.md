@@ -1,3 +1,10 @@
+## [4.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.5...v4.3.6) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** another fix for passing app version between workflow steps ([94a19bf](https://github.com/jbelew/nms_optimizer-web/commit/94a19bfc1bebe4929ec9143f3be7d2c224fa4dcd))
+
 ## [4.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.4...v4.3.5) (2025-10-19)
 
 
