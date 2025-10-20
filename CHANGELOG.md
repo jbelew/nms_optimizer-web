@@ -1,3 +1,11 @@
+## [4.3.18](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.17...v4.3.18) (2025-10-20)
+
+
+### Bug Fixes
+
+* **changelog:** fixed broken model link ([7db85b5](https://github.com/jbelew/nms_optimizer-web/commit/7db85b50632fea558faee27c810af6ae9a1518d2))
+* **changelog:** updated changelog content ([f60feab](https://github.com/jbelew/nms_optimizer-web/commit/f60feabb529f96085089fa80324de3ab29f71244))
+
 ## [4.3.17](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.16...v4.3.17) (2025-10-20)
 
 
