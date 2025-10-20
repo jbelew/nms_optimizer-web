@@ -1,3 +1,10 @@
+## [4.3.14](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.13...v4.3.14) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** fix for docker images not triggering ([845ce35](https://github.com/jbelew/nms_optimizer-web/commit/845ce3552b988b61c50e45d4c4af355b2dc1b76c))
+
 ## [4.3.13](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.12...v4.3.13) (2025-10-20)
 
 
