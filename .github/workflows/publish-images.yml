@@ -64,3 +64,4 @@ jobs: # Renamed job for clarity
           build-args: |
             BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
             BACKEND_REPO_BRANCH=main
+          no-cache: true
