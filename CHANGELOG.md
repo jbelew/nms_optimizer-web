@@ -1,3 +1,10 @@
+## [4.3.15](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.14...v4.3.15) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** Inject version info at build time and streamline deploy ([04c4acf](https://github.com/jbelew/nms_optimizer-web/commit/04c4acff85d333afcbb13a23bb7dbda350a3e7f7))
+
 ## [4.3.14](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.13...v4.3.14) (2025-10-20)
 
 
