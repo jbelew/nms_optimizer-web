@@ -1,12 +1,12 @@
 ## Model Status
 
-See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main/src/training/trained_models) for up to date model build information.
+See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main/src/trained_models) for up to date model build information.
 
 ---
 
 ## Version 4.3.0 (2025-10-17)
 
-- Added **Focus Mode**, an accessibility feature that improves readability for all users, including those with dyslexia or other reading and visual challenges by leveraging Atkinson Hyperlegible Next created by the Braille Institute.
+- Added **Focus Mode**, an accessibility feature that enhances readability for all users, including those with dyslexia or other reading and visual challenges, by using *Atkinson Hyperlegible Next*, a typeface developed by the Braille Institute.
 
 ## Version 4.2.0 (2025-10-15)
 
