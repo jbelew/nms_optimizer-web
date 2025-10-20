@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.19...v4.4.0) (2025-10-20)
+
+
+### Features
+
+* **ci:** add dependabot configuration and trigger tests on pull requests ([8a42bcd](https://github.com/jbelew/nms_optimizer-web/commit/8a42bcd140d4521c2f8d42bb5725c1cdb5bf9dac))
+
 ## [4.3.19](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.18...v4.3.19) (2025-10-20)
 
 
