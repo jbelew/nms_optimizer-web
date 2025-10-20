@@ -1,3 +1,10 @@
+## [4.3.17](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.16...v4.3.17) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** fix for failing docker builds ([826e435](https://github.com/jbelew/nms_optimizer-web/commit/826e43551a5fd5922072d3274b49c439d1a296d8))
+
 ## [4.3.16](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.15...v4.3.16) (2025-10-20)
 
 
