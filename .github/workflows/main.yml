@@ -84,6 +84,12 @@ jobs:
         with:
           ref: main # Checkout main branch directly
           token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+          fetch-depth: 0 # Ensure full history is fetched
+
+      - name: Ensure latest main branch is fetched for deploy
+        run: |
+          git pull origin main
+          git reset --hard origin/main
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -93,6 +99,7 @@ jobs:
             heroku_api_key: ${{secrets.HEROKU_API_KEY}}
             heroku_app_name: "nms-optimizer-web"
             heroku_email: "john.belew@gmail.com"
+            branch: main # Explicitly push the main branch
 
       - name: Set Heroku Config
         run: |
