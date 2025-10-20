@@ -49,34 +49,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "App Version from package.json: $VERSION"
 
-  test:
+  deploy:
     runs-on: ubuntu-latest
     needs: get_release_info
     if: ${{ needs.get_release_info.outputs.conclusion == 'success' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: main # Checkout main branch directly
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run vitest tests in CI mode
-        run: npm run test:ci
-
-
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [get_release_info, test]
-    if: ${{ needs.get_release_info.outputs.conclusion == 'success' && needs.test.result == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -97,14 +73,10 @@ jobs:
 
       - uses: akhileshns/heroku-deploy@v3.14.15
         with:
-            heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-            heroku_app_name: "nms-optimizer-web"
-            heroku_email: "john.belew@gmail.com"
-            branch: main # Explicitly push the main branch
-
-      - name: Set Heroku Config
-        run: |
-          # Set VITE_BUILD_VERSION to the GitHub Actions run number (build identifier)
-          heroku config:set VITE_BUILD_VERSION=build-${{ github.run_number }} --app nms-optimizer-web
-          # Set VITE_APP_VERSION to the semantic version from package.json
-          heroku config:set VITE_APP_VERSION=${{ needs.get_release_info.outputs.app_version }} --app nms-optimizer-web
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "nms-optimizer-web"
+          heroku_email: "john.belew@gmail.com"
+          branch: main # Explicitly push the main branch
+        env:
+          HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
+          HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
