@@ -71,8 +71,7 @@ jobs:
       - name: Run vitest tests in CI mode
         run: npm run test:ci
 
-      - name: Build application with semantic version
-        run: VITE_APP_VERSION=${{ needs.get_release_info.outputs.app_version }} npm run build
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -90,6 +89,8 @@ jobs:
         run: |
           git pull origin main
           git reset --hard origin/main
+          echo "Current package.json version before Heroku deploy:"
+          node -p "require('./package.json').version" # Log the version
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
