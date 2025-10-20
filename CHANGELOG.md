@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.4.1...v4.5.0) (2025-10-20)
+
+
+### Features
+
+* **ci:** configure dependabot and automerge workflow ([87f82e8](https://github.com/jbelew/nms_optimizer-web/commit/87f82e8be2da4044f46145053573d25c4af58191))
+
 ## [4.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.4.0...v4.4.1) (2025-10-20)
 
 
