@@ -1,3 +1,10 @@
+## [4.3.13](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.12...v4.3.13) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** one more try at proper semver ([f8e8928](https://github.com/jbelew/nms_optimizer-web/commit/f8e89285ae57978d50bf2d11c8bdc0510c159d52))
+
 ## [4.3.12](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.11...v4.3.12) (2025-10-19)
 
 
