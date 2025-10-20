@@ -107,7 +107,7 @@ COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/src /o
 COPY --from=backend-builder --chown=${APP_USER}:${APP_GROUP} /app/backend/scripts /opt/app/backend_app/scripts
 
 # Copy installed Python dependencies (site-packages) from the backend-deps-installer stage
-COPY --from=backend-deps-installer /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=backend-deps-installer /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
 # Copy any executables installed by pip (e.g., if gunicorn was in requirements.txt)
 COPY --from=backend-deps-installer /usr/local/bin /usr/local/bin
 
