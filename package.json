@@ -75,7 +75,7 @@
     "@storybook/addon-vitest": "^9.1.8",
     "@storybook/react-vite": "^9.1.10",
     "@storybook/test": "^9.0.0-alpha.2",
-    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.1.15",
     "@tailwindcss/vite": "^4.1.10",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.8.0",
