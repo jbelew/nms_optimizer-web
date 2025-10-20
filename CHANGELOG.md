@@ -1,3 +1,10 @@
+## [4.3.19](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.18...v4.3.19) (2025-10-20)
+
+
+### Bug Fixes
+
+* **fonts:** updated the fonts.css file to match project settings ([03aa2b9](https://github.com/jbelew/nms_optimizer-web/commit/03aa2b9f5bbca28b86c7370465a5d11e85380fde))
+
 ## [4.3.18](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.17...v4.3.18) (2025-10-20)
 
 
