@@ -21,7 +21,6 @@ updates:
       prefix: "chore(actions)"
       include: "scope"
     rebase-strategy: "auto"
-    automerge: true
 
   # Docker
   - package-ecosystem: "docker"
@@ -33,4 +32,3 @@ updates:
       prefix: "chore(docker)"
       include: "scope"
     rebase-strategy: "auto"
-    automerge: true
