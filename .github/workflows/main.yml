@@ -1,75 +1,75 @@
-name: Test and Deploy to Heroku
+name: Deploy to Heroku
 
 on:
-  workflow_run:
-    workflows: ["Release"]
-    types: [completed]
-    branches: [main]
+    workflow_run:
+        workflows: ["Release"]
+        types: [completed]
+        branches: [main]
 
 jobs:
-  get_release_info:
-    if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
-    outputs:
-      app_version: ${{ steps.get_app_version.outputs.version }}
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "lts/*"
+    get_release_info:
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        outputs:
+            app_version: ${{ steps.get_app_version.outputs.version }}
+        steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
 
-      - name: Checkout main branch to get package.json
-        uses: actions/checkout@v4
-        with:
-          ref: main # Checkout main branch directly
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
-          fetch-depth: 0 # Fetch full history to ensure latest is available
+            - name: Checkout main branch to get package.json
+              uses: actions/checkout@v4
+              with:
+                  ref: main # Checkout main branch directly
+                  token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+                  fetch-depth: 0 # Fetch full history to ensure latest is available
 
-      - name: Ensure latest main branch is fetched # Re-adding this step
-        run: |
-          git pull origin main
-          git reset --hard origin/main
+            - name: Ensure latest main branch is fetched # Re-adding this step
+              run: |
+                  git pull origin main
+                  git reset --hard origin/main
 
-      - name: Get App Version from package.json
-        id: get_app_version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "App Version from package.json: $VERSION"
+            - name: Get App Version from package.json
+              id: get_app_version
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+                  echo "App Version from package.json: $VERSION"
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [get_release_info]
-    if: ${{ needs.get_release_info.result == 'success' }}
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "lts/*"
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [get_release_info]
+        if: ${{ needs.get_release_info.result == 'success' }}
+        steps:
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
 
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: main # Checkout main branch directly
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
-          fetch-depth: 0 # Ensure full history is fetched
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  ref: main # Checkout main branch directly
+                  token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+                  fetch-depth: 0 # Ensure full history is fetched
 
-      - name: Ensure latest main branch is fetched for deploy
-        run: |
-          git pull origin main
-          git reset --hard origin/main
-          echo "Current package.json version before Heroku deploy:"
-          node -p "require('./package.json').version" # Log the version
+            - name: Ensure latest main branch is fetched for deploy
+              run: |
+                  git pull origin main
+                  git reset --hard origin/main
+                  echo "Current package.json version before Heroku deploy:"
+                  node -p "require('./package.json').version" # Log the version
 
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+            - name: Install Heroku CLI
+              run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      - uses: akhileshns/heroku-deploy@v3.14.15
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "nms-optimizer-web"
-          heroku_email: "john.belew@gmail.com"
-          branch: main # Explicitly push the main branch
-        env:
-          HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
-          HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
+            - uses: akhileshns/heroku-deploy@v3.14.15
+              with:
+                  heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                  heroku_app_name: "nms-optimizer-web"
+                  heroku_email: "john.belew@gmail.com"
+                  branch: main # Explicitly push the main branch
+              env:
+                  HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
+                  HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
