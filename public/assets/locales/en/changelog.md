@@ -6,7 +6,7 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ## Version 4.3.0 (2025-10-17)
 
-- Added **Focus Mode**, an accessibility feature that improves readability for all users, including those with dyslexia or other reading and challenges by leveraging Atkinson Hyperlegible Next created by the Braille Institute.
+- Added **Focus Mode**, an accessibility feature that improves readability for all users, including those with dyslexia or other reading and visual challenges by leveraging Atkinson Hyperlegible Next created by the Braille Institute.
 
 ## Version 4.2.0 (2025-10-15)
 
