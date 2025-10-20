@@ -118,7 +118,7 @@
     "puppeteer-core": "^24.24.1",
     "require": "^0.4.4",
     "rollup-plugin-critical": "^1.0.15",
-    "rollup-plugin-visualizer": "^6.0.3",
+    "rollup-plugin-visualizer": "^6.0.5",
     "sass": "^1.93.2",
     "semantic-release": "^25.0.1",
     "sharp": "^0.34.3",
