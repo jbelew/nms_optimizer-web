@@ -67,7 +67,7 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.6",
-    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/npm": "^13.1.1",
     "@storybook/addon-a11y": "^9.1.13",
     "@storybook/addon-actions": "^9.0.8",
     "@storybook/addon-docs": "^9.1.13",
