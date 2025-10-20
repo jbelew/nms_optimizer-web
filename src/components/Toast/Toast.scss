@@ -15,7 +15,7 @@
 .ToastTitle {
 	@include mixins.heading-styled;
 
-	color: var(--accent-11);
+	color: var(--amber-11);
 	font-size: 15px;
 	grid-area: title;
 }
