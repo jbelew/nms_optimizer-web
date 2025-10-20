@@ -1,3 +1,10 @@
+## [4.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.2...v4.5.3) (2025-10-20)
+
+
+### Bug Fixes
+
+* **build:** align python version for dependency copy in Dockerfile ([1a7fe19](https://github.com/jbelew/nms_optimizer-web/commit/1a7fe19a75afe28cb821746e05bfad5e94a57928))
+
 ## [4.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.1...v4.5.2) (2025-10-20)
 
 
