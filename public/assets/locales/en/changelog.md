@@ -4,6 +4,14 @@ See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main
 
 ---
 
+## Version 4.4.0 (2025-10-20)
+
+- Added **Dependabot configuration** to automate dependency updates and run tests on pull requests.
+- Various **CI improvements**, including Docker build fixes, version injection at build time, and proper semantic versioning support.
+- **Accessibility fixes** to ensure full Lighthouse score in Focus Mode.
+- Updated fonts to match project settings.
+- Fixed changelog links and content.
+
 ## Version 4.3.0 (2025-10-17)
 
 - Added **Focus Mode**, an accessibility feature that enhances readability for all users, including those with dyslexia or other reading and visual challenges, by using Atkinson Hyperlegible Next, a typeface developed by the Braille Institute.
