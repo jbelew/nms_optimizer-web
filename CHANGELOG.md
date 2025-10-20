@@ -1,3 +1,10 @@
+## [4.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.0...v4.5.1) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** correct dependabot commit message format ([7a82f39](https://github.com/jbelew/nms_optimizer-web/commit/7a82f399c11eafecacdcbe3c9a2b639cc09a4284))
+
 # [4.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.4.1...v4.5.0) (2025-10-20)
 
 
