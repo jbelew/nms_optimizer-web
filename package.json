@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^9.38.0",
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@playwright/test": "^1.54.1",
