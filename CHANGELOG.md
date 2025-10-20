@@ -1,3 +1,10 @@
+## [4.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.4.0...v4.4.1) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** correct invalid dependabot configuration ([95fd21d](https://github.com/jbelew/nms_optimizer-web/commit/95fd21d6e76bcd1cf849ff339af3642dbb42aded))
+
 # [4.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.19...v4.4.0) (2025-10-20)
 
 
