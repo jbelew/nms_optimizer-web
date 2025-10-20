@@ -1,50 +1,36 @@
 version: 2
 updates:
-    # Production npm dependencies
-    - package-ecosystem: "npm"
-      directory: "/"
-      target-branch: "main"
-      schedule:
-          interval: "weekly"
-      dependency-type: "production"
-      commit-message:
-          prefix: "chore(deps)"
-          include: "scope"
-      rebase-strategy: "auto"
+  # NPM dependencies (production and development)
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    rebase-strategy: "auto"
 
-    # Development npm dependencies
-    - package-ecosystem: "npm"
-      directory: "/"
-      target-branch: "main"
-      schedule:
-          interval: "weekly"
-      dependency-type: "development"
-      commit-message:
-          prefix: "chore(deps-dev)"
-          include: "scope"
-      rebase-strategy: "auto"
-      automerge: true
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(actions)"
+      include: "scope"
+    rebase-strategy: "auto"
+    automerge: true
 
-    # GitHub Actions
-    - package-ecosystem: "github-actions"
-      directory: "/"
-      target-branch: "main"
-      schedule:
-          interval: "weekly"
-      commit-message:
-          prefix: "chore(actions)"
-          include: "scope"
-      rebase-strategy: "auto"
-      automerge: true
-
-    # Docker
-    - package-ecosystem: "docker"
-      directory: "/"
-      target-branch: "main"
-      schedule:
-          interval: "weekly"
-      commit-message:
-          prefix: "chore(docker)"
-          include: "scope"
-      rebase-strategy: "auto"
-      automerge: true
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(docker)"
+      include: "scope"
+    rebase-strategy: "auto"
+    automerge: true
