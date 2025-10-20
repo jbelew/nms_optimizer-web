@@ -32,15 +32,19 @@
 }
 
 @font-face {
-	font-family: "Lexend";
-	src: url("/assets/fonts/Lexend-VariableFont_wght.ttf") format("truetype");
-	font-weight: normal;
+	font-family: "AtkinsonHyperlegibleNext";
+	src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2")
+		format("woff2-variations");
+	font-weight: 100 900;
 	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-	font-family: "Atkinson";
-	src: url("/assets/fonts/AtkinsonHyperlegible-Regular.ttf") format("truetype");
-	font-weight: normal;
-	font-style: normal;
+	font-family: "AtkinsonHyperlegibleNext";
+	src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2")
+		format("woff2-variations");
+	font-weight: 100 900;
+	font-style: italic;
+	font-display: swap;
 }
