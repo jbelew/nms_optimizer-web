@@ -29,18 +29,3 @@ jobs:
       - name: Get Release Version
         id: get_release_version
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-
-      - name: Dispatch Docker Build Workflow
-        uses: actions/github-script@v8
-        if: ${{ success() && steps.get_release_version.outputs.version != '' }}
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'publish-images.yml',
-              ref: 'main',
-              inputs: {
-                version: '${{ steps.get_release_version.outputs.version }}'
-              }
-            });
