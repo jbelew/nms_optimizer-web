@@ -1,3 +1,10 @@
+## [4.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.1...v4.5.2) (2025-10-20)
+
+
+### Bug Fixes
+
+* **ci:** update node version in docker and refactor main workflow ([ce97172](https://github.com/jbelew/nms_optimizer-web/commit/ce971720cb1dea2ef20ac3ed0b78f2714cc39357))
+
 ## [4.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.0...v4.5.1) (2025-10-20)
 
 
