@@ -1,3 +1,10 @@
+## [4.3.12](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.11...v4.3.12) (2025-10-19)
+
+
+### Bug Fixes
+
+* **ci:** more semver fixes along with slug size reduction ([1029dfd](https://github.com/jbelew/nms_optimizer-web/commit/1029dfdc8ed74dbefdd88d3b0be3e0a762c767ea))
+
 ## [4.3.11](https://github.com/jbelew/nms_optimizer-web/compare/v4.3.10...v4.3.11) (2025-10-19)
 
 
