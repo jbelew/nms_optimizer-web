@@ -49,10 +49,36 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "App Version from package.json: $VERSION"
 
-  deploy:
+  test:
     runs-on: ubuntu-latest
     needs: get_release_info
     if: ${{ needs.get_release_info.outputs.conclusion == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main # Checkout main branch directly
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run pre-commit checks
+        run: |
+          npm run format:check
+          npm run lint
+          npm run lint:css
+          npm run typecheck
+          npm run test:ci
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [get_release_info, test]
+    if: ${{ needs.get_release_info.outputs.conclusion == 'success' && needs.test.result == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
