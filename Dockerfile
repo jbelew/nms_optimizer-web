@@ -16,7 +16,7 @@ COPY . ./
 RUN npm run build:docker # Assumes output to /app/frontend/dist
 
 # Stage 2: Prepare Backend (nms_optimizer-service from GitHub)
-FROM python:3.11-slim AS backend-builder
+FROM python:3.14-slim AS backend-builder
 WORKDIR /app/backend
 
 # Install git, build dependencies for python packages, and wheel for building wheels
@@ -47,7 +47,7 @@ RUN echo "--- Attempting to build wheels from /app/backend/requirements.txt ---"
     (echo "!!! Pip wheel command failed. Check errors above. !!!" && exit 1)
 
 # Stage 2.5: Install backend dependencies into a clean environment
-FROM python:3.11-slim AS backend-deps-installer
+FROM python:3.14-slim AS backend-deps-installer
 WORKDIR /deps
 
 # Copy wheels and requirements.txt from the backend-builder stage
@@ -60,7 +60,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requiremen
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 
 # Stage 3: Final Image with Nginx, Frontend, and Backend Service (was Stage 3)
-FROM python:3.11-slim
+FROM python:3.14-slim
 LABEL maintainer="jbelew.dev@gmail.com"
 LABEL description="NMS Optimizer Web UI and Python Backend Service"
 

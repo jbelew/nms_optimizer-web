@@ -1,7 +1,7 @@
 {
   "name": "nms_optimizer",
   "private": true,
-  "version": "4.5.0",
+  "version": "4.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -73,7 +73,7 @@
     "@storybook/addon-docs": "^9.1.13",
     "@storybook/addon-interactions": "^9.0.0-alpha.10",
     "@storybook/addon-vitest": "^9.1.13",
-    "@storybook/react-vite": "^9.1.10",
+    "@storybook/react-vite": "^9.1.13",
     "@storybook/test": "^9.0.0-alpha.2",
     "@tailwindcss/postcss": "^4.1.15",
     "@tailwindcss/vite": "^4.1.10",
