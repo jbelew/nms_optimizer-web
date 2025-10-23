@@ -10,20 +10,24 @@ import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
  */
 interface AppFooterProps {
 	buildVersion: string;
+	language: string;
 }
 
 /**
- * AppFooterInternal component displays the application footer.
+ * AppFooter component displays the application footer.
  * It includes links for issues, build version information, and a "Buy Me a Coffee" component.
  *
- * @param {AppFooterProps} props - The props for the AppFooterInternal component.
- * @returns {JSX.Element} The rendered AppFooterInternal component.
+ * @param {AppFooterProps} props - The props for the AppFooter component.
+ * @returns {JSX.Element} The rendered AppFooter component.
  */
-const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
+const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 	useTranslation();
 
 	return (
-		<footer className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-center text-xs font-light sm:text-sm lg:pb-0">
+		<footer
+			key={language}
+			className="flex flex-col items-center justify-center gap-1 p-4 pb-8 text-center text-xs font-light sm:text-sm lg:pb-0"
+		>
 			<div>
 				<Trans
 					i18nKey="footer.issuePrompt"
@@ -59,10 +63,5 @@ const AppFooterInternal: React.FC<AppFooterProps> = ({ buildVersion }) => {
 		</footer>
 	);
 };
-
-/**
- * A memoized version of the AppFooterInternal component.
- */
-const AppFooter = React.memo(AppFooterInternal);
 
 export default AppFooter;

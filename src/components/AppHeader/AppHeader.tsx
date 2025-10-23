@@ -21,16 +21,17 @@ import { useA11yStore } from "@/store/A11yStore";
  */
 interface AppHeaderProps {
 	onShowChangelog: () => void;
+	language: string;
 }
 
 /**
- * AppHeaderInternal component displays the application header.
+ * AppHeader component displays the application header.
  * It includes the application title, a language selector, and buttons for user statistics and changelog.
  *
- * @param {AppHeaderProps} props - The props for the AppHeaderInternal component.
- * @returns {JSX.Element} The rendered AppHeaderInternal component.
+ * @param {AppHeaderProps} props - The props for the AppHeader component.
+ * @returns {JSX.Element} The rendered AppHeader component.
  */
-const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
+const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
@@ -46,7 +47,10 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	}, [a11yMode]);
 
 	return (
-		<header className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl">
+		<header
+			key={language}
+			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
+		>
 			<div className="!absolute !top-4 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
 				{!isLg && (
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
@@ -205,6 +209,4 @@ const AppHeaderInternal: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	);
 };
 
-// Memoize the component
-const AppHeader = React.memo(AppHeaderInternal);
 export default AppHeader;

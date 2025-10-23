@@ -65,7 +65,7 @@ const App: FC = () => {
 
 	return (
 		<>
-			<MainAppContent buildVersion={build} />
+			<MainAppContent buildVersion={build} language={i18n.language} />
 
 			<Suspense fallback={null}>
 				<Routes>

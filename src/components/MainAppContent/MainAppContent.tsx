@@ -21,8 +21,9 @@ import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 /**
  * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
  */
-type MainAppContentInternalProps = {
+type MainAppContentProps = {
 	buildVersion: string;
+	language: string;
 };
 
 /**
@@ -30,7 +31,7 @@ type MainAppContentInternalProps = {
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion }) => {
+export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language }) => {
 	const { t } = useTranslation();
 	const { activateRow, deActivateRow, isSharedGrid } = useGridStore();
 	const { openDialog } = useDialog();
@@ -75,7 +76,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--accent-a2)" }}
 			>
-				<AppHeader onShowChangelog={handleShowChangelog} />
+				<AppHeader onShowChangelog={handleShowChangelog} language={language} />
 				<section
 					className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
@@ -142,7 +143,7 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 				</section>
 			</div>
 
-			<AppFooter buildVersion={buildVersion} />
+			<AppFooter buildVersion={buildVersion} language={language} />
 
 			{/* Dialogs related to MainAppContent's state */}
 			<OptimizationAlertDialog
@@ -154,9 +155,3 @@ const MainAppContentInternal: FC<MainAppContentInternalProps> = ({ buildVersion 
 		</main>
 	);
 };
-
-/**
- * A memoized version of `MainAppContentInternal` to prevent unnecessary re-renders.
- * This is the component that should be used throughout the application.
- */
-export const MainAppContent = React.memo(MainAppContentInternal);
