@@ -1,3 +1,11 @@
+## [4.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.3...v4.5.4) (2025-10-23)
+
+
+### Bug Fixes
+
+* **app:** integrate i18n language to app header and footer ([eff8d76](https://github.com/jbelew/nms_optimizer-web/commit/eff8d769a8e60ac977bfb6cffc55254642fd01b0))
+* **linting:** fixed numerous linting errors caused by new, stricter rules ([02d159c](https://github.com/jbelew/nms_optimizer-web/commit/02d159c7b0baa4127ef67463f1c79c9c6532f34a))
+
 ## [4.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.2...v4.5.3) (2025-10-20)
 
 
