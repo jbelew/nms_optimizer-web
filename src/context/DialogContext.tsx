@@ -1,6 +1,6 @@
 // src/context/DialogContext.tsx
 import type { DialogType } from "./dialog-utils";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -20,7 +20,6 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const navigate = useNavigate();
 	const { i18n } = useTranslation();
 
-	const [activeDialog, setActiveDialog] = useState<DialogType>(null);
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [tutorialFinished, setTutorialFinished] = useState(() => {
@@ -40,34 +39,26 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 	});
 
-	/**
-	 * Effect to sync dialog state with URL.
-	 */
-	useEffect(() => {
-		const pathParts = location.pathname.split("/").filter(Boolean);
-		const langCand = pathParts[0];
-		let dialogPath: DialogType = null;
+	const pathParts = location.pathname.split("/").filter(Boolean);
+	const langCand = pathParts[0];
+	let dialogPath: DialogType = null;
 
-		if (OTHER_LANGUAGES.includes(langCand)) {
-			// Path is like /fr/about or /fr
-			dialogPath = (pathParts[1] as DialogType) || null;
-		} else {
-			// Path is like /about or /
-			dialogPath = (pathParts[0] as DialogType) || null;
-		}
+	if (OTHER_LANGUAGES.includes(langCand)) {
+		// Path is like /fr/about or /fr
+		dialogPath = (pathParts[1] as DialogType) || null;
+	} else {
+		// Path is like /about or /
+		dialogPath = (pathParts[0] as DialogType) || null;
+	}
 
-		if (
-			dialogPath === "about" ||
-			dialogPath === "instructions" ||
-			dialogPath === "changelog" ||
-			dialogPath === "translation" ||
-			dialogPath === "userstats"
-		) {
-			setActiveDialog(dialogPath);
-		} else {
-			setActiveDialog(null);
-		}
-	}, [location.pathname]);
+	const activeDialog: DialogType =
+		dialogPath === "about" ||
+		dialogPath === "instructions" ||
+		dialogPath === "changelog" ||
+		dialogPath === "translation" ||
+		dialogPath === "userstats"
+			? dialogPath
+			: null;
 
 	/**
 	 * Opens a dialog.

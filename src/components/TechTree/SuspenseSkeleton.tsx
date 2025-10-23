@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { useMemo } from "react";
+import { useState } from "react";
 import { Flex, Skeleton } from "@radix-ui/themes";
 
 /**
@@ -8,7 +8,7 @@ import { Flex, Skeleton } from "@radix-ui/themes";
  * @returns {JSX.Element} The rendered skeleton component.
  */
 export function SuspenseSkeleton() {
-	const skeletons = useMemo(() => {
+	const [skeletons] = useState(() => {
 		const totalSections = 3 + Math.floor(Math.random() * 3); // 3–5 sections
 		const elements: JSX.Element[] = [];
 
@@ -29,7 +29,7 @@ export function SuspenseSkeleton() {
 		}
 
 		return elements;
-	}, []);
+	});
 
 	return (
 		<Flex direction="column" gapY="2">

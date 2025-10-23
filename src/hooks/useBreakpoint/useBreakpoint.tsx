@@ -1,5 +1,5 @@
 // src/hooks/useBreakpoint.tsx
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 /**
  * Custom hook for tracking whether a media query breakpoint is matched.
@@ -8,16 +8,21 @@ import { useEffect, useState } from "react";
  * @returns {boolean} Whether the breakpoint is currently matched.
  */
 export const useBreakpoint = (breakpoint: string) => {
-	const [matches, setMatches] = useState(false);
+	const subscribe = useCallback(
+		(callback: () => void) => {
+			const mediaQuery = window.matchMedia(`(min-width: ${breakpoint})`);
+			mediaQuery.addEventListener("change", callback);
+			return () => {
+				mediaQuery.removeEventListener("change", callback);
+			};
+		},
+		[breakpoint]
+	);
 
-	useEffect(() => {
-		const mediaQuery = window.matchMedia(`(min-width: ${breakpoint})`);
-		const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
-
-		setMatches(mediaQuery.matches);
-		mediaQuery.addEventListener("change", handler);
-		return () => mediaQuery.removeEventListener("change", handler);
+	const getSnapshot = useCallback(() => {
+		return window.matchMedia(`(min-width: ${breakpoint})`).matches;
 	}, [breakpoint]);
 
+	const matches = useSyncExternalStore(subscribe, getSnapshot);
 	return matches;
 };

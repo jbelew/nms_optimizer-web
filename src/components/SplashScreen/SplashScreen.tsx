@@ -22,18 +22,10 @@ interface SplashScreenProps {
  */
 const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 	({ minDurationMs = 0, onHidden }, ref) => {
-		const [status, setStatus] = useState<"pending" | "visible" | "hiding" | "hidden">(
-			"pending"
-		);
-		const elementRef = useRef<HTMLDivElement>(null);
-		const renderedAtRef = useRef<number>(0);
-		const cssBlock = "SplashScreen"; // BEM Block name, also used for URL param
-
-		useEffect(() => {
-			renderedAtRef.current = new Date().getTime();
+		const [status, setStatus] = useState<"pending" | "visible" | "hiding" | "hidden">(() => {
 			const url = new URL(window.location.href);
 			const urlParams = new URLSearchParams(url.search);
-			const param = urlParams.get(cssBlock); // Check for ?SplashScreen=false
+			const param = urlParams.get("SplashScreen"); // Check for ?SplashScreen=false
 
 			let shouldBeVisible = true;
 			if (param === "false") {
@@ -41,13 +33,20 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 			}
 
 			if (param) {
-				urlParams.delete(cssBlock);
+				urlParams.delete("SplashScreen");
 				url.search = urlParams.toString();
 				window.history.replaceState({}, "", url.toString());
 			}
 
-			setStatus(shouldBeVisible ? "visible" : "hidden");
-		}, [cssBlock]);
+			return shouldBeVisible ? "visible" : "hidden";
+		});
+		const elementRef = useRef<HTMLDivElement>(null);
+		const renderedAtRef = useRef<number>(0);
+		const cssBlock = "SplashScreen"; // BEM Block name, also used for URL param
+
+		useEffect(() => {
+			renderedAtRef.current = new Date().getTime();
+		}, []);
 
 		useImperativeHandle(ref, () => ({
 			async hide() {
