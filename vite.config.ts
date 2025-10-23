@@ -22,13 +22,8 @@ export default defineConfig(({ mode }) => {
 		},
 		plugins: [
 			react({
-				// Enable React Compiler
 				babel: {
-					plugins: [
-						[
-							"babel-plugin-react-compiler",
-						],
-					],
+					plugins: [["babel-plugin-react-compiler"]],
 				},
 			}),
 			tailwindcss(),
