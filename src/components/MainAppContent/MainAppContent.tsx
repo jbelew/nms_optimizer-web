@@ -33,7 +33,9 @@ type MainAppContentProps = {
  */
 export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language }) => {
 	const { t } = useTranslation();
-	const { activateRow, deActivateRow, isSharedGrid } = useGridStore();
+	const activateRow = useGridStore((state) => state.activateRow);
+	const deActivateRow = useGridStore((state) => state.deActivateRow);
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {

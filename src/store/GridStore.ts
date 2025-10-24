@@ -499,21 +499,29 @@ export const useGridStore = create<GridStore>()(
 
 				activateRow: (rowIndex: number) => {
 					set((state) => {
-						if (state.grid.cells[rowIndex]) {
-							state.grid.cells[rowIndex].forEach((cell: Cell) => {
-								cell.active = true;
-							});
+						const row = state.grid.cells[rowIndex];
+						if (row) {
+							for (let i = 0; i < row.length; i++) {
+								const cell = row[i];
+								if (cell) {
+									cell.active = true;
+								}
+							}
 						}
 					});
 				},
 
 				deActivateRow: (rowIndex: number) => {
 					set((state) => {
-						if (state.grid.cells[rowIndex]) {
-							state.grid.cells[rowIndex].forEach((cell: Cell) => {
-								cell.active = false;
-								cell.supercharged = false;
-							});
+						const row = state.grid.cells[rowIndex];
+						if (row) {
+							for (let i = 0; i < row.length; i++) {
+								const cell = row[i];
+								if (cell) {
+									cell.active = false;
+									cell.supercharged = false;
+								}
+							}
 						}
 					});
 				},
