@@ -111,15 +111,26 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 	}, [tutorialFinished]);
 
-	const value = {
-		activeDialog,
-		openDialog,
-		closeDialog,
-		tutorialFinished,
-		markTutorialFinished,
-		shareUrl,
-		sectionToScrollTo,
-	};
+	const value = React.useMemo(
+		() => ({
+			activeDialog,
+			openDialog,
+			closeDialog,
+			tutorialFinished,
+			markTutorialFinished,
+			shareUrl,
+			sectionToScrollTo,
+		}),
+		[
+			activeDialog,
+			openDialog,
+			closeDialog,
+			tutorialFinished,
+			markTutorialFinished,
+			shareUrl,
+			sectionToScrollTo,
+		]
+	);
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;
 };

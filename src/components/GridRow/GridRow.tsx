@@ -26,56 +26,55 @@ interface GridRowProps {
  * @returns {JSX.Element} The rendered GridRow component.
  */
 const GridRow: React.FC<GridRowProps> = memo(({ rowIndex }) => {
-		const row = useGridStore((state) => state.grid.cells[rowIndex]);
-		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
-		const gridFixed = useGridStore((state) => state.gridFixed);
-		const gridWidth = useGridStore((state) => state.grid.width);
-		const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
-		const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
-		const activateRow = useGridStore((state) => state.activateRow);
-		const deActivateRow = useGridStore((state) => state.deActivateRow);
+	const row = useGridStore((state) => state.grid.cells[rowIndex]);
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const gridFixed = useGridStore((state) => state.gridFixed);
+	const gridWidth = useGridStore((state) => state.grid.width);
+	const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
+	const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
+	const activateRow = useGridStore((state) => state.activateRow);
+	const deActivateRow = useGridStore((state) => state.deActivateRow);
 
-		// Determine column count for ARIA properties.
-		// Add 1 for the GridControlButtons column.
-		const totalAriaColumnCount = gridWidth + 1;
+	// Determine column count for ARIA properties.
+	// Add 1 for the GridControlButtons column.
+	const totalAriaColumnCount = gridWidth + 1;
 
-		if (!row) {
-			return null; // Should not happen if gridHeight is correct, but good for safety
-		}
-
-		return (
-			<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>
-				{Array.from({ length: gridWidth }).map((_, columnIndex) => (
-					<GridCell
-						key={`${rowIndex}-${columnIndex}`}
-						rowIndex={rowIndex}
-						columnIndex={columnIndex}
-						isSharedGrid={isSharedGrid}
-					/>
-				))}
-				{/* Wrap GridControlButtons in a div with role="gridcell" */}
-				<div role="gridcell" className="w-[24px]" aria-colindex={totalAriaColumnCount}>
-					<GridControlButtons
-						rowIndex={rowIndex}
-						activateRow={activateRow}
-						deActivateRow={deActivateRow}
-						hasModulesInGrid={hasModulesInGrid}
-						isFirstInactiveRow={
-							row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
-						}
-						isLastActiveRow={
-							row.some((cell) => cell.active) &&
-							rowIndex === lastActiveRowIndex &&
-							rowIndex >= useGridStore.getState().grid.cells.length - 3 // Keep this specific condition if it's intended
-						}
-						gridFixed={gridFixed}
-					/>
-				</div>
-			</div>
-		);
+	if (!row) {
+		return null; // Should not happen if gridHeight is correct, but good for safety
 	}
-);
+
+	return (
+		<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>
+			{Array.from({ length: gridWidth }).map((_, columnIndex) => (
+				<GridCell
+					key={`${rowIndex}-${columnIndex}`}
+					rowIndex={rowIndex}
+					columnIndex={columnIndex}
+					isSharedGrid={isSharedGrid}
+				/>
+			))}
+			{/* Wrap GridControlButtons in a div with role="gridcell" */}
+			<div role="gridcell" className="w-[24px]" aria-colindex={totalAriaColumnCount}>
+				<GridControlButtons
+					rowIndex={rowIndex}
+					activateRow={activateRow}
+					deActivateRow={deActivateRow}
+					hasModulesInGrid={hasModulesInGrid}
+					isFirstInactiveRow={
+						row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
+					}
+					isLastActiveRow={
+						row.some((cell) => cell.active) &&
+						rowIndex === lastActiveRowIndex &&
+						rowIndex >= useGridStore.getState().grid.cells.length - 3 // Keep this specific condition if it's intended
+					}
+					gridFixed={gridFixed}
+				/>
+			</div>
+		</div>
+	);
+});
 
 GridRow.displayName = "GridRow";
 

@@ -111,10 +111,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 				>
 					{Array.from({ length: gridHeight }).map((_, rowIndex) => (
-						<GridRow
-							key={rowIndex}
-							rowIndex={rowIndex}
-						/>
+						<GridRow key={rowIndex} rowIndex={rowIndex} />
 					))}
 					{!isLarge && (
 						<div role="row">

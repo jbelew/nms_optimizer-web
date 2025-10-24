@@ -524,15 +524,28 @@ export const useGridStore = create<GridStore>()(
 				},
 
 				isGridFull: (): boolean => {
-					const activeCells = get()
-						.grid.cells.flat()
-						.filter((cell) => cell.active);
+					const grid = get().grid;
+					if (!grid || !grid.cells) return false;
 
-					if (activeCells.length === 0) {
+					let activeCellsCount = 0;
+					let allActiveCellsHaveModules = true;
+
+					for (const row of grid.cells) {
+						for (const cell of row) {
+							if (cell.active) {
+								activeCellsCount++;
+								if (cell.module === null) {
+									allActiveCellsHaveModules = false;
+								}
+							}
+						}
+					}
+
+					if (activeCellsCount === 0) {
 						return false;
 					}
 
-					return activeCells.every((cell) => cell.module !== null);
+					return allActiveCellsHaveModules;
 				},
 				resetGridTech: (tech: string) => {
 					set((state) => {
@@ -553,7 +566,7 @@ export const useGridStore = create<GridStore>()(
 				selectHasModulesInGrid: () => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return false;
-					return grid.cells.flat().some((cell) => cell.module !== null);
+					return grid.cells.some((row) => row.some((cell) => cell.module !== null));
 				},
 
 				selectFirstInactiveRowIndex: () => {
