@@ -18,11 +18,17 @@ vi.mock("../../store/GridStore", async (importOriginal) => {
 	const mod = await importOriginal<typeof import("../../store/GridStore")>();
 	return {
 		...mod,
-		useGridStore: vi.fn(),
+		useGridStore: {
+			getState: vi.fn(),
+		},
 	};
 });
 vi.mock("../../store/OptimizeStore");
-vi.mock("../../store/TechStore");
+vi.mock("../../store/TechStore", () => ({
+	useTechStore: {
+		getState: vi.fn(),
+	},
+}));
 vi.mock("../../store/PlatformStore");
 vi.mock("../useBreakpoint/useBreakpoint");
 
@@ -52,7 +58,7 @@ describe("useOptimize", () => {
 		mockIo.mockImplementation(() => mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
-		mockUseGridStore.mockReturnValue({
+		mockUseGridStore.getState.mockReturnValue({
 			setGrid: vi.fn(),
 			setResult: vi.fn(),
 			grid: {
@@ -67,7 +73,7 @@ describe("useOptimize", () => {
 			patternNoFitTech: null,
 			setPatternNoFitTech: vi.fn(),
 		});
-		mockUseTechStore.mockReturnValue({
+		mockUseTechStore.getState.mockReturnValue({
 			checkedModules: {},
 			techGroups: {},
 			activeGroups: {},
@@ -127,12 +133,12 @@ describe("useOptimize", () => {
 			const selectedShipType = "hauler";
 
 			// Setup specific mock state for this test
-			mockUseGridStore.mockReturnValue({
+			mockUseGridStore.getState.mockReturnValue({
 				setGrid: vi.fn(),
 				setResult: vi.fn(),
 				grid,
 			});
-			mockUseTechStore.mockReturnValue({
+			mockUseTechStore.getState.mockReturnValue({
 				checkedModules,
 				techGroups: { "Test Tech": ["module1", "module2"] },
 				activeGroups: { "Test Tech": "group1" },

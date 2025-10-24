@@ -57,13 +57,12 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to run a forced optimization for the technology that previously failed to fit.
  */
 export const useOptimize = (): UseOptimizeReturn => {
-	const { setGrid, setResult, grid } = useGridStore();
+
 	const {
 		setShowError: setShowErrorStore,
 		patternNoFitTech,
 		setPatternNoFitTech,
 	} = useOptimizeStore();
-	const { checkedModules, techGroups, activeGroups } = useTechStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
 	const isLarge = useBreakpoint("1024px");
@@ -93,6 +92,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
+			const { grid, setGrid, setResult } = useGridStore.getState();
+			const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
 			setSolving(true);
 			setShowErrorStore(false);
 
@@ -206,16 +207,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 			setShowErrorStore,
 			patternNoFitTech,
 			setPatternNoFitTech,
-			grid,
 			selectedShipType,
-			checkedModules,
 			sendEvent,
-			setResult,
-			setGrid,
 			resetProgress,
 			isLarge,
-			techGroups,
-			activeGroups,
 		]
 	);
 
