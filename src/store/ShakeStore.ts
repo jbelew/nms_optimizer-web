@@ -7,16 +7,16 @@ import { create } from "zustand";
  * @property {(shaking: boolean) => void} setShaking - Function to set the shaking state.
  */
 export interface ShakeState {
-	shaking: boolean;
-	setShaking: (shaking: boolean) => void;
+	shakeCount: number;
+	triggerShake: () => void;
 }
 
 /**
  * Zustand store for managing the state of the shake animation.
  */
 export const useShakeStore = create<ShakeState>((set) => ({
-	shaking: false,
-	setShaking: (shaking) => set({ shaking }),
+	shakeCount: 0,
+	triggerShake: () => set((state) => ({ shakeCount: state.shakeCount + 1 })),
 }));
 
 if (import.meta.env.VITE_E2E_TESTING) {

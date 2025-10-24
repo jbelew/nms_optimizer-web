@@ -1,33 +1,46 @@
-// ShakingWrapper.tsx
 import "./GridShake.scss";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-interface ShakingWrapperProps {
-	shaking: boolean;
+import { useShakeStore } from "../../store/ShakeStore";
+
+interface GridShakeProps {
 	children: React.ReactNode;
 	duration: number;
 }
 
 /**
- * ShakingWrapper component applies a shaking animation to its children when the `shaking` prop is true.
+ * GridShake component applies a shaking animation to its children when the `shakeCount` in the store is incremented.
  * The shaking effect lasts for a specified `duration`.
  *
- * @param {ShakingWrapperProps} props - The props for the ShakingWrapper component.
- * @returns {JSX.Element} The rendered ShakingWrapper component.
+ * @param {GridShakeProps} props - The props for the GridShake component.
+ * @returns {JSX.Element} The rendered GridShake component.
  */
-const ShakingWrapper: React.FC<ShakingWrapperProps> = ({ shaking, children, duration }) => {
-	const ref = React.useRef<HTMLDivElement>(null);
+const GridShake: React.FC<GridShakeProps> = ({ children, duration }) => {
+	const ref = useRef<HTMLDivElement>(null);
+	const shakeCount = useShakeStore((state) => state.shakeCount);
+
+	console.log("GridShake rendered. shakeCount:", shakeCount);
 
 	useEffect(() => {
-		if (shaking) {
-			ref.current?.classList.add("shake");
-			const timer = setTimeout(() => {
-				ref.current?.classList.remove("shake");
-			}, duration);
-			return () => clearTimeout(timer);
+		console.log("GridShake effect running. shakeCount:", shakeCount);
+		// We only run the effect if shakeCount is greater than 0, which indicates a shake has been triggered.
+		if (shakeCount > 0) {
+			const element = ref.current;
+			if (element) {
+				// Add the shake class to trigger the animation
+				element.classList.add("shake");
+
+				// Set a timer to remove the class after the animation duration
+				const timer = setTimeout(() => {
+					element.classList.remove("shake");
+				}, duration);
+
+				// Cleanup function to clear the timer if the component unmounts
+				return () => clearTimeout(timer);
+			}
 		}
-	}, [shaking, duration]);
+	}, [shakeCount, duration]);
 
 	return (
 		<div ref={ref} className={`gridTable__shakeWrapper relative`}>
@@ -36,4 +49,4 @@ const ShakingWrapper: React.FC<ShakingWrapperProps> = ({ shaking, children, dura
 	);
 };
 
-export default ShakingWrapper;
+export default GridShake;

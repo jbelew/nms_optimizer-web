@@ -9,10 +9,9 @@ import { useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
-import { useShakeStore } from "../../store/ShakeStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import GridRow from "../GridRow/GridRow";
-import ShakingWrapper from "../GridShake/GridShake";
+import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 
@@ -52,19 +51,15 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			solving,
 			progressPercent,
 			status,
-			shared: isSharedGridProp,
 			updateUrlForShare,
 			updateUrlForReset,
 			gridContainerRef,
 		},
 		ref
 	) => {
-		const { shaking } = useShakeStore();
 		const { t } = useTranslation();
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const gridWidth = useGridStore((state) => state.grid.width);
-		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
-		const gridFixed = useGridStore((state) => state.gridFixed);
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
 		const isTouchDevice =
@@ -85,7 +80,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const totalAriaColumnCount = gridWidth + 1;
 
 		return (
-			<ShakingWrapper shaking={shaking} duration={500}>
+			<GridShake duration={500}>
 				{!isLarge && (
 					<Separator
 						size="4"
@@ -119,12 +114,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						<GridRow
 							key={rowIndex}
 							rowIndex={rowIndex}
-							isSharedGrid={isSharedGridProp}
-							hasModulesInGrid={hasModulesInGrid}
-							gridFixed={gridFixed}
 						/>
 					))}
-
 					{!isLarge && (
 						<div role="row">
 							<div className="col-span-full mt-1 text-sm">
@@ -158,7 +149,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 						/>
 					</div>
 				</div>
-			</ShakingWrapper>
+			</GridShake>
 		);
 	}
 );

@@ -51,8 +51,7 @@ export const useGridCellInteraction = (
 	} = useGridStore.getState();
 	const [isTouching, setIsTouching] = useState(false);
 
-	const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const { setShaking } = useShakeStore();
+	const { triggerShake: storeTriggerShake } = useShakeStore();
 
 	const isTouchInteraction = useRef(false);
 
@@ -79,18 +78,11 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Triggers a visual shake animation on the grid.
-	 * Sets `setShaking` to true and then to false after a 500ms timeout.
+	 * Calls the `triggerShake` action from the ShakeStore.
 	 */
 	const triggerShake = useCallback(() => {
-		setShaking(true);
-		if (shakeTimeoutRef.current) {
-			clearTimeout(shakeTimeoutRef.current);
-		}
-		shakeTimeoutRef.current = setTimeout(() => {
-			setShaking(false);
-			shakeTimeoutRef.current = null;
-		}, 500);
-	}, [setShaking]);
+		storeTriggerShake();
+	}, [storeTriggerShake]);
 
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {

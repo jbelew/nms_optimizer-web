@@ -28,10 +28,7 @@
 		"**/dist": true,
 		"**/node_modules": true
 	},
-
-	// Exclude temp folders from problems
-	"problems.excludePatterns": ["**/tmp/**"],
-
-	// Optional: Prevent TS server from using files in temp directories
-	"typescript.preferences.excludeDirectories": ["**/tmp"]
+	"files.watcherExclude": {
+		"**/tmp/**": true
+	}
 }

@@ -15,9 +15,6 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
  */
 interface GridRowProps {
 	rowIndex: number;
-	isSharedGrid: boolean;
-	hasModulesInGrid: boolean;
-	gridFixed: boolean;
 }
 
 /**
@@ -28,9 +25,11 @@ interface GridRowProps {
  * @param {GridRowProps} props - The props for the GridRow component.
  * @returns {JSX.Element} The rendered GridRow component.
  */
-const GridRow: React.FC<GridRowProps> = memo(
-	({ rowIndex, isSharedGrid, hasModulesInGrid, gridFixed }) => {
+const GridRow: React.FC<GridRowProps> = memo(({ rowIndex }) => {
 		const row = useGridStore((state) => state.grid.cells[rowIndex]);
+		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+		const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+		const gridFixed = useGridStore((state) => state.gridFixed);
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
 		const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());

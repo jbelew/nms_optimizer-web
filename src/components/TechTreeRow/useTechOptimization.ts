@@ -25,7 +25,7 @@ export const useTechOptimization = (
 ) => {
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
 	const { clearTechMaxBonus, clearTechSolvedBonus } = useTechStore();
-	const { setShaking } = useShakeStore();
+	const { triggerShake } = useShakeStore();
 	const [isResetting, startResetTransition] = useTransition();
 
 	const handleReset = useCallback(() => {
@@ -38,16 +38,13 @@ export const useTechOptimization = (
 
 	const handleOptimizeClick = useCallback(() => {
 		if (isGridFull && !hasTechInGrid) {
-			setShaking(true);
-			setTimeout(() => {
-				setShaking(false);
-			}, 500);
+			triggerShake();
 		} else {
 			// We need to reset everything before optimizing
 			handleReset();
 			handleOptimize(tech);
 		}
-	}, [isGridFull, hasTechInGrid, setShaking, handleReset, handleOptimize, tech]);
+	}, [isGridFull, hasTechInGrid, triggerShake, handleReset, handleOptimize, tech]);
 
 	return { handleOptimizeClick, handleReset, isResetting };
 };

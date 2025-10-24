@@ -12,8 +12,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		activateRow: () => {},
-		deActivateRow: () => {},
 		solving: true,
 		progressPercent: 0,
 		shared: true,
