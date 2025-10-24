@@ -3,10 +3,10 @@ import { act, renderHook } from "@testing-library/react";
 import { io } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
+import { GridStore, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
+import { TechState, useTechStore } from "../../store/TechStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useOptimize } from "./useOptimize";
@@ -58,7 +58,7 @@ describe("useOptimize", () => {
 		mockIo.mockImplementation(() => mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
-		mockUseGridStore.getState.mockReturnValue({
+		vi.mocked(mockUseGridStore.getState).mockReturnValue({
 			setGrid: vi.fn(),
 			setResult: vi.fn(),
 			grid: {
@@ -67,17 +67,17 @@ describe("useOptimize", () => {
 				height: 7,
 				valid: true,
 			},
-		});
+		} as unknown as GridStore);
 		mockUseOptimizeStore.mockReturnValue({
 			setShowError: vi.fn(),
 			patternNoFitTech: null,
 			setPatternNoFitTech: vi.fn(),
 		});
-		mockUseTechStore.getState.mockReturnValue({
+		vi.mocked(mockUseTechStore.getState).mockReturnValue({
 			checkedModules: {},
 			techGroups: {},
 			activeGroups: {},
-		});
+		} as unknown as TechState);
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
 		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn() });
@@ -133,16 +133,16 @@ describe("useOptimize", () => {
 			const selectedShipType = "hauler";
 
 			// Setup specific mock state for this test
-			mockUseGridStore.getState.mockReturnValue({
+			vi.mocked(mockUseGridStore.getState).mockReturnValue({
 				setGrid: vi.fn(),
 				setResult: vi.fn(),
 				grid,
-			});
-			mockUseTechStore.getState.mockReturnValue({
+			} as unknown as GridStore);
+			vi.mocked(mockUseTechStore.getState).mockReturnValue({
 				checkedModules,
 				techGroups: { "Test Tech": ["module1", "module2"] },
 				activeGroups: { "Test Tech": "group1" },
-			});
+			} as unknown as TechState);
 			mockUsePlatformStore.mockReturnValue(selectedShipType);
 
 			const { result } = renderHook(() => useOptimize());

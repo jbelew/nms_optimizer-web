@@ -17,7 +17,7 @@ const mockRevertCellTap = vi.fn();
 const mockToggleCellActive = vi.fn();
 const mockToggleCellSupercharged = vi.fn();
 const mockClearInitialCellStateForTap = vi.fn();
-const mockSetShaking = vi.fn();
+const mockTriggerShake = vi.fn();
 const mockSelectTotalSuperchargedCells = vi.fn(() => 0);
 
 const mockUseGridStore = useGridStore as unknown as Mock;
@@ -52,7 +52,7 @@ describe("useGridCellInteraction", () => {
 			() => baseMockGridStoreState;
 
 		mockUseShakeStore.mockImplementation((selector) => {
-			const state = { setShaking: mockSetShaking };
+			const state = { triggerShake: mockTriggerShake };
 			if (typeof selector === "function") {
 				return selector(state);
 			}
@@ -86,7 +86,7 @@ describe("useGridCellInteraction", () => {
 		expect(mockHandleCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
 		expect(mockRevertCellTap).not.toHaveBeenCalled();
-		expect(mockSetShaking).not.toHaveBeenCalled();
+		expect(mockTriggerShake).not.toHaveBeenCalled();
 	});
 
 	it("should call handleCellDoubleTap on double click", () => {
@@ -100,7 +100,7 @@ describe("useGridCellInteraction", () => {
 		vi.advanceTimersByTime(500); // Advance timers to clear lastTapTime
 		expect(mockHandleCellDoubleTap).toHaveBeenCalledWith(0, 0);
 		expect(mockRevertCellTap).not.toHaveBeenCalled();
-		expect(mockSetShaking).not.toHaveBeenCalled();
+		expect(mockTriggerShake).not.toHaveBeenCalled();
 	});
 
 	it("should call revertCellTap and trigger shake if superchargedFixed on double tap", () => {
@@ -119,9 +119,7 @@ describe("useGridCellInteraction", () => {
 		});
 		vi.advanceTimersByTime(500);
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // For shake timeout
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
 	it("should call revertCellTap and trigger shake if gridFixed on double tap", () => {
@@ -137,9 +135,7 @@ describe("useGridCellInteraction", () => {
 		});
 		vi.advanceTimersByTime(500);
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // For shake timeout
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
 	it("should call revertCellTap and trigger shake if totalSupercharged >= 4 and cell is not supercharged on double tap", () => {
@@ -158,9 +154,7 @@ describe("useGridCellInteraction", () => {
 		});
 		vi.advanceTimersByTime(500);
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // For shake timeout
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
 	it("should trigger shake and not call handleCellTap if gridFixed on single tap", () => {
@@ -173,9 +167,7 @@ describe("useGridCellInteraction", () => {
 		});
 		vi.advanceTimersByTime(500);
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // For shake timeout
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
 	it("should trigger shake and not call handleCellTap if superchargedFixed and cell is supercharged on single tap", () => {
@@ -191,9 +183,7 @@ describe("useGridCellInteraction", () => {
 		});
 		vi.advanceTimersByTime(500);
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		vi.advanceTimersByTime(500); // for shake timeout
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
 	it("should not interact if isSharedGrid is true", () => {
@@ -207,7 +197,7 @@ describe("useGridCellInteraction", () => {
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
 		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
 		expect(mockRevertCellTap).not.toHaveBeenCalled();
-		expect(mockSetShaking).not.toHaveBeenCalled();
+		expect(mockTriggerShake).not.toHaveBeenCalled();
 	});
 
 	it("should prevent default on context menu", () => {

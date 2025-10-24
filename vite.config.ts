@@ -149,7 +149,7 @@ export default defineConfig(({ mode }) => {
 		test: {
 			globals: true,
 			environment: "happy-dom",
-			setupFiles: ".vitest/setup",
+			setupFiles: ".vitest/setup.ts",
 			root: ".",
 			include: ["src/**/*.{test,spec}.{ts,tsx}"],
 		},

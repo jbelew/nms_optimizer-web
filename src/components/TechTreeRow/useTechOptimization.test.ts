@@ -16,7 +16,7 @@ describe("useTechOptimization", () => {
 	const mockResetGridTech = vi.fn();
 	const mockClearTechMaxBonus = vi.fn();
 	const mockClearTechSolvedBonus = vi.fn();
-	const mockSetShaking = vi.fn();
+	const mockTriggerShake = vi.fn();
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -24,7 +24,7 @@ describe("useTechOptimization", () => {
 			(selector: (state: { resetGridTech: () => void }) => unknown) =>
 				selector({ resetGridTech: mockResetGridTech })
 		);
-		(useShakeStore as unknown as Mock).mockReturnValue({ setShaking: mockSetShaking });
+		(useShakeStore as unknown as Mock).mockReturnValue({ triggerShake: mockTriggerShake });
 		(useTechStore as unknown as Mock).mockReturnValue({
 			clearTechMaxBonus: mockClearTechMaxBonus,
 			clearTechSolvedBonus: mockClearTechSolvedBonus,
@@ -45,10 +45,10 @@ describe("useTechOptimization", () => {
 		expect(mockClearTechMaxBonus).toHaveBeenCalledWith("testTech");
 		expect(mockClearTechSolvedBonus).toHaveBeenCalledWith("testTech");
 		expect(handleOptimize).toHaveBeenCalledWith("testTech");
-		expect(mockSetShaking).not.toHaveBeenCalled();
+		expect(mockTriggerShake).not.toHaveBeenCalled();
 	});
 
-	it("should call setShaking when grid is full and tech is not in grid", async () => {
+	it("should call triggerShake when grid is full and tech is not in grid", async () => {
 		vi.useFakeTimers();
 		const handleOptimize = vi.fn().mockResolvedValue(undefined);
 		const { result } = renderHook(() =>
@@ -59,11 +59,7 @@ describe("useTechOptimization", () => {
 			await result.current.handleOptimizeClick();
 		});
 
-		expect(mockSetShaking).toHaveBeenCalledWith(true);
-		act(() => {
-			vi.runAllTimers();
-		});
-		expect(mockSetShaking).toHaveBeenCalledWith(false);
+		expect(mockTriggerShake).toHaveBeenCalled();
 		expect(handleOptimize).not.toHaveBeenCalled();
 		vi.useRealTimers();
 	});

@@ -116,7 +116,7 @@ const setupMocks = (hasTechInGrid: boolean) => {
 	});
 
 	mockUseShakeStore.mockImplementation((selector?: (state: ShakeState) => unknown) => {
-		const state: Partial<ShakeState> = { setShaking: vi.fn() };
+		const state: Partial<ShakeState> = { triggerShake: vi.fn() };
 		return selector ? selector(state as ShakeState) : (state as ShakeState);
 	});
 };
