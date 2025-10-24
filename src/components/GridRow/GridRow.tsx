@@ -16,8 +16,6 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
 interface GridRowProps {
 	rowIndex: number;
 	isSharedGrid: boolean;
-	activateRow: (rowIndex: number) => void;
-	deActivateRow: (rowIndex: number) => void;
 	hasModulesInGrid: boolean;
 	gridFixed: boolean;
 }
@@ -31,11 +29,13 @@ interface GridRowProps {
  * @returns {JSX.Element} The rendered GridRow component.
  */
 const GridRow: React.FC<GridRowProps> = memo(
-	({ rowIndex, isSharedGrid, activateRow, deActivateRow, hasModulesInGrid, gridFixed }) => {
+	({ rowIndex, isSharedGrid, hasModulesInGrid, gridFixed }) => {
 		const row = useGridStore((state) => state.grid.cells[rowIndex]);
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
 		const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
+		const activateRow = useGridStore((state) => state.activateRow);
+		const deActivateRow = useGridStore((state) => state.deActivateRow);
 
 		// Determine column count for ARIA properties.
 		// Add 1 for the GridControlButtons column.

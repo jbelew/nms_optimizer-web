@@ -8,9 +8,8 @@ import { Cell, useGridStore } from "../../store/GridStore";
  * @param {number} columnIndex - The column index of the cell.
  * @returns {Cell} The state of the specified cell.
  */
+import { shallow } from "zustand/shallow";
+
 export const useCell = (rowIndex: number, columnIndex: number): Cell => {
-	return useGridStore(
-		(state) => state.grid.cells[rowIndex][columnIndex]
-		// shallow // Removed shallow as it's not needed for a single object reference
-	);
+	return useGridStore((state) => state.grid.cells[rowIndex][columnIndex], shallow);
 };

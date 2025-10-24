@@ -28,8 +28,6 @@ import MessageSpinner from "../MessageSpinner/MessageSpinner";
  * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
  */
 interface GridTableProps {
-	activateRow: (rowIndex: number) => void;
-	deActivateRow: (rowIndex: number) => void;
 	solving: boolean;
 	progressPercent: number;
 	status?: string;
@@ -51,8 +49,6 @@ interface GridTableProps {
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 	(
 		{
-			activateRow,
-			deActivateRow,
 			solving,
 			progressPercent,
 			status,
@@ -124,8 +120,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 							key={rowIndex}
 							rowIndex={rowIndex}
 							isSharedGrid={isSharedGridProp}
-							activateRow={activateRow}
-							deActivateRow={deActivateRow}
 							hasModulesInGrid={hasModulesInGrid}
 							gridFixed={gridFixed}
 						/>
