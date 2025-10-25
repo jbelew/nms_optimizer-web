@@ -33,6 +33,8 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("mag-field") ||
 		lowerLabel.includes("torpedo") ||
 		lowerLabel.includes("landing") ||
+		lowerLabel.includes("platform") ||
+		lowerLabel.includes("defense cannon") ||
 		lowerLabel.includes("deadeye");
 	const isReactor = lowerLabel.includes("reactor");
 	const isForbidden = lowerLabel.includes("forbidden");

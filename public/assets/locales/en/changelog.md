@@ -1,8 +1,14 @@
 ## Model Status
 
-See this [GitHub page](https://github.com/jbelew/nms_optimizer-service/tree/main/src/trained_models) for up to date model build information.
+See this [page](https://github.com/jbelew/nms_optimizer-service/tree/main/src/trained_models) for up to date model build information.
 
 ---
+
+The complete commit history for this project can be viewed on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md).
+
+## Version 4.7.0 (2025-10-25)
+
+- Updated Corvette weapon systems for v6.1 **Breach**
 
 ## Version 4.4.0 (2025-10-20)
 

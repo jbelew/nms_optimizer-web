@@ -1,4 +1,5 @@
 import React from "react";
+import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -38,24 +39,46 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 								target="_blank"
 								className="underline"
 								rel="noopener noreferrer"
-								style={{ color: "var(--accent-11)" }}
+								// style={{ color: "var(--accent-11)" }}
 							/>
 						),
 					}}
 				/>
 				<br />
-				Built by jbelew (
+				Built by jbelew
+				<a
+					href="https://github.com/jbelew/nms_optimizer-web"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<GitHubLogoIcon
+						className="ml-1 inline"
+						style={{ color: "var(--accent-track)" }}
+					/>
+				</a>
+				<a
+					href="https://www.linkedin.com/in/jobelew/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<LinkedInLogoIcon
+						className="mr-1 ml-1 inline"
+						style={{ color: "var(--accent-track)" }}
+					/>
+				</a>
+				(
 				<a
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="underline"
+					style={{ color: "var(--accent-11)" }}
 				>
 					Looking for work BTW!
 				</a>
 				) • {buildVersion}
 			</div>
-			<Separator decorative size="3" />
+			<Separator decorative size="3" color="cyan" className="mt-1" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
