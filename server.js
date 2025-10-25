@@ -53,6 +53,31 @@ const csp = [
   "base-uri 'self'"
 ].join('; ');
 
+app.use(
+	"/",
+	expressStaticGzip(DIST_DIR, {
+		enableBrotli: true,
+		orderPreference: ["br", "gz"],
+		index: false, // handled by SPA middleware
+		setHeaders: (res, filePath) => {
+			const fileName = path.basename(filePath);
+			const hashedAsset = /-[0-9a-zA-Z_]{8}\./; // Vite hashed files
+
+			if (hashedAsset.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+			} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
+			} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
+			} else if (/\.md$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, no-cache");
+			} else {
+				res.setHeader("Cache-control", "public, max-age=86400"); // 1 day
+			}
+		},
+	})
+);
+
 app.get(/.*/, async (req, res, next) => {
 	if (/\.[^/]+$/.test(req.path)) return next(); // static asset, skip
 
@@ -122,32 +147,6 @@ app.get(/.*/, async (req, res, next) => {
 		res.status(500).send("Internal Server Error");
 	}
 });
-
-// Serve static assets
-app.use(
-	"/",
-	expressStaticGzip(DIST_DIR, {
-		enableBrotli: true,
-		orderPreference: ["br", "gz"],
-		index: false, // handled by SPA middleware
-		setHeaders: (res, filePath) => {
-			const fileName = path.basename(filePath);
-			const hashedAsset = /-[0-9a-zA-Z_]{8}\./; // Vite hashed files
-
-			if (hashedAsset.test(fileName)) {
-				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-			} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
-				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
-			} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
-			} else if (/\.md$/.test(fileName)) {
-				res.setHeader("Cache-Control", "public, no-cache");
-			} else {
-				res.setHeader("Cache-control", "public, max-age=86400");
-			}
-		},
-	})
-);
 
 // Optional 404 fallback for missing assets
 app.use((req, res) => {
