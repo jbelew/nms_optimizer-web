@@ -550,6 +550,13 @@
         "cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
         "optimizeButton": "Otimizar",
         "atlantid": "Módulos Atlântida",
-        "cancelButton": "Cancelar"
-    }
-}
+        	"cancelButton": "Cancelar"
+        	},
+        	"seo": {
+        		"mainPageTitle": "NMS Optimizer | Construtor de Layouts de No Man’s Sky para Naves e Mais",
+        		"appDescription": "Encontre os melhores layouts de tecnologia de No Man's Sky para sua Nave, Corveta, Multi-ferramenta, Exotraje e Exonave. Otimize os bônus de adjacência e os slots sobrecarregados para criar as melhores construções de NMS.",
+        		"instructionsPageTitle": "Como Usar o Otimizador NMS | Instruções e Dicas",
+        		"instructionsDescription": "Obtenha instruções detalhadas e dicas profissionais sobre como usar o Otimizador NMS. Aprenda a dominar os slots sobrecarregados, os bônus de adjacência e a criar os melhores layouts de tecnologia em No Man's Sky.",
+        		"aboutPageTitle": "Sobre o Otimizador NMS | Layouts e Construções de Tecnologia com IA",
+        		"aboutDescription": "Aprenda sobre o Otimizador NMS, uma ferramenta com IA para No Man's Sky. Descubra como ele usa o aprendizado de máquina para criar construções ideais de Naves, Corvetas, Multi-ferramentas, Exotrajes e Exonaves."
+        	}}

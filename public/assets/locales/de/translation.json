@@ -550,6 +550,13 @@
         "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
         "optimizeButton": "Optimieren",
         "atlantid": "Atlantis-Module",
-        "cancelButton": "Stornieren"
-    }
-}
+        	"cancelButton": "Stornieren"
+        	},
+        	"seo": {
+        		"mainPageTitle": "NMS Optimizer | No Man’s Sky Layout-Builder für Schiffe & mehr",
+        		"appDescription": "Finden Sie die besten No Man's Sky-Technologielayouts für Ihr Raumschiff, Ihre Korvette, Ihr Multitool, Ihren Exosuit und Ihr Exocraft. Optimieren Sie Adjazenzboni und aufgeladene Slots, um die ultimativen NMS-Builds zu erstellen.",
+        		"instructionsPageTitle": "So verwenden Sie den NMS Optimizer | Anleitungen & Tipps",
+        		"instructionsDescription": "Erhalten Sie detaillierte Anleitungen und Profi-Tipps zur Verwendung des NMS Optimizer. Lernen Sie, aufgeladene Slots und Adjazenzboni zu meistern und die besten Technologielayouts in No Man's Sky zu erstellen.",
+        		"aboutPageTitle": "Über den NMS Optimizer | KI-gestützte Tech-Layouts & Builds",
+        		"aboutDescription": "Erfahren Sie mehr über den NMS Optimizer, ein KI-gestütztes Werkzeug für No Man's Sky. Entdecken Sie, wie es maschinelles Lernen einsetzt, um optimale Builds für Raumschiffe, Korvetten, Multitools, Exosuits und Exocrafts zu erstellen."
+        	}}

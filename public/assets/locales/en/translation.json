@@ -551,5 +551,13 @@
 		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don’t let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
+	},
+	"seo": {
+		"mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
+		"appDescription": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds.",
+		"instructionsPageTitle": "How to Use the NMS Optimizer | Instructions & Tips",
+		"instructionsDescription": "Get detailed instructions and pro tips on how to use the NMS Optimizer. Learn to master supercharged slots, adjacency bonuses, and create the best technology layouts in No Man's Sky.",
+		"aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
+		"aboutDescription": "Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds."
 	}
 }

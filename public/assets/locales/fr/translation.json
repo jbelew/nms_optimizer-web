@@ -550,6 +550,13 @@
         "cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
         "optimizeButton": "Optimiser",
         "atlantid": "Modules Atlantides",
-        "cancelButton": "Annuler"
-    }
-}
+        	"cancelButton": "Annuler"
+        	},
+        	"seo": {
+        		"mainPageTitle": "NMS Optimizer | Constructeur de Layouts No Man’s Sky pour Vaisseaux & Plus",
+        		"appDescription": "Trouvez les meilleures dispositions technologiques de No Man's Sky pour votre Vaisseau, Corvette, Multi-outil, Exocombinaison et Exonef. Optimisez les bonus d'adjacence et les emplacements surchargés pour créer les meilleures constructions NMS.",
+        		"instructionsPageTitle": "Comment Utiliser l'Optimiseur NMS | Instructions & Astuces",
+        		"instructionsDescription": "Obtenez des instructions détaillées et des astuces de pro sur l'utilisation de l'Optimiseur NMS. Apprenez à maîtriser les emplacements surchargés, les bonus d'adjacence et à créer les meilleures dispositions technologiques dans No Man's Sky.",
+        		"aboutPageTitle": "À Propos de l'Optimiseur NMS | Layouts & Builds Technologiques par IA",
+        		"aboutDescription": "Découvrez l'Optimiseur NMS, un outil alimenté par l'IA pour No Man's Sky. Découvrez comment il utilise l'apprentissage automatique pour créer des constructions optimales de Vaisseaux, Corvettes, Multi-outils, Exocombinaisons et Exonefs."
+        	}}

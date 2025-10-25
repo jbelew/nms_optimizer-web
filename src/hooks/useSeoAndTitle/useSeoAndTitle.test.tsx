@@ -13,168 +13,98 @@ vi.mock("react-router-dom", () => ({
 // Mock react-i18next's useTranslation
 vi.mock("react-i18next", () => ({
 	useTranslation: vi.fn(),
-	initReactI18next: {
-		// Mock initReactI18next
-		type: "3rdParty",
-		init: vi.fn(),
-	},
 }));
 
-/**
- * Test suite for the `useSeoAndTitle` hook.
- */
 describe("useSeoAndTitle", () => {
 	const mockUseLocation = useLocation as Mock;
 	const mockUseTranslation = useTranslation as Mock;
 
-	/**
-	 * Sets up mocks and initializes test environment before each test.
-	 */
-	beforeEach(() => {
-		vi.clearAllMocks();
-
-		// Reset document.head content before each test
-		document.head.innerHTML = "";
-
-		// Mock window properties
-		Object.defineProperty(window, "location", {
-			value: { origin: "http://localhost:3000", pathname: "/", search: "" },
-			writable: true,
-		});
-		Object.defineProperty(document, "title", { value: "", writable: true });
-
-		// Default mocks for useLocation and useTranslation
-		mockUseLocation.mockReturnValue({ pathname: "/", search: "" });
+	const setupMocks = (pathname: string, translations: Record<string, string> = {}) => {
+		mockUseLocation.mockReturnValue({ pathname });
 		mockUseTranslation.mockReturnValue({
-			t: vi.fn((key) => key), // Simple mock: returns the key itself
+			t: vi.fn((key, options) => translations[key] || options?.defaultValue || key),
 			i18n: {
-				language: "en-US",
-				options: {
-					supportedLngs: ["en", "es", "fr", "de"], // Match actual i18n config
-					fallbackLng: ["en"],
+				language: "en",
+				services: {
+					resourceStore: {
+						data: { en: {}, es: {}, fr: {}, de: {}, pt: {} },
+					},
 				},
 			},
 		});
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		document.head.innerHTML = "";
+		document.title = "";
 	});
 
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});
 
-	/**
-	 * Test suite for document title updates.
-	 */
-	describe("Document Title", () => {
-		/**
-		 * Verifies that the document title is set correctly for the default path.
-		 */
-		it("should set document title for default path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+	describe("Document Title and Meta Description", () => {
+		it("should set default title and description for root path", () => {
+			setupMocks("/");
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("My App");
+
+			expect(document.title).toBe(
+				"NMS Optimizer | No Man’s Sky Layout Builder for Ships & More"
+			);
+			const metaDesc = document.querySelector("meta[name='description']");
+			expect(metaDesc?.getAttribute("content")).toContain(
+				"Find the best No Man's Sky technology layouts"
+			);
 		});
 
-		/**
-		 * Verifies that the document title is set correctly for the instructions path.
-		 */
-		it("should set document title for instructions path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/instructions", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => {
-					if (key === "appName") return "My App";
-					if (key === "dialogs.titles.instructions") return "Instructions";
-					return key;
-				}),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+		it("should set correct title and description for /instructions path", () => {
+			setupMocks("/instructions");
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("Instructions - My App");
+
+			expect(document.title).toBe("How to Use the NMS Optimizer | Instructions & Tips");
+			const metaDesc = document.querySelector("meta[name='description']");
+			expect(metaDesc?.getAttribute("content")).toContain(
+				"Get detailed instructions and pro tips"
+			);
 		});
 
-		/**
-		 * Verifies that the document title is set correctly for the about path.
-		 */
-		it("should set document title for about path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/about", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => {
-					if (key === "appName") return "My App";
-					if (key === "dialogs.titles.about") return "About";
-					return key;
-				}),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+		it("should set correct title and description for /about path", () => {
+			setupMocks("/about");
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("About - My App");
+
+			expect(document.title).toBe(
+				"About the NMS Optimizer | AI-Powered Tech Layouts & Builds"
+			);
+			const metaDesc = document.querySelector("meta[name='description']");
+			expect(metaDesc?.getAttribute("content")).toContain("Learn about the NMS Optimizer");
 		});
 
-		/**
-		 * Verifies that the document title is set correctly for the changelog path.
-		 */
-		it("should set document title for changelog path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/changelog", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => {
-					if (key === "appName") return "My App";
-					if (key === "dialogs.titles.changelog") return "Changelog";
-					return key;
-				}),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+		it("should set correct title and description for language-prefixed path", () => {
+			setupMocks("/es/about");
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("Changelog - My App");
+
+			expect(document.title).toBe(
+				"About the NMS Optimizer | AI-Powered Tech Layouts & Builds"
+			);
+			const metaDesc = document.querySelector("meta[name='description']");
+			expect(metaDesc?.getAttribute("content")).toContain("Learn about the NMS Optimizer");
 		});
 
-		/**
-		 * Verifies that the document title is set correctly for the translation path.
-		 */
-		it("should set document title for translation path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/translation", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => {
-					if (key === "appName") return "My App";
-					if (key === "dialogs.titles.translationRequest") return "Translation Request";
-					return key;
-				}),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+		it("should set title for /changelog path", () => {
+			setupMocks("/changelog", { "dialogs.titles.changelog": "Changelog" });
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("Translation Request - My App");
+
+			expect(document.title).toBe("Changelog | NMS Optimizer");
 		});
 
-		/**
-		 * Verifies that the document title defaults to the app name for unknown paths.
-		 */
-		it("should set document title to appName for unknown path", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/unknown", search: "" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => (key === "appName" ? "My App" : key)),
-				i18n: {
-					language: "en-US",
-					options: { supportedLngs: ["en"], fallbackLng: ["en"] },
-				},
-			});
+		it("should fall back to default title for unknown paths", () => {
+			setupMocks("/unknown-path");
 			renderHook(() => useSeoAndTitle());
-			expect(document.title).toBe("My App");
+
+			expect(document.title).toBe(
+				"NMS Optimizer | No Man’s Sky Layout Builder for Ships & More"
+			);
 		});
 	});
 });
