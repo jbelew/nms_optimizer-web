@@ -115,7 +115,13 @@ export const useGridCellInteraction = (
 				return;
 			}
 
-			// Touch-specific logic (single/double tap)
+			// If the cell has a module, no touch interactions should change its state.
+			if (cell.module) {
+				triggerShake();
+				return;
+			}
+
+			// Touch-specific logic for empty cells (single/double tap)
 			const currentTime = new Date().getTime();
 			const timeSinceLastTap = currentTime - lastTapInfo.time;
 			const isSameCell =
@@ -159,6 +165,7 @@ export const useGridCellInteraction = (
 			toggleCellActive,
 			toggleCellSupercharged,
 			cell.supercharged,
+			cell.module,
 			triggerShake,
 			gridFixed,
 			superchargedFixed,
