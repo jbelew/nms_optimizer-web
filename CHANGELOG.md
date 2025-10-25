@@ -1,3 +1,10 @@
+## [4.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.0...v4.8.1) (2025-10-25)
+
+
+### Bug Fixes
+
+* **server:** fixed o-op for static assets in the middleware ([2b4182b](https://github.com/jbelew/nms_optimizer-web/commit/2b4182b6cbc977115e3a0ac40866fb078c6b4581))
+
 # [4.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.7.1...v4.8.0) (2025-10-25)
 
 
