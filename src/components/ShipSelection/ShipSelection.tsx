@@ -91,7 +91,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	 */
 	const handleOptionSelect = useCallback(
 		(option: string) => {
-			if (option !== selectedShipType) {
+			if (option !== usePlatformStore.getState().selectedPlatform) {
 				sendEvent({
 					category: "User Interactions",
 					action: "platform_selection",
@@ -104,21 +104,15 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				}
 
 				startTransition(() => {
-					setSelectedShipType(option, Object.keys(shipTypes));
+					const shipTypeKeys = Object.keys(shipTypes);
+					setSelectedShipType(option, shipTypeKeys);
 
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
 					setGridAndResetAuxiliaryState(initialGrid);
 				});
 			}
 		},
-		[
-			selectedShipType,
-			setSelectedShipType,
-			setGridAndResetAuxiliaryState,
-			sendEvent,
-			shipTypes,
-			startTransition,
-		]
+		[setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent, shipTypes, startTransition]
 	);
 
 	return (
