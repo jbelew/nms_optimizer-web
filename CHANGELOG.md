@@ -1,3 +1,10 @@
+## [4.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.2...v4.8.3) (2025-10-25)
+
+
+### Bug Fixes
+
+* **gridcell:** prevent cell state changes on a populated cell on touch devices ([2ad0fd8](https://github.com/jbelew/nms_optimizer-web/commit/2ad0fd8c83281b823664369a669d91fc20b98d85))
+
 ## [4.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.1...v4.8.2) (2025-10-25)
 
 
