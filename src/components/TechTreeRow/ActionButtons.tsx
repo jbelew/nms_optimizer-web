@@ -1,6 +1,6 @@
 import React from "react";
 // Minor change to force re-transpilation
-import { DoubleArrowLeftIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -43,7 +43,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 	} else {
 		tooltipLabel = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
 	}
-	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : DoubleArrowLeftIcon;
+	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 	const isOptimizeButtonDisabled =
 		(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;
 
