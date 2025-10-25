@@ -39,3 +39,10 @@ tsconfig.tsbuildinfo
 storybook-static
 scripts/dedup.ts
 
+seo/Countries.csv
+seo/Dates.csv
+seo/Devices.csv
+seo/Filters.csv
+seo/Pages.csv
+seo/Queries.csv
+seo/Search appearance.csv
