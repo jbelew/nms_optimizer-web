@@ -1,3 +1,10 @@
+# [4.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.6.1...v4.7.0) (2025-10-25)
+
+
+### Features
+
+* **corvettes:** corvette weapon systems changes for the Breach update ([5afae0a](https://github.com/jbelew/nms_optimizer-web/commit/5afae0a946f1e2a3818416b1564365c84e8e246c))
+
 ## [4.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.6.0...v4.6.1) (2025-10-25)
 
 
