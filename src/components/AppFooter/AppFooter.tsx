@@ -50,6 +50,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 					href="https://github.com/jbelew/nms_optimizer-web"
 					target="_blank"
 					rel="noopener noreferrer"
+					aria-label="View source on GitHub"
 				>
 					<GitHubLogoIcon
 						className="ml-1 inline"
@@ -60,6 +61,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
 					rel="noopener noreferrer"
+					aria-label="View profile on LinkedIn"
 				>
 					<LinkedInLogoIcon
 						className="mr-1 ml-1 inline"

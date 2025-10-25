@@ -136,6 +136,10 @@ app.use(
 
 			if (hashedAsset.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+			} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
+			} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
 			} else {
 				res.setHeader("Cache-control", "public, max-age=86400");
 			}
