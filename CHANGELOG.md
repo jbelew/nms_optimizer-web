@@ -1,3 +1,10 @@
+## [4.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.1...v4.8.2) (2025-10-25)
+
+
+### Bug Fixes
+
+* **server:** fix for failing routes to the sitemap.xml file ([abc8774](https://github.com/jbelew/nms_optimizer-web/commit/abc8774a571bcc1001714c1e7932c24bfd906452))
+
 ## [4.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.0...v4.8.1) (2025-10-25)
 
 
