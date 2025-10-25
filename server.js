@@ -20,6 +20,19 @@ app.use((req, res, next) => {
 	next();
 });
 
+// Specific handlers for root-level static files
+app.get("/sitemap.xml", (req, res) => {
+	res.setHeader("Content-Type", "application/xml");
+	res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
+	res.sendFile(path.join(DIST_DIR, "sitemap.xml"));
+});
+
+app.get("/robots.txt", (req, res) => {
+	res.setHeader("Content-Type", "text/plain");
+	res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
+	res.sendFile(path.join(DIST_DIR, "robots.txt"));
+});
+
 const DIST_DIR = path.join(__dirname, "dist");
 const INDEX_PATH = path.join(DIST_DIR, "index.html");
 
