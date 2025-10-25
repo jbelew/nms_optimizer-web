@@ -140,6 +140,8 @@ app.use(
 				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
 			} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
 				res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
+			} else if (/\.md$/.test(fileName)) {
+				res.setHeader("Cache-Control", "public, no-cache");
 			} else {
 				res.setHeader("Cache-control", "public, max-age=86400");
 			}
