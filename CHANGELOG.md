@@ -1,3 +1,23 @@
+# [4.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.4...v4.6.0) (2025-10-24)
+
+
+### Bug Fixes
+
+* **tests:** resolve unit test failures after refactoring ([543f683](https://github.com/jbelew/nms_optimizer-web/commit/543f683e5a3d2100903dbbd3195863cb9c2b2467))
+* **tests:** resolve unit test failures and localStorage errors ([659bc74](https://github.com/jbelew/nms_optimizer-web/commit/659bc74552dcf1fcd9d8f667584e59c53b3785f7))
+
+
+### Features
+
+* **perf:** Memoize GridRow and co-locate state to prevent re-renders ([b666dd9](https://github.com/jbelew/nms_optimizer-web/commit/b666dd904e5d8abccb6d62695319edaa110b63fa))
+* **perf:** Optimize grid performance with cell-based updates and selective state subscription ([cda1d08](https://github.com/jbelew/nms_optimizer-web/commit/cda1d086acfe792730f432ac09ece4443f0fe57a))
+
+
+### Performance Improvements
+
+* **react-scan:** final pass on react-scan based improvements ([b5d1db0](https://github.com/jbelew/nms_optimizer-web/commit/b5d1db0bb828328acb4ea7479fa789dafb5b66e4))
+* **useoptimize:** cleaning up state subscriptions ([c797d15](https://github.com/jbelew/nms_optimizer-web/commit/c797d150525a8ff72f5e11c26e09e09e22ae0384))
+
 ## [4.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.3...v4.5.4) (2025-10-23)
 
 
