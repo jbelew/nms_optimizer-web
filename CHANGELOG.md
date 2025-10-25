@@ -1,3 +1,10 @@
+## [4.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.7.0...v4.7.1) (2025-10-25)
+
+
+### Bug Fixes
+
+* **server:** fix for stale markdown files (no rule was set previously) ([9472588](https://github.com/jbelew/nms_optimizer-web/commit/9472588dd7683f200c6d91b4e9947d15319aad62))
+
 # [4.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.6.1...v4.7.0) (2025-10-25)
 
 
