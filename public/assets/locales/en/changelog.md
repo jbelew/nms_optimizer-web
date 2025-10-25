@@ -2,6 +2,10 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 4.8.0 (2025-10-25)
+
+- Implemented PWA Service Workers for (hopefully) better Android performance.
+
 ## Version 4.7.0 (2025-10-25)
 
 - Updated Corvette weapon systems for v6.1 **Breach**.
