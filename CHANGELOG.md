@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.6.0...v4.6.1) (2025-10-25)
+
+
+### Performance Improvements
+
+* **shipselection:** one more react-scan fix for tonight ([827f022](https://github.com/jbelew/nms_optimizer-web/commit/827f022d430ab3c3d32e65ebac0e830f1f9bb0e8))
+
 # [4.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.5.4...v4.6.0) (2025-10-24)
 
 
