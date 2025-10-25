@@ -1,3 +1,10 @@
+# [4.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.7.1...v4.8.0) (2025-10-25)
+
+
+### Features
+
+* **pwa:** enabled vite-plugin-pwa to improve mobile performance ([cc3d700](https://github.com/jbelew/nms_optimizer-web/commit/cc3d700c4d0ee31e3d21f544d6b9eca393a0b423))
+
 ## [4.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.7.0...v4.7.1) (2025-10-25)
 
 
