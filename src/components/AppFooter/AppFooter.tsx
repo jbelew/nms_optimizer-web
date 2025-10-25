@@ -68,7 +68,6 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 						style={{ color: "var(--accent-track)" }}
 					/>
 				</a>
-				(
 				<a
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
@@ -76,9 +75,9 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 					className="underline"
 					style={{ color: "var(--accent-11)" }}
 				>
-					Looking for work BTW!
+					#OpenToWork
 				</a>
-				) • {buildVersion}
+				&nbsp;• {buildVersion}
 			</div>
 			<Separator decorative size="3" color="cyan" className="mt-1" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
