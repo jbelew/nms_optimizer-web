@@ -10,6 +10,7 @@ import { splashScreen } from "vite-plugin-splash-screen";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
@@ -66,6 +67,89 @@ export default defineConfig(({ mode }) => {
 				brotliSize: true,
 				filename: "stats.json",
 				template: "raw-data",
+			}),
+			VitePWA({
+				registerType: "autoUpdate",
+				workbox: {
+					globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
+					globIgnores: ["**/pwa-*.png"],
+					runtimeCaching: [
+						{
+							urlPattern: ({ url }) => url.pathname.endsWith(".md"),
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "markdown-cache",
+								expiration: {
+									maxEntries: 20,
+									maxAgeSeconds: 60 * 60 * 24, // 1 day
+								},
+							},
+						},
+						{
+							urlPattern: ({ request }) => request.destination === "image",
+							handler: "StaleWhileRevalidate",
+							options: {
+								cacheName: "image-cache",
+								expiration: {
+									maxEntries: 60,
+									maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+								},
+							},
+						},
+					],
+				},
+				manifest: {
+					name: "No Man's Sky Technology Layout Optimizer AI",
+					short_name: "NMS Optimizer",
+					description:
+						"The NMS Optimizer helps you design the perfect Starship, Corvette, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+					start_url: "/",
+					display: "standalone",
+					background_color: "#274860",
+					theme_color: "#00a2c7",
+					orientation: "any",
+					icons: [
+						{
+							src: "/assets/img/favicons/pwa-192x192.png",
+							sizes: "192x192",
+							type: "image/png",
+						},
+						{
+							src: "/assets/img/favicons/pwa-512x512.png",
+							sizes: "512x512",
+							type: "image/png",
+						},
+						{
+							src: "/assets/img/favicons/pwa-maskable-512x512.png",
+							sizes: "512x512",
+							type: "image/png",
+							purpose: "maskable",
+						},
+					],
+					screenshots: [
+						{
+							src: "/assets/img/screenshots/screenshot_desktop.png",
+							sizes: "1280x824",
+							type: "image/png",
+							platform: "desktop",
+							label: "Main application view showing the technology grid on desktop.",
+						},
+						{
+							src: "/assets/img/screenshots/screenshot_tablet.png",
+							sizes: "800x1280",
+							type: "image/png",
+							platform: "tablet",
+							label: "Main application view on tablet.",
+						},
+						{
+							src: "/assets/img/screenshots/screenshot_mobile.png",
+							sizes: "375x667",
+							type: "image/png",
+							platform: "mobile",
+							label: "Main application view on mobile.",
+						},
+					],
+				},
 			}),
 		],
 		resolve: {

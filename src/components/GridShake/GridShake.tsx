@@ -20,10 +20,7 @@ const GridShake: React.FC<GridShakeProps> = ({ children, duration }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const shakeCount = useShakeStore((state) => state.shakeCount);
 
-	console.log("GridShake rendered. shakeCount:", shakeCount);
-
 	useEffect(() => {
-		console.log("GridShake effect running. shakeCount:", shakeCount);
 		// We only run the effect if shakeCount is greater than 0, which indicates a shake has been triggered.
 		if (shakeCount > 0) {
 			const element = ref.current;

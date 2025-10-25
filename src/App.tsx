@@ -5,6 +5,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
+import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import { useDialog } from "./context/dialog-utils"; // Import useDialog
 
 // Import the new custom hooks
@@ -65,6 +66,7 @@ const App: FC = () => {
 
 	return (
 		<>
+			<OfflineBanner />
 			<MainAppContent buildVersion={build} language={i18n.language} />
 
 			<Suspense fallback={null}>
