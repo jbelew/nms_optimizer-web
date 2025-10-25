@@ -73,3 +73,11 @@ jobs:
               env:
                   HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
                   HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
+
+            - name: Purge Cloudflare Cache
+              if: success()
+              run: |
+                curl -X POST "https://api.cloudflare.com/client/v4/zones/0986bee940f1277db8e730912b3a27ae/purge_cache" \
+                -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+                -H "Content-Type: application/json" \
+                --data '{"purge_everything":true}'
