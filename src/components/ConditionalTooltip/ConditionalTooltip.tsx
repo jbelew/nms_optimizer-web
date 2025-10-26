@@ -74,7 +74,7 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
 	return (
 		<>
 			{shouldRenderTooltip && label ? (
-				<Tooltip open={true} content={label}>
+				<Tooltip open={true} content={label} className="font-medium!">
 					{wrappedChildren}
 				</Tooltip>
 			) : (
