@@ -1,3 +1,10 @@
+## [4.8.5](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.4...v4.8.5) (2025-10-26)
+
+
+### Bug Fixes
+
+* **server:** fix for googlebot seeing a 404 on the main entry point ([03d0146](https://github.com/jbelew/nms_optimizer-web/commit/03d0146c6fe42afaafe352231477c15bf20dba67))
+
 ## [4.8.4](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.3...v4.8.4) (2025-10-26)
 
 
