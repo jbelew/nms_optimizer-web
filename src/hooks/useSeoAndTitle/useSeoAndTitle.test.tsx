@@ -5,14 +5,28 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
-// Mock react-router-dom's useLocation
-vi.mock("react-router-dom", () => ({
-	useLocation: vi.fn(),
-}));
-
-// Mock react-i18next's useTranslation
-vi.mock("react-i18next", () => ({
-	useTranslation: vi.fn(),
+// Mock dependencies
+vi.mock("react-router-dom", () => ({ useLocation: vi.fn() }));
+vi.mock("react-i18next", () => ({ useTranslation: vi.fn() }));
+vi.mock("../../../shared/seo-metadata.js", () => ({
+	seoMetadata: {
+		"/": {
+			titleKey: "seo.mainPageTitle",
+			descriptionKey: "seo.appDescription",
+		},
+		"/instructions": {
+			titleKey: "seo.instructionsPageTitle",
+			descriptionKey: "seo.instructionsDescription",
+		},
+		"/about": {
+			titleKey: "seo.aboutPageTitle",
+			descriptionKey: "seo.aboutDescription",
+		},
+		"/changelog": {
+			titleKey: "seo.changelogPageTitle",
+			descriptionKey: "seo.changelogDescription",
+		},
+	},
 }));
 
 describe("useSeoAndTitle", () => {
@@ -22,7 +36,7 @@ describe("useSeoAndTitle", () => {
 	const setupMocks = (pathname: string, translations: Record<string, string> = {}) => {
 		mockUseLocation.mockReturnValue({ pathname });
 		mockUseTranslation.mockReturnValue({
-			t: vi.fn((key, options) => translations[key] || options?.defaultValue || key),
+			t: vi.fn((key) => translations[key] || key),
 			i18n: {
 				language: "en",
 				services: {
@@ -46,7 +60,11 @@ describe("useSeoAndTitle", () => {
 
 	describe("Document Title and Meta Description", () => {
 		it("should set default title and description for root path", () => {
-			setupMocks("/");
+			setupMocks("/", {
+				"seo.mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
+				"seo.appDescription":
+					"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds.",
+			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
@@ -59,7 +77,11 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should set correct title and description for /instructions path", () => {
-			setupMocks("/instructions");
+			setupMocks("/instructions", {
+				"seo.instructionsPageTitle": "How to Use the NMS Optimizer | Instructions & Tips",
+				"seo.instructionsDescription":
+					"Get detailed instructions and pro tips on how to use the NMS Optimizer. Learn to master supercharged slots, adjacency bonuses, and create the best technology layouts in No Man's Sky.",
+			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe("How to Use the NMS Optimizer | Instructions & Tips");
@@ -70,7 +92,11 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should set correct title and description for /about path", () => {
-			setupMocks("/about");
+			setupMocks("/about", {
+				"seo.aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
+				"seo.aboutDescription":
+					"Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds.",
+			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
@@ -81,7 +107,11 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should set correct title and description for language-prefixed path", () => {
-			setupMocks("/es/about");
+			setupMocks("/es/about", {
+				"seo.aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
+				"seo.aboutDescription":
+					"Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds.",
+			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
@@ -92,14 +122,16 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should set title for /changelog path", () => {
-			setupMocks("/changelog", { "dialogs.titles.changelog": "Changelog" });
+			setupMocks("/changelog", { "seo.changelogPageTitle": "Changelog | NMS Optimizer" });
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe("Changelog | NMS Optimizer");
 		});
 
 		it("should fall back to default title for unknown paths", () => {
-			setupMocks("/unknown-path");
+			setupMocks("/unknown-path", {
+				"seo.mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
+			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(

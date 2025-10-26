@@ -37,7 +37,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 							<a
 								href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 								target="_blank"
-								className="underline"
+								className="font-medium underline"
 								rel="noopener noreferrer"
 								// style={{ color: "var(--accent-11)" }}
 							/>
@@ -72,7 +72,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="underline"
+					className="font-medium underline"
 					style={{ color: "var(--accent-11)" }}
 				>
 					#OpenToWork

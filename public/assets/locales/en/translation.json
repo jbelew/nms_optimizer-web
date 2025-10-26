@@ -558,6 +558,12 @@
 		"instructionsPageTitle": "How to Use the NMS Optimizer | Instructions & Tips",
 		"instructionsDescription": "Get detailed instructions and pro tips on how to use the NMS Optimizer. Learn to master supercharged slots, adjacency bonuses, and create the best technology layouts in No Man's Sky.",
 		"aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
-		"aboutDescription": "Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds."
+		"aboutDescription": "Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds.",
+		"changelogPageTitle": "Changelog | NMS Optimizer",
+		"changelogDescription": "View the full changelog and release history for the NMS Optimizer, including new features, bug fixes, and updates.",
+		"userstatsPageTitle": "User Statistics | NMS Optimizer",
+		"userstatsDescription": "Explore aggregated user statistics for the NMS Optimizer, showing the most popular and effective technology layouts.",
+		"translationPageTitle": "Translation Help | NMS Optimizer",
+		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more players around the world."
 	}
 }

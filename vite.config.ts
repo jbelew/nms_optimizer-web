@@ -235,7 +235,7 @@ export default defineConfig(({ mode }) => {
 			environment: "happy-dom",
 			setupFiles: ".vitest/setup.ts",
 			root: ".",
-			include: ["src/**/*.{test,spec}.{ts,tsx}"],
+			include: ["src/**/*.{test,spec}.{ts,tsx}", "server/**/*.{test,spec}.{js,ts}"],
 		},
 	};
 });
