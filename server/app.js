@@ -193,18 +193,12 @@ app.use(
 // This regex matches all paths that do not contain a dot, which is a common
 // way to distinguish between SPA routes and static file requests.
 app.get(/^[^.]*$/, async (req, res, next) => {
-	const isSpaNavigation =
-		req.headers.accept?.includes("text/html") &&
-		!req.path.startsWith("/assets/");
-
-	if (isSpaNavigation) {
-		try {
-			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
-		} catch (error) {
-			next(error);
-		}
-	} else {
-		next();
+	// Any request that makes it here is assumed to be a SPA navigation request
+	// because the regex in the route path excludes paths with dots (i.e., static files).
+	try {
+		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
+	} catch (error) {
+		next(error);
 	}
 });
 
