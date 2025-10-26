@@ -1,5 +1,6 @@
 .gridCell {
 	background-color: var(--accent-a2);
+	background-image: image-set(var(--grid-cell-image-1x) 1x, var(--grid-cell-image-2x) 2x);
 	background-position: center;
 	background-size: cover;
 	height: var(--grid-cell-size);

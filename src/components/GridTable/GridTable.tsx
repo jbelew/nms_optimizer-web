@@ -1,7 +1,7 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -62,9 +62,12 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
-		const isTouchDevice =
-			typeof window !== "undefined" &&
-			("ontouchstart" in window || navigator.maxTouchPoints > 0);
+		const isTouchDevice = useMemo(() => {
+			return (
+				typeof window !== "undefined" &&
+				("ontouchstart" in window || navigator.maxTouchPoints > 0)
+			);
+		}, []);
 		const { tutorialFinished } = useDialog();
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 

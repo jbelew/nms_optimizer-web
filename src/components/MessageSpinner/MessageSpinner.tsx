@@ -38,32 +38,26 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	useEffect(() => {
 		let timer: NodeJS.Timeout | null = null;
-		// Only run the random message logic if showRandomMessages is true and the spinner is visible
+
 		if (showRandomMessages && isVisible) {
-			// Fetch random messages from i18n. Ensure it's an array.
 			const i18nRandomMessages = t("messageSpinner.randomMessages", {
 				returnObjects: true,
 			}) as string[];
-			setShowAdditionalMessage(false); // Reset visibility when conditions change
-			setCurrentRandomMessage(""); // Clear previous message
 
 			timer = setTimeout(() => {
 				const randomIndex = Math.floor(Math.random() * i18nRandomMessages.length);
 				setCurrentRandomMessage(i18nRandomMessages[randomIndex]);
 				setShowAdditionalMessage(true); // Set to show after delay
 			}, 2500);
+		}
 
-			// Cleanup function
-			return () => {
-				if (timer) clearTimeout(timer);
-			};
-		} else {
-			// Ensure state is reset if conditions aren't met
+		// Cleanup function: This runs when the component unmounts OR when dependencies change
+		return () => {
+			if (timer) clearTimeout(timer);
+			// Reset state here, ensuring it happens before the next effect run or unmount
 			setShowAdditionalMessage(false);
 			setCurrentRandomMessage("");
-			return;
-		}
-		// Depend on both isVisible and showRandomMessages
+		};
 	}, [isVisible, showRandomMessages, t]);
 
 	// Use the isVisible prop to control rendering of the entire component
@@ -102,7 +96,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 								</div>
 							</div>
 						) : (
-							<div className="h-[6px]" />
+							<div className="h-1.5" />
 						)}
 					</div>
 				</>

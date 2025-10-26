@@ -48,20 +48,22 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		isTouching,
 	]);
 
-	const backgroundImageStyle = useMemo(() => {
-		if (cell.image) {
-			return `image-set(url(/assets/img/grid/${
-				cell.image
-			}) 1x, url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")}) 2x)`;
-		}
-		return "none";
+	const image1x = useMemo(() => {
+		return cell.image ? `url(/assets/img/grid/${cell.image})` : "none";
+	}, [cell.image]);
+
+	const image2x = useMemo(() => {
+		return cell.image
+			? `url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")})`
+			: "none";
 	}, [cell.image]);
 
 	const cellElementStyle = useMemo(
 		() => ({
-			backgroundImage: backgroundImageStyle,
+			"--grid-cell-image-1x": image1x,
+			"--grid-cell-image-2x": image2x,
 		}),
-		[backgroundImageStyle]
+		[image1x, image2x]
 	);
 
 	const showEmptyIcon = !cell.module && cell.active;

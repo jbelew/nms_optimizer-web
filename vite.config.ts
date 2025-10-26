@@ -1,4 +1,3 @@
-import MillionLint from "@million/lint";
 import fs from "fs";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
@@ -23,7 +22,6 @@ export default defineConfig(({ mode }) => {
 			__APP_VERSION__: JSON.stringify(appVersion),
 		},
 		plugins: [
-			// MillionLint.vite({ enabled: true }),
 			react({
 				babel: {
 					plugins: [["babel-plugin-react-compiler"]],
