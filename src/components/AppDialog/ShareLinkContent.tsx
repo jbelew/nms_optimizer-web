@@ -51,7 +51,7 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 					<ExternalLinkIcon className="ml-1 inline-block" />
 				</Link>
 			</Text>
-			<Flex gap="2" mt="4" justify="end">
+			<Flex gap="2" mt="4" mb="2" justify="end">
 				<Dialog.Close asChild>
 					<Button variant="soft" onClick={onClose}>
 						{t("dialogs.shareLink.closeButton")}
