@@ -1,3 +1,10 @@
+## [4.8.4](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.3...v4.8.4) (2025-10-26)
+
+
+### Bug Fixes
+
+* **server:** fix for over aggressive SPA redirects ([810aa8c](https://github.com/jbelew/nms_optimizer-web/commit/810aa8c74693bb1962a6172eb651787afe41c8d2))
+
 ## [4.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.2...v4.8.3) (2025-10-25)
 
 
