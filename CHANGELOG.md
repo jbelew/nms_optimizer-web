@@ -1,3 +1,10 @@
+## [4.8.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.5...v4.8.6) (2025-10-26)
+
+
+### Performance Improvements
+
+* **tooltip:** conditionally mount the radix ui component on hover ([1661800](https://github.com/jbelew/nms_optimizer-web/commit/16618000b804631751e83ead1719cceb309b8899))
+
 ## [4.8.5](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.4...v4.8.5) (2025-10-26)
 
 
