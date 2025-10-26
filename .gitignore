@@ -46,3 +46,6 @@ seo/Filters.csv
 seo/Pages.csv
 seo/Queries.csv
 seo/Search appearance.csv
+
+# Million Lint
+.million

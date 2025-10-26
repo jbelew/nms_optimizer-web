@@ -67,3 +67,17 @@ const staticContent = document.querySelector("main.visually-hidden");
 if (staticContent) {
 	staticContent.setAttribute("aria-hidden", "true");
 }
+
+// Conditionally register the service worker for non-bot user agents
+if (
+	"serviceWorker" in navigator &&
+	!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
+) {
+	import("virtual:pwa-register")
+		.then(({ registerSW }) => {
+			registerSW({ immediate: true });
+		})
+		.catch((e) => {
+			console.error("Failed to register service worker:", e);
+		});
+}
