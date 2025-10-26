@@ -6,23 +6,26 @@ import express from "express";
 import expressStaticGzip from "express-static-gzip";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DIST_DIR = path.join(__dirname, "dist");
 
 const app = express();
 app.set("trust proxy", true); // Trust Heroku/Cloudflare proxies
 
 // Redirect non-canonical hosts
 const TARGET_HOST = "nms-optimizer.app";
-app.use((req, res, next) => {
-	const host = req.headers.host?.toLowerCase();
-	if (host && host !== TARGET_HOST.toLowerCase()) {
-		return res.redirect(301, `https://${TARGET_HOST}${req.originalUrl}`);
-	}
-	next();
-});
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        const host = req.headers.host?.toLowerCase();
+        if (host && host !== TARGET_HOST.toLowerCase()) {
+            return res.redirect(301, `https://${TARGET_HOST}${req.originalUrl}`);
+        }
+        next();
+    });
+}
 
 // Specific handlers for root-level static files
 app.get("/sitemap.xml", (req, res) => {
-	res.setHeader("Content-Type", "application/xml");
+	res.type("application/xml");
 	res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
 	res.sendFile(path.join(DIST_DIR, "sitemap.xml"));
 });
@@ -33,7 +36,6 @@ app.get("/robots.txt", (req, res) => {
 	res.sendFile(path.join(DIST_DIR, "robots.txt"));
 });
 
-const DIST_DIR = path.join(__dirname, "dist");
 const INDEX_PATH = path.join(DIST_DIR, "index.html");
 
 // Cache index.html in memory
