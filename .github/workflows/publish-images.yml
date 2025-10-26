@@ -1,9 +1,10 @@
 name: Build & Publish Application Docker Image
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       version:
@@ -22,6 +23,8 @@ jobs: # Renamed job for clarity
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
       - name: Set up QEMU (for multi‑arch)
         uses: docker/setup-qemu-action@v3
@@ -30,7 +33,7 @@ jobs: # Renamed job for clarity
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -43,14 +46,9 @@ jobs: # Renamed job for clarity
         with:
           images: ghcr.io/${{ github.repository_owner }}/nms-optimizer-app
           tags: |
-            type=schedule,pattern={{date 'YYYYMMDD'}}
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=sha
-            # Use the version input if available (from workflow_dispatch)
-            type=raw,value=${{ github.event.inputs.version }},enable=${{ github.event_name == 'workflow_dispatch' }}
+            type=ref,event=tag # Extract tag from workflow_run if it's a tag push
+            type=raw,value=${{ github.event.inputs.version }},enable=${{ github.event_name == 'workflow_dispatch' }} # Manual trigger
+            type=sha # Always include SHA
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6 # Updated to v5
@@ -58,7 +56,7 @@ jobs: # Renamed job for clarity
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name == 'push' }}
+          push: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
