@@ -94,7 +94,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
 
         const indexEtag = etag(modifiedHtml);
 
-        res.setHeader("Content-Security-Policy-Report-Only", csp);
+        res.setHeader("Content-Security-Policy", csp);
         res.setHeader("ETag", indexEtag);
         res.setHeader("Cache-Control", "no-cache");
 
