@@ -1,3 +1,10 @@
+## [4.8.7](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.6...v4.8.7) (2025-10-26)
+
+
+### Bug Fixes
+
+* **docker:** bumping to trigger the docker workflow ([bedf3f3](https://github.com/jbelew/nms_optimizer-web/commit/bedf3f330d2b096bc9dc8b2c47929e422976300e))
+
 ## [4.8.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.5...v4.8.6) (2025-10-26)
 
 
