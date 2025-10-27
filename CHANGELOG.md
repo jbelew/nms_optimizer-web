@@ -1,3 +1,10 @@
+## [4.8.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.7...v4.8.8) (2025-10-27)
+
+
+### Bug Fixes
+
+* **docker:** possible fix or docker builds hanging ([2037d56](https://github.com/jbelew/nms_optimizer-web/commit/2037d567e5f71bc4cb8b8e1ac91115a489bb8267))
+
 ## [4.8.7](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.6...v4.8.7) (2025-10-26)
 
 
