@@ -1,7 +1,10 @@
 // src/components/app/MainAppContent.tsx
 import React, { FC, Suspense, useCallback, useEffect } from "react";
+import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
@@ -35,6 +38,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
+	const isLg = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
 		solving,
@@ -71,7 +75,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 	}, [openDialog]);
 
 	return (
-		<main className="flex min-h-[100dvh] flex-col items-center justify-center lg:min-h-screen">
+		<main className="flex min-h-dvh flex-col items-center justify-center lg:min-h-screen">
 			<div
 				className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--accent-a2)" }}
@@ -82,7 +86,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 					ref={gridContainerRef}
 				>
 					<article
-						className="gridContainer__container w-full lg:w-auto lg:flex-shrink-0"
+						className="gridContainer__container w-full lg:w-auto lg:shrink-0"
 						ref={appLayoutContainerRef}
 					>
 						<header
@@ -94,7 +98,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 							}}
 						>
 							{!isSharedGrid && (
-								<span className="flex-shrink-0 self-start">
+								<span className="shrink-0 self-start">
 									<ShipSelection solving={solving} />
 								</span>
 							)}
@@ -105,7 +109,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 								{t("platformLabel")}
 							</span>
 							<span
-								className="mt-[7px] min-w-0 flex-1 self-start sm:mt-[0px]"
+								className="mt-[7px] min-w-0 flex-1 self-start sm:mt-0"
 								style={{
 									textWrap: "balance",
 								}}
@@ -138,10 +142,23 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 							</Suspense>
 						</aside>
 					)}
+
+					{!isLg && (
+						<>
+							<Separator
+								color="cyan"
+								size="4"
+								mt="2"
+								mb="4"
+								orientation="horizontal"
+							/>
+							<AppFooter buildVersion={buildVersion} language={language} />
+						</>
+					)}
 				</section>
 			</div>
 
-			<AppFooter buildVersion={buildVersion} language={language} />
+			{isLg && <AppFooter buildVersion={buildVersion} language={language} />}
 
 			{/* Dialogs related to MainAppContent's state */}
 			<OptimizationAlertDialog
