@@ -51,7 +51,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 			key={language}
 			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
 		>
-			<div className="!absolute !top-4 !left-4 z-10 flex items-start sm:!top-5 sm:!left-8">
+			<div className="absolute! top-4! left-4! z-10 flex items-start sm:top-5! sm:left-8!">
 				{!isLg && (
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<IconButton
@@ -66,12 +66,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 					</ConditionalTooltip>
 				)}
 			</div>
-			<div className="!absolute !top-4 !right-4 z-10 flex items-center sm:!top-5 sm:!right-8">
+			<div className="absolute! top-4! right-4! z-10 flex items-center sm:top-5! sm:right-8!">
 				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton
 						variant="soft"
 						radius="full"
-						className="!mr-1 sm:!mr-2"
+						className="mr-1! sm:mr-2!"
 						size={isLg ? "2" : "1"}
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
@@ -119,7 +119,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 				<Popover.Root>
 					<Popover.Trigger>
 						<img
-							className="h-4 w-3 flex-shrink-0 sm:h-5 sm:w-4"
+							className="h-4 w-3 shrink-0 sm:h-5 sm:w-4"
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
 							alt="No Man's Sky Atlas Logo"
@@ -190,7 +190,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 						variant="ghost"
 						radius="full"
 						size="1"
-						className="!ml-1"
+						className="ml-px!"
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							sendEvent({
@@ -201,7 +201,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 							onShowChangelog();
 						}}
 					>
-						<CounterClockwiseClockIcon className="mt-[1px] h-4 w-4 sm:h-5 sm:w-5" />
+						<CounterClockwiseClockIcon className="mt-px h-4 w-4 sm:h-5 sm:w-5" />
 					</IconButton>
 				</ConditionalTooltip>
 			</Heading>
