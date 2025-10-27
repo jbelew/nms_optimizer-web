@@ -79,7 +79,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
 				</a>
 				&nbsp;• {buildVersion}
 			</div>
-			<Separator decorative size="3" color="cyan" className="mt-1" />
+			<Separator decorative size="3" className="mt-1" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
