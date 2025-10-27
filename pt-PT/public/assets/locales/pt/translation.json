@@ -85,7 +85,7 @@
 	"footer": {
 		"issuePrompt": "Something off with your solve or found a bug? <1>Open an issue on GitHub</1> and let us know!",
 		"builtBy": "Built by jbelew (Looking for Work BTW!) • {{buildVersion}}",
-		"supportPrompt": "If you found this application useful, consider supporting its development with "
+		"supportPrompt": "If you found this application useful, consider supporting its development with: "
 	},
 	"translationRequest": {
 		"openDialogLabel": "Translators needed!"
