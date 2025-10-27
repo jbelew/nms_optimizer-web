@@ -8,7 +8,7 @@ COPY package.json \
      tsconfig.json \
      vite.config.ts \
      ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts --omit=dev
 
 # Copy the rest of the frontend source
 COPY . ./
