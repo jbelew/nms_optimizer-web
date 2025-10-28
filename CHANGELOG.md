@@ -1,3 +1,10 @@
+## [4.8.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.8...v4.8.9) (2025-10-28)
+
+
+### Performance Improvements
+
+* **app:** did a pass on removing unnecessary props ([ccead4c](https://github.com/jbelew/nms_optimizer-web/commit/ccead4c00f2fa5c08526a6e2b48bacc9c6f1bcec))
+
 ## [4.8.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.7...v4.8.8) (2025-10-27)
 
 
