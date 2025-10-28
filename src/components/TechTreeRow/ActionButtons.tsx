@@ -56,7 +56,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 					disabled={isOptimizeButtonDisabled}
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
 					id={tech}
-					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "!cursor-pointer" : ""}`.trim()}
+					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`.trim()}
 				>
 					<OptimizeIconComponent />
 				</IconButton>
@@ -68,7 +68,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 					onClick={handleReset}
 					disabled={!hasTechInGrid || solving || isResetting}
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
-					className={`techRow__resetButton ${hasTechInGrid && !solving ? "!cursor-pointer" : ""}`.trim()}
+					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`.trim()}
 				>
 					<ResetIcon />
 				</IconButton>

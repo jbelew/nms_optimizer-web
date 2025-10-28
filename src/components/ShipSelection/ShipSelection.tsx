@@ -42,7 +42,7 @@ const ShipSelectionLoadingState = () => {
 					size="2"
 					variant="soft"
 					aria-label="Select ship type"
-					className="!p-2"
+					className="p-2!"
 					disabled
 				>
 					<Spinner size="3" />
@@ -54,7 +54,7 @@ const ShipSelectionLoadingState = () => {
 					size="2"
 					variant="soft"
 					aria-label="Select ship type"
-					className="!mt-1"
+					className="mt-1!"
 					disabled
 				>
 					<Spinner size="3" />
@@ -124,7 +124,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 							size="2"
 							variant="soft"
 							aria-label="Select ship type"
-							className="!p-2"
+							className="p-2!"
 						>
 							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 							<Separator
@@ -139,7 +139,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 							size="2"
 							variant="soft"
 							aria-label="Select ship type"
-							className="!mt-1"
+							className="mt-1!"
 						>
 							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						</IconButton>
@@ -161,7 +161,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				open={toastOpen}
 				onOpenChange={setToastOpen}
 				title="Corvette Warning!"
-				description="As of 6.11 -- Corvettes continue to have a bug that can cause layouts to reset unexpectedly. We recommend holding off on heavy optimization until this issue is resolved. If you do create a layout, use the “Share Grid” feature and bookmark your build to keep an easy backup"
+				description="As of 6.12 -- Corvettes continue to have a bug that can cause layouts to reset unexpectedly. If you do create a layout, use the “Share Grid” feature and bookmark your build to keep an easy backup."
 			/>
 		</>
 	);

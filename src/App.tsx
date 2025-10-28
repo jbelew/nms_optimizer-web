@@ -14,6 +14,9 @@ import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
 
+// import { useInstallPrompt } from "./hooks/useInstallPrompt/useInstallPrompt";
+// import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt";
+
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
 
@@ -42,6 +45,8 @@ const App: FC = () => {
 
 	const shipTypes = useFetchShipTypesSuspense();
 	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
+
+	// const { showPrompt, dismissPrompt } = useInstallPrompt();
 
 	useEffect(() => {
 		initializePlatform(Object.keys(shipTypes));
@@ -89,6 +94,7 @@ const App: FC = () => {
 
 				<RoutedDialogs />
 			</Suspense>
+			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
 		</>
 	);
 };

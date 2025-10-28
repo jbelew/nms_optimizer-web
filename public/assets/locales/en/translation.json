@@ -108,7 +108,7 @@
 		"colossus": "Colossus Exocraft",
 		"minotaur": "Minotaur Exocraft",
 		"exosuit": "Exosuit",
-		"corvette": "Corvette (Beta)"
+		"corvette": "Corvette"
 	},
 	"techTree": {
 		"loading": "LOADING PLATFORM DATA...",
@@ -562,8 +562,12 @@
 		"changelogPageTitle": "Changelog & Updates | NMS Optimizer",
 		"changelogDescription": "View updates, release notes, and bug fixes for the NMS Optimizer. Stay current with new features, improvements, and version history.",
 		"userstatsPageTitle": "User Statistics & Popular Layouts | NMS Optimizer",
-		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man’s Sky technologies across all item types.",
+		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man’s Sky technologies across all platform types.",
 		"translationPageTitle": "Help Translate NMS Optimizer | Community Localization",
 		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man’s Sky players worldwide."
+	},
+	"installPrompt": {
+		"iosInstructions": "For the best experience, add this app to your Home Screen: Tap the Share icon, then 'Add to Home Screen'.",
+		"dismiss": "Dismiss"
 	}
 }

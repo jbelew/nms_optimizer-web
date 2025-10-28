@@ -108,7 +108,7 @@
         "colossus": "Colossus exocraft",
         "minotaur": "Minotauro Exocraft",
         "exosuit": "Exame",
-        "corvette": "Corvette (beta)"
+        "corvette": "Corvette"
     },
     "techTree": {
         "loading": "Carregando dados da plataforma ...",
