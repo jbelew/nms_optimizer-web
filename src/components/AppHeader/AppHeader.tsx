@@ -21,7 +21,6 @@ import { useA11yStore } from "@/store/A11yStore";
  */
 interface AppHeaderProps {
 	onShowChangelog: () => void;
-	language: string;
 }
 
 /**
@@ -31,8 +30,8 @@ interface AppHeaderProps {
  * @param {AppHeaderProps} props - The props for the AppHeader component.
  * @returns {JSX.Element} The rendered AppHeader component.
  */
-const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
-	const { t } = useTranslation();
+const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
+	const { t, i18n } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
@@ -48,7 +47,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog, language }) => {
 
 	return (
 		<header
-			key={language}
+			key={i18n.language}
 			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
 		>
 			<div className="absolute! top-4! left-4! z-10 flex items-start sm:top-5! sm:left-8!">

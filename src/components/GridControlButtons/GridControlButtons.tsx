@@ -6,25 +6,18 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useGridStore } from "@/store/GridStore";
 
 /**
  * @interface RowControlButtonProps
  * @property {number} rowIndex - The index of the row these buttons control.
- * @property {(rowIndex: number) => void} activateRow - Function to activate the row.
- * @property {(rowIndex: number) => void} deActivateRow - Function to deactivate the row.
- * @property {boolean} hasModulesInGrid - True if any cell in the grid contains a module, used to disable buttons.
  * @property {boolean} isFirstInactiveRow - True if this row is the first one that is completely inactive.
  * @property {boolean} isLastActiveRow - True if this row is the last one that has at least one active cell.
- * @property {boolean} gridFixed - True if the grid dimensions are fixed, disabling the buttons.
  */
 interface RowControlButtonProps {
 	rowIndex: number;
-	activateRow: (rowIndex: number) => void;
-	deActivateRow: (rowIndex: number) => void;
-	hasModulesInGrid: boolean;
 	isFirstInactiveRow: boolean;
 	isLastActiveRow: boolean;
-	gridFixed: boolean;
 }
 
 /**
@@ -37,16 +30,16 @@ interface RowControlButtonProps {
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	rowIndex,
-	activateRow,
-	deActivateRow,
-	hasModulesInGrid,
 	isFirstInactiveRow,
 	isLastActiveRow,
-	gridFixed,
 }) => {
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const iconButtonSize = isMediumOrLarger ? "2" : "1";
+	const activateRow = useGridStore((state) => state.activateRow);
+	const deActivateRow = useGridStore((state) => state.deActivateRow);
+	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const gridFixed = useGridStore((state) => state.gridFixed);
 
 	return (
 		<div
@@ -59,7 +52,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						size={iconButtonSize}
 						radius="full"
 						variant="ghost"
-						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={`${!hasModulesInGrid ? "cursor-pointer!" : ""}`} // Centering handled by parent
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.activateRow")}
@@ -75,7 +68,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						variant="ghost"
 						radius="full"
 						size={iconButtonSize}
-						className={`${!hasModulesInGrid ? "!cursor-pointer" : ""}`} // Centering handled by parent
+						className={`${!hasModulesInGrid ? "cursor-pointer!" : ""}`} // Centering handled by parent
 						onClick={() => deActivateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed}
 						aria-label={t("gridControls.deactivateRow")}

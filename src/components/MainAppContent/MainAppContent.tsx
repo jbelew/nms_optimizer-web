@@ -26,7 +26,6 @@ import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
  */
 type MainAppContentProps = {
 	buildVersion: string;
-	language: string;
 };
 
 /**
@@ -34,7 +33,7 @@ type MainAppContentProps = {
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language }) => {
+export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
@@ -80,7 +79,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 				className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 				style={{ backgroundColor: "var(--accent-a2)" }}
 			>
-				<AppHeader onShowChangelog={handleShowChangelog} language={language} />
+				<AppHeader onShowChangelog={handleShowChangelog} />
 				<section
 					className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 					ref={gridContainerRef}
@@ -146,13 +145,13 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, language
 					{!isLg && (
 						<>
 							<Separator size="4" mt="4" mb="4" orientation="horizontal" />
-							<AppFooter buildVersion={buildVersion} language={language} />
+							<AppFooter buildVersion={buildVersion} />
 						</>
 					)}
 				</section>
 			</div>
 
-			{isLg && <AppFooter buildVersion={buildVersion} language={language} />}
+			{isLg && <AppFooter buildVersion={buildVersion} />}
 
 			{/* Dialogs related to MainAppContent's state */}
 			<OptimizationAlertDialog

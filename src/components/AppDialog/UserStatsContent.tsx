@@ -209,7 +209,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 					trim="end"
 					as="h2"
 					mb="3"
-					className="!text-base sm:!text-lg"
+					className="text-base! sm:text-lg!"
 					style={{ color: "var(--accent-a11)" }}
 				>
 					{t(titleKey)}
@@ -241,7 +241,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 							trim="end"
 							as="h2"
 							mb="3"
-							className="!text-base sm:!text-lg"
+							className="text-base! sm:text-lg!"
 							style={{ color: "var(--accent-a11)" }}
 						>
 							<Skeleton>Starship Technologies</Skeleton>
@@ -251,7 +251,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
 							trim="end"
 							as="h2"
 							mb="3"
-							className="!text-base sm:!text-lg"
+							className="text-base! sm:text-lg!"
 							style={{ color: "var(--accent-a11)" }}
 						>
 							<Skeleton>Multi-tool Technologies</Skeleton>

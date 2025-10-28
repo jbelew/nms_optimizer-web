@@ -11,7 +11,6 @@ import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
  */
 interface AppFooterProps {
 	buildVersion: string;
-	language: string;
 }
 
 /**
@@ -21,12 +20,12 @@ interface AppFooterProps {
  * @param {AppFooterProps} props - The props for the AppFooter component.
  * @returns {JSX.Element} The rendered AppFooter component.
  */
-const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, language }) => {
-	useTranslation();
+const AppFooter: React.FC<AppFooterProps> = ({ buildVersion }) => {
+	const { i18n } = useTranslation();
 
 	return (
 		<footer
-			key={language}
+			key={i18n.language}
 			className="flex flex-col items-center justify-center gap-1 pb-4 text-center text-xs font-light sm:text-sm lg:pt-4"
 		>
 			<div>

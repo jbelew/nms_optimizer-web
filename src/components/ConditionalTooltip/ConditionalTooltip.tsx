@@ -1,5 +1,5 @@
 // src/components/ConditionalTooltip/ConditionalTooltip.tsx
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import { Tooltip } from "@radix-ui/themes";
 
 import { isTouchDevice } from "../../utils/isTouchDevice";
@@ -17,7 +17,7 @@ interface ConditionalTooltipProps {
 }
 
 /**
- * A tooltip that is only displayed on non-touch devices and only rendered when hovered.
+ * A tooltip that is only displayed on non-touch devices.
  *
  * @param {ConditionalTooltipProps} props - The props for the component.
  * @returns {React.ReactElement} - The rendered component.
@@ -28,58 +28,14 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
 	delayDuration = 500,
 }) => {
 	const isTouch = isTouchDevice();
-	const [shouldRenderTooltip, setShouldRenderTooltip] = useState(false);
-	const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-	// Clear timeout on unmount or when dependencies change
-	useEffect(() => {
-		return () => {
-			if (hoverTimeoutRef.current) {
-				clearTimeout(hoverTimeoutRef.current);
-			}
-		};
-	}, []);
-
-	// Define handlers unconditionally
-	const handleMouseEnter = useCallback(() => {
-		if (hoverTimeoutRef.current) {
-			clearTimeout(hoverTimeoutRef.current);
-		}
-		hoverTimeoutRef.current = setTimeout(() => {
-			setShouldRenderTooltip(true);
-		}, delayDuration);
-	}, [delayDuration]);
-
-	const handleMouseLeave = useCallback(() => {
-		if (hoverTimeoutRef.current) {
-			clearTimeout(hoverTimeoutRef.current);
-		}
-		setShouldRenderTooltip(false);
-	}, []);
 
 	if (isTouch) {
 		return <>{children}</>;
 	}
 
-	// --- Only for non-touch devices --- //
-	// We need to wrap the children in a div to attach event handlers,
-	// as React.cloneElement might not work reliably with all child types
-	// and directly modifying props of children can be problematic.
-	const wrappedChildren = (
-		<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="inline">
-			{children}
-		</div>
-	);
-
 	return (
-		<>
-			{shouldRenderTooltip && label ? (
-				<Tooltip open={true} content={label} className="font-medium!">
-					{wrappedChildren}
-				</Tooltip>
-			) : (
-				wrappedChildren
-			)}
-		</>
+		<Tooltip delayDuration={delayDuration} content={label} className="font-medium!">
+			{children}
+		</Tooltip>
 	);
 };

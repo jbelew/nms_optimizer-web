@@ -1,13 +1,12 @@
 import type { FC } from "react";
 import React, { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
-import { useDialog } from "./context/dialog-utils"; // Import useDialog
-
+import { useDialog } from "./context/dialog-utils";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
@@ -30,23 +29,7 @@ const RoutedDialogs = lazy(() =>
  * @returns {JSX.Element} The rendered App component.
  */
 const App: FC = () => {
-	const { t, i18n } = useTranslation();
-	const location = useLocation();
-
-	useEffect(() => {
-		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
-		const pathParts = location.pathname.split("/").filter((p) => p);
-
-		let lang = "en";
-		if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
-			lang = pathParts[0];
-		}
-
-		const currentLang = i18n.language.split("-")[0];
-		if (currentLang !== lang) {
-			i18n.changeLanguage(lang);
-		}
-	}, [location.pathname, i18n]);
+	const { t } = useTranslation();
 
 	const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
@@ -67,7 +50,7 @@ const App: FC = () => {
 	return (
 		<>
 			<OfflineBanner />
-			<MainAppContent buildVersion={build} language={i18n.language} />
+			<MainAppContent buildVersion={build} />
 
 			<Suspense fallback={null}>
 				<Routes>

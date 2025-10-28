@@ -94,10 +94,10 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 						<DropdownMenu.Label className="shipSelection__header">
 							Select Build
 						</DropdownMenu.Label>
-						{builds.map((build, index) => (
+						{builds.map((build) => (
 							<DropdownMenu.Item
 								className="font-medium"
-								key={index}
+								key={build.title}
 								onClick={() => handleApply(build)}
 							>
 								{build.title}

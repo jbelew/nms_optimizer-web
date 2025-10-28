@@ -7,11 +7,6 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
 /**
  * @interface GridRowProps
  * @property {number} rowIndex - The row index of the current row.
- * @property {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
- * @property {(rowIndex: number) => void} activateRow - Function to activate a specific row in the grid.
- * @property {(rowIndex: number) => void} deActivateRow - Function to deactivate a specific row in the grid.
- * @property {boolean} hasModulesInGrid - Indicates if there are any modules currently placed in the grid.
- * @property {boolean} gridFixed - Indicates if the grid's dimensions (active/inactive cells) are fixed.
  */
 interface GridRowProps {
 	rowIndex: number;
@@ -27,14 +22,9 @@ interface GridRowProps {
  */
 const GridRow: React.FC<GridRowProps> = memo(({ rowIndex }) => {
 	const row = useGridStore((state) => state.grid.cells[rowIndex]);
-	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
-	const gridFixed = useGridStore((state) => state.gridFixed);
 	const gridWidth = useGridStore((state) => state.grid.width);
 	const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
 	const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
-	const activateRow = useGridStore((state) => state.activateRow);
-	const deActivateRow = useGridStore((state) => state.deActivateRow);
 
 	// Determine column count for ARIA properties.
 	// Add 1 for the GridControlButtons column.
@@ -51,16 +41,12 @@ const GridRow: React.FC<GridRowProps> = memo(({ rowIndex }) => {
 					key={`${rowIndex}-${columnIndex}`}
 					rowIndex={rowIndex}
 					columnIndex={columnIndex}
-					isSharedGrid={isSharedGrid}
 				/>
 			))}
 			{/* Wrap GridControlButtons in a div with role="gridcell" */}
-			<div role="gridcell" className="w-[24px]" aria-colindex={totalAriaColumnCount}>
+			<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
 				<GridControlButtons
 					rowIndex={rowIndex}
-					activateRow={activateRow}
-					deActivateRow={deActivateRow}
-					hasModulesInGrid={hasModulesInGrid}
 					isFirstInactiveRow={
 						row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
 					}
@@ -69,7 +55,6 @@ const GridRow: React.FC<GridRowProps> = memo(({ rowIndex }) => {
 						rowIndex === lastActiveRowIndex &&
 						rowIndex >= useGridStore.getState().grid.cells.length - 3 // Keep this specific condition if it's intended
 					}
-					gridFixed={gridFixed}
 				/>
 			</div>
 		</div>

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import { useCell } from "@/hooks/useCell/useCell";
+import { useGridStore } from "@/store/GridStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
@@ -67,12 +68,10 @@ const getUpgradePriority = (label: string | undefined): string => {
  * @interface GridCellProps
  * @property {number} rowIndex - The row index of the cell.
  * @property {number} columnIndex - The column index of the cell.
- * @property {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
  */
 interface GridCellProps {
 	rowIndex: number;
 	columnIndex: number;
-	isSharedGrid: boolean;
 }
 
 /**
@@ -80,14 +79,12 @@ interface GridCellProps {
  * It displays the technology icon, handles user interactions, and applies styling.
  *
  * @param {GridCellProps} props - The props for the GridCell component.
- * @param {number} props.rowIndex - The row index of the cell.
- * @param {number} props.columnIndex - The column index of the cell.
- * @param {boolean} props.isSharedGrid - Indicates if the grid is in a shared (read-only) state.
  * @returns {JSX.Element} The rendered GridCell component.
  */
-const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
+const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);
 	const { t } = useTranslation();
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const {
 		isTouching,
