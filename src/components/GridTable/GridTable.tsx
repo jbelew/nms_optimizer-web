@@ -83,7 +83,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 				<MessageSpinner
 					isVisible={solving || isTechTreeLoading}
-					showRandomMessages={solving}
 					useNMSFont={isTechTreeLoading}
 					initialMessage={
 						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
@@ -105,7 +104,11 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					))}
 					{!isLarge && (
 						<div role="row">
-							<div className="col-span-full mt-1 text-sm">
+							<div
+								role="gridcell"
+								aria-colspan={totalAriaColumnCount}
+								className="col-span-full mt-1 text-sm"
+							>
 								{isTouchDevice && !superchargedFixed && !tutorialFinished && (
 									<Callout.Root className="mt-2 mb-4" size="1">
 										<Callout.Icon>

@@ -3,6 +3,17 @@
 .messageSpinner {
 	&__header {
 		@include mixins.heading-styled;
+
+		&--nms {
+			color: var(--accent-11);
+			filter: drop-shadow(0 2px 4px var(--accent-a2));
+
+			// Note: This modifier had very similar styles to the base.
+			// Sass would allow further optimization here with @extend if needed.
+			font-family: NMS, sans-serif;
+			font-weight: 400;
+			text-transform: uppercase;
+		}
 	}
 
 	&__spinner {
@@ -24,8 +35,8 @@
 		}
 
 		@media (width <= 640px) {
-			height: 2rem;
-			width: 2rem;
+			height: 3rem;
+			width: 3rem;
 		}
 	}
 
