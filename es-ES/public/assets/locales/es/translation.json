@@ -111,7 +111,7 @@
 		"corvette": "Corvette"
 	},
 	"techTree": {
-		"loading": "LOADING PLATFORM DATA...",
+		"loading": "LOADING PLATFORM DATA",
 		"tooltips": {
 			"insufficientSpace": "Incomplete Solve!",
 			"validSolve": "Valid solve!",
