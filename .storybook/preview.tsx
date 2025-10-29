@@ -1,9 +1,8 @@
-import React from "react";
 import type { Preview } from "@storybook/react-vite";
+import React from "react";
 import { Theme } from "@radix-ui/themes";
 
 import "../src/i18n/i18n";
-
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";
 import "@radix-ui/themes/tokens/colors/cyan.css";
@@ -24,7 +23,7 @@ import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
 import "../src/index.css";
-import "../src/components/Toast/Toast.css";
+import "../src/components/Toast/Toast.scss";
 import "../src/assets/css/fonts.css";
 
 const preview: Preview = {
