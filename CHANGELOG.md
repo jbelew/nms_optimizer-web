@@ -1,3 +1,10 @@
+## [4.8.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.9...v4.8.10) (2025-10-29)
+
+
+### Performance Improvements
+
+* **markdown:** lazy loading the markdown libraries ([b713c49](https://github.com/jbelew/nms_optimizer-web/commit/b713c491f503b140a7f1a2d8e68f6560535b255e))
+
 ## [4.8.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.8...v4.8.9) (2025-10-28)
 
 
