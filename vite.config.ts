@@ -182,22 +182,6 @@ export default defineConfig(({ mode }) => {
 								return "react";
 							}
 
-							// Markdown ecosystem
-							if (
-								id.includes("react-markdown") ||
-								id.includes("remark-") ||
-								id.includes("rehype-") ||
-								id.includes("micromark") ||
-								id.includes("mdast-") ||
-								id.includes("unist-") ||
-								id.includes("vfile") ||
-								id.includes("zwitch") ||
-								id.includes("bail") ||
-								id.includes("trough") ||
-								id.includes("decode-named-character-reference") ||
-								id.includes("parse-entities")
-							)
-								return "markdown";
 
 							// Radix Themes (tokens/utilities)
 							if (id.includes("@radix-ui/themes/tokens/colors/"))

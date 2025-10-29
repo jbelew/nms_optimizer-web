@@ -12,15 +12,15 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ onDismiss }) => {
 
 	return (
 		<Callout.Root
-			size="2"
-			style={{ backgroundColor: "-var(--cyan-11)" }}
+			variant="surface"
+			size="1"
 			className="fixed right-4 bottom-4 left-4 mx-auto max-w-md"
 		>
 			<Callout.Icon>
 				<Share1Icon />
 			</Callout.Icon>
 			<Callout.Text>{t("installPrompt.iosInstructions")}</Callout.Text>
-			<Button size="1" variant="solid" onClick={onDismiss}>
+			<Button mt="1" mb="1" size="1" variant="solid" onClick={onDismiss}>
 				{t("installPrompt.dismiss")}
 			</Button>
 		</Callout.Root>

@@ -1,7 +1,5 @@
-// src/components/AppDialog/MarkdownContentRenderer.tsx
-import React, { lazy, useEffect, useRef } from "react";
+import React, { lazy, useEffect, useRef, useState } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
-import remarkGfm from "remark-gfm";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
@@ -14,23 +12,23 @@ interface MarkdownContentRendererProps {
 
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
 
-/**
- * MarkdownContentRenderer component fetches and renders markdown content.
- * It also handles scrolling to a specific section if `targetSectionId` is provided.
- *
- * @param {MarkdownContentRendererProps} props - The props for the MarkdownContentRenderer component.
- * @returns {JSX.Element} The rendered MarkdownContentRenderer component.
- */
 const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,
 }) => {
 	const { markdown, isLoading, error } = useMarkdownContent(markdownFileName);
+	const [remarkGfm, setRemarkGfm] = useState<(() => void) | undefined>(undefined);
 
 	const h2CounterRef = useRef(0);
 	const h2IdMapRef = useRef(new Map<React.ReactNode, string>());
 
 	const articleRef = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		import("remark-gfm").then((module) => {
+			setRemarkGfm(() => module.default);
+		});
+	}, []);
 
 	// Reset the counter and map when markdownFileName changes
 	useEffect(() => {
@@ -163,7 +161,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 
 	return (
 		<article ref={articleRef} className="text-sm sm:text-base">
-			{isLoading ? (
+			{isLoading || !remarkGfm ? (
 				<LoremIpsumSkeleton />
 			) : (
 				<LazyReactMarkdown components={components} remarkPlugins={[remarkGfm]}>

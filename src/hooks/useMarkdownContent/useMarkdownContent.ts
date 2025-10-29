@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import aboutMarkdown from "/src/assets/locales/en/about.md?raw";
-
 /**
  * @interface MarkdownContentState
  * @property {string} markdown - The markdown content.
@@ -36,11 +34,6 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			setError(null);
 
 			const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
-			if (markdownFileName === "about" && lang === "en") {
-				setMarkdown(aboutMarkdown);
-				setIsLoading(false);
-				return;
-			}
 			const langToFetch = markdownFileName === "changelog" ? "en" : lang;
 			const defaultLang = (i18n.options.fallbackLng as string[])[0] || "en"; // Assuming 'en' is the default fallback
 
