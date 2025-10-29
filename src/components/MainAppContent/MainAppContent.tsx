@@ -9,7 +9,6 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
-import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
@@ -49,7 +48,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 		clearPatternNoFitTech,
 		handleForceCurrentPnfOptimize,
 	} = useOptimize();
-	const { updateUrlForShare, updateUrlForReset } = useUrlSync(); // Destructure functions
+
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
@@ -123,9 +122,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 							status={status}
 							shared={isSharedGrid}
 							ref={appLayoutGridTableRef}
-							updateUrlForShare={updateUrlForShare}
-							updateUrlForReset={updateUrlForReset}
-							gridContainerRef={gridContainerRef}
 						/>
 					</article>
 

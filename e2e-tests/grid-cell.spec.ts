@@ -82,6 +82,9 @@ test.describe('GridCell Supercharge Interaction', () => {
     // Wait for React to re-render after state update
     await page.waitForTimeout(500);
 
+    // Get initial shake count
+    const initialShakeCount = await page.evaluate(() => window.useShakeStore.getState().shakeCount);
+
     // Select a 5th cell that is not supercharged (e.g., the 5th cell in the first row)
     const targetCell = page.getByRole('gridcell').nth(4); // 0-indexed, so this is the 5th cell
 
@@ -92,14 +95,8 @@ test.describe('GridCell Supercharge Interaction', () => {
     // Attempt to supercharge the 5th cell
     await targetCell.click();
 
-    // Assert that shaking state becomes true
-    await expect(page.evaluate(() => window.useShakeStore.getState().shaking)).resolves.toBe(true);
-
-    // Wait for shake animation to complete (500ms in triggerShake)
-    await page.waitForTimeout(600);
-
-    // Assert that shaking state becomes false
-    await expect(page.evaluate(() => window.useShakeStore.getState().shaking)).resolves.toBe(false);
+    // Assert that shakeCount has increased
+    await expect(page.evaluate(() => window.useShakeStore.getState().shakeCount)).resolves.toBe(initialShakeCount + 1);
 
     // Verify cell remains active and not supercharged
     await expect(targetCell).toHaveClass(/gridCell--active/);

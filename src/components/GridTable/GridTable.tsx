@@ -31,9 +31,6 @@ interface GridTableProps {
 	progressPercent: number;
 	status?: string;
 	shared: boolean; // This is isSharedGridProp, used for GridCell
-	updateUrlForShare: () => string;
-	updateUrlForReset: () => void;
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -46,17 +43,7 @@ interface GridTableProps {
  * @returns {JSX.Element} The rendered GridTableInternal component.
  */
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
-	(
-		{
-			solving,
-			progressPercent,
-			status,
-			updateUrlForShare,
-			updateUrlForReset,
-			gridContainerRef,
-		},
-		ref
-	) => {
+	({ solving, progressPercent, status }, ref) => {
 		const { t } = useTranslation();
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const gridWidth = useGridStore((state) => state.grid.width);
@@ -141,12 +128,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					)}
 
 					<div role="row">
-						<GridTableButtons
-							solving={solving}
-							updateUrlForShare={updateUrlForShare}
-							updateUrlForReset={updateUrlForReset}
-							gridContainerRef={gridContainerRef}
-						/>
+						<GridTableButtons />
 					</div>
 				</div>
 			</GridShake>

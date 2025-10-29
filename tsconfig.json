@@ -18,7 +18,7 @@
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
+		"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom", "@playwright/test"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "**/tmp", "/tmp", "**/dist"]

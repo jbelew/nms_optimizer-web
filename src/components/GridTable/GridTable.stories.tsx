@@ -15,8 +15,5 @@ export const Default: Story = {
 		solving: true,
 		progressPercent: 0,
 		shared: true,
-		updateUrlForShare: () => "",
-		updateUrlForReset: () => "",
-		gridContainerRef: { current: null },
 	},
 };

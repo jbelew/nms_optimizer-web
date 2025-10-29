@@ -11,28 +11,19 @@ import { useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useOptimize } from "../../hooks/useOptimize/useOptimize";
+import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
-
-interface GridTableButtonsProps {
-	solving: boolean;
-	updateUrlForShare: () => string;
-	updateUrlForReset: () => void;
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
-}
 
 /**
  * GridTableButtons component provides a set of control buttons for the grid.
  * These include buttons for showing instructions, about page, sharing the grid, and resetting the grid.
  *
- * @param {GridTableButtonsProps} props - The props for the GridTableButtons component.
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = ({
-	solving,
-	updateUrlForShare,
-	updateUrlForReset,
-	gridContainerRef,
-}) => {
+const GridTableButtons: React.FC = () => {
+	const { solving, gridContainerRef } = useOptimize();
+	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("140px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
