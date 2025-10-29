@@ -1150,7 +1150,7 @@ console.log("Screenshot script started.");
 			localStorage.setItem("selectedPlatform", "sentinel");
 		});
 
-		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
+		await page.goto("https://nms-optimizer.app", { waitUntil: "networkidle0" });
 		await page.screenshot({ path: "public/assets/img/screenshots/screenshot.png", fullPage: true });
 		console.log("Taking standard screenshot ...");
 		await page.screenshot({
@@ -1159,7 +1159,7 @@ console.log("Screenshot script started.");
 		});
 
 		await page.setViewport({ width: 375, height: 667 });
-		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
+		await page.goto("https://nms-optimizer.app", { waitUntil: "networkidle0" });
 		// Inject CSS to hide scrollbars for the mobile screenshot
 		await page.addStyleTag({ content: `
 			body::-webkit-scrollbar {
@@ -1176,7 +1176,7 @@ console.log("Screenshot script started.");
 		});
 
 		await page.setViewport({ width: 800, height: 1280 });
-		await page.goto("http://localhost:4173", { waitUntil: "networkidle0" });
+		await page.goto("https://nms-optimizer.app", { waitUntil: "networkidle0" });
 		// Inject CSS to hide scrollbars for the tablet screenshot
 		await page.addStyleTag({ content: `
 			body::-webkit-scrollbar {
