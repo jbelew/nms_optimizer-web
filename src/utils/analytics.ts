@@ -55,9 +55,11 @@ export const initializeAnalytics = () => {
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
 			send_page_view: true,
+			user_properties: {
+				app_version: __APP_VERSION__,
+			},
 		},
 	});
-	ReactGA.set({ app_version: __APP_VERSION__ });
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
