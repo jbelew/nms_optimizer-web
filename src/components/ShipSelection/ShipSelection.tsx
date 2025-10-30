@@ -2,7 +2,7 @@
 import "./ShipSelection.scss";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useMemo, useState, useTransition } from "react";
+import React, { Suspense, useCallback, useMemo, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,6 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { NmsToast } from "../Toast/Toast";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;
@@ -81,7 +80,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	);
 	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
-	const [toastOpen, setToastOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 
 	/**
@@ -157,12 +155,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					/>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
-			<NmsToast
-				open={toastOpen}
-				onOpenChange={setToastOpen}
-				title="Corvette Warning!"
-				description="As of 6.12 -- Corvettes continue to have a bug that can cause layouts to reset unexpectedly. If you do create a layout, use the “Share Grid” feature and bookmark your build to keep an easy backup."
-			/>
 		</>
 	);
 });
