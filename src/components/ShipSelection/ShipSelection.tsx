@@ -99,9 +99,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					value: 1,
 				});
 
-				if (option === "corvette") {
-					setToastOpen(true);
-				}
+				// if (option === "corvette") {
+				// 	setToastOpen(true);
+				// }
 
 				startTransition(() => {
 					const shipTypeKeys = Object.keys(shipTypes);

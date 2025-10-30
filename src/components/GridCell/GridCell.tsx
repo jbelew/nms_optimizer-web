@@ -1,7 +1,8 @@
 import "./GridCell.scss";
 
 import React, { memo } from "react";
-import { useTranslation } from "react-i18next";
+
+// import { useTranslation } from "react-i18next";
 
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
@@ -83,7 +84,7 @@ interface GridCellProps {
  */
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);
-	const { t } = useTranslation();
+	// const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const {
@@ -137,11 +138,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 		</div>
 	);
 
-	const tooltipContent = cell.image
-		? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
-				defaultValue: cell.label,
-			})
-		: cell.label;
+	const tooltipContent = cell.label;
+	// const tooltipContent = cell.image
+	// 	? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
+	// 			defaultValue: cell.label,
+	// 		})
+	// 	: cell.label;
 
 	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
 
