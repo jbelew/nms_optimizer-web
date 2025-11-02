@@ -1,3 +1,10 @@
+## [4.8.11](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.10...v4.8.11) (2025-10-30)
+
+
+### Bug Fixes
+
+* **toast:** triggering a version bump for the toast removal ([6d60782](https://github.com/jbelew/nms_optimizer-web/commit/6d60782976653493a17c52cd776e8f03d044e0a6))
+
 ## [4.8.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.9...v4.8.10) (2025-10-29)
 
 
