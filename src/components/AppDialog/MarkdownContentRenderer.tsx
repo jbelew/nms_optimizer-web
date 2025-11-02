@@ -92,7 +92,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 						trim="end"
 						as="h2"
 						mb="3"
-						className="!text-base sm:!text-lg"
+						className="text-base! sm:text-lg!"
 						id={id}
 						style={{ color: "var(--accent-a11)" }}
 					>
@@ -102,7 +102,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			},
 			h3: ({ children }: { children?: React.ReactNode }) => {
 				return (
-					<Heading as="h3" className="!text-sm sm:!text-base">
+					<Heading as="h3" className="text-sm! sm:text-base!">
 						{children}
 					</Heading>
 				);

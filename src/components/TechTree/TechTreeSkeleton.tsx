@@ -28,7 +28,7 @@ export const TechTreeSkeleton: React.FC = () => {
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
-				<aside className="w-full flex-grow pt-8" style={{ minHeight: "50vh" }}>
+				<aside className="w-full grow pt-8" style={{ minHeight: "50vh" }}>
 					<SuspenseSkeleton />
 				</aside>
 			)}

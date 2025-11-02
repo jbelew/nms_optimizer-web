@@ -77,7 +77,7 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 								src={imagePath}
 								srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
 								alt={type}
-								className="mt-[1px] mr-1 ml-1 h-[24] w-[36] opacity-25 sm:mt-1 sm:mr-2"
+								className="mt-px mr-1 ml-1 h-[24] w-[36] opacity-25 sm:mt-1 sm:mr-2"
 							/>
 						)}
 					<h2 className="heading-styled text-xl sm:text-2xl">
