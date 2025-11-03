@@ -1,3 +1,10 @@
+## [4.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.0...v4.10.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* **docker:** more arm64 fixes ([a7a09aa](https://github.com/jbelew/nms_optimizer-web/commit/a7a09aa3e0529db0d4fccb4d2cef5f52949b635c))
+
 # [4.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.8...v4.10.0) (2025-11-03)
 
 
