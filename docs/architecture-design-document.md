@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-This document outlines the architecture and design of the No Man's Sky Technology Layout Optimizer AI (Web UI). This tool is a web-based application that allows users to optimize their technology layouts in the game No Man's Sky.
+This document outlines the architecture and design of the No Man's Sky Technology Layout Optimizer (Web UI). This tool is a web-based application that allows users to optimize their technology layouts in the game No Man's Sky.
 
 ## 2. Architectural Goals
 

@@ -1,13 +1,9 @@
 {
-    "appHeader": {
-        "subTitle": "KI zur Technologie-Layout-Optimierung"
-    },
     "languageInfo": {
         "nativeName": "Deutsch",
         "changeLanguage": "Sprache ändern",
         "selectLanguage": "Sprache auswählen"
     },
-    "appName": "No Man's Sky Technologie-Layout-Optimierer KI",
     "buttons": {
         "instructions": "Anleitung",
         "about": "Über",
@@ -565,5 +561,13 @@
         "userstatsDescription": "Entdecken Sie die Benutzerstatistiken von NMS Optimizer, um die beliebtesten No Man’s Sky-Technologien für alle Artikeltypen zu sehen.",
         "translationPageTitle": "Helfen Sie beim Übersetzen des NMS Optimizers | Community-Lokalisierung",
         "translationDescription": "Helfen Sie mit, den NMS Optimizer in Ihre Sprache zu übersetzen und ihn für mehr No Man’s Sky-Spieler weltweit zugänglich zu machen."
+    },
+    "appHeader": {
+        "subTitle": "Technologie-Layout-Optimierer <1>AI/RUST</1>"
+    },
+    "appName": "No Man's Sky Technology Layout-Optimierer",
+    "installPrompt": {
+        "iosInstructions": "Für das beste Erlebnis fügen Sie diese App zu Ihrem Startbildschirm hinzu: Tippen Sie auf das Teilen-Symbol und dann auf „Zum Startbildschirm hinzufügen“.",
+        "dismiss": "Zurückweisen"
     }
 }

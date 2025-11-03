@@ -51,4 +51,4 @@ Sie können Ihre Übersetzungen dort einfügen oder Fragen stellen, wenn Sie nic
 
 `randomMessages` ist genau das – eine Liste von zufälligen Nachrichten, die angezeigt werden, wenn die Optimierung länger als ein paar Sekunden dauert. Sie müssen nicht alle übersetzen, sondern nur ein paar, die in Ihrer Sprache Sinn ergeben.
 
-Vielen Dank, dass Sie dazu beitragen, den No Man's Sky Technology Layout Optimizer AI für alle besser zu machen! Lassen Sie mich wissen, wenn Sie Fragen haben – ich helfe gerne.
+Vielen Dank, dass Sie dazu beitragen, den No Man's Sky Technology Layout Optimizer für alle besser zu machen! Lassen Sie mich wissen, wenn Sie Fragen haben – ich helfe gerne.

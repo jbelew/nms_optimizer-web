@@ -1,4 +1,4 @@
-# No Man's Sky Technology Layout Optimizer AI (Web UI)
+# No Man's Sky Technology Layout Optimizer (Web UI)
 
 ## CI/CD Status
 

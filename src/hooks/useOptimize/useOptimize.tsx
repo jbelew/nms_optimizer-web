@@ -186,15 +186,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 									typeof data.max_bonus === "number" && data.max_bonus > 100,
 							});
 							setGrid(data.grid);
+							cleanup();
 						}
 					}
 				} else {
 					console.error("Invalid API response:", data);
 					setShowErrorStore(true);
+					cleanup();
 				}
-				cleanup();
 			});
-
 			socket.once("connect_error", (err) => {
 				console.error("WebSocket connection error:", err);
 				setShowErrorStore(true);

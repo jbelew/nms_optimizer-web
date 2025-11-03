@@ -51,4 +51,4 @@ You can paste your translations there or ask questions if you’re not sure wher
 
 `randomMessages` is just that — a list of random messages that show when optimization takes longer than a couple of seconds. No need to translate them all, just come up with a few that make sense in your language.
 
-Thanks for helping make the No Man's Sky Technology Layout Optimizer AI better for everyone! Let me know if you have any questions — happy to help.
+Thanks for helping make the No Man's Sky Technology Layout Optimizer better for everyone! Let me know if you have any questions — happy to help.

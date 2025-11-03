@@ -2,6 +2,11 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 4.9.3 (2025-11-03)
+
+- Fixed an issue impacting solve quality on incomplete model sets.
+- Fine tuned the solver parameters for higher quality, complex solves.
+
 ## Version 4.9.0 (2025-11-02)
 
 - Core solver rewritten in Rust ⚡ — now 38× faster (really!), because brute force deserves a proper engine.

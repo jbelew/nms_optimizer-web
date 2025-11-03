@@ -100,7 +100,7 @@ export default defineConfig(({ mode }) => {
 					],
 				},
 				manifest: {
-					name: "No Man's Sky Technology Layout Optimizer AI",
+					name: "No Man's Sky Technology Layout Optimizer",
 					short_name: "NMS Optimizer",
 					description:
 						"The NMS Optimizer helps you design the perfect Starship, Corvette, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",

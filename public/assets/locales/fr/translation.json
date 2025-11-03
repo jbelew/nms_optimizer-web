@@ -1,13 +1,9 @@
 {
-    "appHeader": {
-        "subTitle": "IA Optimiseur d'agencement de technologie"
-    },
     "languageInfo": {
         "nativeName": "Français (Généré par IA)",
         "changeLanguage": "Changer la langue",
         "selectLanguage": "Sélectionner la langue"
     },
-    "appName": "IA d'optimisation d'agencement de technologie de No Man's Sky",
     "buttons": {
         "instructions": "Instructions",
         "about": "À propos",
@@ -565,5 +561,13 @@
         "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour connaître les technologies No Man’s Sky les plus populaires pour tous les types d’objets.",
         "translationPageTitle": "Aidez à traduire NMS Optimizer | Localisation communautaire",
         "translationDescription": "Aidez à traduire NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
+    },
+    "appHeader": {
+        "subTitle": "Optimiseur de configuration technologique <1>AI/RUST</1>"
+    },
+    "appName": "Optimiseur de mise en page technologique No Man's Sky",
+    "installPrompt": {
+        "iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil : appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\".",
+        "dismiss": "Rejeter"
     }
 }
