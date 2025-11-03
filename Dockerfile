@@ -19,13 +19,16 @@ RUN npm run build:docker # Assumes output to /app/frontend/dist
 FROM python:3.14-slim AS backend-builder
 WORKDIR /app/backend
 
-# Install git, build dependencies for python packages, and wheel for building wheels
+# Install git, build dependencies, Rust, and maturin
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     build-essential \
-    # Add other build dependencies if your requirements.txt needs them (e.g., libpq-dev for psycopg2)
-    && pip install --no-cache-dir wheel \
+    curl \
+    && pip install --no-cache-dir wheel maturin \
+    && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Clone the backend repository
 ARG BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
@@ -38,11 +41,15 @@ RUN echo "Attempting to clone backend repository..." && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \
     cat /app/backend/requirements.txt || echo "Failed to cat requirements.txt"
 
-# Build wheels for Python dependencies from the cloned repo's requirements.txt
-RUN echo "--- Attempting to build wheels from /app/backend/requirements.txt ---" && \
-    mkdir /app/wheels && \
-    pip wheel --no-cache-dir -r requirements.txt -w /app/wheels && \
-    echo "--- Successfully built wheels. Contents of /app/wheels: ---" && \
+# Build wheels for Python dependencies
+RUN mkdir /app/wheels && \
+    echo "--- Building nms_optimizer_service wheel with maturin ---" && \
+    (cd rust_scorer && maturin build --release -o /app/wheels) && \
+    echo "--- Building dependency wheels ---" && \
+    # Create a temporary requirements file without the nms_optimizer_service wheel
+    grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
+    pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
+    echo "--- Successfully built all wheels. Contents of /app/wheels: ---" && \
     ls -la /app/wheels/ || \
     (echo "!!! Pip wheel command failed. Check errors above. !!!" && exit 1)
 
