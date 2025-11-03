@@ -59,11 +59,12 @@ WORKDIR /deps
 
 # Copy wheels and requirements.txt from the backend-builder stage
 COPY --from=backend-builder /app/wheels /tmp/wheels
-COPY --from=backend-builder /app/backend/requirements.txt .
+COPY --from=backend-builder /app/backend/requirements.tmp.txt .
 COPY --from=backend-builder /app/backend/wheelhouse ./wheelhouse
 
 # Install dependencies from requirements.txt using the pre-built wheels
-RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.txt && \
+RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.tmp.txt && \
+    pip install --no-cache-dir --no-index --find-links=/tmp/wheels nms_optimizer_service && \
     rm -rf /tmp/wheels
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 

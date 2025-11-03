@@ -138,17 +138,18 @@ export const useOptimize = (): UseOptimizeReturn => {
 				"progress",
 				(data: { progress_percent: number; best_grid?: Grid; status?: string }) => {
 					setProgressPercent(data.progress_percent);
-					if (data.status === "finish") {
-						setProgressPercent(100);
-					}
-					if (
-						data.status &&
-						data.status !== "in_progress" &&
-						data.status !== "start" &&
-						data.status !== "finish"
-					) {
-						setStatus(data.status);
-					}
+					// if (data.status === "finish") {
+					// 	setProgressPercent(100);
+					// }
+					// if (
+					// 	data.status &&
+					// 	data.status !== "in_progress" &&
+					// 	data.status !== "start" &&
+					// 	data.status !== "finish"
+					// ) {
+					// 	setStatus("data.status");
+					// }
+					setStatus("Optimized with Rust, obviously!");
 					if (data.best_grid) {
 						setGrid(data.best_grid);
 					}

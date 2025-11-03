@@ -13,6 +13,7 @@
 			font-family: NMS, sans-serif;
 			font-weight: 400;
 			text-transform: uppercase;
+			will-change: filter;
 		}
 	}
 
@@ -20,6 +21,7 @@
 		filter: drop-shadow(0 2px 4px var(--accent-a2));
 		height: 4rem;
 		width: 4rem;
+		will-change: filter;
 
 		&--big {
 			height: 6rem;
@@ -41,16 +43,15 @@
 	}
 
 	&__random {
+		color: var(--amber-9);
+		font-weight: semi-bold;
 		min-height: 1.5em;
-		transition: color 0.25s ease-in-out;
+		opacity: 0;
+		transition: opacity 0.5s ease-in-out;
 		user-select: none;
 
 		&--visible {
-			color: var(--amber-9);
-		}
-
-		&--hidden {
-			color: transparent;
+			opacity: 1;
 		}
 	}
 }

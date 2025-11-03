@@ -30,5 +30,8 @@
 	},
 	"files.watcherExclude": {
 		"**/tmp/**": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
 	}
 }

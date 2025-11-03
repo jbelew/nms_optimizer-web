@@ -24,7 +24,11 @@ export const TechTreeSkeleton: React.FC = () => {
 						backgroundColor: "var(--gray-a2)",
 					}}
 				>
-					<MessageSpinner initialMessage="Loading Tech" isInset={true} isVisible={true} />
+					<MessageSpinner
+						initialMessage="Loading Tech"
+						isInlay={true}
+						isVisible={true}
+					/>{" "}
 				</ScrollArea>
 			) : (
 				// Skeleton for small screens: An aside with a fixed min-height.
