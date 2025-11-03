@@ -1,3 +1,10 @@
+## [4.9.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.5...v4.9.6) (2025-11-03)
+
+
+### Bug Fixes
+
+* **docker:** still debugging arm64 builds ([0887038](https://github.com/jbelew/nms_optimizer-web/commit/0887038c7bcb9065475ce156aa3440b9cd54c66a))
+
 ## [4.9.5](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.4...v4.9.5) (2025-11-03)
 
 
