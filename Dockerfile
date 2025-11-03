@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && pip install --no-cache-dir wheel maturin \
     && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
+# Add the aarch64-unknown-linux-gnu target for ARM64 builds
+RUN /root/.cargo/bin/rustup target add aarch64-unknown-linux-gnu && \
+    /root/.cargo/bin/rustup target add x86_64-unknown-linux-gnu
 RUN arch
 
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -64,12 +67,12 @@ RUN \
     \
     mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
+    (cd rust_scorer && /root/.cargo/bin/maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
     \
     echo "--- Building dependency wheels ---" && \
-    # Create a temporary requirements file without the nms_optimizer_service wheel
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
     pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
+    \
     echo "--- Successfully built all wheels. Contents of /app/wheels: ---" && \
     ls -la /app/wheels/ || \
     (echo "!!! Pip wheel command failed. Check errors above. !!!" && exit 1)
