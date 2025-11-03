@@ -1,3 +1,10 @@
+# [4.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.8...v4.10.0) (2025-11-03)
+
+
+### Features
+
+* **docker:** last try! ([6346c26](https://github.com/jbelew/nms_optimizer-web/commit/6346c265f03fab9fe873428df54a28303ef27327))
+
 ## [4.9.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.7...v4.9.8) (2025-11-03)
 
 
