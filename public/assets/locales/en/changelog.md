@@ -4,7 +4,7 @@ The full commit history for this project is available on [GitHub](https://github
 
 ## Version 4.9.3 (2025-11-03)
 
-- Fixed an issue impacting solve quality on incomplete model sets.
+- Fixed an issue impacting solve quality with user-selected module sets.
 - Fine tuned the solver parameters for higher quality, complex solves.
 
 ## Version 4.9.0 (2025-11-02)

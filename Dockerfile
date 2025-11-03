@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN arch
 
 ENV PATH="/root/.cargo/bin:${PATH}"
+RUN arch
 
 # Clone the backend repository
 ARG BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
