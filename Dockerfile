@@ -23,9 +23,9 @@ WORKDIR /app/backend
 
 # Install git, build dependencies, Rust, and maturin
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    build-essential \
-    curl \
+    git [arch=${TARGETARCH}] \
+    build-essential [arch=${TARGETARCH}] \
+    curl [arch=${TARGETARCH}] \
     && pip install --no-cache-dir wheel maturin \
     && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
@@ -92,8 +92,8 @@ RUN groupadd -r ${APP_GROUP} && useradd -r -g ${APP_GROUP} -d /opt/app -s /sbin/
 
 # Install Nginx, supervisor, and Gunicorn
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    nginx \
-    supervisor \
+    nginx [arch=${TARGETARCH}] \
+    supervisor [arch=${TARGETARCH}] \
     && pip install --no-cache-dir gunicorn gevent \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
