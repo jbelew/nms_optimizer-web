@@ -1,3 +1,10 @@
+# [4.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.11...v4.9.0) (2025-11-03)
+
+
+### Features
+
+* **rust!:** ported the main solver to rust. Minor fixes to support that change ([88fa1ff](https://github.com/jbelew/nms_optimizer-web/commit/88fa1ff25c6d225a284ed54043176173eca6d4d9))
+
 ## [4.8.11](https://github.com/jbelew/nms_optimizer-web/compare/v4.8.10...v4.8.11) (2025-10-30)
 
 
