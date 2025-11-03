@@ -1,5 +1,6 @@
 # Stage 1: Build Frontend (nms_optimizer-web)
-FROM node:22-alpine AS frontend-builder
+ARG BUILDPLATFORM
+FROM --platform=$BUILDPLATFORM node:22-alpine AS frontend-builder
 WORKDIR /app/frontend
 
 # Copy frontend specific files from nms_optimizer-web directory (relative to build context)
@@ -16,7 +17,8 @@ COPY . ./
 RUN npm run build:docker # Assumes output to /app/frontend/dist
 
 # Stage 2: Prepare Backend (nms_optimizer-service from GitHub)
-FROM python:3.14-slim AS backend-builder
+FROM --platform=$BUILDPLATFORM python:3.14-slim AS backend-builder
+ARG TARGETARCH
 WORKDIR /app/backend
 
 # Install git, build dependencies, Rust, and maturin
@@ -43,10 +45,16 @@ RUN echo "Attempting to clone backend repository..." && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \
     cat /app/backend/requirements.txt || echo "Failed to cat requirements.txt"
 
+ARG MATURIN_TARGET
+RUN if [ "${TARGETARCH}" = "amd64" ]; then MATURIN_TARGET="x86_64-unknown-linux-gnu"; \
+    elif [ "${TARGETARCH}" = "arm64" ]; then MATURIN_TARGET="aarch64-unknown-linux-gnu"; \
+    else echo "Unsupported TARGETARCH: ${TARGETARCH}" && exit 1; fi && \
+    echo "MATURIN_TARGET: ${MATURIN_TARGET}"
+
 # Build wheels for Python dependencies
 RUN mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && maturin build --release -o /app/wheels) && \
+    (cd rust_scorer && maturin build --release -o /app/wheels --target ${MATURIN_TARGET}) && \
     echo "--- Building dependency wheels ---" && \
     # Create a temporary requirements file without the nms_optimizer_service wheel
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
@@ -66,7 +74,7 @@ COPY --from=backend-builder /app/backend/wheelhouse ./wheelhouse
 
 # Install dependencies from requirements.txt using the pre-built wheels
 RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.tmp.txt && \
-    pip install --no-cache-dir --no-index --find-links=/tmp/wheels nms_optimizer_service && \
+    pip install --no-cache-dir --no-index --find-links=/tmp/wheels /tmp/wheels/*.whl && \
     rm -rf /tmp/wheels
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 
