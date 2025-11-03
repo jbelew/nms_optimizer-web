@@ -1,13 +1,13 @@
 {
 	"appHeader": {
-		"subTitle": "Technology Layout Optimizer <1>AI</1>"
+		"subTitle": "Technology Layout Optimizer <1>AI/RUST</1>"
 	},
 	"languageInfo": {
 		"nativeName": "English",
 		"changeLanguage": "Change language",
 		"selectLanguage": "Select Language"
 	},
-	"appName": "No Man's Sky Technology Layout Optimizer AI",
+	"appName": "No Man's Sky Technology Layout Optimizer",
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "About",
@@ -557,7 +557,7 @@
 		"appDescription": "Optimize No Man's Sky tech layouts for Starships, Multitools, Exosuits & more. Maximize adjacency bonuses and supercharged slots for the best build.",
 		"instructionsPageTitle": "How to Use NMS Optimizer | Instructions & Tips",
 		"instructionsDescription": "Learn how to use the NMS Optimizer to master supercharged slots, adjacency bonuses, and build the best technology layouts in No Man’s Sky.",
-		"aboutPageTitle": "About NMS Optimizer | AI-Powered Tech Layouts & Builds",
+		"aboutPageTitle": "About NMS Optimizer | AI/RUST Powered Tech Layouts & Builds",
 		"aboutDescription": "Discover how the NMS Optimizer uses AI to create optimal No Man’s Sky builds for Starships, Corvettes, Multitools, Exosuits, and Exocraft.",
 		"changelogPageTitle": "Changelog & Updates | NMS Optimizer",
 		"changelogDescription": "View updates, release notes, and bug fixes for the NMS Optimizer. Stay current with new features, improvements, and version history.",
