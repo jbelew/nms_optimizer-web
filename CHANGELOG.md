@@ -1,3 +1,10 @@
+## [4.9.3](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.2...v4.9.3) (2025-11-03)
+
+
+### Bug Fixes
+
+* **docker:** moved building the rust wheels into the pipeline to ensure arm64 support ([a20bcd3](https://github.com/jbelew/nms_optimizer-web/commit/a20bcd320de39994ff0a0e8aee200302ad11537e))
+
 ## [4.9.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.1...v4.9.2) (2025-11-03)
 
 
