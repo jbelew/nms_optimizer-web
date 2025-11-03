@@ -45,16 +45,12 @@ RUN echo "Attempting to clone backend repository..." && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \
     cat /app/backend/requirements.txt || echo "Failed to cat requirements.txt"
 
-ARG MATURIN_TARGET
-RUN if [ "${TARGETARCH}" = "amd64" ]; then MATURIN_TARGET="x86_64-unknown-linux-gnu"; \
-    elif [ "${TARGETARCH}" = "arm64" ]; then MATURIN_TARGET="aarch64-unknown-linux-gnu"; \
-    else echo "Unsupported TARGETARCH: ${TARGETARCH}" && exit 1; fi && \
-    echo "MATURIN_TARGET: ${MATURIN_TARGET}"
-
 # Build wheels for Python dependencies
-RUN mkdir /app/wheels && \
+RUN MATURIN_TARGET=$([ "${TARGETARCH}" = "amd64" ] && echo "x86_64-unknown-linux-gnu" || ([ "${TARGETARCH}" = "arm64" ] && echo "aarch64-unknown-linux-gnu" || (echo "Unsupported TARGETARCH: ${TARGETARCH}" && exit 1))) && \
+    echo "MATURIN_TARGET: ${MATURIN_TARGET}" && \
+    mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && maturin build --release -o /app/wheels --target ${MATURIN_TARGET}) && \
+    (cd rust_scorer && maturin build --release -o /app/wheels --target "${MATURIN_TARGET}") && \
     echo "--- Building dependency wheels ---" && \
     # Create a temporary requirements file without the nms_optimizer_service wheel
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
