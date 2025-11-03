@@ -1,3 +1,10 @@
+## [4.9.2](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.1...v4.9.2) (2025-11-03)
+
+
+### Bug Fixes
+
+* **docker:** fixed the docker build to pull in the rust wheels properly ([b6cbd6e](https://github.com/jbelew/nms_optimizer-web/commit/b6cbd6eff291f14031e37ac592acffb0b040afc2))
+
 ## [4.9.1](https://github.com/jbelew/nms_optimizer-web/compare/v4.9.0...v4.9.1) (2025-11-03)
 
 
