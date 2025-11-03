@@ -67,7 +67,7 @@ RUN \
     \
     mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && /root/.cargo/bin/maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
+    (cd rust_scorer && maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
     \
     echo "--- Building dependency wheels ---" && \
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
