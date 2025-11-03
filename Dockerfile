@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && pip install --no-cache-dir wheel maturin \
     && curl https://sh.rustup.rs -sSf | sh -s -- -y \
-    && rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*
+RUN arch
 
 ENV PATH="/root/.cargo/bin:${PATH}"
 
