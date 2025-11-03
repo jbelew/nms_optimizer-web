@@ -2,6 +2,11 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 5.0.0 (2025-11-02)
+
+- Core solver rewritten in Rust ⚡ — now 38× faster (really!), because brute force deserves a proper engine.  
+  - With the extra speed, the solver now runs **double the iterations** and performs **two passes** to maximize accuracy.
+
 ## Version 4.8.0 (2025-10-25)
 
 - Implemented PWA Service Workers for (hopefully) better Android performance.
