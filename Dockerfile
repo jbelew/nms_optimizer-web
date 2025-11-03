@@ -54,8 +54,9 @@ WORKDIR /deps
 COPY --from=backend-builder /app/wheels /tmp/wheels
 COPY --from=backend-builder /app/backend/requirements.txt .
 
-# Install dependencies from local wheels
-RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.txt && \
+# Install all local wheels first, then install remaining dependencies from requirements.txt
+RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels /tmp/wheels/*.whl && \
+    pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.txt && \
     rm -rf /tmp/wheels
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 
