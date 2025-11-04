@@ -14,25 +14,22 @@ RUN npm ci --ignore-scripts
 # Copy the rest of the frontend source
 COPY . ./
 
-RUN npm run build:docker # Assumes output to /app/frontend/dist
+RUN set -eux && npm run build:docker # Assumes output to /app/frontend/dist
 
 # Stage 2: Prepare Backend (nms_optimizer-service from GitHub)
-FROM --platform=$BUILDPLATFORM debian:trixie AS backend-builder
+FROM --platform=$BUILDPLATFORM python:3.14-slim AS backend-builder
 ARG TARGETARCH
 WORKDIR /app/backend
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3-brotli \
-    python3-venv \
     git \
     build-essential \
     curl \
     gcc-aarch64-linux-gnu \
     libc6-dev-arm64-cross \
-    && python3 -m venv /opt/venv \
-    && /opt/venv/bin/pip install --no-cache-dir wheel maturin \
+    libev-dev \
+    libevent-dev \
+    && pip install --no-cache-dir wheel maturin \
     && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
 # Add the aarch64-unknown-linux-gnu target for ARM64 builds
@@ -73,11 +70,14 @@ RUN \
     \
     mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && /opt/venv/bin/maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
+    (cd rust_scorer && maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
     \
     echo "--- Building dependency wheels ---" && \
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
-    /opt/venv/bin/pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
+    echo "gunicorn" >> requirements.tmp.txt && \
+    echo "gevent" >> requirements.tmp.txt && \
+    echo "supervisor" >> requirements.tmp.txt && \
+    pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
     \
     echo "--- Successfully built all wheels. Contents of /app/wheels: ---" && \
     ls -la /app/wheels/ || \
@@ -93,8 +93,9 @@ COPY --from=backend-builder /app/backend/requirements.tmp.txt .
 COPY --from=backend-builder /app/backend/wheelhouse ./wheelhouse
 
 # Install dependencies from requirements.txt using the pre-built wheels
-RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.tmp.txt && \
-    pip install --no-cache-dir --no-index --find-links=/tmp/wheels /tmp/wheels/*.whl && \
+RUN pip install --verbose --no-cache-dir --no-index --find-links=/tmp/wheels -r requirements.tmp.txt 2>&1 | tee /tmp/pip_install_output.log && \
+    pip install --verbose --no-cache-dir --no-index --find-links=/tmp/wheels /tmp/wheels/*.whl 2>&1 | tee -a /tmp/pip_install_output.log && \
+    cat /tmp/pip_install_output.log && \
     rm -rf /tmp/wheels
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 
@@ -112,12 +113,7 @@ RUN groupadd -r ${APP_GROUP} && useradd -r -g ${APP_GROUP} -d /opt/app -s /sbin/
 
 # Install Python 3.14, pip, Nginx, supervisor, and Gunicorn
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
     nginx \
-    supervisor \
-    python3-gunicorn \
-    python3-gevent \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
@@ -162,4 +158,4 @@ RUN rm -f /etc/nginx/sites-enabled/default
 COPY docker_configs/supervisord.conf /etc/supervisor/supervisord.conf
 
 EXPOSE 80
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
