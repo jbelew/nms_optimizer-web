@@ -17,16 +17,22 @@ COPY . ./
 RUN npm run build:docker # Assumes output to /app/frontend/dist
 
 # Stage 2: Prepare Backend (nms_optimizer-service from GitHub)
-FROM --platform=$BUILDPLATFORM python:3.14-slim AS backend-builder
+FROM --platform=$BUILDPLATFORM debian:trixie AS backend-builder
 ARG TARGETARCH
 WORKDIR /app/backend
 
-# Install git, build dependencies, Rust, and maturin
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-brotli \
+    python3-venv \
     git \
     build-essential \
     curl \
-    && pip install --no-cache-dir wheel maturin \
+    gcc-aarch64-linux-gnu \
+    libc6-dev-arm64-cross \
+    && python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir wheel maturin \
     && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && rm -rf /var/lib/apt/lists/*
 # Add the aarch64-unknown-linux-gnu target for ARM64 builds
@@ -42,17 +48,17 @@ ARG BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
 ARG BACKEND_REPO_BRANCH=main # Or a specific commit/tag
 RUN echo "Attempting to clone backend repository..." && \
     git clone --branch ${BACKEND_REPO_BRANCH} --depth 1 ${BACKEND_REPO_URL} . && \
+    git pull && \
     rm -rf .git && \
+    sed -i '/Brotli/d' requirements.txt && \
     echo "--- Contents of /app/backend after clone: ---" && \
     ls -la /app/backend/ && \
     echo "--- Contents of /app/backend/requirements.txt: ---" && \
     cat /app/backend/requirements.txt || echo "Failed to cat requirements.txt"
 
-ARG MATURIN_TARGET
-RUN if [ "${TARGETARCH}" = "amd64" ]; then MATURIN_TARGET="x86_64-unknown-linux-gnu"; \
-    elif [ "${TARGETARCH}" = "arm64" ]; then MATURIN_TARGET="aarch64-unknown-linux-gnu"; \
-    else echo "Unsupported TARGETARCH: ${TARGETARCH}" && exit 1; fi && \
-    echo "MATURIN_TARGET: ${MATURIN_TARGET}"
+RUN mkdir -p /root/.cargo && \
+    echo '[target.aarch64-unknown-linux-gnu]' > /root/.cargo/config.toml && \
+    echo 'linker = "aarch64-linux-gnu-gcc"' >> /root/.cargo/config.toml
 
 # Build wheels for Python dependencies
 RUN \
@@ -67,11 +73,11 @@ RUN \
     \
     mkdir /app/wheels && \
     echo "--- Building nms_optimizer_service wheel with maturin ---" && \
-    (cd rust_scorer && maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
+    (cd rust_scorer && /opt/venv/bin/maturin build --release -o /app/wheels --target "${MATURIN_TARGET}" -i python3.14) && \
     \
     echo "--- Building dependency wheels ---" && \
     grep -v "nms_optimizer_service" requirements.txt > requirements.tmp.txt && \
-    pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
+    /opt/venv/bin/pip wheel --no-cache-dir -r requirements.tmp.txt -w /app/wheels && \
     \
     echo "--- Successfully built all wheels. Contents of /app/wheels: ---" && \
     ls -la /app/wheels/ || \
@@ -93,7 +99,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/tmp/wheels -r requiremen
 # At this point, /usr/local/lib/python3.11/site-packages contains the installed dependencies
 
 # Stage 3: Final Image with Nginx, Frontend, and Backend Service (was Stage 3)
-FROM python:3.14-slim
+FROM debian:trixie
 LABEL maintainer="jbelew.dev@gmail.com"
 LABEL description="NMS Optimizer Web UI and Python Backend Service"
 
@@ -104,11 +110,14 @@ ENV PYTHONUNBUFFERED=1 \
 # Create a non-root user for running the application
 RUN groupadd -r ${APP_GROUP} && useradd -r -g ${APP_GROUP} -d /opt/app -s /sbin/nologin ${APP_USER}
 
-# Install Nginx, supervisor, and Gunicorn
+# Install Python 3.14, pip, Nginx, supervisor, and Gunicorn
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
     nginx \
     supervisor \
-    && pip install --no-cache-dir gunicorn gevent \
+    python3-gunicorn \
+    python3-gevent \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
