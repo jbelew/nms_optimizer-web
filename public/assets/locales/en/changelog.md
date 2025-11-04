@@ -2,15 +2,16 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
-## Version 4.9.3 (2025-11-03)
+## Version 4.10 (2025-11-03)
 
-- Fixed an issue impacting solve quality with user-selected module sets.
-- Fine tuned the solver parameters for higher quality, complex solves.
+- Resolved an issue affecting solve accuracy when using custom module sets.
+- Further refined solver parameters for more consistent, high-quality results on complex layouts.
+- Updated Docker builds to support the new Rust modules.
 
 ## Version 4.9.0 (2025-11-02)
 
-- Core solver rewritten in Rust ⚡ — now 38× faster (really!), because brute force deserves a proper engine.
-  - With the extra speed, the solver now runs **double the iterations** and performs **two passes** to maximize accuracy.
+- Core solver completely rewritten in Rust ⚡ — now **38× faster** (really).
+    - With the extra speed, the solver now runs **five times as many calculations** and performs **six passes** to ensure maximum accuracy.
 
 ## Version 4.8.0 (2025-10-25)
 
