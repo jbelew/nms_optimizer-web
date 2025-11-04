@@ -1,3 +1,10 @@
+## [4.10.7](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.6...v4.10.7) (2025-11-04)
+
+
+### Bug Fixes
+
+* **docker:** another attempt ([99bf24a](https://github.com/jbelew/nms_optimizer-web/commit/99bf24aecf83171d1cad349d237495328190f0c4))
+
 ## [4.10.6](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.5...v4.10.6) (2025-11-03)
 
 
