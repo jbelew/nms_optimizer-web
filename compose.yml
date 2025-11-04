@@ -5,7 +5,8 @@ services:
     container_name: nms_optimizer_app
     build:
       context: .
+      args:
+        TARGETARCH: amd64
     ports:
       - "8016:80"
     restart: unless-stopped
-    command: ["/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
