@@ -1,3 +1,10 @@
+## [4.10.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.8...v4.10.9) (2025-11-04)
+
+
+### Bug Fixes
+
+* **docker:** builds work for both arch's locally ([9d2cb34](https://github.com/jbelew/nms_optimizer-web/commit/9d2cb34255c7a4fb582509cf7d6a3bb208a381f7))
+
 ## [4.10.8](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.7...v4.10.8) (2025-11-04)
 
 
