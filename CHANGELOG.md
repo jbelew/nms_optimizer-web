@@ -1,3 +1,10 @@
+## [4.10.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.9...v4.10.10) (2025-11-05)
+
+
+### Bug Fixes
+
+* **nofit:** fixed a bug with the no fit dialog ([e8c70b2](https://github.com/jbelew/nms_optimizer-web/commit/e8c70b2b2f154efd0192046739e974cf043e8a7f))
+
 ## [4.10.9](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.8...v4.10.9) (2025-11-04)
 
 
