@@ -1,8 +1,6 @@
-@use "../../styles/mixins";
 
 .moduleSelection {
 	&__heading--styled {
-		@include mixins.heading-styled;
 
 		line-height: 1.5em;
 	}

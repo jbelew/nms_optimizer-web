@@ -25,8 +25,10 @@ export default defineConfig(({ mode }) => {
 		},
 		plugins: [
 			react({
+				jsxRuntime: "automatic",
+				jsxImportSource: "react",
 				babel: {
-					plugins: [["babel-plugin-react-compiler"]],
+					plugins: [],
 				},
 			}),
 			tailwindcss(),
@@ -158,6 +160,7 @@ export default defineConfig(({ mode }) => {
 		resolve: {
 			alias: {
 				"@": path.resolve(__dirname, "./src"),
+				"react/jsx-dev-runtime": "react/jsx-runtime",
 				react: path.resolve(__dirname, "node_modules/react"),
 				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 				i18next: path.resolve(__dirname, "node_modules/i18next"),

@@ -20,7 +20,7 @@
     "sitemap": "node scripts/generate-sitemap.mjs",
     "preview": "vite preview",
     "screenshot": "node scripts/screenshot.cjs",
-    "test": "vitest run --coverage",
+    "test": "npm run build && vitest run --coverage",
     "test:e2e": "npm run build:e2e && playwright test",
     "test:ci": "vitest run",
     "typecheck": "tsc --noEmit",

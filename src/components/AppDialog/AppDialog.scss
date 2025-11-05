@@ -1,4 +1,3 @@
-@use "../../styles/mixins";
 
 /* Keyframes for AppDialog animations */
 @keyframes appDialog__overlay-show {
@@ -97,7 +96,6 @@
 	}
 
 	&__title {
-		@include mixins.heading-styled;
 
 		margin-right: 1rem;
 	}

@@ -1,8 +1,6 @@
-@use "../../styles/mixins";
 
 .messageSpinner {
 	&__header {
-		@include mixins.heading-styled;
 
 		&--nms {
 			color: var(--accent-11);

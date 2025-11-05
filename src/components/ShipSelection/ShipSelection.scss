@@ -1,8 +1,6 @@
-@use "../../styles/mixins";
 
 .shipSelection {
 	&__header {
-		@include mixins.heading-styled;
 
 		color: var(--accent-11);
 		font-size: var(--text-base);
