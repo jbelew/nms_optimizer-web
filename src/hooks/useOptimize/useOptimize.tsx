@@ -160,6 +160,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				if (isApiResponse(data)) {
 					if (data.solve_method === "Pattern No Fit" && !forced) {
 						setPatternNoFitTech(tech);
+						setSolving(false);
 						sendEvent({
 							category: "User Interactions",
 							action: "no_fit_warning",
