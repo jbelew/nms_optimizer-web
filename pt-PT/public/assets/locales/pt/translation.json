@@ -69,8 +69,8 @@
 		},
 		"optimizationAlert": {
 			"warning": "-kzzkt- Warning! -kzzkt-",
-			"insufficientSpace": "There’s not enough space to place all modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are selected in your layout.",
-			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it will probably fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the result.",
+			"insufficientSpace": "There’s not a large enough window to effectively place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are selected in your layout.",
+			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Force Optimize"
 		},
