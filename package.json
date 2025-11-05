@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build --mode production",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "build:docker": "DOCKER=true vite build --mode docker",
     "build:critical": "tsc -b && vite build --mode critical",
     "build:e2e": "vite build --mode e2e",
@@ -136,6 +138,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^1.1.0",
     "vite-plugin-splash-screen": "^0.2.0",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.4"
   },
   "config": {

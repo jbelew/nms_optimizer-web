@@ -25,7 +25,7 @@ import "./i18n/i18n"; // Initialize i18next
 import { StrictMode } from "react";
 import * as Toast from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
@@ -36,7 +36,7 @@ import { initializeAnalytics } from "./utils/analytics";
 // Initialize analytics
 initializeAnalytics();
 
-createRoot(document.getElementById("root")!).render(
+hydrateRoot(document.getElementById("root")!,
 	<StrictMode>
 		<BrowserRouter>
 			<ErrorBoundary>

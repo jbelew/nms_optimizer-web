@@ -1,16 +1,18 @@
 import fs from "fs";
 import path from "path";
+import type { UserConfigExport } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import PluginCritical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
+import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
-import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
@@ -28,23 +30,23 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			tailwindcss(),
-			splashScreen({
-				logoSrc: "assets/svg/loader.svg",
-				splashBg: "#000000",
-				loaderBg: "#00A2C7",
-				loaderType: "dots",
-			}),
-			...(doCritical
-				? [
-						deferStylesheetsPlugin(),
-						PluginCritical({
-							criticalBase: "dist/",
-							criticalUrl: "https://nms-optimizer.app",
-							criticalPages: [{ uri: "/", template: "index" }],
-							criticalConfig: {},
-						}),
-					]
-				: []),
+			// splashScreen({
+			// 	logoSrc: "assets/svg/loader.svg",
+			// 	splashBg: "#000000",
+			// 	loaderBg: "#00A2C7",
+			// 	loaderType: "dots",
+			// }),
+			// ...(doCritical
+			// 	? [
+			// 			deferStylesheetsPlugin(),
+			// 			PluginCritical({
+			// 				criticalBase: "dist/",
+			// 				criticalUrl: "https://nms-optimizer.app",
+			// 				criticalPages: [{ uri: "/", template: "index" }],
+			// 				criticalConfig: {},
+			// 			}),
+			// 		]
+			// 	: []),
 			compression({
 				algorithm: "brotliCompress",
 				ext: ".br",
@@ -57,9 +59,9 @@ export default defineConfig(({ mode }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-			...(doCritical
-				? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
-				: []),
+			// ...(doCritical
+			// 	? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
+			// 	: []),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
@@ -158,11 +160,12 @@ export default defineConfig(({ mode }) => {
 				"@": path.resolve(__dirname, "./src"),
 				react: path.resolve(__dirname, "node_modules/react"),
 				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+				i18next: path.resolve(__dirname, "node_modules/i18next"),
 			},
 			dedupe: ["react", "react-dom"], // <- critical for singleton React
 		},
 		optimizeDeps: {
-			include: ["react", "react-dom"],
+			include: ["react", "react-dom", "i18next"],
 			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
 		},
 		server: { host: "0.0.0.0", port: 5173 },
@@ -181,7 +184,6 @@ export default defineConfig(({ mode }) => {
 							if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
 								return "react";
 							}
-
 
 							// Radix Themes (tokens/utilities)
 							if (id.includes("@radix-ui/themes/tokens/colors/"))
@@ -214,6 +216,7 @@ export default defineConfig(({ mode }) => {
 							: "assets/[name]-[hash].[ext]",
 				},
 			},
+			ssr: "src/entry-server.tsx",
 		},
 		test: {
 			globals: true,
