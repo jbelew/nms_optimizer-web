@@ -26,7 +26,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion }) => {
 	return (
 		<footer
 			key={i18n.language}
-			className="flex flex-col items-center justify-center gap-1 pb-4 text-center text-xs font-light sm:text-sm lg:pt-4 lg:pb-4"
+			className="flex flex-col items-center justify-center gap-1 pb-4 text-center text-xs font-light sm:text-sm lg:pt-4 lg:pb-0"
 		>
 			<div>
 				<Trans
