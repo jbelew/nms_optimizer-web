@@ -1,3 +1,10 @@
+## [5.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.2...v5.0.3) (2025-11-06)
+
+
+### Bug Fixes
+
+* **css:** fixed CLS caused by Radiu UI components ([3db12a2](https://github.com/jbelew/nms_optimizer-web/commit/3db12a28be2d6c727f16e86325be9b31e3fc0340))
+
 ## [5.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.1...v5.0.2) (2025-11-06)
 
 
