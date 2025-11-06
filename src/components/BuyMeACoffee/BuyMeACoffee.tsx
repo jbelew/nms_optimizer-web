@@ -29,10 +29,12 @@ export default function BuyMeACoffee() {
 	};
 
 	return (
-		<Button size={isLargeScreen ? "1" : "1"} variant="solid" asChild>
-			<a href="https://www.buymeacoffee.com/jbelew" onClick={handleButtonClick}>
-				☕ Buy me a Coffee!
-			</a>
-		</Button>
+		<div className="pt-1 md:pt-0">
+			<Button size={isLargeScreen ? "1" : "1"} variant="solid" asChild>
+				<a href="https://www.buymeacoffee.com/jbelew" onClick={handleButtonClick}>
+					☕ Buy me a Coffee!
+				</a>
+			</Button>
+		</div>
 	);
 }
