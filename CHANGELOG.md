@@ -1,3 +1,10 @@
+## [5.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.1...v5.0.2) (2025-11-06)
+
+
+### Bug Fixes
+
+* **lauout:** finally fixed the width/padding issue on desktop on small screen sizes ([5a8230e](https://github.com/jbelew/nms_optimizer-web/commit/5a8230e5f715c0a8afaf2c6bf002fc938dce7c55))
+
 ## [5.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.0...v5.0.1) (2025-11-06)
 
 
