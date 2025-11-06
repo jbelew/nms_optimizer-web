@@ -1,3 +1,16 @@
+# [5.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.10...v5.0.0) (2025-11-06)
+
+
+### Features
+
+* **v5.0:** bumping app to v5.0 ([dd3a6af](https://github.com/jbelew/nms_optimizer-web/commit/dd3a6af0d9646a1f435d68672a075e6c3df108ae))
+
+
+### BREAKING CHANGES
+
+* **v5.0:** The core solver has been rebuilt in Rust ⚡, making it 38× faster and capable of
+running deeper optimization passes without slowing down.
+
 ## [4.10.10](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.9...v4.10.10) (2025-11-05)
 
 
