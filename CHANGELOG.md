@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.0...v5.0.1) (2025-11-06)
+
+
+### Bug Fixes
+
+* **reponsive:** finally fixed the desktop reponsive layout ([384e17f](https://github.com/jbelew/nms_optimizer-web/commit/384e17fbdcaa95115930804af085d3c51a82fa53))
+
 # [5.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v4.10.10...v5.0.0) (2025-11-06)
 
 
