@@ -84,7 +84,7 @@ body {
 
 @media (max-width: 1023px) {
 	body {
-		padding-right: calc(100dvw - 100%);
+		padding-right: calc(100dvw - 100%) !important;
 	}
 }
 
