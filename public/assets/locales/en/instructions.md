@@ -1,6 +1,6 @@
 ## Basic Usage
 
-- **Click or tap** the ⚙️ icon to select your **Technology**.
+- **Click or tap** the ⚙️ icon to select your **Platform** (Starships, Multi-tools, Corvettes, etc.).
 - **Click or double-tap** a cell to mark it as **Supercharged** (up to 4 per grid).
 - **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on mobile) to toggle a cell’s **active** state — active cells can hold modules.
 - Use the **row toggle buttons** to enable or disable entire rows. Row toggles are **disabled once modules are placed**, and re-enabled when you press **Reset Grid**.
