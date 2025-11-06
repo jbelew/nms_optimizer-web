@@ -2,7 +2,7 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
-## Version 5.0.0 (2025-11-06)
+## Version 5.0 (2025-11-06)
 
 ### 🚀 Major Update
 
