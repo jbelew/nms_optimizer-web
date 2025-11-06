@@ -2,16 +2,28 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
-## Version 4.10 (2025-11-03)
+## Version 5.0.0 (2025-11-06)
 
-- Resolved an issue affecting solve accuracy when using custom module sets.
-- Further refined solver parameters for more consistent, high-quality results on complex layouts.
-- Updated Docker builds to support the new Rust modules.
+### 🚀 Major Update
 
-## Version 4.9.0 (2025-11-02)
+Version 5 introduces a complete solver overhaul focused on speed, accuracy, and long-term maintainability.
 
-- Core solver completely rewritten in Rust ⚡ — now **38× faster** (really).
-    - With the extra speed, the solver now runs **five times as many calculations** and performs **six passes** to ensure maximum accuracy.
+- The core solver has been **rebuilt in Rust ⚡**, making it **38× faster** and capable of running deeper optimization passes.
+- Solve quality has improved significantly, especially for complex layouts and custom module sets.
+- Many internal systems have been cleaned up and modularized for more reliable and predictable results.
+
+### 🧠 Improvements
+
+- More consistent solves through better pattern matching and refinement logic.
+- Improved handling of special cases like partial module sets and custom solve maps.
+- New ML models for Corvettes.
+- More stable randomization and reproducible solve results.
+
+### 🛠 Fixes
+
+- Fixed several bugs affecting specific ship types and hyperdrive configurations.
+- Addressed rare cases where solve maps couldn’t be found or reused correctly.
+- General polish, stability, and performance improvements throughout.
 
 ## Version 4.8.0 (2025-10-25)
 
