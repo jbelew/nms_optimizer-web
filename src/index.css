@@ -30,19 +30,18 @@ body.a11y-font .radix-themes {
 
 :root {
 	--grid-columns-flex: 10;
-	/* number of resizable columns */
 	--grid-column-fixed: 24px;
-	/* fixed width of column 11 */
-	--grid-padding: 16px;
+
+	--grid-padding: 32px;
 
 	--grid-gap-min: 2px;
 	--grid-gap-max: 8px;
 
-	--grid-cell-min: 24px;
+	--grid-cell-min: 22px;
 	--grid-cell-max: 64px;
 
 	/* Available width = viewport - left/right padding */
-	--grid-container-width: calc(100vw - (2 * var(--grid-padding)));
+	--grid-container-width: calc(100dvw - (2 * var(--grid-padding)));
 
 	/* Gap scales, but clamped */
 	--grid-gap: clamp(var(--grid-gap-min), 1vw, var(--grid-gap-max));
@@ -52,13 +51,21 @@ body.a11y-font .radix-themes {
 		var(--grid-cell-min),
 		calc(
 			(
-					var(--grid-container-width) - var(--grid-column-fixed) -
-						((var(--grid-columns-flex)) * var(--grid-gap))
+					(100dvw - var(--grid-column-fixed)) -
+						((var(--grid-columns-flex)) * var(--grid-gap)) -
+						(2 * var(--grid-padding) / 2)
 				) /
 				var(--grid-columns-flex)
 		),
 		var(--grid-cell-max)
 	);
+}
+
+/* On non-touch (fine pointer) devices, increase padding */
+@media (pointer: fine) and (hover: hover) {
+	:root {
+		--grid-padding: 48px;
+	}
 }
 
 html {
@@ -73,6 +80,12 @@ body {
 	min-height: 100dvh;
 	width: 100dvw;
 	overflow-x: hidden;
+}
+
+@media (max-width: 1023px) {
+	body {
+		padding-right: calc(100dvw - 100%);
+	}
 }
 
 @media (min-width: 1024px) {
