@@ -1,3 +1,10 @@
+## [5.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.3...v5.0.4) (2025-11-07)
+
+
+### Performance Improvements
+
+* **caching:** added caching for the static API endpoints ([bc042c5](https://github.com/jbelew/nms_optimizer-web/commit/bc042c567af1824b050e2053009fc53ab93d2ea3))
+
 ## [5.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.2...v5.0.3) (2025-11-06)
 
 
