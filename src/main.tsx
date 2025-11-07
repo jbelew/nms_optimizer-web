@@ -40,24 +40,22 @@ hydrateRoot(document.getElementById("root")!,
 	<StrictMode>
 		<BrowserRouter>
 			<ErrorBoundary>
-				<Theme
-					appearance="dark"
-					panelBackground="solid"
-					accentColor="cyan"
-					grayColor="sage"
-					scaling="100%"
-				>
-					<Toast.Provider>
-						<Toast.Provider swipeDirection="right">
-							<DialogProvider>
-								<App />
-							</DialogProvider>
-							<Toast.Viewport className="ToastViewport" />
-						</Toast.Provider>{" "}
-						<Toast.Viewport />
-					</Toast.Provider>
-				</Theme>
-			</ErrorBoundary>
+				                <DialogProvider>
+				                    <Theme
+				                        appearance="dark"
+				                        panelBackground="solid"
+				                        accentColor="cyan"
+				                        grayColor="sage"
+				                        scaling="100%"
+				                    >
+				                        <Toast.Provider>
+				                            <Toast.Provider swipeDirection="right">
+				                                <App />
+				                            </Toast.Provider>{" "}
+				                            <Toast.Viewport />
+				                        </Toast.Provider>
+				                    </Theme>
+				                </DialogProvider>			</ErrorBoundary>
 		</BrowserRouter>
 	</StrictMode>
 );

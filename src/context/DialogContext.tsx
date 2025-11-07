@@ -1,6 +1,6 @@
 // src/context/DialogContext.tsx
 import type { DialogType } from "./dialog-utils";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -22,22 +22,24 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
-	const [tutorialFinished, setTutorialFinished] = useState(() => {
-		const oldKey = "hasVisitedNMSOptimizer";
-		const newKey = "tutorialFinished";
-		const oldVal = localStorage.getItem(oldKey);
-		const newVal = localStorage.getItem(newKey);
+	const [tutorialFinished, setTutorialFinished] = useState(false);
 
-		if (newVal === "true") {
-			return true;
-		} else if (oldVal === "true") {
-			localStorage.setItem(newKey, "true");
-			localStorage.removeItem(oldKey);
-			return true;
-		} else {
-			return false;
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			const oldKey = "hasVisitedNMSOptimizer";
+			const newKey = "tutorialFinished";
+			const oldVal = localStorage.getItem(oldKey);
+			const newVal = localStorage.getItem(newKey);
+
+			if (newVal === "true") {
+				setTutorialFinished(true);
+			} else if (oldVal === "true") {
+				localStorage.setItem(newKey, "true");
+				localStorage.removeItem(oldKey);
+				setTutorialFinished(true);
+			}
 		}
-	});
+	}, []);
 
 	const pathParts = location.pathname.split("/").filter(Boolean);
 	const langCand = pathParts[0];

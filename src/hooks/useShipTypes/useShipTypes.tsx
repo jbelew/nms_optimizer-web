@@ -127,7 +127,15 @@ export function fetchShipTypes(): Resource<ShipTypes> {
  *
  * @returns {ShipTypes} The ship types data.
  */
-export function useFetchShipTypesSuspense(): ShipTypes {
+export function useFetchShipTypesSuspense(initialShipTypes?: ShipTypes): ShipTypes {
+	if (initialShipTypes) {
+		return initialShipTypes;
+	}
+
+	if (typeof window === "undefined") {
+		return {}; // Return empty object on server to prevent suspension
+	}
+
 	return fetchShipTypes().read();
 }
 

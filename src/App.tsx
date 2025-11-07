@@ -33,7 +33,7 @@ import { routes } from "./router";
  * and global state providers. It also handles dynamic document titles and SEO tags.
  * @returns {JSX.Element} The rendered App component.
  */
-const App: FC = () => {
+const App: FC<{ shipTypes?: any; techTree?: any }> = ({ shipTypes, techTree }) => {
 	const { t } = useTranslation();
 
 	const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
@@ -45,47 +45,42 @@ const App: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
-	const shipTypes = useFetchShipTypesSuspense();
+	const fetchedShipTypes = useFetchShipTypesSuspense(shipTypes);
 	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
 
 	// const { showPrompt, dismissPrompt } = useInstallPrompt();
 
-	useEffect(() => {
-		initializePlatform(Object.keys(shipTypes));
-	}, [shipTypes, initializePlatform]);
-
-	return (
-		<>
-			<OfflineBanner />
-			<MainAppContent buildVersion={build} />
-
-			<Suspense fallback={null}>
-				<Routes>
-					{routes.map((route, index) => (
-						<Route key={index} path={route.path} element={route.element} />
-					))}
-				</Routes>
-
-				<AppDialog
-					isOpen={showError}
-					onClose={() => setShowError(false)}
-					content={<ErrorContent onClose={() => setShowError(false)} />}
-					titleKey="dialogs.titles.serverError"
-					title={t("dialogs.titles.serverError")}
-				/>
-
-				{/* Render ShareLinkDialog conditionally */}
-				<ShareLinkDialog
-					isOpen={!!shareUrl}
-					shareUrl={shareUrl || ""}
-					onClose={closeDialog}
-				/>
-
-				<RoutedDialogs />
-			</Suspense>
-			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
-		</>
-	);
-};
-
-export default App;
+	  useEffect(() => {
+	    initializePlatform(Object.keys(fetchedShipTypes));
+	  }, [fetchedShipTypes, initializePlatform]);
+	    return (
+	      <>
+	        <OfflineBanner />
+	        <MainAppContent buildVersion={build} techTree={techTree} />
+	  
+	        <Routes>
+	          {routes.map((route, index) => (
+	            <Route key={index} path={route.path} element={route.element} />
+	          ))}
+	        </Routes>
+	  
+	        <AppDialog
+	          isOpen={showError}
+	          onClose={() => setShowError(false)}
+	          content={<ErrorContent onClose={() => setShowError(false)} />}
+	          titleKey="dialogs.titles.serverError"
+	          title={t("dialogs.titles.serverError")}
+	        />
+	  
+	        {/* Render ShareLinkDialog conditionally */}
+	        <ShareLinkDialog
+	          isOpen={!!shareUrl}
+	          shareUrl={shareUrl || ""}
+	          onClose={closeDialog}
+	        />
+	  
+	        <RoutedDialogs />
+	        {/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
+	      </>
+	    );
+	  };export default App;

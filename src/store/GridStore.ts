@@ -330,6 +330,12 @@ const getWindowSearch = () =>
  * @remarks
  * This store uses `immer` for immutable state updates and `persist` for saving the state to localStorage.
  */
+const dummyStorage = {
+	getItem: () => null,
+	setItem: () => {},
+	removeItem: () => {},
+};
+
 export const useGridStore = create<GridStore>()(
 	persist(
 		immer((set, get) => {
@@ -627,7 +633,7 @@ export const useGridStore = create<GridStore>()(
 		{
 			name: "gridState",
 			version: 1, // Current version of the storage schema
-			storage: debouncedStorage,
+			storage: typeof window === "undefined" ? dummyStorage : debouncedStorage,
 			partialize: (state) => {
 				const dataToPersist = {
 					grid: state.grid,

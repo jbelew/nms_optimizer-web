@@ -2,7 +2,7 @@ import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import ReactGA from "react-ga4";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
 
 // src/components/ErrorBoundary/ErrorBoundary.tsx
 

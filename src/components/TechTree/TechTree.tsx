@@ -1,7 +1,7 @@
 // src/components/TechTree/TechTree.tsx
 import React, { useEffect, useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { TechTree, useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
@@ -45,7 +45,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 }) => {
 	const isLarge = useBreakpoint("1024px");
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
-	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
+	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType, techTreeProp);
 	const techTree = techTreeProp || fetchedTechTree;
 
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
@@ -62,9 +62,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 	}, [hasRecommendedBuilds]);
 
-	useEffect(() => {
-		hideSplashScreen();
-	}, []);
+	
 
 	return (
 		<>
@@ -130,7 +128,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
 	return (
 		<ErrorBoundaryInset>
-			<TechTreeWithData {...props} />
+			<TechTreeWithData {...props} techTree={props.techTree} />
 		</ErrorBoundaryInset>
 	);
 };

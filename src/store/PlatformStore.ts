@@ -28,15 +28,22 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			platform = "standard";
 		}
 		set({ selectedPlatform: platform });
-		localStorage.setItem(LOCAL_STORAGE_KEY, platform);
+		if (typeof window !== "undefined") {
+			localStorage.setItem(LOCAL_STORAGE_KEY, platform);
 
-		if (updateUrl) {
-			const url = new URL(window.location.href);
-			url.searchParams.set("platform", platform);
-			window.history.pushState({}, "", url.toString());
+			if (updateUrl) {
+				const url = new URL(window.location.href);
+				url.searchParams.set("platform", platform);
+				window.history.pushState({}, "", url.toString());
+			}
 		}
 	},
 	initializePlatform: (validShipTypes: string[]) => {
+		if (typeof window === "undefined") {
+			// On server, do nothing, initialPlatform will be handled by default value
+			return;
+		}
+
 		const urlParams = new URLSearchParams(window.location.search);
 		const platformFromUrl = urlParams.get("platform");
 		const platformFromStorage = localStorage.getItem(LOCAL_STORAGE_KEY);

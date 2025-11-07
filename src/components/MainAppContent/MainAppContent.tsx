@@ -2,7 +2,7 @@
 import React, { FC, Suspense, useCallback, useEffect } from "react";
 import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
@@ -25,6 +25,7 @@ import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
  */
 type MainAppContentProps = {
 	buildVersion: string;
+	techTree?: any;
 };
 
 /**
@@ -32,7 +33,7 @@ type MainAppContentProps = {
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
+export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, techTree }) => {
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
@@ -59,10 +60,8 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 		if (isSharedGrid) {
 			// If it's a shared grid, the tech tree is not actively loading,
 			// so ensure the loading spinner is hidden.
-			useTechTreeLoadingStore.getState().setLoading(false);
-			hideSplashScreen();
-		}
-	}, [isSharedGrid]);
+			    useTechTreeLoadingStore.getState().setLoading(false);
+					}	}, [isSharedGrid]);
 
 	/**
 	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
@@ -127,14 +126,13 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 
 					{!isSharedGrid && (
 						<aside className="flex w-full flex-col lg:ml-4">
-							<Suspense fallback={<TechTreeSkeleton />}>
 								<TechTreeComponent
 									handleOptimize={handleOptimize}
 									solving={solving}
 									gridContainerRef={gridContainerRef}
 									gridTableTotalWidth={gridTableTotalWidth}
+									techTree={techTree}
 								/>
-							</Suspense>
 						</aside>
 					)}
 

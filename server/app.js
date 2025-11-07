@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 import { createServer as createViteServer } from 'vite';
+import { getShipTypes, getTechTree } from './data.js';
 
 const __dirname = path.resolve();
 const isProd = process.env.NODE_ENV === 'production' || process.env.VITEST;
@@ -48,7 +49,10 @@ async function createServer(distPath = path.resolve(__dirname, 'dist')) {
         render = (await import(path.resolve(distPath, 'server/entry-server.js'))).render;
       }
 
-      const appHtml = await render(url, {});
+      const shipTypes = await getShipTypes();
+      const techTree = await getTechTree('standard'); // Hardcoded for now
+
+      const appHtml = await render(url, { shipTypes, techTree });
       const html = template.replace(`<!--ssr-outlet-->`, appHtml);
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);

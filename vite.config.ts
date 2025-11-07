@@ -8,11 +8,13 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
-import { splashScreen } from "vite-plugin-splash-screen";
+
 import tsconfigPaths from "vite-tsconfig-paths";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+
+import devtools from "vite-plugin-devtools-json";
 
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
@@ -24,6 +26,7 @@ export default defineConfig(({ mode }) => {
 			__APP_VERSION__: JSON.stringify(appVersion),
 		},
 		plugins: [
+			devtools(),
 			react({
 				jsxRuntime: "automatic",
 				jsxImportSource: "react",
@@ -32,13 +35,12 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			tailwindcss(),
-			// splashScreen({
-			// 	logoSrc: "assets/svg/loader.svg",
-			// 	splashBg: "#000000",
-			// 	loaderBg: "#00A2C7",
-			// 	loaderType: "dots",
-			// }),
-			// ...(doCritical
+			      // splashScreen({
+						// 	logoSrc: "assets/svg/loader.svg",
+						// 	splashBg: "#000000",
+						// 	loaderBg: "#00A2C7",
+						// 	loaderType: "dots",
+						// }),			// ...(doCritical
 			// 	? [
 			// 			deferStylesheetsPlugin(),
 			// 			PluginCritical({
@@ -158,20 +160,14 @@ export default defineConfig(({ mode }) => {
 			}),
 		],
 		resolve: {
-			alias: {
-				"@": path.resolve(__dirname, "./src"),
-				"react/jsx-dev-runtime": "react/jsx-runtime",
-				react: path.resolve(__dirname, "node_modules/react"),
-				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
-				i18next: path.resolve(__dirname, "node_modules/i18next"),
-			},
-			dedupe: ["react", "react-dom"], // <- critical for singleton React
+			        alias: {
+			    				"@": path.resolve(__dirname, "./src"),
+			    			},			dedupe: ["react", "react-dom"], // <- critical for singleton React
 		},
-		optimizeDeps: {
-			include: ["react", "react-dom", "i18next"],
-			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
-		},
-		server: { host: "0.0.0.0", port: 5173 },
+		    optimizeDeps: {
+					include: ["react", "react-dom", "i18next", "react-router-dom"],
+					dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
+				},		server: { host: "0.0.0.0", port: 5173 },
 		css: { transformer: "lightningcss" },
 		build: {
 			target: "esnext",
@@ -219,7 +215,10 @@ export default defineConfig(({ mode }) => {
 							: "assets/[name]-[hash].[ext]",
 				},
 			},
-			ssr: "src/entry-server.tsx",
+			ssr: {
+				noExternal: ["node-fetch"],
+				external: ["react-router-dom"],
+			},
 		},
 		test: {
 			globals: true,

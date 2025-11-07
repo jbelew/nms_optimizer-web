@@ -3,7 +3,7 @@ import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/themes";
 import ReactGA from "react-ga4";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 

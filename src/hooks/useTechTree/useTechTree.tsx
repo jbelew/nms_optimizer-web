@@ -197,7 +197,18 @@ function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
  * @param {string} [shipType="standard"] - The type of ship to fetch the tech tree for.
  * @returns {TechTree} The tech tree data.
  */
-export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
+export function useFetchTechTreeSuspense(
+	shipType: string = "standard",
+	initialTechTree?: TechTree
+): TechTree {
+	if (initialTechTree) {
+		return initialTechTree;
+	}
+
+	if (typeof window === "undefined") {
+		return {}; // Return empty object on server to prevent suspension
+	}
+
 	const techTree = fetchTechTree(shipType).read();
 	const { setTechColors, setTechGroups, setActiveGroup } = useTechStore();
 

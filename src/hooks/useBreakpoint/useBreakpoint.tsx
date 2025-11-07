@@ -8,6 +8,10 @@ import { useCallback, useSyncExternalStore } from "react";
  * @returns {boolean} Whether the breakpoint is currently matched.
  */
 export const useBreakpoint = (breakpoint: string) => {
+	if (typeof window === "undefined") {
+		return false;
+	}
+
 	const subscribe = useCallback(
 		(callback: () => void) => {
 			const mediaQuery = window.matchMedia(`(min-width: ${breakpoint})`);
