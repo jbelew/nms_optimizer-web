@@ -1,11 +1,11 @@
 import type { Grid } from "../../store/GridStore";
+import type { Module, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
 import { useCallback } from "react";
 
-import { API_URL } from "../../constants";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
-import { type Module, type TechTree, type TechTreeItem } from "../useTechTree/useTechTree";
+import { fetchTechTree } from "../useTechTree/useTechTree";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).
@@ -210,13 +210,7 @@ export const deserialize = async (
 			}, {});
 
 		// --- Fetch Tech Tree Data ---
-		const modulesResponse = await fetch(`${API_URL}/tech_tree/${shipType}`);
-		if (!modulesResponse.ok) {
-			throw new Error(
-				`Failed to fetch modules: ${modulesResponse.status} ${modulesResponse.statusText}`
-			);
-		}
-		const techTreeData: TechTree = await modulesResponse.json();
+		const techTreeData: TechTree = (await fetchTechTree(shipType)).read();
 
 		const colors: { [key: string]: string } = {};
 		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};

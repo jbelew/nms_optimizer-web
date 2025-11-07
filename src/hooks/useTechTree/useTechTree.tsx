@@ -161,7 +161,7 @@ export const clearTechTreeCache = () => {
  * @param {string} [shipType="standard"] - The type of ship to fetch the tech tree for.
  * @returns {Resource<TechTree>} A resource object that can be used with Suspense.
  */
-function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
+export function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
 		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
