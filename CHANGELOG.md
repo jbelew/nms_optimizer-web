@@ -1,3 +1,10 @@
+## [5.0.9](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.8...v5.0.9) (2025-11-07)
+
+
+### Bug Fixes
+
+* **i18n:** restored the old version of Raleway with the full glyph set ([3045f6e](https://github.com/jbelew/nms_optimizer-web/commit/3045f6e46bed9b2682f2669c1b8fd8e0eca3b5ad))
+
 ## [5.0.8](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.7...v5.0.8) (2025-11-07)
 
 
