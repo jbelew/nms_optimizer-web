@@ -1,3 +1,10 @@
+## [5.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.5...v5.0.6) (2025-11-07)
+
+
+### Bug Fixes
+
+* **footer:** fix for text not wrapping in some languages ([0ee35ff](https://github.com/jbelew/nms_optimizer-web/commit/0ee35ff8e7cd087c55ca3c40f22a816d315f8c4a))
+
 ## [5.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.4...v5.0.5) (2025-11-07)
 
 
