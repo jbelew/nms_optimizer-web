@@ -28,7 +28,7 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("habitation") ||
 		lowerLabel.includes("array") ||
 		lowerLabel.includes("arcadia") ||
-		lowerLabel.includes("ion") ||
+		lowerLabel.includes("ion barrier") ||
 		lowerLabel.includes("deflector") ||
 		lowerLabel.includes("mag-field") ||
 		lowerLabel.includes("torpedo") ||
