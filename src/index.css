@@ -88,14 +88,6 @@ body {
 	}
 }
 
-@media (min-width: 1024px) {
-	/* body.a11y-font {
-		transform: scale(1.1);
-		transform-origin: top center;
-		width: 100%;
-	} */
-}
-
 .heading-styled {
 	letter-spacing: var(--letter-spacing-wide);
 	font-family: var(--font-family-geosans);

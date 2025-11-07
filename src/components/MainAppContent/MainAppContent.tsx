@@ -1,5 +1,5 @@
 // src/components/app/MainAppContent.tsx
-import React, { FC, Suspense, useCallback, useEffect } from "react";
+import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
 import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
@@ -12,13 +12,14 @@ import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTreeComponent from "../TechTree/TechTree";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
+
+const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAlertDialog"));
 
 /**
  * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
@@ -150,12 +151,14 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 			{isLg && <AppFooter buildVersion={buildVersion} />}
 
 			{/* Dialogs related to MainAppContent's state */}
-			<OptimizationAlertDialog
-				isOpen={!!patternNoFitTech}
-				technologyName={patternNoFitTech}
-				onClose={clearPatternNoFitTech}
-				onForceOptimize={handleForceCurrentPnfOptimize}
-			/>
+			<Suspense fallback={null}>
+				<OptimizationAlertDialog
+					isOpen={!!patternNoFitTech}
+					technologyName={patternNoFitTech}
+					onClose={clearPatternNoFitTech}
+					onForceOptimize={handleForceCurrentPnfOptimize}
+				/>
+			</Suspense>
 		</main>
 	);
 };
