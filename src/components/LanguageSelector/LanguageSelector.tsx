@@ -16,6 +16,7 @@ import usFlagPath from "../../assets/svg/flags/us.svg";
 import xxFlagPath from "../../assets/svg/flags/xx.svg";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { languages, nativeLanguageNames } from "../../i18n/i18n";
 
 interface LanguageFlagPaths {
 	[key: string]: string; // Path to the SVG
@@ -45,17 +46,16 @@ const LanguageSelector: React.FC = () => {
 	const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 
 	const supportedLanguages = useMemo(() => {
-		const availableLanguageCodes = Object.keys(i18n.services.resourceStore.data || {});
+		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
+			(code) => languages.includes(code)
+		);
 		return availableLanguageCodes
 			.map((code) => {
-				const label =
-					(i18n.getResource(code, "translation", "languageInfo.nativeName") as
-						| string
-						| undefined) ?? code.toUpperCase();
+				const label = nativeLanguageNames[code] ?? code.toUpperCase();
 				const flagPath = languageFlagPaths[code] || xxFlagPath; // Fallback flag path
 				return { code, label, flagPath };
 			})
-			.filter((lang) => lang.label && lang.label !== lang.code.toUpperCase() && lang.flagPath)
+			.filter((lang) => lang.flagPath)
 			.sort((a, b) => a.label.localeCompare(b.label));
 	}, [i18n]);
 

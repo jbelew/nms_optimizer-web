@@ -3,7 +3,15 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-const languages = ["en", "es", "fr", "de", "pt"];
+export const languages = ["en", "es", "fr", "de", "pt"];
+
+export const nativeLanguageNames: { [key: string]: string } = {
+	en: "English",
+	es: "Español",
+	fr: "Français",
+	de: "Deutsch",
+	pt: "Português",
+};
 
 void i18n
 	.use(Backend)
@@ -11,7 +19,6 @@ void i18n
 	.use(initReactI18next)
 	.init({
 		supportedLngs: languages,
-		preload: languages,
 		fallbackLng: "en",
 		debug: process.env.NODE_ENV === "development",
 		detection: {
