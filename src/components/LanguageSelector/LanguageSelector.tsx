@@ -43,7 +43,6 @@ const LanguageSelector: React.FC = () => {
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
-	const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 
 	const supportedLanguages = useMemo(() => {
 		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
@@ -69,7 +68,7 @@ const LanguageSelector: React.FC = () => {
 		const langCand = pathParts[0];
 		let basePath = location.pathname;
 
-		if (OTHER_LANGUAGES.includes(langCand)) {
+		if (languages.includes(langCand)) {
 			basePath = location.pathname.substring(langCand.length + 1) || "/";
 		}
 

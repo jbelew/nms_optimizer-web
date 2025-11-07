@@ -22,17 +22,9 @@ void i18n
 		fallbackLng: "en",
 		debug: process.env.NODE_ENV === "development",
 		detection: {
-			order: [
-				"path",
-				"querystring",
-				"cookie",
-				"localStorage",
-				"sessionStorage",
-				"navigator",
-				"htmlTag",
-			],
+			order: ["path"],
 			caches: ["localStorage", "cookie"],
-			lookupFromPathIndex: 1,
+			lookupFromPathIndex: 0,
 		},
 		backend: {
 			loadPath: "/assets/locales/{{lng}}/{{ns}}.json",
