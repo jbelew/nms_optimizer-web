@@ -6,11 +6,11 @@ import PluginCritical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
+import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
-import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
@@ -170,6 +170,12 @@ export default defineConfig(({ mode }) => {
 		build: {
 			target: "esnext",
 			minify: "terser",
+			terserOptions: {
+				compress: {
+					drop_console: true,
+					drop_debugger: true,
+				},
+			},
 			cssCodeSplit: true,
 			sourcemap: false,
 			cssMinify: "lightningcss",
@@ -181,7 +187,6 @@ export default defineConfig(({ mode }) => {
 							if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
 								return "react";
 							}
-
 
 							// Radix Themes (tokens/utilities)
 							if (id.includes("@radix-ui/themes/tokens/colors/"))
