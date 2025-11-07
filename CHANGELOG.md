@@ -1,3 +1,10 @@
+## [5.0.8](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.7...v5.0.8) (2025-11-07)
+
+
+### Performance Improvements
+
+* **optimizationalert:** lazy load the dialog to improve performance ([1d716a4](https://github.com/jbelew/nms_optimizer-web/commit/1d716a41663922c9d02cff2a2780934b8057e09c))
+
 ## [5.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.6...v5.0.7) (2025-11-07)
 
 
