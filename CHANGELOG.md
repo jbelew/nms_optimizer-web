@@ -1,3 +1,10 @@
+## [5.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.4...v5.0.5) (2025-11-07)
+
+
+### Performance Improvements
+
+* **i18n:** lazy loading language files ([e44f0ff](https://github.com/jbelew/nms_optimizer-web/commit/e44f0ffccb820f150e8bcdf7c69e78d4ff952f16))
+
 ## [5.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.3...v5.0.4) (2025-11-07)
 
 
