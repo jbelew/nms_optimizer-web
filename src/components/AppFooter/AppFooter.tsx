@@ -28,7 +28,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion }) => {
 			key={i18n.language}
 			className="flex flex-col items-center justify-center gap-1 pb-4 text-center text-xs font-light sm:text-sm lg:pt-4 lg:pb-0"
 		>
-			<div>
+			<div className="max-w-full break-words">
 				<Trans
 					i18nKey="footer.issuePrompt"
 					components={{
