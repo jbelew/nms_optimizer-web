@@ -1,3 +1,10 @@
+## [5.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.6...v5.0.7) (2025-11-07)
+
+
+### Bug Fixes
+
+* **i18n:** fix for not detecting language in the path ([afbff7a](https://github.com/jbelew/nms_optimizer-web/commit/afbff7a7b532e96774fe2b10b4fd5d0c03464988))
+
 ## [5.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.5...v5.0.6) (2025-11-07)
 
 
