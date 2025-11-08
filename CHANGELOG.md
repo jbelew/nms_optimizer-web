@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.9...v5.1.0) (2025-11-08)
+
+
+### Features
+
+* **lighthouse:** Integrate Lighthouse CI with GitHub Actions ([34e23cf](https://github.com/jbelew/nms_optimizer-web/commit/34e23cfa9fdd5b7695c5504e278f83ab9fd22195))
+
 ## [5.0.9](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.8...v5.0.9) (2025-11-07)
 
 
