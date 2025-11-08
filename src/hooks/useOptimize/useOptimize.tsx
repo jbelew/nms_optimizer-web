@@ -162,7 +162,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 						setPatternNoFitTech(tech);
 						setSolving(false);
 						sendEvent({
-							category: "User Interactions",
+							category: "ui",
 							action: "no_fit_warning",
 							platform: selectedShipType,
 							tech,
@@ -178,7 +178,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 						if (data.grid) {
 							console.log("Optimization Result Grid:", data.grid);
 							sendEvent({
-								category: "User Interactions",
+								category: "ui",
 								action: "optimize_tech",
 								platform: selectedShipType,
 								tech: gaTech,

@@ -57,7 +57,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	const handleApply = async (build: (typeof builds)[number]) => {
 		await applyRecommendedBuild(build);
 		sendEvent({
-			category: "Recommended Build",
+			category: "build",
 			action: "apply_build",
 			build: build.title,
 			platform: selectedPlatform,

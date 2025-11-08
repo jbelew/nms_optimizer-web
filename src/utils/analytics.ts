@@ -71,6 +71,6 @@ export const initializeAnalytics = () => {
  * @returns {void}
  */
 export const sendEvent = (event: GA4Event) => {
-	const { action, ...params } = event;
-	ReactGA.event(action, params);
+	const { action, category, ...params } = event;
+	ReactGA.event(action, { ...params, category });
 };

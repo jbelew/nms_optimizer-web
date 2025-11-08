@@ -93,7 +93,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 		(option: string) => {
 			if (option !== usePlatformStore.getState().selectedPlatform) {
 				sendEvent({
-					category: "User Interactions",
+					category: "ui",
 					action: "platform_selection",
 					platform: option,
 					value: 1,
