@@ -1,3 +1,10 @@
+## [5.1.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.4...v5.1.5) (2025-11-08)
+
+
+### Bug Fixes
+
+* **404:** added a component based 404 ([bf1e3cf](https://github.com/jbelew/nms_optimizer-web/commit/bf1e3cfc933465477e97870fb3744a04a3720370))
+
 ## [5.1.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.3...v5.1.4) (2025-11-08)
 
 
