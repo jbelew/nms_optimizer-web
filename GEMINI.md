@@ -161,3 +161,35 @@ function add(a, b) {
 ### Maintaining JSDoc:
 - **Update on change:** Whenever the signature or logic of a documented function changes, update its JSDoc accordingly.
 - **Review during code reviews:** Ensure JSDoc is part of the code review process.
+
+## JSDoc Guidelines
+
+When writing and maintaining JavaScript/TypeScript code, ensure all functions, classes, and complex variables are properly documented using JSDoc. This improves code readability, maintainability, and enables better IDE support.
+
+### General Rules:
+- **All public APIs:** Every function, class, or method that is part of a public interface should have JSDoc.
+- **Complex logic:** Any internal function or variable with non-obvious logic should also be documented.
+- **Parameters and Returns:** Always document `@param` for each parameter and `@returns` for the return value (if any).
+- **Types:** Use TypeScript types in JSDoc where applicable (e.g., `{string}`, `{number[]}`, `{MyInterface}`).
+- **Examples:** For complex functions, consider adding `@example` to demonstrate usage.
+
+### Example JSDoc Structure:
+
+```javascript
+/**
+ * Calculates the sum of two numbers.
+ *
+ * @param {number} a - The first number.
+ * @param {number} b - The second number.
+ * @returns {number} The sum of a and b.
+ * @example
+ * const result = add(5, 3); // result is 8
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+### Maintaining JSDoc:
+- **Update on change:** Whenever the signature or logic of a documented function changes, update its JSDoc accordingly.
+- **Review during code reviews:** Ensure JSDoc is part of the code review process.
