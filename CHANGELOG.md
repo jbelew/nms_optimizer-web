@@ -1,3 +1,10 @@
+## [5.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.1...v5.1.2) (2025-11-08)
+
+
+### Bug Fixes
+
+* **lighthouse:** Add serverReadyPattern to lighthouserc ([bbd7947](https://github.com/jbelew/nms_optimizer-web/commit/bbd7947840e1f1e3840eaae5cead85ce739b29d5))
+
 ## [5.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.0...v5.1.1) (2025-11-08)
 
 
