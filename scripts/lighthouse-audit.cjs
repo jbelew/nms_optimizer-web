@@ -4,7 +4,9 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 
-const SERVER_URL = "http://localhost:4173";
+const LIGHTHOUSE_URL = process.env.LIGHTHOUSE_URL || "http://localhost:4173";
+const IS_LOCAL_AUDIT = !process.env.LIGHTHOUSE_URL;
+
 const SERVER_CHECK_URL = "http://127.0.0.1:4173/index.html"; // Explicitly check for index.html
 const REPORT_FILENAME = "lighthouse-report.html";
 const SERVER_START_TIMEOUT_MS = 60000; // 60 seconds
@@ -58,7 +60,7 @@ async function waitForServerReady() {
 }
 
 async function runLighthouseAudit() {
-	console.log(`Starting Lighthouse audit for ${SERVER_URL}...`);
+	console.log(`Starting Lighthouse audit for ${LIGHTHOUSE_URL}...`);
 	const browser = await puppeteer.launch({
 		headless: "new",
 		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
@@ -68,7 +70,7 @@ async function runLighthouseAudit() {
 	try {
 		// Debug logs removed.
 		// Destructure 'lhr' and 'report' (aliased to htmlReportString)
-		const { lhr, report: htmlReportString } = await lighthouse.default(SERVER_URL, {
+		const { lhr, report: htmlReportString } = await lighthouse.default(LIGHTHOUSE_URL, {
 			port: new URL(browser.wsEndpoint()).port,
 			output: "html",
 			logLevel: "info", // Using "info" for better feedback during run
@@ -120,10 +122,12 @@ async function main() {
 	let serverProcess;
 	let exitCode = 0;
 	try {
-		serverProcess = startDevServer();
-		const serverReady = await waitForServerReady();
-		if (!serverReady) {
-			throw new Error("Server did not become ready in time.");
+		if (IS_LOCAL_AUDIT) {
+			serverProcess = startDevServer();
+			const serverReady = await waitForServerReady();
+			if (!serverReady) {
+				throw new Error("Server did not become ready in time.");
+			}
 		}
 		await runLighthouseAudit();
 	} catch (error) {

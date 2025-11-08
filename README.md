@@ -85,3 +85,17 @@ services:
       - "8016:80"
     restart: unless-stopped
 ```
+
+---
+
+### **Lighthouse Auditing**
+
+A Lighthouse audit is automatically run against a production build of the application on every pull request to the `main` branch. This provides a performance baseline for the proposed changes. The audit is performed as part of the `Lighthouse Audit` GitHub Actions workflow.
+
+The reports (HTML and JSON) are available as artifacts in the workflow run. You can download them from the "Artifacts" section of the workflow summary page.
+
+To run the audit locally against a preview of the production build, use the following command:
+
+```sh
+npm run build && npm run lighthouse:local
+```
