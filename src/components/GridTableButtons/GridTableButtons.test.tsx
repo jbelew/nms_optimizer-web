@@ -148,8 +148,8 @@ describe("GridTableButtons", () => {
 		expect(openDialogMock).toHaveBeenCalledWith("instructions");
 		expect(markTutorialFinishedMock).toHaveBeenCalled();
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "User Interactions",
-			action: "showInstructions",
+			category: "ui",
+			action: "show_instructions",
 			value: 1,
 		});
 	});
@@ -160,8 +160,8 @@ describe("GridTableButtons", () => {
 
 		expect(openDialogMock).toHaveBeenCalledWith("about");
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "User Interactions",
-			action: "showAbout",
+			category: "ui",
+			action: "show_about",
 			value: 1,
 		});
 	});
@@ -173,8 +173,8 @@ describe("GridTableButtons", () => {
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
 		expect(openDialogMock).toHaveBeenCalledWith(null, { shareUrl: "http://share.url" });
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "User Interactions",
-			action: "shareLink",
+			category: "ui",
+			action: "share_link",
 			value: 1,
 		});
 	});
@@ -184,8 +184,8 @@ describe("GridTableButtons", () => {
 		fireEvent.click(screen.getByText("Reset Grid Button"));
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "User Interactions",
-			action: "resetGrid",
+			category: "ui",
+			action: "reset_grid",
 			value: 1,
 		});
 
