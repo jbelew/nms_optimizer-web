@@ -12,9 +12,8 @@ const NotFound: FC = () => {
 
 	useEffect(() => {
 		sendEvent({
-			category: "NotFound",
-			action: "Display",
-			label: window.location.pathname,
+			category: "navigation",
+			action: "not_found",
 		});
 	}, []);
 

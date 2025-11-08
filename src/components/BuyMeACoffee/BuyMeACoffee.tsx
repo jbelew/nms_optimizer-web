@@ -16,9 +16,8 @@ export default function BuyMeACoffee() {
 
 		// Send the Google Analytics event
 		sendEvent({
-			category: "User Interactions",
-			action: "BuyMeACoffeeClick",
-			label: "Buy Me a Coffee Button",
+			category: "ui",
+			action: "buy_me_a_coffee_click",
 			value: 1,
 		});
 

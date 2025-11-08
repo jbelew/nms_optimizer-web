@@ -79,8 +79,8 @@ const LanguageSelector: React.FC = () => {
 		navigate(newPath);
 
 		sendEvent({
-			category: "User Interactions",
-			action: "languageSelection",
+			category: "ui",
+			action: "language_selection",
 			label: newLang,
 			value: 1,
 		});

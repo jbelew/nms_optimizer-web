@@ -75,8 +75,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							sendEvent({
-								category: "User Interactions",
-								action: "showUserStats",
+								category: "ui",
+								action: "show_user_stats",
 								value: 1,
 							});
 							openDialog("userstats");
@@ -124,8 +124,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							alt="No Man's Sky Atlas Logo"
 							onClick={() => {
 								sendEvent({
-									category: "User Interactions",
-									action: "foundSecret",
+									category: "ui",
+									action: "found_secret",
 									value: 1,
 								});
 							}}
@@ -193,8 +193,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							sendEvent({
-								category: "User Interactions",
-								action: "showChangelog",
+								category: "ui",
+								action: "show_changelog",
 								value: 1,
 							});
 							onShowChangelog();
