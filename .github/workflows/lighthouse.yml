@@ -1,7 +1,7 @@
 name: Lighthouse Audit
 
 on:
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
