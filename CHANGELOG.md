@@ -1,3 +1,10 @@
+## [5.1.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.3...v5.1.4) (2025-11-08)
+
+
+### Bug Fixes
+
+* **css:** Conditionally hide horizontal overflow ([871dcae](https://github.com/jbelew/nms_optimizer-web/commit/871dcae9cc94b5f0da007b54fa02c63333cd1c8c))
+
 ## [5.1.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.2...v5.1.3) (2025-11-08)
 
 
