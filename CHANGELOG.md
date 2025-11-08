@@ -1,3 +1,10 @@
+## [5.1.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.2...v5.1.3) (2025-11-08)
+
+
+### Bug Fixes
+
+* **csp:** Allow connection to API domain ([7df9c8b](https://github.com/jbelew/nms_optimizer-web/commit/7df9c8bc82dcca430300ec599f55294796c5d9b0))
+
 ## [5.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.1...v5.1.2) (2025-11-08)
 
 
