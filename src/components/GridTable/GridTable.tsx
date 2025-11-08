@@ -82,7 +82,8 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 				)}
 
 				<MessageSpinner
-					isVisible={solving || isTechTreeLoading}
+					// isVisible={solving || isTechTreeLoading}
+					isVisible={solving}
 					useNMSFont={isTechTreeLoading}
 					initialMessage={
 						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")

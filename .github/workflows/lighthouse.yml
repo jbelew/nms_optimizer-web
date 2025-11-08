@@ -25,27 +25,8 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Run Lighthouse audit
-        run: npm run lighthouse:local
-
-      - name: Add Lighthouse scores to job summary
-        run: |
-          PERF=$(jq '.categories.performance.score * 100' lighthouse-report.json)
-          ACCESSIBILITY=$(jq '.categories.accessibility.score * 100' lighthouse-report.json)
-          BEST_PRACTICES=$(jq '.categories."best-practices".score * 100' lighthouse-report.json)
-          SEO=$(jq '.categories.seo.score * 100' lighthouse-report.json)
-          echo "### Lighthouse Audit Summary" >> $GITHUB_STEP_SUMMARY
-          echo "| Category | Score |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| Performance | $PERF |" >> $GITHUB_STEP_SUMMARY
-          echo "| Accessibility | $ACCESSIBILITY |" >> $GITHUB_STEP_SUMMARY
-          echo "| Best Practices | $BEST_PRACTICES |" >> $GITHUB_STEP_SUMMARY
-          echo "| SEO | $SEO |" >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload Lighthouse report
-        uses: actions/upload-artifact@v4
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
         with:
-          name: lighthouse-reports
-          path: |
-            lighthouse-report.html
-            lighthouse-report.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
