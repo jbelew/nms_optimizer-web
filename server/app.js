@@ -60,7 +60,7 @@ const csp = [
 	"style-src 'self' 'unsafe-inline'",
 	"img-src 'self' data: www.google-analytics.com",
 	"font-src 'self'",
-	"connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com",
+	"connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app",
 	"frame-ancestors 'none'",
 	"object-src 'none'",
 	"base-uri 'self'",
