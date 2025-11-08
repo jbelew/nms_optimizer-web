@@ -30,3 +30,5 @@ jobs:
         with:
           uploadArtifacts: true
           temporaryPublicStorage: true
+          configPath: './lighthouserc.cjs'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
