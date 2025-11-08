@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.0...v5.1.1) (2025-11-08)
+
+
+### Bug Fixes
+
+* **lighthouse:** Rename lighthouserc.js to lighthouserc.cjs ([ba5d80e](https://github.com/jbelew/nms_optimizer-web/commit/ba5d80e92da1810922b747bc799428070d4e7748))
+
 # [5.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.0.9...v5.1.0) (2025-11-08)
 
 
