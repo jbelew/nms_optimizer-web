@@ -569,5 +569,10 @@
     "installPrompt": {
         "iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil : appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\".",
         "dismiss": "Rejeter"
+    },
+    "notFound": {
+        "title": "–kzzkt– 404 –kzzkt–",
+        "message": "La page que vous recherchez est introuvable.",
+        "backToMain": "Retourner à la page principale"
     }
 }

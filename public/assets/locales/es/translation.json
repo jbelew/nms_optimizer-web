@@ -569,5 +569,10 @@
     "installPrompt": {
         "iosInstructions": "Para obtener la mejor experiencia, agregue esta aplicación a su pantalla de inicio: toque el ícono Compartir y luego \"Agregar a la pantalla de inicio\".",
         "dismiss": "Despedir"
+    },
+    "notFound": {
+        "title": "–kzzkt– 404 –kzzkt–",
+        "message": "No se pudo encontrar la página que estás buscando.",
+        "backToMain": "Volver a la página principal"
     }
 }

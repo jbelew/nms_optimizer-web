@@ -32,11 +32,11 @@ const ErrorFallback = () => {
 		>
 			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
 				<ExclamationTriangleIcon
-					className="h-16 w-16 flex-shrink-0 shadow-md"
+					className="h-16 w-16 shrink-0 shadow-md"
 					style={{ color: "var(--red-track)" }}
 				/>
 				<h1
-					className="errorContent__title block text-center text-2xl font-semibold tracking-widest break-words"
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest wrap-break-word"
 					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
 				>
 					-kzzkt- Error! -kzzkt-
@@ -50,11 +50,11 @@ const ErrorFallback = () => {
 		<div className="mt-8">
 			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
 				<ExclamationTriangleIcon
-					className="h-16 w-16 flex-shrink-0 shadow-md"
+					className="h-16 w-16 shrink-0 shadow-md"
 					style={{ color: "var(--red-track)" }}
 				/>
 				<h1
-					className="errorContent__title block text-center text-2xl font-semibold tracking-widest break-words"
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest wrap-break-word"
 					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
 				>
 					-kzzkt- Error! -kzzkt-

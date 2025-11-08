@@ -569,5 +569,10 @@
     "installPrompt": {
         "iosInstructions": "Für das beste Erlebnis fügen Sie diese App zu Ihrem Startbildschirm hinzu: Tippen Sie auf das Teilen-Symbol und dann auf „Zum Startbildschirm hinzufügen“.",
         "dismiss": "Zurückweisen"
+    },
+    "notFound": {
+        "title": "–kzzkt– 404 –kzzkt–",
+        "message": "Die gesuchte Seite konnte nicht gefunden werden.",
+        "backToMain": "Gehen Sie zurück zur Hauptseite"
     }
 }

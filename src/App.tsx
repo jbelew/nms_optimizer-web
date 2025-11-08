@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import React, { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Routes } from "react-router-dom";
+import { matchPath } from "react-router-dom"; // Import matchPath
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
@@ -19,6 +19,7 @@ import { usePlatformStore } from "./store/PlatformStore";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
+const NotFound = lazy(() => import("./components/NotFound/NotFound"));
 
 const RoutedDialogs = lazy(() =>
 	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
@@ -52,30 +53,54 @@ const App: FC = () => {
 		initializePlatform(Object.keys(shipTypes));
 	}, [shipTypes, initializePlatform]);
 
+	// Define all known application paths (including dialogs)
+	const knownPaths = [
+		"/",
+		"/changelog",
+		"/instructions",
+		"/about",
+		"/translation",
+		"/userstats",
+		"/:lang", // Simplified from /:lang(es|fr|de|pt)
+		"/:lang/changelog", // Simplified
+		"/:lang/instructions", // Simplified
+		"/:lang/about", // Simplified
+		"/:lang/translation", // Simplified
+		"/:lang/userstats", // Simplified
+	];
+
+	const currentPathname = window.location.pathname;
+	let isKnownRoute = false;
+	const validLangs = ["es", "fr", "de", "pt"];
+
+	for (const pathPattern of knownPaths) {
+		const match = matchPath(pathPattern, currentPathname);
+		if (match) {
+			// If it's a language-specific path, validate the 'lang' parameter
+			if (match.params.lang) {
+				if (validLangs.includes(match.params.lang as string)) {
+					isKnownRoute = true;
+					break;
+				}
+			} else {
+				// It's a non-language-specific path or a language path without a 'lang' param (e.g., "/")
+				isKnownRoute = true;
+				break;
+			}
+		}
+	}
+
 	return (
 		<>
 			<OfflineBanner />
-			<MainAppContent buildVersion={build} />
-
 			<Suspense fallback={null}>
-				<Routes>
-					{/* English (default) routes */}
-					<Route path="/" element={null} />
-					<Route path="/changelog" element={null} />
-					<Route path="/instructions" element={null} />
-					<Route path="/about" element={null} />
-					<Route path="/translation" element={null} />
-					<Route path="/userstats" element={null} />
-
-					{/* Other language routes */}
-					<Route path="/:lang(es|fr|de|pt)" element={null} />
-					<Route path="/:lang(es|fr|de|pt)/changelog" element={null} />
-					<Route path="/:lang(es|fr|de|pt)/instructions" element={null} />
-					<Route path="/:lang(es|fr|de|pt)/about" element={null} />
-					<Route path="/:lang(es|fr|de|pt)/translation" element={null} />
-					<Route path="/:lang(es|fr|de|pt)/userstats" element={null} />
-					<Route path="*" element={null} />
-				</Routes>
+				{isKnownRoute ? (
+					// Render MainAppContent if it's a known route
+					<MainAppContent buildVersion={build} />
+				) : (
+					// Render NotFound if it's not a known route
+					<NotFound />
+				)}
 
 				<AppDialog
 					isOpen={showError}

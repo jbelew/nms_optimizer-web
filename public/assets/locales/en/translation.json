@@ -68,7 +68,7 @@
 			"closeButton": "Close"
 		},
 		"optimizationAlert": {
-			"warning": "-kzzkt- Warning! -kzzkt-",
+			"warning": "–kzzkt– Warning! –kzzkt–",
 			"insufficientSpace": "There’s not a large enough window to effectively place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are selected in your layout.",
 			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
 			"cancelButton": "Cancel",
@@ -207,7 +207,7 @@
 			"freighter-hyper": "Freighter Hyperdrive",
 			"freighter-scanner": "Interstellar Scanner",
 			"freighter-matter": "Matter Beam",
-			"fleet-fuel": "Fuel Efficiency",
+			"fleet-fuel": "Fleet Fuel Efficiency",
 			"fleet-speed": "Expedition Speed",
 			"fleet-combat": "Combat and Defense",
 			"fleet-exploration": "Exploration and Science",
@@ -393,9 +393,9 @@
 			"waveform-osc": "Waveform Oscillator",
 			"blaze-upgrade": "Blaze Javelin Upgrade",
 			"boltcaster": "Bolt Caster",
-			"boltcaster-rm": "Boltcaster Ricochet Module",
+			"boltcaster-rm": "Bolt Caster Ricochet Module",
 			"barrel-ionizer": "Barrel Ionizer",
-			"boltcaster-upgrade": "Boltcaster Upgrade",
+			"boltcaster-upgrade": "Bolt Caster Upgrade",
 			"forbidden": "Forbidden Module",
 			"geology": "Geology Cannon",
 			"geology-upgrade": "Geology Cannon Upgrade",
@@ -406,7 +406,7 @@
 			"plasma-upgrade": "Plasma Launcher Upgrade",
 			"pulse-spitter": "Pulse Spitter",
 			"amplified": "Amplified Cartridges",
-			"pulse-spitter-rm": "Richochet Module",
+			"pulse-spitter-rm": "Ricochet Module",
 			"impact-ignitor": "Impact Ignitor",
 			"pulse-spitter-upgrade": "Pulse Spitter Upgrade",
 			"scatter": "Scatter Blaster",
@@ -569,5 +569,10 @@
 	"installPrompt": {
 		"iosInstructions": "For the best experience, add this app to your Home Screen: Tap the Share icon, then 'Add to Home Screen'.",
 		"dismiss": "Dismiss"
+	},
+	"notFound": {
+		"title": "–kzzkt– 404 –kzzkt–",
+		"message": "The page you're looking for could not be found.",
+		"backToMain": "Go back to the main page"
 	}
 }
