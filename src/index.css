@@ -73,6 +73,7 @@ html {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	scrollbar-gutter: stable;
+	overflow-x: hidden;
 }
 
 body {
@@ -135,11 +136,11 @@ body.a11y-font .heading-styled {
 
 @keyframes buttonGlow {
 	from {
-		box-shadow: 0 0 4px 0px var(--accent-a0);
+		filter: drop-shadow(0 0 2px var(--accent-a0));
 	}
 
 	to {
-		box-shadow: 0 0 4px 2px var(--accent-track);
+		filter: drop-shadow(0 0 4px var(--accent-track));
 	}
 }
 
