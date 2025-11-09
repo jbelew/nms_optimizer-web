@@ -105,7 +105,8 @@ describe("useUrlSync", () => {
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
 			"new-platform",
 			["new-platform"],
-			false
+			false,
+			true
 		);
 	});
 
@@ -124,7 +125,8 @@ describe("useUrlSync", () => {
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
 			"new-platform",
 			["test-platform"],
-			false
+			false,
+			true
 		);
 	});
 });

@@ -1,7 +1,5 @@
-import type { FC } from "react";
-import React, { lazy, Suspense, useEffect } from "react";
+import { FC, lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { matchPath } from "react-router-dom"; // Import matchPath
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
@@ -53,39 +51,35 @@ const App: FC = () => {
 		initializePlatform(Object.keys(shipTypes));
 	}, [shipTypes, initializePlatform]);
 
-	// Define all known application paths (including dialogs)
-	const knownPaths = [
+	const currentPathname = window.location.pathname;
+	let isKnownRoute = false;
+	const validLangs = ["es", "fr", "de", "pt"];
+
+	// Define base known paths without language prefixes
+	const baseKnownPaths = [
 		"/",
 		"/changelog",
 		"/instructions",
 		"/about",
 		"/translation",
 		"/userstats",
-		"/:lang", // Simplified from /:lang(es|fr|de|pt)
-		"/:lang/changelog", // Simplified
-		"/:lang/instructions", // Simplified
-		"/:lang/about", // Simplified
-		"/:lang/translation", // Simplified
-		"/:lang/userstats", // Simplified
 	];
 
-	const currentPathname = window.location.pathname;
-	let isKnownRoute = false;
-	const validLangs = ["es", "fr", "de", "pt"];
+	// Check if the current pathname is a base known path
+	if (baseKnownPaths.includes(currentPathname)) {
+		isKnownRoute = true;
+	}
 
-	for (const pathPattern of knownPaths) {
-		const match = matchPath(pathPattern, currentPathname);
-		if (match) {
-			// If it's a language-specific path, validate the 'lang' parameter
-			if (match.params.lang) {
-				if (validLangs.includes(match.params.lang as string)) {
-					isKnownRoute = true;
-					break;
-				}
-			} else {
-				// It's a non-language-specific path or a language path without a 'lang' param (e.g., "/")
+	// If not a base path, check for language-specific paths
+	if (!isKnownRoute) {
+		const parts = currentPathname.split("/");
+		// Check if the first part after the root is a valid language
+		if (parts.length > 1 && validLangs.includes(parts[1])) {
+			const pathWithoutLang = "/" + parts.slice(2).join("/");
+			// If the path without language is empty (e.g., "/es"), it's a known language root
+			// Otherwise, check if the path without language is a known base path
+			if (pathWithoutLang === "/" || baseKnownPaths.includes(pathWithoutLang)) {
 				isKnownRoute = true;
-				break;
 			}
 		}
 	}

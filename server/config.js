@@ -27,3 +27,10 @@ export const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
  * @type {string[]}
  */
 export const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation", "userstats"];
+
+/**
+ * A list of base known paths for the client-side application.
+ * These paths, along with language prefixes, determine if a request should serve the SPA.
+ * @type {string[]}
+ */
+export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS];

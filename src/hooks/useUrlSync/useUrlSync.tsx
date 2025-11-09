@@ -2,6 +2,7 @@
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useRouteContext } from "../../context/RouteContext";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
@@ -17,6 +18,7 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  */
 export const useUrlSync = () => {
 	const navigate = useNavigate();
+	const { isKnownRoute } = useRouteContext();
 	const { setIsSharedGrid, isSharedGrid } = useGridStore();
 	const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
@@ -25,6 +27,8 @@ export const useUrlSync = () => {
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
+		if (!isKnownRoute) return;
+
 		const handlePopState = () => {
 			const urlParams = new URLSearchParams(window.location.search);
 			const platformFromUrl = urlParams.get("platform");
@@ -32,7 +36,12 @@ export const useUrlSync = () => {
 
 			// Sync platform from URL to store
 			if (platformFromUrl && platformFromUrl !== selectedShipTypeFromStore) {
-				setSelectedShipTypeInStore(platformFromUrl, Object.keys(shipTypes), false);
+				setSelectedShipTypeInStore(
+					platformFromUrl,
+					Object.keys(shipTypes),
+					false,
+					isKnownRoute
+				);
 			}
 
 			// Sync grid from URL to store
@@ -53,6 +62,7 @@ export const useUrlSync = () => {
 			window.removeEventListener("popstate", handlePopState);
 		};
 	}, [
+		isKnownRoute,
 		selectedShipTypeFromStore,
 		setSelectedShipTypeInStore,
 		deserializeGrid,

@@ -9,8 +9,13 @@ import { create } from "zustand";
  */
 export interface PlatformState {
 	selectedPlatform: string;
-	setSelectedPlatform: (platform: string, validShipTypes: string[], updateUrl?: boolean) => void;
-	initializePlatform: (validShipTypes: string[]) => void;
+	setSelectedPlatform: (
+		platform: string,
+		validShipTypes: string[],
+		updateUrl?: boolean,
+		isKnownRoute?: boolean
+	) => void;
+	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 }
 
 const LOCAL_STORAGE_KEY = "selectedPlatform";
@@ -20,7 +25,7 @@ const LOCAL_STORAGE_KEY = "selectedPlatform";
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value
-	setSelectedPlatform: (platform, validShipTypes, updateUrl = true) => {
+	setSelectedPlatform: (platform, validShipTypes, updateUrl = true, isKnownRoute = true) => {
 		if (!validShipTypes.includes(platform)) {
 			console.warn(
 				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
@@ -30,13 +35,13 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		set({ selectedPlatform: platform });
 		localStorage.setItem(LOCAL_STORAGE_KEY, platform);
 
-		if (updateUrl) {
+		if (updateUrl && isKnownRoute) {
 			const url = new URL(window.location.href);
 			url.searchParams.set("platform", platform);
 			window.history.pushState({}, "", url.toString());
 		}
 	},
-	initializePlatform: (validShipTypes: string[]) => {
+	initializePlatform: (validShipTypes: string[], isKnownRoute = true) => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const platformFromUrl = urlParams.get("platform");
 		const platformFromStorage = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -61,7 +66,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		set({ selectedPlatform: initialPlatform });
 
-		if (updateUrlNeeded) {
+		if (updateUrlNeeded && isKnownRoute) {
 			const url = new URL(window.location.href);
 			url.searchParams.set("platform", initialPlatform);
 			window.history.replaceState({}, "", url.toString());

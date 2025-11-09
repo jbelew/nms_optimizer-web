@@ -7,6 +7,7 @@ import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useRouteContext } from "../../context/RouteContext";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
@@ -83,6 +84,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const { sendEvent } = useAnalytics();
 	const [toastOpen, setToastOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
+	const { isKnownRoute } = useRouteContext();
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
@@ -105,14 +107,21 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 
 				startTransition(() => {
 					const shipTypeKeys = Object.keys(shipTypes);
-					setSelectedShipType(option, shipTypeKeys);
+					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
 					setGridAndResetAuxiliaryState(initialGrid);
 				});
 			}
 		},
-		[setSelectedShipType, setGridAndResetAuxiliaryState, sendEvent, shipTypes, startTransition]
+		[
+			setSelectedShipType,
+			setGridAndResetAuxiliaryState,
+			sendEvent,
+			shipTypes,
+			startTransition,
+			isKnownRoute,
+		]
 	);
 
 	return (

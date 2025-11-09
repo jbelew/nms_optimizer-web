@@ -56,12 +56,10 @@ describe("Express Server", () => {
 	});
 
 	it("should handle SPA fallback for non-asset paths", async () => {
-		const response = await request(app)
-			.get("/a/random/spa/path")
-			.set("Accept", "text/html");
-		expect(response.status).toBe(200);
-		expect(response.headers["content-type"]).toMatch(/html/);
-	});
+		        const response = await request(app)
+		            .get("/a/random/spa/path")
+		            .set("Accept", "text/html");
+		        expect(response.status).toBe(404);	});
 
 	it("should redirect requests with trailing slashes", async () => {
 		const response = await request(app).get("/about/");

@@ -74,6 +74,7 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
 					globIgnores: ["**/pwa-*.png"],
+					navigateFallbackDenylist: [/\/status\/404/],
 					runtimeCaching: [
 						{
 							urlPattern: ({ url }) => url.pathname.endsWith(".md"),

@@ -18,6 +18,7 @@ import expressStaticGzip from "express-static-gzip";
 // Local modules
 import { seoTagInjectionMiddleware } from "./seoMiddleware.js";
 import {
+	BASE_KNOWN_PATHS,
 	KNOWN_DIALOGS,
 	OTHER_LANGUAGES,
 	SUPPORTED_LANGUAGES,
@@ -120,6 +121,29 @@ function setCacheHeaders(res, filePath) {
 	}
 }
 
+/**
+ * Checks if a given pathname corresponds to a known client-side SPA route.
+ * This function considers base paths and language-prefixed paths.
+ * @param {string} pathname - The URL pathname to check.
+ * @returns {boolean} True if the pathname is a known SPA route, false otherwise.
+ */
+function isSpaRoute(pathname) {
+	// Check for base known paths
+	if (BASE_KNOWN_PATHS.includes(pathname)) {
+		return true;
+	}
+
+	// Check for language-specific paths
+	const parts = pathname.split("/");
+	if (parts.length > 1 && SUPPORTED_LANGUAGES.includes(parts[1])) {
+		const pathWithoutLang = "/" + parts.slice(2).join("/");
+		if (pathWithoutLang === "/" || BASE_KNOWN_PATHS.includes(pathWithoutLang)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // --- MIDDLEWARE & ROUTING ---
 
 // Trust proxies like Heroku or Cloudflare to get the correct client IP.
@@ -184,6 +208,10 @@ app.use(
 	})
 );
 
+app.get("/status/404", (req, res) => {
+	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));
+});
+
 /**
  * The main SPA fallback handler.
  * It determines if a request is for a page navigation or a static asset.
@@ -193,12 +221,15 @@ app.use(
 // This regex matches all paths that do not contain a dot, which is a common
 // way to distinguish between SPA routes and static file requests.
 app.get(/^[^.]*$/, async (req, res, next) => {
-	// Any request that makes it here is assumed to be a SPA navigation request
-	// because the regex in the route path excludes paths with dots (i.e., static files).
-	try {
-		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
-	} catch (error) {
-		next(error);
+	if (isSpaRoute(req.path)) {
+		try {
+			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
+		} catch (error) {
+			next(error);
+		}
+	} else {
+		// If it's not a known SPA route, let it fall through to the 404 handler
+		next();
 	}
 });
 

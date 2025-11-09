@@ -17,6 +17,10 @@ const NotFound: FC = () => {
 			category: "navigation",
 			action: "not_found",
 		});
+
+		if (window.location.pathname !== "/status/404") {
+			window.location.replace("/status/404");
+		}
 	}, []);
 
 	return (
