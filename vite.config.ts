@@ -69,37 +69,54 @@ export default defineConfig(({ mode }) => {
 				template: "raw-data",
 			}),
 			VitePWA({
+				manifestFilename: "manifest.json", // ensure browsers don’t 404 on /manifest.json
 				registerType: "autoUpdate",
-				injectRegister: null,
+				includeAssets: [
+					"favicon.svg",
+					"robots.txt",
+					"/assets/img/favicons/apple-touch-icon.png",
+				],
 				workbox: {
-					globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
-					globIgnores: ["**/pwa-*.png"],
-					navigateFallbackDenylist: [
-						/\/status\/404/,
-						/sitemap\.xml$/,
-						/robots\.txt$/,
-						/404\.html$/,
-					],
+					// immediately activate new SW versions
+					clientsClaim: true,
+					skipWaiting: true,
+
+					// define caching strategies
 					runtimeCaching: [
 						{
-							urlPattern: ({ url }) => url.pathname.endsWith(".md"),
-							handler: "NetworkFirst",
+							urlPattern: ({ request }) => request.destination === "image",
+							handler: "CacheFirst",
 							options: {
-								cacheName: "markdown-cache",
+								cacheName: "images-cache",
 								expiration: {
-									maxEntries: 20,
-									maxAgeSeconds: 60 * 60 * 24, // 1 day
+									maxEntries: 100,
+									maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
 								},
 							},
 						},
 						{
-							urlPattern: ({ request }) => request.destination === "image",
+							urlPattern: /^https:\/\/api\.nms-optimizer\.com\/.*$/,
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "api-cache",
+								networkTimeoutSeconds: 5,
+								expiration: {
+									maxEntries: 50,
+									maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
+								},
+								cacheableResponse: {
+									statuses: [0, 200],
+								},
+							},
+						},
+						{
+							urlPattern: ({ request }) =>
+								request.destination === "script" || request.destination === "style",
 							handler: "StaleWhileRevalidate",
 							options: {
-								cacheName: "image-cache",
+								cacheName: "static-resources",
 								expiration: {
-									maxEntries: 60,
-									maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+									maxEntries: 50,
 								},
 							},
 						},

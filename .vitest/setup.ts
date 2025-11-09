@@ -1,4 +1,13 @@
 import '@testing-library/jest-dom/vitest'
+import { vi } from 'vitest';
+
+// Mock the hideSplashScreen function
+vi.mock("vite-plugin-splash-screen/runtime", () => ({
+	hideSplashScreen: vi.fn(),
+}));
+
+// Mock .scss imports
+vi.mock('*.scss', () => ({}));
 
 // Mock local storage
 const localStorageMock = (() => {

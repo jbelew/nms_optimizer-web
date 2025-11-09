@@ -1,8 +1,13 @@
+import { lazy } from "react"; // Add this line
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
 import { act, render, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
+
+const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
+const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
+const NotFound = lazy(() => import("./components/NotFound/NotFound"));
 
 import App from "./App";
 import { DialogProvider } from "./context/DialogContext";
@@ -102,23 +107,19 @@ Object.defineProperty(window, "history", {
 
 describe("App 404 handling", () => {
 	const renderApp = (initialEntries = ["/"]) => {
-		let rendered;
-		act(() => {
-			rendered = render(
-				<MemoryRouter initialEntries={initialEntries}>
-					<Theme>
-						<DialogProvider>
-							<TooltipProvider>
-								<Routes>
-									<Route path="*" element={<App />} />
-								</Routes>
-							</TooltipProvider>
-						</DialogProvider>
-					</Theme>
-				</MemoryRouter>
-			);
-		});
-		return rendered;
+		return render(
+			<MemoryRouter initialEntries={initialEntries}>
+				<Theme>
+					<DialogProvider>
+						<TooltipProvider>
+							<Routes>
+								<Route path="*" element={<App />} />
+							</Routes>
+						</TooltipProvider>
+					</DialogProvider>
+				</Theme>
+			</MemoryRouter>
+		);
 	};
 
 	beforeEach(() => {
@@ -135,24 +136,15 @@ describe("App 404 handling", () => {
 
 	test("should redirect to /status/404 and not add ?platform=standard when navigating to an unknown route", async () => {
 		mockLocation.pathname = "/unknown-route"; // Set the pathname for the test
-		renderApp(["/unknown-route"]); // Simulate navigating to an unknown route directly
+		const rendered = renderApp(["/unknown-route"]); // Capture the returned value
 
 		// Expect the URL to be redirected to /status/404
 		await waitFor(() => {
 			expect(mockLocation.replace).toHaveBeenCalledWith("/status/404");
 		});
+		expect(rendered.getByText("notFound.title")).toBeInTheDocument();
 	});
-
-	test("should redirect to /status/404 and not add ?platform=standard when navigating to an unknown route", async () => {
-		mockLocation.pathname = "/unknown-route"; // Set the pathname for the test
-		renderApp(["/unknown-route"]); // Simulate navigating to an unknown route directly
-
-		// Expect the URL to be redirected to /status/404
-		await waitFor(() => {
-			expect(mockLocation.replace).toHaveBeenCalledWith("/status/404");
-		});
-	});
-
+	
 	test("should not redirect when navigating directly to /status/404", async () => {
 		mockLocation.pathname = "/status/404";
 		renderApp(["/status/404"]);
