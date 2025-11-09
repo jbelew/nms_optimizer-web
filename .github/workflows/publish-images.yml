@@ -1,16 +1,9 @@
 name: Build & Publish Application Docker Image
 
 on:
-  workflow_run:
-    workflows: ["Release"]
-    types:
-      - completed
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to build (e.g., 1.0.0)'
-        required: true
-        type: string
+  push:
+    tags:
+      - 'v*.*.*'
       
 jobs: # Renamed job for clarity
   publish:
@@ -24,7 +17,7 @@ jobs: # Renamed job for clarity
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_branch || github.ref }}
+          ref: ${{ github.ref }}
 
       - name: Set up QEMU (for multi‑arch)
         uses: docker/setup-qemu-action@v3
@@ -33,7 +26,7 @@ jobs: # Renamed job for clarity
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
-        if: ${{ github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch' }}
+        if: ${{ github.event_name == 'push' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -46,9 +39,8 @@ jobs: # Renamed job for clarity
         with:
           images: ghcr.io/${{ github.repository_owner }}/nms-optimizer-app
           tags: |
-            type=ref,event=tag # Extract tag from workflow_run if it's a tag push
-            type=raw,value=${{ github.event.inputs.version }},enable=${{ github.event_name == 'workflow_dispatch' }} # Manual trigger
-            type=sha # Always include SHA
+            type=ref,event=tag
+            type=sha
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6 # Updated to v5
@@ -56,7 +48,7 @@ jobs: # Renamed job for clarity
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
