@@ -178,12 +178,6 @@ export default defineConfig(({ mode }) => {
 			minify: "terser",
 			terserOptions: {
 				compress: {
-					navigateFallbackDenylist: [
-						/\/status\/404/,
-						/sitemap\.xml$/,
-						/robots\.txt$/,
-						/404\.html$/,
-					],
 					drop_console: true,
 					drop_debugger: true,
 				},
