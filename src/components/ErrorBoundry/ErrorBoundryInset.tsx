@@ -2,10 +2,10 @@ import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/themes";
-import ReactGA from "react-ga4";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { sendEvent } from "../../utils/analytics";
 
 interface Props {
 	children: ReactNode;
@@ -107,9 +107,9 @@ class ErrorBoundaryInset extends Component<Props, State> {
 			console.error("ErrorBoundary: Failed to clear localStorage.", e);
 		}
 
-		ReactGA.event(error.name, {
-			category: "Error",
-			action: "ErrorBoundary Catch",
+		sendEvent({
+			category: "error",
+			action: error.name,
 			label: error.message,
 			nonInteraction: true,
 			componentStack:

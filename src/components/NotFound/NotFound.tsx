@@ -6,6 +6,8 @@ import { sendEvent } from "../../utils/analytics";
 
 import "./NotFound.scss";
 
+import { Button } from "@radix-ui/themes";
+
 const NotFound: FC = () => {
 	const { t } = useTranslation();
 	hideSplashScreen();
@@ -19,7 +21,7 @@ const NotFound: FC = () => {
 
 	return (
 		<div className="not-found w-full">
-			<div className="not-found__logo mb-2">
+			<div className="not-found__logo mb-4">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 126.75 126.77">
 					<g className="layer">
 						<path
@@ -29,10 +31,12 @@ const NotFound: FC = () => {
 					</g>
 				</svg>
 			</div>
-			<h1 className="not-found__title">{t("notFound.title")}</h1>
-			<p className="not-found__message">{t("notFound.message")}</p>
+			<h1 className="not-found__title text-2xl font-semibold tracking-widest">
+				{t("notFound.title")}
+			</h1>
+			<p className="not-found__message mb-4">{t("notFound.message")}</p>
 			<a className="not-found__link" href="/">
-				{t("notFound.backToMain")}
+				<Button>{t("notFound.backToMain")}</Button>
 			</a>
 		</div>
 	);

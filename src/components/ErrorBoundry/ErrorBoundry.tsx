@@ -1,8 +1,9 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import ReactGA from "react-ga4";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
+
+import { sendEvent } from "../../utils/analytics";
 
 // src/components/ErrorBoundary/ErrorBoundary.tsx
 
@@ -56,9 +57,9 @@ class ErrorBoundary extends Component<Props, State> {
 			console.error("ErrorBoundary: Failed to clear localStorage.", e);
 		}
 
-		ReactGA.event(error.name, {
-			category: "Error",
-			action: "ErrorBoundary Catch",
+		sendEvent({
+			category: "error",
+			action: error.name,
 			label: error.message,
 			nonInteraction: true,
 			componentStack:
