@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.5...v5.2.0) (2025-11-08)
+
+
+### Features
+
+* **analytics:** apply GA4 best practices for event naming ([98d0d34](https://github.com/jbelew/nms_optimizer-web/commit/98d0d34e36a0d097d3480dde07fa194d8511cc7a))
+
 ## [5.1.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.4...v5.1.5) (2025-11-08)
 
 
