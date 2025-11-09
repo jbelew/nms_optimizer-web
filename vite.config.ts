@@ -74,7 +74,12 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
 					globIgnores: ["**/pwa-*.png"],
-					navigateFallbackDenylist: [/\/status\/404/],
+					navigateFallbackDenylist: [
+						/\/status\/404/,
+						/sitemap\.xml$/,
+						/robots\.txt$/,
+						/404\.html$/,
+					],
 					runtimeCaching: [
 						{
 							urlPattern: ({ url }) => url.pathname.endsWith(".md"),
@@ -173,6 +178,12 @@ export default defineConfig(({ mode }) => {
 			minify: "terser",
 			terserOptions: {
 				compress: {
+					navigateFallbackDenylist: [
+						/\/status\/404/,
+						/sitemap\.xml$/,
+						/robots\.txt$/,
+						/404\.html$/,
+					],
 					drop_console: true,
 					drop_debugger: true,
 				},
