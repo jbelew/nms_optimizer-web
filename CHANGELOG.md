@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.0...v5.2.1) (2025-11-10)
+
+
+### Bug Fixes
+
+* **i18n:** fixed i18n routes again ([17f8f4c](https://github.com/jbelew/nms_optimizer-web/commit/17f8f4c5edc2b63de7028cd7b77e4f986d4cba5a))
+
 # [5.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.1.5...v5.2.0) (2025-11-08)
 
 
