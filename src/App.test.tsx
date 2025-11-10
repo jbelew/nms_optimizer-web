@@ -3,10 +3,12 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 import { vi } from "vitest";
 
 import { routes } from "./routes";
 import { usePlatformStore } from "./store/PlatformStore";
+import { sendEvent } from "./utils/analytics";
 
 // Mock the hideSplashScreen function
 vi.mock("vite-plugin-splash-screen/runtime", () => ({
@@ -130,6 +132,19 @@ describe("App 404 handling", () => {
 		const backToMainLink = await rendered.findByText("notFound.backToMain");
 		expect(backToMainLink).toBeInTheDocument();
 		expect(backToMainLink.closest("a")).toHaveAttribute("href", "/");
+	});
+
+	test("should call hideSplashScreen and sendEvent when 404 page is rendered", async () => {
+		renderApp(["/unknown-route"]);
+
+		// Wait for the NotFound component to render and its useEffect to run
+		await vi.waitFor(() => {
+			expect(hideSplashScreen).toHaveBeenCalledTimes(1);
+			expect(sendEvent).toHaveBeenCalledWith({
+				category: "navigation",
+				action: "not_found",
+			});
+		});
 	});
 
 	// _test("should render the main app content for a language-specific route", async () => {
