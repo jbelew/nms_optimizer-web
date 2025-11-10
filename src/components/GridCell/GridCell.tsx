@@ -124,7 +124,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			)}
 			{cell.label && (
 				<span
-					className={`text-1xl gridCell__label mt-1 sm:text-3xl lg:text-4xl ${
+					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
 						upGradePriority?.length > 1
 							? "gridCell__label--corvette"
 							: "gridCell__label"
