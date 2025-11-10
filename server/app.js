@@ -128,20 +128,25 @@ function setCacheHeaders(res, filePath) {
  * @returns {boolean} True if the pathname is a known SPA route, false otherwise.
  */
 function isSpaRoute(pathname) {
-	// Check for base known paths
-	if (BASE_KNOWN_PATHS.includes(pathname)) {
-		return true;
+	const parts = pathname.split("/").filter((p) => p);
+
+	// Root path (e.g., '/')
+	if (parts.length === 0) {
+		return BASE_KNOWN_PATHS.includes("/");
 	}
 
-	// Check for language-specific paths
-	const parts = pathname.split("/");
-	if (parts.length > 1 && SUPPORTED_LANGUAGES.includes(parts[1])) {
-		const pathWithoutLang = "/" + parts.slice(2).join("/");
-		if (pathWithoutLang === "/" || BASE_KNOWN_PATHS.includes(pathWithoutLang)) {
-			return true;
+	// Language-prefixed paths (e.g., '/es/about', '/de')
+	if (SUPPORTED_LANGUAGES.includes(parts[0])) {
+		const page = parts[1];
+		if (!page) {
+			return true; // Language root (e.g., /es)
 		}
+		return KNOWN_DIALOGS.includes(page);
 	}
-	return false;
+
+	// Non-language-prefixed paths (e.g., '/about')
+	const page = parts[0];
+	return KNOWN_DIALOGS.includes(page);
 }
 
 // --- MIDDLEWARE & ROUTING ---
