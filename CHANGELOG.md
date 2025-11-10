@@ -1,3 +1,10 @@
+## [5.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.1...v5.2.2) (2025-11-10)
+
+
+### Bug Fixes
+
+* **deserializer:** use direct fetch to prevent suspense error ([084ebf1](https://github.com/jbelew/nms_optimizer-web/commit/084ebf10540ec35b60348ddfa72dc7badb39360a))
+
 ## [5.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.0...v5.2.1) (2025-11-10)
 
 
