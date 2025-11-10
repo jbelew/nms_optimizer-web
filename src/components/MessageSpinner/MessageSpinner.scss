@@ -8,8 +8,8 @@
 			color: var(--accent-11);
 			filter: drop-shadow(0 2px 4px var(--accent-a2));
 
-			// Note: This modifier had very similar styles to the base.
-			// Sass would allow further optimization here with @extend if needed.
+			// Note: this modifier had very similar styles to the base.
+			// sass would allow further optimization here with @extend if needed.;
 			font-family: NMS, sans-serif;
 			font-weight: 400;
 			text-transform: uppercase;

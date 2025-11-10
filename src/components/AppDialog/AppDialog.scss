@@ -73,6 +73,7 @@
 		max-height: 80vh;
 		padding: calc(var(--spacing) * 4) calc(var(--spacing) * 2) calc(var(--spacing) * 4)
 			calc(var(--spacing) * 4);
+
 		@media (width <= 640px) {
 			padding: calc(var(--spacing) * 3) calc(var(--spacing) * 1) calc(var(--spacing) * 3)
 				calc(var(--spacing) * 3);
@@ -115,6 +116,7 @@
 		article {
 			font-size: var(--text-base);
 			padding-right: calc(var(--spacing) * 4);
+
 			@media (width <= 640px) {
 				font-size: var(--text-small);
 			}

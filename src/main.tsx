@@ -29,8 +29,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
-import { initializeAnalytics } from "./utils/analytics";
 import { routes } from "./routes";
+import { initializeAnalytics } from "./utils/analytics";
 
 // Initialize analytics
 initializeAnalytics();
