@@ -75,11 +75,19 @@ export default defineConfig(({ mode }) => {
 					"favicon.svg",
 					"robots.txt",
 					"/assets/img/favicons/apple-touch-icon.png",
+					"assets/fonts/*.woff2",
+					"assets/img/background.webp",
+					"assets/img/background@2x.webp",
+					"assets/img/background@mobile.webp",
 				],
 				workbox: {
-					// immediately activate new SW versions
+					// Auto-update service worker
 					clientsClaim: true,
 					skipWaiting: true,
+
+					// Workbox quality-of-life features
+					navigationPreload: false,
+					cleanupOutdatedCaches: true,
 
 					// define caching strategies
 					runtimeCaching: [
@@ -90,7 +98,7 @@ export default defineConfig(({ mode }) => {
 								cacheName: "images-cache",
 								expiration: {
 									maxEntries: 100,
-									maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+									maxAgeSeconds: 604800, // 1 week (matches server/app.js)
 								},
 							},
 						},
@@ -101,13 +109,14 @@ export default defineConfig(({ mode }) => {
 								cacheName: "fonts-cache",
 								expiration: {
 									maxEntries: 30,
-									maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+									maxAgeSeconds: 31536000, // 1 year
 								},
 							},
 						},
 						{
-							urlPattern: /^https:\/\/api\.nms-optimizer\.com\/.*$/,
+							urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
 							handler: "NetworkFirst",
+							method: "GET",
 							options: {
 								cacheName: "api-cache",
 								networkTimeoutSeconds: 5,
@@ -120,29 +129,19 @@ export default defineConfig(({ mode }) => {
 								},
 							},
 						},
-						{
-							urlPattern: ({ request }) =>
-								request.destination === "script" || request.destination === "style",
-							handler: "CacheFirst",
-							options: {
-								cacheName: "static-resources",
-								expiration: {
-									maxEntries: 50,
-									maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-								},
-							},
-						},
 					],
 				},
 				manifest: {
+					id: "/",
 					name: "No Man's Sky Technology Layout Optimizer",
 					short_name: "NMS Optimizer",
 					description:
 						"The NMS Optimizer helps you design the perfect Starship, Corvette, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
 					start_url: "/",
+					scope: "/",
 					display: "standalone",
 					background_color: "#274860",
-					theme_color: "#00a2c7",
+					theme_color: "#003848",
 					orientation: "any",
 					icons: [
 						{
@@ -245,7 +244,7 @@ export default defineConfig(({ mode }) => {
 							if (id.includes("recharts")) return "recharts";
 							if (id.includes("radix")) return "radix";
 
-							return "vendor";
+						return "vendor";
 						}
 					},
 					assetFileNames: (assetInfo) =>

@@ -2,9 +2,7 @@
 import type { TechTree } from "../useTechTree/useTechTree";
 import { useEffect, useState } from "react";
 
-import { fetchTechTree } from "../useTechTree/useTechTree";
-
-// Assuming TechTree interface is defined here
+import { API_URL } from "../../constants";
 
 /**
  * Custom hook to fetch the tech tree colors from the API.
@@ -23,12 +21,19 @@ export const useTechTreeColors = () => {
 		 */
 		const fetchColors = async () => {
 			try {
-				const [starshipResource, multitoolResource] = await Promise.all([
-					fetchTechTree("standard"),
-					fetchTechTree("standard-mt"),
+				const [starshipResponse, multitoolResponse, corvetteResponse] = await Promise.all([
+					fetch(`${API_URL}tech_tree/standard`),
+					fetch(`${API_URL}tech_tree/standard-mt`),
+					fetch(`${API_URL}tech_tree/corvette`),
 				]);
-				const starshipData: TechTree = starshipResource.read();
-				const multitoolData: TechTree = multitoolResource.read();
+
+				if (!starshipResponse.ok || !multitoolResponse.ok || !corvetteResponse.ok) {
+					throw new Error("Failed to fetch tech tree data");
+				}
+
+				const starshipData: TechTree = await starshipResponse.json();
+				const multitoolData: TechTree = await multitoolResponse.json();
+				const corvetteData: TechTree = await corvetteResponse.json();
 
 				const colors: Record<string, string> = {};
 
@@ -47,6 +52,7 @@ export const useTechTreeColors = () => {
 
 				processTechTree(starshipData);
 				processTechTree(multitoolData);
+				processTechTree(corvetteData);
 
 				setTechColors(colors);
 			} catch (err: unknown) {

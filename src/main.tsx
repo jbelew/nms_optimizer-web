@@ -69,7 +69,11 @@ if (
 ) {
 	import("virtual:pwa-register")
 		.then(({ registerSW }) => {
-			registerSW({ immediate: true });
+			registerSW({
+				onOfflineReady() {
+					console.log("App is ready to work offline");
+				},
+			});
 		})
 		.catch((e) => {
 			console.error("Failed to register service worker:", e);

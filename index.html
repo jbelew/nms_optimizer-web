@@ -84,7 +84,7 @@
 				src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
 				font-weight: 400; /* Semibold */
 				font-style: normal;
-				font-display: swap;
+				font-display: optional;
 			}
 
 			@font-face {
@@ -181,12 +181,14 @@
 			href="/assets/img/background.webp"
 			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
 			media="(min-width: 601px)"
+			fetchpriority="high"
 		/>
 		<link
 			rel="preload"
 			as="image"
 			href="/assets/img/background@mobile.webp"
 			media="(max-width: 600px)"
+			fetchpriority="high"
 		/>
 
 		<!-- Fonts -->
