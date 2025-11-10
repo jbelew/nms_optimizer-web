@@ -35,10 +35,10 @@ const singleImages = [
 		outputDir: "public/assets/img",
 		resolutions: [
 			{ width: 1920, suffix: "" },
-			{ width: 3840, suffix: "@2x" },
+			{ width: 2880, suffix: "@2x" }, // Reduced from 3840
 			{ width: 640, height: 1136, suffix: "@mobile" },
 		],
-		webpOptions: { quality: 60, effort: 6 },
+		webpOptions: { quality: 55, effort: 6 },
 	},
 ];
 
@@ -66,7 +66,7 @@ async function processImages() {
 
 					await sharp(filePath)
 						.resize(res.width, res.height)
-						.webp({ quality: res.suffix === "@2x" ? 60 : 75, effort: 6 })
+						.webp({ quality: res.suffix === "@2x" ? 55 : 65, effort: 6 })
 						.toFile(outputPath);
 				}
 			};

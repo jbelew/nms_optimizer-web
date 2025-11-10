@@ -12,13 +12,15 @@ import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
-import { ShipSelection } from "../ShipSelection/ShipSelection";
-import TechTreeComponent from "../TechTree/TechTree";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 
+const AppFooter = lazy(() => import("../AppFooter/AppFooter"));
+const ShipSelection = lazy(() =>
+	import("../ShipSelection/ShipSelection").then((m) => ({ default: m.ShipSelection }))
+);
+const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAlertDialog"));
 
 /**

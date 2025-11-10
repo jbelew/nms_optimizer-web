@@ -191,6 +191,9 @@
 			fetchpriority="high"
 		/>
 
+		<!-- Default language translations -->
+		<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" crossorigin />
+
 		<!-- Fonts -->
 		<link
 			rel="preload"
@@ -198,6 +201,7 @@
 			as="font"
 			type="font/woff2"
 			crossorigin="anonymous"
+			fetchpriority="high"
 		/>
 		<link
 			rel="preload"
@@ -216,15 +220,8 @@
 		/>
 
 		<!-- Preconnect -->
-		<link
-			rel="preconnect"
-			href="https://nms-optimizer-service-afebcfd47e2a.herokuapp.com"
-			crossorigin
-		/>
+		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
 		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
-
-		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
-		<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 
 		<!-- SEO Meta Tags -->
 		<meta

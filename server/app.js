@@ -11,7 +11,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Third-party libraries
-import etag from "etag";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
 
@@ -106,7 +105,7 @@ async function loadIndexHtml() {
  */
 function setCacheHeaders(res, filePath) {
 	const fileName = path.basename(filePath);
-	const hashedAsset = /-[0-9a-zA-Z_]{8}\./; // Vite hashed files
+	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
 	if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
@@ -153,6 +152,17 @@ function isSpaRoute(pathname) {
 
 // Trust proxies like Heroku or Cloudflare to get the correct client IP.
 app.set("trust proxy", true);
+
+/**
+ * Global security headers middleware
+ */
+app.use((req, res, next) => {
+	res.setHeader("X-Content-Type-Options", "nosniff");
+	res.setHeader("X-Frame-Options", "DENY");
+	res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+	res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+	next();
+});
 
 /**
  * Middleware to redirect requests from non-canonical hosts to the target host in production.

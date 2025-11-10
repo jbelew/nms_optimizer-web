@@ -32,8 +32,10 @@ import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 
-// Initialize analytics
-initializeAnalytics();
+// Initialize analytics after app loads (don't block render)
+if (typeof window !== "undefined") {
+	requestIdleCallback(() => initializeAnalytics(), { timeout: 2000 });
+}
 
 const router = createBrowserRouter(routes);
 

@@ -122,6 +122,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							style={{ color: "var(--accent-track)" }}
 							src={nmslogo}
 							alt="No Man's Sky Atlas Logo"
+							width="16"
+							height="20"
 							onClick={() => {
 								sendEvent({
 									category: "ui",

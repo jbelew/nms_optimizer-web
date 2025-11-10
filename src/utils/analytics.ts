@@ -51,10 +51,12 @@ let gaInitialized = false;
  * @returns {void}
  */
 export const initializeAnalytics = () => {
-	if (gaInitialized) return;
+	if (gaInitialized || !/bot|googlebot|crawler|spider/i.test(navigator.userAgent)) return;
+
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
 			send_page_view: true,
+			anonymize_ip: true,
 			user_properties: {
 				app_version: __APP_VERSION__,
 			},
