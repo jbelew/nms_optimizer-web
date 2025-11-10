@@ -1,3 +1,10 @@
+## [5.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.2...v5.2.3) (2025-11-10)
+
+
+### Bug Fixes
+
+* **toast:** was importing toast twice ([03a2d28](https://github.com/jbelew/nms_optimizer-web/commit/03a2d287f8d2ca774a2c52fbafe8b5ce1b8a8f93))
+
 ## [5.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.1...v5.2.2) (2025-11-10)
 
 
