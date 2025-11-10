@@ -26,39 +26,36 @@ import { StrictMode } from "react";
 import * as Toast from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
-import { DialogProvider } from "./context/DialogContext";
 import { initializeAnalytics } from "./utils/analytics";
+import { routes } from "./routes";
 
 // Initialize analytics
 initializeAnalytics();
 
+const router = createBrowserRouter(routes);
+
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<BrowserRouter>
-			<ErrorBoundary>
-				<Theme
-					appearance="dark"
-					panelBackground="solid"
-					accentColor="cyan"
-					grayColor="sage"
-					scaling="100%"
-				>
-					<Toast.Provider>
-						<Toast.Provider swipeDirection="right">
-							<DialogProvider>
-								<App />
-							</DialogProvider>
-							<Toast.Viewport className="ToastViewport" />
-						</Toast.Provider>{" "}
-						<Toast.Viewport />
-					</Toast.Provider>
-				</Theme>
-			</ErrorBoundary>
-		</BrowserRouter>
+		<ErrorBoundary>
+			<Theme
+				appearance="dark"
+				panelBackground="solid"
+				accentColor="cyan"
+				grayColor="sage"
+				scaling="100%"
+			>
+				<Toast.Provider>
+					<Toast.Provider swipeDirection="right">
+						<RouterProvider router={router} />
+						<Toast.Viewport className="ToastViewport" />
+					</Toast.Provider>{" "}
+					<Toast.Viewport />
+				</Toast.Provider>
+			</Theme>
+		</ErrorBoundary>
 	</StrictMode>
 );
 

@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { sendEvent } from "../../utils/analytics";
@@ -10,17 +11,13 @@ import { Button } from "@radix-ui/themes";
 
 const NotFound: FC = () => {
 	const { t } = useTranslation();
-	hideSplashScreen();
 
 	useEffect(() => {
+		hideSplashScreen();
 		sendEvent({
 			category: "navigation",
 			action: "not_found",
 		});
-
-		if (window.location.pathname !== "/status/404") {
-			window.location.replace("/status/404");
-		}
 	}, []);
 
 	return (
@@ -39,9 +36,9 @@ const NotFound: FC = () => {
 				{t("notFound.title")}
 			</h1>
 			<p className="not-found__message mb-4">{t("notFound.message")}</p>
-			<a className="not-found__link" href="/">
+			<Link className="not-found__link" to="/">
 				<Button>{t("notFound.backToMain")}</Button>
-			</a>
+			</Link>
 		</div>
 	);
 };
