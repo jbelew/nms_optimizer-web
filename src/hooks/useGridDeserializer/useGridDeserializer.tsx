@@ -1,11 +1,11 @@
-import type { Grid } from "../../store/GridStore";
-import type { Module, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
 import { useCallback } from "react";
 
-import { createGrid, useGridStore } from "../../store/GridStore";
+import { API_URL } from "../../constants";
+import { createGrid, Grid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
-import { fetchTechTree } from "../useTechTree/useTechTree";
+import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { Module, RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).
@@ -210,7 +210,23 @@ export const deserialize = async (
 			}, {});
 
 		// --- Fetch Tech Tree Data ---
-		const techTreeData: TechTree = (await fetchTechTree(shipType)).read();
+		const techTreeRes = await fetch(`${API_URL}tech_tree/${shipType}`);
+		if (!techTreeRes.ok) {
+			throw new Error(`HTTP error! status: ${techTreeRes.status}`);
+		}
+		const techTreeData: TechTree = await techTreeRes.json();
+
+		if (techTreeData.recommended_builds && Array.isArray(techTreeData.recommended_builds)) {
+			techTreeData.recommended_builds = techTreeData.recommended_builds.filter(
+				(build: RecommendedBuild) => {
+					if (!isValidRecommendedBuild(build)) {
+						console.error("Invalid recommended build found in tech tree:", build);
+						return false;
+					}
+					return true;
+				}
+			);
+		}
 
 		const colors: { [key: string]: string } = {};
 		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};
