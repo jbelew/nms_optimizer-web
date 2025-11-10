@@ -30,8 +30,6 @@
 
 		&--corvette {
 			color: var(--accent-a11);
-
-			/* text-shadow is identical, so it can be omitted if inherited or defined once */
 		}
 	}
 
@@ -178,7 +176,7 @@
 
 	&--glow {
 		animation: pulseGlow 0.75s infinite alternate ease-in-out;
-		box-shadow: 0 0 2px 1px var(--accent-track);
+		box-shadow: 0 0 2px 1px var(--accent-7);
 	}
 
 	&--touched {
@@ -193,7 +191,7 @@
 	}
 
 	to {
-		border-color: var(--purple-12);
+		border-color: var(--purple-11);
 	}
 }
 
@@ -216,7 +214,7 @@
 		}
 
 		&--glow {
-			box-shadow: 0 0 2px 2px var(--accent-a8);
+			box-shadow: 0 0 2px 2px var(--accent-7);
 		}
 
 		&--empty .corner,
