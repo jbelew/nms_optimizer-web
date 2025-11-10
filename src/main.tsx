@@ -47,12 +47,9 @@ createRoot(document.getElementById("root")!).render(
 				grayColor="sage"
 				scaling="100%"
 			>
-				<Toast.Provider>
-					<Toast.Provider swipeDirection="right">
-						<RouterProvider router={router} />
-						<Toast.Viewport className="ToastViewport" />
-					</Toast.Provider>{" "}
-					<Toast.Viewport />
+				<Toast.Provider swipeDirection="right">
+					<RouterProvider router={router} />
+					<Toast.Viewport className="ToastViewport" />
 				</Toast.Provider>
 			</Theme>
 		</ErrorBoundary>

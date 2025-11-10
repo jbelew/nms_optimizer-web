@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useEffect } from "react";
+import { FC, lazy, Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
@@ -44,9 +44,11 @@ const App: FC = () => {
 
 	// const { showPrompt, dismissPrompt } = useInstallPrompt();
 
+	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+
 	useEffect(() => {
-		initializePlatform(Object.keys(shipTypes));
-	}, [shipTypes, initializePlatform]);
+		initializePlatform(shipTypeKeys);
+	}, [initializePlatform, shipTypeKeys]);
 
 	return (
 		<>
