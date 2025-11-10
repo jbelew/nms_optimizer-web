@@ -1,0 +1,17 @@
+{
+	"extends": [
+		"stylelint-config-standard"
+	],
+	"overrides": [
+		{
+			"files": [
+				"**/*.html"
+			],
+			"customSyntax": "postcss-html"
+		}
+	],
+	"rules": {
+		"block-no-empty": true,
+		"color-no-invalid-hex": true
+	}
+}

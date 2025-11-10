@@ -56,7 +56,7 @@
 		<style>
 			/* src/assets/css/fonts.css */
 			@font-face {
-				font-family: "GeosansLight";
+				font-family: GeosansLight;
 				src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
 				font-weight: 700;
 				font-style: normal;
@@ -64,7 +64,7 @@
 			}
 
 			@font-face {
-				font-family: "Raleway";
+				font-family: Raleway;
 				src: url("/assets/fonts/Raleway-VariableFont_wght.woff2") format("woff2");
 				font-weight: 100 900;
 				font-style: normal;
@@ -72,7 +72,7 @@
 			}
 
 			@font-face {
-				font-family: "Acumin";
+				font-family: Acumin;
 				src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
 				font-weight: 600; /* Semibold */
 				font-style: normal;
@@ -80,7 +80,7 @@
 			}
 
 			@font-face {
-				font-family: "NMS";
+				font-family: NMS;
 				src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
 				font-weight: 400; /* Semibold */
 				font-style: normal;
@@ -88,7 +88,7 @@
 			}
 
 			@font-face {
-				font-family: "AtkinsonHyperlegibleNext";
+				font-family: AtkinsonHyperlegibleNext;
 				src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2")
 					format("woff2-variations");
 				font-weight: 100 900;
@@ -97,7 +97,7 @@
 			}
 
 			@font-face {
-				font-family: "AtkinsonHyperlegibleNext";
+				font-family: AtkinsonHyperlegibleNext;
 				src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2")
 					format("woff2-variations");
 				font-weight: 100 900;
@@ -106,7 +106,7 @@
 			}
 
 			html {
-				text-rendering: optimizeLegibility;
+				text-rendering: optimizelegibility;
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
 				scrollbar-gutter: stable;
@@ -119,6 +119,7 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
+
 				/* Set all background properties except image */
 				background-position: center;
 				background-repeat: no-repeat;
@@ -129,7 +130,6 @@
 					url("/assets/img/background.webp") 1x,
 					url("/assets/img/background@2x.webp") 2x
 				);
-
 				z-index: -1;
 
 				/* Keep it in its own GPU layer to prevent repaint flicker */
@@ -138,7 +138,7 @@
 			}
 
 			/* Mobile (≤600px): swap only the background-image, not the whole background */
-			@media (max-width: 600px) {
+			@media (width <= 600px) {
 				body::before {
 					background-image: url("/assets/img/background@mobile.webp");
 				}
@@ -168,7 +168,6 @@
 				height: 1px;
 				margin: -1px;
 				padding: 0;
-				clip: rect(0, 0, 0, 0);
 				overflow: hidden;
 				border: 0;
 				white-space: nowrap;
@@ -215,7 +214,11 @@
 		/>
 
 		<!-- Preconnect -->
-		<link rel="preconnect" href="https://nms-optimizer-service-afebcfd47e2a.herokuapp.com" crossorigin />
+		<link
+			rel="preconnect"
+			href="https://nms-optimizer-service-afebcfd47e2a.herokuapp.com"
+			crossorigin
+		/>
 		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
 
 		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
