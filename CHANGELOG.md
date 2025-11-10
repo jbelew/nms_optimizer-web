@@ -1,3 +1,10 @@
+## [5.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.3...v5.2.4) (2025-11-10)
+
+
+### Performance Improvements
+
+* **images:** better image optimizations and other fixes ([5cb96d8](https://github.com/jbelew/nms_optimizer-web/commit/5cb96d821e4c48ec9413f4aa21c0cd7309c5617c))
+
 ## [5.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.2...v5.2.3) (2025-11-10)
 
 
