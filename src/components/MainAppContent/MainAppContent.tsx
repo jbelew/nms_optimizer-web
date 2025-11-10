@@ -141,7 +141,13 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 
 					{!isLg && (
 						<>
-							<Separator size="4" mt="4" mb="4" orientation="horizontal" />
+							<Separator
+								color="cyan"
+								size="4"
+								mt="4"
+								mb="4"
+								orientation="horizontal"
+							/>
 							<AppFooter buildVersion={buildVersion} />
 						</>
 					)}

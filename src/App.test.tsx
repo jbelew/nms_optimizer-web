@@ -87,6 +87,10 @@ vi.mock("./hooks/useUrlValidation/useUrlValidation", () => ({
 	useUrlValidation: vi.fn(),
 }));
 
+vi.mock("./utils/analytics", () => ({
+	sendEvent: vi.fn(),
+}));
+
 describe("App 404 handling", () => {
 	beforeEach(() => {
 		// Reset the platform store before each test
@@ -112,12 +116,20 @@ describe("App 404 handling", () => {
 
 		// Expect the URL to be redirected to /status/404
 		expect(await rendered.findByText("notFound.title")).toBeInTheDocument();
+		expect(await rendered.findByText("notFound.message")).toBeInTheDocument();
+		const backToMainLink = await rendered.findByText("notFound.backToMain");
+		expect(backToMainLink).toBeInTheDocument();
+		expect(backToMainLink.closest("a")).toHaveAttribute("href", "/");
 	});
 
 	test("should not redirect when navigating directly to /status/404", async () => {
 		const rendered = renderApp(["/status/404"]);
 		// Expect the URL to be redirected to /status/404
 		expect(await rendered.findByText("notFound.title")).toBeInTheDocument();
+		expect(await rendered.findByText("notFound.message")).toBeInTheDocument();
+		const backToMainLink = await rendered.findByText("notFound.backToMain");
+		expect(backToMainLink).toBeInTheDocument();
+		expect(backToMainLink.closest("a")).toHaveAttribute("href", "/");
 	});
 
 	// _test("should render the main app content for a language-specific route", async () => {
