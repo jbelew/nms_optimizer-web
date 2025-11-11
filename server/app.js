@@ -104,7 +104,9 @@ async function loadIndexHtml() {
  * @param {string} filePath - The path to the file being served.
  */
 function setCacheHeaders(res, filePath) {
-	const fileName = path.basename(filePath);
+	let fileName = path.basename(filePath);
+	// Strip compression extensions (.br, .gz) before checking hash
+	fileName = fileName.replace(/\.(br|gz)$/, '');
 	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
 	if (hashedAsset.test(fileName)) {
