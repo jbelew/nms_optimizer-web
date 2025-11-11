@@ -1,364 +1,70 @@
 <!doctype html>
 <html lang="en">
-	<!--
-          __  _ __ __   __    __  ___ _____ _ __ __ _ ___ ___ ___
-         |  \| |  V  |/' _/  /__\| _,\_   _| |  V  | |_  | __| _ \
-         | | ' | \_/ |`._`. | \/ | v_/ | | | | \_/ | |/ /| _|| v /
-         |_|\__|_| |_||___/  \__/|_|   |_| |_|_| |_|_|___|___|_|_\
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Clearing Service Worker...</title>
+    <script>
+        // EMERGENCY: Aggressive Service Worker and Cache Clearing Script
+        // This script is designed to run on a minimal page to force unregistration
+        // and cache clearing on stubborn browsers, especially iOS.
+        // It should be deployed temporarily and then reverted.
 
-                  Built by jbelew (void23 | QQ9Y-EJRS-P8KGW)
-                                GPL-3.0 license
-                 https://github.com/jbelew/nms_optimizer-web
-
-    -->
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-		<meta name="theme-color" content="#003848" />
-
-		<title>NMS Optimizer | No Man’s Sky Layout Builder for Ships & More</title>
-
-		<!-- Preferred favicon format -->
-		<link
-			rel="icon"
-			href="/assets/svg/favicon-light.svg"
-			type="image/svg+xml"
-			media="(prefers-color-scheme: light)"
-		/>
-		<link
-			rel="icon"
-			href="/assets/svg/favicon-dark.svg"
-			type="image/svg+xml"
-			media="(prefers-color-scheme: dark)"
-		/>
-
-		<!-- Fallback PNG favicons -->
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/assets/img/favicons/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/assets/img/favicons/favicon-16x16.png"
-		/>
-
-		<!-- Apple touch icon (iOS home screen icon) -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/assets/img/favicons/apple-touch-icon.png?v=3"
-		/>
-
-		<style>
-			/* src/assets/css/fonts.css */
-			@font-face {
-				font-family: GeosansLight;
-				src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
-				font-weight: 700;
-				font-style: normal;
-				font-display: swap;
-			}
-
-			@font-face {
-				font-family: Raleway;
-				src: url("/assets/fonts/Raleway-VariableFont_wght.woff2") format("woff2");
-				font-weight: 100 900;
-				font-style: normal;
-				font-display: swap;
-			}
-
-			@font-face {
-				font-family: Acumin;
-				src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
-				font-weight: 600; /* Semibold */
-				font-style: normal;
-				font-display: swap;
-			}
-
-			@font-face {
-				font-family: NMS;
-				src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
-				font-weight: 400; /* Semibold */
-				font-style: normal;
-				font-display: optional;
-			}
-
-			@font-face {
-				font-family: AtkinsonHyperlegibleNext;
-				src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2")
-					format("woff2-variations");
-				font-weight: 100 900;
-				font-style: normal;
-				font-display: swap;
-			}
-
-			@font-face {
-				font-family: AtkinsonHyperlegibleNext;
-				src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2")
-					format("woff2-variations");
-				font-weight: 100 900;
-				font-style: italic;
-				font-display: swap;
-			}
-
-			html {
-				text-rendering: optimizelegibility;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-				scrollbar-gutter: stable;
-			}
-
-			body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-
-				/* Set all background properties except image */
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-
-				/* Default desktop image-set */
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-				z-index: -1;
-
-				/* Keep it in its own GPU layer to prevent repaint flicker */
-				will-change: transform;
-				transform: translateZ(0);
-			}
-
-			/* Mobile (≤600px): swap only the background-image, not the whole background */
-			@media (width <= 640px) {
-				body::before {
-					background-image: url("/assets/img/background@mobile.webp");
-				}
-			}
-
-			body.a11y-font::before {
-				background-image: none !important;
-				background-color: #101b20;
-			}
-
-			body {
-				background-color: #000;
-			}
-
-			.vpss-logo svg {
-				height: 48px;
-				width: 48px;
-			}
-
-			body.vpss-active {
-				overflow: hidden;
-			}
-
-			.visually-hidden {
-				position: absolute;
-				width: 1px;
-				height: 1px;
-				margin: -1px;
-				padding: 0;
-				overflow: hidden;
-				border: 0;
-				white-space: nowrap;
-			}
-		</style>
-
-		<!-- Preload images so iOS Safari has them ready -->
-		<link
-			rel="preload"
-			as="image"
-			href="/assets/img/background.webp"
-			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
-			media="(min-width: 601px)"
-			fetchpriority="high"
-		/>
-		<link
-			rel="preload"
-			as="image"
-			href="/assets/img/background@mobile.webp"
-			media="(max-width: 600px)"
-			fetchpriority="high"
-		/>
-
-		<!-- Default language translations -->
-		<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" crossorigin />
-
-		<!-- Fonts -->
-		<link
-			rel="preload"
-			href="/assets/fonts/geonms-webfont.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="high"
-		/>
-		<link
-			rel="preload"
-			href="/assets/fonts/Raleway-VariableFont_wght.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-		/>
-
-		<link
-			rel="preload"
-			href="/assets/fonts/nms-alphabet.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-		/>
-
-		<!-- Preconnect -->
-		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
-
-		<!-- SEO Meta Tags -->
-		<meta
-			name="description"
-			content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds."
-		/>
-		<meta
-			name="keywords"
-			content="No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool, Corvette layout, Corvette build, Corvette optimizer"
-		/>
-
-		<!-- Open Graph Meta Tags -->
-		<meta property="og:title" content="No Man's Sky Technology Layout Optimizer" />
-		<meta
-			property="og:description"
-			content="Build optimal Starship, Corvette, Multitool, Exocraft, and Exosuit layouts in No Man's Sky. Improve adjacency bonuses, maximize supercharged slots, and share your best builds."
-		/>
-		<meta
-			property="og:image"
-			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
-		/>
-		<meta
-			property="og:image:alt"
-			content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
-		/>
-		<meta property="og:url" content="https://nms-optimizer.app/" />
-		<meta property="og:type" content="website" />
-
-		<!-- Twitter Card Meta Tags -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="No Man's Sky Technology Layout Optimizer" />
-		<meta
-			name="twitter:description"
-			content="Create the best Starship, Corvette, Multitool, Exocraft, and Exosuit builds in No Man’s Sky with this powerful optimizer. Maximize performance with adjacency and supercharged slots."
-		/>
-		<meta
-			name="twitter:image"
-			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
-		/>
-		<meta
-			name="twitter:image:alt"
-			content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
-		/>
-
-		<!-- Structured Data (JSON-LD) -->
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "WebApplication",
-				"name": "No Man's Sky Technology Layout Optimizer",
-				"url": "https://nms-optimizer.app/",
-				"image": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
-				"description": "Optimize your No Man's Sky experience with the best Starship, Corvette, Multitool, Exocraft, and Exosuit layouts. Improve adjacency bonuses, maximize supercharged slots, and design efficient, powerful configurations.",
-				"applicationCategory": "GameApplication",
-				"operatingSystem": "All",
-				"browserRequirements": "Requires JavaScript",
-				"creator": {
-					"@type": "Person",
-					"name": "John Belew"
-				},
-				"inLanguage": ["en", "es", "fr", "de"]
-			}
-		</script>
-
-	</head>
-	<body>
-		<main class="visually-hidden">
-			<section>
-				<h1>No Man's Sky Optimizer: The Ultimate Tool for Tech Layouts and Builds</h1>
-				<p>
-					Welcome to the NMS Optimizer, the ultimate tool for creating the best No Man's
-					Sky tech layouts. Whether you're looking to create the best starship, corvette,
-					multitool, or exocraft layout, or the most efficient exosuit setup, our tool is
-					here to help. We use advanced algorithms to calculate the optimal placement of
-					your technology modules, maximizing your adjacency bonuses and the effectiveness
-					of your supercharged slots.
-				</p>
-			</section>
-
-			<section>
-				<h2>What is an Adjacency Bonus?</h2>
-				<p>
-					In No Man's Sky, an adjacency bonus is a crucial mechanic that boosts the stats
-					of your technology modules. When you place compatible technology modules next to
-					each other in your inventory, they form a synergy and receive a performance
-					boost. The NMS Optimizer is the perfect tool to figure out the best arrangement
-					for maximum adjacency bonus.
-				</p>
-			</section>
-
-			<section>
-				<h2>What Are Supercharged Slots?</h2>
-				<p>
-					Supercharged slots are a special type of inventory slot in No Man's Sky that
-					provides a massive boost to any technology module placed within them. These
-					slots are rare and valuable, and using them effectively is key to creating the
-					best builds. The NMS Optimizer is designed to help you make the most of your
-					supercharged slots, ensuring that you get the best possible performance out of
-					your gear.
-				</p>
-			</section>
-
-			<section>
-				<h2>How the NMS Optimizer Works</h2>
-				<p>
-					Our No Man's Sky optimizer uses a combination of deterministic patterns, machine
-					learning, and simulated annealing to find the best possible technology layout
-					for your specific needs. Whether you're building a new starship, upgrading your
-					multitool, or optimizing your exosuit or exocraft, our tool will provide you
-					with a detailed layout that maximizes your performance.
-				</p>
-			</section>
-
-			<section>
-				<h2>Supported Platforms</h2>
-				<ul>
-					<li>Starship Layouts</li>
-					<li>Corvette Layouts</li>
-					<li>Multitool Builds</li>
-					<li>Exosuit Layouts</li>
-					<li>Exocraft Layouts</li>
-					<li>Freighter Layouts</li>
-				</ul>
-			</section>
-
-			<section>
-				<h2>Why Use the NMS Optimizer?</h2>
-				<p>
-					Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer
-					is the best tool for creating the perfect No Man's Sky builds. Whether you're a
-					new player or a seasoned veteran, our tool will help you create the best
-					starship layouts, multitool builds, and more.
-				</p>
-			</section>
-		</main>
-
-		<div id="root"></div>
-		<script type="module" src="/src/main.tsx"></script>
-	</body>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then(registrations => {
+                    console.log('Attempting to unregister', registrations.length, 'service workers.');
+                    const unregistrationPromises = registrations.map(registration => {
+                        console.log('Unregistering:', registration.scope);
+                        return registration.unregister();
+                    });
+                    return Promise.all(unregistrationPromises);
+                })
+                .then(() => caches.keys())
+                .then(cacheNames => {
+                    console.log('Attempting to clear', cacheNames.length, 'caches.');
+                    const cacheDeletionPromises = cacheNames.map(cacheName => {
+                        console.log('Deleting cache:', cacheName);
+                        return caches.delete(cacheName);
+                    });
+                    return Promise.all(cacheDeletionPromises);
+                })
+                .then(() => {
+                    console.log('All service workers unregistered and caches cleared. Reloading...');
+                    // Use a small delay to ensure console messages are visible before reload
+                    setTimeout(() => {
+                        window.location.reload(true); // Force a hard reload from the server
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.error('Service Worker unregistration/cache clearing failed:', err);
+                    // If clearing fails, still try to reload to break potential loops
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 1000);
+                });
+        } else {
+            console.log('Service Workers not supported. Reloading...');
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 1000);
+        }
+    </script>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clearing corrupted data. Please wait...</h1>
+</body>
 </html>

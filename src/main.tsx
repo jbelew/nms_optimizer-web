@@ -34,7 +34,11 @@ import { initializeAnalytics } from "./utils/analytics";
 
 // Initialize analytics after app loads (don't block render)
 if (typeof window !== "undefined") {
-	requestIdleCallback(() => initializeAnalytics(), { timeout: 2000 });
+	if ("requestIdleCallback" in window) {
+		requestIdleCallback(() => initializeAnalytics(), { timeout: 2000 });
+	} else {
+		setTimeout(() => initializeAnalytics(), 0);
+	}
 
 	// Failsafe: hide splash screen after 8 seconds if still showing
 	setTimeout(() => {
