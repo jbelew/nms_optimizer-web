@@ -35,6 +35,16 @@ import { initializeAnalytics } from "./utils/analytics";
 // Initialize analytics after app loads (don't block render)
 if (typeof window !== "undefined") {
 	requestIdleCallback(() => initializeAnalytics(), { timeout: 2000 });
+
+	// Failsafe: hide splash screen after 8 seconds if still showing
+	setTimeout(() => {
+		const splash = document.querySelector(".vpss");
+		if (splash) {
+			import("vite-plugin-splash-screen/runtime").then(({ hideSplashScreen }) => {
+				hideSplashScreen();
+			});
+		}
+	}, 8000);
 }
 
 const router = createBrowserRouter(routes);
@@ -72,6 +82,7 @@ if (
 	import("virtual:pwa-register")
 		.then(({ registerSW }) => {
 			registerSW({
+				immediate: true,
 				onOfflineReady() {
 					console.log("App is ready to work offline");
 				},
