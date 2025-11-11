@@ -1,3 +1,10 @@
+## [5.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.5...v5.2.6) (2025-11-11)
+
+
+### Bug Fixes
+
+* **ios:** emergency service worker fix ([364ca7e](https://github.com/jbelew/nms_optimizer-web/commit/364ca7eaded7c10a7a7edaa563a957fb1d417d2f))
+
 ## [5.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.4...v5.2.5) (2025-11-11)
 
 
