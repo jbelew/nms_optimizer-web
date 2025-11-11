@@ -1,3 +1,10 @@
+## [5.2.11](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.10...v5.2.11) (2025-11-11)
+
+
+### Reverts
+
+* Revert "chore(release): 5.2.10 [skip ci]" ([9115b01](https://github.com/jbelew/nms_optimizer-web/commit/9115b01cf37b44ba6c0dbb00ed86d6ff6219eadf))
+
 ## [5.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.8...v5.2.9) (2025-11-11)
 
 
