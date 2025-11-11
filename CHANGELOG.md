@@ -1,3 +1,10 @@
+## [5.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.7...v5.2.8) (2025-11-11)
+
+
+### Bug Fixes
+
+* **ios:** hack to unregister bad service workers in previous deployments ([0bcd74d](https://github.com/jbelew/nms_optimizer-web/commit/0bcd74dea39ef22e49c1568cc88e118ef1db2f90))
+
 ## [5.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.6...v5.2.7) (2025-11-11)
 
 
