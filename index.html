@@ -285,6 +285,24 @@
 				"inLanguage": ["en", "es", "fr", "de"]
 			}
 		</script>
+		<script>
+			// One-time script to unregister old service workers
+			if (
+				"serviceWorker" in navigator &&
+				!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
+			) {
+				navigator.serviceWorker
+					.getRegistrations()
+					.then((registrations) => {
+						for (const registration of registrations) {
+							registration.unregister();
+						}
+					})
+					.catch((err) => {
+						console.error("Service Worker unregistration failed: ", err);
+					});
+			}
+		</script>
 	</head>
 	<body>
 		<main class="visually-hidden">
