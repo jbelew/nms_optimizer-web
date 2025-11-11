@@ -1,3 +1,10 @@
+## [5.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.6...v5.2.7) (2025-11-11)
+
+
+### Bug Fixes
+
+* **ios:** fix for service worker issues ([5277b7b](https://github.com/jbelew/nms_optimizer-web/commit/5277b7bf6539bfbb0c7bca7abc75f11933dd217a))
+
 ## [5.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.5...v5.2.6) (2025-11-11)
 
 
