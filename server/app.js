@@ -239,6 +239,10 @@ app.get("/status/404", (req, res) => {
 // way to distinguish between SPA routes and static file requests.
 app.get(/^[^.]*$/, async (req, res, next) => {
 	if (isSpaRoute(req.path)) {
+		// Ensure index.html is never cached by the browser or intermediaries
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setHeader("Expires", "0");
 		try {
 			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
 		} catch (error) {

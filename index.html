@@ -285,36 +285,7 @@
 				"inLanguage": ["en", "es", "fr", "de"]
 			}
 		</script>
-		<script>
-			// Emergency: One-time script to unregister ALL service workers and clear caches.
-			// This script should be removed once the issue is resolved for most users.
-			const swClearedFlag = 'sw_cleared_v2'; // Use a new flag to ensure it runs again
-			if (
-				"serviceWorker" in navigator &&
-				!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent) &&
-				!localStorage.getItem(swClearedFlag)
-			) {
-				navigator.serviceWorker.getRegistrations()
-					.then(registrations => {
-						const unregistrationPromises = registrations.map(registration => registration.unregister());
-						return Promise.all(unregistrationPromises);
-					})
-					.then(() => caches.keys())
-					.then(cacheNames => {
-						const cacheDeletionPromises = cacheNames.map(cacheName => caches.delete(cacheName));
-						return Promise.all(cacheDeletionPromises);
-					})
-					.then(() => {
-						console.log('All service workers unregistered and caches cleared.');
-						localStorage.setItem(swClearedFlag, 'true');
-						window.location.reload(); // Reload to ensure fresh content and no old SW control
-					})
-					.catch(err => {
-						console.error("Service Worker unregistration/cache clearing failed: ", err);
-						localStorage.setItem(swClearedFlag, 'error'); // Mark as error to avoid infinite loop on persistent errors
-					});
-			}
-		</script>
+
 	</head>
 	<body>
 		<main class="visually-hidden">
