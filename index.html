@@ -286,20 +286,22 @@
 			}
 		</script>
 		<script>
-			// One-time script to unregister old service workers
+			// Emergency: One-time script to unregister ALL service workers and clear caches.
+			// This is a temporary fix for a broken service worker deployment.
+			// This script should be removed once the issue is resolved for most users.
 			if (
 				"serviceWorker" in navigator &&
 				!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
 			) {
-				navigator.serviceWorker
-					.getRegistrations()
-					.then((registrations) => {
-						for (const registration of registrations) {
-							registration.unregister();
-						}
+				navigator.serviceWorker.register('/sw-kill.js', { scope: '/' })
+					.then(registration => {
+						console.log('Kill switch service worker registered:', registration);
+						// No need to listen for messages or reload here.
+						// The sw-kill.js will unregister itself and clear caches.
+						// The browser will then naturally fetch fresh content on subsequent navigations.
 					})
-					.catch((err) => {
-						console.error("Service Worker unregistration failed: ", err);
+					.catch(error => {
+						console.error('Kill switch service worker registration failed:', error);
 					});
 			}
 		</script>

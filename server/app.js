@@ -109,7 +109,11 @@ function setCacheHeaders(res, filePath) {
 	fileName = fileName.replace(/\.(br|gz)$/, '');
 	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
-	if (hashedAsset.test(fileName)) {
+	if (fileName === 'sw-kill.js') {
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setHeader("Expires", "0");
+	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
