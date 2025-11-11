@@ -70,7 +70,7 @@ export default defineConfig(({ mode }) => {
 			}),
 			VitePWA({
 				manifestFilename: "manifest.json", // ensure browsers don’t 404 on /manifest.json
-				registerType: "prompt",
+				registerType: "autoUpdate",
 				includeAssets: [
 					"favicon.svg",
 					"robots.txt",
@@ -83,7 +83,7 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					// User-controlled updates
 					clientsClaim: true,
-					skipWaiting: false,
+					skipWaiting: true,
 
 					// Workbox quality-of-life features
 					navigationPreload: false,

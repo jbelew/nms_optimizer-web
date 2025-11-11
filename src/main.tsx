@@ -79,26 +79,16 @@ if (
 	"serviceWorker" in navigator &&
 	!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
 ) {
-	// EMERGENCY: Force unregister stuck service workers
-	navigator.serviceWorker.getRegistrations().then((registrations) => {
-		registrations.forEach((registration) => {
-			registration.unregister();
+	import("virtual:pwa-register")
+		.then(({ registerSW }) => {
+			registerSW({
+				immediate: true,
+				onOfflineReady() {
+					console.log("App is ready to work offline");
+				},
+			});
+		})
+		.catch((e) => {
+			console.error("Failed to register service worker:", e);
 		});
-
-		// Wait a bit, then re-register fresh
-		setTimeout(() => {
-			import("virtual:pwa-register")
-				.then(({ registerSW }) => {
-					registerSW({
-						immediate: true,
-						onOfflineReady() {
-							console.log("App is ready to work offline");
-						},
-					});
-				})
-				.catch((e) => {
-					console.error("Failed to register service worker:", e);
-				});
-		}, 1000);
-	});
 }
