@@ -9,15 +9,10 @@
         // This script is designed to run on a minimal page to force unregistration
         // and cache clearing on stubborn browsers, especially iOS.
         // It should be deployed temporarily and then reverted.
+        // This version does NOT use localStorage or redirects to avoid looping issues.
+        // The page will remain blank after execution.
 
-        const swClearedFlag = 'sw_cleared_final'; // A new, unique flag for this final attempt
-
-        if (localStorage.getItem(swClearedFlag) === 'true') {
-            // If the flag is set, it means we've already cleared.
-            // Redirect to the main application.
-            console.log('Service workers already cleared. Redirecting to main app.');
-            window.location.replace('/'); // Redirect to the root of the application
-        } else if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations()
                 .then(registrations => {
                     console.log('Attempting to unregister', registrations.length, 'service workers.');
@@ -37,20 +32,17 @@
                     return Promise.all(cacheDeletionPromises);
                 })
                 .then(() => {
-                    console.log('All service workers unregistered and caches cleared. Setting flag and redirecting...');
-                    localStorage.setItem(swClearedFlag, 'true');
-                    window.location.replace('/'); // Redirect to the root of the application
+                    console.log('All service workers unregistered and caches cleared. Page will remain blank.');
+                    // No reload, no redirect. The page will simply remain blank.
+                    // User will need to manually navigate or refresh.
                 })
                 .catch(err => {
                     console.error('Service Worker unregistration/cache clearing failed:', err);
-                    // If clearing fails, set an error flag and still try to redirect
-                    localStorage.setItem(swClearedFlag, 'error');
-                    window.location.replace('/'); // Redirect to the root of the application
+                    // Even if it fails, we don't want to loop. Page remains blank.
                 });
         } else {
-            console.log('Service Workers not supported. Setting flag and redirecting...');
-            localStorage.setItem(swClearedFlag, 'true'); // Assume cleared if no SW support
-            window.location.replace('/'); // Redirect to the root of the application
+            console.log('Service Workers not supported. Page will remain blank.');
+            // No reload, no redirect. The page will simply remain blank.
         }
     </script>
     <style>
@@ -68,6 +60,7 @@
     </style>
 </head>
 <body>
-    <h1>Clearing corrupted data. Please wait...</h1>
+    <h1>Clearing corrupted data. This page will remain blank.</h1>
+    <p>Please close and reopen your browser, or navigate to the site again.</p>
 </body>
 </html>
