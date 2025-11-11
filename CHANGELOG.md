@@ -1,3 +1,10 @@
+## [5.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.8...v5.2.9) (2025-11-11)
+
+
+### Bug Fixes
+
+* **ios:** disabling pwa mode for now ([1571394](https://github.com/jbelew/nms_optimizer-web/commit/1571394f4c40f710de3436e7dc633ef2f20ac22f))
+
 ## [5.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.7...v5.2.8) (2025-11-11)
 
 
