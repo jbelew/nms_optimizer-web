@@ -1,3 +1,10 @@
+## [5.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.4...v5.2.5) (2025-11-11)
+
+
+### Bug Fixes
+
+* **splashscreen:** temporarily disabled ([a493ce6](https://github.com/jbelew/nms_optimizer-web/commit/a493ce636fdfe16c80e5c2d0e607ae3fb68a07f6))
+
 ## [5.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.3...v5.2.4) (2025-11-10)
 
 
