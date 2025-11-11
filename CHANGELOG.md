@@ -1,3 +1,10 @@
+## [5.2.12](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.11...v5.2.12) (2025-11-11)
+
+
+### Bug Fixes
+
+* **pwa:** emergenecy service worker fix ([913b506](https://github.com/jbelew/nms_optimizer-web/commit/913b5064c4a2a0886973e27eacc8799633e78958))
+
 ## [5.2.11](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.10...v5.2.11) (2025-11-11)
 
 
