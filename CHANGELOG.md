@@ -1,3 +1,10 @@
+## [5.2.17](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.16...v5.2.17) (2025-11-11)
+
+
+### Bug Fixes
+
+* **pwa:** nuking service workers ([0ba2f41](https://github.com/jbelew/nms_optimizer-web/commit/0ba2f414d323c286412a4e1a04a54e6eda29dfef))
+
 ## [5.2.16](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.15...v5.2.16) (2025-11-11)
 
 
