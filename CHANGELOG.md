@@ -1,3 +1,10 @@
+## [5.2.14](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.13...v5.2.14) (2025-11-11)
+
+
+### Bug Fixes
+
+* **ios:** nuking everything ([a1e2832](https://github.com/jbelew/nms_optimizer-web/commit/a1e2832b70a0b6c916f9dae3844eef33124d85d5))
+
 ## [5.2.13](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.12...v5.2.13) (2025-11-11)
 
 
