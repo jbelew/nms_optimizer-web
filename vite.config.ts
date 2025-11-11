@@ -28,12 +28,12 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			tailwindcss(),
-			// splashScreen({
-			// 	logoSrc: "assets/svg/loader.svg",
-			// 	splashBg: "#000000",
-			// 	loaderBg: "#00A2C7",
-			// 	loaderType: "dots",
-			// }),
+			splashScreen({
+				logoSrc: "assets/svg/loader.svg",
+				splashBg: "#000000",
+				loaderBg: "#00A2C7",
+				loaderType: "dots",
+			}),
 			...(doCritical
 				? [
 						deferStylesheetsPlugin(),
