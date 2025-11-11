@@ -51,7 +51,7 @@ let gaInitialized = false;
  * @returns {void}
  */
 export const initializeAnalytics = () => {
-	if (gaInitialized || !/bot|googlebot|crawler|spider/i.test(navigator.userAgent)) return;
+	if (gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) return;
 
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
