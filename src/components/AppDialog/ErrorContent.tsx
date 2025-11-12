@@ -38,9 +38,7 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 			</Text>
 			<Flex gap="2" mt="6" mb="2" justify="end">
 				<Dialog.Close asChild>
-					<Button variant="soft" onClick={onClose}>
-						{t("dialogs.userStats.closeButton")}
-					</Button>
+					<Button onClick={onClose}>{t("dialogs.userStats.closeButton")}</Button>
 				</Dialog.Close>
 			</Flex>
 		</>
