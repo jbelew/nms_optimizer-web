@@ -1,3 +1,10 @@
+# [5.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.17...v5.3.0) (2025-11-12)
+
+
+### Features
+
+* **pwa:** a much more complete Service Worker implementation ([46cc43a](https://github.com/jbelew/nms_optimizer-web/commit/46cc43a33bf07745d936e888f7381160e702f021))
+
 ## [5.2.17](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.16...v5.2.17) (2025-11-11)
 
 
