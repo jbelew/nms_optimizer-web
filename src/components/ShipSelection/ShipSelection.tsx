@@ -101,7 +101,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					value: 1,
 				});
 
-				// TODO: Turn this back on if the Corvette the bug is not fixed in future updates
+				// TODO: Turn this back on if the Corvette bug shows up again
 				if (option === "corvette_disabled") {
 					setToastOpen(true);
 				}
