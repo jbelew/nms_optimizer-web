@@ -49,6 +49,44 @@ if (typeof window !== "undefined") {
 			});
 		}
 	}, 8000);
+
+	// Conditionally register the service worker for non-bot user agents
+	// Delayed registration to avoid blocking initial render
+	setTimeout(() => {
+		if (
+			"serviceWorker" in navigator &&
+			!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
+		) {
+			import("virtual:pwa-register")
+				.then(({ registerSW }) => {
+					const updateServiceWorker = registerSW({
+						// Correctly capture updateServiceWorker
+						// immediate: true, // Removed to allow natural waiting state with 'prompt' registerType
+						onOfflineReady() {
+							console.log("App is ready to work offline");
+						},
+						onNeedRefresh() {
+							console.log("New content available, dispatching event.");
+							window.dispatchEvent(
+								new CustomEvent("new-version-available", {
+									detail: updateServiceWorker,
+								})
+							);
+						},
+						onRegistered(registration) {
+							console.log("Service Worker registered:", registration);
+							// Removed aggressive update check for debugging
+						},
+						onRegisterError(error) {
+							console.error("Service Worker registration failed:", error);
+						},
+					});
+				})
+				.catch((e) => {
+					console.error("Failed to import PWA register:", e);
+				});
+		}
+	}, 5000); // Delay registration by 5 seconds
 }
 
 const router = createBrowserRouter(routes);

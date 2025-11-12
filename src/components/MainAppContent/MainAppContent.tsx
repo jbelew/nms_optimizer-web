@@ -25,9 +25,11 @@ const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAler
 
 /**
  * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
+ * @property {string} [buildDate] - The build date of the application, to be displayed in the footer for devmode.
  */
 type MainAppContentProps = {
 	buildVersion: string;
+	buildDate?: string; // Added optional buildDate prop
 };
 
 /**
@@ -35,7 +37,8 @@ type MainAppContentProps = {
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
+export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDate }) => {
+	// Destructure buildDate
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
@@ -150,13 +153,13 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion }) => {
 								mb="4"
 								orientation="horizontal"
 							/>
-							<AppFooter buildVersion={buildVersion} />
+							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
 						</>
 					)}
 				</section>
 			</div>
 
-			{isLg && <AppFooter buildVersion={buildVersion} />}
+			{isLg && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
 			{/* Dialogs related to MainAppContent's state */}
 			<Suspense fallback={null}>

@@ -1,9 +1,10 @@
-import { FC, lazy, Suspense, useEffect, useMemo } from "react";
+import { FC, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"; // Added useRef
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/AppDialog";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
+import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
 import { useDialog } from "./context/dialog-utils";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
@@ -35,6 +36,9 @@ const App: FC = () => {
 	const { showError, setShowError } = useOptimizeStore();
 	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
 
+	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false); // Added state for update prompt
+	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined); // Declared updateSW using useRef
+
 	// Use the new custom hooks
 	useSeoAndTitle();
 	useUrlValidation();
@@ -48,7 +52,30 @@ const App: FC = () => {
 
 	useEffect(() => {
 		initializePlatform(shipTypeKeys);
+
+		// Listen for new version available event
+		const handleNewVersion = (event: CustomEvent) => {
+			updateSWRef.current = event.detail; // Store in ref
+			setShowUpdatePrompt(true);
+		};
+		window.addEventListener("new-version-available", handleNewVersion as EventListener);
+
+		return () => {
+			window.removeEventListener("new-version-available", handleNewVersion as EventListener);
+		};
 	}, [initializePlatform, shipTypeKeys]);
+
+	const handleRefresh = () => {
+		if (updateSWRef.current) {
+			updateSWRef.current(true); // Call updateServiceWorker to skip waiting and reload
+		} else {
+			window.location.reload(); // Fallback if updateSW is not available
+		}
+	};
+
+	const handleDismissUpdatePrompt = () => {
+		setShowUpdatePrompt(false);
+	};
 
 	return (
 		<>
@@ -73,6 +100,11 @@ const App: FC = () => {
 				<RoutedDialogs />
 			</Suspense>
 			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
+			<UpdatePrompt
+				isOpen={showUpdatePrompt}
+				onRefresh={handleRefresh}
+				onDismiss={handleDismissUpdatePrompt}
+			/>
 		</>
 	);
 };

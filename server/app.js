@@ -109,14 +109,18 @@ function setCacheHeaders(res, filePath) {
 	fileName = fileName.replace(/\.(br|gz)$/, '');
 	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
-	if (hashedAsset.test(fileName)) {
+	if (fileName === 'sw.js') { // Explicitly set no-cache for the service worker file
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setHeader("Expires", "0");
+	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
 	} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
 	} else if (/\.md$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, no-cache");
+		res.setHeader("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
 	} else {
 		res.setHeader("Cache-control", "public, max-age=86400"); // 1 day
 	}

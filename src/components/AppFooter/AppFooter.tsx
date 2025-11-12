@@ -8,9 +8,11 @@ import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
 /**
  * @interface AppFooterProps
  * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
+ * @property {string} [buildDate] - The build date of the application, to be displayed in the footer for devmode.
  */
 interface AppFooterProps {
 	buildVersion: string;
+	buildDate?: string; // Added optional buildDate prop
 }
 
 /**
@@ -20,7 +22,8 @@ interface AppFooterProps {
  * @param {AppFooterProps} props - The props for the AppFooter component.
  * @returns {JSX.Element} The rendered AppFooter component.
  */
-const AppFooter: React.FC<AppFooterProps> = ({ buildVersion }) => {
+const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
+	// Destructure buildDate
 	const { i18n } = useTranslation();
 
 	return (
@@ -76,7 +79,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion }) => {
 				>
 					#OpenToWork
 				</a>
-				&nbsp;• {buildVersion}
+				&nbsp;• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
 			</div>
 			<Separator decorative size="3" className="mt-1" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
