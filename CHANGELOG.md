@@ -1,3 +1,10 @@
+## [5.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.0...v5.3.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* **starship trails:** added images for the two new starship trail types ([c301c4b](https://github.com/jbelew/nms_optimizer-web/commit/c301c4b2a0270de1e078c435ace66102b0ba181d))
+
 # [5.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.2.17...v5.3.0) (2025-11-12)
 
 
