@@ -42,4 +42,4 @@ Deja de adivinar la ubicación de tus tecnologías y desbloquea el verdadero pot
 
 Aquí hay un vistazo a una versión temprana de la interfaz de usuario: funcionalmente sólida pero visualmente mínima. La versión actual es una actualización importante en diseño, usabilidad y claridad, que ayuda a los jugadores a encontrar rápidamente el mejor diseño para cualquier nave o herramienta.
 
-![Prototipo temprano de la interfaz de usuario del Optimizer de No Man's Sky](/src/assets/img/screenshots/screenshot_v03.png)
+![Prototipo temprano de la interfaz de usuario del Optimizer de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

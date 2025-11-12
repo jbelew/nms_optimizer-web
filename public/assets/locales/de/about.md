@@ -42,4 +42,4 @@ Hör auf, die Platzierung von Technologien zu raten, und schalte das wahre Poten
 
 Hier ein Blick auf eine **frühe Version** der Benutzeroberfläche – funktional solide, aber visuell minimal. Die aktuelle Version ist ein großes Upgrade in Design, Benutzerfreundlichkeit und Klarheit und hilft Spielern, schnell das beste Layout für jedes Schiff oder Werkzeug zu finden.
 
-![Früher Prototyp der Benutzeroberfläche des No Man’s Sky Layout-Optimierers](/src/assets/img/screenshots/screenshot_v03.png)
+![Früher Prototyp der Benutzeroberfläche des No Man’s Sky Layout-Optimierers](/assets/img/screenshots/screenshot_v03.png)
