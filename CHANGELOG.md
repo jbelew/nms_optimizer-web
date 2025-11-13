@@ -1,3 +1,10 @@
+## [5.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.1...v5.3.2) (2025-11-13)
+
+
+### Bug Fixes
+
+* **server:** correct caching for sw.js and index.html ([231f7f6](https://github.com/jbelew/nms_optimizer-web/commit/231f7f6710e3f6a2b2133bf153ab2ede1c8e3de2))
+
 ## [5.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.0...v5.3.1) (2025-11-12)
 
 
