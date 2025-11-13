@@ -109,10 +109,8 @@ function setCacheHeaders(res, filePath) {
 	fileName = fileName.replace(/\.(br|gz)$/, '');
 	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
-	if (fileName === 'sw.js') { // Explicitly set no-cache for the service worker file
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.setHeader("Pragma", "no-cache");
-		res.setHeader("Expires", "0");
+	if (fileName === 'sw.js') { // Must revalidate, but allow caching.
+		res.setHeader("Cache-Control", "no-cache");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
@@ -243,10 +241,8 @@ app.get("/status/404", (req, res) => {
 // way to distinguish between SPA routes and static file requests.
 app.get(/^[^.]*$/, async (req, res, next) => {
 	if (isSpaRoute(req.path)) {
-		// Ensure index.html is never cached by the browser or intermediaries
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.setHeader("Pragma", "no-cache");
-		res.setHeader("Expires", "0");
+		// Ensure index.html is revalidated by the browser on every navigation.
+		res.setHeader("Cache-Control", "no-cache");
 		try {
 			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
 		} catch (error) {
