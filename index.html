@@ -112,6 +112,13 @@
 				scrollbar-gutter: stable;
 			}
 
+			@media (max-width: 1023px) {
+				html,
+				body {
+					overflow-x: hidden;
+				}
+			}
+
 			body::before {
 				content: "";
 				position: fixed;
@@ -121,6 +128,7 @@
 				height: 100%;
 
 				/* Set all background properties except image */
+				background-color: #000000;
 				background-position: center;
 				background-repeat: no-repeat;
 				background-size: cover;
