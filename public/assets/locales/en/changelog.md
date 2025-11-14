@@ -2,6 +2,34 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 5.3 – Improved PWA Support (2025-11-13)
+- Added a more complete Service Worker for improved offline reliability.
+- Improved update detection on iOS to prevent false “new version available” prompts.
+- Corrected caching behavior for core files (`sw.js`, `index.html`).
+- Added images for new starship trail types.
+- Added several new starship trail types.
+- Fixed multiple starship trail definition issues.
+- Corrected corruption of module definitions introduced during a trails update.
+- Fixed shield classification (greater vs. lesser).
+- Resolved various shield scoring issues, including the bug referenced in #169.
+- Increased most living-ship technology module windows to **2×3** to improve supercharge slot usage.
+
+## Version 5.2 – Major iOS SW Fixes (2025-11-11)
+- Added GA4-compliant analytics event naming.
+- Implemented multiple emergency patches for iOS Service Worker corruption:
+  - Forced unregister for corrupted SWs
+  - Temporary PWA disablement on iOS
+  - Splash screen adjustments
+  - Added reliability guards to prevent offline lockouts
+- Improved image optimization and static API caching.
+- Fixed issues with i18n routing, deserialization, toasts, and layout stability.
+- Updated corvette solve maps for accurate scoring.
+
+## Version 5.1 – Stability Improvements (2025-11-08)
+- Added full Lighthouse CI integration for automated performance audits.
+- Introduced a proper 404 page.
+- Fixed CSP rules, CSS overflow, and various Lighthouse configuration issues.
+
 ## Version 5.0 (2025-11-06)
 
 ### 🚀 Major Update
