@@ -1,3 +1,10 @@
+# [5.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.5...v5.4.0) (2025-11-14)
+
+
+### Features
+
+* **seo:** Enhance metadata and middleware ([fc63a5d](https://github.com/jbelew/nms_optimizer-web/commit/fc63a5d3355c9c47f960a10fd780bc690b53380c))
+
 ## [5.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.4...v5.3.5) (2025-11-14)
 
 
