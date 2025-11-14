@@ -1,11 +1,11 @@
 // src/components/TechTree/TechTree.tsx
 import React, { useEffect, useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { TechTree, useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import ErrorBoundaryInset from "../ErrorBoundry/ErrorBoundryInset";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
@@ -63,7 +63,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	}, [hasRecommendedBuilds]);
 
 	useEffect(() => {
-		hideSplashScreen();
+		hideSplashScreenAndShowBackground();
 	}, []);
 
 	return (

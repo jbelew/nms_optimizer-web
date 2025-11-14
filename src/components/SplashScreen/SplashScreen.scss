@@ -10,7 +10,7 @@
 	z-index: 99999;
 
 	&--hidden {
-		animation: SplashScreen-hide 500ms forwards;
+		animation: SplashScreen-hide 250ms forwards;
 		pointer-events: none;
 	}
 

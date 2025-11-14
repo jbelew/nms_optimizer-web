@@ -1,9 +1,9 @@
 import { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { sendEvent } from "../../utils/analytics";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 import "./NotFound.scss";
 
@@ -13,7 +13,7 @@ const NotFound: FC = () => {
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		hideSplashScreen();
+		hideSplashScreenAndShowBackground();
 		sendEvent({
 			category: "navigation",
 			action: "not_found",

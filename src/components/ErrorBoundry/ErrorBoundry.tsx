@@ -1,9 +1,9 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { sendEvent } from "../../utils/analytics";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 // src/components/ErrorBoundary/ErrorBoundary.tsx
 
@@ -75,7 +75,7 @@ class ErrorBoundary extends Component<Props, State> {
 
 		if (hasError) {
 			console.log("ErrorBoundary: Rendering fallback UI.");
-			hideSplashScreen();
+			hideSplashScreenAndShowBackground();
 
 			return (
 				<main className="flex flex-col items-center justify-center lg:min-h-screen">

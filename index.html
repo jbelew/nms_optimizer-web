@@ -143,7 +143,16 @@
 				/* Keep it in its own GPU layer to prevent repaint flicker */
 				will-change: transform;
 				transform: translateZ(0);
-			}
+
+				/* Hide background image until splash screen is hidden */
+				opacity: 0;
+				transition: opacity 250ms ease-in-out;
+				}
+
+				/* Show background image after splash screen hides */
+				body.background-visible::before {
+				opacity: 1;
+				}
 
 			/* Mobile (≤600px): swap only the background-image, not the whole background */
 			@media (width <= 640px) {

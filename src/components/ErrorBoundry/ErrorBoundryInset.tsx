@@ -2,10 +2,10 @@ import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/themes";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { sendEvent } from "../../utils/analytics";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 interface Props {
 	children: ReactNode;
@@ -125,7 +125,7 @@ class ErrorBoundaryInset extends Component<Props, State> {
 
 		if (hasError) {
 			console.log("ErrorBoundary: Rendering fallback UI.");
-			hideSplashScreen();
+			hideSplashScreenAndShowBackground();
 
 			return <ErrorFallback />;
 		}

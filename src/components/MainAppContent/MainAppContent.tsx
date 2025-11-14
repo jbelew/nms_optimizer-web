@@ -2,7 +2,6 @@
 import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
 import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
@@ -12,6 +11,7 @@ import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
@@ -66,7 +66,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 			// If it's a shared grid, the tech tree is not actively loading,
 			// so ensure the loading spinner is hidden.
 			useTechTreeLoadingStore.getState().setLoading(false);
-			hideSplashScreen();
+			hideSplashScreenAndShowBackground();
 		}
 	}, [isSharedGrid]);
 

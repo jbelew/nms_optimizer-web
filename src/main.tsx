@@ -31,6 +31,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
+import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics after app loads (don't block render)
 if (typeof window !== "undefined") {
@@ -44,9 +45,7 @@ if (typeof window !== "undefined") {
 	setTimeout(() => {
 		const splash = document.querySelector(".vpss");
 		if (splash) {
-			import("vite-plugin-splash-screen/runtime").then(({ hideSplashScreen }) => {
-				hideSplashScreen();
-			});
+			hideSplashScreenAndShowBackground();
 		}
 	}, 8000);
 
