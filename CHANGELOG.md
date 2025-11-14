@@ -1,3 +1,10 @@
+## [5.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.3...v5.3.4) (2025-11-14)
+
+
+### Bug Fixes
+
+* **bump:** adding a version bump to reflect all of the recent minor changes ([9425090](https://github.com/jbelew/nms_optimizer-web/commit/942509037b7c4c638f28b515cf5ba9964545a02e))
+
 ## [5.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.2...v5.3.3) (2025-11-13)
 
 
