@@ -182,21 +182,19 @@
 			}
 		</style>
 
-		<!-- Preload images so iOS Safari has them ready -->
+		<!-- Preload images without high priority to avoid competing with splash screen -->
 		<link
 			rel="preload"
 			as="image"
 			href="/assets/img/background.webp"
 			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
 			media="(min-width: 601px)"
-			fetchpriority="high"
 		/>
 		<link
 			rel="preload"
 			as="image"
 			href="/assets/img/background@mobile.webp"
 			media="(max-width: 600px)"
-			fetchpriority="high"
 		/>
 
 		<!-- Default language translations -->
