@@ -1,3 +1,10 @@
+## [5.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.0...v5.4.1) (2025-11-14)
+
+
+### Bug Fixes
+
+* **ship-selection:** Re-enable corvette selection toast ([87b3c2e](https://github.com/jbelew/nms_optimizer-web/commit/87b3c2e69dac90291caf1ab55eb1c900d43fbf84))
+
 # [5.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.5...v5.4.0) (2025-11-14)
 
 
