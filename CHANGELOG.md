@@ -1,3 +1,10 @@
+## [5.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.4...v5.3.5) (2025-11-14)
+
+
+### Performance Improvements
+
+* **loading:** Optimize initial asset loading and defer dialog data fetching ([5b47c4b](https://github.com/jbelew/nms_optimizer-web/commit/5b47c4b128e434f5994e8572187e939eb0f1d606))
+
 ## [5.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.3...v5.3.4) (2025-11-14)
 
 
