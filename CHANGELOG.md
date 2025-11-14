@@ -1,3 +1,10 @@
+## [5.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.2...v5.3.3) (2025-11-13)
+
+
+### Bug Fixes
+
+* **pwa:** better Service Worker update detection to prevent false positives on iOS ([86f7dda](https://github.com/jbelew/nms_optimizer-web/commit/86f7dda68d0555b9e6d94440e5adcc66a8f773c6))
+
 ## [5.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.3.1...v5.3.2) (2025-11-13)
 
 
