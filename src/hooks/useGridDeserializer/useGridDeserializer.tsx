@@ -1,11 +1,16 @@
 import { useCallback } from "react";
 
-import { API_URL } from "../../constants";
 import { createGrid, Grid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
-import { Module, RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
+import {
+	fetchTechTreeAsync,
+	Module,
+	RecommendedBuild,
+	TechTree,
+	TechTreeItem,
+} from "../useTechTree/useTechTree";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).
@@ -209,12 +214,8 @@ export const deserialize = async (
 				return acc;
 			}, {});
 
-		// --- Fetch Tech Tree Data ---
-		const techTreeRes = await fetch(`${API_URL}tech_tree/${shipType}`);
-		if (!techTreeRes.ok) {
-			throw new Error(`HTTP error! status: ${techTreeRes.status}`);
-		}
-		const techTreeData: TechTree = await techTreeRes.json();
+		// --- Fetch Tech Tree Data (using cached promise) ---
+		const techTreeData: TechTree = await fetchTechTreeAsync(shipType);
 
 		if (techTreeData.recommended_builds && Array.isArray(techTreeData.recommended_builds)) {
 			techTreeData.recommended_builds = techTreeData.recommended_builds.filter(

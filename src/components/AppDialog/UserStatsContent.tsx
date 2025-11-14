@@ -120,6 +120,7 @@ const LazyRechartsChart = lazy(async () => {
 
 interface UserStatsContentProps {
 	onClose: () => void;
+	isOpen: boolean;
 }
 
 /**
@@ -129,10 +130,10 @@ interface UserStatsContentProps {
  * @param {UserStatsContentProps} props - The props for the UserStatsContent component.
  * @returns {JSX.Element} The rendered UserStatsContent component.
  */
-export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose }) => {
+export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
 	const { t } = useTranslation();
 	const { data, loading, error } = useUserStats();
-	const { techColors, loading: colorsLoading, error: colorsError } = useTechTreeColors();
+	const { techColors, loading: colorsLoading, error: colorsError } = useTechTreeColors(isOpen);
 
 	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];

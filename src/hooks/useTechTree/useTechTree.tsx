@@ -146,7 +146,12 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 	};
 };
 
-const cache = new Map<string, Resource<TechTree>>();
+type CacheEntry = {
+	resource: Resource<TechTree>;
+	promise: Promise<TechTree>;
+};
+
+const cache = new Map<string, CacheEntry>();
 
 /**
  * Clears the tech tree cache.
@@ -156,12 +161,13 @@ export const clearTechTreeCache = () => {
 };
 
 /**
- * Fetches the tech tree for a given ship type.
+ * Fetches the tech tree for a given ship type as a Promise.
+ * Useful for async contexts like deserialization.
  *
  * @param {string} [shipType="standard"] - The type of ship to fetch the tech tree for.
- * @returns {Resource<TechTree>} A resource object that can be used with Suspense.
+ * @returns {Promise<TechTree>} A promise that resolves to the tech tree data.
  */
-export function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
+export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
 		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
@@ -185,10 +191,29 @@ export function fetchTechTree(shipType: string = "standard"): Resource<TechTree>
 			return data;
 		});
 
-		cache.set(cacheKey, createResource<TechTree>(promise));
+		cache.set(cacheKey, {
+			resource: createResource<TechTree>(promise),
+			promise,
+		});
 	}
 
-	return cache.get(cacheKey)!;
+	return cache.get(cacheKey)!.promise;
+}
+
+/**
+ * Fetches the tech tree for a given ship type.
+ *
+ * @param {string} [shipType="standard"] - The type of ship to fetch the tech tree for.
+ * @returns {Resource<TechTree>} A resource object that can be used with Suspense.
+ */
+export function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
+	const cacheKey = shipType;
+	if (!cache.has(cacheKey)) {
+		// Populate cache using the async version
+		fetchTechTreeAsync(cacheKey);
+	}
+
+	return cache.get(cacheKey)!.resource;
 }
 
 /**

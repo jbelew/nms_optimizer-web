@@ -2,39 +2,33 @@
 import type { TechTree } from "../useTechTree/useTechTree";
 import { useEffect, useState } from "react";
 
-import { API_URL } from "../../constants";
+import { fetchTechTreeAsync } from "../useTechTree/useTechTree";
 
 /**
- * Custom hook to fetch the tech tree colors from the API.
+ * Custom hook to fetch the tech tree colors for all ship types.
+ * Uses cached fetches to avoid redundant API calls.
+ * Only fetches when enabled to avoid unnecessary requests for users not viewing stats.
  *
+ * @param {boolean} [enabled=true] - Whether to fetch the colors.
  * @returns {{techColors: Record<string, string>, loading: boolean, error: string | null}}
  *          An object containing the tech colors, loading state, and error state.
  */
-export const useTechTreeColors = () => {
+export const useTechTreeColors = (enabled: boolean = true) => {
 	const [techColors, setTechColors] = useState<Record<string, string>>({});
-	const [loading, setLoading] = useState<boolean>(true);
+	const [loading, setLoading] = useState<boolean>(enabled);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
+		if (!enabled) {
+			setLoading(false);
+			return;
+		}
+
 		/**
-		 * Fetches the tech tree colors from the API.
+		 * Fetches the tech tree colors for all ship types.
 		 */
 		const fetchColors = async () => {
 			try {
-				const [starshipResponse, multitoolResponse, corvetteResponse] = await Promise.all([
-					fetch(`${API_URL}tech_tree/standard`),
-					fetch(`${API_URL}tech_tree/standard-mt`),
-					fetch(`${API_URL}tech_tree/corvette`),
-				]);
-
-				if (!starshipResponse.ok || !multitoolResponse.ok || !corvetteResponse.ok) {
-					throw new Error("Failed to fetch tech tree data");
-				}
-
-				const starshipData: TechTree = await starshipResponse.json();
-				const multitoolData: TechTree = await multitoolResponse.json();
-				const corvetteData: TechTree = await corvetteResponse.json();
-
 				const colors: Record<string, string> = {};
 
 				const processTechTree = (data: TechTree) => {
@@ -50,6 +44,12 @@ export const useTechTreeColors = () => {
 					}
 				};
 
+				const [starshipData, multitoolData, corvetteData] = await Promise.all([
+					fetchTechTreeAsync("standard"),
+					fetchTechTreeAsync("standard-mt"),
+					fetchTechTreeAsync("corvette"),
+				]);
+
 				processTechTree(starshipData);
 				processTechTree(multitoolData);
 				processTechTree(corvetteData);
@@ -63,7 +63,7 @@ export const useTechTreeColors = () => {
 		};
 
 		fetchColors();
-	}, []);
+	}, [enabled]);
 
 	return { techColors, loading, error };
 };

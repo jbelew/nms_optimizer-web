@@ -26,7 +26,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 			onClose={onClose}
 			titleKey="dialogs.titles.userStats"
 			title={t("dialogs.titles.userStats")}
-			content={<UserStatsContent onClose={onClose} />}
+			content={<UserStatsContent onClose={onClose} isOpen={isOpen} />}
 		/>
 	);
 };

@@ -2,7 +2,7 @@ import { vi } from "vitest";
 
 import { API_URL } from "../../constants";
 import { createEmptyCell } from "../../store/GridStore"; // Import createEmptyCell
-
+import { clearTechTreeCache } from "../useTechTree/useTechTree";
 import { deserialize } from "./useGridDeserializer";
 
 // Mock dependencies
@@ -156,6 +156,7 @@ describe("deserialize", () => {
 
 	it("should return null and log an error if fetch fails", async () => {
 		// Arrange
+		clearTechTreeCache(); // Clear cache so fetch will be called
 		// Use a valid serialized grid that will pass initial checks
 		const serializedGrid =
 			"111111111111111111111111111111111111111111111111111111111111|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
