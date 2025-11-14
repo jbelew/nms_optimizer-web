@@ -549,18 +549,18 @@
         "cancelButton": "Cancelar"
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer | Creador de Diseños de No Man’s Sky para Naves y Más",
-        "appDescription": "Encuentra los mejores diseños de tecnología de No Man's Sky para tu Nave, Corbeta, Multiherramienta, Exotraje y Exonave. Optimiza las bonificaciones de adyacencia y las ranuras sobrecargadas para crear las mejores construcciones de NMS.",
-        "instructionsPageTitle": "Cómo Usar el NMS Optimizer | Instrucciones y Consejos",
-        "instructionsDescription": "Obtén instrucciones detalladas y consejos profesionales sobre cómo usar el NMS Optimizer. Aprende a dominar las ranuras sobrecargadas, las bonificaciones de adyacencia y a crear los mejores diseños de tecnología en No Man's Sky.",
-        "aboutPageTitle": "Acerca del NMS Optimizer | Diseños y Construcciones de Tecnología con IA",
-        "aboutDescription": "Aprende sobre el NMS Optimizer, una herramienta con IA para No Man's Sky. Descubre cómo utiliza el aprendizaje automático para crear construcciones óptimas de Naves, Corbetas, Multiherramientas, Exotrajes y Exonaves.",
-        "changelogPageTitle": "Registro de cambios y actualizaciones | NMS Optimizer",
-        "changelogDescription": "Vea actualizaciones, notas de la versión y correcciones de errores para NMS Optimizer. Manténgase actualizado con nuevas funciones, mejoras e historial de versiones.",
-        "userstatsPageTitle": "Estadísticas de usuario y diseños populares | NMS Optimizer",
-        "userstatsDescription": "Explora las estadísticas de usuario de NMS Optimizer para ver las tecnologías más populares de No Man's Sky en todos los tipos de elementos.",
-        "translationPageTitle": "Ayuda a traducir NMS Optimizer | Localización comunitaria",
-        "translationDescription": "Ayuda a traducir el Optimizador de NMS a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo."
+        "mainPageTitle": "NMS Optimizer | Constructor de Diseños Tecnológicos para No Man's Sky",
+        "appDescription": "El Optimizador NMS te ayuda a diseñar el diseño perfecto para tu Nave, Corbeta, Multiherramienta, Exonave o Exotraje en No Man's Sky. Utiliza herramientas de optimización inteligentes para maximizar las bonificaciones por adyacencia, las ranuras sobrecargadas y el rendimiento general.",
+        "instructionsPageTitle": "Cómo Usar el Optimizador NMS | Guía de Bonificaciones por Adyacencia",
+        "instructionsDescription": "Aprende a usar el Optimizador NMS para crear los mejores diseños tecnológicos de No Man's Sky. Esta guía explica cómo maximizar las bonificaciones por adyacencia para cualquier nave o herramienta.",
+        "aboutPageTitle": "Acerca de NMS Optimizer | El Calculador de Diseños #1 para No Man's Sky",
+        "aboutDescription": "NMS Optimizer es una herramienta gratuita que utiliza IA para encontrar los mejores diseños tecnológicos para No Man's Sky. Optimiza tu Nave, Multiherramienta y más.",
+        "changelogPageTitle": "NMS Optimizer Changelog | Últimas Actualizaciones y Características",
+        "changelogDescription": "Consulta las últimas actualizaciones, las nuevas características y las correcciones de errores para el Optimizador NMS. Mantente al día con el desarrollo de la mejor herramienta de diseños para No Man's Sky.",
+        "userstatsPageTitle": "Estadísticas de Usuario y Diseños Populares | NMS Optimizer",
+        "userstatsDescription": "Explora las estadísticas de usuario del NMS Optimizer para ver las tecnologías de No Man's Sky más populares en todos los tipos de plataforma.",
+        "translationPageTitle": "Ayuda a Traducir NMS Optimizer | Localización Comunitaria",
+        "translationDescription": "Ayuda a traducir el NMS Optimizer a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo."
     },
     "appHeader": {
         "subTitle": "Optimizador de diseño de tecnología <1>AI/RUST</1>"

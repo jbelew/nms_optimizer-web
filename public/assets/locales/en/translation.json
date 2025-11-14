@@ -69,7 +69,7 @@
 		},
 		"optimizationAlert": {
 			"warning": "–kzzkt– Warning! –kzzkt–",
-			"insufficientSpace": "There’s not a large enough window to effectively place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are selected in your layout.",
+			"insufficientSpace": "There's not a large enough window to effectively place the selected modules for <1>{{technologyName}}</1>. This usually happens when too many technologies are selected in your layout.",
 			"forceOptimizeSuggestion": "You can try <1>\"Force Optimize\"</1> for a more intensive solve, but it may fail to find an optimal layout. Consider reordering your technologies or selecting fewer to improve the results.",
 			"cancelButton": "Cancel",
 			"forceOptimizeButton": "Force Optimize"
@@ -545,26 +545,26 @@
 		"atlantid": "Atlantid Modules",
 		"cosmetic": "Cosmetic Modules",
 		"title": "{{techName}} SELECTION",
-		"warning": "Default selections for Corvettes are suggestions. Use <strong>Select All</strong> to fully maximize this technology, but keep in mind — you’ll usually only have space for <strong>2–3</strong> maxed technologies in your layout.",
+		"warning": "Default selections for Corvettes are suggestions. Use <strong>Select All</strong> to fully maximize this technology, but keep in mind — you'll usually only have space for <strong>2–3</strong> maxed technologies in your layout.",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
-		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don’t let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
+		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don't let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
-		"appDescription": "Optimize No Man's Sky tech layouts for Starships, Multitools, Exosuits & more. Maximize adjacency bonuses and supercharged slots for the best build.",
-		"instructionsPageTitle": "How to Use NMS Optimizer | Instructions & Tips",
-		"instructionsDescription": "Learn how to use the NMS Optimizer to master supercharged slots, adjacency bonuses, and build the best technology layouts in No Man’s Sky.",
-		"aboutPageTitle": "About NMS Optimizer | AI/RUST Powered Tech Layouts & Builds",
-		"aboutDescription": "Discover how the NMS Optimizer uses AI to create optimal No Man’s Sky builds for Starships, Corvettes, Multitools, Exosuits, and Exocraft.",
-		"changelogPageTitle": "Changelog & Updates | NMS Optimizer",
-		"changelogDescription": "View updates, release notes, and bug fixes for the NMS Optimizer. Stay current with new features, improvements, and version history.",
+		"mainPageTitle": "NMS Optimizer | No Man's Sky Tech Layout Builder & Calculator",
+		"appDescription": "The NMS Optimizer helps you design the perfect Starship, Corvette, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
+		"instructionsPageTitle": "How to Use NMS Optimizer | Adjacency Bonus Guide",
+		"instructionsDescription": "Learn how to use the NMS Optimizer to create the best No Man's Sky tech layouts. This guide explains how to maximize adjacency bonuses for any ship or tool.",
+		"aboutPageTitle": "About NMS Optimizer | The #1 No Man's Sky Tech Layout Calculator",
+		"aboutDescription": "NMS Optimizer is a free tool that uses AI to find the best technology layouts for No Man's Sky. Optimize your Starship, Multitool, and more.",
+		"changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
+		"changelogDescription": "See the latest updates, new features, and bug fixes for the NMS Optimizer. Stay up-to-date with the development of the best No Man's Sky layout tool.",
 		"userstatsPageTitle": "User Statistics & Popular Layouts | NMS Optimizer",
-		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man’s Sky technologies across all platform types.",
+		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man's Sky technologies across all platform types.",
 		"translationPageTitle": "Help Translate NMS Optimizer | Community Localization",
-		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man’s Sky players worldwide."
+		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man's Sky players worldwide."
 	},
 	"installPrompt": {
 		"iosInstructions": "For the best experience, add this app to your Home Screen: Tap the Share icon, then 'Add to Home Screen'.",

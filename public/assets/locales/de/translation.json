@@ -549,18 +549,18 @@
         "cancelButton": "Stornieren"
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer | No Man’s Sky Layout-Builder für Schiffe & mehr",
-        "appDescription": "Finden Sie die besten No Man's Sky-Technologielayouts für Ihr Raumschiff, Ihre Korvette, Ihr Multitool, Ihren Exosuit und Ihr Exocraft. Optimieren Sie Adjazenzboni und aufgeladene Slots, um die ultimativen NMS-Builds zu erstellen.",
-        "instructionsPageTitle": "So verwenden Sie den NMS Optimizer | Anleitungen & Tipps",
-        "instructionsDescription": "Erhalten Sie detaillierte Anleitungen und Profi-Tipps zur Verwendung des NMS Optimizer. Lernen Sie, aufgeladene Slots und Adjazenzboni zu meistern und die besten Technologielayouts in No Man's Sky zu erstellen.",
-        "aboutPageTitle": "Über den NMS Optimizer | KI-gestützte Tech-Layouts & Builds",
-        "aboutDescription": "Erfahren Sie mehr über den NMS Optimizer, ein KI-gestütztes Werkzeug für No Man's Sky. Entdecken Sie, wie es maschinelles Lernen einsetzt, um optimale Builds für Raumschiffe, Korvetten, Multitools, Exosuits und Exocrafts zu erstellen.",
-        "changelogPageTitle": "Änderungsprotokoll und Updates | NMS Optimizer",
-        "changelogDescription": "Sehen Sie sich Updates, Versionshinweise und Fehlerbehebungen für den NMS Optimizer an. Bleiben Sie mit neuen Funktionen, Verbesserungen und dem Versionsverlauf auf dem Laufenden.",
-        "userstatsPageTitle": "Benutzerstatistiken und beliebte Layouts | NMS Optimizer",
-        "userstatsDescription": "Entdecken Sie die Benutzerstatistiken von NMS Optimizer, um die beliebtesten No Man’s Sky-Technologien für alle Artikeltypen zu sehen.",
-        "translationPageTitle": "Helfen Sie beim Übersetzen des NMS Optimizers | Community-Lokalisierung",
-        "translationDescription": "Helfen Sie mit, den NMS Optimizer in Ihre Sprache zu übersetzen und ihn für mehr No Man’s Sky-Spieler weltweit zugänglich zu machen."
+        "mainPageTitle": "NMS Optimizer | Tech-Layout-Builder für No Man's Sky",
+        "appDescription": "Der NMS Optimizer hilft Ihnen bei der Gestaltung des perfekten Layouts für Ihr Raumschiff, Ihre Korvette, Ihr Multitool, Ihr Exocraft oder Ihren Exosuit in No Man's Sky. Nutzen Sie intelligente Optimierungstools, um Adjazenzboni, aufgeladene Slots und die Gesamtleistung zu maximieren.",
+        "instructionsPageTitle": "Anleitung zum NMS Optimizer | Adjazenzbonus-Leitfaden",
+        "instructionsDescription": "Erfahren Sie, wie Sie mit dem NMS Optimizer die besten Tech-Layouts für No Man's Sky erstellen. Diese Anleitung erklärt, wie Sie die Adjazenzboni für jedes Schiff oder Werkzeug maximieren.",
+        "aboutPageTitle": "Über NMS Optimizer | Der #1 Tech-Layout-Rechner für No Man's Sky",
+        "aboutDescription": "NMS Optimizer ist ein kostenloses Tool, das KI verwendet, um die besten Technologielayouts für No Man's Sky zu finden. Optimieren Sie Ihr Raumschiff, Multitool und mehr.",
+        "changelogPageTitle": "NMS Optimizer Changelog | Neueste Updates & Funktionen",
+        "changelogDescription": "Sehen Sie sich die neuesten Updates, neuen Funktionen und Fehlerbehebungen für den NMS Optimizer an. Bleiben Sie auf dem Laufenden über die Entwicklung des besten Layout-Tools für No Man's Sky.",
+        "userstatsPageTitle": "Benutzerstatistiken & Beliebte Layouts | NMS Optimizer",
+        "userstatsDescription": "Erkunden Sie die Benutzerstatistiken des NMS Optimizers, um die beliebtesten No Man's Sky-Technologien für alle Plattformtypen zu sehen.",
+        "translationPageTitle": "Hilf beim Übersetzen des NMS Optimizers | Community-Lokalisierung",
+        "translationDescription": "Helfen Sie beim Übersetzen des NMS Optimizers in Ihre Sprache und machen Sie ihn für mehr No Man's Sky-Spieler weltweit zugänglich."
     },
     "appHeader": {
         "subTitle": "Technologie-Layout-Optimierer <1>AI/RUST</1>"

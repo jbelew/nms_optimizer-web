@@ -549,18 +549,18 @@
         "cancelButton": "Cancelar"
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer | Construtor de Layouts de No Man’s Sky para Naves e Mais",
-        "appDescription": "Encontre os melhores layouts de tecnologia de No Man's Sky para sua Nave, Corveta, Multi-ferramenta, Exotraje e Exonave. Otimize os bônus de adjacência e os slots sobrecarregados para criar as melhores construções de NMS.",
-        "instructionsPageTitle": "Como Usar o NMS Optimizer | Instruções e Dicas",
-        "instructionsDescription": "Obtenha instruções detalhadas e dicas profissionais sobre como usar o NMS Optimizer. Aprenda a dominar os slots sobrecarregados, os bônus de adjacência e a criar os melhores layouts de tecnologia em No Man's Sky.",
-        "aboutPageTitle": "Sobre o NMS Optimizer | Layouts e Construções de Tecnologia com IA",
-        "aboutDescription": "Aprenda sobre o NMS Optimizer, uma ferramenta com IA para No Man's Sky. Descubra como ele usa o aprendizado de máquina para criar construções ideais de Naves, Corvetas, Multi-ferramentas, Exotrajes e Exonaves.",
-        "changelogPageTitle": "Registro de alterações e atualizações | NMS Optimizer",
-        "changelogDescription": "Veja atualizações, notas de versão e correções de bugs do NMS Optimizer. Mantenha-se atualizado com novos recursos, melhorias e histórico de versões.",
-        "userstatsPageTitle": "Estatísticas de usuários e layouts populares | NMS Optimizer",
-        "userstatsDescription": "Explore as estatísticas do usuário do NMS Optimizer para ver as tecnologias No Man’s Sky mais populares em todos os tipos de itens.",
-        "translationPageTitle": "Ajude a traduzir o NMS Optimizer | Localização da comunidade",
-        "translationDescription": "Ajude a traduzir o NMS Optimizer para o seu idioma e torne-o acessível a mais jogadores de No Man’s Sky em todo o mundo."
+        "mainPageTitle": "NMS Optimizer | Construtor de Layouts de Tecnologia para No Man's Sky",
+        "appDescription": "O NMS Optimizer ajuda você a projetar o layout perfeito para sua Nave, Corveta, Multi-ferramenta, Exonave ou Exotraje em No Man's Sky. Use ferramentas de otimização inteligentes para maximizar os bônus de adjacência, os slots sobrecarregados e o desempenho geral.",
+        "instructionsPageTitle": "Como Usar o NMS Optimizer | Guia de Bônus de Adjacência",
+        "instructionsDescription": "Aprenda a usar o NMS Optimizer para criar os melhores layouts de tecnologia do No Man's Sky. Este guia explica como maximizar os bônus de adjacência para qualquer nave ou ferramenta.",
+        "aboutPageTitle": "Sobre o NMS Optimizer | A Calculadora de Layouts #1 para No Man's Sky",
+        "aboutDescription": "O NMS Optimizer é uma ferramenta gratuita que usa IA para encontrar os melhores layouts de tecnologia para No Man's Sky. Otimize sua Nave, Multi-ferramenta e muito mais.",
+        "changelogPageTitle": "NMS Optimizer Changelog | Últimas Atualizações e Recursos",
+        "changelogDescription": "Veja as últimas atualizações, novos recursos e correções de bugs para o NMS Optimizer. Mantenha-se atualizado com o desenvolvimento da melhor ferramenta de layouts para No Man's Sky.",
+        "userstatsPageTitle": "Estatísticas do Usuário e Layouts Populares | NMS Optimizer",
+        "userstatsDescription": "Explore as estatísticas de usuário do NMS Optimizer para ver as tecnologias mais populares do No Man's Sky em todos os tipos de plataforma.",
+        "translationPageTitle": "Ajude a Traduzir o NMS Optimizer | Localização da Comunidade",
+        "translationDescription": "Ajude a traduzir o NMS Optimizer para o seu idioma e torne-o acessível a mais jogadores de No Man's Sky em todo o mundo."
     },
     "appHeader": {
         "subTitle": "Otimizador de layout de tecnologia <1>AI/RUST</1>"

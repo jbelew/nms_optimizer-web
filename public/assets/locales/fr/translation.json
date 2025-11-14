@@ -549,18 +549,18 @@
         "cancelButton": "Annuler"
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer | Constructeur de Layouts No Man’s Sky pour Vaisseaux & Plus",
-        "appDescription": "Trouvez les meilleures dispositions technologiques de No Man's Sky pour votre Vaisseau, Corvette, Multi-outil, Exocombinaison et Exonef. Optimisez les bonus d'adjacence et les emplacements surchargés pour créer les meilleures constructions NMS.",
-        "instructionsPageTitle": "Comment Utiliser l'NMS Optimizer | Instructions & Astuces",
-        "instructionsDescription": "Obtenez des instructions détaillées et des astuces de pro sur l'utilisation de l'NMS Optimizer. Apprenez à maîtriser les emplacements surchargés, les bonus d'adjacence et à créer les meilleures dispositions technologiques dans No Man's Sky.",
-        "aboutPageTitle": "À Propos de l'NMS Optimizer | Layouts & Builds Technologiques par IA",
-        "aboutDescription": "Découvrez l'NMS Optimizer, un outil alimenté par l'IA pour No Man's Sky. Découvrez comment il utilise l'apprentissage automatique pour créer des constructions optimales de Vaisseaux, Corvettes, Multi-outils, Exocombinaisons et Exonefs.",
-        "changelogPageTitle": "Journal des modifications et mises à jour | NMS Optimizer",
-        "changelogDescription": "Affichez les mises à jour, les notes de version et les corrections de bogues pour NMS Optimizer. Restez au courant des nouvelles fonctionnalités, des améliorations et de l’historique des versions.",
-        "userstatsPageTitle": "Statistiques des utilisateurs et mises en page populaires | NMS Optimizer",
-        "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour connaître les technologies No Man’s Sky les plus populaires pour tous les types d’objets.",
-        "translationPageTitle": "Aidez à traduire NMS Optimizer | Localisation communautaire",
-        "translationDescription": "Aidez à traduire NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
+        "mainPageTitle": "NMS Optimizer | Constructeur de Schémas Technologiques pour No Man's Sky",
+        "appDescription": "L'Optimiseur NMS vous aide à concevoir l'agencement parfait pour votre Vaisseau, Corvette, Multi-outil, Exonef ou Exocombinaison dans No Man's Sky. Utilisez des outils d'optimisation intelligents pour maximiser les bonus d'adjacence, les emplacements surchargés et les performances globales.",
+        "instructionsPageTitle": "Comment Utiliser l'Optimiseur NMS | Guide des Bonus d'Adjacence",
+        "instructionsDescription": "Apprenez à utiliser l'Optimiseur NMS pour créer les meilleurs schémas technologiques de No Man's Sky. Ce guide explique comment maximiser les bonus d'adjacence pour n'importe quel vaisseau ou outil.",
+        "aboutPageTitle": "À Propos de NMS Optimizer | Le Calculateur de Schémas #1 pour No Man's Sky",
+        "aboutDescription": "NMS Optimizer est un outil gratuit qui utilise l'IA pour trouver les meilleurs agencements technologiques pour No Man's Sky. Optimisez votre Vaisseau, Multi-outil, et plus encore.",
+        "changelogPageTitle": "NMS Optimizer Changelog | Dernières Mises à Jour & Fonctionnalités",
+        "changelogDescription": "Consultez les dernières mises à jour, les nouvelles fonctionnalités et les corrections de bugs pour l'Optimiseur NMS. Restez à jour avec le développement du meilleur outil de schémas pour No Man's Sky.",
+        "userstatsPageTitle": "Statistiques des Utilisateurs & Schémas Populaires | NMS Optimizer",
+        "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour voir les technologies No Man's Sky les plus populaires pour tous les types de plates-formes.",
+        "translationPageTitle": "Aidez à Traduire NMS Optimizer | Localisation Communautaire",
+        "translationDescription": "Aidez à traduire le NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
     },
     "appHeader": {
         "subTitle": "Optimiseur de configuration technologique <1>AI/RUST</1>"

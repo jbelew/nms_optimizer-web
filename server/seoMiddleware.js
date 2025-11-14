@@ -6,7 +6,7 @@
 
 import etag from "etag";
 
-import { KNOWN_DIALOGS, OTHER_LANGUAGES } from "../server/config.js";
+import { KNOWN_DIALOGS, OTHER_LANGUAGES, SUPPORTED_LANGUAGES } from "../server/config.js";
 import i18next from "./i18n.js";
 
 import { seoMetadata } from "../shared/seo-metadata.js";
@@ -23,6 +23,21 @@ import { seoMetadata } from "../shared/seo-metadata.js";
  * @param {string} csp - The Content Security Policy string to be applied to the response.
  */
 export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
+    const lng = req.query.lng;
+    if (lng) {
+        const lang = Array.isArray(lng) ? String(lng[0]) : String(lng);
+        const supportedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
+
+        const newURL = new URL(req.originalUrl, `https://${req.headers.host}`);
+        newURL.searchParams.delete('lng');
+
+        if (supportedLang !== 'en') {
+            newURL.pathname = `/${supportedLang}${newURL.pathname === '/' ? '' : newURL.pathname}`;
+        }
+
+        return res.redirect(301, newURL.href);
+    }
+
     try {
         const indexHtml = await loadIndexHtml();
         let modifiedHtml = indexHtml;
