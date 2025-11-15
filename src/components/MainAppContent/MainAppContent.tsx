@@ -94,6 +94,10 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					backgroundColor: "#003848",
 					contain: "layout",
 					WebkitUserSelect: "none",
+					backfaceVisibility: "hidden",
+					WebkitBackfaceVisibility: "hidden",
+					transform: "translateZ(0)",
+					WebkitTransform: "translateZ(0)",
 				}}
 			>
 				<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
@@ -149,7 +153,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 				</div>
 			</nav>
 
-			<main className="flex min-h-dvh flex-col items-center justify-center pt-12 sm:pt-0 lg:min-h-screen">
+			<main className="flex min-h-svh flex-col items-center justify-center pt-12 sm:pt-0 lg:min-h-screen">
 				<div
 					className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 					style={{ backgroundColor: "var(--accent-a2)" }}

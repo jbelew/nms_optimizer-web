@@ -2,6 +2,18 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 5.5 – Update Prompt, Mobile Toolbar & Performance Improvements (2025-11-15)
+- Introduced a dedicated **toolbar on mobile devices**, increasing hotspot/tap target sizes for easier interaction.
+- Applied consistant styling to the **Update Prompt** dialog.
+- Improved grid rendering performance through hardware acceleration.
+- Optimized UI animations to run on the GPU for smoother responsiveness.
+- Fixed mobile scrolling and layout issues related to the new toolbar.
+
+## Version 5.4 – Loading Optimizations & Corvette Fix (2025-11-14/15)
+- Improved preload priority for translation files to speed up localization on first load.
+- Optimized critical asset loading for faster startup.
+- Re-enabled the corvette selection toast warning. Come on HG! Fix it!
+
 ## Version 5.3 – Improved PWA & Trail Update Fixes (2025-11-13)
 - Added a more complete Service Worker for improved offline reliability and correct caching of core files (`sw.js`, `index.html`).
 - Improved iOS update detection to prevent false “new version available” prompts.

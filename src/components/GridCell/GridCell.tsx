@@ -114,6 +114,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			style={{
 				...(cellElementStyle as React.CSSProperties),
 				backfaceVisibility: "hidden",
+				WebkitBackfaceVisibility: "hidden",
 			}}
 		>
 			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
