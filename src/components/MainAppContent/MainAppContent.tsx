@@ -90,7 +90,11 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 			{/* Mobile fixed toolbar */}
 			<nav
 				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 sm:hidden"
-				style={{ backgroundColor: "#003848" }}
+				style={{
+					backgroundColor: "#003848",
+					contain: "layout",
+					WebkitUserSelect: "none",
+				}}
 			>
 				<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 					<div className="flex items-center gap-2 pl-2">
