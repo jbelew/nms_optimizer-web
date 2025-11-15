@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.7...v5.6.0) (2025-11-15)
+
+
+### Features
+
+* **GridCell:** Render cell background images as <img> and hide corners when image is present ([d05d7a7](https://github.com/jbelew/nms_optimizer-web/commit/d05d7a740da024fb3d2902d86d2ae51338a34f1a))
+
 ## [5.5.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.6...v5.5.7) (2025-11-15)
 
 
