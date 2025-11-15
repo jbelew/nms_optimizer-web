@@ -113,8 +113,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			className={cellClassName}
 			style={{
 				...(cellElementStyle as React.CSSProperties),
-				transform: "translate3d(0, 0, 0)",
-				WebkitTransform: "translate3d(0, 0, 0)",
+				backfaceVisibility: "hidden",
+				WebkitBackfaceVisibility: "hidden",
+				willChange: "transform",
 			}}
 		>
 			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
