@@ -1,3 +1,10 @@
+## [5.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.3...v5.5.4) (2025-11-15)
+
+
+### Performance Improvements
+
+* **layout:** Optimize main content rendering and viewport height ([d39fcf4](https://github.com/jbelew/nms_optimizer-web/commit/d39fcf4fcea1978e290844ec0f928421a83ddf5c))
+
 ## [5.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.2...v5.5.3) (2025-11-15)
 
 
