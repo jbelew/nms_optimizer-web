@@ -1,3 +1,10 @@
+## [5.5.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.6...v5.5.7) (2025-11-15)
+
+
+### Bug Fixes
+
+* **css:** Adjust layout calculation unit and clean up GridCell styles ([707a3e2](https://github.com/jbelew/nms_optimizer-web/commit/707a3e2e90849382a6326c7337a727cf922329a6))
+
 ## [5.5.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.5...v5.5.6) (2025-11-15)
 
 
