@@ -56,7 +56,8 @@
 			"optimizationAlert": "Optimization Alert",
 			"translationRequest": "Translators Needed!",
 			"shareLink": "Share Grid Layout",
-			"userStats": "User Statistics"
+			"userStats": "User Statistics",
+			"updatePrompt": "Update Available"
 		},
 		"userStats": {
 			"noDataForChart": "No data available for this chart.",
