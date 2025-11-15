@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.3...v5.5.0) (2025-11-15)
+
+
+### Features
+
+* **dialogs:** Add UpdatePrompt component and enhance dialog stories ([83233bd](https://github.com/jbelew/nms_optimizer-web/commit/83233bd0e2c6ba9bc5e9d75c65c6cb0589c2cc00))
+
 ## [5.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.2...v5.4.3) (2025-11-15)
 
 
