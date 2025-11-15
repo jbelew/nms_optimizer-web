@@ -206,6 +206,9 @@
 			media="(max-width: 600px)"
 		/>
 
+		<!-- Default language translations -->
+		<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="high" crossorigin />
+
 		<!-- Fonts (highest priority) -->
 		<link
 			rel="preload"
@@ -216,14 +219,13 @@
 			fetchpriority="high"
 		/>
 
-		<!-- Default language translations -->
-		<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" crossorigin />
 		<link
 			rel="preload"
 			href="/assets/fonts/Raleway-VariableFont_wght.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin="anonymous"
+			fetchpriority="high"
 		/>
 
 		<!-- Preconnect -->
