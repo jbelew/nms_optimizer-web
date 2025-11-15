@@ -92,7 +92,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 sm:hidden"
 				style={{
 					backgroundColor: "#003848",
-					contain: "layout",
 					WebkitUserSelect: "none",
 				}}
 			>

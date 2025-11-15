@@ -44,14 +44,14 @@ body.a11y-font .radix-themes {
 	--grid-container-width: calc(100dvw - (2 * var(--grid-padding)));
 
 	/* Gap scales, but clamped */
-	--grid-gap: clamp(var(--grid-gap-min), 1vw, var(--grid-gap-max));
+	--grid-gap: clamp(var(--grid-gap-min), 1dvw, var(--grid-gap-max));
 
 	/* Formula: (container - fixed - gaps) / flex-cols, clamped */
 	--grid-cell-size: clamp(
 		var(--grid-cell-min),
 		calc(
 			(
-					(100vw - var(--grid-column-fixed)) -
+					(100dvw - var(--grid-column-fixed)) -
 						((var(--grid-columns-flex)) * var(--grid-gap)) -
 						(2 * var(--grid-padding) / 2)
 				) /
