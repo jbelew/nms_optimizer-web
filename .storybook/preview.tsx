@@ -1,7 +1,10 @@
 import type { Preview } from "@storybook/react-vite";
 import React from "react";
 import { Theme } from "@radix-ui/themes";
+import { BrowserRouter } from "react-router-dom";
 
+import { DialogProvider } from "../src/context/DialogContext";
+import { hideSplashScreenAndShowBackground } from "../src/utils/splashScreen";
 import "../src/i18n/i18n";
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";
@@ -43,16 +46,23 @@ const preview: Preview = {
 		},
 	},
 	decorators: [
-		(Story) => (
-			<Theme
-				appearance="dark"
-				panelBackground="translucent"
-				accentColor="cyan"
-				grayColor="sage"
-			>
-				<Story />
-			</Theme>
-		),
+		(Story) => {
+			hideSplashScreenAndShowBackground();
+			return (
+				<BrowserRouter>
+					<DialogProvider>
+						<Theme
+							appearance="dark"
+							panelBackground="translucent"
+							accentColor="cyan"
+							grayColor="sage"
+						>
+							<Story />
+						</Theme>
+					</DialogProvider>
+				</BrowserRouter>
+			);
+		},
 	],
 };
 

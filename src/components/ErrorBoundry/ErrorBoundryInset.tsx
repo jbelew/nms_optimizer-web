@@ -107,6 +107,16 @@ class ErrorBoundaryInset extends Component<Props, State> {
 			console.error("ErrorBoundary: Failed to clear localStorage.", e);
 		}
 
+		// Clear service workers to force fresh code fetch
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.getRegistrations().then((registrations) => {
+				registrations.forEach((reg) => {
+					reg.unregister();
+					console.log("ErrorBoundary: Unregistered service worker.");
+				});
+			});
+		}
+
 		sendEvent({
 			category: "error",
 			action: error.name,

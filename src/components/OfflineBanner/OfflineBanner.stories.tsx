@@ -5,10 +5,20 @@ import OfflineBanner from "./OfflineBanner";
 const meta = {
 	component: OfflineBanner,
 	title: "components/OfflineBanner",
+	decorators: [
+		(Story) => {
+			// Mock navigator.onLine to return false for the story
+			Object.defineProperty(navigator, "onLine", {
+				writable: true,
+				value: false,
+			});
+			return <Story />;
+		},
+	],
 } satisfies Meta<typeof OfflineBanner>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Offline: Story = {};

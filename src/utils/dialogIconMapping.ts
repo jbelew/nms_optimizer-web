@@ -9,6 +9,7 @@ import {
 	InfoCircledIcon,
 	PieChartIcon,
 	QuestionMarkCircledIcon,
+	ReloadIcon,
 	Share2Icon,
 } from "@radix-ui/react-icons";
 
@@ -35,6 +36,7 @@ const iconMap: Record<string, React.ElementType<IconProps>> = {
 	"dialogs.titles.shareLink": Share2Icon,
 	"dialogs.titles.userStats": PieChartIcon,
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
+	"dialogs.titles.updatePrompt": ReloadIcon,
 };
 
 /**

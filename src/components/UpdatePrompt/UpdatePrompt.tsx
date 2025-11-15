@@ -1,5 +1,9 @@
-import React from "react";
-import { Button, Dialog, Flex } from "@radix-ui/themes";
+import type { FC } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Button, Flex, Text } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import AppDialog from "../AppDialog/AppDialog";
 
 interface UpdatePromptProps {
 	isOpen: boolean;
@@ -7,26 +11,41 @@ interface UpdatePromptProps {
 	onDismiss: () => void;
 }
 
-const UpdatePrompt: React.FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) => {
-	return (
-		<Dialog.Root open={isOpen}>
-			<Dialog.Content style={{ maxWidth: 450 }}>
-				<Dialog.Title>Update Available</Dialog.Title>
-				<Dialog.Description size="2" mb="4">
-					A new version of the application is available. Refresh now to get the latest
-					features and bug fixes.
-				</Dialog.Description>
+const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) => {
+	const { t } = useTranslation();
 
-				<Flex gap="3" mt="4" justify="end">
-					<Dialog.Close>
-						<Button variant="soft" onClick={onDismiss}>
-							Later
-						</Button>
-					</Dialog.Close>
-					<Button onClick={onRefresh}>Refresh Now</Button>
-				</Flex>
-			</Dialog.Content>
-		</Dialog.Root>
+	const content = (
+		<>
+			<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+				{t("updatePrompt.description", {
+					defaultValue:
+						"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
+				})}
+			</Text>
+
+			<Flex gap="2" mt="6" mb="2" justify="end">
+				<Dialog.Close asChild>
+					<Button variant="soft" onClick={onDismiss}>
+						{t("updatePrompt.later", { defaultValue: "Later" })}
+					</Button>
+				</Dialog.Close>
+				<Dialog.Close asChild>
+					<Button onClick={onRefresh}>
+						{t("updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
+					</Button>
+				</Dialog.Close>
+			</Flex>
+		</>
+	);
+
+	return (
+		<AppDialog
+			isOpen={isOpen}
+			titleKey="dialogs.titles.updatePrompt"
+			title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
+			onClose={onDismiss}
+			content={content}
+		/>
 	);
 };
 
