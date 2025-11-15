@@ -1,3 +1,11 @@
+## [5.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.1...v5.5.2) (2025-11-15)
+
+
+### Performance Improvements
+
+* **grid-cell:** Force hardware acceleration for improved rendering ([dbb19ab](https://github.com/jbelew/nms_optimizer-web/commit/dbb19ab66ccc72b3b16fb0b018bda342f6299c4e))
+* **ui:** Optimize animations with CSS hardware acceleration ([62bf2ab](https://github.com/jbelew/nms_optimizer-web/commit/62bf2ab7d7075aadc946d54ed6ea2400595c1096))
+
 ## [5.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.0...v5.5.1) (2025-11-15)
 
 
