@@ -51,7 +51,7 @@ body.a11y-font .radix-themes {
 		var(--grid-cell-min),
 		calc(
 			(
-					(100dvw - var(--grid-column-fixed)) -
+					(100vw - var(--grid-column-fixed)) -
 						((var(--grid-columns-flex)) * var(--grid-gap)) -
 						(2 * var(--grid-padding) / 2)
 				) /
