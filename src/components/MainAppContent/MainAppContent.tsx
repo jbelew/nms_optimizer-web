@@ -94,10 +94,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					backgroundColor: "#003848",
 					contain: "layout",
 					WebkitUserSelect: "none",
-					backfaceVisibility: "hidden",
-					WebkitBackfaceVisibility: "hidden",
-					transform: "translateZ(0)",
-					WebkitTransform: "translateZ(0)",
 				}}
 			>
 				<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
