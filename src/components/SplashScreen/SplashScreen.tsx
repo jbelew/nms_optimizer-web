@@ -97,7 +97,14 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 				<div
 					className={cssBlock}
 					ref={elementRef}
-					style={{ visibility: "visible" } as CSSProperties} // Made visible by JS when status is 'visible'
+					style={
+						{
+							visibility: "visible",
+							transform: "translateZ(0)",
+							willChange: "opacity, transform",
+							backfaceVisibility: "hidden",
+						} as CSSProperties
+					}
 				>
 					<div className={`${cssBlock}__loader`}>
 						<div className={`${cssBlock}__dot`}></div>
