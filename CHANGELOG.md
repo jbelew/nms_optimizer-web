@@ -1,3 +1,10 @@
+## [5.5.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.4...v5.5.5) (2025-11-15)
+
+
+### Performance Improvements
+
+* **ui:** Force hardware acceleration for smoother rendering ([d5a25e2](https://github.com/jbelew/nms_optimizer-web/commit/d5a25e29e1cb50403c9e01a787eced76eecf98c7))
+
 ## [5.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.3...v5.5.4) (2025-11-15)
 
 
