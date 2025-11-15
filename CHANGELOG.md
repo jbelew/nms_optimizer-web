@@ -1,3 +1,10 @@
+## [5.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.1...v5.4.2) (2025-11-15)
+
+
+### Performance Improvements
+
+* **html:** Optimize critical asset preloading ([446e5f0](https://github.com/jbelew/nms_optimizer-web/commit/446e5f00dffda658c200ef0fab69353e4691dbc7))
+
 ## [5.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.0...v5.4.1) (2025-11-14)
 
 
