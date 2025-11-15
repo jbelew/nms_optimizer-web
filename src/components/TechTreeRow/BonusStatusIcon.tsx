@@ -50,7 +50,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	if (roundedMaxBonus < 100) {
 		const icon = (
 			<ExclamationTriangleIcon
-				className="mt-[8px] inline-block cursor-pointer align-text-top"
+				className="mt-2 inline-block cursor-pointer align-text-top"
 				style={{ color: "var(--red-a8)" }}
 			/>
 		);
@@ -104,7 +104,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	// roundedMaxBonus > 100
 	const icon = (
 		<LightningBoltIcon
-			className="mt-[6px] inline-block h-4 w-4 cursor-pointer align-text-top"
+			className="mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top"
 			style={{ color: "var(--amber-a8)" }}
 		/>
 	);

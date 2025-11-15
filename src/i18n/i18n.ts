@@ -3,8 +3,13 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
+/** Array of supported language codes. */
 export const languages = ["en", "es", "fr", "de", "pt"];
 
+/**
+ * Mapping of language codes to their native language names.
+ * Used for displaying language options to users.
+ */
 export const nativeLanguageNames: { [key: string]: string } = {
 	en: "English",
 	es: "Español",
@@ -13,6 +18,14 @@ export const nativeLanguageNames: { [key: string]: string } = {
 	pt: "Português",
 };
 
+/**
+ * Initialize i18next with language detection, HTTP backend, and React integration.
+ * Configuration:
+ * - Supports the languages defined in the languages array
+ * - Detects language from URL path
+ * - Falls back to English if language not found
+ * - Loads translations from /assets/locales/{language}/{namespace}.json
+ */
 void i18n
 	.use(Backend)
 	.use(LanguageDetector)
@@ -36,4 +49,5 @@ void i18n
 		defaultNS: "translation",
 	});
 
+/** Configured i18next instance for internationalization. */
 export default i18n;

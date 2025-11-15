@@ -3,7 +3,7 @@ import "./AppHeader.scss";
 
 import React, { useEffect } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { Code, DataList, Heading, IconButton, Popover, Separator } from "@radix-ui/themes";
+import { Code, DataList, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -35,6 +35,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
+	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 
 	useEffect(() => {
@@ -50,28 +51,43 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			key={i18n.language}
 			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
 		>
-			<div className="absolute! top-4! left-4! z-10 flex items-start sm:top-5! sm:left-8!">
-				{!isLg && (
+			{!isLg && isSm && (
+				<div className="absolute! top-5! left-4! z-10 flex items-start sm:top-6! sm:left-8!">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<IconButton
-							size="1"
-							variant={a11yMode ? "solid" : "surface"}
-							radius="full"
-							aria-label={t("buttons.accessibility") ?? ""}
-							onClick={toggleA11yMode}
-						>
-							<EyeOpenIcon />
-						</IconButton>
+						<div className="flex items-center gap-2">
+							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+							<Switch
+								variant="soft"
+								checked={a11yMode}
+								onCheckedChange={toggleA11yMode}
+								aria-label={t("buttons.accessibility") ?? ""}
+							/>
+						</div>
 					</ConditionalTooltip>
-				)}
-			</div>
-			<div className="absolute! top-4! right-4! z-10 flex items-center sm:top-5! sm:right-8!">
+				</div>
+			)}
+
+			<div className="absolute! top-4! right-4! z-10 hidden items-center gap-2 sm:top-5! sm:right-8! sm:flex">
+				<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
+					<IconButton
+						variant="soft"
+						aria-label={t("buttons.changelog") ?? ""}
+						onClick={() => {
+							sendEvent({
+								category: "ui",
+								action: "show_changelog",
+								value: 1,
+							});
+							onShowChangelog();
+						}}
+					>
+						<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+					</IconButton>
+				</ConditionalTooltip>
+
 				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 					<IconButton
 						variant="soft"
-						radius="full"
-						className="mr-1! sm:mr-2!"
-						size={isLg ? "2" : "1"}
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							sendEvent({
@@ -90,19 +106,20 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 				{isLg && (
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<IconButton
-							variant={a11yMode ? "solid" : "surface"}
-							radius="full"
-							aria-label={t("buttons.accessibility") ?? ""}
-							onClick={toggleA11yMode}
-						>
-							<EyeOpenIcon />
-						</IconButton>
+						<div className="flex items-center gap-2">
+							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+							<Switch
+								variant="soft"
+								checked={a11yMode}
+								onCheckedChange={toggleA11yMode}
+								aria-label={t("buttons.accessibility") ?? ""}
+							/>
+						</div>
 					</ConditionalTooltip>
 				)}
 			</div>
 
-			<h1 className="header__logo--text text-2xl [word-spacing:-.25rem] sm:text-4xl">
+			<h1 className="header__logo--text text-3xl [word-spacing:-.25rem] sm:text-4xl">
 				NO MAN&apos;S SKY
 			</h1>
 
@@ -186,25 +203,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					{" "}
 					v{__APP_VERSION__}
 				</span>
-				<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
-					<IconButton
-						variant="ghost"
-						radius="full"
-						size="1"
-						className="ml-px!"
-						aria-label={t("buttons.changelog") ?? ""}
-						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_changelog",
-								value: 1,
-							});
-							onShowChangelog();
-						}}
-					>
-						<CounterClockwiseClockIcon className="mt-px h-4 w-4 sm:h-5 sm:w-5" />
-					</IconButton>
-				</ConditionalTooltip>
 			</Heading>
 		</header>
 	);

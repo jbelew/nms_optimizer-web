@@ -3,7 +3,7 @@ import "./LanguageSelector.scss";
 
 import React, { useMemo } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
-import { DropdownMenu, IconButton } from "@radix-ui/themes";
+import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -37,7 +37,8 @@ const languageFlagPaths: LanguageFlagPaths = {
  * It displays a dropdown with flags and names of supported languages.
  */
 const LanguageSelector: React.FC = () => {
-	const isSmallAndUp = useBreakpoint("640px");
+	const isSm = useBreakpoint("640px");
+	const isMd = useBreakpoint("768px");
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -102,19 +103,31 @@ const LanguageSelector: React.FC = () => {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
-				<IconButton
-					variant="soft"
-					radius="full"
-					className="mr-0! lg:mr-2!"
-					size={isSmallAndUp ? "2" : "1"}
-					aria-label={t("languageInfo.changeLanguage") || "Change language"}
-				>
-					<img
-						src={currentFlagPath}
-						alt={t("languageInfo.changeLanguage") || "Change language"}
-						className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
-					/>
-				</IconButton>
+				{!isSm || isMd ? (
+					<Button
+						variant="soft"
+						aria-label={t("languageInfo.changeLanguage") || "Change language"}
+					>
+						<img
+							src={currentFlagPath}
+							alt={t("languageInfo.changeLanguage") || "Change language"}
+							className="h-3 w-4 sm:h-3.5 sm:w-5"
+						/>
+						<Separator orientation="vertical" decorative />
+						<DropdownMenu.TriggerIcon />
+					</Button>
+				) : (
+					<IconButton
+						variant="soft"
+						aria-label={t("languageInfo.changeLanguage") || "Change language"}
+					>
+						<img
+							src={currentFlagPath}
+							alt={t("languageInfo.changeLanguage") || "Change language"}
+							className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
+						/>
+					</IconButton>
+				)}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content sideOffset={5} align="end">
 				<DropdownMenu.Label className="selectLanguage__header">

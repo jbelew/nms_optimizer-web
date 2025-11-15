@@ -1,5 +1,14 @@
 /**
- * Hides the splash screen and reveals the background image
+ * Hides the splash screen and reveals the background image.
+ * Uses the vite-plugin-splash-screen runtime to hide the splash screen,
+ * then adds a CSS class to show the background image.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves after the splash screen is hidden.
+ * @throws {Error} Logs an error if the splash screen hiding fails.
+ *
+ * @example
+ * await hideSplashScreenAndShowBackground();
  */
 export async function hideSplashScreenAndShowBackground() {
 	try {

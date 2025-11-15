@@ -20,7 +20,7 @@ export interface TechTreeRowProps {
 	solving: boolean;
 	/** The filename of the image representing the technology (e.g., "hyperdrive.webp"). Null if no specific image. */
 	techImage: string | null;
-	/** Function to check if the grid is full. */
+	/** Boolean indicating whether the grid is currently full. */
 	isGridFull: boolean;
 	/** The currently selected ship type. */
 	selectedShipType: string;

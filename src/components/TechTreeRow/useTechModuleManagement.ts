@@ -16,6 +16,7 @@ import { useTechStore } from "@/store/TechStore";
  * @property {boolean} isIndeterminate - True for the "select all" checkbox's indeterminate state.
  * @property {(newValues: string[]) => void} handleValueChange - Handler for the checkbox group's value change.
  * @property {(checked: boolean | "indeterminate") => void} handleSelectAllChange - Handler for the "select all" checkbox.
+ * @property {(moduleIds: string[]) => void} handleAllCheckboxesChange - Handler for setting all checkboxes to specific module IDs.
  */
 export const useTechModuleManagement = (
 	tech: string,

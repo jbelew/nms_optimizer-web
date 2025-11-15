@@ -9,6 +9,7 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
+import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
 export interface UseOptimizeReturn {
 	solving: boolean;
@@ -70,6 +71,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const [progressPercent, setProgressPercent] = useState(0);
 	const [status, setStatus] = useState<string | undefined>();
 	const gridContainerRef = useRef<HTMLDivElement | null>(null);
+	const { scrollIntoView } = useScrollGridIntoView(gridContainerRef);
 
 	const resetProgress = useCallback(() => {
 		setSolving(false);
@@ -79,15 +81,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	// Scroll into view when solving on smaller screens
 	useEffect(() => {
-		if (solving && gridContainerRef.current && !isLarge) {
-			const element = gridContainerRef.current;
-			const offset = 8;
-			requestAnimationFrame(() => {
-				const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
-				window.scrollTo({ top, behavior: "smooth" });
-			});
+		if (solving && !isLarge) {
+			scrollIntoView();
 		}
-	}, [solving, isLarge]);
+	}, [solving, isLarge, scrollIntoView]);
 
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {

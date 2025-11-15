@@ -4,13 +4,17 @@ import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 
 declare const __APP_VERSION__: string;
 
+/** Function type for sending analytics events. */
 type SendEventFunction = (event: GA4Event) => void;
 
 /**
  * Sends a web vitals metric to Google Analytics.
+ * Converts the metric value to milliseconds (or multiplies by 1000 for CLS).
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
+ * @returns {void}
+ * @private
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
@@ -26,9 +30,14 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 
 /**
  * Reports web vitals metrics to Google Analytics.
+ * Registers listeners for all Core Web Vitals (CLS, INP, FCP, LCP, TTFB)
+ * and sends them to Google Analytics via the provided send function.
  *
  * @param {SendEventFunction} sendEvent - The function to send the event.
  * @returns {void}
+ *
+ * @example
+ * reportWebVitals(sendEvent);
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
 	onCLS((metric) => sendVitalsMetric(metric, sendEvent));

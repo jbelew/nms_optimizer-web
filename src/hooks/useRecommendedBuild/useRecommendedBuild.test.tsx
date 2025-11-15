@@ -17,6 +17,11 @@ vi.mock("../../store/GridStore", () => ({
 	}),
 }));
 
+// Mock useBreakpoint to return false for all breakpoints (simulate small screen)
+vi.mock("../useBreakpoint/useBreakpoint", () => ({
+	useBreakpoint: vi.fn(() => false),
+}));
+
 /**
  * Test suite for the `useRecommendedBuild` hook.
  */
@@ -340,7 +345,7 @@ describe("useRecommendedBuild", () => {
 
 		expect(requestAnimationFrameMock).toHaveBeenCalled();
 		expect(scrollToMock).toHaveBeenCalledWith({
-			top: 92, // 100 (top) + 0 (pageYOffset) - 8 (offset)
+			top: 46, // 100 (top) + 0 (pageYOffset) - 54 (offset)
 			behavior: "smooth",
 		});
 	});

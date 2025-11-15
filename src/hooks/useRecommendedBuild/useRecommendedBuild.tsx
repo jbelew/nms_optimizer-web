@@ -4,6 +4,7 @@ import { useCallback, useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
 /**
  * Custom hook to handle the application of recommended builds to the grid.
@@ -18,6 +19,7 @@ export const useRecommendedBuild = (
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>
 ) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
+	const { scrollIntoView } = useScrollGridIntoView(gridContainerRef);
 
 	/**
 	 * A memoized map of all modules, indexed by a composite key of `tech/moduleId`.
@@ -115,27 +117,10 @@ export const useRecommendedBuild = (
 				setGridAndResetAuxiliaryState(newGrid);
 
 				// Scroll to the top of the grid container after applying the build
-				if (gridContainerRef.current) {
-					const element = gridContainerRef.current;
-					const offset = 8; // Same offset as in useOptimize.tsx
-
-					const scrollIntoView = () => {
-						requestAnimationFrame(() => {
-							const elementRect = element.getBoundingClientRect();
-							const absoluteElementTop = elementRect.top + window.pageYOffset;
-							const targetScrollPosition = absoluteElementTop - offset;
-
-							window.scrollTo({
-								top: targetScrollPosition,
-								behavior: "smooth",
-							});
-						});
-					};
-					requestAnimationFrame(scrollIntoView);
-				}
+				scrollIntoView();
 			}
 		},
-		[modulesMap, setGridAndResetAuxiliaryState, gridContainerRef]
+		[modulesMap, setGridAndResetAuxiliaryState, scrollIntoView]
 	);
 
 	return { applyRecommendedBuild };

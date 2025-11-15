@@ -36,11 +36,18 @@ export interface DialogContextType {
 	sectionToScrollTo: string | undefined;
 }
 
+/**
+ * React Context for managing dialog state and providing dialog control functions
+ * to child components.
+ */
 export const DialogContext = createContext<DialogContextType | undefined>(undefined);
 
 /**
  * Custom hook for easy consumption of the DialogContext.
  * Throws an error if used outside of a DialogProvider.
+ *
+ * @returns {DialogContextType} The dialog context value.
+ * @throws {Error} If used outside of a DialogProvider.
  */
 export const useDialog = () => {
 	const context = useContext(DialogContext);

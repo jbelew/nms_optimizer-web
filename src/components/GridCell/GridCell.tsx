@@ -15,7 +15,7 @@ import { useGridCellStyle } from "./useGridCellStyle";
  * This is used to display a number or code on the cell for certain upgrades.
  *
  * @param {string|undefined} label - The label of the technology.
- * @returns {string} The priority ("1", "2", "3" for upgrades; "B1", "B2", "B3" for boosters), or "" if not applicable.
+ * @returns {string} The priority ("1", "2", "3" for upgrades; "C1", "C2", "C3" for boosters; "R1", "R2", "R3" for reactors; "F1", "F2", "F3" for forbidden), or "" if not applicable.
  */
 
 const getUpgradePriority = (label: string | undefined): string => {
