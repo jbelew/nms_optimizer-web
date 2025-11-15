@@ -1,3 +1,10 @@
+## [5.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.2...v5.5.3) (2025-11-15)
+
+
+### Performance Improvements
+
+* **grid-cell:** Optimize rendering and refine corner styles ([63b8502](https://github.com/jbelew/nms_optimizer-web/commit/63b85021afb31b4d0c4c003f4bb1f0c6aa5a0bc0))
+
 ## [5.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.1...v5.5.2) (2025-11-15)
 
 
