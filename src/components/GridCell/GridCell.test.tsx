@@ -128,10 +128,16 @@ describe("GridCell", () => {
 		expect(screen.getByText("3")).toBeInTheDocument();
 	});
 
-	it("renders corner elements when not supercharged", () => {
-		renderComponent({ supercharged: false });
+	it("renders corner elements when not supercharged and no image is present", () => {
+		renderComponent({ supercharged: false, image: null });
 		const cellElement = screen.getByRole("gridcell");
 		expect(cellElement.querySelector(".corner.top-left")).toBeInTheDocument();
+	});
+
+	it("does not render corner elements when an image is present", () => {
+		renderComponent({ supercharged: false, image: "some-image.webp" });
+		const cellElement = screen.getByRole("gridcell");
+		expect(cellElement.querySelector(".corner.top-left")).not.toBeInTheDocument();
 	});
 
 	it("does not render corner elements when supercharged", () => {

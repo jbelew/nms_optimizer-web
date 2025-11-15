@@ -97,6 +97,15 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
 		useGridCellStyle(cell, isTouching);
 
+	// Create a mutable copy of the style from the hook.
+	const divStyle: React.CSSProperties = { ...(cellElementStyle as React.CSSProperties) };
+	// Extract the image URL from the backgroundImage property.
+	const imageUrl = divStyle.backgroundImage?.match(/url\("?(.+?)"?\)/)?.[1];
+	// If an image URL is found, remove it from the div's style to prevent it from rendering as a background.
+	if (imageUrl) {
+		divStyle.backgroundImage = "none";
+	}
+
 	const upGradePriority = getUpgradePriority(cell.label);
 
 	const cellElement = (
@@ -111,10 +120,18 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			onTouchEnd={handleTouchEnd}
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
-			style={cellElementStyle as React.CSSProperties}
+			style={divStyle}
 		>
+			{imageUrl && (
+				<img
+					src={imageUrl}
+					alt=""
+					className="absolute inset-0 -z-10 h-full w-full object-cover"
+					style={{ transform: "translate3d(0, 0, 0)" }}
+				/>
+			)}
 			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
-			{!cell.supercharged && (
+			{!cell.supercharged && !cell.image && (
 				<>
 					<span className="corner top-left"></span>
 					<span className="corner top-right"></span>
@@ -122,7 +139,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 					<span className="corner bottom-right"></span>
 				</>
 			)}
-			{cell.label && (
+			{upGradePriority && (
 				<span
 					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
 						upGradePriority?.length > 1
