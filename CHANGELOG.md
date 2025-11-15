@@ -1,3 +1,10 @@
+## [5.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.2...v5.4.3) (2025-11-15)
+
+
+### Performance Improvements
+
+* **html:** Improve preload fetch priority for translation file ([0374402](https://github.com/jbelew/nms_optimizer-web/commit/037440212a5993e35b3cb301cbbae5794977bb65))
+
 ## [5.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.1...v5.4.2) (2025-11-15)
 
 
