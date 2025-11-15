@@ -1,3 +1,10 @@
+## [5.5.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.5...v5.5.6) (2025-11-15)
+
+
+### Performance Improvements
+
+* **rendering:** Optimize rendering with explicit CSS properties ([82446c6](https://github.com/jbelew/nms_optimizer-web/commit/82446c611c48f7afca064060cddf624ba46a7902))
+
 ## [5.5.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.4...v5.5.5) (2025-11-15)
 
 
