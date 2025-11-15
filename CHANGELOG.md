@@ -1,3 +1,10 @@
+## [5.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.0...v5.5.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* **ui:** Adjust mobile toolbar styles and grid scroll offset ([62af246](https://github.com/jbelew/nms_optimizer-web/commit/62af246d1c857afadf3a5d980db248398367c218))
+
 # [5.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.4.3...v5.5.0) (2025-11-15)
 
 
