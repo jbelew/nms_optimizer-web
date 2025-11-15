@@ -113,8 +113,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			className={cellClassName}
 			style={{
 				...(cellElementStyle as React.CSSProperties),
-				transform: "translateZ(0)",
-				willChange: "transform",
 				backfaceVisibility: "hidden",
 			}}
 		>

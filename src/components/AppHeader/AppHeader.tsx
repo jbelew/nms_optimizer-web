@@ -119,7 +119,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				)}
 			</div>
 
-			<h1 className="header__logo--text text-3xl [word-spacing:-.25rem] sm:text-4xl">
+			<h1 className="header__logo--text text-center text-3xl [word-spacing:-.25rem] sm:text-4xl">
 				NO MAN&apos;S SKY
 			</h1>
 
@@ -191,7 +191,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				align="center"
 				as="h2"
 				size={{ initial: "2", sm: "3" }}
-				className="header__title w-fit"
+				className="header__title"
 			>
 				<Trans
 					i18nKey="appHeader.subTitle"
