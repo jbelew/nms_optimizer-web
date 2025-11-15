@@ -111,7 +111,12 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			onTouchEnd={handleTouchEnd}
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
-			style={cellElementStyle as React.CSSProperties}
+			style={{
+				...(cellElementStyle as React.CSSProperties),
+				transform: "translateZ(0)",
+				willChange: "transform",
+				backfaceVisibility: "hidden",
+			}}
 		>
 			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
 			{!cell.supercharged && (
