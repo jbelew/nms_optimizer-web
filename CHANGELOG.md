@@ -1,3 +1,10 @@
+## [5.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.2...v5.6.3) (2025-11-16)
+
+
+### Performance Improvements
+
+* **font-loading:** Preload AcuminProCond-Semibold font ([d32e697](https://github.com/jbelew/nms_optimizer-web/commit/d32e6973265b6ca74a08836abd254afe12d33ab7))
+
 ## [5.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.1...v5.6.2) (2025-11-16)
 
 
