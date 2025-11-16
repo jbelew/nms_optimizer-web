@@ -4,10 +4,7 @@ module.exports = {
       startServerCommand: 'npm run preview',
       url: ['http://localhost:4173'],
       numberOfRuns: 3,
-      serverReadyPattern: 'http://localhost:4173',
-      startServerReadyTimeout: 60000,
-      chromePath: '/usr/bin/chromium-browser',
-      chromeFlags: '--no-sandbox --disable-gpu --disable-dev-shm-usage --disable-software-rasterizer',
+      serverReadyPattern: 'Local:',
     },
     assert: {
       assertions: {
