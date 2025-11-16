@@ -180,13 +180,13 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 									</span>
 								)}
 								<span
-									className="hidden self-start sm:inline"
+									className="mt-px hidden self-start sm:inline"
 									style={{ color: "var(--accent-11)" }}
 								>
 									{t("platformLabel")}
 								</span>
 								<span
-									className="mt-[7px] min-w-0 flex-1 self-start sm:mt-0"
+									className="mt-[3px] min-w-0 flex-1 self-start sm:mt-px"
 									style={{
 										textWrap: "balance",
 									}}

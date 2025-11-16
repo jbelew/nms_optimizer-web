@@ -80,7 +80,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const setGridAndResetAuxiliaryState = useGridStore(
 		(state) => state.setGridAndResetAuxiliaryState
 	);
-	const isSmallAndUp = useBreakpoint("640px");
 	const { sendEvent } = useAnalytics();
 	const [toastOpen, setToastOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
@@ -129,31 +128,15 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 		<>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger disabled={solving || isPending}>
-					{isSmallAndUp ? (
-						<Button
-							size="2"
-							variant="soft"
-							aria-label="Select ship type"
-							className="p-2!"
-						>
-							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-							<Separator
-								orientation="vertical"
-								color={solving || isPending ? "gray" : "cyan"}
-								decorative
-							/>
-							<DropdownMenu.TriggerIcon />
-						</Button>
-					) : (
-						<IconButton
-							size="2"
-							variant="soft"
-							aria-label="Select ship type"
-							className="mt-1!"
-						>
-							<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-						</IconButton>
-					)}
+					<Button size="2" variant="soft" aria-label="Select ship type" className="p-2!">
+						<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+						<Separator
+							orientation="vertical"
+							color={solving || isPending ? "gray" : "cyan"}
+							decorative
+						/>
+						<DropdownMenu.TriggerIcon />
+					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content className="shipSelection__dropdownMenu">
 					<DropdownMenu.Label className="shipSelection__header">
