@@ -42,7 +42,6 @@ const mockProps: TechTreeRowProps = {
 	solving: false,
 	techImage: "test.webp",
 	isGridFull: false,
-	selectedShipType: "hauler",
 	techColor: "blue",
 };
 

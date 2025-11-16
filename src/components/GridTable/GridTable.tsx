@@ -58,6 +58,21 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { tutorialFinished } = useDialog();
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
+		// Memoize grid rows - must be called unconditionally
+		const gridRows = useMemo(() => {
+			if (!gridHeight) return [];
+			const firstInactiveRowIndex = useGridStore.getState().selectFirstInactiveRowIndex();
+			const lastActiveRowIndex = useGridStore.getState().selectLastActiveRowIndex();
+			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
+				<GridRow
+					key={rowIndex}
+					rowIndex={rowIndex}
+					firstInactiveRowIndex={firstInactiveRowIndex}
+					lastActiveRowIndex={lastActiveRowIndex}
+				/>
+			));
+		}, [gridHeight]);
+
 		// Early return if grid is not available. This is now safe as hooks are called above.
 		if (!gridHeight || !gridWidth) {
 			// Render a minimal div if ref is strictly needed for layout, or a loading message.
@@ -100,9 +115,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					aria-colcount={totalAriaColumnCount}
 					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 				>
-					{Array.from({ length: gridHeight }).map((_, rowIndex) => (
-						<GridRow key={rowIndex} rowIndex={rowIndex} />
-					))}
+					{gridRows}
 					{!isLarge && (
 						<div role="row">
 							<div

@@ -42,7 +42,6 @@ const typeImageMap: TypeImageMap = {
  * @property {(tech: string) => Promise<void>} handleOptimize - Callback to trigger optimization.
  * @property {boolean} solving - Indicates if an optimization is in progress.
  * @property {boolean} isGridFull - Boolean that returns true if the grid is full.
- * @property {string} selectedShipType - The currently selected ship type.
  */
 interface TechTreeSectionProps {
 	type: string;
@@ -51,7 +50,6 @@ interface TechTreeSectionProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
 	isGridFull: boolean; // Add isGridFull prop
-	selectedShipType: string; // Add selectedShipType prop
 }
 
 /**
@@ -62,8 +60,7 @@ interface TechTreeSectionProps {
  * @returns {JSX.Element} The rendered TechTreeSection component.
  */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
-	({ type, technologies, handleOptimize, solving, isGridFull, selectedShipType }) => {
-		// selectedShipType is kept here if TechTreeSection needs it for other things
+	({ type, technologies, handleOptimize, solving, isGridFull }) => {
 		const { t } = useTranslation();
 		// Determine the image path from the typeImageMap
 		const imagePath = typeImageMap[type] ? `/assets/img/sidebar/${typeImageMap[type]}` : null;
@@ -100,7 +97,6 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 						solving={solving}
 						techImage={tech.image} // Pass the tech.image here
 						isGridFull={isGridFull} // Pass isGridFull down
-						selectedShipType={selectedShipType} // Pass selectedShipType
 						techColor={tech.color} // Pass tech.color
 					/>
 				))}

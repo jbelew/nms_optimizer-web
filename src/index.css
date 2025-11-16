@@ -184,3 +184,95 @@ footer a {
 	white-space: nowrap;
 	border-width: 0;
 }
+
+/* ============================================ */
+/* PERFORMANCE OPTIMIZATIONS                   */
+/* Based on trace analysis 2025-11-16         */
+/* ============================================ */
+
+/* Reduce animation complexity for CSS animations */
+.button--glow {
+	/* Use GPU acceleration for animations */
+	will-change: filter;
+	/* Only animate filter, avoid layout thrashing */
+	transform: translateZ(0);
+	backface-visibility: hidden;
+}
+
+@keyframes buttonGlow {
+	from {
+		/* Only animate filter - doesn't trigger layout */
+		filter: drop-shadow(0 0 2px var(--accent-a0));
+	}
+
+	to {
+		filter: drop-shadow(0 0 4px var(--accent-track));
+	}
+}
+
+/* Optimize main app container for composition */
+.app {
+	/* Enable GPU acceleration for smooth transitions */
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	/* Prevent subpixel rendering issues */
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Optimize grid container for layout efficiency */
+.gridContainer {
+	contain: layout style;
+	/* Isolate from parent's layout calculations */
+	/* This prevents reflows from affecting child elements */
+}
+
+/* Optimize grid cells for isolation */
+.gridContainer__container {
+	contain: content;
+	/* Allow independent layout and styling within this element */
+}
+
+/* Reduce paint overhead for buttons */
+button,
+[role="button"],
+.rt-Button {
+	/* Isolate button repaints from rest of the page */
+	will-change: auto; /* Only when button is active */
+	/* Prevents continuous GPU memory allocation */
+}
+
+/* Optimize text rendering */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	/* Ensure text is crisp without GPU overhead */
+	-webkit-text-size-adjust: 100%;
+	text-rendering: optimizeLegibility;
+}
+
+/* Reduce animation overhead when page is hidden */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Performance: Enable hardware acceleration for smooth scrolling */
+html {
+	scroll-behavior: smooth;
+	/* Enables GPU acceleration for scroll operations */
+}
+
+/* Optimize focus states to prevent reflows */
+*:focus {
+	outline-offset: 2px;
+	/* Prevents outline from triggering repaint of adjacent elements */
+}

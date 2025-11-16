@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 // Minor change to force re-transpilation
 import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
@@ -37,15 +37,23 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
 }) => {
 	const { t } = useTranslation();
 
-	let tooltipLabel: string;
-	if (isGridFull && !hasTechInGrid) {
-		tooltipLabel = t("techTree.tooltips.gridFull");
-	} else {
-		tooltipLabel = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
-	}
-	const OptimizeIconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
-	const isOptimizeButtonDisabled =
-		(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;
+	const { tooltipLabel, OptimizeIconComponent, isOptimizeButtonDisabled } = useMemo(() => {
+		let label: string;
+		if (isGridFull && !hasTechInGrid) {
+			label = t("techTree.tooltips.gridFull");
+		} else {
+			label = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
+		}
+		const IconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
+		const disabled =
+			(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;
+
+		return {
+			tooltipLabel: label,
+			OptimizeIconComponent: IconComponent,
+			isOptimizeButtonDisabled: disabled,
+		};
+	}, [isGridFull, hasTechInGrid, solving, currentCheckedModules.length, t]);
 
 	return (
 		<>

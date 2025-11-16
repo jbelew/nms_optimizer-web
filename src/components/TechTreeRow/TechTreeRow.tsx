@@ -22,8 +22,6 @@ export interface TechTreeRowProps {
 	techImage: string | null;
 	/** Boolean indicating whether the grid is currently full. */
 	isGridFull: boolean;
-	/** The currently selected ship type. */
-	selectedShipType: string;
 	/** The color associated with the technology. */
 	techColor:
 		| "gray"

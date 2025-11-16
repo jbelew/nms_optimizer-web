@@ -19,7 +19,6 @@ export const Default: Story = {
 		solving: true,
 		techImage: "hyperdrive.webp",
 		isGridFull: true,
-		selectedShipType: "selectedShipType",
 		techColor: "gray",
 	},
 };

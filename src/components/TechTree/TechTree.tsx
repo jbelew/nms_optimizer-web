@@ -78,7 +78,6 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 							handleOptimize={handleOptimize}
 							solving={solving}
 							techTree={techTree}
-							selectedShipType={selectedShipType}
 						/>
 					</ScrollArea>
 
@@ -106,7 +105,6 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 							handleOptimize={handleOptimize}
 							solving={solving}
 							techTree={techTree}
-							selectedShipType={selectedShipType}
 						/>
 					</div>
 				</>

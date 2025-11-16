@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@radix-ui/react-icons";
 import { Popover, Text, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -41,92 +41,60 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		setIsTouchDevice(touch);
 	}, []);
 
+	const roundedMaxBonus = round(techMaxBonus, 2);
+
+	const contentData = useMemo(() => {
+		if (roundedMaxBonus < 100) {
+			const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
+			return {
+				icon: ExclamationTriangleIcon,
+				iconClassName: "mt-2 inline-block cursor-pointer align-text-top",
+				iconStyle: { color: "var(--red-a8)" },
+				tooltipContent: `${t("techTree.tooltips.insufficientSpace")} -${percent}%`,
+				popoverMaxWidth: undefined,
+			};
+		}
+		if (roundedMaxBonus === 100) {
+			return {
+				icon: Crosshair2Icon,
+				iconClassName: "mt-[7px] inline-block cursor-pointer align-text-top",
+				iconStyle: { color: "var(--gray-a10)" },
+				tooltipContent: `${t("techTree.tooltips.validSolve")} `,
+				popoverMaxWidth: "300px",
+			};
+		}
+		// roundedMaxBonus > 100
+		const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
+		return {
+			icon: LightningBoltIcon,
+			iconClassName: "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
+			iconStyle: { color: "var(--amber-a8)" },
+			tooltipContent: `${t("techTree.tooltips.boostedSolve")} +${percent}%`,
+			popoverMaxWidth: "300px",
+		};
+	}, [roundedMaxBonus, t]);
+
 	if (techSolvedBonus <= 0) {
 		return null;
 	}
 
-	const roundedMaxBonus = round(techMaxBonus, 2);
+	const IconComponent = contentData.icon;
 
-	if (roundedMaxBonus < 100) {
-		const icon = (
-			<ExclamationTriangleIcon
-				className="mt-2 inline-block cursor-pointer align-text-top"
-				style={{ color: "var(--red-a8)" }}
-			/>
-		);
-		const tooltipContent = (
-			<>
-				{t("techTree.tooltips.insufficientSpace") +
-					" -" +
-					Math.round((100 - roundedMaxBonus) * 100) / 100 +
-					"%"}
-			</>
-		);
-
-		if (isTouchDevice) {
-			return (
-				<Popover.Root>
-					<Popover.Trigger>{icon}</Popover.Trigger>
-					<Popover.Content size="1">
-						<Text as="p" trim="both" size="1">
-							{tooltipContent}
-						</Text>
-					</Popover.Content>
-				</Popover.Root>
-			);
-		}
-		return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
-	}
-	if (roundedMaxBonus === 100) {
-		const icon = (
-			<Crosshair2Icon
-				className="mt-[7px] inline-block cursor-pointer align-text-top"
-				style={{ color: "var(--gray-a10)" }}
-			/>
-		);
-
-		const tooltipContent = `${t("techTree.tooltips.validSolve")} `;
-
-		if (isTouchDevice) {
-			return (
-				<Popover.Root>
-					<Popover.Trigger>{icon}</Popover.Trigger>
-					<Popover.Content size="1" maxWidth="300px">
-						<Text as="p" trim="both" size="1">
-							{tooltipContent}
-						</Text>
-					</Popover.Content>
-				</Popover.Root>
-			);
-		}
-		return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
-	}
-	// roundedMaxBonus > 100
 	const icon = (
-		<LightningBoltIcon
-			className="mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top"
-			style={{ color: "var(--amber-a8)" }}
-		/>
-	);
-	const tooltipContent = (
-		<>
-			{`${t("techTree.tooltips.boostedSolve")} +${
-				Math.round((roundedMaxBonus - 100) * 100) / 100
-			}%`}
-		</>
+		<IconComponent className={contentData.iconClassName} style={contentData.iconStyle} />
 	);
 
 	if (isTouchDevice) {
 		return (
 			<Popover.Root>
 				<Popover.Trigger>{icon}</Popover.Trigger>
-				<Popover.Content size="1" maxWidth="300px">
+				<Popover.Content size="1" maxWidth={contentData.popoverMaxWidth}>
 					<Text as="p" trim="both" size="1">
-						{tooltipContent}
+						{contentData.tooltipContent}
 					</Text>
 				</Popover.Content>
 			</Popover.Root>
 		);
 	}
-	return <Tooltip content={tooltipContent}>{icon}</Tooltip>;
+	return <Tooltip content={contentData.tooltipContent}>{icon}</Tooltip>;
 };

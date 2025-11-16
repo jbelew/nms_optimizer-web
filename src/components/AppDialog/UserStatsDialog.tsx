@@ -1,9 +1,16 @@
 // src/components/AppDialog/UserStatsDialog.tsx
 import type { FC } from "react";
+import { lazy, Suspense } from "react";
+import { Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import AppDialog from "./AppDialog";
-import { UserStatsContent } from "./UserStatsContent";
+
+const LazyUserStatsContent = lazy(() =>
+	import("./UserStatsContent").then((module) => ({
+		default: module.UserStatsContent,
+	}))
+);
 
 interface UserStatsDialogProps {
 	isOpen: boolean;
@@ -26,7 +33,11 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 			onClose={onClose}
 			titleKey="dialogs.titles.userStats"
 			title={t("dialogs.titles.userStats")}
-			content={<UserStatsContent onClose={onClose} isOpen={isOpen} />}
+			content={
+				<Suspense fallback={<Skeleton height="300px" width="100%" />}>
+					<LazyUserStatsContent onClose={onClose} isOpen={isOpen} />
+				</Suspense>
+			}
 		/>
 	);
 };

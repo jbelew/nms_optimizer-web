@@ -5,6 +5,7 @@ module.exports = {
       url: ['http://localhost:4173'],
       numberOfRuns: 3,
       serverReadyPattern: 'Local:',
+      chromePath: '/usr/bin/chromium-browser',
     },
     assert: {
       assertions: {

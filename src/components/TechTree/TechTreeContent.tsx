@@ -15,7 +15,6 @@ interface TechTreeContentProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
 	techTree: TechTree; // Define a more specific type for techTree if possible
-	selectedShipType: string;
 }
 
 /**
@@ -29,7 +28,7 @@ interface TechTreeContentProps {
  * @returns {JSX.Element} The rendered tech tree content.
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
-	({ handleOptimize, solving, techTree, selectedShipType }) => {
+	({ handleOptimize, solving, techTree }) => {
 		const isGridFull = useGridStore((state) => state.isGridFull()); // Calculate isGridFull once here
 
 		/**
@@ -88,10 +87,9 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 						solving={solving}
 						index={index}
 						isGridFull={isGridFull} // Pass isGridFull down
-						selectedShipType={selectedShipType} // Pass selectedShipType down
 					/>
 				)),
-			[processedTechTree, handleOptimize, solving, isGridFull, selectedShipType]
+			[processedTechTree, handleOptimize, solving, isGridFull]
 		);
 
 		return <>{renderedTechTree}</>;

@@ -22,7 +22,7 @@ interface ConditionalTooltipProps {
  * @param {ConditionalTooltipProps} props - The props for the component.
  * @returns {React.ReactElement} - The rendered component.
  */
-export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
+const ConditionalTooltipComponent: React.FC<ConditionalTooltipProps> = ({
 	children,
 	label,
 	delayDuration = 500,
@@ -39,3 +39,5 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
 		</Tooltip>
 	);
 };
+
+export const ConditionalTooltip = React.memo(ConditionalTooltipComponent);

@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import AppDialog from "../AppDialog/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/LoremIpsumSkeleton";
-import UserStatsDialog from "../AppDialog/UserStatsDialog";
 
 const MarkdownContentRenderer = lazy(() => import("../AppDialog/MarkdownContentRenderer"));
+const UserStatsDialog = lazy(() => import("../AppDialog/UserStatsDialog"));
 
 /**
  * RoutedDialogs component manages and renders various application dialogs based on the active dialog state.
@@ -88,7 +88,9 @@ export const RoutedDialogs: FC = () => {
 				}
 			/>
 			{/* Dialog for "User Stats" information */}
-			<UserStatsDialog isOpen={activeDialog === "userstats"} onClose={closeDialog} />
+			<Suspense fallback={null}>
+				<UserStatsDialog isOpen={activeDialog === "userstats"} onClose={closeDialog} />
+			</Suspense>
 		</>
 	);
 };
