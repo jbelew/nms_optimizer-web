@@ -6,7 +6,7 @@ module.exports = {
       numberOfRuns: 3,
       serverReadyPattern: 'Local:',
       chromePath: '/usr/bin/chromium-browser',
-      chromeFlags: '--no-sandbox',
+      chromeFlags: '--no-sandbox --disable-gpu --disable-dev-shm-usage --disable-software-rasterizer',
     },
     assert: {
       assertions: {

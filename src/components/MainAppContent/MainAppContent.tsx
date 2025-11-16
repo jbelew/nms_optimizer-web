@@ -154,16 +154,17 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					style={{ backgroundColor: "var(--accent-a2)" }}
 				>
 					<AppHeader onShowChangelog={handleShowChangelog} />
+
 					<section
-						className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
+						className="gridContainer flex flex-col items-center p-3 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 						ref={gridContainerRef}
 					>
 						<article
-							className="gridContainer__container w-full lg:w-auto lg:shrink-0"
+							className="gridContainer__container w-full p-1 lg:w-auto lg:shrink-0"
 							ref={appLayoutContainerRef}
 						>
 							<header
-								className="heading-styled mb-3 flex flex-wrap items-center gap-2 text-xl sm:mb-4 sm:text-2xl"
+								className="heading-styled mb-3 flex flex-wrap items-center gap-3 text-xl sm:mb-4 sm:text-2xl"
 								style={{
 									maxWidth: gridTableTotalWidth
 										? `${gridTableTotalWidth}px`
