@@ -1,3 +1,10 @@
+## [5.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.0...v5.6.1) (2025-11-15)
+
+
+### Bug Fixes
+
+* **layout:** Use dvw units for layout and adjust header style ([c8c1227](https://github.com/jbelew/nms_optimizer-web/commit/c8c12276938d2394c68eea60bfbc3958ed0548d1))
+
 # [5.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.5.7...v5.6.0) (2025-11-15)
 
 
