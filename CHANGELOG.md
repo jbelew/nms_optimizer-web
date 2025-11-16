@@ -1,3 +1,10 @@
+## [5.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.3...v5.6.4) (2025-11-16)
+
+
+### Performance Improvements
+
+* **performance:** implement comprehensive optimizations and analysis tooling ([44b1717](https://github.com/jbelew/nms_optimizer-web/commit/44b17170fa6866b8d3eed46c45d703051a7ecaca))
+
 ## [5.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.2...v5.6.3) (2025-11-16)
 
 
