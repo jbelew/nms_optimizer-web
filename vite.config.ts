@@ -13,7 +13,7 @@ import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical" || mode === "production";
+	const doCritical = mode === "critical";
 	// Use an environment variable for the app version, defaulting to 'unknown'
 	const appVersion = process.env.VITE_APP_VERSION || "unknown";
 
