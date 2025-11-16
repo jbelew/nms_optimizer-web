@@ -1,5 +1,4 @@
 .gridCell {
-	backface-visibility: hidden;
 	background-color: var(--accent-a2);
 	background-image: image-set(var(--grid-cell-image-1x) 1x, var(--grid-cell-image-2x) 2x);
 	background-position: center;
@@ -11,13 +10,11 @@
 
 	/* Prevent callout menu on iOS tap-hold */
 	-webkit-touch-callout: none;
-	transform: translateZ(0);
 
-	/* Optional: Prevent drag */
+	/* Prevent drag */
 	-webkit-user-drag: none;
-	user-select: none; /* IE/Edge */
+	user-select: none;
 	width: var(--grid-cell-size);
-	will-change: transform;
 
 	&:focus-visible {
 		outline: 2px solid var(--accent-track);

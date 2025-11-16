@@ -148,10 +148,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 				</div>
 			</nav>
 
-			<main
-				className="flex min-h-dvh flex-col items-center justify-center pt-12 sm:pt-0 lg:min-h-screen"
-				style={{ contain: "paint" }}
-			>
+			<main className="flex min-h-dvh flex-col items-center justify-center pt-12 sm:pt-0 lg:min-h-screen">
 				<div
 					className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 					style={{ backgroundColor: "var(--accent-a2)" }}
@@ -160,7 +157,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					<section
 						className="gridContainer flex flex-col items-center p-4 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
 						ref={gridContainerRef}
-						style={{ contain: "paint" }}
 					>
 						<article
 							className="gridContainer__container w-full lg:w-auto lg:shrink-0"

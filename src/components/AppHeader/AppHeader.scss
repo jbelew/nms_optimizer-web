@@ -43,18 +43,3 @@
 .nmsFont {
 	font-family: NMS, sans-serif;
 }
-
-.glow {
-	animation: glow 2s ease-in-out infinite;
-}
-
-@keyframes glow {
-	0%,
-	100% {
-		filter: drop-shadow(0 0 5px var(--accent-a2));
-	}
-
-	50% {
-		filter: drop-shadow(0 0 10px var(--accent-a11));
-	}
-}

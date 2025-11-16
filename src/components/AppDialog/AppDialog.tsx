@@ -75,20 +75,8 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
 			<Dialog.Portal>
 				<Theme>
-					<Dialog.Overlay
-						className="appDialog__overlay"
-						style={{
-							transform: "translateZ(0)",
-							willChange: "opacity",
-							backfaceVisibility: "hidden",
-						}}
-					/>
-					<Dialog.Content
-						className="appDialog__content"
-						style={{
-							willChange: "opacity",
-						}}
-					>
+					<Dialog.Overlay className="appDialog__overlay" />
+					<Dialog.Content className="appDialog__content">
 						<Dialog.Title className="mr-2">
 							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
 								{IconComponent && (

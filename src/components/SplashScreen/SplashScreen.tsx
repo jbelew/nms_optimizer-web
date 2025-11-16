@@ -100,9 +100,6 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 					style={
 						{
 							visibility: "visible",
-							transform: "translateZ(0)",
-							willChange: "opacity, transform",
-							backfaceVisibility: "hidden",
 						} as CSSProperties
 					}
 				>

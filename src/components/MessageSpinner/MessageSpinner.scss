@@ -13,7 +13,6 @@
 			font-family: NMS, sans-serif;
 			font-weight: 400;
 			text-transform: uppercase;
-			will-change: filter;
 		}
 	}
 
@@ -21,7 +20,6 @@
 		filter: drop-shadow(0 2px 4px var(--accent-a2));
 		height: 4rem;
 		width: 4rem;
-		will-change: filter;
 
 		&--big {
 			height: 6rem;

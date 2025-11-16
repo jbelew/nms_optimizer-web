@@ -1,15 +1,9 @@
 .gridTable {
-	backface-visibility: hidden;
-
-	/* Prevent layout thrashing on viewport changes (iOS Chrome) */
-	contain: layout;
 	display: grid;
 	gap: var(--grid-gap);
 	grid-template-columns: repeat(10, var(--grid-cell-size)) auto;
 	grid-template-rows: repeat(6, var(--grid-cell-size));
-	overscroll-behavior: contain;
 	width: fit-content;
-	will-change: auto;
 }
 
 [role="row"] {

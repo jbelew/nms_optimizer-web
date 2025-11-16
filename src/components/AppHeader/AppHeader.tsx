@@ -199,7 +199,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						1: <span className="font-mono" style={{ color: "var(--accent-11)" }} />,
 					}}
 				/>
-				<span className="glow font-medium" style={{ color: "var(--gray-11)" }}>
+				<span className="font-medium" style={{ color: "var(--gray-11)" }}>
 					{" "}
 					v{__APP_VERSION__}
 				</span>
