@@ -106,7 +106,6 @@
 			}
 
 			html {
-				background-color: #000000;
 				text-rendering: optimizelegibility;
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
@@ -141,17 +140,15 @@
 				);
 				z-index: -1;
 
-
-
 				/* Hide background image until splash screen is hidden */
 				opacity: 0;
 				transition: opacity 250ms ease-in-out;
-				}
+			}
 
-				/* Show background image after splash screen hides */
-				body.background-visible::before {
+			/* Show background image after splash screen hides */
+			body.background-visible::before {
 				opacity: 1;
-				}
+			}
 
 			/* Mobile (≤600px): swap only the background-image, not the whole background */
 			@media (width <= 640px) {
@@ -206,7 +203,13 @@
 		/>
 
 		<!-- Default language translations -->
-		<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
+		<link
+			rel="preload"
+			href="/assets/locales/en/translation.json"
+			as="fetch"
+			fetchpriority="highest"
+			crossorigin
+		/>
 
 		<!-- Fonts (highest priority) -->
 		<link
