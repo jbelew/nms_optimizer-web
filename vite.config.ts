@@ -84,7 +84,7 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					// User-controlled updates
 					clientsClaim: false, // Set to false to allow onNeedRefresh to prompt
-					skipWaiting: false,  // Set to false to allow onNeedRefresh to prompt
+					skipWaiting: false, // Set to false to allow onNeedRefresh to prompt
 
 					// Workbox quality-of-life features
 					navigationPreload: false,
@@ -165,23 +165,23 @@ export default defineConfig(({ mode }) => {
 					screenshots: [
 						{
 							src: "/assets/img/screenshots/screenshot_desktop.png",
-							sizes: "1280x824",
+							sizes: "1280x880",
 							type: "image/png",
-							platform: "desktop",
+							form_factor: "wide",
 							label: "Main application view showing the technology grid on desktop.",
 						},
 						{
 							src: "/assets/img/screenshots/screenshot_tablet.png",
 							sizes: "800x1280",
 							type: "image/png",
-							platform: "tablet",
+							form_factor: "narrow",
 							label: "Main application view on tablet.",
 						},
 						{
 							src: "/assets/img/screenshots/screenshot_mobile.png",
-							sizes: "375x667",
+							sizes: "375x600",
 							type: "image/png",
-							platform: "mobile",
+							form_factor: "narrow",
 							label: "Main application view on mobile.",
 						},
 					],

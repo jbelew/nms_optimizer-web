@@ -1158,7 +1158,7 @@ console.log("Screenshot script started.");
 			fullPage: true,
 		});
 
-		await page.setViewport({ width: 375, height: 667 });
+		await page.setViewport({ width: 375, height: 600 });
 		await page.goto("https://nms-optimizer.app", { waitUntil: "networkidle0" });
 		// Inject CSS to hide scrollbars for the mobile screenshot
 		await page.addStyleTag({ content: `
