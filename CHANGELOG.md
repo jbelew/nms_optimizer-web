@@ -1,3 +1,10 @@
+## [5.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.1...v5.6.2) (2025-11-16)
+
+
+### Performance Improvements
+
+* **build:** drop console and debugger from production builds ([c128cbe](https://github.com/jbelew/nms_optimizer-web/commit/c128cbe6f49abe9e8ddfb904d219c5354d639e16))
+
 ## [5.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.0...v5.6.1) (2025-11-15)
 
 
