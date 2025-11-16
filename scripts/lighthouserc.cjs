@@ -6,6 +6,7 @@ module.exports = {
       numberOfRuns: 3,
       serverReadyPattern: 'Local:',
       chromePath: '/usr/bin/chromium-browser',
+      chromeFlags: '--no-sandbox',
     },
     assert: {
       assertions: {
