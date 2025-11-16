@@ -179,7 +179,7 @@
 
 	&--glow {
 		animation: pulseGlow 0.75s infinite alternate ease-in-out;
-		box-shadow: 0 0 2px 1px var(--accent-7);
+		box-shadow: 0 0 3px 1px var(--accent-track);
 	}
 
 	&--touched {
@@ -191,10 +191,12 @@
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
+		box-shadow: 0 0 3px 1px var(--accent-track);
 	}
 
 	to {
 		border-color: var(--purple-11);
+		box-shadow: 0 0 3px 1px var(--purple-10);
 	}
 }
 
