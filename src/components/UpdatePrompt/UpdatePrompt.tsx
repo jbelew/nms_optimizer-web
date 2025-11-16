@@ -23,7 +23,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 				})}
 			</Text>
 
-			<Flex gap="2" mt="6" mb="2" justify="end">
+			<Flex gap="3" mt="6" mb="2" justify="end">
 				<Dialog.Close asChild>
 					<Button variant="soft" onClick={onDismiss}>
 						{t("updatePrompt.later", { defaultValue: "Later" })}

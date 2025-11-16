@@ -202,7 +202,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 						</article>
 
 						{!isSharedGrid && (
-							<aside className="flex w-full flex-col lg:ml-4">
+							<aside className="flex w-full flex-col p-1 lg:ml-4 lg:p-0">
 								<Suspense fallback={<TechTreeSkeleton />}>
 									<TechTreeComponent
 										handleOptimize={handleOptimize}
