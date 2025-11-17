@@ -34,7 +34,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 			titleKey="dialogs.titles.userStats"
 			title={t("dialogs.titles.userStats")}
 			content={
-				<Suspense fallback={<Skeleton height="300px" width="100%" />}>
+				<Suspense fallback={<Skeleton height="900px" width="100%" />}>
 					<LazyUserStatsContent onClose={onClose} isOpen={isOpen} />
 				</Suspense>
 			}
