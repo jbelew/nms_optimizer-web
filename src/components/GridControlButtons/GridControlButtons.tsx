@@ -18,6 +18,7 @@ interface RowControlButtonProps {
 	rowIndex: number;
 	isFirstInactiveRow: boolean;
 	isLastActiveRow: boolean;
+	isLoading?: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	rowIndex,
 	isFirstInactiveRow,
 	isLastActiveRow,
+	isLoading,
 }) => {
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
@@ -40,6 +42,9 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 	const deActivateRow = useGridStore((state) => state.deActivateRow);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const gridFixed = useGridStore((state) => state.gridFixed);
+	const hasAnyActiveCells = useGridStore((state) =>
+		state.grid.cells.some((row) => row.some((cell) => cell.active))
+	);
 
 	return (
 		<div
@@ -52,9 +57,9 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						size={iconButtonSize}
 						radius="full"
 						variant="ghost"
-						className={`${!hasModulesInGrid ? "cursor-pointer!" : ""}`} // Centering handled by parent
+						className={`${hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells ? "cursor-not-allowed!" : ""}`}
 						onClick={() => activateRow(rowIndex)}
-						disabled={hasModulesInGrid || gridFixed}
+						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
 						aria-label={t("gridControls.activateRow")}
 					>
 						<PlusIcon />
@@ -68,9 +73,9 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({
 						variant="ghost"
 						radius="full"
 						size={iconButtonSize}
-						className={`${!hasModulesInGrid ? "cursor-pointer!" : ""}`} // Centering handled by parent
+						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
 						onClick={() => deActivateRow(rowIndex)}
-						disabled={hasModulesInGrid || gridFixed}
+						disabled={hasModulesInGrid || gridFixed || isLoading}
 						aria-label={t("gridControls.deactivateRow")}
 					>
 						<MinusIcon />

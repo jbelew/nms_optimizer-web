@@ -59,19 +59,20 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 		// Memoize grid rows - must be called unconditionally
+		const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
+		const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
 		const gridRows = useMemo(() => {
 			if (!gridHeight) return [];
-			const firstInactiveRowIndex = useGridStore.getState().selectFirstInactiveRowIndex();
-			const lastActiveRowIndex = useGridStore.getState().selectLastActiveRowIndex();
 			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
 				<GridRow
 					key={rowIndex}
 					rowIndex={rowIndex}
 					firstInactiveRowIndex={firstInactiveRowIndex}
 					lastActiveRowIndex={lastActiveRowIndex}
+					isLoading={isTechTreeLoading}
 				/>
 			));
-		}, [gridHeight]);
+		}, [gridHeight, firstInactiveRowIndex, lastActiveRowIndex, isTechTreeLoading]);
 
 		// Early return if grid is not available. This is now safe as hooks are called above.
 		if (!gridHeight || !gridWidth) {

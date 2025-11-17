@@ -182,6 +182,11 @@
 		background-color: var(--purple-a7) !important;
 	}
 
+	[data-accent-color="white"] &--glow {
+		animation: pulseGlowWhite 0.75s infinite alternate ease-in-out;
+		background-color: var(--purple-a7) !important;
+	}
+
 	&--touched {
 		background-color: var(--accent-track) !important;
 		border-color: var(--accent-a11) !important;
@@ -191,6 +196,18 @@
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
+		box-shadow: 0 0 2px 1px var(--accent-track);
+	}
+
+	to {
+		border-color: var(--purple-12);
+		box-shadow: 0 0 3px 1px var(--purple-10);
+	}
+}
+
+@keyframes pulseGlow {
+	from {
+		border-color: var(--gray-12);
 		box-shadow: 0 0 2px 1px var(--accent-track);
 	}
 

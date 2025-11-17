@@ -23,10 +23,11 @@ interface GridRowProps {
 interface GridRowInternalProps extends GridRowProps {
 	firstInactiveRowIndex: number;
 	lastActiveRowIndex: number;
+	isLoading: boolean;
 }
 
 const GridRowInternal: React.FC<GridRowInternalProps> = memo(
-	({ rowIndex, firstInactiveRowIndex, lastActiveRowIndex }) => {
+	({ rowIndex, firstInactiveRowIndex, lastActiveRowIndex, isLoading }) => {
 		const row = useGridStore((state) => state.grid.cells[rowIndex]);
 		const gridWidth = useGridStore((state) => state.grid.width);
 
@@ -57,8 +58,9 @@ const GridRowInternal: React.FC<GridRowInternalProps> = memo(
 						isLastActiveRow={
 							row.some((cell) => cell.active) &&
 							rowIndex === lastActiveRowIndex &&
-							rowIndex >= useGridStore.getState().grid.cells.length - 3 // Keep this specific condition if it's intended
+							rowIndex >= useGridStore.getState().grid.cells.length - 3
 						}
+						isLoading={isLoading}
 					/>
 				</div>
 			</div>
@@ -69,7 +71,8 @@ const GridRowInternal: React.FC<GridRowInternalProps> = memo(
 		return (
 			prevProps.rowIndex === nextProps.rowIndex &&
 			prevProps.firstInactiveRowIndex === nextProps.firstInactiveRowIndex &&
-			prevProps.lastActiveRowIndex === nextProps.lastActiveRowIndex
+			prevProps.lastActiveRowIndex === nextProps.lastActiveRowIndex &&
+			prevProps.isLoading === nextProps.isLoading
 		);
 	}
 );
