@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 import { API_URL } from "../../constants";
+import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
 
 /**
  * @typedef {object} UserStat
@@ -33,8 +34,10 @@ export const useUserStats = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch(
-					API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today"
+				const response = await fetchWithTimeout(
+					API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today",
+					{},
+					10000
 				);
 				if (!response.ok) {
 					throw new Error("Network response was not ok");

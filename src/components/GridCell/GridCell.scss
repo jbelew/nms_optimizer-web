@@ -179,7 +179,7 @@
 
 	&--glow {
 		animation: pulseGlow 0.75s infinite alternate ease-in-out;
-		box-shadow: 0 0 3px 1px var(--accent-track);
+		background-color: var(--purple-a7) !important;
 	}
 
 	&--touched {
@@ -191,12 +191,12 @@
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
-		box-shadow: 0 0 3px 1px var(--accent-track);
+		box-shadow: 0 0 2px 1px var(--accent-track);
 	}
 
 	to {
-		border-color: var(--purple-11);
-		box-shadow: 0 0 3px 1px var(--purple-10);
+		border-color: var(--purple-12);
+		box-shadow: 0 0 4px 2px var(--purple-10);
 	}
 }
 
@@ -216,10 +216,6 @@
 
 		&--active[data-accent-color="white"] {
 			border-width: 2px;
-		}
-
-		&--glow {
-			box-shadow: 0 0 2px 2px var(--accent-7);
 		}
 
 		&--empty .corner,

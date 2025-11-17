@@ -54,7 +54,10 @@ describe("useMarkdownContent", () => {
 		});
 
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
-		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/en/test-file.md");
+		expect(fetchSpy).toHaveBeenCalledWith(
+			"/assets/locales/en/test-file.md",
+			expect.objectContaining({ signal: expect.any(AbortSignal) })
+		);
 	});
 
 	it("should use cached content if available", async () => {
@@ -119,8 +122,16 @@ describe("useMarkdownContent", () => {
 		});
 
 		expect(fetchSpy).toHaveBeenCalledTimes(2);
-		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/fr/localized-file.md");
-		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/en/localized-file.md");
+		expect(fetchSpy).toHaveBeenNthCalledWith(
+			1,
+			"/assets/locales/fr/localized-file.md",
+			expect.objectContaining({ signal: expect.any(AbortSignal) })
+		);
+		expect(fetchSpy).toHaveBeenNthCalledWith(
+			2,
+			"/assets/locales/en/localized-file.md",
+			expect.objectContaining({ signal: expect.any(AbortSignal) })
+		);
 		consoleWarnSpy.mockRestore();
 	});
 
@@ -145,7 +156,10 @@ describe("useMarkdownContent", () => {
 		});
 
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
-		expect(fetchSpy).toHaveBeenCalledWith("/assets/locales/en/changelog.md");
+		expect(fetchSpy).toHaveBeenCalledWith(
+			"/assets/locales/en/changelog.md",
+			expect.objectContaining({ signal: expect.any(AbortSignal) })
+		);
 	});
 
 	it("should handle network error during fetch", async () => {

@@ -4,6 +4,7 @@ import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
 import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
 /**
@@ -170,26 +171,31 @@ export const clearTechTreeCache = () => {
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
-		const promise = fetch(`${API_URL}tech_tree/${shipType}`).then(async (res) => {
-			if (!res.ok) {
-				throw new Error(`HTTP error! status: ${res.status}`);
-			}
-			const data = await res.json();
-			console.log("Fetched tech tree:", data);
+		const promise = fetchWithTimeout(`${API_URL}tech_tree/${shipType}`, {}, 10000).then(
+			async (res) => {
+				if (!res.ok) {
+					throw new Error(`HTTP error! status: ${res.status}`);
+				}
+				const data = await res.json();
+				console.log("Fetched tech tree:", data);
 
-			if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
-				data.recommended_builds = data.recommended_builds.filter(
-					(build: RecommendedBuild) => {
-						if (!isValidRecommendedBuild(build)) {
-							console.error("Invalid recommended build found in tech tree:", build);
-							return false;
+				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
+					data.recommended_builds = data.recommended_builds.filter(
+						(build: RecommendedBuild) => {
+							if (!isValidRecommendedBuild(build)) {
+								console.error(
+									"Invalid recommended build found in tech tree:",
+									build
+								);
+								return false;
+							}
+							return true;
 						}
-						return true;
-					}
-				);
+					);
+				}
+				return data;
 			}
-			return data;
-		});
+		);
 
 		cache.set(cacheKey, {
 			resource: createResource<TechTree>(promise),

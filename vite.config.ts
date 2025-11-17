@@ -242,8 +242,15 @@ export default defineConfig(({ mode }) => {
 							// Additional large libs - force separate chunks to avoid unused code
 							if (id.includes("lodash")) return "lodash";
 							if (id.includes("d3-")) return "d3";
-							if (id.includes("recharts") || id.includes("decimal.js")) return "recharts";
-							if (id.includes("react-markdown") || id.includes("unified") || id.includes("micromark") || id.includes("remark")) return "markdown";
+							if (id.includes("recharts") || id.includes("decimal.js"))
+								return "recharts";
+							if (
+								id.includes("react-markdown") ||
+								id.includes("unified") ||
+								id.includes("micromark") ||
+								id.includes("remark")
+							)
+								return "markdown";
 							if (id.includes("radix")) return "radix";
 
 							return "vendor";

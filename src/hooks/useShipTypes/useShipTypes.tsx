@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { API_URL } from "../../constants";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
 
 /**
  * @interface ShipTypeDetail
@@ -82,7 +83,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 	const cacheKey = "shipTypes";
 
 	if (!cache.has(cacheKey)) {
-		const promise = fetch(`${API_URL}platforms`)
+		const promise = fetchWithTimeout(`${API_URL}platforms`, {}, 10000)
 			.then((res) => {
 				if (!res.ok) {
 					console.error(

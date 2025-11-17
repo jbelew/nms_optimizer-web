@@ -31,6 +31,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
+import { fetchWithTimeout } from "./utils/fetchWithTimeout";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics after app loads (don't block render)
@@ -160,7 +161,7 @@ if (typeof window !== "undefined") {
 	 */
 	async function generateScriptHash(scriptUrl: string): Promise<string> {
 		try {
-			const response = await fetch(scriptUrl, { cache: "no-store" });
+			const response = await fetchWithTimeout(scriptUrl, { cache: "no-store" }, 10000);
 			if (!response.ok) {
 				console.warn(`Failed to fetch service worker script: ${response.status}`);
 				return "";

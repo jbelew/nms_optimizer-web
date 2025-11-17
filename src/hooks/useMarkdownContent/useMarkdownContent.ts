@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
+
 /**
  * @interface MarkdownContentState
  * @property {string} markdown - The markdown content.
@@ -46,7 +48,11 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 			}
 
 			try {
-				let response = await fetch(`/assets/locales/${langToFetch}/${markdownFileName}.md`);
+				let response = await fetchWithTimeout(
+					`/assets/locales/${langToFetch}/${markdownFileName}.md`,
+					{},
+					10000
+				);
 				if (
 					!response.ok &&
 					langToFetch !== defaultLang &&
@@ -55,7 +61,11 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 					console.warn(
 						`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`
 					);
-					response = await fetch(`/assets/locales/${defaultLang}/${markdownFileName}.md`);
+					response = await fetchWithTimeout(
+						`/assets/locales/${defaultLang}/${markdownFileName}.md`,
+						{},
+						10000
+					);
 				}
 				if (!response.ok) {
 					throw new Error(
