@@ -1,3 +1,10 @@
+## [5.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.3...v5.7.4) (2025-11-17)
+
+
+### Performance Improvements
+
+* **fonts:** use subset Raleway font ([c818071](https://github.com/jbelew/nms_optimizer-web/commit/c8180710a64d9910a86f0742b7fb1c3ce3cff4b5))
+
 ## [5.7.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.2...v5.7.3) (2025-11-17)
 
 
