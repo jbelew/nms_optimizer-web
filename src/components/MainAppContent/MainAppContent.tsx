@@ -1,7 +1,7 @@
 // src/components/app/MainAppContent.tsx
 import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { IconButton, Separator, Switch } from "@radix-ui/themes";
+import { IconButton, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
@@ -148,7 +148,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 				</div>
 			</nav>
 
-			<main className="flex min-h-dvh flex-col items-center justify-center pt-12 sm:pt-0 lg:min-h-screen">
+			<main className="flex min-h-dvh flex-col items-center justify-start pt-12 sm:justify-center sm:pt-0">
 				<div
 					className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
 					style={{ backgroundColor: "var(--accent-a2)" }}
@@ -156,7 +156,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<section
-						className="gridContainer flex flex-col items-center p-3 pt-2 sm:p-8 sm:pt-4 lg:flex-row lg:items-start"
+						className="gridContainer flex flex-col items-center px-3 py-2 sm:px-8 sm:py-4 lg:flex-row lg:items-start"
 						ref={gridContainerRef}
 					>
 						<article
@@ -214,21 +214,19 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 							</aside>
 						)}
 
-						{!isLg && (
-							<>
-								<Separator
-									color="cyan"
-									size="4"
-									mt="4"
-									mb="4"
-									orientation="horizontal"
-								/>
-								<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
-							</>
-						)}
+						{/* {!isLg && (
+							<Separator
+								color="cyan"
+								size="4"
+								mt="4"
+								mb="4"
+								orientation="horizontal"
+							/>
+						)} */}
 					</section>
 				</div>
 
+				{!isLg && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 				{isLg && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
 				{/* Dialogs related to MainAppContent's state */}

@@ -29,7 +29,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 	return (
 		<footer
 			key={i18n.language}
-			className="flex flex-col items-center justify-center gap-1 pb-4 text-center text-xs font-light sm:text-sm lg:pt-4 lg:pb-0"
+			className="flex w-full flex-col items-center justify-center gap-1 bg-(--accent-1) px-3 py-6 text-center text-xs font-light sm:text-sm md:w-fit md:bg-transparent md:px-0 md:py-4 lg:px-0 lg:py-4"
 		>
 			<div className="max-w-full wrap-break-word">
 				<Trans

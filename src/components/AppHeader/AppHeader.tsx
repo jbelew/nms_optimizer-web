@@ -14,6 +14,7 @@ import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/A11yStore";
+import { useGridStore } from "@/store/GridStore";
 
 /**
  * @interface AppHeaderProps
@@ -37,6 +38,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const isLg = useBreakpoint("1024px");
 	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	useEffect(() => {
 		if (a11yMode) {
@@ -51,7 +53,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			key={i18n.language}
 			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
 		>
-			{!isLg && isSm && (
+			{!isSharedGrid && !isLg && isSm && (
 				<div className="absolute! top-5! left-4! z-10 flex items-start sm:top-6! sm:left-8!">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<div className="flex items-center gap-2">
@@ -67,57 +69,59 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</div>
 			)}
 
-			<div className="absolute! top-4! right-4! z-10 hidden items-center gap-2 sm:top-5! sm:right-8! sm:flex">
-				<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
-					<IconButton
-						variant="soft"
-						aria-label={t("buttons.changelog") ?? ""}
-						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_changelog",
-								value: 1,
-							});
-							onShowChangelog();
-						}}
-					>
-						<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-					</IconButton>
-				</ConditionalTooltip>
-
-				<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
-					<IconButton
-						variant="soft"
-						aria-label={t("buttons.userStats") ?? ""}
-						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_user_stats",
-								value: 1,
-							});
-							openDialog("userstats");
-						}}
-					>
-						<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-					</IconButton>
-				</ConditionalTooltip>
-
-				<LanguageSelector />
-
-				{isLg && (
-					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<div className="flex items-center gap-2">
-							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
-							<Switch
-								variant="soft"
-								checked={a11yMode}
-								onCheckedChange={toggleA11yMode}
-								aria-label={t("buttons.accessibility") ?? ""}
-							/>
-						</div>
+			{!isSharedGrid && (
+				<div className="absolute! top-4! right-4! z-10 hidden items-center gap-2 sm:top-5! sm:right-8! sm:flex">
+					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
+						<IconButton
+							variant="soft"
+							aria-label={t("buttons.changelog") ?? ""}
+							onClick={() => {
+								sendEvent({
+									category: "ui",
+									action: "show_changelog",
+									value: 1,
+								});
+								onShowChangelog();
+							}}
+						>
+							<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+						</IconButton>
 					</ConditionalTooltip>
-				)}
-			</div>
+
+					<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
+						<IconButton
+							variant="soft"
+							aria-label={t("buttons.userStats") ?? ""}
+							onClick={() => {
+								sendEvent({
+									category: "ui",
+									action: "show_user_stats",
+									value: 1,
+								});
+								openDialog("userstats");
+							}}
+						>
+							<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+						</IconButton>
+					</ConditionalTooltip>
+
+					<LanguageSelector />
+
+					{isLg && (
+						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
+							<div className="flex items-center gap-2">
+								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+								<Switch
+									variant="soft"
+									checked={a11yMode}
+									onCheckedChange={toggleA11yMode}
+									aria-label={t("buttons.accessibility") ?? ""}
+								/>
+							</div>
+						</ConditionalTooltip>
+					)}
+				</div>
+			)}
 
 			<h1 className="header__logo--text text-center text-3xl [word-spacing:-.25rem] sm:text-4xl">
 				NO MAN&apos;S SKY
@@ -190,7 +194,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				wrap="pretty"
 				align="center"
 				as="h2"
-				size={{ initial: "2", sm: "3" }}
+				size={isSm ? "3" : "2"}
 				className="header__title"
 			>
 				<Trans
