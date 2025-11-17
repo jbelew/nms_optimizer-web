@@ -38,12 +38,12 @@ export default defineConfig(({ mode }) => {
 			...(doCritical
 				? [
 						deferStylesheetsPlugin(),
-						PluginCritical({
-							criticalBase: "dist/",
-							criticalUrl: "https://nms-optimizer.app",
-							criticalPages: [{ uri: "/", template: "index" }],
-							criticalConfig: {},
-						}),
+						// PluginCritical({
+						// 	criticalBase: "dist/",
+						// 	criticalUrl: "https://nms-optimizer.app",
+						// 	criticalPages: [{ uri: "/", template: "index" }],
+						// 	criticalConfig: {},
+						// }),
 					]
 				: []),
 			compression({
@@ -58,9 +58,9 @@ export default defineConfig(({ mode }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-			...(doCritical
-				? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
-				: []),
+			// ...(doCritical
+			// 	? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
+			// 	: []),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
