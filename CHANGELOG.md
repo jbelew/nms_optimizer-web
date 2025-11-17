@@ -1,3 +1,10 @@
+## [5.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.1...v5.7.2) (2025-11-17)
+
+
+### Bug Fixes
+
+* **grid-cell:** Ensure correct glow animation for white accent ([d25d1c5](https://github.com/jbelew/nms_optimizer-web/commit/d25d1c5c4714aecd055f4e8d5f2fb83b25b58495))
+
 ## [5.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.0...v5.7.1) (2025-11-17)
 
 
