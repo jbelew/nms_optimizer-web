@@ -1,3 +1,10 @@
+## [5.7.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.4...v5.7.5) (2025-11-17)
+
+
+### Bug Fixes
+
+* **ui:** adjust UserStatsDialog loading skeleton height ([4ec6a6e](https://github.com/jbelew/nms_optimizer-web/commit/4ec6a6e48f20a283675121eff7dc3605ef6efc8f))
+
 ## [5.7.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.3...v5.7.4) (2025-11-17)
 
 
