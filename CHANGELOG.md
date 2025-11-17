@@ -1,3 +1,10 @@
+# [5.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.4...v5.7.0) (2025-11-17)
+
+
+### Features
+
+* **data:** Implement robust data fetching with timeout and error handling ([7d73a66](https://github.com/jbelew/nms_optimizer-web/commit/7d73a66c364b491d709aca54b904290cbbb92d98))
+
 ## [5.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.6.3...v5.6.4) (2025-11-16)
 
 
