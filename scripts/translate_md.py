@@ -67,6 +67,13 @@ def translate_markdown_file(input_file, output_file, target_lang):
 
 
 if __name__ == '__main__':
-    # Example usage:
-    # translate_markdown_file('path/to/your/file.md', 'path/to/your/translated_file.md', 'es')
-    pass
+    import sys
+    if len(sys.argv) != 4:
+        print("Usage: python translate_md.py <input_file> <output_file> <target_lang>")
+        sys.exit(1)
+    
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    target_lang = sys.argv[3]
+    
+    translate_markdown_file(input_file, output_file, target_lang)

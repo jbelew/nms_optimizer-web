@@ -1,45 +1,45 @@
-## Descripción general
+## ¿Qué es el optimizador NMS?
 
-Esta aplicación web, el **NMS Optimizer**, ayuda a los jugadores de _No Man's Sky_ a descubrir la mejor disposición de módulos para diseñar **construcciones óptimas** para naves espaciales, corbetas, multiherramientas, exocrafts y exotrajes. Calcula automáticamente la colocación ideal de los módulos para maximizar mecánicas clave del juego como **bonos de adyacencia** (logrados agrupando tecnologías similares para efectos sinérgicos) y los potentes aumentos de **ranuras sobrealimentadas**. Comprender cómo usar mejor estas características, especialmente las ranuras sobrealimentadas, es clave para lograr el máximo rendimiento; esta herramienta simplifica ese proceso complejo.
+NMS Optimizer es una poderosa **calculadora**, **planificadora** y **constructora** basada en web para el juego No Man's Sky. Ayuda a los jugadores a diseñar diseños óptimos para su equipo al descubrir la mejor disposición de los módulos. Esta herramienta admite **diseños de naves espaciales**, **diseños de cargueros**, **diseños de corbetas**, **diseños de multiherramientas**, **diseños de exocraft** y **diseños de exotrajes**. Calcula automáticamente la **ubicación del módulo** ideal para maximizar mecánicas cruciales en el juego como **bonos de adyacencia** (al agrupar tecnologías similares) y los poderosos impulsos de **ranuras supercargadas**. Comprender cómo utilizar mejor estas funciones es clave para lograr el máximo rendimiento, y esta herramienta simplifica ese complejo proceso.
 
 ## Cómo funciona
 
-> ¿Cómo se resuelve un problema con hasta ~8.32 × 10⁸¹ permutaciones posibles (¡eso son 82 dígitos!) en menos de cinco segundos?
+> ¿Cómo se resuelve un problema con hasta ~8,32 × 10⁸¹ permutaciones posibles (¡es decir, 82 dígitos!) en menos de cinco segundos?
 
-Descubrir la mejor colocación de módulos con tantas permutaciones de diseño posibles para una cuadrícula completa no es una hazaña pequeña. Esta herramienta combina patrones deterministas, aprendizaje automático y recocido simulado para ofrecer sugerencias de construcción de primer nivel para naves, corbetas, multiherramientas, exocrafts y exotrajes en menos de cinco segundos. Tiene en cuenta factores como los **bonos de adyacencia** y el uso estratégico de **ranuras sobrealimentadas**.
+Descubrir la mejor **ubicación del módulo** con tantas permutaciones de diseño posibles para una cuadrícula completa no es tarea fácil. Esta herramienta combina patrones deterministas, aprendizaje automático y recocido simulado basado en Rust para ofrecer **construcciones de naves estelares**, **construcciones de cargueros**, **construcciones de Corvette**, **diseños de multiherramientas**, **construcciones de Exocraft** y **diseños de exotrajes** de primer nivel en aproximadamente cinco segundos. Considera todos los factores, incluidos **bonos de adyacencia** y el uso estratégico de **ranuras supercargadas**.
 
-1. **Pre-solve basado en patrones:** comienza con una biblioteca curada de patrones de diseño probados a mano, optimizando para las bonificaciones de adyacencia máximas en diferentes tipos de cuadrícula.
-2. **Colocación guiada por IA (inferencia ML):** si una configuración viable incluye ranuras sobrealimentadas, la herramienta invoca un modelo TensorFlow entrenado en más de 16,000 cuadrículas para predecir una ubicación óptima.
-3. **Recocido simulado (refinamiento):** refina el diseño mediante búsquedas estocásticas sobre módulos y cambios de posición para aumentar la puntuación de adyacencia mientras evita los óptimos locales.
-4. **Presentación de resultados:** encuentra la configuración de mayor puntuación, incluyendo desgloses de puntuación y recomendaciones visuales de diseño para naves, corbetas, multiherramientas, exocrafts y exotrajes.
+1. **Resolución previa basada en patrones:** Comienza con una biblioteca seleccionada de patrones de diseño probados manualmente, optimizados para obtener bonificaciones de adyacencia máximas en diferentes tipos de cuadrículas.
+2. **Colocación guiada por IA (inferencia ML):** Si una configuración viable incluye ranuras supercargadas, la herramienta invoca un modelo de TensorFlow entrenado en más de 16 000 cuadrículas para predecir la ubicación óptima.
+3. **Recocido simulado (refinamiento):** Refina el diseño mediante búsqueda estocástica: intercambia módulos y cambia de posiciones para aumentar la puntuación de adyacencia y evitar los óptimos locales.
+4. **Presentación de resultados:** Genera la configuración con la puntuación más alta, incluidos desgloses de puntuación y recomendaciones de diseño visual para naves espaciales, cargueros, corbetas, herramientas múltiples, exocraft y exosuits.
 
 ## Características clave
 
-- **Optimización integral de la cuadrícula:** soporte completo para cuadrículas estándar, ranuras sobrealimentadas e espacios inactivos para encontrar el verdadero diseño óptimo.
-- **Utilización estratégica de las ranuras sobrealimentadas:** más allá de solo reconocer las ranuras sobrealimentadas, el optimizador determina de manera inteligente si colocar tecnologías centrales (por ejemplo, el arma principal) o sus mejores mejoras en estas ranuras de alto impacto, navegando las complejidades del diseño para maximizar objetivos específicos (daño, alcance, eficiencia, etc.).
-- **Inferencia de aprendizaje automático:** entrenado en más de 16,000 diseños de cuadrícula históricos para identificar patrones efectivos.
-- **Recocido simulado avanzado:** refinamiento meticuloso para exprimir cada punto porcentual de rendimiento.
+- **Optimización integral de la red:** Soporte completo para ranuras estándar, **sobrealimentadas** e inactivas para encontrar el verdadero diseño óptimo.
+- **Utilización estratégica de las ranuras supercargadas:** Más allá de simplemente reconocer las ranuras supercargadas, el optimizador determina de manera inteligente si colocar tecnologías centrales (como un arma principal) o sus mejores mejoras en estas ranuras de alto impulso, navegando por las complejas compensaciones para maximizar sus objetivos de construcción específicos (por ejemplo, daño, alcance o eficiencia). Esto refleja las estrategias de los jugadores expertos pero con precisión computacional.
+- **Inferencia de aprendizaje automático:** Capacitado en más de 16 000 diseños de cuadrículas históricos para identificar patrones poderosos.
+- **Recocido simulado avanzado:** Para un refinamiento meticuloso del diseño que garantiza que se exprima cada punto porcentual de rendimiento.
 
-## ¿Por qué usar esta herramienta?
+## ¿Por qué utilizar esta herramienta?
 
-Deja de adivinar la ubicación de tus tecnologías y desbloquea el verdadero potencial de tu equipo. Ya sea que busques una construcción de daño para naves, una poderosa construcción para corbeta, el alcance de escaneo definitivo con una multiherramienta optimizada, una exocraft altamente especializada o un exotraje sólido, o si intentas encontrar la mejor manera de usar unas pocas ranuras sobrealimentadas, esta herramienta te ofrece una forma clara y eficiente de planificar tus actualizaciones con confianza y lograr un rendimiento de primer nivel sin horas de prueba y error manual.
+¡Deja de adivinar la ubicación de la tecnología y desbloquea el verdadero potencial de tu equipo! Ya sea que esté buscando una **construcción de nave estelar** de daño máximo, una **construcción de carguero** de largo alcance, una poderosa **construcción de Corvette**, el rango de escaneo definitivo con un perfecto **diseño de multiherramienta**, una **Exocraft** optimizada o un **Exotraje** robusto, este optimizador desmitifica las complejas reglas de las **bonificaciones de adyacencia** y las interacciones de **ranuras supercargadas**. Proporciona una manera clara y eficiente de planificar sus actualizaciones con confianza y lograr un rendimiento de primer nivel sin horas de prueba y error manual. Si alguna vez se ha preguntado cuál es la mejor manera de utilizar sus ranuras supercargadas limitadas, esta **calculadora NMS** tiene la respuesta.
 
-## Pila tecnológica
+## Pila de tecnología
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-**Solucionador de backend:** Python, Flask, TensorFlow, NumPy, implementación de recocido simulado personalizada y puntuación heurística
-**Pruebas:** Vitest, Python unittest
-**Implementación:** Heroku (hosting) y Cloudflare (DNS y CDN)
-**Automatización:** GitHub Actions (CI/CD)
-**Análisis:** Google Analytics
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend Solver:** Implementaciones personalizadas de puntuación heurística y recocido simulado basadas en Python, Flask, TensorFlow, NumPy y Rust.
+- **Pruebas:** Vitest, prueba unitaria de Python
+- **Implementación:** Heroku (Hosting), Cloudflare (DNS y CDN), Docker
+- **Automatización:** Acciones de GitHub (CI/CD)
+- **Análisis:** Google Analytics
 
 ## Repositorios
 
-- UI web: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-- Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Interfaz de usuario web: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Servidor: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Alguna historia divertida
+## Un poco de historia divertida
 
-Aquí hay un vistazo a una versión temprana de la interfaz de usuario: funcionalmente sólida pero visualmente mínima. La versión actual es una actualización importante en diseño, usabilidad y claridad, que ayuda a los jugadores a encontrar rápidamente el mejor diseño para cualquier nave o herramienta.
+He aquí un vistazo a una **primera versión** de la interfaz de usuario: funcionalmente sólida pero visualmente mínima. La versión actual es una mejora importante en diseño, usabilidad y claridad, que ayuda a los jugadores a encontrar rápidamente el **mejor diseño** para cualquier barco o herramienta.
 
-![Prototipo temprano de la interfaz de usuario del Optimizer de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
+![Prototipo inicial de la interfaz de usuario del optimizador de diseño de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

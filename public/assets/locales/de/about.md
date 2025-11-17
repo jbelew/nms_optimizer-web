@@ -1,45 +1,45 @@
-## Übersicht
+## Was ist der NMS-Optimierer?
 
-Diese Webanwendung, der **NMS Optimizer**, hilft Spielern von _No Man’s Sky_, das beste Modul-Arrangement zu finden, um optimale **Starship-Layouts**, **Corvette-Layouts**, **Multitool-Builds**, **Exocraft-Layouts** und **Exosuit-Builds** zu erstellen. Sie berechnet automatisch die ideale Platzierung der **Module**, um zentrale Spielmechaniken wie **Adjazenzboni** (erzielt durch Gruppieren ähnlicher Technologien für synergetische Effekte) und die leistungsstarken **aufgeladenen Slots** zu maximieren. Das Verständnis, wie man diese Features – insbesondere aufgeladene Slots – am besten nutzt, ist der Schlüssel zu Spitzenleistung. Dieses Tool vereinfacht diesen komplexen Prozess.
+Der NMS Optimizer ist ein leistungsstarker webbasierter **Rechner**, **Planer** und **Builder** für das Spiel No Man's Sky. Es hilft Spielern, optimale Layouts für ihre Ausrüstung zu entwerfen, indem es die beste Modulanordnung ermittelt. Dieses Tool unterstützt **Raumschiff-Layouts**, **Frachter-Layouts**, **Corvette-Layouts**, **Multitool-Builds**, **Exocraft-Layouts** und **Exosuit-Builds**. Es berechnet automatisch die ideale **Modulplatzierung**, um wichtige Spielmechaniken wie **Nachbarschaftsboni** (aus der Gruppierung ähnlicher Technologien) und die leistungsstarken Boosts von **aufgeladenen Slots** zu maximieren. Um Spitzenleistungen zu erzielen, ist es wichtig zu verstehen, wie diese Funktionen optimal genutzt werden können, und dieses Tool vereinfacht diesen komplexen Prozess.
 
 ## Wie es funktioniert
 
-> Wie löst man ein Problem mit bis zu ~8,32 × 10⁸¹ möglichen Permutationen (das sind 82 Stellen!) in weniger als fünf Sekunden?
+> Wie löst man ein Problem mit bis zu ~8,32 × 10⁸¹ möglichen Permutationen (das sind 82 Ziffern!) in weniger als fünf Sekunden?
 
-Die absolut beste **Modulplatzierung** bei so vielen möglichen Layout-Permutationen für ein volles Gitter ist keine kleine Leistung. Dieses Tool kombiniert deterministische Muster, maschinelles Lernen und simuliertes Annealing, um **Top-Tier-Builds** für Starships, Corvettes, Multitools, Exocrafts und Exosuits in weniger als fünf Sekunden zu liefern. Es berücksichtigt alle Faktoren, einschließlich **Adjazenzboni** und die strategische Nutzung von **aufgeladenen Slots**.
+Die absolut beste **Modulplatzierung** bei so vielen möglichen Layout-Permutationen für ein vollständiges Raster herauszufinden, ist keine leichte Aufgabe. Dieses Tool kombiniert deterministische Muster, maschinelles Lernen und Rust-basiertes simuliertes Tempern, um erstklassige **Raumschiff-Builds**, **Frachter-Builds**, **Corvette-Builds**, **Multitool-Layouts**, **Exocraft-Builds** und **Exosuit-Layouts** in etwa fünf Sekunden zu liefern. Es berücksichtigt alle Faktoren, einschließlich **Nachbarschaftsboni** und den strategischen Einsatz von **Supercharger-Slots**.
 
-1. **Musterbasierte Vorlösungen:** beginnt mit einer kuratierten Bibliothek handgeprüfter Layout-Muster und optimiert für maximale Adjazenzboni über verschiedene Gittertypen hinweg.
-2. **KI-gesteuerte Platzierung (ML-Inferenz):** wenn eine mögliche Konfiguration aufgeladene Slots enthält, verwendet das Tool ein TensorFlow-Modell, das auf mehr als 16.000 Grids trainiert wurde, um eine optimale Platzierung vorherzusagen.
-3. **Simuliertes Annealing (Verfeinerung):** verfeinert das Layout durch stochastische Suche – Module vertauschen und Positionen verschieben – um die Adjazenzbewertung zu verbessern und lokale Optima zu vermeiden.
-4. **Ergebnispräsentation:** liefert die Konfiguration mit der höchsten Punktzahl, inklusive Bewertung und visuellen Layout-Empfehlungen für Starships, Corvettes, Multitools, Exocrafts und Exosuits.
+1. **Musterbasierte Vorlösung:** Beginnt mit einer kuratierten Bibliothek handgetesteter Layoutmuster und optimiert für maximale Adjazenzboni über verschiedene Rastertypen hinweg.
+2. **KI-gesteuerte Platzierung (ML-Inferenz):** Wenn eine praktikable Konfiguration aufgeladene Slots umfasst, ruft das Tool ein TensorFlow-Modell auf, das auf mehr als 16.000 Gittern trainiert wurde, um die optimale Platzierung vorherzusagen.
+3. **Simuliertes Annealing (Verfeinerung):** Verfeinert das Layout durch stochastische Suche – Austausch von Modulen und Verschiebung von Positionen, um die Adjazenzbewertung zu verbessern und gleichzeitig lokale Optima zu vermeiden.
+4. **Ergebnispräsentation:** Gibt die Konfiguration mit der höchsten Punktzahl aus, einschließlich Punkteaufschlüsselung und visuellen Layoutempfehlungen für Raumschiffe, Frachter, Korvetten, Multitools, Exocraft und Exosuits.
 
-## Schlüsselfunktionen
+## Hauptmerkmale
 
-- **Umfassende Gitteroptimierung:** voller Support für Standard-, **aufgeladene** und inaktive Slots, um das wirklich optimale Layout zu finden.
-- **Strategische Nutzung von aufgeladenen Slots:** über die Erkennung hinaus bestimmt der Optimierer intelligent, ob Kerntechnologien (z. B. Hauptwaffen) oder deren beste Upgrades in diese High-Impact-Slots gehören. Er navigiert komplexe Kompromisse, um Bauziele wie Schaden, Reichweite oder Effizienz zu maximieren – präzise wie bei Experten, aber mit Rechenpower.
-- **ML-Inferenz:** trainiert auf mehr als 16.000 historischen Layouts, um starke Muster zu identifizieren.
-- **Fortgeschrittenes simuliertes Annealing:** für sorgfältige Layout-Verfeinerung, sodass jede Prozentpunktleistung genutzt wird.
+- **Umfassende Netzoptimierung:** Volle Unterstützung für Standard-, **Supercharged**- und inaktive Slots, um das wirklich optimale Layout zu finden.
+- **Strategische Supercharged-Slot-Nutzung:** Der Optimierer erkennt nicht nur Supercharged-Slots, sondern bestimmt auch intelligent, ob Kerntechnologien (wie eine Hauptwaffe) oder ihre besten Upgrades auf diesen High-Boost-Slots platziert werden sollen, und steuert dabei die komplexen Kompromisse, um Ihre spezifischen Build-Ziele (z. B. Schaden, Reichweite oder Effizienz) zu maximieren. Dies spiegelt die Strategien erfahrener Spieler wider, jedoch mit rechnerischer Präzision.
+- **Inferenz durch maschinelles Lernen:** Auf über 16.000 historischen Rasterlayouts trainiert, um wirkungsvolle Muster zu identifizieren.
+- **Erweitertes Simulated Annealing:** Zur sorgfältigen Verfeinerung des Layouts, um sicherzustellen, dass jeder Prozentpunkt der Leistung herausgeholt wird.
 
 ## Warum dieses Tool verwenden?
 
-Hör auf, die Platzierung von Technologien zu raten, und schalte das wahre Potenzial deiner Ausrüstung frei! Egal ob du auf einen maximalen **Starship-Damage-Build**, einen leistungsstarken **Corvette-Build**, die ultimative Scan-Reichweite mit einem perfekten **Multitool-Layout**, ein optimiertes **Exocraft** oder ein robustes **Exosuit** abzielst – oder ob du einfach die beste Nutzung deiner begrenzten **aufgeladenen Slots** suchst: Dieses Tool bietet eine klare und effiziente Möglichkeit, deine Upgrades zu planen und Spitzenleistung zu erreichen, ohne stundenlang manuell herumprobieren zu müssen.
+Hören Sie auf, bei der Platzierung der Technik zu raten, und entfalten Sie das wahre Potenzial Ihrer Ausrüstung! Egal, ob Sie einen **Raumschiff-Build** mit maximalem Schaden, einen **Frachter-Build** mit großer Reichweite, einen leistungsstarken **Corvette-Build**, die ultimative Scan-Reichweite mit einem perfekten **Multitool-Layout**, ein optimiertes **Exocraft** oder einen robusten **Exosuit** anstreben, dieser Optimierer entmystifiziert die komplexen Regeln von **Adjacency-Boni** und **Supercharged-Slot-Interaktionen**. Es bietet eine klare und effiziente Möglichkeit, Ihre Upgrades sicher zu planen und erstklassige Leistung zu erzielen, ohne stundenlanges manuelles Ausprobieren. Wenn Sie sich jemals gefragt haben, wie Sie Ihre begrenzten Supercharger-Slots am besten nutzen können, hat dieser **NMS-Rechner** die Antwort.
 
-## Tech Stack
+## Tech-Stack
 
-**Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-**Backend-Solver:** Python, Flask, TensorFlow, NumPy, benutzerdefinierte simulierte Annealing-Implementierung und heuristische Bewertung
-**Tests:** Vitest, Python Unittest
-**Deployment:** Heroku (Hosting) und Cloudflare (DNS/CDN)
-**Automatisierung:** GitHub Actions (CI/CD)
-**Analytics:** Google Analytics
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend-Solver:** Python-, Flask-, TensorFlow-, NumPy- und Rust-basierte benutzerdefinierte simulierte Annealing- und heuristische Scoring-Implementierungen.
+- **Testen:** Vitest, Python Unittest
+- **Bereitstellung:** Heroku (Hosting), Cloudflare (DNS und CDN), Docker
+- **Automatisierung:** GitHub-Aktionen (CI/CD)
+- **Analytics:** Google Analytics
 
-## Repositories
+## Repositorys
 
-- UI-Web: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Web-Benutzeroberfläche: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
 ## Eine lustige Geschichte
 
-Hier ein Blick auf eine **frühe Version** der Benutzeroberfläche – funktional solide, aber visuell minimal. Die aktuelle Version ist ein großes Upgrade in Design, Benutzerfreundlichkeit und Klarheit und hilft Spielern, schnell das beste Layout für jedes Schiff oder Werkzeug zu finden.
+Hier ist ein Blick auf eine **frühe Version** der Benutzeroberfläche – funktional solide, aber optisch minimalistisch. Die aktuelle Version stellt eine wesentliche Verbesserung in Design, Benutzerfreundlichkeit und Klarheit dar und hilft Spielern, schnell das **beste Layout** für jedes Schiff oder Werkzeug zu finden.
 
-![Früher Prototyp der Benutzeroberfläche des No Man’s Sky Layout-Optimierers](/assets/img/screenshots/screenshot_v03.png)
+![Früher Prototyp der Benutzeroberfläche für die Layoutoptimierung von No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
