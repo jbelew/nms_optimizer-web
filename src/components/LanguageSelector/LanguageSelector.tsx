@@ -77,7 +77,7 @@ const LanguageSelector: React.FC = () => {
 			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
 
 		void i18n.changeLanguage(newLang);
-		navigate(newPath);
+		navigate(newPath + window.location.search);
 
 		sendEvent({
 			category: "ui",
@@ -94,7 +94,7 @@ const LanguageSelector: React.FC = () => {
 	const handleRequestTranslationClick = () => {
 		const lang = (i18n.language || "en").split("-")[0];
 		const path = lang === "en" ? "/translation" : `/${lang}/translation`;
-		navigate(path);
+		navigate(path + window.location.search);
 	};
 
 	const currentFlagPath =

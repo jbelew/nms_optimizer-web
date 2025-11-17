@@ -76,7 +76,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 				setShareUrl(data.shareUrl);
 			} else if (dialog) {
 				const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
-				navigate(path);
+				navigate(path + window.location.search);
 			}
 			if (data?.section) {
 				setSectionToScrollTo(data.section);
@@ -96,7 +96,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			setShareUrl("");
 		} else if (activeDialog) {
 			const path = lang === "en" ? "/" : `/${lang}`;
-			navigate(path);
+			navigate(path + window.location.search);
 		}
 		setSectionToScrollTo(undefined);
 	}, [activeDialog, navigate, shareUrl, i18n.language]);

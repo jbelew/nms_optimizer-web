@@ -78,4 +78,81 @@ describe("TechStore", () => {
 		expect(useTechStore.getState().max_bonus).toEqual({});
 		expect(useTechStore.getState().solved_bonus).toEqual({});
 	});
+
+	it("should set tech groups and initialize checked modules", () => {
+		const { setTechGroups } = useTechStore.getState();
+		const mockTechGroups = {
+			"test-tech": [
+				{
+					label: "Test",
+					key: "test-tech",
+					modules: [
+						{
+							id: "mod1",
+							checked: true,
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 5,
+							image: "",
+							label: "Module 1",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "test-tech",
+							type: "",
+							value: 10,
+						},
+						{
+							id: "mod2",
+							checked: false,
+							active: true,
+							adjacency: "",
+							adjacency_bonus: 0,
+							bonus: 3,
+							image: "",
+							label: "Module 2",
+							sc_eligible: false,
+							supercharged: false,
+							tech: "test-tech",
+							type: "",
+							value: 8,
+						},
+					],
+					image: null,
+					color: "red" as const,
+					module_count: 2,
+				},
+			],
+		};
+		setTechGroups(mockTechGroups);
+		expect(useTechStore.getState().techGroups).toEqual(mockTechGroups);
+		expect(useTechStore.getState().checkedModules["test-tech"]).toEqual(["mod1"]);
+	});
+
+	it("should set tech groups with no modules", () => {
+		const { setTechGroups } = useTechStore.getState();
+		const mockTechGroups = {
+			"test-tech": [
+				{
+					label: "Test",
+					key: "test-tech",
+					modules: [],
+					image: null,
+					color: "red" as const,
+					module_count: 0,
+				},
+			],
+		};
+		setTechGroups(mockTechGroups);
+		expect(useTechStore.getState().techGroups).toEqual(mockTechGroups);
+		expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
+	});
+
+	it("should set active group for a tech", () => {
+		const { setActiveGroup } = useTechStore.getState();
+		setActiveGroup("test-tech", "normal");
+		expect(useTechStore.getState().activeGroups["test-tech"]).toBe("normal");
+		setActiveGroup("test-tech", "max");
+		expect(useTechStore.getState().activeGroups["test-tech"]).toBe("max");
+	});
 });

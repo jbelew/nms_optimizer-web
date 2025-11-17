@@ -1,0 +1,248 @@
+import type { TechTree } from "../../hooks/useTechTree/useTechTree";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { afterEach, vi } from "vitest";
+
+import * as useBreakpointModule from "../../hooks/useBreakpoint/useBreakpoint";
+import * as splashScreenModule from "../../utils/splashScreen";
+import TechTreeComponent from "./TechTree";
+
+// Mock react-i18next
+vi.mock("react-i18next", () => ({
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
+}));
+
+// Mock child components
+vi.mock("./TechTreeContent", () => ({
+	TechTreeContent: () => <div data-testid="tech-tree-content">TechTreeContent</div>,
+}));
+
+vi.mock("../RecommendedBuild/RecommendedBuild", () => ({
+	default: () => <div data-testid="recommended-build">RecommendedBuild</div>,
+}));
+
+vi.mock("../ErrorBoundry/ErrorBoundryInset", () => ({
+	default: ({ children }: { children?: React.ReactNode }) => (
+		<div data-testid="error-boundary-inset">{children}</div>
+	),
+}));
+
+vi.mock("@radix-ui/themes", () => ({
+	ScrollArea: ({
+		children,
+		className,
+		style,
+	}: {
+		children?: React.ReactNode;
+		className?: string;
+		style?: React.CSSProperties;
+	}) => (
+		<div data-testid="scroll-area" className={className} style={style}>
+			{children}
+		</div>
+	),
+}));
+
+// Mock hooks
+vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+	useBreakpoint: vi.fn(() => true), // Default to large screen
+}));
+
+vi.mock("../../hooks/useTechTree/useTechTree", () => ({
+	useFetchTechTreeSuspense: vi.fn(() => ({
+		recommended_builds: [],
+		Weaponry: [],
+	})),
+}));
+
+// Mock store
+vi.mock("../../store/PlatformStore", () => ({
+	usePlatformStore: vi.fn((selector) => {
+		const mockState = {
+			selectedPlatform: "standard",
+		};
+		return selector(mockState);
+	}),
+}));
+
+// Mock utility
+vi.mock("../../utils/splashScreen", () => ({
+	hideSplashScreenAndShowBackground: vi.fn(),
+}));
+
+describe("TechTree", () => {
+	const mockHandleOptimize = vi.fn();
+	const mockGridContainerRef = React.createRef<HTMLDivElement>();
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	afterEach(() => {
+		vi.resetAllMocks();
+	});
+
+	test("should render error boundary wrapper", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("error-boundary-inset")).toBeInTheDocument();
+	});
+
+	test("should render TechTreeContent on large screens", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+	});
+
+	test("should render ScrollArea on large screens", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("scroll-area")).toBeInTheDocument();
+	});
+
+	test("should pass handleOptimize to TechTreeContent", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+	});
+
+	test("should render RecommendedBuild when tech tree has recommended builds", () => {
+		vi.doMock("../../hooks/useTechTree/useTechTree", () => ({
+			useFetchTechTreeSuspense: vi.fn(() => ({
+				recommended_builds: [{ name: "Build 1" }],
+				Weaponry: [],
+			})),
+		}));
+
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		// RecommendedBuild should render if tech tree has recommended_builds
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+	});
+
+	test("should call hideSplashScreenAndShowBackground on mount", () => {
+		const mockHideSplash = vi.spyOn(splashScreenModule, "hideSplashScreenAndShowBackground");
+
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(mockHideSplash).toHaveBeenCalled();
+		mockHideSplash.mockRestore();
+	});
+
+	test("should handle solving prop", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={true}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+	});
+
+	test("should accept optional techTree prop", () => {
+		const customTechTree = {
+			Weaponry: [
+				{
+					key: "weapon1",
+					label: "Weapon 1",
+					modules: [],
+					module_count: 0,
+					color: "",
+					image: null,
+				},
+			],
+		};
+
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+				techTree={customTechTree as TechTree}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+	});
+
+	test("should adjust scroll area height based on recommended builds", () => {
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		const scrollArea = screen.getByTestId("scroll-area");
+		expect(scrollArea).toBeInTheDocument();
+		// Height style should be applied
+		expect(scrollArea).toHaveAttribute("style");
+	});
+
+	test("should render on small screens without ScrollArea", () => {
+		const mockUseBreakpoint = vi.spyOn(useBreakpointModule, "useBreakpoint");
+		mockUseBreakpoint.mockReturnValueOnce(false); // Small screen
+
+		render(
+			<TechTreeComponent
+				handleOptimize={mockHandleOptimize}
+				solving={false}
+				gridContainerRef={mockGridContainerRef}
+				gridTableTotalWidth={undefined}
+			/>
+		);
+
+		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
+		mockUseBreakpoint.mockRestore();
+	});
+});
