@@ -122,7 +122,7 @@ const GridTableButtons: React.FC = () => {
 					<Button
 						size="2"
 						variant={!tutorialFinished ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${
+						className={`gridTable__button gridTable__button--instructions mr-2! ${
 							!tutorialFinished ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -136,7 +136,7 @@ const GridTableButtons: React.FC = () => {
 					<IconButton
 						size="2"
 						variant={!tutorialFinished ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions !mr-2 ${
+						className={`gridTable__button gridTable__button--instructions mr-2! ${
 							!tutorialFinished ? "button--glow" : ""
 						}`}
 						onClick={handleShowInstructions}
@@ -150,7 +150,7 @@ const GridTableButtons: React.FC = () => {
 					<Button
 						size="2"
 						variant="soft"
-						className={`gridTable__button gridTable__button--about !mr-2`}
+						className={`gridTable__button gridTable__button--about mr-2!`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
 						disabled={isInfoPending}
@@ -162,7 +162,7 @@ const GridTableButtons: React.FC = () => {
 					<IconButton
 						size="2"
 						variant="soft"
-						className={`gridTable__button gridTable__button--about !mr-2`}
+						className={`gridTable__button gridTable__button--about mr-2!`}
 						onClick={handleShowAboutPage}
 						aria-label={t("buttons.about")}
 						disabled={isInfoPending}

@@ -196,24 +196,24 @@
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
-		box-shadow: 0 0 2px 1px var(--accent-track);
+		filter: drop-shadow(0 0 2px var(--accent-track));
 	}
 
 	to {
 		border-color: var(--purple-12);
-		box-shadow: 0 0 3px 1px var(--purple-10);
+		filter: drop-shadow(0 0 3px var(--purple-10));
 	}
 }
 
 @keyframes pulseGlowWhite {
 	from {
 		border-color: var(--gray-12);
-		box-shadow: 0 0 2px 1px var(--purple-track);
+		filter: drop-shadow(0 0 2px var(--purple-track));
 	}
 
 	to {
 		border-color: var(--purple-12);
-		box-shadow: 0 0 3px 1px var(--purple-10);
+		filter: drop-shadow(0 0 3px var(--purple-10));
 	}
 }
 

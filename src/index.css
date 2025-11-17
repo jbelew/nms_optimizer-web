@@ -139,16 +139,6 @@ body.a11y-font .heading-styled {
 	animation: buttonGlow 0.5s infinite alternate ease-in-out;
 }
 
-@keyframes buttonGlow {
-	from {
-		filter: drop-shadow(0 0 2px var(--accent-a0));
-	}
-
-	to {
-		filter: drop-shadow(0 0 4px var(--accent-track));
-	}
-}
-
 .warningDialog__title {
 	font-family: var(--font-family-geosans);
 	/* Use variable */
