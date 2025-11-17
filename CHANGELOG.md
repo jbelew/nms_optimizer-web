@@ -1,3 +1,10 @@
+## [5.7.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.2...v5.7.3) (2025-11-17)
+
+
+### Bug Fixes
+
+* **grid-cell:** Refine pulse glow animations with box-shadow ([13bdb51](https://github.com/jbelew/nms_optimizer-web/commit/13bdb510ea3afe99754df67bd1260ba4b567185c))
+
 ## [5.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.1...v5.7.2) (2025-11-17)
 
 
