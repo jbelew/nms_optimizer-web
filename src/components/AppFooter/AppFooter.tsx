@@ -81,7 +81,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 				</a>
 				&nbsp;• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
 			</div>
-			<Separator decorative size="3" className="mt-1" />
+			<Separator decorative size="3" mt="1" mb="1" />
 			<div className="flex flex-wrap items-center justify-center gap-1">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />

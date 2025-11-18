@@ -196,7 +196,7 @@
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
-		box-shadow: 0 0 2px 1px var(--accent-track);
+		box-shadow: 0 0 3px 1px var(--accent-track);
 	}
 
 	to {
@@ -208,11 +208,11 @@
 @keyframes pulseGlowWhite {
 	from {
 		border-color: var(--gray-12);
-		box-shadow: 0 0 2px 1px var(--purple-track);
+		box-shadow: 0 0 3px 1px var(--purple-track);
 	}
 
 	to {
-		border-color: var(--purple-12);
+		border-color: var(--purple-11);
 		box-shadow: 0 0 3px 1px var(--purple-10);
 	}
 }
@@ -220,15 +220,16 @@
 @media (width >= 640px) {
 	.gridCell {
 		/* Transitions only on desktop */
-		&--inactive:hover,
-		&--active:hover,
-		&--supercharged:hover,
-		&--black:hover {
+		&--inactive,
+		&--active,
+		&--supercharged {
 			transition: background-color 0.25s ease;
 		}
 
-		&--black:hover {
-			transition: border-color 0.25s ease;
+		&--black {
+			transition:
+				background-color 0.25s ease,
+				border-color 0.25s ease;
 		}
 
 		&--active[data-accent-color="white"] {
