@@ -171,9 +171,8 @@ export const clearTechTreeCache = () => {
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
-		const promise = apiCall(`${API_URL}tech_tree/${shipType}`, {}, 10000)
-			.then(async (res) => {
-				const data = await res.json();
+		const promise = apiCall<TechTree>(`${API_URL}tech_tree/${shipType}`, {}, 10000)
+			.then(async (data) => {
 				console.log("Fetched tech tree:", data);
 
 				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {

@@ -28,9 +28,7 @@ function loadMarkdownContent() {
 		const langDir = path.join(LOCALES_DIR, lang);
 
 		// Read all markdown files in this language directory
-		const mdFiles = fs
-			.readdirSync(langDir)
-			.filter((file) => file.endsWith(".md"));
+		const mdFiles = fs.readdirSync(langDir).filter((file) => file.endsWith(".md"));
 
 		mdFiles.forEach((file) => {
 			const fileName = file.replace(/\.md$/, "");
@@ -44,24 +42,42 @@ function loadMarkdownContent() {
 }
 
 /**
- * Generates the virtual module code
- * @param {Object} markdownContent - The markdown content object
- * @returns {string} JavaScript code as a string
+ * Generates the source code for the virtual module "virtual:markdown-bundle".
+ * This function does not execute the logic itself but returns a string containing
+ * the JavaScript code that will be served by Vite.
+ *
+ * The generated module exports:
+ * - `markdownBundle`: The raw JSON object containing all markdown content.
+ * - `getMarkdown(lang, fileName)`: A helper function to retrieve content with fallbacks.
+ *
+ * @param {Object} markdownContent - The dictionary of markdown content keyed by language and filename.
+ * @returns {string} The complete JavaScript source code for the virtual module.
  */
 function generateModuleCode(markdownContent) {
 	return `
-// Auto-generated markdown bundle
+/**
+ * Auto-generated markdown bundle containing all content from locales directory.
+ * @type {Record<string, Record<string, string>>}
+ */
 export const markdownBundle = ${JSON.stringify(markdownContent)};
 
+/**
+ * Retrieves markdown content for a specific language and file.
+ * Falls back to English if the language or file is missing.
+ *
+ * @param {string} lang - The language code (e.g., 'en', 'es').
+ * @param {string} fileName - The name of the markdown file (without extension).
+ * @returns {string} The markdown content or an empty string if not found.
+ */
 export function getMarkdown(lang, fileName) {
 	// Fallback to English if language not available
 	const langContent = markdownBundle[lang] || markdownBundle['en'];
-	
+
 	// Fallback to English if file not available for language
 	if (!langContent[fileName] && lang !== 'en') {
 		return markdownBundle['en'][fileName] || '';
 	}
-	
+
 	return langContent[fileName] || '';
 }
 `;

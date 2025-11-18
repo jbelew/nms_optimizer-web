@@ -29,8 +29,8 @@ const RoutedDialogs = lazy(() =>
  * Inner component that loads ship types with Suspense and error boundary
  */
 const AppContent: FC = () => {
-	const { showError } = useOptimizeStore();
-	const { closeDialog, shareUrl } = useDialog();
+	const { showError, errorType } = useOptimizeStore();
+	const { closeDialog, shareUrl, activeDialog } = useDialog();
 	useTranslation();
 
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
@@ -69,18 +69,21 @@ const AppContent: FC = () => {
 	};
 
 	// If an API error occurred during loading, don't render the main app
-	if (showError) {
+	if (showError && errorType === "fatal") {
 		return null;
 	}
 
 	return (
 		<>
 			<Outlet />
-
-			<ShareLinkDialog isOpen={!!shareUrl} shareUrl={shareUrl || ""} onClose={closeDialog} />
-
-			<RoutedDialogs />
-
+			{shareUrl && (
+				<ShareLinkDialog
+					isOpen={!!shareUrl}
+					shareUrl={shareUrl || ""}
+					onClose={closeDialog}
+				/>
+			)}
+			{activeDialog && <RoutedDialogs />}
 			<UpdatePrompt
 				isOpen={showUpdatePrompt}
 				onRefresh={handleRefresh}

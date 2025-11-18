@@ -1,6 +1,6 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
+import type { Socket } from "socket.io-client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { io, Socket } from "socket.io-client";
 
 import { WS_URL } from "../../constants";
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
@@ -107,6 +107,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			// New socket per optimization
+			const { io } = await import("socket.io-client");
 			const socket: Socket = io(WS_URL, { transports: ["websocket"] });
 
 			const cleanup = () => {
@@ -190,13 +191,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 					}
 				} else {
 					console.error("Invalid API response:", data);
-					setShowErrorStore(true);
+					setShowErrorStore(true, "recoverable");
 					cleanup();
 				}
 			});
 			socket.once("connect_error", (err) => {
 				console.error("WebSocket connection error:", err);
-				setShowErrorStore(true);
+				setShowErrorStore(true, "recoverable");
 				cleanup();
 			});
 

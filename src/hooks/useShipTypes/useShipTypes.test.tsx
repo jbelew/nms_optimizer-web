@@ -75,10 +75,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			sentinel: { label: "Sentinel", type: "Starship" },
 		};
 		const { apiCall } = await import("../../utils/apiCall");
-		vi.mocked(apiCall).mockResolvedValue({
-			ok: true,
-			json: () => Promise.resolve(mockShipTypes),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// 3. Dynamically import to re-initialize the store with the new URL
 		const { fetchShipTypes } = await import("./useShipTypes");
@@ -102,10 +99,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			standard: { label: "Standard", type: "Starship" },
 		};
 		const { apiCall } = await import("../../utils/apiCall");
-		vi.mocked(apiCall).mockResolvedValue({
-			ok: true,
-			json: () => Promise.resolve(mockShipTypes),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
@@ -128,10 +122,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			standard: { label: "Standard", type: "Starship" },
 		};
 		const { apiCall } = await import("../../utils/apiCall");
-		vi.mocked(apiCall).mockResolvedValue({
-			ok: true,
-			json: () => Promise.resolve(mockShipTypes),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");

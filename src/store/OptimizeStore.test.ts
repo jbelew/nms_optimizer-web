@@ -164,6 +164,7 @@ describe("OptimizeStore", () => {
 
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: true,
+				errorType: "recoverable",
 				patternNoFitTech: "armor-plating",
 				setShowError,
 				setPatternNoFitTech,
@@ -174,6 +175,7 @@ describe("OptimizeStore", () => {
 
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: false,
+				errorType: null,
 				patternNoFitTech: "armor-plating",
 				setShowError,
 				setPatternNoFitTech,
@@ -184,6 +186,7 @@ describe("OptimizeStore", () => {
 
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: false,
+				errorType: null,
 				patternNoFitTech: null,
 				setShowError,
 				setPatternNoFitTech,

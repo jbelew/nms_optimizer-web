@@ -44,7 +44,14 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 				<strong>Tip:</strong> Open the link and Bookmark the page to easily return to this
 				layout later.
 			</Text>
-			<TextArea size={{ initial: "2", sm: "3" }} readOnly value={shareUrl} rows={8} />
+			<TextArea
+				id="share-url-input"
+				name="shareUrl"
+				size={{ initial: "2", sm: "3" }}
+				readOnly
+				value={shareUrl}
+				rows={8}
+			/>
 			<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
 				<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 					{t("dialogs.shareLink.openLink")}

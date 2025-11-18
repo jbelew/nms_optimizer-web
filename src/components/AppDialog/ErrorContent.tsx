@@ -3,6 +3,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
+import { useOptimizeStore } from "../../store/OptimizeStore";
+
 interface ErrorContentProps {
 	onClose: () => void;
 }
@@ -16,6 +18,12 @@ interface ErrorContentProps {
  */
 const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
+	const errorType = useOptimizeStore((state) => state.errorType);
+
+	const handleRetry = () => {
+		window.location.reload();
+	};
+
 	return (
 		<>
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
@@ -37,9 +45,13 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 				/>
 			</Text>
 			<Flex gap="2" mt="6" mb="2" justify="end">
-				<Dialog.Close asChild>
-					<Button onClick={onClose}>{t("dialogs.userStats.closeButton")}</Button>
-				</Dialog.Close>
+				{errorType === "fatal" ? (
+					<Button onClick={handleRetry}>Retry</Button>
+				) : (
+					<Dialog.Close asChild>
+						<Button onClick={onClose}>{t("dialogs.userStats.closeButton")}</Button>
+					</Dialog.Close>
+				)}
 			</Flex>
 		</>
 	);

@@ -34,12 +34,11 @@ export const useUserStats = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await apiCall(
+				const result = await apiCall<UserStat[]>(
 					API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today",
 					{},
 					10000
 				);
-				const result = await response.json();
 				setData(result);
 			} catch (error: unknown) {
 				setError((error as Error).message);

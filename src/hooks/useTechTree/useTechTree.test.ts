@@ -34,10 +34,7 @@ describe("useTechTree utilities", () => {
 		};
 
 		it("should fetch tech tree successfully", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -52,10 +49,7 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should cache the tech tree result", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -67,10 +61,7 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should handle different ship types separately", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -117,10 +108,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockData),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockData);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -131,10 +119,7 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should use default ship type 'standard'", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -163,10 +148,7 @@ describe("useTechTree utilities", () => {
 		};
 
 		it("should return a resource that can be read", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -181,12 +163,7 @@ describe("useTechTree utilities", () => {
 				// Never resolves to keep it pending
 			});
 
-			const mockApiCall = vi.fn().mockReturnValue(
-				Promise.resolve({
-					ok: true,
-					json: vi.fn().mockReturnValue(mockPromise),
-				})
-			);
+			const mockApiCall = vi.fn().mockReturnValue(mockPromise);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -196,10 +173,7 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should use async function to populate cache", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -231,10 +205,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -251,10 +222,7 @@ describe("useTechTree utilities", () => {
 		it("should allow re-fetching after cache clear", async () => {
 			const mockTechTree: TechTree = { starship: [] };
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -278,10 +246,7 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should handle JSON parse errors gracefully", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
-			});
+			const mockApiCall = vi.fn().mockRejectedValue(new Error("Invalid JSON"));
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -326,10 +291,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockData),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockData);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -368,10 +330,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockData),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockData);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -390,10 +349,7 @@ describe("useTechTree utilities", () => {
 				},
 			} as unknown as TechTree;
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockData),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockData);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -406,10 +362,7 @@ describe("useTechTree utilities", () => {
 
 	describe("API URL construction", () => {
 		it("should construct correct API URL for different ship types", async () => {
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue({}),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue({});
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -445,10 +398,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -476,10 +426,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
@@ -503,10 +450,7 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockApiCall = vi.fn().mockResolvedValue({
-				ok: true,
-				json: vi.fn().mockResolvedValue(mockTechTree),
-			});
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 

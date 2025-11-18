@@ -22,23 +22,28 @@ describe("apiCall", () => {
 		vi.clearAllMocks();
 	});
 
-	it("should return response when fetch is successful", async () => {
-		const mockResponse = { ok: true, status: 200 } as Response;
+	it("should return parsed JSON when fetch is successful", async () => {
+		const mockData = { message: "success" };
+		const mockResponse = {
+			ok: true,
+			status: 200,
+			json: vi.fn().mockResolvedValue(mockData),
+		} as unknown as Response;
 		vi.mocked(fetchWithTimeout).mockResolvedValue(mockResponse);
 
 		const result = await apiCall("https://api.example.com/data");
 
-		expect(result).toBe(mockResponse);
-		expect(fetchWithTimeout).toHaveBeenCalledWith(
-			"https://api.example.com/data",
-			undefined,
-			10000
-		);
+		expect(result).toEqual(mockData);
+		expect(fetchWithTimeout).toHaveBeenCalledWith("https://api.example.com/data", {}, 10000);
 		expect(hideSplashScreenAndShowBackground).not.toHaveBeenCalled();
 	});
 
 	it("should throw HttpError and trigger error dialog when response is not ok", async () => {
-		const mockResponse = { ok: false, status: 404, statusText: "Not Found" } as Response;
+		const mockResponse = {
+			ok: false,
+			status: 404,
+			statusText: "Not Found",
+		} as unknown as Response;
 		vi.mocked(fetchWithTimeout).mockResolvedValue(mockResponse);
 		const setShowErrorMock = vi.fn();
 		vi.mocked(useOptimizeStore.getState).mockReturnValue({
@@ -48,7 +53,7 @@ describe("apiCall", () => {
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow(HttpError);
 
 		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
-		expect(setShowErrorMock).toHaveBeenCalledWith(true);
+		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal");
 	});
 
 	it("should throw Error and trigger error dialog when fetch fails (network error)", async () => {
@@ -62,6 +67,26 @@ describe("apiCall", () => {
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow("Network Error");
 
 		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
-		expect(setShowErrorMock).toHaveBeenCalledWith(true);
+		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal");
+	});
+
+	it("should NOT trigger error dialog when skipGlobalError is true", async () => {
+		const mockResponse = {
+			ok: false,
+			status: 500,
+			statusText: "Server Error",
+		} as unknown as Response;
+		vi.mocked(fetchWithTimeout).mockResolvedValue(mockResponse);
+		const setShowErrorMock = vi.fn();
+		vi.mocked(useOptimizeStore.getState).mockReturnValue({
+			setShowError: setShowErrorMock,
+		} as unknown as ReturnType<typeof useOptimizeStore.getState>);
+
+		await expect(
+			apiCall("https://api.example.com/data", { skipGlobalError: true })
+		).rejects.toThrow(HttpError);
+
+		expect(hideSplashScreenAndShowBackground).not.toHaveBeenCalled();
+		expect(setShowErrorMock).not.toHaveBeenCalled();
 	});
 });

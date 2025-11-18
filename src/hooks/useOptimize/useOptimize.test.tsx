@@ -245,7 +245,7 @@ describe("useOptimize", () => {
 				errorCallback(new Error("Connection failed"));
 			});
 
-			expect(setShowErrorMock).toHaveBeenCalledWith(true);
+			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable");
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.disconnect).toHaveBeenCalled();
 			consoleErrorSpy.mockRestore();
@@ -274,7 +274,7 @@ describe("useOptimize", () => {
 				resultCallback({ some: "invalid data" });
 			});
 
-			expect(setShowErrorMock).toHaveBeenCalledWith(true);
+			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable");
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.disconnect).toHaveBeenCalled();
 			consoleErrorSpy.mockRestore();

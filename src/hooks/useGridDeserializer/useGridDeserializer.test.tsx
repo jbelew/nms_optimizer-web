@@ -134,10 +134,7 @@ describe("deserialize", () => {
 		};
 
 		// Mock apiCall response
-		vi.mocked(apiCall).mockResolvedValueOnce({
-			ok: true,
-			json: () => Promise.resolve(mockTechTree),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValueOnce(mockTechTree);
 
 		// Act
 		const resultGrid = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
@@ -250,10 +247,7 @@ describe("deserialize", () => {
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
 		// Mock apiCall to avoid unrelated errors
-		vi.mocked(apiCall).mockResolvedValueOnce({
-			ok: true,
-			json: () => Promise.resolve({}),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValueOnce({});
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
@@ -274,10 +268,7 @@ describe("deserialize", () => {
 			"1|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
 
 		// Mock apiCall to avoid unrelated errors
-		vi.mocked(apiCall).mockResolvedValueOnce({
-			ok: true,
-			json: () => Promise.resolve({}),
-		} as Response);
+		vi.mocked(apiCall).mockResolvedValueOnce({});
 
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
