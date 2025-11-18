@@ -1,3 +1,10 @@
+# [5.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.5...v5.8.0) (2025-11-18)
+
+
+### Features
+
+* **data:** introduce centralized API fetching and error handling ([b0d5f91](https://github.com/jbelew/nms_optimizer-web/commit/b0d5f9123048115afd57aaf93ce38dde46c69dd7))
+
 ## [5.7.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.4...v5.7.5) (2025-11-17)
 
 
