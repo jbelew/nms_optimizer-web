@@ -1,3 +1,10 @@
+## [5.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.8.0...v5.8.1) (2025-11-18)
+
+
+### Performance Improvements
+
+* **seo:** Optimize initial page render for bots ([afabcf5](https://github.com/jbelew/nms_optimizer-web/commit/afabcf59a3e53961a488a860854c7171506f193d))
+
 # [5.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.7.5...v5.8.0) (2025-11-18)
 
 
