@@ -185,19 +185,19 @@
 	&--glow {
 		animation: pulseGlow 0.75s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 3px 1px var(--purple-a8);
+		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 
 	&--glow[data-accent-color="white"] {
 		animation: pulseGlowWhite 0.75s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 3px 1px var(--purple-a8);
+		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 
 	&--glow[data-accent-color="yellow"] {
 		animation: pulseGlowYellow 0.75s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 3px 1px var(--purple-a8);
+		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 }
 
@@ -237,13 +237,13 @@
 		&--inactive,
 		&--active,
 		&--supercharged {
-			transition: background-color 0.25s ease;
+			transition: background-color 0.2s ease;
 		}
 
 		&--black {
 			transition:
-				background-color 0.25s ease,
-				border-color 0.25s ease;
+				background-color 0.2s ease,
+				border-color 0.2s ease;
 		}
 
 		&--active[data-accent-color="white"] {

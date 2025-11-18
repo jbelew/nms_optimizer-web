@@ -103,6 +103,14 @@ const App: FC = () => {
 	useSeoAndTitle();
 	useUrlValidation();
 
+	useEffect(() => {
+		// Cleanup pre-rendered SSG content
+		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
+		if (prerendered) {
+			prerendered.remove();
+		}
+	}, []);
+
 	return (
 		<>
 			<OfflineBanner />

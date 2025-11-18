@@ -151,17 +151,6 @@ footer a {
 	color: var(--accent-11);
 }
 
-@keyframes pulse-glow {
-	0%,
-	100% {
-		filter: drop-shadow(0 0 6px var(--accent-a7));
-	}
-
-	50% {
-		filter: drop-shadow(0 0 12px var(--accent-a7));
-	}
-}
-
 /* Visually hide an element but keep it accessible to screen readers */
 .sr-only {
 	position: absolute;
