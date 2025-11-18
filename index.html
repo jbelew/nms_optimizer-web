@@ -54,24 +54,69 @@
 		/>
 
 		<script>
-			// Detect if this is a bot/crawler
-			const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot/i.test(navigator.userAgent);
-			if (isBot) {
-				document.documentElement.classList.add('is-bot');
-			}
+			(function() {
+				// Detect if this is a bot/crawler
+				const userAgent = navigator.userAgent || '';
+				const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|headless|phantom|mobile safari.*\(iphone|ipad\)|windows phone|android|webos|blackberry|playbook|rim tablet|kindle|silk|nintendo|xbox|playstation/i.test(userAgent);
+				
+				// Also check for Google's rendering engine signature
+				const isGoogleRenderer = /Google Web Preview|googlebot-Mobile|googlebot\/2\.1|Google-InspecteurWeb|Chrome-Lighthouse|HeadlessChrome/i.test(userAgent) || 
+										  (typeof __HEADLESS__ !== 'undefined') || 
+										  !('onmousemove' in document) ||
+										  navigator.webdriver === true;
+				
+				function hideSplash() {
+					document.documentElement.classList.add('is-bot');
+					// Immediately hide splash screen elements
+					const style = document.createElement('style');
+					style.textContent = `
+						.vpss, .vpss-overlay, #vpss, [class*="splash"], [class*="vpss"] { 
+							display: none !important; 
+							visibility: hidden !important;
+							pointer-events: none !important;
+							height: 0 !important;
+							width: 0 !important;
+						}
+						body::before { opacity: 1 !important; }
+						body { overflow: auto !important; }
+					`;
+					document.head.appendChild(style);
+				}
+				
+				if (isBot || isGoogleRenderer) {
+					hideSplash();
+				}
+				
+				// Also hide splash if it's still showing after 3 seconds
+				// (indicates something is wrong or it's a slow crawler)
+				setTimeout(function() {
+					const splash = document.querySelector('.vpss');
+					if (splash && splash.style.display !== 'none') {
+						// Splash still showing - might be a crawler or slow connection
+						hideSplash();
+					}
+				}, 3000);
+			})();
 		</script>
 
 		<style>
 			/* Hide splash screen for bots */
 			html.is-bot .vpss,
-			html.is-bot .vpss-overlay {
+			html.is-bot .vpss-overlay,
+			html.is-bot [class*="splash"],
+			html.is-bot [id*="splash"] {
 				display: none !important;
 				visibility: hidden !important;
+				pointer-events: none !important;
 			}
 
 			/* Show background immediately for bots */
 			html.is-bot body::before {
 				opacity: 1 !important;
+			}
+			
+			html.is-bot body {
+				overflow: auto !important;
 			}
 
 			/* src/assets/css/fonts.css */
