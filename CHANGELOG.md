@@ -1,3 +1,10 @@
+# [5.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.9.0...v5.10.0) (2025-11-18)
+
+
+### Features
+
+* **ssg:** Implement Static Site Generation (SSG) for markdown content ([b685e99](https://github.com/jbelew/nms_optimizer-web/commit/b685e99fb03256f976bcda121a2ea797d466a9a9))
+
 # [5.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.8.1...v5.9.0) (2025-11-18)
 
 
