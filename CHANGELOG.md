@@ -1,3 +1,10 @@
+## [5.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.0...v5.10.1) (2025-11-18)
+
+
+### Bug Fixes
+
+* **grid-cell:** Prevent stuck cell taps on touch cancel ([7cd84b6](https://github.com/jbelew/nms_optimizer-web/commit/7cd84b64772ecf35f4a76320cdd25d9cbc4c2dfa))
+
 # [5.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.9.0...v5.10.0) (2025-11-18)
 
 
