@@ -1,8 +1,7 @@
 // src/hooks/useMarkdownContent.ts
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
+import { getMarkdown } from "virtual:markdown-bundle";
 
 /**
  * @interface MarkdownContentState
@@ -16,14 +15,19 @@ export interface MarkdownContentState {
 	error: string | null;
 }
 
-const markdownCache = new Map<string, string>();
-
 /**
- * Custom hook to fetch markdown content from a file.
+ * Custom hook to fetch markdown content from a bundled file.
+ * Uses pre-bundled markdown content loaded at build time.
  *
  * @param {string} markdownFileName - The name of the markdown file to fetch.
  * @returns {MarkdownContentState} An object containing the markdown content, loading state, and error state.
  */
+declare global {
+	interface Window {
+		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
+	}
+}
+
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");
@@ -31,50 +35,32 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		const loadMarkdown = async () => {
+		const loadMarkdown = () => {
 			setIsLoading(true);
 			setError(null);
 
-			const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
-			const langToFetch = markdownFileName === "changelog" ? "en" : lang;
-			const defaultLang = (i18n.options.fallbackLng as string[])[0] || "en"; // Assuming 'en' is the default fallback
-
-			const cacheKey = `${langToFetch}-${markdownFileName}`;
-
-			if (markdownCache.has(cacheKey)) {
-				setMarkdown(markdownCache.get(cacheKey)!);
-				setIsLoading(false);
-				return;
-			}
-
 			try {
-				let response = await fetchWithTimeout(
-					`/assets/locales/${langToFetch}/${markdownFileName}.md`,
-					{},
-					10000
-				);
-				if (
-					!response.ok &&
-					langToFetch !== defaultLang &&
-					markdownFileName !== "changelog"
-				) {
-					console.warn(
-						`Markdown for ${markdownFileName} not found for language ${langToFetch}, falling back to ${defaultLang}.`
-					);
-					response = await fetchWithTimeout(
-						`/assets/locales/${defaultLang}/${markdownFileName}.md`,
-						{},
-						10000
-					);
+				const lang = i18n.language.split("-")[0]; // Get base language e.g., 'en'
+				const langToFetch = markdownFileName === "changelog" ? "en" : lang;
+
+				// First, try to use pre-rendered markdown from SSG
+				const preRendered = window.__MARKDOWN_BUNDLE__?.[langToFetch]?.[markdownFileName];
+				if (preRendered) {
+					setMarkdown(preRendered);
+					setIsLoading(false);
+					return;
 				}
-				if (!response.ok) {
+
+				// Fallback to bundled markdown
+				const content = getMarkdown(langToFetch, markdownFileName);
+
+				if (!content) {
 					throw new Error(
-						`Failed to load ${markdownFileName}.md for language: ${lang} or ${defaultLang}. Status: ${response.status}`
+						`Markdown content not found for ${markdownFileName} in language ${langToFetch}`
 					);
 				}
-				const text = await response.text();
-				markdownCache.set(cacheKey, text); // Store in cache
-				setMarkdown(text);
+
+				setMarkdown(content);
 			} catch (e) {
 				console.error(`Error loading ${markdownFileName}.md:`, e);
 				setError(e instanceof Error ? e.message : "An unknown error occurred");
@@ -83,8 +69,9 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 				setIsLoading(false);
 			}
 		};
-		void loadMarkdown();
-	}, [i18n.language, markdownFileName, i18n.options.fallbackLng]);
+
+		loadMarkdown();
+	}, [i18n.language, markdownFileName]);
 
 	return { markdown, isLoading, error };
 };

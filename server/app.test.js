@@ -75,38 +75,34 @@ describe("Express Server", () => {
 	});
 });
 
-describe("SEO Middleware", () => {
-	it("should redirect /?lng=fr to /fr", async () => {
-		const response = await request(app).get("/?lng=fr");
-		expect(response.status).toBe(301);
-		expect(new URL(response.headers["location"]).pathname).toBe("/fr");
+describe("SEO Middleware - Path-based Language Routing", () => {
+	it("should serve /fr language route", async () => {
+		const response = await request(app).get("/fr");
+		expect(response.status).toBe(200);
 	});
 
-	it("should redirect /instructions?lng=de to /de/instructions", async () => {
-		const response = await request(app).get("/instructions?lng=de");
-		expect(response.status).toBe(301);
-		expect(new URL(response.headers["location"]).pathname).toBe("/de/instructions");
+	it("should serve /de/instructions language-prefixed route", async () => {
+		const response = await request(app).get("/de/instructions");
+		expect(response.status).toBe(200);
 	});
 
-	it("should redirect /?lng=en to /", async () => {
-		const response = await request(app).get("/?lng=en");
-		expect(response.status).toBe(301);
-		expect(new URL(response.headers["location"]).pathname).toBe("/");
-	});
-
-	it("should redirect /about?lng=en to /about", async () => {
-		const response = await request(app).get("/about?lng=en");
-		expect(response.status).toBe(301);
-		expect(new URL(response.headers["location"]).pathname).toBe("/about");
-	});
-
-	it("should not redirect /", async () => {
+	it("should serve /", async () => {
 		const response = await request(app).get("/");
 		expect(response.status).toBe(200);
 	});
 
-	it("should not redirect /about", async () => {
+	it("should serve /about", async () => {
 		const response = await request(app).get("/about");
+		expect(response.status).toBe(200);
+	});
+
+	it("should serve /es language route", async () => {
+		const response = await request(app).get("/es");
+		expect(response.status).toBe(200);
+	});
+
+	it("should serve /de language route", async () => {
+		const response = await request(app).get("/de");
 		expect(response.status).toBe(200);
 	});
 });

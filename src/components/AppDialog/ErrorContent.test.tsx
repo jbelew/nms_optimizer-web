@@ -32,7 +32,13 @@ vi.mock("react-i18next", () => ({
 const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>
-			<Dialog.Content>{component}</Dialog.Content>
+			<Dialog.Content>
+				<Dialog.Title className="sr-only">Error</Dialog.Title>
+				<Dialog.Description className="sr-only">
+					Error dialog with details
+				</Dialog.Description>
+				{component}
+			</Dialog.Content>
 		</Dialog.Root>
 	);
 };
@@ -88,6 +94,10 @@ describe("ErrorContent", () => {
 		rerender(
 			<Dialog.Root open={true}>
 				<Dialog.Content>
+					<Dialog.Title className="sr-only">Error</Dialog.Title>
+					<Dialog.Description className="sr-only">
+						Error dialog with details
+					</Dialog.Description>
 					<ErrorContent onClose={newMockOnClose} />
 				</Dialog.Content>
 			</Dialog.Root>

@@ -58,20 +58,20 @@
 				// Detect if this is a bot/crawler
 				const userAgent = navigator.userAgent || '';
 				const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|headless|phantom|mobile safari.*\(iphone|ipad\)|windows phone|android|webos|blackberry|playbook|rim tablet|kindle|silk|nintendo|xbox|playstation/i.test(userAgent);
-				
+
 				// Also check for Google's rendering engine signature
-				const isGoogleRenderer = /Google Web Preview|googlebot-Mobile|googlebot\/2\.1|Google-InspecteurWeb|Chrome-Lighthouse|HeadlessChrome/i.test(userAgent) || 
-										  (typeof __HEADLESS__ !== 'undefined') || 
+				const isGoogleRenderer = /Google Web Preview|googlebot-Mobile|googlebot\/2\.1|Google-InspecteurWeb|Chrome-Lighthouse|HeadlessChrome/i.test(userAgent) ||
+										  (typeof __HEADLESS__ !== 'undefined') ||
 										  !('onmousemove' in document) ||
 										  navigator.webdriver === true;
-				
+
 				function hideSplash() {
 					document.documentElement.classList.add('is-bot');
 					// Immediately hide splash screen elements
 					const style = document.createElement('style');
 					style.textContent = `
-						.vpss, .vpss-overlay, #vpss, [class*="splash"], [class*="vpss"] { 
-							display: none !important; 
+						.vpss, .vpss-overlay, #vpss, [class*="splash"], [class*="vpss"] {
+							display: none !important;
 							visibility: hidden !important;
 							pointer-events: none !important;
 							height: 0 !important;
@@ -82,20 +82,10 @@
 					`;
 					document.head.appendChild(style);
 				}
-				
+
 				if (isBot || isGoogleRenderer) {
 					hideSplash();
 				}
-				
-				// Also hide splash if it's still showing after 3 seconds
-				// (indicates something is wrong or it's a slow crawler)
-				setTimeout(function() {
-					const splash = document.querySelector('.vpss');
-					if (splash && splash.style.display !== 'none') {
-						// Splash still showing - might be a crawler or slow connection
-						hideSplash();
-					}
-				}, 3000);
 			})();
 		</script>
 
@@ -114,7 +104,7 @@
 			html.is-bot body::before {
 				opacity: 1 !important;
 			}
-			
+
 			html.is-bot body {
 				overflow: auto !important;
 			}
@@ -239,18 +229,7 @@
 			body.vpss-active {
 				overflow: hidden;
 			}
-
-			.visually-hidden {
-				position: absolute;
-				width: 1px;
-				height: 1px;
-				margin: -1px;
-				padding: 0;
-				overflow: hidden;
-				border: 0;
-				white-space: nowrap;
-			}
-		</style>
+			</style>
 
 		<!-- Prefetch background images (non-critical, lower priority) -->
 		<link
@@ -376,74 +355,136 @@
 		</script>
 	</head>
 	<body>
-		<main class="visually-hidden">
-			<section>
-				<h1>No Man's Sky Optimizer: The Ultimate Tool for Tech Layouts and Builds</h1>
-				<p>
-					Welcome to the NMS Optimizer, the ultimate <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the best No Man's
-					Sky tech layouts and builds. Whether you're looking to create the best starship, freighter, corvette,
-					multitool, exocraft, or exosuit layout, our tool is here to help. We use advanced algorithms to calculate the optimal placement of
-					your technology modules, maximizing your adjacency bonuses and the effectiveness
-					of your supercharged slots.
-				</p>
-			</section>
+		<noscript>
+			<main>
+				<section>
+					<h1>No Man's Sky Optimizer: The Ultimate Tool for Tech Layouts and Builds</h1>
+					<img src="public/assets/img/screenshots/screenshot.png" alt="Screenshot of NMS Optimizer application" />
+					<br />
+					<p>
+						Welcome to the NMS Optimizer, the ultimate <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the best No Man's
+						Sky tech layouts and builds. Whether you're looking to create the best starship, freighter, corvette,
+						multitool, exocraft, or exosuit layout, our tool is here to help. We use advanced algorithms to calculate the optimal placement of
+						your technology modules, maximizing your adjacency bonuses and the effectiveness
+						of your supercharged slots.
+					</p>
+				</section>
 
-			<section>
-				<h2>What is an Adjacency Bonus?</h2>
-				<p>
-					In No Man's Sky, an adjacency bonus is a crucial mechanic that boosts the stats
-					of your technology modules. When you place compatible technology modules next to
-					each other in your inventory, they form a synergy and receive a performance
-					boost. The NMS Optimizer is the perfect tool to figure out the best arrangement
-					for maximum adjacency bonus.
-				</p>
-			</section>
+				<section>
+					<h2>What is an Adjacency Bonus?</h2>
+					<p>
+						In No Man's Sky, an adjacency bonus is a crucial mechanic that boosts the stats
+						of your technology modules. When you place compatible technology modules next to
+						each other in your inventory, they form a synergy and receive a performance
+						boost. The NMS Optimizer is the perfect tool to figure out the best arrangement
+						for maximum adjacency bonus.
+					</p>
+				</section>
 
-			<section>
-				<h2>What Are Supercharged Slots?</h2>
-				<p>
-					Supercharged slots are a special type of inventory slot in No Man's Sky that
-					provides a massive boost to any technology module placed within them. These
-					slots are rare and valuable, and using them effectively is key to creating the
-					best builds. The NMS Optimizer is designed to help you make the most of your
-					supercharged slots, ensuring that you get the best possible performance out of
-					your gear.
-				</p>
-			</section>
+				<section>
+					<h2>What Are Supercharged Slots?</h2>
+					<p>
+						Supercharged slots are a special type of inventory slot in No Man's Sky that
+						provides a massive boost to any technology module placed within them. These
+						slots are rare and valuable, and using them effectively is key to creating the
+						best builds. The NMS Optimizer is designed to help you make the most of your
+						supercharged slots, ensuring that you get the best possible performance out of
+						your gear.
+					</p>
+				</section>
 
-			<section>
-				<h2>How the NMS Optimizer Works</h2>
-				<p>
-					Our No Man's Sky optimizer uses a combination of deterministic patterns, machine
-					learning, and simulated annealing to find the best possible technology layout
-					for your specific needs. Whether you're building a new starship, freighter, corvette, upgrading your
-					multitool, or optimizing your exosuit or exocraft, our tool will provide you
-					with a detailed layout that maximizes your performance.
-				</p>
-			</section>
+				<section>
+					<h2>How the NMS Optimizer Works</h2>
+					<p>
+						Our No Man's Sky optimizer uses a combination of deterministic patterns, machine
+						learning, and simulated annealing to find the best possible technology layout
+						for your specific needs. Whether you're building a new starship, freighter, corvette, upgrading your
+						multitool, or optimizing your exosuit or exocraft, our tool will provide you
+						with a detailed layout that maximizes your performance.
+					</p>
+				</section>
 
-			<section>
-				<h2>Supported Platforms</h2>
-				<ul>
-					<li>Starship Layouts</li>
-					<li>Corvette Layouts</li>
-					<li>Multitool Builds</li>
-					<li>Exosuit Layouts</li>
-					<li>Exocraft Layouts</li>
-					<li>Freighter Layouts</li>
-				</ul>
-			</section>
+				<section>
+					<h2>Supported Platforms</h2>
+					<ul>
+						<li>Starship Layouts</li>
+						<li>Corvette Layouts</li>
+						<li>Multitool Builds</li>
+						<li>Exosuit Layouts</li>
+						<li>Exocraft Layouts</li>
+						<li>Freighter Layouts</li>
+					</ul>
+				</section>
 
-			<section>
-				<h2>Why Use the NMS Optimizer?</h2>
-				<p>
-					Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer
-					is the best <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the perfect No Man's Sky builds. Whether you're a
-					new player or a seasoned veteran, our tool will help you create the best
-					starship, freighter, corvette, multitool, exocraft, and exosuit layouts and builds.
-				</p>
-			</section>
-		</main>
+				<section>
+					<h2>Why Use the NMS Optimizer?</h2>
+					<p>
+						Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer
+						is the best <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the perfect No Man's Sky builds. Whether you're a
+						new player or a seasoned veteran, our tool will help you create the best
+						starship, freighter, corvette, multitool, exocraft, and exosuit layouts and builds.
+					</p>
+				</section>
+			</main>
+
+			<style>
+				main {
+					color: #fff;
+					padding: 2rem;
+					font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+				}
+				main h1 {
+					color: #0ba5e9;
+					margin: 1.5rem 0 1rem 0;
+					font-size: 1.125rem;
+					font-weight: bold;
+				}
+				main h2 {
+					color: #0ba5e9;
+					margin: 1.5rem 0 1rem 0;
+					font-size: 1.125rem;
+					font-weight: bold;
+				}
+				main h3 {
+					color: #0ba5e9;
+					margin: 1rem 0 0.75rem 0;
+					font-size: 1rem;
+					font-weight: bold;
+				}
+				main p {
+					margin-bottom: 0.5rem;
+					line-height: 1.6;
+				}
+				main ul {
+					list-style: disc;
+					margin: 0.5rem 0 0.5rem 1.5rem;
+				}
+				main ol {
+					list-style: decimal;
+					margin: 0.5rem 0 0.5rem 1.5rem;
+				}
+				main li {
+					margin-bottom: 0.25rem;
+				}
+				main a {
+					color: #0ba5e9;
+					text-decoration: underline;
+				}
+				main code {
+					background-color: rgba(0, 162, 199, 0.1);
+					padding: 0.125rem 0.25rem;
+					border-radius: 0.25rem;
+					color: #0ba5e9;
+				}
+				main blockquote {
+					border-left: 4px solid #0ba5e9;
+					padding-left: 1rem;
+					margin: 0.5rem 0;
+					font-style: italic;
+					color: #cbd5e1;
+				}
+			</style>
+		</noscript>
 
 		<div id="root"></div>
 		<script type="module" src="/src/main.tsx"></script>

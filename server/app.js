@@ -185,6 +185,7 @@ if (process.env.NODE_ENV === "production") {
 /**
  * Middleware to redirect requests with trailing slashes to the non-slashed version.
  * e.g., /about/ -> /about. This is important for SEO.
+ * However, this is skipped for directory paths that have SSG files, which are handled below.
  */
 app.use((req, res, next) => {
 	if (req.path.length > 1 && req.path.endsWith("/")) {
@@ -213,6 +214,56 @@ app.get("/robots.txt", (req, res) => {
 });
 
 /**
+ * The main SPA fallback handler for SSG-generated pages.
+ * This runs BEFORE the static file middleware to intercept SPA routes
+ * and serve pregenerated HTML files directly.
+ */
+app.get(/^[^.]*$/, async (req, res, next) => {
+	if (isSpaRoute(req.path)) {
+		// Ensure index.html is revalidated by the browser on every navigation.
+		res.setHeader("Cache-Control", "no-cache");
+		
+		// Try to serve pregenerated SSG file first (e.g., /dist/about/index.html)
+		const parts = req.path.split("/").filter((p) => p);
+		let ssgPath = null;
+		
+		// Build potential SSG file paths
+		if (parts.length === 0) {
+			ssgPath = path.join(DIST_DIR, "index.html");
+		} else if (SUPPORTED_LANGUAGES.includes(parts[0])) {
+			// Language-prefixed: /es/about -> /dist/es/about/index.html
+			const langPage = parts.slice(1).join("/");
+			ssgPath = path.join(DIST_DIR, parts[0], langPage || "index.html");
+			if (langPage) ssgPath = path.join(ssgPath, "index.html");
+		} else {
+			// Regular page: /about -> /dist/about/index.html
+			ssgPath = path.join(DIST_DIR, parts.join("/"), "index.html");
+		}
+		
+		// Check if SSG file exists
+		try {
+			const stats = await fs.promises.stat(ssgPath);
+			if (stats.isFile()) {
+				// Serve the pregenerated file
+				res.setHeader("Cache-Control", "public, max-age=3600");
+				return res.sendFile(ssgPath);
+			}
+		} catch (err) {
+			// File doesn't exist, fall back to serving index.html with middleware
+		}
+		
+		try {
+			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
+		} catch (error) {
+			next(error);
+		}
+	} else {
+		// If it's not a known SPA route, let it fall through to the static middleware
+		next();
+	}
+});
+
+/**
  * Middleware for serving pre-compressed static assets (Brotli/Gzip) from the 'dist' directory.
  */
 app.use(
@@ -220,7 +271,7 @@ app.use(
 	expressStaticGzip(DIST_DIR, {
 		enableBrotli: true,
 		orderPreference: ["br", "gz"],
-		index: false, // SPA fallback is handled manually
+		index: false, // SPA fallback is handled above
 		setHeaders: (res, filePath) => {
 			setCacheHeaders(res, filePath);
 		},
@@ -229,29 +280,6 @@ app.use(
 
 app.get("/status/404", (req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));
-});
-
-/**
- * The main SPA fallback handler.
- * It determines if a request is for a page navigation or a static asset.
- * If it's a navigation request, it serves the main index.html file with SEO tags injected.
- * Otherwise, it passes the request to the next middleware (the 404 handler).
- */
-// This regex matches all paths that do not contain a dot, which is a common
-// way to distinguish between SPA routes and static file requests.
-app.get(/^[^.]*$/, async (req, res, next) => {
-	if (isSpaRoute(req.path)) {
-		// Ensure index.html is revalidated by the browser on every navigation.
-		res.setHeader("Cache-Control", "no-cache");
-		try {
-			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
-		} catch (error) {
-			next(error);
-		}
-	} else {
-		// If it's not a known SPA route, let it fall through to the 404 handler
-		next();
-	}
 });
 
 /**

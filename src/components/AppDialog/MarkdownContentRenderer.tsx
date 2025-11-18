@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
@@ -11,11 +11,16 @@ interface MarkdownContentRendererProps {
 }
 
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
+const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
 
 const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,
 }) => {
+	// Check if pre-rendered content is available in the page
+	const [hasPrerendered, setHasPrerendered] = useState(false);
+
+	// Always call hooks at the top level
 	const { markdown, isLoading, error } = useMarkdownContent(markdownFileName);
 	const [remarkGfm, setRemarkGfm] = useState<(() => void) | undefined>(undefined);
 
@@ -23,6 +28,11 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	const h2IdMapRef = useRef(new Map<React.ReactNode, string>());
 
 	const articleRef = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		const prerenderedElement = document.querySelector('[data-prerendered-markdown="true"]');
+		setHasPrerendered(!!prerenderedElement);
+	}, []);
 
 	useEffect(() => {
 		import("remark-gfm").then((module) => {
@@ -157,6 +167,15 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 
 	if (error) {
 		return <div>Error: {error}</div>;
+	}
+
+	// If pre-rendered content exists, use it
+	if (hasPrerendered) {
+		return (
+			<Suspense fallback={<LoremIpsumSkeleton />}>
+				<PrerenderedMarkdownRenderer targetSectionId={targetSectionId} />
+			</Suspense>
+		);
 	}
 
 	return (

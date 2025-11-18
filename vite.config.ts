@@ -11,6 +11,7 @@ import { splashScreen } from "vite-plugin-splash-screen";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
+import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
 export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
@@ -23,6 +24,7 @@ export default defineConfig(({ mode }) => {
 			__BUILD_DATE__: JSON.stringify(new Date().toISOString()), // Added build date
 		},
 		plugins: [
+			markdownBundlePlugin(),
 			react({
 				babel: {
 					plugins: [["babel-plugin-react-compiler"]],
@@ -220,8 +222,8 @@ export default defineConfig(({ mode }) => {
 			minify: "terser",
 			terserOptions: {
 				compress: {
-					drop_console: true,
-					drop_debugger: true,
+					// drop_console: true,
+					// drop_debugger: true,
 				},
 			},
 			cssCodeSplit: true,
