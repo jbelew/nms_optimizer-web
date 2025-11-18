@@ -53,7 +53,27 @@
 			href="/assets/img/favicons/apple-touch-icon.png?v=3"
 		/>
 
+		<script>
+			// Detect if this is a bot/crawler
+			const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot/i.test(navigator.userAgent);
+			if (isBot) {
+				document.documentElement.classList.add('is-bot');
+			}
+		</script>
+
 		<style>
+			/* Hide splash screen for bots */
+			html.is-bot .vpss,
+			html.is-bot .vpss-overlay {
+				display: none !important;
+				visibility: hidden !important;
+			}
+
+			/* Show background immediately for bots */
+			html.is-bot body::before {
+				opacity: 1 !important;
+			}
+
 			/* src/assets/css/fonts.css */
 			@font-face {
 				font-family: GeosansLight;
