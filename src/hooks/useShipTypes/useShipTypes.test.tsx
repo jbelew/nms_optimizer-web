@@ -6,9 +6,10 @@ vi.mock("../../constants", () => ({
 	API_URL: "http://mock-api.com/",
 }));
 
-// Mock global fetch
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+// Mock apiCall
+vi.mock("../../utils/apiCall", () => ({
+	apiCall: vi.fn(),
+}));
 
 // Mock window.history.pushState and replaceState for the test environment
 const mockPushState = vi.fn();
@@ -73,10 +74,11 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			hauler: { label: "Hauler", type: "Starship" },
 			sentinel: { label: "Sentinel", type: "Starship" },
 		};
-		mockFetch.mockResolvedValue({
+		const { apiCall } = await import("../../utils/apiCall");
+		vi.mocked(apiCall).mockResolvedValue({
 			ok: true,
 			json: () => Promise.resolve(mockShipTypes),
-		});
+		} as Response);
 
 		// 3. Dynamically import to re-initialize the store with the new URL
 		const { fetchShipTypes } = await import("./useShipTypes");
@@ -85,7 +87,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 		// ACT: Trigger the fetch and wait for the internal promise chain to complete
 		await act(async () => {
 			fetchShipTypes();
-			await mockFetch.mock.results[0].value; // Wait for the fetch to resolve
+			await new Promise((resolve) => setTimeout(resolve, 50)); // Wait for async operations
 		});
 
 		// ASSERT: The selected ship type should NOT be overwritten by the first
@@ -99,7 +101,11 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(mockShipTypes) });
+		const { apiCall } = await import("../../utils/apiCall");
+		vi.mocked(apiCall).mockResolvedValue({
+			ok: true,
+			json: () => Promise.resolve(mockShipTypes),
+		} as Response);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
@@ -107,7 +113,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		await act(async () => {
 			fetchShipTypes();
-			await mockFetch.mock.results[0].value;
+			await new Promise((resolve) => setTimeout(resolve, 50));
 		});
 
 		// ASSERT
@@ -121,7 +127,11 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve(mockShipTypes) });
+		const { apiCall } = await import("../../utils/apiCall");
+		vi.mocked(apiCall).mockResolvedValue({
+			ok: true,
+			json: () => Promise.resolve(mockShipTypes),
+		} as Response);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
@@ -129,7 +139,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 
 		await act(async () => {
 			fetchShipTypes();
-			await mockFetch.mock.results[0].value;
+			await new Promise((resolve) => setTimeout(resolve, 50));
 		});
 
 		// ASSERT: After validation, it should be reset to the default.

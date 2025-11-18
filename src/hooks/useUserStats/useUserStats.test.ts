@@ -44,7 +44,7 @@ describe("useUserStats", () => {
 	});
 
 	it("should handle API error", async () => {
-		const errorMessage = "Network response was not ok";
+		const errorMessage = "HTTP error! status: 500";
 		vi.spyOn(global, "fetch").mockResolvedValueOnce({
 			ok: false,
 			status: 500,

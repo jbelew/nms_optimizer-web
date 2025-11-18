@@ -26,36 +26,27 @@ const RoutedDialogs = lazy(() =>
 );
 
 /**
- * The main application component. It sets up routing, analytics, internationalization,
- * and global state providers. It also handles dynamic document titles and SEO tags.
- * @returns {JSX.Element} The rendered App component.
+ * Inner component that loads ship types with Suspense and error boundary
  */
-const App: FC = () => {
-	const { t } = useTranslation();
+const AppContent: FC = () => {
+	const { showError } = useOptimizeStore();
+	const { closeDialog, shareUrl } = useDialog();
+	useTranslation();
 
-	const { showError, setShowError } = useOptimizeStore();
-	const { closeDialog, shareUrl } = useDialog(); // Destructure from useDialog
-
-	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false); // Added state for update prompt
-	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined); // Declared updateSW using useRef
-
-	// Use the new custom hooks
-	useSeoAndTitle();
-	useUrlValidation();
+	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
+	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
 
 	const shipTypes = useFetchShipTypesSuspense();
 	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
-
-	// const { showPrompt, dismissPrompt } = useInstallPrompt();
-
 	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
 
 	useEffect(() => {
 		initializePlatform(shipTypeKeys);
+	}, [initializePlatform, shipTypeKeys]);
 
-		// Listen for new version available event
+	useEffect(() => {
 		const handleNewVersion = (event: CustomEvent) => {
-			updateSWRef.current = event.detail; // Store in ref
+			updateSWRef.current = event.detail;
 			setShowUpdatePrompt(true);
 		};
 		window.addEventListener("new-version-available", handleNewVersion as EventListener);
@@ -63,13 +54,13 @@ const App: FC = () => {
 		return () => {
 			window.removeEventListener("new-version-available", handleNewVersion as EventListener);
 		};
-	}, [initializePlatform, shipTypeKeys]);
+	}, []);
 
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
-			updateSWRef.current(true); // Call updateServiceWorker to skip waiting and reload
+			updateSWRef.current(true);
 		} else {
-			window.location.reload(); // Fallback if updateSW is not available
+			window.location.reload();
 		}
 	};
 
@@ -77,33 +68,55 @@ const App: FC = () => {
 		setShowUpdatePrompt(false);
 	};
 
+	// If an API error occurred during loading, don't render the main app
+	if (showError) {
+		return null;
+	}
+
 	return (
 		<>
-			<OfflineBanner />
-			<Suspense fallback={null}>
-				<Outlet />
-				<AppDialog
-					isOpen={showError}
-					onClose={() => setShowError(false)}
-					content={<ErrorContent onClose={() => setShowError(false)} />}
-					titleKey="dialogs.titles.serverError"
-					title={t("dialogs.titles.serverError")}
-				/>
+			<Outlet />
 
-				{/* Render ShareLinkDialog conditionally */}
-				<ShareLinkDialog
-					isOpen={!!shareUrl}
-					shareUrl={shareUrl || ""}
-					onClose={closeDialog}
-				/>
+			<ShareLinkDialog isOpen={!!shareUrl} shareUrl={shareUrl || ""} onClose={closeDialog} />
 
-				<RoutedDialogs />
-			</Suspense>
-			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
+			<RoutedDialogs />
+
 			<UpdatePrompt
 				isOpen={showUpdatePrompt}
 				onRefresh={handleRefresh}
 				onDismiss={handleDismissUpdatePrompt}
+			/>
+		</>
+	);
+};
+
+/**
+ * The main application component. It sets up routing, analytics, internationalization,
+ * and global state providers. It also handles dynamic document titles and SEO tags.
+ * @returns {JSX.Element} The rendered App component.
+ */
+const App: FC = () => {
+	const { t } = useTranslation();
+	const { showError, setShowError } = useOptimizeStore();
+
+	// Use the new custom hooks
+	useSeoAndTitle();
+	useUrlValidation();
+
+	return (
+		<>
+			<OfflineBanner />
+			<Suspense fallback={null}>
+				<AppContent />
+			</Suspense>
+
+			{/* Error dialog - rendered at App level so it's always available */}
+			<AppDialog
+				isOpen={showError}
+				onClose={() => setShowError(false)}
+				content={<ErrorContent onClose={() => setShowError(false)} />}
+				titleKey="dialogs.titles.serverError"
+				title={t("dialogs.titles.serverError")}
 			/>
 		</>
 	);

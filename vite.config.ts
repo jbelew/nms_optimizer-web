@@ -80,6 +80,7 @@ export default defineConfig(({ mode }) => {
 					"assets/img/background.webp",
 					"assets/img/background@2x.webp",
 					"assets/img/background@mobile.webp",
+					"assets/locales/*/translation.json",
 				],
 				workbox: {
 					// User-controlled updates
@@ -98,7 +99,7 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: "images-cache",
 								expiration: {
-									maxEntries: 100,
+									maxEntries: 1000,
 									maxAgeSeconds: 604800, // 1 week (matches server/app.js)
 								},
 							},
@@ -111,6 +112,18 @@ export default defineConfig(({ mode }) => {
 								expiration: {
 									maxEntries: 30,
 									maxAgeSeconds: 31536000, // 1 year
+								},
+							},
+						},
+						{
+							urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "translations-cache",
+								networkTimeoutSeconds: 5,
+								expiration: {
+									maxEntries: 20,
+									maxAgeSeconds: 86400, // 1 day
 								},
 							},
 						},

@@ -2,6 +2,7 @@ import { vi } from "vitest";
 
 import { API_URL } from "../../constants";
 import { createEmptyCell } from "../../store/GridStore"; // Import createEmptyCell
+import { apiCall } from "../../utils/apiCall";
 import { clearTechTreeCache } from "../useTechTree/useTechTree";
 import { deserialize } from "./useGridDeserializer";
 
@@ -33,12 +34,17 @@ vi.mock("../../utils/recommendedBuildValidation", () => ({
 	isValidRecommendedBuild: vi.fn(() => true),
 }));
 
+vi.mock("../../utils/apiCall", () => ({
+	apiCall: vi.fn(),
+}));
+
 describe("deserialize", () => {
 	const mockSetTechColors = vi.fn();
 	const mockShipType = "standard";
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		clearTechTreeCache();
 	});
 
 	it("should deserialize a valid grid string and set tech colors", async () => {
@@ -127,22 +133,17 @@ describe("deserialize", () => {
 			],
 		};
 
-		// Mock fetch response
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () => Promise.resolve(mockTechTree),
-			})
-		) as unknown as typeof fetch;
+		// Mock apiCall response
+		vi.mocked(apiCall).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve(mockTechTree),
+		} as Response);
 
 		// Act
 		const resultGrid = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
-		expect(global.fetch).toHaveBeenCalledWith(
-			`${API_URL}tech_tree/${mockShipType}`,
-			expect.objectContaining({ signal: expect.any(AbortSignal) })
-		);
+		expect(apiCall).toHaveBeenCalledWith(`${API_URL}tech_tree/${mockShipType}`, {}, 10000);
 		expect(mockSetTechColors).toHaveBeenCalledWith({
 			shield: "blue",
 		});
@@ -159,16 +160,12 @@ describe("deserialize", () => {
 
 	it("should return null and log an error if fetch fails", async () => {
 		// Arrange
-		clearTechTreeCache(); // Clear cache so fetch will be called
 		// Use a valid serialized grid that will pass initial checks
 		const serializedGrid =
 			"111111111111111111111111111111111111111111111111111111111111|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				ok: false,
-				status: 500,
-			})
-		) as unknown as typeof fetch;
+
+		// Mock apiCall to reject - this will cause fetchTechTreeAsync to return an empty object
+		vi.mocked(apiCall).mockRejectedValueOnce(new Error("HTTP error! status: 500"));
 
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
@@ -177,10 +174,14 @@ describe("deserialize", () => {
 
 		// Assert
 		expect(result).toBeNull();
+		// The error about fetch failing is logged from fetchTechTreeAsync, and then
+		// deserialize logs its own error about empty tech tree data
 		expect(consoleErrorSpy).toHaveBeenCalledWith(
-			"Error deserializing grid:",
-			"HTTP error! status: 500",
-			expect.any(String) // stack trace
+			"Error fetching tech tree:",
+			expect.any(Error)
+		);
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			"Tech tree data is empty. Fetch likely failed."
 		);
 		expect(mockSetTechColors).not.toHaveBeenCalled();
 		consoleErrorSpy.mockRestore();
@@ -248,13 +249,11 @@ describe("deserialize", () => {
 		const serializedGrid = "|||||"; // 6 parts, but all undefined/empty
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-		// Mock fetch to avoid unrelated errors
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () => Promise.resolve({}),
-			})
-		) as unknown as typeof fetch;
+		// Mock apiCall to avoid unrelated errors
+		vi.mocked(apiCall).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({}),
+		} as Response);
 		// Act
 		const result = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
@@ -274,13 +273,11 @@ describe("deserialize", () => {
 		const serializedGrid =
 			"1|%033%207%032%2048|ABC%207DE%2048|T3F7T2F48|shield:%03|Cb:A,Ca:B,DS:C,Cc:D,AA:E";
 
-		// Mock fetch to avoid unrelated errors
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				ok: true,
-				json: () => Promise.resolve({}),
-			})
-		) as unknown as typeof fetch;
+		// Mock apiCall to avoid unrelated errors
+		vi.mocked(apiCall).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({}),
+		} as Response);
 
 		const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 

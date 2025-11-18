@@ -1,12 +1,12 @@
 import type { Module, TechTree, TechTreeItem } from "./useTechTree";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as fetchWithTimeoutModule from "../../utils/fetchWithTimeout";
+import * as apiCallModule from "../../utils/apiCall";
 import { clearTechTreeCache, fetchTechTree, fetchTechTreeAsync } from "./useTechTree";
 
-// Mock fetchWithTimeout
-vi.mock("../../utils/fetchWithTimeout", () => ({
-	fetchWithTimeout: vi.fn(),
+// Mock apiCall
+vi.mock("../../utils/apiCall", () => ({
+	apiCall: vi.fn(),
 }));
 
 describe("useTechTree utilities", () => {
@@ -34,17 +34,17 @@ describe("useTechTree utilities", () => {
 		};
 
 		it("should fetch tech tree successfully", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const result = await fetchTechTreeAsync("standard");
 
 			expect(result).toEqual(mockTechTree);
-			expect(mockFetch).toHaveBeenCalledWith(
+			expect(mockApiCall).toHaveBeenCalledWith(
 				expect.stringContaining("tech_tree/standard"),
 				{},
 				10000
@@ -52,44 +52,45 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should cache the tech tree result", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			await fetchTechTreeAsync("standard");
 			await fetchTechTreeAsync("standard");
 
 			// Should only be called once due to caching
-			expect(mockFetch).toHaveBeenCalledTimes(1);
+			expect(mockApiCall).toHaveBeenCalledTimes(1);
 		});
 
 		it("should handle different ship types separately", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			await fetchTechTreeAsync("standard");
 			await fetchTechTreeAsync("explorer");
 
 			// Should be called twice for different ship types
-			expect(mockFetch).toHaveBeenCalledTimes(2);
+			expect(mockApiCall).toHaveBeenCalledTimes(2);
 		});
 
-		it("should throw error on HTTP error response", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
-				ok: false,
-				status: 404,
-			});
+		it("should handle HTTP error response gracefully", async () => {
+			const mockApiCall = vi.fn().mockRejectedValue(new Error("HTTP error! status: 404"));
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			await expect(fetchTechTreeAsync("invalid")).rejects.toThrow("HTTP error! status: 404");
+			// Should not throw - errors are caught and trigger the error dialog instead
+			const result = await fetchTechTreeAsync("invalid");
+
+			// Should return empty object on error
+			expect(result).toEqual({});
 		});
 
 		it("should filter out invalid recommended builds", async () => {
@@ -116,12 +117,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockData),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const result = await fetchTechTreeAsync("standard");
 
@@ -130,16 +131,16 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should use default ship type 'standard'", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			await fetchTechTreeAsync();
 
-			expect(mockFetch).toHaveBeenCalledWith(
+			expect(mockApiCall).toHaveBeenCalledWith(
 				expect.stringContaining("tech_tree/standard"),
 				{},
 				10000
@@ -162,12 +163,12 @@ describe("useTechTree utilities", () => {
 		};
 
 		it("should return a resource that can be read", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource = fetchTechTree("standard");
 
@@ -180,14 +181,14 @@ describe("useTechTree utilities", () => {
 				// Never resolves to keep it pending
 			});
 
-			const mockFetch = vi.fn().mockReturnValue(
+			const mockApiCall = vi.fn().mockReturnValue(
 				Promise.resolve({
 					ok: true,
 					json: vi.fn().mockReturnValue(mockPromise),
 				})
 			);
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource = fetchTechTree("standard");
 
@@ -195,12 +196,12 @@ describe("useTechTree utilities", () => {
 		});
 
 		it("should use async function to populate cache", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource = fetchTechTree("standard");
 
@@ -230,67 +231,73 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			await fetchTechTreeAsync("standard");
-			expect(mockFetch).toHaveBeenCalledTimes(1);
+			expect(mockApiCall).toHaveBeenCalledTimes(1);
 
 			clearTechTreeCache();
 
 			await fetchTechTreeAsync("standard");
 			// Should be called again after cache is cleared
-			expect(mockFetch).toHaveBeenCalledTimes(2);
+			expect(mockApiCall).toHaveBeenCalledTimes(2);
 		});
 
 		it("should allow re-fetching after cache clear", async () => {
 			const mockTechTree: TechTree = { starship: [] };
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			await fetchTechTreeAsync("standard");
 			clearTechTreeCache();
 			await fetchTechTreeAsync("standard");
 
-			expect(mockFetch).toHaveBeenCalledTimes(2);
+			expect(mockApiCall).toHaveBeenCalledTimes(2);
 		});
 	});
 
 	describe("Error handling", () => {
-		it("should handle network errors", async () => {
-			const mockFetch = vi.fn().mockRejectedValue(new Error("Network error"));
+		it("should handle network errors gracefully", async () => {
+			const mockApiCall = vi.fn().mockRejectedValue(new Error("Network error"));
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			await expect(fetchTechTreeAsync("standard")).rejects.toThrow("Network error");
+			// Should not throw - errors are caught and trigger the error dialog instead
+			const result = await fetchTechTreeAsync("standard");
+			expect(result).toEqual({});
 		});
 
-		it("should handle JSON parse errors", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+		it("should handle JSON parse errors gracefully", async () => {
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockRejectedValue(new Error("Invalid JSON")),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			await expect(fetchTechTreeAsync("standard")).rejects.toThrow("Invalid JSON");
+			// Should not throw - errors are caught and trigger the error dialog instead
+			const result = await fetchTechTreeAsync("standard");
+			expect(result).toEqual({});
 		});
 
-		it("should handle timeout errors", async () => {
-			const mockFetch = vi.fn().mockRejectedValue(new Error("Request timeout"));
+		it("should handle timeout errors gracefully", async () => {
+			const mockApiCall = vi.fn().mockRejectedValue(new Error("Request timeout"));
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			await expect(fetchTechTreeAsync("standard")).rejects.toThrow("Request timeout");
+			// Should not throw - errors are caught and trigger the error dialog instead
+			const result = await fetchTechTreeAsync("standard");
+			expect(result).toEqual({});
 		});
 	});
 
@@ -319,12 +326,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockData),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const result = await fetchTechTreeAsync("standard");
 
@@ -361,12 +368,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockData),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const result = await fetchTechTreeAsync("standard");
 
@@ -383,12 +390,12 @@ describe("useTechTree utilities", () => {
 				},
 			} as unknown as TechTree;
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockData),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const result = await fetchTechTreeAsync("standard");
 
@@ -399,22 +406,22 @@ describe("useTechTree utilities", () => {
 
 	describe("API URL construction", () => {
 		it("should construct correct API URL for different ship types", async () => {
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue({}),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const shipTypes = ["standard", "explorer", "fighter", "hauler", "exotic"];
 
 			for (const shipType of shipTypes) {
 				clearTechTreeCache();
-				mockFetch.mockClear();
+				mockApiCall.mockClear();
 
 				await fetchTechTreeAsync(shipType);
 
-				expect(mockFetch).toHaveBeenCalledWith(
+				expect(mockApiCall).toHaveBeenCalledWith(
 					expect.stringContaining(`tech_tree/${shipType}`),
 					{},
 					10000
@@ -438,12 +445,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource = fetchTechTree("standard");
 
@@ -469,12 +476,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource1 = fetchTechTree("standard");
 			const resource2 = fetchTechTree("standard");
@@ -496,12 +503,12 @@ describe("useTechTree utilities", () => {
 				],
 			};
 
-			const mockFetch = vi.fn().mockResolvedValue({
+			const mockApiCall = vi.fn().mockResolvedValue({
 				ok: true,
 				json: vi.fn().mockResolvedValue(mockTechTree),
 			});
 
-			vi.mocked(fetchWithTimeoutModule.fetchWithTimeout).mockImplementation(mockFetch);
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
 			const resource1 = fetchTechTree("standard");
 			const resource2 = fetchTechTree("explorer");

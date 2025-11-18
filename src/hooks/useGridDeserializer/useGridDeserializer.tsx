@@ -217,6 +217,12 @@ export const deserialize = async (
 		// --- Fetch Tech Tree Data (using cached promise) ---
 		const techTreeData: TechTree = await fetchTechTreeAsync(shipType);
 
+		// Check if tech tree data is empty (indicates a fetch failure)
+		if (Object.keys(techTreeData).length === 0) {
+			console.error("Tech tree data is empty. Fetch likely failed.");
+			return null;
+		}
+
 		if (techTreeData.recommended_builds && Array.isArray(techTreeData.recommended_builds)) {
 			techTreeData.recommended_builds = techTreeData.recommended_builds.filter(
 				(build: RecommendedBuild) => {

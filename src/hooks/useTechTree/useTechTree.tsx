@@ -4,7 +4,7 @@ import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
 import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
+import { apiCall } from "../../utils/apiCall";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
 /**
@@ -171,11 +171,8 @@ export const clearTechTreeCache = () => {
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
 	if (!cache.has(cacheKey)) {
-		const promise = fetchWithTimeout(`${API_URL}tech_tree/${shipType}`, {}, 10000).then(
-			async (res) => {
-				if (!res.ok) {
-					throw new Error(`HTTP error! status: ${res.status}`);
-				}
+		const promise = apiCall(`${API_URL}tech_tree/${shipType}`, {}, 10000)
+			.then(async (res) => {
 				const data = await res.json();
 				console.log("Fetched tech tree:", data);
 
@@ -194,8 +191,13 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 					);
 				}
 				return data;
-			}
-		);
+			})
+			.catch((error) => {
+				console.error("Error fetching tech tree:", error);
+				// Error dialog is already triggered by apiCall
+				// Return empty object to prevent Suspense from throwing
+				return {} as TechTree;
+			});
 
 		cache.set(cacheKey, {
 			resource: createResource<TechTree>(promise),

@@ -185,35 +185,49 @@
 	&--glow {
 		animation: pulseGlow 0.75s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
+		box-shadow: 0 0 3px 1px var(--purple-a8);
 	}
 
 	&--glow[data-accent-color="white"] {
 		animation: pulseGlowWhite 0.75s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
+		box-shadow: 0 0 3px 1px var(--purple-a8);
+	}
+
+	&--glow[data-accent-color="yellow"] {
+		animation: pulseGlowYellow 0.75s infinite alternate ease-in-out;
+		background-color: var(--purple-a7) !important;
+		box-shadow: 0 0 3px 1px var(--purple-a8);
 	}
 }
 
 @keyframes pulseGlow {
 	from {
 		border-color: var(--accent-track);
-		box-shadow: 0 0 3px 1px var(--accent-track);
 	}
 
 	to {
 		border-color: var(--purple-12);
-		box-shadow: 0 0 3px 1px var(--purple-10);
 	}
 }
 
 @keyframes pulseGlowWhite {
 	from {
 		border-color: var(--gray-12);
-		box-shadow: 0 0 3px 1px var(--purple-track);
 	}
 
 	to {
 		border-color: var(--purple-11);
-		box-shadow: 0 0 3px 1px var(--purple-10);
+	}
+}
+
+@keyframes pulseGlowYellow {
+	from {
+		border-color: var(--accent-track);
+	}
+
+	to {
+		border-color: var(--purple-11);
 	}
 }
 

@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { API_URL } from "../../constants";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { fetchWithTimeout } from "../../utils/fetchWithTimeout";
+import { apiCall } from "../../utils/apiCall";
 
 /**
  * @interface ShipTypeDetail
@@ -83,16 +83,8 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 	const cacheKey = "shipTypes";
 
 	if (!cache.has(cacheKey)) {
-		const promise = fetchWithTimeout(`${API_URL}platforms`, {}, 10000)
-			.then((res) => {
-				if (!res.ok) {
-					console.error(
-						`HTTP error fetching ship types: ${res.status} ${res.statusText}`
-					);
-					throw new Error(`HTTP error! status: ${res.status}`);
-				}
-				return res.json();
-			})
+		const promise = apiCall(`${API_URL}platforms`, {}, 10000)
+			.then((res) => res.json())
 			.then((data: ShipTypes) => {
 				console.log("Fetched ship types:", data);
 				const shipTypesState = useShipTypesStore.getState();
@@ -111,10 +103,9 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 			})
 			.catch((error) => {
 				console.error("Error fetching ship types:", error);
-				if (error instanceof TypeError && error.message === "Failed to fetch") {
-					console.error("Likely a network issue or server not running.");
-				}
-				throw error;
+				// Error dialog is already triggered by apiCall
+				// Return empty object to prevent Suspense from throwing
+				return {} as ShipTypes;
 			});
 
 		cache.set(cacheKey, createResource(promise));
