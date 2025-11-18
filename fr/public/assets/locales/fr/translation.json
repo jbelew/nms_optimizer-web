@@ -45,7 +45,7 @@
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Signal Disruption! –kzzkt–",
-		"serverErrorDetails": "<strong>The server returned an error while attempting to optimize your layout.</strong> If the issue persists, please consider <1>filing a bug report</1>."
+		"serverErrorDetails": "<strong>There was a temporary error retrieving data.</strong> If the issue persists, please consider <1>filing a bug report</1>."
 	},
 	"dialogs": {
 		"titles": {
