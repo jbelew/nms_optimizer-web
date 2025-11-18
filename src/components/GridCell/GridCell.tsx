@@ -92,6 +92,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 		handleKeyDown,
 		handleTouchStart,
 		handleTouchEnd,
+		handleTouchCancel,
 	} = useGridCellInteraction(cell, rowIndex, columnIndex, isSharedGrid);
 
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
@@ -118,6 +119,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			onClick={handleClick}
 			onTouchStart={handleTouchStart}
 			onTouchEnd={handleTouchEnd}
+			onTouchCancel={handleTouchCancel}
 			onKeyDown={handleKeyDown}
 			className={cellClassName}
 			style={divStyle}

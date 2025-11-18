@@ -54,12 +54,17 @@ export const useGridCellInteraction = (
 	const { triggerShake: storeTriggerShake } = useShakeStore();
 
 	const isTouchInteraction = useRef(false);
+	const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	/**
 	 * Handles the touch start event for a grid cell.
 	 * Sets `isTouchInteraction` to true and `isTouching` to true.
 	 */
 	const handleTouchStart = useCallback(() => {
+		if (touchTimeoutRef.current) {
+			clearTimeout(touchTimeoutRef.current);
+			touchTimeoutRef.current = null;
+		}
 		isTouchInteraction.current = true;
 		setIsTouching(true);
 	}, []);
@@ -71,10 +76,15 @@ export const useGridCellInteraction = (
 	const handleTouchEnd = useCallback(() => {
 		setIsTouching(false);
 		// Reset after a short delay. onClick fires after onTouchEnd.
-		setTimeout(() => {
+		touchTimeoutRef.current = setTimeout(() => {
 			isTouchInteraction.current = false;
-		}, 200);
+			touchTimeoutRef.current = null;
+		}, 500);
 	}, []);
+
+	const handleTouchCancel = useCallback(() => {
+		handleTouchEnd();
+	}, [handleTouchEnd]);
 
 	/**
 	 * Triggers a visual shake animation on the grid.
@@ -199,6 +209,7 @@ export const useGridCellInteraction = (
 		handleContextMenu,
 		handleTouchStart,
 		handleTouchEnd,
+		handleTouchCancel,
 		handleKeyDown,
 	};
 };
