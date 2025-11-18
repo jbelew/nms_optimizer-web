@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.8.1...v5.9.0) (2025-11-18)
+
+
+### Features
+
+* **bot-detection:** enhance bot and crawler detection for splash screen ([d623df1](https://github.com/jbelew/nms_optimizer-web/commit/d623df163e93e51d83cf23ebd5d0da22358d390f))
+
 ## [5.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.8.0...v5.8.1) (2025-11-18)
 
 
