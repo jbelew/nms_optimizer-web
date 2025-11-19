@@ -29,7 +29,7 @@
     "coverage:merge": "vitest coverage merge",
     "coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
     "start": "node server/index.js",
-    "heroku-postbuild": "vite build",
+    "heroku-postbuild": "vite build && node scripts/generate-ssg.mjs",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
