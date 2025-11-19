@@ -58,6 +58,7 @@ export const useGridCellInteraction = (
 
 	const isTouchInteraction = useRef(false);
 	const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const touchResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	/**
 	 * Handles the touch start event for a grid cell.
@@ -67,6 +68,10 @@ export const useGridCellInteraction = (
 		if (touchTimeoutRef.current) {
 			clearTimeout(touchTimeoutRef.current);
 			touchTimeoutRef.current = null;
+		}
+		if (touchResetTimeoutRef.current) {
+			clearTimeout(touchResetTimeoutRef.current);
+			touchResetTimeoutRef.current = null;
 		}
 		isTouchInteraction.current = true;
 		setIsTouching(true);
@@ -83,6 +88,11 @@ export const useGridCellInteraction = (
 			isTouchInteraction.current = false;
 			touchTimeoutRef.current = null;
 		}, TOUCH_INTERACTION_DELAY);
+		// Safety timeout to ensure isTouching is cleared even if touch events don't fire properly
+		touchResetTimeoutRef.current = setTimeout(() => {
+			setIsTouching(false);
+			touchResetTimeoutRef.current = null;
+		}, 1000);
 	}, []);
 
 	const handleTouchCancel = useCallback(() => {
@@ -100,6 +110,12 @@ export const useGridCellInteraction = (
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {
 			if (isSharedGrid) {
+				return;
+			}
+
+			// If the cell has a module, no interactions should change its state.
+			if (cell.module) {
+				triggerShake();
 				return;
 			}
 
@@ -125,12 +141,6 @@ export const useGridCellInteraction = (
 						toggleCellSupercharged(rowIndex, columnIndex);
 					}
 				}
-				return;
-			}
-
-			// If the cell has a module, no touch interactions should change its state.
-			if (cell.module) {
-				triggerShake();
 				return;
 			}
 
@@ -196,6 +206,11 @@ export const useGridCellInteraction = (
 				event.preventDefault();
 				if (isSharedGrid) return;
 
+				if (cell.module) {
+					triggerShake();
+					return;
+				}
+
 				if (gridFixed) {
 					triggerShake();
 				} else {
@@ -203,7 +218,15 @@ export const useGridCellInteraction = (
 				}
 			}
 		},
-		[isSharedGrid, gridFixed, triggerShake, toggleCellActive, rowIndex, columnIndex]
+		[
+			isSharedGrid,
+			gridFixed,
+			triggerShake,
+			toggleCellActive,
+			rowIndex,
+			columnIndex,
+			cell.module,
+		]
 	);
 
 	return {

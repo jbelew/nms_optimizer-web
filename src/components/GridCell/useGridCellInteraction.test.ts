@@ -213,7 +213,108 @@ describe("useGridCellInteraction", () => {
 		expect(result.current.isTouching).toBe(true);
 		act(() => {
 			result.current.handleTouchEnd();
+			// Run the safety timeout
+			vi.advanceTimersByTime(1000);
 		});
 		expect(result.current.isTouching).toBe(false);
+	});
+
+	describe("module blocking - preventing state changes", () => {
+		it("should trigger shake on mouse click and not toggle supercharged when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			act(() => {
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+		});
+
+		it("should trigger shake on Ctrl+Click and not toggle active when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			act(() => {
+				result.current.handleClick({ ctrlKey: true } as React.MouseEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(mockToggleCellActive).not.toHaveBeenCalled();
+		});
+
+		it("should trigger shake on touch tap and not call handleCellTap when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			act(() => {
+				result.current.handleTouchStart();
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			vi.advanceTimersByTime(500);
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(mockHandleCellTap).not.toHaveBeenCalled();
+		});
+
+		it("should trigger shake on double-tap and not call handleCellDoubleTap when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			act(() => {
+				result.current.handleTouchStart();
+				result.current.handleClick({} as React.MouseEvent);
+				vi.advanceTimersByTime(100);
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			vi.advanceTimersByTime(500);
+			// Both clicks should trigger shake (once each)
+			expect(mockTriggerShake).toHaveBeenCalledTimes(2);
+			expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
+		});
+
+		it("should trigger shake on keyboard spacebar and not toggle active when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			const mockEvent = {
+				key: " ",
+				preventDefault: vi.fn(),
+			} as unknown as React.KeyboardEvent;
+			act(() => {
+				result.current.handleKeyDown(mockEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(mockToggleCellActive).not.toHaveBeenCalled();
+		});
+
+		it("should trigger shake on keyboard enter and not toggle active when cell has module", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			const mockEvent = {
+				key: "Enter",
+				preventDefault: vi.fn(),
+			} as unknown as React.KeyboardEvent;
+			act(() => {
+				result.current.handleKeyDown(mockEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
+			expect(mockToggleCellActive).not.toHaveBeenCalled();
+		});
+
+		it("should block all interactions when module is present (mixed click and keyboard)", () => {
+			const { result } = renderGridCellHook({ module: "exocraft" });
+			act(() => {
+				// Mouse click
+				result.current.handleClick({} as React.MouseEvent);
+				// Keyboard
+				const keyEvent = {
+					key: " ",
+					preventDefault: vi.fn(),
+				} as unknown as React.KeyboardEvent;
+				result.current.handleKeyDown(keyEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalledTimes(2);
+			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+			expect(mockToggleCellActive).not.toHaveBeenCalled();
+		});
+
+		it("should allow interactions when module is null", () => {
+			const { result } = renderGridCellHook({ module: null });
+			act(() => {
+				result.current.handleTouchStart();
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			vi.advanceTimersByTime(500);
+			expect(mockHandleCellTap).toHaveBeenCalled();
+			expect(mockTriggerShake).not.toHaveBeenCalled();
+		});
 	});
 });
