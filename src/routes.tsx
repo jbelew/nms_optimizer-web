@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 
 import App from "./App";
+import { RouteError } from "./components/ErrorBoundry/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { DialogProvider } from "./context/DialogContext";
 
@@ -51,6 +52,7 @@ export const routes: RouteObject[] = [
 				<App />
 			</DialogProvider>
 		),
+		errorElement: <RouteError />,
 		children: [
 			{
 				index: true,

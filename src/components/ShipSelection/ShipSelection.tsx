@@ -103,6 +103,8 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				// TODO: Turn this back on if the Corvette bug shows up again
 				if (option === "corvette") {
 					setToastOpen(true);
+				} else {
+					setToastOpen(false);
 				}
 
 				startTransition(() => {

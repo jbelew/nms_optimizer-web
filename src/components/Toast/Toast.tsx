@@ -12,7 +12,7 @@ type ToastProps = {
 export const NmsToast = ({ open, onOpenChange, title, description }: ToastProps) => {
 	return (
 		<Toast.Root
-			duration={10000}
+			duration={8000}
 			className="ToastRoot"
 			open={open}
 			onOpenChange={onOpenChange}

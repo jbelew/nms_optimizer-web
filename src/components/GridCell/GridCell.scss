@@ -152,25 +152,25 @@
 	}
 
 	&--glow {
-		animation: pulseGlow 0.75s infinite alternate ease-in-out;
+		animation: pulseGlow 2s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
 		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 
 	&--glow[data-accent-color="white"] {
-		animation: pulseGlowWhite 0.75s infinite alternate ease-in-out;
+		animation: pulseGlowWhite 2s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
 		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 
 	&--glow[data-accent-color="yellow"] {
-		animation: pulseGlowYellow 0.75s infinite alternate ease-in-out;
+		animation: pulseGlowYellow 2s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
 		box-shadow: 0 0 4px 1px var(--purple-a9);
 	}
 
 	&--glow.gridCell--black {
-		animation: pulseGlowBlack 0.75s infinite alternate ease-in-out;
+		animation: pulseGlowBlack 2s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
 		border-color: var(--gray-6);
 		box-shadow: 0 0 4px 1px var(--purple-a9);
