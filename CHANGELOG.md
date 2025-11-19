@@ -1,3 +1,10 @@
+## [5.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.1...v5.10.2) (2025-11-19)
+
+
+### Performance Improvements
+
+* **cache:** Increase cache duration for static images ([9498c20](https://github.com/jbelew/nms_optimizer-web/commit/9498c2056ec17087529d8240491a1b25e1c754ae))
+
 ## [5.10.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.0...v5.10.1) (2025-11-18)
 
 
