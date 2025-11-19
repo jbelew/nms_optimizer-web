@@ -1,5 +1,6 @@
 import { ErrorInfo } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Link } from "@radix-ui/themes";
 
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
@@ -27,9 +28,18 @@ export const ErrorPage = ({ error, errorInfo }: ErrorPageProps) => {
 						-kzzkt- Error! -kzzkt-
 					</h1>
 					<h2 className="pb-4 text-sm sm:text-base">
-						Something went wrong. You may be viewing an{" "}
-						<strong>outdated version</strong> of this page. Please{" "}
-						<strong>reload</strong> to get the latest updates.
+						Something went wrong! This page may be <strong>out of date</strong>. Try{" "}
+						<strong>reloading the page</strong> to get the latest updates. If the
+						problem continues, please consider{" "}
+						<Link
+							href="https://github.com/jbelew/nms_optimizer-web/issues"
+							target="_blank"
+							rel="noopener noreferrer"
+							underline="always"
+						>
+							filing a bug report
+						</Link>
+						.
 					</h2>
 					<div
 						className="w-full text-left font-mono text-xs lg:text-base"
