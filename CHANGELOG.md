@@ -1,3 +1,10 @@
+## [5.10.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.2...v5.10.3) (2025-11-19)
+
+
+### Performance Improvements
+
+* **GridCell:** Reduce touch interaction delay and externalize timing constants ([80387e5](https://github.com/jbelew/nms_optimizer-web/commit/80387e5566a4971eef9c251b6021cc4a543075f3))
+
 ## [5.10.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.1...v5.10.2) (2025-11-19)
 
 
