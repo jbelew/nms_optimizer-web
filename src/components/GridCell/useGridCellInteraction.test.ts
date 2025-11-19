@@ -58,7 +58,7 @@ describe("useGridCellInteraction", () => {
 		vi.useRealTimers();
 	});
 
-	const renderGridCellHook = (cellOverrides = {}, isSharedGrid = false) => {
+	const renderGridCellHook = (cellOverrides = {}, isSharedGrid = false, rowIndex = 0) => {
 		const cell = {
 			active: false,
 			supercharged: false,
@@ -66,7 +66,7 @@ describe("useGridCellInteraction", () => {
 			...cellOverrides,
 		} as Cell;
 
-		return renderHook(() => useGridCellInteraction(cell, 0, 0, isSharedGrid));
+		return renderHook(() => useGridCellInteraction(cell, rowIndex, 0, isSharedGrid));
 	};
 
 	it("should call handleCellTap on single click on empty cell", () => {
@@ -320,18 +320,7 @@ describe("useGridCellInteraction", () => {
 
 	describe("supercharge row limit - first 4 rows only", () => {
 		it("should block supercharging on row 4 and trigger shake", () => {
-			const { result } = renderHook(() =>
-				useGridCellInteraction(
-					{
-						active: false,
-						supercharged: false,
-						module: null,
-					} as Cell,
-					4,
-					0,
-					false
-				)
-			);
+			const { result } = renderGridCellHook({ module: null }, false, 4);
 			act(() => {
 				result.current.handleClick({} as React.MouseEvent);
 			});
@@ -340,18 +329,7 @@ describe("useGridCellInteraction", () => {
 		});
 
 		it("should block supercharging on row 5 and trigger shake", () => {
-			const { result } = renderHook(() =>
-				useGridCellInteraction(
-					{
-						active: false,
-						supercharged: false,
-						module: null,
-					} as Cell,
-					5,
-					0,
-					false
-				)
-			);
+			const { result } = renderGridCellHook({ module: null }, false, 5);
 			act(() => {
 				result.current.handleClick({} as React.MouseEvent);
 			});
@@ -360,18 +338,7 @@ describe("useGridCellInteraction", () => {
 		});
 
 		it("should allow supercharging on row 0", () => {
-			const { result } = renderHook(() =>
-				useGridCellInteraction(
-					{
-						active: false,
-						supercharged: false,
-						module: null,
-					} as Cell,
-					0,
-					0,
-					false
-				)
-			);
+			const { result } = renderGridCellHook({ module: null }, false, 0);
 			act(() => {
 				result.current.handleClick({} as React.MouseEvent);
 			});
@@ -380,18 +347,7 @@ describe("useGridCellInteraction", () => {
 		});
 
 		it("should allow supercharging on row 3", () => {
-			const { result } = renderHook(() =>
-				useGridCellInteraction(
-					{
-						active: false,
-						supercharged: false,
-						module: null,
-					} as Cell,
-					3,
-					0,
-					false
-				)
-			);
+			const { result } = renderGridCellHook({ module: null }, false, 3);
 			act(() => {
 				result.current.handleClick({} as React.MouseEvent);
 			});
@@ -400,18 +356,7 @@ describe("useGridCellInteraction", () => {
 		});
 
 		it("should block double-tap supercharge on row 4", () => {
-			const { result } = renderHook(() =>
-				useGridCellInteraction(
-					{
-						active: false,
-						supercharged: false,
-						module: null,
-					} as Cell,
-					4,
-					0,
-					false
-				)
-			);
+			const { result } = renderGridCellHook({ module: null }, false, 4);
 			act(() => {
 				result.current.handleTouchStart();
 				result.current.handleClick({} as React.MouseEvent);
