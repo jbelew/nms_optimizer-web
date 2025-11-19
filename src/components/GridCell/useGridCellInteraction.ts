@@ -14,6 +14,9 @@ let lastTapInfo = {
 	cell: [-1, -1], // [rowIndex, columnIndex]
 };
 
+const DOUBLE_TAP_THRESHOLD = 400; // ms
+const TOUCH_INTERACTION_DELAY = 100; // ms (reduced from 500)
+
 /**
  * Custom hook for handling user interactions (clicks, touches, keyboard) with a grid cell.
  * It manages single tap, double tap, and keyboard interactions, and integrates with
@@ -79,7 +82,7 @@ export const useGridCellInteraction = (
 		touchTimeoutRef.current = setTimeout(() => {
 			isTouchInteraction.current = false;
 			touchTimeoutRef.current = null;
-		}, 500);
+		}, TOUCH_INTERACTION_DELAY);
 	}, []);
 
 	const handleTouchCancel = useCallback(() => {
@@ -137,7 +140,7 @@ export const useGridCellInteraction = (
 			const isSameCell =
 				lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
 
-			if (isSameCell && timeSinceLastTap < 400 && timeSinceLastTap > 0) {
+			if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
 				// Double tap on the same cell
 				lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
 				const totalSupercharged = selectTotalSuperchargedCells();
