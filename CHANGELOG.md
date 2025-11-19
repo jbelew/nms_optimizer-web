@@ -1,3 +1,10 @@
+## [5.12.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.0...v5.12.1) (2025-11-19)
+
+
+### Bug Fixes
+
+* Enable Static Site Generation during build and add a script to verify SSG output. ([76187ef](https://github.com/jbelew/nms_optimizer-web/commit/76187efd4b103b36f316aa82f0b037e6bdc9e9cf))
+
 # [5.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.11.0...v5.12.0) (2025-11-19)
 
 
