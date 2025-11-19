@@ -1,3 +1,10 @@
+# [5.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.3...v5.11.0) (2025-11-19)
+
+
+### Features
+
+* **grid-cell:** Prevent state changes and trigger shake on module-blocked interactions ([5dde1ae](https://github.com/jbelew/nms_optimizer-web/commit/5dde1aef72fddf806cfe52432d754207e1c67deb))
+
 ## [5.10.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.2...v5.10.3) (2025-11-19)
 
 
