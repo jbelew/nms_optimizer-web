@@ -317,4 +317,111 @@ describe("useGridCellInteraction", () => {
 			expect(mockTriggerShake).not.toHaveBeenCalled();
 		});
 	});
+
+	describe("supercharge row limit - first 4 rows only", () => {
+		it("should block supercharging on row 4 and trigger shake", () => {
+			const { result } = renderHook(() =>
+				useGridCellInteraction(
+					{
+						active: false,
+						supercharged: false,
+						module: null,
+					} as Cell,
+					4,
+					0,
+					false
+				)
+			);
+			act(() => {
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalled();
+			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+		});
+
+		it("should block supercharging on row 5 and trigger shake", () => {
+			const { result } = renderHook(() =>
+				useGridCellInteraction(
+					{
+						active: false,
+						supercharged: false,
+						module: null,
+					} as Cell,
+					5,
+					0,
+					false
+				)
+			);
+			act(() => {
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			expect(mockTriggerShake).toHaveBeenCalled();
+			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
+		});
+
+		it("should allow supercharging on row 0", () => {
+			const { result } = renderHook(() =>
+				useGridCellInteraction(
+					{
+						active: false,
+						supercharged: false,
+						module: null,
+					} as Cell,
+					0,
+					0,
+					false
+				)
+			);
+			act(() => {
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			expect(mockToggleCellSupercharged).toHaveBeenCalledWith(0, 0);
+			expect(mockTriggerShake).not.toHaveBeenCalled();
+		});
+
+		it("should allow supercharging on row 3", () => {
+			const { result } = renderHook(() =>
+				useGridCellInteraction(
+					{
+						active: false,
+						supercharged: false,
+						module: null,
+					} as Cell,
+					3,
+					0,
+					false
+				)
+			);
+			act(() => {
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			expect(mockToggleCellSupercharged).toHaveBeenCalledWith(3, 0);
+			expect(mockTriggerShake).not.toHaveBeenCalled();
+		});
+
+		it("should block double-tap supercharge on row 4", () => {
+			const { result } = renderHook(() =>
+				useGridCellInteraction(
+					{
+						active: false,
+						supercharged: false,
+						module: null,
+					} as Cell,
+					4,
+					0,
+					false
+				)
+			);
+			act(() => {
+				result.current.handleTouchStart();
+				result.current.handleClick({} as React.MouseEvent);
+				vi.advanceTimersByTime(100);
+				result.current.handleClick({} as React.MouseEvent);
+			});
+			vi.advanceTimersByTime(500);
+			expect(mockTriggerShake).toHaveBeenCalled();
+			expect(mockRevertCellTap).toHaveBeenCalled();
+			expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
+		});
+	});
 });

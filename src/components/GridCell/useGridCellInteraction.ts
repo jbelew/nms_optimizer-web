@@ -134,6 +134,7 @@ export const useGridCellInteraction = (
 					const isInvalidSuperchargeToggle =
 						superchargedFixed ||
 						gridFixed ||
+						rowIndex >= 4 ||
 						(totalSupercharged >= 4 && !cell.supercharged);
 					if (isInvalidSuperchargeToggle) {
 						triggerShake();
@@ -157,6 +158,7 @@ export const useGridCellInteraction = (
 				const isInvalidDoubleTap =
 					superchargedFixed ||
 					gridFixed ||
+					rowIndex >= 4 ||
 					(totalSupercharged >= 4 && !cell.supercharged);
 
 				if (isInvalidDoubleTap) {
