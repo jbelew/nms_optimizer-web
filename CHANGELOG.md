@@ -1,3 +1,10 @@
+# [5.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.11.0...v5.12.0) (2025-11-19)
+
+
+### Features
+
+* **grid-cell:** limit supercharge to first 4 rows ([693b615](https://github.com/jbelew/nms_optimizer-web/commit/693b615e856b9a224348ddbf5720d058efc12198))
+
 # [5.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.10.3...v5.11.0) (2025-11-19)
 
 
