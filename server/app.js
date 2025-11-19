@@ -116,7 +116,7 @@ function setCacheHeaders(res, filePath) {
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
 	} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=604800"); // 1 week
+		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
 	} else if (/\.md$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
 	} else {
