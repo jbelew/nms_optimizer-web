@@ -1,3 +1,10 @@
+## [5.12.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.1...v5.12.2) (2025-11-20)
+
+
+### Performance Improvements
+
+* **store:** optimize TechStore subscriptions to reduce unnecessary re-renders ([c9fad0a](https://github.com/jbelew/nms_optimizer-web/commit/c9fad0af13a8b4ac530ef6aec90ed79411bdedce))
+
 ## [5.12.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.0...v5.12.1) (2025-11-19)
 
 
