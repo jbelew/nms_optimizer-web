@@ -279,7 +279,15 @@ export default defineConfig(({ mode }) => {
 								id.includes("remark")
 							)
 								return "markdown";
-							if (id.includes("radix")) return "radix";
+							
+							// Radix UI components - split from other vendor code
+							if (id.includes("@radix-ui")) return "radix";
+							
+							// Router
+							if (id.includes("react-router")) return "router";
+							
+							// Web Vitals monitoring
+							if (id.includes("web-vitals")) return "web-vitals";
 
 							return "vendor";
 						}

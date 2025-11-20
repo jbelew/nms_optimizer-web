@@ -34,7 +34,9 @@
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
 		"release": "semantic-release",
-		"lighthouse:ci": "lhci autorun"
+		"lighthouse:ci": "lhci autorun",
+		"perf:check": "node scripts/performance-check.mjs",
+		"perf:report": "open PERFORMANCE_REPORT.html || xdg-open PERFORMANCE_REPORT.html"
 	},
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.1.15",
