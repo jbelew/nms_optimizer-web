@@ -149,11 +149,22 @@ if (typeof window !== "undefined") {
 	// Use queueMicrotask for faster execution than setTimeout
 	// This ensures it runs after the current task but before the next paint
 	queueMicrotask(() => {
-		// Initialize analytics in background
-		if ("requestIdleCallback" in window) {
-			requestIdleCallback(() => initializeAnalytics(), { timeout: 5000 });
+		// Delay analytics initialization until after window load event
+		// This ensures it doesn't compete with critical resources affecting LCP
+		const initGA = () => {
+			if ("requestIdleCallback" in window) {
+				requestIdleCallback(() => initializeAnalytics(), { timeout: 10000 });
+			} else {
+				setTimeout(() => initializeAnalytics(), 2000);
+			}
+		};
+
+		if (document.readyState === "complete") {
+			// Page already loaded, delay slightly before initializing
+			setTimeout(initGA, 1000);
 		} else {
-			setTimeout(() => initializeAnalytics(), 100);
+			// Wait for page load event, then delay before initializing
+			window.addEventListener("load", () => setTimeout(initGA, 1000));
 		}
 
 		// Conditionally register the service worker for non-bot user agents
@@ -161,31 +172,41 @@ if (typeof window !== "undefined") {
 			"serviceWorker" in navigator &&
 			!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
 		) {
-			setTimeout(() => {
-				import("virtual:pwa-register")
-					.then(({ registerSW }) => {
-						const updateServiceWorker = registerSW({
-							onOfflineReady() {
-								console.log("App is ready to work offline");
-							},
-							onNeedRefresh() {
-								verifyServiceWorkerUpdate(updateServiceWorker);
-							},
-							onRegistered(registration) {
-								console.log("Service Worker registered:", registration);
-								if (registration) {
-									storeServiceWorkerVersion(registration);
-								}
-							},
-							onRegisterError(error) {
-								console.error("Service Worker registration failed:", error);
-							},
+			const registerWorker = () => {
+				setTimeout(() => {
+					import("virtual:pwa-register")
+						.then(({ registerSW }) => {
+							const updateServiceWorker = registerSW({
+								onOfflineReady() {
+									console.log("App is ready to work offline");
+								},
+								onNeedRefresh() {
+									verifyServiceWorkerUpdate(updateServiceWorker);
+								},
+								onRegistered(registration) {
+									console.log("Service Worker registered:", registration);
+									if (registration) {
+										storeServiceWorkerVersion(registration);
+									}
+								},
+								onRegisterError(error) {
+									console.error("Service Worker registration failed:", error);
+								},
+							});
+						})
+						.catch((e) => {
+							console.error("Failed to import PWA register:", e);
 						});
-					})
-					.catch((e) => {
-						console.error("Failed to import PWA register:", e);
-					});
-			}, 3000); // Reduced from 5s to 3s
+				}, 2000); // Delay after load event
+			};
+
+			if (document.readyState === "complete") {
+				// Page already loaded, register worker
+				registerWorker();
+			} else {
+				// Wait for page load event before registering
+				window.addEventListener("load", registerWorker);
+			}
 		}
 	});
 }
