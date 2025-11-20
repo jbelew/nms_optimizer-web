@@ -1,3 +1,10 @@
+## [5.12.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.5...v5.12.6) (2025-11-20)
+
+
+### Bug Fixes
+
+* **GridCell:** Limit hover effects to hover-capable devices ([53526b0](https://github.com/jbelew/nms_optimizer-web/commit/53526b014378a5072387e487129e27e47fc357fa))
+
 ## [5.12.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.4...v5.12.5) (2025-11-20)
 
 
