@@ -102,7 +102,7 @@ export default defineConfig(({ mode }) => {
 								cacheName: "images-cache",
 								expiration: {
 									maxEntries: 1000,
-									maxAgeSeconds: 604800, // 1 week (matches server/app.js)
+									maxAgeSeconds: 31536000, // 1 year (matches server/app.js)
 								},
 							},
 						},
@@ -142,18 +142,6 @@ export default defineConfig(({ mode }) => {
 								},
 								cacheableResponse: {
 									statuses: [0, 200],
-								},
-							},
-						},
-						{
-							urlPattern: /^https:\/\/www\.googletagmanager\.com\/.*$/,
-							handler: "NetworkFirst",
-							options: {
-								cacheName: "ga4-cache",
-								networkTimeoutSeconds: 5,
-								expiration: {
-									maxEntries: 5,
-									maxAgeSeconds: 3600, // 1 hour
 								},
 							},
 						},
@@ -250,10 +238,9 @@ export default defineConfig(({ mode }) => {
 								return "react";
 							}
 
-							// Radix Themes - Separate colors for better lazy-loading
-							// Colors are now split into their own chunk to enable dynamic loading
-							if (id.includes("@radix-ui/themes/tokens/colors/"))
-								return "radix-colors";
+							// Radix Themes - Optimized colors from src/assets/css/radix-colors/
+							// Colors are now split into their own chunk to enable lazy-loading
+							if (id.includes("/assets/css/radix-colors/")) return "radix-colors";
 							if (id.includes("@radix-ui/themes/utilities.css"))
 								return "radix-utilities";
 							if (id.includes("@radix-ui/themes")) return "radix-themes";
@@ -279,13 +266,13 @@ export default defineConfig(({ mode }) => {
 								id.includes("remark")
 							)
 								return "markdown";
-							
+
 							// Radix UI components - split from other vendor code
 							if (id.includes("@radix-ui")) return "radix";
-							
+
 							// Router
 							if (id.includes("react-router")) return "router";
-							
+
 							// Web Vitals monitoring
 							if (id.includes("web-vitals")) return "web-vitals";
 
