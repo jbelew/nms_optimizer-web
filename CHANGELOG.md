@@ -1,3 +1,15 @@
+## [5.12.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.2...v5.12.3) (2025-11-20)
+
+
+### Bug Fixes
+
+* regenerate package-lock.json for npm ci compatibility ([195154a](https://github.com/jbelew/nms_optimizer-web/commit/195154ad7467d582b7d186f6e48344a10696db5d))
+
+
+### Performance Improvements
+
+* **build:** implement performance measurement infrastructure ([4009191](https://github.com/jbelew/nms_optimizer-web/commit/40091912658b5beafc4a48b9008bff05d99b9a0f))
+
 ## [5.12.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.1...v5.12.2) (2025-11-20)
 
 
