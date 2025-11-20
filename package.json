@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+		"prebuild": "node scripts/generate-radix-colors.mjs",
 		"build": "tsc -b && vite build --mode production && node scripts/generate-ssg.mjs",
 		"build:docker": "DOCKER=true vite build --mode docker && node scripts/generate-ssg.mjs",
 		"build:critical": "tsc -b && vite build --mode critical && node scripts/generate-ssg.mjs",

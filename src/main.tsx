@@ -1,19 +1,19 @@
-// Base theme tokens - all colors required by useTechTreeColors hook
+// Base theme tokens - optimized color imports without P3 definitions
 import "@radix-ui/themes/tokens/base.css";
-import "@radix-ui/themes/tokens/colors/cyan.css";
-import "@radix-ui/themes/tokens/colors/sage.css";
-import "@radix-ui/themes/tokens/colors/purple.css";
-import "@radix-ui/themes/tokens/colors/amber.css";
-import "@radix-ui/themes/tokens/colors/blue.css";
-import "@radix-ui/themes/tokens/colors/crimson.css";
-import "@radix-ui/themes/tokens/colors/green.css";
-import "@radix-ui/themes/tokens/colors/iris.css";
-import "@radix-ui/themes/tokens/colors/jade.css";
-import "@radix-ui/themes/tokens/colors/orange.css";
-import "@radix-ui/themes/tokens/colors/red.css";
-import "@radix-ui/themes/tokens/colors/sky.css";
-import "@radix-ui/themes/tokens/colors/teal.css";
-import "@radix-ui/themes/tokens/colors/yellow.css";
+import "./assets/css/radix-colors/cyan.css";
+import "./assets/css/radix-colors/sage.css";
+import "./assets/css/radix-colors/purple.css";
+import "./assets/css/radix-colors/amber.css";
+import "./assets/css/radix-colors/blue.css";
+import "./assets/css/radix-colors/crimson.css";
+import "./assets/css/radix-colors/green.css";
+import "./assets/css/radix-colors/iris.css";
+import "./assets/css/radix-colors/jade.css";
+import "./assets/css/radix-colors/orange.css";
+import "./assets/css/radix-colors/red.css";
+import "./assets/css/radix-colors/sky.css";
+import "./assets/css/radix-colors/teal.css";
+import "./assets/css/radix-colors/yellow.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS
