@@ -5,8 +5,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const today = new Date().toISOString().split("T")[0];
+
 const pages = [
-	{ path: "src/components/MainAppContent/MainAppContent.tsx", url: "https://nms-optimizer.app/", priority: "1.0" },
+	{ path: null, url: "https://nms-optimizer.app/", priority: "1.0", lastmod: today },
 	{ path: "src/assets/locales/en/about.md", url: "https://nms-optimizer.app/about", priority: "1.0" },
 	{ path: "public/assets/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog", priority: "0.7" },
 	{
@@ -29,8 +31,7 @@ const pages = [
 const languages = ["en", "es", "fr", "de", "pt"];
 
 const urlEntries = pages.flatMap((page) => {
-	const stats = fs.statSync(path.join(__dirname, "..", page.path));
-	const lastmod = stats.mtime.toISOString().split("T")[0];
+	const lastmod = page.lastmod || fs.statSync(path.join(__dirname, "..", page.path)).mtime.toISOString().split("T")[0];
 
 	// 1. Generate all alternate URLs for this page
 	const alternateUrls = languages.map((lang) => {
