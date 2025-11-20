@@ -4,8 +4,11 @@
 	},
 	"languageInfo": {
 		"nativeName": "English",
-		"changeLanguage": "Change language",
+		"changeLanguage": "Change Language",
 		"selectLanguage": "Select Language"
+	},
+	"shipSelection": {
+		"dropdownTooltip": "Select Platform Type"
 	},
 	"appName": "No Man's Sky Technology Layout Optimizer",
 	"buttons": {
