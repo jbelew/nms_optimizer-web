@@ -1,3 +1,10 @@
+## [5.12.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.3...v5.12.4) (2025-11-20)
+
+
+### Performance Improvements
+
+* **loading:** Defer analytics and service worker initialization ([0fce22e](https://github.com/jbelew/nms_optimizer-web/commit/0fce22ee7b34105df1da8990177efd4114c6486c))
+
 ## [5.12.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.2...v5.12.3) (2025-11-20)
 
 
