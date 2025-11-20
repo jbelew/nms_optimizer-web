@@ -1,3 +1,10 @@
+## [5.12.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.6...v5.12.7) (2025-11-20)
+
+
+### Performance Improvements
+
+* **service-worker:** optimize script fetching with no-cache ([4db3389](https://github.com/jbelew/nms_optimizer-web/commit/4db3389b6e582b71cdc84389190961ed7755a3b5))
+
 ## [5.12.6](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.5...v5.12.6) (2025-11-20)
 
 
