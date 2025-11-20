@@ -2,6 +2,16 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 5.12 – Supercharge Limits & Touch Improvements (2025-11-20)
+- Limited supercharge slot placement to the first 4 rows of the grid for better gameplay balance.
+- Fixed touch interactions that could occasionally get stuck after canceling a tap.
+- Improved responsiveness of touch interactions on mobile devices.
+- Fixed a rare issue where blocked module placements wouldn't provide feedback.
+
+## Version 5.11 – Blocked Module Feedback (2025-11-19)
+- Added visual shake feedback when attempting to place a module on a blocked cell.
+- Prevented accidental state changes when interacting with blocked cells.
+
 ## Version 5.10 – Static Markdown Pages & SEO Improvements (2025-11-18)
 - Added static site generation for all markdown pages (`/about`, `/instructions`, `/changelog`, etc.).
 - Pages now ship with pre-rendered HTML for faster first load and better SEO.
