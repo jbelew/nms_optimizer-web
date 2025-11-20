@@ -32,7 +32,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
-	const [isPending, startTransition] = useTransition();
+	const [, startTransition] = useTransition();
 
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
@@ -72,7 +72,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 						highContrast={a11yMode}
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
-						disabled={modules.length === 1 || solving || isPending}
+						disabled={modules.length === 1 || solving}
 					>
 						x{currentCheckedModules.length}
 						<OpenInNewWindowIcon />

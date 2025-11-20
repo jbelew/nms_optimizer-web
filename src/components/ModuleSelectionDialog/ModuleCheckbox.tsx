@@ -33,7 +33,7 @@ const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
 	return (
 		<label
 			key={module.id}
-			className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-[var(--accent-a12)] sm:text-base"
+			className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base"
 			style={{ cursor: "pointer" }}
 		>
 			<CheckboxGroup.Item value={module.id} disabled={isDisabled} />
