@@ -77,8 +77,10 @@
 		background-color: var(--accent-a3);
 		border-color: var(--accent-indicator);
 
-		&:hover {
-			background-color: var(--accent-a4);
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--accent-a4);
+			}
 		}
 
 		&[data-accent-color="white"] {
@@ -86,8 +88,10 @@
 			border-color: var(--gray-12);
 			border-width: 1px;
 
-			&:hover {
-				background-color: var(--gray-a4);
+			@media (hover: hover) {
+				&:hover {
+					background-color: var(--gray-a4);
+				}
 			}
 		}
 	}
@@ -97,8 +101,10 @@
 		border-color: var(--accent-a2);
 		transition: background-color 0.2s ease;
 
-		&:hover {
-			background-color: var(--accent-a4);
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--accent-a4);
+			}
 		}
 
 		.corner {
@@ -110,8 +116,10 @@
 		background-color: var(--gray-a2);
 		border-color: var(--gray-a2);
 
-		&:hover {
-			background-color: var(--gray-a3);
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--gray-a3);
+			}
 		}
 
 		&.gridCell--touched {
@@ -128,8 +136,10 @@
 		background-color: var(--purple-a3) !important;
 		border-color: var(--accent-track);
 
-		&:hover {
-			background-color: var(--purple-a4) !important;
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--purple-a4) !important;
+			}
 		}
 
 		&.gridCell--touched {
@@ -143,8 +153,10 @@
 		border-color: var(--gray-6);
 		transition: background-color 0.2s ease;
 
-		&:hover {
-			background-color: var(--gray-a4);
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--gray-a4);
+			}
 		}
 	}
 
