@@ -95,6 +95,7 @@
 	&--empty {
 		background-color: var(--accent-a3);
 		border-color: var(--accent-a2);
+		transition: background-color 0.2s ease;
 
 		&:hover {
 			background-color: var(--accent-a4);
@@ -140,6 +141,7 @@
 	&--black {
 		background-color: var(--gray-a3);
 		border-color: var(--gray-6);
+		transition: background-color 0.2s ease;
 
 		&:hover {
 			background-color: var(--gray-a4);
@@ -236,10 +238,6 @@
 		}
 
 		&--black {
-			transition:
-				background-color 0.2s ease,
-				border-color 0.2s ease;
-
 			&.gridCell--glow {
 				transition: background-color 0.2s ease;
 			}

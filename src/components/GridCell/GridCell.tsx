@@ -1,6 +1,6 @@
 import "./GridCell.scss";
 
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
@@ -99,60 +99,92 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 		useGridCellStyle(cell, isTouching);
 
 	// Create a mutable copy of the style from the hook.
-	const divStyle: React.CSSProperties = { ...(cellElementStyle as React.CSSProperties) };
+	const divStyle: React.CSSProperties = useMemo(() => {
+		const style = { ...(cellElementStyle as React.CSSProperties) };
+		// Extract the image URL from the backgroundImage property.
+		const bgImage = style.backgroundImage?.match(/url\("?(.+?)"?\)/)?.[1];
+		// If an image URL is found, remove it from the div's style to prevent it from rendering as a background.
+		if (bgImage) {
+			style.backgroundImage = "none";
+		}
+		return style;
+	}, [cellElementStyle]);
+
 	// Extract the image URL from the backgroundImage property.
-	const imageUrl = divStyle.backgroundImage?.match(/url\("?(.+?)"?\)/)?.[1];
-	// If an image URL is found, remove it from the div's style to prevent it from rendering as a background.
-	if (imageUrl) {
-		divStyle.backgroundImage = "none";
-	}
+	const imageUrl =
+		divStyle.backgroundImage === "none"
+			? (cellElementStyle as React.CSSProperties)?.backgroundImage?.match(
+					/url\("?(.+?)"?\)/
+				)?.[1]
+			: undefined;
 
 	const upGradePriority = getUpgradePriority(cell.label);
 
-	const cellElement = (
-		<div
-			role="gridcell"
-			aria-colindex={columnIndex + 1}
-			tabIndex={isSharedGrid ? -1 : 0}
-			data-accent-color={techColor}
-			onContextMenu={handleContextMenu}
-			onClick={handleClick}
-			onTouchStart={handleTouchStart}
-			onTouchEnd={handleTouchEnd}
-			onTouchCancel={handleTouchCancel}
-			onKeyDown={handleKeyDown}
-			className={cellClassName}
-			style={divStyle}
-		>
-			{imageUrl && (
-				<img
-					src={imageUrl}
-					alt=""
-					className="absolute inset-0 -z-10 h-full w-full object-cover"
-					style={{ transform: "translate3d(0, 0, 0)" }}
-				/>
-			)}
-			{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
-			{!cell.supercharged && !cell.image && (
-				<>
-					<span className="corner top-left"></span>
-					<span className="corner top-right"></span>
-					<span className="corner bottom-left"></span>
-					<span className="corner bottom-right"></span>
-				</>
-			)}
-			{upGradePriority && (
-				<span
-					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
-						upGradePriority?.length > 1
-							? "gridCell__label--corvette"
-							: "gridCell__label"
-					}`}
-				>
-					{upGradePriority ?? null}
-				</span>
-			)}
-		</div>
+	const cellElement = useMemo(
+		() => (
+			<div
+				role="gridcell"
+				aria-colindex={columnIndex + 1}
+				tabIndex={isSharedGrid ? -1 : 0}
+				data-accent-color={techColor}
+				onContextMenu={handleContextMenu}
+				onClick={handleClick}
+				onTouchStart={handleTouchStart}
+				onTouchEnd={handleTouchEnd}
+				onTouchCancel={handleTouchCancel}
+				onKeyDown={handleKeyDown}
+				className={cellClassName}
+				style={divStyle}
+			>
+				{imageUrl && (
+					<img
+						src={imageUrl}
+						alt=""
+						className="absolute inset-0 -z-10 h-full w-full object-cover"
+						style={{ transform: "translate3d(0, 0, 0)" }}
+					/>
+				)}
+				{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
+				{!cell.supercharged && !cell.image && (
+					<>
+						<span className="corner top-left"></span>
+						<span className="corner top-right"></span>
+						<span className="corner bottom-left"></span>
+						<span className="corner bottom-right"></span>
+					</>
+				)}
+				{upGradePriority && (
+					<span
+						className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
+							upGradePriority?.length > 1
+								? "gridCell__label--corvette"
+								: "gridCell__label"
+						}`}
+					>
+						{upGradePriority ?? null}
+					</span>
+				)}
+			</div>
+		),
+		[
+			columnIndex,
+			isSharedGrid,
+			techColor,
+			handleContextMenu,
+			handleClick,
+			handleTouchStart,
+			handleTouchEnd,
+			handleTouchCancel,
+			handleKeyDown,
+			cellClassName,
+			divStyle,
+			imageUrl,
+			showEmptyIcon,
+			emptyIconFillColor,
+			upGradePriority,
+			cell.supercharged,
+			cell.image,
+		]
 	);
 
 	const tooltipContent = cell.label;
