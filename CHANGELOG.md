@@ -1,3 +1,11 @@
+## [5.12.5](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.4...v5.12.5) (2025-11-20)
+
+
+### Performance Improvements
+
+* **build:** Generate and use optimized Radix UI color CSS by stripping P3 and light mode definitions. ([24d2620](https://github.com/jbelew/nms_optimizer-web/commit/24d262060f759cc58634108502c67983fe6ad55a))
+* **html:** Remove Google Analytics preconnect links ([015a780](https://github.com/jbelew/nms_optimizer-web/commit/015a7805b447d7d8deef24919bf6d03b8f3da9f5))
+
 ## [5.12.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.3...v5.12.4) (2025-11-20)
 
 
