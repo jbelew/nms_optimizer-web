@@ -156,7 +156,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				open={toastOpen}
 				onOpenChange={setToastOpen}
 				title="Corvette Warning!"
-				description="As of 6.15 -- Corvettes continue to have a bug that can cause layouts to reset unexpectedly. If you do create a layout, use the “Share Grid” feature and bookmark your build to keep an easy backup."
+				description="As of 6.17.1 -- Corvettes continue to have a bug that can cause layouts to reset unexpectedly. If you do create a layout, use the “Share Grid” feature and bookmark your build to keep an easy backup."
 			/>
 		</>
 	);

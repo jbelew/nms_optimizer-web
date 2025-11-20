@@ -22,7 +22,8 @@ export const useTechModuleManagement = (
 	tech: string,
 	modules: { label: string; id: string; image: string; type?: string }[]
 ) => {
-	const { setCheckedModules, checkedModules: allCheckedModules } = useTechStore();
+	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
+	const allCheckedModules = useTechStore((state) => state.checkedModules);
 	const currentCheckedModules = useMemo(
 		() => allCheckedModules[tech] || [],
 		[allCheckedModules, tech]

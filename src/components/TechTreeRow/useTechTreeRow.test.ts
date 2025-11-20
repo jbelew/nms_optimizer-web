@@ -47,12 +47,24 @@ const mockProps: TechTreeRowProps = {
 
 describe("useTechTreeRow", () => {
 	beforeEach(() => {
-		(useGridStore as unknown as Mock).mockReturnValue(vi.fn());
-		(useTechStore as unknown as Mock).mockReturnValue({
-			techGroups: { testTech: [{ modules: [] }] },
-			max_bonus: {},
-			solved_bonus: {},
-		});
+		(useGridStore as unknown as Mock).mockImplementation(
+			(selector: (state: { hasTechInGrid: (tech: string) => boolean }) => unknown) =>
+				selector({ hasTechInGrid: vi.fn() })
+		);
+		(useTechStore as unknown as Mock).mockImplementation(
+			(
+				selector: (state: {
+					techGroups: { [key: string]: [{ modules: unknown[] }] };
+					max_bonus: { [key: string]: number };
+					solved_bonus: { [key: string]: number };
+				}) => unknown
+			) =>
+				selector({
+					techGroups: { testTech: [{ modules: [] }] },
+					max_bonus: {},
+					solved_bonus: {},
+				})
+		);
 	});
 	it("should return the correct data shape", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));

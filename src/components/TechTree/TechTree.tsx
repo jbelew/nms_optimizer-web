@@ -12,7 +12,7 @@ import { TechTreeContent } from "./TechTreeContent";
 
 /**
  * @interface TechTreeProps
- * @property {(tech: string) => Promise<void>} handleOptimize - Function to initiate an optimization for a given technology.
+ * @property {(tech: string) => void} handleOptimize - Function to initiate an optimization for a given technology.
  * @property {boolean} solving - Indicates if the optimization process is currently running.
  * @property {React.RefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
  * @property {number | undefined} gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.

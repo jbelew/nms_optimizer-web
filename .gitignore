@@ -50,3 +50,4 @@ seo/Search appearance.csv
 # Million Lint
 .million
 playwright-report/*
+.env

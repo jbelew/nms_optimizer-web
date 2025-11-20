@@ -1,11 +1,10 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@radix-ui/themes";
+import { Link, ScrollArea } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { sendEvent } from "../../utils/analytics";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import { handleError } from "./errorHandler";
 
 interface Props {
 	children: ReactNode;
@@ -17,12 +16,19 @@ interface State {
 	errorInfo?: ErrorInfo;
 }
 
+interface ErrorFallbackProps {
+	error?: Error;
+	errorInfo?: ErrorInfo;
+}
+
 /**
- * A fallback component to be displayed when an error is caught by the ErrorBoundary.
+ * A fallback component to be displayed when an error is caught by the ErrorBoundaryInset.
+ * This is designed to fit within a container (inset) rather than taking up the full page.
+ * Content and styling matches ErrorPage exactly, including stack trace display.
  *
  * @returns {JSX.Element} The rendered fallback component.
  */
-const ErrorFallback = () => {
+const ErrorFallback = ({ error, errorInfo }: ErrorFallbackProps) => {
 	const isLarge = useBreakpoint("1024px");
 
 	return isLarge ? (
@@ -30,52 +36,135 @@ const ErrorFallback = () => {
 			className="gridContainer__sidebar rounded-md p-4 shadow-md"
 			style={{ height: "526px", backgroundColor: "var(--accent-a2)" }}
 		>
-			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
+			<div className="flex h-full flex-col items-center justify-center p-8 text-center text-gray-50">
 				<ExclamationTriangleIcon
-					className="h-16 w-16 shrink-0 shadow-md"
+					className="h-16 w-16 shadow-md"
 					style={{ color: "var(--red-track)" }}
 				/>
 				<h1
-					className="errorContent__title block text-center text-2xl font-semibold tracking-widest wrap-break-word"
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
 					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
 				>
 					-kzzkt- Error! -kzzkt-
 				</h1>
-				<h2 className="pb-4 font-semibold">
-					Something went wrong. Please try reloading the page.
+				<h2 className="pb-4 text-sm sm:text-base">
+					Something went wrong! Try <strong>reloading the page</strong> to see if that
+					resolves the issue. If the problem continues, please consider{" "}
+					<Link
+						href="https://github.com/jbelew/nms_optimizer-web/issues"
+						target="_blank"
+						rel="noopener noreferrer"
+						underline="always"
+					>
+						filing a bug report
+					</Link>
+					.
 				</h2>
+				<div
+					className="w-full text-left font-mono text-xs lg:text-base"
+					style={{
+						whiteSpace: "pre-wrap",
+						overflowWrap: "break-word",
+						wordBreak: "break-word",
+						maxHeight: "200px",
+					}}
+				>
+					{error?.message && (
+						<p>
+							<strong>Error:</strong> {error.message}
+						</p>
+					)}
+					{error?.stack && (
+						<>
+							<p className="mt-2">
+								<strong>Stack Trace:</strong>
+							</p>
+							{error.stack}
+						</>
+					)}
+					{errorInfo?.componentStack && (
+						<>
+							<p className="mt-2">
+								<strong>Component Stack:</strong>
+							</p>
+							{errorInfo.componentStack}
+						</>
+					)}
+				</div>
 			</div>
 		</ScrollArea>
 	) : (
 		<div className="mt-8">
-			<div className="flex h-full flex-col items-center justify-center overflow-auto p-8 text-center text-gray-50">
+			<div className="flex h-full flex-col items-center justify-center p-8 text-center text-gray-50">
 				<ExclamationTriangleIcon
-					className="h-16 w-16 shrink-0 shadow-md"
+					className="h-16 w-16 shadow-md"
 					style={{ color: "var(--red-track)" }}
 				/>
 				<h1
-					className="errorContent__title block text-center text-2xl font-semibold tracking-widest wrap-break-word"
+					className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
 					style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
 				>
 					-kzzkt- Error! -kzzkt-
 				</h1>
-				<h2 className="pb-4 font-semibold">
-					Something went wrong. Please try reloading the page.
+				<h2 className="pb-4 text-sm sm:text-base">
+					Something went wrong! Try <strong>reloading the page</strong> to see if that
+					resolves the issue. If the problem continues, please consider{" "}
+					<Link
+						href="https://github.com/jbelew/nms_optimizer-web/issues"
+						target="_blank"
+						rel="noopener noreferrer"
+						underline="always"
+					>
+						filing a bug report
+					</Link>
+					.
 				</h2>
+				<div
+					className="w-full overflow-x-auto overflow-y-auto text-left font-mono text-xs lg:text-base"
+					style={{
+						whiteSpace: "pre-wrap",
+						overflowWrap: "break-word",
+						wordBreak: "break-word",
+						maxHeight: "200px",
+					}}
+				>
+					{error?.message && (
+						<p>
+							<strong>Error:</strong> {error.message}
+						</p>
+					)}
+					{error?.stack && (
+						<>
+							<p className="mt-2">
+								<strong>Stack Trace:</strong>
+							</p>
+							{error.stack}
+						</>
+					)}
+					{errorInfo?.componentStack && (
+						<>
+							<p className="mt-2">
+								<strong>Component Stack:</strong>
+							</p>
+							{errorInfo.componentStack}
+						</>
+					)}
+				</div>
 			</div>
 		</div>
 	);
 };
 
 /**
- * ErrorBoundary component catches JavaScript errors anywhere in its child component tree,
- * logs those errors, and displays a fallback UI instead of the component tree that crashed.
- * It also attempts to clear localStorage and sends a Google Analytics event on error.
+ * ErrorBoundaryInset component catches JavaScript errors anywhere in its child component tree,
+ * logs those errors, and displays an inset fallback UI instead of the component tree that crashed.
+ * Unlike the standard ErrorBoundary, this is designed to fit within a container rather than
+ * taking up the full page.
  */
 class ErrorBoundaryInset extends Component<Props, State> {
 	/**
-	 * Creates an instance of ErrorBoundary.
-	 * @param {Props} props - The props for the ErrorBoundary component.
+	 * Creates an instance of ErrorBoundaryInset.
+	 * @param {Props} props - The props for the ErrorBoundaryInset component.
 	 */
 	constructor(props: Props) {
 		super(props);
@@ -88,7 +177,7 @@ class ErrorBoundaryInset extends Component<Props, State> {
 	 * @returns {{ hasError: boolean; error: Error }} An object to update the state.
 	 */
 	static getDerivedStateFromError(error: Error) {
-		console.log("ErrorBoundary: Caught error, updating state.");
+		console.log("ErrorBoundaryInset: Caught error, updating state.");
 		return { hasError: true, error };
 	}
 
@@ -98,47 +187,17 @@ class ErrorBoundaryInset extends Component<Props, State> {
 	 * @param {ErrorInfo} errorInfo - Information about the component stack where the error occurred.
 	 */
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-		console.error("Uncaught error:", error, errorInfo);
-
-		try {
-			localStorage.clear();
-			console.log("ErrorBoundary: Cleared localStorage.");
-		} catch (e) {
-			console.error("ErrorBoundary: Failed to clear localStorage.", e);
-		}
-
-		// Clear service workers to force fresh code fetch
-		if ("serviceWorker" in navigator) {
-			navigator.serviceWorker.getRegistrations().then((registrations) => {
-				registrations.forEach((reg) => {
-					reg.unregister();
-					console.log("ErrorBoundary: Unregistered service worker.");
-				});
-			});
-		}
-
-		sendEvent({
-			category: "error",
-			action: error.name,
-			label: error.message,
-			nonInteraction: true,
-			componentStack:
-				errorInfo.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
-			stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
-		});
-
+		handleError(error, errorInfo);
 		this.setState({ errorInfo });
 	}
 
 	render() {
-		const { hasError } = this.state;
+		const { hasError, error, errorInfo } = this.state;
 
 		if (hasError) {
-			console.log("ErrorBoundary: Rendering fallback UI.");
-			hideSplashScreenAndShowBackground();
-
-			return <ErrorFallback />;
+			return <ErrorFallback error={error} errorInfo={errorInfo} />;
 		}
+
 		return this.props.children;
 	}
 }

@@ -31,10 +31,9 @@ export const useTechTreeRow = ({
 
 	// State from stores
 	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const { techGroups, max_bonus, solved_bonus } = useTechStore();
-
-	const techMaxBonus = max_bonus?.[tech] ?? 0;
-	const techSolvedBonus = solved_bonus?.[tech] ?? 0;
+	const techGroups = useTechStore((state) => state.techGroups);
+	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
+	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
 
 	// Derived state
 	const modules = techGroups[tech]?.[0]?.modules || EMPTY_MODULES_ARRAY;

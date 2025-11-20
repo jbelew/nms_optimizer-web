@@ -231,7 +231,9 @@ export function fetchTechTree(shipType: string = "standard"): Resource<TechTree>
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const techTree = fetchTechTree(shipType).read();
-	const { setTechColors, setTechGroups, setActiveGroup } = useTechStore();
+	const setTechColors = useTechStore((state) => state.setTechColors);
+	const setTechGroups = useTechStore((state) => state.setTechGroups);
+	const setActiveGroup = useTechStore((state) => state.setActiveGroup);
 
 	const setInitialGridDefinition = useGridStore((state) => state.setInitialGridDefinition);
 	const setGridFromInitialDefinition = useGridStore(

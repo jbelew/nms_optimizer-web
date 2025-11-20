@@ -145,6 +145,18 @@ export default defineConfig(({ mode }) => {
 								},
 							},
 						},
+						{
+							urlPattern: /^https:\/\/www\.googletagmanager\.com\/.*$/,
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "ga4-cache",
+								networkTimeoutSeconds: 5,
+								expiration: {
+									maxEntries: 5,
+									maxAgeSeconds: 3600, // 1 hour
+								},
+							},
+						},
 					],
 				},
 				manifest: {
@@ -234,11 +246,12 @@ export default defineConfig(({ mode }) => {
 					manualChunks(id) {
 						if (id.includes("node_modules")) {
 							// Chunk React and its dependencies
-							if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
+							if (/[\/]node_modules[\/](react|react-dom|scheduler)[\/]/.test(id)) {
 								return "react";
 							}
 
-							// Radix Themes (tokens/utilities)
+							// Radix Themes - Separate colors for better lazy-loading
+							// Colors are now split into their own chunk to enable dynamic loading
 							if (id.includes("@radix-ui/themes/tokens/colors/"))
 								return "radix-colors";
 							if (id.includes("@radix-ui/themes/utilities.css"))

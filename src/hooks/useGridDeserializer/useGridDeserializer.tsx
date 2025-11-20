@@ -329,7 +329,7 @@ export const deserialize = async (
 export const useGridDeserializer = () => {
 	const { setGrid, grid, setIsSharedGrid } = useGridStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { setTechColors } = useTechStore();
+	const setTechColors = useTechStore((state) => state.setTechColors);
 
 	const serializeGrid = useCallback((): string => {
 		return serialize(grid);

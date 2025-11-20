@@ -24,7 +24,8 @@ export const useTechOptimization = (
 	hasTechInGrid: boolean
 ) => {
 	const handleResetGridTech = useGridStore((state) => state.resetGridTech);
-	const { clearTechMaxBonus, clearTechSolvedBonus } = useTechStore();
+	const clearTechMaxBonus = useTechStore((state) => state.clearTechMaxBonus);
+	const clearTechSolvedBonus = useTechStore((state) => state.clearTechSolvedBonus);
 	const { triggerShake } = useShakeStore();
 	const [isResetting, startResetTransition] = useTransition();
 

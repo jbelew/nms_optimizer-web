@@ -20,10 +20,18 @@ const mockModules = [
 
 describe("useTechModuleManagement", () => {
 	it("should group modules correctly", () => {
-		(useTechStore as unknown as Mock).mockReturnValue({
-			checkedModules: {},
-			setCheckedModules: vi.fn(),
-		});
+		(useTechStore as unknown as Mock).mockImplementation(
+			(
+				selector: (state: {
+					setCheckedModules: () => void;
+					checkedModules: { [key: string]: string[] };
+				}) => unknown
+			) =>
+				selector({
+					checkedModules: {},
+					setCheckedModules: vi.fn(),
+				})
+		);
 
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
@@ -36,10 +44,18 @@ describe("useTechModuleManagement", () => {
 
 	it("should handle selecting and deselecting all non-core modules", () => {
 		const setCheckedModules = vi.fn();
-		(useTechStore as unknown as Mock).mockReturnValue({
-			checkedModules: { testTech: ["core1"] },
-			setCheckedModules,
-		});
+		(useTechStore as unknown as Mock).mockImplementation(
+			(
+				selector: (state: {
+					setCheckedModules: () => void;
+					checkedModules: { [key: string]: string[] };
+				}) => unknown
+			) =>
+				selector({
+					checkedModules: { testTech: ["core1"] },
+					setCheckedModules,
+				})
+		);
 
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 
@@ -71,10 +87,18 @@ describe("useTechModuleManagement", () => {
 
 	it("should handle dependency chains for upgrades", () => {
 		const setCheckedModules = vi.fn();
-		(useTechStore as unknown as Mock).mockReturnValue({
-			checkedModules: { testTech: ["core1", "upgradeC", "upgradeB"] },
-			setCheckedModules,
-		});
+		(useTechStore as unknown as Mock).mockImplementation(
+			(
+				selector: (state: {
+					setCheckedModules: () => void;
+					checkedModules: { [key: string]: string[] };
+				}) => unknown
+			) =>
+				selector({
+					checkedModules: { testTech: ["core1", "upgradeC", "upgradeB"] },
+					setCheckedModules,
+				})
+		);
 
 		const { result } = renderHook(() => useTechModuleManagement("testTech", mockModules));
 

@@ -25,10 +25,18 @@ describe("useTechOptimization", () => {
 				selector({ resetGridTech: mockResetGridTech })
 		);
 		(useShakeStore as unknown as Mock).mockReturnValue({ triggerShake: mockTriggerShake });
-		(useTechStore as unknown as Mock).mockReturnValue({
-			clearTechMaxBonus: mockClearTechMaxBonus,
-			clearTechSolvedBonus: mockClearTechSolvedBonus,
-		});
+		(useTechStore as unknown as Mock).mockImplementation(
+			(
+				selector: (state: {
+					clearTechMaxBonus: () => void;
+					clearTechSolvedBonus: () => void;
+				}) => unknown
+			) =>
+				selector({
+					clearTechMaxBonus: mockClearTechMaxBonus,
+					clearTechSolvedBonus: mockClearTechSolvedBonus,
+				})
+		);
 	});
 
 	it("should call reset and optimize when grid is not full", async () => {
