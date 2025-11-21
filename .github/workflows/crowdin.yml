@@ -32,11 +32,6 @@ jobs:
                   pull_request_body: "New translations from Crowdin by [Crowdin GH Action](https://github.com/crowdin/github-action)\n\nPlease review and merge if translations are correct."
                   pull_request_base_branch_name: "main"
               env:
-                  # A classic GitHub Personal Access Token with the 'repo' scope selected (the user should have write access to the repository).
-                  GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-
-                  # A numeric ID, found at https://crowdin.com/project/<projectName>/tools/api
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-
-                  # Visit https://crowdin.com/settings#api-key to create this token
                   CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
