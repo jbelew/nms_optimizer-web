@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/A11yStore";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -48,7 +47,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
-	const isLg = useBreakpoint("1024px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const {
@@ -213,21 +211,10 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 								</Suspense>
 							</aside>
 						)}
-
-						{/* {!isLg && (
-							<Separator
-								color="cyan"
-								size="4"
-								mt="4"
-								mb="4"
-								orientation="horizontal"
-							/>
-						)} */}
 					</section>
 				</div>
 
-				{!isLg && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
-				{isLg && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
+				<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
 
 				{/* Dialogs related to MainAppContent's state */}
 				<Suspense fallback={null}>
