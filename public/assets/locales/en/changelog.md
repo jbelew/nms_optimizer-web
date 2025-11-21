@@ -2,6 +2,9 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 5.13 - New Artwork (2025-11-21)
+- Added a brand new background image! The old one was something I “found,” and I wasn’t giving proper credit to the creator, so now the art is clean and original.
+
 ## Version 5.12 – Supercharge Limits & Touch Improvements (2025-11-20)
 - Limited supercharge slot placement to the first 4 rows of the grid for better gameplay balance.
 - Fixed touch interactions that could occasionally get stuck after canceling a tap.
