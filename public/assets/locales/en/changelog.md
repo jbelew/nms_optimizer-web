@@ -3,44 +3,55 @@ The full commit history for this project is available on [GitHub](https://github
 ---
 
 ## Version 5.13 - New Artwork (2025-11-21)
-- Added a brand new background image! The old one was something I “found,” and I wasn’t giving proper credit to the creator, so now the art is clean and original.
+
+- Added a brand new background image! The old one was something I “found,” and I wasn’t giving proper credit to the creator, so now the art is clean and original. I also put together a quick video showing a visual history of the app.
+
+[youtube:nGbHf9fQmds]
 
 ## Version 5.12 – Supercharge Limits & Touch Improvements (2025-11-20)
+
 - Limited supercharge slot placement to the first 4 rows of the grid for better gameplay balance.
 - Fixed touch interactions that could occasionally get stuck after canceling a tap.
 - Improved responsiveness of touch interactions on mobile devices.
 - Fixed a rare issue where blocked module placements wouldn't provide feedback.
 
 ## Version 5.11 – Blocked Module Feedback (2025-11-19)
+
 - Added visual shake feedback when attempting to place a module on a blocked cell.
 - Prevented accidental state changes when interacting with blocked cells.
 
 ## Version 5.10 – Static Markdown Pages & SEO Improvements (2025-11-18)
+
 - Added static site generation for all markdown pages (`/about`, `/instructions`, `/changelog`, etc.).
 - Pages now ship with pre-rendered HTML for faster first load and better SEO.
 - Includes graceful client-side hydration when dynamic rendering is needed.
 
 ## Version 5.9 – Enhanced Bot Detection & SEO Improvements (2025-11-18)
+
 - Improved splash-screen behavior for bots and crawlers to ensure correct rendering and telemetry.
 - Optimized initial page render when accessed by search engines for better SEO performance.
 
 ## Version 5.8 – Centralized Data Fetching & Error Handling (2025-11-18)
+
 - Introduced a unified data-fetching system with built-in timeout and error handling.
 - Lays groundwork for smarter caching and prefetching in future releases.
 
 ## Version 5.7 – Performance, Animation & UI Fixes (2025-11-17)
+
 - Refined grid-cell glow effects for smoother, cleaner animations.
 - Corrected glow behavior on white accent cells.
 - Reduced layout shift in the User Stats dialog by fixing skeleton height.
 - Switched to a subsetted Raleway font to reduce font-load overhead.
 
 ## Version 5.6 – Build-Time Optimizations & Layout Fixes (2025-11-15/16)
+
 - Preloaded key font assets to improve perceived load time.
 - Removed console and debug statements from production builds to shrink bundle size.
 - Improved global performance through profiling and architectural cleanup.
 - Updated layout units (`dvw`) and adjusted header styling to fix mobile spacing issues.
 
 ## Version 5.5 – Update Prompt, Mobile Toolbar & Performance Improvements (2025-11-15)
+
 - Introduced a dedicated **toolbar on mobile devices**, increasing hotspot/tap target sizes for easier interaction.
 - Applied consistant styling to the **Update Prompt** dialog.
 - Improved grid rendering performance through hardware acceleration.
@@ -48,11 +59,13 @@ The full commit history for this project is available on [GitHub](https://github
 - Fixed mobile scrolling and layout issues related to the new toolbar.
 
 ## Version 5.4 – Loading Optimizations & Corvette Fix (2025-11-14/15)
+
 - Improved preload priority for translation files to speed up localization on first load.
 - Optimized critical asset loading for faster startup.
 - Re-enabled the corvette selection toast warning. Come on HG! Fix it!
 
 ## Version 5.3 – Improved PWA & Trail Update Fixes (2025-11-13)
+
 - Added a more complete Service Worker for improved offline reliability and correct caching of core files (`sw.js`, `index.html`).
 - Improved iOS update detection to prevent false “new version available” prompts.
 - Added several new starship trail types and included corresponding images.
@@ -61,17 +74,19 @@ The full commit history for this project is available on [GitHub](https://github
 - Increased most living-ship technology module windows to **2×3** to better support supercharge slot usage.
 
 ## Version 5.2 – Major iOS Service Worker Recovery (2025-11-11)
+
 - Added GA4-compliant analytics event names.
 - Implemented multiple patches to recover from iOS Service Worker corruption:
-  - Forced unregister for corrupted SWs
-  - Temporary PWA disablement on iOS
-  - Updated splash screen behavior
-  - Added reliability guards to prevent offline lockouts
+    - Forced unregister for corrupted SWs
+    - Temporary PWA disablement on iOS
+    - Updated splash screen behavior
+    - Added reliability guards to prevent offline lockouts
 - Improved image optimization and caching for static API responses.
 - Fixed issues with i18n routing, deserialization, toasts, and layout instability.
 - Updated corvette solve maps for more accurate scoring.
 
 ## Version 5.1 – Stability & Tooling Improvements (2025-11-08)
+
 - Added full Lighthouse CI integration for automated performance audits.
 - Introduced a proper 404 page.
 - Fixed CSP rules, CSS overflow behavior, and several Lighthouse configuration issues.

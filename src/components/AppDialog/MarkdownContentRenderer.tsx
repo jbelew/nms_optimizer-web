@@ -5,6 +5,22 @@ import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownConten
 
 import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
 
+// YouTube embed component
+const YouTubeEmbed: React.FC<{ videoId: string; title?: string }> = ({ videoId, title }) => (
+	<Box asChild mb="2">
+		<iframe
+			width="100%"
+			height="400"
+			src={`https://www.youtube.com/embed/${videoId}`}
+			title={title || "YouTube video"}
+			frameBorder="0"
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			allowFullScreen
+			style={{ borderRadius: "6px" }}
+		/>
+	</Box>
+);
+
 interface MarkdownContentRendererProps {
 	markdownFileName: string;
 	targetSectionId?: string;
@@ -37,6 +53,14 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	useEffect(() => {
 		import("remark-gfm").then((module) => {
 			setRemarkGfm(() => module.default);
+		});
+	}, []);
+
+	const [rehypeRaw, setRehypeRaw] = useState<(() => void) | undefined>(undefined);
+
+	useEffect(() => {
+		import("rehype-raw").then((module) => {
+			setRehypeRaw(() => module.default);
 		});
 	}, []);
 
@@ -90,6 +114,24 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 
 	const components = React.useMemo(
 		() => ({
+			p: ({ children }: { children?: React.ReactNode }) => {
+				// Check if this paragraph contains a YouTube embed pattern
+				const text =
+					typeof children === "string"
+						? children
+						: React.Children.toArray(children).toString();
+
+				const youtubeMatch = text.match(/\[youtube:([^\]]+)\]/);
+				if (youtubeMatch) {
+					return <YouTubeEmbed videoId={youtubeMatch[1]} />;
+				}
+
+				return (
+					<Text as="p" mb="2">
+						{children}
+					</Text>
+				);
+			},
 			h2: ({ children }: { children?: React.ReactNode }) => {
 				let id = h2IdMapRef.current.get(children);
 				if (!id) {
@@ -117,11 +159,6 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 					</Heading>
 				);
 			},
-			p: ({ children }: { children?: React.ReactNode }) => (
-				<Text as="p" mb="2">
-					{children}
-				</Text>
-			),
 			a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
 				<Link href={href} target="_blank" rel="noopener noreferrer" underline="auto">
 					{children}
@@ -158,6 +195,20 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
 				<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
 			),
+			iframe: ({ src, title }: { src?: string; title?: string }) => (
+				<Box asChild mb="2">
+					<iframe
+						width="100%"
+						height="400"
+						src={src}
+						title={title}
+						frameBorder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowFullScreen
+						style={{ borderRadius: "6px" }}
+					/>
+				</Box>
+			),
 			hr: () => (
 				<Separator size="4" color="cyan" orientation="horizontal" decorative mb="2" />
 			),
@@ -180,10 +231,14 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 
 	return (
 		<article ref={articleRef} className="text-sm sm:text-base">
-			{isLoading || !remarkGfm ? (
+			{isLoading || !remarkGfm || !rehypeRaw ? (
 				<LoremIpsumSkeleton />
 			) : (
-				<LazyReactMarkdown components={components} remarkPlugins={[remarkGfm]}>
+				<LazyReactMarkdown
+					components={components}
+					remarkPlugins={[remarkGfm]}
+					rehypePlugins={[rehypeRaw]}
+				>
 					{markdown}
 				</LazyReactMarkdown>
 			)}
