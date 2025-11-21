@@ -167,37 +167,53 @@ if (typeof window !== "undefined") {
 			window.addEventListener("load", () => setTimeout(initGA, 1000));
 		}
 
+		// Detect iOS
+		const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+
 		// Conditionally register the service worker for non-bot user agents
 		if (
 			"serviceWorker" in navigator &&
 			!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
 		) {
 			const registerWorker = () => {
-				setTimeout(() => {
-					import("virtual:pwa-register")
-						.then(({ registerSW }) => {
-							const updateServiceWorker = registerSW({
-								onOfflineReady() {
-									console.log("App is ready to work offline");
-								},
-								onNeedRefresh() {
-									verifyServiceWorkerUpdate(updateServiceWorker);
-								},
-								onRegistered(registration) {
-									console.log("Service Worker registered:", registration);
-									if (registration) {
-										storeServiceWorkerVersion(registration);
-									}
-								},
-								onRegisterError(error) {
-									console.error("Service Worker registration failed:", error);
-								},
+				setTimeout(
+					() => {
+						// Add a timeout for SW registration to prevent lockups
+						const swRegistrationTimeout = setTimeout(() => {
+							console.warn("Service worker registration timeout (10s), skipping");
+						}, 10000);
+
+						import("virtual:pwa-register")
+							.then(({ registerSW }) => {
+								const updateServiceWorker = registerSW({
+									onOfflineReady() {
+										clearTimeout(swRegistrationTimeout);
+										console.log("App is ready to work offline");
+									},
+									onNeedRefresh() {
+										clearTimeout(swRegistrationTimeout);
+										verifyServiceWorkerUpdate(updateServiceWorker);
+									},
+									onRegistered(registration) {
+										clearTimeout(swRegistrationTimeout);
+										console.log("Service Worker registered:", registration);
+										if (registration) {
+											storeServiceWorkerVersion(registration);
+										}
+									},
+									onRegisterError(error) {
+										clearTimeout(swRegistrationTimeout);
+										console.error("Service Worker registration failed:", error);
+									},
+								});
+							})
+							.catch((e) => {
+								clearTimeout(swRegistrationTimeout);
+								console.error("Failed to import PWA register:", e);
 							});
-						})
-						.catch((e) => {
-							console.error("Failed to import PWA register:", e);
-						});
-				}, 2000); // Delay after load event
+					},
+					isIOS ? 3000 : 2000
+				); // Longer delay for iOS
 			};
 
 			if (document.readyState === "complete") {
