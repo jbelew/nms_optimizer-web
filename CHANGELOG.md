@@ -1,3 +1,10 @@
+## [5.13.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.3...v5.13.4) (2025-11-21)
+
+
+### Bug Fixes
+
+* authenticate to GHCR on manual workflow dispatch. ([2e45047](https://github.com/jbelew/nms_optimizer-web/commit/2e450478f60584a3e9e6344085194b594bf5f134))
+
 ## [5.13.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.2...v5.13.3) (2025-11-21)
 
 
