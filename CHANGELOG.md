@@ -1,3 +1,15 @@
+# [5.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.7...v5.13.0) (2025-11-21)
+
+
+### Bug Fixes
+
+* **ui:** Improve tech info button availability and module checkbox style ([d5eb8f0](https://github.com/jbelew/nms_optimizer-web/commit/d5eb8f000dbf7eb872a6095f04d18e48a334ba3c))
+
+
+### Features
+
+* **ui:** Update application background image and layout ([a113865](https://github.com/jbelew/nms_optimizer-web/commit/a11386560df3d315f04abd330b7f1f382b691b59)), closes [hi#resolution](https://github.com/hi/issues/resolution)
+
 ## [5.12.7](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.6...v5.12.7) (2025-11-20)
 
 
