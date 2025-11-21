@@ -1,3 +1,10 @@
+## [5.13.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.1...v5.13.2) (2025-11-21)
+
+
+### Bug Fixes
+
+* add release and workflow_dispatch triggers to Docker build workflow ([44a9f08](https://github.com/jbelew/nms_optimizer-web/commit/44a9f08de28a16ec4921c2bb6a1cf34e418fd9a2))
+
 ## [5.13.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.0...v5.13.1) (2025-11-21)
 
 
