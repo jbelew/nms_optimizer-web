@@ -1,8 +1,16 @@
-name: Crowdin Action
+name: Crowdin Sync
 
 on:
-    push:
-        branches: [main]
+    workflow_dispatch:
+        inputs:
+            upload_sources:
+                description: "Upload source strings to Crowdin"
+                required: false
+                default: false
+                type: boolean
+    schedule:
+        # Run every Sunday at 2 AM UTC to download translations
+        - cron: "0 2 * * 0"
 
 jobs:
     synchronize-with-crowdin:
@@ -12,16 +20,16 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: crowdin action
+            - name: Download Translations from Crowdin
               uses: crowdin/github-action@v2
               with:
-                  upload_sources: true
+                  upload_sources: ${{ github.event.inputs.upload_sources == 'true' }}
                   upload_translations: false
                   download_translations: true
                   localization_branch_name: l10n_crowdin_translations
                   create_pull_request: true
-                  pull_request_title: "New Crowdin Translations"
-                  pull_request_body: "New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)"
+                  pull_request_title: "chore: New Crowdin translations"
+                  pull_request_body: "New translations from Crowdin by [Crowdin GH Action](https://github.com/crowdin/github-action)\n\nPlease review and merge if translations are correct."
                   pull_request_base_branch_name: "main"
               env:
                   # A classic GitHub Personal Access Token with the 'repo' scope selected (the user should have write access to the repository).
