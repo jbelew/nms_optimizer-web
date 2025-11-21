@@ -1,3 +1,10 @@
+## [5.13.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.2...v5.13.3) (2025-11-21)
+
+
+### Bug Fixes
+
+* remove skip ci from release commits and add explicit Docker build trigger ([f1951fb](https://github.com/jbelew/nms_optimizer-web/commit/f1951fb8a453443a8665df5ff4af5afe433ab1f5))
+
 ## [5.13.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.1...v5.13.2) (2025-11-21)
 
 
