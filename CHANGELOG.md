@@ -1,3 +1,12 @@
+## [5.13.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.0...v5.13.1) (2025-11-21)
+
+
+### Bug Fixes
+
+* fully regenerate lock file from scratch ([b72546f](https://github.com/jbelew/nms_optimizer-web/commit/b72546f81615a350a2c311076080fda8c5996e83))
+* regenerate lock file after npm dedupe corruption ([db55a1b](https://github.com/jbelew/nms_optimizer-web/commit/db55a1ba25613c8344c615c901db79b87fa0a1fa))
+* resolve npm ci lock file conflicts by downgrading @semantic-release/npm ([af2c3b9](https://github.com/jbelew/nms_optimizer-web/commit/af2c3b96e0c5cf7d8760122cbb65dcbde1e9e68e))
+
 # [5.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.12.7...v5.13.0) (2025-11-21)
 
 
