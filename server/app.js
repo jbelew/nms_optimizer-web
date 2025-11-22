@@ -99,10 +99,10 @@ function setCacheHeaders(res, filePath) {
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=31536000");
-	} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=31536000");
+	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
+		// Non-hashed static assets get a 7-day browser cache.
+		// Cloudflare's edge cache can be longer, as it's purged on deploy.
+		res.setHeader("Cache-Control", "public, max-age=604800");
 	} else if (/\.md$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=3600");
 	} else {
