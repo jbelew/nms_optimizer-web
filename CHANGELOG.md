@@ -1,3 +1,10 @@
+# [5.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.4...v5.14.0) (2025-11-22)
+
+
+### Features
+
+* **server:** Implement HTTP ETag caching for SPA routes ([7984fca](https://github.com/jbelew/nms_optimizer-web/commit/7984fca7d57616f97a276810d06c688dfa61fc10))
+
 ## [5.13.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.3...v5.13.4) (2025-11-21)
 
 
