@@ -48,7 +48,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 workflow_id: 'publish-images.yml',
-                ref: 'main'
+                ref: `refs/tags/${tag}`
               });
               console.log('Docker build workflow triggered successfully');
             } catch (error) {
