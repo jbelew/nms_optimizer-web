@@ -125,6 +125,17 @@ export default defineConfig(({ mode }) => {
 								cacheableResponse: {
 									statuses: [0, 200], // Only cache successful responses, not 503s
 								},
+								// Ignore query parameters in cache key to prevent duplicate caches
+								plugins: [
+									{
+										// Ignore query parameters when matching cache entries
+										cacheKeyWillBeUsed: async ({request}) => {
+											const url = new URL(request.url);
+											url.search = ''; // Remove query string
+											return new Request(url.toString(), {method: request.method});
+										},
+									}
+								],
 							},
 						},
 						{
@@ -136,6 +147,16 @@ export default defineConfig(({ mode }) => {
 									maxEntries: 30,
 									maxAgeSeconds: 31536000, // 1 year
 								},
+								// Ignore query parameters in cache key
+								plugins: [
+									{
+										cacheKeyWillBeUsed: async ({request}) => {
+											const url = new URL(request.url);
+											url.search = '';
+											return new Request(url.toString(), {method: request.method});
+										},
+									}
+								],
 							},
 						},
 						{
