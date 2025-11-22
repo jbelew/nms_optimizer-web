@@ -1,3 +1,10 @@
+## [5.14.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.2...v5.14.3) (2025-11-22)
+
+
+### Bug Fixes
+
+* **assets:** Handle query parameters for static assets and caching ([947b939](https://github.com/jbelew/nms_optimizer-web/commit/947b9392e717af3e2d27d8e9a2e8574a06fac54d))
+
 ## [5.14.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.1...v5.14.2) (2025-11-22)
 
 
