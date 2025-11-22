@@ -16,11 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload Source Strings to Crowdin
+      - name: Upload Source and Translations to Crowdin
         uses: crowdin/github-action@v2
         with:
           upload_sources: true
-          upload_translations: false
+          upload_translations: true
           download_translations: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
