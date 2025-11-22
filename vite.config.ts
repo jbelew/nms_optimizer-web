@@ -93,6 +93,9 @@ export default defineConfig(({ mode }) => {
 					navigationPreload: false,
 					cleanupOutdatedCaches: true, // Essential for cache hygiene
 
+					// Don't serve app shell for unknown routes - let 404s return proper status for SEO
+					navigateFallback: undefined,
+
 					// Don't precache HTML - let the server handle it with proper cache headers
 					dontCacheBustURLsMatching: /\.(js|css|woff2?)$/,
 
@@ -107,6 +110,9 @@ export default defineConfig(({ mode }) => {
 								expiration: {
 									maxEntries: 10,
 									maxAgeSeconds: 300, // 5 minutes
+								},
+								cacheableResponse: {
+									statuses: [0, 200], // Only cache successful responses, not 404s
 								},
 							},
 						},
