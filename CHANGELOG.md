@@ -1,3 +1,10 @@
+## [5.14.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.3...v5.14.4) (2025-11-22)
+
+
+### Performance Improvements
+
+* **fonts:** Optimize NMS alphabet font loading ([2f54328](https://github.com/jbelew/nms_optimizer-web/commit/2f54328c37298657f62e6637b821c4cb82c1f95c))
+
 ## [5.14.3](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.2...v5.14.3) (2025-11-22)
 
 
