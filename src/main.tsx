@@ -108,7 +108,7 @@ function storeServiceWorkerVersion(registration: ServiceWorkerRegistration) {
  */
 async function generateScriptHash(scriptUrl: string): Promise<string> {
 	try {
-		const response = await fetchWithTimeout(scriptUrl, { cache: "no-cache" }, 10000);
+		const response = await fetchWithTimeout(scriptUrl, { cache: "no-store" }, 10000);
 		if (!response.ok) {
 			console.warn(`Failed to fetch service worker script: ${response.status}`);
 			return "";

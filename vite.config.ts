@@ -79,9 +79,6 @@ export default defineConfig(({ mode }) => {
 					"robots.txt",
 					"/assets/img/favicons/apple-touch-icon.png",
 					"assets/fonts/*.woff2",
-					"assets/img/background.webp",
-					"assets/img/background@2x.webp",
-					"assets/img/background@mobile.webp",
 					"assets/locales/*/translation.json",
 				],
 				workbox: {
@@ -124,6 +121,9 @@ export default defineConfig(({ mode }) => {
 								expiration: {
 									maxEntries: 1000,
 									maxAgeSeconds: 31536000, // 1 year (matches server/app.js)
+								},
+								cacheableResponse: {
+									statuses: [0, 200], // Only cache successful responses, not 503s
 								},
 							},
 						},

@@ -25,36 +25,14 @@ import {
 	TARGET_HOST,
 } from "./config.js";
 
-// --- CONSTANTS ---
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 
-/**
- * The directory name of the current module.
- * @type {string}
- */
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-/**
- * The absolute path to the 'dist' directory, where built assets are stored.
- * @type {string}
- */
-const DIST_DIR = path.join(__dirname, "../dist"); // Adjusted for new file location
-
-/**
- * The main Express application instance.
- * @type {import('express').Express}
- */
-const app = express();
-
-/**
- * The absolute path to the main index.html file.
- * @type {string}
- */
+const DIST_DIR = path.join(__dirname, "../dist");
 const INDEX_PATH = path.join(DIST_DIR, "index.html");
 
-/**
- * The Content Security Policy (CSP) string.
- * @type {string}
- */
 const csp = [
 	"default-src 'self'",
 	"script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'",
@@ -67,29 +45,19 @@ const csp = [
 	"base-uri 'self'",
 ].join("; ");
 
-// --- IN-MEMORY CACHE FOR INDEX.HTML ---
+const app = express();
 
-/**
- * In-memory cache for the index.html content.
- * @type {string | null}
- */
+// ============================================================================
+// IN-MEMORY CACHE FOR INDEX.HTML
+// ============================================================================
+
 let cachedIndex = null;
-
-/**
- * The modification time of the cached index.html file.
- * @type {number}
- */
 let cachedIndexMTime = 0;
-
-/**
- * ETag cache for index.html
- * @type {string | null}
- */
 let cachedIndexETag = null;
 
 /**
  * Loads index.html from the filesystem and caches it in memory.
- * If the file has been modified since the last read, it re-reads and updates the cache.
+ * If the file has been modified, re-reads and updates the cache.
  * @async
  * @returns {Promise<string>} The content of index.html.
  */
@@ -98,87 +66,78 @@ async function loadIndexHtml() {
 	if (!cachedIndex || stat.mtimeMs > cachedIndexMTime) {
 		cachedIndex = await fs.promises.readFile(INDEX_PATH, "utf8");
 		cachedIndexMTime = stat.mtimeMs;
-		// Generate ETag based on file hash
 		cachedIndexETag = `"${crypto.createHash("md5").update(cachedIndex).digest("hex")}"`;
 	}
 	return cachedIndex;
 }
 
 /**
- * Gets the ETag for index.html
+ * Gets the ETag for index.html.
  * @async
  * @returns {Promise<string>} The ETag value.
  */
 async function getIndexHtmlETag() {
-	await loadIndexHtml(); // Ensure it's loaded and ETag is set
+	await loadIndexHtml();
 	return cachedIndexETag;
 }
 
-// --- HELPER FUNCTIONS ---
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
 /**
- * Sets appropriate Cache-Control headers for static assets based on their file type and name.
- * Hashed assets are given an immutable cache header, while others have shorter durations.
- * @param {import('express').Response} res - The Express response object.
- * @param {string} filePath - The path to the file being served.
+ * Sets appropriate Cache-Control headers for static assets based on file type and name.
+ * Hashed assets get long-lived caching, others vary by type.
+ * @param {import('express').Response} res - Express response object.
+ * @param {string} filePath - Path to the file being served.
  */
 function setCacheHeaders(res, filePath) {
-	let fileName = path.basename(filePath);
-	// Strip compression extensions (.br, .gz) before checking hash
-	fileName = fileName.replace(/\.(br|gz)$/, '');
-	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
+	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, '');
+	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/;
 
-	if (fileName === 'sw.js') { // Must revalidate, but allow caching by intermediaries
-		res.setHeader("Cache-Control", "no-cache, public");
+	if (fileName === 'sw.js') {
+		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
+		res.setHeader("Cache-Control", "public, max-age=31536000");
 	} else if (/\.(png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=31536000"); // 1 year
+		res.setHeader("Cache-Control", "public, max-age=31536000");
 	} else if (/\.md$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
+		res.setHeader("Cache-Control", "public, max-age=3600");
 	} else {
-		res.setHeader("Cache-control", "public, max-age=86400"); // 1 day
+		res.setHeader("Cache-Control", "public, max-age=86400");
 	}
 }
 
 /**
- * Checks if a given pathname corresponds to a known client-side SPA route.
- * This function considers base paths and language-prefixed paths.
- * @param {string} pathname - The URL pathname to check.
- * @returns {boolean} True if the pathname is a known SPA route, false otherwise.
+ * Checks if a pathname corresponds to a known client-side SPA route.
+ * Handles base paths and language-prefixed paths.
+ * @param {string} pathname - URL pathname to check.
+ * @returns {boolean} True if pathname is a known SPA route.
  */
 function isSpaRoute(pathname) {
 	const parts = pathname.split("/").filter((p) => p);
 
-	// Root path (e.g., '/')
 	if (parts.length === 0) {
 		return BASE_KNOWN_PATHS.includes("/");
 	}
 
-	// Language-prefixed paths (e.g., '/es/about', '/de')
 	if (SUPPORTED_LANGUAGES.includes(parts[0])) {
 		const page = parts[1];
-		if (!page) {
-			return true; // Language root (e.g., /es)
-		}
-		return KNOWN_DIALOGS.includes(page);
+		return !page || KNOWN_DIALOGS.includes(page);
 	}
 
-	// Non-language-prefixed paths (e.g., '/about')
-	const page = parts[0];
-	return KNOWN_DIALOGS.includes(page);
+	return KNOWN_DIALOGS.includes(parts[0]);
 }
 
-// --- MIDDLEWARE & ROUTING ---
+// ============================================================================
+// GLOBAL MIDDLEWARE
+// ============================================================================
 
-// Trust proxies like Heroku or Cloudflare to get the correct client IP.
 app.set("trust proxy", true);
 
-/**
- * Global security headers middleware
- */
+// Security headers
 app.use((req, res, next) => {
 	res.setHeader("X-Content-Type-Options", "nosniff");
 	res.setHeader("X-Frame-Options", "DENY");
@@ -187,10 +146,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-/**
- * Middleware to redirect requests from non-canonical hosts to the target host in production.
- * Ensures all traffic goes to a single domain for SEO purposes.
- */
+// Canonical host redirect (production only)
 if (process.env.NODE_ENV === "production") {
 	app.use((req, res, next) => {
 		const host = req.headers.host?.toLowerCase();
@@ -201,11 +157,7 @@ if (process.env.NODE_ENV === "production") {
 	});
 }
 
-/**
- * Middleware to redirect requests with trailing slashes to the non-slashed version.
- * e.g., /about/ -> /about. This is important for SEO.
- * However, this is skipped for directory paths that have SSG files, which are handled below.
- */
+// Trailing slash redirect
 app.use((req, res, next) => {
 	if (req.path.length > 1 && req.path.endsWith("/")) {
 		const query = req.url.slice(req.path.length);
@@ -214,9 +166,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-/**
- * Middleware to add ETag headers to static files for efficient caching.
- */
+// ETag generation for static files
 app.use((req, res, next) => {
 	const originalSendFile = res.sendFile;
 	res.sendFile = function(filePath, ...args) {
@@ -225,7 +175,6 @@ app.use((req, res, next) => {
 				const etag = `"${stats.mtime.getTime()}-${stats.size}"`;
 				res.setHeader("ETag", etag);
 				
-				// Return 304 if client has matching ETag
 				if (req.headers["if-none-match"] === etag) {
 					res.status(304).end();
 					return;
@@ -237,114 +186,125 @@ app.use((req, res, next) => {
 	next();
 });
 
-/**
- * Route handler for serving the sitemap.xml file.
- */
+// ============================================================================
+// SPECIFIC ROUTES (before wildcard and static middleware)
+// ============================================================================
+
 app.get("/sitemap.xml", (req, res) => {
 	res.type("application/xml");
-	res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
+	res.setHeader("Cache-Control", "public, max-age=86400");
 	res.sendFile(path.join(DIST_DIR, "sitemap.xml"));
 });
 
-/**
- * Route handler for serving the robots.txt file.
- */
 app.get("/robots.txt", (req, res) => {
 	res.setHeader("Content-Type", "text/plain");
-	res.setHeader("Cache-Control", "public, max-age=86400"); // 1 day
+	res.setHeader("Cache-Control", "public, max-age=86400");
 	res.sendFile(path.join(DIST_DIR, "robots.txt"));
 });
 
 /**
- * The main SPA fallback handler for SSG-generated pages.
- * This runs BEFORE the static file middleware to intercept SPA routes
- * and serve pregenerated HTML files directly.
+ * Service worker route with explicit ETag handling and strong cache-busting.
+ * Service workers must never be cached to ensure updates reach users immediately.
  */
-app.get(/^[^.]*$/, async (req, res, next) => {
-	if (isSpaRoute(req.path)) {
-		// Revalidate on every request, but allow back/forward cache
-		res.setHeader("Cache-Control", "no-cache, public");
-		res.setHeader("Pragma", "no-cache");
-		
-		// Set ETag for instant revalidation
-		const etag = await getIndexHtmlETag();
+app.get("/sw.js", async (req, res) => {
+	const swPath = path.join(DIST_DIR, "sw.js");
+	try {
+		const stat = await fs.promises.stat(swPath);
+		const etag = `"${stat.mtime.getTime()}-${stat.size}"`;
 		res.setHeader("ETag", etag);
+		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+		res.setHeader("Content-Type", "application/javascript");
 		
-		// Return 304 if client has matching ETag
 		if (req.headers["if-none-match"] === etag) {
 			res.status(304).end();
 			return;
 		}
 		
-		// Try to serve pregenerated SSG file first (e.g., /dist/about/index.html)
-		const parts = req.path.split("/").filter((p) => p);
-		let ssgPath = null;
-		
-		// Build potential SSG file paths
-		if (parts.length === 0) {
-			ssgPath = path.join(DIST_DIR, "index.html");
-		} else if (SUPPORTED_LANGUAGES.includes(parts[0])) {
-			// Language-prefixed: /es/about -> /dist/es/about/index.html
-			const langPage = parts.slice(1).join("/");
-			ssgPath = path.join(DIST_DIR, parts[0], langPage || "index.html");
-			if (langPage) ssgPath = path.join(ssgPath, "index.html");
-		} else {
-			// Regular page: /about -> /dist/about/index.html
-			ssgPath = path.join(DIST_DIR, parts.join("/"), "index.html");
-		}
-		
-		// Check if SSG file exists
-		try {
-			const stats = await fs.promises.stat(ssgPath);
-			if (stats.isFile()) {
-				// Serve the pregenerated file with short cache
-				res.setHeader("Cache-Control", "public, max-age=300");
-				return res.sendFile(ssgPath);
-			}
-		} catch (err) {
-			// File doesn't exist, fall back to serving index.html with middleware
-		}
-		
-		try {
-			await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
-		} catch (error) {
-			next(error);
-		}
-	} else {
-		// If it's not a known SPA route, let it fall through to the static middleware
-		next();
+		res.sendFile(swPath);
+	} catch (error) {
+		res.status(404).send("Service worker not found");
 	}
 });
-
-/**
- * Middleware for serving pre-compressed static assets (Brotli/Gzip) from the 'dist' directory.
- */
-app.use(
-	"/",
-	expressStaticGzip(DIST_DIR, {
-		enableBrotli: true,
-		orderPreference: ["br", "gz"],
-		index: false, // SPA fallback is handled above
-		setHeaders: (res, filePath) => {
-			setCacheHeaders(res, filePath);
-		},
-	})
-);
 
 app.get("/status/404", (req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));
 });
 
+// ============================================================================
+// SPA FALLBACK HANDLER
+// ============================================================================
+
 /**
- * Final fallback middleware to handle 404 errors for any requests that haven't been handled yet.
- * Serves a custom 404 page.
+ * Handles SPA routes with SSG files, SEO tag injection, and proper caching.
+ * Runs before the static file middleware to intercept known SPA routes.
  */
-app.use((req, res) => {
-	res.status(404).sendFile(path.join(__dirname, "../public", "404.html")); // Adjusted for new file location
+app.get(/^[^.]*$/, async (req, res, next) => {
+	if (!isSpaRoute(req.path)) {
+		return next();
+	}
+
+	// HTML revalidation strategy
+	res.setHeader("Cache-Control", "no-cache, public");
+	res.setHeader("Pragma", "no-cache");
+	
+	const etag = await getIndexHtmlETag();
+	res.setHeader("ETag", etag);
+	
+	if (req.headers["if-none-match"] === etag) {
+		res.status(304).end();
+		return;
+	}
+
+	// Try to serve pregenerated SSG file first
+	const parts = req.path.split("/").filter((p) => p);
+	let ssgPath = null;
+
+	if (parts.length === 0) {
+		ssgPath = path.join(DIST_DIR, "index.html");
+	} else if (SUPPORTED_LANGUAGES.includes(parts[0])) {
+		const langPage = parts.slice(1).join("/");
+		ssgPath = path.join(DIST_DIR, parts[0], langPage || "index.html");
+		if (langPage) ssgPath = path.join(ssgPath, "index.html");
+	} else {
+		ssgPath = path.join(DIST_DIR, parts.join("/"), "index.html");
+	}
+
+	try {
+		const stats = await fs.promises.stat(ssgPath);
+		if (stats.isFile()) {
+			res.setHeader("Cache-Control", "public, max-age=300");
+			return res.sendFile(ssgPath);
+		}
+	} catch (err) {
+		// SSG file doesn't exist, fall back to dynamic rendering
+	}
+
+	try {
+		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
+	} catch (error) {
+		next(error);
+	}
 });
 
-// --- EXPORT APP ---
-/**
- * The configured Express app, exported for testing and for the server entry point.
- */
+// ============================================================================
+// STATIC FILE MIDDLEWARE
+// ============================================================================
+
+app.use("/", expressStaticGzip(DIST_DIR, {
+	enableBrotli: true,
+	orderPreference: ["br", "gz"],
+	index: false,
+	setHeaders: (res, filePath) => {
+		setCacheHeaders(res, filePath);
+	},
+}));
+
+// ============================================================================
+// ERROR HANDLING
+// ============================================================================
+
+app.use((req, res) => {
+	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));
+});
+
 export default app;

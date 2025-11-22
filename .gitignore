@@ -53,3 +53,4 @@ playwright-report/*
 .env
 frames/*
 screenshot_evolution.mp4
+src/assets/css/radix-colors/*
