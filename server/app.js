@@ -6,6 +6,7 @@
  */
 
 // Node.js built-in modules
+import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -81,6 +82,12 @@ let cachedIndex = null;
 let cachedIndexMTime = 0;
 
 /**
+ * ETag cache for index.html
+ * @type {string | null}
+ */
+let cachedIndexETag = null;
+
+/**
  * Loads index.html from the filesystem and caches it in memory.
  * If the file has been modified since the last read, it re-reads and updates the cache.
  * @async
@@ -91,8 +98,20 @@ async function loadIndexHtml() {
 	if (!cachedIndex || stat.mtimeMs > cachedIndexMTime) {
 		cachedIndex = await fs.promises.readFile(INDEX_PATH, "utf8");
 		cachedIndexMTime = stat.mtimeMs;
+		// Generate ETag based on file hash
+		cachedIndexETag = `"${crypto.createHash("md5").update(cachedIndex).digest("hex")}"`;
 	}
 	return cachedIndex;
+}
+
+/**
+ * Gets the ETag for index.html
+ * @async
+ * @returns {Promise<string>} The ETag value.
+ */
+async function getIndexHtmlETag() {
+	await loadIndexHtml(); // Ensure it's loaded and ETag is set
+	return cachedIndexETag;
 }
 
 // --- HELPER FUNCTIONS ---
@@ -196,6 +215,29 @@ app.use((req, res, next) => {
 });
 
 /**
+ * Middleware to add ETag headers to static files for efficient caching.
+ */
+app.use((req, res, next) => {
+	const originalSendFile = res.sendFile;
+	res.sendFile = function(filePath, ...args) {
+		fs.stat(filePath, (err, stats) => {
+			if (!err) {
+				const etag = `"${stats.mtime.getTime()}-${stats.size}"`;
+				res.setHeader("ETag", etag);
+				
+				// Return 304 if client has matching ETag
+				if (req.headers["if-none-match"] === etag) {
+					res.status(304).end();
+					return;
+				}
+			}
+			originalSendFile.call(res, filePath, ...args);
+		});
+	};
+	next();
+});
+
+/**
  * Route handler for serving the sitemap.xml file.
  */
 app.get("/sitemap.xml", (req, res) => {
@@ -220,8 +262,19 @@ app.get("/robots.txt", (req, res) => {
  */
 app.get(/^[^.]*$/, async (req, res, next) => {
 	if (isSpaRoute(req.path)) {
-		// Ensure index.html is revalidated by the browser on every navigation.
-		res.setHeader("Cache-Control", "no-cache");
+		// Revalidate on every request, but allow back/forward cache
+		res.setHeader("Cache-Control", "no-cache, public");
+		res.setHeader("Pragma", "no-cache");
+		
+		// Set ETag for instant revalidation
+		const etag = await getIndexHtmlETag();
+		res.setHeader("ETag", etag);
+		
+		// Return 304 if client has matching ETag
+		if (req.headers["if-none-match"] === etag) {
+			res.status(304).end();
+			return;
+		}
 		
 		// Try to serve pregenerated SSG file first (e.g., /dist/about/index.html)
 		const parts = req.path.split("/").filter((p) => p);
@@ -244,8 +297,8 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		try {
 			const stats = await fs.promises.stat(ssgPath);
 			if (stats.isFile()) {
-				// Serve the pregenerated file
-				res.setHeader("Cache-Control", "public, max-age=3600");
+				// Serve the pregenerated file with short cache
+				res.setHeader("Cache-Control", "public, max-age=300");
 				return res.sendFile(ssgPath);
 			}
 		} catch (err) {

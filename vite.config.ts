@@ -93,8 +93,23 @@ export default defineConfig(({ mode }) => {
 					navigationPreload: false,
 					cleanupOutdatedCaches: true, // Essential for cache hygiene
 
+					// Don't precache HTML - let the server handle it with proper cache headers
+					dontCacheBustURLsMatching: /\.(js|css|woff2?)$/,
+
 					// define caching strategies
 					runtimeCaching: [
+						{
+							urlPattern: /^https:\/\/nms-optimizer\.app\/.*\.html$/,
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "html-cache",
+								networkTimeoutSeconds: 3,
+								expiration: {
+									maxEntries: 10,
+									maxAgeSeconds: 300, // 5 minutes
+								},
+							},
+						},
 						{
 							urlPattern: ({ request }) => request.destination === "image",
 							handler: "CacheFirst",
