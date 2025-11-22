@@ -31,110 +31,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
-import { fetchWithTimeout } from "./utils/fetchWithTimeout";
+import { setupServiceWorkerRegistration } from "./utils/setupServiceWorker"; // NEW IMPORT
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
-
-/**
- * Verifies that the service worker has actually changed by comparing
- * with the stored version. Only dispatches the update event if a real change is detected.
- */
-async function verifyServiceWorkerUpdate(
-	updateServiceWorker: (reloadPage?: boolean) => Promise<void>
-) {
-	try {
-		const registration = await navigator.serviceWorker.getRegistration();
-		if (!registration) {
-			console.log("No active service worker registration found");
-			return;
-		}
-
-		// Get the new service worker script URL
-		const newSWUrl = registration.installing?.scriptURL || registration.waiting?.scriptURL;
-		if (!newSWUrl) {
-			console.log("Could not determine new service worker URL");
-			return;
-		}
-
-		// Compare with stored version
-		const storedVersion = localStorage.getItem("sw_version_hash");
-		const currentVersionHash = await generateScriptHash(newSWUrl);
-
-		if (storedVersion === currentVersionHash) {
-			console.log("Service worker content is identical, skipping update prompt");
-			return;
-		}
-
-		console.log("Service worker has changed, dispatching update event.");
-		console.log(`Previous: ${storedVersion}, Current: ${currentVersionHash}`);
-		window.dispatchEvent(
-			new CustomEvent("new-version-available", {
-				detail: updateServiceWorker,
-			})
-		);
-	} catch (error) {
-		console.error("Error verifying service worker update:", error);
-		// If verification fails, err on the side of caution and show the prompt
-		window.dispatchEvent(
-			new CustomEvent("new-version-available", {
-				detail: updateServiceWorker,
-			})
-		);
-	}
-}
-
-/**
- * Stores the current service worker version hash for later comparison
- */
-function storeServiceWorkerVersion(registration: ServiceWorkerRegistration) {
-	try {
-		const swUrl =
-			registration.active?.scriptURL ||
-			registration.installing?.scriptURL ||
-			registration.waiting?.scriptURL;
-		if (swUrl) {
-			generateScriptHash(swUrl).then((hash) => {
-				localStorage.setItem("sw_version_hash", hash);
-				console.log("Stored service worker version hash:", hash);
-			});
-		}
-	} catch (error) {
-		console.error("Error storing service worker version:", error);
-	}
-}
-
-/**
- * Generates a hash of the service worker script content.
- * Uses a simple checksum as a lightweight alternative to crypto hashing.
- */
-async function generateScriptHash(scriptUrl: string): Promise<string> {
-	try {
-		const response = await fetchWithTimeout(scriptUrl, { cache: "no-store" }, 10000);
-		if (!response.ok) {
-			console.warn(`Failed to fetch service worker script: ${response.status}`);
-			return "";
-		}
-		const text = await response.text();
-		// Generate a simple hash from the script content
-		return simpleHash(text);
-	} catch (error) {
-		console.error("Error fetching service worker script:", error);
-		return "";
-	}
-}
-
-/**
- * Simple hash function for comparing script content.
- * Not cryptographically secure, but sufficient for detecting real changes.
- */
-function simpleHash(str: string): string {
-	let hash = 0;
-	for (let i = 0; i < str.length; i++) {
-		const char = str.charCodeAt(i);
-		hash = (hash << 5) - hash + char;
-		hash = hash & hash; // Convert to 32bit integer
-	}
-	return hash.toString(36);
-}
 
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
@@ -167,47 +65,8 @@ if (typeof window !== "undefined") {
 			window.addEventListener("load", () => setTimeout(initGA, 1000));
 		}
 
-		// Conditionally register the service worker for non-bot user agents
-		if (
-			"serviceWorker" in navigator &&
-			!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
-		) {
-			const registerWorker = () => {
-				setTimeout(() => {
-					import("virtual:pwa-register")
-						.then(({ registerSW }) => {
-							const updateServiceWorker = registerSW({
-								onOfflineReady() {
-									console.log("App is ready to work offline");
-								},
-								onNeedRefresh() {
-									verifyServiceWorkerUpdate(updateServiceWorker);
-								},
-								onRegistered(registration) {
-									console.log("Service Worker registered:", registration);
-									if (registration) {
-										storeServiceWorkerVersion(registration);
-									}
-								},
-								onRegisterError(error) {
-									console.error("Service Worker registration failed:", error);
-								},
-							});
-						})
-						.catch((e) => {
-							console.error("Failed to import PWA register:", e);
-						});
-				}, 2000); // Delay after load event
-			};
-
-			if (document.readyState === "complete") {
-				// Page already loaded, register worker
-				registerWorker();
-			} else {
-				// Wait for page load event before registering
-				window.addEventListener("load", registerWorker);
-			}
-		}
+		// Call the new function for service worker registration
+		setupServiceWorkerRegistration();
 	});
 }
 
