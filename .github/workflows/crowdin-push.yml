@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'public/assets/locales/en/translation.json'
+      - 'public/assets/locales/**/translation.json'
   workflow_dispatch:
 
 jobs:

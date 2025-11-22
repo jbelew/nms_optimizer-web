@@ -52,7 +52,8 @@
             "optimizationAlert": "Optimierungswarnung",
             "translationRequest": "Übersetzer gesucht!",
             "shareLink": "Rasterlayout teilen",
-            "userStats": "Benutzerstatistik"
+            "userStats": "Benutzerstatistik",
+            "updatePrompt": "Update verfügbar"
         },
         "userStats": {
             "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
@@ -574,5 +575,8 @@
         "title": "–kzzkt– 404 –kzzkt–",
         "message": "Die gesuchte Seite konnte nicht gefunden werden.",
         "backToMain": "Gehen Sie zurück zur Hauptseite"
+    },
+    "shipSelection": {
+        "dropdownTooltip": "Wählen Sie Plattformtyp aus"
     }
 }
