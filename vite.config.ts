@@ -137,7 +137,7 @@ export default defineConfig(({ mode }) => {
 							handler: "NetworkFirst",
 							options: {
 								cacheName: "translations-cache",
-								networkTimeoutSeconds: 5,
+								networkTimeoutSeconds: 3,
 								expiration: {
 									maxEntries: 20,
 									maxAgeSeconds: 86400, // 1 day
@@ -237,8 +237,8 @@ export default defineConfig(({ mode }) => {
 			minify: "terser",
 			terserOptions: {
 				compress: {
-					// drop_console: true,
-					// drop_debugger: true,
+					drop_console: true,
+					drop_debugger: true,
 				},
 			},
 			cssCodeSplit: true,

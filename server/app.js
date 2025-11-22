@@ -128,8 +128,8 @@ function setCacheHeaders(res, filePath) {
 	fileName = fileName.replace(/\.(br|gz)$/, '');
 	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/; // Vite hashed files
 
-	if (fileName === 'sw.js') { // Must revalidate, but allow caching.
-		res.setHeader("Cache-Control", "no-cache");
+	if (fileName === 'sw.js') { // Must revalidate, but allow caching by intermediaries
+		res.setHeader("Cache-Control", "no-cache, public");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot)$/.test(fileName)) {
