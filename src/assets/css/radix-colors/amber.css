@@ -1,0 +1,40 @@
+.dark,
+.dark-theme {
+	--amber-1: #16120c;
+	--amber-2: #1d180f;
+	--amber-3: #302008;
+	--amber-4: #3f2700;
+	--amber-5: #4d3000;
+	--amber-6: #5c3d05;
+	--amber-7: #714f19;
+	--amber-8: #8f6424;
+	--amber-9: #ffc53d;
+	--amber-10: #ffd60a;
+	--amber-11: #ffca16;
+	--amber-12: #ffe7b3;
+	--amber-a1: #e63c0006;
+	--amber-a2: #fd9b000d;
+	--amber-a3: #fa820022;
+	--amber-a4: #fc820032;
+	--amber-a5: #fd8b0041;
+	--amber-a6: #fd9b0051;
+	--amber-a7: #ffab2567;
+	--amber-a8: #ffae3587;
+	--amber-a9: #ffc53d;
+	--amber-a10: #ffd60a;
+	--amber-a11: #ffca16;
+	--amber-a12: #ffe7b3;
+	--amber-surface: #271f1380;
+	--amber-indicator: var(--amber-9);
+	--amber-track: var(--amber-9);
+}
+
+:root {
+	--amber-contrast: #21201c;
+}
+@supports (color: color-mix(in oklab, white, black)) {
+	.dark,
+	.dark-theme {
+		--amber-track: color-mix(in oklab, var(--amber-8), var(--amber-9) 75%);
+	}
+}

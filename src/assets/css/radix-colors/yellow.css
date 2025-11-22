@@ -1,0 +1,40 @@
+.dark,
+.dark-theme {
+	--yellow-1: #14120b;
+	--yellow-2: #1b180f;
+	--yellow-3: #2d2305;
+	--yellow-4: #362b00;
+	--yellow-5: #433500;
+	--yellow-6: #524202;
+	--yellow-7: #665417;
+	--yellow-8: #836a21;
+	--yellow-9: #ffe629;
+	--yellow-10: #ffff57;
+	--yellow-11: #f5e147;
+	--yellow-12: #f6eeb4;
+	--yellow-a1: #d1510004;
+	--yellow-a2: #f9b4000b;
+	--yellow-a3: #ffaa001e;
+	--yellow-a4: #fdb70028;
+	--yellow-a5: #febb0036;
+	--yellow-a6: #fec40046;
+	--yellow-a7: #fdcb225c;
+	--yellow-a8: #fdca327b;
+	--yellow-a9: #ffe629;
+	--yellow-a10: #ffff57;
+	--yellow-a11: #fee949f5;
+	--yellow-a12: #fef6baf6;
+	--yellow-surface: #231f1380;
+	--yellow-indicator: var(--yellow-9);
+	--yellow-track: var(--yellow-9);
+}
+
+:root {
+	--yellow-contrast: #21201c;
+}
+@supports (color: color-mix(in oklab, white, black)) {
+	.dark,
+	.dark-theme {
+		--yellow-track: color-mix(in oklab, var(--yellow-8), var(--yellow-9) 65%);
+	}
+}
