@@ -1,3 +1,10 @@
+## [5.14.2](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.1...v5.14.2) (2025-11-22)
+
+
+### Performance Improvements
+
+* **cache:** Set 7-day browser cache for non-hashed static assets ([727b408](https://github.com/jbelew/nms_optimizer-web/commit/727b40815aa9bfbf52b9f8b799f1f0672d476653))
+
 ## [5.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.0...v5.14.1) (2025-11-22)
 
 
