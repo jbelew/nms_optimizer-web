@@ -287,14 +287,50 @@ export function pauseAnimationsOnHidden(): () => void {
 }
 
 /**
+ * Default lightweight key generator
+ * Avoids expensive JSON.stringify() for simple types
+ * @param args - Arguments to generate key from
+ * @returns String cache key
+ */
+function defaultKeyGenerator(args: unknown[]): string {
+	if (args.length === 0) return "";
+	if (args.length === 1) {
+		const arg = args[0];
+		if (arg === null || arg === undefined) return String(arg);
+		if (typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean") {
+			return String(arg);
+		}
+		// For objects, use property hashing
+		if (typeof arg === "object") {
+			const keys = Object.keys(arg as Record<string, unknown>).sort();
+			return keys
+				.map((k) => {
+					const v = (arg as Record<string, unknown>)[k];
+					return `${k}:${typeof v === "object" ? "{}" : String(v)}`;
+				})
+				.join("|");
+		}
+	}
+	// For multiple args, concatenate primitive representations
+	return args
+		.map((arg) => {
+			if (arg === null || arg === undefined) return String(arg);
+			if (typeof arg === "object") return "{obj}";
+			return String(arg);
+		})
+		.join(",");
+}
+
+/**
  * Memoize an Expensive Function Result
  * Caches result and only recalculates when dependencies change
  *
  * Usage:
- *   const memoized = memoize(calculateLayout, (deps) => JSON.stringify(deps));
+ *   const memoized = memoize(calculateLayout, (deps) => customKeyFn(deps));
+ *   // If not provided, uses lightweight default key generator (avoids JSON.stringify)
  *
  * @param fn - The function to memoize
- * @param keyGenerator - Optional function to generate cache key
+ * @param keyGenerator - Optional function to generate cache key (defaults to lightweight hash)
  * @returns Memoized version of the function
  */
 export function memoize<T extends (...args: Parameters<T>) => ReturnType<T>>(
@@ -302,9 +338,10 @@ export function memoize<T extends (...args: Parameters<T>) => ReturnType<T>>(
 	keyGenerator?: (args: Parameters<T>) => string
 ): T {
 	const cache = new Map<string, ReturnType<T>>();
+	const generator = keyGenerator || (defaultKeyGenerator as (args: Parameters<T>) => string);
 
 	return ((...args: Parameters<T>) => {
-		const key = keyGenerator ? keyGenerator(args) : JSON.stringify(args);
+		const key = generator(args);
 
 		if (cache.has(key)) {
 			return cache.get(key) as ReturnType<T>;

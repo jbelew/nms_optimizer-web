@@ -20,7 +20,7 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	}
 
 	// Clear service workers to force fresh code fetch
-	if ("serviceWorker" in navigator) {
+	if ("serviceWorker" in navigator && navigator.serviceWorker) {
 		navigator.serviceWorker.getRegistrations().then((registrations) => {
 			registrations.forEach((reg) => {
 				reg.unregister();

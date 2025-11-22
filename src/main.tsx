@@ -1,3 +1,9 @@
+/**
+ * @file Main application entry point
+ * @description Sets up the React application with routing, theming, PWA service worker,
+ * analytics, and i18n. Handles DOM rendering and splash screen management.
+ */
+
 // Base theme tokens - optimized color imports without P3 definitions
 import "@radix-ui/themes/tokens/base.css";
 import "./assets/css/radix-colors/cyan.css";
@@ -62,7 +68,11 @@ if (typeof window !== "undefined") {
 			setTimeout(initGA, 1000);
 		} else {
 			// Wait for page load event, then delay before initializing
-			window.addEventListener("load", () => setTimeout(initGA, 1000));
+			const handleLoad = () => {
+				setTimeout(initGA, 1000);
+				window.removeEventListener("load", handleLoad); // Clean up listener
+			};
+			window.addEventListener("load", handleLoad);
 		}
 
 		// Call the new function for service worker registration

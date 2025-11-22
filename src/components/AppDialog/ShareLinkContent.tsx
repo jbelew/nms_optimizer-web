@@ -1,6 +1,6 @@
 // src/components/AppDialog/ShareLinkContent.tsx
 import type { FC } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
@@ -20,6 +20,16 @@ interface ShareLinkContentProps {
 export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose }) => {
 	const { t } = useTranslation();
 	const [copied, setCopied] = useState(false);
+	const copiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Cleanup timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (copiedTimeoutRef.current) {
+				clearTimeout(copiedTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	/**
 	 * Handles the click event for the copy button.
@@ -29,7 +39,14 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 		try {
 			await navigator.clipboard.writeText(shareUrl);
 			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
+			// Clear any existing timeout before setting a new one
+			if (copiedTimeoutRef.current) {
+				clearTimeout(copiedTimeoutRef.current);
+			}
+			copiedTimeoutRef.current = setTimeout(() => {
+				setCopied(false);
+				copiedTimeoutRef.current = null;
+			}, 2000);
 		} catch (err) {
 			console.error("Failed to copy: ", err);
 		}

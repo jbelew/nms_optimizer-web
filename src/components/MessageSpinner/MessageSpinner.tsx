@@ -67,10 +67,15 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
 					clearTimeout(randomMessageTimeoutRef.current);
 					randomMessageTimeoutRef.current = null;
 				}
-				setTimeout(() => {
+				// Track this timeout to avoid memory leaks on unmount
+				const resetTimeout = setTimeout(() => {
 					setCurrentRandomMessage("");
 					setShowRandomMessage(false);
 				}, 0);
+
+				return () => {
+					clearTimeout(resetTimeout);
+				};
 			}
 		}, [isVisible]);
 

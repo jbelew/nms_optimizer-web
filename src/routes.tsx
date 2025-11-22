@@ -1,3 +1,9 @@
+/**
+ * @file Application route definitions
+ * @description Defines all routes for the application including root, pages, and language variants.
+ * Uses lazy loading for code splitting and includes error handling.
+ */
+
 import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 
@@ -6,13 +12,24 @@ import { RouteError } from "./components/ErrorBoundry/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { DialogProvider } from "./context/DialogContext";
 
+/** Lazy-loaded 404 Not Found page component */
 const NotFound = lazy(() => import("./components/NotFound/NotFound"));
-const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
-declare const __BUILD_DATE__: string; // Declare global variable
 
+/** Build version string from environment or default to "devmode" */
+const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
+
+/** Build date injected at compile time for development mode */
+declare const __BUILD_DATE__: string;
+
+/** List of available page routes in the application */
 const pages = ["changelog", "instructions", "about", "translation", "userstats"];
+
+/** List of supported language codes for internationalization */
 const languages = ["en", "es", "fr", "de", "pt"];
 
+/**
+ * Route definitions for static pages (changelog, instructions, about, translation, userstats)
+ */
 const pageRoutes: RouteObject[] = pages.map((page) => ({
 	path: page,
 	element: (
@@ -23,6 +40,10 @@ const pageRoutes: RouteObject[] = pages.map((page) => ({
 	),
 }));
 
+/**
+ * Route definitions for language-specific pages
+ * Creates routes for each language and language-page combinations
+ */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
 		path: lang,
@@ -44,6 +65,10 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	})),
 ]);
 
+/**
+ * Complete route configuration for the application
+ * Includes root route with App and DialogProvider, page routes, language routes, and 404 fallback
+ */
 export const routes: RouteObject[] = [
 	{
 		path: "/",

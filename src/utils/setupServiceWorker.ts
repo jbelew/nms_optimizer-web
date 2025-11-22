@@ -1,3 +1,10 @@
+/**
+ * Registers the PWA service worker with Workbox integration.
+ * Handles offline capability, app ready status, and update prompts.
+ * Skips registration for bot user agents to avoid unnecessary overhead.
+ *
+ * @returns {void}
+ */
 export function setupServiceWorkerRegistration() {
 	// Conditionally register the service worker for non-bot user agents
 	if (
@@ -42,7 +49,11 @@ export function setupServiceWorkerRegistration() {
 			registerWorker();
 		} else {
 			// Wait for page load event before registering
-			window.addEventListener("load", registerWorker);
+			const handleLoad = () => {
+				registerWorker();
+				window.removeEventListener("load", handleLoad); // Clean up listener
+			};
+			window.addEventListener("load", handleLoad);
 		}
 	}
 }

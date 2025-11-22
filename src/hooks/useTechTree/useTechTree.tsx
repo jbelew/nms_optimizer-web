@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
@@ -290,32 +290,40 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		useTechTreeLoadingStore.getState().setLoading(false);
 	}, [techTree]); // Dependency on techTree ensures it runs after data is available
 
-	const processedTechTree = Object.entries(techTree).reduce((acc, [category, items]) => {
-		if (category === "recommended_builds") {
-			acc[category] = items as RecommendedBuild[]; // Explicitly cast to RecommendedBuild[]
-		} else if (category === "grid_definition") {
-			acc[category] = items as {
-				grid: Module[][];
-				gridFixed: boolean;
-				superchargedFixed: boolean;
-			}; // Explicitly cast to grid_definition type
-		} else if (Array.isArray(items)) {
-			const uniqueKeys = new Set<string>();
-			acc[category] = items.filter((item): item is TechTreeItem => {
-				if (typeof item === "object" && item !== null && "key" in item) {
-					if (uniqueKeys.has(item.key)) {
+	/**
+	 * Memoize tech tree processing to avoid recalculating on every render
+	 * Only recalculates when the techTree object reference changes
+	 */
+	const processedTechTree = useMemo(
+		() =>
+			Object.entries(techTree).reduce((acc, [category, items]) => {
+				if (category === "recommended_builds") {
+					acc[category] = items as RecommendedBuild[]; // Explicitly cast to RecommendedBuild[]
+				} else if (category === "grid_definition") {
+					acc[category] = items as {
+						grid: Module[][];
+						gridFixed: boolean;
+						superchargedFixed: boolean;
+					}; // Explicitly cast to grid_definition type
+				} else if (Array.isArray(items)) {
+					const uniqueKeys = new Set<string>();
+					acc[category] = items.filter((item): item is TechTreeItem => {
+						if (typeof item === "object" && item !== null && "key" in item) {
+							if (uniqueKeys.has(item.key)) {
+								return false;
+							}
+							uniqueKeys.add(item.key);
+							return true;
+						}
 						return false;
-					}
-					uniqueKeys.add(item.key);
-					return true;
+					});
+				} else {
+					acc[category] = items;
 				}
-				return false;
-			});
-		} else {
-			acc[category] = items;
-		}
-		return acc;
-	}, {} as TechTree);
+				return acc;
+			}, {} as TechTree),
+		[techTree]
+	);
 
 	return processedTechTree;
 }

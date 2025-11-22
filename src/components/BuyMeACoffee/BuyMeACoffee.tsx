@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
@@ -11,6 +12,8 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 export default function BuyMeACoffee() {
 	const isLargeScreen = useBreakpoint("1024px"); // Tailwind's 'lg' breakpoint
 	const { sendEvent } = useAnalytics();
+	const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
 	const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
 
@@ -22,8 +25,12 @@ export default function BuyMeACoffee() {
 		});
 
 		// Delay to ensure GA event is captured
-		setTimeout(() => {
+		if (openTimeoutRef.current) {
+			clearTimeout(openTimeoutRef.current);
+		}
+		openTimeoutRef.current = setTimeout(() => {
 			window.open("https://www.buymeacoffee.com/jbelew", "_blank", "noopener,noreferrer");
+			openTimeoutRef.current = null;
 		}, 100);
 	};
 

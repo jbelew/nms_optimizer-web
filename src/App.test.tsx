@@ -1,3 +1,9 @@
+/**
+ * @file App component tests
+ * @description Unit and integration tests for the main App component,
+ * testing routing, theme setup, and global state initialization.
+ */
+
 import { Suspense } from "react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
@@ -10,7 +16,7 @@ import { routes } from "./routes";
 import { usePlatformStore } from "./store/PlatformStore";
 import { sendEvent } from "./utils/analytics";
 
-// Mock the hideSplashScreen function
+/** Mock the hideSplashScreen function from vite-plugin-splash-screen */
 vi.mock("vite-plugin-splash-screen/runtime", () => ({
 	hideSplashScreen: vi.fn(),
 }));

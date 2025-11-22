@@ -95,15 +95,20 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
 
+			// Optimize grid update: only create new array structure if cells actually change
 			const updatedGrid: Grid = {
 				...grid,
-				cells: grid.cells.map((row) =>
-					row.map((cell) =>
-						cell.tech === tech
-							? { ...createEmptyCell(cell.supercharged, cell.active) }
-							: cell
-					)
-				),
+				cells: grid.cells.map((row) => {
+					let rowChanged = false;
+					const newRow = row.map((cell) => {
+						if (cell.tech === tech) {
+							rowChanged = true;
+							return { ...createEmptyCell(cell.supercharged, cell.active) };
+						}
+						return cell;
+					});
+					return rowChanged ? newRow : row; // Reuse row reference if unchanged
+				}),
 			};
 
 			// New socket per optimization

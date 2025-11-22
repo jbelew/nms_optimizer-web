@@ -1,0 +1,40 @@
+# Agent Guidelines
+
+## Build & Test Commands
+
+- **Dev**: `npm run dev` (http://localhost:5173, expects API at http://127.0.0.1:5000)
+- **Build**: `npm run build` (production, includes SSG)
+- **Test all**: `npm run test` (Vitest with coverage)
+- **Test single file**: `npm run test -- src/path/to/file.test.tsx`
+- **Test watch**: `npm run test -- --watch`
+- **Lint**: `npm run lint` and `npm run lint:fix`
+- **Format**: `npm run format` (Prettier, src/ only)
+- **Type check**: `npm run typecheck`
+
+## Architecture
+
+**Frontend**: React 19 + TypeScript + Zustand state management + React Router v7  
+**Build**: Vite with PWA support, compression (gzip/brotli), and automatic code splitting  
+**UI**: Radix UI + Tailwind CSS + Radix Colors  
+**i18n**: i18next with translations via Crowdin  
+**Server**: Node.js/Express (server/ directory) serves SSG + runtime assets  
+**API**: External NMS Optimizer service (Python backend)  
+
+**Key directories**:
+- `src/`: React components, hooks, stores, utilities
+- `src/components/`: Reusable UI components
+- `src/store/`: Zustand stores (state management)
+- `src/hooks/`: Custom React hooks
+- `src/utils/`: Shared utilities
+- `server/`: Express app for production serving
+- `e2e-tests/`: Playwright tests
+
+## Code Style
+
+**Imports**: Types first → React/react-dom → Third-party → Internal (@/) → Relative (./). Use sort-imports plugin.  
+**Formatting**: Tabs, 100 char line width, trailing commas (es5), double quotes, no semicolons omitted, arrow parens always.  
+**Types**: Strict TypeScript, no any. Interfaces for React components; use discriminated unions for variants.  
+**Naming**: camelCase files/vars, PascalCase components/types, UPPER_SNAKE_CASE constants.  
+**React**: Functional components, hooks, avoid export components with state (react-refresh rule).  
+**Testing**: Vitest + React Testing Library. Mock external dependencies (i18next, API calls). Use `vi.mock()` for modules.  
+**Error handling**: Use try-catch in hooks, pass error state via context/store, display user-friendly toast messages.
