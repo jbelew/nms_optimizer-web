@@ -1,12 +1,13 @@
 // src/components/TechTree/TechTree.tsx
+import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
 import React, { useEffect, useMemo } from "react";
 import { ScrollArea } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { TechTree, useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
+import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
-import ErrorBoundaryInset from "../ErrorBoundry/ErrorBoundryInset";
+import ErrorBoundaryInset from "../ErrorBoundary/ErrorBoundaryInset";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 
@@ -22,7 +23,7 @@ interface TechTreeProps {
 	solving: boolean;
 	gridContainerRef: React.RefObject<HTMLDivElement | null>;
 	gridTableTotalWidth: number | undefined;
-	techTree?: TechTree; // Optional techTree prop
+	techTree?: TechTreeType; // Optional techTree prop
 }
 
 /**
@@ -123,9 +124,9 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
  * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
- * @returns {JSX.Element} The rendered TechTreeComponent component.
+ * @returns {JSX.Element} The rendered TechTree component.
  */
-const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
+const TechTree: React.FC<TechTreeProps> = (props) => {
 	return (
 		<ErrorBoundaryInset>
 			<TechTreeWithData {...props} />
@@ -133,4 +134,4 @@ const TechTreeComponent: React.FC<TechTreeProps> = (props) => {
 	);
 };
 
-export default TechTreeComponent;
+export default TechTree;

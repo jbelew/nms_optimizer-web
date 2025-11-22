@@ -2,19 +2,21 @@ import React from "react";
 import { Text } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useTechTreeRow } from "./useTechTreeRow";
 
 interface TechInfoProps {
-	tech: string;
-	translatedTechName: string;
+	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
  * Renders the information for a tech tree row, including the name.
+ * Receives hook data from parent to avoid redundant hook calls.
  *
- * @param {TechInfoProps} props - The props for the component.
+ * @param props - The props for the component.
  * @returns {JSX.Element} The rendered tech info.
  */
-export const TechInfo: React.FC<TechInfoProps> = ({ translatedTechName }) => {
+export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
+	const { translatedTechName } = hookData;
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (

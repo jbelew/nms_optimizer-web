@@ -170,13 +170,15 @@ ShipSelectionInternal.displayName = "ShipSelectionInternal";
  * @param {ShipSelectionProps} props - The props for the ShipSelection component.
  * @returns {JSX.Element} The rendered ShipSelection component with Suspense.
  */
-export const ShipSelection: React.FC<ShipSelectionProps> = (props) => {
+const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 	return (
 		<Suspense fallback={<ShipSelectionLoadingState />}>
 			<ShipSelectionInternal {...props} />
 		</Suspense>
 	);
 };
+
+export const ShipSelection = ShipSelectionComponent;
 ShipSelection.displayName = "ShipSelection";
 
 /**

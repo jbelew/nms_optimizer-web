@@ -38,3 +38,16 @@
 **React**: Functional components, hooks, avoid export components with state (react-refresh rule).  
 **Testing**: Vitest + React Testing Library. Mock external dependencies (i18next, API calls). Use `vi.mock()` for modules.  
 **Error handling**: Use try-catch in hooks, pass error state via context/store, display user-friendly toast messages.
+
+## Prop Drilling Patterns
+
+**Colocated Hook Pattern**: Use custom hooks to derive state in child components instead of passing calculated props through intermediate layers. This pattern is applied across:
+- `TechTreeRow` hierarchy (uses `useTechTreeRow`)
+- `GridRow` hierarchy (uses `useGridRowState`)
+- `ModuleSelectionDialog` (uses `useModuleSelectionContext` pattern)
+
+**When NOT to refactor**: Keep prop forwarding for minimal props (1-2), leaf components, Suspense boundaries, and prop decomposition patterns. See `PROP_DRILLING_REFACTORING.md` for detailed guidance on when to apply colocated hooks vs. other patterns.
+
+**Documentation**: 
+- `PROP_DRILLING_REFACTORING.md` - Implementation details, patterns applied, and best practices
+- `PROP_DRILLING_OPPORTUNITIES.md` - Analysis of prop drilling opportunities and assessment of each hierarchy

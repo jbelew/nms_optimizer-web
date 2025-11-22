@@ -10,6 +10,7 @@ import { useDialog } from "../../context/dialog-utils";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 import GridRow from "../GridRow/GridRow";
 import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
@@ -49,30 +50,17 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
-		const isTouchDevice = useMemo(() => {
-			return (
-				typeof window !== "undefined" &&
-				("ontouchstart" in window || navigator.maxTouchPoints > 0)
-			);
-		}, []);
+		const isTouch = isTouchDevice();
 		const { tutorialFinished } = useDialog();
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 		// Memoize grid rows - must be called unconditionally
-		const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
-		const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
 		const gridRows = useMemo(() => {
 			if (!gridHeight) return [];
 			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
-				<GridRow
-					key={rowIndex}
-					rowIndex={rowIndex}
-					firstInactiveRowIndex={firstInactiveRowIndex}
-					lastActiveRowIndex={lastActiveRowIndex}
-					isLoading={isTechTreeLoading}
-				/>
+				<GridRow key={rowIndex} rowIndex={rowIndex} isLoading={isTechTreeLoading} />
 			));
-		}, [gridHeight, firstInactiveRowIndex, lastActiveRowIndex, isTechTreeLoading]);
+		}, [gridHeight, isTechTreeLoading]);
 
 		// Early return if grid is not available. This is now safe as hooks are called above.
 		if (!gridHeight || !gridWidth) {
@@ -124,7 +112,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 								aria-colspan={totalAriaColumnCount}
 								className="col-span-full mt-1 text-sm"
 							>
-								{isTouchDevice && !superchargedFixed && !tutorialFinished && (
+								{isTouch && !superchargedFixed && !tutorialFinished && (
 									<Callout.Root className="mt-2 mb-4" size="1">
 										<Callout.Icon>
 											<InfoCircledIcon />

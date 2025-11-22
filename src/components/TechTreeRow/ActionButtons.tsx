@@ -1,3 +1,4 @@
+import type { TechTreeRowProps } from "./TechTreeRow";
 import React, { useMemo } from "react";
 // Minor change to force re-transpilation
 import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
@@ -6,36 +7,30 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 
-interface ActionButtonsProps {
-	tech: string;
-	hasTechInGrid: boolean;
-	isGridFull: boolean;
-	solving: boolean;
-	translatedTechName: string;
-	handleOptimizeClick: () => void;
-	handleReset: () => void;
-	currentCheckedModules: string[];
-	isResetting: boolean;
+import { useTechTreeRow } from "./useTechTreeRow";
+
+interface ActionButtonsProps extends TechTreeRowProps {
+	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
  * Renders the action buttons for a tech tree row (optimize/update and reset).
+ * Receives hook data from parent to avoid redundant hook calls.
  *
  * @param {ActionButtonsProps} props - The props for the component.
  * @returns {JSX.Element} The rendered action buttons.
  */
-export const ActionButtons: React.FC<ActionButtonsProps> = ({
-	tech,
-	hasTechInGrid,
-	isGridFull,
-	solving,
-	translatedTechName,
-	handleOptimizeClick,
-	handleReset,
-	currentCheckedModules,
-	isResetting,
-}) => {
+export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
+	const {
+		hasTechInGrid,
+		solving,
+		translatedTechName,
+		handleOptimizeClick,
+		handleReset,
+		currentCheckedModules,
+		isResetting,
+	} = hookData;
 
 	const { tooltipLabel, OptimizeIconComponent, isOptimizeButtonDisabled } = useMemo(() => {
 		let label: string;

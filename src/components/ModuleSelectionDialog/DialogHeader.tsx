@@ -17,7 +17,8 @@ export interface DialogHeaderProps {
 
 /**
  * Renders the header of the module selection dialog.
- * @param {DialogHeaderProps} props - The props for the component.
+ *
+ * @param props - The props for the component.
  * @returns {JSX.Element} The rendered dialog header.
  */
 export const DialogHeader: React.FC<DialogHeaderProps> = ({

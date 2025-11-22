@@ -8,7 +8,7 @@ import { FC } from "react";
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import ErrorBoundary from "./ErrorBoundry";
+import ErrorBoundary from "./ErrorBoundary";
 import * as errorHandler from "./errorHandler";
 
 /**

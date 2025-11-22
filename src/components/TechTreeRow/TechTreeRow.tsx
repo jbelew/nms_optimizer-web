@@ -54,40 +54,18 @@ export interface TechTreeRowProps {
 
 /**
  * Renders a single row in the technology tree, allowing users to optimize, reset, and view module details.
- * This component is now a pure presentational component that delegates all its logic to the useTechTreeRow hook.
+ * Child components call useTechTreeRow directly to get their data (colocated hook pattern).
  *
  * @param {TechTreeRowProps} props - The props for the component.
  * @returns {JSX.Element} The rendered tech tree row.
  */
 const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
-	const { tech, isGridFull } = props;
-	const hookProps = useTechTreeRow(props);
-	const {
-		hasTechInGrid,
-		solving,
-		translatedTechName,
-		handleOptimizeClick,
-		handleReset,
-		imagePath,
-		techColor,
-		imagePath2x,
-		currentCheckedModules,
-		isResetting,
-	} = hookProps;
+	const hookData = useTechTreeRow(props);
+	const { translatedTechName, imagePath, techColor, imagePath2x } = hookData;
 
 	return (
 		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
-			<ActionButtons
-				tech={tech}
-				hasTechInGrid={hasTechInGrid}
-				isGridFull={isGridFull}
-				solving={solving}
-				translatedTechName={translatedTechName}
-				handleOptimizeClick={handleOptimizeClick}
-				handleReset={handleReset}
-				currentCheckedModules={currentCheckedModules}
-				isResetting={isResetting}
-			/>
+			<ActionButtons {...props} hookData={hookData} />
 
 			<Avatar
 				size="2"
@@ -102,12 +80,12 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 			<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
 				{/* First column */}
 				<div className="flex justify-start">
-					<TechInfo tech={tech} translatedTechName={translatedTechName} />
+					<TechInfo hookData={hookData} />
 				</div>
 
 				{/* Right-hand group */}
 				<div className="flex items-start justify-end gap-1">
-					<TechInfoBadges {...hookProps} />
+					<TechInfoBadges {...props} hookData={hookData} />
 				</div>
 			</div>
 		</div>

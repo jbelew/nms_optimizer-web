@@ -1,5 +1,4 @@
-import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import type { Module } from "./index";
+import type { Module, ModuleSelectionDialogProps } from "./index";
 import React, { useMemo } from "react";
 import { Blockquote } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -9,11 +8,10 @@ import { ModuleCheckbox } from "./ModuleCheckbox";
 /**
  * Props for the ModuleGroup component.
  */
-export interface ModuleGroupProps {
+export interface ModuleGroupProps
+	extends Pick<ModuleSelectionDialogProps, "currentCheckedModules" | "techColor"> {
 	groupName: string;
 	modules: Module[];
-	currentCheckedModules: string[];
-	techColor: TechTreeRowProps["techColor"];
 }
 
 /**

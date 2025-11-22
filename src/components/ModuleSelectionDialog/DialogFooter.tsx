@@ -7,19 +7,21 @@ import { useTranslation } from "react-i18next";
  */
 export interface DialogFooterProps {
 	handleOptimizeClick: () => Promise<void>;
-	isOptimizeDisabled: boolean;
+	currentCheckedModules: string[];
 }
 
 /**
  * Renders the footer of the module selection dialog, containing the action buttons.
- * @param {DialogFooterProps} props - The props for the component.
+ *
+ * @param props - The props for the component.
  * @returns {JSX.Element} The rendered dialog footer.
  */
 export const DialogFooter: React.FC<DialogFooterProps> = ({
 	handleOptimizeClick,
-	isOptimizeDisabled,
+	currentCheckedModules,
 }) => {
 	const { t } = useTranslation();
+	const isOptimizeDisabled = currentCheckedModules.length === 0;
 
 	return (
 		<div className="mt-2 mb-2 flex justify-end gap-2">

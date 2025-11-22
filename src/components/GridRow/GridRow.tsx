@@ -7,27 +7,25 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
 /**
  * @interface GridRowProps
  * @property {number} rowIndex - The row index of the current row.
+ * @property {boolean} isLoading - Indicates if the tech tree is currently loading.
  */
 interface GridRowProps {
 	rowIndex: number;
+	isLoading: boolean;
 }
 
 /**
  * GridRow component represents a single row in the technology grid.
  * It renders individual `GridCell` components and `GridControlButtons` for managing the row.
- * This component is memoized to prevent unnecessary re-renders when its props or relevant store state haven't changed.
+ * Uses the colocated hook pattern: GridControlButtons calls `useGridRowState` directly
+ * rather than receiving calculated state via props.
+ * This component is memoized to prevent unnecessary re-renders when its props haven't changed.
  *
  * @param {GridRowProps} props - The props for the GridRow component.
  * @returns {JSX.Element} The rendered GridRow component.
  */
-interface GridRowInternalProps extends GridRowProps {
-	firstInactiveRowIndex: number;
-	lastActiveRowIndex: number;
-	isLoading: boolean;
-}
-
-const GridRowInternal: React.FC<GridRowInternalProps> = memo(
-	({ rowIndex, firstInactiveRowIndex, lastActiveRowIndex, isLoading }) => {
+const GridRowInternal: React.FC<GridRowProps> = memo(
+	({ rowIndex, isLoading }) => {
 		const row = useGridStore((state) => state.grid.cells[rowIndex]);
 		const gridWidth = useGridStore((state) => state.grid.width);
 
@@ -50,29 +48,15 @@ const GridRowInternal: React.FC<GridRowInternalProps> = memo(
 				))}
 				{/* Wrap GridControlButtons in a div with role="gridcell" */}
 				<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
-					<GridControlButtons
-						rowIndex={rowIndex}
-						isFirstInactiveRow={
-							row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
-						}
-						isLastActiveRow={
-							row.some((cell) => cell.active) &&
-							rowIndex === lastActiveRowIndex &&
-							rowIndex >= useGridStore.getState().grid.cells.length - 3
-						}
-						isLoading={isLoading}
-					/>
+					<GridControlButtons rowIndex={rowIndex} isLoading={isLoading} />
 				</div>
 			</div>
 		);
 	},
 	(prevProps, nextProps) => {
-		// Custom comparison to prevent re-renders when indices haven't changed
+		// Custom comparison to prevent re-renders when props haven't changed
 		return (
-			prevProps.rowIndex === nextProps.rowIndex &&
-			prevProps.firstInactiveRowIndex === nextProps.firstInactiveRowIndex &&
-			prevProps.lastActiveRowIndex === nextProps.lastActiveRowIndex &&
-			prevProps.isLoading === nextProps.isLoading
+			prevProps.rowIndex === nextProps.rowIndex && prevProps.isLoading === nextProps.isLoading
 		);
 	}
 );

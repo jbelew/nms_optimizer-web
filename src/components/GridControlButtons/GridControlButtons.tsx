@@ -8,33 +8,30 @@ import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/GridStore";
 
+import { useGridRowState } from "../GridRow/useGridRowState";
+
 /**
  * @interface RowControlButtonProps
  * @property {number} rowIndex - The index of the row these buttons control.
- * @property {boolean} isFirstInactiveRow - True if this row is the first one that is completely inactive.
- * @property {boolean} isLastActiveRow - True if this row is the last one that has at least one active cell.
+ * @property {boolean} [isLoading] - Indicates if the grid is currently loading.
  */
 interface RowControlButtonProps {
 	rowIndex: number;
-	isFirstInactiveRow: boolean;
-	isLastActiveRow: boolean;
 	isLoading?: boolean;
 }
 
 /**
  * GridControlButtons component provides buttons to activate or deactivate a row in the grid.
+ * Uses the colocated hook pattern: calls `useGridRowState` directly to derive which button
+ * to show, rather than receiving calculated props from the parent.
  * The buttons are conditionally rendered based on whether the row is the first inactive row or the last active row.
  * They are disabled if there are any modules in the grid or if the grid is fixed.
  *
  * @param {RowControlButtonProps} props - The props for the GridControlButtons component.
  * @returns {JSX.Element} The rendered GridControlButtons component.
  */
-const GridControlButtons: React.FC<RowControlButtonProps> = ({
-	rowIndex,
-	isFirstInactiveRow,
-	isLastActiveRow,
-	isLoading,
-}) => {
+const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoading }) => {
+	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const iconButtonSize = isMediumOrLarger ? "2" : "1";

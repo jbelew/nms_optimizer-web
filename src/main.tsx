@@ -34,7 +34,7 @@ import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import ErrorBoundary from "./components/ErrorBoundry/ErrorBoundry";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { setupServiceWorkerRegistration } from "./utils/setupServiceWorker"; // NEW IMPORT

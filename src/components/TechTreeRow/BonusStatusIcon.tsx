@@ -3,6 +3,8 @@ import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@rad
 import { Popover, Text, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { isTouchDevice } from "../../utils/isTouchDevice";
+
 /**
  * Rounds a number to a specified number of decimal places.
  * @param {number} value - The number to round.
@@ -34,12 +36,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	techSolvedBonus,
 }) => {
 	const { t } = useTranslation();
-	const [isTouchDevice, setIsTouchDevice] = React.useState(false);
-
-	React.useEffect(() => {
-		const touch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-		setIsTouchDevice(touch);
-	}, []);
+	const isTouch = isTouchDevice();
 
 	const roundedMaxBonus = round(techMaxBonus, 2);
 
@@ -84,7 +81,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		<IconComponent className={contentData.iconClassName} style={contentData.iconStyle} />
 	);
 
-	if (isTouchDevice) {
+	if (isTouch) {
 		return (
 			<Popover.Root>
 				<Popover.Trigger>{icon}</Popover.Trigger>

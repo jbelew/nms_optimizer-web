@@ -1,4 +1,5 @@
-import type { ModuleSelectionDialogProps } from "./index";
+import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import type { GroupedModules } from "./index";
 import React, { useCallback, useEffect, useRef } from "react";
 import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -13,23 +14,22 @@ const fallbackImage = `${baseImagePath}infra.webp`;
 /**
  * Props for the DialogBody component.
  */
-export type DialogBodyProps = Pick<
-	ModuleSelectionDialogProps,
-	| "groupedModules"
-	| "currentCheckedModules"
-	| "handleValueChange"
-	| "handleSelectAllChange"
-	| "allModulesSelected"
-	| "isIndeterminate"
-	| "techColor"
->;
+export interface DialogBodyProps {
+	groupedModules: GroupedModules;
+	currentCheckedModules: string[];
+	handleValueChange: (newValues: string[]) => void;
+	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
+	allModulesSelected: boolean;
+	isIndeterminate: boolean;
+	techColor: TechTreeRowProps["techColor"];
+}
 
 /**
  * Renders the main body of the module selection dialog.
  * This includes the global "Select All" checkbox, a warning for specific ship types,
  * and the groups of selectable modules.
  *
- * @param {DialogBodyProps} props - The props for the component.
+ * @param props - The props for the component.
  * @returns {JSX.Element} The rendered dialog body.
  */
 export const DialogBody: React.FC<DialogBodyProps> = ({

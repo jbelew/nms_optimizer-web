@@ -1,4 +1,7 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
+import type { DialogBodyProps } from "./DialogBody";
+import type { DialogFooterProps } from "./DialogFooter";
+import type { DialogHeaderProps } from "./DialogHeader";
 import React from "react";
 import { Dialog } from "@radix-ui/themes";
 
@@ -46,54 +49,49 @@ export interface ModuleSelectionDialogProps {
  * Renders the content of the module selection dialog.
  * This component is responsible for displaying the list of available modules,
  * allowing the user to select them, and triggering the optimization.
- * It is composed of smaller, more manageable child components.
+ * Child components receive all props and call their hooks directly (colocated hook pattern).
  *
  * @param {ModuleSelectionDialogProps} props - The props for the component.
  * @returns {JSX.Element} The rendered dialog content.
  */
-export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = ({
-	translatedTechName,
-	groupedModules,
-	currentCheckedModules,
-	handleValueChange,
-	handleSelectAllChange,
-	handleOptimizeClick,
-	allModulesSelected,
-	isIndeterminate,
-	techColor,
-	techImage,
-}) => {
+export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
+	const headerProps: DialogHeaderProps = {
+		translatedTechName: props.translatedTechName,
+		techImage: props.techImage,
+		techColor: props.techColor,
+	};
+
+	const bodyProps: DialogBodyProps = {
+		groupedModules: props.groupedModules,
+		currentCheckedModules: props.currentCheckedModules,
+		handleValueChange: props.handleValueChange,
+		handleSelectAllChange: props.handleSelectAllChange,
+		allModulesSelected: props.allModulesSelected,
+		isIndeterminate: props.isIndeterminate,
+		techColor: props.techColor,
+	};
+
+	const footerProps: DialogFooterProps = {
+		handleOptimizeClick: props.handleOptimizeClick,
+		currentCheckedModules: props.currentCheckedModules,
+	};
+
 	return (
 		<Dialog.Content
 			size={{ initial: "1", sm: "2" }}
 			// className="moduleSelection__content flex flex-col"
 		>
-			<DialogHeader
-				translatedTechName={translatedTechName}
-				techImage={techImage}
-				techColor={techColor}
-			/>
+			<DialogHeader {...headerProps} />
 
 			{/* <div className="flex-1 overflow-y-auto pr-4 mb-4"> */}
 			<Dialog.Description className="sr-only">
 				Select modules to include in the optimization calculation.
 			</Dialog.Description>
 
-			<DialogBody
-				groupedModules={groupedModules}
-				currentCheckedModules={currentCheckedModules}
-				handleValueChange={handleValueChange}
-				handleSelectAllChange={handleSelectAllChange}
-				allModulesSelected={allModulesSelected}
-				isIndeterminate={isIndeterminate}
-				techColor={techColor}
-			/>
+			<DialogBody {...bodyProps} />
 			{/* </div> */}
 
-			<DialogFooter
-				handleOptimizeClick={handleOptimizeClick}
-				isOptimizeDisabled={currentCheckedModules.length === 0}
-			/>
+			<DialogFooter {...footerProps} />
 		</Dialog.Content>
 	);
 };

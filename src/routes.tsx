@@ -8,7 +8,7 @@ import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 
 import App from "./App";
-import { RouteError } from "./components/ErrorBoundry/RouteError";
+import { RouteError } from "./components/ErrorBoundary/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { DialogProvider } from "./context/DialogContext";
 

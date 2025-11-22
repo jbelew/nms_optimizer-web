@@ -1,3 +1,4 @@
+import type { TechTreeRowProps } from "./TechTreeRow";
 import React, { useRef, useState, useTransition } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
@@ -8,31 +9,43 @@ import { ModuleSelectionDialog } from "../ModuleSelectionDialog";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
 
-type TechInfoBadgesProps = ReturnType<typeof useTechTreeRow>;
+interface TechInfoBadgesProps extends TechTreeRowProps {
+	hookData: ReturnType<typeof useTechTreeRow>;
+}
 
 /**
  * Renders the badges for the tech tree row, including the bonus status icon
  * and the trigger for the module selection dialog.
+ * Receives hook data from parent to avoid redundant hook calls.
  *
- * @param props - The props for the component, derived from the `useTechTreeRow` hook.
+ * @param props - The props for the component.
  * @returns The rendered badges.
  */
-export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
-	hasTechInGrid,
-	techColor,
-	techMaxBonus,
-	techSolvedBonus,
-	modules,
-	currentCheckedModules,
-	techImage,
-	solving,
-	...props
-}) => {
+export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData }) => {
 	const { a11yMode } = useA11yStore();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
 	const [, startTransition] = useTransition();
+
+	const {
+		hasTechInGrid,
+		techColor,
+		techMaxBonus,
+		techSolvedBonus,
+		modules,
+		currentCheckedModules,
+		techImage,
+		solving,
+		handleAllCheckboxesChange,
+		handleOptimizeClick,
+		groupedModules,
+		allModulesSelected,
+		isIndeterminate,
+		handleValueChange,
+		handleSelectAllChange,
+		translatedTechName,
+	} = hookData;
 
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
@@ -45,7 +58,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 			// Dialog is closing
 			startTransition(() => {
 				if (!optimizeClickedRef.current) {
-					props.handleAllCheckboxesChange(initialModules);
+					handleAllCheckboxesChange(initialModules);
 				}
 				setIsOpen(open);
 			});
@@ -54,7 +67,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 
 	const handleOptimizeWrapper = async () => {
 		optimizeClickedRef.current = true;
-		await props.handleOptimizeClick();
+		await handleOptimizeClick();
 	};
 
 	return (
@@ -80,11 +93,16 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({
 				</Dialog.Trigger>
 				{isOpen && (
 					<ModuleSelectionDialog
-						{...props}
-						techColor={techColor}
+						translatedTechName={translatedTechName}
+						groupedModules={groupedModules}
 						currentCheckedModules={currentCheckedModules}
-						techImage={techImage}
+						handleValueChange={handleValueChange}
+						handleSelectAllChange={handleSelectAllChange}
 						handleOptimizeClick={handleOptimizeWrapper}
+						allModulesSelected={allModulesSelected}
+						isIndeterminate={isIndeterminate}
+						techColor={techColor}
+						techImage={techImage}
 					/>
 				)}
 			</Dialog.Root>

@@ -1,8 +1,8 @@
-import type { Grid } from "../GridStore";
+import type { Grid } from "./GridStore";
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createEmptyCell, createGrid, useGridStore } from "../GridStore";
+import { createEmptyCell, createGrid, useGridStore } from "./GridStore";
 
 describe("hasTechInGrid selector in GridStore", () => {
 	const gridWidth = 3;
