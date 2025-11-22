@@ -1,3 +1,10 @@
+## [5.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.0...v5.14.1) (2025-11-22)
+
+
+### Performance Improvements
+
+* **config:** Optimize PWA caching and production build output ([c2a1b3e](https://github.com/jbelew/nms_optimizer-web/commit/c2a1b3efe1d2424cddb0fc8ab59ba9675efb9018))
+
 # [5.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.13.4...v5.14.0) (2025-11-22)
 
 
