@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.2...v6.0.3) (2025-11-23)
+
+
+### Performance Improvements
+
+* split ga4 and socket.io into separate lazy-loaded chunks ([0a72ac8](https://github.com/jbelew/nms_optimizer-web/commit/0a72ac88cd9f46c581ca566d74c5cb3406b5d0b2))
+
 ## [6.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.1...v6.0.2) (2025-11-23)
 
 
