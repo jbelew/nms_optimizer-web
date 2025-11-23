@@ -1,3 +1,10 @@
+## [6.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.4...v6.0.5) (2025-11-23)
+
+
+### Bug Fixes
+
+* **useScrollHide:** ignore scroll-up events near page bottom ([f6d264e](https://github.com/jbelew/nms_optimizer-web/commit/f6d264e8b1b06c4ab9009d051c9c5306c6b605bc))
+
 ## [6.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.3...v6.0.4) (2025-11-23)
 
 
