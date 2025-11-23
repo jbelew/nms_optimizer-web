@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-	<!--
+<!--
           __  _ __ __   __    __  ___ _____ _ __ __ _ ___ ___
          |  \| |  V  |/' _/  /__\|_   _| |  V  | |_  | __| _|\
          | | ' | \_/ |`._`. | \/ | v_/ | | | | \_/ | |/ /| _|| v /
@@ -11,65 +11,42 @@
                  https://github.com/jbelew/nms_optimizer-web
 
     -->
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-		<meta name="theme-color" content="#003848" />
 
-		<title>NMS Optimizer | No Man’s Sky Layout Builder for Ships & More</title>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+	<meta name="theme-color" content="#003848" />
 
-		<!-- Preferred favicon format -->
-		<link
-			rel="icon"
-			href="/assets/svg/favicon-light.svg"
-			type="image/svg+xml"
-			media="(prefers-color-scheme: light)"
-		/>
-		<link
-			rel="icon"
-			href="/assets/svg/favicon-dark.svg"
-			type="image/svg+xml"
-			media="(prefers-color-scheme: dark)"
-		/>
+	<title>NMS Optimizer | No Man’s Sky Layout Builder for Ships & More</title>
 
-		<!-- Fallback PNG favicons -->
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/assets/img/favicons/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/assets/img/favicons/favicon-16x16.png"
-		/>
+	<!-- Preferred favicon format -->
+	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+	<link rel="icon" href="/assets/svg/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
 
-		<!-- Apple touch icon (iOS home screen icon) -->
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/assets/img/favicons/apple-touch-icon.png?v=3"
-		/>
+	<!-- Fallback PNG favicons -->
+	<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
 
-		<script>
-			(function() {
-				// Detect if this is a bot/crawler
-				const userAgent = navigator.userAgent || '';
-				const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|headless|phantom|mobile safari.*\(iphone|ipad\)|windows phone|android|webos|blackberry|playbook|rim tablet|kindle|silk|nintendo|xbox|playstation/i.test(userAgent);
+	<!-- Apple touch icon (iOS home screen icon) -->
+	<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=3" />
 
-				// Also check for Google's rendering engine signature
-				const isGoogleRenderer = /Google Web Preview|googlebot-Mobile|googlebot\/2\.1|Google-InspecteurWeb|Chrome-Lighthouse|HeadlessChrome/i.test(userAgent) ||
-										  (typeof __HEADLESS__ !== 'undefined') ||
-										  !('onmousemove' in document) ||
-										  navigator.webdriver === true;
+	<script>
+		(function () {
+			// Detect if this is a bot/crawler
+			const userAgent = navigator.userAgent || '';
+			const isBot = /bot|googlebot|crawler|spider|crawling|applebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|headless|phantom|mobile safari.*\(iphone|ipad\)|windows phone|android|webos|blackberry|playbook|rim tablet|kindle|silk|nintendo|xbox|playstation/i.test(userAgent);
 
-				function hideSplash() {
-					document.documentElement.classList.add('is-bot');
-					// Immediately hide splash screen elements
-					const style = document.createElement('style');
-					style.textContent = `
+			// Also check for Google's rendering engine signature
+			const isGoogleRenderer = /Google Web Preview|googlebot-Mobile|googlebot\/2\.1|Google-InspecteurWeb|Chrome-Lighthouse|HeadlessChrome/i.test(userAgent) ||
+				(typeof __HEADLESS__ !== 'undefined') ||
+				!('onmousemove' in document) ||
+				navigator.webdriver === true;
+
+			function hideSplash() {
+				document.documentElement.classList.add('is-bot');
+				// Immediately hide splash screen elements
+				const style = document.createElement('style');
+				style.textContent = `
 						.vpss, .vpss-overlay, #vpss, [class*="splash"], [class*="vpss"] {
 							display: none !important;
 							visibility: hidden !important;
@@ -80,267 +57,208 @@
 						body::before { opacity: 1 !important; }
 						body { overflow: auto !important; }
 					`;
-					document.head.appendChild(style);
-				}
-
-				if (isBot || isGoogleRenderer) {
-					hideSplash();
-				}
-			})();
-		</script>
-
-		<style>
-			/* Hide splash screen for bots */
-			html.is-bot .vpss,
-			html.is-bot .vpss-overlay,
-			html.is-bot [class*="splash"],
-			html.is-bot [id*="splash"] {
-				display: none !important;
-				visibility: hidden !important;
-				pointer-events: none !important;
+				document.head.appendChild(style);
 			}
 
-			/* Show background immediately for bots */
-			html.is-bot body::before {
-				opacity: 1 !important;
+			if (isBot || isGoogleRenderer) {
+				hideSplash();
 			}
+		})();
+	</script>
 
-			html.is-bot body {
-				overflow: auto !important;
-			}
+	<style>
+		/* Hide splash screen for bots */
+		html.is-bot .vpss,
+		html.is-bot .vpss-overlay,
+		html.is-bot [class*="splash"],
+		html.is-bot [id*="splash"] {
+			display: none !important;
+			visibility: hidden !important;
+			pointer-events: none !important;
+		}
 
-			/* src/assets/css/fonts.css */
-			@font-face {
-				font-family: GeosansLight;
-				src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
-				font-weight: 700;
-				font-style: normal;
-				font-display: swap;
-			}
+		/* Show background immediately for bots */
+		html.is-bot body::before {
+			opacity: 1 !important;
+		}
 
-			@font-face {
-				font-family: Raleway;
-				src: url("/assets/fonts/Raleway-VariableFont_wght.subset.woff2") format("woff2");
-				font-weight: 100 900;
-				font-style: normal;
-				font-display: swap;
-			}
+		html.is-bot body {
+			overflow: auto !important;
+		}
 
-			@font-face {
-				font-family: Acumin;
-				src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
-				font-weight: 600; /* Semibold */
-				font-style: normal;
-				font-display: swap;
-			}
+		/* src/assets/css/fonts.css */
+		@font-face {
+			font-family: GeosansLight;
+			src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
+			font-weight: 700;
+			font-style: normal;
+			font-display: swap;
+		}
 
-			@font-face {
-				font-family: NMS;
-				src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
-				font-weight: 400; /* Semibold */
-				font-style: normal;
-				font-display: optional;
-			}
+		@font-face {
+			font-family: Raleway;
+			src: url("/assets/fonts/Raleway-VariableFont_wght.subset.woff2") format("woff2");
+			font-weight: 100 900;
+			font-style: normal;
+			font-display: swap;
+		}
 
-			@font-face {
-				font-family: AtkinsonHyperlegibleNext;
-				src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2")
-					format("woff2-variations");
-				font-weight: 100 900;
-				font-style: normal;
-				font-display: swap;
-			}
+		@font-face {
+			font-family: Acumin;
+			src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
+			font-weight: 600;
+			/* Semibold */
+			font-style: normal;
+			font-display: swap;
+		}
 
-			@font-face {
-				font-family: AtkinsonHyperlegibleNext;
-				src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2")
-					format("woff2-variations");
-				font-weight: 100 900;
-				font-style: italic;
-				font-display: swap;
-			}
+		@font-face {
+			font-family: NMS;
+			src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
+			font-weight: 400;
+			/* Semibold */
+			font-style: normal;
+			font-display: optional;
+		}
 
-			html {
-				text-rendering: optimizelegibility;
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-				scrollbar-gutter: stable;
-			}
+		@font-face {
+			font-family: AtkinsonHyperlegibleNext;
+			src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2") format("woff2-variations");
+			font-weight: 100 900;
+			font-style: normal;
+			font-display: swap;
+		}
 
-			@media (max-width: 1023px) {
-				html,
-				body {
-					overflow-x: hidden;
-				}
-			}
+		@font-face {
+			font-family: AtkinsonHyperlegibleNext;
+			src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2") format("woff2-variations");
+			font-weight: 100 900;
+			font-style: italic;
+			font-display: swap;
+		}
 
-			body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
+		html {
+			text-rendering: optimizelegibility;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			scrollbar-gutter: stable;
+		}
 
-				/* Set all background properties except image */
-				background-color: #000000;
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
+		@media (max-width: 1023px) {
 
-				/* Default desktop image-set */
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-				z-index: -1;
-
-				/* Hide background image until splash screen is hidden */
-				opacity: 0;
-				transition: opacity 200ms ease-in-out;
-			}
-
-			/* Show background image after splash screen hides */
-			body.background-visible::before {
-				opacity: 1;
-			}
-
-			/* Mobile (≤600px): swap only the background-image, not the whole background */
-			@media (width <= 640px) {
-				body::before {
-					background-image: url("/assets/img/background@mobile.webp");
-				}
-			}
-
-			body.a11y-font::before {
-				background-image: none !important;
-				background-color: #101b20;
-			}
-
+			html,
 			body {
-				background-color: #000;
+				overflow-x: hidden;
 			}
+		}
 
-			.vpss-logo svg {
-				height: 48px;
-				width: 48px;
+		body::before {
+			content: "";
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+
+			/* Set all background properties except image */
+			background-color: #000000;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+
+			/* Default desktop image-set */
+			background-image: image-set(url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x);
+			z-index: -1;
+
+			/* Hide background image until splash screen is hidden */
+			opacity: 0;
+			transition: opacity 200ms ease-in-out;
+		}
+
+		/* Show background image after splash screen hides */
+		body.background-visible::before {
+			opacity: 1;
+		}
+
+		/* Mobile (≤600px): swap only the background-image, not the whole background */
+		@media (width <=640px) {
+			body::before {
+				background-image: url("/assets/img/background@mobile.webp");
 			}
+		}
 
-			body.vpss-active {
-				overflow: hidden;
-			}
-			</style>
+		body.a11y-font::before {
+			background-image: none !important;
+			background-color: #101b20;
+		}
 
-		<!-- Prefetch background images (non-critical, lower priority) -->
-		<link
-			rel="prefetch"
-			as="image"
-			href="/assets/img/background.webp"
-			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
-			media="(min-width: 601px)"
-		/>
-		<link
-			rel="prefetch"
-			as="image"
-			href="/assets/img/background@mobile.webp"
-			media="(max-width: 600px)"
-		/>
+		body {
+			background-color: #000;
+		}
 
-		<!-- Default language translations -->
-		<link
-			rel="preload"
-			href="/assets/locales/en/translation.json"
-			as="fetch"
-			fetchpriority="highest"
-			crossorigin
-		/>
+		.vpss-logo svg {
+			height: 48px;
+			width: 48px;
+		}
 
-		<!-- Fonts (highest priority) -->
-		<link
-			rel="preload"
-			href="/assets/fonts/geonms-webfont.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="high"
-		/>
+		body.vpss-active {
+			overflow: hidden;
+		}
+	</style>
 
-		<link
-			rel="preload"
-			href="/assets/fonts/Raleway-VariableFont_wght.subset.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="high"
-		/>
+	<!-- Prefetch background images (non-critical, lower priority) -->
+	<link rel="prefetch" as="image" href="/assets/img/background.webp"
+		imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 601px)" />
+	<link rel="prefetch" as="image" href="/assets/img/background@mobile.webp" media="(max-width: 600px)" />
 
-		<link
-			rel="preload"
-			href="/assets/fonts/AcuminProCond-Semibold.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="low"
-		/>
+	<!-- Default language translations -->
+	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
 
-		<link
-			rel="preload"
-			href="/assets/fonts/nms-alphabet.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="low"
-		/>
+	<!-- Fonts (highest priority) -->
+	<link rel="preload" href="/assets/fonts/geonms-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+		fetchpriority="high" />
 
-		<!-- Preconnect -->
-		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
+	<link rel="preload" href="/assets/fonts/Raleway-VariableFont_wght.subset.woff2" as="font" type="font/woff2"
+		crossorigin="anonymous" fetchpriority="high" />
 
-		<!-- SEO Meta Tags -->
-		<meta
-			name="description"
-			content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds."
-		/>
-		<meta
-			name="keywords"
-			content="No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool, Corvette layout, Corvette build, Corvette optimizer"
-		/>
+	<link rel="preload" href="/assets/fonts/AcuminProCond-Semibold.woff2" as="font" type="font/woff2"
+		crossorigin="anonymous" fetchpriority="low" />
 
-		<!-- Open Graph Meta Tags -->
-		<meta property="og:title" content="No Man's Sky Technology Layout Optimizer" />
-		<meta
-			property="og:description"
-			content="Build optimal Starship, Corvette, Multitool, Exocraft, and Exosuit layouts in No Man's Sky. Improve adjacency bonuses, maximize supercharged slots, and share your best builds."
-		/>
-		<meta
-			property="og:image"
-			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
-		/>
-		<meta
-			property="og:image:alt"
-			content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
-		/>
-		<meta property="og:url" content="https://nms-optimizer.app/" />
-		<meta property="og:type" content="website" />
+	<link rel="preload" href="/assets/fonts/nms-alphabet.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+		fetchpriority="low" />
 
-		<!-- Twitter Card Meta Tags -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="No Man's Sky Technology Layout Optimizer" />
-		<meta
-			property="twitter:description"
-			content="Create the best Starship, Corvette, Multitool, Exocraft, and Exosuit builds in No Man’s Sky with this powerful optimizer. Maximize performance with adjacency and supercharged slots."
-		/>
-		<meta
-			property="twitter:image"
-			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
-		/>
-		<meta
-			property="twitter:image:alt"
-			content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
-		/>
+	<!-- Preconnect -->
+	<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
+	<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
 
-		<!-- Structured Data (JSON-LD) -->
-		<script type="application/ld+json">
+	<!-- SEO Meta Tags -->
+	<meta name="description"
+		content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds." />
+	<meta name="keywords"
+		content="No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool, Corvette layout, Corvette build, Corvette optimizer" />
+
+	<!-- Open Graph Meta Tags -->
+	<meta property="og:title" content="No Man's Sky Technology Layout Optimizer" />
+	<meta property="og:description"
+		content="Build optimal Starship, Corvette, Multitool, Exocraft, and Exosuit layouts in No Man's Sky. Improve adjacency bonuses, maximize supercharged slots, and share your best builds." />
+	<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+	<meta property="og:image:alt"
+		content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons." />
+	<meta property="og:url" content="https://nms-optimizer.app/" />
+	<meta property="og:type" content="website" />
+
+	<!-- Twitter Card Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="No Man's Sky Technology Layout Optimizer" />
+	<meta property="twitter:description"
+		content="Create the best Starship, Corvette, Multitool, Exocraft, and Exosuit builds in No Man’s Sky with this powerful optimizer. Maximize performance with adjacency and supercharged slots." />
+	<meta property="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+	<meta property="twitter:image:alt"
+		content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons." />
+
+	<!-- Structured Data (JSON-LD) -->
+	<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
 				"@type": "WebApplication",
@@ -358,140 +276,161 @@
 				"inLanguage": ["en", "es", "fr", "de"]
 			}
 		</script>
-	</head>
-	<body>
-		<noscript>
-			<main>
-				<section>
-					<h1>No Man's Sky Optimizer: The Ultimate Tool for Tech Layouts and Builds</h1>
-					<img src="public/assets/img/screenshots/screenshot.png" alt="Screenshot of NMS Optimizer application" />
-					<br />
-					<p>
-						Welcome to the NMS Optimizer, the ultimate <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the best No Man's
-						Sky tech layouts and builds. Whether you're looking to create the best starship, freighter, corvette,
-						multitool, exocraft, or exosuit layout, our tool is here to help. We use advanced algorithms to calculate the optimal placement of
-						your technology modules, maximizing your adjacency bonuses and the effectiveness
-						of your supercharged slots.
-					</p>
-				</section>
+</head>
 
-				<section>
-					<h2>What is an Adjacency Bonus?</h2>
-					<p>
-						In No Man's Sky, an adjacency bonus is a crucial mechanic that boosts the stats
-						of your technology modules. When you place compatible technology modules next to
-						each other in your inventory, they form a synergy and receive a performance
-						boost. The NMS Optimizer is the perfect tool to figure out the best arrangement
-						for maximum adjacency bonus.
-					</p>
-				</section>
+<body>
+	<noscript>
+		<main>
+			<section>
+				<h1>No Man's Sky Optimizer: The Ultimate Tool for Tech Layouts and Builds</h1>
+				<img src="public/assets/img/screenshots/screenshot.png" alt="Screenshot of NMS Optimizer application" />
+				<br />
+				<p>
+					Welcome to the NMS Optimizer, the ultimate <strong>calculator</strong>, <strong>planner</strong>,
+					and <strong>builder</strong> for creating the best No Man's
+					Sky tech layouts and builds. Whether you're looking to create the best starship, freighter,
+					corvette,
+					multitool, exocraft, or exosuit layout, our tool is here to help. We use advanced algorithms to
+					calculate the optimal placement of
+					your technology modules, maximizing your adjacency bonuses and the effectiveness
+					of your supercharged slots.
+				</p>
+			</section>
 
-				<section>
-					<h2>What Are Supercharged Slots?</h2>
-					<p>
-						Supercharged slots are a special type of inventory slot in No Man's Sky that
-						provides a massive boost to any technology module placed within them. These
-						slots are rare and valuable, and using them effectively is key to creating the
-						best builds. The NMS Optimizer is designed to help you make the most of your
-						supercharged slots, ensuring that you get the best possible performance out of
-						your gear.
-					</p>
-				</section>
+			<section>
+				<h2>What is an Adjacency Bonus?</h2>
+				<p>
+					In No Man's Sky, an adjacency bonus is a crucial mechanic that boosts the stats
+					of your technology modules. When you place compatible technology modules next to
+					each other in your inventory, they form a synergy and receive a performance
+					boost. The NMS Optimizer is the perfect tool to figure out the best arrangement
+					for maximum adjacency bonus.
+				</p>
+			</section>
 
-				<section>
-					<h2>How the NMS Optimizer Works</h2>
-					<p>
-						Our No Man's Sky optimizer uses a combination of deterministic patterns, machine
-						learning, and simulated annealing to find the best possible technology layout
-						for your specific needs. Whether you're building a new starship, freighter, corvette, upgrading your
-						multitool, or optimizing your exosuit or exocraft, our tool will provide you
-						with a detailed layout that maximizes your performance.
-					</p>
-				</section>
+			<section>
+				<h2>What Are Supercharged Slots?</h2>
+				<p>
+					Supercharged slots are a special type of inventory slot in No Man's Sky that
+					provides a massive boost to any technology module placed within them. These
+					slots are rare and valuable, and using them effectively is key to creating the
+					best builds. The NMS Optimizer is designed to help you make the most of your
+					supercharged slots, ensuring that you get the best possible performance out of
+					your gear.
+				</p>
+			</section>
 
-				<section>
-					<h2>Supported Platforms</h2>
-					<ul>
-						<li>Starship Layouts</li>
-						<li>Corvette Layouts</li>
-						<li>Multitool Builds</li>
-						<li>Exosuit Layouts</li>
-						<li>Exocraft Layouts</li>
-						<li>Freighter Layouts</li>
-					</ul>
-				</section>
+			<section>
+				<h2>How the NMS Optimizer Works</h2>
+				<p>
+					Our No Man's Sky optimizer uses a combination of deterministic patterns, machine
+					learning, and simulated annealing to find the best possible technology layout
+					for your specific needs. Whether you're building a new starship, freighter, corvette, upgrading your
+					multitool, or optimizing your exosuit or exocraft, our tool will provide you
+					with a detailed layout that maximizes your performance.
+				</p>
+			</section>
 
-				<section>
-					<h2>Why Use the NMS Optimizer?</h2>
-					<p>
-						Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer
-						is the best <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for creating the perfect No Man's Sky builds. Whether you're a
-						new player or a seasoned veteran, our tool will help you create the best
-						starship, freighter, corvette, multitool, exocraft, and exosuit layouts and builds.
-					</p>
-				</section>
-			</main>
+			<section>
+				<h2>Supported Platforms</h2>
+				<ul>
+					<li>Starship Layouts</li>
+					<li>Corvette Layouts</li>
+					<li>Multitool Builds</li>
+					<li>Exosuit Layouts</li>
+					<li>Exocraft Layouts</li>
+					<li>Freighter Layouts</li>
+				</ul>
+			</section>
 
-			<style>
-				main {
-					color: #fff;
-					padding: 2rem;
-					font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-				}
-				main h1 {
-					color: #0ba5e9;
-					margin: 1.5rem 0 1rem 0;
-					font-size: 1.125rem;
-					font-weight: bold;
-				}
-				main h2 {
-					color: #0ba5e9;
-					margin: 1.5rem 0 1rem 0;
-					font-size: 1.125rem;
-					font-weight: bold;
-				}
-				main h3 {
-					color: #0ba5e9;
-					margin: 1rem 0 0.75rem 0;
-					font-size: 1rem;
-					font-weight: bold;
-				}
-				main p {
-					margin-bottom: 0.5rem;
-					line-height: 1.6;
-				}
-				main ul {
-					list-style: disc;
-					margin: 0.5rem 0 0.5rem 1.5rem;
-				}
-				main ol {
-					list-style: decimal;
-					margin: 0.5rem 0 0.5rem 1.5rem;
-				}
-				main li {
-					margin-bottom: 0.25rem;
-				}
-				main a {
-					color: #0ba5e9;
-					text-decoration: underline;
-				}
-				main code {
-					background-color: rgba(0, 162, 199, 0.1);
-					padding: 0.125rem 0.25rem;
-					border-radius: 0.25rem;
-					color: #0ba5e9;
-				}
-				main blockquote {
-					border-left: 4px solid #0ba5e9;
-					padding-left: 1rem;
-					margin: 0.5rem 0;
-					font-style: italic;
-					color: #cbd5e1;
-				}
-			</style>
-		</noscript>
+			<section>
+				<h2>Why Use the NMS Optimizer?</h2>
+				<p>
+					Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer
+					is the best <strong>calculator</strong>, <strong>planner</strong>, and <strong>builder</strong> for
+					creating the perfect No Man's Sky builds. Whether you're a
+					new player or a seasoned veteran, our tool will help you create the best
+					starship, freighter, corvette, multitool, exocraft, and exosuit layouts and builds.
+				</p>
+			</section>
+		</main>
 
-		<div id="root"></div>
-		<script type="module" src="/src/main.tsx"></script>
-	</body>
+		<style>
+			main {
+				color: #fff;
+				padding: 2rem;
+				font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			}
+
+			main h1 {
+				color: #0ba5e9;
+				margin: 1.5rem 0 1rem 0;
+				font-size: 1.125rem;
+				font-weight: bold;
+			}
+
+			main h2 {
+				color: #0ba5e9;
+				margin: 1.5rem 0 1rem 0;
+				font-size: 1.125rem;
+				font-weight: bold;
+			}
+
+			main h3 {
+				color: #0ba5e9;
+				margin: 1rem 0 0.75rem 0;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+
+			main p {
+				margin-bottom: 0.5rem;
+				line-height: 1.6;
+			}
+
+			main ul {
+				list-style: disc;
+				margin: 0.5rem 0 0.5rem 1.5rem;
+			}
+
+			main ol {
+				list-style: decimal;
+				margin: 0.5rem 0 0.5rem 1.5rem;
+			}
+
+			main li {
+				margin-bottom: 0.25rem;
+			}
+
+			main a {
+				color: #0ba5e9;
+				text-decoration: underline;
+			}
+
+			main code {
+				background-color: rgba(0, 162, 199, 0.1);
+				padding: 0.125rem 0.25rem;
+				border-radius: 0.25rem;
+				color: #0ba5e9;
+			}
+
+			main blockquote {
+				border-left: 4px solid #0ba5e9;
+				padding-left: 1rem;
+				margin: 0.5rem 0;
+				font-style: italic;
+				color: #cbd5e1;
+			}
+		</style>
+	</noscript>
+
+	<div id="root"></div>
+	<script type="module" src="/src/main.tsx"></script>
+
+	<!-- Cloudflare Web Analytics -->
+	<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e"}'></script>
+	<!-- End Cloudflare Web Analytics -->
+</body>
+
 </html>
