@@ -68,6 +68,9 @@ vi.mock("react-i18next", () => ({
 		t: (key: string) => (key === "buttons.resetGrid" ? "Reset Grid Button" : key),
 	}),
 }));
+vi.mock("../ConditionalTooltip", () => ({
+	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => children,
+}));
 vi.mock("../../hooks/useBreakpoint/useBreakpoint");
 vi.mock("../../context/dialog-utils", () => ({
 	useDialog: () => ({
@@ -90,6 +93,21 @@ vi.mock("../../hooks/useUrlSync/useUrlSync", () => ({
 }));
 vi.mock("../../store/GridStore", () => ({
 	useGridStore: useGridStore,
+}));
+vi.mock("../../hooks/useBuildFileManager/useBuildFileManager", () => ({
+	useBuildFileManager: () => ({
+		saveBuildToFile: vi.fn(),
+		loadBuildFromFile: vi.fn(),
+	}),
+}));
+vi.mock("../../hooks/useToast/useToast", () => ({
+	useToast: () => ({
+		toastConfig: null,
+		isOpen: false,
+		showSuccess: vi.fn(),
+		showError: vi.fn(),
+		closeToast: vi.fn(),
+	}),
 }));
 
 describe("GridTableButtons", () => {

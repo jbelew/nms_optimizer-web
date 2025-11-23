@@ -1,6 +1,12 @@
 // src/components/app/MainAppContent.tsx
 import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
-import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import {
+	CounterClockwiseClockIcon,
+	DownloadIcon,
+	EyeOpenIcon,
+	FileIcon,
+	PieChartIcon,
+} from "@radix-ui/react-icons";
 import { IconButton, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -11,14 +17,19 @@ import { useA11yStore } from "@/store/A11yStore";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
+import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
+import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { useToast } from "../../hooks/useToast/useToast";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
+import { NmsToast } from "../Toast/Toast";
 
 const AppFooter = lazy(() => import("../AppFooter/AppFooter"));
 const ShipSelection = lazy(() =>
@@ -45,6 +56,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 	// Destructure buildDate
 	const { t } = useTranslation();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
 	const { a11yMode, toggleA11yMode } = useA11yStore();
@@ -65,6 +77,15 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 		gridTableRef: appLayoutGridTableRef,
 		gridTableTotalWidth,
 	} = useAppLayout();
+
+	const { toastConfig, isOpen: isToastOpen, closeToast } = useToast();
+	const {
+		isSaveBuildDialogOpen,
+		handleSaveBuild,
+		handleBuildNameConfirm,
+		handleBuildNameCancel,
+	} = useSaveBuild();
+	const { fileInputRef, handleLoadBuild, handleFileSelect } = useLoadBuild();
 
 	useEffect(() => {
 		if (isSharedGrid) {
@@ -93,17 +114,31 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					WebkitUserSelect: "none",
 				}}
 			>
-				<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-					<div className="flex items-center gap-2 pl-2">
-						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
-						<Switch
+				<div className="flex items-center gap-2 pl-2">
+					{/* Load/Save buttons for mobile - far left */}
+					<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
+						<IconButton
 							variant="soft"
-							checked={a11yMode}
-							onCheckedChange={toggleA11yMode}
-							aria-label={t("buttons.accessibility") ?? ""}
-						/>
-					</div>
-				</ConditionalTooltip>
+							size="2"
+							aria-label={t("buttons.loadBuild") ?? ""}
+							onClick={handleLoadBuild}
+							disabled={solving}
+						>
+							<FileIcon className="h-4 w-4" />
+						</IconButton>
+					</ConditionalTooltip>
+					<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
+						<IconButton
+							variant="soft"
+							size="2"
+							aria-label={t("buttons.saveBuild") ?? ""}
+							onClick={handleSaveBuild}
+							disabled={solving || !hasModulesInGrid}
+						>
+							<DownloadIcon className="h-4 w-4" />
+						</IconButton>
+					</ConditionalTooltip>
+				</div>
 
 				<div className="flex items-center gap-2">
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
@@ -140,6 +175,22 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 						>
 							<PieChartIcon className="h-4 w-4" />
 						</IconButton>
+					</ConditionalTooltip>
+
+					{/* A11y mode switch */}
+					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
+						<div className="flex items-center gap-2">
+							<EyeOpenIcon
+								style={{ color: "var(--accent-a11)" }}
+								className="h-4 w-4"
+							/>
+							<Switch
+								variant="soft"
+								checked={a11yMode}
+								onCheckedChange={toggleA11yMode}
+								aria-label={t("buttons.accessibility") ?? ""}
+							/>
+						</div>
 					</ConditionalTooltip>
 
 					<LanguageSelector />
@@ -225,6 +276,31 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 						onForceOptimize={handleForceCurrentPnfOptimize}
 					/>
 				</Suspense>
+
+				{/* Build file management (only on mobile) */}
+				<BuildNameDialog
+					isOpen={isSaveBuildDialogOpen}
+					onConfirm={handleBuildNameConfirm}
+					onCancel={handleBuildNameCancel}
+				/>
+				<input
+					ref={fileInputRef}
+					type="file"
+					accept=".nms"
+					onChange={handleFileSelect}
+					className="hidden"
+					aria-label={t("buttons.loadBuild")}
+				/>
+				{toastConfig && (
+					<NmsToast
+						open={isToastOpen}
+						onOpenChange={closeToast}
+						title={toastConfig.title}
+						description={toastConfig.description}
+						variant={toastConfig.variant}
+						duration={toastConfig.duration}
+					/>
+				)}
 			</main>
 		</>
 	);

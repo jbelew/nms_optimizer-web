@@ -41,6 +41,9 @@ export interface GA4Event {
 	componentStack?: string;
 	stackTrace?: string;
 	app_version?: string;
+	buildName?: string;
+	fileName?: string;
+	shipType?: string;
 }
 
 let gaInitialized = false;

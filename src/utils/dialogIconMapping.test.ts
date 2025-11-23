@@ -1,12 +1,13 @@
 import {
 	CounterClockwiseClockIcon,
+	DownloadIcon,
 	ExclamationTriangleIcon,
 	GlobeIcon,
 	InfoCircledIcon,
 	PieChartIcon,
 	QuestionMarkCircledIcon,
 	ReloadIcon,
-	Share2Icon,
+	Share1Icon,
 } from "@radix-ui/react-icons";
 
 import { getDialogIconAndStyle } from "./dialogIconMapping";
@@ -43,10 +44,10 @@ describe("dialogIconMapping", () => {
 			expect(result.IconComponent).toBe(GlobeIcon);
 		});
 
-		test("should return Share2Icon for shareLink dialog", () => {
+		test("should return Share1Icon for shareLink dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.shareLink");
 
-			expect(result.IconComponent).toBe(Share2Icon);
+			expect(result.IconComponent).toBe(Share1Icon);
 		});
 
 		test("should return PieChartIcon for userStats dialog", () => {
@@ -65,6 +66,12 @@ describe("dialogIconMapping", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.updatePrompt");
 
 			expect(result.IconComponent).toBe(ReloadIcon);
+		});
+
+		test("should return DownloadIcon for buildName dialog", () => {
+			const result = getDialogIconAndStyle("dialog.buildName.title");
+
+			expect(result.IconComponent).toBe(DownloadIcon);
 		});
 
 		test("should return undefined IconComponent for unknown titleKey", () => {

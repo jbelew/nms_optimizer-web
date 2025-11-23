@@ -4,13 +4,14 @@ import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import type { CSSProperties } from "react";
 import {
 	CounterClockwiseClockIcon,
+	DownloadIcon,
 	ExclamationTriangleIcon,
 	GlobeIcon,
 	InfoCircledIcon,
 	PieChartIcon,
 	QuestionMarkCircledIcon,
 	ReloadIcon,
-	Share2Icon,
+	Share1Icon,
 } from "@radix-ui/react-icons";
 
 /**
@@ -33,10 +34,11 @@ const iconMap: Record<string, React.ElementType<IconProps>> = {
 	"dialogs.titles.about": InfoCircledIcon,
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.translationRequest": GlobeIcon,
-	"dialogs.titles.shareLink": Share2Icon,
+	"dialogs.titles.shareLink": Share1Icon,
 	"dialogs.titles.userStats": PieChartIcon,
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 	"dialogs.titles.updatePrompt": ReloadIcon,
+	"dialog.buildName.title": DownloadIcon,
 };
 
 /**

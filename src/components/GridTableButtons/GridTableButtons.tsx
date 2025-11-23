@@ -1,9 +1,11 @@
 import React, { useCallback, useTransition } from "react";
 import {
+	DownloadIcon,
+	FileIcon,
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 	ResetIcon,
-	Share2Icon,
+	Share1Icon,
 } from "@radix-ui/react-icons";
 import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -11,9 +13,15 @@ import { useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
+import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
+import BuildNameDialog from "../AppDialog/BuildNameDialog";
+import { ConditionalTooltip } from "../ConditionalTooltip";
+import { NmsToast } from "../Toast/Toast";
 
 /**
  * GridTableButtons component provides a set of control buttons for the grid.
@@ -24,7 +32,7 @@ import { useGridStore } from "../../store/GridStore";
 const GridTableButtons: React.FC = () => {
 	const { solving, gridContainerRef } = useOptimize();
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
-	const isSmallAndUp = useBreakpoint("140px"); // sm breakpoint
+	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
 	const [isResetPending, startResetTransition] = useTransition();
@@ -32,9 +40,18 @@ const GridTableButtons: React.FC = () => {
 	const [isSharePending, startShareTransition] = useTransition();
 
 	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
-	const { setIsSharedGrid } = useGridStore(); // Removed initialGridDefinition
+	const { setIsSharedGrid } = useGridStore();
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const { toastConfig, isOpen: isToastOpen, closeToast } = useToast();
+	const {
+		isSaveBuildDialogOpen,
+		handleSaveBuild,
+		handleBuildNameConfirm,
+		handleBuildNameCancel,
+		isSavePending,
+	} = useSaveBuild();
+	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
 
 	/**
 	 * Handles the click event for the "Instructions" button.
@@ -114,93 +131,128 @@ const GridTableButtons: React.FC = () => {
 		}
 	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef, startResetTransition]);
 
+	const instructionsVariant = !tutorialFinished ? "solid" : "soft";
+	const instructionGlowClass = !tutorialFinished ? "button--glow" : "";
+
+	const renderResponsiveButton = (
+		icon: React.ReactNode,
+		labelKey: string,
+		onClick: () => void,
+		disabled: boolean,
+		className: string,
+		variant: "soft" | "solid" = "soft"
+	) => {
+		const translatedLabel = t(labelKey);
+		return isSmallAndUp ? (
+			<Button
+				size="2"
+				variant={variant}
+				className={className}
+				onClick={onClick}
+				aria-label={translatedLabel}
+				disabled={disabled}
+			>
+				{icon}
+				<span className="hidden sm:inline">{translatedLabel}</span>
+			</Button>
+		) : (
+			<IconButton
+				size="2"
+				variant={variant}
+				className={className}
+				onClick={onClick}
+				aria-label={translatedLabel}
+				disabled={disabled}
+			>
+				{icon}
+			</IconButton>
+		);
+	};
+
 	return (
 		<>
-			<div role="gridcell" className="col-span-6 mt-3 gap-2">
-				{/* This div will contain the left-aligned buttons */}
-				{isSmallAndUp ? (
-					<Button
-						size="2"
-						variant={!tutorialFinished ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions mr-2! ${
-							!tutorialFinished ? "button--glow" : ""
-						}`}
-						onClick={handleShowInstructions}
-						aria-label={t("buttons.instructions")}
-						disabled={isInfoPending}
-					>
-						<QuestionMarkCircledIcon />
-						<span className="hidden sm:inline">{t("buttons.instructions")}</span>
-					</Button>
-				) : (
-					<IconButton
-						size="2"
-						variant={!tutorialFinished ? "solid" : "soft"}
-						className={`gridTable__button gridTable__button--instructions mr-2! ${
-							!tutorialFinished ? "button--glow" : ""
-						}`}
-						onClick={handleShowInstructions}
-						aria-label={t("buttons.instructions")}
-						disabled={isInfoPending}
-					>
-						<QuestionMarkCircledIcon />
-					</IconButton>
+			<BuildNameDialog
+				isOpen={isSaveBuildDialogOpen}
+				onConfirm={handleBuildNameConfirm}
+				onCancel={handleBuildNameCancel}
+			/>
+			<div role="gridcell" className="col-span-6 mt-3 flex gap-2">
+				{renderResponsiveButton(
+					<QuestionMarkCircledIcon />,
+					"buttons.instructions",
+					handleShowInstructions,
+					isInfoPending,
+					`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
+					instructionsVariant as "soft" | "solid"
 				)}
-				{isSmallAndUp ? (
-					<Button
-						size="2"
-						variant="soft"
-						className={`gridTable__button gridTable__button--about mr-2!`}
-						onClick={handleShowAboutPage}
-						aria-label={t("buttons.about")}
-						disabled={isInfoPending}
-					>
-						<InfoCircledIcon />
-						<span className="hidden sm:inline">{t("buttons.about")}</span>
-					</Button>
-				) : (
-					<IconButton
-						size="2"
-						variant="soft"
-						className={`gridTable__button gridTable__button--about mr-2!`}
-						onClick={handleShowAboutPage}
-						aria-label={t("buttons.about")}
-						disabled={isInfoPending}
-					>
-						<InfoCircledIcon />
-					</IconButton>
+				{renderResponsiveButton(
+					<InfoCircledIcon />,
+					"buttons.about",
+					handleShowAboutPage,
+					isInfoPending,
+					"gridTable__button gridTable__button--about"
 				)}
-				{!isSharedGrid &&
-					(isSmallAndUp ? (
-						<Button
-							size="2"
-							variant="soft"
-							className="gridTable__button gridTable__button--changelog"
-							onClick={handleShareClick}
-							disabled={solving || !hasModulesInGrid || isSharePending}
-							aria-label={t("buttons.share")}
-						>
-							<Share2Icon />
-							<span className="hidden sm:inline">{t("buttons.share")}</span>
-						</Button>
-					) : (
+
+				{/* Load/Save buttons - hidden on mobile, shown on sm and up */}
+				{isSmallAndUp && (
+					<>
+						<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
+							<IconButton
+								size="2"
+								variant="soft"
+								className="gridTable__button gridTable__button--load"
+								onClick={handleLoadBuild}
+								disabled={solving || isLoadPending}
+								aria-label={t("buttons.loadBuild")}
+							>
+								<FileIcon />
+							</IconButton>
+						</ConditionalTooltip>
+
+						<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
+							<IconButton
+								size="2"
+								variant="soft"
+								className="gridTable__button gridTable__button--save"
+								onClick={handleSaveBuild}
+								disabled={solving || !hasModulesInGrid || isSavePending}
+								aria-label={t("buttons.saveBuild")}
+							>
+								<DownloadIcon />
+							</IconButton>
+						</ConditionalTooltip>
+					</>
+				)}
+
+				<input
+					ref={fileInputRef}
+					type="file"
+					accept=".nms"
+					onChange={handleFileSelect}
+					className="hidden"
+					aria-label={t("buttons.loadBuild")}
+				/>
+
+				{!isSharedGrid && (
+					<ConditionalTooltip label={t("buttons.share") ?? ""}>
 						<IconButton
 							size="2"
 							variant="soft"
-							className="gridTable__button gridTable__button--changelog"
+							className="gridTable__button gridTable__button--share"
 							onClick={handleShareClick}
 							disabled={solving || !hasModulesInGrid || isSharePending}
 							aria-label={t("buttons.share")}
 						>
-							<Share2Icon />
+							<Share1Icon />
 						</IconButton>
-					))}
+					</ConditionalTooltip>
+				)}
 			</div>
 
-			<div role="gridcell" className="col-span-5 mt-3 flex justify-end lg:col-span-4">
+			<div role="gridcell" className="col-span-5 mt-3 flex justify-end gap-2 lg:col-span-4">
 				<Button
 					size="2"
-					className={`gridTable__button gridTable__button--reset`}
+					className="gridTable__button gridTable__button--reset"
 					variant="solid"
 					onClick={handleResetGrid}
 					disabled={solving || isResetPending}
@@ -210,6 +262,17 @@ const GridTableButtons: React.FC = () => {
 					{t("buttons.resetGrid")}
 				</Button>
 			</div>
+
+			{toastConfig && (
+				<NmsToast
+					open={isToastOpen}
+					onOpenChange={closeToast}
+					title={toastConfig.title}
+					description={toastConfig.description}
+					variant={toastConfig.variant}
+					duration={toastConfig.duration}
+				/>
+			)}
 		</>
 	);
 };

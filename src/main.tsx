@@ -37,7 +37,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
-import { setupServiceWorkerRegistration } from "./utils/setupServiceWorker"; // NEW IMPORT
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics and PWA after render is complete
@@ -75,8 +74,10 @@ if (typeof window !== "undefined") {
 			window.addEventListener("load", handleLoad);
 		}
 
-		// Call the new function for service worker registration
-		setupServiceWorkerRegistration();
+		// Dynamically import and initialize service worker to avoid bundling it with i18n
+		import("./utils/setupServiceWorker").then(({ setupServiceWorkerRegistration }) => {
+			setupServiceWorkerRegistration();
+		});
 	});
 }
 

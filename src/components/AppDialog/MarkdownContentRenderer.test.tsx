@@ -16,6 +16,11 @@ vi.mock("./LoremIpsumSkeleton", () => ({
 	default: () => <div data-testid="lorem-ipsum-skeleton">Loading...</div>,
 }));
 
+// Mock PrerenderedMarkdownRenderer
+vi.mock("./PrerenderedMarkdownRenderer", () => ({
+	default: () => <div data-testid="prerendered-markdown">Prerendered</div>,
+}));
+
 // Mock react-markdown and remark-gfm
 vi.mock("react-markdown", () => ({
 	default: ({ children }: { children: React.ReactNode }) => (
@@ -24,7 +29,11 @@ vi.mock("react-markdown", () => ({
 }));
 
 vi.mock("remark-gfm", () => ({
-	default: vi.fn(),
+	default: vi.fn(() => {}),
+}));
+
+vi.mock("rehype-raw", () => ({
+	default: vi.fn(() => {}),
 }));
 
 describe("MarkdownContentRenderer", () => {
@@ -66,9 +75,12 @@ describe("MarkdownContentRenderer", () => {
 	test("should render markdown content when successfully loaded", async () => {
 		render(<MarkdownContentRenderer markdownFileName="test.md" />);
 
-		await waitFor(() => {
-			expect(screen.getByTestId("markdown-content")).toBeInTheDocument();
-		});
+		await waitFor(
+			() => {
+				expect(screen.getByTestId("markdown-content")).toBeInTheDocument();
+			},
+			{ timeout: 2000 }
+		);
 	});
 
 	test("should render skeleton when remarkGfm is not yet loaded", async () => {

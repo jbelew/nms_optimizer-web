@@ -2,7 +2,13 @@
 import "./AppHeader.scss";
 
 import React, { useEffect } from "react";
-import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import {
+	CounterClockwiseClockIcon,
+	DownloadIcon,
+	EyeOpenIcon,
+	FileIcon,
+	PieChartIcon,
+} from "@radix-ui/react-icons";
 import { Code, DataList, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
@@ -19,9 +25,20 @@ import { useGridStore } from "@/store/GridStore";
 /**
  * @interface AppHeaderProps
  * @property {() => void} onShowChangelog - Callback function to be invoked when the changelog button is clicked.
+ * @property {() => void} [onSaveBuild] - Optional callback for save build button.
+ * @property {() => void} [onLoadBuild] - Optional callback for load build button.
+ * @property {boolean} [isSavePending] - Whether save operation is pending.
+ * @property {boolean} [isLoadPending] - Whether load operation is pending.
+ * @property {boolean} [hasModulesInGrid] - Whether there are modules in the grid.
  */
 interface AppHeaderProps {
 	onShowChangelog: () => void;
+	onSaveBuild?: () => void;
+	onLoadBuild?: () => void;
+	isSavePending?: boolean;
+	isLoadPending?: boolean;
+	hasModulesInGrid?: boolean;
+	solving?: boolean;
 }
 
 /**
@@ -31,7 +48,15 @@ interface AppHeaderProps {
  * @param {AppHeaderProps} props - The props for the AppHeader component.
  * @returns {JSX.Element} The rendered AppHeader component.
  */
-const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
+const AppHeader: React.FC<AppHeaderProps> = ({
+	onShowChangelog,
+	onSaveBuild,
+	onLoadBuild,
+	isSavePending,
+	isLoadPending,
+	hasModulesInGrid,
+	solving,
+}) => {
 	const { t, i18n } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendEvent } = useAnalytics();
@@ -71,6 +96,32 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 			{!isSharedGrid && (
 				<div className="absolute! top-4! right-4! z-10 hidden items-center gap-2 sm:top-5! sm:right-8! sm:flex">
+					{/* Save/Load buttons - show only on small screens */}
+					{!isSm && onSaveBuild && (
+						<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
+							<IconButton
+								variant="soft"
+								aria-label={t("buttons.saveBuild") ?? ""}
+								onClick={onSaveBuild}
+								disabled={solving || !hasModulesInGrid || isSavePending}
+							>
+								<DownloadIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							</IconButton>
+						</ConditionalTooltip>
+					)}
+					{!isSm && onLoadBuild && (
+						<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
+							<IconButton
+								variant="soft"
+								aria-label={t("buttons.loadBuild") ?? ""}
+								onClick={onLoadBuild}
+								disabled={solving || isLoadPending}
+							>
+								<FileIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							</IconButton>
+						</ConditionalTooltip>
+					)}
+
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
 							variant="soft"
@@ -105,8 +156,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</IconButton>
 					</ConditionalTooltip>
 
-					<LanguageSelector />
-
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 							<div className="flex items-center gap-2">
@@ -120,6 +169,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							</div>
 						</ConditionalTooltip>
 					)}
+
+					<LanguageSelector />
 				</div>
 			)}
 

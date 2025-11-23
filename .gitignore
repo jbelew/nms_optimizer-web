@@ -53,3 +53,8 @@ playwright-report/*
 .env
 frames/*
 screenshot_evolution.mp4
+
+# Cloudflare API scripts
+scripts/cloudflare/get_cf_rules.py
+scripts/cloudflare/update_cf_rules.py
+scripts/cloudflare/get_cf_pagerules.py

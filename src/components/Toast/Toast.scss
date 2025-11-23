@@ -18,6 +18,14 @@
 	color: var(--amber-11);
 	font-size: 15px;
 	grid-area: title;
+
+	&--success {
+		color: var(--accent-a11);
+	}
+
+	&--error {
+		color: var(--red-a10);
+	}
 }
 
 .ToastDescription {
