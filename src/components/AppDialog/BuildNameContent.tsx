@@ -80,16 +80,18 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	return (
 		<>
 			<Flex direction="column" gap="2">
-				<Text as="label" ml="1" size="2" weight="medium">
+				<Text as="label" htmlFor="build-name-input" ml="1" size="2" weight="medium">
 					{t("dialog.buildName.description")}
 				</Text>
 				<Flex gap="2">
 					<TextField.Root
+						id="build-name-input"
+						name="buildName"
 						placeholder={t("dialog.buildName.placeholder")}
 						value={buildName}
 						onChange={handleBuildNameChange}
 						onKeyDown={handleKeyDown}
-						style={{ flex: 1 }}
+						style={{ flex: 1, fontSize: "16px" }}
 					/>
 					<IconButton
 						variant="soft"
