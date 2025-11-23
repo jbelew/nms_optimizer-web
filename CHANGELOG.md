@@ -1,3 +1,10 @@
+## [6.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.3...v6.0.4) (2025-11-23)
+
+
+### Bug Fixes
+
+* **dialogs:** Correct icon mapping for instructions and about dialogs ([f9d0d24](https://github.com/jbelew/nms_optimizer-web/commit/f9d0d24be589b9fc5c08d7c47eea173a2de09e72))
+
 ## [6.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.2...v6.0.3) (2025-11-23)
 
 
