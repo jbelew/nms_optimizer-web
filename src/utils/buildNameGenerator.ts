@@ -12,5 +12,5 @@ export const generateBuildNameWithType = (shipType: string): string => {
 	const prefix = SHIP_NAME_PREFIXES[Math.floor(Math.random() * SHIP_NAME_PREFIXES.length)];
 	const suffix = SHIP_NAME_SUFFIXES[Math.floor(Math.random() * SHIP_NAME_SUFFIXES.length)];
 	const sanitize = (str: string) => str.toLowerCase().replace(/'/g, "").replace(/ /g, "_");
-	return `${shipType.toUpperCase()}-${sanitize(prefix)}_${sanitize(suffix)}`;
+	return `${shipType.toLowerCase()}-${sanitize(prefix)}_${sanitize(suffix)}`;
 };

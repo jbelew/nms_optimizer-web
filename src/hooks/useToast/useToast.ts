@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useCallback, useState } from "react";
 
 /**
@@ -5,7 +6,7 @@ import { useCallback, useState } from "react";
  */
 export interface ToastConfig {
 	title: string;
-	description: string;
+	description: ReactNode;
 	variant?: "success" | "error";
 	duration?: number; // Duration in milliseconds, defaults to 8000
 }
@@ -34,21 +35,21 @@ export const useToast = () => {
 	}, []);
 
 	const showSuccess = useCallback(
-		(title: string, description: string, duration?: number) => {
+		(title: string, description: ReactNode, duration?: number) => {
 			showToast({ title, description, variant: "success", duration });
 		},
 		[showToast]
 	);
 
 	const showError = useCallback(
-		(title: string, description: string, duration?: number) => {
+		(title: string, description: ReactNode, duration?: number) => {
 			showToast({ title, description, variant: "error", duration });
 		},
 		[showToast]
 	);
 
 	const showInfo = useCallback(
-		(title: string, description: string, duration?: number) => {
+		(title: string, description: ReactNode, duration?: number) => {
 			showToast({ title, description, duration });
 		},
 		[showToast]

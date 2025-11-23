@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -13,7 +14,7 @@ interface UseLoadBuildReturn {
 }
 
 interface UseLoadBuildProps {
-	showSuccess: (title: string, description: string, duration?: number) => void;
+	showSuccess: (title: string, description: string | React.ReactNode, duration?: number) => void;
 	showError: (title: string, description: string, duration?: number) => void;
 }
 
@@ -47,7 +48,9 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 					await loadBuildFromFile(file);
 					showSuccess(
 						t("toast.buildLoaded.title") || "Success",
-						t("toast.buildLoaded.description") || `Build "${file.name}" loaded`,
+						<>
+							Build <Code>{file.name}</Code> loaded successfully!
+						</>,
 						5000
 					);
 					sendEvent({
