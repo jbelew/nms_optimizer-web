@@ -15,10 +15,10 @@ import { getDialogIconAndStyle } from "./dialogIconMapping";
 
 describe("dialogIconMapping", () => {
 	describe("getDialogIconAndStyle", () => {
-		test("should return QuestionMarkCircledIcon for instructions dialog", () => {
+		test("should return InfoCircledIcon for instructions dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.instructions");
 
-			expect(result.IconComponent).toBe(QuestionMarkCircledIcon);
+			expect(result.IconComponent).toBe(InfoCircledIcon);
 		});
 
 		test("should return CounterClockwiseClockIcon for changelog dialog", () => {
@@ -27,10 +27,10 @@ describe("dialogIconMapping", () => {
 			expect(result.IconComponent).toBe(CounterClockwiseClockIcon);
 		});
 
-		test("should return InfoCircledIcon for about dialog", () => {
+		test("should return QuestionMarkCircledIcon for about dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.about");
 
-			expect(result.IconComponent).toBe(InfoCircledIcon);
+			expect(result.IconComponent).toBe(QuestionMarkCircledIcon);
 		});
 
 		test("should return ExclamationTriangleIcon for serverError dialog", () => {
@@ -188,7 +188,7 @@ describe("dialogIconMapping", () => {
 			const lowerCaseResult = getDialogIconAndStyle("dialogs.titles.about");
 			const upperCaseResult = getDialogIconAndStyle("DIALOGS.TITLES.ABOUT");
 
-			expect(lowerCaseResult.IconComponent).toBe(InfoCircledIcon);
+			expect(lowerCaseResult.IconComponent).toBe(QuestionMarkCircledIcon);
 			expect(upperCaseResult.IconComponent).toBeUndefined();
 		});
 	});
