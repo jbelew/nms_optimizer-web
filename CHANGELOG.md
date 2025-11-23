@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.1...v6.0.2) (2025-11-23)
+
+
+### Bug Fixes
+
+* **build-management:** Implement build save/load and filename validation ([0d3835f](https://github.com/jbelew/nms_optimizer-web/commit/0d3835f231f6312533ffe5d7a238129bb121217d))
+
 ## [6.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.0...v6.0.1) (2025-11-23)
 
 
