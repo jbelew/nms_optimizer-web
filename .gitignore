@@ -29,7 +29,7 @@ coverage/*
 lighthouse-report.html
 lighthouse-report.json
 playwright-report
-# stats.html
+stats.html
 # stats.json
 test-results
 tsconfig.node.tsbuildinfo

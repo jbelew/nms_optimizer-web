@@ -112,8 +112,16 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			// New socket per optimization
-			const { io } = await import("socket.io-client");
-			const socket: Socket = io(WS_URL, { transports: ["websocket"] });
+			let socket: Socket;
+			try {
+				const { io } = await import("socket.io-client");
+				socket = io(WS_URL, { transports: ["websocket"] });
+			} catch (importError) {
+				console.error("Failed to import socket.io-client:", importError);
+				setShowErrorStore(true, "recoverable");
+				resetProgress();
+				return;
+			}
 
 			const cleanup = () => {
 				socket.disconnect();
