@@ -341,6 +341,12 @@ export default defineConfig(({ mode }) => {
 							// Web Vitals monitoring
 							if (id.includes("web-vitals")) return "web-vitals";
 
+							// Socket.io - dynamically imported for optimization, separate chunk
+							if (id.includes("socket.io")) return "socket-io";
+
+							// Google Analytics - can be lazy-loaded
+							if (id.includes("react-ga4")) return "ga4";
+
 							return "vendor";
 						}
 					},
