@@ -39,7 +39,7 @@ const csp = [
 	"style-src 'self' 'unsafe-inline'",
 	"img-src 'self' data: www.google-analytics.com",
 	"font-src 'self'",
-	"connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app",
+	"connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app cloudflareinsights.com",
 	"frame-src https://www.youtube.com",
 	"frame-ancestors 'none'",
 	"object-src 'none'",
