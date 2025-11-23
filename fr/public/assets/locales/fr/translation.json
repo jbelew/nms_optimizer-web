@@ -14,11 +14,16 @@
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "About",
-		"share": "Share",
+		"share": "Share Build",
 		"resetGrid": "Reset Grid",
 		"changelog": "Changelog",
 		"userStats": "User Statistics",
-		"accessibility": "Focus Mode"
+		"accessibility": "Focus Mode",
+		"saveBuild": "Save Build",
+		"loadBuild": "Load Build",
+		"cancel": "Cancel",
+		"save": "Save",
+		"generateName": "Generate"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
@@ -84,6 +89,31 @@
 			"copiedButton": "Copied!",
 			"closeButton": "Close",
 			"openLink": "Open Link"
+		}
+	},
+	"dialog": {
+		"buildName": {
+			"title": "Save Build",
+			"description": "Enter a name for your build:",
+			"placeholder": "Build name"
+		}
+	},
+	"toast": {
+		"buildSaved": {
+			"title": "Success",
+			"description": "Build downloaded successfully"
+		},
+		"buildSaveError": {
+			"title": "Error",
+			"description": "Failed to save build"
+		},
+		"buildLoaded": {
+			"title": "Success",
+			"description": "Build loaded successfully"
+		},
+		"buildLoadError": {
+			"title": "Error",
+			"description": "Failed to load build"
 		}
 	},
 	"footer": {
