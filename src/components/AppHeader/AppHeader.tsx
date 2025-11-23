@@ -105,6 +105,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</IconButton>
 					</ConditionalTooltip>
 
+					<LanguageSelector />
+
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 							<div className="flex items-center gap-2">
@@ -118,8 +120,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							</div>
 						</ConditionalTooltip>
 					)}
-
-					<LanguageSelector />
 				</div>
 			)}
 

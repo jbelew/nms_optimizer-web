@@ -4,7 +4,6 @@ import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/
 import { IconButton, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 import { UploadIcon } from "@/components/Icons/UploadIcon";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
@@ -119,84 +118,71 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 			>
 				<div className="flex items-center gap-2 pl-2">
 					{/* Load/Save buttons for mobile - far left */}
-					<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
-						<IconButton
-							variant="soft"
-							size="2"
-							aria-label={t("buttons.loadBuild") ?? ""}
-							onClick={handleLoadBuild}
-							disabled={solving}
-						>
-							<UploadIcon weight="light" size={20} />
-						</IconButton>
-					</ConditionalTooltip>
-					<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
-						<IconButton
-							variant="soft"
-							size="2"
-							aria-label={t("buttons.saveBuild") ?? ""}
-							onClick={handleSaveBuild}
-							disabled={solving || !hasModulesInGrid}
-						>
-							<DownloadIcon weight="light" size={20} />
-						</IconButton>
-					</ConditionalTooltip>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.loadBuild") ?? ""}
+						onClick={handleLoadBuild}
+						disabled={solving}
+					>
+						<UploadIcon weight="light" size={20} />
+					</IconButton>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.saveBuild") ?? ""}
+						onClick={handleSaveBuild}
+						disabled={solving || !hasModulesInGrid}
+					>
+						<DownloadIcon weight="light" size={20} />
+					</IconButton>
 				</div>
 
 				<div className="flex items-center gap-2">
-					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
-						<IconButton
-							variant="soft"
-							size="2"
-							aria-label={t("buttons.changelog") ?? ""}
-							onClick={() => {
-								sendEvent({
-									category: "ui",
-									action: "show_changelog",
-									value: 1,
-								});
-								handleShowChangelog();
-							}}
-						>
-							<CounterClockwiseClockIcon className="h-4 w-4" />
-						</IconButton>
-					</ConditionalTooltip>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.changelog") ?? ""}
+						onClick={() => {
+							sendEvent({
+								category: "ui",
+								action: "show_changelog",
+								value: 1,
+							});
+							handleShowChangelog();
+						}}
+					>
+						<CounterClockwiseClockIcon className="h-4 w-4" />
+					</IconButton>
 
-					<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
-						<IconButton
-							variant="soft"
-							size="2"
-							aria-label={t("buttons.userStats") ?? ""}
-							onClick={() => {
-								sendEvent({
-									category: "ui",
-									action: "show_user_stats",
-									value: 1,
-								});
-								openDialog("userstats");
-							}}
-						>
-							<PieChartIcon className="h-4 w-4" />
-						</IconButton>
-					</ConditionalTooltip>
-
-					{/* A11y mode switch */}
-					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<div className="flex items-center gap-2">
-							<EyeOpenIcon
-								style={{ color: "var(--accent-a11)" }}
-								className="h-4 w-4"
-							/>
-							<Switch
-								variant="soft"
-								checked={a11yMode}
-								onCheckedChange={toggleA11yMode}
-								aria-label={t("buttons.accessibility") ?? ""}
-							/>
-						</div>
-					</ConditionalTooltip>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.userStats") ?? ""}
+						onClick={() => {
+							sendEvent({
+								category: "ui",
+								action: "show_user_stats",
+								value: 1,
+							});
+							openDialog("userstats");
+						}}
+					>
+						<PieChartIcon className="h-4 w-4" />
+					</IconButton>
 
 					<LanguageSelector />
+
+					{/* A11y mode switch */}
+					<div className="flex items-center gap-2">
+						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
+						<Switch
+							variant="soft"
+							checked={a11yMode}
+							onCheckedChange={toggleA11yMode}
+							aria-label={t("buttons.accessibility") ?? ""}
+						/>
+					</div>
 				</div>
 			</nav>
 
