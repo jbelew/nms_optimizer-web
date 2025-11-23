@@ -47,7 +47,7 @@ export const useBuildFileManager = () => {
 				};
 
 				const json = JSON.stringify(buildData, null, 2);
-				const blob = new Blob([json], { type: "application/json" });
+				const blob = new Blob([json], { type: "application/octet-stream" });
 				const url = URL.createObjectURL(blob);
 				const link = document.createElement("a");
 				link.href = url;
