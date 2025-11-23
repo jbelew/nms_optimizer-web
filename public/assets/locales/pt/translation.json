@@ -11,7 +11,12 @@
         "resetGrid": "Redefinir grade",
         "changelog": "Registo de alterações",
         "userStats": "Estatísticas do usuário",
-        "accessibility": "Modo de foco"
+        "accessibility": "Modo de foco",
+        "saveBuild": "Salvar compilação",
+        "loadBuild": "Carregar compilação",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "generateName": "Gerar"
     },
     "gridTable": {
         "optimizing": "Otimizando!",
@@ -578,5 +583,35 @@
     },
     "shipSelection": {
         "dropdownTooltip": "Selecione o tipo de plataforma"
+    },
+    "dialog": {
+        "buildName": {
+            "title": "Salvar compilação",
+            "description": "Insira um nome para sua compilação:",
+            "placeholder": "Nome da versão",
+            "validation": {
+                "empty": "O nome da compilação não pode ficar vazio",
+                "invalid": "O nome da compilação contém caracteres inválidos. Evite usar: < > : \" / \\ | ? * e caracteres especiais."
+            }
+        }
+    },
+    "toast": {
+        "buildSaved": {
+            "title": "Sucesso",
+            "description": "Versão baixada com sucesso"
+        },
+        "buildSaveError": {
+            "title": "Erro",
+            "description": "Falha ao salvar a compilação"
+        },
+        "buildLoaded": {
+            "title": "Sucesso",
+            "description": "Versão carregada com sucesso",
+            "loadedMessage": "carregado com sucesso"
+        },
+        "buildLoadError": {
+            "title": "Erro",
+            "description": "Falha ao carregar compilação"
+        }
     }
 }

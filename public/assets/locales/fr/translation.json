@@ -11,7 +11,12 @@
         "resetGrid": "Réinitialiser la grille",
         "changelog": "Historique des modifications",
         "userStats": "Statistiques des utilisateurs",
-        "accessibility": "Mode de mise au point"
+        "accessibility": "Mode de mise au point",
+        "saveBuild": "Enregistrer la construction",
+        "loadBuild": "Charger la construction",
+        "cancel": "Annuler",
+        "save": "Sauvegarder",
+        "generateName": "Générer"
     },
     "gridTable": {
         "optimizing": "OPTIMISATION !",
@@ -578,5 +583,35 @@
     },
     "shipSelection": {
         "dropdownTooltip": "Sélectionnez le type de plate-forme"
+    },
+    "dialog": {
+        "buildName": {
+            "title": "Enregistrer la construction",
+            "description": "Entrez un nom pour votre build :",
+            "placeholder": "Nom du build",
+            "validation": {
+                "empty": "Le nom de la build ne peut pas être vide",
+                "invalid": "Le nom de build contient des caractères non valides. Évitez d'utiliser : < > : \" / \\ | ? * et des caractères spéciaux."
+            }
+        }
+    },
+    "toast": {
+        "buildSaved": {
+            "title": "Succès",
+            "description": "Build téléchargé avec succès"
+        },
+        "buildSaveError": {
+            "title": "Erreur",
+            "description": "Échec de l'enregistrement de la version"
+        },
+        "buildLoaded": {
+            "title": "Succès",
+            "description": "Build chargé avec succès",
+            "loadedMessage": "chargé avec succès"
+        },
+        "buildLoadError": {
+            "title": "Erreur",
+            "description": "Échec du chargement de la version"
+        }
     }
 }

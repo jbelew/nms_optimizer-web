@@ -1,16 +1,12 @@
 // src/components/app/MainAppContent.tsx
 import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
-import {
-	CounterClockwiseClockIcon,
-	DownloadIcon,
-	EyeOpenIcon,
-	FileIcon,
-	PieChartIcon,
-} from "@radix-ui/react-icons";
+import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
 import { IconButton, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { UploadIcon } from "@/components/Icons/UploadIcon";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useA11yStore } from "@/store/A11yStore";
 
@@ -127,7 +123,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 							onClick={handleLoadBuild}
 							disabled={solving}
 						>
-							<FileIcon className="h-4 w-4" />
+							<UploadIcon weight="light" size={20} />
 						</IconButton>
 					</ConditionalTooltip>
 					<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
@@ -138,7 +134,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 							onClick={handleSaveBuild}
 							disabled={solving || !hasModulesInGrid}
 						>
-							<DownloadIcon className="h-4 w-4" />
+							<DownloadIcon weight="light" size={20} />
 						</IconButton>
 					</ConditionalTooltip>
 				</div>

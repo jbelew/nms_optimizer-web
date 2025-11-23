@@ -11,7 +11,12 @@
         "resetGrid": "Raster zurücksetzen",
         "changelog": "Änderungsprotokoll",
         "userStats": "Benutzerstatistik",
-        "accessibility": "Fokusmodus"
+        "accessibility": "Fokusmodus",
+        "saveBuild": "Build speichern",
+        "loadBuild": "Build laden",
+        "cancel": "Stornieren",
+        "save": "Speichern",
+        "generateName": "Erzeugen"
     },
     "gridTable": {
         "optimizing": "Optimierung!",
@@ -578,5 +583,35 @@
     },
     "shipSelection": {
         "dropdownTooltip": "Wählen Sie Plattformtyp aus"
+    },
+    "dialog": {
+        "buildName": {
+            "title": "Build speichern",
+            "description": "Geben Sie einen Namen für Ihren Build ein:",
+            "placeholder": "Build-Name",
+            "validation": {
+                "empty": "Der Build-Name darf nicht leer sein",
+                "invalid": "Der Buildname enthält ungültige Zeichen. Vermeiden Sie die Verwendung von: < > : \" / \\ | ? * und Sonderzeichen."
+            }
+        }
+    },
+    "toast": {
+        "buildSaved": {
+            "title": "Erfolg",
+            "description": "Build erfolgreich heruntergeladen"
+        },
+        "buildSaveError": {
+            "title": "Fehler",
+            "description": "Build konnte nicht gespeichert werden"
+        },
+        "buildLoaded": {
+            "title": "Erfolg",
+            "description": "Build erfolgreich geladen",
+            "loadedMessage": "erfolgreich geladen"
+        },
+        "buildLoadError": {
+            "title": "Fehler",
+            "description": "Build konnte nicht geladen werden"
+        }
     }
 }

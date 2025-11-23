@@ -47,9 +47,9 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 				try {
 					await loadBuildFromFile(file);
 					showSuccess(
-						t("toast.buildLoaded.title") || "Success",
+						t("toast.buildLoaded.title"),
 						<>
-							Build <Code>{file.name}</Code> loaded successfully!
+							Build <Code>{file.name}</Code> {t("toast.buildLoaded.loadedMessage")}
 						</>,
 						5000
 					);
@@ -63,8 +63,10 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 				} catch (error) {
 					console.error("Load failed:", error);
 					const errorMessage =
-						error instanceof Error ? error.message : "Failed to load build";
-					showError(t("toast.buildLoadError.title") || "Error", errorMessage, 5000);
+						error instanceof Error
+							? error.message
+							: t("toast.buildLoadError.description");
+					showError(t("toast.buildLoadError.title"), errorMessage, 5000);
 				} finally {
 					setIsLoadPending(false);
 				}

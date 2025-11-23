@@ -4,8 +4,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useDebouncedValidation } from "../../hooks/useDebouncedValidation/useDebouncedValidation";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { generateBuildNameWithType } from "../../utils/buildNameGenerator";
+import { isValidFilename } from "../../utils/filenameValidation";
 
 interface BuildNameContentProps {
 	onConfirm: (buildName: string) => void;
@@ -17,21 +19,52 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const [buildName, setBuildName] = useState(() => generateBuildNameWithType(selectedShipType));
 
+	const createValidator = useCallback(
+		(value: string): string | null => {
+			const trimmed = value.trim();
+			if (!trimmed) {
+				return t("dialog.buildName.validation.empty");
+			}
+			if (!isValidFilename(trimmed)) {
+				return t("dialog.buildName.validation.invalid");
+			}
+			return null;
+		},
+		[t]
+	);
+
+	const { error: validationError, handleChange: handleDebouncedValidation } =
+		useDebouncedValidation(createValidator);
+
 	const handleGenerateName = useCallback(() => {
-		setBuildName(generateBuildNameWithType(selectedShipType));
-	}, [selectedShipType]);
+		const newName = generateBuildNameWithType(selectedShipType);
+		setBuildName(newName);
+		handleDebouncedValidation(newName);
+	}, [selectedShipType, handleDebouncedValidation]);
+
+	const handleBuildNameChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const newValue = e.target.value;
+			setBuildName(newValue);
+			handleDebouncedValidation(newValue);
+		},
+		[handleDebouncedValidation]
+	);
 
 	const handleConfirm = useCallback(() => {
 		const trimmedName = buildName.trim();
-		if (trimmedName) {
+		const error = createValidator(trimmedName);
+		if (!error) {
 			onConfirm(trimmedName);
 		}
-	}, [buildName, onConfirm]);
+	}, [buildName, onConfirm, createValidator]);
 
 	const handleCancel = useCallback(() => {
-		setBuildName(generateBuildNameWithType(selectedShipType));
+		const newName = generateBuildNameWithType(selectedShipType);
+		setBuildName(newName);
+		handleDebouncedValidation(newName);
 		onCancel();
-	}, [onCancel, selectedShipType]);
+	}, [onCancel, selectedShipType, handleDebouncedValidation]);
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -48,35 +81,38 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 		<>
 			<Flex direction="column" gap="2">
 				<Text as="label" ml="1" size="2" weight="medium">
-					{t("dialog.buildName.description") || "Enter a name for your build"}
+					{t("dialog.buildName.description")}
 				</Text>
 				<Flex gap="2">
 					<TextField.Root
-						placeholder={t("dialog.buildName.placeholder") || "Build name"}
+						placeholder={t("dialog.buildName.placeholder")}
 						value={buildName}
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-							setBuildName(e.target.value)
-						}
+						onChange={handleBuildNameChange}
 						onKeyDown={handleKeyDown}
 						style={{ flex: 1 }}
 					/>
 					<IconButton
 						variant="soft"
 						onClick={handleGenerateName}
-						aria-label={t("buttons.generateName") || "Generate name"}
-						title={t("buttons.generateName") || "Generate name"}
+						aria-label={t("buttons.generateName")}
+						title={t("buttons.generateName")}
 					>
 						<ReloadIcon />
 					</IconButton>
 				</Flex>
+				{validationError && (
+					<Text size="1" color="red" ml="1">
+						{validationError}
+					</Text>
+				)}
 			</Flex>
 
 			<Flex gap="2" mt="6" mb="2" justify="end">
 				<Button variant="soft" onClick={handleCancel}>
-					{t("buttons.cancel") || "Cancel"}
+					{t("buttons.cancel")}
 				</Button>
-				<Button onClick={handleConfirm} disabled={!buildName.trim()}>
-					{t("buttons.save") || "Save"}
+				<Button onClick={handleConfirm} disabled={!buildName.trim() || !!validationError}>
+					{t("buttons.save")}
 				</Button>
 			</Flex>
 		</>

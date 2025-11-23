@@ -1,10 +1,8 @@
 // src/utils/dialogIconMapping.ts
 
-import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import type { CSSProperties } from "react";
 import {
 	CounterClockwiseClockIcon,
-	DownloadIcon,
 	ExclamationTriangleIcon,
 	GlobeIcon,
 	InfoCircledIcon,
@@ -14,21 +12,22 @@ import {
 	Share1Icon,
 } from "@radix-ui/react-icons";
 
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+
 /**
  * @interface DialogIconAndStyle
- * @property {React.ElementType<IconProps>|null} IconComponent - The icon component to render.
+ * @property {React.ElementType | null} IconComponent - The icon component to render.
  * @property {CSSProperties} style - The style to apply to the icon.
  */
 interface DialogIconAndStyle {
-	IconComponent: React.ElementType<IconProps> | null;
+	IconComponent: React.ElementType | null;
 	style: CSSProperties;
 }
 
 /**
  * A map of dialog title keys to their corresponding icon components.
- * @type {Record<string, React.ElementType<IconProps>>}
  */
-const iconMap: Record<string, React.ElementType<IconProps>> = {
+const iconMap: Record<string, React.ElementType> = {
 	"dialogs.titles.instructions": QuestionMarkCircledIcon,
 	"dialogs.titles.changelog": CounterClockwiseClockIcon,
 	"dialogs.titles.about": InfoCircledIcon,

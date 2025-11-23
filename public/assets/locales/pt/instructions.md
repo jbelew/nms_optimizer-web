@@ -1,62 +1,69 @@
 ## Uso Básico
 
-- **Clique ou toque** no ícone ⚙️ para selecionar sua **Tecnologia**.
-- **Clique ou dê um duplo toque** em uma célula para marcá-la como **Sobrecarregada** (até 4 por grade).
-- **Ctrl-clique** (Windows) / **⌘-clique** (Mac) ou **um único toque** (no celular) para alternar o estado **ativo** de uma célula — células ativas podem conter módulos.
-- Use os **botões de alternância de linha** para ativar ou desativar linhas inteiras. Os alternadores de linha são **desativados assim que os módulos são colocados** e reativados quando você pressiona **Redefinir Grade**.
+- **Clique ou toque** no ícone ⚙️ para selecionar sua **Plataforma** (Naves Estelares, Multiferramentas, Corvetas, etc.).
+- **Clique ou toque duas vezes** em uma célula para marcá-la como **Supercharged** (até 4 por grade).
+- **Ctrl-clique** (Windows) / **⌘-clique** (Mac) ou **toque único** (no celular) para alternar o estado **ativo** de uma célula — as células ativas podem conter módulos.
+- Use os **botões de alternância de linha** para ativar ou desativar linhas inteiras. As alternâncias de linha são **desativadas quando os módulos são colocados** e reativadas quando você pressiona **Redefinir grade**.
 
-> 💡 **Nota:** Exotrajes e Exocrafts têm configurações de grade fixas. As células de Exocraft não podem ser modificadas de forma alguma. Nos Exotrajes, você só pode alternar as células entre ativas ou inativas; não é possível alterar o layout sobrecarregado.
+> 💡 **Observação:** Exosuits e Exocraft têm configurações de grade fixas. As células Exocraft não podem ser modificadas. Em Exosuits, você só pode alternar células ativas ou inativas; alterar o layout sobrealimentado não é suportado.
 
-## Antes de Começar
+## Salvando e carregando compilações
 
-Esta ferramenta é para **jogadores de fim de jogo** que desejam otimizar o layout de tecnologia de sua plataforma para máxima eficiência. Funciona melhor quando:
+Você pode salvar seus layouts otimizados em um arquivo e recarregá-los mais tarde, facilitando o gerenciamento de múltiplas configurações para a mesma plataforma ou o compartilhamento de construções com amigos.
 
-- Você desbloqueou **a maioria ou todas as células** em sua plataforma (Nave Estelar, Exotraje, Exocraft ou Ferramenta Múltipla).
+- **Salvar compilação** — Clique no ícone salvar para baixar seu layout atual como um arquivo `.nms`. Você será solicitado a nomear sua compilação; a ferramenta gera automaticamente nomes temáticos como `"Corvette - Crusade of the Starfall.nms"` que você pode personalizar.
+- **Load Build** — Clique no ícone de carregamento para carregar um arquivo `.nms` salvo anteriormente. Sua grade será atualizada imediatamente para corresponder ao layout salvo, incluindo todos os posicionamentos de módulos e posições de células sobrecarregadas.
+
+Os arquivos de compilação são validados quanto à integridade e compatibilidade — se uma compilação foi salva em um tipo de plataforma diferente ou está corrompida, a ferramenta informará você.
+
+## Antes de começar
+
+Esta ferramenta é para **jogadores finais** otimizando o layout de tecnologia de sua plataforma para máxima eficiência. Funciona melhor quando:
+
+- Você desbloqueou **a maioria ou todas as células** em sua plataforma (Starship, Exosuit, Exocraft ou Multi-Tool).
 - Você tem acesso a **todas as tecnologias relevantes**.
-- Você possui um **conjunto completo de três módulos de atualização** por tecnologia aplicável.
+- Você possui um **conjunto completo de três módulos de atualização** de acordo com a tecnologia aplicável.
 
-Se você ainda está desbloqueando células ou coletando módulos, a ferramenta ainda pode fornecer insights — mas foi projetada principalmente para **plataformas totalmente atualizadas**.
+Se você ainda estiver desbloqueando células ou coletando módulos, a ferramenta ainda poderá fornecer insights, mas foi projetada principalmente para **plataformas totalmente atualizadas**.
 
 ## Informações sobre Corvetas
 
-As corvetas funcionam de maneira um pouco diferente de outras plataformas — em vez de apenas um conjunto de atualizações, elas podem ter até três.
+Os Corvettes funcionam de maneira um pouco diferente de outras plataformas – em vez de apenas um conjunto de atualizações, eles podem ter até três.
 
 - **Atualizações cosméticas** são mostradas como `Cn`.
 - **Atualizações do reator** são mostradas como `Rn`.
 
-O solucionador também sugerirá as melhores atualizações cosméticas se você preferir priorizar o desempenho em vez da aparência — embora, na prática, as trocas sejam mínimas na maioria das vezes.
+O solucionador também irá sugerir as melhores atualizações cosméticas se você preferir priorizar o desempenho em vez da aparência – embora, na prática, as compensações sejam mínimas na maioria das vezes.
 
-Lembre-se de que um subsistema de tecnologia de corveta totalmente atualizado ocupa **muito** espaço. Os interruptores à direita de cada tecnologia de corveta permitem que você escolha entre uma **solução cosmética**, organizando os itens colocados automaticamente no slot de tecnologia com ajustes e adições mínimas, ou uma **solução min/max** totalmente otimizada para desempenho.
+Tenha em mente que um subsistema de tecnologia Corvette totalmente atualizado ocupa **muito** espaço. Com 60 slots de tecnologia completos, você normalmente só terá espaço para três ou quatro **resoluções min/máx**, então escolha com sabedoria.
 
-Com 60 slots de tecnologia completos, você normalmente terá espaço apenas para três ou quatro **soluções min/max**, então escolha sabiamente.
+## Construções recomendadas
 
-## Construções Recomendadas
+Para plataformas como **Exosuits** e **Exocraft**, onde as células sobrecarregadas são fixas, o número de layouts viáveis ​​é **extremamente limitado**. Em vez de lidar com bilhões de permutações como fazemos com naves estelares ou ferramentas múltiplas, estamos trabalhando com apenas algumas possibilidades de melhor caso.
 
-Para plataformas como **Exotrajes** e **Exocrafts**, onde as células sobrecarregadas são fixas, o número de layouts viáveis é **extremamente limitado**. Em vez de lidar com bilhões de permutações como fazemos para naves estelares ou ferramentas múltiplas, estamos trabalhando com apenas um punhado das melhores possibilidades.
+Isso permite que a ferramenta ofereça **construções recomendadas** — layouts cuidadosamente escolhidos a dedo e altamente opinativos, refletindo as melhores combinações disponíveis. O sistema também oferece suporte a **múltiplas compilações por plataforma**, adaptadas a diferentes casos de uso. Por exemplo:
 
-Isso permite que a ferramenta ofereça **construções recomendadas** — layouts cuidadosamente selecionados e altamente opinativos, refletindo as melhores combinações disponíveis. O sistema também suporta **várias construções por plataforma**, adaptadas a diferentes casos de uso. Por exemplo:
+- O **Minotaur** inclui uma **compilação de uso geral** (para quando você estiver testando-o ativamente) e uma **compilação de suporte de IA dedicada** (otimizada para implantação remota).
 
-- O **Minotauro** inclui tanto uma **construção de uso geral** (para quando você o está pilotando ativamente) quanto uma **construção de suporte de IA dedicada** (otimizada para implantação remota).
+Outras plataformas podem incluir **variantes especializadas no futuro** — como uma **configuração de corrida Pilgrim** ou um **Exosuit com scanner** — dependendo do feedback e da demanda do usuário.
 
-Outras plataformas podem incluir **variantes especializadas no futuro** — como uma **configuração de corrida Pilgrim** ou um **Exotraje com scanner aprimorado** — dependendo do feedback e da demanda do usuário.
+Se você tiver comentários ou quiser sugerir configurações alternativas, sinta-se à vontade para [iniciar uma discussão](https://github.com/jbelew/nms_optimizer-web/discussions) — essas compilações são selecionadas, não geradas automaticamente, e as contribuições da comunidade ajudam a torná-las melhores.
 
-Se você tiver feedback ou quiser sugerir configurações alternativas, sinta-se à vontade para [iniciar uma discussão](https://github.com/jbelew/nms_optimizer-web/discussions) — essas construções são selecionadas, não geradas automaticamente, e a contribuição da comunidade ajuda a torná-las melhores.
+## Dicas de uso
 
-## Dicas de Uso
+As células sobrecarregadas oferecem bônus importantes, mas são limitadas – cada colocação é importante. **Evite combinar cegamente o layout superalimentado do jogo.** Para obter melhores resultados:
 
-As células sobrecarregadas fornecem bônus importantes, mas são limitadas — cada posicionamento é importante. **Evite combinar cegamente seu layout sobrecarregado no jogo.** Para obter os melhores resultados:
+- **Comece com uma tecnologia de alto impacto** — uma que se adapta ao seu estilo de jogo e se beneficia de duas ou três células sobrecarregadas, como _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_ ou _Neutron Cannon_.
+  Marque essas células como sobrecarregadas e resolva.
+- **Use suas células sobrecarregadas restantes** para uma tecnologia de segunda prioridade, como _Hyperdrive_, _Scanner_ ou _Mining Beam_, e resolva novamente. Distribuir bônus geralmente é melhor do que acumulá-los todos em uma única tecnologia.
+- Depois que suas principais tecnologias forem resolvidas, mude o foco para aqueles com **contagens maiores de módulos** (por exemplo, _Hyperdrive_, _Starship Trails_) antes de ficar sem espaço contíguo.
+- O solucionador faz o trabalho pesado — seu trabalho é **priorizar tecnologias** com base em como você joga.
 
-- **Comece com uma tecnologia de alto impacto** — uma que se adapte ao seu estilo de jogo e se beneficie de duas ou três células sobrecarregadas, como _Motor de Pulso_, _Ejetor de Pulso_, _Acelerador de Infra-Faca_ ou _Canhão de Nêutrons_.
-  Marque essas células como sobrecarregadas e, em seguida, resolva.
-- **Use suas células sobrecarregadas restantes** para uma segunda tecnologia prioritária, como _Hiperpropulsor_, _Scanner_ ou _Raio de Mineração_, e resolva novamente. Espalhar os bônus geralmente é melhor do que acumulá-los todos em uma única tecnologia.
-- Depois que suas tecnologias principais estiverem resolvidas, mude o foco para aquelas com **maior número de módulos** (por exemplo, _Hiperpropulsor_, _Rastros de Nave Estelar_) antes de ficar sem espaço contíguo.
-- O solucionador faz o trabalho pesado — seu trabalho é **priorizar as tecnologias** com base em como você joga.
+À medida que o espaço da grade fica apertado, pode ser necessário **redefinir algumas tecnologias** e resolvê-las em uma ordem diferente para evitar o temido **Alerta de Otimização**. Com uma nave totalmente atualizada, muitas vezes você ficará com apenas uma célula aberta — ou nenhuma, se estiver otimizando um **Interceptor**.
 
-À medida que o espaço na grade fica apertado, pode ser necessário **redefinir algumas tecnologias** e resolvê-las em uma ordem diferente para evitar o temido **Alerta de Otimização**. Com uma nave estelar totalmente atualizada, muitas vezes você ficará com apenas uma célula aberta — ou nenhuma se estiver otimizando um **Interceptor**.
+## Dica profissional
 
-## Dica Profissional
+Há matemática real por trás do posicionamento. O solucionador funciona em janelas fixas com base em quantos módulos uma tecnologia requer e geralmente escolhe o layout mais eficiente sem desperdiçar espaço. Mas se as coisas não estão se alinhando:
 
-Há matemática real por trás do posicionamento. O solucionador funciona dentro de janelas fixas com base em quantos módulos uma tecnologia requer e, geralmente, escolhe o layout mais eficiente sem desperdiçar espaço. Mas se as coisas não estiverem se alinhando:
-
-- Tente **desativar algumas células** para guiar o solucionador em direção a uma janela melhor.
+- Tente **desativar algumas células** para orientar o solucionador em direção a uma janela melhor.
 - Um pequeno ajuste pode liberar zonas de posicionamento importantes e melhorar seu layout final.

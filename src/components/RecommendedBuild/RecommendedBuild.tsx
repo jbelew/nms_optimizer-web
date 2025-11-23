@@ -69,7 +69,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
 	 * Handles opening the instructions dialog, specifically to the section about recommended builds.
 	 */
 	const handleOpenInstructions = () => {
-		openDialog("instructions", { section: "section-4" });
+		openDialog("instructions", { section: "section-5" });
 	};
 
 	/**

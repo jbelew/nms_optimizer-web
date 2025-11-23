@@ -1,6 +1,5 @@
 import {
 	CounterClockwiseClockIcon,
-	DownloadIcon,
 	ExclamationTriangleIcon,
 	GlobeIcon,
 	InfoCircledIcon,
@@ -9,6 +8,8 @@ import {
 	ReloadIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
+
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
 
 import { getDialogIconAndStyle } from "./dialogIconMapping";
 

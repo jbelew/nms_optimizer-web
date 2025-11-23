@@ -1,62 +1,69 @@
-## Uso Básico
+## Uso básico
 
-- **Haga clic o toque** el ícono ⚙️ para seleccionar su **Tecnología**.
-- **Haga clic o doble toque** en una celda para marcarla como **Supercargada** (hasta 4 por cuadrícula).
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o **un solo toque** (en el móvil) para alternar el estado **activo** de una celda — las celdas activas pueden contener módulos.
-- Use los **botones de alternancia de fila** para habilitar o deshabilitar filas enteras. Los alternadores de fila se **desactivan una vez que se colocan los módulos** y se vuelven a habilitar cuando presiona **Restablecer Cuadrícula**.
+- **Haga clic o toque** el ícono ⚙️ para seleccionar su **Plataforma** (naves espaciales, multiherramientas, corbetas, etc.).
+- **Haga clic o toque dos veces** una celda para marcarla como **Supercargada** (hasta 4 por cuadrícula).
+- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o **un solo toque** (en dispositivos móviles) para alternar el estado **activo** de una celda: las celdas activas pueden contener módulos.
+- Utilice los **botones de alternancia de fila** para habilitar o deshabilitar filas enteras. Los cambios de fila se **deshabilitan una vez que se colocan los módulos** y se vuelven a habilitar cuando presiona **Restablecer cuadrícula**.
 
-> 💡 **Nota:** Los Exotrajes y Exocrafts tienen configuraciones de cuadrícula fijas. Las celdas de Exocraft no se pueden modificar en absoluto. En los Exotrajes, solo puede alternar el estado de las celdas entre activo o inactivo; no se admite el cambio del diseño supercargado.
+> 💡 **Nota:** Los Exosuits y Exocraft tienen configuraciones de cuadrícula fija. Las células Exocraft no se pueden modificar en absoluto. En Exosuits, sólo puedes alternar celdas activas o inactivas; No se admite cambiar el diseño sobrealimentado.
 
-## Antes de Empezar
+## Guardar y cargar compilaciones
 
-Esta herramienta es para **jugadores de final de partida** que optimizan el diseño de la tecnología de su plataforma para obtener la máxima eficiencia. Funciona mejor cuando:
+Puede guardar sus diseños optimizados en un archivo y recargarlos más tarde, lo que facilita la administración de múltiples configuraciones para la misma plataforma o compartir compilaciones con amigos.
 
-- Ha desbloqueado **la mayoría o todas las celdas** en su plataforma (Nave Estelar, Exotraje, Exocraft o Multiherramienta).
-- Tiene acceso a **todas las tecnologías relevantes**.
-- Posee un **juego completo de tres módulos de actualización** por tecnología aplicable.
+- **Guardar compilación**: haga clic en el ícono de guardar para descargar su diseño actual como un archivo `.nms`. Se te pedirá que pongas un nombre a tu compilación; la herramienta genera automáticamente nombres temáticos como `"Corvette - Crusade of the Starfall.nms"` que puedes personalizar.
+- **Cargar compilación**: haga clic en el icono de carga para cargar un archivo `.nms` previamente guardado. Su cuadrícula se actualizará inmediatamente para coincidir con el diseño guardado, incluidas todas las ubicaciones de los módulos y las posiciones de las celdas supercargadas.
 
-Si todavía está desbloqueando celdas o recolectando módulos, la herramienta aún puede proporcionar información, pero está diseñada principalmente para **plataformas completamente actualizadas**.
+Los archivos de compilación se validan para determinar su integridad y compatibilidad: si una compilación se guardó desde un tipo de plataforma diferente o está dañada, la herramienta se lo informará.
+
+## Antes de comenzar
+
+Esta herramienta es para **jugadores finales** que optimizan el diseño tecnológico de su plataforma para lograr la máxima eficiencia. Funciona mejor cuando:
+
+- Has desbloqueado **la mayoría o todas las celdas** en tu plataforma (Starship, Exosuit, Exocraft o Multi-Tool).
+- Tienes acceso a **todas las tecnologías relevantes**.
+- Posees un **conjunto completo de tres módulos de actualización** por tecnología aplicable.
+
+Si todavía estás desbloqueando celdas o recopilando módulos, la herramienta aún puede brindarte información, pero está diseñada principalmente para **plataformas completamente actualizadas**.
 
 ## Información sobre Corbetas
 
-Las corbetas funcionan de manera un poco diferente a otras plataformas: en lugar de un solo conjunto de actualizaciones, pueden tener hasta tres.
+Los Corvettes funcionan de manera un poco diferente a otras plataformas: en lugar de solo un conjunto de actualizaciones, pueden tener hasta tres.
 
-- Las **actualizaciones cosméticas** se muestran como `Cn`.
-- Las **actualizaciones del reactor** se muestran como `Rn`.
+- **Las mejoras cosméticas** se muestran como "Cn".
+- **Las actualizaciones del reactor** se muestran como `Rn`.
 
 El solucionador también sugerirá las mejores actualizaciones cosméticas si prefiere priorizar el rendimiento sobre la apariencia, aunque en la práctica, las compensaciones son mínimas la mayor parte del tiempo.
 
-Tenga en cuenta que un subsistema tecnológico de corbeta completamente actualizado ocupa **mucho** espacio. Los interruptores a la derecha de cada tecnología de corbeta le permiten elegir entre una **solución cosmética**, organizando los elementos colocados automáticamente en la ranura de tecnología con ajustes y adiciones mínimas, o una **solución min/max** totalmente optimizada para el rendimiento.
+Tenga en cuenta que un subsistema tecnológico de Corvette completamente actualizado ocupa **mucho** espacio. Con un total de 60 espacios tecnológicos, normalmente solo tendrás espacio para tres o cuatro **soluciones mínimas/máximas**, así que elige sabiamente.
 
-Con 60 ranuras de tecnología completas, normalmente solo tendrá espacio para tres o cuatro **soluciones min/max**, así que elija sabiamente.
+## Construcciones recomendadas
 
-## Construcciones Recomendadas
+Para plataformas como **Exosuits** y **Exocraft**, donde las celdas sobrealimentadas son fijas, la cantidad de diseños viables es **extremadamente limitada**. En lugar de lidiar con miles de millones de permutaciones como lo hacemos con las naves espaciales o las herramientas múltiples, estamos trabajando solo con un puñado de posibilidades en el mejor de los casos.
 
-Para plataformas como **Exotrajes** y **Exocrafts**, donde las celdas supercargadas son fijas, el número de diseños viables es **extremadamente limitado**. En lugar de lidiar con miles de millones de permutaciones como lo hacemos para las naves estelares o las multiherramientas, estamos trabajando con solo un puñado de las mejores posibilidades.
+Esto permite que la herramienta ofrezca **compilaciones recomendadas**: diseños cuidadosamente seleccionados y altamente obstinados que reflejan las mejores combinaciones disponibles. El sistema también admite **múltiples compilaciones por plataforma**, adaptadas a diferentes casos de uso. Por ejemplo:
 
-Esto permite que la herramienta ofrezca **construcciones recomendadas** — diseños cuidadosamente seleccionados y muy opinados que reflejan las mejores combinaciones disponibles. El sistema también admite **múltiples construcciones por plataforma**, adaptadas a diferentes casos de uso. Por ejemplo:
+- El **Minotauro** incluye una **compilación de propósito general** (para cuando lo estés pilotando activamente) y una **compilación de soporte de IA dedicada** (optimizada para implementación remota).
 
-- El **Minotauro** incluye tanto una **construcción de propósito general** (para cuando lo está pilotando activamente) como una **construcción de soporte de IA dedicada** (optimizada para el despliegue remoto).
+Otras plataformas pueden incluir **variantes especializadas en el futuro**, como una **configuración de carrera de Pilgrim** o un **Exotraje potenciado por escáner**, dependiendo de los comentarios y la demanda de los usuarios.
 
-Otras plataformas pueden incluir **variantes especializadas en el futuro** — como una **configuración de carreras de Pilgrim** o un **Exotraje mejorado con escáner** — dependiendo de los comentarios y la demanda de los usuarios.
+Si tiene comentarios o desea sugerir configuraciones alternativas, no dude en [iniciar una discusión](https://github.com/jbelew/nms_optimizer-web/discussions): estas compilaciones están seleccionadas, no generadas automáticamente, y los aportes de la comunidad ayudan a mejorarlas.
 
-Si tiene comentarios o desea sugerir configuraciones alternativas, no dude en [iniciar una discusión](https://github.com/jbelew/nms_optimizer-web/discussions) — estas construcciones son seleccionadas, no generadas automáticamente, y la contribución de la comunidad ayuda a mejorarlas.
+## Consejos de uso
 
-## Consejos de Uso
+Las celdas sobrealimentadas ofrecen importantes ventajas, pero son limitadas: cada ubicación es importante. **Evita hacer coincidir ciegamente el diseño supercargado del juego.** Para obtener mejores resultados:
 
-Las celdas supercargadas proporcionan bonificaciones importantes, pero son limitadas — cada ubicación importa. **Evite igualar ciegamente su diseño supercargado en el juego.** Para obtener los mejores resultados:
+- **Comienza con una tecnología de alto impacto**, una que se adapte a tu estilo de juego y se beneficie de dos o tres celdas supercargadas, como _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_ o _Neutron Cannon_.
+  Marca esas celdas como supercargadas y luego resuelve.
+- **Usa las celdas supercargadas restantes** para una tecnología de segunda prioridad como _Hyperdrive_, _Scanner_ o _Mining Beam_, y resuelve de nuevo. Los bonos de distribución generalmente son mejores que acumularlos todos en una sola tecnología.
+- Una vez resueltas tus tecnologías principales, cambia el enfoque a aquellas con **números de módulos más grandes** (por ejemplo, _Hyperdrive_, _Starship Trails_) antes de quedarte sin espacio contiguo.
+- El solucionador hace el trabajo pesado: tu trabajo es **priorizar las tecnologías** según tu forma de jugar.
 
-- **Comience con una tecnología de alto impacto** — una que se adapte a su estilo de juego y se beneficie de dos o tres celdas supercargadas, como el _Motor de Pulso_, el _Lanzador de Pulsos_, el _Acelerador de Infra-Cuchillo_ o el _Cañón de Neutrones_.
-  Marque esas celdas como supercargadas y luego resuelva.
-- **Use sus celdas supercargadas restantes** para una segunda tecnología prioritaria como el _Hiperimpulsor_, el _Escáner_ o el _Rayo de Minería_, y resuelva de nuevo. Repartir las bonificaciones suele ser mejor que apilarlas todas en una sola tecnología.
-- Una vez que sus tecnologías principales estén resueltas, cambie el enfoque a aquellas con **mayor número de módulos** (p. ej., _Hiperimpulsor_, _Rastros de Nave Estelar_) antes de quedarse sin espacio contiguo.
-- El solucionador hace el trabajo pesado — su trabajo es **priorizar las tecnologías** según su forma de jugar.
+A medida que el espacio de la cuadrícula se reduce, es posible que tengas que **restablecer algunas tecnologías** y resolverlas en un orden diferente para evitar la temida **Alerta de optimización**. Con una nave espacial completamente mejorada, a menudo te quedarás solo con una celda abierta, o ninguna si estás optimizando un **Interceptor**.
 
-A medida que el espacio en la cuadrícula se vuelve escaso, es posible que deba **restablecer algunas tecnologías** y resolverlas en un orden diferente para evitar la temida **Alerta de Optimización**. Con una nave estelar completamente actualizada, a menudo se quedará con una sola celda abierta, o ninguna si está optimizando un **Interceptor**.
+## Consejo profesional
 
-## Consejo Profesional
+Hay verdaderas matemáticas detrás de la ubicación. El solucionador funciona dentro de ventanas fijas según la cantidad de módulos que requiere una tecnología y, por lo general, elige el diseño más eficiente sin desperdiciar espacio. Pero si las cosas no van bien:
 
-Hay matemáticas reales detrás de la ubicación. El solucionador funciona dentro de ventanas fijas basadas en cuántos módulos requiere una tecnología y, en general, elige el diseño más eficiente sin desperdiciar espacio. Pero si las cosas no se alinean:
-
-- Intente **desactivar algunas celdas** para guiar al solucionador hacia una mejor ventana.
-- Un pequeño ajuste puede liberar zonas de ubicación clave y mejorar su diseño final.
+- Intente **deshabilitar algunas celdas** para guiar al solucionador hacia una ventana mejor.
+- Un pequeño ajuste puede liberar zonas de ubicación clave y mejorar el diseño final.

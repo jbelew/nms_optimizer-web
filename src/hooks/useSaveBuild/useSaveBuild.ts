@@ -41,11 +41,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 			setIsSavePending(true);
 			try {
 				await saveBuildToFile(buildName);
-				showSuccess(
-					t("toast.buildSaved.title") || "Success",
-					t("toast.buildSaved.description") || `Build "${buildName}" downloaded`,
-					5000
-				);
+				showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
 				sendEvent({
 					category: "ui",
 					action: "save_build",
@@ -56,8 +52,8 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 			} catch (error) {
 				console.error("Save failed:", error);
 				showError(
-					t("toast.buildSaveError.title") || "Error",
-					t("toast.buildSaveError.description") || "Failed to save build",
+					t("toast.buildSaveError.title"),
+					t("toast.buildSaveError.description"),
 					5000
 				);
 			} finally {

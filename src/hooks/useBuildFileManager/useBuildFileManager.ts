@@ -5,6 +5,7 @@ import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { isValidBuildFile } from "../../utils/buildFileValidation";
+import { sanitizeFilename } from "../../utils/filenameValidation";
 import { computeSHA256 } from "../../utils/hashUtils";
 import { deserialize, useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
@@ -51,8 +52,7 @@ export const useBuildFileManager = () => {
 				const url = URL.createObjectURL(blob);
 				const link = document.createElement("a");
 				link.href = url;
-				// Replace spaces/special chars with underscores for filename
-				const safeFilename = buildName.replace(/[^\w\s-]/g, "").replace(/\s+/g, "_");
+				const safeFilename = sanitizeFilename(buildName);
 				link.download = `${safeFilename}.nms`;
 				document.body.appendChild(link);
 				link.click();

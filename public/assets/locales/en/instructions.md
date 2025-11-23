@@ -7,6 +7,15 @@
 
 > 💡 **Note:** Exosuits and Exocraft have fixed grid configurations. Exocraft cells cannot be modified at all. On Exosuits, you can only toggle cells active or inactive; changing the supercharged layout is not supported.
 
+## Saving and Loading Builds
+
+You can save your optimized layouts to a file and reload them later, making it easy to manage multiple configurations for the same platform or share builds with friends.
+
+- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"` that you can customize.
+- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
+
+Build files are validated for integrity and compatibility — if a build was saved from a different platform type or is corrupted, the tool will let you know.
+
 ## Before You Begin
 
 This tool is for **endgame players** optimizing their platform’s technology layout for maximum efficiency. It works best when:

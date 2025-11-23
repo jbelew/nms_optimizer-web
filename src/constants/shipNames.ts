@@ -1,19 +1,16 @@
 /**
- * No Mans Sky themed ship name prefixes.
- * Contains standard sci-fi adjectives, specific NMS lore terms (Dissonant, Glass, Crimson),
- * and prepositional phrases formatted to flow into a singular noun.
+ * Simple prefixes (adjectives/nouns only - no prepositional phrases)
+ * Safe to combine with any suffix
  */
-export const SHIP_NAME_PREFIXES = [
-	// --- Adjectives & Descriptors ---
+export const SHIP_NAME_PREFIXES_SIMPLE = [
+	// --- Cosmic & Elements ---
 	"Starfire",
 	"Celestial",
 	"Silver",
 	"Galactic",
 	"Infinite",
-	"Black Nebula",
 	"Silent",
 	"Solar",
-	"Archangel",
 	"Eternal",
 	"Starborn",
 	"Eclipse",
@@ -30,25 +27,105 @@ export const SHIP_NAME_PREFIXES = [
 	"Platinum",
 	"Obsidian",
 
-	// --- NMS Lore Specific ---
-	"Dissonant", // Sentinel/Interceptor
-	"Anomalous", // The Anomaly
-	"Crimson", // The Atlas
-	"Glass", // World of Glass
-	"Shattered", // Glitch/Broken
-	"Forgotten", // Abandoned
-	"Living", // Organic Frigates/Ships
-	"Synthetic", // Korvax
-	"Ancestral", // Vykeen
-	"First Spawn", // Gek
-	"Euclids", // Primary Galaxy
-	"Fugitive", // Outlaw
-	"Heretics", // Rogue
-	"Boundary", // Glitch
-	"Iteration", // Simulation
-	"Seventh", // Lore significance of 7/16
+	// --- NMS Lore ---
+	"Dissonant",
+	"Anomalous",
+	"Crimson",
+	"Glass",
+	"Shattered",
+	"Forgotten",
+	"Living",
+	"Synthetic",
+	"Ancestral",
+	"Fugitive",
+	"Heretical",
+	"Boundary",
+	"Iteration",
+	"Seventh",
 
-	// --- Prepositional (Grammar handlers) ---
+	// --- Mythological & Cosmic ---
+	"Phantom",
+	"Raven",
+	"Phoenix",
+	"Nova",
+	"Titan",
+	"Apex",
+	"Zenith",
+	"Void",
+	"Prism",
+	"Velocity",
+	"Quantum",
+	"Nexus",
+	"Oracle",
+	"Sentinel",
+	"Infernal",
+	"Celestine",
+	"Aurora",
+	"Nebular",
+	"Crystalline",
+	"Temporal",
+	"Ethereal",
+	"Spectral",
+	"Mystic",
+	"Divine",
+	"Elysian",
+	"Arcane",
+
+	// --- Power & Authority ---
+	"Sovereign",
+	"Regal",
+	"Imperial",
+	"Majestic",
+	"Dominant",
+	"Supreme",
+	"Transcendent",
+	"Absolute",
+	"Ultimate",
+	"Infinite",
+
+	// --- Nature & Elements ---
+	"Inferno",
+	"Blizzard",
+	"Tempest",
+	"Cyclone",
+	"Meteor",
+	"Tsunami",
+	"Torrent",
+	"Gale",
+	"Serene",
+	"Tranquil",
+
+	// --- Precious & Rare ---
+	"Diamond",
+	"Emerald",
+	"Sapphire",
+	"Pearl",
+	"Opal",
+	"Amber",
+	"Jade",
+	"Ivory",
+	"Obsidian",
+	"Ebony",
+
+	// --- Additional Sci-Fi ---
+	"Hyperdrive",
+	"Photonic",
+	"Kinetic",
+	"Stellar",
+	"Plasma",
+	"Resonant",
+	"Harmonic",
+	"Ionic",
+	"Atomic",
+	"Molecular",
+];
+
+/**
+ * Compound prefixes (prepositional phrases with "of the")
+ * Pair only with nouns that work after "of the"
+ */
+export const SHIP_NAME_PREFIXES_COMPOUND = [
+	// --- Existential & Poetic ---
 	"Dawn of the",
 	"Wings of the",
 	"Crusade of the",
@@ -56,7 +133,6 @@ export const SHIP_NAME_PREFIXES = [
 	"Crown of the",
 	"Horizon of the",
 	"Shadow of the",
-	"Valkyries",
 	"Nova of the",
 	"Aegis of the",
 	"Kingdom of the",
@@ -79,15 +155,95 @@ export const SHIP_NAME_PREFIXES = [
 	"Ghost of the",
 	"Memory of the",
 	"Dream of the",
-	"Empires",
-	"Nebulas",
-	"Odysseys",
+	"Heart of the",
+	"Soul of the",
+	"Eye of the",
+	"Fist of the",
+	"Wrath of the",
+	"Mercy of the",
+	"Truth of the",
+	"Empires of the",
+	"Nebulas of the",
+	"Odysseys of the",
+
+	// --- Cosmic & Celestial ---
+	"Light of the",
+	"Fire of the",
+	"Ice of the",
+	"Wind of the",
+	"Breath of the",
+	"Pulse of the",
+	"Heartbeat of the",
+	"Silence of the",
+	"Thunder of the",
+	"Fury of the",
+	"Peace of the",
+	"Whisper of the",
+	"Roar of the",
+	"Tides of the",
+	"Waves of the",
+	"Sands of the",
+	"Peaks of the",
+	"Depths of the",
+	"Heights of the",
+	"Reaches of the",
+
+	// --- Mythological & Ancient ---
+	"Throne of the",
+	"Crown of the",
+	"Scepter of the",
+	"Secrets of the",
+	"Mysteries of the",
+	"Wonders of the",
+	"Treasures of the",
+	"Vaults of the",
+	"Archives of the",
+	"Halls of the",
+	"Courts of the",
+	"Sanctum of the",
+	"Temple of the",
+	"Ruins of the",
+	"Ashes of the",
+
+	// --- Power & Dominion ---
+	"Dominion of the",
+	"Rule of the",
+	"Command of the",
+	"Authority of the",
+	"Power of the",
+	"Strength of the",
+	"Might of the",
+	"Glory of the",
+	"Victory of the",
+	"Conquest of the",
+	"Triumph of the",
+	"Ascension of the",
+	"Rise of the",
+	"Return of the",
+	"Resurrection of the",
+
+	// --- Lore & Discovery ---
+	"Mystery of the",
+	"Secret of the",
+	"Riddle of the",
+	"Answer to the",
+	"Path of the",
+	"Way of the",
+	"Road of the",
+	"Journey of the",
+	"Quest of the",
+	"Pilgrimage of the",
+	"Search for the",
+	"Hunt for the",
+	"Discovery of the",
+	"Revelation of the",
+	"Prophecy of the",
 ];
 
 /**
- * No Mans Sky themed ship name suffixes.
- * Strict Nouns Only (No The or Of).
- * Includes abstract concepts, NMS entities, and physical objects.
+ * Single-word suffixes that work after simple prefixes
+ * and as standalone nouns after "of the" phrases
+ * Expanded to work across all ship types
  */
 export const SHIP_NAME_SUFFIXES = [
 	// --- Abstract & Grandeur ---
@@ -97,19 +253,15 @@ export const SHIP_NAME_SUFFIXES = [
 	"Horizon",
 	"Symphony",
 	"Eclipse",
-	"Rising",
 	"Starfall",
 	"Requiem",
 	"Infinity",
 	"Ascendant",
 	"Voyager",
-	"Dawn",
 	"Void",
 	"Monarch",
 	"Sovereign",
-	"Tomorrow",
 	"Breaker",
-	"Empire",
 	"Promise",
 	"Triumph",
 	"Armada",
@@ -126,39 +278,51 @@ export const SHIP_NAME_SUFFIXES = [
 	"Obelisk",
 	"Parallax",
 	"Resolution",
+	"Rising",
+	"Awakening",
+	"Ascension",
+	"Rebirth",
+	"Transcendence",
+	"Enlightenment",
+	"Awakening",
+	"Liberation",
+	"Redemption",
+	"Salvation",
+	"Revelation",
 
 	// --- NMS Lore Specific Nouns ---
 	"Traveller",
 	"Interloper",
 	"Anomaly",
-	"Entity", // Korvax
-	"Convergence", // Korvax
-	"Singularity", // Atlas/Black Holes
+	"Entity",
+	"Convergence",
+	"Singularity",
 	"Atlas",
 	"Sentinel",
 	"Interceptor",
-	"Vector", // Golden Vector
+	"Vector",
 	"Alpha",
 	"Omega",
 	"Utopia",
 	"Pathfinder",
 	"Wanderer",
-	"Grave",
-	"Mirror", // Inverted Mirrors
-	"Shard", // Dissonant Shards
+	"Mirror",
+	"Shard",
 	"Construct",
 	"Mainframe",
 	"Expanse",
 	"Citadel",
 	"Outlaw",
-	"Sleep", // The Great Sleep
+	"Grave",
+	"Horizon",
+	"Frontier",
 
-	// --- Elemental & Objects ---
+	// --- Elements & Physical Objects ---
 	"Flame",
 	"Frost",
 	"Thunder",
 	"Spear",
-	"Dagger", // Vykeen Dagger
+	"Dagger",
 	"Talon",
 	"Wing",
 	"Claw",
@@ -167,5 +331,160 @@ export const SHIP_NAME_SUFFIXES = [
 	"Soul",
 	"Mind",
 	"Hand",
-	"Eye", // Abyssal Horror
+	"Eye",
+	"Fist",
+	"Wraith",
+	"Tempest",
+	"Surge",
+	"Storm",
+	"Maelstrom",
+	"Inferno",
+	"Blizzard",
+	"Cyclone",
+	"Typhoon",
+	"Vortex",
+
+	// --- Technology & Innovation (universal across all types) ---
+	"Protocol",
+	"Array",
+	"Matrix",
+	"Engine",
+	"Core",
+	"Pulse",
+	"Frequency",
+	"Signal",
+	"Beacon",
+	"Resonance",
+	"Flux",
+	"Catalyst",
+	"Lens",
+	"Cipher",
+	"Mainframe",
+	"Quantum",
+	"Nexus",
+	"Lattice",
+	"Framework",
+	"Architecture",
+	"System",
+	"Interface",
+	"Gateway",
+	"Portal",
+	"Conduit",
+	"Channel",
+
+	// --- Universal Concepts ---
+	"Haven",
+	"Sanctuary",
+	"Paradise",
+	"Fortress",
+	"Bastion",
+	"Pinnacle",
+	"Summit",
+	"Peak",
+	"Apex",
+	"Throne",
+	"Legacy",
+	"Heritage",
+	"Archives",
+	"Repository",
+	"Vault",
+	"Torch",
+	"Star",
+	"Pearl",
+	"Gem",
+	"Crown",
+	"Scepter",
+	"Relic",
+	"Artifact",
+
+	// --- Mythological & Mystical ---
+	"Phoenix",
+	"Dragon",
+	"Griffin",
+	"Golem",
+	"Titan",
+	"Oracle",
+	"Sage",
+	"Mystic",
+	"Sorcerer",
+	"Mage",
+	"Shaman",
+	"Priest",
+	"Prophet",
+	"Bard",
+	"Knight",
+	"Warrior",
+	"Champion",
+	"Sentinel",
+	"Guardian",
+	"Keeper",
+
+	// --- Cosmic & Space ---
+	"Cosmonaut",
+	"Astronaut",
+	"Navigator",
+	"Pilot",
+	"Skipper",
+	"Captain",
+	"Commander",
+	"Admiral",
+	"General",
+	"Lord",
+	"Lady",
+	"Emperor",
+	"Empress",
+
+	// --- Time & Existence ---
+	"Epoch",
+	"Era",
+	"Age",
+	"Aeon",
+	"Eon",
+	"Period",
+	"Chapter",
+	"Verse",
+	"Moment",
+	"Instance",
+	"Instant",
+	"Eternity",
+	"Forever",
+
+	// --- Light & Energy ---
+	"Radiance",
+	"Luminescence",
+	"Brilliance",
+	"Luminosity",
+	"Aurora",
+	"Daystar",
+	"Sunburst",
+	"Lightning",
+	"Electricity",
+	"Energy",
+	"Power",
+	"Force",
+	"Might",
+	"Vigor",
+	"Vitality",
+
+	// --- Victory & Achievement ---
+	"Victor",
+	"Winner",
+	"Champion",
+	"Conqueror",
+	"Crusader",
+	"Avenger",
+	"Liberator",
+	"Emancipator",
+	"Savior",
+	"Hero",
+	"Heroine",
+	"Legend",
+	"Icon",
+	"Idol",
+	"Paragon",
 ];
+
+/**
+ * SHIP_NAME_PREFIXES combines both simple and compound for backwards compatibility
+ */
+export const SHIP_NAME_PREFIXES = [...SHIP_NAME_PREFIXES_SIMPLE, ...SHIP_NAME_PREFIXES_COMPOUND];

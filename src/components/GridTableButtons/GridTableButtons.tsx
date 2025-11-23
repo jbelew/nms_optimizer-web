@@ -1,7 +1,5 @@
 import React, { useCallback, useTransition } from "react";
 import {
-	DownloadIcon,
-	FileIcon,
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 	ResetIcon,
@@ -21,6 +19,8 @@ import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip";
+import { DownloadIcon } from "../Icons/DownloadIcon";
+import { UploadIcon } from "../Icons/UploadIcon";
 import { NmsToast } from "../Toast/Toast";
 
 /**
@@ -208,7 +208,7 @@ const GridTableButtons: React.FC = () => {
 								disabled={solving || isLoadPending}
 								aria-label={t("buttons.loadBuild")}
 							>
-								<FileIcon />
+								<UploadIcon weight="light" size={20} />
 							</IconButton>
 						</ConditionalTooltip>
 
@@ -221,7 +221,7 @@ const GridTableButtons: React.FC = () => {
 								disabled={solving || !hasModulesInGrid || isSavePending}
 								aria-label={t("buttons.saveBuild")}
 							>
-								<DownloadIcon />
+								<DownloadIcon weight="light" size={20} />
 							</IconButton>
 						</ConditionalTooltip>
 					</>
