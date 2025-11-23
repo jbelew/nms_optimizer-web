@@ -32,12 +32,7 @@ const languages = ["en", "es", "fr", "de", "pt"];
  */
 const pageRoutes: RouteObject[] = pages.map((page) => ({
 	path: page,
-	element: (
-		<MainAppContent
-			buildVersion={build}
-			buildDate={build === "devmode" ? __BUILD_DATE__ : undefined}
-		/>
-	),
+	element: <MainAppContent buildVersion={build} buildDate={__BUILD_DATE__} />,
 }));
 
 /**
@@ -47,21 +42,11 @@ const pageRoutes: RouteObject[] = pages.map((page) => ({
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
 		path: lang,
-		element: (
-			<MainAppContent
-				buildVersion={build}
-				buildDate={build === "devmode" ? __BUILD_DATE__ : undefined}
-			/>
-		),
+		element: <MainAppContent buildVersion={build} buildDate={__BUILD_DATE__} />,
 	},
 	...pages.map((page) => ({
 		path: `${lang}/${page}`,
-		element: (
-			<MainAppContent
-				buildVersion={build}
-				buildDate={build === "devmode" ? __BUILD_DATE__ : undefined}
-			/>
-		),
+		element: <MainAppContent buildVersion={build} buildDate={__BUILD_DATE__} />,
 	})),
 ]);
 
@@ -81,12 +66,7 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				element: (
-					<MainAppContent
-						buildVersion={build}
-						buildDate={build === "devmode" ? __BUILD_DATE__ : undefined}
-					/>
-				),
+				element: <MainAppContent buildVersion={build} buildDate={__BUILD_DATE__} />,
 			},
 			...pageRoutes,
 			...languageRoutes,

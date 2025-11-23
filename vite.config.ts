@@ -17,14 +17,28 @@ export default defineConfig(({ mode }) => {
 	const doCritical = mode === "critical" || mode === "production";
 	// Use an environment variable for the app version, defaulting to 'unknown'
 	const appVersion = process.env.VITE_APP_VERSION || "unknown";
+	const buildDate = new Date().toISOString();
 
 	return {
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
-			__BUILD_DATE__: JSON.stringify(new Date().toISOString()), // Added build date
+			__BUILD_DATE__: JSON.stringify(buildDate),
 		},
 		plugins: [
 			markdownBundlePlugin(),
+			{
+				name: "generate-version-json",
+				writeBundle() {
+					const versionInfo = {
+						version: appVersion,
+						buildDate: buildDate,
+					};
+					fs.writeFileSync(
+						path.resolve(__dirname, "dist/version.json"),
+						JSON.stringify(versionInfo, null, 2)
+					);
+				},
+			},
 			react({
 				babel: {
 					plugins: [["babel-plugin-react-compiler"]],
@@ -98,6 +112,11 @@ export default defineConfig(({ mode }) => {
 
 					// define caching strategies
 					runtimeCaching: [
+						// CRITICAL: version.json must NEVER be cached - always fetch from network
+						{
+							urlPattern: /\/version\.json$/,
+							handler: "NetworkOnly",
+						},
 						{
 							urlPattern: /^https:\/\/nms-optimizer\.app\/.*\.html$/,
 							handler: "NetworkFirst",
@@ -129,12 +148,14 @@ export default defineConfig(({ mode }) => {
 								plugins: [
 									{
 										// Ignore query parameters when matching cache entries
-										cacheKeyWillBeUsed: async ({request}) => {
+										cacheKeyWillBeUsed: async ({ request }) => {
 											const url = new URL(request.url);
-											url.search = ''; // Remove query string
-											return new Request(url.toString(), {method: request.method});
+											url.search = ""; // Remove query string
+											return new Request(url.toString(), {
+												method: request.method,
+											});
 										},
-									}
+									},
 								],
 							},
 						},
@@ -150,12 +171,14 @@ export default defineConfig(({ mode }) => {
 								// Ignore query parameters in cache key
 								plugins: [
 									{
-										cacheKeyWillBeUsed: async ({request}) => {
+										cacheKeyWillBeUsed: async ({ request }) => {
 											const url = new URL(request.url);
-											url.search = '';
-											return new Request(url.toString(), {method: request.method});
+											url.search = "";
+											return new Request(url.toString(), {
+												method: request.method,
+											});
 										},
-									}
+									},
 								],
 							},
 						},

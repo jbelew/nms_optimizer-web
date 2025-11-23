@@ -9,6 +9,7 @@ import { useDialog } from "./context/dialog-utils";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
+import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
@@ -44,17 +45,10 @@ const AppContent: FC = () => {
 		initializePlatform(shipTypeKeys);
 	}, [initializePlatform, shipTypeKeys]);
 
-	useEffect(() => {
-		const handleNewVersion = (event: CustomEvent) => {
-			updateSWRef.current = event.detail;
-			setShowUpdatePrompt(true);
-		};
-		window.addEventListener("new-version-available", handleNewVersion as EventListener);
-
-		return () => {
-			window.removeEventListener("new-version-available", handleNewVersion as EventListener);
-		};
-	}, []);
+	useUpdateCheck((updateSW) => {
+		updateSWRef.current = updateSW;
+		setShowUpdatePrompt(true);
+	});
 
 	const handleRefresh = () => {
 		if (updateSWRef.current) {

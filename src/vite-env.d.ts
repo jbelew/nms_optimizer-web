@@ -12,6 +12,7 @@ interface ImportMeta {
 }
 
 declare const __APP_VERSION__: string;
+declare const __BUILD_DATE__: string;
 
 interface Window {
 	useGridStore: typeof import("./store/GridStore").useGridStore;
