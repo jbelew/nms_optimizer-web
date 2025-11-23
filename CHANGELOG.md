@@ -1,3 +1,10 @@
+## [6.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.5...v6.0.6) (2025-11-23)
+
+
+### Bug Fixes
+
+* **mobile:** improve rendering stability and scroll hide bounce handling ([d67bd5c](https://github.com/jbelew/nms_optimizer-web/commit/d67bd5cead2ac521be7ece453f099471bb52bba8))
+
 ## [6.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.4...v6.0.5) (2025-11-23)
 
 
