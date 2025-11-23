@@ -32,6 +32,7 @@ interface AppDialogProps {
 	titleKey?: string; // Add a prop for the translation key
 	isOpen: boolean;
 	content: ReactNode;
+	className?: string;
 }
 
 /**
@@ -45,6 +46,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	isOpen,
 	titleKey, // Use the new prop
 	title = "Information",
+	className = "",
 }) => {
 	/**
 	 * Handle the Escape key, closing the dialog if it is pressed.
@@ -76,7 +78,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 			<Dialog.Portal>
 				<Theme>
 					<Dialog.Overlay className="appDialog__overlay" />
-					<Dialog.Content className="appDialog__content">
+					<Dialog.Content className={`appDialog__content ${className}`}>
 						<Dialog.Title className="mr-2">
 							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
 								{IconComponent && (

@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import AppDialog from "./AppDialog";
 import { BuildNameContent } from "./BuildNameContent";
 
+import "./BuildNameDialog.scss";
+
 interface BuildNameDialogProps {
 	isOpen: boolean;
 	onConfirm: (buildName: string) => void;
@@ -24,6 +26,7 @@ const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onConfirm, onCancel
 			titleKey="dialog.buildName.title"
 			title={t("dialog.buildName.title") || "Save Build"}
 			content={<BuildNameContent onConfirm={onConfirm} onCancel={onCancel} />}
+			className="buildNameDialog__content"
 		/>
 	);
 };
