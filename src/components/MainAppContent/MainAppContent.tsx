@@ -12,10 +12,10 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useA11yStore } from "@/store/A11yStore";
 
 import { useDialog } from "../../context/dialog-utils";
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
@@ -78,14 +78,17 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 		gridTableTotalWidth,
 	} = useAppLayout();
 
-	const { toastConfig, isOpen: isToastOpen, closeToast } = useToast();
+	const { toastConfig, isOpen: isToastOpen, closeToast, showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
 		handleBuildNameConfirm,
 		handleBuildNameCancel,
 	} = useSaveBuild();
-	const { fileInputRef, handleLoadBuild, handleFileSelect } = useLoadBuild();
+	const { fileInputRef, handleLoadBuild, handleFileSelect } = useLoadBuild({
+		showSuccess,
+		showError,
+	});
 
 	useEffect(() => {
 		if (isSharedGrid) {

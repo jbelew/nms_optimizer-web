@@ -2,6 +2,17 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.0 – Local Build Saving & Major Performance Improvements (2025-11-23)
+
+- You can now **save, load, and manage builds locally**, making it easy to keep backups of your favorite layouts and switch between them without re-entering everything.
+- Improved performance and caching across the entire app, resulting in faster loading—especially on repeat visits.
+- Fonts and static assets now load more efficiently for smoother startup.
+- The backend optimization engine received major stability and correctness updates, including:
+-   - Better module placement to minimize wasted space on the grid.
+    - More reliable handling of missing or unusual module data.
+    - More robust solving logic across different grid sizes.
+    - Expanded automated test coverage to ensure better long-term stability and fewer regressions.
+
 ## Version 5.13 - New Artwork (2025-11-21)
 
 - Added a brand new background image! The old one was something I “found,” and I wasn’t giving proper credit to the creator, so now the art is clean and original. I also put together a quick video showing a visual history of the app.

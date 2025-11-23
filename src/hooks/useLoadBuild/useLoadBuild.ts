@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
-import { useToast } from "../useToast/useToast";
 
 interface UseLoadBuildReturn {
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
@@ -13,17 +12,23 @@ interface UseLoadBuildReturn {
 	isLoadPending: boolean;
 }
 
+interface UseLoadBuildProps {
+	showSuccess: (title: string, description: string, duration?: number) => void;
+	showError: (title: string, description: string, duration?: number) => void;
+}
+
 /**
  * Custom hook to manage load build functionality.
  * Handles file input, file loading, analytics, and toast notifications.
  *
+ * @param {UseLoadBuildProps} [props] - Optional toast functions passed from parent component
  * @returns {UseLoadBuildReturn} Load build state and handlers
  */
-export const useLoadBuild = (): UseLoadBuildReturn => {
+export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const { t } = useTranslation();
 	const { loadBuildFromFile } = useBuildFileManager();
 	const { sendEvent } = useAnalytics();
-	const { showSuccess, showError } = useToast();
+	const { showSuccess, showError } = props || { showSuccess: () => {}, showError: () => {} };
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 
 	const fileInputRef = useRef<HTMLInputElement>(null);

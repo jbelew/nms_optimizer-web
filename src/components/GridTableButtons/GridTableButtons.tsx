@@ -43,7 +43,7 @@ const GridTableButtons: React.FC = () => {
 	const { setIsSharedGrid } = useGridStore();
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const { toastConfig, isOpen: isToastOpen, closeToast } = useToast();
+	const { toastConfig, isOpen: isToastOpen, closeToast, showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
@@ -51,7 +51,10 @@ const GridTableButtons: React.FC = () => {
 		handleBuildNameCancel,
 		isSavePending,
 	} = useSaveBuild();
-	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
+	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild({
+		showSuccess,
+		showError,
+	});
 
 	/**
 	 * Handles the click event for the "Instructions" button.
