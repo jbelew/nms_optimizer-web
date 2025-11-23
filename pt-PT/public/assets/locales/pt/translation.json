@@ -95,7 +95,11 @@
 		"buildName": {
 			"title": "Save Build",
 			"description": "Enter a name for your build:",
-			"placeholder": "Build name"
+			"placeholder": "Build name",
+			"validation": {
+				"empty": "Build name cannot be empty",
+				"invalid": "Build name contains invalid characters. Avoid using: < > : \" / \\ | ? * and special characters."
+			}
 		}
 	},
 	"toast": {
@@ -109,7 +113,8 @@
 		},
 		"buildLoaded": {
 			"title": "Success",
-			"description": "Build loaded successfully"
+			"description": "Build loaded successfully",
+			"loadedMessage": "loaded successfully"
 		},
 		"buildLoadError": {
 			"title": "Error",
