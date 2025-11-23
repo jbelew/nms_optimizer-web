@@ -28,9 +28,9 @@ interface DialogIconAndStyle {
  * A map of dialog title keys to their corresponding icon components.
  */
 const iconMap: Record<string, React.ElementType> = {
-	"dialogs.titles.instructions": QuestionMarkCircledIcon,
+	"dialogs.titles.instructions": IconInfoCircledIcon,
 	"dialogs.titles.changelog": CounterClockwiseClockIcon,
-	"dialogs.titles.about": InfoCircledIcon,
+	"dialogs.titles.about": QuestionMarkCircled,
 	"dialogs.titles.serverError": ExclamationTriangleIcon,
 	"dialogs.titles.translationRequest": GlobeIcon,
 	"dialogs.titles.shareLink": Share1Icon,

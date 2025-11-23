@@ -181,7 +181,7 @@ const GridTableButtons: React.FC = () => {
 			/>
 			<div role="gridcell" className="col-span-6 mt-3 flex gap-2">
 				{renderResponsiveButton(
-					<QuestionMarkCircledIcon />,
+					<InfoCircledIcon />,
 					"buttons.instructions",
 					handleShowInstructions,
 					isInfoPending,
@@ -189,7 +189,7 @@ const GridTableButtons: React.FC = () => {
 					instructionsVariant as "soft" | "solid"
 				)}
 				{renderResponsiveButton(
-					<InfoCircledIcon />,
+					<QuestionMarkCircledIcon />,
 					"buttons.about",
 					handleShowAboutPage,
 					isInfoPending,
