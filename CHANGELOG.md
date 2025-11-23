@@ -1,3 +1,13 @@
+# [6.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.15.0...v6.0.0) (2025-11-23)
+
+
+* feat!: major version bump to v6.0.0 ([d20098f](https://github.com/jbelew/nms_optimizer-web/commit/d20098fb8fc5176ae5711469be6eddd36252e063))
+
+
+### BREAKING CHANGES
+
+* This is a major version release.
+
 # [5.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.4...v5.15.0) (2025-11-23)
 
 
