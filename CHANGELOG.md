@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.0...v6.0.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* **file-manager:** Correct MIME type to force build file download ([4babea3](https://github.com/jbelew/nms_optimizer-web/commit/4babea39c7febbc75661253f860b76bd3bef27cf))
+
 # [6.0.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.15.0...v6.0.0) (2025-11-23)
 
 
