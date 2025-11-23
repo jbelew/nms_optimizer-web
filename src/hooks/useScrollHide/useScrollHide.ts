@@ -28,6 +28,14 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 			const isScrollingDown = currentScrollY > lastScrollYRef.current;
 			const currentDirection = isScrollingDown ? "down" : "up";
 
+			// Ignore scroll-up events at the bottom (iOS bounce)
+			const isAtBottom =
+				window.innerHeight + currentScrollY >= document.documentElement.scrollHeight - 100;
+			if (!isScrollingDown && isAtBottom) {
+				lastScrollYRef.current = currentScrollY;
+				return;
+			}
+
 			if (currentDirection !== lastDirectionRef.current) {
 				directionBaseRef.current = lastScrollYRef.current;
 				lastDirectionRef.current = currentDirection;
