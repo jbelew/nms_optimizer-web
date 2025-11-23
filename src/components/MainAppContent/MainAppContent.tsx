@@ -16,6 +16,7 @@ import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -57,6 +58,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 	const { sendEvent } = useAnalytics();
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
+	const { isVisible, toolbarRef } = useScrollHide(80);
 	const {
 		solving,
 		progressPercent,
@@ -107,10 +109,12 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 		<>
 			{/* Mobile fixed toolbar */}
 			<nav
-				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 sm:hidden"
+				ref={toolbarRef}
+				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out sm:hidden"
 				style={{
 					backgroundColor: "#003848",
 					WebkitUserSelect: "none",
+					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
 				}}
 			>
 				<div className="flex items-center gap-2 pl-2">
