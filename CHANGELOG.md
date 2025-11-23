@@ -1,3 +1,10 @@
+# [5.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.4...v5.15.0) (2025-11-23)
+
+
+### Features
+
+* **build-management:** Implement local build saving, loading, and management ([2d67c95](https://github.com/jbelew/nms_optimizer-web/commit/2d67c95bea725ffb9bdb31e2cd226bd6bde4a125))
+
 ## [5.14.4](https://github.com/jbelew/nms_optimizer-web/compare/v5.14.3...v5.14.4) (2025-11-22)
 
 
