@@ -1,55 +1,96 @@
 /**
- * No Man's Sky themed ship name prefixes.
- * These are used to generate build names for saved configurations.
+ * No Mans Sky themed ship name prefixes.
+ * Contains standard sci-fi adjectives, specific NMS lore terms (Dissonant, Glass, Crimson),
+ * and prepositional phrases formatted to flow into a singular noun.
  */
 export const SHIP_NAME_PREFIXES = [
+	// --- Adjectives & Descriptors ---
 	"Starfire",
 	"Celestial",
-	"Dawn of",
 	"Silver",
 	"Galactic",
 	"Infinite",
 	"Black Nebula",
 	"Silent",
 	"Solar",
-	"Wings of",
-	"Crusade of the",
 	"Archangel",
 	"Eternal",
-	"Storm of",
-	"Crown of the",
 	"Starborn",
 	"Eclipse",
-	"Horizon of",
 	"Light",
-	"Shadow of the",
-	"Valkyrie's",
-	"Nova of the",
-	"Aegis of",
-	"Kingdom of the",
-	"Nebula's",
-	"Odyssey's",
-	"Reign of the",
 	"Golden",
 	"Astral",
+	"Voidstar",
+	"Sunborn",
+	"Stellar",
+	"Cosmic",
+	"Radiant",
+	"Onyx",
+	"Iron",
+	"Platinum",
+	"Obsidian",
+
+	// --- NMS Lore Specific ---
+	"Dissonant", // Sentinel/Interceptor
+	"Anomalous", // The Anomaly
+	"Crimson", // The Atlas
+	"Glass", // World of Glass
+	"Shattered", // Glitch/Broken
+	"Forgotten", // Abandoned
+	"Living", // Organic Frigates/Ships
+	"Synthetic", // Korvax
+	"Ancestral", // Vykeen
+	"First Spawn", // Gek
+	"Euclids", // Primary Galaxy
+	"Fugitive", // Outlaw
+	"Heretics", // Rogue
+	"Boundary", // Glitch
+	"Iteration", // Simulation
+	"Seventh", // Lore significance of 7/16
+
+	// --- Prepositional (Grammar handlers) ---
+	"Dawn of the",
+	"Wings of the",
+	"Crusade of the",
+	"Storm of the",
+	"Crown of the",
+	"Horizon of the",
+	"Shadow of the",
+	"Valkyries",
+	"Nova of the",
+	"Aegis of the",
+	"Kingdom of the",
+	"Reign of the",
 	"Fortress of the",
 	"Dragon of the",
-	"Empire's",
 	"Blade of the",
 	"Children of the",
-	"Queen of",
+	"Queen of the",
 	"Symphony of the",
 	"Keeper of the",
-	"Voidstar",
 	"Legend of the",
-	"Sunborn",
+	"Voice of the",
+	"Will of the",
+	"Echo of the",
+	"Last of the",
+	"Song of the",
+	"Cry of the",
+	"Spirit of the",
+	"Ghost of the",
+	"Memory of the",
+	"Dream of the",
+	"Empires",
+	"Nebulas",
+	"Odysseys",
 ];
 
 /**
- * No Man's Sky themed ship name suffixes.
- * These are used to generate build names for saved configurations.
+ * No Mans Sky themed ship name suffixes.
+ * Strict Nouns Only (No The or Of).
+ * Includes abstract concepts, NMS entities, and physical objects.
  */
 export const SHIP_NAME_SUFFIXES = [
+	// --- Abstract & Grandeur ---
 	"Eternity",
 	"Crusader",
 	"Nebula",
@@ -60,7 +101,6 @@ export const SHIP_NAME_SUFFIXES = [
 	"Starfall",
 	"Requiem",
 	"Infinity",
-	"First Flame",
 	"Ascendant",
 	"Voyager",
 	"Dawn",
@@ -71,22 +111,61 @@ export const SHIP_NAME_SUFFIXES = [
 	"Breaker",
 	"Empire",
 	"Promise",
-	"Seven Suns",
-	"Stars",
-	"Heart",
 	"Triumph",
-	"Celestials",
 	"Armada",
 	"Dawnbreaker",
 	"Dominion",
-	"Burning Sky",
 	"Cosmos",
 	"Leviathan",
 	"Glory",
-	"Seventh Gate",
 	"Starlight",
-	"First Age",
-	"Eternal Flame",
-	"Silver Crown",
 	"Dynasty",
+	"Destiny",
+	"Prophecy",
+	"Vanguard",
+	"Obelisk",
+	"Parallax",
+	"Resolution",
+
+	// --- NMS Lore Specific Nouns ---
+	"Traveller",
+	"Interloper",
+	"Anomaly",
+	"Entity", // Korvax
+	"Convergence", // Korvax
+	"Singularity", // Atlas/Black Holes
+	"Atlas",
+	"Sentinel",
+	"Interceptor",
+	"Vector", // Golden Vector
+	"Alpha",
+	"Omega",
+	"Utopia",
+	"Pathfinder",
+	"Wanderer",
+	"Grave",
+	"Mirror", // Inverted Mirrors
+	"Shard", // Dissonant Shards
+	"Construct",
+	"Mainframe",
+	"Expanse",
+	"Citadel",
+	"Outlaw",
+	"Sleep", // The Great Sleep
+
+	// --- Elemental & Objects ---
+	"Flame",
+	"Frost",
+	"Thunder",
+	"Spear",
+	"Dagger", // Vykeen Dagger
+	"Talon",
+	"Wing",
+	"Claw",
+	"Shield",
+	"Lance",
+	"Soul",
+	"Mind",
+	"Hand",
+	"Eye", // Abyssal Horror
 ];
