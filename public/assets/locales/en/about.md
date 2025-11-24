@@ -4,7 +4,7 @@ The NMS Optimizer is a powerful web-based **calculator**, **planner**, and **bui
 
 ## How It Works
 
-> How do you solve a problem with up to ~8.32 × 10⁸¹ possible permutations (that’s 82 digits long!) in under five seconds?
+> How do you solve a problem with up to ~8.32 × 10⁸¹ possible permutations (that's 82 digits long!) in under five seconds?
 
 Figuring out the absolute best **module placement** with so many possible layout permutations for a full grid is no small feat. This tool blends deterministic patterns, machine learning, and Rust-based simulated annealing to deliver top-tier **Starship builds**, **Freighter builds**, **Corvette builds**, **Multitool layouts**, **Exocraft builds**, and **Exosuit layouts** in about five seconds. It considers all factors including **adjacency bonuses** and the strategic use of **supercharged slots**.
 

@@ -86,7 +86,7 @@ export default defineConfig(({ mode }) => {
 				template: "raw-data",
 			}),
 			VitePWA({
-				manifestFilename: "manifest.json", // ensure browsers don’t 404 on /manifest.json
+				manifestFilename: "manifest.json", // ensure browsers don't 404 on /manifest.json
 				registerType: "prompt", // Use 'prompt' for user control over updates
 				includeAssets: [
 					"favicon.svg",

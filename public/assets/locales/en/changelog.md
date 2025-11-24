@@ -15,7 +15,7 @@ The full commit history for this project is available on [GitHub](https://github
 
 ## Version 5.13 - New Artwork (2025-11-21)
 
-- Added a brand new background image! The old one was something I “found,” and I wasn’t giving proper credit to the creator, so now the art is clean and original. I also put together a quick video showing a visual history of the app.
+- Added a brand new background image! The old one was something I “found,” and I wasn't giving proper credit to the creator, so now the art is clean and original. I also put together a quick video showing a visual history of the app.
 
 [youtube:nGbHf9fQmds]
 
@@ -122,7 +122,7 @@ Version 5 introduces a complete solver overhaul focused on speed, accuracy, and 
 ### 🛠 Fixes
 
 - Fixed several bugs affecting specific ship types and hyperdrive configurations.
-- Addressed rare cases where solve maps couldn’t be found or reused correctly.
+- Addressed rare cases where solve maps couldn't be found or reused correctly.
 - General polish, stability, and performance improvements throughout.
 
 ## Version 4.8.0 (2025-10-25)
@@ -198,15 +198,15 @@ Version 5 introduces a complete solver overhaul focused on speed, accuracy, and 
 ## Version 3.11 (2025-09-06)
 
 - Corvettes now support both **cosmetic** and **min/max** solves.
-  _Note: space is limited, so you’ll only be able to fit two or three min/max solves — choose carefully!_
+  _Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!_
 
 ## Version 3.10 (2025-09-02)
 
-- Added **beta support for Corvettes**. Right now, space is too limited to allow even a partial build using the current approach, but this update lays the groundwork. I’ll be exploring solutions that don’t disrupt the existing models and ML functionality over the next few days, so check back soon.
+- Added **beta support for Corvettes**. Right now, space is too limited to allow even a partial build using the current approach, but this update lays the groundwork. I'll be exploring solutions that don't disrupt the existing models and ML functionality over the next few days, so check back soon.
 
 ## Corvettes Coming Soon (2025-08-31)
 
-I thought I was finished here... **until Corvettes showed up**. Once the bugs around Corvette technology are sorted (and there are plenty right now), I’ll build the new models and roll out a release.
+I thought I was finished here... **until Corvettes showed up**. Once the bugs around Corvette technology are sorted (and there are plenty right now), I'll build the new models and roll out a release.
 
 ## Version 3.9 (2025-08-24)
 
