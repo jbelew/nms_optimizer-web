@@ -49,12 +49,32 @@ export interface GA4Event {
 let gaInitialized = false;
 
 /**
+ * Helper function to check if running in development mode.
+ * Exported for testing purposes.
+ *
+ * @returns {boolean} True if in development mode
+ */
+export const isDevMode = (): boolean => import.meta.env.DEV;
+
+/**
+ * Reset analytics initialization state for testing.
+ * @internal For testing purposes only.
+ */
+export const resetAnalyticsForTesting = () => {
+	gaInitialized = false;
+};
+
+/**
  * Initializes Google Analytics tracking.
+ * Skips initialization in development mode to prevent polluting analytics data.
  *
  * @returns {void}
  */
 export const initializeAnalytics = () => {
-	if (gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) return;
+	// Skip analytics in dev mode, if already initialized, or for bots
+	if (isDevMode() || gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) {
+		return;
+	}
 
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
