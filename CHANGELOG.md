@@ -1,3 +1,10 @@
+## [6.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.0...v6.1.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **bonus-status:** Do not persist status when no bonus is solved ([ff3ddc4](https://github.com/jbelew/nms_optimizer-web/commit/ff3ddc4931f5ecd276ee8ba340f4f0afc609d5c3))
+
 # [6.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.7...v6.1.0) (2025-11-24)
 
 
