@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.7...v6.1.0) (2025-11-24)
+
+
+### Features
+
+* **state-management:** Introduce ModuleSelection and TechBonus stores ([e193e68](https://github.com/jbelew/nms_optimizer-web/commit/e193e6819d834db3a3cb1fd80be9eab52a5f5fbe))
+
 ## [6.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.6...v6.0.7) (2025-11-24)
 
 
