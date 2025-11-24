@@ -1,3 +1,10 @@
+## [6.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.6...v6.0.7) (2025-11-24)
+
+
+### Bug Fixes
+
+* **typography:** standardize apostrophe usage ([4f4f87d](https://github.com/jbelew/nms_optimizer-web/commit/4f4f87d4b725ea1072f286a4442c70d6170cf99d))
+
 ## [6.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.0.5...v6.0.6) (2025-11-23)
 
 
