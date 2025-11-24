@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const [buildName, setBuildName] = useState(() => generateBuildNameWithType(selectedShipType));
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const createValidator = useCallback(
 		(value: string): string | null => {
@@ -40,6 +41,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 		const newName = generateBuildNameWithType(selectedShipType);
 		setBuildName(newName);
 		handleDebouncedValidation(newName);
+		inputRef.current?.select();
 	}, [selectedShipType, handleDebouncedValidation]);
 
 	const handleBuildNameChange = useCallback(
@@ -85,6 +87,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 				</Text>
 				<Flex gap="2">
 					<TextField.Root
+						ref={inputRef}
 						id="build-name-input"
 						name="buildName"
 						placeholder={t("dialog.buildName.placeholder")}
