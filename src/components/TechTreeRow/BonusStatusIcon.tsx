@@ -111,8 +111,12 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		return computeBonusStatusData(techMaxBonus, t);
 	}, [techMaxBonus, t, cachedBonusStatus]);
 
-	// Persist the computed bonus status whenever it changes (only if actually changed)
+	// Persist the computed bonus status whenever it changes (only if actually changed and techSolvedBonus > 0)
 	useEffect(() => {
+		// Don't persist bonus data if there's no solved bonus
+		if (techSolvedBonus <= 0) {
+			return;
+		}
 		const cached = getBonusStatus(tech);
 		// Only update if the data has actually changed
 		const hasChanged =
@@ -123,7 +127,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		if (hasChanged) {
 			setBonusStatus(tech, contentData);
 		}
-	}, [tech, contentData, setBonusStatus, getBonusStatus]);
+	}, [tech, contentData, setBonusStatus, getBonusStatus, techSolvedBonus]);
 
 	// Only hide if no cached data AND no current bonus
 	if (techSolvedBonus <= 0 && !cachedBonusStatus) {
