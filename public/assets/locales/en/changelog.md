@@ -2,6 +2,14 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.1 – Improved State Saving & UI Stability (2025-11-24)
+
+- Saved builds now **store the full UI state**, so layouts reload exactly as they were when saved.
+- Fixed a rare issue where **“Force Optimize” could fail to produce a solve**.
+- Improved mobile toolbar behavior with **smoother scrolling and fewer false triggers**.
+- Corrected dialog icons and cleaned up minor typography issues.
+- Performance improved by splitting analytics and real-time services into lighter, lazy-loaded chunks.
+
 ## Version 6.0 – Local Build Saving & Major Performance Improvements (2025-11-23)
 
 - You can now **save, load, and manage builds locally**, making it easy to keep backups of your favorite layouts and switch between them without re-entering everything.
