@@ -6,12 +6,20 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import i18n from "../../test/i18n";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 
+vi.mock("../../store/TechBonusStore", () => ({
+	useTechBonusStore: vi.fn(() => ({
+		setBonusStatus: vi.fn(),
+		getBonusStatus: vi.fn(() => null),
+	})),
+}));
+
 describe("BonusStatusIcon Component", () => {
 	const renderComponent = (techMaxBonus: number, techSolvedBonus: number) => {
 		return render(
 			<I18nextProvider i18n={i18n}>
 				<TooltipProvider>
 					<BonusStatusIcon
+						tech="test-tech"
 						techMaxBonus={techMaxBonus}
 						techSolvedBonus={techSolvedBonus}
 					/>
@@ -25,12 +33,12 @@ describe("BonusStatusIcon Component", () => {
 	});
 
 	describe("Rendering based on bonus values", () => {
-		it("should return null when techSolvedBonus is 0", () => {
+		it("should return null when techSolvedBonus is 0 and no cached data", () => {
 			const { container } = renderComponent(100, 0);
 			expect(container.firstChild).toBeNull();
 		});
 
-		it("should return null when techSolvedBonus is negative", () => {
+		it("should return null when techSolvedBonus is negative and no cached data", () => {
 			const { container } = renderComponent(100, -5);
 			expect(container.firstChild).toBeNull();
 		});

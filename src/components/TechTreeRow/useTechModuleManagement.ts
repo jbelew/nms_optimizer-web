@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
+import { useModuleSelectionStore } from "@/store/ModuleSelectionStore";
 import { useTechStore } from "@/store/TechStore";
 
 /**
@@ -24,10 +25,27 @@ export const useTechModuleManagement = (
 ) => {
 	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
 	const allCheckedModules = useTechStore((state) => state.checkedModules);
+	const { setModuleSelection, getModuleSelection } = useModuleSelectionStore();
+
 	const currentCheckedModules = useMemo(
 		() => allCheckedModules[tech] || [],
 		[allCheckedModules, tech]
 	);
+
+	// Sync module selections to persistent store (only if they changed)
+	useEffect(() => {
+		if (currentCheckedModules.length > 0) {
+			const persistedSelection = getModuleSelection(tech);
+			// Only update if the selection has actually changed
+			const hasChanged =
+				!persistedSelection ||
+				persistedSelection.length !== currentCheckedModules.length ||
+				!persistedSelection.every((id) => currentCheckedModules.includes(id));
+			if (hasChanged) {
+				setModuleSelection(tech, currentCheckedModules);
+			}
+		}
+	}, [tech, currentCheckedModules, setModuleSelection, getModuleSelection]);
 
 	const coreModuleIds = useMemo(
 		() => modules.filter((m) => m.type === "core").map((m) => m.id),

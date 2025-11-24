@@ -1,15 +1,51 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as hashUtils from "../../utils/hashUtils";
 import { useBuildFileManager } from "./useBuildFileManager";
 
 // Mock dependencies
 vi.mock("../../store/GridStore", () => ({
-	useGridStore: vi.fn(() => ({
-		setGrid: vi.fn(),
-		setIsSharedGrid: vi.fn(),
-	})),
+	useGridStore: {
+		getState: vi.fn(() => ({
+			grid: { cells: [], width: 0, height: 0 },
+			result: null,
+			isSharedGrid: false,
+			gridFixed: false,
+			superchargedFixed: false,
+			initialGridDefinition: undefined,
+		})),
+		setState: vi.fn(),
+	},
+}));
+
+vi.mock("../../store/TechStore", () => ({
+	useTechStore: {
+		getState: vi.fn(() => ({
+			checkedModules: {},
+			max_bonus: {},
+			solved_bonus: {},
+			solve_method: {},
+		})),
+		setState: vi.fn(),
+	},
+}));
+
+vi.mock("../../store/TechBonusStore", () => ({
+	useTechBonusStore: {
+		getState: vi.fn(() => ({
+			bonusStatus: {},
+		})),
+		setState: vi.fn(),
+	},
+}));
+
+vi.mock("../../store/ModuleSelectionStore", () => ({
+	useModuleSelectionStore: {
+		getState: vi.fn(() => ({
+			moduleSelections: {},
+		})),
+		setState: vi.fn(),
+	},
 }));
 
 vi.mock("../../store/PlatformStore", () => {
@@ -25,29 +61,6 @@ vi.mock("../../store/PlatformStore", () => {
 	};
 });
 
-vi.mock("../../store/TechStore", () => {
-	const useTechStoreMock = vi.fn((selector) => {
-		const store = {
-			setTechColors: vi.fn(),
-		};
-		return typeof selector === "function" ? selector(store) : store;
-	});
-	return {
-		useTechStore: useTechStoreMock,
-	};
-});
-
-vi.mock("../../utils/hashUtils", () => ({
-	computeSHA256: vi.fn(),
-}));
-
-vi.mock("../useGridDeserializer/useGridDeserializer", () => ({
-	deserialize: vi.fn(),
-	useGridDeserializer: () => ({
-		serializeGrid: vi.fn(() => "serialized_data"),
-	}),
-}));
-
 vi.mock("../useShipTypes/useShipTypes", () => ({
 	useFetchShipTypesSuspense: () => ({
 		freighter: {},
@@ -57,75 +70,72 @@ vi.mock("../useShipTypes/useShipTypes", () => ({
 	}),
 }));
 
+vi.mock("../../utils/hashUtils", () => ({
+	computeSHA256: vi.fn(async () => "abc123def456"),
+}));
+
+const createValidBuildFile = () => ({
+	name: "Test Build",
+	shipType: "freighter",
+	timestamp: Date.now(),
+	checksum: "abc123def456", // Mock checksum - tests will mock computeSHA256 to return this
+	gridState: {
+		grid: { cells: [], width: 0, height: 0 },
+		result: null,
+		isSharedGrid: false,
+		gridFixed: false,
+		superchargedFixed: false,
+		initialGridDefinition: undefined,
+	},
+	techState: {
+		checkedModules: {},
+		max_bonus: {},
+		solved_bonus: {},
+		solve_method: {},
+	},
+	bonusState: {
+		bonusStatus: {},
+	},
+	moduleState: {
+		moduleSelections: {},
+	},
+});
+
 describe("useBuildFileManager", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
 	describe("loadBuildFromFile", () => {
-		it("should reject build file without checksum", async () => {
+		it("should reject build file with missing gridState", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
-			const buildFileWithoutChecksum = {
+			const buildFileWithoutGridState = {
 				name: "Test Build",
 				shipType: "freighter",
-				serialized: "test_serialized_data",
 				timestamp: Date.now(),
-				// Missing checksum
+				checksum: "abc123def456",
+				// Missing gridState
+				techState: {},
+				bonusState: {},
+				moduleState: {},
 			};
 
-			const file = new File([JSON.stringify(buildFileWithoutChecksum)], "test.nms", {
+			const file = new File([JSON.stringify(buildFileWithoutGridState)], "test.nms", {
 				type: "application/json",
 			});
 
 			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"Build file is missing integrity checksum"
+				/The build file couldn.*t be loaded/i
 			);
 		});
 
-		it("should reject build file with invalid checksum", async () => {
+		it("should accept build file with all required state", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
-			const buildFileWithInvalidChecksum = {
-				name: "Test Build",
-				shipType: "freighter",
-				serialized: "test_serialized_data",
-				timestamp: Date.now(),
-				checksum: "invalid_checksum_value",
-			};
+			const buildFile = createValidBuildFile();
 
-			vi.mocked(hashUtils.computeSHA256).mockResolvedValue("correct_checksum_value");
-
-			const file = new File([JSON.stringify(buildFileWithInvalidChecksum)], "test.nms", {
-				type: "application/json",
-			});
-
-			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
-				"Build file integrity check failed"
-			);
-		});
-
-		it("should accept build file with valid checksum", async () => {
-			const { result } = renderHook(() => useBuildFileManager());
-
-			const correctChecksum = "abc123def456";
-			const buildFileWithValidChecksum = {
-				name: "Test Build",
-				shipType: "freighter",
-				serialized: "test_serialized_data",
-				timestamp: Date.now(),
-				checksum: correctChecksum,
-			};
-
-			vi.mocked(hashUtils.computeSHA256).mockResolvedValue(correctChecksum);
-			const { deserialize } = await import("../useGridDeserializer/useGridDeserializer");
-			vi.mocked(deserialize).mockResolvedValue({
-				cells: [],
-				width: 0,
-				height: 0,
-			});
-
-			const file = new File([JSON.stringify(buildFileWithValidChecksum)], "test.nms", {
+			const file = new File([JSON.stringify(buildFile)], "test.nms", {
 				type: "application/json",
 			});
 
@@ -147,15 +157,9 @@ describe("useBuildFileManager", () => {
 		it("should reject file with wrong extension", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
-			const buildData = {
-				name: "Test Build",
-				shipType: "freighter",
-				serialized: "test_serialized_data",
-				timestamp: Date.now(),
-				checksum: "some_checksum",
-			};
+			const buildFile = createValidBuildFile();
 
-			const file = new File([JSON.stringify(buildData)], "test.txt", {
+			const file = new File([JSON.stringify(buildFile)], "test.txt", {
 				type: "text/plain",
 			});
 
@@ -189,16 +193,10 @@ describe("useBuildFileManager", () => {
 		it("should reject build file with unsupported shipType", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
-			const correctChecksum = "abc123def456";
 			const buildFileWithUnsupportedShip = {
-				name: "Test Build",
+				...createValidBuildFile(),
 				shipType: "unsupported_ship",
-				serialized: "test_serialized_data",
-				timestamp: Date.now(),
-				checksum: correctChecksum,
 			};
-
-			vi.mocked(hashUtils.computeSHA256).mockResolvedValue(correctChecksum);
 
 			const file = new File([JSON.stringify(buildFileWithUnsupportedShip)], "test.nms", {
 				type: "application/json",

@@ -2,12 +2,13 @@ import type { BuildFile } from "../../utils/buildFileValidation";
 import { useCallback } from "react";
 
 import { useGridStore } from "../../store/GridStore";
+import { useModuleSelectionStore } from "../../store/ModuleSelectionStore";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { useTechBonusStore } from "../../store/TechBonusStore";
 import { useTechStore } from "../../store/TechStore";
 import { isValidBuildFile } from "../../utils/buildFileValidation";
 import { sanitizeFilename } from "../../utils/filenameValidation";
 import { computeSHA256 } from "../../utils/hashUtils";
-import { deserialize, useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**
@@ -22,29 +23,55 @@ export const useBuildFileManager = () => {
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedPlatform = usePlatformStore((state) => state.setSelectedPlatform);
 	const shipTypes = useFetchShipTypesSuspense();
-	const { setGrid, setIsSharedGrid } = useGridStore();
-	const setTechColors = useTechStore((state) => state.setTechColors);
-	const { serializeGrid } = useGridDeserializer();
 
 	/**
-	 * Saves the current grid state to a .nms build file.
+	 * Saves the current application state to a .nms build file.
+	 * Saves GridStore, TechStore, TechBonusStore, and ModuleSelectionStore state.
 	 *
 	 * @param {string} buildName - The name for the saved build.
 	 */
 	const saveBuildToFile = useCallback(
 		async (buildName: string) => {
 			try {
-				const serialized = serializeGrid();
+				// Get current state from all stores
+				const gridState = useGridStore.getState();
+				const techState = useTechStore.getState();
+				const bonusState = useTechBonusStore.getState();
+				const moduleState = useModuleSelectionStore.getState();
 
-				// Compute SHA-256 checksum of serialized data for integrity verification
-				const checksum = await computeSHA256(serialized);
+				const stateData = {
+					gridState: {
+						grid: gridState.grid,
+						result: gridState.result,
+						isSharedGrid: gridState.isSharedGrid,
+						gridFixed: gridState.gridFixed,
+						superchargedFixed: gridState.superchargedFixed,
+						initialGridDefinition: gridState.initialGridDefinition,
+					},
+					techState: {
+						checkedModules: techState.checkedModules,
+						max_bonus: techState.max_bonus,
+						solved_bonus: techState.solved_bonus,
+						solve_method: techState.solve_method,
+					},
+					bonusState: {
+						bonusStatus: bonusState.bonusStatus,
+					},
+					moduleState: {
+						moduleSelections: moduleState.moduleSelections,
+					},
+				};
+
+				// Compute checksum of the state data
+				const stateDataJson = JSON.stringify(stateData);
+				const checksum = await computeSHA256(stateDataJson);
 
 				const buildData: BuildFile = {
 					name: buildName,
 					shipType: selectedShipType,
-					serialized,
 					timestamp: Date.now(),
 					checksum,
+					...stateData,
 				};
 
 				const json = JSON.stringify(buildData, null, 2);
@@ -63,14 +90,15 @@ export const useBuildFileManager = () => {
 				throw new Error("Failed to save build file");
 			}
 		},
-		[serializeGrid, selectedShipType]
+		[selectedShipType]
 	);
 
 	/**
 	 * Loads a build from a .nms file.
+	 * Restores GridStore, TechStore, TechBonusStore, and ModuleSelectionStore state.
 	 *
 	 * @param {File} file - The file to load the build from.
-	 * @throws {Error} If the file is invalid or deserialization fails.
+	 * @throws {Error} If the file is invalid or incompatible.
 	 */
 	const loadBuildFromFile = useCallback(
 		async (file: File) => {
@@ -104,17 +132,19 @@ export const useBuildFileManager = () => {
 				// Validate build file structure
 				if (!isValidBuildFile(buildData)) {
 					throw new Error(
-						"Invalid build file format. Please ensure you're loading a valid NMS Optimizer build file."
+						"The build file couldn’t be loaded. Please verify that you selected a valid NMS Optimizer build file. If the file was created before version 6.1, you may need to export it again using the latest version."
 					);
 				}
 
-				// Verify checksum (required for integrity verification)
-				if (!buildData.checksum) {
-					throw new Error(
-						"Build file is missing integrity checksum. This is not a valid NMS Optimizer build file."
-					);
-				}
-				const computedChecksum = await computeSHA256(buildData.serialized);
+				// Verify checksum for integrity
+				const stateDataToVerify = {
+					gridState: buildData.gridState,
+					techState: buildData.techState,
+					bonusState: buildData.bonusState,
+					moduleState: buildData.moduleState,
+				};
+				const stateDataJson = JSON.stringify(stateDataToVerify);
+				const computedChecksum = await computeSHA256(stateDataJson);
 				if (computedChecksum !== buildData.checksum) {
 					throw new Error(
 						"Build file integrity check failed. The file may have been corrupted or tampered with."
@@ -135,24 +165,11 @@ export const useBuildFileManager = () => {
 					setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
 				}
 
-				// Deserialize the grid with the explicit shipType from the build file
-				// to avoid race conditions where the techTree hasn't loaded for the new shipType
-				console.log("Attempting to deserialize:", buildData.serialized);
-				const newGrid = await deserialize(
-					buildData.serialized,
-					buildData.shipType,
-					setTechColors
-				);
-				if (newGrid) {
-					console.log("Deserialization successful, setting grid and colors.");
-					setGrid(newGrid);
-					setIsSharedGrid(true);
-				} else {
-					console.error("Deserialization failed, grid not set.");
-					throw new Error(
-						"Failed to deserialize grid data. The build file may be corrupted or from an incompatible version."
-					);
-				}
+				// Restore state from all stores
+				useGridStore.setState(buildData.gridState);
+				useTechStore.setState(buildData.techState);
+				useTechBonusStore.setState(buildData.bonusState);
+				useModuleSelectionStore.setState(buildData.moduleState);
 			} catch (error) {
 				console.error("Failed to load build file:", error);
 				if (error instanceof Error) {
@@ -161,7 +178,7 @@ export const useBuildFileManager = () => {
 				throw new Error("An unexpected error occurred while loading the build file.");
 			}
 		},
-		[selectedShipType, shipTypes, setSelectedPlatform, setTechColors, setGrid, setIsSharedGrid]
+		[selectedShipType, shipTypes, setSelectedPlatform]
 	);
 
 	return { saveBuildToFile, loadBuildFromFile };

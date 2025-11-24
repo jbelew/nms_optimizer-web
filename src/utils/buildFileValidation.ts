@@ -1,12 +1,16 @@
 /**
  * Type definition for a saved build file.
+ * Stores the complete state of GridStore, TechStore, TechBonusStore, and ModuleSelectionStore.
  */
 export type BuildFile = {
 	name: string;
 	shipType: string;
-	serialized: string;
 	timestamp: number;
-	checksum?: string; // SHA-256 hash of serialized data for integrity verification
+	checksum: string; // SHA-256 hash of the state data for integrity verification
+	gridState: Record<string, unknown>;
+	techState: Record<string, unknown>;
+	bonusState: Record<string, unknown>;
+	moduleState: Record<string, unknown>;
 };
 
 /**
@@ -41,17 +45,49 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 		return false;
 	}
 
-	if (typeof buildFile.serialized !== "string") {
+	if (typeof buildFile.timestamp !== "number") {
 		console.error(
-			"Validation Error: BuildFile missing or invalid 'serialized' property.",
+			"Validation Error: BuildFile missing or invalid 'timestamp' property.",
 			buildFile
 		);
 		return false;
 	}
 
-	if (typeof buildFile.timestamp !== "number") {
+	if (typeof buildFile.checksum !== "string") {
 		console.error(
-			"Validation Error: BuildFile missing or invalid 'timestamp' property.",
+			"Validation Error: BuildFile missing or invalid 'checksum' property.",
+			buildFile
+		);
+		return false;
+	}
+
+	if (typeof buildFile.gridState !== "object" || buildFile.gridState === null) {
+		console.error(
+			"Validation Error: BuildFile missing or invalid 'gridState' property.",
+			buildFile
+		);
+		return false;
+	}
+
+	if (typeof buildFile.techState !== "object" || buildFile.techState === null) {
+		console.error(
+			"Validation Error: BuildFile missing or invalid 'techState' property.",
+			buildFile
+		);
+		return false;
+	}
+
+	if (typeof buildFile.bonusState !== "object" || buildFile.bonusState === null) {
+		console.error(
+			"Validation Error: BuildFile missing or invalid 'bonusState' property.",
+			buildFile
+		);
+		return false;
+	}
+
+	if (typeof buildFile.moduleState !== "object" || buildFile.moduleState === null) {
+		console.error(
+			"Validation Error: BuildFile missing or invalid 'moduleState' property.",
 			buildFile
 		);
 		return false;

@@ -2,6 +2,7 @@
 import { create } from "zustand";
 
 import { TechTreeItem } from "../hooks/useTechTree/useTechTree";
+import { useModuleSelectionStore } from "./ModuleSelectionStore";
 
 /**
  * @interface TechState
@@ -42,6 +43,7 @@ export interface TechState {
 	getTechColor: (tech: string) => string | undefined;
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
 	clearCheckedModules: (tech: string) => void;
+	clearAllCheckedModules: () => void;
 	clearResult: () => void;
 	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
 	setActiveGroup: (tech: string, groupType: string) => void;
@@ -92,13 +94,36 @@ export const useTechStore = create<TechState>((set, get) => ({
 		set((state) => ({
 			checkedModules: { ...state.checkedModules, [tech]: [] },
 		})),
+	clearAllCheckedModules: () => {
+		set((state) => {
+			// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
+			const resetCheckedModules = Object.keys(state.techGroups).reduce(
+				(acc, tech) => {
+					const group = state.techGroups[tech]?.[0];
+					if (group) {
+						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+					}
+					return acc;
+				},
+				{} as { [key: string]: string[] }
+			);
+			return { checkedModules: resetCheckedModules };
+		});
+	},
 	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
 	setTechGroups: (techGroups) => {
+		const moduleSelectionStore = useModuleSelectionStore.getState();
 		const initialCheckedModules = Object.keys(techGroups).reduce(
 			(acc, tech) => {
 				const group = techGroups[tech]?.[0];
 				if (group) {
-					acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+					// Try to restore from persistent store first, otherwise use checked modules from data
+					const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
+					if (persistedSelection && persistedSelection.length > 0) {
+						acc[tech] = persistedSelection;
+					} else {
+						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+					}
 				}
 				return acc;
 			},

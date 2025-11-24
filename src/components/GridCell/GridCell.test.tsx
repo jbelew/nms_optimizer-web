@@ -102,6 +102,7 @@ describe("GridCell", () => {
 					getTechColor: vi.fn(() => "blue"),
 					setCheckedModules: vi.fn(),
 					clearCheckedModules: vi.fn(),
+					clearAllCheckedModules: vi.fn(),
 					clearResult: vi.fn(),
 					setTechGroups: vi.fn(),
 					setActiveGroup: vi.fn(),

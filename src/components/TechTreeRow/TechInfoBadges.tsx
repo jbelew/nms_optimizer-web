@@ -21,7 +21,7 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
  * @param props - The props for the component.
  * @returns The rendered badges.
  */
-export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData }) => {
+export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }) => {
 	const { a11yMode } = useA11yStore();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
@@ -73,7 +73,11 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData }) => {
 	return (
 		<>
 			{hasTechInGrid && (
-				<BonusStatusIcon techMaxBonus={techMaxBonus} techSolvedBonus={techSolvedBonus} />
+				<BonusStatusIcon
+					tech={tech}
+					techMaxBonus={techMaxBonus}
+					techSolvedBonus={techSolvedBonus}
+				/>
 			)}
 			<Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
 				<Dialog.Trigger>

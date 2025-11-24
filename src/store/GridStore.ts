@@ -4,7 +4,9 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { type Module } from "../hooks/useTechTree/useTechTree";
+import { useModuleSelectionStore } from "./ModuleSelectionStore";
 import { usePlatformStore } from "./PlatformStore";
+import { useTechBonusStore } from "./TechBonusStore";
 import { useTechStore } from "./TechStore";
 
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
@@ -382,6 +384,12 @@ export const useGridStore = create<GridStore>()(
 						state.isSharedGrid = false;
 					});
 					useTechStore.getState().clearResult();
+					useTechStore.getState().clearAllCheckedModules();
+					useTechBonusStore.getState().clearAllBonusStatus();
+					useModuleSelectionStore.getState().clearAllModuleSelections();
+					// Clear persisted storage
+					localStorage.removeItem("techBonusState");
+					localStorage.removeItem("moduleSelectionState");
 				},
 
 				setGridAndResetAuxiliaryState: (newGrid) => {
