@@ -61,14 +61,14 @@ describe("useSeoAndTitle", () => {
 	describe("Document Title and Meta Description", () => {
 		it("should set default title and description for root path", () => {
 			setupMocks("/", {
-				"seo.mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
+				"seo.mainPageTitle": "NMS Optimizer | No Man's Sky Layout Builder for Ships & More",
 				"seo.appDescription":
 					"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds.",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"NMS Optimizer | No Man’s Sky Layout Builder for Ships & More"
+				"NMS Optimizer | No Man's Sky Layout Builder for Ships & More"
 			);
 			const metaDesc = document.querySelector("meta[name='description']");
 			expect(metaDesc?.getAttribute("content")).toContain(
@@ -130,12 +130,12 @@ describe("useSeoAndTitle", () => {
 
 		it("should fall back to default title for unknown paths", () => {
 			setupMocks("/unknown-path", {
-				"seo.mainPageTitle": "NMS Optimizer | No Man’s Sky Layout Builder for Ships & More",
+				"seo.mainPageTitle": "NMS Optimizer | No Man's Sky Layout Builder for Ships & More",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"NMS Optimizer | No Man’s Sky Layout Builder for Ships & More"
+				"NMS Optimizer | No Man's Sky Layout Builder for Ships & More"
 			);
 		});
 	});

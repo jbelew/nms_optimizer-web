@@ -1,12 +1,12 @@
 ## Help Translate the NMS Optimizer
 
-Analytics show visitors from all over the world and I’d love to make it more accessible to the global No Man’s Sky community — and that’s where you come in.
+Analytics show visitors from all over the world and I'd love to make it more accessible to the global No Man's Sky community — and that's where you come in.
 
 ## How You Can Help
 
-I’m looking for bilingual players to help translate the app — especially to **edit and proof the AI-generated French, German, Spanish translations**, or to work on other languages with strong NMS player communities.
+I'm looking for bilingual players to help translate the app — especially to **edit and proof the AI-generated French, German, Spanish translations**, or to work on other languages with strong NMS player communities.
 
-You don’t need to be a professional translator — just fluent, familiar with the game, and willing to help out. It'll definitely be better than this ChatGPT mess! You’ll be credited (or remain anonymous if you prefer).
+You don't need to be a professional translator — just fluent, familiar with the game, and willing to help out. It'll definitely be better than this ChatGPT mess! You'll be credited (or remain anonymous if you prefer).
 
 Most strings are short UI labels, tooltips, or fun status messages.
 
@@ -23,7 +23,7 @@ If you want the easiest way to contribute:
 
 > Crowdin uses standard [ISO language codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` for French, `de` for German, `es` for Spanish, etc.
 
-This is the recommended approach if you’re not familiar with GitHub or want your changes reflected immediately in the app.
+This is the recommended approach if you're not familiar with GitHub or want your changes reflected immediately in the app.
 
 ## If You're Comfortable With GitHub
 
@@ -45,7 +45,7 @@ You can update existing files or create a new folder for your language using the
 
 No problem — just head over to the [GitHub Discussions page](https://github.com/jbelew/nms_optimizer-web/discussions) and start a new thread.
 
-You can paste your translations there or ask questions if you’re not sure where to begin. I’ll take it from there.
+You can paste your translations there or ask questions if you're not sure where to begin. I'll take it from there.
 
 ## Notes
 

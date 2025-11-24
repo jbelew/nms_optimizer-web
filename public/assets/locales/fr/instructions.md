@@ -28,14 +28,14 @@ Si vous déverrouillez toujours des cellules ou collectez des modules, l'outil p
 
 ## Informations sur les Corvettes
 
-Les Corvettes fonctionnent un peu différemment des autres plates-formes : au lieu d’un seul ensemble de mises à niveau, elles peuvent en avoir jusqu’à trois.
+Les Corvettes fonctionnent un peu différemment des autres plates-formes : au lieu d'un seul ensemble de mises à niveau, elles peuvent en avoir jusqu'à trois.
 
 - **Les améliorations cosmétiques** sont affichées sous la forme « Cn ».
 - Les **mises à niveau du réacteur** sont affichées sous la forme « Rn ».
 
-Le solveur suggérera également les meilleures mises à niveau esthétiques si vous préférez donner la priorité aux performances plutôt qu’à l’apparence – bien qu’en pratique, les compromis soient assez minimes la plupart du temps.
+Le solveur suggérera également les meilleures mises à niveau esthétiques si vous préférez donner la priorité aux performances plutôt qu'à l'apparence – bien qu'en pratique, les compromis soient assez minimes la plupart du temps.
 
-Gardez à l’esprit qu’un sous-système technologique Corvette entièrement mis à niveau prend **beaucoup** d’espace. Avec 60 emplacements technologiques complets, vous ne disposerez généralement que de trois ou quatre résolutions **min/max**, alors choisissez judicieusement.
+Gardez à l'esprit qu'un sous-système technologique Corvette entièrement mis à niveau prend **beaucoup** d'espace. Avec 60 emplacements technologiques complets, vous ne disposerez généralement que de trois ou quatre résolutions **min/max**, alors choisissez judicieusement.
 
 ## Builds recommandées
 
@@ -63,7 +63,7 @@ Les cellules suralimentées offrent des bonus majeurs mais sont limités : chaqu
 
 ## Conseil de pro
 
-Il y a de vraies mathématiques derrière le placement. Le solveur fonctionne dans des fenêtres fixes en fonction du nombre de modules requis par une technologie et sélectionne généralement la disposition la plus efficace sans perdre d'espace. Mais si les choses ne s’alignent pas :
+Il y a de vraies mathématiques derrière le placement. Le solveur fonctionne dans des fenêtres fixes en fonction du nombre de modules requis par une technologie et sélectionne généralement la disposition la plus efficace sans perdre d'espace. Mais si les choses ne s'alignent pas :
 
 - Essayez de **désactiver quelques cellules** pour guider le solveur vers une meilleure fenêtre.
 - Un petit ajustement peut libérer des zones de placement clés et améliorer votre mise en page finale.
