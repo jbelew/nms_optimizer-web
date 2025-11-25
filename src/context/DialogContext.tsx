@@ -23,6 +23,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [tutorialFinished, setTutorialFinished] = useState(() => {
+		if (typeof window === "undefined" || !window.localStorage) {
+			return false;
+		}
+
 		const oldKey = "hasVisitedNMSOptimizer";
 		const newKey = "tutorialFinished";
 		const oldVal = localStorage.getItem(oldKey);
@@ -107,7 +111,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const markTutorialFinished = useCallback(() => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);
-			localStorage.setItem("tutorialFinished", "true");
+			if (typeof window !== "undefined" && window.localStorage) {
+				localStorage.setItem("tutorialFinished", "true");
+			}
 		}
 	}, [tutorialFinished]);
 

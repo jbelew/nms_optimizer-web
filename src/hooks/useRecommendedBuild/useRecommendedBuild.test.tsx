@@ -3,6 +3,10 @@ import { act, renderHook } from "@testing-library/react";
 import { Mock, vi } from "vitest";
 
 import { createEmptyCell, createGrid, useGridStore } from "../../store/GridStore";
+import {
+	__resetScrollGridIntoViewRef,
+	useScrollGridIntoView,
+} from "../useScrollGridIntoView/useScrollGridIntoView";
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
@@ -36,6 +40,7 @@ describe("useRecommendedBuild", () => {
 	 * Sets up mocks and initializes test environment before each test.
 	 */ beforeEach(() => {
 		vi.clearAllMocks();
+		__resetScrollGridIntoViewRef();
 
 		setGridAndResetAuxiliaryStateMock = vi.fn();
 		(useGridStore.getState as Mock).mockReturnValue({
@@ -145,9 +150,7 @@ describe("useRecommendedBuild", () => {
 	/**
 	 * Verifies that the `applyRecommendedBuild` function is returned by the hook.
 	 */ it("should return applyRecommendedBuild function", () => {
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 		expect(typeof result.current.applyRecommendedBuild).toBe("function");
 	});
 
@@ -180,9 +183,7 @@ describe("useRecommendedBuild", () => {
 			],
 		};
 
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			await result.current.applyRecommendedBuild(mockBuild);
@@ -251,9 +252,7 @@ describe("useRecommendedBuild", () => {
 			],
 		};
 
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			await result.current.applyRecommendedBuild(mockBuild);
@@ -306,9 +305,7 @@ describe("useRecommendedBuild", () => {
 			],
 		};
 
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			await result.current.applyRecommendedBuild(mockBuild);
@@ -335,9 +332,13 @@ describe("useRecommendedBuild", () => {
 			layout: [[{ tech: "weapon", module: "S1" }]], // Updated tech to "weapon"
 		};
 
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
+		// Initialize the shared ref with mockGridContainerRef
+		const { result: scrollHookResult } = renderHook(() =>
+			useScrollGridIntoView({ skipOnLargeScreens: false })
 		);
+		scrollHookResult.current.gridContainerRef!.current = mockGridContainerRef.current;
+
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			await result.current.applyRecommendedBuild(mockBuild);
@@ -353,9 +354,7 @@ describe("useRecommendedBuild", () => {
 	/**
 	 * Ensures that no build is applied if the provided build or layout is null or empty.
 	 */ it("should not apply build if build or layout is null", async () => {
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			result.current.applyRecommendedBuild({ title: "Empty", layout: [] });
@@ -373,9 +372,7 @@ describe("useRecommendedBuild", () => {
 			],
 		};
 
-		const { result } = renderHook(() =>
-			useRecommendedBuild(mockTechTree, mockGridContainerRef)
-		);
+		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
 			await result.current.applyRecommendedBuild(mockBuild);

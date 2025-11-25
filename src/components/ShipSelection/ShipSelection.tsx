@@ -2,7 +2,7 @@
 import "./ShipSelection.scss";
 
 import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useMemo, useState, useTransition } from "react";
+import React, { Suspense, useCallback, useMemo, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -11,9 +11,9 @@ import { useRouteContext } from "../../context/RouteContext";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
+import { useToast } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { NmsToast } from "../Toast/Toast";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;
@@ -81,7 +81,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 		(state) => state.setGridAndResetAuxiliaryState
 	);
 	const { sendEvent } = useAnalytics();
-	const [toastOpen, setToastOpen] = useState(false);
+	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
 
@@ -102,9 +102,14 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 
 				// TODO: Turn this back on if the Corvette bug shows up again
 				if (option === "corvette") {
-					setToastOpen(true);
-				} else {
-					setToastOpen(false);
+					showInfo(
+						"Corvette Warning!",
+						<>
+							As of version 6.17.1, Corvettes still have a bug that may cause layouts
+							to reset unexpectedly. If you create a layout, use the new{" "}
+							<strong>Save Build</strong> feature to keep a quick backup.
+						</>
+					);
 				}
 
 				startTransition(() => {
@@ -120,6 +125,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 			setSelectedShipType,
 			setGridAndResetAuxiliaryState,
 			sendEvent,
+			showInfo,
 			shipTypes,
 			startTransition,
 			isKnownRoute,
@@ -152,18 +158,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					/>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
-			<NmsToast
-				open={toastOpen}
-				onOpenChange={setToastOpen}
-				title="Corvette Warning!"
-				description={
-					<>
-						As of version 6.17.1, Corvettes still have a bug that may cause layouts to
-						reset unexpectedly. If you create a layout, use the new{" "}
-						<strong>Save Build</strong> feature to keep a quick backup.
-					</>
-				}
-			/>
 		</>
 	);
 });

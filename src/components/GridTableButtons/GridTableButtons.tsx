@@ -1,4 +1,4 @@
-import React, { useCallback, useTransition } from "react";
+import React, { useCallback, useMemo, useTransition } from "react";
 import {
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
@@ -14,6 +14,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
@@ -21,7 +22,6 @@ import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { UploadIcon } from "../Icons/UploadIcon";
-import { NmsToast } from "../Toast/Toast";
 
 /**
  * GridTableButtons component provides a set of control buttons for the grid.
@@ -30,7 +30,7 @@ import { NmsToast } from "../Toast/Toast";
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
 const GridTableButtons: React.FC = () => {
-	const { solving, gridContainerRef } = useOptimize();
+	const { solving } = useOptimize();
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -43,7 +43,7 @@ const GridTableButtons: React.FC = () => {
 	const { setIsSharedGrid } = useGridStore();
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const { toastConfig, isOpen: isToastOpen, closeToast, showSuccess, showError } = useToast();
+	const { showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
@@ -55,6 +55,9 @@ const GridTableButtons: React.FC = () => {
 		showSuccess,
 		showError,
 	});
+	const isAbove1024 = useBreakpoint("1024px");
+	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: false }), []);
+	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
 	 * Handles the click event for the "Instructions" button.
@@ -103,9 +106,14 @@ const GridTableButtons: React.FC = () => {
 
 	/**
 	 * Handles the click event for the "Reset Grid" button.
-	 * Resets the grid to its initial state, updates the URL, and scrolls to the top of the grid.
+	 * Scrolls first (on small screens only), then resets the grid to its initial state and updates the URL.
 	 */
 	const handleResetGrid = useCallback(() => {
+		// Scroll immediately before computations on screens < 1024px
+		if (!isAbove1024) {
+			scrollIntoView();
+		}
+
 		sendEvent({ category: "ui", action: "reset_grid", value: 1 });
 
 		startResetTransition(() => {
@@ -113,26 +121,14 @@ const GridTableButtons: React.FC = () => {
 			updateUrlForReset();
 			setIsSharedGrid(false);
 		});
-
-		if (gridContainerRef.current) {
-			const element = gridContainerRef.current;
-			const offset = 8; // Same offset as in useOptimize.tsx and useRecommendedBuild.tsx
-
-			const scrollIntoView = () => {
-				requestAnimationFrame(() => {
-					const elementRect = element.getBoundingClientRect();
-					const absoluteElementTop = elementRect.top + window.pageYOffset;
-					const targetScrollPosition = absoluteElementTop - offset;
-
-					window.scrollTo({
-						top: targetScrollPosition,
-						behavior: "smooth",
-					});
-				});
-			};
-			requestAnimationFrame(scrollIntoView);
-		}
-	}, [updateUrlForReset, setIsSharedGrid, sendEvent, gridContainerRef, startResetTransition]);
+	}, [
+		updateUrlForReset,
+		setIsSharedGrid,
+		sendEvent,
+		scrollIntoView,
+		isAbove1024,
+		startResetTransition,
+	]);
 
 	const instructionsVariant = !tutorialFinished ? "solid" : "soft";
 	const instructionGlowClass = !tutorialFinished ? "button--glow" : "";
@@ -265,17 +261,6 @@ const GridTableButtons: React.FC = () => {
 					{t("buttons.resetGrid")}
 				</Button>
 			</div>
-
-			{toastConfig && (
-				<NmsToast
-					open={isToastOpen}
-					onOpenChange={closeToast}
-					title={toastConfig.title}
-					description={toastConfig.description}
-					variant={toastConfig.variant}
-					duration={toastConfig.duration}
-				/>
-			)}
 		</>
 	);
 };

@@ -1,13 +1,13 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import type { GroupedModules } from "./index";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback } from "react";
 import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { usePlatformStore } from "../../store/PlatformStore";
+import { MODULE_GROUP_ORDER } from "./constants";
 import { ModuleGroup } from "./ModuleGroup";
 
-const groupOrder = ["core", "bonus", "upgrade", "atlantid", "reactor", "cosmetic"];
 const baseImagePath = "/assets/img/grid/";
 const fallbackImage = `${baseImagePath}infra.webp`;
 
@@ -20,8 +20,8 @@ export interface DialogBodyProps {
 	handleValueChange: (newValues: string[]) => void;
 	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
 	allModulesSelected: boolean;
-	isIndeterminate: boolean;
 	techColor: TechTreeRowProps["techColor"];
+	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
@@ -38,23 +38,12 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	handleValueChange,
 	handleSelectAllChange,
 	allModulesSelected,
-	isIndeterminate,
 	techColor,
+	selectAllCheckboxRef,
 }) => {
 	const { t } = useTranslation();
-	const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
-
-	useEffect(() => {
-		if (selectAllCheckboxRef.current) {
-			const inputElement =
-				selectAllCheckboxRef.current.querySelector('input[type="checkbox"]');
-			if (inputElement instanceof HTMLInputElement) {
-				inputElement.indeterminate = isIndeterminate;
-			}
-		}
-	}, [isIndeterminate]);
 
 	const onSelectAllChange = useCallback(
 		(checked: boolean | "indeterminate") => {
@@ -120,7 +109,10 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 					</div>
 				)}
 				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
-					{(isCorvette ? groupOrder : groupOrder.filter((g) => g !== "core")).map(
+					{(isCorvette
+						? MODULE_GROUP_ORDER
+						: MODULE_GROUP_ORDER.filter((g) => g !== "core")
+					).map(
 						(groupName) =>
 							groupedModules[groupName]?.length > 0 && (
 								<ModuleGroup

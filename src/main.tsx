@@ -35,6 +35,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
@@ -94,7 +95,9 @@ createRoot(document.getElementById("root")!).render(
 				scaling="100%"
 			>
 				<Toast.Provider swipeDirection="right">
-					<RouterProvider router={router} />
+					<ToastProvider>
+						<RouterProvider router={router} />
+					</ToastProvider>
 					<Toast.Viewport className="ToastViewport" />
 				</Toast.Provider>
 			</Theme>

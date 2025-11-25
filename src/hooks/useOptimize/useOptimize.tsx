@@ -1,6 +1,6 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
 import type { Socket } from "socket.io-client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { WS_URL } from "../../constants";
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
@@ -65,13 +65,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 	} = useOptimizeStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
-	const isLarge = useBreakpoint("1024px");
+	const isLarge = useBreakpoint("1024px"); // Used to conditionally send grid updates to backend
 
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
 	const [status, setStatus] = useState<string | undefined>();
-	const gridContainerRef = useRef<HTMLDivElement | null>(null);
-	const { scrollIntoView } = useScrollGridIntoView(gridContainerRef);
+	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
+	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	const resetProgress = useCallback(() => {
 		setSolving(false);
@@ -81,10 +81,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	// Scroll into view when solving on smaller screens
 	useEffect(() => {
-		if (solving && !isLarge) {
+		if (solving) {
 			scrollIntoView();
 		}
-	}, [solving, isLarge, scrollIntoView]);
+	}, [solving, scrollIntoView]);
 
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {

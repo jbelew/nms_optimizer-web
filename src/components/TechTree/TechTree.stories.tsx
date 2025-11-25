@@ -23,11 +23,19 @@ const meta = {
 	],
 	loaders: [
 		async () => {
-			const response = await fetch(
-				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
-			);
-			const techTree = await response.json();
-			return { techTree };
+			try {
+				const response = await fetch(
+					"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
+				);
+				if (!response.ok) {
+					throw new Error(`API responded with status ${response.status}`);
+				}
+				const techTree = await response.json();
+				return { techTree };
+			} catch (error) {
+				console.error("Failed to load tech tree for Storybook:", error);
+				return { techTree: {} };
+			}
 		},
 	],
 } satisfies Meta<typeof TechTree>;
@@ -43,7 +51,6 @@ export const Default: Story = {
 		},
 
 		solving: false,
-		gridContainerRef: { current: null },
 		gridTableTotalWidth: 400,
 		techTree: {},
 	},

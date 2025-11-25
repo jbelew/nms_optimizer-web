@@ -3,6 +3,7 @@ import React, { useMemo } from "react";
 import { Blockquote } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { MODULE_RANK_ORDER } from "./constants";
 import { ModuleCheckbox } from "./ModuleCheckbox";
 
 /**
@@ -40,11 +41,12 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	const dependencyMap = useMemo(() => {
 		const map = new Map<string, string>();
 		if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
-			const order = ["Theta", "Tau", "Sigma"];
 			modules.forEach((module) => {
-				const rankIndex = order.findIndex((rank) => module.label.includes(rank));
+				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
+					module.label.includes(rank)
+				);
 				if (rankIndex > 0) {
-					const prerequisiteRank = order[rankIndex - 1];
+					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
 					const prerequisiteModule = modules.find((m) =>
 						m.label.includes(prerequisiteRank)
 					);

@@ -1,71 +1,18 @@
-import type { ReactNode } from "react";
-import { useCallback, useState } from "react";
+import { useContext } from "react";
+
+import { ToastContext } from "../../context/createToastContext";
+
+export { ToastProvider } from "../../context/ToastContext";
+export type { ToastConfig } from "../../context/createToastContext";
 
 /**
- * Toast notification configuration.
- */
-export interface ToastConfig {
-	title: string;
-	description: ReactNode;
-	variant?: "success" | "error";
-	duration?: number; // Duration in milliseconds, defaults to 8000
-}
-
-/**
- * Custom hook for managing toast notifications.
- * Provides methods to show success, error, and info toasts.
- *
- * @returns {{
- *   toastConfig: ToastConfig | null,
- *   isOpen: boolean,
- *   showToast: (config: ToastConfig) => void,
- *   showSuccess: (title: string, description: string) => void,
- *   showError: (title: string, description: string) => void,
- *   showInfo: (title: string, description: string) => void,
- *   closeToast: () => void
- * }} Toast control functions and state.
+ * Hook to use toast notifications from any component.
+ * Must be used within a ToastProvider.
  */
 export const useToast = () => {
-	const [toastConfig, setToastConfig] = useState<ToastConfig | null>(null);
-	const [isOpen, setIsOpen] = useState(false);
-
-	const showToast = useCallback((config: ToastConfig) => {
-		setToastConfig(config);
-		setIsOpen(true);
-	}, []);
-
-	const showSuccess = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, variant: "success", duration });
-		},
-		[showToast]
-	);
-
-	const showError = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, variant: "error", duration });
-		},
-		[showToast]
-	);
-
-	const showInfo = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, duration });
-		},
-		[showToast]
-	);
-
-	const closeToast = useCallback(() => {
-		setIsOpen(false);
-	}, []);
-
-	return {
-		toastConfig,
-		isOpen,
-		showToast,
-		showSuccess,
-		showError,
-		showInfo,
-		closeToast,
-	};
+	const context = useContext(ToastContext);
+	if (!context) {
+		throw new Error("useToast must be used within a ToastProvider");
+	}
+	return context;
 };

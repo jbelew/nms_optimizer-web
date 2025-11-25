@@ -33,18 +33,28 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			platform = "standard";
 		}
 		set({ selectedPlatform: platform });
-		localStorage.setItem(LOCAL_STORAGE_KEY, platform);
+		if (typeof window !== "undefined" && window.localStorage) {
+			localStorage.setItem(LOCAL_STORAGE_KEY, platform);
+		}
 
-		if (updateUrl && isKnownRoute) {
+		if (updateUrl && isKnownRoute && typeof window !== "undefined") {
 			const url = new URL(window.location.href);
 			url.searchParams.set("platform", platform);
 			window.history.pushState({}, "", url.toString());
 		}
 	},
 	initializePlatform: (validShipTypes: string[], isKnownRoute = true) => {
+		if (typeof window === "undefined") {
+			set({ selectedPlatform: "standard" });
+			return;
+		}
+
 		const urlParams = new URLSearchParams(window.location.search);
 		const platformFromUrl = urlParams.get("platform");
-		const platformFromStorage = localStorage.getItem(LOCAL_STORAGE_KEY);
+		const platformFromStorage =
+			typeof window !== "undefined" && window.localStorage
+				? localStorage.getItem(LOCAL_STORAGE_KEY)
+				: null;
 
 		let initialPlatform: string = "standard";
 		let updateUrlNeeded = false;
@@ -72,7 +82,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			window.history.replaceState({}, "", url.toString());
 		}
 
-		if (updateStorageNeeded) {
+		if (updateStorageNeeded && typeof window !== "undefined" && window.localStorage) {
 			localStorage.setItem(LOCAL_STORAGE_KEY, initialPlatform);
 		}
 	},

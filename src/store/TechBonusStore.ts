@@ -18,6 +18,10 @@ function debounceSetItem(
 	let timeoutId: number | null = null;
 
 	return (name: string, value: StorageValue<Partial<TechBonusStore>>): Promise<void> => {
+		if (typeof window === "undefined") {
+			return Promise.resolve();
+		}
+
 		if (timeoutId !== null) {
 			clearTimeout(timeoutId);
 		}
@@ -38,14 +42,21 @@ function debounceSetItem(
 
 const debouncedStorage = {
 	getItem: (name: string) => {
+		if (typeof window === "undefined" || !window.localStorage) {
+			return null;
+		}
 		const item = localStorage.getItem(name);
 		return item ? JSON.parse(item) : null;
 	},
 	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechBonusStore>>) => {
-		localStorage.setItem(name, JSON.stringify(value));
+		if (typeof window !== "undefined" && window.localStorage) {
+			localStorage.setItem(name, JSON.stringify(value));
+		}
 	}, 500),
 	removeItem: (name: string) => {
-		localStorage.removeItem(name);
+		if (typeof window !== "undefined" && window.localStorage) {
+			localStorage.removeItem(name);
+		}
 	},
 };
 

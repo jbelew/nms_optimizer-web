@@ -4,22 +4,22 @@ import { useCallback, useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
 /**
  * Custom hook to handle the application of recommended builds to the grid.
+ * Uses the shared grid container ref from useScrollGridIntoView.
  *
  * @param {TechTree} techTree - The tech tree data.
- * @param {React.MutableRefObject<HTMLDivElement|null>} gridContainerRef - Ref to the grid container for scrolling.
  * @returns {{applyRecommendedBuild: (build: RecommendedBuild) => void}}
  *          An object containing the function to apply a recommended build.
  */
-export const useRecommendedBuild = (
-	techTree: TechTree,
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>
-) => {
+export const useRecommendedBuild = (techTree: TechTree) => {
 	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
-	const { scrollIntoView } = useScrollGridIntoView(gridContainerRef);
+	const isAbove1024 = useBreakpoint("1024px");
+	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: false }), []);
+	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
 	 * A memoized map of all modules, indexed by a composite key of `tech/moduleId`.
@@ -50,6 +50,7 @@ export const useRecommendedBuild = (
 	}, [techTree]);
 	/**
 	 * Applies a recommended build to the grid.
+	 * Scrolls immediately (on small screens only), then applies the build while the page is already moving.
 	 *
 	 * @param {RecommendedBuild} build - The recommended build to apply.
 	 */
@@ -61,6 +62,11 @@ export const useRecommendedBuild = (
 			}
 
 			if (build && build.layout && build.layout.length > 0) {
+				// Scroll immediately before computations on screens < 1024px
+				if (!isAbove1024) {
+					scrollIntoView();
+				}
+
 				const newGrid = createGrid(10, 6);
 				const layout = build.layout as ({
 					tech: string;
@@ -115,12 +121,9 @@ export const useRecommendedBuild = (
 					await new Promise((resolve) => setTimeout(resolve, 0)); // Yield after each row
 				}
 				setGridAndResetAuxiliaryState(newGrid);
-
-				// Scroll to the top of the grid container after applying the build
-				scrollIntoView();
 			}
 		},
-		[modulesMap, setGridAndResetAuxiliaryState, scrollIntoView]
+		[modulesMap, setGridAndResetAuxiliaryState, scrollIntoView, isAbove1024]
 	);
 
 	return { applyRecommendedBuild };

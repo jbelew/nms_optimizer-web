@@ -75,11 +75,13 @@ describe("MarkdownContentRenderer", () => {
 	test("should render markdown content when successfully loaded", async () => {
 		render(<MarkdownContentRenderer markdownFileName="test.md" />);
 
+		// Wait for both skeleton to disappear and markdown content to appear
 		await waitFor(
 			() => {
+				expect(screen.queryByTestId("lorem-ipsum-skeleton")).not.toBeInTheDocument();
 				expect(screen.getByTestId("markdown-content")).toBeInTheDocument();
 			},
-			{ timeout: 2000 }
+			{ timeout: 3000 }
 		);
 	});
 

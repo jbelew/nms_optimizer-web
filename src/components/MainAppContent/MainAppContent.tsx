@@ -25,7 +25,7 @@ import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
-import { NmsToast } from "../Toast/Toast";
+import { ToastRenderer } from "../Toast/ToastRenderer";
 
 const AppFooter = lazy(() => import("../AppFooter/AppFooter"));
 const ShipSelection = lazy(() =>
@@ -75,7 +75,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 		gridTableTotalWidth,
 	} = useAppLayout();
 
-	const { toastConfig, isOpen: isToastOpen, closeToast, showSuccess, showError } = useToast();
+	const { showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
@@ -245,7 +245,6 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 									<TechTreeComponent
 										handleOptimize={handleOptimize}
 										solving={solving}
-										gridContainerRef={gridContainerRef}
 										gridTableTotalWidth={gridTableTotalWidth}
 									/>
 								</Suspense>
@@ -280,16 +279,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					className="hidden"
 					aria-label={t("buttons.loadBuild")}
 				/>
-				{toastConfig && (
-					<NmsToast
-						open={isToastOpen}
-						onOpenChange={closeToast}
-						title={toastConfig.title}
-						description={toastConfig.description}
-						variant={toastConfig.variant}
-						duration={toastConfig.duration}
-					/>
-				)}
+				<ToastRenderer />
 			</main>
 		</>
 	);

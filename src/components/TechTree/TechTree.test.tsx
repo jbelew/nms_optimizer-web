@@ -74,7 +74,6 @@ vi.mock("../../utils/splashScreen", () => ({
 
 describe("TechTree", () => {
 	const mockHandleOptimize = vi.fn();
-	const mockGridContainerRef = React.createRef<HTMLDivElement>();
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -89,7 +88,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -102,7 +100,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -115,7 +112,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -128,7 +124,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -148,7 +143,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -164,7 +158,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -178,7 +171,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={true}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -204,7 +196,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 				techTree={customTechTree as TechTree}
 			/>
@@ -218,7 +209,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);
@@ -237,7 +227,6 @@ describe("TechTree", () => {
 			<TechTreeComponent
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridContainerRef={mockGridContainerRef}
 				gridTableTotalWidth={undefined}
 			/>
 		);

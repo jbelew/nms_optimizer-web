@@ -1,13 +1,11 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import type { DialogBodyProps } from "./DialogBody";
-import type { DialogFooterProps } from "./DialogFooter";
-import type { DialogHeaderProps } from "./DialogHeader";
 import React from "react";
 import { Dialog } from "@radix-ui/themes";
 
 import { DialogBody } from "./DialogBody";
 import { DialogFooter } from "./DialogFooter";
 import { DialogHeader } from "./DialogHeader";
+import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";
 
@@ -49,32 +47,14 @@ export interface ModuleSelectionDialogProps {
  * Renders the content of the module selection dialog.
  * This component is responsible for displaying the list of available modules,
  * allowing the user to select them, and triggering the optimization.
- * Child components receive all props and call their hooks directly (colocated hook pattern).
+ * Uses the colocated hook pattern with `useModuleSelectionDialog` to manage
+ * all state and props distribution to child components.
  *
  * @param {ModuleSelectionDialogProps} props - The props for the component.
  * @returns {JSX.Element} The rendered dialog content.
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
-	const headerProps: DialogHeaderProps = {
-		translatedTechName: props.translatedTechName,
-		techImage: props.techImage,
-		techColor: props.techColor,
-	};
-
-	const bodyProps: DialogBodyProps = {
-		groupedModules: props.groupedModules,
-		currentCheckedModules: props.currentCheckedModules,
-		handleValueChange: props.handleValueChange,
-		handleSelectAllChange: props.handleSelectAllChange,
-		allModulesSelected: props.allModulesSelected,
-		isIndeterminate: props.isIndeterminate,
-		techColor: props.techColor,
-	};
-
-	const footerProps: DialogFooterProps = {
-		handleOptimizeClick: props.handleOptimizeClick,
-		currentCheckedModules: props.currentCheckedModules,
-	};
+	const { headerProps, bodyProps, footerProps } = useModuleSelectionDialog(props);
 
 	return (
 		<Dialog.Content

@@ -21,12 +21,10 @@ import { usePlatformStore } from "../../store/PlatformStore";
 /**
  * @interface RecommendedBuildProps
  * @property {TechTree} techTree - The tech tree data, which may contain recommended builds.
- * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
  * @property {boolean} isLarge - Indicates if the screen is large, used for responsive layout.
  */
 interface RecommendedBuildProps {
 	techTree: TechTree;
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	isLarge: boolean;
 }
 
@@ -37,14 +35,10 @@ interface RecommendedBuildProps {
  * @param {RecommendedBuildProps} props - The props for the RecommendedBuild component.
  * @returns {JSX.Element} The rendered RecommendedBuild component.
  */
-const RecommendedBuild: React.FC<RecommendedBuildProps> = ({
-	techTree,
-	gridContainerRef,
-	isLarge,
-}) => {
+const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
-	const { applyRecommendedBuild } = useRecommendedBuild(techTree, gridContainerRef);
+	const { applyRecommendedBuild } = useRecommendedBuild(techTree);
 	const { sendEvent } = useAnalytics();
 	const selectedPlatform = usePlatformStore((state) => state.selectedPlatform);
 

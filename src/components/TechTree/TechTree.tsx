@@ -15,13 +15,11 @@ import { TechTreeContent } from "./TechTreeContent";
  * @interface TechTreeProps
  * @property {(tech: string) => void} handleOptimize - Function to initiate an optimization for a given technology.
  * @property {boolean} solving - Indicates if the optimization process is currently running.
- * @property {React.RefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
  * @property {number | undefined} gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  */
 interface TechTreeProps {
 	handleOptimize: (tech: string) => Promise<void>;
 	solving: boolean;
-	gridContainerRef: React.RefObject<HTMLDivElement | null>;
 	gridTableTotalWidth: number | undefined;
 	techTree?: TechTreeType; // Optional techTree prop
 }
@@ -35,13 +33,11 @@ interface TechTreeProps {
  * @param {object} props - The component props.
  * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
- * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
 	solving,
-	gridContainerRef,
 	techTree: techTreeProp,
 }) => {
 	const isLarge = useBreakpoint("1024px");
@@ -58,7 +54,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
 		if (hasRecommendedBuilds) {
 			// Adjust height to account for the RecommendedBuild button
-			return `${baseHeight - 52}px`;
+			return `${baseHeight - 48}px`;
 		}
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 	}, [hasRecommendedBuilds]);
@@ -83,25 +79,17 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 					</ScrollArea>
 
 					{hasRecommendedBuilds && (
-						<RecommendedBuild
-							techTree={techTree}
-							gridContainerRef={gridContainerRef}
-							isLarge={isLarge}
-						/>
+						<RecommendedBuild techTree={techTree} isLarge={isLarge} />
 					)}
 				</>
 			) : (
 				<>
 					<div className="mt-4 sm:mt-5">
 						{hasRecommendedBuilds && (
-							<RecommendedBuild
-								techTree={techTree}
-								gridContainerRef={gridContainerRef}
-								isLarge={isLarge}
-							/>
+							<RecommendedBuild techTree={techTree} isLarge={isLarge} />
 						)}
 					</div>
-					<div className={`${!hasRecommendedBuilds ? "mt-4" : "mt-4"}`}>
+					<div className="mt-4">
 						<TechTreeContent
 							handleOptimize={handleOptimize}
 							solving={solving}
@@ -122,7 +110,6 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @param {object} props - The component props.
  * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
  * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
- * @param {React.RefObject<HTMLDivElement | null>} props.gridContainerRef - Ref to the grid container for scroll management.
  * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
  * @returns {JSX.Element} The rendered TechTree component.
  */
