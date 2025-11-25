@@ -4,27 +4,34 @@ Copyright (c) 2025 John Belew
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to use
-the Software for personal, educational, or noncommercial purposes only, subject
+the Software **only for personal, educational, or noncommercial purposes**, subject
 to the following conditions:
 
-1. **Noncommercial Use Only**  
-   You may NOT use, distribute, or create derivative works of the Software for
-   commercial purposes. This includes, but is not limited to, monetizing content
-   created with the Software (e.g., YouTube videos, tutorials, streams, or other
-   monetized content).
+1. **Definitions**  
+   - **Commercial Use / Monetization:** Any activity intended to generate revenue or other compensation, including but not limited to selling the Software, offering paid access, using the Software in monetized content such as YouTube videos, streams, tutorials, advertisements, or paid subscriptions.  
+   - **Derivative Works:** Any modified, extended, or adapted version of the Software, including forks or integrations.
 
-2. **Attribution**  
-   You must give appropriate credit to the original author in any use or derivative work.
+2. **Permitted Use**  
+   - You may use, run, and study the Software for personal or educational purposes.  
+   - You may create noncommercial derivative works, provided you comply with all conditions of this license.
 
-3. **Distribution of Source**  
-   If you distribute the Software or modified versions, you must include this
-   license and retain all copyright notices.
+3. **Prohibited Use**  
+   - You may NOT distribute, sell, or otherwise commercially exploit the Software or derivative works.  
+   - You may NOT monetize content that demonstrates, uses, or includes the Software (e.g., YouTube videos, streams, tutorials, or any paid content) without explicit written permission from the copyright holder.
 
-4. **No Warranty**  
-   The Software is provided "as is", without warranty of any kind.
+4. **Attribution**  
+   - All copies or derivative works must include this license and retain the original copyright notice.  
+   - You must provide clear credit to the original author (John Belew) in any use or derivative work.
 
-For any commercial use, including monetization, you must obtain explicit written
-permission from the copyright holder.
+5. **Termination**  
+   - Any violation of this license automatically terminates your rights to use, copy, or distribute the Software.
+
+6. **Disclaimer / No Warranty**  
+   - The Software is provided "as is", without warranty of any kind, express or implied, including but not limited to warranties of merchantability or fitness for a particular purpose.  
+   - In no event shall the copyright holder be liable for any claim, damages, or other liability arising from the use of the Software.
+
+7. **Governing Law**  
+   - This license shall be governed by and construed in accordance with the laws of the State of [Your State], USA.
 
 ---
 
