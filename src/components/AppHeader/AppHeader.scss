@@ -5,24 +5,24 @@
 	overflow: hidden;
 
 	&__logo--text {
-		filter: drop-shadow(0 0 8px var(--accent-track));
 		font-family: var(--font-family-geosans);
 		font-weight: 400;
 		letter-spacing: 0.35em;
 		margin-right: -0.35em;
+		text-shadow: 0 0 8px var(--accent-track);
 		-webkit-text-stroke: 2px;
 		text-transform: uppercase;
 	}
 
 	&__title {
 		color: var(--gray-12);
-		filter: drop-shadow(0 0 4px var(--accent-a2));
 		font-weight: 700;
+		text-shadow: 0 0 4px var(--accent-a2);
 
 		strong {
 			color: var(--gray-12);
-			filter: drop-shadow(0 0 8px var(--accent-surface));
 			font-weight: 700;
+			text-shadow: 0 0 8px var(--accent-surface);
 		}
 	}
 }

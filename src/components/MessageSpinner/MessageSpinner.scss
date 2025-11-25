@@ -6,18 +6,17 @@
 
 		&--nms {
 			color: var(--accent-11);
-			filter: drop-shadow(0 2px 4px var(--accent-a2));
 
 			// Note: this modifier had very similar styles to the base.
 			// sass would allow further optimization here with @extend if needed.;
 			font-family: NMS, sans-serif;
 			font-weight: 400;
+			text-shadow: 0 2px 4px var(--accent-a2);
 			text-transform: uppercase;
 		}
 	}
 
 	&__spinner {
-		filter: drop-shadow(0 2px 4px var(--accent-a2));
 		height: 4rem;
 		width: 4rem;
 
@@ -27,8 +26,6 @@
 		}
 
 		&--accent {
-			filter: drop-shadow(0 2px 4px var(--accent-a2));
-
 			/* color: var(--accent-indicator); */
 			height: 4rem;
 			width: 4rem;

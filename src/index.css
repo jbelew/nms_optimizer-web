@@ -99,17 +99,16 @@ body {
 	font-family: var(--font-family-geosans);
 	font-weight: 400;
 	text-transform: uppercase;
-	filter: drop-shadow(0 2px 4px var(--accent-a2));
+	text-shadow: 0 2px 4px var(--accent-a2);
 	-webkit-text-stroke: 0.8px;
 }
 
 body.a11y-font .heading-styled {
 	letter-spacing: normal;
 	font-family: var(--default-font-family);
-	transform: scaleY(1.1);
 	font-weight: 700;
 	text-transform: uppercase;
-	filter: drop-shadow(0 2px 4px var(--accent-a2));
+	text-shadow: 0 2px 4px var(--accent-a2);
 	-webkit-text-stroke: 0px;
 }
 
@@ -171,11 +170,7 @@ footer a {
 
 /* Reduce animation complexity for CSS animations */
 .button--glow {
-	/* Use GPU acceleration for animations */
-	will-change: filter;
-	/* Only animate filter, avoid layout thrashing */
-	transform: translateZ(0);
-	backface-visibility: hidden;
+	/* Filter animation doesn't require GPU acceleration */
 }
 
 @keyframes buttonGlow {
@@ -191,9 +186,6 @@ footer a {
 
 /* Optimize main app container for composition */
 .app {
-	/* Enable GPU acceleration for smooth transitions */
-	transform: translateZ(0);
-	backface-visibility: hidden;
 	/* Prevent subpixel rendering issues */
 	-webkit-font-smoothing: antialiased;
 }
@@ -207,8 +199,7 @@ footer a {
 
 /* Optimize grid cells for isolation */
 .gridContainer__container {
-	contain: content;
-	/* Allow independent layout and styling within this element */
+	/* contain: content removed - can prevent proper rendering of child elements */
 }
 
 /* Reduce paint overhead for buttons */
@@ -216,8 +207,7 @@ button,
 [role="button"],
 .rt-Button {
 	/* Isolate button repaints from rest of the page */
-	will-change: auto; /* Only when button is active */
-	/* Prevents continuous GPU memory allocation */
+	/* will-change applied dynamically via JS when needed */
 }
 
 /* Optimize text rendering */
@@ -244,11 +234,8 @@ h6 {
 	}
 }
 
-/* Performance: Enable hardware acceleration for smooth scrolling */
-html {
-	scroll-behavior: smooth;
-	/* Enables GPU acceleration for scroll operations */
-}
+/* Note: scroll-behavior: smooth can cause rendering jank */
+/* Let browsers use auto scroll by default */
 
 /* Optimize focus states to prevent reflows */
 *:focus {
