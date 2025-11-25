@@ -44,7 +44,7 @@ describe("useRecommendedBuild", () => {
 
 		setGridAndResetAuxiliaryStateMock = vi.fn();
 		(useGridStore.getState as Mock).mockReturnValue({
-			setGridAndResetAuxiliaryState: setGridAndResetAuxiliaryStateMock,
+			setGrid: setGridAndResetAuxiliaryStateMock,
 		});
 
 		// Mock createGrid and createEmptyCell to return predictable values

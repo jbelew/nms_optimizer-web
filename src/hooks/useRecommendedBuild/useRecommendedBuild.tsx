@@ -16,7 +16,6 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  *          An object containing the function to apply a recommended build.
  */
 export const useRecommendedBuild = (techTree: TechTree) => {
-	const { setGridAndResetAuxiliaryState } = useGridStore.getState();
 	const isAbove1024 = useBreakpoint("1024px");
 	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: false }), []);
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
@@ -120,10 +119,10 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 					}
 					await new Promise((resolve) => setTimeout(resolve, 0)); // Yield after each row
 				}
-				setGridAndResetAuxiliaryState(newGrid);
+				useGridStore.getState().setGrid(newGrid);
 			}
 		},
-		[modulesMap, setGridAndResetAuxiliaryState, scrollIntoView, isAbove1024]
+		[modulesMap, scrollIntoView, isAbove1024]
 	);
 
 	return { applyRecommendedBuild };
