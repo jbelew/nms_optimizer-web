@@ -1,3 +1,10 @@
+## [6.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.1...v6.1.2) (2025-11-25)
+
+
+### Bug Fixes
+
+* **store:** Correct state reset behavior and add ModuleSelectionStore tests ([d722dd8](https://github.com/jbelew/nms_optimizer-web/commit/d722dd84beed89c426df1b175289f0165917dfcb))
+
 ## [6.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.0...v6.1.1) (2025-11-24)
 
 
