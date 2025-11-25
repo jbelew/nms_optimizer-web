@@ -75,7 +75,9 @@ describe("errorHandler", () => {
 			// Should have logged the error message about failed clear
 			const errorCalls = consoleErrorSpy.mock.calls;
 			const hasClearError = errorCalls.some(
-				(call: unknown[]) => call[0] === "ErrorBoundary: Failed to clear localStorage."
+				(call: unknown[]) =>
+					typeof call[0] === "string" &&
+					call[0].includes("ErrorBoundary: Failed to clear localStorage")
 			);
 			expect(hasClearError).toBe(true);
 

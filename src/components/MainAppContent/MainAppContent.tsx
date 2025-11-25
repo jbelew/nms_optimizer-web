@@ -194,7 +194,7 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<section
-						className="gridContainer flex flex-col items-center px-3 py-2 sm:px-8 sm:py-4 lg:flex-row lg:items-start"
+						className="gridContainer flex flex-col items-center px-4 py-2 sm:px-8 sm:pt-4 sm:pb-4 lg:flex-row lg:items-start"
 						ref={gridContainerRef}
 					>
 						<article

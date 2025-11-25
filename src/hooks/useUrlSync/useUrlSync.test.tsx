@@ -114,6 +114,12 @@ describe("useUrlSync", () => {
 	 * Tests that the hook correctly handles popstate events (browser history navigation).
 	 */
 	it("should handle popstate events", () => {
+		// Mock ship types to include both test-platform and new-platform
+		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
+			"test-platform": { label: "Test Platform", type: "Starship" },
+			"new-platform": { label: "New Platform", type: "Starship" },
+		});
+
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
 
 		act(() => {
@@ -124,7 +130,7 @@ describe("useUrlSync", () => {
 		expect(mockDeserializeGrid).toHaveBeenCalledWith("new-serialized-grid");
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
 			"new-platform",
-			["test-platform"],
+			["test-platform", "new-platform"],
 			false,
 			true
 		);

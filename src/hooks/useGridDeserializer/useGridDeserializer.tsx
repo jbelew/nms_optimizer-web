@@ -237,6 +237,7 @@ export const deserialize = async (
 
 		const colors: { [key: string]: string } = {};
 		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};
+		const validTechKeys = new Set<string>();
 		for (const techCategory in techTreeData) {
 			const techTreeItems = techTreeData[techCategory];
 			if (Array.isArray(techTreeItems)) {
@@ -248,6 +249,7 @@ export const deserialize = async (
 					) {
 						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
 						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
+						validTechKeys.add(techTreeItem.key);
 						for (const module of (techTreeItem as TechTreeItem).modules) {
 							modulesMap[techTreeItem.key][module.id] = module;
 						}
@@ -255,10 +257,24 @@ export const deserialize = async (
 				}
 			}
 		}
+
+		// Validate that all techs in serialized grid exist in current API data
+		const missingTechs = new Set<string>();
+		for (const techChar of Object.values(techMap)) {
+			if (techChar !== " " && !validTechKeys.has(techChar)) {
+				missingTechs.add(techChar);
+			}
+		}
+		if (missingTechs.size > 0) {
+			console.error(
+				`Grid deserialization warning: The following techs no longer exist in the API: ${Array.from(missingTechs).join(", ")}. They will be skipped. This may be due to API changes since the grid was shared.`
+			);
+		}
 		setTechColors(colors);
 
 		// --- Grid Population Loop ---
 		let index = 0;
+		let skippedCellsCount = 0;
 		for (let r = 0; r < newGrid.height; r++) {
 			for (let c = 0; c < newGrid.width; c++) {
 				const gridChar = gridString[index];
@@ -272,7 +288,6 @@ export const deserialize = async (
 				const adjBonusChar = decompressedAdjBonus[index];
 
 				// Reset cell properties
-				newGrid.cells[r][c].tech = techName;
 				newGrid.cells[r][c].module = null;
 				newGrid.cells[r][c].label = "";
 				newGrid.cells[r][c].image = null;
@@ -282,7 +297,19 @@ export const deserialize = async (
 				newGrid.cells[r][c].adjacency_bonus = adjBonusChar === "T" ? 1.0 : 0.0;
 				newGrid.cells[r][c].sc_eligible = false;
 
-				if (moduleId && techName) {
+				// Validate tech exists before assigning (handles API changes)
+				if (techName && !validTechKeys.has(techName)) {
+					console.warn(
+						`Cell [${r},${c}] references missing tech: ${techName}. Skipping cell content.`
+					);
+					newGrid.cells[r][c].tech = null;
+					newGrid.cells[r][c].active = false;
+					skippedCellsCount++;
+				} else {
+					newGrid.cells[r][c].tech = techName;
+				}
+
+				if (moduleId && techName && validTechKeys.has(techName)) {
 					const techModules = modulesMap[techName];
 					if (techModules) {
 						const moduleData = techModules[moduleId];
@@ -307,6 +334,12 @@ export const deserialize = async (
 				}
 				index++;
 			}
+		}
+
+		if (skippedCellsCount > 0) {
+			console.warn(
+				`Grid deserialization: Skipped ${skippedCellsCount} cells due to missing techs in API.`
+			);
 		}
 		console.log("Deserialized Grid (using raw gridString):", newGrid);
 		return newGrid;

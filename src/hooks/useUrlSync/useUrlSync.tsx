@@ -29,22 +29,37 @@ export const useUrlSync = () => {
 	useEffect(() => {
 		if (!isKnownRoute) return;
 
-		const handlePopState = () => {
+		const handlePopState = async () => {
 			const urlParams = new URLSearchParams(window.location.search);
 			const platformFromUrl = urlParams.get("platform");
 			const gridFromUrl = urlParams.get("grid");
 
-			// Sync platform from URL to store
+			const validShipTypes = Object.keys(shipTypes);
+			if (validShipTypes.length === 0) {
+				console.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
+				return;
+			}
+
+			// IMPORTANT: Sync platform BEFORE grid to avoid race conditions
+			// If we have both platform and grid from URL, ensure platform is set first
+			// so deserialization uses the correct platform
 			if (platformFromUrl && platformFromUrl !== selectedShipTypeFromStore) {
-				setSelectedShipTypeInStore(
-					platformFromUrl,
-					Object.keys(shipTypes),
-					false,
-					isKnownRoute
-				);
+				if (validShipTypes.includes(platformFromUrl)) {
+					setSelectedShipTypeInStore(
+						platformFromUrl,
+						validShipTypes,
+						false,
+						isKnownRoute
+					);
+				} else {
+					console.warn(
+						`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
+					);
+				}
 			}
 
 			// Sync grid from URL to store
+			// Grid deserialization will use the platform that was just synced above
 			if (gridFromUrl) {
 				deserializeGrid(gridFromUrl);
 			} else {

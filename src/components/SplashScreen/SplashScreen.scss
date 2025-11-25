@@ -1,3 +1,5 @@
+@use "../../styles/z-indexes" as *;
+
 .SplashScreen {
 	align-items: center;
 	display: flex;
@@ -7,11 +9,12 @@
 	justify-content: center;
 	opacity: 1;
 	position: fixed;
-	z-index: 99999;
+	z-index: $z-splash-screen;
 
 	&--hidden {
 		animation: SplashScreen-hide 200ms forwards;
 		pointer-events: none;
+		visibility: hidden;
 	}
 
 	&__loader {

@@ -23,6 +23,7 @@ import { reportWebVitals } from "./reportWebVitals";
  * @property {string} [componentStack] - The component stack trace for errors.
  * @property {string} [stackTrace] - The stack trace for errors.
  * @property {string} [app_version] - The version of the application.
+ * @property {string} [storageCleared] - Whether localStorage was successfully cleared ("yes" or "no").
  */
 export interface GA4Event {
 	category: string;
@@ -44,6 +45,7 @@ export interface GA4Event {
 	buildName?: string;
 	fileName?: string;
 	shipType?: string;
+	storageCleared?: string;
 }
 
 let gaInitialized = false;

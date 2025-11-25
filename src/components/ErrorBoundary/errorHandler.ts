@@ -12,11 +12,19 @@ import { sendEvent } from "../../utils/analytics";
 export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);
 
+	// Attempt to clear localStorage, but don't let storage errors prevent recovery
+	let localStorageCleared = false;
 	try {
-		localStorage.clear();
-		console.log("ErrorBoundary: Cleared localStorage.");
+		if (typeof window !== "undefined" && window.localStorage) {
+			localStorage.clear();
+			localStorageCleared = true;
+			console.log("ErrorBoundary: Cleared localStorage.");
+		}
 	} catch (e) {
-		console.error("ErrorBoundary: Failed to clear localStorage.", e);
+		console.error(
+			"ErrorBoundary: Failed to clear localStorage. May be in private browsing mode or storage full.",
+			e instanceof Error ? e.message : String(e)
+		);
 	}
 
 	// Clear service workers to force fresh code fetch
@@ -36,5 +44,6 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 		nonInteraction: true,
 		componentStack: errorInfo?.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
 		stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
+		storageCleared: localStorageCleared ? "yes" : "no",
 	});
 };

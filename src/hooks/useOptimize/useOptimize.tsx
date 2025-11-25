@@ -112,7 +112,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			// New socket per optimization
-			let socket: Socket;
+			let socket: Socket | null = null;
 			try {
 				const { io } = await import("socket.io-client");
 				socket = io(WS_URL, { transports: ["websocket"] });
@@ -124,7 +124,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 			}
 
 			const cleanup = () => {
-				socket.disconnect();
+				if (socket) {
+					socket.disconnect();
+				}
 				resetProgress();
 			};
 
@@ -149,17 +151,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 				"progress",
 				(data: { progress_percent: number; best_grid?: Grid; status?: string }) => {
 					setProgressPercent(data.progress_percent);
-					// if (data.status === "finish") {
-					// 	setProgressPercent(100);
-					// }
-					// if (
-					// 	data.status &&
-					// 	data.status !== "in_progress" &&
-					// 	data.status !== "start" &&
-					// 	data.status !== "finish"
-					// ) {
-					// 	setStatus("data.status");
-					// }
 					setStatus("Optimized with Rust, obviously!");
 					if (data.best_grid) {
 						setGrid(data.best_grid);

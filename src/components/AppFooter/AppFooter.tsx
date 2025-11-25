@@ -30,7 +30,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 		<footer
 			key={i18n.language}
 			data-build-date={buildDate}
-			className="flex w-full flex-col items-center justify-center gap-1 bg-(--color-panel-solid) px-3 py-6 text-center text-xs font-light sm:text-sm md:w-fit md:bg-transparent md:p-4 md:px-0 lg:px-0 lg:pt-4 lg:pb-0"
+			className="flex w-full flex-col items-center justify-center gap-1 bg-(--color-panel-solid) px-4 py-6 text-center text-xs font-light sm:text-sm md:w-fit md:bg-transparent md:p-4 md:px-0 lg:px-0 lg:pt-4 lg:pb-0"
 		>
 			<div className="max-w-full wrap-break-word">
 				<Trans
@@ -83,7 +83,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 				&nbsp;• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
 			</div>
 			<Separator decorative size="3" mt="1" mb="1" />
-			<div className="flex flex-wrap items-center justify-center gap-1">
+			<div className="flex flex-wrap items-center justify-center gap-2 lg:gap-1">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
 			</div>

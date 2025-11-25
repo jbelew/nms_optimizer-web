@@ -276,22 +276,38 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
+			// Collect keys to remove first to avoid mutating collection during iteration
+			const keysToRemove: string[] = [];
 			for (let i = 0; i < localStorage.length; i++) {
 				const key = localStorage.key(i);
 				if (key && key.startsWith("app-state") && key !== name) {
-					console.log(`GridStore: Removing old app-state key: ${key}`);
-					localStorage.removeItem(key);
+					keysToRemove.push(key);
 				}
 			}
+			// Remove collected keys in a separate loop
+			keysToRemove.forEach((key) => {
+				console.log(`GridStore: Removing old app-state key: ${key}`);
+				localStorage.removeItem(key);
+			});
 
 			const storedData = localStorage.getItem(name);
 			if (!storedData) {
 				console.log(`GridStore: No stored data found for key: ${name}`);
 				return null;
 			}
-			const parsedData = JSON.parse(storedData) as StorageValue<
-				Partial<GridStore> & { selectedPlatform?: string }
-			>;
+
+			let parsedData: StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
+			try {
+				parsedData = JSON.parse(storedData) as StorageValue<
+					Partial<GridStore> & { selectedPlatform?: string }
+				>;
+			} catch (parseError) {
+				console.error(
+					`GridStore: Failed to parse stored data for key "${name}". Data may be corrupted.`,
+					parseError instanceof Error ? parseError.message : String(parseError)
+				);
+				return null;
+			}
 
 			const urlParams = new URLSearchParams(getWindowSearch());
 			const platformFromUrl = urlParams.get("platform");

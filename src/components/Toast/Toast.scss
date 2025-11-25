@@ -1,4 +1,5 @@
 @use "../../styles/mixins";
+@use "../../styles/z-indexes" as *;
 
 .ToastRoot {
 	align-items: center;
@@ -44,12 +45,11 @@
 	list-style: none;
 	margin: 0;
 	max-width: 100vw;
-	outline: none;
 	padding: var(--viewport-padding);
 	position: fixed;
 	right: 0;
 	width: 390px;
-	z-index: 2147483647;
+	z-index: $z-toast;
 }
 
 @keyframes hide {

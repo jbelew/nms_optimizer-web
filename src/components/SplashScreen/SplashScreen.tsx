@@ -68,6 +68,8 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 				const handleAnimationEnd = (event: AnimationEvent) => {
 					if (event.animationName === `${cssBlock}-hide`) {
 						setStatus("hidden");
+						// Call onHidden callback when animation completes
+						// Note: If onHidden dependency changes during animation, the new callback will be called
 						onHidden?.();
 						element.removeEventListener(
 							"animationend",
