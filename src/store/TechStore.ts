@@ -44,6 +44,7 @@ export interface TechState {
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
 	clearCheckedModules: (tech: string) => void;
 	clearAllCheckedModules: () => void;
+	clearTechGroups: () => void;
 	clearResult: () => void;
 	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
 	setActiveGroup: (tech: string, groupType: string) => void;
@@ -110,6 +111,7 @@ export const useTechStore = create<TechState>((set, get) => ({
 			return { checkedModules: resetCheckedModules };
 		});
 	},
+	clearTechGroups: () => set({ techGroups: {}, checkedModules: {}, activeGroups: {} }),
 	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
 	setTechGroups: (techGroups) => {
 		const moduleSelectionStore = useModuleSelectionStore.getState();

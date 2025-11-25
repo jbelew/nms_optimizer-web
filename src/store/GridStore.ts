@@ -399,6 +399,12 @@ export const useGridStore = create<GridStore>()(
 						state.isSharedGrid = false;
 					});
 					useTechStore.getState().clearResult();
+					useTechStore.getState().clearTechGroups();
+					useTechBonusStore.getState().clearAllBonusStatus();
+					useModuleSelectionStore.getState().clearAllModuleSelections();
+					// Clear persisted storage when user explicitly switches ship types
+					localStorage.removeItem("techBonusState");
+					localStorage.removeItem("moduleSelectionState");
 				},
 
 				setResult: (result, tech) => {

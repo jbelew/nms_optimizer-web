@@ -103,6 +103,7 @@ describe("GridCell", () => {
 					setCheckedModules: vi.fn(),
 					clearCheckedModules: vi.fn(),
 					clearAllCheckedModules: vi.fn(),
+					clearTechGroups: vi.fn(),
 					clearResult: vi.fn(),
 					setTechGroups: vi.fn(),
 					setActiveGroup: vi.fn(),

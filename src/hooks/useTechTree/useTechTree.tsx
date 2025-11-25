@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 
 import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
-import { useModuleSelectionStore } from "../../store/ModuleSelectionStore";
 import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { apiCall } from "../../utils/apiCall";
@@ -267,8 +266,6 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 
 		setTechColors(colors);
-		// Clear module selections before loading new tech tree to prevent old selections from persisting
-		useModuleSelectionStore.getState().clearAllModuleSelections();
 		setTechGroups(techGroups);
 
 		Object.entries(activeGroups).forEach(([tech, groupType]) => {
