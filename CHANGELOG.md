@@ -1,3 +1,10 @@
+## [6.1.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.2...v6.1.3) (2025-11-25)
+
+
+### Performance Improvements
+
+* **bot-detection:** Improve initial load for crawlers by removing splash screen ([3dfbfac](https://github.com/jbelew/nms_optimizer-web/commit/3dfbfacf2ef6d9270d13f6b4f47eb46e94adf0a3))
+
 ## [6.1.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.1...v6.1.2) (2025-11-25)
 
 
