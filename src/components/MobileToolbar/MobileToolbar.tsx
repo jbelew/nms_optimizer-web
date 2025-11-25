@@ -1,0 +1,121 @@
+import React, { forwardRef } from "react";
+import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import * as Toolbar from "@radix-ui/react-toolbar";
+import { IconButton, Switch } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import { DownloadIcon } from "@/components/Icons/DownloadIcon";
+import { UploadIcon } from "@/components/Icons/UploadIcon";
+import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
+import { useDialog } from "@/context/dialog-utils";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useA11yStore } from "@/store/A11yStore";
+
+type MobileToolbarProps = {
+	isVisible: boolean;
+	solving: boolean;
+	hasModulesInGrid: boolean;
+	onLoadBuild: () => void;
+	onSaveBuild: () => void;
+	onShowChangelog: () => void;
+};
+
+export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
+	({ isVisible, solving, hasModulesInGrid, onLoadBuild, onSaveBuild, onShowChangelog }, ref) => {
+		const { t } = useTranslation();
+		const { openDialog } = useDialog();
+		const { sendEvent } = useAnalytics();
+		const { a11yMode, toggleA11yMode } = useA11yStore();
+
+		return (
+			<Toolbar.Root
+				ref={ref}
+				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out"
+				style={{
+					backgroundColor: "#003848",
+					WebkitUserSelect: "none",
+					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
+				}}
+			>
+				<Toolbar.ToggleGroup
+					type="multiple"
+					className="flex items-center gap-2 pl-2"
+					aria-label={t("buttons.buildManagement") ?? ""}
+				>
+					{/* Load/Save buttons for mobile - far left */}
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.loadBuild") ?? ""}
+						onClick={onLoadBuild}
+						disabled={solving}
+					>
+						<UploadIcon weight="light" size={20} />
+					</IconButton>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.saveBuild") ?? ""}
+						onClick={onSaveBuild}
+						disabled={solving || !hasModulesInGrid}
+					>
+						<DownloadIcon weight="light" size={20} />
+					</IconButton>
+				</Toolbar.ToggleGroup>
+
+				<Toolbar.ToggleGroup
+					type="multiple"
+					className="flex items-center gap-2"
+					aria-label={t("buttons.utilities") ?? ""}
+				>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.changelog") ?? ""}
+						onClick={() => {
+							sendEvent({
+								category: "ui",
+								action: "show_changelog",
+								value: 1,
+							});
+							onShowChangelog();
+						}}
+					>
+						<CounterClockwiseClockIcon className="h-4 w-4" />
+					</IconButton>
+
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.userStats") ?? ""}
+						onClick={() => {
+							sendEvent({
+								category: "ui",
+								action: "show_user_stats",
+								value: 1,
+							});
+							openDialog("userstats");
+						}}
+					>
+						<PieChartIcon className="h-4 w-4" />
+					</IconButton>
+
+					<LanguageSelector />
+
+					{/* A11y mode switch */}
+					<div className="flex items-center gap-2">
+						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
+						<Switch
+							variant="soft"
+							checked={a11yMode}
+							onCheckedChange={toggleA11yMode}
+							aria-label={t("buttons.accessibility") ?? ""}
+						/>
+					</div>
+				</Toolbar.ToggleGroup>
+			</Toolbar.Root>
+		);
+	}
+);
+
+MobileToolbar.displayName = "MobileToolbar";

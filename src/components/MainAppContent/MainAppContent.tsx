@@ -1,17 +1,12 @@
 // src/components/app/MainAppContent.tsx
-import React, { FC, lazy, Suspense, useCallback, useEffect } from "react";
-import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { IconButton, Switch } from "@radix-ui/themes";
+import React, { lazy, Suspense, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
-import { UploadIcon } from "@/components/Icons/UploadIcon";
-import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
-import { useA11yStore } from "@/store/A11yStore";
+import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useDialog } from "../../context/dialog-utils";
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
@@ -48,14 +43,12 @@ type MainAppContentProps = {
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDate }) => {
-	// Destructure buildDate
+export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps) => {
 	const { t } = useTranslation();
+	const isSmallScreen = !useBreakpoint("640px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const { openDialog } = useDialog();
-	const { sendEvent } = useAnalytics();
-	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { isVisible, toolbarRef } = useScrollHide(80);
 	const {
@@ -106,85 +99,17 @@ export const MainAppContent: FC<MainAppContentProps> = ({ buildVersion, buildDat
 
 	return (
 		<>
-			{/* Mobile fixed toolbar */}
-			<nav
-				ref={toolbarRef}
-				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out sm:hidden"
-				style={{
-					backgroundColor: "#003848",
-					WebkitUserSelect: "none",
-					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
-				}}
-			>
-				<div className="flex items-center gap-2 pl-2">
-					{/* Load/Save buttons for mobile - far left */}
-					<IconButton
-						variant="soft"
-						size="2"
-						aria-label={t("buttons.loadBuild") ?? ""}
-						onClick={handleLoadBuild}
-						disabled={solving}
-					>
-						<UploadIcon weight="light" size={20} />
-					</IconButton>
-					<IconButton
-						variant="soft"
-						size="2"
-						aria-label={t("buttons.saveBuild") ?? ""}
-						onClick={handleSaveBuild}
-						disabled={solving || !hasModulesInGrid}
-					>
-						<DownloadIcon weight="light" size={20} />
-					</IconButton>
-				</div>
-
-				<div className="flex items-center gap-2">
-					<IconButton
-						variant="soft"
-						size="2"
-						aria-label={t("buttons.changelog") ?? ""}
-						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_changelog",
-								value: 1,
-							});
-							handleShowChangelog();
-						}}
-					>
-						<CounterClockwiseClockIcon className="h-4 w-4" />
-					</IconButton>
-
-					<IconButton
-						variant="soft"
-						size="2"
-						aria-label={t("buttons.userStats") ?? ""}
-						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_user_stats",
-								value: 1,
-							});
-							openDialog("userstats");
-						}}
-					>
-						<PieChartIcon className="h-4 w-4" />
-					</IconButton>
-
-					<LanguageSelector />
-
-					{/* A11y mode switch */}
-					<div className="flex items-center gap-2">
-						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
-						<Switch
-							variant="soft"
-							checked={a11yMode}
-							onCheckedChange={toggleA11yMode}
-							aria-label={t("buttons.accessibility") ?? ""}
-						/>
-					</div>
-				</div>
-			</nav>
+			{isSmallScreen && (
+				<MobileToolbar
+					ref={toolbarRef as React.Ref<HTMLDivElement>}
+					isVisible={isVisible}
+					solving={solving}
+					hasModulesInGrid={hasModulesInGrid}
+					onLoadBuild={handleLoadBuild}
+					onSaveBuild={handleSaveBuild}
+					onShowChangelog={handleShowChangelog}
+				/>
+			)}
 
 			<main className="flex min-h-dvh flex-col items-center justify-start pt-12 sm:justify-center sm:pt-0">
 				<div
