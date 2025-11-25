@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type UseScrollHideReturn = {
 	isVisible: boolean;
 	toolbarRef: React.RefObject<HTMLElement | null>;
+	forceShow: () => void;
 };
 
 /**
@@ -16,6 +17,10 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 	const lastScrollYRef = useRef(0);
 	const directionBaseRef = useRef(0);
 	const lastDirectionRef = useRef<"up" | "down" | null>(null);
+
+	const forceShow = useCallback(() => {
+		setIsVisible(true);
+	}, []);
 
 	useEffect(() => {
 		const initialScroll = window.scrollY;
@@ -60,5 +65,5 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 		};
 	}, [threshold]);
 
-	return { isVisible, toolbarRef };
+	return { isVisible, toolbarRef, forceShow };
 };
