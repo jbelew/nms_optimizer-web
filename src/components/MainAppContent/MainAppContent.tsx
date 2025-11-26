@@ -119,11 +119,11 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<section
-						className="gridContainer flex flex-col items-center px-4 py-2 sm:px-8 sm:pt-4 sm:pb-4 lg:flex-row lg:items-start"
+						className="gridContainer flex flex-col items-center px-4 sm:px-8 sm:py-4 lg:flex-row lg:items-start"
 						ref={gridContainerRef}
 					>
 						<article
-							className="gridContainer__container w-full p-1 lg:w-auto lg:shrink-0"
+							className="gridContainer__container w-full lg:w-auto lg:shrink-0 lg:p-1"
 							ref={appLayoutContainerRef}
 						>
 							<header
@@ -165,7 +165,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 						</article>
 
 						{!isSharedGrid && (
-							<aside className="flex w-full flex-col p-1 lg:ml-4 lg:p-0">
+							<aside className="flex w-full flex-col lg:ml-4 lg:p-0">
 								<Suspense fallback={<TechTreeSkeleton />}>
 									<TechTreeComponent
 										handleOptimize={handleOptimize}

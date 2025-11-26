@@ -51,7 +51,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	return (
 		<header
 			key={i18n.language}
-			className="header relative flex flex-col items-center p-4 pb-2 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
+			className="header relative flex flex-col items-center p-4 pb-6 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
 		>
 			{!isSharedGrid && !isLg && isSm && (
 				<div className="absolute! top-5! left-4! z-10 flex items-start sm:top-6! sm:left-8!">
@@ -127,7 +127,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				NO MAN&apos;S SKY
 			</h1>
 
-			<div className="m-1 mb-2 flex w-full items-center gap-2">
+			<div className="my-1 flex w-full items-center gap-2">
 				<Separator
 					size="1"
 					orientation="horizontal"
@@ -194,6 +194,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				wrap="pretty"
 				align="center"
 				as="h2"
+				mt="1"
 				size={isSm ? "3" : "2"}
 				className="header__title"
 			>

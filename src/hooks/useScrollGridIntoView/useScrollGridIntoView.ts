@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollHide } from "../useScrollHide/useScrollHide";
 
-const GRID_SCROLL_OFFSET_SMALL = 54; // < 640px
+const GRID_SCROLL_OFFSET_SMALL = 64; // < 640px
 const GRID_SCROLL_OFFSET_MEDIUM = 0; // 640px - 768px
 const GRID_SCROLL_OFFSET_LARGE = 0; // >= 768px
 
