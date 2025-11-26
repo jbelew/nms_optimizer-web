@@ -98,25 +98,17 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
 		useGridCellStyle(cell, isTouching);
 
-	// Create a mutable copy of the style from the hook.
-	const divStyle: React.CSSProperties = useMemo(() => {
-		const style = { ...(cellElementStyle as React.CSSProperties) };
-		// Extract the image URL from the backgroundImage property.
-		const bgImage = style.backgroundImage?.match(/url\("?(.+?)"?\)/)?.[1];
-		// If an image URL is found, remove it from the div's style to prevent it from rendering as a background.
-		if (bgImage) {
-			style.backgroundImage = "none";
-		}
-		return style;
-	}, [cellElementStyle]);
+	// Build image URLs with cache-busting query param.
+	const { imageUrl, imageSrcSet } = useMemo(() => {
+		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };
 
-	// Extract the image URL from the backgroundImage property.
-	const imageUrl =
-		divStyle.backgroundImage === "none"
-			? (cellElementStyle as React.CSSProperties)?.backgroundImage?.match(
-					/url\("?(.+?)"?\)/
-				)?.[1]
-			: undefined;
+		const base1x = `/assets/img/grid/${cell.image}`;
+		const base2x = base1x.replace(/\.webp$/, "@2x.webp");
+		const url1x = `${base1x}?v=${__APP_VERSION__}`;
+		const url2x = `${base2x}?v=${__APP_VERSION__}`;
+
+		return { imageUrl: url1x, imageSrcSet: `${url1x} 1x, ${url2x} 2x` };
+	}, [cell.image]);
 
 	const upGradePriority = getUpgradePriority(cell.label);
 
@@ -134,13 +126,14 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 				onTouchCancel={handleTouchCancel}
 				onKeyDown={handleKeyDown}
 				className={cellClassName}
-				style={divStyle}
+				style={cellElementStyle as React.CSSProperties}
 			>
 				{imageUrl && (
 					<img
 						src={imageUrl}
+						srcSet={imageSrcSet}
 						alt=""
-						className="absolute inset-0 -z-10 h-full w-full object-cover"
+						className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
 						style={{ transform: "translate3d(0, 0, 0)" }}
 					/>
 				)}
@@ -177,8 +170,9 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 			handleTouchCancel,
 			handleKeyDown,
 			cellClassName,
-			divStyle,
+			cellElementStyle,
 			imageUrl,
+			imageSrcSet,
 			showEmptyIcon,
 			emptyIconFillColor,
 			upGradePriority,

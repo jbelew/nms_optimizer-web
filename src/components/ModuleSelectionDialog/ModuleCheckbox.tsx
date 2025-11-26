@@ -48,7 +48,9 @@ const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
 	techColor,
 	isDisabled,
 }) => {
-	const imagePath = module.image ? `${baseImagePath}${module.image}` : fallbackImage;
+	const imagePath = module.image
+		? `${baseImagePath}${module.image}?v=${__APP_VERSION__}`
+		: fallbackImage;
 
 	return (
 		<label

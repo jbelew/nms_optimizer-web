@@ -48,23 +48,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		isTouching,
 	]);
 
-	const image1x = useMemo(() => {
-		return cell.image ? `url(/assets/img/grid/${cell.image})` : "none";
-	}, [cell.image]);
-
-	const image2x = useMemo(() => {
-		return cell.image
-			? `url(/assets/img/grid/${cell.image.replace(/\.webp$/, "@2x.webp")})`
-			: "none";
-	}, [cell.image]);
-
-	const cellElementStyle = useMemo(
-		() => ({
-			"--grid-cell-image-1x": image1x,
-			"--grid-cell-image-2x": image2x,
-		}),
-		[image1x, image2x]
-	);
+	const cellElementStyle: React.CSSProperties = {};
 
 	const showEmptyIcon = !cell.module && cell.active;
 
