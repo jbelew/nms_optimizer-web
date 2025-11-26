@@ -1,3 +1,10 @@
+## [6.1.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.3...v6.1.4) (2025-11-26)
+
+
+### Bug Fixes
+
+* **grid-cell:** Restore visibility of an internal element ([2d91f78](https://github.com/jbelew/nms_optimizer-web/commit/2d91f782cdd8a09418d1d6cfa1f13e3b75092609))
+
 ## [6.1.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.2...v6.1.3) (2025-11-25)
 
 
