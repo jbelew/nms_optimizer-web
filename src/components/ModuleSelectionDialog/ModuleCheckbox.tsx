@@ -1,10 +1,30 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import type { Module } from "./index";
 import React from "react";
-import { Avatar, CheckboxGroup } from "@radix-ui/themes";
+import { Avatar, CheckboxGroup, Code } from "@radix-ui/themes";
 
 const baseImagePath = "/assets/img/grid/";
 const fallbackImage = `${baseImagePath}infra.webp`;
+
+/**
+ * Formats a label by wrapping [Pn] patterns (where n is a number) in a Code tag.
+ */
+const formatLabel = (label: string): React.ReactNode => {
+	const pattern = /\[P\d+\]/g;
+	const parts = label.split(pattern);
+	const matches = label.match(pattern) || [];
+
+	if (matches.length === 0) {
+		return label;
+	}
+
+	return parts.map((part, index) => (
+		<React.Fragment key={index}>
+			{part}
+			{matches[index] && <Code>{matches[index]}</Code>}
+		</React.Fragment>
+	));
+};
 
 /**
  * Props for the ModuleCheckbox component.
@@ -45,7 +65,7 @@ const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
 				src={imagePath}
 				color={techColor}
 			/>
-			{module.label}
+			{formatLabel(module.label)}
 		</label>
 	);
 };
