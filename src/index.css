@@ -168,11 +168,6 @@ footer a {
 /* Based on trace analysis 2025-11-16         */
 /* ============================================ */
 
-/* Reduce animation complexity for CSS animations */
-.button--glow {
-	/* Filter animation doesn't require GPU acceleration */
-}
-
 @keyframes buttonGlow {
 	from {
 		/* Only animate filter - doesn't trigger layout */
@@ -195,19 +190,6 @@ footer a {
 	contain: layout style;
 	/* Isolate from parent's layout calculations */
 	/* This prevents reflows from affecting child elements */
-}
-
-/* Optimize grid cells for isolation */
-.gridContainer__container {
-	/* contain: content removed - can prevent proper rendering of child elements */
-}
-
-/* Reduce paint overhead for buttons */
-button,
-[role="button"],
-.rt-Button {
-	/* Isolate button repaints from rest of the page */
-	/* will-change applied dynamically via JS when needed */
 }
 
 /* Optimize text rendering */

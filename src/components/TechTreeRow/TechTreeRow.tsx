@@ -64,7 +64,7 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 	const { translatedTechName, imagePath, techColor, imagePath2x } = hookData;
 
 	return (
-		<div className="items-top optimizationButton mt-2 mr-1 mb-2 ml-0 flex gap-2 sm:ml-1">
+		<div className="items-top optimizationButton mt-2 mb-2 ml-0 flex gap-2 sm:ml-1 lg:mr-1">
 			<ActionButtons {...props} hookData={hookData} />
 
 			<Avatar
