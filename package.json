@@ -33,7 +33,7 @@
 		"heroku-postbuild": "vite build && node scripts/generate-ssg.mjs",
 		"prepare": "husky",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build",
+		"build-storybook": "STORYBOOK_BUILD=true storybook build",
 		"release": "semantic-release",
 		"lighthouse:ci": "lhci autorun",
 		"perf:check": "node scripts/performance-check.mjs",

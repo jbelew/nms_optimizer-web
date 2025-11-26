@@ -19,12 +19,3 @@ export const Default: Story = {
 		onForceOptimize: async () => console.log("Force optimize"),
 	},
 };
-
-export const WithDifferentTech: Story = {
-	args: {
-		isOpen: true,
-		technologyName: "Shield Generator",
-		onClose: () => console.log("Dialog closed"),
-		onForceOptimize: async () => console.log("Force optimize"),
-	},
-};

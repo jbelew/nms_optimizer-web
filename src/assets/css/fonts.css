@@ -1,0 +1,55 @@
+/* Font declarations for GeosansLight */
+@font-face {
+	font-family: GeosansLight;
+	src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Font declarations for Raleway */
+@font-face {
+	font-family: Raleway;
+	src: url("/assets/fonts/Raleway-VariableFont_wght.subset.woff2") format("woff2");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Font declarations for Acumin */
+@font-face {
+	font-family: Acumin;
+	src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Font declarations for NMS */
+@font-face {
+	font-family: NMS;
+	src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: optional;
+}
+
+/* Font declarations for AtkinsonHyperlegibleNext */
+@font-face {
+	font-family: AtkinsonHyperlegibleNext;
+	src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2")
+		format("woff2-variations");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Font declarations for AtkinsonHyperlegibleNext Italic */
+@font-face {
+	font-family: AtkinsonHyperlegibleNext;
+	src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2")
+		format("woff2-variations");
+	font-weight: 100 900;
+	font-style: italic;
+	font-display: swap;
+}

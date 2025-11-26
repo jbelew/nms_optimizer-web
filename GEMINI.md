@@ -129,6 +129,7 @@ You will ensure these are addressed in all projects.
 
 ## Gemini Added Memories
 - The user tends to perform the 'git push origin main --follow-tags' command manually.
+- Storybook builds were failing due to a large file exceeding the service worker's cache limit. The fix involved increasing `maximumFileSizeToCacheInBytes` in `vite.config.ts` and conditionally disabling the `generate-version-json` plugin during Storybook builds.
 
 ## JSDoc Guidelines
 

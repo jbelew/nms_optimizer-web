@@ -4,27 +4,27 @@ import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { GridTable } from "./GridTable";
+import GridTableButtons from "./GridTableButtons";
 
 const meta = {
-	component: GridTable,
+	component: GridTableButtons,
+	title: "Components/GridTableButtons",
+	parameters: {
+		docs: {
+			description: {
+				component:
+					"Control buttons for grid operations including load/save builds, share grid, reset, and help/about dialogs.",
+			},
+		},
+	},
 	decorators: [
 		(Story) => {
-			// Initialize stores
 			useEffect(() => {
 				useGridStore.setState({
-					grid: createGrid(10, 6),
-					result: null,
 					isSharedGrid: false,
-					gridFixed: false,
-					superchargedFixed: false,
-				});
-				useTechTreeLoadingStore.setState({
-					isLoading: false,
+					grid: createGrid(10, 6),
 				});
 			}, []);
-
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
@@ -35,24 +35,19 @@ const meta = {
 			);
 		},
 	],
-} satisfies Meta<typeof GridTable>;
+} satisfies Meta<typeof GridTableButtons>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {
-		solving: false,
-		progressPercent: 0,
-		shared: false,
-	},
-};
-
-export const Solving: Story = {
-	args: {
-		solving: true,
-		progressPercent: 45,
-		shared: false,
+	args: {},
+	parameters: {
+		docs: {
+			description: {
+				story: "Grid buttons in default state with all controls available.",
+			},
+		},
 	},
 };

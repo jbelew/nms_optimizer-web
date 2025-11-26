@@ -26,19 +26,23 @@ export default defineConfig(({ mode }) => {
 		},
 		plugins: [
 			markdownBundlePlugin(),
-			{
-				name: "generate-version-json",
-				writeBundle() {
-					const versionInfo = {
-						version: appVersion,
-						buildDate: buildDate,
-					};
-					fs.writeFileSync(
-						path.resolve(__dirname, "dist/version.json"),
-						JSON.stringify(versionInfo, null, 2)
-					);
-				},
-			},
+			...(!process.env.STORYBOOK_BUILD // Conditionally include the plugin
+				? [
+						{
+							name: "generate-version-json",
+							writeBundle() {
+								const versionInfo = {
+									version: appVersion,
+									buildDate: buildDate,
+								};
+								fs.writeFileSync(
+									path.resolve(__dirname, "dist/version.json"),
+									JSON.stringify(versionInfo, null, 2)
+								);
+							},
+						},
+					]
+				: []),
 			react({
 				babel: {
 					plugins: [["babel-plugin-react-compiler"]],
@@ -103,7 +107,7 @@ export default defineConfig(({ mode }) => {
 					// Workbox quality-of-life features
 					navigationPreload: false,
 					cleanupOutdatedCaches: true, // Essential for cache hygiene
-
+					maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 					// Don't serve app shell for unknown routes - let 404s return proper status for SEO
 					navigateFallback: undefined,
 
