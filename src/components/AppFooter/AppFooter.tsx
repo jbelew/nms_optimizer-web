@@ -1,3 +1,5 @@
+import "./AppFooter.scss";
+
 import React from "react";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Separator } from "@radix-ui/themes";
@@ -27,12 +29,8 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 	const { i18n } = useTranslation();
 
 	return (
-		<footer
-			key={i18n.language}
-			data-build-date={buildDate}
-			className="flex w-full flex-col items-center justify-center gap-1 bg-(--color-panel-solid) px-4 py-6 text-center text-xs font-light sm:text-sm md:w-fit md:bg-transparent md:p-4 md:px-0 lg:px-0 lg:pt-4 lg:pb-0"
-		>
-			<div className="max-w-full wrap-break-word">
+		<footer key={i18n.language} data-build-date={buildDate} className="app-footer">
+			<div className="app-footer__content">
 				<Trans
 					i18nKey="footer.issuePrompt"
 					components={{
@@ -40,9 +38,8 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 							<a
 								href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 								target="_blank"
-								className="font-medium underline"
+								className="app-footer__link"
 								rel="noopener noreferrer"
-								// style={{ color: "var(--accent-11)" }}
 							/>
 						),
 					}}
@@ -55,10 +52,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 					rel="noopener noreferrer"
 					aria-label="View source on GitHub"
 				>
-					<GitHubLogoIcon
-						className="ml-1 inline"
-						style={{ color: "var(--accent-track)" }}
-					/>
+					<GitHubLogoIcon className="app-footer__link--icon" />
 				</a>
 				<a
 					href="https://www.linkedin.com/in/jobelew/"
@@ -66,24 +60,20 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 					rel="noopener noreferrer"
 					aria-label="View profile on LinkedIn"
 				>
-					<LinkedInLogoIcon
-						className="mr-1 ml-1 inline"
-						style={{ color: "var(--accent-track)" }}
-					/>
+					<LinkedInLogoIcon className="app-footer__link--icon-linkedin" />
 				</a>
 				<a
 					href="https://www.linkedin.com/in/jobelew/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="font-medium underline"
-					style={{ color: "var(--accent-11)" }}
+					className="app-footer__link"
 				>
 					#OpenToWork
 				</a>
 				&nbsp;• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
 			</div>
 			<Separator decorative size="3" mt="1" mb="1" />
-			<div className="flex flex-wrap items-center justify-center gap-2 lg:gap-1">
+			<div className="app-footer__support">
 				<Trans i18nKey="footer.supportPrompt" />
 				<Buymeacoffee />
 			</div>

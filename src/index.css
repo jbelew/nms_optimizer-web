@@ -124,10 +124,6 @@ body.a11y-font .heading-styled {
 	text-transform: uppercase;
 }
 
-footer a {
-	color: var(--accent-11);
-}
-
 /* Visually hide an element but keep it accessible to screen readers */
 .sr-only {
 	position: absolute;

@@ -49,12 +49,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	}, [a11yMode]);
 
 	return (
-		<header
-			key={i18n.language}
-			className="header relative flex flex-col items-center p-4 pb-6 sm:px-8 sm:pt-6 sm:pb-4 lg:rounded-t-xl"
-		>
+		<header key={i18n.language} className="app-header">
 			{!isSharedGrid && !isLg && isSm && (
-				<div className="absolute! top-5! left-4! z-10 flex items-start sm:top-6! sm:left-8!">
+				<div className="app-header__controls app-header__controls--left">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<div className="flex items-center gap-2">
 							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
@@ -70,7 +67,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			)}
 
 			{!isSharedGrid && (
-				<div className="absolute! top-4! right-4! z-10 hidden items-center gap-2 sm:top-5! sm:right-8! sm:flex">
+				<div className="app-header__controls app-header__controls--right">
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
 							variant="soft"
@@ -123,11 +120,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</div>
 			)}
 
-			<h1 className="header__logo--text text-center text-3xl [word-spacing:-.25rem] sm:text-4xl">
-				NO MAN&apos;S SKY
-			</h1>
+			<h1 className="app-header__logo-text">NO MAN&apos;S SKY</h1>
 
-			<div className="my-1 flex w-full items-center gap-2">
+			<div className="app-header__separator-container">
 				<Separator
 					size="1"
 					orientation="horizontal"
@@ -139,8 +134,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Popover.Root>
 					<Popover.Trigger>
 						<img
-							className="h-4 w-3 shrink-0 sm:h-5 sm:w-4"
-							style={{ color: "var(--accent-track)" }}
+							className="app-header__logo-image"
 							src={nmslogo}
 							alt="No Man's Sky Atlas Logo"
 							width="16"
@@ -196,7 +190,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				as="h2"
 				mt="1"
 				size={isSm ? "3" : "2"}
-				className="header__title"
+				className="app-header__title"
 			>
 				<Trans
 					i18nKey="appHeader.subTitle"
