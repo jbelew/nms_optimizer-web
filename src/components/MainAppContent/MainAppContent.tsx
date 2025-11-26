@@ -1,4 +1,6 @@
 // src/components/app/MainAppContent.tsx
+import "./MainAppContent.scss";
+
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -111,49 +113,33 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 				/>
 			)}
 
-			<main className="flex min-h-dvh flex-col items-center justify-start pt-12 sm:justify-center sm:pt-0">
-				<div
-					className="app rounded-none shadow-none backdrop-blur-3xl sm:w-fit lg:rounded-xl lg:shadow-xl"
-					style={{ backgroundColor: "var(--accent-a2)" }}
-				>
+			<main className="main-app__container">
+				<div className="main-app__card">
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
-					<section
-						className="gridContainer flex flex-col items-center px-4 sm:px-8 sm:py-4 lg:flex-row lg:items-start"
-						ref={gridContainerRef}
-					>
-						<article
-							className="gridContainer__container w-full lg:w-auto lg:shrink-0 lg:p-1"
-							ref={appLayoutContainerRef}
-						>
-							<header
-								className="heading-styled mb-3 flex flex-wrap items-center gap-3 text-xl sm:mb-4 sm:text-2xl"
-								style={{
-									maxWidth: gridTableTotalWidth
-										? `${gridTableTotalWidth}px`
-										: undefined,
-								}}
-							>
-								{!isSharedGrid && (
-									<span className="shrink-0 self-start">
-										<ShipSelection solving={solving} />
-									</span>
-								)}
-								<span
-									className="mt-px hidden self-start sm:inline"
-									style={{ color: "var(--accent-11)" }}
-								>
-									{t("platformLabel")}
-								</span>
-								<span
-									className="mt-[3px] min-w-0 flex-1 self-start sm:mt-px"
+					<div className="main-app__content" ref={gridContainerRef}>
+						{/* Grid section */}
+						<div className="main-app__grid-section" ref={appLayoutContainerRef}>
+							{!isSharedGrid && (
+								<div
+									className="main-app__ship-selector"
 									style={{
-										textWrap: "balance",
+										maxWidth: gridTableTotalWidth
+											? `${gridTableTotalWidth}px`
+											: undefined,
 									}}
 								>
-									{t(`platforms.${selectedShipType}`)}
-								</span>
-							</header>
+									<span className="main-app__ship-selection">
+										<ShipSelection solving={solving} />
+									</span>
+									<span className="main-app__ship-label">
+										{t("platformLabel")}
+									</span>
+									<span className="main-app__ship-name">
+										{t(`platforms.${selectedShipType}`)}
+									</span>
+								</div>
+							)}
 
 							<GridTable
 								solving={solving}
@@ -162,10 +148,11 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 								shared={isSharedGrid}
 								ref={appLayoutGridTableRef}
 							/>
-						</article>
+						</div>
 
+						{/* Tech tree section */}
 						{!isSharedGrid && (
-							<aside className="flex w-full flex-col lg:ml-4 lg:p-0">
+							<div className="main-app__tech-tree-section">
 								<Suspense fallback={<TechTreeSkeleton />}>
 									<TechTreeComponent
 										handleOptimize={handleOptimize}
@@ -173,9 +160,9 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 										gridTableTotalWidth={gridTableTotalWidth}
 									/>
 								</Suspense>
-							</aside>
+							</div>
 						)}
-					</section>
+					</div>
 				</div>
 
 				<AppFooter buildVersion={buildVersion} buildDate={buildDate} />

@@ -68,7 +68,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="gridContainer__sidebar rounded-md p-4 shadow-md"
+						className="main-app__tech-tree-sidebar rounded-md p-4 shadow-md"
 						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a2)" }}
 					>
 						<TechTreeContent
