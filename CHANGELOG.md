@@ -1,3 +1,10 @@
+## [6.1.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.4...v6.1.5) (2025-11-26)
+
+
+### Performance Improvements
+
+* **assets:** Optimize background images ([6be28c7](https://github.com/jbelew/nms_optimizer-web/commit/6be28c742eb9f893855b89da4e2225434108533e))
+
 ## [6.1.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.3...v6.1.4) (2025-11-26)
 
 
