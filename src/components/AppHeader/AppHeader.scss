@@ -2,7 +2,7 @@
 
 .app-header {
 	align-items: center;
-	background-image: linear-gradient(to bottom, var(--color-panel-solid), rgb(0 0 0 / 0%));
+	background-image: linear-gradient(to bottom, var(--color-panel-solid), transparent);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -97,7 +97,7 @@
 		strong {
 			color: var(--gray-12);
 			font-weight: 700;
-			text-shadow: 0 0 8px var(--accent-surface);
+			text-shadow: 0 0 8px var(--accent-track);
 		}
 	}
 }

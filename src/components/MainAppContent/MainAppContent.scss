@@ -19,10 +19,10 @@
 
 	// Card wrapper for app content
 	&__card {
-		backdrop-filter: blur(64px);
+		backdrop-filter: blur(48px);
 		background-color: var(--accent-a2);
 		border: 1px solid var(--accent-surface);
-		border-radius: 0;
+		border-radius: var(--radius-3);
 		box-shadow: none;
 		box-shadow:
 			inset 0 0 16px rgb(255 255 255 / 5%),
@@ -56,7 +56,7 @@
 		padding: 0 1rem;
 
 		@media (width >= 640px) {
-			padding: 1rem 2rem;
+			padding: 1rem 2rem 1.5rem;
 		}
 
 		@media (width >= 1024px) {
@@ -129,7 +129,7 @@
 
 	// Tech tree sidebar content (ScrollArea)
 	&__tech-tree-sidebar {
-		border: 1px solid var(--gray-a2);
+		border: 1px solid var(--accent-surface);
 		box-shadow:
 			inset 0 0 8px rgb(255 255 255 / 5%),
 			0 4px 6px -1px rgb(0 0 0 / 10%),

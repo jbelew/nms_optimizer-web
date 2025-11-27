@@ -123,13 +123,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			<h1 className="app-header__logo-text">NO MAN&apos;S SKY</h1>
 
 			<div className="app-header__separator-container">
-				<Separator
-					size="1"
-					orientation="horizontal"
-					color="cyan"
-					decorative
-					className="flex-1"
-				/>
+				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
 
 				<Popover.Root>
 					<Popover.Trigger>
@@ -174,13 +168,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Content>
 				</Popover.Root>
 
-				<Separator
-					size="1"
-					orientation="horizontal"
-					color="cyan"
-					decorative
-					className="flex-1"
-				/>
+				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
 				{/* Tooltip button absolutely positioned to the right */}
 			</div>
 

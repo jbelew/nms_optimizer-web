@@ -209,9 +209,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 					/>
 				</Box>
 			),
-			hr: () => (
-				<Separator size="4" color="cyan" orientation="horizontal" decorative mb="2" />
-			),
+			hr: () => <Separator size="4" orientation="horizontal" decorative mb="2" />,
 		}),
 		[]
 	);

@@ -48,7 +48,7 @@
 /* Main component block */
 .appDialog {
 	&__overlay {
-		background-color: var(--black-a9);
+		background-color: var(--color-overlay);
 		inset: 0;
 		position: fixed;
 
@@ -94,7 +94,13 @@
 	}
 
 	&__scrollable-content {
-		mask-image: linear-gradient(to bottom, transparent, #000 1%, #000 98%, transparent);
+		mask-image: linear-gradient(
+			to bottom,
+			transparent,
+			var(--black-a12) 1%,
+			var(--black-a12) 98%,
+			transparent
+		);
 	}
 
 	&__title {

@@ -21,7 +21,7 @@ export const TechTreeSkeleton: React.FC = () => {
 					className="main-app__tech-tree-sidebar rounded-md p-4 shadow-md"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
-						backgroundColor: "var(--gray-a2)",
+						backgroundColor: "var(--accent-a2)",
 					}}
 				>
 					<MessageSpinner

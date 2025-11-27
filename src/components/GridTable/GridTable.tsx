@@ -78,7 +78,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 				{!isLarge && (
 					<Separator
 						size="4"
-						color="cyan"
 						orientation="horizontal"
 						decorative
 						className={`mb-4 ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
@@ -124,7 +123,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 								)}
 								<Separator
 									size="4"
-									color="cyan"
 									orientation="horizontal"
 									className="mt-2"
 									decorative
