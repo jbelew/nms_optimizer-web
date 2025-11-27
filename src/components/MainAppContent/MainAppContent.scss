@@ -55,6 +55,10 @@
 		flex-direction: column;
 		padding: 0 1rem;
 
+		// Force GPU acceleration to ensure repaints during zoom on iOS Safari
+		// This works in conjunction with grid cell GPU acceleration
+		transform: translateZ(0);
+
 		@media (width >= 640px) {
 			padding: 1rem 2rem 1.5rem;
 		}
