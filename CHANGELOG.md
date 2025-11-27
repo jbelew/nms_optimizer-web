@@ -1,3 +1,10 @@
+## [6.1.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.6...v6.1.7) (2025-11-27)
+
+
+### Bug Fixes
+
+* **ios-rendering:** Fix Safari zoom rendering issues with GPU acceleration ([e7744a3](https://github.com/jbelew/nms_optimizer-web/commit/e7744a30f0a3bb39f977b9be9a817840396e6939))
+
 ## [6.1.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.5...v6.1.6) (2025-11-27)
 
 
