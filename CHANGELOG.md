@@ -1,3 +1,10 @@
+## [6.1.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.5...v6.1.6) (2025-11-27)
+
+
+### Bug Fixes
+
+* **grid-cell:** remove contain: layout due to iOS zoom rendering issues ([c5534a5](https://github.com/jbelew/nms_optimizer-web/commit/c5534a58a4b80b931eb6b0562f6d096de6772123))
+
 ## [6.1.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.4...v6.1.5) (2025-11-26)
 
 
