@@ -19,7 +19,7 @@ jobs:
                   node-version: "lts/*"
 
             - name: Checkout main branch to get package.json
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   ref: main # Checkout main branch directly
                   token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
@@ -48,7 +48,7 @@ jobs:
                   node-version: "lts/*"
 
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   ref: main # Checkout main branch directly
                   token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
