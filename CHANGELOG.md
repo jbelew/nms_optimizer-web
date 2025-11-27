@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.8...v6.2.0) (2025-11-27)
+
+
+### Features
+
+* **useScrollHide:** force show element when near top ([6ca1cfe](https://github.com/jbelew/nms_optimizer-web/commit/6ca1cfef820203a42dc2ff7b944af4665031a65e))
+
 ## [6.1.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.7...v6.1.8) (2025-11-27)
 
 
