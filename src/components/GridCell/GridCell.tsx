@@ -134,7 +134,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 						srcSet={imageSrcSet}
 						alt=""
 						className="absolute inset-0 h-full w-full object-cover object-center"
-						style={{ transform: "translate3d(0, 0, 0)" }}
 					/>
 				)}
 				{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
