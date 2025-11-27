@@ -1,3 +1,10 @@
+## [6.1.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.7...v6.1.8) (2025-11-27)
+
+
+### Bug Fixes
+
+* **grid-cell:** Ensure label is visible over image ([cbeceb1](https://github.com/jbelew/nms_optimizer-web/commit/cbeceb1a66a9f800ce5229bf8679ccea81add435))
+
 ## [6.1.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.6...v6.1.7) (2025-11-27)
 
 
