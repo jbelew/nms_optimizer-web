@@ -1,15 +1,9 @@
 .gridCell {
 	background-color: var(--accent-a2);
-
-	/* Prevent layout thrashing on viewport changes (iOS Chrome) */
-	contain: layout;
 	height: var(--grid-cell-size);
 
 	/* Prevent callout menu on iOS tap-hold */
 	-webkit-touch-callout: none;
-
-	/* Force GPU acceleration to ensure repaints during zoom on iOS Safari */
-	transform: translateZ(0);
 	user-select: none;
 	width: var(--grid-cell-size);
 
