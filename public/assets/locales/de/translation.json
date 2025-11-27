@@ -552,7 +552,10 @@
         "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
         "optimizeButton": "Optimieren",
         "atlantid": "Atlantis-Module",
-        "cancelButton": "Stornieren"
+        "cancelButton": "Stornieren",
+        "trails": "Raumschiffspuren",
+        "figurines": "Figuren",
+        "trailsInfo": "Wählen Sie in den meisten Fällen nicht mehr als <strong>5 Raumschiffpfade</strong> aus. Wenn Sie mit der Tentakelfigur experimentieren, um die Geschwindigkeit in der Atmosphäre zu erhöhen, wählen Sie 7."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer | Tech-Layout-Builder für No Man's Sky",

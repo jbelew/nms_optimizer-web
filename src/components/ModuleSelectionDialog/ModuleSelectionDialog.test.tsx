@@ -11,6 +11,10 @@ vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string, options?: { techName?: string }) => {
 			if (key === "moduleSelection.title") return `Modules for ${options?.techName}`;
+			if (key === "moduleSelection.trails") return "Starship Trails";
+			if (key === "moduleSelection.figurines") return "Figurines";
+			if (key === "moduleSelection.bonus") return "Bonus Modules";
+			if (key === "moduleSelection.cosmetic") return "Cosmetic Modules";
 			if (key.startsWith("moduleSelection.")) return key.split(".")[1];
 			return key;
 		},
@@ -48,7 +52,9 @@ const defaultProps = {
 };
 
 const renderDialog = (props = {}) => {
-	(usePlatformStore as unknown as Mock).mockReturnValue("explorer");
+	(usePlatformStore as unknown as Mock).mockReturnValue({
+		selectedPlatform: "explorer",
+	});
 	return render(
 		<Dialog.Root open={true}>
 			<ModuleSelectionDialog {...defaultProps} {...props} />
@@ -68,18 +74,48 @@ describe("ModuleSelectionDialog", () => {
 
 	it("renders module groups correctly", () => {
 		renderDialog();
-		expect(screen.getByText("bonus")).toBeInTheDocument();
+		expect(screen.getByText("Bonus Modules")).toBeInTheDocument();
 		expect(screen.getByText("Alpha Bonus")).toBeInTheDocument();
 		expect(screen.getByText("upgrade")).toBeInTheDocument();
-		expect(screen.getByText("cosmetic")).toBeInTheDocument();
+		expect(screen.getByText("Cosmetic Modules")).toBeInTheDocument();
 	});
 
 	it("sorts 'bonus' modules alphabetically", () => {
 		renderDialog();
-		const bonusModules = screen.getByText("bonus").parentElement?.querySelectorAll("label");
+		const bonusModules = screen
+			.getByText("Bonus Modules")
+			.parentElement?.querySelectorAll("label");
 		expect(bonusModules).not.toBeNull();
 		expect(bonusModules![0]).toHaveTextContent("Alpha Bonus");
 		expect(bonusModules![1]).toHaveTextContent("Beta Bonus");
+	});
+
+	it("sorts 'trails' and 'figurines' modules alphabetically", () => {
+		const props = {
+			...defaultProps,
+			groupedModules: {
+				...mockGroupedModules,
+				trails: [
+					{ id: "trail2", label: "Beta Trail", image: "trail.png" },
+					{ id: "trail1", label: "Alpha Trail", image: "trail.png" },
+				],
+				figurines: [
+					{ id: "fig2", label: "Beta Figurine", image: "fig.png" },
+					{ id: "fig1", label: "Alpha Figurine", image: "fig.png" },
+				],
+			},
+		};
+		renderDialog(props);
+
+		const trailModules = screen
+			.getByText("Starship Trails")
+			.parentElement?.querySelectorAll("label");
+		expect(trailModules![0]).toHaveTextContent("Alpha Trail");
+		expect(trailModules![1]).toHaveTextContent("Beta Trail");
+
+		const figModules = screen.getByText("Figurines").parentElement?.querySelectorAll("label");
+		expect(figModules![0]).toHaveTextContent("Alpha Figurine");
+		expect(figModules![1]).toHaveTextContent("Beta Figurine");
 	});
 
 	it("disables an upgrade module if its prerequisite is not selected", () => {
@@ -95,6 +131,18 @@ describe("ModuleSelectionDialog", () => {
 		renderDialog({ currentCheckedModules: ["bonus1", "upgrade_tau"] });
 		const sigmaCheckbox = screen.getByRole("checkbox", { name: "Upgrade Sigma" });
 		expect(sigmaCheckbox).not.toBeDisabled();
+	});
+
+	it("renames 'bonus' group to 'Starship Trails' when tech is 'trails'", () => {
+		renderDialog({ tech: "trails" });
+		expect(screen.getByText("Starship Trails")).toBeInTheDocument();
+		expect(screen.queryByText("bonus")).not.toBeInTheDocument();
+	});
+
+	it("does not rename 'bonus' group when tech is not 'trails'", () => {
+		renderDialog({ tech: "hyperdrive" });
+		expect(screen.getByText("Bonus Modules")).toBeInTheDocument();
+		expect(screen.queryByText("Starship Trails")).not.toBeInTheDocument();
 	});
 
 	it("calls handleValueChange when a checkbox is clicked", () => {

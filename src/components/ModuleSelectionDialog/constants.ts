@@ -8,11 +8,13 @@
  */
 export const MODULE_GROUP_ORDER = [
 	"core",
+	"figurines",
 	"bonus",
 	"upgrade",
 	"atlantid",
 	"reactor",
 	"cosmetic",
+	"trails",
 ] as const;
 
 /**

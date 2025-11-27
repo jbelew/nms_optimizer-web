@@ -22,6 +22,7 @@ export interface DialogBodyProps {
 	allModulesSelected: boolean;
 	techColor: TechTreeRowProps["techColor"];
 	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
+	tech?: string;
 }
 
 /**
@@ -40,6 +41,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	allModulesSelected,
 	techColor,
 	selectAllCheckboxRef,
+	tech,
 }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -58,10 +60,16 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 
 	return (
 		<>
-			{isCorvette && (
+			{isCorvette && tech !== "trails" && (
 				<span
 					className="mb-3 block text-sm sm:text-base"
 					dangerouslySetInnerHTML={{ __html: t("moduleSelection.warning") }}
+				/>
+			)}
+			{tech === "trails" && (
+				<span
+					className="mb-3 block text-sm sm:text-base"
+					dangerouslySetInnerHTML={{ __html: t("moduleSelection.trailsInfo") }}
 				/>
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
@@ -112,18 +120,25 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 					{(isCorvette
 						? MODULE_GROUP_ORDER
 						: MODULE_GROUP_ORDER.filter((g) => g !== "core")
-					).map(
-						(groupName) =>
-							groupedModules[groupName]?.length > 0 && (
-								<ModuleGroup
-									key={groupName}
-									groupName={groupName}
-									modules={groupedModules[groupName]}
-									currentCheckedModules={currentCheckedModules}
-									techColor={techColor}
-								/>
-							)
-					)}
+					).map((groupName) => {
+						if (!groupedModules[groupName]?.length) return null;
+
+						let titleOverride: string | undefined;
+						if (groupName === "bonus" && tech === "trails") {
+							titleOverride = t("moduleSelection.trails");
+						}
+
+						return (
+							<ModuleGroup
+								key={groupName}
+								groupName={groupName}
+								modules={groupedModules[groupName]}
+								currentCheckedModules={currentCheckedModules}
+								techColor={techColor}
+								titleOverride={titleOverride}
+							/>
+						);
+					})}
 				</CheckboxGroup.Root>
 			</div>
 		</>

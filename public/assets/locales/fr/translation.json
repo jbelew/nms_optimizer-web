@@ -552,7 +552,10 @@
         "cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
         "optimizeButton": "Optimiser",
         "atlantid": "Modules Atlantides",
-        "cancelButton": "Annuler"
+        "cancelButton": "Annuler",
+        "trails": "Sentiers de vaisseaux spatiaux",
+        "figurines": "Figurines",
+        "trailsInfo": "Dans la plupart des cas, ne sélectionnez pas plus de <strong>5 Starship Trails</strong>. Si vous expérimentez la figurine tentaculaire pour augmenter la vitesse dans l’atmosphère, sélectionnez 7."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer | Constructeur de Schémas Technologiques pour No Man's Sky",

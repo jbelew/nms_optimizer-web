@@ -65,9 +65,16 @@ export const useTechModuleManagement = (
 			reactor: [],
 			cosmetic: [],
 			atlantid: [],
+			trails: [],
+			figurines: [],
 		};
 
 		modules.forEach((module) => {
+			if (module.label.toLowerCase().includes("figurine")) {
+				groups.figurines.push(module);
+				return;
+			}
+
 			const type = module.type || "upgrade";
 			if (groups[type]) {
 				groups[type].push(module);

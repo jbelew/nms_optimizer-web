@@ -41,6 +41,7 @@ export interface ModuleSelectionDialogProps {
 	isIndeterminate: boolean;
 	techColor: TechTreeRowProps["techColor"];
 	techImage: string | null;
+	tech?: string;
 }
 
 /**

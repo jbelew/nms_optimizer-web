@@ -31,6 +31,7 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		isIndeterminate,
 		techColor,
 		techImage,
+		tech,
 	} = props;
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -65,6 +66,7 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		allModulesSelected,
 		techColor,
 		selectAllCheckboxRef,
+		tech,
 	};
 
 	// Structured props for DialogFooter

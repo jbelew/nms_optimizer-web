@@ -552,7 +552,10 @@
         "cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
         "optimizeButton": "Otimizar",
         "atlantid": "Módulos Atlântida",
-        "cancelButton": "Cancelar"
+        "cancelButton": "Cancelar",
+        "trails": "Trilhas de naves estelares",
+        "figurines": "Estatuetas",
+        "trailsInfo": "Na maioria dos casos, selecione no máximo <strong>5 trilhas de naves estelares</strong>. Se você estiver experimentando a Estatueta de Tentáculos para aumentar a velocidade na atmosfera, selecione 7."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer | Construtor de Layouts de Tecnologia para No Man's Sky",

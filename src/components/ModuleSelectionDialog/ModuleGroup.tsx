@@ -13,6 +13,7 @@ export interface ModuleGroupProps
 	extends Pick<ModuleSelectionDialogProps, "currentCheckedModules" | "techColor"> {
 	groupName: string;
 	modules: Module[];
+	titleOverride?: string;
 }
 
 /**
@@ -28,11 +29,12 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	modules,
 	currentCheckedModules,
 	techColor,
+	titleOverride,
 }) => {
 	const { t } = useTranslation();
 
 	const sortedModules = useMemo(() => {
-		if (groupName === "bonus") {
+		if (["bonus", "trails", "figurines"].includes(groupName)) {
 			return [...modules].sort((a, b) => a.label.localeCompare(b.label));
 		}
 		return modules;
@@ -69,7 +71,7 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 				className={`font-bold capitalize ${groupName !== "cosmetic" ? "mb-2" : "mb-0"}`}
 				style={{ color: "var(--accent-a11)" }}
 			>
-				{t(`moduleSelection.${groupName}`)}
+				{titleOverride || t(`moduleSelection.${groupName}`)}
 			</div>
 			{groupName === "cosmetic" && (
 				<Blockquote

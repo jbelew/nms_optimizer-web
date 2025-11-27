@@ -107,6 +107,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						isIndeterminate={isIndeterminate}
 						techColor={techColor}
 						techImage={techImage}
+						tech={tech}
 					/>
 				)}
 			</Dialog.Root>
