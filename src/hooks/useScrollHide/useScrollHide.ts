@@ -42,6 +42,13 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 				return;
 			}
 
+			// Force show if within threshold from top
+			if (currentScrollY < threshold) {
+				setIsVisible(true);
+				lastScrollYRef.current = currentScrollY;
+				return;
+			}
+
 			if (currentDirection !== lastDirectionRef.current) {
 				directionBaseRef.current = lastScrollYRef.current;
 				lastDirectionRef.current = currentDirection;
