@@ -19,7 +19,7 @@
 
 	// Card wrapper for app content
 	&__card {
-		backdrop-filter: blur(48px);
+		backdrop-filter: blur(32px);
 		background-color: var(--accent-a2);
 		border: 1px solid var(--accent-surface);
 		border-radius: var(--radius-3);
