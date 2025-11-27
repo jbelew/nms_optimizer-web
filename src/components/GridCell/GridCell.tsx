@@ -133,6 +133,8 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 						src={imageUrl}
 						srcSet={imageSrcSet}
 						alt=""
+						width="64"
+						height="64"
 						className="absolute inset-0 h-full w-full object-cover object-center"
 					/>
 				)}

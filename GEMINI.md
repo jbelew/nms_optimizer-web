@@ -11,7 +11,7 @@ These are the highest-level, non-negotiable principles that govern your operatio
 - **Teach and Explain Mandate:** You must clearly document and articulate your entire thought process. This includes explaining your design choices, technology recommendations, and implementation details in project documentation, code comments, and direct communication to facilitate user learning.
 - **Continuous Improvement & Learning:** You must continuously learn from the broader software engineering community and from your own actions. This involves seeking out best practices via web searches and maintaining a project-specific learning log. After every 5 tasks, you should proactively suggest a review of this document.
 - **Document Refactoring Mandate:** Each time this document is modified, you must review its entirety to improve clarity, structure, and conciseness. It must remain your single, unambiguous source of truth.
-- **Backup Mandate:** Before executing *any* modification to this `GEMINI.md` file, you must create a timestamped backup copy (e.g., `GEMINI.md.YYYYMMDD-HHMMSS.bak`) to prevent loss of critical instructions. This is a required first step in the 'Act & Implement' phase when this file is the target.
+- **Backup Mandate:** Before executing _any_ modification to this `GEMINI.md` file, you must create a timestamped backup copy (e.g., `GEMINI.md.YYYYMMDD-HHMMSS.bak`) to prevent loss of critical instructions. This is a required first step in the 'Act & Implement' phase when this file is the target.
 - **Systemic Thinking:** You must analyze the entire system context before implementing changes, considering maintainability, scalability, and potential side effects.
 - **Quality as a Non-Negotiable:** All code you produce or modify must be clean, efficient, and strictly adhere to project conventions. Verification through tests and linters is mandatory for completion. "Done" means verified.
 - **Verify, Then Trust:** You must never assume the state of the system. Use read-only tools to verify the environment before acting, and verify the outcome after acting.
@@ -117,8 +117,8 @@ If a project has a pre-existing technology stack, you will prioritize the existi
 
 This section is for logging project-specific user preferences.
 
-*   The user prefers that I do not shorten the meta description in `index.html`.
-*   Commit messages must follow the Angular convention (as used by Commitizen). I will construct and propose these messages manually for approval.
+- The user prefers that I do not shorten the meta description in `index.html`.
+- Commit messages must follow the Angular convention (as used by Commitizen). I will construct and propose these messages manually for approval.
 
 ## 9. Cross-Cutting Concerns
 
@@ -128,14 +128,17 @@ You will ensure these are addressed in all projects.
 - **CI/CD:** Implement automation using GitHub Actions.
 
 ## Gemini Added Memories
+
 - The user tends to perform the 'git push origin main --follow-tags' command manually.
 - Storybook builds were failing due to a large file exceeding the service worker's cache limit. The fix involved increasing `maximumFileSizeToCacheInBytes` in `vite.config.ts` and conditionally disabling the `generate-version-json` plugin during Storybook builds.
+- **CRITICAL: Never add GPU acceleration properties** (`translateZ(0)`, `translate3d()`, `will-change`, `contain: layout`, etc.) to this project without verified performance problems and real iOS device testing. These "optimizations" caused iOS Safari rendering failures. Simple, clean CSS with explicit image dimensions works better.
 
 ## JSDoc Guidelines
 
 When writing and maintaining JavaScript/TypeScript code, ensure all functions, classes, and complex variables are properly documented using JSDoc. This improves code readability, maintainability, and enables better IDE support.
 
 ### General Rules:
+
 - **All public APIs:** Every function, class, or method that is part of a public interface should have JSDoc.
 - **Complex logic:** Any internal function or variable with non-obvious logic should also be documented.
 - **Parameters and Returns:** Always document `@param` for each parameter and `@returns` for the return value (if any).
@@ -155,11 +158,12 @@ When writing and maintaining JavaScript/TypeScript code, ensure all functions, c
  * const result = add(5, 3); // result is 8
  */
 function add(a, b) {
-  return a + b;
+	return a + b;
 }
 ```
 
 ### Maintaining JSDoc:
+
 - **Update on change:** Whenever the signature or logic of a documented function changes, update its JSDoc accordingly.
 - **Review during code reviews:** Ensure JSDoc is part of the code review process.
 
@@ -168,6 +172,7 @@ function add(a, b) {
 When writing and maintaining JavaScript/TypeScript code, ensure all functions, classes, and complex variables are properly documented using JSDoc. This improves code readability, maintainability, and enables better IDE support.
 
 ### General Rules:
+
 - **All public APIs:** Every function, class, or method that is part of a public interface should have JSDoc.
 - **Complex logic:** Any internal function or variable with non-obvious logic should also be documented.
 - **Parameters and Returns:** Always document `@param` for each parameter and `@returns` for the return value (if any).
@@ -187,10 +192,11 @@ When writing and maintaining JavaScript/TypeScript code, ensure all functions, c
  * const result = add(5, 3); // result is 8
  */
 function add(a, b) {
-  return a + b;
+	return a + b;
 }
 ```
 
 ### Maintaining JSDoc:
+
 - **Update on change:** Whenever the signature or logic of a documented function changes, update its JSDoc accordingly.
 - **Review during code reviews:** Ensure JSDoc is part of the code review process.
