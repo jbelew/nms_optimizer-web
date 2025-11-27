@@ -15,12 +15,14 @@
 	&__label {
 		color: var(--gray-a12);
 		font-family: Acumin, sans-serif;
+		position: relative;
 		text-shadow:
 			-1px -1px 2px rgb(0 0 0 / 50%),
 			1px -1px 2px rgb(0 0 0 / 50%),
 			-1px 1px 2px rgb(0 0 0 / 50%),
 			1px 1px 2px rgb(0 0 0 / 50%),
 			0 0 4px rgb(0 0 0 / 75%);
+		z-index: 1;
 
 		&--corvette {
 			color: var(--accent-a11);

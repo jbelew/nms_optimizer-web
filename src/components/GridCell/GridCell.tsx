@@ -133,7 +133,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 						src={imageUrl}
 						srcSet={imageSrcSet}
 						alt=""
-						className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+						className="absolute inset-0 h-full w-full object-cover object-center"
 						style={{ transform: "translate3d(0, 0, 0)" }}
 					/>
 				)}
