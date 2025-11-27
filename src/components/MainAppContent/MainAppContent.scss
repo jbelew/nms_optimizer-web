@@ -48,9 +48,6 @@
 	// Main content area (grid + tech tree)
 	&__content {
 		align-items: center;
-
-		// Performance optimization - isolate layout
-		contain: layout style;
 		display: flex;
 		flex-direction: column;
 		padding: 0 1rem;
