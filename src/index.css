@@ -59,6 +59,9 @@ body.a11y-font .radix-themes {
 		),
 		var(--grid-cell-max)
 	);
+
+	--empty-icon-color: #00befd28;
+	--empty-icon-color-supercharged: #c150ff2d;
 }
 
 /* On non-touch (fine pointer) devices, increase padding */

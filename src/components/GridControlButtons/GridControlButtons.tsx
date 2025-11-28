@@ -1,6 +1,6 @@
 // RowControlButton.tsx
 import React from "react";
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { MinusCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -54,12 +54,13 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 						size={iconButtonSize}
 						radius="full"
 						variant="ghost"
+						color="green"
 						className={`${hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells ? "cursor-not-allowed!" : ""}`}
 						onClick={() => activateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
 						aria-label={t("gridControls.activateRow")}
 					>
-						<PlusIcon />
+						<PlusCircledIcon />
 					</IconButton>
 				</ConditionalTooltip>
 			)}
@@ -70,12 +71,13 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 						variant="ghost"
 						radius="full"
 						size={iconButtonSize}
+						color="red"
 						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
 						onClick={() => deActivateRow(rowIndex)}
 						disabled={hasModulesInGrid || gridFixed || isLoading}
 						aria-label={t("gridControls.deactivateRow")}
 					>
-						<MinusIcon />
+						<MinusCircledIcon />
 					</IconButton>
 				</ConditionalTooltip>
 			)}

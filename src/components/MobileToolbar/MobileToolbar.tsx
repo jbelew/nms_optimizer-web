@@ -32,7 +32,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 				ref={ref}
 				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out"
 				style={{
-					backgroundColor: "#003848",
+					backgroundColor: "var(--accent-4)",
 					WebkitUserSelect: "none",
 					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
 				}}

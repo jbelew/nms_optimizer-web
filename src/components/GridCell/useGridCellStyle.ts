@@ -13,7 +13,7 @@ import { useTechStore } from "../../store/TechStore";
  */
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
-	const emptyIconFillColor = cell.supercharged ? "#C150FF2D" : "#00BEFD28";
+	const emptyIconFillColor = cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
 
 	const techColor = useMemo(() => {
 		return !currentTechColorFromStore && cell.supercharged
