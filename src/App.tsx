@@ -14,9 +14,6 @@ import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
 
-// import { useInstallPrompt } from "./hooks/useInstallPrompt/useInstallPrompt";
-// import { InstallPrompt } from "./components/InstallPrompt/InstallPrompt";
-
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
 

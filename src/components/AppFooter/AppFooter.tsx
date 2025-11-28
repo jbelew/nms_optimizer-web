@@ -2,7 +2,7 @@ import "./AppFooter.scss";
 
 import React from "react";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
-import { Separator } from "@radix-ui/themes";
+import { Flex, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
@@ -29,54 +29,70 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 	const { i18n } = useTranslation();
 
 	return (
-		<footer key={i18n.language} data-build-date={buildDate} className="app-footer">
-			<div className="app-footer__content">
-				<Trans
-					i18nKey="footer.issuePrompt"
-					components={{
-						1: (
-							<a
-								href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
-								target="_blank"
-								className="app-footer__link"
-								rel="noopener noreferrer"
-							/>
-						),
-					}}
-				/>
-				<br />
-				Built by jbelew
-				<a
-					href="https://github.com/jbelew/nms_optimizer-web"
-					target="_blank"
-					rel="noopener noreferrer"
-					aria-label="View source on GitHub"
+		<footer key={i18n.language} data-build-date={buildDate} className="app-footer -mt-px">
+			<Flex
+				direction="column"
+				align="center"
+				gap="1"
+				p="5"
+				pb={{ initial: "6", lg: "0" }}
+				className="app-footer__wrapper"
+			>
+				<div className="app-footer__content">
+					<Trans
+						i18nKey="footer.issuePrompt"
+						components={{
+							1: (
+								<a
+									href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
+									target="_blank"
+									className="app-footer__link"
+									rel="noopener noreferrer"
+								/>
+							),
+						}}
+					/>
+					<br />
+					Built by jbelew
+					<a
+						href="https://github.com/jbelew/nms_optimizer-web"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="View source on GitHub"
+					>
+						<GitHubLogoIcon className="app-footer__link--icon" />
+					</a>
+					<a
+						href="https://www.linkedin.com/in/jobelew/"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="View profile on LinkedIn"
+					>
+						<LinkedInLogoIcon className="app-footer__link--icon-linkedin" />
+					</a>
+					<a
+						href="https://www.linkedin.com/in/jobelew/"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="app-footer__link"
+					>
+						#OpenToWork
+					</a>
+					&nbsp;• {buildVersion}{" "}
+					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
+				</div>
+				<Separator decorative size="3" mt="1" mb="1" />
+				<Flex
+					align="center"
+					gap={{ initial: "2", lg: "1" }}
+					wrap="wrap"
+					justify="center"
+					className="app-footer__support"
 				>
-					<GitHubLogoIcon className="app-footer__link--icon" />
-				</a>
-				<a
-					href="https://www.linkedin.com/in/jobelew/"
-					target="_blank"
-					rel="noopener noreferrer"
-					aria-label="View profile on LinkedIn"
-				>
-					<LinkedInLogoIcon className="app-footer__link--icon-linkedin" />
-				</a>
-				<a
-					href="https://www.linkedin.com/in/jobelew/"
-					target="_blank"
-					rel="noopener noreferrer"
-					className="app-footer__link"
-				>
-					#OpenToWork
-				</a>
-				&nbsp;• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
-			</div>
-			<Separator decorative size="3" mt="1" mb="1" />
-			<div className="app-footer__support">
-				<Trans i18nKey="footer.supportPrompt" />
-				<Buymeacoffee />
-			</div>
+					<Trans i18nKey="footer.supportPrompt" />
+					<Buymeacoffee />
+				</Flex>
+			</Flex>
 		</footer>
 	);
 };

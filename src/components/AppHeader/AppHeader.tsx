@@ -3,7 +3,17 @@ import "./AppHeader.scss";
 
 import React, { useEffect } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import { Code, DataList, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
+import {
+	Box,
+	Code,
+	DataList,
+	Flex,
+	Heading,
+	IconButton,
+	Popover,
+	Separator,
+	Switch,
+} from "@radix-ui/themes";
 import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -49,11 +59,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	}, [a11yMode]);
 
 	return (
-		<header key={i18n.language} className="app-header">
+		<Box p="5" key={i18n.language} className="app-header">
 			{!isSharedGrid && !isLg && isSm && (
-				<div className="app-header__controls app-header__controls--left">
+				<Flex gap="2" className="app-header__controls app-header__controls--left">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-						<div className="flex items-center gap-2">
+						<Flex align="center" gap="2">
 							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
 							<Switch
 								variant="soft"
@@ -61,13 +71,13 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								onCheckedChange={toggleA11yMode}
 								aria-label={t("buttons.accessibility") ?? ""}
 							/>
-						</div>
+						</Flex>
 					</ConditionalTooltip>
-				</div>
+				</Flex>
 			)}
 
 			{!isSharedGrid && (
-				<div className="app-header__controls app-header__controls--right">
+				<Flex gap="2" className="app-header__controls app-header__controls--right">
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
 							variant="soft"
@@ -106,7 +116,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-							<div className="flex items-center gap-2">
+							<Flex align="center" gap="2">
 								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
 								<Switch
 									variant="soft"
@@ -114,15 +124,21 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									onCheckedChange={toggleA11yMode}
 									aria-label={t("buttons.accessibility") ?? ""}
 								/>
-							</div>
+							</Flex>
 						</ConditionalTooltip>
 					)}
-				</div>
+				</Flex>
 			)}
 
 			<h1 className="app-header__logo-text">NO MAN&apos;S SKY</h1>
 
-			<div className="app-header__separator-container">
+			<Flex
+				align="center"
+				gap="2"
+				my="1"
+				width="100%"
+				className="app-header__separator-container"
+			>
 				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
 
 				<Popover.Root>
@@ -169,8 +185,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Popover.Root>
 
 				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
-				{/* Tooltip button absolutely positioned to the right */}
-			</div>
+			</Flex>
 
 			<Heading
 				wrap="pretty"
@@ -191,7 +206,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					v{__APP_VERSION__}
 				</span>
 			</Heading>
-		</header>
+		</Box>
 	);
 };
 

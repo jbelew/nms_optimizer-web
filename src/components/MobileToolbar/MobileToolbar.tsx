@@ -30,7 +30,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		return (
 			<Toolbar.Root
 				ref={ref}
-				className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out"
+				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out"
 				style={{
 					backgroundColor: "var(--accent-4)",
 					WebkitUserSelect: "none",

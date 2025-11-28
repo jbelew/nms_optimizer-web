@@ -20,7 +20,9 @@
 	--font-weight-bold: 600;
 	/* Added for common bold weight */
 	--color-background: var(--gray-a1);
-	/* Fixed typo: was --gary-a1 */
+
+	--color-panel-translucent: var(--accent-a2);
+	--color-panel-solid: var(--accent-1);
 }
 
 body.a11y-font .radix-themes {
