@@ -2,6 +2,16 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.2 – Improved Mobile Rendering Stability (2025-11-27)
+
+This update focuses on making the app far more stable and consistent on mobile devices—especially Safari and Chrome on iOS.
+
+- Fixed several iOS zoom and rendering issues, including a GPU acceleration glitch that caused visual artifacts during pinch-zoom.
+- Removed a CSS optimization that caused grid cells to **disappear or flicker** when zooming on mobile.
+- Restored visibility for an internal grid element that wasn’t rendering correctly.
+- Optimized background images to reduce memory usage and improve load times on mobile.
+- Improved internal store behavior and expanded test coverage for better long-term stability.
+
 ## Version 6.1 – Improved State Saving & UI Stability (2025-11-24)
 
 - Saved builds now **store the full UI state**, so layouts reload exactly as they were when saved.
