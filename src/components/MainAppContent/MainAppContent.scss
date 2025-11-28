@@ -23,7 +23,6 @@
 		font-weight: 400;
 		letter-spacing: var(--letter-spacing-wide);
 		line-height: 1.75rem;
-		margin-bottom: 0.75rem;
 		text-shadow: 0 2px 4px var(--accent-a2);
 		-webkit-text-stroke: 0.8px;
 		text-transform: uppercase;
@@ -31,7 +30,6 @@
 		@media (width >= 640px) {
 			font-size: 1.5rem;
 			line-height: 2rem;
-			margin-bottom: 1rem;
 		}
 	}
 

@@ -121,12 +121,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 										</Callout.Text>
 									</Callout.Root>
 								)}
-								<Separator
-									size="4"
-									orientation="horizontal"
-									className="mt-2"
-									decorative
-								/>
+								<Separator size="4" orientation="horizontal" mt="2" decorative />
 							</div>
 						</div>
 					)}
