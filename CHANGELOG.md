@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.2.0...v6.3.0) (2025-11-28)
+
+
+### Features
+
+* **ui:** improve responsive layout and mobile experience ([27f7ac6](https://github.com/jbelew/nms_optimizer-web/commit/27f7ac6b64d92a799533ea841b7a32e28ddcb3a8))
+
 # [6.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.8...v6.2.0) (2025-11-27)
 
 
