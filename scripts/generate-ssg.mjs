@@ -7,6 +7,10 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import i18next from "i18next";
+import i18nextFsBackend from "i18next-fs-backend";
+
+import { seoMetadata } from "../shared/seo-metadata.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,7 +70,7 @@ function generateSeoTags(pathname, lang, baseUrl) {
 /**
  * Generate a page with markdown content
  */
-function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor) {
+function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 	let html = indexHtml;
 	const pathname = pageName === "" ? "/" : `/${pageName}`;
 	const isRootPage = pageName === "";
@@ -76,7 +80,23 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor) {
 		html = html.replace(/<main[^>]*>[\s\S]*?<\/main>/i, "");
 	}
 
-	// Generate SEO tags
+	// --- SEO Title & Description Injection ---
+	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];
+
+	if (metadata) {
+		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
+		const pageDescription = t(metadata.descriptionKey);
+
+		// Replace title and meta description placeholders
+		html = html
+			.replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
+			.replace(
+				/<meta name="description"[\s\S]*?\/>/,
+				`<meta name="description" content="${pageDescription}" />`
+			);
+	}
+
+	// Generate SEO tags (canonical, hreflang)
 	const seoTags = generateSeoTags(pathname, lang, baseUrl);
 
 	// Inject SEO tags before closing </head>
@@ -85,11 +105,11 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor) {
 	// Read and render markdown content for pre-rendering
 	if (pageName) {
 		const markdownContent = readMarkdownFile(lang, pageName);
-		
+
 		if (markdownContent) {
 			// Render markdown to HTML
 			const renderedHtml = mdProcessor(markdownContent);
-			
+
 			// Create a div with the rendered markdown with styling
 			const prerenderedContent = `
   <style>
@@ -130,17 +150,32 @@ async function generateSsg() {
 
 	const baseIndexHtml = fs.readFileSync(indexPath, "utf-8");
 	const baseUrl = "https://nms-optimizer.app";
-	
+
 	// Create markdown processor
 	const mdProcessor = createMarkdownProcessor();
+
+	// Initialize i18next for translations
+	await i18next.use(i18nextFsBackend).init({
+		supportedLngs: SUPPORTED_LANGUAGES,
+		preload: SUPPORTED_LANGUAGES,
+		fallbackLng: "en",
+		ns: ["translation"],
+		defaultNS: "translation",
+		backend: {
+			loadPath: path.join(DIST_DIR, "assets/locales/{{lng}}/{{ns}}.json"),
+		},
+	});
 
 	let generatedCount = 0;
 
 	// Generate pages for each language
-	SUPPORTED_LANGUAGES.forEach((lang) => {
+	for (const lang of SUPPORTED_LANGUAGES) {
+		// Get translation function for this language
+		const t = i18next.getFixedT(lang);
+
 		// Root path
 		const rootPath = lang === "en" ? "" : lang;
-		const rootPageHtml = generatePage(baseIndexHtml, lang, "", baseUrl, mdProcessor);
+		const rootPageHtml = generatePage(baseIndexHtml, lang, "", baseUrl, mdProcessor, t);
 		const rootDir = path.join(DIST_DIR, rootPath);
 		fs.mkdirSync(rootDir, { recursive: true });
 		fs.writeFileSync(path.join(rootDir, "index.html"), rootPageHtml);
@@ -148,17 +183,17 @@ async function generateSsg() {
 		generatedCount++;
 
 		// Generate dialog/page routes
-		KNOWN_DIALOGS.forEach((dialog) => {
+		for (const dialog of KNOWN_DIALOGS) {
 			const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
 			const pageDir = path.join(DIST_DIR, pagePath);
 			fs.mkdirSync(pageDir, { recursive: true });
 
-			const pageHtml = generatePage(baseIndexHtml, lang, dialog, baseUrl, mdProcessor);
+			const pageHtml = generatePage(baseIndexHtml, lang, dialog, baseUrl, mdProcessor, t);
 			fs.writeFileSync(path.join(pageDir, "index.html"), pageHtml);
 			console.log(`✓ Generated /${pagePath}`);
 			generatedCount++;
-		});
-	});
+		}
+	}
 
 	console.log(`\n✅ Generated ${generatedCount} static pages`);
 }

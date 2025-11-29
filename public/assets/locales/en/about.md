@@ -38,6 +38,39 @@ Stop guessing on tech placement and unlock your gear's true potential! Whether y
 - Web UI: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
+## Frequently Asked Questions
+
+### What is an adjacency bonus in No Man's Sky?
+
+An adjacency bonus is a performance boost you get when compatible technology modules are placed next to each other in your inventory. The more modules of the same type you group together, the stronger the bonus. The NMS Optimizer calculates the optimal arrangement to maximize these bonuses across all your technologies.
+
+### How do supercharged slots work?
+
+Supercharged slots provide a massive ~25-30% boost to any technology module placed in them. They're rare (limited to 4 per grid on most platforms) and strategically valuable. The optimizer helps you decide whether to place core technologies or their best upgrades in supercharged slots to maximize overall performance.
+
+### What platforms does the optimizer support?
+
+The optimizer supports all major No Man's Sky platforms:
+
+- **Starships** (Standard, Exotic, Sentinel, Solar, Living)
+- **Corvettes** (with unique reactor and cosmetic module support)
+- **Multitools** (Standard, Exotic, Atlantid, Sentinel, Staves)
+- **Exocraft** (all types including Minotaur)
+- **Exosuits**
+- **Freighters**
+
+### How accurate is the optimizer?
+
+Extremely accurate. The tool uses a combination of proven patterns, machine learning trained on 16,000+ layouts, and simulated annealing refinement. It considers all factors including adjacency bonuses, supercharged slots, and module placement constraints to find the mathematically optimal layout for your specific configuration.
+
+### Is the optimizer free to use?
+
+Yes! The NMS Optimizer is completely free, ad-free, and open source. No registration or payment required.
+
+### Can I save and share my builds?
+
+Absolutely! You can save your optimized layouts as `.nms` files, reload them later, or generate shareable links to send to friends. All builds are validated for integrity and compatibility.
+
 ## Some Fun History
 
 Here's a look at an **early version** of the UI—functionally solid but visually minimal. The current version is a major upgrade in design, usability, and clarity, helping players quickly find the **best layout** for any ship or tool.

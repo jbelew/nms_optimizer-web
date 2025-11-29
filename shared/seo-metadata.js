@@ -4,28 +4,28 @@
  */
 
 export const seoMetadata = {
-    '/': {
-        titleKey: 'seo.mainPageTitle',
-        descriptionKey: 'seo.appDescription',
-    },
-    '/instructions': {
-        titleKey: 'seo.instructionsPageTitle',
-        descriptionKey: 'seo.instructionsDescription',
-    },
-    '/about': {
-        titleKey: 'seo.aboutPageTitle',
-        descriptionKey: 'seo.aboutDescription',
-    },
-    '/changelog': {
-        titleKey: 'seo.changelogPageTitle',
-        descriptionKey: 'seo.changelogDescription',
-    },
-    '/translation': {
-        titleKey: 'seo.translationPageTitle',
-        descriptionKey: 'seo.translationDescription',
-    },
-    '/userstats': {
-        titleKey: 'seo.userstatsPageTitle',
-        descriptionKey: 'seo.userstatsDescription',
-    },
+	"/": {
+		titleKey: "seo.mainPageTitle",
+		descriptionKey: "seo.appDescription",
+	},
+	"/instructions": {
+		titleKey: "seo.instructionsPageTitle",
+		descriptionKey: "seo.instructionsDescription",
+	},
+	"/about": {
+		titleKey: "seo.aboutPageTitle",
+		descriptionKey: "seo.aboutDescription",
+	},
+	"/changelog": {
+		titleKey: "seo.changelogPageTitle",
+		descriptionKey: "seo.changelogDescription",
+	},
+	"/translation": {
+		titleKey: "seo.translationPageTitle",
+		descriptionKey: "seo.translationDescription",
+	},
+	"/userstats": {
+		titleKey: "seo.userstatsPageTitle",
+		descriptionKey: "seo.userstatsDescription",
+	},
 };
