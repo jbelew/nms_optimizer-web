@@ -122,7 +122,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
 
 			<main className="main-app__container">
-				<div className="main-app__card mt-0 sm:shadow-md">
+				<div className="main-app__card sm:shadow-md">
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<Flex
@@ -134,7 +134,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 					>
 						{/* Grid section */}
 						<Box
-							width={{ initial: "100%", md: "auto" }}
+							// width={{ initial: "100%", md: "auto" }}
 							flexShrink={{ initial: "1", md: "0" }}
 							className="main-app__grid-section"
 							ref={appLayoutContainerRef}
@@ -177,7 +177,11 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 						{!isSharedGrid && (
 							<Flex
 								direction="column"
-								width="100%"
+								width={
+									!isLargeScreen && gridTableTotalWidth
+										? `${gridTableTotalWidth}px`
+										: "100%"
+								}
 								ml={{ md: "5" }}
 								className="main-app__tech-tree-section"
 							>
