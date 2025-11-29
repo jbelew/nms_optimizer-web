@@ -1,3 +1,10 @@
+## [6.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.1...v6.3.2) (2025-11-29)
+
+
+### Bug Fixes
+
+* **ui:** Refine component sizing and spacing ([780f953](https://github.com/jbelew/nms_optimizer-web/commit/780f9534e234855cc299bc13c21b5cf00e049171))
+
 ## [6.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.0...v6.3.1) (2025-11-29)
 
 
