@@ -8,11 +8,6 @@
 	overflow: hidden;
 	position: relative;
 
-	@media (width >= 1024px) {
-		border-top-left-radius: 0.75rem;
-		border-top-right-radius: 0.75rem;
-	}
-
 	&__controls {
 		align-items: center;
 		display: flex;
