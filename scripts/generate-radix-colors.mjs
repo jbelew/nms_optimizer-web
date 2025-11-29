@@ -54,6 +54,7 @@ console.log("Generating optimized Radix UI color files...\n");
 
 let totalOriginalSize = 0;
 let totalOptimizedSize = 0;
+const optimizedColorContents = [];
 
 for (const color of colors) {
 	const inputPath = join(projectRoot, `node_modules/@radix-ui/themes/tokens/colors/${color}.css`);
@@ -64,6 +65,7 @@ for (const color of colors) {
 		const optimizedCss = stripP3Colors(originalCss);
 
 		writeFileSync(outputPath, optimizedCss);
+		optimizedColorContents.push(optimizedCss);
 
 		const originalSize = Buffer.byteLength(originalCss, "utf-8");
 		const optimizedSize = Buffer.byteLength(optimizedCss, "utf-8");
@@ -80,8 +82,16 @@ for (const color of colors) {
 	}
 }
 
+// Generate concatenated file for production use
+const concatenatedPath = join(outputDir, "radix-colors.css");
+const concatenatedContent = optimizedColorContents.join("\n");
+writeFileSync(concatenatedPath, concatenatedContent);
+
 const totalSavings = ((1 - totalOptimizedSize / totalOriginalSize) * 100).toFixed(1);
 console.log(
 	`\n✨ Total: ${totalOriginalSize} → ${totalOptimizedSize} bytes (${totalSavings}% reduction)`
 );
-console.log(`📦 Saved ${totalOriginalSize - totalOptimizedSize} bytes from color CSS\n`);
+console.log(`📦 Saved ${totalOriginalSize - totalOptimizedSize} bytes from color CSS`);
+console.log(
+	`\n✓ Generated concatenated file: radix-colors.css (${optimizedColorContents.length} colors)\n`
+);

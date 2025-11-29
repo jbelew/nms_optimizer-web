@@ -22,6 +22,11 @@ const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
 const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats"];
 const BASE_KNOWN_PATHS = ["/"];
 
+// Map route names to markdown filenames when they differ
+const PAGE_TO_MARKDOWN_MAPPING = {
+	translation: "translation-request",
+};
+
 /**
  * Read markdown file from the locales directory
  */
@@ -68,6 +73,48 @@ function generateSeoTags(pathname, lang, baseUrl) {
 }
 
 /**
+ * Generate internal navigation links for SEO
+ */
+function generateNavigationLinks(lang, currentPage, t) {
+	const langPrefix = lang === "en" ? "" : `/${lang}`;
+	const pages = [
+		{ path: "/", key: "seo.nav.home", desc: "Use the NMS Optimizer layout calculator" },
+		{
+			path: "/instructions",
+			key: "seo.nav.instructions",
+			desc: "Complete guide for using the app",
+		},
+		{ path: "/about", key: "seo.nav.about", desc: "How it works and technical details" },
+		{ path: "/changelog", key: "seo.nav.changelog", desc: "Latest updates and new features" },
+		{ path: "/userstats", key: "seo.nav.userstats", desc: "Popular technologies and builds" },
+		{
+			path: "/translation",
+			key: "seo.nav.translation",
+			desc: "Contribute to community localization",
+		},
+	];
+
+	const links = pages
+		.map(({ path, key, desc }) => {
+			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}`;
+			const label = t(key, { defaultValue: path.slice(1) || "Home" });
+			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
+			const isCurrent = path === currentPath;
+
+			return `<li${isCurrent ? ' aria-current="page"' : ""}><a href="${href}">${label}</a> - ${desc}</li>`;
+		})
+		.join("\n          ");
+
+	return `
+    <nav aria-label="Site navigation">
+      <h2>Navigation</h2>
+      <ul>
+        ${links}
+      </ul>
+    </nav>`;
+}
+
+/**
  * Generate a page with markdown content
  */
 function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
@@ -104,14 +151,32 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 
 	// Read and render markdown content for pre-rendering
 	if (pageName) {
-		const markdownContent = readMarkdownFile(lang, pageName);
+		const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
+		const markdownContent = readMarkdownFile(lang, markdownFileName);
 
 		if (markdownContent) {
 			// Render markdown to HTML
 			const renderedHtml = mdProcessor(markdownContent);
 
+			// Generate navigation links
+			const navigationHtml = generateNavigationLinks(lang, pageName, t);
+
 			// Create a div with the rendered markdown with styling
 			const prerenderedContent = `
+  <script>
+    // Hide splash screen for prerendered pages when JavaScript is enabled
+    (function() {
+      try {
+        const splash = document.getElementById('vpss');
+        if (splash) {
+          splash.style.display = 'none';
+        }
+        document.body.classList.add('background-visible');
+      } catch (e) {
+        console.error('Error hiding splash screen:', e);
+      }
+    })();
+  </script>
   <style>
     [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; }
     [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
@@ -123,9 +188,14 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
     [data-prerendered-markdown="true"] a { color: #0ba5e9; text-decoration: underline; }
     [data-prerendered-markdown="true"] code { background-color: rgba(0, 162, 199, 0.1); padding: 0.125rem 0.25rem; border-radius: 0.25rem; color: #0ba5e9; }
     [data-prerendered-markdown="true"] blockquote { border-left: 4px solid #0ba5e9; padding-left: 1rem; margin: 0.5rem 0; font-style: italic; color: #cbd5e1; }
+    [data-prerendered-markdown="true"] nav { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(11, 165, 233, 0.3); }
+    [data-prerendered-markdown="true"] nav h2 { font-size: 1rem; margin-bottom: 0.5rem; }
+    [data-prerendered-markdown="true"] nav ul { margin-top: 0.5rem; }
+    [data-prerendered-markdown="true"] nav li[aria-current="page"] a { font-weight: bold; color: #fff; }
   </style>
   <div data-prerendered-markdown="true">
     ${renderedHtml}
+    ${navigationHtml}
   </div>`;
 
 			html = html.replace("</body>", `${prerenderedContent}\n</body>`);
