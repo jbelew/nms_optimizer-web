@@ -51,6 +51,7 @@ type MainAppContentProps = {
 export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps) => {
 	const { t } = useTranslation();
 	const isSmallScreen = !useBreakpoint("640px");
+	const isLargeScreen = useBreakpoint("1024px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const { openDialog } = useDialog();
@@ -121,7 +122,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
 
 			<main className="main-app__container">
-				<div className="main-app__card sm:mt-0 sm:shadow-md md:mt-6 lg:mt-0">
+				<div className="main-app__card mt-0 sm:shadow-md">
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<Flex
@@ -190,9 +191,15 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 							</Flex>
 						)}
 					</Flex>
+
+					{!isLargeScreen && (
+						<div>
+							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+						</div>
+					)}
 				</div>
 
-				<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
 				{/* Dialogs related to MainAppContent's state */}
 				<Suspense fallback={null}>

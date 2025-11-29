@@ -1,5 +1,6 @@
 .app-footer {
 	// Visual styles - layout handled by Flex props
+	// background-color: var(--color-panel-solid);
 	background-color: var(--color-panel-solid);
 	font-size: 0.75rem;
 	font-weight: 300;
@@ -12,7 +13,7 @@
 		line-height: 1.25rem;
 	}
 
-	@media (width >= 768px) {
+	@media (width >= 1024px) {
 		background-color: transparent;
 		width: fit-content;
 	}

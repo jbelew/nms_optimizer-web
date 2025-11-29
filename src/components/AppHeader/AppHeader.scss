@@ -2,8 +2,6 @@
 
 .app-header {
 	align-items: center;
-	border-top-left-radius: var(--radius-5);
-	border-top-right-radius: var(--radius-5);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -11,6 +9,11 @@
 
 	@media (width >= 640px) {
 		background-image: linear-gradient(to bottom, var(--color-panel-solid), transparent);
+	}
+
+	@media (width >= 1024px) {
+		border-top-left-radius: var(--radius-5);
+		border-top-right-radius: var(--radius-5);
 	}
 
 	&__controls {

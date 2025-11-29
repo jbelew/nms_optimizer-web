@@ -29,7 +29,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 	const { i18n } = useTranslation();
 
 	return (
-		<footer key={i18n.language} data-build-date={buildDate} className="app-footer -mt-px">
+		<footer key={i18n.language} data-build-date={buildDate} className="app-footer">
 			<Flex
 				direction="column"
 				align="center"
