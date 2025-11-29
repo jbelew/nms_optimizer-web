@@ -1,3 +1,10 @@
+## [6.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.2...v6.3.3) (2025-11-29)
+
+
+### Bug Fixes
+
+* **layout:** make tech tree section width dynamic ([9773fe9](https://github.com/jbelew/nms_optimizer-web/commit/9773fe9543cb43344e33a248ff9992b0b0ce3bca))
+
 ## [6.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.1...v6.3.2) (2025-11-29)
 
 
