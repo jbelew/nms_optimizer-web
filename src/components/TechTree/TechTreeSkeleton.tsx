@@ -11,17 +11,19 @@ import { SuspenseSkeleton } from "./SuspenseSkeleton";
  */
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "524px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "517px";
 
 	return (
 		<>
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="main-app__tech-tree-sidebar rounded-md p-4 shadow-md"
+					className="main-app__tech-tree-sidebar shadow-md"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
-						backgroundColor: "var(--accent-a2)",
+						backgroundColor: "var(--color-panel-translucent)",
+						padding: "var(--space-5)",
+						borderRadius: "var(--radius-5)",
 					}}
 				>
 					<MessageSpinner

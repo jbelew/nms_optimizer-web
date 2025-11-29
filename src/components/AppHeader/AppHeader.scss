@@ -3,48 +3,39 @@
 .app-header {
 	align-items: center;
 	background-image: linear-gradient(to bottom, var(--color-panel-solid), transparent);
+	border-top-left-radius: var(--radius-5);
+	border-top-right-radius: var(--radius-5);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	padding: 1rem 1rem 1.5rem;
 	position: relative;
-
-	@media (width >= 640px) {
-		padding: 1.5rem 2rem 1rem;
-	}
-
-	@media (width >= 1024px) {
-		border-top-left-radius: 0.75rem;
-		border-top-right-radius: 0.75rem;
-	}
 
 	&__controls {
 		align-items: center;
 		display: flex;
-		gap: 0.5rem;
 		position: absolute !important;
 		z-index: 10;
 
 		&--left {
-			align-items: flex-start;
-			left: 1rem !important;
-			top: 1.25rem !important;
+			align-items: center; // Changed from flex-start to center vertically
+			height: var(--space-6); // 32px
+			left: var(--space-5) !important; // 24px
+			top: var(--space-5) !important; // 24px
 
 			@media (width >= 640px) {
-				left: 2rem !important;
-				top: 1.5rem !important;
+				left: var(--space-5) !important; // 24px
+				top: var(--space-5) !important; // 24px
 			}
 		}
 
 		&--right {
 			display: none;
-			right: 1rem !important;
-			top: 1rem !important;
+			top: var(--space-5) !important; // 24px
 
 			@media (width >= 640px) {
 				display: flex;
-				right: 2rem !important;
-				top: 1.25rem !important;
+				right: var(--space-5) !important; // 24px
+				top: var(--space-5) !important; // 24px
 			}
 		}
 	}
@@ -57,7 +48,8 @@
 		line-height: 2.25rem;
 		margin-right: -0.35em;
 		text-align: center;
-		text-shadow: 0 0 8px var(--accent-track);
+
+		// text-shadow: 0 0 8px var(--accent-track);
 		-webkit-text-stroke: 2px;
 		text-transform: uppercase;
 		word-spacing: -0.25rem;
@@ -66,15 +58,6 @@
 			font-size: 2.25rem;
 			line-height: 2.5rem;
 		}
-	}
-
-	&__separator-container {
-		align-items: center;
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 0.25rem;
-		margin-top: 0.25rem;
-		width: 100%;
 	}
 
 	&__logo-image {

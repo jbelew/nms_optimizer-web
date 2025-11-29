@@ -175,13 +175,13 @@ const GridTableButtons: React.FC = () => {
 				onConfirm={handleBuildNameConfirm}
 				onCancel={handleBuildNameCancel}
 			/>
-			<div role="gridcell" className="col-span-6 mt-3 flex gap-2">
+			<div role="gridcell" className="col-span-6 mt-2 flex gap-2">
 				{renderResponsiveButton(
 					<InfoCircledIcon />,
 					"buttons.instructions",
 					handleShowInstructions,
 					isInfoPending,
-					`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
+					`gridTable__button gridTable__button--instructions ${instructionGlowClass} shadow-(--shadow-2)`,
 					instructionsVariant as "soft" | "solid"
 				)}
 				{renderResponsiveButton(
@@ -189,7 +189,7 @@ const GridTableButtons: React.FC = () => {
 					"buttons.about",
 					handleShowAboutPage,
 					isInfoPending,
-					"gridTable__button gridTable__button--about"
+					"gridTable__button gridTable__button--about shadow-(--shadow-2)"
 				)}
 
 				{/* Load/Save buttons - hidden on mobile, shown on sm and up */}
@@ -199,7 +199,7 @@ const GridTableButtons: React.FC = () => {
 							<IconButton
 								size="2"
 								variant="soft"
-								className="gridTable__button gridTable__button--load"
+								className="gridTable__button gridTable__button--load shadow-(--shadow-2)"
 								onClick={handleLoadBuild}
 								disabled={solving || isLoadPending}
 								aria-label={t("buttons.loadBuild")}
@@ -212,7 +212,7 @@ const GridTableButtons: React.FC = () => {
 							<IconButton
 								size="2"
 								variant="soft"
-								className="gridTable__button gridTable__button--save"
+								className="gridTable__button gridTable__button--save shadow-(--shadow-2)"
 								onClick={handleSaveBuild}
 								disabled={solving || !hasModulesInGrid || isSavePending}
 								aria-label={t("buttons.saveBuild")}
@@ -237,7 +237,7 @@ const GridTableButtons: React.FC = () => {
 						<IconButton
 							size="2"
 							variant="soft"
-							className="gridTable__button gridTable__button--share"
+							className="gridTable__button gridTable__button--share shadow-(--shadow-2)"
 							onClick={handleShareClick}
 							disabled={solving || !hasModulesInGrid || isSharePending}
 							aria-label={t("buttons.share")}
@@ -248,10 +248,10 @@ const GridTableButtons: React.FC = () => {
 				)}
 			</div>
 
-			<div role="gridcell" className="col-span-5 mt-3 flex justify-end gap-2 lg:col-span-4">
+			<div role="gridcell" className="col-span-5 mt-2 flex justify-end gap-2 lg:col-span-4">
 				<Button
 					size="2"
-					className="gridTable__button gridTable__button--reset"
+					className="gridTable__button gridTable__button--reset shadow-(--shadow-2)"
 					variant="solid"
 					onClick={handleResetGrid}
 					disabled={solving || isResetPending}

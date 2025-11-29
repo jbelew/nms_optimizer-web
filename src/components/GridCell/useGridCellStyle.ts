@@ -26,8 +26,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 			"gridCell",
 			"gridCell--interactive",
 			"sm:border-2 border-1",
-			"shadow-sm",
-			"sm:shadow-md",
+			"shadow-md",
 			"relative",
 		];
 		if (!cell.module && cell.active) classes.push("gridCell--empty");

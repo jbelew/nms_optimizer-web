@@ -1,14 +1,9 @@
 .app-footer {
-	align-items: center;
+	// Visual styles - layout handled by Flex props
 	background-color: var(--color-panel-solid);
-	display: flex;
-	flex-direction: column;
 	font-size: 0.75rem;
 	font-weight: 300;
-	gap: 0.25rem;
-	justify-content: center;
 	line-height: 1rem;
-	padding: 1.5rem 1rem;
 	text-align: center;
 	width: 100%;
 
@@ -19,14 +14,7 @@
 
 	@media (width >= 768px) {
 		background-color: transparent;
-		padding: 1rem;
-		padding-left: 0;
-		padding-right: 0;
 		width: fit-content;
-	}
-
-	@media (width >= 1024px) {
-		padding: 1rem 0 0;
 	}
 
 	&__content {
@@ -50,18 +38,6 @@
 			display: inline;
 			margin-left: 0.25rem;
 			margin-right: 0.25rem;
-		}
-	}
-
-	&__support {
-		align-items: center;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		justify-content: center;
-
-		@media (width >= 1024px) {
-			gap: 0.25rem;
 		}
 	}
 }

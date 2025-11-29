@@ -43,7 +43,7 @@ const ShipSelectionLoadingState = () => {
 					size="2"
 					variant="soft"
 					aria-label="Select ship type"
-					className="p-2!"
+					className="p-2! shadow-(--shadow-2)"
 					disabled
 				>
 					<Spinner size="3" />
@@ -55,7 +55,7 @@ const ShipSelectionLoadingState = () => {
 					size="2"
 					variant="soft"
 					aria-label="Select ship type"
-					className="mt-1!"
+					className="mt-1! shadow-(--shadow-2)"
 					disabled
 				>
 					<Spinner size="3" />

@@ -45,7 +45,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
 	const techTree = techTreeProp || fetchedTechTree;
 
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "529px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "517px";
 
 	const hasRecommendedBuilds =
 		techTree?.recommended_builds && techTree.recommended_builds.length > 0;
@@ -68,8 +68,13 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="main-app__tech-tree-sidebar rounded-md p-4 shadow-md"
-						style={{ height: scrollAreaHeight, backgroundColor: "var(--accent-a2)" }}
+						className="main-app__tech-tree-sidebar shadow-md"
+						style={{
+							height: scrollAreaHeight,
+							backgroundColor: "var(--color-panel-translucent)",
+							padding: "var(--space-5)",
+							borderRadius: "var(--radius-5)",
+						}}
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}

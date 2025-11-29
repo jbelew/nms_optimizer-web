@@ -2,6 +2,9 @@
 import "./MainAppContent.scss";
 
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
+// import { useInstallPrompt } from "../../hooks/useInstallPrompt/useInstallPrompt";
+// import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
+import { Box, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
@@ -82,6 +85,8 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 		showError,
 	});
 
+	// const { showPrompt, dismissPrompt } = useInstallPrompt();
+
 	useEffect(() => {
 		if (isSharedGrid) {
 			// If it's a shared grid, the tech tree is not actively loading,
@@ -113,15 +118,32 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 				/>
 			)}
 
+			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
+
 			<main className="main-app__container">
-				<div className="main-app__card">
+				<div className="main-app__card shadow-md sm:mt-0 md:mt-6 lg:mt-0">
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
-					<div className="main-app__content" ref={gridContainerRef}>
+					<Flex
+						direction={{ initial: "column", md: "row" }}
+						align={{ initial: "center", md: "start" }}
+						className="main-app__content"
+						p="5"
+						ref={gridContainerRef}
+					>
 						{/* Grid section */}
-						<div className="main-app__grid-section" ref={appLayoutContainerRef}>
+						<Box
+							width={{ initial: "100%", md: "auto" }}
+							flexShrink={{ initial: "1", md: "0" }}
+							className="main-app__grid-section"
+							ref={appLayoutContainerRef}
+						>
 							{!isSharedGrid && (
-								<div
+								<Flex
+									align="center"
+									wrap="wrap"
+									gap="3"
+									mb="3"
 									className="main-app__ship-selector"
 									style={{
 										maxWidth: gridTableTotalWidth
@@ -138,7 +160,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 									<span className="main-app__ship-name">
 										{t(`platforms.${selectedShipType}`)}
 									</span>
-								</div>
+								</Flex>
 							)}
 
 							<GridTable
@@ -148,11 +170,16 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 								shared={isSharedGrid}
 								ref={appLayoutGridTableRef}
 							/>
-						</div>
+						</Box>
 
 						{/* Tech tree section */}
 						{!isSharedGrid && (
-							<div className="main-app__tech-tree-section">
+							<Flex
+								direction="column"
+								width="100%"
+								ml={{ md: "5" }}
+								className="main-app__tech-tree-section"
+							>
 								<Suspense fallback={<TechTreeSkeleton />}>
 									<TechTreeComponent
 										handleOptimize={handleOptimize}
@@ -160,9 +187,9 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 										gridTableTotalWidth={gridTableTotalWidth}
 									/>
 								</Suspense>
-							</div>
+							</Flex>
 						)}
-					</div>
+					</Flex>
 				</div>
 
 				<AppFooter buildVersion={buildVersion} buildDate={buildDate} />

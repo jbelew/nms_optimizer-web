@@ -1,3 +1,24 @@
+## [6.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.1...v6.3.2) (2025-11-29)
+
+
+### Bug Fixes
+
+* **ui:** Refine component sizing and spacing ([780f953](https://github.com/jbelew/nms_optimizer-web/commit/780f9534e234855cc299bc13c21b5cf00e049171))
+
+## [6.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.0...v6.3.1) (2025-11-29)
+
+
+### Bug Fixes
+
+* **components:** Enhance GridTable and MainAppContent display ([b3a0c00](https://github.com/jbelew/nms_optimizer-web/commit/b3a0c00826bb619397eae210ce38e620e564a1e6))
+
+# [6.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.2.0...v6.3.0) (2025-11-28)
+
+
+### Features
+
+* **ui:** improve responsive layout and mobile experience ([27f7ac6](https://github.com/jbelew/nms_optimizer-web/commit/27f7ac6b64d92a799533ea841b7a32e28ddcb3a8))
+
 # [6.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.1.8...v6.2.0) (2025-11-27)
 
 

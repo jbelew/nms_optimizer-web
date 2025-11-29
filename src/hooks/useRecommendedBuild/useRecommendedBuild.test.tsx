@@ -346,7 +346,7 @@ describe("useRecommendedBuild", () => {
 
 		expect(requestAnimationFrameMock).toHaveBeenCalled();
 		expect(scrollToMock).toHaveBeenCalledWith({
-			top: 36, // 100 (top) + 0 (pageYOffset) - 64 (offset)
+			top: 60, // 100 (top) + 0 (pageYOffset) - 40 (GRID_SCROLL_OFFSET_SMALL)
 			behavior: "smooth",
 		});
 	});

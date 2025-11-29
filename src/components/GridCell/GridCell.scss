@@ -1,5 +1,6 @@
 .gridCell {
 	background-color: var(--accent-a2);
+	border-radius: 2px;
 	height: var(--grid-cell-size);
 
 	/* Prevent callout menu on iOS tap-hold */
@@ -104,7 +105,8 @@
 		}
 
 		.corner {
-			border-color: var(--accent-a5);
+			// border-color: var(--accent-a5);
+			border-color: var(--accent-7);
 		}
 	}
 
@@ -124,7 +126,8 @@
 		}
 
 		.corner {
-			border-color: var(--gray-a5);
+			// border-color: var(--gray-a5);
+			border-color: var(--gray-7);
 		}
 	}
 
