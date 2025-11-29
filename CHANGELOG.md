@@ -1,3 +1,10 @@
+## [6.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.0...v6.3.1) (2025-11-29)
+
+
+### Bug Fixes
+
+* **components:** Enhance GridTable and MainAppContent display ([b3a0c00](https://github.com/jbelew/nms_optimizer-web/commit/b3a0c00826bb619397eae210ce38e620e564a1e6))
+
 # [6.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.2.0...v6.3.0) (2025-11-28)
 
 
