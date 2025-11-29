@@ -11,7 +11,7 @@ type UseScrollHideReturn = {
  * Shows when scrolling up, hides when scrolling down.
  * @param threshold - Distance scrolled before hiding (default: 80px)
  */
-export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
+export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideReturn => {
 	const [isVisible, setIsVisible] = useState(true);
 	const toolbarRef = useRef<HTMLElement>(null);
 	const lastScrollYRef = useRef(0);
@@ -23,42 +23,44 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 	}, []);
 
 	useEffect(() => {
-		const initialScroll = window.scrollY;
-		lastScrollYRef.current = initialScroll;
-		directionBaseRef.current = initialScroll;
-		lastDirectionRef.current = "down";
-
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
+
+			// 1. Top of Page Guarantee (including negative scroll for iOS bounce)
+			// Always show the toolbar if we are near the top.
+			if (currentScrollY <= threshold) {
+				setIsVisible(true);
+				lastScrollYRef.current = currentScrollY;
+				// Reset direction base to prevent immediate hiding when scrolling starts
+				directionBaseRef.current = currentScrollY;
+				return;
+			}
+
+			// 2. Bottom of Page Handling (ignore bounce)
+			const isAtBottom =
+				window.innerHeight + currentScrollY >= document.documentElement.scrollHeight;
+			if (isAtBottom) {
+				lastScrollYRef.current = currentScrollY;
+				return;
+			}
+
+			// Determine direction
 			const isScrollingDown = currentScrollY > lastScrollYRef.current;
 			const currentDirection = isScrollingDown ? "down" : "up";
 
-			// Ignore iOS bounce scroll at top and bottom
-			const isAtTop = currentScrollY <= 0;
-			const isAtBottom =
-				window.innerHeight + currentScrollY >= document.documentElement.scrollHeight - 100;
-			if (isAtTop || isAtBottom) {
-				lastScrollYRef.current = currentScrollY;
-				return;
-			}
-
-			// Force show if within threshold from top
-			if (currentScrollY < threshold) {
-				setIsVisible(true);
-				lastScrollYRef.current = currentScrollY;
-				return;
-			}
-
+			// Reset anchor point if direction changes
 			if (currentDirection !== lastDirectionRef.current) {
 				directionBaseRef.current = lastScrollYRef.current;
 				lastDirectionRef.current = currentDirection;
 			}
 
-			const scrollDistance = currentScrollY - directionBaseRef.current;
+			// Calculate distance scrolled in current direction since last direction change
+			const scrollDistance = Math.abs(currentScrollY - directionBaseRef.current);
 
-			if (isScrollingDown && scrollDistance > threshold) {
+			// 3. Logic with Hysteresis
+			if (isScrollingDown && scrollDistance > hysteresis) {
 				setIsVisible(false);
-			} else if (!isScrollingDown) {
+			} else if (!isScrollingDown && scrollDistance > hysteresis) {
 				setIsVisible(true);
 			}
 
@@ -70,7 +72,7 @@ export const useScrollHide = (threshold = 80): UseScrollHideReturn => {
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
 		};
-	}, [threshold]);
+	}, [threshold, hysteresis]);
 
 	return { isVisible, toolbarRef, forceShow };
 };

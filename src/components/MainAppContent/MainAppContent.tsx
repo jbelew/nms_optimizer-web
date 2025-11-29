@@ -4,7 +4,7 @@ import "./MainAppContent.scss";
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
 // import { useInstallPrompt } from "../../hooks/useInstallPrompt/useInstallPrompt";
 // import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
-import { Box, Card, Flex, Inset } from "@radix-ui/themes";
+import { Box, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
@@ -121,19 +121,14 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
 
 			<main className="main-app__container">
-				<Card
-					size="3"
-					variant="surface"
-					className="main-app__card -mt-px sm:mt-0 md:mt-6 lg:mt-0"
-				>
-					<Inset mb="5">
-						<AppHeader onShowChangelog={handleShowChangelog} />
-					</Inset>
+				<div className="main-app__card shadow-md sm:mt-0 md:mt-6 lg:mt-0">
+					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<Flex
 						direction={{ initial: "column", md: "row" }}
 						align={{ initial: "center", md: "start" }}
 						className="main-app__content"
+						p="5"
 						ref={gridContainerRef}
 					>
 						{/* Grid section */}
@@ -195,7 +190,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 							</Flex>
 						)}
 					</Flex>
-				</Card>
+				</div>
 
 				<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
 

@@ -59,7 +59,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	}, [a11yMode]);
 
 	return (
-		<Box p="5" key={i18n.language} className="app-header">
+		<Box pt="5" px="5" key={i18n.language} className="app-header">
 			{!isSharedGrid && !isLg && isSm && (
 				<Flex gap="2" className="app-header__controls app-header__controls--left">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
