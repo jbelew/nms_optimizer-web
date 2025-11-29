@@ -19,10 +19,30 @@ $panel-border: 1px solid var(--accent-a2);
 	}
 
 	&__card {
-		backdrop-filter: blur(64px);
-		background-color: var(--color-panel-translucent);
 		border: $panel-border;
 		border-radius: var(--radius-5);
+
+		// Desktop: use backdrop-filter for dynamic blur
+		@media (width >= 640px) {
+			backdrop-filter: blur(64px);
+			background-color: var(--color-panel-translucent);
+		}
+
+		// Mobile: use pre-blurred background image for better performance
+		@media (width <= 639px) {
+			background-image: url("/assets/img/background@mobile-blurred.webp");
+			background-position: center top;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+
+		// Accessibility override: disable background image
+		body.a11y-font & {
+			@media (width <= 639px) {
+				background-color: var(--color-panel-solid);
+				background-image: none !important;
+			}
+		}
 	}
 
 	// Ship selector header

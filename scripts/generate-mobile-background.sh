@@ -1,0 +1,62 @@
+#!/bin/bash
+# Script to generate blurred and tinted mobile background for performance optimization
+# This pre-bakes the blur and tint effects that would otherwise be applied via CSS backdrop-filter
+
+set -e
+
+# Configuration
+INPUT_IMAGE="public/assets/img/background@mobile.webp"
+OUTPUT_IMAGE="public/assets/img/background@mobile-blurred.webp"
+BLUR_RADIUS="64"
+# Cyan-dark-alpha a2 color (--cyan-a2: #02a7f211)
+# The color is #02a7f2 (cyan) with 11 hex = 17 decimal = ~6.7% opacity
+TINT_COLOR="#02a7f2"  # Cyan color
+TINT_OPACITY="6.7"    # 6.7% opacity to match --cyan-a2
+BRIGHTNESS="85"       # Reduce brightness to 85% to compensate for blur "graying" out the black space
+
+echo "🎨 Generating blurred and tinted mobile background..."
+echo "   Input:  $INPUT_IMAGE"
+echo "   Output: $OUTPUT_IMAGE"
+echo "   Blur:   ${BLUR_RADIUS}px"
+echo "   Tint:   $TINT_COLOR at ${TINT_OPACITY}%"
+echo "   Bright: ${BRIGHTNESS}%"
+
+# Check if ImageMagick is installed
+if ! command -v convert &> /dev/null; then
+    echo "❌ Error: ImageMagick is not installed."
+    echo "   Install it with: sudo apt-get install imagemagick"
+    exit 1
+fi
+
+# Check if input file exists
+if [ ! -f "$INPUT_IMAGE" ]; then
+    echo "❌ Error: Input file not found: $INPUT_IMAGE"
+    exit 1
+fi
+
+# Generate blurred and tinted background
+# Step 1: Apply blur to the image
+# Step 2: Reduce brightness (modulate) to fix "gray fog" from blurring stars
+# Step 3: Create a tint overlay and blend it
+convert "$INPUT_IMAGE" \
+    -blur 0x${BLUR_RADIUS} \
+    -modulate ${BRIGHTNESS},100,100 \
+    \( +clone -fill "$TINT_COLOR" -colorize 100% \) \
+    -compose blend -define compose:args=${TINT_OPACITY} -composite \
+    "$OUTPUT_IMAGE"
+
+# Get file sizes for comparison
+INPUT_SIZE=$(du -h "$INPUT_IMAGE" | cut -f1)
+OUTPUT_SIZE=$(du -h "$OUTPUT_IMAGE" | cut -f1)
+
+echo "✅ Successfully generated blurred and tinted background!"
+echo "   Original size: $INPUT_SIZE"
+echo "   Blurred size:  $OUTPUT_SIZE"
+echo ""
+echo "💡 The blurred image is now ready to use in MainAppContent.scss"
+echo ""
+echo "🔧 To adjust the effect, modify these variables in the script:"
+echo "   BLUR_RADIUS - Controls blur strength (currently ${BLUR_RADIUS}px)"
+echo "   TINT_COLOR  - Controls tint color (currently $TINT_COLOR)"
+echo "   TINT_OPACITY - Controls tint strength (currently ${TINT_OPACITY}%)"
+
