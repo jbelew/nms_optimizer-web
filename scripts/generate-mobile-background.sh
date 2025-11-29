@@ -12,7 +12,7 @@ BLUR_RADIUS="64"
 # The color is #02a7f2 (cyan) with 11 hex = 17 decimal = ~6.7% opacity
 TINT_COLOR="#02a7f2"  # Cyan color
 TINT_OPACITY="6.7"    # 6.7% opacity to match --cyan-a2
-BRIGHTNESS="85"       # Reduce brightness to 85% to compensate for blur "graying" out the black space
+BRIGHTNESS="80"       # Reduce brightness to 85% to compensate for blur "graying" out the black space
 
 echo "🎨 Generating blurred and tinted mobile background..."
 echo "   Input:  $INPUT_IMAGE"

@@ -122,7 +122,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
 
 			<main className="main-app__container">
-				<div className="main-app__card sm:shadow-md">
+				<div className="main-app__card lg:shadow-xl">
 					<AppHeader onShowChangelog={handleShowChangelog} />
 
 					<Flex

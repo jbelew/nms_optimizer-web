@@ -2,7 +2,7 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
-## Version 6.2 – Improved Mobile Rendering Stability (2025-11-27)
+## Version 6.3 – Improved Mobile Rendering Stability (2025-11-29)
 
 This update focuses on making the app far more stable and consistent on mobile devices—especially Safari and Chrome on iOS.
 

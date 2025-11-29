@@ -19,7 +19,9 @@ $panel-border: 1px solid var(--accent-a2);
 	}
 
 	&__card {
-		border: $panel-border;
+		@media (width >= 640px) and (width < 1024px) {
+			max-width: 798px;
+		}
 
 		// Desktop: use backdrop-filter for dynamic blur
 		@media (width >= 640px) {
@@ -33,9 +35,11 @@ $panel-border: 1px solid var(--accent-a2);
 			background-position: center top;
 			background-repeat: no-repeat;
 			background-size: cover;
+			max-width: fit-content;
 		}
 
 		@media (width >= 1024px) {
+			border: $panel-border;
 			border-radius: var(--radius-5);
 		}
 
