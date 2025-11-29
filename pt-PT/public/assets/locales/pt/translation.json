@@ -595,12 +595,12 @@
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer | No Man's Sky Tech Layout Builder & Calculator",
-		"appDescription": "The NMS Optimizer helps you design the perfect Starship, Corvette, Multitool, Exocraft, or Exosuit layout in No Man's Sky. Use smart optimization tools to maximize adjacency bonuses, supercharged slots, and overall performance.",
-		"instructionsPageTitle": "How to Use NMS Optimizer | Adjacency Bonus Guide",
-		"instructionsDescription": "Learn how to use the NMS Optimizer to create the best No Man's Sky tech layouts. This guide explains how to maximize adjacency bonuses for any ship or tool.",
-		"aboutPageTitle": "About NMS Optimizer | The #1 No Man's Sky Tech Layout Calculator",
-		"aboutDescription": "NMS Optimizer is a free tool that uses AI to find the best technology layouts for No Man's Sky. Optimize your Starship, Multitool, and more.",
+		"mainPageTitle": "NMS Optimizer | Best Tech Layouts & Adjacency Calculator for No Man's Sky",
+		"appDescription": "The best No Man's Sky layout calculator and optimizer. Find optimal technology placements with maximum adjacency bonuses for Starship, Corvette, Multitool, Exocraft, and Exosuit builds. Free tool with supercharged slot optimization.",
+		"instructionsPageTitle": "How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
+		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
+		"aboutPageTitle": "About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
+		"aboutDescription": "NMS Optimizer is a free calculator that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
 		"changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
 		"changelogDescription": "See the latest updates, new features, and bug fixes for the NMS Optimizer. Stay up-to-date with the development of the best No Man's Sky layout tool.",
 		"userstatsPageTitle": "User Statistics & Popular Layouts | NMS Optimizer",
