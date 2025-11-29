@@ -1,3 +1,10 @@
+## [6.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.3...v6.3.4) (2025-11-29)
+
+
+### Bug Fixes
+
+* **mobile:** improve rendering stability and visual consistency ([d5e4137](https://github.com/jbelew/nms_optimizer-web/commit/d5e4137da6a80cf281e89a6935937803f427d02c))
+
 ## [6.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.2...v6.3.3) (2025-11-29)
 
 
