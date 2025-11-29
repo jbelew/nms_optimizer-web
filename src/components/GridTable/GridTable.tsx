@@ -75,14 +75,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 		return (
 			<GridShake duration={500}>
-				{!isLarge && (
-					<Separator
-						size="4"
-						orientation="horizontal"
-						decorative
-						className={`mb-4 ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
-					/>
-				)}
+				{!isLarge && <Separator size="4" orientation="horizontal" decorative mb="3" />}
 
 				<MessageSpinner
 					// isVisible={solving || isTechTreeLoading}
@@ -121,7 +114,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 										</Callout.Text>
 									</Callout.Root>
 								)}
-								<Separator size="4" orientation="horizontal" mt="2" decorative />
+								<Separator size="4" orientation="horizontal" mt="1" decorative />
 							</div>
 						</div>
 					)}

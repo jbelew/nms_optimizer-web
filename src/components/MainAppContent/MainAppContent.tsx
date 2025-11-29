@@ -148,7 +148,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 									align="center"
 									wrap="wrap"
 									gap="3"
-									mb="4"
+									mb="3"
 									className="main-app__ship-selector"
 									style={{
 										maxWidth: gridTableTotalWidth

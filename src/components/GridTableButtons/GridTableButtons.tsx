@@ -175,7 +175,7 @@ const GridTableButtons: React.FC = () => {
 				onConfirm={handleBuildNameConfirm}
 				onCancel={handleBuildNameCancel}
 			/>
-			<div role="gridcell" className="col-span-6 mt-3 flex gap-2">
+			<div role="gridcell" className="col-span-6 mt-2 flex gap-2">
 				{renderResponsiveButton(
 					<InfoCircledIcon />,
 					"buttons.instructions",
@@ -248,7 +248,7 @@ const GridTableButtons: React.FC = () => {
 				)}
 			</div>
 
-			<div role="gridcell" className="col-span-5 mt-3 flex justify-end gap-2 lg:col-span-4">
+			<div role="gridcell" className="col-span-5 mt-2 flex justify-end gap-2 lg:col-span-4">
 				<Button
 					size="2"
 					className="gridTable__button gridTable__button--reset shadow-(--shadow-2)"
