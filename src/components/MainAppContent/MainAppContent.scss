@@ -59,6 +59,7 @@ $panel-border: 1px solid var(--accent-a2);
 		font-weight: 400;
 		letter-spacing: var(--letter-spacing-wide);
 		line-height: 1.75rem;
+		margin-bottom: var(--space-3);
 		text-shadow: 0 2px 4px var(--accent-a2);
 		-webkit-text-stroke: 0.8px;
 		text-transform: uppercase;
@@ -66,6 +67,10 @@ $panel-border: 1px solid var(--accent-a2);
 		@media (width >= 640px) {
 			font-size: 1.5rem;
 			line-height: 2rem;
+		}
+
+		@media (width > 1024px) {
+			margin-bottom: var(--space-4);
 		}
 	}
 

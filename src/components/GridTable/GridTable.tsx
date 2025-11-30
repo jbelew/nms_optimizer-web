@@ -2,19 +2,16 @@
 import "./GridTable.scss";
 
 import React, { useMemo } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { Callout, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { isTouchDevice } from "../../utils/isTouchDevice";
 import GridRow from "../GridRow/GridRow";
 import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
+import { TapInstructions } from "../TapInstructions";
 
 /**
  * @interface GridTableProps
@@ -48,10 +45,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		const { t } = useTranslation();
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const gridWidth = useGridStore((state) => state.grid.width);
-		const superchargedFixed = useGridStore((state) => state.superchargedFixed);
 		const isLarge = useBreakpoint("1024px");
-		const isTouch = isTouchDevice();
-		const { tutorialFinished } = useDialog();
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 		// Memoize grid rows - must be called unconditionally
@@ -75,10 +69,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 		return (
 			<GridShake duration={500}>
-				{!isLarge && <Separator size="4" orientation="horizontal" decorative mb="3" />}
-
 				<MessageSpinner
-					// isVisible={solving || isTechTreeLoading}
 					isVisible={solving}
 					useNMSFont={isTechTreeLoading}
 					initialMessage={
@@ -97,32 +88,11 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
 				>
 					{gridRows}
-					{!isLarge && (
-						<div role="row">
-							<div
-								role="gridcell"
-								aria-colspan={totalAriaColumnCount}
-								className="col-span-full mt-1 text-sm"
-							>
-								{isTouch && !superchargedFixed && !tutorialFinished && (
-									<Callout.Root className="mt-2 mb-4" size="1">
-										<Callout.Icon>
-											<InfoCircledIcon />
-										</Callout.Icon>
-										<Callout.Text>
-											{t("gridTable.tapInstructions")}
-										</Callout.Text>
-									</Callout.Root>
-								)}
-								<Separator size="4" orientation="horizontal" mt="1" decorative />
-							</div>
-						</div>
-					)}
-
-					<div role="row">
-						<GridTableButtons />
-					</div>
 				</div>
+
+				{!isLarge && <TapInstructions />}
+
+				<GridTableButtons />
 			</GridShake>
 		);
 	}

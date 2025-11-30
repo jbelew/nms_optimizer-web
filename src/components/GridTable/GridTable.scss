@@ -4,6 +4,23 @@
 	grid-template-columns: repeat(10, var(--grid-cell-size)) auto;
 	grid-template-rows: repeat(6, var(--grid-cell-size));
 	width: fit-content;
+
+	@media (width <= 1024px) {
+		border-bottom: 1px solid var(--gray-a6);
+		border-top: 1px solid var(--gray-a6);
+		padding-bottom: var(--space-4);
+
+		// margin-left: calc(-1 * var(--space-5));
+		// margin-right: calc(-1 * var(--space-5));
+		// padding-left: var(--space-5);
+		// padding-right: var(--space-5);
+		padding-top: var(--space-4);
+	}
+
+	@media (width <= 640px) {
+		padding-bottom: var(--space-3);
+		padding-top: var(--space-3);
+	}
 }
 
 [role="row"] {

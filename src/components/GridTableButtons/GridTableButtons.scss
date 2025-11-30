@@ -1,0 +1,25 @@
+.gridTable-buttons__container {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	justify-content: space-between;
+	margin-top: var(--space-4);
+
+	@media (width <= 640px) {
+		margin-top: var(--space-3);
+	}
+}
+
+.gridTable-buttons__left {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+}
+
+.gridTable-buttons__right {
+	display: flex;
+	gap: var(--space-2);
+	margin-left: auto;
+}

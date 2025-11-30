@@ -1,0 +1,1 @@
+export { TapInstructions } from "./TapInstructions";

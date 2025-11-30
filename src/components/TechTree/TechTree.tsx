@@ -1,7 +1,7 @@
 // src/components/TechTree/TechTree.tsx
 import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
 import React, { useEffect, useMemo } from "react";
-import { ScrollArea } from "@radix-ui/themes";
+import { Box, ScrollArea } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
@@ -45,7 +45,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
 	const techTree = techTreeProp || fetchedTechTree;
 
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "517px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "521px";
 
 	const hasRecommendedBuilds =
 		techTree?.recommended_builds && techTree.recommended_builds.length > 0;
@@ -89,18 +89,18 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 				</>
 			) : (
 				<>
-					<div className="mt-4 sm:mt-5">
+					<Box mt="4">
 						{hasRecommendedBuilds && (
 							<RecommendedBuild techTree={techTree} isLarge={isLarge} />
 						)}
-					</div>
-					<div className="mt-4">
+					</Box>
+					<Box mt="4">
 						<TechTreeContent
 							handleOptimize={handleOptimize}
 							solving={solving}
 							techTree={techTree}
 						/>
-					</div>
+					</Box>
 				</>
 			)}
 		</>

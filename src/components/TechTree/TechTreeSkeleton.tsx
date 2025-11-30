@@ -11,7 +11,7 @@ import { SuspenseSkeleton } from "./SuspenseSkeleton";
  */
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "517px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "521px";
 
 	return (
 		<>
