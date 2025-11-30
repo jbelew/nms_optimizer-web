@@ -1,0 +1,55 @@
+name: Update Screenshots on Version Bump
+
+on:
+    push:
+        tags:
+            - "v*.*.*"
+    workflow_dispatch:
+
+jobs:
+    update-screenshots:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.ref }}
+                  fetch-depth: 0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build application
+              run: npm run build
+
+            - name: Start preview server
+              run: |
+                  npm run preview &
+                  npx wait-on http://localhost:4173 --timeout 60000
+
+            - name: Run screenshot script
+              run: npm run screenshot
+
+            - name: Configure Git
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Commit and push screenshots
+              run: |
+                  git add public/assets/img/screenshots/*.png
+                  if git diff --staged --quiet; then
+                    echo "No screenshot changes to commit"
+                  else
+                    git commit -m "chore: update screenshots for ${{ github.ref_name }}"
+                    git push origin HEAD:main
+                  fi
