@@ -146,7 +146,7 @@
 		"vite": "^7.2.2",
 		"vite-plugin-color-scheme": "^0.0.1",
 		"vite-plugin-compression": "^0.5.1",
-		"vite-plugin-pwa": "^1.1.0",
+		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-splash-screen": "^0.2.0",
 		"vitest": "^4.0.8",
 		"vitest-websocket-mock": "^0.5.0"
