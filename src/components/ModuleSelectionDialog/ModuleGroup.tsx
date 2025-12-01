@@ -9,8 +9,10 @@ import { ModuleCheckbox } from "./ModuleCheckbox";
 /**
  * Props for the ModuleGroup component.
  */
-export interface ModuleGroupProps
-	extends Pick<ModuleSelectionDialogProps, "currentCheckedModules" | "techColor"> {
+export interface ModuleGroupProps extends Pick<
+	ModuleSelectionDialogProps,
+	"currentCheckedModules" | "techColor"
+> {
 	groupName: string;
 	modules: Module[];
 	titleOverride?: string;
