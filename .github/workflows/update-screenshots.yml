@@ -29,6 +29,8 @@ jobs:
               run: npm ci
 
             - name: Build application
+              env:
+                VITE_APP_VERSION: ${{ github.ref_name }}
               run: npm run build
 
             - name: Start server
