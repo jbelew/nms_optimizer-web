@@ -569,7 +569,15 @@
         "userstatsPageTitle": "Statistiques des Utilisateurs & Schémas Populaires | NMS Optimizer",
         "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour voir les technologies No Man's Sky les plus populaires pour tous les types de plates-formes.",
         "translationPageTitle": "Aidez à Traduire NMS Optimizer | Localisation Communautaire",
-        "translationDescription": "Aidez à traduire le NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
+        "translationDescription": "Aidez à traduire le NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde.",
+        "nav": {
+            "home": "Maison",
+            "instructions": "Instructions",
+            "about": "À propos",
+            "changelog": "Journal des modifications",
+            "userstats": "Statistiques des utilisateurs",
+            "translation": "Aide à traduire"
+        }
     },
     "appHeader": {
         "subTitle": "Optimiseur de configuration technologique <1>AI/RUST</1>"
