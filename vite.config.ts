@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import PluginCritical from "rollup-plugin-critical";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, Plugin } from "vite";
 import compression from "vite-plugin-compression";
@@ -10,11 +9,9 @@ import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
-import inlineCriticalCssPlugin from "./scripts/vite-plugin-inline-critical-css";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
 export default defineConfig(({ mode }) => {
-	const doCritical = mode === "critical" || mode === "production";
 	// Use an environment variable for the app version, defaulting to 'unknown'
 	const appVersion = process.env.VITE_APP_VERSION || "unknown";
 	const buildDate = new Date().toISOString();
@@ -55,17 +52,7 @@ export default defineConfig(({ mode }) => {
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			...(doCritical
-				? [
-						deferStylesheetsPlugin(),
-						// PluginCritical({
-						// 	criticalBase: "dist/",
-						// 	criticalUrl: "https://nms-optimizer.app",
-						// 	criticalPages: [{ uri: "/", template: "index" }],
-						// 	criticalConfig: {},
-						// }),
-					]
-				: []),
+			deferStylesheetsPlugin(),
 			compression({
 				algorithm: "brotliCompress",
 				ext: ".br",
@@ -78,9 +65,6 @@ export default defineConfig(({ mode }) => {
 				threshold: 10240,
 				deleteOriginFile: false,
 			}),
-			// ...(doCritical
-			// 	? [inlineCriticalCssPlugin({ criticalCssFileName: "index_critical.min.css" })]
-			// 	: []),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
