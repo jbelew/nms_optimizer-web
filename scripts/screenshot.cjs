@@ -1,15 +1,29 @@
 const puppeteer = require("puppeteer");
 
-console.log("Screenshot script started.");
+const baseUrl = process.env.BASE_URL;
+if (!baseUrl) {
+	console.error("BASE_URL environment variable is required");
+	process.exit(1);
+}
+
+console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 (async () => {
 	console.log("Attempting to launch browser...");
 	const browser = await puppeteer.launch({
 		headless: "new",
 		dumpio: true,
-		args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+		args: [
+			"--no-sandbox",
+			"--disable-setuid-sandbox",
+			"--disable-dev-shm-usage",
+			"--disable-blink-features=AutomationControlled",
+		],
 	});
 	const page = await browser.newPage();
+	await page.setUserAgent(
+		"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+	);
 
 	try {
 		// GitHub Actions may run on localhost:4173 by default for vite preview
@@ -1149,7 +1163,7 @@ console.log("Screenshot script started.");
 			localStorage.setItem("selectedPlatform", "sentinel");
 		});
 
-		await page.goto(process.env.BASE_URL || "https://nms-optimizer.app", {
+		await page.goto(baseUrl, {
 			waitUntil: "networkidle0",
 		});
 		await page.screenshot({
@@ -1163,7 +1177,7 @@ console.log("Screenshot script started.");
 		});
 
 		await page.setViewport({ width: 375, height: 600 });
-		await page.goto(process.env.BASE_URL || "https://nms-optimizer.app", {
+		await page.goto(baseUrl, {
 			waitUntil: "networkidle0",
 		});
 		// Inject CSS to hide scrollbars for the mobile screenshot
@@ -1184,7 +1198,7 @@ console.log("Screenshot script started.");
 		});
 
 		await page.setViewport({ width: 800, height: 1280 });
-		await page.goto(process.env.BASE_URL || "https://nms-optimizer.app", {
+		await page.goto(baseUrl, {
 			waitUntil: "networkidle0",
 		});
 		// Inject CSS to hide scrollbars for the tablet screenshot
