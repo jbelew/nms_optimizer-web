@@ -148,7 +148,7 @@
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-pwa": "^1.1.0",
 		"vite-plugin-splash-screen": "^0.2.0",
-		"vitest": "^4.0.8",
+		"vitest": "^4.0.14",
 		"vitest-websocket-mock": "^0.5.0"
 	},
 	"config": {
