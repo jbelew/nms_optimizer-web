@@ -20,10 +20,18 @@
 	--font-weight-bold: 600;
 	/* Added for common bold weight */
 	--color-background: var(--gray-a1);
-	/* --color-background: #00000000; */
 
-	--color-panel-translucent: var(--accent-a2);
-	--color-panel-solid: var(--accent-1);
+	/* --color-panel-translucent: var(--accent-a2);
+	--color-panel-solid: var(--accent-1); */
+}
+
+.rt-BaseButton {
+	--tw-shadow:
+		0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+		0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+	box-shadow:
+		var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+		var(--tw-ring-shadow), var(--tw-shadow);
 }
 
 body.a11y-font .radix-themes {

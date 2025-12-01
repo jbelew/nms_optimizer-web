@@ -184,7 +184,7 @@ const GridTableButtons: React.FC = () => {
 						"buttons.instructions",
 						handleShowInstructions,
 						isInfoPending,
-						`gridTable__button gridTable__button--instructions ${instructionGlowClass} shadow-md`,
+						`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
 						instructionsVariant as "soft" | "solid"
 					)}
 					{renderResponsiveButton(
@@ -192,7 +192,7 @@ const GridTableButtons: React.FC = () => {
 						"buttons.about",
 						handleShowAboutPage,
 						isInfoPending,
-						"gridTable__button gridTable__button--about shadow-md"
+						"gridTable__button gridTable__button--about"
 					)}
 
 					{/* Load/Save buttons - hidden on mobile, shown on sm and up */}
@@ -202,7 +202,7 @@ const GridTableButtons: React.FC = () => {
 								<IconButton
 									size="2"
 									variant="soft"
-									className="gridTable__button gridTable__button--load shadow-md"
+									className="gridTable__button gridTable__button--load"
 									onClick={handleLoadBuild}
 									disabled={solving || isLoadPending}
 									aria-label={t("buttons.loadBuild")}
@@ -215,7 +215,7 @@ const GridTableButtons: React.FC = () => {
 								<IconButton
 									size="2"
 									variant="soft"
-									className="gridTable__button gridTable__button--save shadow-md"
+									className="gridTable__button gridTable__button--save"
 									onClick={handleSaveBuild}
 									disabled={solving || !hasModulesInGrid || isSavePending}
 									aria-label={t("buttons.saveBuild")}
@@ -240,7 +240,7 @@ const GridTableButtons: React.FC = () => {
 							<IconButton
 								size="2"
 								variant="soft"
-								className="gridTable__button gridTable__button--share shadow-md"
+								className="gridTable__button gridTable__button--share"
 								onClick={handleShareClick}
 								disabled={solving || !hasModulesInGrid || isSharePending}
 								aria-label={t("buttons.share")}
@@ -254,7 +254,7 @@ const GridTableButtons: React.FC = () => {
 				<div className="gridTable-buttons__right">
 					<Button
 						size="2"
-						className="gridTable__button gridTable__button--reset shadow-md"
+						className="gridTable__button gridTable__button--reset"
 						variant="solid"
 						onClick={handleResetGrid}
 						disabled={solving || isResetPending}

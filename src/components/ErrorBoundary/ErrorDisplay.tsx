@@ -26,10 +26,7 @@ export const ErrorDisplay = ({
 			className={`flex h-full flex-col items-center justify-center p-8 text-center text-gray-50 ${className}`}
 			style={containerStyle}
 		>
-			<ExclamationTriangleIcon
-				className="h-16 w-16 shadow-md"
-				style={{ color: "var(--red-track)" }}
-			/>
+			<ExclamationTriangleIcon className="h-16 w-16" style={{ color: "var(--red-track)" }} />
 			<h1
 				className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
 				style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}

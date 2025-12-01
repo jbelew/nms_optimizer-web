@@ -68,7 +68,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						className="main-app__tech-tree-sidebar shadow-md"
+						className="main-app__tech-tree-sidebar shadow-sm"
 						style={{
 							height: scrollAreaHeight,
 							backgroundColor: "var(--color-panel-translucent)",
