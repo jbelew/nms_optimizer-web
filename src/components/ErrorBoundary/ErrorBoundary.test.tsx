@@ -59,7 +59,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// ErrorPage displays error information
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
 
 			consoleErrorSpy.mockRestore();
 		});
@@ -104,7 +104,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Check that ErrorPage is rendered (which means state was updated)
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
 		});
 
 		it("should catch errors and set hasError to true", () => {
@@ -117,7 +117,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Verify error page is displayed
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
 		});
 	});
 
@@ -134,7 +134,7 @@ describe("ErrorBoundary", () => {
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
 		});
 	});
 
@@ -160,7 +160,7 @@ describe("ErrorBoundary", () => {
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
 
 			// Re-render with the same error
 			rerender(

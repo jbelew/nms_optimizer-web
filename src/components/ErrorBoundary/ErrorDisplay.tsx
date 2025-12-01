@@ -1,6 +1,6 @@
 import type { ErrorInfo, ReactNode } from "react";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Link } from "@radix-ui/themes";
+
+import "./ErrorBoundary.scss";
 
 interface ErrorDisplayProps {
 	error?: Error;
@@ -12,7 +12,7 @@ interface ErrorDisplayProps {
 
 /**
  * Reusable error display component that shows error details in a consistent format.
- * Used by both ErrorPage and ErrorBoundaryInset for displaying error information.
+ * Used by ErrorContent for displaying error information.
  */
 export const ErrorDisplay = ({
 	error,
@@ -23,19 +23,12 @@ export const ErrorDisplay = ({
 }: ErrorDisplayProps) => {
 	return (
 		<div
-			className={`flex h-full flex-col items-center justify-center p-8 text-center text-gray-50 ${className}`}
+			className={`flex flex-col items-center gap-4 text-gray-50 ${className}`}
 			style={containerStyle}
 		>
-			<ExclamationTriangleIcon className="h-16 w-16" style={{ color: "var(--red-track)" }} />
-			<h1
-				className="errorContent__title block text-center text-2xl font-semibold tracking-widest"
-				style={{ color: "var(--amber-track)", fontFamily: "GeosansLight" }}
-			>
-				-kzzkt- Error! -kzzkt-
-			</h1>
-			<h2 className="pb-4 text-sm sm:text-base">{children}</h2>
+			{children && <p className="text-sm sm:text-base">{children}</p>}
 			<div
-				className="w-full text-left font-mono text-xs lg:text-base"
+				className="w-full text-left font-mono text-xs"
 				style={{
 					whiteSpace: "pre-wrap",
 					overflowWrap: "break-word",
@@ -52,7 +45,7 @@ export const ErrorDisplay = ({
 						<p className="mt-2">
 							<strong>Stack Trace:</strong>
 						</p>
-						{error.stack}
+						<p>{error.stack}</p>
 					</>
 				)}
 				{errorInfo?.componentStack && (
@@ -60,49 +53,10 @@ export const ErrorDisplay = ({
 						<p className="mt-2">
 							<strong>Component Stack:</strong>
 						</p>
-						{errorInfo.componentStack}
+						<p>{errorInfo.componentStack}</p>
 					</>
 				)}
 			</div>
 		</div>
 	);
 };
-
-/**
- * Default error message for full-page errors
- */
-export const DefaultErrorMessage = () => (
-	<>
-		Something went wrong! This page may be <strong>out of date</strong>. Try{" "}
-		<strong>reloading the page</strong> to get the latest updates. If the problem continues,
-		please consider{" "}
-		<Link
-			href="https://github.com/jbelew/nms_optimizer-web/issues"
-			target="_blank"
-			rel="noopener noreferrer"
-			underline="always"
-		>
-			filing a bug report
-		</Link>
-		.
-	</>
-);
-
-/**
- * Alternative error message for inset errors
- */
-export const InsetErrorMessage = () => (
-	<>
-		Something went wrong! Try <strong>reloading the page</strong> to see if that resolves the
-		issue. If the problem continues, please consider{" "}
-		<Link
-			href="https://github.com/jbelew/nms_optimizer-web/issues"
-			target="_blank"
-			rel="noopener noreferrer"
-			underline="always"
-		>
-			filing a bug report
-		</Link>
-		.
-	</>
-);

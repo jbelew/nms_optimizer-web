@@ -1,29 +1,47 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { ErrorPage } from "./ErrorPage";
+import { ErrorContent } from "./ErrorContent";
 
 const meta = {
-	component: ErrorPage,
-	title: "components/ErrorBoundary/ErrorPage",
+	component: ErrorContent,
+	title: "components/ErrorBoundary/ErrorContent",
 	parameters: {
 		layout: "fullscreen",
 	},
-} satisfies Meta<typeof ErrorPage>;
+	argTypes: {
+		variant: {
+			control: "radio",
+			options: ["page", "inset"],
+		},
+	},
+} satisfies Meta<typeof ErrorContent>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const PageVariant: Story = {
+	args: {
+		variant: "page",
+	},
+};
+
+export const InsetVariant: Story = {
+	args: {
+		variant: "inset",
+	},
+};
 
 export const WithErrorMessage: Story = {
 	args: {
+		variant: "page",
 		error: new Error("This is a sample error message."),
 	},
 };
 
 export const WithStackTrace: Story = {
 	args: {
+		variant: "page",
 		error: {
 			name: "Error",
 			message: "Something went wrong",
@@ -37,6 +55,7 @@ export const WithStackTrace: Story = {
 
 export const WithComponentStack: Story = {
 	args: {
+		variant: "page",
 		error: new Error("Error with component stack"),
 		errorInfo: {
 			componentStack: `

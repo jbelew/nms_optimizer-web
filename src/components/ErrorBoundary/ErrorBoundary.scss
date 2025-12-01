@@ -1,0 +1,107 @@
+/* Error Content - Shared styles */
+.error-content {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-height: 0; // Allow shrinking for scroll
+	width: 100%;
+
+	&__header {
+		color: var(--amber-track);
+		flex-shrink: 0;
+	}
+
+	&__icon {
+		color: var(--red-9);
+	}
+
+	&__body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		min-height: 0; // Allow shrinking for scroll
+		overflow-y: auto;
+	}
+}
+
+/* Page Variant Specifics */
+.error-page {
+	&__overlay {
+		align-items: center;
+		background-color: var(--color-overlay);
+		display: flex;
+		inset: 0;
+		justify-content: center;
+		padding: calc(var(--spacing) * 2);
+		position: fixed;
+		z-index: 50; // Ensure it sits on top
+	}
+
+	&__content {
+		background-color: var(--color-panel-solid);
+		border-radius: 8px;
+		box-shadow: var(--shadow-6);
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--spacing) * 4);
+		max-height: 80vh;
+		padding: calc(var(--spacing) * 4);
+		width: clamp(280px, 90vw, 560px);
+
+		@media (width <= 640px) {
+			max-height: 90vh;
+			padding: calc(var(--spacing) * 3);
+			width: 100%;
+		}
+	}
+}
+
+/* Inset Variant Specifics */
+.error-boundary {
+	&__container {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		padding-top: 3rem; // Mobile
+
+		@media (width >= 640px) {
+			justify-content: center;
+			padding-top: 0;
+		}
+	}
+
+	&__card {
+		@media (width >= 640px) and (width < 1024px) {
+			max-width: 798px;
+		}
+
+		// Desktop: use backdrop-filter for dynamic blur
+		@media (width >= 640px) {
+			backdrop-filter: blur(64px);
+			background-color: var(--color-panel-translucent);
+		}
+
+		// Mobile: use pre-blurred background image for better performance
+		@media (width <= 639px) {
+			background-image: url("/assets/img/background@mobile-blurred.webp");
+			background-position: center top;
+			background-repeat: no-repeat;
+			background-size: cover;
+			max-width: fit-content;
+		}
+
+		@media (width >= 1024px) {
+			border: 1px solid var(--accent-a2);
+			border-radius: var(--radius-5);
+		}
+
+		// Accessibility override: disable background image
+		body.a11y-font & {
+			@media (width <= 639px) {
+				background-color: var(--color-panel-solid);
+				background-image: none !important;
+			}
+		}
+	}
+}

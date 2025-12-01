@@ -1,8 +1,8 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 
+import { ErrorContent } from "./ErrorContent";
 import { handleError } from "./errorHandler";
-import { ErrorPage } from "./ErrorPage";
 
 // src/components/ErrorBoundary/ErrorBoundary.tsx
 
@@ -55,7 +55,7 @@ class ErrorBoundary extends Component<Props, State> {
 		const { hasError, error, errorInfo } = this.state;
 
 		if (hasError) {
-			return <ErrorPage error={error} errorInfo={errorInfo} />;
+			return <ErrorContent error={error} errorInfo={errorInfo} variant="page" />;
 		}
 
 		return this.props.children;

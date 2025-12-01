@@ -117,7 +117,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	return (
 		<>
 			{isLarge ? (
-				<div className="mt-[16px] flex items-center justify-center gap-2">
+				<div className="mt-4 flex items-center justify-center gap-2">
 					{renderBuildButton()}
 					<IconButton
 						variant="ghost"
