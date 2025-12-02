@@ -8,7 +8,7 @@
 	position: relative;
 
 	@media (width >= 640px) {
-		background-image: linear-gradient(to bottom, var(--accent-1), transparent);
+		background-image: linear-gradient(to bottom, var(--color-panel-solid), transparent);
 	}
 
 	@media (width >= 1024px) {
