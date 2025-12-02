@@ -10,8 +10,8 @@ OUTPUT_IMAGE="public/assets/img/background@mobile-blurred.webp"
 BLUR_RADIUS="64"
 # Radix UI cyan-a3 color (display-p3 0.051 0.725 1 / 0.227)
 # Using darker cyan to match the visual weight of the semi-transparent overlay
-TINT_COLOR="#09313e"  # Darker cyan
-TINT_OPACITY="30"     # Reduced opacity for subtler effect
+TINT_COLOR="#f0f2f1"  # Darker cyan
+TINT_OPACITY=".31"     # Reduced opacity for subtler effect
 BRIGHTNESS="100"       # Reduce brightness to match Radix UI gray-a1 darkening effect
 
 echo "🎨 Generating blurred and tinted mobile background..."

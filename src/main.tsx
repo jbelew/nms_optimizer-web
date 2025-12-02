@@ -93,7 +93,7 @@ createRoot(document.getElementById("root")!).render(
 		<ErrorBoundary>
 			<Theme
 				appearance="dark"
-				panelBackground="solid"
+				panelBackground="translucent"
 				accentColor="cyan"
 				grayColor="sage"
 				scaling="100%"
