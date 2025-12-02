@@ -14,7 +14,7 @@ jobs:
 
         steps:
             - name: Check out code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   ref: ${{ github.ref }}
                   fetch-depth: 0
@@ -30,7 +30,7 @@ jobs:
 
             - name: Build application
               env:
-                VITE_APP_VERSION: ${{ github.ref_name }}
+                  VITE_APP_VERSION: ${{ github.ref_name }}
               run: npm run build
 
             - name: Start server

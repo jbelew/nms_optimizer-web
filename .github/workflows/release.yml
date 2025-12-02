@@ -64,3 +64,24 @@ jobs:
                         console.error('❌ Failed to trigger Docker build:', error);
                         throw error;
                       }
+
+            - name: Trigger Screenshot Update Workflow
+              if: steps.check_release.outputs.released == 'true'
+              uses: actions/github-script@v8
+              with:
+                  script: |
+                      const tag = '${{ steps.check_release.outputs.tag }}';
+                      console.log(`Triggering Screenshot Update for tag: ${tag}`);
+
+                      try {
+                        await github.rest.actions.createWorkflowDispatch({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          workflow_id: 'update-screenshots.yml',
+                          ref: tag
+                        });
+                        console.log('✅ Screenshot update workflow triggered successfully');
+                      } catch (error) {
+                        console.error('❌ Failed to trigger screenshot update:', error);
+                        throw error;
+                      }
