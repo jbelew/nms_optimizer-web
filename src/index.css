@@ -94,13 +94,13 @@ body {
 	width: 100dvw;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
 	body {
 		padding-right: calc(100dvw - 100%) !important;
 	}
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
 	html,
 	body {
 		overflow-x: hidden;

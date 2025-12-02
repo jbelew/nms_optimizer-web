@@ -49,7 +49,7 @@
 		padding: calc(var(--spacing) * 4);
 		width: clamp(280px, 90vw, 560px);
 
-		@media (width <= 640px) {
+		@media (width <= 639px) {
 			max-height: 90vh;
 			padding: calc(var(--spacing) * 3);
 			width: 100%;

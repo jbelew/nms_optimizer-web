@@ -6,7 +6,7 @@
 	justify-content: space-between;
 	margin-top: var(--space-4);
 
-	@media (width <= 640px) {
+	@media (width <= 639px) {
 		margin-top: var(--space-3);
 	}
 }
