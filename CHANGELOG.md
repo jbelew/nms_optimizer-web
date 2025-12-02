@@ -1,3 +1,10 @@
+## [6.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.8...v6.3.9) (2025-12-02)
+
+
+### Bug Fixes
+
+* **grid:** refine shared grid behavior and mobile toolbar interactions ([7218c94](https://github.com/jbelew/nms_optimizer-web/commit/7218c94451db88e58cfc5fabb8ce3dcd376e7bf5))
+
 ## [6.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.7...v6.3.8) (2025-12-02)
 
 
