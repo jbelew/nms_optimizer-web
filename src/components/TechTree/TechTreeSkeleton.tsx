@@ -21,7 +21,7 @@ export const TechTreeSkeleton: React.FC = () => {
 					className="main-app__tech-tree-sidebar shadow-md"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
-						backgroundColor: "var(--color-panel-translucent)",
+						backgroundColor: "var(--gray-a3)",
 						padding: "var(--space-5)",
 						borderRadius: "var(--radius-5)",
 					}}
