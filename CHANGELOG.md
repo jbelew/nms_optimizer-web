@@ -1,3 +1,10 @@
+## [6.3.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.9...v6.3.10) (2025-12-02)
+
+
+### Bug Fixes
+
+* **GridCell:** apply responsive border width to supercharged variant ([cb5c839](https://github.com/jbelew/nms_optimizer-web/commit/cb5c8394a700601aacaab2021cafb0b9ebe23619))
+
 ## [6.3.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.8...v6.3.9) (2025-12-02)
 
 
