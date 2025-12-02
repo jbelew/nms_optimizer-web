@@ -1,3 +1,10 @@
+## [6.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.6...v6.3.7) (2025-12-02)
+
+
+### Bug Fixes
+
+* **MainAppContent:** refine panel styling and add box shadow ([5105d63](https://github.com/jbelew/nms_optimizer-web/commit/5105d63e4cdd05786f72c8dd38e159c578e2c51e))
+
 ## [6.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.5...v6.3.6) (2025-12-02)
 
 
