@@ -1,5 +1,10 @@
-import React, { forwardRef } from "react";
-import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import React, { forwardRef, useCallback, useTransition } from "react";
+import {
+	CounterClockwiseClockIcon,
+	EyeOpenIcon,
+	PieChartIcon,
+	Share1Icon,
+} from "@radix-ui/react-icons";
 import * as Toolbar from "@radix-ui/react-toolbar";
 import { IconButton, Switch } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -9,7 +14,9 @@ import { UploadIcon } from "@/components/Icons/UploadIcon";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useA11yStore } from "@/store/A11yStore";
+import { useGridStore } from "@/store/GridStore";
 
 type MobileToolbarProps = {
 	isVisible: boolean;
@@ -26,6 +33,17 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const { openDialog } = useDialog();
 		const { sendEvent } = useAnalytics();
 		const { a11yMode, toggleA11yMode } = useA11yStore();
+		const { updateUrlForShare } = useUrlSync();
+		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+		const [isSharePending, startShareTransition] = useTransition();
+
+		const handleShareClick = useCallback(() => {
+			startShareTransition(() => {
+				const shareUrl = updateUrlForShare();
+				openDialog(null, { shareUrl });
+			});
+			sendEvent({ category: "ui", action: "share_link", value: 1 });
+		}, [updateUrlForShare, openDialog, sendEvent]);
 
 		return (
 			<Toolbar.Root
@@ -42,13 +60,13 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					className="flex items-center gap-2 pl-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
 				>
-					{/* Load/Save buttons for mobile - far left */}
+					{/* Load/Save/Share buttons for mobile - far left */}
 					<IconButton
 						variant="soft"
 						size="2"
 						aria-label={t("buttons.loadBuild") ?? ""}
 						onClick={onLoadBuild}
-						disabled={solving}
+						disabled={solving || isSharedGrid}
 					>
 						<UploadIcon weight="light" size={20} />
 					</IconButton>
@@ -57,9 +75,18 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						size="2"
 						aria-label={t("buttons.saveBuild") ?? ""}
 						onClick={onSaveBuild}
-						disabled={solving || !hasModulesInGrid}
+						disabled={solving || !hasModulesInGrid || isSharedGrid}
 					>
 						<DownloadIcon weight="light" size={20} />
+					</IconButton>
+					<IconButton
+						variant="soft"
+						size="2"
+						aria-label={t("buttons.share") ?? ""}
+						onClick={handleShareClick}
+						disabled={solving || !hasModulesInGrid || isSharePending || isSharedGrid}
+					>
+						<Share1Icon className="h-4 w-4" />
 					</IconButton>
 				</Toolbar.ToggleGroup>
 

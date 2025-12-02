@@ -22,17 +22,21 @@ export const compressRLE = (input: string): string => {
 	if (!input) return "";
 	let compressed = "";
 	let count = 1;
+
 	for (let i = 0; i < input.length; i++) {
 		if (i + 1 < input.length && input[i] === input[i + 1]) {
 			count++;
 		} else {
 			compressed += input[i];
+
 			if (count > 1) {
 				compressed += count.toString();
 			}
+
 			count = 1;
 		}
 	}
+
 	return compressed;
 };
 
@@ -46,17 +50,21 @@ export const decompressRLE = (input: string): string => {
 	if (!input) return "";
 	let decompressed = "";
 	let i = 0;
+
 	while (i < input.length) {
 		const currentChar = input[i];
 		i++; // Move past the character
 		let countStr = "";
+
 		while (i < input.length && !isNaN(parseInt(input[i]))) {
 			countStr += input[i];
 			i++;
 		}
+
 		const count = countStr ? parseInt(countStr) : 1;
 		decompressed += currentChar.repeat(count);
 	}
+
 	return decompressed;
 };
 
@@ -131,23 +139,28 @@ export const deserialize = async (
 	try {
 		if (!serializedGrid) {
 			console.warn("No serialized grid data found. Skipping deserialization.");
+
 			return null;
 		}
 
 		const decoded = decodeURIComponent(serializedGrid);
+
 		if (!decoded) {
 			console.error("Failed to decodeURIComponent. Skipping deserialization.");
+
 			return null;
 		}
 
 		// Format: gridString|compressedTech|compressedModule|compressedAdjBonus|techMap|moduleMap
 		const parts = decoded.split("|");
+
 		if (parts.length !== 6) {
 			console.error(
 				"Invalid serialized grid format. Incorrect number of parts. Expected 6, got",
 				parts.length,
 				"Skipping deserialization."
 			);
+
 			return null;
 		}
 
@@ -173,6 +186,7 @@ export const deserialize = async (
 			console.error(
 				"Invalid serialized grid format. Missing parts. Skipping deserialization."
 			);
+
 			return null;
 		}
 
@@ -193,6 +207,7 @@ export const deserialize = async (
 			console.error(
 				`Invalid serialized grid format: String length mismatch. Expected ${expectedLength}. Got Grid: ${gridString.length}, Tech: ${decompressedTech.length}, Module: ${decompressedModule.length}, AdjBonus: ${decompressedAdjBonus.length}. Skipping deserialization.`
 			);
+
 			return null;
 		}
 
@@ -203,6 +218,7 @@ export const deserialize = async (
 				if (!entry) return acc;
 				const [key, value] = entry.split(":");
 				if (key && value) acc[value] = key;
+
 				return acc;
 			}, {});
 		const moduleMap = (moduleMapString || "")
@@ -211,6 +227,7 @@ export const deserialize = async (
 				if (!entry) return acc;
 				const [key, value] = entry.split(":");
 				if (key && value) acc[value] = key;
+
 				return acc;
 			}, {});
 
@@ -220,6 +237,7 @@ export const deserialize = async (
 		// Check if tech tree data is empty (indicates a fetch failure)
 		if (Object.keys(techTreeData).length === 0) {
 			console.error("Tech tree data is empty. Fetch likely failed.");
+
 			return null;
 		}
 
@@ -228,8 +246,10 @@ export const deserialize = async (
 				(build: RecommendedBuild) => {
 					if (!isValidRecommendedBuild(build)) {
 						console.error("Invalid recommended build found in tech tree:", build);
+
 						return false;
 					}
+
 					return true;
 				}
 			);
@@ -238,8 +258,10 @@ export const deserialize = async (
 		const colors: { [key: string]: string } = {};
 		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};
 		const validTechKeys = new Set<string>();
+
 		for (const techCategory in techTreeData) {
 			const techTreeItems = techTreeData[techCategory];
+
 			if (Array.isArray(techTreeItems)) {
 				for (const techTreeItem of techTreeItems) {
 					if (
@@ -250,6 +272,7 @@ export const deserialize = async (
 						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
 						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
 						validTechKeys.add(techTreeItem.key);
+
 						for (const module of (techTreeItem as TechTreeItem).modules) {
 							modulesMap[techTreeItem.key][module.id] = module;
 						}
@@ -260,21 +283,25 @@ export const deserialize = async (
 
 		// Validate that all techs in serialized grid exist in current API data
 		const missingTechs = new Set<string>();
+
 		for (const techChar of Object.values(techMap)) {
 			if (techChar !== " " && !validTechKeys.has(techChar)) {
 				missingTechs.add(techChar);
 			}
 		}
+
 		if (missingTechs.size > 0) {
 			console.error(
 				`Grid deserialization warning: The following techs no longer exist in the API: ${Array.from(missingTechs).join(", ")}. They will be skipped. This may be due to API changes since the grid was shared.`
 			);
 		}
+
 		setTechColors(colors);
 
 		// --- Grid Population Loop ---
 		let index = 0;
 		let skippedCellsCount = 0;
+
 		for (let r = 0; r < newGrid.height; r++) {
 			for (let c = 0; c < newGrid.width; c++) {
 				const gridChar = gridString[index];
@@ -311,8 +338,10 @@ export const deserialize = async (
 
 				if (moduleId && techName && validTechKeys.has(techName)) {
 					const techModules = modulesMap[techName];
+
 					if (techModules) {
 						const moduleData = techModules[moduleId];
+
 						if (moduleData) {
 							newGrid.cells[r][c].module = moduleData.id;
 							newGrid.cells[r][c].label = moduleData.label;
@@ -332,6 +361,7 @@ export const deserialize = async (
 						);
 					}
 				}
+
 				index++;
 			}
 		}
@@ -341,7 +371,9 @@ export const deserialize = async (
 				`Grid deserialization: Skipped ${skippedCellsCount} cells due to missing techs in API.`
 			);
 		}
+
 		console.log("Deserialized Grid (using raw gridString):", newGrid);
+
 		return newGrid;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
@@ -349,6 +381,7 @@ export const deserialize = async (
 		} else {
 			console.error("An unknown error occurred during grid deserialization:", error);
 		}
+
 		return null;
 	}
 };
@@ -372,6 +405,7 @@ export const useGridDeserializer = () => {
 		async (serializedGrid: string) => {
 			console.log("Attempting to deserialize:", serializedGrid);
 			const newGrid = await deserialize(serializedGrid, selectedShipType, setTechColors);
+
 			if (newGrid) {
 				console.log("Deserialization successful, setting grid and colors.");
 				setGrid(newGrid); // Update grid state

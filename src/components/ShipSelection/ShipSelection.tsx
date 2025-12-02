@@ -214,13 +214,17 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
 			if (!shipTypes) {
 				return {};
 			}
+
 			return Object.entries(shipTypes).reduce(
 				(acc, [key, details]) => {
 					const type = details.type;
+
 					if (!acc[type]) {
 						acc[type] = [];
 					}
+
 					acc[type].push({ key, details });
+
 					return acc;
 				},
 				{} as Record<string, { key: string; details: ShipTypeDetail }[]>

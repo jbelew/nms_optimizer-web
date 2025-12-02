@@ -15,9 +15,11 @@ export const useUpdateCheck = (
 
 			try {
 				const response = await fetch("/version.json", { cache: "no-store" });
+
 				if (!response.ok) {
 					throw new Error("Failed to fetch version.json");
 				}
+
 				const data = await response.json();
 				const latestBuildDate = data.buildDate;
 				const currentBuildDate = __BUILD_DATE__;
@@ -33,6 +35,7 @@ export const useUpdateCheck = (
 				}
 			} catch (error) {
 				console.error("Error checking version:", error);
+
 				// Fail safe: show prompt if we can't verify
 				if (event instanceof CustomEvent) {
 					onUpdateAvailable(event.detail);

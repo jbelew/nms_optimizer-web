@@ -21,6 +21,7 @@ vi.mock("react-i18next", () => ({
 			if (key === "techTree.tooltips.solve") return "Solve";
 			if (key === "techTree.tooltips.reset") return "Reset";
 			if (key === "techTree.tooltips.update") return "Update";
+
 			return key;
 		},
 	}),
@@ -51,6 +52,7 @@ const setupMocks = (hasTechInGrid: boolean) => {
 			hasTechInGrid: () => hasTechInGrid,
 			resetGridTech: vi.fn(),
 		};
+
 		return selector ? selector(state as GridStore) : (state as GridStore);
 	});
 
@@ -116,6 +118,7 @@ const setupMocks = (hasTechInGrid: boolean) => {
 
 	mockUseShakeStore.mockImplementation((selector?: (state: ShakeState) => unknown) => {
 		const state: Partial<ShakeState> = { triggerShake: vi.fn() };
+
 		return selector ? selector(state as ShakeState) : (state as ShakeState);
 	});
 };

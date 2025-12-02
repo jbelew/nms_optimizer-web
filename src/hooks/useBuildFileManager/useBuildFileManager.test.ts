@@ -54,8 +54,10 @@ vi.mock("../../store/PlatformStore", () => {
 			selectedPlatform: "freighter",
 			setSelectedPlatform: vi.fn(),
 		};
+
 		return typeof selector === "function" ? selector(store) : store;
 	});
+
 	return {
 		usePlatformStore: usePlatformStoreMock,
 	};

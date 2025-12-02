@@ -63,6 +63,7 @@ vi.mock("../../store/PlatformStore", () => ({
 		const mockState = {
 			selectedPlatform: "standard",
 		};
+
 		return selector(mockState);
 	}),
 }));

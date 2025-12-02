@@ -27,6 +27,7 @@ export type BuildFile = {
 export function isValidBuildFile(obj: unknown): obj is BuildFile {
 	if (typeof obj !== "object" || obj === null) {
 		console.error("Validation Error: BuildFile is not an object or is null.", obj);
+
 		return false;
 	}
 
@@ -34,6 +35,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 
 	if (typeof buildFile.name !== "string") {
 		console.error("Validation Error: BuildFile missing or invalid 'name' property.", buildFile);
+
 		return false;
 	}
 
@@ -42,6 +44,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'shipType' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -50,6 +53,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'timestamp' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -58,6 +62,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'checksum' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -66,6 +71,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'gridState' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -74,6 +80,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'techState' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -82,6 +89,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'bonusState' property.",
 			buildFile
 		);
+
 		return false;
 	}
 
@@ -90,6 +98,7 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 			"Validation Error: BuildFile missing or invalid 'moduleState' property.",
 			buildFile
 		);
+
 		return false;
 	}
 

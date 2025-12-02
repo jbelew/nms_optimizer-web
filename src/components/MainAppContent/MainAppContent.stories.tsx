@@ -28,13 +28,17 @@ const meta = {
 				const response = await fetch(
 					"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
 				);
+
 				if (!response.ok) {
 					throw new Error(`API responded with status ${response.status}`);
 				}
+
 				const techTree = await response.json();
+
 				return { techTree };
 			} catch (error) {
 				console.error("Failed to load tech tree for Storybook:", error);
+
 				return { techTree: {} };
 			}
 		},

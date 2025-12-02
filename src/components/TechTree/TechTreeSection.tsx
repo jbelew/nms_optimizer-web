@@ -64,6 +64,7 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 		const { t } = useTranslation();
 		// Determine the image path from the typeImageMap
 		const imagePath = typeImageMap[type] ? `/assets/img/sidebar/${typeImageMap[type]}` : null;
+
 		return (
 			<div className="sidebar__section mb-6 last:mb-0 lg:mb-6">
 				<div className="flex items-start">

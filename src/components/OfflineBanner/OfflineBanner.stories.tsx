@@ -12,6 +12,7 @@ const meta = {
 				writable: true,
 				value: false,
 			});
+
 			return <Story />;
 		},
 	],

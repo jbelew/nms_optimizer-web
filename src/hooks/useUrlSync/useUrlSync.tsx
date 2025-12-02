@@ -35,8 +35,10 @@ export const useUrlSync = () => {
 			const gridFromUrl = urlParams.get("grid");
 
 			const validShipTypes = Object.keys(shipTypes);
+
 			if (validShipTypes.length === 0) {
 				console.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
+
 				return;
 			}
 
@@ -73,6 +75,7 @@ export const useUrlSync = () => {
 		handlePopState();
 
 		window.addEventListener("popstate", handlePopState);
+
 		return () => {
 			window.removeEventListener("popstate", handlePopState);
 		};
@@ -92,6 +95,7 @@ export const useUrlSync = () => {
 		const url = new URL(window.location.href);
 		url.searchParams.set("grid", serializedGrid);
 		url.searchParams.set("platform", selectedShipTypeFromStore);
+
 		return url.toString();
 	}, [serializeGrid, selectedShipTypeFromStore]);
 

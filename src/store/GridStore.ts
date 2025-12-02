@@ -264,12 +264,15 @@ const debouncedStorage = {
 		try {
 			const storageValue = JSON.stringify(value);
 			localStorage.setItem(name, storageValue);
+
 			return Promise.resolve();
 		} catch (e) {
 			console.error("Failed to save to localStorage:", e);
+
 			if (e instanceof Error) {
 				return Promise.reject(e);
 			}
+
 			return Promise.reject(new Error(String(e)));
 		}
 	}, 1000),
@@ -278,12 +281,15 @@ const debouncedStorage = {
 		try {
 			// Collect keys to remove first to avoid mutating collection during iteration
 			const keysToRemove: string[] = [];
+
 			for (let i = 0; i < localStorage.length; i++) {
 				const key = localStorage.key(i);
+
 				if (key && key.startsWith("app-state") && key !== name) {
 					keysToRemove.push(key);
 				}
 			}
+
 			// Remove collected keys in a separate loop
 			keysToRemove.forEach((key) => {
 				console.log(`GridStore: Removing old app-state key: ${key}`);
@@ -291,12 +297,15 @@ const debouncedStorage = {
 			});
 
 			const storedData = localStorage.getItem(name);
+
 			if (!storedData) {
 				console.log(`GridStore: No stored data found for key: ${name}`);
+
 				return null;
 			}
 
 			let parsedData: StorageValue<Partial<GridStore> & { selectedPlatform?: string }>;
+
 			try {
 				parsedData = JSON.parse(storedData) as StorageValue<
 					Partial<GridStore> & { selectedPlatform?: string }
@@ -306,6 +315,7 @@ const debouncedStorage = {
 					`GridStore: Failed to parse stored data for key "${name}". Data may be corrupted.`,
 					parseError instanceof Error ? parseError.message : String(parseError)
 				);
+
 				return null;
 			}
 
@@ -319,12 +329,14 @@ const debouncedStorage = {
 				console.warn(
 					`GridStore: Discarding stored grid due to platform mismatch. Stored: ${storedGridPlatform}, Current: ${currentPlatform}`
 				);
+
 				return null;
 			}
 
 			return parsedData;
 		} catch (e) {
 			console.error("Failed to load from localStorage:", e);
+
 			return null;
 		}
 	},
@@ -388,6 +400,7 @@ export const useGridStore = create<GridStore>()(
 				resetGrid: () => {
 					set((state) => {
 						const definition = state.initialGridDefinition;
+
 						if (definition) {
 							applyGridDefinition(state, definition);
 						} else {
@@ -396,6 +409,7 @@ export const useGridStore = create<GridStore>()(
 							state.gridFixed = false;
 							state.superchargedFixed = false;
 						}
+
 						state.result = null;
 						state.isSharedGrid = false;
 					});
@@ -429,6 +443,7 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						state.result = result;
 					});
+
 					if (result) {
 						setTechMaxBonus(tech, result.max_bonus);
 						setTechSolvedBonus(tech, result.solved_bonus);
@@ -439,9 +454,11 @@ export const useGridStore = create<GridStore>()(
 				handleCellTap: (rowIndex: number, columnIndex: number) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (cell) {
 							state._initialCellStateForTap = { ...cell };
 							cell.active = !cell.active;
+
 							if (!cell.active) {
 								cell.supercharged = false;
 							}
@@ -453,10 +470,12 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						const initialCellState = state._initialCellStateForTap;
 						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (initialCellState && currentCell) {
 							currentCell.supercharged = !initialCellState.supercharged;
 							currentCell.active = true;
 						}
+
 						state._initialCellStateForTap = null;
 					});
 				},
@@ -465,10 +484,12 @@ export const useGridStore = create<GridStore>()(
 					set((state) => {
 						const initialCellState = state._initialCellStateForTap;
 						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (initialCellState && currentCell) {
 							currentCell.active = initialCellState.active;
 							currentCell.supercharged = initialCellState.supercharged;
 						}
+
 						state._initialCellStateForTap = null;
 					});
 				},
@@ -482,9 +503,11 @@ export const useGridStore = create<GridStore>()(
 				toggleCellActive: (rowIndex, columnIndex) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (cell.supercharged) {
 							cell.supercharged = !cell.supercharged;
 						}
+
 						if (cell && (!cell.active || !cell.module)) {
 							cell.active = !cell.active;
 						} else {
@@ -496,21 +519,27 @@ export const useGridStore = create<GridStore>()(
 				toggleCellSupercharged: (rowIndex, columnIndex) =>
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (!cell) {
 							console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
+
 							return;
 						}
+
 						if (!cell.active) {
 							cell.active = true;
 						}
+
 						cell.supercharged = !cell.supercharged;
 					}),
 
 				setCellActive: (rowIndex, columnIndex, active) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (cell) {
 							cell.active = active;
+
 							if (!active) {
 								cell.supercharged = false;
 							}
@@ -521,6 +550,7 @@ export const useGridStore = create<GridStore>()(
 				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
 					set((state) => {
 						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
 						if (cell) {
 							if (cell.active || !supercharged) cell.supercharged = supercharged;
 						}
@@ -550,6 +580,7 @@ export const useGridStore = create<GridStore>()(
 
 				hasTechInGrid: (tech: string): boolean => {
 					const grid = get().grid;
+
 					return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
 				},
 
@@ -564,6 +595,7 @@ export const useGridStore = create<GridStore>()(
 						for (const cell of row) {
 							if (cell.active) {
 								activeCellsCount++;
+
 								if (cell.module === null) {
 									allActiveCellsHaveModules = false;
 								}
@@ -590,24 +622,28 @@ export const useGridStore = create<GridStore>()(
 				selectTotalSuperchargedCells: () => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return 0;
+
 					return grid.cells.flat().filter((c) => c.supercharged).length;
 				},
 
 				selectHasModulesInGrid: () => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return false;
+
 					return grid.cells.some((row) => row.some((cell) => cell.module !== null));
 				},
 
 				selectFirstInactiveRowIndex: () => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return 0;
+
 					return grid.cells.findIndex((r) => r.every((cell) => !cell.active));
 				},
 
 				selectLastActiveRowIndex: () => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return -1;
+
 					return grid.cells.map((r) => r.some((cell) => cell.active)).lastIndexOf(true);
 				},
 
@@ -628,6 +664,7 @@ export const useGridStore = create<GridStore>()(
 							const rowIndex = Math.floor(index / state.grid.width);
 							const colIndex = index % state.grid.width;
 							const cell = state.grid.cells[rowIndex]?.[colIndex];
+
 							if (cell) {
 								if (moduleData) {
 									Object.assign(cell, {
@@ -667,13 +704,16 @@ export const useGridStore = create<GridStore>()(
 					initialGridDefinition: state.initialGridDefinition,
 					selectedPlatform: usePlatformStore.getState().selectedPlatform,
 				};
+
 				return dataToPersist;
 			},
 			migrate: (persistedState: unknown, version: number) => {
 				const state = persistedState as Partial<GridStore>;
+
 				if (version === 0) {
 					return state;
 				}
+
 				return state;
 			},
 			merge: (persistedState, currentState) => {

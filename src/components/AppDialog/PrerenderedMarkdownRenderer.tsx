@@ -26,10 +26,13 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 
 		const scrollIfTargetExists = () => {
 			const targetElement = articleRef.current?.querySelector(`#${targetSectionId}`);
+
 			if (targetElement) {
 				targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+
 				return true;
 			}
+
 			return false;
 		};
 
@@ -44,6 +47,7 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 		});
 
 		observer.observe(articleRef.current, { childList: true, subtree: true });
+
 		return () => observer.disconnect();
 	}, [targetSectionId]);
 

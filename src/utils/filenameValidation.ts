@@ -8,6 +8,7 @@
  */
 
 const CONTROL_CHARS = "\x00-\x1F";
+
 export const FILENAME_REGEX = new RegExp(
 	`^(?=.{1,255}$)(?!^(CON|PRn|AUX|NUL|COM[1-9]|LPT[1-9])$)[^<>:"/\\\\|?*${CONTROL_CHARS}]+(?<![ .])$`,
 	"i"
@@ -20,6 +21,7 @@ export const FILENAME_REGEX = new RegExp(
  */
 export const isValidFilename = (filename: string): boolean => {
 	const trimmed = filename.trim();
+
 	return FILENAME_REGEX.test(trimmed);
 };
 

@@ -106,6 +106,7 @@ describe("useFetchTechTreeSuspense", () => {
 				techGroups: {},
 				activeGroups: {},
 			};
+
 			return selector(state as never);
 		});
 
@@ -115,6 +116,7 @@ describe("useFetchTechTreeSuspense", () => {
 				setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 				selectHasModulesInGrid: () => hasGridModules,
 			};
+
 			return selector(state as never);
 		});
 
@@ -130,6 +132,7 @@ describe("useFetchTechTreeSuspense", () => {
 				setLoading: mockSetLoading,
 				isLoading: false,
 			};
+
 			return selector(state as never);
 		});
 
@@ -288,6 +291,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(() => {
 			const starship = result.current?.starship;
+
 			// Can safely check if starship exists without suspense error
 			if (starship) {
 				expect(Array.isArray(starship)).toBe(true);

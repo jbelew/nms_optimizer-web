@@ -34,11 +34,13 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFu
 
 	const { tooltipLabel, OptimizeIconComponent, isOptimizeButtonDisabled } = useMemo(() => {
 		let label: string;
+
 		if (isGridFull && !hasTechInGrid) {
 			label = t("techTree.tooltips.gridFull");
 		} else {
 			label = hasTechInGrid ? t("techTree.tooltips.update") : t("techTree.tooltips.solve");
 		}
+
 		const IconComponent = hasTechInGrid ? UpdateIcon : MagicWandIcon;
 		const disabled =
 			(isGridFull && !hasTechInGrid) || solving || currentCheckedModules.length === 0;

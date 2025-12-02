@@ -31,13 +31,17 @@ const meta = {
 				const response = await fetch(
 					"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/platforms"
 				);
+
 				if (!response.ok) {
 					throw new Error(`API responded with status ${response.status}`);
 				}
+
 				const shipTypes = await response.json();
+
 				return { shipTypes };
 			} catch (error) {
 				console.error("Failed to load ship types for Storybook:", error);
+
 				return { shipTypes: {} };
 			}
 		},

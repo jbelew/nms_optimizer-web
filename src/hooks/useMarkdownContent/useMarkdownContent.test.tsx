@@ -105,6 +105,7 @@ describe("useMarkdownContent", () => {
 			if (lang === "fr") {
 				return "# English Fallback"; // getMarkdown does fallback internally
 			}
+
 			return "# English Fallback";
 		});
 

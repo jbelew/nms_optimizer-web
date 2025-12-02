@@ -38,6 +38,7 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 
 	if (roundedMaxBonus < 100) {
 		const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
+
 		return {
 			icon: "warning",
 			percent,
@@ -46,6 +47,7 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 			tooltipContent: `${t("techTree.tooltips.insufficientSpace")} -${percent}%`,
 		};
 	}
+
 	if (roundedMaxBonus === 100) {
 		return {
 			icon: "check",
@@ -55,8 +57,10 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 			tooltipContent: `${t("techTree.tooltips.validSolve")} `,
 		};
 	}
+
 	// roundedMaxBonus > 100
 	const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
+
 	return {
 		icon: "lightning",
 		percent,
@@ -108,6 +112,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		if (techMaxBonus === 0 && cachedBonusStatus) {
 			return cachedBonusStatus;
 		}
+
 		return computeBonusStatusData(techMaxBonus, t);
 	}, [techMaxBonus, t, cachedBonusStatus]);
 
@@ -117,6 +122,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		if (techSolvedBonus <= 0) {
 			return;
 		}
+
 		const cached = getBonusStatus(tech);
 		// Only update if the data has actually changed
 		const hasChanged =
@@ -124,6 +130,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			cached.icon !== contentData.icon ||
 			cached.percent !== contentData.percent ||
 			cached.tooltipContent !== contentData.tooltipContent;
+
 		if (hasChanged) {
 			setBonusStatus(tech, contentData);
 		}
@@ -135,6 +142,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	}
 
 	const icon = renderIcon(contentData.icon, contentData.iconClassName, contentData.iconStyle);
+
 	if (!icon) {
 		return null;
 	}
@@ -151,5 +159,6 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			</Popover.Root>
 		);
 	}
+
 	return <Tooltip content={contentData.tooltipContent}>{icon}</Tooltip>;
 };

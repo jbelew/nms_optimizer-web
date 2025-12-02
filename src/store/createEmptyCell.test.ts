@@ -91,6 +91,7 @@ describe("createEmptyCell() createEmptyCell method", () => {
 				[false, true],
 				[false, false],
 			];
+
 			for (const [supercharged, active] of combinations) {
 				const cell = createEmptyCell(supercharged, active);
 				expect(cell).toHaveProperty("active");

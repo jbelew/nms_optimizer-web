@@ -68,6 +68,7 @@ const GridTableButtons: React.FC = () => {
 	const handleShowInstructions = useCallback(() => {
 		startInfoTransition(() => {
 			openDialog("instructions");
+
 			if (!tutorialFinished) {
 				markTutorialFinished();
 			}
@@ -144,6 +145,7 @@ const GridTableButtons: React.FC = () => {
 		variant: "soft" | "solid" = "soft"
 	) => {
 		const translatedLabel = t(labelKey);
+
 		return isSmallAndUp ? (
 			<Button
 				size="2"
@@ -196,7 +198,7 @@ const GridTableButtons: React.FC = () => {
 					)}
 
 					{/* Load/Save buttons - hidden on mobile, shown on sm and up */}
-					{isSmallAndUp && (
+					{isSmallAndUp && !isSharedGrid && (
 						<>
 							<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
 								<IconButton
@@ -235,7 +237,8 @@ const GridTableButtons: React.FC = () => {
 						aria-label={t("buttons.loadBuild")}
 					/>
 
-					{!isSharedGrid && (
+					{/* Share button - hidden on mobile, shown on sm and up */}
+					{isSmallAndUp && !isSharedGrid && (
 						<ConditionalTooltip label={t("buttons.share") ?? ""}>
 							<IconButton
 								size="2"

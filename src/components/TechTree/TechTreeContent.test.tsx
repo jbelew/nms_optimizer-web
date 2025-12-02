@@ -20,6 +20,7 @@ vi.mock("../../store/GridStore", () => ({
 		const mockState = {
 			isGridFull: () => false,
 		};
+
 		return selector(mockState);
 	}),
 }));

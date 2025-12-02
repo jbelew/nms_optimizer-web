@@ -74,16 +74,20 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	useEffect(() => {
 		if (!isLoading && !error && markdown && targetSectionId) {
 			const articleElement = articleRef.current;
+
 			if (!articleElement) {
 				return; // Article element not yet mounted
 			}
 
 			const scrollIfTargetExists = () => {
 				const targetElement = document.getElementById(targetSectionId);
+
 				if (targetElement) {
 					targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+
 					return true; // Scrolled successfully
 				}
+
 				return false; // Target not found yet
 			};
 
@@ -108,6 +112,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				observer.disconnect();
 			};
 		}
+
 		// Cleanup for when conditions are not met (e.g., isLoading becomes true again)
 		return () => {};
 	}, [isLoading, error, markdown, targetSectionId]);
@@ -122,6 +127,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 						: React.Children.toArray(children).toString();
 
 				const youtubeMatch = text.match(/\[youtube:([^\]]+)\]/);
+
 				if (youtubeMatch) {
 					return <YouTubeEmbed videoId={youtubeMatch[1]} />;
 				}
@@ -134,11 +140,13 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 			},
 			h2: ({ children }: { children?: React.ReactNode }) => {
 				let id = h2IdMapRef.current.get(children);
+
 				if (!id) {
 					h2CounterRef.current++;
 					id = `section-${h2CounterRef.current}`;
 					h2IdMapRef.current.set(children, id);
 				}
+
 				return (
 					<Heading
 						trim="end"

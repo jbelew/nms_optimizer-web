@@ -309,6 +309,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 		it("should handle resetting tech in entire grid", () => {
 			const grid = createGrid(3, 3);
+
 			// Fill entire grid with same tech
 			for (let r = 0; r < 3; r++) {
 				for (let c = 0; c < 3; c++) {
@@ -324,6 +325,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const state = useGridStore.getState();
+
 			for (let r = 0; r < 3; r++) {
 				for (let c = 0; c < 3; c++) {
 					expect(state.grid.cells[r][c].tech).toBeNull();

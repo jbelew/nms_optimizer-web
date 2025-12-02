@@ -139,29 +139,27 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 							className="main-app__grid-section"
 							ref={appLayoutContainerRef}
 						>
-							{!isSharedGrid && (
-								<Flex
-									align="center"
-									wrap="wrap"
-									gap="3"
-									className="main-app__ship-selector"
-									style={{
-										maxWidth: gridTableTotalWidth
-											? `${gridTableTotalWidth}px`
-											: undefined,
-									}}
-								>
+							<Flex
+								align="center"
+								wrap="wrap"
+								gap="3"
+								className="main-app__ship-selector"
+								style={{
+									maxWidth: gridTableTotalWidth
+										? `${gridTableTotalWidth}px`
+										: undefined,
+								}}
+							>
+								{!isSharedGrid && (
 									<span className="main-app__ship-selection">
 										<ShipSelection solving={solving} />
 									</span>
-									<span className="main-app__ship-label">
-										{t("platformLabel")}
-									</span>
-									<span className="main-app__ship-name">
-										{t(`platforms.${selectedShipType}`)}
-									</span>
-								</Flex>
-							)}
+								)}
+								<span className="main-app__ship-label">{t("platformLabel")}</span>
+								<span className="main-app__ship-name">
+									{t(`platforms.${selectedShipType}`)}
+								</span>
+							</Flex>
 
 							<GridTable
 								solving={solving}

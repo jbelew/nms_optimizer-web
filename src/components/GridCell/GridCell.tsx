@@ -46,12 +46,14 @@ const getUpgradePriority = (label: string | undefined): string => {
 			if (isReactor) return "R1";
 			if (isForbidden) return "F1";
 		}
+
 		if (lowerLabel.includes("tau")) {
 			if (isUpgrade) return "2";
 			if (isBooster) return "C2";
 			if (isReactor) return "R2";
 			if (isForbidden) return "F2";
 		}
+
 		if (lowerLabel.includes("sigma")) {
 			if (isUpgrade) return "3";
 			if (isBooster) return "C3";

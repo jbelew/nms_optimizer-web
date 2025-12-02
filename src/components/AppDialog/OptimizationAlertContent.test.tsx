@@ -19,6 +19,7 @@ vi.mock("react-i18next", () => ({
 				</span>
 			);
 		}
+
 		return <span>{i18nKey}</span>;
 	},
 }));

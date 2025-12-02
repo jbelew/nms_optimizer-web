@@ -37,6 +37,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		} else if (oldVal === "true") {
 			localStorage.setItem(newKey, "true");
 			localStorage.removeItem(oldKey);
+
 			return true;
 		} else {
 			return false;
@@ -76,12 +77,14 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			data?: { shareUrl?: string; section?: string }
 		) => {
 			const lang = (i18n.language || "en").split("-")[0];
+
 			if (data?.shareUrl) {
 				setShareUrl(data.shareUrl);
 			} else if (dialog) {
 				const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
 				navigate(path + window.location.search);
 			}
+
 			if (data?.section) {
 				setSectionToScrollTo(data.section);
 			} else {
@@ -96,12 +99,14 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 */
 	const closeDialog = useCallback(() => {
 		const lang = (i18n.language || "en").split("-")[0];
+
 		if (shareUrl) {
 			setShareUrl("");
 		} else if (activeDialog) {
 			const path = lang === "en" ? "/" : `/${lang}`;
 			navigate(path + window.location.search);
 		}
+
 		setSectionToScrollTo(undefined);
 	}, [activeDialog, navigate, shareUrl, i18n.language]);
 
@@ -111,6 +116,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const markTutorialFinished = useCallback(() => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);
+
 			if (typeof window !== "undefined" && window.localStorage) {
 				localStorage.setItem("tutorialFinished", "true");
 			}

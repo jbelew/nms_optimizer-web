@@ -45,6 +45,7 @@ vi.mock("@/store/GridStore", () => ({
 				],
 			},
 		};
+
 		return selector(mockState);
 	}),
 }));
@@ -58,6 +59,7 @@ vi.mock("../GridRow/useGridRowState", () => ({
 		} else if (rowIndex === 1) {
 			return { isFirstInactiveRow: true, isLastActiveRow: false };
 		}
+
 		return { isFirstInactiveRow: false, isLastActiveRow: false };
 	},
 }));

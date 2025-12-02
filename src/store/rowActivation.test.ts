@@ -16,6 +16,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 			defaultTestGrid.cells.forEach((row, rIdx) => {
 				row.forEach((cell, cIdx) => {
 					Object.assign(cell, createEmptyCell(false, true)); // Base: active, not supercharged
+
 					if (rIdx === 0) {
 						// Row 0: mix of active/inactive, some supercharged
 						if (cIdx === 0) cell.active = true;
@@ -80,6 +81,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 
 		it("should not affect cells in other rows", () => {
 			const originalOtherRows: Cell[][] = [];
+
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					originalOtherRows.push(
@@ -94,6 +96,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 
 			const finalGridCells = useGridStore.getState().grid.cells;
 			let otherRowIdx = 0;
+
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					expect(finalGridCells[r]).toEqual(originalOtherRows[otherRowIdx]);
@@ -137,6 +140,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 
 		it("should not affect cells in other rows", () => {
 			const originalOtherRows: Cell[][] = [];
+
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					originalOtherRows.push(
@@ -151,6 +155,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 
 			const finalGridCells = useGridStore.getState().grid.cells;
 			let otherRowIdx = 0;
+
 			for (let r = 0; r < gridHeight; r++) {
 				if (r !== targetRowIndex) {
 					expect(finalGridCells[r]).toEqual(originalOtherRows[otherRowIdx]);

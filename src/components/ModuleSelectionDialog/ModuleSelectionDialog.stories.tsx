@@ -21,6 +21,7 @@ const groupModules = (modules: Module[]): GroupedModules => {
 
 	modules.forEach((module) => {
 		const type = module.type || "upgrade";
+
 		if (groups[type]) {
 			groups[type].push(module);
 		} else {
@@ -56,6 +57,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 			const initialChecked = modules
 				.filter((m: Module) => m.checked)
 				.map((m: Module) => m.id);
+
 			return { groupedModules, modules, initialChecked };
 		},
 	],
@@ -82,6 +84,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 
 		const handleSelectAllChange = (checked: boolean | "indeterminate") => {
 			console.log("handleSelectAllChange", checked);
+
 			if (checked) {
 				setCurrentCheckedModules(nonCoreModuleIds);
 			} else {
@@ -105,6 +108,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		);
 	},
 };
+
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -136,12 +140,14 @@ export const CorvetteHyperdrive: Story = {
 			const initialChecked = modules
 				.filter((m: Module) => m.checked)
 				.map((m: Module) => m.id);
+
 			return { groupedModules, modules, initialChecked };
 		},
 	],
 	decorators: [
 		(Story) => {
 			usePlatformStore.setState({ selectedPlatform: "corvette" });
+
 			return <Story />;
 		},
 	],

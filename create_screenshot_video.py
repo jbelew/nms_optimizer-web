@@ -15,7 +15,14 @@ KEEP_FRAMES = True  # Set to True to keep extracted frames in a 'frames' directo
 CROSSFADE_DURATION = 0.65  # Duration of crossfade in seconds
 IMAGE_DURATION = 0.05      # How long each image is shown (before fade starts)
 HOLD_DURATION = 1.5        # Duration to hold first and last screenshots
-SKIP_FRAMES = [20]  # Frame indices to skip (0-indexed filenames, so 19 is 0019.png)
+
+# Blacklist specific commits by hash (full or short hash)
+# Example: BLACKLIST_COMMITS = ["abc1234", "def5678"]
+BLACKLIST_COMMITS = ["ceb3076", "149d704", "0a85a58", "e9769bf"]
+
+# Skip frames by index (0-indexed, after blacklist is applied)
+# Use BLACKLIST_COMMITS instead for more reliable exclusion
+SKIP_FRAMES = []
 
 
 def get_screenshot_history():
@@ -200,6 +207,13 @@ def main():
 
     commits = get_screenshot_history()
     commits = [c for c in commits if c]  # Remove empty lines
+
+    # Filter out blacklisted commits
+    if BLACKLIST_COMMITS:
+        original_count = len(commits)
+        commits = [c for c in commits if not any(c.startswith(b) for b in BLACKLIST_COMMITS)]
+        if len(commits) < original_count:
+            print(f"Filtered {original_count - len(commits)} blacklisted commits")
 
     if not commits:
         print(f"Error: No commits found for {SCREENSHOT_PATH}")

@@ -22,6 +22,7 @@ const deriveRowState = (rowIndex: number) => {
 			rowIndex === 0 &&
 			rowIndex >= mockGridState.grid.cells.length - 3
 		: false;
+
 	return { isFirstInactiveRow, isLastActiveRow };
 };
 
@@ -32,6 +33,7 @@ vi.mock("../GridRow/useGridRowState", () => ({
 vi.mock("../GridControlButtons/GridControlButtons", () => ({
 	default: ({ rowIndex }: { rowIndex: number }) => {
 		const { isFirstInactiveRow, isLastActiveRow } = deriveRowState(rowIndex);
+
 		return (
 			<div
 				data-testid={`grid-control-buttons-${rowIndex}`}

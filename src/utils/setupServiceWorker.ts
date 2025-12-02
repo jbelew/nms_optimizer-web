@@ -53,6 +53,7 @@ export function setupServiceWorkerRegistration() {
 				registerWorker();
 				window.removeEventListener("load", handleLoad); // Clean up listener
 			};
+
 			window.addEventListener("load", handleLoad);
 		}
 	}

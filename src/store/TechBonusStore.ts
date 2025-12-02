@@ -45,7 +45,9 @@ const debouncedStorage = {
 		if (typeof window === "undefined" || !window.localStorage) {
 			return null;
 		}
+
 		const item = localStorage.getItem(name);
+
 		return item ? JSON.parse(item) : null;
 	},
 	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechBonusStore>>) => {

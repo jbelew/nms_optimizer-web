@@ -57,9 +57,11 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 		read(): T {
 			if (status === "pending") throw suspender;
 			if (status === "error") throw error;
+
 			if (result === undefined || result === null) {
 				throw new Error("Result is undefined or null");
 			}
+
 			return result;
 		},
 	};
@@ -102,6 +104,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 			})
 			.catch((error) => {
 				console.error("Error fetching ship types:", error);
+
 				// Error dialog is already triggered by apiCall
 				// Return empty object to prevent Suspense from throwing
 				return {} as ShipTypes;

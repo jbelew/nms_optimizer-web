@@ -14,6 +14,7 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 
 	// Attempt to clear localStorage, but don't let storage errors prevent recovery
 	let localStorageCleared = false;
+
 	try {
 		if (typeof window !== "undefined" && window.localStorage) {
 			localStorage.clear();

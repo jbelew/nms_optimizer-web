@@ -23,6 +23,7 @@ vi.mock("vite-plugin-splash-screen/runtime", () => ({
 
 vi.mock("react-i18next", async () => {
 	const original = await vi.importActual("react-i18next");
+
 	return {
 		...original,
 		useTranslation: () => ({
@@ -109,6 +110,7 @@ describe("App", () => {
 
 	const renderApp = (initialEntries = ["/"]) => {
 		const router = createMemoryRouter(routes, { initialEntries });
+
 		return render(
 			<Theme>
 				<TooltipProvider>
@@ -239,6 +241,7 @@ describe("App", () => {
 		test("should not throw if no prerendered element exists", async () => {
 			// Ensure no prerendered element exists
 			const existing = document.querySelector('[data-prerendered-markdown="true"]');
+
 			if (existing) {
 				existing.remove();
 			}

@@ -44,6 +44,7 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		if (selectAllCheckboxRef.current) {
 			const inputElement =
 				selectAllCheckboxRef.current.querySelector('input[type="checkbox"]');
+
 			if (inputElement instanceof HTMLInputElement) {
 				inputElement.indeterminate = isIndeterminate;
 			}

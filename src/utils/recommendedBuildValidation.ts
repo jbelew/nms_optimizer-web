@@ -14,6 +14,7 @@ import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
 export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	if (typeof obj !== "object" || obj === null) {
 		console.error("Validation Error: RecommendedBuild is not an object or is null.", obj);
+
 		return false;
 	}
 
@@ -24,6 +25,7 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 			"Validation Error: RecommendedBuild missing or invalid 'title' property.",
 			recommendedBuild
 		);
+
 		return false;
 	}
 
@@ -32,6 +34,7 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 			"Validation Error: RecommendedBuild missing or invalid 'layout' property (not an array).",
 			recommendedBuild
 		);
+
 		return false;
 	}
 
@@ -42,8 +45,10 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 				"Validation Error: RecommendedBuild layout row is not an array.",
 				recommendedBuild
 			);
+
 			return false;
 		}
+
 		for (const cellData of row) {
 			if (cellData !== null) {
 				if (typeof cellData !== "object" || cellData === null) {
@@ -51,8 +56,10 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 						"Validation Error: RecommendedBuild layout cell is not an object or is null.",
 						cellData
 					);
+
 					return false;
 				}
+
 				// Check for optional properties and their types
 				if (
 					"tech" in cellData &&
@@ -63,8 +70,10 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 						"Validation Error: RecommendedBuild layout cell 'tech' property is not a string or null. Cell data:",
 						cellData
 					);
+
 					return false;
 				}
+
 				if (
 					"module" in cellData &&
 					typeof cellData.module !== "string" &&
@@ -74,27 +83,34 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 						"Validation Error: RecommendedBuild layout cell 'module' property is not a string or null. Cell data:",
 						cellData
 					);
+
 					return false;
 				}
+
 				if ("supercharged" in cellData && typeof cellData.supercharged !== "boolean") {
 					console.error(
 						"Validation Error: RecommendedBuild layout cell 'supercharged' property is not a boolean. Cell data:",
 						cellData
 					);
+
 					return false;
 				}
+
 				if ("active" in cellData && typeof cellData.active !== "boolean") {
 					console.error(
 						"Validation Error: RecommendedBuild layout cell 'active' property is not a boolean. Cell data:",
 						cellData
 					);
+
 					return false;
 				}
+
 				if ("adjacency_bonus" in cellData && typeof cellData.adjacency_bonus !== "number") {
 					console.error(
 						"Validation Error: RecommendedBuild layout cell 'adjacency_bonus' property is not a number. Cell data:",
 						cellData
 					);
+
 					return false;
 				}
 			}

@@ -16,6 +16,7 @@ vi.mock("socket.io-client");
 vi.mock("../useAnalytics/useAnalytics");
 vi.mock("../../store/GridStore", async (importOriginal) => {
 	const mod = await importOriginal<typeof import("../../store/GridStore")>();
+
 	return {
 		...mod,
 		useGridStore: {

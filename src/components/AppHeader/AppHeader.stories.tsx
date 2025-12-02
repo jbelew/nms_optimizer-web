@@ -18,6 +18,7 @@ const meta = {
 		(Story) => {
 			// Initialize grid store for isSharedGrid check
 			useGridStore.setState({ isSharedGrid: false });
+
 			return <Story />;
 		},
 	],

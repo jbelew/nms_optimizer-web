@@ -12,6 +12,7 @@ export const useBreakpoint = (breakpoint: string) => {
 		(callback: () => void) => {
 			const mediaQuery = window.matchMedia(`(min-width: ${breakpoint})`);
 			mediaQuery.addEventListener("change", callback);
+
 			return () => {
 				mediaQuery.removeEventListener("change", callback);
 			};
@@ -24,5 +25,6 @@ export const useBreakpoint = (breakpoint: string) => {
 	}, [breakpoint]);
 
 	const matches = useSyncExternalStore(subscribe, getSnapshot);
+
 	return matches;
 };

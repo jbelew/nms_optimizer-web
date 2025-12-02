@@ -52,10 +52,12 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 
 	const scrollAreaHeight = useMemo(() => {
 		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
+
 		if (hasRecommendedBuilds) {
 			// Adjust height to account for the RecommendedBuild button
 			return `${baseHeight - 48}px`;
 		}
+
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 	}, [hasRecommendedBuilds]);
 

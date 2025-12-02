@@ -32,7 +32,9 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			);
 			platform = "standard";
 		}
+
 		set({ selectedPlatform: platform });
+
 		if (typeof window !== "undefined" && window.localStorage) {
 			localStorage.setItem(LOCAL_STORAGE_KEY, platform);
 		}
@@ -46,6 +48,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 	initializePlatform: (validShipTypes: string[], isKnownRoute = true) => {
 		if (typeof window === "undefined") {
 			set({ selectedPlatform: "standard" });
+
 			return;
 		}
 
@@ -62,6 +65,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		if (platformFromUrl && validShipTypes.includes(platformFromUrl)) {
 			initialPlatform = platformFromUrl;
+
 			if (platformFromStorage !== initialPlatform) {
 				localStorage.setItem(LOCAL_STORAGE_KEY, initialPlatform);
 			}

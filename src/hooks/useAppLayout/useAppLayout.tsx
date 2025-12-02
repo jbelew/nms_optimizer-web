@@ -60,6 +60,7 @@ export const useAppLayout = (): AppLayout => {
 		if (containerElement) {
 			observer.observe(containerElement);
 		}
+
 		if (gridTableElement) {
 			observer.observe(gridTableElement);
 		}

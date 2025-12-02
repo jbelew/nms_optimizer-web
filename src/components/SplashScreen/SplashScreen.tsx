@@ -28,6 +28,7 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 			const param = urlParams.get("SplashScreen"); // Check for ?SplashScreen=false
 
 			let shouldBeVisible = true;
+
 			if (param === "false") {
 				shouldBeVisible = false;
 			}
@@ -58,12 +59,14 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 				if (remainingTime > 0) {
 					await new Promise((resolve) => setTimeout(resolve, remainingTime));
 				}
+
 				setStatus("hiding");
 			},
 		}));
 
 		useEffect(() => {
 			const element = elementRef.current;
+
 			if (status === "hiding" && element) {
 				const handleAnimationEnd = (event: AnimationEvent) => {
 					if (event.animationName === `${cssBlock}-hide`) {
@@ -77,6 +80,7 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 						);
 					}
 				};
+
 				element.addEventListener("animationend", handleAnimationEnd as EventListener);
 				element.classList.add(`${cssBlock}--hidden`); // Trigger animation
 
@@ -87,6 +91,7 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 					);
 				};
 			}
+
 			return;
 		}, [status, cssBlock, onHidden]);
 
@@ -118,4 +123,5 @@ const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 );
 
 SplashScreen.displayName = "SplashScreen";
+
 export default SplashScreen;

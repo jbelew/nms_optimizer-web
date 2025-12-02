@@ -21,11 +21,13 @@ const testDialogNavigation = (pathname: string, search: string, dialog: string, 
 	}
 
 	const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
+
 	return path + search;
 };
 
 const testDialogClosing = (pathname: string, search: string, lang: string) => {
 	const path = lang === "en" ? "/" : `/${lang}`;
+
 	return path + search;
 };
 

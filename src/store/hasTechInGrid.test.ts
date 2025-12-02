@@ -15,6 +15,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 			useGridStore.getState().resetGrid();
 
 			let gridToSet: Grid;
+
 			if (gridSetup === null) {
 				// For empty grid test
 				gridToSet = createGrid(0, 0); // Or handle as per store's empty state logic

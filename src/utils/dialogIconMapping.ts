@@ -58,5 +58,6 @@ const iconStyle: Record<string, CSSProperties> = {
 export const getDialogIconAndStyle = (titleKey: string | undefined): DialogIconAndStyle => {
 	const IconComponent = titleKey ? iconMap[titleKey] : null;
 	const style = titleKey ? iconStyle[titleKey] || iconStyle.default : iconStyle.default;
+
 	return { IconComponent, style };
 };

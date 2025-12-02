@@ -101,13 +101,16 @@ export const useTechStore = create<TechState>((set, get) => ({
 			const resetCheckedModules = Object.keys(state.techGroups).reduce(
 				(acc, tech) => {
 					const group = state.techGroups[tech]?.[0];
+
 					if (group) {
 						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
 					}
+
 					return acc;
 				},
 				{} as { [key: string]: string[] }
 			);
+
 			return { checkedModules: resetCheckedModules };
 		});
 	},
@@ -118,15 +121,18 @@ export const useTechStore = create<TechState>((set, get) => ({
 		const initialCheckedModules = Object.keys(techGroups).reduce(
 			(acc, tech) => {
 				const group = techGroups[tech]?.[0];
+
 				if (group) {
 					// Try to restore from persistent store first, otherwise use checked modules from data
 					const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
+
 					if (persistedSelection && persistedSelection.length > 0) {
 						acc[tech] = persistedSelection;
 					} else {
 						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
 					}
 				}
+
 				return acc;
 			},
 			{} as { [key: string]: string[] }

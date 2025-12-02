@@ -21,6 +21,7 @@ export const useTechTreeColors = (enabled: boolean = true) => {
 	useEffect(() => {
 		if (!enabled) {
 			setLoading(false);
+
 			return;
 		}
 
@@ -34,6 +35,7 @@ export const useTechTreeColors = (enabled: boolean = true) => {
 				const processTechTree = (data: TechTree) => {
 					for (const category in data) {
 						const categoryItems = data[category];
+
 						if (Array.isArray(categoryItems)) {
 							categoryItems.forEach((tech) => {
 								if ("key" in tech && "color" in tech) {

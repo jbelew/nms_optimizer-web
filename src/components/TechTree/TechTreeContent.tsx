@@ -47,6 +47,7 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 					return;
 
 				const safeTechnologies = Array.isArray(technologies) ? technologies : [];
+
 				if (!Array.isArray(technologies)) {
 					console.warn(
 						`TechTree: Expected 'technologies' to be an array for category '${category}', but received:`,
@@ -68,6 +69,7 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = React.memo(
 
 				result[category] = mappedAndSortedTechnologies;
 			});
+
 			return result;
 		}, [techTree]);
 

@@ -22,11 +22,13 @@ export const useLanguage = () => {
 		const pathParts = location.pathname.split("/").filter((p) => p);
 
 		let lang = "en";
+
 		if (pathParts.length > 0 && supportedLangs.includes(pathParts[0])) {
 			lang = pathParts[0];
 		}
 
 		const currentLang = i18n.language.split("-")[0];
+
 		if (currentLang !== lang) {
 			i18n.changeLanguage(lang);
 		}

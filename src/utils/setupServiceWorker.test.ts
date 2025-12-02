@@ -7,6 +7,7 @@ import { setupServiceWorkerRegistration } from "./setupServiceWorker";
 const { mockUpdateSW, mockRegisterSW } = vi.hoisted(() => {
 	const updateSW = vi.fn();
 	const registerSW = vi.fn();
+
 	return { mockUpdateSW: updateSW, mockRegisterSW: registerSW };
 });
 
@@ -104,6 +105,7 @@ describe("setupServiceWorkerRegistration", () => {
 
 		mockRegisterSW.mockImplementationOnce((options: RegisterSWOptions) => {
 			onNeedRefreshCallback = options.onNeedRefresh!;
+
 			return mockUpdateSW; // Ensure it returns mockUpdateSW
 		});
 
@@ -136,6 +138,7 @@ describe("setupServiceWorkerRegistration", () => {
 
 		mockRegisterSW.mockImplementationOnce((options: RegisterSWOptions) => {
 			onOfflineReadyCallback = options.onOfflineReady!;
+
 			return mockUpdateSW;
 		});
 

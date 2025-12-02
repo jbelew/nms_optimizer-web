@@ -41,6 +41,7 @@ vi.mock("../../store/GridStore", () => {
 	const useGridStore = vi.fn(() => mockState);
 	// @ts-expect-error - Mocking getState
 	useGridStore.getState = () => mockState;
+
 	return { useGridStore };
 });
 
@@ -108,6 +109,7 @@ describe("GridCell", () => {
 					setTechGroups: vi.fn(),
 					setActiveGroup: vi.fn(),
 				};
+
 				return selector(state);
 			}
 		);

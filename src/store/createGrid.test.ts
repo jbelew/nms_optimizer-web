@@ -35,6 +35,7 @@ describe("createGrid", () => {
 
 		// Test case 2: 3x2 grid
 		const grid3x2 = createGrid(3, 2);
+
 		for (let y = 0; y < 2; y++) {
 			for (let x = 0; x < 3; x++) {
 				expect(grid3x2.cells[y][x]).toEqual(defaultCell);
@@ -43,6 +44,7 @@ describe("createGrid", () => {
 
 		// Test case 3: 5x5 grid
 		const grid5x5 = createGrid(5, 5);
+
 		for (let y = 0; y < 5; y++) {
 			for (let x = 0; x < 5; x++) {
 				expect(grid5x5.cells[y][x]).toEqual(defaultCell);

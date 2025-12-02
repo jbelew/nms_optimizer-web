@@ -45,9 +45,11 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 
 				// First, try to use pre-rendered markdown from SSG
 				const preRendered = window.__MARKDOWN_BUNDLE__?.[langToFetch]?.[markdownFileName];
+
 				if (preRendered) {
 					setMarkdown(preRendered);
 					setIsLoading(false);
+
 					return;
 				}
 

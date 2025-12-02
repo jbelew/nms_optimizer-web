@@ -23,6 +23,7 @@ export function SuspenseSkeleton() {
 			);
 
 			const smallCount = 1 + Math.floor(Math.random() * 8);
+
 			for (let j = 0; j < smallCount; j++) {
 				elements.push(<Skeleton key={`small-${i}-${j}`} height="32px" width="100%" />);
 			}

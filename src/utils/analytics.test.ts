@@ -185,6 +185,7 @@ describe("analytics", () => {
 			// Skip if running in dev mode (when DEV=true)
 			if (analytics.isDevMode()) {
 				console.log("Skipping test: running in dev mode where GA init is disabled");
+
 				return;
 			}
 
@@ -192,6 +193,7 @@ describe("analytics", () => {
 
 			expect(ReactGA.initialize).toHaveBeenCalled();
 			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
+
 			if (calls.length > 0) {
 				const callArgs = calls[0];
 				expect(callArgs[0]).toBeTruthy(); // TRACKING_ID should be truthy
@@ -202,12 +204,14 @@ describe("analytics", () => {
 			// Skip if running in dev mode (when DEV=true)
 			if (analytics.isDevMode()) {
 				console.log("Skipping test: running in dev mode where GA init is disabled");
+
 				return;
 			}
 
 			analytics.initializeAnalytics();
 
 			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
+
 			if (calls.length > 0) {
 				const callArgs = calls[0];
 				const options = callArgs[1];
@@ -222,6 +226,7 @@ describe("analytics", () => {
 			analytics.initializeAnalytics();
 
 			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
+
 			if (calls.length > 0) {
 				const callArgs = calls[0];
 				const options = callArgs[1];
@@ -237,6 +242,7 @@ describe("analytics", () => {
 			// reportWebVitals should be called during initialization
 			const calls = (reportWebVitalsModule.reportWebVitals as ReturnType<typeof vi.fn>).mock
 				.calls;
+
 			if (calls.length > 0) {
 				const callArgs = calls[0];
 				expect(typeof callArgs[0]).toBe("function");

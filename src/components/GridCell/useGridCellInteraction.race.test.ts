@@ -47,14 +47,17 @@ describe("useGridCellInteraction Race Conditions", () => {
 			if (typeof selector === "function") {
 				return selector(baseMockGridStoreState);
 			}
+
 			return baseMockGridStoreState;
 		});
 
 		mockUseShakeStore.mockImplementation((selector) => {
 			const state = { triggerShake: mockTriggerShake };
+
 			if (typeof selector === "function") {
 				return selector(state);
 			}
+
 			return state;
 		});
 	});

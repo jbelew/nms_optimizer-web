@@ -42,8 +42,10 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const handleFileSelect = useCallback(
 		async (event: React.ChangeEvent<HTMLInputElement>) => {
 			const file = event.target.files?.[0];
+
 			if (file) {
 				setIsLoadPending(true);
+
 				try {
 					await loadBuildFromFile(file);
 					showSuccess(
@@ -71,6 +73,7 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 					setIsLoadPending(false);
 				}
 			}
+
 			// Reset the input so the same file can be selected again
 			event.target.value = "";
 		},

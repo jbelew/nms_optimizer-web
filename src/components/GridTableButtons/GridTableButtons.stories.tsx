@@ -25,6 +25,7 @@ const meta = {
 					grid: createGrid(10, 6),
 				});
 			}, []);
+
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>

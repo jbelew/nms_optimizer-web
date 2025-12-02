@@ -16,6 +16,7 @@ vi.mock("react-i18next", () => ({
 			if (key === "moduleSelection.bonus") return "Bonus Modules";
 			if (key === "moduleSelection.cosmetic") return "Cosmetic Modules";
 			if (key.startsWith("moduleSelection.")) return key.split(".")[1];
+
 			return key;
 		},
 	}),
@@ -55,6 +56,7 @@ const renderDialog = (props = {}) => {
 	(usePlatformStore as unknown as Mock).mockReturnValue({
 		selectedPlatform: "explorer",
 	});
+
 	return render(
 		<Dialog.Root open={true}>
 			<ModuleSelectionDialog {...defaultProps} {...props} />

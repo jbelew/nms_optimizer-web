@@ -18,6 +18,7 @@ const ThrowError: FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
 	if (shouldThrow) {
 		throw new Error("Test error from child component");
 	}
+
 	return <div>Child rendered successfully</div>;
 };
 

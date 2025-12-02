@@ -22,6 +22,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"
 
 const LazyRechartsChart = lazy(async () => {
 	const { ResponsiveContainer, PieChart, Pie, Cell } = await import("recharts");
+
 	return {
 		default: ({
 			chartData,
@@ -36,12 +37,15 @@ const LazyRechartsChart = lazy(async () => {
 				if (entry.name.toLowerCase() === "photonix") {
 					return "#FF8042"; // orange
 				}
+
 				if (entry.name.toLowerCase() === "other") {
 					return "gray";
 				}
+
 				if (techColors[entry.name]) {
 					return `var(--${techColors[entry.name]}-track)`;
 				}
+
 				return COLORS[index % COLORS.length];
 			};
 
@@ -157,16 +161,19 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 				if (item.technology === "pulse-splitter") {
 					return { ...item, technology: "pulse-spitter" };
 				}
+
 				return item;
 			})
 			.reduce(
 				(acc, curr) => {
 					const existing = acc.find((item) => item.name === curr.technology);
+
 					if (existing) {
 						existing.value += curr.total_events;
 					} else {
 						acc.push({ name: curr.technology, value: curr.total_events });
 					}
+
 					return acc;
 				},
 				[] as { name: string; value: number }[]
@@ -204,6 +211,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 		if (chartData.length === 0) {
 			return <Text>{t("dialogs.userStats.noDataForChart")}</Text>;
 		}
+
 		return (
 			<>
 				<Heading

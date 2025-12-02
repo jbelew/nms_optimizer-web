@@ -60,6 +60,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 				if (!optimizeClickedRef.current) {
 					handleAllCheckboxesChange(initialModules);
 				}
+
 				setIsOpen(open);
 			});
 		}

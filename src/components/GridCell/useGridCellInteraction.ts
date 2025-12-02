@@ -69,10 +69,12 @@ export const useGridCellInteraction = (
 			clearTimeout(touchTimeoutRef.current);
 			touchTimeoutRef.current = null;
 		}
+
 		if (touchResetTimeoutRef.current) {
 			clearTimeout(touchResetTimeoutRef.current);
 			touchResetTimeoutRef.current = null;
 		}
+
 		isTouchInteraction.current = true;
 		setIsTouching(true);
 	}, []);
@@ -116,6 +118,7 @@ export const useGridCellInteraction = (
 			// If the cell has a module, no interactions should change its state.
 			if (cell.module) {
 				triggerShake();
+
 				return;
 			}
 
@@ -136,12 +139,14 @@ export const useGridCellInteraction = (
 						gridFixed ||
 						rowIndex >= 4 ||
 						(totalSupercharged >= 4 && !cell.supercharged);
+
 					if (isInvalidSuperchargeToggle) {
 						triggerShake();
 					} else {
 						toggleCellSupercharged(rowIndex, columnIndex);
 					}
 				}
+
 				return;
 			}
 
@@ -171,6 +176,7 @@ export const useGridCellInteraction = (
 				// Single tap or tap on a different cell
 				lastTapInfo = { time: currentTime, cell: [rowIndex, columnIndex] };
 				const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
+
 				if (isInvalidSingleTap) {
 					triggerShake();
 					clearInitialCellStateForTap();
@@ -210,6 +216,7 @@ export const useGridCellInteraction = (
 
 				if (cell.module) {
 					triggerShake();
+
 					return;
 				}
 

@@ -49,10 +49,12 @@ const LanguageSelector: React.FC = () => {
 		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
 			(code) => languages.includes(code)
 		);
+
 		return availableLanguageCodes
 			.map((code) => {
 				const label = nativeLanguageNames[code] ?? code.toUpperCase();
 				const flagPath = languageFlagPaths[code] || xxFlagPath; // Fallback flag path
+
 				return { code, label, flagPath };
 			})
 			.filter((lang) => lang.flagPath)

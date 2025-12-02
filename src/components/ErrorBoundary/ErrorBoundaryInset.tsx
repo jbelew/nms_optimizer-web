@@ -37,6 +37,7 @@ class ErrorBoundaryInset extends Component<Props, State> {
 	 */
 	static getDerivedStateFromError(error: Error) {
 		console.log("ErrorBoundaryInset: Caught error, updating state.");
+
 		return { hasError: true, error };
 	}
 

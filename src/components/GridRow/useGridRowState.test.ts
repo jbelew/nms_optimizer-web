@@ -26,6 +26,7 @@ describe("useGridRowState", () => {
 					selectLastActiveRowIndex: () => 5,
 					grid: { cells: [] },
 				};
+
 				return selector(mockState);
 			}
 		);
@@ -46,6 +47,7 @@ describe("useGridRowState", () => {
 					selectLastActiveRowIndex: () => 1,
 					grid: { cells: [null, null, mockRow] },
 				};
+
 				return selector(mockState);
 			}
 		);
@@ -66,6 +68,7 @@ describe("useGridRowState", () => {
 					selectLastActiveRowIndex: () => 1,
 					grid: { cells: [null, null, mockRow] },
 				};
+
 				return selector(mockState);
 			}
 		);
@@ -134,6 +137,7 @@ describe("useGridRowState", () => {
 						cells: [null, null, null, null, null, null, null, mockRow, null, null],
 					},
 				};
+
 				return selector(mockState);
 			}
 		);

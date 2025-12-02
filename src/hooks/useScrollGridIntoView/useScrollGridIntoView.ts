@@ -38,6 +38,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	}, [forceShow]);
 
 	let offset = GRID_SCROLL_OFFSET_SMALL;
+
 	if (isAbove640 && !isAbove768) {
 		offset = GRID_SCROLL_OFFSET_MEDIUM;
 	} else if (isAbove768) {

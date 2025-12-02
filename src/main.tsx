@@ -49,6 +49,7 @@ if (typeof window !== "undefined") {
 	// Failsafe: hide splash screen after 8 seconds if still showing
 	setTimeout(() => {
 		const splash = document.querySelector(".vpss");
+
 		if (splash) {
 			hideSplashScreenAndShowBackground();
 		}
@@ -76,6 +77,7 @@ if (typeof window !== "undefined") {
 				setTimeout(initGA, 1000);
 				window.removeEventListener("load", handleLoad); // Clean up listener
 			};
+
 			window.addEventListener("load", handleLoad);
 		}
 
@@ -111,6 +113,7 @@ createRoot(document.getElementById("root")!).render(
 
 // Hide the static content from screen readers after the app has been rendered.
 const staticContent = document.querySelector("main.visually-hidden");
+
 if (staticContent) {
 	staticContent.setAttribute("aria-hidden", "true");
 }

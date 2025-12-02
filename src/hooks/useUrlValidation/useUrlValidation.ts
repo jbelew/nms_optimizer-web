@@ -12,6 +12,7 @@ export const useUrlValidation = () => {
 
 	useEffect(() => {
 		const currentParams = new URLSearchParams(location.search);
+
 		if (currentParams.has("grid") && !currentParams.has("platform")) {
 			// Invalid shared URL: grid is present but platform is missing
 			currentParams.delete("grid"); // Remove the grid param

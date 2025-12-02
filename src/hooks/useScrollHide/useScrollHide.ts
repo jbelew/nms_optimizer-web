@@ -33,14 +33,17 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 				lastScrollYRef.current = currentScrollY;
 				// Reset direction base to prevent immediate hiding when scrolling starts
 				directionBaseRef.current = currentScrollY;
+
 				return;
 			}
 
 			// 2. Bottom of Page Handling (ignore bounce)
 			const isAtBottom =
 				window.innerHeight + currentScrollY >= document.documentElement.scrollHeight;
+
 			if (isAtBottom) {
 				lastScrollYRef.current = currentScrollY;
+
 				return;
 			}
 

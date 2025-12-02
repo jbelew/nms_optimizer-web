@@ -142,6 +142,7 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 		read() {
 			if (status === "pending") throw suspender;
 			if (status === "error") throw error;
+
 			return result!;
 		},
 	};
@@ -170,6 +171,7 @@ export const clearTechTreeCache = () => {
  */
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
+
 	if (!cache.has(cacheKey)) {
 		const promise = apiCall<TechTree>(`${API_URL}tech_tree/${shipType}`, {}, 10000)
 			.then(async (data) => {
@@ -183,16 +185,20 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 									"Invalid recommended build found in tech tree:",
 									build
 								);
+
 								return false;
 							}
+
 							return true;
 						}
 					);
 				}
+
 				return data;
 			})
 			.catch((error) => {
 				console.error("Error fetching tech tree:", error);
+
 				// Error dialog is already triggered by apiCall
 				// Return empty object to prevent Suspense from throwing
 				return {} as TechTree;
@@ -215,6 +221,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  */
 export function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
 	const cacheKey = shipType;
+
 	if (!cache.has(cacheKey)) {
 		// Populate cache using the async version
 		fetchTechTreeAsync(cacheKey);
@@ -247,6 +254,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 		for (const category in techTree) {
 			const categoryItems = techTree[category];
+
 			if (Array.isArray(categoryItems)) {
 				categoryItems.forEach((tech) => {
 					if ("key" in tech && "color" in tech) {
@@ -255,6 +263,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 						if (!techGroups[tech.key]) {
 							techGroups[tech.key] = [];
 						}
+
 						techGroups[tech.key].push(tech as TechTreeItem);
 
 						if (!activeGroups[tech.key]) {
@@ -312,14 +321,18 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 							if (uniqueKeys.has(item.key)) {
 								return false;
 							}
+
 							uniqueKeys.add(item.key);
+
 							return true;
 						}
+
 						return false;
 					});
 				} else {
 					acc[category] = items;
 				}
+
 				return acc;
 			}, {} as TechTree),
 		[techTree]

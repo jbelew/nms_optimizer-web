@@ -48,6 +48,7 @@ const preview: Preview = {
 	decorators: [
 		(Story) => {
 			hideSplashScreenAndShowBackground();
+
 			return (
 				<BrowserRouter>
 					<DialogProvider>

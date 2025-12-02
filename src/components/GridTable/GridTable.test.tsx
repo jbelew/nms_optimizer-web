@@ -51,6 +51,7 @@ vi.mock("../../store/GridStore", () => ({
 			selectFirstInactiveRowIndex: () => 0,
 			selectLastActiveRowIndex: () => -1,
 		};
+
 		return selector(mockState);
 	}),
 }));
@@ -60,6 +61,7 @@ vi.mock("../../store/TechTreeLoadingStore", () => ({
 		const mockState = {
 			isLoading: false,
 		};
+
 		return selector(mockState);
 	}),
 }));

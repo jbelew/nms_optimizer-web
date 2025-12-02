@@ -41,6 +41,7 @@ export const useTechModuleManagement = (
 				!persistedSelection ||
 				persistedSelection.length !== currentCheckedModules.length ||
 				!persistedSelection.every((id) => currentCheckedModules.includes(id));
+
 			if (hasChanged) {
 				setModuleSelection(tech, currentCheckedModules);
 			}
@@ -72,10 +73,12 @@ export const useTechModuleManagement = (
 		modules.forEach((module) => {
 			if (module.label.toLowerCase().includes("figurine")) {
 				groups.figurines.push(module);
+
 				return;
 			}
 
 			const type = module.type || "upgrade";
+
 			if (groups[type]) {
 				groups[type].push(module);
 			} else {
@@ -89,6 +92,7 @@ export const useTechModuleManagement = (
 	const handleCheckboxChange = (moduleId: string) => {
 		setCheckedModules(tech, (prevChecked = []) => {
 			const isChecked = prevChecked.includes(moduleId);
+
 			return isChecked
 				? prevChecked.filter((id) => id !== moduleId)
 				: [...prevChecked, moduleId];
@@ -121,10 +125,13 @@ export const useTechModuleManagement = (
 
 			for (const removedId of removed) {
 				const module = modules.find((m) => m.id === removedId);
+
 				if (module) {
 					const groupName = module.type || "upgrade";
+
 					if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
 						const label = module.label;
+
 						if (label.includes("Theta")) {
 							const tauModule = groupedModules[groupName].find((m) =>
 								m.label.includes("Tau")
@@ -143,6 +150,7 @@ export const useTechModuleManagement = (
 					}
 				}
 			}
+
 			handleAllCheckboxesChange(Array.from(finalNewValues));
 		}
 	};

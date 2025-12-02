@@ -66,6 +66,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	 */
 	useEffect(() => {
 		window.addEventListener("keydown", handleEscapeKey);
+
 		return () => window.removeEventListener("keydown", handleEscapeKey);
 	}, [handleEscapeKey]);
 

@@ -25,6 +25,7 @@ const useLanguageSelectorNavigation = (pathParts: string[], newLang: string) => 
 	}
 
 	const newPath = newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
+
 	return newPath + window.location.search;
 };
 

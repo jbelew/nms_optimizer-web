@@ -39,10 +39,12 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 		try {
 			await navigator.clipboard.writeText(shareUrl);
 			setCopied(true);
+
 			// Clear any existing timeout before setting a new one
 			if (copiedTimeoutRef.current) {
 				clearTimeout(copiedTimeoutRef.current);
 			}
+
 			copiedTimeoutRef.current = setTimeout(() => {
 				setCopied(false);
 				copiedTimeoutRef.current = null;

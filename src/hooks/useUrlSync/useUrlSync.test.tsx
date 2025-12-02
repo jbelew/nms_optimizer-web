@@ -17,6 +17,7 @@ vi.mock("../useShipTypes/useShipTypes");
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
 	const original = await vi.importActual("react-router-dom");
+
 	return {
 		...original,
 		useNavigate: () => mockNavigate,
@@ -50,6 +51,7 @@ describe("useUrlSync", () => {
 					setSelectedPlatform: mockSetSelectedPlatform,
 					initializePlatform: vi.fn(), // Add this line
 				};
+
 				return selector(state);
 			}
 		);

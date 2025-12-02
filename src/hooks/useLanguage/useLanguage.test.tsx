@@ -20,6 +20,7 @@ const createMockLocation = (pathname: string): Location => ({
 
 vi.mock("react-router-dom", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("react-router-dom")>();
+
 	return {
 		...actual,
 		useLocation: vi.fn(() => createMockLocation("/")), // Directly return the mock function

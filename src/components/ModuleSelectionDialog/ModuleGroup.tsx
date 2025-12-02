@@ -39,27 +39,32 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 		if (["bonus", "trails", "figurines"].includes(groupName)) {
 			return [...modules].sort((a, b) => a.label.localeCompare(b.label));
 		}
+
 		return modules;
 	}, [modules, groupName]);
 
 	const dependencyMap = useMemo(() => {
 		const map = new Map<string, string>();
+
 		if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
 			modules.forEach((module) => {
 				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
 					module.label.includes(rank)
 				);
+
 				if (rankIndex > 0) {
 					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
 					const prerequisiteModule = modules.find((m) =>
 						m.label.includes(prerequisiteRank)
 					);
+
 					if (prerequisiteModule) {
 						map.set(module.id, prerequisiteModule.id);
 					}
 				}
 			});
 		}
+
 		return map;
 	}, [modules, groupName]);
 

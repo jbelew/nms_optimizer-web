@@ -24,6 +24,7 @@ const GridShake: React.FC<GridShakeProps> = ({ children, duration }) => {
 		// We only run the effect if shakeCount is greater than 0, which indicates a shake has been triggered.
 		if (shakeCount > 0) {
 			const element = ref.current;
+
 			if (element) {
 				// Add the shake class to trigger the animation
 				element.classList.add("shake");

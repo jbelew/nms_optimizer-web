@@ -40,9 +40,11 @@ const { useGridStore, setGridStoreState } = vi.hoisted(() => {
 
 	const useGridStoreMock = vi.fn((selector?: (state: unknown) => unknown) => {
 		const currentState = { ...store, isSharedGrid, hasModulesInGrid };
+
 		if (typeof selector === "function") {
 			return selector(currentState);
 		}
+
 		return currentState;
 	});
 

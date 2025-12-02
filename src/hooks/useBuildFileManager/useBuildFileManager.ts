@@ -110,6 +110,7 @@ export const useBuildFileManager = () => {
 
 				// Validate file size (max 10MB - builds should be much smaller)
 				const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 				if (file.size > MAX_FILE_SIZE) {
 					throw new Error("File is too large. Build files should be under 10MB.");
 				}
@@ -123,6 +124,7 @@ export const useBuildFileManager = () => {
 
 				// Parse JSON with error handling
 				let buildData;
+
 				try {
 					buildData = JSON.parse(fileContent);
 				} catch {
@@ -145,6 +147,7 @@ export const useBuildFileManager = () => {
 				};
 				const stateDataJson = JSON.stringify(stateDataToVerify);
 				const computedChecksum = await computeSHA256(stateDataJson);
+
 				if (computedChecksum !== buildData.checksum) {
 					throw new Error(
 						"Build file integrity check failed. The file may have been corrupted or tampered with."
@@ -153,6 +156,7 @@ export const useBuildFileManager = () => {
 
 				// Validate shipType is supported
 				const validShipTypes = Object.keys(shipTypes);
+
 				if (!validShipTypes.includes(buildData.shipType)) {
 					throw new Error(
 						`Unsupported ship type: "${buildData.shipType}". Valid types are: ${validShipTypes.join(", ")}.`
@@ -172,9 +176,11 @@ export const useBuildFileManager = () => {
 				useModuleSelectionStore.setState(buildData.moduleState);
 			} catch (error) {
 				console.error("Failed to load build file:", error);
+
 				if (error instanceof Error) {
 					throw error;
 				}
+
 				throw new Error("An unexpected error occurred while loading the build file.");
 			}
 		},

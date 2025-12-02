@@ -32,14 +32,17 @@ function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
 	const obj = value as Record<string, unknown>;
 	if (typeof obj.solve_method !== "string") return false;
+
 	if (obj.grid !== null) {
 		if (typeof obj.grid !== "object" || !obj.grid) return false;
 		const gridCandidate = obj.grid as Record<string, unknown>;
 		if (!Array.isArray(gridCandidate.cells) || typeof gridCandidate.width !== "number")
 			return false;
 	}
+
 	if ("max_bonus" in obj && typeof obj.max_bonus !== "number") return false;
 	if ("solved_bonus" in obj && typeof obj.solved_bonus !== "number") return false;
+
 	return true;
 }
 
@@ -103,16 +106,20 @@ export const useOptimize = (): UseOptimizeReturn => {
 					const newRow = row.map((cell) => {
 						if (cell.tech === tech) {
 							rowChanged = true;
+
 							return { ...createEmptyCell(cell.supercharged, cell.active) };
 						}
+
 						return cell;
 					});
+
 					return rowChanged ? newRow : row; // Reuse row reference if unchanged
 				}),
 			};
 
 			// New socket per optimization
 			let socket: Socket | null = null;
+
 			try {
 				const { io } = await import("socket.io-client");
 				socket = io(WS_URL, { transports: ["websocket"] });
@@ -120,6 +127,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				console.error("Failed to import socket.io-client:", importError);
 				setShowErrorStore(true, "recoverable");
 				resetProgress();
+
 				return;
 			}
 
@@ -127,6 +135,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				if (socket) {
 					socket.disconnect();
 				}
+
 				resetProgress();
 			};
 
@@ -152,6 +161,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				(data: { progress_percent: number; best_grid?: Grid; status?: string }) => {
 					setProgressPercent(data.progress_percent);
 					setStatus("Optimized with Rust, obviously!");
+
 					if (data.best_grid) {
 						setGrid(data.best_grid);
 					}
@@ -177,6 +187,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 							tech === "pulse" && checkedModules[tech]?.includes("PC")
 								? "photonix"
 								: tech;
+
 						if (data.grid) {
 							console.log("Optimization Result Grid:", data.grid);
 							sendEvent({

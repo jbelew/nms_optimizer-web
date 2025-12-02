@@ -96,6 +96,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 							const imagePath = module.image
 								? `${baseImagePath}${module.image}`
 								: fallbackImage;
+
 							return (
 								<div
 									key={module.id}
@@ -124,6 +125,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 						if (!groupedModules[groupName]?.length) return null;
 
 						let titleOverride: string | undefined;
+
 						if (groupName === "bonus" && tech === "trails") {
 							titleOverride = t("moduleSelection.trails");
 						}

@@ -23,12 +23,15 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const createValidator = useCallback(
 		(value: string): string | null => {
 			const trimmed = value.trim();
+
 			if (!trimmed) {
 				return t("dialog.buildName.validation.empty");
 			}
+
 			if (!isValidFilename(trimmed)) {
 				return t("dialog.buildName.validation.invalid");
 			}
+
 			return null;
 		},
 		[t]
@@ -56,6 +59,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const handleConfirm = useCallback(() => {
 		const trimmedName = buildName.trim();
 		const error = createValidator(trimmedName);
+
 		if (!error) {
 			onConfirm(trimmedName);
 		}

@@ -51,6 +51,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 		// Memoize grid rows - must be called unconditionally
 		const gridRows = useMemo(() => {
 			if (!gridHeight) return [];
+
 			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
 				<GridRow key={rowIndex} rowIndex={rowIndex} isLoading={isTechTreeLoading} />
 			));

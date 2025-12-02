@@ -28,6 +28,7 @@ export default function BuyMeACoffee() {
 		if (openTimeoutRef.current) {
 			clearTimeout(openTimeoutRef.current);
 		}
+
 		openTimeoutRef.current = setTimeout(() => {
 			window.open("https://www.buymeacoffee.com/jbelew", "_blank", "noopener,noreferrer");
 			openTimeoutRef.current = null;

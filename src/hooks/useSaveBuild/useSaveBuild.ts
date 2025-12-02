@@ -39,6 +39,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 		async (buildName: string) => {
 			setIsSaveBuildDialogOpen(false);
 			setIsSavePending(true);
+
 			try {
 				await saveBuildToFile(buildName);
 				showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);

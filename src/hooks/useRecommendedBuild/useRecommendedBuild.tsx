@@ -30,6 +30,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 
 		for (const category in techTree) {
 			const categoryItems = techTree[category];
+
 			if (Array.isArray(categoryItems)) {
 				for (const tech of categoryItems) {
 					if (
@@ -45,6 +46,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 				}
 			}
 		}
+
 		return map;
 	}, [techTree]);
 	/**
@@ -57,6 +59,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 		async (build: RecommendedBuild) => {
 			if (!isValidRecommendedBuild(build)) {
 				console.error("Invalid RecommendedBuild object received:", build);
+
 				return;
 			}
 
@@ -78,6 +81,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 				for (let r = 0; r < layout.length; r++) {
 					for (let c = 0; c < layout[r].length; c++) {
 						const cellData = layout[r][c];
+
 						if (cellData) {
 							// Initialize with empty cell, then apply specific overrides
 							let cell = createEmptyCell(
@@ -93,6 +97,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 								const module = modulesMap.get(
 									`${cellData.tech}/${cellData.module}`
 								);
+
 								if (module) {
 									cell = {
 										...cell,
@@ -109,6 +114,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 									resetCellContent(cell);
 								}
 							}
+
 							cell.adjacency_bonus = cellData.adjacency_bonus ?? 0.0;
 
 							newGrid.cells[r][c] = cell;
@@ -117,8 +123,10 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 							newGrid.cells[r][c] = createEmptyCell();
 						}
 					}
+
 					await new Promise((resolve) => setTimeout(resolve, 0)); // Yield after each row
 				}
+
 				useGridStore.getState().setGrid(newGrid);
 			}
 		},

@@ -36,6 +36,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
 		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
 		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
+
 		return classes.join(" ");
 	}, [
 		cell.supercharged,

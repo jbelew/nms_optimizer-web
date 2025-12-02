@@ -22,6 +22,7 @@ export const useShakeStore = create<ShakeState>((set) => ({
 	shakeCount: 0,
 	triggerShake: () => {
 		const now = Date.now();
+
 		if (now - lastShakeTime >= SHAKE_ANIMATION_DURATION) {
 			lastShakeTime = now;
 			set((state) => ({ shakeCount: state.shakeCount + 1 }));

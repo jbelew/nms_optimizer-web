@@ -28,12 +28,14 @@ export async function fetchWithTimeout(
 		});
 
 		clearTimeout(timeoutId);
+
 		return response;
 	} catch (error) {
 		if (timeoutTriggered && error instanceof Error && error.name === "AbortError") {
 			console.error(`[fetchWithTimeout] Request aborted due to timeout: ${url}`);
 			throw new Error(`Request timeout after ${timeoutMs}ms: ${url}`);
 		}
+
 		throw error;
 	} finally {
 		clearTimeout(timeoutId);

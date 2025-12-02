@@ -16,6 +16,7 @@ vi.mock("react-i18next", () => ({
 			// Insert the link component
 			const key = typeof i18nKey === "string" ? i18nKey : "";
 			const comp1 = components[1] as React.ReactNode;
+
 			return (
 				<span>
 					{key.substring(0, 1)}
@@ -24,6 +25,7 @@ vi.mock("react-i18next", () => ({
 				</span>
 			);
 		}
+
 		return <span>{i18nKey}</span>;
 	},
 }));

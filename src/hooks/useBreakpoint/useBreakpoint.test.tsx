@@ -25,6 +25,7 @@ const createMatchMediaMock = (matches: boolean) => {
 	) {
 		if (type === "change") {
 			const index = listeners.indexOf(listener);
+
 			if (index > -1) {
 				listeners.splice(index, 1);
 			}
@@ -49,6 +50,7 @@ const createMatchMediaMock = (matches: boolean) => {
 			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
 		) {
 			const index = listeners.indexOf(listener);
+
 			if (index > -1) {
 				listeners.splice(index, 1);
 			}
@@ -56,6 +58,7 @@ const createMatchMediaMock = (matches: boolean) => {
 		dispatchEvent: vi.fn(function (this: MediaQueryList, event: Partial<MediaQueryListEvent>) {
 			// Call listeners with the correct 'this' context
 			listeners.forEach((listener) => listener.call(this, event as MediaQueryListEvent));
+
 			return true;
 		}),
 	};
