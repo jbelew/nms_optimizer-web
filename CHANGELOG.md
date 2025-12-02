@@ -1,3 +1,10 @@
+## [6.3.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.7...v6.3.8) (2025-12-02)
+
+
+### Bug Fixes
+
+* **error-boundary:** hide splash screen when ErrorContent mounts ([29101ec](https://github.com/jbelew/nms_optimizer-web/commit/29101ec2e6e0176c0fe22f8995dccec04601af6a))
+
 ## [6.3.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.6...v6.3.7) (2025-12-02)
 
 
