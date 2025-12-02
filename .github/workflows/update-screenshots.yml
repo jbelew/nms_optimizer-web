@@ -28,9 +28,16 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
+            - name: Get App Version from package.json
+              id: get_app_version
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+                  echo "App Version from package.json: $VERSION"
+
             - name: Build application
               env:
-                  VITE_APP_VERSION: ${{ github.ref_name }}
+                  VITE_APP_VERSION: ${{ steps.get_app_version.outputs.version }}
               run: npm run build
 
             - name: Start server

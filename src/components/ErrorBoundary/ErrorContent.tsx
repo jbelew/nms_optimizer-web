@@ -1,8 +1,10 @@
 import type { ErrorInfo, ReactNode } from "react";
+import { useEffect } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Link, ScrollArea, Separator } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import { ErrorDisplay } from "./ErrorDisplay";
 
 import "./ErrorBoundary.scss";
@@ -49,6 +51,10 @@ const InsetMessage = () => (
 
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
 	const isLarge = useBreakpoint("1024px");
+
+	useEffect(() => {
+		hideSplashScreenAndShowBackground();
+	}, []);
 
 	const content = (
 		<div className="error-content">

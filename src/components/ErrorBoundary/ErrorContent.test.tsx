@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import { ErrorContent } from "./ErrorContent";
 
 // Mock useBreakpoint hook
@@ -9,9 +10,20 @@ vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(),
 }));
 
+// Mock splashScreen utility
+vi.mock("../../utils/splashScreen", () => ({
+	hideSplashScreenAndShowBackground: vi.fn(),
+}));
+
 describe("ErrorContent", () => {
 	const mockError = new Error("Test error");
 	const mockErrorInfo = { componentStack: "Test stack" };
+
+	it("should call hideSplashScreenAndShowBackground on mount", () => {
+		render(<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo} />);
+
+		expect(hideSplashScreenAndShowBackground).toHaveBeenCalledTimes(1);
+	});
 
 	it("should render page variant correctly", () => {
 		render(<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo} />);
