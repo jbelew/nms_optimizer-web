@@ -46,7 +46,7 @@ $panel-border: 1px solid var(--gray-a2);
 		// Accessibility override: disable background image
 		body.a11y-font & {
 			@media (width <= 639px) {
-				background-color: var(--color-panel-solid);
+				background-color: var(--color-panel-translucent);
 				background-image: none !important;
 			}
 		}
