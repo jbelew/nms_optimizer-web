@@ -1,0 +1,2418 @@
+{
+  "name": "Corvette - Akamai Terror VI",
+  "shipType": "corvette",
+  "timestamp": 1764709813779,
+  "checksum": "fe30fa93009b80d8fc5ac4a699a7f6a714f4329bf6b0a59ea6736dcffd706af5",
+  "gridState": {
+    "grid": {
+      "width": 10,
+      "height": 6,
+      "cells": [
+        [
+          {
+            "module": "CP",
+            "label": "Titan-Class Cockpit",
+            "value": 0,
+            "type": "core",
+            "total": 0.2,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.08,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "cockpit",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/cockpit.webp"
+          },
+          {
+            "module": "Ca",
+            "label": "Medusa-Class Reactor Theta",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.3745,
+            "adjacency_bonus": 0.07,
+            "bonus": 0.35,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "cockpit",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "corvette/medusa.webp"
+          },
+          {
+            "module": "Aa",
+            "label": "Azimuth-Class Reactor Theta",
+            "value": 0,
+            "type": "reactor",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "corvette/azimuth.webp"
+          },
+          {
+            "module": "Ab",
+            "label": "Azimuth-Class Reactor Tau",
+            "value": 0,
+            "type": "reactor",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "corvette/azimuth.webp"
+          },
+          {
+            "module": "SL",
+            "label": "Sub-Light Amplifier",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/sublight.webp"
+          },
+          {
+            "module": "PC",
+            "label": "Photonix Core",
+            "value": 0,
+            "type": "bonus",
+            "total": 1.298,
+            "adjacency_bonus": 0.18,
+            "bonus": 1.1,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/photonix.webp"
+          },
+          {
+            "module": "Bc",
+            "label": "Arcadia Heavy Booster Sigma",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 1.14016,
+            "adjacency_bonus": 0.12,
+            "bonus": 1.018,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/booster.webp"
+          },
+          {
+            "module": "TP",
+            "label": "Teleport Receiver",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "no_adjacency",
+            "tech": "teleporter",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/teleport.webp"
+          },
+          {
+            "module": "Cb",
+            "label": "Phase Beam Array Tau",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.2352,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.21,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/phase.webp"
+          },
+          {
+            "module": "Ca",
+            "label": "Phase Beam Array Theta",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.2352,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.21,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/phase.webp"
+          }
+        ],
+        [
+          {
+            "module": "Cb",
+            "label": "Medusa-Class Reactor Tau",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.2461,
+            "adjacency_bonus": 0.07,
+            "bonus": 0.23,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "cockpit",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "corvette/medusa.webp"
+          },
+          {
+            "module": "LT",
+            "label": "Launch Thruster",
+            "value": 0,
+            "type": "core",
+            "total": 0.0102,
+            "adjacency_bonus": 0.0002,
+            "bonus": 0.01,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/launch.webp"
+          },
+          {
+            "module": "La",
+            "label": "Thunderbird Landing Thruster Theta",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.0366,
+            "adjacency_bonus": 0.22,
+            "bonus": 0.03,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/landing.webp"
+          },
+          {
+            "module": "Lb",
+            "label": "Thunderbird Landing Thruster Tau",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.03422,
+            "adjacency_bonus": 0.18,
+            "bonus": 0.029,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/landing.webp"
+          },
+          {
+            "module": "Ba",
+            "label": "Arcadia Heavy Booster Theta",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 1.2036,
+            "adjacency_bonus": 0.18,
+            "bonus": 1.02,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/booster.webp"
+          },
+          {
+            "module": "Xa",
+            "label": "Pulse Engine Upgrade Theta",
+            "value": 0,
+            "type": "upgrade",
+            "total": 1.7669999999999997,
+            "adjacency_bonus": 0.24,
+            "bonus": 1.14,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": true,
+            "sc_eligible": true,
+            "image": "starship/pulse-upgrade.webp"
+          },
+          {
+            "module": "Xc",
+            "label": "Pulse Engine Upgrade Sigma",
+            "value": 0,
+            "type": "upgrade",
+            "total": 1.3216,
+            "adjacency_bonus": 0.18,
+            "bonus": 1.12,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/pulse-upgrade.webp"
+          },
+          {
+            "module": "FD",
+            "label": "Fourier De-Limiter",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.07280700000000001,
+            "adjacency_bonus": 0.040100000000000004,
+            "bonus": 0.07,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/fourier.webp"
+          },
+          {
+            "module": "Xb",
+            "label": "Phase Beam Upgrade Tau",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.4719,
+            "adjacency_bonus": 0.21,
+            "bonus": 0.39,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/phase-upgrade.webp"
+          },
+          {
+            "module": "Xa",
+            "label": "Phase Beam Upgrade Theta",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.5900000000000001,
+            "adjacency_bonus": 0.18,
+            "bonus": 0.4,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": true,
+            "sc_eligible": true,
+            "image": "starship/phase-upgrade.webp"
+          }
+        ],
+        [
+          {
+            "module": "Hc",
+            "label": "Habitation Module Sigma",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.321,
+            "adjacency_bonus": 0.07,
+            "bonus": 0.3,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "habitation",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/habitation.webp"
+          },
+          {
+            "module": "EF",
+            "label": "Efficient Thrusters",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.1,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/efficient.webp"
+          },
+          {
+            "module": "Lc",
+            "label": "Mag-Field Landing Thruster Sigma",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.03304,
+            "adjacency_bonus": 0.18,
+            "bonus": 0.028,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/mag-field.webp"
+          },
+          {
+            "module": "Ac",
+            "label": "Azimuth-Class Reactor Sigma",
+            "value": 0,
+            "type": "reactor",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "launch",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "corvette/azimuth.webp"
+          },
+          {
+            "module": "Bb",
+            "label": "Arcadia Heavy Booster Tau",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 1.18204,
+            "adjacency_bonus": 0.16,
+            "bonus": 1.019,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/booster.webp"
+          },
+          {
+            "module": "FA",
+            "label": "Flight Assist Override",
+            "value": 0,
+            "type": "bonus",
+            "total": 1.2626,
+            "adjacency_bonus": 0.18,
+            "bonus": 1.07,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/flight-assist.webp"
+          },
+          {
+            "module": "Xb",
+            "label": "Pulse Engine Upgrade Tau",
+            "value": 0,
+            "type": "upgrade",
+            "total": 1.66675,
+            "adjacency_bonus": 0.18,
+            "bonus": 1.13,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": true,
+            "sc_eligible": true,
+            "image": "starship/pulse-upgrade.webp"
+          },
+          {
+            "module": "PB",
+            "label": "Phase Beam",
+            "value": 0,
+            "type": "core",
+            "total": 1.287625,
+            "adjacency_bonus": 0.0301,
+            "bonus": 1,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "phase",
+            "supercharged": true,
+            "sc_eligible": true,
+            "image": "starship/phase-beam.webp"
+          },
+          {
+            "module": "Xc",
+            "label": "Phase Beam Upgrade Sigma",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.4408,
+            "adjacency_bonus": 0.16,
+            "bonus": 0.38,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/phase-upgrade.webp"
+          },
+          {
+            "module": "Cc",
+            "label": "Phase Beam Array Sigma",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.224,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.2,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "phase",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/phase.webp"
+          }
+        ],
+        [
+          {
+            "module": "Ha",
+            "label": "Habitation Module Theta",
+            "value": 0,
+            "type": "core",
+            "total": 0.42,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.3,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "habitation",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/habitation.webp"
+          },
+          {
+            "module": "Hb",
+            "label": "Habitation Module Tau",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.321,
+            "adjacency_bonus": 0.07,
+            "bonus": 0.3,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "habitation",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/habitation.webp"
+          },
+          {
+            "module": "AA",
+            "label": "Ablative Armor",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.07700000000000001,
+            "adjacency_bonus": 0.1,
+            "bonus": 0.07,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "shield",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/ablative.webp"
+          },
+          {
+            "module": "Ca",
+            "label": "Ion Barrier Theta",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.112,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.1,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "shield",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/ion.webp"
+          },
+          {
+            "module": "PE",
+            "label": "Pulse Engine",
+            "value": 0,
+            "type": "core",
+            "total": 0.99,
+            "adjacency_bonus": -0.01,
+            "bonus": 1,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/pulse.webp"
+          },
+          {
+            "module": "RT",
+            "label": "Chromatic Starship Trail [p1]",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.06,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/chromatic-trail.webp"
+          },
+          {
+            "module": "ID",
+            "label": "Instability Drive",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.06,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "pulse",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/instability.webp"
+          },
+          {
+            "module": "AD",
+            "label": "Atlantid Drive",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.040100000000000004,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/atlantid.webp"
+          },
+          {
+            "module": "Xc",
+            "label": "Hyperdrive Upgrade Sigma",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.345,
+            "adjacency_bonus": 0.15,
+            "bonus": 0.3,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/hyper-upgrade.webp"
+          },
+          {
+            "module": "Zb",
+            "label": "Zenith-Class Reactor Tau",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.2016,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.18,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/zenith.webp"
+          }
+        ],
+        [
+          {
+            "module": "CS",
+            "label": "Conflict Scanner",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "no_adjacency",
+            "tech": "conflict_scanner",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/conflict.webp"
+          },
+          {
+            "module": "CD",
+            "label": "Cargo Scan Deflector",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "no_adjacency",
+            "tech": "cargo_scanner",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/cargo.webp"
+          },
+          {
+            "module": "DS",
+            "label": "Defensive Shields",
+            "value": 0,
+            "type": "core",
+            "total": 1.0002,
+            "adjacency_bonus": 0.0002,
+            "bonus": 1,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "shield",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/shield.webp"
+          },
+          {
+            "module": "Cb",
+            "label": "Deflector Shield Tau",
+            "value": 0,
+            "type": "cosmetic",
+            "total": 0.09899999999999999,
+            "adjacency_bonus": 0.1,
+            "bonus": 0.09,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "shield",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/deflector.webp"
+          },
+          {
+            "module": "GT",
+            "label": "Golden Starship Trail [p5]",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/golden-trail.webp"
+          },
+          {
+            "module": "PB",
+            "label": "Polo Figurine",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.0744,
+            "adjacency_bonus": 0.24,
+            "bonus": 0.06,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/polo.webp"
+          },
+          {
+            "module": "ST",
+            "label": "Stealth Starship Trail [p4]",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/stealth-trail.webp"
+          },
+          {
+            "module": "HD",
+            "label": "Hyperdrive",
+            "value": 0,
+            "type": "core",
+            "total": 0.0401,
+            "adjacency_bonus": 0.0301,
+            "bonus": 0.01,
+            "active": true,
+            "adjacency": "lesser",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/hyperdrive.webp"
+          },
+          {
+            "module": "Xa",
+            "label": "Hyperdrive Upgrade Theta",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.3904,
+            "adjacency_bonus": 0.22,
+            "bonus": 0.32,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/hyper-upgrade.webp"
+          },
+          {
+            "module": "Xb",
+            "label": "Hyperdrive Upgrade Tau",
+            "value": 0,
+            "type": "upgrade",
+            "total": 0.3658,
+            "adjacency_bonus": 0.18,
+            "bonus": 0.31,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/hyper-upgrade.webp"
+          }
+        ],
+        [
+          {
+            "module": "PC",
+            "label": "Photon Cannon",
+            "value": 0,
+            "type": "core",
+            "total": 1,
+            "adjacency_bonus": 0,
+            "bonus": 1,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "photon",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/photon.webp",
+            "module_position": [
+              0,
+              5
+            ]
+          },
+          {
+            "module": "ES",
+            "label": "Economy Scanner",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "no_adjacency",
+            "tech": "economy_scanner",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/economy.webp"
+          },
+          {
+            "module": "Cb",
+            "label": "Ceto-Class Reactor Tau",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.18020000000000003,
+            "adjacency_bonus": 0.06,
+            "bonus": 0.17,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "ceto",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/ceto.webp"
+          },
+          {
+            "module": "Ca",
+            "label": "Ceto-Class Reactor Theta",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.10600000000000001,
+            "adjacency_bonus": 0.06,
+            "bonus": 0.1,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "ceto",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/ceto.webp"
+          },
+          {
+            "module": "CT",
+            "label": "Cadmium Starship Trail [p2]",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/cadmium-trail.webp"
+          },
+          {
+            "module": "AB",
+            "label": "Artemis Figurine",
+            "value": 0,
+            "type": "bonus",
+            "total": 0.059000000000000004,
+            "adjacency_bonus": 0.18,
+            "bonus": 0.05,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "starship/artemis.webp"
+          },
+          {
+            "module": "ET",
+            "label": "Emeril Starship Trail [p3]",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0.12,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "trails",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/emeril-trail.webp"
+          },
+          {
+            "module": "AJ",
+            "label": "Aqua-Jets",
+            "value": 0,
+            "type": "bonus",
+            "total": 0,
+            "adjacency_bonus": 0,
+            "bonus": 0,
+            "active": true,
+            "adjacency": "no_adjacency",
+            "tech": "aqua",
+            "supercharged": false,
+            "sc_eligible": false,
+            "image": "starship/aquajets.webp"
+          },
+          {
+            "module": "Zc",
+            "label": "Zenith-Class Reactor Sigma",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.1904,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.17,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/zenith.webp"
+          },
+          {
+            "module": "Za",
+            "label": "Zenith-Class Reactor Theta",
+            "value": 0,
+            "type": "reactor",
+            "total": 0.2128,
+            "adjacency_bonus": 0.12,
+            "bonus": 0.19,
+            "active": true,
+            "adjacency": "greater",
+            "tech": "hyper",
+            "supercharged": false,
+            "sc_eligible": true,
+            "image": "corvette/zenith.webp"
+          }
+        ]
+      ]
+    },
+    "result": {
+      "grid": {
+        "width": 10,
+        "height": 6,
+        "cells": [
+          [
+            {
+              "module": "CP",
+              "label": "Titan-Class Cockpit",
+              "value": 0,
+              "type": "core",
+              "total": 0.2,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.08,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "cockpit",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/cockpit.webp"
+            },
+            {
+              "module": "Ca",
+              "label": "Medusa-Class Reactor Theta",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.3745,
+              "adjacency_bonus": 0.07,
+              "bonus": 0.35,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "cockpit",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "corvette/medusa.webp"
+            },
+            {
+              "module": "Aa",
+              "label": "Azimuth-Class Reactor Theta",
+              "value": 0,
+              "type": "reactor",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "corvette/azimuth.webp"
+            },
+            {
+              "module": "Ab",
+              "label": "Azimuth-Class Reactor Tau",
+              "value": 0,
+              "type": "reactor",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "corvette/azimuth.webp"
+            },
+            {
+              "module": "SL",
+              "label": "Sub-Light Amplifier",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/sublight.webp"
+            },
+            {
+              "module": "PC",
+              "label": "Photonix Core",
+              "value": 0,
+              "type": "bonus",
+              "total": 1.298,
+              "adjacency_bonus": 0.18,
+              "bonus": 1.1,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/photonix.webp"
+            },
+            {
+              "module": "Bc",
+              "label": "Arcadia Heavy Booster Sigma",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 1.14016,
+              "adjacency_bonus": 0.12,
+              "bonus": 1.018,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/booster.webp"
+            },
+            {
+              "module": "TP",
+              "label": "Teleport Receiver",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "no_adjacency",
+              "tech": "teleporter",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/teleport.webp"
+            },
+            {
+              "module": "Cb",
+              "label": "Phase Beam Array Tau",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.2352,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.21,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/phase.webp"
+            },
+            {
+              "module": "Ca",
+              "label": "Phase Beam Array Theta",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.2352,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.21,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/phase.webp"
+            }
+          ],
+          [
+            {
+              "module": "Cb",
+              "label": "Medusa-Class Reactor Tau",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.2461,
+              "adjacency_bonus": 0.07,
+              "bonus": 0.23,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "cockpit",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "corvette/medusa.webp"
+            },
+            {
+              "module": "LT",
+              "label": "Launch Thruster",
+              "value": 0,
+              "type": "core",
+              "total": 0.0102,
+              "adjacency_bonus": 0.0002,
+              "bonus": 0.01,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/launch.webp"
+            },
+            {
+              "module": "La",
+              "label": "Thunderbird Landing Thruster Theta",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.0366,
+              "adjacency_bonus": 0.22,
+              "bonus": 0.03,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/landing.webp"
+            },
+            {
+              "module": "Lb",
+              "label": "Thunderbird Landing Thruster Tau",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.03422,
+              "adjacency_bonus": 0.18,
+              "bonus": 0.029,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/landing.webp"
+            },
+            {
+              "module": "Ba",
+              "label": "Arcadia Heavy Booster Theta",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 1.2036,
+              "adjacency_bonus": 0.18,
+              "bonus": 1.02,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/booster.webp"
+            },
+            {
+              "module": "Xa",
+              "label": "Pulse Engine Upgrade Theta",
+              "value": 0,
+              "type": "upgrade",
+              "total": 1.7669999999999997,
+              "adjacency_bonus": 0.24,
+              "bonus": 1.14,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": true,
+              "sc_eligible": true,
+              "image": "starship/pulse-upgrade.webp"
+            },
+            {
+              "module": "Xc",
+              "label": "Pulse Engine Upgrade Sigma",
+              "value": 0,
+              "type": "upgrade",
+              "total": 1.3216,
+              "adjacency_bonus": 0.18,
+              "bonus": 1.12,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/pulse-upgrade.webp"
+            },
+            {
+              "module": "FD",
+              "label": "Fourier De-Limiter",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.07280700000000001,
+              "adjacency_bonus": 0.040100000000000004,
+              "bonus": 0.07,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/fourier.webp"
+            },
+            {
+              "module": "Xb",
+              "label": "Phase Beam Upgrade Tau",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.4719,
+              "adjacency_bonus": 0.21,
+              "bonus": 0.39,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/phase-upgrade.webp"
+            },
+            {
+              "module": "Xa",
+              "label": "Phase Beam Upgrade Theta",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.5900000000000001,
+              "adjacency_bonus": 0.18,
+              "bonus": 0.4,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": true,
+              "sc_eligible": true,
+              "image": "starship/phase-upgrade.webp"
+            }
+          ],
+          [
+            {
+              "module": "Hc",
+              "label": "Habitation Module Sigma",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.321,
+              "adjacency_bonus": 0.07,
+              "bonus": 0.3,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "habitation",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/habitation.webp"
+            },
+            {
+              "module": "EF",
+              "label": "Efficient Thrusters",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.1,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/efficient.webp"
+            },
+            {
+              "module": "Lc",
+              "label": "Mag-Field Landing Thruster Sigma",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.03304,
+              "adjacency_bonus": 0.18,
+              "bonus": 0.028,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/mag-field.webp"
+            },
+            {
+              "module": "Ac",
+              "label": "Azimuth-Class Reactor Sigma",
+              "value": 0,
+              "type": "reactor",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "launch",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "corvette/azimuth.webp"
+            },
+            {
+              "module": "Bb",
+              "label": "Arcadia Heavy Booster Tau",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 1.18204,
+              "adjacency_bonus": 0.16,
+              "bonus": 1.019,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/booster.webp"
+            },
+            {
+              "module": "FA",
+              "label": "Flight Assist Override",
+              "value": 0,
+              "type": "bonus",
+              "total": 1.2626,
+              "adjacency_bonus": 0.18,
+              "bonus": 1.07,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/flight-assist.webp"
+            },
+            {
+              "module": "Xb",
+              "label": "Pulse Engine Upgrade Tau",
+              "value": 0,
+              "type": "upgrade",
+              "total": 1.66675,
+              "adjacency_bonus": 0.18,
+              "bonus": 1.13,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": true,
+              "sc_eligible": true,
+              "image": "starship/pulse-upgrade.webp"
+            },
+            {
+              "module": "PB",
+              "label": "Phase Beam",
+              "value": 0,
+              "type": "core",
+              "total": 1.287625,
+              "adjacency_bonus": 0.0301,
+              "bonus": 1,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "phase",
+              "supercharged": true,
+              "sc_eligible": true,
+              "image": "starship/phase-beam.webp"
+            },
+            {
+              "module": "Xc",
+              "label": "Phase Beam Upgrade Sigma",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.4408,
+              "adjacency_bonus": 0.16,
+              "bonus": 0.38,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/phase-upgrade.webp"
+            },
+            {
+              "module": "Cc",
+              "label": "Phase Beam Array Sigma",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.224,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.2,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "phase",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/phase.webp"
+            }
+          ],
+          [
+            {
+              "module": "Ha",
+              "label": "Habitation Module Theta",
+              "value": 0,
+              "type": "core",
+              "total": 0.42,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.3,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "habitation",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/habitation.webp"
+            },
+            {
+              "module": "Hb",
+              "label": "Habitation Module Tau",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.321,
+              "adjacency_bonus": 0.07,
+              "bonus": 0.3,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "habitation",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/habitation.webp"
+            },
+            {
+              "module": "AA",
+              "label": "Ablative Armor",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.07700000000000001,
+              "adjacency_bonus": 0.1,
+              "bonus": 0.07,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "shield",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/ablative.webp"
+            },
+            {
+              "module": "Ca",
+              "label": "Ion Barrier Theta",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.112,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.1,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "shield",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/ion.webp"
+            },
+            {
+              "module": "PE",
+              "label": "Pulse Engine",
+              "value": 0,
+              "type": "core",
+              "total": 0.99,
+              "adjacency_bonus": -0.01,
+              "bonus": 1,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/pulse.webp"
+            },
+            {
+              "module": "RT",
+              "label": "Chromatic Starship Trail [p1]",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.06,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/chromatic-trail.webp"
+            },
+            {
+              "module": "ID",
+              "label": "Instability Drive",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.06,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "pulse",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/instability.webp"
+            },
+            {
+              "module": "AD",
+              "label": "Atlantid Drive",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.040100000000000004,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/atlantid.webp"
+            },
+            {
+              "module": "Xc",
+              "label": "Hyperdrive Upgrade Sigma",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.345,
+              "adjacency_bonus": 0.15,
+              "bonus": 0.3,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/hyper-upgrade.webp"
+            },
+            {
+              "module": "Zb",
+              "label": "Zenith-Class Reactor Tau",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.2016,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.18,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/zenith.webp"
+            }
+          ],
+          [
+            {
+              "module": "CS",
+              "label": "Conflict Scanner",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "no_adjacency",
+              "tech": "conflict_scanner",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/conflict.webp"
+            },
+            {
+              "module": "CD",
+              "label": "Cargo Scan Deflector",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "no_adjacency",
+              "tech": "cargo_scanner",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/cargo.webp"
+            },
+            {
+              "module": "DS",
+              "label": "Defensive Shields",
+              "value": 0,
+              "type": "core",
+              "total": 1.0002,
+              "adjacency_bonus": 0.0002,
+              "bonus": 1,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "shield",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/shield.webp"
+            },
+            {
+              "module": "Cb",
+              "label": "Deflector Shield Tau",
+              "value": 0,
+              "type": "cosmetic",
+              "total": 0.09899999999999999,
+              "adjacency_bonus": 0.1,
+              "bonus": 0.09,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "shield",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/deflector.webp"
+            },
+            {
+              "module": "GT",
+              "label": "Golden Starship Trail [p5]",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/golden-trail.webp"
+            },
+            {
+              "module": "PB",
+              "label": "Polo Figurine",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.0744,
+              "adjacency_bonus": 0.24,
+              "bonus": 0.06,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/polo.webp"
+            },
+            {
+              "module": "ST",
+              "label": "Stealth Starship Trail [p4]",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/stealth-trail.webp"
+            },
+            {
+              "module": "HD",
+              "label": "Hyperdrive",
+              "value": 0,
+              "type": "core",
+              "total": 0.0401,
+              "adjacency_bonus": 0.0301,
+              "bonus": 0.01,
+              "active": true,
+              "adjacency": "lesser",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/hyperdrive.webp"
+            },
+            {
+              "module": "Xa",
+              "label": "Hyperdrive Upgrade Theta",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.3904,
+              "adjacency_bonus": 0.22,
+              "bonus": 0.32,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/hyper-upgrade.webp"
+            },
+            {
+              "module": "Xb",
+              "label": "Hyperdrive Upgrade Tau",
+              "value": 0,
+              "type": "upgrade",
+              "total": 0.3658,
+              "adjacency_bonus": 0.18,
+              "bonus": 0.31,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/hyper-upgrade.webp"
+            }
+          ],
+          [
+            {
+              "module": "PC",
+              "label": "Photon Cannon",
+              "value": 0,
+              "type": "core",
+              "total": 1,
+              "adjacency_bonus": 0,
+              "bonus": 1,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "photon",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/photon.webp",
+              "module_position": [
+                0,
+                5
+              ]
+            },
+            {
+              "module": "ES",
+              "label": "Economy Scanner",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "no_adjacency",
+              "tech": "economy_scanner",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/economy.webp"
+            },
+            {
+              "module": "Cb",
+              "label": "Ceto-Class Reactor Tau",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.18020000000000003,
+              "adjacency_bonus": 0.06,
+              "bonus": 0.17,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "ceto",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/ceto.webp"
+            },
+            {
+              "module": "Ca",
+              "label": "Ceto-Class Reactor Theta",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.10600000000000001,
+              "adjacency_bonus": 0.06,
+              "bonus": 0.1,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "ceto",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/ceto.webp"
+            },
+            {
+              "module": "CT",
+              "label": "Cadmium Starship Trail [p2]",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/cadmium-trail.webp"
+            },
+            {
+              "module": "AB",
+              "label": "Artemis Figurine",
+              "value": 0,
+              "type": "bonus",
+              "total": 0.059000000000000004,
+              "adjacency_bonus": 0.18,
+              "bonus": 0.05,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "starship/artemis.webp"
+            },
+            {
+              "module": "ET",
+              "label": "Emeril Starship Trail [p3]",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0.12,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "trails",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/emeril-trail.webp"
+            },
+            {
+              "module": "AJ",
+              "label": "Aqua-Jets",
+              "value": 0,
+              "type": "bonus",
+              "total": 0,
+              "adjacency_bonus": 0,
+              "bonus": 0,
+              "active": true,
+              "adjacency": "no_adjacency",
+              "tech": "aqua",
+              "supercharged": false,
+              "sc_eligible": false,
+              "image": "starship/aquajets.webp"
+            },
+            {
+              "module": "Zc",
+              "label": "Zenith-Class Reactor Sigma",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.1904,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.17,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/zenith.webp"
+            },
+            {
+              "module": "Za",
+              "label": "Zenith-Class Reactor Theta",
+              "value": 0,
+              "type": "reactor",
+              "total": 0.2128,
+              "adjacency_bonus": 0.12,
+              "bonus": 0.19,
+              "active": true,
+              "adjacency": "greater",
+              "tech": "hyper",
+              "supercharged": false,
+              "sc_eligible": true,
+              "image": "corvette/zenith.webp"
+            }
+          ]
+        ]
+      },
+      "max_bonus": 30.35,
+      "solved_bonus": 1,
+      "solve_method": "Partial Set SA Pattern Match",
+      "run_id": "78d1fdab-46cc-4265-af27-ecbf4ca0f55f"
+    },
+    "isSharedGrid": false,
+    "gridFixed": false,
+    "superchargedFixed": false,
+    "initialGridDefinition": {
+      "grid": [
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ],
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ],
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ],
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ],
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ],
+        [
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          },
+          {
+            "active": true
+          }
+        ]
+      ],
+      "gridFixed": false,
+      "superchargedFixed": false
+    }
+  },
+  "techState": {
+    "checkedModules": {
+      "shield": [
+        "DS",
+        "AA",
+        "Ca",
+        "Cb"
+      ],
+      "ceto": [
+        "Ca",
+        "Cb"
+      ],
+      "hyper": [
+        "HD",
+        "AD",
+        "Za",
+        "Zb",
+        "Zc",
+        "Xa",
+        "Xb",
+        "Xc"
+      ],
+      "cockpit": [
+        "CP",
+        "Ca",
+        "Cb"
+      ],
+      "launch": [
+        "LT",
+        "EF",
+        "La",
+        "Lb",
+        "Lc",
+        "Aa",
+        "Ab",
+        "Ac"
+      ],
+      "pulse": [
+        "FA",
+        "SL",
+        "ID",
+        "Xa",
+        "Xb",
+        "Xc",
+        "Ba",
+        "Bb",
+        "Bc",
+        "PC",
+        "PE"
+      ],
+      "habitation": [
+        "Ha",
+        "Hb",
+        "Hc"
+      ],
+      "aqua": [
+        "AJ"
+      ],
+      "bobble": [
+        "AP",
+        "AT",
+        "NA",
+        "NB"
+      ],
+      "conflict_scanner": [
+        "CS"
+      ],
+      "economy_scanner": [
+        "ES"
+      ],
+      "cargo_scanner": [
+        "CD"
+      ],
+      "trails": [
+        "AB",
+        "PB",
+        "RT",
+        "CT",
+        "ET",
+        "GT",
+        "ST"
+      ],
+      "teleporter": [
+        "TP"
+      ],
+      "cyclotron": [
+        "CB",
+        "QR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "infra": [
+        "IK",
+        "QR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "phase": [
+        "FD",
+        "Xa",
+        "Xb",
+        "Xc",
+        "Ca",
+        "Cb",
+        "Cc",
+        "PB"
+      ],
+      "photon": [
+        "PC"
+      ],
+      "positron": [
+        "PE",
+        "FS",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "rocket": [
+        "RL",
+        "LR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ]
+    },
+    "max_bonus": {
+      "photon": 30.35
+    },
+    "solved_bonus": {
+      "photon": 1
+    },
+    "solve_method": {
+      "photon": "Partial Set SA Pattern Match"
+    }
+  },
+  "bonusState": {
+    "bonusStatus": {
+      "phase": {
+        "icon": "lightning",
+        "percent": 11.78,
+        "iconClassName": "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--amber-a8)"
+        },
+        "tooltipContent": "Boosted solve! +11.78%"
+      },
+      "pulse": {
+        "icon": "lightning",
+        "percent": 6.16,
+        "iconClassName": "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--amber-a8)"
+        },
+        "tooltipContent": "Boosted solve! +6.16%"
+      },
+      "hyper": {
+        "icon": "warning",
+        "percent": 4.63,
+        "iconClassName": "mt-2 inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--red-a8)"
+        },
+        "tooltipContent": "Incomplete Solve! -4.63%"
+      },
+      "shield": {
+        "icon": "warning",
+        "percent": 46.74,
+        "iconClassName": "mt-2 inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--red-a8)"
+        },
+        "tooltipContent": "Incomplete Solve! -46.74%"
+      },
+      "launch": {
+        "icon": "warning",
+        "percent": 90.29,
+        "iconClassName": "mt-2 inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--red-a8)"
+        },
+        "tooltipContent": "Incomplete Solve! -90.29%"
+      },
+      "trails": {
+        "icon": "check",
+        "percent": 0,
+        "iconClassName": "mt-[7px] inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--gray-a10)"
+        },
+        "tooltipContent": "Valid solve! "
+      },
+      "ceto": {
+        "icon": "warning",
+        "percent": 30.7,
+        "iconClassName": "mt-2 inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--red-a8)"
+        },
+        "tooltipContent": "Incomplete Solve! -30.7%"
+      },
+      "cockpit": {
+        "icon": "check",
+        "percent": 0,
+        "iconClassName": "mt-[7px] inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--gray-a10)"
+        },
+        "tooltipContent": "Valid solve! "
+      },
+      "habitation": {
+        "icon": "check",
+        "percent": 0,
+        "iconClassName": "mt-[7px] inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--gray-a10)"
+        },
+        "tooltipContent": "Valid solve! "
+      },
+      "photon": {
+        "icon": "warning",
+        "percent": 69.65,
+        "iconClassName": "mt-2 inline-block cursor-pointer align-text-top",
+        "iconStyle": {
+          "color": "var(--red-a8)"
+        },
+        "tooltipContent": "Incomplete Solve! -69.65%"
+      }
+    }
+  },
+  "moduleState": {
+    "moduleSelections": {
+      "ceto": [
+        "Ca",
+        "Cb"
+      ],
+      "shield": [
+        "DS",
+        "AA",
+        "Ca",
+        "Cb"
+      ],
+      "cockpit": [
+        "CP",
+        "Ca",
+        "Cb"
+      ],
+      "hyper": [
+        "HD",
+        "AD",
+        "Za",
+        "Zb",
+        "Zc",
+        "Xa",
+        "Xb",
+        "Xc"
+      ],
+      "launch": [
+        "LT",
+        "EF",
+        "La",
+        "Lb",
+        "Lc",
+        "Aa",
+        "Ab",
+        "Ac"
+      ],
+      "pulse": [
+        "FA",
+        "SL",
+        "ID",
+        "Xa",
+        "Xb",
+        "Xc",
+        "Ba",
+        "Bb",
+        "Bc",
+        "PC",
+        "PE"
+      ],
+      "aqua": [
+        "AJ"
+      ],
+      "cargo_scanner": [
+        "CD"
+      ],
+      "conflict_scanner": [
+        "CS"
+      ],
+      "economy_scanner": [
+        "ES"
+      ],
+      "bobble": [
+        "AP",
+        "AT",
+        "NA",
+        "NB"
+      ],
+      "habitation": [
+        "Ha",
+        "Hb",
+        "Hc"
+      ],
+      "trails": [
+        "AB",
+        "PB",
+        "RT",
+        "CT",
+        "ET",
+        "GT",
+        "ST"
+      ],
+      "teleporter": [
+        "TP"
+      ],
+      "cyclotron": [
+        "CB",
+        "QR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "infra": [
+        "IK",
+        "QR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "phase": [
+        "FD",
+        "Xa",
+        "Xb",
+        "Xc",
+        "Ca",
+        "Cb",
+        "Cc",
+        "PB"
+      ],
+      "photon": [
+        "PC"
+      ],
+      "positron": [
+        "PE",
+        "FS",
+        "Ca",
+        "Cb",
+        "Cc"
+      ],
+      "rocket": [
+        "RL",
+        "LR",
+        "Ca",
+        "Cb",
+        "Cc"
+      ]
+    }
+  }
+}
