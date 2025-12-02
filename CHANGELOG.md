@@ -1,3 +1,10 @@
+## [6.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.4...v6.3.5) (2025-12-02)
+
+
+### Bug Fixes
+
+* **ui:** align mobile background and panel colors with theme ([44333df](https://github.com/jbelew/nms_optimizer-web/commit/44333df39c4ed3ed832bc42ce711fccb80d3e2ff))
+
 ## [6.3.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.3...v6.3.4) (2025-11-29)
 
 
