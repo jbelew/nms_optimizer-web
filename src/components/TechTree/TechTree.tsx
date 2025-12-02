@@ -71,7 +71,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 						className="main-app__tech-tree-sidebar shadow-sm"
 						style={{
 							height: scrollAreaHeight,
-							backgroundColor: "var(--color-panel-translucent)",
+							backgroundColor: "var(--accent-a3)",
 							padding: "var(--space-5)",
 							borderRadius: "var(--radius-5)",
 						}}
