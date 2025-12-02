@@ -1,3 +1,10 @@
+## [6.3.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.5...v6.3.6) (2025-12-02)
+
+
+### Bug Fixes
+
+* **theme:** Implement translucent UI panels and refined mobile background ([2d4d09d](https://github.com/jbelew/nms_optimizer-web/commit/2d4d09d4aa1fe451f5cf8e5a0c4ac0bedaa7ed23))
+
 ## [6.3.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.4...v6.3.5) (2025-12-02)
 
 
