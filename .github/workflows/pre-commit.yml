@@ -1,31 +1,34 @@
 name: Pre-Commit Checks
 
 on:
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  pre-commit-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+    pre-commit-checks:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "lts/*"
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Run pre-commit checks
-        run: |
-          npm run format:check
-          npm run lint
-          npm run lint:css
-          npm run typecheck
-          npm run test:ci
+            - name: Run pre-commit checks
+              run: |
+                  npm run format:check
+                  npm run lint
+                  npm run lint:css
+                  npm run typecheck
+                  npm run test:ci
+
+            - name: Build application (verification)
+              run: npm run build
