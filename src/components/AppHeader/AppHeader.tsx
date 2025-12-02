@@ -116,7 +116,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-							<Flex align="center" gap="2">
+							<Flex align="center" gap="1">
 								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
 								<Switch
 									variant="soft"

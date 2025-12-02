@@ -130,7 +130,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					<LanguageSelector />
 
 					{/* A11y mode switch */}
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-1">
 						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
 						<Switch
 							variant="soft"
