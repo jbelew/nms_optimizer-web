@@ -147,6 +147,12 @@
 		}
 	}
 
+	@media (width >= 640px) {
+		&--supercharged {
+			border-width: 2px;
+		}
+	}
+
 	&--black {
 		background-color: var(--gray-a3);
 		border-color: var(--gray-6);
