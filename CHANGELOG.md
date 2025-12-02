@@ -1,3 +1,10 @@
+## [6.3.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.10...v6.3.11) (2025-12-02)
+
+
+### Bug Fixes
+
+* **layout:** Reduce spacing for accessibility toggle ([b833a6c](https://github.com/jbelew/nms_optimizer-web/commit/b833a6c0997deb1f604e538c35e33d27868e56f7))
+
 ## [6.3.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.9...v6.3.10) (2025-12-02)
 
 
