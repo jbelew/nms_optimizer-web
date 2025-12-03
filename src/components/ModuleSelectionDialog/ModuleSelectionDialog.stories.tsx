@@ -8,17 +8,6 @@ import { ModuleSelectionDialog } from "./index";
 
 import "./ModuleSelectionDialog.scss";
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
 // Helper function to group modules, adapted from useTechModuleManagement.ts
 const groupModules = (modules: Module[]): GroupedModules => {
 	const groups: GroupedModules = {
@@ -124,41 +113,20 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultLight: Story = {
+export const Default: Story = {
 	args: {
 		translatedTechName: "Hyperdrive",
 		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
 		techColor: "blue",
 		techImage: "starship/hyper.webp",
 	},
-	decorators: [(Story) => withRadixTheme("light")(Story)],
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
 };
 
-export const DefaultDark: Story = {
+export const Corvette: Story = {
 	args: {
 		translatedTechName: "Hyperdrive",
 		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
 		techColor: "blue",
-		techImage: "starship/hyper.webp",
-	},
-	decorators: [(Story) => withRadixTheme("dark")(Story)],
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-};
-
-export const CorvetteHyperdriveLight: Story = {
-	args: {
-		...DefaultLight.args,
 		techImage: "starship/hyper.webp",
 	},
 	decorators: [
@@ -167,52 +135,7 @@ export const CorvetteHyperdriveLight: Story = {
 
 			return <Story />;
 		},
-		(Story) => withRadixTheme("light")(Story),
 	],
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-	loaders: [
-		async () => {
-			const response = await fetch(
-				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/corvette"
-			);
-			const techTree: Record<string, { key: string; modules: Module[] }[]> =
-				await response.json();
-			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
-			const modules = hyperdriveTech.modules;
-			const groupedModules = groupModules(modules);
-			const initialChecked = modules
-				.filter((m: Module) => m.checked)
-				.map((m: Module) => m.id);
-
-			return { groupedModules, modules, initialChecked };
-		},
-	],
-};
-
-export const CorvetteDark: Story = {
-	args: {
-		...DefaultDark.args,
-		techImage: "starship/hyper.webp",
-	},
-	decorators: [
-		(Story) => {
-			usePlatformStore.setState({ selectedPlatform: "corvette" });
-
-			return <Story />;
-		},
-		(Story) => withRadixTheme("dark")(Story),
-	],
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
 	loaders: [
 		async () => {
 			const response = await fetch(

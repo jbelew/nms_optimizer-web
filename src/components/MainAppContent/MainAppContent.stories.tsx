@@ -126,31 +126,17 @@ const withLocalProviders =
 		</Toast.Provider>
 	);
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
-export const DesktopLight: Story = {
+export const Desktop: Story = {
 	args: {
 		buildVersion: "1.0.0",
 		buildDate: "2024-11-25",
 	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("light"),
-	],
+	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
 	render: (args) => <MainAppContent {...args} />,
 	parameters: {
 		docs: {
 			description: {
-				story: "Main application view with empty grid and tech tree in Light Mode. Standard layout for desktop users.",
+				story: "Main application view with empty grid and tech tree. Standard layout for desktop users.",
 			},
 		},
 	},
@@ -163,45 +149,16 @@ export const DesktopLight: Story = {
 	loaders: meta.loaders,
 };
 
-export const DesktopDark: Story = {
+export const Tablet: Story = {
 	args: {
-		buildVersion: "1.0.0",
-		buildDate: "2024-11-25",
+		...Desktop.args,
 	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("dark"),
-	],
-	render: (args) => <MainAppContent {...args} />,
+	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
+	render: Desktop.render,
 	parameters: {
 		docs: {
 			description: {
-				story: "Main application view with empty grid and tech tree in Dark Mode. Standard layout for desktop users.",
-			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
-};
-
-export const TabletLight: Story = {
-	args: {
-		...DesktopLight.args,
-	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("light"),
-	],
-	render: DesktopLight.render,
-	parameters: {
-		docs: {
-			description: {
-				story: "Main application view on a tablet device (iPad) in Light Mode.",
+				story: "Main application view on a tablet device (iPad).",
 			},
 		},
 	},
@@ -214,69 +171,16 @@ export const TabletLight: Story = {
 	loaders: meta.loaders,
 };
 
-export const TabletDark: Story = {
+export const Mobile: Story = {
 	args: {
-		...DesktopDark.args,
+		...Desktop.args,
 	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("dark"),
-	],
-	render: DesktopDark.render,
+	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
+	render: Desktop.render,
 	parameters: {
 		docs: {
 			description: {
-				story: "Main application view on a tablet device (iPad) in Dark Mode.",
-			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "tablet",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
-};
-
-export const MobileLight: Story = {
-	args: {
-		...DesktopLight.args,
-	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("light"),
-	],
-	render: DesktopLight.render,
-	parameters: {
-		docs: {
-			description: {
-				story: "Main application view on a mobile device in Light Mode.",
-			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "mobile",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
-};
-
-export const MobileDark: Story = {
-	args: {
-		...DesktopDark.args,
-	},
-	decorators: [
-		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
-		withRadixTheme("dark"),
-	],
-	render: DesktopDark.render,
-	parameters: {
-		docs: {
-			description: {
-				story: "Main application view on a mobile device in Dark Mode.",
+				story: "Main application view on a mobile device.",
 			},
 		},
 	},

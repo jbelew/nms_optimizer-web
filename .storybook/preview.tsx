@@ -61,6 +61,37 @@ import "../src/index.css";
 import "../src/components/Toast/Toast.scss";
 import "../src/assets/css/fonts.css";
 
+import { StoreResetWrapper, ThemeWrapper } from "./decorators";
+
+export const globalTypes = {
+	theme: {
+		description: "Global theme for components",
+		defaultValue: "light",
+		toolbar: {
+			title: "Theme",
+			icon: "circlehollow",
+			items: ["light", "dark"],
+			dynamicTitle: true,
+		},
+	},
+};
+
+const withTheme: Decorator = (Story, context) => {
+	return (
+		<ThemeWrapper theme={context.globals.theme}>
+			<Story />
+		</ThemeWrapper>
+	);
+};
+
+const withStoreReset: Decorator = (Story) => {
+	return (
+		<StoreResetWrapper>
+			<Story />
+		</StoreResetWrapper>
+	);
+};
+
 const withGlobalProviders: Decorator = (Story) => {
 	return (
 		<BrowserRouter>
@@ -79,7 +110,7 @@ const withGlobalProviders: Decorator = (Story) => {
 };
 
 const preview: Preview = {
-	decorators: [withGlobalProviders],
+	decorators: [withGlobalProviders, withTheme, withStoreReset],
 	parameters: {
 		viewport: {
 			options: customViewports,

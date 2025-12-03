@@ -6,17 +6,6 @@ import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
 const meta = {
 	component: GridTableButtons,
 	title: "Components/GridTableButtons",
@@ -58,38 +47,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultLight: Story = {
+export const Default: Story = {
 	args: {},
-	decorators: [(Story) => withRadixTheme("light")(Story)],
 	parameters: {
 		docs: {
 			description: {
 				story: "Grid buttons in default state with all controls available.",
 			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-};
-
-export const DefaultDark: Story = {
-	args: {},
-	decorators: [(Story) => withRadixTheme("dark")(Story)],
-	parameters: {
-		docs: {
-			description: {
-				story: "Grid buttons in default state with all controls available.",
-			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
 		},
 	},
 };

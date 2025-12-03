@@ -2,17 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import BuildNameDialog from "./BuildNameDialog";
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
 const meta = {
 	component: BuildNameDialog,
 	title: "Components/AppDialog/BuildNameDialog",
@@ -42,33 +31,16 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultLight: Story = {
+export const Default: Story = {
 	args: {
 		isOpen: true,
 		onConfirm: (name: string) => console.log("Build saved as:", name),
 		onCancel: () => console.log("Cancelled"),
 	},
-	decorators: [(Story) => withRadixTheme("light")(Story)],
 	parameters: {
 		docs: {
 			description: {
-				story: "Build Name Dialog in light mode.",
-			},
-		},
-	},
-};
-
-export const DefaultDark: Story = {
-	args: {
-		isOpen: true,
-		onConfirm: (name: string) => console.log("Build saved as:", name),
-		onCancel: () => console.log("Cancelled"),
-	},
-	decorators: [(Story) => withRadixTheme("dark")(Story)],
-	parameters: {
-		docs: {
-			description: {
-				story: "Build Name Dialog in dark mode.",
+				story: "Build Name Dialog.",
 			},
 		},
 	},

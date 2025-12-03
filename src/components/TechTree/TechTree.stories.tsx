@@ -4,17 +4,6 @@ import { create } from "zustand";
 import { PlatformState, usePlatformStore } from "../../store/PlatformStore";
 import TechTree from "./TechTree";
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
 // Mock Zustand store
 const mockPlatformStore = create<PlatformState>(() => ({
 	platforms: ["standard", "hauler"],
@@ -66,17 +55,15 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultLight: Story = {
+export const Desktop: Story = {
 	args: {
+		gridTableTotalWidth: 400,
+		techTree: {},
 		handleOptimize: async (tech: string) => {
 			console.log(`Optimizing ${tech}`);
 		},
-
 		solving: false,
-		gridTableTotalWidth: 400,
-		techTree: {},
 	},
-	decorators: [(Story) => withRadixTheme("light")(Story)],
 	render: (args, { loaded }) => <TechTree {...args} {...loaded} />,
 	globals: {
 		viewport: {
@@ -84,24 +71,11 @@ export const DefaultLight: Story = {
 			isRotated: false,
 		},
 	},
-};
-
-export const DefaultDark: Story = {
-	args: {
-		handleOptimize: async (tech: string) => {
-			console.log(`Optimizing ${tech}`);
-		},
-
-		solving: false,
-		gridTableTotalWidth: 400,
-		techTree: {},
-	},
-	decorators: [(Story) => withRadixTheme("dark")(Story)],
-	render: (args, { loaded }) => <TechTree {...args} {...loaded} />,
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
+	parameters: {
+		docs: {
+			description: {
+				story: "Tech tree component.",
+			},
 		},
 	},
 };

@@ -4,17 +4,6 @@ import * as Toast from "@radix-ui/react-toast";
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { ShipSelection } from "./ShipSelection";
 
-// Decorator for setting Radix UI theme
-const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
-	if (theme === "dark") {
-		document.documentElement.classList.add("dark");
-	} else {
-		document.documentElement.classList.remove("dark");
-	}
-
-	return <Story />;
-};
-
 const meta = {
 	component: ShipSelection,
 	title: "Components/ShipSelection",
@@ -67,42 +56,15 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DefaultLight: Story = {
+export const Default: Story = {
 	args: {
 		solving: false,
 	},
-	decorators: [(Story) => withRadixTheme("light")(Story)],
 	parameters: {
 		docs: {
 			description: {
 				story: "Ship selection dropdown ready for user interaction.",
 			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-};
-
-export const DefaultDark: Story = {
-	args: {
-		solving: false,
-	},
-	decorators: [(Story) => withRadixTheme("dark")(Story)],
-	parameters: {
-		docs: {
-			description: {
-				story: "Ship selection dropdown ready for user interaction.",
-			},
-		},
-	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
 		},
 	},
 };
