@@ -1,7 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Box } from "@radix-ui/themes";
 
 import ErrorBoundaryInset from "./ErrorBoundaryInset";
+
+// Decorator for setting Radix UI theme
+const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
+	if (theme === "dark") {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+
+	return <Story />;
+};
 
 const meta = {
 	component: ErrorBoundaryInset,
@@ -36,10 +48,33 @@ const ErrorTrigger = () => {
 	);
 };
 
-export const InTechTreeLayout: Story = {
+export const InTechTreeLayoutLight: Story = {
 	render: () => <TechTreeContainerMock />,
 	args: {
 		children: null,
+	},
+	decorators: [(Story) => withRadixTheme("light")(Story)],
+	parameters: {
+		docs: {
+			description: {
+				story: "Error boundary inset within tech tree layout in light mode.",
+			},
+		},
+	},
+};
+
+export const InTechTreeLayoutDark: Story = {
+	render: () => <TechTreeContainerMock />,
+	args: {
+		children: null,
+	},
+	decorators: [(Story) => withRadixTheme("dark")(Story)],
+	parameters: {
+		docs: {
+			description: {
+				story: "Error boundary inset within tech tree layout in dark mode.",
+			},
+		},
 	},
 };
 
@@ -60,9 +95,32 @@ const ErrorWithComponentStack = () => {
 	throw error;
 };
 
-export const WithLongStackTrace: Story = {
+export const WithLongStackTraceLight: Story = {
 	render: () => <TechTreeWithLongError />,
 	args: {
 		children: null,
+	},
+	decorators: [(Story) => withRadixTheme("light")(Story)],
+	parameters: {
+		docs: {
+			description: {
+				story: "Error boundary inset with long stack trace in light mode.",
+			},
+		},
+	},
+};
+
+export const WithLongStackTraceDark: Story = {
+	render: () => <TechTreeWithLongError />,
+	args: {
+		children: null,
+	},
+	decorators: [(Story) => withRadixTheme("dark")(Story)],
+	parameters: {
+		docs: {
+			description: {
+				story: "Error boundary inset with long stack trace in dark mode.",
+			},
+		},
 	},
 };

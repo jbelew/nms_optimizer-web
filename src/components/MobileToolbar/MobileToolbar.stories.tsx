@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 
-import { InstallPrompt } from "./InstallPrompt";
+import { MobileToolbar } from "./MobileToolbar";
 
 // Decorator for setting Radix UI theme
 const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
@@ -14,12 +15,12 @@ const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
 };
 
 const meta = {
-	component: InstallPrompt,
-	title: "Components/InstallPrompt",
+	component: MobileToolbar,
+	title: "Components/MobileToolbar",
 	parameters: {
 		docs: {
 			description: {
-				component: "Prompt to ask user to install the app as a PWA.",
+				component: "Mobile toolbar for grid operations and utility actions.",
 			},
 		},
 	},
@@ -35,7 +36,7 @@ const meta = {
 			);
 		},
 	],
-} satisfies Meta<typeof InstallPrompt>;
+} satisfies Meta<typeof MobileToolbar>;
 
 export default meta;
 
@@ -43,13 +44,18 @@ type Story = StoryObj<typeof meta>;
 
 export const DefaultLight: Story = {
 	args: {
-		onDismiss: () => console.log("Install prompt dismissed"),
+		isVisible: true,
+		solving: false,
+		hasModulesInGrid: true,
+		onLoadBuild: () => console.log("Load Build"),
+		onSaveBuild: () => console.log("Save Build"),
+		onShowChangelog: () => console.log("Show Changelog"),
 	},
 	decorators: [(Story) => withRadixTheme("light")(Story)],
 	parameters: {
 		docs: {
 			description: {
-				story: "Install prompt in light mode.",
+				story: "Mobile Toolbar in light mode.",
 			},
 		},
 	},
@@ -57,13 +63,18 @@ export const DefaultLight: Story = {
 
 export const DefaultDark: Story = {
 	args: {
-		onDismiss: () => console.log("Install prompt dismissed"),
+		isVisible: true,
+		solving: false,
+		hasModulesInGrid: true,
+		onLoadBuild: () => console.log("Load Build"),
+		onSaveBuild: () => console.log("Save Build"),
+		onShowChangelog: () => console.log("Show Changelog"),
 	},
 	decorators: [(Story) => withRadixTheme("dark")(Story)],
 	parameters: {
 		docs: {
 			description: {
-				story: "Install prompt in dark mode.",
+				story: "Mobile Toolbar in dark mode.",
 			},
 		},
 	},

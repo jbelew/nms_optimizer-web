@@ -7,6 +7,17 @@ import { createGrid, useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { GridTable } from "./GridTable";
 
+// Decorator for setting Radix UI theme
+const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
+	if (theme === "dark") {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+
+	return <Story />;
+};
+
 const meta = {
 	component: GridTable,
 	decorators: [
@@ -46,18 +57,62 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const DefaultLight: Story = {
 	args: {
 		solving: false,
 		progressPercent: 0,
 		shared: false,
 	},
+	decorators: [(Story) => withRadixTheme("light")(Story)],
+	globals: {
+		viewport: {
+			value: "desktop",
+			isRotated: false,
+		},
+	},
 };
 
-export const Solving: Story = {
+export const DefaultDark: Story = {
+	args: {
+		solving: false,
+		progressPercent: 0,
+		shared: false,
+	},
+	decorators: [(Story) => withRadixTheme("dark")(Story)],
+	globals: {
+		viewport: {
+			value: "desktop",
+			isRotated: false,
+		},
+	},
+};
+
+export const SolvingLight: Story = {
 	args: {
 		solving: true,
 		progressPercent: 45,
 		shared: false,
+	},
+	decorators: [(Story) => withRadixTheme("light")(Story)],
+	globals: {
+		viewport: {
+			value: "desktop",
+			isRotated: false,
+		},
+	},
+};
+
+export const SolvingDark: Story = {
+	args: {
+		solving: true,
+		progressPercent: 45,
+		shared: false,
+	},
+	decorators: [(Story) => withRadixTheme("dark")(Story)],
+	globals: {
+		viewport: {
+			value: "desktop",
+			isRotated: false,
+		},
 	},
 };
