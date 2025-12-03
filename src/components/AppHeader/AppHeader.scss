@@ -65,6 +65,20 @@
 		}
 	}
 
+	&__logo-button {
+		align-items: center;
+		all: unset;
+		cursor: pointer;
+		display: inline-flex;
+		justify-content: center;
+
+		&:focus-visible {
+			border-radius: 2px;
+			outline: 2px solid var(--accent-9);
+			outline-offset: 2px;
+		}
+	}
+
 	&__logo-image {
 		color: var(--accent-track);
 		flex-shrink: 0;

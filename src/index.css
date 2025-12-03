@@ -198,3 +198,18 @@ h6 {
 	outline-offset: 2px;
 	/* Prevents outline from triggering repaint of adjacent elements */
 }
+
+/* ============================================ */
+/* RADIX UI ACCESSIBILITY FIXES                */
+/* ============================================ */
+
+/* Fix Radix UI focus guards: elements with aria-hidden should not be tabbable
+ * See: https://github.com/radix-ui/primitives/issues/1586 */
+[data-radix-focus-guard][aria-hidden="true"] {
+	/* Remove from tab order while keeping for programmatic focus management */
+	position: fixed !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+	/* Critically: make it not tabbable */
+	display: none !important;
+}

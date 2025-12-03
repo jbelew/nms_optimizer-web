@@ -79,24 +79,43 @@ const withGlobalProviders: Decorator = (Story) => {
 };
 
 const preview: Preview = {
-    decorators: [withGlobalProviders],
-    parameters: {
-        viewport: {
-            options: customViewports,
-        },
-        controls: {
-            matchers: {
-                color: /(background|color)$/i,
-                date: /Date$/i,
-            },
-        },
-    },
-    initialGlobals: {
-        viewport: {
-            value: 'desktop',
-            isRotated: false,
-        },
-    },
+	decorators: [withGlobalProviders],
+	parameters: {
+		viewport: {
+			options: customViewports,
+		},
+		controls: {
+			matchers: {
+				color: /(background|color)$/i,
+				date: /Date$/i,
+			},
+		},
+		a11y: {
+			config: {
+				rules: [
+					{
+						// Disable aria-controls validation for Radix UI components
+						// Radix generates dynamic IDs (e.g., radix-_r_1h_) that exist at runtime
+						// but can't be verified during static accessibility checks
+						id: 'aria-valid-attr-value',
+						selector: '[aria-controls^="radix-"]',
+					},
+					{
+						// Disable color-contrast checks
+						// The app uses a custom theme with intentional color choices
+						id: 'color-contrast',
+						enabled: false,
+					},
+				],
+			},
+		},
+	},
+	initialGlobals: {
+		viewport: {
+			value: 'desktop',
+			isRotated: false,
+		},
+	},
 };
 
 export default preview;

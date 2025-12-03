@@ -98,7 +98,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 								: fallbackImage;
 
 							return (
-								<div
+								<label
 									key={module.id}
 									className="mb-2 flex items-center gap-2 font-medium"
 								>
@@ -112,7 +112,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 										color={techColor}
 									/>
 									{module.label}
-								</div>
+								</label>
 							);
 						})}
 					</div>

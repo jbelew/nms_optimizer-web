@@ -143,12 +143,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 				<Popover.Root>
 					<Popover.Trigger>
-						<img
-							className="app-header__logo-image"
-							src={nmslogo}
-							alt="No Man's Sky Atlas Logo"
-							width="16"
-							height="20"
+						<button
+							type="button"
+							className="app-header__logo-button"
+							aria-label="Show easter egg coordinates"
 							onClick={() => {
 								sendEvent({
 									category: "ui",
@@ -156,7 +154,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									value: 1,
 								});
 							}}
-						/>
+						>
+							<img
+								className="app-header__logo-image"
+								src={nmslogo}
+								alt="No Man's Sky Atlas Logo"
+								width="16"
+								height="20"
+							/>
+						</button>
 					</Popover.Trigger>
 					<Popover.Content size="1">
 						<DataList.Root size="1">
