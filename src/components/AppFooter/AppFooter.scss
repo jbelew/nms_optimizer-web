@@ -25,17 +25,17 @@
 
 	&__link {
 		color: var(--accent-11);
-		font-weight: 500;
+		font-weight: 600;
 		text-decoration-line: underline;
 
 		&--icon {
-			color: var(--accent-track);
+			color: var(--accent-11);
 			display: inline;
 			margin-left: 0.25rem;
 		}
 
 		&--icon-linkedin {
-			color: var(--accent-track);
+			color: var(--accent-11);
 			display: inline;
 			margin-left: 0.25rem;
 			margin-right: 0.25rem;

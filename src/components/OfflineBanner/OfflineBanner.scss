@@ -2,7 +2,7 @@
 
 .offline {
 	align-items: center;
-	background-color: black;
+	background-color: var(--color-background);
 	display: flex;
 	flex-direction: column;
 	inset: 0;
@@ -24,7 +24,7 @@
 	}
 
 	&__title {
-		color: var(--amber-9);
+		color: var(--amber-11);
 		font-family: var(--font-family-geosans);
 		-webkit-text-stroke: 0.8px;
 	}

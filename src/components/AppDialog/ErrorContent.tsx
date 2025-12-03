@@ -39,6 +39,7 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 								target="_blank"
 								rel="noopener noreferrer"
 								underline="always"
+								weight="medium"
 							/>
 						),
 					}}

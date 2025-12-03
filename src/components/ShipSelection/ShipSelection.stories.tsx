@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
-import { withThemeAndTooltip } from "../../stories/decorators";
 import { ShipSelection } from "./ShipSelection";
 
 const meta = {
@@ -29,7 +28,6 @@ const meta = {
 				<Toast.Viewport className="ToastViewport" />
 			</Toast.Provider>
 		),
-		withThemeAndTooltip,
 	],
 	loaders: [
 		async () => {

@@ -26,6 +26,7 @@ const DefaultMessage = () => (
 			target="_blank"
 			rel="noopener noreferrer"
 			underline="always"
+			weight="medium"
 		>
 			filing a bug report
 		</Link>
@@ -42,6 +43,7 @@ const InsetMessage = () => (
 			target="_blank"
 			rel="noopener noreferrer"
 			underline="always"
+			weight="medium"
 		>
 			filing a bug report
 		</Link>

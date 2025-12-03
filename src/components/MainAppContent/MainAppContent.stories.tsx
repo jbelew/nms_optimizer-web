@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
-import { DialogProvider } from "../../context/DialogContext";
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
@@ -22,6 +21,10 @@ const meta = {
 			},
 		},
 		layout: "fullscreen",
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
 	},
 	loaders: [
 		async () => {
@@ -110,33 +113,159 @@ const StorybookWrapper = ({
 };
 
 // Decorator that wraps stories with necessary providers including dialog
-const withProvidersAndDialog =
+const withLocalProviders =
 	(isSharedGrid: boolean = false, techTree?: TechTree) =>
 	(Story: React.FC) => (
 		<Toast.Provider swipeDirection="right">
 			<ToastProvider>
 				<StorybookWrapper isSharedGrid={isSharedGrid} techTree={techTree}>
-					<DialogProvider>
-						<Story />
-					</DialogProvider>
+					<Story />
 				</StorybookWrapper>
 			</ToastProvider>
 			<Toast.Viewport className="ToastViewport" />
 		</Toast.Provider>
 	);
 
-export const Default: Story = {
+// Decorator for setting Radix UI theme
+const withRadixTheme = (theme: "light" | "dark") => (Story: React.FC) => {
+	if (theme === "dark") {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+
+	return <Story />;
+};
+
+export const DesktopLight: Story = {
 	args: {
 		buildVersion: "1.0.0",
 		buildDate: "2024-11-25",
 	},
-	decorators: [(Story) => withProvidersAndDialog()(Story)],
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("light"),
+	],
 	render: (args) => <MainAppContent {...args} />,
 	parameters: {
 		docs: {
 			description: {
-				story: "Main application view with empty grid and tech tree. Standard layout for desktop users.",
+				story: "Main application view with empty grid and tech tree in Light Mode. Standard layout for desktop users.",
 			},
+		},
+		viewport: {
+			defaultViewport: "desktop",
+		},
+	},
+	loaders: meta.loaders,
+};
+
+export const DesktopDark: Story = {
+	args: {
+		buildVersion: "1.0.0",
+		buildDate: "2024-11-25",
+	},
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("dark"),
+	],
+	render: (args) => <MainAppContent {...args} />,
+	parameters: {
+		docs: {
+			description: {
+				story: "Main application view with empty grid and tech tree in Dark Mode. Standard layout for desktop users.",
+			},
+		},
+		viewport: {
+			defaultViewport: "desktop",
+		},
+	},
+	loaders: meta.loaders,
+};
+
+export const TabletLight: Story = {
+	args: {
+		...DesktopLight.args,
+	},
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("light"),
+	],
+	render: DesktopLight.render,
+	parameters: {
+		docs: {
+			description: {
+				story: "Main application view on a tablet device (iPad) in Light Mode.",
+			},
+		},
+		viewport: {
+			defaultViewport: "ipad",
+		},
+	},
+	loaders: meta.loaders,
+};
+
+export const TabletDark: Story = {
+	args: {
+		...DesktopDark.args,
+	},
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("dark"),
+	],
+	render: DesktopDark.render,
+	parameters: {
+		docs: {
+			description: {
+				story: "Main application view on a tablet device (iPad) in Dark Mode.",
+			},
+		},
+		viewport: {
+			defaultViewport: "ipad",
+		},
+	},
+	loaders: meta.loaders,
+};
+
+export const MobileLight: Story = {
+	args: {
+		...DesktopLight.args,
+	},
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("light"),
+	],
+	render: DesktopLight.render,
+	parameters: {
+		docs: {
+			description: {
+				story: "Main application view on a mobile device in Light Mode.",
+			},
+		},
+		viewport: {
+			defaultViewport: "mobile1",
+		},
+	},
+	loaders: meta.loaders,
+};
+
+export const MobileDark: Story = {
+	args: {
+		...DesktopDark.args,
+	},
+	decorators: [
+		(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story),
+		withRadixTheme("dark"),
+	],
+	render: DesktopDark.render,
+	parameters: {
+		docs: {
+			description: {
+				story: "Main application view on a mobile device in Dark Mode.",
+			},
+		},
+		viewport: {
+			defaultViewport: "mobile1",
 		},
 	},
 	loaders: meta.loaders,

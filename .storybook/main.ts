@@ -1,4 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import { mergeConfig } from 'vite';
+import { splashScreen } from 'vite-plugin-splash-screen';
 
 const config: StorybookConfig = {
   "stories": [
@@ -12,7 +14,19 @@ const config: StorybookConfig = {
     "@storybook/addon-a11y",
     "@storybook/addon-docs"
   ],
-  "framework": "@storybook/react-vite"
+  "framework": "@storybook/react-vite",
+  async viteFinal(config) {
+    return mergeConfig(config, {
+      plugins: [
+        splashScreen({
+          logoSrc: "assets/svg/loader.svg",
+          splashBg: "#000000",
+          loaderBg: "#00A2C7",
+          loaderType: "dots",
+        }),
+      ],
+    });
+  },
 };
 
 export default config;

@@ -45,8 +45,9 @@ const iconMap: Record<string, React.ElementType> = {
  * @type {Record<string, CSSProperties>}
  */
 const iconStyle: Record<string, CSSProperties> = {
-	"dialogs.titles.serverError": { color: "var(--red-9)" },
-	default: { color: "var(--accent-indicator)" },
+	"dialogs.titles.serverError": { color: "var(--red-track)" },
+	"dialogs.titles.optimizationAlert": { color: "var(--red-track)" },
+	default: { color: "var(--accent-track)" },
 };
 
 /**

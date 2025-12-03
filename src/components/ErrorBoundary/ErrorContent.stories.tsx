@@ -26,12 +26,6 @@ export const PageVariant: Story = {
 	},
 };
 
-export const InsetVariant: Story = {
-	args: {
-		variant: "inset",
-	},
-};
-
 export const WithErrorMessage: Story = {
 	args: {
 		variant: "page",

@@ -4,7 +4,6 @@ import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
-import { withAllProviders } from "../../stories/decorators";
 import GridTableButtons from "./GridTableButtons";
 
 const meta = {
@@ -41,7 +40,6 @@ const meta = {
 				</Toast.Provider>
 			);
 		},
-		withAllProviders,
 	],
 } satisfies Meta<typeof GridTableButtons>;
 

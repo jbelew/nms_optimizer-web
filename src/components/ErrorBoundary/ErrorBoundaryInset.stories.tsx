@@ -8,7 +8,10 @@ const meta = {
 	title: "components/ErrorBoundary/ErrorBoundaryInset",
 	decorators: [
 		(Story) => (
-			<Box className="min-h-screen bg-linear-to-br from-slate-900 to-slate-800 p-8">
+			<Box
+				className="flex h-screen items-center justify-center p-8"
+				style={{ backgroundColor: "var(--accent-3)" }}
+			>
 				<Story />
 			</Box>
 		),
@@ -20,15 +23,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const TechTreeContainerMock = () => (
-	<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-		<div className="h-96 rounded-lg bg-slate-700 p-4 lg:col-span-3">
-			<p className="text-sm text-slate-300">TechTree Grid Container</p>
-		</div>
-		<div className="lg:col-span-1">
-			<ErrorBoundaryInset>
-				<ErrorTrigger />
-			</ErrorBoundaryInset>
-		</div>
+	<div className="lg:col-span-1">
+		<ErrorBoundaryInset>
+			<ErrorTrigger />
+		</ErrorBoundaryInset>
 	</div>
 );
 
@@ -46,16 +44,9 @@ export const InTechTreeLayout: Story = {
 };
 
 const TechTreeWithLongError = () => (
-	<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-		<div className="h-96 rounded-lg bg-slate-700 p-4 lg:col-span-3">
-			<p className="text-sm text-slate-300">TechTree Grid Container</p>
-		</div>
-		<div className="lg:col-span-1">
-			<ErrorBoundaryInset>
-				<ErrorWithComponentStack />
-			</ErrorBoundaryInset>
-		</div>
-	</div>
+	<ErrorBoundaryInset>
+		<ErrorWithComponentStack />
+	</ErrorBoundaryInset>
 );
 
 const ErrorWithComponentStack = () => {

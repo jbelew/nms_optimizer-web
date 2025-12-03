@@ -110,6 +110,9 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
 									<Progress
 										value={Math.min(progressPercent, 100)}
 										variant="soft"
+										aria-label={
+											initialMessage || t("messageSpinner.loadingProgress")
+										}
 									/>
 									<div className="flex h-12 justify-center pt-3 font-medium">
 										<Text

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { useGridStore } from "../../store/GridStore";
-import { withDialogProvider } from "../../stories/decorators";
 import AppHeader from "./AppHeader";
 
 const meta = {
@@ -20,14 +19,13 @@ const meta = {
 			useGridStore.setState({ isSharedGrid: false });
 
 			return (
-				<div className="flex h-screen w-screen items-center justify-center p-6">
-					<div className="w-full">
+				<div className="flex h-screen w-screen items-center justify-center p-8">
+					<div className="mx-auto w-full max-w-7xl">
 						<Story />
 					</div>
 				</div>
 			);
 		},
-		withDialogProvider,
 	],
 } satisfies Meta<typeof AppHeader>;
 

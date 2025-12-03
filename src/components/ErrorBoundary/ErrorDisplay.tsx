@@ -22,10 +22,7 @@ export const ErrorDisplay = ({
 	containerStyle,
 }: ErrorDisplayProps) => {
 	return (
-		<div
-			className={`flex flex-col items-center gap-4 text-gray-50 ${className}`}
-			style={containerStyle}
-		>
+		<div className={`flex flex-col items-center gap-4 ${className}`} style={containerStyle}>
 			{children && <p className="text-sm sm:text-base">{children}</p>}
 			<div
 				className="w-full text-left font-mono text-xs"

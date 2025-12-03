@@ -96,7 +96,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						<OpenInNewWindowIcon />
 					</Button>
 				</Dialog.Trigger>
-				{isOpen && (
+				{isOpen && ( // Original conditional rendering
 					<ModuleSelectionDialog
 						translatedTechName={translatedTechName}
 						groupedModules={groupedModules}
