@@ -19,7 +19,13 @@ const meta = {
 		(Story) => {
 			usePlatformStore.setState(mockPlatformStore.getState(), true);
 
-			return <Story />;
+			return (
+				<div className="flex h-screen w-screen items-center justify-center p-4">
+					<div className="max-h-full max-w-full overflow-auto">
+						<Story />
+					</div>
+				</div>
+			);
 		},
 	],
 	loaders: [

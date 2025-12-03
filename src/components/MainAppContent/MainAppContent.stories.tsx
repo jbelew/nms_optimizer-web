@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
+import { DialogProvider } from "../../context/DialogContext";
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
@@ -108,14 +109,16 @@ const StorybookWrapper = ({
 	return <>{children}</>;
 };
 
-// Decorator that wraps stories with necessary providers
-const withProviders =
+// Decorator that wraps stories with necessary providers including dialog
+const withProvidersAndDialog =
 	(isSharedGrid: boolean = false, techTree?: TechTree) =>
 	(Story: React.FC) => (
 		<Toast.Provider swipeDirection="right">
 			<ToastProvider>
 				<StorybookWrapper isSharedGrid={isSharedGrid} techTree={techTree}>
-					<Story />
+					<DialogProvider>
+						<Story />
+					</DialogProvider>
 				</StorybookWrapper>
 			</ToastProvider>
 			<Toast.Viewport className="ToastViewport" />
@@ -127,7 +130,7 @@ export const Default: Story = {
 		buildVersion: "1.0.0",
 		buildDate: "2024-11-25",
 	},
-	decorators: [(Story) => withProviders()(Story)],
+	decorators: [(Story) => withProvidersAndDialog()(Story)],
 	render: (args) => <MainAppContent {...args} />,
 	parameters: {
 		docs: {

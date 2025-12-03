@@ -5,6 +5,13 @@ import AppFooter from "./AppFooter";
 const meta = {
 	component: AppFooter,
 	title: "Components/AppFooter",
+	decorators: [
+		(Story) => (
+			<div className="flex h-screen w-screen items-center justify-center p-6">
+				<Story />
+			</div>
+		),
+	],
 	parameters: {
 		docs: {
 			description: {

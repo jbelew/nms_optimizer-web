@@ -1,0 +1,94 @@
+
+> nms_optimizer@6.3.11 test:storybook
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.14 [39m[90m/home/jbelew/projects/nms_optimizer-web[39m
+
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+ [31m❯[39m [30m[43m chromium [49m[39m src/components/AppHeader/AppHeader.stories.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 383[2mms[22m[39m
+[31m   [31m×[31m Default[39m[33m 379[2mms[22m[39m
+ [31m❯[39m [30m[43m chromium [49m[39m src/components/OfflineBanner/OfflineBanner.stories.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1014[2mms[22m[39m
+[31m   [31m×[31m Offline[39m[33m 1011[2mms[22m[39m
+ [31m❯[39m [30m[43m chromium [49m[39m src/components/GridTable/GridTable.stories.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 616[2mms[22m[39m
+[31m   [31m×[31m Default[39m[33m 365[2mms[22m[39m
+[31m   [31m×[31m Solving[39m[32m 247[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/stories/Button.stories.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1377[2mms[22m[39m
+   [33m[2m✓[22m[39m Primary [33m 931[2mms[22m[39m
+[90mstdout[2m | src/components/MainAppContent/MainAppContent.stories.tsx[2m > [22m[2mDefault
+[22m[39m[fetchWithTimeout] Starting fetch with 10000ms timeout: http://localhost:5173platforms
+ [31m❯[39m [30m[43m chromium [49m[39m src/components/MainAppContent/MainAppContent.stories.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1025[2mms[22m[39m
+[31m   [31m×[31m Default[39m[33m 1021[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/ErrorBoundary/ErrorContent.stories.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2085[2mms[22m[39m
+   [33m[2m✓[22m[39m Page Variant [33m 842[2mms[22m[39m
+   [33m[2m✓[22m[39m With Error Message [33m 493[2mms[22m[39m
+ [31m❯[39m [30m[43m chromium [49m[39m src/components/ModuleSelectionDialog/ModuleSelectionDialog.stories.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2062[2mms[22m[39m
+[31m   [31m×[31m Default[39m[33m 1428[2mms[22m[39m
+   [33m[2m✓[22m[39m Corvette Hyperdrive [33m 629[2mms[22m[39m
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mIn Tech Tree Layout
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mIn Tech Tree Layout
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mIn Tech Tree Layout
+[22m[39mErrorBoundary: Cleared localStorage.
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mWith Long Stack Trace
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mWith Long Stack Trace
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx[2m > [22m[2mWith Long Stack Trace
+[22m[39mErrorBoundary: Cleared localStorage.
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/ErrorBoundary/ErrorBoundaryInset.stories.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1082[2mms[22m[39m
+   [33m[2m✓[22m[39m In Tech Tree Layout [33m 852[2mms[22m[39m
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+[90mstdout[2m | src/components/GridTableButtons/GridTableButtons.stories.tsx[2m > [22m[2mDefault
+[22m[39m[fetchWithTimeout] Starting fetch with 10000ms timeout: http://localhost:5173platforms
+[90mstdout[2m | src/components/ShipSelection/ShipSelection.stories.tsx[2m > [22m[2mDefault
+[22m[39m[fetchWithTimeout] Starting fetch with 10000ms timeout: http://localhost:5173platforms
+ [32m✓[39m [30m[43m chromium [49m[39m src/stories/Header.stories.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 666[2mms[22m[39m
+   [33m[2m✓[22m[39m Logged In [33m 531[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/stories/Page.stories.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1053[2mms[22m[39m
+   [33m[2m✓[22m[39m Logged Out [33m 767[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/AppDialog/BuildNameDialog.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1031[2mms[22m[39m
+   [33m[2m✓[22m[39m Open [33m 1030[2mms[22m[39m
+[90mstdout[2m | src/components/TechTree/TechTree.stories.tsx[2m > [22m[2mDefault
+[22m[39m[fetchWithTimeout] Starting fetch with 10000ms timeout: http://localhost:5173tech_tree/standard
+[90mstdout[2m | src/components/TechTree/TechTree.stories.tsx[2m > [22m[2mDefault
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | src/components/TechTree/TechTree.stories.tsx[2m > [22m[2mDefault
+[22m[39mErrorBoundaryInset: Caught error, updating state.
+[90mstdout[2m | src/components/TechTree/TechTree.stories.tsx[2m > [22m[2mDefault
+[22m[39mErrorBoundary: Cleared localStorage.
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/ShipSelection/ShipSelection.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 974[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 973[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/GridTableButtons/GridTableButtons.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 786[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 785[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/TechTree/TechTree.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1196[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 1195[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/AppFooter/AppFooter.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 327[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/UpdatePrompt/UpdatePrompt.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 361[2mms[22m[39m
+[90mstdout[2m | unknown test
+[22m[39mGridStore: No stored data found for key: gridState
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/AppDialog/OptimizationAlertDialog.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [32m 300[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/InstallPrompt/InstallPrompt.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 255[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/AppDialog/ErrorContent.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m Default [33m 444[2mms[22m[39m
+ [32m✓[39m [30m[43m chromium [49m[39m src/components/TechTreeRow/TechTreeRow.stories.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 257[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m26 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 21:44:12
+[2m   Duration [22m 13.19s[2m (transform 0ms, setup 16.17s, import 16.66s, tests 17.29s, environment 0ms)[22m
+

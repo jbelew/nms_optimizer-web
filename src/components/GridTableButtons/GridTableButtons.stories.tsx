@@ -4,6 +4,7 @@ import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
+import { withAllProviders } from "../../stories/decorators";
 import GridTableButtons from "./GridTableButtons";
 
 const meta = {
@@ -29,12 +30,18 @@ const meta = {
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
-						<Story />
+						<div
+							className="flex min-h-screen items-center justify-center p-4"
+							style={{ maxWidth: "800px", margin: "0 auto" }}
+						>
+							<Story />
+						</div>
 					</ToastProvider>
 					<Toast.Viewport className="ToastViewport" />
 				</Toast.Provider>
 			);
 		},
+		withAllProviders,
 	],
 } satisfies Meta<typeof GridTableButtons>;
 

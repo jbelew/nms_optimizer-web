@@ -4,9 +4,12 @@
 
 - **Dev**: `npm run dev` (http://localhost:5173, expects API at http://127.0.0.1:5000)
 - **Build**: `npm run build` (production, includes SSG)
-- **Test all**: `npm run test` (Vitest with coverage)
+- **Test all**: `npm run test` (Vitest unit/component tests with coverage)
 - **Test single file**: `npm run test -- src/path/to/file.test.tsx`
 - **Test watch**: `npm run test -- --watch`
+- **Storybook tests**: `npm run test:storybook` (runs story-based tests with Vitest)
+- **Storybook watch**: `npm run test:storybook:watch`
+- **Storybook a11y**: `npm run test:storybook:a11y` (accessibility violations via CLI)
 - **Lint**: `npm run lint` and `npm run lint:fix`
 - **Format**: `npm run format` (Prettier, src/ only)
 - **Type check**: `npm run typecheck`
