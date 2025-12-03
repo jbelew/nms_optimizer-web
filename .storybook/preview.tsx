@@ -5,6 +5,34 @@ import { Theme } from "@radix-ui/themes";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { I18nextProvider } from "react-i18next";
 
+// Custom viewports matching Tailwind breakpoints
+const customViewports = {
+	mobile: {
+		name: "Mobile (375px)",
+		styles: {
+			width: "375px",
+			height: "667px",
+		},
+		type: "mobile" as const,
+	},
+	tablet: {
+		name: "Tablet (768px)",
+		styles: {
+			width: "768px",
+			height: "1024px",
+		},
+		type: "tablet" as const,
+	},
+	desktop: {
+		name: "Desktop (1280px)",
+		styles: {
+			width: "1280px",
+			height: "860px",
+		},
+		type: "desktop" as const,
+	},
+};
+
 import i18n from "../src/i18n/i18n";
 import { DialogProvider } from "../src/context/DialogContext";
 import { SplashscreenHider } from "../src/utils/SplashscreenHider";
@@ -54,35 +82,19 @@ const preview: Preview = {
     decorators: [withGlobalProviders],
     parameters: {
         viewport: {
-            viewports: {
-                desktop: {
-                    name: 'Desktop',
-                    styles: {
-                        width: '1024px',
-                        height: '768px',
-                    },
-                },
-                ipad: {
-                    name: 'iPad',
-                    styles: {
-                        width: '768px',
-                        height: '1024px',
-                    },
-                },
-                mobile1: {
-                    name: 'Mobile',
-                    styles: {
-                        width: '375px',
-                        height: '667px',
-                    },
-                },
-            },
+            options: customViewports,
         },
         controls: {
             matchers: {
                 color: /(background|color)$/i,
                 date: /Date$/i,
             },
+        },
+    },
+    initialGlobals: {
+        viewport: {
+            value: 'desktop',
+            isRotated: false,
         },
     },
 };

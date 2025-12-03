@@ -153,8 +153,11 @@ export const DesktopLight: Story = {
 				story: "Main application view with empty grid and tech tree in Light Mode. Standard layout for desktop users.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "desktop",
+			value: "desktop",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
@@ -176,8 +179,11 @@ export const DesktopDark: Story = {
 				story: "Main application view with empty grid and tech tree in Dark Mode. Standard layout for desktop users.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "desktop",
+			value: "desktop",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
@@ -198,8 +204,11 @@ export const TabletLight: Story = {
 				story: "Main application view on a tablet device (iPad) in Light Mode.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "ipad",
+			value: "tablet",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
@@ -220,8 +229,11 @@ export const TabletDark: Story = {
 				story: "Main application view on a tablet device (iPad) in Dark Mode.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "ipad",
+			value: "tablet",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
@@ -242,8 +254,11 @@ export const MobileLight: Story = {
 				story: "Main application view on a mobile device in Light Mode.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "mobile1",
+			value: "mobile",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
@@ -264,8 +279,11 @@ export const MobileDark: Story = {
 				story: "Main application view on a mobile device in Dark Mode.",
 			},
 		},
+	},
+	globals: {
 		viewport: {
-			defaultViewport: "mobile1",
+			value: "mobile",
+			isRotated: false,
 		},
 	},
 	loaders: meta.loaders,
