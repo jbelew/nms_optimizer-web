@@ -138,25 +138,27 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 							className="mt-0.5 shrink-0 sm:mt-0"
 						/>
 					</Callout.Icon>
-					<Callout.Text size={{ initial: "2", sm: "3" }}>
-						<Trans
-							i18nKey="techTree.recommendedBuilds.summary"
-							components={{
-								1: <Strong />,
-								3: <Strong />,
-								5: (
-									<Link
-										href="#"
-										underline="always"
-										weight="medium"
-										onClick={(e) => {
-											e.preventDefault(); // Prevent jump to top
-											handleOpenInstructions();
-										}}
-									/>
-								),
-							}}
-						/>
+					<Callout.Text>
+						<span className="text-sm sm:text-base">
+							<Trans
+								i18nKey="techTree.recommendedBuilds.summary"
+								components={{
+									1: <Strong />,
+									3: <Strong />,
+									5: (
+										<Link
+											href="#"
+											underline="always"
+											weight="medium"
+											onClick={(e) => {
+												e.preventDefault(); // Prevent jump to top
+												handleOpenInstructions();
+											}}
+										/>
+									),
+								}}
+							/>
+						</span>
 					</Callout.Text>
 					<div>
 						{renderBuildButton({
