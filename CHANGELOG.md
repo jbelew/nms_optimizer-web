@@ -1,3 +1,10 @@
+## [6.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.0...v6.4.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* **deps:** regenerate package-lock.json to fix CI error ([dca6dd3](https://github.com/jbelew/nms_optimizer-web/commit/dca6dd3a6ed8e0a9e5ba7a0a45429c2db2be9745))
+
 # [6.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.11...v6.4.0) (2025-12-04)
 
 
