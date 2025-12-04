@@ -77,7 +77,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 			return (
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-						<Button {...buttonProps}>
+						<Button color="cyan" {...buttonProps}>
 							<MagicWandIcon />
 							{t("techTree.recommendedBuilds.selectBuildButton")}
 							<Separator orientation="vertical" size="1" />
@@ -104,7 +104,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 
 		if (builds.length === 1) {
 			return (
-				<Button {...buttonProps} onClick={() => handleApply(builds[0])}>
+				<Button color="cyan" {...buttonProps} onClick={() => handleApply(builds[0])}>
 					<MagicWandIcon />
 					{t("techTree.recommendedBuilds.applyBuildButton")}
 				</Button>
@@ -130,16 +130,12 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					</IconButton>
 				</div>
 			) : (
-				<Callout.Root size="1">
+				<Callout.Root size="1" color="gray" variant="surface">
 					<Callout.Icon>
-						<InfoCircledIcon
-							width="20"
-							height="20"
-							className="mt-0.5 shrink-0 sm:mt-0"
-						/>
+						<InfoCircledIcon className="shrink-0" />
 					</Callout.Icon>
 					<Callout.Text>
-						<span className="text-sm sm:text-base">
+						<span className="text-sm sm:text-sm">
 							<Trans
 								i18nKey="techTree.recommendedBuilds.summary"
 								components={{
@@ -150,6 +146,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 											href="#"
 											underline="always"
 											weight="medium"
+											color="cyan"
 											onClick={(e) => {
 												e.preventDefault(); // Prevent jump to top
 												handleOpenInstructions();
