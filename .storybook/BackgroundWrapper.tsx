@@ -1,6 +1,6 @@
 import React from "react";
-import backgroundWebp from "../public/assets/img/background.webp";
-import background2xWebp from "../public/assets/img/background@2x.webp";
+import backgroundWebp from "/assets/img/background.webp?url";
+import background2xWebp from "/assets/img/background@2x.webp?url";
 
 interface BackgroundWrapperProps {
 	children: React.ReactNode;

@@ -15,17 +15,22 @@ const config: StorybookConfig = {
     "@storybook/addon-docs"
   ],
   "framework": "@storybook/react-vite",
-  async viteFinal(config) {
-    return mergeConfig(config, {
-      plugins: [
-        splashScreen({
-          logoSrc: "assets/svg/loader.svg",
-          splashBg: "#000000",
-          loaderBg: "#00A2C7",
-          loaderType: "dots",
-        }),
-      ],
-    });
+  async viteFinal(config, { configType }) {
+    // Skip splash screen plugin during tests
+    if (configType === 'DOCUMENTATION') {
+      return mergeConfig(config, {
+        plugins: [
+          splashScreen({
+            logoSrc: "assets/svg/loader.svg",
+            splashBg: "#000000",
+            loaderBg: "#00A2C7",
+            loaderType: "dots",
+          }),
+        ],
+      });
+    }
+
+    return config;
   },
 };
 
