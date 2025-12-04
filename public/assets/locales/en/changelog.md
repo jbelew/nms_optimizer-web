@@ -2,6 +2,17 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.4 – UI Polish & Mobile Stability Improvements (2025-12-02)
+
+This update delivers a series of visual refinements and stability fixes across the app, with a focus on visual consistancy and mobile usability.
+
+- Improved mobile rendering stability and toolbar responsiveness.
+- Updated panel styling with cleaner spacing, subtle shadows, and new translucent panels.
+- Enhanced visibility of supercharged cells with responsive borders.
+- Refined UI sizing, spacing, and overall visual consistency.
+- Fixed an issue where the splash screen could remain visible during errors.
+- Improved Tech Tree responsiveness and shared-grid interactions.
+
 ## Version 6.3 – Improved Mobile Rendering Stability (2025-11-29)
 
 This update focuses on making the app far more stable and consistent on mobile devices—especially Safari and Chrome on iOS.
