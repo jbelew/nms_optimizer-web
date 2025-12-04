@@ -1,3 +1,10 @@
+# [6.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.11...v6.4.0) (2025-12-04)
+
+
+### Features
+
+* **storybook:** improve visual test consistency ([48c9638](https://github.com/jbelew/nms_optimizer-web/commit/48c963885fca3a9f6aab49675146fdc052fb099c))
+
 ## [6.3.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.10...v6.3.11) (2025-12-02)
 
 
