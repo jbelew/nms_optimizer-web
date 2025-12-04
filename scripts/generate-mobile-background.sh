@@ -8,11 +8,11 @@ set -e
 INPUT_IMAGE="public/assets/img/background@mobile.webp"
 OUTPUT_IMAGE="public/assets/img/background@mobile-blurred.webp"
 BLUR_RADIUS="64"
-# Radix UI cyan-a3 color (display-p3 0.051 0.725 1 / 0.227)
-# Using darker cyan to match the visual weight of the semi-transparent overlay
-TINT_COLOR="#f0f2f1"  # Darker cyan
-TINT_OPACITY=".031"     # Reduced opacity for subtler effect
-BRIGHTNESS="85"       # Reduce brightness to match Radix UI gray-a1 darkening effect
+# Radix UI cyan-a3 color (#00c2d121 in sRGB, where 21 hex = ~13% opacity)
+# For ImageMagick compose blend, opacity is 0-100
+TINT_COLOR="#00c2d1"  # Radix cyan-a3 base color
+TINT_OPACITY="13"     # 0x21 / 0xFF = ~13% opacity to match #00c2d121
+BRIGHTNESS="90"      # No brightness adjustment - matches gray-a1 overlay (minimal darkening)
 
 echo "🎨 Generating blurred and tinted mobile background..."
 echo "   Input:  $INPUT_IMAGE"

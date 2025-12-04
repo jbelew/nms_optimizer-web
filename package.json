@@ -20,6 +20,7 @@
 		"preview": "vite preview",
 		"serve:ssg": "node scripts/serve-ssg.mjs",
 		"screenshot": "node scripts/screenshot.cjs",
+		"screenshot:mobile-bg": "node scripts/screenshot-blurred-background.js",
 		"test": "vitest run -c vitest.unit.config.ts --coverage",
 		"test:storybook": "vitest run",
 		"test:storybook:watch": "vitest",

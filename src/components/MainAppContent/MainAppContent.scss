@@ -26,7 +26,7 @@ $panel-border: 1px solid var(--gray-a5);
 		// Desktop: use backdrop-filter for dynamic blur
 		@media (width >= 640px) {
 			backdrop-filter: blur(64px);
-			background-color: var(--color-panel-translucent);
+			background-color: var(--accent-a3);
 		}
 
 		// Mobile: use pre-blurred background image for better performance

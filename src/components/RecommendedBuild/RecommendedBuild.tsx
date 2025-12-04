@@ -126,7 +126,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 						aria-label={t("buttons.changelog")}
 						onClick={handleOpenInstructions}
 					>
-						<InfoCircledIcon width="24" height="24" className="shrink-0" />
+						<InfoCircledIcon width="20" height="20" className="shrink-0" />
 					</IconButton>
 				</div>
 			) : (
