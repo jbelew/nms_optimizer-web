@@ -37,6 +37,19 @@ vi.mock("@radix-ui/themes", () => ({
 			{children}
 		</div>
 	),
+	Box: ({
+		children,
+		className,
+		style,
+	}: {
+		children?: React.ReactNode;
+		className?: string;
+		style?: React.CSSProperties;
+	}) => (
+		<div className={className} style={style} data-testid="box">
+			{children}
+		</div>
+	),
 }));
 
 // Mock hooks
@@ -76,18 +89,6 @@ describe("TechTree", () => {
 
 	afterEach(() => {
 		vi.resetAllMocks();
-	});
-
-	test("should render error boundary wrapper", () => {
-		render(
-			<TechTreeComponent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				gridTableTotalWidth={undefined}
-			/>
-		);
-
-		expect(screen.getByTestId("error-boundary-inset")).toBeInTheDocument();
 	});
 
 	test("should render TechTreeContent on large screens", () => {

@@ -1,20 +1,13 @@
 import type { RegisterSWOptions } from "virtual:pwa-register"; // Import the type
+
+import * as pwaMockModule from "virtual:pwa-register";
 import { vi } from "vitest";
 
 import { setupServiceWorkerRegistration } from "./setupServiceWorker";
 
-// Use vi.hoisted to define mock variables that are accessible within the mock factory
-const { mockUpdateSW, mockRegisterSW } = vi.hoisted(() => {
-	const updateSW = vi.fn();
-	const registerSW = vi.fn();
-
-	return { mockUpdateSW: updateSW, mockRegisterSW: registerSW };
-});
-
-// Mock the virtual module provided by vite-plugin-pwa
-vi.mock("virtual:pwa-register", () => ({
-	registerSW: mockRegisterSW,
-}));
+// Set up spies on the mock module
+const mockRegisterSW = vi.spyOn(pwaMockModule, "registerSW");
+const mockUpdateSW = vi.fn();
 
 describe("setupServiceWorkerRegistration", () => {
 	let originalServiceWorker: ServiceWorkerContainer | undefined;
@@ -103,8 +96,10 @@ describe("setupServiceWorkerRegistration", () => {
 			updateServiceWorker: (reloadPage?: boolean) => Promise<void>
 		) => void;
 
-		mockRegisterSW.mockImplementationOnce((options: RegisterSWOptions) => {
-			onNeedRefreshCallback = options.onNeedRefresh!;
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onNeedRefresh) {
+				onNeedRefreshCallback = options.onNeedRefresh;
+			}
 
 			return mockUpdateSW; // Ensure it returns mockUpdateSW
 		});
@@ -136,8 +131,10 @@ describe("setupServiceWorkerRegistration", () => {
 		const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 		let onOfflineReadyCallback: () => void;
 
-		mockRegisterSW.mockImplementationOnce((options: RegisterSWOptions) => {
-			onOfflineReadyCallback = options.onOfflineReady!;
+		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
+			if (options?.onOfflineReady) {
+				onOfflineReadyCallback = options.onOfflineReady;
+			}
 
 			return mockUpdateSW;
 		});

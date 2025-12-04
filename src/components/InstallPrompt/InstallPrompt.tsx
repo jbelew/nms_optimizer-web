@@ -22,7 +22,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ onDismiss }) => {
 							style={{ color: "var(--accent-track)" }}
 						/>
 						<Flex direction="column" flexGrow="1">
-							<Text size={{ initial: "2", sm: "3" }}>
+							<Text className="text-sm sm:text-base">
 								{t("installPrompt.iosInstructions")}
 							</Text>
 						</Flex>

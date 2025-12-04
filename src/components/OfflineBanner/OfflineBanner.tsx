@@ -24,7 +24,7 @@ const OfflineBanner: React.FC = () => {
 	}
 
 	return (
-		<div className="offline w-full text-center">
+		<div className="offline w-full p-4 text-center">
 			<div className="offline__logo mb-4">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 126.75 126.77">
 					<g className="layer">
@@ -38,10 +38,12 @@ const OfflineBanner: React.FC = () => {
 			<h1 className="offline__title text-2xl font-semibold tracking-widest">
 				<Trans i18nKey="offline.title" defaults="-kzzkt- Offline! -kzzkt-" />
 			</h1>
-			<Trans
-				i18nKey="offline.message"
-				defaults="An internet connection is required to use this application. Please reconnect to access its features."
-			/>
+			<span className="text-sm sm:text-base">
+				<Trans
+					i18nKey="offline.message"
+					defaults="An internet connection is required to use this application. Please reconnect to access its features."
+				/>
+			</span>
 		</div>
 	);
 };

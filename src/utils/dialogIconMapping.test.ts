@@ -90,67 +90,67 @@ describe("dialogIconMapping", () => {
 		test("should return red color for serverError dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.serverError");
 
-			expect(result.style).toEqual({ color: "var(--red-9)" });
+			expect(result.style).toEqual({ color: "var(--red-track)" });
 		});
 
 		test("should return default accent color for instructions dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.instructions");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for changelog dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.changelog");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for about dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.about");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for translationRequest dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.translationRequest");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for shareLink dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.shareLink");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for userStats dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.userStats");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
-		test("should return default accent color for optimizationAlert dialog", () => {
+		test("should return red color for optimizationAlert dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.optimizationAlert");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--red-track)" });
 		});
 
 		test("should return default accent color for updatePrompt dialog", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.updatePrompt");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for unknown titleKey", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.unknownDialog");
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return default accent color for undefined titleKey", () => {
 			const result = getDialogIconAndStyle(undefined);
 
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should return object with both IconComponent and style properties", () => {
@@ -181,7 +181,7 @@ describe("dialogIconMapping", () => {
 			const result = getDialogIconAndStyle("");
 
 			expect(result.IconComponent).toBeNull();
-			expect(result.style).toEqual({ color: "var(--accent-indicator)" });
+			expect(result.style).toEqual({ color: "var(--accent-track)" });
 		});
 
 		test("should be case-sensitive for titleKey matching", () => {

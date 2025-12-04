@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
 	// Use an environment variable for the app version, defaulting to 'unknown'
 	const appVersion = process.env.VITE_APP_VERSION || "unknown";
 	const buildDate = new Date().toISOString();
+	const skipSplashScreen = process.env.VITEST === "true";
 
 	return {
 		define: {
@@ -46,12 +47,16 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			tailwindcss(),
-			splashScreen({
-				logoSrc: "assets/svg/loader.svg",
-				splashBg: "#000000",
-				loaderBg: "#00A2C7",
-				loaderType: "dots",
-			}),
+			...(!skipSplashScreen
+				? [
+						splashScreen({
+							logoSrc: "assets/svg/loader.svg",
+							splashBg: "#000000",
+							loaderBg: "#00A2C7",
+							loaderType: "dots",
+						}),
+					]
+				: []),
 			deferStylesheetsPlugin(),
 			compression({
 				algorithm: "brotliCompress",

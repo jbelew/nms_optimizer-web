@@ -170,6 +170,8 @@ const preview: Preview = {
 			value: 'desktop',
 			isRotated: false,
 		},
+		theme: 'dark',
+		background: 'hidden',
 	},
 };
 

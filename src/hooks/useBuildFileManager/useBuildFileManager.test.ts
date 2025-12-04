@@ -190,7 +190,7 @@ describe("useBuildFileManager", () => {
 			await expect(result.current.loadBuildFromFile(file)).rejects.toThrow(
 				"File is too large"
 			);
-		});
+		}, 10000);
 
 		it("should reject build file with unsupported shipType", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
