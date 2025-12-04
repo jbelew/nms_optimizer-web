@@ -98,10 +98,10 @@
 		"@typescript-eslint/eslint-plugin": "^8.46.4",
 		"@typescript-eslint/parser": "^8.48.0",
 		"@vitejs/plugin-react": "^5.0.4",
-		"@vitest/browser": "^4.0.14",
+		"@vitest/browser": "^4.0.15",
 		"@vitest/browser-playwright": "^4.0.15",
-		"@vitest/coverage-v8": "^4.0.14",
-		"@vitest/ui": "^4.0.14",
+		"@vitest/coverage-v8": "^4.0.15",
+		"@vitest/ui": "^4.0.15",
 		"autoprefixer": "^10.4.21",
 		"babel-plugin-react-compiler": "^19.1.0-rc.3",
 		"commitizen": "^4.3.1",
@@ -153,7 +153,7 @@
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-splash-screen": "^0.2.0",
-		"vitest": "^4.0.14",
+		"vitest": "^4.0.15",
 		"vitest-websocket-mock": "^0.5.0"
 	},
 	"config": {
