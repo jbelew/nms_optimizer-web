@@ -7,6 +7,7 @@ The full commit history for this project is available on [GitHub](https://github
 This update delivers a series of visual refinements and stability fixes across the app, with a focus on visual consistancy and mobile usability.
 
 - Improved mobile rendering stability and toolbar responsiveness.
+- Incorporated Storybook into the development process to improve visual testing capabilities.
 - Updated panel styling with cleaner spacing, subtle shadows, and new translucent panels.
 - Enhanced visibility of supercharged cells with responsive borders.
 - Refined UI sizing, spacing, and overall visual consistency.
