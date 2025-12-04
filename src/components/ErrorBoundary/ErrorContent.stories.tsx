@@ -54,9 +54,9 @@ export const WithStackTrace: Story = {
 			name: "Error",
 			message: "Something went wrong",
 			stack: `Error: Something went wrong
-    at ErrorPage (http://localhost:6006/src/components/ErrorBoundary/ErrorPage.tsx:10:1)
-    at renderWithHooks (http://localhost:6006/node_modules/.cache/sb/.vite-storybook/deps/chunk-QA6L6B62.js?v=1234:1234:1)
-    at mountIndeterminateComponent (http://localhost:6006/node_modules/.cache/sb/.vite-storybook/deps/chunk-QA6L6B62.js?v=1234:1234:1)`,
+    at ErrorPage (http://localhost:5173/src/components/ErrorBoundary/ErrorPage.tsx:10:1)
+    at renderWithHooks (http://localhost:5173/node_modules/react/index.js:200:45)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/react/index.js:500:30)`,
 		},
 	},
 	parameters: {

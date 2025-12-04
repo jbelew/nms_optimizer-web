@@ -35,7 +35,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 				align="center"
 				gap="1"
 				p="5"
-				pb={{ initial: "6", lg: "0" }}
+				pb={{ initial: "6", md: "0" }}
 				className="app-footer__wrapper"
 			>
 				<div className="app-footer__content">

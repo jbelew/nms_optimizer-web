@@ -32,12 +32,22 @@ const meta = {
 				});
 			}, []);
 
+			// Seed Math.random for consistent visual tests
+			const originalRandom = Math.random;
+			Math.random = () => 0.3;
+
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
 						<div
 							className="flex min-h-screen items-center justify-center p-4"
 							style={{ maxWidth: "800px", margin: "0 auto" }}
+							onMouseEnter={() => {
+								Math.random = originalRandom;
+							}}
+							onMouseLeave={() => {
+								Math.random = () => 0.3;
+							}}
 						>
 							<Story />
 						</div>

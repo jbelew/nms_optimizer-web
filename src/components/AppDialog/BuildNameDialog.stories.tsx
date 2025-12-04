@@ -15,10 +15,20 @@ const meta = {
 	},
 	decorators: [
 		(Story) => {
+			// Seed Math.random for consistent visual tests
+			const originalRandom = Math.random;
+			Math.random = () => 0.5;
+
 			return (
 				<div
 					className="flex min-h-screen items-center justify-center p-4"
 					style={{ maxWidth: "800px", margin: "0 auto" }}
+					onMouseEnter={() => {
+						Math.random = originalRandom;
+					}}
+					onMouseLeave={() => {
+						Math.random = () => 0.5;
+					}}
 				>
 					<Story />
 				</div>
