@@ -23,12 +23,6 @@ vi.mock("../RecommendedBuild/RecommendedBuild", () => ({
 	default: () => <div data-testid="recommended-build">RecommendedBuild</div>,
 }));
 
-vi.mock("../ErrorBoundary/ErrorBoundaryInset", () => ({
-	default: ({ children }: { children?: React.ReactNode }) => (
-		<div data-testid="error-boundary-inset">{children}</div>
-	),
-}));
-
 vi.mock("@radix-ui/themes", () => ({
 	ScrollArea: ({
 		children,

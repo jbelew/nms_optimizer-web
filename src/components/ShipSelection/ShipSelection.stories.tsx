@@ -14,6 +14,7 @@ const meta = {
 					"Dropdown component for selecting ship types (Standard, Hauler, Corvette, etc). Manages platform selection and grid reset on change.",
 			},
 		},
+		layout: "fullscreen",
 	},
 	decorators: [
 		(Story) => (

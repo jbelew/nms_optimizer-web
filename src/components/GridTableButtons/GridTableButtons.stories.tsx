@@ -55,5 +55,6 @@ export const Default: Story = {
 				story: "Grid buttons in default state with all controls available.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

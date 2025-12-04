@@ -19,6 +19,11 @@ const meta = {
 					"Footer component displaying build version, build date, social links, and support options.",
 			},
 		},
+		layout: "fullscreen",
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
 	},
 } satisfies Meta<typeof AppFooter>;
 
@@ -31,17 +36,17 @@ export const Desktop: Story = {
 		buildVersion: "6.1.2",
 		buildDate: "2024-11-25T15:30:00Z",
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Footer with version and build date displayed.",
-			},
-		},
-	},
 	globals: {
 		viewport: {
 			value: "desktop",
 			isRotated: false,
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Footer on desktop.",
+			},
 		},
 	},
 };
@@ -50,18 +55,17 @@ export const Tablet: Story = {
 	args: {
 		...Desktop.args,
 	},
-	render: Desktop.render,
-	parameters: {
-		docs: {
-			description: {
-				story: "Main application view on a tablet device (iPad).",
-			},
-		},
-	},
 	globals: {
 		viewport: {
 			value: "tablet",
 			isRotated: false,
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Footer on a tablet device.",
+			},
 		},
 	},
 };
@@ -70,18 +74,17 @@ export const Mobile: Story = {
 	args: {
 		...Desktop.args,
 	},
-	render: Desktop.render,
-	parameters: {
-		docs: {
-			description: {
-				story: "Main application view on a mobile device.",
-			},
-		},
-	},
 	globals: {
 		viewport: {
 			value: "mobile",
 			isRotated: false,
+		},
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Footer on a mobile device.",
+			},
 		},
 	},
 };

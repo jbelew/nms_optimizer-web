@@ -35,6 +35,13 @@ const groupModules = (modules: Module[]): GroupedModules => {
 const meta: Meta<typeof ModuleSelectionDialog> = {
 	title: "Components/ModuleSelectionDialog",
 	component: ModuleSelectionDialog,
+	parameters: {
+		layout: "fullscreen",
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+	},
 	decorators: [
 		(Story) => (
 			<Theme>

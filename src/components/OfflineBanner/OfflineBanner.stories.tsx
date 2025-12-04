@@ -5,6 +5,13 @@ import OfflineBanner from "./OfflineBanner";
 const meta = {
 	component: OfflineBanner,
 	title: "components/OfflineBanner",
+	parameters: {
+		layout: "fullscreen",
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+	},
 	decorators: [
 		(Story) => {
 			// Mock navigator.onLine to return false for the story

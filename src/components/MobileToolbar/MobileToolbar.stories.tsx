@@ -46,5 +46,6 @@ export const Default: Story = {
 				story: "Mobile Toolbar with controls for grid operations.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

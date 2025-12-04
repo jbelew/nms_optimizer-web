@@ -43,5 +43,6 @@ export const Default: Story = {
 				story: "Build Name Dialog.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

@@ -40,5 +40,6 @@ export const Default: Story = {
 				story: "Install prompt component.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

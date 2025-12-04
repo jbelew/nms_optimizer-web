@@ -60,5 +60,6 @@ export const Default: Story = {
 				story: "Error Content Dialog with fatal error type. Shows a Retry button instead of Close.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

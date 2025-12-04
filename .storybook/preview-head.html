@@ -1,12 +1,42 @@
 <style>
-  body.sb-main-padded,
+  /* body.sb-main-padded,
   .sb-show-main {
     background-color: var(--color-background) !important;
-  }
+  } */
 
   /* Storybook root container background - light mode (default) */
-  #storybook-root {
+  /* #storybook-root {
     background-color: var(--color-background) !important;
+  } */
+
+  /* Override scrollbar-gutter for Storybook */
+  html {
+    scrollbar-gutter: auto !important;
   }
 
+  /* Background image styling */
+  html.sb-background-visible::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: image-set(
+      url("/assets/img/background.webp") 1x,
+      url("/assets/img/background@2x.webp") 2x
+    );
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Hide background on mobile */
+  @media (width <= 639px) {
+    html.sb-background-visible::before {
+      background-image: none;
+    }
+  }
 </style>

@@ -7,7 +7,6 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
-import ErrorBoundaryInset from "../ErrorBoundary/ErrorBoundaryInset";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 
@@ -121,11 +120,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
  * @returns {JSX.Element} The rendered TechTree component.
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {
-	return (
-		<ErrorBoundaryInset>
-			<TechTreeWithData {...props} />
-		</ErrorBoundaryInset>
-	);
+	return <TechTreeWithData {...props} />;
 };
 
 export default TechTree;

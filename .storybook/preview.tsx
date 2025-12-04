@@ -62,6 +62,7 @@ import "../src/components/Toast/Toast.scss";
 import "../src/assets/css/fonts.css";
 
 import { StoreResetWrapper, ThemeWrapper } from "./decorators";
+import { BackgroundWrapper } from "./BackgroundWrapper";
 
 export const globalTypes = {
 	theme: {
@@ -74,6 +75,19 @@ export const globalTypes = {
 			dynamicTitle: true,
 		},
 	},
+	background: {
+		description: "Background image visibility",
+		defaultValue: "visible",
+		toolbar: {
+			title: "Background",
+			icon: "image",
+			items: [
+				{ value: "visible", title: "Visible" },
+				{ value: "hidden", title: "Hidden" },
+			],
+			dynamicTitle: true,
+		},
+	},
 };
 
 const withTheme: Decorator = (Story, context) => {
@@ -81,6 +95,16 @@ const withTheme: Decorator = (Story, context) => {
 		<ThemeWrapper theme={context.globals.theme}>
 			<Story />
 		</ThemeWrapper>
+	);
+};
+
+const withBackground: Decorator = (Story, context) => {
+	const isVisible = context.globals.background === "visible";
+
+	return (
+		<BackgroundWrapper isVisible={isVisible}>
+			<Story />
+		</BackgroundWrapper>
 	);
 };
 
@@ -110,7 +134,7 @@ const withGlobalProviders: Decorator = (Story) => {
 };
 
 const preview: Preview = {
-	decorators: [withGlobalProviders, withTheme, withStoreReset],
+	decorators: [withGlobalProviders, withTheme, withBackground, withStoreReset],
 	parameters: {
 		viewport: {
 			options: customViewports,

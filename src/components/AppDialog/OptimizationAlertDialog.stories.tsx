@@ -44,5 +44,6 @@ export const Default: Story = {
 				story: "Optimization Alert Dialog.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };

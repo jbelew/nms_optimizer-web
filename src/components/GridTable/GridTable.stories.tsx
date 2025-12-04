@@ -9,9 +9,16 @@ import { GridTable } from "./GridTable";
 
 const meta = {
 	component: GridTable,
+	title: "Components/GridTable",
+	parameters: {
+		docs: {
+			description: {
+				component: "Grid table component for displaying and managing the grid layout.",
+			},
+		},
+	},
 	decorators: [
 		(Story) => {
-			// Initialize stores
 			useEffect(() => {
 				useGridStore.setState({
 					grid: createGrid(10, 6),
@@ -52,6 +59,14 @@ export const Default: Story = {
 		progressPercent: 0,
 		shared: false,
 	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Grid table in default state.",
+			},
+		},
+		layout: "fullscreen",
+	},
 };
 
 export const Solving: Story = {
@@ -59,5 +74,13 @@ export const Solving: Story = {
 		solving: true,
 		progressPercent: 45,
 		shared: false,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "Grid table with solving state.",
+			},
+		},
+		layout: "fullscreen",
 	},
 };

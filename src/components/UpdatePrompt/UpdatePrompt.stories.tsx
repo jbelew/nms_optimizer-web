@@ -17,10 +17,4 @@ export const Default: Story = {
 		onRefresh: () => console.log("Refresh clicked"),
 		onDismiss: () => console.log("Dismiss clicked"),
 	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
 };

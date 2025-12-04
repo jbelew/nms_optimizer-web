@@ -48,6 +48,7 @@ export const Default: Story = {
 				story: "A default toast notification.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };
 
@@ -65,6 +66,7 @@ export const Success: Story = {
 				story: "A success toast notification.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };
 
@@ -86,5 +88,6 @@ export const Error: Story = {
 				story: "An error toast notification.",
 			},
 		},
+		layout: "fullscreen",
 	},
 };
