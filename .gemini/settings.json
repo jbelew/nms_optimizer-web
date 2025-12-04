@@ -1,8 +1,0 @@
-{
-	"mcpServers": {
-		"ESLint": {
-			"command": "npx",
-			"args": ["@eslint/mcp@latest"]
-		}
-	}
-}

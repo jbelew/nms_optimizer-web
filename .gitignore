@@ -7,14 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build outputs
 dist
 dist-ssr
 *.local
 __pycache__
 
+# Coverage
+coverage/*
+
+# Python virtual environment
+.venv/*
+
 # Editor directories and files
-!.vscode/extensions.json
+.vscode
 .idea
 .DS_Store
 *.suo
@@ -23,22 +32,29 @@ __pycache__
 *.sln
 *.sw?
 
-coverage/*
-.venv/*
-
-lighthouse-report.html
-lighthouse-report.json
+# Testing
 playwright-report
-stats.html
-# stats.json
+playwright-report/*
 test-results
+*storybook.log
+storybook-static
+
+# TypeScript build info
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
 
-*storybook.log
-storybook-static
-scripts/dedup.ts
+# Environment
+.env
 
+# Generated/temporary files
+lighthouse-report.html
+lighthouse-report.json
+stats.html
+scripts/dedup.ts
+screenshot_evolution.mp4
+frames/*
+
+# SEO exports
 seo/Countries.csv
 seo/Dates.csv
 seo/Devices.csv
@@ -47,12 +63,11 @@ seo/Pages.csv
 seo/Queries.csv
 seo/Search appearance.csv
 
-# Million Lint
+# Build tools
 .million
-playwright-report/*
-.env
-frames/*
-screenshot_evolution.mp4
+
+# AI tool caches
+.gemini
 
 # Cloudflare API scripts
 scripts/cloudflare/get_cf_rules.py
