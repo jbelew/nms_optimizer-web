@@ -53,7 +53,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 						}}
 					/>
 					<br />
-					Built by jbelew
+					Built by jbelew (void23 | QQ9Y-EJRS-P8KGW)
 					<a
 						href="https://github.com/jbelew/nms_optimizer-web"
 						target="_blank"

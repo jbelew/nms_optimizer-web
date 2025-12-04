@@ -8,7 +8,7 @@ FROM frontend-builder_${TARGETARCH} AS frontend-builder
 
 WORKDIR /app
 COPY package.json package-lock.json tsconfig.json vite.config.ts ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts --legacy-peer-deps
 COPY . .
 RUN npm run build:docker
 
