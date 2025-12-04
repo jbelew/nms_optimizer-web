@@ -34,7 +34,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
-	const iconButtonSize = isMediumOrLarger ? "2" : "1";
+	const iconButtonSize = isMediumOrLarger ? "1" : "1";
 	const activateRow = useGridStore((state) => state.activateRow);
 	const deActivateRow = useGridStore((state) => state.deActivateRow);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
@@ -60,7 +60,11 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
 						aria-label={t("gridControls.activateRow")}
 					>
-						<PlusCircledIcon />
+						{isMediumOrLarger ? (
+							<PlusCircledIcon width="20" height="20" className="shrink-0" />
+						) : (
+							<PlusCircledIcon className="shrink-0" />
+						)}
 					</IconButton>
 				</ConditionalTooltip>
 			)}
@@ -77,7 +81,11 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 						disabled={hasModulesInGrid || gridFixed || isLoading}
 						aria-label={t("gridControls.deactivateRow")}
 					>
-						<MinusCircledIcon />
+						{isMediumOrLarger ? (
+							<MinusCircledIcon width="20" height="20" className="shrink-0" />
+						) : (
+							<MinusCircledIcon className="shrink-0" />
+						)}
 					</IconButton>
 				</ConditionalTooltip>
 			)}
