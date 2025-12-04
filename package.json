@@ -60,6 +60,7 @@
 		"react-dom": "^19.1.0",
 		"react-ga4": "^2.1.0",
 		"react-i18next": "^16.2.4",
+		"react-is": "^19.2.1",
 		"react-markdown": "^10.1.0",
 		"react-router-dom": "^7.9.5",
 		"recharts": "^3.5.1",
