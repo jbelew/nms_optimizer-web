@@ -22,13 +22,13 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ onDismiss }) => {
 							style={{ color: "var(--accent-track)" }}
 						/>
 						<Flex direction="column" flexGrow="1">
-							<Text size="1">{t("installPrompt.iosInstructions")}</Text>
+							<Text size={{ initial: "2", sm: "3" }}>
+								{t("installPrompt.iosInstructions")}
+							</Text>
 						</Flex>
 					</Flex>
 					<Flex justify="end">
-						<Button size="1" onClick={onDismiss}>
-							{t("installPrompt.dismiss")}
-						</Button>
+						<Button onClick={onDismiss}>{t("installPrompt.dismiss")}</Button>
 					</Flex>
 				</Flex>
 			</Card>

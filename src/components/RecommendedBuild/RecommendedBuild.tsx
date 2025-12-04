@@ -1,6 +1,6 @@
 // src/components/RecommendedBuild/RecommendedBuild.tsx
 import React from "react";
-import { InfoCircledIcon, MagicWandIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
 	Button,
 	Callout,
@@ -121,18 +121,22 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					{renderBuildButton()}
 					<IconButton
 						variant="ghost"
-						size="2"
+						size="1"
 						radius="full"
 						aria-label={t("buttons.changelog")}
 						onClick={handleOpenInstructions}
 					>
-						<QuestionMarkCircledIcon />
+						<InfoCircledIcon width="24" height="24" className="shrink-0" />
 					</IconButton>
 				</div>
 			) : (
 				<Callout.Root size="1">
 					<Callout.Icon>
-						<InfoCircledIcon />
+						<InfoCircledIcon
+							width="20"
+							height="20"
+							className="mt-0.5 shrink-0 sm:mt-0"
+						/>
 					</Callout.Icon>
 					<Callout.Text size={{ initial: "2", sm: "3" }}>
 						<Trans
@@ -144,6 +148,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 									<Link
 										href="#"
 										underline="always"
+										weight="medium"
 										onClick={(e) => {
 											e.preventDefault(); // Prevent jump to top
 											handleOpenInstructions();

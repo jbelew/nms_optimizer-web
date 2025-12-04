@@ -5,6 +5,9 @@ import UpdatePrompt from "./UpdatePrompt";
 const meta = {
 	component: UpdatePrompt,
 	title: "components/UpdatePrompt",
+	parameters: {
+		layout: "fullscreen",
+	},
 } satisfies Meta<typeof UpdatePrompt>;
 
 export default meta;

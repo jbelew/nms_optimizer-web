@@ -175,7 +175,18 @@ export const Mobile: Story = {
 	args: {
 		...Desktop.args,
 	},
-	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
+	decorators: [
+		(Story, context) => {
+			// Mock touch device for mobile story to show TapInstructions
+			Object.defineProperty(navigator, "maxTouchPoints", {
+				value: 1,
+				writable: true,
+				configurable: true,
+			});
+
+			return withLocalProviders(false, context.loaded.techTree)(Story);
+		},
+	],
 	render: Desktop.render,
 	parameters: {
 		docs: {
