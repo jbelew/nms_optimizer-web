@@ -1,11 +1,4 @@
-# [6.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.1...v6.6.0) (2025-12-05)
-
-
-### Features
-
-* **background:** Generate improved mobile blurred background ([dc697fd](https://github.com/jbelew/nms_optimizer-web/commit/dc697fdc3796705c829c295f0465a08d9cbc2ae3))
-
-## [6.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.1...v6.4.2) (2025-12-05)
+## [6.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.4.3) (2025-12-05)
 
 
 ### Performance Improvements
@@ -19,7 +12,7 @@
 
 * **deps:** regenerate package-lock.json to fix CI error ([dca6dd3](https://github.com/jbelew/nms_optimizer-web/commit/dca6dd3a6ed8e0a9e5ba7a0a45429c2db2be9745))
 
-# [6.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.11...v6.4.0) (2025-12-04)
+## [6.4.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.3.11...v6.4.0) (2025-12-04)
 
 
 ### Features
