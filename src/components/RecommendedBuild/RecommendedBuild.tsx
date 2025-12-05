@@ -130,7 +130,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					</IconButton>
 				</div>
 			) : (
-				<Callout.Root size="1" color="gray" variant="surface">
+				<Callout.Root size="1" color="gray" variant="outline">
 					<Callout.Icon>
 						<InfoCircledIcon className="shrink-0" />
 					</Callout.Icon>
