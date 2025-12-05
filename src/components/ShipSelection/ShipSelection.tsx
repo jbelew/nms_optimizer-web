@@ -101,13 +101,13 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				});
 
 				// TODO: Turn this back on if the Corvette bug shows up again
-				if (option === "corvette_old") {
+				if (option === "corvette") {
 					showInfo(
 						"Corvette Warning!",
 						<>
-							As of version 6.18.1, Corvettes still have a bug that may cause layouts
-							to reset unexpectedly. If you create a layout, use the new{" "}
-							<strong>Save Build</strong> feature to keep a quick backup.
+							As of version 6.18., Corvettes <strong>STILL(!!!)</strong> have a bug
+							that may cause layouts to reset unexpectedly. If you create a layout,
+							use the new <strong>Save Build</strong> feature to keep a backup.
 						</>
 					);
 				}
