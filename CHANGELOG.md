@@ -1,3 +1,10 @@
+## [6.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.1...v6.4.2) (2025-12-05)
+
+
+### Performance Improvements
+
+* **mobile-background:** Update blurred background image ([2514a4d](https://github.com/jbelew/nms_optimizer-web/commit/2514a4d6df42b7f589619fc5950c4fab19d670a6))
+
 ## [6.4.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.0...v6.4.1) (2025-12-04)
 
 
