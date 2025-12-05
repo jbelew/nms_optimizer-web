@@ -1,3 +1,10 @@
+## [6.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.0...v6.5.1) (2025-12-05)
+
+
+### Bug Fixes
+
+* **ship-selection:** Update Corvette warning trigger and message ([2f0ced5](https://github.com/jbelew/nms_optimizer-web/commit/2f0ced5fe7960fbe21edcdbe0b3379a0833ccea7))
+
 # [6.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.5.0) (2025-12-05)
 
 
