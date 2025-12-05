@@ -1,3 +1,10 @@
+# [6.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.5.0) (2025-12-05)
+
+
+### Features
+
+* **ui:** improve image visibility and heading readability ([eda84f6](https://github.com/jbelew/nms_optimizer-web/commit/eda84f60966dd007c10b45aeba69502a9c8ce13b))
+
 ## [6.4.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.1...v6.4.2) (2025-12-05)
 
 
