@@ -1,24 +1,23 @@
 ## Grundlegende Verwendung
 
 - **Klicken oder tippen** Sie auf das ⚙️-Symbol, um Ihre **Plattform** auszuwählen (Raumschiffe, Multitools, Korvetten usw.).
-- **Klicken oder doppeltippen** Sie auf eine Zelle, um sie als **Supercharged** zu markieren (bis zu 4 pro Raster).
-- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf Mobilgeräten), um den **aktiven** Status einer Zelle umzuschalten – aktive Zellen können Module enthalten.
-- Verwenden Sie die **Zeilen-Umschaltschaltflächen**, um ganze Zeilen zu aktivieren oder zu deaktivieren. Reihenumschaltungen werden **deaktiviert, sobald Module platziert sind** und wieder aktiviert, wenn Sie **Reset Grid** drücken.
+- **Klicken oder doppeltippen** (auf Mobilgeräten), um eine Zelle als **Supercharged** zu markieren.
+- **Strg-Klick** (Windows) / **⌘-Klick** (Mac) oder **einmaliges Tippen** (auf Mobilgeräten), um den **aktiven** Status einer Zelle umzuschalten.
+- Verwenden Sie die **Zeilen-Umschaltschaltflächen**, um ganze Zeilen zu aktivieren oder zu deaktivieren. Reihenumschaltungen werden **deaktiviert, sobald Module platziert sind**.
 
 > 💡 **Hinweis:** Exosuits und Exocraft haben feste Gitterkonfigurationen. Exocraft-Zellen können überhaupt nicht verändert werden. Bei Exosuits können Sie Zellen nur aktiv oder inaktiv umschalten; Das Ändern des aufgeladenen Layouts wird nicht unterstützt.
 
-## Builds speichern und laden
+## Builds speichern, laden und teilen
 
-Sie können Ihre optimierten Layouts in einer Datei speichern und später erneut laden, sodass Sie problemlos mehrere Konfigurationen für dieselbe Plattform verwalten oder Builds mit Freunden teilen können.
+Sie können Ihre optimierten Layouts speichern, sie später erneut laden oder mit Freunden teilen, sodass Sie problemlos mehrere Konfigurationen für dieselbe Plattform verwalten können.
 
-- **Build speichern** – Klicken Sie auf das Speichersymbol, um Ihr aktuelles Layout als „.nms“-Datei herunterzuladen. Sie werden aufgefordert, Ihrem Build einen Namen zu geben. Das Tool generiert automatisch Themennamen wie „Corvette – Crusade of the Starfall.nms“, die Sie anpassen können.
+- **Build speichern** – Klicken Sie auf das Speichersymbol, um Ihr aktuelles Layout als „.nms“-Datei herunterzuladen. Sie werden aufgefordert, Ihrem Build einen Namen zu geben. Das Tool generiert außerdem automatisch thematische Namen wie „Corvette – Crusade of the Starfall.nms“, die Sie anpassen können.
 - **Build laden** – Klicken Sie auf das Ladesymbol, um eine zuvor gespeicherte „.nms“-Datei hochzuladen. Ihr Raster wird sofort aktualisiert, um dem gespeicherten Layout zu entsprechen, einschließlich aller Modulplatzierungen und aufgeladenen Zellenpositionen.
-
-Build-Dateien werden auf Integrität und Kompatibilität überprüft. Wenn ein Build von einem anderen Plattformtyp gespeichert wurde oder beschädigt ist, werden Sie vom Tool darüber informiert.
+- **Build teilen** – Klicken Sie auf das Teilen-Symbol, um einen gemeinsam nutzbaren Link für Ihr aktuelles Layout zu generieren. Freunde können über diesen Link Ihren Build direkt in ihren Optimierer laden, ohne die Datei zu benötigen.
 
 ## Bevor Sie beginnen
 
-Dieses Tool richtet sich an **Endgame-Spieler**, die das Technologielayout ihrer Plattform für maximale Effizienz optimieren möchten. Es funktioniert am besten, wenn:
+Dieses Tool wurde für **Endgame-Spieler** entwickelt, die das Technologielayout ihrer Plattform für maximale Effizienz optimieren möchten. Es funktioniert am besten, wenn:
 
 - Sie haben **die meisten oder alle Zellen** auf Ihrer Plattform (Starship, Exosuit, Exocraft oder Multi-Tool) freigeschaltet.
 - Sie haben Zugriff auf **alle relevanten Technologien**.
@@ -35,17 +34,10 @@ Corvettes funktionieren etwas anders als andere Plattformen – statt nur einem 
 
 Der Solver schlägt auch die besten kosmetischen Upgrades vor, wenn Sie lieber Wert auf Leistung als auf Aussehen legen – in der Praxis sind die Kompromisse jedoch meist recht gering.
 
-Bedenken Sie, dass ein vollständig aktualisiertes Corvette-Tech-Subsystem **viel** Platz einnimmt. Bei vollen 60 Technologie-Slots haben Sie normalerweise nur Platz für drei oder vier **Min/Max-Lösungen**, also wählen Sie mit Bedacht aus.
-
 ## Empfohlene Builds
 
-Für Plattformen wie **Exosuits** und **Exocraft**, bei denen die aufgeladenen Zellen fest installiert sind, ist die Anzahl der realisierbaren Layouts **extrem begrenzt**. Anstatt uns mit Milliarden von Permutationen auseinanderzusetzen, wie wir es bei Raumschiffen oder Multitools tun, arbeiten wir mit nur einer Handvoll Best-Case-Möglichkeiten.
-
-Dadurch kann das Tool **empfohlene Builds** anbieten – sorgfältig ausgewählte und äußerst eigenwillige Layouts, die die besten verfügbaren Kombinationen widerspiegeln. Das System unterstützt auch **mehrere Builds pro Plattform**, zugeschnitten auf verschiedene Anwendungsfälle. Zum Beispiel:
-
-- Der **Minotaurus** enthält sowohl einen **Allzweck-Build** (für den Fall, dass Sie ihn aktiv steuern) als auch einen **dedizierten Build zur KI-Unterstützung** (optimiert für den Remote-Einsatz).
-
-Andere Plattformen könnten **spezialisierte Varianten in der Zukunft** beinhalten – wie zum Beispiel ein **Pilgrim-Rennsetup** oder einen **Scanner-gestützten Exosuit** – abhängig vom Feedback und der Nachfrage der Benutzer.
+Für Plattformen wie **Exosuits** und **Exocraft**, bei denen die aufgeladenen Zellen fest installiert sind, ist die Anzahl der realisierbaren Layouts **extrem begrenzt**.
+Dadurch kann das Tool **empfohlene Builds** anbieten – sorgfältig ausgewählte und äußerst eigenwillige Layouts, die die besten verfügbaren Kombinationen widerspiegeln.
 
 Wenn Sie Feedback haben oder alternative Konfigurationen vorschlagen möchten, können Sie gerne [eine Diskussion starten](https://github.com/jbelew/nms_optimizer-web/discussions) – diese Builds werden kuratiert und nicht automatisch generiert, und der Input der Community hilft, sie zu verbessern.
 
@@ -59,11 +51,8 @@ Aufgeladene Zellen bieten große Vorteile, sind aber begrenzt – jede Platzieru
 - Nachdem Ihre Kerntechnologien gelöst sind, konzentrieren Sie sich auf diejenigen mit **größerer Modulanzahl** (z. B. _Hyperdrive_, _Starship Trails_), bevor Ihnen der zusammenhängende Platz ausgeht.
 - Der Löser übernimmt die schwere Arbeit – Ihre Aufgabe ist es, basierend auf Ihrer Spielweise **Technologien zu priorisieren**.
 
-Wenn der Platz im Raster knapp wird, müssen Sie möglicherweise **einige Technologien zurücksetzen** und sie in einer anderen Reihenfolge lösen, um die gefürchtete **Optimierungswarnung** zu vermeiden. Bei einem vollständig aufgerüsteten Raumschiff bleibt oft nur eine offene Zelle übrig – oder gar keine, wenn Sie einen **Abfangjäger** optimieren.
+Wenn der Platz im Raster knapp wird, müssen Sie möglicherweise **einige Technologien zurücksetzen** und sie in einer anderen Reihenfolge lösen, um die gefürchtete **Optimierungswarnung** zu vermeiden. Bei einem vollständig aufgerüsteten Raumschiff verfügen Sie oft über ein komplett vollständiges Gitter.
 
 ## Profi-Tipp
 
-Hinter der Platzierung steckt echte Mathematik. Der Solver arbeitet innerhalb fester Fenster, basierend auf der Anzahl der Module, die eine Technologie erfordert, und wählt im Allgemeinen das effizienteste Layout aus, ohne Platz zu verschwenden. Aber wenn die Dinge nicht stimmen:
-
-- Versuchen Sie, **einige Zellen zu deaktivieren**, um den Solver zu einem besseren Fenster zu führen.
-- Eine kleine Anpassung kann wichtige Platzierungszonen freigeben und Ihr endgültiges Layout verbessern.
+Hinter der Platzierung steckt echte Mathematik. Der Solver sucht nach festen Fenstern, die der Anzahl der Module entsprechen, die eine Technologie benötigt, und findet normalerweise das platzeffizienteste Layout. Wenn etwas nicht stimmt, versuchen Sie, **einige Zellen vorübergehend zu deaktivieren**, um es an eine bessere Stelle im Raster zu lenken.
