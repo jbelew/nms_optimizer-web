@@ -1,3 +1,16 @@
+# [6.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.5.0) (2025-12-05)
+
+
+### Bug Fixes
+
+* **ship-selection:** Update Corvette warning trigger and message ([2f0ced5](https://github.com/jbelew/nms_optimizer-web/commit/2f0ced5fe7960fbe21edcdbe0b3379a0833ccea7))
+
+
+### Features
+
+* **background:** Generate improved mobile blurred background ([dc697fd](https://github.com/jbelew/nms_optimizer-web/commit/dc697fdc3796705c829c295f0465a08d9cbc2ae3))
+* **ui:** improve image visibility and heading readability ([eda84f6](https://github.com/jbelew/nms_optimizer-web/commit/eda84f60966dd007c10b45aeba69502a9c8ce13b))
+
 ## [6.4.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.4.3) (2025-12-05)
 
 
