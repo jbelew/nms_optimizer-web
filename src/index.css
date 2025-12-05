@@ -113,7 +113,7 @@ body {
 	font-weight: 400;
 	text-transform: uppercase;
 	text-shadow: 0 2px 4px var(--accent-a2);
-	-webkit-text-stroke: 0.8px;
+	-webkit-text-stroke: 1px;
 }
 
 body.a11y-font .heading-styled {

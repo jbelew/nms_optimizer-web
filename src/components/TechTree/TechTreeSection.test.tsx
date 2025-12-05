@@ -304,6 +304,6 @@ describe("TechTreeSection", () => {
 		const img = container.querySelector("img");
 		expect(img).toHaveClass("h-[24]");
 		expect(img).toHaveClass("w-[36]");
-		expect(img).toHaveClass("opacity-25");
+		expect(img).toHaveClass("opacity-35");
 	});
 });

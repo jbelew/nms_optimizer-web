@@ -75,11 +75,11 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 								src={imagePath}
 								srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
 								alt={type}
-								className="mt-px mr-1 ml-1 h-[24] w-[36] opacity-25 sm:mt-1"
-								style={{
-									filter: "hue-rotate(190deg) saturate(2) brightness(1.5)",
-									mixBlendMode: "color-dodge",
-								}}
+								className="mt-px mr-1 ml-1 h-[24] w-[36] opacity-35 sm:mt-1"
+								// style={{
+								// 	filter: "hue-rotate(190deg) saturate(2) brightness(2)",
+								// 	mixBlendMode: "color-dodge",
+								// }}
 							/>
 						)}
 					<h2 className="heading-styled text-xl sm:text-2xl">
