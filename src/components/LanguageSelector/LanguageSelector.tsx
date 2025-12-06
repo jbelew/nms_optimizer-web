@@ -38,7 +38,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  */
 const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
-	const isMd = useBreakpoint("768px");
+	const isMd = useBreakpoint("1024px");
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();

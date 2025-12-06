@@ -81,6 +81,14 @@ body.a11y-font .radix-themes {
 	}
 }
 
+/* On non-touch (fine pointer) devices, increase padding */
+@media (width >= 639px) and (width <= 1023px) {
+	:root {
+		--grid-padding: 64px;
+		--grid-cell-max: 72px;
+	}
+}
+
 html {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;

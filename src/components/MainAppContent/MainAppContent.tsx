@@ -129,7 +129,6 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 						direction={{ initial: "column", md: "row" }}
 						align={{ initial: "center", md: "start" }}
 						className="main-app__content"
-						p="5"
 						ref={gridContainerRef}
 					>
 						{/* Grid section */}

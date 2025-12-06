@@ -18,7 +18,7 @@ export const TechTreeSkeleton: React.FC = () => {
 			{isLarge ? (
 				// Skeleton for large screens: A scroll area with a fixed height.
 				<ScrollArea
-					className="main-app__tech-tree-sidebar shadow-md"
+					className="main-app__tech-tree-sidebar shadow-sm"
 					style={{
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 						backgroundColor: "var(--gray-a3)",

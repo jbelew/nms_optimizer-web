@@ -6,7 +6,16 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	padding-left: var(--space-5);
+	padding-right: var(--space-5);
+	padding-top: var(--space-5);
 	position: relative;
+
+	@media (width >= 640px) and (width <= 1024px) {
+		padding-left: var(--space-6);
+		padding-right: var(--space-6);
+		padding-top: var(--space-6);
+	}
 
 	@media (width >= 1024px) {
 		border-top-left-radius: var(--radius-5);
@@ -25,20 +34,20 @@
 			left: var(--space-5) !important; // 24px
 			top: var(--space-5) !important; // 24px
 
-			@media (width >= 640px) {
-				left: var(--space-5) !important; // 24px
-				top: var(--space-5) !important; // 24px
+			@media (width >= 639px) and (width <= 1023px) {
+				left: var(--space-6) !important; // 24px
+				top: var(--space-6) !important; // 24px
 			}
 		}
 
 		&--right {
-			display: none;
-			top: var(--space-5) !important; // 24px
+			right: var(--space-5); // 24px
+			top: var(--space-5); // 24px
 
-			@media (width >= 640px) {
+			@media (width >= 639px) and (width <= 1023px) {
 				display: flex;
-				right: var(--space-5) !important; // 24px
-				top: var(--space-5) !important; // 24px
+				right: var(--space-6) !important; // 24px
+				top: var(--space-6) !important; // 24px
 			}
 		}
 	}
