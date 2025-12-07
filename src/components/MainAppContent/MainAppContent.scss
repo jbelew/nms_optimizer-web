@@ -31,12 +31,12 @@ $panel-border: 1px solid var(--gray-a5);
 		// Desktop: use backdrop-filter for dynamic blur
 		@media (width >= 640px) {
 			backdrop-filter: blur(64px);
-			background-color: var(--accent-a3);
+			background-color: var(--gray-a3);
 		}
 
 		// Mobile: use pre-blurred background image for better performance
 		@media (width <= 639px) {
-			background-image: url("/assets/img/background@mobile-blurred_v3.webp");
+			background-image: url("/assets/img/background@mobile-blurred_v4.webp");
 			background-position: center top;
 			background-repeat: no-repeat;
 			background-size: cover;
@@ -56,6 +56,7 @@ $panel-border: 1px solid var(--gray-a5);
 		// Accessibility override: disable background image
 		body.a11y-font & {
 			@media (width <= 639px) {
+				background-color: var(--accent-a3);
 				background-image: none !important;
 			}
 		}
@@ -127,3 +128,9 @@ body.a11y-font {
 		-webkit-text-stroke: 0;
 	}
 }
+
+/* @media (width <=639px) {
+			body::before {
+				background-image: none;
+			}
+		} */

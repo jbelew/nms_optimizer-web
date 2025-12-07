@@ -14,7 +14,7 @@ const projectRoot = join(__dirname, "..");
 // Colors we're using in main.tsx
 const colors = [
 	"cyan",
-	"sage",
+	"slate",
 	"purple",
 	"amber",
 	"blue",

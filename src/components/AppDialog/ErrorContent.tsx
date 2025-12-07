@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
@@ -19,6 +19,14 @@ interface ErrorContentProps {
 const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
 	const errorType = useOptimizeStore((state) => state.errorType);
+
+	useEffect(() => {
+		document.body.classList.add("error-boundary-visible");
+
+		return () => {
+			document.body.classList.remove("error-boundary-visible");
+		};
+	}, []);
 
 	const handleRetry = () => {
 		window.location.reload();

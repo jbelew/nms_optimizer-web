@@ -56,6 +56,11 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 
 	useEffect(() => {
 		hideSplashScreenAndShowBackground();
+		document.body.classList.add("error-boundary-visible");
+
+		return () => {
+			document.body.classList.remove("error-boundary-visible");
+		};
 	}, []);
 
 	const content = (

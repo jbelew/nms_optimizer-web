@@ -97,7 +97,7 @@ createRoot(document.getElementById("root")!).render(
 				appearance="dark"
 				panelBackground="translucent"
 				accentColor="cyan"
-				grayColor="sage"
+				grayColor="slate"
 				scaling="100%"
 			>
 				<Toast.Provider swipeDirection="right">

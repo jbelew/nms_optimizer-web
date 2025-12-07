@@ -148,6 +148,12 @@
 			}
 		}
 
+		/* Show background on mobile when error boundary is visible */
+		body.error-boundary-visible::before {
+			background-image: image-set(url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x);
+		}
+
 		body.a11y-font::before {
 			background-image: none !important;
 			background-color: #0B161A;
@@ -172,7 +178,7 @@
 		imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" />
 
 	<!-- Preload blurred mobile background for card (critical for mobile performance) -->
-	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred_v3.webp" media="(max-width: 640px)"
+	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred_v4.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
 
 	<!-- Default language translations -->

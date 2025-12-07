@@ -78,7 +78,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 				.tint {
 					position: absolute;
 					inset: 0;
-					background-color: #00befd28;
+					background-color: #DDEAF814;
 					width: 100%;
 					height: 100%;
 					pointer-events: none;
