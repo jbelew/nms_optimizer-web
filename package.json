@@ -57,7 +57,7 @@
 		"i18next-http-backend": "^3.0.2",
 		"immer": "^11.0.1",
 		"react": "^19.1.0",
-		"react-dom": "^19.1.0",
+		"react-dom": "^19.2.1",
 		"react-ga4": "^2.1.0",
 		"react-i18next": "^16.2.4",
 		"react-is": "^19.2.1",
