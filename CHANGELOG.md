@@ -1,3 +1,10 @@
+## [6.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.0...v6.5.1) (2025-12-08)
+
+
+### Bug Fixes
+
+* **error-handling:** refine error boundary UI and mobile background behavior ([a64d6b0](https://github.com/jbelew/nms_optimizer-web/commit/a64d6b0895cbff9626813babf45db9f62f606a67))
+
 # [6.5.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.4.2...v6.5.0) (2025-12-05)
 
 
