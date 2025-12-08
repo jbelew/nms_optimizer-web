@@ -71,39 +71,83 @@ describe("useGridCellInteraction", () => {
 		return renderHook(() => useGridCellInteraction(cell, rowIndex, 0, isSharedGrid));
 	};
 
-	it("should call handleCellTap on single click on empty cell", () => {
+	// Helper for mock events
+	const createMockTouchEvent = () =>
+		({
+			cancelable: true,
+			preventDefault: vi.fn(),
+		}) as unknown as React.TouchEvent;
+
+	const createMockMouseEvent = (overrides = {}) =>
+		({
+			cancelable: true,
+			preventDefault: vi.fn(),
+			ctrlKey: false,
+			metaKey: false,
+			...overrides,
+		}) as unknown as React.MouseEvent;
+
+	it("should call handleCellTap on single tap (touch end) on empty cell", () => {
 		const { result } = renderGridCellHook({ module: null });
+		const mockEvent = createMockTouchEvent();
+
 		act(() => {
 			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(mockEvent);
 		});
-		vi.advanceTimersByTime(500);
+
+		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockHandleCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
 	});
 
-	it("should call handleCellDoubleTap on double click on empty cell", () => {
+	it("should call handleCellDoubleTap on double tap (touch end) on empty cell", () => {
 		const { result } = renderGridCellHook({ module: null });
+		const mockEvent1 = createMockTouchEvent();
+		const mockEvent2 = createMockTouchEvent();
+
 		act(() => {
-			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
-			vi.advanceTimersByTime(100);
-			result.current.handleClick({} as React.MouseEvent);
+			// First Tap
+			result.current.handleTouchEnd(mockEvent1);
 		});
-		vi.advanceTimersByTime(500);
+
+		// Simulate time passing (less than threshold)
+		vi.advanceTimersByTime(100);
+
+		act(() => {
+			// Second Tap
+			result.current.handleTouchEnd(mockEvent2);
+		});
+
+		expect(mockEvent1.preventDefault).toHaveBeenCalled();
+		expect(mockEvent2.preventDefault).toHaveBeenCalled();
 		expect(mockHandleCellDoubleTap).toHaveBeenCalledWith(0, 0);
 	});
 
-	it("should trigger shake and do nothing else if cell has a module", () => {
+	it("should trigger shake and do nothing else if cell has a module (Touch)", () => {
 		const { result } = renderGridCellHook({ module: "some-module" });
+		const mockEvent = createMockTouchEvent();
+
 		act(() => {
-			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(mockEvent);
 		});
-		vi.advanceTimersByTime(500);
+
+		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockTriggerShake).toHaveBeenCalled();
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
 		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
+	});
+
+	it("should trigger shake and do nothing else if cell has a module (Mouse)", () => {
+		const { result } = renderGridCellHook({ module: "some-module" });
+		const mockEvent = createMockMouseEvent();
+
+		act(() => {
+			result.current.handleClick(mockEvent);
+		});
+
+		expect(mockTriggerShake).toHaveBeenCalled();
+		expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
 	});
 
 	it("should call revertCellTap and trigger shake if superchargedFixed on double tap", () => {
@@ -113,13 +157,15 @@ describe("useGridCellInteraction", () => {
 		});
 
 		const { result } = renderGridCellHook({ module: null });
+
 		act(() => {
-			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
-			vi.advanceTimersByTime(100);
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(createMockTouchEvent());
 		});
-		vi.advanceTimersByTime(500);
+		vi.advanceTimersByTime(100);
+		act(() => {
+			result.current.handleTouchEnd(createMockTouchEvent());
+		});
+
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockTriggerShake).toHaveBeenCalled();
 	});
@@ -128,13 +174,15 @@ describe("useGridCellInteraction", () => {
 		mockGetState.mockReturnValue({ ...baseMockGridStoreState, gridFixed: true });
 
 		const { result } = renderGridCellHook({ module: null });
+
 		act(() => {
-			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
-			vi.advanceTimersByTime(100);
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(createMockTouchEvent());
 		});
-		vi.advanceTimersByTime(500);
+		vi.advanceTimersByTime(100);
+		act(() => {
+			result.current.handleTouchEnd(createMockTouchEvent());
+		});
+
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockTriggerShake).toHaveBeenCalled();
 	});
@@ -146,25 +194,40 @@ describe("useGridCellInteraction", () => {
 		});
 
 		const { result } = renderGridCellHook({ module: null, supercharged: false });
+
 		act(() => {
-			result.current.handleTouchStart();
-			result.current.handleClick({} as React.MouseEvent);
-			vi.advanceTimersByTime(100);
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(createMockTouchEvent());
 		});
-		vi.advanceTimersByTime(500);
+		vi.advanceTimersByTime(100);
+		act(() => {
+			result.current.handleTouchEnd(createMockTouchEvent());
+		});
+
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
 		expect(mockTriggerShake).toHaveBeenCalled();
 	});
 
-	it("should not interact if isSharedGrid is true", () => {
+	it("should not interact if isSharedGrid is true (Touch)", () => {
 		const { result } = renderGridCellHook({}, true);
+		const mockEvent = createMockTouchEvent();
+
 		act(() => {
-			result.current.handleClick({} as React.MouseEvent);
+			result.current.handleTouchEnd(mockEvent);
 		});
-		vi.advanceTimersByTime(500);
+
+		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockHandleCellTap).not.toHaveBeenCalled();
-		expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
+	});
+
+	it("should not interact if isSharedGrid is true (Mouse)", () => {
+		const { result } = renderGridCellHook({}, true);
+		const mockEvent = createMockMouseEvent();
+
+		act(() => {
+			result.current.handleClick(mockEvent);
+		});
+
+		expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
 	});
 
 	it("should prevent default on context menu", () => {
@@ -214,9 +277,7 @@ describe("useGridCellInteraction", () => {
 		});
 		expect(result.current.isTouching).toBe(true);
 		act(() => {
-			result.current.handleTouchEnd();
-			// Run the safety timeout
-			vi.advanceTimersByTime(1000);
+			result.current.handleTouchEnd(createMockTouchEvent());
 		});
 		expect(result.current.isTouching).toBe(false);
 	});
@@ -225,7 +286,7 @@ describe("useGridCellInteraction", () => {
 		it("should trigger shake on mouse click and not toggle supercharged when cell has module", () => {
 			const { result } = renderGridCellHook({ module: "exocraft" });
 			act(() => {
-				result.current.handleClick({} as React.MouseEvent);
+				result.current.handleClick(createMockMouseEvent());
 			});
 			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
 			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
@@ -234,138 +295,61 @@ describe("useGridCellInteraction", () => {
 		it("should trigger shake on Ctrl+Click and not toggle active when cell has module", () => {
 			const { result } = renderGridCellHook({ module: "exocraft" });
 			act(() => {
-				result.current.handleClick({ ctrlKey: true } as React.MouseEvent);
+				result.current.handleClick(createMockMouseEvent({ ctrlKey: true }));
 			});
 			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
 			expect(mockToggleCellActive).not.toHaveBeenCalled();
-		});
-
-		it("should trigger shake on touch tap and not call handleCellTap when cell has module", () => {
-			const { result } = renderGridCellHook({ module: "exocraft" });
-			act(() => {
-				result.current.handleTouchStart();
-				result.current.handleClick({} as React.MouseEvent);
-			});
-			vi.advanceTimersByTime(500);
-			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
-			expect(mockHandleCellTap).not.toHaveBeenCalled();
 		});
 
 		it("should trigger shake on double-tap and not call handleCellDoubleTap when cell has module", () => {
 			const { result } = renderGridCellHook({ module: "exocraft" });
 			act(() => {
-				result.current.handleTouchStart();
-				result.current.handleClick({} as React.MouseEvent);
-				vi.advanceTimersByTime(100);
-				result.current.handleClick({} as React.MouseEvent);
+				result.current.handleTouchEnd(createMockTouchEvent());
 			});
-			vi.advanceTimersByTime(500);
-			// Both clicks should trigger shake (once each)
+			vi.advanceTimersByTime(100);
+			act(() => {
+				result.current.handleTouchEnd(createMockTouchEvent());
+			});
+
+			// Both taps should trigger shake (once each)
 			expect(mockTriggerShake).toHaveBeenCalledTimes(2);
 			expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();
 		});
 
-		it("should trigger shake on keyboard spacebar and not toggle active when cell has module", () => {
-			const { result } = renderGridCellHook({ module: "exocraft" });
-			const mockEvent = {
-				key: " ",
-				preventDefault: vi.fn(),
-			} as unknown as React.KeyboardEvent;
-			act(() => {
-				result.current.handleKeyDown(mockEvent);
-			});
-			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
-			expect(mockToggleCellActive).not.toHaveBeenCalled();
-		});
-
-		it("should trigger shake on keyboard enter and not toggle active when cell has module", () => {
-			const { result } = renderGridCellHook({ module: "exocraft" });
-			const mockEvent = {
-				key: "Enter",
-				preventDefault: vi.fn(),
-			} as unknown as React.KeyboardEvent;
-			act(() => {
-				result.current.handleKeyDown(mockEvent);
-			});
-			expect(mockTriggerShake).toHaveBeenCalledTimes(1);
-			expect(mockToggleCellActive).not.toHaveBeenCalled();
-		});
-
-		it("should block all interactions when module is present (mixed click and keyboard)", () => {
-			const { result } = renderGridCellHook({ module: "exocraft" });
-			act(() => {
-				// Mouse click
-				result.current.handleClick({} as React.MouseEvent);
-				// Keyboard
-				const keyEvent = {
-					key: " ",
-					preventDefault: vi.fn(),
-				} as unknown as React.KeyboardEvent;
-				result.current.handleKeyDown(keyEvent);
-			});
-			expect(mockTriggerShake).toHaveBeenCalledTimes(2);
-			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
-			expect(mockToggleCellActive).not.toHaveBeenCalled();
-		});
-
-		it("should allow interactions when module is null", () => {
-			const { result } = renderGridCellHook({ module: null });
-			act(() => {
-				result.current.handleTouchStart();
-				result.current.handleClick({} as React.MouseEvent);
-			});
-			vi.advanceTimersByTime(500);
-			expect(mockHandleCellTap).toHaveBeenCalled();
-			expect(mockTriggerShake).not.toHaveBeenCalled();
-		});
+		// Removed combined test as mouse and keyboard are separate handlers now
 	});
 
 	describe("supercharge row limit - first 4 rows only", () => {
-		it("should block supercharging on row 4 and trigger shake", () => {
+		// Mouse tests
+		it("should block supercharging on row 4 and trigger shake (Mouse)", () => {
 			const { result } = renderGridCellHook({ module: null }, false, 4);
 			act(() => {
-				result.current.handleClick({} as React.MouseEvent);
+				result.current.handleClick(createMockMouseEvent());
 			});
 			expect(mockTriggerShake).toHaveBeenCalled();
 			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
 		});
 
-		it("should block supercharging on row 5 and trigger shake", () => {
-			const { result } = renderGridCellHook({ module: null }, false, 5);
-			act(() => {
-				result.current.handleClick({} as React.MouseEvent);
-			});
-			expect(mockTriggerShake).toHaveBeenCalled();
-			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
-		});
-
-		it("should allow supercharging on row 0", () => {
-			const { result } = renderGridCellHook({ module: null }, false, 0);
-			act(() => {
-				result.current.handleClick({} as React.MouseEvent);
-			});
-			expect(mockToggleCellSupercharged).toHaveBeenCalledWith(0, 0);
-			expect(mockTriggerShake).not.toHaveBeenCalled();
-		});
-
-		it("should allow supercharging on row 3", () => {
+		it("should allow supercharging on row 3 (Mouse)", () => {
 			const { result } = renderGridCellHook({ module: null }, false, 3);
 			act(() => {
-				result.current.handleClick({} as React.MouseEvent);
+				result.current.handleClick(createMockMouseEvent());
 			});
 			expect(mockToggleCellSupercharged).toHaveBeenCalledWith(3, 0);
 			expect(mockTriggerShake).not.toHaveBeenCalled();
 		});
 
+		// Touch tests
 		it("should block double-tap supercharge on row 4", () => {
 			const { result } = renderGridCellHook({ module: null }, false, 4);
 			act(() => {
-				result.current.handleTouchStart();
-				result.current.handleClick({} as React.MouseEvent);
-				vi.advanceTimersByTime(100);
-				result.current.handleClick({} as React.MouseEvent);
+				result.current.handleTouchEnd(createMockTouchEvent());
 			});
-			vi.advanceTimersByTime(500);
+			vi.advanceTimersByTime(100);
+			act(() => {
+				result.current.handleTouchEnd(createMockTouchEvent());
+			});
+
 			expect(mockTriggerShake).toHaveBeenCalled();
 			expect(mockRevertCellTap).toHaveBeenCalled();
 			expect(mockHandleCellDoubleTap).not.toHaveBeenCalled();

@@ -23,57 +23,72 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	}, []);
 
 	useEffect(() => {
+		let rafId: number | null = null;
+
 		const handleScroll = () => {
-			const currentScrollY = window.scrollY;
-
-			// 1. Top of Page Guarantee (including negative scroll for iOS bounce)
-			// Always show the toolbar if we are near the top.
-			if (currentScrollY <= threshold) {
-				setIsVisible(true);
-				lastScrollYRef.current = currentScrollY;
-				// Reset direction base to prevent immediate hiding when scrolling starts
-				directionBaseRef.current = currentScrollY;
-
+			if (rafId !== null) {
 				return;
 			}
 
-			// 2. Bottom of Page Handling (ignore bounce)
-			const isAtBottom =
-				window.innerHeight + currentScrollY >= document.documentElement.scrollHeight;
+			rafId = requestAnimationFrame(() => {
+				const currentScrollY = window.scrollY;
 
-			if (isAtBottom) {
+				// 1. Top of Page Guarantee (including negative scroll for iOS bounce)
+				// Always show the toolbar if we are near the top.
+				if (currentScrollY <= threshold) {
+					setIsVisible(true);
+					lastScrollYRef.current = currentScrollY;
+					// Reset direction base to prevent immediate hiding when scrolling starts
+					directionBaseRef.current = currentScrollY;
+					rafId = null;
+
+					return;
+				}
+
+				// 2. Bottom of Page Handling (ignore bounce)
+				const isAtBottom =
+					window.innerHeight + currentScrollY >= document.documentElement.scrollHeight;
+
+				if (isAtBottom) {
+					lastScrollYRef.current = currentScrollY;
+					rafId = null;
+
+					return;
+				}
+
+				// Determine direction
+				const isScrollingDown = currentScrollY > lastScrollYRef.current;
+				const currentDirection = isScrollingDown ? "down" : "up";
+
+				// Reset anchor point if direction changes
+				if (currentDirection !== lastDirectionRef.current) {
+					directionBaseRef.current = lastScrollYRef.current;
+					lastDirectionRef.current = currentDirection;
+				}
+
+				// Calculate distance scrolled in current direction since last direction change
+				const scrollDistance = Math.abs(currentScrollY - directionBaseRef.current);
+
+				// 3. Logic with Hysteresis
+				if (isScrollingDown && scrollDistance > hysteresis) {
+					setIsVisible(false);
+				} else if (!isScrollingDown && scrollDistance > hysteresis) {
+					setIsVisible(true);
+				}
+
 				lastScrollYRef.current = currentScrollY;
-
-				return;
-			}
-
-			// Determine direction
-			const isScrollingDown = currentScrollY > lastScrollYRef.current;
-			const currentDirection = isScrollingDown ? "down" : "up";
-
-			// Reset anchor point if direction changes
-			if (currentDirection !== lastDirectionRef.current) {
-				directionBaseRef.current = lastScrollYRef.current;
-				lastDirectionRef.current = currentDirection;
-			}
-
-			// Calculate distance scrolled in current direction since last direction change
-			const scrollDistance = Math.abs(currentScrollY - directionBaseRef.current);
-
-			// 3. Logic with Hysteresis
-			if (isScrollingDown && scrollDistance > hysteresis) {
-				setIsVisible(false);
-			} else if (!isScrollingDown && scrollDistance > hysteresis) {
-				setIsVisible(true);
-			}
-
-			lastScrollYRef.current = currentScrollY;
+				rafId = null;
+			});
 		};
 
 		window.addEventListener("scroll", handleScroll, { passive: true });
 
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
+
+			if (rafId !== null) {
+				cancelAnimationFrame(rafId);
+			}
 		};
 	}, [threshold, hysteresis]);
 

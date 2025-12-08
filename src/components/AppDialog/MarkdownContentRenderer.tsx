@@ -168,7 +168,13 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				);
 			},
 			a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
-				<Link href={href} target="_blank" rel="noopener noreferrer" underline="always">
+				<Link
+					weight="bold"
+					href={href}
+					target="_blank"
+					rel="noopener noreferrer"
+					underline="always"
+				>
 					{children}
 				</Link>
 			),

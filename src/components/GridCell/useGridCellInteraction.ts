@@ -1,11 +1,8 @@
 import type { Cell } from "../../store/GridStore";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
-
-// DEV FLAG: Set to true to make mouse clicks behave like touch taps for testing.
-const MOUSE_AS_TAP_ENABLED = false;
 
 // To track double taps correctly across all cells, we need a shared reference.
 // A tap on one cell should not be considered the first tap of a double tap on another.
@@ -15,7 +12,6 @@ let lastTapInfo = {
 };
 
 const DOUBLE_TAP_THRESHOLD = 400; // ms
-const TOUCH_INTERACTION_DELAY = 100; // ms (reduced from 500)
 
 /**
  * Custom hook for handling user interactions (clicks, touches, keyboard) with a grid cell.
@@ -56,51 +52,6 @@ export const useGridCellInteraction = (
 
 	const { triggerShake: storeTriggerShake } = useShakeStore();
 
-	const isTouchInteraction = useRef(false);
-	const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const touchResetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-	/**
-	 * Handles the touch start event for a grid cell.
-	 * Sets `isTouchInteraction` to true and `isTouching` to true.
-	 */
-	const handleTouchStart = useCallback(() => {
-		if (touchTimeoutRef.current) {
-			clearTimeout(touchTimeoutRef.current);
-			touchTimeoutRef.current = null;
-		}
-
-		if (touchResetTimeoutRef.current) {
-			clearTimeout(touchResetTimeoutRef.current);
-			touchResetTimeoutRef.current = null;
-		}
-
-		isTouchInteraction.current = true;
-		setIsTouching(true);
-	}, []);
-
-	/**
-	 * Handles the touch end event for a grid cell.
-	 * Sets `isTouching` to false and resets `isTouchInteraction` after a short delay.
-	 */
-	const handleTouchEnd = useCallback(() => {
-		setIsTouching(false);
-		// Reset after a short delay. onClick fires after onTouchEnd.
-		touchTimeoutRef.current = setTimeout(() => {
-			isTouchInteraction.current = false;
-			touchTimeoutRef.current = null;
-		}, TOUCH_INTERACTION_DELAY);
-		// Safety timeout to ensure isTouching is cleared even if touch events don't fire properly
-		touchResetTimeoutRef.current = setTimeout(() => {
-			setIsTouching(false);
-			touchResetTimeoutRef.current = null;
-		}, 1000);
-	}, []);
-
-	const handleTouchCancel = useCallback(() => {
-		handleTouchEnd();
-	}, [handleTouchEnd]);
-
 	/**
 	 * Triggers a visual shake animation on the grid.
 	 * Calls the `triggerShake` action from the ShakeStore.
@@ -108,6 +59,90 @@ export const useGridCellInteraction = (
 	const triggerShake = useCallback(() => {
 		storeTriggerShake();
 	}, [storeTriggerShake]);
+
+	const handleTouchLogic = useCallback(() => {
+		const currentTime = new Date().getTime();
+		const timeSinceLastTap = currentTime - lastTapInfo.time;
+		const isSameCell = lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
+
+		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
+			// Double tap on the same cell
+			lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
+			const totalSupercharged = selectTotalSuperchargedCells();
+			const isInvalidDoubleTap =
+				superchargedFixed ||
+				gridFixed ||
+				rowIndex >= 4 ||
+				(totalSupercharged >= 4 && !cell.supercharged);
+
+			if (isInvalidDoubleTap) {
+				triggerShake();
+				revertCellTap(rowIndex, columnIndex);
+			} else {
+				handleCellDoubleTap(rowIndex, columnIndex);
+			}
+		} else {
+			// Single tap or tap on a different cell
+			lastTapInfo = { time: currentTime, cell: [rowIndex, columnIndex] };
+			const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
+
+			if (isInvalidSingleTap) {
+				triggerShake();
+				clearInitialCellStateForTap();
+			} else {
+				handleCellTap(rowIndex, columnIndex);
+			}
+		}
+	}, [
+		cell.supercharged,
+		columnIndex,
+		clearInitialCellStateForTap,
+		gridFixed,
+		handleCellDoubleTap,
+		handleCellTap,
+		revertCellTap,
+		rowIndex,
+		selectTotalSuperchargedCells,
+		superchargedFixed,
+		triggerShake,
+	]);
+
+	/**
+	 * Handles the touch start event for a grid cell.
+	 */
+	const handleTouchStart = useCallback(() => {
+		setIsTouching(true);
+	}, []);
+
+	/**
+	 * Handles the touch end event for a grid cell.
+	 * Calls preventDefault to stop the browser from generating a click event, eliminating the 300ms delay.
+	 */
+	const handleTouchEnd = useCallback(
+		(event: React.TouchEvent | React.MouseEvent) => {
+			// We can cast event to any because we preventDefault on both if needed,
+			// though physically this is usually a TouchEvent.
+			if (event.cancelable) {
+				event.preventDefault();
+			}
+
+			setIsTouching(false);
+			if (isSharedGrid) return;
+
+			if (cell.module) {
+				triggerShake();
+
+				return;
+			}
+
+			handleTouchLogic();
+		},
+		[handleTouchLogic, isSharedGrid, cell.module, triggerShake]
+	);
+
+	const handleTouchCancel = useCallback(() => {
+		setIsTouching(false);
+	}, []);
 
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {
@@ -122,66 +157,27 @@ export const useGridCellInteraction = (
 				return;
 			}
 
-			// Mouse-specific logic
-			if (!isTouchInteraction.current && !MOUSE_AS_TAP_ENABLED) {
-				if (event.ctrlKey || event.metaKey) {
-					// Ctrl/Cmd + Click: Toggle Active
-					if (gridFixed) {
-						triggerShake();
-					} else {
-						toggleCellActive(rowIndex, columnIndex);
-					}
+			// Mouse-specific logic (Ctrl/Cmd + Click)
+			if (event.ctrlKey || event.metaKey) {
+				// Ctrl/Cmd + Click: Toggle Active
+				if (gridFixed) {
+					triggerShake();
 				} else {
-					// Normal Click: Toggle Supercharged
-					const totalSupercharged = selectTotalSuperchargedCells();
-					const isInvalidSuperchargeToggle =
-						superchargedFixed ||
-						gridFixed ||
-						rowIndex >= 4 ||
-						(totalSupercharged >= 4 && !cell.supercharged);
-
-					if (isInvalidSuperchargeToggle) {
-						triggerShake();
-					} else {
-						toggleCellSupercharged(rowIndex, columnIndex);
-					}
+					toggleCellActive(rowIndex, columnIndex);
 				}
-
-				return;
-			}
-
-			// Touch-specific logic for empty cells (single/double tap)
-			const currentTime = new Date().getTime();
-			const timeSinceLastTap = currentTime - lastTapInfo.time;
-			const isSameCell =
-				lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
-
-			if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
-				// Double tap on the same cell
-				lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
+			} else {
+				// Normal Click: Toggle Supercharged
 				const totalSupercharged = selectTotalSuperchargedCells();
-				const isInvalidDoubleTap =
+				const isInvalidSuperchargeToggle =
 					superchargedFixed ||
 					gridFixed ||
 					rowIndex >= 4 ||
 					(totalSupercharged >= 4 && !cell.supercharged);
 
-				if (isInvalidDoubleTap) {
+				if (isInvalidSuperchargeToggle) {
 					triggerShake();
-					revertCellTap(rowIndex, columnIndex);
 				} else {
-					handleCellDoubleTap(rowIndex, columnIndex);
-				}
-			} else {
-				// Single tap or tap on a different cell
-				lastTapInfo = { time: currentTime, cell: [rowIndex, columnIndex] };
-				const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
-
-				if (isInvalidSingleTap) {
-					triggerShake();
-					clearInitialCellStateForTap();
-				} else {
-					handleCellTap(rowIndex, columnIndex);
+					toggleCellSupercharged(rowIndex, columnIndex);
 				}
 			}
 		},
@@ -189,10 +185,6 @@ export const useGridCellInteraction = (
 			isSharedGrid,
 			rowIndex,
 			columnIndex,
-			handleCellTap,
-			handleCellDoubleTap,
-			revertCellTap,
-			clearInitialCellStateForTap,
 			toggleCellActive,
 			toggleCellSupercharged,
 			cell.supercharged,

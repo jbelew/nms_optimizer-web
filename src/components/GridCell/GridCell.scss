@@ -2,6 +2,7 @@
 	background-color: var(--accent-a2);
 	border-radius: 2px;
 	height: var(--grid-cell-size);
+	touch-action: manipulation;
 
 	/* Prevent callout menu on iOS tap-hold */
 	-webkit-touch-callout: none;
