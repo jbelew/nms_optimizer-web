@@ -164,10 +164,21 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 								solving={solving}
 								progressPercent={progressPercent}
 								status={status}
-								shared={isSharedGrid}
+								sharedGrid={isSharedGrid}
 								ref={appLayoutGridTableRef}
 							/>
 						</Box>
+
+						{/* {isSharedGrid && (
+							<Callout.Root mt="3" size="1">
+								<Callout.Icon>
+									<InfoCircledIcon />
+								</Callout.Icon>
+								<Callout.Text>
+									<span className="text-sm sm:text-base">{t("gridTable.tapInstructions")}</span>
+								</Callout.Text>
+							</Callout.Root>
+						)} */}
 
 						{/* Tech tree section */}
 						{!isSharedGrid && (
@@ -193,7 +204,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 					</Flex>
 
 					{!isLargeScreen && (
-						<div>
+						<div className="main-app__footer-wrapper">
 							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
 						</div>
 					)}

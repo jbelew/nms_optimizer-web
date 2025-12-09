@@ -32,7 +32,6 @@ $panel-border: 1px solid var(--gray-a5);
 		// Mobile: use pre-blurred background image for better performance
 		// and use a fixed pseudo-element to prevent scroll jank
 		@media (width <= 639px) {
-			background: transparent;
 			max-width: fit-content;
 		}
 
@@ -44,6 +43,20 @@ $panel-border: 1px solid var(--gray-a5);
 			box-shadow:
 				inset 0 0 16px rgb(255 255 255 / 5%),
 				var(--tw-shadow, 0 0 #0000);
+		}
+
+		// Tablet: Fill full height (no container padding)
+		@media (width >= 640px) and (width < 1024px) {
+			display: flex;
+			flex-direction: column;
+			min-height: 100dvh;
+		}
+
+		// Mobile: Fill remaining height (minus container padding)
+		@media (width < 640px) {
+			display: flex;
+			flex-direction: column;
+			min-height: calc(100dvh - 3rem);
 		}
 
 		// Accessibility override: disable background image
@@ -115,6 +128,13 @@ $panel-border: 1px solid var(--gray-a5);
 	&__tech-tree-sidebar {
 		// border: $panel-border;
 		width: 396px;
+	}
+
+	&__footer-wrapper {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		justify-content: flex-end;
 	}
 }
 

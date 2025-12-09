@@ -67,7 +67,7 @@ export const Default: Story = {
 	args: {
 		solving: false,
 		progressPercent: 0,
-		shared: false,
+		sharedGrid: false,
 	},
 	parameters: {
 		docs: {
@@ -83,7 +83,7 @@ export const Solving: Story = {
 	args: {
 		solving: true,
 		progressPercent: 45,
-		shared: false,
+		sharedGrid: false,
 	},
 	parameters: {
 		docs: {
