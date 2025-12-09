@@ -1,3 +1,10 @@
+## [6.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.3...v6.5.4) (2025-12-09)
+
+
+### Bug Fixes
+
+* **shared-builds:** show read-only warning for shared builds ([ba9cd7b](https://github.com/jbelew/nms_optimizer-web/commit/ba9cd7bdffe74b7118cf0aea1025762df8c7fa79))
+
 ## [6.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.2...v6.5.3) (2025-12-09)
 
 
