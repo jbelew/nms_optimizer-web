@@ -6,7 +6,7 @@ import {
 	Share1Icon,
 } from "@radix-ui/react-icons";
 import * as Toolbar from "@radix-ui/react-toolbar";
-import { IconButton, Switch } from "@radix-ui/themes";
+import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { DownloadIcon } from "@/components/Icons/DownloadIcon";
@@ -129,18 +129,17 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						<PieChartIcon className="h-4 w-4" />
 					</IconButton>
 
-					<LanguageSelector />
-
 					{/* A11y mode switch */}
-					<div className="flex items-center gap-1">
-						<EyeOpenIcon style={{ color: "var(--accent-a11)" }} className="h-4 w-4" />
-						<Switch
-							variant="soft"
-							checked={a11yMode}
-							onCheckedChange={toggleA11yMode}
-							aria-label={t("buttons.accessibility") ?? ""}
-						/>
-					</div>
+					<IconButton
+						variant={a11yMode ? "solid" : "surface"}
+						size="2"
+						onClick={toggleA11yMode}
+						aria-label={t("buttons.accessibility") ?? ""}
+					>
+						<EyeOpenIcon className="h-4 w-4" />
+					</IconButton>
+
+					<LanguageSelector />
 				</Toolbar.ToggleGroup>
 			</Toolbar.Root>
 		);

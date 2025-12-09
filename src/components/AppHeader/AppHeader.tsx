@@ -112,8 +112,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</IconButton>
 					</ConditionalTooltip>
 
-					<LanguageSelector />
-
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 							<Flex align="center" gap="1">
@@ -127,6 +125,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							</Flex>
 						</ConditionalTooltip>
 					)}
+
+					<LanguageSelector />
 				</Flex>
 			)}
 
