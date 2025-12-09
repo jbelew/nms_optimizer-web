@@ -12,7 +12,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ onDismiss }) => {
 
 	return (
 		<div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center p-5">
-			<Card size="1" variant="classic" className="pointer-events-auto max-w-md">
+			<Card size="1" className="pointer-events-auto max-w-md">
 				<Flex direction="column" gap="3">
 					<Flex gap="3" align="start">
 						<HomeIcon
