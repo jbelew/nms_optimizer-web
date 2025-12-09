@@ -42,7 +42,14 @@ body.a11y-font .radix-themes {
 	--grid-columns-flex: 10;
 	--grid-column-fixed: 24px;
 
-	--grid-padding: 32px;
+	/* Default (Mobile) Content Padding */
+	--app-content-padding-base: 24px;
+
+	--app-safe-pl: max(var(--app-content-padding-base), env(safe-area-inset-left));
+	--app-safe-pr: max(var(--app-content-padding-base), env(safe-area-inset-right));
+
+	--grid-padding: 0px;
+	/* Fully managed by app-safe vars in grid calculations */
 
 	--grid-gap-min: 2px;
 	--grid-gap-max: 8px;
@@ -51,7 +58,14 @@ body.a11y-font .radix-themes {
 	--grid-cell-max: 64px;
 
 	/* Available width = viewport - left/right padding */
-	--grid-container-width: calc(100dvw - (2 * var(--grid-padding)));
+	/* Use max() to adhere to safe areas OR specific grid padding (e.g. 48px on desktop) */
+	--grid-container-width: calc(
+		100dvw -
+			(
+				max(var(--grid-padding), var(--app-safe-pl)) +
+					max(var(--grid-padding), var(--app-safe-pr))
+			)
+	);
 
 	/* Gap scales, but clamped */
 	--grid-gap: clamp(var(--grid-gap-min), 1dvw, var(--grid-gap-max));
@@ -63,7 +77,10 @@ body.a11y-font .radix-themes {
 			(
 					(100dvw - var(--grid-column-fixed)) -
 						((var(--grid-columns-flex)) * var(--grid-gap)) -
-						(2 * var(--grid-padding) / 2)
+						(
+							max(var(--grid-padding), var(--app-safe-pl)) +
+								max(var(--grid-padding), var(--app-safe-pr))
+						)
 				) /
 				var(--grid-columns-flex)
 		),
@@ -74,17 +91,21 @@ body.a11y-font .radix-themes {
 	--empty-icon-color-supercharged: #c150ff2d;
 }
 
-/* On non-touch (fine pointer) devices, increase padding */
-@media (pointer: fine) and (hover: hover) {
+/* Desktop (Large Screen) Override */
+@media (width >=1024px) {
 	:root {
 		--grid-padding: 48px;
 	}
 }
 
-/* On non-touch (fine pointer) devices, increase padding */
+/* Landscape / Tablet Notch Support */
 @media (width >=639px) and (width <=1023px) {
 	:root {
-		--grid-padding: 64px;
+		/* Base padding for content */
+		--app-content-padding-base: 32px;
+
+		/* Update grid variable to map to safe padding */
+		--grid-padding: 0px;
 		--grid-cell-max: 72px;
 	}
 }

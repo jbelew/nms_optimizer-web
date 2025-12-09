@@ -41,4 +41,9 @@
 			margin-right: 0.25rem;
 		}
 	}
+
+	&__wrapper {
+		padding-left: var(--app-safe-pl) !important;
+		padding-right: var(--app-safe-pr) !important;
+	}
 }

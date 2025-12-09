@@ -48,16 +48,18 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		return (
 			<Toolbar.Root
 				ref={ref}
-				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 p-2 pr-4 transition-transform duration-300 ease-in-out"
+				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
 				style={{
 					backgroundColor: "var(--accent-4)",
 					WebkitUserSelect: "none",
 					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
+					paddingLeft: "var(--app-safe-pl)",
+					paddingRight: "var(--app-safe-pr)",
 				}}
 			>
 				<Toolbar.ToggleGroup
 					type="multiple"
-					className="flex items-center gap-2 pl-2"
+					className="flex items-center gap-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
 				>
 					{/* Load/Save/Share buttons for mobile - far left */}
