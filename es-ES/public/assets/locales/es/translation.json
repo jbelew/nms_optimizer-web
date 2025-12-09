@@ -617,7 +617,7 @@
 		}
 	},
 	"installPrompt": {
-		"iosInstructions": "Add this app to your Home Screen for the best experience: tap the Share icon in your browser, then 'Add to Home Screen'.",
+		"iosInstructions": "For the best experience, consider adding this app to your Home Screen. Tap the Share icon in your browser, then 'Add to Home Screen' to install the app.",
 		"dismiss": "Dismiss"
 	},
 	"notFound": {
