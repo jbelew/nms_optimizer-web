@@ -1,3 +1,10 @@
+## [6.5.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.2...v6.5.3) (2025-12-09)
+
+
+### Bug Fixes
+
+* **a11y:** Adjust background and backdrop filter for a11y-font mode ([d5bd668](https://github.com/jbelew/nms_optimizer-web/commit/d5bd668a1ffb63f3a5056137728ff82552a69a1a))
+
 ## [6.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.1...v6.5.2) (2025-12-09)
 
 
