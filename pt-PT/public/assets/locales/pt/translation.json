@@ -23,7 +23,9 @@
 		"loadBuild": "Load Build",
 		"cancel": "Cancel",
 		"save": "Save",
-		"generateName": "Generate"
+		"generateName": "Generate",
+		"buildManagement": "Build Management",
+		"utilities": "Dialogs and App Controls"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
