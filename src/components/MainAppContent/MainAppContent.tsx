@@ -2,9 +2,10 @@
 import "./MainAppContent.scss";
 
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 // import { useInstallPrompt } from "../../hooks/useInstallPrompt/useInstallPrompt";
 // import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
-import { Box, Flex } from "@radix-ui/themes";
+import { Box, Callout, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
@@ -138,6 +139,30 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 							className="main-app__grid-section"
 							ref={appLayoutContainerRef}
 						>
+							{isSharedGrid && (
+								<Box
+									flexShrink="0"
+									style={{
+										maxWidth: gridTableTotalWidth
+											? `${gridTableTotalWidth}px`
+											: undefined,
+									}}
+								>
+									<Callout.Root mb="3" color="gray" variant="surface" size="1">
+										<Callout.Icon>
+											<InfoCircledIcon />
+										</Callout.Icon>
+										<Callout.Text>
+											<span className="text-sm sm:text-base">
+												You are viewing a <strong>Shared Build</strong>.
+												This layout is read-only. To create your own layout,
+												click the <strong>Reset Grid</strong> button.
+											</span>
+										</Callout.Text>
+									</Callout.Root>
+								</Box>
+							)}
+
 							<Flex
 								align="center"
 								wrap="wrap"
@@ -168,17 +193,6 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 								ref={appLayoutGridTableRef}
 							/>
 						</Box>
-
-						{/* {isSharedGrid && (
-							<Callout.Root mt="3" size="1">
-								<Callout.Icon>
-									<InfoCircledIcon />
-								</Callout.Icon>
-								<Callout.Text>
-									<span className="text-sm sm:text-base">{t("gridTable.tapInstructions")}</span>
-								</Callout.Text>
-							</Callout.Root>
-						)} */}
 
 						{/* Tech tree section */}
 						{!isSharedGrid && (

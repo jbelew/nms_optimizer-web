@@ -24,7 +24,7 @@ export const TapInstructions: React.FC = () => {
 	}
 
 	return (
-		<Callout.Root mt="3" size="1">
+		<Callout.Root color="gray" variant="surface" mt="3" size="1">
 			<Callout.Icon>
 				<InfoCircledIcon />
 			</Callout.Icon>

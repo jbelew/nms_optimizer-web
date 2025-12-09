@@ -91,6 +91,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
 						disabled={modules.length === 1 || solving}
+						aria-label={`${translatedTechName} Module Selection`}
 					>
 						x{currentCheckedModules.length}
 						<OpenInNewWindowIcon />
