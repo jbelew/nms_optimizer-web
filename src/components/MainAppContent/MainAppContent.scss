@@ -53,8 +53,10 @@ $panel-border: 1px solid var(--gray-a5);
 
 		// Accessibility override: disable background image
 		body.a11y-font & {
+			backdrop-filter: none;
+
 			@media (width <= 639px) {
-				background-color: var(--accent-a3);
+				background-color: var(--gray-a3);
 
 				&::before {
 					background-image: none !important;
@@ -130,9 +132,3 @@ body.a11y-font {
 		-webkit-text-stroke: 0;
 	}
 }
-
-/* @media (width <=639px) {
-			body::before {
-				background-image: none;
-			}
-		} */
