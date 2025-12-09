@@ -1,3 +1,10 @@
+## [6.5.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.1...v6.5.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **ui:** Improve grid cell interactions and update background assets ([cb17b1f](https://github.com/jbelew/nms_optimizer-web/commit/cb17b1f7cfd1df313b53066307677b6ddf2091ca))
+
 ## [6.5.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.0...v6.5.1) (2025-12-08)
 
 
