@@ -18,7 +18,7 @@
 	--letter-spacing-wide: 0.225rem;
 	--font-weight-bold: 600;
 
-	--color-background: var(--acceny-a1);
+	--color-background: var(--accent-a1);
 
 	/* --color-panel-translucent: var(--accent-a2); */
 	--color-panel-solid: var(--accent-1);
@@ -82,7 +82,7 @@ body.a11y-font .radix-themes {
 }
 
 /* On non-touch (fine pointer) devices, increase padding */
-@media (width >= 639px) and (width <= 1023px) {
+@media (width >=639px) and (width <=1023px) {
 	:root {
 		--grid-padding: 64px;
 		--grid-cell-max: 72px;
@@ -100,6 +100,26 @@ body {
 	font-family: var(--default-font-family);
 	min-height: 100dvh;
 	width: 100dvw;
+
+	/* Mobile: use pre-blurred background image for better performance */
+	/* Apply to body pseudo-element for best stability on iOS */
+	@media (width <=639px) {
+		&::before {
+			background-image: url("/assets/img/background@mobile-blurred_v5.webp");
+			background-position: center top;
+			background-repeat: no-repeat;
+			background-size: cover;
+			content: "";
+			height: 100vh;
+			left: 0;
+			pointer-events: none;
+			position: fixed;
+			top: 0;
+			width: 100vw;
+			will-change: auto;
+			z-index: -1;
+		}
+	}
 }
 
 @media (max-width: 1023px) {

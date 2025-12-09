@@ -134,7 +134,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					<Callout.Icon>
 						<InfoCircledIcon className="shrink-0" />
 					</Callout.Icon>
-					<Callout.Text color="gray">
+					<Callout.Text>
 						<span className="text-sm sm:text-sm">
 							<Trans
 								i18nKey="techTree.recommendedBuilds.summary"

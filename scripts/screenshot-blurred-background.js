@@ -9,13 +9,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 	try {
 		console.log("🎨 Generating blurred and tinted mobile background with Chromium...");
 
-		const bgImagePath = path.resolve(__dirname, "../public/assets/img/background@mobile.webp");
+		// Use the high-res desktop background as source to ensure quality
+		const bgImagePath = path.resolve(__dirname, "../public/assets/img/background@2x.webp");
 		const outputPath = path.resolve(
 			__dirname,
-			"../public/assets/img/background@mobile-blurred.webp"
+			"../public/assets/img/background@mobile-blurred_v4.webp"
 		);
 
-		// Mobile dimensions
+		// Mobile dimensions (Reverting to 640w to maintain blur scale/softness)
 		const mobileWidth = 640;
 		const mobileHeight = 1136;
 

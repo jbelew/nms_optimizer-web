@@ -90,9 +90,12 @@ describe("useGridCellInteraction", () => {
 	it("should call handleCellTap on single tap (touch end) on empty cell", () => {
 		const { result } = renderGridCellHook({ module: null });
 		const mockEvent = createMockTouchEvent();
+		Object.defineProperty(mockEvent, "touches", {
+			value: [{ clientX: 0, clientY: 0 }],
+		});
 
 		act(() => {
-			result.current.handleTouchStart();
+			result.current.handleTouchStart(mockEvent);
 			result.current.handleTouchEnd(mockEvent);
 		});
 
@@ -264,16 +267,27 @@ describe("useGridCellInteraction", () => {
 
 	it("should set isTouching to true on touch start", () => {
 		const { result } = renderGridCellHook();
+		const mockEvent = createMockTouchEvent();
+		// Mock single touch for default behavior
+		Object.defineProperty(mockEvent, "touches", {
+			value: [{ clientX: 0, clientY: 0 }],
+		});
+
 		act(() => {
-			result.current.handleTouchStart();
+			result.current.handleTouchStart(mockEvent);
 		});
 		expect(result.current.isTouching).toBe(true);
 	});
 
 	it("should set isTouching to false on touch end", () => {
 		const { result } = renderGridCellHook();
+		const mockEvent = createMockTouchEvent();
+		Object.defineProperty(mockEvent, "touches", {
+			value: [{ clientX: 0, clientY: 0 }],
+		});
+
 		act(() => {
-			result.current.handleTouchStart();
+			result.current.handleTouchStart(mockEvent);
 		});
 		expect(result.current.isTouching).toBe(true);
 		act(() => {

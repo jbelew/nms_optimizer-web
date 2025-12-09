@@ -1,5 +1,5 @@
 import type { Cell } from "../../store/GridStore";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
@@ -49,6 +49,10 @@ export const useGridCellInteraction = (
 		gridFixed,
 	} = useGridStore.getState();
 	const [isTouching, setIsTouching] = useState(false);
+
+	// Refs to track gestures (scroll, zoom) vs taps
+	const gestureStartRef = useRef<{ x: number; y: number } | null>(null);
+	const isGestureRef = useRef(false);
 
 	const { triggerShake: storeTriggerShake } = useShakeStore();
 
@@ -110,8 +114,36 @@ export const useGridCellInteraction = (
 	/**
 	 * Handles the touch start event for a grid cell.
 	 */
-	const handleTouchStart = useCallback(() => {
+	const handleTouchStart = useCallback((event: React.TouchEvent) => {
 		setIsTouching(true);
+
+		// If more than one finger, it's a gesture (pinch/zoom)
+		if (event.touches.length > 1) {
+			isGestureRef.current = true;
+		} else {
+			isGestureRef.current = false;
+			gestureStartRef.current = {
+				x: event.touches[0].clientX,
+				y: event.touches[0].clientY,
+			};
+		}
+	}, []);
+
+	/**
+	 * Handles touch move to detect scrolling/gestures
+	 */
+	const handleTouchMove = useCallback((event: React.TouchEvent) => {
+		if (isGestureRef.current || !gestureStartRef.current) return;
+
+		const x = event.touches[0].clientX;
+		const y = event.touches[0].clientY;
+		const dx = Math.abs(x - gestureStartRef.current.x);
+		const dy = Math.abs(y - gestureStartRef.current.y);
+
+		// If moved more than 10px, treat as scroll/gesture
+		if (dx > 10 || dy > 10) {
+			isGestureRef.current = true;
+		}
 	}, []);
 
 	/**
@@ -120,13 +152,22 @@ export const useGridCellInteraction = (
 	 */
 	const handleTouchEnd = useCallback(
 		(event: React.TouchEvent | React.MouseEvent) => {
+			setIsTouching(false);
+
+			// If it was a gesture (scroll/zoom), ignore the tap
+			if (isGestureRef.current) {
+				isGestureRef.current = false;
+				gestureStartRef.current = null;
+
+				return;
+			}
+
 			// We can cast event to any because we preventDefault on both if needed,
 			// though physically this is usually a TouchEvent.
 			if (event.cancelable) {
 				event.preventDefault();
 			}
 
-			setIsTouching(false);
 			if (isSharedGrid) return;
 
 			if (cell.module) {
@@ -235,6 +276,7 @@ export const useGridCellInteraction = (
 		handleClick,
 		handleContextMenu,
 		handleTouchStart,
+		handleTouchMove,
 		handleTouchEnd,
 		handleTouchCancel,
 		handleKeyDown,

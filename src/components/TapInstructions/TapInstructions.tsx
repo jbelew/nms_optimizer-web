@@ -28,7 +28,7 @@ export const TapInstructions: React.FC = () => {
 			<Callout.Icon>
 				<InfoCircledIcon />
 			</Callout.Icon>
-			<Callout.Text color="gray">
+			<Callout.Text>
 				<span className="text-sm sm:text-base">{t("gridTable.tapInstructions")}</span>
 			</Callout.Text>
 		</Callout.Root>
