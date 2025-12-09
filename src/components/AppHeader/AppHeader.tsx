@@ -166,6 +166,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Trigger>
 					<Popover.Content size="1">
 						<DataList.Root size="1">
+							<Header className="nmsFont--header text-base">Euclid</Header>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont">
+									Olamsk Spaceport
+								</DataList.Label>
+								<DataList.Value>
+									<Code>0356:0085:0D17:006C</Code>
+								</DataList.Value>
+							</DataList.Item>
 							<Header className="nmsFont--header text-base">Ityanianat</Header>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
