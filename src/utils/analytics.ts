@@ -69,21 +69,13 @@ export const resetAnalyticsForTesting = () => {
 
 /**
  * Initializes Google Analytics tracking.
- * Skips initialization in development mode to prevent polluting analytics data,
- * unless dual tracking is enabled for testing.
+ * Skips initialization in development mode to prevent polluting analytics data.
  *
  * @returns {void}
  */
 export const initializeAnalytics = () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
-	// Exception: allow in dev when VITE_DUAL_ANALYTICS is enabled for testing
-	const dualTracking = import.meta.env.VITE_DUAL_ANALYTICS === "true";
-
-	if (
-		(isDevMode() && !dualTracking) ||
-		gaInitialized ||
-		/bot|googlebot|crawler|spider/i.test(navigator.userAgent)
-	) {
+	if (isDevMode() || gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) {
 		return;
 	}
 

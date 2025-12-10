@@ -22,11 +22,11 @@ We blend cutting-edge technology to deliver top-tier **Starship layouts**, **Fre
 1.  **Start with the Best Patterns:** The process begins by instantly checking a curated library of hand-tested patterns to establish a high-scoring starting point for **adjacency bonuses**.
 2.  **AI-Guided Placement (Machine Learning):** If your setup includes supercharged slots, a specialized TensorFlow model—trained on 16,000+ real-world grids—steps in to predict the optimal placement for core technologies.
 3.  **Refinement via Simulated Annealing:** A highly-optimized, Rust-based stochastic search process meticulously swaps modules and shifts positions. This final refinement ensures the layout is pushed to its absolute performance limit, avoiding common mistakes (local optima) that human players often hit.
-4.  **Visualize the Perfect Build:** The **NMS calculator** then presents the highest-scoring configuration, complete with score breakdowns and visual recommendations for all your gear.
+4.  **Visualize the Perfect Build:** The **NMS Optimizer** then presents the highest-scoring configuration, complete with score breakdowns and visual recommendations for all your gear.
 
 ---
 
-## ✨Key Features That Drive Performance
+## Key Features That Drive Performance
 
 * **Comprehensive Optimization:** Full support for standard, **supercharged**, and inactive slots to guarantee you find the mathematically true optimal **layout**.
 * **Intelligent Supercharged Slot Utilization:** The optimizer doesn't just recognize supercharged slots—it acts like an expert player, intelligently determining whether a core technology (like a main Pulse Engine) or its most powerful upgrade module should occupy these high-boost slots. It navigates the complex trade-offs to perfectly maximize your specific goal (e.g., jump range, weapon damage, or mobility).
@@ -57,7 +57,7 @@ This **optimizer** demystifies the complex rules of **adjacency bonuses** and **
 
 ---
 
-## ❓Frequently Asked Questions
+## Frequently Asked Questions
 
 ### What is an adjacency bonus in No Man's Sky?
 

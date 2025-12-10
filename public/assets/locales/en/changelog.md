@@ -2,6 +2,17 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.5 – UI Clarity & Mobile Improvements (2025-12-09)
+
+This update focuses on cleaner visuals, better mobile behavior, and clearer messaging in shared layouts.
+
+- Added a clear read-only notice when viewing shared builds.
+- Improved grid-cell interactions and overall tap responsiveness.
+- Updated blurred background assets for better consistency on mobile.
+- Refined accessibility-font mode for stronger contrast.
+- Improved error screens, ensuring backgrounds render correctly on mobile.
+- Polished headings, image visibility, and spacing across the UI.
+
 ## Version 6.4 – UI Polish & Mobile Stability Improvements (2025-12-02)
 
 This update delivers a series of visual refinements and stability fixes across the app, with a focus on visual consistancy and mobile usability.
