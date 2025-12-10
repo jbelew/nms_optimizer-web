@@ -176,7 +176,9 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 										<ShipSelection solving={solving} />
 									</span>
 								)}
-								<span className="main-app__ship-label">{t("platformLabel")}</span>
+								<Text trim="end" className="main-app__ship-label">
+									{t("platformLabel")}
+								</Text>
 								<Text trim="end" className="main-app__ship-name trim-text">
 									{t(`platforms.${selectedShipType}`)}
 								</Text>

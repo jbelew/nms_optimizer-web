@@ -84,7 +84,6 @@ $panel-border: 1px solid var(--gray-a5);
 
 		@media (width >= 640px) {
 			font-size: 1.5rem;
-			line-height: 2rem;
 		}
 
 		@media (width > 1024px) {
@@ -101,7 +100,6 @@ $panel-border: 1px solid var(--gray-a5);
 		align-self: flex-start;
 		color: var(--accent-11);
 		display: none;
-		margin-top: 1px;
 
 		@media (width >= 640px) {
 			display: inline;

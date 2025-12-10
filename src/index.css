@@ -169,6 +169,7 @@ body {
 body.a11y-font .heading-styled {
 	letter-spacing: normal;
 	font-family: var(--default-font-family);
+	word-spacing: normal;
 	font-weight: 700;
 	text-transform: uppercase;
 	text-shadow: 0 2px 4px var(--accent-a2);
