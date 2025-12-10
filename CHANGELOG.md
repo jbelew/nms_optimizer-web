@@ -1,3 +1,10 @@
+## [6.5.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.6...v6.5.7) (2025-12-10)
+
+
+### Bug Fixes
+
+* **GA4:** Update event tracking to classify user interactions and passive events ([36f5140](https://github.com/jbelew/nms_optimizer-web/commit/36f514055eeaaabea5858b1f3c0ef35f32289e31))
+
 ## [6.5.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.5...v6.5.6) (2025-12-10)
 
 
