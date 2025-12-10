@@ -31,11 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build Storybook
-        run: npm run build-storybook
-
       - name: Run Chromatic visual tests
         uses: chromaui/action@v12
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+          exitOnceUploaded: true
