@@ -1,3 +1,10 @@
+## [6.5.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.5...v6.5.6) (2025-12-10)
+
+
+### Bug Fixes
+
+* **useGridCellInteraction:** Improve tap handling logic eliminating some edge case bugs. ([6d688d2](https://github.com/jbelew/nms_optimizer-web/commit/6d688d2ab45dcfe29b8606559f2ed84359879186))
+
 ## [6.5.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.4...v6.5.5) (2025-12-10)
 
 
