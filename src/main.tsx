@@ -42,7 +42,11 @@ import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
+import { initializeAnalyticsClient } from "./utils/analyticsClient";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
+
+const USE_SERVER_ANALYTICS = import.meta.env.VITE_USE_SERVER_ANALYTICS === "true";
+const DUAL_TRACKING = import.meta.env.VITE_DUAL_ANALYTICS === "true";
 
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
@@ -58,27 +62,34 @@ if (typeof window !== "undefined") {
 	// Use queueMicrotask for faster execution than setTimeout
 	// This ensures it runs after the current task but before the next paint
 	queueMicrotask(() => {
-		// Delay analytics initialization until after window load event
-		// This ensures it doesn't compete with critical resources affecting LCP
-		const initGA = () => {
-			if ("requestIdleCallback" in window) {
-				requestIdleCallback(() => initializeAnalytics(), { timeout: 10000 });
-			} else {
-				setTimeout(() => initializeAnalytics(), 2000);
-			}
-		};
+		// Initialize server-side client if using server analytics or dual tracking
+		if (USE_SERVER_ANALYTICS || DUAL_TRACKING) {
+			initializeAnalyticsClient();
+		}
 
-		if (document.readyState === "complete") {
-			// Page already loaded, delay slightly before initializing
-			setTimeout(initGA, 1000);
-		} else {
-			// Wait for page load event, then delay before initializing
-			const handleLoad = () => {
-				setTimeout(initGA, 1000);
-				window.removeEventListener("load", handleLoad); // Clean up listener
+		// Initialize client-side ReactGA if NOT using server-side only, or if dual tracking
+		if (!USE_SERVER_ANALYTICS || DUAL_TRACKING) {
+			// Initialize client-side ReactGA with deferred loading
+			const initGA = () => {
+				if ("requestIdleCallback" in window) {
+					requestIdleCallback(() => initializeAnalytics(), { timeout: 10000 });
+				} else {
+					setTimeout(() => initializeAnalytics(), 2000);
+				}
 			};
 
-			window.addEventListener("load", handleLoad);
+			if (document.readyState === "complete") {
+				// Page already loaded, delay slightly before initializing
+				setTimeout(initGA, 1000);
+			} else {
+				// Wait for page load event, then delay before initializing
+				const handleLoad = () => {
+					setTimeout(initGA, 1000);
+					window.removeEventListener("load", handleLoad); // Clean up listener
+				};
+
+				window.addEventListener("load", handleLoad);
+			}
 		}
 
 		// Dynamically import and initialize service worker to avoid bundling it with i18n

@@ -46,6 +46,7 @@ export interface GA4Event {
 	fileName?: string;
 	shipType?: string;
 	storageCleared?: string;
+	source?: string;
 }
 
 let gaInitialized = false;
@@ -68,13 +69,21 @@ export const resetAnalyticsForTesting = () => {
 
 /**
  * Initializes Google Analytics tracking.
- * Skips initialization in development mode to prevent polluting analytics data.
+ * Skips initialization in development mode to prevent polluting analytics data,
+ * unless dual tracking is enabled for testing.
  *
  * @returns {void}
  */
 export const initializeAnalytics = () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
-	if (isDevMode() || gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) {
+	// Exception: allow in dev when VITE_DUAL_ANALYTICS is enabled for testing
+	const dualTracking = import.meta.env.VITE_DUAL_ANALYTICS === "true";
+
+	if (
+		(isDevMode() && !dualTracking) ||
+		gaInitialized ||
+		/bot|googlebot|crawler|spider/i.test(navigator.userAgent)
+	) {
 		return;
 	}
 
