@@ -1,3 +1,10 @@
+## [6.5.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.7...v6.5.8) (2025-12-10)
+
+
+### Bug Fixes
+
+* Enhance install prompt and analytics tracking for better user experience ([9228047](https://github.com/jbelew/nms_optimizer-web/commit/922804785b6e4ae7a5f7e3d72c517492cb6b154d))
+
 ## [6.5.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.6...v6.5.7) (2025-12-10)
 
 
