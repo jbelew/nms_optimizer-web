@@ -61,6 +61,7 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 						value: 1,
 						fileName: file.name,
 						shipType: selectedShipType,
+						nonInteraction: false,
 					});
 				} catch (error) {
 					console.error("Load failed:", error);

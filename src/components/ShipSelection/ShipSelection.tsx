@@ -98,6 +98,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					action: "platform_selection",
 					platform: option,
 					value: 1,
+					nonInteraction: false,
 				});
 
 				// TODO: Turn this back on if the Corvette bug shows up again

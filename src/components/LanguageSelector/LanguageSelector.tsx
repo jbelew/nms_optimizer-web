@@ -86,6 +86,7 @@ const LanguageSelector: React.FC = () => {
 			action: "language_selection",
 			label: newLang,
 			value: 1,
+			nonInteraction: false,
 		});
 	};
 

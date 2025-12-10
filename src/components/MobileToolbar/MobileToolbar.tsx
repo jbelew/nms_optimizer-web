@@ -42,7 +42,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 				const shareUrl = updateUrlForShare();
 				openDialog(null, { shareUrl });
 			});
-			sendEvent({ category: "ui", action: "share_link", value: 1 });
+			sendEvent({ category: "ui", action: "share_link", value: 1, nonInteraction: false });
 		}, [updateUrlForShare, openDialog, sendEvent]);
 
 		return (
@@ -106,6 +106,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 								category: "ui",
 								action: "show_changelog",
 								value: 1,
+								nonInteraction: false,
 							});
 							onShowChangelog();
 						}}
@@ -122,6 +123,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 								category: "ui",
 								action: "show_user_stats",
 								value: 1,
+								nonInteraction: false,
 							});
 							openDialog("userstats");
 						}}

@@ -17,6 +17,7 @@ const NotFound: FC = () => {
 		sendEvent({
 			category: "navigation",
 			action: "not_found",
+			nonInteraction: true,
 		});
 	}, []);
 

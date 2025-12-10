@@ -171,6 +171,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			action: "show_instructions",
 			value: 1,
+			nonInteraction: false,
 		});
 	});
 
@@ -183,6 +184,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			action: "show_about",
 			value: 1,
+			nonInteraction: false,
 		});
 	});
 
@@ -196,6 +198,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			action: "share_link",
 			value: 1,
+			nonInteraction: false,
 		});
 	});
 
@@ -207,6 +210,7 @@ describe("GridTableButtons", () => {
 			category: "ui",
 			action: "reset_grid",
 			value: 1,
+			nonInteraction: false,
 		});
 
 		// Check that the functions inside handleResetGrid are called

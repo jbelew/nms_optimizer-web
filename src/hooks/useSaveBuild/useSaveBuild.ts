@@ -49,6 +49,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 					value: 1,
 					buildName,
 					shipType: selectedShipType,
+					nonInteraction: false,
 				});
 			} catch (error) {
 				console.error("Save failed:", error);

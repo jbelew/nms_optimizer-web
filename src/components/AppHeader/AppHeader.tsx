@@ -87,6 +87,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									category: "ui",
 									action: "show_changelog",
 									value: 1,
+									nonInteraction: false,
 								});
 								onShowChangelog();
 							}}
@@ -104,6 +105,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									category: "ui",
 									action: "show_user_stats",
 									value: 1,
+									nonInteraction: false,
 								});
 								openDialog("userstats");
 							}}
@@ -152,6 +154,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									category: "ui",
 									action: "found_secret",
 									value: 1,
+									nonInteraction: false,
 								});
 							}}
 						>

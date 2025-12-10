@@ -22,6 +22,7 @@ export default function BuyMeACoffee() {
 			category: "ui",
 			action: "buy_me_a_coffee_click",
 			value: 1,
+			nonInteraction: false,
 		});
 
 		// Delay to ensure GA event is captured

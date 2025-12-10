@@ -56,6 +56,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 			build: build.title,
 			platform: selectedPlatform,
 			value: 1,
+			nonInteraction: false,
 		});
 	};
 

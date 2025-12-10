@@ -77,6 +77,7 @@ const GridTableButtons: React.FC = () => {
 			category: "ui",
 			action: "show_instructions",
 			value: 1,
+			nonInteraction: false,
 		});
 	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent, startInfoTransition]);
 
@@ -92,6 +93,7 @@ const GridTableButtons: React.FC = () => {
 			category: "ui",
 			action: "show_about",
 			value: 1,
+			nonInteraction: false,
 		});
 	}, [openDialog, sendEvent, startInfoTransition]);
 
@@ -104,7 +106,7 @@ const GridTableButtons: React.FC = () => {
 			const shareUrl = updateUrlForShare();
 			openDialog(null, { shareUrl });
 		});
-		sendEvent({ category: "ui", action: "share_link", value: 1 });
+		sendEvent({ category: "ui", action: "share_link", value: 1, nonInteraction: false });
 	}, [updateUrlForShare, openDialog, sendEvent, startShareTransition]);
 
 	/**
@@ -117,7 +119,7 @@ const GridTableButtons: React.FC = () => {
 			scrollIntoView();
 		}
 
-		sendEvent({ category: "ui", action: "reset_grid", value: 1 });
+		sendEvent({ category: "ui", action: "reset_grid", value: 1, nonInteraction: false });
 
 		startResetTransition(() => {
 			useGridStore.getState().resetGrid();

@@ -179,6 +179,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 							platform: selectedShipType,
 							tech,
 							value: 1,
+							nonInteraction: false,
 						});
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
@@ -197,6 +198,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 								tech: gaTech,
 								solve_method: data.solve_method,
 								value: 1,
+								nonInteraction: false,
 								supercharged:
 									typeof data.max_bonus === "number" && data.max_bonus > 100,
 							});

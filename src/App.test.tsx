@@ -153,6 +153,7 @@ describe("App", () => {
 				expect(sendEvent).toHaveBeenCalledWith({
 					category: "navigation",
 					action: "not_found",
+					nonInteraction: true,
 				});
 			});
 		});
