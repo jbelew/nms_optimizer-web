@@ -136,7 +136,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 						<InfoCircledIcon className="shrink-0" />
 					</Callout.Icon>
 					<Callout.Text>
-						<span className="text-sm sm:text-sm">
+						<span className="text-sm sm:text-base">
 							<Trans
 								i18nKey="techTree.recommendedBuilds.summary"
 								components={{
