@@ -1,40 +1,40 @@
 name: Storybook Tests
 
 on:
-	push:
-		branches: [main]
-	pull_request:
-		branches: [main]
-	workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-	storybook-tests:
-		runs-on: ubuntu-latest
-		steps:
-			- name: Checkout repository
-			  uses: actions/checkout@v6
-			  with:
-				  ref: ${{ github.event.pull_request.head.sha || github.ref }}
-				  token: ${{ secrets.GITHUB_TOKEN }}
+  storybook-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-			- name: Set up Node.js
-			  uses: actions/setup-node@v6
-			  with:
-				  node-version: "lts/*"
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
 
-			- name: Validate package.json and package-lock.json are in sync
-			  run: |
-				  echo "Checking if package-lock.json is in sync with package.json..."
-				  npm ci --dry-run --ignore-scripts --legacy-peer-deps
+      - name: Validate package.json and package-lock.json are in sync
+        run: |
+          echo "Checking if package-lock.json is in sync with package.json..."
+          npm ci --dry-run --ignore-scripts --legacy-peer-deps
 
-			- name: Install dependencies
-			  run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
 
-			- name: Build Storybook
-			  run: npm run build-storybook
+      - name: Build Storybook
+        run: npm run build-storybook
 
-			- name: Run Chromatic visual tests
-			  uses: chromaui/action@v12
-			  with:
-				  projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-				  onlyChanged: true
+      - name: Run Chromatic visual tests
+        uses: chromaui/action@v12
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          onlyChanged: true
