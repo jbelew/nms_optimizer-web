@@ -79,12 +79,15 @@ export const initializeAnalytics = () => {
 		return;
 	}
 
+	const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
+
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
 			send_page_view: true,
 			anonymize_ip: true,
 			user_properties: {
 				app_version: __APP_VERSION__,
+				is_installed: isInstalled ? "yes" : "no",
 			},
 		},
 	});

@@ -161,6 +161,7 @@ body {
 	font-family: var(--font-family-geosans);
 	font-weight: 400;
 	text-transform: uppercase;
+	word-spacing: -0.15em;
 	text-shadow: 0 2px 4px var(--accent-a2);
 	-webkit-text-stroke: 1px;
 }

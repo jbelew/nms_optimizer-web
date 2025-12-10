@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { ToastProvider } from "../../hooks/useToast/useToast";
 import { InstallPrompt } from "./InstallPrompt";
 
 const meta = {
@@ -15,12 +16,14 @@ const meta = {
 	decorators: [
 		(Story) => {
 			return (
-				<div
-					className="flex min-h-screen items-center justify-center p-4"
-					style={{ maxWidth: "800px", margin: "0 auto" }}
-				>
-					<Story />
-				</div>
+				<ToastProvider>
+					<div
+						className="flex min-h-screen items-center justify-center p-4"
+						style={{ maxWidth: "800px", margin: "0 auto" }}
+					>
+						<Story />
+					</div>
+				</ToastProvider>
 			);
 		},
 	],
@@ -31,13 +34,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {
-		onDismiss: () => console.log("Install prompt dismissed"),
-	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Install prompt component.",
+				story: "Install prompt component. Displays a toast notification prompting users to install the app, shown only on touch devices after the first visit (if not already installed).",
 			},
 		},
 		layout: "fullscreen",

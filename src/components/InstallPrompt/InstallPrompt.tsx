@@ -1,37 +1,41 @@
-import React from "react";
-import { HomeIcon } from "@radix-ui/react-icons";
-import { Button, Card, Flex, Text } from "@radix-ui/themes";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-interface InstallPromptProps {
-	onDismiss: () => void;
-}
+import { useToast } from "../../hooks/useToast/useToast";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 
-export const InstallPrompt: React.FC<InstallPromptProps> = ({ onDismiss }) => {
+const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
+const USER_VISIT_KEY = "userVisited";
+
+export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();
+	const { showToast } = useToast();
 
-	return (
-		<div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center p-5">
-			<Card size="1" className="pointer-events-auto max-w-md">
-				<Flex direction="column" gap="3">
-					<Flex gap="3" align="start">
-						<HomeIcon
-							width="24"
-							height="24"
-							className="mt-0.5 shrink-0"
-							style={{ color: "var(--accent-track)" }}
-						/>
-						<Flex direction="column" flexGrow="1">
-							<Text className="text-sm sm:text-base">
-								{t("installPrompt.iosInstructions")}
-							</Text>
-						</Flex>
-					</Flex>
-					<Flex justify="end">
-						<Button onClick={onDismiss}>{t("installPrompt.dismiss")}</Button>
-					</Flex>
-				</Flex>
-			</Card>
-		</div>
-	);
+	// Mark user as having visited on first mount
+	useEffect(() => {
+		if (!localStorage.getItem(USER_VISIT_KEY)) {
+			localStorage.setItem(USER_VISIT_KEY, "true");
+		}
+	}, []);
+
+	useEffect(() => {
+		const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
+		const isDismissed = localStorage.getItem(INSTALL_PROMPT_DISMISSED_KEY);
+		const hasVisitedBefore = localStorage.getItem(USER_VISIT_KEY);
+
+		if (!isInstalled && !isDismissed && hasVisitedBefore && isTouchDevice()) {
+			const description = t("installPrompt.iosInstructions");
+
+			showToast({
+				title: t("installPrompt.title"),
+				description: <div dangerouslySetInnerHTML={{ __html: description }} />,
+				variant: "success",
+				duration: 10000,
+			});
+
+			localStorage.setItem(INSTALL_PROMPT_DISMISSED_KEY, "true");
+		}
+	}, [showToast, t]);
+
+	return null;
 };

@@ -3,13 +3,12 @@ import "./MainAppContent.scss";
 
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-// import { useInstallPrompt } from "../../hooks/useInstallPrompt/useInstallPrompt";
-// import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
-import { Box, Callout, Flex } from "@radix-ui/themes";
+import { Box, Callout, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
+import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
@@ -87,8 +86,6 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 		showError,
 	});
 
-	// const { showPrompt, dismissPrompt } = useInstallPrompt();
-
 	useEffect(() => {
 		if (isSharedGrid) {
 			// If it's a shared grid, the tech tree is not actively loading,
@@ -120,7 +117,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 				/>
 			)}
 
-			{/* {showPrompt && <InstallPrompt onDismiss={dismissPrompt} />} */}
+			<InstallPrompt />
 
 			<main className="main-app__container">
 				<div className="main-app__card lg:shadow-lg">
@@ -180,9 +177,9 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 									</span>
 								)}
 								<span className="main-app__ship-label">{t("platformLabel")}</span>
-								<span className="main-app__ship-name">
+								<Text trim="end" className="main-app__ship-name trim-text">
 									{t(`platforms.${selectedShipType}`)}
-								</span>
+								</Text>
 							</Flex>
 
 							<GridTable

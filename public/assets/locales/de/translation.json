@@ -16,7 +16,9 @@
         "loadBuild": "Build laden",
         "cancel": "Stornieren",
         "save": "Speichern",
-        "generateName": "Erzeugen"
+        "generateName": "Erzeugen",
+        "buildManagement": "Build-Management",
+        "utilities": "Dialoge und App-Steuerelemente"
     },
     "gridTable": {
         "optimizing": "Optimierung!",
@@ -585,7 +587,7 @@
     "appName": "No Man's Sky Technology Layout-Optimierer",
     "installPrompt": {
         "iosInstructions": "Für das beste Erlebnis fügen Sie diese App zu Ihrem Startbildschirm hinzu: Tippen Sie auf das Teilen-Symbol und dann auf „Zum Startbildschirm hinzufügen“.",
-        "dismiss": "Zurückweisen"
+        "title": "Zum Startbildschirm hinzufügen"
     },
     "notFound": {
         "title": "–kzzkt– 404 –kzzkt–",

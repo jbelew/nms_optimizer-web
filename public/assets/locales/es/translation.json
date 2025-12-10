@@ -16,7 +16,9 @@
         "loadBuild": "Carga de construcción",
         "cancel": "Cancelar",
         "save": "Ahorrar",
-        "generateName": "Generar"
+        "generateName": "Generar",
+        "buildManagement": "Gestión de construcción",
+        "utilities": "Diálogos y controles de aplicaciones"
     },
     "gridTable": {
         "optimizing": "¡OPTIMIZANDO!",
@@ -585,7 +587,7 @@
     "appName": "Optimizador de diseño de tecnología No Man's Sky",
     "installPrompt": {
         "iosInstructions": "Para obtener la mejor experiencia, agregue esta aplicación a su pantalla de inicio: toque el ícono Compartir y luego \"Agregar a la pantalla de inicio\".",
-        "dismiss": "Despedir"
+        "title": "Agregar a la pantalla de inicio"
     },
     "notFound": {
         "title": "–kzzkt– 404 –kzzkt–",
