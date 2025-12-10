@@ -36,7 +36,10 @@ export const PageVariant: Story = {
 export const WithErrorMessage: Story = {
 	args: {
 		variant: "page",
-		error: new Error("This is a sample error message."),
+		error: {
+			name: "Error",
+			message: "This is a sample error message.",
+		},
 	},
 	parameters: {
 		docs: {
@@ -71,7 +74,10 @@ export const WithStackTrace: Story = {
 export const WithComponentStack: Story = {
 	args: {
 		variant: "page",
-		error: new Error("Error with component stack"),
+		error: {
+			name: "Error",
+			message: "Error with component stack",
+		},
 		errorInfo: {
 			componentStack: `
     in ErrorPage
