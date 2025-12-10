@@ -45,8 +45,6 @@ export const useGridCellInteraction = (
 		toggleCellActive,
 		toggleCellSupercharged,
 		selectTotalSuperchargedCells,
-		superchargedFixed,
-		gridFixed,
 	} = useGridStore.getState();
 	const [isTouching, setIsTouching] = useState(false);
 
@@ -65,6 +63,7 @@ export const useGridCellInteraction = (
 	}, [storeTriggerShake]);
 
 	const handleTouchLogic = useCallback(() => {
+		const { superchargedFixed, gridFixed } = useGridStore.getState();
 		const currentTime = new Date().getTime();
 		const timeSinceLastTap = currentTime - lastTapInfo.time;
 		const isSameCell = lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
@@ -101,13 +100,11 @@ export const useGridCellInteraction = (
 		cell.supercharged,
 		columnIndex,
 		clearInitialCellStateForTap,
-		gridFixed,
 		handleCellDoubleTap,
 		handleCellTap,
 		revertCellTap,
 		rowIndex,
 		selectTotalSuperchargedCells,
-		superchargedFixed,
 		triggerShake,
 	]);
 
@@ -187,6 +184,8 @@ export const useGridCellInteraction = (
 
 	const handleClick = useCallback(
 		(event: React.MouseEvent) => {
+			const { superchargedFixed, gridFixed } = useGridStore.getState();
+
 			if (isSharedGrid) {
 				return;
 			}
@@ -201,7 +200,7 @@ export const useGridCellInteraction = (
 			// Mouse-specific logic (Ctrl/Cmd + Click)
 			if (event.ctrlKey || event.metaKey) {
 				// Ctrl/Cmd + Click: Toggle Active
-				if (gridFixed) {
+				if (gridFixed || (superchargedFixed && cell.supercharged)) {
 					triggerShake();
 				} else {
 					toggleCellActive(rowIndex, columnIndex);
@@ -231,8 +230,6 @@ export const useGridCellInteraction = (
 			cell.supercharged,
 			cell.module,
 			triggerShake,
-			gridFixed,
-			superchargedFixed,
 			selectTotalSuperchargedCells,
 		]
 	);
@@ -253,6 +250,8 @@ export const useGridCellInteraction = (
 					return;
 				}
 
+				const { gridFixed } = useGridStore.getState();
+
 				if (gridFixed) {
 					triggerShake();
 				} else {
@@ -260,15 +259,7 @@ export const useGridCellInteraction = (
 				}
 			}
 		},
-		[
-			isSharedGrid,
-			gridFixed,
-			triggerShake,
-			toggleCellActive,
-			rowIndex,
-			columnIndex,
-			cell.module,
-		]
+		[isSharedGrid, triggerShake, toggleCellActive, rowIndex, columnIndex, cell.module]
 	);
 
 	return {
