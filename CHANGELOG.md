@@ -1,3 +1,10 @@
+## [6.5.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.4...v6.5.5) (2025-12-10)
+
+
+### Bug Fixes
+
+* **analytics:** implement dual analytics tracking with server-side support ([c1cd180](https://github.com/jbelew/nms_optimizer-web/commit/c1cd180917b602c3568e4c65d4877825cb5856bd))
+
 ## [6.5.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.3...v6.5.4) (2025-12-09)
 
 
