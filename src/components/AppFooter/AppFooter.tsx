@@ -78,8 +78,16 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 					>
 						#OpenToWork
 					</a>
-					&nbsp;• {buildVersion}{" "}
-					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
+					&nbsp;•{" "}
+					<a
+						href="https://raw.githubusercontent.com/jbelew/nms_optimizer-web/refs/heads/main/LICENSE"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="app-footer__link"
+					>
+						GPL-3.0
+					</a>{" "}
+					{buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>
 				<Separator decorative size="3" mt="1" mb="1" />
 				<Flex
