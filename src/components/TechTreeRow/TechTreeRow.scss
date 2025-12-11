@@ -1,11 +1,7 @@
-@use "../../styles/mixins";
-
 .techRow__label {
-	text-shadow: 0 0 2px rgb(0 0 0 / 10%);
-}
-
-.heading__styled {
-	line-height: 1.5em;
+	@media (width >= 640px) {
+		text-shadow: 0 0 2px rgb(0 0 0 / 10%);
+	}
 }
 
 /* reset */
