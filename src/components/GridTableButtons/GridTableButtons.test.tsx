@@ -5,7 +5,6 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import GridTableButtons from "./GridTableButtons";
 
 const {
@@ -116,15 +115,11 @@ describe("GridTableButtons", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		(useBreakpoint as Mock).mockReturnValue(true); // Default to smallAndUp
-		(useOptimize as Mock).mockReturnValue({
-			solving: false,
-			gridContainerRef: { current: null },
-		});
 		setGridStoreState(false, true); // Default to not shared, has modules
 	});
 
 	it("renders all buttons when not shared grid and has modules", () => {
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		expect(screen.getByLabelText("buttons.instructions")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.about")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.share")).toBeInTheDocument();
@@ -133,36 +128,38 @@ describe("GridTableButtons", () => {
 
 	it("does not render share button when isSharedGrid is true", () => {
 		setGridStoreState(true, true); // Set shared grid to true
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		expect(screen.queryByLabelText("buttons.share")).not.toBeInTheDocument();
 	});
 
 	it("disables share button when solving is true", () => {
-		(useOptimize as Mock).mockReturnValue({
-			solving: true,
-			gridContainerRef: { current: null },
-		});
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={true} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables share button when hasModulesInGrid is false", () => {
 		setGridStoreState(false, false); // Set hasModulesInGrid to false
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables reset button when solving is true", () => {
-		(useOptimize as Mock).mockReturnValue({
-			solving: true,
-			gridContainerRef: { current: null },
-		});
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={true} />);
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
 	});
 
+	it("disables instructions button when solving is true", () => {
+		render(<GridTableButtons solving={true} />);
+		expect(screen.getByLabelText("buttons.instructions")).toBeDisabled();
+	});
+
+	it("disables about button when solving is true", () => {
+		render(<GridTableButtons solving={true} />);
+		expect(screen.getByLabelText("buttons.about")).toBeDisabled();
+	});
+
 	it("calls handleShowInstructions and tracks GA event on instructions button click", () => {
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.instructions"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("instructions");
@@ -176,7 +173,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShowAboutPage and tracks GA event on about button click", () => {
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.about"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("about");
@@ -189,7 +186,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.share"));
 
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
@@ -203,7 +200,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls reset grid and related functions on reset button click", () => {
-		render(<GridTableButtons />);
+		render(<GridTableButtons solving={false} />);
 		fireEvent.click(screen.getByText("Reset Grid Button"));
 
 		expect(mockSendEvent).toHaveBeenCalledWith({

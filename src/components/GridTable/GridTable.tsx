@@ -93,7 +93,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 				{!isLarge && !sharedGrid && <TapInstructions />}
 
-				<GridTableButtons />
+				<GridTableButtons solving={solving} />
 			</GridShake>
 		);
 	}

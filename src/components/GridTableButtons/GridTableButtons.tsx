@@ -14,7 +14,6 @@ import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
-import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
 import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useToast } from "../../hooks/useToast/useToast";
@@ -25,14 +24,17 @@ import { ConditionalTooltip } from "../ConditionalTooltip";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { UploadIcon } from "../Icons/UploadIcon";
 
+interface GridTableButtonsProps {
+	solving: boolean;
+}
+
 /**
  * GridTableButtons component provides a set of control buttons for the grid.
  * These include buttons for showing instructions, about page, sharing the grid, and resetting the grid.
  *
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
-const GridTableButtons: React.FC = () => {
-	const { solving } = useOptimize();
+const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -187,7 +189,7 @@ const GridTableButtons: React.FC = () => {
 						<InfoCircledIcon />,
 						"buttons.instructions",
 						handleShowInstructions,
-						isInfoPending,
+						solving || isInfoPending,
 						`gridTable__button gridTable__button--instructions ${instructionGlowClass}`,
 						instructionsVariant as "soft" | "solid"
 					)}
@@ -195,7 +197,7 @@ const GridTableButtons: React.FC = () => {
 						<QuestionMarkCircledIcon />,
 						"buttons.about",
 						handleShowAboutPage,
-						isInfoPending,
+						solving || isInfoPending,
 						"gridTable__button gridTable__button--about"
 					)}
 

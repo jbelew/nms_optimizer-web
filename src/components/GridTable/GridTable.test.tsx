@@ -19,7 +19,11 @@ vi.mock("../GridRow/GridRow", () => ({
 }));
 
 vi.mock("../GridTableButtons/GridTableButtons", () => ({
-	default: () => <div data-testid="grid-table-buttons">Grid Table Buttons</div>,
+	default: ({ solving }: { solving: boolean }) => (
+		<div data-testid="grid-table-buttons" data-solving={solving}>
+			Grid Table Buttons
+		</div>
+	),
 }));
 
 vi.mock("../GridShake/GridShake", () => ({
@@ -124,6 +128,12 @@ describe("GridTable", () => {
 	test("should render GridTableButtons", () => {
 		render(<GridTable solving={false} progressPercent={0} sharedGrid={false} />);
 		expect(screen.getByTestId("grid-table-buttons")).toBeInTheDocument();
+	});
+
+	test("should pass solving prop to GridTableButtons", () => {
+		render(<GridTable solving={true} progressPercent={0} sharedGrid={false} />);
+		const buttons = screen.getByTestId("grid-table-buttons");
+		expect(buttons).toHaveAttribute("data-solving", "true");
 	});
 
 	test("should apply opacity class when solving", () => {
