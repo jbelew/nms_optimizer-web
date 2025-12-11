@@ -108,7 +108,7 @@ export const initializeAnalytics = () => {
 
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
-			send_page_view: true,
+			send_page_view: false,
 			anonymize_ip: true,
 			user_properties: {
 				app_version: __APP_VERSION__,
@@ -116,6 +116,15 @@ export const initializeAnalytics = () => {
 			},
 		},
 	});
+
+	// Manually send initial page_view to include tracking_source
+	sendEvent({
+		action: "page_view",
+		category: "engagement", // Common category for page views
+		label: document.title,
+		page: window.location.pathname + window.location.search,
+	});
+
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
