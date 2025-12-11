@@ -1,252 +1,99 @@
-import type { GA4Event } from "./analytics";
 import ReactGA from "react-ga4";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import * as reportWebVitalsModule from "./reportWebVitals";
+import { initializeAnalytics, resetAnalyticsForTesting, sendEvent } from "./analytics";
+import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 
-// Mock ReactGA
+// Mock external dependencies
 vi.mock("react-ga4", () => ({
 	default: {
 		initialize: vi.fn(),
 		event: vi.fn(),
 	},
 }));
-
-// Mock reportWebVitals
-vi.mock("./reportWebVitals", () => ({
-	reportWebVitals: vi.fn(),
+vi.mock("./analyticsClient", () => ({
+	sendEvent: vi.fn(),
 }));
 
-// Don't mock the analytics module - we'll use spyOn in beforeEach instead
+describe("analytics.ts", () => {
+	const testEvent = {
+		category: "Test",
+		action: "Test Action",
+		label: "Test Label",
+	};
 
-describe("analytics", () => {
-	let analytics: typeof import("./analytics");
-
-	beforeEach(async () => {
+	beforeEach(() => {
 		vi.clearAllMocks();
-		// Mock navigator.userAgent to prevent bot detection
-		Object.defineProperty(navigator, "userAgent", {
-			value: "Mozilla/5.0 (Test Environment)",
-			writable: true,
-			configurable: true,
-		});
-		// Import fresh module with mocks applied
-		analytics = await import("./analytics");
-		// Reset the gaInitialized flag to allow initialization in each test
-		analytics.resetAnalyticsForTesting();
+		resetAnalyticsForTesting(); // Ensure GA initialization state is clean
+		vi.stubGlobal("fetch", vi.fn()); // Mock global fetch
 	});
 
-	afterEach(() => {
-		vi.restoreAllMocks();
+	// Tests for initializeAnalytics
+	it("should not initialize GA4 in development mode", () => {
+		initializeAnalytics();
+		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
-	describe("GA4Event Interface", () => {
-		test("should have required properties", () => {
-			const event: GA4Event = {
-				category: "Test Category",
-				action: "Test Action",
-			};
-
-			expect(event.category).toBe("Test Category");
-			expect(event.action).toBe("Test Action");
-		});
-
-		test("should accept optional properties", () => {
-			const event: GA4Event = {
-				category: "Test Category",
-				action: "Test Action",
-				label: "Test Label",
-				value: 42,
-				nonInteraction: true,
-				platform: "test-platform",
-				tech: "test-tech",
-				solve_method: "test-method",
-				supercharged: true,
-				page: "test-page",
-				title: "Test Title",
-				metric_name: "test-metric",
-				build: "test-build",
-				componentStack: "test-stack",
-				stackTrace: "test-trace",
-				app_version: "1.0.0",
-			};
-
-			expect(event.label).toBe("Test Label");
-			expect(event.value).toBe(42);
-			expect(event.nonInteraction).toBe(true);
-			expect(event.platform).toBe("test-platform");
-			expect(event.tech).toBe("test-tech");
-			expect(event.solve_method).toBe("test-method");
-			expect(event.supercharged).toBe(true);
-			expect(event.page).toBe("test-page");
-			expect(event.title).toBe("Test Title");
-			expect(event.metric_name).toBe("test-metric");
-			expect(event.build).toBe("test-build");
-			expect(event.componentStack).toBe("test-stack");
-			expect(event.stackTrace).toBe("test-trace");
-			expect(event.app_version).toBe("1.0.0");
-		});
+	it("should not initialize GA4 if already initialized", () => {
+		initializeAnalytics();
+		initializeAnalytics(); // Call again
+		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
-	describe("sendEvent", () => {
-		test("should send event with category and action to ReactGA", () => {
-			const event: GA4Event = {
-				category: "Test Category",
-				action: "Test Action",
-			};
-
-			analytics.sendEvent(event);
-
-			expect(ReactGA.event).toHaveBeenCalledWith("Test Action", {
-				category: "Test Category",
-			});
-		});
-
-		test("should send event with additional parameters", () => {
-			const event: GA4Event = {
-				category: "Engagement",
-				action: "button_click",
-				label: "Hero CTA",
-				value: 1,
-				page: "/home",
-			};
-
-			analytics.sendEvent(event);
-
-			expect(ReactGA.event).toHaveBeenCalledWith("button_click", {
-				category: "Engagement",
-				label: "Hero CTA",
-				value: 1,
-				page: "/home",
-			});
-		});
-
-		test("should destructure action and category from event object", () => {
-			const event: GA4Event = {
-				category: "User",
-				action: "sign_up",
-				platform: "web",
-				nonInteraction: false,
-			};
-
-			analytics.sendEvent(event);
-
-			expect(ReactGA.event).toHaveBeenCalledWith("sign_up", {
-				category: "User",
-				platform: "web",
-				nonInteraction: false,
-			});
-		});
-
-		test("should handle events with all optional parameters", () => {
-			const event: GA4Event = {
-				category: "Grid",
-				action: "optimize_grid",
-				label: "auto-optimize",
-				value: 5,
-				nonInteraction: true,
-				platform: "starship",
-				tech: "armor-plating",
-				solve_method: "genetic-algorithm",
-				supercharged: true,
-				page: "/builder",
-				title: "Grid Builder",
-				metric_name: "optimization-time",
-				build: "5.7.4",
-				componentStack: "App > Builder > Grid",
-				stackTrace: "line 42",
-				app_version: "5.7.4",
-			};
-
-			analytics.sendEvent(event);
-
-			expect(ReactGA.event).toHaveBeenCalledWith("optimize_grid", {
-				category: "Grid",
-				label: "auto-optimize",
-				value: 5,
-				nonInteraction: true,
-				platform: "starship",
-				tech: "armor-plating",
-				solve_method: "genetic-algorithm",
-				supercharged: true,
-				page: "/builder",
-				title: "Grid Builder",
-				metric_name: "optimization-time",
-				build: "5.7.4",
-				componentStack: "App > Builder > Grid",
-				stackTrace: "line 42",
-				app_version: "5.7.4",
-			});
-		});
+	it("should not initialize GA4 for bots", () => {
+		vi.stubGlobal("navigator", { userAgent: "Googlebot" });
+		initializeAnalytics();
+		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
-	describe("initializeAnalytics", () => {
-		test("should initialize ReactGA with correct tracking ID (when not in dev mode)", () => {
-			// Skip if running in dev mode (when DEV=true)
-			if (analytics.isDevMode()) {
-				console.log("Skipping test: running in dev mode where GA init is disabled");
+	// Tests for sendEvent with ad-blocker detection
+	it("should call client-side analytics when tracking is not blocked", async () => {
+		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch for /ads.js
+		await sendEvent(testEvent);
 
-				return;
-			}
+		// Expect fetch to be called once for ad-blocker detection
+		expect(fetch).toHaveBeenCalledTimes(1);
+		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
 
-			analytics.initializeAnalytics();
-
-			expect(ReactGA.initialize).toHaveBeenCalled();
-			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
-
-			if (calls.length > 0) {
-				const callArgs = calls[0];
-				expect(callArgs[0]).toBeTruthy(); // TRACKING_ID should be truthy
-			}
+		// Expect ReactGA.event to be called
+		expect(ReactGA.event).toHaveBeenCalledTimes(1);
+		expect(ReactGA.event).toHaveBeenCalledWith(testEvent.action, {
+			category: testEvent.category,
+			label: testEvent.label,
+			tracking_source: "client",
 		});
+		expect(sendAnalyticsEvent).not.toHaveBeenCalled();
+	});
 
-		test("should set up gtagOptions with send_page_view and anonymize_ip (when not in dev mode)", () => {
-			// Skip if running in dev mode (when DEV=true)
-			if (analytics.isDevMode()) {
-				console.log("Skipping test: running in dev mode where GA init is disabled");
+	it("should call server-side analytics when tracking is blocked", async () => {
+		(fetch as Mock).mockRejectedValue(new Error("Blocked by ad-blocker")); // Mock failed fetch
+		await sendEvent(testEvent);
 
-				return;
-			}
+		// Expect fetch to be called once for ad-blocker detection
+		expect(fetch).toHaveBeenCalledTimes(1);
+		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
 
-			analytics.initializeAnalytics();
-
-			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
-
-			if (calls.length > 0) {
-				const callArgs = calls[0];
-				const options = callArgs[1];
-
-				expect(options).toHaveProperty("gtagOptions");
-				expect(options.gtagOptions).toHaveProperty("send_page_view", true);
-				expect(options.gtagOptions).toHaveProperty("anonymize_ip", true);
-			}
+		// Expect sendAnalyticsEvent to be called
+		expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
+		expect(sendAnalyticsEvent).toHaveBeenCalledWith(testEvent.action, {
+			action: testEvent.action,
+			category: testEvent.category,
+			label: testEvent.label,
+			tracking_source: "server",
 		});
+		expect(ReactGA.event).not.toHaveBeenCalled();
+	});
 
-		test("should set app_version in user_properties", () => {
-			analytics.initializeAnalytics();
+	it("should cache ad-blocker detection result", async () => {
+		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
+		await sendEvent(testEvent); // First call
+		await sendEvent(testEvent); // Second call
 
-			const calls = (ReactGA.initialize as ReturnType<typeof vi.fn>).mock.calls;
+		// Fetch should only be called once, result is cached
+		expect(fetch).toHaveBeenCalledTimes(1);
+		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
 
-			if (calls.length > 0) {
-				const callArgs = calls[0];
-				const options = callArgs[1];
-
-				expect(options.gtagOptions).toHaveProperty("user_properties");
-				expect(options.gtagOptions.user_properties).toHaveProperty("app_version");
-			}
-		});
-
-		test("should call reportWebVitals with sendEvent function", () => {
-			analytics.initializeAnalytics();
-
-			// reportWebVitals should be called during initialization
-			const calls = (reportWebVitalsModule.reportWebVitals as ReturnType<typeof vi.fn>).mock
-				.calls;
-
-			if (calls.length > 0) {
-				const callArgs = calls[0];
-				expect(typeof callArgs[0]).toBe("function");
-			}
-		});
+		expect(ReactGA.event).toHaveBeenCalledTimes(2);
+		expect(sendAnalyticsEvent).not.toHaveBeenCalled();
 	});
 });

@@ -1,29 +1,12 @@
 import ReactGA from "react-ga4";
 
 import { TRACKING_ID } from "../constants";
+import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { reportWebVitals } from "./reportWebVitals";
 
 /**
  * Interface for Google Analytics 4 event tracking.
- *
- * @interface GA4Event
- * @property {string} category - The category of the event.
- * @property {string} action - The action that occurred.
- * @property {string} [label] - An optional label for the event.
- * @property {number} [value] - An optional numerical value for the event.
- * @property {boolean} [nonInteraction] - If true, the event will not affect bounce rate.
- * @property {string} [platform] - The platform where the event occurred.
- * @property {string} [tech] - The technology associated with the event.
- * @property {string} [solve_method] - The method used to solve a problem.
- * @property {boolean} [supercharged] - Whether a feature is supercharged.
- * @property {string} [page] - The page where the event occurred.
- * @property {string} [title] - The title of the page or event.
- * @property {string} [metric_name] - The name of the metric being measured.
- * @property {string} [build] - The build version of the application.
- * @property {string} [componentStack] - The component stack trace for errors.
- * @property {string} [stackTrace] - The stack trace for errors.
- * @property {string} [app_version] - The version of the application.
- * @property {string} [storageCleared] - Whether localStorage was successfully cleared ("yes" or "no").
+ * ... (rest of the interface properties)
  */
 export interface GA4Event {
 	category: string;
@@ -46,10 +29,38 @@ export interface GA4Event {
 	fileName?: string;
 	shipType?: string;
 	storageCleared?: string;
-	source?: string;
+	tracking_source?: string;
 }
 
 let gaInitialized = false;
+
+/**
+ * Detects if client-side tracking is likely being blocked.
+ * This is a simplified check. For a more robust solution, consider a library.
+ * @returns {Promise<boolean>} True if tracking is likely blocked.
+ */
+const detectAdBlocker = async (): Promise<boolean> => {
+	try {
+		await fetch("/ads.js", { method: "HEAD", cache: "reload" });
+		console.log("No Ad blocker detected. Using client-side analytics.");
+
+		return false;
+	} catch (_error) {
+		console.log("Ad blocker detected. Using server-side analytics fallback.");
+
+		return true;
+	}
+};
+
+let adBlockerDetectionPromise: Promise<boolean> | null = null;
+
+const getAdBlockerDetectionPromise = (): Promise<boolean> => {
+	if (!adBlockerDetectionPromise) {
+		adBlockerDetectionPromise = detectAdBlocker();
+	}
+
+	return adBlockerDetectionPromise;
+};
 
 /**
  * Helper function to check if running in development mode.
@@ -57,7 +68,16 @@ let gaInitialized = false;
  *
  * @returns {boolean} True if in development mode
  */
-export const isDevMode = (): boolean => import.meta.env.DEV;
+export const isDevMode = (): boolean => {
+	// Use typeof check to handle both string and boolean values from import.meta.env
+	const devEnv = import.meta.env.DEV;
+
+	if (typeof devEnv === "string") {
+		return devEnv === "true";
+	}
+
+	return devEnv;
+};
 
 /**
  * Reset analytics initialization state for testing.
@@ -65,6 +85,7 @@ export const isDevMode = (): boolean => import.meta.env.DEV;
  */
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
+	adBlockerDetectionPromise = null;
 };
 
 /**
@@ -95,13 +116,41 @@ export const initializeAnalytics = () => {
 	reportWebVitals(sendEvent);
 };
 
+// Manually send a page_view event if ad-blocker is detected
+getAdBlockerDetectionPromise().then((isBlocked) => {
+	if (isBlocked) {
+		sendEvent({
+			action: "page_view",
+			category: "engagement",
+			label: document.title,
+			page: window.location.pathname + window.location.search,
+		});
+	}
+});
+
 /**
- * Sends an event to Google Analytics.
+ * Sends an event to Google Analytics, automatically choosing the transport method.
  *
  * @param {GA4Event} event - The event to send.
- * @returns {void}
+ * @returns {Promise<void>}
  */
-export const sendEvent = (event: GA4Event) => {
-	const { action, category, ...params } = event;
-	ReactGA.event(action, { ...params, category });
+export const sendEvent = async (event: GA4Event): Promise<void> => {
+	const isBlocked = await getAdBlockerDetectionPromise();
+
+	if (isBlocked) {
+		const { action, category, ...params } = event;
+		await sendAnalyticsEvent(action, {
+			...params,
+			category,
+			action,
+			tracking_source: "server",
+		});
+	} else {
+		const { action, category, ...params } = event;
+		ReactGA.event(action, {
+			...params,
+			category,
+			tracking_source: "client",
+		});
+	}
 };

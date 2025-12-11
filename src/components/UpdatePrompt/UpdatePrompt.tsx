@@ -17,7 +17,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 	const content = (
 		<>
 			<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
-				{t("updatePrompt.description", {
+				{t("dialogs.updatePrompt.description", {
 					defaultValue:
 						"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
 				})}
@@ -26,12 +26,12 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 			<Flex gap="3" mt="6" mb="2" justify="end">
 				<Dialog.Close asChild>
 					<Button variant="soft" onClick={onDismiss}>
-						{t("updatePrompt.later", { defaultValue: "Later" })}
+						{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
 					</Button>
 				</Dialog.Close>
 				<Dialog.Close asChild>
 					<Button onClick={onRefresh}>
-						{t("updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
+						{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 					</Button>
 				</Dialog.Close>
 			</Flex>

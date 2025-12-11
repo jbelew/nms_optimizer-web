@@ -19,7 +19,7 @@ describe("errorHandler", () => {
 		// No need to spy on localStorage.clear since we mock it directly when needed
 
 		// Spy on analytics.sendEvent
-		sendEventSpy = vi.spyOn(analytics, "sendEvent").mockImplementation(() => {});
+		sendEventSpy = vi.spyOn(analytics, "sendEvent").mockImplementation(async () => {});
 
 		// Spy on console
 		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
