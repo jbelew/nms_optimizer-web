@@ -91,6 +91,11 @@
 			"copiedButton": "Copied!",
 			"closeButton": "Close",
 			"openLink": "Open Link"
+		},
+		"updatePrompt": {
+			"description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
+			"later": "Update Later",
+			"refreshNow": "Refresh Now"
 		}
 	},
 	"dialog": {
