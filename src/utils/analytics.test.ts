@@ -48,12 +48,15 @@ describe("analytics.ts", () => {
 
 	// Tests for sendEvent with ad-blocker detection
 	it("should call client-side analytics when tracking is not blocked", async () => {
-		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch for /ads.js
+		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
 		await sendEvent(testEvent);
 
 		// Expect fetch to be called once for ad-blocker detection
 		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
+		expect(fetch).toHaveBeenCalledWith(
+			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
+			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+		);
 
 		// Expect ReactGA.event to be called
 		expect(ReactGA.event).toHaveBeenCalledTimes(1);
@@ -71,7 +74,10 @@ describe("analytics.ts", () => {
 
 		// Expect fetch to be called once for ad-blocker detection
 		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
+		expect(fetch).toHaveBeenCalledWith(
+			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
+			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+		);
 
 		// Expect sendAnalyticsEvent to be called
 		expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
@@ -91,7 +97,10 @@ describe("analytics.ts", () => {
 
 		// Fetch should only be called once, result is cached
 		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith("/ads.js", { method: "HEAD", cache: "reload" });
+		expect(fetch).toHaveBeenCalledWith(
+			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
+			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+		);
 
 		expect(ReactGA.event).toHaveBeenCalledTimes(2);
 		expect(sendAnalyticsEvent).not.toHaveBeenCalled();

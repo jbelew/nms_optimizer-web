@@ -41,7 +41,11 @@ let gaInitialized = false;
  */
 const detectAdBlocker = async (): Promise<boolean> => {
 	try {
-		await fetch("/ads.js", { method: "HEAD", cache: "reload" });
+		await fetch("https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9", {
+			method: "HEAD",
+			mode: "no-cors",
+			cache: "reload",
+		});
 		console.log("No Ad blocker detected. Using client-side analytics.");
 
 		return false;
