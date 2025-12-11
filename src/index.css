@@ -1,7 +1,15 @@
 /* Tailwind base, theme, and utilities layers */
-@import "tailwindcss/preflight.css" layer(base);
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@layer base {
+	@import "tailwindcss/preflight.css";
+}
+
+@layer theme {
+	@import "tailwindcss/theme.css";
+}
+
+@layer utilities {
+	@import "tailwindcss/utilities.css";
+}
 
 /* Global box-sizing reset */
 *,
@@ -18,7 +26,7 @@
 	--letter-spacing-wide: 0.225rem;
 	--font-weight-bold: 600;
 
-	--color-background: var(--accent-a1);
+	--color-background: var(--gray-a1);
 
 	/* --color-panel-translucent: var(--accent-a2); */
 	--color-panel-solid: var(--accent-1);
@@ -110,13 +118,6 @@ body.a11y-font .radix-themes {
 	}
 }
 
-html {
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	/* scrollbar-gutter: stable; */
-}
-
 body {
 	font-family: var(--default-font-family);
 	min-height: 100dvh;
@@ -146,46 +147,44 @@ body {
 @media (max-width: 1023px) {
 	body {
 		padding-right: calc(100dvw - 100%) !important;
+		overflow-x: hidden;
 	}
-}
 
-@media (max-width: 1023px) {
-	html,
-	body {
+	html {
 		overflow-x: hidden;
 	}
 }
 
+/* Heading styled utility */
 .heading-styled {
-	letter-spacing: var(--letter-spacing-wide);
 	font-family: var(--font-family-geosans);
-	font-weight: 400;
+	font-weight: 600;
+	letter-spacing: var(--letter-spacing-wide);
+	-webkit-text-stroke: 1.25px;
 	text-transform: uppercase;
 	word-spacing: -0.15em;
-	text-shadow: 0 2px 4px var(--accent-a2);
-	-webkit-text-stroke: 1px;
 }
 
 body.a11y-font .heading-styled {
-	letter-spacing: normal;
 	font-family: var(--default-font-family);
+	font-weight: 600;
 	word-spacing: normal;
-	font-weight: 700;
+	letter-spacing: normal;
+	-webkit-text-stroke: 0;
 	text-transform: uppercase;
-	text-shadow: 0 2px 4px var(--accent-a2);
-	-webkit-text-stroke: 0px;
 }
 
-.button--glow {
-	animation: buttonGlow 0.5s infinite alternate ease-in-out;
+@media (min-width: 640px) {
+	.heading-styled {
+		text-shadow: 0 2px 4px var(--accent-a2);
+	}
 }
 
-.warningDialog__title {
-	font-family: var(--font-family-geosans);
-	/* Use variable */
-	filter: drop-shadow(0 0 4px var(--accent-6));
-	letter-spacing: var(--letter-spacing-wide);
-	text-transform: uppercase;
+/* Dialog close button utility */
+.dialog-close {
+	position: absolute;
+	right: 8px;
+	top: 10px;
 }
 
 /* Visually hide an element but keep it accessible to screen readers */
@@ -203,31 +202,7 @@ body.a11y-font .heading-styled {
 
 /* ============================================ */
 /* PERFORMANCE OPTIMIZATIONS                   */
-/* Based on trace analysis 2025-11-16         */
 /* ============================================ */
-
-@keyframes buttonGlow {
-	from {
-		/* Only animate filter - doesn't trigger layout */
-		filter: drop-shadow(0 0 2px var(--accent-a0));
-	}
-
-	to {
-		filter: drop-shadow(0 0 4px var(--accent-track));
-	}
-}
-
-/* Optimize text rendering */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	/* Ensure text is crisp without GPU overhead */
-	-webkit-text-size-adjust: 100%;
-	text-rendering: optimizeLegibility;
-}
 
 /* Reduce animation overhead when page is hidden */
 @media (prefers-reduced-motion: reduce) {

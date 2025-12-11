@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 
+import "./TechTreeSection.scss";
+
 /**
  * @typedef {object} TypeImageMap
  * @property {string} [key] - The key is the technology type, and the value is the image file name.

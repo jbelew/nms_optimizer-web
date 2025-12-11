@@ -36,7 +36,7 @@ export const NmsToast = ({
 			onClick={() => onOpenChange(false)}
 			onTouchEnd={() => onOpenChange(false)}
 		>
-			<Toast.Title className={`${titleClassName} mb-1`}>{title}</Toast.Title>
+			<Toast.Title className={`${titleClassName} heading-styled mb-1`}>{title}</Toast.Title>
 			<Toast.Description className="ToastDescription">{description}</Toast.Description>
 		</Toast.Root>
 	);

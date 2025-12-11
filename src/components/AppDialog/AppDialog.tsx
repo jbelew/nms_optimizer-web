@@ -108,7 +108,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 							<IconButton
 								variant="soft"
 								size="1"
-								className="appDialog__close"
+								className="dialog-close"
 								aria-label="Close dialog"
 							>
 								<Cross2Icon />

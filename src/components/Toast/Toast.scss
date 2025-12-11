@@ -1,4 +1,3 @@
-@use "../../styles/mixins";
 @use "../../styles/z-indexes" as *;
 
 .ToastRoot {
@@ -14,8 +13,6 @@
 }
 
 .ToastTitle {
-	@include mixins.heading-styled;
-
 	color: var(--amber-11);
 	font-size: 15px;
 	grid-area: title;

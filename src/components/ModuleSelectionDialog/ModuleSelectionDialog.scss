@@ -2,15 +2,7 @@
 
 .moduleSelection {
 	&__heading--styled {
-		@include mixins.heading-styled;
-
 		line-height: 1.5em;
-	}
-
-	&__close {
-		position: absolute;
-		right: 8px;
-		top: 10px;
 	}
 
 	&__content {

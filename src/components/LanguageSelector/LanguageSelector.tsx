@@ -133,7 +133,7 @@ const LanguageSelector: React.FC = () => {
 				)}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content sideOffset={5} align="end">
-				<DropdownMenu.Label className="selectLanguage__header">
+				<DropdownMenu.Label className="selectLanguage__header heading-styled">
 					{t("languageInfo.selectLanguage") || "Select Language"}
 				</DropdownMenu.Label>
 				<DropdownMenu.RadioGroup

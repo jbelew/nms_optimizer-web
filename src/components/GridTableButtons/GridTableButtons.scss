@@ -23,3 +23,18 @@
 	gap: var(--space-2);
 	margin-left: auto;
 }
+
+.button--glow {
+	animation: buttonGlow 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes buttonGlow {
+	from {
+		/* Only animate filter - doesn't trigger layout */
+		filter: drop-shadow(0 0 2px var(--accent-a0));
+	}
+
+	to {
+		filter: drop-shadow(0 0 4px var(--accent-track));
+	}
+}

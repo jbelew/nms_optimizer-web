@@ -86,7 +86,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
-						<DropdownMenu.Label className="shipSelection__header">
+						<DropdownMenu.Label className="shipSelection__header heading-styled">
 							Select Build
 						</DropdownMenu.Label>
 						{builds.map((build) => (

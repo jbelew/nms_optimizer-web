@@ -35,37 +35,37 @@
 
 .dark,
 .dark-theme {
-	--sage-1: #101211;
-	--sage-2: #171918;
-	--sage-3: #202221;
-	--sage-4: #272a29;
-	--sage-5: #2e3130;
-	--sage-6: #373b39;
-	--sage-7: #444947;
-	--sage-8: #5b625f;
-	--sage-9: #63706b;
-	--sage-10: #717d79;
-	--sage-11: #adb5b2;
-	--sage-12: #eceeed;
-	--sage-a1: #00000000;
-	--sage-a2: #f0f2f108;
-	--sage-a3: #f3f5f412;
-	--sage-a4: #f2fefd1a;
-	--sage-a5: #f1fbfa22;
-	--sage-a6: #edfbf42d;
-	--sage-a7: #edfcf73c;
-	--sage-a8: #ebfdf657;
-	--sage-a9: #dffdf266;
-	--sage-a10: #e5fdf674;
-	--sage-a11: #f4fefbb0;
-	--sage-a12: #fdfffeed;
-	--sage-surface: #1e201f80;
-	--sage-indicator: var(--sage-9);
-	--sage-track: var(--sage-9);
+	--slate-1: #111113;
+	--slate-2: #18191b;
+	--slate-3: #212225;
+	--slate-4: #272a2d;
+	--slate-5: #2e3135;
+	--slate-6: #363a3f;
+	--slate-7: #43484e;
+	--slate-8: #5a6169;
+	--slate-9: #696e77;
+	--slate-10: #777b84;
+	--slate-11: #b0b4ba;
+	--slate-12: #edeef0;
+	--slate-a1: #00000000;
+	--slate-a2: #d8f4f609;
+	--slate-a3: #ddeaf814;
+	--slate-a4: #d3edf81d;
+	--slate-a5: #d9edfe25;
+	--slate-a6: #d6ebfd30;
+	--slate-a7: #d9edff40;
+	--slate-a8: #d9edff5d;
+	--slate-a9: #dfebfd6d;
+	--slate-a10: #e5edfd7b;
+	--slate-a11: #f1f7feb5;
+	--slate-a12: #fcfdffef;
+	--slate-surface: #1f212380;
+	--slate-indicator: var(--slate-9);
+	--slate-track: var(--slate-9);
 }
 
 :root {
-	--sage-contrast: white;
+	--slate-contrast: white;
 }
 
 .dark,

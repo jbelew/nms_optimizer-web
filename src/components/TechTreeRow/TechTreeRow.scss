@@ -5,8 +5,6 @@
 }
 
 .heading__styled {
-	@include mixins.heading-styled;
-
 	line-height: 1.5em;
 }
 

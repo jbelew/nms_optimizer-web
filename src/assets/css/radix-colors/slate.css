@@ -1,0 +1,34 @@
+.dark,
+.dark-theme {
+	--slate-1: #111113;
+	--slate-2: #18191b;
+	--slate-3: #212225;
+	--slate-4: #272a2d;
+	--slate-5: #2e3135;
+	--slate-6: #363a3f;
+	--slate-7: #43484e;
+	--slate-8: #5a6169;
+	--slate-9: #696e77;
+	--slate-10: #777b84;
+	--slate-11: #b0b4ba;
+	--slate-12: #edeef0;
+	--slate-a1: #00000000;
+	--slate-a2: #d8f4f609;
+	--slate-a3: #ddeaf814;
+	--slate-a4: #d3edf81d;
+	--slate-a5: #d9edfe25;
+	--slate-a6: #d6ebfd30;
+	--slate-a7: #d9edff40;
+	--slate-a8: #d9edff5d;
+	--slate-a9: #dfebfd6d;
+	--slate-a10: #e5edfd7b;
+	--slate-a11: #f1f7feb5;
+	--slate-a12: #fcfdffef;
+	--slate-surface: #1f212380;
+	--slate-indicator: var(--slate-9);
+	--slate-track: var(--slate-9);
+}
+
+:root {
+	--slate-contrast: white;
+}

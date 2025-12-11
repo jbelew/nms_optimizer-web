@@ -64,10 +64,7 @@ $panel-border: 1px solid var(--gray-a5);
 		// Accessibility override: disable background image
 		body.a11y-font & {
 			backdrop-filter: none;
-
 			@media (width <= 639px) {
-				background-color: var(--gray-a3);
-
 				&::before {
 					background-image: none !important;
 					display: none !important;
@@ -78,8 +75,6 @@ $panel-border: 1px solid var(--gray-a5);
 
 	// Ship selector header
 	&__ship-selector {
-		@include mixins.heading-styled;
-
 		font-size: 1.25rem;
 
 		@media (width >= 640px) {
@@ -124,15 +119,5 @@ $panel-border: 1px solid var(--gray-a5);
 		flex-direction: column;
 		flex-grow: 1;
 		justify-content: flex-end;
-	}
-}
-
-// Accessibility font overrides
-body.a11y-font {
-	.main-app__ship-selector {
-		font-family: var(--default-font-family);
-		font-weight: 700;
-		letter-spacing: normal;
-		-webkit-text-stroke: 0;
 	}
 }

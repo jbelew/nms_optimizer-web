@@ -104,15 +104,7 @@
 	}
 
 	&__title {
-		@include mixins.heading-styled;
-
 		margin-right: 1rem;
-	}
-
-	&__close {
-		position: absolute;
-		right: 8px;
-		top: 10px;
 	}
 
 	&__container {

@@ -96,11 +96,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
 
 				{hasMessage && (
 					<>
-						<Text
-							className={`messageSpinner__header${
-								useNMSFont ? "--nms" : ""
-							} pt-4 pb-2 text-center text-xl sm:text-2xl`}
-						>
+						<Text className="heading-styled pt-4 pb-2 text-center text-xl sm:text-2xl">
 							{initialMessage}
 						</Text>
 

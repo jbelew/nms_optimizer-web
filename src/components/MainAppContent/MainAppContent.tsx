@@ -164,7 +164,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 								align="center"
 								wrap="wrap"
 								gap="3"
-								className="main-app__ship-selector"
+								className="main-app__ship-selector heading-styled"
 								style={{
 									maxWidth: gridTableTotalWidth
 										? `${gridTableTotalWidth}px`
