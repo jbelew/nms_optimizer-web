@@ -1,3 +1,10 @@
+## [6.5.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.8...v6.5.9) (2025-12-11)
+
+
+### Bug Fixes
+
+* **GridTableButtons:** pass solving prop to GridTableButtons and update tests ([ec6ceaa](https://github.com/jbelew/nms_optimizer-web/commit/ec6ceaa8420dc7cfe0829b3a51baac23efede69a))
+
 ## [6.5.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.7...v6.5.8) (2025-12-10)
 
 
