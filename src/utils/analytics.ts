@@ -57,10 +57,19 @@ const detectAdBlocker = async (): Promise<boolean> => {
 };
 
 let adBlockerDetectionPromise: Promise<boolean> | null = null;
+let adBlockerResult: boolean | null = null;
 
-const getAdBlockerDetectionPromise = (): Promise<boolean> => {
+const getAdBlockerDetectionResult = async (): Promise<boolean> => {
+	if (adBlockerResult !== null) {
+		return adBlockerResult;
+	}
+
 	if (!adBlockerDetectionPromise) {
-		adBlockerDetectionPromise = detectAdBlocker();
+		adBlockerDetectionPromise = detectAdBlocker().then((result) => {
+			adBlockerResult = result;
+
+			return result;
+		});
 	}
 
 	return adBlockerDetectionPromise;
@@ -90,6 +99,7 @@ export const isDevMode = (): boolean => {
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
 	adBlockerDetectionPromise = null;
+	adBlockerResult = null;
 };
 
 /**
@@ -123,47 +133,81 @@ export const initializeAnalytics = () => {
 		category: "engagement", // Common category for page views
 		label: document.title,
 		page: window.location.pathname + window.location.search,
+	}).catch((error) => {
+		console.error("Failed to send initial page_view:", error);
 	});
 
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
 
-// Manually send a page_view event if ad-blocker is detected
-getAdBlockerDetectionPromise().then((isBlocked) => {
-	if (isBlocked) {
+// Detect ad-blocker at module load time and send fallback page_view if needed
+getAdBlockerDetectionResult().then((isBlocked) => {
+	if (isBlocked && !gaInitialized) {
 		sendEvent({
 			action: "page_view",
 			category: "engagement",
 			label: document.title,
 			page: window.location.pathname + window.location.search,
+		}).catch((error) => {
+			console.error("Failed to send ad-blocked page_view:", error);
 		});
 	}
 });
 
 /**
+ * Validates that an event has required properties.
+ * @param {GA4Event} event - The event to validate.
+ * @throws {Error} If required properties are missing.
+ */
+const validateEvent = (event: GA4Event): void => {
+	if (!event.action) {
+		throw new Error("Event must have an 'action' property");
+	}
+
+	if (!event.category) {
+		throw new Error("Event must have a 'category' property");
+	}
+};
+
+/**
  * Sends an event to Google Analytics, automatically choosing the transport method.
+ * Uses cached ad-blocker detection result, or waits for detection on first call.
+ * Falls back to server-side tracking if client-side is blocked.
  *
  * @param {GA4Event} event - The event to send.
  * @returns {Promise<void>}
+ * @throws {Error} If event validation fails.
  */
 export const sendEvent = async (event: GA4Event): Promise<void> => {
-	const isBlocked = await getAdBlockerDetectionPromise();
+	try {
+		validateEvent(event);
+	} catch (validationError) {
+		console.error("Event validation failed:", validationError);
+		throw validationError;
+	}
 
-	if (isBlocked) {
-		const { action, category, ...params } = event;
-		await sendAnalyticsEvent(action, {
-			...params,
-			category,
-			action,
-			tracking_source: "server",
-		});
-	} else {
-		const { action, category, ...params } = event;
-		ReactGA.event(action, {
-			...params,
-			category,
-			tracking_source: "client",
-		});
+	try {
+		const isBlocked = await getAdBlockerDetectionResult();
+
+		if (isBlocked) {
+			const { action, category, ...params } = event;
+			await sendAnalyticsEvent(action, {
+				...params,
+				category,
+				action,
+				tracking_source: "server",
+			});
+		} else {
+			const { action, category, ...params } = event;
+			ReactGA.event(action, {
+				...params,
+				category,
+				tracking_source: "client",
+			});
+		}
+	} catch (trackingError) {
+		console.error("Failed to send analytics event:", trackingError);
+		throw trackingError;
 	}
 };
