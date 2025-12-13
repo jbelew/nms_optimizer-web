@@ -79,12 +79,14 @@ describe("analytics.ts", () => {
 			{ method: "HEAD", mode: "no-cors", cache: "reload" }
 		);
 
-		// Expect sendAnalyticsEvent to be called
+		// Expect sendAnalyticsEvent to be called with user properties
 		expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
 		expect(sendAnalyticsEvent).toHaveBeenCalledWith(testEvent.action, {
 			action: testEvent.action,
 			category: testEvent.category,
 			label: testEvent.label,
+			app_version: expect.any(String),
+			is_installed: expect.any(String),
 			tracking_source: "server",
 		});
 		expect(ReactGA.event).not.toHaveBeenCalled();

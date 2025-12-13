@@ -108,13 +108,15 @@ export const resetAnalyticsForTesting = () => {
  *
  * @returns {void}
  */
+// Store globally so sendEvent can access these values for server-side fallback
+const globalIsInstalled =
+	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
+
 export const initializeAnalytics = () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
 	if (isDevMode() || gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) {
 		return;
 	}
-
-	const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
 
 	ReactGA.initialize(TRACKING_ID, {
 		gtagOptions: {
@@ -122,7 +124,7 @@ export const initializeAnalytics = () => {
 			anonymize_ip: true,
 			user_properties: {
 				app_version: __APP_VERSION__,
-				is_installed: isInstalled ? "yes" : "no",
+				is_installed: globalIsInstalled ? "yes" : "no",
 			},
 		},
 	});
@@ -196,6 +198,8 @@ export const sendEvent = async (event: GA4Event): Promise<void> => {
 				...params,
 				category,
 				action,
+				app_version: __APP_VERSION__,
+				is_installed: globalIsInstalled ? "yes" : "no",
 				tracking_source: "server",
 			});
 		} else {
