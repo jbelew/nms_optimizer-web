@@ -65,7 +65,7 @@ $panel-border: 1px solid var(--gray-a5);
 		body.a11y-font & {
 			backdrop-filter: none;
 			@media (width <= 639px) {
-				background-color: var(--accent-a3);
+				background-color: var(--accent-a2);
 
 				&::before {
 					background-image: none !important;
