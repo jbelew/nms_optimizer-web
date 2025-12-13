@@ -86,6 +86,10 @@
 			border-color: var(--gray-12);
 			border-width: 1px;
 
+			&.gridCell.gridCell--black {
+				border-color: var(--gray-6);
+			}
+
 			@media (hover: hover) {
 				&:hover {
 					background-color: var(--gray-a4);
