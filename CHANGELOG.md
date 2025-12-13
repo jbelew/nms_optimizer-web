@@ -1,3 +1,10 @@
+## [6.5.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.10...v6.5.11) (2025-12-13)
+
+
+### Bug Fixes
+
+* **locale:** Fix pluralization of several item categories ([81babb9](https://github.com/jbelew/nms_optimizer-web/commit/81babb9c5a894b1500a16757bf66d4a7721521f5))
+
 ## [6.5.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.9...v6.5.10) (2025-12-13)
 
 
