@@ -127,7 +127,7 @@ body {
 	/* Apply to body pseudo-element for best stability on iOS */
 	@media (width <=639px) {
 		&::before {
-			background-image: url("/assets/img/background@mobile-blurred_v5.webp");
+			background-image: url("/assets/img/background@mobile-blurred_v6.webp");
 			background-position: center top;
 			background-repeat: no-repeat;
 			background-size: cover;

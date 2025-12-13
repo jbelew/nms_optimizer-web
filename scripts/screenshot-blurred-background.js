@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 		const bgImagePath = path.resolve(__dirname, "../public/assets/img/background@2x.webp");
 		const outputPath = path.resolve(
 			__dirname,
-			"../public/assets/img/background@mobile-blurred_v4.webp"
+			"../public/assets/img/background@mobile-blurred_v6.webp"
 		);
 
 		// Mobile dimensions (Reverting to 640w to maintain blur scale/softness)
@@ -79,7 +79,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 				.tint {
 					position: absolute;
 					inset: 0;
-					background-color: #DDEAF814;
+					background-color: #02A7F211;
 					width: 100%;
 					height: 100%;
 					pointer-events: none;
