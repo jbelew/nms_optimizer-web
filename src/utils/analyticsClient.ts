@@ -87,7 +87,7 @@ export const sendEvent = async (
 			payload.userId = userId;
 		}
 
-		const response = await fetch(`${API_URL}/api/events`, {
+		const response = await fetch(`${API_URL}api/events`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

@@ -198,7 +198,28 @@ export default defineConfig(({ mode }) => {
 								},
 							},
 						},
-					],
+						{
+							urlPattern: /^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
+							handler: "NetworkOnly",
+							method: "POST",
+						},
+						{
+							urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
+							handler: "NetworkFirst",
+							options: {
+								cacheName: "google-analytics-cache",
+								networkTimeoutSeconds: 3,
+								expiration: {
+									maxEntries: 50,
+									maxAgeSeconds: 86400, // 1 day
+								},
+							},
+						},
+						{
+							urlPattern: /^https:\/\/www\.google-analytics\.com\//,
+							handler: "NetworkOnly",
+						},
+						],
 				},
 				manifest: {
 					id: "/",
