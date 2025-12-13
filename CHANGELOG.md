@@ -1,3 +1,10 @@
+## [6.5.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.9...v6.5.10) (2025-12-13)
+
+
+### Bug Fixes
+
+* **analytics:** Include app version and install status in server-side events ([48b809d](https://github.com/jbelew/nms_optimizer-web/commit/48b809d3cf99cf329942bb15c4798931a9ecf22b))
+
 ## [6.5.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.8...v6.5.9) (2025-12-11)
 
 
