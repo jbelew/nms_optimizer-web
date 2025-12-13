@@ -1,3 +1,10 @@
+## [6.5.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.11...v6.5.12) (2025-12-13)
+
+
+### Bug Fixes
+
+* **pwa:** correct analytics request handling in service worker ([a80e376](https://github.com/jbelew/nms_optimizer-web/commit/a80e3762da549a44ff06f76239773185dc2fb957))
+
 ## [6.5.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.10...v6.5.11) (2025-12-13)
 
 
