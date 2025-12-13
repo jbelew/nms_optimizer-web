@@ -145,8 +145,8 @@
 		"standard-mt": "Standard / Exotic Multi-Tools",
 		"atlantid": "Atlantid Multi-Tools",
 		"sentinel-mt": "Sentinel Multi-Tools",
-		"staves": "Voltaic / Expedition Staff",
-		"freighter": "Freighter",
+		"staves": "Voltaic / Expedition Staffs",
+		"freighter": "Freighters",
 		"nomad": "Nomad Exocraft",
 		"pilgrim": "Pilgrim Exocraft",
 		"roamer": "Roamer Exocraft",
@@ -154,7 +154,7 @@
 		"colossus": "Colossus Exocraft",
 		"minotaur": "Minotaur Exocraft",
 		"exosuit": "Exosuit",
-		"corvette": "Corvette"
+		"corvette": "Corvettes"
 	},
 	"techTree": {
 		"loading": "LOADING PLATFORM DATA",
