@@ -32,7 +32,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Run Chromatic visual tests
-        uses: chromaui/action@v12
+        uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
