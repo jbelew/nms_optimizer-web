@@ -63,7 +63,7 @@
 		"react-is": "^19.2.1",
 		"react-markdown": "^10.1.0",
 		"react-router-dom": "^7.10.1",
-		"recharts": "^3.5.1",
+		"recharts": "^3.6.0",
 		"rehype-raw": "^7.0.0",
 		"remark-gfm": "^4.0.1",
 		"socket.io-client": "^4.8.1",
