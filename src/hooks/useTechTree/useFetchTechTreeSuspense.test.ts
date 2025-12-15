@@ -73,6 +73,7 @@ describe("useFetchTechTreeSuspense", () => {
 		setTechColors: (colors: Record<string, string>) => void;
 		setTechGroups: (groups: Record<string, TechTreeItem[]>) => void;
 		setActiveGroup: (key: string, type: string) => void;
+		setActiveGroups: (groups: Record<string, string>) => void;
 		techColors: Record<string, string>;
 		techGroups: Record<string, TechTreeItem[]>;
 		activeGroups: Record<string, string>;
@@ -93,6 +94,7 @@ describe("useFetchTechTreeSuspense", () => {
 		const mockSetTechColors = vi.fn();
 		const mockSetTechGroups = vi.fn();
 		const mockSetActiveGroup = vi.fn();
+		const mockSetActiveGroups = vi.fn();
 		const mockSetInitialGridDefinition = vi.fn();
 		const mockSetGridFromInitialDefinition = vi.fn();
 		const mockSetLoading = vi.fn();
@@ -102,6 +104,7 @@ describe("useFetchTechTreeSuspense", () => {
 				setTechColors: mockSetTechColors,
 				setTechGroups: mockSetTechGroups,
 				setActiveGroup: mockSetActiveGroup,
+				setActiveGroups: mockSetActiveGroups,
 				techColors: {},
 				techGroups: {},
 				activeGroups: {},
@@ -127,6 +130,17 @@ describe("useFetchTechTreeSuspense", () => {
 			selectHasModulesInGrid: () => hasGridModules,
 		});
 
+		// Mock getState for useTechStore to support setActiveGroups
+		(useTechStore as unknown as { getState: () => MockTechStoreState }).getState = () => ({
+			setTechColors: mockSetTechColors,
+			setTechGroups: mockSetTechGroups,
+			setActiveGroup: mockSetActiveGroup,
+			setActiveGroups: mockSetActiveGroups,
+			techColors: {},
+			techGroups: {},
+			activeGroups: {},
+		});
+
 		vi.mocked(useTechTreeLoadingStore).mockImplementation((selector) => {
 			const state: MockTechTreeLoadingState = {
 				setLoading: mockSetLoading,
@@ -148,6 +162,7 @@ describe("useFetchTechTreeSuspense", () => {
 			mockSetTechColors,
 			mockSetTechGroups,
 			mockSetActiveGroup,
+			mockSetActiveGroups,
 			mockSetInitialGridDefinition,
 			mockSetGridFromInitialDefinition,
 			mockSetLoading,
@@ -197,18 +212,21 @@ describe("useFetchTechTreeSuspense", () => {
 		expect(Array.isArray(groupsArg.defense)).toBe(true);
 	});
 
-	it("should call setActiveGroup for each tech with default type 'normal'", async () => {
-		const { mockSetActiveGroup } = setupMocks();
+	it("should call setActiveGroups with all techs with default type 'normal'", async () => {
+		const { mockSetActiveGroups } = setupMocks();
 
 		renderHook(() => useFetchTechTreeSuspense("standard"));
 
 		await waitFor(() => {
-			expect(mockSetActiveGroup).toHaveBeenCalled();
+			expect(mockSetActiveGroups).toHaveBeenCalled();
 		});
 
-		expect(mockSetActiveGroup).toHaveBeenCalledWith("defense", "normal");
-		expect(mockSetActiveGroup).toHaveBeenCalledWith("shield", "normal");
-		expect(mockSetActiveGroup).toHaveBeenCalledWith("health", "normal");
+		const callArg = mockSetActiveGroups.mock.calls[0]?.[0];
+		expect(callArg).toEqual({
+			defense: "normal",
+			shield: "normal",
+			health: "normal",
+		});
 	});
 
 	it("should set loading to false after processing tech tree", async () => {
@@ -250,15 +268,18 @@ describe("useFetchTechTreeSuspense", () => {
 		};
 
 		vi.mocked(apiCallModule.apiCall).mockResolvedValue(techTreeWithTypes);
-		const { mockSetActiveGroup } = setupMocks();
+		const { mockSetActiveGroups } = setupMocks();
 
 		renderHook(() => useFetchTechTreeSuspense("standard"));
 
 		await waitFor(() => {
-			expect(mockSetActiveGroup).toHaveBeenCalled();
+			expect(mockSetActiveGroups).toHaveBeenCalled();
 		});
 
-		expect(mockSetActiveGroup).toHaveBeenCalledWith("defense", "max");
+		const callArg = mockSetActiveGroups.mock.calls[0]?.[0];
+		expect(callArg).toEqual({
+			defense: "max",
+		});
 	});
 
 	it("should filter out duplicate tech items by key in useMemo", async () => {

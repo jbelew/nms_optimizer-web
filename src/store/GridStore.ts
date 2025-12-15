@@ -581,7 +581,16 @@ export const useGridStore = create<GridStore>()(
 				hasTechInGrid: (tech: string): boolean => {
 					const grid = get().grid;
 
-					return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
+					// Use early exit optimization with for loops instead of nested .some()
+					for (const row of grid.cells) {
+						for (const cell of row) {
+							if (cell.tech === tech) {
+								return true;
+							}
+						}
+					}
+
+					return false;
 				},
 
 				isGridFull: (): boolean => {
@@ -611,11 +620,15 @@ export const useGridStore = create<GridStore>()(
 				},
 				resetGridTech: (tech: string) => {
 					set((state) => {
-						state.grid.cells.forEach((row: Cell[]) => {
-							row.forEach((cell: Cell) => {
-								if (cell.tech === tech) resetCellContent(cell);
-							});
-						});
+						// Use for loops instead of nested forEach for better performance
+						// and clearer early exit semantics
+						for (const row of state.grid.cells) {
+							for (const cell of row) {
+								if (cell.tech === tech) {
+									resetCellContent(cell);
+								}
+							}
+						}
 					});
 				},
 
@@ -623,7 +636,18 @@ export const useGridStore = create<GridStore>()(
 					const grid = get().grid;
 					if (!grid || !grid.cells) return 0;
 
-					return grid.cells.flat().filter((c) => c.supercharged).length;
+					// Avoid .flat() which creates intermediate array; count directly
+					let count = 0;
+
+					for (const row of grid.cells) {
+						for (const cell of row) {
+							if (cell.supercharged) {
+								count++;
+							}
+						}
+					}
+
+					return count;
 				},
 
 				selectHasModulesInGrid: () => {

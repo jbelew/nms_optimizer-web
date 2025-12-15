@@ -25,6 +25,7 @@ import { useModuleSelectionStore } from "./ModuleSelectionStore";
  * @property {() => void} clearResult - Function to clear the result state.
  * @property {(techGroups: {[key: string]: TechTreeItem[]}) => void} setTechGroups - Function to set the tech groups.
  * @property {(tech: string, groupType: string) => void} setActiveGroup - Function to set the active group for a technology.
+ * @property {(groups: {[key: string]: string}) => void} setActiveGroups - Function to batch set multiple active groups at once.
  */
 export interface TechState {
 	max_bonus: { [key: string]: number };
@@ -48,6 +49,7 @@ export interface TechState {
 	clearResult: () => void;
 	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
 	setActiveGroup: (tech: string, groupType: string) => void;
+	setActiveGroups: (groups: { [key: string]: string }) => void;
 }
 
 /**
@@ -143,5 +145,9 @@ export const useTechStore = create<TechState>((set, get) => ({
 	setActiveGroup: (tech, groupType) =>
 		set((state) => ({
 			activeGroups: { ...state.activeGroups, [tech]: groupType },
+		})),
+	setActiveGroups: (groups) =>
+		set((state) => ({
+			activeGroups: { ...state.activeGroups, ...groups },
 		})),
 }));

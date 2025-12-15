@@ -60,6 +60,17 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 	}, [hasRecommendedBuilds]);
 
+	// P3 Optimization: Extract inline style object to avoid recreation on every render
+	const scrollAreaStyle = useMemo(
+		() => ({
+			height: scrollAreaHeight,
+			backgroundColor: "var(--accent-a3)",
+			padding: "var(--space-5)",
+			borderRadius: "var(--radius-5)",
+		}),
+		[scrollAreaHeight]
+	);
+
 	useEffect(() => {
 		hideSplashScreenAndShowBackground();
 	}, []);
@@ -70,12 +81,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 				<>
 					<ScrollArea
 						className="main-app__tech-tree-sidebar shadow-sm"
-						style={{
-							height: scrollAreaHeight,
-							backgroundColor: "var(--accent-a3)",
-							padding: "var(--space-5)",
-							borderRadius: "var(--radius-5)",
-						}}
+						style={scrollAreaStyle}
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}

@@ -240,7 +240,6 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	const techTree = fetchTechTree(shipType).read();
 	const setTechColors = useTechStore((state) => state.setTechColors);
 	const setTechGroups = useTechStore((state) => state.setTechGroups);
-	const setActiveGroup = useTechStore((state) => state.setActiveGroup);
 
 	const setInitialGridDefinition = useGridStore((state) => state.setInitialGridDefinition);
 	const setGridFromInitialDefinition = useGridStore(
@@ -277,27 +276,25 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		setTechColors(colors);
 		setTechGroups(techGroups);
 
-		Object.entries(activeGroups).forEach(([tech, groupType]) => {
-			setActiveGroup(tech, groupType);
-		});
+		// P0 Optimization: Batch activeGroups updates into a single store action
+		// Previously called setActiveGroup in a loop (N+1 pattern)
+		useTechStore.getState().setActiveGroups(activeGroups);
 
 		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
 			setInitialGridDefinition(techTree.grid_definition);
 			setGridFromInitialDefinition(techTree.grid_definition);
 		}
+
+		// P1 Optimization: Consolidate loading state update into single effect
+		// Previously had separate effect that also ran on techTree change
+		useTechTreeLoadingStore.getState().setLoading(false);
 	}, [
 		techTree,
 		setTechColors,
 		setTechGroups,
-		setActiveGroup,
 		setInitialGridDefinition,
 		setGridFromInitialDefinition,
 	]);
-
-	useEffect(() => {
-		// Set loading to false after the techTree data has been processed and rendered
-		useTechTreeLoadingStore.getState().setLoading(false);
-	}, [techTree]); // Dependency on techTree ensures it runs after data is available
 
 	/**
 	 * Memoize tech tree processing to avoid recalculating on every render
