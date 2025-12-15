@@ -1,3 +1,10 @@
+## [6.5.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.12...v6.5.13) (2025-12-15)
+
+
+### Performance Improvements
+
+* **core:** Apply initial optimizations and document strategy ([a36034f](https://github.com/jbelew/nms_optimizer-web/commit/a36034f5829c02d9a99eb80ddaa74477d99f04cc))
+
 ## [6.5.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.11...v6.5.12) (2025-12-13)
 
 
