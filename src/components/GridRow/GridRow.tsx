@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import GridCell from "../GridCell/GridCell";
@@ -33,13 +33,16 @@ const GridRowInternal: React.FC<GridRowProps> = memo(
 		// Add 1 for the GridControlButtons column.
 		const totalAriaColumnCount = gridWidth + 1;
 
+		// P0 Optimization: Memoize array generation to avoid recreating on every render
+		const columnIndices = useMemo(() => Array.from({ length: gridWidth }), [gridWidth]);
+
 		if (!row) {
 			return null; // Should not happen if gridHeight is correct, but good for safety
 		}
 
 		return (
 			<div role="row" key={rowIndex} aria-rowindex={rowIndex + 1}>
-				{Array.from({ length: gridWidth }).map((_, columnIndex) => (
+				{columnIndices.map((_, columnIndex) => (
 					<GridCell
 						key={`${rowIndex}-${columnIndex}`}
 						rowIndex={rowIndex}

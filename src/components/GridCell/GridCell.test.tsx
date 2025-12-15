@@ -108,6 +108,7 @@ describe("GridCell", () => {
 					clearResult: vi.fn(),
 					setTechGroups: vi.fn(),
 					setActiveGroup: vi.fn(),
+					setActiveGroups: vi.fn(),
 				};
 
 				return selector(state);

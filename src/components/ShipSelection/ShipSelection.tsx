@@ -85,6 +85,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
 
+	// P2 Optimization: Memoize ship type keys to avoid recreating on every render
+	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
 	 * Updates the selected ship type in the store and resets the grid.
@@ -114,7 +117,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 				}
 
 				startTransition(() => {
-					const shipTypeKeys = Object.keys(shipTypes);
 					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
@@ -127,7 +129,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 			setGridAndResetAuxiliaryState,
 			sendEvent,
 			showInfo,
-			shipTypes,
+			shipTypeKeys,
 			startTransition,
 			isKnownRoute,
 		]

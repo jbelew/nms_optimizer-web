@@ -47,6 +47,17 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 		const map = new Map<string, string>();
 
 		if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
+			// P2 Optimization: Build rank-to-module lookup once to avoid O(n²) dependency resolution
+			// Previously called modules.find() for each module during forEach loop
+			const rankToModuleMap = new Map<string, string>();
+			modules.forEach((module) => {
+				MODULE_RANK_ORDER.forEach((rank) => {
+					if (module.label.includes(rank)) {
+						rankToModuleMap.set(rank, module.id);
+					}
+				});
+			});
+
 			modules.forEach((module) => {
 				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
 					module.label.includes(rank)
@@ -54,12 +65,10 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 
 				if (rankIndex > 0) {
 					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
-					const prerequisiteModule = modules.find((m) =>
-						m.label.includes(prerequisiteRank)
-					);
+					const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
 
-					if (prerequisiteModule) {
-						map.set(module.id, prerequisiteModule.id);
+					if (prerequisiteModuleId) {
+						map.set(module.id, prerequisiteModuleId);
 					}
 				}
 			});

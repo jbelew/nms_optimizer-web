@@ -83,6 +83,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 	}, []);
 
 	// Scroll into view when solving on smaller screens
+	// P1 Optimization note: scrollIntoView is already wrapped in useCallback from useScrollGridIntoView,
+	// so dependency array is optimized. Effect only runs when solving state changes.
 	useEffect(() => {
 		if (solving) {
 			scrollIntoView();

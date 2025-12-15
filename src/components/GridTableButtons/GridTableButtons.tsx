@@ -34,7 +34,7 @@ interface GridTableButtonsProps {
  *
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
+const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving }) => {
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -274,6 +274,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 			</div>
 		</>
 	);
-};
+});
+GridTableButtons.displayName = "GridTableButtons";
 
 export default GridTableButtons;
