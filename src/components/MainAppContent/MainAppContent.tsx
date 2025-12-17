@@ -15,6 +15,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useGridStore } from "../../store/GridStore";
@@ -56,7 +57,12 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { isVisible, toolbarRef } = useScrollHide(80);
+	const { isVisible, toolbarRef, forceShow } = useScrollHide(80);
+
+	// Register the toolbar's forceShow function so useScrollGridIntoView can trigger it
+	useEffect(() => {
+		registerToolbarForceShow(forceShow);
+	}, [forceShow]);
 	const {
 		solving,
 		progressPercent,

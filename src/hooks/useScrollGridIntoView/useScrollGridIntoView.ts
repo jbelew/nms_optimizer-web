@@ -1,7 +1,6 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
-import { useScrollHide } from "../useScrollHide/useScrollHide";
 
 const GRID_SCROLL_OFFSET_SMALL = 40; // < 640px
 const GRID_SCROLL_OFFSET_MEDIUM = 0; // 640px - 768px
@@ -12,6 +11,15 @@ let sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDiv
 
 // Shared toolbar show function
 let sharedForceShow: (() => void) | null = null;
+
+/**
+ * Register the external forceShow function used by the toolbar.
+ * This allows the scroll-into-view behavior to unhide the toolbar when triggered.
+ * @param {() => void} fn - The forceShow function from useScrollHide
+ */
+export const registerToolbarForceShow = (fn: () => void) => {
+	sharedForceShow = fn;
+};
 
 /**
  * Custom hook to manage grid container ref and scroll behavior with responsive offset.
@@ -30,12 +38,6 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	const isAbove640 = useBreakpoint("640px");
 	const isAbove768 = useBreakpoint("768px");
 	const isAbove1024 = useBreakpoint("1024px");
-	const { forceShow } = useScrollHide(80);
-
-	// Register the forceShow function once from the first caller
-	useEffect(() => {
-		sharedForceShow = forceShow;
-	}, [forceShow]);
 
 	let offset = GRID_SCROLL_OFFSET_SMALL;
 

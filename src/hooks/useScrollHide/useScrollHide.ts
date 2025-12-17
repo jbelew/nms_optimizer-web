@@ -17,9 +17,12 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	const lastScrollYRef = useRef(0);
 	const directionBaseRef = useRef(0);
 	const lastDirectionRef = useRef<"up" | "down" | null>(null);
+	const isForcedRef = useRef(false);
+	const scrollStopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	const forceShow = useCallback(() => {
 		setIsVisible(true);
+		isForcedRef.current = true;
 	}, []);
 
 	useEffect(() => {
@@ -71,10 +74,24 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 
 				// 3. Logic with Hysteresis
 				if (isScrollingDown && scrollDistance > hysteresis) {
-					setIsVisible(false);
+					// Suppress hiding if we are in a forced state (e.g. from programmatic scroll)
+					if (!isForcedRef.current) {
+						setIsVisible(false);
+					}
 				} else if (!isScrollingDown && scrollDistance > hysteresis) {
 					setIsVisible(true);
+					// If we are scrolling up, we can clear the forced state
+					isForcedRef.current = false;
 				}
+
+				// Detect when scrolling has stopped to clear the forced state
+				if (scrollStopTimeoutRef.current) {
+					clearTimeout(scrollStopTimeoutRef.current);
+				}
+
+				scrollStopTimeoutRef.current = setTimeout(() => {
+					isForcedRef.current = false;
+				}, 150);
 
 				lastScrollYRef.current = currentScrollY;
 				rafId = null;
@@ -88,6 +105,10 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 
 			if (rafId !== null) {
 				cancelAnimationFrame(rafId);
+			}
+
+			if (scrollStopTimeoutRef.current) {
+				clearTimeout(scrollStopTimeoutRef.current);
 			}
 		};
 	}, [threshold, hysteresis]);
