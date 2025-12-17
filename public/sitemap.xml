@@ -8,7 +8,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />
-    <lastmod>2025-12-15</lastmod>
+    <lastmod>2025-12-17</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
@@ -20,7 +20,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />
-    <lastmod>2025-12-15</lastmod>
+    <lastmod>2025-12-17</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
@@ -32,7 +32,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />
-    <lastmod>2025-12-15</lastmod>
+    <lastmod>2025-12-17</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
@@ -44,7 +44,7 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />
-    <lastmod>2025-12-15</lastmod>
+    <lastmod>2025-12-17</lastmod>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
@@ -56,8 +56,68 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/" />
-    <lastmod>2025-12-15</lastmod>
+    <lastmod>2025-12-17</lastmod>
     <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/instructions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
+    <lastmod>2025-12-15</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/es/instructions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
+    <lastmod>2025-12-15</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/fr/instructions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
+    <lastmod>2025-12-15</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/de/instructions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
+    <lastmod>2025-12-15</lastmod>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://nms-optimizer.app/pt/instructions</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
+    <lastmod>2025-12-15</lastmod>
+    <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
@@ -178,66 +238,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/changelog" />
     <lastmod>2025-12-15</lastmod>
     <priority>0.7</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/instructions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
-    <lastmod>2025-12-15</lastmod>
-    <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/es/instructions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
-    <lastmod>2025-12-15</lastmod>
-    <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/fr/instructions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
-    <lastmod>2025-12-15</lastmod>
-    <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/de/instructions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
-    <lastmod>2025-12-15</lastmod>
-    <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://nms-optimizer.app/pt/instructions</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://nms-optimizer.app/instructions" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://nms-optimizer.app/es/instructions" />
-    <xhtml:link rel="alternate" hreflang="fr" href="https://nms-optimizer.app/fr/instructions" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://nms-optimizer.app/de/instructions" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://nms-optimizer.app/pt/instructions" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://nms-optimizer.app/instructions" />
-    <lastmod>2025-12-15</lastmod>
-    <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>

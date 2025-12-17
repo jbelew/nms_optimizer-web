@@ -41,16 +41,22 @@ let gaInitialized = false;
  */
 const detectAdBlocker = async (): Promise<boolean> => {
 	try {
-		await fetch("https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9", {
+		const url = `https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`;
+		await fetch(url, {
 			method: "HEAD",
 			mode: "no-cors",
-			cache: "reload",
+			cache: "no-store",
 		});
-		console.log("No Ad blocker detected. Using client-side analytics.");
+
+		if (isDevMode()) {
+			console.log("No Ad blocker detected. Using client-side analytics.");
+		}
 
 		return false;
 	} catch (_error) {
-		console.log("Ad blocker detected. Using server-side analytics fallback.");
+		if (isDevMode()) {
+			console.log("Ad blocker detected. Using server-side analytics fallback.");
+		}
 
 		return true;
 	}

@@ -1,6 +1,7 @@
 import ReactGA from "react-ga4";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
+import { TRACKING_ID } from "../constants";
 import { initializeAnalytics, resetAnalyticsForTesting, sendEvent } from "./analytics";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 
@@ -54,8 +55,8 @@ describe("analytics.ts", () => {
 		// Expect fetch to be called once for ad-blocker detection
 		expect(fetch).toHaveBeenCalledTimes(1);
 		expect(fetch).toHaveBeenCalledWith(
-			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
-			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
 		);
 
 		// Expect ReactGA.event to be called
@@ -75,8 +76,8 @@ describe("analytics.ts", () => {
 		// Expect fetch to be called once for ad-blocker detection
 		expect(fetch).toHaveBeenCalledTimes(1);
 		expect(fetch).toHaveBeenCalledWith(
-			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
-			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
 		);
 
 		// Expect sendAnalyticsEvent to be called with user properties
@@ -100,8 +101,8 @@ describe("analytics.ts", () => {
 		// Fetch should only be called once, result is cached
 		expect(fetch).toHaveBeenCalledTimes(1);
 		expect(fetch).toHaveBeenCalledWith(
-			"https://www.googletagmanager.com/gtag/js?id=G-P5VBZQ69Q9",
-			{ method: "HEAD", mode: "no-cors", cache: "reload" }
+			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
 		);
 
 		expect(ReactGA.event).toHaveBeenCalledTimes(2);

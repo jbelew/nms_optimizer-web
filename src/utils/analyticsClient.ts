@@ -28,13 +28,13 @@ let clientId: string;
  * @returns {string} The client ID
  */
 export const initializeAnalyticsClient = (): string => {
-	const stored = sessionStorage.getItem("analytics_client_id");
+	const stored = localStorage.getItem("analytics_client_id");
 
 	if (stored) {
 		clientId = stored;
 	} else {
 		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-		sessionStorage.setItem("analytics_client_id", clientId);
+		localStorage.setItem("analytics_client_id", clientId);
 	}
 
 	return clientId;
@@ -93,6 +93,7 @@ export const sendEvent = async (
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(payload),
+			keepalive: true,
 		});
 
 		if (!response.ok) {

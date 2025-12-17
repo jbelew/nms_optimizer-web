@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
 
+import { BASE_KNOWN_PATHS, KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
@@ -17,10 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
 
-// Configuration from server/config.js
-const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
-const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats"];
-const BASE_KNOWN_PATHS = ["/"];
+// Configuration is now imported from server/config.js
 
 // Map route names to markdown filenames when they differ
 const PAGE_TO_MARKDOWN_MAPPING = {
@@ -219,7 +217,7 @@ async function generateSsg() {
 	}
 
 	const baseIndexHtml = fs.readFileSync(indexPath, "utf-8");
-	const baseUrl = "https://nms-optimizer.app";
+	const baseUrl = `https://${TARGET_HOST}`;
 
 	// Create markdown processor
 	const mdProcessor = createMarkdownProcessor();

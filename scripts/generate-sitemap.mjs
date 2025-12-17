@@ -2,33 +2,43 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const today = new Date().toISOString().split("T")[0];
+const baseUrl = `https://${TARGET_HOST}`;
+
+/** Mapping of route names to their source files for lastmod calculation */
+const PAGE_TO_FILE_MAPPING = {
+	about: "src/assets/locales/en/about.md",
+	changelog: "public/assets/locales/en/changelog.md",
+	instructions: "public/assets/locales/en/instructions.md",
+	translation: "public/assets/locales/en/translation-request.md",
+	userstats: "src/components/AppDialog/UserStatsDialog.tsx",
+};
+
+/** SEO priorities for different pages */
+const PRIORITIES = {
+	root: "1.0",
+	about: "1.0",
+	instructions: "0.9",
+	userstats: "0.8",
+	changelog: "0.7",
+	translation: "0.6",
+};
 
 const pages = [
-	{ path: null, url: "https://nms-optimizer.app/", priority: "1.0", lastmod: today },
-	{ path: "src/assets/locales/en/about.md", url: "https://nms-optimizer.app/about", priority: "1.0" },
-	{ path: "public/assets/locales/en/changelog.md", url: "https://nms-optimizer.app/changelog", priority: "0.7" },
-	{
-		path: "public/assets/locales/en/instructions.md",
-		url: "https://nms-optimizer.app/instructions",
-		priority: "0.9"
-	},
-	{
-		path: "public/assets/locales/en/translation-request.md",
-		url: "https://nms-optimizer.app/translation",
-		priority: "0.6"
-	},
-	{
-		path: "src/components/AppDialog/UserStatsDialog.tsx",
-		url: "https://nms-optimizer.app/userstats",
-		priority: "0.8"
-	},
+	{ path: null, url: `${baseUrl}/`, priority: PRIORITIES.root, lastmod: today },
+	...KNOWN_DIALOGS.map((page) => ({
+		path: PAGE_TO_FILE_MAPPING[page],
+		url: `${baseUrl}/${page}`,
+		priority: PRIORITIES[page] || "0.5",
+	})),
 ];
 
-const languages = ["en", "es", "fr", "de", "pt"];
+const languages = SUPPORTED_LANGUAGES;
 
 const urlEntries = pages.flatMap((page) => {
 	const lastmod = page.lastmod || fs.statSync(path.join(__dirname, "..", page.path)).mtime.toISOString().split("T")[0];

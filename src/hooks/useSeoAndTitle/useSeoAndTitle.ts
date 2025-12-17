@@ -22,6 +22,39 @@ const updateMetaTag = (name: string, content: string) => {
 };
 
 /**
+ * Updates a meta property tag in the document's head (e.g., og:url).
+ * @param {string} property - The property attribute of the meta tag.
+ * @param {string} content - The new content for the meta tag.
+ */
+const updateMetaPropertyTag = (property: string, content: string) => {
+	let element = document.querySelector(`meta[property="${property}"]`);
+
+	if (!element) {
+		element = document.createElement("meta");
+		element.setAttribute("property", property);
+		document.head.appendChild(element);
+	}
+
+	element.setAttribute("content", content);
+};
+
+/**
+ * Updates or creates the canonical link tag.
+ * @param {string} href - The canonical URL.
+ */
+const updateCanonicalTag = (href: string) => {
+	let element = document.querySelector('link[rel="canonical"]');
+
+	if (!element) {
+		element = document.createElement("link");
+		element.setAttribute("rel", "canonical");
+		document.head.appendChild(element);
+	}
+
+	element.setAttribute("href", href);
+};
+
+/**
  * Custom hook for managing document title and SEO meta tags.
  * Updates based on the current route and language by looking up metadata from a shared source.
  */
@@ -46,6 +79,17 @@ export const useSeoAndTitle = () => {
 
 		document.title = pageTitle;
 		updateMetaTag("description", pageDescription);
+
+		// --- Canonical URL Logic ---
+		const baseUrl = "https://nms-optimizer.app";
+		const cleanPath = currentPath === "/" ? "" : currentPath;
+		// If language is English, canonical is just the clean path. Otherwise, include lang prefix.
+		const canonicalPath =
+			i18n.language === "en" ? cleanPath || "/" : `/${i18n.language}${cleanPath}`;
+		const canonicalUrl = `${baseUrl}${canonicalPath}`;
+
+		updateCanonicalTag(canonicalUrl);
+		updateMetaPropertyTag("og:url", canonicalUrl);
 
 		document.documentElement.lang = i18n.language;
 	}, [location.pathname, t, i18n]);

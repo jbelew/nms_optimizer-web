@@ -6,7 +6,7 @@
 
 import etag from "etag";
 
-import { KNOWN_DIALOGS, OTHER_LANGUAGES, SUPPORTED_LANGUAGES } from "../server/config.js";
+import { KNOWN_DIALOGS, OTHER_LANGUAGES, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import i18next from "./i18n.js";
 
 import { seoMetadata } from "../shared/seo-metadata.js";
@@ -23,6 +23,7 @@ import { seoMetadata } from "../shared/seo-metadata.js";
  * @param {string} csp - The Content Security Policy string to be applied to the response.
  */
 export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
+    // 1. Handle ?lng= query parameter for backward compatibility/easy switching
     const lng = req.query.lng;
     if (lng) {
         const lang = Array.isArray(lng) ? String(lng[0]) : String(lng);
@@ -35,6 +36,19 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
             newURL.pathname = `/${supportedLang}${newURL.pathname === '/' ? '' : newURL.pathname}`;
         }
 
+        return res.redirect(301, newURL.href);
+    }
+
+    // 2. Consolidate duplicate English URLs (redirect /en/* to /*)
+    const pathParts = req.path.split("/").filter(Boolean);
+    if (pathParts[0] === "en") {
+        const cleanPath = `/${pathParts.slice(1).join("/")}`;
+        const newURL = new URL(cleanPath, `https://${req.headers.host}`);
+        // Preserve query parameters if any
+        const search = req.originalUrl.split("?")[1];
+        if (search) {
+            newURL.search = search;
+        }
         return res.redirect(301, newURL.href);
     }
 
@@ -70,7 +84,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         }
 
         // --- SEO Link Tags Injection ---
-        const baseUrl = `https://${req.headers.host}`;
+        const baseUrl = `https://${TARGET_HOST}`;
         const tagsToInject = [];
 
         const isKnownDialog = KNOWN_DIALOGS.includes(pagePath);
