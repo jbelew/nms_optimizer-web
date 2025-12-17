@@ -1,3 +1,10 @@
+## [6.5.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.14...v6.5.15) (2025-12-17)
+
+
+### Bug Fixes
+
+* Enable `useScrollGridIntoView` to force toolbar visibility and prevent hiding during programmatic scrolls. ([48f8ae5](https://github.com/jbelew/nms_optimizer-web/commit/48f8ae54ae0e9913cb4dbf4ec18c3e8e6f80bfa1))
+
 ## [6.5.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.13...v6.5.14) (2025-12-17)
 
 
