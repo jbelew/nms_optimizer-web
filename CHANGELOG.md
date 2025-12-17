@@ -1,3 +1,10 @@
+## [6.5.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.15...v6.5.16) (2025-12-17)
+
+
+### Bug Fixes
+
+* **ui, i18n:** prevent tech tree label overflow and refine German translations ([3c8be15](https://github.com/jbelew/nms_optimizer-web/commit/3c8be15546d704bf913e2066ad8db98cfb54b3b6))
+
 ## [6.5.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.14...v6.5.15) (2025-12-17)
 
 
