@@ -126,7 +126,7 @@
 			"reset": "Zurücksetzen"
 		},
 		"categories": {
-			"Defensive Systems": "Verteidigungssysteme",
+			"Defensive Systems": "Verteidigung",
 			"Hyperdrive": "Hyperantrieb",
 			"Utilities": "Werkzeuge",
 			"Weaponry": "Waffen",
@@ -135,10 +135,10 @@
 			"Secondary Weapons": "Sekundärwaffen",
 			"Fleet Upgrades": "Flotten-Upgrades",
 			"Propulsion": "Antrieb",
-			"Life Support": "Gesundheit & Lebenserhaltung",
+			"Life Support": "Lebenserhaltung",
 			"Hazard Protection": "Gefahrenschutz",
-			"Quest Rewards": "Quest -Belohnungen",
-			"Upgrade Modules": "Upgrade Module",
+			"Quest Rewards": "Quest-Belohnungen",
+			"Upgrade Modules": "Upgrade-Module",
 			"Movement Systems": "Bewegungssysteme"
 		},
 		"recommendedBuilds": {
@@ -263,7 +263,7 @@
 			"aeration": "Belüftungsmembran",
 			"anomaly": "Anomalie-Unterdrücker",
 			"coolant": "Kühlmittelnetzwerk",
-			"defense": "Verteidigungssysteme",
+			"defense": "Verteidigung",
 			"hazard": "Gefahrenschutz",
 			"pressure": "Druckmembran",
 			"radiation": "Strahlendeflektor",
@@ -503,7 +503,7 @@
 			"anomaly": "Anomalie-Unterdrücker",
 			"coolant": "Kühlmittelnetzwerk",
 			"coolant-upgrade": "Kühlmittelnetzwerk-Upgrade",
-			"defense": "Verteidigungssysteme-Upgrade",
+			"defense": "Verteidigung-Upgrade",
 			"hazard": "Gefahrenschutz",
 			"pressure": "Druckmembran",
 			"radiation": "Strahlendeflektor",
