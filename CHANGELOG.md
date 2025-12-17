@@ -1,3 +1,16 @@
+## [6.5.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.13...v6.5.14) (2025-12-17)
+
+
+### Bug Fixes
+
+* Centralize sitemap and static site generation configuration by importing from shared server config. ([181312a](https://github.com/jbelew/nms_optimizer-web/commit/181312a5eb68ca4e088622b15e4db8db74bfef9a))
+* Improve SEO with canonical URL handling and server-side redirects, and refine analytics client ID persistence and ad-blocker detection. ([774f79b](https://github.com/jbelew/nms_optimizer-web/commit/774f79b05d05ae1671d343c41bb60bd9025c3df6))
+
+
+### Performance Improvements
+
+* **core:** Apply initial optimizations and document strategy ([e3fb229](https://github.com/jbelew/nms_optimizer-web/commit/e3fb22978fdf086bf8480c6c46823ac2c97f6bc4))
+
 ## [6.5.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.12...v6.5.13) (2025-12-15)
 
 
