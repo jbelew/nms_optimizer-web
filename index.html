@@ -186,6 +186,9 @@
 	<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
 	<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
 
+	<!-- Entry Point (Critical Path) -->
+	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+
 	<!-- SEO Meta Tags -->
 	<meta name="description"
 		content="The best No Man's Sky layout calculator and optimizer. Find optimal technology placements with maximum adjacency bonuses for Starship, Corvette, Multitool, Exocraft, and Exosuit builds. Free tool with supercharged slot optimization." />
@@ -396,8 +399,8 @@
 		</style>
 	</noscript>
 
+
 	<div id="root"></div>
-	<script type="module" src="/src/main.tsx"></script>
 
 	<!-- Cloudflare Web Analytics -->
 	<script defer src='https://static.cloudflareinsights.com/beacon.min.js'

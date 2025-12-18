@@ -312,12 +312,10 @@ export default defineConfig(({ mode }) => {
 								return "react";
 							}
 
-							// Radix Themes - Optimized colors from src/assets/css/radix-colors/
-							// Colors are now split into their own chunk to enable lazy-loading
+							// Radix Themes - Optimized colors and utilities
 							if (id.includes("/assets/css/radix-colors/")) return "radix-colors";
-							if (id.includes("@radix-ui/themes/utilities.css"))
-								return "radix-utilities";
 							if (id.includes("@radix-ui/themes")) return "radix-themes";
+							if (id.includes("@radix-ui/react-")) return "radix-ui";
 
 							// i18n
 							if (
@@ -328,11 +326,10 @@ export default defineConfig(({ mode }) => {
 							)
 								return "i18n";
 
-							// Additional large libs - force separate chunks to avoid unused code
-							if (id.includes("lodash")) return "lodash";
-							if (id.includes("d3-")) return "d3";
-							if (id.includes("recharts") || id.includes("decimal.js"))
-								return "recharts";
+							// Additional large libs
+							if (id.includes("recharts") || id.includes("decimal.js") || id.includes("d3-"))
+								return "viz";
+
 							if (
 								id.includes("react-markdown") ||
 								id.includes("unified") ||
@@ -341,17 +338,11 @@ export default defineConfig(({ mode }) => {
 							)
 								return "markdown";
 
-							// Radix UI components - split from other vendor code
-							if (id.includes("@radix-ui")) return "radix";
-
 							// Router
 							if (id.includes("react-router")) return "router";
 
-							// Web Vitals monitoring
-							if (id.includes("web-vitals")) return "web-vitals";
-
-							// Google Analytics - can be lazy-loaded
-							if (id.includes("react-ga4")) return "ga4";
+							// Web Vitals & Analytics
+							if (id.includes("web-vitals") || id.includes("react-ga4")) return "monitoring";
 
 							return "vendor";
 						}
