@@ -141,16 +141,30 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		return null;
 	}
 
-	const icon = renderIcon(contentData.icon, contentData.iconClassName, contentData.iconStyle);
+	const icon = renderIcon(
+		contentData.icon,
+		contentData.iconClassName.replace("cursor-pointer", ""),
+		contentData.iconStyle
+	);
 
 	if (!icon) {
 		return null;
 	}
 
+	const trigger = (
+		<button
+			type="button"
+			className="flex cursor-pointer appearance-none border-none bg-transparent p-0 outline-none"
+			aria-label={contentData.tooltipContent}
+		>
+			{icon}
+		</button>
+	);
+
 	if (isTouch) {
 		return (
 			<Popover.Root>
-				<Popover.Trigger>{icon}</Popover.Trigger>
+				<Popover.Trigger>{trigger}</Popover.Trigger>
 				<Popover.Content size="1">
 					<Text as="p" trim="both" size="1">
 						{contentData.tooltipContent}
@@ -160,5 +174,5 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		);
 	}
 
-	return <Tooltip content={contentData.tooltipContent}>{icon}</Tooltip>;
+	return <Tooltip content={contentData.tooltipContent}>{trigger}</Tooltip>;
 };

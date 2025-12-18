@@ -50,10 +50,13 @@ describe("BonusStatusIcon Component", () => {
 	});
 
 	describe("Icon variants based on maxBonus", () => {
-		it("should render an icon when maxBonus < 100", () => {
+		it("should render an icon wrapped in a button when maxBonus < 100", () => {
 			const { container } = renderComponent(75, 10);
-			// Check for the presence of an SVG (icon element)
-			expect(container.querySelector("svg")).toBeInTheDocument();
+			// Check for the presence of a button wrapping the SVG
+			const button = container.querySelector("button");
+			expect(button).toBeInTheDocument();
+			expect(button).toHaveAttribute("type", "button");
+			expect(button?.querySelector("svg")).toBeInTheDocument();
 		});
 
 		it("should render an icon when maxBonus = 100", () => {
