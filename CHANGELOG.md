@@ -1,3 +1,10 @@
+## [6.5.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.16...v6.5.17) (2025-12-18)
+
+
+### Performance Improvements
+
+* **seo:** Optimize server-side SEO rendering ([a701a1d](https://github.com/jbelew/nms_optimizer-web/commit/a701a1d29fe6f80a1d0dab6e798c9611ad69ab3a))
+
 ## [6.5.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.15...v6.5.16) (2025-12-17)
 
 
