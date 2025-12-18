@@ -1,9 +1,16 @@
 {
+	"appHeader": {
+		"subTitle": "Optimiseur de configuration technologique <1>AI/RUST</1>"
+	},
 	"languageInfo": {
 		"nativeName": "Français",
 		"changeLanguage": "Changer la langue",
 		"selectLanguage": "Sélectionner la langue"
 	},
+	"shipSelection": {
+		"dropdownTooltip": "Sélectionnez le type de plate-forme"
+	},
+	"appName": "Optimiseur de mise en page technologique No Man's Sky",
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "À propos",
@@ -84,6 +91,41 @@
 			"copiedButton": "Copié!",
 			"closeButton": "Fermer",
 			"openLink": "Lien ouvert"
+		},
+		"updatePrompt": {
+			"description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
+			"later": "Update Later",
+			"refreshNow": "Refresh Now"
+		}
+	},
+	"dialog": {
+		"buildName": {
+			"title": "Enregistrer la construction",
+			"description": "Entrez un nom pour votre build :",
+			"placeholder": "Nom du build",
+			"validation": {
+				"empty": "Le nom de la build ne peut pas être vide",
+				"invalid": "Le nom de build contient des caractères non valides. Évitez d'utiliser : < > : \" / \\ | ? * et des caractères spéciaux."
+			}
+		}
+	},
+	"toast": {
+		"buildSaved": {
+			"title": "Succès",
+			"description": "Build téléchargé avec succès"
+		},
+		"buildSaveError": {
+			"title": "Erreur",
+			"description": "Échec de l'enregistrement de la version"
+		},
+		"buildLoaded": {
+			"title": "Succès",
+			"description": "Build chargé avec succès",
+			"loadedMessage": "chargé avec succès"
+		},
+		"buildLoadError": {
+			"title": "Erreur",
+			"description": "Échec du chargement de la version"
 		}
 	},
 	"footer": {
@@ -112,8 +154,7 @@
 		"colossus": "Exonef Colosse",
 		"minotaur": "Exonef Minotaure",
 		"exosuit": "Exocombinaison",
-		"corvette": "Corvette",
-		"exocraft": "Exonef"
+		"corvette": "Corvette"
 	},
 	"techTree": {
 		"loading": "CHARGEMENT DE LA TECHNOLOGIE...",
@@ -547,18 +588,18 @@
 		"bonus": "Modules bonus",
 		"upgrade": "Modules de mise à niveau",
 		"reactor": "Modules de réacteur",
+		"atlantid": "Modules Atlantides",
 		"cosmetic": "Modules cosmétiques",
+		"trails": "Sentiers de vaisseaux spatiaux",
+		"figurines": "Figurines",
 		"title": "Sélection {{techName}}",
 		"warning": "<strong> AVERTISSEMENT! </strong> Si votre résolution n'inclut pas tous les modules, l'optimiseur sautera la plupart des étapes et les résultats peuvent ne pas représenter la meilleure résolution possible.",
 		"selectAll": "Sélectionnez tout",
 		"closeDialogLabel": "Fermer le dialogue",
 		"cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
+		"trailsInfo": "Dans la plupart des cas, ne sélectionnez pas plus de <strong>5 Starship Trails</strong>. Si vous expérimentez la figurine tentaculaire pour augmenter la vitesse dans l’atmosphère, sélectionnez 7.",
 		"optimizeButton": "Optimiser",
-		"atlantid": "Modules Atlantides",
-		"cancelButton": "Annuler",
-		"trails": "Sentiers de vaisseaux spatiaux",
-		"figurines": "Figurines",
-		"trailsInfo": "Dans la plupart des cas, ne sélectionnez pas plus de <strong>5 Starship Trails</strong>. Si vous expérimentez la figurine tentaculaire pour augmenter la vitesse dans l’atmosphère, sélectionnez 7."
+		"cancelButton": "Annuler"
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer | Constructeur d'agencement technologique et calculateur d'adjacence pour No Man's Sky",
@@ -582,50 +623,13 @@
 			"translation": "Aide à traduire"
 		}
 	},
-	"appHeader": {
-		"subTitle": "Optimiseur de configuration technologique <1>AI/RUST</1>"
-	},
-	"appName": "Optimiseur de mise en page technologique No Man's Sky",
 	"installPrompt": {
-		"iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil : appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\".",
-		"title": "Ajouter à l'écran d'accueil"
+		"title": "Ajouter à l'écran d'accueil",
+		"iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil : appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\"."
 	},
 	"notFound": {
 		"title": "–kzzkt– 404 –kzzkt–",
 		"message": "La page que vous recherchez est introuvable.",
 		"backToMain": "Retourner à la page principale"
-	},
-	"shipSelection": {
-		"dropdownTooltip": "Sélectionnez le type de plate-forme"
-	},
-	"dialog": {
-		"buildName": {
-			"title": "Enregistrer la construction",
-			"description": "Entrez un nom pour votre build :",
-			"placeholder": "Nom du build",
-			"validation": {
-				"empty": "Le nom de la build ne peut pas être vide",
-				"invalid": "Le nom de build contient des caractères non valides. Évitez d'utiliser : < > : \" / \\ | ? * et des caractères spéciaux."
-			}
-		}
-	},
-	"toast": {
-		"buildSaved": {
-			"title": "Succès",
-			"description": "Build téléchargé avec succès"
-		},
-		"buildSaveError": {
-			"title": "Erreur",
-			"description": "Échec de l'enregistrement de la version"
-		},
-		"buildLoaded": {
-			"title": "Succès",
-			"description": "Build chargé avec succès",
-			"loadedMessage": "chargé avec succès"
-		},
-		"buildLoadError": {
-			"title": "Erreur",
-			"description": "Échec du chargement de la version"
-		}
 	}
 }

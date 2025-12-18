@@ -1,9 +1,16 @@
 {
+	"appHeader": {
+		"subTitle": "Technologie-Layout-Optimierer <1>AI/RUST</1>"
+	},
 	"languageInfo": {
 		"nativeName": "Deutsch",
 		"changeLanguage": "Sprache ändern",
 		"selectLanguage": "Sprache auswählen"
 	},
+	"shipSelection": {
+		"dropdownTooltip": "Wählen Sie Plattformtyp aus"
+	},
+	"appName": "No Man's Sky Technology Layout-Optimierer",
 	"buttons": {
 		"instructions": "Anleitung",
 		"about": "Über",
@@ -11,7 +18,7 @@
 		"resetGrid": "Raster zurücksetzen",
 		"changelog": "Änderungsprotokoll",
 		"userStats": "Benutzerstatistik",
-		"accessibility": "Fokusmodus",
+		"accessibility": "Focus-Modus",
 		"saveBuild": "Build speichern",
 		"loadBuild": "Build laden",
 		"cancel": "Abbrechen",
@@ -84,6 +91,41 @@
 			"copiedButton": "Kopiert!",
 			"closeButton": "Schließen",
 			"openLink": "Link öffnen"
+		},
+		"updatePrompt": {
+			"description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
+			"later": "Update Later",
+			"refreshNow": "Refresh Now"
+		}
+	},
+	"dialog": {
+		"buildName": {
+			"title": "Build speichern",
+			"description": "Geben Sie einen Namen für Ihren Build ein:",
+			"placeholder": "Build-Name",
+			"validation": {
+				"empty": "Der Build-Name darf nicht leer sein",
+				"invalid": "Der Buildname enthält ungültige Zeichen. Vermeiden Sie die Verwendung von: < > : \" / \\ | ? * und Sonderzeichen."
+			}
+		}
+	},
+	"toast": {
+		"buildSaved": {
+			"title": "Erfolg",
+			"description": "Build erfolgreich heruntergeladen"
+		},
+		"buildSaveError": {
+			"title": "Fehler",
+			"description": "Build konnte nicht gespeichert werden"
+		},
+		"buildLoaded": {
+			"title": "Erfolg",
+			"description": "Build erfolgreich geladen",
+			"loadedMessage": "erfolgreich geladen"
+		},
+		"buildLoadError": {
+			"title": "Fehler",
+			"description": "Build konnte nicht geladen werden"
 		}
 	},
 	"footer": {
@@ -546,18 +588,18 @@
 		"bonus": "Bonusmodule",
 		"upgrade": "Upgrade Module",
 		"reactor": "Reaktormodule",
+		"atlantid": "Atlantis-Module",
 		"cosmetic": "Kosmetische Module",
+		"trails": "Raumschiffspuren",
+		"figurines": "Figuren",
 		"title": "{{techName}} Auswahl",
 		"warning": "<strong> WARNUNG! </strong> Wenn Ihre Lösung nicht alle Module enthält, überspringt der Optimierer die meisten Schritte und die Ergebnisse sind möglicherweise nicht die bestmögliche Lösung.",
 		"selectAll": "Wählen Sie alle aus",
 		"closeDialogLabel": "Dialog schließen",
 		"cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
+		"trailsInfo": "Wählen Sie in den meisten Fällen nicht mehr als <strong>5 Raumschiffpfade</strong> aus. Wenn Sie mit der Tentakelfigur experimentieren, um die Geschwindigkeit in der Atmosphäre zu erhöhen, wählen Sie 7.",
 		"optimizeButton": "Optimieren",
-		"atlantid": "Atlantis-Module",
-		"cancelButton": "Abbrechen",
-		"trails": "Raumschiffspuren",
-		"figurines": "Figuren",
-		"trailsInfo": "Wählen Sie in den meisten Fällen nicht mehr als <strong>5 Raumschiffpfade</strong> aus. Wenn Sie mit der Tentakelfigur experimentieren, um die Geschwindigkeit in der Atmosphäre zu erhöhen, wählen Sie 7."
+		"cancelButton": "Abbrechen"
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer | Tech-Layout-Builder & Adjazenz-Rechner für No Man's Sky",
@@ -581,50 +623,13 @@
 			"translation": "Helfen Sie beim Übersetzen"
 		}
 	},
-	"appHeader": {
-		"subTitle": "Technologie-Layout-Optimierer <1>AI/RUST</1>"
-	},
-	"appName": "No Man's Sky Technology Layout-Optimierer",
 	"installPrompt": {
-		"iosInstructions": "Für das beste Erlebnis fügen Sie diese App zu Ihrem Startbildschirm hinzu: Tippen Sie auf das Teilen-Symbol und dann auf „Zum Startbildschirm hinzufügen“.",
-		"title": "Zum Startbildschirm hinzufügen"
+		"title": "Zum Startbildschirm hinzufügen",
+		"iosInstructions": "Für das beste Erlebnis fügen Sie diese App zu Ihrem Startbildschirm hinzu: Tippen Sie auf das Teilen-Symbol und dann auf „Zum Startbildschirm hinzufügen“."
 	},
 	"notFound": {
 		"title": "–kzzkt– 404 –kzzkt–",
 		"message": "Die gesuchte Seite konnte nicht gefunden werden.",
 		"backToMain": "Gehen Sie zurück zur Hauptseite"
-	},
-	"shipSelection": {
-		"dropdownTooltip": "Wählen Sie Plattformtyp aus"
-	},
-	"dialog": {
-		"buildName": {
-			"title": "Build speichern",
-			"description": "Geben Sie einen Namen für Ihren Build ein:",
-			"placeholder": "Build-Name",
-			"validation": {
-				"empty": "Der Build-Name darf nicht leer sein",
-				"invalid": "Der Buildname enthält ungültige Zeichen. Vermeiden Sie die Verwendung von: < > : \" / \\ | ? * und Sonderzeichen."
-			}
-		}
-	},
-	"toast": {
-		"buildSaved": {
-			"title": "Erfolg",
-			"description": "Build erfolgreich heruntergeladen"
-		},
-		"buildSaveError": {
-			"title": "Fehler",
-			"description": "Build konnte nicht gespeichert werden"
-		},
-		"buildLoaded": {
-			"title": "Erfolg",
-			"description": "Build erfolgreich geladen",
-			"loadedMessage": "erfolgreich geladen"
-		},
-		"buildLoadError": {
-			"title": "Fehler",
-			"description": "Build konnte nicht geladen werden"
-		}
 	}
 }
