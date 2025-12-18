@@ -22,6 +22,11 @@ import { seoMetadata } from "../shared/seo-metadata.js";
  * @param {function(): Promise<string>} loadIndexHtml - An async function that returns the content of the index.html file.
  * @param {string} csp - The Content Security Policy string to be applied to the response.
  */
+
+// In-memory cache for SEO-injected HTML
+const seoCache = new Map();
+let lastBaseIndexETag = null;
+
 export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
     // 1. Handle ?lng= query parameter for backward compatibility/easy switching
     const lng = req.query.lng;
@@ -53,8 +58,13 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
     }
 
     try {
-        const indexHtml = await loadIndexHtml();
-        let modifiedHtml = indexHtml;
+        const { content: indexHtml, etag: baseEtag } = await loadIndexHtml();
+
+        // Invalidate cache if base index.html changed
+        if (lastBaseIndexETag !== baseEtag) {
+            seoCache.clear();
+            lastBaseIndexETag = baseEtag;
+        }
 
         const pathParts = req.path.split("/").filter(Boolean);
         const langFromPath = pathParts[0];
@@ -65,6 +75,24 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
 			: pathParts;
         const pagePath = pagePathParts.join("/");
         const basePath = `/${pagePath}`;
+
+        const cacheKey = `${lang}:${basePath}`;
+
+        // If we have a cached version
+        if (seoCache.has(cacheKey)) {
+            const { html, etag: cachedEtag } = seoCache.get(cacheKey);
+
+            res.setHeader("Content-Security-Policy", csp);
+            res.setHeader("ETag", cachedEtag);
+            res.setHeader("Cache-Control", "no-cache");
+
+            if (req.headers["if-none-match"] === cachedEtag) {
+                return res.status(304).end();
+            }
+            return res.type("html").send(html);
+        }
+
+        let modifiedHtml = indexHtml;
 
         // --- SEO Title & Description Injection ---
         const t = await i18next.getFixedT(lang);
@@ -122,6 +150,9 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         modifiedHtml = modifiedHtml.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
 
         const indexEtag = etag(modifiedHtml);
+
+        // Store in cache
+        seoCache.set(cacheKey, { html: modifiedHtml, etag: indexEtag });
 
         res.setHeader("Content-Security-Policy", csp);
         res.setHeader("ETag", indexEtag);

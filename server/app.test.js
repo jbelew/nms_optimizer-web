@@ -27,7 +27,7 @@ beforeAll(() => {
 	}
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "index.html"),
-		"<html><body>Mock Index</body></html>"
+		"<html><body>" + "Mock Index ".repeat(500) + "</body></html>"
 	);
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "sitemap.xml"),
@@ -169,14 +169,16 @@ describe("Security Headers", () => {
 });
 
 describe("Compression", () => {
-	it("should serve gzip-compressed assets when available", async () => {
+	it("should serve gzip-compressed assets for HTML", async () => {
 		const response = await request(app).get("/").set("Accept-Encoding", "gzip");
 		expect(response.status).toBe(200);
+		expect(response.headers["content-encoding"]).toBe("gzip");
 	});
 
 	it("should serve uncompressed assets to clients without gzip support", async () => {
-		const response = await request(app).get("/");
+		const response = await request(app).get("/").set("Accept-Encoding", "identity");
 		expect(response.status).toBe(200);
+		expect(response.headers["content-encoding"]).toBeUndefined();
 	});
 });
 

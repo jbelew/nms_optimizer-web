@@ -12,6 +12,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Third-party libraries
+import compression from "compression";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
 
@@ -48,6 +49,17 @@ const csp = [
 
 const app = express();
 
+// Apply compression early to capture all eligible responses, especially dynamic HTML
+app.use(compression({
+	level: 6, // Balanced compression level
+	threshold: 1024, // Compressing anything over 1kb
+	filter: (req, res) => {
+		if (req.headers["x-no-compression"]) return false;
+		// Standard compression filter
+		return compression.filter(req, res);
+	}
+}));
+
 // ============================================================================
 // IN-MEMORY CACHE FOR INDEX.HTML
 // ============================================================================
@@ -60,16 +72,27 @@ let cachedIndexETag = null;
  * Loads index.html from the filesystem and caches it in memory.
  * If the file has been modified, re-reads and updates the cache.
  * @async
- * @returns {Promise<string>} The content of index.html.
+ * @returns {Promise<{content: string, etag: string}>} The content and ETag of index.html.
  */
 async function loadIndexHtml() {
-	const stat = await fs.promises.stat(INDEX_PATH);
-	if (!cachedIndex || stat.mtimeMs > cachedIndexMTime) {
-		cachedIndex = await fs.promises.readFile(INDEX_PATH, "utf8");
-		cachedIndexMTime = stat.mtimeMs;
-		cachedIndexETag = `"${crypto.createHash("md5").update(cachedIndex).digest("hex")}"`;
+	// Optimization: In production, we assume index.html doesn't change after server starts.
+	// For other environments or for robustness, we still check stat but less frequently or only when needed.
+	if (process.env.NODE_ENV === "production" && cachedIndex) {
+		return { content: cachedIndex, etag: cachedIndexETag };
 	}
-	return cachedIndex;
+
+	try {
+		const stat = await fs.promises.stat(INDEX_PATH);
+		if (!cachedIndex || stat.mtimeMs > cachedIndexMTime) {
+			cachedIndex = await fs.promises.readFile(INDEX_PATH, "utf8");
+			cachedIndexMTime = stat.mtimeMs;
+			cachedIndexETag = `"${crypto.createHash("md5").update(cachedIndex).digest("hex")}"`;
+		}
+	} catch (error) {
+		console.error("Critical: Failed to read index.html", error);
+		if (!cachedIndex) throw error;
+	}
+	return { content: cachedIndex, etag: cachedIndexETag };
 }
 
 /**
@@ -78,8 +101,8 @@ async function loadIndexHtml() {
  * @returns {Promise<string>} The ETag value.
  */
 async function getIndexHtmlETag() {
-	await loadIndexHtml();
-	return cachedIndexETag;
+	const { etag } = await loadIndexHtml();
+	return etag;
 }
 
 // ============================================================================
@@ -176,7 +199,7 @@ app.use((req, res, next) => {
 			if (!err) {
 				const etag = `"${stats.mtime.getTime()}-${stats.size}"`;
 				res.setHeader("ETag", etag);
-				
+
 				if (req.headers["if-none-match"] === etag) {
 					res.status(304).end();
 					return;
@@ -216,12 +239,12 @@ app.get("/sw.js", async (req, res) => {
 		res.setHeader("ETag", etag);
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 		res.setHeader("Content-Type", "application/javascript");
-		
+
 		if (req.headers["if-none-match"] === etag) {
 			res.status(304).end();
 			return;
 		}
-		
+
 		res.sendFile(swPath);
 	} catch (error) {
 		res.status(404).send("Service worker not found");
@@ -248,10 +271,10 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 	// HTML revalidation strategy
 	res.setHeader("Cache-Control", "no-cache, public");
 	res.setHeader("Pragma", "no-cache");
-	
+
 	const etag = await getIndexHtmlETag();
 	res.setHeader("ETag", etag);
-	
+
 	if (req.headers["if-none-match"] === etag) {
 		res.status(304).end();
 		return;
