@@ -6,6 +6,7 @@ on:
             - main
         paths:
             - "public/assets/locales/**/translation.json"
+            - ".github/workflows/crowdin-push.yml"
     workflow_dispatch:
 
 jobs:
@@ -20,7 +21,7 @@ jobs:
               uses: crowdin/github-action@v2
               with:
                   upload_sources: true
-                  upload_translations: false
+                  upload_translations: true
                   download_translations: false
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
