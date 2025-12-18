@@ -1,9 +1,16 @@
 {
+	"appHeader": {
+		"subTitle": "Otimizador de layout de tecnologia <1>AI/RUST</1>"
+	},
 	"languageInfo": {
 		"nativeName": "Português",
 		"changeLanguage": "Mudar a linguagem",
 		"selectLanguage": "Selecione o idioma"
 	},
+	"shipSelection": {
+		"dropdownTooltip": "Selecione o tipo de plataforma"
+	},
+	"appName": "Otimizador de layout da tecnologia No Man's Sky",
 	"buttons": {
 		"instructions": "Instruções",
 		"about": "Sobre",
@@ -84,6 +91,41 @@
 			"copiedButton": "Copiado!",
 			"closeButton": "Fechar",
 			"openLink": "Link aberto"
+		},
+		"updatePrompt": {
+			"description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
+			"later": "Update Later",
+			"refreshNow": "Refresh Now"
+		}
+	},
+	"dialog": {
+		"buildName": {
+			"title": "Salvar compilação",
+			"description": "Insira um nome para sua compilação:",
+			"placeholder": "Nome da versão",
+			"validation": {
+				"empty": "O nome da compilação não pode ficar vazio",
+				"invalid": "O nome da compilação contém caracteres inválidos. Evite usar: < > : \" / \\ | ? * e caracteres especiais."
+			}
+		}
+	},
+	"toast": {
+		"buildSaved": {
+			"title": "Sucesso",
+			"description": "Versão baixada com sucesso"
+		},
+		"buildSaveError": {
+			"title": "Erro",
+			"description": "Falha ao salvar a compilação"
+		},
+		"buildLoaded": {
+			"title": "Sucesso",
+			"description": "Versão carregada com sucesso",
+			"loadedMessage": "carregado com sucesso"
+		},
+		"buildLoadError": {
+			"title": "Erro",
+			"description": "Falha ao carregar compilação"
 		}
 	},
 	"footer": {
@@ -546,18 +588,18 @@
 		"bonus": "Módulos de bônus",
 		"upgrade": "Módulos de atualização",
 		"reactor": "Módulos do reator",
+		"atlantid": "Módulos Atlântida",
 		"cosmetic": "Módulos cosméticos",
+		"trails": "Trilhas de naves estelares",
+		"figurines": "Estatuetas",
 		"title": "{{techName}} Seleção",
 		"warning": "<strong> Aviso! </strong> Se a sua resolução não incluir todos os módulos, o otimizador pulará a maioria das etapas e os resultados podem não representar a melhor resolução possível.",
 		"selectAll": "Selecione tudo",
 		"closeDialogLabel": "Fechar diálogo",
 		"cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
+		"trailsInfo": "Na maioria dos casos, selecione no máximo <strong>5 trilhas de naves estelares</strong>. Se você estiver experimentando a Estatueta de Tentáculos para aumentar a velocidade na atmosfera, selecione 7.",
 		"optimizeButton": "Otimizar",
-		"atlantid": "Módulos Atlântida",
-		"cancelButton": "Cancelar",
-		"trails": "Trilhas de naves estelares",
-		"figurines": "Estatuetas",
-		"trailsInfo": "Na maioria dos casos, selecione no máximo <strong>5 trilhas de naves estelares</strong>. Se você estiver experimentando a Estatueta de Tentáculos para aumentar a velocidade na atmosfera, selecione 7."
+		"cancelButton": "Cancelar"
 	},
 	"seo": {
 		"mainPageTitle": "NMS Optimizer | Construtor de Layouts de Tecnologia & Calculadora de Adjacência para No Man's Sky",
@@ -581,50 +623,13 @@
 			"translation": "Ajude a traduzir"
 		}
 	},
-	"appHeader": {
-		"subTitle": "Otimizador de layout de tecnologia <1>AI/RUST</1>"
-	},
-	"appName": "Otimizador de layout da tecnologia No Man's Sky",
 	"installPrompt": {
-		"iosInstructions": "Para obter a melhor experiência, adicione este aplicativo à sua tela inicial: toque no ícone Compartilhar e depois em “Adicionar à tela inicial”.",
-		"title": "Adicionar à tela inicial"
+		"title": "Adicionar à tela inicial",
+		"iosInstructions": "Para obter a melhor experiência, adicione este aplicativo à sua tela inicial: toque no ícone Compartilhar e depois em “Adicionar à tela inicial”."
 	},
 	"notFound": {
 		"title": "–kzzkt– 404 –kzzkt–",
 		"message": "A página que você procura não foi encontrada.",
 		"backToMain": "Voltar para a página principal"
-	},
-	"shipSelection": {
-		"dropdownTooltip": "Selecione o tipo de plataforma"
-	},
-	"dialog": {
-		"buildName": {
-			"title": "Salvar compilação",
-			"description": "Insira um nome para sua compilação:",
-			"placeholder": "Nome da versão",
-			"validation": {
-				"empty": "O nome da compilação não pode ficar vazio",
-				"invalid": "O nome da compilação contém caracteres inválidos. Evite usar: < > : \" / \\ | ? * e caracteres especiais."
-			}
-		}
-	},
-	"toast": {
-		"buildSaved": {
-			"title": "Sucesso",
-			"description": "Versão baixada com sucesso"
-		},
-		"buildSaveError": {
-			"title": "Erro",
-			"description": "Falha ao salvar a compilação"
-		},
-		"buildLoaded": {
-			"title": "Sucesso",
-			"description": "Versão carregada com sucesso",
-			"loadedMessage": "carregado com sucesso"
-		},
-		"buildLoadError": {
-			"title": "Erro",
-			"description": "Falha ao carregar compilação"
-		}
 	}
 }
