@@ -1,3 +1,10 @@
+## [6.5.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.17...v6.5.18) (2025-12-18)
+
+
+### Bug Fixes
+
+* Wrap bonus status icon in a button for improved accessibility and update tests. ([22b0590](https://github.com/jbelew/nms_optimizer-web/commit/22b05908b474f9ca32c64bb64d8b9e1e55cbbdba))
+
 ## [6.5.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.16...v6.5.17) (2025-12-18)
 
 
