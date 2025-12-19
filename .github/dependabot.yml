@@ -1,34 +1,58 @@
 version: 2
 updates:
-  # NPM dependencies (production and development)
-  - package-ecosystem: "npm"
-    directory: "/"
-    target-branch: "main"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    rebase-strategy: "auto"
+    # NPM dependencies (production and development)
+    - package-ecosystem: "npm"
+      directory: "/"
+      target-branch: "main"
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: "chore"
+          include: "scope"
+      rebase-strategy: "auto"
+      open-pull-requests-limit: 10
+      labels:
+          - "dependencies"
+          - "javascript"
 
-  # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    target-branch: "main"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore(actions)"
-      include: "scope"
-    rebase-strategy: "auto"
+    # Python dependencies
+    - package-ecosystem: "pip"
+      directory: "/"
+      target-branch: "main"
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: "chore(python)"
+          include: "scope"
+      rebase-strategy: "auto"
+      labels:
+          - "dependencies"
+          - "python"
 
-  # Docker
-  - package-ecosystem: "docker"
-    directory: "/"
-    target-branch: "main"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore(docker)"
-      include: "scope"
-    rebase-strategy: "auto"
+    # GitHub Actions
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      target-branch: "main"
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: "chore(actions)"
+          include: "scope"
+      rebase-strategy: "auto"
+      labels:
+          - "dependencies"
+          - "github-actions"
+
+    # Docker
+    - package-ecosystem: "docker"
+      directory: "/"
+      target-branch: "main"
+      schedule:
+          interval: "weekly"
+      commit-message:
+          prefix: "chore(docker)"
+          include: "scope"
+      rebase-strategy: "auto"
+      labels:
+          - "dependencies"
+          - "docker"
