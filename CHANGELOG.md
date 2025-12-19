@@ -1,3 +1,10 @@
+## [6.5.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.19...v6.5.20) (2025-12-19)
+
+
+### Bug Fixes
+
+* **grid-cell:** Refine interaction timing for grid cells ([5d50dac](https://github.com/jbelew/nms_optimizer-web/commit/5d50dac2ba5e9dc7054a484eb659fd3c9557e563))
+
 ## [6.5.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.18...v6.5.19) (2025-12-19)
 
 
