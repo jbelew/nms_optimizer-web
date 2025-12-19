@@ -1,5 +1,5 @@
 import type { Cell } from "../../store/GridStore";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useTransition } from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import { useShakeStore } from "../../store/ShakeStore";
@@ -47,6 +47,7 @@ export const useGridCellInteraction = (
 		selectTotalSuperchargedCells,
 	} = useGridStore.getState();
 	const [isTouching, setIsTouching] = useState(false);
+	const [_isPending, startTransition] = useTransition();
 
 	// Refs to track gestures (scroll, zoom) vs taps
 	const gestureStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -80,9 +81,17 @@ export const useGridCellInteraction = (
 
 			if (isInvalidDoubleTap) {
 				triggerShake();
-				revertCellTap(rowIndex, columnIndex);
+				setTimeout(() => {
+					startTransition(() => {
+						revertCellTap(rowIndex, columnIndex);
+					});
+				}, 0);
 			} else {
-				handleCellDoubleTap(rowIndex, columnIndex);
+				setTimeout(() => {
+					startTransition(() => {
+						handleCellDoubleTap(rowIndex, columnIndex);
+					});
+				}, 0);
 			}
 		} else {
 			// Single tap or tap on a different cell
@@ -91,9 +100,17 @@ export const useGridCellInteraction = (
 
 			if (isInvalidSingleTap) {
 				triggerShake();
-				clearInitialCellStateForTap();
+				setTimeout(() => {
+					startTransition(() => {
+						clearInitialCellStateForTap();
+					});
+				}, 0);
 			} else {
-				handleCellTap(rowIndex, columnIndex);
+				setTimeout(() => {
+					startTransition(() => {
+						handleCellTap(rowIndex, columnIndex);
+					});
+				}, 0);
 			}
 		}
 	}, [
@@ -203,7 +220,11 @@ export const useGridCellInteraction = (
 				if (gridFixed || (superchargedFixed && cell.supercharged)) {
 					triggerShake();
 				} else {
-					toggleCellActive(rowIndex, columnIndex);
+					setTimeout(() => {
+						startTransition(() => {
+							toggleCellActive(rowIndex, columnIndex);
+						});
+					}, 0);
 				}
 			} else {
 				// Normal Click: Toggle Supercharged
@@ -217,7 +238,11 @@ export const useGridCellInteraction = (
 				if (isInvalidSuperchargeToggle) {
 					triggerShake();
 				} else {
-					toggleCellSupercharged(rowIndex, columnIndex);
+					setTimeout(() => {
+						startTransition(() => {
+							toggleCellSupercharged(rowIndex, columnIndex);
+						});
+					}, 0);
 				}
 			}
 		},
@@ -255,7 +280,11 @@ export const useGridCellInteraction = (
 				if (gridFixed) {
 					triggerShake();
 				} else {
-					toggleCellActive(rowIndex, columnIndex);
+					setTimeout(() => {
+						startTransition(() => {
+							toggleCellActive(rowIndex, columnIndex);
+						});
+					}, 0);
 				}
 			}
 		},

@@ -26,8 +26,8 @@ interface GridRowProps {
  */
 const GridRowInternal: React.FC<GridRowProps> = memo(
 	({ rowIndex, isLoading }) => {
-		const row = useGridStore((state) => state.grid.cells[rowIndex]);
 		const gridWidth = useGridStore((state) => state.grid.width);
+		const gridHeight = useGridStore((state) => state.grid.height);
 
 		// Determine column count for ARIA properties.
 		// Add 1 for the GridControlButtons column.
@@ -36,8 +36,8 @@ const GridRowInternal: React.FC<GridRowProps> = memo(
 		// P0 Optimization: Memoize array generation to avoid recreating on every render
 		const columnIndices = useMemo(() => Array.from({ length: gridWidth }), [gridWidth]);
 
-		if (!row) {
-			return null; // Should not happen if gridHeight is correct, but good for safety
+		if (rowIndex >= gridHeight) {
+			return null;
 		}
 
 		return (

@@ -50,6 +50,7 @@ vi.mock("../GridControlButtons/GridControlButtons", () => ({
 const mockGridState = {
 	grid: {
 		width: 3,
+		height: 3,
 		cells: [
 			[{ active: true }, { active: true }, { active: true }],
 			[{ active: false }, { active: false }, { active: false }],

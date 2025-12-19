@@ -97,6 +97,7 @@ describe("useGridCellInteraction", () => {
 		act(() => {
 			result.current.handleTouchStart(mockEvent);
 			result.current.handleTouchEnd(mockEvent);
+			vi.runAllTimers();
 		});
 
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
@@ -120,6 +121,7 @@ describe("useGridCellInteraction", () => {
 		act(() => {
 			// Second Tap
 			result.current.handleTouchEnd(mockEvent2);
+			vi.runAllTimers();
 		});
 
 		expect(mockEvent1.preventDefault).toHaveBeenCalled();
@@ -133,6 +135,7 @@ describe("useGridCellInteraction", () => {
 
 		act(() => {
 			result.current.handleTouchEnd(mockEvent);
+			vi.runAllTimers();
 		});
 
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
@@ -147,6 +150,7 @@ describe("useGridCellInteraction", () => {
 
 		act(() => {
 			result.current.handleClick(mockEvent);
+			vi.runAllTimers();
 		});
 
 		expect(mockTriggerShake).toHaveBeenCalled();
@@ -167,6 +171,7 @@ describe("useGridCellInteraction", () => {
 		vi.advanceTimersByTime(100);
 		act(() => {
 			result.current.handleTouchEnd(createMockTouchEvent());
+			vi.runAllTimers();
 		});
 
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
@@ -184,6 +189,7 @@ describe("useGridCellInteraction", () => {
 		vi.advanceTimersByTime(100);
 		act(() => {
 			result.current.handleTouchEnd(createMockTouchEvent());
+			vi.runAllTimers();
 		});
 
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
@@ -204,6 +210,7 @@ describe("useGridCellInteraction", () => {
 		vi.advanceTimersByTime(100);
 		act(() => {
 			result.current.handleTouchEnd(createMockTouchEvent());
+			vi.runAllTimers();
 		});
 
 		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
@@ -216,6 +223,7 @@ describe("useGridCellInteraction", () => {
 
 		act(() => {
 			result.current.handleTouchEnd(mockEvent);
+			vi.runAllTimers();
 		});
 
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
@@ -228,6 +236,7 @@ describe("useGridCellInteraction", () => {
 
 		act(() => {
 			result.current.handleClick(mockEvent);
+			vi.runAllTimers();
 		});
 
 		expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
@@ -247,6 +256,7 @@ describe("useGridCellInteraction", () => {
 		const mockEvent = { key: " ", preventDefault: vi.fn() } as unknown as React.KeyboardEvent;
 		act(() => {
 			result.current.handleKeyDown(mockEvent);
+			vi.runAllTimers();
 		});
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockToggleCellActive).toHaveBeenCalledWith(0, 0);
@@ -260,6 +270,7 @@ describe("useGridCellInteraction", () => {
 		} as unknown as React.KeyboardEvent;
 		act(() => {
 			result.current.handleKeyDown(mockEvent);
+			vi.runAllTimers();
 		});
 		expect(mockEvent.preventDefault).toHaveBeenCalled();
 		expect(mockToggleCellActive).toHaveBeenCalledWith(0, 0);
@@ -339,6 +350,7 @@ describe("useGridCellInteraction", () => {
 			const { result } = renderGridCellHook({ module: null }, false, 4);
 			act(() => {
 				result.current.handleClick(createMockMouseEvent());
+				vi.runAllTimers();
 			});
 			expect(mockTriggerShake).toHaveBeenCalled();
 			expect(mockToggleCellSupercharged).not.toHaveBeenCalled();
@@ -348,6 +360,7 @@ describe("useGridCellInteraction", () => {
 			const { result } = renderGridCellHook({ module: null }, false, 3);
 			act(() => {
 				result.current.handleClick(createMockMouseEvent());
+				vi.runAllTimers();
 			});
 			expect(mockToggleCellSupercharged).toHaveBeenCalledWith(3, 0);
 			expect(mockTriggerShake).not.toHaveBeenCalled();
@@ -362,6 +375,7 @@ describe("useGridCellInteraction", () => {
 			vi.advanceTimersByTime(100);
 			act(() => {
 				result.current.handleTouchEnd(createMockTouchEvent());
+				vi.runAllTimers();
 			});
 
 			expect(mockTriggerShake).toHaveBeenCalled();
