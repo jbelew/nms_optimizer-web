@@ -1,3 +1,10 @@
+## [6.5.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.20...v6.5.21) (2025-12-19)
+
+
+### Bug Fixes
+
+* **seo:** Update meta tags for improved SEO and social sharing ([eb02f04](https://github.com/jbelew/nms_optimizer-web/commit/eb02f04f40544e3dd1218125a8f6a41e2e639db1))
+
 ## [6.5.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.19...v6.5.20) (2025-12-19)
 
 
