@@ -15,20 +15,6 @@ updates:
           - "dependencies"
           - "javascript"
 
-    # Python dependencies
-    - package-ecosystem: "pip"
-      directory: "/"
-      target-branch: "main"
-      schedule:
-          interval: "weekly"
-      commit-message:
-          prefix: "chore(python)"
-          include: "scope"
-      rebase-strategy: "auto"
-      labels:
-          - "dependencies"
-          - "python"
-
     # GitHub Actions
     - package-ecosystem: "github-actions"
       directory: "/"
