@@ -6,4 +6,4 @@ gevent==25.9.1
 translate-missing==0.1.0
 lxml==6.0.2
 packaging==25.0
-zopfli==0.2.3.post1
+zopfli==0.4.0
