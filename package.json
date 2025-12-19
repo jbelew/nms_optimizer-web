@@ -117,7 +117,7 @@
 		"eslint-plugin-react": "^7.37.5",
 		"eslint-plugin-react-hooks": "^7.0.0",
 		"eslint-plugin-react-refresh": "^0.4.20",
-		"eslint-plugin-storybook": "^10.1.9",
+		"eslint-plugin-storybook": "^10.1.10",
 		"globals": "^16.5.0",
 		"happy-dom": "^20.0.11",
 		"husky": "^9.1.7",
