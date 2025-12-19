@@ -61,81 +61,98 @@ describe("useSeoAndTitle", () => {
 	describe("Document Title and Meta Description", () => {
 		it("should set default title and description for root path", () => {
 			setupMocks("/", {
-				"seo.mainPageTitle": "NMS Optimizer | No Man's Sky Layout Builder for Ships & More",
+				"seo.mainPageTitle":
+					"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 				"seo.appDescription":
-					"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds.",
+					"The best No Man's Sky layout calculator and optimizer. Find optimal technology placements with maximum adjacency bonuses for Starship, Corvette, Multitool, Exocraft, and Exosuit builds. Free tool with supercharged slot optimization.",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"NMS Optimizer | No Man's Sky Layout Builder for Ships & More"
+				"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky"
 			);
 			const metaDesc = document.querySelector("meta[name='description']");
 			expect(metaDesc?.getAttribute("content")).toContain(
-				"Find the best No Man's Sky technology layouts"
+				"The best No Man's Sky layout calculator"
 			);
+
+			// Check social tags
+			expect(
+				document.querySelector("meta[property='og:title']")?.getAttribute("content")
+			).toBe("NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky");
+			expect(
+				document.querySelector("meta[name='twitter:title']")?.getAttribute("content")
+			).toBe("NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky");
 		});
 
 		it("should set correct title and description for /instructions path", () => {
 			setupMocks("/instructions", {
-				"seo.instructionsPageTitle": "How to Use the NMS Optimizer | Instructions & Tips",
+				"seo.instructionsPageTitle":
+					"How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
 				"seo.instructionsDescription":
-					"Get detailed instructions and pro tips on how to use the NMS Optimizer. Learn to master supercharged slots, adjacency bonuses, and create the best technology layouts in No Man's Sky.",
+					"Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
 			});
 			renderHook(() => useSeoAndTitle());
 
-			expect(document.title).toBe("How to Use the NMS Optimizer | Instructions & Tips");
+			expect(document.title).toBe(
+				"How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky"
+			);
 			const metaDesc = document.querySelector("meta[name='description']");
 			expect(metaDesc?.getAttribute("content")).toContain(
-				"Get detailed instructions and pro tips"
+				"Complete instructions for using the NMS Optimizer app"
 			);
 		});
 
 		it("should set correct title and description for /about path", () => {
 			setupMocks("/about", {
-				"seo.aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
+				"seo.aboutPageTitle":
+					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
-					"Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds.",
+					"NMS Optimizer is a free tool that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"About the NMS Optimizer | AI-Powered Tech Layouts & Builds"
+				"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator"
 			);
 			const metaDesc = document.querySelector("meta[name='description']");
-			expect(metaDesc?.getAttribute("content")).toContain("Learn about the NMS Optimizer");
+			expect(metaDesc?.getAttribute("content")).toContain("NMS Optimizer is a free tool");
 		});
 
 		it("should set correct title and description for language-prefixed path", () => {
 			setupMocks("/es/about", {
-				"seo.aboutPageTitle": "About the NMS Optimizer | AI-Powered Tech Layouts & Builds",
+				"seo.aboutPageTitle":
+					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
-					"Learn about the NMS Optimizer, an AI-powered tool for No Man's Sky. Discover how it uses machine learning to create optimal Starship, Corvette, Multitool, Exosuit, and Exocraft builds.",
+					"NMS Optimizer is a free tool that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"About the NMS Optimizer | AI-Powered Tech Layouts & Builds"
+				"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator"
 			);
 			const metaDesc = document.querySelector("meta[name='description']");
-			expect(metaDesc?.getAttribute("content")).toContain("Learn about the NMS Optimizer");
+			expect(metaDesc?.getAttribute("content")).toContain("NMS Optimizer is a free tool");
 		});
 
 		it("should set title for /changelog path", () => {
-			setupMocks("/changelog", { "seo.changelogPageTitle": "Changelog | NMS Optimizer" });
+			setupMocks("/changelog", {
+				"seo.changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
+			});
 			renderHook(() => useSeoAndTitle());
 
-			expect(document.title).toBe("Changelog | NMS Optimizer");
+			expect(document.title).toBe("NMS Optimizer Changelog | Latest Updates & Features");
 		});
 
 		it("should fall back to default title for unknown paths", () => {
 			setupMocks("/unknown-path", {
-				"seo.mainPageTitle": "NMS Optimizer | No Man's Sky Layout Builder for Ships & More",
+				"seo.mainPageTitle":
+					"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 			});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.title).toBe(
-				"NMS Optimizer | No Man's Sky Layout Builder for Ships & More"
+				"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky"
 			);
 		});
 	});

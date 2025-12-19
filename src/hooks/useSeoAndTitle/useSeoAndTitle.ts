@@ -80,6 +80,12 @@ export const useSeoAndTitle = () => {
 		document.title = pageTitle;
 		updateMetaTag("description", pageDescription);
 
+		// --- Social Media Tags ---
+		updateMetaPropertyTag("og:title", pageTitle);
+		updateMetaPropertyTag("og:description", pageDescription);
+		updateMetaTag("twitter:title", pageTitle);
+		updateMetaTag("twitter:description", pageDescription);
+
 		// --- Canonical URL Logic ---
 		const baseUrl = "https://nms-optimizer.app";
 		const cleanPath = currentPath === "/" ? "" : currentPath;

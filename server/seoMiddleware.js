@@ -108,6 +108,22 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
                 .replace(
                     /<meta name="description" content=".*?" \/>/,
                     `<meta name="description" content="${pageDescription}" />`
+                )
+                .replace(
+                    /<meta property="og:title" content=".*?" \/>/,
+                    `<meta property="og:title" content="${pageTitle}" />`
+                )
+                .replace(
+                    /<meta property="og:description" content=".*?" \/>/,
+                    `<meta property="og:description" content="${pageDescription}" />`
+                )
+                .replace(
+                    /<meta name="twitter:title" content=".*?" \/>/,
+                    `<meta name="twitter:title" content="${pageTitle}" />`
+                )
+                .replace(
+                    /<meta name="twitter:description" content=".*?" \/>/,
+                    `<meta name="twitter:description" content="${pageDescription}" />`
                 );
         }
 
