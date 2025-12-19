@@ -1,3 +1,10 @@
+## [6.5.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.18...v6.5.19) (2025-12-19)
+
+
+### Performance Improvements
+
+* **ui:** Improve responsiveness and loading experience ([56797de](https://github.com/jbelew/nms_optimizer-web/commit/56797de4d4354108833d709ad32acbb0a51e8271))
+
 ## [6.5.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.17...v6.5.18) (2025-12-18)
 
 
