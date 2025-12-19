@@ -78,16 +78,19 @@ const LanguageSelector: React.FC = () => {
 		const newPath =
 			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
 
-		void i18n.changeLanguage(newLang);
-		navigate(newPath + window.location.search);
+		// Defer non-critical work to avoid blocking main thread
+		setTimeout(() => {
+			void i18n.changeLanguage(newLang);
+			navigate(newPath + window.location.search);
 
-		sendEvent({
-			category: "ui",
-			action: "language_selection",
-			label: newLang,
-			value: 1,
-			nonInteraction: false,
-		});
+			sendEvent({
+				category: "ui",
+				action: "language_selection",
+				label: newLang,
+				value: 1,
+				nonInteraction: false,
+			});
+		}, 0);
 	};
 
 	/**

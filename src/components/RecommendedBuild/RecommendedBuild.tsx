@@ -48,16 +48,19 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * Handles applying a selected recommended build.
 	 * @param {(typeof builds)[number]} build - The build object to apply.
 	 */
-	const handleApply = async (build: (typeof builds)[number]) => {
-		await applyRecommendedBuild(build);
-		sendEvent({
-			category: "build",
-			action: "apply_build",
-			build: build.title,
-			platform: selectedPlatform,
-			value: 1,
-			nonInteraction: false,
-		});
+	const handleApply = (build: (typeof builds)[number]) => {
+		// Defer async work to avoid blocking main thread on INP
+		setTimeout(async () => {
+			await applyRecommendedBuild(build);
+			sendEvent({
+				category: "build",
+				action: "apply_build",
+				build: build.title,
+				platform: selectedPlatform,
+				value: 1,
+				nonInteraction: false,
+			});
+		}, 0);
 	};
 
 	/**

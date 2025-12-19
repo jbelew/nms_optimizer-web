@@ -4,7 +4,6 @@ import { render, screen } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
 import * as useBreakpointModule from "../../hooks/useBreakpoint/useBreakpoint";
-import * as splashScreenModule from "../../utils/splashScreen";
 import TechTreeComponent from "./TechTree";
 
 // Mock react-i18next
@@ -145,21 +144,6 @@ describe("TechTree", () => {
 
 		// RecommendedBuild should render if tech tree has recommended_builds
 		expect(screen.getByTestId("tech-tree-content")).toBeInTheDocument();
-	});
-
-	test("should call hideSplashScreenAndShowBackground on mount", () => {
-		const mockHideSplash = vi.spyOn(splashScreenModule, "hideSplashScreenAndShowBackground");
-
-		render(
-			<TechTreeComponent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				gridTableTotalWidth={undefined}
-			/>
-		);
-
-		expect(mockHideSplash).toHaveBeenCalled();
-		mockHideSplash.mockRestore();
 	});
 
 	test("should handle solving prop", () => {

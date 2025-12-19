@@ -63,6 +63,12 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 	useEffect(() => {
 		registerToolbarForceShow(forceShow);
 	}, [forceShow]);
+
+	// Hide splash screen once main app content is mounted
+	useEffect(() => {
+		hideSplashScreenAndShowBackground();
+	}, []);
+
 	const {
 		solving,
 		progressPercent,

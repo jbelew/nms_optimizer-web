@@ -96,32 +96,36 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const handleOptionSelect = useCallback(
 		(option: string) => {
 			if (option !== usePlatformStore.getState().selectedPlatform) {
-				sendEvent({
-					category: "ui",
-					action: "platform_selection",
-					platform: option,
-					value: 1,
-					nonInteraction: false,
-				});
+				// Defer the update to allow the dropdown to close immediately
+				setTimeout(() => {
+					startTransition(() => {
+						sendEvent({
+							category: "ui",
+							action: "platform_selection",
+							platform: option,
+							value: 1,
+							nonInteraction: false,
+						});
 
-				// TODO: Turn this back on if the Corvette bug shows up again
-				if (option === "corvette") {
-					showInfo(
-						"Corvette Warning!",
-						<>
-							As of version 6.18, Corvettes <strong>STILL(!!!)</strong> have a bug
-							that may cause layouts to reset unexpectedly. If you create a layout,
-							use the new <strong>Save Build</strong> feature to keep a backup.
-						</>
-					);
-				}
+						// TODO: Turn this back on if the Corvette bug shows up again
+						if (option === "corvette") {
+							showInfo(
+								"Corvette Warning!",
+								<>
+									As of version 6.18, Corvettes <strong>STILL(!!!)</strong> have a
+									bug that may cause layouts to reset unexpectedly. If you create
+									a layout, use the new <strong>Save Build</strong> feature to
+									keep a backup.
+								</>
+							);
+						}
 
-				startTransition(() => {
-					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
+						setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 
-					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-					setGridAndResetAuxiliaryState(initialGrid);
-				});
+						const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
+						setGridAndResetAuxiliaryState(initialGrid);
+					});
+				}, 0);
 			}
 		},
 		[

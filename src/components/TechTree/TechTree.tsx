@@ -1,12 +1,11 @@
 // src/components/TechTree/TechTree.tsx
 import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Box, ScrollArea } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 
@@ -71,15 +70,13 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		[scrollAreaHeight]
 	);
 
-	useEffect(() => {
-		hideSplashScreenAndShowBackground();
-	}, []);
-
 	return (
 		<>
 			{isLarge ? (
 				<>
 					<ScrollArea
+						type="always"
+						scrollbars="vertical"
 						className="main-app__tech-tree-sidebar shadow-sm"
 						style={scrollAreaStyle}
 					>
