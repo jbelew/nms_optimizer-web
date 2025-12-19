@@ -101,7 +101,7 @@
 		"@typescript-eslint/parser": "^8.48.0",
 		"@vitejs/plugin-react": "^5.1.2",
 		"@vitest/browser": "^4.0.15",
-		"@vitest/browser-playwright": "^4.0.15",
+		"@vitest/browser-playwright": "^4.0.16",
 		"@vitest/coverage-v8": "^4.0.15",
 		"@vitest/ui": "^4.0.15",
 		"autoprefixer": "^10.4.21",
