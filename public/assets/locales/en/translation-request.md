@@ -4,26 +4,22 @@ Analytics show visitors from all over the world and I'd love to make it more acc
 
 ## How You Can Help
 
-I'm looking for bilingual players to help translate the app — especially to **edit and proof the AI-generated French, German, Spanish translations**, or to work on other languages with strong NMS player communities.
+I'm looking for bilingual players to help translate the app — especially to **edit and proof the AI-generated French, German, Spanish, and Portuguese translations**, or to work on other languages with strong NMS player communities.
 
-You don't need to be a professional translator — just fluent, familiar with the game, and willing to help out. It'll definitely be better than this ChatGPT mess! You'll be credited (or remain anonymous if you prefer).
+You don't need to be a professional translator — just fluent, familiar with the game, and willing to help out. While AI-generated translations are a great starting point, they often miss game-specific context or nuance. You'll be credited (or remain anonymous if you prefer).
 
 Most strings are short UI labels, tooltips, or fun status messages.
-
-Translations are managed using [`i18next`](https://www.i18next.com/), with simple JSON and Markdown files. We also use **Crowdin** to manage collaborative translation contributions.
 
 ## Using Crowdin (Recommended)
 
 If you want the easiest way to contribute:
 
-1. **Sign up for Crowdin** at [https://crowdin.com](https://crowdin.com/project/nms-optimizer) and request access to the NMS Optimizer project.
-2. Once approved, you can **edit existing translations directly in the web UI**, or upload your own translations.
-3. Crowdin handles different languages and ensures your updates are synced with the app automatically.
-4. You can focus on **proofing existing translations** or adding new ones in your language.
+1. **Visit the Crowdin Project** at [crowdin.com/project/nms-optimizer](https://crowdin.com/project/nms-optimizer).
+2. **Select your language** and start editing existing strings or adding new ones.
+3. You can use the **proofreading** feature to verify AI-suggested translations.
+4. Crowdin handles the synchronization with GitHub automatically, so you don't need to touch any code.
 
-> Crowdin uses standard [ISO language codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` for French, `de` for German, `es` for Spanish, etc.
-
-This is the recommended approach if you're not familiar with GitHub or want your changes reflected immediately in the app.
+> Crowdin uses standard [ISO language codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` for French, `de` for German, `es` for Spanish, `pt` for Portuguese, etc.
 
 ## If You're Comfortable With GitHub
 
@@ -32,23 +28,20 @@ This is the recommended approach if you're not familiar with GitHub or want your
 
 **Update or Create the Translation Files:**
 
-- Application UI labels are located in `/src/i18n/locales/[language_code]/translation.json`.
-- Larger dialog box content is stored as pure Markdown files inside `/public/locales/[language_code]/`.
+All localization files are located in `/public/assets/locales/[language_code]/`:
 
-You can update existing files or create a new folder for your language using the [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of-ISO_639-1-codes) (e.g., `de` for German). Copy the relevant Markdown files and JSON files into that folder, then update the content accordingly.
+- `translation.json`: Application UI labels, tooltips, and status messages.
+- `*.md`: Content for larger dialogs (About, Instructions, Changelog, etc.).
 
-> _Example:_ Create `/public/locales/de/about.md` for dialog content and `/src/i18n/locales/de/translation.json` for UI labels.
+You can update existing files or create a new folder for your language using the [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+
+> _Example:_ To add or edit German translations, check `/public/assets/locales/de/`.
 
 **Submit a pull request** when you're done.
 
-## Not Into Pull Requests?
-
-No problem — just head over to the [GitHub Discussions page](https://github.com/jbelew/nms_optimizer-web/discussions) and start a new thread.
-
-You can paste your translations there or ask questions if you're not sure where to begin. I'll take it from there.
-
 ## Notes
 
-`randomMessages` is just that — a list of random messages that show when optimization takes longer than a couple of seconds. No need to translate them all, just come up with a few that make sense in your language.
+- **Interpolation**: You'll see tags like `<1></1>` or `{{techName}}`—please keep these exactly as they are, as the app uses them to insert dynamic content or styling.
+- **Random Messages**: `randomMessages` is a list of fun status updates that appear during optimization. Feel free to get creative with these in your language!
 
 Thanks for helping make the No Man's Sky Technology Layout Optimizer better for everyone! Let me know if you have any questions — happy to help.

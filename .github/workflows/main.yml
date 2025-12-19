@@ -8,7 +8,7 @@ on:
 
 jobs:
     get_release_info:
-        if: false # github.event.workflow_run.conclusion == 'success'
+        if: github.event.workflow_run.conclusion == 'success'
         runs-on: ubuntu-latest
         outputs:
             app_version: ${{ steps.get_app_version.outputs.version }}
@@ -40,7 +40,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         needs: [get_release_info]
-        if: false # ${{ needs.get_release_info.result == 'success' }}
+        if: needs.get_release_info.result == 'success'
         steps:
             - name: Set up Node.js
               uses: actions/setup-node@v6
