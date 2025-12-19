@@ -133,7 +133,7 @@
 		"postcss-merge-rules": "^7.0.6",
 		"prettier": "^3.7.4",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"puppeteer": "^24.32.1",
+		"puppeteer": "^24.33.1",
 		"puppeteer-core": "^24.32.1",
 		"rollup-plugin-visualizer": "^6.0.3",
 		"sass": "^1.93.3",
