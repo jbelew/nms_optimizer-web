@@ -58,13 +58,11 @@ const optimizedColorContents = [];
 
 for (const color of colors) {
 	const inputPath = join(projectRoot, `node_modules/@radix-ui/themes/tokens/colors/${color}.css`);
-	const outputPath = join(outputDir, `${color}.css`);
 
 	try {
 		const originalCss = readFileSync(inputPath, "utf-8");
 		const optimizedCss = stripP3Colors(originalCss);
 
-		writeFileSync(outputPath, optimizedCss);
 		optimizedColorContents.push(optimizedCss);
 
 		const originalSize = Buffer.byteLength(originalCss, "utf-8");

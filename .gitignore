@@ -14,13 +14,33 @@ node_modules
 dist
 dist-ssr
 *.local
-__pycache__
 
 # Coverage
 coverage/*
 
-# Python virtual environment
-.venv/*
+# Testing
+playwright-report
+test-results
+*storybook.log
+storybook-static
+
+# TypeScript build info
+tsconfig.node.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Environment & Python
+.env
+.venv/
+venv/
+__pycache__
+
+# Generated/temporary files
+lighthouse-report.html
+lighthouse-report.json
+stats.html
+stats.json
+screenshot_evolution.mp4
+frames/*
 
 # Editor directories and files
 .vscode
@@ -31,28 +51,6 @@ coverage/*
 *.njsproj
 *.sln
 *.sw?
-
-# Testing
-playwright-report
-playwright-report/*
-test-results
-*storybook.log
-storybook-static
-
-# TypeScript build info
-tsconfig.node.tsbuildinfo
-tsconfig.tsbuildinfo
-
-# Environment
-.env
-
-# Generated/temporary files
-lighthouse-report.html
-lighthouse-report.json
-stats.html
-scripts/dedup.ts
-screenshot_evolution.mp4
-frames/*
 
 # SEO exports
 seo/Countries.csv
