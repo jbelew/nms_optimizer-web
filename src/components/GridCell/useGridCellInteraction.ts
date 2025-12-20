@@ -2,6 +2,7 @@ import type { Cell } from "../../store/GridStore";
 import { useCallback, useRef, useState, useTransition } from "react";
 
 import { useGridStore } from "../../store/GridStore";
+import { useSessionStore } from "../../store/SessionStore";
 import { useShakeStore } from "../../store/ShakeStore";
 
 // To track double taps correctly across all cells, we need a shared reference.
@@ -54,6 +55,13 @@ export const useGridCellInteraction = (
 	const isGestureRef = useRef(false);
 
 	const { triggerShake: storeTriggerShake } = useShakeStore();
+	const {
+		incrementSuperchargedLimit,
+		incrementSuperchargedFixed,
+		incrementGridFixed,
+		incrementModuleLocked,
+		incrementRowLimit,
+	} = useSessionStore();
 
 	/**
 	 * Triggers a visual shake animation on the grid.
@@ -80,6 +88,16 @@ export const useGridCellInteraction = (
 				(totalSupercharged >= 4 && !cell.supercharged);
 
 			if (isInvalidDoubleTap) {
+				if (totalSupercharged >= 4 && !cell.supercharged) {
+					incrementSuperchargedLimit();
+				} else if (superchargedFixed) {
+					incrementSuperchargedFixed();
+				} else if (gridFixed) {
+					incrementGridFixed();
+				} else if (rowIndex >= 4) {
+					incrementRowLimit();
+				}
+
 				triggerShake();
 				setTimeout(() => {
 					startTransition(() => {
@@ -99,6 +117,12 @@ export const useGridCellInteraction = (
 			const isInvalidSingleTap = gridFixed || (superchargedFixed && cell.supercharged);
 
 			if (isInvalidSingleTap) {
+				if (superchargedFixed && cell.supercharged) {
+					incrementSuperchargedFixed();
+				} else if (gridFixed) {
+					incrementGridFixed();
+				}
+
 				triggerShake();
 				setTimeout(() => {
 					startTransition(() => {
@@ -119,6 +143,10 @@ export const useGridCellInteraction = (
 		clearInitialCellStateForTap,
 		handleCellDoubleTap,
 		handleCellTap,
+		incrementGridFixed,
+		incrementRowLimit,
+		incrementSuperchargedFixed,
+		incrementSuperchargedLimit,
 		revertCellTap,
 		rowIndex,
 		selectTotalSuperchargedCells,
@@ -185,6 +213,7 @@ export const useGridCellInteraction = (
 			if (isSharedGrid) return;
 
 			if (cell.module) {
+				incrementModuleLocked();
 				triggerShake();
 
 				return;
@@ -192,7 +221,7 @@ export const useGridCellInteraction = (
 
 			handleTouchLogic();
 		},
-		[handleTouchLogic, isSharedGrid, cell.module, triggerShake]
+		[handleTouchLogic, isSharedGrid, cell.module, triggerShake, incrementModuleLocked]
 	);
 
 	const handleTouchCancel = useCallback(() => {
@@ -209,6 +238,7 @@ export const useGridCellInteraction = (
 
 			// If the cell has a module, no interactions should change its state.
 			if (cell.module) {
+				incrementModuleLocked();
 				triggerShake();
 
 				return;
@@ -218,6 +248,12 @@ export const useGridCellInteraction = (
 			if (event.ctrlKey || event.metaKey) {
 				// Ctrl/Cmd + Click: Toggle Active
 				if (gridFixed || (superchargedFixed && cell.supercharged)) {
+					if (superchargedFixed && cell.supercharged) {
+						incrementSuperchargedFixed();
+					} else if (gridFixed) {
+						incrementGridFixed();
+					}
+
 					triggerShake();
 				} else {
 					setTimeout(() => {
@@ -236,6 +272,14 @@ export const useGridCellInteraction = (
 					(totalSupercharged >= 4 && !cell.supercharged);
 
 				if (isInvalidSuperchargeToggle) {
+					if (totalSupercharged >= 4 && !cell.supercharged) {
+						incrementSuperchargedLimit();
+					} else if (superchargedFixed) {
+						incrementSuperchargedFixed();
+					} else if (rowIndex >= 4) {
+						incrementRowLimit();
+					}
+
 					triggerShake();
 				} else {
 					setTimeout(() => {
@@ -254,6 +298,11 @@ export const useGridCellInteraction = (
 			toggleCellSupercharged,
 			cell.supercharged,
 			cell.module,
+			incrementGridFixed,
+			incrementModuleLocked,
+			incrementRowLimit,
+			incrementSuperchargedFixed,
+			incrementSuperchargedLimit,
 			triggerShake,
 			selectTotalSuperchargedCells,
 		]
@@ -270,6 +319,7 @@ export const useGridCellInteraction = (
 				if (isSharedGrid) return;
 
 				if (cell.module) {
+					incrementModuleLocked();
 					triggerShake();
 
 					return;
@@ -278,6 +328,7 @@ export const useGridCellInteraction = (
 				const { gridFixed } = useGridStore.getState();
 
 				if (gridFixed) {
+					incrementGridFixed();
 					triggerShake();
 				} else {
 					setTimeout(() => {
@@ -288,7 +339,16 @@ export const useGridCellInteraction = (
 				}
 			}
 		},
-		[isSharedGrid, triggerShake, toggleCellActive, rowIndex, columnIndex, cell.module]
+		[
+			isSharedGrid,
+			triggerShake,
+			toggleCellActive,
+			rowIndex,
+			columnIndex,
+			cell.module,
+			incrementGridFixed,
+			incrementModuleLocked,
+		]
 	);
 
 	return {

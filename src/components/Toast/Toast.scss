@@ -1,35 +1,48 @@
 @use "../../styles/z-indexes" as *;
 
-.ToastRoot {
-	align-items: center;
+.Toast {
 	background-color: var(--color-panel-solid);
 	border-radius: 8px;
 	box-shadow: var(--shadow-6);
-	column-gap: 16px;
-	display: grid;
-	grid-template-areas: "title action" "description action";
-	grid-template-columns: auto max-content;
-	padding: 16px;
-}
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	padding: var(--space-3);
 
-.ToastTitle {
-	color: var(--amber-11);
-	font-size: 15px;
-	grid-area: title;
-
-	&--success {
-		color: var(--accent-a11);
+	&__title-container {
+		align-items: center;
+		display: flex;
+		gap: var(--space-2);
 	}
 
-	&--error {
-		color: var(--red-a10);
+	&__title {
+		color: var(--gray-12);
+		font-size: 14px;
+		margin-top: var(--space-1);
 	}
-}
 
-.ToastDescription {
-	color: var(--gray-12);
-	font-size: 13px;
-	grid-area: description;
+	&__description {
+		color: var(--gray-12);
+		font-size: 14px;
+	}
+
+	&__icon {
+		flex-shrink: 0;
+		height: 20px;
+		width: 20px;
+
+		&--error {
+			color: var(--red-10);
+		}
+
+		&--success {
+			color: var(--accent-10);
+		}
+
+		&--info {
+			color: var(--amber-10);
+		}
+	}
 }
 
 .ToastViewport {
@@ -79,14 +92,14 @@
 	}
 }
 
-.ToastRoot[data-state="open"] {
+.Toast[data-state="open"] {
 	animation: slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ToastRoot[data-state="closed"] {
+.Toast[data-state="closed"] {
 	animation: hide 100ms ease-in;
 }
 
-.ToastRoot[data-state="swiped"] {
+.Toast[data-state="swiped"] {
 	animation: swipeOut 100ms ease-out;
 }

@@ -1,7 +1,7 @@
 // src/components/ShipSelection/ShipSelection.tsx
 import "./ShipSelection.scss";
 
-import type { ShipTypeDetail, ShipTypes } from "../../hooks/useShipTypes/useShipTypes";
+import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useCallback, useMemo, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
@@ -84,9 +84,36 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
+	const { t } = useTranslation();
 
 	// P2 Optimization: Memoize ship type keys to avoid recreating on every render
 	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+
+	/**
+	 * Memoized grouping of ship types by their category.
+	 * Moved here to prevent recalculation when DropdownMenu content mounts/unmounts.
+	 * @type {Record<string, { key: string; label: string; details: ShipTypeDetail }[]>}
+	 */
+	const groupedShipTypes = useMemo(() => {
+		if (!shipTypes) {
+			return {};
+		}
+
+		return Object.entries(shipTypes).reduce(
+			(acc, [key, details]) => {
+				const type = details.type;
+
+				if (!acc[type]) {
+					acc[type] = [];
+				}
+
+				acc[type].push({ key, label: t(`platforms.${key}`), details });
+
+				return acc;
+			},
+			{} as Record<string, { key: string; label: string; details: ShipTypeDetail }[]>
+		);
+	}, [shipTypes, t]);
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
@@ -160,8 +187,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 					<ShipTypesDropdown
 						selectedShipType={selectedShipType}
 						handleOptionSelect={handleOptionSelect}
-						solving={solving}
-						shipTypes={shipTypes}
+						groupedShipTypes={groupedShipTypes}
 					/>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
@@ -198,8 +224,7 @@ ShipSelection.displayName = "ShipSelection";
 interface ShipTypesDropdownProps {
 	selectedShipType: string;
 	handleOptionSelect: (option: string) => void;
-	solving: boolean;
-	shipTypes: ShipTypes;
+	groupedShipTypes: Record<string, { key: string; label: string; details: ShipTypeDetail }[]>;
 }
 
 /**
@@ -210,42 +235,15 @@ interface ShipTypesDropdownProps {
  * @returns {JSX.Element} The rendered ShipTypesDropdown component.
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
-	({ selectedShipType, handleOptionSelect, shipTypes }) => {
-		const { t } = useTranslation();
-
-		/**
-		 * Memoized grouping of ship types by their category.
-		 * @type {Record<string, { key: string; details: ShipTypeDetail }[]>}
-		 */
-		const groupedShipTypes = useMemo(() => {
-			if (!shipTypes) {
-				return {};
-			}
-
-			return Object.entries(shipTypes).reduce(
-				(acc, [key, details]) => {
-					const type = details.type;
-
-					if (!acc[type]) {
-						acc[type] = [];
-					}
-
-					acc[type].push({ key, details });
-
-					return acc;
-				},
-				{} as Record<string, { key: string; details: ShipTypeDetail }[]>
-			);
-		}, [shipTypes]);
-
+	({ selectedShipType, handleOptionSelect, groupedShipTypes }) => {
 		return (
 			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
 				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 					<React.Fragment key={type}>
 						{groupIndex > 0 && <DropdownMenu.Separator />}
-						{items.map(({ key }) => (
+						{items.map(({ key, label }) => (
 							<DropdownMenu.RadioItem key={key} value={key} className="font-medium">
-								{t(`platforms.${key}`)}
+								{label}
 							</DropdownMenu.RadioItem>
 						))}
 					</React.Fragment>

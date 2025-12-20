@@ -12,6 +12,7 @@ import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
 import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useErrorDispatcher } from "../../hooks/useErrorDispatcher";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
@@ -20,10 +21,12 @@ import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { useSessionStore } from "../../store/SessionStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import AppHeader from "../AppHeader/AppHeader";
+import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 import { ToastRenderer } from "../Toast/ToastRenderer";
@@ -58,6 +61,15 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { isVisible, toolbarRef, forceShow } = useScrollHide(80);
+	const { resetSession } = useSessionStore();
+
+	// Reset error counts when ship type changes
+	useEffect(() => {
+		resetSession();
+	}, [selectedShipType, resetSession]);
+
+	// Monitor session errors and dispatch messages to toast
+	useErrorDispatcher();
 
 	// Register the toolbar's forceShow function so useScrollGridIntoView can trigger it
 	useEffect(() => {
@@ -261,6 +273,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 					className="hidden"
 					aria-label={t("buttons.loadBuild")}
 				/>
+				<ErrorMessageRenderer />
 				<ToastRenderer />
 			</main>
 		</>
