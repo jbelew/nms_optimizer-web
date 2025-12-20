@@ -631,5 +631,13 @@
 		"title": "–kzzkt– 404 –kzzkt–",
 		"message": "The page you're looking for could not be found.",
 		"backToMain": "Go back to the main page"
+	},
+	"restrictions": {
+		"title": "Action Unavailable",
+		"superchargedLimit": "You can only have up to four supercharged cells.",
+		"superchargedFixed": "Supercharged cell locations for Exocraft and Exosuits can’t be changed.",
+		"gridFixed": "Cell locations are fixed for Exocraft and can’t be changed.",
+		"moduleLocked": "Cells with modules can’t be changed. Remove the module group first.",
+		"rowLimit": "Supercharged cells can only be placed in the first four rows."
 	}
 }
