@@ -1,3 +1,10 @@
+# [6.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.21...v6.6.0) (2025-12-20)
+
+
+### Features
+
+* **ux:** enhance error handling and introduce toast notifications ([cbc7258](https://github.com/jbelew/nms_optimizer-web/commit/cbc7258769b6d009c315502cb08e7f88422825b5))
+
 ## [6.5.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.20...v6.5.21) (2025-12-19)
 
 
