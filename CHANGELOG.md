@@ -1,3 +1,10 @@
+## [6.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.0...v6.6.1) (2025-12-20)
+
+
+### Bug Fixes
+
+* **ui:** Adjust shared build callout text color ([59d5f76](https://github.com/jbelew/nms_optimizer-web/commit/59d5f76bac7a62c1b584e667a82eea2cacbd3c67))
+
 # [6.6.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.5.21...v6.6.0) (2025-12-20)
 
 
