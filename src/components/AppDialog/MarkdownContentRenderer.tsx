@@ -148,21 +148,37 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				}
 
 				return (
-					<Heading
-						trim="end"
-						as="h2"
-						mb="3"
-						className="text-base! sm:text-lg!"
-						id={id}
-						style={{ color: "var(--accent-a11)" }}
-					>
-						{children}
-					</Heading>
+					<>
+						{id !== "section-1" && (
+							<Separator
+								color="cyan"
+								size="3"
+								orientation="horizontal"
+								decorative
+								mt="2"
+								mb="2"
+							/>
+						)}
+						<Heading
+							trim="end"
+							as="h2"
+							mb="3"
+							className="text-base! sm:text-lg!"
+							id={id}
+							style={{ color: "var(--accent-a11)" }}
+						>
+							{children}
+						</Heading>
+					</>
 				);
 			},
 			h3: ({ children }: { children?: React.ReactNode }) => {
 				return (
-					<Heading as="h3" className="text-sm! sm:text-base!">
+					<Heading
+						as="h3"
+						className="text-sm! sm:text-base!"
+						style={{ color: "var(--accent-a11)" }}
+					>
 						{children}
 					</Heading>
 				);

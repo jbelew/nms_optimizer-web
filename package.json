@@ -73,6 +73,8 @@
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^4.1.2",
+		"@commitlint/cli": "^20.1.0",
+		"@commitlint/config-conventional": "^20.0.0",
 		"@elsikora/commitizen-plugin-commitlint-ai": "^2.0.1",
 		"@eslint/js": "^9.29.0",
 		"@fullhuman/postcss-purgecss": "^7.0.2",
@@ -160,7 +162,7 @@
 	},
 	"config": {
 		"commitizen": {
-			"path": "@elsikora/commitizen-plugin-commitlint-ai"
+			"path": "./node_modules/@elsikora/commitizen-plugin-commitlint-ai/index.cjs"
 		}
 	}
 }
