@@ -60,6 +60,7 @@ jobs:
                   heroku_app_name: "nms-optimizer-web"
                   heroku_email: ${{ secrets.HEROKU_EMAIL }}
                   branch: main # Explicitly push the main branch
+                  rollbackonhealthcheckfailed: true
               env:
                   HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
                   HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
@@ -72,7 +73,7 @@ jobs:
                   -H "Content-Type: application/json" \
                   --data '{"purge_everything":true}')
                   
-                  if echo "$RESPONSE" | grep -q '"success":true'; then
+                  if echo "$RESPONSE" | grep -q '"success".*true'; then
                     echo "✅ Cloudflare cache purged successfully"
                   else
                     echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
