@@ -2,6 +2,20 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.6 – Supercharged Cell Limits & Constraint Messages (2025-12-19)
+
+This update focuses on clarity around supercharged and fixed cells, with new error messages and improved guidance for grid constraints.
+
+- Added **constraint messages** for supercharged and fixed cells:
+  - Maximum of four supercharged cells allowed.
+  - Supercharged cells for **Exocraft and Exosuits** cannot be changed.
+  - Cells containing modules cannot be changed; remove the module group first.
+  - Supercharged cells can only be placed in the first four rows.
+  - Fixed Exocraft cell locations cannot be modified.
+- Refined **grid-cell feedback**, so players see instant responses when actions are unavailable.
+- Enhanced **accessibility**, including wrapping bonus icons in buttons for better keyboard and screen reader support.
+- Minor **performance and responsiveness improvements** across the UI.
+
 ## Version 6.5 – UI Clarity & Mobile Improvements (2025-12-09)
 
 This update focuses on cleaner visuals, better mobile behavior, and clearer messaging in shared layouts.
