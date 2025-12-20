@@ -2,7 +2,7 @@ name: Deploy to Heroku
 
 on:
     workflow_run:
-        workflows: ["release.yml"]
+        workflows: ["Release & Publish"]
         types: [completed]
 
 concurrency:
