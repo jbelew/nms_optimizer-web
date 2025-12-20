@@ -169,12 +169,15 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 											: undefined,
 									}}
 								>
-									<Callout.Root mb="3" color="gray" variant="surface" size="1">
+									<Callout.Root mb="3" variant="surface" size="1">
 										<Callout.Icon>
 											<InfoCircledIcon />
 										</Callout.Icon>
 										<Callout.Text>
-											<span className="text-sm sm:text-base">
+											<span
+												className="text-sm sm:text-base"
+												style={{ color: "var(--gray-12)" }}
+											>
 												You are viewing a <strong>Shared Build</strong>.
 												This layout is read-only. To create your own layout,
 												click the <strong>Reset Grid</strong> button.
