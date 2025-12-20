@@ -1,5 +1,5 @@
 # Semver workflow
-name: Release
+name: Release & Publish
 
 on:
     push:
@@ -19,6 +19,7 @@ jobs:
               uses: actions/setup-node@v6
               with:
                   node-version: "lts/*"
+                  cache: 'npm'
 
             - name: Validate package.json and package-lock.json are in sync
               run: |
@@ -27,6 +28,13 @@ jobs:
 
             - name: Install dependencies
               run: npm ci --legacy-peer-deps
+
+            - name: Cache Playwright browsers
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: playwright-${{ runner.os }}-
 
             - name: Install Playwright browsers
               run: npx playwright install --with-deps

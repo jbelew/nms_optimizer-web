@@ -1,4 +1,4 @@
-name: Build & Publish Application Docker Image
+name: Build & Push Docker Image
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs: # Renamed job for clarity
             type=sha
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6 # Updated to v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -55,4 +55,5 @@ jobs: # Renamed job for clarity
           build-args: |
             BACKEND_REPO_URL=https://github.com/jbelew/nms_optimizer-service.git
             BACKEND_REPO_BRANCH=main
-          no-cache: true
+          cache-from: type=registry,ref=${{ steps.meta.outputs.tags }}
+          cache-to: type=inline

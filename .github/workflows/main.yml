@@ -6,6 +6,10 @@ on:
         types: [completed]
         branches: [main]
 
+concurrency:
+    group: deploy-production
+    cancel-in-progress: false
+
 jobs:
     get_release_info:
         if: github.event.workflow_run.conclusion == 'success'
@@ -13,22 +17,12 @@ jobs:
         outputs:
             app_version: ${{ steps.get_app_version.outputs.version }}
         steps:
-            - name: Set up Node.js
-              uses: actions/setup-node@v6
-              with:
-                  node-version: "lts/*"
-
             - name: Checkout main branch to get package.json
               uses: actions/checkout@v6
               with:
                   ref: main # Checkout main branch directly
                   token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
                   fetch-depth: 0 # Fetch full history to ensure latest is available
-
-            - name: Ensure latest main branch is fetched # Re-adding this step
-              run: |
-                  git pull origin main
-                  git reset --hard origin/main
 
             - name: Get App Version from package.json
               id: get_app_version
@@ -54,12 +48,14 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
                   fetch-depth: 0 # Ensure full history is fetched
 
-            - name: Ensure latest main branch is fetched for deploy
-              run: |
-                  git pull origin main
-                  git reset --hard origin/main
-                  echo "Current package.json version before Heroku deploy:"
-                  node -p "require('./package.json').version" # Log the version
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: 'npm'
+
+            - name: Verify app version
+              run: echo "Deploying app version ${{ needs.get_release_info.outputs.app_version }}"
 
             - name: Install Heroku CLI
               run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -68,7 +64,7 @@ jobs:
               with:
                   heroku_api_key: ${{secrets.HEROKU_API_KEY}}
                   heroku_app_name: "nms-optimizer-web"
-                  heroku_email: "john.belew@gmail.com"
+                  heroku_email: ${{ secrets.HEROKU_EMAIL }}
                   branch: main # Explicitly push the main branch
               env:
                   HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
@@ -77,7 +73,14 @@ jobs:
             - name: Purge Cloudflare Cache
               if: success()
               run: |
-                  curl -X POST "https://api.cloudflare.com/client/v4/zones/0986bee940f1277db8e730912b3a27ae/purge_cache" \
+                  RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
                   -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
                   -H "Content-Type: application/json" \
-                  --data '{"purge_everything":true}'
+                  --data '{"purge_everything":true}')
+                  
+                  if echo "$RESPONSE" | grep -q '"success":true'; then
+                    echo "✅ Cloudflare cache purged successfully"
+                  else
+                    echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
+                    exit 1
+                  fi

@@ -1,4 +1,4 @@
-name: Lighthouse Audit
+name: Audit Lighthouse Scores
 
 on:
     push:
@@ -22,6 +22,7 @@ jobs:
               uses: actions/setup-node@v6
               with:
                   node-version: "lts/*"
+                  cache: 'npm'
 
             - name: Validate package.json and package-lock.json are in sync
               run: |
@@ -33,6 +34,13 @@ jobs:
 
             - name: Build application
               run: npm run build
+
+            - name: Validate Lighthouse config exists
+              run: |
+                  if [ ! -f "./scripts/lighthouserc.cjs" ]; then
+                    echo "Error: Lighthouse config file not found at ./scripts/lighthouserc.cjs"
+                    exit 1
+                  fi
 
             - name: Run Lighthouse CI
               uses: treosh/lighthouse-ci-action@v12

@@ -1,42 +1,111 @@
-name: Pre-Commit Checks
+name: Lint, Test & Build
 
 on:
     pull_request:
         branches: [main]
 
 jobs:
-    pre-commit-checks:
+    validate:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
               uses: actions/checkout@v6
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
-                  token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN for checkout
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Set up Node.js
               uses: actions/setup-node@v6
               with:
                   node-version: "lts/*"
+                  cache: 'npm'
 
             - name: Validate package.json and package-lock.json are in sync
               run: |
                   echo "Checking if package-lock.json is in sync with package.json..."
                   npm ci --dry-run --ignore-scripts --legacy-peer-deps
 
+    lint-and-type-check:
+        runs-on: ubuntu-latest
+        needs: validate
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: 'npm'
+
             - name: Install dependencies
               run: npm ci --legacy-peer-deps
+
+            - name: Check formatting
+              run: npm run format:check
+
+            - name: Run linter
+              run: npm run lint
+
+            - name: Run CSS linter
+              run: npm run lint:css
+
+            - name: Type check
+              run: npm run typecheck
+
+    test:
+        runs-on: ubuntu-latest
+        needs: validate
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Cache Playwright browsers
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: playwright-${{ runner.os }}-
 
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
 
-            - name: Run pre-commit checks
-              run: |
-                  npm run format:check
-                  npm run lint
-                  npm run lint:css
-                  npm run typecheck
-                  npm run test:ci
+            - name: Run tests
+              run: npm run test:ci
 
-            - name: Build application (verification)
+    build:
+        runs-on: ubuntu-latest
+        needs: validate
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "lts/*"
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Build application
               run: npm run build

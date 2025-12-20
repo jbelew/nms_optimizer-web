@@ -1,4 +1,4 @@
-name: Storybook Tests
+name: Test Storybook Components
 
 on:
   push:
@@ -23,6 +23,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
+          cache: 'npm'
 
       - name: Validate package.json and package-lock.json are in sync
         run: |
