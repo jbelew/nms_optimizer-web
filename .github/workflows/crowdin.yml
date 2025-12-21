@@ -52,3 +52,4 @@ jobs:
               with:
                   commit_message: 'chore: format translations'
                   file_pattern: 'public/assets/locales/**'
+                  commit_options: '--no-verify'
