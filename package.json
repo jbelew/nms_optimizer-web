@@ -31,6 +31,7 @@
 		"verify:ssg": "node scripts/verify-ssg.mjs",
 		"format:check": "prettier --check ./src",
 		"format": "prettier --write ./src",
+		"format:locales": "prettier --write \"public/assets/locales/**/*.json\"",
 		"coverage:merge": "vitest coverage merge",
 		"coverage:report": "vitest coverage report --reporter=lcov --reporter=text",
 		"start": "node server/index.js",

@@ -36,7 +36,7 @@ jobs:
           download_translations: true
           localization_branch_name: l10n_crowdin_translations
           create_pull_request: false
-          push_translations: true
+          push_translations: false
           commit_message: "chore: update Crowdin translations"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,15 +44,7 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
       - name: Format translations
-        run: npm run format -- public/assets/locales
-
-      - name: Commit formatted translations
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          branch: l10n_crowdin_translations
-          commit_message: "chore: format Crowdin translations"
-          file_pattern: public/assets/locales/**
-          commit_options: --no-verify
+        run: npm run format:locales
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
@@ -60,6 +52,8 @@ jobs:
           branch: l10n_crowdin_translations
           base: main
           title: "chore: New Crowdin translations"
+          commit-message: "chore: update and format Crowdin translations"
           body: |
             New translations from Crowdin.
             Files formatted to match project standards.
+          delete-branch: true
