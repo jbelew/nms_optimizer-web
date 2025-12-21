@@ -8,6 +8,8 @@ on:
 jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
 
     permissions:
       contents: write
@@ -58,3 +60,4 @@ jobs:
             New translations from Crowdin.
             Files formatted to match project standards.
           delete-branch: true
+
