@@ -25,11 +25,7 @@
 	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.225rem;
 	--font-weight-bold: 600;
-
 	--color-background: var(--gray-a1);
-
-	/* --color-panel-translucent: var(--accent-a2); */
-	--color-panel-solid: var(--accent-1);
 }
 
 .rt-BaseButton {

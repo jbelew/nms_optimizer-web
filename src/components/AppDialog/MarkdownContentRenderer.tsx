@@ -150,14 +150,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				return (
 					<>
 						{id !== "section-1" && (
-							<Separator
-								color="cyan"
-								size="3"
-								orientation="horizontal"
-								decorative
-								mt="2"
-								mb="2"
-							/>
+							<Separator size="3" orientation="horizontal" decorative mt="2" mb="2" />
 						)}
 						<Heading
 							trim="end"

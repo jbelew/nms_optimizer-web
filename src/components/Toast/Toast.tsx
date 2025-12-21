@@ -4,7 +4,7 @@ import * as Toast from "@radix-ui/react-toast";
 
 import "./Toast.scss";
 
-import { Separator } from "@radix-ui/themes";
+import { Button, Separator } from "@radix-ui/themes";
 
 type ToastProps = {
 	open: boolean;
@@ -21,7 +21,7 @@ export const NmsToast = ({
 	title,
 	description,
 	variant,
-	duration = 8000,
+	duration = 5000,
 }: ToastProps) => {
 	const titleClassName =
 		variant === "error"
@@ -56,6 +56,15 @@ export const NmsToast = ({
 			</div>
 			<Separator size="4" mb="1" />
 			<Toast.Description className="Toast__description">{description}</Toast.Description>
+			<Button
+				className="Toast__close"
+				aria-label="Dismiss"
+				variant="soft"
+				size="2"
+				onClick={() => onOpenChange(false)}
+			>
+				Dismiss
+			</Button>
 		</Toast.Root>
 	);
 };
