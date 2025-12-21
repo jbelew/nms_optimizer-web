@@ -68,11 +68,14 @@ export const useTechTreeRow = ({
 		const translatedName = t(`technologies.${translationKeyPart}`);
 
 		const baseImagePath = "/assets/img/tech/";
-		const fallbackImage = `${baseImagePath}infra.webp`;
-		const imagePath = techImage ? `${baseImagePath}${techImage}` : fallbackImage;
+		const versionParam = `?v=${__APP_VERSION__}`;
+		const fallbackImageBase = `${baseImagePath}infra.webp`;
+		const fallbackImage = `${fallbackImageBase}${versionParam}`;
+		const fallbackImage2x = `${fallbackImageBase.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`;
+		const imagePath = techImage ? `${baseImagePath}${techImage}${versionParam}` : fallbackImage;
 		const imagePath2x = techImage
-			? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
-			: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
+			? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`
+			: fallbackImage2x;
 
 		return { translatedTechName: translatedName, imagePath, imagePath2x };
 	}, [techImage, tech, t]);

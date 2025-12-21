@@ -65,7 +65,9 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
 	({ type, technologies, handleOptimize, solving, isGridFull }) => {
 		const { t } = useTranslation();
 		// Determine the image path from the typeImageMap
-		const imagePath = typeImageMap[type] ? `/assets/img/sidebar/${typeImageMap[type]}` : null;
+		const imagePath = typeImageMap[type]
+			? `/assets/img/sidebar/${typeImageMap[type]}?v=${__APP_VERSION__}`
+			: null;
 
 		return (
 			<div className="sidebar__section mb-6 last:mb-0 lg:mb-6">

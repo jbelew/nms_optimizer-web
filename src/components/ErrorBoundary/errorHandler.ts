@@ -38,6 +38,38 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 		});
 	}
 
+	// Clear service worker caches
+	if ("caches" in window) {
+		caches.keys().then((cacheNames) => {
+			cacheNames.forEach((cacheName) => {
+				caches.delete(cacheName);
+				console.log(`ErrorBoundary: Deleted cache "${cacheName}".`);
+			});
+		});
+	}
+
+	// Clear IndexedDB
+	if ("indexedDB" in window) {
+		indexedDB.databases().then((databases) => {
+			databases.forEach((db) => {
+				if (db.name) {
+					indexedDB.deleteDatabase(db.name);
+					console.log(`ErrorBoundary: Deleted IndexedDB "${db.name}".`);
+				}
+			});
+		});
+	}
+
+	// Clear sessionStorage
+	try {
+		if (typeof window !== "undefined" && window.sessionStorage) {
+			sessionStorage.clear();
+			console.log("ErrorBoundary: Cleared sessionStorage.");
+		}
+	} catch (e) {
+		console.error("ErrorBoundary: Failed to clear sessionStorage.", e);
+	}
+
 	sendEvent({
 		category: "error",
 		action: error.name,

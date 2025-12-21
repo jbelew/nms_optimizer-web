@@ -114,7 +114,9 @@ describe("TechTreeSection", () => {
 			/>
 		);
 
-		const img = container.querySelector('img[src="/assets/img/sidebar/weaponry.webp"]');
+		const img = container.querySelector(
+			`img[src="/assets/img/sidebar/weaponry.webp?v=${__APP_VERSION__}"]`
+		);
 		expect(img).toBeInTheDocument();
 		expect(img).toHaveAttribute("alt", "Weaponry");
 	});
@@ -184,7 +186,9 @@ describe("TechTreeSection", () => {
 				/>
 			);
 
-			const img = container.querySelector(`img[src="/assets/img/sidebar/${image}"]`);
+			const img = container.querySelector(
+				`img[src="/assets/img/sidebar/${image}?v=${__APP_VERSION__}"]`
+			);
 			expect(img).toBeInTheDocument();
 		});
 	});
@@ -286,7 +290,10 @@ describe("TechTreeSection", () => {
 		);
 
 		const img = container.querySelector("img");
-		expect(img).toHaveAttribute("srcSet", "/assets/img/sidebar/weaponry@2x.webp 2x");
+		expect(img).toHaveAttribute(
+			"srcSet",
+			`/assets/img/sidebar/weaponry@2x.webp?v=${__APP_VERSION__} 2x`
+		);
 	});
 
 	test("should apply correct image dimensions", () => {

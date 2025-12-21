@@ -87,14 +87,18 @@ describe("useTechTreeRow", () => {
 
 	it("should construct image paths correctly", () => {
 		const { result } = renderHook(() => useTechTreeRow(mockProps));
-		expect(result.current.imagePath).toBe("/assets/img/tech/test.webp");
-		expect(result.current.imagePath2x).toBe("/assets/img/tech/test@2x.webp");
+		expect(result.current.imagePath).toBe(`/assets/img/tech/test.webp?v=${__APP_VERSION__}`);
+		expect(result.current.imagePath2x).toBe(
+			`/assets/img/tech/test@2x.webp?v=${__APP_VERSION__}`
+		);
 	});
 
 	it("should use fallback image when techImage is null", () => {
 		const { result } = renderHook(() => useTechTreeRow({ ...mockProps, techImage: null }));
-		expect(result.current.imagePath).toBe("/assets/img/tech/infra.webp");
-		expect(result.current.imagePath2x).toBe("/assets/img/tech/infra@2x.webp");
+		expect(result.current.imagePath).toBe(`/assets/img/tech/infra.webp?v=${__APP_VERSION__}`);
+		expect(result.current.imagePath2x).toBe(
+			`/assets/img/tech/infra@2x.webp?v=${__APP_VERSION__}`
+		);
 	});
 
 	it("should memoize image paths and translation (no recalculation on non-dependency changes)", () => {
@@ -120,13 +124,15 @@ describe("useTechTreeRow", () => {
 			{ initialProps: { props: mockProps } }
 		);
 
-		expect(result.current.imagePath).toBe("/assets/img/tech/test.webp");
+		expect(result.current.imagePath).toBe(`/assets/img/tech/test.webp?v=${__APP_VERSION__}`);
 
 		// Change techImage
 		rerender({ props: { ...mockProps, techImage: "different.webp" } });
 
 		// Image paths should be updated
-		expect(result.current.imagePath).toBe("/assets/img/tech/different.webp");
+		expect(result.current.imagePath).toBe(
+			`/assets/img/tech/different.webp?v=${__APP_VERSION__}`
+		);
 	});
 
 	it("should handle empty modules array", () => {

@@ -268,9 +268,10 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		return next();
 	}
 
-	// HTML revalidation strategy
-	res.setHeader("Cache-Control", "no-cache, public");
+	// HTML revalidation strategy - force revalidation on every request
+	res.setHeader("Cache-Control", "no-cache, public, must-revalidate, max-age=0");
 	res.setHeader("Pragma", "no-cache");
+	res.setHeader("Expires", "0");
 
 	const etag = await getIndexHtmlETag();
 	res.setHeader("ETag", etag);
@@ -314,17 +315,6 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 // ============================================================================
 // STATIC FILE MIDDLEWARE
 // ============================================================================
-
-// Strip query parameters from static asset requests before express-static-gzip processes them
-// This prevents issues where browsers/service workers add query params to asset requests
-app.use((req, res, next) => {
-	const assetPattern = /^\/assets\//;
-	if (assetPattern.test(req.path) && req.query && Object.keys(req.query).length > 0) {
-		// Reconstruct URL without query parameters for assets
-		return res.redirect(301, req.path);
-	}
-	next();
-});
 
 app.use("/", expressStaticGzip(DIST_DIR, {
 	enableBrotli: true,
