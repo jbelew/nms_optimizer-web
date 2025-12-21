@@ -82,6 +82,12 @@ A: Yes! The **NMS Optimizer** is completely free, ad-free, and open source (GPL-
 
 A: Absolutely! You can save optimized layouts as `.nms` files, reload them later, or generate shareable links for friends. All builds are validated for integrity and compatibility.
 
+## Thank You to All My Amazing Supporters!
+
+George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, and everyone else who has contributed — your support means the world.
+
+Every donation, share, and kind word helps me continue building tools that make your NMS experience better. Thank you for being part of this journey — you rock!
+
 ## Some Fun History
 
 Here’s a look at an **early version** of the UI—functionally solid but visually minimal. The current version is a massive upgrade in design, usability, and clarity, helping players quickly find the **best layout** for any ship or tool.

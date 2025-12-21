@@ -17,6 +17,7 @@ import xxFlagPath from "../../assets/svg/flags/xx.svg";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { languages, nativeLanguageNames } from "../../i18n/i18n";
+import { useErrorStore } from "../../store/ErrorStore";
 
 interface LanguageFlagPaths {
 	[key: string]: string; // Path to the SVG
@@ -44,6 +45,7 @@ const LanguageSelector: React.FC = () => {
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
+	const { clearErrors } = useErrorStore();
 
 	const supportedLanguages = useMemo(() => {
 		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
@@ -67,6 +69,8 @@ const LanguageSelector: React.FC = () => {
 	 * @param {string} newLang - The language code to change to.
 	 */
 	const handleLanguageChange = (newLang: string) => {
+		clearErrors(); // Clear existing errors to prevent re-display on remount
+
 		const pathParts = location.pathname.split("/").filter(Boolean);
 		const langCand = pathParts[0];
 		let basePath = location.pathname;

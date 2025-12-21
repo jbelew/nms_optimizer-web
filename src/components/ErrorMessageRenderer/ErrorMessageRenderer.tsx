@@ -26,7 +26,7 @@ export const ErrorMessageRenderer = () => {
 			// Remove the error after displaying it (auto-cleanup)
 			const timeout = setTimeout(() => {
 				removeError(latestError.id);
-			}, 6000);
+			}, 5000);
 
 			return () => clearTimeout(timeout);
 		}
