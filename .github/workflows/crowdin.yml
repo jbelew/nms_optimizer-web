@@ -1,55 +1,51 @@
 name: Sync Crowdin Translations
 
 on:
-    workflow_dispatch:
-        inputs:
-            upload_sources:
-                description: "Upload source strings to Crowdin"
-                required: false
-                default: false
-                type: boolean
-    schedule:
-        # Run every Sunday at 2 AM UTC to download translations
-        - cron: "0 2 * * 0"
+  workflow_dispatch:
+    inputs:
+      upload_sources:
+        description: "Upload source strings to Crowdin"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: "0 2 * * 0"
 
 jobs:
-    synchronize-with-crowdin:
-        runs-on: ubuntu-latest
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
-            - name: Download Translations from Crowdin
-              uses: crowdin/github-action@v2
-              with:
-                  upload_sources: ${{ github.event.inputs.upload_sources == 'true' }}
-                  upload_translations: false
-                  download_translations: true
-                  localization_branch_name: l10n_crowdin_translations
-                  create_pull_request: true
-                  pull_request_title: "chore: New Crowdin translations"
-                  pull_request_body: "New translations from Crowdin by [Crowdin GH Action](https://github.com/crowdin/github-action)\n\nPlease review and merge if translations are correct."
-                  pull_request_base_branch_name: "main"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-                  CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "lts/*"
+      - name: Install dependencies
+        run: npm ci
 
-            - name: Install dependencies
-              run: npm ci
+      - name: Download Translations from Crowdin
+        uses: crowdin/github-action@v2
+        with:
+          upload_sources: ${{ github.event.inputs.upload_sources == 'true' }}
+          upload_translations: false
+          download_translations: true
+          localization_branch_name: l10n_crowdin_translations
+          create_pull_request: true
+          pull_request_title: "chore: New Crowdin translations"
+          pull_request_body: |
+            New translations from Crowdin.
 
-            - name: Format translations
-              run: npm run format -- public/assets/locales
+            Files are automatically formatted to match project standards before commit.
+          pull_request_base_branch_name: "main"
 
-            - name: Commit formatting changes
-              uses: stefanzweifel/git-auto-commit-action@v5
-              with:
-                  commit_message: 'chore: format translations'
-                  file_pattern: 'public/assets/locales/**'
-                  commit_options: '--no-verify'
+          # 🔑 THIS IS THE IMPORTANT PART
+          pre_commit_script: |
+            npm run format -- public/assets/locales
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
