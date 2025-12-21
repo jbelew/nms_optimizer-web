@@ -1,5 +1,5 @@
 # Semver workflow
-name: Release & Publish
+name: Release & Publish (Disabled)
 
 on:
     push:
