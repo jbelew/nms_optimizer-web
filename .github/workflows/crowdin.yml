@@ -8,6 +8,7 @@ on:
         required: false
         default: false
         type: boolean
+
   schedule:
     - cron: "0 2 * * 0"
 
@@ -15,9 +16,15 @@ jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: l10n_crowdin_translations
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,18 +41,30 @@ jobs:
           upload_translations: false
           download_translations: true
           localization_branch_name: l10n_crowdin_translations
-          create_pull_request: true
-          pull_request_title: "chore: New Crowdin translations"
-          pull_request_body: |
+          create_pull_request: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Format translations
+        run: npm run format -- public/assets/locales
+
+      - name: Commit formatted translations
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: l10n_crowdin_translations
+          commit_message: "chore: update & format Crowdin translations"
+          file_pattern: public/assets/locales/**
+          commit_options: --no-verify
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: l10n_crowdin_translations
+          base: main
+          title: "chore: New Crowdin translations"
+          body: |
             New translations from Crowdin.
 
-            Files are automatically formatted to match project standards before commit.
-          pull_request_base_branch_name: "main"
-
-          # 🔑 THIS IS THE IMPORTANT PART
-          pre_commit_script: |
-            npm run format -- public/assets/locales
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
-        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+            Files are automatically formatted to match project standards.
