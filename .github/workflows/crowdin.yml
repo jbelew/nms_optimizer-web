@@ -2,13 +2,6 @@ name: Sync Crowdin Translations
 
 on:
   workflow_dispatch:
-    inputs:
-      upload_sources:
-        description: "Upload source strings to Crowdin"
-        required: false
-        default: false
-        type: boolean
-
   schedule:
     - cron: "0 2 * * 0"
 
@@ -21,10 +14,11 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v6
         with:
-          ref: l10n_crowdin_translations
+          ref: main
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,11 +31,13 @@ jobs:
       - name: Download Translations from Crowdin
         uses: crowdin/github-action@v2
         with:
-          upload_sources: ${{ github.event.inputs.upload_sources == 'true' }}
+          upload_sources: false
           upload_translations: false
           download_translations: true
           localization_branch_name: l10n_crowdin_translations
           create_pull_request: false
+          push_translations: true
+          commit_message: "chore: update Crowdin translations"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
@@ -54,7 +50,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: l10n_crowdin_translations
-          commit_message: "chore: update & format Crowdin translations"
+          commit_message: "chore: format Crowdin translations"
           file_pattern: public/assets/locales/**
           commit_options: --no-verify
 
@@ -66,5 +62,4 @@ jobs:
           title: "chore: New Crowdin translations"
           body: |
             New translations from Crowdin.
-
-            Files are automatically formatted to match project standards.
+            Files formatted to match project standards.
