@@ -1,3 +1,10 @@
+## [6.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.1...v6.6.2) (2025-12-21)
+
+
+### Bug Fixes
+
+* **ci:** disable credential persistence in checkout to prevent duplicate auth headers" ([d218b5b](https://github.com/jbelew/nms_optimizer-web/commit/d218b5b1fdca63c3dbc638297d078edae1fe823c))
+
 ## [6.6.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.0...v6.6.1) (2025-12-20)
 
 
