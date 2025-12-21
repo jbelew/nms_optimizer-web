@@ -61,6 +61,7 @@ export const NmsToast = ({
 				aria-label="Dismiss"
 				variant="soft"
 				size="2"
+				mb="1"
 				onClick={() => onOpenChange(false)}
 			>
 				Dismiss
