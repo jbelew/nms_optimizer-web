@@ -11,10 +11,12 @@ import sys
 
 SCREENSHOT_PATH = "public/assets/img/screenshots/screenshot.png"
 OUTPUT_VIDEO = "screenshot_evolution.mp4"
+AUDIO_FILE = "audio/freez_demo.mp3"  # Audio track to add (will be truncated to video length)
 KEEP_FRAMES = True  # Set to True to keep extracted frames in a 'frames' directory
 CROSSFADE_DURATION = 0.65  # Duration of crossfade in seconds
 IMAGE_DURATION = 0.05      # How long each image is shown (before fade starts)
 HOLD_DURATION = 1.5        # Duration to hold first and last screenshots
+TOTAL_VIDEO_DURATION = 45  # Total video duration in seconds
 
 # Blacklist specific commits by hash (full or short hash)
 # Example: BLACKLIST_COMMITS = ["abc1234", "def5678"]
@@ -92,6 +94,27 @@ def extract_versions(commits, temp_dir):
     return files
 
 
+def calculate_durations(num_files):
+    """Calculate image and hold durations to fit total video duration."""
+    # Total crossfade time
+    total_crossfade_time = (num_files - 1) * CROSSFADE_DURATION
+    
+    # If crossfades alone exceed total duration, reduce crossfade duration
+    if total_crossfade_time >= TOTAL_VIDEO_DURATION:
+        crossfade_duration = TOTAL_VIDEO_DURATION / (num_files - 1) * 0.9  # 90% for crossfades
+        total_crossfade_time = (num_files - 1) * crossfade_duration
+    else:
+        crossfade_duration = CROSSFADE_DURATION
+    
+    # Remaining time for images
+    remaining_time = TOTAL_VIDEO_DURATION - total_crossfade_time
+    
+    # Distribute remaining time equally across all images
+    image_duration = max(0.05, remaining_time / num_files)  # Minimum 0.05s per image
+    
+    return image_duration, image_duration, crossfade_duration  # Return (per_image_duration, hold_duration, crossfade)
+
+
 def create_video(files):
     """Create video with crossfades by pre-rendering each transition."""
     if len(files) < 2:
@@ -99,6 +122,10 @@ def create_video(files):
         return False
 
     print(f"Creating video with {len(files)} frames and crossfades...")
+    
+    # Calculate durations to fit total video duration
+    image_dur, hold_dur, crossfade_dur = calculate_durations(len(files))
+    print(f"Target duration: {TOTAL_VIDEO_DURATION}s | Image duration: {image_dur:.2f}s | Crossfade duration: {crossfade_dur:.2f}s")
 
     temp_videos = []
     try:
@@ -113,10 +140,10 @@ def create_video(files):
             img1_file = f"_temp_img1_{i:04d}.mp4"
             img2_file = f"_temp_img2_{i:04d}.mp4"
 
-            # Determine duration for first image (use HOLD_DURATION for first frame, otherwise IMAGE_DURATION)
-            img1_duration = HOLD_DURATION if i == 0 else IMAGE_DURATION
+            # Determine duration for first image (use hold_dur for first frame, otherwise image_dur)
+            img1_duration = hold_dur if i == 0 else image_dur
             # Both need to be long enough for the transition
-            duration = img1_duration + CROSSFADE_DURATION
+            duration = img1_duration + crossfade_dur
 
             # Create video for first image
             cmd = [
@@ -143,7 +170,7 @@ def create_video(files):
                 "ffmpeg", "-y",
                 "-i", img1_file,
                 "-i", img2_file,
-                "-filter_complex", f"[0:v][1:v]xfade=transition=fade:duration={CROSSFADE_DURATION}:offset={img1_duration}[v];[v]trim=0:{duration}[trimmed]",
+                "-filter_complex", f"[0:v][1:v]xfade=transition=fade:duration={crossfade_dur}:offset={img1_duration}[v];[v]trim=0:{duration}[trimmed]",
                 "-map", "[trimmed]",
                 "-c:v", "libx264",
                 "-crf", "23",
@@ -165,14 +192,14 @@ def create_video(files):
         last_screenshot_file = "_temp_last_screenshot.mp4"
         cmd = [
             "ffmpeg", "-y", "-loop", "1", "-i", files[-1],
-            "-t", str(HOLD_DURATION),
+            "-t", str(hold_dur),
             "-vf", "scale=1280:1024:force_original_aspect_ratio=decrease,pad=1280:1024:(ow-iw)/2:(oh-ih)/2",
             "-c:v", "libx264", "-crf", "23", "-pix_fmt", "yuv420p",
             last_screenshot_file
         ]
         subprocess.run(cmd, capture_output=True, check=True)
         temp_videos.append(last_screenshot_file)
-        print(f"  Added {HOLD_DURATION}s hold for last screenshot")
+        print(f"  Added {hold_dur:.2f}s hold for last screenshot")
 
         # Concatenate all transition videos
         concat_file = tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, dir='.')
@@ -188,6 +215,30 @@ def create_video(files):
         subprocess.run(concat_cmd, capture_output=True, check=True)
         os.unlink(concat_file.name)
         print(f"Video created: {OUTPUT_VIDEO}")
+        
+        # Add audio track if file exists
+        if os.path.exists(AUDIO_FILE):
+            print(f"Adding audio track from {AUDIO_FILE}...")
+            temp_video_with_audio = "_temp_with_audio.mp4"
+            # Add 2-second fade-out at the end of audio
+            fade_start = TOTAL_VIDEO_DURATION - 2
+            audio_cmd = [
+                "ffmpeg", "-y",
+                "-i", OUTPUT_VIDEO,
+                "-i", AUDIO_FILE,
+                "-c:v", "copy",
+                "-c:a", "aac",
+                "-af", f"afade=t=out:st={fade_start}:d=2",
+                "-t", str(TOTAL_VIDEO_DURATION),
+                "-shortest",
+                temp_video_with_audio
+            ]
+            subprocess.run(audio_cmd, capture_output=True, check=True)
+            os.unlink(OUTPUT_VIDEO)
+            os.rename(temp_video_with_audio, OUTPUT_VIDEO)
+            print(f"Audio track added to: {OUTPUT_VIDEO}")
+        else:
+            print(f"Note: Audio file not found at {AUDIO_FILE}, skipping audio")
 
         return True
     except subprocess.CalledProcessError as e:
@@ -214,6 +265,9 @@ def main():
         commits = [c for c in commits if not any(c.startswith(b) for b in BLACKLIST_COMMITS)]
         if len(commits) < original_count:
             print(f"Filtered {original_count - len(commits)} blacklisted commits")
+
+    # Reverse to go from oldest to newest
+    commits.reverse()
 
     if not commits:
         print(f"Error: No commits found for {SCREENSHOT_PATH}")
