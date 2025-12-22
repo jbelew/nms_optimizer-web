@@ -1,3 +1,10 @@
+## [6.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.2...v6.6.3) (2025-12-21)
+
+
+### Bug Fixes
+
+* add error handling improvements and support acknowledgments ([fcecd89](https://github.com/jbelew/nms_optimizer-web/commit/fcecd8949ad58fa7931135e3f326c4051499c32e))
+
 ## [6.6.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.1...v6.6.2) (2025-12-21)
 
 
