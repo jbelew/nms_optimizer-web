@@ -174,41 +174,31 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 			const navigationHtml = generateNavigationLinks(lang, pageName, t);
 
 			// Create a div with the rendered markdown with styling
-			const prerenderedContent = `
-  <script>
-    // Hide splash screen for prerendered pages when JavaScript is enabled
-    (function() {
-      try {
-        const splash = document.getElementById('vpss');
-        if (splash) {
-          splash.style.display = 'none';
-        }
-        document.body.classList.add('background-visible');
-      } catch (e) {
-        console.error('Error hiding splash screen:', e);
-      }
-    })();
-  </script>
-  <style>
-    [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    [data-prerendered-markdown="true"] h1, [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
-    [data-prerendered-markdown="true"] h3 { color: #0ba5e9; margin: 1rem 0 0.75rem 0; font-size: 1rem; font-weight: bold; }
-    [data-prerendered-markdown="true"] p { margin-bottom: 0.5rem; line-height: 1.6; }
-    [data-prerendered-markdown="true"] ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.5rem; }
-    [data-prerendered-markdown="true"] ol { list-style: decimal; margin: 0.5rem 0 0.5rem 1.5rem; }
-    [data-prerendered-markdown="true"] li { margin-bottom: 0.25rem; }
-    [data-prerendered-markdown="true"] a { color: #0ba5e9; text-decoration: underline; }
-    [data-prerendered-markdown="true"] code { background-color: rgba(0, 162, 199, 0.1); padding: 0.125rem 0.25rem; border-radius: 0.25rem; color: #0ba5e9; }
-    [data-prerendered-markdown="true"] blockquote { border-left: 4px solid #0ba5e9; padding-left: 1rem; margin: 0.5rem 0; font-style: italic; color: #cbd5e1; }
-    [data-prerendered-markdown="true"] nav { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(11, 165, 233, 0.3); }
-    [data-prerendered-markdown="true"] nav h2 { font-size: 1rem; margin-bottom: 0.5rem; }
-    [data-prerendered-markdown="true"] nav ul { margin-top: 0.5rem; }
-    [data-prerendered-markdown="true"] nav li[aria-current="page"] a { font-weight: bold; color: #fff; }
-  </style>
-  <div data-prerendered-markdown="true">
-    ${renderedHtml}
-    ${navigationHtml}
-  </div>`;
+			const contentBlock = `
+  <noscript>
+    <style>
+      [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      [data-prerendered-markdown="true"] h1, [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
+      [data-prerendered-markdown="true"] h3 { color: #0ba5e9; margin: 1rem 0 0.75rem 0; font-size: 1rem; font-weight: bold; }
+      [data-prerendered-markdown="true"] p { margin-bottom: 0.5rem; line-height: 1.6; }
+      [data-prerendered-markdown="true"] ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.5rem; }
+      [data-prerendered-markdown="true"] ol { list-style: decimal; margin: 0.5rem 0 0.5rem 1.5rem; }
+      [data-prerendered-markdown="true"] li { margin-bottom: 0.25rem; }
+      [data-prerendered-markdown="true"] a { color: #0ba5e9; text-decoration: underline; }
+      [data-prerendered-markdown="true"] code { background-color: rgba(0, 162, 199, 0.1); padding: 0.125rem 0.25rem; border-radius: 0.25rem; color: #0ba5e9; }
+      [data-prerendered-markdown="true"] blockquote { border-left: 4px solid #0ba5e9; padding-left: 1rem; margin: 0.5rem 0; font-style: italic; color: #cbd5e1; }
+      [data-prerendered-markdown="true"] nav { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(11, 165, 233, 0.3); }
+      [data-prerendered-markdown="true"] nav h2 { font-size: 1rem; margin-bottom: 0.5rem; }
+      [data-prerendered-markdown="true"] nav ul { margin-top: 0.5rem; }
+      [data-prerendered-markdown="true"] nav li[aria-current="page"] a { font-weight: bold; color: #fff; }
+    </style>
+    <div data-prerendered-markdown="true">
+      ${renderedHtml}
+      ${navigationHtml}
+    </div>
+  </noscript>`;
+
+			const prerenderedContent = contentBlock;
 
 			html = html.replace("</body>", `${prerenderedContent}\n</body>`);
 		}
