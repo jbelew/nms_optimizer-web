@@ -621,6 +621,14 @@
 			"changelog": "Changelog",
 			"userstats": "User Statistics",
 			"translation": "Help Translate"
+		},
+		"navDescriptions": {
+			"home": "Use the NMS Optimizer layout calculator",
+			"instructions": "Complete guide for using the app",
+			"about": "How it works and technical details",
+			"changelog": "Latest updates and new features",
+			"userstats": "Popular technologies and builds",
+			"translation": "Contribute to community localization"
 		}
 	},
 	"installPrompt": {

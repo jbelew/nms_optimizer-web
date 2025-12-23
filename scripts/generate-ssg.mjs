@@ -23,6 +23,7 @@ const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
 // Map route names to markdown filenames when they differ
 const PAGE_TO_MARKDOWN_MAPPING = {
 	translation: "translation-request",
+	"": "home",
 };
 
 /**
@@ -76,26 +77,39 @@ function generateSeoTags(pathname, lang, baseUrl) {
 function generateNavigationLinks(lang, currentPage, t) {
 	const langPrefix = lang === "en" ? "" : `/${lang}`;
 	const pages = [
-		{ path: "/", key: "seo.nav.home", desc: "Use the NMS Optimizer layout calculator" },
+		{ path: "/", key: "seo.nav.home", descKey: "seo.navDescriptions.home" },
 		{
 			path: "/instructions",
 			key: "seo.nav.instructions",
-			desc: "Complete guide for using the app",
+			descKey: "seo.navDescriptions.instructions",
 		},
-		{ path: "/about", key: "seo.nav.about", desc: "How it works and technical details" },
-		{ path: "/changelog", key: "seo.nav.changelog", desc: "Latest updates and new features" },
-		{ path: "/userstats", key: "seo.nav.userstats", desc: "Popular technologies and builds" },
+		{
+			path: "/about",
+			key: "seo.nav.about",
+			descKey: "seo.navDescriptions.about",
+		},
+		{
+			path: "/changelog",
+			key: "seo.nav.changelog",
+			descKey: "seo.navDescriptions.changelog",
+		},
+		{
+			path: "/userstats",
+			key: "seo.nav.userstats",
+			descKey: "seo.navDescriptions.userstats",
+		},
 		{
 			path: "/translation",
 			key: "seo.nav.translation",
-			desc: "Contribute to community localization",
+			descKey: "seo.navDescriptions.translation",
 		},
 	];
 
 	const links = pages
-		.map(({ path, key, desc }) => {
+		.map(({ path, key, descKey }) => {
 			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}`;
 			const label = t(key, { defaultValue: path.slice(1) || "Home" });
+			const desc = t(descKey, { defaultValue: "" });
 			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
 			const isCurrent = path === currentPath;
 
@@ -116,14 +130,14 @@ function generateNavigationLinks(lang, currentPage, t) {
  * Generate a page with markdown content
  */
 function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
-	let html = indexHtml;
+	let html = indexHtml.replace(/<html lang="[^"]*">/, `<html lang="${lang}">`);
 	const pathname = pageName === "" ? "/" : `/${pageName}`;
 	const isRootPage = pageName === "";
 
-	// For non-root pages, remove the <main> element since they have markdown content
-	if (!isRootPage) {
-		html = html.replace(/<main[^>]*>[\s\S]*?<\/main>/i, "");
-	}
+	// Remove the <main> element (or noscript wrapper) to inject markdown content for ALL pages
+	html = html.replace(/<noscript>[\s\S]*?<main[\s\S]*?<\/main>[\s\S]*?<\/noscript>/i, "");
+	// Fallback: If no noscript wrapper, just remove main
+	html = html.replace(/<main[^>]*>[\s\S]*?<\/main>/i, "");
 
 	// --- SEO Title & Description Injection ---
 	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];
@@ -148,7 +162,7 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 	html = html.replace("</head>", `  ${seoTags.join("\n  ")}\n</head>`);
 
 	// Read and render markdown content for pre-rendering
-	if (pageName) {
+	if (pageName !== null) {
 		const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
 		const markdownContent = readMarkdownFile(lang, markdownFileName);
 
@@ -176,8 +190,8 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
     })();
   </script>
   <style>
-    [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; }
-    [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
+    [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    [data-prerendered-markdown="true"] h1, [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
     [data-prerendered-markdown="true"] h3 { color: #0ba5e9; margin: 1rem 0 0.75rem 0; font-size: 1rem; font-weight: bold; }
     [data-prerendered-markdown="true"] p { margin-bottom: 0.5rem; line-height: 1.6; }
     [data-prerendered-markdown="true"] ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.5rem; }
