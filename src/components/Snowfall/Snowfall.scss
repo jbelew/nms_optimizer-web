@@ -1,0 +1,51 @@
+@use "sass:math";
+
+.snow-container {
+	height: 100vh;
+	left: 0;
+	overflow: hidden;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	z-index: 0; /* Behind main content but visible over background */
+}
+
+.snowflake {
+	animation: fall linear infinite;
+	background: white;
+	border-radius: 50%;
+	opacity: 0.8;
+	position: absolute;
+	top: -10px;
+}
+
+@keyframes fall {
+	0% {
+		opacity: 0;
+		transform: translateY(-10vh) translateX(0);
+	}
+
+	10% {
+		opacity: 0.8;
+	}
+
+	100% {
+		opacity: 0.3;
+		transform: translateY(110vh) translateX(20px);
+	}
+}
+
+// Randomize snowflakes
+@for $i from 1 through 100 {
+	.snowflake:nth-child(#{$i}) {
+		$size: math.random(3) + 1 + px;
+
+		animation-delay: math.random(20) * -1 + s; // Start immediately with negative delay
+		animation-duration: math.random(15) + 10 + s; // 10-25s duration
+		height: $size;
+		left: math.random(100) * 1%;
+		opacity: math.random(5) * 0.1 + 0.2;
+		width: $size;
+	}
+}
