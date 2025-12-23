@@ -1,3 +1,10 @@
+## [6.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.3...v6.6.4) (2025-12-23)
+
+
+### Bug Fixes
+
+* **i18n:** add localized home page content ([9e85169](https://github.com/jbelew/nms_optimizer-web/commit/9e85169936a7f1f86d8875de023fdf9284087c15))
+
 ## [6.6.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.2...v6.6.3) (2025-12-21)
 
 
