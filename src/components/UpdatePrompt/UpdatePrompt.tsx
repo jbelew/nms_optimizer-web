@@ -30,7 +30,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 					</Button>
 				</Dialog.Close>
 				<Dialog.Close asChild>
-					<Button onClick={onRefresh}>
+					<Button onClick={onRefresh} autoFocus>
 						{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 					</Button>
 				</Dialog.Close>
