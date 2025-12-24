@@ -1,3 +1,10 @@
+## [6.6.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.4...v6.6.5) (2025-12-24)
+
+
+### Bug Fixes
+
+* **UpdatePrompt:** autofocus refresh button in update prompt ([29edcf2](https://github.com/jbelew/nms_optimizer-web/commit/29edcf2fd87da0872af27039cfb5ac9008e359d1))
+
 ## [6.6.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.3...v6.6.4) (2025-12-23)
 
 
