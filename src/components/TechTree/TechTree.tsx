@@ -43,7 +43,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
 	const techTree = techTreeProp || fetchedTechTree;
 
-	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "525px";
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "523px";
 
 	const hasRecommendedBuilds =
 		techTree?.recommended_builds && techTree.recommended_builds.length > 0;
@@ -53,7 +53,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 
 		if (hasRecommendedBuilds) {
 			// Adjust height to account for the RecommendedBuild button
-			return `${baseHeight - 48}px`;
+			return `${baseHeight - 47}px`;
 		}
 
 		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;

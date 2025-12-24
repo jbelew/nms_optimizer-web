@@ -1,8 +1,6 @@
 // MainAppContent component styles
 // Using BEM naming convention: Block__Element--Modifier
 
-@use "../../styles/mixins";
-
 $panel-border: 1px solid var(--gray-6);
 
 // Block: main-app
@@ -38,13 +36,13 @@ $panel-border: 1px solid var(--gray-6);
 		}
 
 		@media (width >= 1024px) {
-			border: $panel-border;
 			border-radius: var(--radius-5);
 
 			/* Frost inset + allow Tailwind shadow */
 			box-shadow:
 				inset 0 0 16px rgb(255 255 255 / 5%),
 				var(--tw-shadow, 0 0 #0000);
+			outline: 1px solid var(--gray-a6);
 		}
 
 		// Tablet: Fill full height (no container padding)
@@ -63,8 +61,8 @@ $panel-border: 1px solid var(--gray-6);
 
 		// Accessibility override: disable background image
 		body.a11y-font & {
-			backdrop-filter: none;
 			@media (width <= 639px) {
+				backdrop-filter: none;
 				background-color: var(--accent-a3);
 
 				&::before {
@@ -112,7 +110,7 @@ $panel-border: 1px solid var(--gray-6);
 
 	// Tech tree sidebar content (ScrollArea)
 	&__tech-tree-sidebar {
-		// border: $panel-border;
+		outline: 1px solid var(--gray-a6);
 		width: 400px;
 	}
 

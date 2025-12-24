@@ -86,7 +86,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					aria-label="Technology Grid"
 					aria-rowcount={gridHeight}
 					aria-colcount={totalAriaColumnCount}
-					className={`gridTable ${solving || isTechTreeLoading ? "opacity-25" : ""}`}
+					className={`gridTable ${solving ? "opacity-25" : ""}`}
 				>
 					{gridRows}
 				</div>
