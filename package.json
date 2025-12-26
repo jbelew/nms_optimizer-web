@@ -152,7 +152,7 @@
 		"supertest": "^7.1.4",
 		"terser": "^5.44.1",
 		"typescript": "~5.9.3",
-		"typescript-eslint": "^8.50.0",
+		"typescript-eslint": "^8.50.1",
 		"vite": "^7.3.0",
 		"vite-plugin-color-scheme": "^0.0.1",
 		"vite-plugin-compression": "^0.5.1",
