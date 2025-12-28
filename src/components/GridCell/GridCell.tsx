@@ -82,6 +82,19 @@ interface GridCellProps {
  * @param {GridCellProps} props - The props for the GridCell component.
  * @returns {JSX.Element} The rendered GridCell component.
  */
+
+/**
+ * Removes content within square brackets [] and parentheses () from a string.
+ *
+ * @param {string|undefined} label - The label to strip.
+ * @returns {string} The stripped label.
+ */
+const stripLabel = (label: string | undefined): string => {
+	if (!label) return "";
+
+	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
+};
+
 const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);
 	// const { t } = useTranslation();
@@ -187,7 +200,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 		]
 	);
 
-	const tooltipContent = cell.label;
+	const tooltipContent = stripLabel(cell.label);
 	// const tooltipContent = cell.image
 	// 	? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
 	// 			defaultValue: cell.label,

@@ -597,7 +597,7 @@
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don't let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
-		"trailsInfo": "In most cases, select no more than <strong>5 Starship Trails</strong>. If you’re experimenting with the Tentacled Figurine for boosted in-atmosphere speed, then select 7.",
+		"trailsInfo": "Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. In most cases, select no more than <strong>five Starship Trails</strong>. If you are experimenting with the Tentacled Figurine to boost in-atmosphere speed, you may select up to <strong>seven</strong>.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
 	},

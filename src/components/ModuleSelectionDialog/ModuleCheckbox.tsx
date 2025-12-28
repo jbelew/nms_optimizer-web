@@ -1,10 +1,35 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import type { Module } from "./index";
 import React from "react";
-import { Avatar, CheckboxGroup, Code } from "@radix-ui/themes";
+import { Avatar, Badge, CheckboxGroup, Code } from "@radix-ui/themes";
 
 const baseImagePath = "/assets/img/grid/";
 const fallbackImage = `${baseImagePath}infra.webp`;
+
+/**
+ * Formats content within parentheses patterns (...) in a Code tag.
+ * Separate function for easier styling experiments.
+ */
+const formatParentheses = (text: string): React.ReactNode => {
+	const pattern = /\([^)]+\)/g;
+	const parts = text.split(pattern);
+	const matches = text.match(pattern) || [];
+
+	if (matches.length === 0) {
+		return text;
+	}
+
+	return parts.map((part, index) => (
+		<React.Fragment key={index}>
+			{part}
+			{matches[index] && (
+				<Badge ml="1" className="hidden sm:inline!">
+					{matches[index].slice(1, -1)}
+				</Badge>
+			)}
+		</React.Fragment>
+	));
+};
 
 /**
  * Formats a label by wrapping [Pn] patterns (where n is a number) in a Code tag.
@@ -15,13 +40,13 @@ const formatLabel = (label: string): React.ReactNode => {
 	const matches = label.match(pattern) || [];
 
 	if (matches.length === 0) {
-		return label;
+		return formatParentheses(label);
 	}
 
 	return parts.map((part, index) => (
 		<React.Fragment key={index}>
-			{part}
-			{matches[index] && <Code>{matches[index]}</Code>}
+			{formatParentheses(part)}
+			{matches[index] && <Code className="inline!">{matches[index]}</Code>}
 		</React.Fragment>
 	));
 };
@@ -67,7 +92,7 @@ const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
 				src={imagePath}
 				color={techColor}
 			/>
-			{formatLabel(module.label)}
+			<span className="flex-1">{formatLabel(module.label)}</span>
 		</label>
 	);
 };

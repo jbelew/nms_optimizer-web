@@ -64,7 +64,8 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		() => ({
 			height: scrollAreaHeight,
 			backgroundColor: "var(--accent-a3)",
-			padding: "var(--space-5)",
+			padding: "var(--space-4)",
+			paddingRight: "var(--space-5)",
 			borderRadius: "var(--radius-5)",
 		}),
 		[scrollAreaHeight]
