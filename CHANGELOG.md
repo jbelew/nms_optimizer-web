@@ -1,3 +1,10 @@
+## [6.6.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.5...v6.6.6) (2025-12-28)
+
+
+### Bug Fixes
+
+* **ui:** clarify module labels and Starship Trails guidance ([8b28b93](https://github.com/jbelew/nms_optimizer-web/commit/8b28b9393cca07e856a389abb29621d58c637845))
+
 ## [6.6.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.4...v6.6.5) (2025-12-24)
 
 
