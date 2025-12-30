@@ -23,7 +23,7 @@ const formatParentheses = (text: string): React.ReactNode => {
 		<React.Fragment key={index}>
 			{part}
 			{matches[index] && (
-				<Badge ml="1" className="hidden font-mono! sm:inline!">
+				<Badge ml="1" className="hidden! font-mono! sm:inline!">
 					{matches[index].slice(1, -1)}
 				</Badge>
 			)}
