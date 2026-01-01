@@ -1,3 +1,10 @@
+## [6.6.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.6...v6.6.7) (2026-01-01)
+
+
+### Performance Improvements
+
+* **loading:** optimize-initial-application-loading-and-refactor-analytics ([69e8d4a](https://github.com/jbelew/nms_optimizer-web/commit/69e8d4a5966de1b8c811cbd56821e22b9800ad43))
+
 ## [6.6.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.5...v6.6.6) (2025-12-28)
 
 
