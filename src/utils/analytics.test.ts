@@ -50,62 +50,74 @@ describe("analytics.ts", () => {
 	// Tests for sendEvent with ad-blocker detection
 	it("should call client-side analytics when tracking is not blocked", async () => {
 		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
-		await sendEvent(testEvent);
+		sendEvent(testEvent);
 
-		// Expect fetch to be called once for ad-blocker detection
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
-		);
+		// waitFor allows the fire-and-forget promise to resolve
+		await vi.waitFor(() => {
+			// Expect fetch to be called once for ad-blocker detection
+			expect(fetch).toHaveBeenCalledTimes(1);
+			expect(fetch).toHaveBeenCalledWith(
+				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
+			);
 
-		// Expect ReactGA.event to be called
-		expect(ReactGA.event).toHaveBeenCalledTimes(1);
-		expect(ReactGA.event).toHaveBeenCalledWith(testEvent.action, {
-			category: testEvent.category,
-			label: testEvent.label,
-			tracking_source: "client",
+			// Expect ReactGA.event to be called
+			expect(ReactGA.event).toHaveBeenCalledTimes(1);
+			expect(ReactGA.event).toHaveBeenCalledWith(testEvent.action, {
+				category: testEvent.category,
+				label: testEvent.label,
+				tracking_source: "client",
+			});
+			expect(sendAnalyticsEvent).not.toHaveBeenCalled();
 		});
-		expect(sendAnalyticsEvent).not.toHaveBeenCalled();
 	});
 
 	it("should call server-side analytics when tracking is blocked", async () => {
 		(fetch as Mock).mockRejectedValue(new Error("Blocked by ad-blocker")); // Mock failed fetch
-		await sendEvent(testEvent);
+		sendEvent(testEvent);
 
-		// Expect fetch to be called once for ad-blocker detection
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
-		);
+		await vi.waitFor(() => {
+			// Expect fetch to be called once for ad-blocker detection
+			expect(fetch).toHaveBeenCalledTimes(1);
+			expect(fetch).toHaveBeenCalledWith(
+				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
+			);
 
-		// Expect sendAnalyticsEvent to be called with user properties
-		expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
-		expect(sendAnalyticsEvent).toHaveBeenCalledWith(testEvent.action, {
-			action: testEvent.action,
-			category: testEvent.category,
-			label: testEvent.label,
-			app_version: expect.any(String),
-			is_installed: expect.any(String),
-			tracking_source: "server",
+			// Expect sendAnalyticsEvent to be called with user properties
+			expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
+			expect(sendAnalyticsEvent).toHaveBeenCalledWith(testEvent.action, {
+				action: testEvent.action,
+				category: testEvent.category,
+				label: testEvent.label,
+				app_version: expect.any(String),
+				is_installed: expect.any(String),
+				tracking_source: "server",
+			});
+			expect(ReactGA.event).not.toHaveBeenCalled();
 		});
-		expect(ReactGA.event).not.toHaveBeenCalled();
 	});
 
 	it("should cache ad-blocker detection result", async () => {
 		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
-		await sendEvent(testEvent); // First call
-		await sendEvent(testEvent); // Second call
+		sendEvent(testEvent); // First call
 
-		// Fetch should only be called once, result is cached
-		expect(fetch).toHaveBeenCalledTimes(1);
-		expect(fetch).toHaveBeenCalledWith(
-			`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-			{ method: "HEAD", mode: "no-cors", cache: "no-store" }
-		);
+		await vi.waitFor(() => {
+			expect(ReactGA.event).toHaveBeenCalledTimes(1);
+		});
 
-		expect(ReactGA.event).toHaveBeenCalledTimes(2);
-		expect(sendAnalyticsEvent).not.toHaveBeenCalled();
+		sendEvent(testEvent); // Second call
+
+		await vi.waitFor(() => {
+			// Fetch should only be called once, result is cached
+			expect(fetch).toHaveBeenCalledTimes(1);
+			expect(fetch).toHaveBeenCalledWith(
+				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
+			);
+
+			expect(ReactGA.event).toHaveBeenCalledTimes(2);
+			expect(sendAnalyticsEvent).not.toHaveBeenCalled();
+		});
 	});
 });

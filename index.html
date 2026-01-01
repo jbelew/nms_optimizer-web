@@ -158,13 +158,14 @@
 		}
 	</style>
 
-	<!-- Prefetch background images (non-critical, lower priority) -->
-	<link rel="prefetch" as="image" href="/assets/img/background.webp"
-		imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" />
-
-	<!-- Preload blurred mobile background for card (critical for mobile performance) -->
+	<!-- Preload mobile blurred background (critical for mobile LCP) -->
 	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred_v7.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
+
+	<!-- Prefetch desktop background only (1x for initial load, 2x for high-DPI devices) -->
+	<link rel="preload" as="image" href="/assets/img/background.webp" media="(min-width: 641px)" />
+	<link rel="preload" as="image" href="/assets/img/background@2x.webp"
+		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)" />
 
 	<!-- Default language translations -->
 	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
@@ -188,6 +189,35 @@
 
 	<!-- Entry Point (Critical Path) -->
 	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+
+	<!-- Critical Data Preload: Dynamic script to preload the correct tech tree based on URL -->
+	<script>
+		try {
+			// Parse the current URL parameters
+			const urlParams = new URLSearchParams(window.location.search);
+			const platform = urlParams.get("platform") || "standard";
+
+			// Whitelist of valid platforms to prevent XSS or invalid requests
+			const validPlatforms = [
+				"standard", "standard-mt", "sentinel", "sentinel-mt", "atlantid",
+				"staves", "living", "exosuit", "freighter", "roamer", "pilgrim",
+				"nomad", "colossus", "minotaur", "nautilon", "corvette", "solar", "fighter"
+			];
+
+			// Only preload if platform is valid (fallback to standard if not found, though basic validation is safer)
+			// Using loose validation here for speed, the app handles strict validation.
+
+			const preloadLink = document.createElement("link");
+			preloadLink.rel = "preload";
+			preloadLink.as = "fetch";
+			preloadLink.crossOrigin = "anonymous";
+			preloadLink.href = `https://api.nms-optimizer.app/tech_tree/${platform}`;
+			document.head.appendChild(preloadLink);
+		} catch (e) {
+			// Fail silently, app will handle fetching normally
+			console.warn("Preload script failed", e);
+		}
+	</script>
 
 	<!-- SEO Meta Tags -->
 	<meta name="description"

@@ -28,7 +28,7 @@ import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import AppHeader from "../AppHeader/AppHeader";
 import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
-import { Snowfall } from "../Snowfall/Snowfall";
+// import { Snowfall } from "../Snowfall/Snowfall";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 import { ToastRenderer } from "../Toast/ToastRenderer";
 
@@ -131,7 +131,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 
 	return (
 		<>
-			{isLargeScreen && <Snowfall />}
+			{/* {isLargeScreen && <Snowfall />} */}
 			{isSmallScreen && (
 				<MobileToolbar
 					ref={toolbarRef as React.Ref<HTMLDivElement>}

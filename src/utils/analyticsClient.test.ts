@@ -74,11 +74,17 @@ describe("analyticsClient", () => {
 		);
 	});
 
-	it("should return false on fetch error", async () => {
+	it("should handle fetch error gracefully", async () => {
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 		const fetchMock = vi.fn().mockRejectedValue(new Error("Network error"));
 		global.fetch = fetchMock;
 
-		const result = await sendEvent("test_event");
-		expect(result).toBe(false);
+		await sendEvent("test_event");
+
+		expect(consoleSpy).toHaveBeenCalledWith(
+			"Analytics event fallback failed:",
+			expect.any(Error)
+		);
+		consoleSpy.mockRestore();
 	});
 });

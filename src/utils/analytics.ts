@@ -141,27 +141,14 @@ export const initializeAnalytics = () => {
 		category: "engagement", // Common category for page views
 		label: document.title,
 		page: window.location.pathname + window.location.search,
-	}).catch((error) => {
-		console.error("Failed to send initial page_view:", error);
 	});
 
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 };
 
-// Detect ad-blocker at module load time and send fallback page_view if needed
-getAdBlockerDetectionResult().then((isBlocked) => {
-	if (isBlocked && !gaInitialized) {
-		sendEvent({
-			action: "page_view",
-			category: "engagement",
-			label: document.title,
-			page: window.location.pathname + window.location.search,
-		}).catch((error) => {
-			console.error("Failed to send ad-blocked page_view:", error);
-		});
-	}
-});
+// Detect ad-blocker is now handled lazily within sendEvent -> getAdBlockerDetectionResult
+// This prevents an immediate network request when the module loads.
 
 /**
  * Validates that an event has required properties.
@@ -187,37 +174,39 @@ const validateEvent = (event: GA4Event): void => {
  * @returns {Promise<void>}
  * @throws {Error} If event validation fails.
  */
-export const sendEvent = async (event: GA4Event): Promise<void> => {
+export const sendEvent = (event: GA4Event): void => {
 	try {
 		validateEvent(event);
 	} catch (validationError) {
 		console.error("Event validation failed:", validationError);
-		throw validationError;
+
+		// throw validationError; // Don't throw, just log and return to avoid crashing
+		return;
 	}
 
-	try {
-		const isBlocked = await getAdBlockerDetectionResult();
-
-		if (isBlocked) {
-			const { action, category, ...params } = event;
-			await sendAnalyticsEvent(action, {
-				...params,
-				category,
-				action,
-				app_version: __APP_VERSION__,
-				is_installed: globalIsInstalled ? "yes" : "no",
-				tracking_source: "server",
-			});
-		} else {
-			const { action, category, ...params } = event;
-			ReactGA.event(action, {
-				...params,
-				category,
-				tracking_source: "client",
-			});
-		}
-	} catch (trackingError) {
-		console.error("Failed to send analytics event:", trackingError);
-		throw trackingError;
-	}
+	// Fire and forget - do not await detection or sending
+	getAdBlockerDetectionResult()
+		.then((isBlocked) => {
+			if (isBlocked) {
+				const { action, category, ...params } = event;
+				sendAnalyticsEvent(action, {
+					...params,
+					category,
+					action,
+					app_version: __APP_VERSION__,
+					is_installed: globalIsInstalled ? "yes" : "no",
+					tracking_source: "server",
+				});
+			} else {
+				const { action, category, ...params } = event;
+				ReactGA.event(action, {
+					...params,
+					category,
+					tracking_source: "client",
+				});
+			}
+		})
+		.catch((trackingError) => {
+			console.error("Failed to send analytics event:", trackingError);
+		});
 };

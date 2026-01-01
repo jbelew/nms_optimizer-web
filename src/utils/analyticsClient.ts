@@ -71,11 +71,11 @@ export const getClientId = (): string => {
  *   max_bonus: 45,
  * });
  */
-export const sendEvent = async (
+export const sendEvent = (
 	eventName: string,
 	params: AnalyticsEventParams = {},
 	userId?: string
-): Promise<boolean> => {
+): void => {
 	try {
 		const payload: AnalyticsEventPayload = {
 			clientId: getClientId(),
@@ -87,25 +87,29 @@ export const sendEvent = async (
 			payload.userId = userId;
 		}
 
-		const response = await fetch(`${API_URL}api/events`, {
+		const blob = new Blob([JSON.stringify(payload)], {
+			type: "application/json",
+		});
+
+		// Use navigator.sendBeacon if available (non-blocking, reliable on unload)
+		if (navigator.sendBeacon) {
+			const success = navigator.sendBeacon(`${API_URL}api/events`, blob);
+			if (success) return;
+		}
+
+		// Fallback to fetch with keepalive if sendBeacon fails or isn't available
+		// Fire and forget - do not await
+		fetch(`${API_URL}api/events`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(payload),
 			keepalive: true,
+		}).catch((error) => {
+			console.error("Analytics event fallback failed:", error);
 		});
-
-		if (!response.ok) {
-			console.error(`Analytics event failed: ${response.status}`);
-
-			return false;
-		}
-
-		return true;
 	} catch (error) {
-		console.error("Error sending analytics event:", error);
-
-		return false;
+		console.error("Error preparing analytics event:", error);
 	}
 };
