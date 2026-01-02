@@ -88,7 +88,7 @@
 		"@semantic-release/github": "^12.0.2",
 		"@storybook/addon-a11y": "^10.1.11",
 		"@storybook/addon-docs": "^10.1.10",
-		"@storybook/addon-vitest": "^10.1.10",
+		"@storybook/addon-vitest": "^10.1.11",
 		"@storybook/react-vite": "^10.1.10",
 		"@tailwindcss/postcss": "^4.1.17",
 		"@tailwindcss/vite": "^4.1.17",
