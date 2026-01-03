@@ -328,7 +328,7 @@ export default defineConfig(({ mode }) => {
 
 							// Additional large libs
 							if (id.includes("recharts") || id.includes("decimal.js") || id.includes("d3-"))
-								return "viz";
+								return "charts";
 
 							if (
 								id.includes("react-markdown") ||
@@ -342,7 +342,7 @@ export default defineConfig(({ mode }) => {
 							if (id.includes("react-router")) return "router";
 
 							// Web Vitals & Analytics
-							if (id.includes("web-vitals") || id.includes("react-ga4")) return "monitoring";
+							if (id.includes("web-vitals") || id.includes("react-ga4")) return "analytics";
 
 							return "vendor";
 						}

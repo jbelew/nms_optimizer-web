@@ -118,6 +118,7 @@ body {
 	font-family: var(--default-font-family);
 	min-height: 100dvh;
 	width: 100dvw;
+	overflow-y: auto;
 
 	/* Mobile: use pre-blurred background image for better performance */
 	/* Apply to body pseudo-element for best stability on iOS */

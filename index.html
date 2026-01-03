@@ -433,8 +433,31 @@
 	<div id="root"></div>
 
 	<!-- Cloudflare Web Analytics -->
-	<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e"}'></script>
+	<script>
+		(function () {
+			function loadBeacon() {
+				const script = document.createElement('script');
+				script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+				script.defer = true;
+				script.setAttribute('data-cf-beacon', '{"token": "614f4aacf3d1446bae6719e156ecc36e"}');
+				document.body.appendChild(script);
+			}
+
+			const run = () => {
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(() => loadBeacon(), { timeout: 5000 });
+				} else {
+					setTimeout(loadBeacon, 2000);
+				}
+			};
+
+			if (document.readyState === 'complete') {
+				setTimeout(run, 1000);
+			} else {
+				window.addEventListener('load', () => setTimeout(run, 1000));
+			}
+		})();
+	</script>
 	<!-- End Cloudflare Web Analytics -->
 </body>
 

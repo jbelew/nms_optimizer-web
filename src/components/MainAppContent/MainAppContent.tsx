@@ -25,18 +25,15 @@ import { useSessionStore } from "../../store/SessionStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
+import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
+import { ShipSelection } from "../ShipSelection/ShipSelection";
 // import { Snowfall } from "../Snowfall/Snowfall";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 import { ToastRenderer } from "../Toast/ToastRenderer";
 
-const AppFooter = lazy(() => import("../AppFooter/AppFooter"));
-
-const ShipSelection = lazy(() =>
-	import("../ShipSelection/ShipSelection").then((m) => ({ default: m.ShipSelection }))
-);
 const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAlertDialog"));
 
