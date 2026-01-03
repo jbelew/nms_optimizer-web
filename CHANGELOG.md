@@ -1,3 +1,10 @@
+## [6.6.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.7...v6.6.8) (2026-01-03)
+
+
+### Performance Improvements
+
+* optimize Initial Page Load Performance ([d55dc10](https://github.com/jbelew/nms_optimizer-web/commit/d55dc10ed4ec0f53f220b7075a86db4bca4439e2))
+
 ## [6.6.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.6...v6.6.7) (2026-01-01)
 
 
