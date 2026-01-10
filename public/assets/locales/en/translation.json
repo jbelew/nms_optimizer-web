@@ -593,7 +593,7 @@
 		"trails": "Starship Trails",
 		"figurines": "Figurines",
 		"title": "{{techName}} SELECTION",
-		"warning": "Default selections for Corvettes are suggestions. Use <strong>Select All</strong> to fully maximize this technology, but keep in mind — you'll usually only have space for <strong>2–3</strong> maxed technologies in your layout.",
+		"warning": "Default Corvette selections are <i>suggestions</i> only. In most cases, traditional upgrade modules provide greater benefit than cosmetics or reactors and should be prioritized. Use <strong>Select All</strong> to fully maximize this technology, but note that most layouts only have space for <strong>2–3</strong> fully maxed technologies.",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don't let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",

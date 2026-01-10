@@ -15,9 +15,8 @@ const config: StorybookConfig = {
     "@storybook/addon-docs"
   ],
   "framework": "@storybook/react-vite",
-  async viteFinal(config, { configType }) {
-    // Skip splash screen plugin during tests
-    if (configType === 'DOCUMENTATION') {
+  async viteFinal(config) {
+    if (process.env.NODE_ENV !== 'test') {
       return mergeConfig(config, {
         plugins: [
           splashScreen({
