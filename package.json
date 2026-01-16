@@ -106,7 +106,7 @@
 		"@vitest/browser": "^4.0.15",
 		"@vitest/browser-playwright": "^4.0.16",
 		"@vitest/coverage-v8": "^4.0.16",
-		"@vitest/ui": "^4.0.16",
+		"@vitest/ui": "^4.0.17",
 		"autoprefixer": "^10.4.21",
 		"babel-plugin-react-compiler": "^19.1.0-rc.3",
 		"commitizen": "^4.3.1",
