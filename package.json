@@ -76,7 +76,7 @@
 		"@chromatic-com/storybook": "^4.1.2",
 		"@commitlint/cli": "^20.3.1",
 		"@commitlint/config-conventional": "^20.3.1",
-		"@elsikora/commitizen-plugin-commitlint-ai": "^2.0.1",
+		"@elsikora/commitizen-plugin-commitlint-ai": "^2.1.1",
 		"@eslint/js": "^9.29.0",
 		"@fullhuman/postcss-purgecss": "^7.0.2",
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.0",
