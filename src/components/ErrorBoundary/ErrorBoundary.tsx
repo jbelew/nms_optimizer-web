@@ -8,6 +8,7 @@ import { handleError } from "./errorHandler";
 
 interface Props {
 	children: ReactNode;
+	fallback?: ReactNode;
 }
 
 interface State {
@@ -54,12 +55,17 @@ class ErrorBoundary extends Component<Props, State> {
 
 	render() {
 		const { hasError, error, errorInfo } = this.state;
+		const { fallback, children } = this.props;
 
 		if (hasError) {
+			if (fallback) {
+				return fallback;
+			}
+
 			return <ErrorContent error={error} errorInfo={errorInfo} variant="page" />;
 		}
 
-		return this.props.children;
+		return children;
 	}
 }
 

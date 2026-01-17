@@ -140,7 +140,7 @@ describe("deserialize", () => {
 		const resultGrid = await deserialize(serializedGrid, mockShipType, mockSetTechColors);
 
 		// Assert
-		expect(apiCall).toHaveBeenCalledWith(`${API_URL}tech_tree/${mockShipType}`, {}, 10000);
+		expect(apiCall).toHaveBeenCalledWith(`${API_URL}/tech_tree/${mockShipType}`, {}, 10000);
 		expect(mockSetTechColors).toHaveBeenCalledWith({
 			shield: "blue",
 		});

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { use, useEffect, useMemo } from "react";
 
 import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
@@ -112,48 +112,7 @@ export interface TechTree {
 	[key: string]: TechTreeItem[] | { grid: Module[][] } | RecommendedBuild[] | undefined;
 }
 
-type Resource<T> = {
-	read: () => T;
-};
-
-/**
- * Creates a resource that can be used with Suspense.
- *
- * @template T
- * @param {Promise<T>} promise - The promise to wrap.
- * @returns {Resource<T>} A resource object with a read method.
- */
-const createResource = <T,>(promise: Promise<T>): Resource<T> => {
-	let status: "pending" | "success" | "error" = "pending";
-	let result: T;
-	let error: Error;
-
-	const suspender = promise
-		.then((res) => {
-			status = "success";
-			result = res;
-		})
-		.catch((err) => {
-			status = "error";
-			error = err;
-		});
-
-	return {
-		read() {
-			if (status === "pending") throw suspender;
-			if (status === "error") throw error;
-
-			return result!;
-		},
-	};
-};
-
-type CacheEntry = {
-	resource: Resource<TechTree>;
-	promise: Promise<TechTree>;
-};
-
-const cache = new Map<string, CacheEntry>();
+const cache = new Map<string, Promise<TechTree>>();
 
 /**
  * Clears the tech tree cache.
@@ -173,7 +132,8 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 	const cacheKey = shipType;
 
 	if (!cache.has(cacheKey)) {
-		const promise = apiCall<TechTree>(`${API_URL}tech_tree/${shipType}`, {}, 10000)
+		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const promise = apiCall<TechTree>(`${baseUrl}tech_tree/${shipType}`, {}, 10000)
 			.then(async (data) => {
 				console.log("Fetched tech tree:", data);
 
@@ -198,36 +158,31 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 			})
 			.catch((error) => {
 				console.error("Error fetching tech tree:", error);
+				// On error, remove from cache so we can retry later
+				cache.delete(cacheKey);
 
 				// Error dialog is already triggered by apiCall
-				// Return empty object to prevent Suspense from throwing
+				// Return empty object to prevent Suspense from throwing if possible, or rethrow
+				// For Suspense/ErrorBoundary, rethrowing is better, but existing logic returned empty object.
+				// Let's keep empty object behavior but maybe we should throw for error boundary?
+				// The previous implementation returned {} to prevent Suspense from throwing.
 				return {} as TechTree;
 			});
 
-		cache.set(cacheKey, {
-			resource: createResource<TechTree>(promise),
-			promise,
-		});
+		cache.set(cacheKey, promise);
 	}
 
-	return cache.get(cacheKey)!.promise;
+	return cache.get(cacheKey)!;
 }
 
 /**
  * Fetches the tech tree for a given ship type.
  *
  * @param {string} [shipType="standard"] - The type of ship to fetch the tech tree for.
- * @returns {Resource<TechTree>} A resource object that can be used with Suspense.
+ * @returns {Promise<TechTree>} A promise that resolves to the tech tree data.
  */
-export function fetchTechTree(shipType: string = "standard"): Resource<TechTree> {
-	const cacheKey = shipType;
-
-	if (!cache.has(cacheKey)) {
-		// Populate cache using the async version
-		fetchTechTreeAsync(cacheKey);
-	}
-
-	return cache.get(cacheKey)!.resource;
+export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
+	return fetchTechTreeAsync(shipType);
 }
 
 /**
@@ -237,7 +192,7 @@ export function fetchTechTree(shipType: string = "standard"): Resource<TechTree>
  * @returns {TechTree} The tech tree data.
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
-	const techTree = fetchTechTree(shipType).read();
+	const techTree = use(fetchTechTree(shipType));
 	const setTechColors = useTechStore((state) => state.setTechColors);
 	const setTechGroups = useTechStore((state) => state.setTechGroups);
 
@@ -327,7 +282,11 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 						return false;
 					});
 				} else {
-					acc[category] = items;
+					acc[category] = items as
+						| TechTreeItem[]
+						| { grid: Module[][] }
+						| RecommendedBuild[]
+						| undefined;
 				}
 
 				return acc;

@@ -1,8 +1,7 @@
 // src/hooks/useUserStats/useUserStats.ts
-import { useEffect, useState } from "react";
+import { use } from "react";
 
-import { API_URL } from "../../constants";
-import { apiCall } from "../../utils/apiCall";
+import { fetchUserStats } from "./userStatsResource";
 
 /**
  * @typedef {object} UserStat
@@ -23,32 +22,8 @@ export type UserStat = {
 /**
  * Custom hook to fetch user statistics from the API.
  *
- * @returns {{data: UserStat[] | null, loading: boolean, error: string | null}}
- *          An object containing the user stats data, loading state, and error state.
+ * @returns {UserStat[]} An array of user stats data.
  */
-export const useUserStats = () => {
-	const [data, setData] = useState<UserStat[] | null>(null);
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const result = await apiCall<UserStat[]>(
-					API_URL + "analytics/popular_data?start_date=28daysAgo&end_date=today",
-					{},
-					10000
-				);
-				setData(result);
-			} catch (error: unknown) {
-				setError((error as Error).message);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchData();
-	}, []);
-
-	return { data, loading, error };
+export const useUserStats = (): UserStat[] => {
+	return use(fetchUserStats());
 };

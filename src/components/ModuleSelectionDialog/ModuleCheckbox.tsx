@@ -35,7 +35,7 @@ const formatParentheses = (text: string): React.ReactNode => {
  * Formats a label by wrapping [Pn] patterns (where n is a number) in a Code tag.
  */
 const formatLabel = (label: string): React.ReactNode => {
-	const pattern = /\[P\d+\]/g;
+	const pattern = /\[.*?\]/g;
 	const parts = label.split(pattern);
 	const matches = label.match(pattern) || [];
 

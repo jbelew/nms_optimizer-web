@@ -24,6 +24,15 @@ vi.mock("@/hooks/useTechTreeColors/useTechTreeColors", () => ({
 	useTechTreeColors: vi.fn(),
 }));
 
+// Mock resources to avoid real calls
+vi.mock("@/hooks/useUserStats/userStatsResource", () => ({
+	fetchUserStats: vi.fn(),
+}));
+
+vi.mock("@/hooks/useTechTreeColors/techTreeColorsResource", () => ({
+	fetchTechTreeColors: vi.fn(),
+}));
+
 // Helper to render component within Dialog context
 const renderWithDialog = (component: React.ReactElement) => {
 	return render(
@@ -33,6 +42,11 @@ const renderWithDialog = (component: React.ReactElement) => {
 	);
 };
 
+// Helper to create a never-resolving promise for Suspense
+const suspend = () => {
+	throw new Promise(() => {});
+};
+
 describe("UserStatsContent", () => {
 	const mockOnClose = vi.fn();
 	const mockUseUserStats = useUserStats as ReturnType<typeof vi.fn>;
@@ -40,16 +54,9 @@ describe("UserStatsContent", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockUseUserStats.mockReturnValue({
-			data: null,
-			loading: false,
-			error: null,
-		});
-		mockUseTechTreeColors.mockReturnValue({
-			techColors: {},
-			loading: false,
-			error: null,
-		});
+		// Default success state
+		mockUseUserStats.mockReturnValue([]);
+		mockUseTechTreeColors.mockReturnValue({});
 	});
 
 	test("should render description text", () => {
@@ -65,65 +72,56 @@ describe("UserStatsContent", () => {
 		expect(closeButton).toBeInTheDocument();
 	});
 
-	test("should show loading state when data is loading", () => {
-		mockUseUserStats.mockReturnValue({
-			data: null,
-			loading: true,
-			error: null,
-		});
+	test("should show loading state when data is loading (suspending)", async () => {
+		// Mock hook to suspend
+		mockUseUserStats.mockImplementation(suspend);
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 
-		// When loading, chart titles should not be visible
+		// Check for skeletons which indicate loading state
+		expect(screen.getByText("Starship Technologies")).toBeInTheDocument(); // Inside Skeleton
+		// Chart titles should NOT be visible yet (they are inside the suspended component)
 		expect(screen.queryByText("dialogs.userStats.starshipChartTitle")).not.toBeInTheDocument();
 	});
 
-	test("should show loading state when colors are loading", () => {
-		mockUseUserStats.mockReturnValue({
-			data: null,
-			loading: true,
-			error: null,
-		});
-		mockUseTechTreeColors.mockReturnValue({
-			techColors: {},
-			loading: true,
-			error: null,
-		});
+	test("should show loading state when colors are loading (suspending)", async () => {
+		mockUseTechTreeColors.mockImplementation(suspend);
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 
-		// When loading, chart titles should not be visible
+		expect(screen.getByText("Starship Technologies")).toBeInTheDocument(); // Inside Skeleton
 		expect(screen.queryByText("dialogs.userStats.starshipChartTitle")).not.toBeInTheDocument();
 	});
 
 	test("should show error message when data fetch fails", () => {
-		mockUseUserStats.mockReturnValue({
-			data: null,
-			loading: false,
-			error: "Failed to fetch data",
+		// Suppress console.error for this test as ErrorBoundary logs it
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+		mockUseUserStats.mockImplementation(() => {
+			throw new Error("Failed to fetch data");
 		});
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 		expect(screen.getByText("dialogs.userStats.error")).toBeInTheDocument();
+
+		consoleSpy.mockRestore();
 	});
 
 	test("should show error message when colors fetch fails", () => {
-		mockUseTechTreeColors.mockReturnValue({
-			techColors: {},
-			loading: false,
-			error: "Failed to fetch colors",
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+		mockUseTechTreeColors.mockImplementation(() => {
+			throw new Error("Failed to fetch colors");
 		});
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 		expect(screen.getByText("dialogs.userStats.error")).toBeInTheDocument();
+
+		consoleSpy.mockRestore();
 	});
 
 	test("should show 'no data for chart' message when data is empty", () => {
-		mockUseUserStats.mockReturnValue({
-			data: [],
-			loading: false,
-			error: null,
-		});
+		mockUseUserStats.mockReturnValue([]);
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 		expect(screen.getAllByText("dialogs.userStats.noDataForChart").length).toBeGreaterThan(0);
@@ -138,56 +136,46 @@ describe("UserStatsContent", () => {
 		expect(mockOnClose).toHaveBeenCalledTimes(1);
 	});
 
-	test("should render chart titles when not loading and no errors", () => {
-		mockUseUserStats.mockReturnValue({
-			data: [
-				{
-					ship_type: "standard",
-					technology: "shield-matrix",
-					supercharged: "true",
-					total_events: 10,
-				},
-			],
-			loading: false,
-			error: null,
-		});
+	test("should render chart titles when not loading and no errors", async () => {
+		mockUseUserStats.mockReturnValue([
+			{
+				ship_type: "standard",
+				technology: "shield-matrix",
+				supercharged: "true",
+				total_events: 10,
+			},
+		]);
+		mockUseTechTreeColors.mockReturnValue({});
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+
 		// When data is present, chart titles should render
-		expect(screen.getByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument();
-	});
+		// Need waitFor because Recharts or internal suspense might cause async rendering?
+		// Actually our mock returns immediately, but Suspense boundaries sometimes bubble up async.
+		// However, with direct return, it should render synchronously unless there is another suspense.
+		// LazyRechartsChart IS a lazy component, so that WILL suspend.
+		// We need to wait for the lazy component to resolve or mock it.
+		// The test didn't mock LazyRechartsChart before, but `lazy(() => import...)` is async.
 
-	test("should render no chart titles when loading", () => {
-		mockUseUserStats.mockReturnValue({
-			data: null,
-			loading: true,
-			error: null,
-		});
-
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
-		// When loading, chart titles should not render (only skeletons)
-		expect(screen.queryByText("dialogs.userStats.starshipChartTitle")).not.toBeInTheDocument();
+		expect(await screen.findByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument();
 	});
 
 	test("should pass isOpen to useTechTreeColors hook", () => {
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		// isOpen is true in renderWithDialog
 		expect(mockUseTechTreeColors).toHaveBeenCalledWith(true);
 	});
 
-	test("should handle tech colors from hook", () => {
+	test("should handle tech colors from hook", async () => {
 		const techColors = {
 			"shield-matrix": "accent-8",
 			"pulse-cannon": "accent-9",
 		};
-		mockUseTechTreeColors.mockReturnValue({
-			techColors,
-			loading: false,
-			error: null,
-		});
+		mockUseTechTreeColors.mockReturnValue(techColors);
+		mockUseUserStats.mockReturnValue([]);
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 
-		// Component should render without errors
 		expect(screen.getByText("dialogs.userStats.description")).toBeInTheDocument();
 	});
 });

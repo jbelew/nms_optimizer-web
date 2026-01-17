@@ -133,7 +133,7 @@ describe("useTechTree utilities", () => {
 		});
 	});
 
-	describe("fetchTechTree resource function", () => {
+	describe("fetchTechTree promise function", () => {
 		const mockTechTree: TechTree = {
 			starship: [
 				{
@@ -147,46 +147,38 @@ describe("useTechTree utilities", () => {
 			],
 		};
 
-		it("should return a resource that can be read", async () => {
+		it("should return a promise", async () => {
 			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			const resource = fetchTechTree("standard");
+			const promise = fetchTechTree("standard");
 
-			expect(resource).toHaveProperty("read");
-			expect(typeof resource.read).toBe("function");
+			expect(promise).toBeInstanceOf(Promise);
 		});
 
-		it("should throw suspender on pending read", async () => {
-			const mockPromise = new Promise(() => {
-				// Never resolves to keep it pending
-			});
-
-			const mockApiCall = vi.fn().mockReturnValue(mockPromise);
-
-			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
-
-			const resource = fetchTechTree("standard");
-
-			expect(() => resource.read()).toThrow();
-		});
-
-		it("should use async function to populate cache", async () => {
+		it("should resolve with tech tree data", async () => {
 			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			const resource = fetchTechTree("standard");
+			const promise = fetchTechTree("standard");
 
-			// Give the promise time to resolve
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			const data = await promise;
+			expect(data).toEqual(mockTechTree);
+		});
 
-			// After resolution, read should return the data
-			expect(() => {
-				const data = resource.read();
-				expect(data).toBeDefined();
-			}).not.toThrow();
+		it("should resolve with data after async operation", async () => {
+			const mockApiCall = vi.fn().mockResolvedValue(mockTechTree);
+
+			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
+
+			const promise = fetchTechTree("standard");
+
+			// Wait for promise to resolve
+			const data = await promise;
+			expect(data).toBeDefined();
+			expect(data).toEqual(mockTechTree);
 		});
 	});
 
@@ -383,8 +375,8 @@ describe("useTechTree utilities", () => {
 		});
 	});
 
-	describe("Resource read behavior", () => {
-		it("should cache resource after resolution", async () => {
+	describe("Promise caching behavior", () => {
+		it("should return cached promise after resolution", async () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
@@ -402,17 +394,14 @@ describe("useTechTree utilities", () => {
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			const resource = fetchTechTree("standard");
+			const promise = fetchTechTree("standard");
 
 			// Wait for promise to resolve
-			await new Promise((resolve) => setTimeout(resolve, 100));
-
-			// Should not throw and should return data
-			const data = resource.read();
+			const data = await promise;
 			expect(data).toEqual(mockTechTree);
 		});
 
-		it("should return same resource for same ship type", async () => {
+		it("should return same promise for same ship type", async () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
@@ -430,13 +419,13 @@ describe("useTechTree utilities", () => {
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			const resource1 = fetchTechTree("standard");
-			const resource2 = fetchTechTree("standard");
+			const promise1 = fetchTechTree("standard");
+			const promise2 = fetchTechTree("standard");
 
-			expect(resource1).toBe(resource2);
+			expect(promise1).toBe(promise2);
 		});
 
-		it("should return different resources for different ship types", async () => {
+		it("should return different promises for different ship types", async () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
@@ -454,10 +443,10 @@ describe("useTechTree utilities", () => {
 
 			vi.mocked(apiCallModule.apiCall).mockImplementation(mockApiCall);
 
-			const resource1 = fetchTechTree("standard");
-			const resource2 = fetchTechTree("explorer");
+			const promise1 = fetchTechTree("standard");
+			const promise2 = fetchTechTree("explorer");
 
-			expect(resource1).not.toBe(resource2);
+			expect(promise1).not.toBe(promise2);
 		});
 	});
 });

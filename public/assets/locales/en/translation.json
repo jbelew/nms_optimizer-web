@@ -593,11 +593,11 @@
 		"trails": "Starship Trails",
 		"figurines": "Figurines",
 		"title": "{{techName}} SELECTION",
-		"warning": "Default Corvette selections are <i>suggestions</i> only. In most cases, traditional upgrade modules provide greater benefit than cosmetics or reactors and should be prioritized. Use <strong>Select All</strong> to fully maximize this technology, but note that most layouts only have space for <strong>2–3</strong> fully maxed technologies.",
+		"warning": "<p>Default Corvette selections are <i>suggestions</i> only. In most cases, traditional upgrade modules provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to fully maximize a given technology; however, most layouts only have space for <strong>3–4</strong> fully maxed technologies.</p>",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don't let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
-		"trailsInfo": "Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. In most cases, select no more than <strong>five Starship Trails</strong>. If you are experimenting with the Tentacled Figurine to boost in-atmosphere speed, you may select up to <strong>seven</strong>.",
+		"trailsInfo": "Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. In most cases, select no more than <strong>five Starship Trails</strong>. If you are experimenting with the Tentacled Figurine to boost in-atmosphere speed, you should select <strong>seven</strong>.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
 	},

@@ -5,7 +5,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import { fetchTechTreeColors } from "@/hooks/useTechTreeColors/techTreeColorsResource";
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
+import { fetchUserStats } from "@/hooks/useUserStats/userStatsResource";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 
 interface PieLabelRenderProps {
@@ -127,31 +130,20 @@ interface UserStatsContentProps {
 	isOpen: boolean;
 }
 
-/**
- * UserStatsContent component displays user statistics related to starship and multi-tool technologies.
- * It fetches data, aggregates it, and renders pie charts.
- *
- * @param {UserStatsContentProps} props - The props for the UserStatsContent component.
- * @returns {JSX.Element} The rendered UserStatsContent component.
- */
-export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
+const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
-	const { data, loading, error } = useUserStats();
-	const { techColors, loading: colorsLoading, error: colorsError } = useTechTreeColors(isOpen);
+
+	// Trigger parallel fetching
+	fetchUserStats();
+	if (isOpen) fetchTechTreeColors();
+
+	const data = useUserStats();
+	const techColors = useTechTreeColors(isOpen);
 
 	const STARSHIP_TYPES = ["standard", "sentinel", "solar"];
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
 	const CORVETTE_TYPES = ["corvette"];
 
-	/**
-	 * Aggregates raw user statistics data for charting.
-	 * Filters data by ship type, corrects technology names, and groups by technology,
-	 * combining less frequent technologies into an "other" category.
-	 *
-	 * @param {UserStat[] | null} rawData - The raw user statistics data.
-	 * @param {string[]} shipTypes - An array of ship types to filter by.
-	 * @returns {{ name: string; value: number }[]} Aggregated data suitable for charting.
-	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
 
@@ -200,13 +192,6 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 		return aboveThreshold;
 	};
 
-	/**
-	 * Renders a pie chart based on the provided data.
-	 *
-	 * @param {{ name: string; value: number }[]} chartData - The data to be displayed in the chart.
-	 * @param {string} titleKey - The translation key for the chart title.
-	 * @returns {JSX.Element} The rendered chart component.
-	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {
 			return <Text>{t("dialogs.userStats.noDataForChart")}</Text>;
@@ -239,44 +224,54 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 	const corvetteData = aggregateData(data, CORVETTE_TYPES);
 
 	return (
+		<Flex direction="column" gap="4">
+			{renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}
+			{renderChart(multitoolData, "dialogs.userStats.multitoolChartTitle")}
+			{renderChart(corvetteData, "dialogs.userStats.corvetteChartTitle")}
+		</Flex>
+	);
+};
+
+export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
+	const { t } = useTranslation();
+
+	return (
 		<>
 			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
 				{t("dialogs.userStats.description")}
 			</Text>
-			<Flex direction="column" gap="4">
-				{(loading || colorsLoading) && (
-					<>
-						<Heading
-							trim="end"
-							as="h2"
-							mb="3"
-							className="text-base! sm:text-lg!"
-							style={{ color: "var(--accent-a11)" }}
-						>
-							<Skeleton>Starship Technologies</Skeleton>
-						</Heading>
-						<Skeleton height="248px" width="100%" />
-						<Heading
-							trim="end"
-							as="h2"
-							mb="3"
-							className="text-base! sm:text-lg!"
-							style={{ color: "var(--accent-a11)" }}
-						>
-							<Skeleton>Multi-tool Technologies</Skeleton>
-						</Heading>
-						<Skeleton height="248px" width="100%" />
-					</>
-				)}
-				{(error || colorsError) && <Text color="red">{t("dialogs.userStats.error")}</Text>}
-				{!(loading || colorsLoading || error || colorsError) && (
-					<>
-						{renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}
-						{renderChart(multitoolData, "dialogs.userStats.multitoolChartTitle")}
-						{renderChart(corvetteData, "dialogs.userStats.corvetteChartTitle")}
-					</>
-				)}
-			</Flex>
+
+			<ErrorBoundary fallback={<Text color="red">{t("dialogs.userStats.error")}</Text>}>
+				<Suspense
+					fallback={
+						<Flex direction="column" gap="4">
+							<Heading
+								trim="end"
+								as="h2"
+								mb="3"
+								className="text-base! sm:text-lg!"
+								style={{ color: "var(--accent-a11)" }}
+							>
+								<Skeleton>Starship Technologies</Skeleton>
+							</Heading>
+							<Skeleton height="248px" width="100%" />
+							<Heading
+								trim="end"
+								as="h2"
+								mb="3"
+								className="text-base! sm:text-lg!"
+								style={{ color: "var(--accent-a11)" }}
+							>
+								<Skeleton>Multi-tool Technologies</Skeleton>
+							</Heading>
+							<Skeleton height="248px" width="100%" />
+						</Flex>
+					}
+				>
+					<UserStatsData isOpen={isOpen} />
+				</Suspense>
+			</ErrorBoundary>
+
 			<Flex gap="2" mt="4" mb="2" justify="end">
 				<Dialog.Close asChild>
 					<Button variant="soft" onClick={onClose}>

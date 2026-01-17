@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { usePlatformStore } from "../../store/PlatformStore";
 import TechTree from "./TechTree";
@@ -68,7 +68,9 @@ const StorybookWrapper = ({
 const withLocalProviders = (Story: React.FC) => (
 	<StorybookWrapper>
 		<div className="p-5">
-			<Story />
+			<React.Suspense fallback={<div>Loading story...</div>}>
+				<Story />
+			</React.Suspense>
 		</div>
 	</StorybookWrapper>
 );

@@ -179,8 +179,7 @@ export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps)
 												style={{ color: "var(--gray-12)" }}
 											>
 												You are viewing a <strong>Shared Build</strong>.
-												This layout is read-only. To create your own layout,
-												click the <strong>Reset Grid</strong> button.
+												This layout is read-only.
 											</span>
 										</Callout.Text>
 									</Callout.Root>

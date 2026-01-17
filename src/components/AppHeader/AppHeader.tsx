@@ -14,7 +14,6 @@ import {
 	Separator,
 	Switch,
 } from "@radix-ui/themes";
-import { Header } from "@radix-ui/themes/components/table";
 import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.webp";
@@ -169,7 +168,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Trigger>
 					<Popover.Content size="1">
 						<DataList.Root size="1">
-							<Header className="nmsFont--header text-base">Euclid</Header>
+							<p className="nmsFont--header text-base">Euclid</p>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">
 									Olamsk Spaceport
@@ -178,14 +177,14 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									<Code>0356:0085:0D17:006C</Code>
 								</DataList.Value>
 							</DataList.Item>
-							<Header className="nmsFont--header text-base">Ityanianat</Header>
+							<p className="nmsFont--header text-base">Ityanianat</p>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
 								<DataList.Value>
 									<Code>0CEE:0085:0CCF:040D</Code>
 								</DataList.Value>
 							</DataList.Item>
-							<Header className="nmsFont--header text-base">Odyalutai</Header>
+							<p className="nmsFont--header text-base">Odyalutai</p>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">
 									Faye Sigma Fishing Resort

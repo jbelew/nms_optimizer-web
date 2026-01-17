@@ -1,26 +1,32 @@
+import type { UserStat } from "./useUserStats";
+import type { ReactNode } from "react";
+import { createElement, Suspense } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import * as apiCallModule from "../../utils/apiCall";
+import { resetUserStatsCache } from "./userStatsResource";
 import { useUserStats } from "./useUserStats";
+
+vi.mock("../../utils/apiCall", () => ({
+	apiCall: vi.fn(),
+}));
+
+const wrapper = ({ children }: { children: ReactNode }) =>
+	createElement(Suspense, { fallback: null }, children);
 
 describe("useUserStats", () => {
 	beforeEach(() => {
-		// Reset mocks before each test
-		vi.resetAllMocks();
+		resetUserStatsCache();
+		vi.clearAllMocks();
 	});
 
-	it("should return initial state correctly", async () => {
-		const { result } = renderHook(() => useUserStats());
-
-		await waitFor(() => {
-			expect(result.current.data).toBeNull();
-			expect(result.current.loading).toBe(true);
-			expect(result.current.error).toBeNull();
-		});
+	afterEach(() => {
+		resetUserStatsCache();
 	});
 
-	it("should fetch data successfully", async () => {
-		const mockData = [
+	it("should call fetchUserStats", () => {
+		const mockData: UserStat[] = [
 			{
 				event_name: "test",
 				ship_type: "test",
@@ -29,47 +35,27 @@ describe("useUserStats", () => {
 				total_events: 1,
 			},
 		];
-		vi.spyOn(global, "fetch").mockResolvedValueOnce({
-			ok: true,
-			json: () => Promise.resolve(mockData),
-		} as Response);
 
-		const { result } = renderHook(() => useUserStats());
+		const mockFetch = vi.fn().mockResolvedValue(mockData);
+		vi.mocked(apiCallModule.apiCall).mockImplementation(mockFetch);
 
-		await waitFor(() => {
-			expect(result.current.loading).toBe(false);
-			expect(result.current.data).toEqual(mockData);
-			expect(result.current.error).toBeNull();
-		});
+		renderHook(() => useUserStats(), { wrapper });
+
+		expect(mockFetch).toHaveBeenCalled();
 	});
 
-	it("should handle API error", async () => {
-		const errorMessage = "HTTP error! status: 500";
-		vi.spyOn(global, "fetch").mockResolvedValueOnce({
-			ok: false,
-			status: 500,
-			statusText: "Internal Server Error",
-		} as Response);
+	it("should call apiCall with correct URL", async () => {
+		const mockData: UserStat[] = [];
+		vi.mocked(apiCallModule.apiCall).mockResolvedValueOnce(mockData);
 
-		const { result } = renderHook(() => useUserStats());
+		renderHook(() => useUserStats(), { wrapper });
 
 		await waitFor(() => {
-			expect(result.current.loading).toBe(false);
-			expect(result.current.data).toBeNull();
-			expect(result.current.error).toBe(errorMessage);
-		});
-	});
-
-	it("should handle network error", async () => {
-		const errorMessage = "Failed to fetch";
-		vi.spyOn(global, "fetch").mockRejectedValueOnce(new Error(errorMessage));
-
-		const { result } = renderHook(() => useUserStats());
-
-		await waitFor(() => {
-			expect(result.current.loading).toBe(false);
-			expect(result.current.data).toBeNull();
-			expect(result.current.error).toBe(errorMessage);
+			expect(apiCallModule.apiCall).toHaveBeenCalledWith(
+				expect.stringContaining("analytics/popular_data"),
+				{},
+				10000
+			);
 		});
 	});
 });
