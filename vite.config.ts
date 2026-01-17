@@ -46,12 +46,12 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			tailwindcss(),
-			splashScreen({
-				logoSrc: "assets/svg/loader.svg",
-				splashBg: "#000000",
-				loaderBg: "#00A2C7",
-				loaderType: "dots",
-			}),
+			// splashScreen({
+			// 	logoSrc: "assets/svg/loader.svg",
+			// 	splashBg: "#000000",
+			// 	loaderBg: "#00A2C7",
+			// 	loaderType: "dots",
+			// }),
 			deferStylesheetsPlugin(),
 			compression({
 				algorithm: "brotliCompress",
@@ -342,7 +342,7 @@ export default defineConfig(({ mode }) => {
 							if (id.includes("react-router")) return "router";
 
 							// Web Vitals & Analytics
-							if (id.includes("web-vitals") || id.includes("react-ga4")) return "analytics";
+							if (id.includes("web-vitals") || id.includes("react-ga4")) return "events";
 
 							return "vendor";
 						}
