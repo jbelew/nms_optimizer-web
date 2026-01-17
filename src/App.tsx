@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react"; // Added useRef
+import { FC, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import { useDialog } from "./context/dialog-utils";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
+import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
@@ -46,6 +47,9 @@ const AppContent: FC = () => {
 		updateSWRef.current = updateSW;
 		setShowUpdatePrompt(true);
 	});
+
+	// Use the URL sync hook at the top level to handle popstate and share-link loading
+	useUrlSync();
 
 	const handleRefresh = () => {
 		if (updateSWRef.current) {

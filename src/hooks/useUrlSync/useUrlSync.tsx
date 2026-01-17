@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "../../context/RouteContext";
-import { useGridStore } from "../../store/GridStore";
+import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
@@ -53,6 +53,14 @@ export const useUrlSync = () => {
 						false,
 						isKnownRoute
 					);
+
+					// --- Bug Fix: Back Navigation Desync ---
+					// If the platform changed via a popstate event (Back/Forward),
+					// and we DON'T have a grid in the URL (it's not a shared link),
+					// we should reset the grid to an empty state for the new platform.
+					if (!gridFromUrl) {
+						useGridStore.getState().setGridAndResetAuxiliaryState(createGrid(10, 6));
+					}
 				} else {
 					console.warn(
 						`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
