@@ -32,9 +32,6 @@ const AppContent: FC = () => {
 	const { closeDialog, shareUrl, activeDialog } = useDialog();
 	useTranslation();
 
-	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
-	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
-
 	const shipTypes = useFetchShipTypesSuspense();
 	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
 	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
@@ -43,25 +40,8 @@ const AppContent: FC = () => {
 		initializePlatform(shipTypeKeys);
 	}, [initializePlatform, shipTypeKeys]);
 
-	useUpdateCheck((updateSW) => {
-		updateSWRef.current = updateSW;
-		setShowUpdatePrompt(true);
-	});
-
 	// Use the URL sync hook at the top level to handle popstate and share-link loading
 	useUrlSync();
-
-	const handleRefresh = () => {
-		if (updateSWRef.current) {
-			updateSWRef.current(true);
-		} else {
-			window.location.reload();
-		}
-	};
-
-	const handleDismissUpdatePrompt = () => {
-		setShowUpdatePrompt(false);
-	};
 
 	// If an API error occurred during loading, don't render the main app
 	if (showError && errorType === "fatal") {
@@ -79,11 +59,6 @@ const AppContent: FC = () => {
 				/>
 			)}
 			{activeDialog && <RoutedDialogs />}
-			<UpdatePrompt
-				isOpen={showUpdatePrompt}
-				onRefresh={handleRefresh}
-				onDismiss={handleDismissUpdatePrompt}
-			/>
 		</>
 	);
 };
@@ -100,6 +75,29 @@ const App: FC = () => {
 	// Use the new custom hooks
 	useSeoAndTitle();
 	useUrlValidation();
+
+	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
+	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
+
+	useUpdateCheck((updateSW) => {
+		updateSWRef.current = updateSW;
+		setShowUpdatePrompt(true);
+	});
+
+	const handleRefresh = () => {
+		if (updateSWRef.current) {
+			updateSWRef.current(true).catch((e) => {
+				console.error("Failed to update SW:", e);
+				window.location.reload();
+			});
+		} else {
+			window.location.reload();
+		}
+	};
+
+	const handleDismissUpdatePrompt = () => {
+		setShowUpdatePrompt(false);
+	};
 
 	useEffect(() => {
 		// Cleanup pre-rendered SSG content
@@ -124,6 +122,12 @@ const App: FC = () => {
 				content={<ErrorContent onClose={() => setShowError(false)} />}
 				titleKey="dialogs.titles.serverError"
 				title={t("dialogs.titles.serverError")}
+			/>
+
+			<UpdatePrompt
+				isOpen={showUpdatePrompt}
+				onRefresh={handleRefresh}
+				onDismiss={handleDismissUpdatePrompt}
 			/>
 		</>
 	);

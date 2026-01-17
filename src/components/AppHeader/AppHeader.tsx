@@ -168,7 +168,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Trigger>
 					<Popover.Content size="1">
 						<DataList.Root size="1">
-							<p className="nmsFont--header text-base">Euclid</p>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont--header text-base">
+									Euclid
+								</DataList.Label>
+							</DataList.Item>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">
 									Olamsk Spaceport
@@ -177,14 +181,22 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									<Code>0356:0085:0D17:006C</Code>
 								</DataList.Value>
 							</DataList.Item>
-							<p className="nmsFont--header text-base">Ityanianat</p>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont--header text-base">
+									Ityanianat
+								</DataList.Label>
+							</DataList.Item>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
 								<DataList.Value>
 									<Code>0CEE:0085:0CCF:040D</Code>
 								</DataList.Value>
 							</DataList.Item>
-							<p className="nmsFont--header text-base">Odyalutai</p>
+							<DataList.Item align="center">
+								<DataList.Label className="nmsFont--header text-base">
+									Odyalutai
+								</DataList.Label>
+							</DataList.Item>
 							<DataList.Item align="center">
 								<DataList.Label className="nmsFont">
 									Faye Sigma Fishing Resort

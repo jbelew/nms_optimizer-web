@@ -85,7 +85,8 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 	const cacheKey = "shipTypes";
 
 	if (!cache.has(cacheKey)) {
-		const promise = apiCall<ShipTypes>(`${API_URL}platforms`, {}, 10000)
+		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const promise = apiCall<ShipTypes>(`${baseUrl}platforms`, {}, 10000)
 			.then((data) => {
 				console.log("Fetched ship types:", data);
 				const shipTypesState = useShipTypesStore.getState();
