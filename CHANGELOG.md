@@ -1,3 +1,10 @@
+## [6.6.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.8...v6.6.9) (2026-01-17)
+
+
+### Bug Fixes
+
+* **url-sync:** fix back navigation grid desync and enable url sync ([7f6ef48](https://github.com/jbelew/nms_optimizer-web/commit/7f6ef480a9e53b5e557034ebb7c3b887e4f5640e))
+
 ## [6.6.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.7...v6.6.8) (2026-01-03)
 
 
