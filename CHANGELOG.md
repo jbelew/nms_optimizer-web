@@ -1,3 +1,10 @@
+## [6.6.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.9...v6.6.10) (2026-01-17)
+
+
+### Bug Fixes
+
+* re-enable splash screen plugin in Vite configuration ([f857b7b](https://github.com/jbelew/nms_optimizer-web/commit/f857b7ba086580e5562dc36483b1dc8c2fa4b22c))
+
 ## [6.6.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.8...v6.6.9) (2026-01-17)
 
 
