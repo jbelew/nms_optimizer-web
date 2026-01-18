@@ -1,3 +1,10 @@
+## [6.6.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.11...v6.6.12) (2026-01-18)
+
+
+### Bug Fixes
+
+* **analytics:** better ad-blocker detection and error handling. ([ae94a14](https://github.com/jbelew/nms_optimizer-web/commit/ae94a14a4f9fe38b4d1efe39f7ebe62642f031a8))
+
 ## [6.6.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.10...v6.6.11) (2026-01-18)
 
 
