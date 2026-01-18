@@ -151,9 +151,12 @@ describe("Caching Headers", () => {
 });
 
 describe("Security Headers", () => {
-	it("should set Content-Security-Policy header", async () => {
+	it("should set Content-Security-Policy header with GTM in img-src", async () => {
 		const response = await request(app).get("/");
-		expect(response.headers["content-security-policy"]).toBeDefined();
+		const csp = response.headers["content-security-policy"];
+		expect(csp).toBeDefined();
+		expect(csp).toContain("img-src");
+		expect(csp).toContain("www.googletagmanager.com");
 	});
 
 	it("should include X-Content-Type-Options header", async () => {
