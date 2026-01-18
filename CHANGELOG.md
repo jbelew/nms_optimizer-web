@@ -1,3 +1,10 @@
+## [6.6.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.12...v6.6.13) (2026-01-18)
+
+
+### Bug Fixes
+
+* **analytics:** correct client ID initialization and page_view timing ([652c752](https://github.com/jbelew/nms_optimizer-web/commit/652c752ef80fdb0a49ab3ce6a8113133b0ef5b72))
+
 ## [6.6.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.11...v6.6.12) (2026-01-18)
 
 
