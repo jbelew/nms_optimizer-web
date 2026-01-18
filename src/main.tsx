@@ -45,9 +45,6 @@ import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-const USE_SERVER_ANALYTICS = import.meta.env.VITE_USE_SERVER_ANALYTICS === "true";
-const DUAL_TRACKING = import.meta.env.VITE_DUAL_ANALYTICS === "true";
-
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
 	// Failsafe: hide splash screen after 8 seconds if still showing
@@ -62,35 +59,13 @@ if (typeof window !== "undefined") {
 	// Use queueMicrotask for faster execution than setTimeout
 	// This ensures it runs after the current task but before the next paint
 	queueMicrotask(() => {
-		// Initialize server-side client if using server analytics or dual tracking
-		if (USE_SERVER_ANALYTICS || DUAL_TRACKING) {
-			initializeAnalyticsClient();
-		}
+		// Initialize server-side client to be ready for fallbacks
+		initializeAnalyticsClient();
 
-		// Initialize client-side ReactGA if NOT using server-side only, or if dual tracking
-		if (!USE_SERVER_ANALYTICS || DUAL_TRACKING) {
-			// Initialize client-side ReactGA with deferred loading
-			const initGA = () => {
-				if ("requestIdleCallback" in window) {
-					requestIdleCallback(() => initializeAnalytics(), { timeout: 10000 });
-				} else {
-					setTimeout(() => initializeAnalytics(), 2000);
-				}
-			};
-
-			if (document.readyState === "complete") {
-				// Page already loaded, delay slightly before initializing
-				setTimeout(initGA, 1000);
-			} else {
-				// Wait for page load event, then delay before initializing
-				const handleLoad = () => {
-					setTimeout(initGA, 1000);
-					window.removeEventListener("load", handleLoad); // Clean up listener
-				};
-
-				window.addEventListener("load", handleLoad);
-			}
-		}
+		// Initialize client-side ReactGA as soon as possible.
+		// The async initializeAnalytics already handles ad-blocker detection
+		// and will fallback to the server-side client if blocked.
+		void initializeAnalytics();
 
 		// Dynamically import and initialize service worker to avoid bundling it with i18n
 		import("./utils/setupServiceWorker").then(({ setupServiceWorkerRegistration }) => {

@@ -40,22 +40,39 @@ let gaInitialized = false;
  * @returns {Promise<boolean>} True if tracking is likely blocked.
  */
 const detectAdBlocker = async (): Promise<boolean> => {
-	try {
-		const url = `https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`;
-		await fetch(url, {
-			method: "HEAD",
-			mode: "no-cors",
-			cache: "no-store",
-		});
+	// Check both GTM (script loading) and GA (collection) domains
+	// Some blockers allow GTM but block the collection endpoint
+	const urls = [
+		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+		"https://www.google-analytics.com/g/collect",
+	];
 
-		if (isDevMode()) {
+	try {
+		// Try to fetch all with a timeout. If ANY fail, tracking is likely blocked.
+		await Promise.all(
+			urls.map((url) => {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+				return fetch(url, {
+					method: "HEAD",
+					mode: "no-cors",
+					cache: "no-store",
+					signal: controller.signal,
+				}).finally(() => clearTimeout(timeoutId));
+			})
+		);
+
+		if (env.isDevMode()) {
 			console.log("No Ad blocker detected. Using client-side analytics.");
 		}
 
 		return false;
 	} catch (_error) {
-		if (isDevMode()) {
-			console.log("Ad blocker detected. Using server-side analytics fallback.");
+		if (env.isDevMode()) {
+			console.log(
+				"Ad blocker detected or network error. Using server-side analytics fallback."
+			);
 		}
 
 		return true;
@@ -82,20 +99,24 @@ const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 };
 
 /**
- * Helper function to check if running in development mode.
- * Exported for testing purposes.
- *
- * @returns {boolean} True if in development mode
+ * Environment check utilities
  */
-export const isDevMode = (): boolean => {
-	// Use typeof check to handle both string and boolean values from import.meta.env
-	const devEnv = import.meta.env.DEV;
+export const env = {
+	/**
+	 * Helper function to check if running in development mode.
+	 *
+	 * @returns {boolean} True if in development mode
+	 */
+	isDevMode: (): boolean => {
+		// Use typeof check to handle both string and boolean values from import.meta.env
+		const devEnv = import.meta.env.DEV;
 
-	if (typeof devEnv === "string") {
-		return devEnv === "true";
-	}
+		if (typeof devEnv === "string") {
+			return devEnv === "true";
+		}
 
-	return devEnv;
+		return devEnv;
+	},
 };
 
 /**
@@ -118,9 +139,22 @@ export const resetAnalyticsForTesting = () => {
 const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
-export const initializeAnalytics = () => {
+export const initializeAnalytics = async () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
-	if (isDevMode() || gaInitialized || /bot|googlebot|crawler|spider/i.test(navigator.userAgent)) {
+	if (
+		env.isDevMode() ||
+		gaInitialized ||
+		/bot|googlebot|crawler|spider/i.test(navigator.userAgent)
+	) {
+		return;
+	}
+
+	const isBlocked = await getAdBlockerDetectionResult();
+
+	if (isBlocked) {
+		// Even if blocked, we mark as initialized so we don't try again
+		gaInitialized = true;
+
 		return;
 	}
 
@@ -145,6 +179,29 @@ export const initializeAnalytics = () => {
 
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
+
+	// Also initialize Cloudflare RUM if not blocked
+	initializeCloudflareRUM();
+};
+
+/**
+ * Initializes Cloudflare Web Analytics (RUM) conditionally.
+ */
+export const initializeCloudflareRUM = () => {
+	// Skip if already loaded or in dev mode
+	if (env.isDevMode() || document.querySelector('script[src*="cloudflareinsights.com"]')) {
+		return;
+	}
+
+	getAdBlockerDetectionResult().then((isBlocked) => {
+		if (isBlocked) return;
+
+		const script = document.createElement("script");
+		script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+		script.defer = true;
+		script.setAttribute("data-cf-beacon", '{"token": "614f4aacf3d1446bae6719e156ecc36e"}');
+		document.body.appendChild(script);
+	});
 };
 
 // Detect ad-blocker is now handled lazily within sendEvent -> getAdBlockerDetectionResult
@@ -210,3 +267,9 @@ export const sendEvent = (event: GA4Event): void => {
 			console.error("Failed to send analytics event:", trackingError);
 		});
 };
+
+// Start detection immediately on module load instead of waiting for the first event or initialization
+// This ensures we have the result ready (or in flight) by the time initializeAnalytics is called.
+if (typeof window !== "undefined") {
+	void getAdBlockerDetectionResult();
+}

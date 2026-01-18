@@ -34,9 +34,14 @@ vi.mock("../../store/PlatformStore");
 vi.mock("../useBreakpoint/useBreakpoint");
 
 // Mock constants
-vi.mock("../../constants", () => ({
-	WS_URL: "ws://mock-ws.com/",
-}));
+vi.mock("../../constants", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("../../constants")>();
+
+	return {
+		...actual,
+		WS_URL: "ws://mock-ws.com/",
+	};
+});
 
 const mockIo = vi.mocked(io);
 const mockUseGridStore = vi.mocked(useGridStore);

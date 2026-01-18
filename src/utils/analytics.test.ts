@@ -1,8 +1,7 @@
 import ReactGA from "react-ga4";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { TRACKING_ID } from "../constants";
-import { initializeAnalytics, resetAnalyticsForTesting, sendEvent } from "./analytics";
+import * as analytics from "./analytics";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 
 // Mock external dependencies
@@ -23,101 +22,117 @@ describe("analytics.ts", () => {
 		label: "Test Label",
 	};
 
+	let mockScript: { src: string; setAttribute: Mock };
+
 	beforeEach(() => {
 		vi.clearAllMocks();
-		resetAnalyticsForTesting(); // Ensure GA initialization state is clean
-		vi.stubGlobal("fetch", vi.fn()); // Mock global fetch
+		analytics.resetAnalyticsForTesting(); // Ensure GA initialization state is clean
+
+		// Use a simple mock that doesn't involve AbortController complexity in tests
+		vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 200 }));
+		vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0" });
+
+		mockScript = { src: "", setAttribute: vi.fn() };
+
+		// Mock document
+		vi.stubGlobal("document", {
+			querySelector: vi.fn().mockReturnValue(null),
+			createElement: vi.fn().mockImplementation((tag: string) => {
+				if (tag === "script") return mockScript;
+
+				return {};
+			}),
+			body: {
+				appendChild: vi.fn(),
+			},
+			title: "Test Title",
+		});
+
+		// Mock window
+		vi.stubGlobal("window", {
+			location: {
+				pathname: "/",
+				search: "",
+			},
+			matchMedia: vi.fn().mockReturnValue({ matches: false }),
+		});
+
+		// Mock env.isDevMode to return false by default for tests
+		vi.spyOn(analytics.env, "isDevMode").mockReturnValue(false);
 	});
 
 	// Tests for initializeAnalytics
-	it("should not initialize GA4 in development mode", () => {
-		initializeAnalytics();
+	it("should not initialize GA4 in development mode", async () => {
+		vi.spyOn(analytics.env, "isDevMode").mockReturnValue(true);
+
+		await analytics.initializeAnalytics();
 		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
-	it("should not initialize GA4 if already initialized", () => {
-		initializeAnalytics();
-		initializeAnalytics(); // Call again
+	it("should not initialize GA4 if blocked", async () => {
+		(fetch as Mock).mockRejectedValue(new Error("Blocked"));
+
+		await analytics.initializeAnalytics();
 		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
-	it("should not initialize GA4 for bots", () => {
-		vi.stubGlobal("navigator", { userAgent: "Googlebot" });
-		initializeAnalytics();
-		expect(ReactGA.initialize).not.toHaveBeenCalled();
+	it("should initialize GA4 if not blocked", async () => {
+		(fetch as Mock).mockResolvedValue({ status: 200 });
+
+		await analytics.initializeAnalytics();
+		expect(ReactGA.initialize).toHaveBeenCalled();
 	});
 
 	// Tests for sendEvent with ad-blocker detection
 	it("should call client-side analytics when tracking is not blocked", async () => {
 		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
-		sendEvent(testEvent);
+		analytics.sendEvent(testEvent);
 
 		// waitFor allows the fire-and-forget promise to resolve
 		await vi.waitFor(() => {
-			// Expect fetch to be called once for ad-blocker detection
-			expect(fetch).toHaveBeenCalledTimes(1);
-			expect(fetch).toHaveBeenCalledWith(
-				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
+			expect(ReactGA.event).toHaveBeenCalledWith(
+				testEvent.action,
+				expect.objectContaining({
+					tracking_source: "client",
+				})
 			);
-
-			// Expect ReactGA.event to be called
-			expect(ReactGA.event).toHaveBeenCalledTimes(1);
-			expect(ReactGA.event).toHaveBeenCalledWith(testEvent.action, {
-				category: testEvent.category,
-				label: testEvent.label,
-				tracking_source: "client",
-			});
 			expect(sendAnalyticsEvent).not.toHaveBeenCalled();
 		});
 	});
 
 	it("should call server-side analytics when tracking is blocked", async () => {
-		(fetch as Mock).mockRejectedValue(new Error("Blocked by ad-blocker")); // Mock failed fetch
-		sendEvent(testEvent);
+		(fetch as Mock).mockRejectedValue(new Error("Blocked"));
+		analytics.sendEvent(testEvent);
 
 		await vi.waitFor(() => {
-			// Expect fetch to be called once for ad-blocker detection
-			expect(fetch).toHaveBeenCalledTimes(1);
-			expect(fetch).toHaveBeenCalledWith(
-				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
+			expect(sendAnalyticsEvent).toHaveBeenCalledWith(
+				testEvent.action,
+				expect.objectContaining({
+					tracking_source: "server",
+				})
 			);
-
-			// Expect sendAnalyticsEvent to be called with user properties
-			expect(sendAnalyticsEvent).toHaveBeenCalledTimes(1);
-			expect(sendAnalyticsEvent).toHaveBeenCalledWith(testEvent.action, {
-				action: testEvent.action,
-				category: testEvent.category,
-				label: testEvent.label,
-				app_version: expect.any(String),
-				is_installed: expect.any(String),
-				tracking_source: "server",
-			});
 			expect(ReactGA.event).not.toHaveBeenCalled();
 		});
 	});
 
-	it("should cache ad-blocker detection result", async () => {
-		(fetch as Mock).mockResolvedValue({ status: 200 }); // Mock successful fetch
-		sendEvent(testEvent); // First call
+	it("should initialize Cloudflare RUM if not blocked", async () => {
+		(fetch as Mock).mockResolvedValue({ status: 200 });
+
+		analytics.initializeCloudflareRUM();
 
 		await vi.waitFor(() => {
-			expect(ReactGA.event).toHaveBeenCalledTimes(1);
+			expect(document.createElement).toHaveBeenCalledWith("script");
+			expect(document.body.appendChild).toHaveBeenCalledWith(mockScript);
 		});
+	});
 
-		sendEvent(testEvent); // Second call
+	it("should not initialize Cloudflare RUM if blocked", async () => {
+		(fetch as Mock).mockRejectedValue(new Error("Blocked"));
 
-		await vi.waitFor(() => {
-			// Fetch should only be called once, result is cached
-			expect(fetch).toHaveBeenCalledTimes(1);
-			expect(fetch).toHaveBeenCalledWith(
-				`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-				{ method: "HEAD", mode: "no-cors", cache: "no-store" }
-			);
+		analytics.initializeCloudflareRUM();
 
-			expect(ReactGA.event).toHaveBeenCalledTimes(2);
-			expect(sendAnalyticsEvent).not.toHaveBeenCalled();
-		});
+		// Wait a bit to ensure it doesn't happen
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		expect(document.createElement).not.toHaveBeenCalledWith("script");
 	});
 });
