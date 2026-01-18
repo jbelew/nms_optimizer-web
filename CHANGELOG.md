@@ -1,3 +1,10 @@
+## [6.6.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.10...v6.6.11) (2026-01-18)
+
+
+### Bug Fixes
+
+* **security:** allow Google Tag Manager in CSP img-src ([6927ef9](https://github.com/jbelew/nms_optimizer-web/commit/6927ef9fc0d865d35a2a621e5e5e501b1ed45d19))
+
 ## [6.6.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.9...v6.6.10) (2026-01-17)
 
 
