@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { seoMetadata } from "../../../shared/seo-metadata.js";
+import { sendEvent } from "../../utils/analytics";
 
 /**
  * Updates a meta tag in the document's head.
@@ -98,5 +99,15 @@ export const useSeoAndTitle = () => {
 		updateMetaPropertyTag("og:url", canonicalUrl);
 
 		document.documentElement.lang = i18n.language;
+
+		// --- Analytics Page View ---
+		// We send this manually here because automatic page views are disabled in analytics.ts
+		// to allow us to control the timing and include the correct document title.
+		sendEvent({
+			action: "page_view",
+			category: "engagement",
+			label: pageTitle,
+			page: location.pathname + location.search,
+		});
 	}, [location.pathname, t, i18n]);
 };

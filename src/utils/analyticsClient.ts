@@ -22,15 +22,41 @@ export interface AnalyticsEventPayload {
 let clientId: string;
 
 /**
+ * Attempts to retrieve the Client ID from the Google Analytics cookie (_ga).
+ * This ensures consistency between client-side (ReactGA) and server-side fallback tracking.
+ *
+ * Cookie format: GA1.1.<clientId>.<timestamp> or GA1.2.<clientId>.<timestamp>
+ * We need to extract: <clientId>.<timestamp>
+ *
+ * @returns {string | null} The extracted Client ID or null if not found.
+ */
+const getGaClientIdFromCookie = (): string | null => {
+	if (typeof document === "undefined") return null;
+
+	const match = document.cookie.match(/(?:^|; )\s*_ga=GA1\.[0-9]+\.([^;]+)/);
+
+	return match ? match[1] : null;
+};
+
+/**
  * Initialize the analytics client with a unique client ID.
  * Stores the client ID in sessionStorage for persistence across page loads.
  *
  * @returns {string} The client ID
  */
 export const initializeAnalyticsClient = (): string => {
+	// 1. Try to get ID from GA cookie (source of truth)
+	const gaId = getGaClientIdFromCookie();
 	const stored = localStorage.getItem("analytics_client_id");
 
-	if (stored) {
+	if (gaId) {
+		// If we have a GA cookie, use it and sync local storage
+		clientId = gaId;
+
+		if (stored !== gaId) {
+			localStorage.setItem("analytics_client_id", gaId);
+		}
+	} else if (stored) {
 		clientId = stored;
 	} else {
 		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;

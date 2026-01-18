@@ -169,14 +169,6 @@ export const initializeAnalytics = async () => {
 		},
 	});
 
-	// Manually send initial page_view to include tracking_source
-	sendEvent({
-		action: "page_view",
-		category: "engagement", // Common category for page views
-		label: document.title,
-		page: window.location.pathname + window.location.search,
-	});
-
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 

@@ -35,6 +35,34 @@ describe("analyticsClient", () => {
 		expect(clientId).toBe(existingId);
 	});
 
+	it("should prioritize GA cookie ID over localStorage", () => {
+		const gaId = "123456.789012";
+		// Mock document.cookie
+		Object.defineProperty(document, "cookie", {
+			writable: true,
+			value: `_ga=GA1.1.${gaId}; other=cookie`,
+		});
+
+		// Pre-set localStorage to something else
+		localStorage.setItem("analytics_client_id", "web_old_id");
+
+		const clientId = initializeAnalyticsClient();
+		expect(clientId).toBe(gaId);
+		expect(localStorage.getItem("analytics_client_id")).toBe(gaId);
+	});
+
+	it("should use GA cookie ID if localStorage is empty", () => {
+		const gaId = "987654.321098";
+		Object.defineProperty(document, "cookie", {
+			writable: true,
+			value: `_ga=GA1.1.${gaId}`,
+		});
+
+		const clientId = initializeAnalyticsClient();
+		expect(clientId).toBe(gaId);
+		expect(localStorage.getItem("analytics_client_id")).toBe(gaId);
+	});
+
 	it("should send event with keepalive: true", async () => {
 		const fetchMock = vi.fn().mockResolvedValue({
 			ok: true,
