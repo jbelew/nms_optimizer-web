@@ -109,5 +109,5 @@ export const useSeoAndTitle = () => {
 			label: pageTitle,
 			page: location.pathname + location.search,
 		});
-	}, [location.pathname, t, i18n]);
+	}, [location.pathname, location.search, t, i18n]);
 };
