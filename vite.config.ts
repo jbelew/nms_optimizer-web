@@ -312,10 +312,17 @@ export default defineConfig(({ mode }) => {
 								return "react";
 							}
 
-							// Radix Themes - Optimized colors and utilities
-							if (id.includes("/assets/css/radix-colors/")) return "radix-colors";
-							if (id.includes("@radix-ui/themes")) return "radix-themes";
-							if (id.includes("@radix-ui/react-")) return "radix-ui";
+							// Radix UI Components & Themes
+							if (
+								id.includes("@radix-ui/") ||
+								id.includes("/assets/css/radix-colors/") ||
+								id.includes("@floating-ui/") ||
+								id.includes("aria-hidden") ||
+								id.includes("react-remove-scroll") ||
+								id.includes("focus-lock")
+							) {
+								return "radix";
+							}
 
 							// i18n
 							if (
@@ -326,25 +333,46 @@ export default defineConfig(({ mode }) => {
 							)
 								return "i18n";
 
-							// Additional large libs
+							// Charts & Data Visualization
 							if (id.includes("recharts") || id.includes("decimal.js") || id.includes("d3-"))
 								return "charts";
 
+							// Markdown Processing (grouped to prevent circular dependencies)
 							if (
 								id.includes("react-markdown") ||
 								id.includes("unified") ||
 								id.includes("micromark") ||
-								id.includes("remark")
+								id.includes("remark") ||
+								id.includes("rehype") ||
+								id.includes("vfile") ||
+								id.includes("unist-") ||
+								id.includes("property-information") ||
+								id.includes("hast-") ||
+								id.includes("mdast-") ||
+								id.includes("ccount") ||
+								id.includes("decode-named-character-reference") ||
+								id.includes("space-separated-tokens") ||
+								id.includes("comma-separated-tokens") ||
+								id.includes("markdown-table") ||
+								id.includes("is-") ||
+								id.includes("character-entities")
 							)
 								return "markdown";
+
+							// Common Utilities to avoid circularity with manual chunks
+							if (
+								id.includes("clsx") ||
+								id.includes("tailwind-merge") ||
+								id.includes("react-is")
+							) {
+								return "react";
+							}
 
 							// Router
 							if (id.includes("react-router")) return "router";
 
 							// Web Vitals & Analytics
 							if (id.includes("web-vitals") || id.includes("react-ga4")) return "events";
-
-							return "vendor";
 						}
 					},
 					assetFileNames: (assetInfo) =>

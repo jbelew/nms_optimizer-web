@@ -97,7 +97,7 @@ const LazyRechartsChart = lazy(async () => {
 										<tspan x={x} dy="-0.4em">
 											{name}
 										</tspan>
-										<tspan x={x} dy="1.2em">
+										<tspan x={x} dy="1.2em" className="tabular-nums">
 											{percent && percent * 100 >= 6
 												? `${(percent * 100).toFixed(0)}%`
 												: ""}

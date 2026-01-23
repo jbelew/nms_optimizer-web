@@ -8,7 +8,6 @@ import AppDialog from "../AppDialog/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/LoremIpsumSkeleton";
 
 const MarkdownContentRenderer = lazy(() => import("../AppDialog/MarkdownContentRenderer"));
-const UserStatsDialog = lazy(() => import("../AppDialog/UserStatsDialog"));
 
 /**
  * RoutedDialogs component manages and renders various application dialogs based on the active dialog state.
@@ -87,10 +86,6 @@ export const RoutedDialogs: FC = () => {
 					</Suspense>
 				}
 			/>
-			{/* Dialog for "User Stats" information */}
-			<Suspense fallback={null}>
-				<UserStatsDialog isOpen={activeDialog === "userstats"} onClose={closeDialog} />
-			</Suspense>
 		</>
 	);
 };

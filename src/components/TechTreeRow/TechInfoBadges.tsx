@@ -84,7 +84,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 				<Dialog.Trigger>
 					<Button
 						mt="1"
-						className="ml-1! align-top font-mono!"
+						className="ml-1! align-top font-mono! tabular-nums"
 						size="1"
 						radius="medium"
 						highContrast={a11yMode}

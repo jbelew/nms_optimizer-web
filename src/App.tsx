@@ -9,6 +9,7 @@ import { useDialog } from "./context/dialog-utils";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
+import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
@@ -24,9 +25,16 @@ const RoutedDialogs = lazy(() =>
 	}))
 );
 
+const UserStatsRoute = lazy(() =>
+	import("./routes/UserStatsRoute").then((module) => ({
+		default: module.UserStatsRoute,
+	}))
+);
+
 /**
  * Inner component that loads ship types with Suspense and error boundary
  */
+
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
 	const { closeDialog, shareUrl, activeDialog } = useDialog();
@@ -58,7 +66,12 @@ const AppContent: FC = () => {
 					onClose={closeDialog}
 				/>
 			)}
-			{activeDialog && <RoutedDialogs />}
+			{activeDialog && activeDialog !== "userstats" && <RoutedDialogs />}
+			{activeDialog === "userstats" && (
+				<Suspense fallback={null}>
+					<UserStatsRoute />
+				</Suspense>
+			)}
 		</>
 	);
 };
@@ -84,6 +97,25 @@ const App: FC = () => {
 		setShowUpdatePrompt(true);
 	});
 
+	// Mount-time operations
+	useEffect(() => {
+		// P0 Optimization: Prefetch tech tree data if platform is in URL
+		// This eliminates the waterfall between fetchShipTypes and tech leaf fetches.
+		const params = new URLSearchParams(window.location.search);
+		const platform = params.get("platform");
+
+		if (platform) {
+			void fetchTechTree(platform);
+		}
+
+		// Cleanup pre-rendered SSG content
+		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
+
+		if (prerendered) {
+			prerendered.remove();
+		}
+	}, []);
+
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
 			updateSWRef.current(true).catch((e) => {
@@ -98,15 +130,6 @@ const App: FC = () => {
 	const handleDismissUpdatePrompt = () => {
 		setShowUpdatePrompt(false);
 	};
-
-	useEffect(() => {
-		// Cleanup pre-rendered SSG content
-		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
-
-		if (prerendered) {
-			prerendered.remove();
-		}
-	}, []);
 
 	return (
 		<>

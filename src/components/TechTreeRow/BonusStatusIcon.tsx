@@ -154,7 +154,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	const trigger = (
 		<button
 			type="button"
-			className="flex cursor-pointer appearance-none border-none bg-transparent p-0 outline-none"
+			className="flex cursor-pointer appearance-none border-none bg-transparent p-0"
 			aria-label={contentData.tooltipContent}
 		>
 			{icon}

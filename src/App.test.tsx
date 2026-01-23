@@ -86,6 +86,7 @@ vi.mock("./hooks/useTechTree/useTechTree", () => ({
 		],
 		recommended_builds: [], // Add recommended_builds to satisfy the interface
 	})),
+	fetchTechTree: vi.fn(() => Promise.resolve({})),
 }));
 
 vi.mock("./components/MainAppContent/MainAppContent", () => ({

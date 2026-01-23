@@ -18,6 +18,10 @@
 	box-sizing: border-box;
 }
 
+.tabular-nums {
+	font-variant-numeric: tabular-nums;
+}
+
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
