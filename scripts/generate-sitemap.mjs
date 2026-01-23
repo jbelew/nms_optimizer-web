@@ -12,7 +12,7 @@ const baseUrl = `https://${TARGET_HOST}`;
 
 /** Mapping of route names to their source files for lastmod calculation */
 const PAGE_TO_FILE_MAPPING = {
-	about: "src/assets/locales/en/about.md",
+	about: "public/assets/locales/en/about.md",
 	changelog: "public/assets/locales/en/changelog.md",
 	instructions: "public/assets/locales/en/instructions.md",
 	translation: "public/assets/locales/en/translation-request.md",

@@ -602,12 +602,12 @@
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
-		"appDescription": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots to create the ultimate NMS builds.",
+		"mainPageTitle": "NMS Optimizer | Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky",
+		"appDescription": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
 		"instructionsPageTitle": "How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
 		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
-		"aboutPageTitle": "About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
-		"aboutDescription": "NMS Optimizer is a free tool that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
+		"aboutPageTitle": "How NMS Optimizer Works | Machine Learning & Advanced Optimization for No Man's Sky",
+		"aboutDescription": "Learn how NMS Optimizer uses machine learning and advanced algorithms to find the absolute best module placement for your Starship, Corvette, and Multitool layouts.",
 		"changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
 		"changelogDescription": "See the latest updates, new features, and bug fixes for the NMS Optimizer. Stay up-to-date with the development of the best No Man's Sky layout tool.",
 		"userstatsPageTitle": "User Statistics & Popular Layouts | NMS Optimizer",
