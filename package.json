@@ -146,7 +146,7 @@
 		"stylelint": "^16.25.0",
 		"stylelint-config-prettier-scss": "^1.0.0",
 		"stylelint-config-standard": "^40.0.0",
-		"stylelint-config-standard-scss": "^16.0.0",
+		"stylelint-config-standard-scss": "^17.0.0",
 		"stylelint-order": "^7.0.1",
 		"stylelint-selector-bem-pattern": "^4.0.1",
 		"supertest": "^7.2.2",
