@@ -131,7 +131,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Flex>
 			)}
 
-			<h1 className="app-header__logo-text">NO MAN&rsquo;S SKY</h1>
+			<h1 className="app-header__logo-text">NO MAN'S SKY</h1>
 
 			<Flex
 				align="center"

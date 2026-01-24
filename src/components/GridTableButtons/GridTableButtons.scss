@@ -25,16 +25,26 @@
 }
 
 .button--glow {
-	animation: buttonGlow 0.5s infinite alternate ease-in-out;
+	position: relative;
+
+	&::before {
+		animation: glowPulse 0.5s infinite alternate ease-in-out;
+		border-radius: inherit;
+		inset: -2px;
+		box-shadow: 0 0 8px var(--accent-track);
+		content: "";
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+	}
 }
 
-@keyframes buttonGlow {
+@keyframes glowPulse {
 	from {
-		/* Only animate filter - doesn't trigger layout */
-		filter: drop-shadow(0 0 2px var(--accent-a0));
+		opacity: 0;
 	}
 
 	to {
-		filter: drop-shadow(0 0 4px var(--accent-track));
+		opacity: 1;
 	}
 }

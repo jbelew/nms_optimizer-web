@@ -303,12 +303,32 @@ export default defineConfig(({ mode }) => {
 			cssCodeSplit: true,
 			sourcemap: false,
 			cssMinify: "lightningcss",
+			modulePreload: {
+				// Filter function to control which chunks get modulepreload links
+				// Exclude charts chunk to prevent eager loading of recharts
+				resolveDependencies: (filename, deps, { hostId, hostType }) => {
+					return deps.filter((dep) => !dep.includes("charts"));
+				},
+			},
 			rollupOptions: {
 				output: {
 					manualChunks(id) {
 						if (id.includes("node_modules")) {
 							// Chunk React and its dependencies
 							if (/[\/]node_modules[\/](react|react-dom|scheduler)[\/]/.test(id)) {
+								return "react";
+							}
+
+							// Common Utilities to avoid circularity with manual chunks
+							// Handle these BEFORE specific rules like charts
+							if (
+								id.includes("clsx") ||
+								id.includes("tailwind-merge") ||
+								id.includes("react-is") ||
+								id.includes("immer") ||
+								id.includes("tiny-invariant") ||
+								id.includes("use-sync-external-store")
+							) {
 								return "react";
 							}
 
@@ -358,15 +378,6 @@ export default defineConfig(({ mode }) => {
 								id.includes("character-entities")
 							)
 								return "markdown";
-
-							// Common Utilities to avoid circularity with manual chunks
-							if (
-								id.includes("clsx") ||
-								id.includes("tailwind-merge") ||
-								id.includes("react-is")
-							) {
-								return "react";
-							}
 
 							// Router
 							if (id.includes("react-router")) return "router";

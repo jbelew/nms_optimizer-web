@@ -134,10 +134,8 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 	const pathname = pageName === "" ? "/" : `/${pageName}`;
 	const isRootPage = pageName === "";
 
-	// Remove the <main> element (or noscript wrapper) to inject markdown content for ALL pages
-	html = html.replace(/<noscript>[\s\S]*?<main[\s\S]*?<\/main>[\s\S]*?<\/noscript>/i, "");
-	// Fallback: If no noscript wrapper, just remove main
-	html = html.replace(/<main[^>]*>[\s\S]*?<\/main>/i, "");
+	// Remove ALL noscript blocks from the template (there might be multiple)
+	html = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, "");
 
 	// --- SEO Title & Description Injection ---
 	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];
@@ -173,9 +171,8 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 			// Generate navigation links
 			const navigationHtml = generateNavigationLinks(lang, pageName, t);
 
-			// Create a div with the rendered markdown with styling
-			const contentBlock = `
-  <noscript>
+			// Create a noscript block with the rendered markdown
+			const contentBlock = `<noscript>
     <style>
       [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
       [data-prerendered-markdown="true"] h1, [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
@@ -198,9 +195,8 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
     </div>
   </noscript>`;
 
-			const prerenderedContent = contentBlock;
-
-			html = html.replace("</body>", `${prerenderedContent}\n</body>`);
+			// Insert the noscript block before closing body tag
+			html = html.replace("</body>", `${contentBlock}\n</body>`);
 		}
 	}
 

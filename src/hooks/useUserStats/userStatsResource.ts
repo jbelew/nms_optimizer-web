@@ -1,6 +1,7 @@
+import type { UserStat } from "./useUserStats";
+
 import { API_URL } from "../../constants";
 import { apiCall } from "../../utils/apiCall";
-import { UserStat } from "./useUserStats";
 
 let userStatsPromise: Promise<UserStat[]> | null = null;
 
