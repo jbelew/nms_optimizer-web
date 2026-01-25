@@ -1,7 +1,7 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useTransition } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
 import {
 	Box,
@@ -48,6 +48,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const [, startTransition] = useTransition();
 
 	useEffect(() => {
 		if (a11yMode) {
@@ -82,13 +83,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							variant="soft"
 							aria-label={t("buttons.changelog") ?? ""}
 							onClick={() => {
-								sendEvent({
-									category: "ui",
-									action: "show_changelog",
-									value: 1,
-									nonInteraction: false,
-								});
 								onShowChangelog();
+								startTransition(() => {
+									sendEvent({
+										category: "ui",
+										action: "show_changelog",
+										value: 1,
+										nonInteraction: false,
+									});
+								});
 							}}
 						>
 							<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -100,13 +103,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							variant="soft"
 							aria-label={t("buttons.userStats") ?? ""}
 							onClick={() => {
-								sendEvent({
-									category: "ui",
-									action: "show_user_stats",
-									value: 1,
-									nonInteraction: false,
-								});
 								openDialog("userstats");
+								startTransition(() => {
+									sendEvent({
+										category: "ui",
+										action: "show_user_stats",
+										value: 1,
+										nonInteraction: false,
+									});
+								});
 							}}
 						>
 							<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -149,11 +154,13 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							className="app-header__logo-button"
 							aria-label="Show easter egg coordinates"
 							onClick={() => {
-								sendEvent({
-									category: "ui",
-									action: "found_secret",
-									value: 1,
-									nonInteraction: false,
+								startTransition(() => {
+									sendEvent({
+										category: "ui",
+										action: "found_secret",
+										value: 1,
+										nonInteraction: false,
+									});
 								});
 							}}
 						>

@@ -1,7 +1,7 @@
 // src/components/LanguageSelector/LanguageSelector.tsx
 import "./LanguageSelector.scss";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useTransition } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -46,6 +46,7 @@ const LanguageSelector: React.FC = () => {
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
 	const { sendEvent } = useAnalytics();
 	const { clearErrors } = useErrorStore();
+	const [, startTransition] = useTransition();
 
 	const supportedLanguages = useMemo(() => {
 		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
@@ -82,8 +83,8 @@ const LanguageSelector: React.FC = () => {
 		const newPath =
 			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
 
-		// Defer non-critical work to avoid blocking main thread
-		setTimeout(() => {
+		// Use startTransition to keep dropdown responsive while handling heavy updates
+		startTransition(() => {
 			void i18n.changeLanguage(newLang);
 			navigate(newPath + window.location.search);
 
@@ -94,7 +95,7 @@ const LanguageSelector: React.FC = () => {
 				value: 1,
 				nonInteraction: false,
 			});
-		}, 0);
+		});
 	};
 
 	/**

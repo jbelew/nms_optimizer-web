@@ -99,17 +99,13 @@ export const useGridCellInteraction = (
 				}
 
 				triggerShake();
-				setTimeout(() => {
-					startTransition(() => {
-						revertCellTap(rowIndex, columnIndex);
-					});
-				}, 0);
+				startTransition(() => {
+					revertCellTap(rowIndex, columnIndex);
+				});
 			} else {
-				setTimeout(() => {
-					startTransition(() => {
-						handleCellDoubleTap(rowIndex, columnIndex);
-					});
-				}, 0);
+				startTransition(() => {
+					handleCellDoubleTap(rowIndex, columnIndex);
+				});
 			}
 		} else {
 			// Single tap or tap on a different cell
@@ -124,17 +120,13 @@ export const useGridCellInteraction = (
 				}
 
 				triggerShake();
-				setTimeout(() => {
-					startTransition(() => {
-						clearInitialCellStateForTap();
-					});
-				}, 0);
+				startTransition(() => {
+					clearInitialCellStateForTap();
+				});
 			} else {
-				setTimeout(() => {
-					startTransition(() => {
-						handleCellTap(rowIndex, columnIndex);
-					});
-				}, 0);
+				startTransition(() => {
+					handleCellTap(rowIndex, columnIndex);
+				});
 			}
 		}
 	}, [
@@ -256,11 +248,9 @@ export const useGridCellInteraction = (
 
 					triggerShake();
 				} else {
-					setTimeout(() => {
-						startTransition(() => {
-							toggleCellActive(rowIndex, columnIndex);
-						});
-					}, 0);
+					startTransition(() => {
+						toggleCellActive(rowIndex, columnIndex);
+					});
 				}
 			} else {
 				// Normal Click: Toggle Supercharged
@@ -282,11 +272,9 @@ export const useGridCellInteraction = (
 
 					triggerShake();
 				} else {
-					setTimeout(() => {
-						startTransition(() => {
-							toggleCellSupercharged(rowIndex, columnIndex);
-						});
-					}, 0);
+					startTransition(() => {
+						toggleCellSupercharged(rowIndex, columnIndex);
+					});
 				}
 			}
 		},

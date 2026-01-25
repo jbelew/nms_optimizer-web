@@ -36,13 +36,19 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const { updateUrlForShare } = useUrlSync();
 		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 		const [isSharePending, startShareTransition] = useTransition();
+		const [, startTransition] = useTransition();
 
 		const handleShareClick = useCallback(() => {
 			startShareTransition(() => {
 				const shareUrl = updateUrlForShare();
 				openDialog(null, { shareUrl });
+				sendEvent({
+					category: "ui",
+					action: "share_link",
+					value: 1,
+					nonInteraction: false,
+				});
 			});
-			sendEvent({ category: "ui", action: "share_link", value: 1, nonInteraction: false });
 		}, [updateUrlForShare, openDialog, sendEvent]);
 
 		return (
@@ -102,13 +108,15 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						size="2"
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_changelog",
-								value: 1,
-								nonInteraction: false,
-							});
 							onShowChangelog();
+							startTransition(() => {
+								sendEvent({
+									category: "ui",
+									action: "show_changelog",
+									value: 1,
+									nonInteraction: false,
+								});
+							});
 						}}
 					>
 						<CounterClockwiseClockIcon className="h-4 w-4" />
@@ -119,13 +127,15 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						size="2"
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
-							sendEvent({
-								category: "ui",
-								action: "show_user_stats",
-								value: 1,
-								nonInteraction: false,
-							});
 							openDialog("userstats");
+							startTransition(() => {
+								sendEvent({
+									category: "ui",
+									action: "show_user_stats",
+									value: 1,
+									nonInteraction: false,
+								});
+							});
 						}}
 					>
 						<PieChartIcon className="h-4 w-4" />
