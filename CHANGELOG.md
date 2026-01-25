@@ -1,3 +1,10 @@
+## [6.6.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.13...v6.6.14) (2026-01-25)
+
+
+### Performance Improvements
+
+* **analytics:** defer analytics events to improve ui responsiveness ([4f3ffcf](https://github.com/jbelew/nms_optimizer-web/commit/4f3ffcfeb12d2f6ae317e820f669ac22f02e3e3a))
+
 ## [6.6.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.12...v6.6.13) (2026-01-18)
 
 
