@@ -7,14 +7,6 @@
 
 > 💡 **Note:** Exosuits and Exocraft have fixed grid configurations. Exocraft cells cannot be modified at all. On Exosuits, you can only toggle cells active or inactive; changing the supercharged layout is not supported.
 
-## Saving, Loading, and Sharing Builds
-
-You can save your optimized layouts, reload them later, or share them with friends, making it easy to manage multiple configurations for the same platform.
-
-- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool also auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"`, which you can customize.
-- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
-- **Share Build** — Click the share icon to generate a shareable link for your current layout. Friends can use this link to load your build directly into their optimizer without needing the file.
-
 ## Before You Begin
 
 This tool is designed for **endgame players** optimizing their platform's technology layout for maximum efficiency. It works best when:
@@ -24,6 +16,14 @@ This tool is designed for **endgame players** optimizing their platform's techno
 - You own a **full set of three upgrade modules** per applicable technology.
 
 If you're still unlocking cells or collecting modules, the tool can still provide insights — but it's primarily designed for **fully upgraded platforms**.
+
+## Saving, Loading, and Sharing Builds
+
+You can save your optimized layouts, reload them later, or share them with friends, making it easy to manage multiple configurations for the same platform.
+
+- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool also auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"`, which you can customize.
+- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
+- **Share Build** — Click the share icon to generate a shareable link for your current layout. Friends can use this link to load your build directly into their optimizer without needing the file.
 
 ## Information on Corvettes
 
