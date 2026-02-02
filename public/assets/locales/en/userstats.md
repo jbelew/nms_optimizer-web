@@ -1,3 +1,5 @@
+# NMS Optimizer Stats: Most Popular Technology Layouts
+
 ## User Statistics & Popular Layouts
 
 This page aggregates data from NMS Optimizer users to reveal the most frequently supercharged technologies across different platforms. Whether you're planning your next build or looking for inspiration, these statistics showcase real community preferences and patterns.

@@ -1,3 +1,5 @@
+# NMS Optimizer Guía: Bono de Adyacencia & Optimización de Diseños
+
 ## Uso básico
 
 - **Haga clic o toque** el ícono ⚙️ para seleccionar su **Plataforma** (naves espaciales, multiherramientas, corbetas, etc.).

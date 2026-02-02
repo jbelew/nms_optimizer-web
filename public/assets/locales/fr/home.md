@@ -1,4 +1,4 @@
-# NMS Optimizer : Le meilleur calculateur gratuit pour les configurations technologiques de No Man's Sky
+# NMS Optimizer: Meilleurs Agencements & Calculateur d'Adjacence
 
 ![Capture d'écran de l'application NMS Optimizer](/assets/img/screenshots/screenshot.png)
 

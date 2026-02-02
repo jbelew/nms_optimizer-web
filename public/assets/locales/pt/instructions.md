@@ -1,3 +1,5 @@
+# NMS Optimizer Guia: Bônus de Adjacência & Otimização de Layouts
+
 ## Uso Básico
 
 - **Clique ou toque** no ícone ⚙️ para selecionar sua **Plataforma** (Naves Estelares, Multiferramentas, Corvetas, etc.).

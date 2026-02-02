@@ -175,7 +175,8 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 			const contentBlock = `<noscript>
     <style>
       [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      [data-prerendered-markdown="true"] h1, [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
+      [data-prerendered-markdown="true"] h1 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.5rem; font-weight: bold; }
+      [data-prerendered-markdown="true"] h2 { color: #0ba5e9; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
       [data-prerendered-markdown="true"] h3 { color: #0ba5e9; margin: 1rem 0 0.75rem 0; font-size: 1rem; font-weight: bold; }
       [data-prerendered-markdown="true"] p { margin-bottom: 0.5rem; line-height: 1.6; }
       [data-prerendered-markdown="true"] ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.5rem; }

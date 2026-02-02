@@ -602,17 +602,17 @@
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer | Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky",
+		"mainPageTitle": "NMS Optimizer: Best Tech Layouts & Adjacency Bonus Calculator",
 		"appDescription": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
-		"instructionsPageTitle": "How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
+		"instructionsPageTitle": "NMS Optimizer Guide: Adjacency Bonus & Layout Optimization",
 		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
-		"aboutPageTitle": "How NMS Optimizer Works | Machine Learning & Advanced Optimization for No Man's Sky",
+		"aboutPageTitle": "How NMS Optimizer Works: ML-Powered Tech Layout Optimization",
 		"aboutDescription": "Learn how NMS Optimizer uses machine learning and advanced algorithms to find the absolute best module placement for your Starship, Corvette, and Multitool layouts.",
-		"changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
+		"changelogPageTitle": "NMS Optimizer Updates: Latest Features & Improvements",
 		"changelogDescription": "See the latest updates, new features, and bug fixes for the NMS Optimizer. Stay up-to-date with the development of the best No Man's Sky layout tool.",
-		"userstatsPageTitle": "User Statistics & Popular Layouts | NMS Optimizer",
+		"userstatsPageTitle": "NMS Optimizer Stats: Most Popular Technology Layouts",
 		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man's Sky technologies across all platform types.",
-		"translationPageTitle": "Help Translate NMS Optimizer | Community Localization",
+		"translationPageTitle": "Translate NMS Optimizer: Help Localize the App",
 		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man's Sky players worldwide.",
 		"nav": {
 			"home": "Home",

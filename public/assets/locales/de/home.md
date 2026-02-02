@@ -1,4 +1,4 @@
-# NMS Optimizer: Der beste kostenlose Rechner für No Man's Sky Technologie-Layouts
+# NMS Optimizer: Beste Tech-Layouts & Adjazenz-Rechner
 
 ![Screenshot der NMS Optimizer Anwendung](/assets/img/screenshots/screenshot.png)
 

@@ -1,3 +1,5 @@
+# Como Funciona NMS Optimizer: Otimização de Layouts com ML
+
 ## O que é o Otimizador NMS?
 
 Pare de confiar em suposições! O **NMS Optimizer** é a **calculadora**, **planejadora** e **construtor** definitiva, gratuita e baseada na Web para jogadores de **No Man's Sky** que desejam desbloquear o potencial máximo absoluto de seus equipamentos.

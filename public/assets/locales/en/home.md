@@ -1,4 +1,4 @@
-# NMS Optimizer: The Best Free Calculator for No Man's Sky Tech Layouts
+# NMS Optimizer: Best Tech Layouts & Adjacency Bonus Calculator
 
 ![Screenshot of NMS Optimizer application](/assets/img/screenshots/screenshot.png)
 

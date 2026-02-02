@@ -602,17 +602,17 @@
         "cancelButton": "Cancelar"
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer | Constructor de Diseños Tecnológicos para No Man's Sky",
+        "mainPageTitle": "NMS Optimizer: Mejores Diseños Tecnológicos & Calculadora de Adyacencia",
         "appDescription": "El mejor calculador y optimizador de diseño de No Man's Sky. Encuentre colocaciones tecnológicas óptimas con los máximos bonos de adyacencia para naves estelares, corbetas, multiherramientas, exocrafts y exotrajes. Herramienta gratuita con optimización de ranuras sobrecargadas.",
-        "instructionsPageTitle": "Cómo Usar el Optimizador NMS | Guía de Bonificaciones por Adyacencia",
+        "instructionsPageTitle": "NMS Optimizer Guía: Bono de Adyacencia & Optimización de Diseños",
         "instructionsDescription": "Instrucciones completas para usar la aplicación NMS Optimizer. Aprenda a seleccionar plataformas, marcar ranuras sobrecargadas, optimizar diseños y maximizar los bonos de adyacencia para naves estelares, corbetas, multiherramientas y más.",
-        "aboutPageTitle": "Sobre el Optimizador NMS | Calculadora gratuita de diseños tecnológicos para No Man's Sky",
+        "aboutPageTitle": "Cómo Funciona NMS Optimizer: Optimización de Diseños Tecnológicos con ML",
         "aboutDescription": "NMS Optimizer es una herramienta gratuita que encuentra los mejores diseños de tecnología para No Man's Sky. Utiliza algoritmos de optimización avanzados para maximizar los bonos de adyacencia para tu nave estelar, corbeta, multiherramienta, exocraft y exotraje.",
-        "changelogPageTitle": "Registro de cambios del Optimizador NMS | Últimas actualizaciones y funciones",
+        "changelogPageTitle": "NMS Optimizer Actualizaciones: Últimas Características y Mejoras",
         "changelogDescription": "Consulta las últimas actualizaciones, nuevas funciones y correcciones de errores del Optimizador NMS. Mantente al día con el desarrollo de la mejor herramienta de diseño para No Man's Sky.",
-        "userstatsPageTitle": "Estadísticas de Usuario y Diseños Populares | NMS Optimizer",
+        "userstatsPageTitle": "NMS Optimizer Estadísticas: Diseños Tecnológicos Más Populares",
         "userstatsDescription": "Explora las estadísticas de usuario del NMS Optimizer para ver las tecnologías de No Man's Sky más populares en todos los tipos de plataforma.",
-        "translationPageTitle": "Ayuda a Traducir NMS Optimizer | Localización Comunitaria",
+        "translationPageTitle": "Traducir NMS Optimizer: Ayuda a Localizar la Aplicación",
         "translationDescription": "Ayuda a traducir el NMS Optimizer a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo.",
         "nav": {
             "home": "Inicio",

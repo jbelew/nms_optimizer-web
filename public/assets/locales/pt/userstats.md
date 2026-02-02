@@ -1,3 +1,5 @@
+# NMS Optimizer Estatísticas: Layouts Tecnológicos Mais Populares
+
 ## Estatísticas de Usuários e Builds Populares
 
 Esta página agrega dados de usuários do NMS Optimizer para revelar as tecnologias mais frequentemente supercarregadas em diferentes plataformas. Quer você esteja planejando seu próximo build ou procurando inspiração, estas estatísticas apresentam preferências e padrões reais da comunidade.

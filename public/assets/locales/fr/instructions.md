@@ -1,3 +1,5 @@
+# NMS Optimizer Guide: Bonus d'Adjacence & Optimisation d'Agencements
+
 ## Utilisation de base
 
 - **Cliquez ou appuyez** sur l'icône ⚙️ pour sélectionner votre **Plateforme** (Vaisseaux spatiaux, Multi-outils, Corvettes, etc.).

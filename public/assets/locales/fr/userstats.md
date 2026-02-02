@@ -1,3 +1,5 @@
+# NMS Optimizer Statistiques: Agencements Technologiques Populaires
+
 ## Statistiques Utilisateurs et Builds Populaires
 
 Cette page agrège les données des utilisateurs de NMS Optimizer pour révéler les technologies les plus fréquemment surpuissantes sur différentes plates-formes. Que vous planifiiez votre prochain build ou cherchiez de l'inspiration, ces statistiques montrent les préférences et les modèles réels de la communauté.

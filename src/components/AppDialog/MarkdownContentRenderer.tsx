@@ -138,6 +138,11 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 					</Text>
 				);
 			},
+			// TODO -- Overloading the md files
+			h1: ({ children: _children }: { children?: React.ReactNode }) => {
+				return null;
+			},
+
 			h2: ({ children }: { children?: React.ReactNode }) => {
 				let id = h2IdMapRef.current.get(children);
 

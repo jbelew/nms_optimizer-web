@@ -1,3 +1,5 @@
+# NMS Optimizer Guide: Adjacency Bonus & Layout Optimization
+
 ## Basic Usage
 
 - **Click or tap** the ⚙️ icon to select your **Platform** (Starships, Multi-tools, Corvettes, etc.).

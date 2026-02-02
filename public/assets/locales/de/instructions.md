@@ -1,3 +1,5 @@
+# NMS Optimizer Anleitung: Adjazenz-Boni & Layout-Optimierung
+
 ## Grundlegende Verwendung
 
 - **Klicken oder tippen** Sie auf das ⚙️-Symbol, um Ihre **Plattform** auszuwählen (Raumschiffe, Multitools, Korvetten usw.).

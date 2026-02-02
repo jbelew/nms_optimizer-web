@@ -1,3 +1,5 @@
+# NMS Optimizer Statistiken: Beliebte Tech-Layouts
+
 ## Benutzerstatistiken & beliebte Layouts
 
 Diese Seite fasst Daten von NMS Optimizer-Benutzern zusammen, um die am häufigsten überladenen Technologien auf verschiedenen Plattformen anzuzeigen. Egal ob Sie Ihren nächsten Build planen oder nach Inspiration suchen - diese Statistiken zeigen echte Community-Vorlieben und -Muster.

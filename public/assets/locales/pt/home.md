@@ -1,4 +1,4 @@
-# NMS Optimizer: A melhor calculadora gratuita para layouts de tecnologia de No Man's Sky
+# NMS Optimizer: Melhores Layouts Tecnológicos & Calculadora de Adjacência
 
 ![Captura de tela do aplicativo NMS Optimizer](/assets/img/screenshots/screenshot.png)
 
