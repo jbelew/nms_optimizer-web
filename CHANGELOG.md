@@ -1,3 +1,10 @@
+## [6.6.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.14...v6.6.15) (2026-02-03)
+
+
+### Bug Fixes
+
+* **seo:** fix structured data (json-ld) script and add portuguese language ([10c05da](https://github.com/jbelew/nms_optimizer-web/commit/10c05da31ae28a31f983d99b69bc884df9aec80d))
+
 ## [6.6.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.13...v6.6.14) (2026-01-25)
 
 
