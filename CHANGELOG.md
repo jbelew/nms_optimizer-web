@@ -1,3 +1,10 @@
+## [6.6.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.15...v6.6.16) (2026-02-04)
+
+
+### Bug Fixes
+
+* **gridcell:** Fixed launch thruster labelling for Corvettes ([2babf24](https://github.com/jbelew/nms_optimizer-web/commit/2babf24660f59f0ca5d84bcf81239cdd8a163cf9))
+
 ## [6.6.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.14...v6.6.15) (2026-02-03)
 
 
