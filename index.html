@@ -163,9 +163,9 @@
 		fetchpriority="high" />
 
 	<!-- Prefetch desktop background only (1x for initial load, 2x for high-DPI devices) -->
-	<link rel="preload" as="image" href="/assets/img/background.webp" media="(min-width: 641px)" />
+	<link rel="preload" as="image" href="/assets/img/background.webp" media="(min-width: 641px)" fetchpriority="high" />
 	<link rel="preload" as="image" href="/assets/img/background@2x.webp"
-		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)" />
+		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)" fetchpriority="high" />
 
 	<!-- Default language translations -->
 	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />

@@ -1,22 +1,25 @@
 # Implementation Plan: Core Web Vitals Performance Audit & Optimization
 
 ## Phase 1: Baseline Audit & Analysis
-- [ ] Task: Establish Performance Baseline
-    - [ ] Run Lighthouse in CI/Local production mode and record initial scores for LCP, INP, and CLS.
-    - [ ] Analyze the "Opportunities" and "Diagnostics" sections of the Lighthouse report.
-- [ ] Task: Identify Bottlenecks
-    - [ ] Use Chrome DevTools Performance panel to record a trace during initial load and grid interactions.
-    - [ ] Pinpoint specific assets or scripts causing LCP delays or high INP.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit & Analysis' (Protocol in workflow.md)
+- [x] Task: Establish Performance Baseline [checkpoint: f213802]
+    - [x] Run Lighthouse in CI/Local production mode and record initial scores for LCP, INP, and CLS. (Baseline: LCP 5.3s, TBT 760ms, CLS 0)
+    - [x] Analyze the "Opportunities" and "Diagnostics" sections of the Lighthouse report.
+- [x] Task: Identify Bottlenecks [checkpoint: f213802]
+    - [x] Use Chrome DevTools Performance panel to record a trace during initial load and grid interactions.
+    - [x] Pinpoint specific assets or scripts causing LCP delays or high INP. (Bottlenecks: background blurred image for LCP, React script evaluation for TBT)
+    - [x] Refactor \`scripts/performance-check.mjs\` to use \`dist/index.html\` as source of truth for accurate critical path analysis.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Baseline Audit & Analysis' (Protocol in workflow.md) [checkpoint: f213802]
 
 ## Phase 2: LCP and CLS Optimizations
-- [ ] Task: Image and Asset Optimization
-    - [ ] Implement `priority` loading for the LCP image.
-    - [ ] Ensure all images and icons have explicit `width` and `height` attributes to prevent CLS.
-- [ ] Task: Resource Prioritization
-    - [ ] Add `<link rel="preload">` or `<link rel="preconnect">` for critical fonts and API endpoints.
-    - [ ] Review and optimize Vite's chunking strategy for critical path assets.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: LCP and CLS Optimizations' (Protocol in workflow.md)
+- [x] Task: Image and Asset Optimization [checkpoint: f213802]
+    - [x] Implement \`fetchpriority="high"\` for the LCP background images in \`index.html\`.
+    - [x] Corrected invalid Tailwind classes and added explicit \`width\` and \`height\` attributes to the section images in \`TechTreeSection.tsx\`.
+    - [x] Verified explicit dimensions for logo and grid cell images.
+- [x] Task: Resource Prioritization [checkpoint: f213802]
+    - [x] Verified preloading of critical fonts, background images, and translations in \`index.html\`.
+    - [x] Further optimized \`manualChunks\` in \`vite.config.ts\` by splitting \`state\` management (Zustand, Immer) from the main React bundle.
+    - [x] Added \`fetchpriority="high"\` to entry scripts and primary LCP background image.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: LCP and CLS Optimizations' (Protocol in workflow.md) [checkpoint: f213802]
 
 ## Phase 3: INP and Main-Thread Optimizations
 - [ ] Task: Script Execution Audit

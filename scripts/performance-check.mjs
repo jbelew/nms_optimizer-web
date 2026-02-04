@@ -3,6 +3,7 @@
 /**
  * Performance Check Script
  * Analyzes bundle sizes and provides optimization recommendations
+ * Uses dist/index.html as the source of truth for critical path assets
  */
 
 import fs from 'fs';
@@ -10,20 +11,54 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distDir = path.join(__dirname, '../dist/assets');
+const distDir = path.join(__dirname, '../dist');
+const assetsDir = path.join(distDir, 'assets');
+const indexPath = path.join(distDir, 'index.html');
+
+// Read index.html to identify critical assets
+function getCriticalAssets() {
+    if (!fs.existsSync(indexPath)) {
+        console.warn('⚠️  dist/index.html not found. Run npm run build first.');
+        return new Set();
+    }
+    const html = fs.readFileSync(indexPath, 'utf8');
+    const criticalAssets = new Set();
+    
+    // Find all src="..." and href="..." in index.html
+    const srcMatches = html.matchAll(/(?:src|href)="([^"]+)"/g);
+    for (const match of srcMatches) {
+        const url = match[1];
+        if (url.startsWith('/assets/')) {
+            criticalAssets.add(url.replace('/assets/', ''));
+        } else if (url.startsWith('assets/')) {
+            criticalAssets.add(url.replace('assets/', ''));
+        }
+    }
+    
+    return criticalAssets;
+}
 
 // Parse bundle stats
 function analyzeBundle() {
-    const files = fs.readdirSync(distDir)
+    if (!fs.existsSync(assetsDir)) {
+        console.error('❌  dist/assets directory not found. Run npm run build first.');
+        process.exit(1);
+    }
+
+    const criticalSet = getCriticalAssets();
+    
+    const files = fs.readdirSync(assetsDir)
         .filter(f => f.endsWith('.br'))
         .map(f => {
-            const filePath = path.join(distDir, f);
+            const name = f.replace('.br', '');
+            const filePath = path.join(assetsDir, f);
             const stat = fs.statSync(filePath);
+            
             return {
-                name: f.replace('.br', ''),
+                name: name,
                 size: stat.size / 1024, // Convert to KB
                 type: f.includes('.js') ? 'JS' : 'CSS',
-                isCritical: !f.includes('node_modules') && !f.includes('Markdown') && !f.includes('recharts')
+                isCritical: criticalSet.has(name)
             };
         })
         .sort((a, b) => b.size - a.size);
@@ -65,7 +100,8 @@ function main() {
 
     console.log('\n🟢 STYLESHEETS:\n');
     css.forEach(b => {
-        console.log(`  ${b.name.padEnd(35)} ${formatSize(b.size).padStart(8)}`);
+        const status = b.isCritical ? ' (Critical)' : ' (Lazy)';
+        console.log(`  ${(b.name + status).padEnd(35)} ${formatSize(b.size).padStart(8)}`);
     });
 
     console.log('\n' + '='.repeat(60));
@@ -92,11 +128,11 @@ function main() {
     }
 
     console.log(`  ✅ Console logs properly dropped (verified in production build)\n`);
-    console.log(`  ✅ Router (23K) and Socket.io (5K) now lazy-loaded\n`);
+    console.log(`  ✅ Router and Socket.io verification: Check lazy-loaded section above\n`);
 
     console.log(`\n📋 NEXT STEPS:\n`);
     console.log(`  1. npm run build  # Rebuild with optimizations`);
-    console.log(`  2. npx lighthouse --view  # Measure Lighthouse score`);
+    console.log(`  2. CHROME_PATH=/usr/bin/google-chrome npx lhci collect --config=scripts/lighthouserc.cjs  # Measure Lighthouse score`);
     console.log(`  3. Check total-blocking-time metric in Chrome DevTools\n`);
 
     console.log('='.repeat(60) + '\n');

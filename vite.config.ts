@@ -353,6 +353,11 @@ export default defineConfig(({ mode }) => {
 							)
 								return "i18n";
 
+							// Split Zustand and other state management
+							if (id.includes("zustand") || id.includes("immer")) {
+								return "state";
+							}
+
 							// Charts & Data Visualization
 							if (id.includes("recharts") || id.includes("decimal.js") || id.includes("d3-"))
 								return "charts";
