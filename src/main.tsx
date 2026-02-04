@@ -22,8 +22,8 @@ import "./assets/css/radix-colors/radix-colors.css";
 // import "@radix-ui/themes/tokens/colors/teal.css";
 // import "@radix-ui/themes/tokens/colors/yellow.css";
 
-import "@radix-ui/themes/styles.css";
-import "@radix-ui/themes/tokens/base.css";
+// import "@radix-ui/themes/styles.css";
+// import "@radix-ui/themes/tokens/base.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS

@@ -15,6 +15,7 @@ const projectRoot = join(__dirname, "..");
 const colors = [
 	"cyan",
 	"slate",
+	"sage",
 	"purple",
 	"amber",
 	"blue",
@@ -56,6 +57,22 @@ let totalOriginalSize = 0;
 let totalOptimizedSize = 0;
 const optimizedColorContents = [];
 
+// 1. Process base tokens (black-a, white-a, transparent, etc)
+const baseInputPath = join(projectRoot, "node_modules/@radix-ui/themes/tokens/base.css");
+try {
+	const baseCss = readFileSync(baseInputPath, "utf-8");
+	// base.css doesn't have the same structure as color files, just strip p3
+	const optimizedBaseCss = baseCss.replace(
+		/@supports \(color: color\(display-p3[^}]+\)\) \{[\s\S]*?\n\}(?=\n|$)/gm,
+		""
+	);
+	optimizedColorContents.push(optimizedBaseCss);
+	console.log(`✓ base.css optimized`);
+} catch (error) {
+	console.error(`✗ base.css: ${error.message}`);
+}
+
+// 2. Process specific colors
 for (const color of colors) {
 	const inputPath = join(projectRoot, `node_modules/@radix-ui/themes/tokens/colors/${color}.css`);
 

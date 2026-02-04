@@ -96,6 +96,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const { grid, setGrid, setResult } = useGridStore.getState();
 			const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
 			setSolving(true);
+			setProgressPercent(0);
+			setStatus(undefined);
 			setShowErrorStore(false);
 
 			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
@@ -185,6 +187,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 						});
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
+
 						setResult(data, tech);
 						const gaTech =
 							tech === "pulse" && checkedModules[tech]?.includes("PC")
@@ -192,7 +195,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 								: tech;
 
 						if (data.grid) {
-							console.log("Optimization Result Grid:", data.grid);
 							sendEvent({
 								category: "ui",
 								action: "optimize_tech",

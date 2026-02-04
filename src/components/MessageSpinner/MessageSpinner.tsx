@@ -104,7 +104,10 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
 							{progressPercent !== undefined && useNMSFont === false ? (
 								<div className="mb-10 lg:mb-18">
 									<Progress
-										value={Math.min(progressPercent, 100)}
+										value={Math.min(
+											isNaN(progressPercent) ? 0 : progressPercent,
+											100
+										)}
 										variant="soft"
 										aria-label={
 											initialMessage || t("messageSpinner.loadingProgress")

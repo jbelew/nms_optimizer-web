@@ -172,8 +172,12 @@ export const initializeAnalytics = async () => {
 	gaInitialized = true;
 	reportWebVitals(sendEvent);
 
-	// Also initialize Cloudflare RUM if not blocked
-	initializeCloudflareRUM();
+	// Also initialize Cloudflare RUM if not blocked, when idle
+	if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+		window.requestIdleCallback(() => initializeCloudflareRUM());
+	} else {
+		setTimeout(() => initializeCloudflareRUM(), 3000);
+	}
 };
 
 /**
@@ -185,7 +189,7 @@ export const initializeCloudflareRUM = () => {
 		return;
 	}
 
-	getAdBlockerDetectionResult().then((isBlocked) => {
+	void getAdBlockerDetectionResult().then((isBlocked) => {
 		if (isBlocked) return;
 
 		const script = document.createElement("script");
