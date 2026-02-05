@@ -1,3 +1,11 @@
+## [6.6.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.16...v6.6.17) (2026-02-05)
+
+
+### Performance Improvements
+
+* **audit:** final validation with CSS bundle optimization ([ac63df5](https://github.com/jbelew/nms_optimizer-web/commit/ac63df599d610ff1368a8a2a12e7ec5f96c20b1a))
+* **ui:** optimize LCP and bundle chunking ([a4fe73f](https://github.com/jbelew/nms_optimizer-web/commit/a4fe73f904d6952d87d6e0d2a76789f1fc0d1847))
+
 ## [6.6.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.15...v6.6.16) (2026-02-04)
 
 
