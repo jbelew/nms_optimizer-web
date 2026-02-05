@@ -66,6 +66,9 @@ seo/Search appearance.csv
 # AI tool caches
 .gemini
 
+# Lighthouse temporary directories
+C:\Users\John Belew\AppData\Local\lighthouse.*
+
 # Cloudflare API scripts
 scripts/cloudflare/get_cf_rules.py
 scripts/cloudflare/update_cf_rules.py
