@@ -137,7 +137,7 @@
 		"prettier": "^3.8.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"puppeteer": "^24.36.1",
-		"puppeteer-core": "^24.36.1",
+		"puppeteer-core": "^24.37.2",
 		"rollup-plugin-visualizer": "^6.0.3",
 		"sass": "^1.97.3",
 		"semantic-release": "^25.0.2",
