@@ -317,7 +317,6 @@
             "rebuilt": "Modules d'Exosuit Reconstruits",
             "remembrance": "Souvenir",
             "protection": "Treillis de Bouclier",
-            "starseed": "Graine Étoile",
             "jetpack": "Jetpack",
             "boots": "Bottes-roquettes",
             "skiff": "Skiff Exo",
@@ -326,7 +325,8 @@
             "nutrient": "Ingestor de Nutriments",
             "refiner": "Raffineur Personnel",
             "trade": "Fusée de Commerce",
-            "translator": "Dispositifs de Traduction Automatique"
+            "translator": "Dispositifs de Traduction Automatique",
+            "starseed": "Santé de base"
         },
         "corvette": {
             "cockpit": "Cockpit de corvette",
@@ -562,7 +562,6 @@
             "remembrance": "Souvenir",
             "protection": "Treillis de Bouclier",
             "protection-upgrade": "Mise à niveau du réseau de bouclier",
-            "starseed": "Graine Étoile",
             "jetpack": "Propulseur de saut",
             "jetpack-upgrade": "Amélioration du propulseur de saut",
             "boots": "Bottes-roquettes",
@@ -580,7 +579,8 @@
             "recycler": "Recycleur d'oxygène",
             "neural": "Stimulateur neural",
             "waterjets": "Hydropropulseurs efficaces",
-            "rerouter": "Rerouteur d'oxygène"
+            "rerouter": "Rerouteur d'oxygène",
+            "starseed": "Graine d'étoile"
         }
     },
     "moduleSelection": {

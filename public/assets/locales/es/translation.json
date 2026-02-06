@@ -317,7 +317,6 @@
             "rebuilt": "Módulos de Exotraje Reconstruidos",
             "remembrance": "Remembranza",
             "protection": "Malla de Escudo",
-            "starseed": "Semilla Estelar",
             "jetpack": "Mochila Propulsora",
             "boots": "Botas Cohete",
             "skiff": "Bote Exo",
@@ -326,7 +325,8 @@
             "nutrient": "Ingestor de Nutrientes",
             "refiner": "Refinador Personal",
             "trade": "Cohete de Comercio",
-            "translator": "Dispositivos de Traducción Automática"
+            "translator": "Dispositivos de Traducción Automática",
+            "starseed": "Salud central"
         },
         "corvette": {
             "cockpit": "Cabina de corvette",
@@ -562,7 +562,6 @@
             "remembrance": "Remembranza",
             "protection": "Malla de Escudo",
             "protection-upgrade": "Actualización de redes de escudo",
-            "starseed": "Semilla Estelar",
             "jetpack": "Mochila Propulsora",
             "jetpack-upgrade": "Mejora de Mochila Propulsora",
             "boots": "Botas Cohete",
@@ -580,7 +579,8 @@
             "recycler": "Reciclador de Oxígeno",
             "neural": "Estimulador Neural",
             "waterjets": "Hidropropulsores Eficientes",
-            "rerouter": "Redirigidor de Oxígeno"
+            "rerouter": "Redirigidor de Oxígeno",
+            "starseed": "Semilla estelar"
         }
     },
     "moduleSelection": {

@@ -317,7 +317,6 @@
             "rebuilt": "Módulos de Exosuit reconstruídos",
             "remembrance": "Lembrança",
             "protection": "Treliça de Escudo",
-            "starseed": "Semente de estrela",
             "jetpack": "Jetpack",
             "boots": "Botas de foguete",
             "skiff": "EXO Skiff",
@@ -326,7 +325,8 @@
             "nutrient": "Ingestão de nutrientes",
             "refiner": "Refinador pessoal",
             "trade": "Foguete comercial",
-            "translator": "Tradução automática"
+            "translator": "Tradução automática",
+            "starseed": "Saúde Central"
         },
         "corvette": {
             "cockpit": "Cockpit de Corveta",
@@ -562,7 +562,6 @@
             "remembrance": "Lembrança",
             "protection": "Treliça de Escudo",
             "protection-upgrade": "Atualização da rede de escudo",
-            "starseed": "Semente de estrela",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Atualização do Jetpack",
             "boots": "Botas de foguete",
@@ -580,7 +579,8 @@
             "recycler": "Reciclador de oxigênio",
             "neural": "Estimulador neural",
             "waterjets": "Jatos de água eficientes",
-            "rerouter": "Oxigênio Rerouter"
+            "rerouter": "Oxigênio Rerouter",
+            "starseed": "Semente Estelar"
         }
     },
     "moduleSelection": {

@@ -317,7 +317,6 @@
             "rebuilt": "Wiederaufgebaute Exo-Anzug-Module",
             "remembrance": "Erinnerung",
             "protection": "Schildgitter",
-            "starseed": "Sternensaat",
             "jetpack": "Jetpack",
             "boots": "Raketenstiefel",
             "skiff": "Exo-Skiff",
@@ -326,7 +325,8 @@
             "nutrient": "Nährstoff-Aufnehmer",
             "refiner": "Persönlicher Raffiner",
             "trade": "Handelsrakete",
-            "translator": "Automatische Übersetzungsgeräte"
+            "translator": "Automatische Übersetzungsgeräte",
+            "starseed": "Kerngesundheit"
         },
         "corvette": {
             "cockpit": "Korvetten-Cockpit",
@@ -562,7 +562,6 @@
             "remembrance": "Erinnerung",
             "protection": "Schildgitter",
             "protection-upgrade": "Schildgitter -Upgrade",
-            "starseed": "Sternensaat",
             "jetpack": "Jetpack",
             "jetpack-upgrade": "Jetpack-Upgrade",
             "boots": "Raketenstiefel",
@@ -580,7 +579,8 @@
             "recycler": "Sauerstoff-Recycler",
             "neural": "Neuralstimulator",
             "waterjets": "Effiziente Wasserstrahlen",
-            "rerouter": "Sauerstoff-Umleiter"
+            "rerouter": "Sauerstoff-Umleiter",
+            "starseed": "Sternensamen"
         }
     },
     "moduleSelection": {
