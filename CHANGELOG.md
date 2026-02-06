@@ -1,3 +1,10 @@
+## [6.6.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.17...v6.6.18) (2026-02-06)
+
+
+### Bug Fixes
+
+* **module-selection:** add instructional text ([9ea7355](https://github.com/jbelew/nms_optimizer-web/commit/9ea73555d0d1b1c61e1640ff6d65a6d96aff524a))
+
 ## [6.6.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.16...v6.6.17) (2026-02-05)
 
 
