@@ -105,6 +105,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						handleValueChange={handleValueChange}
 						handleSelectAllChange={handleSelectAllChange}
 						handleOptimizeClick={handleOptimizeWrapper}
+						onClose={() => handleOpenChange(false)}
 						allModulesSelected={allModulesSelected}
 						isIndeterminate={isIndeterminate}
 						techColor={techColor}

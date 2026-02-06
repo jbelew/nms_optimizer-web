@@ -1,8 +1,10 @@
 import type { Module, ModuleSelectionDialogProps } from "./index";
 import React, { useMemo } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Blockquote } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useDialog } from "../../context/dialog-utils";
 import { MODULE_RANK_ORDER } from "./constants";
 import { ModuleCheckbox } from "./ModuleCheckbox";
 
@@ -16,6 +18,7 @@ export interface ModuleGroupProps extends Pick<
 	groupName: string;
 	modules: Module[];
 	titleOverride?: string;
+	onClose?: () => void;
 }
 
 /**
@@ -32,8 +35,10 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	currentCheckedModules,
 	techColor,
 	titleOverride,
+	onClose,
 }) => {
 	const { t } = useTranslation();
+	const { openDialog } = useDialog();
 
 	const sortedModules = useMemo(() => {
 		if (["bonus", "trails", "figurines"].includes(groupName)) {
@@ -84,11 +89,23 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	return (
 		<div>
 			<div
-				className={`font-bold capitalize ${groupName !== "cosmetic" ? "mb-2" : "mb-0"}`}
+				className={`flex items-center gap-2 font-bold capitalize ${
+					groupName !== "cosmetic" ? "mb-2" : "mb-0"
+				}`}
 				style={{ color: "var(--accent-a11)" }}
 			>
 				{titleOverride || t(`moduleSelection.${groupName}`)}
+				{modules.some((m) => m.label.includes("[") && m.label.includes("]")) && (
+					<InfoCircledIcon
+						className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
+						onClick={() => {
+							onClose?.();
+							openDialog("instructions", { section: "section-3" });
+						}}
+					/>
+				)}
 			</div>
+
 			{groupName === "cosmetic" && (
 				<Blockquote
 					className="text-sm sm:text-base"

@@ -19,13 +19,32 @@ This tool is designed for **endgame players** optimizing their platform's techno
 
 If you're still unlocking cells or collecting modules, the tool can still provide insights — but it's primarily designed for **fully upgraded platforms**.
 
-## Saving, Loading, and Sharing Builds
+## Theta / Tau / Sigma Labels
 
-You can save your optimized layouts, reload them later, or share them with friends, making it easy to manage multiple configurations for the same platform.
+These labels rank procedural upgrades **by stat quality**, not by class. They are **legacy terms from earlier versions of the game**, kept to maintain consistency in theme and style.
 
-- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool also auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"`, which you can customize.
-- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
-- **Share Build** — Click the share icon to generate a shareable link for your current layout. Friends can use this link to load your build directly into their optimizer without needing the file.
+- **Theta** — best procedural upgrade _(displayed as **1** in the grid)_
+- **Tau** — middle _(displayed as **2** in the grid)_
+- **Sigma** — worst _(displayed as **3** in the grid)_
+
+You won’t see these names in your inventory. They’re assigned by **comparing the actual stats of upgrades for the same technology**.
+
+### How to Use This In-Game
+
+Ignore the class letter (S, X, etc.). Instead, compare the stats directly:
+
+- Best stats → **Theta (1)**
+- Second best → **Tau (2)**
+- Worst stats → **Sigma (3)**
+
+### S-Class vs X-Class
+
+Class does **not** determine rank. X-Class upgrades can roll higher or lower than S-Class.
+
+- If an X-Class has the best stats, it’s **Theta (1)**
+- If an S-Class is weaker, it becomes **Tau (2)** or **Sigma (3)**
+
+**Bottom line:** Theta / Tau / Sigma simply mean **best / middle / worst**, based on stats alone.
 
 ## Information on Corvettes
 
@@ -43,6 +62,14 @@ This allows the tool to offer **recommended builds** — carefully hand-picked a
 
 If you have feedback or want to suggest alternate configurations, feel free to [start a discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — these builds are curated, not auto-generated, and community input helps make them better.
 
+## Saving, Loading, and Sharing Builds
+
+You can save your optimized layouts, reload them later, or share them with friends, making it easy to manage multiple configurations for the same platform.
+
+- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool also auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"`, which you can customize.
+- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
+- **Share Build** — Click the share icon to generate a shareable link for your current layout. Friends can use this link to load your build directly into their optimizer without needing the file.
+
 ## Usage Tips
 
 Supercharged cells provide major bonuses but are limited — every placement matters. **Avoid blindly matching your in-game supercharged layout.** For best results:
@@ -58,4 +85,3 @@ As grid space gets tight, you may need to **reset a few technologies** and solve
 ## Pro Tip
 
 There’s real math behind placement. The solver looks for fixed windows that match the number of modules a technology needs and usually finds the most space-efficient layout. If something isn’t lining up, try **temporarily disabling a few cells** to steer it toward a better spot on the grid.
-

@@ -23,6 +23,11 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("../../store/PlatformStore");
+vi.mock("../../context/dialog-utils", () => ({
+	useDialog: () => ({
+		openDialog: vi.fn(),
+	}),
+}));
 
 const mockGroupedModules = {
 	core: [{ id: "core1", label: "Core Module", image: "core.png" }],

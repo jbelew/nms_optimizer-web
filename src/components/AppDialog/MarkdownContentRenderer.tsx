@@ -155,13 +155,13 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				return (
 					<>
 						{id !== "section-1" && (
-							<Separator size="3" orientation="horizontal" decorative mt="2" mb="2" />
+							<Separator size="4" orientation="horizontal" decorative mt="2" mb="2" />
 						)}
 						<Heading
 							trim="end"
 							as="h2"
 							mb="3"
-							className="text-base! sm:text-lg!"
+							className="text-base! font-extrabold! sm:text-lg!"
 							id={id}
 							style={{ color: "var(--accent-a11)" }}
 						>

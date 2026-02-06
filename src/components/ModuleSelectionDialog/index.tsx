@@ -42,6 +42,7 @@ export interface ModuleSelectionDialogProps {
 	techColor: TechTreeRowProps["techColor"];
 	techImage: string | null;
 	tech?: string;
+	onClose?: () => void;
 }
 
 /**

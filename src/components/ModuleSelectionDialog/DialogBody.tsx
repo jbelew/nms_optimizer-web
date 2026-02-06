@@ -23,6 +23,7 @@ export interface DialogBodyProps {
 	techColor: TechTreeRowProps["techColor"];
 	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
 	tech?: string;
+	onClose?: () => void;
 }
 
 /**
@@ -42,6 +43,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	techColor,
 	selectAllCheckboxRef,
 	tech,
+	onClose,
 }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -138,6 +140,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 								currentCheckedModules={currentCheckedModules}
 								techColor={techColor}
 								titleOverride={titleOverride}
+								onClose={onClose}
 							/>
 						);
 					})}
