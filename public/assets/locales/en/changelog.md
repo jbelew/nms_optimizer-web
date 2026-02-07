@@ -4,6 +4,26 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.7 – Grid Logic Enhancements, Stability & Performance (2026-02-07)
+
+This update introduces a small but important grid-behavior enhancement, alongside continued refinements to guidance, performance, analytics reliability, and overall stability.
+
+- Introduced improved **grid-cell grouping logic**, enabling more accurate handling of adjacent cell behaviors in complex layouts.
+- Added clearer **instructional text during module selection**, helping players better understand required actions before making changes.
+- Fixed incorrect **launch thruster labeling for Corvettes**, ensuring ship modules are accurately identified.
+- Improved **URL sync and back-navigation behavior**, preventing grid desynchronization when navigating history.
+- Refined **module labels and Starship Trails guidance** for better clarity and consistency.
+- Expanded **localization and SEO support**, including Portuguese language structured data fixes.
+- Improved **analytics reliability and error handling**, with better ad-blocker detection and corrected event timing.
+- Enhanced **security configuration**, ensuring required third-party services load correctly under strict content policies.
+- Continued **performance improvements**, including:
+  - Faster initial page load and improved Largest Contentful Paint (LCP).
+  - Optimized bundle chunking and CSS delivery.
+  - Deferred non-critical analytics events to keep the UI responsive.
+
+This release continues the focus on polish and correctness, reducing friction in everyday use while laying groundwork for future grid and layout features.
+
+
 ## Version 6.6 – Supercharged Cell Limits & Constraint Messages (2025-12-19)
 
 This update focuses on clarity around supercharged and fixed cells, with new error messages and improved guidance for grid constraints.
