@@ -18,6 +18,7 @@ describe("createEmptyCell() createEmptyCell method", () => {
 				label: "",
 				sc_eligible: false,
 				supercharged: false,
+				group_adjacent: false,
 				tech: null,
 				total: 0.0,
 				type: "",
@@ -103,6 +104,7 @@ describe("createEmptyCell() createEmptyCell method", () => {
 				expect(cell).toHaveProperty("label");
 				expect(cell).toHaveProperty("sc_eligible");
 				expect(cell).toHaveProperty("supercharged");
+				expect(cell).toHaveProperty("group_adjacent");
 				expect(cell).toHaveProperty("tech");
 				expect(cell).toHaveProperty("total");
 				expect(cell).toHaveProperty("type");

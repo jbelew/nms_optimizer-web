@@ -181,6 +181,7 @@ describe("useOptimize", () => {
 							module: null,
 							sc_eligible: false,
 							supercharged: false,
+							group_adjacent: false,
 							tech: null,
 							total: 0,
 							type: "",

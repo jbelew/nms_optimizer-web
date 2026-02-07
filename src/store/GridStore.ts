@@ -55,6 +55,7 @@ function debounceSetItem(
  * @property {string} label - The label of the module.
  * @property {boolean} sc_eligible - Whether the module is eligible for a supercharged bonus.
  * @property {boolean} supercharged - Whether the cell is supercharged.
+ * @property {boolean} group_adjacent - Whether the module is part of an adjacency group.
  * @property {string|null} tech - The technology type of the module.
  * @property {number} total - The total bonus of the cell.
  * @property {string} type - The type of the module.
@@ -70,6 +71,7 @@ export type Cell = {
 	label: string;
 	sc_eligible: boolean;
 	supercharged: boolean;
+	group_adjacent: boolean;
 	tech: string | null;
 	total: number;
 	type: string;
@@ -121,6 +123,7 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
 	label: "",
 	sc_eligible: false,
 	supercharged: supercharged,
+	group_adjacent: false,
 	tech: null,
 	total: 0.0,
 	type: "",
@@ -159,6 +162,7 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
 		label: moduleData?.label ?? "",
 		sc_eligible: moduleData?.sc_eligible ?? false,
 		supercharged: moduleData?.supercharged === true,
+		group_adjacent: false, // Default for non-cell module data
 		tech: moduleData?.tech ?? null,
 		total: 0.0,
 		type: moduleData?.type ?? "",
@@ -691,20 +695,21 @@ export const useGridStore = create<GridStore>()(
 
 							if (cell) {
 								if (moduleData) {
+									const m = moduleData as Module & { group_adjacent?: boolean };
 									Object.assign(cell, {
-										active: moduleData.active ?? cell.active,
-										adjacency: moduleData.adjacency ?? cell.adjacency,
-										adjacency_bonus:
-											moduleData.adjacency_bonus ?? cell.adjacency_bonus,
-										bonus: moduleData.bonus ?? cell.bonus,
-										image: moduleData.image ?? cell.image,
-										module: moduleData.id ?? cell.module,
-										label: moduleData.label ?? cell.label,
-										sc_eligible: moduleData.sc_eligible ?? cell.sc_eligible,
-										supercharged: moduleData.supercharged ?? cell.supercharged,
-										tech: moduleData.tech ?? cell.tech,
-										type: moduleData.type ?? cell.type,
-										value: moduleData.value ?? cell.value,
+										active: m.active ?? cell.active,
+										adjacency: m.adjacency ?? cell.adjacency,
+										adjacency_bonus: m.adjacency_bonus ?? cell.adjacency_bonus,
+										bonus: m.bonus ?? cell.bonus,
+										image: m.image ?? cell.image,
+										module: m.id ?? cell.module,
+										label: m.label ?? cell.label,
+										sc_eligible: m.sc_eligible ?? cell.sc_eligible,
+										supercharged: m.supercharged ?? cell.supercharged,
+										group_adjacent: m.group_adjacent ?? cell.group_adjacent,
+										tech: m.tech ?? cell.tech,
+										type: m.type ?? cell.type,
+										value: m.value ?? cell.value,
 									});
 								} else {
 									resetCellContent(cell);

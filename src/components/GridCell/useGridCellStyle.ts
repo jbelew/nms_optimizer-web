@@ -33,7 +33,8 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		if (cell.supercharged) classes.push("gridCell--supercharged");
 		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
 		if (isTouching) classes.push("gridCell--touched");
-		if (cell.adjacency_bonus === 0 && cell.image) classes.push("gridCell--black");
+		if (cell.adjacency_bonus === 0 && !cell.group_adjacent && cell.image)
+			classes.push("gridCell--black");
 		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
 		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
 
@@ -45,6 +46,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		cell.image,
 		cell.label,
 		cell.module,
+		cell.group_adjacent,
 		isTouching,
 	]);
 

@@ -21,6 +21,7 @@ import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation"
  * @property {string} tech - The technology type of the module.
  * @property {string} type - The general type of the module.
  * @property {number} value - The value of the module.
+ * @property {boolean} [checked] - Whether the module is checked in the selection UI.
  */
 export interface Module {
 	active: boolean;
