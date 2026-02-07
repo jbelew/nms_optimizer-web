@@ -1,3 +1,10 @@
+# [6.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.18...v6.7.0) (2026-02-07)
+
+
+### Features
+
+* **grid-cell:** add group_adjacent property to cell interface ([d1958d6](https://github.com/jbelew/nms_optimizer-web/commit/d1958d6453f4808401313e86e1c1c8fa09eca19b))
+
 ## [6.6.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.17...v6.6.18) (2026-02-06)
 
 
