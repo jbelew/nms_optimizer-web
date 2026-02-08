@@ -1,4 +1,4 @@
-# NMS Optimizer Guía: Bono de Adyacencia & Optimización de Diseños
+# Guía del optimizador de NMS: bonificación de adyacencia y optimización del diseño
 
 ## Uso básico
 
@@ -9,14 +9,6 @@
 
 > 💡 **Nota:** Los Exosuits y Exocraft tienen configuraciones de cuadrícula fija. Las células Exocraft no se pueden modificar en absoluto. En Exosuits, sólo puedes alternar celdas activas o inactivas; No se admite cambiar el diseño sobrealimentado.
 
-## Guardar, cargar y compartir compilaciones
-
-Puede guardar sus diseños optimizados, recargarlos más tarde o compartirlos con amigos, lo que facilita la administración de múltiples configuraciones para la misma plataforma.
-
-- **Guardar compilación**: haga clic en el ícono de guardar para descargar su diseño actual como un archivo `.nms`. Se te pedirá que pongas un nombre a tu compilación; la herramienta también genera automáticamente nombres temáticos como `"Corvette - Crusade of the Starfall.nms"`, que puedes personalizar.
-- **Cargar compilación**: haga clic en el icono de carga para cargar un archivo `.nms` previamente guardado. Su cuadrícula se actualizará inmediatamente para coincidir con el diseño guardado, incluidas todas las ubicaciones de los módulos y las posiciones de las celdas supercargadas.
-- **Compartir compilación**: haga clic en el ícono de compartir para generar un enlace que se pueda compartir para su diseño actual. Los amigos pueden usar este enlace para cargar su compilación directamente en su optimizador sin necesidad del archivo.
-
 ## Antes de comenzar
 
 Esta herramienta está diseñada para **jugadores de finales** que optimizan el diseño tecnológico de su plataforma para lograr la máxima eficiencia. Funciona mejor cuando:
@@ -26,6 +18,33 @@ Esta herramienta está diseñada para **jugadores de finales** que optimizan el 
 - Posees un **conjunto completo de tres módulos de actualización** por tecnología aplicable.
 
 Si todavía estás desbloqueando celdas o recopilando módulos, la herramienta aún puede brindarte información, pero está diseñada principalmente para **plataformas completamente actualizadas**.
+
+## Etiquetas Theta / Tau / Sigma
+
+Estas etiquetas clasifican las actualizaciones de procedimientos **por calidad de estadísticas**, no por clase. Son **términos heredados de versiones anteriores del juego**, mantenidos para mantener la coherencia en el tema y el estilo.
+
+- **Theta** — mejor actualización de procedimiento _(se muestra como **1** en la cuadrícula)_
+- **Tau** — medio _(se muestra como **2** en la cuadrícula)_
+- **Sigma** — peor _(se muestra como **3** en la cuadrícula)_
+
+No verás estos nombres en tu inventario. Se asignan **comparando las estadísticas reales de las actualizaciones para la misma tecnología**.
+
+### Cómo usar esto en el juego
+
+Ignore la letra de clase (S, X, etc.). En su lugar, compare las estadísticas directamente:
+
+- Mejores estadísticas → **Theta (1)**
+- Segundo mejor → **Tau (2)**
+- Peores estadísticas → **Sigma (3)**
+
+### Clase S frente a Clase X
+
+La clase **no** determina el rango. Las actualizaciones de la Clase X pueden ser superiores o inferiores a las de la Clase S.
+
+- Si una Clase X tiene las mejores estadísticas, es **Theta (1)**
+- Si una Clase S es más débil, se convierte en **Tau (2)** o **Sigma (3)**
+
+**En pocas palabras:** Theta/Tau/Sigma simplemente significa **mejor/medio/peor**, basándose únicamente en las estadísticas.
 
 ## Información sobre Corbetas
 
@@ -42,6 +61,14 @@ Para plataformas como **Exosuits** y **Exocraft**, donde las celdas sobrealiment
 Esto permite que la herramienta ofrezca **compilaciones recomendadas**: diseños cuidadosamente seleccionados y altamente obstinados que reflejan las mejores combinaciones disponibles.
 
 Si tiene comentarios o desea sugerir configuraciones alternativas, no dude en [iniciar una discusión](https://github.com/jbelew/nms_optimizer-web/discussions): estas compilaciones están seleccionadas, no generadas automáticamente, y los aportes de la comunidad ayudan a mejorarlas.
+
+## Guardar, cargar y compartir compilaciones
+
+Puede guardar sus diseños optimizados, recargarlos más tarde o compartirlos con amigos, lo que facilita la administración de múltiples configuraciones para la misma plataforma.
+
+- **Guardar compilación**: haga clic en el ícono de guardar para descargar su diseño actual como un archivo `.nms`. Se te pedirá que pongas un nombre a tu compilación; la herramienta también genera automáticamente nombres temáticos como `"Corvette - Crusade of the Starfall.nms"`, que puedes personalizar.
+- **Cargar compilación**: haga clic en el icono de carga para cargar un archivo `.nms` previamente guardado. Su cuadrícula se actualizará inmediatamente para coincidir con el diseño guardado, incluidas todas las ubicaciones de los módulos y las posiciones de las celdas supercargadas.
+- **Compartir compilación**: haga clic en el ícono de compartir para generar un enlace que se pueda compartir para su diseño actual. Los amigos pueden usar este enlace para cargar su compilación directamente en su optimizador sin necesidad del archivo.
 
 ## Consejos de uso
 

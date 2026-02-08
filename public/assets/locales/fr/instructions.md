@@ -1,4 +1,4 @@
-# NMS Optimizer Guide: Bonus d'Adjacence & Optimisation d'Agencements
+# Guide de l'optimiseur NMS : bonus de contiguïté et optimisation de la mise en page
 
 ## Utilisation de base
 
@@ -9,14 +9,6 @@
 
 > 💡 **Remarque :** Les Exosuits et Exocraft ont des configurations de grille fixes. Les cellules Exocraft ne peuvent pas du tout être modifiées. Sur les Exosuits, vous pouvez uniquement activer ou désactiver les cellules ; la modification de la disposition suralimentée n'est pas prise en charge.
 
-## Sauvegarde, chargement et partage de builds
-
-Vous pouvez enregistrer vos mises en page optimisées, les recharger plus tard ou les partager avec des amis, ce qui facilite la gestion de plusieurs configurations pour la même plateforme.
-
-- **Enregistrer la construction** — Cliquez sur l'icône d'enregistrement pour télécharger votre mise en page actuelle sous forme de fichier « .nms ». Vous serez invité à nommer votre build ; l'outil génère également automatiquement des noms thématiques comme « Corvette - Crusade of the Starfall.nms » , que vous pouvez personnaliser.
-- **Load Build** — Cliquez sur l'icône de chargement pour télécharger un fichier « .nms » précédemment enregistré. Votre grille sera immédiatement mise à jour pour correspondre à la disposition enregistrée, y compris tous les emplacements de modules et les positions des cellules suralimentées.
-- **Partager la construction** — Cliquez sur l'icône de partage pour générer un lien partageable pour votre mise en page actuelle. Les amis peuvent utiliser ce lien pour charger votre build directement dans leur optimiseur sans avoir besoin du fichier.
-
 ## Avant de commencer
 
 Cet outil est conçu pour les **joueurs de fin de partie** qui optimisent la configuration technologique de leur plate-forme pour une efficacité maximale. Cela fonctionne mieux quand :
@@ -26,6 +18,33 @@ Cet outil est conçu pour les **joueurs de fin de partie** qui optimisent la con
 - Vous possédez un **ensemble complet de trois modules de mise à niveau** par technologie applicable.
 
 Si vous déverrouillez toujours des cellules ou collectez des modules, l'outil peut toujours fournir des informations, mais il est principalement conçu pour les **plates-formes entièrement mises à niveau**.
+
+## Étiquettes Thêta / Tau / Sigma
+
+Ces étiquettes classent les améliorations procédurales **par qualité statistique**, et non par classe. Il s'agit de **termes hérités des versions antérieures du jeu**, conservés pour maintenir la cohérence du thème et du style.
+
+- **Theta** — meilleure mise à niveau procédurale _(affiché comme **1** dans la grille)_
+- **Tau** — milieu _(affiché comme **2** dans la grille)_
+- **Sigma** — pire _(affiché comme **3** dans la grille)_
+
+Vous ne verrez pas ces noms dans votre inventaire. Ils sont attribués en **comparant les statistiques réelles des mises à niveau pour la même technologie**.
+
+### Comment utiliser ceci dans le jeu
+
+Ignorez la lettre de classe (S, X, etc.). Comparez plutôt les statistiques directement :
+
+- Meilleures statistiques → **Thêta (1)**
+- Deuxième meilleur → **Tau (2)**
+- Pires statistiques → **Sigma (3)**
+
+### Classe S vs Classe X
+
+La classe ne détermine **pas** le rang. Les mises à niveau de la Classe X peuvent être supérieures ou inférieures à celles de la Classe S.
+
+- Si une Classe X a les meilleures statistiques, c'est **Thêta (1)**
+- Si une Classe S est plus faible, elle devient **Tau (2)** ou **Sigma (3)**
+
+**En résumé :** Thêta/Tau/Sigma signifie simplement **meilleur/milieu/pire**, en se basant uniquement sur les statistiques.
 
 ## Informations sur les Corvettes
 
@@ -42,6 +61,14 @@ Pour les plates-formes comme **Exosuits** et **Exocraft**, où les cellules sura
 Cela permet à l'outil de proposer des **versions recommandées** : des mises en page soigneusement sélectionnées et très avisées reflétant les meilleures combinaisons disponibles.
 
 Si vous avez des commentaires ou souhaitez suggérer des configurations alternatives, n'hésitez pas à [démarrer une discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — ces versions sont organisées, non générées automatiquement, et la contribution de la communauté contribue à les améliorer.
+
+## Sauvegarde, chargement et partage de builds
+
+Vous pouvez enregistrer vos mises en page optimisées, les recharger plus tard ou les partager avec des amis, ce qui facilite la gestion de plusieurs configurations pour la même plateforme.
+
+- **Enregistrer la construction** — Cliquez sur l'icône d'enregistrement pour télécharger votre mise en page actuelle sous forme de fichier « .nms ». Vous serez invité à nommer votre build ; l'outil génère également automatiquement des noms thématiques comme « Corvette - Crusade of the Starfall.nms » , que vous pouvez personnaliser.
+- **Load Build** — Cliquez sur l'icône de chargement pour télécharger un fichier « .nms » précédemment enregistré. Votre grille sera immédiatement mise à jour pour correspondre à la disposition enregistrée, y compris tous les emplacements de modules et les positions des cellules suralimentées.
+- **Partager la construction** — Cliquez sur l'icône de partage pour générer un lien partageable pour votre mise en page actuelle. Les amis peuvent utiliser ce lien pour charger votre build directement dans leur optimiseur sans avoir besoin du fichier.
 
 ## Conseils d'utilisation
 

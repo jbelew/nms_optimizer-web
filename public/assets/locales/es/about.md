@@ -1,101 +1,129 @@
-# Cómo Funciona NMS Optimizer: Optimización de Diseños Tecnológicos con ML
+# Cómo funciona NMS Optimizer: optimización del diseño tecnológico impulsada por ML
 
 ## ¿Qué es el optimizador NMS?
 
-¡Deja de confiar en conjeturas! El **NMS Optimizer** es la **calculadora**, **planificador** y **constructor** definitivo, gratuito y basado en la web para los jugadores de **No Man's Sky** que desean desbloquear el máximo potencial absoluto de su equipo.
+NMS Optimizer es la mejor calculadora de diseño técnico gratuita basada en web para jugadores de No Man's Sky que desean encontrar la ubicación óptima de los módulos para su equipo. Esta herramienta le ayuda a diseñar y visualizar diseños ideales para:
 
-Es una herramienta inteligente que le ayuda a diseñar y visualizar la **ubicación óptima del módulo** para todos sus equipos. Obtenga el **diseño** perfecto para su:
+- **Diseños tecnológicos de naves espaciales** y construcciones de naves espaciales
+- **Diseños de cargueros** y colocación de tecnología de cargueros
+- **Diseños de tecnología Corvette** y construcciones de Corvette
+- **Diseños multiherramienta** y compilaciones multiherramienta
+- **Diseños de Exocraft** y construcciones de exocraft.
+- **Diseños de exotraje** y colocación de tecnología de exotraje
 
-* **Construcciones de naves espaciales** (todas las clases)
-* **Diseños de carguero**
-* **Corvette construye**
-* **Diseños multiherramienta**
-* **Construcciones de Exocraft**
-* **Construcciones de exotraje**
+La herramienta maneja los cálculos automáticamente, teniendo en cuenta **bonos de adyacencia** (el aumento de rendimiento que se obtiene al colocar tecnologías compatibles una al lado de la otra en la cuadrícula de tu inventario) y **espacios supercargados** (los raros espacios de alto valor que dan aumentos de ~25-30%). Calcula y encuentra la disposición que le brinda la puntuación más alta posible para su construcción.
 
-El optimizador maneja automáticamente las matemáticas complejas, calculando la disposición ideal para maximizar las mecánicas críticas del juego como **bonos de adyacencia** (el impulso de agrupar tecnologías similares) y el inmenso poder de las **tragamonedas supercargadas**. Lograr el máximo rendimiento ahora es sencillo.
+## ¿Cómo funciona?
 
-## ¿Cómo resuelve el problema imposible?
+El problema es matemáticamente enorme: ~8,32 × 10⁸¹ posibles permutaciones (82 dígitos de longitud). Lo solucionamos mediante reconocimiento de patrones, aprendizaje automático y optimización. La herramienta funciona en cuatro pasos:
 
-> ¿Cómo se resuelve un problema con hasta ~8,32 × 10⁸¹ permutaciones posibles (¡es decir, 82 dígitos!) en cuestión de segundos?
+1. **Compruebe los patrones seleccionados:** Comience con patrones probados manualmente que brinden sólidas bonificaciones de adyacencia
+2. **Predecir con ML:** Si su configuración incluye ranuras supercargadas, un modelo de TensorFlow, entrenado en más de 16 000 redes del mundo real, predice la mejor ubicación para las tecnologías centrales.
+3. **Refinar con recocido simulado:** Un optimizador basado en Rust intercambia módulos y cambia de posición para alcanzar la mejor puntuación posible
+4. **Mostrarle el resultado:** La herramienta muestra su configuración de puntuación más alta con desgloses de puntuación.
 
-Combinamos tecnología de vanguardia para ofrecer **diseños de naves estelares**, **diseños de cargueros**, **diseños de multiherramientas** y **diseños de exotrajes** de primer nivel. La herramienta considera todos los factores, incluidos todos los **bonos de adyacencia** y el uso estratégico de **espacios supercargados**, mediante un proceso de cuatro pasos:
+## Qué puede hacer
 
-1. **Comience con los mejores patrones:** El proceso comienza verificando instantáneamente una biblioteca seleccionada de patrones probados manualmente para establecer un punto de partida de alta puntuación para **bonos de adyacencia**.
-2. **Ubicación guiada por IA (aprendizaje automático):** Si su configuración incluye ranuras supercargadas, un modelo especializado de TensorFlow, entrenado en más de 16 000 redes del mundo real, interviene para predecir la ubicación óptima para las tecnologías centrales.
-3. **Refinamiento mediante recocido simulado:** Un proceso de búsqueda estocástica altamente optimizado basado en Rust intercambia meticulosamente módulos y cambia posiciones. Este refinamiento final garantiza que el diseño se lleve a su límite absoluto de rendimiento, evitando errores comunes (óptimos locales) que los jugadores humanos suelen cometer.
-4. **Visualiza la construcción perfecta:** La **calculadora NMS** luego presenta la configuración de puntuación más alta, completa con desgloses de puntuación y recomendaciones visuales para todo tu equipo.
+- **Administra todos los tipos de ranuras:** Ranuras estándar, sobrealimentadas e inactivas
+- **Comprende las ranuras supercargadas:** El optimizador decide si una tecnología central o su mejor actualización debe incluirse en estas ranuras de alto valor. Navega por las compensaciones para maximizar su objetivo
+- **Utiliza patrones de aprendizaje automático:** Capacitado en más de 16 000 diseños reales para identificar arreglos de alto rendimiento
+- **Refina a la perfección:** El recocido simulado extrae cada punto porcentual de rendimiento posible
 
----
+## ¿Por qué usarlo?
 
-## ✨Características clave que impulsan el rendimiento
+Evite las interminables pruebas y errores. Obtenga el diseño matemáticamente óptimo para su Starship de máximo daño, su carguero de mayor alcance, su potente Corvette o su robusto Exosuit. La herramienta explica los bonos de adyacencia y las tragamonedas sobrecargadas en lugar de dejarte adivinando. Si alguna vez te has preguntado cómo aprovechar mejor tus limitadas ranuras supercargadas, esto te da la respuesta.
 
-* **Optimización integral:** Soporte completo para ranuras estándar, **sobrealimentadas** e inactivas para garantizar que encuentres el **diseño** óptimo matemáticamente verdadero.
-* **Utilización inteligente de las ranuras supercargadas:** El optimizador no solo reconoce las ranuras supercargadas: actúa como un jugador experto, determinando de forma inteligente si una tecnología central (como un Pulse Engine principal) o su módulo de actualización más potente debe ocupar estas ranuras de alto impulso. Explora las complejas compensaciones para maximizar perfectamente su objetivo específico (por ejemplo, rango de salto, daño de arma o movilidad).
-* **Aprendizaje avanzado de IA:** Creado sobre una base de **Inferencia de aprendizaje automático** a partir de más de 16 000 diseños de cuadrícula históricos.
-* **Refinamiento meticuloso del diseño:** El proceso de **Recocido simulado avanzado** garantiza que se extraiga cada punto porcentual posible de rendimiento de su equipo.
+## ¿Por qué elegir el optimizador NMS en lugar de la planificación manual?
 
-## ¿Por qué utilizar esta **Calculadora NMS**?
+**El problema:** Los equipos de No Man's Sky pueden tener millones de disposiciones tecnológicas posibles, y encontrar el diseño óptimo mediante prueba y error lleva horas.
 
-¡Detén el interminable ensayo y error manual! Desbloquea el verdadero potencial de tu equipo, ya sea que estés construyendo una **construcción de nave estelar** de daño máximo, el **diseño de carguero** de mayor alcance, una poderosa **construcción de Corvette**, el alcance de escaneo definitivo con un perfecto **diseño de multiherramienta**, un **Exocraft** optimizado o un **Exotraje** robusto.
+**La solución:** NMS Optimizer utiliza aprendizaje automático y algoritmos avanzados para:
+- Encuentra tu mejor diseño tecnológico en segundos
+- Maximizar las bonificaciones de adyacencia automáticamente
+- Optimice la ubicación de la ranura sobrealimentada
+- Mostrarte el desglose exacto de la puntuación.
+- Trabajo para todo tipo de equipos (naves espaciales, corbetas, multiherramientas, exotrajes, exocraft, cargueros)
+- Actualiza en tiempo real a medida que ajustas tus selecciones de tecnología
 
-Este **optimizador** desmitifica las complejas reglas de las interacciones de **bonos de adyacencia** y de **ranuras supercargadas**. Proporciona una manera clara y eficiente de planificar cada actualización con confianza. Si alguna vez se ha preguntado cuál es la mejor manera de utilizar sus **ranuras supercargadas** limitadas, esta herramienta le brinda la respuesta definitiva.
-
----
+En lugar de adivinar, obtienes siempre la disposición matemáticamente óptima.
 
 ## Pila de tecnología
 
-* **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-* **Backend Solver:** Implementaciones personalizadas de puntuación heurística y recocido simulado basadas en Python, Flask, TensorFlow, NumPy y Rust.
-* **Pruebas:** Vitest, prueba unitaria de Python
-* **Implementación:** Heroku (Hosting), Cloudflare (DNS y CDN), Docker
-* **Automatización:** Acciones de GitHub (CI/CD)
-* **Análisis:** Google Analytics
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend Solver:** Python, Flask, TensorFlow, NumPy, recocido y puntuación simulados basados en Rust
+- **Pruebas:** Vitest, prueba unitaria de Python
+- **Implementación:** Heroku (Hosting), Cloudflare (DNS y CDN), Docker
+- **Automatización:** Acciones de GitHub (CI/CD)
+- **Análisis:** Google Analytics
 
 ## Repositorios
 
-* Interfaz de usuario web: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-* Servidor: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Interfaz de usuario web: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Servidor: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
----
+## Preguntas frecuentes
 
-## ❓Preguntas frecuentes
+### P: ¿Qué es un bono de adyacencia?
 
-### ¿Qué es una bonificación de adyacencia en No Man's Sky?
+R: Una **bonificación de adyacencia** en No Man's Sky es el aumento de rendimiento que recibes al colocar módulos de tecnología compatibles uno al lado del otro en tu cuadrícula de inventario. Las diferentes tecnologías tienen diferentes socios de adyacencia; por ejemplo, las mejoras de armas a menudo otorgan bonificaciones cuando se colocan cerca unas de otras. NMS Optimizer analiza las tecnologías seleccionadas y encuentra la disposición que maximiza todas las bonificaciones de adyacencia en toda su red, lo que garantiza que obtenga los mejores multiplicadores de rendimiento posibles.
 
-Una **bonificación de adyacencia** es un aumento significativo en el rendimiento que se obtiene cuando los módulos de tecnología compatibles se colocan uno al lado del otro en su cuadrícula de inventario. El Optimizador de NMS calcula la disposición óptima para maximizar estas bonificaciones en todas sus tecnologías para lograr el máximo efecto.
+### P: ¿Cómo funcionan las ranuras supercargadas?
 
-### ¿Cómo funcionan las tragamonedas sobrealimentadas?
+R: **Las ranuras supercargadas** son ranuras de inventario raras y de alto valor (normalmente 4 por cuadrícula) que proporcionan un aumento de ~25 a 30 % a cualquier cosa que se coloque en ellas. Son uno de los bienes inmuebles más valiosos de su red. El desafío es decidir qué tecnologías deberían incluirse en estos espacios limitados. El optimizador utiliza aprendizaje automático entrenado en más de 16 000 diseños reales para decidir si colocar una tecnología central o su mejor actualización en cada ranura supercargada, maximizando su rendimiento general.
 
-Las **ranuras supercargadas** son raras (limitadas a 4 por cuadrícula en la mayoría de las plataformas) y proporcionan un enorme impulso de ~25-30 % a cualquier módulo de tecnología colocado en ellas. Son estratégicamente vitales. El optimizador le ayuda a decidir si desea colocar una tecnología central o sus mejores actualizaciones en estas ranuras para maximizar su rendimiento general.
+### P: ¿Cómo funciona el optimizador de ubicación de tecnología NMS?
 
-### ¿Qué equipo admite el optimizador?
+R: NMS Optimizer utiliza tres métodos que funcionan juntos:
+1. **Coincidencia de patrones**: comienza con patrones de diseño de tecnología comprobada y probados manualmente que ofrecen sólidas bonificaciones de adyacencia.
+2. **Predicción de aprendizaje automático**: una red neuronal TensorFlow entrenada en más de 16 000 redes del mundo real predice la mejor ubicación para sus tecnologías principales
+3. **Refinamiento del recocido simulado**: un optimizador basado en Rust afina el diseño probando miles de intercambios de posiciones para alcanzar la mejor puntuación posible.
 
-El optimizador admite todos los equipos principales de **No Man's Sky**:
+Este enfoque de tres capas resuelve lo que de otro modo sería un problema increíblemente complejo (~8,32 × 10⁸¹ permutaciones).
 
-* **Naves estelares** (Estándar, Exóticas, Centinelas, Solares, Vivas)
-* **Corbetas** (incluidos módulos cosméticos y de reactor exclusivos)
-* **Multiherramientas** (Estándar, Exótica, Atlántida, Centinela, Bastones)
-* **Exocraft** (todos los tipos, incluido Minotauro)
-* **Exotrajes**
-* **Cargueros**
+### P: ¿Qué equipo de No Man's Sky admite el optimizador?
 
-### ¿Qué tan preciso es el optimizador?
+R: El Optimizador NMS es compatible con todos los principales equipos de No Man's Sky:
 
-Es **extremadamente preciso**. La herramienta utiliza una combinación de patrones probados, aprendizaje automático entrenado en más de 16 000 diseños y refinamiento de recocido simulado. Considera todos los factores, incluidos **bonos de adyacencia**, **ranuras supercargadas** y reglas de colocación de módulos, para encontrar el diseño matemáticamente óptimo** para su configuración específica.
+- **Naves estelares:** variantes estándar, exótica, centinela, solar, viva y MT (enfocada en múltiples herramientas)
+- **Corbetas:** Incluye módulos de reactor únicos y ranuras para tecnología cosmética.
+- **Multiherramientas:** Todos los tipos, incluidas duelas
+- **Exocraft:** Todos los tipos de vehículos (Nomad, Pilgrim, Roamer, Minotaur, Nautilon)
+- **Exotrajes:** Todo tipo de tecnología
+- **Cargueros:** Diseños de tecnología de naves capitales
 
-### ¿El optimizador es de uso gratuito?
+### P: ¿Qué tan preciso es el optimizador?
 
-¡Sí! El **NMS Optimizer** es completamente gratuito, sin publicidad y de código abierto. No se requiere registro ni pago.
+R: Muy preciso. NMS Optimizer combina patrones de diseño probados manualmente, aprendizaje automático entrenado en más de 16 000 cuadrículas del mundo real y un algoritmo de recocido simulado basado en Rust para encontrar el diseño tecnológico matemáticamente óptimo para su configuración exacta. Tiene en cuenta todas las bonificaciones de adyacencia, las compensaciones de las ranuras supercargadas y las ranuras inactivas para maximizar el rendimiento de su configuración.
 
-### ¿Puedo guardar y compartir mis compilaciones?
+### P: ¿Puedo encontrar el mejor diseño de nave estelar, diseño de corbeta o diseño de exotraje con esta herramienta?
 
-¡Absolutamente! Puede guardar sus diseños optimizados como archivos `.nms`, recargarlos más tarde o generar enlaces para compartir y enviar a sus amigos. Todas las compilaciones están validadas para garantizar su integridad y compatibilidad.
+R: Sí. El Optimizador NMS encuentra el **mejor diseño tecnológico** para cualquier tipo de equipo:
+- **Los mejores diseños de naves espaciales** teniendo en cuenta tus opciones de armas y tecnología de servicios públicos.
+- **Mejores diseños de corbetas** Equilibrio de reactores y tecnologías de combate.
+- **Los mejores diseños de exotrajes** que optimizan la tecnología de utilidad, defensa y movimiento.
+- **Los mejores diseños de multiherramienta** para máximo daño o utilidad
+- **Mejores diseños de carguero** para almacenamiento y servicios públicos
 
----
+Simplemente seleccione su tipo de equipo, elija sus tecnologías, marque sus ranuras supercargadas y el optimizador calculará la disposición matemáticamente óptima.
 
-## Un poco de historia divertida
+### P: ¿El Optimizador NMS es gratuito?
 
-He aquí un vistazo a una **primera versión** de la interfaz de usuario: funcionalmente sólida pero visualmente mínima. La versión actual es una mejora masiva en diseño, usabilidad y claridad, que ayuda a los jugadores a encontrar rápidamente el **mejor diseño** para cualquier barco o herramienta.
+R: Sí. NMS Optimizer es completamente gratuito, sin publicidad y de código abierto (licencia GPL-3.0). No se requiere registro ni pago. Toda la optimización ocurre instantáneamente en su navegador o en nuestros servidores sin costo alguno.
+
+### P: ¿Puedo guardar y compartir mis compilaciones?
+
+R: Sí. Puedes:
+- **Guarde las compilaciones** como archivos `.nms` en su computadora y vuelva a cargarlas más tarde
+- **Genere enlaces para compartir** para enviar su diseño tecnológico a amigos
+- **Comparte tu compilación directamente** a través de las redes sociales o mensajes
+Todas las compilaciones se validan en cuanto a integridad y compatibilidad de equipos antes de compartirlas.
+
+## Gracias
+
+George V, Diab, JayTee73, Boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrreally, Kevin Murray y todos los que han contribuido: su apoyo lo es todo. Cada donación, compartir y palabra amable me ayuda a seguir construyendo. Gracias.
+
+## Versión temprana
+
+Así es como se veía la interfaz de usuario en una de las primeras versiones: funcionó, pero el diseño era mínimo. La versión actual supone una mejora importante en diseño, usabilidad y claridad.
 
 ![Prototipo inicial de la interfaz de usuario del optimizador de diseño de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

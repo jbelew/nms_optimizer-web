@@ -1,101 +1,129 @@
-# Wie NMS Optimizer Funktioniert: ML-gesteuerte Layout-Optimierung
+# So funktioniert NMS Optimizer: ML-gestützte Tech-Layout-Optimierung
 
 ## Was ist der NMS-Optimierer?
 
-Verlassen Sie sich nicht mehr auf Vermutungen! Der **NMS Optimizer** ist der ultimative, kostenlose, webbasierte **Rechner**, **Planer** und **Builder** für **No Man's Sky**-Spieler, die das absolut maximale Potenzial ihrer Ausrüstung freischalten möchten.
+Der NMS Optimizer ist der beste kostenlose, webbasierte Tech-Layout-Rechner für No Man's Sky-Spieler, die die optimale Modulplatzierung für ihre Ausrüstung finden möchten. Mit diesem Tool können Sie ideale Layouts entwerfen und visualisieren für:
 
-Es handelt sich um ein intelligentes Tool, mit dem Sie die **optimale Modulplatzierung** für Ihre gesamte Ausrüstung entwerfen und visualisieren können. Holen Sie sich das perfekte **Layout** für Ihr:
+- **Raumschiff-Tech-Layouts** und Raumschiff-Builds
+- **Frachter-Layouts** und Platzierung der Frachter-Technologie
+- **Corvette-Technologie-Layouts** und Corvette-Builds
+- **Multitool-Layouts** und Multitool-Builds
+- **Exocraft-Layouts** und Exocraft-Builds
+- **Exosuit-Layouts** und Platzierung der Exosuit-Technologie
 
-* **Raumschiff-Builds** (alle Klassen)
-* **Frachterlayouts**
-* **Corvette-Builds**
-* **Multitool-Layouts**
-* **Exocraft-Builds**
-* **Exosuit-Builds**
+Das Tool übernimmt die Berechnung automatisch und berücksichtigt **Adjazenzboni** (die Leistungssteigerung, die Sie durch die Platzierung kompatibler Technologien nebeneinander in Ihrem Inventarraster erhalten) und **Supercharged-Slots** (die seltenen hochwertigen Slots, die ~25–30 % Boosts bieten). Es berechnet und findet die Anordnung, die Ihnen die höchstmögliche Punktzahl für Ihren Build gibt.
 
-Der Optimierer verarbeitet automatisch die komplexe Mathematik und berechnet die ideale Anordnung, um wichtige Spielmechaniken wie **Adjazenzboni** (der Boost durch die Gruppierung ähnlicher Technologien) und die immense Leistung von **aufgeladenen Slots** zu maximieren. Höchstleistungen zu erzielen ist jetzt ganz einfach.
+## Wie funktioniert es?
 
-## Wie löst es das unmögliche Problem?
+Das Problem ist mathematisch enorm: ~8,32 × 10⁸¹ mögliche Permutationen (82 Ziffern lang). Wir lösen es mithilfe von Mustererkennung, maschinellem Lernen und Optimierung. Das Tool funktioniert in vier Schritten:
 
-> Wie löst man ein Problem mit bis zu ~8,32 × 10⁸¹ möglichen Permutationen (das sind 82 Ziffern!) in nur wenigen Sekunden?
+1. **Überprüfen Sie kuratierte Muster:** Beginnen Sie mit handgetesteten Mustern, die solide Nachbarschaftsboni bieten
+2. **Vorhersage mit ML:** Wenn Ihr Setup aufgeladene Slots umfasst, sagt ein TensorFlow-Modell – trainiert auf über 16.000 realen Gittern – die beste Platzierung für Kerntechnologien voraus
+3. **Verfeinern mit simuliertem Tempern:** Ein Rust-basierter Optimierer tauscht Module und verschiebt Positionen, um die bestmögliche Punktzahl zu erreichen
+4. **Zeigen Sie das Ergebnis:** Das Tool zeigt Ihre Konfiguration mit der höchsten Punktzahl mit Aufschlüsselung der Punktzahlen an
 
-Wir kombinieren modernste Technologie, um erstklassige **Raumschiff-Layouts**, **Frachter-Builds**, **Multitool-Layouts** und **Exosuit-Builds** zu liefern. Das Tool berücksichtigt jeden Faktor, einschließlich aller **Adjacency-Boni** und der strategischen Nutzung von **Supercharged Slots**, mithilfe eines vierstufigen Prozesses:
+## Was es kann
 
-1. **Beginnen Sie mit den besten Mustern:** Der Prozess beginnt mit der sofortigen Überprüfung einer kuratierten Bibliothek handgetesteter Muster, um einen Ausgangspunkt mit hoher Punktzahl für **Adjazenzboni** zu schaffen.
-2. **KI-gesteuerte Platzierung (maschinelles Lernen):** Wenn Ihr Setup aufgeladene Slots umfasst, greift ein spezielles TensorFlow-Modell – trainiert auf über 16.000 realen Gittern – ein, um die optimale Platzierung für Kerntechnologien vorherzusagen.
-3. **Verfeinerung durch Simulated Annealing:** Ein hochoptimierter, Rust-basierter stochastischer Suchprozess tauscht sorgfältig Module und verschiebt Positionen. Diese letzte Verfeinerung stellt sicher, dass das Layout an seine absolute Leistungsgrenze gebracht wird, und vermeidet häufige Fehler (lokale Optima), die menschliche Spieler häufig machen.
-4. **Visualisieren Sie den perfekten Build:** Der **NMS-Rechner** präsentiert dann die Konfiguration mit der höchsten Punktzahl, komplett mit Punkteaufschlüsselung und visuellen Empfehlungen für Ihre gesamte Ausrüstung.
+- **Verwaltet alle Slot-Typen:** Standard-, Supercharged- und inaktive Slots
+- **Versteht Supercharged-Slots:** Der Optimierer entscheidet, ob eine Kerntechnologie oder ihr bestes Upgrade in diese hochwertigen Slots gesteckt werden soll. Es navigiert durch die Kompromisse, um Ihr Ziel zu maximieren
+- **Verwendet ML-Muster:** Auf über 16.000 realen Layouts trainiert, um leistungsstarke Arrangements zu identifizieren
+- **Verfeinert bis zur Perfektion:** Simuliertes Tempern extrahiert jeden möglichen Prozentpunkt der Leistung
 
----
+## Warum es verwenden?
 
-## ✨Hauptfunktionen, die die Leistung steigern
+Überspringen Sie das endlose Ausprobieren. Holen Sie sich das mathematisch optimale Layout für Ihr Raumschiff mit maximalem Schaden, Ihren Frachter mit der größten Reichweite, Ihre leistungsstarke Corvette oder Ihren robusten Exosuit. Das Tool erklärt Nachbarschaftsboni und aufgeladene Slots, anstatt Sie im Ungewissen zu lassen. Wenn Sie sich jemals gefragt haben, wie Sie Ihre begrenzten Supercharger-Slots am besten nutzen können, finden Sie hier die Antwort.
 
-* **Umfassende Optimierung:** Volle Unterstützung für Standard-, **Supercharged**- und inaktive Slots, um sicherzustellen, dass Sie das mathematisch korrekte optimale **Layout** finden.
-* **Intelligente Supercharged-Slot-Auslastung:** Der Optimierer erkennt nicht nur Supercharged-Slots – er verhält sich wie ein erfahrener Spieler und bestimmt intelligent, ob eine Kerntechnologie (wie eine Haupt-Pulse Engine) oder ihr leistungsstärkstes Upgrade-Modul diese High-Boost-Slots belegen soll. Es navigiert durch die komplexen Kompromisse, um Ihr spezifisches Ziel perfekt zu maximieren (z. B. Sprungreichweite, Waffenschaden oder Mobilität).
-* **Fortgeschrittenes KI-Lernen:** Basierend auf **Machine-Learning-Inferenz** aus über 16.000 historischen Rasterlayouts.
-* **Sorgfältige Layout-Verfeinerung:** Der **Advanced Simulated Annealing**-Prozess stellt sicher, dass jeder mögliche Prozentpunkt der Leistung aus Ihrer Ausrüstung herausgeholt wird.
+## Warum den NMS-Optimierer der manuellen Planung vorziehen?
 
-## Warum diesen **NMS-Rechner** verwenden?
+**Das Problem:** Die Ausrüstung von No Man's Sky kann Millionen möglicher Technologieanordnungen aufweisen, und es dauert Stunden, durch Versuch und Irrtum die optimale Anordnung zu finden.
 
-Schluss mit dem endlosen manuellen Ausprobieren! Schöpfen Sie das wahre Potenzial Ihrer Ausrüstung aus, egal ob Sie einen **Raumschiff-Build** mit maximalem Schaden, den **Frachter-Layout mit der größten Reichweite**, einen leistungsstarken **Corvette-Build**, die ultimative Scan-Reichweite mit einem perfekten **Multitool-Layout**, ein optimiertes **Exocraft** oder einen robusten **Exosuit** bauen.
+**Die Lösung:** Der NMS Optimizer nutzt maschinelles Lernen und fortschrittliche Algorithmen, um:
+- Finden Sie in Sekundenschnelle Ihr bestes Technologie-Layout
+- Adjazenzboni automatisch maximieren
+- Optimieren Sie die Platzierung der aufgeladenen Steckplätze
+- Zeigen Sie die genaue Punkteaufschlüsselung an
+- Arbeiten für alle Ausrüstungstypen (Raumschiffe, Korvetten, Multitools, Exosuits, Exocraft, Frachter)
+- Aktualisieren Sie in Echtzeit, während Sie Ihre Technologieauswahl anpassen
 
-Dieser **Optimierer** entmystifiziert die komplexen Regeln von **Adjazenzboni** und **Supercharged-Slot-Interaktionen**. Es bietet eine klare und effiziente Möglichkeit, jedes Upgrade sicher zu planen. Wenn Sie sich jemals gefragt haben, wie Sie Ihre begrenzten **supergeladenen Slots** am besten nutzen können, bietet dieses Tool die endgültige Antwort.
-
----
+Anstatt zu raten, erhalten Sie jedes Mal die mathematisch optimale Anordnung.
 
 ## Tech-Stack
 
-* **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-* **Backend-Solver:** Python-, Flask-, TensorFlow-, NumPy- und Rust-basierte benutzerdefinierte simulierte Annealing- und heuristische Scoring-Implementierungen.
-* **Testen:** Vitest, Python Unittest
-* **Bereitstellung:** Heroku (Hosting), Cloudflare (DNS und CDN), Docker
-* **Automatisierung:** GitHub-Aktionen (CI/CD)
-* **Analytics:** Google Analytics
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend-Solver:** Python, Flask, TensorFlow, NumPy, Rust-basiertes simuliertes Tempern und Scoring
+- **Testen:** Vitest, Python Unittest
+- **Bereitstellung:** Heroku (Hosting), Cloudflare (DNS und CDN), Docker
+- **Automatisierung:** GitHub-Aktionen (CI/CD)
+- **Analytics:** Google Analytics
 
 ## Repositorys
 
-* Web-Benutzeroberfläche: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-* Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Web-Benutzeroberfläche: [https://github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend: [https://github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
----
+## Häufig gestellte Fragen
 
-## ❓Häufig gestellte Fragen
+### F: Was ist ein Adjazenzbonus?
 
-### Was ist ein Adjazenzbonus in No Man's Sky?
+A: Ein **Nachbarschaftsbonus** in No Man's Sky ist die Leistungssteigerung, die Sie erhalten, wenn Sie kompatible Technologiemodule nebeneinander in Ihrem Inventarraster platzieren. Unterschiedliche Technologien haben unterschiedliche Nachbarschaftspartner – Waffen-Upgrades bringen beispielsweise häufig Boni, wenn sie nahe beieinander platziert werden. Der NMS Optimizer analysiert Ihre ausgewählten Technologien und findet die Anordnung, die alle Adjazenzboni in Ihrem gesamten Raster maximiert und so sicherstellt, dass Sie die bestmöglichen Leistungsmultiplikatoren erhalten.
 
-Ein **Nachbarschaftsbonus** ist eine deutliche Leistungssteigerung, die Sie erhalten, wenn kompatible Technologiemodule in Ihrem Inventarraster direkt nebeneinander platziert werden. Der NMS Optimizer berechnet die optimale Anordnung, um diese Boni für alle Ihre Technologien zu maximieren und so eine maximale Wirkung zu erzielen.
+### F: Wie funktionieren Supercharged-Slots?
 
-### Wie funktionieren Supercharged-Slots?
+A: **Supercharged-Slots** sind seltene, hochwertige Inventar-Slots (normalerweise 4 pro Raster), die alles, was darin platziert wird, um ca. 25–30 % steigern. Sie gehören zu den wertvollsten Immobilien in Ihrem Netz. Die Herausforderung besteht darin, zu entscheiden, welche Technologien in diese begrenzten Slots passen sollen. Der Optimierer nutzt maschinelles Lernen, das auf mehr als 16.000 realen Layouts trainiert wurde, um zu entscheiden, ob in jedem aufgeladenen Steckplatz eine Kerntechnologie oder das beste Upgrade platziert werden soll, um so Ihre Gesamtleistung zu maximieren.
 
-**Supercharged-Slots** sind selten (auf den meisten Plattformen auf 4 pro Raster begrenzt) und bieten jedem darin platzierten Technologiemodul einen enormen Schub von ca. 25–30 %. Sie sind von strategischer Bedeutung. Der Optimierer hilft Ihnen bei der Entscheidung, ob Sie eine Kerntechnologie oder ihre besten Upgrades in diesen Slots platzieren, um Ihre Gesamtleistung zu maximieren.
+### F: Wie funktioniert der NMS-Technologieplatzierungsoptimierer?
 
-### Welche Geräte unterstützt der Optimierer?
+A: Der NMS-Optimierer verwendet drei zusammenarbeitende Methoden:
+1. **Musterabgleich** – Es beginnt mit handgetesteten, bewährten Technologie-Layoutmustern, die solide Nachbarschaftsvorteile bieten
+2. **Vorhersage durch maschinelles Lernen** – Ein neuronales TensorFlow-Netzwerk, das auf über 16.000 realen Gittern trainiert wurde, sagt die beste Platzierung für Ihre Kerntechnologien voraus
+3. **Simulierte Glühverfeinerung** – Ein Rust-basierter Optimierer optimiert das Layout, indem er Tausende von Positionswechseln testet, um die absolut bestmögliche Punktzahl zu erreichen
 
-Der Optimierer unterstützt alle wichtigen **No Man's Sky**-Geräte:
+Dieser dreischichtige Ansatz löst ein ansonsten unmöglich komplexes Problem (~8,32 × 10⁸¹ Permutationen).
 
-* **Raumschiffe** (Standard, Exotisch, Sentinel, Solar, Living)
-* **Korvetten** (einschließlich einzigartiger Reaktor- und Kosmetikmodule)
-* **Multitools** (Standard, Exotic, Atlantid, Sentinel, Staves)
-* **Exocraft** (alle Typen einschließlich Minotaurus)
-* **Exoanzüge**
-* **Frachter**
+### F: Welche No Man's Sky-Geräte unterstützt der Optimierer?
 
-### Wie genau ist der Optimierer?
+A: Der NMS Optimizer unterstützt alle wichtigen No Man's Sky-Geräte:
 
-Es ist **extrem genau**. Das Tool nutzt eine Kombination aus bewährten Mustern, maschinellem Lernen, das auf mehr als 16.000 Layouts trainiert wurde, und einer Verfeinerung durch simuliertes Tempern. Es berücksichtigt jeden Faktor – einschließlich **Adjacency-Boni**, **Supercharged-Slots** und Modulplatzierungsregeln –, um das mathematisch **optimale Layout** für Ihre spezifische Konfiguration zu finden.
+- **Raumschiffe:** Standard-, Exotic-, Sentinel-, Solar-, Living- und MT-Varianten (Multitool-fokussiert).
+- **Korvetten:** Einschließlich einzigartiger Reaktormodule und kosmetischer Technologie-Slots
+- **Multitools:** Alle Arten, einschließlich Dauben
+- **Exocraft:** Alle Fahrzeugtypen (Nomad, Pilgrim, Roamer, Minotaur, Nautilon)
+- **Exoanzüge:** Alle Technologietypen
+- **Frachter:** Technologielayouts für Großschiffe
 
-### Ist die Nutzung des Optimierers kostenlos?
+### F: Wie genau ist der Optimierer?
 
-Ja! Der **NMS Optimizer** ist völlig kostenlos, werbefrei und Open Source. Es ist keine Registrierung oder Zahlung erforderlich.
+A: Sehr genau. Der NMS Optimizer kombiniert handgetestete Layoutmuster, maschinelles Lernen, das auf über 16.000 realen Gittern trainiert wurde, und einen Rust-basierten simulierten Glühalgorithmus, um das mathematisch optimale Technologielayout für Ihre genaue Konfiguration zu finden. Es berücksichtigt alle Adjazenzboni, Kompromisse bei aufgeladenen Slots und inaktive Slots, um die Leistung Ihres Builds zu maximieren.
 
-### Kann ich meine Builds speichern und teilen?
+### F: Kann ich mit diesem Tool das beste Raumschiff-, Korvetten- oder Exosuit-Layout finden?
 
-Absolut! Sie können Ihre optimierten Layouts als „.nms“-Dateien speichern, sie später erneut laden oder gemeinsam nutzbare Links generieren, um sie an Freunde zu senden. Alle Builds werden auf Integrität und Kompatibilität validiert.
+A: Ja. Der NMS Optimizer findet für jeden Gerätetyp das **beste Technologielayout**:
+- **Beste Raumschiff-Layouts** unter Berücksichtigung Ihrer Waffen- und Versorgungstechnologieauswahl
+- **Beste Korvetten-Layouts**, die Reaktor- und Kampftechnologien ausgleichen
+- **Beste Exosuit-Layouts** zur Optimierung von Nutzen, Verteidigung und Bewegungstechnologie
+- **Beste Multitool-Layouts** für maximalen Schaden oder Nutzen
+- **Beste Frachter-Layouts** für Lagerung und Versorgung
 
----
+Wählen Sie einfach Ihren Gerätetyp, wählen Sie Ihre Technologien aus, markieren Sie Ihre aufgeladenen Steckplätze und der Optimierer berechnet die mathematisch optimale Anordnung.
 
-## Eine lustige Geschichte
+### F: Ist der NMS Optimizer kostenlos?
 
-Hier ist ein Blick auf eine **frühe Version** der Benutzeroberfläche – funktional solide, aber optisch minimalistisch. Die aktuelle Version stellt eine gewaltige Verbesserung in Design, Benutzerfreundlichkeit und Klarheit dar und hilft Spielern, schnell das **beste Layout** für jedes Schiff oder Werkzeug zu finden.
+A: Ja. Der NMS Optimizer ist völlig kostenlos, werbefrei und Open Source (GPL-3.0-Lizenz). Keine Registrierung oder Zahlung erforderlich. Die gesamte Optimierung erfolgt sofort und kostenlos in Ihrem Browser oder auf unseren Servern.
+
+### F: Kann ich meine Builds speichern und teilen?
+
+A: Ja. Sie können:
+- **Speichern Sie Builds** als „.nms“-Dateien auf Ihrem Computer und laden Sie sie später erneut
+- **Generieren Sie gemeinsam nutzbare Links**, um Ihr Technologielayout an Freunde zu senden
+- **Teilen Sie Ihren Build direkt** über soziale Medien oder Messaging
+Alle Builds werden vor der Freigabe auf Integrität und Gerätekompatibilität überprüft.
+
+## Danke
+
+George V, Diab, JayTee73, Boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen, die dazu beigetragen haben – Ihre Unterstützung bedeutet alles. Jede Spende, jeder Anteil und jedes freundliche Wort hilft mir, weiter aufzubauen. Danke schön.
+
+## Frühe Version
+
+So sah die Benutzeroberfläche in einer frühen Version aus: Sie funktionierte, aber das Design war minimal. Die aktuelle Version stellt eine wesentliche Verbesserung in Design, Benutzerfreundlichkeit und Übersichtlichkeit dar.
 
 ![Früher Prototyp der Benutzeroberfläche für die Layoutoptimierung von No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

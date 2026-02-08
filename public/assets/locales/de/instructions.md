@@ -1,4 +1,4 @@
-# NMS Optimizer Anleitung: Adjazenz-Boni & Layout-Optimierung
+# NMS Optimizer Guide: Adjazenzbonus und Layoutoptimierung
 
 ## Grundlegende Verwendung
 
@@ -9,14 +9,6 @@
 
 > 💡 **Hinweis:** Exosuits und Exocraft haben feste Gitterkonfigurationen. Exocraft-Zellen können überhaupt nicht verändert werden. Bei Exosuits können Sie Zellen nur aktiv oder inaktiv umschalten; Das Ändern des aufgeladenen Layouts wird nicht unterstützt.
 
-## Builds speichern, laden und teilen
-
-Sie können Ihre optimierten Layouts speichern, sie später erneut laden oder mit Freunden teilen, sodass Sie problemlos mehrere Konfigurationen für dieselbe Plattform verwalten können.
-
-- **Build speichern** – Klicken Sie auf das Speichersymbol, um Ihr aktuelles Layout als „.nms“-Datei herunterzuladen. Sie werden aufgefordert, Ihrem Build einen Namen zu geben. Das Tool generiert außerdem automatisch thematische Namen wie „Corvette – Crusade of the Starfall.nms“, die Sie anpassen können.
-- **Build laden** – Klicken Sie auf das Ladesymbol, um eine zuvor gespeicherte „.nms“-Datei hochzuladen. Ihr Raster wird sofort aktualisiert, um dem gespeicherten Layout zu entsprechen, einschließlich aller Modulplatzierungen und aufgeladenen Zellenpositionen.
-- **Build teilen** – Klicken Sie auf das Teilen-Symbol, um einen gemeinsam nutzbaren Link für Ihr aktuelles Layout zu generieren. Freunde können über diesen Link Ihren Build direkt in ihren Optimierer laden, ohne die Datei zu benötigen.
-
 ## Bevor Sie beginnen
 
 Dieses Tool wurde für **Endgame-Spieler** entwickelt, die das Technologielayout ihrer Plattform für maximale Effizienz optimieren möchten. Es funktioniert am besten, wenn:
@@ -26,6 +18,33 @@ Dieses Tool wurde für **Endgame-Spieler** entwickelt, die das Technologielayout
 - Sie besitzen einen **vollständigen Satz von drei Upgrade-Modulen** pro anwendbarer Technologie.
 
 Wenn Sie immer noch Zellen freischalten oder Module sammeln, kann das Tool immer noch Einblicke liefern – es ist jedoch in erster Linie für **vollständig aktualisierte Plattformen** konzipiert.
+
+## Theta/Tau/Sigma-Etiketten
+
+Diese Labels ordnen prozedurale Upgrades **nach Statistikqualität**, nicht nach Klasse. Es handelt sich um **ältere Begriffe aus früheren Versionen des Spiels**, die beibehalten wurden, um die Konsistenz in Thema und Stil zu gewährleisten.
+
+- **Theta** – bestes prozedurales Upgrade _(wird im Raster als **1** angezeigt)_
+- **Tau** – Mitte _(im Raster als **2** angezeigt)_
+- **Sigma** – am schlechtesten _(im Raster als **3** angezeigt)_
+
+Diese Namen werden in Ihrem Inventar nicht angezeigt. Sie werden durch **Vergleich der tatsächlichen Upgrade-Statistiken für dieselbe Technologie** zugewiesen.
+
+### So verwenden Sie dies im Spiel
+
+Ignorieren Sie den Klassenbuchstaben (S, X usw.). Vergleichen Sie stattdessen die Statistiken direkt:
+
+- Beste Statistiken → **Theta (1)**
+- Zweitbester → **Tau (2)**
+- Schlechteste Statistiken → **Sigma (3)**
+
+### S-Klasse vs. X-Klasse
+
+Die Klasse bestimmt **nicht** den Rang. X-Klasse-Upgrades können höher oder niedriger als die S-Klasse sein.
+
+- Wenn eine X-Klasse die besten Werte hat, ist sie **Theta (1)**
+- Wenn eine S-Klasse schwächer ist, wird sie zu **Tau (2)** oder **Sigma (3)**
+
+**Fazit:** Theta / Tau / Sigma bedeuten einfach **am besten / mittel / am schlechtesten**, allein basierend auf Statistiken.
 
 ## Informationen zu Korvetten
 
@@ -43,9 +62,17 @@ Dadurch kann das Tool **empfohlene Builds** anbieten – sorgfältig ausgewählt
 
 Wenn Sie Feedback haben oder alternative Konfigurationen vorschlagen möchten, können Sie gerne [eine Diskussion starten](https://github.com/jbelew/nms_optimizer-web/discussions) – diese Builds werden kuratiert und nicht automatisch generiert, und der Input der Community hilft, sie zu verbessern.
 
+## Builds speichern, laden und teilen
+
+Sie können Ihre optimierten Layouts speichern, sie später erneut laden oder mit Freunden teilen, sodass Sie problemlos mehrere Konfigurationen für dieselbe Plattform verwalten können.
+
+- **Build speichern** – Klicken Sie auf das Speichersymbol, um Ihr aktuelles Layout als „.nms“-Datei herunterzuladen. Sie werden aufgefordert, Ihrem Build einen Namen zu geben. Das Tool generiert außerdem automatisch thematische Namen wie „Corvette – Crusade of the Starfall.nms“, die Sie anpassen können.
+- **Build laden** – Klicken Sie auf das Ladesymbol, um eine zuvor gespeicherte „.nms“-Datei hochzuladen. Ihr Raster wird sofort aktualisiert, um dem gespeicherten Layout zu entsprechen, einschließlich aller Modulplatzierungen und aufgeladenen Zellenpositionen.
+- **Build teilen** – Klicken Sie auf das Teilen-Symbol, um einen gemeinsam nutzbaren Link für Ihr aktuelles Layout zu generieren. Freunde können über diesen Link Ihren Build direkt in ihren Optimierer laden, ohne die Datei zu benötigen.
+
 ## Nutzungstipps
 
-Aufgeladene Zellen bieten große Vorteile, sind aber begrenzt – jede Platzierung zählt. **Vermeiden Sie eine blinde Anpassung an Ihr aufgeladenes In-Game-Layout.** Für beste Ergebnisse:
+Aufgeladene Zellen bieten große Vorteile, sind aber begrenzt – jede Platzierung zählt. **Vermeiden Sie es, blind Ihr spielinternes Layout anzupassen.** Für beste Ergebnisse:
 
 - **Beginnen Sie mit einer hochwirksamen Technologie** – einer, die zu Ihrem Spielstil passt und von zwei oder drei aufgeladenen Zellen profitiert, wie z. B. _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_ oder _Neutron Cannon_.
   Markieren Sie diese Zellen als überladen und lösen Sie sie dann.

@@ -1,50 +1,50 @@
-# NMS Optimizer Statistiques: Agencements Technologiques Populaires
+# Statistiques de l'optimiseur NMS : présentations technologiques les plus populaires
 
-## Statistiques Utilisateurs et Builds Populaires
+## Statistiques utilisateur et mises en page populaires
 
-Cette page agrège les données des utilisateurs de NMS Optimizer pour révéler les technologies les plus fréquemment surpuissantes sur différentes plates-formes. Que vous planifiiez votre prochain build ou cherchiez de l'inspiration, ces statistiques montrent les préférences et les modèles réels de la communauté.
+Cette page regroupe les données des utilisateurs de NMS Optimizer pour révéler les technologies les plus fréquemment utilisées sur différentes plates-formes. Que vous planifiiez votre prochaine construction ou que vous recherchiez de l'inspiration, ces statistiques présentent les préférences et modèles réels de la communauté.
 
-## Comprendre les Données
+## Comprendre les données
 
-Les graphiques ci-dessous affichent les statistiques utilisateurs agrégées des **28 derniers jours**, montrant quelles technologies les joueurs optimisent le plus fréquemment pour les **emplacements surpuissants**. Les données représentent des milliers de sessions d'optimisation sur trois types de plates-formes principaux:
+Les graphiques ci-dessous affichent les statistiques agrégées des utilisateurs des **28 derniers jours**, indiquant les technologies que les joueurs optimisent le plus souvent pour les **machines à sous suralimentées**. Les données représentent des milliers de sessions d'optimisation sur trois types de plates-formes principaux :
 
-- **Technologies de Vaisseau** - Incluant les variantes de vaisseau standard, Sentinelle et Solaire
-- **Technologies Multi-Outils** - Couvrant les multi-outils standard, Sentinelle, Atlantide et Bâtons
-- **Technologies de Corvette** - Les vaisseaux corsaires spécialisés introduits dans la mise à jour **Omega**
+- **Starship Technologies** - Y compris les variantes de vaisseau Standard, Sentinel et Solar
+- **Technologies multi-outils** - Couvrant les multi-outils Standard, Sentinel, Atlantid et Staves
+- **Corvette Technologies** - Les vaisseaux corsaires spécialisés introduits dans la mise à jour **Omega**
 
-## Ce que Signifient Ces Graphiques
+## Ce que signifient ces graphiques
 
-Chaque graphique montre la popularité relative des différentes technologies lorsque les utilisateurs choisissent de les surpuissancer. Une plus grande tranche signifie que cette technologie a été sélectionnée pour surpuissance plus fréquemment par la communauté. Cela reflète:
+Chaque graphique montre la popularité relative des différentes technologies lorsque les utilisateurs choisissent de les suralimenter. Une part plus importante signifie que la technologie a été choisie pour suralimenter plus fréquemment par la communauté. Cela reflète :
 
-1. **Efficacité Meta** - Les technologies qui fournissent les plus grands gains de performance ont tendance à se regrouper en haut
-2. **Préférences des Joueurs** - Les joueurs axés sur le combat privilégient des technologies différentes de ceux axés sur l'exploration
-3. **Opportunités de Synergie** - Certaines technologies fonctionnent particulièrement bien avec la surpuissance, ce qui en fait des choix naturels
+1. **Méta-efficacité** - Les technologies qui offrent les améliorations de performances les plus élevées ont tendance à se regrouper vers le sommet
+2. **Préférences des joueurs** - Les joueurs axés sur le combat donnent la priorité à des technologies différentes de celles axées sur l'exploration.
+3. **Opportunités de synergie** – Certaines technologies se marient particulièrement bien avec la suralimentation, ce qui en fait des choix naturels
 
-### Lire les Graphiques
+### Lire les graphiques
 
-- Les technologies représentant moins de **2% du total des sélections** sont regroupées dans la catégorie "Autre" pour garder les graphiques lisibles
-- Les pourcentages apparaissent sur chaque tranche lorsqu'ils représentent au moins 6% du total
-- Les couleurs de technologie correspondent à celles utilisées dans tout l'optimiseur pour faciliter la référence
+- Les technologies représentant moins de **2 % des sélections totales** sont regroupées dans la catégorie "Autres" pour garder les graphiques lisibles
+- Des pourcentages apparaissent sur chaque tranche lorsqu'ils représentent au moins 6% du total
+- Les couleurs de la technologie correspondent à celles utilisées dans l'optimiseur pour une référence facile
 
-## Pourquoi C'est Important
+## Pourquoi c'est important
 
-Comprendre les modèles communautaires peut aider à éclairer vos propres décisions de construction:
+Comprendre les modèles de communauté peut vous aider à éclairer vos propres décisions de construction :
 
-- **Validation** - Si une technologie que vous envisagez est populaire, c'est probablement pour une bonne raison
-- **Découverte** - Trouvez les technologies que vous n'aviez peut-être pas envisagées en voyant ce que les autres privilégient
-- **Évolutions Meta** - Observez comment les données évoluent au fur et à mesure que le jeu évolue
-- **Variété de Builds** - Utilisez cela comme point de départ, puis personnalisez en fonction de votre style de jeu
+- **Validation** – Si une technologie que vous envisagez est populaire, c'est probablement pour une bonne raison
+- **Découverte** – Trouvez des technologies que vous n'auriez peut-être pas envisagées en voyant les priorités des autres.
+- **Meta Shifts** - Regardez comment les données changent à mesure que le jeu évolue et que de nouveaux contenus sont publiés.
+- **Créer de la variété** - Utilisez-le comme point de départ, puis personnalisez-le en fonction de votre style de jeu et de vos besoins spécifiques.
 
-## Premiers Pas
+## Commencer
 
-Après avoir examiné les options populaires ici, allez à l'[optimiseur](/fr) pour créer votre propre build optimisé. Vous pouvez:
+Une fois que vous avez examiné les choix populaires ici, rendez-vous sur [optimiseur](/en) pour créer votre propre version optimisée. Tu peux:
 
-1. Sélectionner votre plate-forme (Vaisseau, Multi-outil, Corvette, Combinaison ou Exocraft)
-2. Configurer vos **emplacements surpuissants** et **cellules actives**
-3. Exécuter le solveur pour trouver votre disposition parfaite
+1. Sélectionnez votre plateforme (Starship, Multi-tool, Corvette, Exosuit ou Exocraft)
+2. Configurez vos **emplacements suralimentés** et vos **cellules actives**
+3. Exécutez le solveur pour trouver votre mise en page parfaite
 
-Pour des instructions détaillées sur l'utilisation de l'optimiseur, visitez la [page d'instructions](/fr/instructions).
+Pour des instructions détaillées sur l'utilisation de l'optimiseur, visitez la [page d'instructions](/en/instructions).
 
-## Collecte de Données
+## Collecte de données
 
-Ces données sont collectées de manière anonyme à partir des demandes d'optimisation et ne contiennent aucune information d'identification personnelle. Elles aident la communauté NMS Optimizer à comprendre quelles technologies offrent le plus de valeur et informent les améliorations futures des algorithmes du solveur.
+Ces données sont collectées de manière anonyme à partir des demandes d'optimisation et n'incluent aucune information personnellement identifiable. Il aide la communauté NMS Optimizer à comprendre quelles technologies offrent le plus de valeur et éclaire les améliorations futures des algorithmes du solveur.

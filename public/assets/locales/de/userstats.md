@@ -1,50 +1,50 @@
-# NMS Optimizer Statistiken: Beliebte Tech-Layouts
+# NMS-Optimiererstatistiken: Die beliebtesten Technologielayouts
 
-## Benutzerstatistiken & beliebte Layouts
+## Benutzerstatistiken und beliebte Layouts
 
-Diese Seite fasst Daten von NMS Optimizer-Benutzern zusammen, um die am häufigsten überladenen Technologien auf verschiedenen Plattformen anzuzeigen. Egal ob Sie Ihren nächsten Build planen oder nach Inspiration suchen - diese Statistiken zeigen echte Community-Vorlieben und -Muster.
+Auf dieser Seite werden Daten von NMS Optimizer-Benutzern zusammengefasst, um die am häufigsten aufgeladenen Technologien auf verschiedenen Plattformen anzuzeigen. Egal, ob Sie Ihren nächsten Bau planen oder nach Inspiration suchen, diese Statistiken zeigen echte Community-Vorlieben und -Muster.
 
 ## Die Daten verstehen
 
-Die folgenden Diagramme zeigen aggregierte Benutzerstatistiken aus den letzten **28 Tagen** und zeigen, welche Technologien Spieler am häufigsten für **überladene Slots** optimieren. Die Daten repräsentieren Tausende von Optimierungssitzungen über drei Hauptplattformtypen:
+Die folgenden Diagramme zeigen aggregierte Benutzerstatistiken der letzten **28 Tage** und zeigen, welche Technologien Spieler am häufigsten für **Supercharged-Slots** optimieren. Die Daten repräsentieren Tausende von Optimierungssitzungen auf drei primären Plattformtypen:
 
-- **Raumschiff-Technologien** - Einschließlich Standard-, Sentinel- und Solar-Raumschiff-Varianten
-- **Multi-Tool-Technologien** - Abdeckung von Standard-, Sentinel-, Atlantid- und Staves-Multi-Tools
-- **Corvetten-Technologien** - Die spezialisierten Kaperschiffe, die im **Omega**-Update eingeführt wurden
+- **Raumschifftechnologien** – Einschließlich Standard-, Sentinel- und Solar-Raumschiffvarianten
+- **Multitool-Technologien** – Deckt Standard-, Sentinel-, Atlantid- und Staves-Multitools ab
+- **Corvette Technologies** – Die spezialisierten Korsarenschiffe, die im **Omega**-Update eingeführt wurden
 
 ## Was diese Diagramme bedeuten
 
-Jedes Diagramm zeigt die relative Beliebtheit verschiedener Technologien, wenn Benutzer sie überladener auswählen. Ein größeres Stück bedeutet, dass diese Technologie von der Community häufiger zum Überladen ausgewählt wurde. Dies spiegelt wider:
+Jedes Diagramm zeigt die relative Beliebtheit verschiedener Technologien, wenn Benutzer sich dafür entscheiden, sie zu verbessern. Ein größerer Anteil bedeutet, dass die Community die Technologie häufiger zum Aufladen ausgewählt hat. Dies spiegelt wider:
 
-1. **Meta-Effektivität** - Technologien, die die höchsten Leistungssteigerungen bieten, tendieren nach oben
-2. **Spielerpräferenzen** - Kampfbegeisterte Spieler priorisieren andere Technologien als Erkundungsorientierte
-3. **Synergien** - Einige Technologien funktionieren besonders gut beim Überladen, was sie zu natürlichen Auswahl macht
+1. **Meta-Effektivität** – Technologien, die die höchsten Leistungssteigerungen bieten, häufen sich tendenziell an der Spitze
+2. **Spielerpräferenzen** – Spieler, die sich auf den Kampf konzentrieren, priorisieren andere Technologien als diejenigen, die sich auf die Erkundung konzentrieren
+3. **Synergiemöglichkeiten** – Einige Technologien lassen sich besonders gut mit der Aufladung kombinieren und sind daher eine natürliche Wahl
 
-### Diagramme lesen
+### Die Charts lesen
 
-- Technologien mit weniger als **2% der Gesamtauswahl** werden in die Kategorie "Sonstige" gruppiert
-- Prozentsätze erscheinen auf jedem Stück, wenn sie mindestens 6% der Gesamtsumme repräsentieren
-- Technologiefarben entsprechen denen im Optimizer für einfache Referenzierung
+– Technologien, die weniger als **2 % der Gesamtauswahl** ausmachen, werden in die Kategorie „Andere“ gruppiert, um die Lesbarkeit der Diagramme zu gewährleisten
+- Prozentsätze erscheinen auf jedem Abschnitt, wenn sie mindestens 6 % des Gesamtwerts ausmachen
+- Die Farben der Technologie entsprechen denen, die im gesamten Optimierer verwendet werden, um eine einfache Referenz zu ermöglichen
 
 ## Warum das wichtig ist
 
-Das Verstehen von Community-Mustern kann bei Ihren eigenen Build-Entscheidungen helfen:
+Das Verständnis von Community-Mustern kann Ihnen dabei helfen, Ihre eigenen Build-Entscheidungen zu treffen:
 
-- **Validierung** - Wenn eine Technologie, die Sie in Betracht ziehen, beliebt ist, ist es wahrscheinlich aus gutem Grund
-- **Entdeckung** - Finden Sie Technologien, die Sie vielleicht nicht berücksichtigt haben, indem Sie sehen, was andere priorisieren
-- **Meta-Verschiebungen** - Beobachten Sie, wie sich die Daten ändern, wenn sich das Spiel entwickelt
-- **Build-Vielfalt** - Verwenden Sie dies als Ausgangspunkt und passen Sie es dann an Ihren Spielstil an
+- **Validierung** – Wenn eine Technologie, die Sie in Betracht ziehen, beliebt ist, dann wahrscheinlich aus gutem Grund
+- **Entdeckung** – Finden Sie Technologien, die Sie vielleicht noch nicht in Betracht gezogen haben, indem Sie sehen, was andere priorisieren
+- **Meta-Verschiebungen** – Beobachten Sie, wie sich die Daten ändern, wenn sich das Spiel weiterentwickelt und neue Inhalte veröffentlicht werden
+- **Bauvielfalt** – Verwenden Sie dies als Ausgangspunkt und passen Sie es dann entsprechend Ihrem Spielstil und Ihren spezifischen Bedürfnissen an
 
 ## Erste Schritte
 
-Nachdem Sie die populären Optionen hier überprüft haben, gehen Sie zum [Optimizer](/de) um Ihren eigenen optimierten Build zu erstellen. Sie können:
+Nachdem Sie sich die beliebten Auswahlmöglichkeiten hier angesehen haben, gehen Sie zum [Optimierer](/en), um Ihren eigenen optimierten Build zu erstellen. Du kannst:
 
-1. Ihre Plattform auswählen (Raumschiff, Multi-tool, Corvette, Anzug oder Exocraft)
-2. Ihre **überladenen Slots** und **aktiven Zellen** konfigurieren
-3. Den Solver ausführen, um Ihr perfektes Layout zu finden
+1. Wählen Sie Ihre Plattform (Starship, Multitool, Corvette, Exosuit oder Exocraft)
+2. Konfigurieren Sie Ihre **Supercharged-Steckplätze** und **aktiven Zellen**
+3. Führen Sie den Solver aus, um Ihr perfektes Layout zu finden
 
-Detaillierte Anweisungen zur Verwendung des Optimizers finden Sie auf der [Anleitung-Seite](/de/instructions).
+Ausführliche Anweisungen zur Verwendung des Optimierers finden Sie auf der [Anweisungsseite](/en/instructions).
 
 ## Datenerfassung
 
-Diese Daten werden anonym aus Optimierungsanfragen erfasst und enthalten keine persönlich identifizierbaren Informationen. Sie helfen der NMS Optimizer Community zu verstehen, welche Technologien den meisten Wert liefern, und informieren zukünftige Verbesserungen der Solver-Algorithmen.
+Diese Daten werden bei Optimierungsanfragen anonym erhoben und enthalten keine personenbezogenen Daten. Es hilft der NMS Optimizer-Community zu verstehen, welche Technologien den größten Nutzen bringen, und informiert über zukünftige Verbesserungen der Solver-Algorithmen.
