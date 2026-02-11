@@ -24,7 +24,7 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
 	const isOptimizeDisabled = currentCheckedModules.length === 0;
 
 	return (
-		<div className="mt-4 mb-2 flex justify-end gap-2">
+		<div className="mt-4 mb-1 flex justify-end gap-2">
 			<Dialog.Close>
 				<Button variant="soft">{t("moduleSelection.cancelButton")}</Button>
 			</Dialog.Close>

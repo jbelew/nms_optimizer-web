@@ -27,8 +27,8 @@
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
 	--font-family-geosans: "GeosansLight", Helvetica, Arial, sans-serif;
 	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
-	--letter-spacing-wide: 0.225rem;
-	--font-weight-bold: 600;
+	--letter-spacing-wide: 0.2em;
+	--font-weight-bold: 700;
 	--color-background: var(--gray-a1);
 }
 
@@ -119,6 +119,9 @@ body.a11y-font .radix-themes {
 }
 
 body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
 	font-family: var(--default-font-family);
 	min-height: 100dvh;
 	width: 100dvw;
@@ -159,9 +162,10 @@ body {
 /* Heading styled utility */
 .heading-styled {
 	font-family: var(--font-family-geosans);
-	font-weight: 600;
+	font-weight: 700;
 	letter-spacing: var(--letter-spacing-wide);
-	-webkit-text-stroke: 1.25px;
+	margin-right: calc(var(--letter-spacing-wide) * -1);
+	-webkit-text-stroke: 0.1px;
 	text-transform: uppercase;
 	word-spacing: -0.15em;
 }

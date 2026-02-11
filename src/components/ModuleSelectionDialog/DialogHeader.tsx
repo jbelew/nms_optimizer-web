@@ -45,7 +45,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 					color={techColor}
 					srcSet={`${techImagePath} 1x, ${techImagePath2x} 2x`}
 				/>
-				<span className="mt-0.5 ml-2 text-xl sm:mt-0 sm:text-2xl">
+				<span className="mt-0.5 mr-6 ml-2 text-xl sm:mt-0 sm:text-2xl">
 					{t("moduleSelection.title", { techName: translatedTechName })}
 				</span>
 			</Dialog.Title>
