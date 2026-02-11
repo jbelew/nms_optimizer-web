@@ -162,10 +162,10 @@ body {
 /* Heading styled utility */
 .heading-styled {
 	font-family: var(--font-family-geosans);
-	font-weight: 700;
+	font-weight: 400;
 	letter-spacing: var(--letter-spacing-wide);
 	margin-right: calc(var(--letter-spacing-wide) * -1);
-	-webkit-text-stroke: 0.1px;
+	-webkit-text-stroke: 1px;
 	text-transform: uppercase;
 	word-spacing: -0.15em;
 }
