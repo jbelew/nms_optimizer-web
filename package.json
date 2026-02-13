@@ -125,7 +125,7 @@
 		"happy-dom": "^20.4.0",
 		"husky": "^9.1.7",
 		"jsdom": "^27.4.0",
-		"lighthouse": "^13.0.1",
+		"lighthouse": "^13.0.3",
 		"lightningcss": "^1.30.2",
 		"markdown-it": "^14.1.0",
 		"marked": "^17.0.1",
