@@ -1,6 +1,21 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
+// Suppress known console warnings from Radix UI accessibility checks during tests
+const originalWarn = console.warn;
+console.warn = (...args: unknown[]) => {
+	const message = String(args[0]);
+	if (
+		message.includes("DialogContent") ||
+		message.includes("VisuallyHidden") ||
+		message.includes("Description") ||
+		message.includes("aria-describedby")
+	) {
+		return;
+	}
+	originalWarn(...args);
+};
+
 // Mock virtual modules
 vi.mock("virtual:pwa-register", () => ({
 	registerSW: vi.fn((options: unknown) => vi.fn()),
