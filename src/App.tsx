@@ -5,7 +5,9 @@ import { Outlet } from "react-router-dom";
 import AppDialog from "./components/AppDialog/AppDialog";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
+
 import { useDialog } from "./context/dialog-utils";
+import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
@@ -132,7 +134,7 @@ const App: FC = () => {
 	};
 
 	return (
-		<>
+		<DialogProvider>
 			<OfflineBanner />
 			<Suspense fallback={null}>
 				<AppContent />
@@ -152,7 +154,7 @@ const App: FC = () => {
 				onRefresh={handleRefresh}
 				onDismiss={handleDismissUpdatePrompt}
 			/>
-		</>
+		</DialogProvider>
 	);
 };
 

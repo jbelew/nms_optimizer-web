@@ -19,6 +19,7 @@ import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
 import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
 import { useToast } from "../../hooks/useToast/useToast";
+import { build, getBuildDate } from "../../routeConfig";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useSessionStore } from "../../store/SessionStore";
@@ -38,20 +39,13 @@ const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAlertDialog"));
 
 /**
- * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
- * @property {string} [buildDate] - The build date of the application, to be displayed in the footer for devmode.
- */
-type MainAppContentProps = {
-	buildVersion: string;
-	buildDate?: string; // Added optional buildDate prop
-};
-
-/**
  * The core component that renders the main application content.
  * It orchestrates the layout, including the header, footer, grid table, and technology tree.
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
-export const MainAppContent = ({ buildVersion, buildDate }: MainAppContentProps) => {
+export const MainAppContent = () => {
+	const buildVersion = build;
+	const buildDate = getBuildDate();
 	const { t } = useTranslation();
 	const isSmallScreen = !useBreakpoint("640px");
 	const isLargeScreen = useBreakpoint("1024px");

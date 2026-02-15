@@ -59,9 +59,9 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 				? localStorage.getItem(LOCAL_STORAGE_KEY)
 				: null;
 
-		let initialPlatform: string = "standard";
 		let updateUrlNeeded = false;
 		let updateStorageNeeded = false;
+		let initialPlatform: string;
 
 		if (platformFromUrl && validShipTypes.includes(platformFromUrl)) {
 			initialPlatform = platformFromUrl;

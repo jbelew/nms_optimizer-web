@@ -87,7 +87,7 @@ export const useBuildFileManager = () => {
 				URL.revokeObjectURL(url);
 			} catch (error) {
 				console.error("Failed to save build file:", error);
-				throw new Error("Failed to save build file");
+				throw new Error("Failed to save build file", { cause: error });
 			}
 		},
 		[selectedShipType]
@@ -181,7 +181,9 @@ export const useBuildFileManager = () => {
 					throw error;
 				}
 
-				throw new Error("An unexpected error occurred while loading the build file.");
+				throw new Error("An unexpected error occurred while loading the build file.", {
+					cause: error,
+				});
 			}
 		},
 		[selectedShipType, shipTypes, setSelectedPlatform]

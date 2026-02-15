@@ -46,15 +46,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	const pathParts = location.pathname.split("/").filter(Boolean);
 	const langCand = pathParts[0];
-	let dialogPath: DialogType = null;
 
-	if (OTHER_LANGUAGES.includes(langCand)) {
-		// Path is like /fr/about or /fr
-		dialogPath = (pathParts[1] as DialogType) || null;
-	} else {
-		// Path is like /about or /
-		dialogPath = (pathParts[0] as DialogType) || null;
-	}
+	const dialogPath: DialogType = OTHER_LANGUAGES.includes(langCand)
+		? (pathParts[1] as DialogType) || null
+		: (pathParts[0] as DialogType) || null;
 
 	const activeDialog: DialogType =
 		dialogPath === "about" ||

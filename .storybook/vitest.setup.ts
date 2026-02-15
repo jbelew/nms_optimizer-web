@@ -4,10 +4,12 @@ import * as projectAnnotations from "./preview";
 
 declare global {
 	const __APP_VERSION__: string;
+	const __BUILD_DATE__: string;
 }
 
 if (typeof globalThis !== "undefined") {
 	(globalThis as Record<string, unknown>).__APP_VERSION__ = "storybook-test";
+	(globalThis as Record<string, unknown>).__BUILD_DATE__ = "2024-01-01";
 }
 
 if (typeof window !== "undefined") {
