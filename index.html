@@ -165,7 +165,8 @@
 	<!-- Prefetch desktop background only (1x for initial load, 2x for high-DPI devices) -->
 	<link rel="preload" as="image" href="/assets/img/background.webp" media="(min-width: 641px)" fetchpriority="high" />
 	<link rel="preload" as="image" href="/assets/img/background@2x.webp"
-		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)" fetchpriority="high" />
+		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)"
+		fetchpriority="high" />
 
 	<!-- Default language translations -->
 	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
@@ -248,19 +249,71 @@
 	<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
-			"@type": "WebApplication",
-			"name": "NMS Optimizer",
-			"url": "https://nms-optimizer.app/",
-			"image": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
-			"description": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
-			"applicationCategory": "GameApplication",
-			"operatingSystem": "All",
-			"browserRequirements": "Requires JavaScript",
-			"creator": {
-				"@type": "Person",
-				"name": "John Belew"
-			},
-			"inLanguage": ["en", "es", "fr", "de", "pt"]
+			"@graph": [
+				{
+					"@type": "WebSite",
+					"@id": "https://nms-optimizer.app/#website",
+					"url": "https://nms-optimizer.app/",
+					"name": "NMS Optimizer",
+					"alternateName": "No Man's Sky Optimizer",
+					"description": "NMS Optimizer is a free calculator and planner tool for No Man's Sky players. It helps you design optimal technology layouts for Starships, Corvettes, Multitools, Exosuits, Exocraft, and Freighters by maximizing adjacency bonuses and supercharged slot effectiveness.",
+					"publisher": {
+						"@id": "https://nms-optimizer.app/#person"
+					},
+					"inLanguage": "en"
+				},
+				{
+					"@type": "WebPage",
+					"@id": "https://nms-optimizer.app/#webpage",
+					"url": "https://nms-optimizer.app/",
+					"name": "NMS Optimizer: Best Tech Layouts & Adjacency Bonus Calculator",
+					"isPartOf": {
+						"@id": "https://nms-optimizer.app/#website"
+					},
+					"about": {
+						"@id": "https://nms-optimizer.app/#webapplication"
+					},
+					"primaryImageOfPage": {
+						"@type": "ImageObject",
+						"url": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
+						"caption": "A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
+					},
+					"description": "NMS Optimizer is a free calculator and planner tool for No Man's Sky players. It helps you design optimal technology layouts for Starships, Corvettes, Multitools, Exosuits, Exocraft, and Freighters by maximizing adjacency bonuses and supercharged slot effectiveness. Uses advanced algorithms to calculate the best module placement."
+				},
+				{
+					"@type": "WebApplication",
+					"@id": "https://nms-optimizer.app/#webapplication",
+					"name": "NMS Optimizer",
+					"alternateName": "NMS Technology Layout Optimizer",
+					"applicationCategory": "GameApplication",
+					"operatingSystem": "Any",
+					"browserRequirements": "Requires JavaScript",
+					"url": "https://nms-optimizer.app/",
+					"image": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
+					"screenshot": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
+					"featureList": "https://nms-optimizer.app/about",
+					"description": "Free No Man's Sky technology layout optimizer and calculator tool. Calculates adjacency bonuses and optimal module placement.",
+					"author": {
+						"@id": "https://nms-optimizer.app/#person"
+					},
+					"inLanguage": ["en", "es", "fr", "de", "pt"],
+					"offers": {
+						"@type": "Offer",
+						"price": "0",
+						"priceCurrency": "USD"
+					}
+				},
+				{
+					"@type": "Person",
+					"@id": "https://nms-optimizer.app/#person",
+					"name": "John Belew",
+					"url": "https://github.com/jbelew",
+					"sameAs": [
+						"https://github.com/jbelew",
+						"https://github.com/jbelew/nms_optimizer-web"
+					]
+				}
+			]
 		}
 	</script>
 </head>
