@@ -137,6 +137,8 @@
 	&__title {
 		color: var(--amber-11);
 		font-family: var(--font-family-geosans);
+		font-weight: 400;
+		-webkit-text-stroke: 1px;
 	}
 
 	&__text {
