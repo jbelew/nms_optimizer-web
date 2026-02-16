@@ -29,8 +29,6 @@ $panel-border: 1px solid var(--gray-6);
 			background-color: var(--accent-a3);
 		}
 
-		// Mobile: use pre-blurred background image for better performance
-		// and use a fixed pseudo-element to prevent scroll jank
 		@media (width <= 639px) {
 			max-width: fit-content;
 		}
@@ -59,12 +57,34 @@ $panel-border: 1px solid var(--gray-6);
 			min-height: calc(100dvh - 3rem);
 		}
 
-		// Accessibility override: disable background image
+		// Accessibility override
 		body.a11y-font & {
-			@media (width <= 639px) {
-				backdrop-filter: none;
-				background-color: var(--accent-a3);
+			backdrop-filter: none;
+			background-color: var(--accent-a3);
+		}
+	}
 
+	&__background-wrapper {
+		@media (width <= 639px) {
+			position: relative;
+
+			&::before {
+				background-image: url("/assets/img/background@mobile-blurred_v7.webp");
+				background-position: center top;
+				background-repeat: no-repeat;
+				background-size: cover;
+				content: "";
+				height: 100%;
+				left: 0;
+				pointer-events: none;
+				position: absolute;
+				top: 0;
+				width: 100%;
+				z-index: -1;
+			}
+
+			// Accessibility override: disable background image
+			body.a11y-font & {
 				&::before {
 					background-image: none !important;
 					display: none !important;

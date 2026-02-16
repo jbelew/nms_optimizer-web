@@ -161,7 +161,7 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 							trim="end"
 							as="h2"
 							mb="3"
-							className="text-base! font-extrabold! sm:text-lg!"
+							className="text-base! font-bold! sm:text-lg!"
 							id={id}
 							style={{ color: "var(--accent-a11)" }}
 						>

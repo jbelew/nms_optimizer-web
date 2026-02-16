@@ -2,7 +2,7 @@
 
 .app-header {
 	align-items: center;
-	background-image: linear-gradient(to bottom, var(--gray-1), transparent);
+	background-image: linear-gradient(to bottom, black, transparent);
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -98,7 +98,10 @@
 	&__title {
 		color: var(--gray-12);
 		font-weight: 700;
-		text-shadow: 0 0 4px var(--accent-a2);
+
+		@media (width >= 640px) {
+			text-shadow: 0 0 4px var(--accent-a2);
+		}
 	}
 }
 

@@ -27,7 +27,7 @@
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
 	--font-family-geosans: "GeosansLight", Helvetica, Arial, sans-serif;
 	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
-	--letter-spacing-wide: 0.2em;
+	--letter-spacing-wide: 0.175em;
 	--font-weight-bold: 700;
 	--color-background: var(--gray-a1);
 }
@@ -123,26 +123,6 @@ body {
 	min-height: 100dvh;
 	width: 100dvw;
 	overflow-y: auto;
-
-	/* Mobile: use pre-blurred background image for better performance */
-	/* Apply to body pseudo-element for best stability on iOS */
-	@media (width <=639px) {
-		&::before {
-			background-image: url("/assets/img/background@mobile-blurred_v7.webp");
-			background-position: center top;
-			background-repeat: no-repeat;
-			background-size: cover;
-			content: "";
-			height: 100vh;
-			left: 0;
-			pointer-events: none;
-			position: fixed;
-			top: 0;
-			width: 100vw;
-			will-change: auto;
-			z-index: -1;
-		}
-	}
 }
 
 @media (max-width: 1023px) {
@@ -178,7 +158,7 @@ body.a11y-font .heading-styled {
 
 @media (min-width: 640px) {
 	.heading-styled {
-		text-shadow: 0 2px 4px var(--accent-a2);
+		text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
 	}
 }
 

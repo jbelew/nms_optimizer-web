@@ -1,42 +1,21 @@
-// src/components/app/MainAppContent.tsx
+// src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import React, { lazy, Suspense, useCallback, useEffect } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { Box, Callout, Flex, Text } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import React, { lazy, Suspense } from "react";
+import { Box, Flex } from "@radix-ui/themes";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
-import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
-import { useDialog } from "../../context/dialog-utils";
-import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useErrorDispatcher } from "../../hooks/useErrorDispatcher";
-import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
-import { useOptimize } from "../../hooks/useOptimize/useOptimize";
-import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
-import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
-import { useToast } from "../../hooks/useToast/useToast";
-import { build, getBuildDate } from "../../routeConfig";
-import { useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useSessionStore } from "../../store/SessionStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
-import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
-import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
-import { ShipSelection } from "../ShipSelection/ShipSelection";
-// import { Snowfall } from "../Snowfall/Snowfall";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
-import { ToastRenderer } from "../Toast/ToastRenderer";
+import { MainAppUtilities } from "./MainAppUtilities";
+import { SharedBuildCallout } from "./SharedBuildCallout";
+import { ShipSelectionHeading } from "./ShipSelectionHeading";
+import { useMainAppLogic } from "./useMainAppLogic";
 
 const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
-const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAlertDialog"));
 
 /**
  * The core component that renders the main application content.
@@ -44,35 +23,22 @@ const OptimizationAlertDialog = lazy(() => import("../AppDialog/OptimizationAler
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
 export const MainAppContent = () => {
-	const buildVersion = build;
-	const buildDate = getBuildDate();
-	const { t } = useTranslation();
-	const isSmallScreen = !useBreakpoint("640px");
-	const isLargeScreen = useBreakpoint("1024px");
-	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
-	const { openDialog } = useDialog();
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { isVisible, toolbarRef, forceShow } = useScrollHide(80);
-	const { resetSession } = useSessionStore();
-
-	// Reset error counts when ship type changes
-	useEffect(() => {
-		resetSession();
-	}, [selectedShipType, resetSession]);
-
-	// Monitor session errors and dispatch messages to toast
-	useErrorDispatcher();
-
-	// Register the toolbar's forceShow function so useScrollGridIntoView can trigger it
-	useEffect(() => {
-		registerToolbarForceShow(forceShow);
-	}, [forceShow]);
-
-	// Hide splash screen once main app content is mounted
-	useEffect(() => {
-		hideSplashScreenAndShowBackground();
-	}, []);
+	const {
+		buildVersion,
+		buildDate,
+		isSmallScreen,
+		isLargeScreen,
+		isSharedGrid,
+		hasModulesInGrid,
+		selectedShipType,
+		isVisible,
+		toolbarRef,
+		optimize,
+		appLayout,
+		saveBuild,
+		loadBuild,
+		handleShowChangelog,
+	} = useMainAppLogic();
 
 	const {
 		solving,
@@ -83,46 +49,25 @@ export const MainAppContent = () => {
 		patternNoFitTech,
 		clearPatternNoFitTech,
 		handleForceCurrentPnfOptimize,
-	} = useOptimize();
+	} = optimize;
 
 	const {
 		containerRef: appLayoutContainerRef,
 		gridTableRef: appLayoutGridTableRef,
 		gridTableTotalWidth,
-	} = useAppLayout();
+	} = appLayout;
 
-	const { showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
 		handleBuildNameConfirm,
 		handleBuildNameCancel,
-	} = useSaveBuild();
-	const { fileInputRef, handleLoadBuild, handleFileSelect } = useLoadBuild({
-		showSuccess,
-		showError,
-	});
+	} = saveBuild;
 
-	useEffect(() => {
-		if (isSharedGrid) {
-			// If it's a shared grid, the tech tree is not actively loading,
-			// so ensure the loading spinner is hidden.
-			useTechTreeLoadingStore.getState().setLoading(false);
-			hideSplashScreenAndShowBackground();
-		}
-	}, [isSharedGrid]);
-
-	/**
-	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
-	 * @returns {void}
-	 */
-	const handleShowChangelog = useCallback(() => {
-		openDialog("changelog");
-	}, [openDialog]);
+	const { fileInputRef, handleLoadBuild, handleFileSelect } = loadBuild;
 
 	return (
 		<>
-			{/* {isLargeScreen && <Snowfall />} */}
 			{isSmallScreen && (
 				<MobileToolbar
 					ref={toolbarRef as React.Ref<HTMLDivElement>}
@@ -135,106 +80,66 @@ export const MainAppContent = () => {
 				/>
 			)}
 
-			<InstallPrompt />
-
 			<main className="main-app__container">
 				<div className="main-app__card lg:shadow-lg">
-					<AppHeader onShowChangelog={handleShowChangelog} />
+					<div className="main-app__background-wrapper">
+						<AppHeader onShowChangelog={handleShowChangelog} />
 
-					<Flex
-						direction={{ initial: "column", md: "row" }}
-						align={{ initial: "center", md: "start" }}
-						className="main-app__content"
-						ref={gridContainerRef}
-					>
-						{/* Grid section */}
-						<Box
-							// width={{ initial: "100%", md: "auto" }}
-							flexShrink={{ initial: "1", md: "0" }}
-							className="main-app__grid-section"
-							ref={appLayoutContainerRef}
+						<Flex
+							direction={{ initial: "column", md: "row" }}
+							align={{ initial: "center", md: "start" }}
+							className="main-app__content"
+							ref={gridContainerRef}
 						>
-							{isSharedGrid && (
-								<Box
-									flexShrink="0"
-									style={{
-										maxWidth: gridTableTotalWidth
-											? `${gridTableTotalWidth}px`
-											: undefined,
-									}}
-								>
-									<Callout.Root mb="3" variant="surface" size="1">
-										<Callout.Icon>
-											<InfoCircledIcon />
-										</Callout.Icon>
-										<Callout.Text>
-											<span
-												className="text-sm sm:text-base"
-												style={{ color: "var(--gray-12)" }}
-											>
-												You are viewing a <strong>Shared Build</strong>.
-												This layout is read-only.
-											</span>
-										</Callout.Text>
-									</Callout.Root>
-								</Box>
-							)}
-
-							<Flex
-								align="center"
-								wrap="wrap"
-								gap="3"
-								className="main-app__ship-selector heading-styled"
-								style={{
-									maxWidth: gridTableTotalWidth
-										? `${gridTableTotalWidth}px`
-										: undefined,
-								}}
+							{/* Grid section */}
+							<Box
+								flexShrink={{ initial: "1", md: "0" }}
+								className="main-app__grid-section"
+								ref={appLayoutContainerRef}
 							>
-								{!isSharedGrid && (
-									<span className="main-app__ship-selection">
-										<ShipSelection solving={solving} />
-									</span>
+								{isSharedGrid && (
+									<SharedBuildCallout gridTableTotalWidth={gridTableTotalWidth} />
 								)}
-								<Text trim="end" className="main-app__ship-label">
-									{t("platformLabel")}
-								</Text>
-								<Text trim="end" className="main-app__ship-name trim-text">
-									{t(`platforms.${selectedShipType}`)}
-								</Text>
-							</Flex>
 
-							<GridTable
-								solving={solving}
-								progressPercent={progressPercent}
-								status={status}
-								sharedGrid={isSharedGrid}
-								ref={appLayoutGridTableRef}
-							/>
-						</Box>
+								<ShipSelectionHeading
+									isSharedGrid={isSharedGrid}
+									solving={solving}
+									selectedShipType={selectedShipType}
+									gridTableTotalWidth={gridTableTotalWidth}
+								/>
 
-						{/* Tech tree section */}
-						{!isSharedGrid && (
-							<Flex
-								direction="column"
-								width={
-									!isLargeScreen && gridTableTotalWidth
-										? `${gridTableTotalWidth}px`
-										: "100%"
-								}
-								ml={{ md: "5" }}
-								className="main-app__tech-tree-section"
-							>
-								<Suspense fallback={<TechTreeSkeleton />}>
-									<TechTreeComponent
-										handleOptimize={handleOptimize}
-										solving={solving}
-										gridTableTotalWidth={gridTableTotalWidth}
-									/>
-								</Suspense>
-							</Flex>
-						)}
-					</Flex>
+								<GridTable
+									solving={solving}
+									progressPercent={progressPercent}
+									status={status}
+									sharedGrid={isSharedGrid}
+									ref={appLayoutGridTableRef}
+								/>
+							</Box>
+
+							{/* Tech tree section */}
+							{!isSharedGrid && (
+								<Flex
+									direction="column"
+									width={
+										!isLargeScreen && gridTableTotalWidth
+											? `${gridTableTotalWidth}px`
+											: "100%"
+									}
+									ml={{ md: "5" }}
+									className="main-app__tech-tree-section"
+								>
+									<Suspense fallback={<TechTreeSkeleton />}>
+										<TechTreeComponent
+											handleOptimize={handleOptimize}
+											solving={solving}
+											gridTableTotalWidth={gridTableTotalWidth}
+										/>
+									</Suspense>
+								</Flex>
+							)}
+						</Flex>
+					</div>
 
 					{!isLargeScreen && (
 						<div className="main-app__footer-wrapper">
@@ -245,32 +150,16 @@ export const MainAppContent = () => {
 
 				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
-				{/* Dialogs related to MainAppContent's state */}
-				<Suspense fallback={null}>
-					<OptimizationAlertDialog
-						isOpen={!!patternNoFitTech}
-						technologyName={patternNoFitTech}
-						onClose={clearPatternNoFitTech}
-						onForceOptimize={handleForceCurrentPnfOptimize}
-					/>
-				</Suspense>
-
-				{/* Build file management (only on mobile) */}
-				<BuildNameDialog
-					isOpen={isSaveBuildDialogOpen}
-					onConfirm={handleBuildNameConfirm}
-					onCancel={handleBuildNameCancel}
+				<MainAppUtilities
+					patternNoFitTech={patternNoFitTech}
+					clearPatternNoFitTech={clearPatternNoFitTech}
+					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
+					isSaveBuildDialogOpen={isSaveBuildDialogOpen}
+					handleBuildNameConfirm={handleBuildNameConfirm}
+					handleBuildNameCancel={handleBuildNameCancel}
+					fileInputRef={fileInputRef}
+					handleFileSelect={handleFileSelect}
 				/>
-				<input
-					ref={fileInputRef}
-					type="file"
-					accept=".nms"
-					onChange={handleFileSelect}
-					className="hidden"
-					aria-label={t("buttons.loadBuild")}
-				/>
-				<ErrorMessageRenderer />
-				<ToastRenderer />
 			</main>
 		</>
 	);

@@ -102,7 +102,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 							return (
 								<label
 									key={module.id}
-									className="mb-2 flex items-center gap-2 font-medium"
+									className="mb-2 flex items-center gap-2 text-sm font-medium sm:text-base"
 								>
 									<Checkbox checked={true} disabled={true} />
 									<Avatar
