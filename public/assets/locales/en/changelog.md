@@ -2,6 +2,8 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md).
 
+> Content and changes from No Man's Sky version 6.2 (Remnant) will be added once there is a stable build to test with.
+
 ---
 
 ## Version 6.7 – Grid Logic Enhancements, Stability & Performance (2026-02-07)
