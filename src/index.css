@@ -119,9 +119,6 @@ body.a11y-font .radix-themes {
 }
 
 body {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-rendering: optimizeLegibility;
 	font-family: var(--default-font-family);
 	min-height: 100dvh;
 	width: 100dvw;
