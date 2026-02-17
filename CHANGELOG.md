@@ -1,3 +1,10 @@
+## [6.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.1...v6.8.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* Update `trailsInfo` localization string in Portuguese, German, Spanish, and French to reflect v6.2 starship trail mechanics. ([1914341](https://github.com/jbelew/nms_optimizer-web/commit/19143414c4f35ff42ae52ce409c1329d4756b8aa))
+
 ## [6.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.0...v6.8.1) (2026-02-17)
 
 
