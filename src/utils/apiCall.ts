@@ -32,7 +32,13 @@ export async function apiCall<T = unknown>(
 		if (!skipGlobalError) {
 			// Always trigger error dialog for any failure in apiCall unless skipped
 			hideSplashScreenAndShowBackground();
-			useOptimizeStore.getState().setShowError(true, "fatal");
+			useOptimizeStore
+				.getState()
+				.setShowError(
+					true,
+					"fatal",
+					error instanceof Error ? error : new Error(String(error))
+				);
 		}
 
 		throw error;

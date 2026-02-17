@@ -14,7 +14,8 @@ export type ErrorType = "fatal" | "recoverable";
 interface OptimizeState {
 	showError: boolean;
 	errorType: ErrorType | null;
-	setShowError: (show: boolean, type?: ErrorType) => void;
+	error: Error | null;
+	setShowError: (show: boolean, type?: ErrorType, error?: Error | null) => void;
 	patternNoFitTech: string | null; // Tech for which "Pattern No Fit" occurred
 	setPatternNoFitTech: (tech: string | null) => void;
 }
@@ -25,8 +26,9 @@ interface OptimizeState {
 export const useOptimizeStore = create<OptimizeState>((set) => ({
 	showError: false,
 	errorType: null,
-	setShowError: (show, type = "recoverable") =>
-		set({ showError: show, errorType: show ? type : null }),
+	error: null,
+	setShowError: (show, type = "recoverable", error = null) =>
+		set({ showError: show, errorType: show ? type : null, error: show ? error : null }),
 	patternNoFitTech: null,
 	setPatternNoFitTech: (tech) => set({ patternNoFitTech: tech }),
 }));

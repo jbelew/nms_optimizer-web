@@ -83,6 +83,24 @@ describe("OptimizeStore", () => {
 
 			expect(useOptimizeStore.getState().patternNoFitTech).toBe("test-tech");
 		});
+		it("should store an error object", () => {
+			const { setShowError } = useOptimizeStore.getState();
+			const testError = new Error("Test error message");
+			setShowError(true, "fatal", testError);
+
+			const state = useOptimizeStore.getState();
+			expect(state.error).toBe(testError);
+		});
+
+		it("should clear error object when setShowError(false) is called", () => {
+			const { setShowError } = useOptimizeStore.getState();
+			const testError = new Error("Test error message");
+			setShowError(true, "fatal", testError);
+			setShowError(false);
+
+			const state = useOptimizeStore.getState();
+			expect(state.error).toBeNull();
+		});
 	});
 
 	describe("setPatternNoFitTech", () => {
@@ -165,6 +183,7 @@ describe("OptimizeStore", () => {
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: true,
 				errorType: "recoverable",
+				error: null,
 				patternNoFitTech: "armor-plating",
 				setShowError,
 				setPatternNoFitTech,
@@ -176,6 +195,7 @@ describe("OptimizeStore", () => {
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: false,
 				errorType: null,
+				error: null,
 				patternNoFitTech: "armor-plating",
 				setShowError,
 				setPatternNoFitTech,
@@ -187,6 +207,7 @@ describe("OptimizeStore", () => {
 			expect(useOptimizeStore.getState()).toEqual({
 				showError: false,
 				errorType: null,
+				error: null,
 				patternNoFitTech: null,
 				setShowError,
 				setPatternNoFitTech,

@@ -53,7 +53,7 @@ describe("apiCall", () => {
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow(HttpError);
 
 		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
-		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal");
+		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal", expect.any(Error));
 	});
 
 	it("should throw Error and trigger error dialog when fetch fails (network error)", async () => {
@@ -67,7 +67,7 @@ describe("apiCall", () => {
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow("Network Error");
 
 		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
-		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal");
+		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal", expect.any(Error));
 	});
 
 	it("should NOT trigger error dialog when skipGlobalError is true", async () => {

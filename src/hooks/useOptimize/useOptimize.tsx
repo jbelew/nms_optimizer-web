@@ -129,7 +129,11 @@ export const useOptimize = (): UseOptimizeReturn => {
 				socket = io(WS_URL, { transports: ["websocket"] });
 			} catch (importError) {
 				console.error("Failed to import socket.io-client:", importError);
-				setShowErrorStore(true, "recoverable");
+				setShowErrorStore(
+					true,
+					"recoverable",
+					importError instanceof Error ? importError : new Error(String(importError))
+				);
 				resetProgress();
 
 				return;
@@ -212,13 +216,21 @@ export const useOptimize = (): UseOptimizeReturn => {
 					}
 				} else {
 					console.error("Invalid API response:", data);
-					setShowErrorStore(true, "recoverable");
+					setShowErrorStore(
+						true,
+						"recoverable",
+						new Error("Invalid API response format")
+					);
 					cleanup();
 				}
 			});
 			socket.once("connect_error", (err) => {
 				console.error("WebSocket connection error:", err);
-				setShowErrorStore(true, "recoverable");
+				setShowErrorStore(
+					true,
+					"recoverable",
+					err instanceof Error ? err : new Error(String(err))
+				);
 				cleanup();
 			});
 
