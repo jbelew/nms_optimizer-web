@@ -1,3 +1,10 @@
+## [6.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.1...v6.7.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* **GridCell:** support salvaged upgrade modules ([bfb47eb](https://github.com/jbelew/nms_optimizer-web/commit/bfb47ebb81f6ce32df75442c1855780903a5035d))
+
 ## [6.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.0...v6.7.1) (2026-02-17)
 
 
