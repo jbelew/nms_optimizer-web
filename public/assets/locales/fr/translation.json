@@ -247,7 +247,8 @@
             "paralysis": "Mortier de paralysie",
             "personal": "Champ de force personnel",
             "terrian": "Manipulateur de terrain",
-            "runic": "Lentille runique"
+            "runic": "Lentille runique",
+            "gravatino": "Bobine Gravatino"
         },
         "other": {
             "freighter-hyper": "Hyperpropulseur",
@@ -299,7 +300,9 @@
             "minotaur": "Canon Minotaure",
             "minotaur-laser": "Laser Minotaure",
             "precision": "Laser Minotaure de Précision",
-            "mineral": "Installation de Traitement des Minéraux"
+            "mineral": "Installation de Traitement des Minéraux",
+            "cyclops": "Portée Cyclope",
+            "excavation": "Lame d'excavation"
         },
         "exosuit": {
             "aeration": "Membrane d'Aération",

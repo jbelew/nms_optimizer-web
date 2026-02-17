@@ -247,7 +247,8 @@
             "paralysis": "Paralysemörser",
             "personal": "Eigenes Kraftfeld",
             "terrian": "Terrainmanipulator",
-            "runic": "Runenobjektiv"
+            "runic": "Runenobjektiv",
+            "gravatino": "Gravatino-Spule"
         },
         "other": {
             "freighter-hyper": "Hyperantrieb",
@@ -299,7 +300,9 @@
             "minotaur": "Minotaurus-Kanone",
             "minotaur-laser": "Minotaur -Laser",
             "precision": "Präzisions-Minotaurus-Laser",
-            "mineral": "Mineralverarbeitungsanlage"
+            "mineral": "Mineralverarbeitungsanlage",
+            "cyclops": "Cyclops-Zielfernrohr",
+            "excavation": "Ausgrabungsklinge"
         },
         "exosuit": {
             "aeration": "Belüftungsmembran",
