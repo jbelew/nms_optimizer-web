@@ -133,6 +133,16 @@ describe("GridCell", () => {
 		expect(screen.getByText("3")).toBeInTheDocument();
 	});
 
+	it("renders 'S1' for 'Salvaged Upgrade Module Theta'", () => {
+		renderComponent({ label: "Salvaged Upgrade Module Theta" });
+		expect(screen.getByText("S1")).toBeInTheDocument();
+	});
+
+	it("renders 'F1' for 'Forbidden Upgrade Module Theta'", () => {
+		renderComponent({ label: "Forbidden Upgrade Module Theta" });
+		expect(screen.getByText("F1")).toBeInTheDocument();
+	});
+
 	it("renders corner elements when not supercharged and no image is present", () => {
 		renderComponent({ supercharged: false, image: null });
 		const cellElement = screen.getByRole("gridcell");

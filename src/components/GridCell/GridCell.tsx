@@ -29,7 +29,7 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("array") ||
 		lowerLabel.includes("arcadia") ||
 		lowerLabel.includes("ion barrier") ||
-		lowerLabel.includes("deflector") ||
+		lowerLabel.includes("deflector shield") ||
 		lowerLabel.includes("mag-field") ||
 		lowerLabel.includes("thunderbird") ||
 		lowerLabel.includes("torpedo") ||
@@ -39,27 +39,31 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("deadeye");
 	const isReactor = lowerLabel.includes("reactor");
 	const isForbidden = lowerLabel.includes("forbidden");
+	const isSalvaged = lowerLabel.includes("salvaged");
 
-	if (isUpgrade || isBooster || isReactor || isForbidden) {
+	if (isUpgrade || isBooster || isReactor || isForbidden || isSalvaged) {
 		if (lowerLabel.includes("theta")) {
-			if (isUpgrade) return "1";
-			if (isBooster) return "C1";
-			if (isReactor) return "R1";
+			if (isSalvaged) return "S1";
 			if (isForbidden) return "F1";
+			if (isReactor) return "R1";
+			if (isBooster) return "C1";
+			if (isUpgrade) return "1";
 		}
 
 		if (lowerLabel.includes("tau")) {
-			if (isUpgrade) return "2";
-			if (isBooster) return "C2";
-			if (isReactor) return "R2";
+			if (isSalvaged) return "S2";
 			if (isForbidden) return "F2";
+			if (isReactor) return "R2";
+			if (isBooster) return "C2";
+			if (isUpgrade) return "2";
 		}
 
 		if (lowerLabel.includes("sigma")) {
-			if (isUpgrade) return "3";
-			if (isBooster) return "C3";
-			if (isReactor) return "R3";
+			if (isSalvaged) return "S3";
 			if (isForbidden) return "F3";
+			if (isReactor) return "R3";
+			if (isBooster) return "C3";
+			if (isUpgrade) return "3";
 		}
 	}
 
