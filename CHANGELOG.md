@@ -1,3 +1,10 @@
+## [6.7.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.0...v6.7.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* **error-handling:** improve error tracking, reporting, and display ([531b2d9](https://github.com/jbelew/nms_optimizer-web/commit/531b2d9f029f2ddaa04905bba38e14ac4a38171d)), closes [#437](https://github.com/jbelew/nms_optimizer-web/issues/437)
+
 # [6.7.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.6.18...v6.7.0) (2026-02-07)
 
 
