@@ -1,3 +1,10 @@
+## [6.8.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.0...v6.8.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* **grid-images:** Update Aeron starship images. ([2e623a3](https://github.com/jbelew/nms_optimizer-web/commit/2e623a36e14a754ee710dd69ecb7c87b0973dc95))
+
 # [6.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.2...v6.8.0) (2026-02-17)
 
 
