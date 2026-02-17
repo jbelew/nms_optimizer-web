@@ -600,9 +600,9 @@
         "selectAll": "Selecione tudo",
         "closeDialogLabel": "Fechar diálogo",
         "cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
-        "trailsInfo": "Na maioria dos casos, selecione no máximo <strong>5 trilhas de naves estelares</strong>. Se você estiver experimentando a Estatueta de Tentáculos para aumentar a velocidade na atmosfera, selecione 7.",
         "optimizeButton": "Otimizar",
-        "cancelButton": "Cancelar"
+        "cancelButton": "Cancelar",
+        "trailsInfo": "<strong>As trilhas de naves foram alteradas com a versão 6.2 (atualização remanescente)!</strong> Na maioria dos casos, selecione no máximo <strong>três trilhas de naves</strong>. A estatueta de tentáculos <strong>não</strong> aumenta a velocidade na atmosfera! As trilhas de naves estelares são aplicadas em ordem de prioridade, com <strong>[P1] Cromático</strong> tendo a prioridade mais alta."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Melhores Layouts Tecnológicos & Calculadora de Adjacência",

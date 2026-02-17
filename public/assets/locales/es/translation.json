@@ -600,9 +600,9 @@
         "selectAll": "Seleccionar todo",
         "closeDialogLabel": "Diálogo de cierre",
         "cosmeticInfo": "Los módulos sugeridos <strong>cosméticos</strong> pueden ayudar a aumentar ligeramente sus estadísticas finales, ¡pero <i>no permita que limiten sus ideas de diseño!</i> simplemente coincidan con la cantidad de módulos cosméticos en su Corvette para la mejor solución posible.",
-        "trailsInfo": "En la mayoría de los casos, no seleccione más de <strong>5 Starship Trails</strong>. Si estás experimentando con la figura de tentáculos para aumentar la velocidad en la atmósfera, selecciona 7.",
         "optimizeButton": "Optimizar",
-        "cancelButton": "Cancelar"
+        "cancelButton": "Cancelar",
+        "trailsInfo": "<strong>¡Starship Trails ha cambiado con v6.2 (Actualización remanente)!</strong> En la mayoría de los casos, seleccione no más de <strong>tres Starship Trails</strong>. ¡La figura con tentáculos <strong>no</strong> aumenta la velocidad en la atmósfera! Starship Trails se aplican en orden de prioridad, siendo <strong>[P1] Chromatic</strong> la de mayor prioridad."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Mejores Diseños Tecnológicos & Calculadora de Adyacencia",

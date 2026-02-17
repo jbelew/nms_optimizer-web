@@ -600,9 +600,9 @@
         "selectAll": "Wählen Sie alle aus",
         "closeDialogLabel": "Dialog schließen",
         "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
-        "trailsInfo": "Wählen Sie in den meisten Fällen nicht mehr als <strong>5 Raumschiffpfade</strong> aus. Wenn Sie mit der Tentakelfigur experimentieren, um die Geschwindigkeit in der Atmosphäre zu erhöhen, wählen Sie 7.",
         "optimizeButton": "Optimieren",
-        "cancelButton": "Abbrechen"
+        "cancelButton": "Abbrechen",
+        "trailsInfo": "<strong>Starship Trails haben sich mit v6.2 (Remnant Update) geändert!</strong> Wählen Sie in den meisten Fällen nicht mehr als <strong>drei Starship Trails</strong> aus. Die Tentakelfigur erhöht die Geschwindigkeit in der Atmosphäre nicht! Starship Trails werden in der Reihenfolge ihrer Priorität angewendet, wobei <strong>[P1] Chromatic</strong> die höchste Priorität hat."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Beste Tech-Layouts & Adjazenz-Rechner",
