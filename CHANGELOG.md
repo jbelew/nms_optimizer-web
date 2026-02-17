@@ -1,3 +1,10 @@
+# [6.8.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.2...v6.8.0) (2026-02-17)
+
+
+### Features
+
+* **items:** add cyclops, excavation exocraft, and gravatino multi-tool assets ([ef2922a](https://github.com/jbelew/nms_optimizer-web/commit/ef2922a05e3f5c4c21c2287817c27c95d0d08d11))
+
 ## [6.7.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.7.1...v6.7.2) (2026-02-17)
 
 
