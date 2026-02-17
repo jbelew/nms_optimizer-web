@@ -2,9 +2,15 @@
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md).
 
-> Content and changes from No Man's Sky version 6.2 (Remnant) will be added once there is a stable build to test with.
-
 ---
+
+## Version 6.8 – Remnant Update (2026-02-17)
+
+- Added technology modules originally introduced in v6.2.
+- Updated Starship Trails solves to reflect revised adjacency bonus behavior.
+- Added text labels to Starship Trails grid images for improved usability.
+- Improved error handling and user-visible messaging when the Web UI cannot connect to the API service layer.
+- Updated adjacency bonus indicators across most Exocraft solutions.
 
 ## Version 6.7 – Grid Logic Enhancements, Stability & Performance (2026-02-07)
 
