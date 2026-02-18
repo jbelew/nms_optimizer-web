@@ -40,4 +40,4 @@ export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS];
  * When true, all requests will serve the maintenance page.
  * @type {boolean}
  */
-export const MAINTENANCE_MODE = true;
+export const MAINTENANCE_MODE = false;
