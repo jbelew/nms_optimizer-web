@@ -35,6 +35,7 @@ import "./i18n/i18n"; // Initialize i18next
 import { StrictMode } from "react";
 import * as Toast from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
+import * as Sentry from "@sentry/react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -78,7 +79,8 @@ if (typeof window !== "undefined") {
 	});
 }
 
-const router = createBrowserRouter(routes);
+const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV6(createBrowserRouter);
+const router = sentryCreateBrowserRouter(routes);
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>

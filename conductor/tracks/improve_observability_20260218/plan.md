@@ -3,17 +3,18 @@
 ## Phase 1: Infrastructure & Centralized Logging
 This phase focuses on setting up Sentry and the core logging utility that will feed both the internal dashboard and external services.
 
-- [x] Task: Integrate Sentry SDK
-    - [x] Install `@sentry/react` and `@sentry/tracing`
-    - [x] Configure Sentry in `src/main.tsx` or a dedicated init file
-    - [x] Verify Sentry is capturing errors in development
-- [~] Task: Create Centralized Logger Utility
-    - [ ] Define `LogLevel` (INFO, WARN, ERROR) and `LogEntry` interfaces
-    - [ ] Implement `Logger` class/utility that handles:
+- [x] Task: Integrate Sentry SDK [e29ec69] (Enhanced with React Router V6 tracking)
+    - [x] Install `@sentry/react`
+    - [x] Configure Sentry in `src/main.tsx`
+    - [x] Integrate React Router V6 instrumentation
+    - [x] Verify Sentry is capturing errors and navigations
+- [x] Task: Create Centralized Logger Utility [33e8b53]
+    - [x] Define `LogLevel` (INFO, WARN, ERROR) and `LogEntry` interfaces
+    - [x] Implement `Logger` class/utility that handles:
         - Console output (respecting current production filtering)
         - Sentry capture (for ERROR/WARN)
         - In-memory/LocalStorage storage for the internal dashboard
-    - [ ] Write tests for the `Logger` utility
+    - [x] Write tests for the `Logger` utility
 - [~] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Centralized Logging' (Protocol in workflow.md)
 
 ## Phase 2: Observability Dashboard UI

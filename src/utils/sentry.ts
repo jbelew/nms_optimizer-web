@@ -1,4 +1,11 @@
+import { useEffect } from "react";
 import * as Sentry from "@sentry/react";
+import {
+	createRoutesFromChildren,
+	matchRoutes,
+	useLocation,
+	useNavigationType,
+} from "react-router-dom";
 
 import { env } from "./analytics";
 
@@ -19,7 +26,16 @@ export const initializeSentry = () => {
 
 	Sentry.init({
 		dsn,
-		integrations: [Sentry.browserTracingIntegration()],
+		integrations: [
+			Sentry.browserTracingIntegration(),
+			Sentry.reactRouterV6BrowserTracingIntegration({
+				useEffect,
+				useLocation,
+				useNavigationType,
+				createRoutesFromChildren,
+				matchRoutes,
+			}),
+		],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
 		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1, // Adjust for production
