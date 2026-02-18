@@ -1,3 +1,10 @@
+## [6.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.2...v6.8.3) (2026-02-18)
+
+
+### Bug Fixes
+
+* Implement maintenance mode to serve a new HTML page and update development environment API endpoints to local. ([0345fcc](https://github.com/jbelew/nms_optimizer-web/commit/0345fcc07a8b567c92e62e4ccfe6e0bac2c17e1b))
+
 ## [6.8.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.1...v6.8.2) (2026-02-17)
 
 
