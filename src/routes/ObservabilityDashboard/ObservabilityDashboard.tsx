@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { Box, Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 
 import { Logger } from "../../utils/logger";
+import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 export default function ObservabilityDashboard() {
 	const [logs, setLogs] = useState(Logger.getLogs());
 
 	useEffect(() => {
+		// Clear splash screen
+		void hideSplashScreenAndShowBackground();
+
 		// Basic polling or just initial load for now
 		const interval = setInterval(() => {
 			setLogs(Logger.getLogs());

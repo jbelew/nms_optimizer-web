@@ -176,6 +176,7 @@ app.set("trust proxy", true);
 // Security headers
 app.use((req, res, next) => {
 	res.setHeader("Content-Security-Policy", csp);
+	res.setHeader("Document-Policy", "js-profiling");
 	res.setHeader("X-Content-Type-Options", "nosniff");
 	res.setHeader("X-Frame-Options", "DENY");
 	res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");

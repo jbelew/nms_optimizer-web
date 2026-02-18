@@ -83,6 +83,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
             const { html, etag: cachedEtag } = seoCache.get(cacheKey);
 
             res.setHeader("Content-Security-Policy", csp);
+            res.setHeader("Document-Policy", "js-profiling");
             res.setHeader("ETag", cachedEtag);
             res.setHeader("Cache-Control", "no-cache");
 
@@ -171,6 +172,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         seoCache.set(cacheKey, { html: modifiedHtml, etag: indexEtag });
 
         res.setHeader("Content-Security-Policy", csp);
+        res.setHeader("Document-Policy", "js-profiling");
         res.setHeader("ETag", indexEtag);
         res.setHeader("Cache-Control", "no-cache");
 

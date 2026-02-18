@@ -28,6 +28,7 @@ export const initializeSentry = () => {
 		dsn,
 		integrations: [
 			Sentry.browserTracingIntegration(),
+			Sentry.browserProfilingIntegration(),
 			Sentry.reactRouterV6BrowserTracingIntegration({
 				useEffect,
 				useLocation,
@@ -39,6 +40,8 @@ export const initializeSentry = () => {
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
 		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1, // Adjust for production
+		// Profiling sample rate is relative to tracesSampleRate
+		profilesSampleRate: env.isDevMode() ? 1.0 : 0.1,
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,

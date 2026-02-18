@@ -19,6 +19,10 @@ vi.mock("../../utils/logger", () => ({
 	},
 }));
 
+vi.mock("../../utils/splashScreen", () => ({
+	hideSplashScreenAndShowBackground: vi.fn(),
+}));
+
 const renderWithTheme = (ui: React.ReactElement) => {
 	return render(<Theme>{ui}</Theme>);
 };
