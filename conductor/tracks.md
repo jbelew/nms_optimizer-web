@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Improve Web App Observability**
+- [~] **Track: Improve Web App Observability**
   *Link: [./tracks/improve_observability_20260218/](./tracks/improve_observability_20260218/)*

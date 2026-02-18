@@ -43,10 +43,14 @@ import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
+import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-// Initialize analytics and PWA after render is complete
+// Initialize analytics, Sentry and PWA after render is complete
 if (typeof window !== "undefined") {
+	// Initialize Sentry early to catch errors during initialization
+	initializeSentry();
+
 	// Failsafe: hide splash screen after 8 seconds if still showing
 	setTimeout(() => {
 		const splash = document.querySelector(".vpss");

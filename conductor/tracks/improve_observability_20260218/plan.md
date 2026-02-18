@@ -3,7 +3,7 @@
 ## Phase 1: Infrastructure & Centralized Logging
 This phase focuses on setting up Sentry and the core logging utility that will feed both the internal dashboard and external services.
 
-- [ ] Task: Integrate Sentry SDK
+- [~] Task: Integrate Sentry SDK
     - [ ] Install `@sentry/react` and `@sentry/tracing`
     - [ ] Configure Sentry in `src/main.tsx` or a dedicated init file
     - [ ] Verify Sentry is capturing errors in development
