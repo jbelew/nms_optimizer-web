@@ -1,3 +1,10 @@
+# [6.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.9.0...v6.10.0) (2026-02-18)
+
+
+### Features
+
+* **observability:** Add Observability Dashboard and route ([87aff0d](https://github.com/jbelew/nms_optimizer-web/commit/87aff0d6e108b61da5cd1b3167104bcf51e5f017))
+
 # [6.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.3...v6.9.0) (2026-02-18)
 
 
