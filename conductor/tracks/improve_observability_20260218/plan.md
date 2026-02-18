@@ -21,15 +21,15 @@ This phase focuses on setting up Sentry and the core logging utility that will f
 ## Phase 2: Observability Dashboard UI
 This phase focuses on creating the hidden route and the UI for the observability dashboard.
 
-- [~] Task: Setup Hidden Route
-    - [ ] Add `/observability` route to `src/routes.tsx` or `src/routeConfig.ts`
-    - [ ] Ensure the route is lazy-loaded to minimize main bundle impact
-- [ ] Task: Build Dashboard Component
-    - [ ] Create `ObservabilityDashboard` component using Radix UI/Tailwind
-    - [ ] Implement display for recent logs and errors from the `Logger` utility
-    - [ ] Add "Clear Logs" functionality
-    - [ ] Write unit tests for the dashboard component
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Observability Dashboard UI' (Protocol in workflow.md)
+- [x] Task: Setup Hidden Route [87aff0d]
+    - [x] Add `/observability` route to `src/routes.tsx` or `src/routeConfig.ts`
+    - [x] Ensure the route is lazy-loaded to minimize main bundle impact
+- [x] Task: Build Dashboard Component [87aff0d]
+    - [x] Create `ObservabilityDashboard` component using Radix UI/Tailwind
+    - [x] Implement display for recent logs and errors from the `Logger` utility
+    - [x] Add "Clear Logs" functionality
+    - [x] Write unit tests for the dashboard component
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Observability Dashboard UI' (Protocol in workflow.md)
 
 ## Phase 3: Integration & Refinement
 This phase integrates the logger into key application flows and performs final checks.
