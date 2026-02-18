@@ -289,6 +289,11 @@ export default defineConfig(({ mode }) => {
 			include: ["react", "react-dom"],
 			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
 		},
+		server: {
+			headers: {
+				"Document-Policy": "js-profiling",
+			},
+		},
 		preview: { host: "0.0.0.0", port: 4173 },
 		css: { transformer: "lightningcss" },
 		build: {

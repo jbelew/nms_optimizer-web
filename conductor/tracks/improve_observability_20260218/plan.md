@@ -34,11 +34,11 @@ This phase focuses on creating the hidden route and the UI for the observability
 ## Phase 3: Integration & Refinement
 This phase integrates the logger into key application flows and performs final checks.
 
-- [ ] Task: Instrument Key Application Events
-    - [ ] Add logging to the optimization algorithm start/end/error
-    - [ ] Add logging to grid interaction events
-    - [ ] Add logging to equipment type changes
-- [ ] Task: Final Verification & Cleanup
+- [x] Task: Instrument Key Application Events [21a1623]
+    - [x] Add logging to the optimization algorithm start/end/error
+    - [x] Add logging to grid interaction events
+    - [x] Add logging to equipment type changes
+- [~] Task: Final Verification & Cleanup
     - [ ] Verify GA is still functioning correctly
     - [ ] Ensure production console is clean
     - [ ] Verify hidden route is not linked anywhere in the UI

@@ -312,6 +312,7 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		const stats = await fs.promises.stat(ssgPath);
 		if (stats.isFile()) {
 			res.setHeader("Cache-Control", "public, max-age=300");
+			res.setHeader("Document-Policy", "js-profiling");
 			return res.sendFile(ssgPath);
 		}
 	} catch (err) {
