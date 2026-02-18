@@ -1,3 +1,10 @@
+# [6.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.10.0...v6.11.0) (2026-02-18)
+
+
+### Features
+
+* **observability:** Enable Sentry Profiling and add js-profiling header ([21a1623](https://github.com/jbelew/nms_optimizer-web/commit/21a1623ba5d77bf3b6abafeddae3b97788b281b3))
+
 # [6.10.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.9.0...v6.10.0) (2026-02-18)
 
 
