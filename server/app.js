@@ -21,6 +21,7 @@ import { seoTagInjectionMiddleware } from "./seoMiddleware.js";
 import {
 	BASE_KNOWN_PATHS,
 	KNOWN_DIALOGS,
+	MAINTENANCE_MODE,
 	OTHER_LANGUAGES,
 	SUPPORTED_LANGUAGES,
 	TARGET_HOST,
@@ -48,6 +49,16 @@ const csp = [
 ].join("; ");
 
 const app = express();
+
+// Maintenance Mode Middleware
+if (MAINTENANCE_MODE && process.env.NODE_ENV !== "test") {
+	app.use((req, res, next) => {
+		// Allow status checks if needed, but for "Hosting Provider Down" we usually want to block everything
+		// except maybe assets if they are needed for the maintenance page itself.
+		// However, our maintenance page is self-contained (inline styles, inline SVG).
+		res.status(503).sendFile(path.join(__dirname, "../public", "maintenance.html"));
+	});
+}
 
 // Apply compression early to capture all eligible responses, especially dynamic HTML
 app.use(compression({

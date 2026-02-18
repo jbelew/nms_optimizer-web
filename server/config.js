@@ -34,3 +34,10 @@ export const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation
  * @type {string[]}
  */
 export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS];
+
+/**
+ * Flag to enable/disable maintenance mode.
+ * When true, all requests will serve the maintenance page.
+ * @type {boolean}
+ */
+export const MAINTENANCE_MODE = true;
