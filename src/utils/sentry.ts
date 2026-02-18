@@ -20,7 +20,7 @@ export const initializeSentry = () => {
 	Sentry.init({
 		dsn,
 		integrations: [Sentry.browserTracingIntegration()],
-		environment: import.meta.env.MODE,
+		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
 		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1, // Adjust for production
 		// Set release if available
