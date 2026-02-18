@@ -7,6 +7,7 @@ import { createEmptyCell, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
+import { Logger } from "../../utils/logger";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
@@ -102,6 +103,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
 
+			Logger.info(`Optimization started for ${tech}`, {
+				tech,
+				forced,
+				platform: selectedShipType,
+			});
+
 			// Optimize grid update: only create new array structure if cells actually change
 			const updatedGrid: Grid = {
 				...grid,
@@ -179,6 +186,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 			socket.once("optimization_result", (data: unknown) => {
 				if (isApiResponse(data)) {
 					if (data.solve_method === "Pattern No Fit" && !forced) {
+						Logger.warn(`Optimization "Pattern No Fit" for ${tech}`, {
+							tech,
+							platform: selectedShipType,
+						});
 						setPatternNoFitTech(tech);
 						setSolving(false);
 						sendEvent({
@@ -191,6 +202,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 						});
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
+
+						Logger.info(`Optimization complete for ${tech}`, {
+							tech,
+							method: data.solve_method,
+							bonus: data.max_bonus,
+						});
 
 						setResult(data, tech);
 						const gaTech =
@@ -215,6 +232,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 						}
 					}
 				} else {
+					Logger.error(`Optimization failed for ${tech}: Invalid API response`, data);
 					console.error("Invalid API response:", data);
 					setShowErrorStore(
 						true,
@@ -225,6 +243,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				}
 			});
 			socket.once("connect_error", (err) => {
+				Logger.error(`Optimization WebSocket error for ${tech}`, err);
 				console.error("WebSocket connection error:", err);
 				setShowErrorStore(
 					true,

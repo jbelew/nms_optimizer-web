@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useTransition } from "react";
 import { useGridStore } from "../../store/GridStore";
 import { useSessionStore } from "../../store/SessionStore";
 import { useShakeStore } from "../../store/ShakeStore";
+import { Logger } from "../../utils/logger";
 
 // To track double taps correctly across all cells, we need a shared reference.
 // A tap on one cell should not be considered the first tap of a double tap on another.
@@ -222,6 +223,11 @@ export const useGridCellInteraction = (
 
 					triggerShake();
 				} else {
+					Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
+						rowIndex,
+						columnIndex,
+						active: !cell.active,
+					});
 					startTransition(() => {
 						gridState.toggleCellActive(rowIndex, columnIndex);
 					});
@@ -246,13 +252,26 @@ export const useGridCellInteraction = (
 
 					triggerShake();
 				} else {
+					Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
+						rowIndex,
+						columnIndex,
+						supercharged: !cell.supercharged,
+					});
 					startTransition(() => {
 						gridState.toggleCellSupercharged(rowIndex, columnIndex);
 					});
 				}
 			}
 		},
-		[isSharedGrid, rowIndex, columnIndex, cell.supercharged, cell.module, triggerShake]
+		[
+			isSharedGrid,
+			rowIndex,
+			columnIndex,
+			cell.supercharged,
+			cell.active,
+			cell.module,
+			triggerShake,
+		]
 	);
 
 	const handleContextMenu = useCallback((event: React.MouseEvent) => {

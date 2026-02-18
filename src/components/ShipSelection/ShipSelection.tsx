@@ -14,6 +14,7 @@ import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes
 import { useToast } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
+import { Logger } from "../../utils/logger";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;
@@ -123,6 +124,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const handleOptionSelect = useCallback(
 		(option: string) => {
 			if (option !== usePlatformStore.getState().selectedPlatform) {
+				Logger.info(`Platform selected: ${option}`, { platform: option });
 				// Use startTransition to keep dropdown responsive while handling updates
 				startTransition(() => {
 					sendEvent({
