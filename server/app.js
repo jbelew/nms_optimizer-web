@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 import compression from "compression";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
+import * as Sentry from "@sentry/node";
 
 // Local modules
 import { seoTagInjectionMiddleware } from "./seoMiddleware.js";
@@ -339,6 +340,8 @@ app.use("/", expressStaticGzip(DIST_DIR, {
 // ============================================================================
 // ERROR HANDLING
 // ============================================================================
+
+Sentry.setupExpressErrorHandler(app);
 
 app.use((req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));

@@ -3,11 +3,12 @@
 ## Phase 1: Infrastructure & Centralized Logging
 This phase focuses on setting up Sentry and the core logging utility that will feed both the internal dashboard and external services.
 
-- [x] Task: Integrate Sentry SDK [e29ec69] (Enhanced with React Router V6 tracking)
-    - [x] Install `@sentry/react`
-    - [x] Configure Sentry in `src/main.tsx`
+- [x] Task: Integrate Sentry SDK [e29ec69] (Enhanced with React Router V6 and Express Server tracking)
+    - [x] Install `@sentry/react` and `@sentry/node`
+    - [x] Configure Sentry in `src/main.tsx` and `server/index.js`
     - [x] Integrate React Router V6 instrumentation
-    - [x] Verify Sentry is capturing errors and navigations
+    - [x] Add Express request and error handlers
+    - [x] Verify Sentry is capturing errors and navigations across stack
 - [x] Task: Create Centralized Logger Utility [33e8b53]
     - [x] Define `LogLevel` (INFO, WARN, ERROR) and `LogEntry` interfaces
     - [x] Implement `Logger` class/utility that handles:
@@ -20,7 +21,7 @@ This phase focuses on setting up Sentry and the core logging utility that will f
 ## Phase 2: Observability Dashboard UI
 This phase focuses on creating the hidden route and the UI for the observability dashboard.
 
-- [ ] Task: Setup Hidden Route
+- [~] Task: Setup Hidden Route
     - [ ] Add `/observability` route to `src/routes.tsx` or `src/routeConfig.ts`
     - [ ] Ensure the route is lazy-loaded to minimize main bundle impact
 - [ ] Task: Build Dashboard Component

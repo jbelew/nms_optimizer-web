@@ -2,6 +2,7 @@
  * @file The main entry point for the Node.js server.
  * Imports the Express app and starts listening on the configured port.
  */
+import './sentry.js';
 import app from './app.js';
 
 /**
