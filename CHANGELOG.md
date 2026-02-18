@@ -1,3 +1,11 @@
+# [6.9.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.3...v6.9.0) (2026-02-18)
+
+
+### Features
+
+* **logger:** add centralized logger utility ([33e8b53](https://github.com/jbelew/nms_optimizer-web/commit/33e8b53165cf28d8da055e047aab87291a5c079a))
+* **observability:** Integrate Sentry SDK v8 and update CSP ([e29ec69](https://github.com/jbelew/nms_optimizer-web/commit/e29ec69b6ec863de28aedc6214d8ba53f606ad0e))
+
 ## [6.8.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.8.2...v6.8.3) (2026-02-18)
 
 
