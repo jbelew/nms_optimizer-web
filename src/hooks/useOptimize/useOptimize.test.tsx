@@ -7,7 +7,7 @@ import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { TechState, useTechStore } from "../../store/TechStore";
 import { Logger } from "../../utils/logger";
-import { socketManager } from "../../utils/socketManager";
+import { createSocket } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useOptimize } from "./useOptimize";
@@ -33,11 +33,8 @@ vi.mock("../../store/TechStore", () => ({
 vi.mock("../../store/PlatformStore");
 vi.mock("../useBreakpoint/useBreakpoint");
 vi.mock("../../utils/socketManager", () => ({
-	socketManager: {
-		connect: vi.fn(),
-		getSocket: vi.fn(),
-		disconnect: vi.fn(),
-	},
+	createSocket: vi.fn(),
+	SOCKET_OPTIONS: {},
 }));
 
 // Mock constants
@@ -56,7 +53,7 @@ const mockUseTechStore = vi.mocked(useTechStore);
 const mockUsePlatformStore = vi.mocked(usePlatformStore);
 const mockUseBreakpoint = vi.mocked(useBreakpoint);
 const mockUseAnalytics = vi.mocked(useAnalytics);
-const mockSocketManager = vi.mocked(socketManager);
+const mockCreateSocket = vi.mocked(createSocket);
 
 vi.mock("../../utils/logger", () => ({
 	Logger: {
@@ -80,7 +77,7 @@ describe("useOptimize", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockSocketManager.connect.mockReturnValue(mockSocket as unknown as Socket);
+		mockCreateSocket.mockReturnValue(mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
 		vi.mocked(mockUseGridStore.getState).mockReturnValue({
@@ -298,7 +295,7 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const disconnectCallback = mockSocket.once.mock.calls.find(
+			const disconnectCallback = mockSocket.on.mock.calls.find(
 				(call) => call[0] === "disconnect"
 			)?.[1];
 			expect(disconnectCallback).toBeDefined();
@@ -308,7 +305,7 @@ describe("useOptimize", () => {
 			});
 
 			expect(mockLogger.info).toHaveBeenCalledWith(
-				expect.stringContaining("benign"),
+				expect.stringContaining("(transport close)"),
 				expect.any(Object)
 			);
 			expect(mockLogger.warn).not.toHaveBeenCalledWith(
@@ -337,7 +334,7 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const disconnectCallback = mockSocket.once.mock.calls.find(
+			const disconnectCallback = mockSocket.on.mock.calls.find(
 				(call) => call[0] === "disconnect"
 			)?.[1];
 			expect(disconnectCallback).toBeDefined();

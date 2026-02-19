@@ -6,7 +6,7 @@ import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { Logger } from "../../utils/logger";
-import { socketManager } from "../../utils/socketManager";
+import { createSocket } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
@@ -87,10 +87,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setStatus(undefined);
 	}, []);
 
-	// Initialize socket connection on mount and handle unmount cleanup
+	// Reset mount state on unmount
 	useEffect(() => {
 		isMountedRef.current = true;
-		socketManager.connect();
 
 		return () => {
 			isMountedRef.current = false;
@@ -152,7 +151,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				}),
 			};
 
-			const socket = socketManager.connect();
+			const socket = createSocket();
 
 			const cleanup = () => {
 				socket.off("progress", onProgress);
@@ -160,6 +159,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 				socket.off("connect_error", onError);
 				socket.off("error", onError);
 				socket.off("disconnect", onDisconnect);
+				socket.disconnect(); // Always disconnect on cleanup
 				cleanupRef.current = null;
 				resetProgress();
 			};
@@ -261,17 +261,24 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			const onDisconnect = (reason: string) => {
-				const isBenign = reason === "io client disconnect" || reason === "transport close";
+				// Benign if we triggered it ourselves during cleanup
+				if (reason === "io client disconnect") {
+					return;
+				}
 
-				if (isBenign) {
-					Logger.info("Socket disconnected during optimization (benign)", { reason });
+				const isTransportClose = reason === "transport close";
+
+				if (isTransportClose) {
+					Logger.info("Socket disconnected during optimization (transport close)", {
+						reason,
+					});
 				} else {
 					Logger.warn("Socket disconnected during optimization", { reason });
 				}
 
-				// Only trigger an error if it wasn't a benign disconnect.
-				// If it's benign (like tab closure), the component is likely unmounting anyway.
-				if (isOptimizingRef.current && !isBenign) {
+				// Only trigger an error if we were still optimizing AND it's not a transport close.
+				// transport close is common during network transitions and often doesn't need a modal error.
+				if (isOptimizingRef.current && !isTransportClose) {
 					onError(new Error(`Disconnected: ${reason}`));
 				} else {
 					cleanup();
@@ -282,7 +289,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			socket.once("optimization_result", onResult);
 			socket.once("connect_error", onError);
 			socket.once("error", onError);
-			socket.once("disconnect", onDisconnect);
+			socket.on("disconnect", onDisconnect);
 
 			const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
 			const payload = {
