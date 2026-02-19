@@ -1,3 +1,10 @@
+## [6.13.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.4...v6.13.5) (2026-02-19)
+
+
+### Bug Fixes
+
+* **sentry:** ensure DSN injection and enable 100% profiling rate ([4cae048](https://github.com/jbelew/nms_optimizer-web/commit/4cae048e0c3d5a8157df52ed9d13a22e1cb2f840))
+
 ## [6.13.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.3...v6.13.4) (2026-02-19)
 
 
