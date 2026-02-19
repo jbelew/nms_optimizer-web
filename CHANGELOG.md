@@ -1,3 +1,10 @@
+## [6.13.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.5...v6.13.6) (2026-02-19)
+
+
+### Bug Fixes
+
+* **sentry:** adjust performance monitoring sample rates for production ([557945c](https://github.com/jbelew/nms_optimizer-web/commit/557945c687625ede8c4142e105859257c658880e))
+
 ## [6.13.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.4...v6.13.5) (2026-02-19)
 
 
