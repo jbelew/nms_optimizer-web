@@ -1,3 +1,10 @@
+## [6.13.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.10...v6.13.11) (2026-02-19)
+
+
+### Bug Fixes
+
+* introduce safe storage utilities and integrate them across stores and error handling to prevent localStorage errors, alongside minor logging and content updates ([7db03db](https://github.com/jbelew/nms_optimizer-web/commit/7db03dbded61b301ebd415f2fd2c76387b5912a8))
+
 ## [6.13.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.9...v6.13.10) (2026-02-19)
 
 
