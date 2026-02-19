@@ -1,3 +1,10 @@
+## [6.13.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.8...v6.13.9) (2026-02-19)
+
+
+### Bug Fixes
+
+* Enhance WebSocket connection management with improved logging and testing, and streamline server-side static file serving and caching. ([ea01655](https://github.com/jbelew/nms_optimizer-web/commit/ea016559076d4103d72d6b25c5fd647e7acfed9b))
+
 ## [6.13.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.7...v6.13.8) (2026-02-19)
 
 
