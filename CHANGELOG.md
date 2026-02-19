@@ -1,3 +1,10 @@
+## [6.13.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.7...v6.13.8) (2026-02-19)
+
+
+### Bug Fixes
+
+* remove the Observability Dashboard and refine socket disconnect logging to differentiate between expected and unexpected disconnections. ([fa5f9ef](https://github.com/jbelew/nms_optimizer-web/commit/fa5f9ef460fea5cc5c28246b53f4b7dd07fcb3c4))
+
 ## [6.13.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.6...v6.13.7) (2026-02-19)
 
 
