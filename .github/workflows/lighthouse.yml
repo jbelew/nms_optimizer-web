@@ -43,5 +43,6 @@ jobs:
                   uploadArtifacts: true
                   temporaryPublicStorage: true
                   configPath: "./scripts/lighthouserc.cjs"
-              env:
-                  LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  env:
+                      LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                      VITE_SENTRY_ENV: ci

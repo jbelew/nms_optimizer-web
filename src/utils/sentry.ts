@@ -38,10 +38,10 @@ export const initializeSentry = () => {
 			}),
 		],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
-		// Performance Monitoring - Set to 1.0 temporarily for verification
-		tracesSampleRate: 1.0,
+		// Performance Monitoring
+		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1,
 		// Profiling sample rate
-		profilesSampleRate: 1.0,
+		profilesSampleRate: env.isDevMode() ? 1.0 : 0.1,
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,
