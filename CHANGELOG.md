@@ -1,3 +1,10 @@
+## [6.13.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.3...v6.13.4) (2026-02-19)
+
+
+### Bug Fixes
+
+* **vite:** add Sentry DSN and environment variables to Vite config ([f63474e](https://github.com/jbelew/nms_optimizer-web/commit/f63474e9a36abf276afe20efa7060385a98e3616))
+
 ## [6.13.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.2...v6.13.3) (2026-02-19)
 
 
