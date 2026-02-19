@@ -74,24 +74,37 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const [progressPercent, setProgressPercent] = useState(0);
 	const [status, setStatus] = useState<string | undefined>();
 	const isOptimizingRef = useRef(false);
+	const cleanupRef = useRef<(() => void) | null>(null);
+	const isMountedRef = useRef(true);
 	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	const resetProgress = useCallback(() => {
+		if (!isMountedRef.current) return;
 		setSolving(false);
 		isOptimizingRef.current = false;
 		setProgressPercent(0);
 		setStatus(undefined);
 	}, []);
 
-	// Initialize socket connection on mount
+	// Initialize socket connection on mount and handle unmount cleanup
 	useEffect(() => {
+		isMountedRef.current = true;
 		socketManager.connect();
+
+		return () => {
+			isMountedRef.current = false;
+
+			if (cleanupRef.current) {
+				cleanupRef.current();
+				cleanupRef.current = null;
+			}
+		};
 	}, []);
 
 	// Scroll into view when solving on smaller screens
 	useEffect(() => {
-		if (solving) {
+		if (solving && isMountedRef.current) {
 			scrollIntoView();
 		}
 	}, [solving, scrollIntoView]);
@@ -147,14 +160,18 @@ export const useOptimize = (): UseOptimizeReturn => {
 				socket.off("connect_error", onError);
 				socket.off("error", onError);
 				socket.off("disconnect", onDisconnect);
+				cleanupRef.current = null;
 				resetProgress();
 			};
+
+			cleanupRef.current = cleanup;
 
 			const onProgress = (data: {
 				progress_percent: number;
 				best_grid?: Grid;
 				status?: string;
 			}) => {
+				if (!isMountedRef.current) return;
 				setProgressPercent(data.progress_percent);
 				setStatus("Optimized with Rust, obviously!");
 
@@ -164,6 +181,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			const onResult = (data: unknown) => {
+				if (!isMountedRef.current) {
+					cleanup();
+
+					return;
+				}
+
 				if (isApiResponse(data)) {
 					if (data.solve_method === "Pattern No Fit" && !forced) {
 						Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
@@ -222,6 +245,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			const onError = (err: Error | unknown) => {
+				if (!isMountedRef.current) {
+					cleanup();
+
+					return;
+				}
+
 				Logger.error(`Optimization WebSocket error for ${tech}`, err);
 				setShowErrorStore(
 					true,

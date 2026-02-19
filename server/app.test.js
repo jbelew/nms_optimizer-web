@@ -28,7 +28,9 @@ beforeAll(() => {
 	// Root index
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "index.html"),
-		"<html><body>Root Index " + "填充 ".repeat(200) + "</body></html>"
+		'<!DOCTYPE html><html lang="en"><head><title>Root Page</title></head><body>Root Index ' +
+			"填充 ".repeat(200) +
+			"</body></html>"
 	);
 	
 	// SSG Language Root
@@ -139,10 +141,12 @@ describe("SEO Middleware - Path-based Language Routing", () => {
 	});
 
 	it("should serve a supported language route without SSG via dynamic injection", async () => {
-		// /es was not created in beforeAll, should fall back to base template
+		// /es was not created in beforeAll, should fall back to base template with dynamic injection
 		const response = await request(app).get("/es");
 		expect(response.status).toBe(200);
-		expect(response.text).toContain("Root Index");
+		// Should contain Spanish SEO markers injected by middleware
+		expect(response.text).toContain('lang="es"');
+		expect(response.text).toContain("<title>");
 	});
 });
 
@@ -234,7 +238,7 @@ describe("Request Handling", () => {
 			.get("/?platform=standard&ship=fighter")
 			.set("Accept", "text/html");
 		expect(response.status).toBe(200);
-		expect(response.text).toContain("Root Index");
+		expect(response.text).toContain("<html");
 	});
 
 	it("should handle requests with URL fragments (client-side only)", async () => {
@@ -243,7 +247,7 @@ describe("Request Handling", () => {
 			.set("Accept", "text/html");
 		// Fragment is client-side, server sees '/'
 		expect(response.status).toBe(200);
-		expect(response.text).toContain("Root Index");
+		expect(response.text).toContain("<html");
 	});
 
 	it("should preserve query parameters when falling back to dynamic injection", async () => {
@@ -252,7 +256,7 @@ describe("Request Handling", () => {
 			.get("/es?foo=bar")
 			.set("Accept", "text/html");
 		expect(response.status).toBe(200);
-		expect(response.text).toContain("Root Index");
+		expect(response.text).toContain('lang="es"');
 	});
 });
 

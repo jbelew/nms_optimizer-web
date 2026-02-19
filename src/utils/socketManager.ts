@@ -156,16 +156,23 @@ class SocketManager {
 				reject(err);
 			};
 
+			const onDisconnect = (reason: string) => {
+				cleanup();
+				reject(new Error(`Socket disconnected during request: ${reason}`));
+			};
+
 			const cleanup = () => {
 				clearTimeout(timer);
 				socket.off(responseEvent, onResponse);
 				socket.off("connect_error", onError);
 				socket.off("error", onError);
+				socket.off("disconnect", onDisconnect);
 			};
 
 			socket.once(responseEvent, onResponse);
 			socket.once("connect_error", onError);
 			socket.once("error", onError);
+			socket.once("disconnect", onDisconnect);
 
 			if (socket.connected) {
 				socket.emit(event, payload);
