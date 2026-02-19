@@ -1,3 +1,10 @@
+## [6.13.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.2...v6.13.3) (2026-02-19)
+
+
+### Bug Fixes
+
+* **workflow:** correct indentation for environment variables in Lighthouse CI job ([081acbd](https://github.com/jbelew/nms_optimizer-web/commit/081acbd4e429a4f22c196bf88133254ca2eb7606))
+
 ## [6.13.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.1...v6.13.2) (2026-02-19)
 
 
