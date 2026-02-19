@@ -1,3 +1,10 @@
+## [6.13.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.1...v6.13.2) (2026-02-19)
+
+
+### Bug Fixes
+
+* **sentry:** update Sentry environment variables and adjust sample rates for production ([0c7bbbc](https://github.com/jbelew/nms_optimizer-web/commit/0c7bbbcee8d2cf335f41ac8cd7f4c53252bec0d2))
+
 ## [6.13.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.0...v6.13.1) (2026-02-19)
 
 
