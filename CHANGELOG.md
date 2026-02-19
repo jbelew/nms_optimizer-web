@@ -1,3 +1,10 @@
+## [6.13.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.6...v6.13.7) (2026-02-19)
+
+
+### Bug Fixes
+
+* **optimize:** improve WebSocket lifecycle management and add concurrency guard ([adcfab5](https://github.com/jbelew/nms_optimizer-web/commit/adcfab588a0557fac2b09910b2d59c7a1da2a4d8))
+
 ## [6.13.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.5...v6.13.6) (2026-02-19)
 
 
