@@ -3,6 +3,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
+
 type SetItemFunction = (
 	name: string,
 	value: StorageValue<Partial<TechBonusStore>>
@@ -42,23 +44,15 @@ function debounceSetItem(
 
 const debouncedStorage = {
 	getItem: (name: string) => {
-		if (typeof window === "undefined" || !window.localStorage) {
-			return null;
-		}
-
-		const item = localStorage.getItem(name);
+		const item = safeGetItem(name);
 
 		return item ? JSON.parse(item) : null;
 	},
 	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechBonusStore>>) => {
-		if (typeof window !== "undefined" && window.localStorage) {
-			localStorage.setItem(name, JSON.stringify(value));
-		}
+		safeSetItem(name, JSON.stringify(value));
 	}, 500),
 	removeItem: (name: string) => {
-		if (typeof window !== "undefined" && window.localStorage) {
-			localStorage.removeItem(name);
-		}
+		safeRemoveItem(name);
 	},
 };
 

@@ -120,7 +120,7 @@ describe("SocketManager", () => {
 		);
 	});
 
-	it("should log error for connection errors", () => {
+	it("should log warning for connection errors", () => {
 		socketManager.connect();
 		const errorCallback = mockSocket.on.mock.calls.find(
 			(call) => call[0] === "connect_error"
@@ -129,6 +129,22 @@ describe("SocketManager", () => {
 		const error = new Error("Connection failed");
 		errorCallback(error);
 
-		expect(mockLogger.error).toHaveBeenCalledWith("WebSocket connection error", error);
+		expect(mockLogger.warn).toHaveBeenCalledWith("WebSocket connection error", {
+			message: "Connection failed",
+		});
+	});
+
+	it("should log generic errors to console", () => {
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		socketManager.connect();
+		const errorCallback = mockSocket.on.mock.calls.find((call) => call[0] === "error")?.[1] as (
+			error: Error
+		) => void;
+
+		const error = new Error("Generic error");
+		errorCallback(error);
+
+		expect(consoleSpy).toHaveBeenCalledWith("[ERROR] WebSocket generic error", error);
+		consoleSpy.mockRestore();
 	});
 });

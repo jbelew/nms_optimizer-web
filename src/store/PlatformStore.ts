@@ -1,6 +1,8 @@
 // src/store/PlatformStore.ts
 import { create } from "zustand";
 
+import { safeGetItem, safeSetItem } from "../utils/storage";
+
 /**
  * @interface PlatformState
  * @property {string} selectedPlatform - The currently selected platform.
@@ -35,9 +37,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		set({ selectedPlatform: platform });
 
-		if (typeof window !== "undefined" && window.localStorage) {
-			localStorage.setItem(LOCAL_STORAGE_KEY, platform);
-		}
+		safeSetItem(LOCAL_STORAGE_KEY, platform);
 
 		if (updateUrl && isKnownRoute && typeof window !== "undefined") {
 			const url = new URL(window.location.href);
@@ -54,10 +54,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const platformFromUrl = urlParams.get("platform");
-		const platformFromStorage =
-			typeof window !== "undefined" && window.localStorage
-				? localStorage.getItem(LOCAL_STORAGE_KEY)
-				: null;
+		const platformFromStorage = safeGetItem(LOCAL_STORAGE_KEY);
 
 		let updateUrlNeeded = false;
 		let updateStorageNeeded = false;
@@ -67,7 +64,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			initialPlatform = platformFromUrl;
 
 			if (platformFromStorage !== initialPlatform) {
-				localStorage.setItem(LOCAL_STORAGE_KEY, initialPlatform);
+				safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
 			}
 		} else if (platformFromStorage && validShipTypes.includes(platformFromStorage)) {
 			initialPlatform = platformFromStorage;
@@ -86,8 +83,8 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			window.history.replaceState({}, "", url.toString());
 		}
 
-		if (updateStorageNeeded && typeof window !== "undefined" && window.localStorage) {
-			localStorage.setItem(LOCAL_STORAGE_KEY, initialPlatform);
+		if (updateStorageNeeded) {
+			safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
 		}
 	},
 }));

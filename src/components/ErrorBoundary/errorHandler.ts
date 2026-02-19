@@ -2,6 +2,7 @@ import { ErrorInfo } from "react";
 import * as Sentry from "@sentry/react";
 
 import { sendEvent } from "../../utils/analytics";
+import { safeClear } from "../../utils/storage";
 
 /**
  * Handles errors by clearing local storage, unregistering service workers,
@@ -21,20 +22,7 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	});
 
 	// Attempt to clear localStorage, but don't let storage errors prevent recovery
-	let localStorageCleared = false;
-
-	try {
-		if (typeof window !== "undefined" && window.localStorage) {
-			localStorage.clear();
-			localStorageCleared = true;
-			console.log("ErrorBoundary: Cleared localStorage.");
-		}
-	} catch (e) {
-		console.error(
-			"ErrorBoundary: Failed to clear localStorage. May be in private browsing mode or storage full.",
-			e instanceof Error ? e.message : String(e)
-		);
-	}
+	const localStorageCleared = safeClear();
 
 	// Clear service workers to force fresh code fetch
 	if ("serviceWorker" in navigator && navigator.serviceWorker) {

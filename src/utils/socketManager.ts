@@ -88,12 +88,14 @@ class SocketManager {
 		});
 
 		this.socket.on("connect_error", (error) => {
-			Logger.error("WebSocket connection error", error);
+			Logger.warn("WebSocket connection error", {
+				message: error instanceof Error ? error.message : String(error),
+			});
 			useSocketStore.getState().setConnected(false);
 		});
 
 		this.socket.on("error", (error) => {
-			Logger.error("WebSocket generic error", error);
+			console.error("[ERROR] WebSocket generic error", error);
 		});
 
 		this.listenersAttached = true;

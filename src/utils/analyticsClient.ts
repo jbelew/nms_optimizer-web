@@ -7,6 +7,7 @@
  */
 
 import { API_URL } from "../constants";
+import { safeGetItem, safeSetItem } from "./storage";
 
 export interface AnalyticsEventParams {
 	[key: string]: string | number | boolean | undefined;
@@ -47,20 +48,20 @@ const getGaClientIdFromCookie = (): string | null => {
 export const initializeAnalyticsClient = (): string => {
 	// 1. Try to get ID from GA cookie (source of truth)
 	const gaId = getGaClientIdFromCookie();
-	const stored = localStorage.getItem("analytics_client_id");
+	const stored = safeGetItem("analytics_client_id");
 
 	if (gaId) {
 		// If we have a GA cookie, use it and sync local storage
 		clientId = gaId;
 
 		if (stored !== gaId) {
-			localStorage.setItem("analytics_client_id", gaId);
+			safeSetItem("analytics_client_id", gaId);
 		}
 	} else if (stored) {
 		clientId = stored;
 	} else {
 		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-		localStorage.setItem("analytics_client_id", clientId);
+		safeSetItem("analytics_client_id", clientId);
 	}
 
 	return clientId;

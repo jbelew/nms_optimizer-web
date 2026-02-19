@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { type Module } from "../hooks/useTechTree/useTechTree";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
 import { useModuleSelectionStore } from "./ModuleSelectionStore";
 import { usePlatformStore } from "./PlatformStore";
 import { useTechBonusStore } from "./TechBonusStore";
@@ -267,9 +268,9 @@ const debouncedStorage = {
 	setItem: debounceSetItem((name: string, value: StorageValue<Partial<GridStore>>) => {
 		try {
 			const storageValue = JSON.stringify(value);
-			localStorage.setItem(name, storageValue);
+			const success = safeSetItem(name, storageValue);
 
-			return Promise.resolve();
+			return success ? Promise.resolve() : Promise.reject(new Error("Storage blocked"));
 		} catch (e) {
 			console.error("Failed to save to localStorage:", e);
 
@@ -286,21 +287,23 @@ const debouncedStorage = {
 			// Collect keys to remove first to avoid mutating collection during iteration
 			const keysToRemove: string[] = [];
 
-			for (let i = 0; i < localStorage.length; i++) {
-				const key = localStorage.key(i);
+			if (typeof window !== "undefined" && window.localStorage) {
+				for (let i = 0; i < localStorage.length; i++) {
+					const key = localStorage.key(i);
 
-				if (key && key.startsWith("app-state") && key !== name) {
-					keysToRemove.push(key);
+					if (key && key.startsWith("app-state") && key !== name) {
+						keysToRemove.push(key);
+					}
 				}
 			}
 
 			// Remove collected keys in a separate loop
 			keysToRemove.forEach((key) => {
 				console.log(`GridStore: Removing old app-state key: ${key}`);
-				localStorage.removeItem(key);
+				safeRemoveItem(key);
 			});
 
-			const storedData = localStorage.getItem(name);
+			const storedData = safeGetItem(name);
 
 			if (!storedData) {
 				console.log(`GridStore: No stored data found for key: ${name}`);
@@ -325,7 +328,7 @@ const debouncedStorage = {
 
 			const urlParams = new URLSearchParams(getWindowSearch());
 			const platformFromUrl = urlParams.get("platform");
-			const platformFromStorage = localStorage.getItem("selectedPlatform");
+			const platformFromStorage = safeGetItem("selectedPlatform");
 			const currentPlatform = platformFromUrl || platformFromStorage || "standard";
 			const storedGridPlatform = parsedData.state?.selectedPlatform;
 
@@ -346,7 +349,7 @@ const debouncedStorage = {
 	},
 
 	removeItem: (name: string): void => {
-		localStorage.removeItem(name);
+		safeRemoveItem(name);
 	},
 };
 
@@ -422,8 +425,8 @@ export const useGridStore = create<GridStore>()(
 					useTechBonusStore.getState().clearAllBonusStatus();
 					useModuleSelectionStore.getState().clearAllModuleSelections();
 					// Clear persisted storage
-					localStorage.removeItem("techBonusState");
-					localStorage.removeItem("moduleSelectionState");
+					safeRemoveItem("techBonusState");
+					safeRemoveItem("moduleSelectionState");
 				},
 
 				setGridAndResetAuxiliaryState: (newGrid) => {
@@ -437,8 +440,8 @@ export const useGridStore = create<GridStore>()(
 					useTechBonusStore.getState().clearAllBonusStatus();
 					useModuleSelectionStore.getState().clearAllModuleSelections();
 					// Clear persisted storage when user explicitly switches ship types
-					localStorage.removeItem("techBonusState");
-					localStorage.removeItem("moduleSelectionState");
+					safeRemoveItem("techBonusState");
+					safeRemoveItem("moduleSelectionState");
 				},
 
 				setResult: (result, tech) => {

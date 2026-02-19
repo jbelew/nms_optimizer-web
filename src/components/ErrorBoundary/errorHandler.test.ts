@@ -43,27 +43,19 @@ describe("errorHandler", () => {
 	describe("localStorage handling", () => {
 		it("should clear localStorage on error", () => {
 			const error = new Error("Test error");
+			const clearSpy = vi.spyOn(localStorage, "clear");
 
 			handleError(error);
 
-			// Verify console.log was called with the success message, proving clear() was called
-			expect(consoleLogSpy).toHaveBeenCalledWith("ErrorBoundary: Cleared localStorage.");
-		});
-
-		it("should log success message when localStorage is cleared", () => {
-			const error = new Error("Test error");
-
-			handleError(error);
-
-			expect(consoleLogSpy).toHaveBeenCalledWith("ErrorBoundary: Cleared localStorage.");
+			expect(clearSpy).toHaveBeenCalled();
 		});
 
 		it("should handle localStorage.clear() failures gracefully", () => {
 			// Mock localStorage directly
-			const originalClear = localStorage.clear;
-			localStorage.clear = vi.fn(() => {
+			const clearSpy = vi.spyOn(localStorage, "clear").mockImplementation(() => {
 				throw new Error("localStorage is disabled");
 			});
+			const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
 			const error = new Error("Test error");
 
@@ -72,17 +64,15 @@ describe("errorHandler", () => {
 				handleError(error);
 			}).not.toThrow();
 
-			// Should have logged the error message about failed clear
-			const errorCalls = consoleErrorSpy.mock.calls;
-			const hasClearError = errorCalls.some(
-				(call: unknown[]) =>
-					typeof call[0] === "string" &&
-					call[0].includes("ErrorBoundary: Failed to clear localStorage")
+			// Should have logged the warn message about failed clear from safeClear
+			expect(consoleWarnSpy).toHaveBeenCalledWith(
+				"Storage: Failed to clear localStorage.",
+				expect.any(Error)
 			);
-			expect(hasClearError).toBe(true);
 
 			// Restore
-			localStorage.clear = originalClear;
+			clearSpy.mockRestore();
+			consoleWarnSpy.mockRestore();
 		});
 	});
 

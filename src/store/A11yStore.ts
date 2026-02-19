@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
+
 /**
  * Represents the state and actions for accessibility mode.
  */
@@ -31,6 +33,19 @@ export const useA11yStore = create<A11yState>()(
 		}),
 		{
 			name: "nms-optimizer-a11y-mode", // name of the item in the storage (must be unique)
+			storage: {
+				getItem: (name) => {
+					const item = safeGetItem(name);
+
+					return item ? JSON.parse(item) : null;
+				},
+				setItem: (name, value) => {
+					safeSetItem(name, JSON.stringify(value));
+				},
+				removeItem: (name) => {
+					safeRemoveItem(name);
+				},
+			},
 		}
 	)
 );

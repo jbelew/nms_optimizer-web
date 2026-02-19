@@ -1,4 +1,4 @@
-# NMS Optimizer Guide: Adjacency Bonus & Layout Optimization
+# NMS Optimizer Intructions: Adjacency Bonus & Layout Optimization
 
 ## Basic Usage
 
