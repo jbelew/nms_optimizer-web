@@ -64,6 +64,9 @@ jobs:
               env:
                   HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
                   HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
+                  HD_SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  HD_SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+                  HD_SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
             - name: Purge Cloudflare Cache
               if: success()
