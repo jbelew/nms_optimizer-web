@@ -1,3 +1,10 @@
+## [6.13.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.9...v6.13.10) (2026-02-19)
+
+
+### Bug Fixes
+
+* Prevent state updates on unmounted components, enhance socket request error handling, and update server-side rendering tests for dynamic HTML. ([f0d2288](https://github.com/jbelew/nms_optimizer-web/commit/f0d2288565124a52cfdfc5a5d4adf9cf49bc6e19))
+
 ## [6.13.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.8...v6.13.9) (2026-02-19)
 
 
