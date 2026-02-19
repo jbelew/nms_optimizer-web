@@ -22,6 +22,8 @@ export default defineConfig(({ mode }) => {
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
+			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(process.env.VITE_SENTRY_DSN),
+			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(process.env.VITE_SENTRY_ENV),
 		},
 		plugins: [
 			sentryVitePlugin({
