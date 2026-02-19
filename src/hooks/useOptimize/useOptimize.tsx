@@ -1,13 +1,12 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
-import type { Socket } from "socket.io-client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { WS_URL } from "../../constants";
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { Logger } from "../../utils/logger";
+import { socketManager } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
@@ -48,7 +47,7 @@ function isApiResponse(value: unknown): value is ApiResponse {
 }
 
 /**
- * Manages the optimization process by communicating with a WebSocket server.
+ * Manages the optimization process by communicating with a persistent singleton WebSocket connection.
  * It handles sending optimization requests, receiving progress updates, and processing the final results.
  * It also manages UI state related to the optimization, such as loading indicators and error states.
  *
@@ -69,29 +68,25 @@ export const useOptimize = (): UseOptimizeReturn => {
 	} = useOptimizeStore();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
-	const isLarge = useBreakpoint("1024px"); // Used to conditionally send grid updates to backend
+	const isLarge = useBreakpoint("1024px");
 
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
 	const [status, setStatus] = useState<string | undefined>();
-	const socketRef = useRef<Socket | null>(null);
+	const isOptimizingRef = useRef(false);
 	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	const resetProgress = useCallback(() => {
 		setSolving(false);
+		isOptimizingRef.current = false;
 		setProgressPercent(0);
 		setStatus(undefined);
 	}, []);
 
-	// Cleanup socket on unmount
+	// Initialize socket connection on mount
 	useEffect(() => {
-		return () => {
-			if (socketRef.current) {
-				socketRef.current.disconnect();
-				socketRef.current = null;
-			}
-		};
+		socketManager.connect();
 	}, []);
 
 	// Scroll into view when solving on smaller screens
@@ -103,7 +98,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
-			if (solving) {
+			if (isOptimizingRef.current) {
 				Logger.warn("Optimization already in progress, ignoring request");
 
 				return;
@@ -112,12 +107,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			const { grid, setGrid, setResult } = useGridStore.getState();
 			const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
 
-			// Ensure previous socket is disconnected
-			if (socketRef.current) {
-				socketRef.current.disconnect();
-				socketRef.current = null;
-			}
-
+			isOptimizingRef.current = true;
 			setSolving(true);
 			setProgressPercent(0);
 			setStatus(undefined);
@@ -131,7 +121,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 				platform: selectedShipType,
 			});
 
-			// Optimize grid update: only create new array structure if cells actually change
 			const updatedGrid: Grid = {
 				...grid,
 				cells: grid.cells.map((row) => {
@@ -146,70 +135,35 @@ export const useOptimize = (): UseOptimizeReturn => {
 						return cell;
 					});
 
-					return rowChanged ? newRow : row; // Reuse row reference if unchanged
+					return rowChanged ? newRow : row;
 				}),
 			};
 
-			try {
-				const { io } = await import("socket.io-client");
-				socketRef.current = io(WS_URL, {
-					transports: ["websocket"],
-					forceNew: true, // Ensure a fresh connection for each optimization
-					timeout: 10000,
-				});
-			} catch (importError) {
-				console.error("Failed to import socket.io-client:", importError);
-				setShowErrorStore(
-					true,
-					"recoverable",
-					importError instanceof Error ? importError : new Error(String(importError))
-				);
-				resetProgress();
-
-				return;
-			}
+			const socket = socketManager.connect();
 
 			const cleanup = () => {
-				if (socketRef.current) {
-					socketRef.current.disconnect();
-					socketRef.current = null;
-				}
-
+				socket.off("progress", onProgress);
+				socket.off("optimization_result", onResult);
+				socket.off("connect_error", onError);
+				socket.off("error", onError);
+				socket.off("disconnect", onDisconnect);
 				resetProgress();
 			};
 
-			const socket = socketRef.current;
+			const onProgress = (data: {
+				progress_percent: number;
+				best_grid?: Grid;
+				status?: string;
+			}) => {
+				setProgressPercent(data.progress_percent);
+				setStatus("Optimized with Rust, obviously!");
 
-			socket.once("connect", () => {
-				const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
-
-				const payload = {
-					ship: selectedShipType,
-					tech,
-					available_modules: checkedModules[tech] || [],
-					grid: updatedGrid,
-					forced,
-					send_grid_updates: isLarge,
-					solve_type,
-				};
-
-				console.debug("Connected to WebSocket server -- ", payload);
-				socket.emit("optimize", payload);
-			});
-
-			socket.on(
-				"progress",
-				(data: { progress_percent: number; best_grid?: Grid; status?: string }) => {
-					setProgressPercent(data.progress_percent);
-					setStatus("Optimized with Rust, obviously!");
-
-					if (data.best_grid) {
-						setGrid(data.best_grid);
-					}
+				if (data.best_grid) {
+					setGrid(data.best_grid);
 				}
-			);
+			};
 
-			socket.once("optimization_result", (data: unknown) => {
+			const onResult = (data: unknown) => {
 				if (isApiResponse(data)) {
 					if (data.solve_method === "Pattern No Fit" && !forced) {
 						Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
@@ -225,7 +179,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 							value: 1,
 							nonInteraction: false,
 						});
-						cleanup();
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
@@ -255,34 +208,63 @@ export const useOptimize = (): UseOptimizeReturn => {
 							});
 							setGrid(data.grid);
 						}
-
-						cleanup();
 					}
 				} else {
 					Logger.error(`Optimization failed for ${tech}: Invalid API response`, data);
-					console.error("Invalid API response:", data);
 					setShowErrorStore(
 						true,
 						"recoverable",
 						new Error("Invalid API response format")
 					);
-					cleanup();
 				}
-			});
-			socket.once("connect_error", (err) => {
+
+				cleanup();
+			};
+
+			const onError = (err: Error | unknown) => {
 				Logger.error(`Optimization WebSocket error for ${tech}`, err);
-				console.error("WebSocket connection error:", err);
 				setShowErrorStore(
 					true,
 					"recoverable",
 					err instanceof Error ? err : new Error(String(err))
 				);
 				cleanup();
-			});
+			};
 
-			socket.once("disconnect", () => {
-				cleanup();
-			});
+			const onDisconnect = (reason: string) => {
+				Logger.warn("Socket disconnected during optimization", { reason });
+
+				// Don't necessarily fail if it was an intentional disconnect,
+				// but since we are optimizing, it usually means a transport error.
+				if (isOptimizingRef.current) {
+					onError(new Error(`Disconnected: ${reason}`));
+				}
+			};
+
+			socket.on("progress", onProgress);
+			socket.once("optimization_result", onResult);
+			socket.once("connect_error", onError);
+			socket.once("error", onError);
+			socket.once("disconnect", onDisconnect);
+
+			const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
+			const payload = {
+				ship: selectedShipType,
+				tech,
+				available_modules: checkedModules[tech] || [],
+				grid: updatedGrid,
+				forced,
+				send_grid_updates: isLarge,
+				solve_type,
+			};
+
+			if (socket.connected) {
+				socket.emit("optimize", payload);
+			} else {
+				socket.once("connect", () => {
+					socket.emit("optimize", payload);
+				});
+			}
 		},
 		[
 			setShowErrorStore,
@@ -292,7 +274,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 			sendEvent,
 			resetProgress,
 			isLarge,
-			solving,
 		]
 	);
 

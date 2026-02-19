@@ -1,18 +1,17 @@
 import type { Socket } from "socket.io-client";
 import { act, renderHook } from "@testing-library/react";
-import { io } from "socket.io-client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { GridStore, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { TechState, useTechStore } from "../../store/TechStore";
+import { socketManager } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useOptimize } from "./useOptimize";
 
 // Mock external dependencies
-vi.mock("socket.io-client");
 vi.mock("../useAnalytics/useAnalytics");
 vi.mock("../../store/GridStore", async (importOriginal) => {
 	const mod = await importOriginal<typeof import("../../store/GridStore")>();
@@ -32,6 +31,13 @@ vi.mock("../../store/TechStore", () => ({
 }));
 vi.mock("../../store/PlatformStore");
 vi.mock("../useBreakpoint/useBreakpoint");
+vi.mock("../../utils/socketManager", () => ({
+	socketManager: {
+		connect: vi.fn(),
+		getSocket: vi.fn(),
+		disconnect: vi.fn(),
+	},
+}));
 
 // Mock constants
 vi.mock("../../constants", async (importOriginal) => {
@@ -43,25 +49,27 @@ vi.mock("../../constants", async (importOriginal) => {
 	};
 });
 
-const mockIo = vi.mocked(io);
 const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseOptimizeStore = vi.mocked(useOptimizeStore);
 const mockUseTechStore = vi.mocked(useTechStore);
 const mockUsePlatformStore = vi.mocked(usePlatformStore);
 const mockUseBreakpoint = vi.mocked(useBreakpoint);
 const mockUseAnalytics = vi.mocked(useAnalytics);
+const mockSocketManager = vi.mocked(socketManager);
 
 describe("useOptimize", () => {
 	const mockSocket = {
 		on: vi.fn(),
 		once: vi.fn(),
+		off: vi.fn(),
 		emit: vi.fn(),
 		disconnect: vi.fn(),
+		connected: true,
 	};
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockIo.mockImplementation(() => mockSocket as unknown as Socket);
+		mockSocketManager.connect.mockReturnValue(mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
 		vi.mocked(mockUseGridStore.getState).mockReturnValue({
@@ -102,20 +110,11 @@ describe("useOptimize", () => {
 	});
 
 	describe("handleOptimize workflow", () => {
-		it("should set solving to true and emit optimize on connect", async () => {
+		it("should set solving to true and emit optimize", async () => {
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
 				await result.current.handleOptimize("Test Tech");
-			});
-
-			// Manually trigger the 'connect' event
-			const connectCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "connect"
-			)?.[1];
-			expect(connectCallback).toBeDefined();
-			act(() => {
-				connectCallback();
 			});
 
 			expect(result.current.solving).toBe(true);
@@ -155,14 +154,6 @@ describe("useOptimize", () => {
 
 			await act(async () => {
 				await result.current.handleOptimize(tech);
-			});
-
-			// Manually trigger connect to get the emit call
-			const connectCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "connect"
-			)?.[1];
-			act(() => {
-				connectCallback();
 			});
 
 			// The grid sent to the server should have the 'Test Tech' cells cleared out
@@ -230,7 +221,6 @@ describe("useOptimize", () => {
 
 	describe("error and cleanup handling", () => {
 		it("should handle connection error", async () => {
-			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			const setShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockReturnValue({
 				setShowError: setShowErrorMock,
@@ -254,12 +244,10 @@ describe("useOptimize", () => {
 
 			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
 			expect(result.current.solving).toBe(false);
-			expect(mockSocket.disconnect).toHaveBeenCalled();
-			consoleErrorSpy.mockRestore();
+			expect(mockSocket.off).toHaveBeenCalled();
 		});
 
 		it("should handle invalid API response", async () => {
-			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			const setShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockReturnValue({
 				setShowError: setShowErrorMock,
@@ -283,8 +271,7 @@ describe("useOptimize", () => {
 
 			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
 			expect(result.current.solving).toBe(false);
-			expect(mockSocket.disconnect).toHaveBeenCalled();
-			consoleErrorSpy.mockRestore();
+			expect(mockSocket.off).toHaveBeenCalled();
 		});
 	});
 
@@ -316,13 +303,6 @@ describe("useOptimize", () => {
 
 			await act(async () => {
 				await result.current.handleForceCurrentPnfOptimize();
-			});
-
-			const connectCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "connect"
-			)?.[1];
-			act(() => {
-				connectCallback();
 			});
 
 			expect(mockSocket.emit).toHaveBeenCalledWith(
