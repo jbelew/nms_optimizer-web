@@ -89,6 +89,7 @@
 		"@semantic-release/changelog": "^6.0.3",
 		"@semantic-release/git": "^10.0.1",
 		"@semantic-release/github": "^12.0.6",
+		"@sentry/vite-plugin": "^4.9.1",
 		"@storybook/addon-a11y": "^10.2.8",
 		"@storybook/addon-docs": "^10.2.8",
 		"@storybook/addon-vitest": "^10.2.8",

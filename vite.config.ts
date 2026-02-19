@@ -3,6 +3,7 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig, Plugin } from "vite";
 import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
@@ -22,6 +23,11 @@ export default defineConfig(({ mode }) => {
 			__BUILD_DATE__: JSON.stringify(buildDate),
 		},
 		plugins: [
+			sentryVitePlugin({
+				org: "personal-4gm",
+				project: "nms-optimizer-web",
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+			}),
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD // Conditionally include the plugin
 				? [
@@ -306,7 +312,7 @@ export default defineConfig(({ mode }) => {
 				},
 			},
 			cssCodeSplit: true,
-			sourcemap: false,
+			sourcemap: true,
 			cssMinify: "lightningcss",
 			modulePreload: {
 				// Filter function to control which chunks get modulepreload links

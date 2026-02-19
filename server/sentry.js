@@ -6,7 +6,7 @@ import { nodeProfilingIntegration } from "@sentry/profiling-node";
  */
 export const initializeSentry = () => {
 	const dsn = process.env.VITE_SENTRY_DSN || "";
-	const environment = process.env.VITE_SENTRY_ENV || process.env.NODE_ENV || "production";
+	const environment = process.env.VITE_SENTRY_ENV || (process.env.NODE_ENV === 'production' ? 'production' : 'development');
 
 	if (!dsn && environment !== "development") {
 		console.warn("Server-side Sentry DSN not found. Sentry will not be initialized.");
