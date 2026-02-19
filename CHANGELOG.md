@@ -1,3 +1,10 @@
+## [6.13.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.0...v6.13.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* **release:** integrate Sentry for release tracking and update dependencies ([3c027e6](https://github.com/jbelew/nms_optimizer-web/commit/3c027e6d8744295fa6849d002761e8717c49d544))
+
 # [6.13.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.12.0...v6.13.0) (2026-02-19)
 
 
