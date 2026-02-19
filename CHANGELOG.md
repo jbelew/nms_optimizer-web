@@ -1,3 +1,10 @@
+# [6.12.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.11.1...v6.12.0) (2026-02-19)
+
+
+### Features
+
+* **sentry:** integrate sentry vite plugin for source maps ([9044772](https://github.com/jbelew/nms_optimizer-web/commit/90447720a99148503ddff43af98d5854f0767426))
+
 ## [6.11.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.11.0...v6.11.1) (2026-02-18)
 
 

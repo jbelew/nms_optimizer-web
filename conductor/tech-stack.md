@@ -12,6 +12,7 @@
 - **Routing:** [React Router](https://reactrouter.com/) - Declarative routing for React applications.
 - **Internationalization:** [i18next](https://www.i18next.com/) - Framework for localizing the application (e.g., Crowdin integration).
 - **Data Visualization:** [Recharts](https://recharts.org/) - Composable charting library built with React components.
+- **Observability:** [Sentry](https://sentry.io/) - Error tracking, performance monitoring, and release management.
 
 ## Testing & Quality Assurance
 - **Unit/Integration Testing:** [Vitest](https://vitest.dev/) - A Vite-native unit test framework.
