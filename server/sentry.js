@@ -24,7 +24,7 @@ export const initializeSentry = () => {
 		tracesSampleRate: environment === "development" ? 1.0 : 0.1,
 		// Set release if available (Heroku might provide this)
 		release: process.env.HEROKU_RELEASE_VERSION || process.env.npm_package_version,
-		// Profiling sample rate (v10 uses profileSessionSampleRate)
-		profileSessionSampleRate: environment === "development" ? 1.0 : 0.1,
+		// Profiling sample rate
+		profilesSampleRate: environment === "development" ? 1.0 : 0.1,
 	});
 };
