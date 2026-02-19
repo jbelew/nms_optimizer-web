@@ -186,7 +186,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			socket.once("optimization_result", (data: unknown) => {
 				if (isApiResponse(data)) {
 					if (data.solve_method === "Pattern No Fit" && !forced) {
-						Logger.warn(`Optimization "Pattern No Fit" for ${tech}`, {
+						Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
 							tech,
 							platform: selectedShipType,
 						});

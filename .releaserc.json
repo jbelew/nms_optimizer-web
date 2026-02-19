@@ -17,6 +17,12 @@
         "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
       }
     ],
-    "@semantic-release/github"
+    "@semantic-release/github",
+    [
+      "@semantic-release/exec",
+      {
+        "successCmd": "npx sentry-cli releases set-commits ${nextRelease.version} --auto"
+      }
+    ]
   ]
 }
