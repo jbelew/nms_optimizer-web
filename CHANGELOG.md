@@ -1,3 +1,10 @@
+## [6.11.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.11.0...v6.11.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* **observability:** Clear splash screen on dashboard mount ([d3947f6](https://github.com/jbelew/nms_optimizer-web/commit/d3947f64fb7ecd81f045f203d40f171930a85fa1))
+
 # [6.11.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.10.0...v6.11.0) (2026-02-18)
 
 
