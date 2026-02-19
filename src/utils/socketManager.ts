@@ -74,7 +74,12 @@ class SocketManager {
 		});
 
 		this.socket.on("disconnect", (reason) => {
-			Logger.warn("WebSocket disconnected", { reason });
+			if (reason === "io client disconnect" || reason === "transport close") {
+				Logger.info("WebSocket disconnected", { reason });
+			} else {
+				Logger.warn("WebSocket disconnected", { reason });
+			}
+
 			useSocketStore.getState().setConnected(false);
 		});
 

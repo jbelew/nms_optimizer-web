@@ -19,13 +19,6 @@ const NotFound = async () => {
 	return { Component };
 };
 
-const ObservabilityDashboard = async () => {
-	const { default: Component } =
-		await import("./routes/ObservabilityDashboard/ObservabilityDashboard");
-
-	return { Component };
-};
-
 const pageRoutes: RouteObject[] = pages.map((page) => ({
 	path: page,
 	Component: MainAppContent,
@@ -51,10 +44,6 @@ export const routes: RouteObject[] = [
 			{
 				index: true,
 				Component: MainAppContent,
-			},
-			{
-				path: "observability",
-				lazy: ObservabilityDashboard,
 			},
 			...pageRoutes,
 			...languageRoutes,
