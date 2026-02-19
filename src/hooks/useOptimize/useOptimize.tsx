@@ -1,6 +1,6 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
 import type { Socket } from "socket.io-client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { WS_URL } from "../../constants";
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
@@ -74,6 +74,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
 	const [status, setStatus] = useState<string | undefined>();
+	const socketRef = useRef<Socket | null>(null);
 	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
@@ -83,9 +84,17 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setStatus(undefined);
 	}, []);
 
+	// Cleanup socket on unmount
+	useEffect(() => {
+		return () => {
+			if (socketRef.current) {
+				socketRef.current.disconnect();
+				socketRef.current = null;
+			}
+		};
+	}, []);
+
 	// Scroll into view when solving on smaller screens
-	// P1 Optimization note: scrollIntoView is already wrapped in useCallback from useScrollGridIntoView,
-	// so dependency array is optimized. Effect only runs when solving state changes.
 	useEffect(() => {
 		if (solving) {
 			scrollIntoView();
@@ -94,8 +103,21 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const handleOptimize = useCallback(
 		async (tech: string, forced: boolean = false) => {
+			if (solving) {
+				Logger.warn("Optimization already in progress, ignoring request");
+
+				return;
+			}
+
 			const { grid, setGrid, setResult } = useGridStore.getState();
 			const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
+
+			// Ensure previous socket is disconnected
+			if (socketRef.current) {
+				socketRef.current.disconnect();
+				socketRef.current = null;
+			}
+
 			setSolving(true);
 			setProgressPercent(0);
 			setStatus(undefined);
@@ -128,12 +150,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 				}),
 			};
 
-			// New socket per optimization
-			let socket: Socket | null = null;
-
 			try {
 				const { io } = await import("socket.io-client");
-				socket = io(WS_URL, { transports: ["websocket"] });
+				socketRef.current = io(WS_URL, {
+					transports: ["websocket"],
+					forceNew: true, // Ensure a fresh connection for each optimization
+					timeout: 10000,
+				});
 			} catch (importError) {
 				console.error("Failed to import socket.io-client:", importError);
 				setShowErrorStore(
@@ -147,12 +170,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 			}
 
 			const cleanup = () => {
-				if (socket) {
-					socket.disconnect();
+				if (socketRef.current) {
+					socketRef.current.disconnect();
+					socketRef.current = null;
 				}
 
 				resetProgress();
 			};
+
+			const socket = socketRef.current;
 
 			socket.once("connect", () => {
 				const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
@@ -191,7 +217,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 							platform: selectedShipType,
 						});
 						setPatternNoFitTech(tech);
-						setSolving(false);
 						sendEvent({
 							category: "ui",
 							action: "no_fit_warning",
@@ -200,6 +225,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 							value: 1,
 							nonInteraction: false,
 						});
+						cleanup();
 					} else {
 						if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
@@ -228,8 +254,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 									typeof data.max_bonus === "number" && data.max_bonus > 100,
 							});
 							setGrid(data.grid);
-							cleanup();
 						}
+
+						cleanup();
 					}
 				} else {
 					Logger.error(`Optimization failed for ${tech}: Invalid API response`, data);
@@ -254,7 +281,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 			});
 
 			socket.once("disconnect", () => {
-				// console.debug("Socket disconnected:", reason);
 				cleanup();
 			});
 		},
@@ -266,6 +292,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			sendEvent,
 			resetProgress,
 			isLarge,
+			solving,
 		]
 	);
 
