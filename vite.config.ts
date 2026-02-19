@@ -9,12 +9,13 @@ import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
+import packageJson from "./package.json";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
 export default defineConfig(({ mode }) => {
-	// Use an environment variable for the app version, defaulting to 'unknown'
-	const appVersion = process.env.VITE_APP_VERSION || "unknown";
+	// Use an environment variable for the app version, falling back to package.json
+	const appVersion = process.env.VITE_APP_VERSION || packageJson.version;
 	const buildDate = new Date().toISOString();
 
 	return {
@@ -27,6 +28,9 @@ export default defineConfig(({ mode }) => {
 				org: "personal-4gm",
 				project: "nms-optimizer-web",
 				authToken: process.env.SENTRY_AUTH_TOKEN,
+				release: {
+					name: appVersion,
+				},
 			}),
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD // Conditionally include the plugin
