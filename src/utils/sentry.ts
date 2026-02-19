@@ -39,9 +39,9 @@ export const initializeSentry = () => {
 		],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
-		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1,
+		tracesSampleRate: env.isDevMode() ? 1.0 : 1.0,
 		// Profiling sample rate
-		profilesSampleRate: env.isDevMode() ? 1.0 : 0.1,
+		profilesSampleRate: env.isDevMode() ? 1.0 : 1.0,
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,

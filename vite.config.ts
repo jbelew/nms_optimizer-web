@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig, Plugin } from "vite";
+import { defineConfig, loadEnv, Plugin } from "vite";
 import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
@@ -14,22 +14,35 @@ import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
 export default defineConfig(({ mode }) => {
+	// Load env file based on `mode` in the current working directory.
+	// Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+	const env = loadEnv(mode, process.cwd(), "");
+
 	// Use an environment variable for the app version, falling back to package.json
-	const appVersion = process.env.VITE_APP_VERSION || packageJson.version;
+	const appVersion = process.env.VITE_APP_VERSION || env.VITE_APP_VERSION || packageJson.version;
 	const buildDate = new Date().toISOString();
+
+	const sentryDsn = process.env.VITE_SENTRY_DSN || env.VITE_SENTRY_DSN || "";
+	const sentryEnv = process.env.VITE_SENTRY_ENV || env.VITE_SENTRY_ENV || "production";
+	const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || env.SENTRY_AUTH_TOKEN;
+
+	// Fail build if Sentry token is missing in production to avoid "deploy and pray"
+	if (mode === "production" && !sentryAuthToken && !process.env.CI) {
+		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
+	}
 
 	return {
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
-			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(process.env.VITE_SENTRY_DSN),
-			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(process.env.VITE_SENTRY_ENV),
+			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
+			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
 		plugins: [
 			sentryVitePlugin({
-				org: "personal-4gm",
-				project: "nms-optimizer-web",
-				authToken: process.env.SENTRY_AUTH_TOKEN,
+				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
+				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
+				authToken: sentryAuthToken,
 				release: {
 					name: appVersion,
 				},
