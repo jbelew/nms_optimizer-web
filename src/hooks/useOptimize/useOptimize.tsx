@@ -232,12 +232,20 @@ export const useOptimize = (): UseOptimizeReturn => {
 			};
 
 			const onDisconnect = (reason: string) => {
-				Logger.warn("Socket disconnected during optimization", { reason });
+				const isBenign = reason === "io client disconnect" || reason === "transport close";
 
-				// Don't necessarily fail if it was an intentional disconnect,
-				// but since we are optimizing, it usually means a transport error.
-				if (isOptimizingRef.current) {
+				if (isBenign) {
+					Logger.info("Socket disconnected during optimization (benign)", { reason });
+				} else {
+					Logger.warn("Socket disconnected during optimization", { reason });
+				}
+
+				// Only trigger an error if it wasn't a benign disconnect.
+				// If it's benign (like tab closure), the component is likely unmounting anyway.
+				if (isOptimizingRef.current && !isBenign) {
 					onError(new Error(`Disconnected: ${reason}`));
+				} else {
+					cleanup();
 				}
 			};
 

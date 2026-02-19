@@ -6,6 +6,7 @@ import { GridStore, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { TechState, useTechStore } from "../../store/TechStore";
+import { Logger } from "../../utils/logger";
 import { socketManager } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
@@ -56,6 +57,16 @@ const mockUsePlatformStore = vi.mocked(usePlatformStore);
 const mockUseBreakpoint = vi.mocked(useBreakpoint);
 const mockUseAnalytics = vi.mocked(useAnalytics);
 const mockSocketManager = vi.mocked(socketManager);
+
+vi.mock("../../utils/logger", () => ({
+	Logger: {
+		info: vi.fn(),
+		warn: vi.fn(),
+		error: vi.fn(),
+	},
+}));
+
+const mockLogger = vi.mocked(Logger);
 
 describe("useOptimize", () => {
 	const mockSocket = {
@@ -272,6 +283,75 @@ describe("useOptimize", () => {
 			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.off).toHaveBeenCalled();
+		});
+
+		it("should silence benign disconnects (transport close)", async () => {
+			const setShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockReturnValue({
+				setShowError: setShowErrorMock,
+				patternNoFitTech: null,
+				setPatternNoFitTech: vi.fn(),
+			});
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("Test Tech");
+			});
+
+			const disconnectCallback = mockSocket.once.mock.calls.find(
+				(call) => call[0] === "disconnect"
+			)?.[1];
+			expect(disconnectCallback).toBeDefined();
+
+			act(() => {
+				disconnectCallback("transport close");
+			});
+
+			expect(mockLogger.info).toHaveBeenCalledWith(
+				expect.stringContaining("benign"),
+				expect.any(Object)
+			);
+			expect(mockLogger.warn).not.toHaveBeenCalledWith(
+				expect.stringContaining("disconnected during optimization"),
+				expect.any(Object)
+			);
+			expect(setShowErrorMock).not.toHaveBeenCalledWith(
+				true,
+				expect.any(String),
+				expect.any(Error)
+			);
+			expect(result.current.solving).toBe(false);
+			expect(mockSocket.off).toHaveBeenCalled();
+		});
+
+		it("should warn on genuine disconnects (ping timeout)", async () => {
+			const setShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockReturnValue({
+				setShowError: setShowErrorMock,
+				patternNoFitTech: null,
+				setPatternNoFitTech: vi.fn(),
+			});
+			const { result } = renderHook(() => useOptimize());
+
+			await act(async () => {
+				await result.current.handleOptimize("Test Tech");
+			});
+
+			const disconnectCallback = mockSocket.once.mock.calls.find(
+				(call) => call[0] === "disconnect"
+			)?.[1];
+			expect(disconnectCallback).toBeDefined();
+
+			act(() => {
+				disconnectCallback("ping timeout");
+			});
+
+			expect(mockLogger.warn).toHaveBeenCalledWith(
+				expect.stringContaining("disconnected during optimization"),
+				expect.any(Object)
+			);
+			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
+			expect(result.current.solving).toBe(false);
 		});
 	});
 

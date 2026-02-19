@@ -25,10 +25,36 @@ beforeAll(() => {
 	if (!fs.existsSync(MOCK_DIST_PATH)) {
 		fs.mkdirSync(MOCK_DIST_PATH);
 	}
+	// Root index
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "index.html"),
-		"<html><body>" + "Mock Index ".repeat(500) + "</body></html>"
+		"<html><body>Root Index " + "填充 ".repeat(200) + "</body></html>"
 	);
+	
+	// SSG Language Root
+	const frDir = path.join(MOCK_DIST_PATH, "fr");
+	if (!fs.existsSync(frDir)) fs.mkdirSync(frDir);
+	fs.writeFileSync(
+		path.join(frDir, "index.html"),
+		"<html><body>French Index</body></html>"
+	);
+
+	// SSG Nested Route
+	const frAboutDir = path.join(frDir, "about");
+	if (!fs.existsSync(frAboutDir)) fs.mkdirSync(frAboutDir, { recursive: true });
+	fs.writeFileSync(
+		path.join(frAboutDir, "index.html"),
+		"<html><body>French About Page</body></html>"
+	);
+
+	// English Nested Route
+	const enAboutDir = path.join(MOCK_DIST_PATH, "about");
+	if (!fs.existsSync(enAboutDir)) fs.mkdirSync(enAboutDir);
+	fs.writeFileSync(
+		path.join(enAboutDir, "index.html"),
+		"<html><body>English About Page</body></html>"
+	);
+
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "sitemap.xml"),
 		'<xml version="1.0" encoding="UTF-8"?><urlset></urlset>'
@@ -88,34 +114,35 @@ describe("Express Server", () => {
 });
 
 describe("SEO Middleware - Path-based Language Routing", () => {
-	it("should serve /fr language route", async () => {
+	it("should serve /fr language route from SSG", async () => {
 		const response = await request(app).get("/fr");
 		expect(response.status).toBe(200);
+		expect(response.text).toContain("French Index");
 	});
 
-	it("should serve /de/instructions language-prefixed route", async () => {
-		const response = await request(app).get("/de/instructions");
+	it("should serve /fr/about language route from SSG", async () => {
+		const response = await request(app).get("/fr/about");
 		expect(response.status).toBe(200);
+		expect(response.text).toContain("French About Page");
 	});
 
-	it("should serve /", async () => {
-		const response = await request(app).get("/");
-		expect(response.status).toBe(200);
-	});
-
-	it("should serve /about", async () => {
+	it("should serve /about from SSG", async () => {
 		const response = await request(app).get("/about");
 		expect(response.status).toBe(200);
+		expect(response.text).toContain("English About Page");
 	});
 
-	it("should serve /es language route", async () => {
+	it("should serve / (root)", async () => {
+		const response = await request(app).get("/");
+		expect(response.status).toBe(200);
+		expect(response.text).toContain("Root Index");
+	});
+
+	it("should serve a supported language route without SSG via dynamic injection", async () => {
+		// /es was not created in beforeAll, should fall back to base template
 		const response = await request(app).get("/es");
 		expect(response.status).toBe(200);
-	});
-
-	it("should serve /de language route", async () => {
-		const response = await request(app).get("/de");
-		expect(response.status).toBe(200);
+		expect(response.text).toContain("Root Index");
 	});
 });
 
@@ -207,21 +234,25 @@ describe("Request Handling", () => {
 			.get("/?platform=standard&ship=fighter")
 			.set("Accept", "text/html");
 		expect(response.status).toBe(200);
+		expect(response.text).toContain("Root Index");
 	});
 
 	it("should handle requests with URL fragments (client-side only)", async () => {
 		const response = await request(app)
 			.get("/#/changelog")
 			.set("Accept", "text/html");
-		// Fragment is client-side, should serve index.html
-		expect([200, 404]).toContain(response.status);
+		// Fragment is client-side, server sees '/'
+		expect(response.status).toBe(200);
+		expect(response.text).toContain("Root Index");
 	});
 
-	it("should preserve query parameters in responses", async () => {
+	it("should preserve query parameters when falling back to dynamic injection", async () => {
+		// /es is dynamic fallback, query params are handled by middleware
 		const response = await request(app)
-			.get("/about?lang=en")
+			.get("/es?foo=bar")
 			.set("Accept", "text/html");
-		expect([200, 404]).toContain(response.status);
+		expect(response.status).toBe(200);
+		expect(response.text).toContain("Root Index");
 	});
 });
 

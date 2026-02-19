@@ -128,16 +128,15 @@ async function getIndexHtmlETag() {
  * @param {string} filePath - Path to the file being served.
  */
 function setCacheHeaders(res, filePath) {
-	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, '');
-	const hashedAsset = /-[0-9a-zA-Z_-]+\.(js|css|woff2?|png|jpe?g|webp|svg)$/;
+	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, "");
+	const hashedAsset = /-[0-9a-zA-Z_-]{8,}\.(js|css|woff2?|png|jpe?g|webp|svg)$/;
 
-	if (fileName === 'sw.js') {
+	if (fileName === "sw.js" || fileName === "index.html") {
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
 		// Non-hashed static assets get a 7-day browser cache.
-		// Cloudflare's edge cache can be longer, as it's purged on deploy.
 		res.setHeader("Cache-Control", "public, max-age=604800");
 	} else if (/\.md$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=3600");
@@ -204,28 +203,28 @@ app.use((req, res, next) => {
 	next();
 });
 
-// ETag generation for static files
-app.use((req, res, next) => {
-	const originalSendFile = res.sendFile;
-	res.sendFile = function(filePath, ...args) {
-		fs.stat(filePath, (err, stats) => {
-			if (!err) {
-				const etag = `"${stats.mtime.getTime()}-${stats.size}"`;
-				res.setHeader("ETag", etag);
+// ============================================================================
+// STATIC FILE MIDDLEWARE
+// ============================================================================
 
-				if (req.headers["if-none-match"] === etag) {
-					res.status(304).end();
-					return;
-				}
-			}
-			originalSendFile.call(res, filePath, ...args);
-		});
-	};
-	next();
-});
+// Static assets (JS, CSS, images) are served here first.
+// We disable indexing and redirects here to let the SPA handler
+// manage the clean URL to index.html mapping for SSG and SEO.
+app.use(
+	"/",
+	expressStaticGzip(DIST_DIR, {
+		enableBrotli: true,
+		orderPreference: ["br", "gz"],
+		index: false,
+		redirect: false,
+		setHeaders: (res, filePath) => {
+			setCacheHeaders(res, filePath);
+		},
+	})
+);
 
 // ============================================================================
-// SPECIFIC ROUTES (before wildcard and static middleware)
+// SPECIFIC ROUTES (for files not served by static middleware)
 // ============================================================================
 
 app.get("/sitemap.xml", (req, res) => {
@@ -240,30 +239,6 @@ app.get("/robots.txt", (req, res) => {
 	res.sendFile(path.join(DIST_DIR, "robots.txt"));
 });
 
-/**
- * Service worker route with explicit ETag handling and strong cache-busting.
- * Service workers must never be cached to ensure updates reach users immediately.
- */
-app.get("/sw.js", async (req, res) => {
-	const swPath = path.join(DIST_DIR, "sw.js");
-	try {
-		const stat = await fs.promises.stat(swPath);
-		const etag = `"${stat.mtime.getTime()}-${stat.size}"`;
-		res.setHeader("ETag", etag);
-		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-		res.setHeader("Content-Type", "application/javascript");
-
-		if (req.headers["if-none-match"] === etag) {
-			res.status(304).end();
-			return;
-		}
-
-		res.sendFile(swPath);
-	} catch (error) {
-		res.status(404).send("Service worker not found");
-	}
-});
-
 app.get("/status/404", (req, res) => {
 	res.status(404).sendFile(path.join(__dirname, "../public", "404.html"));
 });
@@ -274,27 +249,13 @@ app.get("/status/404", (req, res) => {
 
 /**
  * Handles SPA routes with SSG files, SEO tag injection, and proper caching.
- * Runs before the static file middleware to intercept known SPA routes.
  */
 app.get(/^[^.]*$/, async (req, res, next) => {
 	if (!isSpaRoute(req.path)) {
 		return next();
 	}
 
-	// HTML revalidation strategy - force revalidation on every request
-	res.setHeader("Cache-Control", "no-cache, public, must-revalidate, max-age=0");
-	res.setHeader("Pragma", "no-cache");
-	res.setHeader("Expires", "0");
-
-	const etag = await getIndexHtmlETag();
-	res.setHeader("ETag", etag);
-
-	if (req.headers["if-none-match"] === etag) {
-		res.status(304).end();
-		return;
-	}
-
-	// Try to serve pregenerated SSG file first
+	// 1. Resolve potential SSG path
 	const parts = req.path.split("/").filter((p) => p);
 	let ssgPath = null;
 
@@ -308,17 +269,20 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		ssgPath = path.join(DIST_DIR, parts.join("/"), "index.html");
 	}
 
+	// 2. Try to serve pre-rendered SSG file if it exists
 	try {
 		const stats = await fs.promises.stat(ssgPath);
 		if (stats.isFile()) {
-			res.setHeader("Cache-Control", "public, max-age=300");
+			res.setHeader("Cache-Control", "no-cache, public, must-revalidate, max-age=0");
 			res.setHeader("Document-Policy", "js-profiling");
+			// Express sendFile handles ETags automatically based on file stats
 			return res.sendFile(ssgPath);
 		}
 	} catch (err) {
-		// SSG file doesn't exist, fall back to dynamic rendering
+		// SSG file doesn't exist, fall back to dynamic SEO injection
 	}
 
+	// 3. Fall back to dynamic SEO tag injection using the base index.html
 	try {
 		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
 	} catch (error) {
