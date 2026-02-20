@@ -1,3 +1,10 @@
+## [6.13.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.11...v6.13.12) (2026-02-19)
+
+
+### Bug Fixes
+
+* replace global SocketManager and SocketStore with local socket management within the useOptimize hook. ([1d068b5](https://github.com/jbelew/nms_optimizer-web/commit/1d068b56739ac504cab52ea70217c9a17dc18a17))
+
 ## [6.13.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.10...v6.13.11) (2026-02-19)
 
 
