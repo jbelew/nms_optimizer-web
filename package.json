@@ -117,7 +117,7 @@
 		"commitizen": "^4.3.1",
 		"conventional-changelog-cli": "^5.0.0",
 		"cssnano": "^7.1.2",
-		"eslint": "^9.39.2",
+		"eslint": "^10.0.1",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
 		"eslint-plugin-performance": "^0.1.1",
