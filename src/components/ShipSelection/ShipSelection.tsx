@@ -140,9 +140,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 						showInfo(
 							"Corvette Warning!",
 							<>
-								As of version 6.2, the Corvette layout issue appears to be resolved.
-								If you create a layout, we recommend using the{" "}
-								<strong>Save Build</strong> feature to keep a backup, just in case.
+								As of version 6.23, Corvettes <strong>still</strong> have known
+								layout issues! If you create a layout, we highly recommend using the{" "}
+								<strong>Save Build</strong> feature to keep a backup of your work.
 							</>
 						);
 					}
