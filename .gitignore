@@ -52,13 +52,7 @@ frames/*
 *.sw?
 
 # SEO exports
-seo/Countries.csv
-seo/Dates.csv
-seo/Devices.csv
-seo/Filters.csv
-seo/Pages.csv
-seo/Queries.csv
-seo/Search appearance.csv
+seo/*
 
 # Build tools
 .million
@@ -70,6 +64,4 @@ seo/Search appearance.csv
 C:\Users\John Belew\AppData\Local\lighthouse.*
 
 # Cloudflare API scripts
-scripts/cloudflare/get_cf_rules.py
-scripts/cloudflare/update_cf_rules.py
-scripts/cloudflare/get_cf_pagerules.py
+scripts/cloudflare/*

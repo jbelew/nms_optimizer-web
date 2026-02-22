@@ -22,7 +22,13 @@ describe("analytics.ts", () => {
 		label: "Test Label",
 	};
 
-	let mockScript: { src: string; setAttribute: Mock };
+	let mockScript: {
+		src: string;
+		defer: boolean;
+		setAttribute: Mock;
+		onload: (() => void) | null;
+		onerror: (() => void) | null;
+	};
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -32,7 +38,13 @@ describe("analytics.ts", () => {
 		vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 200 }));
 		vi.stubGlobal("navigator", { userAgent: "Mozilla/5.0" });
 
-		mockScript = { src: "", setAttribute: vi.fn() };
+		mockScript = {
+			src: "",
+			defer: false,
+			setAttribute: vi.fn(),
+			onload: null,
+			onerror: null,
+		};
 
 		// Mock document
 		vi.stubGlobal("document", {
@@ -42,6 +54,8 @@ describe("analytics.ts", () => {
 
 				return {};
 			}),
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
 			body: {
 				appendChild: vi.fn(),
 			},

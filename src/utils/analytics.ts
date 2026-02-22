@@ -182,6 +182,7 @@ export const initializeAnalytics = async () => {
 
 /**
  * Initializes Cloudflare Web Analytics (RUM) conditionally.
+ * Wraps script loading with error suppression to catch SecurityErrors from cross-origin iframe access attempts.
  */
 export const initializeCloudflareRUM = () => {
 	// Skip if already loaded or in dev mode
@@ -189,15 +190,60 @@ export const initializeCloudflareRUM = () => {
 		return;
 	}
 
-	void getAdBlockerDetectionResult().then((isBlocked) => {
-		if (isBlocked) return;
+	getAdBlockerDetectionResult()
+		.then((isBlocked) => {
+			if (isBlocked) return;
 
-		const script = document.createElement("script");
-		script.src = "https://static.cloudflareinsights.com/beacon.min.js";
-		script.defer = true;
-		script.setAttribute("data-cf-beacon", '{"token": "614f4aacf3d1446bae6719e156ecc36e"}');
-		document.body.appendChild(script);
-	});
+			try {
+				const script = document.createElement("script");
+				script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+				script.defer = true;
+				script.setAttribute(
+					"data-cf-beacon",
+					'{"token": "614f4aacf3d1446bae6719e156ecc36e"}'
+				);
+
+				// Wrap script loading with error suppression for cross-origin iframe access
+				const errorHandler = (event: Event) => {
+					if (event instanceof ErrorEvent && event.error?.name === "SecurityError") {
+						// Suppress SecurityError from Cloudflare beacon accessing cross-origin iframes
+						event.preventDefault();
+					}
+				};
+
+				document.addEventListener("error", errorHandler, true);
+
+				// Create a timeout to remove the error handler after a reasonable time
+				const timeout = setTimeout(() => {
+					document.removeEventListener("error", errorHandler, true);
+				}, 5000);
+
+				script.onload = () => {
+					clearTimeout(timeout);
+					document.removeEventListener("error", errorHandler, true);
+				};
+
+				script.onerror = () => {
+					clearTimeout(timeout);
+					document.removeEventListener("error", errorHandler, true);
+				};
+
+				document.body.appendChild(script);
+			} catch (error) {
+				// Suppress any errors during script initialization
+				if (env.isDevMode()) {
+					console.error("Failed to initialize Cloudflare RUM:", error);
+				}
+			}
+		})
+		.catch((error) => {
+			if (env.isDevMode()) {
+				console.error(
+					"Failed to detect ad blocker during Cloudflare RUM initialization:",
+					error
+				);
+			}
+		});
 };
 
 // Detect ad-blocker is now handled lazily within sendEvent -> getAdBlockerDetectionResult
@@ -267,5 +313,9 @@ export const sendEvent = (event: GA4Event): void => {
 // Start detection immediately on module load instead of waiting for the first event or initialization
 // This ensures we have the result ready (or in flight) by the time initializeAnalytics is called.
 if (typeof window !== "undefined") {
-	void getAdBlockerDetectionResult();
+	getAdBlockerDetectionResult().catch((error) => {
+		if (env.isDevMode()) {
+			console.error("Failed to detect ad blocker on module load:", error);
+		}
+	});
 }

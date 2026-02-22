@@ -52,6 +52,24 @@ if (typeof window !== "undefined") {
 	// Initialize Sentry early to catch errors during initialization
 	initializeSentry();
 
+	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
+	// when it tries to access cross-origin iframes (especially on iOS Safari)
+	window.addEventListener("error", (event: ErrorEvent) => {
+		// Check if this is a SecurityError from Cloudflare or similar third-party scripts
+		// trying to access cross-origin iframes
+		if (
+			event.error &&
+			event.error.name === "SecurityError" &&
+			event.error.message?.includes("cross-origin")
+		) {
+			// Prevent the error from being reported to Sentry
+			event.preventDefault();
+
+			// Prevent default error handling
+			return true;
+		}
+	});
+
 	// Failsafe: hide splash screen after 8 seconds if still showing
 	setTimeout(() => {
 		const splash = document.querySelector(".vpss");
