@@ -30,7 +30,16 @@ export const useUrlSync = () => {
 		if (!isKnownRoute) return;
 
 		const handlePopState = async () => {
-			const urlParams = new URLSearchParams(window.location.search);
+			let urlParams: URLSearchParams;
+
+			try {
+				urlParams = new URLSearchParams(window.location.search);
+			} catch (e) {
+				console.warn("useUrlSync: Failed to parse URL search params", e);
+
+				return;
+			}
+
 			const platformFromUrl = urlParams.get("platform");
 			const gridFromUrl = urlParams.get("grid");
 
@@ -97,22 +106,31 @@ export const useUrlSync = () => {
 		shipTypes,
 	]);
 
-	// Function to update URL when sharing
 	const updateUrlForShare = useCallback(() => {
 		const serializedGrid = serializeGrid();
-		const url = new URL(window.location.href);
-		url.searchParams.set("grid", serializedGrid);
-		url.searchParams.set("platform", selectedShipTypeFromStore);
 
-		return url.toString();
+		try {
+			const url = new URL(window.location.href);
+			url.searchParams.set("grid", serializedGrid);
+			url.searchParams.set("platform", selectedShipTypeFromStore);
+
+			return url.toString();
+		} catch (error) {
+			console.warn("useUrlSync: Failed to create share URL", error);
+
+			return `/?platform=${selectedShipTypeFromStore}&grid=${serializedGrid}`;
+		}
 	}, [serializeGrid, selectedShipTypeFromStore]);
 
-	// Function to update URL on reset (removes grid param)
 	const updateUrlForReset = useCallback(() => {
-		const url = new URL(window.location.href);
-		url.searchParams.delete("grid");
-		// Use navigate to ensure React Router is aware of the URL change
-		navigate(url.pathname + url.search, { replace: true });
+		try {
+			const url = new URL(window.location.href);
+			url.searchParams.delete("grid");
+			// Use navigate to ensure React Router is aware of the URL change
+			navigate(url.pathname + url.search, { replace: true });
+		} catch (error) {
+			console.warn("useUrlSync: Failed to update URL for reset", error);
+		}
 	}, [navigate]);
 
 	return { updateUrlForShare, updateUrlForReset };

@@ -40,9 +40,16 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		safeSetItem(LOCAL_STORAGE_KEY, platform);
 
 		if (updateUrl && isKnownRoute && typeof window !== "undefined") {
-			const url = new URL(window.location.href);
-			url.searchParams.set("platform", platform);
-			window.history.pushState({}, "", url.toString());
+			try {
+				const url = new URL(window.location.href);
+
+				if (url.searchParams.get("platform") !== platform) {
+					url.searchParams.set("platform", platform);
+					window.history.pushState({}, "", url.toString());
+				}
+			} catch (e) {
+				console.warn("PlatformStore: Failed to update URL", e);
+			}
 		}
 	},
 	initializePlatform: (validShipTypes: string[], isKnownRoute = true) => {
@@ -52,7 +59,15 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			return;
 		}
 
-		const urlParams = new URLSearchParams(window.location.search);
+		let urlParams: URLSearchParams;
+
+		try {
+			urlParams = new URLSearchParams(window.location.search);
+		} catch (e) {
+			console.warn("PlatformStore: Failed to parse URLSearchParams", e);
+			urlParams = new URLSearchParams();
+		}
+
 		const platformFromUrl = urlParams.get("platform");
 		const platformFromStorage = safeGetItem(LOCAL_STORAGE_KEY);
 
@@ -78,9 +93,16 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		set({ selectedPlatform: initialPlatform });
 
 		if (updateUrlNeeded && isKnownRoute) {
-			const url = new URL(window.location.href);
-			url.searchParams.set("platform", initialPlatform);
-			window.history.replaceState({}, "", url.toString());
+			try {
+				const url = new URL(window.location.href);
+
+				if (url.searchParams.get("platform") !== initialPlatform) {
+					url.searchParams.set("platform", initialPlatform);
+					window.history.replaceState({}, "", url.toString());
+				}
+			} catch (e) {
+				console.warn("PlatformStore: Failed to replace URL state", e);
+			}
 		}
 
 		if (updateStorageNeeded) {
