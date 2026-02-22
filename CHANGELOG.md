@@ -1,3 +1,10 @@
+## [6.13.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.14...v6.13.15) (2026-02-22)
+
+
+### Bug Fixes
+
+* Adjust Sentry `tracesSampleRate` and ignore `Invalid call to runtime.sendMessage()` errors. ([7969582](https://github.com/jbelew/nms_optimizer-web/commit/7969582759e7f8edf8e32a8cb0c22ba79bb1f920))
+
 ## [6.13.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.13...v6.13.14) (2026-02-22)
 
 
