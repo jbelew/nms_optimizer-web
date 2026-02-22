@@ -1,3 +1,10 @@
+## [6.13.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.13...v6.13.14) (2026-02-22)
+
+
+### Bug Fixes
+
+* Enhance URL parameter synchronization in PlatformStore with error handling and conditional updates. ([62dfb1d](https://github.com/jbelew/nms_optimizer-web/commit/62dfb1df627ef0b16ffeef4ed19cd97fd5bf710d))
+
 ## [6.13.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.12...v6.13.13) (2026-02-22)
 
 
