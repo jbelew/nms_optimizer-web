@@ -1,3 +1,10 @@
+## [6.13.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.12...v6.13.13) (2026-02-22)
+
+
+### Bug Fixes
+
+* Suppress SecurityErrors during Cloudflare RUM script loading to prevent issues with cross-origin iframe access and simplify `.gitignore` rules. ([738c00d](https://github.com/jbelew/nms_optimizer-web/commit/738c00d4c42c6868edbc9eab9c25b8081fb0f72a))
+
 ## [6.13.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.11...v6.13.12) (2026-02-19)
 
 
