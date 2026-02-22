@@ -39,12 +39,13 @@ export const initializeSentry = () => {
 		],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
-		tracesSampleRate: env.isDevMode() ? 1.0 : 0.1,
+		tracesSampleRate: env.isDevMode() ? 1.0 : 0.2,
 		// Profiling sample rate
 		profilesSampleRate: env.isDevMode() ? 1.0 : 0.1,
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,
+		ignoreErrors: ["Invalid call to runtime.sendMessage(). Tab not found."],
 		beforeSend(event) {
 			// Don't send events in dev mode unless explicitly enabled via DSN
 			if (env.isDevMode() && !import.meta.env.VITE_SENTRY_DSN) {
