@@ -1,3 +1,10 @@
+## [6.13.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.15...v6.13.16) (2026-02-23)
+
+
+### Bug Fixes
+
+* Improve bundle chunking and lazy loading for markdown, events, and sentry, and add scripts for bundle analysis. ([85eae8a](https://github.com/jbelew/nms_optimizer-web/commit/85eae8aa61514b24e09de90e5184f3298b3bfa15))
+
 ## [6.13.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.14...v6.13.15) (2026-02-22)
 
 
