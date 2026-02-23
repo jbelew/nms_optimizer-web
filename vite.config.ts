@@ -337,7 +337,7 @@ export default defineConfig(({ mode }) => {
 				// Filter function to control which chunks get modulepreload links
 				// Exclude charts chunk to prevent eager loading of recharts
 				resolveDependencies: (filename, deps, { hostId, hostType }) => {
-					return deps.filter((dep) => !dep.includes("charts"));
+					return deps.filter((dep) => !dep.includes("charts") && !dep.includes("markdown"));
 				},
 			},
 			rollupOptions: {
@@ -409,8 +409,11 @@ export default defineConfig(({ mode }) => {
 								id.includes("space-separated-tokens") ||
 								id.includes("comma-separated-tokens") ||
 								id.includes("markdown-table") ||
-								id.includes("is-") ||
-								id.includes("character-entities")
+								id.includes("character-entities") ||
+								// Only include specific is- utility packages for markdown
+								/node_modules[\/](is-alphabetical|is-decimal|is-hexadecimal|is-alphanumeric|is-whitespace-character|is-word-character)[\/]/.test(
+									id
+								)
 							)
 								return "markdown";
 
@@ -418,7 +421,18 @@ export default defineConfig(({ mode }) => {
 							if (id.includes("react-router")) return "router";
 
 							// Web Vitals & Analytics
-							if (id.includes("web-vitals") || id.includes("react-ga4")) return "events";
+							if (
+								id.includes("node_modules/web-vitals/") ||
+								id.includes("node_modules/react-ga4/")
+							)
+								return "events";
+
+							// Sentry Error Tracking
+							if (
+								id.includes("node_modules/@sentry/") ||
+								id.includes("node_modules/@sentry-internal/")
+							)
+								return "observability";
 						}
 					},
 					assetFileNames: (assetInfo) =>
