@@ -1,3 +1,10 @@
+## [6.13.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.18...v6.13.19) (2026-02-24)
+
+
+### Bug Fixes
+
+* Improve robustness of IndexedDB clearing in the error boundary by adding defensive checks and error handling. ([148f103](https://github.com/jbelew/nms_optimizer-web/commit/148f103bb87abdcf273c32230420c44efe2412e9))
+
 ## [6.13.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.17...v6.13.18) (2026-02-24)
 
 
