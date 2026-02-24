@@ -1,3 +1,10 @@
+## [6.13.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.17...v6.13.18) (2026-02-24)
+
+
+### Bug Fixes
+
+* Removed useless Sentry browser profiling and replay integrations and server-side Sentry initialization. ([86b0a78](https://github.com/jbelew/nms_optimizer-web/commit/86b0a78377b93001927b91434dfe71d7394f014c))
+
 ## [6.13.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.16...v6.13.17) (2026-02-24)
 
 
