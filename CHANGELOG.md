@@ -1,3 +1,10 @@
+## [6.13.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.16...v6.13.17) (2026-02-24)
+
+
+### Bug Fixes
+
+* Add Sentry Session Replay integration and configure sampling rates. ([7e6ea7d](https://github.com/jbelew/nms_optimizer-web/commit/7e6ea7df24a82eccbab04ea5a476338e92d1a113))
+
 ## [6.13.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.15...v6.13.16) (2026-02-23)
 
 
