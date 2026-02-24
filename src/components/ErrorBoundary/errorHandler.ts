@@ -45,15 +45,24 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	}
 
 	// Clear IndexedDB
-	if ("indexedDB" in window) {
-		indexedDB.databases().then((databases) => {
-			databases.forEach((db) => {
-				if (db.name) {
-					indexedDB.deleteDatabase(db.name);
-					console.log(`ErrorBoundary: Deleted IndexedDB "${db.name}".`);
-				}
-			});
-		});
+	if ("indexedDB" in window && typeof indexedDB.databases === "function") {
+		try {
+			indexedDB
+				.databases()
+				.then((databases) => {
+					databases.forEach((db) => {
+						if (db.name) {
+							indexedDB.deleteDatabase(db.name);
+							console.log(`ErrorBoundary: Deleted IndexedDB "${db.name}".`);
+						}
+					});
+				})
+				.catch((e) => {
+					console.error("ErrorBoundary: Failed to list IndexedDB databases.", e);
+				});
+		} catch (e) {
+			console.error("ErrorBoundary: Error accessing IndexedDB databases API.", e);
+		}
 	}
 
 	// Clear sessionStorage
