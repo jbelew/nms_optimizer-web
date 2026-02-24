@@ -1,87 +1,81 @@
-# NMS Optimizer Intructions: Adjacency Bonus & Layout Optimization
+# NMS Optimizer Help
 
 ## Basic Usage
 
-- **Click or tap** the ⚙️ icon to select your **Platform** (Starships, Multi-tools, Corvettes, etc.).
-- **Click or double-tap** (on Mobile) to mark a cell as **Supercharged**.
-- **Ctrl-click** (Windows) / **⌘-click** (Mac) or **single tap** (on mobile) to toggle a cell's **active** state.
-- Use the **row toggle buttons** to enable or disable entire rows. Row toggles are **disabled once modules are placed**.
+- Tap the ⚙️ icon to select a **Platform** (Starship, Multi-Tool, Corvette, etc.).
+- Click or double-tap (mobile) to mark a cell **Supercharged**.
+- Ctrl-click (Windows) / ⌘-click (Mac) or single-tap (mobile) to toggle a cell **active** or **inactive**.
+- Use **row toggles** to enable or disable entire rows. Row toggles are disabled once modules are placed.
+- Click the **module selection (↗︎)** button on the right to add or remove individual modules from a technology group.
 
-> 💡 **Note:** Exosuits and Exocraft have fixed grid configurations. Exocraft cells cannot be modified at all. On Exosuits, you can only toggle cells active or inactive; changing the supercharged layout is not supported.
+> 💡 **Note:**
+> Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged layouts are fixed.
 
 ## Before You Begin
 
-This tool is designed for **endgame players** optimizing their platform's technology layout for maximum efficiency. It works best when:
+This tool is intended for **endgame optimization** and works best when:
 
-- You've unlocked **most or all cells** on your platform (Starship, Exosuit, Exocraft, or Multi-Tool).
-- You have access to **all relevant technologies**.
-- You own a **full set of three upgrade modules** per applicable technology.
+- Most or all grid cells are unlocked.
+- All relevant technologies are available.
+- You have **three upgrade modules** per technology.
 
-If you're still unlocking cells or collecting modules, the tool can still provide insights — but it's primarily designed for **fully upgraded platforms**.
+Partial setups are supported, but results are optimized for fully upgraded platforms.
 
-## Theta / Tau / Sigma Labels
+## Theta / Tau / Sigma
 
-These labels rank procedural upgrades **by stat quality**, not by class. They are **legacy terms from earlier versions of the game**, kept to maintain consistency in theme and style.
+These labels rank procedural upgrades **by stats**, not by class. They are legacy terms retained for consistency.
 
-- **Theta** — best procedural upgrade _(displayed as **1** in the grid)_
-- **Tau** — middle _(displayed as **2** in the grid)_
-- **Sigma** — worst _(displayed as **3** in the grid)_
+- **Theta (1)** — best stats
+- **Tau (2)** — middle
+- **Sigma (3)** — weakest
 
-You won’t see these names in your inventory. They’re assigned by **comparing the actual stats of upgrades for the same technology**.
+You won’t see these labels in-game. They are assigned by directly comparing upgrade stats.
 
-### How to Use This In-Game
+### In-Game Comparison
 
-Ignore the class letter (S, X, etc.). Instead, compare the stats directly:
+Ignore class letters (S, X, etc.) and compare stats:
 
-- Best stats → **Theta (1)**
-- Second best → **Tau (2)**
-- Worst stats → **Sigma (3)**
+- Best → **Theta**
+- Second → **Tau**
+- Worst → **Sigma**
 
-### S-Class vs X-Class
+**Class does not determine rank.** X-Class upgrades can outperform or underperform S-Class.
 
-Class does **not** determine rank. X-Class upgrades can roll higher or lower than S-Class.
+## Corvettes
 
-- If an X-Class has the best stats, it’s **Theta (1)**
-- If an S-Class is weaker, it becomes **Tau (2)** or **Sigma (3)**
-
-**Bottom line:** Theta / Tau / Sigma simply mean **best / middle / worst**, based on stats alone.
-
-## Information on Corvettes
-
-Corvettes work a little differently from other platforms — instead of just one set of upgrades, they can have up to three.
+Corvettes differ from other platforms: they can have **up to three separate upgrade sets**.
 
 - **Cosmetic upgrades** are shown as `Cn`.
 - **Reactor upgrades** are shown as `Rn`.
 
-The solver will also suggest the best Cosmetic upgrades if you'd rather prioritize performance over looks — though in practice, the trade-offs are pretty minimal most of the time.
+The solver may suggest Cosmetic upgrades for performance over appearance, though differences are usually minor.
 
 ## Recommended Builds
 
-For platforms like **Exosuits** and **Exocraft**, where the supercharged cells are fixed, the number of viable layouts is **extremely limited**.
-This allows the tool to offer **recommended builds** — carefully hand-picked and highly opinionated layouts reflecting the best combinations available.
+For **Exosuits** and **Exocraft**, supercharged cells are fixed and viable layouts are limited.
+The tool provides **hand-curated recommended builds** reflecting optimal combinations.
 
-If you have feedback or want to suggest alternate configurations, feel free to [start a discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — these builds are curated, not auto-generated, and community input helps make them better.
+Suggestions and alternate layouts are welcome via the project discussions:
+https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Saving, Loading, and Sharing Builds
+## Saving, Loading, and Sharing
 
-You can save your optimized layouts, reload them later, or share them with friends, making it easy to manage multiple configurations for the same platform.
-
-- **Save Build** — Click the save icon to download your current layout as a `.nms` file. You'll be prompted to name your build; the tool also auto-generates themed names like `"Corvette - Crusade of the Starfall.nms"`, which you can customize.
-- **Load Build** — Click the load icon to upload a previously saved `.nms` file. Your grid will immediately update to match the saved layout, including all module placements and supercharged cell positions.
-- **Share Build** — Click the share icon to generate a shareable link for your current layout. Friends can use this link to load your build directly into their optimizer without needing the file.
+- **Save** — Download the current layout as a `.nms` file.
+- **Load** — Upload a saved `.nms` file to restore a layout.
+- **Share** — Generate a link others can open directly in the optimizer.
 
 ## Usage Tips
 
-Supercharged cells provide major bonuses but are limited — every placement matters. **Avoid blindly matching your in-game supercharged layout.** For best results:
+Supercharged cells are limited — placement matters.
 
-- **Start with one high-impact technology** — one that fits your play style and benefits from two or three supercharged cells, such as _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_, or _Neutron Cannon_.
-  Mark those cells as supercharged, then solve.
-- **Use your remaining supercharged cells** for a second priority tech like _Hyperdrive_, _Scanner_, or _Mining Beam_, and solve again. Spreading bonuses usually beats stacking them all on one tech.
-- After your core techs are solved, shift focus to those with **larger module counts** (e.g. _Hyperdrive_, _Starship Trails_) before running out of contiguous space.
-- The solver does the heavy lifting — your job is to **prioritize technologies** based on how you play.
+- Start with **one high-impact technology** that benefits from multiple supercharged cells.
+- Allocate remaining supercharged cells to a **second priority tech** rather than stacking everything in one place.
+- Prioritize technologies with **larger module counts** before space becomes constrained.
+- Let the solver handle placement; your role is to **set priorities**.
 
-As grid space gets tight, you may need to **reset a few technologies** and solve them in a different order to avoid the dreaded **Optimization Alert**. With a fully upgraded starship, you'll often have a completely full grid.
+If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
 
 ## Pro Tip
 
-There’s real math behind placement. The solver looks for fixed windows that match the number of modules a technology needs and usually finds the most space-efficient layout. If something isn’t lining up, try **temporarily disabling a few cells** to steer it toward a better spot on the grid.
+The solver uses fixed windows sized to each technology’s module count to find space-efficient placements.
+If results aren’t ideal, **temporarily disable cells** to guide the solver toward a better layout.
