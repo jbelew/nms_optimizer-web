@@ -1,5 +1,5 @@
 // src/hooks/useUrlSync.tsx
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "../../context/RouteContext";
@@ -19,17 +19,30 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 export const useUrlSync = () => {
 	const navigate = useNavigate();
 	const { isKnownRoute } = useRouteContext();
-	const { setIsSharedGrid, isSharedGrid } = useGridStore();
 	const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
 	const { serializeGrid, deserializeGrid } = useGridDeserializer();
 	const shipTypes = useFetchShipTypesSuspense();
+
+	// Use a ref to prevent multiple simultaneous sync operations
+	// and to store the latest values without triggering re-effects
+	const isSyncingRef = useRef(false);
+	const shipTypesRef = useRef(shipTypes);
+	const isKnownRouteRef = useRef(isKnownRoute);
+
+	// Keep refs up to date
+	useEffect(() => {
+		shipTypesRef.current = shipTypes;
+		isKnownRouteRef.current = isKnownRoute;
+	}, [shipTypes, isKnownRoute]);
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
 		if (!isKnownRoute) return;
 
 		const handlePopState = async () => {
+			if (isSyncingRef.current) return;
+
 			let urlParams: URLSearchParams;
 
 			try {
@@ -43,7 +56,8 @@ export const useUrlSync = () => {
 			const platformFromUrl = urlParams.get("platform");
 			const gridFromUrl = urlParams.get("grid");
 
-			const validShipTypes = Object.keys(shipTypes);
+			const currentShipTypes = shipTypesRef.current;
+			const validShipTypes = Object.keys(currentShipTypes);
 
 			if (validShipTypes.length === 0) {
 				console.warn("useUrlSync: Ship types not loaded yet, deferring URL sync");
@@ -51,45 +65,60 @@ export const useUrlSync = () => {
 				return;
 			}
 
-			// IMPORTANT: Sync platform BEFORE grid to avoid race conditions
-			// If we have both platform and grid from URL, ensure platform is set first
-			// so deserialization uses the correct platform
-			if (platformFromUrl && platformFromUrl !== selectedShipTypeFromStore) {
-				if (validShipTypes.includes(platformFromUrl)) {
-					setSelectedShipTypeInStore(
-						platformFromUrl,
-						validShipTypes,
-						false,
-						isKnownRoute
-					);
+			isSyncingRef.current = true;
 
-					// --- Bug Fix: Back Navigation Desync ---
-					// If the platform changed via a popstate event (Back/Forward),
-					// and we DON'T have a grid in the URL (it's not a shared link),
-					// we should reset the grid to an empty state for the new platform.
-					if (!gridFromUrl) {
-						useGridStore.getState().setGridAndResetAuxiliaryState(createGrid(10, 6));
+			try {
+				const currentPlatform = usePlatformStore.getState().selectedPlatform;
+
+				// IMPORTANT: Sync platform BEFORE grid to avoid race conditions
+				// If we have both platform and grid from URL, ensure platform is set first
+				// so deserialization uses the correct platform
+				if (platformFromUrl && platformFromUrl !== currentPlatform) {
+					if (validShipTypes.includes(platformFromUrl)) {
+						setSelectedShipTypeInStore(
+							platformFromUrl,
+							validShipTypes,
+							false, // updateUrl = false (we are ALREADY responding to a URL change)
+							isKnownRouteRef.current
+						);
+
+						// --- Bug Fix: Back Navigation Desync ---
+						// If the platform changed via a popstate event (Back/Forward),
+						// and we DON'T have a grid in the URL (it's not a shared link),
+						// we should reset the grid to an empty state for the new platform.
+						if (!gridFromUrl) {
+							useGridStore
+								.getState()
+								.setGridAndResetAuxiliaryState(createGrid(10, 6));
+						}
+					} else {
+						console.warn(
+							`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
+						);
 					}
-				} else {
-					console.warn(
-						`useUrlSync: Invalid platform from URL: ${platformFromUrl}. Expected one of: ${validShipTypes.join(", ")}`
-					);
 				}
-			}
 
-			// Sync grid from URL to store
-			// Grid deserialization will use the platform that was just synced above
-			if (gridFromUrl) {
-				deserializeGrid(gridFromUrl);
-			} else {
-				if (isSharedGrid) {
-					setIsSharedGrid(false);
+				// Sync grid from URL to store
+				// Grid deserialization will use the platform that was just synced above
+				if (gridFromUrl) {
+					deserializeGrid(gridFromUrl);
+				} else {
+					const {
+						isSharedGrid: currentIsSharedGrid,
+						setIsSharedGrid: storeSetIsSharedGrid,
+					} = useGridStore.getState();
+
+					if (currentIsSharedGrid) {
+						storeSetIsSharedGrid(false);
+					}
 				}
+			} finally {
+				isSyncingRef.current = false;
 			}
 		};
 
-		// Initial check on mount, delayed slightly to allow router to initialize
-		handlePopState();
+		// Initial check on mount
+		void handlePopState();
 
 		window.addEventListener("popstate", handlePopState);
 
@@ -98,12 +127,10 @@ export const useUrlSync = () => {
 		};
 	}, [
 		isKnownRoute,
-		selectedShipTypeFromStore,
 		setSelectedShipTypeInStore,
 		deserializeGrid,
-		setIsSharedGrid,
-		isSharedGrid,
-		shipTypes,
+		// Removing selectedShipTypeFromStore and isSharedGrid from dependencies
+		// to break the infinite loop triggered by store persistence
 	]);
 
 	const updateUrlForShare = useCallback(() => {

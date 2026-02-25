@@ -23,6 +23,9 @@ vi.mock("react-router-dom", async () => {
 		useNavigate: () => mockNavigate,
 	};
 });
+vi.mock("../../context/RouteContext", () => ({
+	useRouteContext: vi.fn(() => ({ isKnownRoute: true })),
+}));
 
 /**
  * Test suite for the `useUrlSync` hook.
@@ -44,17 +47,28 @@ describe("useUrlSync", () => {
 			isSharedGrid: false,
 			setIsSharedGrid: mockSetIsSharedGrid,
 		});
+		(useGridStore as unknown as { getState: Mock }).getState = vi.fn().mockReturnValue({
+			isSharedGrid: false,
+			setIsSharedGrid: mockSetIsSharedGrid,
+		});
+
 		(usePlatformStore as unknown as Mock).mockImplementation(
-			(selector: (state: PlatformState) => PlatformState[keyof PlatformState]) => {
+			(selector: (state: PlatformState) => unknown) => {
 				const state = {
 					selectedPlatform: "test-platform",
 					setSelectedPlatform: mockSetSelectedPlatform,
-					initializePlatform: vi.fn(), // Add this line
+					initializePlatform: vi.fn(),
 				};
 
-				return selector(state);
+				return typeof selector === "function" ? selector(state) : state;
 			}
 		);
+		(usePlatformStore as unknown as { getState: Mock }).getState = vi.fn().mockReturnValue({
+			selectedPlatform: "test-platform",
+			setSelectedPlatform: mockSetSelectedPlatform,
+			initializePlatform: vi.fn(),
+		});
+
 		(useGridDeserializer as unknown as Mock).mockReturnValue({
 			serializeGrid: mockSerializeGrid,
 			deserializeGrid: mockDeserializeGrid,
