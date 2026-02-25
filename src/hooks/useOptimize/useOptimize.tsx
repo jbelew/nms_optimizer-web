@@ -153,6 +153,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 			const socket = createSocket();
 
+			if (!socket) {
+				const error = new Error("Failed to initialize WebSocket connection");
+				Logger.error(`Optimization failed for ${tech}: Socket initialization error`, error);
+				setShowErrorStore(true, "recoverable", error);
+				resetProgress();
+
+				return;
+			}
+
 			const cleanup = () => {
 				socket.off("progress", onProgress);
 				socket.off("optimization_result", onResult);

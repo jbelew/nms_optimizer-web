@@ -68,6 +68,16 @@ if (typeof window !== "undefined") {
 			// Prevent default error handling
 			return true;
 		}
+
+		// Broaden handling for other minified or uncaught errors during initialization
+		// Specifically on iOS where some failures might bypass React's error boundary
+		console.error("Uncaught initialization error:", event.error || event.message);
+	});
+
+	// Handle unhandled promise rejections which are common in async initialization
+	window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
+		// Suppress known non-critical rejections if needed
+		console.error("Unhandled promise rejection:", event.reason);
 	});
 
 	// Failsafe: hide splash screen after 8 seconds if still showing
@@ -81,19 +91,30 @@ if (typeof window !== "undefined") {
 
 	// Use queueMicrotask for faster execution than setTimeout
 	// This ensures it runs after the current task but before the next paint
-	queueMicrotask(() => {
-		// Initialize server-side client to be ready for fallbacks
-		initializeAnalyticsClient();
+	queueMicrotask(async () => {
+		try {
+			// Initialize server-side client to be ready for fallbacks
+			initializeAnalyticsClient();
 
-		// Initialize client-side ReactGA as soon as possible.
-		// The async initializeAnalytics already handles ad-blocker detection
-		// and will fallback to the server-side client if blocked.
-		void initializeAnalytics();
+			// Initialize client-side ReactGA as soon as possible.
+			// The async initializeAnalytics already handles ad-blocker detection
+			// and will fallback to the server-side client if blocked.
+			await initializeAnalytics();
 
-		// Dynamically import and initialize service worker to avoid bundling it with i18n
-		import("./utils/setupServiceWorker").then(({ setupServiceWorkerRegistration }) => {
+			// Dynamically import and initialize service worker to avoid bundling it with i18n
+			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
 			setupServiceWorkerRegistration();
-		});
+		} catch (error) {
+			// Catch any errors during the async initialization phase
+			// to prevented unhandled rejections or crashes
+			console.error("Failed to recover from initialization error:", error);
+
+			// Log to Sentry if available
+			Sentry.captureException(error, {
+				tags: { area: "initialization" },
+				level: "error",
+			});
+		}
 	});
 }
 

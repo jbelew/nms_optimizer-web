@@ -2,6 +2,8 @@ import "./GridTableButtons.scss";
 
 import React, { useCallback, useMemo, useTransition } from "react";
 import {
+	DownloadIcon,
+	FileIcon,
 	InfoCircledIcon,
 	QuestionMarkCircledIcon,
 	ResetIcon,
@@ -21,8 +23,6 @@ import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip";
-import { DownloadIcon } from "../Icons/DownloadIcon";
-import { UploadIcon } from "../Icons/UploadIcon";
 
 interface GridTableButtonsProps {
 	solving: boolean;
@@ -213,7 +213,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 									disabled={solving || isLoadPending}
 									aria-label={t("buttons.loadBuild")}
 								>
-									<UploadIcon weight="light" size={20} />
+									<FileIcon />
 								</IconButton>
 							</ConditionalTooltip>
 
@@ -226,7 +226,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 									disabled={solving || !hasModulesInGrid || isSavePending}
 									aria-label={t("buttons.saveBuild")}
 								>
-									<DownloadIcon weight="light" size={20} />
+									<DownloadIcon />
 								</IconButton>
 							</ConditionalTooltip>
 						</>

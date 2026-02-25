@@ -2,11 +2,11 @@
 
 ## Basic Usage
 
-- Tap the ⚙️ icon to select a **Platform** (Starship, Multi-Tool, Corvette, etc.).
+- Tap the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon to select a **Platform** (Starship, Multi-Tool, Corvette, etc.).
 - Click or double-tap (mobile) to mark a cell **Supercharged**.
 - Ctrl-click (Windows) / ⌘-click (Mac) or single-tap (mobile) to toggle a cell **active** or **inactive**.
 - Use **row toggles** to enable or disable entire rows. Row toggles are disabled once modules are placed.
-- Click the **module selection (↗︎)** button on the right to add or remove individual modules from a technology group.
+- Click the **module selection <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>** button on the right to add or remove individual modules from a technology group.
 
 > 💡 **Note:**
 > Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged layouts are fixed.
@@ -60,9 +60,9 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 
 ## Saving, Loading, and Sharing
 
-- **Save** — Download the current layout as a `.nms` file.
-- **Load** — Upload a saved `.nms` file to restore a layout.
-- **Share** — Generate a link others can open directly in the optimizer.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Upload a saved `.nms` file to restore a layout.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Save** — Download the current layout as a `.nms` file.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share** — Generate a link others can open directly in the optimizer.
 
 ## Usage Tips
 

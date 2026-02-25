@@ -1,7 +1,9 @@
 import React, { forwardRef, useCallback, useTransition } from "react";
 import {
 	CounterClockwiseClockIcon,
+	DownloadIcon,
 	EyeOpenIcon,
+	FileIcon,
 	PieChartIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
@@ -9,8 +11,6 @@ import * as Toolbar from "@radix-ui/react-toolbar";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { DownloadIcon } from "@/components/Icons/DownloadIcon";
-import { UploadIcon } from "@/components/Icons/UploadIcon";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
@@ -76,7 +76,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						onClick={onLoadBuild}
 						disabled={solving || isSharedGrid}
 					>
-						<UploadIcon weight="light" size={20} />
+						<FileIcon />
 					</IconButton>
 					<IconButton
 						variant="soft"
@@ -85,7 +85,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						onClick={onSaveBuild}
 						disabled={solving || !hasModulesInGrid || isSharedGrid}
 					>
-						<DownloadIcon weight="light" size={20} />
+						<DownloadIcon />
 					</IconButton>
 					<IconButton
 						variant="soft"

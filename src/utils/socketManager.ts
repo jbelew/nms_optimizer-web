@@ -22,8 +22,14 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  *
  * @returns {Socket} A new socket.io client instance.
  */
-export const createSocket = (): Socket => {
-	Logger.info("Creating new WebSocket connection", { url: WS_URL });
+export const createSocket = (): Socket | null => {
+	try {
+		Logger.info("Creating new WebSocket connection", { url: WS_URL });
 
-	return io(WS_URL, SOCKET_OPTIONS);
+		return io(WS_URL, SOCKET_OPTIONS);
+	} catch (error) {
+		Logger.error("Failed to create WebSocket instance", { error });
+
+		return null;
+	}
 };

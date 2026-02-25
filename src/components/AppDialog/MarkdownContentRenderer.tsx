@@ -3,6 +3,7 @@ import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@rad
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
+import DynamicRadixIcon from "./DynamicRadixIcon";
 import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
 
 // YouTube embed component
@@ -238,6 +239,11 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 				</Box>
 			),
 			hr: () => <Separator size="4" orientation="horizontal" decorative mb="2" />,
+			"radix-icon": (props: { name: string; size?: string | number; color?: string }) => {
+				const { name, size, color, ...rest } = props;
+
+				return <DynamicRadixIcon name={name} size={size} color={color} {...rest} />;
+			},
 		}),
 		[]
 	);
