@@ -1,3 +1,10 @@
+## [6.13.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.19...v6.13.20) (2026-02-25)
+
+
+### Bug Fixes
+
+* Rephrase and clarify help instructions for improved readability and conciseness. ([00525f2](https://github.com/jbelew/nms_optimizer-web/commit/00525f2a99de939d85137f77f1a59ed563db15de))
+
 ## [6.13.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.18...v6.13.19) (2026-02-24)
 
 
