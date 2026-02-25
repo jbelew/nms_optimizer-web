@@ -1,3 +1,10 @@
+## [6.13.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.20...v6.13.21) (2026-02-25)
+
+
+### Bug Fixes
+
+* Improve `useUrlSync` stability by using refs and direct store state access to prevent re-renders and race conditions during URL synchronization. ([4934d93](https://github.com/jbelew/nms_optimizer-web/commit/4934d938eb5c1c8ab7f7ccda54d8107590d36675))
+
 ## [6.13.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.19...v6.13.20) (2026-02-25)
 
 
