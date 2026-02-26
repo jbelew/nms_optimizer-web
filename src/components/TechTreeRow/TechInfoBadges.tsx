@@ -69,6 +69,10 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 	const handleOptimizeWrapper = async () => {
 		optimizeClickedRef.current = true;
 		await handleOptimizeClick();
+		// Close the dialog programmatically AFTER the async operation resolves.
+		// Previously, wrapping the button in Dialog.Close caused immediate unmounting
+		// before the promise could settle, leading to an unhandled rejection in Safari.
+		handleOpenChange(false);
 	};
 
 	return (

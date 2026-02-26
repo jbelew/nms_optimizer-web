@@ -28,11 +28,9 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
 			<Dialog.Close>
 				<Button variant="soft">{t("moduleSelection.cancelButton")}</Button>
 			</Dialog.Close>
-			<Dialog.Close>
-				<Button onClick={handleOptimizeClick} disabled={isOptimizeDisabled}>
-					{t("moduleSelection.optimizeButton")}
-				</Button>
-			</Dialog.Close>
+			<Button onClick={handleOptimizeClick} disabled={isOptimizeDisabled}>
+				{t("moduleSelection.optimizeButton")}
+			</Button>
 		</div>
 	);
 };
