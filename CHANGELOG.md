@@ -1,3 +1,10 @@
+# [6.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.22...v6.14.0) (2026-02-28)
+
+
+### Features
+
+* **welcome-dialog:** add welcome dialog ([1b576b3](https://github.com/jbelew/nms_optimizer-web/commit/1b576b31a412291cc576c7bcd487310a438a6144))
+
 ## [6.13.22](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.21...v6.13.22) (2026-02-26)
 
 
