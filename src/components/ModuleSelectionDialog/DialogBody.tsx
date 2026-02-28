@@ -51,13 +51,9 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 
 	const onSelectAllChange = useCallback(
 		(checked: boolean | "indeterminate") => {
-			if (isCorvette && !checked) {
-				handleValueChange([]);
-			} else {
-				handleSelectAllChange(checked);
-			}
+			handleSelectAllChange(checked);
 		},
-		[isCorvette, handleValueChange, handleSelectAllChange]
+		[handleSelectAllChange]
 	);
 
 	return (
@@ -86,7 +82,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 			</label>
 			<Separator size="4" className="mt-2" mb="3" />
 			<div className="flex flex-col gap-2">
-				{!isCorvette && groupedModules["core"]?.length > 0 && (
+				{groupedModules["core"]?.length > 0 && (
 					<div key="core">
 						<div
 							className="mb-2 font-bold capitalize"
@@ -120,10 +116,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 					</div>
 				)}
 				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
-					{(isCorvette
-						? MODULE_GROUP_ORDER
-						: MODULE_GROUP_ORDER.filter((g) => g !== "core")
-					).map((groupName) => {
+					{MODULE_GROUP_ORDER.filter((g) => g !== "core").map((groupName) => {
 						if (!groupedModules[groupName]?.length) return null;
 
 						let titleOverride: string | undefined;
