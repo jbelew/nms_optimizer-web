@@ -1,3 +1,10 @@
+## [6.13.22](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.21...v6.13.22) (2026-02-26)
+
+
+### Bug Fixes
+
+* Delay dialog close until async optimize operation resolves to prevent unhandled rejections. ([a334fb0](https://github.com/jbelew/nms_optimizer-web/commit/a334fb05c2934409d1541497e49db040b4ad1b0b))
+
 ## [6.13.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.20...v6.13.21) (2026-02-25)
 
 
