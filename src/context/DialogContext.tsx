@@ -20,6 +20,14 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const navigate = useNavigate();
 	const { i18n } = useTranslation();
 
+	const [userVisited, setUserVisited] = useState(() => {
+		if (typeof window === "undefined" || !window.localStorage) {
+			return false;
+		}
+
+		return localStorage.getItem("userVisited") === "true";
+	});
+
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [tutorialFinished, setTutorialFinished] = useState(() => {
@@ -118,6 +126,19 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 	}, [tutorialFinished]);
 
+	/**
+	 * Marks the user as visited.
+	 */
+	const markUserVisited = useCallback(() => {
+		if (!userVisited) {
+			setUserVisited(true);
+
+			if (typeof window !== "undefined" && window.localStorage) {
+				localStorage.setItem("userVisited", "true");
+			}
+		}
+	}, [userVisited]);
+
 	const value = React.useMemo(
 		() => ({
 			activeDialog,
@@ -125,6 +146,8 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			closeDialog,
 			tutorialFinished,
 			markTutorialFinished,
+			userVisited,
+			markUserVisited,
 			shareUrl,
 			sectionToScrollTo,
 		}),
@@ -134,6 +157,8 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			closeDialog,
 			tutorialFinished,
 			markTutorialFinished,
+			userVisited,
+			markUserVisited,
 			shareUrl,
 			sectionToScrollTo,
 		]

@@ -28,10 +28,18 @@
 		font-weight: 600;
 		text-decoration-line: underline;
 
+		&:hover {
+			color: var(--accent-12);
+		}
+
 		&--icon {
 			color: var(--accent-11);
 			display: inline;
 			margin-left: 0.25rem;
+
+			&:hover {
+				color: var(--accent-12);
+			}
 		}
 
 		&--icon-linkedin {
@@ -39,6 +47,10 @@
 			display: inline;
 			margin-left: 0.25rem;
 			margin-right: 0.25rem;
+
+			&:hover {
+				color: var(--accent-12);
+			}
 		}
 	}
 

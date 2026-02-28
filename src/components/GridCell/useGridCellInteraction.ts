@@ -298,11 +298,9 @@ export const useGridCellInteraction = (
 					useSessionStore.getState().incrementGridFixed();
 					triggerShake();
 				} else {
-					setTimeout(() => {
-						startTransition(() => {
-							gridState.toggleCellActive(rowIndex, columnIndex);
-						});
-					}, 0);
+					startTransition(() => {
+						gridState.toggleCellActive(rowIndex, columnIndex);
+					});
 				}
 			}
 		},

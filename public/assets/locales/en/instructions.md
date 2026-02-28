@@ -2,11 +2,11 @@
 
 ## Basic Usage
 
-- Tap the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon to select a **Platform** (Starship, Multi-Tool, Corvette, etc.).
-- Click or double-tap (mobile) to mark a cell **Supercharged**.
-- Ctrl-click (Windows) / ⌘-click (Mac) or single-tap (mobile) to toggle a cell **active** or **inactive**.
-- Use **row toggles** to enable or disable entire rows. Row toggles are disabled once modules are placed.
-- Click the **module selection <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>** button on the right to add or remove individual modules from a technology group.
+- Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
+- **Click** or **double-tap** (mobile) a cell to mark it **Supercharged**.
+- **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** to toggle a cell **active** or **inactive**.
+- Use **row toggles** to enable or disable entire rows. *(Row toggles are disabled once modules are placed.)*
+- Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 
 > 💡 **Note:**
 > Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged layouts are fixed.

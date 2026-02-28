@@ -67,7 +67,19 @@
 			"translationRequest": "Translators Needed!",
 			"shareLink": "Share Build",
 			"userStats": "User Statistics",
-			"updatePrompt": "Update Available"
+			"updatePrompt": "Update Available",
+			"welcome": "Welcome"
+		},
+		"welcome": {
+			"title": "Welcome to NMS Optimizer!",
+			"description": "A quick start guide to help you get the most out of this tool:",
+			"item1": "Select a <strong>Platform</strong> using the <icon/> icon.",
+			"item2": "<strong>Click</strong> or <strong>double-tap</strong> a cell to mark it <strong>Supercharged</strong>.",
+			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>tap</strong> (Mobile) to toggle a cell active or inactive.",
+			"item4": "Use <strong>row toggles</strong> to enable or disable entire rows (disabled once modules are placed).",
+			"item5": "Use the <strong>module selection</strong> <icon/> button to add or remove modules.",
+			"viewInstructions": "For more information, <1>see the complete instructions</1>.",
+			"getStarted": "Get Started"
 		},
 		"userStats": {
 			"noDataForChart": "No data available for this chart.",

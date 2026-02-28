@@ -67,7 +67,8 @@
             "translationRequest": "Übersetzer gesucht!",
             "shareLink": "Rasterlayout teilen",
             "userStats": "Benutzerstatistik",
-            "updatePrompt": "Update verfügbar"
+            "updatePrompt": "Update verfügbar",
+            "welcome": "Willkommen"
         },
         "userStats": {
             "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
@@ -96,6 +97,17 @@
             "description": "Eine neue Version des NMS Optimizers ist verfügbar. Für die beste Erfahrung, aktualisieren Sie bitte die Seite, um die neuesten Updates und Funktionen zu laden.",
             "later": "Später aktualisieren",
             "refreshNow": "Jetzt aktualisieren"
+        },
+        "welcome": {
+            "title": "Willkommen bei NMS Optimizer!",
+            "description": "Eine Kurzanleitung, die Ihnen hilft, dieses Tool optimal zu nutzen:",
+            "item1": "Wählen Sie über das <icon/>-Symbol eine <strong>Plattform</strong> aus.",
+            "item2": "<strong>Klicken</strong> oder <strong>doppeltippen</strong> Sie auf eine Zelle, um sie als <strong>Supercharged</strong> zu markieren.",
+            "item3": "<strong>Strg-Klick</strong> (Windows) / <strong>⌘-Klick</strong> (Mac) / <strong>Tippen</strong> (Mobilgerät), um eine Zelle aktiv oder inaktiv zu schalten.",
+            "item4": "Verwenden Sie <strong>Zeilenschalter</strong>, um ganze Reihen zu aktivieren oder zu deaktivieren (deaktiviert, sobald Module platziert sind).",
+            "item5": "Verwenden Sie die Schaltfläche <strong>Modulauswahl</strong> <icon/>, um Module hinzuzufügen oder zu entfernen.",
+            "viewInstructions": "Weitere Informationen finden Sie in der <1>vollständigen Anleitung</1>.",
+            "getStarted": "Legen Sie los"
         }
     },
     "dialog": {

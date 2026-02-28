@@ -74,6 +74,12 @@ describe("dialogIconMapping", () => {
 			expect(result.IconComponent).toBe(DownloadIcon);
 		});
 
+		test("should return InfoCircledIcon for welcome dialog", () => {
+			const result = getDialogIconAndStyle("dialogs.titles.welcome");
+
+			expect(result.IconComponent).toBe(InfoCircledIcon);
+		});
+
 		test("should return undefined IconComponent for unknown titleKey", () => {
 			const result = getDialogIconAndStyle("dialogs.titles.unknownDialog");
 

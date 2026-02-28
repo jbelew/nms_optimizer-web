@@ -56,7 +56,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	 * @param {RecommendedBuild} build - The recommended build to apply.
 	 */
 	const applyRecommendedBuild = useCallback(
-		async (build: RecommendedBuild) => {
+		(build: RecommendedBuild) => {
 			if (!isValidRecommendedBuild(build)) {
 				console.error("Invalid RecommendedBuild object received:", build);
 
@@ -123,8 +123,6 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 							newGrid.cells[r][c] = createEmptyCell();
 						}
 					}
-
-					await new Promise((resolve) => setTimeout(resolve, 0)); // Yield after each row
 				}
 
 				useGridStore.getState().setGrid(newGrid);

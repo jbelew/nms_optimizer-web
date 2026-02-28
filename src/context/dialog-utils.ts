@@ -20,6 +20,8 @@ export type DialogType =
  * @property {() => void} closeDialog - Function to close the current dialog.
  * @property {boolean} tutorialFinished - Whether the user has finished the tutorial.
  * @property {() => void} markTutorialFinished - Function to mark the tutorial as finished.
+ * @property {boolean} userVisited - Whether the user has visited before.
+ * @property {() => void} markUserVisited - Function to mark the user as visited.
  * @property {string} shareUrl - The URL to share.
  * @property {string|undefined} sectionToScrollTo - The section to scroll to in the dialog.
  */
@@ -32,6 +34,8 @@ export interface DialogContextType {
 	closeDialog: () => void;
 	tutorialFinished: boolean;
 	markTutorialFinished: () => void;
+	userVisited: boolean;
+	markUserVisited: () => void;
 	shareUrl: string;
 	sectionToScrollTo: string | undefined;
 }

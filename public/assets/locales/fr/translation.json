@@ -67,7 +67,8 @@
             "translationRequest": "Traducteurs recherchés !",
             "shareLink": "Partager la disposition de la grille",
             "userStats": "Statistiques des utilisateurs",
-            "updatePrompt": "Mise à jour disponible"
+            "updatePrompt": "Mise à jour disponible",
+            "welcome": "Accueillir"
         },
         "userStats": {
             "noDataForChart": "Aucune donnée disponible pour ce graphique.",
@@ -96,6 +97,17 @@
             "description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
             "later": "Update Later",
             "refreshNow": "Refresh Now"
+        },
+        "welcome": {
+            "title": "Bienvenue dans NMS Optimiseur !",
+            "description": "Un guide de démarrage rapide pour vous aider à tirer le meilleur parti de cet outil :",
+            "item1": "Sélectionnez une <strong>Plateforme</strong> à l'aide de l'icône <icon/>.",
+            "item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur une cellule pour la marquer <strong>Suralimentée</strong>.",
+            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>appuyez</strong> (Mobile) pour activer ou désactiver une cellule.",
+            "item4": "Utilisez les <strong>basculements de lignes</strong> pour activer ou désactiver des lignes entières (désactivées une fois les modules placés).",
+            "item5": "Utilisez le bouton <strong>sélection de module</strong> <icon/> pour ajouter ou supprimer des modules.",
+            "viewInstructions": "Pour plus d'informations, <1>consultez les instructions complètes</1>.",
+            "getStarted": "Commencer"
         }
     },
     "dialog": {

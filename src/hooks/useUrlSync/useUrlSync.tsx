@@ -120,7 +120,7 @@ export const useUrlSync = () => {
 		// Initial check on mount
 		void handlePopState();
 
-		window.addEventListener("popstate", handlePopState);
+		window.addEventListener("popstate", handlePopState, { passive: true });
 
 		return () => {
 			window.removeEventListener("popstate", handlePopState);

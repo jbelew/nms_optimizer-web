@@ -67,7 +67,8 @@
             "translationRequest": "¡Se necesitan traductores!",
             "shareLink": "Compartir el diseño de la cuadrícula",
             "userStats": "Estadísticas de usuario",
-            "updatePrompt": "Actualización disponible"
+            "updatePrompt": "Actualización disponible",
+            "welcome": "Bienvenido"
         },
         "userStats": {
             "noDataForChart": "No hay datos disponibles para este gráfico.",
@@ -96,6 +97,17 @@
             "description": "Una nueva versión de NMS Optimizer está disponible. Para la mejor experiencia, por favor actualice la página para cargar las últimas actualizaciones y características.",
             "later": "Update Later",
             "refreshNow": "Refresh Now"
+        },
+        "welcome": {
+            "title": "¡Bienvenido al Optimizador NMS!",
+            "description": "Una guía de inicio rápido para ayudarle a aprovechar al máximo esta herramienta:",
+            "item1": "Seleccione una <strong>Plataforma</strong> usando el ícono <icon/>.",
+            "item2": "<strong>Haz clic</strong> o <strong>toca dos veces</strong> una celda para marcarla como <strong>Supercargada</strong>.",
+            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>toque</strong> (Móvil) para alternar una celda activa o inactiva.",
+            "item4": "Utilice <strong>cambios de filas</strong> para habilitar o deshabilitar filas enteras (se deshabilita una vez que se colocan los módulos).",
+            "item5": "Utilice el botón <strong>selección de módulo</strong> <icono/> para agregar o eliminar módulos.",
+            "viewInstructions": "Para obtener más información, <1>consulte las instrucciones completas</1>.",
+            "getStarted": "Empezar"
         }
     },
     "dialog": {

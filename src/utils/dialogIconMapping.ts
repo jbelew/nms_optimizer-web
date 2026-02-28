@@ -37,6 +37,7 @@ const iconMap: Record<string, React.ElementType> = {
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 	"dialogs.titles.updatePrompt": ReloadIcon,
 	"dialog.buildName.title": DownloadIcon,
+	"dialogs.titles.welcome": InfoCircledIcon,
 };
 
 /**

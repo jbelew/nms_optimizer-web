@@ -36,7 +36,7 @@ const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
 
 	const iconStyles: React.CSSProperties = {
 		display: "inline-block",
-		verticalAlign: "top",
+		verticalAlign: "middle",
 		width: size,
 		height: size,
 		color: color,

@@ -20,6 +20,7 @@ import { usePlatformStore } from "./store/PlatformStore";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
+const WelcomeContent = lazy(() => import("./components/AppDialog/WelcomeContent"));
 
 const RoutedDialogs = lazy(() =>
 	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
@@ -39,8 +40,21 @@ const UserStatsRoute = lazy(() =>
 
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
-	const { closeDialog, shareUrl, activeDialog } = useDialog();
-	useTranslation();
+	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
+	const { t } = useTranslation();
+
+	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog);
+
+	useEffect(() => {
+		if (!userVisited && activeDialog) {
+			markUserVisited();
+		}
+	}, [activeDialog, userVisited, markUserVisited]);
+
+	const handleCloseWelcome = () => {
+		setShowWelcome(false);
+		markUserVisited();
+	};
 
 	const shipTypes = useFetchShipTypesSuspense();
 	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
@@ -72,6 +86,18 @@ const AppContent: FC = () => {
 			{activeDialog === "userstats" && (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
+				</Suspense>
+			)}
+
+			{showWelcome && (
+				<Suspense fallback={null}>
+					<AppDialog
+						isOpen={showWelcome}
+						onClose={handleCloseWelcome}
+						content={<WelcomeContent onClose={handleCloseWelcome} />}
+						titleKey="dialogs.titles.welcome"
+						title={t("dialogs.titles.welcome", "Welcome")}
+					/>
 				</Suspense>
 			)}
 		</>
