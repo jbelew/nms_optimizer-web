@@ -1,3 +1,10 @@
+## [6.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.0...v6.14.1) (2026-03-01)
+
+
+### Bug Fixes
+
+* Enhance service worker registration robustness and iOS Safari error handling, update the changelog, and correct an import path. ([085d36a](https://github.com/jbelew/nms_optimizer-web/commit/085d36a4565ea011259dff5dab69c8acf814c0b8))
+
 # [6.14.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.13.22...v6.14.0) (2026-02-28)
 
 
