@@ -1,87 +1,81 @@
-# Guide de l'optimiseur NMS : bonus de contiguïté et optimisation de la mise en page
+# Aide de l'optimiseur NMS
 
 ## Utilisation de base
 
-- **Cliquez ou appuyez** sur l'icône ⚙️ pour sélectionner votre **Plateforme** (Vaisseaux spatiaux, Multi-outils, Corvettes, etc.).
-- **Cliquez ou appuyez deux fois** (sur mobile) pour marquer une cellule comme **Suralimentée**.
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) ou **une seule pression** (sur mobile) pour basculer l'état **actif** d'une cellule.
-- Utilisez les **boutons bascule de ligne** pour activer ou désactiver des lignes entières. Les bascules de ligne sont **désactivées une fois les modules placés**.
+- Sélectionnez une **Plateforme** (Starship, Multi-Tool, Corvette, etc.) à l'aide de l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Cliquez** ou **appuyez deux fois** (mobile) sur une cellule pour la marquer **Suralimentée**.
+- **Ctrl-clic (Windows) / ⌘-clic (Mac) / simple pression (mobile)** pour basculer une cellule **active** ou **inactive**.
+- Utilisez **row toggles** pour activer ou désactiver des lignes entières. *(Les bascules de ligne sont désactivées une fois les modules placés.)*
+- Utilisez le bouton **sélection de module** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou supprimer des modules individuels au sein d'un groupe technologique.
 
-> 💡 **Remarque :** Les Exosuits et Exocraft ont des configurations de grille fixes. Les cellules Exocraft ne peuvent pas du tout être modifiées. Sur les Exosuits, vous pouvez uniquement activer ou désactiver les cellules ; la modification de la disposition suralimentée n'est pas prise en charge.
+> 💡 **Remarque :**
+> Les Exosuits et Exocraft ont des grilles fixes. Les cellules Exocraft ne peuvent pas être modifiées. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – les dispositions suralimentées sont corrigées.
 
 ## Avant de commencer
 
-Cet outil est conçu pour les **joueurs de fin de partie** qui optimisent la configuration technologique de leur plate-forme pour une efficacité maximale. Cela fonctionne mieux quand :
+Cet outil est destiné à l'**optimisation de fin de partie** et fonctionne mieux lorsque :
 
-- Vous avez débloqué **la plupart ou toutes les cellules** de votre plateforme (Starship, Exosuit, Exocraft ou Multi-Tool).
-- Vous avez accès à **toutes les technologies pertinentes**.
-- Vous possédez un **ensemble complet de trois modules de mise à niveau** par technologie applicable.
+- La plupart ou la totalité des cellules de la grille sont déverrouillées.
+- Toutes les technologies pertinentes sont disponibles.
+- Vous disposez de **trois modules de mise à niveau** par technologie.
 
-Si vous déverrouillez toujours des cellules ou collectez des modules, l'outil peut toujours fournir des informations, mais il est principalement conçu pour les **plates-formes entièrement mises à niveau**.
+Les configurations partielles sont prises en charge, mais les résultats sont optimisés pour les plates-formes entièrement mises à niveau.
 
-## Étiquettes Thêta / Tau / Sigma
+## Thêta / Tau / Sigma
 
-Ces étiquettes classent les améliorations procédurales **par qualité statistique**, et non par classe. Il s'agit de **termes hérités des versions antérieures du jeu**, conservés pour maintenir la cohérence du thème et du style.
+Ces étiquettes classent les améliorations procédurales **par statistiques**, et non par classe. Ce sont des termes hérités conservés par souci de cohérence.
 
-- **Theta** — meilleure mise à niveau procédurale _(affiché comme **1** dans la grille)_
-- **Tau** — milieu _(affiché comme **2** dans la grille)_
-- **Sigma** — pire _(affiché comme **3** dans la grille)_
+- **Thêta (1)** — meilleures statistiques
+- **Tau (2)** — milieu
+- **Sigma (3)** — le plus faible
 
-Vous ne verrez pas ces noms dans votre inventaire. Ils sont attribués en **comparant les statistiques réelles des mises à niveau pour la même technologie**.
+Vous ne verrez pas ces étiquettes dans le jeu. Ils sont attribués en comparant directement les statistiques de mise à niveau.
 
-### Comment utiliser ceci dans le jeu
+### Comparaison en jeu
 
-Ignorez la lettre de classe (S, X, etc.). Comparez plutôt les statistiques directement :
+Ignorez les lettres de classe (S, X, etc.) et comparez les statistiques :
 
-- Meilleures statistiques → **Thêta (1)**
-- Deuxième meilleur → **Tau (2)**
-- Pires statistiques → **Sigma (3)**
+- Meilleur → **Thêta**
+- Deuxième → **Tau**
+- Le pire → **Sigma**
 
-### Classe S vs Classe X
+**La classe ne détermine pas le classement.** Les mises à niveau de la Classe X peuvent surpasser ou sous-performer la Classe S.
 
-La classe ne détermine **pas** le rang. Les mises à niveau de la Classe X peuvent être supérieures ou inférieures à celles de la Classe S.
+## Corvette
 
-- Si une Classe X a les meilleures statistiques, c'est **Thêta (1)**
-- Si une Classe S est plus faible, elle devient **Tau (2)** ou **Sigma (3)**
+Les corvettes diffèrent des autres plates-formes : elles peuvent avoir **jusqu'à trois ensembles de mises à niveau distincts**.
 
-**En résumé :** Thêta/Tau/Sigma signifie simplement **meilleur/milieu/pire**, en se basant uniquement sur les statistiques.
+- **Les améliorations cosmétiques** sont affichées sous la forme `Cn`.
+- Les **mises à niveau du réacteur** sont affichées sous la forme `Rn`.
 
-## Informations sur les Corvettes
+Le solveur peut suggérer des améliorations esthétiques pour les performances par rapport à l'apparence, bien que les différences soient généralement mineures.
 
-Les Corvettes fonctionnent un peu différemment des autres plates-formes : au lieu d’un seul ensemble de mises à niveau, elles peuvent en avoir jusqu’à trois.
+## Builds recommandées
 
-- **Les améliorations cosmétiques** sont affichées sous la forme « Cn ».
-- Les **mises à niveau du réacteur** sont affichées sous la forme « Rn ».
+Pour les **Exosuits** et **Exocraft**, les cellules suralimentées sont fixes et les configurations viables sont limitées.
+L'outil fournit des **versions recommandées sélectionnées à la main** reflétant des combinaisons optimales.
 
-Le solveur suggérera également les meilleures mises à niveau esthétiques si vous préférez donner la priorité aux performances plutôt qu'à l'apparence – bien qu'en pratique, les compromis soient assez minimes la plupart du temps.
+Les suggestions et mises en page alternatives sont les bienvenues via les discussions sur le projet :
+https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Builds recommandées
+## Sauvegarde, chargement et partage
 
-Pour les plates-formes comme **Exosuits** et **Exocraft**, où les cellules suralimentées sont fixes, le nombre de configurations viables est **extrêmement limité**.
-Cela permet à l'outil de proposer des **versions recommandées** : des mises en page soigneusement sélectionnées et très avisées reflétant les meilleures combinaisons disponibles.
-
-Si vous avez des commentaires ou souhaitez suggérer des configurations alternatives, n'hésitez pas à [démarrer une discussion](https://github.com/jbelew/nms_optimizer-web/discussions) — ces versions sont organisées, non générées automatiquement, et la contribution de la communauté contribue à les améliorer.
-
-## Sauvegarde, chargement et partage de builds
-
-Vous pouvez enregistrer vos mises en page optimisées, les recharger plus tard ou les partager avec des amis, ce qui facilite la gestion de plusieurs configurations pour la même plateforme.
-
-- **Enregistrer la construction** — Cliquez sur l'icône d'enregistrement pour télécharger votre mise en page actuelle sous forme de fichier « .nms ». Vous serez invité à nommer votre build ; l'outil génère également automatiquement des noms thématiques comme « Corvette - Crusade of the Starfall.nms » , que vous pouvez personnaliser.
-- **Load Build** — Cliquez sur l'icône de chargement pour télécharger un fichier « .nms » précédemment enregistré. Votre grille sera immédiatement mise à jour pour correspondre à la disposition enregistrée, y compris tous les emplacements de modules et les positions des cellules suralimentées.
-- **Partager la construction** — Cliquez sur l'icône de partage pour générer un lien partageable pour votre mise en page actuelle. Les amis peuvent utiliser ce lien pour charger votre build directement dans leur optimiseur sans avoir besoin du fichier.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Téléchargez un fichier `.nms` enregistré pour restaurer une mise en page.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Enregistrer** — Téléchargez la mise en page actuelle sous forme de fichier `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Génère un lien que d'autres peuvent ouvrir directement dans l'optimiseur.
 
 ## Conseils d'utilisation
 
-Les cellules suralimentées offrent des bonus majeurs mais sont limités : chaque placement compte. **Évitez de faire correspondre aveuglément votre disposition suralimentée dans le jeu.** Pour de meilleurs résultats :
+Les cellules suralimentées sont limitées – le placement est important.
 
-- **Commencez avec une technologie à fort impact** — une qui correspond à votre style de jeu et bénéficie de deux ou trois cellules suralimentées, telles que _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_ ou _Neutron Cannon_.
-  Marquez ces cellules comme suralimentées, puis résolvez.
-- **Utilisez vos cellules suralimentées restantes** pour une technologie de deuxième priorité comme _Hyperdrive_, _Scanner_ ou _Mining Beam_, et résolvez à nouveau. Répartir les bonus vaut généralement mieux que de les empiler tous sur une seule technologie.
-- Une fois vos technologies de base résolues, concentrez-vous sur celles avec **un plus grand nombre de modules** (par exemple _Hyperdrive_, _Starship Trails_) avant de manquer d'espace contigu.
-- Le solveur fait le gros du travail : votre travail consiste à **prioriser les technologies** en fonction de votre façon de jouer.
+- Commencez par **une technologie à fort impact** qui bénéficie de plusieurs cellules suralimentées.
+- Attribuez les cellules suralimentées restantes à une **technologie de deuxième priorité** plutôt que de tout empiler au même endroit.
+- Donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
+- Laissez le solveur gérer le placement ; votre rôle est de **fixer les priorités**.
 
-À mesure que l'espace sur la grille devient restreint, vous devrez peut-être **réinitialiser quelques technologies** et les résoudre dans un ordre différent pour éviter la redoutable **alerte d'optimisation**. Avec un vaisseau entièrement amélioré, vous aurez souvent une grille complètement pleine.
+Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudre les technologies dans un ordre différent pour éviter une **alerte d'optimisation**.
 
 ## Conseil de pro
 
-Il y a de vraies mathématiques derrière le placement. Le solveur recherche des fenêtres fixes correspondant au nombre de modules dont une technologie a besoin et trouve généralement la disposition la plus efficace en termes d'espace. Si quelque chose ne s'aligne pas, essayez de **désactiver temporairement quelques cellules** pour l'orienter vers un meilleur endroit sur la grille.
+Le solveur utilise des fenêtres fixes dimensionnées en fonction du nombre de modules de chaque technologie pour trouver des emplacements optimisés en termes d'espace.
+Si les résultats ne sont pas idéaux, **désactivez temporairement les cellules** pour guider le solveur vers une meilleure présentation.

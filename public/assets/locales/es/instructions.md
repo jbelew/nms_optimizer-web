@@ -1,87 +1,81 @@
-# Guía del optimizador de NMS: bonificación de adyacencia y optimización del diseño
+# Ayuda del optimizador NMS
 
 ## Uso básico
 
-- **Haga clic o toque** el ícono ⚙️ para seleccionar su **Plataforma** (naves espaciales, multiherramientas, corbetas, etc.).
-- **Haga clic o toque dos veces** (en dispositivos móviles) para marcar una celda como **Supercargada**.
-- **Ctrl-clic** (Windows) / **⌘-clic** (Mac) o **un solo toque** (en dispositivos móviles) para alternar el estado **activo** de una celda.
-- Utilice los **botones de alternancia de fila** para habilitar o deshabilitar filas enteras. Los cambios de fila están **deshabilitados una vez que se colocan los módulos**.
+- Seleccione una **Plataforma** (Starship, Multi-Tool, Corvette, etc.) usando el ícono <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Haga clic** o **toque dos veces** (móvil) en una celda para marcarla como **Supercargada**.
+- **Ctrl y clic (Windows) / ⌘ y clic (Mac) / toque único (móvil)** para alternar una celda **activa** o **inactiva**.
+- Utilice **cambios de fila** para habilitar o deshabilitar filas enteras. *(El cambio de filas se desactiva una vez que se colocan los módulos).*
+- Utilice el botón **selección de módulo** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para agregar o eliminar módulos individuales dentro de un grupo de tecnología.
 
-> 💡 **Nota:** Los Exosuits y Exocraft tienen configuraciones de cuadrícula fija. Las células Exocraft no se pueden modificar en absoluto. En Exosuits, sólo puedes alternar celdas activas o inactivas; No se admite cambiar el diseño sobrealimentado.
+> 💡 **Nota:**
+> Exosuits y Exocraft tienen rejillas fijas. Las células de Exocraft no se pueden modificar. En los Exosuits, solo se pueden cambiar los estados activo/inactivo; los diseños sobrealimentados son fijos.
 
 ## Antes de comenzar
 
-Esta herramienta está diseñada para **jugadores de finales** que optimizan el diseño tecnológico de su plataforma para lograr la máxima eficiencia. Funciona mejor cuando:
+Esta herramienta está diseñada para **optimizar el final del juego** y funciona mejor cuando:
 
-- Has desbloqueado **la mayoría o todas las celdas** en tu plataforma (Starship, Exosuit, Exocraft o Multi-Tool).
-- Tienes acceso a **todas las tecnologías relevantes**.
-- Posees un **conjunto completo de tres módulos de actualización** por tecnología aplicable.
+- La mayoría o todas las celdas de la cuadrícula están desbloqueadas.
+- Todas las tecnologías relevantes están disponibles.
+- Tienes **tres módulos de actualización** por tecnología.
 
-Si todavía estás desbloqueando celdas o recopilando módulos, la herramienta aún puede brindarte información, pero está diseñada principalmente para **plataformas completamente actualizadas**.
+Se admiten configuraciones parciales, pero los resultados se optimizan para plataformas completamente actualizadas.
 
-## Etiquetas Theta / Tau / Sigma
+## Theta/Tau/Sigma
 
-Estas etiquetas clasifican las actualizaciones de procedimientos **por calidad de estadísticas**, no por clase. Son **términos heredados de versiones anteriores del juego**, mantenidos para mantener la coherencia en el tema y el estilo.
+Estas etiquetas clasifican las actualizaciones de procedimientos **por estadísticas**, no por clase. Son términos heredados que se conservan por motivos de coherencia.
 
-- **Theta** — mejor actualización de procedimiento _(se muestra como **1** en la cuadrícula)_
-- **Tau** — medio _(se muestra como **2** en la cuadrícula)_
-- **Sigma** — peor _(se muestra como **3** en la cuadrícula)_
+- **Theta (1)** — mejores estadísticas
+- **Tau (2)** — medio
+- **Sigma (3)** — más débil
 
-No verás estos nombres en tu inventario. Se asignan **comparando las estadísticas reales de las actualizaciones para la misma tecnología**.
+No verás estas etiquetas en el juego. Se asignan comparando directamente las estadísticas de actualización.
 
-### Cómo usar esto en el juego
+### Comparación en el juego
 
-Ignore la letra de clase (S, X, etc.). En su lugar, compare las estadísticas directamente:
+Ignora las letras de clase (S, X, etc.) y compara estadísticas:
 
-- Mejores estadísticas → **Theta (1)**
-- Segundo mejor → **Tau (2)**
-- Peores estadísticas → **Sigma (3)**
+- Mejor → **Theta**
+- Segundo → **Tau**
+- Peor → **Sigma**
 
-### Clase S frente a Clase X
+**La clase no determina el rango.** Las mejoras del Clase X pueden superar o superar al Clase S.
 
-La clase **no** determina el rango. Las actualizaciones de la Clase X pueden ser superiores o inferiores a las de la Clase S.
+## Corbetas
 
-- Si una Clase X tiene las mejores estadísticas, es **Theta (1)**
-- Si una Clase S es más débil, se convierte en **Tau (2)** o **Sigma (3)**
+Los Corvettes se diferencian de otras plataformas: pueden tener **hasta tres conjuntos de mejoras independientes**.
 
-**En pocas palabras:** Theta/Tau/Sigma simplemente significa **mejor/medio/peor**, basándose únicamente en las estadísticas.
-
-## Información sobre Corbetas
-
-Los Corvettes funcionan de manera un poco diferente a otras plataformas: en lugar de solo un conjunto de actualizaciones, pueden tener hasta tres.
-
-- **Las mejoras cosméticas** se muestran como "Cn".
+- **Las mejoras cosméticas** se muestran como `Cn`.
 - **Las actualizaciones del reactor** se muestran como `Rn`.
 
-El solucionador también sugerirá las mejores actualizaciones cosméticas si prefiere priorizar el rendimiento sobre la apariencia, aunque en la práctica, las compensaciones son mínimas la mayor parte del tiempo.
+El solucionador puede sugerir mejoras cosméticas para mejorar el rendimiento sobre la apariencia, aunque las diferencias suelen ser menores.
 
 ## Construcciones recomendadas
 
-Para plataformas como **Exosuits** y **Exocraft**, donde las celdas sobrealimentadas son fijas, la cantidad de diseños viables es **extremadamente limitada**.
-Esto permite que la herramienta ofrezca **compilaciones recomendadas**: diseños cuidadosamente seleccionados y altamente obstinados que reflejan las mejores combinaciones disponibles.
+Para **Exosuits** y **Exocraft**, las celdas sobrealimentadas son fijas y los diseños viables son limitados.
+La herramienta proporciona **compilaciones recomendadas cuidadosamente seleccionadas** que reflejan combinaciones óptimas.
 
-Si tiene comentarios o desea sugerir configuraciones alternativas, no dude en [iniciar una discusión](https://github.com/jbelew/nms_optimizer-web/discussions): estas compilaciones están seleccionadas, no generadas automáticamente, y los aportes de la comunidad ayudan a mejorarlas.
+Se aceptan sugerencias y diseños alternativos a través de las discusiones del proyecto:
+https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Guardar, cargar y compartir compilaciones
+## Guardar, cargar y compartir
 
-Puede guardar sus diseños optimizados, recargarlos más tarde o compartirlos con amigos, lo que facilita la administración de múltiples configuraciones para la misma plataforma.
-
-- **Guardar compilación**: haga clic en el ícono de guardar para descargar su diseño actual como un archivo `.nms`. Se te pedirá que pongas un nombre a tu compilación; la herramienta también genera automáticamente nombres temáticos como `"Corvette - Crusade of the Starfall.nms"`, que puedes personalizar.
-- **Cargar compilación**: haga clic en el icono de carga para cargar un archivo `.nms` previamente guardado. Su cuadrícula se actualizará inmediatamente para coincidir con el diseño guardado, incluidas todas las ubicaciones de los módulos y las posiciones de las celdas supercargadas.
-- **Compartir compilación**: haga clic en el ícono de compartir para generar un enlace que se pueda compartir para su diseño actual. Los amigos pueden usar este enlace para cargar su compilación directamente en su optimizador sin necesidad del archivo.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar**: cargue un archivo `.nms` guardado para restaurar un diseño.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar**: descargue el diseño actual como un archivo `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir**: genera un enlace que otros pueden abrir directamente en el optimizador.
 
 ## Consejos de uso
 
-Las celdas sobrealimentadas ofrecen importantes ventajas, pero son limitadas: cada ubicación es importante. **Evita hacer coincidir ciegamente el diseño supercargado del juego.** Para obtener mejores resultados:
+Las celdas sobrealimentadas son limitadas: la ubicación es importante.
 
-- **Comienza con una tecnología de alto impacto**, una que se adapte a tu estilo de juego y se beneficie de dos o tres celdas supercargadas, como _Pulse Engine_, _Pulse Spitter_, _Infra-Knife Accelerator_ o _Neutron Cannon_.
-  Marca esas celdas como supercargadas y luego resuelve.
-- **Usa las celdas supercargadas restantes** para una tecnología de segunda prioridad como _Hyperdrive_, _Scanner_ o _Mining Beam_, y resuelve de nuevo. Los bonos de distribución generalmente son mejores que acumularlos todos en una sola tecnología.
-- Una vez resueltas tus tecnologías principales, cambia el enfoque a aquellas con **números de módulos más grandes** (por ejemplo, _Hyperdrive_, _Starship Trails_) antes de quedarte sin espacio contiguo.
-- El solucionador hace el trabajo pesado: tu trabajo es **priorizar las tecnologías** según tu forma de jugar.
+- Comience con **una tecnología de alto impacto** que se beneficia de múltiples celdas supercargadas.
+- Asigne las celdas supercargadas restantes a una **tecnología de segunda prioridad** en lugar de apilar todo en un solo lugar.
+- Priorice las tecnologías con **números de módulos más grandes** antes de que el espacio se vea limitado.
+- Deje que el solucionador se encargue de la colocación; su función es **establecer prioridades**.
 
-A medida que el espacio de la cuadrícula se reduce, es posible que tengas que **restablecer algunas tecnologías** y resolverlas en un orden diferente para evitar la temida **Alerta de optimización**. Con una nave estelar completamente mejorada, a menudo tendrás una cuadrícula completamente llena.
+Si hay poco espacio, es posible que tengas que restablecer y resolver las tecnologías en un orden diferente para evitar una **Alerta de optimización**.
 
 ## Consejo profesional
 
-Hay verdaderas matemáticas detrás de la ubicación. El solucionador busca ventanas fijas que coincidan con la cantidad de módulos que necesita una tecnología y, por lo general, encuentra el diseño que ahorra más espacio. Si algo no está alineado, intenta **deshabilitar temporalmente algunas celdas** para dirigirlo hacia un mejor lugar en la cuadrícula.
+El solucionador utiliza ventanas fijas dimensionadas según el número de módulos de cada tecnología para encontrar ubicaciones que aprovechen el espacio.
+Si los resultados no son ideales, **deshabilite temporalmente las celdas** para guiar al solucionador hacia un mejor diseño.
