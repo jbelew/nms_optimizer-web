@@ -11,41 +11,58 @@ export function setupServiceWorkerRegistration() {
 		"serviceWorker" in navigator &&
 		!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
 	) {
-		const registerWorker = () => {
-			setTimeout(() => {
-				import("virtual:pwa-register")
-					.then(({ registerSW }) => {
-						try {
-							const updateServiceWorker = registerSW({
-								onOfflineReady() {
-									console.log("App is ready to work offline");
-								},
-								onNeedRefresh() {
-									// Directly dispatch an event for the UI to handle the update.
-									// The onNeedRefresh event is only triggered by Workbox when a
-									// new service worker is available and waiting.
-									console.log("New service worker available. Prompting user.");
-									window.dispatchEvent(
-										new CustomEvent("new-version-available", {
-											detail: updateServiceWorker, // Pass the updateServiceWorker function
-										})
-									);
-								},
-								onRegistered(registration) {
-									console.log("Service Worker registered:", registration);
-								},
-								onRegisterError(error) {
-									console.error("Service Worker registration failed:", error);
-								},
-							});
-						} catch (error) {
-							console.error("Error during registerSW call:", error);
-						}
-					})
-					.catch((e) => {
-						console.error("Failed to import PWA register:", e);
-					});
-			}, 2000); // Delay after load event
+		const registerWorker = async (retries = 2) => {
+			try {
+				// Use a single, shorter timeout or no timeout at all to register after load
+				// 1000ms is usually enough to let the main thread settle
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+
+				let registerSWModule;
+
+				try {
+					registerSWModule = await import("virtual:pwa-register");
+				} catch (importError) {
+					if (retries > 0) {
+						console.warn(
+							`PWA import failed, retrying (${retries} left)...`,
+							importError
+						);
+
+						return registerWorker(retries - 1);
+					}
+
+					throw importError;
+				}
+
+				const { registerSW } = registerSWModule;
+
+				const updateServiceWorker = registerSW({
+					onOfflineReady() {
+						console.log("App is ready to work offline");
+					},
+					onNeedRefresh() {
+						// Directly dispatch an event for the UI to handle the update.
+						// The onNeedRefresh event is only triggered by Workbox when a
+						// new service worker is available and waiting.
+						console.log("New service worker available. Prompting user.");
+						window.dispatchEvent(
+							new CustomEvent("new-version-available", {
+								detail: updateServiceWorker, // Pass the updateServiceWorker function
+							})
+						);
+					},
+					onRegistered(registration) {
+						console.log("Service Worker registered:", registration);
+					},
+					onRegisterError(error) {
+						console.error("Service Worker registration failed:", error);
+					},
+				});
+			} catch (error) {
+				// Silently catch PWA registration errors after retries to avoid crashing the app
+				// We log it but don't re-throw.
+				console.error("Failed to register Service Worker after retries:", error);
+			}
 		};
 
 		if (document.readyState === "complete") {

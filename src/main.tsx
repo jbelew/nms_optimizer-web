@@ -53,24 +53,33 @@ if (typeof window !== "undefined") {
 	initializeSentry();
 
 	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
-	// when it tries to access cross-origin iframes (especially on iOS Safari)
+	// and "Importing a module script failed" errors on iOS Safari
 	window.addEventListener("error", (event: ErrorEvent) => {
-		// Check if this is a SecurityError from Cloudflare or similar third-party scripts
-		// trying to access cross-origin iframes
-		if (
-			event.error &&
-			event.error.name === "SecurityError" &&
-			event.error.message?.includes("cross-origin")
-		) {
-			// Prevent the error from being reported to Sentry
+		const errorMessage = event.error?.message || event.message || "";
+		const errorName = event.error?.name || "";
+
+		// Suppress SecurityError from Cloudflare or similar third-party scripts
+		if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
 			event.preventDefault();
 
-			// Prevent default error handling
+			return true;
+		}
+
+		// Suppress and handle "Importing a module script failed" which is a known iOS Safari flake
+		if (errorMessage.includes("Importing a module script failed")) {
+			// Prevent the error from being reported to Sentry as an unhandled exception
+			event.preventDefault();
+
+			// Log locally for debugging but don't crash the app
+			console.warn(
+				"Caught and suppressed module import failure (Safari flake):",
+				errorMessage
+			);
+
 			return true;
 		}
 
 		// Broaden handling for other minified or uncaught errors during initialization
-		// Specifically on iOS where some failures might bypass React's error boundary
 		console.error("Uncaught initialization error:", event.error || event.message);
 	});
 
@@ -100,10 +109,6 @@ if (typeof window !== "undefined") {
 			// The async initializeAnalytics already handles ad-blocker detection
 			// and will fallback to the server-side client if blocked.
 			await initializeAnalytics();
-
-			// Dynamically import and initialize service worker to avoid bundling it with i18n
-			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
-			setupServiceWorkerRegistration();
 		} catch (error) {
 			// Catch any errors during the async initialization phase
 			// to prevented unhandled rejections or crashes
@@ -116,6 +121,18 @@ if (typeof window !== "undefined") {
 			});
 		}
 	});
+
+	// Dynamically import and initialize service worker to avoid bundling it with i18n
+	// This is moved OUT of queueMicrotask to avoid iOS Safari module loading failures
+	// that can occur when dynamic imports are nested in microtasks alongside network requests.
+	(async () => {
+		try {
+			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
+			setupServiceWorkerRegistration();
+		} catch (error) {
+			console.error("Failed to load service worker registration module:", error);
+		}
+	})();
 }
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV6(createBrowserRouter);

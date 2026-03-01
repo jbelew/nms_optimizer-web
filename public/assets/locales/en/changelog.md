@@ -4,6 +4,27 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.14 – Onboarding, Stability & Infrastructure Refinements (2026-02-28)
+
+This release introduces a new first-run onboarding experience, alongside a large set of stability, reliability, and performance improvements across optimization workflows, URL synchronization, storage handling, observability, and error recovery.
+
+- Added a new **welcome dialog** to better orient first-time users and explain core functionality.
+- Improved **optimization workflow stability**, including safer async handling, stronger WebSocket lifecycle management, and protection against race conditions and duplicate requests.
+- Significantly enhanced **URL synchronization and navigation reliability**, reducing desynchronization, unnecessary re-renders, and history-related edge cases.
+- Improved **error handling and recovery** across the app:
+  - Safer localStorage and IndexedDB access with defensive checks.
+  - Reduced unhandled promise rejections and state updates on unmounted components.
+  - Clearer handling of cross-origin and browser security errors.
+- Refined **instructional and help text** for improved clarity, readability, and conciseness.
+- Continued **performance optimizations**, including improved bundle chunking, lazy loading, and reduced non-critical runtime overhead.
+- Major **observability and monitoring refinements**, which surfaced a number of real-world issues that were not reproducible through local testing alone:
+  - Improved release tracking and version detection.
+  - Tuned performance and profiling sample rates for production.
+  - Simplified monitoring setup by removing unnecessary integrations and dashboards.
+- Improved **build, deployment, and infrastructure configuration**, including better environment handling, safer script loading, and more reliable CI diagnostics.
+
+This update focuses on robustness and polish—reducing friction during everyday use while strengthening the underlying systems that support optimization, navigation, and long-running sessions.
+
 ## Version 6.8 – Remnant Update (2026-02-17)
 
 - Added technology modules originally introduced in v6.2.

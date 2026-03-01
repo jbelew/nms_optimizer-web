@@ -1,6 +1,6 @@
 import React from "react";
 
-import { radixIconRegistry } from "@/utils/radixIconRegistry";
+import { radixIconRegistry } from "../../utils/radixIconRegistry";
 
 interface DynamicRadixIconProps {
 	name: string;
