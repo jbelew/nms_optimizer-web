@@ -90,7 +90,9 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			updateStorageNeeded = true;
 		}
 
-		set({ selectedPlatform: initialPlatform });
+		if (usePlatformStore.getState().selectedPlatform !== initialPlatform) {
+			set({ selectedPlatform: initialPlatform });
+		}
 
 		if (updateUrlNeeded && isKnownRoute) {
 			try {

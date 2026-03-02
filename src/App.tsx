@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
@@ -16,7 +16,6 @@ import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
-import { usePlatformStore } from "./store/PlatformStore";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
@@ -56,13 +55,7 @@ const AppContent: FC = () => {
 		markUserVisited();
 	};
 
-	const shipTypes = useFetchShipTypesSuspense();
-	const initializePlatform = usePlatformStore((state) => state.initializePlatform);
-	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
-
-	useEffect(() => {
-		initializePlatform(shipTypeKeys);
-	}, [initializePlatform, shipTypeKeys]);
+	useFetchShipTypesSuspense();
 
 	// Use the URL sync hook at the top level to handle popstate and share-link loading
 	useUrlSync();

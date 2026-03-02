@@ -117,8 +117,10 @@ export const useUrlSync = () => {
 			}
 		};
 
-		// Initial check on mount
-		void handlePopState();
+		// Initial check on mount - wrap in isSyncingRef to prevent collision with popstate
+		if (!isSyncingRef.current) {
+			void handlePopState();
+		}
 
 		window.addEventListener("popstate", handlePopState, { passive: true });
 

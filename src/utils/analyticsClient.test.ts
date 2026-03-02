@@ -115,4 +115,32 @@ describe("analyticsClient", () => {
 		);
 		consoleSpy.mockRestore();
 	});
+
+	it("should fall back to fetch if sendBeacon throws (Facebook IAB case)", async () => {
+		const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+		const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+		global.fetch = fetchMock;
+
+		// Mock sendBeacon to throw "Java object is gone"
+		const sendBeaconMock = vi.fn().mockImplementation(() => {
+			throw new Error("Java object is gone");
+		});
+		Object.defineProperty(navigator, "sendBeacon", {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value: sendBeaconMock,
+		});
+
+		await sendEvent("test_event");
+
+		expect(sendBeaconMock).toHaveBeenCalled();
+		expect(fetchMock).toHaveBeenCalled();
+		expect(consoleSpy).toHaveBeenCalledWith(
+			expect.stringContaining("navigator.sendBeacon failed"),
+			expect.any(Error)
+		);
+
+		consoleSpy.mockRestore();
+	});
 });

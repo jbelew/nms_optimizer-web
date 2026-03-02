@@ -394,7 +394,6 @@ export const deserialize = async (
  */
 export const useGridDeserializer = () => {
 	const { setGrid, grid, setIsSharedGrid } = useGridStore();
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setTechColors = useTechStore((state) => state.setTechColors);
 
 	const serializeGrid = useCallback((): string => {
@@ -404,7 +403,8 @@ export const useGridDeserializer = () => {
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {
 			console.log("Attempting to deserialize:", serializedGrid);
-			const newGrid = await deserialize(serializedGrid, selectedShipType, setTechColors);
+			const currentPlatform = usePlatformStore.getState().selectedPlatform;
+			const newGrid = await deserialize(serializedGrid, currentPlatform, setTechColors);
 
 			if (newGrid) {
 				console.log("Deserialization successful, setting grid and colors.");
@@ -414,7 +414,7 @@ export const useGridDeserializer = () => {
 				console.error("Deserialization failed, grid not set.");
 			}
 		},
-		[setGrid, selectedShipType, setIsSharedGrid, setTechColors]
+		[setGrid, setIsSharedGrid, setTechColors]
 	);
 
 	return { serializeGrid, deserializeGrid };

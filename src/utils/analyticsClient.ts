@@ -120,8 +120,14 @@ export const sendEvent = (
 
 		// Use navigator.sendBeacon if available (non-blocking, reliable on unload)
 		if (navigator.sendBeacon) {
-			const success = navigator.sendBeacon(`${API_URL}api/events`, blob);
-			if (success) return;
+			try {
+				const success = navigator.sendBeacon(`${API_URL}api/events`, blob);
+				if (success) return;
+			} catch (error) {
+				// Facebook Android in-app browser can throw "Java object is gone"
+				// or other bridge-related errors. Fall back to fetch.
+				console.warn("navigator.sendBeacon failed, falling back to fetch:", error);
+			}
 		}
 
 		// Fallback to fetch with keepalive if sendBeacon fails or isn't available
