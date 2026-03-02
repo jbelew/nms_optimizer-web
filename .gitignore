@@ -65,3 +65,7 @@ C:\Users\John Belew\AppData\Local\lighthouse.*
 
 # Cloudflare API scripts
 scripts/cloudflare/*
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
