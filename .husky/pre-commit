@@ -7,3 +7,4 @@ npm test
 npm run test:storybook
 npm run sitemap
 git add -u
+bd hooks run pre-commit

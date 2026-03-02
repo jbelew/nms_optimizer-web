@@ -5,6 +5,9 @@ module.exports = {
       url: ['http://localhost:4173'],
       numberOfRuns: 3,
       serverReadyPattern: 'Local:',
+      settings: {
+        chromeFlags: '--headless --no-sandbox --disable-gpu',
+      },
     },
     assert: {
       assertions: {

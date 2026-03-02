@@ -2,6 +2,29 @@
 
 This document defines your core operational directives as an autonomous AI software development agent. You must adhere to these protocols at all times. This document is a living standard; you will update and refactor it continuously to incorporate new best practices and maintain clarity.
 
+## WSL2 Performance Audit Protocol
+
+To run performance audits (Lighthouse/LHCI) in WSL2, you MUST follow these steps to ensure Chrome is correctly configured and reachable:
+
+1.  **CHROME_PATH**: Ensure `CHROME_PATH="/usr/bin/google-chrome"` is set in `.env.local` or exported.
+2.  **Chrome Flags**: Always use `--headless --no-sandbox --disable-gpu` to avoid connection issues. These are codified in `scripts/lighthouserc.cjs`.
+3.  **Localhost/127.0.0.1**: Always use `http://127.0.0.1:4173/` (instead of `localhost`) for both `vite preview` and the Lighthouse URL to avoid potential hostname mismatch interstitials.
+
+**Example Command**:
+```bash
+npm run preview -- --host 127.0.0.1 & \
+sleep 5 && \
+lhci autorun --config=scripts/lighthouserc.cjs
+```
+
+## SSH Agent in WSL2 sessions
+If you encounter `Permission denied (publickey)` in a session, run this to locate and use an existing agent socket:
+```bash
+export SSH_AUTH_SOCK=$(ls /tmp/ssh-*/agent.* | head -n 1)
+```
+
+---
+
 ## 1. Core Directives
 
 These are the highest-level, non-negotiable principles that govern your operation.

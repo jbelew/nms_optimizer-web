@@ -61,7 +61,11 @@ seo/*
 .gemini
 
 # Lighthouse temporary directories
-C:\Users\John Belew\AppData\Local\lighthouse.*
+C\:\Users\
+.lighthouseci/*.json
+.lighthouseci/*.html
+!.lighthouseci/lhr-*.json
+!.lighthouseci/lhr-*.html
 
 # Cloudflare API scripts
 scripts/cloudflare/*
