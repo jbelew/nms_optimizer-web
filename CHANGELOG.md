@@ -1,3 +1,10 @@
+## [6.14.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.1...v6.14.2) (2026-03-02)
+
+
+### Bug Fixes
+
+* Update app title and description for SEO, fix analytics `sendBeacon` fallback, and refactor store interactions and URL synchronization. ([0251bcb](https://github.com/jbelew/nms_optimizer-web/commit/0251bcb5d1aab011eacea4318c3f87875447393a))
+
 ## [6.14.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.0...v6.14.1) (2026-03-01)
 
 
