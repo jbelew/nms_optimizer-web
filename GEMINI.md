@@ -18,7 +18,15 @@ lhci autorun --config=scripts/lighthouserc.cjs
 ```
 
 ## SSH Agent in WSL2 sessions
-If you encounter `Permission denied (publickey)` in a session, run this to locate and use an existing agent socket:
+If you encounter `Permission denied (publickey)` in a session, use `keychain` to manage your keys. Add this to your `~/.bashrc` (or `~/.zshrc`) for automatic setup in every session:
+
+```bash
+eval $(keychain --eval --agents ssh id_ed25519)
+```
+
+*(Note: Replace `id_ed25519` with the actual filename of your private key in `~/.ssh/`.)*
+
+If you need to manually link to an existing agent socket once, run:
 ```bash
 export SSH_AUTH_SOCK=$(ls /tmp/ssh-*/agent.* | head -n 1)
 ```

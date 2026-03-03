@@ -29,3 +29,6 @@
 {"actor":"John Belew","comment":null,"created_at":"2026-03-02T15:06:39Z","event_type":"created","id":29,"issue_id":"nms_optimizer-web-m4n.6","new_value":"","old_value":""}
 {"actor":"John Belew","comment":null,"created_at":"2026-03-02T15:06:43Z","event_type":"closed","id":30,"issue_id":"nms_optimizer-web-m4n.6","new_value":"Work complete: Folders removed and gitignore updated.","old_value":""}
 {"actor":"John Belew","comment":null,"created_at":"2026-03-02T16:17:31Z","event_type":"created","id":31,"issue_id":"nms_optimizer-web-a1r","new_value":"","old_value":""}
+{"actor":"John Belew","comment":null,"created_at":"2026-03-02T16:28:23Z","event_type":"closed","id":32,"issue_id":"nms_optimizer-web-a1r","new_value":"Updated release.yml, lighthouse.yml, pre-commit.yml, and storybook-tests.yml to ignore .beads changes. Verified by commit f309aae9.","old_value":""}
+{"actor":"John Belew","comment":null,"created_at":"2026-03-02T19:09:48Z","event_type":"created","id":33,"issue_id":"nms_optimizer-web-tkx","new_value":"","old_value":""}
+{"actor":"John Belew","comment":null,"created_at":"2026-03-03T10:12:33Z","event_type":"created","id":34,"issue_id":"nms_optimizer-web-fsi","new_value":"","old_value":""}
