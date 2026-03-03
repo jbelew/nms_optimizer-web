@@ -3,8 +3,12 @@ name: Test Storybook Components
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.beads/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '.beads/**'
   workflow_dispatch:
 
 jobs:

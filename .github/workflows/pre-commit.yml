@@ -3,6 +3,8 @@ name: Lint, Test & Build
 on:
     pull_request:
         branches: [main]
+        paths-ignore:
+            - '.beads/**'
 
 jobs:
     pre-commit:
