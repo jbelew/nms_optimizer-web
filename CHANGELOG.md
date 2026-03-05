@@ -1,3 +1,10 @@
+## [6.14.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.2...v6.14.3) (2026-03-05)
+
+
+### Bug Fixes
+
+* Remove Beads integration, update Sentry configuration, and add `forceNew` to socket options. ([a52616a](https://github.com/jbelew/nms_optimizer-web/commit/a52616a36a9f65fca27fcf71d9e54a3adeb828b0))
+
 ## [6.14.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.1...v6.14.2) (2026-03-02)
 
 
