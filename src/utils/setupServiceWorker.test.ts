@@ -78,6 +78,22 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(mockRegisterSW).not.toHaveBeenCalled();
 	});
 
+	it("should not attempt to register service worker if the user is a bot", async () => {
+		// Arrange: Set user agent to a known bot
+		Object.defineProperty(window.navigator, "userAgent", {
+			value: "Googlebot",
+			writable: true,
+		});
+
+		setupServiceWorkerRegistration();
+		await Promise.resolve();
+
+		window.dispatchEvent(new Event("load"));
+		vi.runOnlyPendingTimers();
+
+		expect(mockRegisterSW).not.toHaveBeenCalled();
+	});
+
 	it("should attempt to register the service worker after the window loads", async () => {
 		setupServiceWorkerRegistration();
 		await Promise.resolve(); // Ensure queueMicrotask (if any) executes

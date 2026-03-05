@@ -83,6 +83,13 @@ describe("analytics.ts", () => {
 		expect(ReactGA.initialize).not.toHaveBeenCalled();
 	});
 
+	it("should not initialize GA4 if the user is a bot", async () => {
+		vi.stubGlobal("navigator", { userAgent: "Googlebot/2.1" });
+
+		await analytics.initializeAnalytics();
+		expect(ReactGA.initialize).not.toHaveBeenCalled();
+	});
+
 	it("should not initialize GA4 if blocked", async () => {
 		(fetch as Mock).mockRejectedValue(new Error("Blocked"));
 

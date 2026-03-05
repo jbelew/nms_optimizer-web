@@ -2,6 +2,7 @@ import ReactGA from "react-ga4";
 
 import { TRACKING_ID } from "../constants";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
+import { isBot } from "./isBot";
 import { reportWebVitals } from "./reportWebVitals";
 
 /**
@@ -144,11 +145,7 @@ const globalIsInstalled =
 
 export const initializeAnalytics = async () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
-	if (
-		env.isDevMode() ||
-		gaInitialized ||
-		/bot|googlebot|crawler|spider/i.test(navigator.userAgent)
-	) {
+	if (env.isDevMode() || gaInitialized || isBot()) {
 		return;
 	}
 

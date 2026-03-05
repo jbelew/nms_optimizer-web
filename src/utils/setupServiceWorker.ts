@@ -1,3 +1,5 @@
+import { isBot } from "./isBot";
+
 /**
  * Registers the PWA service worker with Workbox integration.
  * Handles offline capability, app ready status, and update prompts.
@@ -7,10 +9,7 @@
  */
 export function setupServiceWorkerRegistration() {
 	// Conditionally register the service worker for non-bot user agents
-	if (
-		"serviceWorker" in navigator &&
-		!/bot|googlebot|crawler|spider|crawling/i.test(navigator.userAgent)
-	) {
+	if ("serviceWorker" in navigator && !isBot()) {
 		const registerWorker = async (retries = 2) => {
 			try {
 				// Use a single, shorter timeout or no timeout at all to register after load

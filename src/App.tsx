@@ -16,6 +16,7 @@ import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
+import { isBot } from "./utils/isBot";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
@@ -42,7 +43,7 @@ const AppContent: FC = () => {
 	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
 	const { t } = useTranslation();
 
-	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog);
+	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog && !isBot());
 
 	useEffect(() => {
 		if (!userVisited && activeDialog) {
