@@ -47,11 +47,7 @@ export const initializeSentry = () => {
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,
-		ignoreErrors: [
-			"Invalid call to runtime.sendMessage(). Tab not found.",
-			"websocket error",
-			"timeout",
-		],
+		ignoreErrors: ["Invalid call to runtime.sendMessage(). Tab not found."],
 		beforeSend(event) {
 			// Don't send events in dev mode unless explicitly enabled via DSN
 			if (env.isDevMode() && !import.meta.env.VITE_SENTRY_DSN) {

@@ -6,7 +6,7 @@ import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { Logger } from "../../utils/logger";
-import { createSocket } from "../../utils/socketManager";
+import { createSocket, TRANSPORT_ERROR_MESSAGES } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
@@ -76,6 +76,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const isOptimizingRef = useRef(false);
 	const cleanupRef = useRef<(() => void) | null>(null);
 	const isMountedRef = useRef(true);
+	/** Stable ref to the latest handleOptimize; used internally for retry recursion. */
+	const handleOptimizeRef = useRef<
+		((tech: string, forced?: boolean, retryCount?: number) => Promise<void>) | undefined
+	>(undefined);
 	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
@@ -108,9 +112,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 		}
 	}, [solving, scrollIntoView]);
 
+	/** Maximum number of silent transport-error retries before showing the error modal. */
+	const MAX_TRANSPORT_RETRIES = 2;
+
 	const handleOptimize = useCallback(
-		async (tech: string, forced: boolean = false) => {
-			if (isOptimizingRef.current) {
+		async (tech: string, forced: boolean = false, retryCount: number = 0) => {
+			if (isOptimizingRef.current && retryCount === 0) {
 				Logger.warn("Optimization already in progress, ignoring request");
 
 				return;
@@ -260,20 +267,29 @@ export const useOptimize = (): UseOptimizeReturn => {
 					return;
 				}
 
-				const isTransportError =
-					err === "websocket error" ||
-					err === "timeout" ||
-					(err instanceof Error &&
-						(err.message === "websocket error" || err.message === "timeout"));
+				const errMessage = err instanceof Error ? err.message : String(err);
+				const isTransportError = TRANSPORT_ERROR_MESSAGES.has(errMessage);
 
-				if (isTransportError) {
-					Logger.warn(`Optimization WebSocket error for ${tech} (transport failure)`, {
-						error: err,
-					});
-				} else {
-					Logger.error(`Optimization WebSocket error for ${tech}`, err);
+				if (isTransportError && retryCount < MAX_TRANSPORT_RETRIES) {
+					// Silently retry for transient network failures; user sees the progress
+					// indicator continue rather than a disruptive error modal.
+					Logger.warn(
+						`Optimization transport failure for ${tech} — retrying (${retryCount + 1}/${MAX_TRANSPORT_RETRIES})`,
+						{ error: errMessage }
+					);
+					cleanup();
+
+					// Re-enter handleOptimize via ref to avoid a forward-declaration issue.
+					// isMountedRef is checked first because cleanup may have set it false.
+					if (isMountedRef.current) {
+						void handleOptimizeRef.current?.(tech, forced, retryCount + 1);
+					}
+
+					return;
 				}
 
+				// All retries exhausted or a genuine application error — log and surface to user.
+				Logger.error(`Optimization WebSocket error for ${tech}`, err);
 				setShowErrorStore(
 					true,
 					"recoverable",
@@ -340,8 +356,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 			sendEvent,
 			resetProgress,
 			isLarge,
+			// handleOptimize is intentionally omitted from deps: it's stable and
+			// including it would cause infinite re-creation due to the retry self-reference.
 		]
 	);
+
+	// Keep the ref in sync with the latest version of handleOptimize.
+	useEffect(() => {
+		handleOptimizeRef.current = handleOptimize;
+	});
 
 	const clearPatternNoFitTech = useCallback(
 		() => setPatternNoFitTech(null),

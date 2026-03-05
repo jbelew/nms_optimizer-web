@@ -35,6 +35,7 @@ vi.mock("../useBreakpoint/useBreakpoint");
 vi.mock("../../utils/socketManager", () => ({
 	createSocket: vi.fn(),
 	SOCKET_OPTIONS: {},
+	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
 }));
 
 // Mock constants
