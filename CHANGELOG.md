@@ -1,3 +1,10 @@
+## [6.14.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.3...v6.14.4) (2026-03-05)
+
+
+### Bug Fixes
+
+* Improve WebSocket connection reliability by enabling polling fallback and removing transport-level errors from Sentry's ignore list. ([e5299c5](https://github.com/jbelew/nms_optimizer-web/commit/e5299c53e293db98befe16a0d11d696bbcb7c35c))
+
 ## [6.14.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.2...v6.14.3) (2026-03-05)
 
 
