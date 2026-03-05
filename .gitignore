@@ -61,7 +61,6 @@ seo/*
 .gemini
 
 # Lighthouse temporary directories
-C\:\Users\
 .lighthouseci/*.json
 .lighthouseci/*.html
 !.lighthouseci/lhr-*.json

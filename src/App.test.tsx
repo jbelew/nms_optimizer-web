@@ -151,11 +151,19 @@ describe("App", () => {
 			// Wait for the NotFound component to render and its useEffect to run
 			await vi.waitFor(() => {
 				expect(hideSplashScreen).toHaveBeenCalledTimes(1);
-				expect(sendEvent).toHaveBeenCalledWith({
-					category: "navigation",
-					action: "not_found",
-					nonInteraction: true,
-				});
+				expect(sendEvent).toHaveBeenCalledWith(
+					expect.objectContaining({
+						action: "page_view",
+						page_title: expect.stringContaining("404"),
+					})
+				);
+				expect(sendEvent).toHaveBeenCalledWith(
+					expect.objectContaining({
+						category: "navigation",
+						action: "not_found",
+						nonInteraction: true,
+					})
+				);
 			});
 		});
 	});

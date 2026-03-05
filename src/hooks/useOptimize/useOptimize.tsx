@@ -260,7 +260,20 @@ export const useOptimize = (): UseOptimizeReturn => {
 					return;
 				}
 
-				Logger.error(`Optimization WebSocket error for ${tech}`, err);
+				const isTransportError =
+					err === "websocket error" ||
+					err === "timeout" ||
+					(err instanceof Error &&
+						(err.message === "websocket error" || err.message === "timeout"));
+
+				if (isTransportError) {
+					Logger.warn(`Optimization WebSocket error for ${tech} (transport failure)`, {
+						error: err,
+					});
+				} else {
+					Logger.error(`Optimization WebSocket error for ${tech}`, err);
+				}
+
 				setShowErrorStore(
 					true,
 					"recoverable",

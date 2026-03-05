@@ -3,11 +3,15 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
+import { sendEvent } from "../../utils/analytics";
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
 // Mock dependencies
 vi.mock("react-router-dom", () => ({ useLocation: vi.fn() }));
 vi.mock("react-i18next", () => ({ useTranslation: vi.fn() }));
+vi.mock("../../utils/analytics", () => ({
+	sendEvent: vi.fn(),
+}));
 vi.mock("../../../shared/seo-metadata.js", () => ({
 	seoMetadata: {
 		"/": {
@@ -83,6 +87,17 @@ describe("useSeoAndTitle", () => {
 			expect(
 				document.querySelector("meta[name='twitter:title']")?.getAttribute("content")
 			).toBe("NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky");
+
+			// Check analytics call
+			expect(sendEvent).toHaveBeenCalledWith(
+				expect.objectContaining({
+					action: "page_view",
+					page_title:
+						"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
+					page_location: expect.any(String),
+					page_referrer: expect.any(String),
+				})
+			);
 		});
 
 		it("should set correct title and description for /instructions path", () => {

@@ -14,12 +14,24 @@ const NotFound: FC = () => {
 
 	useEffect(() => {
 		hideSplashScreenAndShowBackground();
+
+		const pageTitle = `404 - ${t("notFound.title")}`;
+		document.title = pageTitle;
+
+		sendEvent({
+			action: "page_view",
+			category: "navigation",
+			page_title: pageTitle,
+			page_location: window.location.href,
+			page: window.location.pathname,
+		});
+
 		sendEvent({
 			category: "navigation",
 			action: "not_found",
 			nonInteraction: true,
 		});
-	}, []);
+	}, [t]);
 
 	return (
 		<div className="not-found w-full">

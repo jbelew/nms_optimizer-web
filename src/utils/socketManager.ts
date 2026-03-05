@@ -15,6 +15,7 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
 	reconnectionDelay: 1000,
 	reconnectionDelayMax: 5000,
 	timeout: 20000,
+	forceNew: true,
 };
 
 /**

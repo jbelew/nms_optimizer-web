@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import * as Sentry from "@sentry/react";
+import {
+	browserTracingIntegration,
+	init,
+	reactRouterV6BrowserTracingIntegration,
+} from "@sentry/react";
 import {
 	createRoutesFromChildren,
 	matchRoutes,
@@ -24,11 +28,11 @@ export const initializeSentry = () => {
 		return;
 	}
 
-	Sentry.init({
+	init({
 		dsn,
 		integrations: [
-			Sentry.browserTracingIntegration(),
-			Sentry.reactRouterV6BrowserTracingIntegration({
+			browserTracingIntegration(),
+			reactRouterV6BrowserTracingIntegration({
 				useEffect,
 				useLocation,
 				useNavigationType,
@@ -43,7 +47,11 @@ export const initializeSentry = () => {
 		// Set release if available
 		release: __APP_VERSION__,
 		enabled: !!dsn,
-		ignoreErrors: ["Invalid call to runtime.sendMessage(). Tab not found."],
+		ignoreErrors: [
+			"Invalid call to runtime.sendMessage(). Tab not found.",
+			"websocket error",
+			"timeout",
+		],
 		beforeSend(event) {
 			// Don't send events in dev mode unless explicitly enabled via DSN
 			if (env.isDevMode() && !import.meta.env.VITE_SENTRY_DSN) {

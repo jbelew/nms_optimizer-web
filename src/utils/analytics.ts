@@ -20,6 +20,9 @@ export interface GA4Event {
 	supercharged?: boolean;
 	page?: string;
 	title?: string;
+	page_title?: string;
+	page_location?: string;
+	page_referrer?: string;
 	metric_name?: string;
 	build?: string;
 	componentStack?: string;

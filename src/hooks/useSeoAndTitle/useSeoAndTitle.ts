@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
@@ -62,6 +62,7 @@ const updateCanonicalTag = (href: string) => {
 export const useSeoAndTitle = () => {
 	const { t, i18n } = useTranslation();
 	const location = useLocation();
+	const prevUrlRef = useRef<string>(document.referrer);
 
 	useEffect(() => {
 		// Handle language-prefixed routes to determine the base path
@@ -106,8 +107,13 @@ export const useSeoAndTitle = () => {
 		sendEvent({
 			action: "page_view",
 			category: "engagement",
-			label: pageTitle,
+			page_title: pageTitle,
+			page_location: window.location.href,
+			page_referrer: prevUrlRef.current,
 			page: location.pathname + location.search,
 		});
+
+		// Update prevUrlRef for the next navigation
+		prevUrlRef.current = window.location.href;
 	}, [location.pathname, location.search, t, i18n]);
 };
