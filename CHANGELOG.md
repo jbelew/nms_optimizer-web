@@ -1,3 +1,10 @@
+## [6.14.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.5...v6.14.6) (2026-03-06)
+
+
+### Bug Fixes
+
+* Simplify PWA service worker registration by using a static import and update the translation cache strategy to StaleWhileRevalidate, and change the offline banner background to black. ([f27def6](https://github.com/jbelew/nms_optimizer-web/commit/f27def679cd6a051941942660f9e9ae7398da1e8))
+
 ## [6.14.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.4...v6.14.5) (2026-03-05)
 
 
