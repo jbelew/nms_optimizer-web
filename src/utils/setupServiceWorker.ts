@@ -1,3 +1,5 @@
+import { registerSW } from "virtual:pwa-register";
+
 import { isBot } from "./isBot";
 
 /**
@@ -10,30 +12,11 @@ import { isBot } from "./isBot";
 export function setupServiceWorkerRegistration() {
 	// Conditionally register the service worker for non-bot user agents
 	if ("serviceWorker" in navigator && !isBot()) {
-		const registerWorker = async (retries = 2) => {
+		const registerWorker = async () => {
 			try {
 				// Use a single, shorter timeout or no timeout at all to register after load
 				// 1000ms is usually enough to let the main thread settle
 				await new Promise((resolve) => setTimeout(resolve, 1000));
-
-				let registerSWModule;
-
-				try {
-					registerSWModule = await import("virtual:pwa-register");
-				} catch (importError) {
-					if (retries > 0) {
-						console.warn(
-							`PWA import failed, retrying (${retries} left)...`,
-							importError
-						);
-
-						return registerWorker(retries - 1);
-					}
-
-					throw importError;
-				}
-
-				const { registerSW } = registerSWModule;
 
 				const updateServiceWorker = registerSW({
 					onOfflineReady() {
@@ -58,9 +41,9 @@ export function setupServiceWorkerRegistration() {
 					},
 				});
 			} catch (error) {
-				// Silently catch PWA registration errors after retries to avoid crashing the app
+				// Silently catch PWA registration errors
 				// We log it but don't re-throw.
-				console.error("Failed to register Service Worker after retries:", error);
+				console.error("Failed to register Service Worker:", error);
 			}
 		};
 

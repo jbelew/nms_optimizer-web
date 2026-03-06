@@ -197,10 +197,9 @@ export default defineConfig(({ mode }) => {
 						},
 						{
 							urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
-							handler: "NetworkFirst",
+							handler: "StaleWhileRevalidate",
 							options: {
 								cacheName: "translations-cache",
-								networkTimeoutSeconds: 3,
 								expiration: {
 									maxEntries: 20,
 									maxAgeSeconds: 86400, // 1 day
