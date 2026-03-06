@@ -1,3 +1,10 @@
+## [6.14.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.4...v6.14.5) (2026-03-05)
+
+
+### Bug Fixes
+
+* created an `isBot` utility and refactored existing bot detection in analytics initialization, service worker registration, and welcome dialog for to utilize the new util. ([7db2796](https://github.com/jbelew/nms_optimizer-web/commit/7db27961d1369e325c575e52e055c8521eb9d82f))
+
 ## [6.14.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.3...v6.14.4) (2026-03-05)
 
 
