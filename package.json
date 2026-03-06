@@ -91,7 +91,7 @@
 		"@sentry/vite-plugin": "^5.1.1",
 		"@storybook/addon-a11y": "^10.2.16",
 		"@storybook/addon-docs": "^10.2.16",
-		"@storybook/addon-vitest": "^10.2.13",
+		"@storybook/addon-vitest": "^10.2.16",
 		"@storybook/react-vite": "^10.2.16",
 		"@tailwindcss/postcss": "^4.2.1",
 		"@tailwindcss/vite": "^4.2.1",
