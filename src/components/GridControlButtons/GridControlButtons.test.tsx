@@ -12,7 +12,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock ConditionalTooltip
-vi.mock("@/components/ConditionalTooltip", () => ({
+vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children, label }: { children: React.ReactNode; label: string }) => (
 		<div data-testid="tooltip" title={label}>
 			{children}

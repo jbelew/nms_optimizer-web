@@ -60,12 +60,13 @@ const debouncedStorage = {
 };
 
 /**
+ * State and actions for the module selection store.
  * @typedef {object} ModuleSelectionStore
- * @property {Record<string, string[]>} moduleSelections - Map of technology to array of selected module IDs.
- * @property {(tech: string, moduleIds: string[]) => void} setModuleSelection - Sets the selected modules for a technology.
- * @property {(tech: string) => string[]|null} getModuleSelection - Gets the selected modules for a technology.
- * @property {(tech: string) => void} clearModuleSelection - Clears the selection for a technology.
- * @property {() => void} clearAllModuleSelections - Clears all module selections.
+ * @property {Record<string, string[]>} moduleSelections - Map of technology keys to an array of selected module IDs.
+ * @property {(tech: string, moduleIds: string[]) => void} setModuleSelection - Sets the selected modules for a specific technology.
+ * @property {(tech: string) => string[] | null} getModuleSelection - Retrieves the currently selected modules for a technology.
+ * @property {(tech: string) => void} clearModuleSelection - Clears the module selection for a specific technology.
+ * @property {() => void} clearAllModuleSelections - Clears all module selections across all technologies.
  */
 export type ModuleSelectionStore = {
 	moduleSelections: Record<string, string[]>;
@@ -75,6 +76,10 @@ export type ModuleSelectionStore = {
 	clearAllModuleSelections: () => void;
 };
 
+/**
+ * Zustand store for managing module selections.
+ * Persists to localStorage with debouncing to avoid excessive writes.
+ */
 export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	persist(
 		immer((set, get) => ({

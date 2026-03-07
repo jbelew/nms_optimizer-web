@@ -125,6 +125,12 @@ const LazyRechartsChart = lazy(async () => {
 	};
 });
 
+/**
+ * Props for the UserStatsContent component.
+ * @typedef {object} UserStatsContentProps
+ * @property {() => void} onClose - Callback to close the dialog.
+ * @property {boolean} isOpen - Whether the dialog is currently open.
+ */
 interface UserStatsContentProps {
 	onClose: () => void;
 	isOpen: boolean;
@@ -232,6 +238,10 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	);
 };
 
+/**
+ * Component for the user statistics dialog content.
+ * Displays charts and data about popular technologies and ship types.
+ */
 export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
 	const { t } = useTranslation();
 

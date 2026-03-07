@@ -2,6 +2,11 @@ import { useOptimizeStore } from "../store/OptimizeStore";
 import { fetchJson } from "./api";
 import { hideSplashScreenAndShowBackground } from "./splashScreen";
 
+/**
+ * Options for the apiCall function.
+ * @typedef {object} ApiCallOptions
+ * @property {boolean} [skipGlobalError] - Whether to skip showing the global error dialog on failure.
+ */
 export interface ApiCallOptions extends RequestInit {
 	skipGlobalError?: boolean;
 }

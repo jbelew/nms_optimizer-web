@@ -4,10 +4,11 @@ import { create } from "zustand";
 import { safeGetItem, safeSetItem } from "../utils/storage";
 
 /**
- * @interface PlatformState
- * @property {string} selectedPlatform - The currently selected platform.
- * @property {(platform: string, validShipTypes: string[], updateUrl?: boolean) => void} setSelectedPlatform - Function to set the selected platform.
- * @property {(validShipTypes: string[]) => void} initializePlatform - Function to initialize the platform state.
+ * State and actions for the platform store.
+ * @typedef {object} PlatformState
+ * @property {string} selectedPlatform - The currently selected platform (e.g., 'standard', 'sentinel').
+ * @property {(platform: string, validShipTypes: string[], updateUrl?: boolean, isKnownRoute?: boolean) => void} setSelectedPlatform - Function to set the selected platform and optionally update the URL.
+ * @property {(validShipTypes: string[], isKnownRoute?: boolean) => void} initializePlatform - Function to initialize the platform state from URL or storage.
  */
 export interface PlatformState {
 	selectedPlatform: string;

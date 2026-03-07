@@ -1,7 +1,7 @@
 import type { DialogBodyProps } from "./DialogBody";
 import type { DialogFooterProps } from "./DialogFooter";
 import type { DialogHeaderProps } from "./DialogHeader";
-import type { ModuleSelectionDialogProps } from "./index";
+import type { ModuleSelectionDialogProps } from "./ModuleSelectionDialog";
 import { useEffect, useRef } from "react";
 
 import { usePlatformStore } from "@/store/PlatformStore";

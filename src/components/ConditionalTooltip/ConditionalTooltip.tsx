@@ -40,4 +40,8 @@ const ConditionalTooltipComponent: React.FC<ConditionalTooltipProps> = ({
 	);
 };
 
+/**
+ * A memoized version of the ConditionalTooltip component.
+ * Displays a tooltip only on non-touch devices.
+ */
 export const ConditionalTooltip = React.memo(ConditionalTooltipComponent);

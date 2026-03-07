@@ -33,10 +33,8 @@ vi.mock("../GridShake/GridShake", () => ({
 }));
 
 vi.mock("../MessageSpinner/MessageSpinner", () => ({
-	default: ({ isVisible, initialMessage }: { isVisible: boolean; initialMessage: string }) => (
-		<div data-testid="message-spinner" data-visible={isVisible}>
-			{initialMessage}
-		</div>
+	default: ({ isVisible }: { isVisible: boolean }) => (
+		<div data-testid="message-spinner" data-visible={isVisible} />
 	),
 }));
 
@@ -88,9 +86,7 @@ describe("GridTable", () => {
 	});
 
 	test("should render grid with correct role and ARIA attributes", () => {
-		const { container } = render(
-			<GridTable solving={false} progressPercent={0} sharedGrid={false} />
-		);
+		const { container } = render(<GridTable solving={false} sharedGrid={false} />);
 
 		const grid = container.querySelector('[role="grid"]');
 		expect(grid).toBeInTheDocument();
@@ -100,24 +96,12 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridShake wrapper", () => {
-		render(<GridTable solving={false} progressPercent={0} sharedGrid={false} />);
+		render(<GridTable solving={false} sharedGrid={false} />);
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 	});
 
-	test("should render MessageSpinner when not solving", () => {
-		render(<GridTable solving={false} progressPercent={0} sharedGrid={false} />);
-		const spinner = screen.getByTestId("message-spinner");
-		expect(spinner).toHaveAttribute("data-visible", "false");
-	});
-
-	test("should render MessageSpinner when solving", () => {
-		render(<GridTable solving={true} progressPercent={50} sharedGrid={false} />);
-		const spinner = screen.getByTestId("message-spinner");
-		expect(spinner).toHaveAttribute("data-visible", "true");
-	});
-
 	test("should render grid rows based on grid height", () => {
-		render(<GridTable solving={false} progressPercent={0} sharedGrid={false} />);
+		render(<GridTable solving={false} sharedGrid={false} />);
 
 		// Should render 5 rows (based on mocked grid height)
 		for (let i = 0; i < 5; i++) {
@@ -126,57 +110,45 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridTableButtons", () => {
-		render(<GridTable solving={false} progressPercent={0} sharedGrid={false} />);
+		render(<GridTable solving={false} sharedGrid={false} />);
 		expect(screen.getByTestId("grid-table-buttons")).toBeInTheDocument();
 	});
 
 	test("should pass solving prop to GridTableButtons", () => {
-		render(<GridTable solving={true} progressPercent={0} sharedGrid={false} />);
+		render(<GridTable solving={true} sharedGrid={false} />);
 		const buttons = screen.getByTestId("grid-table-buttons");
 		expect(buttons).toHaveAttribute("data-solving", "true");
 	});
 
 	test("should apply opacity class when solving", () => {
-		const { container } = render(
-			<GridTable solving={true} progressPercent={50} sharedGrid={false} />
-		);
+		const { container } = render(<GridTable solving={true} sharedGrid={false} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).toHaveClass("opacity-25");
 	});
 
 	test("should not apply opacity class when not solving", () => {
-		const { container } = render(
-			<GridTable solving={false} progressPercent={0} sharedGrid={false} />
-		);
+		const { container } = render(<GridTable solving={false} sharedGrid={false} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).not.toHaveClass("opacity-25");
 	});
 
-	test("should pass progressPercent to MessageSpinner", () => {
-		render(<GridTable solving={true} progressPercent={75} sharedGrid={false} />);
-		// Verify component renders with the progressPercent passed
-		expect(screen.getByTestId("message-spinner")).toBeInTheDocument();
-	});
-
 	test("should forward ref to grid container", () => {
 		const ref = React.createRef<HTMLDivElement>();
-		render(<GridTable ref={ref} solving={false} progressPercent={0} sharedGrid={false} />);
+		render(<GridTable ref={ref} solving={false} sharedGrid={false} />);
 
 		expect(ref.current).toBeInTheDocument();
 		expect(ref.current).toHaveAttribute("role", "grid");
 	});
 
 	test("should be memoized for performance", () => {
-		const { rerender } = render(
-			<GridTable solving={false} progressPercent={0} sharedGrid={false} />
-		);
+		const { rerender } = render(<GridTable solving={false} sharedGrid={false} />);
 
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 
-		// Rerender with different progress percent but same solving state
-		rerender(<GridTable solving={false} progressPercent={50} sharedGrid={false} />);
+		// Rerender with same solving state
+		rerender(<GridTable solving={false} sharedGrid={false} />);
 
 		// Should still render grid
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();

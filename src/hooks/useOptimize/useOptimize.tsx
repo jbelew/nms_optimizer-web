@@ -11,10 +11,20 @@ import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
+/**
+ * The return type of the useOptimize hook.
+ * @typedef {object} UseOptimizeReturn
+ * @property {boolean} solving - Whether an optimization is currently in progress.
+ * @property {number} progressPercent - The current progress percentage (0-100).
+ * @property {(tech: string, forced?: boolean) => Promise<void>} handleOptimize - Function to start optimization for a given technology.
+ * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the grid container for scrolling.
+ * @property {string | null} patternNoFitTech - The technology that failed to fit with pattern solver, if any.
+ * @property {() => void} clearPatternNoFitTech - Function to clear the failed technology state.
+ * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to force optimization for the currently failed technology.
+ */
 export interface UseOptimizeReturn {
 	solving: boolean;
 	progressPercent: number;
-	status?: string;
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	patternNoFitTech: string | null;
@@ -72,7 +82,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
-	const [status, setStatus] = useState<string | undefined>();
 	const isOptimizingRef = useRef(false);
 	const cleanupRef = useRef<(() => void) | null>(null);
 	const isMountedRef = useRef(true);
@@ -88,7 +97,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 		setSolving(false);
 		isOptimizingRef.current = false;
 		setProgressPercent(0);
-		setStatus(undefined);
 	}, []);
 
 	// Reset mount state on unmount
@@ -129,7 +137,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 			isOptimizingRef.current = true;
 			setSolving(true);
 			setProgressPercent(0);
-			setStatus(undefined);
 			setShowErrorStore(false);
 
 			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
@@ -189,7 +196,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 			}) => {
 				if (!isMountedRef.current) return;
 				setProgressPercent(data.progress_percent);
-				setStatus("Optimized with Rust, obviously!");
 
 				if (data.best_grid) {
 					setGrid(data.best_grid);
@@ -378,7 +384,6 @@ export const useOptimize = (): UseOptimizeReturn => {
 	return {
 		solving,
 		progressPercent,
-		status,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,

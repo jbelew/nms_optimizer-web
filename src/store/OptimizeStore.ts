@@ -1,22 +1,28 @@
 // src/store/OptimizeStore.ts
 import { create } from "zustand";
 
+/**
+ * Types of errors that can occur during optimization.
+ * 'fatal' errors typically require a reload, while 'recoverable' errors can be dismissed.
+ */
 export type ErrorType = "fatal" | "recoverable";
 
 /**
- * @interface OptimizeState
- * @property {boolean} showError - Whether to show an error message.
- * @property {ErrorType|null} errorType - The type of error (fatal or recoverable).
- * @property {(show: boolean, type?: ErrorType) => void} setShowError - Function to set the showError state.
- * @property {string|null} patternNoFitTech - The technology for which a "Pattern No Fit" occurred.
- * @property {(tech: string|null) => void} setPatternNoFitTech - Function to set the patternNoFitTech state.
+ * State and actions for the optimization store.
+ * @typedef {object} OptimizeState
+ * @property {boolean} showError - Whether an error should be displayed to the user.
+ * @property {ErrorType | null} errorType - The severity/type of the current error.
+ * @property {Error | null} error - The actual error object, if any.
+ * @property {(show: boolean, type?: ErrorType, error?: Error | null) => void} setShowError - Function to update error display state.
+ * @property {string | null} patternNoFitTech - The technology that failed a pattern-based fit.
+ * @property {(tech: string | null) => void} setPatternNoFitTech - Function to set the technology that failed a pattern-based fit.
  */
 interface OptimizeState {
 	showError: boolean;
 	errorType: ErrorType | null;
 	error: Error | null;
 	setShowError: (show: boolean, type?: ErrorType, error?: Error | null) => void;
-	patternNoFitTech: string | null; // Tech for which "Pattern No Fit" occurred
+	patternNoFitTech: string | null;
 	setPatternNoFitTech: (tech: string | null) => void;
 }
 

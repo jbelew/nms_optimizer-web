@@ -5,27 +5,30 @@ import { TechTreeItem } from "../hooks/useTechTree/useTechTree";
 import { useModuleSelectionStore } from "./ModuleSelectionStore";
 
 /**
- * @interface TechState
- * @property {{[key: string]: number}} max_bonus - A map of technology keys to their maximum potential bonus.
- * @property {{[key: string]: number}} solved_bonus - A map of technology keys to their solved bonus.
- * @property {{[key: string]: string}} solve_method - A map of technology keys to the method used to solve them.
- * @property {{[key: string]: string}} techColors - A map of technology keys to their colors.
- * @property {{[key: string]: string[]}} checkedModules - A map of technology keys to their checked modules.
- * @property {{[key: string]: TechTreeItem[]}} techGroups - A map of technology keys to their tech groups.
- * @property {{[key: string]: string}} activeGroups - A map of technology keys to their active group.
+ * State and actions for managing technology-specific data and optimization results.
+ * @typedef {object} TechState
+ * @property {Record<string, number>} max_bonus - A map of technology keys to their maximum potential bonus.
+ * @property {Record<string, number>} solved_bonus - A map of technology keys to their solved bonus.
+ * @property {Record<string, string>} solve_method - A map of technology keys to the method used to solve them.
+ * @property {Record<string, string>} techColors - A map of technology keys to their associated colors.
+ * @property {Record<string, string[]>} checkedModules - A map of technology keys to their currently checked module IDs.
+ * @property {Record<string, TechTreeItem[]>} techGroups - A map of technology keys to their available tech groups.
+ * @property {Record<string, string>} activeGroups - A map of technology keys to their currently active group type.
  * @property {(tech: string) => void} clearTechMaxBonus - Function to clear the max bonus for a technology.
  * @property {(tech: string, bonus: number) => void} setTechMaxBonus - Function to set the max bonus for a technology.
  * @property {(tech: string) => void} clearTechSolvedBonus - Function to clear the solved bonus for a technology.
  * @property {(tech: string, bonus: number) => void} setTechSolvedBonus - Function to set the solved bonus for a technology.
  * @property {(tech: string, method: string) => void} setTechSolveMethod - Function to set the solve method for a technology.
- * @property {(colors: {[key: string]: string}) => void} setTechColors - Function to set the tech colors.
+ * @property {(colors: Record<string, string>) => void} setTechColors - Function to set the tech colors.
  * @property {(tech: string) => string|undefined} getTechColor - Function to get the color for a technology.
  * @property {(tech: string, updater: (prev?: string[]) => string[]) => void} setCheckedModules - Function to set the checked modules for a technology.
  * @property {(tech: string) => void} clearCheckedModules - Function to clear the checked modules for a technology.
- * @property {() => void} clearResult - Function to clear the result state.
- * @property {(techGroups: {[key: string]: TechTreeItem[]}) => void} setTechGroups - Function to set the tech groups.
+ * @property {() => void} clearAllCheckedModules - Function to reset all checked modules to their defaults.
+ * @property {() => void} clearTechGroups - Function to clear all technology groups and selections.
+ * @property {() => void} clearResult - Function to clear the result state (max and solved bonuses).
+ * @property {(techGroups: Record<string, TechTreeItem[]>) => void} setTechGroups - Function to set the tech groups and initialize module selections.
  * @property {(tech: string, groupType: string) => void} setActiveGroup - Function to set the active group for a technology.
- * @property {(groups: {[key: string]: string}) => void} setActiveGroups - Function to batch set multiple active groups at once.
+ * @property {(groups: Record<string, string>) => void} setActiveGroups - Function to batch set multiple active groups at once.
  */
 export interface TechState {
 	max_bonus: { [key: string]: number };

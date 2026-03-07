@@ -57,26 +57,28 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         return res.redirect(301, newURL.href);
     }
 
+    const langFromPath = pathParts[0];
+    const lang = OTHER_LANGUAGES.includes(langFromPath) ? langFromPath : "en";
+
+    const pagePathParts = OTHER_LANGUAGES.includes(langFromPath)
+        ? pathParts.slice(1)
+        : pathParts;
+    const pagePath = pagePathParts.join("/");
+    const basePath = `/${pagePath}`;
+    const cacheKey = `${lang}:${basePath}`;
+
     try {
-        const { content: indexHtml, etag: baseEtag } = await loadIndexHtml();
+        // Parallelize loading of index.html and i18next translation instance
+        const [ { content: indexHtml, etag: baseEtag }, t ] = await Promise.all([
+            loadIndexHtml(),
+            i18next.getFixedT(lang)
+        ]);
 
         // Invalidate cache if base index.html changed
         if (lastBaseIndexETag !== baseEtag) {
             seoCache.clear();
             lastBaseIndexETag = baseEtag;
         }
-
-        const pathParts = req.path.split("/").filter(Boolean);
-        const langFromPath = pathParts[0];
-        const lang = OTHER_LANGUAGES.includes(langFromPath) ? langFromPath : "en";
-
-        const pagePathParts = OTHER_LANGUAGES.includes(langFromPath)
-			? pathParts.slice(1)
-			: pathParts;
-        const pagePath = pagePathParts.join("/");
-        const basePath = `/${pagePath}`;
-
-        const cacheKey = `${lang}:${basePath}`;
 
         // If we have a cached version
         if (seoCache.has(cacheKey)) {
@@ -96,7 +98,6 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         let modifiedHtml = indexHtml;
 
         // --- SEO Title & Description Injection ---
-        const t = await i18next.getFixedT(lang);
         const metadata = seoMetadata[basePath === "/" ? "/" : basePath];
 
         if (metadata) {

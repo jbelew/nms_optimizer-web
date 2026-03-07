@@ -169,7 +169,7 @@
 		"corvette": "Corvettes"
 	},
 	"techTree": {
-		"loading": "LOADING PLATFORM DATA",
+		"loading": "LOADING TECH",
 		"tooltips": {
 			"insufficientSpace": "Incomplete Solve",
 			"validSolve": "Valid solve!",

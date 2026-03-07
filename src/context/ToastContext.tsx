@@ -13,7 +13,10 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	const [isOpen, setIsOpen] = useState(false);
 
 	const showToast = useCallback((config: ToastConfig) => {
-		setToastConfig(config);
+		setToastConfig({
+			...config,
+			id: config.id || Date.now().toString(),
+		});
 		setIsOpen(true);
 	}, []);
 
@@ -40,7 +43,32 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
 	const closeToast = useCallback(() => {
 		setIsOpen(false);
+		// Optionally clear config after a small delay to allow for exit animation
+		setTimeout(() => {
+			setToastConfig(null);
+		}, 500);
 	}, []);
+
+	// Dismiss toast on any click/touch outside or inside
+	React.useEffect(() => {
+		if (!isOpen) return;
+
+		const handleGlobalDismiss = () => {
+			closeToast();
+		};
+
+		// Small delay to prevent the click that opens the toast from immediately closing it
+		const timer = setTimeout(() => {
+			window.addEventListener("click", handleGlobalDismiss);
+			window.addEventListener("touchstart", handleGlobalDismiss);
+		}, 100);
+
+		return () => {
+			clearTimeout(timer);
+			window.removeEventListener("click", handleGlobalDismiss);
+			window.removeEventListener("touchstart", handleGlobalDismiss);
+		};
+	}, [isOpen, closeToast]);
 
 	const value: ToastContextType = {
 		toastConfig,

@@ -17,7 +17,7 @@ import {
 import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.webp";
-import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
@@ -82,6 +82,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						<IconButton
 							variant="soft"
 							aria-label={t("buttons.changelog") ?? ""}
+							onMouseEnter={() => {
+								// Prefetch the component when user hovers
+								void import("../AppDialog/MarkdownContentRenderer");
+							}}
 							onClick={() => {
 								onShowChangelog();
 								startTransition(() => {
@@ -102,6 +106,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						<IconButton
 							variant="soft"
 							aria-label={t("buttons.userStats") ?? ""}
+							onMouseEnter={() => {
+								// Prefetch the UserStats component when user hovers
+								void import("../../routes/UserStatsRoute");
+							}}
 							onClick={() => {
 								openDialog("userstats");
 								startTransition(() => {

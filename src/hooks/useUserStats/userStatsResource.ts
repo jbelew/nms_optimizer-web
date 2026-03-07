@@ -5,6 +5,11 @@ import { apiCall } from "../../utils/apiCall";
 
 let userStatsPromise: Promise<UserStat[]> | null = null;
 
+/**
+ * Fetches user statistics from the analytics endpoint.
+ * Caches the result in a promise to avoid redundant network calls.
+ * @returns {Promise<UserStat[]>} A promise that resolves to an array of user statistics.
+ */
 export const fetchUserStats = (): Promise<UserStat[]> => {
 	if (!userStatsPromise) {
 		userStatsPromise = apiCall<UserStat[]>(
@@ -25,7 +30,10 @@ export const fetchUserStats = (): Promise<UserStat[]> => {
 	return userStatsPromise;
 };
 
-// Function to reset the cache (useful for testing)
+/**
+ * Resets the cached user statistics promise.
+ * Useful for testing or to force a re-fetch of the statistics data.
+ */
 export const resetUserStatsCache = () => {
 	userStatsPromise = null;
 };

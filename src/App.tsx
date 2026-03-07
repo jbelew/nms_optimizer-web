@@ -69,21 +69,21 @@ const AppContent: FC = () => {
 	return (
 		<>
 			<Outlet />
-			{shareUrl && (
+			{shareUrl ? (
 				<ShareLinkDialog
 					isOpen={!!shareUrl}
 					shareUrl={shareUrl || ""}
 					onClose={closeDialog}
 				/>
-			)}
-			{activeDialog && activeDialog !== "userstats" && <RoutedDialogs />}
-			{activeDialog === "userstats" && (
+			) : null}
+			{activeDialog && activeDialog !== "userstats" ? <RoutedDialogs /> : null}
+			{activeDialog === "userstats" ? (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
 				</Suspense>
-			)}
+			) : null}
 
-			{showWelcome && (
+			{showWelcome ? (
 				<Suspense fallback={null}>
 					<AppDialog
 						isOpen={showWelcome}
@@ -93,7 +93,7 @@ const AppContent: FC = () => {
 						title={t("dialogs.titles.welcome", "Welcome")}
 					/>
 				</Suspense>
-			)}
+			) : null}
 		</>
 	);
 };

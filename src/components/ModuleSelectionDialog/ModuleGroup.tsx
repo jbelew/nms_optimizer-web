@@ -1,4 +1,4 @@
-import type { Module, ModuleSelectionDialogProps } from "./index";
+import type { ModuleSelectionDialogProps, SelectionModule } from "./ModuleSelectionDialog";
 import React, { useMemo } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Blockquote } from "@radix-ui/themes";
@@ -16,7 +16,7 @@ export interface ModuleGroupProps extends Pick<
 	"currentCheckedModules" | "techColor"
 > {
 	groupName: string;
-	modules: Module[];
+	modules: SelectionModule[];
 	titleOverride?: string;
 	onClose?: () => void;
 }

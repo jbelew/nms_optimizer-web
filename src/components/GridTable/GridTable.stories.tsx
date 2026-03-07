@@ -66,7 +66,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		solving: false,
-		progressPercent: 0,
 		sharedGrid: false,
 	},
 	parameters: {
@@ -82,7 +81,6 @@ export const Default: Story = {
 export const Solving: Story = {
 	args: {
 		solving: true,
-		progressPercent: 45,
 		sharedGrid: false,
 	},
 	parameters: {

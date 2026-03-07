@@ -1,5 +1,5 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import type { Module } from "./index";
+import type { SelectionModule } from "./ModuleSelectionDialog";
 import React from "react";
 import { Avatar, Badge, CheckboxGroup, Code } from "@radix-ui/themes";
 
@@ -55,7 +55,7 @@ const formatLabel = (label: string): React.ReactNode => {
  * Props for the ModuleCheckbox component.
  */
 export interface ModuleCheckboxProps {
-	module: Module;
+	module: SelectionModule;
 	techColor: TechTreeRowProps["techColor"];
 	isDisabled: boolean;
 }

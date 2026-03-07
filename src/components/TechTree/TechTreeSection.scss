@@ -1,3 +1,4 @@
-@use "../../styles/mixins";
-
-/* .heading-styled class defined in index.css */
+.sidebar__section {
+	contain-intrinsic-size: 1px 100px; /* Placeholder for off-screen sections */
+	content-visibility: auto;
+}

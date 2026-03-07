@@ -3,6 +3,11 @@ import "./SplashScreen.scss";
 import type { CSSProperties } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
+/**
+ * Handle to interact with the SplashScreen component.
+ * @typedef {object} SplashScreenHandle
+ * @property {() => void} hide - Method to programmatically hide the splash screen.
+ */
 export interface SplashScreenHandle {
 	hide: () => void;
 }

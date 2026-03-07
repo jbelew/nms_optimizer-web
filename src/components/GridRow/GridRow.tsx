@@ -12,6 +12,7 @@ import GridControlButtons from "../GridControlButtons/GridControlButtons";
 interface GridRowProps {
 	rowIndex: number;
 	isLoading: boolean;
+	isSharedGrid: boolean;
 }
 
 /**
@@ -25,7 +26,7 @@ interface GridRowProps {
  * @returns {JSX.Element} The rendered GridRow component.
  */
 const GridRowInternal: React.FC<GridRowProps> = memo(
-	({ rowIndex, isLoading }) => {
+	({ rowIndex, isLoading, isSharedGrid }) => {
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const gridHeight = useGridStore((state) => state.grid.height);
 
@@ -47,6 +48,7 @@ const GridRowInternal: React.FC<GridRowProps> = memo(
 						key={`${rowIndex}-${columnIndex}`}
 						rowIndex={rowIndex}
 						columnIndex={columnIndex}
+						isSharedGrid={isSharedGrid}
 					/>
 				))}
 				{/* Wrap GridControlButtons in a div with role="gridcell" */}
@@ -59,7 +61,9 @@ const GridRowInternal: React.FC<GridRowProps> = memo(
 	(prevProps, nextProps) => {
 		// Custom comparison to prevent re-renders when props haven't changed
 		return (
-			prevProps.rowIndex === nextProps.rowIndex && prevProps.isLoading === nextProps.isLoading
+			prevProps.rowIndex === nextProps.rowIndex &&
+			prevProps.isLoading === nextProps.isLoading &&
+			prevProps.isSharedGrid === nextProps.isSharedGrid
 		);
 	}
 );

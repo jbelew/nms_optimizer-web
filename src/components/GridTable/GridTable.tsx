@@ -4,14 +4,11 @@ import "./GridTable.scss";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import GridRow from "../GridRow/GridRow";
 import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
-import MessageSpinner from "../MessageSpinner/MessageSpinner";
-import { TapInstructions } from "../TapInstructions";
 
 /**
  * @interface GridTableProps
@@ -26,8 +23,6 @@ import { TapInstructions } from "../TapInstructions";
  */
 interface GridTableProps {
 	solving: boolean;
-	progressPercent: number;
-	status?: string;
 	sharedGrid: boolean; // This is isSharedGridProp, used for GridCell
 }
 
@@ -41,11 +36,10 @@ interface GridTableProps {
  * @returns {JSX.Element} The rendered GridTableInternal component.
  */
 const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
-	({ solving, progressPercent, status, sharedGrid }, ref) => {
-		const { t } = useTranslation();
+	({ solving, sharedGrid }, ref) => {
+		useTranslation();
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const gridWidth = useGridStore((state) => state.grid.width);
-		const isLarge = useBreakpoint("1024px");
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 		// Memoize grid rows - must be called unconditionally
@@ -53,9 +47,14 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 			if (!gridHeight) return [];
 
 			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
-				<GridRow key={rowIndex} rowIndex={rowIndex} isLoading={isTechTreeLoading} />
+				<GridRow
+					key={rowIndex}
+					rowIndex={rowIndex}
+					isLoading={isTechTreeLoading}
+					isSharedGrid={sharedGrid}
+				/>
 			));
-		}, [gridHeight, isTechTreeLoading]);
+		}, [gridHeight, isTechTreeLoading, sharedGrid]);
 
 		// Early return if grid is not available. This is now safe as hooks are called above.
 		if (!gridHeight || !gridWidth) {
@@ -70,16 +69,6 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 
 		return (
 			<GridShake duration={500}>
-				<MessageSpinner
-					isVisible={solving}
-					useNMSFont={isTechTreeLoading}
-					initialMessage={
-						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
-					}
-					progressPercent={progressPercent}
-					status={status}
-				/>
-
 				<div
 					ref={ref}
 					role="grid"
@@ -91,7 +80,7 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					{gridRows}
 				</div>
 
-				{!isLarge && !sharedGrid && <TapInstructions />}
+				{/* {!isLarge && !sharedGrid && <TapInstructions />} */}
 
 				<GridTableButtons solving={solving} />
 			</GridShake>

@@ -35,6 +35,10 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	})),
 ]);
 
+/**
+ * The root route configuration for the application.
+ * Defines the main App layout, nested page routes, and language-specific routes.
+ */
 export const routes: RouteObject[] = [
 	{
 		path: "/",

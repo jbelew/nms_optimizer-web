@@ -16,7 +16,6 @@ import { build, getBuildDate } from "../../routeConfig";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useSessionStore } from "../../store/SessionStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 /**
@@ -70,9 +69,7 @@ export const useMainAppLogic = () => {
 
 	useEffect(() => {
 		if (isSharedGrid) {
-			// If it's a shared grid, the tech tree is not actively loading,
-			// so ensure the loading spinner is hidden.
-			useTechTreeLoadingStore.getState().setLoading(false);
+			// If it's a shared grid, ensure splash screen is hidden.
 			hideSplashScreenAndShowBackground();
 		}
 	}, [isSharedGrid]);

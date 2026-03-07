@@ -9,11 +9,21 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import { generateBuildNameWithType } from "../../utils/buildNameGenerator";
 import { isValidFilename } from "../../utils/filenameValidation";
 
+/**
+ * Props for the BuildNameContent component.
+ * @typedef {object} BuildNameContentProps
+ * @property {(buildName: string) => void} onConfirm - Callback when the user confirms the build name.
+ * @property {() => void} onCancel - Callback when the user cancels the operation.
+ */
 interface BuildNameContentProps {
 	onConfirm: (buildName: string) => void;
 	onCancel: () => void;
 }
 
+/**
+ * Component for the build name input dialog content.
+ * Allows users to enter or generate a name for their build.
+ */
 export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCancel }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);

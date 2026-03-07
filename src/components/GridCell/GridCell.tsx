@@ -3,9 +3,8 @@ import "./GridCell.scss";
 import React, { memo, useMemo } from "react";
 
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
-import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useCell } from "@/hooks/useCell/useCell";
-import { useGridStore } from "@/store/GridStore";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
@@ -78,6 +77,7 @@ const getUpgradePriority = (label: string | undefined): string => {
 interface GridCellProps {
 	rowIndex: number;
 	columnIndex: number;
+	isSharedGrid: boolean;
 }
 
 /**
@@ -100,10 +100,8 @@ const stripLabel = (label: string | undefined): string => {
 	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
 };
 
-const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
+const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useCell(rowIndex, columnIndex);
-	// const { t } = useTranslation();
-	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	const {
 		isTouching,
@@ -150,7 +148,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 				className={cellClassName}
 				style={cellElementStyle as React.CSSProperties}
 			>
-				{imageUrl && (
+				{imageUrl ? (
 					<img
 						src={imageUrl}
 						srcSet={imageSrcSet}
@@ -159,27 +157,27 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex }) => {
 						height="64"
 						className="absolute inset-0 h-full w-full object-cover object-center"
 					/>
-				)}
-				{showEmptyIcon && <EmptyCellIcon fillColor={emptyIconFillColor} />}
-				{!cell.supercharged && !cell.image && (
+				) : null}
+				{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
+				{!cell.supercharged && !cell.image ? (
 					<>
 						<span className="corner top-left"></span>
 						<span className="corner top-right"></span>
 						<span className="corner bottom-left"></span>
 						<span className="corner bottom-right"></span>
 					</>
-				)}
-				{upGradePriority && (
+				) : null}
+				{upGradePriority ? (
 					<span
 						className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
-							upGradePriority?.length > 1
+							upGradePriority.length > 1
 								? "gridCell__label--corvette"
 								: "gridCell__label"
 						}`}
 					>
-						{upGradePriority ?? null}
+						{upGradePriority}
 					</span>
-				)}
+				) : null}
 			</div>
 		),
 		[

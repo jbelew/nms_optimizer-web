@@ -10,9 +10,11 @@ import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 import "./ModuleSelectionDialog.scss";
 
 /**
- * Represents a single technology module.
+ * Represents a single technology module as used in the selection dialog.
+ * This is a subset of the full Module interface from useTechTree,
+ * containing only the properties necessary for display and selection.
  */
-export interface Module {
+export interface SelectionModule {
 	label: string;
 	id: string;
 	image: string;
@@ -24,7 +26,7 @@ export interface Module {
  * Represents a collection of modules, grouped by their type (e.g., "core", "bonus").
  */
 export interface GroupedModules {
-	[key: string]: Module[];
+	[key: string]: SelectionModule[];
 }
 
 /**
@@ -59,19 +61,14 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (prop
 	const { headerProps, bodyProps, footerProps } = useModuleSelectionDialog(props);
 
 	return (
-		<Dialog.Content
-			size={{ initial: "1", sm: "2" }}
-			// className="moduleSelection__content flex flex-col"
-		>
+		<Dialog.Content size={{ initial: "1", sm: "2" }}>
 			<DialogHeader {...headerProps} />
 
-			{/* <div className="flex-1 overflow-y-auto pr-4 mb-4"> */}
 			<Dialog.Description className="sr-only">
 				Select modules to include in the optimization calculation.
 			</Dialog.Description>
 
 			<DialogBody {...bodyProps} />
-			{/* </div> */}
 
 			<DialogFooter {...footerProps} />
 		</Dialog.Content>

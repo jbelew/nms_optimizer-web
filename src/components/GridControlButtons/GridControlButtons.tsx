@@ -1,14 +1,18 @@
 // RowControlButton.tsx
+import type { GridStore } from "@/store/GridStore";
 import React from "react";
 import { MinusCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/GridStore";
 
 import { useGridRowState } from "../GridRow/useGridRowState";
+
+const selectHasAnyActiveCells = (state: GridStore) =>
+	state.grid.cells.some((row) => row.some((cell) => cell.active));
 
 /**
  * @interface RowControlButtonProps
@@ -34,14 +38,11 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
-	const iconButtonSize = isMediumOrLarger ? "1" : "1";
 	const activateRow = useGridStore((state) => state.activateRow);
 	const deActivateRow = useGridStore((state) => state.deActivateRow);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const gridFixed = useGridStore((state) => state.gridFixed);
-	const hasAnyActiveCells = useGridStore((state) =>
-		state.grid.cells.some((row) => row.some((cell) => cell.active))
-	);
+	const hasAnyActiveCells = useGridStore(selectHasAnyActiveCells);
 
 	return (
 		<div
@@ -51,7 +52,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 			{isFirstInactiveRow && (
 				<ConditionalTooltip label={t("gridControls.activateRow")}>
 					<IconButton
-						size={iconButtonSize}
+						size="1"
 						radius="full"
 						variant="ghost"
 						color="green"
@@ -74,7 +75,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 					<IconButton
 						variant="ghost"
 						radius="full"
-						size={iconButtonSize}
+						size="1"
 						color="red"
 						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
 						onClick={() => deActivateRow(rowIndex)}

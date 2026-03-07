@@ -13,7 +13,10 @@ import { useTechStore } from "../../store/TechStore";
  */
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
-	const emptyIconFillColor = cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
+
+	const emptyIconFillColor = useMemo(() => {
+		return cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
+	}, [cell.supercharged]);
 
 	const techColor = useMemo(() => {
 		return !currentTechColorFromStore && cell.supercharged
@@ -50,7 +53,7 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 		isTouching,
 	]);
 
-	const cellElementStyle: React.CSSProperties = {};
+	const cellElementStyle: React.CSSProperties = useMemo(() => ({}), []);
 
 	const showEmptyIcon = !cell.module && cell.active;
 

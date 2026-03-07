@@ -18,6 +18,16 @@ import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
 
+/**
+ * Props for the MobileToolbar component.
+ * @typedef {object} MobileToolbarProps
+ * @property {boolean} isVisible - Whether the toolbar is currently visible.
+ * @property {boolean} solving - Whether an optimization is in progress.
+ * @property {boolean} hasModulesInGrid - Whether the grid currently contains any modules.
+ * @property {() => void} onLoadBuild - Callback to load a build.
+ * @property {() => void} onSaveBuild - Callback to save a build.
+ * @property {() => void} onShowChangelog - Callback to show the changelog.
+ */
 type MobileToolbarProps = {
 	isVisible: boolean;
 	solving: boolean;
@@ -27,6 +37,10 @@ type MobileToolbarProps = {
 	onShowChangelog: () => void;
 };
 
+/**
+ * A toolbar optimized for mobile devices, providing quick access to build management and utilities.
+ * Handles its own visibility transitions based on the `isVisible` prop.
+ */
 export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 	({ isVisible, solving, hasModulesInGrid, onLoadBuild, onSaveBuild, onShowChangelog }, ref) => {
 		const { t } = useTranslation();

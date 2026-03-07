@@ -7,6 +7,11 @@ import { isTouchDevice } from "../../utils/isTouchDevice";
 const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
 const USER_VISIT_KEY = "userVisited";
 
+/**
+ * Component that triggers an installation prompt for mobile devices.
+ * Shows a toast with instructions if the app is not installed and has been visited before.
+ * @returns {null} This component doesn't render any visible output.
+ */
 export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();
 	const { showToast } = useToast();

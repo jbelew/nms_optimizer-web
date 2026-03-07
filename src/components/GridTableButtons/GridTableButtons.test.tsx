@@ -69,7 +69,7 @@ vi.mock("react-i18next", () => ({
 		t: (key: string) => (key === "buttons.resetGrid" ? "Reset Grid Button" : key),
 	}),
 }));
-vi.mock("../ConditionalTooltip", () => ({
+vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => children,
 }));
 vi.mock("../../hooks/useBreakpoint/useBreakpoint");

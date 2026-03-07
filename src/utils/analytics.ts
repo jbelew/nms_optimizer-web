@@ -7,7 +7,31 @@ import { reportWebVitals } from "./reportWebVitals";
 
 /**
  * Interface for Google Analytics 4 event tracking.
- * ... (rest of the interface properties)
+ * @typedef {object} GA4Event
+ * @property {string} category - The category of the event (e.g., 'ui', 'error', 'api').
+ * @property {string} action - The action that occurred (e.g., 'click', 'submit', 'load').
+ * @property {string} [label] - Optional label for the event.
+ * @property {number} [value] - Optional numerical value associated with the event.
+ * @property {boolean} [nonInteraction] - Whether the event is non-interactive.
+ * @property {string} [platform] - The platform where the event occurred.
+ * @property {string} [tech] - Technology type associated with the event.
+ * @property {string} [solve_method] - The method used to solve an optimization problem.
+ * @property {boolean} [supercharged] - Whether the build is supercharged.
+ * @property {string} [page] - The page where the event occurred.
+ * @property {string} [title] - The title of the page.
+ * @property {string} [page_title] - The SEO-friendly title of the page.
+ * @property {string} [page_location] - The full URL of the page.
+ * @property {string} [page_referrer] - The referrer URL.
+ * @property {string} [metric_name] - The name of a specific metric being tracked.
+ * @property {string} [build] - Build identifier.
+ * @property {string} [componentStack] - React component stack trace for errors.
+ * @property {string} [stackTrace] - JavaScript stack trace for errors.
+ * @property {string} [app_version] - The application version.
+ * @property {string} [buildName] - The name given to a build.
+ * @property {string} [fileName] - The filename associated with the event.
+ * @property {string} [shipType] - The type of ship in the optimization.
+ * @property {string} [storageCleared] - Status of storage clearing operation.
+ * @property {string} [tracking_source] - Source of the tracking ('client' or 'server').
  */
 export interface GA4Event {
 	category: string;
@@ -86,6 +110,11 @@ const detectAdBlocker = async (): Promise<boolean> => {
 let adBlockerDetectionPromise: Promise<boolean> | null = null;
 let adBlockerResult: boolean | null = null;
 
+/**
+ * Gets the result of the ad blocker detection.
+ * If detection is already in progress or completed, returns the existing promise or result.
+ * @returns {Promise<boolean>} A promise that resolves to true if an ad blocker is detected.
+ */
 const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 	if (adBlockerResult !== null) {
 		return adBlockerResult;
@@ -133,16 +162,17 @@ export const resetAnalyticsForTesting = () => {
 	adBlockerResult = null;
 };
 
-/**
- * Initializes Google Analytics tracking.
- * Skips initialization in development mode to prevent polluting analytics data.
- *
- * @returns {void}
- */
 // Store globally so sendEvent can access these values for server-side fallback
 const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
+/**
+ * Initializes Google Analytics tracking.
+ * Skips initialization in development mode to prevent polluting analytics data.
+ * Also checks for ad blockers and falls back to server-side tracking if necessary.
+ *
+ * @returns {Promise<void>}
+ */
 export const initializeAnalytics = async () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
 	if (env.isDevMode() || gaInitialized || isBot()) {

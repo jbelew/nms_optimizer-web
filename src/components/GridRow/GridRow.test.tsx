@@ -77,7 +77,9 @@ describe("GridRow", () => {
 	});
 
 	test("should render grid row with correct role and ARIA attributes", () => {
-		const { container } = render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		const { container } = render(
+			<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />
+		);
 
 		const row = container.querySelector('[role="row"]');
 		expect(row).toBeInTheDocument();
@@ -85,7 +87,7 @@ describe("GridRow", () => {
 	});
 
 	test("should render grid cells based on grid width", () => {
-		render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		render(<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />);
 
 		// Should render 3 cells (based on mocked grid width)
 		for (let i = 0; i < 3; i++) {
@@ -94,7 +96,7 @@ describe("GridRow", () => {
 	});
 
 	test("should render GridControlButtons with correct props", () => {
-		render(<GridRowInternal rowIndex={1} isLoading={false} />);
+		render(<GridRowInternal rowIndex={1} isLoading={false} isSharedGrid={false} />);
 
 		const controls = screen.getByTestId("grid-control-buttons-1");
 		expect(controls).toBeInTheDocument();
@@ -102,14 +104,16 @@ describe("GridRow", () => {
 	});
 
 	test("should render GridControlButtons with isLastActiveRow true when conditions met", () => {
-		render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		render(<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />);
 
 		const controls = screen.getByTestId("grid-control-buttons-0");
 		expect(controls).toHaveAttribute("data-last-active", "true");
 	});
 
 	test("should wrap GridControlButtons in gridcell div", () => {
-		const { container } = render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		const { container } = render(
+			<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />
+		);
 
 		const gridcells = container.querySelectorAll('[role="gridcell"]');
 		// Should have at least 1 gridcell for control buttons
@@ -121,41 +125,49 @@ describe("GridRow", () => {
 	});
 
 	test("should pass isLoading prop to GridControlButtons", () => {
-		render(<GridRowInternal rowIndex={0} isLoading={true} />);
+		render(<GridRowInternal rowIndex={0} isLoading={true} isSharedGrid={false} />);
 
 		// Controls should be rendered and receive isLoading prop
 		expect(screen.getByTestId("grid-control-buttons-0")).toBeInTheDocument();
 	});
 
 	test("should return null when row does not exist", () => {
-		const { container } = render(<GridRowInternal rowIndex={99} isLoading={false} />);
+		const { container } = render(
+			<GridRowInternal rowIndex={99} isLoading={false} isSharedGrid={false} />
+		);
 
 		// Component should not render anything for invalid row
 		expect(container.firstChild).toBeNull();
 	});
 
 	test("should handle different row indices", () => {
-		const { rerender } = render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		const { rerender } = render(
+			<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />
+		);
 
 		expect(screen.getByTestId("grid-cell-0-0")).toBeInTheDocument();
 
-		rerender(<GridRowInternal rowIndex={2} isLoading={false} />);
+		rerender(<GridRowInternal rowIndex={2} isLoading={false} isSharedGrid={false} />);
 
 		expect(screen.getByTestId("grid-cell-2-0")).toBeInTheDocument();
 	});
 
 	test("should have correct control button column width class", () => {
-		const { container } = render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		const { container } = render(
+			<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />
+		);
 
 		const controlCell = container.querySelector('[aria-colindex="4"]');
 		expect(controlCell).toHaveClass("w-6");
 	});
 
 	test("should memoize and not rerender when props don't change", () => {
-		const { rerender } = render(<GridRowInternal rowIndex={0} isLoading={false} />);
+		const { rerender } = render(
+			<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />
+		);
 
 		// Rerender with same props
-		rerender(<GridRowInternal rowIndex={0} isLoading={false} />);
+		rerender(<GridRowInternal rowIndex={0} isLoading={false} isSharedGrid={false} />);
 
 		// Should still have the same cells
 		expect(screen.getByTestId("grid-cell-0-0")).toBeInTheDocument();

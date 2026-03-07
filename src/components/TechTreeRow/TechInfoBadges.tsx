@@ -5,7 +5,7 @@ import { Button, Dialog } from "@radix-ui/themes";
 
 import { useA11yStore } from "@/store/A11yStore";
 
-import { ModuleSelectionDialog } from "../ModuleSelectionDialog";
+import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionDialog";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
 

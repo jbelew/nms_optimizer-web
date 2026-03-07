@@ -5,7 +5,7 @@ import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { ConditionalTooltip } from "@/components/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
 import { useTechTreeRow } from "./useTechTreeRow";
 

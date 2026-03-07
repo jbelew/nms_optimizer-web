@@ -6,6 +6,16 @@ import "./Toast.scss";
 
 import { Button, Separator } from "@radix-ui/themes";
 
+/**
+ * Props for the NmsToast component.
+ * @typedef {object} ToastProps
+ * @property {boolean} open - Whether the toast is currently visible.
+ * @property {(open: boolean) => void} onOpenChange - Callback triggered when the open state changes.
+ * @property {string} title - The title text of the toast.
+ * @property {string | ReactNode} description - The main content/description of the toast.
+ * @property {"success" | "error" | undefined} variant - Visual variant (color and icon).
+ * @property {number} [duration=5000] - Duration in milliseconds before the toast auto-closes.
+ */
 type ToastProps = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -15,6 +25,9 @@ type ToastProps = {
 	duration?: number;
 };
 
+/**
+ * A custom toast notification component styled for the NMS Optimizer.
+ */
 export const NmsToast = ({
 	open,
 	onOpenChange,

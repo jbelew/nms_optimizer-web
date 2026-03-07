@@ -17,6 +17,7 @@ export const ToastRenderer = () => {
 
 	return (
 		<NmsToast
+			key={toastConfig.id}
 			open={isOpen}
 			onOpenChange={closeToast}
 			title={toastConfig.title}

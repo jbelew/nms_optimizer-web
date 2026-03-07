@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { usePlatformStore } from "../../store/PlatformStore";
-import { ModuleSelectionDialog } from "./index";
+import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 // Mocking external dependencies
 vi.mock("react-i18next", () => ({

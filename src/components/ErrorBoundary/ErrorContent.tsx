@@ -9,6 +9,14 @@ import { ErrorDisplay } from "./ErrorDisplay";
 
 import "./ErrorBoundary.scss";
 
+/**
+ * Props for the ErrorContent component.
+ * @typedef {object} ErrorContentProps
+ * @property {Error} [error] - The error object caught by the boundary.
+ * @property {ErrorInfo} [errorInfo] - Additional React error information.
+ * @property {"page" | "inset"} variant - Whether to display as a full page or inset.
+ * @property {ReactNode} [children] - Optional custom error message.
+ */
 interface ErrorContentProps {
 	error?: Error;
 	errorInfo?: ErrorInfo;
@@ -51,6 +59,10 @@ const InsetMessage = () => (
 	</>
 );
 
+/**
+ * Component that displays an error message and optional debug information.
+ * Used by the ErrorBoundary and RouteError components.
+ */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
 	const isLarge = useBreakpoint("1024px");
 

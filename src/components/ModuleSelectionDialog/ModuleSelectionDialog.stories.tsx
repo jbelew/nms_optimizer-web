@@ -1,15 +1,15 @@
-import type { GroupedModules, Module } from "./index";
+import type { GroupedModules, SelectionModule } from "./ModuleSelectionDialog";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Dialog, Theme } from "@radix-ui/themes";
 
 import { usePlatformStore } from "../../store/PlatformStore";
-import { ModuleSelectionDialog } from "./index";
+import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";
 
 // Helper function to group modules, adapted from useTechModuleManagement.ts
-const groupModules = (modules: Module[]): GroupedModules => {
+const groupModules = (modules: SelectionModule[]): GroupedModules => {
 	const groups: GroupedModules = {
 		core: [],
 		bonus: [],
@@ -56,14 +56,14 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 			const response = await fetch(
 				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
 			);
-			const techTree: Record<string, { key: string; modules: Module[] }[]> =
+			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
 				await response.json();
 			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
 			const modules = hyperdriveTech.modules;
 			const groupedModules = groupModules(modules);
 			const initialChecked = modules
-				.filter((m: Module) => m.checked)
-				.map((m: Module) => m.id);
+				.filter((m: SelectionModule) => m.checked)
+				.map((m: SelectionModule) => m.id);
 
 			return { groupedModules, modules, initialChecked };
 		},
@@ -73,7 +73,10 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		const [currentCheckedModules, setCurrentCheckedModules] = React.useState(initialChecked);
 
 		const nonCoreModuleIds = React.useMemo(
-			() => modules.filter((m: Module) => m.type !== "core").map((m: Module) => m.id),
+			() =>
+				modules
+					.filter((m: SelectionModule) => m.type !== "core")
+					.map((m: SelectionModule) => m.id),
 			[modules]
 		);
 
@@ -148,14 +151,14 @@ export const Corvette: Story = {
 			const response = await fetch(
 				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/corvette"
 			);
-			const techTree: Record<string, { key: string; modules: Module[] }[]> =
+			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
 				await response.json();
 			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
 			const modules = hyperdriveTech.modules;
 			const groupedModules = groupModules(modules);
 			const initialChecked = modules
-				.filter((m: Module) => m.checked)
-				.map((m: Module) => m.id);
+				.filter((m: SelectionModule) => m.checked)
+				.map((m: SelectionModule) => m.id);
 
 			return { groupedModules, modules, initialChecked };
 		},

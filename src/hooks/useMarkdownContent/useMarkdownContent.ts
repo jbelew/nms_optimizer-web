@@ -15,6 +15,12 @@ export interface MarkdownContentState {
 	error: string | null;
 }
 
+declare global {
+	interface Window {
+		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
+	}
+}
+
 /**
  * Custom hook to fetch markdown content from a bundled file.
  * Uses pre-bundled markdown content loaded at build time.
@@ -22,12 +28,6 @@ export interface MarkdownContentState {
  * @param {string} markdownFileName - The name of the markdown file to fetch.
  * @returns {MarkdownContentState} An object containing the markdown content, loading state, and error state.
  */
-declare global {
-	interface Window {
-		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
-	}
-}
-
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");

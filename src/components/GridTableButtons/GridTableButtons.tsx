@@ -22,7 +22,7 @@ import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
-import { ConditionalTooltip } from "../ConditionalTooltip";
+import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 interface GridTableButtonsProps {
 	solving: boolean;

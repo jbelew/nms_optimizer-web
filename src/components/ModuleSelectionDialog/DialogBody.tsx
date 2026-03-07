@@ -1,5 +1,5 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import type { GroupedModules } from "./index";
+import type { GroupedModules } from "./ModuleSelectionDialog";
 import React, { useCallback } from "react";
 import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";

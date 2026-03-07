@@ -133,6 +133,9 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 	const cacheKey = shipType;
 
 	if (!cache.has(cacheKey)) {
+		// Reset loading state in the store to true when a new fetch starts
+		useTechTreeLoadingStore.getState().setLoading(true);
+
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
 		const promise = apiCall<TechTree>(`${baseUrl}tech_tree/${shipType}`, {}, 10000)
 			.then(async (data) => {
@@ -202,38 +205,79 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		(state) => state.setGridFromInitialDefinition
 	);
 
-	useEffect(() => {
+	/**
+	 * Memoize tech tree processing to avoid recalculating on every render
+	 * Only recalculates when the techTree object reference changes.
+	 * Also extracts metadata (colors, groups) in the same pass.
+	 */
+	const { processedTechTree, metadata } = useMemo(() => {
 		const colors: { [key: string]: string } = {};
 		const techGroups: { [key: string]: TechTreeItem[] } = {};
 		const activeGroups: { [key: string]: string } = {};
 
-		for (const category in techTree) {
-			const categoryItems = techTree[category];
-
-			if (Array.isArray(categoryItems)) {
-				categoryItems.forEach((tech) => {
-					if ("key" in tech && "color" in tech) {
-						colors[tech.key] = tech.color;
-
-						if (!techGroups[tech.key]) {
-							techGroups[tech.key] = [];
+		const processed = Object.entries(techTree).reduce((acc, [category, items]) => {
+			if (category === "recommended_builds") {
+				acc[category] = items as RecommendedBuild[];
+			} else if (category === "grid_definition") {
+				acc[category] = items as {
+					grid: Module[][];
+					gridFixed: boolean;
+					superchargedFixed: boolean;
+				};
+			} else if (Array.isArray(items)) {
+				const uniqueKeys = new Set<string>();
+				acc[category] = items.filter((item): item is TechTreeItem => {
+					if (typeof item === "object" && item !== null && "key" in item) {
+						if (uniqueKeys.has(item.key)) {
+							return false;
 						}
 
-						techGroups[tech.key].push(tech as TechTreeItem);
+						uniqueKeys.add(item.key);
 
-						if (!activeGroups[tech.key]) {
-							activeGroups[tech.key] = tech.type || "normal";
+						// Extract metadata while we're already iterating
+						if ("color" in item) {
+							colors[item.key] = item.color as string;
+
+							if (!techGroups[item.key]) {
+								techGroups[item.key] = [];
+							}
+
+							techGroups[item.key].push(item as TechTreeItem);
+
+							if (!activeGroups[item.key]) {
+								activeGroups[item.key] = (item.type as string) || "normal";
+							}
 						}
+
+						return true;
 					}
+
+					return false;
 				});
+			} else {
+				acc[category] = items as
+					| TechTreeItem[]
+					| { grid: Module[][] }
+					| RecommendedBuild[]
+					| undefined;
 			}
-		}
+
+			return acc;
+		}, {} as TechTree);
+
+		return {
+			processedTechTree: processed,
+			metadata: { colors, techGroups, activeGroups },
+		};
+	}, [techTree]);
+
+	useEffect(() => {
+		const { colors, techGroups, activeGroups } = metadata;
 
 		setTechColors(colors);
 		setTechGroups(techGroups);
 
 		// P0 Optimization: Batch activeGroups updates into a single store action
-		// Previously called setActiveGroup in a loop (N+1 pattern)
 		useTechStore.getState().setActiveGroups(activeGroups);
 
 		if (techTree.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
@@ -242,58 +286,15 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 		}
 
 		// P1 Optimization: Consolidate loading state update into single effect
-		// Previously had separate effect that also ran on techTree change
 		useTechTreeLoadingStore.getState().setLoading(false);
 	}, [
 		techTree,
+		metadata,
 		setTechColors,
 		setTechGroups,
 		setInitialGridDefinition,
 		setGridFromInitialDefinition,
 	]);
-
-	/**
-	 * Memoize tech tree processing to avoid recalculating on every render
-	 * Only recalculates when the techTree object reference changes
-	 */
-	const processedTechTree = useMemo(
-		() =>
-			Object.entries(techTree).reduce((acc, [category, items]) => {
-				if (category === "recommended_builds") {
-					acc[category] = items as RecommendedBuild[]; // Explicitly cast to RecommendedBuild[]
-				} else if (category === "grid_definition") {
-					acc[category] = items as {
-						grid: Module[][];
-						gridFixed: boolean;
-						superchargedFixed: boolean;
-					}; // Explicitly cast to grid_definition type
-				} else if (Array.isArray(items)) {
-					const uniqueKeys = new Set<string>();
-					acc[category] = items.filter((item): item is TechTreeItem => {
-						if (typeof item === "object" && item !== null && "key" in item) {
-							if (uniqueKeys.has(item.key)) {
-								return false;
-							}
-
-							uniqueKeys.add(item.key);
-
-							return true;
-						}
-
-						return false;
-					});
-				} else {
-					acc[category] = items as
-						| TechTreeItem[]
-						| { grid: Module[][] }
-						| RecommendedBuild[]
-						| undefined;
-				}
-
-				return acc;
-			}, {} as TechTree),
-		[techTree]
-	);
 
 	return processedTechTree;
 }

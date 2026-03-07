@@ -9,6 +9,10 @@
 
 const CONTROL_CHARS = "\x00-\x1F";
 
+/**
+ * Regular expression for validating filenames across major platforms (Windows, macOS, Linux).
+ * Validates length (1-255), reserved names, and forbidden characters.
+ */
 export const FILENAME_REGEX = new RegExp(
 	`^(?=.{1,255}$)(?!^(CON|PRn|AUX|NUL|COM[1-9]|LPT[1-9])$)[^<>:"/\\\\|?*${CONTROL_CHARS}]+(?<![ .])$`,
 	"i"

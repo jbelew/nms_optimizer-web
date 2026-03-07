@@ -4,6 +4,11 @@ import { fetchTechTreeAsync } from "../useTechTree/useTechTree";
 
 let techTreeColorsPromise: Promise<Record<string, string>> | null = null;
 
+/**
+ * Fetches and aggregates colors for all technologies across different tech trees.
+ * Caches the result in a promise to avoid redundant network calls.
+ * @returns {Promise<Record<string, string>>} A map of technology keys to their associated colors.
+ */
 export const fetchTechTreeColors = (): Promise<Record<string, string>> => {
 	if (!techTreeColorsPromise) {
 		techTreeColorsPromise = (async () => {
@@ -46,7 +51,10 @@ export const fetchTechTreeColors = (): Promise<Record<string, string>> => {
 	return techTreeColorsPromise;
 };
 
-// Function to reset the cache (useful for testing)
+/**
+ * Resets the cached promise for tech tree colors.
+ * Useful for testing or to force a re-fetch of the color data.
+ */
 export const resetTechTreeColorsCache = () => {
 	techTreeColorsPromise = null;
 };

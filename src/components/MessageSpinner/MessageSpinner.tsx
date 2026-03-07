@@ -8,10 +8,9 @@ import { useTranslation } from "react-i18next";
 interface MessageSpinnerProps {
 	isVisible: boolean;
 	isInlay?: boolean;
-	useNMSFont?: boolean;
+	showProgress?: boolean;
 	initialMessage?: string;
 	progressPercent?: number;
-	status?: string;
 }
 
 /**
@@ -21,7 +20,7 @@ interface MessageSpinnerProps {
  * @returns {JSX.Element | null} The rendered MessageSpinner component, or null if not visible.
  */
 const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
-	({ isInlay = true, isVisible, initialMessage, useNMSFont, progressPercent }) => {
+	({ isInlay = true, isVisible, initialMessage, showProgress, progressPercent }) => {
 		const [currentRandomMessage, setCurrentRandomMessage] = useState<string>("");
 		const [showRandomMessage, setShowRandomMessage] = useState<boolean>(false);
 		const { t } = useTranslation();
@@ -101,7 +100,7 @@ const MessageSpinner: React.FC<MessageSpinnerProps> = memo(
 						</Text>
 
 						<div className="w-3/4 sm:w-1/2">
-							{progressPercent !== undefined && useNMSFont === false ? (
+							{progressPercent !== undefined && showProgress ? (
 								<div className="mb-10 lg:mb-18">
 									<Progress
 										value={Math.min(

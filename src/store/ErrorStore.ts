@@ -2,7 +2,13 @@
 import { create } from "zustand";
 
 /**
- * Represents a single error message to be displayed to the user
+ * Represents a single error message to be displayed to the user.
+ * @typedef {object} ErrorMessage
+ * @property {string} id - Unique identifier for the error message.
+ * @property {string} message - The human-readable message to display.
+ * @property {"warning" | "error" | "info"} type - The severity/type of the message.
+ * @property {boolean} dismissible - Whether the user can manually dismiss the message.
+ * @property {number} timestamp - Unix timestamp when the error was created.
  */
 export interface ErrorMessage {
 	id: string;
@@ -13,11 +19,12 @@ export interface ErrorMessage {
 }
 
 /**
- * @interface ErrorState
- * @property {ErrorMessage[]} errors - Array of active error messages
- * @property {(message: string, type: ErrorMessage['type']) => void} addError - Add an error message
- * @property {(id: string) => void} removeError - Remove an error message by ID
- * @property {() => void} clearErrors - Clear all error messages
+ * State and actions for the error store.
+ * @typedef {object} ErrorState
+ * @property {ErrorMessage[]} errors - Active error messages currently being displayed.
+ * @property {(message: string, type?: ErrorMessage["type"]) => string} addError - Adds a new error message to the store. Returns the new message ID.
+ * @property {(id: string) => void} removeError - Removes an error message by its ID.
+ * @property {() => void} clearErrors - Clears all error messages from the store.
  */
 export interface ErrorState {
 	errors: ErrorMessage[];

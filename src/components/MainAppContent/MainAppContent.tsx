@@ -3,12 +3,15 @@ import "./MainAppContent.scss";
 
 import React, { lazy, Suspense } from "react";
 import { Box, Flex } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
+import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
+import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 import { MainAppUtilities } from "./MainAppUtilities";
 import { SharedBuildCallout } from "./SharedBuildCallout";
@@ -23,6 +26,7 @@ const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
  * This component utilizes Suspense for asynchronous data fetching of ship types.
  */
 export const MainAppContent = () => {
+	const { t } = useTranslation();
 	const {
 		buildVersion,
 		buildDate,
@@ -43,7 +47,6 @@ export const MainAppContent = () => {
 	const {
 		solving,
 		progressPercent,
-		status,
 		handleOptimize,
 		gridContainerRef,
 		patternNoFitTech,
@@ -65,6 +68,8 @@ export const MainAppContent = () => {
 	} = saveBuild;
 
 	const { fileInputRef, handleLoadBuild, handleFileSelect } = loadBuild;
+
+	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 	return (
 		<>
@@ -94,11 +99,24 @@ export const MainAppContent = () => {
 							{/* Grid section */}
 							<Box
 								flexShrink={{ initial: "1", md: "0" }}
-								className="main-app__grid-section"
+								className="main-app__grid-section relative"
 								ref={appLayoutContainerRef}
 							>
 								{isSharedGrid && (
 									<SharedBuildCallout gridTableTotalWidth={gridTableTotalWidth} />
+								)}
+
+								{!isLargeScreen && !isSharedGrid && (
+									<MessageSpinner
+										isVisible={solving || isTechTreeLoading}
+										showProgress={!isTechTreeLoading}
+										initialMessage={
+											isTechTreeLoading
+												? t("techTree.loading")
+												: t("gridTable.optimizing")
+										}
+										progressPercent={progressPercent}
+									/>
 								)}
 
 								<ShipSelectionHeading
@@ -110,8 +128,6 @@ export const MainAppContent = () => {
 
 								<GridTable
 									solving={solving}
-									progressPercent={progressPercent}
-									status={status}
 									sharedGrid={isSharedGrid}
 									ref={appLayoutGridTableRef}
 								/>

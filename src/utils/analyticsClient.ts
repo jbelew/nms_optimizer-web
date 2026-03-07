@@ -9,10 +9,22 @@
 import { API_URL } from "../constants";
 import { safeGetItem, safeSetItem } from "./storage";
 
+/**
+ * Key-value pairs for event parameters.
+ * @typedef {Object.<string, string | number | boolean | undefined>} AnalyticsEventParams
+ */
 export interface AnalyticsEventParams {
 	[key: string]: string | number | boolean | undefined;
 }
 
+/**
+ * Payload sent to the backend for server-side analytics.
+ * @typedef {object} AnalyticsEventPayload
+ * @property {string} clientId - Unique identifier for the client session.
+ * @property {string} eventName - The name of the event to track.
+ * @property {AnalyticsEventParams} [params] - Optional event-specific parameters.
+ * @property {string} [userId] - Optional authenticated user identifier.
+ */
 export interface AnalyticsEventPayload {
 	clientId: string;
 	eventName: string;
