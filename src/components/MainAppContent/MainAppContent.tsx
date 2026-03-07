@@ -106,9 +106,9 @@ export const MainAppContent = () => {
 									<SharedBuildCallout gridTableTotalWidth={gridTableTotalWidth} />
 								)}
 
-								{!isLargeScreen && !isSharedGrid && (
+								{!isSharedGrid && (
 									<MessageSpinner
-										isVisible={solving || isTechTreeLoading}
+										isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
 										showProgress={!isTechTreeLoading}
 										initialMessage={
 											isTechTreeLoading
