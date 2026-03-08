@@ -87,19 +87,21 @@ const AppDialog: React.FC<AppDialogProps> = ({
 							<Separator mt="2" size="4" orientation="horizontal" decorative />
 						</Dialog.Title>
 
-						<Dialog.Description asChild>
-							<section
-								className={`appDialog__scrollable-content flex-1 overflow-y-auto ${
-									ROUTED_DIALOG_TITLE_KEYS.includes(
-										(titleKey || "").split(".").pop() || ""
-									)
-										? "pr-4"
-										: "pr-2"
-								}`}
-							>
-								{content}
-							</section>
+						<Dialog.Description className="sr-only">
+							{titleKey ? t(titleKey) : title}
 						</Dialog.Description>
+
+						<section
+							className={`appDialog__scrollable-content flex-1 overflow-y-auto ${
+								ROUTED_DIALOG_TITLE_KEYS.includes(
+									(titleKey || "").split(".").pop() || ""
+								)
+									? "pr-4"
+									: "pr-2"
+							}`}
+						>
+							{content}
+						</section>
 
 						<Dialog.Close asChild>
 							<IconButton

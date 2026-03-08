@@ -172,13 +172,12 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0) {
 			const { colors, techGroups, activeGroups } = processTechTreeMetadata(data);
-			useTechStore.getState().setTechColors(colors);
-			useTechStore.getState().setTechGroups(techGroups);
-			useTechStore.getState().setActiveGroups(activeGroups);
+			useTechStore.getState().initializeTechTree(colors, techGroups, activeGroups);
 
 			if (data.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
-				useGridStore.getState().setInitialGridDefinition(data.grid_definition);
-				useGridStore.getState().setGridFromInitialDefinition(data.grid_definition);
+				const gridStore = useGridStore.getState();
+				gridStore.setInitialGridDefinition(data.grid_definition);
+				gridStore.setGridFromInitialDefinition(data.grid_definition);
 			}
 		}
 	}, [data, shipType]);

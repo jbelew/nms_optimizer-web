@@ -1,6 +1,7 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import React from "react";
 import { Dialog } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 import { DialogBody } from "./DialogBody";
 import { DialogFooter } from "./DialogFooter";
@@ -59,13 +60,17 @@ export interface ModuleSelectionDialogProps {
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
 	const { headerProps, bodyProps, footerProps } = useModuleSelectionDialog(props);
+	const { t } = useTranslation();
 
 	return (
 		<Dialog.Content size={{ initial: "1", sm: "2" }}>
 			<DialogHeader {...headerProps} />
 
 			<Dialog.Description className="sr-only">
-				Select modules to include in the optimization calculation.
+				{t(
+					"moduleSelection.description",
+					"Select modules to include in the optimization calculation."
+				)}
 			</Dialog.Description>
 
 			<DialogBody {...bodyProps} />

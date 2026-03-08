@@ -1,19 +1,11 @@
-import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 
-interface TooltipState {
-	label: string;
-	rect: DOMRect | null;
-	isOpen: boolean;
-	delayDuration: number;
-}
-
-interface TooltipActions {
-	show: (label: string, rect: DOMRect, delayDuration?: number) => void;
-	hide: () => void;
-}
-
-const TooltipStateContext = createContext<TooltipState | undefined>(undefined);
-const TooltipActionsContext = createContext<TooltipActions | undefined>(undefined);
+import {
+	TooltipActions,
+	TooltipActionsContext,
+	TooltipState,
+	TooltipStateContext,
+} from "./tooltip-utils";
 
 const WARM_THRESHOLD = 500; // ms to keep the "warm" state for instant re-opening
 
@@ -64,7 +56,7 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 		setState((prev) => ({ ...prev, rect: null, isOpen: false }));
 	}, []); // EMPTY dependency array - perfectly stable
 
-	const actions = useMemo(() => ({ show, hide }), [show, hide]);
+	const actions = useMemo(() => ({ show, hide }) as TooltipActions, [show, hide]);
 
 	return (
 		<TooltipStateContext.Provider value={state}>
@@ -73,34 +65,4 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 			</TooltipActionsContext.Provider>
 		</TooltipStateContext.Provider>
 	);
-};
-
-export const useTooltipState = () => {
-	const context = useContext(TooltipStateContext);
-
-	if (context === undefined) {
-		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider
-		if (process.env.NODE_ENV === "test") {
-			return { label: "", rect: null, isOpen: false, delayDuration: 500 };
-		}
-
-		throw new Error("useTooltipState must be used within a TooltipProvider");
-	}
-
-	return context;
-};
-
-export const useTooltipActions = () => {
-	const context = useContext(TooltipActionsContext);
-
-	if (context === undefined) {
-		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider
-		if (process.env.NODE_ENV === "test") {
-			return { show: () => {}, hide: () => {} };
-		}
-
-		throw new Error("useTooltipActions must be used within a TooltipProvider");
-	}
-
-	return context;
 };

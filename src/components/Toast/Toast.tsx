@@ -53,14 +53,7 @@ export const NmsToast = ({
 		);
 
 	return (
-		<Toast.Root
-			duration={duration}
-			className="Toast"
-			open={open}
-			onOpenChange={onOpenChange}
-			onClick={() => onOpenChange(false)}
-			onTouchEnd={() => onOpenChange(false)}
-		>
+		<Toast.Root duration={duration} className="Toast" open={open} onOpenChange={onOpenChange}>
 			<div className="Toast__title-container">
 				{icon}
 				<Toast.Title className={`${titleClassName} heading-styled mb-1`}>

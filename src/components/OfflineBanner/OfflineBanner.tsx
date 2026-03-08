@@ -24,9 +24,13 @@ const OfflineBanner: React.FC = () => {
 	}
 
 	return (
-		<div className="offline w-full p-4 text-center">
+		<div className="offline w-full p-4 text-center" role="alert" aria-live="polite">
 			<div className="offline__logo mb-4">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 126.75 126.77">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 126.75 126.77"
+					aria-hidden="true"
+				>
 					<g className="layer">
 						<path
 							fill="#fff"

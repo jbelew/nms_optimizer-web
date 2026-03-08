@@ -74,6 +74,11 @@ describe("useFetchTechTreeSuspense", () => {
 		setTechGroups: (groups: Record<string, TechTreeItem[]>) => void;
 		setActiveGroup: (key: string, type: string) => void;
 		setActiveGroups: (groups: Record<string, string>) => void;
+		initializeTechTree: (
+			colors: Record<string, string>,
+			techGroups: Record<string, TechTreeItem[]>,
+			activeGroups: Record<string, string>
+		) => void;
 		techColors: Record<string, string>;
 		techGroups: Record<string, TechTreeItem[]>;
 		activeGroups: Record<string, string>;
@@ -95,6 +100,7 @@ describe("useFetchTechTreeSuspense", () => {
 		const mockSetTechGroups = vi.fn();
 		const mockSetActiveGroup = vi.fn();
 		const mockSetActiveGroups = vi.fn();
+		const mockInitializeTechTree = vi.fn();
 		const mockSetInitialGridDefinition = vi.fn();
 		const mockSetGridFromInitialDefinition = vi.fn();
 		const mockSetLoading = vi.fn();
@@ -105,6 +111,7 @@ describe("useFetchTechTreeSuspense", () => {
 				setTechGroups: mockSetTechGroups,
 				setActiveGroup: mockSetActiveGroup,
 				setActiveGroups: mockSetActiveGroups,
+				initializeTechTree: mockInitializeTechTree,
 				techColors: {},
 				techGroups: {},
 				activeGroups: {},
@@ -136,6 +143,7 @@ describe("useFetchTechTreeSuspense", () => {
 			setTechGroups: mockSetTechGroups,
 			setActiveGroup: mockSetActiveGroup,
 			setActiveGroups: mockSetActiveGroups,
+			initializeTechTree: mockInitializeTechTree,
 			techColors: {},
 			techGroups: {},
 			activeGroups: {},
@@ -163,6 +171,7 @@ describe("useFetchTechTreeSuspense", () => {
 			mockSetTechGroups,
 			mockSetActiveGroup,
 			mockSetActiveGroups,
+			mockInitializeTechTree,
 			mockSetInitialGridDefinition,
 			mockSetGridFromInitialDefinition,
 			mockSetLoading,
@@ -181,8 +190,8 @@ describe("useFetchTechTreeSuspense", () => {
 		clearTechTreeCache();
 	});
 
-	it("should call setTechColors with extracted colors", async () => {
-		const { mockSetTechColors } = setupMocks();
+	it("should call initializeTechTree with extracted colors", async () => {
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -192,19 +201,19 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetTechColors).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
-		const colorsArg = mockSetTechColors.mock.calls[0][0];
+		const colorsArg = mockInitializeTechTree.mock.calls[0][0];
 		expect(colorsArg).toHaveProperty("defense", "red");
 		expect(colorsArg).toHaveProperty("shield", "blue");
 		expect(colorsArg).toHaveProperty("health", "green");
 	});
 
-	it("should call setTechGroups with tech items grouped by key", async () => {
-		const { mockSetTechGroups } = setupMocks();
+	it("should call initializeTechTree with tech items grouped by key", async () => {
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -214,20 +223,20 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetTechGroups).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
-		const groupsArg = mockSetTechGroups.mock.calls[0][0];
+		const groupsArg = mockInitializeTechTree.mock.calls[0][1];
 		expect(groupsArg).toHaveProperty("defense");
 		expect(groupsArg).toHaveProperty("shield");
 		expect(groupsArg).toHaveProperty("health");
 		expect(Array.isArray(groupsArg.defense)).toBe(true);
 	});
 
-	it("should call setActiveGroups with all techs with default type 'normal'", async () => {
-		const { mockSetActiveGroups } = setupMocks();
+	it("should call initializeTechTree with all techs with default type 'normal'", async () => {
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -237,12 +246,12 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetActiveGroups).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
-		const callArg = mockSetActiveGroups.mock.calls[0]?.[0];
+		const callArg = mockInitializeTechTree.mock.calls[0]?.[2];
 		expect(callArg).toEqual({
 			defense: "normal",
 			shield: "normal",
@@ -303,7 +312,7 @@ describe("useFetchTechTreeSuspense", () => {
 		};
 
 		vi.mocked(apiCallModule.apiCall).mockResolvedValue(techTreeWithTypes);
-		const { mockSetActiveGroups } = setupMocks();
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -313,12 +322,12 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetActiveGroups).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
-		const callArg = mockSetActiveGroups.mock.calls[0]?.[0];
+		const callArg = mockInitializeTechTree.mock.calls[0]?.[2];
 		expect(callArg).toEqual({
 			defense: "max",
 		});
@@ -465,7 +474,7 @@ describe("useFetchTechTreeSuspense", () => {
 		};
 
 		vi.mocked(apiCallModule.apiCall).mockResolvedValue(multiCategoryTree);
-		const { mockSetTechColors } = setupMocks();
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -475,12 +484,12 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetTechColors).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
-		const colorsArg = mockSetTechColors.mock.calls[0][0];
+		const colorsArg = mockInitializeTechTree.mock.calls[0][0];
 		expect(Object.keys(colorsArg)).toContain("defense");
 		expect(Object.keys(colorsArg)).toContain("health");
 		expect(Object.keys(colorsArg)).toContain("damage");
@@ -505,7 +514,7 @@ describe("useFetchTechTreeSuspense", () => {
 		};
 
 		vi.mocked(apiCallModule.apiCall).mockResolvedValue(techTreeWithInvalidItems);
-		const { mockSetTechGroups } = setupMocks();
+		const { mockInitializeTechTree } = setupMocks();
 
 		await act(async () => {
 			renderHook(() => useFetchTechTreeSuspense("standard"));
@@ -515,13 +524,13 @@ describe("useFetchTechTreeSuspense", () => {
 
 		await waitFor(
 			() => {
-				expect(mockSetTechGroups).toHaveBeenCalled();
+				expect(mockInitializeTechTree).toHaveBeenCalled();
 			},
 			{ timeout: 2000 }
 		);
 
 		// Should only include valid items in groups
-		const groupsArg = mockSetTechGroups.mock.calls[0][0];
+		const groupsArg = mockInitializeTechTree.mock.calls[0][1];
 		expect(groupsArg).toHaveProperty("defense");
 		expect(Object.keys(groupsArg)).toHaveLength(1);
 	});

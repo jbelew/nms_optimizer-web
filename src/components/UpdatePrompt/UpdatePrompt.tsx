@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import AppDialog from "../AppDialog/AppDialog";
 
 interface UpdatePromptProps {
@@ -13,6 +14,7 @@ interface UpdatePromptProps {
 
 const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) => {
 	const { t } = useTranslation();
+	const isDesktop = useBreakpoint("1024px");
 
 	const content = (
 		<>
@@ -30,7 +32,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 					</Button>
 				</Dialog.Close>
 				<Dialog.Close asChild>
-					<Button onClick={onRefresh} autoFocus>
+					<Button onClick={onRefresh} autoFocus={isDesktop}>
 						{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 					</Button>
 				</Dialog.Close>

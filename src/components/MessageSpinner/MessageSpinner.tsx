@@ -91,7 +91,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	const hasMessage = initialMessage != null;
 
 	return (
-		<div className={containerClasses.trim()}>
+		<div className={containerClasses.trim()} role="status" aria-live="polite">
 			<Spinner className="messageSpinner__spinner" />
 
 			{hasMessage && (

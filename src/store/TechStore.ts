@@ -44,6 +44,11 @@ export interface TechState {
 	setTechSolvedBonus: (tech: string, bonus: number) => void;
 	setTechSolveMethod: (tech: string, method: string) => void;
 	setTechColors: (colors: { [key: string]: string }) => void;
+	initializeTechTree: (
+		colors: { [key: string]: string },
+		techGroups: { [key: string]: TechTreeItem[] },
+		activeGroups: { [key: string]: string }
+	) => void;
 	getTechColor: (tech: string) => string | undefined;
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
 	clearCheckedModules: (tech: string) => void;
@@ -88,6 +93,38 @@ export const useTechStore = create<TechState>((set, get) => ({
 			solve_method: { ...state.solve_method, [tech]: solve_method },
 		})),
 	setTechColors: (colors) => set({ techColors: colors }),
+	initializeTechTree: (
+		colors: { [key: string]: string },
+		techGroups: { [key: string]: TechTreeItem[] },
+		activeGroups: { [key: string]: string }
+	) => {
+		const moduleSelectionStore = useModuleSelectionStore.getState();
+		const initialCheckedModules = Object.keys(techGroups).reduce(
+			(acc, tech) => {
+				const group = techGroups[tech]?.[0];
+
+				if (group) {
+					const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
+
+					if (persistedSelection && persistedSelection.length > 0) {
+						acc[tech] = persistedSelection;
+					} else {
+						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+					}
+				}
+
+				return acc;
+			},
+			{} as { [key: string]: string[] }
+		);
+
+		set({
+			techColors: colors,
+			techGroups,
+			checkedModules: initialCheckedModules,
+			activeGroups,
+		});
+	},
 	getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
 	setCheckedModules: (tech, updater) =>
 		set((state) => ({

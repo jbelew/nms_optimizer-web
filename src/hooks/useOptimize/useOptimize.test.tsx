@@ -81,6 +81,17 @@ describe("useOptimize", () => {
 		mockCreateSocket.mockReturnValue(mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
+		const mockOptimizeState = {
+			showError: false,
+			errorType: null,
+			error: null,
+			setShowError: vi.fn(),
+			patternNoFitTech: null,
+			setPatternNoFitTech: vi.fn(),
+		};
+
+		mockUseOptimizeStore.mockImplementation((selector) => selector(mockOptimizeState));
+
 		vi.mocked(mockUseGridStore.getState).mockReturnValue({
 			setGrid: vi.fn(),
 			setResult: vi.fn(),
@@ -91,15 +102,12 @@ describe("useOptimize", () => {
 				valid: true,
 			},
 		} as unknown as GridStore);
-		mockUseOptimizeStore.mockReturnValue({
-			setShowError: vi.fn(),
-			patternNoFitTech: null,
-			setPatternNoFitTech: vi.fn(),
-		});
+
 		vi.mocked(mockUseTechStore.getState).mockReturnValue({
 			checkedModules: {},
 			techGroups: {},
 			activeGroups: {},
+			initializeTechTree: vi.fn(),
 		} as unknown as TechState);
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
@@ -231,11 +239,16 @@ describe("useOptimize", () => {
 	describe("error and cleanup handling", () => {
 		it("should handle connection error", async () => {
 			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: setShowErrorMock,
-				patternNoFitTech: null,
-				setPatternNoFitTech: vi.fn(),
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					showError: false,
+					errorType: null,
+					error: null,
+					setShowError: setShowErrorMock,
+					patternNoFitTech: null,
+					setPatternNoFitTech: vi.fn(),
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
@@ -258,11 +271,16 @@ describe("useOptimize", () => {
 
 		it("should handle invalid API response", async () => {
 			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: setShowErrorMock,
-				patternNoFitTech: null,
-				setPatternNoFitTech: vi.fn(),
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					showError: false,
+					errorType: null,
+					error: null,
+					setShowError: setShowErrorMock,
+					patternNoFitTech: null,
+					setPatternNoFitTech: vi.fn(),
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
@@ -285,11 +303,16 @@ describe("useOptimize", () => {
 
 		it("should silence benign disconnects (transport close)", async () => {
 			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: setShowErrorMock,
-				patternNoFitTech: null,
-				setPatternNoFitTech: vi.fn(),
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					showError: false,
+					errorType: null,
+					error: null,
+					setShowError: setShowErrorMock,
+					patternNoFitTech: null,
+					setPatternNoFitTech: vi.fn(),
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
@@ -324,11 +347,16 @@ describe("useOptimize", () => {
 
 		it("should warn on genuine disconnects (ping timeout)", async () => {
 			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: setShowErrorMock,
-				patternNoFitTech: null,
-				setPatternNoFitTech: vi.fn(),
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					setShowError: setShowErrorMock,
+					patternNoFitTech: null,
+					setPatternNoFitTech: vi.fn(),
+					showError: false,
+					errorType: null,
+					error: null,
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {
@@ -356,11 +384,16 @@ describe("useOptimize", () => {
 	describe("remaining hook functions", () => {
 		it("should clear patternNoFitTech", () => {
 			const setPatternNoFitTechMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: vi.fn(),
-				patternNoFitTech: "some-tech",
-				setPatternNoFitTech: setPatternNoFitTechMock,
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					setShowError: vi.fn(),
+					patternNoFitTech: "some-tech",
+					setPatternNoFitTech: setPatternNoFitTechMock,
+					showError: false,
+					errorType: null,
+					error: null,
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			act(() => {
@@ -372,11 +405,16 @@ describe("useOptimize", () => {
 
 		it("should handle force-optimizing a PNF tech", async () => {
 			const setPatternNoFitTechMock = vi.fn();
-			mockUseOptimizeStore.mockReturnValue({
-				setShowError: vi.fn(),
-				patternNoFitTech: "PNF Tech",
-				setPatternNoFitTech: setPatternNoFitTechMock,
-			});
+			mockUseOptimizeStore.mockImplementation((selector) =>
+				selector({
+					setShowError: vi.fn(),
+					patternNoFitTech: "PNF Tech",
+					setPatternNoFitTech: setPatternNoFitTechMock,
+					showError: false,
+					errorType: null,
+					error: null,
+				})
+			);
 			const { result } = renderHook(() => useOptimize());
 
 			await act(async () => {

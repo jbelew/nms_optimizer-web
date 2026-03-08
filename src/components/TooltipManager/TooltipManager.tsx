@@ -1,7 +1,7 @@
 import React from "react";
 import { Tooltip } from "@radix-ui/themes";
 
-import { useTooltipState } from "../../context/TooltipContext";
+import { useTooltipState } from "../../context/tooltip-utils";
 
 /**
  * TooltipManager renders a single singleton tooltip instance.

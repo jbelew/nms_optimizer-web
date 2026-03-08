@@ -161,7 +161,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content className="shipSelection__dropdownMenu">
 					<DropdownMenu.Label className="shipSelection__header heading-styled">
-						Select Platform
+						{t("shipSelection.selectPlatform", "Select Platform")}
 					</DropdownMenu.Label>
 					<ShipTypesDropdown
 						selectedShipType={selectedShipType}

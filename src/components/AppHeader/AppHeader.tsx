@@ -64,7 +64,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				<Flex gap="2" className="app-header__controls app-header__controls--left">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<Flex align="center" gap="2">
-							<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+							<EyeOpenIcon
+								aria-hidden="true"
+								style={{ color: "var(--accent-a11)" }}
+							/>
 							<Switch
 								variant="soft"
 								checked={a11yMode}
@@ -129,7 +132,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 							<Flex align="center" gap="1">
-								<EyeOpenIcon style={{ color: "var(--accent-a11)" }} />
+								<EyeOpenIcon
+									aria-hidden="true"
+									style={{ color: "var(--accent-a11)" }}
+								/>
 								<Switch
 									variant="soft"
 									checked={a11yMode}

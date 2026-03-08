@@ -100,6 +100,15 @@ const stripLabel = (label: string | undefined): string => {
 	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
 };
 
+const CORNER_SPANS = (
+	<>
+		<span className="corner top-left"></span>
+		<span className="corner top-right"></span>
+		<span className="corner bottom-left"></span>
+		<span className="corner bottom-right"></span>
+	</>
+);
+
 const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useCell(rowIndex, columnIndex);
 
@@ -160,14 +169,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 				/>
 			) : null}
 			{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
-			{!cell.supercharged && !cell.image ? (
-				<>
-					<span className="corner top-left"></span>
-					<span className="corner top-right"></span>
-					<span className="corner bottom-left"></span>
-					<span className="corner bottom-right"></span>
-				</>
-			) : null}
+			{!cell.supercharged && !cell.image ? CORNER_SPANS : null}
 			{upGradePriority ? (
 				<span
 					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${

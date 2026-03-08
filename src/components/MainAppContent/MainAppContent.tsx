@@ -85,7 +85,13 @@ export const MainAppContent = () => {
 				/>
 			)}
 
-			<main className="main-app__container">
+			<a
+				href="#main-content"
+				className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded focus:bg-(--accent-9) focus:px-4 focus:py-2 focus:text-white"
+			>
+				Skip to main content
+			</a>
+			<main id="main-content" className="main-app__container">
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">
 						<AppHeader onShowChangelog={handleShowChangelog} />
@@ -108,7 +114,8 @@ export const MainAppContent = () => {
 
 								{!isSharedGrid && (
 									<MessageSpinner
-										isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
+										// isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
+										isVisible={solving}
 										showProgress={!isTechTreeLoading}
 										initialMessage={
 											isTechTreeLoading

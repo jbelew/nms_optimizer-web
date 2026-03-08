@@ -288,7 +288,9 @@ const debouncedStorage = {
 			const keysToRemove: string[] = [];
 
 			if (typeof window !== "undefined" && window.localStorage) {
-				for (let i = 0; i < localStorage.length; i++) {
+				const len = localStorage.length;
+
+				for (let i = 0; i < len; i++) {
 					const key = localStorage.key(i);
 
 					if (key && key.startsWith("app-state") && key !== name) {

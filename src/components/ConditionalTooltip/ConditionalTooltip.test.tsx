@@ -2,7 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTooltipActions } from "../../context/TooltipContext";
+import { useTooltipActions } from "../../context/tooltip-utils";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { ConditionalTooltip } from "./ConditionalTooltip";
 
@@ -12,10 +12,9 @@ vi.mock("../../utils/isTouchDevice", () => ({
 }));
 
 // Mock useTooltip hook
-vi.mock("../../context/TooltipContext", () => ({
+vi.mock("../../context/tooltip-utils", () => ({
 	useTooltipActions: vi.fn(),
 	useTooltipState: vi.fn(),
-	TooltipProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 describe("ConditionalTooltip", () => {

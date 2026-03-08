@@ -37,7 +37,7 @@ describe("AppDialog", () => {
 
 		// The dialog content should be visible
 		expect(screen.getByText("Test Content")).toBeInTheDocument();
-		expect(screen.getByText("Test Dialog")).toBeInTheDocument();
+		expect(screen.getAllByText("Test Dialog").length).toBeGreaterThanOrEqual(1);
 	});
 
 	test("should not render dialog content when isOpen is false", () => {
@@ -85,14 +85,14 @@ describe("AppDialog", () => {
 			<AppDialog {...defaultProps} titleKey="dialogs.titles.test" title="Fallback Title" />
 		);
 
-		// Should use titleKey for translation
-		expect(screen.getByText("dialogs.titles.test")).toBeInTheDocument();
+		// Should use titleKey for translation (appears in both Title and Description)
+		expect(screen.getAllByText("dialogs.titles.test").length).toBeGreaterThanOrEqual(1);
 	});
 
 	test("should use fallback title when titleKey is not provided", () => {
 		render(<AppDialog {...defaultProps} />);
 
-		expect(screen.getByText("Test Dialog")).toBeInTheDocument();
+		expect(screen.getAllByText("Test Dialog").length).toBeGreaterThanOrEqual(1);
 	});
 
 	test("should cleanup event listener on unmount", () => {

@@ -277,7 +277,7 @@ describe("App", () => {
 			const rendered = renderApp(["/"]);
 
 			await vi.waitFor(() => {
-				expect(rendered.getByText("dialogs.titles.welcome")).toBeInTheDocument();
+				expect(rendered.getAllByText("dialogs.titles.welcome")[0]).toBeInTheDocument();
 				expect(rendered.getByText("dialogs.welcome.description")).toBeInTheDocument();
 			});
 		});
@@ -288,8 +288,8 @@ describe("App", () => {
 			const rendered = renderApp(["/"]);
 
 			// Should not show welcome dialog
-			const welcomeTitle = rendered.queryByText("dialogs.titles.welcome");
-			expect(welcomeTitle).not.toBeInTheDocument();
+			const welcomeTitle = rendered.queryAllByText("dialogs.titles.welcome");
+			expect(welcomeTitle.length).toBe(0);
 		});
 
 		test("should mark user as visited when closing WelcomeDialog", async () => {
@@ -303,7 +303,7 @@ describe("App", () => {
 
 			await vi.waitFor(() => {
 				expect(localStorage.getItem("userVisited")).toBe("true");
-				expect(rendered.queryByText("dialogs.titles.welcome")).not.toBeInTheDocument();
+				expect(rendered.queryAllByText("dialogs.titles.welcome").length).toBe(0);
 			});
 		});
 
@@ -315,13 +315,13 @@ describe("App", () => {
 
 			// Welcome dialog title should NOT be in the document
 			await vi.waitFor(() => {
-				const welcomeTitle = rendered.queryByText("dialogs.titles.welcome");
-				expect(welcomeTitle).not.toBeInTheDocument();
+				const welcomeTitle = rendered.queryAllByText("dialogs.titles.welcome");
+				expect(welcomeTitle.length).toBe(0);
 			});
 
 			// Instructions dialog title SHOULD be in the document
 			await vi.waitFor(() => {
-				expect(rendered.getByText("dialogs.titles.instructions")).toBeInTheDocument();
+				expect(rendered.getAllByText("dialogs.titles.instructions")[0]).toBeInTheDocument();
 			});
 
 			// userVisited should be marked as true by useEffect in AppContent

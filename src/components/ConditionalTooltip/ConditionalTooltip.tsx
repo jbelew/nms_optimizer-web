@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
 
-import { useTooltipActions } from "../../context/TooltipContext";
+import { useTooltipActions } from "../../context/tooltip-utils";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 
 /**

@@ -51,7 +51,12 @@ export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
 					className={`gridTable ${solving ? "opacity-25" : ""}`}
 				>
 					{Array.from({ length: gridHeight }).map((_, rowIndex) => (
-						<React.Fragment key={rowIndex}>
+						<div
+							key={rowIndex}
+							role="row"
+							aria-rowindex={rowIndex + 1}
+							className="gridTable__row"
+						>
 							{/* Direct row-less rendering of cells for performance */}
 							{Array.from({ length: gridWidth }).map((__, columnIndex) => (
 								<GridCell
@@ -65,14 +70,13 @@ export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
 								role="gridcell"
 								className="w-6"
 								aria-colindex={totalAriaColumnCount}
-								aria-rowindex={rowIndex + 1}
 							>
 								<GridControlButtons
 									rowIndex={rowIndex}
 									isLoading={isTechTreeLoading}
 								/>
 							</div>
-						</React.Fragment>
+						</div>
 					))}
 				</div>
 

@@ -120,6 +120,8 @@ export const LanguageSelector: React.FC = () => {
 						<img
 							src={currentFlagPath}
 							alt={t("languageInfo.changeLanguage") || "Change language"}
+							width="20"
+							height="14"
 							className="h-3 w-4 sm:h-3.5 sm:w-5"
 						/>
 						<Separator orientation="vertical" decorative />
@@ -133,6 +135,8 @@ export const LanguageSelector: React.FC = () => {
 						<img
 							src={currentFlagPath}
 							alt={t("languageInfo.changeLanguage") || "Change language"}
+							width="16"
+							height="12"
 							className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
 						/>
 					</IconButton>
@@ -148,7 +152,13 @@ export const LanguageSelector: React.FC = () => {
 				>
 					{supportedLanguages.map(({ code, label, flagPath }) => (
 						<DropdownMenu.RadioItem key={code} value={code}>
-							<img src={flagPath} alt={label} className="mr-2 h-auto w-5" />
+							<img
+								src={flagPath}
+								alt={label}
+								width="20"
+								height="14"
+								className="mr-2 h-auto w-5"
+							/>
 							<span className="ml-1 font-medium">{label}</span>
 						</DropdownMenu.RadioItem>
 					))}
