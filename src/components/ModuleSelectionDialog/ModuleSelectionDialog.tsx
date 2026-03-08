@@ -11,52 +11,70 @@ import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 import "./ModuleSelectionDialog.scss";
 
 /**
- * Represents a single technology module as used in the selection dialog.
- * This is a subset of the full Module interface from useTechTree,
- * containing only the properties necessary for display and selection.
+ * Represents a simplified technology module definition used within the selection UI.
  */
 export interface SelectionModule {
+	/** Display name of the module. */
 	label: string;
+	/** Unique identifier for the module. */
 	id: string;
+	/** Icon filename. */
 	image: string;
+	/** Optional classification (e.g., 'upgrade'). */
 	type?: string;
+	/** Initial checked status. */
 	checked?: boolean;
 }
 
 /**
- * Represents a collection of modules, grouped by their type (e.g., "core", "bonus").
+ * A dictionary of module lists, keyed by their grouping category (e.g., 'Procedural Upgrades').
  */
 export interface GroupedModules {
 	[key: string]: SelectionModule[];
 }
 
 /**
- * Props for the main ModuleSelectionDialog component.
+ * Props for the `ModuleSelectionDialog` component.
  */
 export interface ModuleSelectionDialogProps {
+	/** Localized name of the technology being configured. */
 	translatedTechName: string;
+	/** Modules organized into categories for display. **Must be provided.** */
 	groupedModules: GroupedModules;
+	/** Array of IDs for currently selected modules. */
 	currentCheckedModules: string[];
+	/** Callback for individual module selection changes. */
 	handleValueChange: (newValues: string[]) => void;
+	/** Callback for the "Select All" toggle. */
 	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
+	/** Asynchronous callback to trigger an optimization using the current selection. */
 	handleOptimizeClick: () => Promise<void>;
+	/** Whether all modules in the dialog are selected. */
 	allModulesSelected: boolean;
+	/** Whether the "Select All" checkbox is in an indeterminate state. */
 	isIndeterminate: boolean;
+	/** Theme color for the technology icon/avatar. */
 	techColor: TechTreeRowProps["techColor"];
+	/** Icon filename for the main technology. */
 	techImage: string | null;
+	/** The unique technology key. */
 	tech?: string;
+	/** Optional callback triggered when the dialog closes. */
 	onClose?: () => void;
 }
 
 /**
- * Renders the content of the module selection dialog.
- * This component is responsible for displaying the list of available modules,
- * allowing the user to select them, and triggering the optimization.
- * Uses the colocated hook pattern with `useModuleSelectionDialog` to manage
- * all state and props distribution to child components.
+ * A dialog component that allows users to pick which specific modules to include in an optimization run.
  *
- * @param {ModuleSelectionDialogProps} props - The props for the component.
- * @returns {JSX.Element} The rendered dialog content.
+ * It features categorical groupings, individual module checkboxes, resolution-aware
+ * icons, and a "Select All" convenience toggle. It uses `useModuleSelectionDialog`
+ * to manage the complex state of multi-select and property mapping.
+ *
+ * @param {ModuleSelectionDialogProps} props - Component properties.
+ * @returns {JSX.Element} The rendered module selection UI.
+ *
+ * @example
+ * <ModuleSelectionDialog {...props} />
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
 	const { headerProps, bodyProps, footerProps } = useModuleSelectionDialog(props);

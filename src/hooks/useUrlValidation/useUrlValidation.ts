@@ -2,9 +2,17 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 /**
- * Custom hook for validating URL parameters and performing necessary redirections.
- * This hook checks for invalid combinations of URL parameters (e.g., `grid` without `platform`)
- * and corrects the URL by navigating to a cleaned version.
+ * Custom hook for validating URL query parameters and enforcing data integrity.
+ *
+ * It specifically checks for edge cases in shared links, such as when a `grid`
+ * parameter exists without a corresponding `platform` parameter. If invalid
+ * combinations are detected, it automatically sanitizes the URL and redirects
+ * the user using a `replace` navigation.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useUrlValidation();
  */
 export const useUrlValidation = () => {
 	const location = useLocation();

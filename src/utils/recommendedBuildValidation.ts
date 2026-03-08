@@ -1,14 +1,17 @@
 import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
 
 /**
- * Type guard to check if an object conforms to the RecommendedBuild interface.
+ * Validates that an unknown object conforms to the `RecommendedBuild` interface.
  *
- * @param {unknown} obj - The object to check.
- * @returns {boolean} True if the object is a valid RecommendedBuild, false otherwise.
+ * This utility performs a deep check of the `layout` property, ensuring it is a
+ * valid 2D array of grid cell data.
+ *
+ * @param {unknown} obj - The object to validate.
+ * @returns {obj is RecommendedBuild} `true` if the object is a valid `RecommendedBuild`, otherwise `false`.
+ *
  * @example
- * const build = { title: "My Build", layout: [[{ tech: "test", module: "test" }]] };
- * if (isValidRecommendedBuild(build)) {
- *  // Do something with the valid build
+ * if (isValidRecommendedBuild(jsonResponse)) {
+ *   applyLayout(jsonResponse.layout);
  * }
  */
 export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {

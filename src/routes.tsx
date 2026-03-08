@@ -1,8 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /**
- * @file Application route definitions
- * @description Defines all routes for the application including root, pages, and language variants.
- * Uses lazy loading for code splitting and includes error handling.
+ * @file High-level application route definitions and navigation structure.
  */
 
 import type { RouteObject } from "react-router-dom";
@@ -12,18 +10,30 @@ import { RouteError } from "./components/ErrorBoundary/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { languages, pages } from "./routeConfig";
 
-// Lazy load components that are not critical for initial render
+/**
+ * Lazily loads the 404 Not Found component.
+ *
+ * @returns {Promise<{ Component: React.ComponentType }>}
+ */
 const NotFound = async () => {
 	const { default: Component } = await import("./components/NotFound/NotFound");
 
 	return { Component };
 };
 
+/**
+ * Generates route objects for each functional page (about, instructions, etc.).
+ * These are rendered via the `MainAppContent` component which handles modal display.
+ */
 const pageRoutes: RouteObject[] = pages.map((page) => ({
 	path: page,
 	Component: MainAppContent,
 }));
 
+/**
+ * Generates language-prefixed versions of all application routes.
+ * This enables deep-linking to specific languages (e.g., /fr/instructions).
+ */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
 		path: lang,
@@ -36,8 +46,13 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 ]);
 
 /**
- * The root route configuration for the application.
- * Defines the main App layout, nested page routes, and language-specific routes.
+ * The master route configuration for the React Router.
+ *
+ * This structure defines the application's URL hierarchy, including:
+ * - The root layout wrapper (`App`).
+ * - Language-prefixed path groups.
+ * - Routed modal pages.
+ * - Global 404 handling.
  */
 export const routes: RouteObject[] = [
 	{

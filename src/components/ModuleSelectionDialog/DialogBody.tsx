@@ -8,31 +8,49 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import { MODULE_GROUP_ORDER } from "./constants";
 import { ModuleGroup } from "./ModuleGroup";
 
+/** Base path for grid module images. */
 const baseImagePath = "/assets/img/grid/";
+/** Path to the fallback icon for modules. */
 const fallbackImage = `${baseImagePath}infra.webp`;
 
 /**
- * Props for the DialogBody component.
+ * Props for the `DialogBody` component.
  */
 export interface DialogBodyProps {
+	/** Modules organized into categories for display. **Must be provided.** */
 	groupedModules: GroupedModules;
+	/** Array of IDs for currently selected modules. */
 	currentCheckedModules: string[];
+	/** Callback for selection changes within the checkbox group. */
 	handleValueChange: (newValues: string[]) => void;
+	/** Callback for the "Select All" toggle checkbox. */
 	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
+	/** Whether all modules in the dialog are currently selected. */
 	allModulesSelected: boolean;
+	/** Theme color for the technology avatar. */
 	techColor: TechTreeRowProps["techColor"];
+	/** Ref to the "Select All" checkbox element. */
 	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
+	/** The unique identifier of the technology being configured. */
 	tech?: string;
+	/** Callback triggered when the dialog is dismissed. */
 	onClose?: () => void;
 }
 
 /**
- * Renders the main body of the module selection dialog.
- * This includes the global "Select All" checkbox, a warning for specific ship types,
- * and the groups of selectable modules.
+ * The primary content component for the module selection dialog.
  *
- * @param props - The props for the component.
- * @returns {JSX.Element} The rendered dialog body.
+ * It manages the rendering of:
+ * 1. Global selection controls (Select All).
+ * 2. Specialized warnings for certain ship types (e.g., Corvettes).
+ * 3. Categorized module lists (Core, Upgrades, etc.) with resolution-aware icons.
+ * 4. Read-only display for "Core" technology modules.
+ *
+ * @param {DialogBodyProps} props - Component properties.
+ * @returns {JSX.Element} The rendered dialog body content.
+ *
+ * @example
+ * <DialogBody {...props} />
  */
 export const DialogBody: React.FC<DialogBodyProps> = ({
 	groupedModules,
@@ -49,6 +67,11 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
 
+	/**
+	 * Proxies the checkbox change event to the parent handler.
+	 *
+	 * @param {boolean | "indeterminate"} checked - The new state.
+	 */
 	const onSelectAllChange = (checked: boolean | "indeterminate") => {
 		handleSelectAllChange(checked);
 	};

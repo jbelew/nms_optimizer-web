@@ -9,16 +9,29 @@ import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalT
 
 import { useTechTreeRow } from "./useTechTreeRow";
 
+/**
+ * Props for the `ActionButtons` component.
+ */
 interface ActionButtonsProps extends TechTreeRowProps {
+	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
 	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
- * Renders the action buttons for a tech tree row (optimize/update and reset).
- * Receives hook data from parent to avoid redundant hook calls.
+ * A component that renders the primary interaction buttons for a technology row.
  *
- * @param {ActionButtonsProps} props - The props for the component.
- * @returns {JSX.Element} The rendered action buttons.
+ * It provides two buttons:
+ * 1. **Optimize/Update**: Triggers the solver or updates the existing layout.
+ * 2. **Reset**: Removes all instances of the technology from the grid.
+ *
+ * It intelligently calculates its own disabled states and tooltip messages
+ * based on whether the grid is full or if the tech is already present.
+ *
+ * @param {ActionButtonsProps} props - Component properties.
+ * @returns {JSX.Element} The rendered optimize and reset buttons.
+ *
+ * @example
+ * <ActionButtons {...props} hookData={hookData} />
  */
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();

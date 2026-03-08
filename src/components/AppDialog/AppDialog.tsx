@@ -1,4 +1,4 @@
-// src/components/InfoDialog/InfoDialog.tsx
+// src/components/AppDialog/AppDialog.tsx
 import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 
 import { getDialogIconAndStyle } from "../../utils/dialogIconMapping";
 
+/** List of translation keys for dialogs that represent full routes. */
 const ROUTED_DIALOG_TITLE_KEYS = [
 	"about",
 	"instructions",
@@ -19,46 +20,57 @@ const ROUTED_DIALOG_TITLE_KEYS = [
 ];
 
 /**
- * @interface AppDialogProps
- * @property {() => void} onClose - Callback to be called when the dialog is closed.
- * @property {string} [title] - The title of the dialog.
- * @property {string} [titleKey] - The translation key for the title.
- * @property {boolean} isOpen - Whether the dialog is open.
- * @property {ReactNode} content - The content to be displayed in the dialog.
+ * Props for the `AppDialog` component.
  */
 interface AppDialogProps {
+	/** Callback function triggered when the dialog requests to close. **Must be provided.** */
 	onClose: () => void;
+	/** Fallback static title if `titleKey` is not provided. */
 	title?: string;
-	titleKey?: string; // Add a prop for the translation key
+	/** Translation key for the dialog's localized title. */
+	titleKey?: string;
+	/** Whether the dialog is currently visible. */
 	isOpen: boolean;
+	/** The React components or text to render inside the dialog body. */
 	content: ReactNode;
+	/** Optional CSS class names to apply to the dialog content container. */
 	className?: string;
 }
 
 /**
- * A reusable dialog component for displaying various types of content.
+ * A reusable modal dialog component built on top of Radix UI.
  *
- * @returns {React.ReactElement} - The rendered dialog component.
+ * This component provides a consistent look and feel for all application modals,
+ * including automated icon selection based on the title, standard scrollable
+ * content areas, and keyboard navigation (Escape key support).
+ *
+ * @param {AppDialogProps} props - Component properties.
+ * @returns {JSX.Element} The rendered dialog component.
+ *
+ * @example
+ * <AppDialog
+ *   isOpen={true}
+ *   onClose={() => setOpen(false)}
+ *   titleKey="dialogs.titles.about"
+ *   content={<AboutContent />}
+ * />
  */
 const AppDialog: React.FC<AppDialogProps> = ({
 	onClose,
 	content,
 	isOpen,
-	titleKey, // Use the new prop
+	titleKey,
 	title = "Information",
 	className = "",
 }) => {
 	/**
-	 * Add a keydown event listener to the window for the Escape key.
-	 *
-	 * This is done to allow the dialog to be closed with the Escape key, in
-	 * addition to the close button.
+	 * Manages the Escape key listener for the dialog.
 	 */
 	useEffect(() => {
 		/**
-		 * Handle the Escape key, closing the dialog if it is pressed.
+		 * Closes the dialog if the Escape key is pressed.
 		 *
-		 * @param {KeyboardEvent} event
+		 * @param {KeyboardEvent} event - The keyboard event.
 		 */
 		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
 

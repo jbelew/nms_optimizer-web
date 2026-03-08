@@ -8,9 +8,10 @@ import { useTechBonusStore } from "../../store/TechBonusStore";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 /**
- * Rounds a number to a specified number of decimal places.
+ * Rounds a numerical value to a fixed number of decimal places.
+ *
  * @param {number} value - The number to round.
- * @param {number} decimals - The number of decimal places.
+ * @param {number} decimals - The target decimal precision. **Must be a positive integer.**
  * @returns {number} The rounded number.
  */
 function round(value: number, decimals: number) {
@@ -18,19 +19,23 @@ function round(value: number, decimals: number) {
 }
 
 /**
- * @interface BonusStatusIconProps
- * @property {string} tech - The technology identifier.
- * @property {number} techMaxBonus - The maximum potential bonus for the technology.
- * @property {number} techSolvedBonus - The bonus achieved from the current solved state for the technology.
+ * Props for the `BonusStatusIcon` component.
  */
 interface BonusStatusIconProps {
+	/** Unique identifier for the technology. */
 	tech: string;
+	/** The theoretical maximum bonus for the current configuration. */
 	techMaxBonus: number;
+	/** The actual bonus achieved in the most recent solve. */
 	techSolvedBonus: number;
 }
 
 /**
- * Computes the bonus status data from raw bonus values.
+ * Core logic to determine the efficiency rating and icon metadata for a technology.
+ *
+ * @param {number} techMaxBonus - The raw maximum bonus value.
+ * @param {function(string): string} t - Translation function.
+ * @returns {BonusStatusData} Metadata including icon type and tooltip text.
  */
 function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
 	const roundedMaxBonus = round(techMaxBonus, 2);
@@ -70,7 +75,12 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 }
 
 /**
- * Renders the icon based on the icon type.
+ * Renders the appropriate Radix icon component based on the status type.
+ *
+ * @param {string | null} iconType - The identifier for the icon (warning, check, lightning).
+ * @param {string} className - CSS classes.
+ * @param {React.CSSProperties} style - Inline styles.
+ * @returns {React.ReactNode} The rendered icon component.
  */
 function renderIcon(
 	iconType: string | null,
@@ -90,10 +100,20 @@ function renderIcon(
 }
 
 /**
- * Displays an icon indicating the status of the technology's bonus based on solved and max values.
+ * A component that displays a status icon representing the optimization quality of a technology.
  *
- * @param {BonusStatusIconProps} props - The props for the component.
- * @returns {JSX.Element|null} The rendered icon or null.
+ * It compares the achieved bonus against the target to show:
+ * - ⚠️ **Warning**: Sub-optimal layout (under 100%).
+ * - 🎯 **Checkmark**: Optimal standard layout (exactly 100%).
+ * - ⚡ **Lightning**: Supercharged layout (over 100%).
+ *
+ * Statuses are persisted in `TechBonusStore` to maintain visual state across sessions.
+ *
+ * @param {BonusStatusIconProps} props - Component properties.
+ * @returns {JSX.Element | null} The status icon with tooltip, or `null` if no bonus exists.
+ *
+ * @example
+ * <BonusStatusIcon tech="pulse" techMaxBonus={145} techSolvedBonus={145} />
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	tech,

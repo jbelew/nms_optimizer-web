@@ -11,25 +11,32 @@ let sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDiv
 let sharedForceShow: (() => void) | null = null;
 
 /**
- * Register the external forceShow function used by the toolbar.
- * This allows the scroll-into-view behavior to unhide the toolbar when triggered.
- * @param {() => void} fn - The forceShow function from useScrollHide
+ * Registers an external function to force the visibility of the toolbar.
+ *
+ * This allows the scroll-into-view behavior to automatically unhide the mobile
+ * toolbar when scrolling is triggered.
+ *
+ * @param {function(): void} fn - The `forceShow` function, typically from `useScrollHide`.
+ * @returns {void}
  */
 export const registerToolbarForceShow = (fn: () => void) => {
 	sharedForceShow = fn;
 };
 
 /**
- * Custom hook to manage grid container ref and scroll behavior with responsive offset.
- * Maintains a single shared ref across all callers (useOptimize, GridTableButtons, useRecommendedBuild).
- * On screens < 1024px, scrolls the grid to near the top of the screen.
- * On larger screens (>= 1024px), may skip scrolling depending on the caller's preference.
- * Also automatically shows the toolbar when scrolling.
+ * Custom hook for managing grid scrolling with responsive offsets.
  *
- * @param {Object} options - Configuration options
- * @param {boolean} [options.skipOnLargeScreens=false] - If true, skip scrolling on screens >= 1024px
- * @returns {{gridContainerRef: React.MutableRefObject<HTMLDivElement | null>, scrollIntoView: () => void}}
- *          The shared ref to attach to the grid container element and function to trigger scroll animation.
+ * It maintains a singleton ref to the grid container, allowing multiple
+ * components (like the optimizer and recommended build list) to trigger
+ * smooth scrolling to the grid. On screens smaller than 1024px, it ensures
+ * the grid is correctly positioned near the top of the viewport.
+ *
+ * @param {object} [options] - Configuration for the scroll behavior.
+ * @param {boolean} [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
+ * @returns {{ gridContainerRef: React.MutableRefObject<HTMLDivElement | null>, scrollIntoView: function(): void }} The shared container ref and a function to trigger the scroll.
+ *
+ * @example
+ * const { gridContainerRef, scrollIntoView } = useScrollGridIntoView({ skipOnLargeScreens: true });
  */
 export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }) => {
 	const gridContainerRef = sharedGridContainerRef;
@@ -45,6 +52,11 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 		offset = GRID_SCROLL_OFFSET_LARGE;
 	}
 
+	/**
+	 * Performs a smooth scroll to the grid container with the appropriate responsive offset.
+	 *
+	 * Also triggers the registered toolbar `forceShow` function.
+	 */
 	const scrollIntoView = () => {
 		// Skip scrolling on large screens if configured to do so
 		if (options?.skipOnLargeScreens && isAbove1024) {

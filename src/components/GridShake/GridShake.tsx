@@ -4,17 +4,30 @@ import React, { useEffect, useRef } from "react";
 
 import { useShakeStore } from "../../store/ShakeStore";
 
+/**
+ * Props for the `GridShake` component.
+ */
 interface GridShakeProps {
+	/** The content that should perform the shake animation. */
 	children: React.ReactNode;
+	/** Duration of the CSS animation in milliseconds. **Must match the CSS animation-duration.** */
 	duration: number;
 }
 
 /**
- * GridShake component applies a shaking animation to its children when the `shakeCount` in the store is incremented.
- * The shaking effect lasts for a specified `duration`.
+ * A wrapper component that provides a visual "shake" animation on demand.
  *
- * @param {GridShakeProps} props - The props for the GridShake component.
- * @returns {JSX.Element} The rendered GridShake component.
+ * It listens to the global `ShakeStore` and applies a CSS class to its child
+ * container whenever a shake event is triggered. This is used as sensory
+ * feedback for invalid user actions (e.g., clicking a locked cell).
+ *
+ * @param {GridShakeProps} props - Component properties.
+ * @returns {JSX.Element} The container wrapping the children.
+ *
+ * @example
+ * <GridShake duration={500}>
+ *   <InteractiveGrid />
+ * </GridShake>
  */
 const GridShake: React.FC<GridShakeProps> = ({ children, duration }) => {
 	const ref = useRef<HTMLDivElement>(null);

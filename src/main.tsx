@@ -1,7 +1,5 @@
 /**
- * @file Main application entry point
- * @description Sets up the React application with routing, theming, PWA service worker,
- * analytics, and i18n. Handles DOM rendering and splash screen management.
+ * @file High-level application bootstrap and root rendering logic.
  */
 
 // Base theme tokens - optimized color imports without P3 definitions

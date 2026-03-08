@@ -7,16 +7,26 @@ import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { ErrorDisplay } from "../ErrorBoundary/ErrorDisplay";
 
+/**
+ * Props for the `ErrorContent` component.
+ */
 interface ErrorContentProps {
+	/** Callback function triggered when the error UI is dismissed. */
 	onClose: () => void;
 }
 
 /**
- * ErrorContent component displays an error message and provides a link to report issues.
- * It is typically used within a dialog.
+ * A component for displaying detailed error information within a dialog.
  *
- * @param {ErrorContentProps} props - The props for the ErrorContent component.
- * @returns {JSX.Element} The rendered ErrorContent component.
+ * It retrieves the active error state from `OptimizeStore`, renders a user-friendly
+ * disruption message, and provides links for reporting the issue on GitHub.
+ * It also handles automated analytics reporting of the error and stack trace.
+ *
+ * @param {ErrorContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered error content.
+ *
+ * @example
+ * <ErrorContent onClose={() => setDialogOpen(false)} />
  */
 const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
@@ -24,6 +34,9 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	const errorType = useOptimizeStore((state) => state.errorType);
 	const error = useOptimizeStore((state) => state.error);
 
+	/**
+	 * Manages the error-boundary CSS class and sends analytics events on mount.
+	 */
 	useEffect(() => {
 		document.body.classList.add("error-boundary-visible");
 
@@ -42,6 +55,9 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 		};
 	}, [error, sendEvent]);
 
+	/**
+	 * Reloads the browser page to attempt recovery from a fatal error.
+	 */
 	const handleRetry = () => {
 		window.location.reload();
 	};

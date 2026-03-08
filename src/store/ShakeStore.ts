@@ -1,22 +1,36 @@
 // src/store/ShakeStore.ts
 import { create } from "zustand";
 
-const SHAKE_ANIMATION_DURATION = 500; // ms - Duration of the shake animation
+/** Duration of the shake CSS animation in milliseconds. */
+const SHAKE_ANIMATION_DURATION = 500;
 let lastShakeTime = 0;
 
 /**
- * @interface ShakeState
- * @property {boolean} shaking - Whether the component should be shaking.
- * @property {(shaking: boolean) => void} setShaking - Function to set the shaking state.
+ * State and actions for triggering UI shake animations.
  */
 export interface ShakeState {
+	/** Incremental counter used to trigger re-renders in components observing the shake. */
 	shakeCount: number;
+	/**
+	 * Throttled function to initiate a shake animation.
+	 *
+	 * Animation is throttled to `SHAKE_ANIMATION_DURATION` to prevent multiple
+	 * overlapping triggers.
+	 */
 	triggerShake: () => void;
 }
 
 /**
- * Zustand store for managing the state of the shake animation.
- * Throttles shake events to prevent overlapping animations.
+ * Zustand store for orchestrating a global "shake" effect.
+ *
+ * This is used to provide visual feedback when a user attempts an invalid
+ * action (e.g., clicking a locked cell).
+ *
+ * @returns {ShakeState} The shake store state and actions.
+ *
+ * @example
+ * const { triggerShake } = useShakeStore();
+ * triggerShake();
  */
 export const useShakeStore = create<ShakeState>((set) => ({
 	shakeCount: 0,

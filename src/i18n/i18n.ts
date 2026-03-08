@@ -3,12 +3,13 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
-/** Array of supported language codes. */
+/** Array of ISO language codes supported by the application. */
 export const languages = ["en", "es", "fr", "de", "pt"];
 
 /**
  * Mapping of language codes to their native language names.
- * Used for displaying language options to users.
+ *
+ * Used for displaying user-friendly language selection options in the UI.
  */
 export const nativeLanguageNames: { [key: string]: string } = {
 	en: "English",
@@ -19,12 +20,14 @@ export const nativeLanguageNames: { [key: string]: string } = {
 };
 
 /**
- * Initialize i18next with language detection, HTTP backend, and React integration.
- * Configuration:
- * - Supports the languages defined in the languages array
- * - Detects language from URL path
- * - Falls back to English if language not found
- * - Loads translations from /assets/locales/{language}/{namespace}.json
+ * Bootstraps the `i18next` library with essential plugins and configuration.
+ *
+ * It configures:
+ * 1. `Backend`: Loads JSON translation files from the `/assets/locales/` directory.
+ * 2. `LanguageDetector`: Extracts the active language from the URL path.
+ * 3. `initReactI18next`: Bridges i18next with the React component lifecycle.
+ *
+ * **Defaults to English if the detected language is unsupported.**
  */
 void i18n
 	.use(Backend)
@@ -49,5 +52,5 @@ void i18n
 		defaultNS: "translation",
 	});
 
-/** Configured i18next instance for internationalization. */
+/** The pre-configured i18next instance used globally for localization. */
 export default i18n;

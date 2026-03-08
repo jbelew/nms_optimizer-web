@@ -7,17 +7,18 @@ import { useEffect, useRef } from "react";
 import { usePlatformStore } from "@/store/PlatformStore";
 
 /**
- * Coordinator hook for the ModuleSelectionDialog component.
- * Encapsulates all state management and logic, returning structured props
- * for DialogHeader, DialogBody, and DialogFooter sub-components.
+ * Coordinator hook for the `ModuleSelectionDialog` component.
  *
- * Handles:
- * - Ship type detection (corvette-specific logic)
- * - Indeterminate checkbox state management
- * - Props distribution to child components
+ * It encapsulates the complex state management for module selection, specifically:
+ * 1. Synchronizing the native DOM indeterminate state for the "Select All" checkbox.
+ * 2. Determining ship-specific behavioral overrides (e.g., for Corvettes).
+ * 3. Structuring and distributing props to specialized sub-components (`DialogHeader`, `DialogBody`, `DialogFooter`).
  *
- * @param props - The props for the ModuleSelectionDialog component
- * @returns Structured object containing header, body, and footer props
+ * @param {ModuleSelectionDialogProps} props - The raw properties passed to the main dialog.
+ * @returns {object} Structured props for children and internal UI flags.
+ *
+ * @example
+ * const { headerProps, bodyProps } = useModuleSelectionDialog(rawProps);
  */
 export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 	const {
@@ -87,4 +88,5 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 	};
 };
 
+/** Type representing the return value of the coordinator hook. */
 export type UseModuleSelectionDialogReturn = ReturnType<typeof useModuleSelectionDialog>;

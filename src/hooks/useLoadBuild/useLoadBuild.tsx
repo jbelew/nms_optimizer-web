@@ -6,24 +6,41 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
 
+/**
+ * Return type for the `useLoadBuild` hook.
+ */
 interface UseLoadBuildReturn {
+	/** Ref to the hidden file input element. */
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
+	/** Function to programmatically trigger the file input click. */
 	handleLoadBuild: () => void;
+	/** Handler for the file input's `onChange` event. */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+	/** Whether a build is currently being parsed and loaded. */
 	isLoadPending: boolean;
 }
 
+/**
+ * Props for the `useLoadBuild` hook.
+ */
 interface UseLoadBuildProps {
+	/** Callback to display a success toast. */
 	showSuccess: (title: string, description: string | React.ReactNode, duration?: number) => void;
+	/** Callback to display an error toast. */
 	showError: (title: string, description: string, duration?: number) => void;
 }
 
 /**
- * Custom hook to manage load build functionality.
- * Handles file input, file loading, analytics, and toast notifications.
+ * Custom hook for managing the "Load Build" workflow.
  *
- * @param {UseLoadBuildProps} [props] - Optional toast functions passed from parent component
- * @returns {UseLoadBuildReturn} Load build state and handlers
+ * It handles the file selection process, delegates parsing to `useBuildFileManager`,
+ * tracks loading state, sends analytics events, and manages success/error notifications.
+ *
+ * @param {UseLoadBuildProps} [props] - Optional callbacks for displaying notifications.
+ * @returns {UseLoadBuildReturn} State and event handlers for build loading.
+ *
+ * @example
+ * const { handleLoadBuild, isLoadPending } = useLoadBuild({ showSuccess, showError });
  */
 export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const { t } = useTranslation();
@@ -35,10 +52,19 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isLoadPending, setIsLoadPending] = useState(false);
 
+	/**
+	 * Opens the system file picker dialog.
+	 */
 	const handleLoadBuild = () => {
 		fileInputRef.current?.click();
 	};
 
+	/**
+	 * Processes the selected build file and updates the application state.
+	 *
+	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 * @returns {Promise<void>}
+	 */
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 

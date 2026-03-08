@@ -6,9 +6,11 @@ import { seoMetadata } from "../../../shared/seo-metadata.js";
 import { sendEvent } from "../../utils/analytics";
 
 /**
- * Updates a meta tag in the document's head.
- * @param {string} name - The name of the meta tag to update.
- * @param {string} content - The new content for the meta tag.
+ * Updates or creates a meta tag in the document's head using the `name` attribute.
+ *
+ * @param {string} name - The name of the meta tag (e.g., 'description'). **Must not be empty.**
+ * @param {string} content - The content string for the meta tag.
+ * @returns {void}
  */
 const updateMetaTag = (name: string, content: string) => {
 	let element = document.querySelector(`meta[name="${name}"]`);
@@ -23,9 +25,13 @@ const updateMetaTag = (name: string, content: string) => {
 };
 
 /**
- * Updates a meta property tag in the document's head (e.g., og:url).
- * @param {string} property - The property attribute of the meta tag.
- * @param {string} content - The new content for the meta tag.
+ * Updates or creates a meta tag in the document's head using the `property` attribute.
+ *
+ * Typically used for Open Graph (OG) tags.
+ *
+ * @param {string} property - The property identifier (e.g., 'og:title'). **Must not be empty.**
+ * @param {string} content - The content string for the meta tag.
+ * @returns {void}
  */
 const updateMetaPropertyTag = (property: string, content: string) => {
 	let element = document.querySelector(`meta[property="${property}"]`);
@@ -40,8 +46,10 @@ const updateMetaPropertyTag = (property: string, content: string) => {
 };
 
 /**
- * Updates or creates the canonical link tag.
- * @param {string} href - The canonical URL.
+ * Updates or creates the canonical link tag in the document's head.
+ *
+ * @param {string} href - The full canonical URL. **Must be a valid URL.**
+ * @returns {void}
  */
 const updateCanonicalTag = (href: string) => {
 	let element = document.querySelector('link[rel="canonical"]');
@@ -56,8 +64,16 @@ const updateCanonicalTag = (href: string) => {
 };
 
 /**
- * Custom hook for managing document title and SEO meta tags.
- * Updates based on the current route and language by looking up metadata from a shared source.
+ * Custom hook for managing SEO metadata and document titles.
+ *
+ * This hook automatically updates the document title, meta description, Open Graph tags,
+ * and canonical URLs based on the current route and language. It also triggers
+ * manual page view events for Google Analytics.
+ *
+ * @returns {void}
+ *
+ * @example
+ * useSeoAndTitle();
  */
 export const useSeoAndTitle = () => {
 	const { t, i18n } = useTranslation();

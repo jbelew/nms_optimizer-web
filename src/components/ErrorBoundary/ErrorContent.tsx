@@ -10,20 +10,22 @@ import { ErrorDisplay } from "./ErrorDisplay";
 import "./ErrorBoundary.scss";
 
 /**
- * Props for the ErrorContent component.
- * @typedef {object} ErrorContentProps
- * @property {Error} [error] - The error object caught by the boundary.
- * @property {ErrorInfo} [errorInfo] - Additional React error information.
- * @property {"page" | "inset"} variant - Whether to display as a full page or inset.
- * @property {ReactNode} [children] - Optional custom error message.
+ * Props for the `ErrorContent` component.
  */
 interface ErrorContentProps {
+	/** The exception that was caught by the boundary. */
 	error?: Error;
+	/** Metadata regarding the React component stack. */
 	errorInfo?: ErrorInfo;
+	/** Controls the visual layout of the error UI. */
 	variant: "page" | "inset";
+	/** Optional custom React nodes to display as the error message. */
 	children?: ReactNode;
 }
 
+/**
+ * Static component rendering the default full-page error message.
+ */
 const DefaultMessage = () => (
 	<>
 		Something went wrong! This page may be <strong>out of date</strong>. Try{" "}
@@ -42,6 +44,9 @@ const DefaultMessage = () => (
 	</>
 );
 
+/**
+ * Static component rendering a compact inset error message.
+ */
 const InsetMessage = () => (
 	<>
 		Something went wrong! Try <strong>reloading the page</strong> to see if that resolves the
@@ -60,8 +65,17 @@ const InsetMessage = () => (
 );
 
 /**
- * Component that displays an error message and optional debug information.
- * Used by the ErrorBoundary and RouteError components.
+ * A layout component for displaying crash information and recovery steps.
+ *
+ * This component is used by both the global `ErrorBoundary` and `RouteError`.
+ * It automatically ensures the splash screen is hidden and adapts its
+ * styling based on the `variant` (full page overlay vs. inset card).
+ *
+ * @param {ErrorContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered error UI.
+ *
+ * @example
+ * <ErrorContent variant="page" error={new Error("Crash")} />
  */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
 	const isLarge = useBreakpoint("1024px");

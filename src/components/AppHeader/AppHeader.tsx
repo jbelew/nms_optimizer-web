@@ -26,19 +26,26 @@ import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
 
 /**
- * @interface AppHeaderProps
- * @property {() => void} onShowChangelog - Callback function to be invoked when the changelog button is clicked.
+ * Props for the `AppHeader` component.
  */
 interface AppHeaderProps {
+	/** Callback function to trigger the changelog dialog. **Must be provided.** */
 	onShowChangelog: () => void;
 }
 
 /**
- * AppHeader component displays the application header.
- * It includes the application title, a language selector, and buttons for user statistics and changelog.
+ * The global application header component.
  *
- * @param {AppHeaderProps} props - The props for the AppHeader component.
- * @returns {JSX.Element} The rendered AppHeader component.
+ * It renders the primary logo, application title, version number, and a suite
+ * of global controls including language selection, accessibility toggles, and
+ * links to statistics and changelogs. It also features a hidden "Easter Egg"
+ * popover with in-game coordinates.
+ *
+ * @param {AppHeaderProps} props - Component properties.
+ * @returns {JSX.Element} The rendered application header.
+ *
+ * @example
+ * <AppHeader onShowChangelog={() => setChangelogOpen(true)} />
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t, i18n } = useTranslation();

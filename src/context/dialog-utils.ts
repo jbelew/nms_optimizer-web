@@ -2,8 +2,7 @@
 import { createContext, useContext } from "react";
 
 /**
- * The type of dialog to display.
- * @typedef {"about" | "instructions" | "changelog" | "translation" | "userstats" | null} DialogType
+ * Union type of all valid routed dialog identifiers.
  */
 export type DialogType =
 	| "about"
@@ -14,44 +13,53 @@ export type DialogType =
 	| null;
 
 /**
- * @interface DialogContextType
- * @property {DialogType} activeDialog - The currently active dialog.
- * @property {(dialog: NonNullable<DialogType>|null, data?: {shareUrl?: string, section?: string}) => void} openDialog - Function to open a dialog.
- * @property {() => void} closeDialog - Function to close the current dialog.
- * @property {boolean} tutorialFinished - Whether the user has finished the tutorial.
- * @property {() => void} markTutorialFinished - Function to mark the tutorial as finished.
- * @property {boolean} userVisited - Whether the user has visited before.
- * @property {() => void} markUserVisited - Function to mark the user as visited.
- * @property {string} shareUrl - The URL to share.
- * @property {string|undefined} sectionToScrollTo - The section to scroll to in the dialog.
+ * Context type for the application's routed dialog system.
  */
 export interface DialogContextType {
+	/** The identifier of the dialog currently being displayed. */
 	activeDialog: DialogType;
+	/**
+	 * Navigates to a dialog route or sets external data for a dialog.
+	 *
+	 * @param {NonNullable<DialogType> | null} dialog - The dialog to show.
+	 * @param {object} [data] - Optional metadata.
+	 */
 	openDialog: (
 		dialog: NonNullable<DialogType> | null,
 		data?: { shareUrl?: string; section?: string }
 	) => void;
+	/**
+	 * Navigates away from the active dialog route.
+	 */
 	closeDialog: () => void;
+	/** Whether the user has seen and completed the initial tutorial. */
 	tutorialFinished: boolean;
+	/** Sets the tutorial completion flag. */
 	markTutorialFinished: () => void;
+	/** Whether the user has visited the site previously. */
 	userVisited: boolean;
+	/** Sets the user visited flag. */
 	markUserVisited: () => void;
+	/** The temporary URL stored for the share link dialog. */
 	shareUrl: string;
+	/** Optional ID of an element within a dialog to scroll to on mount. */
 	sectionToScrollTo: string | undefined;
 }
 
 /**
- * React Context for managing dialog state and providing dialog control functions
- * to child components.
+ * React Context for managing and providing global dialog-related state.
  */
 export const DialogContext = createContext<DialogContextType | undefined>(undefined);
 
 /**
- * Custom hook for easy consumption of the DialogContext.
- * Throws an error if used outside of a DialogProvider.
+ * Custom hook for accessing the `DialogContext`.
  *
- * @returns {DialogContextType} The dialog context value.
- * @throws {Error} If used outside of a DialogProvider.
+ * @returns {DialogContextType} The active dialog context value.
+ * @throws {Error} If called outside of a `DialogProvider`.
+ *
+ * @example
+ * const { openDialog } = useDialog();
+ * openDialog("changelog");
  */
 export const useDialog = () => {
 	const context = useContext(DialogContext);

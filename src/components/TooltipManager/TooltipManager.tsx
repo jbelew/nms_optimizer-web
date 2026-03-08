@@ -4,9 +4,17 @@ import { Tooltip } from "@radix-ui/themes";
 import { useTooltipState } from "../../context/tooltip-utils";
 
 /**
- * TooltipManager renders a single singleton tooltip instance.
- * It uses the high-level @radix-ui/themes Tooltip for perfect styling
- * but controls its lifecycle manually via the singleton context.
+ * A singleton tooltip management component.
+ *
+ * It listens to the global `TooltipState` and renders a single `radix-ui` tooltip
+ * positioned dynamically over a "dummy" trigger element. This approach ensures
+ * that only one tooltip is ever rendered in the DOM, maximizing performance
+ * and preventing overlap, while still utilizing high-quality theme-aware styling.
+ *
+ * @returns {JSX.Element | null} The rendered singleton tooltip, or `null` if no active position is provided.
+ *
+ * @example
+ * <TooltipManager />
  */
 export const TooltipManager: React.FC = () => {
 	const { label, rect, isOpen } = useTooltipState();

@@ -3,8 +3,16 @@ import "./Snowfall.scss";
 import React, { memo } from "react";
 
 /**
- * Component that renders a decorative snowfall effect.
- * Uses CSS animations for performance and is aria-hidden to avoid impacting accessibility.
+ * A decorative component that renders a background snowfall animation.
+ *
+ * It generates 100 individual "snowflake" elements that are animated via CSS.
+ * The component is memoized to prevent unnecessary re-renders and is
+ * explicitly hidden from screen readers.
+ *
+ * @returns {JSX.Element} The container with snowflake elements.
+ *
+ * @example
+ * <Snowfall />
  */
 export const Snowfall = memo(() => {
 	// Create an array of 100 items for the snowflakes

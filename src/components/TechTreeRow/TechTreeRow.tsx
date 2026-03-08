@@ -9,20 +9,20 @@ import { TechInfoBadges } from "./TechInfoBadges";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 /**
- * Props for the TechTreeRow component.
+ * Props for the `TechTreeRow` component.
  */
 export interface TechTreeRowProps {
-	/** The unique identifier for the technology. */
+	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
 	tech: string;
-	/** Async function to handle the optimization process for a given technology. */
+	/** Asynchronous callback to trigger an optimization solve for this row. */
 	handleOptimize: (tech: string) => Promise<void>;
-	/** Boolean indicating if an optimization process is currently active. */
+	/** Whether any optimization solve is currently running globally. */
 	solving: boolean;
-	/** The filename of the image representing the technology (e.g., "hyperdrive.webp"). Null if no specific image. */
+	/** Filename of the icon image to display. `null` if no icon is available. */
 	techImage: string | null;
-	/** Boolean indicating whether the grid is currently full. */
+	/** Whether all active grid slots are currently occupied. */
 	isGridFull: boolean;
-	/** The color associated with the technology. */
+	/** The theme color identifier for the technology's avatar and UI accents. */
 	techColor:
 		| "gray"
 		| "gold"
@@ -53,11 +53,17 @@ export interface TechTreeRowProps {
 }
 
 /**
- * Renders a single row in the technology tree, allowing users to optimize, reset, and view module details.
- * Child components call useTechTreeRow directly to get their data (colocated hook pattern).
+ * A component representing a single row in the technology sidebar.
  *
- * @param {TechTreeRowProps} props - The props for the component.
- * @returns {JSX.Element} The rendered tech tree row.
+ * It provides the user interface for a specific technology category, including
+ * an avatar, status badges, and action buttons for optimization and resetting.
+ * It uses the `useTechTreeRow` hook to manage its internal state and derived data.
+ *
+ * @param {TechTreeRowProps} props - Component properties.
+ * @returns {JSX.Element} The rendered technology row.
+ *
+ * @example
+ * <TechTreeRow tech="pulse" techColor="blue" solving={false} isGridFull={false} handleOptimize={fn} techImage="pulse.webp" />
  */
 export const TechTreeRow: React.FC<TechTreeRowProps> = (props) => {
 	const hookData = useTechTreeRow(props);

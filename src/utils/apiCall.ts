@@ -3,24 +3,29 @@ import { fetchJson } from "./api";
 import { hideSplashScreenAndShowBackground } from "./splashScreen";
 
 /**
- * Options for the apiCall function.
- * @typedef {object} ApiCallOptions
- * @property {boolean} [skipGlobalError] - Whether to skip showing the global error dialog on failure.
+ * Options for the `apiCall` function, extending standard `RequestInit`.
  */
 export interface ApiCallOptions extends RequestInit {
+	/** Whether to skip showing the global error dialog on failure. Defaults to `false`. */
 	skipGlobalError?: boolean;
 }
 
 /**
- * Centralized API call wrapper that handles errors and triggers the error dialog.
- * All HTTP errors and network failures automatically trigger the ErrorContent dialog unless skipped.
+ * Centralized API call wrapper that handles errors and triggers the global error dialog.
  *
- * @template T - The expected return type.
- * @param {string} url - The API endpoint URL.
- * @param {ApiCallOptions} [options] - Fetch options plus custom flags.
- * @param {number} [timeout=10000] - Timeout in milliseconds (default: 10000).
- * @returns {Promise<T>} The parsed JSON response.
- * @throws {HttpError|Error} If the request fails or returns a non-ok status.
+ * All HTTP errors and network failures automatically trigger the `ErrorContent` dialog
+ * via the `OptimizeStore` unless `skipGlobalError` is set to `true`.
+ *
+ * @template T - The expected return type of the JSON data.
+ * @param {string} url - The API endpoint URL. **Must be a valid URL.**
+ * @param {ApiCallOptions} [options={}] - Fetch options plus custom logic flags.
+ * @param {number} [timeout=10000] - Timeout in milliseconds. **Must be a positive integer.**
+ * @returns {Promise<T>} A promise that resolves to the parsed JSON response of type `T`.
+ * @throws {HttpError} Throws if the response status is not "ok".
+ * @throws {Error} Throws on network failure or timeout.
+ *
+ * @example
+ * const result = await apiCall<{ success: boolean }>("/api/submit", { method: "POST" });
  */
 export async function apiCall<T = unknown>(
 	url: string,

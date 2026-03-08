@@ -5,29 +5,34 @@ import { useGridStore } from "../../store/GridStore";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 /**
- * @interface AppLayout
- * @property {React.RefObject<HTMLDivElement|null>} containerRef - A ref for the main container element.
- * @property {React.RefObject<HTMLDivElement|null>} gridTableRef - A ref for the grid table element.
- * @property {number|null} gridHeight - The height of the grid.
- * @property {number|undefined} gridTableTotalWidth - The total width of the grid table.
- * @property {boolean} isLarge - Whether the screen is large.
+ * Interface representing the dimensions and refs for the application layout.
  */
 interface AppLayout {
+	/** Ref to the main content container. */
 	containerRef: React.RefObject<HTMLDivElement | null>;
+	/** Ref to the grid table container. */
 	gridTableRef: React.RefObject<HTMLDivElement | null>;
+	/** Calculated height of the grid. `null` if the grid is not in side-by-side mode. */
 	gridHeight: number | null;
+	/** Calculated total width of the grid table, including adjustments. */
 	gridTableTotalWidth: number | undefined;
+	/** Whether the viewport matches the 'large' breakpoint (1024px). */
 	isLarge: boolean;
 }
 
 const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 
 /**
- * Custom hook for managing application layout, specifically grid dimensions and responsiveness.
- * It observes the size of the main container and grid table to dynamically adjust layout.
+ * Custom hook for managing dynamic application layout and responsiveness.
  *
- * @returns {AppLayout} An object containing refs for the container and grid table,
- *                      and state for grid height, grid table total width, and large screen status.
+ * It uses `ResizeObserver` to track the dimensions of the main container and grid table.
+ * On large screens, it synchronizes the grid height with the container height to enable
+ * side-by-side scrolling.
+ *
+ * @returns {AppLayout} Layout state including refs and calculated dimensions.
+ *
+ * @example
+ * const { containerRef, gridHeight } = useAppLayout();
  */
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);

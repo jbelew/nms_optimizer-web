@@ -9,6 +9,18 @@ import "./NotFound.scss";
 
 import { Button } from "@radix-ui/themes";
 
+/**
+ * A themed 404 fallback component for invalid application routes.
+ *
+ * It provides a stylized "Atlas" interface to inform users that the requested
+ * page doesn't exist. It also handles automatic SEO title updates, analytics
+ * tracking for broken links, and ensuring the splash screen is dismissed.
+ *
+ * @returns {JSX.Element} The rendered 404 page.
+ *
+ * @example
+ * <Route path="*" element={<NotFound />} />
+ */
 const NotFound: FC = () => {
 	const { t } = useTranslation();
 

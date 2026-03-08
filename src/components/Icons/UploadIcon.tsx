@@ -1,18 +1,26 @@
 import type { SVGProps } from "react";
 
 /**
- * Props for the UploadIcon component.
- * @typedef {object} UploadIconProps
- * @property {number} [size=24] - Size of the icon in pixels.
- * @property {"light" | "regular" | "bold"} [weight] - Visual weight of the icon.
+ * Props for the `UploadIcon` component.
  */
 interface UploadIconProps extends SVGProps<SVGSVGElement> {
+	/** The width and height of the icon in pixels. Defaults to `24`. */
 	size?: number;
+	/** Optional visual weight classification. */
 	weight?: "light" | "regular" | "bold";
 }
 
 /**
- * Custom SVG icon for upload actions.
+ * A custom SVG icon representing an "upload" or "file" action.
+ *
+ * It provides a standardized look for file operations and can be scaled
+ * using the `size` prop.
+ *
+ * @param {UploadIconProps} props - Component properties.
+ * @returns {JSX.Element} The rendered SVG icon.
+ *
+ * @example
+ * <UploadIcon size={32} />
  */
 export const UploadIcon = ({ size = 24, ...props }: UploadIconProps) => {
 	return (

@@ -19,27 +19,37 @@ import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
 
 /**
- * Props for the MobileToolbar component.
- * @typedef {object} MobileToolbarProps
- * @property {boolean} isVisible - Whether the toolbar is currently visible.
- * @property {boolean} solving - Whether an optimization is in progress.
- * @property {boolean} hasModulesInGrid - Whether the grid currently contains any modules.
- * @property {() => void} onLoadBuild - Callback to load a build.
- * @property {() => void} onSaveBuild - Callback to save a build.
- * @property {() => void} onShowChangelog - Callback to show the changelog.
+ * Props for the `MobileToolbar` component.
  */
 type MobileToolbarProps = {
+	/** Whether the toolbar is currently visible on the screen. */
 	isVisible: boolean;
+	/** Whether an optimization solve is currently active. */
 	solving: boolean;
+	/** Whether any technology modules are currently placed in the grid. */
 	hasModulesInGrid: boolean;
+	/** Callback to trigger the build loading workflow. */
 	onLoadBuild: () => void;
+	/** Callback to trigger the build saving workflow. */
 	onSaveBuild: () => void;
+	/** Callback to display the application changelog. */
 	onShowChangelog: () => void;
 };
 
 /**
- * A toolbar optimized for mobile devices, providing quick access to build management and utilities.
- * Handles its own visibility transitions based on the `isVisible` prop.
+ * A responsive toolbar designed for mobile devices.
+ *
+ * This component provides quick access to core build management features (Save, Load, Share)
+ * and utility functions (Language, Accessibility, Stats) in a compact, top-pinned layout.
+ * It animates its position based on the `isVisible` prop, typically controlled by
+ * the user's scroll direction.
+ *
+ * @param {MobileToolbarProps} props - Component properties.
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the root toolbar container.
+ * @returns {JSX.Element} The rendered mobile toolbar.
+ *
+ * @example
+ * <MobileToolbar isVisible={true} solving={false} onLoadBuild={onLoad} onSaveBuild={onSave} onShowChangelog={onChangelog} hasModulesInGrid={true} />
  */
 export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 	({ isVisible, solving, hasModulesInGrid, onLoadBuild, onSaveBuild, onShowChangelog }, ref) => {
@@ -52,6 +62,9 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const [isSharePending, startShareTransition] = useTransition();
 		const [, startTransition] = useTransition();
 
+		/**
+		 * Generates a share link and opens the share dialog.
+		 */
 		const handleShareClick = () => {
 			startShareTransition(() => {
 				const shareUrl = updateUrlForShare();

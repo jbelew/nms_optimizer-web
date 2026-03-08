@@ -1,11 +1,13 @@
 import { useState } from "react";
 
 /**
- * Custom hook for managing the iOS install prompt.
- * Shows a prompt for adding the app to the home screen on iOS devices
- * that are not already in standalone mode.
+ * Custom hook for managing the visibility of the iOS PWA install prompt.
  *
- * @returns {{showPrompt: boolean, dismissPrompt: () => void}} An object containing the prompt visibility state and a dismiss function.
+ * This hook provides a simple state toggle for the install prompt. The logic for
+ * determining if the device is iOS and not in standalone mode is typically handled
+ * at the component level using this hook.
+ *
+ * @returns {{ showPrompt: boolean, dismissPrompt: function(): void }} State for prompt visibility and a handler to dismiss it.
  *
  * @example
  * const { showPrompt, dismissPrompt } = useInstallPrompt();
@@ -16,6 +18,9 @@ import { useState } from "react";
 export const useInstallPrompt = () => {
 	const [showPrompt, setShowPrompt] = useState(true);
 
+	/**
+	 * Dismisses the install prompt.
+	 */
 	const dismissPrompt = () => {
 		setShowPrompt(false);
 	};

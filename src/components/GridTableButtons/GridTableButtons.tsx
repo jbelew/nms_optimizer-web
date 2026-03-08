@@ -24,15 +24,31 @@ import { useGridStore } from "../../store/GridStore";
 import BuildNameDialog from "../AppDialog/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
+/**
+ * Props for the `GridTableButtons` component.
+ */
 interface GridTableButtonsProps {
+	/** Whether an optimization solve is currently active. */
 	solving: boolean;
 }
 
 /**
- * GridTableButtons component provides a set of control buttons for the grid.
- * These include buttons for showing instructions, about page, sharing the grid, and resetting the grid.
+ * A container component for the various action buttons located below the technology grid.
  *
- * @returns {JSX.Element} The rendered GridTableButtons component.
+ * It provides buttons for global grid actions, including:
+ * - Opening Instructions and About dialogs.
+ * - Loading and Saving `.nms` build files.
+ * - Generating and opening the Share Link dialog.
+ * - Resetting the entire grid to its initial state.
+ *
+ * The component adapts its layout for mobile and desktop, using `IconButton` on
+ * small screens and full `Button` with text on larger viewports.
+ *
+ * @param {GridTableButtonsProps} props - Component properties.
+ * @returns {JSX.Element} The rendered control button area.
+ *
+ * @example
+ * <GridTableButtons solving={false} />
  */
 const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
@@ -64,8 +80,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
-	 * Handles the click event for the "Instructions" button.
-	 * Opens the instructions dialog and marks the tutorial as finished if it wasn't already.
+	 * Navigates to the instructions dialog and updates completion state.
 	 */
 	const handleShowInstructions = () => {
 		startInfoTransition(() => {
@@ -84,8 +99,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	};
 
 	/**
-	 * Handles the click event for the "About" button.
-	 * Opens the about dialog.
+	 * Navigates to the about dialog.
 	 */
 	const handleShowAboutPage = () => {
 		startInfoTransition(() => {
@@ -100,8 +114,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	};
 
 	/**
-	 * Handles the click event for the "Share" button.
-	 * Generates a shareable URL and opens the share link dialog.
+	 * Creates a shareable link and opens the share dialog.
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {
@@ -112,8 +125,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	};
 
 	/**
-	 * Handles the click event for the "Reset Grid" button.
-	 * Scrolls first (on small screens only), then resets the grid to its initial state and updates the URL.
+	 * Purges the current grid state and resets the URL.
 	 */
 	const handleResetGrid = () => {
 		// Scroll immediately before computations on screens < 1024px
@@ -133,6 +145,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const instructionsVariant = !tutorialFinished ? "solid" : "soft";
 	const instructionGlowClass = !tutorialFinished ? "button--glow" : "";
 
+	/**
+	 * Internal helper to render a button that collapses to an icon on mobile.
+	 */
 	const renderResponsiveButton = (
 		icon: React.ReactNode,
 		labelKey: string,

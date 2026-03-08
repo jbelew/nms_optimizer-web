@@ -3,12 +3,19 @@ import type { SelectionModule } from "./ModuleSelectionDialog";
 import React from "react";
 import { Avatar, Badge, CheckboxGroup, Code } from "@radix-ui/themes";
 
+/** Base path for grid module icons. */
 const baseImagePath = "/assets/img/grid/";
+/** Path to the default fallback icon. */
 const fallbackImage = `${baseImagePath}infra.webp`;
 
 /**
- * Formats content within parentheses patterns (...) in a Code tag.
- * Separate function for easier styling experiments.
+ * Parses and styles parenthetical text fragments within a string.
+ *
+ * It wraps text like `(Sigma)` or `(Tau)` into Radix UI `Badge` components
+ * for a more structured, NMS-like UI appearance.
+ *
+ * @param {string} text - The input label string.
+ * @returns {React.ReactNode} The formatted React element tree.
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -32,7 +39,13 @@ const formatParentheses = (text: string): React.ReactNode => {
 };
 
 /**
- * Formats a label by wrapping [Pn] patterns (where n is a number) in a Code tag.
+ * Parses and styles bracketed text fragments within a technology label.
+ *
+ * Specifically targets technical metadata like `[P1]` or `[S]`, wrapping
+ * them in `Code` tags.
+ *
+ * @param {string} label - The raw technology or module label.
+ * @returns {React.ReactNode} The formatted React element tree.
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -52,19 +65,30 @@ const formatLabel = (label: string): React.ReactNode => {
 };
 
 /**
- * Props for the ModuleCheckbox component.
+ * Props for the `ModuleCheckbox` component.
  */
 export interface ModuleCheckboxProps {
+	/** The module object containing label, ID, and image data. **Must be valid.** */
 	module: SelectionModule;
+	/** The theme color applied to the module's avatar background. */
 	techColor: TechTreeRowProps["techColor"];
+	/** Whether the checkbox is in a read-only or blocked state. */
 	isDisabled: boolean;
 }
 
 /**
- * Renders a module checkbox item.
+ * A component that renders a single selectable module row.
  *
- * @param {ModuleCheckboxProps} props - The props for the component.
- * @returns {JSX.Element} The rendered module checkbox.
+ * It includes:
+ * 1. A functional checkbox for selection.
+ * 2. A circular avatar/icon representing the module.
+ * 3. A formatted text label with stylized technical metadata.
+ *
+ * @param {ModuleCheckboxProps} props - Component properties.
+ * @returns {JSX.Element} The rendered checkbox row.
+ *
+ * @example
+ * <ModuleCheckbox module={m} techColor="blue" isDisabled={false} />
  */
 export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 	module,

@@ -21,9 +21,17 @@ import { useMainAppLogic } from "./useMainAppLogic";
 const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 
 /**
- * The core component that renders the main application content.
- * It orchestrates the layout, including the header, footer, grid table, and technology tree.
- * This component utilizes Suspense for asynchronous data fetching of ship types.
+ * The primary layout component for the application's main functional area.
+ *
+ * It orchestrates the rendering of the technology grid, the technology tree,
+ * global headers/footers, and various UI overlays (spinners, callouts, toolbars).
+ * It uses a custom hook, `useMainAppLogic`, to encapsulate state management and
+ * event handling.
+ *
+ * @returns {JSX.Element} The root application layout structure.
+ *
+ * @example
+ * <MainAppContent />
  */
 export const MainAppContent = () => {
 	const { t } = useTranslation();

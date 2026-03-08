@@ -11,28 +11,35 @@ import { useGridStore } from "@/store/GridStore";
 
 import { useGridRowState } from "./useGridRowState";
 
+/**
+ * Selector function to check if the grid contains any active (highlighted) cells.
+ */
 const selectHasAnyActiveCells = (state: GridStore) =>
 	state.grid.cells.some((row) => row.some((cell) => cell.active));
 
 /**
- * @interface RowControlButtonProps
- * @property {number} rowIndex - The index of the row these buttons control.
- * @property {boolean} [isLoading] - Indicates if the grid is currently loading.
+ * Props for the `GridControlButtons` component.
  */
 interface RowControlButtonProps {
+	/** The zero-based index of the row being controlled. **Must be a valid row index.** */
 	rowIndex: number;
+	/** Whether the grid data is currently being fetched or processed. */
 	isLoading?: boolean;
 }
 
 /**
- * GridControlButtons component provides buttons to activate or deactivate a row in the grid.
- * Uses the colocated hook pattern: calls `useGridRowState` directly to derive which button
- * to show, rather than receiving calculated props from the parent.
- * The buttons are conditionally rendered based on whether the row is the first inactive row or the last active row.
- * They are disabled if there are any modules in the grid or if the grid is fixed.
+ * A component that provides contextual row-level controls for the technology grid.
  *
- * @param {RowControlButtonProps} props - The props for the GridControlButtons component.
- * @returns {JSX.Element} The rendered GridControlButtons component.
+ * It renders a "Plus" button to activate the first inactive row, or a "Minus"
+ * button to deactivate the last active row. These buttons allow users to quickly
+ * expand or shrink their available grid space. The buttons are automatically
+ * disabled if the grid contains technology modules or if the layout is locked.
+ *
+ * @param {RowControlButtonProps} props - Component properties.
+ * @returns {JSX.Element} The rendered row control buttons.
+ *
+ * @example
+ * <GridControlButtons rowIndex={5} isLoading={false} />
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoading }) => {
 	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);

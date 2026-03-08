@@ -1,3 +1,4 @@
+import { ElementType } from "react";
 import {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
@@ -15,10 +16,11 @@ import {
 
 /**
  * A registry of Radix UI icons used throughout the application.
- * Importing icons individually here allows Rollup to tree-shake the
- * @radix-ui/react-icons library, significantly reducing build size.
+ *
+ * This central registry facilitates tree-shaking by ensuring only the icons listed here
+ * are included in the final production bundle.
  */
-export const radixIconRegistry: Record<string, React.ElementType> = {
+export const radixIconRegistry: Record<string, ElementType> = {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	ExclamationTriangleIcon,

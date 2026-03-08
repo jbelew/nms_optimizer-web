@@ -15,7 +15,14 @@ import { env } from "./analytics";
 
 /**
  * Initializes Sentry for error tracking and performance monitoring.
- * In development, it only logs to the console unless explicitly enabled.
+ *
+ * Configures Sentry with React Router integration and sets up sampling rates
+ * based on the environment. Initialization is skipped if `VITE_SENTRY_DSN` is missing.
+ *
+ * @returns {void}
+ *
+ * @example
+ * initializeSentry();
  */
 export const initializeSentry = () => {
 	// We can use a public DSN or a dummy one for now if the user hasn't provided one.

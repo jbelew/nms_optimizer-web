@@ -9,17 +9,29 @@ import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionD
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
 
+/**
+ * Props for the `TechInfoBadges` component.
+ */
 interface TechInfoBadgesProps extends TechTreeRowProps {
+	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
 	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
- * Renders the badges for the tech tree row, including the bonus status icon
- * and the trigger for the module selection dialog.
- * Receives hook data from parent to avoid redundant hook calls.
+ * A component that renders status and configuration badges for a technology row.
  *
- * @param props - The props for the component.
- * @returns The rendered badges.
+ * It displays:
+ * 1. The `BonusStatusIcon` (if the tech is in the grid) showing efficiency.
+ * 2. A trigger button showing the count of selected modules.
+ *
+ * Clicking the count button opens the `ModuleSelectionDialog`. This component
+ * manages the dialog's lifecycle, including state restoration if the user cancels.
+ *
+ * @param {TechInfoBadgesProps} props - Component properties.
+ * @returns {JSX.Element} The rendered badges and dialog trigger.
+ *
+ * @example
+ * <TechInfoBadges {...props} hookData={hookData} />
  */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }) => {
 	const { a11yMode } = useA11yStore();
@@ -47,6 +59,11 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 		translatedTechName,
 	} = hookData;
 
+	/**
+	 * Manages the dialog's open/close state and ensures data consistency.
+	 *
+	 * @param {boolean} open - The new visibility state.
+	 */
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
 			setInitialModules(currentCheckedModules);
@@ -66,12 +83,15 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 		}
 	};
 
+	/**
+	 * Wrapper for the optimize callback to ensure the dialog closes only after the solve starts.
+	 *
+	 * @returns {Promise<void>}
+	 */
 	const handleOptimizeWrapper = async () => {
 		optimizeClickedRef.current = true;
 		await handleOptimizeClick();
 		// Close the dialog programmatically AFTER the async operation resolves.
-		// Previously, wrapping the button in Dialog.Close caused immediate unmounting
-		// before the promise could settle, leading to an unhandled rejection in Safari.
 		handleOpenChange(false);
 	};
 
@@ -101,7 +121,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						<OpenInNewWindowIcon />
 					</Button>
 				</Dialog.Trigger>
-				{isOpen && ( // Original conditional rendering
+				{isOpen && (
 					<ModuleSelectionDialog
 						translatedTechName={translatedTechName}
 						groupedModules={groupedModules}

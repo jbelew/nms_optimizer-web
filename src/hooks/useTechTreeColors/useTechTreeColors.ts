@@ -4,12 +4,17 @@ import { use } from "react";
 import { fetchTechTreeColors } from "./techTreeColorsResource";
 
 /**
- * Custom hook to fetch the tech tree colors for all ship types.
- * Uses cached fetches to avoid redundant API calls.
- * Only fetches when enabled to avoid unnecessary requests for users not viewing stats.
+ * Custom hook for retrieving the global technology color registry.
  *
- * @param {boolean} [enabled=true] - Whether to fetch the colors.
- * @returns {Record<string, string>} An object containing the tech colors.
+ * This hook uses React's `use` for promise unwrapping, allowing it to be used
+ * within Suspense boundaries. It provides a mapping of technology keys to their
+ * assigned UI theme colors.
+ *
+ * @param {boolean} [enabled=true] - Whether to execute the fetch. Defaults to `true`.
+ * @returns {Record<string, string>} A dictionary mapping tech keys to color strings.
+ *
+ * @example
+ * const colors = useTechTreeColors();
  */
 export const useTechTreeColors = (enabled: boolean = true) => {
 	if (!enabled) {

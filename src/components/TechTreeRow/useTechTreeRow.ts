@@ -7,17 +7,22 @@ import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechOptimization } from "./useTechOptimization";
 
+/** Default empty array for modules to ensure stable reference. */
 const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: string }[] = [];
 
 /**
- * A coordinator hook that orchestrates all the logic for the TechTreeRow component.
- * It consumes specialized hooks for module management (`useTechModuleManagement`) and
- * optimization (`useTechOptimization`), fetches data from stores, and computes derived state.
- * This provides a single, clean interface for the presentational `TechTreeRow` component.
+ * A coordinator hook that orchestrates the complex logic for a single technology sidebar row.
  *
- * @param props - The props passed to the `TechTreeRow` component.
- * @returns A comprehensive object containing all state and callbacks required by the `TechTreeRow`
- * and its children, abstracting away the underlying implementation details.
+ * It acts as a facade, aggregating data from multiple stores (`GridStore`, `TechStore`)
+ * and delegating specialized tasks to sub-hooks (`useTechModuleManagement`,
+ * `useTechOptimization`). It also handles the derived logic for localization and
+ * resolution-aware image path generation.
+ *
+ * @param {TechTreeRowProps} props - The properties passed to the parent component.
+ * @returns {object} A unified interface containing state flags, localized strings, and event handlers.
+ *
+ * @example
+ * const hookData = useTechTreeRow(props);
  */
 export const useTechTreeRow = ({
 	tech,

@@ -4,16 +4,25 @@ import { Text } from "@radix-ui/themes";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useTechTreeRow } from "./useTechTreeRow";
 
+/**
+ * Props for the `TechInfo` component.
+ */
 interface TechInfoProps {
+	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
 	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
- * Renders the information for a tech tree row, including the name.
- * Receives hook data from parent to avoid redundant hook calls.
+ * A layout component that renders the localized name of a technology in the sidebar.
  *
- * @param props - The props for the component.
- * @returns {JSX.Element} The rendered tech info.
+ * It automatically adjusts its font size based on the viewport breakpoint and
+ * uses balanced text wrapping for better readability of long technology names.
+ *
+ * @param {TechInfoProps} props - Component properties.
+ * @returns {JSX.Element} The rendered technology name.
+ *
+ * @example
+ * <TechInfo hookData={hookData} />
  */
 export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 	const { translatedTechName } = hookData;

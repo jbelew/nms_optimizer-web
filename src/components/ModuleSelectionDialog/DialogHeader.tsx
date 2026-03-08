@@ -4,22 +4,33 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Avatar, Dialog, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+/** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
 
 /**
- * Props for the DialogHeader component.
+ * Props for the `DialogHeader` component.
  */
 export interface DialogHeaderProps {
+	/** Localized name of the technology. **Must be provided.** */
 	translatedTechName: string;
+	/** Icon filename for the technology. `null` to use fallback. */
 	techImage: string | null;
+	/** Theme color for the technology avatar. */
 	techColor: TechTreeRowProps["techColor"];
 }
 
 /**
- * Renders the header of the module selection dialog.
+ * A header component for the module selection dialog.
  *
- * @param props - The props for the component.
+ * It displays the technology's avatar and localized title. It also provides
+ * the primary close button for the dialog. It handles resolution-aware image
+ * path generation for the technology icon.
+ *
+ * @param {DialogHeaderProps} props - Component properties.
  * @returns {JSX.Element} The rendered dialog header.
+ *
+ * @example
+ * <DialogHeader translatedTechName="Hyperdrive" techImage="hyperdrive.webp" techColor="blue" />
  */
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
 	translatedTechName,

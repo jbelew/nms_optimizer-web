@@ -2,14 +2,20 @@ import { fetchWithTimeout } from "./fetchWithTimeout";
 import { HttpError } from "./HttpError";
 
 /**
- * Fetches a JSON resource from the network.
+ * Fetches a JSON resource from the network with built-in error handling and timeout.
  *
- * @template T - The expected return type.
- * @param {string} url - The URL to fetch.
- * @param {RequestInit} [options] - Fetch options.
- * @param {number} [timeout=10000] - Timeout in milliseconds.
- * @returns {Promise<T>} The parsed JSON response.
- * @throws {HttpError} If the response status is not ok.
+ * Automatically checks if the response is successful and parses the body as JSON.
+ *
+ * @template T - The expected return type of the JSON data.
+ * @param {string} url - The URL to fetch. **Must be a valid URL string.**
+ * @param {RequestInit} [options] - Standard `fetch` options.
+ * @param {number} [timeout=10000] - Timeout in milliseconds. **Must be a positive integer.**
+ * @returns {Promise<T>} A promise that resolves to the parsed JSON response of type `T`.
+ * @throws {HttpError} Throws an `HttpError` if the response status is not "ok" (200-299).
+ * @throws {Error} Throws a timeout error if the request exceeds the `timeout` duration.
+ *
+ * @example
+ * const data = await fetchJson<{ id: number }>("/api/user/1");
  */
 export async function fetchJson<T>(
 	url: string,

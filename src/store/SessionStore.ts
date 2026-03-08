@@ -2,36 +2,45 @@
 import { create } from "zustand";
 
 /**
- * @interface SessionState
- * @property {number} supercharged_limit - Count of times user attempted to exceed supercharged cell limit
- * @property {number} supercharged_fixed - Count of times user attempted to modify supercharged cells while locked
- * @property {number} grid_fixed - Count of times user attempted to modify cells while entire grid is locked
- * @property {number} module_locked - Count of times user attempted to modify cells with an active module
- * @property {number} row_limit - Count of times user attempted to set supercharged cell in row > 3
- * @property {() => void} incrementSuperchargedLimit - Increment the supercharged limit counter
- * @property {() => void} incrementSuperchargedFixed - Increment the supercharged fixed counter
- * @property {() => void} incrementGridFixed - Increment the grid fixed counter
- * @property {() => void} incrementModuleLocked - Increment the module locked counter
- * @property {() => void} incrementRowLimit - Increment the row limit counter
- * @property {() => void} resetSession - Reset all session counters
+ * State and actions for tracking user interactions and constraint violations during a single session.
  */
 export interface SessionState {
+	/** Count of attempts to exceed the supercharged cell limit. */
 	supercharged_limit: number;
+	/** Count of attempts to modify supercharged cells while the supercharged layout is locked. */
 	supercharged_fixed: number;
+	/** Count of attempts to modify any cell while the entire grid layout is locked. */
 	grid_fixed: number;
+	/** Count of attempts to modify a cell that already contains a technology module. */
 	module_locked: number;
+	/** Count of attempts to place a supercharged cell beyond the supported row limit (row > 3). */
 	row_limit: number;
+	/** Increments the `supercharged_limit` counter. */
 	incrementSuperchargedLimit: () => void;
+	/** Increments the `supercharged_fixed` counter. */
 	incrementSuperchargedFixed: () => void;
+	/** Increments the `grid_fixed` counter. */
 	incrementGridFixed: () => void;
+	/** Increments the `module_locked` counter. */
 	incrementModuleLocked: () => void;
+	/** Increments the `row_limit` counter. */
 	incrementRowLimit: () => void;
+	/** Resets all session violation counters to zero. */
 	resetSession: () => void;
 }
 
 /**
- * Zustand store for managing session-level error/restriction tracking.
- * Tracks user interaction attempts that violate constraints during the current session.
+ * Zustand store for tracking transient session-level interaction metrics.
+ *
+ * This store is primarily used by the `useErrorDispatcher` hook to determine when
+ * a user has repeatedly attempted an invalid action and should be shown a helpful
+ * error or warning message.
+ *
+ * @returns {SessionState} The session store state and actions.
+ *
+ * @example
+ * const { incrementGridFixed } = useSessionStore();
+ * incrementGridFixed();
  */
 export const useSessionStore = create<SessionState>((set) => ({
 	supercharged_limit: 0,

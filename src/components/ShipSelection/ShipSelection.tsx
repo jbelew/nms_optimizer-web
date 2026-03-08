@@ -21,18 +21,19 @@ const DEFAULT_GRID_HEIGHT = 10;
 const DEFAULT_GRID_WIDTH = 6;
 
 /**
- * @interface ShipSelectionProps
- * @property {boolean} solving - Indicates if an optimization calculation is in progress.
+ * Props for the `ShipSelection` component.
  */
 interface ShipSelectionProps {
+	/** Whether an optimization solve is currently active. */
 	solving: boolean;
 }
 
 /**
- * A skeleton component that mimics the ShipSelection trigger button,
- * showing a spinner. Used as a Suspense fallback.
+ * A skeleton component that mimics the `ShipSelection` trigger button.
  *
- * @returns {JSX.Element} The rendered loading state component.
+ * Used as a fallback for `Suspense` while ship type metadata is being fetched.
+ *
+ * @returns {JSX.Element} The rendered loading state.
  */
 const ShipSelectionLoadingState = () => {
 	const isSmallAndUp = useBreakpoint("640px");
@@ -67,11 +68,14 @@ const ShipSelectionLoadingState = () => {
 };
 
 /**
- * ShipSelectionInternal component allows users to select a ship type (platform).
- * It fetches available ship types, manages the selected type, and updates the grid accordingly.
+ * Internal component that manages the ship type selection logic.
  *
- * @param {ShipSelectionProps} props - The props for the ShipSelectionInternal component.
- * @returns {JSX.Element} The rendered ShipSelectionInternal component.
+ * It uses `useFetchShipTypesSuspense` to retrieve the list of available
+ * equipment categories from the backend. When a selection is made, it
+ * synchronizes the `PlatformStore` and resets the grid state.
+ *
+ * @param {ShipSelectionProps} props - Component properties.
+ * @returns {JSX.Element} The rendered selection interface.
  */
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	const shipTypes = useFetchShipTypesSuspense(); // This will suspend the component
@@ -88,10 +92,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 
 	const shipTypeKeys = Object.keys(shipTypes);
 
-	/**
-	 * Grouping of ship types by their category.
-	 * @type {Record<string, { key: string; label: string; details: ShipTypeDetail }[]>}
-	 */
 	const groupedShipTypes = Object.entries(shipTypes).reduce(
 		(acc, [key, details]) => {
 			const type = details.type;
@@ -108,9 +108,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	);
 
 	/**
-	 * Handles the selection of a new ship type from the dropdown.
-	 * Updates the selected ship type in the store and resets the grid.
-	 * @param {string} option - The selected ship type code.
+	 * Finalizes the platform selection and updates global state.
+	 *
+	 * @param {string} option - The internal platform identifier.
 	 */
 	const handleOptionSelect = (option: string) => {
 		if (option !== usePlatformStore.getState().selectedPlatform) {
@@ -175,11 +175,16 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 };
 
 /**
- * ShipSelection component is a wrapper that provides a Suspense fallback
- * for the ShipSelectionInternal component.
+ * A component that allows users to toggle between different equipment platforms.
  *
- * @param {ShipSelectionProps} props - The props for the ShipSelection component.
- * @returns {JSX.Element} The rendered ShipSelection component with Suspense.
+ * This is the primary entry point for changing the application's context
+ * (e.g., from Starship to Multi-Tool). It is designed to work with React Suspense.
+ *
+ * @param {ShipSelectionProps} props - Component properties.
+ * @returns {JSX.Element} The selection component wrapped in Suspense.
+ *
+ * @example
+ * <ShipSelection solving={false} />
  */
 const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 	return (
@@ -192,24 +197,22 @@ const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 export const ShipSelection = ShipSelectionComponent;
 
 /**
- * @interface ShipTypesDropdownProps
- * @property {string} selectedShipType - The currently selected ship type.
- * @property {(option: string) => void} handleOptionSelect - Callback for when a ship type is selected.
- * @property {boolean} solving - Indicates if an optimization calculation is in progress.
- * @property {ShipTypes} shipTypes - The available ship types data.
+ * Props for the `ShipTypesDropdown` helper component.
  */
 interface ShipTypesDropdownProps {
+	/** The ID of the currently active ship type. */
 	selectedShipType: string;
+	/** Callback function for when a new type is selected. */
 	handleOptionSelect: (option: string) => void;
+	/** Map of grouped ship type data for rendering sections. */
 	groupedShipTypes: Record<string, { key: string; label: string; details: ShipTypeDetail }[]>;
 }
 
 /**
- * ShipTypesDropdown component renders the dropdown menu for selecting ship types.
- * It groups ship types by their category and displays them as radio items.
+ * Helper component that renders the categorical list of ship types.
  *
- * @param {ShipTypesDropdownProps} props - The props for the ShipTypesDropdown component.
- * @returns {JSX.Element} The rendered ShipTypesDropdown component.
+ * @param {ShipTypesDropdownProps} props - Component properties.
+ * @returns {JSX.Element} The rendered radio group content.
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({
 	selectedShipType,

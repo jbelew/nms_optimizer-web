@@ -1,27 +1,40 @@
 /**
  * Type definition for a saved build file.
- * Stores the complete state of GridStore, TechStore, TechBonusStore, and ModuleSelectionStore.
+ *
+ * Stores the complete serialized state of the application's stores, including
+ * grid configuration, technology choices, and optimization results.
  */
 export type BuildFile = {
+	/** The display name of the build. */
 	name: string;
+	/** The ship type classification (e.g., 'fighter', 'freighter'). */
 	shipType: string;
+	/** Unix timestamp when the build was saved. */
 	timestamp: number;
-	checksum: string; // SHA-256 hash of the state data for integrity verification
+	/** SHA-256 hash of the state data used for integrity verification. */
+	checksum: string;
+	/** Serialized state of the `GridStore`. */
 	gridState: Record<string, unknown>;
+	/** Serialized state of the `TechStore`. */
 	techState: Record<string, unknown>;
+	/** Serialized state of the `TechBonusStore`. */
 	bonusState: Record<string, unknown>;
+	/** Serialized state of the `ModuleSelectionStore`. */
 	moduleState: Record<string, unknown>;
 };
 
 /**
- * Type guard to check if an object conforms to the BuildFile interface.
+ * Validates that an unknown object conforms to the `BuildFile` interface.
  *
- * @param {unknown} obj - The object to check.
- * @returns {boolean} True if the object is a valid BuildFile, false otherwise.
+ * Performs a shallow property check and type verification for all required
+ * fields in a build file.
+ *
+ * @param {unknown} obj - The object to validate.
+ * @returns {obj is BuildFile} `true` if the object is a valid `BuildFile`, otherwise `false`.
+ *
  * @example
- * const build = { name: "My Build", shipType: "freighter", serialized: "abc123", timestamp: 1234567890 };
- * if (isValidBuildFile(build)) {
- *   // Do something with the valid build
+ * if (isValidBuildFile(parsedJson)) {
+ *   console.log("Loading build:", parsedJson.name);
  * }
  */
 export function isValidBuildFile(obj: unknown): obj is BuildFile {

@@ -10,13 +10,14 @@ import { useGridCellInteraction } from "./useGridCellInteraction";
 import { useGridCellStyle } from "./useGridCellStyle";
 
 /**
- * Determines the upgrade priority based on the technology label.
- * This is used to display a number or code on the cell for certain upgrades.
+ * Determines the upgrade priority identifier based on a technology's label.
  *
- * @param {string|undefined} label - The label of the technology.
- * @returns {string} The priority ("1", "2", "3" for upgrades; "C1", "C2", "C3" for boosters; "R1", "R2", "R3" for reactors; "F1", "F2", "F3" for forbidden), or "" if not applicable.
+ * This utility maps specific keywords (Theta, Tau, Sigma) and categories
+ * (Booster, Reactor, etc.) to a shorthand code used as an overlay on the cell icon.
+ *
+ * @param {string} [label] - The display name of the technology.
+ * @returns {string} A shorthand code (e.g., '1', 'C2', 'S3') or an empty string.
  */
-
 const getUpgradePriority = (label: string | undefined): string => {
 	if (!label) return "";
 
@@ -70,29 +71,22 @@ const getUpgradePriority = (label: string | undefined): string => {
 };
 
 /**
- * @interface GridCellProps
- * @property {number} rowIndex - The row index of the cell.
- * @property {number} columnIndex - The column index of the cell.
+ * Props for the `GridCell` component.
  */
 interface GridCellProps {
+	/** The row index of the cell within the grid. **Must be a valid index.** */
 	rowIndex: number;
+	/** The column index of the cell within the grid. **Must be a valid index.** */
 	columnIndex: number;
+	/** Whether the grid is currently in read-only shared mode. */
 	isSharedGrid: boolean;
 }
 
 /**
- * GridCell component represents a single cell in the technology grid.
- * It displays the technology icon, handles user interactions, and applies styling.
+ * Removes bracketed and parenthetical metadata from a technology label.
  *
- * @param {GridCellProps} props - The props for the GridCell component.
- * @returns {JSX.Element} The rendered GridCell component.
- */
-
-/**
- * Removes content within square brackets [] and parentheses () from a string.
- *
- * @param {string|undefined} label - The label to strip.
- * @returns {string} The stripped label.
+ * @param {string} [label] - The raw label string.
+ * @returns {string} The cleaned label string.
  */
 const stripLabel = (label: string | undefined): string => {
 	if (!label) return "";
@@ -100,6 +94,7 @@ const stripLabel = (label: string | undefined): string => {
 	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
 };
 
+/** Static elements for the cell's corner highlights. */
 const CORNER_SPANS = (
 	<>
 		<span className="corner top-left"></span>
@@ -109,6 +104,18 @@ const CORNER_SPANS = (
 	</>
 );
 
+/**
+ * A component representing an individual interactive cell in the optimization grid.
+ *
+ * It manages its own styling based on the cell's state (active, supercharged, occupied)
+ * and handles complex user interactions including taps, double-taps, and long-presses.
+ *
+ * @param {GridCellProps} props - Component properties.
+ * @returns {JSX.Element} The rendered cell element.
+ *
+ * @example
+ * <GridCell rowIndex={0} columnIndex={5} isSharedGrid={false} />
+ */
 const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useCell(rowIndex, columnIndex);
 
@@ -126,7 +133,11 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
 		useGridCellStyle(cell, isTouching);
 
-	// Build image URLs with cache-busting query param.
+	/**
+	 * Generates resolution-aware URLs for the cell's technology icon.
+	 *
+	 * @returns {{ imageUrl?: string, imageSrcSet?: string }} Image metadata.
+	 */
 	const getImageUrl = () => {
 		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };
 
@@ -183,11 +194,6 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	);
 
 	const tooltipContent = stripLabel(cell.label);
-	// const tooltipContent = cell.image
-	// 	? t(`modules.${cell.image.replace(/\.webp$/, "").replace(/\//g, ".")}`, {
-	// 			defaultValue: cell.label,
-	// 		})
-	// 	: cell.label;
 
 	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
 

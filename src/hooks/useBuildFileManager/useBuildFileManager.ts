@@ -11,12 +11,18 @@ import { computeSHA256 } from "../../utils/hashUtils";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**
- * Custom hook for saving and loading build files.
+ * Custom hook for managing the saving and loading of `.nms` build files.
+ *
+ * This hook orchestrates state extraction from multiple stores, computes
+ * checksums for integrity, and handles file system interactions (downloading/uploading).
  *
  * @returns {{
- *   saveBuildToFile: (buildName: string) => void,
+ *   saveBuildToFile: (buildName: string) => Promise<void>,
  *   loadBuildFromFile: (file: File) => Promise<void>
- * }} An object containing functions to save and load builds.
+ * }} Functions to save and load build states.
+ *
+ * @example
+ * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
  */
 export const useBuildFileManager = () => {
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -24,10 +30,12 @@ export const useBuildFileManager = () => {
 	const shipTypes = useFetchShipTypesSuspense();
 
 	/**
-	 * Saves the current application state to a .nms build file.
-	 * Saves GridStore, TechStore, TechBonusStore, and ModuleSelectionStore state.
+	 * Captures the current application state and downloads it as a `.nms` file.
 	 *
-	 * @param {string} buildName - The name for the saved build.
+	 * Includes state from `GridStore`, `TechStore`, `TechBonusStore`, and `ModuleSelectionStore`.
+	 *
+	 * @param {string} buildName - The display name for the build. **Must not be empty.**
+	 * @returns {Promise<void>}
 	 */
 	const saveBuildToFile = async (buildName: string) => {
 		try {
@@ -90,11 +98,14 @@ export const useBuildFileManager = () => {
 	};
 
 	/**
-	 * Loads a build from a .nms file.
-	 * Restores GridStore, TechStore, TechBonusStore, and ModuleSelectionStore state.
+	 * Parses a `.nms` file and restores the application state.
 	 *
-	 * @param {File} file - The file to load the build from.
-	 * @throws {Error} If the file is invalid or incompatible.
+	 * Performs validation on file type, size, JSON structure, and data integrity (checksum).
+	 * **Will switch the active ship type if the file contains a different one.**
+	 *
+	 * @param {File} file - The file object to load. **Must have a `.nms` extension.**
+	 * @returns {Promise<void>}
+	 * @throws {Error} If validation or restoration fails.
 	 */
 	const loadBuildFromFile = async (file: File) => {
 		try {

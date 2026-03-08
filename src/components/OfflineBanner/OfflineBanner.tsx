@@ -3,6 +3,19 @@ import { Trans } from "react-i18next";
 
 import "./OfflineBanner.scss";
 
+/**
+ * A full-screen overlay component that appears when the application is offline.
+ *
+ * It monitors the browser's `navigator.onLine` status and displays a thematic
+ * (No Man's Sky styled) warning message and logo. Since this application
+ * relies on a backend solver for its primary functionality, this banner
+ * effectively disables the UI until a connection is restored.
+ *
+ * @returns {JSX.Element | null} The rendered offline overlay, or `null` if online.
+ *
+ * @example
+ * <OfflineBanner />
+ */
 const OfflineBanner: React.FC = () => {
 	const [isOffline, setIsOffline] = useState(!navigator.onLine);
 

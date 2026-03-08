@@ -9,25 +9,36 @@ import { MODULE_RANK_ORDER } from "./constants";
 import { ModuleCheckbox } from "./ModuleCheckbox";
 
 /**
- * Props for the ModuleGroup component.
+ * Props for the `ModuleGroup` component.
  */
 export interface ModuleGroupProps extends Pick<
 	ModuleSelectionDialogProps,
 	"currentCheckedModules" | "techColor"
 > {
+	/** The internal name of the group (e.g., 'upgrade', 'bonus'). **Must be a valid category key.** */
 	groupName: string;
+	/** Array of modules belonging to this group. */
 	modules: SelectionModule[];
+	/** Optional title to display instead of the localized group name. */
 	titleOverride?: string;
+	/** Callback function to close the parent dialog. */
 	onClose?: () => void;
 }
 
 /**
- * Renders a group of modules within the dialog.
- * It handles the display of a group title, optional info blocks, and the list of modules.
- * It also contains the logic for sorting modules and disabling them based on dependencies.
+ * A component that renders a titled group of selectable modules.
  *
- * @param {ModuleGroupProps} props - The props for the component.
- * @returns {JSX.Element | null} The rendered module group, or null if there are no modules.
+ * It handles the categorization logic, including:
+ * 1. Sorting modules alphabetically for specific groups (bonus, figurines).
+ * 2. Enforcing prerequisite dependencies (e.g., Sigma must be selected before Tau).
+ * 3. Displaying contextual help info icons for specific module patterns.
+ * 4. Rendering specialized informational blocks for "Cosmetic" groups.
+ *
+ * @param {ModuleGroupProps} props - Component properties.
+ * @returns {JSX.Element | null} The rendered group UI, or `null` if no modules are present.
+ *
+ * @example
+ * <ModuleGroup groupName="upgrade" modules={upgradeModules} currentCheckedModules={['M1']} techColor="blue" />
  */
 export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	groupName,

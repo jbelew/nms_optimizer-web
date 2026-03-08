@@ -15,8 +15,13 @@ import {
 /**
  * Compresses a string using Run-Length Encoding (RLE).
  *
+ * Consecutive identical characters are replaced by the character followed by the count.
+ *
  * @param {string} input - The string to compress.
  * @returns {string} The compressed string.
+ *
+ * @example
+ * compressRLE("AAAABBBCC"); // Returns "A4B3C2"
  */
 export const compressRLE = (input: string): string => {
 	if (!input) return "";
@@ -41,10 +46,13 @@ export const compressRLE = (input: string): string => {
 };
 
 /**
- * Decompresses a string using Run-Length Encoding (RLE).
+ * Decompresses a string that was compressed using Run-Length Encoding (RLE).
  *
- * @param {string} input - The string to decompress.
+ * @param {string} input - The compressed string to decompress.
  * @returns {string} The decompressed string.
+ *
+ * @example
+ * decompressRLE("A4B3C2"); // Returns "AAAABBBCC"
  */
 export const decompressRLE = (input: string): string => {
 	if (!input) return "";
@@ -69,10 +77,21 @@ export const decompressRLE = (input: string): string => {
 };
 
 /**
- * Serializes the grid state into a compressed string.
+ * Serializes the grid state into a URL-safe compressed string.
  *
- * @param {Grid} grid - The grid to serialize.
- * @returns {string} The serialized grid string.
+ * The format consists of six pipe-separated parts:
+ * 1. `gridString`: Map of cell states (0=inactive, 1=active, 2=supercharged).
+ * 2. `compressedTech`: RLE-compressed characters representing tech keys.
+ * 3. `compressedModule`: RLE-compressed characters representing module IDs.
+ * 4. `compressedAdjBonus`: RLE-compressed adjacency bonus status flags.
+ * 5. `techMap`: Mapping of characters to tech keys.
+ * 6. `moduleMap`: Mapping of characters to module IDs.
+ *
+ * @param {Grid} grid - The grid object to serialize. **Must contain a valid cells array.**
+ * @returns {string} An encoded string representing the grid state.
+ *
+ * @example
+ * const sharedLink = serialize(currentGrid);
  */
 export const serialize = (grid: Grid): string => {
 	let gridString = ""; // Raw grid string (0, 1, 2)
@@ -124,12 +143,18 @@ export const serialize = (grid: Grid): string => {
 };
 
 /**
- * Deserializes a compressed string into a grid state.
+ * Deserializes a compressed string back into a functional grid state.
  *
- * @param {string} serializedGrid - The serialized grid string.
- * @param {string} shipType - The type of ship.
- * @param {(colors: { [key: string]: string }) => void} setTechColors - Function to set the tech colors.
- * @returns {Promise<Grid|null>} A promise that resolves to the deserialized grid or null if an error occurs.
+ * Fetches current tech tree data to ensure the deserialized techs and modules
+ * still exist and have up-to-date properties.
+ *
+ * @param {string} serializedGrid - The encoded grid string to deserialize. **Must be correctly formatted.**
+ * @param {string} shipType - The ship type context for fetching tech tree data.
+ * @param {function(Record<string, string>): void} setTechColors - Callback to update the tech color registry.
+ * @returns {Promise<Grid | null>} A promise resolving to the restored `Grid` object, or `null` if deserialization fails.
+ *
+ * @example
+ * const restoredGrid = await deserialize(urlParam, "fighter", setColors);
  */
 export const deserialize = async (
 	serializedGrid: string,
@@ -387,22 +412,38 @@ export const deserialize = async (
 };
 
 /**
- * Custom hook for serializing and deserializing the grid state.
+ * Custom hook for serializing and deserializing the grid state for sharing.
  *
- * @returns {{serializeGrid: () => string, deserializeGrid: (serializedGrid: string) => Promise<void>}}
- *          An object containing the serialize and deserialize functions.
+ * Provides functions to convert the complex grid state into a compact string
+ * suitable for URL parameters, and to restore that state from a string.
+ *
+ * @returns {{ serializeGrid: function(): string, deserializeGrid: function(string): Promise<void> }} Serialization and deserialization utilities.
+ *
+ * @example
+ * const { serializeGrid, deserializeGrid } = useGridDeserializer();
  */
 export const useGridDeserializer = () => {
 	const setGrid = useGridStore((state) => state.setGrid);
 	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const setTechColors = useTechStore((state) => state.setTechColors);
 
+	/**
+	 * Serializes the current grid state from `GridStore` into a compressed string.
+	 *
+	 * @returns {string} The serialized grid data.
+	 */
 	const serializeGrid = useCallback((): string => {
 		const grid = useGridStore.getState().grid;
 
 		return serialize(grid);
 	}, []);
 
+	/**
+	 * Restores the grid state from a serialized string and updates the application stores.
+	 *
+	 * @param {string} serializedGrid - The encoded grid string to process.
+	 * @returns {Promise<void>}
+	 */
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {
 			console.log("Attempting to deserialize:", serializedGrid);

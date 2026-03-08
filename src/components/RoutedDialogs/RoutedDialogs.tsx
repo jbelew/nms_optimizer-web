@@ -10,8 +10,17 @@ import LoremIpsumSkeleton from "../AppDialog/LoremIpsumSkeleton";
 const MarkdownContentRenderer = lazy(() => import("../AppDialog/MarkdownContentRenderer"));
 
 /**
- * RoutedDialogs component manages and renders various application dialogs based on the active dialog state.
- * It uses `AppDialog` and `UserStatsDialog` to display different types of content.
+ * A central orchestrator for dialogs that are mapped to specific application routes.
+ *
+ * It monitors the `activeDialog` state from the `DialogContext` and renders the
+ * corresponding `AppDialog` with its specific content (usually markdown-based).
+ * This component enables a "modal as a page" experience where dialogs have
+ * unique URLs and can be bookmarked.
+ *
+ * @returns {JSX.Element} A collection of potentially visible dialog components.
+ *
+ * @example
+ * <RoutedDialogs />
  */
 export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();

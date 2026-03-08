@@ -35,9 +35,14 @@ const UserStatsRoute = lazy(() =>
 );
 
 /**
- * Inner component that loads ship types with Suspense and error boundary
+ * Inner component that manages core data loading and dialog orchestration.
+ *
+ * It uses `useFetchShipTypesSuspense` to trigger the initial data fetch and
+ * `useUrlSync` to restore state from URL parameters. It also manages the
+ * conditional rendering of routed dialogs and the initial welcome dialog.
+ *
+ * @returns {JSX.Element | null} The application content, or `null` if a fatal error occurs.
  */
-
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
 	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
@@ -51,6 +56,9 @@ const AppContent: FC = () => {
 		}
 	}, [activeDialog, userVisited, markUserVisited]);
 
+	/**
+	 * Dismisses the welcome dialog and records the visit.
+	 */
 	const handleCloseWelcome = () => {
 		setShowWelcome(false);
 		markUserVisited();
@@ -99,9 +107,20 @@ const AppContent: FC = () => {
 };
 
 /**
- * The main application component. It sets up routing, analytics, internationalization,
- * and global state providers. It also handles dynamic document titles and SEO tags.
- * @returns {JSX.Element} The rendered App component.
+ * The root component of the No Man's Sky Technology Layout Optimizer.
+ *
+ * This component sets up the high-level application environment, including:
+ * - SEO and Title management via `useSeoAndTitle`.
+ * - URL validation and sanitization.
+ * - Global update detection for the PWA.
+ * - Root-level error handling and service worker update prompts.
+ *
+ * It wraps the entire application in a `DialogProvider` to enable routed modals.
+ *
+ * @returns {JSX.Element} The rendered root component.
+ *
+ * @example
+ * <App />
  */
 const App: FC = () => {
 	const { t } = useTranslation();
@@ -138,6 +157,9 @@ const App: FC = () => {
 		}
 	}, []);
 
+	/**
+	 * Triggers a hard reload to activate the newly installed service worker.
+	 */
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
 			updateSWRef.current(true).catch((e) => {
@@ -149,6 +171,9 @@ const App: FC = () => {
 		}
 	};
 
+	/**
+	 * Hides the application update notification.
+	 */
 	const handleDismissUpdatePrompt = () => {
 		setShowUpdatePrompt(false);
 	};

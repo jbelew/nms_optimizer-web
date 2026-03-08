@@ -7,12 +7,17 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
 /**
- * Custom hook to handle the application of recommended builds to the grid.
- * Uses the shared grid container ref from useScrollGridIntoView.
+ * Custom hook for applying pre-defined "Recommended Builds" to the technology grid.
  *
- * @param {TechTree} techTree - The tech tree data.
- * @returns {{applyRecommendedBuild: (build: RecommendedBuild) => void}}
- *          An object containing the function to apply a recommended build.
+ * This hook maps technology and module identifiers from the recommended build
+ * layout to their actual data properties in the `techTree`. It handles
+ * automatic scrolling on mobile devices and updates the global `GridStore`.
+ *
+ * @param {TechTree} techTree - The complete technology tree data required for property mapping. **Must not be null.**
+ * @returns {{ applyRecommendedBuild: function(RecommendedBuild): void }} A function to apply a selected build.
+ *
+ * @example
+ * const { applyRecommendedBuild } = useRecommendedBuild(techTree);
  */
 export const useRecommendedBuild = (techTree: TechTree) => {
 	const isAbove1024 = useBreakpoint("1024px");
@@ -21,7 +26,6 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 
 	/**
 	 * A map of all modules, indexed by a composite key of `tech/moduleId`.
-	 * @type {Map<string, Module>}
 	 */
 	const modulesMap = new Map<string, Module>();
 
@@ -47,10 +51,11 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	}
 
 	/**
-	 * Applies a recommended build to the grid.
-	 * Scrolls immediately (on small screens only), then applies the build while the page is already moving.
+	 * Overwrites the current grid state with the layout defined in a recommended build.
 	 *
-	 * @param {RecommendedBuild} build - The recommended build to apply.
+	 * Performs validation on the build object and initiates a scroll-into-view on mobile.
+	 *
+	 * @param {RecommendedBuild} build - The recommended build configuration. **Must pass `isValidRecommendedBuild` check.**
 	 */
 	const applyRecommendedBuild = (build: RecommendedBuild) => {
 		if (!isValidRecommendedBuild(build)) {

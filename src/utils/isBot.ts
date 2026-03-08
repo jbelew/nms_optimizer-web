@@ -1,5 +1,6 @@
 /**
  * A regex pattern matching the User-Agent strings of common web crawlers and bots.
+ *
  * This list covers major search engine crawlers (Googlebot, Bingbot, etc.) as well as
  * generic headless browser and bot indicators.
  */
@@ -9,16 +10,19 @@ const BOT_USER_AGENT_PATTERN =
 /**
  * Detects whether the current visitor is likely a bot or web crawler.
  *
- * Uses two heuristics:
- * 1. `navigator.webdriver` — set to `true` by WebDriver-controlled browsers (e.g.,
- *    Selenium, Puppeteer in automation mode), which crawlers sometimes use.
- * 2. User-Agent string matching against a list of known bot/crawler signatures.
+ * Uses heuristics including `navigator.webdriver` and User-Agent string matching
+ * against known bot signatures.
  *
- * This check is intentionally client-side only; it runs in the browser at render time.
- * It is not security-critical — its sole purpose is to suppress UI-only dialogs
- * (e.g., the Welcome dialog) for automated visitors to improve SEO rendering.
+ * This check is used to suppress non-essential UI (like Welcome dialogs) for
+ * automated visitors to improve SEO and prevent unwanted interactions.
+ * **Note: This is not a security-critical check.**
  *
  * @returns {boolean} `true` if the visitor is likely a bot, `false` otherwise.
+ *
+ * @example
+ * if (isBot()) {
+ *   console.log("Welcome dialog suppressed for crawler.");
+ * }
  */
 export function isBot(): boolean {
 	if (navigator.webdriver) {

@@ -2,11 +2,16 @@ import { useToast } from "../../hooks/useToast/useToast";
 import { NmsToast } from "./Toast";
 
 /**
- * ToastRenderer component renders the centralized toast notification.
- * Should be mounted at the top level of the app, preferably in MainAppContent or App component.
- * Uses the global toast context to display notifications.
+ * A non-rendering observer component that manages the display of the active toast notification.
  *
- * @returns {JSX.Element|null} The rendered toast or null if no toast is open.
+ * It listens to the `ToastContext` and renders a single `NmsToast` instance
+ * when a configuration is present. This component should be mounted once at
+ * the application's root to avoid multiple overlapping notification systems.
+ *
+ * @returns {JSX.Element | null} The rendered toast notification, or `null` if none are active.
+ *
+ * @example
+ * <ToastRenderer />
  */
 export const ToastRenderer = () => {
 	const { toastConfig, isOpen, closeToast } = useToast();

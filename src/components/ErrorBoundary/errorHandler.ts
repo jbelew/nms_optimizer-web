@@ -5,11 +5,23 @@ import { sendEvent } from "../../utils/analytics";
 import { safeClear } from "../../utils/storage";
 
 /**
- * Handles errors by clearing local storage, unregistering service workers,
- * and sending analytics events.
+ * Executes a nuclear recovery strategy after an uncaught application error.
  *
- * @param error - The error that was thrown.
- * @param errorInfo - Optional component stack information.
+ * This function performs the following actions to ensure a clean state for recovery:
+ * 1. Logs the error to the console and Sentry.
+ * 2. Purges all `localStorage` data.
+ * 3. Unregisters all active Service Workers.
+ * 4. Deletes all browser caches.
+ * 5. Attempts to delete all IndexedDB databases.
+ * 6. Clears `sessionStorage`.
+ * 7. Reports the event to Google Analytics with debug metadata.
+ *
+ * @param {Error} error - The caught exception. **Must not be null.**
+ * @param {ErrorInfo} [errorInfo] - The React component stack metadata.
+ * @returns {void}
+ *
+ * @example
+ * handleError(new Error("Fatal Crash"), { componentStack: "..." });
  */
 export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);

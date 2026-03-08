@@ -7,26 +7,35 @@ import "./Toast.scss";
 import { Button, Separator } from "@radix-ui/themes";
 
 /**
- * Props for the NmsToast component.
- * @typedef {object} ToastProps
- * @property {boolean} open - Whether the toast is currently visible.
- * @property {(open: boolean) => void} onOpenChange - Callback triggered when the open state changes.
- * @property {string} title - The title text of the toast.
- * @property {string | ReactNode} description - The main content/description of the toast.
- * @property {"success" | "error" | undefined} variant - Visual variant (color and icon).
- * @property {number} [duration=5000] - Duration in milliseconds before the toast auto-closes.
+ * Props for the `NmsToast` component.
  */
 type ToastProps = {
+	/** Whether the toast is currently visible on the screen. */
 	open: boolean;
+	/** Callback function triggered when the open state changes (e.g., auto-close or manual dismiss). */
 	onOpenChange: (open: boolean) => void;
+	/** The primary text to display at the top of the toast. **Must not be empty.** */
 	title: string;
+	/** The detailed message. Can be a string or complex React nodes. */
 	description: string | ReactNode;
+	/** The visual style and icon to use. */
 	variant?: "success" | "error";
+	/** Time in milliseconds before the toast auto-closes. Defaults to `5000`. */
 	duration?: number;
 };
 
 /**
- * A custom toast notification component styled for the NMS Optimizer.
+ * A customized toast notification component built using Radix UI.
+ *
+ * It provides standardized success, error, and info variants with matching
+ * icons and CSS class modifiers. It includes a progress-tracked auto-close
+ * and a manual "Dismiss" button.
+ *
+ * @param {ToastProps} props - Component properties.
+ * @returns {JSX.Element} The rendered toast notification.
+ *
+ * @example
+ * <NmsToast open={true} onOpenChange={setOpen} title="Error" description="Failed to save" variant="error" />
  */
 export const NmsToast = ({
 	open,

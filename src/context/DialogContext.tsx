@@ -6,14 +6,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { DialogContext } from "./dialog-utils";
 
+/** List of non-English language codes supported by the router. */
 const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
 
 /**
- * Provider component that manages the state and logic for routed dialogs.
- * It syncs the active dialog with the URL.
+ * Provider component for managing the state and logic of routed dialogs.
  *
- * @param {{children: React.ReactNode}} props - The props for the component.
- * @returns {JSX.Element} The rendered provider.
+ * This provider synchronizes the currently active dialog with the browser's URL path.
+ * It also manages persistent state for the tutorial and first-visit flags via `localStorage`.
+ *
+ * @param {object} props - Component properties.
+ * @param {React.ReactNode} props.children - The child components to wrap.
+ * @returns {JSX.Element} The context provider with dialog state.
+ *
+ * @example
+ * <DialogProvider>
+ *   <App />
+ * </DialogProvider>
  */
 export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const location = useLocation();
@@ -69,10 +78,13 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 			: null;
 
 	/**
-	 * Opens a dialog.
+	 * Navigates to a specific dialog route or sets the share URL state.
 	 *
-	 * @param {NonNullable<DialogType>|null} dialog - The dialog to open.
-	 * @param {{shareUrl?: string, section?: string}} [data] - Additional data for the dialog.
+	 * @param {NonNullable<DialogType> | null} dialog - The identifier of the dialog to open.
+	 * @param {object} [data] - Optional metadata for the dialog.
+	 * @param {string} [data.shareUrl] - A specific URL for the share dialog.
+	 * @param {string} [data.section] - An element ID to scroll into view when the dialog opens.
+	 * @returns {void}
 	 */
 	const openDialog = (
 		dialog: NonNullable<DialogType> | null,
@@ -95,7 +107,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	};
 
 	/**
-	 * Closes the currently active dialog.
+	 * Clears the active dialog state and navigates back to the root route.
+	 *
+	 * @returns {void}
 	 */
 	const closeDialog = () => {
 		const lang = (i18n.language || "en").split("-")[0];
@@ -111,7 +125,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	};
 
 	/**
-	 * Marks the tutorial as finished.
+	 * Updates state and `localStorage` to indicate the user has completed the tutorial.
+	 *
+	 * @returns {void}
 	 */
 	const markTutorialFinished = () => {
 		if (!tutorialFinished) {
@@ -124,7 +140,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	};
 
 	/**
-	 * Marks the user as visited.
+	 * Updates state and `localStorage` to indicate the user has visited the app at least once.
+	 *
+	 * @returns {void}
 	 */
 	const markUserVisited = () => {
 		if (!userVisited) {

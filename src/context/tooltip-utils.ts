@@ -1,24 +1,53 @@
 import { createContext, useContext } from "react";
 
+/**
+ * Represents the visual and data state of the active tooltip.
+ */
 export interface TooltipState {
+	/** The text content to display. */
 	label: string;
+	/** The bounding rectangle of the target element, used for positioning. */
 	rect: DOMRect | null;
+	/** Whether the tooltip is currently visible. */
 	isOpen: boolean;
+	/** The delay in milliseconds before the tooltip appears. */
 	delayDuration: number;
 }
 
+/**
+ * Functional interface for controlling the tooltip visibility.
+ */
 export interface TooltipActions {
+	/**
+	 * Displays the tooltip with specific content and position.
+	 *
+	 * @param {string} label - The text to show.
+	 * @param {DOMRect} rect - The anchor element's layout properties.
+	 * @param {number} [delayDuration] - Optional override for the show delay.
+	 */
 	show: (label: string, rect: DOMRect, delayDuration?: number) => void;
+	/**
+	 * Requests to hide the tooltip.
+	 */
 	hide: () => void;
 }
 
+/** Context for the tooltip's data state. */
 export const TooltipStateContext = createContext<TooltipState | undefined>(undefined);
 
+/** Context for the tooltip's control actions. */
 export const TooltipActionsContext = createContext<TooltipActions | undefined>(undefined);
 
 /**
- * Custom hook to access the tooltip state.
- * Returns default values in test environments if the provider is missing.
+ * Custom hook for accessing the active tooltip's state.
+ *
+ * Provides a graceful fallback for test environments to simplify component testing.
+ *
+ * @returns {TooltipState} The current tooltip state.
+ * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
+ *
+ * @example
+ * const { isOpen, label } = useTooltipState();
  */
 export const useTooltipState = () => {
 	const context = useContext(TooltipStateContext);
@@ -36,8 +65,15 @@ export const useTooltipState = () => {
 };
 
 /**
- * Custom hook to access tooltip actions (show, hide).
- * Returns no-ops in test environments if the provider is missing.
+ * Custom hook for accessing tooltip control actions.
+ *
+ * Provides a graceful fallback for test environments to simplify component testing.
+ *
+ * @returns {TooltipActions} The show and hide functions.
+ * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
+ *
+ * @example
+ * const { show, hide } = useTooltipActions();
  */
 export const useTooltipActions = () => {
 	const context = useContext(TooltipActionsContext);

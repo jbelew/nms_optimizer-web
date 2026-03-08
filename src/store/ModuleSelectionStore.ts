@@ -11,7 +11,11 @@ type SetItemFunction = (
 ) => Promise<void>;
 
 /**
- * Creates a debounced version of a setItem function.
+ * Creates a debounced version of a `setItem` function for `ModuleSelectionStore`.
+ *
+ * @param {SetItemFunction} setItemFn - The storage setter function.
+ * @param {number} msToWait - Delay in milliseconds.
+ * @returns {function(string, StorageValue<Partial<ModuleSelectionStore>>): Promise<void>}
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -60,25 +64,48 @@ const debouncedStorage = {
 };
 
 /**
- * State and actions for the module selection store.
- * @typedef {object} ModuleSelectionStore
- * @property {Record<string, string[]>} moduleSelections - Map of technology keys to an array of selected module IDs.
- * @property {(tech: string, moduleIds: string[]) => void} setModuleSelection - Sets the selected modules for a specific technology.
- * @property {(tech: string) => string[] | null} getModuleSelection - Retrieves the currently selected modules for a technology.
- * @property {(tech: string) => void} clearModuleSelection - Clears the module selection for a specific technology.
- * @property {() => void} clearAllModuleSelections - Clears all module selections across all technologies.
+ * State and actions for tracking user-selected technology modules.
  */
 export type ModuleSelectionStore = {
+	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
 	moduleSelections: Record<string, string[]>;
+	/**
+	 * Updates the selected modules for a specific technology.
+	 *
+	 * @param {string} tech - The technology identifier.
+	 * @param {string[]} moduleIds - The list of module IDs to associate with this technology.
+	 */
 	setModuleSelection: (tech: string, moduleIds: string[]) => void;
+	/**
+	 * Retrieves the currently selected module IDs for a given technology.
+	 *
+	 * @param {string} tech - The technology identifier.
+	 * @returns {string[] | null} The list of selected IDs, or `null` if none are found.
+	 */
 	getModuleSelection: (tech: string) => string[] | null;
+	/**
+	 * Removes all module selections for a specific technology.
+	 *
+	 * @param {string} tech - The technology identifier to clear.
+	 */
 	clearModuleSelection: (tech: string) => void;
+	/**
+	 * Resets the entire module selection registry.
+	 */
 	clearAllModuleSelections: () => void;
 };
 
 /**
- * Zustand store for managing module selections.
- * Persists to localStorage with debouncing to avoid excessive writes.
+ * Zustand store for managing persistent module selections across technology categories.
+ *
+ * This store ensures that when a user selects specific modules for an optimization
+ * solve, those choices are remembered and persisted to `localStorage`.
+ *
+ * @returns {ModuleSelectionStore} The module selection store state and actions.
+ *
+ * @example
+ * const { setModuleSelection } = useModuleSelectionStore();
+ * setModuleSelection("pulse", ["S1", "S2", "S3"]);
  */
 export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	persist(

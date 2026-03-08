@@ -5,27 +5,29 @@ import { useGridStore } from "../../store/GridStore";
 import { TechTreeSection } from "./TechTreeSection";
 
 /**
- * @interface TechTreeContentProps
- * @property {(tech: string) => Promise<void>} handleOptimize - Function to call when optimizing a tech.
- * @property {boolean} solving - Indicates if the optimizer is currently solving.
- * @property {TechTree} techTree - The tech tree data.
- * @property {string} selectedShipType - The currently selected ship type.
+ * Props for the `TechTreeContent` component.
  */
 interface TechTreeContentProps {
+	/** Asynchronous callback function to trigger a solve for a technology. **Must be provided.** */
 	handleOptimize: (tech: string) => Promise<void>;
+	/** Whether an optimization solve is currently in progress. */
 	solving: boolean;
-	techTree: TechTree; // Define a more specific type for techTree if possible
+	/** The full technology tree data structure to render. **Must be valid `TechTree` data.** */
+	techTree: TechTree;
 }
 
 /**
- * Renders the main content of the tech tree, processing and displaying the sections.
+ * Internal component that handles the processing and rendering of technology sections.
  *
- * @param {TechTreeContentProps} props - The props for the component.
- * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
- * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
- * @param {TechTree} props.techTree - The tech tree data.
- * @param {string} props.selectedShipType - The currently selected ship type.
- * @returns {JSX.Element} The rendered tech tree content.
+ * It filters the raw `techTree` data to remove metadata (like grid definitions),
+ * sorts technologies alphabetically within their categories, and calculates
+ * the overall grid capacity state.
+ *
+ * @param {TechTreeContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered technology sections.
+ *
+ * @example
+ * <TechTreeContent techTree={fetchedTree} handleOptimize={fn} solving={false} />
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 	handleOptimize,
@@ -37,7 +39,6 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 	/**
 	 * Processed version of the tech tree.
 	 * Filters out non-technology categories, ensures correct types, and sorts technologies alphabetically.
-	 * @type {Record<string, TechTreeItem[]>}
 	 */
 	const result: { [key: string]: TechTreeItem[] } = {};
 	Object.entries(techTree).forEach(([category, technologies]) => {
@@ -77,7 +78,6 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 	/**
 	 * Array of `TechTreeSection` components to be rendered.
 	 * Each section represents a category of technologies.
-	 * @type {JSX.Element[]}
 	 */
 	const renderedTechTree = Object.entries(processedTechTree).map(
 		([type, technologies], index) => (

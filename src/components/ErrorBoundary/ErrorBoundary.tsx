@@ -6,26 +6,47 @@ import { handleError } from "./errorHandler";
 
 // src/components/ErrorBoundary/ErrorBoundary.tsx
 
+/**
+ * Props for the `ErrorBoundary` component.
+ */
 interface Props {
+	/** The child component tree that is monitored for runtime errors. */
 	children: ReactNode;
+	/** Optional React node to render instead of the default error UI if a crash occurs. */
 	fallback?: ReactNode;
 }
 
+/**
+ * Internal state for the `ErrorBoundary` class component.
+ */
 interface State {
+	/** Whether an error has been detected in the current lifecycle. */
 	hasError: boolean;
+	/** The exception that was caught. */
 	error?: Error;
+	/** Metadata about the component stack where the error originated. */
 	errorInfo?: ErrorInfo;
 }
 
 /**
- * ErrorBoundary component catches JavaScript errors anywhere in its child component tree,
- * logs those errors, and displays a fallback UI instead of the component tree that crashed.
- * It also attempts to clear localStorage and sends a Google Analytics event on error.
+ * A robust class-based component that intercepts JavaScript errors in its subtree.
+ *
+ * When an error is caught:
+ * 1. It prevents the entire application from crashing.
+ * 2. It triggers a global error reporting event (via `handleError`).
+ * 3. It displays a user-friendly error UI or the provided `fallback` node.
+ * 4. It maintains information about the crash for debugging purposes.
+ *
+ * @example
+ * <ErrorBoundary fallback={<CustomErrorUI />}>
+ *   <FeatureComponent />
+ * </ErrorBoundary>
  */
 class ErrorBoundary extends Component<Props, State> {
 	/**
-	 * Creates an instance of ErrorBoundary.
-	 * @param {Props} props - The props for the ErrorBoundary component.
+	 * Initializes the error boundary with a clean state.
+	 *
+	 * @param {Props} props - Component properties.
 	 */
 	constructor(props: Props) {
 		super(props);
@@ -33,9 +54,10 @@ class ErrorBoundary extends Component<Props, State> {
 	}
 
 	/**
-	 * Static method to update state when an error is caught.
-	 * @param {Error} error - The error that was thrown.
-	 * @returns {{ hasError: boolean; error: Error }} An object to update the state.
+	 * Updates the internal state so the next render will show the fallback UI.
+	 *
+	 * @param {Error} error - The caught exception.
+	 * @returns {State} The new component state.
 	 */
 	static getDerivedStateFromError(error: Error) {
 		console.log("ErrorBoundary: Caught error, updating state.");
@@ -44,15 +66,21 @@ class ErrorBoundary extends Component<Props, State> {
 	}
 
 	/**
-	 * Lifecycle method to catch errors and log them.
-	 * @param {Error} error - The error that was thrown.
-	 * @param {ErrorInfo} errorInfo - Information about the component stack where the error occurred.
+	 * Executes side effects after an error is caught, such as logging or analytics.
+	 *
+	 * @param {Error} error - The caught exception.
+	 * @param {ErrorInfo} errorInfo - The component stack trace.
 	 */
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		handleError(error, errorInfo);
 		this.setState({ errorInfo });
 	}
 
+	/**
+	 * Renders children normally, or the error UI if a crash occurred.
+	 *
+	 * @returns {ReactNode}
+	 */
 	render() {
 		const { hasError, error, errorInfo } = this.state;
 		const { fallback, children } = this.props;

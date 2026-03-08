@@ -12,31 +12,30 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
 /**
- * The return type of the useOptimize hook.
- * @typedef {object} UseOptimizeReturn
- * @property {boolean} solving - Whether an optimization is currently in progress.
- * @property {number} progressPercent - The current progress percentage (0-100).
- * @property {(tech: string, forced?: boolean) => Promise<void>} handleOptimize - Function to start optimization for a given technology.
- * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the grid container for scrolling.
- * @property {string | null} patternNoFitTech - The technology that failed to fit with pattern solver, if any.
- * @property {() => void} clearPatternNoFitTech - Function to clear the failed technology state.
- * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to force optimization for the currently failed technology.
+ * The return type of the `useOptimize` hook.
  */
 export interface UseOptimizeReturn {
+	/** Whether an optimization is currently in progress. */
 	solving: boolean;
+	/** The current progress percentage (0-100). */
 	progressPercent: number;
+	/** Function to initiate optimization for a specific technology. */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
+	/** Ref to the grid container for automated scrolling. */
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
+	/** The technology identifier that failed to fit using pattern solving, if any. */
 	patternNoFitTech: string | null;
+	/** Function to clear the "No Fit" warning state. */
 	clearPatternNoFitTech: () => void;
+	/** Function to re-run optimization with forced solving for the current PNF tech. */
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 }
 
 /**
- * Type guard for ApiResponse
+ * Type guard for validating that a value conforms to the `ApiResponse` structure.
  *
- * @param {unknown} value - The value to check.
- * @returns {value is ApiResponse} - Whether the value is an ApiResponse.
+ * @param {unknown} value - The object to validate.
+ * @returns {value is ApiResponse} `true` if valid, otherwise `false`.
  */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
@@ -57,18 +56,20 @@ function isApiResponse(value: unknown): value is ApiResponse {
 }
 
 /**
- * Manages the optimization process by communicating with a persistent singleton WebSocket connection.
- * It handles sending optimization requests, receiving progress updates, and processing the final results.
- * It also manages UI state related to the optimization, such as loading indicators and error states.
+ * Custom hook for managing the asynchronous optimization process via WebSockets.
  *
- * @returns {UseOptimizeReturn} An object containing state and functions for the optimization process.
- * @property {boolean} solving - True if an optimization is currently in progress.
- * @property {number} progressPercent - The percentage completion of the current optimization.
- * @property {(tech: string, forced?: boolean) => Promise<void>} handleOptimize - Function to initiate an optimization for a given technology.
- * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref for the grid container, used for scrolling on smaller screens.
- * @property {string | null} patternNoFitTech - The technology that failed to fit using the pattern-based solver, offering a forced solve.
- * @property {() => void} clearPatternNoFitTech - Function to clear the `patternNoFitTech` state.
- * @property {() => Promise<void>} handleForceCurrentPnfOptimize - Function to run a forced optimization for the technology that previously failed to fit.
+ * This hook handles the entire lifecycle of an optimization request:
+ * 1. Establishing a WebSocket connection via `socket.io-client`.
+ * 2. Managing progress updates and real-time grid updates.
+ * 3. Handling success, "No Fit" warnings, and transport-level retries.
+ * 4. Cleaning up resources and updating the global `GridStore`.
+ *
+ * **Requires a running backend service supporting Socket.io.**
+ *
+ * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
+ *
+ * @example
+ * const { handleOptimize, solving } = useOptimize();
  */
 export const useOptimize = (): UseOptimizeReturn => {
 	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
@@ -121,6 +122,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 	/** Maximum number of silent transport-error retries before showing the error modal. */
 	const MAX_TRANSPORT_RETRIES = 2;
 
+	/**
+	 * Initiates the optimization solve for the specified technology.
+	 *
+	 * @param {string} tech - The internal identifier for the technology (e.g., 'pulse').
+	 * @param {boolean} [forced=false] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
+	 * @param {number} [retryCount=0] - Internal counter for handling network retries.
+	 */
 	const handleOptimize = async (
 		tech: string,
 		forced: boolean = false,
@@ -357,8 +365,16 @@ export const useOptimize = (): UseOptimizeReturn => {
 		handleOptimizeRef.current = handleOptimize;
 	});
 
+	/**
+	 * Clears the technology stored in the "Pattern No Fit" state.
+	 */
 	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
 
+	/**
+	 * Forces a solve for the technology that failed pattern matching.
+	 *
+	 * @returns {Promise<void>}
+	 */
 	const handleForceCurrentPnfOptimize = async () => {
 		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);
 	};

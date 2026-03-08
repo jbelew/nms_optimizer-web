@@ -7,10 +7,16 @@ import { useGridStore } from "../../store/GridStore";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 
 /**
- * TapInstructions component displays a callout with instructions for touch device users.
- * Only shown on touch devices when the tutorial hasn't been finished and supercharged is not fixed.
+ * A contextual help component that displays interaction instructions for touch-enabled devices.
  *
- * @returns {JSX.Element | null} The tap instructions callout or null if conditions aren't met
+ * It appears as a Radix UI `Callout` and informs the user about how to toggle
+ * active and supercharged states on the grid. It is conditionally rendered based
+ * on device type and user tutorial progress.
+ *
+ * @returns {JSX.Element | null} The rendered instructions callout, or `null` if hidden.
+ *
+ * @example
+ * <TapInstructions />
  */
 export const TapInstructions: React.FC = () => {
 	const { t } = useTranslation();

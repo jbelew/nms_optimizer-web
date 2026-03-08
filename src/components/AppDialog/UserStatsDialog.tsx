@@ -12,17 +12,28 @@ const LazyUserStatsContent = lazy(() =>
 	}))
 );
 
+/**
+ * Props for the `UserStatsDialog` component.
+ */
 interface UserStatsDialogProps {
+	/** Whether the statistics dialog is currently visible. */
 	isOpen: boolean;
+	/** Callback function to close the dialog. */
 	onClose: () => void;
 }
 
 /**
- * UserStatsDialog component displays user statistics in a dialog.
- * It serves as a wrapper around the AppDialog component, providing the specific content for user stats.
+ * A modal dialog that displays aggregate user optimization statistics.
  *
- * @param {UserStatsDialogProps} props - The props for the component.
- * @returns {JSX.Element} The UserStatsDialog component.
+ * It uses React `lazy` and `Suspense` to dynamically load the heavy chart-related
+ * content only when the dialog is requested, minimizing the initial bundle size.
+ * It wraps the dynamic content in a standard `AppDialog`.
+ *
+ * @param {UserStatsDialogProps} props - Component properties.
+ * @returns {JSX.Element} The rendered statistics dialog.
+ *
+ * @example
+ * <UserStatsDialog isOpen={showStats} onClose={hideFn} />
  */
 const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();
