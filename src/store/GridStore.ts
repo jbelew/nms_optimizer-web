@@ -50,7 +50,7 @@ function debounceSetItem(
 /**
  * Represents a single cell within the technology grid.
  */
-export type Cell {
+export type Cell = {
 	/** Whether the cell is part of the active layout. */
 	active: boolean;
 	/** The type of adjacency bonus the module in this cell provides. */
