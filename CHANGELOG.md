@@ -1,3 +1,15 @@
+# [6.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.6...v6.15.0) (2026-03-07)
+
+
+### Bug Fixes
+
+* adjust `MessageSpinner` visibility to always render when not a shared grid, but only show `isTechTreeLoading` status on smaller screens. ([3118ce3](https://github.com/jbelew/nms_optimizer-web/commit/3118ce32610ac1c78f988baef9604e4834345151))
+
+
+### Features
+
+* enhance toast system, update JSDocs, introduce `useLatest` hook, simplify component exports, and update various UI components and stores. ([5729641](https://github.com/jbelew/nms_optimizer-web/commit/57296419f9d48bf4c01aea0b9d8e56f874ccdd87))
+
 ## [6.14.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.5...v6.14.6) (2026-03-06)
 
 
