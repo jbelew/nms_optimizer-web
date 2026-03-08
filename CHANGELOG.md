@@ -1,3 +1,10 @@
+## [6.16.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.2...v6.16.3) (2026-03-08)
+
+
+### Bug Fixes
+
+* correct syntax for Cell type definition ([a3bfa4f](https://github.com/jbelew/nms_optimizer-web/commit/a3bfa4f8e66f9ddc51aba149b4b5431d32435126))
+
 ## [6.16.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.1...v6.16.2) (2026-03-08)
 
 
