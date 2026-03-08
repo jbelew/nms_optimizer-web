@@ -1,3 +1,10 @@
+# [6.16.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.15.0...v6.16.0) (2026-03-08)
+
+
+### Features
+
+* Refactor grid rendering by removing `GridRow` and optimizing `ConditionalTooltip`, `TechTree`, and `MarkdownContentRenderer` for improved performance. ([8698e66](https://github.com/jbelew/nms_optimizer-web/commit/8698e668a3e1504e6f89bddb70f9fa26fa34a8cd))
+
 # [6.15.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.14.6...v6.15.0) (2026-03-07)
 
 
