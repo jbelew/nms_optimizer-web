@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 const GRID_SCROLL_OFFSET_SMALL = 40; // < 640px
@@ -47,7 +45,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 		offset = GRID_SCROLL_OFFSET_LARGE;
 	}
 
-	const scrollIntoView = useCallback(() => {
+	const scrollIntoView = () => {
 		// Skip scrolling on large screens if configured to do so
 		if (options?.skipOnLargeScreens && isAbove1024) {
 			return;
@@ -62,7 +60,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 			const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
 			window.scrollTo({ top, behavior: "smooth" });
 		});
-	}, [gridContainerRef, offset, isAbove1024, options?.skipOnLargeScreens]);
+	};
 
 	return { gridContainerRef, scrollIntoView };
 };

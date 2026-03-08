@@ -12,9 +12,17 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock child components
-vi.mock("../GridRow/GridRow", () => ({
+vi.mock("../GridCell/GridCell", () => ({
+	default: ({ rowIndex, columnIndex }: { rowIndex: number; columnIndex: number }) => (
+		<div data-testid={`grid-cell-${rowIndex}-${columnIndex}`}>
+			Cell {rowIndex}-{columnIndex}
+		</div>
+	),
+}));
+
+vi.mock("../GridControlButtons/GridControlButtons", () => ({
 	default: ({ rowIndex }: { rowIndex: number }) => (
-		<div data-testid={`grid-row-${rowIndex}`}>Row {rowIndex}</div>
+		<div data-testid={`grid-control-buttons-${rowIndex}`}>Control {rowIndex}</div>
 	),
 }));
 
@@ -100,12 +108,17 @@ describe("GridTable", () => {
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 	});
 
-	test("should render grid rows based on grid height", () => {
+	test("should render grid cells and control buttons based on grid dimensions", () => {
 		render(<GridTable solving={false} sharedGrid={false} />);
 
-		// Should render 5 rows (based on mocked grid height)
-		for (let i = 0; i < 5; i++) {
-			expect(screen.getByTestId(`grid-row-${i}`)).toBeInTheDocument();
+		// Should render 5 * 3 cells (based on mocked grid dimensions)
+		for (let r = 0; r < 5; r++) {
+			for (let c = 0; c < 3; c++) {
+				expect(screen.getByTestId(`grid-cell-${r}-${c}`)).toBeInTheDocument();
+			}
+
+			// Should render control buttons for each row
+			expect(screen.getByTestId(`grid-control-buttons-${r}`)).toBeInTheDocument();
 		}
 	});
 

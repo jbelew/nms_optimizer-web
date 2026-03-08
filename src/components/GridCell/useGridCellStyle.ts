@@ -1,5 +1,4 @@
 import type { Cell } from "../../store/GridStore";
-import { useMemo } from "react";
 
 import { useTechStore } from "../../store/TechStore";
 
@@ -14,46 +13,30 @@ import { useTechStore } from "../../store/TechStore";
 export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
 
-	const emptyIconFillColor = useMemo(() => {
-		return cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
-	}, [cell.supercharged]);
+	const emptyIconFillColor = cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
 
-	const techColor = useMemo(() => {
-		return !currentTechColorFromStore && cell.supercharged
-			? "purple"
-			: currentTechColorFromStore;
-	}, [currentTechColorFromStore, cell.supercharged]);
+	const techColor =
+		!currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
 
-	const cellClassName = useMemo(() => {
-		const classes = [
-			"gridCell",
-			"gridCell--interactive",
-			"sm:border-2 border-1",
-			"shadow-sm",
-			"relative",
-		];
-		if (!cell.module && cell.active) classes.push("gridCell--empty");
-		if (cell.supercharged) classes.push("gridCell--supercharged");
-		classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
-		if (isTouching) classes.push("gridCell--touched");
-		if (cell.adjacency_bonus === 0 && !cell.group_adjacent && cell.image)
-			classes.push("gridCell--black");
-		if (cell.supercharged && cell.image) classes.push("gridCell--glow");
-		if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
+	const classes = [
+		"gridCell",
+		"gridCell--interactive",
+		"sm:border-2 border-1",
+		"shadow-sm",
+		"relative",
+	];
+	if (!cell.module && cell.active) classes.push("gridCell--empty");
+	if (cell.supercharged) classes.push("gridCell--supercharged");
+	classes.push(cell.active ? "gridCell--active" : "gridCell--inactive");
+	if (isTouching) classes.push("gridCell--touched");
+	if (cell.adjacency_bonus === 0 && !cell.group_adjacent && cell.image)
+		classes.push("gridCell--black");
+	if (cell.supercharged && cell.image) classes.push("gridCell--glow");
+	if (cell.label) classes.push("flex", "items-center", "justify-center", "w-full", "h-full");
 
-		return classes.join(" ");
-	}, [
-		cell.supercharged,
-		cell.active,
-		cell.adjacency_bonus,
-		cell.image,
-		cell.label,
-		cell.module,
-		cell.group_adjacent,
-		isTouching,
-	]);
+	const cellClassName = classes.join(" ");
 
-	const cellElementStyle: React.CSSProperties = useMemo(() => ({}), []);
+	const cellElementStyle: React.CSSProperties = {};
 
 	const showEmptyIcon = !cell.module && cell.active;
 

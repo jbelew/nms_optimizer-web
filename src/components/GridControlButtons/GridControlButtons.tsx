@@ -9,7 +9,7 @@ import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalT
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/GridStore";
 
-import { useGridRowState } from "../GridRow/useGridRowState";
+import { useGridRowState } from "./useGridRowState";
 
 const selectHasAnyActiveCells = (state: GridStore) =>
 	state.grid.cells.some((row) => row.some((cell) => cell.active));

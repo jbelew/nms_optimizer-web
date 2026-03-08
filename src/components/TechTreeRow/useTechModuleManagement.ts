@@ -48,46 +48,38 @@ export const useTechModuleManagement = (
 		}
 	}, [tech, currentCheckedModules, setModuleSelection, getModuleSelection]);
 
-	const coreModuleIds = useMemo(
-		() => modules.filter((m) => m.type === "core").map((m) => m.id),
-		[modules]
-	);
+	const coreModuleIds = modules.filter((m) => m.type === "core").map((m) => m.id);
 
-	const nonCoreModuleIds = useMemo(
-		() => modules.filter((m) => m.type !== "core").map((m) => m.id),
-		[modules]
-	);
+	const nonCoreModuleIds = modules.filter((m) => m.type !== "core").map((m) => m.id);
 
-	const groupedModules = useMemo(() => {
-		const groups: { [key: string]: typeof modules } = {
-			core: [],
-			bonus: [],
-			upgrade: [],
-			reactor: [],
-			cosmetic: [],
-			atlantid: [],
-			trails: [],
-			figurines: [],
-		};
+	const groups: { [key: string]: typeof modules } = {
+		core: [],
+		bonus: [],
+		upgrade: [],
+		reactor: [],
+		cosmetic: [],
+		atlantid: [],
+		trails: [],
+		figurines: [],
+	};
 
-		modules.forEach((module) => {
-			if (module.label.toLowerCase().includes("figurine")) {
-				groups.figurines.push(module);
+	modules.forEach((module) => {
+		if (module.label.toLowerCase().includes("figurine")) {
+			groups.figurines.push(module);
 
-				return;
-			}
+			return;
+		}
 
-			const type = module.type || "upgrade";
+		const type = module.type || "upgrade";
 
-			if (groups[type]) {
-				groups[type].push(module);
-			} else {
-				groups.upgrade.push(module);
-			}
-		});
+		if (groups[type]) {
+			groups[type].push(module);
+		} else {
+			groups.upgrade.push(module);
+		}
+	});
 
-		return groups;
-	}, [modules]);
+	const groupedModules = groups;
 
 	const handleCheckboxChange = (moduleId: string) => {
 		setCheckedModules(tech, (prevChecked = []) => {

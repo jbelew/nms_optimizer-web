@@ -1,6 +1,6 @@
 import type { ToastConfig, ToastContextType } from "./createToastContext";
 import type { ReactNode } from "react";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 
 import { ToastContext } from "./createToastContext";
 
@@ -12,42 +12,33 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	const [toastConfig, setToastConfig] = useState<ToastConfig | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
-	const showToast = useCallback((config: ToastConfig) => {
+	const showToast = (config: ToastConfig) => {
 		setToastConfig({
 			...config,
 			id: config.id || Date.now().toString(),
 		});
 		setIsOpen(true);
-	}, []);
+	};
 
-	const showSuccess = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, variant: "success", duration });
-		},
-		[showToast]
-	);
+	const showSuccess = (title: string, description: ReactNode, duration?: number) => {
+		showToast({ title, description, variant: "success", duration });
+	};
 
-	const showError = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, variant: "error", duration });
-		},
-		[showToast]
-	);
+	const showError = (title: string, description: ReactNode, duration?: number) => {
+		showToast({ title, description, variant: "error", duration });
+	};
 
-	const showInfo = useCallback(
-		(title: string, description: ReactNode, duration?: number) => {
-			showToast({ title, description, duration });
-		},
-		[showToast]
-	);
+	const showInfo = (title: string, description: ReactNode, duration?: number) => {
+		showToast({ title, description, duration });
+	};
 
-	const closeToast = useCallback(() => {
+	const closeToast = () => {
 		setIsOpen(false);
 		// Optionally clear config after a small delay to allow for exit animation
 		setTimeout(() => {
 			setToastConfig(null);
 		}, 500);
-	}, []);
+	};
 
 	// Dismiss toast on any click/touch outside or inside
 	React.useEffect(() => {
@@ -68,7 +59,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 			window.removeEventListener("click", handleGlobalDismiss);
 			window.removeEventListener("touchstart", handleGlobalDismiss);
 		};
-	}, [isOpen, closeToast]);
+	}, [isOpen]);
 
 	const value: ToastContextType = {
 		toastConfig,

@@ -1,5 +1,5 @@
 import type { ApiResponse, Grid } from "../../store/GridStore";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { createEmptyCell, useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
@@ -89,15 +89,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const handleOptimizeRef = useRef<
 		((tech: string, forced?: boolean, retryCount?: number) => Promise<void>) | undefined
 	>(undefined);
-	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: true }), []);
+	const scrollOptions = { skipOnLargeScreens: true };
 	const { gridContainerRef, scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
-	const resetProgress = useCallback(() => {
+	const resetProgress = () => {
 		if (!isMountedRef.current) return;
 		setSolving(false);
 		isOptimizingRef.current = false;
 		setProgressPercent(0);
-	}, []);
+	};
 
 	// Reset mount state on unmount
 	useEffect(() => {
@@ -123,263 +123,247 @@ export const useOptimize = (): UseOptimizeReturn => {
 	/** Maximum number of silent transport-error retries before showing the error modal. */
 	const MAX_TRANSPORT_RETRIES = 2;
 
-	const handleOptimize = useCallback(
-		async (tech: string, forced: boolean = false, retryCount: number = 0) => {
-			if (isOptimizingRef.current && retryCount === 0) {
-				Logger.warn("Optimization already in progress, ignoring request");
+	const handleOptimize = async (
+		tech: string,
+		forced: boolean = false,
+		retryCount: number = 0
+	) => {
+		if (isOptimizingRef.current && retryCount === 0) {
+			Logger.warn("Optimization already in progress, ignoring request");
+
+			return;
+		}
+
+		const { grid, setGrid, setResult } = useGridStore.getState();
+		const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
+
+		isOptimizingRef.current = true;
+		setSolving(true);
+		setProgressPercent(0);
+		setShowErrorStore(false);
+
+		if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
+
+		Logger.info(`Optimization started for ${tech}`, {
+			tech,
+			forced,
+			platform: selectedShipType,
+		});
+
+		const updatedGrid: Grid = {
+			...grid,
+			cells: grid.cells.map((row) => {
+				let rowChanged = false;
+				const newRow = row.map((cell) => {
+					if (cell.tech === tech) {
+						rowChanged = true;
+
+						return { ...createEmptyCell(cell.supercharged, cell.active) };
+					}
+
+					return cell;
+				});
+
+				return rowChanged ? newRow : row;
+			}),
+		};
+
+		const socket = createSocket();
+
+		if (!socket) {
+			const error = new Error("Failed to initialize WebSocket connection");
+			Logger.error(`Optimization failed for ${tech}: Socket initialization error`, error);
+			setShowErrorStore(true, "recoverable", error);
+			resetProgress();
+
+			return;
+		}
+
+		const cleanup = () => {
+			socket.off("progress", onProgress);
+			socket.off("optimization_result", onResult);
+			socket.off("connect_error", onError);
+			socket.off("error", onError);
+			socket.off("disconnect", onDisconnect);
+			socket.disconnect(); // Always disconnect on cleanup
+			cleanupRef.current = null;
+			resetProgress();
+		};
+
+		cleanupRef.current = cleanup;
+
+		const onProgress = (data: {
+			progress_percent: number;
+			best_grid?: Grid;
+			status?: string;
+		}) => {
+			if (!isMountedRef.current) return;
+			setProgressPercent(data.progress_percent);
+
+			if (data.best_grid) {
+				setGrid(data.best_grid);
+			}
+		};
+
+		const onResult = (data: unknown) => {
+			if (!isMountedRef.current) {
+				cleanup();
 
 				return;
 			}
 
-			const { grid, setGrid, setResult } = useGridStore.getState();
-			const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
+			if (isApiResponse(data)) {
+				if (data.solve_method === "Pattern No Fit" && !forced) {
+					Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
+						tech,
+						platform: selectedShipType,
+					});
+					setPatternNoFitTech(tech);
+					sendEvent({
+						category: "ui",
+						action: "no_fit_warning",
+						platform: selectedShipType,
+						tech,
+						value: 1,
+						nonInteraction: false,
+					});
+				} else {
+					if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
-			isOptimizingRef.current = true;
-			setSolving(true);
-			setProgressPercent(0);
-			setShowErrorStore(false);
-
-			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
-
-			Logger.info(`Optimization started for ${tech}`, {
-				tech,
-				forced,
-				platform: selectedShipType,
-			});
-
-			const updatedGrid: Grid = {
-				...grid,
-				cells: grid.cells.map((row) => {
-					let rowChanged = false;
-					const newRow = row.map((cell) => {
-						if (cell.tech === tech) {
-							rowChanged = true;
-
-							return { ...createEmptyCell(cell.supercharged, cell.active) };
-						}
-
-						return cell;
+					Logger.info(`Optimization complete for ${tech}`, {
+						tech,
+						method: data.solve_method,
+						bonus: data.max_bonus,
 					});
 
-					return rowChanged ? newRow : row;
-				}),
-			};
+					setResult(data, tech);
+					const gaTech =
+						tech === "pulse" && checkedModules[tech]?.includes("PC")
+							? "photonix"
+							: tech;
 
-			const socket = createSocket();
-
-			if (!socket) {
-				const error = new Error("Failed to initialize WebSocket connection");
-				Logger.error(`Optimization failed for ${tech}: Socket initialization error`, error);
-				setShowErrorStore(true, "recoverable", error);
-				resetProgress();
-
-				return;
-			}
-
-			const cleanup = () => {
-				socket.off("progress", onProgress);
-				socket.off("optimization_result", onResult);
-				socket.off("connect_error", onError);
-				socket.off("error", onError);
-				socket.off("disconnect", onDisconnect);
-				socket.disconnect(); // Always disconnect on cleanup
-				cleanupRef.current = null;
-				resetProgress();
-			};
-
-			cleanupRef.current = cleanup;
-
-			const onProgress = (data: {
-				progress_percent: number;
-				best_grid?: Grid;
-				status?: string;
-			}) => {
-				if (!isMountedRef.current) return;
-				setProgressPercent(data.progress_percent);
-
-				if (data.best_grid) {
-					setGrid(data.best_grid);
-				}
-			};
-
-			const onResult = (data: unknown) => {
-				if (!isMountedRef.current) {
-					cleanup();
-
-					return;
-				}
-
-				if (isApiResponse(data)) {
-					if (data.solve_method === "Pattern No Fit" && !forced) {
-						Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
-							tech,
-							platform: selectedShipType,
-						});
-						setPatternNoFitTech(tech);
+					if (data.grid) {
 						sendEvent({
 							category: "ui",
-							action: "no_fit_warning",
+							action: "optimize_tech",
 							platform: selectedShipType,
-							tech,
+							tech: gaTech,
+							solve_method: data.solve_method,
 							value: 1,
 							nonInteraction: false,
+							supercharged:
+								typeof data.max_bonus === "number" && data.max_bonus > 100,
 						});
-					} else {
-						if (patternNoFitTech === tech) setPatternNoFitTech(null);
-
-						Logger.info(`Optimization complete for ${tech}`, {
-							tech,
-							method: data.solve_method,
-							bonus: data.max_bonus,
-						});
-
-						setResult(data, tech);
-						const gaTech =
-							tech === "pulse" && checkedModules[tech]?.includes("PC")
-								? "photonix"
-								: tech;
-
-						if (data.grid) {
-							sendEvent({
-								category: "ui",
-								action: "optimize_tech",
-								platform: selectedShipType,
-								tech: gaTech,
-								solve_method: data.solve_method,
-								value: 1,
-								nonInteraction: false,
-								supercharged:
-									typeof data.max_bonus === "number" && data.max_bonus > 100,
-							});
-							setGrid(data.grid);
-						}
+						setGrid(data.grid);
 					}
-				} else {
-					Logger.error(`Optimization failed for ${tech}: Invalid API response`, data);
-					setShowErrorStore(
-						true,
-						"recoverable",
-						new Error("Invalid API response format")
-					);
 				}
+			} else {
+				Logger.error(`Optimization failed for ${tech}: Invalid API response`, data);
+				setShowErrorStore(true, "recoverable", new Error("Invalid API response format"));
+			}
 
+			cleanup();
+		};
+
+		const onError = (err: Error | unknown) => {
+			if (!isMountedRef.current) {
 				cleanup();
-			};
 
-			const onError = (err: Error | unknown) => {
-				if (!isMountedRef.current) {
-					cleanup();
+				return;
+			}
 
-					return;
-				}
+			const errMessage = err instanceof Error ? err.message : String(err);
+			const isTransportError = TRANSPORT_ERROR_MESSAGES.has(errMessage);
 
-				const errMessage = err instanceof Error ? err.message : String(err);
-				const isTransportError = TRANSPORT_ERROR_MESSAGES.has(errMessage);
-
-				if (isTransportError && retryCount < MAX_TRANSPORT_RETRIES) {
-					// Silently retry for transient network failures; user sees the progress
-					// indicator continue rather than a disruptive error modal.
-					Logger.warn(
-						`Optimization transport failure for ${tech} — retrying (${retryCount + 1}/${MAX_TRANSPORT_RETRIES})`,
-						{ error: errMessage }
-					);
-					cleanup();
-
-					// Re-enter handleOptimize via ref to avoid a forward-declaration issue.
-					// isMountedRef is checked first because cleanup may have set it false.
-					if (isMountedRef.current) {
-						void handleOptimizeRef.current?.(tech, forced, retryCount + 1);
-					}
-
-					return;
-				}
-
-				// All retries exhausted or a genuine application error — log and surface to user.
-				Logger.error(`Optimization WebSocket error for ${tech}`, err);
-				setShowErrorStore(
-					true,
-					"recoverable",
-					err instanceof Error ? err : new Error(String(err))
+			if (isTransportError && retryCount < MAX_TRANSPORT_RETRIES) {
+				// Silently retry for transient network failures; user sees the progress
+				// indicator continue rather than a disruptive error modal.
+				Logger.warn(
+					`Optimization transport failure for ${tech} — retrying (${retryCount + 1}/${MAX_TRANSPORT_RETRIES})`,
+					{ error: errMessage }
 				);
 				cleanup();
-			};
 
-			const onDisconnect = (reason: string) => {
-				// Benign if we triggered it ourselves during cleanup
-				if (reason === "io client disconnect") {
-					return;
+				// Re-enter handleOptimize via ref to avoid a forward-declaration issue.
+				// isMountedRef is checked first because cleanup may have set it false.
+				if (isMountedRef.current) {
+					void handleOptimizeRef.current?.(tech, forced, retryCount + 1);
 				}
 
-				const isTransportClose = reason === "transport close";
-
-				if (isTransportClose) {
-					Logger.info("Socket disconnected during optimization (transport close)", {
-						reason,
-					});
-				} else {
-					Logger.warn("Socket disconnected during optimization", { reason });
-				}
-
-				// Only trigger an error if we were still optimizing AND it's not a transport close.
-				// transport close is common during network transitions and often doesn't need a modal error.
-				if (isOptimizingRef.current && !isTransportClose) {
-					onError(new Error(`Disconnected: ${reason}`));
-				} else {
-					cleanup();
-				}
-			};
-
-			socket.on("progress", onProgress);
-			socket.once("optimization_result", onResult);
-			socket.once("connect_error", onError);
-			socket.once("error", onError);
-			socket.on("disconnect", onDisconnect);
-
-			const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
-			const payload = {
-				ship: selectedShipType,
-				tech,
-				available_modules: checkedModules[tech] || [],
-				grid: updatedGrid,
-				forced,
-				send_grid_updates: isLarge,
-				solve_type,
-			};
-
-			if (socket.connected) {
-				socket.emit("optimize", payload);
-			} else {
-				socket.once("connect", () => {
-					socket.emit("optimize", payload);
-				});
+				return;
 			}
-		},
-		[
-			setShowErrorStore,
-			patternNoFitTech,
-			setPatternNoFitTech,
-			selectedShipType,
-			sendEvent,
-			resetProgress,
-			isLarge,
-			// handleOptimize is intentionally omitted from deps: it's stable and
-			// including it would cause infinite re-creation due to the retry self-reference.
-		]
-	);
+
+			// All retries exhausted or a genuine application error — log and surface to user.
+			Logger.error(`Optimization WebSocket error for ${tech}`, err);
+			setShowErrorStore(
+				true,
+				"recoverable",
+				err instanceof Error ? err : new Error(String(err))
+			);
+			cleanup();
+		};
+
+		const onDisconnect = (reason: string) => {
+			// Benign if we triggered it ourselves during cleanup
+			if (reason === "io client disconnect") {
+				return;
+			}
+
+			const isTransportClose = reason === "transport close";
+
+			if (isTransportClose) {
+				Logger.info("Socket disconnected during optimization (transport close)", {
+					reason,
+				});
+			} else {
+				Logger.warn("Socket disconnected during optimization", { reason });
+			}
+
+			// Only trigger an error if we were still optimizing AND it's not a transport close.
+			// transport close is common during network transitions and often doesn't need a modal error.
+			if (isOptimizingRef.current && !isTransportClose) {
+				onError(new Error(`Disconnected: ${reason}`));
+			} else {
+				cleanup();
+			}
+		};
+
+		socket.on("progress", onProgress);
+		socket.once("optimization_result", onResult);
+		socket.once("connect_error", onError);
+		socket.once("error", onError);
+		socket.on("disconnect", onDisconnect);
+
+		const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
+		const payload = {
+			ship: selectedShipType,
+			tech,
+			available_modules: checkedModules[tech] || [],
+			grid: updatedGrid,
+			forced,
+			send_grid_updates: isLarge,
+			solve_type,
+		};
+
+		if (socket.connected) {
+			socket.emit("optimize", payload);
+		} else {
+			socket.once("connect", () => {
+				socket.emit("optimize", payload);
+			});
+		}
+	};
 
 	// Keep the ref in sync with the latest version of handleOptimize.
 	useEffect(() => {
 		handleOptimizeRef.current = handleOptimize;
 	});
 
-	const clearPatternNoFitTech = useCallback(
-		() => setPatternNoFitTech(null),
-		[setPatternNoFitTech]
-	);
+	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
 
-	const handleForceCurrentPnfOptimize = useCallback(async () => {
+	const handleForceCurrentPnfOptimize = async () => {
 		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);
-	}, [patternNoFitTech, handleOptimize]);
+	};
 
 	return {
 		solving,

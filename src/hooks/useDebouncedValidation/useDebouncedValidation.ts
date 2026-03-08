@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseDebouncedValidationOptions {
 	debounceMs?: number;
@@ -17,20 +17,17 @@ export const useDebouncedValidation = (
 	const [error, setError] = useState<string | null>(null);
 	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	const handleChange = useCallback(
-		(value: string) => {
-			// Clear existing timer
-			if (debounceTimerRef.current) {
-				clearTimeout(debounceTimerRef.current);
-			}
+	const handleChange = (value: string) => {
+		// Clear existing timer
+		if (debounceTimerRef.current) {
+			clearTimeout(debounceTimerRef.current);
+		}
 
-			// Set new debounced validation
-			debounceTimerRef.current = setTimeout(() => {
-				setError(validator(value));
-			}, debounceMs);
-		},
-		[validator, debounceMs]
-	);
+		// Set new debounced validation
+		debounceTimerRef.current = setTimeout(() => {
+			setError(validator(value));
+		}, debounceMs);
+	};
 
 	// Cleanup timer on unmount
 	useEffect(() => {

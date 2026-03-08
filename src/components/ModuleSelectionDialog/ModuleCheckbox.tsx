@@ -61,14 +61,12 @@ export interface ModuleCheckboxProps {
 }
 
 /**
- * Renders a single, memoized module checkbox item.
- * This component is memoized to prevent re-renders when its props do not change,
- * which is crucial for performance in a large list of checkboxes.
+ * Renders a module checkbox item.
  *
  * @param {ModuleCheckboxProps} props - The props for the component.
  * @returns {JSX.Element} The rendered module checkbox.
  */
-const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
+export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 	module,
 	techColor,
 	isDisabled,
@@ -96,5 +94,3 @@ const ModuleCheckboxComponent: React.FC<ModuleCheckboxProps> = ({
 		</label>
 	);
 };
-
-export const ModuleCheckbox = React.memo(ModuleCheckboxComponent);

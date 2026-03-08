@@ -22,26 +22,56 @@ interface ConditionalTooltipProps {
  * @param {ConditionalTooltipProps} props - The props for the component.
  * @returns {React.ReactElement} - The rendered component.
  */
-const ConditionalTooltipComponent: React.FC<ConditionalTooltipProps> = ({
+export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = ({
 	children,
 	label,
 	delayDuration = 500,
 }) => {
+	const [isHovered, setIsHovered] = React.useState(false);
 	const isTouch = isTouchDevice();
 
 	if (isTouch) {
 		return <>{children}</>;
 	}
 
-	return (
+	// Attach hover listeners directly to the child to avoid a wrapper with display: contents
+	const trigger = React.isValidElement(children)
+		? React.cloneElement(
+				children as React.ReactElement,
+				{
+					onPointerEnter: (e: React.PointerEvent) => {
+						setIsHovered(true);
+
+						const props = children.props as {
+							onPointerEnter?: React.PointerEventHandler;
+						};
+						const originalOnPointerEnter = props.onPointerEnter;
+
+						if (typeof originalOnPointerEnter === "function") {
+							originalOnPointerEnter(e);
+						}
+					},
+					onPointerLeave: (e: React.PointerEvent) => {
+						setIsHovered(false);
+
+						const props = children.props as {
+							onPointerLeave?: React.PointerEventHandler;
+						};
+						const originalOnPointerLeave = props.onPointerLeave;
+
+						if (typeof originalOnPointerLeave === "function") {
+							originalOnPointerLeave(e);
+						}
+					},
+				} as React.HTMLAttributes<HTMLElement>
+			)
+		: children;
+
+	return isHovered ? (
 		<Tooltip delayDuration={delayDuration} content={label} className="font-medium!">
-			{children}
+			{trigger}
 		</Tooltip>
+	) : (
+		trigger
 	);
 };
-
-/**
- * A memoized version of the ConditionalTooltip component.
- * Displays a tooltip only on non-touch devices.
- */
-export const ConditionalTooltip = React.memo(ConditionalTooltipComponent);

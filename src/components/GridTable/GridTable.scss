@@ -21,7 +21,3 @@
 		padding-top: var(--space-3);
 	}
 }
-
-[role="row"] {
-	display: contents; /* This allows children to be direct grid items */
-}

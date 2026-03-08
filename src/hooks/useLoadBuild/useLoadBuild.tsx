@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -35,51 +35,46 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isLoadPending, setIsLoadPending] = useState(false);
 
-	const handleLoadBuild = useCallback(() => {
+	const handleLoadBuild = () => {
 		fileInputRef.current?.click();
-	}, []);
+	};
 
-	const handleFileSelect = useCallback(
-		async (event: React.ChangeEvent<HTMLInputElement>) => {
-			const file = event.target.files?.[0];
+	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
 
-			if (file) {
-				setIsLoadPending(true);
+		if (file) {
+			setIsLoadPending(true);
 
-				try {
-					await loadBuildFromFile(file);
-					showSuccess(
-						t("toast.buildLoaded.title"),
-						<>
-							Build <Code>{file.name}</Code> {t("toast.buildLoaded.loadedMessage")}
-						</>,
-						5000
-					);
-					sendEvent({
-						category: "ui",
-						action: "load_build",
-						value: 1,
-						fileName: file.name,
-						shipType: selectedShipType,
-						nonInteraction: false,
-					});
-				} catch (error) {
-					console.error("Load failed:", error);
-					const errorMessage =
-						error instanceof Error
-							? error.message
-							: t("toast.buildLoadError.description");
-					showError(t("toast.buildLoadError.title"), errorMessage, 5000);
-				} finally {
-					setIsLoadPending(false);
-				}
+			try {
+				await loadBuildFromFile(file);
+				showSuccess(
+					t("toast.buildLoaded.title"),
+					<>
+						Build <Code>{file.name}</Code> {t("toast.buildLoaded.loadedMessage")}
+					</>,
+					5000
+				);
+				sendEvent({
+					category: "ui",
+					action: "load_build",
+					value: 1,
+					fileName: file.name,
+					shipType: selectedShipType,
+					nonInteraction: false,
+				});
+			} catch (error) {
+				console.error("Load failed:", error);
+				const errorMessage =
+					error instanceof Error ? error.message : t("toast.buildLoadError.description");
+				showError(t("toast.buildLoadError.title"), errorMessage, 5000);
+			} finally {
+				setIsLoadPending(false);
 			}
+		}
 
-			// Reset the input so the same file can be selected again
-			event.target.value = "";
-		},
-		[loadBuildFromFile, showSuccess, showError, sendEvent, t, selectedShipType]
-	);
+		// Reset the input so the same file can be selected again
+		event.target.value = "";
+	};
 
 	return {
 		fileInputRef,

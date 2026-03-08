@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "@/store/GridStore";
@@ -60,25 +59,20 @@ export const useTechTreeRow = ({
 
 	// Other logic specific to TechTreeRow
 
-	// Memoize translation and image path calculations to prevent unnecessary re-computation
-	const { translatedTechName, imagePath, imagePath2x } = useMemo(() => {
-		const translationKeyPart = techImage
-			? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
-			: tech;
-		const translatedName = t(`technologies.${translationKeyPart}`);
+	const translationKeyPart = techImage
+		? techImage.replace(/\.\w+$/, "").replace(/\//g, ".")
+		: tech;
+	const translatedTechName = t(`technologies.${translationKeyPart}`);
 
-		const baseImagePath = "/assets/img/tech/";
-		const versionParam = `?v=${__APP_VERSION__}`;
-		const fallbackImageBase = `${baseImagePath}infra.webp`;
-		const fallbackImage = `${fallbackImageBase}${versionParam}`;
-		const fallbackImage2x = `${fallbackImageBase.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`;
-		const imagePath = techImage ? `${baseImagePath}${techImage}${versionParam}` : fallbackImage;
-		const imagePath2x = techImage
-			? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`
-			: fallbackImage2x;
-
-		return { translatedTechName: translatedName, imagePath, imagePath2x };
-	}, [techImage, tech, t]);
+	const baseImagePath = "/assets/img/tech/";
+	const versionParam = `?v=${__APP_VERSION__}`;
+	const fallbackImageBase = `${baseImagePath}infra.webp`;
+	const fallbackImage = `${fallbackImageBase}${versionParam}`;
+	const fallbackImage2x = `${fallbackImageBase.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`;
+	const imagePath = techImage ? `${baseImagePath}${techImage}${versionParam}` : fallbackImage;
+	const imagePath2x = techImage
+		? `${baseImagePath}${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}${versionParam}`
+		: fallbackImage2x;
 
 	return {
 		// State and derived data

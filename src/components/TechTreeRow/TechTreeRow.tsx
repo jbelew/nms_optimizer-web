@@ -59,7 +59,7 @@ export interface TechTreeRowProps {
  * @param {TechTreeRowProps} props - The props for the component.
  * @returns {JSX.Element} The rendered tech tree row.
  */
-const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
+export const TechTreeRow: React.FC<TechTreeRowProps> = (props) => {
 	const hookData = useTechTreeRow(props);
 	const { translatedTechName, imagePath, techColor, imagePath2x } = hookData;
 
@@ -92,7 +92,4 @@ const TechTreeRowComponent: React.FC<TechTreeRowProps> = (props) => {
 	);
 };
 
-/**
- * Memoized version of TechTreeRowComponent to prevent unnecessary re-renders.
- */
-export const TechTreeRow = React.memo(TechTreeRowComponent);
+TechTreeRow.displayName = "TechTreeRow";

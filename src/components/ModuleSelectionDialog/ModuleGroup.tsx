@@ -1,5 +1,5 @@
 import type { ModuleSelectionDialogProps, SelectionModule } from "./ModuleSelectionDialog";
-import React, { useMemo } from "react";
+import React from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Blockquote } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ export interface ModuleGroupProps extends Pick<
  * @param {ModuleGroupProps} props - The props for the component.
  * @returns {JSX.Element | null} The rendered module group, or null if there are no modules.
  */
-const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
+export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	groupName,
 	modules,
 	currentCheckedModules,
@@ -40,47 +40,37 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 
-	const sortedModules = useMemo(() => {
-		if (["bonus", "trails", "figurines"].includes(groupName)) {
-			return [...modules].sort((a, b) => a.label.localeCompare(b.label));
-		}
+	const sortedModules = ["bonus", "trails", "figurines"].includes(groupName)
+		? [...modules].sort((a, b) => a.label.localeCompare(b.label))
+		: modules;
 
-		return modules;
-	}, [modules, groupName]);
+	const dependencyMap = new Map<string, string>();
 
-	const dependencyMap = useMemo(() => {
-		const map = new Map<string, string>();
-
-		if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
-			// P2 Optimization: Build rank-to-module lookup once to avoid O(n²) dependency resolution
-			// Previously called modules.find() for each module during forEach loop
-			const rankToModuleMap = new Map<string, string>();
-			modules.forEach((module) => {
-				MODULE_RANK_ORDER.forEach((rank) => {
-					if (module.label.includes(rank)) {
-						rankToModuleMap.set(rank, module.id);
-					}
-				});
-			});
-
-			modules.forEach((module) => {
-				const rankIndex = MODULE_RANK_ORDER.findIndex((rank) =>
-					module.label.includes(rank)
-				);
-
-				if (rankIndex > 0) {
-					const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
-					const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
-
-					if (prerequisiteModuleId) {
-						map.set(module.id, prerequisiteModuleId);
-					}
+	if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
+		// P2 Optimization: Build rank-to-module lookup once to avoid O(n²) dependency resolution
+		// Previously called modules.find() for each module during forEach loop
+		const rankToModuleMap = new Map<string, string>();
+		modules.forEach((module) => {
+			MODULE_RANK_ORDER.forEach((rank) => {
+				if (module.label.includes(rank)) {
+					rankToModuleMap.set(rank, module.id);
 				}
 			});
-		}
+		});
 
-		return map;
-	}, [modules, groupName]);
+		modules.forEach((module) => {
+			const rankIndex = MODULE_RANK_ORDER.findIndex((rank) => module.label.includes(rank));
+
+			if (rankIndex > 0) {
+				const prerequisiteRank = MODULE_RANK_ORDER[rankIndex - 1];
+				const prerequisiteModuleId = rankToModuleMap.get(prerequisiteRank);
+
+				if (prerequisiteModuleId) {
+					dependencyMap.set(module.id, prerequisiteModuleId);
+				}
+			}
+		});
+	}
 
 	if (!modules || modules.length === 0) {
 		return null;
@@ -134,5 +124,3 @@ const ModuleGroupComponent: React.FC<ModuleGroupProps> = ({
 		</div>
 	);
 };
-
-export const ModuleGroup = React.memo(ModuleGroupComponent);

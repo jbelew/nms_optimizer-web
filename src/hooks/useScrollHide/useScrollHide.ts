@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type UseScrollHideReturn = {
 	isVisible: boolean;
@@ -20,10 +20,10 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	const isForcedRef = useRef(false);
 	const scrollStopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-	const forceShow = useCallback(() => {
+	const forceShow = () => {
 		setIsVisible(true);
 		isForcedRef.current = true;
-	}, []);
+	};
 
 	useEffect(() => {
 		let rafId: number | null = null;

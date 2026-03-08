@@ -1,6 +1,6 @@
 // src/components/TechTree/TechTree.tsx
 import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
-import React, { useMemo } from "react";
+import React from "react";
 import { Box, ScrollArea } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
@@ -48,28 +48,18 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	const hasRecommendedBuilds =
 		techTree?.recommended_builds && techTree.recommended_builds.length > 0;
 
-	const scrollAreaHeight = useMemo(() => {
-		const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
+	const baseHeight = parseInt(DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT, 10);
+	const scrollAreaHeight = hasRecommendedBuilds
+		? `${baseHeight - 47}px`
+		: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 
-		if (hasRecommendedBuilds) {
-			// Adjust height to account for the RecommendedBuild button
-			return `${baseHeight - 47}px`;
-		}
-
-		return DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
-	}, [hasRecommendedBuilds]);
-
-	// P3 Optimization: Extract inline style object to avoid recreation on every render
-	const scrollAreaStyle = useMemo(
-		() => ({
-			height: scrollAreaHeight,
-			backgroundColor: "var(--accent-a3)",
-			padding: "var(--space-4)",
-			paddingRight: "var(--space-5)",
-			borderRadius: "var(--radius-5)",
-		}),
-		[scrollAreaHeight]
-	);
+	const scrollAreaStyle = {
+		height: scrollAreaHeight,
+		backgroundColor: "var(--accent-a3)",
+		padding: "var(--space-4)",
+		paddingRight: "var(--space-5)",
+		borderRadius: "var(--radius-5)",
+	};
 
 	return (
 		<>
@@ -112,6 +102,8 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	);
 };
 
+TechTreeWithData.displayName = "TechTreeWithData";
+
 /**
  * TechTreeComponent is the main entry point for the Tech Tree feature.
  * It manages the overall layout, error boundaries, and suspense for data loading.
@@ -126,5 +118,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 const TechTree: React.FC<TechTreeProps> = (props) => {
 	return <TechTreeWithData {...props} />;
 };
+
+TechTree.displayName = "TechTree";
 
 export default TechTree;

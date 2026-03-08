@@ -1,5 +1,5 @@
 import type { Cell } from "../../store/GridStore";
-import { useCallback, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
 import { useLatest } from "../../hooks/useLatest/useLatest";
 import { useGridStore } from "../../store/GridStore";
@@ -29,8 +29,10 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
  * isTouching: boolean;
  * handleClick: (event: React.MouseEvent) => void;
  * handleContextMenu: (event: React.MouseEvent) => void;
- * handleTouchStart: () => void;
- * handleTouchEnd: () => void;
+ * handleTouchStart: (event: React.TouchEvent) => void;
+ * handleTouchMove: (event: React.TouchEvent) => void;
+ * handleTouchEnd: (event: React.TouchEvent | React.MouseEvent) => void;
+ * handleTouchCancel: () => void;
  * handleKeyDown: (event: React.KeyboardEvent) => void;
  * }} An object containing interaction handlers and the `isTouching` state.
  */
@@ -55,11 +57,11 @@ export const useGridCellInteraction = (
 	 * Triggers a visual shake animation on the grid.
 	 * Calls the `triggerShake` action from the ShakeStore directly to avoid subscription.
 	 */
-	const triggerShake = useCallback(() => {
+	const triggerShake = () => {
 		useShakeStore.getState().triggerShake();
-	}, []);
+	};
 
-	const handleTouchLogic = useCallback(() => {
+	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
 		const latestCell = cellRef.current;
@@ -121,12 +123,12 @@ export const useGridCellInteraction = (
 				});
 			}
 		}
-	}, [rowIndex, columnIndex, triggerShake, cellRef]);
+	};
 
 	/**
 	 * Handles the touch start event for a grid cell.
 	 */
-	const handleTouchStart = useCallback((event: React.TouchEvent) => {
+	const handleTouchStart = (event: React.TouchEvent) => {
 		setIsTouching(true);
 
 		// If more than one finger, it's a gesture (pinch/zoom)
@@ -139,12 +141,12 @@ export const useGridCellInteraction = (
 				y: event.touches[0].clientY,
 			};
 		}
-	}, []);
+	};
 
 	/**
 	 * Handles touch move to detect scrolling/gestures
 	 */
-	const handleTouchMove = useCallback((event: React.TouchEvent) => {
+	const handleTouchMove = (event: React.TouchEvent) => {
 		if (isGestureRef.current || !gestureStartRef.current) return;
 
 		const x = event.touches[0].clientX;
@@ -156,30 +158,124 @@ export const useGridCellInteraction = (
 		if (dx > 10 || dy > 10) {
 			isGestureRef.current = true;
 		}
-	}, []);
+	};
 
 	/**
 	 * Handles the touch end event for a grid cell.
 	 * Calls preventDefault to stop the browser from generating a click event, eliminating the 300ms delay.
 	 */
-	const handleTouchEnd = useCallback(
-		(event: React.TouchEvent | React.MouseEvent) => {
-			setIsTouching(false);
+	const handleTouchEnd = (event: React.TouchEvent | React.MouseEvent) => {
+		setIsTouching(false);
 
-			// If it was a gesture (scroll/zoom), ignore the tap
-			if (isGestureRef.current) {
-				isGestureRef.current = false;
-				gestureStartRef.current = null;
+		// If it was a gesture (scroll/zoom), ignore the tap
+		if (isGestureRef.current) {
+			isGestureRef.current = false;
+			gestureStartRef.current = null;
 
-				return;
+			return;
+		}
+
+		// We can cast event to any because we preventDefault on both if needed,
+		// though physically this is usually a TouchEvent.
+		if (event.cancelable) {
+			event.preventDefault();
+		}
+
+		if (isSharedGridRef.current) return;
+
+		if (cellRef.current.module) {
+			useSessionStore.getState().incrementModuleLocked();
+			triggerShake();
+
+			return;
+		}
+
+		handleTouchLogic();
+	};
+
+	const handleTouchCancel = () => {
+		setIsTouching(false);
+	};
+
+	const handleClick = (event: React.MouseEvent) => {
+		const gridState = useGridStore.getState();
+		const sessionState = useSessionStore.getState();
+		const latestCell = cellRef.current;
+
+		const { superchargedFixed, gridFixed } = gridState;
+
+		if (isSharedGridRef.current) {
+			return;
+		}
+
+		// If the cell has a module, no interactions should change its state.
+		if (latestCell.module) {
+			sessionState.incrementModuleLocked();
+			triggerShake();
+
+			return;
+		}
+
+		// Mouse-specific logic (Ctrl/Cmd + Click)
+		if (event.ctrlKey || event.metaKey) {
+			// Ctrl/Cmd + Click: Toggle Active
+			if (gridFixed || (superchargedFixed && latestCell.supercharged)) {
+				if (superchargedFixed && latestCell.supercharged) {
+					sessionState.incrementSuperchargedFixed();
+				} else if (gridFixed) {
+					sessionState.incrementGridFixed();
+				}
+
+				triggerShake();
+			} else {
+				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
+					rowIndex,
+					columnIndex,
+					active: !latestCell.active,
+				});
+				startTransition(() => {
+					gridState.toggleCellActive(rowIndex, columnIndex);
+				});
 			}
+		} else {
+			// Normal Click: Toggle Supercharged
+			const totalSupercharged = gridState.selectTotalSuperchargedCells();
+			const isInvalidSuperchargeToggle =
+				superchargedFixed ||
+				gridFixed ||
+				rowIndex >= 4 ||
+				(totalSupercharged >= 4 && !latestCell.supercharged);
 
-			// We can cast event to any because we preventDefault on both if needed,
-			// though physically this is usually a TouchEvent.
-			if (event.cancelable) {
-				event.preventDefault();
+			if (isInvalidSuperchargeToggle) {
+				if (totalSupercharged >= 4 && !latestCell.supercharged) {
+					sessionState.incrementSuperchargedLimit();
+				} else if (superchargedFixed) {
+					sessionState.incrementSuperchargedFixed();
+				} else if (rowIndex >= 4) {
+					sessionState.incrementRowLimit();
+				}
+
+				triggerShake();
+			} else {
+				Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
+					rowIndex,
+					columnIndex,
+					supercharged: !latestCell.supercharged,
+				});
+				startTransition(() => {
+					gridState.toggleCellSupercharged(rowIndex, columnIndex);
+				});
 			}
+		}
+	};
 
+	const handleContextMenu = (event: React.MouseEvent) => {
+		event.preventDefault();
+	};
+
+	const handleKeyDown = (event: React.KeyboardEvent) => {
+		if (event.key === " " || event.key === "Enter") {
+			event.preventDefault();
 			if (isSharedGridRef.current) return;
 
 			if (cellRef.current.module) {
@@ -189,122 +285,19 @@ export const useGridCellInteraction = (
 				return;
 			}
 
-			handleTouchLogic();
-		},
-		[handleTouchLogic, triggerShake, isSharedGridRef, cellRef]
-	);
-
-	const handleTouchCancel = useCallback(() => {
-		setIsTouching(false);
-	}, []);
-
-	const handleClick = useCallback(
-		(event: React.MouseEvent) => {
 			const gridState = useGridStore.getState();
-			const sessionState = useSessionStore.getState();
-			const latestCell = cellRef.current;
+			const { gridFixed } = gridState;
 
-			const { superchargedFixed, gridFixed } = gridState;
-
-			if (isSharedGridRef.current) {
-				return;
-			}
-
-			// If the cell has a module, no interactions should change its state.
-			if (latestCell.module) {
-				sessionState.incrementModuleLocked();
+			if (gridFixed) {
+				useSessionStore.getState().incrementGridFixed();
 				triggerShake();
-
-				return;
-			}
-
-			// Mouse-specific logic (Ctrl/Cmd + Click)
-			if (event.ctrlKey || event.metaKey) {
-				// Ctrl/Cmd + Click: Toggle Active
-				if (gridFixed || (superchargedFixed && latestCell.supercharged)) {
-					if (superchargedFixed && latestCell.supercharged) {
-						sessionState.incrementSuperchargedFixed();
-					} else if (gridFixed) {
-						sessionState.incrementGridFixed();
-					}
-
-					triggerShake();
-				} else {
-					Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
-						rowIndex,
-						columnIndex,
-						active: !latestCell.active,
-					});
-					startTransition(() => {
-						gridState.toggleCellActive(rowIndex, columnIndex);
-					});
-				}
 			} else {
-				// Normal Click: Toggle Supercharged
-				const totalSupercharged = gridState.selectTotalSuperchargedCells();
-				const isInvalidSuperchargeToggle =
-					superchargedFixed ||
-					gridFixed ||
-					rowIndex >= 4 ||
-					(totalSupercharged >= 4 && !latestCell.supercharged);
-
-				if (isInvalidSuperchargeToggle) {
-					if (totalSupercharged >= 4 && !latestCell.supercharged) {
-						sessionState.incrementSuperchargedLimit();
-					} else if (superchargedFixed) {
-						sessionState.incrementSuperchargedFixed();
-					} else if (rowIndex >= 4) {
-						sessionState.incrementRowLimit();
-					}
-
-					triggerShake();
-				} else {
-					Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
-						rowIndex,
-						columnIndex,
-						supercharged: !latestCell.supercharged,
-					});
-					startTransition(() => {
-						gridState.toggleCellSupercharged(rowIndex, columnIndex);
-					});
-				}
+				startTransition(() => {
+					gridState.toggleCellActive(rowIndex, columnIndex);
+				});
 			}
-		},
-		[rowIndex, columnIndex, triggerShake, cellRef, isSharedGridRef]
-	);
-
-	const handleContextMenu = useCallback((event: React.MouseEvent) => {
-		event.preventDefault();
-	}, []);
-
-	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent) => {
-			if (event.key === " " || event.key === "Enter") {
-				event.preventDefault();
-				if (isSharedGridRef.current) return;
-
-				if (cellRef.current.module) {
-					useSessionStore.getState().incrementModuleLocked();
-					triggerShake();
-
-					return;
-				}
-
-				const gridState = useGridStore.getState();
-				const { gridFixed } = gridState;
-
-				if (gridFixed) {
-					useSessionStore.getState().incrementGridFixed();
-					triggerShake();
-				} else {
-					startTransition(() => {
-						gridState.toggleCellActive(rowIndex, columnIndex);
-					});
-				}
-			}
-		},
-		[triggerShake, rowIndex, columnIndex, isSharedGridRef, cellRef]
-	);
+		}
+	};
 
 	return {
 		isTouching,

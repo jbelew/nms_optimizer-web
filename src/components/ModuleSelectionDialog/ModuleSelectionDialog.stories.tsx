@@ -72,25 +72,17 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		const { groupedModules, modules, initialChecked } = loaded;
 		const [currentCheckedModules, setCurrentCheckedModules] = React.useState(initialChecked);
 
-		const nonCoreModuleIds = React.useMemo(
-			() =>
-				modules
-					.filter((m: SelectionModule) => m.type !== "core")
-					.map((m: SelectionModule) => m.id),
-			[modules]
+		const nonCoreModuleIds = modules
+			.filter((m: SelectionModule) => m.type !== "core")
+			.map((m: SelectionModule) => m.id);
+
+		const allModulesSelected = nonCoreModuleIds.every((id: string) =>
+			currentCheckedModules.includes(id)
 		);
 
-		const allModulesSelected = React.useMemo(
-			() => nonCoreModuleIds.every((id: string) => currentCheckedModules.includes(id)),
-			[nonCoreModuleIds, currentCheckedModules]
-		);
-
-		const isIndeterminate = React.useMemo(
-			() =>
-				!allModulesSelected &&
-				nonCoreModuleIds.some((id: string) => currentCheckedModules.includes(id)),
-			[allModulesSelected, nonCoreModuleIds, currentCheckedModules]
-		);
+		const isIndeterminate =
+			!allModulesSelected &&
+			nonCoreModuleIds.some((id: string) => currentCheckedModules.includes(id));
 
 		const handleSelectAllChange = (checked: boolean | "indeterminate") => {
 			console.log("handleSelectAllChange", checked);

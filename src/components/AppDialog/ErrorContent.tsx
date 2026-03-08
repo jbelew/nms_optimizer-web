@@ -87,4 +87,4 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	);
 };
 
-export default React.memo(ErrorContent);
+export default ErrorContent;

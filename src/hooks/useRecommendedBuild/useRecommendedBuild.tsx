@@ -1,6 +1,5 @@
 // src/hooks/useRecommendedBuild.tsx
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
-import { useCallback, useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
@@ -17,17 +16,16 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  */
 export const useRecommendedBuild = (techTree: TechTree) => {
 	const isAbove1024 = useBreakpoint("1024px");
-	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: false }), []);
+	const scrollOptions = { skipOnLargeScreens: false };
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
-	 * A memoized map of all modules, indexed by a composite key of `tech/moduleId`.
+	 * A map of all modules, indexed by a composite key of `tech/moduleId`.
 	 * @type {Map<string, Module>}
 	 */
-	const modulesMap = useMemo(() => {
-		const map = new Map<string, Module>();
-		if (!techTree) return map;
+	const modulesMap = new Map<string, Module>();
 
+	if (techTree) {
 		for (const category in techTree) {
 			const categoryItems = techTree[category];
 
@@ -40,96 +38,90 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 						"modules" in tech
 					) {
 						for (const module of (tech as TechTreeItem).modules) {
-							map.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
+							modulesMap.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
 						}
 					}
 				}
 			}
 		}
+	}
 
-		return map;
-	}, [techTree]);
 	/**
 	 * Applies a recommended build to the grid.
 	 * Scrolls immediately (on small screens only), then applies the build while the page is already moving.
 	 *
 	 * @param {RecommendedBuild} build - The recommended build to apply.
 	 */
-	const applyRecommendedBuild = useCallback(
-		(build: RecommendedBuild) => {
-			if (!isValidRecommendedBuild(build)) {
-				console.error("Invalid RecommendedBuild object received:", build);
+	const applyRecommendedBuild = (build: RecommendedBuild) => {
+		if (!isValidRecommendedBuild(build)) {
+			console.error("Invalid RecommendedBuild object received:", build);
 
-				return;
+			return;
+		}
+
+		if (build && build.layout && build.layout.length > 0) {
+			// Scroll immediately before computations on screens < 1024px
+			if (!isAbove1024) {
+				scrollIntoView();
 			}
 
-			if (build && build.layout && build.layout.length > 0) {
-				// Scroll immediately before computations on screens < 1024px
-				if (!isAbove1024) {
-					scrollIntoView();
-				}
+			const newGrid = createGrid(10, 6);
+			const layout = build.layout as ({
+				tech: string;
+				module: string;
+				supercharged?: boolean;
+				active?: boolean;
+				adjacency_bonus?: number;
+			} | null)[][];
 
-				const newGrid = createGrid(10, 6);
-				const layout = build.layout as ({
-					tech: string;
-					module: string;
-					supercharged?: boolean;
-					active?: boolean;
-					adjacency_bonus?: number;
-				} | null)[][];
+			for (let r = 0; r < layout.length; r++) {
+				for (let c = 0; c < layout[r].length; c++) {
+					const cellData = layout[r][c];
 
-				for (let r = 0; r < layout.length; r++) {
-					for (let c = 0; c < layout[r].length; c++) {
-						const cellData = layout[r][c];
+					if (cellData) {
+						// Initialize with empty cell, then apply specific overrides
+						let cell = createEmptyCell(
+							cellData.supercharged ?? false,
+							cellData.active ?? true
+						);
 
-						if (cellData) {
-							// Initialize with empty cell, then apply specific overrides
-							let cell = createEmptyCell(
-								cellData.supercharged ?? false,
-								cellData.active ?? true
-							);
+						// Ensure tech and module are null if not provided
+						cell.tech = cellData.tech ?? null;
+						cell.module = cellData.module ?? null;
 
-							// Ensure tech and module are null if not provided
-							cell.tech = cellData.tech ?? null;
-							cell.module = cellData.module ?? null;
+						if (cellData.tech && cellData.module) {
+							const module = modulesMap.get(`${cellData.tech}/${cellData.module}`);
 
-							if (cellData.tech && cellData.module) {
-								const module = modulesMap.get(
-									`${cellData.tech}/${cellData.module}`
-								);
-
-								if (module) {
-									cell = {
-										...cell,
-										label: module.label ?? "",
-										image: module.image ?? null,
-										bonus: module.bonus ?? 0,
-										value: module.value ?? 0,
-										adjacency: module.adjacency ?? "none",
-										sc_eligible: module.sc_eligible ?? false,
-										type: module.type ?? "", // Add the missing 'type' property
-									};
-								} else {
-									// If module not found, reset the cell to empty state
-									resetCellContent(cell);
-								}
+							if (module) {
+								cell = {
+									...cell,
+									label: module.label ?? "",
+									image: module.image ?? null,
+									bonus: module.bonus ?? 0,
+									value: module.value ?? 0,
+									adjacency: module.adjacency ?? "none",
+									sc_eligible: module.sc_eligible ?? false,
+									type: module.type ?? "", // Add the missing 'type' property
+								};
+							} else {
+								// If module not found, reset the cell to empty state
+								resetCellContent(cell);
 							}
-
-							cell.adjacency_bonus = cellData.adjacency_bonus ?? 0.0;
-
-							newGrid.cells[r][c] = cell;
-						} else {
-							// If cellData is null, ensure the cell is empty and inactive/not supercharged by default
-							newGrid.cells[r][c] = createEmptyCell();
 						}
+
+						cell.adjacency_bonus = cellData.adjacency_bonus ?? 0.0;
+
+						newGrid.cells[r][c] = cell;
+					} else {
+						// If cellData is null, ensure the cell is empty and inactive/not supercharged by default
+						newGrid.cells[r][c] = createEmptyCell();
 					}
 				}
-
-				useGridStore.getState().setGrid(newGrid);
 			}
-		},
-		[modulesMap, scrollIntoView, isAbove1024]
-	);
+
+			useGridStore.getState().setGrid(newGrid);
+		}
+	};
 
 	return { applyRecommendedBuild };
 };

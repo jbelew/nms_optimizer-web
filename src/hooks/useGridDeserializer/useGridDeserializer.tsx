@@ -393,12 +393,15 @@ export const deserialize = async (
  *          An object containing the serialize and deserialize functions.
  */
 export const useGridDeserializer = () => {
-	const { setGrid, grid, setIsSharedGrid } = useGridStore();
+	const setGrid = useGridStore((state) => state.setGrid);
+	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const setTechColors = useTechStore((state) => state.setTechColors);
 
 	const serializeGrid = useCallback((): string => {
+		const grid = useGridStore.getState().grid;
+
 		return serialize(grid);
-	}, [grid]);
+	}, []);
 
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {

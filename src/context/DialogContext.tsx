@@ -1,6 +1,6 @@
 // src/context/DialogContext.tsx
 import type { DialogType } from "./dialog-utils";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -74,33 +74,30 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * @param {NonNullable<DialogType>|null} dialog - The dialog to open.
 	 * @param {{shareUrl?: string, section?: string}} [data] - Additional data for the dialog.
 	 */
-	const openDialog = useCallback(
-		(
-			dialog: NonNullable<DialogType> | null,
-			data?: { shareUrl?: string; section?: string }
-		) => {
-			const lang = (i18n.language || "en").split("-")[0];
+	const openDialog = (
+		dialog: NonNullable<DialogType> | null,
+		data?: { shareUrl?: string; section?: string }
+	) => {
+		const lang = (i18n.language || "en").split("-")[0];
 
-			if (data?.shareUrl) {
-				setShareUrl(data.shareUrl);
-			} else if (dialog) {
-				const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
-				navigate(path + window.location.search);
-			}
+		if (data?.shareUrl) {
+			setShareUrl(data.shareUrl);
+		} else if (dialog) {
+			const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
+			navigate(path + window.location.search);
+		}
 
-			if (data?.section) {
-				setSectionToScrollTo(data.section);
-			} else {
-				setSectionToScrollTo(undefined);
-			}
-		},
-		[navigate, i18n.language]
-	);
+		if (data?.section) {
+			setSectionToScrollTo(data.section);
+		} else {
+			setSectionToScrollTo(undefined);
+		}
+	};
 
 	/**
 	 * Closes the currently active dialog.
 	 */
-	const closeDialog = useCallback(() => {
+	const closeDialog = () => {
 		const lang = (i18n.language || "en").split("-")[0];
 
 		if (shareUrl) {
@@ -111,12 +108,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 
 		setSectionToScrollTo(undefined);
-	}, [activeDialog, navigate, shareUrl, i18n.language]);
+	};
 
 	/**
 	 * Marks the tutorial as finished.
 	 */
-	const markTutorialFinished = useCallback(() => {
+	const markTutorialFinished = () => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);
 
@@ -124,12 +121,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 				localStorage.setItem("tutorialFinished", "true");
 			}
 		}
-	}, [tutorialFinished]);
+	};
 
 	/**
 	 * Marks the user as visited.
 	 */
-	const markUserVisited = useCallback(() => {
+	const markUserVisited = () => {
 		if (!userVisited) {
 			setUserVisited(true);
 
@@ -137,32 +134,19 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 				localStorage.setItem("userVisited", "true");
 			}
 		}
-	}, [userVisited]);
+	};
 
-	const value = React.useMemo(
-		() => ({
-			activeDialog,
-			openDialog,
-			closeDialog,
-			tutorialFinished,
-			markTutorialFinished,
-			userVisited,
-			markUserVisited,
-			shareUrl,
-			sectionToScrollTo,
-		}),
-		[
-			activeDialog,
-			openDialog,
-			closeDialog,
-			tutorialFinished,
-			markTutorialFinished,
-			userVisited,
-			markUserVisited,
-			shareUrl,
-			sectionToScrollTo,
-		]
-	);
+	const value = {
+		activeDialog,
+		openDialog,
+		closeDialog,
+		tutorialFinished,
+		markTutorialFinished,
+		userVisited,
+		markUserVisited,
+		shareUrl,
+		sectionToScrollTo,
+	};
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;
 };

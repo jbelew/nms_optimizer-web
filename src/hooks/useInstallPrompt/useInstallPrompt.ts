@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 /**
  * Custom hook for managing the iOS install prompt.
@@ -16,9 +16,9 @@ import { useCallback, useState } from "react";
 export const useInstallPrompt = () => {
 	const [showPrompt, setShowPrompt] = useState(true);
 
-	const dismissPrompt = useCallback(() => {
+	const dismissPrompt = () => {
 		setShowPrompt(false);
-	}, []);
+	};
 
 	return { showPrompt, dismissPrompt };
 };

@@ -1,6 +1,6 @@
 import "./GridTableButtons.scss";
 
-import React, { useCallback, useMemo, useTransition } from "react";
+import React, { useTransition } from "react";
 import {
 	DownloadIcon,
 	FileIcon,
@@ -34,7 +34,7 @@ interface GridTableButtonsProps {
  *
  * @returns {JSX.Element} The rendered GridTableButtons component.
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving }) => {
+const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -44,7 +44,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 	const [isSharePending, startShareTransition] = useTransition();
 
 	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
-	const { setIsSharedGrid } = useGridStore();
+	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const { showSuccess, showError } = useToast();
@@ -60,14 +60,14 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 		showError,
 	});
 	const isAbove1024 = useBreakpoint("1024px");
-	const scrollOptions = useMemo(() => ({ skipOnLargeScreens: false }), []);
+	const scrollOptions = { skipOnLargeScreens: false };
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
 	 * Handles the click event for the "Instructions" button.
 	 * Opens the instructions dialog and marks the tutorial as finished if it wasn't already.
 	 */
-	const handleShowInstructions = useCallback(() => {
+	const handleShowInstructions = () => {
 		startInfoTransition(() => {
 			openDialog("instructions");
 
@@ -81,13 +81,13 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 			value: 1,
 			nonInteraction: false,
 		});
-	}, [openDialog, tutorialFinished, markTutorialFinished, sendEvent, startInfoTransition]);
+	};
 
 	/**
 	 * Handles the click event for the "About" button.
 	 * Opens the about dialog.
 	 */
-	const handleShowAboutPage = useCallback(() => {
+	const handleShowAboutPage = () => {
 		startInfoTransition(() => {
 			openDialog("about");
 		});
@@ -97,25 +97,25 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 			value: 1,
 			nonInteraction: false,
 		});
-	}, [openDialog, sendEvent, startInfoTransition]);
+	};
 
 	/**
 	 * Handles the click event for the "Share" button.
 	 * Generates a shareable URL and opens the share link dialog.
 	 */
-	const handleShareClick = useCallback(() => {
+	const handleShareClick = () => {
 		startShareTransition(() => {
 			const shareUrl = updateUrlForShare();
 			openDialog(null, { shareUrl });
 		});
 		sendEvent({ category: "ui", action: "share_link", value: 1, nonInteraction: false });
-	}, [updateUrlForShare, openDialog, sendEvent, startShareTransition]);
+	};
 
 	/**
 	 * Handles the click event for the "Reset Grid" button.
 	 * Scrolls first (on small screens only), then resets the grid to its initial state and updates the URL.
 	 */
-	const handleResetGrid = useCallback(() => {
+	const handleResetGrid = () => {
 		// Scroll immediately before computations on screens < 1024px
 		if (!isAbove1024) {
 			scrollIntoView();
@@ -128,14 +128,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 			updateUrlForReset();
 			setIsSharedGrid(false);
 		});
-	}, [
-		updateUrlForReset,
-		setIsSharedGrid,
-		sendEvent,
-		scrollIntoView,
-		isAbove1024,
-		startResetTransition,
-	]);
+	};
 
 	const instructionsVariant = !tutorialFinished ? "solid" : "soft";
 	const instructionGlowClass = !tutorialFinished ? "button--glow" : "";
@@ -274,7 +267,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = React.memo(({ solving 
 			</div>
 		</>
 	);
-});
+};
+
 GridTableButtons.displayName = "GridTableButtons";
 
 export default GridTableButtons;

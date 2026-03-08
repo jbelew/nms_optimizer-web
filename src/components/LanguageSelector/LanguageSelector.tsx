@@ -1,7 +1,7 @@
 // src/components/LanguageSelector/LanguageSelector.tsx
 import "./LanguageSelector.scss";
 
-import React, { useMemo, useTransition } from "react";
+import React, { useTransition } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  * LanguageSelector component allows users to change the application's language.
  * It displays a dropdown with flags and names of supported languages.
  */
-const LanguageSelector: React.FC = () => {
+export const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
 	const isMd = useBreakpoint("1024px");
 	const { t, i18n } = useTranslation();
@@ -48,21 +48,19 @@ const LanguageSelector: React.FC = () => {
 	const { clearErrors } = useErrorStore();
 	const [, startTransition] = useTransition();
 
-	const supportedLanguages = useMemo(() => {
-		const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter(
-			(code) => languages.includes(code)
-		);
+	const availableLanguageCodes = ((i18n.options.supportedLngs as string[]) || []).filter((code) =>
+		languages.includes(code)
+	);
 
-		return availableLanguageCodes
-			.map((code) => {
-				const label = nativeLanguageNames[code] ?? code.toUpperCase();
-				const flagPath = languageFlagPaths[code] || xxFlagPath; // Fallback flag path
+	const supportedLanguages = availableLanguageCodes
+		.map((code) => {
+			const label = nativeLanguageNames[code] ?? code.toUpperCase();
+			const flagPath = languageFlagPaths[code] || xxFlagPath; // Fallback flag path
 
-				return { code, label, flagPath };
-			})
-			.filter((lang) => lang.flagPath)
-			.sort((a, b) => a.label.localeCompare(b.label));
-	}, [i18n]);
+			return { code, label, flagPath };
+		})
+		.filter((lang) => lang.flagPath)
+		.sort((a, b) => a.label.localeCompare(b.label));
 
 	/**
 	 * Handles the language change event.
@@ -165,4 +163,4 @@ const LanguageSelector: React.FC = () => {
 	);
 };
 
-export default React.memo(LanguageSelector);
+export default LanguageSelector;

@@ -61,59 +61,59 @@ interface TechTreeSectionProps {
  * @param {TechTreeSectionProps} props - The props for the TechTreeSection component.
  * @returns {JSX.Element} The rendered TechTreeSection component.
  */
-export const TechTreeSection: React.FC<TechTreeSectionProps> = React.memo(
-	({ type, technologies, handleOptimize, solving, isGridFull }) => {
-		const { t } = useTranslation();
-		// Determine the image path from the typeImageMap
-		const imagePath = typeImageMap[type]
-			? `/assets/img/sidebar/${typeImageMap[type]}?v=${__APP_VERSION__}`
-			: null;
+export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
+	type,
+	technologies,
+	handleOptimize,
+	solving,
+	isGridFull,
+}) => {
+	const { t } = useTranslation();
+	// Determine the image path from the typeImageMap
+	const imagePath = typeImageMap[type]
+		? `/assets/img/sidebar/${typeImageMap[type]}?v=${__APP_VERSION__}`
+		: null;
 
-		return (
-			<div className="sidebar__section mb-6 last:mb-0 lg:mb-6">
-				<div className="flex items-start">
-					{/* Conditionally render the image if imagePath is available */}
-					{imagePath &&
-						typeImageMap[type] && ( // Ensure type exists in map before rendering image
-							<img
-								src={imagePath}
-								srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
-								alt={type}
-								width="36"
-								height="24"
-								className="mt-px mr-1 ml-1 opacity-35 sm:mt-1"
-								// style={{
-								// 	filter: "hue-rotate(190deg) saturate(2) brightness(2)",
-								// 	mixBlendMode: "color-dodge",
-								// }}
-							/>
-						)}
-					<h2 className="heading-styled text-xl sm:text-2xl">
-						{t(`techTree.categories.${type}`).toUpperCase()}
-					</h2>
-				</div>
-
-				<Separator
-					orientation="horizontal"
-					size="4"
-					className="sidebar__separator mt-2 mb-4"
-				/>
-
-				{/* Render each technology as a TechTreeRow */}
-				{technologies.map((tech: TechTreeItem) => (
-					<TechTreeRow
-						key={tech.key}
-						tech={tech.key}
-						handleOptimize={handleOptimize}
-						solving={solving}
-						techImage={tech.image} // Pass the tech.image here
-						isGridFull={isGridFull} // Pass isGridFull down
-						techColor={tech.color} // Pass tech.color
-					/>
-				))}
+	return (
+		<div className="sidebar__section mb-6 last:mb-0 lg:mb-6">
+			<div className="flex items-start">
+				{/* Conditionally render the image if imagePath is available */}
+				{imagePath &&
+					typeImageMap[type] && ( // Ensure type exists in map before rendering image
+						<img
+							src={imagePath}
+							srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
+							alt={type}
+							width="36"
+							height="24"
+							className="mt-px mr-1 ml-1 opacity-35 sm:mt-1"
+							// style={{
+							// 	filter: "hue-rotate(190deg) saturate(2) brightness(2)",
+							// 	mixBlendMode: "color-dodge",
+							// }}
+						/>
+					)}
+				<h2 className="heading-styled text-xl sm:text-2xl">
+					{t(`techTree.categories.${type}`).toUpperCase()}
+				</h2>
 			</div>
-		);
-	}
-);
+
+			<Separator orientation="horizontal" size="4" className="sidebar__separator mt-2 mb-4" />
+
+			{/* Render each technology as a TechTreeRow */}
+			{technologies.map((tech: TechTreeItem) => (
+				<TechTreeRow
+					key={tech.key}
+					tech={tech.key}
+					handleOptimize={handleOptimize}
+					solving={solving}
+					techImage={tech.image} // Pass the tech.image here
+					isGridFull={isGridFull} // Pass isGridFull down
+					techColor={tech.color} // Pass tech.color
+				/>
+			))}
+		</div>
+	);
+};
 
 TechTreeSection.displayName = "TechTreeSection";

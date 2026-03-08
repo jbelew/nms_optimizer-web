@@ -35,7 +35,7 @@ export const useAppLayout = (): AppLayout => {
 	const [gridHeight, setGridHeight] = useState<number | null>(null);
 	const [gridTableTotalWidth, setGridTableTotalWidth] = useState<number | undefined>(undefined);
 	const isLarge = useBreakpoint("1024px");
-	const { isSharedGrid } = useGridStore();
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 
 	useEffect(() => {
 		const containerElement = containerRef.current;

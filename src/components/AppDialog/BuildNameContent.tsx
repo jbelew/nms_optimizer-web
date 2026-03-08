@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -30,68 +30,59 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const [buildName, setBuildName] = useState(() => generateBuildNameWithType(selectedShipType));
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const createValidator = useCallback(
-		(value: string): string | null => {
-			const trimmed = value.trim();
+	const createValidator = (value: string): string | null => {
+		const trimmed = value.trim();
 
-			if (!trimmed) {
-				return t("dialog.buildName.validation.empty");
-			}
+		if (!trimmed) {
+			return t("dialog.buildName.validation.empty");
+		}
 
-			if (!isValidFilename(trimmed)) {
-				return t("dialog.buildName.validation.invalid");
-			}
+		if (!isValidFilename(trimmed)) {
+			return t("dialog.buildName.validation.invalid");
+		}
 
-			return null;
-		},
-		[t]
-	);
+		return null;
+	};
 
 	const { error: validationError, handleChange: handleDebouncedValidation } =
 		useDebouncedValidation(createValidator);
 
-	const handleGenerateName = useCallback(() => {
+	const handleGenerateName = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
 		setBuildName(newName);
 		handleDebouncedValidation(newName);
 		inputRef.current?.select();
-	}, [selectedShipType, handleDebouncedValidation]);
+	};
 
-	const handleBuildNameChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newValue = e.target.value;
-			setBuildName(newValue);
-			handleDebouncedValidation(newValue);
-		},
-		[handleDebouncedValidation]
-	);
+	const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = e.target.value;
+		setBuildName(newValue);
+		handleDebouncedValidation(newValue);
+	};
 
-	const handleConfirm = useCallback(() => {
+	const handleConfirm = () => {
 		const trimmedName = buildName.trim();
 		const error = createValidator(trimmedName);
 
 		if (!error) {
 			onConfirm(trimmedName);
 		}
-	}, [buildName, onConfirm, createValidator]);
+	};
 
-	const handleCancel = useCallback(() => {
+	const handleCancel = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
 		setBuildName(newName);
 		handleDebouncedValidation(newName);
 		onCancel();
-	}, [onCancel, selectedShipType, handleDebouncedValidation]);
+	};
 
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent<HTMLInputElement>) => {
-			if (e.key === "Enter") {
-				handleConfirm();
-			} else if (e.key === "Escape") {
-				handleCancel();
-			}
-		},
-		[handleConfirm, handleCancel]
-	);
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			handleConfirm();
+		} else if (e.key === "Escape") {
+			handleCancel();
+		}
+	};
 
 	return (
 		<>

@@ -1,6 +1,6 @@
 import "./GridCell.scss";
 
-import React, { memo, useMemo } from "react";
+import React from "react";
 
 import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
@@ -100,7 +100,7 @@ const stripLabel = (label: string | undefined): string => {
 	return label.replace(/\[[^\]]+\]|\([^)]+\)/g, "").trim();
 };
 
-const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isSharedGrid }) => {
+const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useCell(rowIndex, columnIndex);
 
 	const {
@@ -118,7 +118,7 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		useGridCellStyle(cell, isTouching);
 
 	// Build image URLs with cache-busting query param.
-	const { imageUrl, imageSrcSet } = useMemo(() => {
+	const getImageUrl = () => {
 		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };
 
 		const base1x = `/assets/img/grid/${cell.image}`;
@@ -127,80 +127,57 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 		const url2x = `${base2x}?v=${__APP_VERSION__}`;
 
 		return { imageUrl: url1x, imageSrcSet: `${url1x} 1x, ${url2x} 2x` };
-	}, [cell.image]);
+	};
+
+	const { imageUrl, imageSrcSet } = getImageUrl();
 
 	const upGradePriority = getUpgradePriority(cell.label);
 
-	const cellElement = useMemo(
-		() => (
-			<div
-				role="gridcell"
-				aria-colindex={columnIndex + 1}
-				tabIndex={isSharedGrid ? -1 : 0}
-				data-accent-color={techColor}
-				onContextMenu={handleContextMenu}
-				onClick={handleClick}
-				onTouchStart={handleTouchStart}
-				onTouchMove={handleTouchMove}
-				onTouchEnd={handleTouchEnd}
-				onTouchCancel={handleTouchCancel}
-				onKeyDown={handleKeyDown}
-				className={cellClassName}
-				style={cellElementStyle as React.CSSProperties}
-			>
-				{imageUrl ? (
-					<img
-						src={imageUrl}
-						srcSet={imageSrcSet}
-						alt=""
-						width="64"
-						height="64"
-						className="absolute inset-0 h-full w-full object-cover object-center"
-					/>
-				) : null}
-				{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
-				{!cell.supercharged && !cell.image ? (
-					<>
-						<span className="corner top-left"></span>
-						<span className="corner top-right"></span>
-						<span className="corner bottom-left"></span>
-						<span className="corner bottom-right"></span>
-					</>
-				) : null}
-				{upGradePriority ? (
-					<span
-						className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
-							upGradePriority.length > 1
-								? "gridCell__label--corvette"
-								: "gridCell__label"
-						}`}
-					>
-						{upGradePriority}
-					</span>
-				) : null}
-			</div>
-		),
-		[
-			columnIndex,
-			isSharedGrid,
-			techColor,
-			handleContextMenu,
-			handleClick,
-			handleTouchStart,
-			handleTouchMove,
-			handleTouchEnd,
-			handleTouchCancel,
-			handleKeyDown,
-			cellClassName,
-			cellElementStyle,
-			imageUrl,
-			imageSrcSet,
-			showEmptyIcon,
-			emptyIconFillColor,
-			upGradePriority,
-			cell.supercharged,
-			cell.image,
-		]
+	const cellElement = (
+		<div
+			role="gridcell"
+			aria-colindex={columnIndex + 1}
+			tabIndex={isSharedGrid ? -1 : 0}
+			data-accent-color={techColor}
+			onContextMenu={handleContextMenu}
+			onClick={handleClick}
+			onTouchStart={handleTouchStart}
+			onTouchMove={handleTouchMove}
+			onTouchEnd={handleTouchEnd}
+			onTouchCancel={handleTouchCancel}
+			onKeyDown={handleKeyDown}
+			className={cellClassName}
+			style={cellElementStyle as React.CSSProperties}
+		>
+			{imageUrl ? (
+				<img
+					src={imageUrl}
+					srcSet={imageSrcSet}
+					alt=""
+					width="64"
+					height="64"
+					className="absolute inset-0 h-full w-full object-cover object-center"
+				/>
+			) : null}
+			{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
+			{!cell.supercharged && !cell.image ? (
+				<>
+					<span className="corner top-left"></span>
+					<span className="corner top-right"></span>
+					<span className="corner bottom-left"></span>
+					<span className="corner bottom-right"></span>
+				</>
+			) : null}
+			{upGradePriority ? (
+				<span
+					className={`gridCell__label mt-1 text-xl sm:text-3xl lg:text-4xl ${
+						upGradePriority.length > 1 ? "gridCell__label--corvette" : "gridCell__label"
+					}`}
+				>
+					{upGradePriority}
+				</span>
+			) : null}
+		</div>
 	);
 
 	const tooltipContent = stripLabel(cell.label);
@@ -219,8 +196,6 @@ const GridCell: React.FC<GridCellProps> = memo(({ rowIndex, columnIndex, isShare
 	) : (
 		cellElement
 	);
-});
-
-GridCell.displayName = "GridCell";
+};
 
 export default GridCell;

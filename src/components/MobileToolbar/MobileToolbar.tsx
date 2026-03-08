@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useTransition } from "react";
+import React, { forwardRef, useTransition } from "react";
 import {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
@@ -52,7 +52,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const [isSharePending, startShareTransition] = useTransition();
 		const [, startTransition] = useTransition();
 
-		const handleShareClick = useCallback(() => {
+		const handleShareClick = () => {
 			startShareTransition(() => {
 				const shareUrl = updateUrlForShare();
 				openDialog(null, { shareUrl });
@@ -63,7 +63,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					nonInteraction: false,
 				});
 			});
-		}, [updateUrlForShare, openDialog, sendEvent]);
+		};
 
 		return (
 			<Toolbar.Root

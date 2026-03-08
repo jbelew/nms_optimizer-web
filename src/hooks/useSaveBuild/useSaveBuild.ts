@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { usePlatformStore } from "../../store/PlatformStore";
@@ -31,43 +31,36 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	const [isSaveBuildDialogOpen, setIsSaveBuildDialogOpen] = useState(false);
 	const [isSavePending, setIsSavePending] = useState(false);
 
-	const handleSaveBuild = useCallback(() => {
+	const handleSaveBuild = () => {
 		setIsSaveBuildDialogOpen(true);
-	}, []);
+	};
 
-	const handleBuildNameConfirm = useCallback(
-		async (buildName: string) => {
-			setIsSaveBuildDialogOpen(false);
-			setIsSavePending(true);
-
-			try {
-				await saveBuildToFile(buildName);
-				showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
-				sendEvent({
-					category: "ui",
-					action: "save_build",
-					value: 1,
-					buildName,
-					shipType: selectedShipType,
-					nonInteraction: false,
-				});
-			} catch (error) {
-				console.error("Save failed:", error);
-				showError(
-					t("toast.buildSaveError.title"),
-					t("toast.buildSaveError.description"),
-					5000
-				);
-			} finally {
-				setIsSavePending(false);
-			}
-		},
-		[saveBuildToFile, showSuccess, showError, sendEvent, t, selectedShipType]
-	);
-
-	const handleBuildNameCancel = useCallback(() => {
+	const handleBuildNameConfirm = async (buildName: string) => {
 		setIsSaveBuildDialogOpen(false);
-	}, []);
+		setIsSavePending(true);
+
+		try {
+			await saveBuildToFile(buildName);
+			showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
+			sendEvent({
+				category: "ui",
+				action: "save_build",
+				value: 1,
+				buildName,
+				shipType: selectedShipType,
+				nonInteraction: false,
+			});
+		} catch (error) {
+			console.error("Save failed:", error);
+			showError(t("toast.buildSaveError.title"), t("toast.buildSaveError.description"), 5000);
+		} finally {
+			setIsSavePending(false);
+		}
+	};
+
+	const handleBuildNameCancel = () => {
+		setIsSaveBuildDialogOpen(false);
+	};
 
 	return {
 		isSaveBuildDialogOpen,

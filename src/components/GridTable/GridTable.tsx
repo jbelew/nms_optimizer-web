@@ -1,70 +1,43 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
-import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import React from "react";
 
 import { useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import GridRow from "../GridRow/GridRow";
+import GridCell from "../GridCell/GridCell";
+import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 
 /**
  * @interface GridTableProps
- * @property {(rowIndex: number) => void} activateRow - Function to activate a specific row in the grid.
- * @property {(rowIndex: number) => void} deActivateRow - Function to deactivate a specific row in the grid.
  * @property {boolean} solving - Indicates if the optimization process is currently running.
- * @property {number} progressPercent - The progress percentage of the optimization process.
  * @property {boolean} sharedGrid - Indicates if the grid is in a shared, read-only state.
- * @property {() => string} updateUrlForShare - Function that generates and returns a shareable URL for the current grid state.
- * @property {() => void} updateUrlForReset - Function that resets the grid to its default state.
- * @property {React.MutableRefObject<HTMLDivElement | null>} gridContainerRef - Ref to the main grid container element, used for scrolling.
  */
 interface GridTableProps {
 	solving: boolean;
-	sharedGrid: boolean; // This is isSharedGridProp, used for GridCell
+	sharedGrid: boolean;
 }
 
 /**
- * GridTableInternal component displays the main technology grid.
+ * GridTable component displays the main technology grid.
  * It renders individual `GridCell` components and `GridControlButtons` for managing rows.
- * It also handles shaking animations, displays a message spinner during optimization, and provides instructions for touch devices.
  *
- * @param {GridTableProps} props - The props for the GridTableInternal component.
+ * @param {GridTableProps} props - The props for the GridTable component.
  * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the main grid table div.
- * @returns {JSX.Element} The rendered GridTableInternal component.
+ * @returns {JSX.Element} The rendered GridTable component.
  */
-const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
+export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
 	({ solving, sharedGrid }, ref) => {
-		useTranslation();
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const gridWidth = useGridStore((state) => state.grid.width);
 		const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
-		// Memoize grid rows - must be called unconditionally
-		const gridRows = useMemo(() => {
-			if (!gridHeight) return [];
-
-			return Array.from({ length: gridHeight }).map((_, rowIndex) => (
-				<GridRow
-					key={rowIndex}
-					rowIndex={rowIndex}
-					isLoading={isTechTreeLoading}
-					isSharedGrid={sharedGrid}
-				/>
-			));
-		}, [gridHeight, isTechTreeLoading, sharedGrid]);
-
-		// Early return if grid is not available. This is now safe as hooks are called above.
 		if (!gridHeight || !gridWidth) {
-			// Render a minimal div if ref is strictly needed for layout, or a loading message.
 			return <div ref={ref} className="gridTable-empty"></div>;
 		}
 
-		// Determine column count for ARIA properties.
-		// This assumes all data rows have the same number of cells.
-		// Add 1 for the GridControlButtons column.
 		const totalAriaColumnCount = gridWidth + 1;
 
 		return (
@@ -77,19 +50,37 @@ const GridTableInternal = React.forwardRef<HTMLDivElement, GridTableProps>(
 					aria-colcount={totalAriaColumnCount}
 					className={`gridTable ${solving ? "opacity-25" : ""}`}
 				>
-					{gridRows}
+					{Array.from({ length: gridHeight }).map((_, rowIndex) => (
+						<React.Fragment key={rowIndex}>
+							{/* Direct row-less rendering of cells for performance */}
+							{Array.from({ length: gridWidth }).map((__, columnIndex) => (
+								<GridCell
+									key={`${rowIndex}-${columnIndex}`}
+									rowIndex={rowIndex}
+									columnIndex={columnIndex}
+									isSharedGrid={sharedGrid}
+								/>
+							))}
+							<div
+								role="gridcell"
+								className="w-6"
+								aria-colindex={totalAriaColumnCount}
+								aria-rowindex={rowIndex + 1}
+							>
+								<GridControlButtons
+									rowIndex={rowIndex}
+									isLoading={isTechTreeLoading}
+								/>
+							</div>
+						</React.Fragment>
+					))}
 				</div>
-
-				{/* {!isLarge && !sharedGrid && <TapInstructions />} */}
 
 				<GridTableButtons solving={solving} />
 			</GridShake>
 		);
 	}
 );
-GridTableInternal.displayName = "GridTable";
+GridTable.displayName = "GridTable";
 
-/**
- * A memoized version of the GridTableInternal component.
- */
-export const GridTable = React.memo(GridTableInternal);
+export default GridTable;

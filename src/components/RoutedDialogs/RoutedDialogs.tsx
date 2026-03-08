@@ -1,6 +1,6 @@
 // src/components/RoutedDialogs/RoutedDialogs.tsx
 import type { FC } from "react";
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -17,29 +17,6 @@ export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();
 	const { activeDialog, closeDialog, sectionToScrollTo } = useDialog();
 
-	// Memoize content elements for dialogs
-	const aboutDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="about" />,
-		[]
-	);
-	const instructionsDialogContent = useMemo(
-		() => (
-			<MarkdownContentRenderer
-				markdownFileName="instructions"
-				targetSectionId={sectionToScrollTo}
-			/>
-		),
-		[sectionToScrollTo]
-	);
-	const changelogDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="changelog" />,
-		[]
-	);
-	const translationRequestDialogContent = useMemo(
-		() => <MarkdownContentRenderer markdownFileName="translation-request" />,
-		[]
-	);
-
 	return (
 		<>
 			{/* Dialog for "About" information */}
@@ -49,7 +26,9 @@ export const RoutedDialogs: FC = () => {
 				titleKey="dialogs.titles.about"
 				title={t("dialogs.titles.about")}
 				content={
-					<Suspense fallback={<LoremIpsumSkeleton />}>{aboutDialogContent}</Suspense>
+					<Suspense fallback={<LoremIpsumSkeleton />}>
+						<MarkdownContentRenderer markdownFileName="about" />
+					</Suspense>
 				}
 			/>
 			{/* Dialog for "Instructions" information */}
@@ -60,7 +39,10 @@ export const RoutedDialogs: FC = () => {
 				title={t("dialogs.titles.instructions")}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
-						{instructionsDialogContent}
+						<MarkdownContentRenderer
+							markdownFileName="instructions"
+							targetSectionId={sectionToScrollTo}
+						/>
 					</Suspense>
 				}
 			/>
@@ -71,7 +53,9 @@ export const RoutedDialogs: FC = () => {
 				titleKey="dialogs.titles.changelog"
 				title={t("dialogs.titles.changelog")}
 				content={
-					<Suspense fallback={<LoremIpsumSkeleton />}>{changelogDialogContent}</Suspense>
+					<Suspense fallback={<LoremIpsumSkeleton />}>
+						<MarkdownContentRenderer markdownFileName="changelog" />
+					</Suspense>
 				}
 			/>
 			{/* Dialog for "Translation Request" information */}
@@ -82,7 +66,7 @@ export const RoutedDialogs: FC = () => {
 				title={t("dialogs.titles.translationRequest")}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
-						{translationRequestDialogContent}
+						<MarkdownContentRenderer markdownFileName="translation-request" />
 					</Suspense>
 				}
 			/>

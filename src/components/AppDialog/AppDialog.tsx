@@ -2,7 +2,7 @@
 import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
@@ -49,26 +49,23 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	className = "",
 }) => {
 	/**
-	 * Handle the Escape key, closing the dialog if it is pressed.
-	 *
-	 * @param {KeyboardEvent} event
-	 */
-	const handleEscapeKey = useCallback(
-		(event: KeyboardEvent) => event.key === "Escape" && onClose(),
-		[onClose]
-	);
-
-	/**
 	 * Add a keydown event listener to the window for the Escape key.
 	 *
 	 * This is done to allow the dialog to be closed with the Escape key, in
 	 * addition to the close button.
 	 */
 	useEffect(() => {
+		/**
+		 * Handle the Escape key, closing the dialog if it is pressed.
+		 *
+		 * @param {KeyboardEvent} event
+		 */
+		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
+
 		window.addEventListener("keydown", handleEscapeKey);
 
 		return () => window.removeEventListener("keydown", handleEscapeKey);
-	}, [handleEscapeKey]);
+	}, [onClose]);
 
 	const { t } = useTranslation();
 

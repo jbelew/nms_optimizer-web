@@ -1,4 +1,4 @@
-import { useCallback, useTransition } from "react";
+import { useTransition } from "react";
 
 import { useGridStore } from "@/store/GridStore";
 import { useShakeStore } from "@/store/ShakeStore";
@@ -29,15 +29,15 @@ export const useTechOptimization = (
 	const { triggerShake } = useShakeStore();
 	const [isResetting, startResetTransition] = useTransition();
 
-	const handleReset = useCallback(() => {
+	const handleReset = () => {
 		startResetTransition(() => {
 			handleResetGridTech(tech);
 			clearTechMaxBonus(tech);
 			clearTechSolvedBonus(tech);
 		});
-	}, [tech, handleResetGridTech, clearTechMaxBonus, clearTechSolvedBonus, startResetTransition]);
+	};
 
-	const handleOptimizeClick = useCallback(() => {
+	const handleOptimizeClick = () => {
 		if (isGridFull && !hasTechInGrid) {
 			triggerShake();
 		} else {
@@ -45,7 +45,7 @@ export const useTechOptimization = (
 			handleReset();
 			handleOptimize(tech);
 		}
-	}, [isGridFull, hasTechInGrid, triggerShake, handleReset, handleOptimize, tech]);
+	};
 
 	return { handleOptimizeClick, handleReset, isResetting };
 };

@@ -2,7 +2,7 @@
 import "./ShipSelection.scss";
 
 import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
-import React, { Suspense, useCallback, useMemo, useTransition } from "react";
+import React, { Suspense, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -69,12 +69,11 @@ const ShipSelectionLoadingState = () => {
 /**
  * ShipSelectionInternal component allows users to select a ship type (platform).
  * It fetches available ship types, manages the selected type, and updates the grid accordingly.
- * This component is memoized to prevent unnecessary re-renders.
  *
  * @param {ShipSelectionProps} props - The props for the ShipSelectionInternal component.
  * @returns {JSX.Element} The rendered ShipSelectionInternal component.
  */
-const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solving }) => {
+const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	const shipTypes = useFetchShipTypesSuspense(); // This will suspend the component
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
@@ -87,83 +86,64 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 	const { isKnownRoute } = useRouteContext();
 	const { t } = useTranslation();
 
-	// P2 Optimization: Memoize ship type keys to avoid recreating on every render
-	const shipTypeKeys = useMemo(() => Object.keys(shipTypes), [shipTypes]);
+	const shipTypeKeys = Object.keys(shipTypes);
 
 	/**
-	 * Memoized grouping of ship types by their category.
-	 * Moved here to prevent recalculation when DropdownMenu content mounts/unmounts.
+	 * Grouping of ship types by their category.
 	 * @type {Record<string, { key: string; label: string; details: ShipTypeDetail }[]>}
 	 */
-	const groupedShipTypes = useMemo(() => {
-		if (!shipTypes) {
-			return {};
-		}
+	const groupedShipTypes = Object.entries(shipTypes).reduce(
+		(acc, [key, details]) => {
+			const type = details.type;
 
-		return Object.entries(shipTypes).reduce(
-			(acc, [key, details]) => {
-				const type = details.type;
+			if (!acc[type]) {
+				acc[type] = [];
+			}
 
-				if (!acc[type]) {
-					acc[type] = [];
-				}
+			acc[type].push({ key, label: t(`platforms.${key}`), details });
 
-				acc[type].push({ key, label: t(`platforms.${key}`), details });
-
-				return acc;
-			},
-			{} as Record<string, { key: string; label: string; details: ShipTypeDetail }[]>
-		);
-	}, [shipTypes, t]);
+			return acc;
+		},
+		{} as Record<string, { key: string; label: string; details: ShipTypeDetail }[]>
+	);
 
 	/**
 	 * Handles the selection of a new ship type from the dropdown.
 	 * Updates the selected ship type in the store and resets the grid.
 	 * @param {string} option - The selected ship type code.
 	 */
-	const handleOptionSelect = useCallback(
-		(option: string) => {
-			if (option !== usePlatformStore.getState().selectedPlatform) {
-				Logger.info(`Platform selected: ${option}`, { platform: option });
-				// Use startTransition to keep dropdown responsive while handling updates
-				startTransition(() => {
-					sendEvent({
-						category: "ui",
-						action: "platform_selection",
-						platform: option,
-						value: 1,
-						nonInteraction: false,
-					});
-
-					// TODO: Turn this back on if the Corvette bug shows up again
-					if (option === "corvette") {
-						showInfo(
-							"Corvette Warning!",
-							<>
-								As of version 6.24, Corvettes <strong>still</strong> have known
-								layout issues! If you create a layout, we highly recommend using the{" "}
-								<strong>Save Build</strong> feature to keep a backup of your work.
-							</>
-						);
-					}
-
-					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
-
-					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-					setGridAndResetAuxiliaryState(initialGrid);
+	const handleOptionSelect = (option: string) => {
+		if (option !== usePlatformStore.getState().selectedPlatform) {
+			Logger.info(`Platform selected: ${option}`, { platform: option });
+			// Use startTransition to keep dropdown responsive while handling updates
+			startTransition(() => {
+				sendEvent({
+					category: "ui",
+					action: "platform_selection",
+					platform: option,
+					value: 1,
+					nonInteraction: false,
 				});
-			}
-		},
-		[
-			setSelectedShipType,
-			setGridAndResetAuxiliaryState,
-			sendEvent,
-			showInfo,
-			shipTypeKeys,
-			startTransition,
-			isKnownRoute,
-		]
-	);
+
+				// TODO: Turn this back on if the Corvette bug shows up again
+				if (option === "corvette") {
+					showInfo(
+						"Corvette Warning!",
+						<>
+							As of version 6.24, Corvettes <strong>still</strong> have known layout
+							issues! If you create a layout, we highly recommend using the{" "}
+							<strong>Save Build</strong> feature to keep a backup of your work.
+						</>
+					);
+				}
+
+				setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
+
+				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
+				setGridAndResetAuxiliaryState(initialGrid);
+			});
+		}
+	};
 
 	return (
 		<>
@@ -192,8 +172,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = React.memo(({ solvin
 			</DropdownMenu.Root>
 		</>
 	);
-});
-ShipSelectionInternal.displayName = "ShipSelectionInternal";
+};
 
 /**
  * ShipSelection component is a wrapper that provides a Suspense fallback
@@ -211,7 +190,6 @@ const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 };
 
 export const ShipSelection = ShipSelectionComponent;
-ShipSelection.displayName = "ShipSelection";
 
 /**
  * @interface ShipTypesDropdownProps
@@ -233,23 +211,25 @@ interface ShipTypesDropdownProps {
  * @param {ShipTypesDropdownProps} props - The props for the ShipTypesDropdown component.
  * @returns {JSX.Element} The rendered ShipTypesDropdown component.
  */
-const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = React.memo(
-	({ selectedShipType, handleOptionSelect, groupedShipTypes }) => {
-		return (
-			<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
-				{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
-					<React.Fragment key={type}>
-						{groupIndex > 0 && <DropdownMenu.Separator />}
-						{items.map(({ key, label }) => (
-							<DropdownMenu.RadioItem key={key} value={key} className="font-medium">
-								{label}
-							</DropdownMenu.RadioItem>
-						))}
-					</React.Fragment>
-				))}
-			</DropdownMenu.RadioGroup>
-		);
-	}
-);
+const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({
+	selectedShipType,
+	handleOptionSelect,
+	groupedShipTypes,
+}) => {
+	return (
+		<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
+			{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
+				<React.Fragment key={type}>
+					{groupIndex > 0 && <DropdownMenu.Separator />}
+					{items.map(({ key, label }) => (
+						<DropdownMenu.RadioItem key={key} value={key} className="font-medium">
+							{label}
+						</DropdownMenu.RadioItem>
+					))}
+				</React.Fragment>
+			))}
+		</DropdownMenu.RadioGroup>
+	);
+};
 
-ShipTypesDropdown.displayName = "ShipTypesDropdown";
+export default ShipSelection;

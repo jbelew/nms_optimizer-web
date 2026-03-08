@@ -2,6 +2,7 @@
 	background-color: var(--accent-a2);
 	border-radius: 2px;
 	height: var(--grid-cell-size);
+	position: relative;
 	touch-action: manipulation;
 
 	/* Prevent callout menu on iOS tap-hold */
@@ -176,68 +177,55 @@
 	}
 
 	&--glow {
-		animation: pulseGlow 2s infinite alternate ease-in-out;
 		background-color: var(--purple-a7) !important;
 		box-shadow: 0 0 4px 1px var(--purple-a9);
+
+		&::after {
+			animation: pulseGlowOpacity 2s infinite alternate ease-in-out;
+			border: 1px solid var(--purple-12);
+			border-radius: inherit;
+			content: "";
+			inset: -1px;
+			pointer-events: none;
+			position: absolute;
+			will-change: opacity;
+			z-index: 2;
+		}
+
+		@media (width >= 640px) {
+			&::after {
+				border-width: 2px;
+				inset: -2px;
+			}
+		}
 	}
 
 	&--glow[data-accent-color="white"] {
-		animation: pulseGlowWhite 2s infinite alternate ease-in-out;
-		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 4px 1px var(--purple-a9);
+		&::after {
+			border-color: var(--purple-11);
+		}
 	}
 
 	&--glow[data-accent-color="yellow"] {
-		animation: pulseGlowYellow 2s infinite alternate ease-in-out;
-		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 4px 1px var(--purple-a9);
+		&::after {
+			border-color: var(--purple-11);
+		}
 	}
 
 	&--glow.gridCell--black {
-		animation: pulseGlowBlack 2s infinite alternate ease-in-out;
-		background-color: var(--purple-a7) !important;
-		border-color: var(--gray-6);
-		box-shadow: 0 0 4px 1px var(--purple-a9);
+		&::after {
+			border-color: var(--purple-12);
+		}
 	}
 }
 
-@keyframes pulseGlow {
+@keyframes pulseGlowOpacity {
 	from {
-		border-color: var(--accent-track);
+		opacity: 0;
 	}
 
 	to {
-		border-color: var(--purple-12);
-	}
-}
-
-@keyframes pulseGlowWhite {
-	from {
-		border-color: var(--gray-12);
-	}
-
-	to {
-		border-color: var(--purple-11);
-	}
-}
-
-@keyframes pulseGlowYellow {
-	from {
-		border-color: var(--accent-9);
-	}
-
-	to {
-		border-color: var(--purple-11);
-	}
-}
-
-@keyframes pulseGlowBlack {
-	from {
-		border-color: var(--gray-6);
-	}
-
-	to {
-		border-color: var(--purple-12);
+		opacity: 1;
 	}
 }
 

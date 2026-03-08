@@ -1,5 +1,5 @@
 // src/components/MainAppContent/useMainAppLogic.ts
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
@@ -77,9 +77,9 @@ export const useMainAppLogic = () => {
 	/**
 	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
 	 */
-	const handleShowChangelog = useCallback(() => {
+	const handleShowChangelog = () => {
 		openDialog("changelog");
-	}, [openDialog]);
+	};
 
 	return {
 		buildVersion,

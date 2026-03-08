@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { useGridStore } from "../../store/GridStore";
 
 // Threshold for showing the deactivate button: display in last N rows before grid end
@@ -24,23 +22,15 @@ export const useGridRowState = (rowIndex: number) => {
 	const row = useGridStore((state) => state.grid.cells[rowIndex]);
 	const totalRows = useGridStore((state) => state.grid.cells.length);
 
-	// Memoize derived boolean values to prevent unnecessary recalculations
-	const { isFirstInactiveRow, isLastActiveRow } = useMemo(() => {
-		const isFirstInactive = row
-			? row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
-			: false;
+	const isFirstInactiveRow = row
+		? row.every((cell) => !cell.active) && rowIndex === firstInactiveRowIndex
+		: false;
 
-		const isLastActive = row
-			? row.some((cell) => cell.active) &&
-				rowIndex === lastActiveRowIndex &&
-				rowIndex >= totalRows - LAST_N_ROWS_THRESHOLD
-			: false;
-
-		return {
-			isFirstInactiveRow: isFirstInactive,
-			isLastActiveRow: isLastActive,
-		};
-	}, [row, rowIndex, firstInactiveRowIndex, lastActiveRowIndex, totalRows]);
+	const isLastActiveRow = row
+		? row.some((cell) => cell.active) &&
+			rowIndex === lastActiveRowIndex &&
+			rowIndex >= totalRows - LAST_N_ROWS_THRESHOLD
+		: false;
 
 	return {
 		isFirstInactiveRow,

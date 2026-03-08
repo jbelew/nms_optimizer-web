@@ -30,7 +30,7 @@ interface MarkdownContentRendererProps {
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
 const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
 
-const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
+export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,
 }) => {
@@ -118,135 +118,130 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 		return () => {};
 	}, [isLoading, error, markdown, targetSectionId]);
 
-	const components = React.useMemo(
-		() => ({
-			p: ({ children }: { children?: React.ReactNode }) => {
-				// Check if this paragraph contains a YouTube embed pattern
-				const text =
-					typeof children === "string"
-						? children
-						: React.Children.toArray(children).toString();
+	const components = {
+		p: ({ children }: { children?: React.ReactNode }) => {
+			// Check if this paragraph contains a YouTube embed pattern
+			const text =
+				typeof children === "string"
+					? children
+					: React.Children.toArray(children).toString();
 
-				const youtubeMatch = text.match(/\[youtube:([^\]]+)\]/);
+			const youtubeMatch = text.match(/\[youtube:([^\]]+)\]/);
 
-				if (youtubeMatch) {
-					return <YouTubeEmbed videoId={youtubeMatch[1]} />;
-				}
+			if (youtubeMatch) {
+				return <YouTubeEmbed videoId={youtubeMatch[1]} />;
+			}
 
-				return (
-					<Text as="p" mb="2">
-						{children}
-					</Text>
-				);
-			},
-			// TODO -- Overloading the md files
-			h1: ({ children: _children }: { children?: React.ReactNode }) => {
-				return null;
-			},
+			return (
+				<Text as="p" mb="2">
+					{children}
+				</Text>
+			);
+		},
+		// TODO -- Overloading the md files
+		h1: ({ children: _children }: { children?: React.ReactNode }) => {
+			return null;
+		},
 
-			h2: ({ children }: { children?: React.ReactNode }) => {
-				let id = h2IdMapRef.current.get(children);
+		h2: ({ children }: { children?: React.ReactNode }) => {
+			let id = h2IdMapRef.current.get(children);
 
-				if (!id) {
-					h2CounterRef.current++;
-					id = `section-${h2CounterRef.current}`;
-					h2IdMapRef.current.set(children, id);
-				}
+			if (!id) {
+				h2CounterRef.current++;
+				id = `section-${h2CounterRef.current}`;
+				h2IdMapRef.current.set(children, id);
+			}
 
-				return (
-					<>
-						{id !== "section-1" && (
-							<Separator size="4" orientation="horizontal" decorative mt="2" mb="2" />
-						)}
-						<Heading
-							trim="end"
-							as="h2"
-							mb="3"
-							className="text-base! font-bold! sm:text-lg!"
-							id={id}
-							style={{ color: "var(--accent-a11)" }}
-						>
-							{children}
-						</Heading>
-					</>
-				);
-			},
-			h3: ({ children }: { children?: React.ReactNode }) => {
-				return (
+			return (
+				<>
+					{id !== "section-1" && (
+						<Separator size="4" orientation="horizontal" decorative mt="2" mb="2" />
+					)}
 					<Heading
-						as="h3"
-						className="text-sm! sm:text-base!"
+						trim="end"
+						as="h2"
+						mb="3"
+						className="text-base! font-bold! sm:text-lg!"
+						id={id}
 						style={{ color: "var(--accent-a11)" }}
 					>
 						{children}
 					</Heading>
-				);
-			},
-			a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
-				<Link
-					weight="bold"
-					href={href}
-					target="_blank"
-					rel="noopener noreferrer"
-					underline="always"
+				</>
+			);
+		},
+		h3: ({ children }: { children?: React.ReactNode }) => {
+			return (
+				<Heading
+					as="h3"
+					className="text-sm! sm:text-base!"
+					style={{ color: "var(--accent-a11)" }}
 				>
 					{children}
-				</Link>
-			),
-			strong: ({ children }: { children?: React.ReactNode }) => (
-				<Text weight="bold">{children}</Text>
-			),
-			del: ({ children }: { children?: React.ReactNode }) => (
-				<Text style={{ textDecoration: "line-through" }}>{children}</Text>
-			),
-			blockquote: ({ children }: { children?: React.ReactNode }) => (
-				<Blockquote mt="2" mb="2">
-					{children}
-				</Blockquote>
-			),
-			ul: ({ children }: { children?: React.ReactNode }) => (
-				<Box asChild mb="2">
-					<ul className="list-disc pl-6">{children}</ul>
-				</Box>
-			),
-			ol: ({ children }: { children?: React.ReactNode }) => (
-				<Box asChild mb="2">
-					<ol className="list-decimal pl-6">{children}</ol>
-				</Box>
-			),
-			li: ({ children }: { children?: React.ReactNode }) => (
-				<li className="mb-1">{children}</li>
-			),
-			code: ({ children }: { children?: React.ReactNode }) => (
-				<Code variant="soft">{children}</Code>
-			),
-			kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
-			img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
-				<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
-			),
-			iframe: ({ src, title }: { src?: string; title?: string }) => (
-				<Box asChild mb="2">
-					<iframe
-						width="100%"
-						height="400"
-						src={src}
-						title={title}
-						frameBorder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-						allowFullScreen
-						style={{ borderRadius: "6px" }}
-					/>
-				</Box>
-			),
-			hr: () => <Separator size="4" orientation="horizontal" decorative mb="2" />,
-			"radix-icon": (props: { name: string; size?: string | number; color?: string }) => {
-				const { name, size, color, ...rest } = props;
+				</Heading>
+			);
+		},
+		a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
+			<Link
+				weight="bold"
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				underline="always"
+			>
+				{children}
+			</Link>
+		),
+		strong: ({ children }: { children?: React.ReactNode }) => (
+			<Text weight="bold">{children}</Text>
+		),
+		del: ({ children }: { children?: React.ReactNode }) => (
+			<Text style={{ textDecoration: "line-through" }}>{children}</Text>
+		),
+		blockquote: ({ children }: { children?: React.ReactNode }) => (
+			<Blockquote mt="2" mb="2">
+				{children}
+			</Blockquote>
+		),
+		ul: ({ children }: { children?: React.ReactNode }) => (
+			<Box asChild mb="2">
+				<ul className="list-disc pl-6">{children}</ul>
+			</Box>
+		),
+		ol: ({ children }: { children?: React.ReactNode }) => (
+			<Box asChild mb="2">
+				<ol className="list-decimal pl-6">{children}</ol>
+			</Box>
+		),
+		li: ({ children }: { children?: React.ReactNode }) => <li className="mb-1">{children}</li>,
+		code: ({ children }: { children?: React.ReactNode }) => (
+			<Code variant="soft">{children}</Code>
+		),
+		kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
+		img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
+			<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
+		),
+		iframe: ({ src, title }: { src?: string; title?: string }) => (
+			<Box asChild mb="2">
+				<iframe
+					width="100%"
+					height="400"
+					src={src}
+					title={title}
+					frameBorder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowFullScreen
+					style={{ borderRadius: "6px" }}
+				/>
+			</Box>
+		),
+		hr: () => <Separator size="4" orientation="horizontal" decorative mb="2" />,
+		"radix-icon": (props: { name: string; size?: string | number; color?: string }) => {
+			const { name, size, color, ...rest } = props;
 
-				return <DynamicRadixIcon name={name} size={size} color={color} {...rest} />;
-			},
-		}),
-		[]
-	);
+			return <DynamicRadixIcon name={name} size={size} color={color} {...rest} />;
+		},
+	};
 
 	if (error) {
 		return <div>Error: {error}</div>;
@@ -278,4 +273,4 @@ const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	);
 };
 
-export default React.memo(MarkdownContentRenderer);
+export default MarkdownContentRenderer;

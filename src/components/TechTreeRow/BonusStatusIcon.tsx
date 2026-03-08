@@ -1,6 +1,6 @@
 import type { BonusStatusData } from "../../store/TechBonusStore";
 import type React from "react";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@radix-ui/react-icons";
 import { Popover, Text, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -107,14 +107,10 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	const cachedBonusStatus = getBonusStatus(tech);
 
 	// Use fresh computed data if available, otherwise fall back to cached data
-	const contentData = useMemo(() => {
-		// If techMaxBonus is 0, use cached data if available
-		if (techMaxBonus === 0 && cachedBonusStatus) {
-			return cachedBonusStatus;
-		}
-
-		return computeBonusStatusData(techMaxBonus, t);
-	}, [techMaxBonus, t, cachedBonusStatus]);
+	const contentData =
+		techMaxBonus === 0 && cachedBonusStatus
+			? cachedBonusStatus
+			: computeBonusStatusData(techMaxBonus, t);
 
 	// Persist the computed bonus status whenever it changes (only if actually changed and techSolvedBonus > 0)
 	useEffect(() => {

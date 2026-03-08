@@ -1,6 +1,6 @@
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import type { GroupedModules } from "./ModuleSelectionDialog";
-import React, { useCallback } from "react";
+import React from "react";
 import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -49,12 +49,9 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
 
-	const onSelectAllChange = useCallback(
-		(checked: boolean | "indeterminate") => {
-			handleSelectAllChange(checked);
-		},
-		[handleSelectAllChange]
-	);
+	const onSelectAllChange = (checked: boolean | "indeterminate") => {
+		handleSelectAllChange(checked);
+	};
 
 	return (
 		<>

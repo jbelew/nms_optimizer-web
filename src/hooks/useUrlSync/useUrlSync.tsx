@@ -1,5 +1,5 @@
 // src/hooks/useUrlSync.tsx
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "../../context/RouteContext";
@@ -135,7 +135,7 @@ export const useUrlSync = () => {
 		// to break the infinite loop triggered by store persistence
 	]);
 
-	const updateUrlForShare = useCallback(() => {
+	const updateUrlForShare = () => {
 		const serializedGrid = serializeGrid();
 
 		try {
@@ -149,9 +149,9 @@ export const useUrlSync = () => {
 
 			return `/?platform=${selectedShipTypeFromStore}&grid=${serializedGrid}`;
 		}
-	}, [serializeGrid, selectedShipTypeFromStore]);
+	};
 
-	const updateUrlForReset = useCallback(() => {
+	const updateUrlForReset = () => {
 		try {
 			const url = new URL(window.location.href);
 			url.searchParams.delete("grid");
@@ -160,7 +160,7 @@ export const useUrlSync = () => {
 		} catch (error) {
 			console.warn("useUrlSync: Failed to update URL for reset", error);
 		}
-	}, [navigate]);
+	};
 
 	return { updateUrlForShare, updateUrlForReset };
 };
