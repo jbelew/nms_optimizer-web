@@ -1,3 +1,10 @@
+## [6.16.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.1...v6.16.2) (2026-03-08)
+
+
+### Bug Fixes
+
+* address a11y issues and consolidate tech tree initialization into a single `initializeTechTree` method in `TechStore`. ([e733d1c](https://github.com/jbelew/nms_optimizer-web/commit/e733d1cf4ea57d7a2ac8985f4c8982b36683517b))
+
 ## [6.16.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.0...v6.16.1) (2026-03-08)
 
 
