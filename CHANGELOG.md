@@ -1,3 +1,11 @@
+## [6.16.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.0...v6.16.1) (2026-03-08)
+
+
+### Bug Fixes
+
+* Implement a singleton tooltip management system using React Context for improved performance and consistency. ([6349233](https://github.com/jbelew/nms_optimizer-web/commit/63492339d665b10908190a40ea69e03e0e156a3b))
+* **tooltip:** gracefully handle missing provider in tests to prevent timeouts ([f3c923f](https://github.com/jbelew/nms_optimizer-web/commit/f3c923fa8cba2dcc10fe447c38b4a2e30ffc0a76))
+
 # [6.16.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.15.0...v6.16.0) (2026-03-08)
 
 
