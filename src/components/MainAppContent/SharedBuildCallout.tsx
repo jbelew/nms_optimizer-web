@@ -3,16 +3,25 @@ import React from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Box, Callout } from "@radix-ui/themes";
 
+/**
+ * Props for the `SharedBuildCallout` component.
+ */
 interface SharedBuildCalloutProps {
+	/** Total width of the grid table, used to align the callout's max-width. */
 	gridTableTotalWidth: number | undefined;
 }
 
 /**
- * SharedBuildCallout component displays a warning callout when viewing a shared build.
- * It is rendered above the ship selection heading on shared grids.
+ * A notification component that appears when the user is viewing a read-only shared layout.
  *
- * @param {SharedBuildCalloutProps} props - The props for the component.
- * @returns {JSX.Element} The rendered SharedBuildCallout.
+ * It renders a standard Radix UI `Callout` with information explaining that
+ * changes cannot be made to the current grid.
+ *
+ * @param {SharedBuildCalloutProps} props - Component properties.
+ * @returns {JSX.Element} The rendered callout component.
+ *
+ * @example
+ * <SharedBuildCallout gridTableTotalWidth={500} />
  */
 export const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalWidth }) => {
 	return (

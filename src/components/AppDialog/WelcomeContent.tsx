@@ -5,15 +5,26 @@ import { Trans, useTranslation } from "react-i18next";
 import { useDialog } from "../../context/dialog-utils";
 import DynamicRadixIcon from "./DynamicRadixIcon";
 
+/**
+ * Props for the `WelcomeContent` component.
+ */
 interface WelcomeContentProps {
+	/** Callback function triggered when the user clicks the "Get Started" button. */
 	onClose: () => void;
 }
 
 /**
- * Content for the Welcome Dialog.
+ * A component that renders the content for the initial "Welcome" dialog.
  *
- * @param {WelcomeContentProps} props - The props for the component.
- * @returns {React.ReactElement} The rendered component.
+ * It provides a summary of the application's core features, key terminology,
+ * and a direct link to the detailed instructions. It utilizes `react-i18next`
+ * for localized messaging and `Trans` components for complex inline icons.
+ *
+ * @param {WelcomeContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered welcome content.
+ *
+ * @example
+ * <WelcomeContent onClose={markTutorialFn} />
  */
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
@@ -22,6 +33,11 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	const iconSize = 16;
 	const iconColor = "var(--accent-11)";
 
+	/**
+	 * Closes the welcome dialog and immediately opens the instructions dialog.
+	 *
+	 * @param {React.MouseEvent} e - The click event.
+	 */
 	const handleViewInstructions = (e: React.MouseEvent) => {
 		e.preventDefault();
 		onClose(); // Close the welcome dialog (marks as visited)

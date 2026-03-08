@@ -4,25 +4,30 @@ import { use } from "react";
 import { fetchUserStats } from "./userStatsResource";
 
 /**
- * @typedef {object} UserStat
- * @property {string} event_name - The name of the event.
- * @property {string} ship_type - The type of ship.
- * @property {string} supercharged - Whether the technology was supercharged.
- * @property {string} technology - The technology that was optimized.
- * @property {number} total_events - The total number of events.
+ * Represents a single aggregate record of user optimization activity.
  */
 export type UserStat = {
+	/** The name of the analytics event. */
 	event_name: string;
+	/** The ship type identifier associated with the event. */
 	ship_type: string;
+	/** A string flag ('yes' or 'no') indicating if supercharged slots were used. */
 	supercharged: string;
+	/** The technology identifier that was optimized. */
 	technology: string;
+	/** The total occurrences of this specific configuration. */
 	total_events: number;
 };
 
 /**
- * Custom hook to fetch user statistics from the API.
+ * Custom hook for retrieving aggregate user statistics.
  *
- * @returns {UserStat[]} An array of user stats data.
+ * Uses React's `use` for promise unwrapping, designed for use within a Suspense boundary.
+ *
+ * @returns {UserStat[]} An array of user statistics.
+ *
+ * @example
+ * const stats = useUserStats();
  */
 export const useUserStats = (): UserStat[] => {
 	return use(fetchUserStats());

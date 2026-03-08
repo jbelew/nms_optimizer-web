@@ -1,10 +1,17 @@
 import { useEffect } from "react";
 
 /**
- * Hook to check for application updates and handle the "new-version-available" event.
- * It fetches /version.json to verify if the available update is actually new.
+ * Custom hook for detecting and validating application updates.
  *
- * @param onUpdateAvailable - Callback to execute when a valid update is available. Receives the updateSW function.
+ * It listens for the `new-version-available` event dispatched by the service
+ * worker. To avoid unnecessary prompts, it fetches `/version.json` and compares
+ * the `latestBuildDate` with the `__BUILD_DATE__` defined at compile time.
+ *
+ * @param {function((reloadPage?: boolean) => Promise<void>): void} onUpdateAvailable - Callback function that receives the `updateSW` function from the service worker. **Must handle UI display.**
+ * @returns {void}
+ *
+ * @example
+ * useUpdateCheck((updateSW) => setShowUpdateDialog(true, updateSW));
  */
 export const useUpdateCheck = (
 	onUpdateAvailable: (updateSW: (reloadPage?: boolean) => Promise<void>) => void

@@ -5,19 +5,34 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Progress, Spinner, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `MessageSpinner` component.
+ */
 interface MessageSpinnerProps {
+	/** Whether the spinner and overlay are visible. */
 	isVisible: boolean;
+	/** If `true`, the spinner is absolutely positioned to cover its parent container. Defaults to `true`. */
 	isInlay?: boolean;
+	/** Whether to display the progress bar alongside the spinner. */
 	showProgress?: boolean;
+	/** The primary message to display below the spinner. */
 	initialMessage?: string;
+	/** The current progress value (0-100). */
 	progressPercent?: number;
 }
 
 /**
- * MessageSpinner component displays a loading spinner overlay with an optional message and progress bar.
+ * A comprehensive loading overlay component.
  *
- * @param {MessageSpinnerProps} props - The props for the MessageSpinner component.
- * @returns {JSX.Element | null} The rendered MessageSpinner component, or null if not visible.
+ * It features a spinning icon, a localized primary message, and an optional
+ * progress bar. While visible, it cycles through a set of "random flavored"
+ * status messages (e.g., "Adjusting warp coils...") to improve perceived performance.
+ *
+ * @param {MessageSpinnerProps} props - Component properties.
+ * @returns {JSX.Element | null} The rendered loading UI, or `null` if not visible.
+ *
+ * @example
+ * <MessageSpinner isVisible={solving} progressPercent={45} showProgress={true} initialMessage="Optimizing..." />
  */
 export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	isInlay = true,
@@ -36,6 +51,9 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	const randomMessageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+	/**
+	 * Selects and fades in a new random flavor message.
+	 */
 	const setRandomMessage = useCallback(() => {
 		setShowRandomMessage(false); // Fade out
 		randomMessageTimeoutRef.current = setTimeout(() => {

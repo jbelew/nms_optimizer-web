@@ -2,17 +2,34 @@ import type { ErrorInfo, ReactNode } from "react";
 
 import "./ErrorBoundary.scss";
 
+/**
+ * Props for the `ErrorDisplay` component.
+ */
 interface ErrorDisplayProps {
+	/** The caught exception object. */
 	error?: Error;
+	/** React-specific error metadata, including component stack. */
 	errorInfo?: ErrorInfo;
+	/** Optional descriptive text to show above the stack trace. */
 	children?: ReactNode;
+	/** Optional CSS class names. */
 	className?: string;
+	/** Optional inline styles for the container. */
 	containerStyle?: React.CSSProperties;
 }
 
 /**
- * Reusable error display component that shows error details in a consistent format.
- * Used by ErrorContent for displaying error information.
+ * A reusable component for rendering technical error details.
+ *
+ * It formats the error message and stack trace (both JS and React component stack)
+ * in a readable, monospace layout. It is primarily used within the `ErrorContent`
+ * component to provide debugging information.
+ *
+ * @param {ErrorDisplayProps} props - Component properties.
+ * @returns {JSX.Element} The rendered error details view.
+ *
+ * @example
+ * <ErrorDisplay error={myError} errorInfo={stackInfo}>Something failed!</ErrorDisplay>
  */
 export const ErrorDisplay = ({
 	error,

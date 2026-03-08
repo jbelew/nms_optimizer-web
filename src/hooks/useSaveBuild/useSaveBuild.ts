@@ -6,20 +6,35 @@ import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
 import { useToast } from "../useToast/useToast";
 
+/**
+ * Return type for the `useSaveBuild` hook.
+ */
 interface UseSaveBuildReturn {
+	/** Whether the build name entry dialog is currently open. */
 	isSaveBuildDialogOpen: boolean;
+	/** Function to manually update the dialog open state. */
 	setIsSaveBuildDialogOpen: (open: boolean) => void;
+	/** Function to initiate the save workflow. */
 	handleSaveBuild: () => void;
+	/** Handler for confirming the build name and executing the save. */
 	handleBuildNameConfirm: (buildName: string) => Promise<void>;
+	/** Handler for canceling the save workflow. */
 	handleBuildNameCancel: () => void;
+	/** Whether the build is currently being saved to disk. */
 	isSavePending: boolean;
 }
 
 /**
- * Custom hook to manage save build functionality.
- * Handles dialog state, file saving, analytics, and toast notifications.
+ * Custom hook for managing the "Save Build" workflow.
  *
- * @returns {UseSaveBuildReturn} Save build state and handlers
+ * It manages the lifecycle of the save operation, including opening the naming
+ * dialog, executing the file generation via `useBuildFileManager`, and
+ * reporting results through toasts and analytics.
+ *
+ * @returns {UseSaveBuildReturn} State and handlers for the save build process.
+ *
+ * @example
+ * const { handleSaveBuild, isSavePending } = useSaveBuild();
  */
 export const useSaveBuild = (): UseSaveBuildReturn => {
 	const { t } = useTranslation();
@@ -31,10 +46,19 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	const [isSaveBuildDialogOpen, setIsSaveBuildDialogOpen] = useState(false);
 	const [isSavePending, setIsSavePending] = useState(false);
 
+	/**
+	 * Opens the naming dialog to start the save process.
+	 */
 	const handleSaveBuild = () => {
 		setIsSaveBuildDialogOpen(true);
 	};
 
+	/**
+	 * Finalizes the save operation using the provided build name.
+	 *
+	 * @param {string} buildName - The name to assign to the saved file. **Must be non-empty.**
+	 * @returns {Promise<void>}
+	 */
 	const handleBuildNameConfirm = async (buildName: string) => {
 		setIsSaveBuildDialogOpen(false);
 		setIsSavePending(true);
@@ -58,6 +82,9 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 		}
 	};
 
+	/**
+	 * Aborts the save process and closes the dialog.
+	 */
 	const handleBuildNameCancel = () => {
 		setIsSaveBuildDialogOpen(false);
 	};

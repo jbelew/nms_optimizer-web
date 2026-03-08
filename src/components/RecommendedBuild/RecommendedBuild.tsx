@@ -19,21 +19,28 @@ import { type TechTree } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/PlatformStore";
 
 /**
- * @interface RecommendedBuildProps
- * @property {TechTree} techTree - The tech tree data, which may contain recommended builds.
- * @property {boolean} isLarge - Indicates if the screen is large, used for responsive layout.
+ * Props for the `RecommendedBuild` component.
  */
 interface RecommendedBuildProps {
+	/** The technology tree data containing available builds for the current ship. **Must not be null.** */
 	techTree: TechTree;
+	/** Whether the screen matches the 'large' (desktop) breakpoint. */
 	isLarge: boolean;
 }
 
 /**
- * RecommendedBuild component displays and allows applying recommended technology builds.
- * It provides options to select and apply different builds based on the available tech tree.
+ * A component that allows users to view and apply pre-configured technology layouts.
  *
- * @param {RecommendedBuildProps} props - The props for the RecommendedBuild component.
- * @returns {JSX.Element} The rendered RecommendedBuild component.
+ * It provides a "Magic Wand" interface that automatically populates the grid with
+ * optimized community builds. If multiple builds are available, it displays a
+ * dropdown menu; otherwise, it shows a direct apply button. On mobile, it
+ * includes an informative callout with a link to instructions.
+ *
+ * @param {RecommendedBuildProps} props - Component properties.
+ * @returns {JSX.Element} The rendered recommended build interface.
+ *
+ * @example
+ * <RecommendedBuild techTree={currentTree} isLarge={true} />
  */
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }) => {
 	const { t } = useTranslation();
@@ -45,8 +52,9 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	const builds = techTree.recommended_builds || [];
 
 	/**
-	 * Handles applying a selected recommended build.
-	 * @param {(typeof builds)[number]} build - The build object to apply.
+	 * Defers the build application and tracks the event.
+	 *
+	 * @param {RecommendedBuild} build - The build configuration object to apply.
 	 */
 	const handleApply = (build: (typeof builds)[number]) => {
 		// Defer async work to avoid blocking main thread on INP
@@ -64,17 +72,17 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	};
 
 	/**
-	 * Handles opening the instructions dialog, specifically to the section about recommended builds.
+	 * Navigates to the relevant section of the instructions dialog.
 	 */
 	const handleOpenInstructions = () => {
 		openDialog("instructions", { section: "section-5" });
 	};
 
 	/**
-	 * Renders the appropriate button for applying a recommended build.
-	 * If there are multiple builds, it renders a dropdown menu. If only one, a direct button.
-	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Optional props to pass to the Button component.
-	 * @returns {JSX.Element | null} The rendered button or dropdown, or null if no builds are available.
+	 * Renders the interaction element based on the number of available builds.
+	 *
+	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Style overrides for the button.
+	 * @returns {JSX.Element | null}
 	 */
 	const renderBuildButton = (buttonProps?: React.ComponentProps<typeof Button>) => {
 		if (builds.length > 1) {

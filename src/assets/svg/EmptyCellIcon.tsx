@@ -1,10 +1,26 @@
 import React from "react";
 
+/**
+ * Props for the `EmptyCellIcon` component.
+ */
 interface EmptyCellIconProps {
+	/** The fill color for the SVG paths. **Accepts any valid CSS color string.** */
 	fillColor: string;
+	/** Optional CSS class name for further styling. */
 	className?: string;
 }
 
+/**
+ * A decorative SVG icon used to represent an empty or available slot in the technology grid.
+ *
+ * It renders a complex path that adapts its color based on the `fillColor` prop.
+ *
+ * @param {EmptyCellIconProps} props - Component properties.
+ * @returns {JSX.Element} The rendered SVG icon.
+ *
+ * @example
+ * <EmptyCellIcon fillColor="var(--accent-a4)" />
+ */
 const EmptyCellIcon: React.FC<EmptyCellIconProps> = ({ fillColor, className }) => (
 	<svg
 		version="1.0"

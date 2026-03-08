@@ -5,19 +5,29 @@ import { useTranslation } from "react-i18next";
 import AppDialog from "./AppDialog";
 import { ShareLinkContent } from "./ShareLinkContent";
 
+/**
+ * Props for the `ShareLinkDialog` component.
+ */
 interface ShareLinkDialogProps {
+	/** Whether the share dialog is currently visible. */
 	isOpen: boolean;
+	/** The full URL generated for sharing the current grid state. **Must be a valid URL.** */
 	shareUrl: string;
+	/** Callback function to close the dialog. */
 	onClose: () => void;
 }
 
 /**
- * ShareLinkDialog component displays a dialog for sharing a link.
- * It uses the `AppDialog` component to render the dialog and `ShareLinkContent`
- * to display the shareable URL and related actions.
+ * A modal dialog that provides a shareable URL to the user.
  *
- * @param {ShareLinkDialogProps} props - The props for the ShareLinkDialog component.
- * @returns {JSX.Element} The rendered ShareLinkDialog component.
+ * It wraps the `ShareLinkContent` within a standard `AppDialog`, handling the
+ * display of the generated link and offering copy-to-clipboard functionality.
+ *
+ * @param {ShareLinkDialogProps} props - Component properties.
+ * @returns {JSX.Element} The rendered share dialog.
+ *
+ * @example
+ * <ShareLinkDialog isOpen={true} shareUrl="https://nms-optimizer.app/?grid=..." onClose={hideFn} />
  */
 const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }) => {
 	const { t } = useTranslation();

@@ -1,11 +1,17 @@
 /**
- * Wrapper for fetch with timeout support.
- * Throws an AbortError if the request exceeds the timeout duration.
+ * Wrapper for the native `fetch` API that adds timeout support.
  *
- * @param url - The URL to fetch
- * @param options - Fetch options (timeout will be added/overridden)
- * @param timeoutMs - Timeout in milliseconds (default: 10000)
- * @returns Promise<Response>
+ * This function initiates a network request and aborts it if it does not complete
+ * within the specified duration.
+ *
+ * @param {string} url - The URL to fetch. **Must be a valid URL string.**
+ * @param {RequestInit} [options={}] - Standard `fetch` options. The `signal` property will be overridden.
+ * @param {number} [timeoutMs=10000] - Timeout duration in milliseconds. **Must be a positive integer.**
+ * @returns {Promise<Response>} A promise that resolves to the `Response` object.
+ * @throws {Error} Throws an error if the request exceeds the `timeoutMs` duration or if the network request fails.
+ *
+ * @example
+ * const response = await fetchWithTimeout("https://api.example.com/data", {}, 5000);
  */
 export async function fetchWithTimeout(
 	url: string,

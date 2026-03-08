@@ -19,23 +19,32 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { languages, nativeLanguageNames } from "../../i18n/i18n";
 import { useErrorStore } from "../../store/ErrorStore";
 
+/**
+ * Mapping of language codes to their respective SVG flag asset paths.
+ */
 interface LanguageFlagPaths {
-	[key: string]: string; // Path to the SVG
+	[key: string]: string;
 }
 
-// Map language codes to SVG components
 const languageFlagPaths: LanguageFlagPaths = {
 	en: usFlagPath,
 	de: deFlagPath,
 	es: esFlagPath,
 	fr: frFlagPath,
 	pt: ptFlagPath,
-	// Add other languages and their flag classes
 };
 
 /**
- * LanguageSelector component allows users to change the application's language.
- * It displays a dropdown with flags and names of supported languages.
+ * A component that allows users to toggle between supported application languages.
+ *
+ * It provides a dropdown menu featuring flags and native language names.
+ * Changing the language updates the global `i18next` state, synchronizes the
+ * URL path prefix, and sends an analytics event.
+ *
+ * @returns {JSX.Element} The rendered language selection dropdown.
+ *
+ * @example
+ * <LanguageSelector />
  */
 export const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
@@ -63,9 +72,9 @@ export const LanguageSelector: React.FC = () => {
 		.sort((a, b) => a.label.localeCompare(b.label));
 
 	/**
-	 * Handles the language change event.
-	 * Navigates to the URL with the new language code and updates i18n state.
-	 * @param {string} newLang - The language code to change to.
+	 * Finalizes the language transition by updating the URL and i18n store.
+	 *
+	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
 	 */
 	const handleLanguageChange = (newLang: string) => {
 		clearErrors(); // Clear existing errors to prevent re-display on remount
@@ -97,8 +106,7 @@ export const LanguageSelector: React.FC = () => {
 	};
 
 	/**
-	 * Handles the click event for the "Request Translation" button.
-	 * Navigates to the translation page.
+	 * Navigates the user to the translation request route.
 	 */
 	const handleRequestTranslationClick = () => {
 		const lang = (i18n.language || "en").split("-")[0];

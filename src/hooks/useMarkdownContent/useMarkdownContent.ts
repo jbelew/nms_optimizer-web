@@ -4,14 +4,14 @@ import { useTranslation } from "react-i18next";
 import { getMarkdown } from "virtual:markdown-bundle";
 
 /**
- * @interface MarkdownContentState
- * @property {string} markdown - The markdown content.
- * @property {boolean} isLoading - Whether the content is loading.
- * @property {string|null} error - Any error that occurred while loading the content.
+ * Represents the state of a markdown content request.
  */
 export interface MarkdownContentState {
+	/** The raw or pre-rendered markdown string. */
 	markdown: string;
+	/** Whether the content is currently being retrieved. */
 	isLoading: boolean;
+	/** Error message if retrieval failed, otherwise `null`. */
 	error: string | null;
 }
 
@@ -22,11 +22,17 @@ declare global {
 }
 
 /**
- * Custom hook to fetch markdown content from a bundled file.
- * Uses pre-bundled markdown content loaded at build time.
+ * Custom hook for retrieving markdown content from a virtual bundle.
  *
- * @param {string} markdownFileName - The name of the markdown file to fetch.
- * @returns {MarkdownContentState} An object containing the markdown content, loading state, and error state.
+ * This hook prioritizes pre-rendered markdown from the window's global bundle
+ * (used for SSG) and falls back to a build-time virtual markdown bundle.
+ * It automatically handles language-specific content based on the current `i18n` language.
+ *
+ * @param {string} markdownFileName - The name of the markdown file to retrieve (without extension). **Must exist in the bundle.**
+ * @returns {MarkdownContentState} State containing the markdown content, loading status, and any errors.
+ *
+ * @example
+ * const { markdown, isLoading } = useMarkdownContent("about");
  */
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();

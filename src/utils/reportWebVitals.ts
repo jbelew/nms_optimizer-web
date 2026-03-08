@@ -9,12 +9,12 @@ type SendEventFunction = (event: GA4Event) => void;
 
 /**
  * Sends a web vitals metric to Google Analytics.
+ *
  * Converts the metric value to milliseconds (or multiplies by 1000 for CLS).
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
  * @returns {void}
- * @private
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
@@ -29,15 +29,16 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 };
 
 /**
- * Reports web vitals metrics to Google Analytics.
- * Registers listeners for all Core Web Vitals (CLS, INP, FCP, LCP, TTFB)
- * and sends them to Google Analytics via the provided send function.
+ * Registers listeners for Core Web Vitals and reports them to analytics.
  *
- * @param {SendEventFunction} sendEvent - The function to send the event.
+ * This function tracks CLS, INP, FCP, LCP, and TTFB. Metrics are sent via the
+ * provided `sendEvent` function.
+ *
+ * @param {SendEventFunction} sendEvent - The function to call for each metric. **Must be a valid function.**
  * @returns {void}
  *
  * @example
- * reportWebVitals(sendEvent);
+ * reportWebVitals((event) => console.log("Metric:", event.action));
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
 	onCLS((metric) => sendVitalsMetric(metric, sendEvent));

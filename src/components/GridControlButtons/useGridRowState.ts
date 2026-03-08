@@ -1,20 +1,21 @@
 import { useGridStore } from "../../store/GridStore";
 
-// Threshold for showing the deactivate button: display in last N rows before grid end
+/** Number of rows from the bottom of the grid where the deactivate button is allowed to appear. */
 const LAST_N_ROWS_THRESHOLD = 3;
 
 /**
- * Hook that derives the state of a grid row, determining if it's the first inactive
- * row or the last active row. This encapsulates the logic for calculating row states
- * so child components can call this hook directly without prop forwarding.
+ * Custom hook for deriving the control state of a specific grid row.
  *
- * Using the colocated hook pattern: components that need this state call the hook
- * directly with the rowIndex, rather than receiving calculated values via props.
+ * It uses specialized selectors from `GridStore` to determine if a row is the
+ * "frontier" for expansion (first inactive row) or the "frontier" for
+ * contraction (last active row within the threshold). This encapsulates the
+ * positioning logic for row activation/deactivation buttons.
  *
- * @param {number} rowIndex - The index of the row to derive state for.
- * @returns {object} Object containing derived state:
- *   - isFirstInactiveRow: true if this is the first row with no active cells
- *   - isLastActiveRow: true if this is the last row with at least one active cell
+ * @param {number} rowIndex - The zero-based index of the row. **Must be within grid bounds.**
+ * @returns {object} Derived boolean flags: `isFirstInactiveRow` and `isLastActiveRow`.
+ *
+ * @example
+ * const { isFirstInactiveRow } = useGridRowState(5);
  */
 export const useGridRowState = (rowIndex: number) => {
 	const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());

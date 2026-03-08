@@ -8,16 +8,14 @@ import { TechTreeRow } from "../TechTreeRow/TechTreeRow";
 import "./TechTreeSection.scss";
 
 /**
- * @typedef {object} TypeImageMap
- * @property {string} [key] - The key is the technology type, and the value is the image file name.
+ * Mapping of technology categories to their corresponding decorative icon filenames.
  */
 type TypeImageMap = {
 	[key: string]: string;
 };
 
 /**
- * A map of technology types to their corresponding image file names.
- * @type {TypeImageMap}
+ * Registry of sidebar icons indexed by technology category name.
  */
 const typeImageMap: TypeImageMap = {
 	Weaponry: "weaponry.webp",
@@ -37,29 +35,35 @@ const typeImageMap: TypeImageMap = {
 };
 
 /**
- * @interface TechTreeSectionProps
- * @property {string} type - The category type of the technologies.
- * @property {TechTreeItem[]} technologies - An array of technology items in this section.
- * @property {number} index - The index of this section.
- * @property {(tech: string) => Promise<void>} handleOptimize - Callback to trigger optimization.
- * @property {boolean} solving - Indicates if an optimization is in progress.
- * @property {boolean} isGridFull - Boolean that returns true if the grid is full.
+ * Props for the `TechTreeSection` component.
  */
 interface TechTreeSectionProps {
+	/** The category identifier for this section (e.g., 'Weaponry'). **Must exist in translations.** */
 	type: string;
+	/** Array of individual technology items to render in this section. */
 	technologies: TechTreeItem[];
+	/** Index of the section for ordering purposes. */
 	index: number;
+	/** Asynchronous callback for triggering an optimization solve. */
 	handleOptimize: (tech: string) => Promise<void>;
+	/** Whether any optimization solve is currently running. */
 	solving: boolean;
-	isGridFull: boolean; // Add isGridFull prop
+	/** Whether the grid has reached its module capacity. */
+	isGridFull: boolean;
 }
 
 /**
- * TechTreeSection component renders a section of the tech tree, grouping technologies by type.
- * It displays a header with an optional image and a list of `TechTreeRow` components.
+ * A layout component that groups related technologies into a titled section.
  *
- * @param {TechTreeSectionProps} props - The props for the TechTreeSection component.
- * @returns {JSX.Element} The rendered TechTreeSection component.
+ * It renders a category header with a decorative icon, followed by a list
+ * of interactive `TechTreeRow` components. It handles localized category
+ * names and resolution-aware icon paths.
+ *
+ * @param {TechTreeSectionProps} props - Component properties.
+ * @returns {JSX.Element} The rendered technology category section.
+ *
+ * @example
+ * <TechTreeSection type="Propulsion" technologies={items} index={0} handleOptimize={fn} solving={false} isGridFull={false} />
  */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 	type,
@@ -87,10 +91,6 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 							width="36"
 							height="24"
 							className="mt-px mr-1 ml-1 opacity-35 sm:mt-1"
-							// style={{
-							// 	filter: "hue-rotate(190deg) saturate(2) brightness(2)",
-							// 	mixBlendMode: "color-dodge",
-							// }}
 						/>
 					)}
 				<h2 className="heading-styled text-xl sm:text-2xl">

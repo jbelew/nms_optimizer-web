@@ -1,16 +1,15 @@
 /**
- * Hides the splash screen and reveals the background image.
- * Uses the vite-plugin-splash-screen runtime to hide the splash screen,
- * then adds a CSS class to show the background image.
+ * Hides the splash screen and reveals the application background.
  *
- * @async
- * @returns {Promise<void>} Resolves after the splash screen is hidden.
- * @throws {Error} Logs an error if the splash screen hiding fails.
+ * This utility uses the `vite-plugin-splash-screen` runtime to perform the hide animation,
+ * and then adds a `background-visible` class to the `document.body` to fade in the main UI background.
+ *
+ * @returns {Promise<void>} A promise that resolves once the splash screen logic is initiated.
  *
  * @example
  * await hideSplashScreenAndShowBackground();
  */
-export async function hideSplashScreenAndShowBackground() {
+export async function hideSplashScreenAndShowBackground(): Promise<void> {
 	try {
 		const { hideSplashScreen } = await import("vite-plugin-splash-screen/runtime");
 		hideSplashScreen();

@@ -1,13 +1,26 @@
 import React, { useEffect, useRef } from "react";
 
+/**
+ * Props for the `PrerenderedMarkdownRenderer` component.
+ */
 interface PrerenderedMarkdownRendererProps {
+	/** Optional HTML ID of a section to scroll to on mount. */
 	targetSectionId?: string;
 }
 
 /**
- * Renders pre-rendered markdown HTML that was embedded in the page by SSG.
- * Falls back to null if pre-rendered content is not available.
- * Used for SEO-critical pages that were pre-rendered during build.
+ * A specialized component for rendering HTML content pre-generated during SSG.
+ *
+ * It scans the DOM for an element with the `data-prerendered-markdown="true"`
+ * attribute and injects its inner HTML into an `<article>` tag. This approach
+ * improves perceived performance and SEO by avoiding client-side re-parsing of
+ * large markdown files (like the Changelog or Instructions).
+ *
+ * @param {PrerenderedMarkdownRendererProps} props - Component properties.
+ * @returns {JSX.Element | null} The injected article, or `null` if no content is found.
+ *
+ * @example
+ * <PrerenderedMarkdownRenderer targetSectionId="about-intro" />
  */
 const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = ({
 	targetSectionId,
@@ -24,6 +37,11 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 	useEffect(() => {
 		if (!targetSectionId || !articleRef.current) return;
 
+		/**
+		 * Attempts to scroll to the target ID within the article.
+		 *
+		 * @returns {boolean} `true` if scrolled, otherwise `false`.
+		 */
 		const scrollIfTargetExists = () => {
 			const targetElement = articleRef.current?.querySelector(`#${targetSectionId}`);
 

@@ -5,11 +5,17 @@ import { useToast } from "@/hooks/useToast/useToast";
 import { useErrorStore } from "@/store/ErrorStore";
 
 /**
- * ErrorMessageRenderer component displays error messages from the ErrorStore using toast notifications.
- * Should be mounted at the top level of the app, preferably in MainAppContent or App component.
- * Automatically queues errors from the session error tracking system.
+ * A non-rendering observer component that bridges the `ErrorStore` and the `Toast` system.
  *
- * @returns {null} Does not render any DOM elements
+ * It monitors the global `ErrorStore` for new error messages. When an error is
+ * detected, it triggers a localized error toast and automatically schedules the
+ * removal of that error from the store after a fixed duration. This component
+ * should be mounted once at the root level of the application.
+ *
+ * @returns {null} This component does not render any visual elements.
+ *
+ * @example
+ * <ErrorMessageRenderer />
  */
 export const ErrorMessageRenderer = () => {
 	const { t } = useTranslation();

@@ -1,28 +1,31 @@
 import { createContext, useContext } from "react";
 
 /**
- * Represents the context value for route-related information.
+ * Context value representing global routing metadata.
  */
 type RouteContextType = {
-	/** Whether the current route is a known/valid route. */
+	/** Whether the current location matches a defined application route. */
 	isKnownRoute: boolean;
 };
 
 /**
- * React Context for managing route-related state and providing route information
- * to child components.
+ * React Context for managing and providing global route-related state.
  *
- * @default {isKnownRoute: true}
+ * This context allows deeply nested components to adapt their behavior based
+ * on whether they are being rendered within a recognized application route.
+ *
+ * @default { isKnownRoute: true }
  */
 export const RouteContext = createContext<RouteContextType>({
 	isKnownRoute: true,
 });
 
 /**
- * Custom hook to access route context.
- * Must be used within a RouteContext provider.
+ * Custom hook for accessing the `RouteContext`.
  *
- * @returns {RouteContextType} The current route context value.
- * @throws {Error} If used outside of a RouteContext provider.
+ * @returns {RouteContextType} The active route context value.
+ *
+ * @example
+ * const { isKnownRoute } = useRouteContext();
  */
 export const useRouteContext = () => useContext(RouteContext);

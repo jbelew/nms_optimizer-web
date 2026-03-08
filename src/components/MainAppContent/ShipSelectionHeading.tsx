@@ -5,18 +5,32 @@ import { useTranslation } from "react-i18next";
 
 import { ShipSelection } from "../ShipSelection/ShipSelection";
 
+/**
+ * Props for the `ShipSelectionHeading` component.
+ */
 interface ShipSelectionHeadingProps {
+	/** Whether the grid is in read-only shared mode. */
 	isSharedGrid: boolean;
+	/** Whether an optimization solve is currently active. */
 	solving: boolean;
+	/** The internal identifier of the currently selected ship type. **Must be a valid key.** */
 	selectedShipType: string;
+	/** Total width of the grid table, used for responsive max-width alignment. */
 	gridTableTotalWidth: number | undefined;
 }
 
 /**
- * ShipSelectionHeading component renders the ship selector (if not shared) and current platform labels.
+ * A layout component that displays the current equipment platform and its selection control.
  *
- * @param {ShipSelectionHeadingProps} props - The props for the component.
- * @returns {JSX.Element} The rendered ShipSelectionHeading.
+ * It renders the localized platform labels (e.g., "Starship: Solar") and, if not in
+ * shared mode, the interactive `ShipSelection` dropdown. It adjusts its opacity
+ * while a solve is in progress to provide visual feedback.
+ *
+ * @param {ShipSelectionHeadingProps} props - Component properties.
+ * @returns {JSX.Element} The rendered heading and selector area.
+ *
+ * @example
+ * <ShipSelectionHeading isSharedGrid={false} solving={false} selectedShipType="solar" gridTableTotalWidth={500} />
  */
 export const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
 	isSharedGrid,

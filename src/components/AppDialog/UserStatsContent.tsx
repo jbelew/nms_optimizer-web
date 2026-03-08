@@ -11,6 +11,9 @@ import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
 import { fetchUserStats } from "@/hooks/useUserStats/userStatsResource";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 
+/**
+ * Props passed to the Recharts label renderer for the Pie chart.
+ */
 interface PieLabelRenderProps {
 	cx: number;
 	cy: number;
@@ -21,8 +24,12 @@ interface PieLabelRenderProps {
 	name: string;
 }
 
+/** Default color palette for the pie chart segments. */
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"];
 
+/**
+ * Lazily loaded chart component to reduce initial bundle size.
+ */
 const LazyRechartsChart = lazy(async () => {
 	const { ResponsiveContainer, PieChart, Pie, Cell } = await import("recharts");
 
@@ -126,16 +133,22 @@ const LazyRechartsChart = lazy(async () => {
 });
 
 /**
- * Props for the UserStatsContent component.
- * @typedef {object} UserStatsContentProps
- * @property {() => void} onClose - Callback to close the dialog.
- * @property {boolean} isOpen - Whether the dialog is currently open.
+ * Props for the `UserStatsContent` component.
  */
 interface UserStatsContentProps {
+	/** Callback function to close the dialog. */
 	onClose: () => void;
+	/** Whether the dialog is currently open. Used to trigger lazy data fetching. */
 	isOpen: boolean;
 }
 
+/**
+ * Internal component that handles data aggregation and chart rendering.
+ *
+ * @param {object} props - Component properties.
+ * @param {boolean} props.isOpen - Visibility flag.
+ * @returns {JSX.Element} The rendered statistics data view.
+ */
 const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
@@ -150,6 +163,13 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const MULTITOOL_TYPES = ["standard-mt", "sentinel-mt", "atlantid", "staves"];
 	const CORVETTE_TYPES = ["corvette"];
 
+	/**
+	 * Aggregates raw analytics records into a format suitable for pie charts.
+	 *
+	 * @param {UserStat[] | null} rawData - The list of statistics from the API.
+	 * @param {string[]} shipTypes - Filter for specific ship types.
+	 * @returns {Array<{ name: string, value: number }>} Aggregated and filtered chart data.
+	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
 
@@ -198,6 +218,13 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		return aboveThreshold;
 	};
 
+	/**
+	 * Renders a labeled section containing a pie chart.
+	 *
+	 * @param {Array<{ name: string, value: number }>} chartData - Data to plot.
+	 * @param {string} titleKey - Translation key for the section header.
+	 * @returns {JSX.Element} The chart section.
+	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {
 			return <Text>{t("dialogs.userStats.noDataForChart")}</Text>;
@@ -239,8 +266,17 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 };
 
 /**
- * Component for the user statistics dialog content.
- * Displays charts and data about popular technologies and ship types.
+ * A component that renders the detailed user statistics content.
+ *
+ * It provides a summary of global community optimization trends, visualized
+ * through pie charts for different equipment categories. Data is fetched from
+ * the analytics backend.
+ *
+ * @param {UserStatsContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered statistics content UI.
+ *
+ * @example
+ * <UserStatsContent isOpen={true} onClose={() => {}} />
  */
 export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
 	const { t } = useTranslation();

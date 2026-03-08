@@ -6,16 +6,27 @@ import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `ShareLinkContent` component.
+ */
 interface ShareLinkContentProps {
+	/** The full shareable URL string. **Must be a valid URL.** */
 	shareUrl: string;
+	/** Callback function to close the parent dialog. */
 	onClose: () => void;
 }
 
 /**
- * ShareLinkContent component displays a shareable URL and provides options to copy it or open it in a new tab.
+ * A component that displays a shareable URL and provides copy-to-clipboard functionality.
  *
- * @param {ShareLinkContentProps} props - The props for the ShareLinkContent component.
- * @returns {JSX.Element} The rendered ShareLinkContent component.
+ * It uses a `TextArea` to display the (potentially long) serialized grid URL
+ * and includes a feedback mechanism (checkmark icon) when the link is successfully copied.
+ *
+ * @param {ShareLinkContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered share link UI.
+ *
+ * @example
+ * <ShareLinkContent shareUrl="https://example.com" onClose={() => {}} />
  */
 export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose }) => {
 	const { t } = useTranslation();
@@ -32,8 +43,9 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 	}, []);
 
 	/**
-	 * Handles the click event for the copy button.
-	 * Copies the `shareUrl` to the clipboard and provides visual feedback.
+	 * Copies the `shareUrl` to the system clipboard and toggles the success state.
+	 *
+	 * @returns {Promise<void>}
 	 */
 	const handleCopyClick = async () => {
 		try {

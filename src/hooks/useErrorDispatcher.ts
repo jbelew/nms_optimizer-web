@@ -7,7 +7,6 @@ import { useSessionStore } from "@/store/SessionStore";
 
 /**
  * Maps session counter thresholds to error message keys.
- * Evaluates session counters and dispatches error messages when thresholds are exceeded.
  */
 const ERROR_THRESHOLDS = {
 	supercharged_limit: {
@@ -38,15 +37,16 @@ const ERROR_THRESHOLDS = {
 };
 
 /**
- * Custom hook for evaluating session counters and dispatching error messages.
- * Monitors session store for constraint violations and automatically creates
- * user-friendly error notifications.
+ * Monitors session counters and dispatches user-friendly error messages when thresholds are reached.
+ *
+ * This hook evaluates violations of application constraints (e.g., trying to supercharge
+ * too many cells) and queues notifications in the `ErrorStore`. It uses a ref to ensure
+ * each threshold violation is only reported once per session.
+ *
+ * @returns {void}
  *
  * @example
- * function App() {
- *   useErrorDispatcher();
- *   // Error messages will be queued automatically when thresholds are exceeded
- * }
+ * useErrorDispatcher();
  */
 export const useErrorDispatcher = () => {
 	const { t } = useTranslation();

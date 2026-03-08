@@ -11,7 +11,11 @@ type SetItemFunction = (
 ) => Promise<void>;
 
 /**
- * Creates a debounced version of a setItem function.
+ * Creates a debounced version of a `setItem` function for `TechBonusStore`.
+ *
+ * @param {SetItemFunction} setItemFn - The storage setter function.
+ * @param {number} msToWait - Delay in milliseconds.
+ * @returns {function(string, StorageValue<Partial<TechBonusStore>>): Promise<void>}
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -57,42 +61,63 @@ const debouncedStorage = {
 };
 
 /**
- * Represents the computed bonus status for a technology.
- * @typedef {object} BonusStatusData
- * @property {"warning" | "check" | "lightning" | null} icon - The icon type representing the status.
- * @property {number} percent - The percentage difference from the maximum possible bonus.
- * @property {string} tooltipContent - Human-readable tooltip text explaining the status.
- * @property {string} iconClassName - CSS classes for styling the icon.
- * @property {{ color: string }} iconStyle - Inline styles for the icon.
+ * Metadata representing the calculated bonus status for a specific technology.
  */
 export type BonusStatusData = {
+	/** Identifier for the icon to display in the UI. */
 	icon: "warning" | "check" | "lightning" | null;
+	/** The calculated efficiency percentage. */
 	percent: number;
+	/** Localized string for the status tooltip. */
 	tooltipContent: string;
+	/** CSS class name for icon styling. */
 	iconClassName: string;
+	/** Inline CSS styles for the icon. */
 	iconStyle: { color: string };
 };
 
 /**
- * State and actions for the tech bonus store.
- * @typedef {object} TechBonusStore
- * @property {Record<string, BonusStatusData>} bonusStatus - Map of technology keys to their computed bonus status data.
- * @property {(tech: string, data: BonusStatusData) => void} setBonusStatus - Sets the bonus status for a specific technology.
- * @property {(tech: string) => BonusStatusData | null} getBonusStatus - Retrieves the currently stored bonus status for a technology.
- * @property {(tech: string) => void} clearBonusStatus - Clears the bonus status for a specific technology.
- * @property {() => void} clearAllBonusStatus - Clears all bonus status data.
+ * State and actions for managing calculated efficiency statuses.
  */
 export type TechBonusStore = {
+	/** Mapping of technology keys to their calculated status data. */
 	bonusStatus: Record<string, BonusStatusData>;
+	/**
+	 * Sets the bonus status for a technology.
+	 *
+	 * @param {string} tech - The technology identifier.
+	 * @param {BonusStatusData} data - The calculated status metadata.
+	 */
 	setBonusStatus: (tech: string, data: BonusStatusData) => void;
+	/**
+	 * Retrieves the current status data for a technology.
+	 *
+	 * @param {string} tech - The technology identifier.
+	 * @returns {BonusStatusData | null} The status data, or `null` if not yet calculated.
+	 */
 	getBonusStatus: (tech: string) => BonusStatusData | null;
+	/**
+	 * Clears the status for a specific technology.
+	 *
+	 * @param {string} tech - The technology identifier.
+	 */
 	clearBonusStatus: (tech: string) => void;
+	/**
+	 * Resets all technology status mappings.
+	 */
 	clearAllBonusStatus: () => void;
 };
 
 /**
- * Zustand store for managing tech bonus status.
- * Persists to localStorage with debouncing.
+ * Zustand store for managing persistent efficiency ratings and statuses for optimized technologies.
+ *
+ * This store allows the UI to maintain "Optimization Checkmark" or "Warning" icons
+ * for each technology across re-renders and sessions.
+ *
+ * @returns {TechBonusStore} The tech bonus store state and actions.
+ *
+ * @example
+ * const status = useTechBonusStore((s) => s.getBonusStatus("shield"));
  */
 export const useTechBonusStore = create<TechBonusStore>()(
 	persist(

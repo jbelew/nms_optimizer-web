@@ -9,12 +9,21 @@ import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer"
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**
- * Custom hook to synchronize the application's state (selected platform, grid)
- * with the browser's URL query parameters. It handles both reading from the URL
- * on initial load and updating the URL when state changes.
+ * Custom hook for synchronizing application state with the browser's URL.
  *
- * @returns {{updateUrlForShare: () => string, updateUrlForReset: () => void}}
- *          An object containing functions to update the URL for sharing and resetting the grid.
+ * This hook manages the bi-directional mapping between the global state
+ * (selected ship type, grid layout) and URL query parameters (`platform`, `grid`).
+ * It handles:
+ * 1. Initial state restoration from URL on mount.
+ * 2. Response to `popstate` events (Back/Forward navigation).
+ * 3. Generation of shareable URLs.
+ * 4. Cleaning up URL state during resets.
+ *
+ * @returns {{ updateUrlForShare: function(): string, updateUrlForReset: function(): void }} Functions to generate share links and reset URL state.
+ *
+ * @example
+ * const { updateUrlForShare } = useUrlSync();
+ * const link = updateUrlForShare();
  */
 export const useUrlSync = () => {
 	const navigate = useNavigate();
@@ -135,6 +144,11 @@ export const useUrlSync = () => {
 		// to break the infinite loop triggered by store persistence
 	]);
 
+	/**
+	 * Generates a full URL including the current ship type and serialized grid state.
+	 *
+	 * @returns {string} The shareable URL.
+	 */
 	const updateUrlForShare = () => {
 		const serializedGrid = serializeGrid();
 
@@ -151,6 +165,9 @@ export const useUrlSync = () => {
 		}
 	};
 
+	/**
+	 * Removes grid-related parameters from the URL.
+	 */
 	const updateUrlForReset = () => {
 		try {
 			const url = new URL(window.location.href);

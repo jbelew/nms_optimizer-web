@@ -19,9 +19,17 @@ import { useSessionStore } from "../../store/SessionStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 
 /**
- * Custom hook that consolidates the logic for MainAppContent.
+ * Custom hook that consolidates the high-level orchestration logic for the main application view.
  *
- * @returns An object containing all state, refs, and handlers needed by MainAppContent.
+ * It aggregates multiple specialized hooks (layout, optimization, persistence,
+ * notifications) into a single unified interface for the `MainAppContent` component.
+ * It also manages global lifecycle events like resetting sessions and dismissing
+ * the splash screen.
+ *
+ * @returns {object} A complex object containing state flags, sub-hook results, and event handlers.
+ *
+ * @example
+ * const logic = useMainAppLogic();
  */
 export const useMainAppLogic = () => {
 	const buildVersion = build;
@@ -75,7 +83,7 @@ export const useMainAppLogic = () => {
 	}, [isSharedGrid]);
 
 	/**
-	 * Handles the action to show the changelog dialog by opening the 'changelog' dialog.
+	 * Opens the application changelog modal.
 	 */
 	const handleShowChangelog = () => {
 		openDialog("changelog");

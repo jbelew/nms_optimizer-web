@@ -3,18 +3,27 @@ import { Button, Dialog } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 /**
- * Props for the DialogFooter component.
+ * Props for the `DialogFooter` component.
  */
 export interface DialogFooterProps {
+	/** Asynchronous callback to trigger the optimization solver. **Must be provided.** */
 	handleOptimizeClick: () => Promise<void>;
+	/** Array of currently selected module IDs. Used to determine if the optimize button should be disabled. */
 	currentCheckedModules: string[];
 }
 
 /**
- * Renders the footer of the module selection dialog, containing the action buttons.
+ * The action bar component for the module selection dialog.
  *
- * @param props - The props for the component.
- * @returns {JSX.Element} The rendered dialog footer.
+ * It provides "Cancel" and "Optimize" buttons. The "Optimize" button is
+ * automatically disabled if no modules are selected, as the solver requires
+ * at least one module to run.
+ *
+ * @param {DialogFooterProps} props - Component properties.
+ * @returns {JSX.Element} The rendered footer area.
+ *
+ * @example
+ * <DialogFooter handleOptimizeClick={solveFn} currentCheckedModules={['M1']} />
  */
 export const DialogFooter: React.FC<DialogFooterProps> = ({
 	handleOptimizeClick,

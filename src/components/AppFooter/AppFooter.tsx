@@ -8,24 +8,28 @@ import { Trans, useTranslation } from "react-i18next";
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
 
 /**
- * @interface AppFooterProps
- * @property {string} buildVersion - The build version of the application, to be displayed in the footer.
- * @property {string} [buildDate] - The build date of the application, to be displayed in the footer for devmode.
+ * Props for the `AppFooter` component.
  */
 interface AppFooterProps {
+	/** The semantic version string of the application. **Must be provided.** */
 	buildVersion: string;
-	buildDate?: string; // Added optional buildDate prop
+	/** The ISO date string when the application was last built. */
+	buildDate?: string;
 }
 
 /**
- * AppFooter component displays the application footer.
- * It includes links for issues, build version information, and a "Buy Me a Coffee" component.
+ * The global application footer component.
  *
- * @param {AppFooterProps} props - The props for the AppFooter component.
- * @returns {JSX.Element} The rendered AppFooter component.
+ * It renders credits, social links, license information, and the build version.
+ * It also includes a call-to-action for supporting the project via "Buy Me a Coffee".
+ *
+ * @param {AppFooterProps} props - Component properties.
+ * @returns {JSX.Element} The rendered application footer.
+ *
+ * @example
+ * <AppFooter buildVersion="1.2.3" buildDate="2023-10-27T10:00:00Z" />
  */
 const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
-	// Destructure buildDate
 	const { i18n } = useTranslation();
 
 	return (

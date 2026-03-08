@@ -5,63 +5,81 @@ import { TechTreeItem } from "../hooks/useTechTree/useTechTree";
 import { useModuleSelectionStore } from "./ModuleSelectionStore";
 
 /**
- * State and actions for managing technology-specific data and optimization results.
- * @typedef {object} TechState
- * @property {Record<string, number>} max_bonus - A map of technology keys to their maximum potential bonus.
- * @property {Record<string, number>} solved_bonus - A map of technology keys to their solved bonus.
- * @property {Record<string, string>} solve_method - A map of technology keys to the method used to solve them.
- * @property {Record<string, string>} techColors - A map of technology keys to their associated colors.
- * @property {Record<string, string[]>} checkedModules - A map of technology keys to their currently checked module IDs.
- * @property {Record<string, TechTreeItem[]>} techGroups - A map of technology keys to their available tech groups.
- * @property {Record<string, string>} activeGroups - A map of technology keys to their currently active group type.
- * @property {(tech: string) => void} clearTechMaxBonus - Function to clear the max bonus for a technology.
- * @property {(tech: string, bonus: number) => void} setTechMaxBonus - Function to set the max bonus for a technology.
- * @property {(tech: string) => void} clearTechSolvedBonus - Function to clear the solved bonus for a technology.
- * @property {(tech: string, bonus: number) => void} setTechSolvedBonus - Function to set the solved bonus for a technology.
- * @property {(tech: string, method: string) => void} setTechSolveMethod - Function to set the solve method for a technology.
- * @property {(colors: Record<string, string>) => void} setTechColors - Function to set the tech colors.
- * @property {(tech: string) => string|undefined} getTechColor - Function to get the color for a technology.
- * @property {(tech: string, updater: (prev?: string[]) => string[]) => void} setCheckedModules - Function to set the checked modules for a technology.
- * @property {(tech: string) => void} clearCheckedModules - Function to clear the checked modules for a technology.
- * @property {() => void} clearAllCheckedModules - Function to reset all checked modules to their defaults.
- * @property {() => void} clearTechGroups - Function to clear all technology groups and selections.
- * @property {() => void} clearResult - Function to clear the result state (max and solved bonuses).
- * @property {(techGroups: Record<string, TechTreeItem[]>) => void} setTechGroups - Function to set the tech groups and initialize module selections.
- * @property {(tech: string, groupType: string) => void} setActiveGroup - Function to set the active group for a technology.
- * @property {(groups: Record<string, string>) => void} setActiveGroups - Function to batch set multiple active groups at once.
+ * State and actions for managing technology definitions, metadata, and solve results.
  */
 export interface TechState {
+	/** Mapping of technology keys to their theoretical maximum bonus. */
 	max_bonus: { [key: string]: number };
+	/** Mapping of technology keys to the actual bonus achieved in the last solve. */
 	solved_bonus: { [key: string]: number };
+	/** Mapping of technology keys to the solver method string used (e.g., 'SA'). */
 	solve_method: { [key: string]: string };
+	/** Global registry of colors assigned to each technology category. */
 	techColors: { [key: string]: string };
+	/** User-selected module IDs for each technology, used as input for the solver. */
 	checkedModules: { [key: string]: string[] };
+	/** List of available technology variants/groups (e.g., 'Standard' vs 'Photonix' for Pulse). */
 	techGroups: { [key: string]: TechTreeItem[] };
+	/** The currently active group identifier for each technology. */
 	activeGroups: { [key: string]: string };
+
+	/** Resets the maximum bonus value for a technology to zero. */
 	clearTechMaxBonus: (tech: string) => void;
+	/** Sets the maximum bonus value for a technology. */
 	setTechMaxBonus: (tech: string, bonus: number) => void;
+	/** Resets the solved bonus value for a technology to zero. */
 	clearTechSolvedBonus: (tech: string) => void;
+	/** Sets the solved bonus value for a technology. */
 	setTechSolvedBonus: (tech: string, bonus: number) => void;
+	/** Sets the identifier for the solver method used for a technology. */
 	setTechSolveMethod: (tech: string, method: string) => void;
+	/** Updates the global technology color registry. */
 	setTechColors: (colors: { [key: string]: string }) => void;
+	/**
+	 * Initializes the entire technology store from API metadata.
+	 *
+	 * Syncs initial module selections with the `ModuleSelectionStore`.
+	 *
+	 * @param {Record<string, string>} colors - Tech-to-color mapping.
+	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
+	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 */
 	initializeTechTree: (
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
 		activeGroups: { [key: string]: string }
 	) => void;
+	/** Returns the color assigned to a specific technology. */
 	getTechColor: (tech: string) => string | undefined;
+	/** Functional update for a technology's checked modules. */
 	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
+	/** Deselects all modules for a specific technology. */
 	clearCheckedModules: (tech: string) => void;
+	/** Resets all technologies to their default module selections. */
 	clearAllCheckedModules: () => void;
+	/** Purges all technology metadata and selections. */
 	clearTechGroups: () => void;
+	/** Purges all previous optimization results. */
 	clearResult: () => void;
+	/** Updates the available technology groups. */
 	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
+	/** Sets the active group variant for a technology. */
 	setActiveGroup: (tech: string, groupType: string) => void;
+	/** Batch updates the active group variants for multiple technologies. */
 	setActiveGroups: (groups: { [key: string]: string }) => void;
 }
 
 /**
- * Zustand store for managing the state of technologies.
+ * Zustand store for managing technology metadata and optimization results.
+ *
+ * This store acts as the central registry for what technologies are available,
+ * how they are colored in the UI, which modules the user has selected, and
+ * the results of the latest optimization runs.
+ *
+ * @returns {TechState} The tech store state and actions.
+ *
+ * @example
+ * const { max_bonus, setTechMaxBonus } = useTechStore();
  */
 export const useTechStore = create<TechState>((set, get) => ({
 	// Note the 'get' parameter

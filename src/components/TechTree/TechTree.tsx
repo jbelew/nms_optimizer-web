@@ -10,28 +10,28 @@ import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
 
 /**
- * @interface TechTreeProps
- * @property {(tech: string) => void} handleOptimize - Function to initiate an optimization for a given technology.
- * @property {boolean} solving - Indicates if the optimization process is currently running.
- * @property {number | undefined} gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
+ * Props for the `TechTree` and `TechTreeWithData` components.
  */
 interface TechTreeProps {
+	/** Function to trigger a solver run for a specific technology. **Must be asynchronous.** */
 	handleOptimize: (tech: string) => Promise<void>;
+	/** Whether an optimization solve is currently in progress. */
 	solving: boolean;
+	/** Total width of the grid table, used for responsive layout matching. */
 	gridTableTotalWidth: number | undefined;
-	techTree?: TechTreeType; // Optional techTree prop
+	/** Optional pre-fetched technology tree data. */
+	techTree?: TechTreeType;
 }
 
 /**
- * This component fetches the tech tree data and renders the complete layout.
- * It's designed to be wrapped in a Suspense boundary. When it suspends,
- * the entire component (including the RecommendedBuild button) is replaced
- * by the Suspense fallback, solving the stale UI issue.
+ * A data-aware component that renders the technology list and recommended builds.
  *
- * @param {object} props - The component props.
- * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
- * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
- * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
+ * This component handles the internal scroll area logic on large screens and
+ * responsive stack behavior on mobile. It uses `useFetchTechTreeSuspense` to
+ * retrieve data, ensuring it integrates with React Suspense.
+ *
+ * @param {TechTreeProps} props - Component properties.
+ * @returns {JSX.Element} The technology tree UI.
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
@@ -105,15 +105,16 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 TechTreeWithData.displayName = "TechTreeWithData";
 
 /**
- * TechTreeComponent is the main entry point for the Tech Tree feature.
- * It manages the overall layout, error boundaries, and suspense for data loading.
- * It displays a skeleton loader while the tech tree data is being fetched.
+ * Main entry point for the technology tree feature.
  *
- * @param {object} props - The component props.
- * @param {(tech: string) => Promise<void>} props.handleOptimize - Function to call when optimizing a tech.
- * @param {boolean} props.solving - Indicates if the optimizer is currently solving.
- * @param {number | undefined} props.gridTableTotalWidth - The total width of the grid table, used for layout adjustments on smaller screens.
- * @returns {JSX.Element} The rendered TechTree component.
+ * It manages the high-level layout and data fetching for the available technologies
+ * and their modules. Designed to be rendered within a `Suspense` boundary.
+ *
+ * @param {TechTreeProps} props - Component properties.
+ * @returns {JSX.Element} The rendered technology tree component.
+ *
+ * @example
+ * <TechTree handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={600} />
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {
 	return <TechTreeWithData {...props} />;

@@ -1,14 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * Options for the `useDebouncedValidation` hook.
+ */
 interface UseDebouncedValidationOptions {
+	/** Delay in milliseconds before the validation is executed. Defaults to `250`. */
 	debounceMs?: number;
 }
 
 /**
- * Custom hook for debounced validation
- * @param validator - Function that validates input and returns error message (or null if valid)
- * @param options - Configuration options
- * @returns Object with error state and change handler
+ * Custom hook for executing validation logic with a debounce delay.
+ *
+ * This is useful for validating user input (e.g., in a text field) without
+ * triggering validation on every keystroke.
+ *
+ * @param {function(string): string|null} validator - A function that takes the current value and returns an error string or `null` if valid. **Must be a pure function.**
+ * @param {UseDebouncedValidationOptions} [options={}] - Configuration for the debounce behavior.
+ * @returns {{ error: string|null, handleChange: function(string): void }} State containing the current error and a handler for input changes.
+ *
+ * @example
+ * const { error, handleChange } = useDebouncedValidation((val) => val.length < 3 ? "Too short" : null);
  */
 export const useDebouncedValidation = (
 	validator: (value: string) => string | null,

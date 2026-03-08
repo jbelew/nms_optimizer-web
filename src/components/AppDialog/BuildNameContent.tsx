@@ -10,19 +10,27 @@ import { generateBuildNameWithType } from "../../utils/buildNameGenerator";
 import { isValidFilename } from "../../utils/filenameValidation";
 
 /**
- * Props for the BuildNameContent component.
- * @typedef {object} BuildNameContentProps
- * @property {(buildName: string) => void} onConfirm - Callback when the user confirms the build name.
- * @property {() => void} onCancel - Callback when the user cancels the operation.
+ * Props for the `BuildNameContent` component.
  */
 interface BuildNameContentProps {
+	/** Callback function triggered when the user confirms the build name. **Receives the validated name.** */
 	onConfirm: (buildName: string) => void;
+	/** Callback function triggered when the user cancels the input process. */
 	onCancel: () => void;
 }
 
 /**
- * Component for the build name input dialog content.
- * Allows users to enter or generate a name for their build.
+ * A component providing the UI for entering and validating a build name.
+ *
+ * It features a text field with debounced validation against filename standards,
+ * a random name generator for NMS-themed build names, and keyboard handling
+ * for Enter and Escape keys.
+ *
+ * @param {BuildNameContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered build name input UI.
+ *
+ * @example
+ * <BuildNameContent onConfirm={(name) => console.log(name)} onCancel={() => {}} />
  */
 export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCancel }) => {
 	const { t } = useTranslation();
@@ -30,6 +38,12 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const [buildName, setBuildName] = useState(() => generateBuildNameWithType(selectedShipType));
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	/**
+	 * Validates the input string for empty or illegal characters.
+	 *
+	 * @param {string} value - The build name to validate.
+	 * @returns {string | null} Error message if invalid, otherwise `null`.
+	 */
 	const createValidator = (value: string): string | null => {
 		const trimmed = value.trim();
 
@@ -47,6 +61,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	const { error: validationError, handleChange: handleDebouncedValidation } =
 		useDebouncedValidation(createValidator);
 
+	/**
+	 * Generates a random themed name and updates the input state.
+	 */
 	const handleGenerateName = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
 		setBuildName(newName);
@@ -54,12 +71,20 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 		inputRef.current?.select();
 	};
 
+	/**
+	 * Updates local state and triggers validation on input change.
+	 *
+	 * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+	 */
 	const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
 		setBuildName(newValue);
 		handleDebouncedValidation(newValue);
 	};
 
+	/**
+	 * Validates and submits the current build name.
+	 */
 	const handleConfirm = () => {
 		const trimmedName = buildName.trim();
 		const error = createValidator(trimmedName);
@@ -69,6 +94,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 		}
 	};
 
+	/**
+	 * Resets state and notifies the parent of cancellation.
+	 */
 	const handleCancel = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
 		setBuildName(newName);
@@ -76,6 +104,11 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 		onCancel();
 	};
 
+	/**
+	 * Dispatches actions based on keyboard input.
+	 *
+	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 */
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			handleConfirm();

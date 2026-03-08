@@ -7,8 +7,25 @@ import {
 	TooltipStateContext,
 } from "./tooltip-utils";
 
-const WARM_THRESHOLD = 500; // ms to keep the "warm" state for instant re-opening
+/** Time in milliseconds to maintain a "warm" state for instant tooltip re-opening. */
+const WARM_THRESHOLD = 500;
 
+/**
+ * Provider component for the global custom tooltip system.
+ *
+ * It manages the shared state of the single active tooltip, including its content,
+ * screen position, and visibility logic (delays, "warm" transitions). Using a
+ * single provider prevents multiple tooltips from overlapping and optimizes performance.
+ *
+ * @param {object} props - Component properties.
+ * @param {React.ReactNode} props.children - The application tree to wrap.
+ * @returns {JSX.Element} The state and actions context providers.
+ *
+ * @example
+ * <TooltipProvider>
+ *   <MainApp />
+ * </TooltipProvider>
+ */
 export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [state, setState] = useState<TooltipState>({
 		label: "",
@@ -21,6 +38,15 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 	const lastCloseTimeRef = useRef<number>(0);
 	const isOpenRef = useRef(false);
 
+	/**
+	 * Requests to show the tooltip with the specified content and position.
+	 *
+	 * Handles delay logic and instant-open if moving between elements.
+	 *
+	 * @param {string} label - The text to display.
+	 * @param {DOMRect} rect - The bounding rectangle of the anchor element.
+	 * @param {number} [delayDuration=500] - Time in ms before showing.
+	 */
 	const show = useCallback((label: string, rect: DOMRect, delayDuration = 500) => {
 		if (timerRef.current) {
 			window.clearTimeout(timerRef.current);
@@ -45,6 +71,9 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 		}
 	}, []); // EMPTY dependency array - perfectly stable
 
+	/**
+	 * Hides the tooltip and records the close time for warmth logic.
+	 */
 	const hide = useCallback(() => {
 		if (timerRef.current) {
 			window.clearTimeout(timerRef.current);

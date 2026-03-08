@@ -4,20 +4,20 @@ import { useModuleSelectionStore } from "@/store/ModuleSelectionStore";
 import { useTechStore } from "@/store/TechStore";
 
 /**
- * Manages the state and logic for module selection within a technology tree row.
- * This includes grouping modules, handling checkbox states, and managing dependencies
- * between modules (e.g., Sigma -> Tau -> Theta).
+ * Custom hook for managing the state and selection logic of technology modules.
  *
- * @param tech - The unique identifier for the technology.
- * @param modules - The list of all modules available for the technology.
- * @returns An object containing the state and handlers for module management.
- * @property {string[]} currentCheckedModules - An array of IDs for the currently selected modules.
- * @property {object} groupedModules - Modules grouped by their type (core, bonus, upgrade, etc.).
- * @property {boolean} allModulesSelected - True if all non-core modules are selected.
- * @property {boolean} isIndeterminate - True for the "select all" checkbox's indeterminate state.
- * @property {(newValues: string[]) => void} handleValueChange - Handler for the checkbox group's value change.
- * @property {(checked: boolean | "indeterminate") => void} handleSelectAllChange - Handler for the "select all" checkbox.
- * @property {(moduleIds: string[]) => void} handleAllCheckboxesChange - Handler for setting all checkboxes to specific module IDs.
+ * It handles:
+ * 1. Syncing module selections with the global `TechStore` and persistent `ModuleSelectionStore`.
+ * 2. Grouping raw module lists into categorical buckets (Core, Upgrade, etc.).
+ * 3. Enforcing selection dependencies (e.g., removing 'Theta' should also remove 'Tau' and 'Sigma').
+ * 4. Managing "Select All" and indeterminate checkbox states.
+ *
+ * @param {string} tech - The unique technology identifier.
+ * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of modules available for the tech.
+ * @returns {object} State flags and event handlers for module selection UI.
+ *
+ * @example
+ * const { groupedModules, handleValueChange } = useTechModuleManagement("pulse", availableModules);
  */
 export const useTechModuleManagement = (
 	tech: string,
@@ -81,6 +81,11 @@ export const useTechModuleManagement = (
 
 	const groupedModules = groups;
 
+	/**
+	 * Toggles the selection status of a single module.
+	 *
+	 * @param {string} moduleId - The unique ID of the module.
+	 */
 	const handleCheckboxChange = (moduleId: string) => {
 		setCheckedModules(tech, (prevChecked = []) => {
 			const isChecked = prevChecked.includes(moduleId);
@@ -91,10 +96,20 @@ export const useTechModuleManagement = (
 		});
 	};
 
+	/**
+	 * Replaces the entire selection list for this technology.
+	 *
+	 * @param {string[]} moduleIds - The new array of selected module IDs.
+	 */
 	const handleAllCheckboxesChange = (moduleIds: string[]) => {
 		setCheckedModules(tech, () => moduleIds);
 	};
 
+	/**
+	 * Handles the "Select All" toggle interaction.
+	 *
+	 * @param {boolean | "indeterminate"} checked - The new checkbox state.
+	 */
 	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
 		if (checked) {
 			handleAllCheckboxesChange([...nonCoreModuleIds, ...coreModuleIds]);
@@ -103,6 +118,12 @@ export const useTechModuleManagement = (
 		}
 	};
 
+	/**
+	 * Processes a batch value change from the checkbox group.
+	 * Enforces tier-based de-selection logic (Theta > Tau > Sigma).
+	 *
+	 * @param {string[]} newValues - The new set of checked IDs.
+	 */
 	const handleValueChange = (newValues: string[]) => {
 		const oldValues = new Set(currentCheckedModules);
 		const newValuesSet = new Set(newValues);

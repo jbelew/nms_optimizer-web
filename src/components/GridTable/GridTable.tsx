@@ -11,22 +11,28 @@ import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 
 /**
- * @interface GridTableProps
- * @property {boolean} solving - Indicates if the optimization process is currently running.
- * @property {boolean} sharedGrid - Indicates if the grid is in a shared, read-only state.
+ * Props for the `GridTable` component.
  */
 interface GridTableProps {
+	/** Whether an optimization solve is currently active. */
 	solving: boolean;
+	/** Whether the grid is being viewed in read-only shared mode. */
 	sharedGrid: boolean;
 }
 
 /**
- * GridTable component displays the main technology grid.
- * It renders individual `GridCell` components and `GridControlButtons` for managing rows.
+ * A layout component that renders the interactive technology grid and its controls.
  *
- * @param {GridTableProps} props - The props for the GridTable component.
- * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the main grid table div.
- * @returns {JSX.Element} The rendered GridTable component.
+ * This component orchestrates the rendering of a 2D array of `GridCell` components,
+ * row-level controls for bulk activation, and a set of table-wide action buttons.
+ * It is wrapped in a `GridShake` component to provide visual feedback for invalid actions.
+ *
+ * @param {GridTableProps} props - Component properties.
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref for the main grid container.
+ * @returns {JSX.Element} The rendered grid table structure.
+ *
+ * @example
+ * <GridTable ref={gridRef} solving={false} sharedGrid={false} />
  */
 export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
 	({ solving, sharedGrid }, ref) => {

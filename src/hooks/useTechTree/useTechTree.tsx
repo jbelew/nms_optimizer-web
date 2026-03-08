@@ -7,27 +7,51 @@ import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { apiCall } from "../../utils/apiCall";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 
+/**
+ * Represents a specific technology module in No Man's Sky.
+ */
 export interface Module {
+	/** Whether the module is currently active. */
 	active: boolean;
+	/** Adjacency type identifier. */
 	adjacency: string;
+	/** Multiplier for adjacency bonuses. */
 	adjacency_bonus: number;
+	/** The base bonus value provided by this module. */
 	bonus: number;
+	/** Unique identifier for the module. */
 	id: string;
+	/** Filename or URL for the module's icon. */
 	image: string;
+	/** Display name of the module. */
 	label: string;
+	/** Whether this module can be placed in a supercharged slot. */
 	sc_eligible: boolean;
+	/** Whether the module is currently in a supercharged slot. */
 	supercharged: boolean;
+	/** The key of the technology category this module belongs to. */
 	tech: string;
+	/** The specific type classification of the module. */
 	type: string;
+	/** Numerical value associated with the module's primary stat. */
 	value: number;
+	/** Optional flag indicating if the module is selected in the UI. */
 	checked?: boolean;
 }
 
+/**
+ * Represents a technology category within the tech tree.
+ */
 export interface TechTreeItem {
+	/** Display label for the technology. */
 	label: string;
+	/** Unique key for the technology. */
 	key: string;
+	/** List of modules available for this technology. */
 	modules: Module[];
+	/** Optional icon for the technology. */
 	image: string | null;
+	/** Theme color assigned to the technology in the UI. */
 	color:
 		| "gray"
 		| "gold"
@@ -55,12 +79,19 @@ export interface TechTreeItem {
 		| "lime"
 		| "mint"
 		| "sky";
+	/** Total number of modules in this category. */
 	module_count: number;
+	/** Optional type classification (e.g., 'normal', 'weapon'). */
 	type?: string;
 }
 
+/**
+ * Defines a pre-configured layout of technologies and modules.
+ */
 export interface RecommendedBuild {
+	/** Display title for the build. */
 	title: string;
+	/** 2D array representing the grid layout of modules. */
 	layout: ({
 		tech?: string | null;
 		module?: string | null;
@@ -70,18 +101,41 @@ export interface RecommendedBuild {
 	} | null)[][];
 }
 
+/**
+ * Root structure for technology tree data fetched from the API.
+ */
 export interface TechTree {
+	/** Optional grid layout and constraints defined for the ship type. */
 	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
+	/** List of recommended builds for this ship type. */
 	recommended_builds?: RecommendedBuild[];
+	/** Dynamic categories containing lists of technologies. */
 	[key: string]: TechTreeItem[] | { grid: Module[][] } | RecommendedBuild[] | undefined;
 }
 
 const cache = new Map<string, Promise<TechTree>>();
 
+/**
+ * Clears the internal tech tree promise cache.
+ *
+ * @returns {void}
+ */
 export const clearTechTreeCache = () => {
 	cache.clear();
 };
 
+/**
+ * Fetches the technology tree for a specific ship type asynchronously.
+ *
+ * Uses internal caching to prevent redundant requests. Updates the
+ * `TechTreeLoadingStore` to reflect the network status.
+ *
+ * @param {string} [shipType="standard"] - The identifier for the ship type.
+ * @returns {Promise<TechTree>} A promise resolving to the `TechTree` data.
+ *
+ * @example
+ * const tree = await fetchTechTreeAsync("solar");
+ */
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
 
@@ -129,10 +183,22 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 	return cache.get(cacheKey)!;
 }
 
+/**
+ * Synchronous-looking wrapper for `fetchTechTreeAsync`.
+ *
+ * @param {string} [shipType="standard"] - The identifier for the ship type.
+ * @returns {Promise<TechTree>}
+ */
 export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
 	return fetchTechTreeAsync(shipType);
 }
 
+/**
+ * Extracts metadata (colors, groups) from a raw tech tree object.
+ *
+ * @param {TechTree} techTree - The tech tree to process.
+ * @returns {object} Extracted metadata including `colors`, `techGroups`, and `activeGroups`.
+ */
 function processTechTreeMetadata(techTree: TechTree) {
 	const colors: { [key: string]: string } = {};
 	const techGroups: { [key: string]: TechTreeItem[] } = {};
@@ -166,6 +232,18 @@ function processTechTreeMetadata(techTree: TechTree) {
 	return { colors, techGroups, activeGroups };
 }
 
+/**
+ * Custom hook for retrieving the technology tree within a Suspense boundary.
+ *
+ * Automatically initializes the `TechStore` and `GridStore` with metadata
+ * from the fetched tree upon successful retrieval.
+ *
+ * @param {string} [shipType="standard"] - The identifier for the ship type.
+ * @returns {TechTree} The loaded technology tree.
+ *
+ * @example
+ * const tree = useFetchTechTreeSuspense("freighter");
+ */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const data = use(fetchTechTree(shipType));
 

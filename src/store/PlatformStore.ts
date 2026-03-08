@@ -4,27 +4,46 @@ import { create } from "zustand";
 import { safeGetItem, safeSetItem } from "../utils/storage";
 
 /**
- * State and actions for the platform store.
- * @typedef {object} PlatformState
- * @property {string} selectedPlatform - The currently selected platform (e.g., 'standard', 'sentinel').
- * @property {(platform: string, validShipTypes: string[], updateUrl?: boolean, isKnownRoute?: boolean) => void} setSelectedPlatform - Function to set the selected platform and optionally update the URL.
- * @property {(validShipTypes: string[], isKnownRoute?: boolean) => void} initializePlatform - Function to initialize the platform state from URL or storage.
+ * State and actions for the ship type (platform) selection.
  */
 export interface PlatformState {
+	/** The currently selected ship type identifier (e.g., 'solar', 'freighter'). */
 	selectedPlatform: string;
+	/**
+	 * Sets the active ship type and synchronizes it with storage and URL.
+	 *
+	 * @param {string} platform - The new platform identifier.
+	 * @param {string[]} validShipTypes - Array of valid identifiers for validation. **Must not be empty.**
+	 * @param {boolean} [updateUrl=true] - Whether to push a new state to the browser history.
+	 * @param {boolean} [isKnownRoute=true] - Whether the current route supports platform synchronization.
+	 */
 	setSelectedPlatform: (
 		platform: string,
 		validShipTypes: string[],
 		updateUrl?: boolean,
 		isKnownRoute?: boolean
 	) => void;
+	/**
+	 * Restores the platform selection from URL parameters or `localStorage`.
+	 *
+	 * @param {string[]} validShipTypes - Array of valid ship type identifiers.
+	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
+	 */
 	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 }
 
 const LOCAL_STORAGE_KEY = "selectedPlatform";
 
 /**
- * Zustand store for managing the state of the selected platform.
+ * Zustand store for managing the active ship type context.
+ *
+ * This store ensures that the application's technology context (Starship,
+ * Multi-tool, etc.) is consistent across page reloads and can be shared via URLs.
+ *
+ * @returns {PlatformState} The platform store state and actions.
+ *
+ * @example
+ * const selectedPlatform = usePlatformStore((s) => s.selectedPlatform);
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value

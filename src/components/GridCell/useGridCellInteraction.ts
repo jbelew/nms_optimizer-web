@@ -17,24 +17,24 @@ let lastTapInfo = {
 const DOUBLE_TAP_THRESHOLD = 400; // ms
 
 /**
- * Custom hook for handling user interactions (clicks, touches, keyboard) with a grid cell.
- * It manages single tap, double tap, and keyboard interactions, and integrates with
- * the grid and shake stores to update cell states and trigger visual feedback.
+ * Custom hook for managing complex user interactions with an individual grid cell.
  *
- * @param {Cell} cell - The cell object representing the current grid cell.
- * @param {number} rowIndex - The row index of the cell.
- * @param {number} columnIndex - The column index of the cell.
- * @param {boolean} isSharedGrid - Indicates if the grid is in a shared (read-only) state.
- * @returns {{
- * isTouching: boolean;
- * handleClick: (event: React.MouseEvent) => void;
- * handleContextMenu: (event: React.MouseEvent) => void;
- * handleTouchStart: (event: React.TouchEvent) => void;
- * handleTouchMove: (event: React.TouchEvent) => void;
- * handleTouchEnd: (event: React.TouchEvent | React.MouseEvent) => void;
- * handleTouchCancel: () => void;
- * handleKeyDown: (event: React.KeyboardEvent) => void;
- * }} An object containing interaction handlers and the `isTouching` state.
+ * It handles mouse, touch, and keyboard events, including specialized logic for:
+ * 1. **Single Click/Tap**: Toggles the cell's supercharged state.
+ * 2. **Double Tap (Mobile)**: Toggles the supercharged state (mimicking desktop click).
+ * 3. **Ctrl/Cmd + Click**: Toggles the cell's active state.
+ * 4. **Keyboard (Space/Enter)**: Toggles the active state.
+ * 5. **Constraint Validation**: Checks against global limits (max 4 SC slots, row limits)
+ *    and provides sensory feedback (shaking) on violation.
+ *
+ * @param {Cell} cell - The current data model for the cell.
+ * @param {number} rowIndex - The row index of the cell. **Must be valid.**
+ * @param {number} columnIndex - The column index of the cell. **Must be valid.**
+ * @param {boolean} isSharedGrid - Flag for read-only mode.
+ * @returns {object} Interaction flags and event handlers for the cell component.
+ *
+ * @example
+ * const handlers = useGridCellInteraction(cell, 0, 5, false);
  */
 export const useGridCellInteraction = (
 	cell: Cell,
@@ -54,13 +54,15 @@ export const useGridCellInteraction = (
 	const isGestureRef = useRef(false);
 
 	/**
-	 * Triggers a visual shake animation on the grid.
-	 * Calls the `triggerShake` action from the ShakeStore directly to avoid subscription.
+	 * Triggers a visual shake animation on the grid for feedback.
 	 */
 	const triggerShake = () => {
 		useShakeStore.getState().triggerShake();
 	};
 
+	/**
+	 * Internal logic for handling timed taps (single vs double).
+	 */
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
@@ -126,7 +128,9 @@ export const useGridCellInteraction = (
 	};
 
 	/**
-	 * Handles the touch start event for a grid cell.
+	 * Records the start of a touch interaction.
+	 *
+	 * @param {React.TouchEvent} event - The touch start event.
 	 */
 	const handleTouchStart = (event: React.TouchEvent) => {
 		setIsTouching(true);
@@ -144,7 +148,9 @@ export const useGridCellInteraction = (
 	};
 
 	/**
-	 * Handles touch move to detect scrolling/gestures
+	 * Tracks movement to distinguish between a tap and a scroll gesture.
+	 *
+	 * @param {React.TouchEvent} event - The touch move event.
 	 */
 	const handleTouchMove = (event: React.TouchEvent) => {
 		if (isGestureRef.current || !gestureStartRef.current) return;
@@ -161,8 +167,9 @@ export const useGridCellInteraction = (
 	};
 
 	/**
-	 * Handles the touch end event for a grid cell.
-	 * Calls preventDefault to stop the browser from generating a click event, eliminating the 300ms delay.
+	 * Finalizes a touch interaction and triggers tap logic if no movement was detected.
+	 *
+	 * @param {React.TouchEvent | React.MouseEvent} event - The end event.
 	 */
 	const handleTouchEnd = (event: React.TouchEvent | React.MouseEvent) => {
 		setIsTouching(false);
@@ -193,10 +200,18 @@ export const useGridCellInteraction = (
 		handleTouchLogic();
 	};
 
+	/**
+	 * Resets the touch state when an interaction is canceled by the system.
+	 */
 	const handleTouchCancel = () => {
 		setIsTouching(false);
 	};
 
+	/**
+	 * Handles primary and modified mouse clicks.
+	 *
+	 * @param {React.MouseEvent} event - The click event.
+	 */
 	const handleClick = (event: React.MouseEvent) => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
@@ -269,10 +284,20 @@ export const useGridCellInteraction = (
 		}
 	};
 
+	/**
+	 * Prevents the context menu from appearing during interactions.
+	 *
+	 * @param {React.MouseEvent} event - The context menu event.
+	 */
 	const handleContextMenu = (event: React.MouseEvent) => {
 		event.preventDefault();
 	};
 
+	/**
+	 * Manages keyboard-driven interactions for accessibility.
+	 *
+	 * @param {React.KeyboardEvent} event - The keyboard event.
+	 */
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === " " || event.key === "Enter") {
 			event.preventDefault();

@@ -11,7 +11,9 @@ import { safeGetItem, safeSetItem } from "./storage";
 
 /**
  * Key-value pairs for event parameters.
- * @typedef {Object.<string, string | number | boolean | undefined>} AnalyticsEventParams
+ *
+ * Each key is a string representing the parameter name, and the value can be
+ * a string, number, boolean, or undefined.
  */
 export interface AnalyticsEventParams {
 	[key: string]: string | number | boolean | undefined;
@@ -19,29 +21,33 @@ export interface AnalyticsEventParams {
 
 /**
  * Payload sent to the backend for server-side analytics.
- * @typedef {object} AnalyticsEventPayload
- * @property {string} clientId - Unique identifier for the client session.
- * @property {string} eventName - The name of the event to track.
- * @property {AnalyticsEventParams} [params] - Optional event-specific parameters.
- * @property {string} [userId] - Optional authenticated user identifier.
+ *
+ * Contains all necessary metadata to track an event on the server side
+ * using GA4 Measurement Protocol.
  */
 export interface AnalyticsEventPayload {
+	/** Unique identifier for the client session. */
 	clientId: string;
+	/** The name of the event to track. */
 	eventName: string;
+	/** Optional event-specific parameters. */
 	params?: AnalyticsEventParams;
+	/** Optional authenticated user identifier. */
 	userId?: string;
 }
 
 let clientId: string;
 
 /**
- * Attempts to retrieve the Client ID from the Google Analytics cookie (_ga).
+ * Attempts to retrieve the Client ID from the Google Analytics cookie (`_ga`).
+ *
  * This ensures consistency between client-side (ReactGA) and server-side fallback tracking.
+ * Cookie format is expected to be `GA1.1.<clientId>.<timestamp>` or `GA1.2.<clientId>.<timestamp>`.
  *
- * Cookie format: GA1.1.<clientId>.<timestamp> or GA1.2.<clientId>.<timestamp>
- * We need to extract: <clientId>.<timestamp>
+ * @returns {string | null} The extracted Client ID or `null` if the cookie is not found or invalid.
  *
- * @returns {string | null} The extracted Client ID or null if not found.
+ * @example
+ * const gaId = getGaClientIdFromCookie();
  */
 const getGaClientIdFromCookie = (): string | null => {
 	if (typeof document === "undefined") return null;
@@ -53,9 +59,15 @@ const getGaClientIdFromCookie = (): string | null => {
 
 /**
  * Initialize the analytics client with a unique client ID.
- * Stores the client ID in sessionStorage for persistence across page loads.
  *
- * @returns {string} The client ID
+ * Prioritizes the ID from the Google Analytics cookie for cross-track consistency.
+ * If not found, it falls back to `localStorage` or generates a new one.
+ * The ID is persisted in `localStorage`.
+ *
+ * @returns {string} The initialized client ID.
+ *
+ * @example
+ * const id = initializeAnalyticsClient();
  */
 export const initializeAnalyticsClient = (): string => {
 	// 1. Try to get ID from GA cookie (source of truth)
@@ -80,10 +92,12 @@ export const initializeAnalyticsClient = (): string => {
 };
 
 /**
- * Get the current client ID.
- * Initializes if not already done.
+ * Gets the current client ID, initializing it if necessary.
  *
- * @returns {string} The client ID
+ * @returns {string} The active client ID.
+ *
+ * @example
+ * const id = getClientId();
  */
 export const getClientId = (): string => {
 	if (!clientId) {
@@ -94,21 +108,18 @@ export const getClientId = (): string => {
 };
 
 /**
- * Send an analytics event to the backend.
- * Events are relayed to GA4 via the Measurement Protocol.
+ * Sends an analytics event to the backend for server-side relay.
  *
- * @param {string} eventName - The event name (e.g., "optimization_complete")
- * @param {AnalyticsEventParams} [params={}] - Event parameters
- * @param {string} [userId] - Optional user ID
- * @returns {Promise<boolean>} True if sent successfully
+ * Uses `navigator.sendBeacon` if available for non-blocking reliability on page unload.
+ * Falls back to a standard `fetch` with `keepalive: true` if `sendBeacon` fails or is unavailable.
+ *
+ * @param {string} eventName - The name of the event (e.g., "optimization_complete"). **Must not be empty.**
+ * @param {AnalyticsEventParams} [params={}] - Optional event parameters.
+ * @param {string} [userId] - Optional authenticated user identifier.
+ * @returns {void}
  *
  * @example
- * await sendEvent("optimization_complete", {
- *   category: "optimization",
- *   action: "complete",
- *   solve_method: "pattern_matching",
- *   max_bonus: 45,
- * });
+ * sendEvent("optimization_complete", { category: "ui", solve_method: "sa" });
  */
 export const sendEvent = (
 	eventName: string,

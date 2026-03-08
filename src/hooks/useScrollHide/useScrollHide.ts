@@ -1,15 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * Return type for the `useScrollHide` hook.
+ */
 type UseScrollHideReturn = {
+	/** Whether the element should currently be visible. */
 	isVisible: boolean;
+	/** Ref to attach to the element being controlled. */
 	toolbarRef: React.RefObject<HTMLElement | null>;
+	/** Function to programmatically force the element to be visible. */
 	forceShow: () => void;
 };
 
 /**
- * Hook to hide/show an element based on scroll direction.
- * Shows when scrolling up, hides when scrolling down.
- * @param threshold - Distance scrolled before hiding (default: 80px)
+ * Custom hook to manage the visibility of an element based on scroll direction.
+ *
+ * Typically used for toolbars or headers, it hides the element when scrolling down
+ * and reveals it when scrolling up. It includes hysteresis to prevent flickering
+ * and a "force show" mechanism for programmatic control.
+ *
+ * @param {number} [threshold=10] - The distance from the top of the page (in pixels) where the element is always visible.
+ * @param {number} [hysteresis=20] - The minimum distance (in pixels) that must be scrolled in a new direction before visibility changes.
+ * @returns {UseScrollHideReturn} State and functions for visibility control.
+ *
+ * @example
+ * const { isVisible, toolbarRef } = useScrollHide(10, 30);
  */
 export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideReturn => {
 	const [isVisible, setIsVisible] = useState(true);
@@ -20,6 +35,9 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	const isForcedRef = useRef(false);
 	const scrollStopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+	/**
+	 * Manually triggers the visibility of the element.
+	 */
 	const forceShow = () => {
 		setIsVisible(true);
 		isForcedRef.current = true;

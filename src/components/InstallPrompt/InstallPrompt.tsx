@@ -4,13 +4,23 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "../../hooks/useToast/useToast";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 
+/** LocalStorage key for tracking if the user has already dismissed the prompt. */
 const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";
+/** LocalStorage key for tracking if the user has visited the app before. */
 const USER_VISIT_KEY = "userVisited";
 
 /**
- * Component that triggers an installation prompt for mobile devices.
- * Shows a toast with instructions if the app is not installed and has been visited before.
- * @returns {null} This component doesn't render any visible output.
+ * A non-rendering component that manages the PWA installation prompt logic.
+ *
+ * It uses a heuristic to determine if the user is on a mobile device and hasn't
+ * installed the app yet. To avoid annoying new users, it only shows the
+ * prompt starting from the second visit. It uses the `Toast` system to
+ * display installation instructions (specifically tailored for iOS).
+ *
+ * @returns {null} This component does not render any visual elements.
+ *
+ * @example
+ * <InstallPrompt />
  */
 export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();

@@ -6,7 +6,14 @@ import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownConten
 import DynamicRadixIcon from "./DynamicRadixIcon";
 import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
 
-// YouTube embed component
+/**
+ * Component for embedding YouTube videos within markdown content.
+ *
+ * @param {object} props - Component properties.
+ * @param {string} props.videoId - The unique identifier of the YouTube video.
+ * @param {string} [props.title] - Accessible title for the iframe.
+ * @returns {JSX.Element} The rendered iframe.
+ */
 const YouTubeEmbed: React.FC<{ videoId: string; title?: string }> = ({ videoId, title }) => (
 	<Box asChild mb="2">
 		<iframe
@@ -22,14 +29,34 @@ const YouTubeEmbed: React.FC<{ videoId: string; title?: string }> = ({ videoId, 
 	</Box>
 );
 
+/**
+ * Props for the `MarkdownContentRenderer` component.
+ */
 interface MarkdownContentRendererProps {
+	/** The identifier of the bundled markdown file to render. **Must exist in the virtual bundle.** */
 	markdownFileName: string;
+	/** Optional HTML ID of a section to scroll to once content is loaded. */
 	targetSectionId?: string;
 }
 
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
 const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
 
+/**
+ * A robust component for rendering bundled markdown content with integrated Radix UI styling.
+ *
+ * It supports:
+ * - Hybrid rendering: Prioritizes SSR/SSG pre-rendered content but can fall back to client-side parsing.
+ * - Custom component mapping: Maps standard markdown elements (h2, p, a, etc.) to themed Radix UI components.
+ * - Custom shortcodes: Supports `[youtube:id]` for video embeds and `<radix-icon />` for dynamic icons.
+ * - Automated scrolling: Handles deep-linking to specific headings via `targetSectionId`.
+ *
+ * @param {MarkdownContentRendererProps} props - Component properties.
+ * @returns {JSX.Element} The rendered article containing the markdown.
+ *
+ * @example
+ * <MarkdownContentRenderer markdownFileName="about" targetSectionId="section-2" />
+ */
 export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({
 	markdownFileName,
 	targetSectionId,

@@ -5,38 +5,39 @@ import { usePlatformStore } from "../../store/PlatformStore";
 import { apiCall } from "../../utils/apiCall";
 
 /**
- * @interface ShipTypeDetail
- * @property {string} label - The display label for the ship type.
- * @property {string} type - The category of the ship type.
+ * Details of a specific ship type.
  */
 export interface ShipTypeDetail {
+	/** The display label for the ship type. */
 	label: string;
+	/** The category identifier for the ship type. */
 	type: string;
 }
 
 /**
- * @interface ShipTypes
- * @property {ShipTypeDetail} [key] - A map of ship type keys to their details.
+ * A dictionary of ship types, where each key is a ship type identifier.
  */
 export interface ShipTypes {
 	[key: string]: ShipTypeDetail;
 }
 
 /**
- * @typedef {object} Resource<T>
- * @property {() => T} read - A function that returns the resource's data or throws a promise if it's not ready.
- * @template T
+ * A generic resource object compatible with React Suspense.
  */
 export type Resource<T> = {
+	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
 	read: () => T;
 };
 
 /**
- * Creates a resource object that can be used with React Suspense.
+ * Creates a Suspense-compatible resource object from a promise.
  *
- * @template T
- * @param {Promise<T>} promise - The promise to wrap in a resource.
- * @returns {Resource<T>} The resource object.
+ * @template T - The type of data being loaded.
+ * @param {Promise<T>} promise - The asynchronous operation to wrap. **Must eventually resolve.**
+ * @returns {Resource<T>} A resource object with a `read` method.
+ *
+ * @example
+ * const userResource = createResource(fetchUser(id));
  */
 const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 	let status: "pending" | "success" | "error" = "pending";
@@ -70,16 +71,25 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 const cache = new Map<string, Resource<ShipTypes>>();
 
 /**
- * Clears the ship types cache.
+ * Clears the internal ship types resource cache.
+ *
+ * @returns {void}
  */
 export const clearShipTypesCache = () => {
 	cache.clear();
 };
 
 /**
- * Fetches the ship types from the API.
+ * Initiates a fetch for all available ship types from the API.
  *
- * @returns {Resource<ShipTypes>} A resource object for use with Suspense.
+ * This function caches the resulting resource to ensure multiple calls
+ * do not trigger redundant network requests. It also updates the
+ * `ShipTypesStore` and `PlatformStore` upon success.
+ *
+ * @returns {Resource<ShipTypes>} A Suspense resource containing ship type data.
+ *
+ * @example
+ * const resource = fetchShipTypes();
  */
 export function fetchShipTypes(): Resource<ShipTypes> {
 	const cacheKey = "shipTypes";
@@ -118,26 +128,29 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 }
 
 /**
- * Custom hook to fetch ship types, for use with React Suspense.
+ * Custom hook for retrieving ship types within a Suspense boundary.
  *
- * @returns {ShipTypes} The ship types data.
+ * @returns {ShipTypes} The loaded ship types data.
+ *
+ * @example
+ * const shipTypes = useFetchShipTypesSuspense();
  */
 export function useFetchShipTypesSuspense(): ShipTypes {
 	return fetchShipTypes().read();
 }
 
 /**
- * @interface ShipTypesState
- * @property {ShipTypes|null} shipTypes - The available ship types.
- * @property {(shipTypes: ShipTypes) => void} setShipTypes - Function to set the ship types.
+ * State and actions for the ship types store.
  */
 export interface ShipTypesState {
+	/** The dictionary of available ship types. */
 	shipTypes: ShipTypes | null;
+	/** Updates the ship types in the store. */
 	setShipTypes: (shipTypes: ShipTypes) => void;
 }
 
 /**
- * Zustand store for managing the state of ship types.
+ * Zustand store for managing the global state of available ship types.
  */
 export const useShipTypesStore = create<ShipTypesState>((set) => {
 	return {

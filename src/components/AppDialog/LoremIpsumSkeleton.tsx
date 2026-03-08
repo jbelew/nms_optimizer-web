@@ -2,9 +2,16 @@ import React from "react";
 import { Skeleton, Text } from "@radix-ui/themes";
 
 /**
- * A skeleton component that displays lorem ipsum text.
+ * A decorative skeleton component that displays shimmering Lorem Ipsum text.
  *
- * @returns {React.ReactElement} The rendered skeleton component.
+ * This is used as a generic loading state for dialogs and content areas that
+ * primarily contain blocks of text (like the "About" or "Instructions" pages).
+ * It uses the Radix UI `Skeleton` component for a consistent look and feel.
+ *
+ * @returns {JSX.Element} The rendered text skeleton.
+ *
+ * @example
+ * <LoremIpsumSkeleton />
  */
 const LoremIpsumSkeleton: React.FC = () => {
 	return (
@@ -25,7 +32,7 @@ const LoremIpsumSkeleton: React.FC = () => {
 					Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate
 					eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac,
 					enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
-					viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam
+					viverra nulla ut metus varius laoreet. Qwisque rutrum. Aenean imperdiet. Etiam
 					ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
 					Etiam rhoncus.
 				</Skeleton>

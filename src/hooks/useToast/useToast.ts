@@ -7,8 +7,17 @@ export { ToastProvider } from "../../context/ToastContext";
 export type { ToastConfig } from "../../context/createToastContext";
 
 /**
- * Hook to use toast notifications from any component.
- * Must be used within a ToastProvider.
+ * Custom hook for accessing the application's toast notification system.
+ *
+ * Provides functions to show success, error, or informational toasts.
+ * **Must be used within a `ToastProvider`.**
+ *
+ * @returns {ToastContextValue} The toast context containing notification handlers.
+ * @throws {Error} If called outside of a `ToastProvider`.
+ *
+ * @example
+ * const { showSuccess } = useToast();
+ * showSuccess("Success!", "Your build has been saved.");
  */
 export const useToast = () => {
 	const context = useContext(ToastContext);

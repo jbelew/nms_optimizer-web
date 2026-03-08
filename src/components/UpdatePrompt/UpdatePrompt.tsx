@@ -6,12 +6,31 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import AppDialog from "../AppDialog/AppDialog";
 
+/**
+ * Props for the `UpdatePrompt` component.
+ */
 interface UpdatePromptProps {
+	/** Whether the update notification dialog is visible. */
 	isOpen: boolean;
+	/** Callback function to trigger the application reload/update. */
 	onRefresh: () => void;
+	/** Callback function to dismiss the update prompt without updating. */
 	onDismiss: () => void;
 }
 
+/**
+ * A modal dialog that notifies the user when a new application version is available.
+ *
+ * It provides a clear call-to-action to refresh the page and activate the new
+ * service worker. On desktop viewports, it automatically focuses the "Refresh Now"
+ * button for convenience.
+ *
+ * @param {UpdatePromptProps} props - Component properties.
+ * @returns {JSX.Element} The rendered update prompt modal.
+ *
+ * @example
+ * <UpdatePrompt isOpen={true} onRefresh={doUpdate} onDismiss={hideFn} />
+ */
 const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) => {
 	const { t } = useTranslation();
 	const isDesktop = useBreakpoint("1024px");

@@ -4,18 +4,29 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
+/**
+ * Props for the `OptimizationAlertContent` component.
+ */
 interface OptimizationAlertContentProps {
+	/** The display name of the technology that could not be optimized. **Must not be empty.** */
 	technologyName: string;
+	/** Callback function triggered when the user cancels the alert. */
 	onClose: () => void;
+	/** Asynchronous callback to initiate a forced optimization solve. */
 	onForceOptimize: () => Promise<void>;
 }
 
 /**
- * OptimizationAlertContent component displays a warning about insufficient space for optimization
- * and provides options to cancel or force optimize.
+ * A component that renders the alert message when pattern matching fails to find a fit.
  *
- * @param {OptimizationAlertContentProps} props - The props for the OptimizationAlertContent component.
- * @returns {JSX.Element} The rendered OptimizationAlertContent component.
+ * It explains to the user that the layout is too constrained for the "Pattern" solver
+ * and offers an alternative "Forced" solve using advanced search algorithms.
+ *
+ * @param {OptimizationAlertContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered alert content.
+ *
+ * @example
+ * <OptimizationAlertContent technologyName="Pulse Engine" onClose={closeFn} onForceOptimize={forceFn} />
  */
 export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 	technologyName,
@@ -25,8 +36,9 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 	const { t } = useTranslation();
 
 	/**
-	 * Handles the click event for the force optimize button.
-	 * Calls the `onForceOptimize` prop.
+	 * Executes the forced optimization callback.
+	 *
+	 * @returns {Promise<void>}
 	 */
 	const handleForceOptimizeClick = async () => {
 		await onForceOptimize();

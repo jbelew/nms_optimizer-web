@@ -8,28 +8,43 @@ import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
 import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { ToastRenderer } from "../Toast/ToastRenderer";
 
+/**
+ * Props for the `MainAppUtilities` component.
+ */
 interface MainAppUtilitiesProps {
-	// OptimizationAlertDialog props
+	/** Identifier of the technology that failed pattern matching. `null` if no active warning. */
 	patternNoFitTech: string | null;
+	/** Callback to clear the optimization failure alert. */
 	clearPatternNoFitTech: () => void;
+	/** Asynchronous callback to re-trigger a solve for the failed technology. */
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 
-	// BuildNameDialog props
+	/** Whether the build name entry modal is visible. */
 	isSaveBuildDialogOpen: boolean;
+	/** Callback function to save a build with the provided name. */
 	handleBuildNameConfirm: (name: string) => void;
+	/** Callback to dismiss the build naming modal. */
 	handleBuildNameCancel: () => void;
 
-	// Hidden file input props
+	/** Ref to the hidden native file input used for build loading. */
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
+	/** Event handler for the system file picker's change event. */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 /**
- * MainAppUtilities component aggregates global utility components and dialogs.
- * This keeps the main application orchestrator cleaner.
+ * A container component for non-visual and global utility components.
  *
- * @param {MainAppUtilitiesProps} props - The props for the component.
- * @returns {JSX.Element} The rendered global utilities.
+ * This component collects global UI elements like toast notifications,
+ * error renderers, installation prompts, and build-management modals into
+ * a single mount point. This helps keep the `MainAppContent` component
+ * focused on layout and primary interaction.
+ *
+ * @param {MainAppUtilitiesProps} props - Component properties.
+ * @returns {JSX.Element} The collection of global utility components.
+ *
+ * @example
+ * <MainAppUtilities {...logicSubProps} />
  */
 export const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 	patternNoFitTech,

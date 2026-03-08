@@ -1,17 +1,18 @@
 /**
- * Regex for validating filenames
+ * Regex for validating filenames across major platforms (Windows, macOS, Linux).
+ *
  * Validates:
- * - Length between 1 and 255 characters
- * - No reserved Windows filenames (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
- * - No invalid characters: < > : " / \ | ? * and control characters
- * - No trailing spaces or periods
+ * - Length between 1 and 255 characters.
+ * - No reserved Windows filenames (CON, PRN, AUX, NUL, COM1-9, LPT1-9).
+ * - No invalid characters: `< > : " / \ | ? *` and control characters.
+ * - No trailing spaces or periods.
  */
 
 const CONTROL_CHARS = "\x00-\x1F";
 
 /**
- * Regular expression for validating filenames across major platforms (Windows, macOS, Linux).
- * Validates length (1-255), reserved names, and forbidden characters.
+ * Regular expression for validating filenames.
+ * **Length must be between 1 and 255 characters.**
  */
 export const FILENAME_REGEX = new RegExp(
 	`^(?=.{1,255}$)(?!^(CON|PRn|AUX|NUL|COM[1-9]|LPT[1-9])$)[^<>:"/\\\\|?*${CONTROL_CHARS}]+(?<![ .])$`,
@@ -19,9 +20,13 @@ export const FILENAME_REGEX = new RegExp(
 );
 
 /**
- * Validates if a filename is valid according to cross-platform standards
- * @param filename - The filename to validate
- * @returns true if valid, false otherwise
+ * Validates if a string is a valid filename according to cross-platform standards.
+ *
+ * @param {string} filename - The filename to validate. **Must not be empty.**
+ * @returns {boolean} `true` if the filename is valid, otherwise `false`.
+ *
+ * @example
+ * const isValid = isValidFilename("my_build.json");
  */
 export const isValidFilename = (filename: string): boolean => {
 	const trimmed = filename.trim();
@@ -30,10 +35,16 @@ export const isValidFilename = (filename: string): boolean => {
 };
 
 /**
- * Sanitizes a filename to make it safe for file systems
- * Removes invalid characters while preserving spaces and general readability
- * @param filename - The filename to sanitize
- * @returns A sanitized filename safe for use in file systems
+ * Sanitizes a string to make it safe for use as a filename on most file systems.
+ *
+ * Removes invalid characters, strips trailing spaces/periods, and enforces
+ * length limits. If the result is empty or a reserved name, it defaults to "build".
+ *
+ * @param {string} filename - The raw filename string to sanitize.
+ * @returns {string} A sanitized, file-system safe filename. **Length is capped at 255 characters.**
+ *
+ * @example
+ * const safeName = sanitizeFilename("Build: #1? (Draft)"); // Returns "Build #1 (Draft)"
  */
 export const sanitizeFilename = (filename: string): string => {
 	// Remove invalid characters

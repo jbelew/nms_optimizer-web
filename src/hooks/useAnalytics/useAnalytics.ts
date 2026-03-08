@@ -1,15 +1,16 @@
 import { sendEvent } from "../../utils/analytics";
 
 /**
- * Custom hook for handling Google Analytics event tracking.
+ * Custom hook for accessing Google Analytics event tracking.
  *
- * This hook provides a convenient way to send GA4 events from any component
- * by returning the globally configured `sendEvent` function.
+ * Provides a React-friendly interface to the global `sendEvent` function,
+ * ensuring consistent event tracking across the application.
  *
- * @returns {{sendEvent: typeof sendEvent}} - Object containing the sendEvent function.
+ * @returns {{ sendEvent: typeof sendEvent }} An object containing the `sendEvent` function.
+ *
  * @example
  * const { sendEvent } = useAnalytics();
- * await sendEvent({ category: 'ui', action: 'button_clicked', label: 'submit' });
+ * sendEvent({ category: "ui", action: "button_click", label: "start_solve" });
  */
 export const useAnalytics = () => {
 	return { sendEvent };

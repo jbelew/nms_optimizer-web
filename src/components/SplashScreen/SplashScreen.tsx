@@ -4,26 +4,39 @@ import type { CSSProperties } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 /**
- * Handle to interact with the SplashScreen component.
- * @typedef {object} SplashScreenHandle
- * @property {() => void} hide - Method to programmatically hide the splash screen.
+ * Handle object exposed via ref to interact with the `SplashScreen`.
  */
 export interface SplashScreenHandle {
+	/** Initiates the hide animation, respecting the `minDurationMs` constraint. */
 	hide: () => void;
 }
 
+/**
+ * Props for the `SplashScreen` component.
+ */
 interface SplashScreenProps {
+	/** The minimum time in milliseconds that the splash screen must remain visible. Defaults to `0`. */
 	minDurationMs?: number;
-	onHidden?: () => void; // Callback when fully hidden and removed
+	/** Callback function triggered once the splash screen is completely removed from the DOM. */
+	onHidden?: () => void;
 }
 
 /**
- * SplashScreen component displays a loading screen with an animation.
- * It can be programmatically hidden after a minimum duration.
+ * A highly performant, animation-capable splash screen component.
  *
- * @param {SplashScreenProps} props - The props for the SplashScreen component.
- * @param {React.Ref<SplashScreenHandle>} ref - Ref to expose `hide` method.
- * @returns {JSX.Element | null} The rendered SplashScreen component, or null if hidden.
+ * It remains visible until programmatically hidden via its `hide` method (exposed
+ * through `useImperativeHandle`). It supports a minimum visibility duration to
+ * prevent "flickering" during rapid loads and can be bypassed using the
+ * `?SplashScreen=false` URL parameter for debugging or automated testing.
+ *
+ * @param {SplashScreenProps} props - Component properties.
+ * @param {React.Ref<SplashScreenHandle>} ref - Ref to control the splash screen's lifecycle.
+ * @returns {JSX.Element | null} The rendered splash screen, or `null` if hidden.
+ *
+ * @example
+ * const splashRef = useRef<SplashScreenHandle>(null);
+ * <SplashScreen ref={splashRef} minDurationMs={1500} />
+ * // Later: splashRef.current?.hide();
  */
 const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 	({ minDurationMs = 0, onHidden }, ref) => {

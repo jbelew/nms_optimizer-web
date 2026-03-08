@@ -6,7 +6,7 @@ import {
 import { sanitizeFilename } from "./filenameValidation";
 
 /**
- * Lookup table for user-friendly ship type names
+ * Mapping of internal ship type identifiers to user-friendly display names.
  */
 const SHIP_TYPE_NAMES: Record<string, string> = {
 	standard: "Starship",
@@ -29,22 +29,29 @@ const SHIP_TYPE_NAMES: Record<string, string> = {
 };
 
 /**
- * Gets the user-friendly name for a ship type
- * @param {string} shipType - The ship type identifier
- * @returns {string} The user-friendly name, or the original shipType if not found
+ * Returns a user-friendly display name for a given ship type identifier.
+ *
+ * @param {string} shipType - The internal ship type identifier (e.g., 'solar'). **Must not be null.**
+ * @returns {string} The localized display name, or the input `shipType` if no mapping exists.
+ *
+ * @example
+ * const name = getShipTypeName("living"); // Returns "Living"
  */
 export const getShipTypeName = (shipType: string): string => {
 	return SHIP_TYPE_NAMES[shipType.toLowerCase()] || shipType;
 };
 
 /**
- * Generates a random build name based on the ship type.
- * Format: ShipType - Prefix Suffix
- * Creates NMS-themed names like "Corvette - Crusade of the Starfall"
- * Returns a sanitized filename-safe version.
+ * Generates a random, NMS-themed build name prefixed with the ship type.
  *
- * @param {string} shipType - The type of ship (e.g., "freighter", "standard").
- * @returns {string} A sanitized build name combining ship type with NMS-themed prefix and suffix.
+ * The generated name follows the pattern: `{ShipType} - {Prefix} {Suffix}`.
+ * The output is automatically sanitized to be safe for use as a filename.
+ *
+ * @param {string} shipType - The ship type identifier used as a prefix.
+ * @returns {string} A sanitized, randomly generated build name.
+ *
+ * @example
+ * const buildName = generateBuildNameWithType("freighter"); // e.g., "Freighter - Echo of the Void"
  */
 export const generateBuildNameWithType = (shipType: string): string => {
 	// Randomly choose between simple and compound prefix (50/50)

@@ -1,13 +1,18 @@
 /**
- * Safe wrapper for localStorage access to prevent SecurityError exceptions in browsers
- * with strict privacy settings (like Safari with "Block all cookies" or ITP).
+ * Safe wrapper for `localStorage` access to prevent `SecurityError` exceptions.
+ *
+ * These wrappers catch errors in browsers with strict privacy settings (like Safari
+ * with "Block all cookies" enabled) or when storage is full.
  */
 
 /**
- * Safely gets an item from localStorage.
+ * Safely retrieves an item from `localStorage`.
  *
- * @param key - The key to retrieve.
- * @returns The stored string value, or null if not found or access is blocked.
+ * @param {string} key - The key to retrieve. **Must not be empty.**
+ * @returns {string | null} The stored string value, or `null` if not found or access is blocked.
+ *
+ * @example
+ * const theme = safeGetItem("app_theme");
  */
 export const safeGetItem = (key: string): string | null => {
 	try {
@@ -22,11 +27,14 @@ export const safeGetItem = (key: string): string | null => {
 };
 
 /**
- * Safely sets an item in localStorage.
+ * Safely stores an item in `localStorage`.
  *
- * @param key - The key to set.
- * @param value - The string value to store.
- * @returns True if successful, false if blocked or storage is full.
+ * @param {string} key - The key to set. **Must not be empty.**
+ * @param {string} value - The string value to store.
+ * @returns {boolean} `true` if the item was successfully saved, otherwise `false`.
+ *
+ * @example
+ * const success = safeSetItem("user_id", "12345");
  */
 export const safeSetItem = (key: string, value: string): boolean => {
 	try {
@@ -43,10 +51,13 @@ export const safeSetItem = (key: string, value: string): boolean => {
 };
 
 /**
- * Safely removes an item from localStorage.
+ * Safely removes an item from `localStorage`.
  *
- * @param key - The key to remove.
- * @returns True if successful, false if blocked.
+ * @param {string} key - The key to remove. **Must not be empty.**
+ * @returns {boolean} `true` if the item was successfully removed, otherwise `false`.
+ *
+ * @example
+ * safeRemoveItem("temp_session");
  */
 export const safeRemoveItem = (key: string): boolean => {
 	try {
@@ -63,9 +74,12 @@ export const safeRemoveItem = (key: string): boolean => {
 };
 
 /**
- * Safely clears all items from localStorage.
+ * Safely clears all items from `localStorage`.
  *
- * @returns True if successful, false if blocked.
+ * @returns {boolean} `true` if the storage was successfully cleared, otherwise `false`.
+ *
+ * @example
+ * safeClear();
  */
 export const safeClear = (): boolean => {
 	try {

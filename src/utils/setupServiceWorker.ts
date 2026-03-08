@@ -3,11 +3,17 @@ import { registerSW } from "virtual:pwa-register";
 import { isBot } from "./isBot";
 
 /**
- * Registers the PWA service worker with Workbox integration.
- * Handles offline capability, app ready status, and update prompts.
- * Skips registration for bot user agents to avoid unnecessary overhead.
+ * Registers the PWA service worker using Vite PWA's standard registration.
+ *
+ * This setup enables offline capabilities, background sync, and update prompts.
+ * Registration is skipped if:
+ * 1. The browser does not support service workers.
+ * 2. The visitor is detected as a bot (via `isBot`).
  *
  * @returns {void}
+ *
+ * @example
+ * setupServiceWorkerRegistration();
  */
 export function setupServiceWorkerRegistration() {
 	// Conditionally register the service worker for non-bot user agents

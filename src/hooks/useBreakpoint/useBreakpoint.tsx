@@ -2,10 +2,16 @@
 import { useSyncExternalStore } from "react";
 
 /**
- * Custom hook for tracking whether a media query breakpoint is matched.
+ * Custom hook for tracking whether a media query breakpoint is currently matched.
  *
- * @param {string} breakpoint - The media query breakpoint to track (e.g., "768px").
- * @returns {boolean} Whether the breakpoint is currently matched.
+ * Uses `useSyncExternalStore` for performant, tear-free subscription to the
+ * `window.matchMedia` API.
+ *
+ * @param {string} breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
+ * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
+ *
+ * @example
+ * const isMobile = !useBreakpoint("768px");
  */
 export const useBreakpoint = (breakpoint: string) => {
 	const subscribe = (callback: () => void) => {
@@ -21,7 +27,12 @@ export const useBreakpoint = (breakpoint: string) => {
 		return window.matchMedia(`(min-width: ${breakpoint})`).matches;
 	};
 
-	const matches = useSyncExternalStore(subscribe, getSnapshot);
+	const getServerSnapshot = () => {
+		// Default to false for SSR or if matchMedia is unavailable
+		return false;
+	};
+
+	const matches = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
 	return matches;
 };
