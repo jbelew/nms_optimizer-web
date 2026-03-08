@@ -56,7 +56,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 			className="flex h-full items-center justify-center" // Ensure full height and center content
 			data-is-grid-control-column="true" // Added data attribute for selection
 		>
-			{isFirstInactiveRow && (
+			{isFirstInactiveRow && hasAnyActiveCells && (
 				<ConditionalTooltip label={t("gridControls.activateRow")}>
 					<IconButton
 						size="1"
@@ -77,7 +77,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 				</ConditionalTooltip>
 			)}
 
-			{isLastActiveRow && (
+			{isLastActiveRow && hasAnyActiveCells && (
 				<ConditionalTooltip label={t("gridControls.deactivateRow")}>
 					<IconButton
 						variant="ghost"
