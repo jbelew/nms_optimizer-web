@@ -2,11 +2,10 @@ import type { BonusStatusData } from "../../store/TechBonusStore";
 import type React from "react";
 import { useEffect } from "react";
 import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@radix-ui/react-icons";
-import { Popover, Text, Tooltip } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useTechBonusStore } from "../../store/TechBonusStore";
-import { isTouchDevice } from "../../utils/isTouchDevice";
+import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 /**
  * Rounds a number to a specified number of decimal places.
@@ -102,7 +101,6 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	techSolvedBonus,
 }) => {
 	const { t } = useTranslation();
-	const isTouch = isTouchDevice();
 	const { setBonusStatus, getBonusStatus } = useTechBonusStore();
 	const cachedBonusStatus = getBonusStatus(tech);
 
@@ -157,18 +155,5 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 		</button>
 	);
 
-	if (isTouch) {
-		return (
-			<Popover.Root>
-				<Popover.Trigger>{trigger}</Popover.Trigger>
-				<Popover.Content size="1">
-					<Text as="p" trim="both" size="1">
-						{contentData.tooltipContent}
-					</Text>
-				</Popover.Content>
-			</Popover.Root>
-		);
-	}
-
-	return <Tooltip content={contentData.tooltipContent}>{trigger}</Tooltip>;
+	return <ConditionalTooltip label={contentData.tooltipContent}>{trigger}</ConditionalTooltip>;
 };

@@ -40,6 +40,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import { TooltipManager } from "./components/TooltipManager/TooltipManager";
+import { TooltipProvider } from "./context/TooltipContext";
 import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
@@ -148,12 +150,15 @@ createRoot(document.getElementById("root")!).render(
 				grayColor="slate"
 				scaling="100%"
 			>
-				<Toast.Provider swipeDirection="right">
-					<ToastProvider>
-						<RouterProvider router={router} />
-					</ToastProvider>
-					<Toast.Viewport className="ToastViewport" />
-				</Toast.Provider>
+				<TooltipProvider>
+					<TooltipManager />
+					<Toast.Provider swipeDirection="right">
+						<ToastProvider>
+							<RouterProvider router={router} />
+						</ToastProvider>
+						<Toast.Viewport className="ToastViewport" />
+					</Toast.Provider>
+				</TooltipProvider>
 			</Theme>
 		</ErrorBoundary>
 	</StrictMode>

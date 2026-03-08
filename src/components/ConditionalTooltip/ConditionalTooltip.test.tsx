@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { useTooltipActions } from "../../context/TooltipContext";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { ConditionalTooltip } from "./ConditionalTooltip";
 
@@ -10,46 +11,27 @@ vi.mock("../../utils/isTouchDevice", () => ({
 	isTouchDevice: vi.fn(() => false),
 }));
 
-// Mock Radix Tooltip
-vi.mock("@radix-ui/themes", () => ({
-	Tooltip: ({ children, content }: { children: React.ReactNode; content: string }) => (
-		<div data-testid="radix-tooltip" title={content}>
-			{children}
-		</div>
-	),
+// Mock useTooltip hook
+vi.mock("../../context/TooltipContext", () => ({
+	useTooltipActions: vi.fn(),
+	useTooltipState: vi.fn(),
+	TooltipProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 describe("ConditionalTooltip", () => {
+	const mockShow = vi.fn();
+	const mockHide = vi.fn();
+
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.mocked(isTouchDevice).mockReturnValue(false);
+		vi.mocked(useTooltipActions).mockReturnValue({
+			show: mockShow,
+			hide: mockHide,
+		});
 	});
 
-	it("should not render Radix Tooltip by default", () => {
-		render(
-			<ConditionalTooltip label="Test Label">
-				<button>Hover me</button>
-			</ConditionalTooltip>
-		);
-
-		expect(screen.queryByTestId("radix-tooltip")).not.toBeInTheDocument();
-		expect(screen.getByText("Hover me")).toBeInTheDocument();
-	});
-
-	it("should render Radix Tooltip on pointer enter", () => {
-		render(
-			<ConditionalTooltip label="Test Label">
-				<button>Hover me</button>
-			</ConditionalTooltip>
-		);
-
-		const trigger = screen.getByText("Hover me");
-		fireEvent.pointerEnter(trigger);
-
-		expect(screen.getByTestId("radix-tooltip")).toBeInTheDocument();
-		expect(screen.getByTestId("radix-tooltip")).toHaveAttribute("title", "Test Label");
-	});
-
-	it("should remove Radix Tooltip on pointer leave", () => {
+	it("should call show on pointer enter", () => {
 		render(
 			<ConditionalTooltip label="Test Label">
 				<button>Hover me</button>
@@ -58,26 +40,49 @@ describe("ConditionalTooltip", () => {
 
 		const trigger = screen.getByText("Hover me");
 		fireEvent.pointerEnter(trigger);
-		expect(screen.getByTestId("radix-tooltip")).toBeInTheDocument();
 
-		// Re-query the trigger as it might have been cloned/replaced during re-render
-		const activeTrigger = screen.getByText("Hover me");
-		fireEvent.pointerLeave(activeTrigger);
-		expect(screen.queryByTestId("radix-tooltip")).not.toBeInTheDocument();
+		expect(mockShow).toHaveBeenCalledWith("Test Label", expect.anything(), 500);
 	});
 
-	it("should not render tooltip on touch devices even when hovered", () => {
-		// Reset mock for this specific test
+	it("should call hide on pointer leave", () => {
+		render(
+			<ConditionalTooltip label="Test Label">
+				<button>Leave me</button>
+			</ConditionalTooltip>
+		);
+
+		const trigger = screen.getByText("Leave me");
+		fireEvent.pointerEnter(trigger);
+		fireEvent.pointerLeave(trigger);
+
+		expect(mockHide).toHaveBeenCalled();
+	});
+
+	it("should not call show on touch devices", () => {
 		vi.mocked(isTouchDevice).mockReturnValue(true);
 
 		render(
 			<ConditionalTooltip label="Test Label">
-				<button>Hover me</button>
+				<button>Touch me</button>
 			</ConditionalTooltip>
 		);
 
-		expect(screen.getByText("Hover me")).toBeInTheDocument();
-		fireEvent.pointerEnter(screen.getByText("Hover me"));
-		expect(screen.queryByTestId("radix-tooltip")).not.toBeInTheDocument();
+		const trigger = screen.getByText("Touch me");
+		fireEvent.pointerEnter(trigger);
+
+		expect(mockShow).not.toHaveBeenCalled();
+	});
+
+	it("should pass custom delayDuration", () => {
+		render(
+			<ConditionalTooltip label="Test Label" delayDuration={1234}>
+				<button>Custom delay</button>
+			</ConditionalTooltip>
+		);
+
+		const trigger = screen.getByText("Custom delay");
+		fireEvent.pointerEnter(trigger);
+
+		expect(mockShow).toHaveBeenCalledWith("Test Label", expect.anything(), 1234);
 	});
 });

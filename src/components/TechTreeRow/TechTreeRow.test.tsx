@@ -1,5 +1,3 @@
-import React from "react";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -13,6 +11,10 @@ import { TechTreeRow, TechTreeRowProps } from "./TechTreeRow";
 vi.mock("@/store/GridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/TechStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/ShakeStore", () => ({ useShakeStore: vi.fn() }));
+
+vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
@@ -40,9 +42,9 @@ const defaultProps: TechTreeRowProps = {
 	techColor: "blue",
 };
 
-// Helper to render with the TooltipProvider
+// Helper to render
 const renderWithProviders = (ui: React.ReactElement) => {
-	return render(<TooltipProvider>{ui}</TooltipProvider>);
+	return render(ui);
 };
 
 // Helper to set up the default store mocks

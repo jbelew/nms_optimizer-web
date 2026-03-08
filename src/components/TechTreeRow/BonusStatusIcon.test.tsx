@@ -1,4 +1,3 @@
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -13,17 +12,19 @@ vi.mock("../../store/TechBonusStore", () => ({
 	})),
 }));
 
+vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 describe("BonusStatusIcon Component", () => {
 	const renderComponent = (techMaxBonus: number, techSolvedBonus: number) => {
 		return render(
 			<I18nextProvider i18n={i18n}>
-				<TooltipProvider>
-					<BonusStatusIcon
-						tech="test-tech"
-						techMaxBonus={techMaxBonus}
-						techSolvedBonus={techSolvedBonus}
-					/>
-				</TooltipProvider>
+				<BonusStatusIcon
+					tech="test-tech"
+					techMaxBonus={techMaxBonus}
+					techSolvedBonus={techSolvedBonus}
+				/>
 			</I18nextProvider>
 		);
 	};
