@@ -1,3 +1,10 @@
+## [6.16.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.4...v6.16.5) (2026-03-09)
+
+
+### Bug Fixes
+
+* improve initial loading experience by suspending ship type data fetches, add click handling to tooltips, and update font definitions while removing old background images. ([8c36ea8](https://github.com/jbelew/nms_optimizer-web/commit/8c36ea827b0316f71c7f204130f199492d309656))
+
 ## [6.16.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.3...v6.16.4) (2026-03-08)
 
 
