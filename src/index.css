@@ -25,8 +25,8 @@
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
 	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
-	--font-family-geosans: "GeosansLight", Helvetica, Arial, sans-serif;
-	--font-family-nms: "NMS", "GeosansLight", Helvetica, Arial, sans-serif;
+	--font-family-geosans: Geosans, Helvetica, Arial, sans-serif;
+	--font-family-nms: NMS, Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.175em;
 	--font-weight-bold: 700;
 	--color-background: var(--gray-a1);
@@ -42,7 +42,7 @@
 }
 
 body.a11y-font .radix-themes {
-	--default-font-family: "AtkinsonHyperlegibleNext", Helvetica, Arial, sans-serif;
+	--default-font-family: Atkinson, Helvetica, Arial, sans-serif;
 	--accent-9: #11809c;
 }
 

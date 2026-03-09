@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
+import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
@@ -19,6 +20,20 @@ import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppLogic } from "./useMainAppLogic";
 
 const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
+
+/**
+ * Inner component that triggers the ship types fetch via Suspense.
+ *
+ * This allows the parent `MainAppContent` to render the header and other
+ * static elements immediately, while only this part of the UI is suspended.
+ *
+ * @returns {null}
+ */
+const ShipTypesLoader = () => {
+	useFetchShipTypesSuspense();
+
+	return null;
+};
 
 /**
  * The primary layout component for the application's main functional area.
@@ -104,72 +119,91 @@ export const MainAppContent = () => {
 					<div className="main-app__background-wrapper">
 						<AppHeader onShowChangelog={handleShowChangelog} />
 
-						<Flex
-							direction={{ initial: "column", md: "row" }}
-							align={{ initial: "center", md: "start" }}
-							className="main-app__content"
-							ref={gridContainerRef}
-						>
-							{/* Grid section */}
-							<Box
-								flexShrink={{ initial: "1", md: "0" }}
-								className="main-app__grid-section relative"
-								ref={appLayoutContainerRef}
-							>
-								{isSharedGrid && (
-									<SharedBuildCallout gridTableTotalWidth={gridTableTotalWidth} />
-								)}
-
-								{!isSharedGrid && (
-									<MessageSpinner
-										// isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
-										isVisible={solving}
-										showProgress={!isTechTreeLoading}
-										initialMessage={
-											isTechTreeLoading
-												? t("techTree.loading")
-												: t("gridTable.optimizing")
-										}
-										progressPercent={progressPercent}
-									/>
-								)}
-
-								<ShipSelectionHeading
-									isSharedGrid={isSharedGrid}
-									solving={solving}
-									selectedShipType={selectedShipType}
-									gridTableTotalWidth={gridTableTotalWidth}
-								/>
-
-								<GridTable
-									solving={solving}
-									sharedGrid={isSharedGrid}
-									ref={appLayoutGridTableRef}
-								/>
-							</Box>
-
-							{/* Tech tree section */}
-							{!isSharedGrid && (
+						<Suspense
+							fallback={
 								<Flex
-									direction="column"
-									width={
-										!isLargeScreen && gridTableTotalWidth
-											? `${gridTableTotalWidth}px`
-											: "100%"
-									}
-									ml={{ md: "5" }}
-									className="main-app__tech-tree-section"
+									align="center"
+									justify="center"
+									className="main-app__content"
+									style={{ minHeight: "400px", width: "100%" }}
 								>
-									<Suspense fallback={<TechTreeSkeleton />}>
-										<TechTreeComponent
-											handleOptimize={handleOptimize}
-											solving={solving}
+									<MessageSpinner
+										isVisible={true}
+										initialMessage={t("techTree.loading")}
+									/>
+								</Flex>
+							}
+						>
+							<ShipTypesLoader />
+							<Flex
+								direction={{ initial: "column", md: "row" }}
+								align={{ initial: "center", md: "start" }}
+								className="main-app__content"
+								ref={gridContainerRef}
+							>
+								{/* Grid section */}
+								<Box
+									flexShrink={{ initial: "1", md: "0" }}
+									className="main-app__grid-section relative"
+									ref={appLayoutContainerRef}
+								>
+									{isSharedGrid && (
+										<SharedBuildCallout
 											gridTableTotalWidth={gridTableTotalWidth}
 										/>
-									</Suspense>
-								</Flex>
-							)}
-						</Flex>
+									)}
+
+									{!isSharedGrid && (
+										<MessageSpinner
+											// isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
+											isVisible={solving}
+											showProgress={!isTechTreeLoading}
+											initialMessage={
+												isTechTreeLoading
+													? t("techTree.loading")
+													: t("gridTable.optimizing")
+											}
+											progressPercent={progressPercent}
+										/>
+									)}
+
+									<ShipSelectionHeading
+										isSharedGrid={isSharedGrid}
+										solving={solving}
+										selectedShipType={selectedShipType}
+										gridTableTotalWidth={gridTableTotalWidth}
+									/>
+
+									<GridTable
+										solving={solving}
+										sharedGrid={isSharedGrid}
+										ref={appLayoutGridTableRef}
+									/>
+								</Box>
+
+								{/* Tech tree section */}
+								{!isSharedGrid && (
+									<Flex
+										direction="column"
+										width={
+											!isLargeScreen && gridTableTotalWidth
+												? `${gridTableTotalWidth}px`
+												: "100%"
+										}
+										ml={{ md: "5" }}
+										className="main-app__tech-tree-section"
+									>
+										<Suspense fallback={<TechTreeSkeleton />}>
+											<TechTreeComponent
+												handleOptimize={handleOptimize}
+												solving={solving}
+												gridTableTotalWidth={gridTableTotalWidth}
+											/>
+										</Suspense>
+									</Flex>
+								)}
+							</Flex>
+						</Suspense>
 					</div>
 
 					{!isLargeScreen && (

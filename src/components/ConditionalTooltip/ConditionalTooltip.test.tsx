@@ -57,6 +57,34 @@ describe("ConditionalTooltip", () => {
 		expect(mockHide).toHaveBeenCalled();
 	});
 
+	it("should call hide on click", () => {
+		render(
+			<ConditionalTooltip label="Test Label">
+				<button>Click me</button>
+			</ConditionalTooltip>
+		);
+
+		const trigger = screen.getByText("Click me");
+		fireEvent.click(trigger);
+
+		expect(mockHide).toHaveBeenCalled();
+	});
+
+	it("should call child's original onClick handler", () => {
+		const originalOnClick = vi.fn();
+		render(
+			<ConditionalTooltip label="Test Label">
+				<button onClick={originalOnClick}>Click me</button>
+			</ConditionalTooltip>
+		);
+
+		const trigger = screen.getByText("Click me");
+		fireEvent.click(trigger);
+
+		expect(mockHide).toHaveBeenCalled();
+		expect(originalOnClick).toHaveBeenCalled();
+	});
+
 	it("should not call show on touch devices", () => {
 		vi.mocked(isTouchDevice).mockReturnValue(true);
 

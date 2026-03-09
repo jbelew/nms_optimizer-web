@@ -61,7 +61,7 @@ export function createMarkdownProcessor() {
 
 	// Override link
 	renderer.link = (token) => {
-		return `<a href="${token.href}" target="_blank" rel="noopener noreferrer" style="color: #0ba5e9; text-decoration: underline;">${token.text}</a>`;
+		return `<a href="${token.href}" target="_blank" rel="noopener noreferrer" style="color: #4CCCE6; text-decoration: underline;">${token.text}</a>`;
 	};
 
 	// Override image

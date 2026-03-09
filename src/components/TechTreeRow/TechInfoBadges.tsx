@@ -5,6 +5,7 @@ import { Button, Dialog } from "@radix-ui/themes";
 
 import { useA11yStore } from "@/store/A11yStore";
 
+import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionDialog";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 import { useTechTreeRow } from "./useTechTreeRow";
@@ -95,15 +96,8 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 		handleOpenChange(false);
 	};
 
-	return (
-		<>
-			{hasTechInGrid && (
-				<BonusStatusIcon
-					tech={tech}
-					techMaxBonus={techMaxBonus}
-					techSolvedBonus={techSolvedBonus}
-				/>
-			)}
+	const badgeContent = (
+		<div>
 			<Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
 				<Dialog.Trigger>
 					<Button
@@ -138,6 +132,25 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 					/>
 				)}
 			</Dialog.Root>
+		</div>
+	);
+
+	return (
+		<>
+			{hasTechInGrid && (
+				<BonusStatusIcon
+					tech={tech}
+					techMaxBonus={techMaxBonus}
+					techSolvedBonus={techSolvedBonus}
+				/>
+			)}
+			{modules.length > 1 ? (
+				<ConditionalTooltip label={`${translatedTechName} Module Selection`}>
+					{badgeContent}
+				</ConditionalTooltip>
+			) : (
+				badgeContent
+			)}
 		</>
 	);
 };

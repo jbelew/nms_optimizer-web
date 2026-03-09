@@ -16,6 +16,8 @@ export async function hideSplashScreenAndShowBackground(): Promise<void> {
 
 		// Show background image with a slight delay to ensure splash screen is hidden
 		requestAnimationFrame(() => {
+			// Clear the initial black background from html element to reveal the app background
+			document.documentElement.style.backgroundColor = "transparent";
 			document.body.classList.add("background-visible");
 		});
 	} catch (error) {

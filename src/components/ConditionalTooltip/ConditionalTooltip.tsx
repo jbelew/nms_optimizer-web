@@ -76,17 +76,38 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 			[children, hide]
 		);
 
+		/**
+		 * Requests to hide the tooltip when the child element is clicked.
+		 *
+		 * @param {React.MouseEvent} e - The click event.
+		 */
+		const handleClick = useCallback(
+			(e: React.MouseEvent) => {
+				hide();
+
+				const props = (children as React.ReactElement).props as {
+					onClick?: React.MouseEventHandler;
+				};
+
+				if (typeof props.onClick === "function") {
+					props.onClick(e);
+				}
+			},
+			[children, hide]
+		);
+
 		if (isTouch) {
 			return <>{children}</>;
 		}
 
-		// Attach hover listeners directly to the child to avoid extra wrappers
+		// Attach hover and click listeners directly to the child to avoid extra wrappers
 		return React.isValidElement(children)
 			? React.cloneElement(
 					children as React.ReactElement,
 					{
 						onPointerEnter: handlePointerEnter,
 						onPointerLeave: handlePointerLeave,
+						onClick: handleClick,
 					} as React.HTMLAttributes<HTMLElement>
 				)
 			: (children as unknown as React.ReactElement);

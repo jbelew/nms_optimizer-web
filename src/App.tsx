@@ -10,7 +10,6 @@ import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
-import { useFetchShipTypesSuspense } from "./hooks/useShipTypes/useShipTypes";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
@@ -64,7 +63,7 @@ const AppContent: FC = () => {
 		markUserVisited();
 	};
 
-	useFetchShipTypesSuspense();
+	// useFetchShipTypesSuspense() - Moved down to allow header rendering
 
 	// Use the URL sync hook at the top level to handle popstate and share-link loading
 	useUrlSync();

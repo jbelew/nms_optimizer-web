@@ -15,6 +15,14 @@
 -->
 
 <head>
+	<style>
+		html{background:#000;color:#fff}
+		.vpss-logo img, .vpss-logo svg {
+			height: 48px !important;
+			width: 48px !important;
+			display: block;
+		}
+	</style>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 	<meta name="theme-color" content="#003848" />
@@ -48,8 +56,8 @@
 	<style>
 		/* src/assets/css/fonts.css */
 		@font-face {
-			font-family: GeosansLight;
-			src: url("/assets/fonts/geonms-webfont.woff2") format("woff2");
+			font-family: Geosans;
+			src: url("/assets/fonts/geonms.woff2") format("woff2");
 			/* font-weight: 100 900;
 			font-style: normal; */
 			font-display: swap;
@@ -57,7 +65,7 @@
 
 		@font-face {
 			font-family: Raleway;
-			src: url("/assets/fonts/Raleway-VariableFont_wght.subset.woff2") format("woff2");
+			src: url("/assets/fonts/raleway.woff2") format("woff2");
 			font-weight: 100 900;
 			font-style: normal;
 			font-display: swap;
@@ -65,7 +73,7 @@
 
 		@font-face {
 			font-family: Acumin;
-			src: url("/assets/fonts/AcuminProCond-Semibold.woff2") format("woff2");
+			src: url("/assets/fonts/acumin.woff2") format("woff2");
 			font-weight: 600;
 			/* Semibold */
 			font-style: normal;
@@ -82,20 +90,13 @@
 		}
 
 		@font-face {
-			font-family: AtkinsonHyperlegibleNext;
-			src: url("/assets/fonts/AtkinsonHyperlegibleNext-VariableFont_wght.woff2") format("woff2-variations");
+			font-family: Atkinson;
+			src: url("/assets/fonts/atkinson.woff2") format("woff2-variations");
 			font-weight: 100 900;
 			font-style: normal;
 			font-display: swap;
 		}
 
-		@font-face {
-			font-family: AtkinsonHyperlegibleNext;
-			src: url("/assets/fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.woff2") format("woff2-variations");
-			font-weight: 100 900;
-			font-style: italic;
-			font-display: swap;
-		}
 
 		body::before {
 			content: "";
@@ -148,18 +149,70 @@
 			background-color: #000;
 		}
 
-		.vpss-logo svg {
-			height: 48px;
-			width: 48px;
-		}
-
 		body.vpss-active {
 			overflow: hidden;
+		}
+
+		/* Static header for improved LCP (before React hydrates) */
+		.app-header-static {
+			align-items: center;
+			display: flex;
+			flex-direction: column;
+			padding-top: 24px;
+			background-image: linear-gradient(to bottom, black, transparent);
+			position: relative;
+			z-index: 1;
+		}
+
+		.app-header-static__logo-text {
+			font-family: Geosans, Helvetica, Arial, sans-serif;
+			font-size: 1.875rem;
+			font-weight: 400;
+			letter-spacing: 0.35em;
+			line-height: 2rem;
+			margin-right: -0.35em;
+			text-align: center;
+			-webkit-text-stroke: 2.5px;
+			text-transform: uppercase;
+			word-spacing: -0.25rem;
+			color: white;
+		}
+
+		@media (width >= 640px) {
+			.app-header-static__logo-text {
+				filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
+				font-size: 2.25rem;
+				line-height: 2.5rem;
+			}
+		}
+
+		.app-header-static__separator-container {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			width: 100%;
+			margin: 4px 0;
+		}
+
+		.app-header-static__separator {
+			height: 1px;
+			background-color: #363A3F;
+			flex: 1;
+		}
+
+		.app-header-static__title {
+			color: #edeef0;
+			font-family: Raleway, Helvetica, Arial, sans-serif;
+			font-size: 16px;
+			font-weight: 700;
+			line-height: 22px;
+			text-align: center;
+			margin-top: 4px;
 		}
 	</style>
 
 	<!-- Preload mobile blurred background (critical for mobile LCP) -->
-	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred_v7.webp" media="(max-width: 640px)"
+	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
 
 	<!-- Prefetch desktop background only (1x for initial load, 2x for high-DPI devices) -->
@@ -172,14 +225,14 @@
 	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
 
 	<!-- Fonts (highest priority) -->
-	<link rel="preload" href="/assets/fonts/geonms-webfont.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="high" />
 
-	<link rel="preload" href="/assets/fonts/Raleway-VariableFont_wght.subset.woff2" as="font" type="font/woff2"
-		crossorigin="anonymous" fetchpriority="high" />
+	<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+		fetchpriority="high" />
 
-	<link rel="preload" href="/assets/fonts/AcuminProCond-Semibold.woff2" as="font" type="font/woff2"
-		crossorigin="anonymous" fetchpriority="medium" />
+	<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+		fetchpriority="medium" />
 
 	<link rel="preload" href="/assets/fonts/nms-alphabet.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="medium" />
@@ -193,7 +246,7 @@
 	<!-- Entry Point (Critical Path) -->
 	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
 
-	<!-- Critical Data Preload: Dynamic script to preload the correct tech tree based on URL -->
+	<!-- Critical Data Preload: Dynamic script to preload the correct tech tree and platforms based on URL -->
 	<script>
 		try {
 			// Parse the current URL parameters
@@ -207,15 +260,21 @@
 				"nomad", "colossus", "minotaur", "nautilon", "corvette", "solar", "fighter"
 			];
 
-			// Only preload if platform is valid (fallback to standard if not found, though basic validation is safer)
-			// Using loose validation here for speed, the app handles strict validation.
+			// Preload tech tree
+			const techTreePreload = document.createElement("link");
+			techTreePreload.rel = "preload";
+			techTreePreload.as = "fetch";
+			techTreePreload.crossOrigin = "anonymous";
+			techTreePreload.href = `https://api.nms-optimizer.app/tech_tree/${platform}`;
+			document.head.appendChild(techTreePreload);
 
-			const preloadLink = document.createElement("link");
-			preloadLink.rel = "preload";
-			preloadLink.as = "fetch";
-			preloadLink.crossOrigin = "anonymous";
-			preloadLink.href = `https://api.nms-optimizer.app/tech_tree/${platform}`;
-			document.head.appendChild(preloadLink);
+			// Preload platforms list (core dependency for ship selection)
+			const platformsPreload = document.createElement("link");
+			platformsPreload.rel = "preload";
+			platformsPreload.as = "fetch";
+			platformsPreload.crossOrigin = "anonymous";
+			platformsPreload.href = "https://api.nms-optimizer.app/platforms";
+			document.head.appendChild(platformsPreload);
 		} catch (e) {
 			// Fail silently, app will handle fetching normally
 			console.warn("Preload script failed", e);
@@ -419,21 +478,21 @@
 			}
 
 			main h1 {
-				color: #0ba5e9;
+				color: #4CCCE6;
 				margin: 1.5rem 0 1rem 0;
 				font-size: 1.5rem;
 				font-weight: bold;
 			}
 
 			main h2 {
-				color: #0ba5e9;
+				color: #4CCCE6;
 				margin: 1.5rem 0 1rem 0;
 				font-size: 1.125rem;
 				font-weight: bold;
 			}
 
 			main h3 {
-				color: #0ba5e9;
+				color: #4CCCE6;
 				margin: 1rem 0 0.75rem 0;
 				font-size: 1rem;
 				font-weight: bold;
@@ -459,7 +518,7 @@
 			}
 
 			main a {
-				color: #0ba5e9;
+				color: #4CCCE6;
 				text-decoration: underline;
 			}
 
@@ -467,11 +526,11 @@
 				background-color: rgba(0, 162, 199, 0.1);
 				padding: 0.125rem 0.25rem;
 				border-radius: 0.25rem;
-				color: #0ba5e9;
+				color: #4CCCE6;
 			}
 
 			main blockquote {
-				border-left: 4px solid #0ba5e9;
+				border-left: 4px solid #4CCCE6;
 				padding-left: 1rem;
 				margin: 0.5rem 0;
 				font-style: italic;
@@ -486,8 +545,21 @@
 		</style>
 	</noscript>
 
-
-	<div id="root"></div>
+	<div id="root">
+		<header class="app-header-static">
+			<h1 class="app-header-static__logo-text" style="margin-bottom: 4px;">NO MAN'S SKY</h1>
+			<div class="app-header-static__separator-container">
+				<span class="app-header-static__separator"></span>
+				<img alt="No Man's Sky Atlas Logo" width="16" height="20"
+					src="data:image/webp;base64,UklGRqIBAABXRUJQVlA4WAoAAAAQAAAAEQAAFwAAQUxQSMMAAAABgFRbe9voOzrpVdn+AB6KGMYcEzCIgBgA5jBt2RFUCtlOL6s+80+RhCEiJkD/TXFjETpR+QnUdz7qhEkmAKfurxoNMkDr7v7cUUyYaDzZ6XRM0gSqx5QvQogScOrZV3UnMmi98LkzMaPx0q/lyIy9Im8xoy56qbCITkq2sImgLqlBMuwydyKiJGhyNUiSwTp1CfZPsEo1oKTB1b81WCp02Py3QiElqB7dHwFlJ5HWvSUOcoLKvQIVRtjfwiYlgroCJQEAVlA4ILgAAABwBACdASoSABgAPpFCm0olo6IhqAgAsBIJZwDO7YteQd0FuXfeG2mn5zTEAAD+0NlxSzwc+VCPKNr6bnlz3XRZDzj7sOc4oqIAzLnkkRoCnUZfKS0NaSuBL/9PZea21iJrj8M0Tu3LnDFm42pkOdUF/97zPcqLsbsSjRywdOTENmFjgc7qlIYL/Hjl+FJs2JEzTixoV5whuapq2yqng+djF9P76VAAHIpjAWvQFmY5x3ezxv/nHwAA" />
+				<span class="app-header-static__separator"></span>
+			</div>
+			<h2 class="app-header-static__title">
+				Technology Layout Optimizer <span style="color: #4CCCE6;">AI/RUST</span>
+				<span style="color: var(--gray-11); font-weight: 500;"> v6.16.4</span>
+			</h2>
+		</header>
+	</div>
 
 </body>
 
