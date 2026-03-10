@@ -16,6 +16,7 @@ import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL syn
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { isBot } from "./utils/isBot";
+import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
@@ -124,6 +125,13 @@ const AppContent: FC = () => {
 const App: FC = () => {
 	const { t } = useTranslation();
 	const { showError, setShowError } = useOptimizeStore();
+
+	// Automatically hide splash screen if a global error occurs
+	useEffect(() => {
+		if (showError) {
+			hideSplashScreenAndShowBackground();
+		}
+	}, [showError]);
 
 	// Use the new custom hooks
 	useSeoAndTitle();

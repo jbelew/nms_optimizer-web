@@ -35,7 +35,15 @@ const customViewports = {
 
 import i18n from "../src/i18n/i18n";
 import { DialogProvider } from "../src/context/DialogContext";
-import { SplashscreenHider } from "../src/utils/SplashscreenHider";
+import { hideSplashScreenAndShowBackground } from "../src/utils/splashScreen";
+
+const SplashHider = () => {
+	React.useEffect(() => {
+		hideSplashScreenAndShowBackground();
+	}, []);
+
+	return null;
+};
 
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";
@@ -101,8 +109,10 @@ const withTheme: Decorator = (Story, context) => {
 const withBackground: Decorator = (Story, context) => {
 	const isVisible = context.globals.background === "visible";
 
+	const theme = context.globals.theme || "dark";
+
 	return (
-		<BackgroundWrapper isVisible={isVisible}>
+		<BackgroundWrapper isVisible={isVisible} theme={theme}>
 			<Story />
 		</BackgroundWrapper>
 	);
@@ -122,7 +132,7 @@ const withGlobalProviders: Decorator = (Story) => {
 			<Theme accentColor="cyan">
 				<TooltipProvider>
 					<DialogProvider>
-						<SplashscreenHider />
+						<SplashHider />
 						<I18nextProvider i18n={i18n}>
 							<Story />
 						</I18nextProvider>

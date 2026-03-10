@@ -4,11 +4,9 @@ import { useOptimizeStore } from "../store/OptimizeStore";
 import { apiCall } from "./apiCall";
 import { fetchWithTimeout } from "./fetchWithTimeout";
 import { HttpError } from "./HttpError";
-import { hideSplashScreenAndShowBackground } from "./splashScreen";
 
 // Mock dependencies
 vi.mock("./fetchWithTimeout");
-vi.mock("./splashScreen");
 vi.mock("../store/OptimizeStore", () => ({
 	useOptimizeStore: {
 		getState: vi.fn(() => ({
@@ -35,7 +33,6 @@ describe("apiCall", () => {
 
 		expect(result).toEqual(mockData);
 		expect(fetchWithTimeout).toHaveBeenCalledWith("https://api.example.com/data", {}, 10000);
-		expect(hideSplashScreenAndShowBackground).not.toHaveBeenCalled();
 	});
 
 	it("should throw HttpError and trigger error dialog when response is not ok", async () => {
@@ -52,7 +49,6 @@ describe("apiCall", () => {
 
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow(HttpError);
 
-		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
 		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal", expect.any(Error));
 	});
 
@@ -66,7 +62,6 @@ describe("apiCall", () => {
 
 		await expect(apiCall("https://api.example.com/data")).rejects.toThrow("Network Error");
 
-		expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
 		expect(setShowErrorMock).toHaveBeenCalledWith(true, "fatal", expect.any(Error));
 	});
 
@@ -86,7 +81,6 @@ describe("apiCall", () => {
 			apiCall("https://api.example.com/data", { skipGlobalError: true })
 		).rejects.toThrow(HttpError);
 
-		expect(hideSplashScreenAndShowBackground).not.toHaveBeenCalled();
 		expect(setShowErrorMock).not.toHaveBeenCalled();
 	});
 });

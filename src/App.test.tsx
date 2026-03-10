@@ -7,18 +7,19 @@
 import { Suspense } from "react";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Theme } from "@radix-ui/themes";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 import { vi } from "vitest";
 
 import { routes } from "./routes";
+import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
 import { sendEvent } from "./utils/analytics";
+import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-/** Mock the hideSplashScreen function from vite-plugin-splash-screen */
-vi.mock("vite-plugin-splash-screen/runtime", () => ({
-	hideSplashScreen: vi.fn(),
+/** Mock the splash screen utility */
+vi.mock("./utils/splashScreen", () => ({
+	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
 vi.mock("react-i18next", async () => {
@@ -145,12 +146,12 @@ describe("App", () => {
 			expect(backToMainLink.closest("a")).toHaveAttribute("href", "/");
 		});
 
-		test("should call hideSplashScreen and sendEvent when 404 page is rendered", async () => {
+		test("should call hideSplashScreenAndShowBackground and sendEvent when 404 page is rendered", async () => {
 			renderApp(["/unknown-route"]);
 
 			// Wait for the NotFound component to render and its useEffect to run
 			await vi.waitFor(() => {
-				expect(hideSplashScreen).toHaveBeenCalledTimes(1);
+				expect(hideSplashScreenAndShowBackground).toHaveBeenCalledTimes(1);
 				expect(sendEvent).toHaveBeenCalledWith(
 					expect.objectContaining({
 						action: "page_view",
@@ -169,6 +170,15 @@ describe("App", () => {
 	});
 
 	describe("AppContent component", () => {
+		test("should hide splash screen when showError is true", async () => {
+			useOptimizeStore.setState({ showError: true });
+			renderApp(["/"]);
+
+			await vi.waitFor(() => {
+				expect(hideSplashScreenAndShowBackground).toHaveBeenCalled();
+			});
+		});
+
 		test("should render Outlet and UpdatePrompt", async () => {
 			renderApp(["/"]);
 			// The Outlet should be rendered
@@ -298,8 +308,7 @@ describe("App", () => {
 			const rendered = renderApp(["/"]);
 
 			const getStartedButton = await rendered.findByText("dialogs.welcome.getStarted");
-			const user = await import("@testing-library/user-event").then((m) => m.default);
-			await user.click(getStartedButton);
+			fireEvent.click(getStartedButton);
 
 			await vi.waitFor(() => {
 				expect(localStorage.getItem("userVisited")).toBe("true");

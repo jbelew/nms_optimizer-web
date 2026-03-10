@@ -75,13 +75,6 @@ export const useMainAppLogic = () => {
 		hideSplashScreenAndShowBackground();
 	}, []);
 
-	useEffect(() => {
-		if (isSharedGrid) {
-			// If it's a shared grid, ensure splash screen is hidden.
-			hideSplashScreenAndShowBackground();
-		}
-	}, [isSharedGrid]);
-
 	/**
 	 * Opens the application changelog modal.
 	 */

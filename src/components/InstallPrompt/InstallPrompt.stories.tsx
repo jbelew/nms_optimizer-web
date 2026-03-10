@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
+import { ToastRenderer } from "../Toast/ToastRenderer";
 import { InstallPrompt } from "./InstallPrompt";
 
 const meta = {
@@ -15,15 +17,30 @@ const meta = {
 	},
 	decorators: [
 		(Story) => {
+			// Seed localStorage so the component thinks this is a return visit
+			localStorage.setItem("userVisited", "true");
+			localStorage.removeItem("installPromptDismissed");
+
+			// Mock touch device so isTouchDevice() returns true
+			Object.defineProperty(navigator, "maxTouchPoints", {
+				value: 1,
+				writable: true,
+				configurable: true,
+			});
+
 			return (
-				<ToastProvider>
-					<div
-						className="flex min-h-screen items-center justify-center p-4"
-						style={{ maxWidth: "800px", margin: "0 auto" }}
-					>
-						<Story />
-					</div>
-				</ToastProvider>
+				<Toast.Provider swipeDirection="right">
+					<ToastProvider>
+						<div
+							className="flex min-h-screen items-center justify-center p-4"
+							style={{ maxWidth: "800px", margin: "0 auto" }}
+						>
+							<Story />
+							<ToastRenderer />
+						</div>
+					</ToastProvider>
+					<Toast.Viewport className="ToastViewport" />
+				</Toast.Provider>
 			);
 		},
 	],
