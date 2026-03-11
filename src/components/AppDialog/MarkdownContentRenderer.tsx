@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
+import { retryImport } from "@/utils/dynamicImport";
 
 import DynamicRadixIcon from "./DynamicRadixIcon";
 import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
@@ -39,8 +40,10 @@ interface MarkdownContentRendererProps {
 	targetSectionId?: string;
 }
 
-const LazyReactMarkdown = lazy(() => import("react-markdown"));
-const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
+const LazyReactMarkdown = lazy(() => retryImport(() => import("react-markdown")));
+const PrerenderedMarkdownRenderer = lazy(() =>
+	retryImport(() => import("./PrerenderedMarkdownRenderer"))
+);
 
 /**
  * A robust component for rendering bundled markdown content with integrated Radix UI styling.
@@ -79,7 +82,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	}, []);
 
 	useEffect(() => {
-		import("remark-gfm").then((module) => {
+		retryImport(() => import("remark-gfm")).then((module) => {
 			setRemarkGfm(() => module.default);
 		});
 	}, []);
@@ -87,7 +90,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	const [rehypeRaw, setRehypeRaw] = useState<(() => void) | undefined>(undefined);
 
 	useEffect(() => {
-		import("rehype-raw").then((module) => {
+		retryImport(() => import("rehype-raw")).then((module) => {
 			setRehypeRaw(() => module.default);
 		});
 	}, []);

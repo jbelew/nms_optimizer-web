@@ -44,6 +44,7 @@ import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
+import { retryImport } from "./utils/dynamicImport";
 import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
@@ -123,14 +124,20 @@ if (typeof window !== "undefined") {
 	});
 
 	// Dynamically import and initialize service worker to avoid bundling it with i18n
-	// This is moved OUT of queueMicrotask to avoid iOS Safari module loading failures
-	// that can occur when dynamic imports are nested in microtasks alongside network requests.
+	// We use retryImport to harden against iOS Safari module loading failures
+	// which often occur during concurrent network activity.
 	(async () => {
 		try {
-			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
+			const { setupServiceWorkerRegistration } = await retryImport(
+				() => import("./utils/setupServiceWorker"),
+				{ retries: 5, delay: 1000 } // Be more aggressive with retries for this critical module
+			);
 			setupServiceWorkerRegistration();
 		} catch (error) {
-			console.error("Failed to load service worker registration module:", error);
+			console.error(
+				"Failed to load service worker registration module after retries:",
+				error
+			);
 		}
 	})();
 }

@@ -4,10 +4,11 @@ import { lazy, Suspense } from "react";
 import { Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { retryImport } from "../../utils/dynamicImport";
 import AppDialog from "./AppDialog";
 
 const LazyUserStatsContent = lazy(() =>
-	import("./UserStatsContent").then((module) => ({
+	retryImport(() => import("./UserStatsContent")).then((module) => ({
 		default: module.UserStatsContent,
 	}))
 );

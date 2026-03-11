@@ -9,6 +9,7 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { retryImport } from "../../utils/dynamicImport";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
@@ -19,7 +20,7 @@ import { SharedBuildCallout } from "./SharedBuildCallout";
 import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppLogic } from "./useMainAppLogic";
 
-const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
+const TechTreeComponent = lazy(() => retryImport(() => import("../TechTree/TechTree")));
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.

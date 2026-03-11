@@ -9,6 +9,7 @@ import App from "./App";
 import { RouteError } from "./components/ErrorBoundary/RouteError";
 import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { languages, pages } from "./routeConfig";
+import { retryImport } from "./utils/dynamicImport";
 
 /**
  * Lazily loads the 404 Not Found component.
@@ -16,7 +17,9 @@ import { languages, pages } from "./routeConfig";
  * @returns {Promise<{ Component: React.ComponentType }>}
  */
 const NotFound = async () => {
-	const { default: Component } = await import("./components/NotFound/NotFound");
+	const { default: Component } = await retryImport(
+		() => import("./components/NotFound/NotFound")
+	);
 
 	return { Component };
 };

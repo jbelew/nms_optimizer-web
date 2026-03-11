@@ -24,6 +24,7 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
+import { retryImport } from "@/utils/dynamicImport";
 
 /**
  * Props for the `AppHeader` component.
@@ -94,7 +95,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							aria-label={t("buttons.changelog") ?? ""}
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
-								void import("../AppDialog/MarkdownContentRenderer");
+								void retryImport(
+									() => import("../AppDialog/MarkdownContentRenderer")
+								);
 							}}
 							onClick={() => {
 								onShowChangelog();
@@ -118,7 +121,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							aria-label={t("buttons.userStats") ?? ""}
 							onMouseEnter={() => {
 								// Prefetch the UserStats component when user hovers
-								void import("../../routes/UserStatsRoute");
+								void retryImport(() => import("../../routes/UserStatsRoute"));
 							}}
 							onClick={() => {
 								openDialog("userstats");

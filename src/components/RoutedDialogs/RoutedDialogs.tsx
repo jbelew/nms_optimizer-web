@@ -4,10 +4,13 @@ import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
+import { retryImport } from "../../utils/dynamicImport";
 import AppDialog from "../AppDialog/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/LoremIpsumSkeleton";
 
-const MarkdownContentRenderer = lazy(() => import("../AppDialog/MarkdownContentRenderer"));
+const MarkdownContentRenderer = lazy(() =>
+	retryImport(() => import("../AppDialog/MarkdownContentRenderer"))
+);
 
 /**
  * A central orchestrator for dialogs that are mapped to specific application routes.

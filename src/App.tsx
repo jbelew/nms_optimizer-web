@@ -15,21 +15,26 @@ import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
+import { retryImport } from "./utils/dynamicImport";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-const ErrorContent = lazy(() => import("./components/AppDialog/ErrorContent"));
-const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLinkDialog"));
-const WelcomeContent = lazy(() => import("./components/AppDialog/WelcomeContent"));
+const ErrorContent = lazy(() => retryImport(() => import("./components/AppDialog/ErrorContent")));
+const ShareLinkDialog = lazy(() =>
+	retryImport(() => import("./components/AppDialog/ShareLinkDialog"))
+);
+const WelcomeContent = lazy(() =>
+	retryImport(() => import("./components/AppDialog/WelcomeContent"))
+);
 
 const RoutedDialogs = lazy(() =>
-	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
+	retryImport(() => import("./components/RoutedDialogs/RoutedDialogs")).then((module) => ({
 		default: module.RoutedDialogs,
 	}))
 );
 
 const UserStatsRoute = lazy(() =>
-	import("./routes/UserStatsRoute").then((module) => ({
+	retryImport(() => import("./routes/UserStatsRoute")).then((module) => ({
 		default: module.UserStatsRoute,
 	}))
 );
