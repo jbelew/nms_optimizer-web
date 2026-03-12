@@ -1,3 +1,10 @@
+## [6.16.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.5...v6.16.6) (2026-03-11)
+
+
+### Bug Fixes
+
+* Implement `retryImport` utility with exponential backoff to improve dynamic import reliability across the application. ([b11a7f8](https://github.com/jbelew/nms_optimizer-web/commit/b11a7f893678df8835909ca07e12af9a839e6ca9))
+
 ## [6.16.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.4...v6.16.5) (2026-03-09)
 
 
