@@ -198,7 +198,7 @@
 		"recommendedBuilds": {
 			"selectBuildButton": "Select a Recommended Build",
 			"applyBuildButton": "Apply Recommended Build",
-			"summary": "Technologies with <1>fixed Supercharger slots</1> support <5>recommended builds</5>."
+			"summary": "Technologies with <1>fixed Supercharged slots</1> support <5>recommended builds</5>."
 		}
 	},
 	"technologies": {
@@ -608,11 +608,12 @@
 		"trails": "Starship Trails",
 		"figurines": "Figurines",
 		"title": "{{techName}} MODULE SELECTION",
-		"warning": "<p>Default Corvette selections are <i>suggestions</i> only. In most cases, traditional upgrade modules provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to fully maximize a given technology; however, most layouts only have space for <strong>3–4</strong> fully maxed technologies.</p>",
+		"warning": "<p>Default Corvette selections are <i>suggestions</i>. Procedural upgrade modules generally provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to maximize this technology; however, most layouts only have room for <strong>3–4</strong> fully maxed technologies.</p>",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",
-		"cosmeticInfo": "Suggested Cosmetic modules can give a small stat boost, but <em>don't let them limit your design ideas!</em> Just match the same number of Cosmetic modules on your Corvette for a good solve.",
+		"cosmeticInfo": "<p>Suggested cosmetic modules can provide a small stat boost, but they shouldn’t limit your design ideas. For a good solve, just match the same number of cosmetic modules on your Corvette.</p>",
 		"trailsInfo": "<strong>Starship Trails have changed with v6.2 (Remnant Update)!</strong> In most cases, select no more than <strong>three Starship Trails</strong>. The Tentacled Figurine to <strong>does not</strong> boost in-atmosphere speed! Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. ",
+		"description": "Select the modules available for this technology. Only selected modules will be included in the optimization.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
 	},

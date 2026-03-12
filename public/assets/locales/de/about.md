@@ -31,7 +31,7 @@ Das Problem ist mathematisch enorm: ~8,32 × 10⁸¹ mögliche Permutationen (82
 
 ## Warum es verwenden?
 
-Überspringen Sie das endlose Ausprobieren. Holen Sie sich das mathematisch optimale Layout für Ihr Raumschiff mit maximalem Schaden, Ihren Frachter mit der größten Reichweite, Ihre leistungsstarke Corvette oder Ihren robusten Exosuit. Das Tool erklärt Nachbarschaftsboni und aufgeladene Slots, anstatt Sie im Ungewissen zu lassen. Wenn Sie sich jemals gefragt haben, wie Sie Ihre begrenzten Supercharger-Slots am besten nutzen können, finden Sie hier die Antwort.
+Überspringen Sie das endlose Ausprobieren. Holen Sie sich das mathematisch optimale Layout für Ihr Raumschiff mit maximalem Schaden, Ihren Frachter mit der größten Reichweite, Ihre leistungsstarke Corvette oder Ihren robusten Exosuit. Das Tool erklärt Nachbarschaftsboni und aufgeladene Slots, anstatt Sie im Ungewissen zu lassen. Wenn Sie sich jemals gefragt haben, wie Sie Ihre begrenzten Supercharged-Slots am besten nutzen können, finden Sie hier die Antwort.
 
 ## Warum den NMS-Optimierer der manuellen Planung vorziehen?
 

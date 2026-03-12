@@ -614,7 +614,8 @@
         "cosmeticInfo": "Os módulos sugeridos <strong>cosméticos</strong> podem ajudar a aumentar levemente suas estatísticas finais, mas <i>não os deixe limitar suas idéias de design!</i>",
         "optimizeButton": "Otimizar",
         "cancelButton": "Cancelar",
-        "trailsInfo": "<strong>As trilhas de naves foram alteradas com a versão 6.2 (atualização remanescente)!</strong> Na maioria dos casos, selecione no máximo <strong>três trilhas de naves</strong>. A estatueta de tentáculos <strong>não</strong> aumenta a velocidade na atmosfera! As trilhas de naves estelares são aplicadas em ordem de prioridade, com <strong>[P1] Cromático</strong> tendo a prioridade mais alta."
+        "trailsInfo": "<strong>As trilhas de naves foram alteradas com a versão 6.2 (atualização remanescente)!</strong> Na maioria dos casos, selecione no máximo <strong>três trilhas de naves</strong>. A estatueta de tentáculos <strong>não</strong> aumenta a velocidade na atmosfera! As trilhas de naves estelares são aplicadas em ordem de prioridade, com <strong>[P1] Cromático</strong> tendo a prioridade mais alta.",
+        "description": "Selecione os módulos disponíveis para esta tecnologia. Somente módulos selecionados serão incluídos na otimização."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Melhores Layouts Tecnológicos & Calculadora de Adjacência",

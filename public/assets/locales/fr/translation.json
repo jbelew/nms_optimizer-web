@@ -614,7 +614,8 @@
         "cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
         "optimizeButton": "Optimiser",
         "cancelButton": "Annuler",
-        "trailsInfo": "<strong>Starship Trails a changé avec la v6.2 (Remnant Update) !</strong> Dans la plupart des cas, ne sélectionnez pas plus de <strong>trois Starship Trails</strong>. La figurine tentaculaire <strong>n'augmente pas</strong> la vitesse dans l'atmosphère ! Les Starship Trails sont appliqués par ordre de priorité, <strong>[P1] Chromatique</strong> ayant la priorité la plus élevée."
+        "trailsInfo": "<strong>Starship Trails a changé avec la v6.2 (Remnant Update) !</strong> Dans la plupart des cas, ne sélectionnez pas plus de <strong>trois Starship Trails</strong>. La figurine tentaculaire <strong>n'augmente pas</strong> la vitesse dans l'atmosphère ! Les Starship Trails sont appliqués par ordre de priorité, <strong>[P1] Chromatique</strong> ayant la priorité la plus élevée.",
+        "description": "Sélectionnez les modules disponibles pour cette technologie. Seuls les modules sélectionnés seront inclus dans l'optimisation."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Meilleurs Agencements & Calculateur d'Adjacence",

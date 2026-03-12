@@ -9,7 +9,7 @@
 - Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 
 > 💡 **Note:**
-> Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged layouts are fixed.
+> Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged slot layouts are fixed.
 
 ## Before You Begin
 

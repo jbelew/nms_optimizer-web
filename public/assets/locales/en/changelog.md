@@ -558,7 +558,7 @@ I thought I was finished here... **until Corvettes showed up**. Once the bugs ar
 
 ## Version 2.2 (2025-04-24)
 
-- Refactored opportunity (supercharger) windowing and scoring engine.
+- Refactored opportunity (supercharged) windowing and scoring engine.
 - All new, faster, AI models based on 16k samples.
 - Added Staves and Solar Starships.
 - Now available as a Docker image to run locally.

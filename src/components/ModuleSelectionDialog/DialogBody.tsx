@@ -90,6 +90,12 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 					dangerouslySetInnerHTML={{ __html: t("moduleSelection.trailsInfo") }}
 				/>
 			)}
+			{!isCorvette && tech !== "trails" && (
+				<span
+					className="mb-3 block text-sm sm:text-base"
+					dangerouslySetInnerHTML={{ __html: t("moduleSelection.description") }}
+				/>
+			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
 					ref={selectAllCheckboxRef}

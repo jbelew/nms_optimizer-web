@@ -198,7 +198,7 @@
         "recommendedBuilds": {
             "selectBuildButton": "Wähle einen Build aus",
             "applyBuildButton": "Build anwenden",
-            "summary": "Plattformen mit <1>festen Supercharger-Slots</1> unterstützen <5>empfohlene Builds</5>."
+            "summary": "Plattformen mit <1>festen Supercharged-Slots</1> unterstützen <5>empfohlene Builds</5>."
         }
     },
     "technologies": {
@@ -614,7 +614,8 @@
         "cosmeticInfo": "Vorgeschlagene <strong>Cosmetic</strong> Module können dazu beitragen, Ihre endgültigen Statistiken geringfügig zu steigern, aber <i>Lassen Sie sie Ihre Designideen nicht einschränken!</i>",
         "optimizeButton": "Optimieren",
         "cancelButton": "Abbrechen",
-        "trailsInfo": "<strong>Starship Trails haben sich mit v6.2 (Remnant Update) geändert!</strong> Wählen Sie in den meisten Fällen nicht mehr als <strong>drei Starship Trails</strong> aus. Die Tentakelfigur erhöht die Geschwindigkeit in der Atmosphäre nicht! Starship Trails werden in der Reihenfolge ihrer Priorität angewendet, wobei <strong>[P1] Chromatic</strong> die höchste Priorität hat."
+        "trailsInfo": "<strong>Starship Trails haben sich mit v6.2 (Remnant Update) geändert!</strong> Wählen Sie in den meisten Fällen nicht mehr als <strong>drei Starship Trails</strong> aus. Die Tentakelfigur erhöht die Geschwindigkeit in der Atmosphäre nicht! Starship Trails werden in der Reihenfolge ihrer Priorität angewendet, wobei <strong>[P1] Chromatic</strong> die höchste Priorität hat.",
+        "description": "Wählen Sie die für diese Technologie verfügbaren Module aus. In die Optimierung werden nur ausgewählte Module einbezogen."
     },
     "seo": {
         "mainPageTitle": "NMS Optimizer: Beste Tech-Layouts & Adjazenz-Rechner",
