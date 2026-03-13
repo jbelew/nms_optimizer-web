@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		experimental: {
-			fullBundleMode: true,
+			bundledDev: true,
 		},
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
