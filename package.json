@@ -108,7 +108,7 @@
 		"@vitejs/plugin-react": "^5.1.4",
 		"@vitest/browser": "^4.0.17",
 		"@vitest/browser-playwright": "^4.1.0",
-		"@vitest/coverage-v8": "^4.0.17",
+		"@vitest/coverage-v8": "^4.1.0",
 		"@vitest/ui": "^4.1.0",
 		"autoprefixer": "^10.4.27",
 		"babel-plugin-react-compiler": "^1.0.0",
