@@ -1,3 +1,10 @@
+## [6.16.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.6...v6.16.7) (2026-03-13)
+
+
+### Bug Fixes
+
+* Implement a high-performance interaction overlay for `GridCell` using a `::before` pseudo-element and CSS variables for dynamic background colors. ([019b1b1](https://github.com/jbelew/nms_optimizer-web/commit/019b1b162efc56e3dd3c9aecc7468b804abe3e95)), closes [hi#performance](https://github.com/hi/issues/performance)
+
 ## [6.16.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.5...v6.16.6) (2026-03-11)
 
 
