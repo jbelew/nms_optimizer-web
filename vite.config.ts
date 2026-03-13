@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig, loadEnv, Plugin } from "vite";
@@ -32,17 +33,22 @@ export default defineConfig(({ mode }) => {
 	}
 
 	return {
+		experimental: {
+			fullBundleMode: true,
+		},
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
+		devtools: true,
 		plugins: [
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
 				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
 				authToken: sentryAuthToken,
+				telemetry: false,
 				release: {
 					name: appVersion,
 				},
@@ -65,10 +71,9 @@ export default defineConfig(({ mode }) => {
 						},
 					]
 				: []),
-			react({
-				babel: {
-					plugins: [["babel-plugin-react-compiler"]],
-				},
+			react(),
+			babel({
+				presets: [reactCompilerPreset()],
 			}),
 			tailwindcss(),
 			splashScreen({
@@ -302,8 +307,8 @@ export default defineConfig(({ mode }) => {
 			}),
 		],
 		resolve: {
+			tsconfigPaths: true,
 			alias: {
-				"@": path.resolve(__dirname, "./src"),
 				react: path.resolve(__dirname, "node_modules/react"),
 				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 			},
@@ -314,6 +319,7 @@ export default defineConfig(({ mode }) => {
 			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
 		},
 		server: {
+			forwardConsole: true,
 			headers: {
 				"Document-Policy": "js-profiling",
 			},
@@ -322,13 +328,15 @@ export default defineConfig(({ mode }) => {
 		css: { transformer: "lightningcss" },
 		build: {
 			target: "esnext",
-			minify: "terser",
-			terserOptions: {
-				compress: {
-					drop_console: true,
-					drop_debugger: true,
-				},
+			cache: {
+				enabled: true,
+				granularity: "module",
 			},
+			// recharts + all its deps (d3-*, decimal.js, reduxjs/toolkit, etc.) is ~536kB unminified.
+			// DO NOT force recharts into a manualChunk — Rolldown bleeds React internals into it,
+			// causing the index bundle to statically import the charts chunk (defeating lazy loading).
+			// Instead we let Rolldown split it naturally and raise the warning threshold.
+			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
 			sourcemap: true,
 			cssMinify: "lightningcss",
@@ -339,8 +347,15 @@ export default defineConfig(({ mode }) => {
 					return deps.filter((dep) => !dep.includes("charts") && !dep.includes("markdown"));
 				},
 			},
-			rollupOptions: {
+			rolldownOptions: {
 				output: {
+					// Equivalent to the old terserOptions: drop console/debugger from production builds
+					minify: {
+						compress: {
+							dropConsole: true,
+							dropDebugger: true,
+						},
+					},
 					manualChunks(id) {
 						if (id.includes("node_modules")) {
 							// Chunk React and its dependencies
@@ -386,35 +401,6 @@ export default defineConfig(({ mode }) => {
 							if (id.includes("zustand") || id.includes("immer")) {
 								return "state";
 							}
-
-							// Charts & Data Visualization
-							if (id.includes("recharts") || id.includes("decimal.js") || id.includes("d3-"))
-								return "charts";
-
-							// Markdown Processing (grouped to prevent circular dependencies)
-							if (
-								id.includes("react-markdown") ||
-								id.includes("unified") ||
-								id.includes("micromark") ||
-								id.includes("remark") ||
-								id.includes("rehype") ||
-								id.includes("vfile") ||
-								id.includes("unist-") ||
-								id.includes("property-information") ||
-								id.includes("hast-") ||
-								id.includes("mdast-") ||
-								id.includes("ccount") ||
-								id.includes("decode-named-character-reference") ||
-								id.includes("space-separated-tokens") ||
-								id.includes("comma-separated-tokens") ||
-								id.includes("markdown-table") ||
-								id.includes("character-entities") ||
-								// Only include specific is- utility packages for markdown
-								/node_modules[\/](is-alphabetical|is-decimal|is-hexadecimal|is-alphanumeric|is-whitespace-character|is-word-character)[\/]/.test(
-									id
-								)
-							)
-								return "markdown";
 
 							// Router
 							if (id.includes("react-router")) return "router";

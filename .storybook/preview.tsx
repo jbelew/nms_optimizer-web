@@ -35,15 +35,7 @@ const customViewports = {
 
 import i18n from "../src/i18n/i18n";
 import { DialogProvider } from "../src/context/DialogContext";
-import { hideSplashScreenAndShowBackground } from "../src/utils/splashScreen";
-
-const SplashHider = () => {
-	React.useEffect(() => {
-		hideSplashScreenAndShowBackground();
-	}, []);
-
-	return null;
-};
+import { SplashHider } from "./SplashHider";
 
 // Base theme tokens
 import "@radix-ui/themes/tokens/base.css";

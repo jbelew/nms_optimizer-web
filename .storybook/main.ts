@@ -15,6 +15,9 @@ const config: StorybookConfig = {
     "@storybook/addon-docs"
   ],
   "framework": "@storybook/react-vite",
+  "typescript": {
+    reactDocgen: 'react-docgen',
+  },
   async viteFinal(config) {
     if (process.env.NODE_ENV !== 'test') {
       return mergeConfig(config, {
