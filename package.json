@@ -136,7 +136,7 @@
 		"playwright": "^1.58.2",
 		"postcss": "^8.5.8",
 		"postcss-html": "^1.8.1",
-		"postcss-merge-rules": "^7.0.6",
+		"postcss-merge-rules": "^7.0.8",
 		"prettier": "^3.8.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"puppeteer": "^24.38.0",
