@@ -5,6 +5,13 @@ import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { isBot } from "./isBot";
 import { reportWebVitals } from "./reportWebVitals";
 
+// Defensive wrapper to handle CommonJS/ESM interop issues with Rolldown (Vite 8+).
+// When react-ga4 (a CJS package) is bundled by Rolldown in fullBundleMode, it may
+// be wrapped with an extra `.default` property layer, making `ReactGA.initialize`
+// inaccessible. This resolves the actual module object regardless of wrapping.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
+
 /**
  * Interface for Google Analytics 4 event tracking.
  *
@@ -201,7 +208,7 @@ export const initializeAnalytics = async () => {
 		return;
 	}
 
-	ReactGA.initialize(TRACKING_ID, {
+	ReactGAInstance.initialize(TRACKING_ID, {
 		gtagOptions: {
 			send_page_view: false,
 			anonymize_ip: true,
@@ -351,7 +358,7 @@ export const sendEvent = (event: GA4Event): void => {
 				});
 			} else {
 				const { action, category, ...params } = event;
-				ReactGA.event(action, {
+				ReactGAInstance.event(action, {
 					...params,
 					category,
 					tracking_source: "client",

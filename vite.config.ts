@@ -315,7 +315,7 @@ export default defineConfig(({ mode }) => {
 			dedupe: ["react", "react-dom"], // <- critical for singleton React
 		},
 		optimizeDeps: {
-			include: ["react", "react-dom"],
+			include: ["react", "react-dom", "react-ga4"],
 			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
 		},
 		server: {
