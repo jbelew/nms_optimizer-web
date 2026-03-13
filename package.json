@@ -142,7 +142,7 @@
 		"puppeteer": "^24.38.0",
 		"puppeteer-core": "^24.38.0",
 		"rollup-plugin-visualizer": "^7.0.1",
-		"sass": "^1.97.3",
+		"sass": "^1.98.0",
 		"semantic-release": "^25.0.3",
 		"sharp": "^0.34.5",
 		"storybook": "^10.2.16",
