@@ -1,3 +1,10 @@
+## [6.16.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.7...v6.16.8) (2026-03-13)
+
+
+### Bug Fixes
+
+* **build:** react-ga4 compatibility with Vite 8+ ([c1690af](https://github.com/jbelew/nms_optimizer-web/commit/c1690af24bdeadad76482689e85d688c1b18648d))
+
 ## [6.16.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.6...v6.16.7) (2026-03-13)
 
 
