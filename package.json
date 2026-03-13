@@ -129,7 +129,7 @@
 		"husky": "^9.1.7",
 		"jsdom": "^28.1.0",
 		"lighthouse": "^13.0.3",
-		"lightningcss": "^1.30.2",
+		"lightningcss": "^1.32.0",
 		"markdown-it": "^14.1.1",
 		"marked": "^17.0.4",
 		"marked-gfm-heading-id": "^4.1.3",
