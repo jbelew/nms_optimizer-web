@@ -5,6 +5,18 @@
 	position: relative;
 	touch-action: manipulation;
 
+	/* High-performance interaction overlay */
+	&::before {
+		background-color: var(--overlay-bg, var(--accent-track));
+		content: "";
+		inset: 0;
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		transition: opacity 0.2s ease;
+		z-index: 0;
+	}
+
 	/* Prevent callout menu on iOS tap-hold */
 	-webkit-touch-callout: none;
 	user-select: none;
@@ -127,7 +139,8 @@
 		}
 
 		&.gridCell--touched {
-			background-color: var(--gray-track) !important;
+			--overlay-bg: var(--gray-track);
+
 			border-color: var(--gray-a11) !important;
 		}
 
@@ -148,7 +161,8 @@
 		}
 
 		&.gridCell--touched {
-			background-color: var(--purple-track) !important;
+			--overlay-bg: var(--purple-track);
+
 			border-color: var(--purple-a11) !important;
 		}
 	}
@@ -172,8 +186,12 @@
 	}
 
 	&--touched {
-		background-color: var(--accent-track) !important;
 		border-color: var(--accent-a11) !important;
+
+		&::before {
+			opacity: 1;
+			transition: none;
+		}
 	}
 
 	&--glow {
