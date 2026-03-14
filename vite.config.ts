@@ -358,25 +358,21 @@ export default defineConfig(({ mode }) => {
 					},
 					manualChunks(id) {
 						if (id.includes("node_modules")) {
-							// Chunk React and its dependencies
-							if (/[\/]node_modules[\/](react|react-dom|scheduler)[\/]/.test(id)) {
-								return "react";
-							}
-
-							// Common Utilities to avoid circularity with manual chunks
-							// Handle these BEFORE specific rules like charts
+							// CORE VENDOR: React, Router, State Management, and critical utils
 							if (
+								/[\/]node_modules[\/](react|react-dom|scheduler|react-router|zustand|immer)[\/]/.test(
+									id
+								) ||
 								id.includes("clsx") ||
 								id.includes("tailwind-merge") ||
 								id.includes("react-is") ||
-								id.includes("immer") ||
 								id.includes("tiny-invariant") ||
 								id.includes("use-sync-external-store")
 							) {
-								return "react";
+								return "vendor-core";
 							}
 
-							// Radix UI Components & Themes
+							// UI VENDOR: Radix and Floating UI
 							if (
 								id.includes("@radix-ui/") ||
 								id.includes("/assets/css/radix-colors/") ||
@@ -385,39 +381,26 @@ export default defineConfig(({ mode }) => {
 								id.includes("react-remove-scroll") ||
 								id.includes("focus-lock")
 							) {
-								return "radix";
+								return "vendor-ui";
 							}
 
-							// i18n
+							// i18n VENDOR
 							if (
 								id.includes("i18next") ||
 								id.includes("react-i18next") ||
 								id.includes("@formatjs") ||
 								id.includes("intl-messageformat")
 							)
-								return "i18n";
+								return "vendor-i18n";
 
-							// Split Zustand and other state management
-							if (id.includes("zustand") || id.includes("immer")) {
-								return "state";
+							// OBSERVABILITY VENDOR: Sentry, Web Vitals, Analytics
+							if (
+								id.includes("@sentry") ||
+								id.includes("web-vitals") ||
+								id.includes("react-ga4")
+							) {
+								return "vendor-observability";
 							}
-
-							// Router
-							if (id.includes("react-router")) return "router";
-
-							// Web Vitals & Analytics
-							if (
-								id.includes("node_modules/web-vitals/") ||
-								id.includes("node_modules/react-ga4/")
-							)
-								return "events";
-
-							// Sentry Error Tracking
-							if (
-								id.includes("node_modules/@sentry/") ||
-								id.includes("node_modules/@sentry-internal/")
-							)
-								return "observability";
 						}
 					},
 					assetFileNames: (assetInfo) =>

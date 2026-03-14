@@ -127,7 +127,7 @@ export const LanguageSelector: React.FC = () => {
 					>
 						<img
 							src={currentFlagPath}
-							alt={t("languageInfo.changeLanguage") || "Change language"}
+							alt=""
 							width="20"
 							height="14"
 							className="h-3 w-4 sm:h-3.5 sm:w-5"
@@ -142,7 +142,7 @@ export const LanguageSelector: React.FC = () => {
 					>
 						<img
 							src={currentFlagPath}
-							alt={t("languageInfo.changeLanguage") || "Change language"}
+							alt=""
 							width="16"
 							height="12"
 							className="h-[12] w-[16] sm:h-[14] sm:w-[20]"

@@ -272,6 +272,7 @@
 			techTreePreload.as = "fetch";
 			techTreePreload.crossOrigin = "anonymous";
 			techTreePreload.href = `https://api.nms-optimizer.app/tech_tree/${platform}`;
+			techTreePreload.setAttribute("fetchpriority", "high");
 			document.head.appendChild(techTreePreload);
 
 			// Preload platforms list (core dependency for ship selection)
@@ -280,6 +281,7 @@
 			platformsPreload.as = "fetch";
 			platformsPreload.crossOrigin = "anonymous";
 			platformsPreload.href = "https://api.nms-optimizer.app/platforms";
+			platformsPreload.setAttribute("fetchpriority", "high");
 			document.head.appendChild(platformsPreload);
 		} catch (e) {
 			// Fail silently, app will handle fetching normally
