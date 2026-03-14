@@ -1,7 +1,7 @@
 {
 	"id": "improve_ttfb_20260313",
 	"title": "Improve TTFB (Time to First Byte)",
-	"status": "active",
+	"status": "completed",
 	"priority": "high",
 	"created_at": "2026-03-13",
 	"description": "Optimize Cloudflare caching and Express middleware to reduce TTFB from >500ms to <100ms."

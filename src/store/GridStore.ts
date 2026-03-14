@@ -310,14 +310,18 @@ const debouncedStorage = {
 			const keysToRemove: string[] = [];
 
 			if (typeof window !== "undefined" && window.localStorage) {
-				const len = localStorage.length;
+				try {
+					const len = localStorage.length;
 
-				for (let i = 0; i < len; i++) {
-					const key = localStorage.key(i);
+					for (let i = 0; i < len; i++) {
+						const key = localStorage.key(i);
 
-					if (key && key.startsWith("app-state") && key !== name) {
-						keysToRemove.push(key);
+						if (key && key.startsWith("app-state") && key !== name) {
+							keysToRemove.push(key);
+						}
 					}
+				} catch (e) {
+					console.warn("GridStore: Failed to enumerate localStorage keys.", e);
 				}
 			}
 

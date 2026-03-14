@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
 import { DialogContext } from "./dialog-utils";
 
 /** List of non-English language codes supported by the router. */
@@ -30,30 +31,22 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const { i18n } = useTranslation();
 
 	const [userVisited, setUserVisited] = useState(() => {
-		if (typeof window === "undefined" || !window.localStorage) {
-			return false;
-		}
-
-		return localStorage.getItem("userVisited") === "true";
+		return safeGetItem("userVisited") === "true";
 	});
 
 	const [shareUrl, setShareUrl] = useState<string>("");
 	const [sectionToScrollTo, setSectionToScrollTo] = useState<string | undefined>(undefined);
 	const [tutorialFinished, setTutorialFinished] = useState(() => {
-		if (typeof window === "undefined" || !window.localStorage) {
-			return false;
-		}
-
 		const oldKey = "hasVisitedNMSOptimizer";
 		const newKey = "tutorialFinished";
-		const oldVal = localStorage.getItem(oldKey);
-		const newVal = localStorage.getItem(newKey);
+		const oldVal = safeGetItem(oldKey);
+		const newVal = safeGetItem(newKey);
 
 		if (newVal === "true") {
 			return true;
 		} else if (oldVal === "true") {
-			localStorage.setItem(newKey, "true");
-			localStorage.removeItem(oldKey);
+			safeSetItem(newKey, "true");
+			safeRemoveItem(oldKey);
 
 			return true;
 		} else {
@@ -132,10 +125,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const markTutorialFinished = () => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);
-
-			if (typeof window !== "undefined" && window.localStorage) {
-				localStorage.setItem("tutorialFinished", "true");
-			}
+			safeSetItem("tutorialFinished", "true");
 		}
 	};
 
@@ -147,10 +137,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const markUserVisited = () => {
 		if (!userVisited) {
 			setUserVisited(true);
-
-			if (typeof window !== "undefined" && window.localStorage) {
-				localStorage.setItem("userVisited", "true");
-			}
+			safeSetItem("userVisited", "true");
 		}
 	};
 

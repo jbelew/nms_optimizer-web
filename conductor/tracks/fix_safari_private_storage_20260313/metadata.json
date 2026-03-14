@@ -1,0 +1,8 @@
+{
+	"id": "fix_safari_private_storage_20260313",
+	"title": "Fix localStorage SecurityError in Safari Private Browsing",
+	"status": "completed",
+	"priority": "high",
+	"created_at": "2026-03-13",
+	"description": "Prevent app crashes in Safari Private Browsing by wrapping all localStorage access in safe utilities."
+}
