@@ -1,3 +1,10 @@
+## [6.16.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.9...v6.16.10) (2026-03-14)
+
+
+### Bug Fixes
+
+* Prevent Safari Private Browsing crashes by using safe localStorage utilities in InstallPrompt, DialogContext, and GridStore. ([b7bd393](https://github.com/jbelew/nms_optimizer-web/commit/b7bd3932e15bd1717d3df619ef68df8bb4625594))
+
 ## [6.16.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.8...v6.16.9) (2026-03-14)
 
 
