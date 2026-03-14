@@ -11,3 +11,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Improve Web App Observability**
   *Link: [./tracks/improve_observability_20260218/](./tracks/improve_observability_20260218/)*
+
+---
+
+- [ ] **Track: Improve TTFB (Time to First Byte)**
+  *Link: [./tracks/improve_ttfb_20260313/](./tracks/improve_ttfb_20260313/)*

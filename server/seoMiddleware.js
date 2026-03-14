@@ -87,7 +87,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
             res.setHeader("Content-Security-Policy", csp);
             res.setHeader("Document-Policy", "js-profiling");
             res.setHeader("ETag", cachedEtag);
-            res.setHeader("Cache-Control", "no-cache");
+            res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60");
 
             if (req.headers["if-none-match"] === cachedEtag) {
                 return res.status(304).end();
@@ -175,7 +175,7 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         res.setHeader("Content-Security-Policy", csp);
         res.setHeader("Document-Policy", "js-profiling");
         res.setHeader("ETag", indexEtag);
-        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60");
 
         if (req.headers["if-none-match"] === indexEtag) {
             return res.status(304).end();

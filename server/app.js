@@ -12,7 +12,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Third-party libraries
-import compression from "compression";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
 // Local modules
@@ -49,6 +48,50 @@ const csp = [
 
 const app = express();
 
+// ============================================================================
+// IN-MEMORY CACHE FOR SSG FILES & INDEX.HTML
+// ============================================================================
+
+/**
+ * A set of paths to pre-rendered index.html files (SSG).
+ * Cached at startup to avoid expensive fs.stat calls on every request.
+ * @type {Set<string>}
+ */
+const ssgFiles = new Set();
+
+/**
+ * Scans the DIST_DIR for pre-rendered index.html files and populates the ssgFiles set.
+ * Only runs in production or if the cache is empty.
+ */
+export function scanSsgFiles() {
+	if (!fs.existsSync(DIST_DIR)) return;
+
+	const walk = (dir) => {
+		const files = fs.readdirSync(dir);
+		for (const file of files) {
+			const fullPath = path.join(dir, file);
+			if (fs.statSync(fullPath).isDirectory()) {
+				walk(fullPath);
+			} else if (file === "index.html") {
+				// Store the path relative to DIST_DIR (e.g., "fr/about/index.html")
+				const relativePath = path.relative(DIST_DIR, fullPath);
+				ssgFiles.add(relativePath);
+			}
+		}
+	};
+
+	try {
+		ssgFiles.clear();
+		walk(DIST_DIR);
+		console.log(`SSG cache populated with ${ssgFiles.size} files.`);
+	} catch (error) {
+		console.error("Failed to scan SSG files:", error);
+	}
+}
+
+// Initial scan
+scanSsgFiles();
+
 // Maintenance Mode Middleware
 if (MAINTENANCE_MODE && process.env.NODE_ENV !== "test") {
 	app.use((req, res, next) => {
@@ -59,16 +102,8 @@ if (MAINTENANCE_MODE && process.env.NODE_ENV !== "test") {
 	});
 }
 
-// Apply compression early to capture all eligible responses, especially dynamic HTML
-app.use(compression({
-	level: 6, // Balanced compression level
-	threshold: 1024, // Compressing anything over 1kb
-	filter: (req, res) => {
-		if (req.headers["x-no-compression"]) return false;
-		// Standard compression filter
-		return compression.filter(req, res);
-	}
-}));
+// NOTE: Global compression is intentionally omitted here to offload Brotli/Gzip 
+// compression to Cloudflare, reducing origin CPU usage and TTFB.
 
 // ============================================================================
 // IN-MEMORY CACHE FOR INDEX.HTML
@@ -129,8 +164,12 @@ function setCacheHeaders(res, filePath) {
 	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, "");
 	const hashedAsset = /-[0-9a-zA-Z_-]{8,}\.(js|css|woff2?|png|jpe?g|webp|svg)$/;
 
-	if (fileName === "sw.js" || fileName === "index.html") {
+	if (fileName === "sw.js") {
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+	} else if (fileName === "index.html") {
+		// Use s-maxage and stale-while-revalidate for HTML to minimize origin revalidation
+		// Cloudflare can cache the HTML for a year and serve stale while fetching in background.
+		res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
@@ -255,29 +294,25 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 
 	// 1. Resolve potential SSG path
 	const parts = req.path.split("/").filter((p) => p);
-	let ssgPath = null;
+	let relativeSsgPath = null;
 
 	if (parts.length === 0) {
-		ssgPath = path.join(DIST_DIR, "index.html");
+		relativeSsgPath = "index.html";
 	} else if (SUPPORTED_LANGUAGES.includes(parts[0])) {
 		const langPage = parts.slice(1).join("/");
-		ssgPath = path.join(DIST_DIR, parts[0], langPage || "index.html");
-		if (langPage) ssgPath = path.join(ssgPath, "index.html");
+		relativeSsgPath = path.join(parts[0], langPage || "index.html");
+		if (langPage) relativeSsgPath = path.join(relativeSsgPath, "index.html");
 	} else {
-		ssgPath = path.join(DIST_DIR, parts.join("/"), "index.html");
+		relativeSsgPath = path.join(parts.join("/"), "index.html");
 	}
 
-	// 2. Try to serve pre-rendered SSG file if it exists
-	try {
-		const stats = await fs.promises.stat(ssgPath);
-		if (stats.isFile()) {
-			res.setHeader("Cache-Control", "no-cache, public, must-revalidate, max-age=0");
-			res.setHeader("Document-Policy", "js-profiling");
-			// Express sendFile handles ETags automatically based on file stats
-			return res.sendFile(ssgPath);
-		}
-	} catch (err) {
-		// SSG file doesn't exist, fall back to dynamic SEO injection
+	// 2. Try to serve pre-rendered SSG file if it exists in our memory cache
+	if (ssgFiles.has(relativeSsgPath)) {
+		const fullPath = path.join(DIST_DIR, relativeSsgPath);
+		res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, stale-while-revalidate=60");
+		res.setHeader("Document-Policy", "js-profiling");
+		// Express sendFile handles ETags automatically based on file stats
+		return res.sendFile(fullPath);
 	}
 
 	// 3. Fall back to dynamic SEO tag injection using the base index.html

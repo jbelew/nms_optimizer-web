@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 import request from "supertest";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 
-import app from "./app.js";
+import app, { scanSsgFiles } from "./app.js";
 
 /** Directory of the current module, resolved from ES module metadata */
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -62,6 +62,9 @@ beforeAll(() => {
 		'<xml version="1.0" encoding="UTF-8"?><urlset></urlset>'
 	);
 	fs.writeFileSync(path.join(MOCK_DIST_PATH, "robots.txt"), "User-agent: *");
+
+	// Refresh SSG cache after creating mock files
+	scanSsgFiles();
 });
 
 /**
@@ -203,13 +206,14 @@ describe("Security Headers", () => {
 });
 
 describe("Compression", () => {
-	it("should serve gzip-compressed assets for HTML", async () => {
+	it("should NOT serve compressed assets for HTML (offloaded to Cloudflare)", async () => {
 		const response = await request(app).get("/").set("Accept-Encoding", "gzip");
 		expect(response.status).toBe(200);
-		expect(response.headers["content-encoding"]).toBe("gzip");
+		// Origin no longer compresses HTML to reduce TTFB; Cloudflare handles this at the edge.
+		expect(response.headers["content-encoding"]).toBeUndefined();
 	});
 
-	it("should serve uncompressed assets to clients without gzip support", async () => {
+	it("should serve uncompressed assets to clients", async () => {
 		const response = await request(app).get("/").set("Accept-Encoding", "identity");
 		expect(response.status).toBe(200);
 		expect(response.headers["content-encoding"]).toBeUndefined();
