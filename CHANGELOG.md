@@ -1,3 +1,10 @@
+## [6.16.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.8...v6.16.9) (2026-03-14)
+
+
+### Bug Fixes
+
+* Improve TTFB by optimizing cache-control headers, removing global compression, and implementing in-memory SSG path caching. ([b6839cb](https://github.com/jbelew/nms_optimizer-web/commit/b6839cb4a66a270106c89b951dff7e67beb88a92))
+
 ## [6.16.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.7...v6.16.8) (2026-03-13)
 
 
