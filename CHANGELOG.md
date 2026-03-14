@@ -1,3 +1,10 @@
+## [6.16.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.10...v6.16.11) (2026-03-14)
+
+
+### Performance Improvements
+
+* Optimize build by refactoring Vite vendor chunking and prioritizing critical preloads, while also enhancing accessibility labels and adjusting header text color. ([d453dd1](https://github.com/jbelew/nms_optimizer-web/commit/d453dd1b7dce23efbeeda1ab415972f037451807))
+
 ## [6.16.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.9...v6.16.10) (2026-03-14)
 
 
