@@ -33,9 +33,9 @@ export default defineConfig(({ mode }) => {
 	}
 
 	return {
-		experimental: {
-			bundledDev: true,
-		},
+		// experimental: {
+		// 	bundledDev: true,
+		// },
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
@@ -357,6 +357,11 @@ export default defineConfig(({ mode }) => {
 						},
 					},
 					manualChunks(id) {
+						// Force all analytics-related files into a neutrally-named chunk
+						// to prevent ad-blockers from blocking them based on the filename.
+						if (id.includes("analytics")) {
+							return "vendor-events";
+						}
 						if (id.includes("node_modules")) {
 							// CORE VENDOR: React, Router, State Management, and critical utils
 							if (
@@ -393,13 +398,9 @@ export default defineConfig(({ mode }) => {
 							)
 								return "vendor-i18n";
 
-							// OBSERVABILITY VENDOR: Sentry, Web Vitals, Analytics
-							if (
-								id.includes("@sentry") ||
-								id.includes("web-vitals") ||
-								id.includes("react-ga4")
-							) {
-								return "vendor-observability";
+							// Events & Reporting: Sentry, Web Vitals
+							if (id.includes("@sentry") || id.includes("web-vitals")) {
+								return "vendor-events";
 							}
 						}
 					},
