@@ -67,29 +67,6 @@ $panel-border: 1px solid var(--gray-6);
 	&__background-wrapper {
 		@media (width <= 639px) {
 			position: relative;
-
-			&::before {
-				background-image: url("/assets/img/background@mobile-blurred.webp");
-				background-position: center top;
-				background-repeat: no-repeat;
-				background-size: cover;
-				content: "";
-				height: 100%;
-				left: 0;
-				pointer-events: none;
-				position: absolute;
-				top: 0;
-				width: 100%;
-				z-index: -1;
-			}
-
-			// Accessibility override: disable background image
-			body.a11y-font & {
-				&::before {
-					background-image: none !important;
-					display: none !important;
-				}
-			}
 		}
 	}
 

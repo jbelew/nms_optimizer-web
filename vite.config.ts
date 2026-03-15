@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig, loadEnv, Plugin } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
@@ -16,7 +16,6 @@ import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs"
 
 export default defineConfig(({ mode }) => {
 	// Load env file based on `mode` in the current working directory.
-	// Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
 	const env = loadEnv(mode, process.cwd(), "");
 
 	// Use an environment variable for the app version, falling back to package.json
@@ -33,9 +32,6 @@ export default defineConfig(({ mode }) => {
 	}
 
 	return {
-		// experimental: {
-		// 	bundledDev: true,
-		// },
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
 			__BUILD_DATE__: JSON.stringify(buildDate),
@@ -43,6 +39,12 @@ export default defineConfig(({ mode }) => {
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
 		devtools: true,
+		oxc: {
+			jsx: {
+				runtime: "automatic",
+				importSource: "react",
+			},
+		},
 		plugins: [
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
@@ -54,7 +56,7 @@ export default defineConfig(({ mode }) => {
 				},
 			}),
 			markdownBundlePlugin(),
-			...(!process.env.STORYBOOK_BUILD // Conditionally include the plugin
+			...(!process.env.STORYBOOK_BUILD
 				? [
 						{
 							name: "generate-version-json",
@@ -72,8 +74,11 @@ export default defineConfig(({ mode }) => {
 					]
 				: []),
 			react(),
+			// React Compiler support via Babel (Rolldown native plugin)
 			babel({
 				presets: [reactCompilerPreset()],
+				include: /\.[jt]sx?$/,
+				exclude: /node_modules/,
 			}),
 			tailwindcss(),
 			splashScreen({
@@ -104,8 +109,8 @@ export default defineConfig(({ mode }) => {
 				template: "raw-data",
 			}),
 			VitePWA({
-				manifestFilename: "manifest.json", // ensure browsers don't 404 on /manifest.json
-				registerType: "prompt", // Use 'prompt' for user control over updates
+				manifestFilename: "manifest.json",
+				registerType: "prompt",
 				includeAssets: [
 					"favicon.svg",
 					"robots.txt",
@@ -114,23 +119,14 @@ export default defineConfig(({ mode }) => {
 					"assets/locales/*/translation.json",
 				],
 				workbox: {
-					// User-controlled updates
-					clientsClaim: false, // Set to false to allow onNeedRefresh to prompt
-					skipWaiting: false, // Set to false to allow onNeedRefresh to prompt
-
-					// Workbox quality-of-life features
+					clientsClaim: false,
+					skipWaiting: false,
 					navigationPreload: false,
-					cleanupOutdatedCaches: true, // Essential for cache hygiene
+					cleanupOutdatedCaches: true,
 					maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-					// Don't serve app shell for unknown routes - let 404s return proper status for SEO
 					navigateFallback: undefined,
-
-					// Don't precache HTML - let the server handle it with proper cache headers
 					dontCacheBustURLsMatching: /\.(js|css|woff2?)$/,
-
-					// define caching strategies
 					runtimeCaching: [
-						// CRITICAL: version.json must NEVER be cached - always fetch from network
 						{
 							urlPattern: /\/version\.json$/,
 							handler: "NetworkOnly",
@@ -143,10 +139,10 @@ export default defineConfig(({ mode }) => {
 								networkTimeoutSeconds: 3,
 								expiration: {
 									maxEntries: 10,
-									maxAgeSeconds: 300, // 5 minutes
+									maxAgeSeconds: 300,
 								},
 								cacheableResponse: {
-									statuses: [0, 200], // Only cache successful responses, not 404s
+									statuses: [0, 200],
 								},
 							},
 						},
@@ -157,18 +153,16 @@ export default defineConfig(({ mode }) => {
 								cacheName: "images-cache",
 								expiration: {
 									maxEntries: 1000,
-									maxAgeSeconds: 31536000, // 1 year (matches server/app.js)
+									maxAgeSeconds: 31536000,
 								},
 								cacheableResponse: {
-									statuses: [0, 200], // Only cache successful responses, not 503s
+									statuses: [0, 200],
 								},
-								// Ignore query parameters in cache key to prevent duplicate caches
 								plugins: [
 									{
-										// Ignore query parameters when matching cache entries
 										cacheKeyWillBeUsed: async ({ request }) => {
 											const url = new URL(request.url);
-											url.search = ""; // Remove query string
+											url.search = "";
 											return new Request(url.toString(), {
 												method: request.method,
 											});
@@ -184,9 +178,8 @@ export default defineConfig(({ mode }) => {
 								cacheName: "fonts-cache",
 								expiration: {
 									maxEntries: 30,
-									maxAgeSeconds: 31536000, // 1 year
+									maxAgeSeconds: 31536000,
 								},
-								// Ignore query parameters in cache key
 								plugins: [
 									{
 										cacheKeyWillBeUsed: async ({ request }) => {
@@ -207,7 +200,7 @@ export default defineConfig(({ mode }) => {
 								cacheName: "translations-cache",
 								expiration: {
 									maxEntries: 20,
-									maxAgeSeconds: 86400, // 1 day
+									maxAgeSeconds: 86400,
 								},
 							},
 						},
@@ -240,7 +233,7 @@ export default defineConfig(({ mode }) => {
 								networkTimeoutSeconds: 3,
 								expiration: {
 									maxEntries: 50,
-									maxAgeSeconds: 86400, // 1 day
+									maxAgeSeconds: 86400,
 								},
 							},
 						},
@@ -248,7 +241,7 @@ export default defineConfig(({ mode }) => {
 							urlPattern: /^https:\/\/www\.google-analytics\.com\//,
 							handler: "NetworkOnly",
 						},
-						],
+					],
 				},
 				manifest: {
 					id: "/",
@@ -312,11 +305,11 @@ export default defineConfig(({ mode }) => {
 				react: path.resolve(__dirname, "node_modules/react"),
 				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
 			},
-			dedupe: ["react", "react-dom"], // <- critical for singleton React
+			dedupe: ["react", "react-dom"],
 		},
 		optimizeDeps: {
 			include: ["react", "react-dom", "react-ga4"],
-			dedupe: ["react", "react-dom"], // <- dedupe pre-bundling
+			dedupe: ["react", "react-dom"],
 		},
 		server: {
 			forwardConsole: true,
@@ -332,61 +325,85 @@ export default defineConfig(({ mode }) => {
 				enabled: true,
 				granularity: "module",
 			},
-			// recharts + all its deps (d3-*, decimal.js, reduxjs/toolkit, etc.) is ~536kB unminified.
-			// DO NOT force recharts into a manualChunk — Rolldown bleeds React internals into it,
-			// causing the index bundle to statically import the charts chunk (defeating lazy loading).
-			// Instead we let Rolldown split it naturally and raise the warning threshold.
 			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
 			sourcemap: true,
 			cssMinify: "lightningcss",
 			modulePreload: {
-				// Filter function to control which chunks get modulepreload links
-				// Exclude charts chunk to prevent eager loading of recharts
-				resolveDependencies: (filename, deps, { hostId, hostType }) => {
-					return deps.filter((dep) => !dep.includes("charts") && !dep.includes("markdown"));
+				resolveDependencies: (filename, deps) => {
+					// Filter out naturally split chunks and the charts vendor to prevent eager preloading
+					return deps.filter(
+						(dep) => !dep.includes("chunk-") && !dep.includes("vendor-charts")
+					);
 				},
 			},
 			rolldownOptions: {
 				output: {
-					// Equivalent to the old terserOptions: drop console/debugger from production builds
 					minify: {
 						compress: {
 							dropConsole: true,
 							dropDebugger: true,
 						},
 					},
+					chunkFileNames: (chunkInfo) => {
+						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
+						// use generic 'chunk-' prefix for all other naturally split modules.
+						if (chunkInfo.name && chunkInfo.name.startsWith("vendor-")) {
+							return "assets/[name]-[hash].js";
+						}
+						return "assets/chunk-[hash].js";
+					},
+					entryFileNames: "assets/entry-[hash].js",
 					manualChunks(id) {
-						// Force all analytics-related files into a neutrally-named chunk
-						// to prevent ad-blockers from blocking them based on the filename.
-						if (id.includes("analytics")) {
+						// Avoid ad-blocker triggers by grouping potentially blocked terms into neutrally-named chunks.
+						const blockedTerms = [
+							"analytics",
+							"sentry",
+							"track",
+							"telemetry",
+							"metrics",
+							"beacon",
+							"google-analytics",
+							"gtag",
+							"ad-block",
+						];
+
+						if (blockedTerms.some((term) => id.toLowerCase().includes(term))) {
 							return "vendor-events";
 						}
+
 						if (id.includes("node_modules")) {
-							// CORE VENDOR: React, Router, State Management, and critical utils
+							// CORE VENDOR: React, Router, and essential state management
 							if (
 								/[\/]node_modules[\/](react|react-dom|scheduler|react-router|zustand|immer)[\/]/.test(
 									id
 								) ||
+								id.includes("react-is") ||
+								id.includes("use-sync-external-store") ||
 								id.includes("clsx") ||
 								id.includes("tailwind-merge") ||
-								id.includes("react-is") ||
-								id.includes("tiny-invariant") ||
-								id.includes("use-sync-external-store")
+								id.includes("tiny-invariant")
 							) {
 								return "vendor-core";
 							}
 
-							// UI VENDOR: Radix and Floating UI
+							// UI VENDOR: Radix Themes
+							if (
+								id.includes("@radix-ui/themes") ||
+								id.includes("/assets/css/radix-colors/")
+							) {
+								return "vendor-ui-themes";
+							}
+
+							// UI UTILS: Floating UI and Radix primitives
 							if (
 								id.includes("@radix-ui/") ||
-								id.includes("/assets/css/radix-colors/") ||
 								id.includes("@floating-ui/") ||
 								id.includes("aria-hidden") ||
 								id.includes("react-remove-scroll") ||
 								id.includes("focus-lock")
 							) {
-								return "vendor-ui";
+								return "vendor-ui-utils";
 							}
 
 							// i18n VENDOR
@@ -395,12 +412,8 @@ export default defineConfig(({ mode }) => {
 								id.includes("react-i18next") ||
 								id.includes("@formatjs") ||
 								id.includes("intl-messageformat")
-							)
+							) {
 								return "vendor-i18n";
-
-							// Events & Reporting: Sentry, Web Vitals
-							if (id.includes("@sentry") || id.includes("web-vitals")) {
-								return "vendor-events";
 							}
 						}
 					},
