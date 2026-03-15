@@ -1,3 +1,10 @@
+## [6.16.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.12...v6.16.13) (2026-03-15)
+
+
+### Bug Fixes
+
+* Add Vite skill documentation and optimize mobile background image loading for LCP. ([6ee2d2c](https://github.com/jbelew/nms_optimizer-web/commit/6ee2d2c64b0faa966160e2537b3b13e7d72928bb))
+
 ## [6.16.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.11...v6.16.12) (2026-03-14)
 
 
