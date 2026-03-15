@@ -1,4 +1,4 @@
-# NMS Optimizer Help
+# NMS Optimizer Instructions: Usage, Modules & Supercharged Cells
 
 ## Basic Usage
 

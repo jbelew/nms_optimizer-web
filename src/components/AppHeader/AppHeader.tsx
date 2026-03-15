@@ -160,7 +160,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				</Flex>
 			)}
 
-			<h1 className="app-header__logo-text">NO MAN'S SKY</h1>
+			<div className="app-header__logo-text">NO MAN'S SKY</div>
 
 			<Flex
 				align="center"

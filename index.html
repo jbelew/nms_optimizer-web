@@ -16,6 +16,132 @@
 
 <head>
 	<meta charset="UTF-8" />
+	<script>
+		(function () {
+			// Detect if this is a bot/crawler or headless browser
+			const isBot = /bot|crawler|spider|headless|phantom|webdriver/i.test(navigator.userAgent) ||
+				navigator.webdriver === true ||
+				!('onmousemove' in document);
+
+			if (isBot) {
+				document.documentElement.classList.add('is-bot');
+			}
+		})();
+	</script>
+	<noscript data-vpss-background-noscript>
+		<style>
+			body::before {
+				content: "";
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000000;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-image: image-set(url("/assets/img/background.webp") 1x,
+						url("/assets/img/background@2x.webp") 2x);
+				z-index: -1;
+			}
+
+			@media (width <= 639px) {
+				body::before {
+					background-image: url("/assets/img/background@mobile-blurred.webp");
+					background-position: center top;
+				}
+			}
+		</style>
+	</noscript>
+	<style id="vpss-style">
+		.is-bot #vpss {
+			display: none !important;
+		}
+
+		#vpss {
+			visibility: visible;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 16px;
+			position: fixed;
+			background-color: var(--vpss-bg-splash, #000000);
+			top: 0px;
+			right: 0px;
+			left: 0px;
+			bottom: 0;
+			z-index: 99999;
+			opacity: 1;
+		}
+
+		#vpss .vpss-loader {
+			display: inline-block;
+			position: relative;
+			width: 72px;
+			height: 10px;
+		}
+
+		#vpss .vpss-loader .vpss-dot {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--vpss-bg-loader, #00A2C7);
+			animation-timing-function: cubic-bezier(0, 1, 1, 0);
+		}
+
+		#vpss .vpss-loader .vpss-dot:nth-child(1) {
+			left: 8px;
+			animation: vpss-dot1 0.6s infinite;
+		}
+
+		#vpss .vpss-loader .vpss-dot:nth-child(2) {
+			left: 8px;
+			animation: vpss-dot2 0.6s infinite;
+		}
+
+		#vpss .vpss-loader .vpss-dot:nth-child(3) {
+			left: 32px;
+			animation: vpss-dot2 0.6s infinite;
+		}
+
+		#vpss .vpss-loader .vpss-dot:nth-child(4) {
+			left: 56px;
+			animation: vpss-dot3 0.6s infinite;
+		}
+
+		@keyframes vpss-dot1 {
+			0% {
+				transform: scale(0);
+			}
+
+			100% {
+				transform: scale(1);
+			}
+		}
+
+		@keyframes vpss-dot2 {
+			0% {
+				transform: translate(0, 0);
+			}
+
+			100% {
+				transform: translate(24px, 0);
+			}
+		}
+
+		@keyframes vpss-dot3 {
+			0% {
+				transform: scale(1);
+			}
+
+			100% {
+				transform: scale(0);
+			}
+		}
+	</style>
 	<style>
 		html {
 			background: #000;
@@ -35,29 +161,12 @@
 
 	<title>NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky</title>
 
-	<!-- Preferred favicon format -->
+	<!-- Favicons -->
 	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
 	<link rel="icon" href="/assets/svg/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
-
-	<!-- Fallback PNG favicons -->
 	<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
 	<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
-
-	<!-- Apple touch icon (iOS home screen icon) -->
 	<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=3" />
-
-	<script>
-		(function () {
-			// Detect if this is a bot/crawler or headless browser
-			const isBot = /bot|crawler|spider|headless|phantom|webdriver/i.test(navigator.userAgent) ||
-				navigator.webdriver === true ||
-				!('onmousemove' in document);
-
-			if (isBot) {
-				document.documentElement.classList.add('is-bot');
-			}
-		})();
-	</script>
 
 	<style>
 		/* src/assets/css/fonts.css */
@@ -104,7 +213,8 @@
 		}
 
 
-		body::before {
+		body.background-visible::before,
+		.is-bot body::before {
 			content: "";
 			position: fixed;
 			top: 0;
@@ -125,8 +235,8 @@
 		}
 
 		/* Mobile (≤639px): Show the blurred mobile background for LCP optimization */
-		@media (width <= 639px) {
-			body::before {
+		@media (width <=639px) {
+			body.background-visible::before {
 				background-image: url("/assets/img/background@mobile-blurred.webp");
 				background-position: center top;
 			}
@@ -176,7 +286,7 @@
 			color: white;
 		}
 
-		@media (width >= 640px) {
+		@media (width >=640px) {
 			.app-header-static__logo-text {
 				filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
 				font-size: 2.25rem;
@@ -382,8 +492,115 @@
 </head>
 
 <body>
-	<noscript>
+	<div id="root"></div>
+
+	<div id="vpss">
+		<div class="vpss-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 126.75 126.77">
+				<g class="layer">
+					<path fill="#fff"
+						d="m62.02 1.25-1.35 1.21S44.69 16.22 44.69 39.87v24.14h-9.66v9.66H15.72V25.4H6.07v33.79H1.24v53.1h14.48v-7.53l19.31 6.95v15.06h9.65v-11.63l4.83 1.83v9.8h9.65v-6.32l3.19 1.21 1.64.58 1.64-.58 3.19-1.21v6.32h9.65v-9.8l4.83-1.83v11.63h9.65v-15.06l19.31-6.95v7.53h14.49v-53.1h-4.83V25.4h-9.65v48.27H92.96v-9.66H83.3V39.87c0-23.65-15.98-37.41-15.98-37.41l-1.35-1.21h-3.95zM64 13.46c3.52 3.81 9.65 11.68 9.65 26.4V64h-4.83V44.69h-9.65V64h-4.83V39.86c0-14.72 6.18-22.59 9.65-26.4H64zM44.69 73.65h38.62v19.31h9.65v-9.65h19.31v11.15L64 111.98 15.73 94.46V83.31h19.31v9.65h9.65V73.65zm4.83 4.83c0 8.01 6.47 14.48 14.48 14.48 8.01 0 14.48-6.47 14.48-14.48h-9.65c0 2.65-2.17 4.83-4.83 4.83-2.65 0-4.83-2.17-4.83-4.83h-9.65z" />
+				</g>
+			</svg></div>
+		<div class="vpss-loader">
+			<div class="vpss-dot"></div>
+			<div class="vpss-dot"></div>
+			<div class="vpss-dot"></div>
+			<div class="vpss-dot"></div>
+		</div>
+	</div>
+
+	<script>
+		(function () {
+			const id = "vpss";
+			const url = new URL(window.location.href);
+			const urlParams = new URLSearchParams(url.search)
+			const param = urlParams.get(id);
+
+			// Setup global options
+			window.__VPSS__ = {
+				id: id,
+				hidden: param === "false",
+				renderedAt: new Date().getTime(),
+				minDurationMs: 0,
+				getElement: function () {
+					return document.getElementById(id);
+				},
+				getStyles: function () {
+					return document.getElementById(id + "-style");
+				},
+				show: function () {
+					const element = this.getElement();
+					if (!element) return;
+
+					element.style.visibility = "visible";
+				},
+				hide: async function () {
+					const element = this.getElement();
+					if (!element) return;
+
+					// Set hidden flag to prevent multiple calls
+					this.hidden = true;
+
+					// Optionally wait for minDurationMs before starting animation
+					if (
+						this.minDurationMs !== undefined &&
+						this.renderedAt !== undefined
+					) {
+						const elapsedTime = new Date().getTime() - this.renderedAt;
+						const remainingTime = Math.max(this.minDurationMs - elapsedTime, 0);
+						await new Promise((resolve) => setTimeout(resolve, remainingTime));
+					}
+
+					const animation = element.animate(
+						[{ opacity: 1 }, { opacity: 0 }],
+						{ duration: 200, easing: "ease-out", fill: "forwards" }
+					);
+
+					animation.onfinish = () => {
+						this.remove();
+					};
+				},
+				remove: function () {
+					const element = this.getElement();
+					const styles = this.getStyles();
+
+					if (element && styles) {
+						element.remove();
+						styles.remove();
+					}
+				}
+			};
+
+			if (window.__VPSS__.hidden) {
+				window.__VPSS__.remove();
+			} else {
+				window.__VPSS__.show();
+			}
+
+			// Remove query param from URL
+			if (param) {
+				urlParams.delete(id);
+				url.search = urlParams.toString();
+				window.history.replaceState({}, "", url);
+			}
+		})();
+	</script>
+	<noscript data-ssg-template>
 		<main>
+
+			<header class="app-header-static">
+				<div class="app-header-static__logo-text" style="margin-bottom: 4px;">NO MAN'S SKY</div>
+				<div class="app-header-static__separator-container">
+					<span class="app-header-static__separator"></span>
+					<img alt="No Man's Sky Atlas Logo" width="16" height="20"
+						src="assets/img/nms-icon.webp" />
+					<span class="app-header-static__separator"></span>
+				</div>
+				<h2 class="app-header-static__title">
+					Technology Layout Optimizer <span style="color: #4CCCE6;">AI/RUST</span>
+				</h2>
+			</header>
+
 			<section>
 				<h1>NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky</h1>
 				<img src="/assets/img/screenshots/screenshot.png" alt="Screenshot of NMS Optimizer application" />
@@ -473,7 +690,12 @@
 		<style>
 			main {
 				color: #fff;
+				background-color: #000;
+				margin: 2rem auto;
 				padding: 2rem;
+				padding-top: 0;
+				max-width: 85ch;
+				border-radius: 16px;
 				font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 			}
 
@@ -544,22 +766,6 @@
 			}
 		</style>
 	</noscript>
-
-	<div id="root">
-		<header class="app-header-static">
-			<h1 class="app-header-static__logo-text" style="margin-bottom: 4px;">NO MAN'S SKY</h1>
-			<div class="app-header-static__separator-container">
-				<span class="app-header-static__separator"></span>
-				<img alt="No Man's Sky Atlas Logo" width="16" height="20"
-					src="data:image/webp;base64,UklGRqIBAABXRUJQVlA4WAoAAAAQAAAAEQAAFwAAQUxQSMMAAAABgFRbe9voOzrpVdn+AB6KGMYcEzCIgBgA5jBt2RFUCtlOL6s+80+RhCEiJkD/TXFjETpR+QnUdz7qhEkmAKfurxoNMkDr7v7cUUyYaDzZ6XRM0gSqx5QvQogScOrZV3UnMmi98LkzMaPx0q/lyIy9Im8xoy56qbCITkq2sImgLqlBMuwydyKiJGhyNUiSwTp1CfZPsEo1oKTB1b81WCp02Py3QiElqB7dHwFlJ5HWvSUOcoLKvQIVRtjfwiYlgroCJQEAVlA4ILgAAABwBACdASoSABgAPpFCm0olo6IhqAgAsBIJZwDO7YteQd0FuXfeG2mn5zTEAAD+0NlxSzwc+VCPKNr6bnlz3XRZDzj7sOc4oqIAzLnkkRoCnUZfKS0NaSuBL/9PZea21iJrj8M0Tu3LnDFm42pkOdUF/97zPcqLsbsSjRywdOTENmFjgc7qlIYL/Hjl+FJs2JEzTixoV5whuapq2yqng+djF9P76VAAHIpjAWvQFmY5x3ezxv/nHwAA" />
-				<span class="app-header-static__separator"></span>
-			</div>
-			<h2 class="app-header-static__title">
-				Technology Layout Optimizer <span style="color: #4CCCE6;">AI/RUST</span>
-				<span style="color: var(--gray-11); font-weight: 500;"> v6.16.4</span>
-			</h2>
-		</header>
-	</div>
 
 </body>
 

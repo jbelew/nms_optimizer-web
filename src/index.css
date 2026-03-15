@@ -24,7 +24,7 @@
 
 /* Apply custom font styles using Tailwind's @layer directive */
 .radix-themes {
-	--default-font-family: Raleway, Helvetica, Arial, sans-serif;
+	--default-font-family: "Raleway", Helvetica, Arial, sans-serif;
 	--font-family-geosans: Geosans, Helvetica, Arial, sans-serif;
 	--font-family-nms: NMS, Helvetica, Arial, sans-serif;
 	--letter-spacing-wide: 0.175em;

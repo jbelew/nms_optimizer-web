@@ -18,8 +18,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
 
-// Configuration is now imported from server/config.js
-
 // Map route names to markdown filenames when they differ
 const PAGE_TO_MARKDOWN_MAPPING = {
 	translation: "translation-request",
@@ -129,13 +127,24 @@ function generateNavigationLinks(lang, currentPage, t) {
 /**
  * Generate a page with markdown content
  */
-function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
+function generatePage(
+	indexHtml,
+	lang,
+	pageName,
+	baseUrl,
+	mdProcessor,
+	t,
+	ssgStyles = "",
+	ssgHeader = ""
+) {
 	let html = indexHtml.replace(/<html lang="[^"]*">/, `<html lang="${lang}">`);
 	const pathname = pageName === "" ? "/" : `/${pageName}`;
 	const isRootPage = pageName === "";
 
-	// Remove ALL noscript blocks from the template (there might be multiple)
-	html = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, "");
+	// Remove noscript blocks from the template
+	// We only remove the original background noscript if it's in the body,
+	// but generatePage will handle inserting the new content.
+	html = html.replace(/<noscript data-ssg-template>[\s\S]*?<\/noscript>/g, "");
 
 	// --- SEO Title & Description Injection ---
 	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];
@@ -173,27 +182,14 @@ function generatePage(indexHtml, lang, pageName, baseUrl, mdProcessor, t) {
 
 			// Create a noscript block with the rendered markdown
 			const contentBlock = `<noscript>
-    <style>
-      [data-prerendered-markdown="true"] { color: #fff; padding: 2rem; padding-top: 0; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      [data-prerendered-markdown="true"] h1 { color: #4CCCE6; margin: 1.5rem 0 1rem 0; font-size: 1.5rem; font-weight: bold; }
-      [data-prerendered-markdown="true"] h2 { color: #4CCCE6; margin: 1.5rem 0 1rem 0; font-size: 1.125rem; font-weight: bold; }
-      [data-prerendered-markdown="true"] h3 { color: #4CCCE6; margin: 1rem 0 0.75rem 0; font-size: 1rem; font-weight: bold; }
-      [data-prerendered-markdown="true"] p { margin-bottom: 0.5rem; line-height: 1.6; }
-      [data-prerendered-markdown="true"] ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.5rem; }
-      [data-prerendered-markdown="true"] ol { list-style: decimal; margin: 0.5rem 0 0.5rem 1.5rem; }
-      [data-prerendered-markdown="true"] li { margin-bottom: 0.25rem; }
-      [data-prerendered-markdown="true"] a { color: #4CCCE6; text-decoration: underline; }
-      [data-prerendered-markdown="true"] code { background-color: rgba(0, 162, 199, 0.1); padding: 0.125rem 0.25rem; border-radius: 0.25rem; color: #4CCCE6; }
-      [data-prerendered-markdown="true"] blockquote { border-left: 4px solid #4CCCE6; padding-left: 1rem; margin: 0.5rem 0; font-style: italic; color: #cbd5e1; }
-      [data-prerendered-markdown="true"] nav { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(11, 165, 233, 0.3); }
-      [data-prerendered-markdown="true"] nav h2 { font-size: 1rem; margin-bottom: 0.5rem; }
-      [data-prerendered-markdown="true"] nav ul { margin-top: 0.5rem; }
-      [data-prerendered-markdown="true"] nav li[aria-current="page"] a { font-weight: bold; color: #fff; }
-    </style>
-    <div data-prerendered-markdown="true">
+    <main>
+      ${ssgHeader}
       ${renderedHtml}
       ${navigationHtml}
-    </div>
+    </main>
+    <style>
+      ${ssgStyles || 'main { color: #fff; padding: 2rem; font-family: Raleway, sans-serif; }'}
+    </style>
   </noscript>`;
 
 			// Insert the noscript block before closing body tag
@@ -220,6 +216,25 @@ async function generateSsg() {
 	const baseIndexHtml = fs.readFileSync(indexPath, "utf-8");
 	const baseUrl = `https://${TARGET_HOST}`;
 
+	// --- CSS & Header Extraction ---
+	// Extract the <style> and <header> content from the specific noscript block in index.html body
+	// We look for the one with data-ssg-template to avoid matching the head's background noscript
+	const ssgBlockMatch = baseIndexHtml.match(/<noscript data-ssg-template>([\s\S]*?)<\/noscript>/);
+	const ssgBlock = ssgBlockMatch ? ssgBlockMatch[1] : "";
+
+	const ssgStyleMatch = ssgBlock.match(/<style>([\s\S]*?)<\/style>/);
+	const ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
+
+	const ssgHeaderMatch = ssgBlock.match(/(<header class="app-header-static">[\s\S]*?<\/header>)/);
+	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
+
+	if (!ssgStyles) {
+		console.warn("⚠️  Warning: Could not extract SSG styles from index.html. Using fallback styles.");
+	}
+	if (!ssgHeader) {
+		console.warn("⚠️  Warning: Could not extract static header from index.html.");
+	}
+
 	// Create markdown processor
 	const mdProcessor = createMarkdownProcessor();
 
@@ -244,7 +259,16 @@ async function generateSsg() {
 
 		// Root path
 		const rootPath = lang === "en" ? "" : lang;
-		const rootPageHtml = generatePage(baseIndexHtml, lang, "", baseUrl, mdProcessor, t);
+		const rootPageHtml = generatePage(
+			baseIndexHtml,
+			lang,
+			"",
+			baseUrl,
+			mdProcessor,
+			t,
+			ssgStyles,
+			ssgHeader
+		);
 		const rootDir = path.join(DIST_DIR, rootPath);
 		fs.mkdirSync(rootDir, { recursive: true });
 		fs.writeFileSync(path.join(rootDir, "index.html"), rootPageHtml);
@@ -257,7 +281,16 @@ async function generateSsg() {
 			const pageDir = path.join(DIST_DIR, pagePath);
 			fs.mkdirSync(pageDir, { recursive: true });
 
-			const pageHtml = generatePage(baseIndexHtml, lang, dialog, baseUrl, mdProcessor, t);
+			const pageHtml = generatePage(
+				baseIndexHtml,
+				lang,
+				dialog,
+				baseUrl,
+				mdProcessor,
+				t,
+				ssgStyles,
+				ssgHeader
+			);
 			fs.writeFileSync(path.join(pageDir, "index.html"), pageHtml);
 			console.log(`✓ Generated /${pagePath}`);
 			generatedCount++;
