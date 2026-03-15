@@ -1,3 +1,10 @@
+## [6.16.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.11...v6.16.12) (2026-03-14)
+
+
+### Bug Fixes
+
+* Disable `bundledDev` and refine manual chunking to consolidate analytics and observability libraries into a `vendor-events` chunk. ([e1bb3f9](https://github.com/jbelew/nms_optimizer-web/commit/e1bb3f9d4d483d972123c28df54b94420ba5a78b))
+
 ## [6.16.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.10...v6.16.11) (2026-03-14)
 
 
