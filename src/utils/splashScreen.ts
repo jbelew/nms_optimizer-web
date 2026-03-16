@@ -29,6 +29,23 @@ export async function hideSplashScreenAndShowBackground(): Promise<void> {
 		// Show background image with a slight delay to ensure splash screen is hidden
 		requestAnimationFrame(() => {
 			document.body.classList.add("background-visible");
+
+			// Completely purge all vpss objects from DOM after a short delay
+			// to ensure the plugin's fade-out animation is finished.
+			// This solves the 'continues to animate' issue.
+			setTimeout(() => {
+				const vpss = document.getElementById("vpss");
+
+				if (vpss) {
+					vpss.remove();
+				}
+
+				const vpssStyle = document.getElementById("vpss-style");
+
+				if (vpssStyle) {
+					vpssStyle.remove();
+				}
+			}, 1000);
 		});
 	} catch (error) {
 		console.error("Error hiding splash screen:", error);

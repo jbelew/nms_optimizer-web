@@ -17,6 +17,7 @@ const PAGE_TO_FILE_MAPPING = {
 	instructions: "public/assets/locales/en/instructions.md",
 	translation: "public/assets/locales/en/translation-request.md",
 	userstats: "src/components/AppDialog/UserStatsDialog.tsx",
+	privacy: "public/assets/locales/en/privacy.md",
 };
 
 /** SEO priorities for different pages */
@@ -41,7 +42,20 @@ const pages = [
 const languages = SUPPORTED_LANGUAGES;
 
 const urlEntries = pages.flatMap((page) => {
-	const lastmod = page.lastmod || fs.statSync(path.join(__dirname, "..", page.path)).mtime.toISOString().split("T")[0];
+	let lastmod = page.lastmod;
+
+	if (!lastmod) {
+		if (page.path) {
+			try {
+				lastmod = fs.statSync(path.join(__dirname, "..", page.path)).mtime.toISOString().split("T")[0];
+			} catch (error) {
+				console.warn(`Warning: Could not get lastmod for ${page.path}: ${error.message}`);
+				lastmod = today;
+			}
+		} else {
+			lastmod = today;
+		}
+	}
 
 	// 1. Generate all alternate URLs for this page
 	const alternateUrls = languages.map((lang) => {

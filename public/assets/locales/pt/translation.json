@@ -25,7 +25,8 @@
         "save": "Salvar",
         "generateName": "Gerar",
         "buildManagement": "Gerenciamento de construção",
-        "utilities": "Diálogos e controles de aplicativos"
+        "utilities": "Diálogos e controles de aplicativos",
+        "privacy": "política de Privacidade"
     },
     "gridTable": {
         "optimizing": "Otimizando!",
@@ -68,7 +69,8 @@
             "shareLink": "Compartilhe o layout da grade",
             "userStats": "Estatísticas do usuário",
             "updatePrompt": "Atualização disponível",
-            "welcome": "Bem-vindo"
+            "welcome": "Bem-vindo",
+            "privacy": "política de Privacidade"
         },
         "userStats": {
             "noDataForChart": "Nenhum dado disponível para este gráfico.",
@@ -645,7 +647,9 @@
             "changelog": "Últimas atualizações e novos recursos",
             "userstats": "Tecnologias e construções populares",
             "translation": "Contribua para a localização da comunidade"
-        }
+        },
+        "privacyPageTitle": "Política de privacidade do NMS Optimizer: seus dados e segurança",
+        "privacyDescription": "Leia a política de privacidade do NMS Optimizer. Saiba como lidamos com seus dados, nosso compromisso com a privacidade e como usamos análises anônimas."
     },
     "installPrompt": {
         "title": "Adicionar à tela inicial",

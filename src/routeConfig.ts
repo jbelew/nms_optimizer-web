@@ -6,7 +6,7 @@
 export const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
 /** List of valid page identifiers that can be navigated to as routed modals. */
-export const pages = ["changelog", "instructions", "about", "translation", "userstats"];
+export const pages = ["changelog", "instructions", "about", "translation", "userstats", "privacy"];
 
 /** List of ISO language codes supported by the router's path prefixing. */
 export const languages = ["en", "es", "fr", "de", "pt"];

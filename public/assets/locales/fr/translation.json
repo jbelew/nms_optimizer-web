@@ -25,7 +25,8 @@
         "save": "Sauvegarder",
         "generateName": "Générer",
         "buildManagement": "Gestion des builds",
-        "utilities": "Boîtes de dialogue et contrôles d'application"
+        "utilities": "Boîtes de dialogue et contrôles d'application",
+        "privacy": "politique de confidentialité"
     },
     "gridTable": {
         "optimizing": "OPTIMISATION !",
@@ -68,7 +69,8 @@
             "shareLink": "Partager la disposition de la grille",
             "userStats": "Statistiques des utilisateurs",
             "updatePrompt": "Mise à jour disponible",
-            "welcome": "Accueillir"
+            "welcome": "Accueillir",
+            "privacy": "politique de confidentialité"
         },
         "userStats": {
             "noDataForChart": "Aucune donnée disponible pour ce graphique.",
@@ -645,7 +647,9 @@
             "changelog": "Dernières mises à jour et nouvelles fonctionnalités",
             "userstats": "Technologies et versions populaires",
             "translation": "Contribuer à la localisation communautaire"
-        }
+        },
+        "privacyPageTitle": "Politique de confidentialité de NMS Optimizer : vos données et votre sécurité",
+        "privacyDescription": "Lisez la politique de confidentialité de NMS Optimizer. Découvrez comment nous traitons vos données, notre engagement en matière de confidentialité et notre utilisation d'analyses anonymes."
     },
     "installPrompt": {
         "title": "Ajouter à l'écran d'accueil",

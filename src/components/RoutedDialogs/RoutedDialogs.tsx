@@ -82,6 +82,18 @@ export const RoutedDialogs: FC = () => {
 					</Suspense>
 				}
 			/>
+			{/* Dialog for "Privacy Policy" information */}
+			<AppDialog
+				isOpen={activeDialog === "privacy"}
+				onClose={closeDialog}
+				titleKey="dialogs.titles.privacy"
+				title={t("dialogs.titles.privacy")}
+				content={
+					<Suspense fallback={<LoremIpsumSkeleton />}>
+						<MarkdownContentRenderer markdownFileName="privacy" />
+					</Suspense>
+				}
+			/>
 		</>
 	);
 };

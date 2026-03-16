@@ -10,6 +10,7 @@ export type DialogType =
 	| "changelog"
 	| "translation"
 	| "userstats"
+	| "privacy"
 	| null;
 
 /**

@@ -26,7 +26,14 @@ export const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
  * A list of known dialog routes that can be accessed via URL paths.
  * @type {string[]}
  */
-export const KNOWN_DIALOGS = ["instructions", "about", "changelog", "translation", "userstats"];
+export const KNOWN_DIALOGS = [
+	"instructions",
+	"about",
+	"changelog",
+	"translation",
+	"userstats",
+	"privacy",
+];
 
 /**
  * A list of base known paths for the client-side application.

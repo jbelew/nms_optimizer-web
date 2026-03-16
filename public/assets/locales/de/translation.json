@@ -25,7 +25,8 @@
         "save": "Speichern",
         "generateName": "Erzeugen",
         "buildManagement": "Build-Management",
-        "utilities": "Dialoge und App-Steuerelemente"
+        "utilities": "Dialoge und App-Steuerelemente",
+        "privacy": "Datenschutzrichtlinie"
     },
     "gridTable": {
         "optimizing": "Optimierung!",
@@ -68,7 +69,8 @@
             "shareLink": "Rasterlayout teilen",
             "userStats": "Benutzerstatistik",
             "updatePrompt": "Update verfügbar",
-            "welcome": "Willkommen"
+            "welcome": "Willkommen",
+            "privacy": "Datenschutzrichtlinie"
         },
         "userStats": {
             "noDataForChart": "Keine Daten für dieses Diagramm verfügbar.",
@@ -645,7 +647,9 @@
             "changelog": "Neueste Updates und neue Funktionen",
             "userstats": "Beliebte Technologien und Builds",
             "translation": "Tragen Sie zur Community-Lokalisierung bei"
-        }
+        },
+        "privacyPageTitle": "NMS Optimizer-Datenschutzrichtlinie: Ihre Daten und Sicherheit",
+        "privacyDescription": "Lesen Sie die Datenschutzrichtlinie von NMS Optimizer. Erfahren Sie, wie wir mit Ihren Daten umgehen, wie wir uns zum Datenschutz verpflichten und wie wir anonyme Analysen nutzen."
     },
     "installPrompt": {
         "title": "Zum Startbildschirm hinzufügen",

@@ -18,6 +18,7 @@
 		"resetGrid": "Reset Grid",
 		"changelog": "Changelog",
 		"userStats": "User Statistics",
+		"privacy": "Privacy Policy",
 		"accessibility": "Focus Mode",
 		"saveBuild": "Save Build",
 		"loadBuild": "Load Build",
@@ -68,7 +69,8 @@
 			"shareLink": "Share Build",
 			"userStats": "User Statistics",
 			"updatePrompt": "Update Available",
-			"welcome": "Welcome"
+			"welcome": "Welcome",
+			"privacy": "Privacy Policy"
 		},
 		"welcome": {
 			"title": "Welcome to NMS Optimizer!",
@@ -630,6 +632,8 @@
 		"userstatsDescription": "Explore NMS Optimizer user statistics to see the most popular No Man's Sky technologies across select platform types.",
 		"translationPageTitle": "Translate NMS Optimizer: Help Localize the App",
 		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man's Sky players worldwide.",
+		"privacyPageTitle": "NMS Optimizer Privacy Policy: Your Data & Security",
+		"privacyDescription": "Read the NMS Optimizer privacy policy. Learn how we handle your data, our commitment to privacy, and our use of anonymous analytics.",
 		"nav": {
 			"home": "Home",
 			"instructions": "Instructions",

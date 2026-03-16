@@ -28,4 +28,8 @@ export const seoMetadata = {
 		titleKey: "seo.userstatsPageTitle",
 		descriptionKey: "seo.userstatsDescription",
 	},
+	"/privacy": {
+		titleKey: "seo.privacyPageTitle",
+		descriptionKey: "seo.privacyDescription",
+	},
 };
