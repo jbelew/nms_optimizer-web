@@ -64,6 +64,37 @@ const updateCanonicalTag = (href: string) => {
 };
 
 /**
+ * Updates or creates hreflang link tags in the document's head.
+ *
+ * @param {string} baseUrl - The base URL of the site.
+ * @param {string} cleanPath - The path without language prefix.
+ * @param {string[]} languages - Supported language codes.
+ * @returns {void}
+ */
+const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: string[]) => {
+	// Remove existing hreflang tags to avoid duplicates
+	document.querySelectorAll("link[hreflang]").forEach((el) => el.remove());
+
+	// Add x-default (English)
+	const xDefault = document.createElement("link");
+	xDefault.setAttribute("rel", "alternate");
+	xDefault.setAttribute("hreflang", "x-default");
+	xDefault.setAttribute("href", `${baseUrl}${cleanPath || "/"}`);
+	document.head.appendChild(xDefault);
+
+	// Add tags for each language
+	languages.forEach((lang) => {
+		const link = document.createElement("link");
+		link.setAttribute("rel", "alternate");
+		link.setAttribute("hreflang", lang);
+
+		const path = lang === "en" ? cleanPath || "/" : `/${lang}${cleanPath}`;
+		link.setAttribute("href", `${baseUrl}${path}`);
+		document.head.appendChild(link);
+	});
+};
+
+/**
  * Custom hook for managing SEO metadata and document titles.
  *
  * This hook automatically updates the document title, meta description, Open Graph tags,
@@ -104,7 +135,7 @@ export const useSeoAndTitle = () => {
 		updateMetaTag("twitter:title", pageTitle);
 		updateMetaTag("twitter:description", pageDescription);
 
-		// --- Canonical URL Logic ---
+		// --- Canonical & Hreflang URL Logic ---
 		const baseUrl = "https://nms-optimizer.app";
 		const cleanPath = currentPath === "/" ? "" : currentPath;
 		// If language is English, canonical is just the clean path. Otherwise, include lang prefix.
@@ -114,6 +145,9 @@ export const useSeoAndTitle = () => {
 
 		updateCanonicalTag(canonicalUrl);
 		updateMetaPropertyTag("og:url", canonicalUrl);
+
+		// Update hreflang tags for multilingual SEO
+		updateHreflangTags(baseUrl, cleanPath, supportedLangs);
 
 		document.documentElement.lang = i18n.language;
 

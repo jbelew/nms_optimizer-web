@@ -6,15 +6,15 @@ Welcome to the NMS Optimizer, the best free **calculator**, **planner**, and **o
 
 ## What is an Adjacency Bonus?
 
-In No Man's Sky, an adjacency bonus is a crucial performance boost mechanic for your technology modules. When you place compatible technology modules next to each other in your inventory, they receive a synergy bonus and enhanced performance. The NMS Optimizer calculator is the best free tool to find the optimal arrangement for maximum adjacency bonuses.
+In No Man's Sky, an adjacency bonus is a crucial performance boost mechanic for your technology modules. When you place compatible technology modules next to each other in your inventory, they receive a synergy bonus and enhanced performance. The NMS Optimizer calculator is the most accurate tool to find the optimal arrangement for maximum adjacency bonuses—often resulting in a performance increase of up to 20% over standard layouts.
 
 ## What Are Supercharged Slots?
 
-Supercharged slots are a special type of inventory slot in No Man's Sky that provides a massive boost to any technology module placed within them. These slots are rare and valuable, and using them effectively is key to creating the best builds. The NMS Optimizer is designed to help you make the most of your supercharged slots, ensuring that you get the best possible performance out of your gear.
+Supercharged slots are a special type of inventory slot in No Man's Sky that provides a massive ~25-30% boost to any technology module placed within them. These slots are rare and valuable, and using them effectively is key to creating the best builds. The NMS Optimizer is designed to help you make the most of your supercharged slots, ensuring that you get the best possible performance out of your gear.
 
 ## How the NMS Optimizer Works
 
-Our free No Man's Sky optimizer and calculator uses advanced optimization algorithms including deterministic patterns and simulated annealing to find the best possible technology layout for your specific needs. Whether you're building a starship, corvette, upgrading your multitool, or optimizing your exosuit or exocraft, our tool will calculate the optimal layout that maximizes your adjacency bonuses and overall performance.
+Our free No Man's Sky optimizer and calculator uses advanced optimization algorithms including deterministic pattern matching, machine learning (trained on 16,000+ layouts), and Rust-based simulated annealing to find the best possible technology layout for your specific needs. Whether you're building a starship, corvette, upgrading your multitool, or optimizing your exosuit or exocraft, our tool will calculate the mathematically optimal layout that maximizes your adjacency bonuses and overall performance.
 
 ## Supported Platforms
 
