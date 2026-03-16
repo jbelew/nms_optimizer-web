@@ -89,6 +89,21 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 						}}
 					/>
 				</li>
+				<li className="welcomeContent__item">
+					<Trans
+						i18nKey="dialogs.welcome.item6"
+						components={{
+							strong: <strong />,
+							icon: (
+								<DynamicRadixIcon
+									name="EyeOpenIcon"
+									size={iconSize}
+									color={iconColor}
+								/>
+							),
+						}}
+					/>
+				</li>
 			</ul>
 
 			<Flex gap="2" mt="2" mb="4" align="start">

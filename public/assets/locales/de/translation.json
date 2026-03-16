@@ -109,7 +109,8 @@
             "item4": "Verwenden Sie <strong>Zeilenschalter</strong>, um ganze Reihen zu aktivieren oder zu deaktivieren (deaktiviert, sobald Module platziert sind).",
             "item5": "Verwenden Sie die Schaltfläche <strong>Modulauswahl</strong> <icon/>, um Module hinzuzufügen oder zu entfernen.",
             "viewInstructions": "Weitere Informationen finden Sie in der <1>vollständigen Anleitung</1>.",
-            "getStarted": "Legen Sie los"
+            "getStarted": "Legen Sie los",
+            "item6": "Schalten Sie den <strong>Fokusmodus</strong> <icon/> um, um visuelle Ablenkungen zu minimieren und die Lesbarkeit der Schriftart für ein klareres Erlebnis zu optimieren."
         }
     },
     "dialog": {

@@ -109,7 +109,8 @@
             "item4": "Utilisez les <strong>basculements de lignes</strong> pour activer ou désactiver des lignes entières (désactivées une fois les modules placés).",
             "item5": "Utilisez le bouton <strong>sélection de module</strong> <icon/> pour ajouter ou supprimer des modules.",
             "viewInstructions": "Pour plus d'informations, <1>consultez les instructions complètes</1>.",
-            "getStarted": "Commencer"
+            "getStarted": "Commencer",
+            "item6": "Activez le <strong>Mode de mise au point</strong> <icon/> pour minimiser les distractions visuelles et optimiser la lisibilité des polices pour une expérience plus claire."
         }
     },
     "dialog": {

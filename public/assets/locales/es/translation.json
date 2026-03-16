@@ -109,7 +109,8 @@
             "item4": "Utilice <strong>cambios de filas</strong> para habilitar o deshabilitar filas enteras (se deshabilita una vez que se colocan los módulos).",
             "item5": "Utilice el botón <strong>selección de módulo</strong> <icono/> para agregar o eliminar módulos.",
             "viewInstructions": "Para obtener más información, <1>consulte las instrucciones completas</1>.",
-            "getStarted": "Empezar"
+            "getStarted": "Empezar",
+            "item6": "Cambie el <strong>Modo de enfoque</strong> <icon/> para minimizar las distracciones visuales y optimizar la legibilidad de la fuente para una experiencia más clara."
         }
     },
     "dialog": {

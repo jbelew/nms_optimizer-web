@@ -109,7 +109,8 @@
             "item4": "Use <strong>alternâncias de linha</strong> para ativar ou desativar linhas inteiras (desativadas quando os módulos são colocados).",
             "item5": "Use o botão <strong>seleção de módulo</strong> <icon/> para adicionar ou remover módulos.",
             "viewInstructions": "Para obter mais informações, <1>consulte as instruções completas</1>.",
-            "getStarted": "Comece"
+            "getStarted": "Comece",
+            "item6": "Ative o <strong>Modo de foco</strong> <icon/> para minimizar distrações visuais e otimizar a legibilidade da fonte para uma experiência mais clara."
         }
     },
     "dialog": {

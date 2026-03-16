@@ -80,6 +80,7 @@
 			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>tap</strong> (Mobile) to toggle a cell active or inactive.",
 			"item4": "Use <strong>row toggles</strong> to enable or disable entire rows (disabled once modules are placed).",
 			"item5": "Use the <strong>module selection</strong> <icon/> button to add or remove modules.",
+			"item6": "Toggle <strong>Focus Mode</strong> <icon/> to minimize visual distractions and optimize font legibility for a clearer experience.",
 			"viewInstructions": "For more information, <1>see the complete instructions</1>.",
 			"getStarted": "Get Started"
 		},

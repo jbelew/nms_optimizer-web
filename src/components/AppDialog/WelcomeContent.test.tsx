@@ -63,7 +63,7 @@ describe("WelcomeContent", () => {
 
 		expect(screen.getByText("dialogs.welcome.description")).toBeInTheDocument();
 		expect(container.querySelector(".welcomeContent__list")).toBeInTheDocument();
-		expect(container.querySelectorAll(".welcomeContent__item")).toHaveLength(5);
+		expect(container.querySelectorAll(".welcomeContent__item")).toHaveLength(6);
 		expect(screen.getByTestId("dialogs.welcome.viewInstructions")).toBeInTheDocument();
 		expect(screen.getByText("dialogs.welcome.getStarted")).toBeInTheDocument();
 	});
