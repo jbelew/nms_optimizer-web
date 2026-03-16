@@ -1,3 +1,10 @@
+## [6.17.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.1...v6.17.2) (2026-03-16)
+
+
+### Bug Fixes
+
+* Enhance SEO capabilities by adding hreflang tag support and updating related logic ([6e57ece](https://github.com/jbelew/nms_optimizer-web/commit/6e57eceaaa32033b036e08ac169f108a4dc5e7cd))
+
 ## [6.17.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.0...v6.17.1) (2026-03-16)
 
 
