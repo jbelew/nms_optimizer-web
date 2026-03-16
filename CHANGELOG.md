@@ -1,3 +1,10 @@
+## [6.17.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.0...v6.17.1) (2026-03-16)
+
+
+### Bug Fixes
+
+* Add a new welcome dialog item for Focus Mode, including the EyeOpenIcon and corresponding internationalization strings. ([face15a](https://github.com/jbelew/nms_optimizer-web/commit/face15a0c8e7a6fd28b91dfe64e340f7ebcf8271))
+
 # [6.17.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.14...v6.17.0) (2026-03-16)
 
 
