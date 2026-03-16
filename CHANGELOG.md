@@ -1,3 +1,10 @@
+# [6.17.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.14...v6.17.0) (2026-03-16)
+
+
+### Features
+
+* Introduce Privacy Policy page and dialog with routing and translations, and refine splash screen element removal. ([b0f670f](https://github.com/jbelew/nms_optimizer-web/commit/b0f670f9afa637cbb619ae4cd8e5d33a040e8221))
+
 ## [6.16.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.13...v6.16.14) (2026-03-15)
 
 
