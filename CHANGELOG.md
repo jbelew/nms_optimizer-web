@@ -1,3 +1,10 @@
+## [6.16.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.13...v6.16.14) (2026-03-15)
+
+
+### Bug Fixes
+
+* Enhance static site generation for bots with a new `noscript` template, extract static styles and header, and fix the splash screen. ([1ba81f2](https://github.com/jbelew/nms_optimizer-web/commit/1ba81f2d49bf57bd46806e74c01137c43cffde7e))
+
 ## [6.16.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.16.12...v6.16.13) (2026-03-15)
 
 
