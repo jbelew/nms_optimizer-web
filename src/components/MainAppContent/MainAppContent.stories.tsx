@@ -129,12 +129,8 @@ const withLocalProviders =
 	);
 
 export const Desktop: Story = {
-	args: {
-		buildVersion: "1.0.0",
-		buildDate: "2024-11-25",
-	},
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
-	render: (args) => <MainAppContent {...args} />,
+	render: () => <MainAppContent />,
 	parameters: {
 		docs: {
 			description: {
@@ -152,11 +148,8 @@ export const Desktop: Story = {
 };
 
 export const Tablet: Story = {
-	args: {
-		...Desktop.args,
-	},
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
-	render: Desktop.render,
+	render: () => <MainAppContent />,
 	parameters: {
 		docs: {
 			description: {
@@ -174,9 +167,6 @@ export const Tablet: Story = {
 };
 
 export const Mobile: Story = {
-	args: {
-		...Desktop.args,
-	},
 	decorators: [
 		(Story, context) => {
 			// Mock touch device for mobile story to show TapInstructions
@@ -189,7 +179,7 @@ export const Mobile: Story = {
 			return withLocalProviders(false, context.loaded.techTree)(Story);
 		},
 	],
-	render: Desktop.render,
+	render: () => <MainAppContent />,
 	parameters: {
 		docs: {
 			description: {

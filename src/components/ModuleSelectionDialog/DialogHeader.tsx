@@ -63,7 +63,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 
 			<Dialog.Close>
 				<IconButton
-					variant="soft"
+					variant="ghost"
 					size="1"
 					className="dialog-close"
 					aria-label={t("moduleSelection.closeDialogLabel")}

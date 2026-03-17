@@ -117,7 +117,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 
 						<Dialog.Close asChild>
 							<IconButton
-								variant="soft"
+								variant="ghost"
 								size="1"
 								className="dialog-close"
 								aria-label="Close dialog"

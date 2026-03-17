@@ -4,6 +4,29 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.17 – Privacy & Focus Mode Discovery (2026-03-16)
+
+This update focuses on making the app more transparent and its accessibility features easier to find.
+
+- **Privacy Policy:** Added a dedicated Privacy Policy so you know exactly how we protect your information.
+- **Focus Mode Discovery:** Added Focus Mode to the Welcome dialog to help new users find our readability improvements right away.
+- **Transition Polish:** Smoothed out the transition from the loading screen to the app for a faster, cleaner startup.
+
+## Version 6.16 – Smooth Interactions & Safari Support (2026-03-15)
+
+A major performance and reliability update that makes the app feel faster and work better in more browser environments.
+
+- **Safari Private Browsing:** Fixed a critical bug that caused the app to crash for users in Safari's Private Browsing mode.
+- **Faster Loading:** Significantly improved startup times and navigation speed, especially on mobile, through better image handling and smarter caching.
+- **Better Reliability:** Added automatic retries for loading app components. If your internet connection flickers, the app will now try to recover automatically instead of failing.
+- **Consistent Tooltips:** Overhauled the tooltip system to ensure information always appears correctly and follows your interactions perfectly.
+- **Search Engine Visibility:** Improved how the app presents itself to search engines, making it easier for the No Man's Sky community to find the tool.
+
+## Version 6.15 – Notification Polish (2026-03-07)
+
+- **Polished Notifications:** Updated the look and feel of the "toast" notifications that appear when saving, loading, or optimizing your builds.
+- **General Cleanup:** Internal performance improvements to keep the app running smoothly as we prepare for future features.
+
 ## Version 6.14 – Onboarding, Stability & Infrastructure Refinements (2026-02-28)
 
 This release introduces a new first-run onboarding experience, alongside a large set of stability, reliability, and performance improvements across optimization workflows, URL synchronization, storage handling, observability, and error recovery.

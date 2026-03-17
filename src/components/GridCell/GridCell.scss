@@ -152,7 +152,7 @@
 
 	&--supercharged {
 		background-color: var(--purple-a3) !important;
-		border: 1px solid var(--accent-track);
+		border: 1px solid var(--accent-indicator);
 
 		@media (hover: hover) {
 			&:hover {
@@ -196,7 +196,7 @@
 
 	&--glow {
 		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 4px 1px var(--purple-a9);
+		box-shadow: 0 0 4px 2px var(--purple-indicator);
 
 		&::after {
 			animation: pulseGlowOpacity 2s infinite alternate ease-in-out;
