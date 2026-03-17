@@ -59,7 +59,7 @@ const formatLabel = (label: string): React.ReactNode => {
 	return parts.map((part, index) => (
 		<React.Fragment key={index}>
 			{formatParentheses(part)}
-			{matches[index] && <Code className="inline!">{matches[index]}</Code>}
+			{matches[index] && <Code className="inline! font-normal!">{matches[index]}</Code>}
 		</React.Fragment>
 	));
 };
