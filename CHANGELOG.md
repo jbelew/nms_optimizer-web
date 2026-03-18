@@ -1,3 +1,10 @@
+## [6.17.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.2...v6.17.3) (2026-03-18)
+
+
+### Bug Fixes
+
+* Clarify module selection defaults in optimization descriptions across all languages. ([bc8c739](https://github.com/jbelew/nms_optimizer-web/commit/bc8c7390c2718b6e406c61d56275b52c83b03937))
+
 ## [6.17.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.1...v6.17.2) (2026-03-16)
 
 
