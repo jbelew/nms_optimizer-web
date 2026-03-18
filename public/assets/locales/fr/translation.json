@@ -101,8 +101,8 @@
             "refreshNow": "Refresh Now"
         },
         "welcome": {
-            "title": "Bienvenue dans NMS Optimiseur !",
-            "description": "Un guide de démarrage rapide pour vous aider à tirer le meilleur parti de cet outil :",
+            "title": "Bienvenue dans NMS Optimiseur!",
+            "description": "Un guide de démarrage rapide pour vous aider à tirer le meilleur parti de cet outil:",
             "item1": "Sélectionnez une <strong>Plateforme</strong> à l'aide de l'icône <icon/>.",
             "item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur une cellule pour la marquer <strong>Suralimentée</strong>.",
             "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>appuyez</strong> (Mobile) pour activer ou désactiver une cellule.",
@@ -116,11 +116,11 @@
     "dialog": {
         "buildName": {
             "title": "Enregistrer la construction",
-            "description": "Entrez un nom pour votre build :",
+            "description": "Entrez un nom pour votre build:",
             "placeholder": "Nom du build",
             "validation": {
                 "empty": "Le nom de la build ne peut pas être vide",
-                "invalid": "Le nom de build contient des caractères non valides. Évitez d'utiliser : < > : \" / \\ | ? * et des caractères spéciaux."
+                "invalid": "Le nom de build contient des caractères non valides. Évitez d'utiliser: < > : \" / \\ | ? * et des caractères spéciaux."
             }
         }
     },
@@ -151,7 +151,7 @@
     "translationRequest": {
         "openDialogLabel": "Traducteurs recherchés !"
     },
-    "platformLabel": "PLATEFORME :",
+    "platformLabel": "PLATEFORME:",
     "platforms": {
         "standard": "Vaisseaux spatiaux standard / exotiques",
         "sentinel": "Intercepteurs Sentinelle",
@@ -617,22 +617,10 @@
         "cosmeticInfo": "Les modules <strong>Cosmetic</strong> suggérés peuvent aider à augmenter légèrement vos statistiques finales, mais <i>ne les laissez pas limiter vos idées de conception!</i> Faire correspondre simplement le nombre de modules cosmétiques sur votre Corvette pour le meilleur résolution possible.",
         "optimizeButton": "Optimiser",
         "cancelButton": "Annuler",
-        "trailsInfo": "<strong>Starship Trails a changé avec la v6.2 (Remnant Update) !</strong> Dans la plupart des cas, ne sélectionnez pas plus de <strong>trois Starship Trails</strong>. La figurine tentaculaire <strong>n'augmente pas</strong> la vitesse dans l'atmosphère ! Les Starship Trails sont appliqués par ordre de priorité, <strong>[P1] Chromatique</strong> ayant la priorité la plus élevée.",
-        "description": "Sélectionnez les modules disponibles pour cette technologie. Seuls les modules sélectionnés seront inclus dans l'optimisation."
+        "trailsInfo": "<strong>Starship Trails a changé avec la v6.2 (Remnant Update)!</strong> Dans la plupart des cas, ne sélectionnez pas plus de <strong>trois Starship Trails</strong>. La figurine tentaculaire <strong>n'augmente pas</strong> la vitesse dans l'atmosphère! Les Starship Trails sont appliqués par ordre de priorité, <strong>[P1] Chromatique</strong> ayant la priorité la plus élevée.",
+        "description": "Seuls les modules sélectionnés seront inclus dans l'optimisation."
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer: Meilleurs Agencements & Calculateur d'Adjacence",
-        "appDescription": "La meilleure calculatrice et l'optimiseur d'agencement pour No Man's Sky. Trouvez les placements technologiques optimaux avec des bonus d'adjacence maximaux pour vos vaisseaux, corvettes, multi-outils, exonefs et exocombinaisons. Outil gratuit avec optimisation des emplacements surchargés.",
-        "instructionsPageTitle": "NMS Optimizer Guide: Bonus d'Adjacence & Optimisation d'Agencements",
-        "instructionsDescription": "Instructions complètes pour utiliser l'application NMS Optimizer. Apprenez à sélectionner des plateformes, marquer des emplacements surchargés, optimiser les agencements et maximiser les bonus d'adjacence pour les vaisseaux, corvettes, multi-outils et plus encore.",
-        "aboutPageTitle": "Comment Fonctionne NMS Optimizer: Optimisation d'Agencements Technologiques",
-        "aboutDescription": "NMS Optimizer est un outil gratuit qui trouve les meilleurs agencements technologiques pour No Man's Sky. Utilise des algorithmes d'optimisation avancés pour maximiser les bonus d'adjacence pour votre vaisseau, corvette, multi-outil, exonef et exocombinaison.",
-        "changelogPageTitle": "NMS Optimizer Mises à Jour: Dernières Fonctionnalités et Améliorations",
-        "changelogDescription": "Consultez les dernières mises à jour, les nouvelles fonctionnalités et les corrections de bugs pour le NMS Optimizer. Restez à jour avec le développement du meilleur outil d'agencement pour No Man's Sky.",
-        "userstatsPageTitle": "NMS Optimizer Statistiques: Agencements Technologiques Populaires",
-        "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour voir les technologies No Man's Sky les plus populaires pour tous les types de plates-formes.",
-        "translationPageTitle": "Traduire NMS Optimizer: Aide à Localiser l'Application",
-        "translationDescription": "Aidez à traduire le NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde.",
         "nav": {
             "home": "Accueil",
             "instructions": "Instructions",
@@ -649,12 +637,24 @@
             "userstats": "Technologies et versions populaires",
             "translation": "Contribuer à la localisation communautaire"
         },
-        "privacyPageTitle": "Politique de confidentialité de NMS Optimizer : vos données et votre sécurité",
-        "privacyDescription": "Lisez la politique de confidentialité de NMS Optimizer. Découvrez comment nous traitons vos données, notre engagement en matière de confidentialité et notre utilisation d'analyses anonymes."
+        "privacyPageTitle": "Politique de confidentialité de NMS Optimizer: vos données et votre sécurité",
+        "privacyDescription": "Lisez la politique de confidentialité de NMS Optimizer. Découvrez comment nous traitons vos données, notre engagement en matière de confidentialité et notre utilisation d'analyses anonymes.",
+        "mainPageTitle": "NMS Optimizer: Calculateur de disposition technologique et de bonus de contiguïté de No Man's Sky",
+        "appDescription": "Trouvez les meilleures configurations technologiques No Man's Sky pour votre Starship, Corvette, Multitool, Exosuit et Exocraft. Optimisez les bonus de contiguïté et les emplacements suralimentés pour des performances optimales.",
+        "instructionsPageTitle": "Instructions de l'optimiseur NMS: utilisation, modules et cellules suralimentées",
+        "instructionsDescription": "Instructions complètes pour utiliser l'application NMS Optimizer. Apprenez à sélectionner des plates-formes, à marquer des emplacements suralimentés, à optimiser les dispositions et à maximiser les bonus de contiguïté pour les vaisseaux spatiaux, les corvettes, les multitools et bien plus encore.",
+        "aboutPageTitle": "À propos de NMS Optimizer: fonctionnement de l'optimisation de la mise en page technologique basée sur le ML",
+        "aboutDescription": "Découvrez comment NMS Optimizer utilise l'apprentissage automatique et des algorithmes avancés pour trouver le meilleur emplacement de module pour vos configurations Starship, Corvette et Multitool.",
+        "changelogPageTitle": "Journal des modifications de NMS Optimizer: dernières mises à jour, fonctionnalités et améliorations",
+        "changelogDescription": "Consultez les dernières mises à jour, les nouvelles fonctionnalités et les corrections de bugs pour NMS Optimizer. Restez à jour avec le développement du meilleur outil de mise en page de No Man's Sky.",
+        "userstatsPageTitle": "Statistiques de l'optimiseur NMS:constructions communautaires suralimentées",
+        "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour connaître les technologies No Man's Sky suralimentées les plus populaires sur certains types de plates-formes.",
+        "translationPageTitle": "Aidez à traduire NMS Optimizer: rejoignez notre communauté de localisation",
+        "translationDescription": "Aidez à traduire NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
     },
     "installPrompt": {
         "title": "Ajouter à l'écran d'accueil",
-        "iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil : appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\"."
+        "iosInstructions": "Pour une expérience optimale, ajoutez cette application à votre écran d'accueil: appuyez sur l'icône Partager, puis sur \"Ajouter à l'écran d'accueil\"."
     },
     "notFound": {
         "title": "–kzzkt– 404 –kzzkt–",

@@ -176,7 +176,7 @@ body.a11y-font .heading-styled {
 /* Dialog close button utility */
 .dialog-close {
 	position: absolute;
-	right: 8px;
+	right: 9px;
 	top: 10px;
 }
 

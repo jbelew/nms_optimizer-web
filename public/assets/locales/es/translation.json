@@ -618,21 +618,9 @@
         "optimizeButton": "Optimizar",
         "cancelButton": "Cancelar",
         "trailsInfo": "<strong>¡Starship Trails ha cambiado con v6.2 (Actualización remanente)!</strong> En la mayoría de los casos, seleccione no más de <strong>tres Starship Trails</strong>. ¡La figura con tentáculos <strong>no</strong> aumenta la velocidad en la atmósfera! Starship Trails se aplican en orden de prioridad, siendo <strong>[P1] Chromatic</strong> la de mayor prioridad.",
-        "description": "Seleccione los módulos disponibles para esta tecnología. Solo los módulos seleccionados se incluirán en la optimización."
+        "description": "Solo los módulos seleccionados se incluirán en la optimización."
     },
     "seo": {
-        "mainPageTitle": "NMS Optimizer: Mejores Diseños Tecnológicos & Calculadora de Adyacencia",
-        "appDescription": "El mejor calculador y optimizador de diseño de No Man's Sky. Encuentre colocaciones tecnológicas óptimas con los máximos bonos de adyacencia para naves estelares, corbetas, multiherramientas, exocrafts y exotrajes. Herramienta gratuita con optimización de ranuras sobrecargadas.",
-        "instructionsPageTitle": "NMS Optimizer Guía: Bono de Adyacencia & Optimización de Diseños",
-        "instructionsDescription": "Instrucciones completas para usar la aplicación NMS Optimizer. Aprenda a seleccionar plataformas, marcar ranuras sobrecargadas, optimizar diseños y maximizar los bonos de adyacencia para naves estelares, corbetas, multiherramientas y más.",
-        "aboutPageTitle": "Cómo Funciona NMS Optimizer: Optimización de Diseños Tecnológicos con ML",
-        "aboutDescription": "NMS Optimizer es una herramienta gratuita que encuentra los mejores diseños de tecnología para No Man's Sky. Utiliza algoritmos de optimización avanzados para maximizar los bonos de adyacencia para tu nave estelar, corbeta, multiherramienta, exocraft y exotraje.",
-        "changelogPageTitle": "NMS Optimizer Actualizaciones: Últimas Características y Mejoras",
-        "changelogDescription": "Consulta las últimas actualizaciones, nuevas funciones y correcciones de errores del Optimizador NMS. Mantente al día con el desarrollo de la mejor herramienta de diseño para No Man's Sky.",
-        "userstatsPageTitle": "NMS Optimizer Estadísticas: Diseños Tecnológicos Más Populares",
-        "userstatsDescription": "Explora las estadísticas de usuario del NMS Optimizer para ver las tecnologías de No Man's Sky más populares en todos los tipos de plataforma.",
-        "translationPageTitle": "Traducir NMS Optimizer: Ayuda a Localizar la Aplicación",
-        "translationDescription": "Ayuda a traducir el NMS Optimizer a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo.",
         "nav": {
             "home": "Inicio",
             "instructions": "Instrucciones",
@@ -650,7 +638,19 @@
             "translation": "Contribuir a la localización de la comunidad."
         },
         "privacyPageTitle": "Política de privacidad de NMS Optimizer: sus datos y seguridad",
-        "privacyDescription": "Lea la política de privacidad de NMS Optimizer. Conozca cómo manejamos sus datos, nuestro compromiso con la privacidad y nuestro uso de análisis anónimos."
+        "privacyDescription": "Lea la política de privacidad de NMS Optimizer. Conozca cómo manejamos sus datos, nuestro compromiso con la privacidad y nuestro uso de análisis anónimos.",
+        "mainPageTitle": "Optimizador de NMS: Calculadora de bonificación por adyacencia y diseño tecnológico de No Man's Sky",
+        "appDescription": "Encuentra los mejores diseños de tecnología de No Man's Sky para tu Starship, Corvette, Multitool, Exosuit y Exocraft. Optimice las bonificaciones de adyacencia y las ranuras supercargadas para obtener el máximo rendimiento.",
+        "instructionsPageTitle": "Instrucciones del optimizador NMS: uso, módulos y celdas sobrealimentadas",
+        "instructionsDescription": "Instrucciones completas para usar la aplicación NMS Optimizer. Aprenda a seleccionar plataformas, marcar espacios supercargados, optimizar diseños y maximizar las bonificaciones de adyacencia para Starships, Corvettes, Multitools y más.",
+        "aboutPageTitle": "Acerca de NMS Optimizer: cómo funciona la optimización del diseño tecnológico impulsada por ML",
+        "aboutDescription": "Descubra cómo NMS Optimizer utiliza el aprendizaje automático y algoritmos avanzados para encontrar la mejor ubicación de módulos para sus diseños de Starship, Corvette y Multitool.",
+        "changelogPageTitle": "Registro de cambios del Optimizador de NMS: últimas actualizaciones, características y mejoras",
+        "changelogDescription": "Vea las últimas actualizaciones, nuevas funciones y correcciones de errores para NMS Optimizer. Manténgase actualizado con el desarrollo de la mejor herramienta de diseño de No Man's Sky.",
+        "userstatsPageTitle": "Estadísticas del optimizador de NMS: compilaciones supercargadas de la comunidad",
+        "userstatsDescription": "Explora las estadísticas de usuario de NMS Optimizer para ver las tecnologías supercargadas de No Man's Sky más populares en determinados tipos de plataformas.",
+        "translationPageTitle": "Ayude a traducir NMS Optimizer: únase a nuestra comunidad de localización",
+        "translationDescription": "Ayuda a traducir el Optimizador de NMS a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo."
     },
     "installPrompt": {
         "title": "Añadir a la pantalla de inicio",
