@@ -1,3 +1,10 @@
+## [6.17.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.3...v6.17.4) (2026-03-18)
+
+
+### Bug Fixes
+
+* Replace EyeOpenIcon with EyeNoneIcon for privacy dialog title ([b695dd7](https://github.com/jbelew/nms_optimizer-web/commit/b695dd78bbd0ff9d6c459bba4788d163c2bd5a5e))
+
 ## [6.17.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.2...v6.17.3) (2026-03-18)
 
 
