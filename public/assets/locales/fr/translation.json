@@ -618,7 +618,7 @@
         "optimizeButton": "Optimiser",
         "cancelButton": "Annuler",
         "trailsInfo": "<strong>Starship Trails a changé avec la v6.2 (Remnant Update)!</strong> Dans la plupart des cas, ne sélectionnez pas plus de <strong>trois Starship Trails</strong>. La figurine tentaculaire <strong>n'augmente pas</strong> la vitesse dans l'atmosphère! Les Starship Trails sont appliqués par ordre de priorité, <strong>[P1] Chromatique</strong> ayant la priorité la plus élevée.",
-        "description": "Les sélections par défaut ne sont que des suggestions. Sélectionnez les modules à inclure dans l'optimisation pour cette technologie spécifique."
+        "description": "Les modules suggérés sont sélectionnés par défaut. Vous pouvez ajouter ou supprimer des modules spécifiques pour personnaliser l'optimisation de cette technologie."
     },
     "seo": {
         "nav": {

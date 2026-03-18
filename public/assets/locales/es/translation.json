@@ -618,7 +618,7 @@
         "optimizeButton": "Optimizar",
         "cancelButton": "Cancelar",
         "trailsInfo": "<strong>¡Starship Trails ha cambiado con v6.2 (Actualización remanente)!</strong> En la mayoría de los casos, seleccione no más de <strong>tres Starship Trails</strong>. ¡La figura con tentáculos <strong>no</strong> aumenta la velocidad en la atmósfera! Starship Trails se aplican en orden de prioridad, siendo <strong>[P1] Chromatic</strong> la de mayor prioridad.",
-        "description": "Las selecciones predeterminadas son sólo sugerencias. Seleccione qué módulos incluir en la optimización para esta tecnología específica."
+        "description": "Los módulos sugeridos se seleccionan de forma predeterminada. Puede agregar o eliminar módulos específicos para personalizar la optimización de esta tecnología."
     },
     "seo": {
         "nav": {

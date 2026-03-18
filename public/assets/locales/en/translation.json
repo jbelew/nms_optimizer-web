@@ -616,7 +616,7 @@
 		"closeDialogLabel": "Close dialog",
 		"cosmeticInfo": "<p>Suggested cosmetic modules can provide a small stat boost, but they shouldn’t limit your design ideas. For a good solve, just match the same number of cosmetic modules on your Corvette.</p>",
 		"trailsInfo": "<strong>Starship Trails have changed with v6.2 (Remnant Update)!</strong> In most cases, select no more than <strong>three Starship Trails</strong>. The Tentacled Figurine to <strong>does not</strong> boost in-atmosphere speed! Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. ",
-		"description": "Default selections are suggestions only. Select which modules to include in the optimization for this specific technology.",
+		"description": "Suggested modules are selected by default. You can add or remove specific modules to customize this technology's optimization.",
 		"optimizeButton": "Optimize",
 		"cancelButton": "Cancel"
 	},
