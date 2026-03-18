@@ -618,7 +618,7 @@
         "optimizeButton": "Optimieren",
         "cancelButton": "Abbrechen",
         "trailsInfo": "<strong>Starship Trails haben sich mit v6.2 (Remnant Update) geändert!</strong> Wählen Sie in den meisten Fällen nicht mehr als <strong>drei Starship Trails</strong> aus. Die Tentakelfigur erhöht die Geschwindigkeit in der Atmosphäre nicht! Starship Trails werden in der Reihenfolge ihrer Priorität angewendet, wobei <strong>[P1] Chromatic</strong> die höchste Priorität hat.",
-        "description": "In die Optimierung werden nur ausgewählte Module einbezogen."
+        "description": "Bei den Standardauswahlen handelt es sich lediglich um Vorschläge. Wählen Sie aus, welche Module in die Optimierung für diese spezifische Technologie einbezogen werden sollen."
     },
     "seo": {
         "nav": {
