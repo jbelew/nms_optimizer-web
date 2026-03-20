@@ -2,5 +2,6 @@
   "database": "dolt",
   "backend": "dolt",
   "dolt_mode": "server",
-  "dolt_database": "nms_optimizer_web"
+  "dolt_database": "nms_optimizer_web",
+  "project_id": "d8eafad7-bfaf-48ba-903f-e38ed1c8d85e"
 }
