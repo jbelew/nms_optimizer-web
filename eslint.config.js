@@ -1,7 +1,6 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import js from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import storybook from "eslint-plugin-storybook";
@@ -56,7 +55,6 @@ const shared = {
 	plugins: {
 		"react-hooks": reactHooks,
 		"react-refresh": reactRefresh,
-		"jsx-a11y": jsxA11y,
 	},
 	rules: {
 		...reactHooks.configs.recommended.rules,
