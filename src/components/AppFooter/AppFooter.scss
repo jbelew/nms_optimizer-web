@@ -31,26 +31,26 @@
 		&:hover {
 			color: var(--accent-12);
 		}
+	}
 
-		&--icon {
-			color: var(--accent-11);
-			display: inline;
-			margin-left: 0.25rem;
+	&__link--icon {
+		color: var(--accent-11);
+		display: inline;
+		margin-left: 0.25rem;
 
-			&:hover {
-				color: var(--accent-12);
-			}
+		&:hover {
+			color: var(--accent-12);
 		}
+	}
 
-		&--icon-linkedin {
-			color: var(--accent-11);
-			display: inline;
-			margin-left: 0.25rem;
-			margin-right: 0.25rem;
+	&__link--icon-linkedin {
+		color: var(--accent-11);
+		display: inline;
+		margin-left: 0.25rem;
+		margin-right: 0.25rem;
 
-			&:hover {
-				color: var(--accent-12);
-			}
+		&:hover {
+			color: var(--accent-12);
 		}
 	}
 
