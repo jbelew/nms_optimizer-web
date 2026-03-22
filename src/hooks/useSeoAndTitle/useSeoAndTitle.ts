@@ -10,8 +10,12 @@ import { sendEvent } from "../../utils/analytics";
  *
  * @param {string} name - The name of the meta tag (e.g., 'description'). **Must not be empty.**
  * @param {string} content - The content string for the meta tag.
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * updateMetaTag("description", "A great app");
+ * // returns void, side-effect: updates <meta name="description">
+ * ```
  */
 const updateMetaTag = (name: string, content: string) => {
 	let element = document.querySelector(`meta[name="${name}"]`);
@@ -28,12 +32,17 @@ const updateMetaTag = (name: string, content: string) => {
 /**
  * Updates or creates a meta tag in the document's head using the `property` attribute.
  *
+ * @remarks
  * Typically used for Open Graph (OG) tags.
  *
  * @param {string} property - The property identifier (e.g., 'og:title'). **Must not be empty.**
  * @param {string} content - The content string for the meta tag.
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * updateMetaPropertyTag("og:title", "My Page");
+ * // returns void, side-effect: updates <meta property="og:title">
+ * ```
  */
 const updateMetaPropertyTag = (property: string, content: string) => {
 	let element = document.querySelector(`meta[property="${property}"]`);
@@ -51,8 +60,12 @@ const updateMetaPropertyTag = (property: string, content: string) => {
  * Updates or creates the canonical link tag in the document's head.
  *
  * @param {string} href - The full canonical URL. **Must be a valid URL.**
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * updateCanonicalTag("https://example.com/page");
+ * // returns void, side-effect: updates <link rel="canonical">
+ * ```
  */
 const updateCanonicalTag = (href: string) => {
 	let element = document.querySelector('link[rel="canonical"]');
@@ -72,8 +85,12 @@ const updateCanonicalTag = (href: string) => {
  * @param {string} baseUrl - The base URL of the site.
  * @param {string} cleanPath - The path without language prefix.
  * @param {string[]} languages - Supported language codes.
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * updateHreflangTags("https://app.com", "/about", ["en", "fr"]);
+ * // returns void, side-effect: updates <link rel="alternate" hreflang="...">
+ * ```
  */
 const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: string[]) => {
 	// Remove existing hreflang tags to avoid duplicates
@@ -101,14 +118,20 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
 /**
  * Custom hook for managing SEO metadata and document titles.
  *
+ * @remarks
  * This hook automatically updates the document title, meta description, Open Graph tags,
  * and canonical URLs based on the current route and language. It also triggers
  * manual page view events for Google Analytics.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @hook
+ * @category Hooks
  *
  * @example
+ * ```tsx
  * useSeoAndTitle();
+ * // returns void, side-effect: manages document metadata and analytics
+ * ```
  */
 export const useSeoAndTitle = () => {
 	const { t, i18n } = useTranslation();

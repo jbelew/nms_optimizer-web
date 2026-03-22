@@ -21,15 +21,27 @@ import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
 /**
  * Custom hook that consolidates the high-level orchestration logic for the main application view.
  *
+ * @remarks
  * It aggregates multiple specialized hooks (layout, optimization, persistence,
  * notifications) into a single unified interface for the `MainAppContent` component.
  * It also manages global lifecycle events like resetting sessions and dismissing
  * the splash screen.
  *
  * @returns {object} A complex object containing state flags, sub-hook results, and event handlers.
- *
+ * @see {@link ./useMainAppLogic.test.ts Unit Tests}
+ * @see {@link ./MainAppContent.stories.tsx Storybook}
+ * @hook
+ * @category Hooks
  * @example
- * const logic = useMainAppLogic();
+ * ```tsx
+ * const {
+ *   buildVersion,
+ *   isSmallScreen,
+ *   optimize,
+ *   saveBuild,
+ *   handleShowChangelog
+ * } = useMainAppLogic();
+ * ```
  */
 export const useMainAppLogic = () => {
 	const buildVersion = build;
@@ -77,7 +89,12 @@ export const useMainAppLogic = () => {
 
 	/**
 	 * Opens the application changelog modal.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleShowChangelog();
+	 * // returns void, side-effect: opens "changelog" dialog
+	 * ```
 	 */
 	const handleShowChangelog = () => {
 		openDialog("changelog");

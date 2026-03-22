@@ -33,14 +33,24 @@ interface UseLoadBuildProps {
 /**
  * Custom hook for managing the "Load Build" workflow.
  *
+ * @remarks
  * It handles the file selection process, delegates parsing to `useBuildFileManager`,
  * tracks loading state, sends analytics events, and manages success/error notifications.
  *
  * @param {UseLoadBuildProps} [props] - Optional callbacks for displaying notifications.
  * @returns {UseLoadBuildReturn} State and event handlers for build loading.
  *
+ * @see {@link useBuildFileManager}
+ * @see {@link useAnalytics}
+ * @see {@link ./useLoadBuild.test.tsx Unit Tests}
+ * @hook
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const { handleLoadBuild, isLoadPending } = useLoadBuild({ showSuccess, showError });
+ * // returns { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending }
+ * ```
  */
 export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	const { t } = useTranslation();
@@ -54,7 +64,13 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 
 	/**
 	 * Opens the system file picker dialog.
+	 *
+	 * @returns {void} Side-effects only.
 	 * @example
+	 * ```typescript
+	 * handleLoadBuild();
+	 * // returns void, side-effect: opens file dialog
+	 * ```
 	 */
 	const handleLoadBuild = () => {
 		fileInputRef.current?.click();
@@ -63,9 +79,13 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	/**
 	 * Processes the selected build file and updates the application state.
 	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
-	 * @returns {Promise<void>}
+	 * @param {import("react").ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
 	 * @example
+	 * ```tsx
+	 * <input type="file" onChange={handleFileSelect} />
+	 * // returns Promise<void>, side-effect: parses file and updates GridStore
+	 * ```
 	 */
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];

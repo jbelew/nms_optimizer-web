@@ -27,14 +27,25 @@ interface UseSaveBuildReturn {
 /**
  * Custom hook for managing the "Save Build" workflow.
  *
+ * @remarks
  * It manages the lifecycle of the save operation, including opening the naming
  * dialog, executing the file generation via `useBuildFileManager`, and
  * reporting results through toasts and analytics.
  *
  * @returns {UseSaveBuildReturn} State and handlers for the save build process.
  *
+ * @see {@link useBuildFileManager}
+ * @see {@link useAnalytics}
+ * @see {@link useToast}
+ * @see {@link ./useSaveBuild.test.ts Unit Tests}
+ * @hook
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const { handleSaveBuild, isSavePending } = useSaveBuild();
+ * // returns { isSaveBuildDialogOpen, ..., isSavePending }
+ * ```
  */
 export const useSaveBuild = (): UseSaveBuildReturn => {
 	const { t } = useTranslation();
@@ -48,7 +59,13 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 
 	/**
 	 * Opens the naming dialog to start the save process.
+	 *
+	 * @returns {void} Side-effects only.
 	 * @example
+	 * ```typescript
+	 * handleSaveBuild();
+	 * // returns void, side-effect: opens naming dialog
+	 * ```
 	 */
 	const handleSaveBuild = () => {
 		setIsSaveBuildDialogOpen(true);
@@ -58,8 +75,12 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	 * Finalizes the save operation using the provided build name.
 	 *
 	 * @param {string} buildName - The name to assign to the saved file. **Must be non-empty.**
-	 * @returns {Promise<void>}
+	 * @returns {Promise<void>} Resolves when the build is saved and dialog closed.
 	 * @example
+	 * ```typescript
+	 * await handleBuildNameConfirm("New Ship");
+	 * // returns Promise<void>, side-effect: saves file and triggers toast
+	 * ```
 	 */
 	const handleBuildNameConfirm = async (buildName: string) => {
 		setIsSaveBuildDialogOpen(false);
@@ -86,7 +107,13 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 
 	/**
 	 * Aborts the save process and closes the dialog.
+	 *
+	 * @returns {void} Side-effects only.
 	 * @example
+	 * ```typescript
+	 * handleBuildNameCancel();
+	 * // returns void, side-effect: closes naming dialog
+	 * ```
 	 */
 	const handleBuildNameCancel = () => {
 		setIsSaveBuildDialogOpen(false);

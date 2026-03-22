@@ -6,6 +6,7 @@ import { useTechStore } from "@/store/TechStore";
 /**
  * Custom hook for managing the state and selection logic of technology modules.
  *
+ * @remarks
  * It handles:
  * 1. Syncing module selections with the global `TechStore` and persistent `ModuleSelectionStore`.
  * 2. Grouping raw module lists into categorical buckets (Core, Upgrade, etc.).
@@ -16,8 +17,16 @@ import { useTechStore } from "@/store/TechStore";
  * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of modules available for the tech.
  * @returns {object} State flags and event handlers for module selection UI.
  *
+ * @see {@link ../../../store/TechStore.ts TechStore}
+ * @see {@link ../../../store/ModuleSelectionStore.ts ModuleSelectionStore}
+ * @see {@link ./useTechModuleManagement.test.ts Unit Tests}
+ * @hook
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const { groupedModules, handleValueChange } = useTechModuleManagement("pulse", availableModules);
+ * ```
  */
 export const useTechModuleManagement = (
 	tech: string,
@@ -86,6 +95,10 @@ export const useTechModuleManagement = (
 	 *
 	 * @param {string} moduleId - The unique ID of the module.
 	 * @example
+	 * ```typescript
+	 * handleCheckboxChange("MOD_1");
+	 * // returns void, side-effect: toggles selection in TechStore
+	 * ```
 	 */
 	const handleCheckboxChange = (moduleId: string) => {
 		setCheckedModules(tech, (prevChecked = []) => {
@@ -102,6 +115,10 @@ export const useTechModuleManagement = (
 	 *
 	 * @param {string[]} moduleIds - The new array of selected module IDs.
 	 * @example
+	 * ```typescript
+	 * handleAllCheckboxesChange(["MOD_1", "MOD_2"]);
+	 * // returns void, side-effect: sets new selection in TechStore
+	 * ```
 	 */
 	const handleAllCheckboxesChange = (moduleIds: string[]) => {
 		setCheckedModules(tech, () => moduleIds);
@@ -112,6 +129,10 @@ export const useTechModuleManagement = (
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new checkbox state.
 	 * @example
+	 * ```typescript
+	 * handleSelectAllChange(true);
+	 * // returns void, side-effect: selects all non-core modules
+	 * ```
 	 */
 	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
 		if (checked) {
@@ -127,6 +148,10 @@ export const useTechModuleManagement = (
 	 *
 	 * @param {string[]} newValues - The new set of checked IDs.
 	 * @example
+	 * ```typescript
+	 * handleValueChange(["MOD_CORE", "MOD_THETA"]);
+	 * // returns void, side-effect: processes selection and enforces rules
+	 * ```
 	 */
 	const handleValueChange = (newValues: string[]) => {
 		const oldValues = new Set(currentCheckedModules);

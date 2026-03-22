@@ -21,6 +21,7 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
 /**
  * A component that renders status and configuration badges for a technology row.
  *
+ * @remarks
  * It displays:
  * 1. The `BonusStatusIcon` (if the tech is in the grid) showing efficiency.
  * 2. A trigger button showing the count of selected modules.
@@ -31,8 +32,15 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
  * @param {TechInfoBadgesProps} props - Component properties.
  * @returns {JSX.Element} The rendered badges and dialog trigger.
  *
+ * @see {@link BonusStatusIcon}
+ * @see {@link ModuleSelectionDialog}
+ * @see {@link useTechTreeRow}
+ * @category Components
+ *
  * @example
- * <TechInfoBadges {...props} hookData={hookData} />
+ * ```tsx
+ * <TechInfoBadges tech="pulse" hookData={hookData} />
+ * ```
  */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }) => {
 	const { a11yMode } = useA11yStore();
@@ -63,8 +71,16 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 	/**
 	 * Manages the dialog's open/close state and ensures data consistency.
 	 *
+	 * @remarks
+	 * When opening, it captures the current module selection. When closing,
+	 * it restores that selection unless an optimization was triggered.
+	 *
 	 * @param {boolean} open - The new visibility state.
 	 * @example
+	 * ```tsx
+	 * handleOpenChange(true);
+	 * // returns void, side-effect: opens dialog and sets initialModules
+	 * ```
 	 */
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
@@ -88,8 +104,12 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 	/**
 	 * Wrapper for the optimize callback to ensure the dialog closes only after the solve starts.
 	 *
-	 * @returns {Promise<void>}
+	 * @returns {Promise<void>} Resolves when optimization starts and dialog closes.
 	 * @example
+	 * ```tsx
+	 * await handleOptimizeWrapper();
+	 * // returns void, side-effect: triggers optimize and closes dialog
+	 * ```
 	 */
 	const handleOptimizeWrapper = async () => {
 		optimizeClickedRef.current = true;

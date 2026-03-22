@@ -19,6 +19,7 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
 /**
  * Custom hook for managing complex user interactions with an individual grid cell.
  *
+ * @remarks
  * It handles mouse, touch, and keyboard events, including specialized logic for:
  * 1. **Single Click/Tap**: Toggles the cell's supercharged state.
  * 2. **Double Tap (Mobile)**: Toggles the supercharged state (mimicking desktop click).
@@ -33,8 +34,14 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
  * @param {boolean} isSharedGrid - Flag for read-only mode.
  * @returns {object} Interaction flags and event handlers for the cell component.
  *
+ * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
+ * @hook
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const handlers = useGridCellInteraction(cell, 0, 5, false);
+ * ```
  */
 export const useGridCellInteraction = (
 	cell: Cell,
@@ -55,7 +62,12 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Triggers a visual shake animation on the grid for feedback.
+	 *
 	 * @example
+	 * ```tsx
+	 * triggerShake();
+	 * // returns void, side-effect: triggers global grid shake
+	 * ```
 	 */
 	const triggerShake = () => {
 		useShakeStore.getState().triggerShake();
@@ -63,7 +75,16 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Internal logic for handling timed taps (single vs double).
+	 *
+	 * @remarks
+	 * Distinguishes between a single tap (toggle active/SC) and a double tap
+	 * (toggle SC only) based on timing and cell coordinates.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleTouchLogic();
+	 * // returns void, side-effect: triggers cell state updates or feedback
+	 * ```
 	 */
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
@@ -132,8 +153,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Records the start of a touch interaction.
 	 *
-	 * @param {React.TouchEvent} event - The touch start event.
+	 * @param {import("react").TouchEvent} event - The touch start event.
 	 * @example
+	 * ```tsx
+	 * <div onTouchStart={handleTouchStart} />
+	 * ```
 	 */
 	const handleTouchStart = (event: React.TouchEvent) => {
 		setIsTouching(true);
@@ -153,8 +177,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Tracks movement to distinguish between a tap and a scroll gesture.
 	 *
-	 * @param {React.TouchEvent} event - The touch move event.
+	 * @param {import("react").TouchEvent} event - The touch move event.
 	 * @example
+	 * ```tsx
+	 * <div onTouchMove={handleTouchMove} />
+	 * ```
 	 */
 	const handleTouchMove = (event: React.TouchEvent) => {
 		if (isGestureRef.current || !gestureStartRef.current) return;
@@ -173,8 +200,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Finalizes a touch interaction and triggers tap logic if no movement was detected.
 	 *
-	 * @param {React.TouchEvent | React.MouseEvent} event - The end event.
+	 * @param {import("react").TouchEvent | import("react").MouseEvent} event - The end event.
 	 * @example
+	 * ```tsx
+	 * <div onTouchEnd={handleTouchEnd} />
+	 * ```
 	 */
 	const handleTouchEnd = (event: React.TouchEvent | React.MouseEvent) => {
 		setIsTouching(false);
@@ -207,7 +237,11 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Resets the touch state when an interaction is canceled by the system.
+	 *
 	 * @example
+	 * ```tsx
+	 * <div onTouchCancel={handleTouchCancel} />
+	 * ```
 	 */
 	const handleTouchCancel = () => {
 		setIsTouching(false);
@@ -216,8 +250,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Handles primary and modified mouse clicks.
 	 *
-	 * @param {React.MouseEvent} event - The click event.
+	 * @param {import("react").MouseEvent} event - The click event.
 	 * @example
+	 * ```tsx
+	 * <div onClick={handleClick} />
+	 * ```
 	 */
 	const handleClick = (event: React.MouseEvent) => {
 		const gridState = useGridStore.getState();
@@ -294,8 +331,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Prevents the context menu from appearing during interactions.
 	 *
-	 * @param {React.MouseEvent} event - The context menu event.
+	 * @param {import("react").MouseEvent} event - The context menu event.
 	 * @example
+	 * ```tsx
+	 * <div onContextMenu={handleContextMenu} />
+	 * ```
 	 */
 	const handleContextMenu = (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -304,8 +344,11 @@ export const useGridCellInteraction = (
 	/**
 	 * Manages keyboard-driven interactions for accessibility.
 	 *
-	 * @param {React.KeyboardEvent} event - The keyboard event.
+	 * @param {import("react").KeyboardEvent} event - The keyboard event.
 	 * @example
+	 * ```tsx
+	 * <div onKeyDown={handleKeyDown} />
+	 * ```
 	 */
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === " " || event.key === "Enter") {

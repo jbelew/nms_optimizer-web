@@ -14,6 +14,9 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
  * @param {number} decimals - The target decimal precision. **Must be a positive integer.**
  * @returns {number} The rounded number.
  * @example
+ * ```typescript
+ * round(10.567, 2); // returns 10.57
+ * ```
  */
 function round(value: number, decimals: number) {
 	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
@@ -38,6 +41,10 @@ interface BonusStatusIconProps {
  * @param {function(string): string} t - Translation function.
  * @returns {BonusStatusData} Metadata including icon type and tooltip text.
  * @example
+ * ```typescript
+ * const status = computeBonusStatusData(105.5, t);
+ * // returns { icon: "lightning", percent: 5.5, ... }
+ * ```
  */
 function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
 	const roundedMaxBonus = round(techMaxBonus, 2);
@@ -81,9 +88,12 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
  *
  * @param {string | null} iconType - The identifier for the icon (warning, check, lightning).
  * @param {string} className - CSS classes.
- * @param {React.CSSProperties} style - Inline styles.
+ * @param {import("react").CSSProperties} style - Inline styles.
  * @returns {React.ReactNode} The rendered icon component.
  * @example
+ * ```tsx
+ * {renderIcon("check", "icon-class", { color: "green" })}
+ * ```
  */
 function renderIcon(
 	iconType: string | null,
@@ -105,6 +115,7 @@ function renderIcon(
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
  *
+ * @remarks
  * It compares the achieved bonus against the target to show:
  * - ⚠️ **Warning**: Sub-optimal layout (under 100%).
  * - 🎯 **Checkmark**: Optimal standard layout (exactly 100%).
@@ -115,8 +126,14 @@ function renderIcon(
  * @param {BonusStatusIconProps} props - Component properties.
  * @returns {JSX.Element | null} The status icon with tooltip, or `null` if no bonus exists.
  *
+ * @see {@link ../../store/TechBonusStore.ts useTechBonusStore}
+ * @see {@link ./BonusStatusIcon.test.tsx Unit Tests}
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <BonusStatusIcon tech="pulse" techMaxBonus={145} techSolvedBonus={145} />
+ * ```
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	tech,

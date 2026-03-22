@@ -18,8 +18,12 @@ type SetItemFunction = (
  *
  * @param {SetItemFunction} setItemFn - The storage setter function.
  * @param {number} msToWait - Delay in milliseconds.
- * @returns {function(string, StorageValue<Partial<TechBonusStore>>): Promise<void>}
+ * @returns {function(string, StorageValue<Partial<TechBonusStore>>): Promise<void>} The debounced setter function.
  * @example
+ * ```typescript
+ * const debouncedSet = debounceSetItem(mySetFn, 500);
+ * await debouncedSet("techBonusState", { state: { ... }, version: 1 });
+ * ```
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -82,6 +86,9 @@ export type BonusStatusData = {
 
 /**
  * State and actions for managing calculated efficiency statuses.
+ *
+ * @category State
+ * @see {@link BonusStatusData}
  */
 export type TechBonusStore = {
 	/** Mapping of technology keys to their calculated status data. */
@@ -115,13 +122,22 @@ export type TechBonusStore = {
 /**
  * Zustand store for managing persistent efficiency ratings and statuses for optimized technologies.
  *
+ * @remarks
  * This store allows the UI to maintain "Optimization Checkmark" or "Warning" icons
  * for each technology across re-renders and sessions.
  *
- * @returns {TechBonusStore} The tech bonus store state and actions.
+ * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<TechBonusStore>>} The tech bonus store hook.
+ * @hook
+ * @category State
+ * @see {@link TechBonusStore}
+ * @see {@link BonusStatusData}
+ * @see {@link safeGetItem}
+ * @see {@link safeSetItem}
  *
  * @example
+ * ```tsx
  * const status = useTechBonusStore((s) => s.getBonusStatus("shield"));
+ * ```
  */
 export const useTechBonusStore = create<TechBonusStore>()(
 	persist(

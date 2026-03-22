@@ -18,8 +18,12 @@ type SetItemFunction = (
  *
  * @param {SetItemFunction} setItemFn - The storage setter function.
  * @param {number} msToWait - Delay in milliseconds.
- * @returns {function(string, StorageValue<Partial<ModuleSelectionStore>>): Promise<void>}
+ * @returns {(name: string, value: StorageValue<Partial<ModuleSelectionStore>>) => Promise<void>} The debounced setter function.
  * @example
+ * ```typescript
+ * const debouncedSet = debounceSetItem(mySetFn, 500);
+ * await debouncedSet("moduleSelectionState", { state: { ... }, version: 1 });
+ * ```
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -108,21 +112,24 @@ export type ModuleSelectionStore = {
 /**
  * Zustand store for managing persistent module selections across technology categories.
  *
+ * @remarks
  * This store ensures that when a user selects specific modules for an optimization
  * solve, those choices are remembered and persisted to `localStorage`. It uses a
  * debounced storage middleware to minimize disk writes during rapid selections.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<ModuleSelectionStore>>} The module selection store hook.
+ * @hook
  * @category State
  * @see {@link ModuleSelectionStore}
  * @see {@link TechStore}
- * @see {@link safeGetItem}
- * @see {@link safeSetItem}
+ * @see {@link ./ModuleSelectionStore.test.ts Unit Tests}
  *
  * @example
+ * ```tsx
  * const { setModuleSelection } = useModuleSelectionStore();
  *
  * setModuleSelection("pulse", ["S1", "S2", "S3"]);
+ * ```
  */
 export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	persist(

@@ -25,6 +25,10 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  * @param {number} msToWait - Delay in milliseconds. **Must be a positive integer.**
  * @returns {function(string, StorageValue<Partial<GridStore>>): Promise<void>} The debounced setter.
  * @example
+ * ```typescript
+ * const debouncedSet = debounceSetItem(mySetFn, 500);
+ * await debouncedSet("myKey", { state: { ... }, version: 1 });
+ * ```
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -188,6 +192,9 @@ export const createGrid = (width: number, height: number): Grid => ({
  * @param {Module} moduleData - The raw module metadata.
  * @returns {Cell} A populated `Cell` object.
  * @example
+ * ```typescript
+ * const cell = createCellFromModuleData(rawModule);
+ * ```
  */
 const createCellFromModuleData = (moduleData: Module): Cell => {
 	return {
@@ -428,8 +435,11 @@ const debouncedStorage = {
 /**
  * Returns the search property of the window's location object.
  *
- * @returns The search property of the window's location object, or an empty string if the window or location are not defined.
+ * @returns {string} The search property of the window's location object, or an empty string if the window or location are not defined.
  * @example
+ * ```typescript
+ * const search = getWindowSearch(); // returns "?grid=..." or ""
+ * ```
  */
 const getWindowSearch = () =>
 	typeof window === "undefined" || !window.location ? "" : window.location.search;
@@ -437,6 +447,7 @@ const getWindowSearch = () =>
 /**
  * Zustand store for managing the technology grid, cell states, and optimization results.
  *
+ * @remarks
  * This is the primary store for the application's interactive grid. It manages:
  * 1. The 2D `Grid` state and its individual `Cell` properties.
  * 2. Persistence of grid layouts via `localStorage` (debounced for performance).
@@ -446,15 +457,20 @@ const getWindowSearch = () =>
  * It uses `immer` for deep nested state updates and `persist` for local storage synchronization.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<GridStore>>} The grid store hook.
+ * @hook
  * @category State
  * @see {@link GridStore}
  * @see {@link Grid}
  * @see {@link Cell}
+ * @see {@link ./createGrid.test.ts createGrid Tests}
+ * @see {@link ./gridSelectors.test.ts Selectors Tests}
+ * @see {@link ./hasTechInGrid.test.ts hasTechInGrid Tests}
  *
  * @example
+ * ```tsx
  * const grid = useGridStore((s) => s.grid);
- *
- * // returns { cells: [...], width: 10, height: 6 }
+ * const handleCellTap = useGridStore((s) => s.handleCellTap);
+ * ```
  */
 export const useGridStore = create<GridStore>()(
 	persist(
@@ -465,6 +481,9 @@ export const useGridStore = create<GridStore>()(
 			 * @param state The current state.
 			 * @param definition The grid definition to apply.
 			 * @example
+			 * ```typescript
+			 * applyGridDefinition(state, { grid: [...], gridFixed: true, superchargedFixed: false });
+			 * ```
 			 */
 			const applyGridDefinition = (
 				state: GridStore,

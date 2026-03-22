@@ -35,9 +35,11 @@ export type Resource<T> = {
  * @template T - The type of data being loaded.
  * @param {Promise<T>} promise - The asynchronous operation to wrap. **Must eventually resolve.**
  * @returns {Resource<T>} A resource object with a `read` method.
- *
  * @example
+ * ```typescript
  * const userResource = createResource(fetchUser(id));
+ * // returns Resource<User>, side-effect: initiates fetch
+ * ```
  */
 const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 	let status: "pending" | "success" | "error" = "pending";
@@ -73,8 +75,12 @@ const cache = new Map<string, Resource<ShipTypes>>();
 /**
  * Clears the internal ship types resource cache.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * clearShipTypesCache();
+ * // returns void, side-effect: clears cache map
+ * ```
  */
 export const clearShipTypesCache = () => {
 	cache.clear();
@@ -83,14 +89,21 @@ export const clearShipTypesCache = () => {
 /**
  * Initiates a fetch for all available ship types from the API.
  *
+ * @remarks
  * This function caches the resulting resource to ensure multiple calls
  * do not trigger redundant network requests. It also updates the
  * `ShipTypesStore` and `PlatformStore` upon success.
  *
  * @returns {Resource<ShipTypes>} A Suspense resource containing ship type data.
+ * @category Data Fetching
+ * @see {@link useShipTypesStore}
+ * @see {@link usePlatformStore}
  *
  * @example
+ * ```typescript
  * const resource = fetchShipTypes();
+ * // returns Resource<ShipTypes>, side-effect: may initiate API call
+ * ```
  */
 export function fetchShipTypes(): Resource<ShipTypes> {
 	const cacheKey = "shipTypes";

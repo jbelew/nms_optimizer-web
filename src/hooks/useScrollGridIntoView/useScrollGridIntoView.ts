@@ -13,12 +13,17 @@ let sharedForceShow: (() => void) | null = null;
 /**
  * Registers an external function to force the visibility of the toolbar.
  *
+ * @remarks
  * This allows the scroll-into-view behavior to automatically unhide the mobile
  * toolbar when scrolling is triggered.
  *
  * @param {function(): void} fn - The `forceShow` function, typically from `useScrollHide`.
- * @returns {void}
+ * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * registerToolbarForceShow(() => setShow(true));
+ * // returns void, side-effect: registers global toolbar callback
+ * ```
  */
 export const registerToolbarForceShow = (fn: () => void) => {
 	sharedForceShow = fn;
@@ -27,6 +32,7 @@ export const registerToolbarForceShow = (fn: () => void) => {
 /**
  * Custom hook for managing grid scrolling with responsive offsets.
  *
+ * @remarks
  * It maintains a singleton ref to the grid container, allowing multiple
  * components (like the optimizer and recommended build list) to trigger
  * smooth scrolling to the grid. On screens smaller than 1024px, it ensures
@@ -34,10 +40,17 @@ export const registerToolbarForceShow = (fn: () => void) => {
  *
  * @param {object} [options] - Configuration for the scroll behavior.
  * @param {boolean} [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
- * @returns {{ gridContainerRef: React.MutableRefObject<HTMLDivElement | null>, scrollIntoView: function(): void }} The shared container ref and a function to trigger the scroll.
+ * @returns {{ gridContainerRef: import("react").MutableRefObject<HTMLDivElement | null>, scrollIntoView: function(): void }} The shared container ref and a function to trigger the scroll.
+ *
+ * @see {@link ./useScrollGridIntoView.test.ts Unit Tests}
+ * @hook
+ * @category Hooks
  *
  * @example
+ * ```tsx
  * const { gridContainerRef, scrollIntoView } = useScrollGridIntoView({ skipOnLargeScreens: true });
+ * // returns { gridContainerRef, scrollIntoView }
+ * ```
  */
 export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }) => {
 	const gridContainerRef = sharedGridContainerRef;
@@ -56,8 +69,15 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	/**
 	 * Performs a smooth scroll to the grid container with the appropriate responsive offset.
 	 *
+	 * @remarks
 	 * Also triggers the registered toolbar `forceShow` function.
+	 *
+	 * @returns {void} Side-effects only.
 	 * @example
+	 * ```typescript
+	 * scrollIntoView();
+	 * // returns void, side-effect: scrolls window to grid
+	 * ```
 	 */
 	const scrollIntoView = () => {
 		// Skip scrolling on large screens if configured to do so
@@ -81,8 +101,14 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 
 /**
  * Reset the shared grid container ref. Used for testing.
+ *
+ * @returns {void} Side-effects only.
  * @internal
  * @example
+ * ```typescript
+ * __resetScrollGridIntoViewRef();
+ * // returns void, side-effect: resets singleton ref
+ * ```
  */
 export const __resetScrollGridIntoViewRef = () => {
 	sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDivElement | null>;

@@ -13,27 +13,28 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 /**
  * Custom hook for managing the saving and loading of `.nms` build files.
  *
+ * @remarks
  * This hook orchestrates state extraction from multiple stores, computes
  * checksums for integrity, and handles file system interactions (downloading/uploading).
+ * It aggregates:
+ * - `GridStore` (layout and results)
+ * - `TechStore` (selected modules and bonuses)
+ * - `TechBonusStore` (calculated efficiency status)
+ * - `ModuleSelectionStore` (persistent user choices)
  *
- * @returns {{
- *   saveBuildToFile: (buildName: string) => Promise<void>,
- *   loadBuildFromFile: (file: File) => Promise<void>
- * }} Functions to save and load build states.
+ * @returns {object} Functions to save and load build states.
  *
- * @see [useBuildFileManager Tests](./useBuildFileManager.test.ts)
+ * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link BuildFile} for the file structure definition.
- * @see [Build File Validation](../../utils/buildFileValidation.ts)
+ * @see {@link ../../utils/buildFileValidation.ts Build File Validation}
  *
+ * @hook
  * @category Hooks
  *
  * @example
  * ```tsx
  * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
- *
- * const handleSave = async () => {
- *   await saveBuildToFile("My Awesome Ship");
- * };
+ * // returns { saveBuildToFile, loadBuildFromFile }
  * ```
  */
 export const useBuildFileManager = () => {
@@ -44,6 +45,7 @@ export const useBuildFileManager = () => {
 	/**
 	 * Captures the current application state and downloads it as a `.nms` file.
 	 *
+	 * @remarks
 	 * Includes state from `GridStore`, `TechStore`, `TechBonusStore`, and `ModuleSelectionStore`.
 	 *
 	 * @param {string} buildName - The display name for the build. **Must not be empty.**
@@ -51,6 +53,10 @@ export const useBuildFileManager = () => {
 	 *
 	 * @throws {Error} If state extraction, checksum computation, or file creation fails.
 	 * @example
+	 * ```typescript
+	 * await saveBuildToFile("My Fighter");
+	 * // returns Promise<void>, side-effect: triggers browser download
+	 * ```
 	 */
 	const saveBuildToFile = async (buildName: string) => {
 		try {
@@ -115,6 +121,7 @@ export const useBuildFileManager = () => {
 	/**
 	 * Parses a `.nms` file and restores the application state.
 	 *
+	 * @remarks
 	 * Performs validation on file type, size, JSON structure, and data integrity (checksum).
 	 * **Will switch the active ship type if the file contains a different one.**
 	 *
@@ -123,6 +130,10 @@ export const useBuildFileManager = () => {
 	 *
 	 * @throws {Error} If validation (type, size, JSON, checksum, shipType) or restoration fails.
 	 * @example
+	 * ```typescript
+	 * await loadBuildFromFile(selectedFile);
+	 * // returns Promise<void>, side-effect: updates multiple global stores
+	 * ```
 	 */
 	const loadBuildFromFile = async (file: File) => {
 		try {

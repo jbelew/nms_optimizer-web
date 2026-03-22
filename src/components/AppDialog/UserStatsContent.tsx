@@ -148,10 +148,23 @@ interface UserStatsContentProps {
 /**
  * Internal component that handles data aggregation and chart rendering.
  *
+ * @remarks
+ * Fetches user stats and tech tree colors in parallel and aggregates the data
+ * into a format suitable for Recharts pie charts.
+ *
  * @param {object} props - Component properties.
  * @param {boolean} props.isOpen - Visibility flag.
  * @returns {JSX.Element} The rendered statistics data view.
+ *
+ * @see {@link fetchUserStats}
+ * @see {@link fetchTechTreeColors}
+ * @see {@link useUserStats}
+ * @see {@link useTechTreeColors}
+ *
  * @example
+ * ```tsx
+ * <UserStatsData isOpen={true} />
+ * ```
  */
 const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
@@ -170,10 +183,18 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	/**
 	 * Aggregates raw analytics records into a format suitable for pie charts.
 	 *
+	 * @remarks
+	 * Filters for supercharged modules and relevant ship types, then reduces the
+	 * data to a list of { name, value } pairs. It also groups small entries
+	 * into an "other" category based on a 2% threshold.
+	 *
 	 * @param {UserStat[] | null} rawData - The list of statistics from the API.
 	 * @param {string[]} shipTypes - Filter for specific ship types.
 	 * @returns {Array<{ name: string, value: number }>} Aggregated and filtered chart data.
 	 * @example
+	 * ```typescript
+	 * const starshipData = aggregateData(stats, ["standard", "sentinel", "solar"]);
+	 * ```
 	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
@@ -230,6 +251,9 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 * @param {string} titleKey - Translation key for the section header.
 	 * @returns {JSX.Element} The chart section.
 	 * @example
+	 * ```tsx
+	 * {renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}
+	 * ```
 	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {
@@ -274,15 +298,22 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 /**
  * A component that renders the detailed user statistics content.
  *
+ * @remarks
  * It provides a summary of global community optimization trends, visualized
  * through pie charts for different equipment categories. Data is fetched from
- * the analytics backend.
+ * the analytics backend. This component is typically rendered within a dialog.
  *
  * @param {UserStatsContentProps} props - Component properties.
  * @returns {JSX.Element} The rendered statistics content UI.
  *
+ * @see {@link ./UserStatsContent.test.tsx Unit Tests}
+ * @see {@link ../../hooks/useUserStats/useUserStats.ts useUserStats Hook}
+ * @category Components
+ *
  * @example
- * <UserStatsContent isOpen={true} onClose={() => {}} />
+ * ```tsx
+ * <UserStatsContent isOpen={true} onClose={() => setOpen(false)} />
+ * ```
  */
 export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
 	const { t } = useTranslation();

@@ -22,15 +22,24 @@ interface BuildNameContentProps {
 /**
  * A component providing the UI for entering and validating a build name.
  *
+ * @remarks
  * It features a text field with debounced validation against filename standards,
  * a random name generator for NMS-themed build names, and keyboard handling
- * for Enter and Escape keys.
+ * for Enter and Escape keys. This component is typically used within a dialog
+ * to name a user's technology layout before saving.
  *
  * @param {BuildNameContentProps} props - Component properties.
  * @returns {JSX.Element} The rendered build name input UI.
  *
+ * @see {@link ../../utils/filenameValidation.ts Filename Validation}
+ * @see {@link ../../utils/buildNameGenerator.ts Build Name Generator}
+ * @see {@link ./BuildNameDialog.stories.tsx Storybook}
+ * @category Components
+ *
  * @example
- * <BuildNameContent onConfirm={(name) => console.log(name)} onCancel={() => {}} />
+ * ```tsx
+ * <BuildNameContent onConfirm={(name) => handleSave(name)} onCancel={() => setOpen(false)} />
+ * ```
  */
 export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCancel }) => {
 	const { t } = useTranslation();
@@ -44,6 +53,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * @param {string} value - The build name to validate.
 	 * @returns {string | null} Error message if invalid, otherwise `null`.
 	 * @example
+	 * ```typescript
+	 * const error = createValidator("Invalid/Name"); // returns "Invalid filename" (localized)
+	 * ```
 	 */
 	const createValidator = (value: string): string | null => {
 		const trimmed = value.trim();
@@ -64,7 +76,12 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Generates a random themed name and updates the input state.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleGenerateName();
+	 * // returns void, side-effect: updates buildName and triggers validation
+	 * ```
 	 */
 	const handleGenerateName = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
@@ -76,8 +93,11 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Updates local state and triggers validation on input change.
 	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+	 * @param {import("react").ChangeEvent<HTMLInputElement>} e - The change event.
 	 * @example
+	 * ```tsx
+	 * <input onChange={handleBuildNameChange} />
+	 * ```
 	 */
 	const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
@@ -87,7 +107,12 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Validates and submits the current build name.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleConfirm();
+	 * // returns void, side-effect: calls onConfirm if valid
+	 * ```
 	 */
 	const handleConfirm = () => {
 		const trimmedName = buildName.trim();
@@ -100,7 +125,12 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Resets state and notifies the parent of cancellation.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleCancel();
+	 * // returns void, side-effect: resets state and calls onCancel
+	 * ```
 	 */
 	const handleCancel = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
@@ -112,8 +142,11 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Dispatches actions based on keyboard input.
 	 *
-	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 * @param {import("react").KeyboardEvent<HTMLInputElement>} e - The keyboard event.
 	 * @example
+	 * ```tsx
+	 * <input onKeyDown={handleKeyDown} />
+	 * ```
 	 */
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {

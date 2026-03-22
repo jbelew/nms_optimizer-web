@@ -42,9 +42,12 @@ const UserStatsRoute = lazy(() =>
 /**
  * Inner component that manages core data loading and dialog orchestration.
  *
+ * @remarks
  * It uses `useFetchShipTypesSuspense` to trigger the initial data fetch and
  * `useUrlSync` to restore state from URL parameters. It also manages the
  * conditional rendering of routed dialogs and the initial welcome dialog.
+ * This component handles the core logic of the application after the initial
+ * setup in the `App` component.
  *
  * @returns {JSX.Element | null} The application content, or `null` if a fatal error occurs.
  *
@@ -53,6 +56,10 @@ const UserStatsRoute = lazy(() =>
  * @see {@link useUrlSync}
  * @category Components
  * @example
+ * ```tsx
+ * // Typically rendered within App's DialogProvider
+ * <AppContent />
+ * ```
  */
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
@@ -69,7 +76,16 @@ const AppContent: FC = () => {
 
 	/**
 	 * Dismisses the welcome dialog and records the visit.
+	 *
+	 * @remarks
+	 * This ensures that the user doesn't see the welcome dialog on subsequent
+	 * visits to the application.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleCloseWelcome();
+	 * // returns void, side-effect: sets showWelcome to false and marks visit
+	 * ```
 	 */
 	const handleCloseWelcome = () => {
 		setShowWelcome(false);
@@ -134,6 +150,7 @@ const AppContent: FC = () => {
  * @see {@link DialogProvider}
  * @see {@link useSeoAndTitle}
  * @see {@link useUpdateCheck}
+ * @see {@link ./App.test.tsx Unit Tests}
  * @category Components
  *
  * @example
@@ -183,7 +200,17 @@ const App: FC = () => {
 
 	/**
 	 * Triggers a hard reload to activate the newly installed service worker.
+	 *
+	 * @remarks
+	 * Calls `updateSW(true)` if the reference exists, which should trigger a page
+	 * reload after the worker updates. Fallback to `window.location.reload()`
+	 * if the update function is not available.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleRefresh();
+	 * // returns void, side-effect: triggers a page reload
+	 * ```
 	 */
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
@@ -198,7 +225,16 @@ const App: FC = () => {
 
 	/**
 	 * Hides the application update notification.
+	 *
+	 * @remarks
+	 * Dismisses the `UpdatePrompt` dialog, allowing the user to continue using
+	 * the application without updating immediately.
+	 *
 	 * @example
+	 * ```tsx
+	 * handleDismissUpdatePrompt();
+	 * // returns void, side-effect: sets showUpdatePrompt to false
+	 * ```
 	 */
 	const handleDismissUpdatePrompt = () => {
 		setShowUpdatePrompt(false);

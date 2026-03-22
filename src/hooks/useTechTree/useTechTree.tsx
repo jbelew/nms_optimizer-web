@@ -98,7 +98,7 @@ export interface TechTreeItem {
  * Defines a pre-configured layout of technologies and modules.
  *
  * @category Data Types
- * @see {@link useRecommendedBuild}
+ * @see {@link ../useRecommendedBuild/useRecommendedBuild.tsx useRecommendedBuild}
  */
 export interface RecommendedBuild {
 	/** Display title for the build. */
@@ -142,6 +142,10 @@ const cache = new Map<string, Promise<TechTree>>();
  *
  * @returns {void} Side-effects only.
  * @example
+ * ```typescript
+ * clearTechTreeCache();
+ * // returns void, side-effect: clears cache map
+ * ```
  */
 export const clearTechTreeCache = () => {
 	cache.clear();
@@ -150,19 +154,21 @@ export const clearTechTreeCache = () => {
 /**
  * Fetches the technology tree for a specific ship type asynchronously.
  *
+ * @remarks
  * Uses internal caching to prevent redundant requests. Updates the
  * `TechTreeLoadingStore` to reflect the network status.
  *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
  * @returns {Promise<TechTree>} A promise resolving to the `TechTree` data.
  * @category Data Fetching
- * @see {@link TechTreeLoadingStore}
+ * @see {@link ../../store/TechTreeLoadingStore.ts useTechTreeLoadingStore}
  * @see {@link isValidRecommendedBuild}
+ * @see {@link ./useTechTree.test.ts Unit Tests}
  *
  * @example
+ * ```typescript
  * const tree = await fetchTechTreeAsync("solar");
- *
- * // returns { grid_definition: {...}, ... }
+ * ```
  */
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
@@ -214,6 +220,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 /**
  * Synchronous-looking wrapper for `fetchTechTreeAsync`.
  *
+ * @remarks
  * Provides a cleaner API for standard fetch requests.
  *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
@@ -221,6 +228,9 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * @category Data Fetching
  * @see {@link fetchTechTreeAsync}
  * @example
+ * ```typescript
+ * fetchTechTree("standard").then(tree => console.log(tree));
+ * ```
  */
 export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
 	return fetchTechTreeAsync(shipType);
@@ -229,12 +239,16 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
 /**
  * Extracts metadata (colors, groups) from a raw tech tree object.
  *
+ * @remarks
  * Processes the tech tree to build indexed maps for UI coloring and grouping.
  *
  * @param {TechTree} techTree - The tech tree to process.
  * @returns {{ colors: Record<string, string>, techGroups: Record<string, TechTreeItem[]>, activeGroups: Record<string, string> }} Extracted metadata.
  * @private
  * @example
+ * ```typescript
+ * const { colors, techGroups } = processTechTreeMetadata(treeData);
+ * ```
  */
 function processTechTreeMetadata(techTree: TechTree) {
 	const colors: { [key: string]: string } = {};
@@ -272,21 +286,24 @@ function processTechTreeMetadata(techTree: TechTree) {
 /**
  * Custom hook for retrieving the technology tree within a Suspense boundary.
  *
+ * @remarks
  * Automatically initializes the `TechStore` and `GridStore` with metadata
  * from the fetched tree upon successful retrieval. Uses React's `use()` hook.
  *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
- * @returns {TechTree} The loaded technology tree.
+ * @returns {TechTree} The loaded technology tree data structure.
+ * @hook
  * @category Hooks
  * @see {@link useTechStore}
  * @see {@link useGridStore}
  * @see {@link fetchTechTree}
+ * @see {@link ./useFetchTechTreeSuspense.test.ts Unit Tests}
  *
  * @example
+ * ```tsx
  * // Inside a component wrapped in <Suspense>
  * const tree = useFetchTechTreeSuspense("freighter");
- *
- * // returns { ...techTreeData }
+ * ```
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const data = use(fetchTechTree(shipType));

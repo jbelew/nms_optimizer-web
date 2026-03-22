@@ -49,6 +49,11 @@ export interface UseOptimizeReturn {
  * @returns {value is ApiResponse} `true` if `value` matches the `ApiResponse` schema.
  * @see {@link ApiResponse}
  * @example
+ * ```typescript
+ * if (isApiResponse(data)) {
+ *   setResult(data, tech);
+ * }
+ * ```
  */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
@@ -71,6 +76,7 @@ function isApiResponse(value: unknown): value is ApiResponse {
 /**
  * Custom hook for managing the asynchronous optimization process via WebSockets.
  *
+ * @remarks
  * This hook handles the entire lifecycle of an optimization request:
  * 1. Establishing a WebSocket connection via `socket.io-client`.
  * 2. Managing progress updates and real-time grid updates.
@@ -80,6 +86,7 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * Requires a running backend service supporting `Socket.io`.
  *
  * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
+ * @hook
  * @category Hooks
  * @see {@link useGridStore}
  * @see {@link useOptimizeStore}
@@ -89,11 +96,16 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * @see {@link useAnalytics}
  * @see {@link useBreakpoint}
  * @see {@link useScrollGridIntoView}
+ * @see {@link ./useOptimize.test.tsx Unit Tests}
  *
  * @example
- * const { handleOptimize, solving } = useOptimize();
+ * ```tsx
+ * const { handleOptimize, solving, progressPercent } = useOptimize();
  *
- * // returns { solving: false, ... }
+ * const onOptimize = () => {
+ *   handleOptimize("pulse");
+ * };
+ * ```
  */
 export const useOptimize = (): UseOptimizeReturn => {
 	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
@@ -160,6 +172,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * @see {@link useAnalytics}
 	 * @see {@link useGridStore}
 	 * @example
+	 * ```tsx
+	 * await handleOptimize("pulse", true);
+	 * // triggers advanced solver for "pulse" tech
+	 * ```
 	 */
 	const handleOptimize = async (
 		tech: string,
@@ -405,6 +421,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * @returns {void} Side-effects only.
 	 * @see {@link useOptimizeStore}
 	 * @example
+	 * ```tsx
+	 * clearPatternNoFitTech();
+	 * // returns void, side-effect: clears patternNoFitTech state
+	 * ```
 	 */
 	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
 
@@ -416,6 +436,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * @returns {Promise<void>} Resolves when the forced optimization is triggered.
 	 * @see {@link handleOptimize}
 	 * @example
+	 * ```tsx
+	 * await handleForceCurrentPnfOptimize();
+	 * // re-triggers handleOptimize with forced: true
+	 * ```
 	 */
 	const handleForceCurrentPnfOptimize = async () => {
 		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);
