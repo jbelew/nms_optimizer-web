@@ -71,7 +71,7 @@ Supercharged cells are limited — placement matters.
 - **Don’t assign all supercharged cells to the first technology you place.** This often blocks stronger overall layouts later.
 - Start by assigning **2–3 supercharged cells to a high-impact technology**, not all of them.
 - Reserve at least **one or more supercharged cells** for a **second priority technology** to improve total effectiveness.
-- Prioritize technologies with **larger module counts** before space becomes constrained.
+- Once you've used all of your supercharged cells, prioritize technologies with **larger module counts** before space becomes constrained.
 - Let the solver handle placement; your role is to **set priorities and distribution**.
 
 If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
