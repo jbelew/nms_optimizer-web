@@ -85,6 +85,7 @@ export const useTechModuleManagement = (
 	 * Toggles the selection status of a single module.
 	 *
 	 * @param {string} moduleId - The unique ID of the module.
+	 * @example
 	 */
 	const handleCheckboxChange = (moduleId: string) => {
 		setCheckedModules(tech, (prevChecked = []) => {
@@ -100,6 +101,7 @@ export const useTechModuleManagement = (
 	 * Replaces the entire selection list for this technology.
 	 *
 	 * @param {string[]} moduleIds - The new array of selected module IDs.
+	 * @example
 	 */
 	const handleAllCheckboxesChange = (moduleIds: string[]) => {
 		setCheckedModules(tech, () => moduleIds);
@@ -109,6 +111,7 @@ export const useTechModuleManagement = (
 	 * Handles the "Select All" toggle interaction.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new checkbox state.
+	 * @example
 	 */
 	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
 		if (checked) {
@@ -123,6 +126,7 @@ export const useTechModuleManagement = (
 	 * Enforces tier-based de-selection logic (Theta > Tau > Sigma).
 	 *
 	 * @param {string[]} newValues - The new set of checked IDs.
+	 * @example
 	 */
 	const handleValueChange = (newValues: string[]) => {
 		const oldValues = new Set(currentCheckedModules);

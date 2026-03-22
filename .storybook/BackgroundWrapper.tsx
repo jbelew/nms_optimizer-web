@@ -1,11 +1,18 @@
 import React from "react";
 
+/**
+ *
+ */
 interface BackgroundWrapperProps {
 	children: React.ReactNode;
 	isVisible: boolean;
 	theme: string;
 }
 
+/**
+ *
+ * @example
+ */
 export const BackgroundWrapper = ({ children, isVisible, theme }: BackgroundWrapperProps) => {
 	React.useEffect(() => {
 		const radixRoot = document.querySelector(".radix-themes") as HTMLElement | null;

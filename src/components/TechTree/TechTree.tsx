@@ -32,6 +32,7 @@ interface TechTreeProps {
  *
  * @param {TechTreeProps} props - Component properties.
  * @returns {JSX.Element} The technology tree UI.
+ * @example
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,

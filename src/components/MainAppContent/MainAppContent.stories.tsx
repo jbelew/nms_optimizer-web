@@ -51,6 +51,9 @@ const meta = {
 
 export default meta;
 
+/**
+ *
+ */
 type Story = StoryObj<typeof meta>;
 
 // Wrapper component to reset store state before each story
@@ -128,6 +131,9 @@ const withLocalProviders =
 		</Toast.Provider>
 	);
 
+/**
+ *
+ */
 export const Desktop: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
 	render: () => <MainAppContent />,
@@ -147,6 +153,9 @@ export const Desktop: Story = {
 	loaders: meta.loaders,
 };
 
+/**
+ *
+ */
 export const Tablet: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
 	render: () => <MainAppContent />,
@@ -166,6 +175,9 @@ export const Tablet: Story = {
 	loaders: meta.loaders,
 };
 
+/**
+ *
+ */
 export const Mobile: Story = {
 	decorators: [
 		(Story, context) => {

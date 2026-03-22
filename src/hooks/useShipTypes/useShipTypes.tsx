@@ -74,6 +74,7 @@ const cache = new Map<string, Resource<ShipTypes>>();
  * Clears the internal ship types resource cache.
  *
  * @returns {void}
+ * @example
  */
 export const clearShipTypesCache = () => {
 	cache.clear();

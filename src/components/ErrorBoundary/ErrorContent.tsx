@@ -25,6 +25,7 @@ interface ErrorContentProps {
 
 /**
  * Static component rendering the default full-page error message.
+ * @example
  */
 const DefaultMessage = () => (
 	<>
@@ -46,6 +47,7 @@ const DefaultMessage = () => (
 
 /**
  * Static component rendering a compact inset error message.
+ * @example
  */
 const InsetMessage = () => (
 	<>

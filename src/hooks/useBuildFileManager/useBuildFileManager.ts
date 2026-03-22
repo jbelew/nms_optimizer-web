@@ -50,6 +50,7 @@ export const useBuildFileManager = () => {
 	 * @returns {Promise<void>} Resolves when the file download is initiated.
 	 *
 	 * @throws {Error} If state extraction, checksum computation, or file creation fails.
+	 * @example
 	 */
 	const saveBuildToFile = async (buildName: string) => {
 		try {
@@ -121,6 +122,7 @@ export const useBuildFileManager = () => {
 	 * @returns {Promise<void>} Resolves when the state has been successfully restored to all stores.
 	 *
 	 * @throws {Error} If validation (type, size, JSON, checksum, shipType) or restoration fails.
+	 * @example
 	 */
 	const loadBuildFromFile = async (file: File) => {
 		try {

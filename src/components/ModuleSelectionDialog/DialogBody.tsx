@@ -71,6 +71,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	 * Proxies the checkbox change event to the parent handler.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new state.
+	 * @example
 	 */
 	const onSelectAllChange = (checked: boolean | "indeterminate") => {
 		handleSelectAllChange(checked);

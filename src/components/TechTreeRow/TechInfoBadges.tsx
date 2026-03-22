@@ -64,6 +64,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 	 * Manages the dialog's open/close state and ensures data consistency.
 	 *
 	 * @param {boolean} open - The new visibility state.
+	 * @example
 	 */
 	const handleOpenChange = (open: boolean) => {
 		if (open) {
@@ -88,6 +89,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 	 * Wrapper for the optimize callback to ensure the dialog closes only after the solve starts.
 	 *
 	 * @returns {Promise<void>}
+	 * @example
 	 */
 	const handleOptimizeWrapper = async () => {
 		optimizeClickedRef.current = true;

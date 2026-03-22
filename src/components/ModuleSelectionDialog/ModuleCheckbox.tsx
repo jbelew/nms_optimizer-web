@@ -16,6 +16,7 @@ const fallbackImage = `${baseImagePath}infra.webp`;
  *
  * @param {string} text - The input label string.
  * @returns {React.ReactNode} The formatted React element tree.
+ * @example
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -46,6 +47,7 @@ const formatParentheses = (text: string): React.ReactNode => {
  *
  * @param {string} label - The raw technology or module label.
  * @returns {React.ReactNode} The formatted React element tree.
+ * @example
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -79,7 +81,7 @@ export interface ModuleCheckboxProps {
 /**
  * A component that renders a single selectable module row.
  *
- * It includes a functional checkbox for selection, a circular avatar/icon 
+ * It includes a functional checkbox for selection, a circular avatar/icon
  * representing the `module`, and a formatted text `label` with stylized technical metadata.
  *
  * @param {ModuleCheckboxProps} props - The component properties.

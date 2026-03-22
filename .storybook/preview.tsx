@@ -64,6 +64,9 @@ import "../src/assets/css/fonts.css";
 import { StoreResetWrapper, ThemeWrapper } from "./decorators";
 import { BackgroundWrapper } from "./BackgroundWrapper";
 
+/**
+ *
+ */
 export const globalTypes = {
 	theme: {
 		description: "Global theme for components",

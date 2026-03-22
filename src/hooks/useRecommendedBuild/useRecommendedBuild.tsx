@@ -75,6 +75,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	 * @see {@link isValidRecommendedBuild}
 	 * @see {@link createGrid}
 	 * @see {@link createEmptyCell}
+	 * @example
 	 */
 	const applyRecommendedBuild = (build: RecommendedBuild) => {
 		if (!isValidRecommendedBuild(build)) {

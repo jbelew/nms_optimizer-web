@@ -55,6 +55,7 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Triggers a visual shake animation on the grid for feedback.
+	 * @example
 	 */
 	const triggerShake = () => {
 		useShakeStore.getState().triggerShake();
@@ -62,6 +63,7 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Internal logic for handling timed taps (single vs double).
+	 * @example
 	 */
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
@@ -131,6 +133,7 @@ export const useGridCellInteraction = (
 	 * Records the start of a touch interaction.
 	 *
 	 * @param {React.TouchEvent} event - The touch start event.
+	 * @example
 	 */
 	const handleTouchStart = (event: React.TouchEvent) => {
 		setIsTouching(true);
@@ -151,6 +154,7 @@ export const useGridCellInteraction = (
 	 * Tracks movement to distinguish between a tap and a scroll gesture.
 	 *
 	 * @param {React.TouchEvent} event - The touch move event.
+	 * @example
 	 */
 	const handleTouchMove = (event: React.TouchEvent) => {
 		if (isGestureRef.current || !gestureStartRef.current) return;
@@ -170,6 +174,7 @@ export const useGridCellInteraction = (
 	 * Finalizes a touch interaction and triggers tap logic if no movement was detected.
 	 *
 	 * @param {React.TouchEvent | React.MouseEvent} event - The end event.
+	 * @example
 	 */
 	const handleTouchEnd = (event: React.TouchEvent | React.MouseEvent) => {
 		setIsTouching(false);
@@ -202,6 +207,7 @@ export const useGridCellInteraction = (
 
 	/**
 	 * Resets the touch state when an interaction is canceled by the system.
+	 * @example
 	 */
 	const handleTouchCancel = () => {
 		setIsTouching(false);
@@ -211,6 +217,7 @@ export const useGridCellInteraction = (
 	 * Handles primary and modified mouse clicks.
 	 *
 	 * @param {React.MouseEvent} event - The click event.
+	 * @example
 	 */
 	const handleClick = (event: React.MouseEvent) => {
 		const gridState = useGridStore.getState();
@@ -288,6 +295,7 @@ export const useGridCellInteraction = (
 	 * Prevents the context menu from appearing during interactions.
 	 *
 	 * @param {React.MouseEvent} event - The context menu event.
+	 * @example
 	 */
 	const handleContextMenu = (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -297,6 +305,7 @@ export const useGridCellInteraction = (
 	 * Manages keyboard-driven interactions for accessibility.
 	 *
 	 * @param {React.KeyboardEvent} event - The keyboard event.
+	 * @example
 	 */
 	const handleKeyDown = (event: React.KeyboardEvent) => {
 		if (event.key === " " || event.key === "Enter") {

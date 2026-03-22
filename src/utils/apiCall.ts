@@ -34,7 +34,7 @@ export interface ApiCallOptions extends RequestInit {
  * @example
  * ```typescript
  * try {
- *   const result = await apiCall<{ success: boolean }>("/api/submit", { 
+ *   const result = await apiCall<{ success: boolean }>("/api/submit", {
  *     method: "POST",
  *     body: JSON.stringify(payload)
  *   });

@@ -11,6 +11,7 @@ import { sendEvent } from "../../utils/analytics";
  * @param {string} name - The name of the meta tag (e.g., 'description'). **Must not be empty.**
  * @param {string} content - The content string for the meta tag.
  * @returns {void}
+ * @example
  */
 const updateMetaTag = (name: string, content: string) => {
 	let element = document.querySelector(`meta[name="${name}"]`);
@@ -32,6 +33,7 @@ const updateMetaTag = (name: string, content: string) => {
  * @param {string} property - The property identifier (e.g., 'og:title'). **Must not be empty.**
  * @param {string} content - The content string for the meta tag.
  * @returns {void}
+ * @example
  */
 const updateMetaPropertyTag = (property: string, content: string) => {
 	let element = document.querySelector(`meta[property="${property}"]`);
@@ -50,6 +52,7 @@ const updateMetaPropertyTag = (property: string, content: string) => {
  *
  * @param {string} href - The full canonical URL. **Must be a valid URL.**
  * @returns {void}
+ * @example
  */
 const updateCanonicalTag = (href: string) => {
 	let element = document.querySelector('link[rel="canonical"]');
@@ -70,6 +73,7 @@ const updateCanonicalTag = (href: string) => {
  * @param {string} cleanPath - The path without language prefix.
  * @param {string[]} languages - Supported language codes.
  * @returns {void}
+ * @example
  */
 const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: string[]) => {
 	// Remove existing hreflang tags to avoid duplicates

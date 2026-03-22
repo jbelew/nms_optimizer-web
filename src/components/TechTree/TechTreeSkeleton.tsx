@@ -8,6 +8,7 @@ import { SuspenseSkeleton } from "./SuspenseSkeleton";
  * A skeleton component that displays a loading state for the tech tree.
  *
  * @returns {JSX.Element} The rendered skeleton component.
+ * @example
  */
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");

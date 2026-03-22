@@ -151,6 +151,7 @@ interface UserStatsContentProps {
  * @param {object} props - Component properties.
  * @param {boolean} props.isOpen - Visibility flag.
  * @returns {JSX.Element} The rendered statistics data view.
+ * @example
  */
 const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
@@ -172,6 +173,7 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 * @param {UserStat[] | null} rawData - The list of statistics from the API.
 	 * @param {string[]} shipTypes - Filter for specific ship types.
 	 * @returns {Array<{ name: string, value: number }>} Aggregated and filtered chart data.
+	 * @example
 	 */
 	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
 		if (!rawData) return [];
@@ -227,6 +229,7 @@ const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 * @param {Array<{ name: string, value: number }>} chartData - Data to plot.
 	 * @param {string} titleKey - Translation key for the section header.
 	 * @returns {JSX.Element} The chart section.
+	 * @example
 	 */
 	const renderChart = (chartData: { name: string; value: number }[], titleKey: string) => {
 		if (chartData.length === 0) {

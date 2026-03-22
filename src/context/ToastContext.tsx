@@ -28,6 +28,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	 * Activates a new toast notification.
 	 *
 	 * @param {ToastConfig} config - The settings for the toast.
+	 * @example
 	 */
 	const showToast = (config: ToastConfig) => {
 		setToastConfig({
@@ -43,6 +44,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	 * @param {string} title - The primary text.
 	 * @param {ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
+	 * @example
 	 */
 	const showSuccess = (title: string, description: ReactNode, duration?: number) => {
 		showToast({ title, description, variant: "success", duration });
@@ -54,6 +56,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	 * @param {string} title - The primary text.
 	 * @param {ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
+	 * @example
 	 */
 	const showError = (title: string, description: ReactNode, duration?: number) => {
 		showToast({ title, description, variant: "error", duration });
@@ -65,6 +68,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 	 * @param {string} title - The primary text.
 	 * @param {ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
+	 * @example
 	 */
 	const showInfo = (title: string, description: ReactNode, duration?: number) => {
 		showToast({ title, description, duration });
@@ -72,6 +76,7 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
 	/**
 	 * Hides the current toast and clears its configuration after an animation delay.
+	 * @example
 	 */
 	const closeToast = () => {
 		setIsOpen(false);

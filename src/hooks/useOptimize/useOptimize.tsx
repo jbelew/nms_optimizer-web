@@ -48,6 +48,7 @@ export interface UseOptimizeReturn {
  * @param {unknown} value - The object or value to validate.
  * @returns {value is ApiResponse} `true` if `value` matches the `ApiResponse` schema.
  * @see {@link ApiResponse}
+ * @example
  */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
@@ -158,6 +159,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * @see {@link createSocket}
 	 * @see {@link useAnalytics}
 	 * @see {@link useGridStore}
+	 * @example
 	 */
 	const handleOptimize = async (
 		tech: string,
@@ -402,6 +404,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 *
 	 * @returns {void} Side-effects only.
 	 * @see {@link useOptimizeStore}
+	 * @example
 	 */
 	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
 
@@ -412,6 +415,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 *
 	 * @returns {Promise<void>} Resolves when the forced optimization is triggered.
 	 * @see {@link handleOptimize}
+	 * @example
 	 */
 	const handleForceCurrentPnfOptimize = async () => {
 		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);

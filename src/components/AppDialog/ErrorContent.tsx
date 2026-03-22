@@ -57,6 +57,7 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 
 	/**
 	 * Reloads the browser page to attempt recovery from a fatal error.
+	 * @example
 	 */
 	const handleRetry = () => {
 		window.location.reload();

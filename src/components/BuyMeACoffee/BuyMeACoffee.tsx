@@ -25,6 +25,7 @@ export default function BuyMeACoffee() {
 	 * Handles the button click, tracks analytics, and opens the external URL.
 	 *
 	 * @param {React.MouseEvent<HTMLAnchorElement>} event - The click event.
+	 * @example
 	 */
 	const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();

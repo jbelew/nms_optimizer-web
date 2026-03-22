@@ -75,6 +75,7 @@ export const LanguageSelector: React.FC = () => {
 	 * Finalizes the language transition by updating the URL and i18n store.
 	 *
 	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
+	 * @example
 	 */
 	const handleLanguageChange = (newLang: string) => {
 		clearErrors(); // Clear existing errors to prevent re-display on remount
@@ -107,6 +108,7 @@ export const LanguageSelector: React.FC = () => {
 
 	/**
 	 * Navigates the user to the translation request route.
+	 * @example
 	 */
 	const handleRequestTranslationClick = () => {
 		const lang = (i18n.language || "en").split("-")[0];

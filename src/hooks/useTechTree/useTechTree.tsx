@@ -141,6 +141,7 @@ const cache = new Map<string, Promise<TechTree>>();
  * Clears the internal tech tree promise cache.
  *
  * @returns {void} Side-effects only.
+ * @example
  */
 export const clearTechTreeCache = () => {
 	cache.clear();
@@ -219,6 +220,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * @returns {Promise<TechTree>}
  * @category Data Fetching
  * @see {@link fetchTechTreeAsync}
+ * @example
  */
 export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
 	return fetchTechTreeAsync(shipType);
@@ -232,6 +234,7 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
  * @param {TechTree} techTree - The tech tree to process.
  * @returns {{ colors: Record<string, string>, techGroups: Record<string, TechTreeItem[]>, activeGroups: Record<string, string> }} Extracted metadata.
  * @private
+ * @example
  */
 function processTechTreeMetadata(techTree: TechTree) {
 	const colors: { [key: string]: string } = {};

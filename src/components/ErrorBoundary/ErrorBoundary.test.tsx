@@ -13,6 +13,7 @@ import * as errorHandler from "./errorHandler";
 
 /**
  * Test component that throws an error
+ * @example
  */
 const ThrowError: FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
 	if (shouldThrow) {
@@ -24,6 +25,7 @@ const ThrowError: FC<{ shouldThrow?: boolean }> = ({ shouldThrow = true }) => {
 
 /**
  * Test component that renders safely
+ * @example
  */
 const SafeComponent: FC = () => <div>Safe component</div>;
 

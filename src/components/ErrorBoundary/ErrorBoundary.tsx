@@ -47,6 +47,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 * Initializes the error boundary with a clean state.
 	 *
 	 * @param {Props} props - Component properties.
+	 * @example
 	 */
 	constructor(props: Props) {
 		super(props);
@@ -58,6 +59,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 *
 	 * @param {Error} error - The caught exception.
 	 * @returns {State} The new component state.
+	 * @example
 	 */
 	static getDerivedStateFromError(error: Error) {
 		console.log("ErrorBoundary: Caught error, updating state.");
@@ -70,6 +72,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 *
 	 * @param {Error} error - The caught exception.
 	 * @param {ErrorInfo} errorInfo - The component stack trace.
+	 * @example
 	 */
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		handleError(error, errorInfo);
@@ -80,6 +83,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 * Renders children normally, or the error UI if a crash occurred.
 	 *
 	 * @returns {ReactNode}
+	 * @example
 	 */
 	render() {
 		const { hasError, error, errorInfo } = this.state;

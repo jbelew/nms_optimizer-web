@@ -46,6 +46,7 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 	 * Copies the `shareUrl` to the system clipboard and toggles the success state.
 	 *
 	 * @returns {Promise<void>}
+	 * @example
 	 */
 	const handleCopyClick = async () => {
 		try {

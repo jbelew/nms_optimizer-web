@@ -84,6 +84,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * @param {string} [data.shareUrl] - A specific URL for the share dialog.
 	 * @param {string} [data.section] - An element ID to scroll into view when the dialog opens.
 	 * @returns {void}
+	 * @example
 	 */
 	const openDialog = (
 		dialog: NonNullable<DialogType> | null,
@@ -109,6 +110,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Clears the active dialog state and navigates back to the root route.
 	 *
 	 * @returns {void}
+	 * @example
 	 */
 	const closeDialog = () => {
 		const lang = (i18n.language || "en").split("-")[0];
@@ -127,6 +129,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Updates state and `localStorage` to indicate the user has completed the tutorial.
 	 *
 	 * @returns {void}
+	 * @example
 	 */
 	const markTutorialFinished = () => {
 		if (!tutorialFinished) {
@@ -139,6 +142,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Updates state and `localStorage` to indicate the user has visited the app at least once.
 	 *
 	 * @returns {void}
+	 * @example
 	 */
 	const markUserVisited = () => {
 		if (!userVisited) {

@@ -15,6 +15,7 @@ import { retryImport } from "./utils/dynamicImport";
  * Lazily loads the 404 Not Found component.
  *
  * @returns {Promise<{ Component: React.ComponentType }>}
+ * @example
  */
 const NotFound = async () => {
 	const { default: Component } = await retryImport(

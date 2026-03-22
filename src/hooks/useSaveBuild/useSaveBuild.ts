@@ -48,6 +48,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 
 	/**
 	 * Opens the naming dialog to start the save process.
+	 * @example
 	 */
 	const handleSaveBuild = () => {
 		setIsSaveBuildDialogOpen(true);
@@ -58,6 +59,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	 *
 	 * @param {string} buildName - The name to assign to the saved file. **Must be non-empty.**
 	 * @returns {Promise<void>}
+	 * @example
 	 */
 	const handleBuildNameConfirm = async (buildName: string) => {
 		setIsSaveBuildDialogOpen(false);
@@ -84,6 +86,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 
 	/**
 	 * Aborts the save process and closes the dialog.
+	 * @example
 	 */
 	const handleBuildNameCancel = () => {
 		setIsSaveBuildDialogOpen(false);

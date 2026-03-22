@@ -16,6 +16,9 @@ export interface MarkdownContentState {
 }
 
 declare global {
+	/**
+	 *
+	 */
 	interface Window {
 		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
 	}

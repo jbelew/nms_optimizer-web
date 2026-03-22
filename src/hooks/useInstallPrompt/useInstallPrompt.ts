@@ -20,6 +20,7 @@ export const useInstallPrompt = () => {
 
 	/**
 	 * Dismisses the install prompt.
+	 * @example
 	 */
 	const dismissPrompt = () => {
 		setShowPrompt(false);

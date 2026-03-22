@@ -36,6 +36,7 @@ export const useTechOptimization = (
 
 	/**
 	 * Clears the technology from the grid and resets its efficiency scores.
+	 * @example
 	 */
 	const handleReset = () => {
 		startResetTransition(() => {
@@ -47,6 +48,7 @@ export const useTechOptimization = (
 
 	/**
 	 * Prepares the grid state and initiates the solver run.
+	 * @example
 	 */
 	const handleOptimizeClick = () => {
 		if (isGridFull && !hasTechInGrid) {

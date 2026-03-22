@@ -14,6 +14,7 @@ import LoremIpsumSkeleton from "./LoremIpsumSkeleton";
  * @param {string} props.videoId - The unique identifier of the YouTube video.
  * @param {string} [props.title] - Accessible title for the iframe.
  * @returns {JSX.Element} The rendered iframe.
+ * @example
  */
 const YouTubeEmbed: React.FC<{ videoId: string; title?: string }> = ({ videoId, title }) => (
 	<Box asChild mb="2">

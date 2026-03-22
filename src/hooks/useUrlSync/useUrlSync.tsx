@@ -153,6 +153,7 @@ export const useUrlSync = () => {
 	 * Generates a full URL including the current ship type and serialized grid state.
 	 *
 	 * @returns {string} The shareable URL.
+	 * @example
 	 */
 	const updateUrlForShare = () => {
 		const serializedGrid = serializeGrid();
@@ -172,6 +173,7 @@ export const useUrlSync = () => {
 
 	/**
 	 * Removes grid-related parameters from the URL.
+	 * @example
 	 */
 	const updateUrlForReset = () => {
 		try {

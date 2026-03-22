@@ -9,6 +9,12 @@ import { reportWebVitals } from "./reportWebVitals";
 // When react-ga4 (a CJS package) is bundled by Rolldown in fullBundleMode, it may
 // be wrapped with an extra `.default` property layer, making `ReactGA.initialize`
 // inaccessible. This resolves the actual module object regardless of wrapping.
+
+/**
+ * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
+ *
+ * @see {@link https://github.com/MatteoGioioso/react-ga-4} react-ga4
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
 
@@ -72,6 +78,7 @@ export interface GA4Event {
 	tracking_source?: string;
 }
 
+/** Tracks whether `ReactGA.initialize` has already been called this session. */
 let gaInitialized = false;
 
 /**
@@ -80,6 +87,10 @@ let gaInitialized = false;
  * Checks both Google Tag Manager and Google Analytics collection endpoints.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if tracking is likely blocked.
+ *
+ * @example
+ * const blocked = await detectAdBlocker();
+ * if (blocked) console.log("Ad blocker detected");
  */
 const detectAdBlocker = async (): Promise<boolean> => {
 	// Check both GTM (script loading) and GA (collection) domains
@@ -121,7 +132,9 @@ const detectAdBlocker = async (): Promise<boolean> => {
 	}
 };
 
+/** Cached promise for in-flight ad blocker detection, preventing duplicate network requests. */
 let adBlockerDetectionPromise: Promise<boolean> | null = null;
+/** Cached boolean result of the ad blocker detection once resolved. */
 let adBlockerResult: boolean | null = null;
 
 /**
@@ -130,6 +143,9 @@ let adBlockerResult: boolean | null = null;
  * If detection is already in progress or completed, returns the existing promise or result.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if an ad blocker is detected.
+ *
+ * @example
+ * const isBlocked = await getAdBlockerDetectionResult();
  */
 const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 	if (adBlockerResult !== null) {
@@ -173,7 +189,11 @@ export const env = {
 
 /**
  * Reset analytics initialization state for testing.
+ *
  * @internal For testing purposes only.
+ *
+ * @example
+ * resetAnalyticsForTesting();
  */
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
@@ -182,6 +202,7 @@ export const resetAnalyticsForTesting = () => {
 };
 
 // Store globally so sendEvent can access these values for server-side fallback
+/** Whether the app is currently running as an installed PWA (standalone display mode). */
 const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
@@ -320,6 +341,9 @@ export const initializeCloudflareRUM = () => {
  *
  * @param {GA4Event} event - The event to validate.
  * @throws {Error} Throws if `action` or `category` are missing.
+ *
+ * @example
+ * validateEvent({ action: "click", category: "ui" });
  */
 const validateEvent = (event: GA4Event): void => {
 	if (!event.action) {

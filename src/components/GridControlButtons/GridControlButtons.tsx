@@ -13,6 +13,7 @@ import { useGridRowState } from "./useGridRowState";
 
 /**
  * Selector function to check if the grid contains any active (highlighted) cells.
+ * @example
  */
 const selectHasAnyActiveCells = (state: GridStore) =>
 	state.grid.cells.some((row) => row.some((cell) => cell.active));

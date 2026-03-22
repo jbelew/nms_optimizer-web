@@ -54,6 +54,7 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 
 	/**
 	 * Opens the system file picker dialog.
+	 * @example
 	 */
 	const handleLoadBuild = () => {
 		fileInputRef.current?.click();
@@ -64,6 +65,7 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	 *
 	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
 	 * @returns {Promise<void>}
+	 * @example
 	 */
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];

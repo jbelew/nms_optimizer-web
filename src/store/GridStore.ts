@@ -10,6 +10,9 @@ import { usePlatformStore } from "./PlatformStore";
 import { useTechBonusStore } from "./TechBonusStore";
 import { useTechStore } from "./TechStore";
 
+/**
+ *
+ */
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
 /**
@@ -21,6 +24,7 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  * @param {SetItemFunction} setItemFn - The storage setter function to debounce.
  * @param {number} msToWait - Delay in milliseconds. **Must be a positive integer.**
  * @returns {function(string, StorageValue<Partial<GridStore>>): Promise<void>} The debounced setter.
+ * @example
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,
@@ -183,6 +187,7 @@ export const createGrid = (width: number, height: number): Grid => ({
  *
  * @param {Module} moduleData - The raw module metadata.
  * @returns {Cell} A populated `Cell` object.
+ * @example
  */
 const createCellFromModuleData = (moduleData: Module): Cell => {
 	return {
@@ -424,6 +429,7 @@ const debouncedStorage = {
  * Returns the search property of the window's location object.
  *
  * @returns The search property of the window's location object, or an empty string if the window or location are not defined.
+ * @example
  */
 const getWindowSearch = () =>
 	typeof window === "undefined" || !window.location ? "" : window.location.search;
@@ -458,6 +464,7 @@ export const useGridStore = create<GridStore>()(
 			 *
 			 * @param state The current state.
 			 * @param definition The grid definition to apply.
+			 * @example
 			 */
 			const applyGridDefinition = (
 				state: GridStore,

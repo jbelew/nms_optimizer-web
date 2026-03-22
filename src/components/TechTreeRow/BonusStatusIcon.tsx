@@ -13,6 +13,7 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
  * @param {number} value - The number to round.
  * @param {number} decimals - The target decimal precision. **Must be a positive integer.**
  * @returns {number} The rounded number.
+ * @example
  */
 function round(value: number, decimals: number) {
 	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
@@ -36,6 +37,7 @@ interface BonusStatusIconProps {
  * @param {number} techMaxBonus - The raw maximum bonus value.
  * @param {function(string): string} t - Translation function.
  * @returns {BonusStatusData} Metadata including icon type and tooltip text.
+ * @example
  */
 function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
 	const roundedMaxBonus = round(techMaxBonus, 2);
@@ -81,6 +83,7 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
  * @param {string} className - CSS classes.
  * @param {React.CSSProperties} style - Inline styles.
  * @returns {React.ReactNode} The rendered icon component.
+ * @example
  */
 function renderIcon(
 	iconType: string | null,

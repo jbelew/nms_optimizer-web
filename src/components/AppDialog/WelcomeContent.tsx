@@ -37,6 +37,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	 * Closes the welcome dialog and immediately opens the instructions dialog.
 	 *
 	 * @param {React.MouseEvent} e - The click event.
+	 * @example
 	 */
 	const handleViewInstructions = (e: React.MouseEvent) => {
 		e.preventDefault();

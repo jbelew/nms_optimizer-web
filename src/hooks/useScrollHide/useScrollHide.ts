@@ -37,6 +37,7 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 
 	/**
 	 * Manually triggers the visibility of the element.
+	 * @example
 	 */
 	const forceShow = () => {
 		setIsVisible(true);

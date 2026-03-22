@@ -5,6 +5,9 @@ import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
 
+/**
+ *
+ */
 type SetItemFunction = (
 	name: string,
 	value: StorageValue<Partial<ModuleSelectionStore>>
@@ -16,6 +19,7 @@ type SetItemFunction = (
  * @param {SetItemFunction} setItemFn - The storage setter function.
  * @param {number} msToWait - Delay in milliseconds.
  * @returns {function(string, StorageValue<Partial<ModuleSelectionStore>>): Promise<void>}
+ * @example
  */
 function debounceSetItem(
 	setItemFn: SetItemFunction,

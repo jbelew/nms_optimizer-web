@@ -52,6 +52,7 @@ const UserStatsRoute = lazy(() =>
  * @see {@link useDialog}
  * @see {@link useUrlSync}
  * @category Components
+ * @example
  */
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
@@ -68,6 +69,7 @@ const AppContent: FC = () => {
 
 	/**
 	 * Dismisses the welcome dialog and records the visit.
+	 * @example
 	 */
 	const handleCloseWelcome = () => {
 		setShowWelcome(false);
@@ -181,6 +183,7 @@ const App: FC = () => {
 
 	/**
 	 * Triggers a hard reload to activate the newly installed service worker.
+	 * @example
 	 */
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
@@ -195,6 +198,7 @@ const App: FC = () => {
 
 	/**
 	 * Hides the application update notification.
+	 * @example
 	 */
 	const handleDismissUpdatePrompt = () => {
 		setShowUpdatePrompt(false);

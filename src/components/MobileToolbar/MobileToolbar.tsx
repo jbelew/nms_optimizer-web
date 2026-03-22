@@ -64,6 +64,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 
 		/**
 		 * Generates a share link and opens the share dialog.
+		 * @example
 		 */
 		const handleShareClick = () => {
 			startShareTransition(() => {

@@ -29,6 +29,7 @@ const TechTreeComponent = lazy(() => retryImport(() => import("../TechTree/TechT
  * static elements immediately, while only this part of the UI is suspended.
  *
  * @returns {null}
+ * @example
  */
 const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();

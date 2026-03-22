@@ -77,7 +77,9 @@ export function useScreenshot(): UseScreenshotReturn {
 				const elementsToHide = element.querySelectorAll<HTMLElement>(
 					'[data-screenshot-exclude="true"]'
 				);
-				const originalVisibilities = Array.from(elementsToHide).map((el) => el.style.visibility);
+				const originalVisibilities = Array.from(elementsToHide).map(
+					(el) => el.style.visibility
+				);
 
 				let canvas: HTMLCanvasElement;
 
@@ -96,7 +98,9 @@ export function useScreenshot(): UseScreenshotReturn {
 						},
 					});
 				} finally {
-					elementsToHide.forEach((el, i) => (el.style.visibility = originalVisibilities[i]));
+					elementsToHide.forEach(
+						(el, i) => (el.style.visibility = originalVisibilities[i])
+					);
 				}
 
 				const ctx = canvas.getContext("2d");

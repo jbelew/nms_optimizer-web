@@ -1,9 +1,10 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
+import type { GridStore } from "../../store/GridStore";
 import React from "react";
 
-import { type GridStore, useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/GridStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
@@ -35,7 +36,10 @@ interface GridTableProps {
  * <GridTableComponent solving={false} sharedGrid={false} />
  * ```
  */
-function GridTableComponent({ solving, sharedGrid }: GridTableProps, ref: React.Ref<HTMLDivElement>) {
+function GridTableComponent(
+	{ solving, sharedGrid }: GridTableProps,
+	ref: React.Ref<HTMLDivElement>
+) {
 	const gridHeight = useGridStore((state) => state.grid.height);
 	const gridWidth = useGridStore((state) => state.grid.width);
 	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
@@ -72,11 +76,7 @@ function GridTableComponent({ solving, sharedGrid }: GridTableProps, ref: React.
 								isSharedGrid={sharedGrid}
 							/>
 						))}
-						<div
-							role="gridcell"
-							className="w-6"
-							aria-colindex={totalAriaColumnCount}
-						>
+						<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
 							<GridControlButtons rowIndex={rowIndex} isLoading={isTechTreeLoading} />
 						</div>
 					</div>

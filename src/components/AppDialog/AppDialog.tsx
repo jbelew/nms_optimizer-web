@@ -71,6 +71,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		 * Closes the dialog if the Escape key is pressed.
 		 *
 		 * @param {KeyboardEvent} event - The keyboard event.
+		 * @example
 		 */
 		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
 

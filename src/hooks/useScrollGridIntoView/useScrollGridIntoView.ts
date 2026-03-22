@@ -18,6 +18,7 @@ let sharedForceShow: (() => void) | null = null;
  *
  * @param {function(): void} fn - The `forceShow` function, typically from `useScrollHide`.
  * @returns {void}
+ * @example
  */
 export const registerToolbarForceShow = (fn: () => void) => {
 	sharedForceShow = fn;
@@ -56,6 +57,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	 * Performs a smooth scroll to the grid container with the appropriate responsive offset.
 	 *
 	 * Also triggers the registered toolbar `forceShow` function.
+	 * @example
 	 */
 	const scrollIntoView = () => {
 		// Skip scrolling on large screens if configured to do so
@@ -80,6 +82,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 /**
  * Reset the shared grid container ref. Used for testing.
  * @internal
+ * @example
  */
 export const __resetScrollGridIntoViewRef = () => {
 	sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDivElement | null>;

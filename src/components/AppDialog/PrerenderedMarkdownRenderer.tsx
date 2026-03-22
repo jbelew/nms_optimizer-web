@@ -41,6 +41,7 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 		 * Attempts to scroll to the target ID within the article.
 		 *
 		 * @returns {boolean} `true` if scrolled, otherwise `false`.
+		 * @example
 		 */
 		const scrollIfTargetExists = () => {
 			const targetElement = articleRef.current?.querySelector(`#${targetSectionId}`);

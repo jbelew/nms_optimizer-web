@@ -4,6 +4,10 @@ import { usePlatformStore } from "../src/store/PlatformStore";
 import { useTechTreeLoadingStore } from "../src/store/TechTreeLoadingStore";
 import { useTechStore } from "../src/store/TechStore";
 
+/**
+ *
+ * @example
+ */
 export const ThemeWrapper = ({
     children,
     theme,
@@ -22,6 +26,10 @@ export const ThemeWrapper = ({
     return <>{children}</>;
 };
 
+/**
+ *
+ * @example
+ */
 export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) => {
     React.useEffect(() => {
         // Reset GridStore

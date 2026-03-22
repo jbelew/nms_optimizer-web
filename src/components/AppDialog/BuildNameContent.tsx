@@ -43,6 +43,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 *
 	 * @param {string} value - The build name to validate.
 	 * @returns {string | null} Error message if invalid, otherwise `null`.
+	 * @example
 	 */
 	const createValidator = (value: string): string | null => {
 		const trimmed = value.trim();
@@ -63,6 +64,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Generates a random themed name and updates the input state.
+	 * @example
 	 */
 	const handleGenerateName = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
@@ -75,6 +77,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Updates local state and triggers validation on input change.
 	 *
 	 * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+	 * @example
 	 */
 	const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
@@ -84,6 +87,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Validates and submits the current build name.
+	 * @example
 	 */
 	const handleConfirm = () => {
 		const trimmedName = buildName.trim();
@@ -96,6 +100,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 
 	/**
 	 * Resets state and notifies the parent of cancellation.
+	 * @example
 	 */
 	const handleCancel = () => {
 		const newName = generateBuildNameWithType(selectedShipType);
@@ -108,6 +113,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Dispatches actions based on keyboard input.
 	 *
 	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 * @example
 	 */
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {

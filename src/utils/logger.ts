@@ -126,6 +126,7 @@ export class Logger {
 	 * @param {string} message - The log message.
 	 * @param {Record<string, unknown>} [data] - Optional metadata.
 	 * @private
+	 * @example
 	 */
 	private static log(level: LogLevel, message: string, data?: Record<string, unknown>) {
 		const entry: LogEntry = {

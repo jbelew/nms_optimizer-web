@@ -5,7 +5,6 @@
 // Base theme tokens - optimized color imports without P3 definitions
 // Single concatenated file to reduce HTTP requests (14 colors in one file)
 import "./assets/css/radix-colors/radix-colors.css";
-
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
 // Main App CSS

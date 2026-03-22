@@ -77,6 +77,7 @@ export const useMainAppLogic = () => {
 
 	/**
 	 * Opens the application changelog modal.
+	 * @example
 	 */
 	const handleShowChangelog = () => {
 		openDialog("changelog");

@@ -55,6 +55,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * Defers the build application and tracks the event.
 	 *
 	 * @param {RecommendedBuild} build - The build configuration object to apply.
+	 * @example
 	 */
 	const handleApply = (build: (typeof builds)[number]) => {
 		// Defer async work to avoid blocking main thread on INP
@@ -73,6 +74,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 
 	/**
 	 * Navigates to the relevant section of the instructions dialog.
+	 * @example
 	 */
 	const handleOpenInstructions = () => {
 		openDialog("instructions", { section: "section-5" });
@@ -83,6 +85,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 *
 	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Style overrides for the button.
 	 * @returns {JSX.Element | null}
+	 * @example
 	 */
 	const renderBuildButton = (buttonProps?: React.ComponentProps<typeof Button>) => {
 		if (builds.length > 1) {

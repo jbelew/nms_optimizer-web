@@ -39,6 +39,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 	 * Executes the forced optimization callback.
 	 *
 	 * @returns {Promise<void>}
+	 * @example
 	 */
 	const handleForceOptimizeClick = async () => {
 		await onForceOptimize();

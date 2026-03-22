@@ -92,8 +92,7 @@ const shared = {
 				contexts: [
 					"TSInterfaceDeclaration",
 					"TSTypeAliasDeclaration",
-					"ExportNamedDeclaration > VariableDeclaration",
-					"Program > VariableDeclaration",
+					"ExportNamedDeclaration[declaration.type='VariableDeclaration']",
 				],
 			},
 		],
