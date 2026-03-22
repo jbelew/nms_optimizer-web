@@ -1,5 +1,6 @@
 import React, { forwardRef, useTransition } from "react";
 import {
+	CameraIcon,
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	EyeOpenIcon,
@@ -14,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
@@ -34,6 +36,8 @@ type MobileToolbarProps = {
 	onSaveBuild: () => void;
 	/** Callback to display the application changelog. */
 	onShowChangelog: () => void;
+	/** Ref to the grid DOM element, used for screenshot capture. */
+	gridRef: React.RefObject<HTMLDivElement | null>;
 };
 
 /**
@@ -52,7 +56,18 @@ type MobileToolbarProps = {
  * <MobileToolbar isVisible={true} solving={false} onLoadBuild={onLoad} onSaveBuild={onSave} onShowChangelog={onChangelog} hasModulesInGrid={true} />
  */
 export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
-	({ isVisible, solving, hasModulesInGrid, onLoadBuild, onSaveBuild, onShowChangelog }, ref) => {
+	(
+		{
+			isVisible,
+			solving,
+			hasModulesInGrid,
+			onLoadBuild,
+			onSaveBuild,
+			onShowChangelog,
+			gridRef,
+		},
+		ref
+	) => {
 		const { t } = useTranslation();
 		const { openDialog } = useDialog();
 		const { sendEvent } = useAnalytics();
@@ -61,10 +76,13 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 		const [isSharePending, startShareTransition] = useTransition();
 		const [, startTransition] = useTransition();
+		const { handleScreenshot, isCapturing } = useScreenshot();
 
 		/**
 		 * Generates a share link and opens the share dialog.
+		 *
 		 * @example
+		 * handleShareClick();
 		 */
 		const handleShareClick = () => {
 			startShareTransition(() => {
@@ -77,6 +95,18 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					nonInteraction: false,
 				});
 			});
+		};
+
+		/**
+		 * Captures the grid section as a screenshot.
+		 *
+		 * @example
+		 * handleScreenshotClick();
+		 */
+		const handleScreenshotClick = () => {
+			if (gridRef.current) {
+				handleScreenshot(gridRef.current);
+			}
 		};
 
 		return (
@@ -93,7 +123,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 			>
 				<Toolbar.ToggleGroup
 					type="multiple"
-					className="flex items-center gap-2"
+					className="flex items-center gap-1 min-[400px]:gap-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
 				>
 					{/* Load/Save/Share buttons for mobile - far left */}
@@ -124,11 +154,21 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					>
 						<Share1Icon className="h-4 w-4" />
 					</IconButton>
+					<IconButton
+						size="2"
+						variant="soft"
+						className="gridTable__button gridTable__button--screenshot"
+						onClick={handleScreenshotClick}
+						disabled={solving || !hasModulesInGrid || isCapturing}
+						aria-label={t("buttons.screenshot")}
+					>
+						<CameraIcon />
+					</IconButton>
 				</Toolbar.ToggleGroup>
 
 				<Toolbar.ToggleGroup
 					type="multiple"
-					className="flex items-center gap-2"
+					className="flex items-center gap-1 min-[400px]:gap-2"
 					aria-label={t("buttons.utilities") ?? ""}
 				>
 					<IconButton

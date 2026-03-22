@@ -31,7 +31,7 @@ interface UseScreenshotReturn {
  * triggers a browser download of the resulting PNG file. It automatically:
  * - Adds significant padding for a clean border.
  * - Injects a "nms-optimizer.app" attribution message at the bottom.
- * - Forces 1x pixel ratio to ensure consistent, crisp output.
+ * - Uses a 2x pixel ratio on narrow screens (< 640px) for sharper mobile output, 1x otherwise.
  * - Temporarily hides UI elements marked with `data-screenshot-exclude="true"`.
  *
  * @returns {UseScreenshotReturn} State and handler for the screenshot workflow.
@@ -113,7 +113,7 @@ export function useScreenshot(): UseScreenshotReturn {
 					ctx.textAlign = "center";
 					ctx.textBaseline = "bottom";
 					ctx.fillText(
-						"Layout created with nms-optimizer.app",
+						"Layout created with https://nms-optimizer.app",
 						canvas.width / 2,
 						canvas.height - padding / 2
 					);

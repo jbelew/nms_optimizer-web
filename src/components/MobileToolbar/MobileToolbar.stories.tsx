@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
+import React, { createRef } from "react";
 
 import { MobileToolbar } from "./MobileToolbar";
 
@@ -45,6 +45,7 @@ export const Default: Story = {
 		onLoadBuild: () => console.log("Load Build"),
 		onSaveBuild: () => console.log("Save Build"),
 		onShowChangelog: () => console.log("Show Changelog"),
+		gridRef: createRef<HTMLDivElement>(),
 	},
 	parameters: {
 		docs: {

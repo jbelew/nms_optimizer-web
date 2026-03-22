@@ -28,8 +28,11 @@ const TechTreeComponent = lazy(() => retryImport(() => import("../TechTree/TechT
  * This allows the parent `MainAppContent` to render the header and other
  * static elements immediately, while only this part of the UI is suspended.
  *
- * @returns {null}
+ * @returns {null} Null — this component renders nothing; it exists only for side-effects.
+ *
  * @example
+ * // Used inside a Suspense boundary to trigger the ship types fetch:
+ * <Suspense><ShipTypesLoader /></Suspense>
  */
 const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();
@@ -107,6 +110,7 @@ export const MainAppContent = () => {
 					onLoadBuild={handleLoadBuild}
 					onSaveBuild={handleSaveBuild}
 					onShowChangelog={handleShowChangelog}
+					gridRef={appLayoutContainerRef}
 				/>
 			)}
 
