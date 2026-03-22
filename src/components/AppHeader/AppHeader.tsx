@@ -44,9 +44,11 @@ interface AppHeaderProps {
  *
  * @param {AppHeaderProps} props - Component properties.
  * @returns {JSX.Element} The rendered application header.
+ * @see AppHeader.stories.tsx
  *
  * @example
  * <AppHeader onShowChangelog={() => setChangelogOpen(true)} />
+ * // mounts AppHeader
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t, i18n } = useTranslation();

@@ -65,6 +65,8 @@ const debouncedStorage = {
 
 /**
  * State and actions for tracking user-selected technology modules.
+ *
+ * @category State
  */
 export type ModuleSelectionStore = {
 	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
@@ -72,25 +74,29 @@ export type ModuleSelectionStore = {
 	/**
 	 * Updates the selected modules for a specific technology.
 	 *
-	 * @param {string} tech - The technology identifier.
+	 * @param {string} tech - The unique technology identifier (e.g., `'pulse'`).
 	 * @param {string[]} moduleIds - The list of module IDs to associate with this technology.
+	 * @returns {void} Side-effects only.
 	 */
 	setModuleSelection: (tech: string, moduleIds: string[]) => void;
 	/**
 	 * Retrieves the currently selected module IDs for a given technology.
 	 *
-	 * @param {string} tech - The technology identifier.
+	 * @param {string} tech - The unique technology identifier.
 	 * @returns {string[] | null} The list of selected IDs, or `null` if none are found.
 	 */
 	getModuleSelection: (tech: string) => string[] | null;
 	/**
 	 * Removes all module selections for a specific technology.
 	 *
-	 * @param {string} tech - The technology identifier to clear.
+	 * @param {string} tech - The unique technology identifier to clear.
+	 * @returns {void} Side-effects only.
 	 */
 	clearModuleSelection: (tech: string) => void;
 	/**
 	 * Resets the entire module selection registry.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	clearAllModuleSelections: () => void;
 };
@@ -99,12 +105,19 @@ export type ModuleSelectionStore = {
  * Zustand store for managing persistent module selections across technology categories.
  *
  * This store ensures that when a user selects specific modules for an optimization
- * solve, those choices are remembered and persisted to `localStorage`.
+ * solve, those choices are remembered and persisted to `localStorage`. It uses a
+ * debounced storage middleware to minimize disk writes during rapid selections.
  *
- * @returns {ModuleSelectionStore} The module selection store state and actions.
+ * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<ModuleSelectionStore>>} The module selection store hook.
+ * @category State
+ * @see {@link ModuleSelectionStore}
+ * @see {@link TechStore}
+ * @see {@link safeGetItem}
+ * @see {@link safeSetItem}
  *
  * @example
  * const { setModuleSelection } = useModuleSelectionStore();
+ *
  * setModuleSelection("pulse", ["S1", "S2", "S3"]);
  */
 export const useModuleSelectionStore = create<ModuleSelectionStore>()(

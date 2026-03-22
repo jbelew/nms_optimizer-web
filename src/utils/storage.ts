@@ -3,6 +3,8 @@
  *
  * These wrappers catch errors in browsers with strict privacy settings (like Safari
  * with "Block all cookies" enabled) or when storage is full.
+ *
+ * @category Utilities
  */
 
 /**
@@ -10,6 +12,9 @@
  *
  * @param {string} key - The key to retrieve. **Must not be empty.**
  * @returns {string | null} The stored string value, or `null` if not found or access is blocked.
+ * @see {@link safeSetItem}
+ * @see {@link safeRemoveItem}
+ * @category Utilities
  *
  * @example
  * const theme = safeGetItem("app_theme");
@@ -32,6 +37,8 @@ export const safeGetItem = (key: string): string | null => {
  * @param {string} key - The key to set. **Must not be empty.**
  * @param {string} value - The string value to store.
  * @returns {boolean} `true` if the item was successfully saved, otherwise `false`.
+ * @see {@link safeGetItem}
+ * @category Utilities
  *
  * @example
  * const success = safeSetItem("user_id", "12345");
@@ -55,6 +62,8 @@ export const safeSetItem = (key: string, value: string): boolean => {
  *
  * @param {string} key - The key to remove. **Must not be empty.**
  * @returns {boolean} `true` if the item was successfully removed, otherwise `false`.
+ * @see {@link safeGetItem}
+ * @category Utilities
  *
  * @example
  * safeRemoveItem("temp_session");
@@ -77,6 +86,8 @@ export const safeRemoveItem = (key: string): boolean => {
  * Safely clears all items from `localStorage`.
  *
  * @returns {boolean} `true` if the storage was successfully cleared, otherwise `false`.
+ * @see {@link safeRemoveItem}
+ * @category Utilities
  *
  * @example
  * safeClear();

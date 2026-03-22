@@ -22,11 +22,15 @@ export const FILENAME_REGEX = new RegExp(
 /**
  * Validates if a string is a valid filename according to cross-platform standards.
  *
- * @param {string} filename - The filename to validate. **Must not be empty.**
- * @returns {boolean} `true` if the filename is valid, otherwise `false`.
+ * Validates length and checks against restricted names like `CON`, `PRN`, and
+ * illegal characters like `< > : " / \ | ? *`.
+ *
+ * @param {string} filename - The filename to validate. Must not be empty.
+ * @returns {boolean} Returns `true` if the filename is valid, otherwise `false`.
  *
  * @example
  * const isValid = isValidFilename("my_build.json");
+ * // returns true
  */
 export const isValidFilename = (filename: string): boolean => {
 	const trimmed = filename.trim();
@@ -38,13 +42,14 @@ export const isValidFilename = (filename: string): boolean => {
  * Sanitizes a string to make it safe for use as a filename on most file systems.
  *
  * Removes invalid characters, strips trailing spaces/periods, and enforces
- * length limits. If the result is empty or a reserved name, it defaults to "build".
+ * length limits. If the result is empty or a reserved name, it defaults to `"build"`.
  *
  * @param {string} filename - The raw filename string to sanitize.
- * @returns {string} A sanitized, file-system safe filename. **Length is capped at 255 characters.**
+ * @returns {string} A sanitized, file-system safe filename (length capped at 255 chars).
  *
  * @example
- * const safeName = sanitizeFilename("Build: #1? (Draft)"); // Returns "Build #1 (Draft)"
+ * const safeName = sanitizeFilename("Build: #1? (Draft)");
+ * // returns "Build #1 (Draft)"
  */
 export const sanitizeFilename = (filename: string): string => {
 	// Remove invalid characters

@@ -79,13 +79,12 @@ export interface ModuleCheckboxProps {
 /**
  * A component that renders a single selectable module row.
  *
- * It includes:
- * 1. A functional checkbox for selection.
- * 2. A circular avatar/icon representing the module.
- * 3. A formatted text label with stylized technical metadata.
+ * It includes a functional checkbox for selection, a circular avatar/icon 
+ * representing the `module`, and a formatted text `label` with stylized technical metadata.
  *
- * @param {ModuleCheckboxProps} props - Component properties.
- * @returns {JSX.Element} The rendered checkbox row.
+ * @param {ModuleCheckboxProps} props - The component properties.
+ * @returns {JSX.Element} The rendered checkbox row layout.
+ * @see {@link formatLabel}
  *
  * @example
  * <ModuleCheckbox module={m} techColor="blue" isDisabled={false} />

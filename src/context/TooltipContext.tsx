@@ -21,6 +21,12 @@ const WARM_THRESHOLD = 500;
  * @param {React.ReactNode} props.children - The application tree to wrap.
  * @returns {JSX.Element} The state and actions context providers.
  *
+ * @see {@link useTooltipState}
+ * @see {@link useTooltipActions}
+ * @see {@link TooltipState}
+ * @see {@link TooltipActions}
+ * @category Components
+ *
  * @example
  * <TooltipProvider>
  *   <MainApp />

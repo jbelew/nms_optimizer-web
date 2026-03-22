@@ -21,6 +21,11 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  *
  * @returns {{ updateUrlForShare: function(): string, updateUrlForReset: function(): void }} Functions to generate share links and reset URL state.
  *
+ * @see {@link usePlatformStore}
+ * @see {@link useGridStore}
+ * @see {@link useGridDeserializer}
+ * @category Hooks
+ *
  * @example
  * const { updateUrlForShare } = useUrlSync();
  * const link = updateUrlForShare();

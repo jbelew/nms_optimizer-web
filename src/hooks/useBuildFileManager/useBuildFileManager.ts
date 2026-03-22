@@ -21,8 +21,20 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  *   loadBuildFromFile: (file: File) => Promise<void>
  * }} Functions to save and load build states.
  *
+ * @see [useBuildFileManager Tests](./useBuildFileManager.test.ts)
+ * @see {@link BuildFile} for the file structure definition.
+ * @see [Build File Validation](../../utils/buildFileValidation.ts)
+ *
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
+ *
+ * const handleSave = async () => {
+ *   await saveBuildToFile("My Awesome Ship");
+ * };
+ * ```
  */
 export const useBuildFileManager = () => {
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -35,7 +47,9 @@ export const useBuildFileManager = () => {
 	 * Includes state from `GridStore`, `TechStore`, `TechBonusStore`, and `ModuleSelectionStore`.
 	 *
 	 * @param {string} buildName - The display name for the build. **Must not be empty.**
-	 * @returns {Promise<void>}
+	 * @returns {Promise<void>} Resolves when the file download is initiated.
+	 *
+	 * @throws {Error} If state extraction, checksum computation, or file creation fails.
 	 */
 	const saveBuildToFile = async (buildName: string) => {
 		try {
@@ -104,8 +118,9 @@ export const useBuildFileManager = () => {
 	 * **Will switch the active ship type if the file contains a different one.**
 	 *
 	 * @param {File} file - The file object to load. **Must have a `.nms` extension.**
-	 * @returns {Promise<void>}
-	 * @throws {Error} If validation or restoration fails.
+	 * @returns {Promise<void>} Resolves when the state has been successfully restored to all stores.
+	 *
+	 * @throws {Error} If validation (type, size, JSON, checksum, shipType) or restoration fails.
 	 */
 	const loadBuildFromFile = async (file: File) => {
 		try {

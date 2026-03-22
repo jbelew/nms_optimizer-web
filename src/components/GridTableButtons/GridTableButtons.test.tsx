@@ -110,6 +110,14 @@ vi.mock("../../hooks/useToast/useToast", () => ({
 		closeToast: vi.fn(),
 	}),
 }));
+vi.mock("../../hooks/useScreenshot/useScreenshot", () => ({
+	useScreenshot: () => ({
+		handleScreenshot: vi.fn(),
+		isCapturing: false,
+	}),
+}));
+
+const mockGridRef = { current: document.createElement("div") } as React.RefObject<HTMLDivElement>;
 
 describe("GridTableButtons", () => {
 	beforeEach(() => {
@@ -119,7 +127,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("renders all buttons when not shared grid and has modules", () => {
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("buttons.instructions")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.about")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.share")).toBeInTheDocument();
@@ -128,38 +136,38 @@ describe("GridTableButtons", () => {
 
 	it("does not render share button when isSharedGrid is true", () => {
 		setGridStoreState(true, true); // Set shared grid to true
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		expect(screen.queryByLabelText("buttons.share")).not.toBeInTheDocument();
 	});
 
 	it("disables share button when solving is true", () => {
-		render(<GridTableButtons solving={true} />);
+		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables share button when hasModulesInGrid is false", () => {
 		setGridStoreState(false, false); // Set hasModulesInGrid to false
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables reset button when solving is true", () => {
-		render(<GridTableButtons solving={true} />);
+		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
 	});
 
 	it("disables instructions button when solving is true", () => {
-		render(<GridTableButtons solving={true} />);
+		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("buttons.instructions")).toBeDisabled();
 	});
 
 	it("disables about button when solving is true", () => {
-		render(<GridTableButtons solving={true} />);
+		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
 		expect(screen.getByLabelText("buttons.about")).toBeDisabled();
 	});
 
 	it("calls handleShowInstructions and tracks GA event on instructions button click", () => {
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByLabelText("buttons.instructions"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("instructions");
@@ -173,7 +181,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShowAboutPage and tracks GA event on about button click", () => {
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByLabelText("buttons.about"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("about");
@@ -186,7 +194,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByLabelText("buttons.share"));
 
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
@@ -200,7 +208,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls reset grid and related functions on reset button click", () => {
-		render(<GridTableButtons solving={false} />);
+		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByText("Reset Grid Button"));
 
 		expect(mockSendEvent).toHaveBeenCalledWith({

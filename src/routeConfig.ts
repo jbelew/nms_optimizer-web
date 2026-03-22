@@ -5,23 +5,44 @@
 /** The semantic version string of the current build. Defaults to `devmode`. */
 export const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
-/** List of valid page identifiers that can be navigated to as routed modals. */
+/**
+ * List of valid page identifiers that can be navigated to as routed modals.
+ *
+ * @see {@link PageName}
+ * @category Routing
+ */
 export const pages = ["changelog", "instructions", "about", "translation", "userstats", "privacy"];
 
-/** List of ISO language codes supported by the router's path prefixing. */
+/**
+ * List of ISO language codes supported by the router's path prefixing.
+ *
+ * @see {@link LanguageCode}
+ * @category Routing
+ */
 export const languages = ["en", "es", "fr", "de", "pt"];
 
 /**
  * Retrieves the application build date string defined at compile time.
  *
  * @returns {string} The ISO date string of the build.
+ * @category Utilities
  */
 export function getBuildDate(): string {
 	return __BUILD_DATE__;
 }
 
-/** Union type of all valid page identifiers. */
+/**
+ * Union type of all valid page identifiers.
+ *
+ * @see {@link pages}
+ * @category Routing
+ */
 export type PageName = (typeof pages)[number];
 
-/** Union type of all supported language codes. */
+/**
+ * Union type of all supported language codes.
+ *
+ * @see {@link languages}
+ * @category Routing
+ */
 export type LanguageCode = (typeof languages)[number];

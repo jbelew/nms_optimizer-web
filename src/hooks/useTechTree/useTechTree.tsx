@@ -9,17 +9,21 @@ import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation"
 
 /**
  * Represents a specific technology module in No Man's Sky.
+ *
+ * Each module contains its base stats, adjacency identifiers, and UI state flags.
+ *
+ * @category Data Types
  */
 export interface Module {
 	/** Whether the module is currently active. */
 	active: boolean;
-	/** Adjacency type identifier. */
+	/** Adjacency type identifier (e.g., `'pulse'`, `'photonix'`). */
 	adjacency: string;
-	/** Multiplier for adjacency bonuses. */
+	/** Multiplier for adjacency bonuses (e.g., `0.05` for 5%). */
 	adjacency_bonus: number;
 	/** The base bonus value provided by this module. */
 	bonus: number;
-	/** Unique identifier for the module. */
+	/** Unique identifier for the module (e.g., `'PULSE_MODULE_1'`). */
 	id: string;
 	/** Filename or URL for the module's icon. */
 	image: string;
@@ -31,7 +35,7 @@ export interface Module {
 	supercharged: boolean;
 	/** The key of the technology category this module belongs to. */
 	tech: string;
-	/** The specific type classification of the module. */
+	/** The specific type classification of the module (e.g., `'normal'`, `'proc'`). */
 	type: string;
 	/** Numerical value associated with the module's primary stat. */
 	value: number;
@@ -41,11 +45,16 @@ export interface Module {
 
 /**
  * Represents a technology category within the tech tree.
+ *
+ * Groupings of modules that share a common purpose (e.g., Hyperdrive, Launch Thruster).
+ *
+ * @category Data Types
+ * @see {@link Module}
  */
 export interface TechTreeItem {
 	/** Display label for the technology. */
 	label: string;
-	/** Unique key for the technology. */
+	/** Unique key for the technology (e.g., `'pulse'`). */
 	key: string;
 	/** List of modules available for this technology. */
 	modules: Module[];
@@ -81,12 +90,15 @@ export interface TechTreeItem {
 		| "sky";
 	/** Total number of modules in this category. */
 	module_count: number;
-	/** Optional type classification (e.g., 'normal', 'weapon'). */
+	/** Optional type classification (e.g., `'normal'`, `'weapon'`). */
 	type?: string;
 }
 
 /**
  * Defines a pre-configured layout of technologies and modules.
+ *
+ * @category Data Types
+ * @see {@link useRecommendedBuild}
  */
 export interface RecommendedBuild {
 	/** Display title for the build. */
@@ -103,6 +115,10 @@ export interface RecommendedBuild {
 
 /**
  * Root structure for technology tree data fetched from the API.
+ *
+ * @category Data Types
+ * @see {@link TechTreeItem}
+ * @see {@link RecommendedBuild}
  */
 export interface TechTree {
 	/** Optional grid layout and constraints defined for the ship type. */
@@ -113,12 +129,18 @@ export interface TechTree {
 	[key: string]: TechTreeItem[] | { grid: Module[][] } | RecommendedBuild[] | undefined;
 }
 
+/**
+ * Internal promise cache to prevent redundant tech tree fetches.
+ *
+ * @type {Map<string, Promise<TechTree>>}
+ * @private
+ */
 const cache = new Map<string, Promise<TechTree>>();
 
 /**
  * Clears the internal tech tree promise cache.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
  */
 export const clearTechTreeCache = () => {
 	cache.clear();
@@ -132,9 +154,14 @@ export const clearTechTreeCache = () => {
  *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
  * @returns {Promise<TechTree>} A promise resolving to the `TechTree` data.
+ * @category Data Fetching
+ * @see {@link TechTreeLoadingStore}
+ * @see {@link isValidRecommendedBuild}
  *
  * @example
  * const tree = await fetchTechTreeAsync("solar");
+ *
+ * // returns { grid_definition: {...}, ... }
  */
 export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechTree> {
 	const cacheKey = shipType;
@@ -186,8 +213,12 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 /**
  * Synchronous-looking wrapper for `fetchTechTreeAsync`.
  *
+ * Provides a cleaner API for standard fetch requests.
+ *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
  * @returns {Promise<TechTree>}
+ * @category Data Fetching
+ * @see {@link fetchTechTreeAsync}
  */
 export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
 	return fetchTechTreeAsync(shipType);
@@ -196,8 +227,11 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
 /**
  * Extracts metadata (colors, groups) from a raw tech tree object.
  *
+ * Processes the tech tree to build indexed maps for UI coloring and grouping.
+ *
  * @param {TechTree} techTree - The tech tree to process.
- * @returns {object} Extracted metadata including `colors`, `techGroups`, and `activeGroups`.
+ * @returns {{ colors: Record<string, string>, techGroups: Record<string, TechTreeItem[]>, activeGroups: Record<string, string> }} Extracted metadata.
+ * @private
  */
 function processTechTreeMetadata(techTree: TechTree) {
 	const colors: { [key: string]: string } = {};
@@ -236,13 +270,20 @@ function processTechTreeMetadata(techTree: TechTree) {
  * Custom hook for retrieving the technology tree within a Suspense boundary.
  *
  * Automatically initializes the `TechStore` and `GridStore` with metadata
- * from the fetched tree upon successful retrieval.
+ * from the fetched tree upon successful retrieval. Uses React's `use()` hook.
  *
  * @param {string} [shipType="standard"] - The identifier for the ship type.
  * @returns {TechTree} The loaded technology tree.
+ * @category Hooks
+ * @see {@link useTechStore}
+ * @see {@link useGridStore}
+ * @see {@link fetchTechTree}
  *
  * @example
+ * // Inside a component wrapped in <Suspense>
  * const tree = useFetchTechTreeSuspense("freighter");
+ *
+ * // returns { ...techTreeData }
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
 	const data = use(fetchTechTree(shipType));

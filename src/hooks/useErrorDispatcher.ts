@@ -7,6 +7,9 @@ import { useSessionStore } from "@/store/SessionStore";
 
 /**
  * Maps session counter thresholds to error message keys.
+ *
+ * @private
+ * @category Constants
  */
 const ERROR_THRESHOLDS = {
 	supercharged_limit: {
@@ -43,10 +46,22 @@ const ERROR_THRESHOLDS = {
  * too many cells) and queues notifications in the `ErrorStore`. It uses a ref to ensure
  * each threshold violation is only reported once per session.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
+ *
+ * @see {@link useErrorStore} for error dispatching.
+ * @see {@link useSessionStore} for counter values.
+ * @see [SessionStore Source](../store/SessionStore.ts)
+ * @see [ErrorStore Source](../store/ErrorStore.ts)
+ *
+ * @category Hooks
  *
  * @example
- * useErrorDispatcher();
+ * ```tsx
+ * const MyComponent = () => {
+ *   useErrorDispatcher();
+ *   return <div>Monitoring session violations...</div>;
+ * };
+ * ```
  */
 export const useErrorDispatcher = () => {
 	const { t } = useTranslation();

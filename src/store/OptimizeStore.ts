@@ -3,11 +3,17 @@ import { create } from "zustand";
 
 /**
  * Types of errors that can occur during the optimization solve process.
+ *
+ * @see {@link useOptimizeStore}
+ * @category Optimization
  */
 export type ErrorType = "fatal" | "recoverable";
 
 /**
  * State and actions for tracking the status and errors of optimization solves.
+ *
+ * @see {@link useOptimizeStore}
+ * @category Optimization
  */
 interface OptimizeState {
 	/** Whether the global error overlay is visible. */
@@ -40,10 +46,14 @@ interface OptimizeState {
  * This store is used by the `useOptimize` hook to communicate solve failures
  * and warnings (like the "Pattern No Fit" alert) to the global UI layout.
  *
- * @returns {OptimizeState} The optimization store state and actions.
+ * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<OptimizeState>>} The Zustand hook for optimization state.
+ * @see {@link OptimizeState}
+ * @see {@link ErrorType}
+ * @category Optimization
  *
  * @example
  * const { showError, error } = useOptimizeStore();
+ * // returns { showError: false, error: null }
  */
 export const useOptimizeStore = create<OptimizeState>((set) => ({
 	showError: false,

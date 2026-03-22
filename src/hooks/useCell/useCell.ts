@@ -12,8 +12,17 @@ import { Cell, useGridStore } from "../../store/GridStore";
  * @param {number} columnIndex - The zero-based index of the column. **Must be within grid bounds.**
  * @returns {Cell} The cell object at the specified coordinates.
  *
+ * @see {@link useGridStore} for the source of grid data.
+ * @see {@link Cell} for the cell data structure.
+ * @see [GridStore Source](../../store/GridStore.ts)
+ *
+ * @category Hooks
+ *
  * @example
+ * ```tsx
  * const cell = useCell(0, 5);
+ * // Returns the cell at row 0, column 5 with shallow equality checking.
+ * ```
  */
 export const useCell = (rowIndex: number, columnIndex: number): Cell => {
 	return useGridStore(useShallow((state) => state.grid.cells[rowIndex][columnIndex]));

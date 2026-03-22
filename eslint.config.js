@@ -1,5 +1,7 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import js from "@eslint/js";
+import jsdoc from "eslint-plugin-jsdoc";
+
 import prettierConfig from "eslint-config-prettier";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -55,6 +57,12 @@ const shared = {
 	plugins: {
 		"react-hooks": reactHooks,
 		"react-refresh": reactRefresh,
+		jsdoc,
+	},
+	settings: {
+		jsdoc: {
+			mode: "typescript",
+		},
 	},
 	rules: {
 		...reactHooks.configs.recommended.rules,
@@ -71,6 +79,36 @@ const shared = {
 				caughtErrorsIgnorePattern: "^_",
 			},
 		],
+
+		// Agentic JSDoc rules
+		"jsdoc/require-jsdoc": [
+			"warn",
+			{
+				require: {
+					FunctionDeclaration: true,
+					MethodDefinition: true,
+					ClassDeclaration: true,
+				},
+				contexts: [
+					"TSInterfaceDeclaration",
+					"TSTypeAliasDeclaration",
+					"ExportNamedDeclaration > VariableDeclaration",
+					"Program > VariableDeclaration",
+				],
+			},
+		],
+		"jsdoc/require-param-description": "warn",
+		"jsdoc/require-returns-description": "warn",
+		"jsdoc/require-example": "warn",
+		"jsdoc/require-description": "warn",
+		"jsdoc/check-tag-names": [
+			"warn",
+			{
+				definedTags: ["hook", "component", "remarks", "performance", "accessibility", "security"],
+			},
+		],
+		// Enforce {@link} instead of Markdown links for cross-references
+		"jsdoc/no-undefined-types": ["warn", { definedTypes: ["JSX"] }],
 	},
 };
 

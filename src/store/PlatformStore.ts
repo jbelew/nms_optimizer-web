@@ -5,17 +5,26 @@ import { safeGetItem, safeSetItem } from "../utils/storage";
 
 /**
  * State and actions for the ship type (platform) selection.
+ *
+ * @category State
+ * @see {@link safeGetItem}
+ * @see {@link safeSetItem}
  */
 export interface PlatformState {
-	/** The currently selected ship type identifier (e.g., 'solar', 'freighter'). */
+	/** The currently selected ship type identifier (e.g., `'solar'`, `'freighter'`). Defaults to `'standard'`. */
 	selectedPlatform: string;
 	/**
-	 * Sets the active ship type and synchronizes it with storage and URL.
+	 * Sets the active ship type and synchronizes it with storage and the URL.
 	 *
-	 * @param {string} platform - The new platform identifier.
-	 * @param {string[]} validShipTypes - Array of valid identifiers for validation. **Must not be empty.**
+	 * This method performs validation against `validShipTypes`, updates the Zustand state,
+	 * persists the selection to `localStorage`, and optionally pushes a new state to the
+	 * browser's history to update the `?platform=` query parameter.
+	 *
+	 * @param {string} platform - The new platform identifier to set.
+	 * @param {string[]} validShipTypes - Array of valid identifiers for validation.
 	 * @param {boolean} [updateUrl=true] - Whether to push a new state to the browser history.
 	 * @param {boolean} [isKnownRoute=true] - Whether the current route supports platform synchronization.
+	 * @returns {void} Side-effects only.
 	 */
 	setSelectedPlatform: (
 		platform: string,
@@ -26,8 +35,12 @@ export interface PlatformState {
 	/**
 	 * Restores the platform selection from URL parameters or `localStorage`.
 	 *
-	 * @param {string[]} validShipTypes - Array of valid ship type identifiers.
+	 * This method is typically called during application initialization or route changes.
+	 * It prioritizes URL parameters over stored values.
+	 *
+	 * @param {string[]} validShipTypes - Array of valid ship type identifiers for validation.
 	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
+	 * @returns {void} Side-effects only.
 	 */
 	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 }
@@ -39,11 +52,16 @@ const LOCAL_STORAGE_KEY = "selectedPlatform";
  *
  * This store ensures that the application's technology context (Starship,
  * Multi-tool, etc.) is consistent across page reloads and can be shared via URLs.
+ * It acts as a single source of truth for the platform-specific data fetching.
  *
- * @returns {PlatformState} The platform store state and actions.
+ * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<PlatformState>>} The platform store hook.
+ * @category State
+ * @see {@link PlatformState}
  *
  * @example
  * const selectedPlatform = usePlatformStore((s) => s.selectedPlatform);
+ *
+ * // returns "solar"
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value

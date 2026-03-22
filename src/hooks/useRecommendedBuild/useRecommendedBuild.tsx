@@ -13,11 +13,20 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  * layout to their actual data properties in the `techTree`. It handles
  * automatic scrolling on mobile devices and updates the global `GridStore`.
  *
- * @param {TechTree} techTree - The complete technology tree data required for property mapping. **Must not be null.**
- * @returns {{ applyRecommendedBuild: function(RecommendedBuild): void }} A function to apply a selected build.
+ * @param {TechTree} techTree - The complete technology tree data required for property mapping.
+ * @returns {{ applyRecommendedBuild: (build: RecommendedBuild) => void }} An object containing the `applyRecommendedBuild` function.
+ * @category Hooks
+ * @see {@link RecommendedBuild}
+ * @see {@link TechTree}
+ * @see {@link useGridStore}
+ * @see {@link useBreakpoint}
+ * @see {@link useScrollGridIntoView}
+ * @see {@link isValidRecommendedBuild}
  *
  * @example
  * const { applyRecommendedBuild } = useRecommendedBuild(techTree);
+ *
+ * // returns { applyRecommendedBuild: [Function] }
  */
 export const useRecommendedBuild = (techTree: TechTree) => {
 	const isAbove1024 = useBreakpoint("1024px");
@@ -25,7 +34,12 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
-	 * A map of all modules, indexed by a composite key of `tech/moduleId`.
+	 * Internal map of all modules, indexed by a composite key of `tech/moduleId`.
+	 *
+	 * Used for fast O(1) lookups during build application.
+	 *
+	 * @type {Map<string, Module>}
+	 * @private
 	 */
 	const modulesMap = new Map<string, Module>();
 
@@ -53,9 +67,14 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	/**
 	 * Overwrites the current grid state with the layout defined in a recommended build.
 	 *
-	 * Performs validation on the build object and initiates a scroll-into-view on mobile.
+	 * Performs validation on the `build` object, maps module IDs to full module data,
+	 * and initiates a scroll-into-view on mobile if needed.
 	 *
-	 * @param {RecommendedBuild} build - The recommended build configuration. **Must pass `isValidRecommendedBuild` check.**
+	 * @param {RecommendedBuild} build - The recommended build configuration to apply.
+	 * @returns {void} Side-effects only; updates `GridStore`.
+	 * @see {@link isValidRecommendedBuild}
+	 * @see {@link createGrid}
+	 * @see {@link createEmptyCell}
 	 */
 	const applyRecommendedBuild = (build: RecommendedBuild) => {
 		if (!isValidRecommendedBuild(build)) {

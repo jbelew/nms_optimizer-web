@@ -15,13 +15,16 @@ const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
 /**
  * Interface for Google Analytics 4 event tracking.
  *
- * Defines the structure for events sent to both client-side (ReactGA)
+ * Defines the structure for events sent to both client-side (`ReactGA`)
  * and server-side fallback tracking.
+ *
+ * @category Utilities
+ * @see {@link sendEvent}
  */
 export interface GA4Event {
-	/** The category of the event (e.g., 'ui', 'error', 'api'). */
+	/** The category of the event (e.g., `'ui'`, `'error'`, `'api'`). */
 	category: string;
-	/** The action that occurred (e.g., 'click', 'submit', 'load'). */
+	/** The action that occurred (e.g., `'click'`, `'submit'`, `'load'`). */
 	action: string;
 	/** Optional label for the event. */
 	label?: string;
@@ -65,7 +68,7 @@ export interface GA4Event {
 	shipType?: string;
 	/** Status of storage clearing operation. */
 	storageCleared?: string;
-	/** Source of the tracking ('client' or 'server'). */
+	/** Source of the tracking (`'client'` or `'server'`). */
 	tracking_source?: string;
 }
 
@@ -188,7 +191,11 @@ const globalIsInstalled =
  * Skips initialization in development mode, for bots, or if already initialized.
  * Falls back to server-side tracking if an ad blocker is detected.
  *
- * @returns {Promise<void>}
+ * @returns {Promise<void>} Resolves when initialization is complete or skipped.
+ * @category Utilities
+ * @see {@link ReactGAInstance}
+ * @see {@link getAdBlockerDetectionResult}
+ * @see {@link isBot}
  *
  * @example
  * await initializeAnalytics();
@@ -236,7 +243,9 @@ export const initializeAnalytics = async () => {
  * Wraps script loading with error suppression to catch SecurityErrors
  * from cross-origin iframe access attempts.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link getAdBlockerDetectionResult}
  *
  * @example
  * initializeCloudflareRUM();
@@ -325,13 +334,22 @@ const validateEvent = (event: GA4Event): void => {
 /**
  * Sends an event to Google Analytics, automatically choosing the transport method.
  *
- * Falls back to server-side tracking if client-side is blocked.
+ * Falls back to server-side tracking if client-side is blocked by an ad-blocker.
+ * Validates the `event` structure before dispatching.
  *
- * @param {GA4Event} event - The event to send. **Must contain `action` and `category`.**
- * @returns {void}
+ * @param {GA4Event} event - The event to send.
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link GA4Event}
+ * @see {@link getAdBlockerDetectionResult}
+ * @see {@link sendAnalyticsEvent}
  *
  * @example
- * sendEvent({ category: "ui", action: "click", label: "submit_button" });
+ * sendEvent({
+ *   category: "ui",
+ *   action: "click",
+ *   label: "submit_button"
+ * });
  */
 export const sendEvent = (event: GA4Event): void => {
 	try {

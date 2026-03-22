@@ -16,10 +16,11 @@ import { useTechStore } from "../../store/TechStore";
  * @example
  * const styles = useGridCellStyle(currentCell, false);
  */
-export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
+export function useGridCellStyle(cell: Cell, isTouching: boolean) {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
 
-	const emptyIconFillColor = cell.supercharged ? "var(--purple-a4)" : "var(--accent-a4)";
+	// Using hex values instead of CSS variables for screenshot compatibility (html-to-image)
+	const emptyIconFillColor = cell.supercharged ? "#c150ff2d" : "#00befd28";
 
 	const techColor =
 		!currentTechColorFromStore && cell.supercharged ? "purple" : currentTechColorFromStore;
@@ -47,4 +48,4 @@ export const useGridCellStyle = (cell: Cell, isTouching: boolean) => {
 	const showEmptyIcon = !cell.module && cell.active;
 
 	return { techColor, cellClassName, cellElementStyle, emptyIconFillColor, showEmptyIcon };
-};
+}

@@ -9,7 +9,9 @@ import { useLocation, useNavigate } from "react-router-dom";
  * combinations are detected, it automatically sanitizes the URL and redirects
  * the user using a `replace` navigation.
  *
- * @returns {void}
+ * @returns {void} This hook performs side-effects only and returns nothing.
+ * @see {@link useLocation}
+ * @see {@link useNavigate}
  *
  * @example
  * useUrlValidation();

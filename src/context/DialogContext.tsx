@@ -20,6 +20,11 @@ const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
  * @param {React.ReactNode} props.children - The child components to wrap.
  * @returns {JSX.Element} The context provider with dialog state.
  *
+ * @see {@link useDialog}
+ * @see {@link DialogContext}
+ * @see {@link DialogType}
+ * @category Components
+ *
  * @example
  * <DialogProvider>
  *   <App />

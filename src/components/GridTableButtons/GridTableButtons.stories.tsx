@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import { createGrid, useGridStore } from "../../store/GridStore";
 import GridTableButtons from "./GridTableButtons";
 
-const meta = {
+const meta: Meta<typeof GridTableButtons> = {
 	component: GridTableButtons,
 	title: "Components/GridTableButtons",
 	parameters: {
@@ -26,14 +26,17 @@ const meta = {
 				});
 			}, []);
 
+			const gridRef = useRef<HTMLDivElement>(null);
+
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
 						<div
+							ref={gridRef}
 							className="flex min-h-screen items-center justify-center p-4"
 							style={{ maxWidth: "800px", margin: "0 auto" }}
 						>
-							<Story />
+							<Story args={{ gridRef }} />
 						</div>
 					</ToastProvider>
 					<Toast.Viewport className="ToastViewport" />
@@ -41,7 +44,7 @@ const meta = {
 			);
 		},
 	],
-} satisfies Meta<typeof GridTableButtons>;
+};
 
 export default meta;
 
@@ -50,6 +53,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		solving: false,
+		gridRef: { current: null },
 	},
 	parameters: {
 		docs: {

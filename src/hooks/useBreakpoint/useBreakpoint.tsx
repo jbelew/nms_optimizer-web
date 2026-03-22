@@ -10,8 +10,17 @@ import { useSyncExternalStore } from "react";
  * @param {string} breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
  * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
  *
+ * @see [useBreakpoint Tests](./useBreakpoint.test.tsx)
+ * @see {@link useAppLayout} for layout-specific responsive logic.
+ *
+ * @category Hooks
+ *
  * @example
- * const isMobile = !useBreakpoint("768px");
+ * ```tsx
+ * const isDesktop = useBreakpoint("1024px");
+ *
+ * return <div>{isDesktop ? "Desktop View" : "Mobile/Tablet View"}</div>;
+ * ```
  */
 export const useBreakpoint = (breakpoint: string) => {
 	const subscribe = (callback: () => void) => {

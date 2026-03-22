@@ -13,13 +13,22 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
 
 /**
  * The return type of the `useOptimize` hook.
+ *
+ * @category Hooks
+ * @see {@link useOptimize}
  */
 export interface UseOptimizeReturn {
 	/** Whether an optimization is currently in progress. */
 	solving: boolean;
 	/** The current progress percentage (0-100). */
 	progressPercent: number;
-	/** Function to initiate optimization for a specific technology. */
+	/**
+	 * Initiates optimization for a specific technology.
+	 *
+	 * @param {string} tech - The unique identifier for the technology (e.g., `'pulse'`).
+	 * @param {boolean} [forced] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
+	 * @returns {Promise<void>} Resolves when the optimization request is handled.
+	 */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
 	/** Ref to the grid container for automated scrolling. */
 	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -32,10 +41,13 @@ export interface UseOptimizeReturn {
 }
 
 /**
- * Type guard for validating that a value conforms to the `ApiResponse` structure.
+ * Validates that a value conforms to the `ApiResponse` structure.
  *
- * @param {unknown} value - The object to validate.
- * @returns {value is ApiResponse} `true` if valid, otherwise `false`.
+ * This type guard is used to safely process incoming WebSocket payloads from the optimization engine.
+ *
+ * @param {unknown} value - The object or value to validate.
+ * @returns {value is ApiResponse} `true` if `value` matches the `ApiResponse` schema.
+ * @see {@link ApiResponse}
  */
 function isApiResponse(value: unknown): value is ApiResponse {
 	if (typeof value !== "object" || value === null) return false;
@@ -64,12 +76,23 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * 3. Handling success, "No Fit" warnings, and transport-level retries.
  * 4. Cleaning up resources and updating the global `GridStore`.
  *
- * **Requires a running backend service supporting Socket.io.**
+ * Requires a running backend service supporting `Socket.io`.
  *
  * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
+ * @category Hooks
+ * @see {@link useGridStore}
+ * @see {@link useOptimizeStore}
+ * @see {@link usePlatformStore}
+ * @see {@link useTechStore}
+ * @see {@link createSocket}
+ * @see {@link useAnalytics}
+ * @see {@link useBreakpoint}
+ * @see {@link useScrollGridIntoView}
  *
  * @example
  * const { handleOptimize, solving } = useOptimize();
+ *
+ * // returns { solving: false, ... }
  */
 export const useOptimize = (): UseOptimizeReturn => {
 	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
@@ -125,9 +148,16 @@ export const useOptimize = (): UseOptimizeReturn => {
 	/**
 	 * Initiates the optimization solve for the specified technology.
 	 *
-	 * @param {string} tech - The internal identifier for the technology (e.g., 'pulse').
+	 * This method sets up the WebSocket connection, manages the `updatedGrid` for the current tech,
+	 * and registers event listeners for progress and results.
+	 *
+	 * @param {string} tech - The internal identifier for the technology (e.g., `'pulse'`).
 	 * @param {boolean} [forced=false] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
 	 * @param {number} [retryCount=0] - Internal counter for handling network retries.
+	 * @returns {Promise<void>} Resolves when the optimization is complete or an error is handled.
+	 * @see {@link createSocket}
+	 * @see {@link useAnalytics}
+	 * @see {@link useGridStore}
 	 */
 	const handleOptimize = async (
 		tech: string,
@@ -367,13 +397,21 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 	/**
 	 * Clears the technology stored in the "Pattern No Fit" state.
+	 *
+	 * Resets the warning overlay by clearing the current tech key from `useOptimizeStore`.
+	 *
+	 * @returns {void} Side-effects only.
+	 * @see {@link useOptimizeStore}
 	 */
 	const clearPatternNoFitTech = () => setPatternNoFitTech(null);
 
 	/**
 	 * Forces a solve for the technology that failed pattern matching.
 	 *
-	 * @returns {Promise<void>}
+	 * This re-triggers `handleOptimize` with the `forced` flag set to `true` for the current `patternNoFitTech`.
+	 *
+	 * @returns {Promise<void>} Resolves when the forced optimization is triggered.
+	 * @see {@link handleOptimize}
 	 */
 	const handleForceCurrentPnfOptimize = async () => {
 		if (patternNoFitTech) await handleOptimize(patternNoFitTech, true);

@@ -6,6 +6,8 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 /**
  * Interface representing the dimensions and refs for the application layout.
+ *
+ * @category Interfaces
  */
 interface AppLayout {
 	/** Ref to the main content container. */
@@ -31,8 +33,22 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
  *
  * @returns {AppLayout} Layout state including refs and calculated dimensions.
  *
+ * @see {@link useGridStore} for shared grid state.
+ * @see {@link useBreakpoint} for responsive logic.
+ * @see [GridStore Source](../../store/GridStore.ts)
+ *
+ * @category Hooks
+ *
  * @example
- * const { containerRef, gridHeight } = useAppLayout();
+ * ```tsx
+ * const { containerRef, gridTableRef, gridHeight, isLarge } = useAppLayout();
+ *
+ * return (
+ *   <div ref={containerRef} style={{ height: isLarge ? gridHeight : 'auto' }}>
+ *     <div ref={gridTableRef}>Grid Content</div>
+ *   </div>
+ * );
+ * ```
  */
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);

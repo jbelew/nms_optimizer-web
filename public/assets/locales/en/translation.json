@@ -26,7 +26,8 @@
 		"save": "Save",
 		"generateName": "Generate",
 		"buildManagement": "Build Management",
-		"utilities": "Dialogs and App Controls"
+		"utilities": "Dialogs and App Controls",
+		"screenshot": "Capture Grid Screenshot"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
@@ -141,6 +142,14 @@
 		"buildLoadError": {
 			"title": "Error",
 			"description": "Failed to load build"
+		},
+		"screenshotSaved": {
+			"title": "Success",
+			"description": "Screenshot downloaded successfully"
+		},
+		"screenshotError": {
+			"title": "Error",
+			"description": "Failed to capture screenshot"
 		}
 	},
 	"footer": {

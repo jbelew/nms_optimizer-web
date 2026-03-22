@@ -17,6 +17,9 @@ import { useGridCellStyle } from "./useGridCellStyle";
  *
  * @param {string} [label] - The display name of the technology.
  * @returns {string} A shorthand code (e.g., '1', 'C2', 'S3') or an empty string.
+ *
+ * @example
+ * getUpgradePriority("Warp Reactor Theta"); // returns "R1"
  */
 const getUpgradePriority = (label: string | undefined): string => {
 	if (!label) return "";
@@ -87,6 +90,9 @@ interface GridCellProps {
  *
  * @param {string} [label] - The raw label string.
  * @returns {string} The cleaned label string.
+ *
+ * @example
+ * stripLabel("Photonic Core [Active]"); // returns "Photonic Core"
  */
 const stripLabel = (label: string | undefined): string => {
 	if (!label) return "";
@@ -107,14 +113,27 @@ const CORNER_SPANS = (
 /**
  * A component representing an individual interactive cell in the optimization grid.
  *
+ * @remarks
  * It manages its own styling based on the cell's state (active, supercharged, occupied)
  * and handles complex user interactions including taps, double-taps, and long-presses.
  *
  * @param {GridCellProps} props - Component properties.
  * @returns {JSX.Element} The rendered cell element.
+ * @component
+ * @category Components
  *
  * @example
+ * ```tsx
  * <GridCell rowIndex={0} columnIndex={5} isSharedGrid={false} />
+ * ```
+ *
+ * @performance
+ * - Direct row-less rendering in parent to minimize layout depth.
+ * - Subscribes to targeted cell state via `useCell` hook to avoid full grid re-renders.
+ *
+ * @accessibility
+ * - Full keyboard navigation support (tabIndex).
+ * - ARIA gridcell role and column index mapping.
  */
 const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid }) => {
 	const cell = useCell(rowIndex, columnIndex);
@@ -137,6 +156,12 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	 * Generates resolution-aware URLs for the cell's technology icon.
 	 *
 	 * @returns {{ imageUrl?: string, imageSrcSet?: string }} Image metadata.
+	 *
+	 * @example
+	 * ```typescript
+	 * const { imageUrl, imageSrcSet } = getImageUrl();
+	 * // returns { imageUrl: "/assets/img/grid/tech_warp.webp?v=1.0", ... }
+	 * ```
 	 */
 	const getImageUrl = () => {
 		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };

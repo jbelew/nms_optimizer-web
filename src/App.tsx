@@ -47,6 +47,11 @@ const UserStatsRoute = lazy(() =>
  * conditional rendering of routed dialogs and the initial welcome dialog.
  *
  * @returns {JSX.Element | null} The application content, or `null` if a fatal error occurs.
+ *
+ * @see {@link App}
+ * @see {@link useDialog}
+ * @see {@link useUrlSync}
+ * @category Components
  */
 const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
@@ -123,6 +128,11 @@ const AppContent: FC = () => {
  * It wraps the entire application in a `DialogProvider` to enable routed modals.
  *
  * @returns {JSX.Element} The rendered root component.
+ *
+ * @see {@link DialogProvider}
+ * @see {@link useSeoAndTitle}
+ * @see {@link useUpdateCheck}
+ * @category Components
  *
  * @example
  * <App />

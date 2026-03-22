@@ -49,6 +49,11 @@ function debounceSetItem(
 
 /**
  * Represents a single cell within the technology grid.
+ *
+ * Each cell maintains its own state for active/inactive status, supercharged status,
+ * and the specific module currently placed within it.
+ *
+ * @category State
  */
 export type Cell = {
 	/** Whether the cell is part of the active layout. */
@@ -71,7 +76,7 @@ export type Cell = {
 	supercharged: boolean;
 	/** Whether the cell belongs to an adjacency grouping. */
 	group_adjacent: boolean;
-	/** The technology category key (e.g., 'pulse'). */
+	/** The technology category key (e.g., `'pulse'`). */
 	tech: string | null;
 	/** The final calculated score/bonus for this specific cell. */
 	total: number;
@@ -83,6 +88,11 @@ export type Cell = {
 
 /**
  * Represents the entire technology grid state.
+ *
+ * The grid is a 2D structure of `Cell` objects, providing a workspace for module placement.
+ *
+ * @category State
+ * @see {@link Cell}
  */
 export type Grid = {
 	/** 2D array of grid cells. Row-major order. */
@@ -95,6 +105,9 @@ export type Grid = {
 
 /**
  * Structure for the optimization engine's successful result.
+ *
+ * @category State
+ * @see {@link Grid}
  */
 export type ApiResponse = {
 	/** The newly optimized grid layout. `null` if the solve failed. */
@@ -103,19 +116,25 @@ export type ApiResponse = {
 	max_bonus: number;
 	/** The actual bonus achieved by the solver. */
 	solved_bonus: number;
-	/** The identifier of the solver method used (e.g., 'SA', 'Pattern'). */
+	/** The identifier of the solver method used (e.g., `'SA'`, `'Pattern'`). */
 	solve_method: string;
 };
 
 /**
  * Factory function to create a default, empty grid cell.
  *
+ * Initialized with default values for adjacency, image, and module.
+ *
  * @param {boolean} [supercharged=false] - Initial supercharged state.
  * @param {boolean} [active=false] - Initial active state.
  * @returns {Cell} A new `Cell` object with default values.
+ * @category Factories
+ * @see {@link Cell}
  *
  * @example
  * const newCell = createEmptyCell(true, true);
+ *
+ * // returns { active: true, supercharged: true, ... }
  */
 export const createEmptyCell = (supercharged = false, active = false): Cell => ({
 	active,
@@ -137,12 +156,19 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
 /**
  * Factory function to create a blank grid of specified dimensions.
  *
- * @param {number} width - Number of columns. **Must be a positive integer.**
- * @param {number} height - Number of rows. **Must be a positive integer.**
+ * Initializes a `Grid` object with a 2D array of empty cells.
+ *
+ * @param {number} width - Number of columns.
+ * @param {number} height - Number of rows.
  * @returns {Grid} A new `Grid` object populated with empty cells.
+ * @category Factories
+ * @see {@link Grid}
+ * @see {@link createEmptyCell}
  *
  * @example
  * const grid = createGrid(10, 6);
+ *
+ * // returns { width: 10, height: 6, cells: [...] }
  */
 export const createGrid = (width: number, height: number): Grid => ({
 	cells: Array.from({ length: height }, () =>
@@ -183,7 +209,10 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
  * Structural state includes whether the cell is `active` and whether it is `supercharged`.
  *
  * @param {Cell} cell - The cell object to modify in-place. **Will be mutated.**
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link Cell}
+ * @see {@link createEmptyCell}
  *
  * @example
  * resetCellContent(grid.cells[0][0]);
@@ -196,6 +225,8 @@ export const resetCellContent = (cell: Cell) => {
 
 /**
  * State and actions for the technology grid store.
+ *
+ * @category State
  */
 export type GridStore = {
 	/** Version of the persisted state schema. */
@@ -218,9 +249,17 @@ export type GridStore = {
 	/** Internal state tracking for tap/double-tap logic. */
 	_initialCellStateForTap?: Cell | null;
 
-	/** Updates the `isSharedGrid` status. */
+	/**
+	 * Updates the `isSharedGrid` status.
+	 *
+	 * @param {boolean} isShared - Whether the current grid is from a share URL.
+	 */
 	setIsSharedGrid: (isShared: boolean) => void;
-	/** Updates the entire grid object. */
+	/**
+	 * Updates the entire grid object.
+	 *
+	 * @param {Grid} grid - The new grid state.
+	 */
 	setGrid: (grid: Grid) => void;
 	/** Resets the grid to its initial state, clearing all modules and results. */
 	resetGrid: () => void;
@@ -392,14 +431,24 @@ const getWindowSearch = () =>
 /**
  * Zustand store for managing the technology grid, cell states, and optimization results.
  *
- * This is the primary store for the application's interactive grid. It uses `immer`
- * for deep nested updates and `persist` with a debounced storage middleware to
- * ensure high performance during user interaction.
+ * This is the primary store for the application's interactive grid. It manages:
+ * 1. The 2D `Grid` state and its individual `Cell` properties.
+ * 2. Persistence of grid layouts via `localStorage` (debounced for performance).
+ * 3. Synchronization with shared URL parameters for grid loading.
+ * 4. Integration with optimization results from the backend.
  *
- * @returns {GridStore} The grid store state and actions.
+ * It uses `immer` for deep nested state updates and `persist` for local storage synchronization.
+ *
+ * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<GridStore>>} The grid store hook.
+ * @category State
+ * @see {@link GridStore}
+ * @see {@link Grid}
+ * @see {@link Cell}
  *
  * @example
  * const grid = useGridStore((s) => s.grid);
+ *
+ * // returns { cells: [...], width: 10, height: 6 }
  */
 export const useGridStore = create<GridStore>()(
 	persist(

@@ -2,6 +2,7 @@ import "./GridTableButtons.scss";
 
 import React, { useTransition } from "react";
 import {
+	CameraIcon,
 	DownloadIcon,
 	FileIcon,
 	InfoCircledIcon,
@@ -17,6 +18,7 @@ import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
+import { useScreenshot } from "../../hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
@@ -30,6 +32,8 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 interface GridTableButtonsProps {
 	/** Whether an optimization solve is currently active. */
 	solving: boolean;
+	/** Ref to the grid DOM element, used for screenshot capture. */
+	gridRef: React.RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -50,7 +54,7 @@ interface GridTableButtonsProps {
  * @example
  * <GridTableButtons solving={false} />
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
+const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef }) => {
 	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -75,12 +79,24 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		showSuccess,
 		showError,
 	});
+	const { handleScreenshot, isCapturing } = useScreenshot();
 	const isAbove1024 = useBreakpoint("1024px");
 	const scrollOptions = { skipOnLargeScreens: false };
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
+	const handleScreenshotClick = () => {
+		const section = gridRef.current?.closest<HTMLElement>(".main-app__grid-section");
+
+		if (section) {
+			handleScreenshot(section);
+		}
+	};
+
 	/**
 	 * Navigates to the instructions dialog and updates completion state.
+	 *
+	 * @example
+	 * handleShowInstructions();
 	 */
 	const handleShowInstructions = () => {
 		startInfoTransition(() => {
@@ -100,6 +116,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Navigates to the about dialog.
+	 *
+	 * @example
+	 * handleShowAboutPage();
 	 */
 	const handleShowAboutPage = () => {
 		startInfoTransition(() => {
@@ -115,6 +134,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Creates a shareable link and opens the share dialog.
+	 *
+	 * @example
+	 * handleShareClick();
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {
@@ -126,6 +148,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Purges the current grid state and resets the URL.
+	 *
+	 * @example
+	 * handleResetGrid();
 	 */
 	const handleResetGrid = () => {
 		// Scroll immediately before computations on screens < 1024px
@@ -147,6 +172,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	/**
 	 * Internal helper to render a button that collapses to an icon on mobile.
+	 *
+	 * @example
+	 * renderResponsiveButton(<Icon />, "buttons.label", onClick, false, "className");
 	 */
 	const renderResponsiveButton = (
 		icon: React.ReactNode,
@@ -191,7 +219,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 				onConfirm={handleBuildNameConfirm}
 				onCancel={handleBuildNameCancel}
 			/>
-			<div className="gridTable-buttons__container">
+			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
 				<div className="gridTable-buttons__left">
 					{renderResponsiveButton(
 						<InfoCircledIcon />,
@@ -261,6 +289,22 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 								aria-label={t("buttons.share")}
 							>
 								<Share1Icon />
+							</IconButton>
+						</ConditionalTooltip>
+					)}
+
+					{/* Screenshot button - hidden on mobile, shown on sm and up */}
+					{isSmallAndUp && (
+						<ConditionalTooltip label={t("buttons.screenshot") ?? ""}>
+							<IconButton
+								size="2"
+								variant="soft"
+								className="gridTable__button gridTable__button--screenshot"
+								onClick={handleScreenshotClick}
+								disabled={solving || !hasModulesInGrid || isCapturing}
+								aria-label={t("buttons.screenshot")}
+							>
+								<CameraIcon />
 							</IconButton>
 						</ConditionalTooltip>
 					)}

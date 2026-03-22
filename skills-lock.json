@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "agentic-jsdoc": {
+      "source": "jbelew/agentic-jsdoc",
+      "sourceType": "github",
+      "computedHash": "6752f68819724ec14f99303c0a39d5927814277acf836f9dd23b7d9863a76e6e"
+    }
+  }
+}
