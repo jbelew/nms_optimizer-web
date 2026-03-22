@@ -1,3 +1,10 @@
+## [6.18.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.0...v6.18.1) (2026-03-22)
+
+
+### Bug Fixes
+
+* Add screenshot functionality to the mobile toolbar with improved pixel ratio handling and attribution. ([4a38d0e](https://github.com/jbelew/nms_optimizer-web/commit/4a38d0e546347e3f80ccfbfb5ca907a8eeb2db14))
+
 # [6.18.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.4...v6.18.0) (2026-03-22)
 
 
