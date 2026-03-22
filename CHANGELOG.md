@@ -1,3 +1,10 @@
+## [6.18.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.1...v6.18.2) (2026-03-22)
+
+
+### Bug Fixes
+
+* Remove screenshot button and related logic from the mobile toolbar, until further testing. Doesn't seem to work in PWA mode. ([0e5167d](https://github.com/jbelew/nms_optimizer-web/commit/0e5167d0d6fed3b35ab7596d9a047eec3ce10a67))
+
 ## [6.18.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.0...v6.18.1) (2026-03-22)
 
 
