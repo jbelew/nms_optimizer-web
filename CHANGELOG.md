@@ -1,3 +1,15 @@
+# [6.18.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.4...v6.18.0) (2026-03-22)
+
+
+### Bug Fixes
+
+* **analytics:** correct malformed JSDoc patterns and ESLint context selector ([0af9c29](https://github.com/jbelew/nms_optimizer-web/commit/0af9c29d3b6e4e9a651668ab69ea406cabb7b28d))
+
+
+### Features
+
+* Add grid layout screenshot function, update JSDoc comments, and remove outdated critical CSS and project documentation. ([9186a87](https://github.com/jbelew/nms_optimizer-web/commit/9186a87c17df41a7521a8150cb6d43d8a9014736))
+
 ## [6.17.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.17.3...v6.17.4) (2026-03-18)
 
 
