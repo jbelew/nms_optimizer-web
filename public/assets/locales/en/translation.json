@@ -27,7 +27,7 @@
 		"generateName": "Generate",
 		"buildManagement": "Build Management",
 		"utilities": "Dialogs and App Controls",
-		"screenshot": "Capture Grid Screenshot"
+		"screenshot": "Capture Build Screenshot"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",

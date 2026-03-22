@@ -1,6 +1,5 @@
 import React, { forwardRef, useTransition } from "react";
 import {
-	CameraIcon,
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	EyeOpenIcon,
@@ -15,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
-import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
+// import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
@@ -64,7 +63,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 			onLoadBuild,
 			onSaveBuild,
 			onShowChangelog,
-			gridRef,
+			// gridRef,
 		},
 		ref
 	) => {
@@ -76,7 +75,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 		const [isSharePending, startShareTransition] = useTransition();
 		const [, startTransition] = useTransition();
-		const { handleScreenshot, isCapturing } = useScreenshot();
+		// const { handleScreenshot, isCapturing } = useScreenshot();
 
 		/**
 		 * Generates a share link and opens the share dialog.
@@ -103,11 +102,11 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		 * @example
 		 * handleScreenshotClick();
 		 */
-		const handleScreenshotClick = () => {
-			if (gridRef.current) {
-				handleScreenshot(gridRef.current);
-			}
-		};
+		// const handleScreenshotClick = () => {
+		// 	if (gridRef.current) {
+		// 		handleScreenshot(gridRef.current);
+		// 	}
+		// };
 
 		return (
 			<Toolbar.Root
@@ -154,7 +153,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					>
 						<Share1Icon className="h-4 w-4" />
 					</IconButton>
-					<IconButton
+					{/* {					<IconButton
 						size="2"
 						variant="soft"
 						className="gridTable__button gridTable__button--screenshot"
@@ -163,7 +162,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						aria-label={t("buttons.screenshot")}
 					>
 						<CameraIcon />
-					</IconButton>
+					</IconButton>} */}
 				</Toolbar.ToggleGroup>
 
 				<Toolbar.ToggleGroup
