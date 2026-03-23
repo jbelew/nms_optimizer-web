@@ -122,7 +122,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 			>
 				<Toolbar.ToggleGroup
 					type="multiple"
-					className="flex items-center gap-1 min-[400px]:gap-2"
+					className="flex items-center gap-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
 				>
 					{/* Load/Save/Share buttons for mobile - far left */}
@@ -167,7 +167,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 
 				<Toolbar.ToggleGroup
 					type="multiple"
-					className="flex items-center gap-1 min-[400px]:gap-2"
+					className="flex items-center gap-2"
 					aria-label={t("buttons.utilities") ?? ""}
 				>
 					<IconButton
