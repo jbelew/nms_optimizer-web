@@ -1,5 +1,6 @@
 import { ElementType } from "react";
 import {
+	CameraIcon,
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	ExclamationTriangleIcon,
@@ -35,4 +36,5 @@ export const radixIconRegistry: Record<string, ElementType> = {
 	QuestionMarkCircledIcon,
 	ReloadIcon,
 	Share1Icon,
+	CameraIcon,
 };

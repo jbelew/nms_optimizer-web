@@ -101,7 +101,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 						className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
 						onClick={() => {
 							onClose?.();
-							openDialog("instructions", { section: "section-3" });
+							openDialog("instructions", { section: "section-5" });
 						}}
 					/>
 				)}

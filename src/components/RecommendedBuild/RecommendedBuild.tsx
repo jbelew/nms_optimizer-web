@@ -77,7 +77,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * @example
 	 */
 	const handleOpenInstructions = () => {
-		openDialog("instructions", { section: "section-5" });
+		openDialog("instructions", { section: "section-7" });
 	};
 
 	/**

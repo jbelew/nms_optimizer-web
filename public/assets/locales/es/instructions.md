@@ -1,6 +1,6 @@
-# Ayuda del optimizador NMS
+# Instrucciones del optimizador NMS: uso, módulos y celdas sobrealimentadas
 
-## Uso básico
+## Comenzando con la cuadrícula
 
 - Seleccione una **Plataforma** (Starship, Multi-Tool, Corvette, etc.) usando el ícono <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Haga clic** o **toque dos veces** (móvil) en una celda para marcarla como **Supercargada**.
@@ -9,7 +9,7 @@
 - Utilice el botón **selección de módulo** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para agregar o eliminar módulos individuales dentro de un grupo de tecnología.
 
 > 💡 **Nota:**
-> Exosuits y Exocraft tienen rejillas fijas. Las células de Exocraft no se pueden modificar. En los Exosuits, solo se pueden cambiar los estados activo/inactivo; los diseños sobrealimentados son fijos.
+> Exosuits y Exocraft tienen rejillas fijas. Las células de Exocraft no se pueden modificar. En los Exosuits, solo se pueden cambiar los estados activo/inactivo; los diseños de las ranuras sobrealimentadas son fijos.
 
 ## Antes de comenzar
 
@@ -21,7 +21,24 @@ Esta herramienta está diseñada para **optimizar el final del juego** y funcion
 
 Se admiten configuraciones parciales, pero los resultados se optimizan para plataformas completamente actualizadas.
 
-## Theta/Tau/Sigma
+## Consejos de uso
+
+Las celdas sobrealimentadas son limitadas: la ubicación es importante.
+
+- **No asigne todas las celdas supercargadas a la primera tecnología que coloque.** Esto a menudo bloquea diseños generales más sólidos más adelante.
+- Empiece por asignar **2 o 3 celdas supercargadas a una tecnología de alto impacto**, no todas.
+- Reserve al menos **una o más celdas supercargadas** para una **tecnología de segunda prioridad** para mejorar la efectividad total.
+- Una vez que haya utilizado todas sus celdas supercargadas, priorice las tecnologías con **números de módulos más grandes** antes de que el espacio se vea limitado.
+- Deje que el solucionador se encargue de la colocación; su función es **establecer prioridades y distribución**.
+
+Si hay poco espacio, es posible que tengas que restablecer y resolver las tecnologías en un orden diferente para evitar una **Alerta de optimización**.
+
+## Consejo profesional
+
+El solucionador utiliza ventanas fijas dimensionadas según el número de módulos de cada tecnología para encontrar ubicaciones que aprovechen el espacio.
+Si los resultados no son ideales, **deshabilite temporalmente las celdas** para guiar al solucionador hacia un mejor diseño.
+
+## Etiquetas Theta / Tau / Sigma
 
 Estas etiquetas clasifican las actualizaciones de procedimientos **por estadísticas**, no por clase. Son términos heredados que se conservan por motivos de coherencia.
 
@@ -63,19 +80,4 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Cargar**: cargue un archivo `.nms` guardado para restaurar un diseño.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Guardar**: descargue el diseño actual como un archivo `.nms`.
 - <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartir**: genera un enlace que otros pueden abrir directamente en el optimizador.
-
-## Consejos de uso
-
-Las celdas sobrealimentadas son limitadas: la ubicación es importante.
-
-- Comience con **una tecnología de alto impacto** que se beneficia de múltiples celdas supercargadas.
-- Asigne las celdas supercargadas restantes a una **tecnología de segunda prioridad** en lugar de apilar todo en un solo lugar.
-- Priorice las tecnologías con **números de módulos más grandes** antes de que el espacio se vea limitado.
-- Deje que el solucionador se encargue de la colocación; su función es **establecer prioridades**.
-
-Si hay poco espacio, es posible que tengas que restablecer y resolver las tecnologías en un orden diferente para evitar una **Alerta de optimización**.
-
-## Consejo profesional
-
-El solucionador utiliza ventanas fijas dimensionadas según el número de módulos de cada tecnología para encontrar ubicaciones que aprovechen el espacio.
-Si los resultados no son ideales, **deshabilite temporalmente las celdas** para guiar al solucionador hacia un mejor diseño.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Captura de pantalla**: genera una captura de pantalla del diseño actual.

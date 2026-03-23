@@ -1,6 +1,6 @@
 # NMS Optimizer Instructions: Usage, Modules & Supercharged Cells
 
-## Basic Usage
+## Getting Started with the Grid
 
 - Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
 - **Click** or **double-tap** (mobile) a cell to mark it **Supercharged**.
@@ -21,7 +21,24 @@ This tool is intended for **endgame optimization** and works best when:
 
 Partial setups are supported, but results are optimized for fully upgraded platforms.
 
-## Theta / Tau / Sigma
+## Usage Tips
+
+Supercharged cells are limited — placement matters.
+
+- **Don’t assign all supercharged cells to the first technology you place.** This often blocks stronger overall layouts later.
+- Start by assigning **2–3 supercharged cells to a high-impact technology**, not all of them.
+- Reserve at least **one or more supercharged cells** for a **second priority technology** to improve total effectiveness.
+- Once you've used all of your supercharged cells, prioritize technologies with **larger module counts** before space becomes constrained.
+- Let the solver handle placement; your role is to **set priorities and distribution**.
+
+If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
+
+## Pro Tip
+
+The solver uses fixed windows sized to each technology’s module count to find space-efficient placements.
+If results aren’t ideal, **temporarily disable cells** to guide the solver toward a better layout.
+
+## Theta / Tau / Sigma Labels
 
 These labels rank procedural upgrades **by stats**, not by class. They are legacy terms retained for consistency.
 
@@ -63,20 +80,6 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Upload a saved `.nms` file to restore a layout.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Save** — Download the current layout as a `.nms` file.
 - <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share** — Generate a link others can open directly in the optimizer.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Generate a screenshot of the current layout.
 
-## Usage Tips
 
-Supercharged cells are limited — placement matters.
-
-- **Don’t assign all supercharged cells to the first technology you place.** This often blocks stronger overall layouts later.
-- Start by assigning **2–3 supercharged cells to a high-impact technology**, not all of them.
-- Reserve at least **one or more supercharged cells** for a **second priority technology** to improve total effectiveness.
-- Once you've used all of your supercharged cells, prioritize technologies with **larger module counts** before space becomes constrained.
-- Let the solver handle placement; your role is to **set priorities and distribution**.
-
-If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
-
-## Pro Tip
-
-The solver uses fixed windows sized to each technology’s module count to find space-efficient placements.
-If results aren’t ideal, **temporarily disable cells** to guide the solver toward a better layout.

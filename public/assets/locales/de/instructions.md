@@ -1,6 +1,6 @@
-# Hilfe zum NMS-Optimierer
+# Anweisungen zum NMS-Optimierer: Verwendung, Module und aufgeladene Zellen
 
-## Grundlegende Verwendung
+## Erste Schritte mit dem Raster
 
 - Wählen Sie eine **Plattform** (Raumschiff, Multi-Tool, Corvette usw.) mit dem Symbol <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> aus.
 - **Klicken** oder **doppeltippen** (mobil) auf eine Zelle, um sie als **Supercharged** zu markieren.
@@ -9,7 +9,7 @@
 - Verwenden Sie die Schaltfläche **Modulauswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Module innerhalb einer Technologiegruppe hinzuzufügen oder zu entfernen.
 
 > 💡 **Hinweis:**
-> Exosuits und Exocraft haben feste Gitter. Exocraft-Zellen können nicht verändert werden. Bei Exosuits können nur die aktiven/inaktiven Zustände geändert werden – aufgeladene Layouts sind behoben.
+> Exosuits und Exocraft haben feste Gitter. Exocraft-Zellen können nicht verändert werden. Bei Exosuits können nur die aktiven/inaktiven Zustände geändert werden – die Anordnung der Supercharged-Slots ist festgelegt.
 
 ## Bevor Sie beginnen
 
@@ -21,7 +21,24 @@ Dieses Tool ist für die **Endgame-Optimierung** gedacht und funktioniert am bes
 
 Teil-Setups werden unterstützt, die Ergebnisse sind jedoch für vollständig aktualisierte Plattformen optimiert.
 
-## Theta / Tau / Sigma
+## Nutzungstipps
+
+Aufgeladene Zellen sind begrenzt – die Platzierung ist wichtig.
+
+- **Weisen Sie nicht alle aufgeladenen Zellen der ersten Technologie zu, die Sie platzieren.** Dies blockiert später oft stärkere Gesamtlayouts.
+- Ordnen Sie zunächst **2–3 aufgeladene Zellen** einer hochwirksamen Technologie zu, nicht allen.
+- Reservieren Sie mindestens **eine oder mehrere aufgeladene Zellen** für eine **Technologie zweiter Priorität**, um die Gesamteffizienz zu verbessern.
+- Wenn Sie alle aufgeladenen Zellen verbraucht haben, priorisieren Sie Technologien mit **größerer Modulanzahl**, bevor der Platz knapp wird.
+- Überlassen Sie die Platzierung dem Solver; Ihre Aufgabe ist es, **Prioritäten und Verteilung festzulegen**.
+
+Wenn der Platz knapp wird, müssen Sie die Technologien möglicherweise zurücksetzen und in einer anderen Reihenfolge lösen, um eine **Optimierungswarnung** zu vermeiden.
+
+## Profi-Tipp
+
+Der Solver verwendet feste Fenster, deren Größe an die Modulanzahl jeder Technologie angepasst ist, um platzsparende Platzierungen zu finden.
+Wenn die Ergebnisse nicht ideal sind, **deaktivieren Sie Zellen vorübergehend**, um den Solver zu einem besseren Layout zu führen.
+
+## Theta/Tau/Sigma-Etiketten
 
 Diese Labels ordnen prozedurale Upgrades **nach Statistiken**, nicht nach Klasse. Es handelt sich um veraltete Begriffe, die aus Konsistenzgründen beibehalten werden.
 
@@ -63,19 +80,4 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** – Laden Sie eine gespeicherte „.nms“-Datei hoch, um ein Layout wiederherzustellen.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** – Laden Sie das aktuelle Layout als „.nms“-Datei herunter.
 - <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share** – Generieren Sie einen Link, den andere direkt im Optimierer öffnen können.
-
-## Nutzungstipps
-
-Aufgeladene Zellen sind begrenzt – die Platzierung ist wichtig.
-
-- Beginnen Sie mit **einer leistungsstarken Technologie**, die von mehreren aufgeladenen Zellen profitiert.
-- Weisen Sie die verbleibenden aufgeladenen Zellen einer **Technologie zweiter Priorität** zu, anstatt alles an einem Ort zu stapeln.
-- Priorisieren Sie Technologien mit **größerer Modulanzahl**, bevor der Platz knapp wird.
-- Überlassen Sie die Platzierung dem Solver; Ihre Aufgabe ist es, **Prioritäten zu setzen**.
-
-Wenn der Platz knapp wird, müssen Sie die Technologien möglicherweise zurücksetzen und in einer anderen Reihenfolge lösen, um eine **Optimierungswarnung** zu vermeiden.
-
-## Profi-Tipp
-
-Der Solver verwendet feste Fenster, deren Größe an die Modulanzahl jeder Technologie angepasst ist, um platzsparende Platzierungen zu finden.
-Wenn die Ergebnisse nicht ideal sind, **deaktivieren Sie Zellen vorübergehend**, um den Solver zu einem besseren Layout zu führen.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** – Erstellt einen Screenshot des aktuellen Layouts.

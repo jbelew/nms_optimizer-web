@@ -1,6 +1,6 @@
-# Aide de l'optimiseur NMS
+# Instructions de l'optimiseur NMS : utilisation, modules et cellules suralimentées
 
-## Utilisation de base
+## Premiers pas avec la grille
 
 - Sélectionnez une **Plateforme** (Starship, Multi-Tool, Corvette, etc.) à l'aide de l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Cliquez** ou **appuyez deux fois** (mobile) sur une cellule pour la marquer **Suralimentée**.
@@ -9,7 +9,7 @@
 - Utilisez le bouton **sélection de module** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou supprimer des modules individuels au sein d'un groupe technologique.
 
 > 💡 **Remarque :**
-> Les Exosuits et Exocraft ont des grilles fixes. Les cellules Exocraft ne peuvent pas être modifiées. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – les dispositions suralimentées sont corrigées.
+> Les Exosuits et Exocraft ont des grilles fixes. Les cellules Exocraft ne peuvent pas être modifiées. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – la disposition des emplacements suralimentés est corrigée.
 
 ## Avant de commencer
 
@@ -21,7 +21,24 @@ Cet outil est destiné à l'**optimisation de fin de partie** et fonctionne mieu
 
 Les configurations partielles sont prises en charge, mais les résultats sont optimisés pour les plates-formes entièrement mises à niveau.
 
-## Thêta / Tau / Sigma
+## Conseils d'utilisation
+
+Les cellules suralimentées sont limitées – le placement est important.
+
+- **N'attribuez pas toutes les cellules suralimentées à la première technologie que vous placez.** Cela bloque souvent des configurations globales plus solides par la suite.
+- Commencez par attribuer **2 à 3 cellules suralimentées à une technologie à fort impact**, pas toutes.
+- Réservez au moins **une ou plusieurs cellules suralimentées** pour une **technologie de deuxième priorité** afin d'améliorer l'efficacité totale.
+- Une fois que vous avez utilisé toutes vos cellules suralimentées, donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
+- Laisser le solveur gérer le placement ; votre rôle est de **définir les priorités et la répartition**.
+
+Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudre les technologies dans un ordre différent pour éviter une **alerte d'optimisation**.
+
+## Conseil de pro
+
+Le solveur utilise des fenêtres fixes dimensionnées en fonction du nombre de modules de chaque technologie pour trouver des emplacements optimisés en termes d'espace.
+Si les résultats ne sont pas idéaux, **désactivez temporairement les cellules** pour guider le solveur vers une meilleure présentation.
+
+## Étiquettes Thêta / Tau / Sigma
 
 Ces étiquettes classent les améliorations procédurales **par statistiques**, et non par classe. Ce sont des termes hérités conservés par souci de cohérence.
 
@@ -50,7 +67,7 @@ Les corvettes diffèrent des autres plates-formes : elles peuvent avoir **jusqu
 
 Le solveur peut suggérer des améliorations esthétiques pour les performances par rapport à l'apparence, bien que les différences soient généralement mineures.
 
-## Builds recommandées
+## Builds recommandées
 
 Pour les **Exosuits** et **Exocraft**, les cellules suralimentées sont fixes et les configurations viables sont limitées.
 L'outil fournit des **versions recommandées sélectionnées à la main** reflétant des combinaisons optimales.
@@ -63,19 +80,4 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Téléchargez un fichier `.nms` enregistré pour restaurer une mise en page.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Enregistrer** — Téléchargez la mise en page actuelle sous forme de fichier `.nms`.
 - <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Génère un lien que d'autres peuvent ouvrir directement dans l'optimiseur.
-
-## Conseils d'utilisation
-
-Les cellules suralimentées sont limitées – le placement est important.
-
-- Commencez par **une technologie à fort impact** qui bénéficie de plusieurs cellules suralimentées.
-- Attribuez les cellules suralimentées restantes à une **technologie de deuxième priorité** plutôt que de tout empiler au même endroit.
-- Donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
-- Laissez le solveur gérer le placement ; votre rôle est de **fixer les priorités**.
-
-Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudre les technologies dans un ordre différent pour éviter une **alerte d'optimisation**.
-
-## Conseil de pro
-
-Le solveur utilise des fenêtres fixes dimensionnées en fonction du nombre de modules de chaque technologie pour trouver des emplacements optimisés en termes d'espace.
-Si les résultats ne sont pas idéaux, **désactivez temporairement les cellules** pour guider le solveur vers une meilleure présentation.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture d'écran** — Génère une capture d'écran de la mise en page actuelle.
