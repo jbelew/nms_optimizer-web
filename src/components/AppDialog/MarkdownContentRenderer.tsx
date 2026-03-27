@@ -79,7 +79,12 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 
 	useEffect(() => {
 		const prerenderedElement = document.querySelector('[data-prerendered-markdown="true"]');
-		setHasPrerendered(!!prerenderedElement);
+
+		if (prerenderedElement) {
+			setTimeout(() => {
+				setHasPrerendered(true);
+			}, 0);
+		}
 	}, []);
 
 	useEffect(() => {

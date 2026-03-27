@@ -52,9 +52,6 @@ describe("ErrorBoundary", () => {
 		});
 
 		it("should render ErrorPage when error is thrown", () => {
-			// Suppress React's error boundary warning
-			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -63,13 +60,9 @@ describe("ErrorBoundary", () => {
 
 			// ErrorPage displays error information
 			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
-
-			consoleErrorSpy.mockRestore();
 		});
 
 		it("should not render children when error is caught", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -83,7 +76,6 @@ describe("ErrorBoundary", () => {
 	describe("error handling", () => {
 		it("should call handleError when error is caught", () => {
 			const handleErrorSpy = vi.spyOn(errorHandler, "handleError");
-			vi.spyOn(console, "error").mockImplementation(() => {});
 
 			render(
 				<ErrorBoundary>
@@ -98,8 +90,6 @@ describe("ErrorBoundary", () => {
 		});
 
 		it("should update state with error and errorInfo", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -111,8 +101,6 @@ describe("ErrorBoundary", () => {
 		});
 
 		it("should catch errors and set hasError to true", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -126,8 +114,6 @@ describe("ErrorBoundary", () => {
 
 	describe("nested error boundaries", () => {
 		it("should handle errors from nested components", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			render(
 				<ErrorBoundary>
 					<div>
@@ -155,8 +141,6 @@ describe("ErrorBoundary", () => {
 
 	describe("edge cases", () => {
 		it("should handle multiple errors gracefully", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			const { rerender } = render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -177,8 +161,6 @@ describe("ErrorBoundary", () => {
 		});
 
 		it("should render children after boundary is reset", () => {
-			vi.spyOn(console, "error").mockImplementation(() => {});
-
 			const { rerender } = render(
 				<ErrorBoundary>
 					<SafeComponent />
