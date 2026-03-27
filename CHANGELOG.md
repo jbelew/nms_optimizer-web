@@ -1,3 +1,10 @@
+## [6.18.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.2...v6.18.3) (2026-03-27)
+
+
+### Bug Fixes
+
+* Defer prerendered markdown state update to prevent timing issues and upgrade various dependencies. ([55b58a3](https://github.com/jbelew/nms_optimizer-web/commit/55b58a3b4a865f3dd401efb4c934ed3a536a0d7d))
+
 ## [6.18.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.1...v6.18.2) (2026-03-22)
 
 
