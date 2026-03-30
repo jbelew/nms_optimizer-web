@@ -4,6 +4,15 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.18 – Build Screenshots & Polish (2026-03-27)
+
+This update introduces a new feature for sharing your builds, along with several smaller improvements to translations and app stability.
+
+- **Grid Screenshots:** A new screenshot tool lets you easily capture high-quality, attributed images of your optimized grid layouts. *(Note: This tool is temporarily disabled on the mobile web-app toolbar while we fix a compatibility issue).*
+- **Clearer Instructions:** Improved the optimization and module selection descriptions across all supported languages.
+- **Global Discovery:** Added international SEO improvements so players around the world can more easily find the app in their native language.
+- **Rendering & Stability:** Fixed a timing bug related to loading text content, updated privacy dialog icons for better clarity, and upgraded various internal systems.
+
 ## Version 6.17 – Privacy & Focus Mode Discovery (2026-03-16)
 
 This update focuses on making the app more transparent and its accessibility features easier to find.
@@ -75,7 +84,6 @@ This update introduces a small but important grid-behavior enhancement, alongsid
 
 This release continues the focus on polish and correctness, reducing friction in everyday use while laying groundwork for future grid and layout features.
 
-
 ## Version 6.6 – Supercharged Cell Limits & Constraint Messages (2025-12-19)
 
 This update focuses on clarity around supercharged and fixed cells, with new error messages and improved guidance for grid constraints.
@@ -137,10 +145,10 @@ This update focuses on making the app far more stable and consistent on mobile d
 - Improved performance and caching across the entire app, resulting in faster loading—especially on repeat visits.
 - Fonts and static assets now load more efficiently for smoother startup.
 - The backend optimization engine received major stability and correctness updates, including:
--   - Better module placement to minimize wasted space on the grid.
-    - More reliable handling of missing or unusual module data.
-    - More robust solving logic across different grid sizes.
-    - Expanded automated test coverage to ensure better long-term stability and fewer regressions.
+- - Better module placement to minimize wasted space on the grid.
+  - More reliable handling of missing or unusual module data.
+  - More robust solving logic across different grid sizes.
+  - Expanded automated test coverage to ensure better long-term stability and fewer regressions.
 
 ## Version 5.13 - New Artwork (2025-11-21)
 
@@ -217,10 +225,10 @@ This update focuses on making the app far more stable and consistent on mobile d
 
 - Added GA4-compliant analytics event names.
 - Implemented multiple patches to recover from iOS Service Worker corruption:
-    - Forced unregister for corrupted SWs
-    - Temporary PWA disablement on iOS
-    - Updated splash screen behavior
-    - Added reliability guards to prevent offline lockouts
+  - Forced unregister for corrupted SWs
+  - Temporary PWA disablement on iOS
+  - Updated splash screen behavior
+  - Added reliability guards to prevent offline lockouts
 - Improved image optimization and caching for static API responses.
 - Fixed issues with i18n routing, deserialization, toasts, and layout instability.
 - Updated corvette solve maps for more accurate scoring.
@@ -327,7 +335,7 @@ Version 5 introduces a complete solver overhaul focused on speed, accuracy, and 
 ## Version 3.11 (2025-09-06)
 
 - Corvettes now support both **cosmetic** and **min/max** solves.
-  _Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!_
+  *Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!*
 
 ## Version 3.10 (2025-09-02)
 
