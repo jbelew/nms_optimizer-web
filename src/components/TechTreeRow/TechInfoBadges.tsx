@@ -42,7 +42,7 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
  * <TechInfoBadges tech="pulse" hookData={hookData} />
  * ```
  */
-export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }) => {
+export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
 	const { a11yMode } = useA11yStore();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
@@ -130,7 +130,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech }
 						highContrast={a11yMode}
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
-						disabled={modules.length === 1 || solving}
+						disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
 						aria-label={`x${currentCheckedModules.length}, ${translatedTechName} Module Selection`}
 					>
 						x{currentCheckedModules.length}

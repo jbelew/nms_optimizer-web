@@ -1,6 +1,5 @@
 import type { TechTreeRowProps } from "./TechTreeRow";
 import React from "react";
-// Minor change to force re-transpilation
 import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
