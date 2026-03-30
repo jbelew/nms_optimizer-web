@@ -1,3 +1,10 @@
+## [6.18.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.3...v6.18.4) (2026-03-30)
+
+
+### Bug Fixes
+
+* add isGridFull prop to TechInfoBadges to disable module selection when grid is full ([26b30f6](https://github.com/jbelew/nms_optimizer-web/commit/26b30f6fb67a1300f3a01bef6d22d31b59b4315f))
+
 ## [6.18.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.2...v6.18.3) (2026-03-27)
 
 
