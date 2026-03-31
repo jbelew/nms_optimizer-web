@@ -1,0 +1,15 @@
+{
+  "packages": {
+    ".": {
+      "package-name": "agentic-jsdoc",
+      "release-type": "node",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "agent-skill.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}

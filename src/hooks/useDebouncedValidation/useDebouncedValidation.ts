@@ -11,15 +11,28 @@ interface UseDebouncedValidationOptions {
 /**
  * Custom hook for executing validation logic with a debounce delay.
  *
+ * @remarks
  * This is useful for validating user input (e.g., in a text field) without
- * triggering validation on every keystroke.
+ * triggering validation on every keystroke. It handles timer cleanup on unmount
+ * to prevent memory leaks and state updates on unmounted components.
  *
  * @param {function(string): string|null} validator - A function that takes the current value and returns an error string or `null` if valid. **Must be a pure function.**
  * @param {UseDebouncedValidationOptions} [options={}] - Configuration for the debounce behavior.
  * @returns {{ error: string|null, handleChange: function(string): void }} State containing the current error and a handler for input changes.
  *
+ * @hook
+ * @category Hooks
+ *
  * @example
- * const { error, handleChange } = useDebouncedValidation((val) => val.length < 3 ? "Too short" : null);
+ * ```tsx
+ * const { error, handleChange } = useDebouncedValidation(
+ *   (val) => (val.length < 3 ? "Too short" : null),
+ *   { debounceMs: 500 }
+ * );
+ *
+ * // handleChange("a"); // error remains null for 500ms
+ * // ... after 500ms: error is "Too short"
+ * ```
  */
 export const useDebouncedValidation = (
 	validator: (value: string) => string | null,

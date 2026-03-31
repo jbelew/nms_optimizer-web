@@ -1,7 +1,18 @@
 /**
- * @file Server application tests
- * @description Integration tests for the Express server including routing, SPA fallback,
- * SEO middleware, static file serving, and language-based path routing.
+ * @file Integration tests for the Express server.
+ * @remarks 
+ * This suite verifies the following server behaviors:
+ * 1.  **Static Asset Serving:** Ensures sitemaps, robots.txt, and JS/CSS assets are served with correct headers.
+ * 2.  **SPA Fallback:** Validates that client-side routes correctly serve `index.html` or SSG equivalents.
+ * 3.  **SEO Middleware:** Checks for dynamic tag injection (hreflang, canonical) and localized content.
+ * 4.  **Security Headers:** Confirms CSP, HSTS, and other security headers are present.
+ * 5.  **Caching:** Verifies ETag and Cache-Control behavior for both HTML and static assets.
+ * 6.  **Error Handling:** Ensures 404 pages are served for invalid routes.
+ * 
+ * @author jbelew
+ * @license GPL-3.0
+ * @see {@link ../server/app.js} Express Application
+ * @see {@link ../server/seoMiddleware.js} SEO Middleware
  */
 
 import fs from "fs";
@@ -12,14 +23,27 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 
 import app, { scanSsgFiles } from "./app.js";
 
-/** Directory of the current module, resolved from ES module metadata */
+/** 
+ * Directory of the current module, resolved from ES module metadata.
+ * @type {string}
+ */
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-/** Path to the mock dist directory used for testing */
+/** 
+ * Path to the mock distribution directory used for integration testing.
+ * @type {string}
+ */
 const MOCK_DIST_PATH = path.join(__dirname, "../dist");
 
 /**
- * Setup: Create a mock dist directory and files for the server to use during tests
+ * Setup hook: Creates a mock distribution environment with index files, SSG pages, and static assets.
+ * @remarks
+ * Initializes:
+ * - Root `index.html`
+ * - French (`/fr`) and English (`/about`) SSG pages.
+ * - Static files like `sitemap.xml` and `robots.txt`.
+ * After file creation, it triggers `scanSsgFiles()` to refresh the server's memory cache.
+ * @returns {void}
  */
 beforeAll(() => {
 	if (!fs.existsSync(MOCK_DIST_PATH)) {
@@ -68,13 +92,14 @@ beforeAll(() => {
 });
 
 /**
- * Teardown: Clean up the mock dist directory after tests are complete
+ * Teardown hook: Recursively removes the mock distribution directory.
+ * @returns {void}
  */
 afterAll(() => {
 	fs.rmSync(MOCK_DIST_PATH, { recursive: true, force: true });
 });
 
-describe("Express Server", () => {
+describe("Express Server Core Routing", () => {
 
 	it("should respond with HTML for the root path", async () => {
 		const response = await request(app).get("/").set("Accept", "text/html");
@@ -153,7 +178,7 @@ describe("SEO Middleware - Path-based Language Routing", () => {
 	});
 });
 
-describe("Caching Headers", () => {
+describe("Caching Headers Verification", () => {
 	it("should set cache headers for HTML content", async () => {
 		const response = await request(app).get("/").set("Accept", "text/html");
 		expect(response.headers["cache-control"]).toBeDefined();
@@ -184,7 +209,7 @@ describe("Caching Headers", () => {
 	});
 });
 
-describe("Security Headers", () => {
+describe("Security Policy Headers", () => {
 	it("should set Content-Security-Policy header with GTM in img-src", async () => {
 		const response = await request(app).get("/");
 		const csp = response.headers["content-security-policy"];
@@ -205,7 +230,7 @@ describe("Security Headers", () => {
 	});
 });
 
-describe("Compression", () => {
+describe("Server-Side Compression Logic", () => {
 	it("should NOT serve compressed assets for HTML (offloaded to Cloudflare)", async () => {
 		const response = await request(app).get("/").set("Accept-Encoding", "gzip");
 		expect(response.status).toBe(200);
@@ -220,7 +245,7 @@ describe("Compression", () => {
 	});
 });
 
-describe("Error Responses", () => {
+describe("Error Responses and Information Leakage", () => {
 	it("should return 404 for nonexistent HTML routes", async () => {
 		const response = await request(app)
 			.get("/nonexistent-page")
@@ -236,7 +261,7 @@ describe("Error Responses", () => {
 	});
 });
 
-describe("Request Handling", () => {
+describe("Complex Request Handling", () => {
 	it("should handle requests with query parameters", async () => {
 		const response = await request(app)
 			.get("/?platform=standard&ship=fighter")
@@ -264,7 +289,7 @@ describe("Request Handling", () => {
 	});
 });
 
-describe("Content-Type Handling", () => {
+describe("Content-Type Enforcement", () => {
 	it("should serve HTML with correct content-type", async () => {
 		const response = await request(app).get("/");
 		expect(response.headers["content-type"]).toMatch(/text\/html/);

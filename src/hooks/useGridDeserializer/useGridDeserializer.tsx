@@ -15,17 +15,20 @@ import {
 /**
  * Compresses a string using Run-Length Encoding (RLE).
  *
+ * @remarks
  * Consecutive identical characters are replaced by the character followed by the count.
- * Used internally for compacting grid serialization tokens.
+ * Used internally for compacting grid serialization tokens, reducing the length of
+ * strings representing long runs of identical cell states or tech codes.
  *
  * @param {string} input - The string to compress.
  * @returns {string} The compressed string.
  * @category Utilities
  *
  * @example
- * compressRLE("AAAABBBCC");
- *
+ * ```ts
+ * const compressed = compressRLE("AAAABBBCC");
  * // returns "A4B3C2"
+ * ```
  */
 export const compressRLE = (input: string): string => {
 	if (!input) return "";
@@ -52,7 +55,9 @@ export const compressRLE = (input: string): string => {
 /**
  * Decompresses a string that was compressed using Run-Length Encoding (RLE).
  *
+ * @remarks
  * Restores the original string by expanding character-count pairs.
+ * Inverse operation of {@link compressRLE}.
  *
  * @param {string} input - The compressed string to decompress.
  * @returns {string} The decompressed string.
@@ -60,9 +65,10 @@ export const compressRLE = (input: string): string => {
  * @see {@link compressRLE}
  *
  * @example
- * decompressRLE("A4B3C2");
- *
+ * ```ts
+ * const original = decompressRLE("A4B3C2");
  * // returns "AAAABBBCC"
+ * ```
  */
 export const decompressRLE = (input: string): string => {
 	if (!input) return "";
@@ -89,6 +95,7 @@ export const decompressRLE = (input: string): string => {
 /**
  * Serializes the grid state into a URL-safe compressed string.
  *
+ * @remarks
  * The format consists of six pipe-separated parts:
  * 1. `gridString` - Map of cell states (`0`=inactive, `1`=active, `2`=supercharged).
  * 2. `compressedTech` - RLE-compressed characters representing tech keys.
@@ -97,16 +104,20 @@ export const decompressRLE = (input: string): string => {
  * 5. `techMap` - Mapping of characters to tech keys.
  * 6. `moduleMap` - Mapping of characters to module IDs.
  *
+ * This compact representation allows sharing complex grid layouts via URL hash or parameters.
+ *
  * @param {Grid} grid - The grid object to serialize.
  * @returns {string} An encoded string representing the grid state.
  * @category Utilities
  * @see {@link Grid}
  * @see {@link compressRLE}
+ * @see {@link deserialize}
  *
  * @example
+ * ```ts
  * const sharedLink = serialize(currentGrid);
- *
- * // returns "111000|A3B3|C2D2|T6F4|pulse:A,infra:B|S1:C,S2:D"
+ * // returns "111000%7CA3B3%7CC2D2%7CT6F4%7Cpulse%3AA%2Cinfra%3AB%7CS1%3AC%2CS2%3AD"
+ * ```
  */
 export const serialize = (grid: Grid): string => {
 	let gridString = ""; // Raw grid string (0, 1, 2)
@@ -160,6 +171,7 @@ export const serialize = (grid: Grid): string => {
 /**
  * Deserializes a compressed string back into a functional grid state.
  *
+ * @remarks
  * Fetches current tech tree data to ensure the deserialized techs and modules
  * still exist and have up-to-date properties. Handles backward compatibility
  * with older shared links by validating against the latest API data.
@@ -167,16 +179,19 @@ export const serialize = (grid: Grid): string => {
  * @param {string} serializedGrid - The encoded grid string to deserialize.
  * @param {string} shipType - The ship type context for fetching tech tree data.
  * @param {function(Record<string, string>): void} setTechColors - Callback to update the tech color registry.
- * @returns {Promise<Grid | null>} A promise resolving to the restored `Grid` object, or `null` if deserialization fails.
+ * @returns {Promise<Grid | null>} A promise resolving to the restored {@link Grid} object, or `null` if deserialization fails.
  * @category Utilities
  * @see {@link Grid}
  * @see {@link decompressRLE}
+ * @see {@link serialize}
  * @see {@link fetchTechTreeAsync}
+ * @see {@link ./useGridDeserializer.test.tsx Unit Tests}
  *
  * @example
+ * ```ts
  * const restoredGrid = await deserialize(urlParam, "fighter", setColors);
- *
  * // returns { width: 10, height: 6, cells: [...] }
+ * ```
  */
 export const deserialize = async (
 	serializedGrid: string,
@@ -436,11 +451,16 @@ export const deserialize = async (
 /**
  * Custom hook for serializing and deserializing the grid state for sharing.
  *
+ * @remarks
  * Provides functions to convert the complex grid state into a compact string
  * suitable for URL parameters, and to restore that state from a string.
- * Orchestrates updates across `GridStore`, `PlatformStore`, and `TechStore`.
+ * Orchestrates updates across {@link useGridStore}, {@link usePlatformStore},
+ * and {@link useTechStore}. This is the primary entry point for URL-based
+ * persistence and sharing functionality.
  *
  * @returns {{ serializeGrid: () => string, deserializeGrid: (serializedGrid: string) => Promise<void> }} Serialization and deserialization utilities.
+ *
+ * @hook
  * @category Hooks
  * @see {@link useGridStore}
  * @see {@link usePlatformStore}
@@ -449,10 +469,13 @@ export const deserialize = async (
  * @see {@link deserialize}
  *
  * @example
+ * ```tsx
  * const { serializeGrid, deserializeGrid } = useGridDeserializer();
  *
  * const link = serializeGrid();
  * await deserializeGrid(link);
+ * // results in grid state being updated in the store and marked as shared
+ * ```
  */
 export const useGridDeserializer = () => {
 	const setGrid = useGridStore((state) => state.setGrid);

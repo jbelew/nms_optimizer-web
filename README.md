@@ -16,11 +16,15 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 
 ### **Tech Stack**
 
-- **React**
+- **React 19**
 - **Zustand**
-- **Tailwind CSS**
-- **Vite**
+- **Tailwind CSS 4**
+- **Vite 8**
 - **Radix UI**
+- **TypeScript**
+- **Playwright (E2E Testing)**
+- **Vitest (Unit Testing)**
+- **Storybook 10**
 
 The Python solver for this project can be found [here](https://github.com/jbelew/nms_optimizer-service).
 
@@ -96,7 +100,13 @@ A summary of the Lighthouse scores is published to the "Summary" page of the wor
 
 To run the audit locally against a preview of the production build, use the following command:
 
-```sh
-npm run build && npm run lighthouse:local
+```bash
+npm run build && npm run lighthouse:ci
+```
+
+You can also use the performance check script to analyze bundle sizes:
+
+```bash
+npm run perf:check
 ```
 

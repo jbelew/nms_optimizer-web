@@ -1,43 +1,63 @@
-# Google TypeScript Style Guide Summary
+# TypeScript Style Guide: No Man's Sky Technology Layout Optimizer
 
-This document summarizes key rules and best practices from the Google TypeScript Style Guide, which is enforced by the `gts` tool.
+This document defines the TypeScript coding standards and best practices for this project, as enforced by ESLint and the project's custom configuration.
 
-## 1. Language Features
-- **Variable Declarations:** Always use `const` or `let`. **`var` is forbidden.** Use `const` by default.
-- **Modules:** Use ES6 modules (`import`/`export`). **Do not use `namespace`.**
-- **Exports:** Use named exports (`export {MyClass};`). **Do not use default exports.**
-- **Classes:**
-  - **Do not use `#private` fields.** Use TypeScript's `private` visibility modifier.
-  - Mark properties never reassigned outside the constructor with `readonly`.
-  - **Never use the `public` modifier** (it's the default). Restrict visibility with `private` or `protected` where possible.
-- **Functions:** Prefer function declarations for named functions. Use arrow functions for anonymous functions/callbacks.
-- **String Literals:** Use single quotes (`'`). Use template literals (`` ` ``) for interpolation and multi-line strings.
-- **Equality Checks:** Always use triple equals (`===`) and not equals (`!==`).
-- **Type Assertions:** **Avoid type assertions (`x as SomeType`) and non-nullability assertions (`y!`)**. If you must use them, provide a clear justification.
+## 1. Core Principles
+- **TypeScript Strict Mode:** All code must pass under strict type checking.
+- **`any` is Forbidden:** Use `unknown` or a specific type. `no-explicit-any` is enforced as an error.
+- **Blank Line Structure:** Follow industry-standard spacing to group related logic and isolate blocks/returns.
+- **Immutability:** Prefer `const` over `let`. Avoid `var` entirely.
 
-## 2. Disallowed Features
-- **`any` Type:** **Avoid `any`**. Prefer `unknown` or a more specific type.
-- **Wrapper Objects:** Do not instantiate `String`, `Boolean`, or `Number` wrapper classes.
-- **Automatic Semicolon Insertion (ASI):** Do not rely on it. **Explicitly end all statements with a semicolon.**
-- **`const enum`:** Do not use `const enum`. Use plain `enum` instead.
-- **`eval()` and `Function(...string)`:** Forbidden.
+## 2. JSDoc Standards (Agentic JSDoc)
+This project adheres to the **Agentic JSDoc** pattern to improve maintainability and LLM comprehension.
 
-## 3. Naming
-- **`UpperCamelCase`:** For classes, interfaces, types, enums, and decorators.
-- **`lowerCamelCase`:** For variables, parameters, functions, methods, and properties.
-- **`CONSTANT_CASE`:** For global constant values, including enum values.
-- **`_` Prefix/Suffix:** **Do not use `_` as a prefix or suffix** for identifiers, including for private properties.
+### Rules:
+- **Mandatory Documentation:** Every exported function, method, class, interface, and type must have JSDoc.
+- **Hierarchical Block Structure:** Use a consistent order: Summary → `@remarks` → `@param` → `@returns` → `@example`.
+- **Semantic Richness:** Every tag must carry a description, not just a type.
+- **Markdown Formatting:** Use backticks for code references within descriptions.
+- **Symbol Linking:** Use `{@link SymbolName}` instead of Markdown links for internal cross-references.
+- **Architecture Primitives:** Use specialized tags like `@hook`, `@component`, `@store`, and `@category`.
 
-## 4. Type System
-- **Type Inference:** Rely on type inference for simple, obvious types. Be explicit for complex types.
-- **`undefined` and `null`:** Both are supported. Be consistent within your project.
-- **Optional vs. `|undefined`:** Prefer optional parameters and fields (`?`) over adding `|undefined` to the type.
-- **`Array<T>` Type:** Use `T[]` for simple types. Use `Array<T>` for more complex union types (e.g., `Array<string | number>`).
-- **`{}` Type:** **Do not use `{}`**. Prefer `unknown`, `Record<string, unknown>`, or `object`.
+### Example JSDoc:
+```typescript
+/**
+ * Custom hook to calculate the adjacency bonus for a specific cell.
+ *
+ * @remarks
+ * This hook uses the `useGridStore` to retrieve the cell's neighbors and
+ * calculates the bonus based on the technology type and level.
+ *
+ * @param {number} rowIndex - The zero-based row index.
+ * @param {number} colIndex - The zero-based column index.
+ * @returns {number} The calculated adjacency bonus multiplier.
+ *
+ * @hook
+ * @category Hooks
+ * @see {@link useGridStore}
+ *
+ * @example
+ * const bonus = useAdjacencyBonus(0, 5);
+ * // returns 1.15
+ */
+```
 
-## 5. Comments and Documentation
-- **JSDoc:** Use `/** JSDoc */` for documentation, `//` for implementation comments.
-- **Redundancy:** **Do not declare types in `@param` or `@return` blocks** (e.g., `/** @param {string} user */`). This is redundant in TypeScript.
-- **Add Information:** Comments must add information, not just restate the code.
+## 3. Component & Hook Patterns
+- **React 19 Primitives:** Leverage modern React patterns, including `useTransition` for performance-critical state updates.
+- **Zustand for State:** Use `useGridStore` and other stores for global state. Use `useShallow` to minimize re-renders.
+- **Tailwind CSS 4:** Use utility-first styling. Avoid complex inline styles unless dynamic.
+- **Default Exports:** Are permitted for top-level components (e.g., `App`, `GridCell`).
 
-*Source: [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)*
+## 4. Testing & Verification
+- **TDD Preferred:** Write tests before implementation.
+- **Coverage:** Aim for >80% code coverage.
+- **Verification:** Run `npm run lint` and `npm run typecheck` before every commit.
+
+## 5. File Naming
+- **PascalCase.tsx:** For React components.
+- **camelCase.ts:** For hooks and utility functions.
+- **.test.ts/tsx:** For corresponding test files in the same directory.
+- **.stories.tsx:** For Storybook stories.
+
+---
+*Last updated: 2026-03-31*

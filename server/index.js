@@ -1,18 +1,26 @@
 /**
- * @file The main entry point for the Node.js server.
- * Imports the Express app and starts listening on the configured port.
+ * @file Entrypoint for the production Node.js server.
+ * @remarks This script imports the pre-configured Express application and starts the HTTP server.
+ * It uses the `PORT` environment variable if available, otherwise defaulting to 3000.
+ * @author jbelew
+ * @license GPL-3.0
  */
+
 import app from './app.js';
 
 /**
- * The port number for the server to listen on.
- * Defaults to 3000 if not provided by the environment.
- * @type {number}
+ * The network port on which the server listens for incoming requests.
+ * @remarks Defaults to `3000` if the `PORT` environment variable is not defined.
+ * @type {number|string}
+ * @default 3000
+ * @category Server
  */
 const PORT = process.env.PORT || 3000;
 
 /**
- * Starts the Express server.
+ * Start the Express server and log the listening status.
+ * @remarks Binds to all network interfaces on the specified `PORT`.
+ * @see {@link app} for the Express application logic.
  */
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);

@@ -1,26 +1,24 @@
 /**
- * @file Defines the Express application for the NMS Optimizer web application.
- * This file configures all middleware, routes, and handlers, then exports the app for use by the server entrypoint or tests.
+ * @file Express application definition for the NMS Optimizer.
+ * @remarks This file configures the middleware pipeline, static asset serving, 
+ * SSG (Static Site Generation) caching, and SPA fallback routing.
  * @author jbelew
  * @license GPL-3.0
  */
 
-// Node.js built-in modules
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Third-party libraries
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
-// Local modules
+
 import { seoTagInjectionMiddleware } from "./seoMiddleware.js";
 import {
 	BASE_KNOWN_PATHS,
 	KNOWN_DIALOGS,
 	MAINTENANCE_MODE,
-	OTHER_LANGUAGES,
 	SUPPORTED_LANGUAGES,
 	TARGET_HOST,
 } from "./config.js";
@@ -30,9 +28,25 @@ import {
 // ============================================================================
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Path to the directory containing production build assets.
+ * @type {string}
+ */
 const DIST_DIR = path.join(__dirname, "../dist");
+
+/**
+ * Absolute path to the main `index.html` template.
+ * @type {string}
+ */
 const INDEX_PATH = path.join(DIST_DIR, "index.html");
 
+/**
+ * Content Security Policy (CSP) string.
+ * @remarks Defines trusted sources for scripts, styles, images, and connections.
+ * @type {string}
+ * @category Security
+ */
 const csp = [
 	"default-src 'self'",
 	"script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'",
@@ -46,6 +60,10 @@ const csp = [
 	"base-uri 'self'",
 ].join("; ");
 
+/**
+ * The Express application instance.
+ * @type {import('express').Application}
+ */
 const app = express();
 
 // ============================================================================
@@ -53,15 +71,22 @@ const app = express();
 // ============================================================================
 
 /**
- * A set of paths to pre-rendered index.html files (SSG).
- * Cached at startup to avoid expensive fs.stat calls on every request.
+ * A set of paths to pre-rendered `index.html` files (Static Site Generation).
+ * @remarks Cached at startup to avoid expensive filesystem `stat` calls on every request.
+ * Contains relative paths from `DIST_DIR` (e.g., `"fr/about/index.html"`).
  * @type {Set<string>}
+ * @category Cache
  */
 const ssgFiles = new Set();
 
 /**
- * Scans the DIST_DIR for pre-rendered index.html files and populates the ssgFiles set.
- * Only runs in production or if the cache is empty.
+ * Scans the `DIST_DIR` for pre-rendered `index.html` files and populates the `ssgFiles` cache.
+ * @remarks 
+ * - Only runs in production or if the cache is empty.
+ * - Recursively walks the directory tree.
+ * @returns {void} Side-effects only (populates `ssgFiles`).
+ * @see {@link ssgFiles}
+ * @category Cache
  */
 export function scanSsgFiles() {
 	if (!fs.existsSync(DIST_DIR)) return;
@@ -73,7 +98,6 @@ export function scanSsgFiles() {
 			if (fs.statSync(fullPath).isDirectory()) {
 				walk(fullPath);
 			} else if (file === "index.html") {
-				// Store the path relative to DIST_DIR (e.g., "fr/about/index.html")
 				const relativePath = path.relative(DIST_DIR, fullPath);
 				ssgFiles.add(relativePath);
 			}
@@ -89,15 +113,10 @@ export function scanSsgFiles() {
 	}
 }
 
-// Initial scan
 scanSsgFiles();
 
-// Maintenance Mode Middleware
 if (MAINTENANCE_MODE && process.env.NODE_ENV !== "test") {
 	app.use((req, res, next) => {
-		// Allow status checks if needed, but for "Hosting Provider Down" we usually want to block everything
-		// except maybe assets if they are needed for the maintenance page itself.
-		// However, our maintenance page is self-contained (inline styles, inline SVG).
 		res.status(503).sendFile(path.join(__dirname, "../public", "maintenance.html"));
 	});
 }
@@ -109,19 +128,25 @@ if (MAINTENANCE_MODE && process.env.NODE_ENV !== "test") {
 // IN-MEMORY CACHE FOR INDEX.HTML
 // ============================================================================
 
+/** @type {string|null} */
 let cachedIndex = null;
+/** @type {number} */
 let cachedIndexMTime = 0;
+/** @type {string|null} */
 let cachedIndexETag = null;
 
 /**
- * Loads index.html from the filesystem and caches it in memory.
- * If the file has been modified, re-reads and updates the cache.
+ * Loads `index.html` from the filesystem and caches it in memory.
+ * @remarks 
+ * - In production, assumes the file doesn't change after server start.
+ * - In other environments, re-reads the file if the modified time (mtime) has changed.
+ * - Generates an MD5-based ETag for the content.
  * @async
- * @returns {Promise<{content: string, etag: string}>} The content and ETag of index.html.
+ * @returns {Promise<{content: string, etag: string}>} Object containing the HTML content and its ETag.
+ * @throws {Error} If the file cannot be read and no cache exists.
+ * @category Cache
  */
 async function loadIndexHtml() {
-	// Optimization: In production, we assume index.html doesn't change after server starts.
-	// For other environments or for robustness, we still check stat but less frequently or only when needed.
 	if (process.env.NODE_ENV === "production" && cachedIndex) {
 		return { content: cachedIndex, etag: cachedIndexETag };
 	}
@@ -140,25 +165,20 @@ async function loadIndexHtml() {
 	return { content: cachedIndex, etag: cachedIndexETag };
 }
 
-/**
- * Gets the ETag for index.html.
- * @async
- * @returns {Promise<string>} The ETag value.
- */
-async function getIndexHtmlETag() {
-	const { etag } = await loadIndexHtml();
-	return etag;
-}
-
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 
 /**
- * Sets appropriate Cache-Control headers for static assets based on file type and name.
- * Hashed assets get long-lived caching, others vary by type.
+ * Sets appropriate `Cache-Control` headers for static assets based on file type and naming conventions.
+ * @remarks
+ * - **Hashed Assets:** Get immutable caching for 1 year.
+ * - **sw.js:** Explicitly disabled caching to ensure fast PWA updates.
+ * - **index.html:** Short browser cache with long `s-maxage` for Cloudflare edge caching.
+ * - **Static Assets:** 7-day browser cache for fonts, images, etc.
  * @param {import('express').Response} res - Express response object.
  * @param {string} filePath - Path to the file being served.
+ * @category Middleware
  */
 function setCacheHeaders(res, filePath) {
 	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, "");
@@ -173,7 +193,6 @@ function setCacheHeaders(res, filePath) {
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-		// Non-hashed static assets get a 7-day browser cache.
 		res.setHeader("Cache-Control", "public, max-age=604800");
 	} else if (/\.md$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=3600");
@@ -184,9 +203,14 @@ function setCacheHeaders(res, filePath) {
 
 /**
  * Checks if a pathname corresponds to a known client-side SPA route.
- * Handles base paths and language-prefixed paths.
- * @param {string} pathname - URL pathname to check.
- * @returns {boolean} True if pathname is a known SPA route.
+ * @remarks
+ * Validates routes against `BASE_KNOWN_PATHS` and `KNOWN_DIALOGS`, 
+ * accounting for language prefixes (e.g., `/fr/about`).
+ * @param {string} pathname - URL pathname to validate.
+ * @returns {boolean} `true` if the path is a known SPA route.
+ * @see {@link BASE_KNOWN_PATHS}
+ * @see {@link KNOWN_DIALOGS}
+ * @category Routing
  */
 function isSpaRoute(pathname) {
 	const parts = pathname.split("/").filter((p) => p);
@@ -209,7 +233,6 @@ function isSpaRoute(pathname) {
 
 app.set("trust proxy", true);
 
-// Security headers
 app.use((req, res, next) => {
 	res.setHeader("Content-Security-Policy", csp);
 	res.setHeader("Document-Policy", "js-profiling");
@@ -220,7 +243,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Canonical host redirect (production only)
 if (process.env.NODE_ENV === "production") {
 	app.use((req, res, next) => {
 		const host = req.headers.host?.toLowerCase();
@@ -231,7 +253,6 @@ if (process.env.NODE_ENV === "production") {
 	});
 }
 
-// Trailing slash redirect
 app.use((req, res, next) => {
 	if (req.path.length > 1 && req.path.endsWith("/")) {
 		const query = req.url.slice(req.path.length);
@@ -244,9 +265,6 @@ app.use((req, res, next) => {
 // STATIC FILE MIDDLEWARE
 // ============================================================================
 
-// Static assets (JS, CSS, images) are served here first.
-// We disable indexing and redirects here to let the SPA handler
-// manage the clean URL to index.html mapping for SSG and SEO.
 app.use(
 	"/",
 	expressStaticGzip(DIST_DIR, {
@@ -261,7 +279,7 @@ app.use(
 );
 
 // ============================================================================
-// SPECIFIC ROUTES (for files not served by static middleware)
+// SPECIFIC ROUTES
 // ============================================================================
 
 app.get("/sitemap.xml", (req, res) => {
@@ -285,14 +303,20 @@ app.get("/status/404", (req, res) => {
 // ============================================================================
 
 /**
- * Handles SPA routes with SSG files, SEO tag injection, and proper caching.
+ * SPA Fallback Handler.
+ * @remarks
+ * Handles all non-asset requests. If the path is a known SPA route:
+ * 1. Checks for a corresponding pre-rendered SSG file.
+ * 2. If no SSG file exists, uses `seoTagInjectionMiddleware` for dynamic tag injection.
+ * @see {@link isSpaRoute}
+ * @see {@link seoTagInjectionMiddleware}
+ * @category Routing
  */
 app.get(/^[^.]*$/, async (req, res, next) => {
 	if (!isSpaRoute(req.path)) {
 		return next();
 	}
 
-	// 1. Resolve potential SSG path
 	const parts = req.path.split("/").filter((p) => p);
 	let relativeSsgPath = null;
 
@@ -306,35 +330,19 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		relativeSsgPath = path.join(parts.join("/"), "index.html");
 	}
 
-	// 2. Try to serve pre-rendered SSG file if it exists in our memory cache
 	if (ssgFiles.has(relativeSsgPath)) {
 		const fullPath = path.join(DIST_DIR, relativeSsgPath);
 		res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, stale-while-revalidate=60");
 		res.setHeader("Document-Policy", "js-profiling");
-		// Express sendFile handles ETags automatically based on file stats
 		return res.sendFile(fullPath);
 	}
 
-	// 3. Fall back to dynamic SEO tag injection using the base index.html
 	try {
 		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
 	} catch (error) {
 		next(error);
 	}
 });
-
-// ============================================================================
-// STATIC FILE MIDDLEWARE
-// ============================================================================
-
-app.use("/", expressStaticGzip(DIST_DIR, {
-	enableBrotli: true,
-	orderPreference: ["br", "gz"],
-	index: false,
-	setHeaders: (res, filePath) => {
-		setCacheHeaders(res, filePath);
-	},
-}));
 
 // ============================================================================
 // ERROR HANDLING

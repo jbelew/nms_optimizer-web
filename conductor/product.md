@@ -24,4 +24,4 @@ To provide a high-performance, accurate, and user-friendly web application that 
 ## Success Metrics
 - **Accuracy:** Layouts consistently match or exceed community-discovered "god-tier" configurations.
 - **Speed:** Optimization algorithm completes in < 5 seconds for most common configurations.
-- **Core Web Vitals:** Maintain "Good" ratings (LCP, FID/INP, CLS) to ensure a high-quality user experience.
+- **Core Web Vitals:** Maintain "Good" ratings (LCP, INP, CLS) to ensure a high-quality user experience.

@@ -1,7 +1,11 @@
 /**
  * @file SEO Middleware for the Express server.
- * This middleware injects dynamic SEO tags (canonical, hreflang, title, description)
- * into the main index.html file for SPA routes.
+ * @remarks This middleware injects dynamic SEO tags (canonical, hreflang, title, description)
+ * into the main `index.html` file for Single Page Application (SPA) routes.
+ * It ensures that search engines and social media crawlers receive pre-rendered metadata
+ * even for client-side routes.
+ * @author jbelew
+ * @license GPL-3.0
  */
 
 import etag from "etag";
@@ -12,23 +16,45 @@ import i18next from "./i18n.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
 
 /**
- * An Express middleware that injects SEO-related tags into the HTML response.
- * It handles internationalization (hreflang) and sets the canonical URL based on the request path.
- * It also sets the Content Security Policy and handles ETag-based caching.
+ * In-memory cache for SEO-injected HTML content.
+ * @remarks Indexed by a composite key of `lang:basePath`. Cleared if the base `index.html` file changes.
+ * @type {Map<string, {html: string, etag: string}>}
+ * @category Cache
+ */
+const seoCache = new Map();
+
+/**
+ * Tracks the ETag of the last known base index.html file.
+ * @remarks Used to detect when the cache should be invalidated (e.g., after a build or hot-reload).
+ * @type {string|null}
+ * @category Cache
+ */
+let lastBaseIndexETag = null;
+
+/**
+ * Express middleware for dynamic SEO tag injection.
+ * @remarks
+ * This middleware performs several critical functions:
+ * 1.  **URL Consolidation:** Redirects `?lng=X` query parameters and `/en/*` paths to canonical versions.
+ * 2.  **Language Detection:** Determines the requested language from the URL path.
+ * 3.  **Metadata Injection:** Replaces placeholders in `index.html` with localized titles and descriptions from `seoMetadata`.
+ * 4.  **Hreflang Generation:** Injects `<link rel="alternate" hreflang="...">` tags for all supported languages.
+ * 5.  **Canonical URLs:** Sets the `<link rel="canonical" ...>` tag for the current route.
+ * 6.  **Caching:** Stores the final HTML in memory with ETag support to minimize CPU overhead.
  *
  * @async
  * @param {import('express').Request} req - The Express request object.
  * @param {import('express').Response} res - The Express response object.
- * @param {function(): Promise<string>} loadIndexHtml - An async function that returns the content of the index.html file.
- * @param {string} csp - The Content Security Policy string to be applied to the response.
+ * @param {() => Promise<{content: string, etag: string}>} loadIndexHtml - Async function to retrieve the base index.html and its ETag.
+ * @param {string} csp - The Content Security Policy string to apply to the response headers.
+ * @returns {Promise<void>} Sends the modified HTML or a 304 Not Modified response.
+ * @throws {Error} Logs internal errors and sends a 500 status code if injection fails.
+ * @see {@link SUPPORTED_LANGUAGES}
+ * @see {@link seoMetadata}
+ * @see {@link i18next}
+ * @category Middleware
  */
-
-// In-memory cache for SEO-injected HTML
-const seoCache = new Map();
-let lastBaseIndexETag = null;
-
 export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
-    // 1. Handle ?lng= query parameter for backward compatibility/easy switching
     const lng = req.query.lng;
     if (lng) {
         const lang = Array.isArray(lng) ? String(lng[0]) : String(lng);
@@ -44,12 +70,10 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         return res.redirect(301, newURL.href);
     }
 
-    // 2. Consolidate duplicate English URLs (redirect /en/* to /*)
     const pathParts = req.path.split("/").filter(Boolean);
     if (pathParts[0] === "en") {
         const cleanPath = `/${pathParts.slice(1).join("/")}`;
         const newURL = new URL(cleanPath, `https://${req.headers.host}`);
-        // Preserve query parameters if any
         const search = req.originalUrl.split("?")[1];
         if (search) {
             newURL.search = search;
@@ -68,19 +92,16 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
     const cacheKey = `${lang}:${basePath}`;
 
     try {
-        // Parallelize loading of index.html and i18next translation instance
         const [ { content: indexHtml, etag: baseEtag }, t ] = await Promise.all([
             loadIndexHtml(),
             i18next.getFixedT(lang)
         ]);
 
-        // Invalidate cache if base index.html changed
         if (lastBaseIndexETag !== baseEtag) {
             seoCache.clear();
             lastBaseIndexETag = baseEtag;
         }
 
-        // If we have a cached version
         if (seoCache.has(cacheKey)) {
             const { html, etag: cachedEtag } = seoCache.get(cacheKey);
 
@@ -97,14 +118,12 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
 
         let modifiedHtml = indexHtml;
 
-        // --- SEO Title & Description Injection ---
         const metadata = seoMetadata[basePath === "/" ? "/" : basePath];
 
         if (metadata) {
             const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
             const pageDescription = t(metadata.descriptionKey);
 
-            // Replace title and meta description placeholders
             modifiedHtml = modifiedHtml
                 .replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
                 .replace(
@@ -129,14 +148,12 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
                 );
         }
 
-        // --- SEO Link Tags Injection ---
         const baseUrl = `https://${TARGET_HOST}`;
         const tagsToInject = [];
 
         const isKnownDialog = KNOWN_DIALOGS.includes(pagePath);
         const isRoot = pagePath === "";
 
-        // 1. Canonical URL Logic
         const cleanPath = basePath === "/" ? "" : basePath;
         const cleanPathname = lang === "en" ? cleanPath || "/" : `/${lang}${cleanPath}`;
         const canonicalUrlBuilder = new URL(cleanPathname, baseUrl);
@@ -144,18 +161,15 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
         tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
         tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
 
-        // 2. Hreflang Tags Logic
         if (isKnownDialog || isRoot) {
             const hreflangUrlBuilder = new URL(canonicalUrl);
 
-            // English (and x-default)
             hreflangUrlBuilder.pathname = cleanPath || "/";
             tagsToInject.push(`<link rel="alternate" hreflang="en" href="${hreflangUrlBuilder.href}" />`);
             tagsToInject.push(
                 `<link rel="alternate" hreflang="x-default" href="${hreflangUrlBuilder.href}" />`
             );
 
-            // Other languages
             OTHER_LANGUAGES.forEach((langCode) => {
                 hreflangUrlBuilder.pathname = `/${langCode}${cleanPath}`;
                 tagsToInject.push(
@@ -164,12 +178,10 @@ export async function seoTagInjectionMiddleware(req, res, loadIndexHtml, csp) {
             });
         }
 
-        // Inject all tags before the closing </head> tag
         modifiedHtml = modifiedHtml.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
 
         const indexEtag = etag(modifiedHtml);
 
-        // Store in cache
         seoCache.set(cacheKey, { html: modifiedHtml, etag: indexEtag });
 
         res.setHeader("Content-Security-Policy", csp);

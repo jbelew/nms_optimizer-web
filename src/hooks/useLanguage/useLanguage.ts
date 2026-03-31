@@ -5,15 +5,23 @@ import { useLocation } from "react-router-dom";
 /**
  * Custom hook that synchronizes the application language with the current URL path.
  *
+ * @remarks
  * This hook monitors the browser's location and extracts the language code from
  * the first segment of the pathname. If the extracted code is supported by `i18next`,
  * it updates the application's active language.
- * **Defaults to 'en' if no supported language is detected.**
  *
  * @returns {string} The current active language code (e.g., 'en', 'fr').
+ * @default "en"
+ *
+ * @hook
+ * @category Hooks
+ * @see {@link ./useLanguage.test.tsx Unit Tests}
  *
  * @example
+ * ```tsx
  * const currentLang = useLanguage();
+ * // if URL is /fr/app, returns "fr" and sets i18n language to "fr"
+ * ```
  */
 export const useLanguage = () => {
 	const { i18n } = useTranslation();
