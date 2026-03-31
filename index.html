@@ -54,7 +54,21 @@
 			}
 		</style>
 	</noscript>
+	<style>
+		html {
+			background: #000;
+			color: #fff;
+			scrollbar-gutter: stable;
+		}
+	</style>
 	<style id="vpss-style">
+		.vpss-logo img,
+		.vpss-logo svg {
+			height: 48px !important;
+			width: 48px !important;
+			display: block;
+		}
+
 		.is-bot #vpss {
 			display: none !important;
 		}
@@ -142,24 +156,10 @@
 			}
 		}
 	</style>
-	<style>
-		html {
-			background: #000;
-			color: #fff;
-			scrollbar-gutter: stable;
-		}
-
-		.vpss-logo img,
-		.vpss-logo svg {
-			height: 48px !important;
-			width: 48px !important;
-			display: block;
-		}
-	</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 	<meta name="theme-color" content="#003848" />
 
-	<title>NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky</title>
+	<title>NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky</title>
 
 	<!-- Favicons -->
 	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
@@ -259,63 +259,6 @@
 
 		body.vpss-active {
 			overflow: hidden;
-		}
-
-		/* Static header for improved LCP (before React hydrates) */
-		.app-header-static {
-			align-items: center;
-			display: flex;
-			flex-direction: column;
-			padding-top: 24px;
-			background-image: linear-gradient(to bottom, black, transparent);
-			position: relative;
-			z-index: 1;
-		}
-
-		.app-header-static__logo-text {
-			font-family: Geosans, Helvetica, Arial, sans-serif;
-			font-size: 1.875rem;
-			font-weight: 400;
-			letter-spacing: 0.35em;
-			line-height: 2rem;
-			margin-right: -0.35em;
-			text-align: center;
-			-webkit-text-stroke: 2.5px;
-			text-transform: uppercase;
-			word-spacing: -0.25rem;
-			color: white;
-		}
-
-		@media (width >=640px) {
-			.app-header-static__logo-text {
-				filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
-				font-size: 2.25rem;
-				line-height: 2.5rem;
-			}
-		}
-
-		.app-header-static__separator-container {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			width: 100%;
-			margin: 4px 0;
-		}
-
-		.app-header-static__separator {
-			height: 1px;
-			background-color: #363A3F;
-			flex: 1;
-		}
-
-		.app-header-static__title {
-			color: #edeef0;
-			font-family: Raleway, Helvetica, Arial, sans-serif;
-			font-size: 16px;
-			font-weight: 700;
-			line-height: 22px;
-			text-align: center;
-			margin-top: 4px;
 		}
 	</style>
 
@@ -613,6 +556,63 @@
 		</main>
 
 		<style>
+			/* Static header styles (for SSG/No-JS) */
+			.app-header-static {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				padding-top: 24px;
+				background-image: linear-gradient(to bottom, black, transparent);
+				position: relative;
+				z-index: 1;
+			}
+
+			.app-header-static__logo-text {
+				font-family: Geosans, Helvetica, Arial, sans-serif;
+				font-size: 1.875rem;
+				font-weight: 400;
+				letter-spacing: 0.35em;
+				line-height: 2rem;
+				margin-right: -0.35em;
+				text-align: center;
+				-webkit-text-stroke: 2.5px;
+				text-transform: uppercase;
+				word-spacing: -0.25rem;
+				color: white;
+			}
+
+			@media (width >= 640px) {
+				.app-header-static__logo-text {
+					filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
+					font-size: 2.25rem;
+					line-height: 2.5rem;
+				}
+			}
+
+			.app-header-static__separator-container {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				width: 100%;
+				margin: 4px 0;
+			}
+
+			.app-header-static__separator {
+				height: 1px;
+				background-color: #363A3F;
+				flex: 1;
+			}
+
+			.app-header-static__title {
+				color: #edeef0;
+				font-family: Raleway, Helvetica, Arial, sans-serif;
+				font-size: 16px;
+				font-weight: 700;
+				line-height: 22px;
+				text-align: center;
+				margin-top: 4px;
+			}
+
 			main {
 				color: #fff;
 				background-color: #000;
