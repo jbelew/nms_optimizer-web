@@ -1,3 +1,10 @@
+## [6.18.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.4...v6.18.5) (2026-04-01)
+
+
+### Bug Fixes
+
+* add zod dependency and clean-up index.html file ([5bbf0c2](https://github.com/jbelew/nms_optimizer-web/commit/5bbf0c247ddfeb4edc552bb82a263e138e95b379))
+
 ## [6.18.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.3...v6.18.4) (2026-03-30)
 
 
