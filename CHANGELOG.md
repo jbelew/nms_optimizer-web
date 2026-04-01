@@ -1,3 +1,10 @@
+## [6.18.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.5...v6.18.6) (2026-04-01)
+
+
+### Bug Fixes
+
+* remove duplicatwe vpss splash screen styles and fix media query syntax ([0840c2d](https://github.com/jbelew/nms_optimizer-web/commit/0840c2d886c54169435354673aa8a661e70d7089))
+
 ## [6.18.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.4...v6.18.5) (2026-04-01)
 
 
