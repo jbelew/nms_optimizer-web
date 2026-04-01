@@ -46,7 +46,7 @@
 				z-index: -1;
 			}
 
-			@media (width <= 639px) {
+			@media (width <=639px) {
 				body::before {
 					background-image: url("/assets/img/background@mobile-blurred.webp");
 					background-position: center top;
@@ -67,93 +67,10 @@
 			height: 48px !important;
 			width: 48px !important;
 			display: block;
+			margin-bottom: 4px;
 		}
-
 		.is-bot #vpss {
 			display: none !important;
-		}
-
-		#vpss {
-			visibility: visible;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			gap: 16px;
-			position: fixed;
-			background-color: var(--vpss-bg-splash, #000000);
-			top: 0px;
-			right: 0px;
-			left: 0px;
-			bottom: 0;
-			z-index: 99999;
-			opacity: 1;
-		}
-
-		#vpss .vpss-loader {
-			display: inline-block;
-			position: relative;
-			width: 72px;
-			height: 10px;
-		}
-
-		#vpss .vpss-loader .vpss-dot {
-			position: absolute;
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			background: var(--vpss-bg-loader, #00A2C7);
-			animation-timing-function: cubic-bezier(0, 1, 1, 0);
-		}
-
-		#vpss .vpss-loader .vpss-dot:nth-child(1) {
-			left: 8px;
-			animation: vpss-dot1 0.6s infinite;
-		}
-
-		#vpss .vpss-loader .vpss-dot:nth-child(2) {
-			left: 8px;
-			animation: vpss-dot2 0.6s infinite;
-		}
-
-		#vpss .vpss-loader .vpss-dot:nth-child(3) {
-			left: 32px;
-			animation: vpss-dot2 0.6s infinite;
-		}
-
-		#vpss .vpss-loader .vpss-dot:nth-child(4) {
-			left: 56px;
-			animation: vpss-dot3 0.6s infinite;
-		}
-
-		@keyframes vpss-dot1 {
-			0% {
-				transform: scale(0);
-			}
-
-			100% {
-				transform: scale(1);
-			}
-		}
-
-		@keyframes vpss-dot2 {
-			0% {
-				transform: translate(0, 0);
-			}
-
-			100% {
-				transform: translate(24px, 0);
-			}
-		}
-
-		@keyframes vpss-dot3 {
-			0% {
-				transform: scale(1);
-			}
-
-			100% {
-				transform: scale(0);
-			}
 		}
 	</style>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -460,8 +377,7 @@
 				<div class="app-header-static__logo-text" style="margin-bottom: 4px;">NO MAN'S SKY</div>
 				<div class="app-header-static__separator-container">
 					<span class="app-header-static__separator"></span>
-					<img alt="No Man's Sky Atlas Logo" width="16" height="20"
-						src="assets/img/nms-icon.webp" />
+					<img alt="No Man's Sky Atlas Logo" width="16" height="20" src="assets/img/nms-icon.webp" />
 					<span class="app-header-static__separator"></span>
 				</div>
 				<h2 class="app-header-static__title">
@@ -581,7 +497,7 @@
 				color: white;
 			}
 
-			@media (width >= 640px) {
+			@media (width >=640px) {
 				.app-header-static__logo-text {
 					filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
 					font-size: 2.25rem;
