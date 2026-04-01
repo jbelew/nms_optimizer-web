@@ -1,5 +1,5 @@
 import { ErrorInfo } from "react";
-import * as Sentry from "@sentry/react";
+import { captureException as SentryCaptureException } from "@sentry/react";
 
 import { sendEvent } from "../../utils/analytics";
 import { safeClear } from "../../utils/storage";
@@ -27,7 +27,7 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);
 
 	// Capture the error in Sentry
-	Sentry.captureException(error, {
+	SentryCaptureException(error, {
 		extra: {
 			componentStack: errorInfo?.componentStack,
 		},

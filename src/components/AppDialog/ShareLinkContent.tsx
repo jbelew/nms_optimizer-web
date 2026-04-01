@@ -1,7 +1,7 @@
 // src/components/AppDialog/ShareLinkContent.tsx
 import type { FC } from "react";
 import { useEffect, useRef, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -79,6 +79,8 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 			<TextArea
 				id="share-url-input"
 				name="shareUrl"
+				ml="1"
+				mr="1"
 				size={{ initial: "2", sm: "3" }}
 				readOnly
 				value={shareUrl}
@@ -91,11 +93,11 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 				</Link>
 			</Text>
 			<Flex gap="2" mt="4" mb="2" justify="end">
-				<Dialog.Close asChild>
+				<DialogClose asChild>
 					<Button variant="soft" onClick={onClose}>
 						{t("dialogs.shareLink.closeButton")}
 					</Button>
-				</Dialog.Close>
+				</DialogClose>
 				<Button onClick={handleCopyClick}>
 					{copied ? <CheckIcon /> : <CopyIcon />}
 					{copied

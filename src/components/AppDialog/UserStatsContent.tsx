@@ -1,7 +1,7 @@
 // src/components/AppDialog/UserStatsContent.tsx
 import type { UserStat } from "@/hooks/useUserStats/useUserStats";
 import { FC, lazy, Suspense } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -356,11 +356,11 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 			</ErrorBoundary>
 
 			<Flex gap="2" mt="4" mb="2" justify="end">
-				<Dialog.Close asChild>
+				<DialogClose asChild>
 					<Button variant="soft" onClick={onClose}>
 						{t("dialogs.userStats.closeButton")}
 					</Button>
-				</Dialog.Close>
+				</DialogClose>
 			</Flex>
 		</>
 	);

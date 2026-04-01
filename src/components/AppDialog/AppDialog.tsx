@@ -3,7 +3,15 @@ import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
 import React, { useEffect } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import {
+	Close as DialogClose,
+	Content as DialogContent,
+	Description as DialogDescription,
+	Overlay as DialogOverlay,
+	Portal as DialogPortal,
+	Root as DialogRoot,
+	Title as DialogTitle,
+} from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -85,12 +93,12 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
 
 	return (
-		<Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
-			<Dialog.Portal>
+		<DialogRoot open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<DialogPortal>
 				<Theme>
-					<Dialog.Overlay className="appDialog__overlay" />
-					<Dialog.Content className={`appDialog__content ${className}`}>
-						<Dialog.Title className="mr-2">
+					<DialogOverlay className="appDialog__overlay" />
+					<DialogContent className={`appDialog__content ${className}`}>
+						<DialogTitle className="mr-2">
 							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
 								{IconComponent && (
 									<IconComponent className="inline h-6 w-6" style={style} />
@@ -98,11 +106,11 @@ const AppDialog: React.FC<AppDialogProps> = ({
 								{titleKey ? t(titleKey) : title}
 							</span>
 							<Separator mt="2" size="4" orientation="horizontal" decorative />
-						</Dialog.Title>
+						</DialogTitle>
 
-						<Dialog.Description className="sr-only">
+						<DialogDescription className="sr-only">
 							{titleKey ? t(titleKey) : title}
-						</Dialog.Description>
+						</DialogDescription>
 
 						<section
 							className={`appDialog__scrollable-content flex-1 overflow-y-auto ${
@@ -116,7 +124,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 							{content}
 						</section>
 
-						<Dialog.Close asChild>
+						<DialogClose asChild>
 							<IconButton
 								variant="ghost"
 								size="1"
@@ -125,11 +133,11 @@ const AppDialog: React.FC<AppDialogProps> = ({
 							>
 								<Cross2Icon />
 							</IconButton>
-						</Dialog.Close>
-					</Dialog.Content>
+						</DialogClose>
+					</DialogContent>
 				</Theme>
-			</Dialog.Portal>
-		</Dialog.Root>
+			</DialogPortal>
+		</DialogRoot>
 	);
 };
 

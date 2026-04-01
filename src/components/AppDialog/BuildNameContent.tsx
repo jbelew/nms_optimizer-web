@@ -166,6 +166,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 					<TextField.Root
 						ref={inputRef}
 						id="build-name-input"
+						ml="1"
 						name="buildName"
 						placeholder={t("dialog.buildName.placeholder")}
 						value={buildName}

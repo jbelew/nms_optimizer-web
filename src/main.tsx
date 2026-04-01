@@ -14,9 +14,9 @@ import "./components/Toast/Toast.scss";
 import "./i18n/i18n"; // Initialize i18next
 
 import { StrictMode } from "react";
-import * as Toast from "@radix-ui/react-toast";
+import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
-import * as Sentry from "@sentry/react";
+import { captureException, wrapCreateBrowserRouterV6 } from "@sentry/react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -99,7 +99,7 @@ if (typeof window !== "undefined") {
 			console.error("Failed to recover from initialization error:", error);
 
 			// Log to Sentry if available
-			Sentry.captureException(error, {
+			captureException(error, {
 				tags: { area: "initialization" },
 				level: "error",
 			});
@@ -125,7 +125,7 @@ if (typeof window !== "undefined") {
 	})();
 }
 
-const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV6(createBrowserRouter);
+const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
 const router = sentryCreateBrowserRouter(routes);
 
 createRoot(document.getElementById("root")!).render(
@@ -140,12 +140,12 @@ createRoot(document.getElementById("root")!).render(
 			>
 				<TooltipProvider>
 					<TooltipManager />
-					<Toast.Provider swipeDirection="right">
+					<ToastProviderRadix swipeDirection="right">
 						<ToastProvider>
 							<RouterProvider router={router} />
 						</ToastProvider>
-						<Toast.Viewport className="ToastViewport" />
-					</Toast.Provider>
+						<ToastViewport className="ToastViewport" />
+					</ToastProviderRadix>
 				</TooltipProvider>
 			</Theme>
 		</ErrorBoundary>

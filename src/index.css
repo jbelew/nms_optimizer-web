@@ -1,15 +1,4 @@
-/* Tailwind base, theme, and utilities layers */
-@layer base {
-	@import "tailwindcss/preflight.css";
-}
-
-@layer theme {
-	@import "tailwindcss/theme.css";
-}
-
-@layer utilities {
-	@import "tailwindcss/utilities.css";
-}
+@import "tailwindcss";
 
 /* Global box-sizing reset */
 *,

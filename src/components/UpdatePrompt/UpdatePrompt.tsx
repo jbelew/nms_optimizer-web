@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -45,16 +45,16 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 			</Text>
 
 			<Flex gap="3" mt="6" mb="2" justify="end">
-				<Dialog.Close asChild>
+				<DialogClose asChild>
 					<Button variant="soft" onClick={onDismiss}>
 						{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
 					</Button>
-				</Dialog.Close>
-				<Dialog.Close asChild>
+				</DialogClose>
+				<DialogClose asChild>
 					<Button onClick={onRefresh} autoFocus={isDesktop}>
 						{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 					</Button>
-				</Dialog.Close>
+				</DialogClose>
 			</Flex>
 		</>
 	);

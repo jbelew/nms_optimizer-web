@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import { CheckCircledIcon, ExclamationTriangleIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import * as Toast from "@radix-ui/react-toast";
+import {
+	Description as ToastDescription,
+	Root as ToastRoot,
+	Title as ToastTitle,
+} from "@radix-ui/react-toast";
 
 import "./Toast.scss";
 
@@ -62,15 +66,13 @@ export const NmsToast = ({
 		);
 
 	return (
-		<Toast.Root duration={duration} className="Toast" open={open} onOpenChange={onOpenChange}>
+		<ToastRoot duration={duration} className="Toast" open={open} onOpenChange={onOpenChange}>
 			<div className="Toast__title-container">
 				{icon}
-				<Toast.Title className={`${titleClassName} heading-styled mb-1`}>
-					{title}
-				</Toast.Title>
+				<ToastTitle className={`${titleClassName} heading-styled mb-1`}>{title}</ToastTitle>
 			</div>
 			<Separator size="4" mb="1" />
-			<Toast.Description className="Toast__description">{description}</Toast.Description>
+			<ToastDescription className="Toast__description">{description}</ToastDescription>
 			<Button
 				className="Toast__close"
 				aria-label="Dismiss"
@@ -81,6 +83,6 @@ export const NmsToast = ({
 			>
 				Dismiss
 			</Button>
-		</Toast.Root>
+		</ToastRoot>
 	);
 };

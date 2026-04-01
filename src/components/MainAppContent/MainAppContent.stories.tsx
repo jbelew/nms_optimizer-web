@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useEffect } from "react";
-import * as Toast from "@radix-ui/react-toast";
+import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { ToastProvider } from "../../hooks/useToast/useToast";
@@ -119,7 +119,7 @@ const StorybookWrapper = ({
 const withLocalProviders =
 	(isSharedGrid: boolean = false, techTree?: TechTree) =>
 	(Story: React.FC) => (
-		<Toast.Provider swipeDirection="right">
+		<ToastProviderRadix swipeDirection="right">
 			<ToastProvider>
 				<StorybookWrapper isSharedGrid={isSharedGrid} techTree={techTree}>
 					<React.Suspense fallback={<div>Loading story...</div>}>
@@ -127,8 +127,8 @@ const withLocalProviders =
 					</React.Suspense>
 				</StorybookWrapper>
 			</ToastProvider>
-			<Toast.Viewport className="ToastViewport" />
-		</Toast.Provider>
+			<ToastViewport className="ToastViewport" />
+		</ToastProviderRadix>
 	);
 
 /**

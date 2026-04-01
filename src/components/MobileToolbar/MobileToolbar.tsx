@@ -7,7 +7,7 @@ import {
 	PieChartIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
-import * as Toolbar from "@radix-ui/react-toolbar";
+import { Root as ToolbarRoot, ToggleGroup as ToolbarToggleGroup } from "@radix-ui/react-toolbar";
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -109,7 +109,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 		// };
 
 		return (
-			<Toolbar.Root
+			<ToolbarRoot
 				ref={ref}
 				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
 				style={{
@@ -120,7 +120,7 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					paddingRight: "var(--app-safe-pr)",
 				}}
 			>
-				<Toolbar.ToggleGroup
+				<ToolbarToggleGroup
 					type="multiple"
 					className="flex items-center gap-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
@@ -163,9 +163,9 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					>
 						<CameraIcon />
 					</IconButton>} */}
-				</Toolbar.ToggleGroup>
+				</ToolbarToggleGroup>
 
-				<Toolbar.ToggleGroup
+				<ToolbarToggleGroup
 					type="multiple"
 					className="flex items-center gap-2"
 					aria-label={t("buttons.utilities") ?? ""}
@@ -219,8 +219,8 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 					</IconButton>
 
 					<LanguageSelector />
-				</Toolbar.ToggleGroup>
-			</Toolbar.Root>
+				</ToolbarToggleGroup>
+			</ToolbarRoot>
 		);
 	}
 );

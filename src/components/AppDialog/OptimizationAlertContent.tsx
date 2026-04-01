@@ -1,6 +1,6 @@
 // src/components/AppDialog/OptimizationAlertContent.tsx
 import type { FC } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -73,7 +73,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 				/>
 			</Text>
 			<Flex gap="3" mt="6" mb="2" justify="end">
-				<Dialog.Close asChild>
+				<DialogClose asChild>
 					<Button
 						variant="soft"
 						onClick={onClose}
@@ -81,8 +81,8 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 					>
 						{t("dialogs.optimizationAlert.cancelButton")}
 					</Button>
-				</Dialog.Close>
-				<Dialog.Close asChild>
+				</DialogClose>
+				<DialogClose asChild>
 					<Button
 						onClick={() => {
 							void handleForceOptimizeClick();
@@ -91,7 +91,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 					>
 						{t("dialogs.optimizationAlert.forceOptimizeButton")}
 					</Button>
-				</Dialog.Close>
+				</DialogClose>
 			</Flex>
 		</>
 	);

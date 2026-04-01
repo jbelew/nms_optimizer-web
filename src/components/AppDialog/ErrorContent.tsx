@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { Button, Flex, Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -95,9 +95,9 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 				{errorType === "fatal" ? (
 					<Button onClick={handleRetry}>Retry</Button>
 				) : (
-					<Dialog.Close asChild>
+					<DialogClose asChild>
 						<Button onClick={onClose}>{t("dialogs.userStats.closeButton")}</Button>
-					</Dialog.Close>
+					</DialogClose>
 				)}
 			</Flex>
 		</>
