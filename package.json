@@ -147,7 +147,7 @@
 		"stylelint-order": "^8.1.1",
 		"supertest": "^7.2.2",
 		"typescript": "~5.9.3",
-		"typescript-eslint": "^8.57.2",
+		"typescript-eslint": "^8.58.0",
 		"vite": "^8.0.3",
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-pwa": "^1.2.0",
