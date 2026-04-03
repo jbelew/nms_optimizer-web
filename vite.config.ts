@@ -56,6 +56,7 @@ export default defineConfig(async ({ mode }): Promise<any> => {
 		},
 		plugins: [
 			// DevTools only available in dev mode (not installed as a prod/CI dependency)
+			// @ts-expect-error - @vitejs/devtools is optionally installed, not a project dependency
 			...(mode !== "production" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
