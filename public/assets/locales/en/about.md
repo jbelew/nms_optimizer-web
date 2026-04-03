@@ -37,7 +37,7 @@ Each step feeds into the next. The ML model gives simulated annealing a strong s
 - **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
 - **Backend solver:** Python, Flask, TensorFlow, NumPy, Rust (simulated annealing and scoring)
 - **Testing:** Vitest, Python Unittest
-- **Deployment:** Heroku (hosting), Cloudflare (DNS/CDN), Docker
+- **Deployment:** Heroku (hosting), Cloudflare (Hosting/DNS/CDN), Docker
 - **CI/CD:** GitHub Actions
 
 ## Repositories
@@ -59,16 +59,16 @@ Supercharged slots are rare inventory slots (usually 4 per grid) that give a ~25
 
 All of them:
 
-- **Starships** — standard, exotic, sentinel, solar, living, and atlantid variants
-- **Corvettes** — including reactor and cosmetic tech slots
-- **Multitools** — all types including staves
-- **Exocraft** — nomad, pilgrim, roamer, colossus, minotaur, nautilon
-- **Exosuits** — all technology categories
-- **Freighters** — capital ship tech layouts
+- **Starships:** Standard, Exotic, Sentinel, Solar, and Living
+- **Corvettes:** Including unique reactor modules and cosmetic technology slots
+- **Multitools:** All types including Staves
+- **Exocraft:** All vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon)
+- **Exosuits:** All technology types
+- **Freighters:** Capital ship technology layouts
 
 ### Is It Free?
 
-Yes. Free, ad-free, open source (GPL-3.0). No account required.
+Yes. Free, ad-free, open source (GPL-3.0). No accounts or email required.
 
 ### Can I Save and Share Builds?
 
