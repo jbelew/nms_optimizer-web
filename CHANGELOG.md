@@ -1,3 +1,10 @@
+## [6.18.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.6...v6.18.7) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ssg:** use absolute path for nms-icon in ssg template ([96ef8d4](https://github.com/jbelew/nms_optimizer-web/commit/96ef8d4be329ae1a0bb34130180834b91d513348))
+
 ## [6.18.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.5...v6.18.6) (2026-04-01)
 
 
