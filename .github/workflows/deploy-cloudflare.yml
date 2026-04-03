@@ -50,13 +50,14 @@ jobs:
           VITE_WS_URL: wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_SENTRY_ENV: ${{ (github.ref == 'refs/heads/dev') && 'staging' || 'production' }}
+          VITE_BUILD_VERSION: ${{ github.run_number }}
           VITE_USE_SERVER_ANALYTICS: "false"
           VITE_DUAL_ANALYTICS: "true"
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Branch is dynamically set: 'main' for production, 'dev' for staging
           command: pages deploy dist --project-name=nms-optimizer-web --branch=${{ github.ref_name == 'main' && 'main' || 'dev' }}
