@@ -1,0 +1,15 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com www.googletagmanager.com; font-src 'self'; connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io; frame-src https://www.youtube.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self';
+  Document-Policy: js-profiling
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Cache rules for hashed assets (Vite output)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Explicitly disable caching for service worker
+/sw.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
