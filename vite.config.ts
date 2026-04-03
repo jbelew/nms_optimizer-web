@@ -1,10 +1,11 @@
 import fs from "fs";
 import path from "path";
 import babel from "@rolldown/plugin-babel";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
+import { DevTools } from "@vitejs/devtools";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig, loadEnv } from "vite";
 import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
@@ -14,9 +15,14 @@ import packageJson from "./package.json";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }): Promise<any> => {
 	// Load env file based on `mode` in the current working directory.
 	const env = loadEnv(mode, process.cwd(), "");
+
+	// Cloudflare Pages sets CF_PAGES=1 during builds. Skip pre-compression since
+	// Cloudflare handles brotli/gzip natively, and pre-compressed .br/.gz files
+	// alongside assets can cause MIME type errors.
+	const isCloudflarePages = process.env.CF_PAGES === "1";
 
 	// Use an environment variable for the app version, falling back to package.json
 	const appVersion = process.env.VITE_APP_VERSION || env.VITE_APP_VERSION || packageJson.version;
@@ -38,7 +44,10 @@ export default defineConfig(({ mode }) => {
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
-		devtools: true,
+		devtools: {
+			enabled: true,
+		},
+
 		oxc: {
 			jsx: {
 				runtime: "automatic",
@@ -46,6 +55,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		plugins: [
+			...(await DevTools()),
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
 				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
@@ -88,18 +98,22 @@ export default defineConfig(({ mode }) => {
 				loaderType: "dots",
 			}),
 			deferStylesheetsPlugin(),
-			compression({
-				algorithm: "brotliCompress",
-				ext: ".br",
-				threshold: 10240,
-				deleteOriginFile: false,
-			}),
-			compression({
-				algorithm: "gzip",
-				ext: ".gz",
-				threshold: 10240,
-				deleteOriginFile: false,
-			}),
+			...(!isCloudflarePages
+				? [
+						compression({
+							algorithm: "brotliCompress",
+							ext: ".br",
+							threshold: 10240,
+							deleteOriginFile: false,
+						}),
+						compression({
+							algorithm: "gzip",
+							ext: ".gz",
+							threshold: 10240,
+							deleteOriginFile: false,
+						}),
+				  ]
+				: []),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
@@ -312,7 +326,9 @@ export default defineConfig(({ mode }) => {
 			dedupe: ["react", "react-dom"],
 		},
 		server: {
+			host: true,
 			forwardConsole: true,
+
 			headers: {
 				"Document-Policy": "js-profiling",
 			},
@@ -330,13 +346,14 @@ export default defineConfig(({ mode }) => {
 			sourcemap: true,
 			cssMinify: "lightningcss",
 			modulePreload: {
-				resolveDependencies: (filename, deps) => {
+				resolveDependencies: (filename: string, deps: string[]) => {
 					// Filter out naturally split chunks and the charts vendor to prevent eager preloading
 					return deps.filter(
-						(dep) => !dep.includes("chunk-") && !dep.includes("vendor-charts")
+						(dep: string) => !dep.includes("chunk-") && !dep.includes("vendor-charts")
 					);
 				},
 			},
+
 			rolldownOptions: {
 				output: {
 					minify: {
@@ -345,7 +362,7 @@ export default defineConfig(({ mode }) => {
 							dropDebugger: true,
 						},
 					},
-					chunkFileNames: (chunkInfo) => {
+					chunkFileNames: (chunkInfo: any) => {
 						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
 						// use generic 'chunk-' prefix for all other naturally split modules.
 						if (chunkInfo.name && chunkInfo.name.startsWith("vendor-")) {
@@ -354,7 +371,7 @@ export default defineConfig(({ mode }) => {
 						return "assets/chunk-[hash].js";
 					},
 					entryFileNames: "assets/entry-[hash].js",
-					manualChunks(id) {
+					manualChunks(id: string) {
 						// Avoid ad-blocker triggers by grouping potentially blocked terms into neutrally-named chunks.
 						const blockedTerms = [
 							"analytics",
@@ -417,7 +434,7 @@ export default defineConfig(({ mode }) => {
 							}
 						}
 					},
-					assetFileNames: (assetInfo) =>
+					assetFileNames: (assetInfo: any) =>
 						assetInfo.name?.endsWith(".css")
 							? "assets/[name]-[hash].css"
 							: "assets/[name]-[hash].[ext]",
