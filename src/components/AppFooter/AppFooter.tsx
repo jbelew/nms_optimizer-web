@@ -103,7 +103,8 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 					>
 						Privacy Policy
 					</a>{" "}
-					• {buildVersion} {buildDate && `(${new Date(buildDate).toLocaleString()})`}
+					• Build {buildVersion}{" "}
+					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>
 				<Separator decorative size="3" mt="1" mb="1" />
 				<Flex
