@@ -43,6 +43,13 @@ jobs:
           npm run typecheck
           npm run test:ci
 
+      - name: Set Build Version
+        id: build_version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          SHA=$(git rev-parse --short HEAD)
+          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
       - name: Build project
         run: npm run build
         env:
@@ -50,7 +57,7 @@ jobs:
           VITE_WS_URL: wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_SENTRY_ENV: ${{ (github.ref == 'refs/heads/dev') && 'staging' || 'production' }}
-          VITE_BUILD_VERSION: build-${{ github.event.workflow_run.run_number || github.run_number }}
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}${{ (github.ref == 'refs/heads/dev') && '-staging' || '' }}
           VITE_USE_SERVER_ANALYTICS: "false"
           VITE_DUAL_ANALYTICS: "true"
 

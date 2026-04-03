@@ -51,6 +51,13 @@ jobs:
             - name: Verify app version
               run: echo "Deploying app version ${{ needs.get_release_info.outputs.app_version }}"
 
+            - name: Set Build Version
+              id: build_version
+              run: |
+                  COUNT=$(git rev-list --count HEAD)
+                  SHA=$(git rev-parse --short HEAD)
+                  echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
             - name: Install Heroku CLI
               run: curl https://cli-assets.heroku.com/install.sh | sh
 
@@ -63,7 +70,7 @@ jobs:
                   rollbackonhealthcheckfailed: true
               env:
                    HD_VITE_APP_VERSION: ${{ needs.get_release_info.outputs.app_version }}
-                   HD_VITE_BUILD_VERSION: build-${{ github.run_number }}
+                   HD_VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
                    HD_VITE_SENTRY_ENV: production
                    HD_VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
                    HD_SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
