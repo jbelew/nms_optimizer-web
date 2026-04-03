@@ -3,7 +3,7 @@ import path from "path";
 import babel from "@rolldown/plugin-babel";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
-import { DevTools } from "@vitejs/devtools";
+
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv } from "vite";
@@ -55,7 +55,8 @@ export default defineConfig(async ({ mode }): Promise<any> => {
 			},
 		},
 		plugins: [
-			...(await DevTools()),
+			// DevTools only available in dev mode (not installed as a prod/CI dependency)
+			...(mode !== "production" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
 				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
