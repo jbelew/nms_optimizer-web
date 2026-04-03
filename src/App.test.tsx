@@ -48,13 +48,20 @@ vi.mock("react-i18next", async () => {
 	};
 });
 
+vi.mock("./hooks/useUrlSync/useUrlSync", () => ({
+	useUrlSync: vi.fn(() => ({
+		updateUrlForShare: vi.fn(),
+		updateUrlForReset: vi.fn(),
+	})),
+}));
+
 // Mock useFetchShipTypesSuspense to avoid actual data fetching
 vi.mock("./hooks/useShipTypes/useShipTypes", () => ({
 	useFetchShipTypesSuspense: vi.fn(() => ({
 		standard: {
 			label: "Standard",
 			type: "ship",
-			technologies: [], // Add technologies array
+			technologies: [],
 		},
 	})),
 }));

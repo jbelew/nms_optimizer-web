@@ -58,14 +58,8 @@ export async function onRequest(context) {
         return Response.redirect(newUrl.toString(), 301);
     }
 
-    // 3. Trailing Slash Removal
-    if (pathname.length > 1 && pathname.endsWith("/")) {
-        const newUrl = new URL(url);
-        newUrl.pathname = pathname.slice(0, -1);
-        return Response.redirect(newUrl.toString(), 301);
-    }
-
-    // 4. Try to fetch the static asset (this includes SSG files)
+    // 3. Try to fetch the static asset (this includes SSG files)
+    // We let Cloudflare handle trailing slashes natively to avoid redirect loops.
     let response = await next();
 
     // 5. SPA Fallback vs 404
