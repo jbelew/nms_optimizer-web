@@ -1,30 +1,26 @@
-# NMS Optimizer: Melhores Layouts Tecnológicos & Calculadora de Adjacência
+# NMS Optimizer: Calculadora de layout técnico e bônus de adjacência para No Man's Sky
 
-![Captura de tela do aplicativo NMS Optimizer](/assets/img/screenshots/screenshot.png)
+![Captura de tela do aplicativo NMS Optimizer mostrando uma grade de tecnologia de nave estelar com posicionamento de módulo otimizado](/assets/img/screenshots/screenshot.png)
 
-Bem-vindo ao NMS Optimizer, a melhor **calculadora**, **planejador** e **otimizador** gratuito para criar layouts de tecnologia ideais em No Man's Sky. Esteja você procurando maximizar o desempenho de sua nave estelar, corveta, multiferramenta, exonave ou exotraje, nossa ferramenta está aqui para ajudar. Usamos algoritmos de otimização avançados para calcular o melhor posicionamento de seus módulos de tecnologia, maximizando os bônus de adjacência e a eficácia de suas células supercarregadas.
+O NMS Optimizer descobre onde colocar seus módulos de tecnologia para que você não precise fazer isso. Escolha sua plataforma, selecione seus módulos, marque seus slots sobrecarregados e o otimizador calcula o layout que aproveita ao máximo seus bônus de adjacência. Funciona para naves estelares, corvetas, ferramentas múltiplas, exosuits, exocraft e cargueiros.
 
 ## O que é um bônus de adjacência?
 
-Em No Man's Sky, um bônus de adjacência é uma mecânica crucial de aumento de desempenho para seus módulos de tecnologia. Quando você coloca módulos de tecnologia compatíveis próximos um do outro em seu inventário, eles recebem um bônus de sinergia e desempenho aprimorado. A calculadora NMS Optimizer é a melhor ferramenta gratuita para encontrar o arranjo ideal para bônus de adjacência máximos.
+Quando você coloca módulos de tecnologia compatíveis próximos uns dos outros no No Man's Sky, eles recebem um aumento nas estatísticas. O jogo não diz muito sobre como isso funciona, mas a versão resumida: módulos do mesmo tipo que compartilham uma vantagem recebem um aumento percentual em suas estatísticas. Quanto mais arestas forem compartilhadas, maior será o bônus. Descobrir o arranjo certo manualmente é entediante, especialmente em grades maiores com slots sobrecarregados para levar em conta.
 
-## O que são slots supercarregados?
+## O que são caça-níqueis superalimentados?
 
-Os slots supercarregados (células supercarregadas) são um tipo especial de slot de inventário em No Man's Sky que fornece um grande impulso a qualquer módulo de tecnologia colocado dentro deles. Esses slots são raros e valiosos, e usá-los de forma eficaz é a chave para criar as melhores construções. O NMS Optimizer foi projetado para ajudá-lo a aproveitar ao máximo seus slots supercarregados, garantindo que você obtenha o melhor desempenho possível de seu equipamento.
+Alguns slots de inventário em No Man's Sky estão sobrecarregados. Qualquer módulo de tecnologia colocado em um recebe um grande multiplicador de estatísticas além dos bônus normais de adjacência. Eles são colocados aleatoriamente em cada peça de equipamento, então o layout ideal muda dependendo de onde seus slots superalimentados pousaram. Essa é a parte difícil e é para isso que esta ferramenta foi criada.
 
-## Como funciona o NMS Optimizer
+## Como funciona
 
-Nosso otimizador e calculadora gratuito para No Man's Sky usa algoritmos de otimização avançados, incluindo padrões determinísticos e recozimento simulado, para encontrar o melhor layout de tecnologia possível para suas necessidades específicas. Esteja você construindo uma nave estelar, corveta, atualizando sua multiferramenta ou otimizando seu exotraje ou exonave, nossa ferramenta calculará o layout ideal que maximiza seus bônus de adjacência e desempenho geral.
+O otimizador usa uma combinação de correspondência de padrões determinísticos e recozimento simulado. Para conjuntos de módulos menores, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o recozimento simulado explora milhares de arranjos para encontrar aquele que obtenha a pontuação mais alta possível. A pontuação leva em conta bônus de adjacência, colocação de slots sobrealimentados e pesos de estatísticas específicos do módulo. O back-end é executado em Rust para maior velocidade.
 
-## Plataformas suportadas
+## Plataformas Suportadas
 
-- Layouts de Nave Estelar
-- Layouts de Corveta
-- Builds de Multiferramenta
-- Layouts de Exotraje
-- Layouts de Exonave
-- Layouts de Cargueiro
-
-## Por que usar o NMS Optimizer?
-
-Pare de adivinhar e desbloqueie o verdadeiro potencial do seu equipamento. Nosso NMS Optimizer é a melhor **calculadora**, **planejador** e **construtor** para criar as builds perfeitas de No Man's Sky. Seja você um jogador novo ou um veterano experiente, nossa ferramenta o ajudará a criar os melhores layouts e builds de nave estelar, cargueiro, corveta, multiferramenta, exonave e exotraje.
+- Naves estelares (padrão, sentinela, solar, lutador, viva, atlântida)
+- Corvetas
+- Multiferramentas (padrão e sentinela)
+- Exosuits
+- Exocraft (roamer, peregrino, nômade, colosso, minotauro, nautilon)
+- Cargueiros

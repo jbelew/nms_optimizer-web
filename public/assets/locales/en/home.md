@@ -1,30 +1,26 @@
-# NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky
+# NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky
 
-![Screenshot of NMS Optimizer application](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-Welcome to the NMS Optimizer, the best free **calculator**, **planner**, and **optimizer** for creating optimal No Man's Sky technology layouts. Whether you're looking to maximize your starship, corvette, multitool, exocraft, or exosuit performance, our tool is here to help. We use advanced optimization algorithms to calculate the best placement of your technology modules, maximizing adjacency bonuses and the effectiveness of your supercharged slots.
+NMS Optimizer figures out where to put your technology modules so you don't have to. Pick your platform, select your modules, mark your supercharged slots, and the optimizer calculates the layout that gets the most out of your adjacency bonuses. It works for starships, corvettes, multitools, exosuits, exocraft, and freighters.
 
-## What is an Adjacency Bonus?
+## What Is an Adjacency Bonus?
 
-In No Man's Sky, an adjacency bonus is a crucial performance boost mechanic for your technology modules. When you place compatible technology modules next to each other in your inventory, they receive a synergy bonus and enhanced performance. The NMS Optimizer calculator is the most accurate tool to find the optimal arrangement for maximum adjacency bonuses—often resulting in a performance increase of up to 20% over standard layouts.
+When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. The game doesn't tell you much about how this works, but the short version: modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots to account for.
 
 ## What Are Supercharged Slots?
 
-Supercharged slots are a special type of inventory slot in No Man's Sky that provides a massive ~25-30% boost to any technology module placed within them. These slots are rare and valuable, and using them effectively is key to creating the best builds. The NMS Optimizer is designed to help you make the most of your supercharged slots, ensuring that you get the best possible performance out of your gear.
+Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed. That's the hard part, and it's what this tool is built to solve.
 
-## How the NMS Optimizer Works
+## How It Works
 
-Our free No Man's Sky optimizer and calculator uses advanced optimization algorithms including deterministic pattern matching, machine learning (trained on 16,000+ layouts), and Rust-based simulated annealing to find the best possible technology layout for your specific needs. Whether you're building a starship, corvette, upgrading your multitool, or optimizing your exosuit or exocraft, our tool will calculate the mathematically optimal layout that maximizes your adjacency bonuses and overall performance.
+The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed.
 
 ## Supported Platforms
 
-- Starship Layouts
-- Corvette Layouts
-- Multitool Builds
-- Exosuit Layouts
-- Exocraft Layouts
-- Freighter Layouts
-
-## Why Use the NMS Optimizer?
-
-Stop the guesswork and unlock the true potential of your gear. Our NMS Optimizer is the best **calculator**, **planner**, and **builder** for creating the perfect No Man's Sky builds. Whether you're a new player or a seasoned veteran, our tool will help you create the best starship, freighter, corvette, multitool, exocraft, and exosuit layouts and builds.
+- Starships (standard, sentinel, solar, fighter, living, atlantid)
+- Corvettes
+- Multitools (standard and sentinel)
+- Exosuits
+- Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
+- Freighters

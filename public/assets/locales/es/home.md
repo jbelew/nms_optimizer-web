@@ -1,30 +1,26 @@
-# NMS Optimizer: Mejores Diseños Tecnológicos & Calculadora de Adyacencia
+# Optimizador de NMS: Calculadora de bonificación de adyacencia y diseño tecnológico para No Man's Sky
 
-![Captura de pantalla de la aplicación Optimizador NMS](/assets/img/screenshots/screenshot.png)
+![Captura de pantalla de la aplicación NMS Optimizer que muestra una cuadrícula de tecnología de nave espacial con ubicación optimizada del módulo](/assets/img/screenshots/screenshot.png)
 
-Bienvenido al Optimizador NMS, la mejor **calculadora**, **planificador** y **optimizador** gratuito para crear diseños tecnológicos óptimos en No Man's Sky. Ya sea que busques maximizar el rendimiento de tu nave estelar, corbeta, multiherramienta, exocraft o exotraje, nuestra herramienta está aquí para ayudarte. Utilizamos algoritmos de optimización avanzados para calcular la mejor ubicación de tus módulos tecnológicos, maximizando las bonificaciones de adyacencia y la efectividad de tus ranuras sobrealimentadas.
+NMS Optimizer descubre dónde colocar sus módulos tecnológicos para que usted no tenga que hacerlo. Elija su plataforma, seleccione sus módulos, marque sus espacios supercargados y el optimizador calculará el diseño que aprovecha al máximo sus bonificaciones de adyacencia. Funciona para naves espaciales, corbetas, multiherramientas, exotrajes, exocrafts y cargueros.
 
-## ¿Qué es una Bonificación de Adyacencia?
+## ¿Qué es un bono de adyacencia?
 
-En No Man's Sky, una bonificación de adyacencia es una mecánica crucial de mejora de rendimiento para tus módulos tecnológicos. Cuando colocas módulos tecnológicos compatibles uno al lado del otro en tu inventario, reciben una bonificación de sinergia y un rendimiento mejorado. La calculadora del Optimizador NMS es la mejor herramienta gratuita para encontrar la disposición óptima para obtener las máximas bonificaciones de adyacencia.
+Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. El juego no te dice mucho sobre cómo funciona esto, pero la versión corta: los módulos del mismo tipo que comparten una ventaja obtienen un aumento porcentual en sus estadísticas. Cuantas más ventajas se compartan, mayor será la bonificación. Determinar a mano la disposición correcta es tedioso, especialmente en rejillas más grandes con ranuras sobrealimentadas que tener en cuenta.
 
-## ¿Qué son las Ranuras Sobrealimentadas?
+## ¿Qué son las tragamonedas sobrealimentadas?
 
-Las ranuras sobrealimentadas son un tipo especial de ranura de inventario en No Man's Sky que proporciona un impulso masivo a cualquier módulo tecnológico colocado en ellas. Estas ranuras son raras y valiosas, y usarlas de manera efectiva es clave para crear las mejores construcciones. El Optimizador NMS está diseñado para ayudarte a aprovechar al máximo tus ranuras sobrealimentadas, asegurando que obtengas el mejor rendimiento posible de tu equipo.
+Algunas ranuras del inventario en No Man's Sky están sobrecargadas. Cualquier módulo de tecnología colocado en uno obtiene un gran multiplicador de estadísticas además de las bonificaciones de adyacencia normales. Se colocan aleatoriamente en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde aterrizaron las ranuras supercargadas. Esa es la parte difícil y para eso está diseñada esta herramienta.
 
-## Cómo Funciona el Optimizador NMS
+## Cómo funciona
 
-Nuestro optimizador y calculadora gratuito para No Man's Sky utiliza algoritmos de optimización avanzados, incluidos patrones deterministas y recocido simulado, para encontrar el mejor diseño tecnológico posible para tus necesidades específicas. Ya sea que estés construyendo una nave estelar, una corbeta, mejorando tu multiherramienta u optimizando tu exotraje o exocraft, nuestra herramienta calculará el diseño óptimo que maximiza tus bonificaciones de adyacencia y el rendimiento general.
+El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos más pequeños, puede encontrar exactamente el mejor diseño. Para rejillas más grandes o más complejas, el recocido simulado explora miles de disposiciones para encontrar una que obtenga la puntuación más alta posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras sobrealimentadas y los pesos de estadísticas específicos del módulo. El backend se ejecuta en Rust para mayor velocidad.
 
-## Plataformas Compatibles
+## Plataformas compatibles
 
-- Diseños de Nave Estelar
-- Diseños de Corbeta
-- Construcciones de Multiherramienta
-- Diseños de Exotraje
-- Diseños de Exocraft
-- Diseños de Carguero
-
-## ¿Por Qué Usar el Optimizador NMS?
-
-Deja de adivinar y desbloquea el verdadero potencial de tu equipo. Nuestro Optimizador NMS es la mejor **calculadora**, **planificador** y **constructor** para crear las construcciones perfectas en No Man's Sky. Ya seas un jugador nuevo o un veterano experimentado, nuestra herramienta te ayudará a crear los mejores diseños y construcciones de nave estelar, carguero, corbeta, multiherramienta, exocraft y exotraje.
+- Naves espaciales (estándar, centinela, solar, de combate, viviente, atlántida)
+- Corbetas
+- Multiherramientas (estándar y centinela)
+- Exotrajes
+- Exocraft (vagabundo, peregrino, nómada, coloso, minotauro, nautilon)
+- cargueros
