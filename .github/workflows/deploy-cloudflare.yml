@@ -61,6 +61,12 @@ jobs:
           VITE_USE_SERVER_ANALYTICS: "false"
           VITE_DUAL_ANALYTICS: "true"
 
+      # Pre-install Wrangler globally so wrangler-action finds it in PATH and skips
+      # its own `npm install`, which fails due to peer dep conflicts with the project's
+      # eslint-plugin-react-hooks canary version vs eslint v10.
+      - name: Install Wrangler globally
+        run: npm install -g wrangler
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
