@@ -15,7 +15,7 @@ import packageJson from "./package.json";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
-export default defineConfig(async ({ mode }): Promise<any> => {
+export default defineConfig(async ({ mode, command }): Promise<any> => {
 	// Load env file based on `mode` in the current working directory.
 	const env = loadEnv(mode, process.cwd(), "");
 
@@ -55,9 +55,8 @@ export default defineConfig(async ({ mode }): Promise<any> => {
 			},
 		},
 		plugins: [
-			// DevTools only available in dev mode (not installed as a prod/CI dependency)
-			// @ts-expect-error - @vitejs/devtools is optionally installed, not a project dependency
-			...(mode !== "production" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
+			// DevTools only loaded during `vite dev` (command === 'serve'), never during builds
+			...(command === "serve" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
 			sentryVitePlugin({
 				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
 				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
