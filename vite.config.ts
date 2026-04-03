@@ -45,7 +45,7 @@ export default defineConfig(async ({ mode, command }): Promise<any> => {
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
 		},
 		devtools: {
-			enabled: true,
+			enabled: command === "serve",
 		},
 
 		oxc: {

@@ -5,6 +5,11 @@
       "source": "jbelew/agentic-jsdoc",
       "sourceType": "github",
       "computedHash": "952f0df11c5012d8e1c6de631049591bab4ac3092ca368c5bb0619399a12aec3"
+    },
+    "vite": {
+      "source": "antfu/skills",
+      "sourceType": "github",
+      "computedHash": "867ff66238f3152e9c494339ad08dc432dd0df5bcf5cc7a00b61a72b580eb908"
     }
   }
 }
