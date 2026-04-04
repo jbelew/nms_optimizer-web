@@ -1,3 +1,10 @@
+## [6.18.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.7...v6.18.8) (2026-04-04)
+
+
+### Bug Fixes
+
+* resolve CLS issue by eagerly importing AppFooter ([b462cbd](https://github.com/jbelew/nms_optimizer-web/commit/b462cbd0410cb2343d0bb173257695ed1e442499))
+
 ## [6.18.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.6...v6.18.7) (2026-04-03)
 
 
