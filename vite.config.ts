@@ -346,14 +346,11 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			cssMinify: "lightningcss",
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
-					// Filter out naturally split chunks and non-critical vendor chunks to prevent eager preloading.
-					// We only want to preload vendor-core, vendor-ui-themes, and vendor-events for the first paint.
-					// vendor-events is included because it's statically imported in main.tsx for Sentry/GA4.
+					// Filter out non-critical vendor chunks to prevent eager preloading.
+					// We leave naturally split chunks alone so Vite can parallelize dynamic route waterfalls.
 					return deps.filter(
 						(dep: string) =>
-							!dep.includes("chunk-") &&
 							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-i18n") &&
 							!dep.includes("vendor-ui-utils")
 					);
 				},

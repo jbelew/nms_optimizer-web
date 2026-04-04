@@ -7,7 +7,6 @@ import { fetchTechTreeColors } from "@/hooks/useTechTreeColors/techTreeColorsRes
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
 import { fetchUserStats } from "@/hooks/useUserStats/userStatsResource";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
-import { retryImport } from "@/utils/dynamicImport";
 
 /**
  * Props passed to the Recharts label renderer for the Pie chart.
@@ -41,9 +40,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"
  * code-split into a separate chunk and only fetched when charts are rendered.
  */
 const LazyRechartsChart = lazy(async () => {
-	const { ResponsiveContainer, PieChart, Pie, Cell } = await retryImport(
-		() => import("recharts")
-	);
+	const { ResponsiveContainer, PieChart, Pie, Cell } = await import("recharts");
 
 	return {
 		default: ({

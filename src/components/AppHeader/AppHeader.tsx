@@ -14,7 +14,6 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
-import { retryImport } from "@/utils/dynamicImport";
 
 const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
 
@@ -89,9 +88,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							aria-label={t("buttons.changelog") ?? ""}
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
-								void retryImport(
-									() => import("../AppDialog/Markdown/MarkdownContentRenderer")
-								);
+								void import("../AppDialog/Markdown/MarkdownContentRenderer");
 							}}
 							onClick={() => {
 								onShowChangelog();
@@ -114,8 +111,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							variant="soft"
 							aria-label={t("buttons.userStats") ?? ""}
 							onMouseEnter={() => {
-								// Prefetch the UserStats component when user hovers
-								void retryImport(() => import("../../routes/UserStatsRoute"));
+								void import("../../routes/UserStatsRoute");
 							}}
 							onClick={() => {
 								openDialog("userstats");

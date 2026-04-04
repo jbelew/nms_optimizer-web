@@ -27,12 +27,16 @@ import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
-import { retryImport } from "./utils/dynamicImport";
 import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics, Sentry and PWA after render is complete
 if (typeof window !== "undefined") {
+	// Add global handler for Vite chunk load failures (e.g. after deployments)
+	window.addEventListener("vite:preloadError", () => {
+		window.location.reload();
+	});
+
 	// Initialize Sentry after the initial render to reduce TBT
 	// We use requestIdleCallback with a timeout to ensure it runs even if the browser is busy
 	if ("requestIdleCallback" in window) {
@@ -117,20 +121,12 @@ if (typeof window !== "undefined") {
 	});
 
 	// Dynamically import and initialize service worker to avoid bundling it with i18n
-	// We use retryImport to harden against iOS Safari module loading failures
-	// which often occur during concurrent network activity.
 	(async () => {
 		try {
-			const { setupServiceWorkerRegistration } = await retryImport(
-				() => import("./utils/setupServiceWorker"),
-				{ retries: 5, delay: 1000 } // Be more aggressive with retries for this critical module
-			);
+			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
 			setupServiceWorkerRegistration();
 		} catch (error) {
-			console.error(
-				"Failed to load service worker registration module after retries:",
-				error
-			);
+			console.error("Failed to load service worker registration module:", error);
 		}
 	})();
 }

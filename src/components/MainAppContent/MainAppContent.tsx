@@ -9,7 +9,6 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { retryImport } from "../../utils/dynamicImport";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
@@ -18,14 +17,12 @@ import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
 import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppLogic } from "./useMainAppLogic";
 
-const TechTreeComponent = lazy(() => retryImport(() => import("../TechTree/TechTree")));
+const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
 const MainAppUtilities = lazy(() =>
-	retryImport(() => import("./MainAppUtilities").then((m) => ({ default: m.MainAppUtilities })))
+	import("./MainAppUtilities").then((m) => ({ default: m.MainAppUtilities }))
 );
 const SharedBuildCallout = lazy(() =>
-	retryImport(() =>
-		import("./SharedBuildCallout").then((m) => ({ default: m.SharedBuildCallout }))
-	)
+	import("./SharedBuildCallout").then((m) => ({ default: m.SharedBuildCallout }))
 );
 
 /**
