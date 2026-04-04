@@ -10,6 +10,7 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { retryImport } from "../../utils/dynamicImport";
+import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
@@ -26,7 +27,6 @@ const SharedBuildCallout = lazy(() =>
 		import("./SharedBuildCallout").then((m) => ({ default: m.SharedBuildCallout }))
 	)
 );
-const AppFooter = lazy(() => retryImport(() => import("../AppFooter/AppFooter")));
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
@@ -222,18 +222,12 @@ export const MainAppContent = () => {
 
 					{!isLargeScreen && (
 						<div className="main-app__footer-wrapper">
-							<Suspense fallback={null}>
-								<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
-							</Suspense>
+							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
 						</div>
 					)}
 				</div>
 
-				{isLargeScreen && (
-					<Suspense fallback={null}>
-						<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
-					</Suspense>
-				)}
+				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
 				<Suspense fallback={null}>
 					<MainAppUtilities
