@@ -15,7 +15,7 @@ import packageJson from "./package.json";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
-export default defineConfig(async ({ mode, command }): Promise<any> => {
+export default defineConfig(async ({ mode, command }): Promise<import("vite").UserConfig> => {
 	// Load env file based on `mode` in the current working directory.
 	const env = loadEnv(mode, process.cwd(), "");
 
@@ -348,9 +348,15 @@ export default defineConfig(async ({ mode, command }): Promise<any> => {
 			cssMinify: "lightningcss",
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
-					// Filter out naturally split chunks and the charts vendor to prevent eager preloading
+					// Filter out naturally split chunks and non-critical vendor chunks to prevent eager preloading.
+					// We only want to preload vendor-core and vendor-ui-themes for the first paint.
 					return deps.filter(
-						(dep: string) => !dep.includes("chunk-") && !dep.includes("vendor-charts")
+						(dep: string) =>
+							!dep.includes("chunk-") &&
+							!dep.includes("vendor-charts") &&
+							!dep.includes("vendor-events") &&
+							!dep.includes("vendor-i18n") &&
+							!dep.includes("vendor-ui-utils")
 					);
 				},
 			},
@@ -363,7 +369,8 @@ export default defineConfig(async ({ mode, command }): Promise<any> => {
 							dropDebugger: true,
 						},
 					},
-					chunkFileNames: (chunkInfo: any) => {
+	// ... unchanged code ...
+					chunkFileNames: (chunkInfo: import("rolldown").PreRenderedChunk) => {
 						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
 						// use generic 'chunk-' prefix for all other naturally split modules.
 						if (chunkInfo.name && chunkInfo.name.startsWith("vendor-")) {
@@ -373,69 +380,9 @@ export default defineConfig(async ({ mode, command }): Promise<any> => {
 					},
 					entryFileNames: "assets/entry-[hash].js",
 					manualChunks(id: string) {
-						// Avoid ad-blocker triggers by grouping potentially blocked terms into neutrally-named chunks.
-						const blockedTerms = [
-							"analytics",
-							"sentry",
-							"track",
-							"telemetry",
-							"metrics",
-							"beacon",
-							"google-analytics",
-							"gtag",
-							"ad-block",
-						];
-
-						if (blockedTerms.some((term) => id.toLowerCase().includes(term))) {
-							return "vendor-events";
-						}
-
-						if (id.includes("node_modules")) {
-							// CORE VENDOR: React, Router, and essential state management
-							if (
-								/[\/]node_modules[\/](react|react-dom|scheduler|react-router|zustand|immer)[\/]/.test(
-									id
-								) ||
-								id.includes("react-is") ||
-								id.includes("use-sync-external-store") ||
-								id.includes("clsx") ||
-								id.includes("tailwind-merge") ||
-								id.includes("tiny-invariant")
-							) {
-								return "vendor-core";
-							}
-
-							// UI VENDOR: Radix Themes
-							if (
-								id.includes("@radix-ui/themes") ||
-								id.includes("/assets/css/radix-colors/")
-							) {
-								return "vendor-ui-themes";
-							}
-
-							// UI UTILS: Floating UI and Radix primitives
-							if (
-								id.includes("@radix-ui/") ||
-								id.includes("@floating-ui/") ||
-								id.includes("aria-hidden") ||
-								id.includes("react-remove-scroll") ||
-								id.includes("focus-lock")
-							) {
-								return "vendor-ui-utils";
-							}
-
-							// i18n VENDOR
-							if (
-								id.includes("i18next") ||
-								id.includes("react-i18next") ||
-								id.includes("@formatjs") ||
-								id.includes("intl-messageformat")
-							) {
-								return "vendor-i18n";
-							}
-						}
+						// ... unchanged code ...
 					},
-					assetFileNames: (assetInfo: any) =>
+					assetFileNames: (assetInfo: import("rolldown").PreRenderedAsset) =>
 						assetInfo.name?.endsWith(".css")
 							? "assets/[name]-[hash].css"
 							: "assets/[name]-[hash].[ext]",

@@ -3,17 +3,7 @@ import "./AppHeader.scss";
 
 import React, { useEffect, useTransition } from "react";
 import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
-import {
-	Box,
-	Code,
-	DataList,
-	Flex,
-	Heading,
-	IconButton,
-	Popover,
-	Separator,
-	Switch,
-} from "@radix-ui/themes";
+import { Box, Flex, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.webp";
@@ -25,6 +15,8 @@ import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/A11yStore";
 import { useGridStore } from "@/store/GridStore";
 import { retryImport } from "@/utils/dynamicImport";
+
+const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
 
 /**
  * Props for the `AppHeader` component.
@@ -200,49 +192,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</button>
 					</Popover.Trigger>
 					<Popover.Content size="1">
-						<DataList.Root size="1">
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont--header text-base">
-									Euclid
-								</DataList.Label>
-							</DataList.Item>
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont">
-									Olamsk Spaceport
-								</DataList.Label>
-								<DataList.Value>
-									<Code>0356:0085:0D17:006C</Code>
-								</DataList.Value>
-							</DataList.Item>
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont--header text-base">
-									Ityanianat
-								</DataList.Label>
-							</DataList.Item>
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont">Mountain House</DataList.Label>
-								<DataList.Value>
-									<Code>0CEE:0085:0CCF:040D</Code>
-								</DataList.Value>
-							</DataList.Item>
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont--header text-base">
-									Odyalutai
-								</DataList.Label>
-							</DataList.Item>
-							<DataList.Item align="center">
-								<DataList.Label className="nmsFont">
-									Faye Sigma Fishing Resort
-								</DataList.Label>
-								<DataList.Value>
-									<Code>07EE:008A:07EF:03E9</Code>
-								</DataList.Value>
-								<DataList.Label className="nmsFont">Sanctum Zero</DataList.Label>
-								<DataList.Value>
-									<Code>07E9:0088:07ED:0404</Code>
-								</DataList.Value>
-							</DataList.Item>
-						</DataList.Root>
+						<React.Suspense fallback={null}>
+							<EasterEggCoordinates />
+						</React.Suspense>
 					</Popover.Content>
 				</Popover.Root>
 

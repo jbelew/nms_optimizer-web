@@ -76,6 +76,9 @@
 		"zustand": "^5.0.12"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.29.0",
+		"@babel/preset-env": "^7.29.2",
+		"@babel/runtime": "^7.29.2",
 		"@chromatic-com/storybook": "^5.1.1",
 		"@commitlint/cli": "^20.5.0",
 		"@commitlint/config-conventional": "^20.5.0",
@@ -155,17 +158,6 @@
 		"vite-plugin-splash-screen": "^0.2.0",
 		"vitest": "^4.1.2",
 		"vitest-websocket-mock": "^0.5.0"
-	},
-	"overrides": {
-		"vite-plugin-pwa": {
-			"vite": "$vite"
-		},
-		"@joshwooding/vite-plugin-react-docgen-typescript": {
-			"vite": "$vite"
-		},
-		"eslint-plugin-react-hooks": {
-			"eslint": "$eslint"
-		}
 	},
 	"config": {
 		"commitizen": {

@@ -1,7 +1,7 @@
 // src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Box, Flex } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -10,17 +10,23 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { retryImport } from "../../utils/dynamicImport";
-import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
-import { MainAppUtilities } from "./MainAppUtilities";
-import { SharedBuildCallout } from "./SharedBuildCallout";
 import { ShipSelectionHeading } from "./ShipSelectionHeading";
 import { useMainAppLogic } from "./useMainAppLogic";
 
 const TechTreeComponent = lazy(() => retryImport(() => import("../TechTree/TechTree")));
+const MainAppUtilities = lazy(() =>
+	retryImport(() => import("./MainAppUtilities").then((m) => ({ default: m.MainAppUtilities })))
+);
+const SharedBuildCallout = lazy(() =>
+	retryImport(() =>
+		import("./SharedBuildCallout").then((m) => ({ default: m.SharedBuildCallout }))
+	)
+);
+const AppFooter = lazy(() => retryImport(() => import("../AppFooter/AppFooter")));
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
@@ -154,9 +160,11 @@ export const MainAppContent = () => {
 									ref={appLayoutContainerRef}
 								>
 									{isSharedGrid && (
-										<SharedBuildCallout
-											gridTableTotalWidth={gridTableTotalWidth}
-										/>
+										<Suspense fallback={null}>
+											<SharedBuildCallout
+												gridTableTotalWidth={gridTableTotalWidth}
+											/>
+										</Suspense>
 									)}
 
 									{!isSharedGrid && (
@@ -214,23 +222,31 @@ export const MainAppContent = () => {
 
 					{!isLargeScreen && (
 						<div className="main-app__footer-wrapper">
-							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+							<Suspense fallback={null}>
+								<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+							</Suspense>
 						</div>
 					)}
 				</div>
 
-				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
+				{isLargeScreen && (
+					<Suspense fallback={null}>
+						<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+					</Suspense>
+				)}
 
-				<MainAppUtilities
-					patternNoFitTech={patternNoFitTech}
-					clearPatternNoFitTech={clearPatternNoFitTech}
-					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
-					isSaveBuildDialogOpen={isSaveBuildDialogOpen}
-					handleBuildNameConfirm={handleBuildNameConfirm}
-					handleBuildNameCancel={handleBuildNameCancel}
-					fileInputRef={fileInputRef}
-					handleFileSelect={handleFileSelect}
-				/>
+				<Suspense fallback={null}>
+					<MainAppUtilities
+						patternNoFitTech={patternNoFitTech}
+						clearPatternNoFitTech={clearPatternNoFitTech}
+						handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
+						isSaveBuildDialogOpen={isSaveBuildDialogOpen}
+						handleBuildNameConfirm={handleBuildNameConfirm}
+						handleBuildNameCancel={handleBuildNameCancel}
+						fileInputRef={fileInputRef}
+						handleFileSelect={handleFileSelect}
+					/>
+				</Suspense>
 			</main>
 		</>
 	);

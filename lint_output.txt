@@ -1,0 +1,187 @@
+
+> nms_optimizer@6.18.7 lint
+> eslint . --max-warnings 0
+
+
+/home/john/projects/nms_optimizer-web/.storybook/BackgroundWrapper.tsx
+  12:1  warning  Missing JSDoc block description     jsdoc/require-description
+  14:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/.storybook/SplashHider.tsx
+  4:1  warning  Missing JSDoc block description     jsdoc/require-description
+  6:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/.storybook/decorators.tsx
+   7:1  warning  Missing JSDoc block description     jsdoc/require-description
+   9:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  29:1  warning  Missing JSDoc block description     jsdoc/require-description
+  31:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/AppDialog.tsx
+  82:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/ErrorContent.tsx
+  60:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/MarkdownContentRenderer.tsx
+  17:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/OptimizationAlertContent.tsx
+  42:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/PrerenderedMarkdownRenderer.tsx
+  44:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/ShareLinkContent.tsx
+  49:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppDialog/WelcomeContent.tsx
+  40:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/AppHeader/AppHeader.tsx
+  8:2  error  'Code' is defined but never used. Allowed unused vars must match /^_/u      @typescript-eslint/no-unused-vars
+  9:2  error  'DataList' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/home/john/projects/nms_optimizer-web/src/components/AppHeader/EasterEggCoordinates.tsx
+  9:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/BuyMeACoffee/BuyMeACoffee.tsx
+  27:1  warning  The type 'React.MouseEvent' is undefined  jsdoc/no-undefined-types
+  28:1  warning  Missing JSDoc @example description        jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ErrorBoundary/ErrorBoundary.test.tsx
+  16:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  28:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ErrorBoundary/ErrorBoundary.tsx
+  50:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  62:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  75:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  85:1  warning  Missing JSDoc @returns description  jsdoc/require-returns-description
+  86:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ErrorBoundary/ErrorContent.tsx
+  28:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  50:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/GridCell/GridCell.tsx
+  14:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/GridControlButtons/GridControlButtons.tsx
+  16:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/LanguageSelector/LanguageSelector.tsx
+   78:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  111:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ModuleSelectionDialog/DialogBody.tsx
+  74:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ModuleSelectionDialog/ModuleCheckbox.tsx
+  19:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  50:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/RecommendedBuild/RecommendedBuild.tsx
+  58:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  77:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  87:1  warning  Missing JSDoc @returns description  jsdoc/require-returns-description
+  88:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/ShipSelection/ShipSelection.tsx
+   37:1  warning  Missing JSDoc @example description  jsdoc/require-example
+   80:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  116:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  222:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/SplashScreen/SplashScreen.tsx
+  33:1  warning  The type 'React.Ref' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/components/TechTree/SuspenseSkeleton.tsx
+  9:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/TechTree/TechTree.tsx
+  35:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/components/TechTree/TechTreeSkeleton.tsx
+  11:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/context/TooltipContext.tsx
+  24:1  warning  The type 'useTooltipState' is undefined    jsdoc/no-undefined-types
+  25:1  warning  The type 'useTooltipActions' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/context/createToastContext.ts
+  37:1  warning  The type 'React.ReactNode' is undefined  jsdoc/no-undefined-types
+  45:1  warning  The type 'React.ReactNode' is undefined  jsdoc/no-undefined-types
+  53:1  warning  The type 'React.ReactNode' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/context/dialog-utils.ts
+   7:1  warning  The type 'DialogProvider' is undefined  jsdoc/no-undefined-types
+  22:1  warning  The type 'DialogProvider' is undefined  jsdoc/no-undefined-types
+  59:1  warning  The type 'DialogProvider' is undefined  jsdoc/no-undefined-types
+  69:1  warning  The type 'DialogProvider' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/context/tooltip-utils.ts
+   6:1  warning  The type 'TooltipProvider' is undefined  jsdoc/no-undefined-types
+  23:1  warning  The type 'TooltipProvider' is undefined  jsdoc/no-undefined-types
+  54:1  warning  The type 'TooltipProvider' is undefined  jsdoc/no-undefined-types
+  83:1  warning  The type 'TooltipProvider' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/hooks/useAnalytics/useAnalytics.ts
+  9:1  warning  The type 'GA4Event' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/hooks/useBreakpoint/useBreakpoint.tsx
+  14:1  warning  The type 'useAppLayout' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/hooks/useInstallPrompt/useInstallPrompt.ts
+  29:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/hooks/useLatest/useLatest.ts
+  12:1  warning  The type 'React.MutableRefObject' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/hooks/useRecommendedBuild/useRecommendedBuild.tsx
+  78:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/hooks/useScrollHide/useScrollHide.ts
+  40:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/hooks/useTechTree/useTechTree.tsx
+  227:1  warning  Missing JSDoc @returns description  jsdoc/require-returns-description
+
+/home/john/projects/nms_optimizer-web/src/hooks/useToast/useToast.ts
+  15:1  warning  The type 'ToastContextValue' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/hooks/useUrlSync/useUrlSync.tsx
+  156:1  warning  Missing JSDoc @example description  jsdoc/require-example
+  176:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/routeConfig.ts
+  29:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/routes.tsx
+  17:1  warning  The type 'React.ComponentType' is undefined  jsdoc/no-undefined-types
+  17:1  warning  Missing JSDoc @returns description           jsdoc/require-returns-description
+  18:1  warning  Missing JSDoc @example description           jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/store/ModuleSelectionStore.ts
+  124:1  warning  The type 'TechStore' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/utils/HttpError.ts
+  28:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/utils/api.ts
+  11:1  warning  The type 'RequestInit' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/utils/fetchWithTimeout.ts
+  8:1  warning  The type 'RequestInit' is undefined  jsdoc/no-undefined-types
+
+/home/john/projects/nms_optimizer-web/src/utils/logger.ts
+  129:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/utils/reportWebVitals.ts
+  18:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+/home/john/projects/nms_optimizer-web/src/vite-env-markdown.d.ts
+  16:1  warning  Missing JSDoc @example description  jsdoc/require-example
+
+✖ 82 problems (2 errors, 80 warnings)
+

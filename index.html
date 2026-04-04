@@ -183,27 +183,12 @@
 	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
 
-	<!-- Prefetch desktop background only (1x for initial load, 2x for high-DPI devices) -->
-	<link rel="preload" as="image" href="/assets/img/background.webp" media="(min-width: 641px)" fetchpriority="high" />
-	<link rel="preload" as="image" href="/assets/img/background@2x.webp"
-		media="(min-width: 641px) and (-webkit-device-pixel-ratio: 2), (min-width: 641px) and (resolution: 192dpi)"
-		fetchpriority="high" />
-
-	<!-- Default language translations -->
-	<link rel="preload" href="/assets/locales/en/translation.json" as="fetch" fetchpriority="highest" crossorigin />
-
 	<!-- Fonts (highest priority) -->
 	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="high" />
 
 	<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="high" />
-
-	<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="medium" />
-
-	<link rel="preload" href="/assets/fonts/nms-alphabet.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="medium" />
 
 	<!-- Preconnect -->
 	<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
@@ -214,42 +199,6 @@
 	<!-- Entry Point (Critical Path) -->
 	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
 
-	<!-- Critical Data Preload: Dynamic script to preload the correct tech tree and platforms based on URL -->
-	<script>
-		try {
-			// Parse the current URL parameters
-			const urlParams = new URLSearchParams(window.location.search);
-			const platform = urlParams.get("platform") || "standard";
-
-			// Whitelist of valid platforms to prevent XSS or invalid requests
-			const validPlatforms = [
-				"standard", "standard-mt", "sentinel", "sentinel-mt", "atlantid",
-				"staves", "living", "exosuit", "freighter", "roamer", "pilgrim",
-				"nomad", "colossus", "minotaur", "nautilon", "corvette", "solar", "fighter"
-			];
-
-			// Preload tech tree
-			const techTreePreload = document.createElement("link");
-			techTreePreload.rel = "preload";
-			techTreePreload.as = "fetch";
-			techTreePreload.crossOrigin = "anonymous";
-			techTreePreload.href = `https://api.nms-optimizer.app/tech_tree/${platform}`;
-			techTreePreload.setAttribute("fetchpriority", "high");
-			document.head.appendChild(techTreePreload);
-
-			// Preload platforms list (core dependency for ship selection)
-			const platformsPreload = document.createElement("link");
-			platformsPreload.rel = "preload";
-			platformsPreload.as = "fetch";
-			platformsPreload.crossOrigin = "anonymous";
-			platformsPreload.href = "https://api.nms-optimizer.app/platforms";
-			platformsPreload.setAttribute("fetchpriority", "high");
-			document.head.appendChild(platformsPreload);
-		} catch (e) {
-			// Fail silently, app will handle fetching normally
-			console.warn("Preload script failed", e);
-		}
-	</script>
 
 	<!-- SEO Meta Tags -->
 	<meta name="description"

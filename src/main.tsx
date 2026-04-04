@@ -33,8 +33,18 @@ import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics, Sentry and PWA after render is complete
 if (typeof window !== "undefined") {
-	// Initialize Sentry early to catch errors during initialization
-	initializeSentry();
+	// Initialize Sentry after the initial render to reduce TBT
+	// We use requestIdleCallback with a timeout to ensure it runs even if the browser is busy
+	if ("requestIdleCallback" in window) {
+		// Since we already checked 'requestIdleCallback' in window at line 38, we cast to tell TS it is safe
+		(
+			window as typeof window & {
+				requestIdleCallback: (cb: () => void, options?: { timeout: number }) => void;
+			}
+		).requestIdleCallback(() => initializeSentry(), { timeout: 2000 });
+	} else {
+		setTimeout(() => initializeSentry(), 1);
+	}
 
 	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
 	// and "Importing a module script failed" errors on iOS Safari

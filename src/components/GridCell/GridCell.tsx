@@ -11,21 +11,27 @@ import { useGridCellStyle } from "./useGridCellStyle";
 
 /**
  * Determines the upgrade priority identifier based on a technology's label.
- *
- * This utility maps specific keywords (Theta, Tau, Sigma) and categories
- * (Booster, Reactor, etc.) to a shorthand code used as an overlay on the cell icon.
- *
- * @param {string} [label] - The display name of the technology.
- * @returns {string} A shorthand code (e.g., '1', 'C2', 'S3') or an empty string.
- *
  * @example
- * getUpgradePriority("Warp Reactor Theta"); // returns "R1"
  */
 const getUpgradePriority = (label: string | undefined): string => {
 	if (!label) return "";
 
 	const lowerLabel = label.toLowerCase();
-	const isUpgrade = lowerLabel.includes("upgrade");
+
+	// Check tier first as it's the most specific
+	let tier = "";
+	if (lowerLabel.includes("theta")) tier = "1";
+	else if (lowerLabel.includes("tau")) tier = "2";
+	else if (lowerLabel.includes("sigma")) tier = "3";
+
+	if (!tier) return "";
+
+	// Check category
+	if (lowerLabel.includes("salvaged")) return `S${tier}`;
+	if (lowerLabel.includes("forbidden")) return `F${tier}`;
+	if (lowerLabel.includes("reactor")) return `R${tier}`;
+
+	// Booster/Category keywords
 	const isBooster =
 		lowerLabel.includes("booster") ||
 		lowerLabel.includes("habitation") ||
@@ -40,35 +46,9 @@ const getUpgradePriority = (label: string | undefined): string => {
 		lowerLabel.includes("platform") ||
 		lowerLabel.includes("defense cannon") ||
 		lowerLabel.includes("deadeye");
-	const isReactor = lowerLabel.includes("reactor");
-	const isForbidden = lowerLabel.includes("forbidden");
-	const isSalvaged = lowerLabel.includes("salvaged");
 
-	if (isUpgrade || isBooster || isReactor || isForbidden || isSalvaged) {
-		if (lowerLabel.includes("theta")) {
-			if (isSalvaged) return "S1";
-			if (isForbidden) return "F1";
-			if (isReactor) return "R1";
-			if (isBooster) return "C1";
-			if (isUpgrade) return "1";
-		}
-
-		if (lowerLabel.includes("tau")) {
-			if (isSalvaged) return "S2";
-			if (isForbidden) return "F2";
-			if (isReactor) return "R2";
-			if (isBooster) return "C2";
-			if (isUpgrade) return "2";
-		}
-
-		if (lowerLabel.includes("sigma")) {
-			if (isSalvaged) return "S3";
-			if (isForbidden) return "F3";
-			if (isReactor) return "R3";
-			if (isBooster) return "C3";
-			if (isUpgrade) return "3";
-		}
-	}
+	if (isBooster) return `C${tier}`;
+	if (lowerLabel.includes("upgrade")) return tier;
 
 	return "";
 };
@@ -152,18 +132,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
 		useGridCellStyle(cell, isTouching);
 
-	/**
-	 * Generates resolution-aware URLs for the cell's technology icon.
-	 *
-	 * @returns {{ imageUrl?: string, imageSrcSet?: string }} Image metadata.
-	 *
-	 * @example
-	 * ```typescript
-	 * const { imageUrl, imageSrcSet } = getImageUrl();
-	 * // returns { imageUrl: "/assets/img/grid/tech_warp.webp?v=1.0", ... }
-	 * ```
-	 */
-	const getImageUrl = () => {
+	const { imageUrl, imageSrcSet } = React.useMemo(() => {
 		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };
 
 		const base1x = `/assets/img/grid/${cell.image}`;
@@ -172,11 +141,9 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 		const url2x = `${base2x}?v=${__APP_VERSION__}`;
 
 		return { imageUrl: url1x, imageSrcSet: `${url1x} 1x, ${url2x} 2x` };
-	};
+	}, [cell.image]);
 
-	const { imageUrl, imageSrcSet } = getImageUrl();
-
-	const upGradePriority = getUpgradePriority(cell.label);
+	const upGradePriority = React.useMemo(() => getUpgradePriority(cell.label), [cell.label]);
 
 	const cellElement = (
 		<div
@@ -201,6 +168,8 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 					alt=""
 					width="64"
 					height="64"
+					decoding="async"
+					loading={rowIndex < 5 ? "eager" : "lazy"}
 					className="absolute inset-0 h-full w-full object-cover object-center"
 				/>
 			) : null}
@@ -218,7 +187,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 		</div>
 	);
 
-	const tooltipContent = stripLabel(cell.label);
+	const tooltipContent = React.useMemo(() => stripLabel(cell.label), [cell.label]);
 
 	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
 

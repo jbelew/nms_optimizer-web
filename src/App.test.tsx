@@ -113,6 +113,8 @@ describe("App", () => {
 	beforeEach(() => {
 		// Reset the platform store before each test
 		usePlatformStore.setState({ selectedPlatform: "standard" });
+		// Reset the optimize store before each test to prevent state leakage
+		useOptimizeStore.setState({ showError: false, errorType: null, error: null });
 		// Clear all mocks
 		vi.clearAllMocks();
 	});
