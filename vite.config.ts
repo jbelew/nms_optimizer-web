@@ -43,6 +43,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			__BUILD_DATE__: JSON.stringify(buildDate),
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
+			__VUE_OPTIONS_API__: false,
+			__VUE_PROD_DEVTOOLS__: false,
+			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
 		},
 		devtools: {
 			enabled: command === "serve",
@@ -324,7 +327,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		},
 		optimizeDeps: {
 			include: ["react", "react-dom", "react-ga4"],
-			dedupe: ["react", "react-dom"],
 		},
 		server: {
 			host: true,
@@ -338,10 +340,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		css: { transformer: "lightningcss" },
 		build: {
 			target: "esnext",
-			cache: {
-				enabled: true,
-				granularity: "module",
-			},
 			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
 			sourcemap: true,
@@ -349,12 +347,12 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
 					// Filter out naturally split chunks and non-critical vendor chunks to prevent eager preloading.
-					// We only want to preload vendor-core and vendor-ui-themes for the first paint.
+					// We only want to preload vendor-core, vendor-ui-themes, and vendor-events for the first paint.
+					// vendor-events is included because it's statically imported in main.tsx for Sentry/GA4.
 					return deps.filter(
 						(dep: string) =>
 							!dep.includes("chunk-") &&
 							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-events") &&
 							!dep.includes("vendor-i18n") &&
 							!dep.includes("vendor-ui-utils")
 					);
@@ -369,7 +367,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							dropDebugger: true,
 						},
 					},
-	// ... unchanged code ...
 					chunkFileNames: (chunkInfo: import("rolldown").PreRenderedChunk) => {
 						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
 						// use generic 'chunk-' prefix for all other naturally split modules.
@@ -380,7 +377,78 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					},
 					entryFileNames: "assets/entry-[hash].js",
 					manualChunks(id: string) {
-						// ... unchanged code ...
+						// Avoid ad-blocker triggers by grouping potentially blocked terms into neutrally-named chunks.
+						const blockedTerms = [
+							"analytics",
+							"sentry",
+							"track",
+							"telemetry",
+							"metrics",
+							"beacon",
+							"google-analytics",
+							"gtag",
+							"ad-block",
+						];
+
+						if (blockedTerms.some((term) => id.toLowerCase().includes(term))) {
+							return "vendor-events";
+						}
+
+						if (id.includes("node_modules")) {
+							// CORE VENDOR: React, Router, and essential state management
+							if (
+								/[\/]node_modules[\/](react|react-dom|scheduler|react-router|zustand|immer)[\/]/.test(
+									id
+								) ||
+								id.includes("react-is") ||
+								id.includes("use-sync-external-store") ||
+								id.includes("clsx") ||
+								id.includes("tailwind-merge") ||
+								id.includes("tiny-invariant")
+							) {
+								return "vendor-core";
+							}
+
+							// CHARTS VENDOR: Recharts and its heavy dependencies
+							if (
+								id.includes("recharts") ||
+								id.includes("d3-") ||
+								id.includes("victory") ||
+								id.includes("decimal.js-light") ||
+								id.includes("@reduxjs/toolkit")
+							) {
+								return "vendor-charts";
+							}
+
+							// UI VENDOR: Radix Themes
+							if (
+								id.includes("@radix-ui/themes") ||
+								id.includes("/assets/css/radix-colors/")
+							) {
+								return "vendor-ui-themes";
+							}
+
+							// UI UTILS: Floating UI and Radix primitives
+							if (
+								id.includes("@radix-ui/") ||
+								id.includes("@floating-ui/") ||
+								id.includes("aria-hidden") ||
+								id.includes("react-remove-scroll") ||
+								id.includes("focus-lock")
+							) {
+								return "vendor-ui-utils";
+							}
+
+							// i18n VENDOR
+							if (
+								id.includes("i18next") ||
+								id.includes("react-i18next") ||
+								id.includes("@formatjs") ||
+								id.includes("intl-messageformat")
+							) {
+								return "vendor-i18n";
+							}
+						}
 					},
 					assetFileNames: (assetInfo: import("rolldown").PreRenderedAsset) =>
 						assetInfo.name?.endsWith(".css")

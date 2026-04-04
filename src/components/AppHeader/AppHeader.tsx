@@ -90,7 +90,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
 								void retryImport(
-									() => import("../AppDialog/MarkdownContentRenderer")
+									() => import("../AppDialog/Markdown/MarkdownContentRenderer")
 								);
 							}}
 							onClick={() => {

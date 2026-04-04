@@ -1,0 +1,93 @@
+import { FC, Suspense } from "react";
+import { Close as DialogClose } from "@radix-ui/react-dialog";
+import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+
+import { UserStatsData } from "./UserStatsData";
+
+/**
+ * Props for the `UserStatsContent` component.
+ */
+interface UserStatsContentProps {
+	/** Callback function to close the dialog. */
+	onClose: () => void;
+	/** Whether the dialog is currently open. Used to trigger lazy data fetching. */
+	isOpen: boolean;
+}
+
+/**
+ * A component that renders the detailed user statistics content.
+ *
+ * @remarks
+ * It provides a summary of global community optimization trends, visualized
+ * through pie charts for different equipment categories. Data is fetched from
+ * the analytics backend. This component is typically rendered within a dialog.
+ *
+ * @param {UserStatsContentProps} props - Component properties.
+ * @returns {JSX.Element} The rendered statistics content UI.
+ *
+ * @see {@link ./UserStatsContent.test.tsx Unit Tests}
+ * @see {@link useUserStats}
+ * @see {@link UserStatsData}
+ * @see {@link ErrorBoundary}
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <UserStatsContent isOpen={true} onClose={() => setOpen(false)} />
+ * ```
+ */
+export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
+	const { t } = useTranslation();
+
+	return (
+		<>
+			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+				{t("dialogs.userStats.description")}
+			</Text>
+
+			<ErrorBoundary fallback={<Text color="red">{t("dialogs.userStats.error")}</Text>}>
+				<Suspense
+					fallback={
+						<Flex direction="column" gap="4">
+							<Heading
+								trim="end"
+								as="h2"
+								mb="3"
+								className="text-base! sm:text-lg!"
+								style={{ color: "var(--accent-a11)" }}
+							>
+								<Skeleton>Starship Technologies</Skeleton>
+							</Heading>
+							<Skeleton height="248px" width="100%" />
+							<Heading
+								trim="end"
+								as="h2"
+								mb="3"
+								className="text-base! sm:text-lg!"
+								style={{ color: "var(--accent-a11)" }}
+							>
+								<Skeleton>Multi-tool Technologies</Skeleton>
+							</Heading>
+							<Skeleton height="248px" width="100%" />
+						</Flex>
+					}
+				>
+					<UserStatsData isOpen={isOpen} />
+				</Suspense>
+			</ErrorBoundary>
+
+			<Flex gap="2" mt="4" mb="2" justify="end">
+				<DialogClose asChild>
+					<Button variant="soft" onClick={onClose}>
+						{t("dialogs.userStats.closeButton")}
+					</Button>
+				</DialogClose>
+			</Flex>
+		</>
+	);
+};
+
+export default UserStatsContent;

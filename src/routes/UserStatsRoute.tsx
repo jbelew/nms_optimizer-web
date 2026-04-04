@@ -5,7 +5,7 @@ import { useDialog } from "@/context/dialog-utils";
 import { retryImport } from "@/utils/dynamicImport";
 
 const UserStatsDialog = lazy(() =>
-	retryImport(() => import("@/components/AppDialog/UserStatsDialog"))
+	retryImport(() => import("@/components/AppDialog/UserStats/UserStatsDialog"))
 );
 
 /**

@@ -23,7 +23,7 @@ import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScro
 import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/GridStore";
-import BuildNameDialog from "../AppDialog/BuildNameDialog";
+import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 /**

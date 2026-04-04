@@ -4,7 +4,7 @@ import { Button, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import AppDialog from "../AppDialog/AppDialog";
+import AppDialog from "../AppDialog/Base/AppDialog";
 
 /**
  * Props for the `UpdatePrompt` component.

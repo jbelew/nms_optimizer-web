@@ -118,7 +118,7 @@
 			font-weight: 400;
 			/* Semibold */
 			font-style: normal;
-			font-display: optional;
+			font-display: swap;
 		}
 
 		@font-face {
@@ -182,6 +182,9 @@
 	<!-- Preload mobile blurred background (critical for mobile LCP) -->
 	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
+
+	<!-- Preload responsive desktop background with image-set capabilities -->
+	<link rel="preload" as="image" imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" fetchpriority="low" />
 
 	<!-- Fonts (highest priority) -->
 	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"

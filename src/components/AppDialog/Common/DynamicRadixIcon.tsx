@@ -1,0 +1,68 @@
+import React from "react";
+
+import { radixIconRegistry } from "../../../utils/radixIconRegistry";
+
+/**
+ * Props for the `DynamicRadixIcon` component.
+ */
+interface DynamicRadixIconProps {
+	/** The name of the icon in the registry (e.g., 'InfoCircled'). **Suffixing with 'Icon' is optional.** */
+	name: string;
+	/** Optional CSS class name. */
+	className?: string;
+	/** Optional inline styles. */
+	style?: React.CSSProperties;
+	/** The width and height of the icon. Accepts CSS lengths. */
+	size?: number | string;
+	/** The fill or stroke color of the icon. */
+	color?: string;
+}
+
+/**
+ * A utility component that renders Radix UI icons based on a string identifier.
+ *
+ * It looks up the icon component in the `radixIconRegistry` to ensure that only
+ * explicitly registered icons are bundled. It applies standard dimensions and
+ * colors based on the provided props.
+ *
+ * @param {DynamicRadixIconProps} props - Component properties.
+ * @returns {JSX.Element | null} The rendered icon component, or `null` if not found.
+ *
+ * @see {@link radixIconRegistry}
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <DynamicRadixIcon name="InfoCircled" size={24} color="blue" />
+ * ```
+ */
+const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
+	name,
+	className,
+	style,
+	size,
+	color,
+}) => {
+	// Map the incoming name to a registry key
+	const iconName = name.endsWith("Icon") ? name : `${name}Icon`;
+	const IconComponent = radixIconRegistry[iconName];
+
+	if (!IconComponent) {
+		console.warn(`Radix Icon "${iconName}" not found.`);
+
+		return null;
+	}
+
+	const iconStyles: React.CSSProperties = {
+		display: "inline-block",
+		verticalAlign: "middle",
+		width: size,
+		height: size,
+		color: color,
+		...style,
+	};
+
+	return <IconComponent className={className} style={iconStyles} />;
+};
+
+export default DynamicRadixIcon;

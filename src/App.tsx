@@ -2,7 +2,7 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
-import AppDialog from "./components/AppDialog/AppDialog";
+import AppDialog from "./components/AppDialog/Base/AppDialog";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
 
@@ -19,12 +19,14 @@ import { retryImport } from "./utils/dynamicImport";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-const ErrorContent = lazy(() => retryImport(() => import("./components/AppDialog/ErrorContent")));
+const ErrorContent = lazy(() =>
+	retryImport(() => import("./components/AppDialog/Error/ErrorContent"))
+);
 const ShareLinkDialog = lazy(() =>
-	retryImport(() => import("./components/AppDialog/ShareLinkDialog"))
+	retryImport(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"))
 );
 const WelcomeContent = lazy(() =>
-	retryImport(() => import("./components/AppDialog/WelcomeContent"))
+	retryImport(() => import("./components/AppDialog/Welcome/WelcomeContent"))
 );
 
 const RoutedDialogs = lazy(() =>
