@@ -378,9 +378,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						const blockedTerms = [
 							"analytics",
 							"sentry",
-							"track",
 							"telemetry",
-							"metrics",
 							"beacon",
 							"google-analytics",
 							"gtag",
