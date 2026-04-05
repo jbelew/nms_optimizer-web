@@ -404,16 +404,11 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								return "vendor-core";
 							}
 
-							// CHARTS VENDOR: Recharts and its heavy dependencies
-							if (
-								id.includes("recharts") ||
-								id.includes("d3-") ||
-								id.includes("victory") ||
-								id.includes("decimal.js-light") ||
-								id.includes("@reduxjs/toolkit")
-							) {
-								return "vendor-charts";
-							}
+							// NOTE: Recharts and its dependencies (d3, victory-vendor,
+							// @reduxjs/toolkit, react-redux) are NOT assigned to a manual
+							// chunk. They are code-split automatically via the React.lazy()
+							// boundary in UserStatsRoute.tsx, which keeps the ~290 KB
+							// recharts bundle out of the initial page load.
 
 							// UI VENDOR: Radix Themes
 							if (
