@@ -23,6 +23,10 @@ export async function hideSplashScreenAndShowBackground(): Promise<void> {
 	try {
 		hideSplashScreen();
 
+		// Dispatch a custom event to signal the app has rendered and is ready
+		// This is used to defer non-critical initializations (e.g., analytics)
+		window.dispatchEvent(new Event("app-ready"));
+
 		// Show background image with a slight delay to ensure splash screen is hidden
 		requestAnimationFrame(() => {
 			document.body.classList.add("background-visible");
