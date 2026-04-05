@@ -1,3 +1,10 @@
+## [6.19.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.0...v6.19.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* move inline font declarations to external stylesheet to ensure storybook builds ([a8832ce](https://github.com/jbelew/nms_optimizer-web/commit/a8832ce4b318fda31b6b4f62752c32aeaf44ed55))
+
 # [6.19.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.8...v6.19.0) (2026-04-05)
 
 
