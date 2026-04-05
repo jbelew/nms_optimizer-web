@@ -2,7 +2,7 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
-import AppDialog from "./components/AppDialog/AppDialog";
+import AppDialog from "./components/AppDialog/Base/AppDialog";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
 
@@ -15,26 +15,21 @@ import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
-import { retryImport } from "./utils/dynamicImport";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-const ErrorContent = lazy(() => retryImport(() => import("./components/AppDialog/ErrorContent")));
-const ShareLinkDialog = lazy(() =>
-	retryImport(() => import("./components/AppDialog/ShareLinkDialog"))
-);
-const WelcomeContent = lazy(() =>
-	retryImport(() => import("./components/AppDialog/WelcomeContent"))
-);
+const ErrorContent = lazy(() => import("./components/AppDialog/Error/ErrorContent"));
+const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
+const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/WelcomeContent"));
 
 const RoutedDialogs = lazy(() =>
-	retryImport(() => import("./components/RoutedDialogs/RoutedDialogs")).then((module) => ({
+	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
 		default: module.RoutedDialogs,
 	}))
 );
 
 const UserStatsRoute = lazy(() =>
-	retryImport(() => import("./routes/UserStatsRoute")).then((module) => ({
+	import("./routes/UserStatsRoute").then((module) => ({
 		default: module.UserStatsRoute,
 	}))
 );

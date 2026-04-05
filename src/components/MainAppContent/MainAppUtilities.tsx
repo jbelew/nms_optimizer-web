@@ -3,8 +3,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { InstallPrompt } from "../../components/InstallPrompt/InstallPrompt";
-import BuildNameDialog from "../AppDialog/BuildNameDialog";
-import OptimizationAlertDialog from "../AppDialog/OptimizationAlertDialog";
+import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
+import OptimizationAlertDialog from "../AppDialog/OptimizationAlert/OptimizationAlertDialog";
 import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { ToastRenderer } from "../Toast/ToastRenderer";
 

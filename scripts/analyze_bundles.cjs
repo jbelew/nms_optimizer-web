@@ -48,12 +48,12 @@ function analyzeBundles(stats) {
         console.log("\nBundle: ".concat(bundle.name, " (Total Size: ").concat((bundle.size / 1024).toFixed(2), " KB)"));
         if (bundle.children.length > 0) {
             console.log("  Largest Modules:");
-            // Display top 5 largest modules within each bundle
-            bundle.children.slice(0, 5).forEach(function (child) {
+            // Display top 20 largest modules within each bundle
+            bundle.children.slice(0, 20).forEach(function (child) {
                 console.log("    - ".concat(child.name, ": ").concat((child.size / 1024).toFixed(2), " KB"));
             });
-            if (bundle.children.length > 5) {
-                console.log("    ... and ".concat(bundle.children.length - 5, " more modules."));
+            if (bundle.children.length > 20) {
+                console.log("    ... and ".concat(bundle.children.length - 20, " more modules."));
             }
         }
     }

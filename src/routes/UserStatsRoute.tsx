@@ -2,11 +2,8 @@ import type { FC } from "react";
 import { lazy, Suspense } from "react";
 
 import { useDialog } from "@/context/dialog-utils";
-import { retryImport } from "@/utils/dynamicImport";
 
-const UserStatsDialog = lazy(() =>
-	retryImport(() => import("@/components/AppDialog/UserStatsDialog"))
-);
+const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
 
 /**
  * Route component for rendering the UserStatsDialog.

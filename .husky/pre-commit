@@ -1,5 +1,5 @@
 #!/bin/sh
-npm run format
+npm run format:check
 git add -u
 npm run lint:fix
 npm run lint:css:fix

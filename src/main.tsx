@@ -27,24 +27,15 @@ import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
-import { retryImport } from "./utils/dynamicImport";
 import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize analytics, Sentry and PWA after render is complete
 if (typeof window !== "undefined") {
-	// Initialize Sentry after the initial render to reduce TBT
-	// We use requestIdleCallback with a timeout to ensure it runs even if the browser is busy
-	if ("requestIdleCallback" in window) {
-		// Since we already checked 'requestIdleCallback' in window at line 38, we cast to tell TS it is safe
-		(
-			window as typeof window & {
-				requestIdleCallback: (cb: () => void, options?: { timeout: number }) => void;
-			}
-		).requestIdleCallback(() => initializeSentry(), { timeout: 2000 });
-	} else {
-		setTimeout(() => initializeSentry(), 1);
-	}
+	// Add global handler for Vite chunk load failures (e.g. after deployments)
+	window.addEventListener("vite:preloadError", () => {
+		window.location.reload();
+	});
 
 	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
 	// and "Importing a module script failed" errors on iOS Safari
@@ -92,45 +83,55 @@ if (typeof window !== "undefined") {
 		}
 	}, 8000);
 
-	// Use queueMicrotask for faster execution than setTimeout
-	// This ensures it runs after the current task but before the next paint
-	queueMicrotask(async () => {
-		try {
-			// Initialize server-side client to be ready for fallbacks
-			initializeAnalyticsClient();
+	// Listen for the custom "app-ready" event dispatched when the splash screen is hidden
+	// This defers non-critical initializations until the critical rendering path is complete
+	window.addEventListener(
+		"app-ready",
+		() => {
+			const initDeferredServices = async () => {
+				try {
+					initializeSentry();
+					initializeAnalyticsClient();
+					await initializeAnalytics();
+				} catch (error) {
+					console.error("Failed to initialize deferred services:", error);
+					captureException(error, {
+						tags: { area: "initialization" },
+						level: "error",
+					});
+				}
+			};
 
-			// Initialize client-side ReactGA as soon as possible.
-			// The async initializeAnalytics already handles ad-blocker detection
-			// and will fallback to the server-side client if blocked.
-			await initializeAnalytics();
-		} catch (error) {
-			// Catch any errors during the async initialization phase
-			// to prevented unhandled rejections or crashes
-			console.error("Failed to recover from initialization error:", error);
-
-			// Log to Sentry if available
-			captureException(error, {
-				tags: { area: "initialization" },
-				level: "error",
-			});
-		}
-	});
+			if ("requestIdleCallback" in window) {
+				(
+					window as typeof window & {
+						requestIdleCallback: (
+							cb: () => void,
+							options?: { timeout: number }
+						) => void;
+					}
+				).requestIdleCallback(
+					() => {
+						void initDeferredServices();
+					},
+					{ timeout: 2000 }
+				);
+			} else {
+				setTimeout(() => {
+					void initDeferredServices();
+				}, 100);
+			}
+		},
+		{ once: true }
+	);
 
 	// Dynamically import and initialize service worker to avoid bundling it with i18n
-	// We use retryImport to harden against iOS Safari module loading failures
-	// which often occur during concurrent network activity.
 	(async () => {
 		try {
-			const { setupServiceWorkerRegistration } = await retryImport(
-				() => import("./utils/setupServiceWorker"),
-				{ retries: 5, delay: 1000 } // Be more aggressive with retries for this critical module
-			);
+			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
 			setupServiceWorkerRegistration();
 		} catch (error) {
-			console.error(
-				"Failed to load service worker registration module after retries:",
-				error
-			);
+			console.error("Failed to load service worker registration module:", error);
 		}
 	})();
 }

@@ -118,7 +118,7 @@
 			font-weight: 400;
 			/* Semibold */
 			font-style: normal;
-			font-display: optional;
+			font-display: swap;
 		}
 
 		@font-face {
@@ -183,11 +183,17 @@
 	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
 		fetchpriority="high" />
 
+	<!-- Preload responsive desktop background with image-set capabilities -->
+	<link rel="preload" as="image" imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" fetchpriority="low" />
+
 	<!-- Fonts (highest priority) -->
 	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="high" />
 
 	<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous"
+		fetchpriority="high" />
+
+	<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous"
 		fetchpriority="high" />
 
 	<!-- Preconnect -->

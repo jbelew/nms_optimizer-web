@@ -5,6 +5,8 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import browserslist from "browserslist";
+import { browserslistToTargets } from "lightningcss";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv } from "vite";
 import compression from "vite-plugin-compression";
@@ -15,9 +17,24 @@ import packageJson from "./package.json";
 import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
+/**
+ * Vite 8 / Rolldown Configuration
+ * 
+ * Major Architecture Decisions:
+ * 1. Unified Bundler: Uses Rolldown (Rust-based) for both dev and prod, ensuring consistency.
+ * 2. Native Transpilation: Oxc is used for JS/TS transforms and minification for peak performance.
+ * 3. Declarative Chunking: Replaced imperative `manualChunks` with `codeSplitting.groups` for 
+ *    stable, efficient vendor splitting.
+ * 4. Target Strategy: 'baseline-widely-available' ensures modern features with safe fallbacks 
+ *    for a public web application.
+ * 5. CSS Optimization: LightningCSS handles transforms and minification, synced with .browserslistrc.
+ */
 export default defineConfig(async ({ mode, command }): Promise<import("vite").UserConfig> => {
 	// Load env file based on `mode` in the current working directory.
 	const env = loadEnv(mode, process.cwd(), "");
+
+	// Load browserslist for LightningCSS targets to ensure CSS polyfilling matches JS support.
+	const browserslistTargets = browserslist();
 
 	// Cloudflare Pages sets CF_PAGES=1 during builds. Skip pre-compression since
 	// Cloudflare handles brotli/gzip natively, and pre-compressed .br/.gz files
@@ -43,6 +60,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			__BUILD_DATE__: JSON.stringify(buildDate),
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
+			__VUE_OPTIONS_API__: false,
+			__VUE_PROD_DEVTOOLS__: false,
+			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
 		},
 		devtools: {
 			enabled: command === "serve",
@@ -57,32 +77,23 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		plugins: [
 			// DevTools only loaded during `vite dev` (command === 'serve'), never during builds
 			...(command === "serve" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
-			sentryVitePlugin({
-				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
-				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
-				authToken: sentryAuthToken,
-				telemetry: false,
-				release: {
-					name: appVersion,
-				},
-			}),
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD
 				? [
-						{
-							name: "generate-version-json",
-							writeBundle() {
-								const versionInfo = {
-									version: appVersion,
-									buildDate: buildDate,
-								};
-								fs.writeFileSync(
-									path.resolve(__dirname, "dist/version.json"),
-									JSON.stringify(versionInfo, null, 2)
-								);
-							},
+					{
+						name: "generate-version-json",
+						writeBundle() {
+							const versionInfo = {
+								version: appVersion,
+								buildDate: buildDate,
+							};
+							fs.writeFileSync(
+								path.resolve(__dirname, "dist/version.json"),
+								JSON.stringify(versionInfo, null, 2)
+							);
 						},
-					]
+					},
+				]
 				: []),
 			react(),
 			// React Compiler support via Babel (Rolldown native plugin)
@@ -92,6 +103,16 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				exclude: /node_modules/,
 			}),
 			tailwindcss(),
+			// Sentry is positioned after transforms to ensure it captures all generated sourcemaps.
+			sentryVitePlugin({
+				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
+				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
+				authToken: sentryAuthToken,
+				telemetry: false,
+				release: {
+					name: appVersion,
+				},
+			}),
 			splashScreen({
 				logoSrc: "assets/svg/loader.svg",
 				splashBg: "#000000",
@@ -101,19 +122,19 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			deferStylesheetsPlugin(),
 			...(!isCloudflarePages
 				? [
-						compression({
-							algorithm: "brotliCompress",
-							ext: ".br",
-							threshold: 10240,
-							deleteOriginFile: false,
-						}),
-						compression({
-							algorithm: "gzip",
-							ext: ".gz",
-							threshold: 10240,
-							deleteOriginFile: false,
-						}),
-				  ]
+					compression({
+						algorithm: "brotliCompress",
+						ext: ".br",
+						threshold: 10240,
+						deleteOriginFile: false,
+					}),
+					compression({
+						algorithm: "gzip",
+						ext: ".gz",
+						threshold: 10240,
+						deleteOriginFile: false,
+					}),
+				]
 				: []),
 			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
@@ -324,7 +345,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		},
 		optimizeDeps: {
 			include: ["react", "react-dom", "react-ga4"],
-			dedupe: ["react", "react-dom"],
 		},
 		server: {
 			host: true,
@@ -335,27 +355,27 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			},
 		},
 		preview: { host: "0.0.0.0", port: 4173 },
-		css: { transformer: "lightningcss" },
-		build: {
-			target: "esnext",
-			cache: {
-				enabled: true,
-				granularity: "module",
+		css: {
+			transformer: "lightningcss",
+			lightningcss: {
+				targets: browserslistToTargets(browserslistTargets),
 			},
+		},
+		build: {
+			// 'baseline-widely-available' targeting (Chrome 111, Firefox 114, Safari 16.4) 
+			// ensures optimal performance for a public tool without excessive polyfilling.
+			target: "baseline-widely-available",
 			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
 			sourcemap: true,
 			cssMinify: "lightningcss",
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
-					// Filter out naturally split chunks and non-critical vendor chunks to prevent eager preloading.
-					// We only want to preload vendor-core and vendor-ui-themes for the first paint.
+					// Filter out non-critical vendor chunks to prevent eager preloading.
+					// We leave naturally split chunks alone so Vite can parallelize dynamic route waterfalls.
 					return deps.filter(
 						(dep: string) =>
-							!dep.includes("chunk-") &&
 							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-events") &&
-							!dep.includes("vendor-i18n") &&
 							!dep.includes("vendor-ui-utils")
 					);
 				},
@@ -369,7 +389,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							dropDebugger: true,
 						},
 					},
-	// ... unchanged code ...
 					chunkFileNames: (chunkInfo: import("rolldown").PreRenderedChunk) => {
 						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
 						// use generic 'chunk-' prefix for all other naturally split modules.
@@ -379,8 +398,43 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						return "assets/chunk-[hash].js";
 					},
 					entryFileNames: "assets/entry-[hash].js",
-					manualChunks(id: string) {
-						// ... unchanged code ...
+					// Declarative code splitting via groups is the native Rolldown/Vite 8 way 
+					// to manage manual chunks with high performance.
+					codeSplitting: {
+						groups: [
+							{
+								// Group all tracking/analytics code into a neutrally named chunk to prevent ad-blockers.
+								name: "vendor-events",
+								test: /analytics|sentry|telemetry|beacon|google-analytics|gtag|ad-block|react-ga4/i,
+								priority: 100,
+							},
+							{
+								name: "vendor-core",
+								test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-router|zustand|immer|react-is|use-sync-external-store|clsx|tailwind-merge|tiny-invariant)[\\/]/,
+								priority: 90,
+							},
+							{
+								name: "vendor-ui-themes",
+								test: /[\\/]node_modules[\\/]@radix-ui\/themes[\\/]|[\\/]assets[\\/]css[\\/]radix-colors[\\/]/,
+								priority: 80,
+							},
+							{
+								name: "vendor-ui-utils",
+								test: /[\\/]node_modules[\\/](@radix-ui\/|@floating-ui\/|aria-hidden|react-remove-scroll|focus-lock)/,
+								priority: 70,
+							},
+							{
+								name: "vendor-i18n",
+								test: /[\\/]node_modules[\\/](i18next|react-i18next|@formatjs|intl-messageformat)/,
+								priority: 60,
+							},
+							{
+								// Stable name for charts to enable its exclusion from eager preloading via modulePreload.
+								name: "vendor-charts",
+								test: /[\\/]node_modules[\\/](recharts|d3|victory-vendor|@reduxjs\/toolkit|react-redux)/,
+								priority: 50,
+							},
+						],
 					},
 					assetFileNames: (assetInfo: import("rolldown").PreRenderedAsset) =>
 						assetInfo.name?.endsWith(".css")

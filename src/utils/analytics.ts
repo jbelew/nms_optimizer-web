@@ -411,13 +411,3 @@ export const sendEvent = (event: GA4Event): void => {
 			console.error("Failed to send analytics event:", trackingError);
 		});
 };
-
-// Start detection immediately on module load instead of waiting for the first event or initialization
-// This ensures we have the result ready (or in flight) by the time initializeAnalytics is called.
-if (typeof window !== "undefined") {
-	getAdBlockerDetectionResult().catch((error) => {
-		if (env.isDevMode()) {
-			console.error("Failed to detect ad blocker on module load:", error);
-		}
-	});
-}

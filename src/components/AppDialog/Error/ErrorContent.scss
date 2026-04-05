@@ -1,0 +1,16 @@
+.errorContent {
+	&__icon {
+		color: var(--red-9);
+	}
+
+	&__title {
+		color: var(--amber-11);
+		font-family: var(--font-family-geosans);
+		font-weight: 400;
+		-webkit-text-stroke: 1px;
+	}
+
+	&__text {
+		color: var(--accent-11);
+	}
+}
