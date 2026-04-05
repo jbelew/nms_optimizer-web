@@ -1,0 +1,41 @@
+@font-face {
+	font-family: Geosans;
+	src: url("/assets/fonts/geonms.woff2") format("woff2");
+	/* font-weight: 100 900;
+	font-style: normal; */
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Raleway;
+	src: url("/assets/fonts/raleway.woff2") format("woff2");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Acumin;
+	src: url("/assets/fonts/acumin.woff2") format("woff2");
+	font-weight: 600;
+	/* Semibold */
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NMS;
+	src: url("/assets/fonts/nms-alphabet.woff2") format("woff2");
+	font-weight: 400;
+	/* Semibold */
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Atkinson;
+	src: url("/assets/fonts/atkinson.woff2") format("woff2-variations");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
