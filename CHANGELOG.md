@@ -1,3 +1,15 @@
+# [6.19.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.8...v6.19.0) (2026-04-05)
+
+
+### Bug Fixes
+
+* **build:** prevent chart libraries from collapsing into eager analytics chunks ([457dcc5](https://github.com/jbelew/nms_optimizer-web/commit/457dcc54698de9e7313dafd9b970cd0e83a53a79))
+
+
+### Features
+
+* defer non-critical initialization until app-ready event and reformat CSS indentation ([2e9fa71](https://github.com/jbelew/nms_optimizer-web/commit/2e9fa714d0cdcf8abe66049d38cc16aa281ac0b3))
+
 ## [6.18.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.18.7...v6.18.8) (2026-04-04)
 
 
