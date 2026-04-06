@@ -1,3 +1,10 @@
+## [6.19.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.1...v6.19.2) (2026-04-06)
+
+
+### Bug Fixes
+
+* add styles for error content icon and title in AppDialog ([3d7d784](https://github.com/jbelew/nms_optimizer-web/commit/3d7d784034565741097d333c46ca321a03fe732c))
+
 ## [6.19.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.0...v6.19.1) (2026-04-05)
 
 
