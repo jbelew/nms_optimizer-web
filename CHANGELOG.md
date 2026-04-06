@@ -1,3 +1,10 @@
+## [6.19.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.2...v6.19.3) (2026-04-06)
+
+
+### Performance Improvements
+
+* add translation preloading and update background visibility CSS selectors ([f779a04](https://github.com/jbelew/nms_optimizer-web/commit/f779a04c8b2d9709a7ce9b541ca2746c05036521))
+
 ## [6.19.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.1...v6.19.2) (2026-04-06)
 
 
