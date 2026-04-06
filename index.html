@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark" style="color-scheme: dark">
+<html lang="en" class="dark background-visible" style="color-scheme: dark">
 <!--
 
 ███╗   ██╗███╗   ███╗███████╗     ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗
@@ -18,6 +18,20 @@
 	<meta charset="UTF-8" />
 	<script>
 		(function () {
+			// Preload translations based on language in path (matches i18next logic)
+			const supportedLngs = ["en", "es", "fr", "de", "pt"];
+			const pathParts = window.location.pathname.split('/');
+			const detectedLng = supportedLngs.includes(pathParts[1]) ? pathParts[1] : 'en';
+			const link = document.createElement('link');
+			link.id = 'preload-translations';
+			link.rel = 'preload';
+			link.as = 'fetch';
+			link.type = 'application/json';
+			link.href = '/assets/locales/' + detectedLng + '/translation.json';
+			link.crossOrigin = 'anonymous';
+			link.setAttribute('fetchpriority', 'high');
+			document.head.appendChild(link);
+
 			// Detect if this is a bot/crawler or headless browser
 			const isBot = /bot|crawler|spider|headless|phantom|webdriver/i.test(navigator.userAgent) ||
 				navigator.webdriver === true ||
@@ -88,7 +102,7 @@
 	<link rel="stylesheet" href="/src/assets/css/fonts.css" />
 
 	<style>
-		body.background-visible::before,
+		html.background-visible body::before,
 		.is-bot body::before {
 			content: "";
 			position: fixed;
@@ -111,7 +125,7 @@
 
 		/* Mobile (≤639px): Show the blurred mobile background for LCP optimization */
 		@media (width <=639px) {
-			body.background-visible::before {
+			html.background-visible body::before {
 				background-image: url("/assets/img/background@mobile-blurred.webp");
 				background-position: center top;
 			}
@@ -280,7 +294,7 @@
 	</script>
 </head>
 
-<body>
+<body class="background-visible">
 	<div id="root"></div>
 
 	<noscript data-ssg-template>
