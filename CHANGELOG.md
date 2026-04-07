@@ -1,3 +1,10 @@
+## [6.19.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.4...v6.19.5) (2026-04-07)
+
+
+### Performance Improvements
+
+* implement eager API preloading and centralize platform resolution logic ([e2bb7dd](https://github.com/jbelew/nms_optimizer-web/commit/e2bb7ddaa3be93796009d2ef465cda221176f377))
+
 ## [6.19.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.3...v6.19.4) (2026-04-07)
 
 
