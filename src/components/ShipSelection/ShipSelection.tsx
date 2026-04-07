@@ -287,10 +287,10 @@ interface ShipTypesDropdownProps {
  *
  * @example Categorical dropdown content
  * ```tsx
- * <ShipTypesDropdown 
- *   selectedShipType="starship" 
- *   handleOptionSelect={fn} 
- *   groupedShipTypes={data} 
+ * <ShipTypesDropdown
+ *   selectedShipType="starship"
+ *   handleOptionSelect={fn}
+ *   groupedShipTypes={data}
  * />
  * // renders list of selectable ship types
  * ```

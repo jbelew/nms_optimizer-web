@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+
 import { isValidFilename, sanitizeFilename } from "./filenameValidation";
 
 describe("filenameValidation", () => {
@@ -15,7 +16,7 @@ describe("filenameValidation", () => {
 			expect(isValidFilename("build:json")).toBe(false);
 			expect(isValidFilename("build*json")).toBe(false);
 			expect(isValidFilename("build?json")).toBe(false);
-			expect(isValidFilename("build\"json")).toBe(false);
+			expect(isValidFilename('build"json')).toBe(false);
 			expect(isValidFilename("build<json")).toBe(false);
 			expect(isValidFilename("build>json")).toBe(false);
 			expect(isValidFilename("build|json")).toBe(false);

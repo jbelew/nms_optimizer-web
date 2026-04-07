@@ -12,13 +12,14 @@ This plan focuses on systematically increasing test coverage for core utilities,
 - [ ] Task: Conductor - User Manual Verification 'Core Utilities Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 -->
 
 #### Phase 2: React Hooks & Stores Coverage <!-- execution: parallel -->
-- [ ] Task: Create tests for `src/hooks/useErrorDispatcher.ts` <!-- files: src/hooks/useErrorDispatcher.ts, src/hooks/useErrorDispatcher.test.ts -->
-- [ ] Task: Create tests for `src/hooks/useCell.ts` <!-- files: src/hooks/useCell.ts, src/hooks/useCell.test.ts -->
-- [ ] Task: Create tests for `src/hooks/useDebouncedValidation.ts" <!-- files: src/hooks/useDebouncedValidation.ts, src/hooks/useDebouncedValidation.test.ts -->
-- [ ] Task: Create tests for `src/hooks/useUrlValidation.ts" <!-- files: src/hooks/useUrlValidation.ts, src/hooks/useUrlValidation.test.ts -->
-- [ ] Task: Create tests for `src/store/ErrorStore.ts` <!-- files: src/store/ErrorStore.ts, src/store/ErrorStore.test.ts -->
-- [ ] Task: Create tests for `src/store/SessionStore.ts` <!-- files: src/store/SessionStore.ts, src/store/SessionStore.test.ts -->
-- [ ] Task: Conductor - User Manual Verification 'React Hooks & Stores Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 -->
+- [x] Task: Create tests for `src/hooks/useErrorDispatcher.ts` <!-- files: src/hooks/useErrorDispatcher.ts, src/hooks/useErrorDispatcher.test.ts --> ec383ae
+- [x] Task: Create tests for `src/hooks/useCell.ts` <!-- files: src/hooks/useCell.ts, src/hooks/useCell.test.ts --> ec383ae
+- [x] Task: Create tests for `src/hooks/useDebouncedValidation.ts` <!-- files: src/hooks/useDebouncedValidation.ts, src/hooks/useDebouncedValidation.test.ts --> ec383ae
+- [x] Task: Create tests for `src/hooks/useUrlValidation.ts` <!-- files: src/hooks/useUrlValidation.ts, src/hooks/useUrlValidation.test.ts --> ec383ae
+- [x] Task: Create tests for `src/store/ErrorStore.ts` <!-- files: src/store/ErrorStore.ts, src/store/ErrorStore.test.ts --> ec383ae
+- [x] Task: Create tests for `src/store/SessionStore.ts` <!-- files: src/store/SessionStore.ts, src/store/SessionStore.test.ts --> ec383ae
+- [~] Task: Conductor - User Manual Verification 'React Hooks & Stores Coverage' (Protocol in workflow.md)
+
 
 #### Phase 3: Final Audit & Cleanup
 - [ ] Task: Run final coverage report and verify all targets meet >80% <!-- files: package.json -->

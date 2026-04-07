@@ -21,6 +21,7 @@
  */
 
 import ReactGA from "react-ga4";
+
 import { TRACKING_ID } from "../constants";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { isBot } from "./isBot";

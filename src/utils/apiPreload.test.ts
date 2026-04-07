@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { preloadInitialState } from "./apiPreload";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { fetchShipTypes } from "../hooks/useShipTypes/useShipTypes";
 import { fetchTechTreeAsync } from "../hooks/useTechTree/useTechTree";
+import { preloadInitialState } from "./apiPreload";
 import { resolveInitialPlatform } from "./platformResolver";
 
 vi.mock("../hooks/useShipTypes/useShipTypes", () => ({
@@ -21,9 +22,13 @@ describe("apiPreload", () => {
 		vi.clearAllMocks();
 	});
 
+	afterEach(() => {
+		vi.unstubAllGlobals();
+	});
+
 	it("should call preloading functions", () => {
 		const mockPlatform = "test-platform";
-		(resolveInitialPlatform as any).mockReturnValue(mockPlatform);
+		vi.mocked(resolveInitialPlatform).mockReturnValue(mockPlatform);
 
 		preloadInitialState();
 
@@ -33,15 +38,10 @@ describe("apiPreload", () => {
 	});
 
 	it("should do nothing if window is undefined", () => {
-		const originalWindow = global.window;
-		// @ts-ignore
-		delete global.window;
+		vi.stubGlobal("window", undefined);
 
 		preloadInitialState();
 
 		expect(fetchShipTypes).not.toHaveBeenCalled();
-		
-		// Restore window
-		global.window = originalWindow;
 	});
 });
