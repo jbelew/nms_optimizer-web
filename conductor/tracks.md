@@ -29,5 +29,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Improving Test Coverage & App Stability
-*Link: [./conductor/tracks/test_coverage_improvement_20260407/](./conductor/tracks/test_coverage_improvement_20260407/)*
+- [x] **Track: Improving Test Coverage & App Stability**
+  *Link: [./conductor/tracks/test_coverage_improvement_20260407/](./conductor/tracks/test_coverage_improvement_20260407/)*
+
+---
+
+- [~] **Track: UI Integration & Stability**
+  *Link: [./conductor/tracks/ui_integration_stability_20260407/](./conductor/tracks/ui_integration_stability_20260407/)*
