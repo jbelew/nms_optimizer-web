@@ -30,7 +30,11 @@ import { initializeAnalyticsClient } from "./utils/analyticsClient";
 import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
-// Initialize analytics, Sentry and PWA after render is complete
+// Initialize Sentry synchronously as early as possible
+// This is required for React Router tracing and early error catching
+initializeSentry();
+
+// Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
 	// Add global handler for Vite chunk load failures (e.g. after deployments)
 	window.addEventListener("vite:preloadError", () => {
@@ -90,7 +94,6 @@ if (typeof window !== "undefined") {
 		() => {
 			const initDeferredServices = async () => {
 				try {
-					initializeSentry();
 					initializeAnalyticsClient();
 					await initializeAnalytics();
 				} catch (error) {
