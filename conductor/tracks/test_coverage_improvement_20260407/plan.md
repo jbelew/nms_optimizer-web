@@ -3,7 +3,7 @@
 This plan focuses on systematically increasing test coverage for core utilities, hooks, and stores to enhance application stability.
 
 #### Phase 1: Core Utilities Coverage <!-- execution: parallel -->
-- [ ] Task: Create tests for `src/utils/hashUtils.ts` <!-- files: src/utils/hashUtils.ts, src/utils/hashUtils.test.ts -->
+- [~] Task: Create tests for `src/utils/hashUtils.ts` <!-- files: src/utils/hashUtils.ts, src/utils/hashUtils.test.ts -->
 - [ ] Task: Create tests for `src/utils/fetchWithTimeout.ts` <!-- files: src/utils/fetchWithTimeout.ts, src/utils/fetchWithTimeout.test.ts -->
 - [ ] Task: Create tests for `src/utils/filenameValidation.ts` <!-- files: src/utils/filenameValidation.ts, src/utils/filenameValidation.test.ts -->
 - [ ] Task: Create tests for `src/utils/isTouchDevice.ts` <!-- files: src/utils/isTouchDevice.ts, src/utils/isTouchDevice.test.ts -->
