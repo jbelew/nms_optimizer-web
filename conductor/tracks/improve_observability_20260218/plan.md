@@ -16,7 +16,7 @@ This phase focuses on setting up Sentry and the core logging utility that will f
         - Sentry capture (for ERROR/WARN)
         - In-memory/LocalStorage storage for the internal dashboard
     - [x] Write tests for the `Logger` utility
-- [~] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Centralized Logging' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Centralized Logging' (Protocol in workflow.md)
 
 ## Phase 2: Observability Dashboard UI
 This phase focuses on creating the hidden route and the UI for the observability dashboard.
@@ -29,7 +29,7 @@ This phase focuses on creating the hidden route and the UI for the observability
     - [x] Implement display for recent logs and errors from the `Logger` utility
     - [x] Add "Clear Logs" functionality
     - [x] Write unit tests for the dashboard component
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Observability Dashboard UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Observability Dashboard UI' (Protocol in workflow.md)
 
 ## Phase 3: Integration & Refinement
 This phase integrates the logger into key application flows and performs final checks.
