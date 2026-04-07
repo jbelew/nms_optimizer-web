@@ -12,10 +12,10 @@ This plan follows a batch-based approach to systematically complete the JSDoc mi
 - [x] Task: Update `docs/JSDOC_PROGRESS.md` for all completed Utilities. <!-- files: docs/JSDOC_PROGRESS.md --> 132300
 - [x] Task: Conductor - User Manual Verification 'Core Utilities - Batch 2' (Protocol in workflow.md) ab3af48
 
-#### Phase 3: UI Components - Batch 1 <!-- depends: --> <!-- execution: parallel -->
+#### Phase 3: UI Components - Batch 1 [checkpoint: 146f203] <!-- depends: --> <!-- execution: parallel -->
 - [x] Task: Update JSDoc for `src/components/` (Items 1-8: `BuyMeACoffee/` to `GridShake/`) <!-- files: src/components/BuyMeACoffee/, src/components/ConditionalTooltip/, src/components/ErrorBoundary/, src/components/ErrorMessageRenderer/, src/components/GridShake/ --> 133800
 - [x] Task: Update JSDoc for `src/components/` (Items 9-16: `Icons/` to `NotFound/`) <!-- files: src/components/Icons/, src/components/InstallPrompt/, src/components/LanguageSelector/, src/components/MessageSpinner/, src/components/MobileToolbar/, src/components/ModuleSelectionDialog/, src/components/NotFound/ --> 134459
-- [ ] Task: Conductor - User Manual Verification 'UI Components - Batch 1' (Protocol in workflow.md) <!-- depends: task1, task2 -->
+- [x] Task: Conductor - User Manual Verification 'UI Components - Batch 1' (Protocol in workflow.md) 146f203
 
 #### Phase 4: UI Components - Batch 2 <!-- execution: parallel -->
 - [ ] Task: Update JSDoc for `src/components/` (Items 17-24: `OfflineBanner/` to `UpdatePrompt/`) <!-- files: src/components/OfflineBanner/, src/components/RecommendedBuild/, src/components/RoutedDialogs/, src/components/ShipSelection/, src/components/Snowfall/, src/components/SplashScreen/, src/components/TapInstructions/, src/components/TechTree/, src/components/TechTreeRow/, src/components/Toast/, src/components/TooltipManager/, src/components/UpdatePrompt/ -->
