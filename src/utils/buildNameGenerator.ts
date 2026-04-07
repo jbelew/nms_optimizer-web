@@ -79,6 +79,7 @@ export const getShipTypeName = (shipType: string): string => {
  * @example
  * ```ts
  * const buildName = generateBuildNameWithType("freighter"); // e.g., "Freighter - Echo of the Void"
+ * // returns string
  * ```
  */
 export const generateBuildNameWithType = (shipType: string): string => {

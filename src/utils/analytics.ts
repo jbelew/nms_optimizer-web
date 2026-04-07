@@ -385,6 +385,7 @@ const validateEvent = (event: GA4Event): void => {
  *   action: "click",
  *   label: "submit_button"
  * });
+ * // returns void
  * ```
  */
 export const sendEvent = (event: GA4Event): void => {

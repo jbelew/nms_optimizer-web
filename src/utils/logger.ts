@@ -1,3 +1,15 @@
+/**
+ * Centralized logging utility for the application.
+ *
+ * @remarks
+ * This module provides a `Logger` class that collects logs in memory and
+ * automatically forwards warnings and errors to Sentry for remote tracking.
+ *
+ * @category Utilities
+ * @see {@link Logger}
+ * @see {@link ./logger.test.ts Unit Tests}
+ */
+
 import { captureException, captureMessage } from "@sentry/react";
 
 /**
@@ -113,7 +125,10 @@ export class Logger {
 	 * @returns {void}
 	 *
 	 * @example
+	 * ```ts
 	 * Logger.clearLogs();
+	 * // returns void
+	 * ```
 	 */
 	public static clearLogs() {
 		this.logs = [];

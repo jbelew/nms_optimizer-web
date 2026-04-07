@@ -28,6 +28,7 @@
  * @example
  * ```ts
  * const response = await fetchWithTimeout("https://api.example.com/data", {}, 5000);
+ * // returns Promise<Response>
  * ```
  */
 export async function fetchWithTimeout(

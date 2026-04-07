@@ -85,6 +85,7 @@ const iconStyle: Record<string, CSSProperties> = {
  * @example
  * ```ts
  * const { IconComponent, style } = getDialogIconAndStyle("dialogs.titles.about");
+ * // returns DialogIconAndStyle
  * ```
  */
 export const getDialogIconAndStyle = (titleKey: string | undefined): DialogIconAndStyle => {

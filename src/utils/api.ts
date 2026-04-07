@@ -35,6 +35,7 @@ import { HttpError } from "./HttpError";
  * @example
  * ```ts
  * const data = await fetchJson<{ id: number }>("/api/user/1");
+ * // returns Promise<{ id: number }>
  * ```
  */
 export async function fetchJson<T>(

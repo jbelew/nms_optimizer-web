@@ -74,6 +74,7 @@ export const isValidFilename = (filename: string): boolean => {
  * @example
  * ```ts
  * const safeName = sanitizeFilename("Build: #1? (Draft)"); // returns "Build #1 (Draft)"
+ * // returns "Build #1 (Draft)"
  * ```
  */
 export const sanitizeFilename = (filename: string): string => {

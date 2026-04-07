@@ -36,6 +36,7 @@ import { resolveInitialPlatform } from "./platformResolver";
  * ```ts
  * // Call as early as possible in main.tsx
  * preloadInitialState();
+ * // returns void
  * ```
  */
 export const preloadInitialState = () => {

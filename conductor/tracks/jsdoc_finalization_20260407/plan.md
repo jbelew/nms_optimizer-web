@@ -3,8 +3,8 @@
 This plan follows a batch-based approach to systematically complete the JSDoc migration.
 
 #### Phase 1: Core Utilities - Batch 1 <!-- depends: --> <!-- execution: parallel -->
-- [~] Task: Update JSDoc for `src/utils/` (Files 1-8: `analytics.ts` to `dialogIconMapping.ts`) <!-- files: src/utils/analytics.ts, src/utils/analyticsClient.ts, src/utils/api.ts, src/utils/apiCall.ts, src/utils/apiPreload.ts, src/utils/buildFileValidation.ts, src/utils/buildNameGenerator.ts, src/utils/dialogIconMapping.ts -->
-- [ ] Task: Update JSDoc for `src/utils/` (Files 9-16: `fetchWithTimeout.ts` to `logger.ts`) <!-- files: src/utils/fetchWithTimeout.ts, src/utils/filenameValidation.ts, src/utils/hashUtils.ts, src/utils/HttpError.ts, src/utils/isBot.ts, src/utils/isTouchDevice.ts, src/utils/logger.ts -->
+- [x] Task: Update JSDoc for `src/utils/` (Files 1-8: `analytics.ts` to `dialogIconMapping.ts`) <!-- files: src/utils/analytics.ts, src/utils/analyticsClient.ts, src/utils/api.ts, src/utils/apiCall.ts, src/utils/apiPreload.ts, src/utils/buildFileValidation.ts, src/utils/buildNameGenerator.ts, src/utils/dialogIconMapping.ts --> 131724
+- [x] Task: Update JSDoc for `src/utils/` (Files 9-16: `fetchWithTimeout.ts` to `logger.ts`) <!-- files: src/utils/fetchWithTimeout.ts, src/utils/filenameValidation.ts, src/utils/hashUtils.ts, src/utils/HttpError.ts, src/utils/isBot.ts, src/utils/isTouchDevice.ts, src/utils/logger.ts --> 131859
 - [ ] Task: Conductor - User Manual Verification 'Core Utilities - Batch 1' (Protocol in workflow.md) <!-- depends: task1, task2 -->
 
 #### Phase 2: Core Utilities - Batch 2 <!-- execution: parallel -->

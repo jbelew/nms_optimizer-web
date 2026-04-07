@@ -136,6 +136,7 @@ export const initializeAnalyticsClient = (): string => {
  * @example
  * ```ts
  * const id = getClientId();
+ * // returns string
  * ```
  */
 export const getClientId = (): string => {

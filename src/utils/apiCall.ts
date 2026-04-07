@@ -56,6 +56,7 @@ export interface ApiCallOptions extends RequestInit {
  *     body: JSON.stringify(payload)
  *   });
  *   console.log("Success:", result.success);
+ *   // returns Promise<{ success: boolean }>
  * } catch (error) {
  *   // Error dialog already shown unless skipGlobalError: true
  * }

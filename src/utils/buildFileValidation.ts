@@ -56,6 +56,7 @@ export type BuildFile = {
  * if (isValidBuildFile(parsedJson)) {
  *   console.log("Loading build:", parsedJson.name);
  * }
+ * // returns true if valid
  * ```
  */
 export function isValidBuildFile(obj: unknown): obj is BuildFile {
