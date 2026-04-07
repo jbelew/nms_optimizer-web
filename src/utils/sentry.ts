@@ -1,3 +1,14 @@
+/**
+ * Sentry error tracking and performance monitoring configuration.
+ *
+ * @remarks
+ * This module initializes the Sentry SDK, integrating it with React Router
+ * and configuring environment-based sampling rates.
+ *
+ * @category Utilities
+ * @see {@link initializeSentry}
+ */
+
 import { useEffect } from "react";
 import {
 	browserTracingIntegration,
@@ -16,13 +27,19 @@ import { env } from "./analytics";
 /**
  * Initializes Sentry for error tracking and performance monitoring.
  *
+ * @remarks
  * Configures Sentry with React Router integration and sets up sampling rates
- * based on the environment. Initialization is skipped if `VITE_SENTRY_DSN` is missing.
+ * based on the environment (DEV vs PROD). Initialization is skipped if
+ * `VITE_SENTRY_DSN` is missing from the environment.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * initializeSentry();
+ * // returns void
+ * ```
  */
 export const initializeSentry = () => {
 	// We can use a public DSN or a dummy one for now if the user hasn't provided one.

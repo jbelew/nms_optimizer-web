@@ -1,3 +1,14 @@
+/**
+ * Splash screen visibility management utility.
+ *
+ * @remarks
+ * This module provides functions to hide the application splash screen
+ * and reveal the main UI. It coordinates animations and DOM cleanup.
+ *
+ * @category Utilities
+ * @see {@link hideSplashScreenAndShowBackground}
+ */
+
 import { hideSplashScreen } from "vite-plugin-splash-screen/runtime";
 
 let isHiding = false;
@@ -5,13 +16,19 @@ let isHiding = false;
 /**
  * Hides the splash screen and reveals the application background.
  *
+ * @remarks
  * This utility uses the `vite-plugin-splash-screen` runtime to perform the hide animation,
  * and then adds a `background-visible` class to the `document.body` to fade in the main UI background.
+ * Dispatches an `app-ready` event upon initiation.
  *
  * @returns {Promise<void>} A promise that resolves once the splash screen logic is initiated.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * await hideSplashScreenAndShowBackground();
+ * // returns Promise<void>
+ * ```
  */
 export async function hideSplashScreenAndShowBackground(): Promise<void> {
 	if (isHiding) {

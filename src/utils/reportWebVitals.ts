@@ -1,3 +1,16 @@
+/**
+ * Performance monitoring utility for Core Web Vitals.
+ *
+ * @remarks
+ * This module uses the `web-vitals` library to capture and report performance
+ * metrics like LCP, CLS, and INP. It facilitates data-driven performance
+ * optimizations.
+ *
+ * @category Utilities
+ * @see {@link reportWebVitals}
+ * @see {@link ./reportWebVitals.test.ts Unit Tests}
+ */
+
 import type { GA4Event } from "./analytics";
 import type { Metric } from "web-vitals";
 import { onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
@@ -10,14 +23,19 @@ type SendEventFunction = (event: GA4Event) => void;
 /**
  * Sends a web vitals metric to Google Analytics.
  *
- * Converts the metric value to milliseconds (or multiplies by 1000 for CLS).
+ * @remarks
+ * Converts the metric value to milliseconds (or multiplies by 1000 for CLS)
+ * before sending to GA4. Ensures metrics are tracked as non-interactive events.
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
- * @returns {void}
- * @example Metric reporting
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ *
+ * @example
  * ```ts
  * sendVitalsMetric(lcpMetric, myAnalyticsFn);
+ * // returns void
  * ```
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
@@ -35,14 +53,20 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 /**
  * Registers listeners for Core Web Vitals and reports them to analytics.
  *
- * This function tracks CLS, INP, FCP, LCP, and TTFB. Metrics are sent via the
- * provided `sendEvent` function.
+ * @remarks
+ * This function tracks CLS, INP, FCP, LCP, and TTFB using the `web-vitals` library.
+ * It is typically called during application initialization.
  *
  * @param {SendEventFunction} sendEvent - The function to call for each metric. **Must be a valid function.**
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link sendVitalsMetric}
  *
  * @example
+ * ```ts
  * reportWebVitals((event) => console.log("Metric:", event.action));
+ * // returns void
+ * ```
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
 	onCLS((metric) => sendVitalsMetric(metric, sendEvent));

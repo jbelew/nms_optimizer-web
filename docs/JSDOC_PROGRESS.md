@@ -4,7 +4,7 @@ Task: Update JSDoc tags across the codebase to improve LLM parsing and documenta
 
 ## Progress Tracking
 
-- [ ] `src/hooks/`
+- [x] `src/hooks/`
     - [x] `useErrorDispatcher.ts`
     - [x] `useAnalytics/useAnalytics.ts`
     - [x] `useAppLayout/useAppLayout.tsx`
@@ -69,31 +69,31 @@ Task: Update JSDoc tags across the codebase to improve LLM parsing and documenta
     - [ ] `Toast/`
     - [ ] `TooltipManager/`
     - [ ] `UpdatePrompt/`
-- [ ] `src/utils/`
-    - [ ] `analytics.ts`
-    - [ ] `analyticsClient.ts`
-    - [ ] `api.ts`
-    - [ ] `apiCall.ts`
-    - [ ] `apiPreload.ts`
-    - [ ] `buildFileValidation.ts`
-    - [ ] `buildNameGenerator.ts`
-    - [ ] `dialogIconMapping.ts`
-    - [ ] `fetchWithTimeout.ts`
-    - [ ] `filenameValidation.ts`
-    - [ ] `hashUtils.ts`
-    - [ ] `HttpError.ts`
-    - [ ] `isBot.ts`
-    - [ ] `isTouchDevice.ts`
-    - [ ] `logger.ts`
-    - [ ] `platformResolver.ts`
-    - [ ] `radixIconRegistry.ts`
-    - [ ] `recommendedBuildValidation.ts`
-    - [ ] `reportWebVitals.ts`
-    - [ ] `sentry.ts`
-    - [ ] `setupServiceWorker.ts`
-    - [ ] `socketManager.ts`
-    - [ ] `splashScreen.ts`
-    - [ ] `storage.ts`
+- [x] `src/utils/`
+    - [x] `analytics.ts`
+    - [x] `analyticsClient.ts`
+    - [x] `api.ts`
+    - [x] `apiCall.ts`
+    - [x] `apiPreload.ts`
+    - [x] `buildFileValidation.ts`
+    - [x] `buildNameGenerator.ts`
+    - [x] `dialogIconMapping.ts`
+    - [x] `fetchWithTimeout.ts`
+    - [x] `filenameValidation.ts`
+    - [x] `hashUtils.ts`
+    - [x] `HttpError.ts`
+    - [x] `isBot.ts`
+    - [x] `isTouchDevice.ts`
+    - [x] `logger.ts`
+    - [x] `platformResolver.ts`
+    - [x] `radixIconRegistry.ts`
+    - [x] `recommendedBuildValidation.ts`
+    - [x] `reportWebVitals.ts`
+    - [x] `sentry.ts`
+    - [x] `setupServiceWorker.ts`
+    - [x] `socketManager.ts`
+    - [x] `splashScreen.ts`
+    - [x] `storage.ts`
 
 ## Completed Files
 
@@ -139,6 +139,7 @@ Task: Update JSDoc tags across the codebase to improve LLM parsing and documenta
 | `src/components/GridControlButtons/GridControlButtons.tsx` | 2026-04-07 | Updated to agentic-jsdoc standards with disabled states documented. |
 | `src/components/GridControlButtons/useGridRowState.ts` | 2026-04-07 | Updated to agentic-jsdoc standards with @hook and threshold documented. |
 | `src/components/GridTableButtons/GridTableButtons.tsx` | 2026-04-07 | Updated to agentic-jsdoc standards with internal helpers documented. |
-| `src/components/MainAppContent/SharedBuildCallout.tsx` | 2026-04-07 | Updated to agentic-jsdoc standards with @remarks and @component. |
-| `src/components/MainAppContent/ShipSelectionHeading.tsx` | 2026-04-07 | Updated to agentic-jsdoc standards with @remarks and @component. |
+| `src/components/MainAppContent/SharedBuildCallout.tsx" | 2026-04-07 | Updated to agentic-jsdoc standards with @remarks and @component. |
+| `src/components/MainAppContent/ShipSelectionHeading.tsx" | 2026-04-07 | Updated to agentic-jsdoc standards with @remarks and @component. |
 | `src/components/MainAppContent/useMainAppLogic.ts` | 2026-04-07 | Updated to agentic-jsdoc standards with @remarks and @hook. |
+| `src/utils/` (All files) | 2026-04-07 | Updated all 24 utility files to agentic-jsdoc standards with @category, @remarks, and expected return values in @example blocks. |

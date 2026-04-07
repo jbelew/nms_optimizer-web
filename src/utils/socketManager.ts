@@ -1,3 +1,15 @@
+/**
+ * WebSocket connection management utility.
+ *
+ * @remarks
+ * This module provides functions to create and manage WebSocket connections
+ * using `socket.io-client`. It defines standard options and transport error
+ * handling logic.
+ *
+ * @category Utilities
+ * @see {@link createSocket}
+ */
+
 import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 import { io } from "socket.io-client";
 
@@ -29,15 +41,23 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
 /**
  * Creates and initializes a new WebSocket connection instance.
  *
- * Uses the global `WS_URL` and predefined `SOCKET_OPTIONS`.
+ * @remarks
+ * Uses the global `WS_URL` and predefined `SOCKET_OPTIONS`. Includes
+ * internal logging for connection lifecycle tracking.
  *
  * @returns {Socket | null} A new `Socket` instance, or `null` if initialization fails.
+ * @category Utilities
+ * @see {@link WS_URL}
+ * @see {@link SOCKET_OPTIONS}
  *
  * @example
+ * ```ts
  * const socket = createSocket();
  * if (socket) {
  *   socket.on("connect", () => console.log("Connected!"));
  * }
+ * // returns Socket or null
+ * ```
  */
 export const createSocket = (): Socket | null => {
 	try {

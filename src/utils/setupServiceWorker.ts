@@ -1,3 +1,15 @@
+/**
+ * Service Worker registration utility for PWA capabilities.
+ *
+ * @remarks
+ * This module handles the registration of the application's service worker,
+ * enabling offline support and update prompts.
+ *
+ * @category Utilities
+ * @see {@link setupServiceWorkerRegistration}
+ * @see {@link ./setupServiceWorker.test.ts Unit Tests}
+ */
+
 import { registerSW } from "virtual:pwa-register";
 
 import { isBot } from "./isBot";
@@ -5,15 +17,19 @@ import { isBot } from "./isBot";
 /**
  * Registers the PWA service worker using Vite PWA's standard registration.
  *
+ * @remarks
  * This setup enables offline capabilities, background sync, and update prompts.
- * Registration is skipped if:
- * 1. The browser does not support service workers.
- * 2. The visitor is detected as a bot (via `isBot`).
+ * Registration is deferred until the page has loaded and is skipped for bots.
  *
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link isBot}
  *
  * @example
+ * ```ts
  * setupServiceWorkerRegistration();
+ * // returns void
+ * ```
  */
 export function setupServiceWorkerRegistration() {
 	// Conditionally register the service worker for non-bot user agents

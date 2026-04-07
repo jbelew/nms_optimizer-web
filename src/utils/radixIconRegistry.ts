@@ -1,3 +1,14 @@
+/**
+ * Centralized registry for Radix UI icons.
+ *
+ * @remarks
+ * This module ensures consistent icon usage across the application and
+ * optimizes the build bundle by facilitating tree-shaking for `@radix-ui/react-icons`.
+ *
+ * @category Utilities
+ * @see {@link radixIconRegistry}
+ */
+
 import { ElementType } from "react";
 import {
 	CameraIcon,
@@ -19,8 +30,12 @@ import {
 /**
  * A registry of Radix UI icons used throughout the application.
  *
- * This central registry facilitates tree-shaking by ensuring only the icons listed here
- * are included in the final production bundle.
+ * @remarks
+ * Only icons explicitly listed in this registry are included in the final
+ * production bundle. This central mapping also simplifies the use of
+ * dynamic icon selection in components like `AppDialog`.
+ *
+ * @category Utilities
  */
 export const radixIconRegistry: Record<string, ElementType> = {
 	CounterClockwiseClockIcon,

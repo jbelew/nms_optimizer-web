@@ -1,10 +1,17 @@
 /**
- * Safe wrapper for `localStorage` access to prevent `SecurityError` exceptions.
+ * Browser storage utility module for safe `localStorage` access.
  *
- * These wrappers catch errors in browsers with strict privacy settings (like Safari
- * with "Block all cookies" enabled) or when storage is full.
+ * @remarks
+ * This module provides safe wrappers for interacting with the browser's
+ * `localStorage` API. It gracefully handles `SecurityError` exceptions
+ * often encountered in restricted privacy environments or full storage scenarios.
  *
  * @category Utilities
+ * @see {@link safeGetItem}
+ * @see {@link safeSetItem}
+ * @see {@link safeRemoveItem}
+ * @see {@link safeClear}
+ * @see {@link ./storage.test.ts Unit Tests}
  */
 
 /**

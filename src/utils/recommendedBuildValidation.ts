@@ -1,18 +1,37 @@
+/**
+ * Validation utilities for recommended technology builds.
+ *
+ * @remarks
+ * This module provides types and functions to ensure that build recommendations
+ * received from the backend API conform to the application's internal structure.
+ *
+ * @category Utilities
+ * @see {@link isValidRecommendedBuild}
+ * @see {@link ./recommendedBuildValidation.test.ts Unit Tests}
+ */
+
 import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
 
 /**
  * Validates that an unknown object conforms to the `RecommendedBuild` interface.
  *
- * This utility performs a deep check of the `layout` property, ensuring it is a
- * valid 2D array of grid cell data.
+ * @remarks
+ * Performs a deep check of the `layout` property, ensuring it is a valid 2D array
+ * of grid cell data. Also validates that required properties like `title`
+ * are present and correctly typed. Logs errors to the console on failure.
  *
  * @param {unknown} obj - The object to validate.
  * @returns {obj is RecommendedBuild} `true` if the object is a valid `RecommendedBuild`, otherwise `false`.
+ * @category Utilities
+ * @see {@link RecommendedBuild}
  *
  * @example
+ * ```ts
  * if (isValidRecommendedBuild(jsonResponse)) {
  *   applyLayout(jsonResponse.layout);
  * }
+ * // returns true if valid
+ * ```
  */
 export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	if (typeof obj !== "object" || obj === null) {

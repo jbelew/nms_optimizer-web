@@ -8,8 +8,8 @@ This plan follows a batch-based approach to systematically complete the JSDoc mi
 - [x] Task: Conductor - User Manual Verification 'Core Utilities - Batch 1' (Protocol in workflow.md) e421122
 
 #### Phase 2: Core Utilities - Batch 2 <!-- execution: parallel -->
-- [ ] Task: Update JSDoc for `src/utils/` (Files 17-24: `platformResolver.ts` to `storage.ts`) <!-- files: src/utils/platformResolver.ts, src/utils/radixIconRegistry.ts, src/utils/recommendedBuildValidation.ts, src/utils/reportWebVitals.ts, src/utils/sentry.ts, src/utils/setupServiceWorker.ts, src/utils/socketManager.ts, src/utils/splashScreen.ts, src/utils/storage.ts -->
-- [ ] Task: Update `docs/JSDOC_PROGRESS.md` for all completed Utilities. <!-- files: docs/JSDOC_PROGRESS.md -->
+- [x] Task: Update JSDoc for `src/utils/` (Files 17-24: `platformResolver.ts` to `storage.ts`) <!-- files: src/utils/platformResolver.ts, src/utils/radixIconRegistry.ts, src/utils/recommendedBuildValidation.ts, src/utils/reportWebVitals.ts, src/utils/sentry.ts, src/utils/setupServiceWorker.ts, src/utils/socketManager.ts, src/utils/splashScreen.ts, src/utils/storage.ts --> 132219
+- [x] Task: Update `docs/JSDOC_PROGRESS.md` for all completed Utilities. <!-- files: docs/JSDOC_PROGRESS.md --> 132300
 - [ ] Task: Conductor - User Manual Verification 'Core Utilities - Batch 2' (Protocol in workflow.md) <!-- depends: task1, task2 -->
 
 #### Phase 3: UI Components - Batch 1 <!-- depends: --> <!-- execution: parallel -->
