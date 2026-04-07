@@ -26,3 +26,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ## [x] Track: Finalize Agentic-JSDoc Standards Migration
 *Link: [./conductor/tracks/jsdoc_finalization_20260407/](./conductor/tracks/jsdoc_finalization_20260407/)*
+
+---
+
+## [ ] Track: Improving Test Coverage & App Stability
+*Link: [./conductor/tracks/test_coverage_improvement_20260407/](./conductor/tracks/test_coverage_improvement_20260407/)*
