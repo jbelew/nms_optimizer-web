@@ -5,8 +5,9 @@
  * This module initializes the Sentry SDK, integrating it with React Router
  * and configuring environment-based sampling rates.
  *
- * @category Utilities
  * @see {@link initializeSentry}
+ *
+ * @category Utilities
  */
 
 import { useEffect } from "react";
@@ -33,6 +34,7 @@ import { env } from "./analytics";
  * `VITE_SENTRY_DSN` is missing from the environment.
  *
  * @returns {void} Side-effects only.
+ *
  * @category Utilities
  *
  * @example

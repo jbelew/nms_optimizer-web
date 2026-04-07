@@ -18,6 +18,7 @@ import { useGridRowState } from "./useGridRowState";
  * Used to determine if the expansion controls should be enabled.
  *
  * @category Selectors
+ *
  * @example
  * ```ts
  * const hasAnyActiveCells = selectHasAnyActiveCells(store.getState());
@@ -52,13 +53,16 @@ interface RowControlButtonProps {
  * - Data is loading.
  *
  * @param {RowControlButtonProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered row control buttons.
  *
- * @category Components
- * @component
  * @see {@link RowControlButtonProps}
  * @see {@link useGridRowState}
  * @see {@link useGridStore}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

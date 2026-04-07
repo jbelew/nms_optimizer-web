@@ -4,6 +4,10 @@ import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import { useBreakpoint } from "./useBreakpoint";
 
 // Helper to mock window.matchMedia
+/**
+ *
+ * @example
+ */
 const createMatchMediaMock = (matches: boolean) => {
 	// Use a more specific type for listeners
 	const listeners: Array<(this: MediaQueryList, ev: MediaQueryListEvent) => void> = [];

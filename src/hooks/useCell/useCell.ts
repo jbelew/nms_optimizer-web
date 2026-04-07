@@ -12,6 +12,7 @@ import { Cell, useGridStore } from "../../store/GridStore";
  *
  * @param {number} rowIndex - The zero-based index of the row. **Must be within grid bounds.**
  * @param {number} columnIndex - The zero-based index of the column. **Must be within grid bounds.**
+ *
  * @returns {Cell} The cell object at the specified coordinates.
  *
  * @see {@link useGridStore} for the source of grid data.
@@ -19,6 +20,7 @@ import { Cell, useGridStore } from "../../store/GridStore";
  * @see {@link ../../components/GridCell/GridCell.test.tsx Unit Tests (via GridCell)}
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example

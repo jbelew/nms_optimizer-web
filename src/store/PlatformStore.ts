@@ -11,9 +11,10 @@ import { safeGetItem, safeSetItem } from "../utils/storage";
 /**
  * State and actions for the ship type (platform) selection.
  *
- * @category State
  * @see {@link safeGetItem}
  * @see {@link safeSetItem}
+ *
+ * @category State
  */
 export interface PlatformState {
 	/** The currently selected ship type identifier (e.g., `'solar'`, `'freighter'`). Defaults to `'standard'`. */
@@ -29,6 +30,7 @@ export interface PlatformState {
 	 * @param {string[]} validShipTypes - Array of valid identifiers for validation.
 	 * @param {boolean} [updateUrl=true] - Whether to push a new state to the browser history.
 	 * @param {boolean} [isKnownRoute=true] - Whether the current route supports platform synchronization.
+	 *
 	 * @returns {void} Side-effects only.
 	 */
 	setSelectedPlatform: (
@@ -45,6 +47,7 @@ export interface PlatformState {
 	 *
 	 * @param {string[]} validShipTypes - Array of valid ship type identifiers for validation.
 	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
+	 *
 	 * @returns {void} Side-effects only.
 	 */
 	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
@@ -60,8 +63,10 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  * It acts as a single source of truth for the platform-specific data fetching.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<PlatformState>>} The platform store hook.
- * @category State
+ *
  * @see {@link PlatformState}
+ *
+ * @category State
  *
  * @example
  * const selectedPlatform = usePlatformStore((s) => s.selectedPlatform);

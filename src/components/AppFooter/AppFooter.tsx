@@ -26,12 +26,15 @@ interface AppFooterProps {
  * It also includes a call-to-action for supporting the project via "Buy Me a Coffee".
  *
  * @param {AppFooterProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered application footer.
  *
  * @see {@link Buymeacoffee}
  * @see {@link useDialog}
  * @see {@link ./AppFooter.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

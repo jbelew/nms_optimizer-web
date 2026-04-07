@@ -11,6 +11,7 @@ import { useState } from "react";
  * @returns {{ showPrompt: boolean, dismissPrompt: () => void }} State for prompt visibility and a handler to dismiss it.
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example Prompt conditional display

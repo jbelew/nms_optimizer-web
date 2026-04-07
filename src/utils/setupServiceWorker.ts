@@ -5,9 +5,10 @@
  * This module handles the registration of the application's service worker,
  * enabling offline support and update prompts.
  *
- * @category Utilities
  * @see {@link setupServiceWorkerRegistration}
  * @see {@link ./setupServiceWorker.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import { registerSW } from "virtual:pwa-register";
@@ -22,8 +23,10 @@ import { isBot } from "./isBot";
  * Registration is deferred until the page has loaded and is skipped for bots.
  *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link isBot}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

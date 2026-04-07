@@ -25,14 +25,17 @@ export type UseScrollHideReturn = {
  * It uses `requestAnimationFrame` for performance and handles edge cases like
  * iOS scroll bounce and bottom-of-page triggers.
  *
- * @hook
- * @category Hooks
  * @param {number} [threshold=10] - The distance from the top of the page (in pixels) where the element is always visible.
  * @param {number} [hysteresis=20] - The minimum distance (in pixels) that must be scrolled in a new direction before visibility changes.
+ *
  * @returns {UseScrollHideReturn} State and functions for visibility control.
  *
  * @see {@link import('../useScrollGridIntoView/useScrollGridIntoView').useScrollGridIntoView} for coordination with programmatic scrolling.
  * @see {@link import('../useScrollGridIntoView/useScrollGridIntoView').registerToolbarForceShow} for the global callback registration.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example Visibility management in a component
  * ```tsx

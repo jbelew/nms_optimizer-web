@@ -6,9 +6,10 @@
  * dialogs within the application. It maps translation keys to Radix UI
  * icons and specific CSS properties, ensuring visual consistency.
  *
- * @category Utilities
  * @see {@link getDialogIconAndStyle}
  * @see {@link ./dialogIconMapping.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import type { CSSProperties, ElementType } from "react";
@@ -77,10 +78,13 @@ const iconStyle: Record<string, CSSProperties> = {
  * no specific style is mapped.
  *
  * @param {string} [titleKey] - The translation key for the dialog title.
+ *
  * @returns {DialogIconAndStyle} An object containing the `IconComponent` and its `style`.
- * @category Utilities
+ *
  * @see {@link iconMap}
  * @see {@link iconStyle}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

@@ -1,4 +1,17 @@
-// src/components/ShipSelection/ShipSelection.tsx
+/**
+ * Equipment platform and ship type selection module.
+ *
+ * @remarks
+ * This module provides the `ShipSelection` component and its internal helpers,
+ * allowing users to switch the optimization context between different
+ * equipment types (e.g., starships, freighters).
+ *
+ * @see {@link ShipSelection}
+ * @see {@link ./ShipSelection.stories.tsx Storybook}
+ *
+ * @category Components
+ */
+
 import "./ShipSelection.scss";
 
 import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
@@ -31,12 +44,19 @@ interface ShipSelectionProps {
 /**
  * A skeleton component that mimics the `ShipSelection` trigger button.
  *
+ * @remarks
  * Used as a fallback for `Suspense` while ship type metadata is being fetched.
  *
  * @returns {JSX.Element} The rendered loading state.
- * @example Loading state fallback
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <ShipSelectionLoadingState />
+ * // renders disabled button with spinner
  * ```
  */
 const ShipSelectionLoadingState = () => {
@@ -74,15 +94,26 @@ const ShipSelectionLoadingState = () => {
 /**
  * Internal component that manages the ship type selection logic.
  *
+ * @remarks
  * It uses `useFetchShipTypesSuspense` to retrieve the list of available
  * equipment categories from the backend. When a selection is made, it
  * synchronizes the `PlatformStore` and resets the grid state.
  *
  * @param {ShipSelectionProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered selection interface.
+ *
+ * @see {@link useFetchShipTypesSuspense}
+ * @see {@link usePlatformStore}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example Internal component usage
  * ```tsx
  * <ShipSelectionInternal solving={false} />
+ * // renders platform selection dropdown
  * ```
  */
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
@@ -119,6 +150,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	 * Finalizes the platform selection and updates global state.
 	 *
 	 * @param {string} option - The internal platform identifier.
+	 *
 	 * @example Handle platform change
 	 * ```ts
 	 * handleOptionSelect("starship");
@@ -127,7 +159,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	const handleOptionSelect = (option: string) => {
 		if (option !== usePlatformStore.getState().selectedPlatform) {
 			Logger.info(`Platform selected: ${option}`, { platform: option });
-			// Use startTransition to keep dropdown responsive while handling updates
+			// Use startTransition to keep dropdown responsive while handling heavy updates
 			startTransition(() => {
 				sendEvent({
 					category: "ui",
@@ -189,14 +221,25 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 /**
  * A component that allows users to toggle between different equipment platforms.
  *
+ * @remarks
  * This is the primary entry point for changing the application's context
  * (e.g., from Starship to Multi-Tool). It is designed to work with React Suspense.
  *
  * @param {ShipSelectionProps} props - Component properties.
+ *
  * @returns {JSX.Element} The selection component wrapped in Suspense.
  *
+ * @see {@link ShipSelectionInternal}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <ShipSelection solving={false} />
+ * // renders suspended selection button
+ * ```
  */
 const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 	return (
@@ -210,6 +253,8 @@ const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
  * Exported reference for the ShipSelection component.
  *
  * @see {@link ShipSelectionComponent}
+ *
+ * @category Components
  */
 export const ShipSelection = ShipSelectionComponent;
 
@@ -228,8 +273,18 @@ interface ShipTypesDropdownProps {
 /**
  * Helper component that renders the categorical list of ship types.
  *
+ * @remarks
+ * It maps grouped ship data into a set of radio items, separated by
+ * category lines.
+ *
  * @param {ShipTypesDropdownProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered radio group content.
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example Categorical dropdown content
  * ```tsx
  * <ShipTypesDropdown 
@@ -237,6 +292,7 @@ interface ShipTypesDropdownProps {
  *   handleOptionSelect={fn} 
  *   groupedShipTypes={data} 
  * />
+ * // renders list of selectable ship types
  * ```
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({

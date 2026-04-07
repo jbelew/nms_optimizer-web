@@ -5,8 +5,9 @@
  * This module provides functions to create randomized, flavor-rich names
  * for ship builds, incorporating ship types and NMS-style prefixes/suffixes.
  *
- * @category Utilities
  * @see {@link generateBuildNameWithType}
+ *
+ * @category Utilities
  */
 
 import {
@@ -49,9 +50,12 @@ const SHIP_TYPE_NAMES: Record<string, string> = {
  * readable equivalents (e.g., `'Living'`).
  *
  * @param {string} shipType - The internal ship type identifier. **Must not be null.**
+ *
  * @returns {string} The localized display name, or the input `shipType` if no mapping exists.
- * @category Utilities
+ *
  * @see {@link SHIP_TYPE_NAMES}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -71,10 +75,13 @@ export const getShipTypeName = (shipType: string): string => {
  * using {@link sanitizeFilename}.
  *
  * @param {string} shipType - The ship type identifier used as a prefix.
+ *
  * @returns {string} A sanitized, randomly generated build name.
- * @category Utilities
+ *
  * @see {@link getShipTypeName}
  * @see {@link sanitizeFilename}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

@@ -20,6 +20,7 @@ export interface DialogFooterProps {
  * at least one module to run.
  *
  * @param {DialogFooterProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered footer area.
  *
  * @example

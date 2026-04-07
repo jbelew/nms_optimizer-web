@@ -21,12 +21,15 @@ const LAST_N_ROWS_THRESHOLD = 3;
  * rendered by {@link import('./GridControlButtons').GridControlButtons}.
  *
  * @param {number} rowIndex - The zero-based index of the row. **Must be within grid bounds.**
+ *
  * @returns {object} Derived boolean flags: `isFirstInactiveRow` and `isLastActiveRow`.
  *
- * @category Hooks
- * @hook
  * @see {@link import('./GridControlButtons').GridControlButtons}
  * @see {@link import('../../store/GridStore').GridStore}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```ts

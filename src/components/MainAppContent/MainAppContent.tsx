@@ -37,8 +37,9 @@ const SharedBuildCallout = lazy(() =>
  *
  * @returns {null} Always returns null.
  *
- * @category Components
  * @see {@link useFetchShipTypesSuspense}
+ *
+ * @category Components
  *
  * @example Suspended loading
  * ```tsx
@@ -72,12 +73,14 @@ const ShipTypesLoader = () => {
  *
  * @returns {JSX.Element} The root application layout structure.
  *
- * @category Components
- * @component
  * @see {@link useMainAppLogic}
  * @see {@link GridTable}
  * @see {@link AppHeader}
  * @see {@link AppFooter}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example Component usage
  * ```tsx

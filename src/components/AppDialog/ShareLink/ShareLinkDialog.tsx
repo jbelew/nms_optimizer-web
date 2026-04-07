@@ -24,12 +24,15 @@ interface ShareLinkDialogProps {
  * handling the display of the generated link and offering copy-to-clipboard functionality.
  *
  * @param {ShareLinkDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered share dialog.
  *
  * @see {@link ./ShareLinkDialog.test.tsx Unit Tests}
  * @see {@link AppDialog}
  * @see {@link ShareLinkContent}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

@@ -23,10 +23,13 @@ interface PrerenderedMarkdownRendererProps {
  * for larger documents to ensure immediate interactivity and SEO.
  *
  * @param {PrerenderedMarkdownRendererProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The injected article, or `null` if no content is found.
  *
  * @see {@link import('./MarkdownContentRenderer').MarkdownContentRenderer}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -53,6 +56,7 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 		 * Attempts to scroll to the target ID within the article.
 		 *
 		 * @returns {boolean} `true` if scrolled, otherwise `false`.
+		 *
 		 * @example Logic usage
 		 * ```typescript
 		 * scrollIfTargetExists();

@@ -14,6 +14,7 @@ import { sendEvent } from "../../utils/analytics";
  *
  * @param {string} name - The name attribute of the meta tag.
  * @param {string} content - The content value to set.
+ *
  * @returns {void} Side-effects only.
  *
  * @example
@@ -42,7 +43,9 @@ const updateMetaTag = (name: string, content: string) => {
  *
  * @param {string} property - The property identifier (e.g., 'og:title'). **Must not be empty.**
  * @param {string} content - The content string for the meta tag.
+ *
  * @returns {void} Side-effects only.
+ *
  * @example
  * ```typescript
  * updateMetaPropertyTag("og:title", "My Page");
@@ -65,7 +68,9 @@ const updateMetaPropertyTag = (property: string, content: string) => {
  * Updates or creates the canonical link tag in the document's head.
  *
  * @param {string} href - The full canonical URL. **Must be a valid URL.**
+ *
  * @returns {void} Side-effects only.
+ *
  * @example
  * ```typescript
  * updateCanonicalTag("https://example.com/page");
@@ -90,7 +95,9 @@ const updateCanonicalTag = (href: string) => {
  * @param {string} baseUrl - The base URL of the site.
  * @param {string} cleanPath - The path without language prefix.
  * @param {string[]} languages - Supported language codes.
+ *
  * @returns {void} Side-effects only.
+ *
  * @example
  * ```typescript
  * updateHreflangTags("https://app.com", "/about", ["en", "fr"]);
@@ -131,13 +138,15 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
  *
  * It acts as the primary SEO driver for the Single Page Application (SPA).
  *
- * @hook
- * @category Hooks
  * @returns {void} Side-effects only; manages document head and sends analytics events.
  *
  * @see {@link seoMetadata} for the source of page-specific titles and descriptions.
  * @see {@link sendEvent} for the analytics reporting implementation.
  * @see {@link ./useSeoAndTitle.test.tsx Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

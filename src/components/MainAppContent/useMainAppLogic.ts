@@ -35,9 +35,12 @@ import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
  * @see {@link useGridStore}
  * @see {@link usePlatformStore}
  * @see {@link useSessionStore}
- * @hook
- * @category Hooks
  * @see {@link import('./MainAppContent').MainAppContent} for the UI implementation.
+ *
+ * @hook
+ *
+ * @category Hooks
+ *
  * @example
  * ```tsx
  * const {

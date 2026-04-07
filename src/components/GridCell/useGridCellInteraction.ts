@@ -29,13 +29,16 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
  * @param {number} rowIndex - The row index of the cell (0-based).
  * @param {number} columnIndex - The column index of the cell (0-based).
  * @param {boolean} isSharedGrid - Flag for read-only mode.
+ *
  * @returns {object} Interaction flags and event handlers for the cell component.
  *
  * @see {@link useGridStore}
  * @see {@link useSessionStore}
  * @see {@link useShakeStore}
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
+ *
  * @hook
+ *
  * @category Hooks
  *
  * @example Usage in a component
@@ -67,6 +70,7 @@ export const useGridCellInteraction = (
 	 * Proxies to `ShakeStore` to trigger global UI feedback on invalid interactions.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @see {@link useShakeStore}
 	 *
 	 * @example Logic trigger
@@ -88,6 +92,7 @@ export const useGridCellInteraction = (
 	 * Includes validation against `gridFixed` and `superchargedFixed` states.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @category Logic
 	 *
 	 * @example Manual trigger
@@ -167,6 +172,7 @@ export const useGridCellInteraction = (
 	 * unintended taps during zooming or scrolling.
 	 *
 	 * @param {React.TouchEvent} event - The React touch start event.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration
@@ -197,6 +203,7 @@ export const useGridCellInteraction = (
 	 * exceeds 10px, the interaction is marked as a gesture (`isGestureRef`).
 	 *
 	 * @param {React.TouchEvent} event - The React touch move event.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration
@@ -226,6 +233,7 @@ export const useGridCellInteraction = (
 	 * is part of a static module before processing the tap.
 	 *
 	 * @param {React.TouchEvent | React.MouseEvent} event - The React event finalizing interaction.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration
@@ -286,6 +294,7 @@ export const useGridCellInteraction = (
 	 * Includes logging via `Logger` for state changes.
 	 *
 	 * @param {React.MouseEvent} event - The React click event.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration
@@ -373,6 +382,7 @@ export const useGridCellInteraction = (
 	 * with custom touch/long-press logic.
 	 *
 	 * @param {React.MouseEvent} event - The React context menu event.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration
@@ -392,6 +402,7 @@ export const useGridCellInteraction = (
 	 * full grid interactability for screen readers and keyboard-only users.
 	 *
 	 * @param {React.KeyboardEvent} event - The React keyboard event.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example Component registration

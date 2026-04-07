@@ -50,6 +50,7 @@ const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRend
  * - **Deep Linking:** Automatically scrolls to the heading specified by `targetSectionId`.
  *
  * @param {MarkdownContentRendererProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered article containing the markdown.
  *
  * @see {@link useMarkdownContent}
@@ -57,7 +58,9 @@ const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRend
  * @see {@link LoremIpsumSkeleton}
  * @see {@link PrerenderedMarkdownRenderer}
  * @see {@link ./MarkdownContentRenderer.test.tsx Unit Tests}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

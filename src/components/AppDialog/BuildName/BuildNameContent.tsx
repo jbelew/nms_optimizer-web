@@ -31,12 +31,15 @@ interface BuildNameContentProps {
  * to name a user's technology layout before saving.
  *
  * @param {BuildNameContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered build name input UI.
  *
  * @see {@link isValidFilename}
  * @see {@link generateBuildNameWithType}
  * @see {@link ./BuildNameDialog.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -58,7 +61,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Validates the input string for empty or illegal characters.
 	 *
 	 * @param {string} value - The build name to validate.
+	 *
 	 * @returns {string | null} Error message if invalid, otherwise null.
+	 *
 	 * @example Logic usage
 	 * ```typescript
 	 * createValidator("cool-build");
@@ -85,6 +90,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Generates a random themed name and updates the input state.
 	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleGenerateName();
@@ -101,7 +107,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Updates local state and triggers validation on input change.
 	 *
 	 * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleBuildNameChange(event);
@@ -117,6 +125,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Validates and submits the current build name.
 	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleConfirm();
@@ -135,6 +144,7 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Resets state and notifies the parent of cancellation.
 	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleCancel();
@@ -151,7 +161,9 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Dispatches actions based on keyboard input.
 	 *
 	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleKeyDown(event);

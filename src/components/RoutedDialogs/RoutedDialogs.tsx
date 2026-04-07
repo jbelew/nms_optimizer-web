@@ -1,4 +1,16 @@
-// src/components/RoutedDialogs/RoutedDialogs.tsx
+/**
+ * Routing-integrated dialog orchestrator module.
+ *
+ * @remarks
+ * This module provides the `RoutedDialogs` component, which maps specific
+ * application routes to modal dialogs, enabling shareable URLs for
+ * informational content.
+ *
+ * @see {@link RoutedDialogs}
+ *
+ * @category Components
+ */
+
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +24,7 @@ const MarkdownContentRenderer = lazy(() => import("../AppDialog/Markdown/Markdow
 /**
  * A central orchestrator for dialogs that are mapped to specific application routes.
  *
+ * @remarks
  * It monitors the `activeDialog` state from the `DialogContext` and renders the
  * corresponding `AppDialog` with its specific content (usually markdown-based).
  * This component enables a "modal as a page" experience where dialogs have
@@ -19,8 +32,18 @@ const MarkdownContentRenderer = lazy(() => import("../AppDialog/Markdown/Markdow
  *
  * @returns {JSX.Element} A collection of potentially visible dialog components.
  *
+ * @see {@link useDialog}
+ * @see {@link AppDialog}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <RoutedDialogs />
+ * // renders active dialog based on route
+ * ```
  */
 export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();

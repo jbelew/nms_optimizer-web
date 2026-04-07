@@ -76,6 +76,10 @@ vi.mock("../../utils/hashUtils", () => ({
 	computeSHA256: vi.fn(async () => "abc123def456"),
 }));
 
+/**
+ *
+ * @example
+ */
 const createValidBuildFile = () => ({
 	name: "Test Build",
 	shipType: "freighter",

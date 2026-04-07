@@ -19,9 +19,11 @@ interface YouTubeEmbedProps {
  * integrated seamlessly into the markdown rendering pipeline.
  *
  * @param {YouTubeEmbedProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered iframe wrapped in a Radix Box.
  *
  * @component
+ *
  * @category Components
  *
  * @example

@@ -48,14 +48,17 @@ interface MainAppUtilitiesProps {
  * and interaction flow.
  *
  * @param {MainAppUtilitiesProps} props - Component properties.
- * @returns {JSX.Element} The collection of global utility components.
- * @see {@link import('./MainAppContent').MainAppContent}
  *
- * @category Components
- * @component
+ * @returns {JSX.Element} The collection of global utility components.
+ *
+ * @see {@link import('./MainAppContent').MainAppContent}
  * @see {@link import('./MainAppContent').MainAppContent}
  * @see {@link OptimizationAlertDialog}
  * @see {@link BuildNameDialog}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

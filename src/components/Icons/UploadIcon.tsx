@@ -5,8 +5,9 @@
  * This module provides a custom SVG icon designed to represent file uploads
  * and export actions across the application.
  *
- * @category Components
  * @see {@link UploadIcon}
+ *
+ * @category Components
  */
 
 import type { SVGProps } from "react";
@@ -29,8 +30,11 @@ interface UploadIconProps extends SVGProps<SVGSVGElement> {
  * using the `size` prop.
  *
  * @param {UploadIconProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered SVG icon.
+ *
  * @component
+ *
  * @category Components
  *
  * @example

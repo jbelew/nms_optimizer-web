@@ -65,6 +65,7 @@ export interface TechTreeRowProps {
  * It uses the {@link useTechTreeRow} hook to centralize logic and derived state.
  *
  * @param {TechTreeRowProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered technology row.
  *
  * @see {@link ActionButtons} for optimization and reset triggers.
@@ -73,6 +74,7 @@ export interface TechTreeRowProps {
  * @see {@link useTechTreeRow} for the underlying business logic.
  *
  * @component
+ *
  * @category Components
  *
  * @example

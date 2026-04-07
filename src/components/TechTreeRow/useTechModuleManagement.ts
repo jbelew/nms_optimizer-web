@@ -15,6 +15,7 @@ import { useTechStore } from "@/store/TechStore";
  *
  * @param {string} tech - The unique technology identifier (e.g., 'pulse').
  * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of modules available for the tech.
+ *
  * @returns {object} State flags and event handlers for module selection UI.
  *
  * @see {@link useTechStore} for global module state.
@@ -22,6 +23,7 @@ import { useTechStore } from "@/store/TechStore";
  * @see {@link ./useTechModuleManagement.test.ts Unit Tests}
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example Hook initialization
@@ -95,6 +97,7 @@ export const useTechModuleManagement = (
 	 * Toggles the selection status of a single module.
 	 *
 	 * @param {string} moduleId - The unique ID of the module.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example
@@ -116,6 +119,7 @@ export const useTechModuleManagement = (
 	 * Replaces the entire selection list for this technology.
 	 *
 	 * @param {string[]} moduleIds - The new array of selected module IDs.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example
@@ -131,6 +135,7 @@ export const useTechModuleManagement = (
 	 * Handles the "Select All" toggle interaction.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new checkbox state.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example
@@ -154,6 +159,7 @@ export const useTechModuleManagement = (
 	 * a higher-tier module automatically deselects dependent lower-tier ones.
 	 *
 	 * @param {string[]} newValues - The new set of checked IDs.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example

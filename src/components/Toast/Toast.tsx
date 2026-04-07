@@ -1,3 +1,16 @@
+/**
+ * Application toast notification system module.
+ *
+ * @remarks
+ * This module provides the `NmsToast` component, a themed implementation of
+ * Radix UI's toast primitive designed for high-visibility status updates.
+ *
+ * @see {@link NmsToast}
+ * @see {@link ./Toast.stories.tsx Storybook}
+ *
+ * @category Components
+ */
+
 import type { ReactNode } from "react";
 import { CheckCircledIcon, ExclamationTriangleIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
@@ -31,15 +44,24 @@ type ToastProps = {
 /**
  * A customized toast notification component built using Radix UI.
  *
+ * @remarks
  * It provides standardized success, error, and info variants with matching
  * icons and CSS class modifiers. It includes a progress-tracked auto-close
  * and a manual "Dismiss" button.
  *
  * @param {ToastProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered toast notification.
  *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <NmsToast open={true} onOpenChange={setOpen} title="Error" description="Failed to save" variant="error" />
+ * // renders error toast
+ * ```
  */
 export const NmsToast = ({
 	open,

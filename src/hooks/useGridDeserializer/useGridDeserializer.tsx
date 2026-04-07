@@ -21,7 +21,9 @@ import {
  * strings representing long runs of identical cell states or tech codes.
  *
  * @param {string} input - The string to compress.
+ *
  * @returns {string} The compressed string.
+ *
  * @category Utilities
  *
  * @example
@@ -60,9 +62,12 @@ export const compressRLE = (input: string): string => {
  * Inverse operation of {@link compressRLE}.
  *
  * @param {string} input - The compressed string to decompress.
+ *
  * @returns {string} The decompressed string.
- * @category Utilities
+ *
  * @see {@link compressRLE}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -107,11 +112,14 @@ export const decompressRLE = (input: string): string => {
  * This compact representation allows sharing complex grid layouts via URL hash or parameters.
  *
  * @param {Grid} grid - The grid object to serialize.
+ *
  * @returns {string} An encoded string representing the grid state.
- * @category Utilities
+ *
  * @see {@link Grid}
  * @see {@link compressRLE}
  * @see {@link deserialize}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -179,13 +187,16 @@ export const serialize = (grid: Grid): string => {
  * @param {string} serializedGrid - The encoded grid string to deserialize.
  * @param {string} shipType - The ship type context for fetching tech tree data.
  * @param {function(Record<string, string>): void} setTechColors - Callback to update the tech color registry.
+ *
  * @returns {Promise<Grid | null>} A promise resolving to the restored {@link Grid} object, or `null` if deserialization fails.
- * @category Utilities
+ *
  * @see {@link Grid}
  * @see {@link decompressRLE}
  * @see {@link serialize}
  * @see {@link fetchTechTreeAsync}
  * @see {@link ./useGridDeserializer.test.tsx Unit Tests}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -460,13 +471,15 @@ export const deserialize = async (
  *
  * @returns {{ serializeGrid: () => string, deserializeGrid: (serializedGrid: string) => Promise<void> }} Serialization and deserialization utilities.
  *
- * @hook
- * @category Hooks
  * @see {@link useGridStore}
  * @see {@link usePlatformStore}
  * @see {@link useTechStore}
  * @see {@link serialize}
  * @see {@link deserialize}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -497,6 +510,7 @@ export const useGridDeserializer = () => {
 	 * Restores the grid state from a serialized string and updates the application stores.
 	 *
 	 * @param {string} serializedGrid - The encoded grid string to process.
+	 *
 	 * @returns {Promise<void>}
 	 */
 	const deserializeGrid = useCallback(

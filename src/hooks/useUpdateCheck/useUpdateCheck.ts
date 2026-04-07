@@ -12,12 +12,15 @@ import { useEffect } from "react";
  * If a mismatch is detected, the provided callback is executed with the `updateSW`
  * function to trigger the update process.
  *
- * @hook
- * @category Hooks
  * @param {(updateSW: (reloadPage?: boolean) => Promise<void>) => void} onUpdateAvailable - Callback function that receives the `updateSW` function from the service worker.
+ *
  * @returns {void} Side-effects only; registers event listeners.
  *
  * @see {@link ./useUpdateCheck.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

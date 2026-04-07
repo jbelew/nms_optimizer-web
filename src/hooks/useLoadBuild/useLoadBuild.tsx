@@ -18,6 +18,7 @@ export interface UseLoadBuildReturn {
 	 * Handler for the file input's `onChange` event.
 	 *
 	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 *
 	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
 	 */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
@@ -54,14 +55,17 @@ export interface UseLoadBuildProps {
  * It handles the file selection process, delegates parsing to `useBuildFileManager`,
  * tracks loading state, sends analytics events, and manages success/error notifications.
  *
- * @hook
- * @category Hooks
  * @param {UseLoadBuildProps} [props] - Optional callbacks for displaying notifications.
+ *
  * @returns {UseLoadBuildReturn} State and event handlers for build loading.
  *
  * @see {@link useBuildFileManager} for the underlying file parsing logic.
  * @see {@link useAnalytics} for event tracking.
  * @see {@link usePlatformStore} for retrieving the currently selected ship type.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -100,6 +104,7 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	 * Opens the system file picker dialog.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleLoadBuild();
@@ -114,7 +119,9 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 	 * Processes the selected build file and updates the application state.
 	 *
 	 * @param {import("react").ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 *
 	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
+	 *
 	 * @example
 	 * ```tsx
 	 * <input type="file" onChange={handleFileSelect} />

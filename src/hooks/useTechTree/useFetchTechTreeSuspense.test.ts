@@ -69,9 +69,6 @@ describe("useFetchTechTreeSuspense", () => {
 		},
 	} as TechTree;
 
-	/**
-	 *
-	 */
 	type MockTechStoreState = {
 		setTechColors: (colors: Record<string, string>) => void;
 		setTechGroups: (groups: Record<string, TechTreeItem[]>) => void;
@@ -87,18 +84,12 @@ describe("useFetchTechTreeSuspense", () => {
 		activeGroups: Record<string, string>;
 	};
 
-	/**
-	 *
-	 */
 	type MockGridStoreState = {
 		setInitialGridDefinition: (def: unknown) => void;
 		setGridFromInitialDefinition: () => void;
 		selectHasModulesInGrid: () => boolean;
 	};
 
-	/**
-	 *
-	 */
 	type MockTechTreeLoadingState = {
 		setLoading: (loading: boolean) => void;
 		isLoading: boolean;

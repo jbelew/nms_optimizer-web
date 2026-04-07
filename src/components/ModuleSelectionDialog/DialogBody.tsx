@@ -47,6 +47,7 @@ export interface DialogBodyProps {
  * 4. Read-only display for "Core" technology modules.
  *
  * @param {DialogBodyProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered dialog body content.
  *
  * @example Component usage
@@ -73,6 +74,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	 * Proxies the checkbox change event to the parent handler.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new state.
+	 *
 	 * @example Interaction relay
 	 * ```typescript
 	 * onSelectAllChange(true);

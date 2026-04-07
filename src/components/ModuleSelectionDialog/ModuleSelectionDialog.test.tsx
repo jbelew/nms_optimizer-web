@@ -57,6 +57,10 @@ const defaultProps = {
 	techImage: "hyperdrive.png",
 };
 
+/**
+ *
+ * @example
+ */
 const renderDialog = (props = {}) => {
 	(usePlatformStore as unknown as Mock).mockReturnValue({
 		selectedPlatform: "explorer",

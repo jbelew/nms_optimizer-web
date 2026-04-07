@@ -43,6 +43,7 @@ const ROUTED_DIALOG_TITLE_KEYS = [
  * title localization, and content to be rendered.
  *
  * @see {@link AppDialog}
+ *
  * @category Components
  */
 interface AppDialogProps {
@@ -69,12 +70,15 @@ interface AppDialogProps {
  * content areas, and keyboard navigation (Escape key support).
  *
  * @param {AppDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered dialog component.
  *
  * @see {@link AppDialogProps}
  * @see {@link getDialogIconAndStyle}
  * @see {@link ./AppDialog.test.tsx Unit Tests}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -104,7 +108,9 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		 * Closes the dialog if the Escape key is pressed.
 		 *
 		 * @param {KeyboardEvent} event - The keyboard event.
+		 *
 		 * @returns {void}
+		 *
 		 * @example Interaction handler
 		 * ```typescript
 		 * handleEscapeKey(event);

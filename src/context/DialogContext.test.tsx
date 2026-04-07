@@ -9,6 +9,10 @@ import { useDialog } from "./dialog-utils";
 import { DialogProvider } from "./DialogContext";
 
 // Test the window.location.search preservation logic directly
+/**
+ *
+ * @example
+ */
 const testDialogNavigation = (pathname: string, search: string, dialog: string, lang: string) => {
 	const pathParts = pathname.split("/").filter(Boolean);
 	const langCand = pathParts[0];
@@ -25,6 +29,10 @@ const testDialogNavigation = (pathname: string, search: string, dialog: string, 
 	return path + search;
 };
 
+/**
+ *
+ * @example
+ */
 const testDialogClosing = (pathname: string, search: string, lang: string) => {
 	const path = lang === "en" ? "/" : `/${lang}`;
 
@@ -32,6 +40,10 @@ const testDialogClosing = (pathname: string, search: string, lang: string) => {
 };
 
 // Mock window.location.search
+/**
+ *
+ * @example
+ */
 const mockWindowLocationSearch = (search: string) => {
 	Object.defineProperty(window, "location", {
 		value: {

@@ -24,14 +24,16 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  * It utilizes a singleton-like syncing ref to prevent infinite loops between
  * store persistence and URL updates.
  *
- * @hook
- * @category Hooks
  * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Functions to generate share links and reset URL state.
  *
  * @see {@link usePlatformStore} for ship type state.
  * @see {@link useGridStore} for the underlying grid data.
  * @see {@link useGridDeserializer} for serialization logic.
  * @see {@link ./useUrlSync.test.tsx Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -170,6 +172,7 @@ export const useUrlSync = () => {
 	 * Generates a full URL including the current ship type and serialized grid state.
 	 *
 	 * @returns {string} The shareable URL.
+	 *
 	 * @example Share URL generation
 	 * ```ts
 	 * const url = updateUrlForShare();

@@ -14,6 +14,7 @@ import { languages, pages } from "./routeConfig";
  * Lazily loads the 404 Not Found component.
  *
  * @returns {Promise<{ Component: React.ComponentType }>} A promise resolving to the component for lazy loading.
+ *
  * @example Lazy load trigger
  * ```ts
  * const route = { path: "*", lazy: NotFound };

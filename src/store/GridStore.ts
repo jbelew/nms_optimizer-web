@@ -10,9 +10,6 @@ import { usePlatformStore } from "./PlatformStore";
 import { useTechBonusStore } from "./TechBonusStore";
 import { useTechStore } from "./TechStore";
 
-/**
- *
- */
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
 /**
@@ -23,7 +20,9 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  *
  * @param {SetItemFunction} setItemFn - The storage setter function to debounce.
  * @param {number} msToWait - Delay in milliseconds. **Must be a positive integer.**
+ *
  * @returns {function(string, StorageValue<Partial<GridStore>>): Promise<void>} The debounced setter.
+ *
  * @example
  * ```typescript
  * const debouncedSet = debounceSetItem(mySetFn, 500);
@@ -99,8 +98,9 @@ export type Cell = {
  *
  * The grid is a 2D structure of `Cell` objects, providing a workspace for module placement.
  *
- * @category State
  * @see {@link Cell}
+ *
+ * @category State
  */
 export type Grid = {
 	/** 2D array of grid cells. Row-major order. */
@@ -114,8 +114,9 @@ export type Grid = {
 /**
  * Structure for the optimization engine's successful result.
  *
- * @category State
  * @see {@link Grid}
+ *
+ * @category State
  */
 export type ApiResponse = {
 	/** The newly optimized grid layout. `null` if the solve failed. */
@@ -135,9 +136,12 @@ export type ApiResponse = {
  *
  * @param {boolean} [supercharged=false] - Initial supercharged state.
  * @param {boolean} [active=false] - Initial active state.
+ *
  * @returns {Cell} A new `Cell` object with default values.
- * @category Factories
+ *
  * @see {@link Cell}
+ *
+ * @category Factories
  *
  * @example
  * const newCell = createEmptyCell(true, true);
@@ -168,10 +172,13 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
  *
  * @param {number} width - Number of columns.
  * @param {number} height - Number of rows.
+ *
  * @returns {Grid} A new `Grid` object populated with empty cells.
- * @category Factories
+ *
  * @see {@link Grid}
  * @see {@link createEmptyCell}
+ *
+ * @category Factories
  *
  * @example
  * const grid = createGrid(10, 6);
@@ -190,7 +197,9 @@ export const createGrid = (width: number, height: number): Grid => ({
  * Maps raw module data to the `Cell` structure used by the grid.
  *
  * @param {Module} moduleData - The raw module metadata.
+ *
  * @returns {Cell} A populated `Cell` object.
+ *
  * @example
  * ```typescript
  * const cell = createCellFromModuleData(rawModule);
@@ -221,10 +230,13 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
  * Structural state includes whether the cell is `active` and whether it is `supercharged`.
  *
  * @param {Cell} cell - The cell object to modify in-place. **Will be mutated.**
+ *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link Cell}
  * @see {@link createEmptyCell}
+ *
+ * @category Utilities
  *
  * @example
  * resetCellContent(grid.cells[0][0]);
@@ -436,6 +448,7 @@ const debouncedStorage = {
  * Returns the search property of the window's location object.
  *
  * @returns {string} The search property of the window's location object, or an empty string if the window or location are not defined.
+ *
  * @example
  * ```typescript
  * const search = getWindowSearch(); // returns "?grid=..." or ""
@@ -457,14 +470,17 @@ const getWindowSearch = () =>
  * It uses `immer` for deep nested state updates and `persist` for local storage synchronization.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<GridStore>>} The grid store hook.
- * @hook
- * @category State
+ *
  * @see {@link GridStore}
  * @see {@link Grid}
  * @see {@link Cell}
  * @see {@link ./createGrid.test.ts createGrid Tests}
  * @see {@link ./gridSelectors.test.ts Selectors Tests}
  * @see {@link ./hasTechInGrid.test.ts hasTechInGrid Tests}
+ *
+ * @hook
+ *
+ * @category State
  *
  * @example
  * ```tsx
@@ -478,8 +494,9 @@ export const useGridStore = create<GridStore>()(
 			/**
 			 * Applies a grid definition to the state.
 			 *
-			 * @param state The current state.
-			 * @param definition The grid definition to apply.
+			 * @param state - The current state.
+			 * @param definition - The grid definition to apply.
+			 *
 			 * @example
 			 * ```typescript
 			 * applyGridDefinition(state, { grid: [...], gridFixed: true, superchargedFixed: false });

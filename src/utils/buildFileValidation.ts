@@ -6,8 +6,9 @@
  * imported into or exported from the application conform to the expected
  * schema. It handles verification of state integrity and property presence.
  *
- * @category Utilities
  * @see {@link isValidBuildFile}
+ *
+ * @category Utilities
  */
 
 /**
@@ -47,9 +48,12 @@ export type BuildFile = {
  * fields in a build file. Logs detailed errors to the console if validation fails.
  *
  * @param {unknown} obj - The object to validate.
+ *
  * @returns {obj is BuildFile} `true` if the object is a valid `BuildFile`, otherwise `false`.
- * @category Utilities
+ *
  * @see {@link BuildFile}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

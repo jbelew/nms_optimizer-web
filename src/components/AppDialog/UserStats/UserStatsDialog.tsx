@@ -30,11 +30,14 @@ interface UserStatsDialogProps {
  * It wraps the dynamic content in a standard {@link AppDialog}.
  *
  * @param {UserStatsDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered statistics dialog.
  *
  * @see {@link AppDialog}
  * @see {@link import('./UserStatsContent').UserStatsContent}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

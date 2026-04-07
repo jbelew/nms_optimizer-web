@@ -29,12 +29,14 @@ export type UserStat = {
  * within Suspense boundaries. It retrieves usage data from the last 28 days
  * to identify popular technologies and configurations.
  *
- * @hook
- * @category Hooks
  * @returns {UserStat[]} An array of user statistics.
  *
  * @see {@link fetchUserStats} for the underlying API resource.
  * @see {@link ./useUserStats.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

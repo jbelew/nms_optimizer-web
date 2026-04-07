@@ -15,13 +15,16 @@ export type { ToastConfig } from "../../context/createToastContext";
  *
  * It is a wrapper around the `ToastContext`.
  *
- * @hook
- * @category Hooks
  * @returns {import('../../context/createToastContext').ToastContextType} The toast context containing notification handlers.
+ *
  * @throws {Error} If called outside of a {@link import('../../context/ToastContext').ToastProvider}.
  *
  * @see {@link ToastContext} for the underlying context definition.
  * @see {@link import('../../context/ToastContext').ToastProvider} for the required provider component.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example Hook usage in a component
  * ```tsx

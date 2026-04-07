@@ -51,12 +51,13 @@ const meta = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
 // Wrapper component to reset store state before each story
+/**
+ *
+ * @example
+ */
 const StorybookWrapper = ({
 	children,
 	resetStores = true,
@@ -116,6 +117,10 @@ const StorybookWrapper = ({
 };
 
 // Decorator that wraps stories with necessary providers including dialog
+/**
+ *
+ * @example
+ */
 const withLocalProviders =
 	(isSharedGrid: boolean = false, techTree?: TechTree) =>
 	(Story: React.FC) => (
@@ -131,9 +136,6 @@ const withLocalProviders =
 		</ToastProviderRadix>
 	);
 
-/**
- *
- */
 export const Desktop: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
 	render: () => <MainAppContent />,
@@ -153,9 +155,6 @@ export const Desktop: Story = {
 	loaders: meta.loaders,
 };
 
-/**
- *
- */
 export const Tablet: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
 	render: () => <MainAppContent />,
@@ -175,9 +174,6 @@ export const Tablet: Story = {
 	loaders: meta.loaders,
 };
 
-/**
- *
- */
 export const Mobile: Story = {
 	decorators: [
 		(Story, context) => {

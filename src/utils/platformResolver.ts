@@ -6,10 +6,11 @@
  * (e.g., 'starship', 'freighter', 'exosuit') based on URL query parameters
  * and local storage. It facilitates early preloading and session persistence.
  *
- * @category Utilities
  * @see {@link getPlatformFromUrl}
  * @see {@link getPlatformFromStorage}
  * @see {@link resolveInitialPlatform}
+ *
+ * @category Utilities
  */
 
 import { safeGetItem } from "./storage";
@@ -36,6 +37,7 @@ export const DEFAULT_PLATFORM = "standard";
  * Gracefully handles parsing errors and non-browser environments.
  *
  * @returns {string | null} The platform identifier found in the query parameters, or null.
+ *
  * @category Utilities
  *
  * @example
@@ -65,8 +67,10 @@ export const getPlatformFromUrl = (): string | null => {
  * Uses {@link safeGetItem} to retrieve the persisted platform key.
  *
  * @returns {string | null} The platform identifier from local storage, or null if not present.
- * @category Utilities
+ *
  * @see {@link safeGetItem}
+ *
+ * @category Utilities
  *
  * @example
  * const platform = getPlatformFromStorage();
@@ -86,10 +90,12 @@ export const getPlatformFromStorage = (): string | null => {
  * Prioritizes URL parameters over local storage.
  *
  * @returns {string} The heuristically determined platform string.
- * @category Utilities
+ *
  * @see {@link getPlatformFromUrl}
  * @see {@link getPlatformFromStorage}
  * @see {@link DEFAULT_PLATFORM}
+ *
+ * @category Utilities
  *
  * @example
  * const platform = resolveInitialPlatform();

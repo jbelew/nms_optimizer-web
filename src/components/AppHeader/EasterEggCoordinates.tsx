@@ -9,7 +9,9 @@ import { Code, DataList } from "@radix-ui/themes";
  * It provides in-game coordinates for various significant locations in the NMS universe.
  *
  * @returns {JSX.Element} The rendered list of coordinates.
+ *
  * @component
+ *
  * @category Components
  *
  * @example

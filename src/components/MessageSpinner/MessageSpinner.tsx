@@ -6,8 +6,9 @@
  * loading state UI, including randomized flavor text to engage users
  * during long-running operations.
  *
- * @category Components
  * @see {@link MessageSpinner}
+ *
+ * @category Components
  */
 
 import "./MessageSpinner.scss";
@@ -41,8 +42,11 @@ interface MessageSpinnerProps {
  * status messages (e.g., "Adjusting warp coils...") to improve perceived performance.
  *
  * @param {MessageSpinnerProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The rendered loading UI, or `null` if not visible.
+ *
  * @component
+ *
  * @category Components
  *
  * @example

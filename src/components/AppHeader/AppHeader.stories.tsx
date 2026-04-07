@@ -24,12 +24,13 @@ const meta = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
 // Wrapper component to reset store state before each story
+/**
+ *
+ * @example
+ */
 const StorybookWrapper = ({
 	children,
 	resetStores = true,
@@ -47,15 +48,16 @@ const StorybookWrapper = ({
 };
 
 // Decorator that wraps stories with necessary providers
+/**
+ *
+ * @example
+ */
 const withLocalProviders = (Story: React.FC) => (
 	<StorybookWrapper>
 		<Story />
 	</StorybookWrapper>
 );
 
-/**
- *
- */
 export const Desktop: Story = {
 	args: {
 		onShowChangelog: () => console.log("Changelog clicked"),
@@ -76,9 +78,6 @@ export const Desktop: Story = {
 	},
 };
 
-/**
- *
- */
 export const Tablet: Story = {
 	args: {
 		...Desktop.args,
@@ -99,9 +98,6 @@ export const Tablet: Story = {
 	},
 };
 
-/**
- *
- */
 export const Mobile: Story = {
 	args: {
 		...Desktop.args,

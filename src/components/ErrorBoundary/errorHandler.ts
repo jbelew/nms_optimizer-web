@@ -5,9 +5,10 @@
  * This module provides the `handleError` utility, which implements a comprehensive
  * cleanup and reporting strategy for fatal application crashes.
  *
- * @category Utilities
  * @see {@link handleError}
  * @see {@link ./errorHandler.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import { ErrorInfo } from "react";
@@ -31,10 +32,13 @@ import { safeClear } from "../../utils/storage";
  *
  * @param {Error} error - The caught exception. **Must not be null.**
  * @param {ErrorInfo} [errorInfo] - The React component stack metadata.
+ *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link safeClear}
  * @see {@link sendEvent}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

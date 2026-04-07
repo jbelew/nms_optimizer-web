@@ -6,9 +6,10 @@
  * user experience by suppressing tooltips on touch devices while maintaining
  * full accessibility on pointer-driven hardware.
  *
- * @category Components
  * @see {@link ConditionalTooltip}
  * @see {@link ./ConditionalTooltip.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 
 import React, { memo, useCallback } from "react";
@@ -37,11 +38,15 @@ interface ConditionalTooltipProps {
  * unnecessary updates and correctly forwards pointer events to its children.
  *
  * @param {ConditionalTooltipProps} props - Component properties.
+ *
  * @returns {JSX.Element} The child element, potentially enhanced with pointer listeners.
- * @component
- * @category Components
+ *
  * @see {@link useTooltipActions}
  * @see {@link isTouchDevice}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

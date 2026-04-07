@@ -7,9 +7,10 @@
  * network failures or non-2xx responses are automatically displayed to the
  * user via a global dialog, unless explicitly skipped.
  *
- * @category Utilities
  * @see {@link apiCall}
  * @see {@link ./apiCall.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import { useOptimizeStore } from "../store/OptimizeStore";
@@ -37,16 +38,21 @@ export interface ApiCallOptions extends RequestInit {
  * It uses {@link fetchJson} internally for the actual network request and JSON parsing.
  *
  * @template T - The expected return type of the JSON data.
+ *
  * @param {string} url - The API endpoint URL. Must be a valid URL.
  * @param {ApiCallOptions} [options={}] - Fetch options plus custom logic flags.
  * @param {number} [timeout=10000] - Timeout in milliseconds. Must be a positive integer.
+ *
  * @returns {Promise<T>} A promise that resolves to the parsed JSON response of type `T`.
+ *
  * @throws {HttpError} Throws if the response status is not "ok" (e.g., 4xx, 5xx).
  * @throws {Error} Throws on network failure, timeout, or JSON parsing error.
- * @category Utilities
+ *
  * @see {@link ApiCallOptions}
  * @see {@link fetchJson}
  * @see {@link useOptimizeStore}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

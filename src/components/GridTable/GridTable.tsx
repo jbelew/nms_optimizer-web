@@ -18,8 +18,9 @@ import GridTableButtons from "../GridTableButtons/GridTableButtons";
  * Defines the operational mode of the grid, including whether it's interactive
  * or a static shared view.
  *
- * @category Components
  * @see {@link GridTable}
+ *
+ * @category Components
  */
 interface GridTableProps {
 	/** Whether an optimization solve is currently active. */
@@ -38,6 +39,7 @@ interface GridTableProps {
  *
  * @param {GridTableProps} props - Component properties.
  * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref for the main grid container.
+ *
  * @returns {JSX.Element} The rendered grid table structure.
  *
  * @example
@@ -113,14 +115,16 @@ function GridTableComponent(
  * - Selective rendering of {@link GridControlButtons} for each row.
  * - Integration with {@link GridTableButtons} for grid-wide actions.
  *
- * @category Components
- * @component
  * @see {@link GridTableProps}
  * @see {@link GridCell}
  * @see {@link GridShake}
  * @see {@link GridStore}
  * @see {@link GridControlButtons}
  * @see {@link GridTableButtons}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

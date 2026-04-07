@@ -27,13 +27,16 @@ interface OptimizationAlertDialogProps {
  * a standard {@link AppDialog}.
  *
  * @param {OptimizationAlertDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The rendered dialog, or `null` if no technology is targeted.
  *
  * @see {@link ./OptimizationAlertDialog.test.tsx Unit Tests}
  * @see {@link ./OptimizationAlertDialog.stories.tsx Storybook}
  * @see {@link AppDialog}
  * @see {@link OptimizationAlertContent}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

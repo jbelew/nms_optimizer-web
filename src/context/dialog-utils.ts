@@ -5,6 +5,7 @@ import { createContext, useContext } from "react";
  * Union type of all valid routed dialog identifiers.
  *
  * @see {@link import('./DialogContext').DialogProvider}
+ *
  * @category Dialog
  */
 export type DialogType =
@@ -20,6 +21,7 @@ export type DialogType =
  * Context type for the application's routed dialog system.
  *
  * @see {@link import('./DialogContext').DialogProvider}
+ *
  * @category Dialog
  */
 export interface DialogContextType {
@@ -57,6 +59,7 @@ export interface DialogContextType {
  * React Context for managing and providing global dialog-related state.
  *
  * @see {@link import('./DialogContext').DialogProvider}
+ *
  * @category Dialog
  */
 export const DialogContext = createContext<DialogContextType | undefined>(undefined);
@@ -65,9 +68,12 @@ export const DialogContext = createContext<DialogContextType | undefined>(undefi
  * Custom hook for accessing the `DialogContext`.
  *
  * @returns {DialogContextType} The active dialog context value.
+ *
  * @throws {Error} If called outside of a `DialogProvider`.
+ *
  * @see {@link import('./DialogContext').DialogProvider}
  * @see {@link DialogContextType}
+ *
  * @category Hooks
  *
  * @example Hook usage for dialog control

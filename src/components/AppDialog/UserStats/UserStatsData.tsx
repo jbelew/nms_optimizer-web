@@ -150,13 +150,16 @@ const LazyRechartsChart = lazy(async () => {
  *
  * @param {Object} props - Component properties.
  * @param {boolean} props.isOpen - Whether the parent dialog is open, used to gate color fetching.
+ *
  * @returns {JSX.Element} The rendered statistics data view.
  *
  * @see {@link fetchUserStats}
  * @see {@link fetchTechTreeColors}
  * @see {@link useUserStats}
  * @see {@link useTechTreeColors}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -188,7 +191,9 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 *
 	 * @param {UserStat[] | null} rawData - The list of statistics from the API.
 	 * @param {string[]} shipTypes - Filter for specific ship types.
+	 *
 	 * @returns {Array<{ name: string, value: number }>} Aggregated and filtered chart data.
+	 *
 	 * @example
 	 * ```typescript
 	 * const starshipData = aggregateData(stats, ["standard", "sentinel", "solar"]);
@@ -247,7 +252,9 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 *
 	 * @param {Array<{ name: string, value: number }>} chartData - Data to plot.
 	 * @param {string} titleKey - Translation key for the section header.
+	 *
 	 * @returns {JSX.Element} The chart section.
+	 *
 	 * @example
 	 * ```tsx
 	 * {renderChart(starshipData, "dialogs.userStats.starshipChartTitle")}

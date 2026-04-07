@@ -29,6 +29,7 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  * @see {@link ../../utils/buildFileValidation.ts Build File Validation}
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example
@@ -49,9 +50,11 @@ export const useBuildFileManager = () => {
 	 * Includes state from `GridStore`, `TechStore`, `TechBonusStore`, and `ModuleSelectionStore`.
 	 *
 	 * @param {string} buildName - The display name for the build. **Must not be empty.**
+	 *
 	 * @returns {Promise<void>} Resolves when the file download is initiated.
 	 *
 	 * @throws {Error} If state extraction, checksum computation, or file creation fails.
+	 *
 	 * @example
 	 * ```typescript
 	 * await saveBuildToFile("My Fighter");
@@ -126,9 +129,11 @@ export const useBuildFileManager = () => {
 	 * **Will switch the active ship type if the file contains a different one.**
 	 *
 	 * @param {File} file - The file object to load. **Must have a `.nms` extension.**
+	 *
 	 * @returns {Promise<void>} Resolves when the state has been successfully restored to all stores.
 	 *
 	 * @throws {Error} If validation (type, size, JSON, checksum, shipType) or restoration fails.
+	 *
 	 * @example
 	 * ```typescript
 	 * await loadBuildFromFile(selectedFile);

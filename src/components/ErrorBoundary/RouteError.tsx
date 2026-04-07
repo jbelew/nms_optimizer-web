@@ -5,8 +5,9 @@
  * This module provides the `RouteError` component, which acts as the default
  * `errorElement` for the application's routing system.
  *
- * @category Components
  * @see {@link RouteError}
+ *
+ * @category Components
  */
 
 import { useEffect } from "react";
@@ -25,11 +26,14 @@ import { handleError } from "./errorHandler";
  * renders the standard `ErrorContent` in its 'page' variant.
  *
  * @returns {JSX.Element} The rendered route error page.
- * @component
- * @category Components
+ *
  * @see {@link useRouteError}
  * @see {@link handleError}
  * @see {@link ErrorContent}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

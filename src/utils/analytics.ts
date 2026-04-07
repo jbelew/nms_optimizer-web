@@ -13,10 +13,11 @@
  * - Event validation and dispatching.
  * - Web Vitals reporting.
  *
- * @category Utilities
  * @see {@link initializeAnalytics}
  * @see {@link sendEvent}
  * @see {@link ./analytics.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import ReactGA from "react-ga4";
@@ -38,6 +39,7 @@ import { reportWebVitals } from "./reportWebVitals";
  * when bundled in environments that might wrap CJS exports in a `.default` property.
  *
  * @see {@link https://github.com/MatteoGioioso/react-ga-4} react-ga4
+ *
  * @category Utilities
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,8 +53,9 @@ const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
  * and server-side fallback tracking. Includes standard GA4 fields and
  * application-specific custom dimensions.
  *
- * @category Utilities
  * @see {@link sendEvent}
+ *
+ * @category Utilities
  */
 export interface GA4Event {
 	/** The category of the event (e.g., `'ui'`, `'error'`, `'api'`). */
@@ -123,6 +126,7 @@ let gaInitialized = false;
  * Some blockers allow GTM but block the collection endpoint.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if tracking is likely blocked.
+ *
  * @category Utilities
  *
  * @example
@@ -197,6 +201,7 @@ let adBlockerResult: boolean | null = null;
  * This is the preferred way to check for ad blockers within the application.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if an ad blocker is detected.
+ *
  * @category Utilities
  *
  * @example
@@ -259,13 +264,14 @@ export const env = {
  * This function clears the initialization flags and cached ad blocker results,
  * allowing for a clean slate between test runs.
  *
- * @internal For testing purposes only.
  * @category Utilities
  *
  * @example
  * ```ts
  * resetAnalyticsForTesting();
  * ```
+ *
+ * @internal For testing purposes only.
  */
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
@@ -294,11 +300,13 @@ const globalIsInstalled =
  * Automatically starts tracking Web Vitals once initialized.
  *
  * @returns {Promise<void>} Resolves when initialization is complete or skipped.
- * @category Utilities
+ *
  * @see {@link ReactGAInstance}
  * @see {@link getAdBlockerDetectionResult}
  * @see {@link isBot}
  * @see {@link reportWebVitals}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -345,7 +353,9 @@ export const initializeAnalytics = async () => {
  * Ensures that all events sent to GA4 have at least an `action` and a `category`.
  *
  * @param {GA4Event} event - The event to validate.
+ *
  * @throws {Error} Throws if `action` or `category` are missing.
+ *
  * @category Utilities
  *
  * @example
@@ -372,11 +382,14 @@ const validateEvent = (event: GA4Event): void => {
  * asynchronously ("fire and forget").
  *
  * @param {GA4Event} event - The event to send.
+ *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link GA4Event}
  * @see {@link getAdBlockerDetectionResult}
  * @see {@link sendAnalyticsEvent}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

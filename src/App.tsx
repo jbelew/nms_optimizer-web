@@ -18,16 +18,33 @@ import { useOptimizeStore } from "./store/OptimizeStore";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
+/**
+ * Lazy-loaded component for displaying technical error details and recovery actions.
+ */
 const ErrorContent = lazy(() => import("./components/AppDialog/Error/ErrorContent"));
+
+/**
+ * Lazy-loaded dialog for generating and displaying shareable build URLs.
+ */
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
+
+/**
+ * Lazy-loaded content for the initial application welcome and introduction.
+ */
 const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/WelcomeContent"));
 
+/**
+ * Lazy-loaded orchestrator for route-based modal dialogs.
+ */
 const RoutedDialogs = lazy(() =>
 	import("./components/RoutedDialogs/RoutedDialogs").then((module) => ({
 		default: module.RoutedDialogs,
 	}))
 );
 
+/**
+ * Lazy-loaded route component for displaying global user equipment statistics.
+ */
 const UserStatsRoute = lazy(() =>
 	import("./routes/UserStatsRoute").then((module) => ({
 		default: module.UserStatsRoute,
@@ -49,7 +66,9 @@ const UserStatsRoute = lazy(() =>
  * @see {@link App}
  * @see {@link useDialog}
  * @see {@link useUrlSync}
+ *
  * @category Components
+ *
  * @example
  * ```tsx
  * // Typically rendered within App's DialogProvider
@@ -132,6 +151,7 @@ const AppContent: FC = () => {
 /**
  * The root component of the No Man's Sky Technology Layout Optimizer.
  *
+ * @remarks
  * This component sets up the high-level application environment, including:
  * - SEO and Title management via `useSeoAndTitle`.
  * - URL validation and sanitization.
@@ -146,10 +166,15 @@ const AppContent: FC = () => {
  * @see {@link useSeoAndTitle}
  * @see {@link useUpdateCheck}
  * @see {@link ./App.test.tsx Unit Tests}
+ *
+ * @component
+ *
  * @category Components
  *
  * @example
+ * ```tsx
  * <App />
+ * ```
  */
 const App: FC = () => {
 	const { t } = useTranslation();

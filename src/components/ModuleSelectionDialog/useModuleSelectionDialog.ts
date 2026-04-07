@@ -15,6 +15,7 @@ import { usePlatformStore } from "@/store/PlatformStore";
  * 3. Structuring and distributing props to specialized sub-components (`DialogHeader`, `DialogBody`, `DialogFooter`).
  *
  * @param {ModuleSelectionDialogProps} props - The raw properties passed to the main dialog.
+ *
  * @returns {object} Structured props for children and internal UI flags.
  *
  * @example

@@ -12,7 +12,9 @@ declare module "virtual:markdown-bundle" {
 	 *
 	 * @param {string} lang - The ISO language code.
 	 * @param {string} fileName - The identifier of the markdown file.
+	 *
 	 * @returns {string} The raw markdown content.
+	 *
 	 * @example Content retrieval
 	 * ```ts
 	 * const content = getMarkdown("en", "ABOUT");

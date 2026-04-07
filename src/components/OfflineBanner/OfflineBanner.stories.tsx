@@ -27,14 +27,8 @@ const meta = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
-/**
- *
- */
 export const Offline: Story = {
 	render: (args) => <OfflineBanner {...args} />,
 };

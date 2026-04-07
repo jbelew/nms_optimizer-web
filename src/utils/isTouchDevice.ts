@@ -4,8 +4,9 @@
  * @remarks
  * Provides functions to determine if the hardware and browser support touch interaction.
  *
- * @category Utilities
  * @see {@link isTouchDevice}
+ *
+ * @category Utilities
  */
 
 /**
@@ -16,6 +17,7 @@
  * to determine if the hardware supports touch interaction.
  *
  * @returns {boolean} `true` if the device supports touch, otherwise `false`.
+ *
  * @category Utilities
  *
  * @example

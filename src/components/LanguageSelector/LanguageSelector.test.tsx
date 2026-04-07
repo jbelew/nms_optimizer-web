@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock window.location.search
+/**
+ *
+ * @example
+ */
 const mockWindowLocation = (search: string) => {
 	const formattedSearch = search ? (search.startsWith("?") ? search : "?" + search) : "";
 	Object.defineProperty(window, "location", {
@@ -15,6 +19,10 @@ const mockWindowLocation = (search: string) => {
 };
 
 // Create a hook that uses the language selector logic
+/**
+ *
+ * @example
+ */
 const useLanguageSelectorNavigation = (pathParts: string[], newLang: string) => {
 	const langCand = pathParts[0];
 	const languages = ["es", "fr", "de", "pt"];

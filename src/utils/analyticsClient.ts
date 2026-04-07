@@ -12,9 +12,10 @@
  * - Synchronization with GA4 cookies.
  * - Reliable event dispatching using `navigator.sendBeacon` or `fetch`.
  *
- * @category Utilities
  * @see {@link sendEvent}
  * @see {@link ./analyticsClient.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import { API_URL } from "../constants";
@@ -68,6 +69,7 @@ let clientId: string;
  * Cookie format is expected to be `GA1.1.<clientId>.<timestamp>` or `GA1.2.<clientId>.<timestamp>`.
  *
  * @returns {string | null} The extracted Client ID or `null` if the cookie is not found or invalid.
+ *
  * @category Utilities
  *
  * @example
@@ -92,9 +94,11 @@ const getGaClientIdFromCookie = (): string | null => {
  * The ID is persisted in `localStorage`.
  *
  * @returns {string} The initialized client ID.
- * @category Utilities
+ *
  * @see {@link safeGetItem}
  * @see {@link safeSetItem}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -130,8 +134,10 @@ export const initializeAnalyticsClient = (): string => {
  * Lazily initializes the client ID if it hasn't been set yet.
  *
  * @returns {string} The active client ID.
- * @category Utilities
+ *
  * @see {@link initializeAnalyticsClient}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -158,10 +164,13 @@ export const getClientId = (): string => {
  * @param {string} eventName - The name of the event (e.g., "optimization_complete"). **Must not be empty.**
  * @param {AnalyticsEventParams} [params={}] - Optional event parameters.
  * @param {string} [userId] - Optional authenticated user identifier.
+ *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link AnalyticsEventPayload}
  * @see {@link getClientId}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

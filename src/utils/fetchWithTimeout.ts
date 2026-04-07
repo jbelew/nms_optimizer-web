@@ -6,8 +6,9 @@
  * that requests do not hang indefinitely. It uses `AbortController` to
  * cancel requests that exceed the specified timeout duration.
  *
- * @category Utilities
  * @see {@link fetchWithTimeout}
+ *
+ * @category Utilities
  */
 
 /**
@@ -21,8 +22,11 @@
  * @param {string} url - The URL to fetch. **Must be a valid URL string.**
  * @param {RequestInit} [options={}] - Standard `fetch` options. The `signal` property will be overridden.
  * @param {number} [timeoutMs=10000] - Timeout duration in milliseconds. **Must be a positive integer.**
+ *
  * @returns {Promise<Response>} A promise that resolves to the `Response` object.
+ *
  * @throws {Error} Throws an error if the request exceeds the `timeoutMs` duration or if the network request fails.
+ *
  * @category Utilities
  *
  * @example

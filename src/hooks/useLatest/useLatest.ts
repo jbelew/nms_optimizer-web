@@ -8,11 +8,15 @@ import { useLayoutEffect, useRef } from "react";
  * asynchronous callbacks or effects without needing to include them in the
  * dependency array, thus avoiding unnecessary effect re-executions.
  *
- * @hook
- * @category Utility Hooks
  * @template T - The type of the value being tracked.
+ *
  * @param {T} value - The value to store in the ref.
+ *
  * @returns {MutableRefObject<T>} A ref object whose `.current` property matches the latest `value`.
+ *
+ * @hook
+ *
+ * @category Utility Hooks
  *
  * @example Accessing latest state in a timer
  * ```tsx

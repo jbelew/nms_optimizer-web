@@ -8,9 +8,6 @@ import { vi } from "vitest";
 import { DialogContext } from "../../../context/dialog-utils";
 import WelcomeContent from "./WelcomeContent";
 
-/**
- *
- */
 interface TransProps {
 	i18nKey: string;
 	children?: ReactNode;

@@ -27,10 +27,13 @@ interface OptimizationAlertContentProps {
  * alternative.
  *
  * @param {OptimizationAlertContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered alert content.
  *
  * @see {@link ./OptimizationAlertContent.test.tsx Unit Tests}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -53,6 +56,7 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 	 * Executes the forced optimization callback.
 	 *
 	 * @returns {Promise<void>}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleForceOptimizeClick();

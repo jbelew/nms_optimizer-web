@@ -23,10 +23,13 @@ interface ShareLinkContentProps {
  * and includes a feedback mechanism (checkmark icon) when the link is successfully copied.
  *
  * @param {ShareLinkContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered share link UI.
  *
  * @see {@link ./ShareLinkContent.test.tsx Unit Tests}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -53,6 +56,7 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 	 * Copies the `shareUrl` to the system clipboard and toggles the success state.
 	 *
 	 * @returns {Promise<void>}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleCopyClick();

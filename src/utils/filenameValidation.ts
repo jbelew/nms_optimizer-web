@@ -6,9 +6,10 @@
  * are safe and valid across major operating systems (Windows, macOS, Linux).
  * It enforces length limits, handles reserved names, and strips illegal characters.
  *
- * @category Utilities
  * @see {@link isValidFilename}
  * @see {@link sanitizeFilename}
+ *
+ * @category Utilities
  */
 
 /**
@@ -43,9 +44,12 @@ export const FILENAME_REGEX = new RegExp(
  * characters like `< > : " / \ | ? *`.
  *
  * @param {string} filename - The filename to validate. Must not be empty.
+ *
  * @returns {boolean} Returns `true` if the filename is valid, otherwise `false`.
- * @category Utilities
+ *
  * @see {@link FILENAME_REGEX}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -67,9 +71,12 @@ export const isValidFilename = (filename: string): boolean => {
  * Safe for use in `Content-Disposition` headers and local filesystem operations.
  *
  * @param {string} filename - The raw filename string to sanitize.
+ *
  * @returns {string} A sanitized, file-system safe filename (length capped at 255 chars).
- * @category Utilities
+ *
  * @see {@link isValidFilename}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

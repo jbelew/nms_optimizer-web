@@ -17,7 +17,9 @@ import { useGridCellStyle } from "./useGridCellStyle";
  * to a short alphanumeric code used for visual identification in the grid.
  *
  * @param {string} [label] - The technology label to analyze.
+ *
  * @returns {string} A 1-2 character priority code (e.g., "S1", "F2", "1") or an empty string.
+ *
  * @category Helpers
  *
  * @example
@@ -87,7 +89,9 @@ interface GridCellProps {
  * displaying them in tooltips or grid labels.
  *
  * @param {string} [label] - The raw label string.
+ *
  * @returns {string} The cleaned label string.
+ *
  * @category Helpers
  *
  * @example
@@ -125,15 +129,18 @@ const CORNER_SPANS = (
  * reactively retrieved from `GridStore` using the `useCell` hook.
  *
  * @param {GridCellProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered cell element.
- * @component
- * @category Components
  *
  * @see {@link useGridCellInteraction}
  * @see {@link useGridCellStyle}
  * @see {@link useCell}
  * @see {@link import('../../store/GridStore').GridStore}
  * @see {@link ./GridCell.test.tsx Unit Tests}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx
@@ -143,7 +150,6 @@ const CORNER_SPANS = (
  * @performance
  * - Avoids full grid re-renders by subscribing only to specific cell data.
  * - Optimized asset loading (eager vs lazy) based on grid position.
- *
  * @accessibility
  * - Full keyboard navigation support (Space/Enter for activation).
  * - ARIA `gridcell` role and index mapping.

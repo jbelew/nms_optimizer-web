@@ -6,8 +6,9 @@
  * the application bootstrap process, before the React component tree is fully
  * mounted. This helps reduce render waterfalls and improves perceived performance.
  *
- * @category Utilities
  * @see {@link preloadInitialState}
+ *
+ * @category Utilities
  */
 
 import { fetchShipTypes } from "../hooks/useShipTypes/useShipTypes";
@@ -27,10 +28,12 @@ import { resolveInitialPlatform } from "./platformResolver";
  * 2. The tech tree for the heuristically determined initial platform.
  *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link fetchShipTypes}
  * @see {@link fetchTechTreeAsync}
  * @see {@link resolveInitialPlatform}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

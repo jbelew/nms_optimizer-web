@@ -16,11 +16,12 @@ let userStatsPromise: Promise<UserStat[]> | null = null;
  * It is primarily used by components that display community trends and
  * popular technology configurations.
  *
- * @category Data Fetching
  * @returns {Promise<UserStat[]>} A promise resolving to an array of statistics objects.
  *
  * @see {@link apiCall} for the underlying network implementation.
  * @see {@link import('./useUserStats').useUserStats} for the React hook consumer.
+ *
+ * @category Data Fetching
  *
  * @example
  * ```ts

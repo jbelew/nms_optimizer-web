@@ -11,11 +11,14 @@ import { useLocation } from "react-router-dom";
  * it updates the application's active language.
  *
  * @returns {string} The current active language code (e.g., 'en', 'fr').
+ *
  * @default "en"
  *
- * @hook
- * @category Hooks
  * @see {@link ./useLanguage.test.tsx Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

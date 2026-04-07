@@ -1,3 +1,16 @@
+/**
+ * Technology tree data processing and list module.
+ *
+ * @remarks
+ * This module contains the `TechTreeContent` component, which transforms
+ * raw technology tree data into a sorted, categorical list of interactive sections.
+ *
+ * @see {@link TechTreeContent}
+ * @see {@link ./TechTreeContent.test.tsx Unit Tests}
+ *
+ * @category Components
+ */
+
 import React from "react";
 
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
@@ -19,15 +32,26 @@ interface TechTreeContentProps {
 /**
  * Internal component that handles the processing and rendering of technology sections.
  *
+ * @remarks
  * It filters the raw `techTree` data to remove metadata (like grid definitions),
  * sorts technologies alphabetically within their categories, and calculates
  * the overall grid capacity state.
  *
  * @param {TechTreeContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered technology sections.
  *
+ * @see {@link TechTreeSection}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <TechTreeContent techTree={fetchedTree} handleOptimize={fn} solving={false} />
+ * // renders list of tech categories
+ * ```
  */
 export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 	handleOptimize,

@@ -1,3 +1,16 @@
+/**
+ * Categorized technology section layout module.
+ *
+ * @remarks
+ * This module provides the `TechTreeSection` component, which groups
+ * individual technologies under themed headers with decorative icons.
+ *
+ * @see {@link TechTreeSection}
+ * @see {@link ./TechTreeSection.test.tsx Unit Tests}
+ *
+ * @category Components
+ */
+
 import React from "react";
 import { Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -55,15 +68,26 @@ interface TechTreeSectionProps {
 /**
  * A layout component that groups related technologies into a titled section.
  *
+ * @remarks
  * It renders a category header with a decorative icon, followed by a list
  * of interactive `TechTreeRow` components. It handles localized category
  * names and resolution-aware icon paths.
  *
  * @param {TechTreeSectionProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered technology category section.
  *
+ * @see {@link TechTreeRow}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <TechTreeSection type="Propulsion" technologies={items} index={0} handleOptimize={fn} solving={false} isGridFull={false} />
+ * // renders Propulsion header and child rows
+ * ```
  */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 	type,

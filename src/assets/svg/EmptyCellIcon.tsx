@@ -16,6 +16,7 @@ interface EmptyCellIconProps {
  * It renders a complex path that adapts its color based on the `fillColor` prop.
  *
  * @param {EmptyCellIconProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered SVG icon.
  *
  * @example

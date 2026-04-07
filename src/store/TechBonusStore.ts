@@ -5,9 +5,6 @@ import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
 
-/**
- *
- */
 type SetItemFunction = (
 	name: string,
 	value: StorageValue<Partial<TechBonusStore>>
@@ -18,7 +15,9 @@ type SetItemFunction = (
  *
  * @param {SetItemFunction} setItemFn - The storage setter function.
  * @param {number} msToWait - Delay in milliseconds.
+ *
  * @returns {function(string, StorageValue<Partial<TechBonusStore>>): Promise<void>} The debounced setter function.
+ *
  * @example
  * ```typescript
  * const debouncedSet = debounceSetItem(mySetFn, 500);
@@ -87,8 +86,9 @@ export type BonusStatusData = {
 /**
  * State and actions for managing calculated efficiency statuses.
  *
- * @category State
  * @see {@link BonusStatusData}
+ *
+ * @category State
  */
 export type TechBonusStore = {
 	/** Mapping of technology keys to their calculated status data. */
@@ -104,6 +104,7 @@ export type TechBonusStore = {
 	 * Retrieves the current status data for a technology.
 	 *
 	 * @param {string} tech - The technology identifier.
+	 *
 	 * @returns {BonusStatusData | null} The status data, or `null` if not yet calculated.
 	 */
 	getBonusStatus: (tech: string) => BonusStatusData | null;
@@ -127,12 +128,15 @@ export type TechBonusStore = {
  * for each technology across re-renders and sessions.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<TechBonusStore>>} The tech bonus store hook.
- * @hook
- * @category State
+ *
  * @see {@link TechBonusStore}
  * @see {@link BonusStatusData}
  * @see {@link safeGetItem}
  * @see {@link safeSetItem}
+ *
+ * @hook
+ *
+ * @category State
  *
  * @example
  * ```tsx

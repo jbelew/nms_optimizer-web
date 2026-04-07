@@ -19,6 +19,7 @@ import { useTechStore } from "@/store/TechStore";
  * @param {function(string): Promise<void>} handleOptimize - The core async function to run the solve.
  * @param {boolean} isGridFull - Flag indicating if the grid has no more available slots.
  * @param {boolean} hasTechInGrid - Flag indicating if the tech is currently placed.
+ *
  * @returns {object} Handlers for optimization and reset UI actions.
  * @returns {Function} returns.handleOptimizeClick - Initiates the optimization process.
  * @returns {Function} returns.handleReset - Clears the technology from the grid and resets bonuses.
@@ -30,6 +31,7 @@ import { useTechStore } from "@/store/TechStore";
  * @see {@link ./useTechOptimization.test.ts Unit Tests}
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example

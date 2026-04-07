@@ -14,8 +14,9 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
 /**
  * The return type of the `useOptimize` hook.
  *
- * @category Hooks
  * @see {@link useOptimize}
+ *
+ * @category Hooks
  */
 export interface UseOptimizeReturn {
 	/** Whether an optimization is currently in progress. */
@@ -27,6 +28,7 @@ export interface UseOptimizeReturn {
 	 *
 	 * @param {string} tech - The unique identifier for the technology (e.g., `'pulse'`).
 	 * @param {boolean} [forced] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
+	 *
 	 * @returns {Promise<void>} Resolves when the optimization request is handled.
 	 */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
@@ -48,7 +50,9 @@ export interface UseOptimizeReturn {
  * It performs runtime checks on the `solve_method`, `grid`, and `bonus` properties.
  *
  * @param {unknown} value - The object or value to validate.
+ *
  * @returns {value is ApiResponse} `true` if `value` matches the `ApiResponse` schema.
+ *
  * @see {@link ApiResponse}
  *
  * @example
@@ -90,8 +94,6 @@ function isApiResponse(value: unknown): value is ApiResponse {
  *
  * It acts as the bridge between the React UI and the high-performance Python optimization backend.
  *
- * @hook
- * @category Hooks
  * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
  *
  * @see {@link useGridStore} for state persistence.
@@ -102,6 +104,10 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * @see {@link useAnalytics} for tracking solve events and results.
  * @see {@link useBreakpoint} for adjusting grid update frequency.
  * @see {@link useScrollGridIntoView} for mobile UX.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -181,10 +187,13 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * @param {string} tech - The internal identifier for the technology (e.g., `'pulse'`).
 	 * @param {boolean} [forced=false] - If `true`, bypasses pattern matching and uses advanced solvers immediately.
 	 * @param {number} [retryCount=0] - Internal counter for handling network retries.
+	 *
 	 * @returns {Promise<void>} Resolves when the optimization is complete or an error is handled.
+	 *
 	 * @see {@link createSocket}
 	 * @see {@link useAnalytics}
 	 * @see {@link useGridStore}
+	 *
 	 * @example
 	 * ```tsx
 	 * await handleOptimize("pulse", true);
@@ -433,7 +442,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * Resets the warning overlay by clearing the current tech key from `useOptimizeStore`.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @see {@link useOptimizeStore}
+	 *
 	 * @example
 	 * ```tsx
 	 * clearPatternNoFitTech();
@@ -448,7 +459,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * This re-triggers `handleOptimize` with the `forced` flag set to `true` for the current `patternNoFitTech`.
 	 *
 	 * @returns {Promise<void>} Resolves when the forced optimization is triggered.
+	 *
 	 * @see {@link handleOptimize}
+	 *
 	 * @example
 	 * ```tsx
 	 * await handleForceCurrentPnfOptimize();

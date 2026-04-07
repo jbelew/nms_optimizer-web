@@ -6,9 +6,10 @@
  * the application interface. It handles route synchronization and asset
  * loading for flags.
  *
- * @category Components
  * @see {@link LanguageSelector}
  * @see {@link ./LanguageSelector.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 
 import "./LanguageSelector.scss";
@@ -55,10 +56,13 @@ const languageFlagPaths: LanguageFlagPaths = {
  * URL path prefix, and sends an analytics event.
  *
  * @returns {JSX.Element} The rendered language selection dropdown.
- * @component
- * @category Components
+ *
  * @see {@link useTranslation}
  * @see {@link useAnalytics}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example Component usage
  * ```tsx
@@ -66,7 +70,10 @@ const languageFlagPaths: LanguageFlagPaths = {
  * // renders localized flag dropdown
  * ```
  */
-export const LanguageSelector: React.FC = () => {
+export /**
+ *
+ */
+const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
 	const isMd = useBreakpoint("1024px");
 	const { t, i18n } = useTranslation();
@@ -95,6 +102,7 @@ export const LanguageSelector: React.FC = () => {
 	 * Finalizes the language transition by updating the URL and i18n store.
 	 *
 	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
+	 *
 	 * @example Switching to German
 	 * ```typescript
 	 * handleLanguageChange("de");

@@ -5,8 +5,9 @@
  * This module ensures consistent icon usage across the application and
  * optimizes the build bundle by facilitating tree-shaking for `@radix-ui/react-icons`.
  *
- * @category Utilities
  * @see {@link radixIconRegistry}
+ *
+ * @category Utilities
  */
 
 import { ElementType } from "react";

@@ -6,8 +6,9 @@
  * using `socket.io-client`. It defines standard options and transport error
  * handling logic.
  *
- * @category Utilities
  * @see {@link createSocket}
+ *
+ * @category Utilities
  */
 
 import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
@@ -46,9 +47,11 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  * internal logging for connection lifecycle tracking.
  *
  * @returns {Socket | null} A new `Socket` instance, or `null` if initialization fails.
- * @category Utilities
+ *
  * @see {@link WS_URL}
  * @see {@link SOCKET_OPTIONS}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

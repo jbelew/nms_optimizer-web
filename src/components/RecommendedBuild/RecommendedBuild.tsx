@@ -1,4 +1,16 @@
-// src/components/RecommendedBuild/RecommendedBuild.tsx
+/**
+ * Community build recommendation integration module.
+ *
+ * @remarks
+ * This module provides the `RecommendedBuild` component, which allows users
+ * to quickly apply expert-verified technology layouts to their equipment.
+ *
+ * @see {@link RecommendedBuild}
+ * @see {@link ./RecommendedBuild.stories.tsx Storybook}
+ *
+ * @category Components
+ */
+
 import React from "react";
 import { InfoCircledIcon, MagicWandIcon } from "@radix-ui/react-icons";
 import {
@@ -31,16 +43,28 @@ interface RecommendedBuildProps {
 /**
  * A component that allows users to view and apply pre-configured technology layouts.
  *
+ * @remarks
  * It provides a "Magic Wand" interface that automatically populates the grid with
  * optimized community builds. If multiple builds are available, it displays a
  * dropdown menu; otherwise, it shows a direct apply button. On mobile, it
  * includes an informative callout with a link to instructions.
  *
  * @param {RecommendedBuildProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered recommended build interface.
  *
+ * @see {@link useRecommendedBuild}
+ * @see {@link usePlatformStore}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example Basic usage
+ * ```tsx
  * <RecommendedBuild techTree={currentTree} isLarge={true} />
+ * // renders build selection UI
+ * ```
  */
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }) => {
 	const { t } = useTranslation();
@@ -55,6 +79,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * Defers the build application and tracks the event.
 	 *
 	 * @param {object} build - The build configuration object to apply.
+	 *
 	 * @example Apply a specific build
 	 * ```ts
 	 * handleApply(builds[0]);
@@ -90,7 +115,9 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * Renders the interaction element based on the number of available builds.
 	 *
 	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Style overrides for the button.
+	 *
 	 * @returns {JSX.Element | null} The button element or null if no builds available.
+	 *
 	 * @example Render with custom margin
 	 * ```tsx
 	 * renderBuildButton({ mt: "2" });

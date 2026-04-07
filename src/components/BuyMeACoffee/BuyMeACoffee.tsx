@@ -5,8 +5,9 @@
  * Provides a UI entry point for users to support the project via the
  * "Buy Me A Coffee" platform.
  *
- * @category Components
  * @see {@link BuyMeACoffee}
+ *
+ * @category Components
  */
 
 import { useRef } from "react";
@@ -23,13 +24,14 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
  * and opens the donation page in a new tab after a 100ms delay to ensure
  * the event is dispatched.
  *
+ * @returns {JSX.Element} The rendered donation button.
+ *
  * @see {@link useAnalytics} - Used for tracking click events.
  * @see {@link useBreakpoint} - Used for responsive sizing.
  *
  * @component
- * @category Components
  *
- * @returns {JSX.Element} The rendered donation button.
+ * @category Components
  *
  * @example
  * ```tsx
@@ -46,7 +48,9 @@ export default function BuyMeACoffee() {
 	 * Handles the button click, tracks analytics, and opens the external URL.
 	 *
 	 * @param {React.MouseEvent<HTMLAnchorElement>} event - The click event.
+	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleButtonClick(event);

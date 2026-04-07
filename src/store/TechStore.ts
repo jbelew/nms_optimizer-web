@@ -7,9 +7,10 @@ import { useModuleSelectionStore } from "./ModuleSelectionStore";
 /**
  * State and actions for managing technology definitions, metadata, and solve results.
  *
- * @category State
  * @see {@link TechTreeItem}
  * @see {@link useModuleSelectionStore}
+ *
+ * @category State
  */
 export interface TechState {
 	/** Mapping of technology keys to their theoretical maximum bonus. */
@@ -75,6 +76,7 @@ export interface TechState {
 	 * @param {Record<string, string>} colors - Tech-to-color mapping.
 	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
 	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 *
 	 * @see {@link useModuleSelectionStore}
 	 */
 	initializeTechTree: (
@@ -86,6 +88,7 @@ export interface TechState {
 	 * Returns the color assigned to a specific technology.
 	 *
 	 * @param {string} tech - The technology key.
+	 *
 	 * @returns {string|undefined} The assigned color, or `undefined` if not found.
 	 */
 	getTechColor: (tech: string) => string | undefined;
@@ -139,8 +142,10 @@ export interface TechState {
  * the results of the latest optimization runs.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<TechState>>} The tech store hook.
- * @category State
+ *
  * @see {@link TechState}
+ *
+ * @category State
  *
  * @example
  * const { max_bonus, setTechMaxBonus } = useTechStore();

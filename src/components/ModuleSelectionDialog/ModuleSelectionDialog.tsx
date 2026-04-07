@@ -6,10 +6,11 @@
  * precisely control which technology upgrades are included in optimization
  * calculations. It supports categorical filtering and mass-selection.
  *
- * @category Components
  * @see {@link ModuleSelectionDialog}
  * @see {@link ./ModuleSelectionDialog.test.tsx Unit Tests}
  * @see {@link ./ModuleSelectionDialog.stories.tsx Storybook}
+ *
+ * @category Components
  */
 
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
@@ -86,13 +87,17 @@ export interface ModuleSelectionDialogProps {
  * to manage the complex state of multi-select and property mapping.
  *
  * @param {ModuleSelectionDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered module selection UI.
- * @component
- * @category Components
+ *
  * @see {@link useModuleSelectionDialog}
  * @see {@link DialogBody}
  * @see {@link DialogHeader}
  * @see {@link DialogFooter}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

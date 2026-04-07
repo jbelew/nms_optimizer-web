@@ -6,9 +6,10 @@
  * scroll-aware interface for accessing critical application features on
  * small-screen devices.
  *
- * @category Components
  * @see {@link MobileToolbar}
  * @see {@link ./MobileToolbar.stories.tsx Storybook}
+ *
+ * @category Components
  */
 
 import React, { forwardRef, useTransition } from "react";
@@ -63,12 +64,16 @@ type MobileToolbarProps = {
  *
  * @param {MobileToolbarProps} props - Component properties.
  * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the root toolbar container.
+ *
  * @returns {JSX.Element} The rendered mobile toolbar.
- * @component
- * @category Components
+ *
  * @see {@link LanguageSelector}
  * @see {@link useA11yStore}
  * @see {@link useGridStore}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

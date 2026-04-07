@@ -24,6 +24,7 @@ export const RouteContext = createContext<RouteContextType>({
  * Custom hook for accessing the `RouteContext`.
  *
  * @returns {RouteContextType} The active route context value.
+ *
  * @see {@link RouteContext}
  *
  * @example

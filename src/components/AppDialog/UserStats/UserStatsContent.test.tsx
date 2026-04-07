@@ -34,6 +34,10 @@ vi.mock("@/hooks/useTechTreeColors/techTreeColorsResource", () => ({
 }));
 
 // Helper to render component within Dialog context
+/**
+ *
+ * @example
+ */
 const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>
@@ -43,6 +47,10 @@ const renderWithDialog = (component: React.ReactElement) => {
 };
 
 // Helper to create a never-resolving promise for Suspense
+/**
+ *
+ * @example
+ */
 const suspend = () => {
 	throw new Promise(() => {});
 };

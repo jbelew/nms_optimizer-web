@@ -28,12 +28,15 @@ interface BuildNameDialogProps {
  * localized title and specific styling for the naming input workflow.
  *
  * @param {BuildNameDialogProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered build naming dialog.
  *
  * @see {@link AppDialog}
  * @see {@link BuildNameContent}
  * @see {@link ./BuildNameDialog.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

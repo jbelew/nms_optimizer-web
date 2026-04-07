@@ -79,53 +79,96 @@ const shared = {
 				caughtErrorsIgnorePattern: "^_",
 			},
 		],
-
-		// Agentic JSDoc rules
-		"jsdoc/require-jsdoc": [
-			"warn",
-			{
-				require: {
-					FunctionDeclaration: true,
-					MethodDefinition: true,
-					ClassDeclaration: true,
-				},
-				contexts: [
-					"TSInterfaceDeclaration",
-					"TSTypeAliasDeclaration",
-					"ExportNamedDeclaration[declaration.type='VariableDeclaration']",
-				],
-			},
-		],
-		"jsdoc/require-param-description": "warn",
-		"jsdoc/require-returns-description": "warn",
-		"jsdoc/require-example": "warn",
-		"jsdoc/require-description": "warn",
-		"jsdoc/check-tag-names": [
-			"warn",
-			{
-				definedTags: ["hook", "component", "remarks", "performance", "accessibility", "security"],
-			},
-		],
-		// Enforce {@link} instead of Markdown links for cross-references
-		"jsdoc/no-undefined-types": [
-			"warn",
-			{
-				definedTypes: [
-					"JSX",
-					"React",
-					"TouchEvent",
-					"MouseEvent",
-					"KeyboardEvent",
-					"ChangeEvent",
-					"RequestInit",
-					"ReactNode",
-					"Ref",
-					"MutableRefObject",
-					"ComponentType",
-				],
-			},
-		],
 	},
+};
+
+/**
+ * Agentic JSDoc rules - applied selectively to non-test/non-story files
+ */
+const jsdocRules = {
+	"jsdoc/require-jsdoc": [
+		"warn",
+		{
+			require: {
+				FunctionDeclaration: true,
+				MethodDefinition: true,
+				ClassDeclaration: true,
+			},
+			contexts: [
+				"TSInterfaceDeclaration",
+				"TSTypeAliasDeclaration",
+				"ExportNamedDeclaration > VariableDeclaration",
+				"Program > VariableDeclaration",
+			],
+		},
+	],
+	"jsdoc/require-param-description": "warn",
+	"jsdoc/require-returns-description": "warn",
+	"jsdoc/require-example": "warn",
+	"jsdoc/require-description": "warn",
+	"jsdoc/require-hyphen-before-param-description": "warn",
+	"jsdoc/require-throws": "warn",
+	"jsdoc/check-tag-names": [
+		"warn",
+		{
+			definedTags: [
+				"hook",
+				"component",
+				"remarks",
+				"performance",
+				"accessibility",
+				"security",
+				"category",
+				"template",
+				"default",
+			],
+		},
+	],
+	"jsdoc/sort-tags": [
+		"warn",
+		{
+			tagSequence: [
+				{ tags: ["remarks"] },
+				{ tags: ["typedef"] },
+				{ tags: ["template"] },
+				{ tags: ["param"] },
+				{ tags: ["returns"] },
+				{ tags: ["throws"] },
+				{ tags: ["deprecated"] },
+				{ tags: ["default"] },
+				{ tags: ["see"] },
+				{ tags: ["hook", "component"] },
+				{ tags: ["category"] },
+				{ tags: ["example"] },
+			],
+		},
+	],
+	// Types are handled by TypeScript, so don't enforce them in JSDoc (user preference)
+	"jsdoc/require-param-type": "off",
+	"jsdoc/require-returns-type": "off",
+	// Enforce {@link} instead of Markdown links for cross-references
+	"jsdoc/no-undefined-types": [
+		"warn",
+		{
+			definedTypes: [
+				"JSX",
+				"React",
+				"TouchEvent",
+				"MouseEvent",
+				"KeyboardEvent",
+				"ChangeEvent",
+				"RequestInit",
+				"ReactNode",
+				"Ref",
+				"MutableRefObject",
+				"ComponentType",
+				"SVGProps",
+				"SVGSVGElement",
+				"HTMLElement",
+				"NodeJS",
+			],
+		},
+	],
 };
 
 export default tseslint.config(
@@ -135,27 +178,43 @@ export default tseslint.config(
 	{ ignores: ["dist", "coverage/", "**/tmp", "/tmp", "storybook-static"] },
 
 	//
-	// --- MAIN SOURCE FILES ---
+	// --- MAIN SOURCE FILES (Business Logic & UI) ---
 	//
 	{
 		...shared,
 		files: ["src/**/*.{ts,tsx}"],
+		ignores: ["**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/test-jsdoc.ts"],
+		rules: {
+			...shared.rules,
+			...jsdocRules,
+		},
 	},
 
 	//
-	// --- STORYBOOK ---
+	// --- TEST FILES & STORIES ---
+	//
+	{
+		...shared,
+		files: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.tsx", "**/test-jsdoc.ts"],
+		rules: {
+			...shared.rules,
+			// explicit overrides to keep them clean
+			"jsdoc/require-jsdoc": "off",
+			"jsdoc/require-description": "off",
+			"jsdoc/require-example": "off",
+		},
+	},
+
+	//
+	// --- STORYBOOK CONFIG ---
 	//
 	{
 		...shared,
 		files: ["**/.storybook/**/*.{ts,tsx}"],
-	},
-
-	//
-	// --- TEST FILES ---
-	//
-	{
-		...shared,
-		files: ["src/**/*.test.{ts,tsx}"],
+		rules: {
+			...shared.rules,
+			"jsdoc/require-jsdoc": "off",
+		},
 	},
 
 	//

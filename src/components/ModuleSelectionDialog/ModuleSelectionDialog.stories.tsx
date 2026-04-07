@@ -9,6 +9,10 @@ import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 import "./ModuleSelectionDialog.scss";
 
 // Helper function to group modules, adapted from useTechModuleManagement.ts
+/**
+ *
+ * @example
+ */
 const groupModules = (modules: SelectionModule[]): GroupedModules => {
 	const groups: GroupedModules = {
 		core: [],
@@ -113,14 +117,8 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
-/**
- *
- */
 export const Default: Story = {
 	args: {
 		translatedTechName: "Hyperdrive",
@@ -130,9 +128,6 @@ export const Default: Story = {
 	},
 };
 
-/**
- *
- */
 export const Corvette: Story = {
 	args: {
 		translatedTechName: "Hyperdrive",

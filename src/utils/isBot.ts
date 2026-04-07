@@ -5,8 +5,9 @@
  * This module provides functions to identify automated visitors such as search
  * engine crawlers and social media scrapers.
  *
- * @category Utilities
  * @see {@link isBot}
+ *
+ * @category Utilities
  */
 
 /**
@@ -33,6 +34,7 @@ const BOT_USER_AGENT_PATTERN =
  * **Note: This is not a security-critical check.**
  *
  * @returns {boolean} `true` if the visitor is likely a bot, `false` otherwise.
+ *
  * @category Utilities
  *
  * @example

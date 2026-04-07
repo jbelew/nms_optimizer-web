@@ -22,6 +22,7 @@ const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: st
  * 4. Derived logic for localization and resolution-aware image path generation.
  *
  * @param {TechTreeRowProps} props - The properties passed to the parent component.
+ *
  * @returns {object} A unified interface containing state flags, localized strings, and event handlers.
  * @returns {boolean} returns.hasTechInGrid - Whether the technology is currently placed in the grid.
  * @returns {string} returns.translatedTechName - The localized name of the technology.
@@ -38,6 +39,7 @@ const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: st
  * @see {@link useTechStore} for technology metadata.
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example Hook orchestration and data aggregation

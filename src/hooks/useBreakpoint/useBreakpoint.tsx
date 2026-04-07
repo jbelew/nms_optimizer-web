@@ -8,6 +8,7 @@ import { useSyncExternalStore } from "react";
  * `window.matchMedia` API.
  *
  * @param {string} breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
+ *
  * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
  *
  * @see [useBreakpoint Tests](./useBreakpoint.test.tsx)

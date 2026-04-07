@@ -5,9 +5,10 @@
  * This module provides the `ErrorBoundary` class component, which serves as the
  * top-level safety net for catching unhandled exceptions in the React tree.
  *
- * @category Components
  * @see {@link ErrorBoundary}
  * @see {@link ./ErrorBoundary.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 
 import type { ErrorInfo, ReactNode } from "react";
@@ -48,10 +49,12 @@ interface State {
  * 3. It displays a user-friendly error UI or the provided `fallback` node.
  * 4. It maintains information about the crash for debugging purposes.
  *
- * @component
- * @category Components
  * @see {@link handleError}
  * @see {@link ErrorContent}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example Component usage
  * ```tsx
@@ -66,6 +69,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 * Initializes the error boundary with a clean state.
 	 *
 	 * @param {Props} props - Component properties.
+	 *
 	 * @example Initialization
 	 * ```typescript
 	 * new ErrorBoundary(props);
@@ -80,7 +84,9 @@ class ErrorBoundary extends Component<Props, State> {
 	 * Updates the internal state so the next render will show the fallback UI.
 	 *
 	 * @param {Error} error - The caught exception.
+	 *
 	 * @returns {State} The new component state.
+	 *
 	 * @example State update
 	 * ```typescript
 	 * ErrorBoundary.getDerivedStateFromError(new Error("test"));
@@ -97,6 +103,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 *
 	 * @param {Error} error - The caught exception.
 	 * @param {ErrorInfo} errorInfo - The component stack trace.
+	 *
 	 * @example Side effects
 	 * ```typescript
 	 * component.componentDidCatch(new Error("test"), info);
@@ -111,6 +118,7 @@ class ErrorBoundary extends Component<Props, State> {
 	 * Renders children normally, or the error UI if a crash occurred.
 	 *
 	 * @returns {ReactNode} The rendered component tree or fallback UI.
+	 *
 	 * @example Lifecycle render
 	 * ```tsx
 	 * boundary.render();

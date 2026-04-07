@@ -12,6 +12,10 @@ vi.mock("../../utils/apiCall", () => ({
 	apiCall: vi.fn(),
 }));
 
+/**
+ *
+ * @example
+ */
 const wrapper = ({ children }: { children: ReactNode }) =>
 	createElement(Suspense, { fallback: null }, children);
 

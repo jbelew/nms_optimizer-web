@@ -7,6 +7,10 @@ import i18n from "../../test/i18n";
 import { useLanguage } from "./useLanguage";
 
 // Helper function to create a mock Location object
+/**
+ *
+ * @example
+ */
 const createMockLocation = (pathname: string): Location => ({
 	pathname,
 	search: "",

@@ -5,9 +5,10 @@
  * This module provides types and functions to ensure that build recommendations
  * received from the backend API conform to the application's internal structure.
  *
- * @category Utilities
  * @see {@link isValidRecommendedBuild}
  * @see {@link ./recommendedBuildValidation.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
@@ -21,9 +22,12 @@ import type { RecommendedBuild } from "../hooks/useTechTree/useTechTree";
  * are present and correctly typed. Logs errors to the console on failure.
  *
  * @param {unknown} obj - The object to validate.
+ *
  * @returns {obj is RecommendedBuild} `true` if the object is a valid `RecommendedBuild`, otherwise `false`.
- * @category Utilities
+ *
  * @see {@link RecommendedBuild}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

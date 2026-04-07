@@ -16,8 +16,11 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
  *
  * @param {number} value - The number to round.
  * @param {number} decimals - The target decimal precision. **Must be a positive integer.**
+ *
  * @returns {number} The rounded number.
+ *
  * @category Utilities
+ *
  * @example
  * ```ts
  * round(10.567, 2); // returns 10.57
@@ -52,8 +55,11 @@ interface BonusStatusIconProps {
  *
  * @param {number} techMaxBonus - The raw maximum bonus value.
  * @param {function(string): string} t - i18next translation function.
+ *
  * @returns {BonusStatusData} Metadata including icon type, styling, and tooltip text.
+ *
  * @category Utilities
+ *
  * @example
  * ```ts
  * const status = computeBonusStatusData(105.5, t);
@@ -106,8 +112,11 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
  * @param {string | null} iconType - The identifier for the icon (warning, check, lightning).
  * @param {string} className - CSS classes to apply to the icon.
  * @param {import("react").CSSProperties} style - Inline styles to apply to the icon.
+ *
  * @returns {React.ReactNode} The rendered icon component or null if type is unknown.
+ *
  * @category Utilities
+ *
  * @example
  * ```tsx
  * renderIcon("check", "my-icon", { color: "green" });
@@ -143,11 +152,14 @@ function renderIcon(
  * Statuses are persisted in {@link useTechBonusStore} to maintain visual state across sessions.
  *
  * @param {BonusStatusIconProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The status icon with tooltip, or `null` if no bonus exists.
  *
  * @see {@link useTechBonusStore} Store used for persisting bonus metadata.
  * @see {@link ./BonusStatusIcon.test.tsx Unit Tests}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

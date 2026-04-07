@@ -6,21 +6,25 @@
  * `localStorage` API. It gracefully handles `SecurityError` exceptions
  * often encountered in restricted privacy environments or full storage scenarios.
  *
- * @category Utilities
  * @see {@link safeGetItem}
  * @see {@link safeSetItem}
  * @see {@link safeRemoveItem}
  * @see {@link safeClear}
  * @see {@link ./storage.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 /**
  * Safely retrieves an item from `localStorage`.
  *
  * @param {string} key - The key to retrieve. **Must not be empty.**
+ *
  * @returns {string | null} The stored string value, or `null` if not found or access is blocked.
+ *
  * @see {@link safeSetItem}
  * @see {@link safeRemoveItem}
+ *
  * @category Utilities
  *
  * @example
@@ -43,8 +47,11 @@ export const safeGetItem = (key: string): string | null => {
  *
  * @param {string} key - The key to set. **Must not be empty.**
  * @param {string} value - The string value to store.
+ *
  * @returns {boolean} `true` if the item was successfully saved, otherwise `false`.
+ *
  * @see {@link safeGetItem}
+ *
  * @category Utilities
  *
  * @example
@@ -68,8 +75,11 @@ export const safeSetItem = (key: string, value: string): boolean => {
  * Safely removes an item from `localStorage`.
  *
  * @param {string} key - The key to remove. **Must not be empty.**
+ *
  * @returns {boolean} `true` if the item was successfully removed, otherwise `false`.
+ *
  * @see {@link safeGetItem}
+ *
  * @category Utilities
  *
  * @example
@@ -93,7 +103,9 @@ export const safeRemoveItem = (key: string): boolean => {
  * Safely clears all items from `localStorage`.
  *
  * @returns {boolean} `true` if the storage was successfully cleared, otherwise `false`.
+ *
  * @see {@link safeRemoveItem}
+ *
  * @category Utilities
  *
  * @example

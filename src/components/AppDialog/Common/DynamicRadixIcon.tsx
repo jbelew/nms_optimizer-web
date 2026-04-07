@@ -29,10 +29,13 @@ interface DynamicRadixIconProps {
  * colors based on the provided props.
  *
  * @param {DynamicRadixIconProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The rendered icon component, or `null` if not found.
  *
  * @see {@link radixIconRegistry}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

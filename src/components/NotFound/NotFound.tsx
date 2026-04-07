@@ -5,8 +5,9 @@
  * This module provides the `NotFound` component, which serves as the "Atlas"
  * themed fallback for all undefined application routes.
  *
- * @category Components
  * @see {@link NotFound}
+ *
+ * @category Components
  */
 
 import { FC, useEffect } from "react";
@@ -29,10 +30,13 @@ import { Button } from "@radix-ui/themes";
  * tracking for broken links, and ensuring the splash screen is dismissed.
  *
  * @returns {JSX.Element} The rendered 404 page.
- * @component
- * @category Components
+ *
  * @see {@link sendEvent}
  * @see {@link hideSplashScreenAndShowBackground}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

@@ -15,7 +15,9 @@ const fallbackImage = `${baseImagePath}infra.webp`;
  * for a more structured, NMS-like UI appearance.
  *
  * @param {string} text - The input label string.
+ *
  * @returns {React.ReactNode} The formatted React element tree.
+ *
  * @example Styling parenthetical metadata
  * ```typescript
  * formatParentheses("Photon Cannon (Sigma)");
@@ -49,7 +51,9 @@ const formatParentheses = (text: string): React.ReactNode => {
  * them in `Code` tags.
  *
  * @param {string} label - The raw technology or module label.
+ *
  * @returns {React.ReactNode} The formatted React element tree.
+ *
  * @example Styling technical metadata
  * ```typescript
  * formatLabel("Pulse Engine [P1]");
@@ -91,7 +95,9 @@ export interface ModuleCheckboxProps {
  * representing the `module`, and a formatted text `label` with stylized technical metadata.
  *
  * @param {ModuleCheckboxProps} props - The component properties.
+ *
  * @returns {JSX.Element} The rendered checkbox row layout.
+ *
  * @see {@link formatLabel}
  *
  * @example Component usage

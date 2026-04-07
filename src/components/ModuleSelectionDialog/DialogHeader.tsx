@@ -27,6 +27,7 @@ export interface DialogHeaderProps {
  * path generation for the technology icon.
  *
  * @param {DialogHeaderProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered dialog header.
  *
  * @example

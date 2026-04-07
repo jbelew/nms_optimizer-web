@@ -5,9 +5,10 @@
  * This module provides a `Logger` class that collects logs in memory and
  * automatically forwards warnings and errors to Sentry for remote tracking.
  *
- * @category Utilities
  * @see {@link Logger}
  * @see {@link ./logger.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import { captureException, captureMessage } from "@sentry/react";
@@ -54,6 +55,7 @@ export class Logger {
 	 *
 	 * @param {string} message - The message to log. **Must not be empty.**
 	 * @param {Record<string, unknown>} [data] - Optional metadata to include.
+	 *
 	 * @returns {void}
 	 *
 	 * @example
@@ -69,6 +71,7 @@ export class Logger {
 	 *
 	 * @param {string} message - The warning message. **Must not be empty.**
 	 * @param {Record<string, unknown>} [data] - Optional metadata to include in the Sentry report.
+	 *
 	 * @returns {void}
 	 *
 	 * @example
@@ -88,6 +91,7 @@ export class Logger {
 	 * @param {string} message - The error description. **Must not be empty.**
 	 * @param {unknown} [error] - The error object or exception caught.
 	 * @param {Record<string, unknown>} [data] - Additional context for the error report.
+	 *
 	 * @returns {void}
 	 *
 	 * @example
@@ -140,11 +144,13 @@ export class Logger {
 	 * @param {LogLevel} level - The log level.
 	 * @param {string} message - The log message.
 	 * @param {Record<string, unknown>} [data] - Optional metadata.
-	 * @private
+	 *
 	 * @example Internal log dispatch
 	 * ```ts
 	 * Logger.log(LogLevel.INFO, "test message");
 	 * ```
+	 *
+	 * @private
 	 */
 	private static log(level: LogLevel, message: string, data?: Record<string, unknown>) {
 		const entry: LogEntry = {

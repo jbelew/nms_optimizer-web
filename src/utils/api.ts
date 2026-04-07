@@ -6,9 +6,10 @@
  * It abstracts away common tasks such as JSON parsing, error handling, and
  * timeout management.
  *
- * @category Utilities
  * @see {@link fetchJson}
  * @see {@link HttpError}
+ *
+ * @category Utilities
  */
 
 import { fetchWithTimeout } from "./fetchWithTimeout";
@@ -22,15 +23,20 @@ import { HttpError } from "./HttpError";
  * It uses {@link fetchWithTimeout} internally to ensure requests do not hang indefinitely.
  *
  * @template T - The expected return type of the JSON data.
+ *
  * @param {string} url - The URL to fetch. **Must be a valid URL string.**
  * @param {RequestInit} [options] - Standard `fetch` options.
  * @param {number} [timeout=10000] - Timeout in milliseconds. **Must be a positive integer.**
+ *
  * @returns {Promise<T>} A promise that resolves to the parsed JSON response of type `T`.
+ *
  * @throws {HttpError} Throws an `HttpError` if the response status is not "ok" (200-299).
  * @throws {Error} Throws a timeout error if the request exceeds the `timeout` duration.
- * @category Utilities
+ *
  * @see {@link fetchWithTimeout}
  * @see {@link HttpError}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

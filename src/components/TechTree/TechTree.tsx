@@ -1,4 +1,18 @@
-// src/components/TechTree/TechTree.tsx
+/**
+ * Technology tree sidebar container module.
+ *
+ * @remarks
+ * This module provides the main `TechTree` component, which organizes the
+ * equipment sidebar, including categorized technology rows and build
+ * recommendations.
+ *
+ * @see {@link TechTree}
+ * @see {@link ./TechTree.test.tsx Unit Tests}
+ * @see {@link ./TechTree.stories.tsx Storybook}
+ *
+ * @category Components
+ */
+
 import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
 import React from "react";
 import { Box, ScrollArea } from "@radix-ui/themes";
@@ -26,15 +40,26 @@ interface TechTreeProps {
 /**
  * A data-aware component that renders the technology list and recommended builds.
  *
+ * @remarks
  * This component handles the internal scroll area logic on large screens and
  * responsive stack behavior on mobile. It uses `useFetchTechTreeSuspense` to
  * retrieve data, ensuring it integrates with React Suspense.
  *
  * @param {TechTreeProps} props - Component properties.
+ *
  * @returns {JSX.Element} The technology tree UI.
+ *
+ * @see {@link TechTreeContent}
+ * @see {@link RecommendedBuild}
+ *
+ * @component
+ *
+ * @category Components
+ *
  * @example Component usage
  * ```tsx
  * <TechTreeWithData {...props} />
+ * // renders sidebar with scroll area
  * ```
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
@@ -111,15 +136,24 @@ TechTreeWithData.displayName = "TechTreeWithData";
 /**
  * Main entry point for the technology tree feature.
  *
+ * @remarks
  * It manages the high-level layout and data fetching for the available technologies
  * and their modules. Designed to be rendered within a `Suspense` boundary.
  *
  * @param {TechTreeProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered technology tree component.
+ *
+ * @see {@link TechTreeWithData}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example Component usage
  * ```tsx
  * <TechTree handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={600} />
+ * // renders technology tree UI
  * ```
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {

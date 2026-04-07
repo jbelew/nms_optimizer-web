@@ -28,8 +28,9 @@ export interface ShipTypes {
 /**
  * A generic resource object compatible with React Suspense.
  *
- * @category Types
  * @template T - The type of data being loaded.
+ *
+ * @category Types
  */
 export type Resource<T> = {
 	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
@@ -44,7 +45,9 @@ export type Resource<T> = {
  * and provide a `read()` method that integrates with React Suspense.
  *
  * @template T - The type of data being loaded.
+ *
  * @param {Promise<T>} promise - The asynchronous operation to wrap.
+ *
  * @returns {Resource<T>} A resource object with a `read` method.
  *
  * @example
@@ -90,6 +93,7 @@ const cache = new Map<string, Resource<ShipTypes>>();
  * Clears the internal ship types resource cache.
  *
  * @returns {void} Side-effects only.
+ *
  * @example
  * ```typescript
  * clearShipTypesCache();
@@ -165,12 +169,14 @@ export function fetchShipTypes(): Resource<ShipTypes> {
  * Promise if the data is not yet available, triggering the nearest
  * `<Suspense>` boundary.
  *
- * @hook
- * @category Hooks
  * @returns {ShipTypes} The loaded ship types data.
  *
  * @see {@link fetchShipTypes} for the resource creation logic.
  * @see {@link ./useShipTypes.test.tsx Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

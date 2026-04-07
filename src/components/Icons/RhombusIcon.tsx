@@ -5,8 +5,9 @@
  * This module provides a simple, decorative SVG icon used primarily for
  * UI markers and bullets.
  *
- * @category Components
  * @see {@link RhombusIcon}
+ *
+ * @category Components
  */
 
 import React from "react";
@@ -19,8 +20,11 @@ import React from "react";
  * color, and other attributes.
  *
  * @param {React.SVGProps<SVGSVGElement>} props - Standard SVG attributes.
+ *
  * @returns {JSX.Element} The rendered SVG icon.
+ *
  * @component
+ *
  * @category Components
  *
  * @example

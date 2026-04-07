@@ -5,6 +5,7 @@ import { create } from "zustand";
  * Types of errors that can occur during the optimization solve process.
  *
  * @see {@link useOptimizeStore}
+ *
  * @category Optimization
  */
 export type ErrorType = "fatal" | "recoverable";
@@ -13,6 +14,7 @@ export type ErrorType = "fatal" | "recoverable";
  * State and actions for tracking the status and errors of optimization solves.
  *
  * @see {@link useOptimizeStore}
+ *
  * @category Optimization
  */
 interface OptimizeState {
@@ -47,8 +49,10 @@ interface OptimizeState {
  * and warnings (like the "Pattern No Fit" alert) to the global UI layout.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<OptimizeState>>} The Zustand hook for optimization state.
+ *
  * @see {@link OptimizeState}
  * @see {@link ErrorType}
+ *
  * @category Optimization
  *
  * @example

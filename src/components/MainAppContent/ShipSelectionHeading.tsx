@@ -38,11 +38,15 @@ interface ShipSelectionHeadingProps {
  * while a solve is in progress to provide visual feedback.
  *
  * @param {ShipSelectionHeadingProps} props - Component properties.
+ *
  * @returns {JSX.Element} The header section above the grid.
  *
  * @see {@link import('./MainAppContent').MainAppContent} The parent component that manages the layout.
+ *
  * @component
+ *
  * @category Components
+ *
  * @example
  * ```tsx
  * <ShipSelectionHeading

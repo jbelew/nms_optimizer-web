@@ -35,13 +35,16 @@ interface AppHeaderProps {
  * popover with in-game coordinates.
  *
  * @param {AppHeaderProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered application header.
  *
  * @see {@link LanguageSelector}
  * @see {@link ConditionalTooltip}
  * @see {@link useDialog}
  * @see {@link ./AppHeader.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
  *
  * @example

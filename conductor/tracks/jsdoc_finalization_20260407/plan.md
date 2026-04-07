@@ -17,12 +17,12 @@ This plan follows a batch-based approach to systematically complete the JSDoc mi
 - [x] Task: Update JSDoc for `src/components/` (Items 9-16: `Icons/` to `NotFound/`) <!-- files: src/components/Icons/, src/components/InstallPrompt/, src/components/LanguageSelector/, src/components/MessageSpinner/, src/components/MobileToolbar/, src/components/ModuleSelectionDialog/, src/components/NotFound/ --> 134459
 - [x] Task: Conductor - User Manual Verification 'UI Components - Batch 1' (Protocol in workflow.md) 146f203
 
-#### Phase 4: UI Components - Batch 2 <!-- execution: parallel -->
-- [ ] Task: Update JSDoc for `src/components/` (Items 17-24: `OfflineBanner/` to `UpdatePrompt/`) <!-- files: src/components/OfflineBanner/, src/components/RecommendedBuild/, src/components/RoutedDialogs/, src/components/ShipSelection/, src/components/Snowfall/, src/components/SplashScreen/, src/components/TapInstructions/, src/components/TechTree/, src/components/TechTreeRow/, src/components/Toast/, src/components/TooltipManager/, src/components/UpdatePrompt/ -->
-- [ ] Task: Update `docs/JSDOC_PROGRESS.md` for all completed Components. <!-- files: docs/JSDOC_PROGRESS.md -->
-- [ ] Task: Conductor - User Manual Verification 'UI Components - Batch 2' (Protocol in workflow.md) <!-- depends: task1, task2 -->
+#### Phase 4: UI Components - Batch 2 [checkpoint: 146f203] <!-- execution: parallel -->
+- [x] Task: Update JSDoc for `src/components/` (Items 17-24: `OfflineBanner/` to `UpdatePrompt/`) <!-- files: src/components/OfflineBanner/, src/components/RecommendedBuild/, src/components/RoutedDialogs/, src/components/ShipSelection/, src/components/Snowfall/, src/components/SplashScreen/, src/components/TapInstructions/, src/components/TechTree/, src/components/TechTreeRow/, src/components/Toast/, src/components/TooltipManager/, src/components/UpdatePrompt/ --> 135349
+- [x] Task: Update `docs/JSDOC_PROGRESS.md` for all completed Components. <!-- files: docs/JSDOC_PROGRESS.md --> 135400
+- [x] Task: Conductor - User Manual Verification 'UI Components - Batch 2' (Protocol in workflow.md) 146f203
 
-#### Phase 5: Final Audit & Compliance
-- [ ] Task: Run project-wide ESLint/JSDoc check to verify 100% compliance.
-- [ ] Task: Final update to `docs/JSDOC_PROGRESS.md` (Mark all as complete). <!-- files: docs/JSDOC_PROGRESS.md -->
-- [ ] Task: Conductor - User Manual Verification 'Final Audit & Compliance' (Protocol in workflow.md)
+#### Phase 5: Final Audit & Compliance [checkpoint: 146f203]
+- [x] Task: Run project-wide ESLint/JSDoc check to verify 100% compliance. 135649
+- [x] Task: Final update to `docs/JSDOC_PROGRESS.md` (Mark all as complete). <!-- files: docs/JSDOC_PROGRESS.md --> 135749
+- [x] Task: Conductor - User Manual Verification 'Final Audit & Compliance' (Protocol in workflow.md) 146f203

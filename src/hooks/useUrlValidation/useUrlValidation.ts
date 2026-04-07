@@ -12,12 +12,14 @@ import { useLocation, useNavigate } from "react-router-dom";
  *
  * It acts as a safety gate for deep-linked application states.
  *
- * @hook
- * @category Hooks
  * @returns {void} Side-effects only; manages URL sanitization.
  *
  * @see {@link useLocation} for monitoring URL changes.
  * @see {@link useNavigate} for performing the redirection.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx

@@ -36,6 +36,7 @@ interface ActionButtonsProps extends TechTreeRowProps {
  * {@link ConditionalTooltip} based on the current grid capacity and technology presence.
  *
  * @param {ActionButtonsProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered action buttons container.
  *
  * @see {@link TechTreeRow} for the parent row component.
@@ -43,6 +44,7 @@ interface ActionButtonsProps extends TechTreeRowProps {
  * @see {@link ./TechTreeRow.test.tsx Unit Tests}
  *
  * @component
+ *
  * @category Components
  *
  * @example

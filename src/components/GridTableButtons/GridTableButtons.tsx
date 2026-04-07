@@ -49,6 +49,7 @@ interface GridTableButtonsProps {
  * small screens and full `Button` with text on larger viewports.
  *
  * @param {GridTableButtonsProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered control button area.
  *
  * @example

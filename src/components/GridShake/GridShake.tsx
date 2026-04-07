@@ -5,8 +5,9 @@
  * This module provides the `GridShake` wrapper component, which reacts to
  * state changes in the `ShakeStore` to provide haptic-like visual feedback.
  *
- * @category Components
  * @see {@link GridShake}
+ *
+ * @category Components
  */
 
 import "./GridShake.scss";
@@ -34,10 +35,14 @@ interface GridShakeProps {
  * feedback for invalid user actions (e.g., clicking a locked cell).
  *
  * @param {GridShakeProps} props - Component properties.
+ *
  * @returns {JSX.Element} The container wrapping the children.
- * @component
- * @category Components
+ *
  * @see {@link useShakeStore}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

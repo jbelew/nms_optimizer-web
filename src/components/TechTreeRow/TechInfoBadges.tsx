@@ -31,6 +31,7 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
  * without saving/optimizing.
  *
  * @param {TechInfoBadgesProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered badges and dialog trigger.
  *
  * @see {@link BonusStatusIcon} for efficiency visualization.
@@ -38,6 +39,7 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
  * @see {@link useTechTreeRow} for the underlying state.
  *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -81,6 +83,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 	 * preventing accidental unsaved changes.
 	 *
 	 * @param {boolean} open - The new visibility state.
+	 *
 	 * @returns {void} Side-effects only.
 	 *
 	 * @example

@@ -5,8 +5,9 @@
  * This module provides the `HttpError` class, which extends the native `Error`
  * to include HTTP-specific properties like `status` and `statusText`.
  *
- * @category Utilities
  * @see {@link HttpError}
+ *
+ * @category Utilities
  */
 
 import { fetchJson } from "./api";
@@ -19,8 +20,9 @@ import { fetchJson } from "./api";
  * the HTTP status code and status text alongside the error message.
  * This is the standard error type thrown by {@link fetchJson}.
  *
- * @category Utilities
  * @see {@link fetchJson}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts
@@ -45,7 +47,9 @@ export class HttpError extends Error {
 	 * @param {number} status - The HTTP status code. **Must be a valid HTTP status.**
 	 * @param {string} statusText - The HTTP status text.
 	 * @param {string} [message] - An optional descriptive error message. Defaults to a generic "HTTP error" string.
+	 *
 	 * @returns {HttpError} A new `HttpError` instance.
+	 *
 	 * @example Standard initialization
 	 * ```ts
 	 * const err = new HttpError(404, "Not Found");

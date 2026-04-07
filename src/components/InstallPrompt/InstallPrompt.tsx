@@ -5,9 +5,10 @@
  * This module contains the `InstallPrompt` logic, which intelligently nudges
  * mobile users to install the application as a PWA after their initial visit.
  *
- * @category Components
  * @see {@link InstallPrompt}
  * @see {@link ./InstallPrompt.stories.tsx Storybook}
+ *
+ * @category Components
  */
 
 import React, { useEffect, useRef } from "react";
@@ -32,10 +33,13 @@ const USER_VISIT_KEY = "userVisited";
  * display installation instructions (specifically tailored for iOS).
  *
  * @returns {null} This component does not render any visual elements.
- * @component
- * @category Components
+ *
  * @see {@link useToast}
  * @see {@link isTouchDevice}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

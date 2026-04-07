@@ -26,6 +26,7 @@ export interface UseSaveBuildReturn {
 	 * Handler for confirming the build name and executing the save to disk.
 	 *
 	 * @param {string} buildName - The name to assign to the saved build.
+	 *
 	 * @returns {Promise<void>} Resolves when the file is generated and downloaded.
 	 */
 	handleBuildNameConfirm: (buildName: string) => Promise<void>;
@@ -43,14 +44,16 @@ export interface UseSaveBuildReturn {
  * dialog, executing the file generation via `useBuildFileManager`, and
  * reporting results through toasts and analytics.
  *
- * @hook
- * @category Hooks
  * @returns {UseSaveBuildReturn} State and handlers for the save build process.
  *
  * @see {@link useBuildFileManager} for the underlying file generation logic.
  * @see {@link useAnalytics} for tracking save events.
  * @see {@link useToast} for user notifications.
  * @see {@link ./useSaveBuild.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -82,6 +85,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	 * Opens the naming dialog to start the save process.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleSaveBuild();
@@ -96,7 +100,9 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	 * Finalizes the save operation using the provided build name.
 	 *
 	 * @param {string} buildName - The name to assign to the saved file. **Must be non-empty.**
+	 *
 	 * @returns {Promise<void>} Resolves when the build is saved and dialog closed.
+	 *
 	 * @example
 	 * ```typescript
 	 * await handleBuildNameConfirm("New Ship");
@@ -130,6 +136,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	 * Aborts the save process and closes the dialog.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleBuildNameCancel();

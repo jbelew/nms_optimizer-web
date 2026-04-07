@@ -21,12 +21,14 @@ const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
  *
  * @param {object} props - Component properties.
  * @param {import("react").ReactNode} props.children - The child components to wrap.
+ *
  * @returns {JSX.Element} The context provider with dialog state.
  *
  * @see {@link ./dialog-utils.ts useDialog Hook}
  * @see {@link DialogContext}
  * @see {@link DialogType}
  * @see {@link ./DialogContext.test.tsx Unit Tests}
+ *
  * @category Components
  *
  * @example Application wrapper
@@ -89,7 +91,9 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * @param {object} [data] - Optional metadata for the dialog.
 	 * @param {string} [data.shareUrl] - A specific URL for the share dialog.
 	 * @param {string} [data.section] - An element ID to scroll into view when the dialog opens.
+	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example Dialog and section navigation
 	 * ```typescript
 	 * openDialog("changelog", { section: "v2.0" });
@@ -119,6 +123,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Clears the active dialog state and navigates back to the root route.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example Interface reset
 	 * ```typescript
 	 * closeDialog();
@@ -141,6 +146,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Updates state and `localStorage` to indicate the user has completed the tutorial.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example Completion tracking
 	 * ```typescript
 	 * markTutorialFinished();
@@ -157,6 +163,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * Updates state and `localStorage` to indicate the user has visited the app at least once.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example Persistence tracking
 	 * ```typescript
 	 * markUserVisited();

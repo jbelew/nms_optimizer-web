@@ -8,14 +8,16 @@ import { useToast } from "../useToast/useToast";
 /**
  * Return type for the `useScreenshot` hook.
  *
- * @category Hooks
  * @see {@link useScreenshot}
+ *
+ * @category Hooks
  */
 interface UseScreenshotReturn {
 	/**
 	 * Captures the given DOM element as a PNG and triggers a download.
 	 *
 	 * @param element - The DOM element to capture.
+	 *
 	 * @returns A promise that resolves when the capture and download cycle completes.
 	 */
 	handleScreenshot: (element: HTMLElement) => Promise<void>;
@@ -35,8 +37,10 @@ interface UseScreenshotReturn {
  * - Temporarily hides UI elements marked with `data-screenshot-exclude="true"`.
  *
  * @returns {UseScreenshotReturn} State and handler for the screenshot workflow.
- * @category Hooks
+ *
  * @see {@link UseScreenshotReturn}
+ *
+ * @category Hooks
  *
  * @example
  * ```typescript
@@ -61,6 +65,7 @@ export function useScreenshot(): UseScreenshotReturn {
 	 * renders it to a PNG with high pixel ratio for clarity, and then triggers a download.
 	 *
 	 * @param {HTMLElement} element - The DOM element to capture. Must be currently visible in the document.
+	 *
 	 * @returns {Promise<void>} Resolves when the capture and download cycle completes.
 	 */
 	const handleScreenshot = useCallback(

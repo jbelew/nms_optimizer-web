@@ -35,6 +35,7 @@ export interface ModuleGroupProps extends Pick<
  * 4. Rendering specialized informational blocks for "Cosmetic" groups.
  *
  * @param {ModuleGroupProps} props - Component properties.
+ *
  * @returns {JSX.Element | null} The rendered group UI, or `null` if no modules are present.
  *
  * @example

@@ -19,12 +19,14 @@ const WARM_THRESHOLD = 500;
  *
  * @param {object} props - Component properties.
  * @param {React.ReactNode} props.children - The application tree to wrap.
+ *
  * @returns {JSX.Element} The state and actions context providers.
  *
  * @see {@link import('./tooltip-utils').useTooltipState}
  * @see {@link import('./tooltip-utils').useTooltipActions}
  * @see {@link TooltipState}
  * @see {@link TooltipActions}
+ *
  * @category Components
  *
  * @example Application wrapper

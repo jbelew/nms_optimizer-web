@@ -24,6 +24,10 @@ Object.defineProperty(navigator, "clipboard", {
 });
 
 // Helper to render component within Dialog context
+/**
+ *
+ * @example
+ */
 const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>

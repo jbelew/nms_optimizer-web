@@ -8,8 +8,9 @@ import { useSessionStore } from "@/store/SessionStore";
 /**
  * Maps session counter thresholds to error message keys.
  *
- * @private
  * @category Constants
+ *
+ * @private
  */
 const ERROR_THRESHOLDS = {
 	supercharged_limit: {

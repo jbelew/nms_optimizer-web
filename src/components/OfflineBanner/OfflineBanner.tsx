@@ -1,3 +1,17 @@
+/**
+ * Connectivity monitoring and offline overlay module.
+ *
+ * @remarks
+ * This module provides the `OfflineBanner` component, which manages the
+ * application's visual state when internet connectivity is lost.
+ *
+ * @see {@link OfflineBanner}
+ * @see {@link ./OfflineBanner.test.tsx Unit Tests}
+ * @see {@link ./OfflineBanner.stories.tsx Storybook}
+ *
+ * @category Components
+ */
+
 import React, { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -6,6 +20,7 @@ import "./OfflineBanner.scss";
 /**
  * A full-screen overlay component that appears when the application is offline.
  *
+ * @remarks
  * It monitors the browser's `navigator.onLine` status and displays a thematic
  * (No Man's Sky styled) warning message and logo. Since this application
  * relies on a backend solver for its primary functionality, this banner
@@ -13,8 +28,15 @@ import "./OfflineBanner.scss";
  *
  * @returns {JSX.Element | null} The rendered offline overlay, or `null` if online.
  *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <OfflineBanner />
+ * // renders offline message if navigator.onLine is false
+ * ```
  */
 const OfflineBanner: React.FC = () => {
 	const [isOffline, setIsOffline] = useState(!navigator.onLine);

@@ -14,9 +14,8 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  * layout to their actual data properties in the `techTree`. It handles
  * automatic scrolling on mobile devices and updates the global `GridStore`.
  *
- * @hook
- * @category Hooks
  * @param {TechTree} techTree - The complete technology tree data required for property mapping.
+ *
  * @returns {{ applyRecommendedBuild: (build: RecommendedBuild) => void }} An object containing the `applyRecommendedBuild` function.
  *
  * @see {@link RecommendedBuild} for the build configuration schema.
@@ -26,6 +25,10 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  * @see {@link useScrollGridIntoView} for mobile UX.
  * @see {@link isValidRecommendedBuild} for runtime validation.
  * @see {@link ./useRecommendedBuild.test.tsx Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -83,6 +86,7 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	 * and initiates a scroll-into-view on mobile if needed.
 	 *
 	 * @param {RecommendedBuild} build - The recommended build configuration to apply.
+	 *
 	 * @returns {void} Side-effects only; updates `GridStore`.
 	 *
 	 * @see {@link isValidRecommendedBuild}

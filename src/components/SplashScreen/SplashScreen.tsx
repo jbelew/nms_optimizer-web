@@ -1,3 +1,16 @@
+/**
+ * Application boot splash screen module.
+ *
+ * @remarks
+ * This module provides the `SplashScreen` component, which handles the initial
+ * loading visual and coordinates with the application bootstrap process
+ * to reveal the main UI.
+ *
+ * @see {@link SplashScreen}
+ *
+ * @category Components
+ */
+
 import "./SplashScreen.scss";
 
 import type { CSSProperties } from "react";
@@ -24,6 +37,7 @@ interface SplashScreenProps {
 /**
  * A highly performant, animation-capable splash screen component.
  *
+ * @remarks
  * It remains visible until programmatically hidden via its `hide` method (exposed
  * through `useImperativeHandle`). It supports a minimum visibility duration to
  * prevent "flickering" during rapid loads and can be bypassed using the
@@ -31,12 +45,19 @@ interface SplashScreenProps {
  *
  * @param {SplashScreenProps} props - Component properties.
  * @param {React.Ref<SplashScreenHandle>} ref - Ref to control the splash screen's lifecycle.
+ *
  * @returns {JSX.Element | null} The rendered splash screen, or `null` if hidden.
  *
+ * @component
+ *
+ * @category Components
+ *
  * @example
+ * ```tsx
  * const splashRef = useRef<SplashScreenHandle>(null);
  * <SplashScreen ref={splashRef} minDurationMs={1500} />
  * // Later: splashRef.current?.hide();
+ * ```
  */
 const SplashScreen = forwardRef<SplashScreenHandle, SplashScreenProps>(
 	({ minDurationMs = 0, onHidden }, ref) => {

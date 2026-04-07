@@ -18,9 +18,11 @@ interface UseDebouncedValidationOptions {
  *
  * @param {function(string): string|null} validator - A function that takes the current value and returns an error string or `null` if valid. **Must be a pure function.**
  * @param {UseDebouncedValidationOptions} [options={}] - Configuration for the debounce behavior.
+ *
  * @returns {{ error: string|null, handleChange: function(string): void }} State containing the current error and a handler for input changes.
  *
  * @hook
+ *
  * @category Hooks
  *
  * @example

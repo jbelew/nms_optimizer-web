@@ -21,12 +21,14 @@ interface TechInfoProps {
  * `balance` text wrapping to ensure long technology names are visually pleasing.
  *
  * @param {TechInfoProps} props - Component properties.
+ *
  * @returns {JSX.Element} A themed `Text` component containing the localized name.
  *
  * @see {@link useTechTreeRow} for the data source.
  * @see {@link useBreakpoint} for responsive logic.
  *
  * @component
+ *
  * @category Components
  *
  * @example

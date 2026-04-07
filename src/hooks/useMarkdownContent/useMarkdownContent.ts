@@ -37,12 +37,15 @@ declare global {
  * (used for SSG) and falls back to a build-time virtual markdown bundle.
  * It automatically handles language-specific content based on the current `i18n` language.
  *
- * @hook
- * @category Hooks
  * @param {string} markdownFileName - The name of the markdown file to retrieve (without extension).
+ *
  * @returns {MarkdownContentState} State containing the markdown content, loading status, and any errors.
  *
  * @see {@link getMarkdown} for the virtual bundle retrieval logic.
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example Example usage in a component
  * ```tsx

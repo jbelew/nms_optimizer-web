@@ -12,6 +12,7 @@ import { Skeleton, Text } from "@radix-ui/themes";
  * @returns {JSX.Element} The rendered text skeleton.
  *
  * @component
+ *
  * @category Components
  *
  * @example

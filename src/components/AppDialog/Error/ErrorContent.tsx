@@ -28,6 +28,7 @@ interface ErrorContentProps {
  * It also handles automated analytics reporting of the error and stack trace.
  *
  * @param {ErrorContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered error content.
  *
  * @see {@link useAnalytics}
@@ -35,7 +36,9 @@ interface ErrorContentProps {
  * @see {@link ErrorDisplay}
  * @see {@link ./ErrorContent.test.tsx Unit Tests}
  * @see {@link ./ErrorContent.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
  *
  * @example
@@ -75,6 +78,7 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 	 * Reloads the browser page to attempt recovery from a fatal error.
 	 *
 	 * @returns {void}
+	 *
 	 * @example Interaction handler
 	 * ```typescript
 	 * handleRetry();

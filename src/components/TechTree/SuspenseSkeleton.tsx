@@ -6,6 +6,7 @@ import { Flex, Skeleton } from "@radix-ui/themes";
  * A skeleton component that displays a loading state for the tech tree.
  *
  * @returns {JSX.Element} The rendered skeleton component.
+ *
  * @example Loading state placeholder
  * ```tsx
  * <SuspenseSkeleton />

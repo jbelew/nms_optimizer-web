@@ -18,14 +18,8 @@ const meta = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
-/**
- *
- */
 export const PageVariant: Story = {
 	args: {
 		variant: "page",
@@ -39,9 +33,6 @@ export const PageVariant: Story = {
 	},
 };
 
-/**
- *
- */
 export const WithErrorMessage: Story = {
 	args: {
 		variant: "page",
@@ -59,9 +50,6 @@ export const WithErrorMessage: Story = {
 	},
 };
 
-/**
- *
- */
 export const WithStackTrace: Story = {
 	args: {
 		variant: "page",
@@ -83,9 +71,6 @@ export const WithStackTrace: Story = {
 	},
 };
 
-/**
- *
- */
 export const WithComponentStack: Story = {
 	args: {
 		variant: "page",

@@ -19,6 +19,7 @@ let sharedForceShow: (() => void) | null = null;
  * shared across all instances of the hook.
  *
  * @param {function(): void} fn - The `forceShow` function, typically from `useScrollHide`.
+ *
  * @returns {void} Side-effects only.
  *
  * @see {@link import('../useScrollHide/useScrollHide').useScrollHide} for the source of the `forceShow` callback.
@@ -43,15 +44,18 @@ export const registerToolbarForceShow = (fn: () => void) => {
  * the grid is correctly positioned near the top of the viewport with
  * responsive offsets.
  *
- * @hook
- * @category Hooks
  * @param {object} [options] - Configuration for the scroll behavior.
  * @param {boolean} [options.skipOnLargeScreens=false] - Whether to ignore scroll requests on viewports >= 1024px.
+ *
  * @returns {{ gridContainerRef: React.MutableRefObject<HTMLDivElement | null>, scrollIntoView: () => void }} The shared container ref and a function to trigger the scroll.
  *
  * @see {@link useBreakpoint} for responsive offset calculations.
  * @see {@link registerToolbarForceShow} for global toolbar coordination.
  * @see {@link ./useScrollGridIntoView.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
  *
  * @example
  * ```tsx
@@ -90,6 +94,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 	 * Also triggers the registered toolbar `forceShow` function.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * scrollIntoView();
@@ -120,12 +125,14 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
  * Reset the shared grid container ref. Used for testing.
  *
  * @returns {void} Side-effects only.
- * @internal
+ *
  * @example Internal reset
  * ```typescript
  * __resetScrollGridIntoViewRef();
  * // returns void, side-effect: resets singleton ref
  * ```
+ *
+ * @internal
  */
 export const __resetScrollGridIntoViewRef = () => {
 	sharedGridContainerRef = { current: null } as React.MutableRefObject<HTMLDivElement | null>;

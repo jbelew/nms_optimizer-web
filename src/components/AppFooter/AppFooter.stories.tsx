@@ -29,14 +29,8 @@ const meta = {
 
 export default meta;
 
-/**
- *
- */
 type Story = StoryObj<typeof meta>;
 
-/**
- *
- */
 export const Desktop: Story = {
 	args: {
 		buildVersion: "6.1.2",
@@ -57,9 +51,6 @@ export const Desktop: Story = {
 	},
 };
 
-/**
- *
- */
 export const Tablet: Story = {
 	args: {
 		...Desktop.args,
@@ -79,9 +70,6 @@ export const Tablet: Story = {
 	},
 };
 
-/**
- *
- */
 export const Mobile: Story = {
 	args: {
 		...Desktop.args,

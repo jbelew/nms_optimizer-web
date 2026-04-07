@@ -5,9 +5,10 @@
  * This module provides the `ErrorMessageRenderer` component, which automatically
  * surfaces errors from the global state into user-visible toasts.
  *
- * @category Components
  * @see {@link ErrorMessageRenderer}
  * @see {@link ./ErrorMessageRenderer.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 
 import { useEffect } from "react";
@@ -26,10 +27,13 @@ import { useErrorStore } from "@/store/ErrorStore";
  * should be mounted once at the root level of the application.
  *
  * @returns {null} This component does not render any visual elements.
- * @component
- * @category Components
+ *
  * @see {@link useErrorStore}
  * @see {@link useToast}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example
  * ```tsx

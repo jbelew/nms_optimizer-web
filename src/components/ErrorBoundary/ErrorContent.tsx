@@ -5,10 +5,11 @@
  * This module contains the visual templates for the error boundary UI,
  * including full-page overlays and compact inset cards.
  *
- * @category Components
  * @see {@link ErrorContent}
  * @see {@link ./ErrorContent.test.tsx Unit Tests}
  * @see {@link ./ErrorContent.stories.tsx Storybook}
+ *
+ * @category Components
  */
 
 import type { ErrorInfo, ReactNode } from "react";
@@ -94,11 +95,15 @@ const InsetMessage = () => (
  * styling based on the `variant` (full page overlay vs. inset card).
  *
  * @param {ErrorContentProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered error UI.
- * @component
- * @category Components
+ *
  * @see {@link ErrorDisplay}
  * @see {@link hideSplashScreenAndShowBackground}
+ *
+ * @component
+ *
+ * @category Components
  *
  * @example Component usage
  * ```tsx

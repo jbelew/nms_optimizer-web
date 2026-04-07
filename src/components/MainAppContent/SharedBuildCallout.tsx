@@ -27,11 +27,16 @@ interface SharedBuildCalloutProps {
  * when a build is loaded from a shared URL or a read-only source.
  *
  * @param {SharedBuildCalloutProps} props - Component properties.
+ *
  * @returns {JSX.Element} The callout banner.
+ *
  * @see {@link import('./MainAppContent').MainAppContent} The parent component that consumes this callout.
  * @see {@link ./MainAppContent.stories.tsx Storybook}
+ *
  * @component
+ *
  * @category Components
+ *
  * @example
  * ```tsx
  * <SharedBuildCallout gridTableTotalWidth={500} />

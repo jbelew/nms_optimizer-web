@@ -5,9 +5,6 @@ import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
 
-/**
- *
- */
 type SetItemFunction = (
 	name: string,
 	value: StorageValue<Partial<ModuleSelectionStore>>
@@ -18,7 +15,9 @@ type SetItemFunction = (
  *
  * @param {SetItemFunction} setItemFn - The storage setter function.
  * @param {number} msToWait - Delay in milliseconds.
+ *
  * @returns {(name: string, value: StorageValue<Partial<ModuleSelectionStore>>) => Promise<void>} The debounced setter function.
+ *
  * @example
  * ```typescript
  * const debouncedSet = debounceSetItem(mySetFn, 500);
@@ -84,6 +83,7 @@ export type ModuleSelectionStore = {
 	 *
 	 * @param {string} tech - The unique technology identifier (e.g., `'pulse'`).
 	 * @param {string[]} moduleIds - The list of module IDs to associate with this technology.
+	 *
 	 * @returns {void} Side-effects only.
 	 */
 	setModuleSelection: (tech: string, moduleIds: string[]) => void;
@@ -91,6 +91,7 @@ export type ModuleSelectionStore = {
 	 * Retrieves the currently selected module IDs for a given technology.
 	 *
 	 * @param {string} tech - The unique technology identifier.
+	 *
 	 * @returns {string[] | null} The list of selected IDs, or `null` if none are found.
 	 */
 	getModuleSelection: (tech: string) => string[] | null;
@@ -98,6 +99,7 @@ export type ModuleSelectionStore = {
 	 * Removes all module selections for a specific technology.
 	 *
 	 * @param {string} tech - The unique technology identifier to clear.
+	 *
 	 * @returns {void} Side-effects only.
 	 */
 	clearModuleSelection: (tech: string) => void;
@@ -118,11 +120,14 @@ export type ModuleSelectionStore = {
  * debounced storage middleware to minimize disk writes during rapid selections.
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<ModuleSelectionStore>>} The module selection store hook.
- * @hook
- * @category State
+ *
  * @see {@link ModuleSelectionStore}
  * @see {@link import('./TechStore').useTechStore}
  * @see {@link ./ModuleSelectionStore.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category State
  *
  * @example
  * ```tsx

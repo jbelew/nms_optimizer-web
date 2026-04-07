@@ -28,6 +28,7 @@ export interface ErrorState {
 	 *
 	 * @param {string} message - The message text to display. **Must not be empty.**
 	 * @param {ErrorMessage["type"]} [type="error"] - The severity level of the notification.
+	 *
 	 * @returns {string} The unique ID assigned to the new error message.
 	 */
 	addError: (message: string, type?: ErrorMessage["type"]) => string;

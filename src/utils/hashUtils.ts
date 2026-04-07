@@ -5,8 +5,9 @@
  * This module provides functions for generating secure hashes using the Web Crypto API.
  * It ensures data integrity and supports checksum verification across the application.
  *
- * @category Utilities
  * @see {@link computeSHA256}
+ *
+ * @category Utilities
  */
 
 /**
@@ -20,7 +21,9 @@
  * **Requires a secure context (HTTPS) in most browsers.**
  *
  * @param {string} data - The input string to hash. **Must not be null.**
+ *
  * @returns {Promise<string>} A promise that resolves to the hex-encoded hash string.
+ *
  * @category Utilities
  *
  * @example

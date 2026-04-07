@@ -6,9 +6,10 @@
  * metrics like LCP, CLS, and INP. It facilitates data-driven performance
  * optimizations.
  *
- * @category Utilities
  * @see {@link reportWebVitals}
  * @see {@link ./reportWebVitals.test.ts Unit Tests}
+ *
+ * @category Utilities
  */
 
 import type { GA4Event } from "./analytics";
@@ -29,7 +30,9 @@ type SendEventFunction = (event: GA4Event) => void;
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
+ *
  * @returns {void} Side-effects only.
+ *
  * @category Utilities
  *
  * @example
@@ -58,9 +61,12 @@ const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
  * It is typically called during application initialization.
  *
  * @param {SendEventFunction} sendEvent - The function to call for each metric. **Must be a valid function.**
+ *
  * @returns {void} Side-effects only.
- * @category Utilities
+ *
  * @see {@link sendVitalsMetric}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

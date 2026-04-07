@@ -12,6 +12,7 @@ import { useTechStore } from "../../store/TechStore";
  *
  * @param {Cell} cell - The data model for the cell.
  * @param {boolean} isTouching - Whether the cell is currently being pressed on a touch device.
+ *
  * @returns {object} Metadata for rendering.
  * @returns {string|undefined} returns.techColor - The hex or name of the accent color.
  * @returns {string} returns.cellClassName - Concatenated list of CSS classes.
@@ -21,7 +22,9 @@ import { useTechStore } from "../../store/TechStore";
  *
  * @see {@link import('../store/TechStore').TechStore}
  * @see {@link Cell}
+ *
  * @hook
+ *
  * @category Hooks
  *
  * @example

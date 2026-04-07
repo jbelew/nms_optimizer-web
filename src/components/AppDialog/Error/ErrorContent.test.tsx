@@ -31,6 +31,17 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Helper to render component within Dialog context
+/**
+ * Renders a component wrapped in a Radix UI Dialog for testing.
+ *
+ * @param {React.ReactElement} component - The component to render.
+ * @returns {RenderResult} The result of the render function.
+ *
+ * @example Unit testing
+ * ```tsx
+ * renderWithDialog(<MyComponent />);
+ * ```
+ */
 const renderWithDialog = (component: React.ReactElement) => {
 	return render(
 		<Dialog.Root open={true}>

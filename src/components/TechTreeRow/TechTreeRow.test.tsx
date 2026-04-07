@@ -43,11 +43,19 @@ const defaultProps: TechTreeRowProps = {
 };
 
 // Helper to render
+/**
+ *
+ * @example
+ */
 const renderWithProviders = (ui: React.ReactElement) => {
 	return render(ui);
 };
 
 // Helper to set up the default store mocks
+/**
+ *
+ * @example
+ */
 const setupMocks = (hasTechInGrid: boolean) => {
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
 		const state: Partial<GridStore> = {

@@ -12,6 +12,7 @@ const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/User
  * It provides its own `<Suspense>` boundary to handle the chunk loading phase natively.
  *
  * @returns {JSX.Element} The suspense-wrapped dialog component.
+ *
  * @see {@link UserStatsDialog}
  *
  * @example

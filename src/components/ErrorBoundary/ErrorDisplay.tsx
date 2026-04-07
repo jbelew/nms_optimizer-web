@@ -5,9 +5,10 @@
  * This module provides the `ErrorDisplay` component, which formats complex
  * error information for developer and power-user debugging.
  *
- * @category Components
  * @see {@link ErrorDisplay}
  * @see {@link ./ErrorDisplay.test.tsx Unit Tests}
+ *
+ * @category Components
  */
 
 import type { ErrorInfo, ReactNode } from "react";
@@ -39,8 +40,11 @@ interface ErrorDisplayProps {
  * component to provide debugging information.
  *
  * @param {ErrorDisplayProps} props - Component properties.
+ *
  * @returns {JSX.Element} The rendered error details view.
+ *
  * @component
+ *
  * @category Components
  *
  * @example
