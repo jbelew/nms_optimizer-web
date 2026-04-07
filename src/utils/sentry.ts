@@ -1,16 +1,3 @@
-import { useEffect } from "react";
-import {
-	browserTracingIntegration,
-	init,
-	reactRouterV6BrowserTracingIntegration,
-} from "@sentry/react";
-import {
-	createRoutesFromChildren,
-	matchRoutes,
-	useLocation,
-	useNavigationType,
-} from "react-router-dom";
-
 import { env } from "./analytics";
 
 /**
@@ -24,7 +11,7 @@ import { env } from "./analytics";
  * @example
  * initializeSentry();
  */
-export const initializeSentry = () => {
+export const initializeSentry = async () => {
 	// We can use a public DSN or a dummy one for now if the user hasn't provided one.
 	// For this task, I'll use a placeholder or check if it's in env.
 	const dsn = import.meta.env.VITE_SENTRY_DSN || "";
@@ -35,18 +22,11 @@ export const initializeSentry = () => {
 		return;
 	}
 
-	init({
+	const Sentry = await import("@sentry/react");
+
+	Sentry.init({
 		dsn,
-		integrations: [
-			browserTracingIntegration(),
-			reactRouterV6BrowserTracingIntegration({
-				useEffect,
-				useLocation,
-				useNavigationType,
-				createRoutesFromChildren,
-				matchRoutes,
-			}),
-		],
+		integrations: [Sentry.browserTracingIntegration()],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
 		tracesSampleRate: env.isDevMode() ? 1.0 : 0.2,

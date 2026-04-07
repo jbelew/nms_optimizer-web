@@ -1,5 +1,4 @@
 import { ErrorInfo } from "react";
-import { captureException as SentryCaptureException } from "@sentry/react";
 
 import { sendEvent } from "../../utils/analytics";
 import { safeClear } from "../../utils/storage";
@@ -27,11 +26,15 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);
 
 	// Capture the error in Sentry
-	SentryCaptureException(error, {
-		extra: {
-			componentStack: errorInfo?.componentStack,
-		},
-	});
+	import("@sentry/react")
+		.then(({ captureException }) => {
+			captureException(error, {
+				extra: {
+					componentStack: errorInfo?.componentStack,
+				},
+			});
+		})
+		.catch(console.error);
 
 	// Attempt to clear localStorage, but don't let storage errors prevent recovery
 	const localStorageCleared = safeClear();

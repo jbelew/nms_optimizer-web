@@ -376,6 +376,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					return deps.filter(
 						(dep: string) =>
 							!dep.includes("vendor-charts") &&
+							!dep.includes("vendor-events") &&
 							!dep.includes("vendor-ui-utils")
 					);
 				},
