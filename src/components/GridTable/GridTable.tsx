@@ -12,7 +12,11 @@ import GridShake from "../GridShake/GridShake";
 import GridTableButtons from "../GridTableButtons/GridTableButtons";
 
 /**
- * Props for the `GridTable` component.
+ * Props for the {@link GridTable} component.
+ *
+ * @remarks
+ * Defines the operational mode of the grid, including whether it's interactive
+ * or a static shared view.
  *
  * @category Components
  * @see {@link GridTable}
@@ -26,6 +30,11 @@ interface GridTableProps {
 
 /**
  * Internal implementation of the GridTable component.
+ *
+ * @remarks
+ * This function handles the core rendering of the 2D grid structure, iterating
+ * over rows and columns to render {@link GridCell} components. It also
+ * integrates row-level controls via {@link GridControlButtons}.
  *
  * @param {GridTableProps} props - Component properties.
  * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref for the main grid container.
@@ -95,9 +104,14 @@ function GridTableComponent(
  * A layout component that renders the interactive technology grid and its controls.
  *
  * @remarks
- * This component orchestrates the rendering of a 2D array of `GridCell` components,
+ * This component orchestrates the rendering of a 2D array of {@link GridCell} components,
  * row-level controls for bulk activation, and a set of table-wide action buttons.
- * It is wrapped in a `GridShake` component to provide visual feedback for invalid actions.
+ * It is wrapped in a {@link GridShake} component to provide visual feedback for invalid actions.
+ *
+ * Performance optimization:
+ * - Direct mapping of grid rows and columns minimizes overhead.
+ * - Selective rendering of {@link GridControlButtons} for each row.
+ * - Integration with {@link GridTableButtons} for grid-wide actions.
  *
  * @category Components
  * @component
@@ -105,11 +119,12 @@ function GridTableComponent(
  * @see {@link GridCell}
  * @see {@link GridShake}
  * @see {@link GridStore}
- * @see GridTable.test.tsx
- * @see GridTable.stories.tsx
+ * @see {@link GridControlButtons}
+ * @see {@link GridTableButtons}
  *
  * @example
  * ```tsx
+ * const gridRef = useRef<HTMLDivElement>(null);
  * <GridTable ref={gridRef} solving={false} sharedGrid={false} />
  * ```
  */

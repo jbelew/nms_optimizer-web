@@ -8,6 +8,8 @@ import "./BuildNameDialog.scss";
 
 /**
  * Props for the `BuildNameDialog` component.
+ *
+ * @category Components
  */
 interface BuildNameDialogProps {
 	/** Whether the naming dialog is currently visible. */
@@ -21,6 +23,7 @@ interface BuildNameDialogProps {
 /**
  * A modal dialog that allows users to provide a custom name for their saved build.
  *
+ * @remarks
  * It wraps the `BuildNameContent` within a standard `AppDialog`, providing a
  * localized title and specific styling for the naming input workflow.
  *
@@ -30,11 +33,17 @@ interface BuildNameDialogProps {
  * @see {@link AppDialog}
  * @see {@link BuildNameContent}
  * @see {@link ./BuildNameDialog.stories.tsx Storybook}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <BuildNameDialog isOpen={showDialog} onConfirm={saveFn} onCancel={closeFn} />
+ * <BuildNameDialog
+ *   isOpen={true}
+ *   onConfirm={(name) => handleSave(name)}
+ *   onCancel={() => setOpen(false)}
+ * />
+ * // mounts a modal dialog with a text input for naming the build
  * ```
  */
 const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onConfirm, onCancel }) => {

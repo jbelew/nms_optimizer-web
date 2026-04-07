@@ -25,7 +25,10 @@ export class HttpError extends Error {
 	 * @param {string} statusText - The HTTP status text.
 	 * @param {string} [message] - An optional descriptive error message. Defaults to a generic "HTTP error" string.
 	 * @returns {HttpError} A new `HttpError` instance.
-	 * @example
+	 * @example Standard initialization
+	 * ```ts
+	 * const err = new HttpError(404, "Not Found");
+	 * ```
 	 */
 	constructor(status: number, statusText: string, message?: string) {
 		super(message || `HTTP error! status: ${status}`);

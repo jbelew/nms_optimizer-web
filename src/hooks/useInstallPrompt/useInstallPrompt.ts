@@ -13,7 +13,7 @@ import { useState } from "react";
  * @hook
  * @category Hooks
  *
- * @example
+ * @example Prompt conditional display
  * ```tsx
  * const { showPrompt, dismissPrompt } = useInstallPrompt();
  * if (showPrompt) {
@@ -26,7 +26,10 @@ export const useInstallPrompt = () => {
 
 	/**
 	 * Dismisses the install prompt.
-	 * @example
+	 * @example Dismiss the prompt
+	 * ```ts
+	 * dismissPrompt();
+	 * ```
 	 */
 	const dismissPrompt = () => {
 		setShowPrompt(false);

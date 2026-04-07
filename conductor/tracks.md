@@ -21,3 +21,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix localStorage SecurityError in Safari Private Browsing**
   *Link: [./tracks/fix_safari_private_storage_20260313/](./tracks/fix_safari_private_storage_20260313/)*
+
+---
+
+## [ ] Track: Finalize Agentic-JSDoc Standards Migration
+*Link: [./conductor/tracks/jsdoc_finalization_20260407/](./conductor/tracks/jsdoc_finalization_20260407/)*

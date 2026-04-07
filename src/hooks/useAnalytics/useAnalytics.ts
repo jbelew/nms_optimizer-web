@@ -6,7 +6,7 @@ import { sendEvent } from "../../utils/analytics";
  * Provides a React-friendly interface to the global `sendEvent` function,
  * ensuring consistent event tracking across the application.
  *
- * @returns {{ sendEvent: (event: GA4Event) => void }} An object containing the `sendEvent` function.
+ * @returns {{ sendEvent: (event: import('../../utils/analytics').GA4Event) => void }} An object containing the `sendEvent` function.
  *
  * @see {@link sendEvent} for the underlying tracking logic.
  * @see [Analytics Utilities](../../utils/analytics.ts)
@@ -14,7 +14,7 @@ import { sendEvent } from "../../utils/analytics";
  *
  * @category Hooks
  *
- * @example
+ * @example Dispatching a UI event
  * ```tsx
  * const { sendEvent } = useAnalytics();
  *

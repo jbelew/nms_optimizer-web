@@ -39,7 +39,7 @@ interface RecommendedBuildProps {
  * @param {RecommendedBuildProps} props - Component properties.
  * @returns {JSX.Element} The rendered recommended build interface.
  *
- * @example
+ * @example Basic usage
  * <RecommendedBuild techTree={currentTree} isLarge={true} />
  */
 const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }) => {
@@ -54,8 +54,11 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	/**
 	 * Defers the build application and tracks the event.
 	 *
-	 * @param {RecommendedBuild} build - The build configuration object to apply.
-	 * @example
+	 * @param {object} build - The build configuration object to apply.
+	 * @example Apply a specific build
+	 * ```ts
+	 * handleApply(builds[0]);
+	 * ```
 	 */
 	const handleApply = (build: (typeof builds)[number]) => {
 		// Defer async work to avoid blocking main thread on INP
@@ -74,7 +77,10 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 
 	/**
 	 * Navigates to the relevant section of the instructions dialog.
-	 * @example
+	 * @example Trigger instructions
+	 * ```ts
+	 * handleOpenInstructions();
+	 * ```
 	 */
 	const handleOpenInstructions = () => {
 		openDialog("instructions", { section: "section-7" });
@@ -84,8 +90,11 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 	 * Renders the interaction element based on the number of available builds.
 	 *
 	 * @param {React.ComponentProps<typeof Button>} [buttonProps] - Style overrides for the button.
-	 * @returns {JSX.Element | null}
-	 * @example
+	 * @returns {JSX.Element | null} The button element or null if no builds available.
+	 * @example Render with custom margin
+	 * ```tsx
+	 * renderBuildButton({ mt: "2" });
+	 * ```
 	 */
 	const renderBuildButton = (buttonProps?: React.ComponentProps<typeof Button>) => {
 		if (builds.length > 1) {

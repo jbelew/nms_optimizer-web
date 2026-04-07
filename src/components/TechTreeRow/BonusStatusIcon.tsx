@@ -10,11 +10,16 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 /**
  * Rounds a numerical value to a fixed number of decimal places.
  *
+ * @remarks
+ * Uses a string-based exponential rounding technique to avoid floating-point
+ * precision errors common with `Math.round`.
+ *
  * @param {number} value - The number to round.
  * @param {number} decimals - The target decimal precision. **Must be a positive integer.**
  * @returns {number} The rounded number.
+ * @category Utilities
  * @example
- * ```typescript
+ * ```ts
  * round(10.567, 2); // returns 10.57
  * ```
  */
@@ -24,9 +29,11 @@ function round(value: number, decimals: number) {
 
 /**
  * Props for the `BonusStatusIcon` component.
+ *
+ * @category Components
  */
 interface BonusStatusIconProps {
-	/** Unique identifier for the technology. */
+	/** Unique identifier for the technology (e.g., "starship_pulse"). */
 	tech: string;
 	/** The theoretical maximum bonus for the current configuration. */
 	techMaxBonus: number;
@@ -37,11 +44,18 @@ interface BonusStatusIconProps {
 /**
  * Core logic to determine the efficiency rating and icon metadata for a technology.
  *
+ * @remarks
+ * Calculates if a technology solve is:
+ * - **Warning**: < 100% (insufficient space)
+ * - **Check**: = 100% (valid solve)
+ * - **Lightning**: > 100% (boosted solve via supercharged slots)
+ *
  * @param {number} techMaxBonus - The raw maximum bonus value.
- * @param {function(string): string} t - Translation function.
- * @returns {BonusStatusData} Metadata including icon type and tooltip text.
+ * @param {function(string): string} t - i18next translation function.
+ * @returns {BonusStatusData} Metadata including icon type, styling, and tooltip text.
+ * @category Utilities
  * @example
- * ```typescript
+ * ```ts
  * const status = computeBonusStatusData(105.5, t);
  * // returns { icon: "lightning", percent: 5.5, ... }
  * ```
@@ -86,13 +100,18 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 /**
  * Renders the appropriate Radix icon component based on the status type.
  *
+ * @remarks
+ * Maps the semantic `iconType` to a specific `@radix-ui/react-icons` component.
+ *
  * @param {string | null} iconType - The identifier for the icon (warning, check, lightning).
- * @param {string} className - CSS classes.
- * @param {import("react").CSSProperties} style - Inline styles.
- * @returns {React.ReactNode} The rendered icon component.
+ * @param {string} className - CSS classes to apply to the icon.
+ * @param {import("react").CSSProperties} style - Inline styles to apply to the icon.
+ * @returns {React.ReactNode} The rendered icon component or null if type is unknown.
+ * @category Utilities
  * @example
  * ```tsx
- * {renderIcon("check", "icon-class", { color: "green" })}
+ * renderIcon("check", "my-icon", { color: "green" });
+ * // returns <Crosshair2Icon ... />
  * ```
  */
 function renderIcon(
@@ -121,18 +140,20 @@ function renderIcon(
  * - 🎯 **Checkmark**: Optimal standard layout (exactly 100%).
  * - ⚡ **Lightning**: Supercharged layout (over 100%).
  *
- * Statuses are persisted in `TechBonusStore` to maintain visual state across sessions.
+ * Statuses are persisted in {@link useTechBonusStore} to maintain visual state across sessions.
  *
  * @param {BonusStatusIconProps} props - Component properties.
  * @returns {JSX.Element | null} The status icon with tooltip, or `null` if no bonus exists.
  *
- * @see {@link ../../store/TechBonusStore.ts useTechBonusStore}
+ * @see {@link useTechBonusStore} Store used for persisting bonus metadata.
  * @see {@link ./BonusStatusIcon.test.tsx Unit Tests}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
  * <BonusStatusIcon tech="pulse" techMaxBonus={145} techSolvedBonus={145} />
+ * // mounts a lightning icon with +45% bonus tooltip
  * ```
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({

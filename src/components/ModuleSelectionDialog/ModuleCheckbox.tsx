@@ -16,7 +16,10 @@ const fallbackImage = `${baseImagePath}infra.webp`;
  *
  * @param {string} text - The input label string.
  * @returns {React.ReactNode} The formatted React element tree.
- * @example
+ * @example Styling parenthetical metadata
+ * ```typescript
+ * formatParentheses("Photon Cannon (Sigma)");
+ * ```
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -47,7 +50,10 @@ const formatParentheses = (text: string): React.ReactNode => {
  *
  * @param {string} label - The raw technology or module label.
  * @returns {React.ReactNode} The formatted React element tree.
- * @example
+ * @example Styling technical metadata
+ * ```typescript
+ * formatLabel("Pulse Engine [P1]");
+ * ```
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -88,8 +94,8 @@ export interface ModuleCheckboxProps {
  * @returns {JSX.Element} The rendered checkbox row layout.
  * @see {@link formatLabel}
  *
- * @example
- * <ModuleCheckbox module={m} techColor="blue" isDisabled={false} />
+ * @example Component usage
+ * <ModuleCheckbox module={module} techColor="blue" isDisabled={false} />
  */
 export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 	module,

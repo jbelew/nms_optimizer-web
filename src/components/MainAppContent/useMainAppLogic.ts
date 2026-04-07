@@ -28,10 +28,16 @@ import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
  * the splash screen.
  *
  * @returns {object} A complex object containing state flags, sub-hook results, and event handlers.
+ *
+ * @see {@link import('./MainAppContent').MainAppContent} The primary component that consumes this hook.
  * @see {@link ./useMainAppLogic.test.ts Unit Tests}
  * @see {@link ./MainAppContent.stories.tsx Storybook}
+ * @see {@link useGridStore}
+ * @see {@link usePlatformStore}
+ * @see {@link useSessionStore}
  * @hook
  * @category Hooks
+ * @see {@link import('./MainAppContent').MainAppContent} for the UI implementation.
  * @example
  * ```tsx
  * const {
@@ -41,6 +47,7 @@ import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
  *   saveBuild,
  *   handleShowChangelog
  * } = useMainAppLogic();
+ * // returns orchestration logic for the main application
  * ```
  */
 export const useMainAppLogic = () => {

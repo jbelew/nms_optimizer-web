@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "mode": "normal",
+  "sync": "bidirectional",
+  "compactOnArchive": true
+}

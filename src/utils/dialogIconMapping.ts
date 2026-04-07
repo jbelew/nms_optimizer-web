@@ -1,4 +1,15 @@
-// src/utils/dialogIconMapping.ts
+/**
+ * Mapping utilities for dialog icons and styles.
+ *
+ * @remarks
+ * This module centralizes the selection of icons and styles for different
+ * dialogs within the application. It maps translation keys to Radix UI
+ * icons and specific CSS properties, ensuring visual consistency.
+ *
+ * @category Utilities
+ * @see {@link getDialogIconAndStyle}
+ * @see {@link ./dialogIconMapping.test.ts Unit Tests}
+ */
 
 import type { CSSProperties, ElementType } from "react";
 import {
@@ -16,6 +27,8 @@ import {
 
 /**
  * Represents an icon component and its associated CSS styles.
+ *
+ * @category Utilities
  */
 interface DialogIconAndStyle {
 	/** The React component used to render the icon. */
@@ -26,6 +39,8 @@ interface DialogIconAndStyle {
 
 /**
  * A map of dialog title translation keys to their corresponding Radix UI icon components.
+ *
+ * @category Utilities
  */
 const iconMap: Record<string, ElementType> = {
 	"dialogs.titles.instructions": InfoCircledIcon,
@@ -44,6 +59,8 @@ const iconMap: Record<string, ElementType> = {
 
 /**
  * A map of dialog title translation keys to their corresponding CSS styles.
+ *
+ * @category Utilities
  */
 const iconStyle: Record<string, CSSProperties> = {
 	"dialogs.titles.serverError": { color: "var(--red-track)" },
@@ -54,14 +71,21 @@ const iconStyle: Record<string, CSSProperties> = {
 /**
  * Returns the appropriate icon component and style for a given dialog title key.
  *
+ * @remarks
  * This utility helps maintain visual consistency across different dialog types by
- * centralizing the icon selection logic.
+ * centralizing the icon selection logic. It defaults to an accent color if
+ * no specific style is mapped.
  *
  * @param {string} [titleKey] - The translation key for the dialog title.
  * @returns {DialogIconAndStyle} An object containing the `IconComponent` and its `style`.
+ * @category Utilities
+ * @see {@link iconMap}
+ * @see {@link iconStyle}
  *
  * @example
+ * ```ts
  * const { IconComponent, style } = getDialogIconAndStyle("dialogs.titles.about");
+ * ```
  */
 export const getDialogIconAndStyle = (titleKey: string | undefined): DialogIconAndStyle => {
 	const IconComponent = titleKey ? iconMap[titleKey] : null;

@@ -7,22 +7,50 @@ import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechOptimization } from "./useTechOptimization";
 
-/** Default empty array for modules to ensure stable reference. */
+/** Default empty array for modules to ensure stable reference for hooks. */
 const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: string }[] = [];
 
 /**
- * A coordinator hook that orchestrates the complex logic for a single technology sidebar row.
+ * Orchestrates the complex logic for a single technology sidebar row.
  *
- * It acts as a facade, aggregating data from multiple stores (`GridStore`, `TechStore`)
- * and delegating specialized tasks to sub-hooks (`useTechModuleManagement`,
- * `useTechOptimization`). It also handles the derived logic for localization and
- * resolution-aware image path generation.
+ * @remarks
+ * This coordinator hook acts as a facade, aggregating data from multiple stores
+ * and delegating specialized tasks to sub-hooks. It handles:
+ * 1. Data aggregation from {@link useGridStore} and {@link useTechStore}.
+ * 2. Module selection state via {@link useTechModuleManagement}.
+ * 3. Optimization and reset lifecycle via {@link useTechOptimization}.
+ * 4. Derived logic for localization and resolution-aware image path generation.
  *
  * @param {TechTreeRowProps} props - The properties passed to the parent component.
  * @returns {object} A unified interface containing state flags, localized strings, and event handlers.
+ * @returns {boolean} returns.hasTechInGrid - Whether the technology is currently placed in the grid.
+ * @returns {string} returns.translatedTechName - The localized name of the technology.
+ * @returns {string} returns.imagePath - Path to the 1x resolution technology icon.
+ * @returns {string} returns.imagePath2x - Path to the 2x resolution technology icon.
+ * @returns {number} returns.techMaxBonus - The maximum possible efficiency score.
+ * @returns {number} returns.techSolvedBonus - The current solved efficiency score.
+ * @returns {boolean} returns.isResetting - Whether a reset operation is in progress.
  *
- * @example
- * const hookData = useTechTreeRow(props);
+ * @see {@link import('./TechTreeRow').TechTreeRow} for the consuming component.
+ * @see {@link useTechModuleManagement} for module selection logic.
+ * @see {@link useTechOptimization} for solver orchestration.
+ * @see {@link useGridStore} for grid state.
+ * @see {@link useTechStore} for technology metadata.
+ *
+ * @hook
+ * @category Hooks
+ *
+ * @example Hook orchestration and data aggregation
+ * ```tsx
+ * const hookData = useTechTreeRow({
+ *   tech: 'pulse',
+ *   techColor: 'blue',
+ *   solving: false,
+ *   isGridFull: false,
+ *   handleOptimize: async (id) => {},
+ *   techImage: 'pulse.webp'
+ * });
+ * ```
  */
 export const useTechTreeRow = ({
 	tech,

@@ -5,16 +5,29 @@ import { useTechStore } from "../../store/TechStore";
 /**
  * Custom hook for computing the visual presentation of a technology grid cell.
  *
- * It maps the abstract state of a `Cell` (active, supercharged, occupied, etc.)
- * to concrete CSS classes and inline styles. It also handles thematic color
- * overrides for supercharged slots and empty states.
+ * @remarks
+ * Maps the abstract state of a `Cell` (active, supercharged, occupied, etc.)
+ * to concrete CSS classes and inline styles. Handles dynamic color overrides
+ * from `TechStore` and theme-based fallback colors for supercharged slots.
  *
- * @param {Cell} cell - The data model for the cell. **Must be valid.**
+ * @param {Cell} cell - The data model for the cell.
  * @param {boolean} isTouching - Whether the cell is currently being pressed on a touch device.
- * @returns {object} Metadata for rendering, including `cellClassName`, `techColor`, and icon status.
+ * @returns {object} Metadata for rendering.
+ * @returns {string|undefined} returns.techColor - The hex or name of the accent color.
+ * @returns {string} returns.cellClassName - Concatenated list of CSS classes.
+ * @returns {React.CSSProperties} returns.cellElementStyle - Inline style overrides.
+ * @returns {string} returns.emptyIconFillColor - Fill color for the `EmptyCellIcon`.
+ * @returns {boolean} returns.showEmptyIcon - Whether to render the empty cell icon.
+ *
+ * @see {@link import('../store/TechStore').TechStore}
+ * @see {@link Cell}
+ * @hook
+ * @category Hooks
  *
  * @example
- * const styles = useGridCellStyle(currentCell, false);
+ * ```tsx
+ * const { cellClassName, techColor } = useGridCellStyle(currentCell, false);
+ * ```
  */
 export function useGridCellStyle(cell: Cell, isTouching: boolean) {
 	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));

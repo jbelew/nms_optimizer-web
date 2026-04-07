@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 /**
  * Represents the visual and data state of the active tooltip.
  *
- * @see {@link TooltipProvider}
+ * @see {@link import('./TooltipContext').TooltipProvider}
  * @category Tooltip
  */
 export interface TooltipState {
@@ -20,7 +20,7 @@ export interface TooltipState {
 /**
  * Functional interface for controlling the tooltip visibility.
  *
- * @see {@link TooltipProvider}
+ * @see {@link import('./TooltipContext').TooltipProvider}
  * @category Tooltip
  */
 export interface TooltipActions {
@@ -51,12 +51,14 @@ export const TooltipActionsContext = createContext<TooltipActions | undefined>(u
  *
  * @returns {TooltipState} The current tooltip state.
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
- * @see {@link TooltipProvider}
+ * @see {@link import('./TooltipContext').TooltipProvider}
  * @see {@link TooltipState}
  * @category Hooks
  *
- * @example
+ * @example Hook usage for state
+ * ```tsx
  * const { isOpen, label } = useTooltipState();
+ * ```
  */
 export const useTooltipState = () => {
 	const context = useContext(TooltipStateContext);
@@ -80,12 +82,14 @@ export const useTooltipState = () => {
  *
  * @returns {TooltipActions} The show and hide functions.
  * @throws {Error} If called outside of a `TooltipProvider` in non-test environments.
- * @see {@link TooltipProvider}
+ * @see {@link import('./TooltipContext').TooltipProvider}
  * @see {@link TooltipActions}
  * @category Hooks
  *
- * @example
+ * @example Hook usage for actions
+ * ```tsx
  * const { show, hide } = useTooltipActions();
+ * ```
  */
 export const useTooltipActions = () => {
 	const context = useContext(TooltipActionsContext);

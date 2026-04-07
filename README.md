@@ -75,6 +75,20 @@ To override the default service endpoint, update the VITE_API_URL value in your 
 
 ---
 
+### **Task Tracking**
+
+This project uses [Beads](https://github.com/gastownhall/beads) for task management and persistent agent memory.
+
+1. **Install the CLI:**
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+   ```
+2. **Usage:**
+   - Run `bd ready` to see what to work on next.
+   - The task database is stored in `.beads/` and versioned with the code.
+
+---
+
 ### Docker compose.yml
 
 ```

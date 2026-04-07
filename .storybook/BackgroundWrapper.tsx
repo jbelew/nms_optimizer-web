@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- *
+ * Properties for the `BackgroundWrapper` component.
  */
 interface BackgroundWrapperProps {
 	children: React.ReactNode;
@@ -10,8 +10,20 @@ interface BackgroundWrapperProps {
 }
 
 /**
+ * A wrapper component that manages global background styles for Storybook stories.
  *
- * @example
+ * It dynamically toggles the application's main background image and colors based
+ * on the current story's visibility settings and active theme.
+ *
+ * @param {BackgroundWrapperProps} props - Component properties.
+ * @returns {JSX.Element} The rendered children.
+ *
+ * @example Storybook usage
+ * ```tsx
+ * <BackgroundWrapper isVisible={true} theme="dark">
+ *   <MyComponent />
+ * </BackgroundWrapper>
+ * ```
  */
 export const BackgroundWrapper = ({ children, isVisible, theme }: BackgroundWrapperProps) => {
 	React.useEffect(() => {

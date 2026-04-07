@@ -4,6 +4,8 @@ import { radixIconRegistry } from "../../../utils/radixIconRegistry";
 
 /**
  * Props for the `DynamicRadixIcon` component.
+ *
+ * @category Components
  */
 interface DynamicRadixIconProps {
 	/** The name of the icon in the registry (e.g., 'InfoCircled'). **Suffixing with 'Icon' is optional.** */
@@ -21,6 +23,7 @@ interface DynamicRadixIconProps {
 /**
  * A utility component that renders Radix UI icons based on a string identifier.
  *
+ * @remarks
  * It looks up the icon component in the `radixIconRegistry` to ensure that only
  * explicitly registered icons are bundled. It applies standard dimensions and
  * colors based on the provided props.
@@ -29,11 +32,18 @@ interface DynamicRadixIconProps {
  * @returns {JSX.Element | null} The rendered icon component, or `null` if not found.
  *
  * @see {@link radixIconRegistry}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <DynamicRadixIcon name="InfoCircled" size={24} color="blue" />
+ * <DynamicRadixIcon
+ *   name="InfoCircled"
+ *   size={24}
+ *   color="blue"
+ *   className="my-icon"
+ * />
+ * // mounts InfoCircledIcon with 24px width/height and blue color
  * ```
  */
 const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({

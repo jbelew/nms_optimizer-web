@@ -25,7 +25,10 @@ interface ErrorContentProps {
 
 /**
  * Static component rendering the default full-page error message.
- * @example
+ * @example View state
+ * ```tsx
+ * <DefaultMessage />
+ * ```
  */
 const DefaultMessage = () => (
 	<>
@@ -47,7 +50,10 @@ const DefaultMessage = () => (
 
 /**
  * Static component rendering a compact inset error message.
- * @example
+ * @example View state
+ * ```tsx
+ * <InsetMessage />
+ * ```
  */
 const InsetMessage = () => (
 	<>
@@ -76,8 +82,10 @@ const InsetMessage = () => (
  * @param {ErrorContentProps} props - Component properties.
  * @returns {JSX.Element} The rendered error UI.
  *
- * @example
+ * @example Component usage
+ * ```tsx
  * <ErrorContent variant="page" error={new Error("Crash")} />
+ * ```
  */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
 	const isLarge = useBreakpoint("1024px");

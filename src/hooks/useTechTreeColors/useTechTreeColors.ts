@@ -6,15 +6,27 @@ import { fetchTechTreeColors } from "./techTreeColorsResource";
 /**
  * Custom hook for retrieving the global technology color registry.
  *
- * This hook uses React's `use` for promise unwrapping, allowing it to be used
+ * @remarks
+ * This hook uses React's `use()` for promise unwrapping, allowing it to be used
  * within Suspense boundaries. It provides a mapping of technology keys to their
- * assigned UI theme colors.
+ * assigned UI theme colors across all categories (Starship, Multi-Tool, etc.).
  *
- * @param {boolean} [enabled=true] - Whether to execute the fetch. Defaults to `true`.
+ * @hook
+ * @category Hooks
+ * @param {boolean} [enabled=true] - Whether to execute the fetch.
  * @returns {Record<string, string>} A dictionary mapping tech keys to color strings.
  *
+ * @see {@link fetchTechTreeColors} for the underlying resource registry.
+ *
  * @example
- * const colors = useTechTreeColors();
+ * ```tsx
+ * const TechBadge = ({ techKey }: { techKey: string }) => {
+ *   const colors = useTechTreeColors();
+ *   const color = colors[techKey] || 'gray';
+ *
+ *   return <Badge color={color}>{techKey}</Badge>;
+ * };
+ * ```
  */
 export const useTechTreeColors = (enabled: boolean = true) => {
 	if (!enabled) {

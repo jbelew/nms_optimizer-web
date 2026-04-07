@@ -18,11 +18,12 @@ import { useTranslation } from "react-i18next";
 import { getDialogIconAndStyle } from "../../../utils/dialogIconMapping";
 
 /**
- * Translation keys for dialogs that correspond to full routed pages.
+ * List of dialog title keys that require extra padding.
  *
  * @remarks
- * Used to apply additional padding (`pr-4`) to the scrollable content area
- * for dialogs that render longer, page-like content.
+ * These keys correspond to full routed pages that render longer, page-like content.
+ * Applying additional padding (`pr-4`) to the scrollable content area ensures
+ * that the scrollbar does not overlap the text on smaller viewports.
  *
  * @category Components
  */
@@ -35,7 +36,11 @@ const ROUTED_DIALOG_TITLE_KEYS = [
 ];
 
 /**
- * Props for the `AppDialog` component.
+ * Properties for the `AppDialog` component.
+ *
+ * @remarks
+ * Defines the configuration for the modal dialog, including visibility state,
+ * title localization, and content to be rendered.
  *
  * @see {@link AppDialog}
  * @category Components
@@ -99,7 +104,11 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		 * Closes the dialog if the Escape key is pressed.
 		 *
 		 * @param {KeyboardEvent} event - The keyboard event.
-		 * @example
+		 * @returns {void}
+		 * @example Interaction handler
+		 * ```typescript
+		 * handleEscapeKey(event);
+		 * ```
 		 */
 		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
 

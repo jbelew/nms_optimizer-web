@@ -26,7 +26,10 @@ export const languages = ["en", "es", "fr", "de", "pt"];
  *
  * @returns {string} The ISO date string of the build.
  * @category Utilities
- * @example
+ * @example Reading build date
+ * ```ts
+ * console.log(getBuildDate());
+ * ```
  */
 export function getBuildDate(): string {
 	return __BUILD_DATE__;

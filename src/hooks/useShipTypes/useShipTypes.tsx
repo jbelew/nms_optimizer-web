@@ -6,16 +6,20 @@ import { apiCall } from "../../utils/apiCall";
 
 /**
  * Details of a specific ship type.
+ *
+ * @category Interfaces
  */
 export interface ShipTypeDetail {
-	/** The display label for the ship type. */
+	/** The display label for the ship type (e.g., "Exotic"). */
 	label: string;
-	/** The category identifier for the ship type. */
+	/** The category identifier for the ship type (e.g., "S"). */
 	type: string;
 }
 
 /**
  * A dictionary of ship types, where each key is a ship type identifier.
+ *
+ * @category Interfaces
  */
 export interface ShipTypes {
 	[key: string]: ShipTypeDetail;
@@ -23,6 +27,9 @@ export interface ShipTypes {
 
 /**
  * A generic resource object compatible with React Suspense.
+ *
+ * @category Types
+ * @template T - The type of data being loaded.
  */
 export type Resource<T> = {
 	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
@@ -32,13 +39,20 @@ export type Resource<T> = {
 /**
  * Creates a Suspense-compatible resource object from a promise.
  *
+ * @remarks
+ * This utility wraps a promise to manage its state (pending, success, error)
+ * and provide a `read()` method that integrates with React Suspense.
+ *
  * @template T - The type of data being loaded.
- * @param {Promise<T>} promise - The asynchronous operation to wrap. **Must eventually resolve.**
+ * @param {Promise<T>} promise - The asynchronous operation to wrap.
  * @returns {Resource<T>} A resource object with a `read` method.
+ *
  * @example
- * ```typescript
+ * ```ts
  * const userResource = createResource(fetchUser(id));
- * // returns Resource<User>, side-effect: initiates fetch
+ *
+ * // Inside a component wrapped in <Suspense>:
+ * const user = userResource.read();
  * ```
  */
 const createResource = <T,>(promise: Promise<T>): Resource<T> => {
@@ -94,15 +108,17 @@ export const clearShipTypesCache = () => {
  * do not trigger redundant network requests. It also updates the
  * `ShipTypesStore` and `PlatformStore` upon success.
  *
+ * It returns a Suspense-compatible resource object.
+ *
  * @returns {Resource<ShipTypes>} A Suspense resource containing ship type data.
- * @category Data Fetching
- * @see {@link useShipTypesStore}
- * @see {@link usePlatformStore}
+ *
+ * @see {@link useShipTypesStore} for the persistent data store.
+ * @see {@link usePlatformStore} for ship-type/platform coordination.
+ * @see {@link apiCall} for the underlying network implementation.
  *
  * @example
- * ```typescript
- * const resource = fetchShipTypes();
- * // returns Resource<ShipTypes>, side-effect: may initiate API call
+ * ```ts
+ * const shipTypesResource = fetchShipTypes();
  * ```
  */
 export function fetchShipTypes(): Resource<ShipTypes> {
@@ -144,10 +160,25 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 /**
  * Custom hook for retrieving ship types within a Suspense boundary.
  *
+ * @remarks
+ * This hook calls `read()` on the ship types resource, which will throw a
+ * Promise if the data is not yet available, triggering the nearest
+ * `<Suspense>` boundary.
+ *
+ * @hook
+ * @category Hooks
  * @returns {ShipTypes} The loaded ship types data.
  *
+ * @see {@link fetchShipTypes} for the resource creation logic.
+ * @see {@link ./useShipTypes.test.tsx Unit Tests}
+ *
  * @example
- * const shipTypes = useFetchShipTypesSuspense();
+ * ```tsx
+ * const ShipTypeSelector = () => {
+ *   const shipTypes = useFetchShipTypesSuspense();
+ *   return <Select options={Object.values(shipTypes)} />;
+ * };
+ * ```
  */
 export function useFetchShipTypesSuspense(): ShipTypes {
 	return fetchShipTypes().read();
@@ -155,16 +186,28 @@ export function useFetchShipTypesSuspense(): ShipTypes {
 
 /**
  * State and actions for the ship types store.
+ *
+ * @category Interfaces
  */
 export interface ShipTypesState {
 	/** The dictionary of available ship types. */
 	shipTypes: ShipTypes | null;
-	/** Updates the ship types in the store. */
+	/**
+	 * Updates the ship types in the store.
+	 *
+	 * @param {ShipTypes} shipTypes - The new dictionary of ship types.
+	 */
 	setShipTypes: (shipTypes: ShipTypes) => void;
 }
 
 /**
  * Zustand store for managing the global state of available ship types.
+ *
+ * @remarks
+ * Stores the full dictionary of ship types retrieved from the API, enabling
+ * components to access labels and IDs across the application.
+ *
+ * @category Stores
  */
 export const useShipTypesStore = create<ShipTypesState>((set) => {
 	return {

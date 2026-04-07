@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Return type for the `useScrollHide` hook.
+ *
+ * @category Types
  */
-type UseScrollHideReturn = {
+export type UseScrollHideReturn = {
 	/** Whether the element should currently be visible. */
 	isVisible: boolean;
-	/** Ref to attach to the element being controlled. */
+	/** Ref to attach to the element being controlled (e.g., a toolbar). */
 	toolbarRef: React.RefObject<HTMLElement | null>;
 	/** Function to programmatically force the element to be visible. */
 	forceShow: () => void;
@@ -15,16 +17,41 @@ type UseScrollHideReturn = {
 /**
  * Custom hook to manage the visibility of an element based on scroll direction.
  *
+ * @remarks
  * Typically used for toolbars or headers, it hides the element when scrolling down
  * and reveals it when scrolling up. It includes hysteresis to prevent flickering
  * and a "force show" mechanism for programmatic control.
  *
+ * It uses `requestAnimationFrame` for performance and handles edge cases like
+ * iOS scroll bounce and bottom-of-page triggers.
+ *
+ * @hook
+ * @category Hooks
  * @param {number} [threshold=10] - The distance from the top of the page (in pixels) where the element is always visible.
  * @param {number} [hysteresis=20] - The minimum distance (in pixels) that must be scrolled in a new direction before visibility changes.
  * @returns {UseScrollHideReturn} State and functions for visibility control.
  *
- * @example
- * const { isVisible, toolbarRef } = useScrollHide(10, 30);
+ * @see {@link import('../useScrollGridIntoView/useScrollGridIntoView').useScrollGridIntoView} for coordination with programmatic scrolling.
+ * @see {@link import('../useScrollGridIntoView/useScrollGridIntoView').registerToolbarForceShow} for the global callback registration.
+ *
+ * @example Visibility management in a component
+ * ```tsx
+ * const MyToolbar = () => {
+ *   const { isVisible, toolbarRef, forceShow } = useScrollHide(50, 20);
+ *
+ *   return (
+ *     <header
+ *       ref={toolbarRef}
+ *       style={{
+ *         transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+ *         transition: 'transform 0.3s ease-in-out'
+ *       }}
+ *     >
+ *       Sticky Header
+ *     </header>
+ *   );
+ * };
+ * ```
  */
 export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideReturn => {
 	const [isVisible, setIsVisible] = useState(true);
@@ -37,7 +64,10 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 
 	/**
 	 * Manually triggers the visibility of the element.
-	 * @example
+	 * @example Forced reveal
+	 * ```ts
+	 * forceShow();
+	 * ```
 	 */
 	const forceShow = () => {
 		setIsVisible(true);

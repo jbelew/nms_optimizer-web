@@ -9,24 +9,33 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
 /**
  * Custom hook for applying pre-defined "Recommended Builds" to the technology grid.
  *
+ * @remarks
  * This hook maps technology and module identifiers from the recommended build
  * layout to their actual data properties in the `techTree`. It handles
  * automatic scrolling on mobile devices and updates the global `GridStore`.
  *
+ * @hook
+ * @category Hooks
  * @param {TechTree} techTree - The complete technology tree data required for property mapping.
  * @returns {{ applyRecommendedBuild: (build: RecommendedBuild) => void }} An object containing the `applyRecommendedBuild` function.
- * @category Hooks
- * @see {@link RecommendedBuild}
- * @see {@link TechTree}
- * @see {@link useGridStore}
- * @see {@link useBreakpoint}
- * @see {@link useScrollGridIntoView}
- * @see {@link isValidRecommendedBuild}
+ *
+ * @see {@link RecommendedBuild} for the build configuration schema.
+ * @see {@link TechTree} for the underlying tech data structure.
+ * @see {@link useGridStore} for state persistence.
+ * @see {@link useBreakpoint} for responsive behavior.
+ * @see {@link useScrollGridIntoView} for mobile UX.
+ * @see {@link isValidRecommendedBuild} for runtime validation.
+ * @see {@link ./useRecommendedBuild.test.tsx Unit Tests}
  *
  * @example
+ * ```tsx
  * const { applyRecommendedBuild } = useRecommendedBuild(techTree);
  *
- * // returns { applyRecommendedBuild: [Function] }
+ * const onLoadBuild = (build: RecommendedBuild) => {
+ *   // Overwrites the entire grid with the pre-defined layout
+ *   applyRecommendedBuild(build);
+ * };
+ * ```
  */
 export const useRecommendedBuild = (techTree: TechTree) => {
 	const isAbove1024 = useBreakpoint("1024px");
@@ -36,7 +45,9 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	/**
 	 * Internal map of all modules, indexed by a composite key of `tech/moduleId`.
 	 *
-	 * Used for fast O(1) lookups during build application.
+	 * @remarks
+	 * Used for fast O(1) lookups during build application to resolve full module data
+	 * from the minimal IDs stored in the build layout.
 	 *
 	 * @type {Map<string, Module>}
 	 * @private
@@ -67,15 +78,22 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	/**
 	 * Overwrites the current grid state with the layout defined in a recommended build.
 	 *
+	 * @remarks
 	 * Performs validation on the `build` object, maps module IDs to full module data,
 	 * and initiates a scroll-into-view on mobile if needed.
 	 *
 	 * @param {RecommendedBuild} build - The recommended build configuration to apply.
 	 * @returns {void} Side-effects only; updates `GridStore`.
+	 *
 	 * @see {@link isValidRecommendedBuild}
 	 * @see {@link createGrid}
 	 * @see {@link createEmptyCell}
+	 *
 	 * @example
+	 * ```ts
+	 * applyRecommendedBuild(myBuildObject);
+	 * // Side-effect: GridStore.grid is updated and mobile screen scrolls to top.
+	 * ```
 	 */
 	const applyRecommendedBuild = (build: RecommendedBuild) => {
 		if (!isValidRecommendedBuild(build)) {

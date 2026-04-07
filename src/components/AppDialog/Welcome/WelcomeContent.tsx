@@ -18,6 +18,7 @@ interface WelcomeContentProps {
 /**
  * A component that renders the content for the initial "Welcome" dialog.
  *
+ * @remarks
  * It provides a summary of the application's core features, key terminology,
  * and a direct link to the detailed instructions. It utilizes `react-i18next`
  * for localized messaging and `Trans` components for complex inline icons.
@@ -28,11 +29,12 @@ interface WelcomeContentProps {
  * @see {@link useDialog}
  * @see {@link DynamicRadixIcon}
  * @see {@link ./WelcomeContent.test.tsx Unit Tests}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <WelcomeContent onClose={markTutorialFn} /> // mounts welcome dialog content
+ * <WelcomeContent onClose={markTutorialFn} />
  * ```
  */
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
@@ -46,7 +48,11 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	 * Closes the welcome dialog and immediately opens the instructions dialog.
 	 *
 	 * @param {React.MouseEvent} e - The click event.
-	 * @example
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleViewInstructions(event);
+	 * ```
 	 */
 	const handleViewInstructions = (e: React.MouseEvent) => {
 		e.preventDefault();

@@ -13,13 +13,23 @@ import { useGridRowState } from "./useGridRowState";
 
 /**
  * Selector function to check if the grid contains any active (highlighted) cells.
+ *
+ * @remarks
+ * Used to determine if the expansion controls should be enabled.
+ *
+ * @category Selectors
  * @example
+ * ```ts
+ * const hasAnyActiveCells = selectHasAnyActiveCells(store.getState());
+ * ```
  */
 const selectHasAnyActiveCells = (state: GridStore) =>
 	state.grid.cells.some((row) => row.some((cell) => cell.active));
 
 /**
- * Props for the `GridControlButtons` component.
+ * Props for the {@link GridControlButtons} component.
+ *
+ * @category Components
  */
 interface RowControlButtonProps {
 	/** The zero-based index of the row being controlled. **Must be a valid row index.** */
@@ -31,16 +41,29 @@ interface RowControlButtonProps {
 /**
  * A component that provides contextual row-level controls for the technology grid.
  *
+ * @remarks
  * It renders a "Plus" button to activate the first inactive row, or a "Minus"
  * button to deactivate the last active row. These buttons allow users to quickly
- * expand or shrink their available grid space. The buttons are automatically
- * disabled if the grid contains technology modules or if the layout is locked.
+ * expand or shrink their available grid space.
+ *
+ * The buttons are automatically disabled if:
+ * - The grid contains technology modules.
+ * - The layout is locked.
+ * - Data is loading.
  *
  * @param {RowControlButtonProps} props - Component properties.
  * @returns {JSX.Element} The rendered row control buttons.
  *
+ * @category Components
+ * @component
+ * @see {@link RowControlButtonProps}
+ * @see {@link useGridRowState}
+ * @see {@link useGridStore}
+ *
  * @example
+ * ```tsx
  * <GridControlButtons rowIndex={5} isLoading={false} />
+ * ```
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoading }) => {
 	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);

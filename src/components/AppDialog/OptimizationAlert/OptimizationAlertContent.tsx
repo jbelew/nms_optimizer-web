@@ -4,7 +4,9 @@ import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 /**
- * Props for the `OptimizationAlertContent` component.
+ * Properties for the `OptimizationAlertContent` component.
+ *
+ * @category Components
  */
 interface OptimizationAlertContentProps {
 	/** The display name of the technology that could not be optimized. **Must not be empty.** */
@@ -16,20 +18,28 @@ interface OptimizationAlertContentProps {
 }
 
 /**
- * A component that renders the alert message when pattern matching fails to find a fit.
+ * Renders the alert message when pattern matching fails to find an optimal fit.
  *
- * It explains to the user that the layout is too constrained for the "Pattern" solver
- * and offers an alternative "Forced" solve using advanced search algorithms.
+ * @remarks
+ * This component handles the internal state of the optimization failure alert.
+ * It provides the user with an explanation of why the layout failed and
+ * offers a "Force Optimize" option as a more computationally intensive
+ * alternative.
  *
  * @param {OptimizationAlertContentProps} props - Component properties.
  * @returns {JSX.Element} The rendered alert content.
  *
  * @see {@link ./OptimizationAlertContent.test.tsx Unit Tests}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <OptimizationAlertContent technologyName="Pulse Engine" onClose={closeFn} onForceOptimize={forceFn} />
+ * <OptimizationAlertContent
+ *   technologyName="Pulse Engine"
+ *   onClose={handleClose}
+ *   onForceOptimize={handleForce}
+ * />
  * ```
  */
 export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
@@ -43,7 +53,10 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 	 * Executes the forced optimization callback.
 	 *
 	 * @returns {Promise<void>}
-	 * @example
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleForceOptimizeClick();
+	 * ```
 	 */
 	const handleForceOptimizeClick = async () => {
 		await onForceOptimize();

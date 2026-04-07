@@ -5,6 +5,8 @@ import { fetchUserStats } from "./userStatsResource";
 
 /**
  * Represents a single aggregate record of user optimization activity.
+ *
+ * @category Types
  */
 export type UserStat = {
 	/** The name of the analytics event. */
@@ -22,12 +24,29 @@ export type UserStat = {
 /**
  * Custom hook for retrieving aggregate user statistics.
  *
- * Uses React's `use` for promise unwrapping, designed for use within a Suspense boundary.
+ * @remarks
+ * This hook uses React's `use()` for promise unwrapping, allowing it to be used
+ * within Suspense boundaries. It retrieves usage data from the last 28 days
+ * to identify popular technologies and configurations.
  *
+ * @hook
+ * @category Hooks
  * @returns {UserStat[]} An array of user statistics.
  *
+ * @see {@link fetchUserStats} for the underlying API resource.
+ * @see {@link ./useUserStats.test.ts Unit Tests}
+ *
  * @example
- * const stats = useUserStats();
+ * ```tsx
+ * const PopularTechList = () => {
+ *   const stats = useUserStats();
+ *   return (
+ *     <ul>
+ *       {stats.map(s => <li key={s.technology}>{s.technology}: {s.total_events}</li>)}
+ *     </ul>
+ *   );
+ * };
+ * ```
  */
 export const useUserStats = (): UserStat[] => {
 	return use(fetchUserStats());

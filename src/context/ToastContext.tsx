@@ -16,18 +16,17 @@ import { ToastContext } from "./createToastContext";
  * @param {import("react").ReactNode} props.children - The application tree to wrap.
  * @returns {JSX.Element} The provider element wrapping children.
  *
- * @see {@link ../hooks/useToast/useToast.ts useToast Hook}
+ * @see {@link import('../hooks/useToast/useToast').useToast} for the consumer hook.
  * @see {@link ToastContext}
  * @see {@link ToastConfig}
  * @component
  * @category Components
  *
- * @example
+ * @example Application wrapper
  * ```tsx
  * <ToastProvider>
  *   <App />
  * </ToastProvider>
- * // mounts ToastProvider and its context
  * ```
  */
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -39,10 +38,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 *
 	 * @param {ToastConfig} config - The settings for the toast.
 	 * @returns {void} Side-effects only.
-	 * @example
+	 * @example Manual trigger
 	 * ```typescript
 	 * showToast({ title: "Updated", description: "Config saved", variant: "success" });
-	 * // returns void, side-effect: updates toastConfig and opens toast
 	 * ```
 	 */
 	const showToast = (config: ToastConfig) => {
@@ -60,10 +58,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * @param {import("react").ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 * @returns {void} Side-effects only.
-	 * @example
+	 * @example Success trigger
 	 * ```typescript
 	 * showSuccess("Success", "Build applied successfully");
-	 * // returns void, side-effect: triggers success toast
 	 * ```
 	 */
 	const showSuccess = (title: string, description: ReactNode, duration?: number) => {
@@ -77,10 +74,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * @param {import("react").ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 * @returns {void} Side-effects only.
-	 * @example
+	 * @example Error trigger
 	 * ```typescript
 	 * showError("Error", "Failed to connect to solver");
-	 * // returns void, side-effect: triggers error toast
 	 * ```
 	 */
 	const showError = (title: string, description: ReactNode, duration?: number) => {
@@ -94,10 +90,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * @param {import("react").ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 * @returns {void} Side-effects only.
-	 * @example
+	 * @example Info trigger
 	 * ```typescript
 	 * showInfo("Info", "Connecting...");
-	 * // returns void, side-effect: triggers info toast
 	 * ```
 	 */
 	const showInfo = (title: string, description: ReactNode, duration?: number) => {
@@ -108,10 +103,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * Hides the current toast and clears its configuration after an animation delay.
 	 *
 	 * @returns {void} Side-effects only.
-	 * @example
+	 * @example Immediate closure
 	 * ```typescript
 	 * closeToast();
-	 * // returns void, side-effect: closes active toast
 	 * ```
 	 */
 	const closeToast = () => {

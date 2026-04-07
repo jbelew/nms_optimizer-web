@@ -32,7 +32,10 @@ interface TechTreeProps {
  *
  * @param {TechTreeProps} props - Component properties.
  * @returns {JSX.Element} The technology tree UI.
- * @example
+ * @example Component usage
+ * ```tsx
+ * <TechTreeWithData {...props} />
+ * ```
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,
@@ -114,8 +117,10 @@ TechTreeWithData.displayName = "TechTreeWithData";
  * @param {TechTreeProps} props - Component properties.
  * @returns {JSX.Element} The rendered technology tree component.
  *
- * @example
+ * @example Component usage
+ * ```tsx
  * <TechTree handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={600} />
+ * ```
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {
 	return <TechTreeWithData {...props} />;

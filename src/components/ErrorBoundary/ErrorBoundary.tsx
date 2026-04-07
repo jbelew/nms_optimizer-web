@@ -37,17 +37,22 @@ interface State {
  * 3. It displays a user-friendly error UI or the provided `fallback` node.
  * 4. It maintains information about the crash for debugging purposes.
  *
- * @example
+ * @example Component usage
+ * ```tsx
  * <ErrorBoundary fallback={<CustomErrorUI />}>
  *   <FeatureComponent />
  * </ErrorBoundary>
+ * ```
  */
 class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Initializes the error boundary with a clean state.
 	 *
 	 * @param {Props} props - Component properties.
-	 * @example
+	 * @example Initialization
+	 * ```typescript
+	 * new ErrorBoundary(props);
+	 * ```
 	 */
 	constructor(props: Props) {
 		super(props);
@@ -59,7 +64,10 @@ class ErrorBoundary extends Component<Props, State> {
 	 *
 	 * @param {Error} error - The caught exception.
 	 * @returns {State} The new component state.
-	 * @example
+	 * @example State update
+	 * ```typescript
+	 * ErrorBoundary.getDerivedStateFromError(new Error("test"));
+	 * ```
 	 */
 	static getDerivedStateFromError(error: Error) {
 		console.log("ErrorBoundary: Caught error, updating state.");
@@ -72,7 +80,10 @@ class ErrorBoundary extends Component<Props, State> {
 	 *
 	 * @param {Error} error - The caught exception.
 	 * @param {ErrorInfo} errorInfo - The component stack trace.
-	 * @example
+	 * @example Side effects
+	 * ```typescript
+	 * component.componentDidCatch(new Error("test"), info);
+	 * ```
 	 */
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		handleError(error, errorInfo);
@@ -82,8 +93,11 @@ class ErrorBoundary extends Component<Props, State> {
 	/**
 	 * Renders children normally, or the error UI if a crash occurred.
 	 *
-	 * @returns {ReactNode}
-	 * @example
+	 * @returns {ReactNode} The rendered component tree or fallback UI.
+	 * @example Lifecycle render
+	 * ```tsx
+	 * boundary.render();
+	 * ```
 	 */
 	render() {
 		const { hasError, error, errorInfo } = this.state;

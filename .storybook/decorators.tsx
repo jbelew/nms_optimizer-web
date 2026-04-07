@@ -5,8 +5,17 @@ import { useTechTreeLoadingStore } from "../src/store/TechTreeLoadingStore";
 import { useTechStore } from "../src/store/TechStore";
 
 /**
+ * A wrapper component that applies the dark/light theme class to the document root safely.
  *
- * @example
+ * @param {object} props - Component properties.
+ * @param {React.ReactNode} props.children - Component subtree.
+ * @param {string} props.theme - The active theme ('light' or 'dark').
+ * @returns {JSX.Element} The rendered subtree.
+ *
+ * @example Storybook usage
+ * ```tsx
+ * <ThemeWrapper theme="dark"><MyComponent /></ThemeWrapper>
+ * ```
  */
 export const ThemeWrapper = ({
     children,
@@ -27,8 +36,19 @@ export const ThemeWrapper = ({
 };
 
 /**
+ * A utility component that resets all global Zustand stores to their initial states.
  *
- * @example
+ * This ensures that Storybook stories start with a clean state and do not bleed
+ * data between different components or variations.
+ *
+ * @param {object} props - Component properties.
+ * @param {React.ReactNode} props.children - Component subtree.
+ * @returns {JSX.Element} The rendered subtree.
+ *
+ * @example Storybook usage
+ * ```tsx
+ * <StoreResetWrapper><MyComponent /></StoreResetWrapper>
+ * ```
  */
 export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) => {
     React.useEffect(() => {

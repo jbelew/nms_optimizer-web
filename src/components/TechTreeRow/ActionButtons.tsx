@@ -1,4 +1,5 @@
 import type { TechTreeRowProps } from "./TechTreeRow";
+import { TechTreeRow } from "./TechTreeRow";
 import React from "react";
 import { MagicWandIcon, ResetIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
@@ -10,27 +11,49 @@ import { useTechTreeRow } from "./useTechTreeRow";
 
 /**
  * Props for the `ActionButtons` component.
+ *
+ * @category Components
  */
 interface ActionButtonsProps extends TechTreeRowProps {
-	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
+	/**
+	 * Consolidated state and handlers from the `useTechTreeRow` hook.
+	 *
+	 * Includes flags for loading states, tech presence, and event handlers
+	 * for optimization and reset actions.
+	 */
 	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
- * A component that renders the primary interaction buttons for a technology row.
+ * Primary interaction buttons for a technology row.
  *
- * It provides two buttons:
- * 1. **Optimize/Update**: Triggers the solver or updates the existing layout.
+ * @remarks
+ * This component provides two main action buttons for managing a specific technology:
+ * 1. **Optimize/Update**: Triggers the solver to find the best placement or update existing modules.
  * 2. **Reset**: Removes all instances of the technology from the grid.
  *
- * It intelligently calculates its own disabled states and tooltip messages
- * based on whether the grid is full or if the tech is already present.
+ * It intelligently calculates disabled states and dynamic tooltips using
+ * {@link ConditionalTooltip} based on the current grid capacity and technology presence.
  *
  * @param {ActionButtonsProps} props - Component properties.
- * @returns {JSX.Element} The rendered optimize and reset buttons.
+ * @returns {JSX.Element} The rendered action buttons container.
+ *
+ * @see {@link TechTreeRow} for the parent row component.
+ * @see {@link useTechTreeRow} for the underlying logic.
+ * @see {@link ./TechTreeRow.test.tsx Unit Tests}
+ *
+ * @component
+ * @category Components
  *
  * @example
- * <ActionButtons {...props} hookData={hookData} />
+ * ```tsx
+ * // Inside a TechTreeRow
+ * <ActionButtons
+ *   tech="solar"
+ *   isGridFull={false}
+ *   hookData={hookData}
+ * />
+ * ```
  */
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();

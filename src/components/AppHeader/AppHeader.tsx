@@ -28,6 +28,7 @@ interface AppHeaderProps {
 /**
  * The global application header component.
  *
+ * @remarks
  * It renders the primary logo, application title, version number, and a suite
  * of global controls including language selection, accessibility toggles, and
  * links to statistics and changelogs. It also features a hidden "Easter Egg"
@@ -35,11 +36,18 @@ interface AppHeaderProps {
  *
  * @param {AppHeaderProps} props - Component properties.
  * @returns {JSX.Element} The rendered application header.
- * @see AppHeader.stories.tsx
+ *
+ * @see {@link LanguageSelector}
+ * @see {@link ConditionalTooltip}
+ * @see {@link useDialog}
+ * @see {@link ./AppHeader.stories.tsx Storybook}
+ * @component
+ * @category Components
  *
  * @example
+ * ```tsx
  * <AppHeader onShowChangelog={() => setChangelogOpen(true)} />
- * // mounts AppHeader
+ * ```
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t, i18n } = useTranslation();

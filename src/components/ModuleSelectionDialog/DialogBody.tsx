@@ -49,8 +49,10 @@ export interface DialogBodyProps {
  * @param {DialogBodyProps} props - Component properties.
  * @returns {JSX.Element} The rendered dialog body content.
  *
- * @example
+ * @example Component usage
+ * ```tsx
  * <DialogBody {...props} />
+ * ```
  */
 export const DialogBody: React.FC<DialogBodyProps> = ({
 	groupedModules,
@@ -71,7 +73,10 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 	 * Proxies the checkbox change event to the parent handler.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new state.
-	 * @example
+	 * @example Interaction relay
+	 * ```typescript
+	 * onSelectAllChange(true);
+	 * ```
 	 */
 	const onSelectAllChange = (checked: boolean | "indeterminate") => {
 		handleSelectAllChange(checked);

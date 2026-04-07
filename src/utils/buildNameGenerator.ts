@@ -1,3 +1,14 @@
+/**
+ * Utility module for generating No Man's Sky themed build names.
+ *
+ * @remarks
+ * This module provides functions to create randomized, flavor-rich names
+ * for ship builds, incorporating ship types and NMS-style prefixes/suffixes.
+ *
+ * @category Utilities
+ * @see {@link generateBuildNameWithType}
+ */
+
 import {
 	SHIP_NAME_PREFIXES_COMPOUND,
 	SHIP_NAME_PREFIXES_SIMPLE,
@@ -7,6 +18,8 @@ import { sanitizeFilename } from "./filenameValidation";
 
 /**
  * Mapping of internal ship type identifiers to user-friendly display names.
+ *
+ * @category Utilities
  */
 const SHIP_TYPE_NAMES: Record<string, string> = {
 	standard: "Starship",
@@ -31,11 +44,19 @@ const SHIP_TYPE_NAMES: Record<string, string> = {
 /**
  * Returns a user-friendly display name for a given ship type identifier.
  *
- * @param {string} shipType - The internal ship type identifier (e.g., 'solar'). **Must not be null.**
+ * @remarks
+ * Translates technical ship type keys (e.g., `'living'`) into their
+ * readable equivalents (e.g., `'Living'`).
+ *
+ * @param {string} shipType - The internal ship type identifier. **Must not be null.**
  * @returns {string} The localized display name, or the input `shipType` if no mapping exists.
+ * @category Utilities
+ * @see {@link SHIP_TYPE_NAMES}
  *
  * @example
+ * ```ts
  * const name = getShipTypeName("living"); // Returns "Living"
+ * ```
  */
 export const getShipTypeName = (shipType: string): string => {
 	return SHIP_TYPE_NAMES[shipType.toLowerCase()] || shipType;
@@ -44,14 +65,21 @@ export const getShipTypeName = (shipType: string): string => {
 /**
  * Generates a random, NMS-themed build name prefixed with the ship type.
  *
+ * @remarks
  * The generated name follows the pattern: `{ShipType} - {Prefix} {Suffix}`.
- * The output is automatically sanitized to be safe for use as a filename.
+ * The output is automatically sanitized to be safe for use as a filename
+ * using {@link sanitizeFilename}.
  *
  * @param {string} shipType - The ship type identifier used as a prefix.
  * @returns {string} A sanitized, randomly generated build name.
+ * @category Utilities
+ * @see {@link getShipTypeName}
+ * @see {@link sanitizeFilename}
  *
  * @example
+ * ```ts
  * const buildName = generateBuildNameWithType("freighter"); // e.g., "Freighter - Echo of the Void"
+ * ```
  */
 export const generateBuildNameWithType = (shipType: string): string => {
 	// Randomly choose between simple and compound prefix (50/50)

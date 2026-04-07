@@ -8,14 +8,25 @@ let userStatsPromise: Promise<UserStat[]> | null = null;
 /**
  * Fetches popular data statistics from the analytics endpoint.
  *
+ * @remarks
  * This utility retrieves aggregate usage data (e.g., most optimized technologies)
  * for the past 28 days. The result is cached in a promise to prevent redundant
  * API calls within the same session.
  *
+ * It is primarily used by components that display community trends and
+ * popular technology configurations.
+ *
+ * @category Data Fetching
  * @returns {Promise<UserStat[]>} A promise resolving to an array of statistics objects.
  *
+ * @see {@link apiCall} for the underlying network implementation.
+ * @see {@link import('./useUserStats').useUserStats} for the React hook consumer.
+ *
  * @example
+ * ```ts
  * const stats = await fetchUserStats();
+ * console.log(stats[0].tech_key, stats[0].count);
+ * ```
  */
 export const fetchUserStats = (): Promise<UserStat[]> => {
 	if (!userStatsPromise) {

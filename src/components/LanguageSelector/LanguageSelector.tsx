@@ -43,8 +43,10 @@ const languageFlagPaths: LanguageFlagPaths = {
  *
  * @returns {JSX.Element} The rendered language selection dropdown.
  *
- * @example
+ * @example Component usage
+ * ```tsx
  * <LanguageSelector />
+ * ```
  */
 export const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
@@ -75,7 +77,10 @@ export const LanguageSelector: React.FC = () => {
 	 * Finalizes the language transition by updating the URL and i18n store.
 	 *
 	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
-	 * @example
+	 * @example Switching to German
+	 * ```typescript
+	 * handleLanguageChange("de");
+	 * ```
 	 */
 	const handleLanguageChange = (newLang: string) => {
 		clearErrors(); // Clear existing errors to prevent re-display on remount
@@ -108,7 +113,10 @@ export const LanguageSelector: React.FC = () => {
 
 	/**
 	 * Navigates the user to the translation request route.
-	 * @example
+	 * @example Trigger navigation
+	 * ```typescript
+	 * handleRequestTranslationClick();
+	 * ```
 	 */
 	const handleRequestTranslationClick = () => {
 		const lang = (i18n.language || "en").split("-")[0];

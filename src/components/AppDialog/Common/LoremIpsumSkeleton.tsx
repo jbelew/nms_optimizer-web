@@ -4,17 +4,20 @@ import { Skeleton, Text } from "@radix-ui/themes";
 /**
  * A decorative skeleton component that displays shimmering Lorem Ipsum text.
  *
+ * @remarks
  * This is used as a generic loading state for dialogs and content areas that
  * primarily contain blocks of text (like the "About" or "Instructions" pages).
  * It uses the Radix UI `Skeleton` component for a consistent look and feel.
  *
  * @returns {JSX.Element} The rendered text skeleton.
  *
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
  * <LoremIpsumSkeleton />
+ * // mounts a set of shimmering skeleton paragraphs
  * ```
  */
 const LoremIpsumSkeleton: React.FC = () => {

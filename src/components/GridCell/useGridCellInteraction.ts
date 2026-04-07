@@ -20,25 +20,25 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
  * Custom hook for managing complex user interactions with an individual grid cell.
  *
  * @remarks
- * It handles mouse, touch, and keyboard events, including specialized logic for:
- * 1. **Single Click/Tap**: Toggles the cell's supercharged state.
- * 2. **Double Tap (Mobile)**: Toggles the supercharged state (mimicking desktop click).
- * 3. **Ctrl/Cmd + Click**: Toggles the cell's active state.
- * 4. **Keyboard (Space/Enter)**: Toggles the active state.
- * 5. **Constraint Validation**: Checks against global limits (max 4 SC slots, row limits)
- *    and provides sensory feedback (shaking) on violation.
+ * Orchestrates mouse, touch, and keyboard events into grid actions.
+ * Specialized for mobile gesture detection (taps vs scrolls) and desktop shortcuts.
+ * Actions are validated against grid constraints (e.g., supercharge limits)
+ * before being dispatched to the `GridStore`.
  *
  * @param {Cell} cell - The current data model for the cell.
- * @param {number} rowIndex - The row index of the cell. **Must be valid.**
- * @param {number} columnIndex - The column index of the cell. **Must be valid.**
+ * @param {number} rowIndex - The row index of the cell (0-based).
+ * @param {number} columnIndex - The column index of the cell (0-based).
  * @param {boolean} isSharedGrid - Flag for read-only mode.
  * @returns {object} Interaction flags and event handlers for the cell component.
  *
+ * @see {@link useGridStore}
+ * @see {@link useSessionStore}
+ * @see {@link useShakeStore}
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
  * @hook
  * @category Hooks
  *
- * @example
+ * @example Usage in a component
  * ```tsx
  * const handlers = useGridCellInteraction(cell, 0, 5, false);
  * ```
@@ -63,10 +63,15 @@ export const useGridCellInteraction = (
 	/**
 	 * Triggers a visual shake animation on the grid for feedback.
 	 *
-	 * @example
-	 * ```tsx
+	 * @remarks
+	 * Proxies to `ShakeStore` to trigger global UI feedback on invalid interactions.
+	 *
+	 * @returns {void} Side-effects only.
+	 * @see {@link useShakeStore}
+	 *
+	 * @example Logic trigger
+	 * ```ts
 	 * triggerShake();
-	 * // returns void, side-effect: triggers global grid shake
 	 * ```
 	 */
 	const triggerShake = () => {
@@ -77,13 +82,17 @@ export const useGridCellInteraction = (
 	 * Internal logic for handling timed taps (single vs double).
 	 *
 	 * @remarks
-	 * Distinguishes between a single tap (toggle active/SC) and a double tap
-	 * (toggle SC only) based on timing and cell coordinates.
+	 * Implements a custom tap resolution engine to distinguish between:
+	 * 1. **Single Tap**: Normal click behavior.
+	 * 2. **Double Tap**: Supercharge toggle (useful for mobile).
+	 * Includes validation against `gridFixed` and `superchargedFixed` states.
 	 *
-	 * @example
-	 * ```tsx
+	 * @returns {void} Side-effects only.
+	 * @category Logic
+	 *
+	 * @example Manual trigger
+	 * ```ts
 	 * handleTouchLogic();
-	 * // returns void, side-effect: triggers cell state updates or feedback
 	 * ```
 	 */
 	const handleTouchLogic = () => {
@@ -153,8 +162,14 @@ export const useGridCellInteraction = (
 	/**
 	 * Records the start of a touch interaction.
 	 *
-	 * @param {import("react").TouchEvent} event - The touch start event.
-	 * @example
+	 * @remarks
+	 * Tracks initial coordinates and checks for multi-finger gestures to prevent
+	 * unintended taps during zooming or scrolling.
+	 *
+	 * @param {React.TouchEvent} event - The React touch start event.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onTouchStart={handleTouchStart} />
 	 * ```
@@ -177,8 +192,14 @@ export const useGridCellInteraction = (
 	/**
 	 * Tracks movement to distinguish between a tap and a scroll gesture.
 	 *
-	 * @param {import("react").TouchEvent} event - The touch move event.
-	 * @example
+	 * @remarks
+	 * Compares current touch coordinates to `gestureStartRef`. If movement
+	 * exceeds 10px, the interaction is marked as a gesture (`isGestureRef`).
+	 *
+	 * @param {React.TouchEvent} event - The React touch move event.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onTouchMove={handleTouchMove} />
 	 * ```
@@ -200,8 +221,14 @@ export const useGridCellInteraction = (
 	/**
 	 * Finalizes a touch interaction and triggers tap logic if no movement was detected.
 	 *
-	 * @param {import("react").TouchEvent | import("react").MouseEvent} event - The end event.
-	 * @example
+	 * @remarks
+	 * Prevents default behavior (e.g., ghost clicks) and validates if the cell
+	 * is part of a static module before processing the tap.
+	 *
+	 * @param {React.TouchEvent | React.MouseEvent} event - The React event finalizing interaction.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onTouchEnd={handleTouchEnd} />
 	 * ```
@@ -238,7 +265,9 @@ export const useGridCellInteraction = (
 	/**
 	 * Resets the touch state when an interaction is canceled by the system.
 	 *
-	 * @example
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example System cancellation
 	 * ```tsx
 	 * <div onTouchCancel={handleTouchCancel} />
 	 * ```
@@ -250,8 +279,16 @@ export const useGridCellInteraction = (
 	/**
 	 * Handles primary and modified mouse clicks.
 	 *
-	 * @param {import("react").MouseEvent} event - The click event.
-	 * @example
+	 * @remarks
+	 * Distinguishes between:
+	 * 1. **Ctrl/Cmd + Click**: Toggles active state.
+	 * 2. **Normal Click**: Toggles supercharged state.
+	 * Includes logging via `Logger` for state changes.
+	 *
+	 * @param {React.MouseEvent} event - The React click event.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onClick={handleClick} />
 	 * ```
@@ -331,8 +368,14 @@ export const useGridCellInteraction = (
 	/**
 	 * Prevents the context menu from appearing during interactions.
 	 *
-	 * @param {import("react").MouseEvent} event - The context menu event.
-	 * @example
+	 * @remarks
+	 * Standard behavior for the grid to prevent browser defaults from interfering
+	 * with custom touch/long-press logic.
+	 *
+	 * @param {React.MouseEvent} event - The React context menu event.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onContextMenu={handleContextMenu} />
 	 * ```
@@ -344,8 +387,14 @@ export const useGridCellInteraction = (
 	/**
 	 * Manages keyboard-driven interactions for accessibility.
 	 *
-	 * @param {import("react").KeyboardEvent} event - The keyboard event.
-	 * @example
+	 * @remarks
+	 * Maps Space and Enter keys to the `toggleCellActive` action, ensuring
+	 * full grid interactability for screen readers and keyboard-only users.
+	 *
+	 * @param {React.KeyboardEvent} event - The React keyboard event.
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example Component registration
 	 * ```tsx
 	 * <div onKeyDown={handleKeyDown} />
 	 * ```

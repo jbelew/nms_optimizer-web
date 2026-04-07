@@ -19,27 +19,31 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
 }
 
 /**
- * A component that renders status and configuration badges for a technology row.
+ * Status and configuration badges for a technology row.
  *
  * @remarks
- * It displays:
- * 1. The `BonusStatusIcon` (if the tech is in the grid) showing efficiency.
+ * This component displays:
+ * 1. The {@link BonusStatusIcon} (if the tech is in the grid) showing efficiency.
  * 2. A trigger button showing the count of selected modules.
  *
- * Clicking the count button opens the `ModuleSelectionDialog`. This component
- * manages the dialog's lifecycle, including state restoration if the user cancels.
+ * Clicking the count button opens the {@link ModuleSelectionDialog}. This component
+ * manages the dialog's lifecycle, including state restoration if the user cancels
+ * without saving/optimizing.
  *
  * @param {TechInfoBadgesProps} props - Component properties.
  * @returns {JSX.Element} The rendered badges and dialog trigger.
  *
- * @see {@link BonusStatusIcon}
- * @see {@link ModuleSelectionDialog}
- * @see {@link useTechTreeRow}
+ * @see {@link BonusStatusIcon} for efficiency visualization.
+ * @see {@link ModuleSelectionDialog} for the module picker.
+ * @see {@link useTechTreeRow} for the underlying state.
+ *
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <TechInfoBadges tech="pulse" hookData={hookData} />
+ * const hookData = useTechTreeRow({ techId: 'pulse' });
+ * <TechInfoBadges tech="pulse" hookData={hookData} isGridFull={false} />
  * ```
  */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
@@ -72,14 +76,16 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 	 * Manages the dialog's open/close state and ensures data consistency.
 	 *
 	 * @remarks
-	 * When opening, it captures the current module selection. When closing,
-	 * it restores that selection unless an optimization was triggered.
+	 * When opening, it captures the current module selection in `initialModules`.
+	 * When closing, it restores that selection unless an optimization was triggered,
+	 * preventing accidental unsaved changes.
 	 *
 	 * @param {boolean} open - The new visibility state.
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```tsx
-	 * handleOpenChange(true);
-	 * // returns void, side-effect: opens dialog and sets initialModules
+	 * handleOpenChange(true); // Captures state and opens dialog
 	 * ```
 	 */
 	const handleOpenChange = (open: boolean) => {
@@ -102,13 +108,18 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 	};
 
 	/**
-	 * Wrapper for the optimize callback to ensure the dialog closes only after the solve starts.
+	 * Wrapper for the optimize callback that manages dialog closure.
 	 *
-	 * @returns {Promise<void>} Resolves when optimization starts and dialog closes.
+	 * @remarks
+	 * Ensures the dialog closes only after the asynchronous optimization logic
+	 * has been successfully triggered. Sets `optimizeClickedRef` to true to
+	 * prevent `handleOpenChange` from reverting module selections.
+	 *
+	 * @returns {Promise<void>} Resolves when optimization starts.
+	 *
 	 * @example
 	 * ```tsx
-	 * await handleOptimizeWrapper();
-	 * // returns void, side-effect: triggers optimize and closes dialog
+	 * await handleOptimizeWrapper(); // Triggers optimize and closes dialog
 	 * ```
 	 */
 	const handleOptimizeWrapper = async () => {

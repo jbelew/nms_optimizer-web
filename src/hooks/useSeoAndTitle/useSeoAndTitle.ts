@@ -8,13 +8,18 @@ import { sendEvent } from "../../utils/analytics";
 /**
  * Updates or creates a meta tag in the document's head using the `name` attribute.
  *
- * @param {string} name - The name of the meta tag (e.g., 'description'). **Must not be empty.**
- * @param {string} content - The content string for the meta tag.
+ * @remarks
+ * This internal helper abstracts the DOM manipulation for standard meta tags
+ * like `description` or `twitter:title`.
+ *
+ * @param {string} name - The name attribute of the meta tag.
+ * @param {string} content - The content value to set.
  * @returns {void} Side-effects only.
+ *
  * @example
- * ```typescript
- * updateMetaTag("description", "A great app");
- * // returns void, side-effect: updates <meta name="description">
+ * ```ts
+ * updateMetaTag("description", "A guide to NMS optimization.");
+ * // Result: <meta name="description" content="..."> is updated or created.
  * ```
  */
 const updateMetaTag = (name: string, content: string) => {
@@ -120,17 +125,28 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
  *
  * @remarks
  * This hook automatically updates the document title, meta description, Open Graph tags,
- * and canonical URLs based on the current route and language. It also triggers
- * manual page view events for Google Analytics.
+ * and canonical URLs based on the current route and language. It also handles
+ * `hreflang` alternates for multilingual indexing and triggers manual
+ * page view events for Google Analytics.
  *
- * @returns {void} Side-effects only.
+ * It acts as the primary SEO driver for the Single Page Application (SPA).
+ *
  * @hook
  * @category Hooks
+ * @returns {void} Side-effects only; manages document head and sends analytics events.
+ *
+ * @see {@link seoMetadata} for the source of page-specific titles and descriptions.
+ * @see {@link sendEvent} for the analytics reporting implementation.
+ * @see {@link ./useSeoAndTitle.test.tsx Unit Tests}
  *
  * @example
  * ```tsx
- * useSeoAndTitle();
- * // returns void, side-effect: manages document metadata and analytics
+ * const App = () => {
+ *   // Typically called at the root level to react to all route changes
+ *   useSeoAndTitle();
+ *
+ *   return <Routes>...</Routes>;
+ * };
  * ```
  */
 export const useSeoAndTitle = () => {

@@ -5,7 +5,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 /**
- * Props for the `TechInfo` component.
+ * Props for the {@link TechInfo} component.
  */
 interface TechInfoProps {
 	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
@@ -13,16 +13,28 @@ interface TechInfoProps {
 }
 
 /**
- * A layout component that renders the localized name of a technology in the sidebar.
+ * Renders the localized technology name with responsive typography.
  *
- * It automatically adjusts its font size based on the viewport breakpoint and
- * uses balanced text wrapping for better readability of long technology names.
+ * @remarks
+ * This layout component handles the display of technology names in the `TechTreeRow`.
+ * It automatically adjusts font size based on the `640px` breakpoint and uses
+ * `balance` text wrapping to ensure long technology names are visually pleasing.
  *
  * @param {TechInfoProps} props - Component properties.
- * @returns {JSX.Element} The rendered technology name.
+ * @returns {JSX.Element} A themed `Text` component containing the localized name.
+ *
+ * @see {@link useTechTreeRow} for the data source.
+ * @see {@link useBreakpoint} for responsive logic.
+ *
+ * @component
+ * @category Components
  *
  * @example
+ * ```tsx
+ * // Inside a component that uses useTechTreeRow
+ * const hookData = useTechTreeRow({ techId: 'HYPERDRIVE' });
  * <TechInfo hookData={hookData} />
+ * ```
  */
 export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 	const { translatedTechName } = hookData;

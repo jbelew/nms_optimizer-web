@@ -24,15 +24,17 @@ interface UserStatsDialogProps {
 /**
  * A modal dialog that displays aggregate user optimization statistics.
  *
- * It uses React `lazy` and `Suspense` to dynamically load the heavy chart-related
+ * @remarks
+ * This component uses React `lazy` and `Suspense` to dynamically load the heavy chart-related
  * content only when the dialog is requested, minimizing the initial bundle size.
- * It wraps the dynamic content in a standard `AppDialog`.
+ * It wraps the dynamic content in a standard {@link AppDialog}.
  *
  * @param {UserStatsDialogProps} props - Component properties.
  * @returns {JSX.Element} The rendered statistics dialog.
  *
  * @see {@link AppDialog}
- * @see {@link UserStatsContent}
+ * @see {@link import('./UserStatsContent').UserStatsContent}
+ * @component
  * @category Components
  *
  * @example

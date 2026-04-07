@@ -5,6 +5,8 @@ import { getMarkdown } from "virtual:markdown-bundle";
 
 /**
  * Represents the state of a markdown content request.
+ *
+ * @category Interfaces
  */
 export interface MarkdownContentState {
 	/** The raw or pre-rendered markdown string. */
@@ -15,11 +17,14 @@ export interface MarkdownContentState {
 	error: string | null;
 }
 
+/** Global override for the browser Window object. */
 declare global {
-	/**
-	 *
-	 */
+	/** Standard browser Window with custom properties. */
 	interface Window {
+		/**
+		 * Global bundle used for Static Site Generation (SSG).
+		 * Contains pre-rendered markdown strings indexed by language and filename.
+		 */
 		__MARKDOWN_BUNDLE__?: Record<string, Record<string, string>>;
 	}
 }
@@ -27,15 +32,27 @@ declare global {
 /**
  * Custom hook for retrieving markdown content from a virtual bundle.
  *
+ * @remarks
  * This hook prioritizes pre-rendered markdown from the window's global bundle
  * (used for SSG) and falls back to a build-time virtual markdown bundle.
  * It automatically handles language-specific content based on the current `i18n` language.
  *
- * @param {string} markdownFileName - The name of the markdown file to retrieve (without extension). **Must exist in the bundle.**
+ * @hook
+ * @category Hooks
+ * @param {string} markdownFileName - The name of the markdown file to retrieve (without extension).
  * @returns {MarkdownContentState} State containing the markdown content, loading status, and any errors.
  *
- * @example
- * const { markdown, isLoading } = useMarkdownContent("about");
+ * @see {@link getMarkdown} for the virtual bundle retrieval logic.
+ *
+ * @example Example usage in a component
+ * ```tsx
+ * const { markdown, isLoading, error } = useMarkdownContent("about");
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage message={error} />;
+ *
+ * return <MarkdownRenderer content={markdown} />;
+ * ```
  */
 export const useMarkdownContent = (markdownFileName: string): MarkdownContentState => {
 	const { i18n } = useTranslation();

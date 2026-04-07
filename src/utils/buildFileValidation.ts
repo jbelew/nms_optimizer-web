@@ -1,8 +1,24 @@
 /**
+ * Validation utilities for application build files.
+ *
+ * @remarks
+ * This module provides types and functions to ensure that build files
+ * imported into or exported from the application conform to the expected
+ * schema. It handles verification of state integrity and property presence.
+ *
+ * @category Utilities
+ * @see {@link isValidBuildFile}
+ */
+
+/**
  * Type definition for a saved build file.
  *
+ * @remarks
  * Stores the complete serialized state of the application's stores, including
  * grid configuration, technology choices, and optimization results.
+ * This is the format used for saving/loading local `.nms` files.
+ *
+ * @category Utilities
  */
 export type BuildFile = {
 	/** The display name of the build. */
@@ -26,16 +42,21 @@ export type BuildFile = {
 /**
  * Validates that an unknown object conforms to the `BuildFile` interface.
  *
+ * @remarks
  * Performs a shallow property check and type verification for all required
- * fields in a build file.
+ * fields in a build file. Logs detailed errors to the console if validation fails.
  *
  * @param {unknown} obj - The object to validate.
  * @returns {obj is BuildFile} `true` if the object is a valid `BuildFile`, otherwise `false`.
+ * @category Utilities
+ * @see {@link BuildFile}
  *
  * @example
+ * ```ts
  * if (isValidBuildFile(parsedJson)) {
  *   console.log("Loading build:", parsedJson.name);
  * }
+ * ```
  */
 export function isValidBuildFile(obj: unknown): obj is BuildFile {
 	if (typeof obj !== "object" || obj === null) {

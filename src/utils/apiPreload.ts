@@ -1,4 +1,15 @@
-// src/utils/apiPreload.ts
+/**
+ * API preloading utilities for performance optimization.
+ *
+ * @remarks
+ * This module provides functions to initiate critical API requests early in
+ * the application bootstrap process, before the React component tree is fully
+ * mounted. This helps reduce render waterfalls and improves perceived performance.
+ *
+ * @category Utilities
+ * @see {@link preloadInitialState}
+ */
+
 import { fetchShipTypes } from "../hooks/useShipTypes/useShipTypes";
 import { fetchTechTreeAsync } from "../hooks/useTechTree/useTechTree";
 import { resolveInitialPlatform } from "./platformResolver";
@@ -6,13 +17,26 @@ import { resolveInitialPlatform } from "./platformResolver";
 /**
  * Initiates critical API calls early in the bootstrap process.
  *
+ * @remarks
  * By eagerly calling these fetch functions, we populate the internal
  * Promises used by their respective React Suspense caches. This prevents
  * render waterfalls when the component tree finally mounts.
  *
+ * It preloads:
+ * 1. Ship types (platforms).
+ * 2. The tech tree for the heuristically determined initial platform.
+ *
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link fetchShipTypes}
+ * @see {@link fetchTechTreeAsync}
+ * @see {@link resolveInitialPlatform}
+ *
  * @example
+ * ```ts
  * // Call as early as possible in main.tsx
  * preloadInitialState();
+ * ```
  */
 export const preloadInitialState = () => {
 	if (typeof window === "undefined") return;

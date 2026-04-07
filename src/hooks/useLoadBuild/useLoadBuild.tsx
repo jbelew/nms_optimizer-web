@@ -9,12 +9,17 @@ import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager"
 /**
  * Return type for the `useLoadBuild` hook.
  */
-interface UseLoadBuildReturn {
+export interface UseLoadBuildReturn {
 	/** Ref to the hidden file input element. */
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
 	/** Function to programmatically trigger the file input click. */
 	handleLoadBuild: () => void;
-	/** Handler for the file input's `onChange` event. */
+	/**
+	 * Handler for the file input's `onChange` event.
+	 *
+	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
+	 */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 	/** Whether a build is currently being parsed and loaded. */
 	isLoadPending: boolean;
@@ -23,10 +28,22 @@ interface UseLoadBuildReturn {
 /**
  * Props for the `useLoadBuild` hook.
  */
-interface UseLoadBuildProps {
-	/** Callback to display a success toast. */
+export interface UseLoadBuildProps {
+	/**
+	 * Callback to display a success toast.
+	 *
+	 * @param {string} title - The title of the toast.
+	 * @param {string | React.ReactNode} description - The description or content of the toast.
+	 * @param {number} [duration] - Optional duration in milliseconds.
+	 */
 	showSuccess: (title: string, description: string | React.ReactNode, duration?: number) => void;
-	/** Callback to display an error toast. */
+	/**
+	 * Callback to display an error toast.
+	 *
+	 * @param {string} title - The title of the toast.
+	 * @param {string} description - The description of the error.
+	 * @param {number} [duration] - Optional duration in milliseconds.
+	 */
 	showError: (title: string, description: string, duration?: number) => void;
 }
 
@@ -37,19 +54,36 @@ interface UseLoadBuildProps {
  * It handles the file selection process, delegates parsing to `useBuildFileManager`,
  * tracks loading state, sends analytics events, and manages success/error notifications.
  *
+ * @hook
+ * @category Hooks
  * @param {UseLoadBuildProps} [props] - Optional callbacks for displaying notifications.
  * @returns {UseLoadBuildReturn} State and event handlers for build loading.
  *
- * @see {@link useBuildFileManager}
- * @see {@link useAnalytics}
- * @see {@link ./useLoadBuild.test.tsx Unit Tests}
- * @hook
- * @category Hooks
+ * @see {@link useBuildFileManager} for the underlying file parsing logic.
+ * @see {@link useAnalytics} for event tracking.
+ * @see {@link usePlatformStore} for retrieving the currently selected ship type.
  *
  * @example
  * ```tsx
- * const { handleLoadBuild, isLoadPending } = useLoadBuild({ showSuccess, showError });
- * // returns { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending }
+ * const { handleLoadBuild, isLoadPending, fileInputRef, handleFileSelect } = useLoadBuild({
+ *   showSuccess: (title, desc) => console.log(title, desc),
+ *   showError: (title, err) => console.error(title, err)
+ * });
+ *
+ * return (
+ *   <>
+ *     <button onClick={handleLoadBuild} disabled={isLoadPending}>
+ *       Load Save File
+ *     </button>
+ *     <input
+ *       type="file"
+ *       ref={fileInputRef}
+ *       onChange={handleFileSelect}
+ *       style={{ display: 'none' }}
+ *       accept=".nms"
+ *     />
+ *   </>
+ * );
  * ```
  */
 export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {

@@ -9,15 +9,37 @@ export type { ToastConfig } from "../../context/createToastContext";
 /**
  * Custom hook for accessing the application's toast notification system.
  *
- * Provides functions to show success, error, or informational toasts.
- * **Must be used within a `ToastProvider`.**
+ * @remarks
+ * This hook provides a high-level API for triggering Radix-based toast
+ * notifications (success, error, etc.) from anywhere in the component tree.
  *
- * @returns {ToastContextValue} The toast context containing notification handlers.
- * @throws {Error} If called outside of a `ToastProvider`.
+ * It is a wrapper around the `ToastContext`.
  *
- * @example
- * const { showSuccess } = useToast();
- * showSuccess("Success!", "Your build has been saved.");
+ * @hook
+ * @category Hooks
+ * @returns {import('../../context/createToastContext').ToastContextType} The toast context containing notification handlers.
+ * @throws {Error} If called outside of a {@link import('../../context/ToastContext').ToastProvider}.
+ *
+ * @see {@link ToastContext} for the underlying context definition.
+ * @see {@link import('../../context/ToastContext').ToastProvider} for the required provider component.
+ *
+ * @example Hook usage in a component
+ * ```tsx
+ * const MyComponent = () => {
+ *   const { showSuccess, showError } = useToast();
+ *
+ *   const handleAction = async () => {
+ *     try {
+ *       await performTask();
+ *       showSuccess("Saved", "Build updated successfully.");
+ *     } catch (err) {
+ *       showError("Error", "Failed to save build.");
+ *     }
+ *   };
+ *
+ *   return <button onClick={handleAction}>Save</button>;
+ * };
+ * ```
  */
 export const useToast = () => {
 	const context = useContext(ToastContext);

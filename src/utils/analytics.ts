@@ -1,5 +1,25 @@
-import ReactGA from "react-ga4";
+/**
+ * Analytics utility module for Google Analytics 4 (GA4).
+ *
+ * @remarks
+ * This module provides a unified interface for tracking user interactions, errors,
+ * and performance metrics. It supports both client-side tracking via `react-ga4`
+ * and a server-side fallback for environments where client-side tracking is blocked
+ * (e.g., ad blockers).
+ *
+ * It handles:
+ * - GA4 initialization with anonymization.
+ * - Ad blocker detection for fallback routing.
+ * - Event validation and dispatching.
+ * - Web Vitals reporting.
+ *
+ * @category Utilities
+ * @see {@link initializeAnalytics}
+ * @see {@link sendEvent}
+ * @see {@link ./analytics.test.ts Unit Tests}
+ */
 
+import ReactGA from "react-ga4";
 import { TRACKING_ID } from "../constants";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { isBot } from "./isBot";
@@ -13,7 +33,12 @@ import { reportWebVitals } from "./reportWebVitals";
 /**
  * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
  *
+ * @remarks
+ * This constant ensures that the `react-ga4` module is correctly accessed even
+ * when bundled in environments that might wrap CJS exports in a `.default` property.
+ *
  * @see {@link https://github.com/MatteoGioioso/react-ga-4} react-ga4
+ * @category Utilities
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
@@ -21,8 +46,10 @@ const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
 /**
  * Interface for Google Analytics 4 event tracking.
  *
+ * @remarks
  * Defines the structure for events sent to both client-side (`ReactGA`)
- * and server-side fallback tracking.
+ * and server-side fallback tracking. Includes standard GA4 fields and
+ * application-specific custom dimensions.
  *
  * @category Utilities
  * @see {@link sendEvent}
@@ -78,19 +105,32 @@ export interface GA4Event {
 	tracking_source?: string;
 }
 
-/** Tracks whether `ReactGA.initialize` has already been called this session. */
+/**
+ * Tracks whether `ReactGA.initialize` has already been called this session.
+ *
+ * @remarks
+ * Prevents duplicate initialization of the GA4 client.
+ *
+ * @category Utilities
+ */
 let gaInitialized = false;
 
 /**
  * Detects if client-side tracking is likely being blocked.
  *
+ * @remarks
  * Checks both Google Tag Manager and Google Analytics collection endpoints.
+ * Some blockers allow GTM but block the collection endpoint.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if tracking is likely blocked.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * const blocked = await detectAdBlocker();
  * if (blocked) console.log("Ad blocker detected");
+ * // returns true if blocked
+ * ```
  */
 const detectAdBlocker = async (): Promise<boolean> => {
 	// Check both GTM (script loading) and GA (collection) domains
@@ -132,20 +172,38 @@ const detectAdBlocker = async (): Promise<boolean> => {
 	}
 };
 
-/** Cached promise for in-flight ad blocker detection, preventing duplicate network requests. */
+/**
+ * Cached promise for in-flight ad blocker detection.
+ *
+ * @remarks
+ * Prevents duplicate network requests when multiple components check status simultaneously.
+ *
+ * @category Utilities
+ */
 let adBlockerDetectionPromise: Promise<boolean> | null = null;
-/** Cached boolean result of the ad blocker detection once resolved. */
+
+/**
+ * Cached boolean result of the ad blocker detection once resolved.
+ *
+ * @category Utilities
+ */
 let adBlockerResult: boolean | null = null;
 
 /**
  * Gets the result of the ad blocker detection.
  *
+ * @remarks
  * If detection is already in progress or completed, returns the existing promise or result.
+ * This is the preferred way to check for ad blockers within the application.
  *
  * @returns {Promise<boolean>} A promise that resolves to `true` if an ad blocker is detected.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * const isBlocked = await getAdBlockerDetectionResult();
+ * // returns true if blocked
+ * ```
  */
 const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 	if (adBlockerResult !== null) {
@@ -165,6 +223,11 @@ const getAdBlockerDetectionResult = async (): Promise<boolean> => {
 
 /**
  * Environment check utilities.
+ *
+ * @remarks
+ * Provides helper functions for detecting the current execution environment.
+ *
+ * @category Utilities
  */
 export const env = {
 	/**
@@ -173,7 +236,9 @@ export const env = {
 	 * @returns {boolean} `true` if in development mode.
 	 *
 	 * @example
+	 * ```ts
 	 * if (env.isDevMode()) { console.log("Debug mode active"); }
+	 * ```
 	 */
 	isDevMode: (): boolean => {
 		// Use typeof check to handle both string and boolean values from import.meta.env
@@ -190,10 +255,17 @@ export const env = {
 /**
  * Reset analytics initialization state for testing.
  *
+ * @remarks
+ * This function clears the initialization flags and cached ad blocker results,
+ * allowing for a clean slate between test runs.
+ *
  * @internal For testing purposes only.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * resetAnalyticsForTesting();
+ * ```
  */
 export const resetAnalyticsForTesting = () => {
 	gaInitialized = false;
@@ -202,24 +274,36 @@ export const resetAnalyticsForTesting = () => {
 };
 
 // Store globally so sendEvent can access these values for server-side fallback
-/** Whether the app is currently running as an installed PWA (standalone display mode). */
+/**
+ * Whether the app is currently running as an installed PWA (standalone display mode).
+ *
+ * @remarks
+ * Used to track user engagement from installed vs. browser-based usage.
+ *
+ * @category Utilities
+ */
 const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
 /**
  * Initializes Google Analytics tracking.
  *
+ * @remarks
  * Skips initialization in development mode, for bots, or if already initialized.
  * Falls back to server-side tracking if an ad blocker is detected.
+ * Automatically starts tracking Web Vitals once initialized.
  *
  * @returns {Promise<void>} Resolves when initialization is complete or skipped.
  * @category Utilities
  * @see {@link ReactGAInstance}
  * @see {@link getAdBlockerDetectionResult}
  * @see {@link isBot}
+ * @see {@link reportWebVitals}
  *
  * @example
+ * ```ts
  * await initializeAnalytics();
+ * ```
  */
 export const initializeAnalytics = async () => {
 	// Skip analytics in dev mode, if already initialized, or for bots
@@ -257,11 +341,17 @@ export const initializeAnalytics = async () => {
 /**
  * Validates that an event has required properties.
  *
+ * @remarks
+ * Ensures that all events sent to GA4 have at least an `action` and a `category`.
+ *
  * @param {GA4Event} event - The event to validate.
  * @throws {Error} Throws if `action` or `category` are missing.
+ * @category Utilities
  *
  * @example
+ * ```ts
  * validateEvent({ action: "click", category: "ui" });
+ * ```
  */
 const validateEvent = (event: GA4Event): void => {
 	if (!event.action) {
@@ -276,8 +366,10 @@ const validateEvent = (event: GA4Event): void => {
 /**
  * Sends an event to Google Analytics, automatically choosing the transport method.
  *
+ * @remarks
  * Falls back to server-side tracking if client-side is blocked by an ad-blocker.
- * Validates the `event` structure before dispatching.
+ * Validates the `event` structure before dispatching. Events are dispatched
+ * asynchronously ("fire and forget").
  *
  * @param {GA4Event} event - The event to send.
  * @returns {void} Side-effects only.
@@ -287,11 +379,13 @@ const validateEvent = (event: GA4Event): void => {
  * @see {@link sendAnalyticsEvent}
  *
  * @example
+ * ```ts
  * sendEvent({
  *   category: "ui",
  *   action: "click",
  *   label: "submit_button"
  * });
+ * ```
  */
 export const sendEvent = (event: GA4Event): void => {
 	try {

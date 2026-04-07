@@ -76,6 +76,13 @@ Use try-catch in hooks, pass error state via context/store, display user-friendl
 - `GridRow` hierarchy (uses `useGridRowState`)
 - `ModuleSelectionDialog` (uses `useModuleSelectionContext` pattern)
 
+## Project-Specific Memories & Preferences
+
+- **CRITICAL: iOS Safari rendering failures**. Never add GPU acceleration properties (`translateZ(0)`, `translate3d()`, `will-change`, `contain: layout`, etc.) to this project without verified performance problems and real iOS device testing. Simple, clean CSS with explicit image dimensions works better.
+- **Storybook Builds**: Storybook builds were failing due to a large file exceeding the service worker's cache limit. The fix involved increasing `maximumFileSizeToCacheInBytes` in `vite.config.ts` and conditionally disabling the `generate-version-json` plugin during Storybook builds.
+- **SEO**: Do not shorten the meta description in `index.html`.
+- **Commits**: Follow the Angular convention for commit messages (enforced by Commitlint).
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker
 

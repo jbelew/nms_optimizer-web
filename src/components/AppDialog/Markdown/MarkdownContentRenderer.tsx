@@ -8,7 +8,13 @@ import LoremIpsumSkeleton from "../Common/LoremIpsumSkeleton";
 import YouTubeEmbed from "./YouTubeEmbed";
 
 /**
- * Props for the `MarkdownContentRenderer` component.
+ * Properties for the `MarkdownContentRenderer` component.
+ *
+ * @remarks
+ * Encapsulates the configuration for rendering and navigating within markdown
+ * content files.
+ *
+ * @category Components
  */
 interface MarkdownContentRendererProps {
 	/** The identifier of the bundled markdown file to render. **Must exist in the virtual bundle.** */
@@ -17,17 +23,31 @@ interface MarkdownContentRendererProps {
 	targetSectionId?: string;
 }
 
+/**
+ * Lazily loaded `ReactMarkdown` component.
+ *
+ * @remarks
+ * Used to avoid loading the heavy markdown parser during the initial application boot.
+ */
 const LazyReactMarkdown = lazy(() => import("react-markdown"));
+
+/**
+ * Lazily loaded `PrerenderedMarkdownRenderer` component.
+ *
+ * @remarks
+ * Specifically used to render static HTML that was pre-generated during build.
+ */
 const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRenderer"));
 
 /**
  * A robust component for rendering bundled markdown content with integrated Radix UI styling.
  *
- * It supports:
- * - Hybrid rendering: Prioritizes SSR/SSG pre-rendered content but can fall back to client-side parsing.
- * - Custom component mapping: Maps standard markdown elements (h2, p, a, etc.) to themed Radix UI components.
- * - Custom shortcodes: Supports `[youtube:id]` for video embeds and `<radix-icon />` for dynamic icons.
- * - Automated scrolling: Handles deep-linking to specific headings via `targetSectionId`.
+ * @remarks
+ * This component acts as a high-level manager for markdown content. It supports:
+ * - **Hybrid Rendering:** Prioritizes SSR/SSG pre-rendered content but can fall back to client-side parsing.
+ * - **Theming:** Maps standard markdown elements (h2, p, a, etc.) to themed Radix UI components for design consistency.
+ * - **Custom Extensions:** Supports shortcodes like `[youtube:id]` and `<radix-icon />`.
+ * - **Deep Linking:** Automatically scrolls to the heading specified by `targetSectionId`.
  *
  * @param {MarkdownContentRendererProps} props - Component properties.
  * @returns {JSX.Element} The rendered article containing the markdown.
@@ -37,11 +57,15 @@ const PrerenderedMarkdownRenderer = lazy(() => import("./PrerenderedMarkdownRend
  * @see {@link LoremIpsumSkeleton}
  * @see {@link PrerenderedMarkdownRenderer}
  * @see {@link ./MarkdownContentRenderer.test.tsx Unit Tests}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <MarkdownContentRenderer markdownFileName="about" targetSectionId="section-2" />
+ * <MarkdownContentRenderer
+ *   markdownFileName="about"
+ *   targetSectionId="section-2"
+ * />
  * ```
  */
 export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = ({

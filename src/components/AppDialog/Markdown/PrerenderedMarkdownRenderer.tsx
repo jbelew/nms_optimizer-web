@@ -1,7 +1,12 @@
 import React, { useEffect, useRef } from "react";
 
 /**
- * Props for the `PrerenderedMarkdownRenderer` component.
+ * Properties for the `PrerenderedMarkdownRenderer` component.
+ *
+ * @remarks
+ * Encapsulates the configuration for navigating within pre-generated HTML.
+ *
+ * @category Components
  */
 interface PrerenderedMarkdownRendererProps {
 	/** Optional HTML ID of a section to scroll to on mount. */
@@ -11,15 +16,17 @@ interface PrerenderedMarkdownRendererProps {
 /**
  * A specialized component for rendering HTML content pre-generated during SSG.
  *
- * It scans the DOM for an element with the `data-prerendered-markdown="true"`
- * attribute and injects its inner HTML into an `<article>` tag. This approach
- * improves perceived performance and SEO by avoiding client-side re-parsing of
- * large markdown files (like the Changelog or Instructions).
+ * @remarks
+ * This component handles the final display of static markdown. It scans the DOM
+ * for an element with the `data-prerendered-markdown="true"` attribute and
+ * injects its contents using `dangerouslySetInnerHTML`. This strategy is used
+ * for larger documents to ensure immediate interactivity and SEO.
  *
  * @param {PrerenderedMarkdownRendererProps} props - Component properties.
  * @returns {JSX.Element | null} The injected article, or `null` if no content is found.
  *
- * @see {@link MarkdownContentRenderer}
+ * @see {@link import('./MarkdownContentRenderer').MarkdownContentRenderer}
+ * @component
  * @category Components
  *
  * @example
@@ -46,7 +53,10 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 		 * Attempts to scroll to the target ID within the article.
 		 *
 		 * @returns {boolean} `true` if scrolled, otherwise `false`.
-		 * @example
+		 * @example Logic usage
+		 * ```typescript
+		 * scrollIfTargetExists();
+		 * ```
 		 */
 		const scrollIfTargetExists = () => {
 			const targetElement = articleRef.current?.querySelector(`#${targetSectionId}`);

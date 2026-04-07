@@ -28,14 +28,24 @@ const SharedBuildCallout = lazy(() =>
 /**
  * Inner component that triggers the ship types fetch via Suspense.
  *
- * This allows the parent `MainAppContent` to render the header and other
+ * @remarks
+ * This allows the parent {@link MainAppContent} to render the header and other
  * static elements immediately, while only this part of the UI is suspended.
  *
- * @returns {null} Null — this component renders nothing; it exists only for side-effects.
+ * This component is technically a "side-effect only" component as it returns null
+ * but performs a fetch on mount via {@link useFetchShipTypesSuspense}.
  *
- * @example
- * // Used inside a Suspense boundary to trigger the ship types fetch:
- * <Suspense><ShipTypesLoader /></Suspense>
+ * @returns {null} Always returns null.
+ *
+ * @category Components
+ * @see {@link useFetchShipTypesSuspense}
+ *
+ * @example Suspended loading
+ * ```tsx
+ * <Suspense fallback={<Loading />}>
+ *   <ShipTypesLoader />
+ * </Suspense>
+ * ```
  */
 const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();
@@ -46,15 +56,33 @@ const ShipTypesLoader = () => {
 /**
  * The primary layout component for the application's main functional area.
  *
- * It orchestrates the rendering of the technology grid, the technology tree,
- * global headers/footers, and various UI overlays (spinners, callouts, toolbars).
- * It uses a custom hook, `useMainAppLogic`, to encapsulate state management and
- * event handling.
+ * @remarks
+ * This component orchestrates the core application flow, including:
+ * - Rendering the {@link GridTable} and {@link TechTreeComponent}.
+ * - Managing global headers and footers ({@link AppHeader}, {@link AppFooter}).
+ * - Integrating the {@link MobileToolbar} for responsive controls.
+ * - Handling various UI overlays like {@link MessageSpinner} and {@link SharedBuildCallout}.
+ *
+ * It utilizes {@link useMainAppLogic} to encapsulate business logic and state management,
+ * keeping the UI structure clean and focused on layout.
+ *
+ * Performance and loading:
+ * - Uses `React.lazy` and `Suspense` for non-critical utilities and specialized callouts.
+ * - Triggers asynchronous data fetching via {@link ShipTypesLoader}.
  *
  * @returns {JSX.Element} The root application layout structure.
  *
- * @example
+ * @category Components
+ * @component
+ * @see {@link useMainAppLogic}
+ * @see {@link GridTable}
+ * @see {@link AppHeader}
+ * @see {@link AppFooter}
+ *
+ * @example Component usage
+ * ```tsx
  * <MainAppContent />
+ * ```
  */
 export const MainAppContent = () => {
 	const { t } = useTranslation();

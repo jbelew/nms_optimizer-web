@@ -121,7 +121,7 @@ export type ModuleSelectionStore = {
  * @hook
  * @category State
  * @see {@link ModuleSelectionStore}
- * @see {@link TechStore}
+ * @see {@link import('./TechStore').useTechStore}
  * @see {@link ./ModuleSelectionStore.test.ts Unit Tests}
  *
  * @example

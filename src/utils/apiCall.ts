@@ -1,9 +1,25 @@
+/**
+ * Centralized API call wrapper with global error handling.
+ *
+ * @remarks
+ * This module provides a high-level `apiCall` function that wraps `fetchJson`
+ * and integrates with the application's global error state. It ensures that
+ * network failures or non-2xx responses are automatically displayed to the
+ * user via a global dialog, unless explicitly skipped.
+ *
+ * @category Utilities
+ * @see {@link apiCall}
+ * @see {@link ./apiCall.test.ts Unit Tests}
+ */
+
 import { useOptimizeStore } from "../store/OptimizeStore";
 import { fetchJson } from "./api";
 import { HttpError } from "./HttpError";
 
 /**
  * Options for the `apiCall` function, extending standard `RequestInit`.
+ *
+ * @category Utilities
  */
 export interface ApiCallOptions extends RequestInit {
 	/** Whether to skip showing the global error dialog on failure. Defaults to `false`. */
@@ -18,21 +34,22 @@ export interface ApiCallOptions extends RequestInit {
  * via the `OptimizeStore` unless `skipGlobalError` is set to `true`. This ensures a
  * consistent error experience across the application without manual try-catch in every hook.
  *
+ * It uses {@link fetchJson} internally for the actual network request and JSON parsing.
+ *
  * @template T - The expected return type of the JSON data.
  * @param {string} url - The API endpoint URL. Must be a valid URL.
  * @param {ApiCallOptions} [options={}] - Fetch options plus custom logic flags.
  * @param {number} [timeout=10000] - Timeout in milliseconds. Must be a positive integer.
  * @returns {Promise<T>} A promise that resolves to the parsed JSON response of type `T`.
- *
  * @throws {HttpError} Throws if the response status is not "ok" (e.g., 4xx, 5xx).
  * @throws {Error} Throws on network failure, timeout, or JSON parsing error.
- *
  * @category Utilities
- * @see {@link ApiCallOptions#skipGlobalError}
+ * @see {@link ApiCallOptions}
+ * @see {@link fetchJson}
  * @see {@link useOptimizeStore}
  *
  * @example
- * ```typescript
+ * ```ts
  * try {
  *   const result = await apiCall<{ success: boolean }>("/api/submit", {
  *     method: "POST",
@@ -46,7 +63,7 @@ export interface ApiCallOptions extends RequestInit {
  *
  * @security
  * - Uses `fetchJson` which implements safe JSON handling.
- * - Error details are sanitized before passing to the global store store.
+ * - Error details are sanitized before passing to the global store.
  */
 export async function apiCall<T = unknown>(
 	url: string,

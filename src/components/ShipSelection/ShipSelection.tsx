@@ -34,7 +34,10 @@ interface ShipSelectionProps {
  * Used as a fallback for `Suspense` while ship type metadata is being fetched.
  *
  * @returns {JSX.Element} The rendered loading state.
- * @example
+ * @example Loading state fallback
+ * ```tsx
+ * <ShipSelectionLoadingState />
+ * ```
  */
 const ShipSelectionLoadingState = () => {
 	const isSmallAndUp = useBreakpoint("640px");
@@ -77,7 +80,10 @@ const ShipSelectionLoadingState = () => {
  *
  * @param {ShipSelectionProps} props - Component properties.
  * @returns {JSX.Element} The rendered selection interface.
- * @example
+ * @example Internal component usage
+ * ```tsx
+ * <ShipSelectionInternal solving={false} />
+ * ```
  */
 const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	const shipTypes = useFetchShipTypesSuspense(); // This will suspend the component
@@ -113,7 +119,10 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	 * Finalizes the platform selection and updates global state.
 	 *
 	 * @param {string} option - The internal platform identifier.
-	 * @example
+	 * @example Handle platform change
+	 * ```ts
+	 * handleOptionSelect("starship");
+	 * ```
 	 */
 	const handleOptionSelect = (option: string) => {
 		if (option !== usePlatformStore.getState().selectedPlatform) {
@@ -198,7 +207,9 @@ const ShipSelectionComponent: React.FC<ShipSelectionProps> = (props) => {
 };
 
 /**
+ * Exported reference for the ShipSelection component.
  *
+ * @see {@link ShipSelectionComponent}
  */
 export const ShipSelection = ShipSelectionComponent;
 
@@ -219,7 +230,14 @@ interface ShipTypesDropdownProps {
  *
  * @param {ShipTypesDropdownProps} props - Component properties.
  * @returns {JSX.Element} The rendered radio group content.
- * @example
+ * @example Categorical dropdown content
+ * ```tsx
+ * <ShipTypesDropdown 
+ *   selectedShipType="starship" 
+ *   handleOptionSelect={fn} 
+ *   groupedShipTypes={data} 
+ * />
+ * ```
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({
 	selectedShipType,

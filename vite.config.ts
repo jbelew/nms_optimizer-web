@@ -3,7 +3,6 @@ import path from "path";
 import babel from "@rolldown/plugin-babel";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
-
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
@@ -19,13 +18,13 @@ import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs"
 
 /**
  * Vite 8 / Rolldown Configuration
- * 
+ *
  * Major Architecture Decisions:
  * 1. Unified Bundler: Uses Rolldown (Rust-based) for both dev and prod, ensuring consistency.
  * 2. Native Transpilation: Oxc is used for JS/TS transforms and minification for peak performance.
- * 3. Declarative Chunking: Replaced imperative `manualChunks` with `codeSplitting.groups` for 
+ * 3. Declarative Chunking: Replaced imperative `manualChunks` with `codeSplitting.groups` for
  *    stable, efficient vendor splitting.
- * 4. Target Strategy: 'baseline-widely-available' ensures modern features with safe fallbacks 
+ * 4. Target Strategy: 'baseline-widely-available' ensures modern features with safe fallbacks
  *    for a public web application.
  * 5. CSS Optimization: LightningCSS handles transforms and minification, synced with .browserslistrc.
  */
@@ -76,24 +75,33 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		},
 		plugins: [
 			// DevTools only loaded during `vite dev` (command === 'serve'), never during builds
-			...(command === "serve" ? await (async () => { try { const { DevTools } = await import("@vitejs/devtools"); return await DevTools(); } catch { return []; } })() : []),
+			...(command === "serve"
+				? await (async () => {
+						try {
+							const { DevTools } = await import("@vitejs/devtools");
+							return await DevTools();
+						} catch {
+							return [];
+						}
+					})()
+				: []),
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD
 				? [
-					{
-						name: "generate-version-json",
-						writeBundle() {
-							const versionInfo = {
-								version: appVersion,
-								buildDate: buildDate,
-							};
-							fs.writeFileSync(
-								path.resolve(__dirname, "dist/version.json"),
-								JSON.stringify(versionInfo, null, 2)
-							);
+						{
+							name: "generate-version-json",
+							writeBundle() {
+								const versionInfo = {
+									version: appVersion,
+									buildDate: buildDate,
+								};
+								fs.writeFileSync(
+									path.resolve(__dirname, "dist/version.json"),
+									JSON.stringify(versionInfo, null, 2)
+								);
+							},
 						},
-					},
-				]
+					]
 				: []),
 			react(),
 			// React Compiler support via Babel (Rolldown native plugin)
@@ -122,26 +130,31 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			deferStylesheetsPlugin(),
 			...(!isCloudflarePages
 				? [
-					compression({
-						algorithm: "brotliCompress",
-						ext: ".br",
-						threshold: 10240,
-						deleteOriginFile: false,
-					}),
-					compression({
-						algorithm: "gzip",
-						ext: ".gz",
-						threshold: 10240,
-						deleteOriginFile: false,
-					}),
-				]
+						compression({
+							algorithm: "brotliCompress",
+							ext: ".br",
+							threshold: 10240,
+							deleteOriginFile: false,
+						}),
+						compression({
+							algorithm: "gzip",
+							ext: ".gz",
+							threshold: 10240,
+							deleteOriginFile: false,
+						}),
+					]
 				: []),
-			visualizer({ open: false, gzipSize: true, brotliSize: true, filename: "stats.html" }),
 			visualizer({
 				open: false,
 				gzipSize: true,
 				brotliSize: true,
-				filename: "stats.json",
+				filename: "bundle/stats.html",
+			}),
+			visualizer({
+				open: false,
+				gzipSize: true,
+				brotliSize: true,
+				filename: "bundle/stats.json",
 				template: "raw-data",
 			}),
 			VitePWA({
@@ -362,7 +375,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			},
 		},
 		build: {
-			// 'baseline-widely-available' targeting (Chrome 111, Firefox 114, Safari 16.4) 
+			// 'baseline-widely-available' targeting (Chrome 111, Firefox 114, Safari 16.4)
 			// ensures optimal performance for a public tool without excessive polyfilling.
 			target: "baseline-widely-available",
 			chunkSizeWarningLimit: 600,
@@ -375,8 +388,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					// We leave naturally split chunks alone so Vite can parallelize dynamic route waterfalls.
 					return deps.filter(
 						(dep: string) =>
-							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-ui-utils")
+							!dep.includes("vendor-charts") && !dep.includes("vendor-ui-utils")
 					);
 				},
 			},
@@ -398,7 +410,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						return "assets/chunk-[hash].js";
 					},
 					entryFileNames: "assets/entry-[hash].js",
-					// Declarative code splitting via groups is the native Rolldown/Vite 8 way 
+					// Declarative code splitting via groups is the native Rolldown/Vite 8 way
 					// to manage manual chunks with high performance.
 					codeSplitting: {
 						groups: [

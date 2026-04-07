@@ -11,6 +11,8 @@ import "./ErrorContent.scss";
 
 /**
  * Props for the `ErrorContent` component.
+ *
+ * @category Components
  */
 interface ErrorContentProps {
 	/** Callback function triggered when the error UI is dismissed. */
@@ -20,6 +22,7 @@ interface ErrorContentProps {
 /**
  * A component for displaying detailed error information within a dialog.
  *
+ * @remarks
  * It retrieves the active error state from `OptimizeStore`, renders a user-friendly
  * disruption message, and provides links for reporting the issue on GitHub.
  * It also handles automated analytics reporting of the error and stack trace.
@@ -32,11 +35,13 @@ interface ErrorContentProps {
  * @see {@link ErrorDisplay}
  * @see {@link ./ErrorContent.test.tsx Unit Tests}
  * @see {@link ./ErrorContent.stories.tsx Storybook}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
  * <ErrorContent onClose={() => setDialogOpen(false)} />
+ * // mounts error details with GitHub issue links and automated error analytics
  * ```
  */
 const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
@@ -68,7 +73,12 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 
 	/**
 	 * Reloads the browser page to attempt recovery from a fatal error.
-	 * @example
+	 *
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleRetry();
+	 * ```
 	 */
 	const handleRetry = () => {
 		window.location.reload();

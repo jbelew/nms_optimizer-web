@@ -11,6 +11,8 @@ import { isValidFilename } from "../../../utils/filenameValidation";
 
 /**
  * Props for the `BuildNameContent` component.
+ *
+ * @category Components
  */
 interface BuildNameContentProps {
 	/** Callback function triggered when the user confirms the build name. **Receives the validated name.** */
@@ -34,11 +36,16 @@ interface BuildNameContentProps {
  * @see {@link isValidFilename}
  * @see {@link generateBuildNameWithType}
  * @see {@link ./BuildNameDialog.stories.tsx Storybook}
+ * @component
  * @category Components
  *
  * @example
  * ```tsx
- * <BuildNameContent onConfirm={(name) => handleSave(name)} onCancel={() => setOpen(false)} />
+ * <BuildNameContent
+ *   onConfirm={(name) => console.log('Saved:', name)}
+ *   onCancel={() => console.log('Cancelled')}
+ * />
+ * // mounts the build name input UI with a generated default name
  * ```
  */
 export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCancel }) => {
@@ -51,10 +58,10 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	 * Validates the input string for empty or illegal characters.
 	 *
 	 * @param {string} value - The build name to validate.
-	 * @returns {string | null} Error message if invalid, otherwise `null`.
-	 * @example
+	 * @returns {string | null} Error message if invalid, otherwise null.
+	 * @example Logic usage
 	 * ```typescript
-	 * const error = createValidator("Invalid/Name"); // returns "Invalid filename" (localized)
+	 * createValidator("cool-build");
 	 * ```
 	 */
 	const createValidator = (value: string): string | null => {
@@ -77,10 +84,10 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Generates a random themed name and updates the input state.
 	 *
-	 * @example
-	 * ```tsx
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
 	 * handleGenerateName();
-	 * // returns void, side-effect: updates buildName and triggers validation
 	 * ```
 	 */
 	const handleGenerateName = () => {
@@ -93,10 +100,11 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Updates local state and triggers validation on input change.
 	 *
-	 * @param {import("react").ChangeEvent<HTMLInputElement>} e - The change event.
-	 * @example
-	 * ```tsx
-	 * <input onChange={handleBuildNameChange} />
+	 * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleBuildNameChange(event);
 	 * ```
 	 */
 	const handleBuildNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,10 +116,10 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Validates and submits the current build name.
 	 *
-	 * @example
-	 * ```tsx
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
 	 * handleConfirm();
-	 * // returns void, side-effect: calls onConfirm if valid
 	 * ```
 	 */
 	const handleConfirm = () => {
@@ -126,10 +134,10 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Resets state and notifies the parent of cancellation.
 	 *
-	 * @example
-	 * ```tsx
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
 	 * handleCancel();
-	 * // returns void, side-effect: resets state and calls onCancel
 	 * ```
 	 */
 	const handleCancel = () => {
@@ -142,10 +150,11 @@ export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCance
 	/**
 	 * Dispatches actions based on keyboard input.
 	 *
-	 * @param {import("react").KeyboardEvent<HTMLInputElement>} e - The keyboard event.
-	 * @example
-	 * ```tsx
-	 * <input onKeyDown={handleKeyDown} />
+	 * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleKeyDown(event);
 	 * ```
 	 */
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

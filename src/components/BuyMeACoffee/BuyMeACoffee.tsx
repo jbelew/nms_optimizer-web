@@ -5,16 +5,26 @@ import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 
 /**
- * A stylized donation button component that links to Buy Me A Coffee.
+ * Stylized donation button linking to "Buy Me A Coffee".
  *
- * It renders as a themed Radix UI `Button`. When clicked, it captures a
- * Google Analytics event and then opens the donation page in a new tab
- * after a short delay (to ensure the event is dispatched).
+ * @remarks
+ * Renders as a themed Radix UI `Button`. Captures a Google Analytics event
+ * and opens the donation page in a new tab after a 100ms delay to ensure
+ * the event is dispatched.
+ *
+ * @see {@link useAnalytics} - Used for tracking click events.
+ * @see {@link useBreakpoint} - Used for responsive sizing.
+ *
+ * @component
+ * @category Components
  *
  * @returns {JSX.Element} The rendered donation button.
  *
  * @example
+ * ```tsx
  * <BuyMeACoffee />
+ * // Renders: ☕ Buy me a Coffee!
+ * ```
  */
 export default function BuyMeACoffee() {
 	const isLargeScreen = useBreakpoint("1024px"); // Tailwind's 'lg' breakpoint
@@ -25,7 +35,11 @@ export default function BuyMeACoffee() {
 	 * Handles the button click, tracks analytics, and opens the external URL.
 	 *
 	 * @param {React.MouseEvent<HTMLAnchorElement>} event - The click event.
-	 * @example
+	 * @returns {void}
+	 * @example Interaction handler
+	 * ```typescript
+	 * handleButtonClick(event);
+	 * ```
 	 */
 	const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();

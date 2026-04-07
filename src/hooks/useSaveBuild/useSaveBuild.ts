@@ -8,19 +8,30 @@ import { useToast } from "../useToast/useToast";
 
 /**
  * Return type for the `useSaveBuild` hook.
+ *
+ * @category Interfaces
  */
-interface UseSaveBuildReturn {
+export interface UseSaveBuildReturn {
 	/** Whether the build name entry dialog is currently open. */
 	isSaveBuildDialogOpen: boolean;
-	/** Function to manually update the dialog open state. */
+	/**
+	 * Function to manually update the dialog open state.
+	 *
+	 * @param {boolean} open - The new state of the dialog.
+	 */
 	setIsSaveBuildDialogOpen: (open: boolean) => void;
-	/** Function to initiate the save workflow. */
+	/** Function to initiate the save workflow by opening the naming dialog. */
 	handleSaveBuild: () => void;
-	/** Handler for confirming the build name and executing the save. */
+	/**
+	 * Handler for confirming the build name and executing the save to disk.
+	 *
+	 * @param {string} buildName - The name to assign to the saved build.
+	 * @returns {Promise<void>} Resolves when the file is generated and downloaded.
+	 */
 	handleBuildNameConfirm: (buildName: string) => Promise<void>;
-	/** Handler for canceling the save workflow. */
+	/** Handler for canceling the save workflow and closing the dialog. */
 	handleBuildNameCancel: () => void;
-	/** Whether the build is currently being saved to disk. */
+	/** Whether the build is currently being processed and saved to disk. */
 	isSavePending: boolean;
 }
 
@@ -32,19 +43,29 @@ interface UseSaveBuildReturn {
  * dialog, executing the file generation via `useBuildFileManager`, and
  * reporting results through toasts and analytics.
  *
- * @returns {UseSaveBuildReturn} State and handlers for the save build process.
- *
- * @see {@link useBuildFileManager}
- * @see {@link useAnalytics}
- * @see {@link useToast}
- * @see {@link ./useSaveBuild.test.ts Unit Tests}
  * @hook
  * @category Hooks
+ * @returns {UseSaveBuildReturn} State and handlers for the save build process.
+ *
+ * @see {@link useBuildFileManager} for the underlying file generation logic.
+ * @see {@link useAnalytics} for tracking save events.
+ * @see {@link useToast} for user notifications.
+ * @see {@link ./useSaveBuild.test.ts Unit Tests}
  *
  * @example
  * ```tsx
- * const { handleSaveBuild, isSavePending } = useSaveBuild();
- * // returns { isSaveBuildDialogOpen, ..., isSavePending }
+ * const MySaveButton = () => {
+ *   const { handleSaveBuild, isSavePending, isSaveBuildDialogOpen } = useSaveBuild();
+ *
+ *   return (
+ *     <>
+ *       <button onClick={handleSaveBuild} disabled={isSavePending}>
+ *         Download Build
+ *       </button>
+ *       {isSaveBuildDialogOpen && <BuildNameDialog onConfirm={...} />}
+ *     </>
+ *   );
+ * };
  * ```
  */
 export const useSaveBuild = (): UseSaveBuildReturn => {

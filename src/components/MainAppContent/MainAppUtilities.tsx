@@ -9,7 +9,9 @@ import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRender
 import { ToastRenderer } from "../Toast/ToastRenderer";
 
 /**
- * Props for the `MainAppUtilities` component.
+ * Props for the {@link MainAppUtilities} component.
+ *
+ * @category Components
  */
 interface MainAppUtilitiesProps {
 	/** Identifier of the technology that failed pattern matching. `null` if no active warning. */
@@ -35,16 +37,34 @@ interface MainAppUtilitiesProps {
 /**
  * A container component for non-visual and global utility components.
  *
- * This component collects global UI elements like toast notifications,
- * error renderers, installation prompts, and build-management modals into
- * a single mount point. This helps keep the `MainAppContent` component
- * focused on layout and primary interaction.
+ * @remarks
+ * This component acts as a central mount point for global UI elements and utilities:
+ * - {@link InstallPrompt} for PWA installation.
+ * - {@link OptimizationAlertDialog} for handling optimization failures.
+ * - {@link BuildNameDialog} and a hidden file input for build persistence.
+ * - {@link ErrorMessageRenderer} and {@link ToastRenderer} for global notifications.
+ *
+ * Centralizing these keeps {@link import('./MainAppContent').MainAppContent} focused on the primary layout
+ * and interaction flow.
  *
  * @param {MainAppUtilitiesProps} props - Component properties.
  * @returns {JSX.Element} The collection of global utility components.
+ * @see {@link import('./MainAppContent').MainAppContent}
+ *
+ * @category Components
+ * @component
+ * @see {@link import('./MainAppContent').MainAppContent}
+ * @see {@link OptimizationAlertDialog}
+ * @see {@link BuildNameDialog}
  *
  * @example
- * <MainAppUtilities {...logicSubProps} />
+ * ```tsx
+ * <MainAppUtilities
+ *   patternNoFitTech={null}
+ *   clearPatternNoFitTech={handleClear}
+ *   // ... other props
+ * />
+ * ```
  */
 export const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 	patternNoFitTech,

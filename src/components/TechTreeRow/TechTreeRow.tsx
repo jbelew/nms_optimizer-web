@@ -9,7 +9,7 @@ import { TechInfoBadges } from "./TechInfoBadges";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 /**
- * Props for the `TechTreeRow` component.
+ * Props for the {@link TechTreeRow} component.
  */
 export interface TechTreeRowProps {
 	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
@@ -53,17 +53,39 @@ export interface TechTreeRowProps {
 }
 
 /**
- * A component representing a single row in the technology sidebar.
+ * A single row in the technology sidebar providing configuration and status.
  *
- * It provides the user interface for a specific technology category, including
- * an avatar, status badges, and action buttons for optimization and resetting.
- * It uses the `useTechTreeRow` hook to manage its internal state and derived data.
+ * @remarks
+ * This component represents a specific technology category. It provides:
+ * - An avatar icon for visual identification.
+ * - {@link ActionButtons} for triggering optimization or resetting state.
+ * - {@link TechInfo} for displaying the localized technology name.
+ * - {@link TechInfoBadges} for module selection and efficiency status.
+ *
+ * It uses the {@link useTechTreeRow} hook to centralize logic and derived state.
  *
  * @param {TechTreeRowProps} props - Component properties.
  * @returns {JSX.Element} The rendered technology row.
  *
+ * @see {@link ActionButtons} for optimization and reset triggers.
+ * @see {@link TechInfo} for the responsive name display.
+ * @see {@link TechInfoBadges} for module management and badges.
+ * @see {@link useTechTreeRow} for the underlying business logic.
+ *
+ * @component
+ * @category Components
+ *
  * @example
- * <TechTreeRow tech="pulse" techColor="blue" solving={false} isGridFull={false} handleOptimize={fn} techImage="pulse.webp" />
+ * ```tsx
+ * <TechTreeRow
+ *   tech="pulse"
+ *   techColor="blue"
+ *   solving={false}
+ *   isGridFull={false}
+ *   handleOptimize={async (id) => console.log('Optimize', id)}
+ *   techImage="pulse.webp"
+ * />
+ * ```
  */
 export const TechTreeRow: React.FC<TechTreeRowProps> = (props) => {
 	const hookData = useTechTreeRow(props);

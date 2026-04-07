@@ -7,14 +7,24 @@ let techTreeColorsPromise: Promise<Record<string, string>> | null = null;
 /**
  * Aggregates technology colors across all major ship and tool categories.
  *
+ * @remarks
  * This utility fetches multiple tech trees (Starship, Multi-Tool, Corvette)
  * and merges their technology-key-to-color mappings into a single registry.
  * The result is cached in a promise to prevent redundant network requests.
  *
+ * It is used primarily by components that need to colorize tech items without
+ * knowing the specific ship type currently being optimized.
+ *
+ * @category Utilities
  * @returns {Promise<Record<string, string>>} A promise resolving to a mapping of tech keys to hex colors.
  *
+ * @see {@link fetchTechTreeAsync} for the underlying tech tree fetching.
+ *
  * @example
+ * ```ts
  * const colors = await fetchTechTreeColors();
+ * const pulseColor = colors['pulse']; // e.g., "blue"
+ * ```
  */
 export const fetchTechTreeColors = (): Promise<Record<string, string>> => {
 	if (!techTreeColorsPromise) {

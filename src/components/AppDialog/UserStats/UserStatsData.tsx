@@ -148,7 +148,7 @@ const LazyRechartsChart = lazy(async () => {
  * Fetches user stats and tech tree colors in parallel and aggregates the data
  * into a format suitable for Recharts pie charts.
  *
- * @param {object} props - Component properties.
+ * @param {Object} props - Component properties.
  * @param {boolean} props.isOpen - Whether the parent dialog is open, used to gate color fetching.
  * @returns {JSX.Element} The rendered statistics data view.
  *
@@ -156,6 +156,7 @@ const LazyRechartsChart = lazy(async () => {
  * @see {@link fetchTechTreeColors}
  * @see {@link useUserStats}
  * @see {@link useTechTreeColors}
+ * @component
  * @category Components
  *
  * @example
@@ -182,7 +183,7 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 *
 	 * @remarks
 	 * Filters for supercharged modules and relevant ship types, then reduces the
-	 * data to a list of { name, value } pairs. It also groups small entries
+	 * data to a list of `{ name: string, value: number }` pairs. It also groups small entries
 	 * into an "other" category based on a 2% threshold.
 	 *
 	 * @param {UserStat[] | null} rawData - The list of statistics from the API.

@@ -4,26 +4,27 @@ import { useModuleSelectionStore } from "@/store/ModuleSelectionStore";
 import { useTechStore } from "@/store/TechStore";
 
 /**
- * Custom hook for managing the state and selection logic of technology modules.
+ * Custom hook to manage the lifecycle of technology modules within the grid.
  *
  * @remarks
- * It handles:
- * 1. Syncing module selections with the global `TechStore` and persistent `ModuleSelectionStore`.
- * 2. Grouping raw module lists into categorical buckets (Core, Upgrade, etc.).
- * 3. Enforcing selection dependencies (e.g., removing 'Theta' should also remove 'Tau' and 'Sigma').
- * 4. Managing "Select All" and indeterminate checkbox states.
+ * Coordinates between {@link useTechStore} and {@link useModuleSelectionStore} to:
+ * 1. Sync module selections between current state and persistence.
+ * 2. Group modules into categories (core, upgrade, Figurines, etc.).
+ * 3. Enforce tier-based de-selection logic (Theta > Tau > Sigma).
+ * 4. Manage "Select All" and indeterminate checkbox states.
  *
- * @param {string} tech - The unique technology identifier.
+ * @param {string} tech - The unique technology identifier (e.g., 'pulse').
  * @param {Array<{ label: string, id: string, image: string, type?: string }>} modules - The full list of modules available for the tech.
  * @returns {object} State flags and event handlers for module selection UI.
  *
- * @see {@link ../../../store/TechStore.ts TechStore}
- * @see {@link ../../../store/ModuleSelectionStore.ts ModuleSelectionStore}
+ * @see {@link useTechStore} for global module state.
+ * @see {@link useModuleSelectionStore} for persistence logic.
  * @see {@link ./useTechModuleManagement.test.ts Unit Tests}
+ *
  * @hook
  * @category Hooks
  *
- * @example
+ * @example Hook initialization
  * ```tsx
  * const { groupedModules, handleValueChange } = useTechModuleManagement("pulse", availableModules);
  * ```
@@ -94,10 +95,11 @@ export const useTechModuleManagement = (
 	 * Toggles the selection status of a single module.
 	 *
 	 * @param {string} moduleId - The unique ID of the module.
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleCheckboxChange("MOD_1");
-	 * // returns void, side-effect: toggles selection in TechStore
 	 * ```
 	 */
 	const handleCheckboxChange = (moduleId: string) => {
@@ -114,10 +116,11 @@ export const useTechModuleManagement = (
 	 * Replaces the entire selection list for this technology.
 	 *
 	 * @param {string[]} moduleIds - The new array of selected module IDs.
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleAllCheckboxesChange(["MOD_1", "MOD_2"]);
-	 * // returns void, side-effect: sets new selection in TechStore
 	 * ```
 	 */
 	const handleAllCheckboxesChange = (moduleIds: string[]) => {
@@ -128,10 +131,11 @@ export const useTechModuleManagement = (
 	 * Handles the "Select All" toggle interaction.
 	 *
 	 * @param {boolean | "indeterminate"} checked - The new checkbox state.
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
-	 * handleSelectAllChange(true);
-	 * // returns void, side-effect: selects all non-core modules
+	 * handleSelectAllChange(true); // Selects all non-core modules
 	 * ```
 	 */
 	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
@@ -144,13 +148,17 @@ export const useTechModuleManagement = (
 
 	/**
 	 * Processes a batch value change from the checkbox group.
-	 * Enforces tier-based de-selection logic (Theta > Tau > Sigma).
+	 *
+	 * @remarks
+	 * Enforces tier-based de-selection logic (Theta > Tau > Sigma). Removing
+	 * a higher-tier module automatically deselects dependent lower-tier ones.
 	 *
 	 * @param {string[]} newValues - The new set of checked IDs.
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```typescript
 	 * handleValueChange(["MOD_CORE", "MOD_THETA"]);
-	 * // returns void, side-effect: processes selection and enforces rules
 	 * ```
 	 */
 	const handleValueChange = (newValues: string[]) => {

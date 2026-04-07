@@ -15,7 +15,10 @@ type SendEventFunction = (event: GA4Event) => void;
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
  * @returns {void}
- * @example
+ * @example Metric reporting
+ * ```ts
+ * sendVitalsMetric(lcpMetric, myAnalyticsFn);
+ * ```
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({

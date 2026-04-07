@@ -126,7 +126,10 @@ export class Logger {
 	 * @param {string} message - The log message.
 	 * @param {Record<string, unknown>} [data] - Optional metadata.
 	 * @private
-	 * @example
+	 * @example Internal log dispatch
+	 * ```ts
+	 * Logger.log(LogLevel.INFO, "test message");
+	 * ```
 	 */
 	private static log(level: LogLevel, message: string, data?: Record<string, unknown>) {
 		const entry: LogEntry = {

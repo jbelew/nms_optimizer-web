@@ -11,24 +11,41 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 /**
  * Custom hook for synchronizing application state with the browser's URL.
  *
+ * @remarks
  * This hook manages the bi-directional mapping between the global state
  * (selected ship type, grid layout) and URL query parameters (`platform`, `grid`).
+ *
  * It handles:
  * 1. Initial state restoration from URL on mount.
- * 2. Response to `popstate` events (Back/Forward navigation).
- * 3. Generation of shareable URLs.
+ * 2. Response to `popstate` events (Back/Forward navigation) to ensure store consistency.
+ * 3. Generation of shareable URLs with serialized grid data.
  * 4. Cleaning up URL state during resets.
  *
- * @returns {{ updateUrlForShare: function(): string, updateUrlForReset: function(): void }} Functions to generate share links and reset URL state.
+ * It utilizes a singleton-like syncing ref to prevent infinite loops between
+ * store persistence and URL updates.
  *
- * @see {@link usePlatformStore}
- * @see {@link useGridStore}
- * @see {@link useGridDeserializer}
+ * @hook
  * @category Hooks
+ * @returns {{ updateUrlForShare: () => string, updateUrlForReset: () => void }} Functions to generate share links and reset URL state.
+ *
+ * @see {@link usePlatformStore} for ship type state.
+ * @see {@link useGridStore} for the underlying grid data.
+ * @see {@link useGridDeserializer} for serialization logic.
+ * @see {@link ./useUrlSync.test.tsx Unit Tests}
  *
  * @example
- * const { updateUrlForShare } = useUrlSync();
- * const link = updateUrlForShare();
+ * ```tsx
+ * const ShareButton = () => {
+ *   const { updateUrlForShare } = useUrlSync();
+ *
+ *   const onShare = () => {
+ *     const link = updateUrlForShare();
+ *     navigator.clipboard.writeText(link);
+ *   };
+ *
+ *   return <button onClick={onShare}>Copy Link</button>;
+ * };
+ * ```
  */
 export const useUrlSync = () => {
 	const navigate = useNavigate();
@@ -153,7 +170,10 @@ export const useUrlSync = () => {
 	 * Generates a full URL including the current ship type and serialized grid state.
 	 *
 	 * @returns {string} The shareable URL.
-	 * @example
+	 * @example Share URL generation
+	 * ```ts
+	 * const url = updateUrlForShare();
+	 * ```
 	 */
 	const updateUrlForShare = () => {
 		const serializedGrid = serializeGrid();
@@ -173,7 +193,10 @@ export const useUrlSync = () => {
 
 	/**
 	 * Removes grid-related parameters from the URL.
-	 * @example
+	 * @example URL state reset
+	 * ```ts
+	 * updateUrlForReset();
+	 * ```
 	 */
 	const updateUrlForReset = () => {
 		try {

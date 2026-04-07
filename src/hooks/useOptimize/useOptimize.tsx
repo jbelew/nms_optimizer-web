@@ -43,15 +43,20 @@ export interface UseOptimizeReturn {
 /**
  * Validates that a value conforms to the `ApiResponse` structure.
  *
+ * @remarks
  * This type guard is used to safely process incoming WebSocket payloads from the optimization engine.
+ * It performs runtime checks on the `solve_method`, `grid`, and `bonus` properties.
  *
  * @param {unknown} value - The object or value to validate.
  * @returns {value is ApiResponse} `true` if `value` matches the `ApiResponse` schema.
  * @see {@link ApiResponse}
+ *
  * @example
- * ```typescript
+ * ```ts
+ * const data = await socket.receive();
  * if (isApiResponse(data)) {
- *   setResult(data, tech);
+ *   // data is now typed as ApiResponse
+ *   console.log(data.solve_method);
  * }
  * ```
  */
@@ -79,31 +84,40 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * @remarks
  * This hook handles the entire lifecycle of an optimization request:
  * 1. Establishing a WebSocket connection via `socket.io-client`.
- * 2. Managing progress updates and real-time grid updates.
- * 3. Handling success, "No Fit" warnings, and transport-level retries.
- * 4. Cleaning up resources and updating the global `GridStore`.
+ * 2. Managing progress updates and real-time grid updates during long-running solves.
+ * 3. Handling success results, "Pattern No Fit" warnings for invalid layouts, and transport-level retries for network stability.
+ * 4. Cleaning up resources on unmount or completion and updating the global `GridStore`.
  *
- * Requires a running backend service supporting `Socket.io`.
+ * It acts as the bridge between the React UI and the high-performance Python optimization backend.
  *
- * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
  * @hook
  * @category Hooks
- * @see {@link useGridStore}
- * @see {@link useOptimizeStore}
- * @see {@link usePlatformStore}
- * @see {@link useTechStore}
- * @see {@link createSocket}
- * @see {@link useAnalytics}
- * @see {@link useBreakpoint}
- * @see {@link useScrollGridIntoView}
- * @see {@link ./useOptimize.test.tsx Unit Tests}
+ * @returns {UseOptimizeReturn} State and functions to control the optimization workflow.
+ *
+ * @see {@link useGridStore} for state persistence.
+ * @see {@link useOptimizeStore} for tracking errors and "No Fit" warnings.
+ * @see {@link usePlatformStore} for ship type context.
+ * @see {@link useTechStore} for retrieving user-selected module inventory.
+ * @see {@link createSocket} for the underlying WebSocket manager.
+ * @see {@link useAnalytics} for tracking solve events and results.
+ * @see {@link useBreakpoint} for adjusting grid update frequency.
+ * @see {@link useScrollGridIntoView} for mobile UX.
  *
  * @example
  * ```tsx
- * const { handleOptimize, solving, progressPercent } = useOptimize();
+ * const MyComponent = () => {
+ *   const { handleOptimize, solving, progressPercent } = useOptimize();
  *
- * const onOptimize = () => {
- *   handleOptimize("pulse");
+ *   const onOptimize = async () => {
+ *     // Initiates a WebSocket solve for pulse drive technology
+ *     await handleOptimize("pulse");
+ *   };
+ *
+ *   return (
+ *     <button onClick={onOptimize} disabled={solving}>
+ *       {solving ? `Solving: ${progressPercent}%` : "Optimize Pulse"}
+ *     </button>
+ *   );
  * };
  * ```
  */

@@ -21,14 +21,23 @@ interface AppFooterProps {
 /**
  * The global application footer component.
  *
+ * @remarks
  * It renders credits, social links, license information, and the build version.
  * It also includes a call-to-action for supporting the project via "Buy Me a Coffee".
  *
  * @param {AppFooterProps} props - Component properties.
  * @returns {JSX.Element} The rendered application footer.
  *
+ * @see {@link Buymeacoffee}
+ * @see {@link useDialog}
+ * @see {@link ./AppFooter.stories.tsx Storybook}
+ * @component
+ * @category Components
+ *
  * @example
+ * ```tsx
  * <AppFooter buildVersion="1.2.3" buildDate="2023-10-27T10:00:00Z" />
+ * ```
  */
 const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 	const { i18n } = useTranslation();

@@ -4,17 +4,30 @@ import { useLocation, useNavigate } from "react-router-dom";
 /**
  * Custom hook for validating URL query parameters and enforcing data integrity.
  *
+ * @remarks
  * It specifically checks for edge cases in shared links, such as when a `grid`
  * parameter exists without a corresponding `platform` parameter. If invalid
  * combinations are detected, it automatically sanitizes the URL and redirects
  * the user using a `replace` navigation.
  *
- * @returns {void} This hook performs side-effects only and returns nothing.
- * @see {@link useLocation}
- * @see {@link useNavigate}
+ * It acts as a safety gate for deep-linked application states.
+ *
+ * @hook
+ * @category Hooks
+ * @returns {void} Side-effects only; manages URL sanitization.
+ *
+ * @see {@link useLocation} for monitoring URL changes.
+ * @see {@link useNavigate} for performing the redirection.
  *
  * @example
- * useUrlValidation();
+ * ```tsx
+ * const App = () => {
+ *   // Typically called at the root to ensure valid initial state
+ *   useUrlValidation();
+ *
+ *   return <Routes>...</Routes>;
+ * };
+ * ```
  */
 export const useUrlValidation = () => {
 	const location = useLocation();

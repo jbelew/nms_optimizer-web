@@ -21,9 +21,10 @@ interface OptimizationAlertDialogProps {
 /**
  * A specialized dialog component that warns users when a pattern-based optimization fails.
  *
- * It provides the user with two choices: dismiss the warning or attempt a "forced" solve
- * using more intensive algorithms. It wraps the `OptimizationAlertContent` inside
- * a standard `AppDialog`.
+ * @remarks
+ * This component provides the user with two choices: dismiss the warning or attempt a "forced" solve
+ * using more intensive algorithms. It wraps the {@link OptimizationAlertContent} inside
+ * a standard {@link AppDialog}.
  *
  * @param {OptimizationAlertDialogProps} props - Component properties.
  * @returns {JSX.Element | null} The rendered dialog, or `null` if no technology is targeted.
@@ -32,6 +33,7 @@ interface OptimizationAlertDialogProps {
  * @see {@link ./OptimizationAlertDialog.stories.tsx Storybook}
  * @see {@link AppDialog}
  * @see {@link OptimizationAlertContent}
+ * @component
  * @category Components
  *
  * @example

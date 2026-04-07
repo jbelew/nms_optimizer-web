@@ -107,7 +107,24 @@ const shared = {
 			},
 		],
 		// Enforce {@link} instead of Markdown links for cross-references
-		"jsdoc/no-undefined-types": ["warn", { definedTypes: ["JSX"] }],
+		"jsdoc/no-undefined-types": [
+			"warn",
+			{
+				definedTypes: [
+					"JSX",
+					"React",
+					"TouchEvent",
+					"MouseEvent",
+					"KeyboardEvent",
+					"ChangeEvent",
+					"RequestInit",
+					"ReactNode",
+					"Ref",
+					"MutableRefObject",
+					"ComponentType",
+				],
+			},
+		],
 	},
 };
 

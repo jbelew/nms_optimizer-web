@@ -5,25 +5,30 @@ import { useShakeStore } from "@/store/ShakeStore";
 import { useTechStore } from "@/store/TechStore";
 
 /**
- * Custom hook for managing the optimization and reset lifecycle of a single technology.
+ * Manages the optimization and reset lifecycle of a technology.
  *
  * @remarks
- * It provides high-level event handlers that interact with multiple stores.
- * Specifically, it handles the logic for:
- * 1. Resetting a technology's presence in the grid and its solved status.
- * 2. Triggering the solver while ensuring the grid is in a valid state (e.g., not full).
- * 3. Providing visual feedback (shake) if an optimization is attempted on a full grid.
+ * This hook provides high-level event handlers that orchestrate interactions
+ * between multiple stores:
+ * 1. Resetting a technology's presence in the grid via {@link useGridStore}.
+ * 2. Clearing solved efficiency bonuses in {@link useTechStore}.
+ * 3. Triggering the solver while ensuring the grid isn't full.
+ * 4. Providing visual feedback (shake) via {@link useShakeStore} if optimization is blocked.
  *
- * @param {string} tech - The unique technology identifier. **Must be valid.**
+ * @param {string} tech - The unique technology identifier (e.g., 'shield').
  * @param {function(string): Promise<void>} handleOptimize - The core async function to run the solve.
  * @param {boolean} isGridFull - Flag indicating if the grid has no more available slots.
  * @param {boolean} hasTechInGrid - Flag indicating if the tech is currently placed.
  * @returns {object} Handlers for optimization and reset UI actions.
+ * @returns {Function} returns.handleOptimizeClick - Initiates the optimization process.
+ * @returns {Function} returns.handleReset - Clears the technology from the grid and resets bonuses.
+ * @returns {boolean} returns.isResetting - Whether a reset transition is currently pending.
  *
- * @see {@link ../../../store/GridStore.ts useGridStore}
- * @see {@link ../../../store/ShakeStore.ts useShakeStore}
- * @see {@link ../../../store/TechStore.ts useTechStore}
+ * @see {@link useGridStore} for grid layout state.
+ * @see {@link useShakeStore} for error feedback.
+ * @see {@link useTechStore} for technology bonus data.
  * @see {@link ./useTechOptimization.test.ts Unit Tests}
+ *
  * @hook
  * @category Hooks
  *
@@ -47,10 +52,14 @@ export const useTechOptimization = (
 	/**
 	 * Clears the technology from the grid and resets its efficiency scores.
 	 *
+	 * @remarks
+	 * Uses `useTransition` to ensure the reset operation doesn't block the UI thread.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```tsx
 	 * handleReset();
-	 * // returns void, side-effect: clears tech from grid and resets bonuses
 	 * ```
 	 */
 	const handleReset = () => {
@@ -64,10 +73,15 @@ export const useTechOptimization = (
 	/**
 	 * Prepares the grid state and initiates the solver run.
 	 *
+	 * @remarks
+	 * If the grid is full and the technology isn't already placed, it triggers
+	 * a shake animation instead of starting the solver.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
 	 * @example
 	 * ```tsx
 	 * handleOptimizeClick();
-	 * // returns void, side-effect: resets state and calls handleOptimize
 	 * ```
 	 */
 	const handleOptimizeClick = () => {
