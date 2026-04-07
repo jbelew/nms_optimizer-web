@@ -8,8 +8,8 @@ This plan focuses on systematically increasing test coverage for core utilities,
 - [x] Task: Create tests for `src/utils/filenameValidation.ts` <!-- files: src/utils/filenameValidation.ts, src/utils/filenameValidation.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/isTouchDevice.ts` <!-- files: src/utils/isTouchDevice.ts, src/utils/isTouchDevice.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/apiPreload.ts` <!-- files: src/utils/apiPreload.ts, src/utils/apiPreload.test.ts --> ec383ae
-- [~] Task: Create tests for `src/utils/socketManager.ts` <!-- files: src/utils/socketManager.ts, src/utils/socketManager.test.ts -->
-- [ ] Task: Conductor - User Manual Verification 'Core Utilities Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 -->
+- [x] Task: Create tests for `src/utils/socketManager.ts` <!-- files: src/utils/socketManager.ts, src/utils/socketManager.test.ts --> 1e63baef
+- [x] Task: Conductor - User Manual Verification 'Core Utilities Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 --> [checkpoint: 771edf8]
 
 #### Phase 2: React Hooks & Stores Coverage <!-- execution: parallel -->
 - [x] Task: Create tests for `src/hooks/useErrorDispatcher.ts` <!-- files: src/hooks/useErrorDispatcher.ts, src/hooks/useErrorDispatcher.test.ts --> ec383ae
