@@ -1,3 +1,15 @@
+/**
+ * PWA Installation management module.
+ *
+ * @remarks
+ * This module contains the `InstallPrompt` logic, which intelligently nudges
+ * mobile users to install the application as a PWA after their initial visit.
+ *
+ * @category Components
+ * @see {@link InstallPrompt}
+ * @see {@link ./InstallPrompt.stories.tsx Storybook}
+ */
+
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -13,15 +25,23 @@ const USER_VISIT_KEY = "userVisited";
 /**
  * A non-rendering component that manages the PWA installation prompt logic.
  *
+ * @remarks
  * It uses a heuristic to determine if the user is on a mobile device and hasn't
  * installed the app yet. To avoid annoying new users, it only shows the
  * prompt starting from the second visit. It uses the `Toast` system to
  * display installation instructions (specifically tailored for iOS).
  *
  * @returns {null} This component does not render any visual elements.
+ * @component
+ * @category Components
+ * @see {@link useToast}
+ * @see {@link isTouchDevice}
  *
  * @example
+ * ```tsx
  * <InstallPrompt />
+ * // returns null (side-effects only)
+ * ```
  */
 export const InstallPrompt: React.FC = () => {
 	const { t } = useTranslation();

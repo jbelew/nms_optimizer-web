@@ -1,3 +1,16 @@
+/**
+ * Mobile-optimized navigation and management toolbar module.
+ *
+ * @remarks
+ * This module provides the `MobileToolbar` component, a responsive,
+ * scroll-aware interface for accessing critical application features on
+ * small-screen devices.
+ *
+ * @category Components
+ * @see {@link MobileToolbar}
+ * @see {@link ./MobileToolbar.stories.tsx Storybook}
+ */
+
 import React, { forwardRef, useTransition } from "react";
 import {
 	CounterClockwiseClockIcon,
@@ -42,6 +55,7 @@ type MobileToolbarProps = {
 /**
  * A responsive toolbar designed for mobile devices.
  *
+ * @remarks
  * This component provides quick access to core build management features (Save, Load, Share)
  * and utility functions (Language, Accessibility, Stats) in a compact, top-pinned layout.
  * It animates its position based on the `isVisible` prop, typically controlled by
@@ -50,9 +64,17 @@ type MobileToolbarProps = {
  * @param {MobileToolbarProps} props - Component properties.
  * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the root toolbar container.
  * @returns {JSX.Element} The rendered mobile toolbar.
+ * @component
+ * @category Components
+ * @see {@link LanguageSelector}
+ * @see {@link useA11yStore}
+ * @see {@link useGridStore}
  *
  * @example
+ * ```tsx
  * <MobileToolbar isVisible={true} solving={false} onLoadBuild={onLoad} onSaveBuild={onSave} onShowChangelog={onChangelog} hasModulesInGrid={true} />
+ * // renders animated top toolbar
+ * ```
  */
 export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 	(

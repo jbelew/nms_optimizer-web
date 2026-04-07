@@ -1,3 +1,16 @@
+/**
+ * Specialized tooltip component with device awareness.
+ *
+ * @remarks
+ * This module provides the `ConditionalTooltip` component, which optimizes the
+ * user experience by suppressing tooltips on touch devices while maintaining
+ * full accessibility on pointer-driven hardware.
+ *
+ * @category Components
+ * @see {@link ConditionalTooltip}
+ * @see {@link ./ConditionalTooltip.test.tsx Unit Tests}
+ */
+
 import React, { memo, useCallback } from "react";
 
 import { useTooltipActions } from "../../context/tooltip-utils";
@@ -18,17 +31,25 @@ interface ConditionalTooltipProps {
 /**
  * A specialized tooltip wrapper that intelligently suppresses tooltips on touch devices.
  *
+ * @remarks
  * This component uses a singleton tooltip pattern (via `useTooltipActions`) to
  * minimize DOM nodes and optimize performance. It memoizes its render to prevent
  * unnecessary updates and correctly forwards pointer events to its children.
  *
  * @param {ConditionalTooltipProps} props - Component properties.
  * @returns {JSX.Element} The child element, potentially enhanced with pointer listeners.
+ * @component
+ * @category Components
+ * @see {@link useTooltipActions}
+ * @see {@link isTouchDevice}
  *
  * @example
+ * ```tsx
  * <ConditionalTooltip label="Helpful text">
  *   <button>Hover me</button>
  * </ConditionalTooltip>
+ * // renders Tooltip on hover (desktop) or just button (mobile)
+ * ```
  */
 export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 	({ children, label, delayDuration = 500 }) => {

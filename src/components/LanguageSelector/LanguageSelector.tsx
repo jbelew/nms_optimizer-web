@@ -1,4 +1,16 @@
-// src/components/LanguageSelector/LanguageSelector.tsx
+/**
+ * Internationalization and language switching module.
+ *
+ * @remarks
+ * This module provides the `LanguageSelector` UI, allowing users to localize
+ * the application interface. It handles route synchronization and asset
+ * loading for flags.
+ *
+ * @category Components
+ * @see {@link LanguageSelector}
+ * @see {@link ./LanguageSelector.test.tsx Unit Tests}
+ */
+
 import "./LanguageSelector.scss";
 
 import React, { useTransition } from "react";
@@ -37,15 +49,21 @@ const languageFlagPaths: LanguageFlagPaths = {
 /**
  * A component that allows users to toggle between supported application languages.
  *
+ * @remarks
  * It provides a dropdown menu featuring flags and native language names.
  * Changing the language updates the global `i18next` state, synchronizes the
  * URL path prefix, and sends an analytics event.
  *
  * @returns {JSX.Element} The rendered language selection dropdown.
+ * @component
+ * @category Components
+ * @see {@link useTranslation}
+ * @see {@link useAnalytics}
  *
  * @example Component usage
  * ```tsx
  * <LanguageSelector />
+ * // renders localized flag dropdown
  * ```
  */
 export const LanguageSelector: React.FC = () => {

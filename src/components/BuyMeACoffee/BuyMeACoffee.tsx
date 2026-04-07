@@ -1,3 +1,14 @@
+/**
+ * Donation integration module.
+ *
+ * @remarks
+ * Provides a UI entry point for users to support the project via the
+ * "Buy Me A Coffee" platform.
+ *
+ * @category Components
+ * @see {@link BuyMeACoffee}
+ */
+
 import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
 
@@ -23,7 +34,7 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
  * @example
  * ```tsx
  * <BuyMeACoffee />
- * // Renders: ☕ Buy me a Coffee!
+ * // returns JSX.Element
  * ```
  */
 export default function BuyMeACoffee() {

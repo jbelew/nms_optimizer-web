@@ -1,10 +1,20 @@
+/**
+ * Global application error boundary module.
+ *
+ * @remarks
+ * This module provides the `ErrorBoundary` class component, which serves as the
+ * top-level safety net for catching unhandled exceptions in the React tree.
+ *
+ * @category Components
+ * @see {@link ErrorBoundary}
+ * @see {@link ./ErrorBoundary.test.tsx Unit Tests}
+ */
+
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 
 import { ErrorContent } from "./ErrorContent";
 import { handleError } from "./errorHandler";
-
-// src/components/ErrorBoundary/ErrorBoundary.tsx
 
 /**
  * Props for the `ErrorBoundary` component.
@@ -31,17 +41,24 @@ interface State {
 /**
  * A robust class-based component that intercepts JavaScript errors in its subtree.
  *
+ * @remarks
  * When an error is caught:
  * 1. It prevents the entire application from crashing.
  * 2. It triggers a global error reporting event (via `handleError`).
  * 3. It displays a user-friendly error UI or the provided `fallback` node.
  * 4. It maintains information about the crash for debugging purposes.
  *
+ * @component
+ * @category Components
+ * @see {@link handleError}
+ * @see {@link ErrorContent}
+ *
  * @example Component usage
  * ```tsx
  * <ErrorBoundary fallback={<CustomErrorUI />}>
  *   <FeatureComponent />
  * </ErrorBoundary>
+ * // handles crash and renders fallback
  * ```
  */
 class ErrorBoundary extends Component<Props, State> {

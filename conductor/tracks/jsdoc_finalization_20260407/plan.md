@@ -13,8 +13,8 @@ This plan follows a batch-based approach to systematically complete the JSDoc mi
 - [x] Task: Conductor - User Manual Verification 'Core Utilities - Batch 2' (Protocol in workflow.md) ab3af48
 
 #### Phase 3: UI Components - Batch 1 <!-- depends: --> <!-- execution: parallel -->
-- [ ] Task: Update JSDoc for `src/components/` (Items 1-8: `BuyMeACoffee/` to `GridShake/`) <!-- files: src/components/BuyMeACoffee/, src/components/ConditionalTooltip/, src/components/ErrorBoundary/, src/components/ErrorMessageRenderer/, src/components/GridShake/ -->
-- [ ] Task: Update JSDoc for `src/components/` (Items 9-16: `Icons/` to `NotFound/`) <!-- files: src/components/Icons/, src/components/InstallPrompt/, src/components/LanguageSelector/, src/components/MessageSpinner/, src/components/MobileToolbar/, src/components/ModuleSelectionDialog/, src/components/NotFound/ -->
+- [x] Task: Update JSDoc for `src/components/` (Items 1-8: `BuyMeACoffee/` to `GridShake/`) <!-- files: src/components/BuyMeACoffee/, src/components/ConditionalTooltip/, src/components/ErrorBoundary/, src/components/ErrorMessageRenderer/, src/components/GridShake/ --> 133800
+- [x] Task: Update JSDoc for `src/components/` (Items 9-16: `Icons/` to `NotFound/`) <!-- files: src/components/Icons/, src/components/InstallPrompt/, src/components/LanguageSelector/, src/components/MessageSpinner/, src/components/MobileToolbar/, src/components/ModuleSelectionDialog/, src/components/NotFound/ --> 134459
 - [ ] Task: Conductor - User Manual Verification 'UI Components - Batch 1' (Protocol in workflow.md) <!-- depends: task1, task2 -->
 
 #### Phase 4: UI Components - Batch 2 <!-- execution: parallel -->

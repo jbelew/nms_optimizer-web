@@ -1,3 +1,16 @@
+/**
+ * Layout components for displaying error messages and recovery actions.
+ *
+ * @remarks
+ * This module contains the visual templates for the error boundary UI,
+ * including full-page overlays and compact inset cards.
+ *
+ * @category Components
+ * @see {@link ErrorContent}
+ * @see {@link ./ErrorContent.test.tsx Unit Tests}
+ * @see {@link ./ErrorContent.stories.tsx Storybook}
+ */
+
 import type { ErrorInfo, ReactNode } from "react";
 import { useEffect } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
@@ -75,16 +88,22 @@ const InsetMessage = () => (
 /**
  * A layout component for displaying crash information and recovery steps.
  *
+ * @remarks
  * This component is used by both the global `ErrorBoundary` and `RouteError`.
  * It automatically ensures the splash screen is hidden and adapts its
  * styling based on the `variant` (full page overlay vs. inset card).
  *
  * @param {ErrorContentProps} props - Component properties.
  * @returns {JSX.Element} The rendered error UI.
+ * @component
+ * @category Components
+ * @see {@link ErrorDisplay}
+ * @see {@link hideSplashScreenAndShowBackground}
  *
  * @example Component usage
  * ```tsx
  * <ErrorContent variant="page" error={new Error("Crash")} />
+ * // renders full page error overlay
  * ```
  */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {

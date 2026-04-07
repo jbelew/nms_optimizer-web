@@ -1,3 +1,15 @@
+/**
+ * Background observer for global error notifications.
+ *
+ * @remarks
+ * This module provides the `ErrorMessageRenderer` component, which automatically
+ * surfaces errors from the global state into user-visible toasts.
+ *
+ * @category Components
+ * @see {@link ErrorMessageRenderer}
+ * @see {@link ./ErrorMessageRenderer.test.tsx Unit Tests}
+ */
+
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -7,15 +19,23 @@ import { useErrorStore } from "@/store/ErrorStore";
 /**
  * A non-rendering observer component that bridges the `ErrorStore` and the `Toast` system.
  *
+ * @remarks
  * It monitors the global `ErrorStore` for new error messages. When an error is
  * detected, it triggers a localized error toast and automatically schedules the
  * removal of that error from the store after a fixed duration. This component
  * should be mounted once at the root level of the application.
  *
  * @returns {null} This component does not render any visual elements.
+ * @component
+ * @category Components
+ * @see {@link useErrorStore}
+ * @see {@link useToast}
  *
  * @example
+ * ```tsx
  * <ErrorMessageRenderer />
+ * // returns null (side-effects only)
+ * ```
  */
 export const ErrorMessageRenderer = () => {
 	const { t } = useTranslation();

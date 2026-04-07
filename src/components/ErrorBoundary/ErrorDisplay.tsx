@@ -1,3 +1,15 @@
+/**
+ * Component for rendering technical error details and stack traces.
+ *
+ * @remarks
+ * This module provides the `ErrorDisplay` component, which formats complex
+ * error information for developer and power-user debugging.
+ *
+ * @category Components
+ * @see {@link ErrorDisplay}
+ * @see {@link ./ErrorDisplay.test.tsx Unit Tests}
+ */
+
 import type { ErrorInfo, ReactNode } from "react";
 
 import "./ErrorBoundary.scss";
@@ -21,15 +33,21 @@ interface ErrorDisplayProps {
 /**
  * A reusable component for rendering technical error details.
  *
+ * @remarks
  * It formats the error message and stack trace (both JS and React component stack)
  * in a readable, monospace layout. It is primarily used within the `ErrorContent`
  * component to provide debugging information.
  *
  * @param {ErrorDisplayProps} props - Component properties.
  * @returns {JSX.Element} The rendered error details view.
+ * @component
+ * @category Components
  *
  * @example
+ * ```tsx
  * <ErrorDisplay error={myError} errorInfo={stackInfo}>Something failed!</ErrorDisplay>
+ * // renders formatted stack trace
+ * ```
  */
 export const ErrorDisplay = ({
 	error,

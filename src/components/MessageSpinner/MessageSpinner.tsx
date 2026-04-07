@@ -1,4 +1,15 @@
-// src/components/MessageSpinner/MessageSpinner.tsx
+/**
+ * Visual loading and progress status module.
+ *
+ * @remarks
+ * This module provides the `MessageSpinner` component, which manages the
+ * loading state UI, including randomized flavor text to engage users
+ * during long-running operations.
+ *
+ * @category Components
+ * @see {@link MessageSpinner}
+ */
+
 import "./MessageSpinner.scss";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -24,15 +35,21 @@ interface MessageSpinnerProps {
 /**
  * A comprehensive loading overlay component.
  *
+ * @remarks
  * It features a spinning icon, a localized primary message, and an optional
  * progress bar. While visible, it cycles through a set of "random flavored"
  * status messages (e.g., "Adjusting warp coils...") to improve perceived performance.
  *
  * @param {MessageSpinnerProps} props - Component properties.
  * @returns {JSX.Element | null} The rendered loading UI, or `null` if not visible.
+ * @component
+ * @category Components
  *
  * @example
+ * ```tsx
  * <MessageSpinner isVisible={solving} progressPercent={45} showProgress={true} initialMessage="Optimizing..." />
+ * // renders loading overlay with progress bar
+ * ```
  */
 export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	isInlay = true,

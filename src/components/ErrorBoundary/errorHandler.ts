@@ -1,3 +1,15 @@
+/**
+ * Global error handler and state recovery module.
+ *
+ * @remarks
+ * This module provides the `handleError` utility, which implements a comprehensive
+ * cleanup and reporting strategy for fatal application crashes.
+ *
+ * @category Utilities
+ * @see {@link handleError}
+ * @see {@link ./errorHandler.test.ts Unit Tests}
+ */
+
 import { ErrorInfo } from "react";
 import { captureException as SentryCaptureException } from "@sentry/react";
 
@@ -7,21 +19,28 @@ import { safeClear } from "../../utils/storage";
 /**
  * Executes a nuclear recovery strategy after an uncaught application error.
  *
+ * @remarks
  * This function performs the following actions to ensure a clean state for recovery:
  * 1. Logs the error to the console and Sentry.
- * 2. Purges all `localStorage` data.
+ * 2. Purges all `localStorage` data via {@link safeClear}.
  * 3. Unregisters all active Service Workers.
  * 4. Deletes all browser caches.
  * 5. Attempts to delete all IndexedDB databases.
  * 6. Clears `sessionStorage`.
- * 7. Reports the event to Google Analytics with debug metadata.
+ * 7. Reports the event to Google Analytics via {@link sendEvent} with debug metadata.
  *
  * @param {Error} error - The caught exception. **Must not be null.**
  * @param {ErrorInfo} [errorInfo] - The React component stack metadata.
- * @returns {void}
+ * @returns {void} Side-effects only.
+ * @category Utilities
+ * @see {@link safeClear}
+ * @see {@link sendEvent}
  *
  * @example
+ * ```ts
  * handleError(new Error("Fatal Crash"), { componentStack: "..." });
+ * // returns void (side-effects only)
+ * ```
  */
 export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);

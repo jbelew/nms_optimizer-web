@@ -1,3 +1,14 @@
+/**
+ * 404 Error page and routing fallback module.
+ *
+ * @remarks
+ * This module provides the `NotFound` component, which serves as the "Atlas"
+ * themed fallback for all undefined application routes.
+ *
+ * @category Components
+ * @see {@link NotFound}
+ */
+
 import { FC, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -12,14 +23,22 @@ import { Button } from "@radix-ui/themes";
 /**
  * A themed 404 fallback component for invalid application routes.
  *
+ * @remarks
  * It provides a stylized "Atlas" interface to inform users that the requested
  * page doesn't exist. It also handles automatic SEO title updates, analytics
  * tracking for broken links, and ensuring the splash screen is dismissed.
  *
  * @returns {JSX.Element} The rendered 404 page.
+ * @component
+ * @category Components
+ * @see {@link sendEvent}
+ * @see {@link hideSplashScreenAndShowBackground}
  *
  * @example
+ * ```tsx
  * <Route path="*" element={<NotFound />} />
+ * // renders 404 Atlas page
+ * ```
  */
 const NotFound: FC = () => {
 	const { t } = useTranslation();
