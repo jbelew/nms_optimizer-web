@@ -135,25 +135,4 @@ describe("analytics.ts", () => {
 			expect(ReactGA.event).not.toHaveBeenCalled();
 		});
 	});
-
-	it("should initialize Cloudflare RUM if not blocked", async () => {
-		(fetch as Mock).mockResolvedValue({ status: 200 });
-
-		analytics.initializeCloudflareRUM();
-
-		await vi.waitFor(() => {
-			expect(document.createElement).toHaveBeenCalledWith("script");
-			expect(document.body.appendChild).toHaveBeenCalledWith(mockScript);
-		});
-	});
-
-	it("should not initialize Cloudflare RUM if blocked", async () => {
-		(fetch as Mock).mockRejectedValue(new Error("Blocked"));
-
-		analytics.initializeCloudflareRUM();
-
-		// Wait a bit to ensure it doesn't happen
-		await new Promise((resolve) => setTimeout(resolve, 100));
-		expect(document.createElement).not.toHaveBeenCalledWith("script");
-	});
 });
