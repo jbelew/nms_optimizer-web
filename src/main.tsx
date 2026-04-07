@@ -27,12 +27,16 @@ import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
+import { preloadInitialState } from "./utils/apiPreload";
 import { initializeSentry } from "./utils/sentry";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize Sentry synchronously as early as possible
 // This is required for React Router tracing and early error catching
 initializeSentry();
+
+// Eagerly preload required API calls to avoid render waterfalls
+preloadInitialState();
 
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {

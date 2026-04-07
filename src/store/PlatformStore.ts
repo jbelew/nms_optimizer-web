@@ -1,6 +1,11 @@
 // src/store/PlatformStore.ts
 import { create } from "zustand";
 
+import {
+	getPlatformFromStorage,
+	getPlatformFromUrl,
+	PLATFORM_STORAGE_KEY,
+} from "../utils/platformResolver";
 import { safeGetItem, safeSetItem } from "../utils/storage";
 
 /**
@@ -45,7 +50,7 @@ export interface PlatformState {
 	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 }
 
-const LOCAL_STORAGE_KEY = "selectedPlatform";
+const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
 
 /**
  * Zustand store for managing the active ship type context.
@@ -97,17 +102,8 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			return;
 		}
 
-		let urlParams: URLSearchParams;
-
-		try {
-			urlParams = new URLSearchParams(window.location.search);
-		} catch (e) {
-			console.warn("PlatformStore: Failed to parse URLSearchParams", e);
-			urlParams = new URLSearchParams();
-		}
-
-		const platformFromUrl = urlParams.get("platform");
-		const platformFromStorage = safeGetItem(LOCAL_STORAGE_KEY);
+		const platformFromUrl = getPlatformFromUrl();
+		const platformFromStorage = getPlatformFromStorage();
 
 		let updateUrlNeeded = false;
 		let updateStorageNeeded = false;
