@@ -89,17 +89,15 @@ const jsdocRules = {
 	"jsdoc/require-jsdoc": [
 		"warn",
 		{
+			enableFixer: false,
+			publicOnly: true,
 			require: {
 				FunctionDeclaration: true,
 				MethodDefinition: true,
 				ClassDeclaration: true,
+				ArrowFunctionExpression: true,
 			},
-			contexts: [
-				"TSInterfaceDeclaration",
-				"TSTypeAliasDeclaration",
-				"ExportNamedDeclaration > VariableDeclaration",
-				"Program > VariableDeclaration",
-			],
+			contexts: ["TSInterfaceDeclaration", "TSTypeAliasDeclaration"],
 		},
 	],
 	"jsdoc/require-param-description": "warn",

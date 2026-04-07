@@ -70,10 +70,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  * // renders localized flag dropdown
  * ```
  */
-export /**
- *
- */
-const LanguageSelector: React.FC = () => {
+export const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
 	const isMd = useBreakpoint("1024px");
 	const { t, i18n } = useTranslation();
