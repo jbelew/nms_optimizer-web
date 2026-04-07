@@ -1,3 +1,10 @@
+## [6.19.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.5...v6.19.6) (2026-04-07)
+
+
+### Performance Improvements
+
+* add high-priority resource preloading for platform and tech tree API data to improve LCP ([2a60ee1](https://github.com/jbelew/nms_optimizer-web/commit/2a60ee1d1fdcae4e1d0eb41c188f18208c040628)), closes [hi#priority](https://github.com/hi/issues/priority)
+
 ## [6.19.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.4...v6.19.5) (2026-04-07)
 
 
