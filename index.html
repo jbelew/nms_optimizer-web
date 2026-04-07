@@ -32,6 +32,38 @@
 			link.setAttribute('fetchpriority', 'high');
 			document.head.appendChild(link);
 
+			// --- PRELOAD API DATA FOR LCP OPTIMIZATION ---
+			// 1. Heuristically guess the selected platform safely
+			let platform = "standard";
+			try {
+				const queryPlatform = new URLSearchParams(window.location.search).get("platform");
+				const storagePlatform = localStorage.getItem("selectedPlatform");
+				if (queryPlatform) platform = queryPlatform;
+				else if (storagePlatform) platform = storagePlatform;
+			} catch (e) {}
+
+			// We use the same API URL already hardcoded in the <link rel="preconnect"> below
+			const apiUrl = "https://api.nms-optimizer.app";
+
+			// 2. Preload Base Platforms Dictionary
+			const platformsLink = document.createElement('link');
+			platformsLink.rel = 'preload';
+			platformsLink.as = 'fetch';
+			platformsLink.href = apiUrl + '/platforms';
+			platformsLink.crossOrigin = 'anonymous';
+			platformsLink.setAttribute('fetchpriority', 'high');
+			document.head.appendChild(platformsLink);
+
+			// 3. Preload Tech Tree Payload
+			const techTreeLink = document.createElement('link');
+			techTreeLink.rel = 'preload';
+			techTreeLink.as = 'fetch';
+			techTreeLink.href = apiUrl + '/tech_tree/' + platform;
+			techTreeLink.crossOrigin = 'anonymous';
+			techTreeLink.setAttribute('fetchpriority', 'high');
+			document.head.appendChild(techTreeLink);
+			// ---------------------------------------------
+
 			// Detect if this is a bot/crawler or headless browser
 			const isBot = /bot|crawler|spider|headless|phantom|webdriver/i.test(navigator.userAgent) ||
 				navigator.webdriver === true ||
