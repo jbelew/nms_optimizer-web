@@ -1,3 +1,10 @@
+## [6.19.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.3...v6.19.4) (2026-04-07)
+
+
+### Bug Fixes
+
+* **sentry:** initialize Sentry synchronously to restore trace tracking ([1ee8b1a](https://github.com/jbelew/nms_optimizer-web/commit/1ee8b1abb947a4d36ebdb091e4bae58bf951ff4e))
+
 ## [6.19.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.2...v6.19.3) (2026-04-06)
 
 
