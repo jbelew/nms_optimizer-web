@@ -2,14 +2,14 @@
 
 This plan focuses on systematically increasing test coverage for core utilities, hooks, and stores to enhance application stability.
 
-#### Phase 1: Core Utilities Coverage <!-- execution: parallel -->
+#### Phase 1: Core Utilities Coverage [checkpoint: c510bee] <!-- execution: parallel -->
 - [x] Task: Create tests for `src/utils/hashUtils.ts` <!-- files: src/utils/hashUtils.ts, src/utils/hashUtils.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/fetchWithTimeout.ts` <!-- files: src/utils/fetchWithTimeout.ts, src/utils/fetchWithTimeout.test.ts --> 2fc2ce4
 - [x] Task: Create tests for `src/utils/filenameValidation.ts` <!-- files: src/utils/filenameValidation.ts, src/utils/filenameValidation.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/isTouchDevice.ts` <!-- files: src/utils/isTouchDevice.ts, src/utils/isTouchDevice.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/apiPreload.ts` <!-- files: src/utils/apiPreload.ts, src/utils/apiPreload.test.ts --> ec383ae
 - [x] Task: Create tests for `src/utils/socketManager.ts` <!-- files: src/utils/socketManager.ts, src/utils/socketManager.test.ts --> 1e63baef
-- [x] Task: Conductor - User Manual Verification 'Core Utilities Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 --> [checkpoint: 771edf8]
+- [x] Task: Conductor - User Manual Verification 'Core Utilities Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 --> [checkpoint: c510bee]
 
 #### Phase 2: React Hooks & Stores Coverage <!-- execution: parallel -->
 - [x] Task: Create tests for `src/hooks/useErrorDispatcher.ts` <!-- files: src/hooks/useErrorDispatcher.ts, src/hooks/useErrorDispatcher.test.ts --> ec383ae
@@ -18,7 +18,7 @@ This plan focuses on systematically increasing test coverage for core utilities,
 - [x] Task: Create tests for `src/hooks/useUrlValidation.ts` <!-- files: src/hooks/useUrlValidation.ts, src/hooks/useUrlValidation.test.ts --> ec383ae
 - [x] Task: Create tests for `src/store/ErrorStore.ts` <!-- files: src/store/ErrorStore.ts, src/store/ErrorStore.test.ts --> ec383ae
 - [x] Task: Create tests for `src/store/SessionStore.ts` <!-- files: src/store/SessionStore.ts, src/store/SessionStore.test.ts --> ec383ae
-- [~] Task: Conductor - User Manual Verification 'React Hooks & Stores Coverage' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'React Hooks & Stores Coverage' (Protocol in workflow.md) <!-- depends: task1, task2, task3, task4, task5, task6 -->
 
 
 #### Phase 3: Final Audit & Cleanup
