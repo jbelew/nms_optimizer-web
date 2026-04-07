@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
-# --- BEGIN BEADS INTEGRATION v0.61.0 ---
+# --- BEGIN BEADS INTEGRATION v1.0.0 ---
 # This section is managed by beads. Do not remove these markers.
 if command -v bd >/dev/null 2>&1; then
   export BD_GIT_HOOK=1
-  _bd_timeout=${BEADS_HOOK_TIMEOUT:-30}
+  _bd_timeout=${BEADS_HOOK_TIMEOUT:-300}
   if command -v timeout >/dev/null 2>&1; then
     timeout "$_bd_timeout" bd hooks run pre-push "$@"
     _bd_exit=$?
@@ -21,4 +21,4 @@ if command -v bd >/dev/null 2>&1; then
   fi
   if [ $_bd_exit -ne 0 ]; then exit $_bd_exit; fi
 fi
-# --- END BEADS INTEGRATION v0.61.0 ---
+# --- END BEADS INTEGRATION v1.0.0 ---
