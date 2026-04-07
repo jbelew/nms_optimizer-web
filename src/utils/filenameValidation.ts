@@ -57,9 +57,7 @@ export const FILENAME_REGEX = new RegExp(
  * ```
  */
 export const isValidFilename = (filename: string): boolean => {
-	const trimmed = filename.trim();
-
-	return FILENAME_REGEX.test(trimmed);
+	return FILENAME_REGEX.test(filename);
 };
 
 /**

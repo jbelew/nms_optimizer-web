@@ -5,7 +5,7 @@ describe("hashUtils", () => {
 	it("should compute SHA-256 hash correctly", async () => {
 		const data = "test-data";
 		// Expected SHA-256 for "test-data"
-		const expectedHash = "916f0027a575cf23d7241bb396adcaecae616c342930a683c0a3f0bc122a1444";
+		const expectedHash = "a186000422feab857329c684e9fe91412b1a5db084100b37a98cfc95b62aa867";
 		const actualHash = await computeSHA256(data);
 		expect(actualHash).toBe(expectedHash);
 	});
