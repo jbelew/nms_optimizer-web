@@ -1,3 +1,10 @@
+# [6.22.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.5...v6.22.0) (2026-04-08)
+
+
+### Features
+
+* **test:** stabilize storybook interaction tests, update api domain, fix storybook ts errors and robust analytics url ([2b3ca16](https://github.com/jbelew/nms_optimizer-web/commit/2b3ca167b5fcc6985dfc7e30650130f57d4e8806))
+
 ## [6.21.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.4...v6.21.5) (2026-04-08)
 
 
