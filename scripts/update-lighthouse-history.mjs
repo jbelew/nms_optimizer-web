@@ -76,4 +76,17 @@ if (fs.existsSync(reportPath)) {
   console.warn('HTML report not found at', reportPath);
 }
 
+// Copy font assets to ensure dashboard renders correctly on the history branch
+const fontsSourceDir = 'public/assets/fonts';
+const fontsDestDir = path.join(historyDir, 'assets/fonts');
+if (fs.existsSync(fontsSourceDir)) {
+  if (!fs.existsSync(fontsDestDir)) {
+    fs.mkdirSync(fontsDestDir, { recursive: true });
+  }
+  const fontFiles = fs.readdirSync(fontsSourceDir);
+  for (const file of fontFiles) {
+    fs.copyFileSync(path.join(fontsSourceDir, file), path.join(fontsDestDir, file));
+  }
+}
+
 console.log(`Successfully updated history for commit ${sha}`);
