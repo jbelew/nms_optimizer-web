@@ -1,3 +1,20 @@
+## [6.22.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.22.0...v6.22.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* **analytics:** remove duplicate Cloudflare beacon script ([4eaeb6c](https://github.com/jbelew/nms_optimizer-web/commit/4eaeb6ce409b4a7d82bc1b315cb3b1966036182a))
+* resolve lint errors and JSDoc warnings after merge ([301acd6](https://github.com/jbelew/nms_optimizer-web/commit/301acd6d9fcb7d58bfa90fde190d4bf19ef877e2))
+* **seo:** move charset meta before ASCII art comment ([c271c57](https://github.com/jbelew/nms_optimizer-web/commit/c271c5712eb800ecf09f562dee2be47af2f297de))
+* **test:** replace 'any' with proper types in App mocks ([fb4595a](https://github.com/jbelew/nms_optimizer-web/commit/fb4595a298ac5c0aa6e08767ce683fa29a28bbee))
+
+
+### Performance Improvements
+
+* **build:** raise vendor-core priority above vendor-markdown-lib ([6a805e7](https://github.com/jbelew/nms_optimizer-web/commit/6a805e7e6e1a1114c0e483299ce0e4a4566f0012))
+* fix vendor-markdown-lib eager load, charset placement, and duplicate beacon ([#623](https://github.com/jbelew/nms_optimizer-web/issues/623)) ([ba0cea8](https://github.com/jbelew/nms_optimizer-web/commit/ba0cea80fb44fd7b55b2fe8506ebb23818237856))
+* optimize TBT by deferring non-critical scripts and markdown chunks ([e1feac1](https://github.com/jbelew/nms_optimizer-web/commit/e1feac1077bd5ebde66e34ac6e5be3ad5fce4b44))
+
 # [6.22.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.5...v6.22.0) (2026-04-08)
 
 
