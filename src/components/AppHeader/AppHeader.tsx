@@ -224,7 +224,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 				/>
 				<span className="font-medium" style={{ color: "var(--gray-11)" }}>
 					{" "}
-					v{__APP_VERSION__}
+					{__APP_VERSION__}
 				</span>
 			</Heading>
 		</Box>
