@@ -1,3 +1,11 @@
+## [6.21.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.4...v6.21.5) (2026-04-08)
+
+
+### Bug Fixes
+
+* **build:** resolve Storybook CI segfault and version mismatch ([0586436](https://github.com/jbelew/nms_optimizer-web/commit/0586436fcf32a7a5716df99e4b56e6556c60777e))
+* **build:** resolve Storybook segfault by rolling back problematic dev-dependency bump ([ba31b80](https://github.com/jbelew/nms_optimizer-web/commit/ba31b808fec3258640cd8f92c971874c5c5e291c))
+
 ## [6.21.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.3...v6.21.4) (2026-04-08)
 
 
