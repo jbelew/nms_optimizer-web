@@ -35,9 +35,6 @@ import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 // This is required for React Router tracing and early error catching
 initializeSentry();
 
-// Eagerly preload required API calls to avoid render waterfalls
-preloadInitialState();
-
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
 	// Add global handler for Vite chunk load failures (e.g. after deployments)
@@ -98,8 +95,18 @@ if (typeof window !== "undefined") {
 		() => {
 			const initDeferredServices = async () => {
 				try {
+					// Eagerly preload required API calls to avoid render waterfalls,
+					// but only after initial UI is interactive.
+					preloadInitialState();
+
 					initializeAnalyticsClient();
 					await initializeAnalytics();
+
+					// Dynamically import and initialize service worker
+					const { setupServiceWorkerRegistration } = await import(
+						"./utils/setupServiceWorker"
+					);
+					setupServiceWorkerRegistration();
 				} catch (error) {
 					console.error("Failed to initialize deferred services:", error);
 					captureException(error, {
@@ -131,16 +138,6 @@ if (typeof window !== "undefined") {
 		},
 		{ once: true }
 	);
-
-	// Dynamically import and initialize service worker to avoid bundling it with i18n
-	(async () => {
-		try {
-			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
-			setupServiceWorkerRegistration();
-		} catch (error) {
-			console.error("Failed to load service worker registration module:", error);
-		}
-	})();
 }
 
 const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);

@@ -2,9 +2,10 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
-import AppDialog from "./components/AppDialog/Base/AppDialog";
-import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
-import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
+// Lazy-loaded components for performance optimization
+const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
+const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
+const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
 
 import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
@@ -262,25 +263,31 @@ const App: FC = () => {
 
 	return (
 		<DialogProvider>
-			<OfflineBanner />
+			<Suspense fallback={null}>
+				<OfflineBanner />
+			</Suspense>
 			<Suspense fallback={null}>
 				<AppContent />
 			</Suspense>
 
 			{/* Error dialog - rendered at App level so it's always available */}
-			<AppDialog
-				isOpen={showError}
-				onClose={() => setShowError(false)}
-				content={<ErrorContent onClose={() => setShowError(false)} />}
-				titleKey="dialogs.titles.serverError"
-				title={t("dialogs.titles.serverError")}
-			/>
+			<Suspense fallback={null}>
+				<AppDialog
+					isOpen={showError}
+					onClose={() => setShowError(false)}
+					content={<ErrorContent onClose={() => setShowError(false)} />}
+					titleKey="dialogs.titles.serverError"
+					title={t("dialogs.titles.serverError")}
+				/>
+			</Suspense>
 
-			<UpdatePrompt
-				isOpen={showUpdatePrompt}
-				onRefresh={handleRefresh}
-				onDismiss={handleDismissUpdatePrompt}
-			/>
+			<Suspense fallback={null}>
+				<UpdatePrompt
+					isOpen={showUpdatePrompt}
+					onRefresh={handleRefresh}
+					onDismiss={handleDismissUpdatePrompt}
+				/>
+			</Suspense>
 		</DialogProvider>
 	);
 };

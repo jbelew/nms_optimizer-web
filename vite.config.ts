@@ -394,6 +394,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			// 'baseline-widely-available' targeting (Chrome 111, Firefox 114, Safari 16.4)
 			// ensures optimal performance for a public tool without excessive polyfilling.
 			target: "baseline-widely-available",
+			manifest: "build-manifest.json",
 			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
 			sourcemap: true,
@@ -404,7 +405,13 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					// We leave naturally split chunks alone so Vite can parallelize dynamic route waterfalls.
 					return deps.filter(
 						(dep: string) =>
-							!dep.includes("vendor-charts") && !dep.includes("vendor-ui-utils")
+							!dep.includes("vendor-charts") &&
+							!dep.includes("vendor-ui-utils") &&
+							!dep.includes("vendor-monitoring") &&
+							!dep.includes("vendor-router") &&
+							!dep.includes("vendor-markdown") &&
+							!dep.includes("vendor-markdown-lib") &&
+							!dep.includes("vendor-state")
 					);
 				},
 			},
@@ -431,14 +438,46 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					codeSplitting: {
 						groups: [
 							{
+								// Dedicated chunk for virtual markdown bundle to keep it out of the entry path.
+								name: "vendor-markdown",
+								test: /virtual:markdown-bundle/,
+								priority: 120,
+							},
+							{
+								// Markdown rendering libraries
+								name: "vendor-markdown-lib",
+								test: /[\\/]node_modules[\\/](react-markdown|remark-gfm|rehype-raw|micromark|vfile|unified|unist|mdast|hast|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements)[\\/]/,
+								priority: 115,
+							},
+							{
+								// Group all Sentry monitoring code into a chunk.
+								name: "vendor-monitoring",
+								test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+								priority: 110,
+							},
+							{
 								// Group all tracking/analytics code into a neutrally named chunk to prevent ad-blockers.
+								// We avoid 'analytics' in the name to prevent automatic blocking on iOS.
 								name: "vendor-events",
-								test: /analytics|sentry|telemetry|beacon|google-analytics|gtag|ad-block|react-ga4/i,
+								test: /analytics|telemetry|beacon|google-analytics|gtag|ad-block|react-ga4/i,
 								priority: 100,
 							},
 							{
+								// Core framework runtime
 								name: "vendor-core",
-								test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-router|zustand|immer|react-is|use-sync-external-store|clsx|tailwind-merge|tiny-invariant)[\\/]/,
+								test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-is|use-sync-external-store)[\\/]/,
+								priority: 95,
+							},
+							{
+								// Routing logic
+								name: "vendor-router",
+								test: /[\\/]node_modules[\\/](react-router|react-router-dom|@remix-run\/router)[\\/]/,
+								priority: 92,
+							},
+							{
+								// State management and core utilities
+								name: "vendor-state",
+								test: /[\\/]node_modules[\\/](zustand|immer|clsx|tailwind-merge|tiny-invariant)[\\/]/,
 								priority: 90,
 							},
 							{

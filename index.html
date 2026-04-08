@@ -554,8 +554,17 @@
 	</noscript>
 
 	<!-- Cloudflare Web Analytics -->
-	<script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e"}'></script>
+	<script>
+		window.addEventListener('load', function () {
+			setTimeout(function () {
+				var script = document.createElement('script');
+				script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+				script.setAttribute('data-cf-beacon', '{"token": "614f4aacf3d1446bae6719e156ecc36e"}');
+				script.defer = true;
+				document.body.appendChild(script);
+			}, 5000);
+		});
+	</script>
 	<!-- End Cloudflare Web Analytics -->
 </body>
 
