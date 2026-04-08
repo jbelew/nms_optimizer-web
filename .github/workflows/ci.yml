@@ -114,7 +114,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist-bundle
           path: dist/
@@ -250,7 +250,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Download production artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist-production
           path: dist/
@@ -322,7 +322,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download dist artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist-bundle
           path: dist/
