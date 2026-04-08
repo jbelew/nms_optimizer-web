@@ -10,13 +10,17 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: dependabot-automerge-${{ github.event.workflow_run.id }}
+  cancel-in-progress: true
+
 jobs:
   automerge:
     runs-on: ubuntu-latest
-    # Only run if the CI pipeline succeeded AND it was triggered by a Dependabot PR
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'pull_request'
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]'
     steps:
       - name: Extract PR Details
         id: pr_info
@@ -30,28 +34,59 @@ jobs:
           echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "url=$PR_URL" >> $GITHUB_OUTPUT
 
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v2
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          # Explicitly pass the PR number from our extraction step
-          pull-request-number: ${{ steps.pr_info.outputs.number }}
+      - name: Determine auto-merge eligibility
+        id: eligible
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ steps.pr_info.outputs.number }}"
+          LABELS=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json labels -q '.labels[].name')
+          TITLE=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json title -q '.title')
 
-      - name: Enable auto-merge for non-npm patch and minor updates
-        if: |
-          steps.metadata.outputs.package-ecosystem != 'npm' &&
-          (steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-           steps.metadata.outputs.update-type == 'version-update:semver-minor')
-        run: gh pr merge --auto --merge "${{ steps.pr_info.outputs.url }}"
+          # Determine ecosystem from labels set in dependabot.yml
+          IS_NPM=false
+          if echo "$LABELS" | grep -q "javascript"; then
+            IS_NPM=true
+          fi
+
+          # Parse semver bump from PR title (e.g., "from 1.0.0 to 1.0.1")
+          OLD_VER=$(echo "$TITLE" | grep -oP 'from \K[0-9]+\.[0-9]+\.[0-9]+')
+          NEW_VER=$(echo "$TITLE" | grep -oP 'to \K[0-9]+\.[0-9]+\.[0-9]+')
+
+          UPDATE_TYPE="major"
+          if [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
+            OLD_MAJOR=$(echo "$OLD_VER" | cut -d. -f1)
+            OLD_MINOR=$(echo "$OLD_VER" | cut -d. -f2)
+            NEW_MAJOR=$(echo "$NEW_VER" | cut -d. -f1)
+            NEW_MINOR=$(echo "$NEW_VER" | cut -d. -f2)
+            if [ "$OLD_MAJOR" != "$NEW_MAJOR" ]; then
+              UPDATE_TYPE="major"
+            elif [ "$OLD_MINOR" != "$NEW_MINOR" ]; then
+              UPDATE_TYPE="minor"
+            else
+              UPDATE_TYPE="patch"
+            fi
+          fi
+
+          echo "ecosystem_npm=$IS_NPM update_type=$UPDATE_TYPE"
+
+          # Auto-merge: non-npm patch+minor, npm patch only
+          if [ "$IS_NPM" == "false" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$UPDATE_TYPE" == "minor" ]); then
+            echo "merge=true" >> $GITHUB_OUTPUT
+          elif [ "$IS_NPM" == "true" ] && [ "$UPDATE_TYPE" == "patch" ]; then
+            echo "merge=true" >> $GITHUB_OUTPUT
+          else
+            echo "merge=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Approve Dependabot PR
+        if: steps.eligible.outputs.merge == 'true'
+        run: gh pr review --approve "${{ steps.pr_info.outputs.url }}"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Approve Dependabot PR
-        if: |
-          steps.metadata.outputs.package-ecosystem != 'npm' &&
-          (steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-           steps.metadata.outputs.update-type == 'version-update:semver-minor')
-        run: gh pr review --approve "${{ steps.pr_info.outputs.url }}"
+      - name: Enable auto-merge
+        if: steps.eligible.outputs.merge == 'true'
+        run: gh pr merge --auto --merge "${{ steps.pr_info.outputs.url }}"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
