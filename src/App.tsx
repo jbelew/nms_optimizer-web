@@ -2,10 +2,6 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
-import AppDialog from "./components/AppDialog/Base/AppDialog";
-import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
-import UpdatePrompt from "./components/UpdatePrompt/UpdatePrompt"; // Imported UpdatePrompt
-
 import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
@@ -17,6 +13,11 @@ import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
+
+// Lazy-loaded components for performance optimization
+const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
+const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
+const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
 
 /**
  * Lazy-loaded component for displaying technical error details and recovery actions.
@@ -262,25 +263,30 @@ const App: FC = () => {
 
 	return (
 		<DialogProvider>
-			<OfflineBanner />
 			<Suspense fallback={null}>
-				<AppContent />
+				<OfflineBanner />
 			</Suspense>
 
-			{/* Error dialog - rendered at App level so it's always available */}
-			<AppDialog
-				isOpen={showError}
-				onClose={() => setShowError(false)}
-				content={<ErrorContent onClose={() => setShowError(false)} />}
-				titleKey="dialogs.titles.serverError"
-				title={t("dialogs.titles.serverError")}
-			/>
+			<AppContent />
 
-			<UpdatePrompt
-				isOpen={showUpdatePrompt}
-				onRefresh={handleRefresh}
-				onDismiss={handleDismissUpdatePrompt}
-			/>
+			{/* Error dialog - rendered at App level so it's always available */}
+			<Suspense fallback={null}>
+				<AppDialog
+					isOpen={showError}
+					onClose={() => setShowError(false)}
+					content={<ErrorContent onClose={() => setShowError(false)} />}
+					titleKey="dialogs.titles.serverError"
+					title={t("dialogs.titles.serverError")}
+				/>
+			</Suspense>
+
+			<Suspense fallback={null}>
+				<UpdatePrompt
+					isOpen={showUpdatePrompt}
+					onRefresh={handleRefresh}
+					onDismiss={handleDismissUpdatePrompt}
+				/>
+			</Suspense>
 		</DialogProvider>
 	);
 };

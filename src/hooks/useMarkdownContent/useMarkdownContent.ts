@@ -1,7 +1,6 @@
 // src/hooks/useMarkdownContent.ts
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getMarkdown } from "virtual:markdown-bundle";
 
 /**
  * Represents the state of a markdown content request.
@@ -41,7 +40,7 @@ declare global {
  *
  * @returns {MarkdownContentState} State containing the markdown content, loading status, and any errors.
  *
- * @see {@link getMarkdown} for the virtual bundle retrieval logic.
+ * @see {@link import("virtual:markdown-bundle").getMarkdown} for the virtual bundle retrieval logic.
  *
  * @hook
  *
@@ -64,7 +63,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		const loadMarkdown = () => {
+		const loadMarkdown = async () => {
 			setIsLoading(true);
 			setError(null);
 
@@ -82,7 +81,8 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 					return;
 				}
 
-				// Fallback to bundled markdown
+				// Fallback to bundled markdown - dynamic import to avoid blocking entry
+				const { getMarkdown } = await import("virtual:markdown-bundle");
 				const content = getMarkdown(langToFetch, markdownFileName);
 
 				if (!content) {

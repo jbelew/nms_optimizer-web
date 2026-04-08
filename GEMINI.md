@@ -29,11 +29,16 @@ To ensure you learn from your actions and avoid repeating mistakes, you must adh
 
 ## 2. JSDoc Guidelines
 
-When writing and maintaining JavaScript/TypeScript code, ensure all functions, classes, and complex variables are properly documented using JSDoc. This improves code readability, maintainability, and enables better IDE support.
+When writing, maintaining, or modifying JavaScript/TypeScript code, you MUST ensure all functions, classes, and complex variables are properly documented or updated using JSDoc. This process must conform to the **agentic-jsdoc** skill.
 
-> [!TIP]
-> Use the **agentic-jsdoc** skill for automated JSDoc generation and review.
-
+- **Mandatory Updates**: Always update or add JSDoc when modifying existing code or adding new functionality.
+- **Conformity**: Use the **agentic-jsdoc** skill for automated generation and to ensure documentation is optimized for LLM parsing.
 - **All public APIs**: Every function, class, or method that is part of a public interface should have JSDoc.
 - **Parameters and Returns**: Always document `@param` for each parameter and `@returns` for the return value (if any).
 - **Types**: Use TypeScript types in JSDoc where applicable.
+
+---
+
+## 3. Tool-specific Protocols
+
+- **Beads**: Beads SHOULD ONLY be used in conjunction with Conductor. Do not use Beads for independent task management unless a Conductor track or track-level plan is active.

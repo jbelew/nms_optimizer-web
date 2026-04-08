@@ -16,7 +16,6 @@ import "./i18n/i18n"; // Initialize i18next
 import { StrictMode } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
-import { captureException, wrapCreateBrowserRouterV6 } from "@sentry/react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -35,9 +34,6 @@ import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 // This is required for React Router tracing and early error catching
 initializeSentry();
 
-// Eagerly preload required API calls to avoid render waterfalls
-preloadInitialState();
-
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
 	// Add global handler for Vite chunk load failures (e.g. after deployments)
@@ -45,13 +41,13 @@ if (typeof window !== "undefined") {
 		window.location.reload();
 	});
 
-	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
+	// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
 	// and "Importing a module script failed" errors on iOS Safari
 	window.addEventListener("error", (event: ErrorEvent) => {
 		const errorMessage = event.error?.message || event.message || "";
 		const errorName = event.error?.name || "";
 
-		// Suppress SecurityError from Cloudflare or similar third-party scripts
+		// Suppress SecurityError from cross-origin third-party scripts (e.g. analytics, CDN assets)
 		if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
 			event.preventDefault();
 
@@ -98,14 +94,27 @@ if (typeof window !== "undefined") {
 		() => {
 			const initDeferredServices = async () => {
 				try {
+					// Eagerly preload required API calls to avoid render waterfalls,
+					// but only after initial UI is interactive.
+					preloadInitialState();
+
 					initializeAnalyticsClient();
 					await initializeAnalytics();
+
+					// Dynamically import and initialize service worker
+					const { setupServiceWorkerRegistration } =
+						await import("./utils/setupServiceWorker");
+					setupServiceWorkerRegistration();
 				} catch (error) {
 					console.error("Failed to initialize deferred services:", error);
-					captureException(error, {
-						tags: { area: "initialization" },
-						level: "error",
-					});
+					import("@sentry/react")
+						.then((Sentry) => {
+							Sentry.captureException(error, {
+								tags: { area: "initialization" },
+								level: "error",
+							});
+						})
+						.catch(console.error);
 				}
 			};
 
@@ -131,20 +140,9 @@ if (typeof window !== "undefined") {
 		},
 		{ once: true }
 	);
-
-	// Dynamically import and initialize service worker to avoid bundling it with i18n
-	(async () => {
-		try {
-			const { setupServiceWorkerRegistration } = await import("./utils/setupServiceWorker");
-			setupServiceWorkerRegistration();
-		} catch (error) {
-			console.error("Failed to load service worker registration module:", error);
-		}
-	})();
 }
 
-const sentryCreateBrowserRouter = wrapCreateBrowserRouterV6(createBrowserRouter);
-const router = sentryCreateBrowserRouter(routes);
+const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
