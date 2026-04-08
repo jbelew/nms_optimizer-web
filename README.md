@@ -108,9 +108,7 @@ services:
 
 ### **Lighthouse Auditing**
 
-A Lighthouse audit is automatically run against a production build of the application on every push to the `main` branch. This provides a performance baseline for the proposed changes. The audit is performed as part of the `Lighthouse Audit` GitHub Actions workflow.
-
-A summary of the Lighthouse scores is published to the "Summary" page of the workflow run. The full reports (HTML and JSON) are also available as artifacts in the workflow run. You can download them from the "Artifacts" section of the workflow summary page.
+A Lighthouse audit is automatically run against a production build of the application on every push to the `main` or `dev` branch. Performance trends and historical reports are visualized on our [**Tactical Performance Dashboard**](https://jbelew.github.io/nms_optimizer-web/).
 
 To run the audit locally against a preview of the production build, use the following command:
 
