@@ -103,8 +103,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -121,16 +119,36 @@ jobs:
           name: dist-bundle
           path: dist/
 
-      - name: Run Lighthouse Audit & Generate History
-        uses: foo-software/lighthouse-check-action@v12
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
         with:
-          urls: 'http://127.0.0.1:4173/'
-          startServerCommand: 'npm run preview -- --host 127.0.0.1'
-          outputDirectory: 'lighthouse-results'
-          gitAuthorName: 'github-actions[bot]'
-          gitAuthorEmail: 'github-actions[bot]@users.noreply.github.com'
-          localGitBranch: 'lighthouse-check'
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: "./scripts/lighthouserc.cjs"
+        env:
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Performance History Dashboard
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        run: |
+          # 1. Checkout the history branch to extract existing data
+          git fetch origin lighthouse-check:lighthouse-check || true
+          mkdir -p history-dir
+          git --work-tree=history-dir checkout lighthouse-check -- . || true
+          
+          # 2. Run the update script (LHCI saves results in .lighthouseci/)
+          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
+          
+          # 3. Ensure the dashboard HTML is the root index.html
+          cp scripts/lighthouse-dashboard.html history-dir/index.html
+
+      - name: Deploy Lighthouse History
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: history-dir
+          branch: lighthouse-check
+          clean: false # Keep previous reports
 
   release:
     name: Release
