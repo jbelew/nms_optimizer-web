@@ -1,18 +1,45 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
+import { expect, userEvent, waitFor, within } from "@storybook/test";
 
+import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
+import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import RecommendedBuild from "./RecommendedBuild";
 
-const mockTechTree = {
+// Simplified to a single build to match Exosuit behavior.
+// We include the tech/module definition so modulesMap can resolve properties.
+const mockTechTree: TechTree = {
+	exosuit: [
+		{
+			key: "exosuit_tech",
+			label: "Exosuit Tech",
+			color: "blue",
+			module_count: 1,
+			type: "technology",
+			modules: [
+				{
+					id: "ET",
+					label: "Exosuit Tech",
+					bonus: 10,
+					value: 100,
+					sc_eligible: true,
+					type: "tech",
+				},
+			],
+		},
+	] as TechTreeItem[],
 	recommended_builds: [
 		{
-			title: "Balanced Build",
-			layout: [],
-		},
-		{
-			title: "Performance Build",
-			layout: [],
+			title: "Exosuit Standard Build",
+			layout: [
+				[
+					{
+						module: "ET",
+						tech: "exosuit_tech",
+					},
+				],
+			],
 		},
 	],
 };
@@ -52,7 +79,8 @@ const StorybookWrapper = ({
 }) => {
 	useEffect(() => {
 		if (resetStores) {
-			usePlatformStore.setState({ selectedPlatform: "standard" });
+			usePlatformStore.setState({ selectedPlatform: "exosuit" });
+			useGridStore.getState().resetGrid();
 		}
 	}, [resetStores]);
 
@@ -87,9 +115,31 @@ export const Desktop: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Recommended build component on desktop with large screen layout.",
+				story: "Recommended build component on desktop showing a single 'Apply' button.",
 			},
 		},
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+		// 1. Initial State Check: Should show the direct apply button
+		// The text comes from t("techTree.recommendedBuilds.applyBuildButton") -> "Apply Recommended Build"
+		const applyButton = await canvas.findByRole("button", { name: /Apply Recommended Build/i });
+		expect(applyButton).toBeInTheDocument();
+
+		// 2. Click the direct apply button
+		await userEvent.click(applyButton);
+
+		// 3. Verify that the grid state is updated
+		// handleApply uses setTimeout(..., 0), so we must waitFor
+		await waitFor(
+			() => {
+				const gridState = useGridStore.getState();
+				// The module should be placed in [0, 0] as defined in the layout
+				expect(gridState.grid.cells[0][0].module).toBe("ET");
+			},
+			{ timeout: 2000 }
+		);
 	},
 };
 
@@ -105,13 +155,6 @@ export const Tablet: Story = {
 			isRotated: false,
 		},
 	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Recommended build component on a tablet device.",
-			},
-		},
-	},
 };
 
 export const Mobile: Story = {
@@ -124,13 +167,6 @@ export const Mobile: Story = {
 		viewport: {
 			value: "mobile",
 			isRotated: false,
-		},
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Recommended build component on a mobile device.",
-			},
 		},
 	},
 };

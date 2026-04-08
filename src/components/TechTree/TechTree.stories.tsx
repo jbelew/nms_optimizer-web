@@ -23,9 +23,7 @@ const meta = {
 	loaders: [
 		async () => {
 			try {
-				const response = await fetch(
-					"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
-				);
+				const response = await fetch("https://api.nms-optimizer.app/tech_tree/standard");
 
 				if (!response.ok) {
 					throw new Error(`API responded with status ${response.status}`);

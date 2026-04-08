@@ -72,8 +72,9 @@ describe("analyticsClient", () => {
 
 		await sendEvent("test_event", { foo: "bar" });
 
+		const expectedUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
 		expect(fetchMock).toHaveBeenCalledWith(
-			`${API_URL}api/events`,
+			`${expectedUrl}api/events`,
 			expect.objectContaining({
 				method: "POST",
 				keepalive: true,

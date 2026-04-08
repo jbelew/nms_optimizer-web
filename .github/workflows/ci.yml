@@ -84,6 +84,9 @@ jobs:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
 
+      - name: Verify Storybook build
+        run: npm run build-storybook
+
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
         with:

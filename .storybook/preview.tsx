@@ -138,6 +138,7 @@ const withGlobalProviders: Decorator = (Story) => {
 	);
 };
 
+// Global mock handling is now in vitest.setup.ts to ensure it catches early resource initialization
 const preview: Preview = {
 	decorators: [withGlobalProviders, withTheme, withBackground, withStoreReset],
 	parameters: {

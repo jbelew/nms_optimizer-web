@@ -57,9 +57,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 	],
 	loaders: [
 		async () => {
-			const response = await fetch(
-				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/standard"
-			);
+			const response = await fetch("https://api.nms-optimizer.app/tech_tree/standard");
 			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
 				await response.json();
 			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;
@@ -144,9 +142,7 @@ export const Corvette: Story = {
 	],
 	loaders: [
 		async () => {
-			const response = await fetch(
-				"https://nms-optimizer-service-afebcfd47e2a.herokuapp.com/tech_tree/corvette"
-			);
+			const response = await fetch("https://api.nms-optimizer.app/tech_tree/corvette");
 			const techTree: Record<string, { key: string; modules: SelectionModule[] }[]> =
 				await response.json();
 			const hyperdriveTech = techTree.Hyperdrive.find((t) => t.key === "hyper")!;

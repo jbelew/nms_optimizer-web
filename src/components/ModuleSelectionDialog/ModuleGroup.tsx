@@ -53,7 +53,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	const { openDialog } = useDialog();
 
 	const sortedModules = ["bonus", "trails", "figurines"].includes(groupName)
-		? [...modules].sort((a, b) => a.label.localeCompare(b.label))
+		? [...modules].sort((a, b) => (a.label ?? "").localeCompare(b.label ?? ""))
 		: modules;
 
 	const dependencyMap = new Map<string, string>();
@@ -63,6 +63,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 		// Previously called modules.find() for each module during forEach loop
 		const rankToModuleMap = new Map<string, string>();
 		modules.forEach((module) => {
+			if (!module.label) return;
 			MODULE_RANK_ORDER.forEach((rank) => {
 				if (module.label.includes(rank)) {
 					rankToModuleMap.set(rank, module.id);
@@ -71,6 +72,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 		});
 
 		modules.forEach((module) => {
+			if (!module.label) return;
 			const rankIndex = MODULE_RANK_ORDER.findIndex((rank) => module.label.includes(rank));
 
 			if (rankIndex > 0) {
@@ -97,7 +99,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 				style={{ color: "var(--accent-a11)" }}
 			>
 				{titleOverride || t(`moduleSelection.${groupName}`)}
-				{modules.some((m) => m.label.includes("[") && m.label.includes("]")) && (
+				{modules.some((m) => m.label?.includes("[") && m.label?.includes("]")) && (
 					<InfoCircledIcon
 						className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
 						onClick={() => {

@@ -127,7 +127,7 @@ export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 				src={imagePath}
 				color={techColor}
 			/>
-			<span className="flex-1">{formatLabel(module.label)}</span>
+			<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
 		</label>
 	);
 };
