@@ -1,3 +1,10 @@
+## [6.21.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.3...v6.21.4) (2026-04-08)
+
+
+### Bug Fixes
+
+* resolve Dependabot Automerge failure by adding checkout and improving PR discovery ([77c9df8](https://github.com/jbelew/nms_optimizer-web/commit/77c9df86ea24f08dd0c6ecd529887b5ac06496f0))
+
 ## [6.21.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.2...v6.21.3) (2026-04-08)
 
 
