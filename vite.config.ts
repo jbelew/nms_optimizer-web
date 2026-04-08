@@ -116,36 +116,39 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				? [
 						sentryVitePlugin({
 							org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
-							project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
+							project:
+								process.env.SENTRY_PROJECT ||
+								env.SENTRY_PROJECT ||
+								"nms-optimizer-web",
 							authToken: sentryAuthToken,
 							telemetry: false,
 							release: {
 								name: appVersion,
 							},
 						}),
-						splashScreen({
-							logoSrc: "assets/svg/loader.svg",
-							splashBg: "#000000",
-							loaderBg: "#00A2C7",
-							loaderType: "dots",
+					]
+				: []),
+			splashScreen({
+				logoSrc: "assets/svg/loader.svg",
+				splashBg: "#000000",
+				loaderBg: "#00A2C7",
+				loaderType: "dots",
+			}),
+			deferStylesheetsPlugin(),
+			...(!isCloudflarePages
+				? [
+						compression({
+							algorithm: "brotliCompress",
+							ext: ".br",
+							threshold: 10240,
+							deleteOriginFile: false,
 						}),
-						deferStylesheetsPlugin(),
-						...(!isCloudflarePages
-							? [
-									compression({
-										algorithm: "brotliCompress",
-										ext: ".br",
-										threshold: 10240,
-										deleteOriginFile: false,
-									}),
-									compression({
-										algorithm: "gzip",
-										ext: ".gz",
-										threshold: 10240,
-										deleteOriginFile: false,
-									}),
-								]
-							: []),
+						compression({
+							algorithm: "gzip",
+							ext: ".gz",
+							threshold: 10240,
+							deleteOriginFile: false,
+						}),
 					]
 				: []),
 			...(!process.env.STORYBOOK_BUILD
@@ -163,6 +166,10 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							filename: "bundle/stats.json",
 							template: "raw-data",
 						}),
+					]
+				: []),
+			...(!process.env.STORYBOOK_BUILD
+				? [
 						VitePWA({
 							manifestFilename: "manifest.json",
 							registerType: "prompt",
@@ -276,7 +283,8 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 										},
 									},
 									{
-										urlPattern: /^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
+										urlPattern:
+											/^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
 										handler: "NetworkOnly",
 										method: "POST",
 									},
