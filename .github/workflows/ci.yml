@@ -128,18 +128,19 @@ jobs:
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout Lighthouse History Branch
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        uses: actions/checkout@v6
+        with:
+          ref: lighthouse-check
+          path: history-dir
+        continue-on-error: true
+
       - name: Update Performance History Dashboard
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
-          # 1. Checkout the history branch to extract existing data
-          git fetch origin lighthouse-check:lighthouse-check || true
           mkdir -p history-dir
-          git --work-tree=history-dir checkout lighthouse-check -- . || true
-          
-          # 2. Run the update script (LHCI saves results in .lighthouseci/)
           node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
-          
-          # 3. Ensure the dashboard HTML is the root index.html
           cp scripts/lighthouse-dashboard.html history-dir/index.html
 
       - name: Deploy Lighthouse History
