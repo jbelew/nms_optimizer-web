@@ -22,17 +22,31 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.actor.login == 'dependabot[bot]'
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Extract PR Details
         id: pr_info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Try extracting from payload first
           PR_NUMBER=$(echo '${{ toJson(github.event.workflow_run.pull_requests) }}' | jq -r '.[0].number')
-          PR_URL=$(echo '${{ toJson(github.event.workflow_run.pull_requests) }}' | jq -r '.[0].html_url')
+          
+          # Fallback to searching by head branch if payload is empty
           if [ "$PR_NUMBER" == "null" ] || [ -z "$PR_NUMBER" ]; then
-            echo "Error: No pull request found for this workflow run."
+            echo "PR not in payload, searching by head branch: ${{ github.event.workflow_run.head_branch }}..."
+            PR_NUMBER=$(gh pr list --head "${{ github.event.workflow_run.head_branch }}" --repo "${{ github.repository }}" --json number -q '.[0].number')
+          fi
+          
+          if [ "$PR_NUMBER" == "null" ] || [ -z "$PR_NUMBER" ]; then
+            echo "Error: No pull request found for branch ${{ github.event.workflow_run.head_branch }}"
             exit 1
           fi
+          
           echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "url=$PR_URL" >> $GITHUB_OUTPUT
+          echo "url=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "Resolved PR #$PR_NUMBER"
 
       - name: Determine auto-merge eligibility
         id: eligible
@@ -81,12 +95,12 @@ jobs:
 
       - name: Approve Dependabot PR
         if: steps.eligible.outputs.merge == 'true'
-        run: gh pr review --approve "${{ steps.pr_info.outputs.url }}"
+        run: gh pr review --approve "${{ steps.pr_info.outputs.number }}" --repo "${{ github.repository }}"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Enable auto-merge
         if: steps.eligible.outputs.merge == 'true'
-        run: gh pr merge --auto --merge "${{ steps.pr_info.outputs.url }}"
+        run: gh pr merge --auto --merge "${{ steps.pr_info.outputs.number }}" --repo "${{ github.repository }}"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
