@@ -16,7 +16,7 @@ const PAGE_TO_FILE_MAPPING = {
 	changelog: "public/assets/locales/en/changelog.md",
 	instructions: "public/assets/locales/en/instructions.md",
 	translation: "public/assets/locales/en/translation-request.md",
-	userstats: "src/components/AppDialog/UserStatsDialog.tsx",
+	userstats: "src/components/AppDialog/UserStats/UserStatsDialog.tsx",
 	privacy: "public/assets/locales/en/privacy.md",
 };
 

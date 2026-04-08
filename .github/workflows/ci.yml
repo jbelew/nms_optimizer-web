@@ -162,8 +162,8 @@ jobs:
             echo "released=false" >> $GITHUB_OUTPUT
           fi
 
-  deploy-production:
-    name: Deploy to Production (Heroku & Cloudflare)
+  deploy-production-cloudflare:
+    name: Deploy to Cloudflare (Production)
     needs: [release]
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
@@ -182,7 +182,6 @@ jobs:
         run: npm ci --legacy-peer-deps
       - name: Install Wrangler globally
         run: npm install -g wrangler
-
       - name: Set Build Version
         id: build_version
         run: |
@@ -204,6 +203,29 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
 
+      - name: Purge Cloudflare Cache
+        run: |
+          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
+
+  deploy-production-heroku:
+    name: Deploy to Heroku (Production)
+    needs: [release, build]
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
       - name: Deploy to Heroku
@@ -212,19 +234,19 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nms-optimizer-web"
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          branch: main
+          branch: HEAD
         env:
           HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
-          HD_VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          HD_VITE_BUILD_VERSION: ${{ needs.build.outputs.build-version }}
           HD_VITE_SENTRY_ENV: production
+          HD_VITE_USE_SERVER_ANALYTICS: "false"
+          HD_VITE_DUAL_ANALYTICS: "true"
 
-      - name: Purge Cloudflare Cache
-        run: |
-          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}'
-
+  post-deploy-production:
+    name: Finalize Production
+    needs: [deploy-production-cloudflare, deploy-production-heroku]
+    runs-on: ubuntu-latest
+    steps:
       - name: Trigger Downstream Jobs
         uses: actions/github-script@v8
         with:
