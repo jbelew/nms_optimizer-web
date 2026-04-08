@@ -109,6 +109,33 @@ vi.mock("./utils/analytics", () => ({
 	sendEvent: vi.fn(),
 }));
 
+vi.mock("./components/AppDialog/Base/AppDialog", () => ({
+	default: ({ title, content, isOpen }: any) =>
+		isOpen ? (
+			<div data-testid="app-dialog">
+				<div>{title}</div>
+				{content}
+			</div>
+		) : null,
+}));
+
+vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
+	default: ({ onClose }: any) => (
+		<div>
+			<div>dialogs.welcome.description</div>
+			<button onClick={onClose}>dialogs.welcome.getStarted</button>
+		</div>
+	),
+}));
+
+vi.mock("./components/OfflineBanner/OfflineBanner", () => ({
+	default: () => <div data-testid="offline-banner" />,
+}));
+
+vi.mock("./components/UpdatePrompt/UpdatePrompt", () => ({
+	default: () => <div data-testid="update-prompt" />,
+}));
+
 describe("App", () => {
 	beforeEach(() => {
 		// Reset the platform store before each test
