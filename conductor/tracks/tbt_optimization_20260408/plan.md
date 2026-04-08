@@ -1,6 +1,6 @@
 # Implementation Plan: TBT Optimization (Landing Page)
 
-## Phase 1: Environment Preparation and Baseline Verification
+## Phase 1: Environment Preparation and Baseline Verification [checkpoint: 7b3301d]
 *Goal: Ensure a clean working environment on the `dev` branch and establish a reliable performance baseline.*
 
 - [x] Task: Reset `dev` branch to match `main` (cleaning up "dead work")
