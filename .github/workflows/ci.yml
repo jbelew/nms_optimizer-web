@@ -162,11 +162,13 @@ jobs:
             echo "released=false" >> $GITHUB_OUTPUT
           fi
 
-  deploy-production-cloudflare:
-    name: Deploy to Cloudflare (Production)
+  build-production:
+    name: Build Application (Production)
     needs: [release]
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
+    outputs:
+      build-version: ${{ steps.build_version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -180,29 +182,47 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-      - name: Install Wrangler globally
-        run: npm install -g wrangler
       - name: Set Build Version
         id: build_version
         run: |
           COUNT=$(git rev-list --count HEAD)
           SHA=$(git rev-parse --short HEAD)
           echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
-
       - name: Build project (Production)
         run: npm run build
         env:
           VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
           VITE_SENTRY_ENV: production
+      - name: Upload production artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-production
+          path: dist/
+          retention-days: 1
 
+  deploy-production-cloudflare:
+    name: Deploy to Cloudflare (Production)
+    needs: [build-production, release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Download production artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-production
+          path: dist/
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Install Wrangler globally
+        run: npm install -g wrangler
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
-
       - name: Purge Cloudflare Cache
         run: |
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
@@ -212,8 +232,7 @@ jobs:
 
   deploy-production-heroku:
     name: Deploy to Heroku (Production)
-    needs: [release, build]
-    if: needs.release.outputs.released == 'true'
+    needs: [build-production, release]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -237,7 +256,7 @@ jobs:
           branch: HEAD
         env:
           HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
-          HD_VITE_BUILD_VERSION: ${{ needs.build.outputs.build-version }}
+          HD_VITE_BUILD_VERSION: ${{ needs.build-production.outputs.build-version }}
           HD_VITE_SENTRY_ENV: production
           HD_VITE_USE_SERVER_ANALYTICS: "false"
           HD_VITE_DUAL_ANALYTICS: "true"
@@ -251,7 +270,7 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const tag = '${{ needs.release.outputs.tag }}';
+            const tag = '${{ needs.release.outputs.tag }}' || '';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
               workflow_id: 'publish-images.yml', ref: tag
