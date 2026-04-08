@@ -1,3 +1,11 @@
+## [6.21.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.2...v6.21.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* replace webp logo with svg and update header styling and dimensions ([9d823d2](https://github.com/jbelew/nms_optimizer-web/commit/9d823d2cd43e39e18c014d132e9e798423a56249))
+* update dashboard title and headers to specify mobile performance insights ([17e9d04](https://github.com/jbelew/nms_optimizer-web/commit/17e9d049da8a96de6e281f9763075876caecca1c))
+
 ## [6.21.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.1...v6.21.2) (2026-04-08)
 
 
