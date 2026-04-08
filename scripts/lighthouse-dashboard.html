@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NMS Optimizer - Performance Insights</title>
+    <title>NMS Optimizer - Mobile Performance Insights</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @font-face {
@@ -136,9 +136,9 @@
             border-spacing: 0 0.75rem;
         }
 
-        th { 
-            text-align: left; 
-            padding: 1rem 1.5rem; 
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -198,7 +198,7 @@
 <body>
     <div class="container">
         <header>
-            <h1 class="heading-styled">Performance Insights</h1>
+            <h1 class="heading-styled">Mobile Performance Insights</h1>
             <p style="opacity: 0.6; margin: 0; font-size: 0.875rem;">Tactical analysis for the NMS Optimizer platform</p>
         </header>
 
@@ -244,7 +244,7 @@
             try {
                 const response = await fetch('data.json');
                 const history = await response.json();
-                
+
                 const plotData = history.slice(-20);
                 const labels = plotData.map(d => new Date(d.date).toLocaleDateString());
 
@@ -255,17 +255,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { 
-                            min: 0, max: 100, 
-                            grid: { color: 'rgba(255,255,255,0.03)' }, 
-                            ticks: { font: { size: 10 }, padding: 10 } 
+                        y: {
+                            min: 0, max: 100,
+                            grid: { color: 'rgba(255,255,255,0.03)' },
+                            ticks: { font: { size: 10 }, padding: 10 }
                         },
-                        x: { 
-                            grid: { display: false }, 
-                            ticks: { font: { size: 10 }, padding: 10 } 
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 10 }, padding: 10 }
                         }
                     },
-                    plugins: { 
+                    plugins: {
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: 'rgba(12, 13, 14, 0.9)',
@@ -307,9 +307,9 @@
                     const row = document.createElement('tr');
                     const date = new Date(run.date).toLocaleDateString() + ' @ ' + new Date(run.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const sha = run.sha.substring(0, 7);
-                    
+
                     const getScoreClass = (s) => s >= 0.9 ? 'score-good' : s >= 0.5 ? 'score-ok' : 'score-bad';
-                    
+
                     row.innerHTML = `
                         <td style="font-size: 0.8125rem; opacity: 0.7;">${date}</td>
                         <td><code class="tag">${sha}</code></td>
