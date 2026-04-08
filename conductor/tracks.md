@@ -36,3 +36,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [~] **Track: UI Integration & Stability**
   *Link: [./conductor/tracks/ui_integration_stability_20260407/](./conductor/tracks/ui_integration_stability_20260407/)*
+
+---
+
+- [ ] **Track: Optimize TBT for initial landing page load**
+  *Link: [./conductor/tracks/tbt_optimization_20260408/](./conductor/tracks/tbt_optimization_20260408/)*
