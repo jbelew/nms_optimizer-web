@@ -6,7 +6,7 @@ import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/
 import { Box, Flex, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import nmslogo from "@/assets/img/nms-icon.webp";
+import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
 import { useDialog } from "@/context/dialog-utils";
@@ -193,8 +193,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								className="app-header__logo-image"
 								src={nmslogo}
 								alt="No Man's Sky Atlas Logo"
-								width="16"
-								height="20"
+								width="10"
+								height="16"
 							/>
 						</button>
 					</Popover.Trigger>

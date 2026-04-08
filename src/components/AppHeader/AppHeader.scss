@@ -90,11 +90,11 @@
 		color: var(--accent-track);
 		flex-shrink: 0;
 		height: 1rem;
-		width: 0.75rem;
+		width: 0.625rem;
 
 		@media (width >= 640px) {
 			height: 1.25rem;
-			width: 1rem;
+			width: 0.8125rem;
 		}
 	}
 
