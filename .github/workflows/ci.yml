@@ -34,7 +34,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm Proxy ci --legacy-peer-deps
 
       - name: Check formatting
         run: npm run format:check
@@ -52,7 +52,7 @@ jobs:
         run: npm run test:ci
 
   build:
-    name: Build Application
+    name: Build Application (Verification)
     runs-on: ubuntu-latest
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
@@ -164,7 +164,7 @@ jobs:
 
   deploy-production:
     name: Deploy to Production (Heroku & Cloudflare)
-    needs: [release, build]
+    needs: [release]
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -178,22 +178,30 @@ jobs:
         with:
           node-version: "24"
           cache: 'npm'
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-bundle
-          path: dist/
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Install Wrangler globally
         run: npm install -g wrangler
+
+      - name: Set Build Version
+        id: build_version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          SHA=$(git rev-parse --short HEAD)
+          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
+      - name: Build project (Production)
+        run: npm run build
+        env:
+          VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          VITE_SENTRY_ENV: production
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Branch is dynamically set: 'main' for production, 'dev' for staging
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
 
       - name: Install Heroku CLI
@@ -207,7 +215,7 @@ jobs:
           branch: main
         env:
           HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
-          HD_VITE_BUILD_VERSION: ${{ needs.build.outputs.build-version }}
+          HD_VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
           HD_VITE_SENTRY_ENV: production
 
       - name: Purge Cloudflare Cache
