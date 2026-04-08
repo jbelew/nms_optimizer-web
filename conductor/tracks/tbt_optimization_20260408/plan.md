@@ -3,9 +3,11 @@
 ## Phase 1: Environment Preparation and Baseline Verification
 *Goal: Ensure a clean working environment on the `dev` branch and establish a reliable performance baseline.*
 
-- [ ] Task: Reset `dev` branch to match `main` (cleaning up "dead work")
-- [ ] Task: Establish baseline Lighthouse performance audit on the clean `dev` branch
-- [ ] Task: Conductor - User Manual Verification 'Environment Preparation' (Protocol in workflow.md)
+- [x] Task: Reset `dev` branch to match `main` (cleaning up "dead work")
+- [x] Task: Establish baseline Lighthouse performance audit on the clean `dev` branch
+  - Baseline TBT: 3,180ms
+  - Primary contributors: `vendor-events-D5HiADy1.js` (2,241ms), `vendor-core-DqvqxTuN.js` (1,847ms)
+- [x] Task: Conductor - User Manual Verification 'Environment Preparation' (Protocol in workflow.md)
 
 ## Phase 2: Analysis and Chunk Optimization (TDD)
 *Goal: Identify and decompose the `events` chunk to reduce initial execution time.*
