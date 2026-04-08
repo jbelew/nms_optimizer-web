@@ -110,7 +110,7 @@ vi.mock("./utils/analytics", () => ({
 }));
 
 vi.mock("./components/AppDialog/Base/AppDialog", () => ({
-	default: ({ title, content, isOpen }: any) =>
+	default: ({ title, content, isOpen }: { title: string; content: React.ReactNode; isOpen: boolean }) =>
 		isOpen ? (
 			<div data-testid="app-dialog">
 				<div>{title}</div>
@@ -120,7 +120,7 @@ vi.mock("./components/AppDialog/Base/AppDialog", () => ({
 }));
 
 vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
-	default: ({ onClose }: any) => (
+	default: ({ onClose }: { onClose: () => void }) => (
 		<div>
 			<div>dialogs.welcome.description</div>
 			<button onClick={onClose}>dialogs.welcome.getStarted</button>
