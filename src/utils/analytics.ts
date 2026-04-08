@@ -20,17 +20,10 @@
  * @category Utilities
  */
 
-import ReactGA from "react-ga4";
-
 import { TRACKING_ID } from "../constants";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { isBot } from "./isBot";
 import { reportWebVitals } from "./reportWebVitals";
-
-// Defensive wrapper to handle CommonJS/ESM interop issues with Rolldown (Vite 8+).
-// When react-ga4 (a CJS package) is bundled by Rolldown in fullBundleMode, it may
-// be wrapped with an extra `.default` property layer, making `ReactGA.initialize`
-// inaccessible. This resolves the actual module object regardless of wrapping.
 
 /**
  * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
@@ -44,7 +37,10 @@ import { reportWebVitals } from "./reportWebVitals";
  * @category Utilities
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ReactGAInstance: typeof ReactGA = (ReactGA as any)?.default ?? ReactGA;
+let ReactGAInstance: any = null;
+
+/** Event queue for events sent before the ReactGA module loads */
+let queuedEvents: GA4Event[] = [];
 
 /**
  * Interface for Google Analytics 4 event tracking.
@@ -329,6 +325,10 @@ export const initializeAnalytics = async () => {
 		return;
 	}
 
+	const ReactGAModule = await import("react-ga4");
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	ReactGAInstance = (ReactGAModule.default as any)?.default ?? ReactGAModule.default;
+
 	ReactGAInstance.initialize(TRACKING_ID, {
 		gtagOptions: {
 			send_page_view: false,
@@ -341,6 +341,14 @@ export const initializeAnalytics = async () => {
 	});
 
 	gaInitialized = true;
+
+	// Flush queued events
+	if (queuedEvents.length > 0) {
+		const eventsToFlush = [...queuedEvents];
+		queuedEvents = [];
+		eventsToFlush.forEach(sendEvent);
+	}
+
 	reportWebVitals(sendEvent);
 };
 
@@ -426,6 +434,12 @@ export const sendEvent = (event: GA4Event): void => {
 					tracking_source: "server",
 				});
 			} else {
+				if (!ReactGAInstance) {
+					queuedEvents.push(event);
+
+					return;
+				}
+
 				const { action, category, ...params } = event;
 				ReactGAInstance.event(action, {
 					...params,

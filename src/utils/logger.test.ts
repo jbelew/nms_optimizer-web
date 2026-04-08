@@ -41,10 +41,13 @@ describe("Logger Utility", () => {
 		});
 	});
 
-	it("should log warn messages to console, Sentry, and internal storage", () => {
+	it("should log warn messages to console, Sentry, and internal storage", async () => {
 		Logger.warn("Test warn message");
 
 		expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test warn message", undefined);
+
+		// Wait for dynamic import of Sentry to resolve
+		await new Promise((resolve) => setTimeout(resolve, 0));
 		expect(Sentry.captureMessage).toHaveBeenCalledWith("Test warn message", expect.any(Object));
 
 		const logs = Logger.getLogs();
@@ -52,11 +55,14 @@ describe("Logger Utility", () => {
 		expect(logs[0].level).toBe(LogLevel.WARN);
 	});
 
-	it("should log error messages to console, Sentry, and internal storage", () => {
+	it("should log error messages to console, Sentry, and internal storage", async () => {
 		const error = new Error("Test error");
 		Logger.error("Test error message", error);
 
 		expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error);
+
+		// Wait for dynamic import of Sentry to resolve
+		await new Promise((resolve) => setTimeout(resolve, 0));
 		expect(Sentry.captureException).toHaveBeenCalledWith(error, expect.any(Object));
 
 		const logs = Logger.getLogs();
