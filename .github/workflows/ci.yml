@@ -1,0 +1,147 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore:
+      - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    name: Setup & Install
+    runs-on: ubuntu-latest
+    outputs:
+      node-cache-hit: ${{ steps.node-cache.outputs.cache-hit }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        id: node-cache
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+
+      - name: Install dependencies
+        id: install
+        run: npm ci --legacy-peer-deps
+
+  lint-test:
+    name: Lint, Typecheck & Unit Test
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run JS linter
+        run: npm run lint
+
+      - name: Run CSS linter
+        run: npm run lint:css
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run unit tests
+        run: npm run test:ci
+
+  build:
+    name: Build Application
+    needs: setup
+    runs-on: ubuntu-latest
+    outputs:
+      build-version: ${{ steps.build_version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Set Build Version
+        id: build_version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          SHA=$(git rev-parse --short HEAD)
+          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_SENTRY_ENV: ci
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}-ci
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-bundle
+          path: dist/
+          retention-days: 1
+
+  lighthouse:
+    name: Lighthouse Audit
+    needs: build
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-bundle
+          path: dist/
+
+      - name: Install dependencies (Lighthouse CLI)
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: "./scripts/lighthouserc.cjs"
+        env:
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
