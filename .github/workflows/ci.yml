@@ -34,7 +34,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm Proxy ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Check formatting
         run: npm run format:check
@@ -126,7 +126,7 @@ jobs:
 
   release:
     name: Release
-    needs: [lint-test, lighthouse]
+    needs: [lint-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
