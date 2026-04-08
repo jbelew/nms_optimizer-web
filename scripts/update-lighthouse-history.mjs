@@ -69,11 +69,24 @@ if (!fs.existsSync(reportsDir)) {
   fs.mkdirSync(reportsDir, { recursive: true });
 }
 
-const reportPath = path.join(resultsDir, run.htmlPath);
+// Robust report discovery
+let reportPath = path.join(resultsDir, run.htmlPath || '');
+if (!fs.existsSync(reportPath)) {
+  // Fallback: search for any HTML file in the results directory
+  const files = fs.readdirSync(resultsDir);
+  const htmlFile = files.find(f => f.endsWith('.html') && !f.includes('manifest'));
+  if (htmlFile) {
+    reportPath = path.join(resultsDir, htmlFile);
+  }
+}
+
 if (fs.existsSync(reportPath)) {
-  fs.copyFileSync(reportPath, path.join(reportsDir, 'index.html'));
+  const destPath = path.join(reportsDir, 'index.html');
+  fs.copyFileSync(reportPath, destPath);
+  console.log(`Report successfully captured: ${reportPath} -> ${destPath}`);
 } else {
-  console.warn('HTML report not found at', reportPath);
+  console.error(`CRITICAL: Lighthouse HTML report not found in ${resultsDir}. Links on the dashboard will 404.`);
+  // We don't exit 1 here to avoid breaking the whole CI, but the error will be visible
 }
 
 // Copy font assets to ensure dashboard renders correctly on the history branch
