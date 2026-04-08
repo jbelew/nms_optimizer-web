@@ -2,11 +2,6 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
-// Lazy-loaded components for performance optimization
-const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
-const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
-const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
-
 import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
@@ -18,6 +13,11 @@ import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
+
+// Lazy-loaded components for performance optimization
+const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
+const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
+const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
 
 /**
  * Lazy-loaded component for displaying technical error details and recovery actions.
@@ -266,9 +266,8 @@ const App: FC = () => {
 			<Suspense fallback={null}>
 				<OfflineBanner />
 			</Suspense>
-			<Suspense fallback={null}>
-				<AppContent />
-			</Suspense>
+
+			<AppContent />
 
 			{/* Error dialog - rendered at App level so it's always available */}
 			<Suspense fallback={null}>

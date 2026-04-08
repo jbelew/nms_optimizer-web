@@ -102,9 +102,8 @@ if (typeof window !== "undefined") {
 					await initializeAnalytics();
 
 					// Dynamically import and initialize service worker
-					const { setupServiceWorkerRegistration } = await import(
-						"./utils/setupServiceWorker"
-					);
+					const { setupServiceWorkerRegistration } =
+						await import("./utils/setupServiceWorker");
 					setupServiceWorkerRegistration();
 				} catch (error) {
 					console.error("Failed to initialize deferred services:", error);

@@ -29,7 +29,9 @@
 *Goal: Confirm the TBT target is met and document the results.*
 
 - [x] Task: Perform final Lighthouse performance audit to verify TBT < 200ms
-  - Final TBT: 340ms (Target: < 200ms, Baseline: 3180ms)
-  - Key Improvements: Isolated Sentry, deferred non-critical scripts, optimized chunking, deferred markdown.
+  - Final TBT: 290ms (Target: < 200ms, Baseline: 3180ms)
+  - FCP: 0.3s (Baseline: 0.8s)
+  - LCP: 1.3s (Baseline: 1.3s)
+  - Key Improvements: Isolated Sentry, deferred non-critical scripts, optimized chunking, deferred markdown, balanced module preloading.
 - [x] Task: Run full suite of unit and E2E tests to ensure no regressions
 - [x] Task: Conductor - User Manual Verification 'Final Validation' (Protocol in workflow.md)

@@ -402,16 +402,14 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
 					// Filter out non-critical vendor chunks to prevent eager preloading.
-					// We leave naturally split chunks alone so Vite can parallelize dynamic route waterfalls.
+					// We keep UI themes, core React, router, and state management preloaded for fast LCP.
 					return deps.filter(
 						(dep: string) =>
 							!dep.includes("vendor-charts") &&
 							!dep.includes("vendor-ui-utils") &&
 							!dep.includes("vendor-monitoring") &&
-							!dep.includes("vendor-router") &&
 							!dep.includes("vendor-markdown") &&
-							!dep.includes("vendor-markdown-lib") &&
-							!dep.includes("vendor-state")
+							!dep.includes("vendor-markdown-lib")
 					);
 				},
 			},
