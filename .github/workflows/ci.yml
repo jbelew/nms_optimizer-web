@@ -154,9 +154,34 @@ jobs:
           branch: lighthouse-check
           clean: false # Keep previous reports
 
+  storybook-test:
+    name: Storybook Interaction & A11y Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Storybook Interaction Tests
+        run: npm run test:storybook
+
+      - name: Run Storybook A11y Tests
+        run: npm run test:storybook:a11y
+
   release:
     name: Release
-    needs: [lint-test, build]
+    needs: [lint-test, build, storybook-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -320,7 +345,7 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build]
+    needs: [lint-test, build, storybook-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:

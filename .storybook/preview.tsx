@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import type { Decorator, Preview } from "@storybook/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
