@@ -1,3 +1,10 @@
+## [6.21.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.0...v6.21.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* remove erroneous Proxy command from npm install step in CI workflow ([21ad896](https://github.com/jbelew/nms_optimizer-web/commit/21ad896fa8addf6b25f901f0d04c09a414622828))
+
 # [6.21.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.20.0...v6.21.0) (2026-04-08)
 
 
