@@ -1,0 +1,11 @@
+{
+  "track_id": "tbt_optimization_20260408",
+  "type": "performance",
+  "status": "new",
+  "priority": "medium",
+  "depends_on": [],
+  "estimated_hours": null,
+  "created_at": "2026-04-08T00:00:00Z",
+  "updated_at": "2026-04-08T00:00:00Z",
+  "description": "Optimize TBT for initial landing page load from 400ms to < 200ms by splitting chunks and optimizing non-critical script initialization."
+}
