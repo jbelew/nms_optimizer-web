@@ -1,3 +1,10 @@
+# [6.21.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.20.0...v6.21.0) (2026-04-08)
+
+
+### Features
+
+* add CI pipeline workflow for linting, testing, building, and lighthouse auditing ([a0d6260](https://github.com/jbelew/nms_optimizer-web/commit/a0d62603a0e60ca11c5f239212acef9fd433bc97))
+
 # [6.20.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.6...v6.20.0) (2026-04-08)
 
 
