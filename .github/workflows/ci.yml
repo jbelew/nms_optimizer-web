@@ -165,15 +165,16 @@ jobs:
   build-production:
     name: Build Application (Production)
     needs: [release]
-    if: needs.release.outputs.released == 'true'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
+      effective-tag: ${{ steps.version_logic.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ needs.release.outputs.tag }}
+          ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -182,18 +183,31 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-      - name: Set Build Version
+
+      - name: Determine Effective Version
+        id: version_logic
+        run: |
+          if [ "${{ needs.release.outputs.released }}" == "true" ]; then
+            echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+            echo "version=${LATEST_TAG}-dev.${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set Build Tracking ID
         id: build_version
         run: |
           COUNT=$(git rev-list --count HEAD)
           SHA=$(git rev-parse --short HEAD)
           echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
       - name: Build project (Production)
         run: npm run build
         env:
-          VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
+          VITE_APP_VERSION: ${{ steps.version_logic.outputs.version }}
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
           VITE_SENTRY_ENV: production
+
       - name: Upload production artifact
         uses: actions/upload-artifact@v4
         with:
@@ -238,7 +252,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ needs.release.outputs.tag }}
+          ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -255,7 +269,7 @@ jobs:
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           branch: HEAD
         env:
-          HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
+          HD_VITE_APP_VERSION: ${{ needs.build-production.outputs.effective-tag }}
           HD_VITE_BUILD_VERSION: ${{ needs.build-production.outputs.build-version }}
           HD_VITE_SENTRY_ENV: production
           HD_VITE_USE_SERVER_ANALYTICS: "false"
@@ -263,7 +277,7 @@ jobs:
 
   post-deploy-production:
     name: Finalize Production
-    needs: [deploy-production-cloudflare, deploy-production-heroku]
+    needs: [deploy-production-cloudflare, deploy-production-heroku, release]
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Downstream Jobs
@@ -273,11 +287,11 @@ jobs:
             const tag = '${{ needs.release.outputs.tag }}' || '';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
-              workflow_id: 'publish-images.yml', ref: tag
+              workflow_id: 'publish-images.yml', ref: tag || 'main'
             });
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
-              workflow_id: 'update-screenshots.yml', ref: tag
+              workflow_id: 'update-screenshots.yml', ref: tag || 'main'
             });
 
   deploy-staging:
