@@ -10,14 +10,7 @@
  * @category Utilities
  */
 
-import { useEffect } from "react";
 import * as Sentry from "@sentry/react";
-import {
-	createRoutesFromChildren,
-	matchRoutes,
-	useLocation,
-	useNavigationType,
-} from "react-router-dom";
 
 import { env } from "./analytics";
 

@@ -40,7 +40,7 @@ declare global {
  *
  * @returns {MarkdownContentState} State containing the markdown content, loading status, and any errors.
  *
- * @see {@link getMarkdown} for the virtual bundle retrieval logic.
+ * @see {@link import("virtual:markdown-bundle").getMarkdown} for the virtual bundle retrieval logic.
  *
  * @hook
  *
