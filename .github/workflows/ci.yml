@@ -20,31 +20,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup:
-    name: Setup & Install
-    runs-on: ubuntu-latest
-    outputs:
-      node-cache-hit: ${{ steps.node-cache.outputs.cache-hit }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        id: node-cache
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-
-      - name: Install dependencies
-        id: install
-        run: npm ci --legacy-peer-deps
-
   lint-test:
     name: Lint, Typecheck & Unit Test
-    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -76,13 +53,14 @@ jobs:
 
   build:
     name: Build Application
-    needs: setup
     runs-on: ubuntu-latest
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -166,8 +144,6 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-      - name: Install Playwright
-        run: npx playwright install --with-deps
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -188,7 +164,7 @@ jobs:
 
   deploy-production:
     name: Deploy to Production (Heroku & Cloudflare)
-    needs: release
+    needs: [release, build]
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -202,34 +178,28 @@ jobs:
         with:
           node-version: "24"
           cache: 'npm'
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-bundle
+          path: dist/
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Install Wrangler globally
         run: npm install -g wrangler
-      - name: Set Build Version
-        id: build_version
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
-
-      - name: Build project
-        run: npm run build
-        env:
-          VITE_SENTRY_ENV: production
-          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
-          # Cloudflare & Heroku deployment envs
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Branch is dynamically set: 'main' for production, 'dev' for staging
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
-      - uses: akhileshns/heroku-deploy@v3.14.15
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.14.15
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nms-optimizer-web"
@@ -237,7 +207,7 @@ jobs:
           branch: main
         env:
           HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
-          HD_VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          HD_VITE_BUILD_VERSION: ${{ needs.build.outputs.build-version }}
           HD_VITE_SENTRY_ENV: production
 
       - name: Purge Cloudflare Cache
@@ -263,34 +233,26 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, lighthouse]
+    needs: [lint-test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: "24"
           cache: 'npm'
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-bundle
+          path: dist/
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Install Wrangler globally
         run: npm install -g wrangler
-      - name: Set Build Version
-        id: build_version
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
-      - name: Build project
-        run: npm run build
-        env:
-          VITE_SENTRY_ENV: staging
-          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}-staging
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
