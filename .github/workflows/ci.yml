@@ -116,7 +116,7 @@ jobs:
   lighthouse:
     name: Lighthouse Audit
     needs: build
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -145,3 +145,155 @@ jobs:
           configPath: "./scripts/lighthouserc.cjs"
         env:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    name: Release
+    needs: [lint-test, lighthouse]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      released: ${{ steps.check_release.outputs.released }}
+      tag: ${{ steps.check_release.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        run: npx semantic-release
+      - name: Check if release was created
+        id: check_release
+        run: |
+          if git describe --exact-match --tags HEAD 2>/dev/null; then
+            echo "released=true" >> $GITHUB_OUTPUT
+            TAG=$(git describe --exact-match --tags HEAD)
+            echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          else
+            echo "released=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-production:
+    name: Deploy to Production (Heroku & Cloudflare)
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Install Wrangler globally
+        run: npm install -g wrangler
+      - name: Set Build Version
+        id: build_version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          SHA=$(git rev-parse --short HEAD)
+          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_SENTRY_ENV: production
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          # Cloudflare & Heroku deployment envs
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=nms-optimizer-web --branch=main
+
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "nms-optimizer-web"
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          branch: main
+        env:
+          HD_VITE_APP_VERSION: ${{ needs.release.outputs.tag }}
+          HD_VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          HD_VITE_SENTRY_ENV: production
+
+      - name: Purge Cloudflare Cache
+        run: |
+          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
+
+      - name: Trigger Downstream Jobs
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const tag = '${{ needs.release.outputs.tag }}';
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner, repo: context.repo.repo,
+              workflow_id: 'publish-images.yml', ref: tag
+            });
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner, repo: context.repo.repo,
+              workflow_id: 'update-screenshots.yml', ref: tag
+            });
+
+  deploy-staging:
+    name: Deploy to Staging (Cloudflare)
+    needs: [lint-test, lighthouse]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Install Wrangler globally
+        run: npm install -g wrangler
+      - name: Set Build Version
+        id: build_version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          SHA=$(git rev-parse --short HEAD)
+          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_SENTRY_ENV: staging
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}-staging
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
