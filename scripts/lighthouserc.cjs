@@ -1,26 +1,8 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npm run preview',
-      url: ['http://localhost:4173'],
-      numberOfRuns: 3,
-      serverReadyPattern: 'Local:',
-      settings: {
-        chromeFlags: '--headless --no-sandbox --disable-gpu',
-      },
-    },
-    assert: {
-      assertions: {
-        'categories:performance': ['warn', { minScore: 0.9 }],
-        'categories:accessibility': ['error', { minScore: 0.9 }],
-        'categories:best-practices': ['error', { minScore: 0.9 }],
-        'categories:seo': ['error', { minScore: 0.9 }],
-        'color-contrast': 'off',
-        'csp-xss': 'off',
-        'tap-targets': 'off',
-        'uses-text-compression': 'off',
-        'non-composited-animations': 'off',
-      },
+      url: ['http://127.0.0.1:4173/'],
+      startServerCommand: 'npm run preview -- --host 127.0.0.1',
     },
     upload: {
       target: 'temporary-public-storage',

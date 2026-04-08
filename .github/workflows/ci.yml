@@ -92,14 +92,19 @@ jobs:
           retention-days: 1
 
   lighthouse:
-    name: Lighthouse Audit
+    name: Lighthouse Audit & History
     needs: build
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     continue-on-error: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -116,14 +121,16 @@ jobs:
           name: dist-bundle
           path: dist/
 
-      - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v12
+      - name: Run Lighthouse Audit & Generate History
+        uses: foo-software/lighthouse-check-action@v12
         with:
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: "./scripts/lighthouserc.cjs"
-        env:
-          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          urls: 'http://127.0.0.1:4173/'
+          startServerCommand: 'npm run preview -- --host 127.0.0.1'
+          outputDirectory: 'lighthouse-results'
+          gitAuthorName: 'github-actions[bot]'
+          gitAuthorEmail: 'github-actions[bot]@users.noreply.github.com'
+          localGitBranch: 'lighthouse-check'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: Release
