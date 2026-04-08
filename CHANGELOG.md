@@ -1,3 +1,10 @@
+## [6.21.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.1...v6.21.2) (2026-04-08)
+
+
+### Bug Fixes
+
+* remove redundant v prefix from app version display ([f049e81](https://github.com/jbelew/nms_optimizer-web/commit/f049e8195b1433991df69a1982cc7ce4ec6eea09))
+
 ## [6.21.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.21.0...v6.21.1) (2026-04-08)
 
 
