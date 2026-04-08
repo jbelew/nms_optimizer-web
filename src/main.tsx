@@ -41,13 +41,13 @@ if (typeof window !== "undefined") {
 		window.location.reload();
 	});
 
-	// Add global error handler to suppress SecurityErrors from Cloudflare beacon script
+	// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
 	// and "Importing a module script failed" errors on iOS Safari
 	window.addEventListener("error", (event: ErrorEvent) => {
 		const errorMessage = event.error?.message || event.message || "";
 		const errorName = event.error?.name || "";
 
-		// Suppress SecurityError from Cloudflare or similar third-party scripts
+		// Suppress SecurityError from cross-origin third-party scripts (e.g. analytics, CDN assets)
 		if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
 			event.preventDefault();
 
