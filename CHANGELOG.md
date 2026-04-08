@@ -1,3 +1,10 @@
+# [6.20.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.6...v6.20.0) (2026-04-08)
+
+
+### Features
+
+* add unit tests for hashUtils and initialize test coverage tracking state ([e33aabf](https://github.com/jbelew/nms_optimizer-web/commit/e33aabf7156148e291c55ea837d7e372e9c39157))
+
 ## [6.19.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.19.5...v6.19.6) (2026-04-07)
 
 
