@@ -2,14 +2,14 @@
 
 Focus on verifying critical data flows and UI regression.
 
-#### Phase 1: Data Parsing Integration
+#### Phase 1: Data Parsing Integration [checkpoint: 965b20c]
 - [x] Task: Create integration test suite for `useGridDeserializer.tsx` using real `.nms` data fixtures <!-- files: src/hooks/useGridDeserializer.test.tsx, src/__fixtures__/builds/ --> 49886d8
-- [~] Task: Conductor - User Manual Verification 'Data Parsing Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Data Parsing Integration' (Protocol in workflow.md) [checkpoint: 965b20c]
 
 #### Phase 2: UI Interaction Testing
-- [ ] Task: Add Storybook interaction tests for `ShipSelection.tsx` <!-- files: src/components/ShipSelection/ShipSelection.stories.tsx -->
-- [ ] Task: Add Storybook interaction tests for `RecommendedBuild.tsx` <!-- files: src/components/RecommendedBuild/RecommendedBuild.stories.tsx -->
-- [ ] Task: Conductor - User Manual Verification 'UI Interaction Testing' (Protocol in workflow.md)
+- [x] Task: Add Storybook interaction tests for `ShipSelection.tsx` <!-- files: src/components/ShipSelection/ShipSelection.stories.tsx --> 965b20c
+- [x] Task: Add Storybook interaction tests for `RecommendedBuild.tsx` <!-- files: src/components/RecommendedBuild/RecommendedBuild.stories.tsx --> 965b20c
+- [~] Task: Conductor - User Manual Verification 'UI Interaction Testing' (Protocol in workflow.md)
 
 #### Phase 3: Infrastructure & Sharing
 - [ ] Task: Create tests for `setupServiceWorker.ts` lifecycle <!-- files: src/utils/setupServiceWorker.test.ts -->

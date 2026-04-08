@@ -7,6 +7,10 @@ on:
   push:
     branches:
       - dev
+    paths-ignore:
+      - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
 
 concurrency:
   group: deploy-cloudflare-${{ github.ref_name }}
