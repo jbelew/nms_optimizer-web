@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMS Optimizer - Performance History</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --accent: #38bdf8;
+            --perf: #10b981;
+            --acc: #8b5cf6;
+            --best: #f59e0b;
+            --seo: #ec4899;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--accent), #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px; height: 10px; border-radius: 50%;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        .history-list {
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        th { text-align: left; padding: 1rem; opacity: 0.5; font-weight: 400; }
+
+        td {
+            padding: 1rem;
+            background: var(--glass);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td:first-child { border-left: 1px solid var(--border); border-radius: 12px 0 0 12px; }
+        td:last-child { border-right: 1px solid var(--border); border-radius: 0 12px 12px 0; }
+
+        .tag {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .score-pill {
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .score-good { color: #10b981; }
+        .score-ok { color: #f59e0b; }
+        .score-bad { color: #ef4444; }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Performance Insights</h1>
+            <p>Historical trends for NMS Optimizer</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2><span class="dot" style="background: var(--perf)"></span> Performance Trend</h2>
+                <canvas id="perfChart"></canvas>
+            </div>
+            <div class="card">
+                <h2><span class="dot" style="background: var(--acc)"></span> Accessibility Trend</h2>
+                <canvas id="accChart"></canvas>
+            </div>
+            <div class="card">
+                <h2><span class="dot" style="background: var(--best)"></span> Best Practices Trend</h2>
+                <canvas id="bestChart"></canvas>
+            </div>
+            <div class="card">
+                <h2><span class="dot" style="background: var(--seo)"></span> SEO Trend</h2>
+                <canvas id="seoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="history-list">
+            <h2>Recent Runs</h2>
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Commit</th>
+                        <th>Status</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function init() {
+            try {
+                const response = await fetch('data.json');
+                const history = await response.json();
+                
+                // Keep only last 20 for graphs
+                const plotData = history.slice(-20);
+                const labels = plotData.map(d => new Date(d.date).toLocaleDateString());
+
+                const commonOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                        x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                    },
+                    plugins: { legend: { display: false } },
+                    elements: {
+                        line: { tension: 0.4, borderWidth: 3 },
+                        point: { radius: 4, hoverRadius: 6 }
+                    }
+                };
+
+                const createChart = (id, color, key) => {
+                    new Chart(document.getElementById(id), {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [{
+                                data: plotData.map(d => d.scores[key] * 100),
+                                borderColor: color,
+                                background: 'transparent'
+                            }]
+                        },
+                        options: commonOptions
+                    });
+                };
+
+                createChart('perfChart', '#10b981', 'performance');
+                createChart('accChart', '#8b5cf6', 'accessibility');
+                createChart('bestChart', '#f59e0b', 'best-practices');
+                createChart('seoChart', '#ec4899', 'seo');
+
+                // Populate history table
+                const tableBody = document.querySelector('#historyTable tbody');
+                history.reverse().forEach(run => {
+                    const row = document.createElement('tr');
+                    const date = new Date(run.date).toLocaleDateString() + ' ' + new Date(run.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const sha = run.sha.substring(0, 7);
+                    
+                    const getScoreClass = (s) => s >= 0.9 ? 'score-good' : s >= 0.5 ? 'score-ok' : 'score-bad';
+                    
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td><code class="tag">${sha}</code></td>
+                        <td>
+                            <span class="score-pill ${getScoreClass(run.scores.performance)}">P: ${Math.round(run.scores.performance * 100)}</span>
+                            <span class="score-pill ${getScoreClass(run.scores.accessibility)}">A: ${Math.round(run.scores.accessibility * 100)}</span>
+                        </td>
+                        <td><a href="reports/${run.sha}/index.html" target="_blank">View Audit</a></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+            } catch (e) {
+                console.error("Dashboard failed to load history", e);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
