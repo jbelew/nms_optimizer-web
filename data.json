@@ -108,5 +108,15 @@
       "best-practices": 0.96,
       "seo": 1
     }
+  },
+  {
+    "date": "2026-04-08T16:15:34.522Z",
+    "sha": "06a9133f488fb1071dcdde63723a4a38328e102f",
+    "scores": {
+      "performance": 0.88,
+      "accessibility": 0.96,
+      "best-practices": 0.96,
+      "seo": 1
+    }
   }
 ]
