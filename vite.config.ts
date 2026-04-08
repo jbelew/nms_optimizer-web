@@ -461,10 +461,12 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								priority: 100,
 							},
 							{
-								// Core framework runtime
+								// Core framework runtime — MUST be highest priority so React is never
+								// absorbed into a lower-priority vendor chunk (e.g. vendor-markdown-lib),
+								// which would force an eager static import of that chunk.
 								name: "vendor-core",
 								test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-is|use-sync-external-store)[\\/]/,
-								priority: 95,
+								priority: 130,
 							},
 							{
 								// Routing logic

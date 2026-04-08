@@ -110,7 +110,15 @@ vi.mock("./utils/analytics", () => ({
 }));
 
 vi.mock("./components/AppDialog/Base/AppDialog", () => ({
-	default: ({ title, content, isOpen }: { title: string; content: React.ReactNode; isOpen: boolean }) =>
+	default: ({
+		title,
+		content,
+		isOpen,
+	}: {
+		title: string;
+		content: React.ReactNode;
+		isOpen: boolean;
+	}) =>
 		isOpen ? (
 			<div data-testid="app-dialog">
 				<div>{title}</div>
