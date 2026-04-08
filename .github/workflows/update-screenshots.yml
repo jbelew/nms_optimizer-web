@@ -6,12 +6,13 @@ on:
             - "v*.*.*"
     workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
     update-screenshots:
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
-
         steps:
             - name: Check out code
               uses: actions/checkout@v6
@@ -25,10 +26,6 @@ jobs:
                   node-version: "24"
                   cache: "npm"
 
-            - name: Validate package.json and package-lock.json are in sync
-              run: |
-                  echo "Checking if package-lock.json is in sync with package.json..."
-                  npm ci --dry-run --ignore-scripts --legacy-peer-deps
 
             - name: Install dependencies
               run: npm ci --legacy-peer-deps
@@ -53,17 +50,19 @@ jobs:
             - name: Run screenshot script
               run: BASE_URL=http://localhost:3000 npm run screenshot
 
-            - name: Configure Git
-              run: |
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            - name: Commit and push screenshots
-              run: |
-                  git add public/assets/img/screenshots/*.png
-                  if git diff --staged --quiet; then
-                    echo "No screenshot changes to commit"
-                  else
-                    git commit --no-verify -m "chore: update screenshots for ${{ github.ref_name }}"
-                    git push origin HEAD:main
-                  fi
+            - name: Create Pull Request for Screenshots
+              uses: peter-evans/create-pull-request@v8
+              with:
+                  commit-message: "chore: update screenshots for ${{ github.ref_name }}"
+                  committer: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+                  author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+                  branch: "automation/update-screenshots-${{ github.ref_name }}"
+                  title: "chore: update screenshots for ${{ github.ref_name }}"
+                  body: |
+                    Automated screenshot update following version bump to `${{ github.ref_name }}`.
+                    Please review visual changes before merging.
+                  labels: |
+                    automation
+                    screenshots
+                  delete-branch: true
+                  base: main

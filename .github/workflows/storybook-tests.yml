@@ -2,11 +2,11 @@ name: Test Storybook Components
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths-ignore:
       - '.beads/**'
   pull_request:
-    branches: [main]
+    branches: [main, dev]
     paths-ignore:
       - '.beads/**'
   workflow_dispatch:

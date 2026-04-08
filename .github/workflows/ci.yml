@@ -78,11 +78,11 @@ jobs:
           SHA=$(git rev-parse --short HEAD)
           echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
 
-      - name: Build project
+      - name: Build project (Staging/Verification)
         run: npm run build
         env:
-          VITE_SENTRY_ENV: ci
-          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}-ci
+          VITE_SENTRY_ENV: staging
+          VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
@@ -126,7 +126,7 @@ jobs:
 
   release:
     name: Release
-    needs: [lint-test]
+    needs: [lint-test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -227,10 +227,6 @@ jobs:
         with:
           name: dist-production
           path: dist/
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-      - name: Install Wrangler globally
-        run: npm install -g wrangler
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
@@ -267,6 +263,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nms-optimizer-web"
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          # Use HEAD to push the exact release commit/tag checked out above
           branch: HEAD
         env:
           HD_VITE_APP_VERSION: ${{ needs.build-production.outputs.effective-tag }}
@@ -278,6 +275,8 @@ jobs:
   post-deploy-production:
     name: Finalize Production
     needs: [deploy-production-cloudflare, deploy-production-heroku, release]
+    # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Downstream Jobs
@@ -300,22 +299,11 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
           name: dist-bundle
           path: dist/
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-      - name: Install Wrangler globally
-        run: npm install -g wrangler
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
