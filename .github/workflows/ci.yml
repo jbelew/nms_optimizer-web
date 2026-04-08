@@ -85,7 +85,7 @@ jobs:
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-bundle
           path: dist/
@@ -236,7 +236,7 @@ jobs:
           VITE_SENTRY_ENV: production
 
       - name: Upload production artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-production
           path: dist/
