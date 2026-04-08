@@ -112,241 +112,249 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			}),
 			tailwindcss(),
 			// Sentry is positioned after transforms to ensure it captures all generated sourcemaps.
-			sentryVitePlugin({
-				org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
-				project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
-				authToken: sentryAuthToken,
-				telemetry: false,
-				release: {
-					name: appVersion,
-				},
-			}),
-			splashScreen({
-				logoSrc: "assets/svg/loader.svg",
-				splashBg: "#000000",
-				loaderBg: "#00A2C7",
-				loaderType: "dots",
-			}),
-			deferStylesheetsPlugin(),
-			...(!isCloudflarePages
+			...(!process.env.STORYBOOK_BUILD
 				? [
-						compression({
-							algorithm: "brotliCompress",
-							ext: ".br",
-							threshold: 10240,
-							deleteOriginFile: false,
+						sentryVitePlugin({
+							org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
+							project: process.env.SENTRY_PROJECT || env.SENTRY_PROJECT || "nms-optimizer-web",
+							authToken: sentryAuthToken,
+							telemetry: false,
+							release: {
+								name: appVersion,
+							},
 						}),
-						compression({
-							algorithm: "gzip",
-							ext: ".gz",
-							threshold: 10240,
-							deleteOriginFile: false,
+						splashScreen({
+							logoSrc: "assets/svg/loader.svg",
+							splashBg: "#000000",
+							loaderBg: "#00A2C7",
+							loaderType: "dots",
+						}),
+						deferStylesheetsPlugin(),
+						...(!isCloudflarePages
+							? [
+									compression({
+										algorithm: "brotliCompress",
+										ext: ".br",
+										threshold: 10240,
+										deleteOriginFile: false,
+									}),
+									compression({
+										algorithm: "gzip",
+										ext: ".gz",
+										threshold: 10240,
+										deleteOriginFile: false,
+									}),
+								]
+							: []),
+					]
+				: []),
+			...(!process.env.STORYBOOK_BUILD
+				? [
+						visualizer({
+							open: false,
+							gzipSize: true,
+							brotliSize: true,
+							filename: "bundle/stats.html",
+						}),
+						visualizer({
+							open: false,
+							gzipSize: true,
+							brotliSize: true,
+							filename: "bundle/stats.json",
+							template: "raw-data",
+						}),
+						VitePWA({
+							manifestFilename: "manifest.json",
+							registerType: "prompt",
+							includeAssets: [
+								"favicon.svg",
+								"robots.txt",
+								"/assets/img/favicons/apple-touch-icon.png",
+								"assets/fonts/*.woff2",
+								"assets/locales/*/translation.json",
+							],
+							workbox: {
+								clientsClaim: false,
+								skipWaiting: false,
+								navigationPreload: false,
+								cleanupOutdatedCaches: true,
+								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+								navigateFallback: undefined,
+								dontCacheBustURLsMatching: /\.(js|css|woff2?)$/,
+								runtimeCaching: [
+									{
+										urlPattern: /\/version\.json$/,
+										handler: "NetworkOnly",
+									},
+									{
+										urlPattern: /^https:\/\/nms-optimizer\.app\/.*\.html$/,
+										handler: "NetworkFirst",
+										options: {
+											cacheName: "html-cache",
+											networkTimeoutSeconds: 3,
+											expiration: {
+												maxEntries: 10,
+												maxAgeSeconds: 300,
+											},
+											cacheableResponse: {
+												statuses: [0, 200],
+											},
+										},
+									},
+									{
+										urlPattern: ({ request }) => request.destination === "image",
+										handler: "CacheFirst",
+										options: {
+											cacheName: "images-cache",
+											expiration: {
+												maxEntries: 1000,
+												maxAgeSeconds: 31536000,
+											},
+											cacheableResponse: {
+												statuses: [0, 200],
+											},
+											plugins: [
+												{
+													cacheKeyWillBeUsed: async ({ request }) => {
+														const url = new URL(request.url);
+														url.search = "";
+														return new Request(url.toString(), {
+															method: request.method,
+														});
+													},
+												},
+											],
+										},
+									},
+									{
+										urlPattern: ({ request }) => request.destination === "font",
+										handler: "CacheFirst",
+										options: {
+											cacheName: "fonts-cache",
+											expiration: {
+												maxEntries: 30,
+												maxAgeSeconds: 31536000,
+											},
+											plugins: [
+												{
+													cacheKeyWillBeUsed: async ({ request }) => {
+														const url = new URL(request.url);
+														url.search = "";
+														return new Request(url.toString(), {
+															method: request.method,
+														});
+													},
+												},
+											],
+										},
+									},
+									{
+										urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
+										handler: "StaleWhileRevalidate",
+										options: {
+											cacheName: "translations-cache",
+											expiration: {
+												maxEntries: 20,
+												maxAgeSeconds: 86400,
+											},
+										},
+									},
+									{
+										urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
+										handler: "NetworkFirst",
+										method: "GET",
+										options: {
+											cacheName: "api-cache",
+											networkTimeoutSeconds: 5,
+											expiration: {
+												maxEntries: 50,
+												maxAgeSeconds: 60 * 60 * 24, // 1 day
+											},
+											cacheableResponse: {
+												statuses: [0, 200],
+											},
+										},
+									},
+									{
+										urlPattern: /^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
+										handler: "NetworkOnly",
+										method: "POST",
+									},
+									{
+										urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
+										handler: "NetworkFirst",
+										options: {
+											cacheName: "google-analytics-cache",
+											networkTimeoutSeconds: 3,
+											expiration: {
+												maxEntries: 50,
+												maxAgeSeconds: 86400,
+											},
+										},
+									},
+									{
+										urlPattern: /^https:\/\/www\.google-analytics\.com\//,
+										handler: "NetworkOnly",
+									},
+								],
+							},
+							manifest: {
+								id: "/",
+								name: "No Man's Sky Technology Layout Optimizer",
+								short_name: "NMS Optimizer",
+								description:
+									"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
+								start_url: "/",
+								scope: "/",
+								display: "standalone",
+								background_color: "#274860",
+								theme_color: "#003848",
+								orientation: "any",
+								icons: [
+									{
+										src: "/assets/img/favicons/pwa-192x192.png",
+										sizes: "192x192",
+										type: "image/png",
+									},
+									{
+										src: "/assets/img/favicons/pwa-512x512.png",
+										sizes: "512x512",
+										type: "image/png",
+									},
+									{
+										src: "/assets/img/favicons/pwa-maskable-512x512.png",
+										sizes: "512x512",
+										type: "image/png",
+										purpose: "maskable",
+									},
+								],
+								screenshots: [
+									{
+										src: "/assets/img/screenshots/screenshot_desktop.png",
+										sizes: "1280x880",
+										type: "image/png",
+										form_factor: "wide",
+										label: "Main application view showing the technology grid on desktop.",
+									},
+									{
+										src: "/assets/img/screenshots/screenshot_tablet.png",
+										sizes: "800x1280",
+										type: "image/png",
+										form_factor: "narrow",
+										label: "Main application view on tablet.",
+									},
+									{
+										src: "/assets/img/screenshots/screenshot_mobile.png",
+										sizes: "375x600",
+										type: "image/png",
+										form_factor: "narrow",
+										label: "Main application view on mobile.",
+									},
+								],
+							},
 						}),
 					]
 				: []),
-			visualizer({
-				open: false,
-				gzipSize: true,
-				brotliSize: true,
-				filename: "bundle/stats.html",
-			}),
-			visualizer({
-				open: false,
-				gzipSize: true,
-				brotliSize: true,
-				filename: "bundle/stats.json",
-				template: "raw-data",
-			}),
-			VitePWA({
-				manifestFilename: "manifest.json",
-				registerType: "prompt",
-				includeAssets: [
-					"favicon.svg",
-					"robots.txt",
-					"/assets/img/favicons/apple-touch-icon.png",
-					"assets/fonts/*.woff2",
-					"assets/locales/*/translation.json",
-				],
-				workbox: {
-					clientsClaim: false,
-					skipWaiting: false,
-					navigationPreload: false,
-					cleanupOutdatedCaches: true,
-					maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-					navigateFallback: undefined,
-					dontCacheBustURLsMatching: /\.(js|css|woff2?)$/,
-					runtimeCaching: [
-						{
-							urlPattern: /\/version\.json$/,
-							handler: "NetworkOnly",
-						},
-						{
-							urlPattern: /^https:\/\/nms-optimizer\.app\/.*\.html$/,
-							handler: "NetworkFirst",
-							options: {
-								cacheName: "html-cache",
-								networkTimeoutSeconds: 3,
-								expiration: {
-									maxEntries: 10,
-									maxAgeSeconds: 300,
-								},
-								cacheableResponse: {
-									statuses: [0, 200],
-								},
-							},
-						},
-						{
-							urlPattern: ({ request }) => request.destination === "image",
-							handler: "CacheFirst",
-							options: {
-								cacheName: "images-cache",
-								expiration: {
-									maxEntries: 1000,
-									maxAgeSeconds: 31536000,
-								},
-								cacheableResponse: {
-									statuses: [0, 200],
-								},
-								plugins: [
-									{
-										cacheKeyWillBeUsed: async ({ request }) => {
-											const url = new URL(request.url);
-											url.search = "";
-											return new Request(url.toString(), {
-												method: request.method,
-											});
-										},
-									},
-								],
-							},
-						},
-						{
-							urlPattern: ({ request }) => request.destination === "font",
-							handler: "CacheFirst",
-							options: {
-								cacheName: "fonts-cache",
-								expiration: {
-									maxEntries: 30,
-									maxAgeSeconds: 31536000,
-								},
-								plugins: [
-									{
-										cacheKeyWillBeUsed: async ({ request }) => {
-											const url = new URL(request.url);
-											url.search = "";
-											return new Request(url.toString(), {
-												method: request.method,
-											});
-										},
-									},
-								],
-							},
-						},
-						{
-							urlPattern: /\/assets\/locales\/.*\/translation\.json$/,
-							handler: "StaleWhileRevalidate",
-							options: {
-								cacheName: "translations-cache",
-								expiration: {
-									maxEntries: 20,
-									maxAgeSeconds: 86400,
-								},
-							},
-						},
-						{
-							urlPattern: /^https:\/\/api\.nms-optimizer\.app\/.*$/,
-							handler: "NetworkFirst",
-							method: "GET",
-							options: {
-								cacheName: "api-cache",
-								networkTimeoutSeconds: 5,
-								expiration: {
-									maxEntries: 50,
-									maxAgeSeconds: 60 * 60 * 24, // 1 day
-								},
-								cacheableResponse: {
-									statuses: [0, 200],
-								},
-							},
-						},
-						{
-							urlPattern: /^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
-							handler: "NetworkOnly",
-							method: "POST",
-						},
-						{
-							urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
-							handler: "NetworkFirst",
-							options: {
-								cacheName: "google-analytics-cache",
-								networkTimeoutSeconds: 3,
-								expiration: {
-									maxEntries: 50,
-									maxAgeSeconds: 86400,
-								},
-							},
-						},
-						{
-							urlPattern: /^https:\/\/www\.google-analytics\.com\//,
-							handler: "NetworkOnly",
-						},
-					],
-				},
-				manifest: {
-					id: "/",
-					name: "No Man's Sky Technology Layout Optimizer",
-					short_name: "NMS Optimizer",
-					description:
-						"Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
-					start_url: "/",
-					scope: "/",
-					display: "standalone",
-					background_color: "#274860",
-					theme_color: "#003848",
-					orientation: "any",
-					icons: [
-						{
-							src: "/assets/img/favicons/pwa-192x192.png",
-							sizes: "192x192",
-							type: "image/png",
-						},
-						{
-							src: "/assets/img/favicons/pwa-512x512.png",
-							sizes: "512x512",
-							type: "image/png",
-						},
-						{
-							src: "/assets/img/favicons/pwa-maskable-512x512.png",
-							sizes: "512x512",
-							type: "image/png",
-							purpose: "maskable",
-						},
-					],
-					screenshots: [
-						{
-							src: "/assets/img/screenshots/screenshot_desktop.png",
-							sizes: "1280x880",
-							type: "image/png",
-							form_factor: "wide",
-							label: "Main application view showing the technology grid on desktop.",
-						},
-						{
-							src: "/assets/img/screenshots/screenshot_tablet.png",
-							sizes: "800x1280",
-							type: "image/png",
-							form_factor: "narrow",
-							label: "Main application view on tablet.",
-						},
-						{
-							src: "/assets/img/screenshots/screenshot_mobile.png",
-							sizes: "375x600",
-							type: "image/png",
-							form_factor: "narrow",
-							label: "Main application view on mobile.",
-						},
-					],
-				},
-			}),
 		],
 		resolve: {
 			tsconfigPaths: true,
