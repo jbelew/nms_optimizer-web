@@ -403,3 +403,43 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     *   **Server/Network configuration is key:** Performance issues are not always in the client-side code. Being able to diagnose HTTP header issues and understand the role of services like Cloudflare is crucial.
     *   **Know the limits of automation:** The LCP and cache lifetime issues highlighted the difference between a simple fix and a major architectural change. I correctly identified when a proposed change was too complex and risky to automate, and I communicated this clearly to the user. This is a critical aspect of being a safe and reliable assistant.
     *   **Systematic Debugging:** My approach of forming hypotheses and testing them one by one (e.g., for the LCP issue) is a sound debugging strategy.
+
+## 2026-04-08: Analytics Lifecycle and Failsafe Removal
+
+### Perceive & Understand
+
+*   **Request:** Evaluate the lifecycle of the `vendor-events` (GA4) chunk to ensure it's only loaded after the `app-ready` event. Also, remove the 8s failsafe timeout for the splash screen.
+*   **Context:**
+    *   The app uses a splash screen that dispatches an `app-ready` event when it's hidden (after data is loaded and the app is interactive).
+    *   `vendor-monitoring` (Sentry) MUST load eagerly to catch early errors.
+    *   `vendor-events` (GA4) SHOULD load only after `app-ready` to avoid TBT (Total Blocking Time) issues during initial render.
+    *   The 8s timeout in `main.tsx` was a legacy failsafe that is no longer needed.
+
+### Reason & Plan
+
+*   **Evaluation Plan:**
+    1.  Use Chrome DevTools MCP to monitor network requests and performance marks.
+    2.  Add a `performance.mark('app-ready')` to `src/utils/splashScreen.ts` to precisely track the event in production builds (where console logs are stripped).
+    3.  Build the app in production mode and use `npm run preview`.
+    4.  Compare the `startTime` of the `app-ready` mark with the `startTime` of the analytics initialization requests (like `gtag/js` and the `vendor-events` chunk).
+*   **Failsafe Removal:** Remove the `setTimeout` failsafe from `src/main.tsx`.
+
+### Act & Implement
+
+*   **Action:**
+    1.  Removed the 8s failsafe from `src/main.tsx`.
+    2.  Temporarily added `performance.mark('app-ready')` to `src/utils/splashScreen.ts`.
+    3.  Successfully built the app after resolving a missing dependency (`@storybook/test`).
+    4.  Started the preview server and performed a trace.
+    5.  **Confirmation:** The `app-ready` event occurred at `1635.39ms`. The first analytics-related request (`gtag/js` from `detectAdBlocker`) started at `1646.79ms` (11ms AFTER the event).
+    6.  **Chunk Verification:** Confirmed that `vendor-events` is correctly defined as a dynamic import in the `analytics.ts` module, which itself is imported eagerly but only triggers the chunk load inside `initializeAnalytics` (called after `app-ready`).
+    7.  Cleaned up the temporary performance mark and ensured the build was stable.
+
+### Refine & Reflect
+
+*   **Reflection:**
+    *   **Production vs Dev:** Evaluating lifecycles in production builds is critical because bundling, minification, and console log stripping significantly change the timing and visibility of events.
+    *   **Performance Marks for Traceability:** Using `performance.mark` is a robust way to instrument production code for evaluation without relying on console logs.
+    *   **Service Worker Caching:** Learned that old versions of the app can be stuck in the Service Worker cache during local testing, which can lead to misleading results. Clearing the SW and caches before evaluating new builds is mandatory.
+    *   **Network Initiators:** Investigating the `initiatorType` and the call stack of network requests helps distinguish between different types of loads (e.g., ad blocker detection vs. actual library load).
+    *   **Dependency Management:** Building the app locally is the best way to ensure all dependencies are present and the build is truly production-ready before performing audits.

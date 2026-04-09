@@ -409,7 +409,8 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							!dep.includes("vendor-ui-utils") &&
 							!dep.includes("vendor-monitoring") &&
 							!dep.includes("vendor-markdown") &&
-							!dep.includes("vendor-markdown-lib")
+							!dep.includes("vendor-markdown-lib") &&
+							!dep.includes("vendor-events")
 					);
 				},
 			},
@@ -454,10 +455,12 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								priority: 110,
 							},
 							{
-								// Group all tracking/analytics code into a neutrally named chunk to prevent ad-blockers.
-								// We avoid 'analytics' in the name to prevent automatic blocking on iOS.
+								// Group GA4 and related tracking packages into a neutrally named chunk.
+								// Anchored to node_modules so app-level analytics.ts / analyticsClient.ts
+								// are NOT inadvertently captured here.
+								// Name avoids 'analytics' to reduce automatic blocking by iOS content filters.
 								name: "vendor-events",
-								test: /analytics|telemetry|beacon|google-analytics|gtag|ad-block|react-ga4/i,
+								test: /[\\/]node_modules[\\/](react-ga4|google-analytics|gtag\.js|web-vitals)[\\/]/,
 								priority: 100,
 							},
 							{

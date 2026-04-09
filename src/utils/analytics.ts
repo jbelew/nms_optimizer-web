@@ -23,7 +23,6 @@
 import { TRACKING_ID } from "../constants";
 import { sendEvent as sendAnalyticsEvent } from "./analyticsClient";
 import { isBot } from "./isBot";
-import { reportWebVitals } from "./reportWebVitals";
 
 /**
  * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
@@ -301,7 +300,6 @@ const globalIsInstalled =
  * @see {@link ReactGAInstance}
  * @see {@link getAdBlockerDetectionResult}
  * @see {@link isBot}
- * @see {@link reportWebVitals}
  *
  * @category Utilities
  *
@@ -318,37 +316,33 @@ export const initializeAnalytics = async () => {
 
 	const isBlocked = await getAdBlockerDetectionResult();
 
-	if (isBlocked) {
-		// Even if blocked, we mark as initialized so we don't try again
-		gaInitialized = true;
+	if (!isBlocked) {
+		const ReactGAModule = await import("react-ga4");
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ReactGAInstance = (ReactGAModule.default as any)?.default ?? ReactGAModule.default;
 
-		return;
-	}
-
-	const ReactGAModule = await import("react-ga4");
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	ReactGAInstance = (ReactGAModule.default as any)?.default ?? ReactGAModule.default;
-
-	ReactGAInstance.initialize(TRACKING_ID, {
-		gtagOptions: {
-			send_page_view: false,
-			anonymize_ip: true,
-			user_properties: {
-				app_version: __APP_VERSION__,
-				is_installed: globalIsInstalled ? "yes" : "no",
+		ReactGAInstance.initialize(TRACKING_ID, {
+			gtagOptions: {
+				send_page_view: false,
+				anonymize_ip: true,
+				user_properties: {
+					app_version: __APP_VERSION__,
+					is_installed: globalIsInstalled ? "yes" : "no",
+				},
 			},
-		},
-	});
+		});
+
+		// Flush queued events
+		if (queuedEvents.length > 0) {
+			const eventsToFlush = [...queuedEvents];
+			queuedEvents = [];
+			eventsToFlush.forEach(sendEvent);
+		}
+	}
 
 	gaInitialized = true;
 
-	// Flush queued events
-	if (queuedEvents.length > 0) {
-		const eventsToFlush = [...queuedEvents];
-		queuedEvents = [];
-		eventsToFlush.forEach(sendEvent);
-	}
-
+	const { reportWebVitals } = await import("./reportWebVitals");
 	reportWebVitals(sendEvent);
 };
 

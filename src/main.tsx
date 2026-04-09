@@ -28,7 +28,6 @@ import { initializeAnalytics } from "./utils/analytics";
 import { initializeAnalyticsClient } from "./utils/analyticsClient";
 import { preloadInitialState } from "./utils/apiPreload";
 import { initializeSentry } from "./utils/sentry";
-import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Initialize Sentry synchronously as early as possible
 // This is required for React Router tracing and early error catching
@@ -77,15 +76,6 @@ if (typeof window !== "undefined") {
 		// Suppress known non-critical rejections if needed
 		console.error("Unhandled promise rejection:", event.reason);
 	});
-
-	// Failsafe: hide splash screen after 8 seconds if still showing
-	setTimeout(() => {
-		const splash = document.querySelector(".vpss");
-
-		if (splash) {
-			hideSplashScreenAndShowBackground();
-		}
-	}, 8000);
 
 	// Listen for the custom "app-ready" event dispatched when the splash screen is hidden
 	// This defers non-critical initializations until the critical rendering path is complete
