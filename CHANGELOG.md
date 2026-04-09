@@ -1,3 +1,10 @@
+# [6.23.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.22.1...v6.23.0) (2026-04-09)
+
+
+### Features
+
+* optimize analytics lifecycle and remove splash failsafe ([75f0d95](https://github.com/jbelew/nms_optimizer-web/commit/75f0d95037e5396993fa3d6c59fa9bae4ae5a8e2))
+
 ## [6.22.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.22.0...v6.22.1) (2026-04-08)
 
 
