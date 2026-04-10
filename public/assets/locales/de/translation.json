@@ -26,11 +26,12 @@
         "generateName": "Erzeugen",
         "buildManagement": "Build-Management",
         "utilities": "Dialoge und App-Steuerelemente",
-        "privacy": "Datenschutzrichtlinie"
+        "privacy": "Datenschutzrichtlinie",
+        "screenshot": "Erfassen Sie den Build-Screenshot"
     },
     "gridTable": {
         "optimizing": "Optimierung!",
-        "tapInstructions": "Einmal tippen, um eine Zelle zu deaktivieren, oder zweimal tippen, um sie als supergeladen zu markieren."
+        "tapInstructions": "Tippen Sie einmal, um einen Steckplatz zu deaktivieren, oder zweimal, um ihn als aufgeladen zu markieren."
     },
     "gridControls": {
         "activateRow": "Reihe aktivieren",
@@ -104,13 +105,13 @@
             "title": "Willkommen bei NMS Optimizer!",
             "description": "Eine Kurzanleitung, die Ihnen hilft, dieses Tool optimal zu nutzen:",
             "item1": "Wählen Sie über das <icon/>-Symbol eine <strong>Plattform</strong> aus.",
-            "item2": "<strong>Klicken</strong> oder <strong>doppeltippen</strong> Sie auf eine Zelle, um sie als <strong>Supercharged</strong> zu markieren.",
-            "item3": "<strong>Strg-Klick</strong> (Windows) / <strong>⌘-Klick</strong> (Mac) / <strong>Tippen</strong> (Mobilgerät), um eine Zelle aktiv oder inaktiv zu schalten.",
             "item4": "Verwenden Sie <strong>Zeilenschalter</strong>, um ganze Reihen zu aktivieren oder zu deaktivieren (deaktiviert, sobald Module platziert sind).",
             "item5": "Verwenden Sie die Schaltfläche <strong>Modulauswahl</strong> <icon/>, um Module hinzuzufügen oder zu entfernen.",
             "viewInstructions": "Weitere Informationen finden Sie in der <1>vollständigen Anleitung</1>.",
             "getStarted": "Legen Sie los",
-            "item6": "Schalten Sie den <strong>Fokusmodus</strong> <icon/> um, um visuelle Ablenkungen zu minimieren und die Lesbarkeit der Schriftart für ein klareres Erlebnis zu optimieren."
+            "item6": "Schalten Sie den <strong>Fokusmodus</strong> <icon/> um, um visuelle Ablenkungen zu minimieren und die Lesbarkeit der Schriftart für ein klareres Erlebnis zu optimieren.",
+            "item2": "<strong>Klicken</strong> oder <strong>doppeltippen</strong> Sie auf einen Slot, um ihn als <strong>Supercharged</strong> zu markieren.",
+            "item3": "<strong>Strg-Klick</strong> (Windows) / <strong>⌘-Klick</strong> (Mac) / <strong>Tippen</strong> (Mobilgerät), um einen Slot aktiv oder inaktiv zu schalten."
         }
     },
     "dialog": {
@@ -141,6 +142,14 @@
         "buildLoadError": {
             "title": "Fehler",
             "description": "Build konnte nicht geladen werden"
+        },
+        "screenshotSaved": {
+            "title": "Erfolg",
+            "description": "Screenshot erfolgreich heruntergeladen"
+        },
+        "screenshotError": {
+            "title": "Fehler",
+            "description": "Screenshot konnte nicht aufgenommen werden"
         }
     },
     "footer": {
@@ -639,18 +648,18 @@
         },
         "privacyPageTitle": "NMS Optimizer-Datenschutzrichtlinie: Ihre Daten und Sicherheit",
         "privacyDescription": "Lesen Sie die Datenschutzrichtlinie von NMS Optimizer. Erfahren Sie, wie wir mit Ihren Daten umgehen, wie wir uns zum Datenschutz verpflichten und wie wir anonyme Analysen nutzen.",
-        "mainPageTitle": "NMS Optimizer: No Man's Sky Tech Layout & Adjacency Bonus-Rechner",
-        "appDescription": "Finden Sie die besten No Man's Sky-Technologie-Layouts für Ihr Raumschiff, Ihre Corvette, Ihr Multitool, Ihren Exosuit und Ihr Exocraft. Optimieren Sie Nachbarschaftsboni und aufgeladene Slots für Spitzenleistungen.",
-        "instructionsPageTitle": "Anweisungen zum NMS-Optimierer: Verwendung, Module und aufgeladene Zellen",
         "instructionsDescription": "Vollständige Anweisungen zur Verwendung der NMS Optimizer-App. Erfahren Sie, wie Sie Plattformen auswählen, aufgeladene Slots markieren, Layouts optimieren und Nachbarschaftsboni für Raumschiffe, Korvetten, Multitools und mehr maximieren.",
-        "aboutPageTitle": "Über NMS Optimizer: Wie die ML-gestützte Tech-Layout-Optimierung funktioniert",
         "aboutDescription": "Erfahren Sie, wie NMS Optimizer maschinelles Lernen und fortschrittliche Algorithmen nutzt, um die absolut beste Modulplatzierung für Ihre Starship-, Corvette- und Multitool-Layouts zu finden.",
         "changelogPageTitle": "NMS Optimizer Changelog: Neueste Updates, Funktionen und Verbesserungen",
         "changelogDescription": "Sehen Sie sich die neuesten Updates, neuen Funktionen und Fehlerbehebungen für den NMS Optimizer an. Bleiben Sie mit der Entwicklung des besten No Man's Sky-Layout-Tools auf dem Laufenden.",
         "userstatsPageTitle": "NMS-Optimiererstatistiken: Supergeladene Community-Builds",
         "userstatsDescription": "Entdecken Sie die Benutzerstatistiken von NMS Optimizer, um die beliebtesten leistungsstarken No Man's Sky-Technologien für ausgewählte Plattformtypen zu sehen.",
         "translationPageTitle": "Helfen Sie mit, NMS Optimizer zu übersetzen: Treten Sie unserer Lokalisierungs-Community bei",
-        "translationDescription": "Helfen Sie mit, den NMS-Optimierer in Ihre Sprache zu übersetzen und ihn für mehr No Man's Sky-Spieler weltweit zugänglich zu machen."
+        "translationDescription": "Helfen Sie mit, den NMS-Optimierer in Ihre Sprache zu übersetzen und ihn für mehr No Man's Sky-Spieler weltweit zugänglich zu machen.",
+        "mainPageTitle": "NMS Optimizer: Tech Layout Builder und Adjazenzrechner",
+        "appDescription": "Berechnen Sie optimale No Man's Sky-Technologie-Layouts für Ihr Raumschiff, Ihre Corvette, Ihr Multitool, Ihren Exosuit und Ihr Exocraft. Behandelt Adjacency-Boni und die Platzierung von Super-Slots, sodass Sie dies nicht tun müssen.",
+        "instructionsPageTitle": "Anweisungen zum NMS-Optimierer: Module und aufgeladene Steckplätze",
+        "aboutPageTitle": "Über NMS Optimizer: So funktioniert die Layout-Optimierung"
     },
     "installPrompt": {
         "title": "Zum Startbildschirm hinzufügen",
@@ -663,10 +672,10 @@
     },
     "restrictions": {
         "title": "Aktion nicht verfügbar",
-        "superchargedLimit": "Sie können nur bis zu vier aufgeladene Zellen haben.",
-        "superchargedFixed": "Die Standorte der Supercharged-Zellen für Exocraft und Exosuits können nicht geändert werden.",
-        "gridFixed": "Die Standorte der Zellen sind für Exocraft festgelegt und können nicht geändert werden.",
-        "moduleLocked": "Zellen mit Modulen können nicht geändert werden. Entfernen Sie zuerst die Modulgruppe.",
-        "rowLimit": "Supergeladene Zellen können nur in den ersten vier Reihen platziert werden."
+        "superchargedLimit": "Sie können nur bis zu vier Supercharged-Slots haben.",
+        "superchargedFixed": "Die Standorte der Supercharged-Slots für Exocraft und Exosuits können nicht geändert werden.",
+        "gridFixed": "Die Slot-Standorte sind für Exocraft festgelegt und können nicht geändert werden.",
+        "moduleLocked": "Steckplätze mit Modulen können nicht geändert werden. Entfernen Sie zuerst die Modulgruppe.",
+        "rowLimit": "Supercharged-Slots können nur in den ersten vier Reihen platziert werden."
     }
 }

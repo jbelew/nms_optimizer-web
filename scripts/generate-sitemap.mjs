@@ -26,16 +26,22 @@ const PRIORITIES = {
 	about: "1.0",
 	instructions: "0.9",
 	userstats: "0.8",
-	changelog: "0.7",
+	changelog: "0.3",
 	translation: "0.6",
 };
 
+/** Crawl frequencies — changelog is low-value for search so reduce its frequency */
+const CHANGE_FREQUENCIES = {
+	changelog: "monthly",
+};
+
 const pages = [
-	{ path: null, url: `${baseUrl}/`, priority: PRIORITIES.root, lastmod: today },
+	{ path: null, url: `${baseUrl}/`, priority: PRIORITIES.root, changefreq: "weekly", lastmod: today },
 	...KNOWN_DIALOGS.map((page) => ({
 		path: PAGE_TO_FILE_MAPPING[page],
 		url: `${baseUrl}/${page}`,
 		priority: PRIORITIES[page] || "0.5",
+		changefreq: CHANGE_FREQUENCIES[page] || "weekly",
 	})),
 ];
 
@@ -83,7 +89,7 @@ ${hreflangLinks}
 ${xDefaultLink}
     <lastmod>${lastmod}</lastmod>
     <priority>${page.priority}</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>${page.changefreq}</changefreq>
   </url>`;
 	});
 });

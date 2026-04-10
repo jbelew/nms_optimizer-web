@@ -1,21 +1,21 @@
-# Instrucciones del optimizador NMS: uso, módulos y celdas sobrealimentadas
+# Instrucciones del optimizador NMS: uso, módulos y ranuras supercargadas
 
 ## Comenzando con la cuadrícula
 
 - Seleccione una **Plataforma** (Starship, Multi-Tool, Corvette, etc.) usando el ícono <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Haga clic** o **toque dos veces** (móvil) en una celda para marcarla como **Supercargada**.
-- **Ctrl y clic (Windows) / ⌘ y clic (Mac) / toque único (móvil)** para alternar una celda **activa** o **inactiva**.
+- **Haga clic** o **toque dos veces** (móvil) en una ranura para marcarla como **Supercargada**.
+- **Ctrl y clic (Windows) / ⌘ y clic (Mac) / toque único (móvil)** para alternar una ranura **activa** o **inactiva**.
 - Utilice **cambios de fila** para habilitar o deshabilitar filas enteras. *(El cambio de filas se desactiva una vez que se colocan los módulos).*
 - Utilice el botón **selección de módulo** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para agregar o eliminar módulos individuales dentro de un grupo de tecnología.
 
 > 💡 **Nota:**
-> Exosuits y Exocraft tienen rejillas fijas. Las células de Exocraft no se pueden modificar. En los Exosuits, solo se pueden cambiar los estados activo/inactivo; los diseños de las ranuras sobrealimentadas son fijos.
+> Los Exosuits y Exocraft tienen rejillas fijas. Las ranuras de Exocraft no se pueden modificar. En los Exosuits, solo se pueden cambiar los estados activo/inactivo; los diseños de las ranuras sobrealimentadas son fijos.
 
 ## Antes de comenzar
 
 Esta herramienta está diseñada para **optimizar el final del juego** y funciona mejor cuando:
 
-- La mayoría o todas las celdas de la cuadrícula están desbloqueadas.
+- La mayoría o todos los espacios de la cuadrícula están desbloqueados.
 - Todas las tecnologías relevantes están disponibles.
 - Tienes **tres módulos de actualización** por tecnología.
 
@@ -23,12 +23,12 @@ Se admiten configuraciones parciales, pero los resultados se optimizan para plat
 
 ## Consejos de uso
 
-Las celdas sobrealimentadas son limitadas: la ubicación es importante.
+Las ranuras supercargadas son limitadas: la ubicación es importante.
 
-- **No asigne todas las celdas supercargadas a la primera tecnología que coloque.** Esto a menudo bloquea diseños generales más sólidos más adelante.
-- Empiece por asignar **2 o 3 celdas supercargadas a una tecnología de alto impacto**, no todas.
-- Reserve al menos **una o más celdas supercargadas** para una **tecnología de segunda prioridad** para mejorar la efectividad total.
-- Una vez que haya utilizado todas sus celdas supercargadas, priorice las tecnologías con **números de módulos más grandes** antes de que el espacio se vea limitado.
+- **No asigne todas las ranuras supercargadas a la primera tecnología que coloque.** Esto a menudo bloquea diseños generales más fuertes más adelante.
+- Comience asignando **2 o 3 espacios supercargados a una tecnología de alto impacto**, no todos.
+- Reserve al menos **una o más ranuras supercargadas** para una **tecnología de segunda prioridad** para mejorar la efectividad total.
+- Una vez que haya utilizado todas sus ranuras supercargadas, priorice las tecnologías con **números de módulos más grandes** antes de que el espacio se vea limitado.
 - Deje que el solucionador se encargue de la colocación; su función es **establecer prioridades y distribución**.
 
 Si hay poco espacio, es posible que tengas que restablecer y resolver las tecnologías en un orden diferente para evitar una **Alerta de optimización**.
@@ -36,7 +36,7 @@ Si hay poco espacio, es posible que tengas que restablecer y resolver las tecnol
 ## Consejo profesional
 
 El solucionador utiliza ventanas fijas dimensionadas según el número de módulos de cada tecnología para encontrar ubicaciones que aprovechen el espacio.
-Si los resultados no son ideales, **deshabilite temporalmente las celdas** para guiar al solucionador hacia un mejor diseño.
+Si los resultados no son ideales, **deshabilite temporalmente las ranuras** para guiar al solucionador hacia un mejor diseño.
 
 ## Etiquetas Theta / Tau / Sigma
 
@@ -62,14 +62,14 @@ Ignora las letras de clase (S, X, etc.) y compara estadísticas:
 
 Los Corvettes se diferencian de otras plataformas: pueden tener **hasta tres conjuntos de mejoras independientes**.
 
-- **Las mejoras cosméticas** se muestran como `Cn`.
+- **Las mejoras cosméticas** se muestran como "Cn".
 - **Las actualizaciones del reactor** se muestran como `Rn`.
 
 El solucionador puede sugerir mejoras cosméticas para mejorar el rendimiento sobre la apariencia, aunque las diferencias suelen ser menores.
 
 ## Construcciones recomendadas
 
-Para **Exosuits** y **Exocraft**, las celdas sobrealimentadas son fijas y los diseños viables son limitados.
+Para **Exosuits** y **Exocraft**, las ranuras supercargadas son fijas y los diseños viables son limitados.
 La herramienta proporciona **compilaciones recomendadas cuidadosamente seleccionadas** que reflejan combinaciones óptimas.
 
 Se aceptan sugerencias y diseños alternativos a través de las discusiones del proyecto:

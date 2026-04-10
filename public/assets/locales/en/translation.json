@@ -31,7 +31,7 @@
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
-		"tapInstructions": "Tap once to disable a cell, or double-tap to mark it as supercharged."
+		"tapInstructions": "Tap once to disable a slot, or double-tap to mark it as supercharged."
 	},
 	"gridControls": {
 		"activateRow": "Activate Row",
@@ -77,8 +77,8 @@
 			"title": "Welcome to NMS Optimizer!",
 			"description": "A quick start guide to help you get the most out of this tool:",
 			"item1": "Select a <strong>Platform</strong> using the <icon/> icon.",
-			"item2": "<strong>Click</strong> or <strong>double-tap</strong> a cell to mark it <strong>Supercharged</strong>.",
-			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>tap</strong> (Mobile) to toggle a cell active or inactive.",
+			"item2": "<strong>Click</strong> or <strong>double-tap</strong> a slot to mark it <strong>Supercharged</strong>.",
+			"item3": "<strong>Ctrl-click</strong> (Windows) / <strong>⌘-click</strong> (Mac) / <strong>tap</strong> (Mobile) to toggle a slot active or inactive.",
 			"item4": "Use <strong>row toggles</strong> to enable or disable entire rows (disabled once modules are placed).",
 			"item5": "Use the <strong>module selection</strong> <icon/> button to add or remove modules.",
 			"item6": "Toggle <strong>Focus Mode</strong> <icon/> to minimize visual distractions and optimize font legibility for a clearer experience.",
@@ -630,11 +630,11 @@
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky",
-		"appDescription": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance.",
-		"instructionsPageTitle": "NMS Optimizer Instructions: Usage, Modules & Supercharged Cells",
+		"mainPageTitle": "NMS Optimizer: Tech Layout Builder & Adjacency Calculator",
+		"appDescription": "Calculate optimal No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Handles adjacency bonuses and supercharged slot placement so you don't have to.",
+		"instructionsPageTitle": "NMS Optimizer Instructions: Modules & Supercharged Slots",
 		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
-		"aboutPageTitle": "About NMS Optimizer: How the ML-Powered Tech Layout Optimization Works",
+		"aboutPageTitle": "About NMS Optimizer: How the Layout Optimization Works",
 		"aboutDescription": "Learn how NMS Optimizer uses machine learning and advanced algorithms to find the absolute best module placement for your Starship, Corvette, and Multitool layouts.",
 		"changelogPageTitle": "NMS Optimizer Changelog: Latest Updates, Features & Improvements",
 		"changelogDescription": "See the latest updates, new features, and bug fixes for the NMS Optimizer. Stay up-to-date with the development of the best No Man's Sky layout tool.",
@@ -672,10 +672,10 @@
 	},
 	"restrictions": {
 		"title": "Action Unavailable",
-		"superchargedLimit": "You can only have up to four supercharged cells.",
-		"superchargedFixed": "Supercharged cell locations for Exocraft and Exosuits can’t be changed.",
-		"gridFixed": "Cell locations are fixed for Exocraft and can’t be changed.",
-		"moduleLocked": "Cells with modules can’t be changed. Remove the module group first.",
-		"rowLimit": "Supercharged cells can only be placed in the first four rows."
+		"superchargedLimit": "You can only have up to four supercharged slots.",
+		"superchargedFixed": "Supercharged slot locations for Exocraft and Exosuits can't be changed.",
+		"gridFixed": "Slot locations are fixed for Exocraft and can’t be changed.",
+		"moduleLocked": "Slots with modules can’t be changed. Remove the module group first.",
+		"rowLimit": "Supercharged slots can only be placed in the first four rows."
 	}
 }

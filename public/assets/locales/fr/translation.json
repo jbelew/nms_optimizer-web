@@ -26,11 +26,12 @@
         "generateName": "Générer",
         "buildManagement": "Gestion des builds",
         "utilities": "Boîtes de dialogue et contrôles d'application",
-        "privacy": "politique de confidentialité"
+        "privacy": "politique de confidentialité",
+        "screenshot": "Capture d'écran de construction de capture"
     },
     "gridTable": {
         "optimizing": "OPTIMISATION !",
-        "tapInstructions": "Appuyez une fois pour désactiver une cellule, ou appuyez deux fois pour la marquer comme surchargée."
+        "tapInstructions": "Appuyez une fois pour désactiver un emplacement ou appuyez deux fois pour le marquer comme suralimenté."
     },
     "gridControls": {
         "activateRow": "Activer la rangée",
@@ -104,13 +105,13 @@
             "title": "Bienvenue dans NMS Optimiseur!",
             "description": "Un guide de démarrage rapide pour vous aider à tirer le meilleur parti de cet outil:",
             "item1": "Sélectionnez une <strong>Plateforme</strong> à l'aide de l'icône <icon/>.",
-            "item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur une cellule pour la marquer <strong>Suralimentée</strong>.",
-            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>appuyez</strong> (Mobile) pour activer ou désactiver une cellule.",
             "item4": "Utilisez les <strong>basculements de lignes</strong> pour activer ou désactiver des lignes entières (désactivées une fois les modules placés).",
             "item5": "Utilisez le bouton <strong>sélection de module</strong> <icon/> pour ajouter ou supprimer des modules.",
             "viewInstructions": "Pour plus d'informations, <1>consultez les instructions complètes</1>.",
             "getStarted": "Commencer",
-            "item6": "Activez le <strong>Mode de mise au point</strong> <icon/> pour minimiser les distractions visuelles et optimiser la lisibilité des polices pour une expérience plus claire."
+            "item6": "Activez le <strong>Mode de mise au point</strong> <icon/> pour minimiser les distractions visuelles et optimiser la lisibilité des polices pour une expérience plus claire.",
+            "item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur un emplacement pour le marquer <strong>Suralimenté</strong>.",
+            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>appuyez</strong> (Mobile) pour activer ou désactiver un emplacement."
         }
     },
     "dialog": {
@@ -141,6 +142,14 @@
         "buildLoadError": {
             "title": "Erreur",
             "description": "Échec du chargement de la version"
+        },
+        "screenshotSaved": {
+            "title": "Succès",
+            "description": "Capture d'écran téléchargée avec succès"
+        },
+        "screenshotError": {
+            "title": "Erreur",
+            "description": "Échec de la capture d'écran"
         }
     },
     "footer": {
@@ -639,18 +648,18 @@
         },
         "privacyPageTitle": "Politique de confidentialité de NMS Optimizer: vos données et votre sécurité",
         "privacyDescription": "Lisez la politique de confidentialité de NMS Optimizer. Découvrez comment nous traitons vos données, notre engagement en matière de confidentialité et notre utilisation d'analyses anonymes.",
-        "mainPageTitle": "NMS Optimizer: Calculateur de disposition technologique et de bonus de contiguïté de No Man's Sky",
-        "appDescription": "Trouvez les meilleures configurations technologiques No Man's Sky pour votre Starship, Corvette, Multitool, Exosuit et Exocraft. Optimisez les bonus de contiguïté et les emplacements suralimentés pour des performances optimales.",
-        "instructionsPageTitle": "Instructions de l'optimiseur NMS: utilisation, modules et cellules suralimentées",
         "instructionsDescription": "Instructions complètes pour utiliser l'application NMS Optimizer. Apprenez à sélectionner des plates-formes, à marquer des emplacements suralimentés, à optimiser les dispositions et à maximiser les bonus de contiguïté pour les vaisseaux spatiaux, les corvettes, les multitools et bien plus encore.",
-        "aboutPageTitle": "À propos de NMS Optimizer: fonctionnement de l'optimisation de la mise en page technologique basée sur le ML",
         "aboutDescription": "Découvrez comment NMS Optimizer utilise l'apprentissage automatique et des algorithmes avancés pour trouver le meilleur emplacement de module pour vos configurations Starship, Corvette et Multitool.",
         "changelogPageTitle": "Journal des modifications de NMS Optimizer: dernières mises à jour, fonctionnalités et améliorations",
         "changelogDescription": "Consultez les dernières mises à jour, les nouvelles fonctionnalités et les corrections de bugs pour NMS Optimizer. Restez à jour avec le développement du meilleur outil de mise en page de No Man's Sky.",
         "userstatsPageTitle": "Statistiques de l'optimiseur NMS:constructions communautaires suralimentées",
         "userstatsDescription": "Explorez les statistiques des utilisateurs de NMS Optimizer pour connaître les technologies No Man's Sky suralimentées les plus populaires sur certains types de plates-formes.",
         "translationPageTitle": "Aidez à traduire NMS Optimizer: rejoignez notre communauté de localisation",
-        "translationDescription": "Aidez à traduire NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde."
+        "translationDescription": "Aidez à traduire NMS Optimizer dans votre langue et rendez-le accessible à davantage de joueurs de No Man's Sky dans le monde.",
+        "mainPageTitle": "NMS Optimizer : générateur de configuration technique et calculateur de contiguïté",
+        "appDescription": "Calculez les configurations technologiques optimales de No Man's Sky pour votre Starship, Corvette, Multitool, Exosuit et Exocraft. Gère les bonus de contiguïté et le placement des emplacements suralimenté pour que vous n'ayez pas à le faire.",
+        "instructionsPageTitle": "Instructions de l'optimiseur NMS : modules et emplacements suralimentés",
+        "aboutPageTitle": "À propos de NMS Optimizer : fonctionnement de l'optimisation de la mise en page"
     },
     "installPrompt": {
         "title": "Ajouter à l'écran d'accueil",
@@ -663,10 +672,10 @@
     },
     "restrictions": {
         "title": "Action indisponible",
-        "superchargedLimit": "Vous ne pouvez avoir que quatre cellules suralimentées au maximum.",
-        "superchargedFixed": "Les emplacements des cellules suralimentées pour Exocraft et Exosuits ne peuvent pas être modifiés.",
-        "gridFixed": "Les emplacements des cellules sont fixes pour Exocraft et ne peuvent pas être modifiés.",
-        "moduleLocked": "Les cellules avec des modules ne peuvent pas être modifiées. Supprimez d'abord le groupe de modules.",
-        "rowLimit": "Les cellules suralimentées ne peuvent être placées que dans les quatre premières rangées."
+        "superchargedLimit": "Vous ne pouvez avoir que quatre emplacements suralimentés au maximum.",
+        "superchargedFixed": "Les emplacements des emplacements suralimentés pour Exocraft et Exosuits ne peuvent pas être modifiés.",
+        "gridFixed": "Les emplacements des emplacements sont fixes pour Exocraft et ne peuvent pas être modifiés.",
+        "moduleLocked": "Les emplacements avec modules ne peuvent pas être modifiés. Supprimez d'abord le groupe de modules.",
+        "rowLimit": "Les emplacements suralimentés ne peuvent être placés que dans les quatre premières rangées."
     }
 }
