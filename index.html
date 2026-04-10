@@ -222,6 +222,8 @@
 	<meta property="og:description"
 		content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance." />
 	<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+	<meta property="og:image:width" content="1280" />
+	<meta property="og:image:height" content="880" />
 	<meta property="og:image:alt"
 		content="A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons." />
 	<meta property="og:url" content="https://nms-optimizer.app/" />
@@ -268,16 +270,18 @@
 					"primaryImageOfPage": {
 						"@type": "ImageObject",
 						"url": "https://nms-optimizer.app/assets/img/screenshots/screenshot.png",
+						"width": 1280,
+						"height": 880,
 						"caption": "A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons."
 					},
 					"description": "Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance."
 				},
 				{
-					"@type": "WebApplication",
+					"@type": ["SoftwareApplication", "WebApplication"],
 					"@id": "https://nms-optimizer.app/#webapplication",
 					"name": "NMS Optimizer",
 					"alternateName": "No Man's Sky Technology Layout Optimizer",
-					"applicationCategory": "UtilitiesApplication",
+					"applicationCategory": "GameApplication",
 					"applicationSubCategory": "Optimization Tool",
 					"operatingSystem": "Any",
 					"browserRequirements": "Requires JavaScript",
@@ -302,6 +306,44 @@
 						"price": "0",
 						"priceCurrency": "USD"
 					}
+				},
+				{
+					"@type": "FAQPage",
+					"@id": "https://nms-optimizer.app/#faqpage",
+					"mainEntity": [
+						{
+							"@type": "Question",
+							"name": "What is an adjacency bonus in No Man's Sky?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots."
+							}
+						},
+						{
+							"@type": "Question",
+							"name": "What are supercharged slots in No Man's Sky?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed."
+							}
+						},
+						{
+							"@type": "Question",
+							"name": "How does NMS Optimizer calculate the best technology layout?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed."
+							}
+						},
+						{
+							"@type": "Question",
+							"name": "What platforms does NMS Optimizer support?",
+							"acceptedAnswer": {
+								"@type": "Answer",
+								"text": "NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters."
+							}
+						}
+					]
 				},
 				{
 					"@type": "Person",

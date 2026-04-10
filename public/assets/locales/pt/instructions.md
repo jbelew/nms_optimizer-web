@@ -1,21 +1,21 @@
-# Instruções do NMS Optimizer: uso, módulos e células supercarregadas
+# Instruções do NMS Optimizer: uso, módulos e slots supercarregados
 
 ## Primeiros passos com a grade
 
-- Selecione uma **Plataforma** (Starship, Multi-Tool, Corvette, etc.) usando o ícone <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Clique** ou **toque duas vezes** (móvel) em uma célula para marcá-la como **Supercharged**.
-- **Ctrl-clique (Windows) / ⌘-clique (Mac) / toque único (móvel)** para alternar uma célula **ativa** ou **inativa**.
+- Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
+- **Clique** ou **toque duas vezes** (móvel) em um slot para marcá-lo como **Supercharged**.
+- **Ctrl-clique (Windows) / ⌘-clique (Mac) / toque único (móvel)** para alternar um slot **ativo** ou **inativo**.
 - Use **alternâncias de linha** para ativar ou desativar linhas inteiras. *(As alternâncias de linha são desativadas quando os módulos são colocados.)*
-- Use o botão **seleção de módulo** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para adicionar ou remover módulos individuais dentro de um grupo de tecnologia.
+- Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 
 > 💡 **Nota:**
-> Exosuits e Exocraft possuem grades fixas. As células Exocraft não podem ser modificadas. Nos Exosuits, apenas os estados ativo/inativo podem ser alterados – os layouts de slots sobrecarregados são corrigidos.
+> Exosuits e Exocraft possuem grades fixas. Os slots Exocraft não podem ser modificados. Nos Exosuits, apenas os estados ativo/inativo podem ser alterados – os layouts de slots sobrecarregados são corrigidos.
 
 ## Antes de começar
 
 Esta ferramenta destina-se à **otimização de final de jogo** e funciona melhor quando:
 
-- A maioria ou todas as células da grade estão desbloqueadas.
+- A maioria ou todos os slots da grade estão desbloqueados.
 - Todas as tecnologias relevantes estão disponíveis.
 - Você tem **três módulos de atualização** por tecnologia.
 
@@ -23,12 +23,12 @@ Configurações parciais são suportadas, mas os resultados são otimizados para
 
 ## Dicas de uso
 
-As células sobrecarregadas são limitadas – o posicionamento é importante.
+Os slots sobrecarregados são limitados – a colocação é importante.
 
-- **Não atribua todas as células sobrecarregadas à primeira tecnologia que você colocar.** Isso geralmente bloqueia layouts gerais mais fortes posteriormente.
-- Comece atribuindo **2 a 3 células sobrecarregadas a uma tecnologia de alto impacto**, não todas.
-- Reserve pelo menos **uma ou mais células sobrecarregadas** para uma **tecnologia de segunda prioridade** para melhorar a eficácia total.
-- Depois de usar todas as suas células sobrecarregadas, priorize tecnologias com **contagens maiores de módulos** antes que o espaço fique restrito.
+- **Não atribua todos os slots sobrecarregados à primeira tecnologia que você colocar.** Isso geralmente bloqueia layouts gerais mais fortes posteriormente.
+- Comece atribuindo **2 a 3 slots superalimentados a uma tecnologia de alto impacto**, não todos eles.
+- Reserve pelo menos **um ou mais slots sobrealimentados** para uma **tecnologia de segunda prioridade** para melhorar a eficácia total.
+- Depois de usar todos os seus slots sobrecarregados, priorize tecnologias com **contagens maiores de módulos** antes que o espaço fique restrito.
 - Deixe o solucionador cuidar do posicionamento; sua função é **definir prioridades e distribuição**.
 
 Se o espaço ficar apertado, talvez seja necessário redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de otimização**.
@@ -36,7 +36,7 @@ Se o espaço ficar apertado, talvez seja necessário redefinir e resolver as tec
 ## Dica profissional
 
 O solucionador usa janelas fixas dimensionadas de acordo com a contagem de módulos de cada tecnologia para encontrar posicionamentos com eficiência de espaço.
-Se os resultados não forem ideais, **desative temporariamente as células** para orientar o solucionador em direção a um layout melhor.
+Se os resultados não forem ideais, **desative temporariamente os slots** para orientar o solucionador em direção a um layout melhor.
 
 ## Etiquetas Teta / Tau / Sigma
 
@@ -69,7 +69,7 @@ O solucionador pode sugerir atualizações cosméticas para desempenho em vez de
 
 ## Construções recomendadas
 
-Para **Exosuits** e **Exocraft**, as células sobrecarregadas são fixas e os layouts viáveis ​​são limitados.
+Para **Exosuits** e **Exocraft**, os slots sobrecarregados são fixos e os layouts viáveis ​​são limitados.
 A ferramenta fornece **compilações recomendadas selecionadas manualmente** refletindo as combinações ideais.
 
 Sugestões e layouts alternativos são bem-vindos nas discussões do projeto:

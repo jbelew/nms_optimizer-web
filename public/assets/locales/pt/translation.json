@@ -26,11 +26,12 @@
         "generateName": "Gerar",
         "buildManagement": "Gerenciamento de construção",
         "utilities": "Diálogos e controles de aplicativos",
-        "privacy": "política de Privacidade"
+        "privacy": "política de Privacidade",
+        "screenshot": "Capturar captura de tela da compilação"
     },
     "gridTable": {
         "optimizing": "Otimizando!",
-        "tapInstructions": "Toque uma vez para desativar uma célula ou duas vezes para marcá-la como sobrecarregada."
+        "tapInstructions": "Toque uma vez para desativar um slot ou toque duas vezes para marcá-lo como sobrecarregado."
     },
     "gridControls": {
         "activateRow": "Ative a linha",
@@ -104,13 +105,13 @@
             "title": "Bem vindo ao NMS Optimizer!",
             "description": "Um guia de início rápido para ajudá-lo a aproveitar ao máximo esta ferramenta:",
             "item1": "Selecione uma <strong>Plataforma</strong> usando o ícone <icon/>.",
-            "item2": "<strong>Clique</strong> ou <strong>toque duas vezes</strong> em uma célula para marcá-la como <strong>Supercharged</strong>.",
-            "item3": "<strong>Ctrl-clique</strong> (Windows) / <strong>⌘-clique</strong> (Mac) / <strong>toque</strong> (Mobile) para alternar uma célula entre ativa ou inativa.",
             "item4": "Use <strong>alternâncias de linha</strong> para ativar ou desativar linhas inteiras (desativadas quando os módulos são colocados).",
             "item5": "Use o botão <strong>seleção de módulo</strong> <icon/> para adicionar ou remover módulos.",
             "viewInstructions": "Para obter mais informações, <1>consulte as instruções completas</1>.",
             "getStarted": "Comece",
-            "item6": "Ative o <strong>Modo de foco</strong> <icon/> para minimizar distrações visuais e otimizar a legibilidade da fonte para uma experiência mais clara."
+            "item6": "Ative o <strong>Modo de foco</strong> <icon/> para minimizar distrações visuais e otimizar a legibilidade da fonte para uma experiência mais clara.",
+            "item2": "<strong>Clique</strong> ou <strong>toque duas vezes</strong> em um slot para marcá-lo como <strong>Supercharged</strong>.",
+            "item3": "<strong>Ctrl-clique</strong> (Windows) / <strong>⌘-clique</strong> (Mac) / <strong>toque</strong> (Mobile) para ativar ou inativo um slot."
         }
     },
     "dialog": {
@@ -141,6 +142,14 @@
         "buildLoadError": {
             "title": "Erro",
             "description": "Falha ao carregar compilação"
+        },
+        "screenshotSaved": {
+            "title": "Sucesso",
+            "description": "Captura de tela baixada com sucesso"
+        },
+        "screenshotError": {
+            "title": "Erro",
+            "description": "Falha ao capturar a captura de tela"
         }
     },
     "footer": {
@@ -639,18 +648,18 @@
         },
         "privacyPageTitle": "Política de privacidade do NMS Optimizer: seus dados e segurança",
         "privacyDescription": "Leia a política de privacidade do NMS Optimizer. Saiba como lidamos com seus dados, nosso compromisso com a privacidade e como usamos análises anônimas.",
-        "mainPageTitle": "Otimizador NMS: Calculadora de layout de tecnologia e bônus de adjacência No Man's Sky",
-        "appDescription": "Encontre os melhores layouts de tecnologia No Man's Sky para sua Starship, Corvette, Multitool, Exosuit e Exocraft. Otimize bônus de adjacência e slots sobrecarregados para desempenho máximo.",
-        "instructionsPageTitle": "Instruções do otimizador NMS: uso, módulos e células supercarregadas",
         "instructionsDescription": "Instruções completas para usar o aplicativo NMS Optimizer. Aprenda como selecionar plataformas, marcar slots sobrecarregados, otimizar layouts e maximizar bônus de adjacência para naves estelares, corvetas, ferramentas múltiplas e muito mais.",
-        "aboutPageTitle": "Sobre o NMS Optimizer: como funciona a otimização de layout de tecnologia baseada em ML",
         "aboutDescription": "Saiba como o NMS Optimizer usa aprendizado de máquina e algoritmos avançados para encontrar o melhor posicionamento de módulo para seus layouts Starship, Corvette e Multitool.",
         "changelogPageTitle": "Log de alterações do NMS Optimizer: últimas atualizações, recursos e melhorias",
         "changelogDescription": "Veja as atualizações mais recentes, novos recursos e correções de bugs do NMS Optimizer. Mantenha-se atualizado com o desenvolvimento da melhor ferramenta de layout do No Man's Sky.",
         "userstatsPageTitle": "Estatísticas do NMS Optimizer: Construções sobrecarregadas da comunidade",
         "userstatsDescription": "Explore as estatísticas do usuário do NMS Optimizer para ver as tecnologias mais populares do No Man's Sky superalimentadas em tipos de plataforma selecionados.",
         "translationPageTitle": "Ajude a traduzir o NMS Optimizer: junte-se à nossa comunidade de localização",
-        "translationDescription": "Ajude a traduzir o NMS Optimizer para o seu idioma e torne-o acessível a mais jogadores de No Man's Sky em todo o mundo."
+        "translationDescription": "Ajude a traduzir o NMS Optimizer para o seu idioma e torne-o acessível a mais jogadores de No Man's Sky em todo o mundo.",
+        "mainPageTitle": "Otimizador NMS: Construtor de Layout Técnico e Calculadora de Adjacência",
+        "appDescription": "Calcule os layouts ideais da tecnologia No Man's Sky para sua Starship, Corvette, Multitool, Exosuit e Exocraft. Lida com bônus de adjacência e posicionamento de slot sobrecarregado para que você não precise fazer isso.",
+        "instructionsPageTitle": "Instruções do NMS Optimizer: Módulos e Slots Supercharged",
+        "aboutPageTitle": "Sobre o NMS Optimizer: como funciona a otimização de layout"
     },
     "installPrompt": {
         "title": "Adicionar à tela inicial",
@@ -663,10 +672,10 @@
     },
     "restrictions": {
         "title": "Ação indisponível",
-        "superchargedLimit": "Você só pode ter até quatro células supercarregadas.",
-        "superchargedFixed": "As localizações das células sobrecarregadas para Exocraft e Exosuits não podem ser alteradas.",
-        "gridFixed": "As localizações das células são fixas para Exocraft e não podem ser alteradas.",
-        "moduleLocked": "Células com módulos não podem ser alteradas. Remova o grupo de módulos primeiro.",
-        "rowLimit": "As células sobrecarregadas só podem ser colocadas nas primeiras quatro linhas."
+        "superchargedLimit": "Você só pode ter até quatro slots superalimentados.",
+        "superchargedFixed": "As localizações dos slots Supercharged para Exocraft e Exosuits não podem ser alteradas.",
+        "gridFixed": "Os locais dos slots são fixos para Exocraft e não podem ser alterados.",
+        "moduleLocked": "Slots com módulos não podem ser alterados. Remova o grupo de módulos primeiro.",
+        "rowLimit": "Os slots Supercharged só podem ser colocados nas primeiras quatro linhas."
     }
 }

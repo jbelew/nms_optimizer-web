@@ -26,11 +26,12 @@
         "generateName": "Generar",
         "buildManagement": "Gestión de construcción",
         "utilities": "Diálogos y controles de aplicaciones",
-        "privacy": "política de privacidad"
+        "privacy": "política de privacidad",
+        "screenshot": "Captura de pantalla de compilación"
     },
     "gridTable": {
         "optimizing": "¡OPTIMIZANDO!",
-        "tapInstructions": "Toca una vez para deshabilitar una celda, o toca dos veces para marcarla como supercargada."
+        "tapInstructions": "Toque una vez para desactivar una ranura o toque dos veces para marcarla como supercargada."
     },
     "gridControls": {
         "activateRow": "Activar fila",
@@ -104,13 +105,13 @@
             "title": "¡Bienvenido al Optimizador NMS!",
             "description": "Una guía de inicio rápido para ayudarle a aprovechar al máximo esta herramienta:",
             "item1": "Seleccione una <strong>Plataforma</strong> usando el ícono <icon/>.",
-            "item2": "<strong>Haz clic</strong> o <strong>toca dos veces</strong> una celda para marcarla como <strong>Supercargada</strong>.",
-            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>toque</strong> (Móvil) para alternar una celda activa o inactiva.",
             "item4": "Utilice <strong>cambios de filas</strong> para habilitar o deshabilitar filas enteras (se deshabilita una vez que se colocan los módulos).",
             "item5": "Utilice el botón <strong>selección de módulo</strong> <icono/> para agregar o eliminar módulos.",
             "viewInstructions": "Para obtener más información, <1>consulte las instrucciones completas</1>.",
             "getStarted": "Empezar",
-            "item6": "Cambie el <strong>Modo de enfoque</strong> <icon/> para minimizar las distracciones visuales y optimizar la legibilidad de la fuente para una experiencia más clara."
+            "item6": "Cambie el <strong>Modo de enfoque</strong> <icon/> para minimizar las distracciones visuales y optimizar la legibilidad de la fuente para una experiencia más clara.",
+            "item2": "<strong>Haz clic</strong> o <strong>toca dos veces</strong> una ranura para marcarla como <strong>Supercargada</strong>.",
+            "item3": "<strong>Ctrl-clic</strong> (Windows) / <strong>⌘-clic</strong> (Mac) / <strong>toque</strong> (Móvil) para alternar una ranura activa o inactiva."
         }
     },
     "dialog": {
@@ -141,6 +142,14 @@
         "buildLoadError": {
             "title": "Error",
             "description": "No se pudo cargar la compilación"
+        },
+        "screenshotSaved": {
+            "title": "Éxito",
+            "description": "Captura de pantalla descargada exitosamente"
+        },
+        "screenshotError": {
+            "title": "Error",
+            "description": "No se pudo realizar la captura de pantalla"
         }
     },
     "footer": {
@@ -639,18 +648,18 @@
         },
         "privacyPageTitle": "Política de privacidad de NMS Optimizer: sus datos y seguridad",
         "privacyDescription": "Lea la política de privacidad de NMS Optimizer. Conozca cómo manejamos sus datos, nuestro compromiso con la privacidad y nuestro uso de análisis anónimos.",
-        "mainPageTitle": "Optimizador de NMS: Calculadora de bonificación por adyacencia y diseño tecnológico de No Man's Sky",
-        "appDescription": "Encuentra los mejores diseños de tecnología de No Man's Sky para tu Starship, Corvette, Multitool, Exosuit y Exocraft. Optimice las bonificaciones de adyacencia y las ranuras supercargadas para obtener el máximo rendimiento.",
-        "instructionsPageTitle": "Instrucciones del optimizador NMS: uso, módulos y celdas sobrealimentadas",
         "instructionsDescription": "Instrucciones completas para usar la aplicación NMS Optimizer. Aprenda a seleccionar plataformas, marcar espacios supercargados, optimizar diseños y maximizar las bonificaciones de adyacencia para Starships, Corvettes, Multitools y más.",
-        "aboutPageTitle": "Acerca de NMS Optimizer: cómo funciona la optimización del diseño tecnológico impulsada por ML",
         "aboutDescription": "Descubra cómo NMS Optimizer utiliza el aprendizaje automático y algoritmos avanzados para encontrar la mejor ubicación de módulos para sus diseños de Starship, Corvette y Multitool.",
         "changelogPageTitle": "Registro de cambios del Optimizador de NMS: últimas actualizaciones, características y mejoras",
         "changelogDescription": "Vea las últimas actualizaciones, nuevas funciones y correcciones de errores para NMS Optimizer. Manténgase actualizado con el desarrollo de la mejor herramienta de diseño de No Man's Sky.",
         "userstatsPageTitle": "Estadísticas del optimizador de NMS: compilaciones supercargadas de la comunidad",
         "userstatsDescription": "Explora las estadísticas de usuario de NMS Optimizer para ver las tecnologías supercargadas de No Man's Sky más populares en determinados tipos de plataformas.",
         "translationPageTitle": "Ayude a traducir NMS Optimizer: únase a nuestra comunidad de localización",
-        "translationDescription": "Ayuda a traducir el Optimizador de NMS a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo."
+        "translationDescription": "Ayuda a traducir el Optimizador de NMS a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo.",
+        "mainPageTitle": "Optimizador de NMS: generador de diseño técnico y calculadora de adyacencia",
+        "appDescription": "Calcule los diseños tecnológicos óptimos de No Man's Sky para su Starship, Corvette, Multitool, Exosuit y Exocraft. Maneja bonos de adyacencia y ubicación de ranuras supercargadas para que usted no tenga que hacerlo.",
+        "instructionsPageTitle": "Instrucciones del optimizador NMS: módulos y ranuras supercargadas",
+        "aboutPageTitle": "Acerca de NMS Optimizer: cómo funciona la optimización del diseño"
     },
     "installPrompt": {
         "title": "Añadir a la pantalla de inicio",
@@ -663,10 +672,10 @@
     },
     "restrictions": {
         "title": "Acción no disponible",
-        "superchargedLimit": "Sólo puede tener hasta cuatro células sobrecargadas.",
-        "superchargedFixed": "Las ubicaciones de las celdas sobrealimentadas para Exocraft y Exosuits no se pueden cambiar.",
-        "gridFixed": "Las ubicaciones de las celdas son fijas para Exocraft y no se pueden cambiar.",
-        "moduleLocked": "Las celdas con módulos no se pueden cambiar. Primero elimine el grupo de módulos.",
-        "rowLimit": "Las celdas sobrealimentadas sólo se pueden colocar en las primeras cuatro filas."
+        "superchargedLimit": "Sólo puedes tener hasta cuatro ranuras supercargadas.",
+        "superchargedFixed": "Las ubicaciones de las ranuras supercargadas para Exocraft y Exosuits no se pueden cambiar.",
+        "gridFixed": "Las ubicaciones de las ranuras son fijas para Exocraft y no se pueden cambiar.",
+        "moduleLocked": "Las ranuras con módulos no se pueden cambiar. Primero elimine el grupo de módulos.",
+        "rowLimit": "Las ranuras sobrealimentadas sólo se pueden colocar en las primeras cuatro filas."
     }
 }

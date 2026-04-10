@@ -1,21 +1,21 @@
-# Instructions de l'optimiseur NMS : utilisation, modules et cellules suralimentées
+# Instructions de l'optimiseur NMS : utilisation, modules et emplacements suralimentés
 
 ## Premiers pas avec la grille
 
 - Sélectionnez une **Plateforme** (Starship, Multi-Tool, Corvette, etc.) à l'aide de l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Cliquez** ou **appuyez deux fois** (mobile) sur une cellule pour la marquer **Suralimentée**.
-- **Ctrl-clic (Windows) / ⌘-clic (Mac) / simple pression (mobile)** pour basculer une cellule **active** ou **inactive**.
+- **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer **Suralimenté**.
+- **Ctrl-clic (Windows) / ⌘-clic (Mac) / simple pression (mobile)** pour basculer un emplacement **actif** ou **inactif**.
 - Utilisez **row toggles** pour activer ou désactiver des lignes entières. *(Les bascules de ligne sont désactivées une fois les modules placés.)*
 - Utilisez le bouton **sélection de module** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou supprimer des modules individuels au sein d'un groupe technologique.
 
 > 💡 **Remarque :**
-> Les Exosuits et Exocraft ont des grilles fixes. Les cellules Exocraft ne peuvent pas être modifiées. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – la disposition des emplacements suralimentés est corrigée.
+> Les Exosuits et Exocraft ont des grilles fixes. Les emplacements Exocraft ne peuvent pas être modifiés. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – la disposition des emplacements suralimentés est corrigée.
 
 ## Avant de commencer
 
 Cet outil est destiné à l'**optimisation de fin de partie** et fonctionne mieux lorsque :
 
-- La plupart ou la totalité des cellules de la grille sont déverrouillées.
+- La plupart ou la totalité des emplacements de grille sont déverrouillés.
 - Toutes les technologies pertinentes sont disponibles.
 - Vous disposez de **trois modules de mise à niveau** par technologie.
 
@@ -23,12 +23,12 @@ Les configurations partielles sont prises en charge, mais les résultats sont op
 
 ## Conseils d'utilisation
 
-Les cellules suralimentées sont limitées – le placement est important.
+Les emplacements suralimentés sont limités – le placement est important.
 
-- **N'attribuez pas toutes les cellules suralimentées à la première technologie que vous placez.** Cela bloque souvent des configurations globales plus solides par la suite.
-- Commencez par attribuer **2 à 3 cellules suralimentées à une technologie à fort impact**, pas toutes.
-- Réservez au moins **une ou plusieurs cellules suralimentées** pour une **technologie de deuxième priorité** afin d'améliorer l'efficacité totale.
-- Une fois que vous avez utilisé toutes vos cellules suralimentées, donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
+- **N'attribuez pas tous les emplacements suralimentés à la première technologie que vous placez.** Cela bloque souvent des dispositions globales plus solides plus tard.
+- Commencez par attribuer **2 à 3 emplacements suralimentés à une technologie à fort impact**, pas tous.
+- Réservez au moins **un ou plusieurs emplacements suralimentés** pour une **technologie de deuxième priorité** afin d'améliorer l'efficacité totale.
+- Une fois que vous avez utilisé tous vos emplacements suralimentés, donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
 - Laisser le solveur gérer le placement ; votre rôle est de **définir les priorités et la répartition**.
 
 Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudre les technologies dans un ordre différent pour éviter une **alerte d'optimisation**.
@@ -36,7 +36,7 @@ Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudr
 ## Conseil de pro
 
 Le solveur utilise des fenêtres fixes dimensionnées en fonction du nombre de modules de chaque technologie pour trouver des emplacements optimisés en termes d'espace.
-Si les résultats ne sont pas idéaux, **désactivez temporairement les cellules** pour guider le solveur vers une meilleure présentation.
+Si les résultats ne sont pas idéaux, **désactivez temporairement les emplacements** pour guider le solveur vers une meilleure présentation.
 
 ## Étiquettes Thêta / Tau / Sigma
 
@@ -62,14 +62,14 @@ Ignorez les lettres de classe (S, X, etc.) et comparez les statistiques :
 
 Les corvettes diffèrent des autres plates-formes : elles peuvent avoir **jusqu'à trois ensembles de mises à niveau distincts**.
 
-- **Les améliorations cosmétiques** sont affichées sous la forme `Cn`.
-- Les **mises à niveau du réacteur** sont affichées sous la forme `Rn`.
+- **Les améliorations cosmétiques** sont affichées sous la forme « Cn ».
+- Les **mises à niveau du réacteur** sont indiquées par « Rn ».
 
 Le solveur peut suggérer des améliorations esthétiques pour les performances par rapport à l'apparence, bien que les différences soient généralement mineures.
 
 ## Builds recommandées
 
-Pour les **Exosuits** et **Exocraft**, les cellules suralimentées sont fixes et les configurations viables sont limitées.
+Pour **Exosuits** et **Exocraft**, les emplacements suralimentés sont fixes et les configurations viables sont limitées.
 L'outil fournit des **versions recommandées sélectionnées à la main** reflétant des combinaisons optimales.
 
 Les suggestions et mises en page alternatives sont les bienvenues via les discussions sur le projet :

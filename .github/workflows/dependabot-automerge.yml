@@ -71,11 +71,18 @@ jobs:
           fi
 
           # Parse semver bump from PR title (e.g., "from 1.0.0 to 1.0.1")
-          OLD_VER=$(echo "$TITLE" | grep -oP 'from \K[0-9]+\.[0-9]+\.[0-9]+')
-          NEW_VER=$(echo "$TITLE" | grep -oP 'to \K[0-9]+\.[0-9]+\.[0-9]+')
+          OLD_VER=$(echo "$TITLE" | grep -oP 'from \K[0-9]+\.[0-9]+\.[0-9]+' || true)
+          NEW_VER=$(echo "$TITLE" | grep -oP 'to \K[0-9]+\.[0-9]+\.[0-9]+' || true)
 
           UPDATE_TYPE="major"
-          if [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
+          ALLOW_NPM_MINOR=false
+          if [[ "$TITLE" == *"bump the production-minor-patch group"* ]]; then
+            UPDATE_TYPE="minor"
+            ALLOW_NPM_MINOR=true
+          elif [[ "$TITLE" == *"bump the dev-dependencies group"* ]]; then
+            UPDATE_TYPE="minor"
+            ALLOW_NPM_MINOR=true
+          elif [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
             OLD_MAJOR=$(echo "$OLD_VER" | cut -d. -f1)
             OLD_MINOR=$(echo "$OLD_VER" | cut -d. -f2)
             NEW_MAJOR=$(echo "$NEW_VER" | cut -d. -f1)
@@ -91,10 +98,10 @@ jobs:
 
           echo "ecosystem_npm=$IS_NPM update_type=$UPDATE_TYPE"
 
-          # Auto-merge: non-npm patch+minor, npm patch only
+          # Auto-merge: non-npm patch+minor, npm patch only (or approved production groups)
           if [ "$IS_NPM" == "false" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$UPDATE_TYPE" == "minor" ]); then
             echo "merge=true" >> $GITHUB_OUTPUT
-          elif [ "$IS_NPM" == "true" ] && [ "$UPDATE_TYPE" == "patch" ]; then
+          elif [ "$IS_NPM" == "true" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$ALLOW_NPM_MINOR" == "true" ]); then
             echo "merge=true" >> $GITHUB_OUTPUT
           else
             echo "merge=false" >> $GITHUB_OUTPUT

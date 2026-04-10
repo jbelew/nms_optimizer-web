@@ -1,21 +1,21 @@
-# NMS Optimizer Instructions: Usage, Modules & Supercharged Cells
+# NMS Optimizer Instructions: Usage, Modules & Supercharged Slots
 
 ## Getting Started with the Grid
 
 - Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
-- **Click** or **double-tap** (mobile) a cell to mark it **Supercharged**.
-- **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** to toggle a cell **active** or **inactive**.
+- **Click** or **double-tap** (mobile) a slot to mark it **Supercharged**.
+- **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** to toggle a slot **active** or **inactive**.
 - Use **row toggles** to enable or disable entire rows. *(Row toggles are disabled once modules are placed.)*
 - Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 
 > 💡 **Note:**
-> Exosuits and Exocraft have fixed grids. Exocraft cells cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged slot layouts are fixed.
+> Exosuits and Exocraft have fixed grids. Exocraft slots cannot be modified. On Exosuits, only active/inactive states can be changed — supercharged slot layouts are fixed.
 
 ## Before You Begin
 
 This tool is intended for **endgame optimization** and works best when:
 
-- Most or all grid cells are unlocked.
+- Most or all grid slots are unlocked.
 - All relevant technologies are available.
 - You have **three upgrade modules** per technology.
 
@@ -23,12 +23,12 @@ Partial setups are supported, but results are optimized for fully upgraded platf
 
 ## Usage Tips
 
-Supercharged cells are limited — placement matters.
+Supercharged slots are limited — placement matters.
 
-- **Don’t assign all supercharged cells to the first technology you place.** This often blocks stronger overall layouts later.
-- Start by assigning **2–3 supercharged cells to a high-impact technology**, not all of them.
-- Reserve at least **one or more supercharged cells** for a **second priority technology** to improve total effectiveness.
-- Once you've used all of your supercharged cells, prioritize technologies with **larger module counts** before space becomes constrained.
+- **Don’t assign all supercharged slots to the first technology you place.** This often blocks stronger overall layouts later.
+- Start by assigning **2–3 supercharged slots to a high-impact technology**, not all of them.
+- Reserve at least **one or more supercharged slots** for a **second priority technology** to improve total effectiveness.
+- Once you've used all of your supercharged slots, prioritize technologies with **larger module counts** before space becomes constrained.
 - Let the solver handle placement; your role is to **set priorities and distribution**.
 
 If space becomes tight, you may need to reset and solve technologies in a different order to avoid an **Optimization Alert**.
@@ -36,7 +36,7 @@ If space becomes tight, you may need to reset and solve technologies in a differ
 ## Pro Tip
 
 The solver uses fixed windows sized to each technology’s module count to find space-efficient placements.
-If results aren’t ideal, **temporarily disable cells** to guide the solver toward a better layout.
+If results aren’t ideal, **temporarily disable slots** to guide the solver toward a better layout.
 
 ## Theta / Tau / Sigma Labels
 
@@ -69,7 +69,7 @@ The solver may suggest Cosmetic upgrades for performance over appearance, though
 
 ## Recommended Builds
 
-For **Exosuits** and **Exocraft**, supercharged cells are fixed and viable layouts are limited.
+For **Exosuits** and **Exocraft**, supercharged slots are fixed and viable layouts are limited.
 The tool provides **hand-curated recommended builds** reflecting optimal combinations.
 
 Suggestions and alternate layouts are welcome via the project discussions:
