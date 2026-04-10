@@ -1,3 +1,15 @@
+# [6.24.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.23.0...v6.24.0) (2026-04-10)
+
+
+### Bug Fixes
+
+* **ci:** prevent crash on grouped Dependabot PRs and allow auto-merge for production-minor-patch ([87aae5d](https://github.com/jbelew/nms_optimizer-web/commit/87aae5dd669952c674952f49cdb626517841ea91))
+
+
+### Features
+
+* **i18n:** standardize terminology to 'Supercharged Slot' across all locales ([ce64323](https://github.com/jbelew/nms_optimizer-web/commit/ce64323a7269a37c4fe70ae00cdcfb68ba58f7d4))
+
 # [6.23.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.22.1...v6.23.0) (2026-04-09)
 
 
