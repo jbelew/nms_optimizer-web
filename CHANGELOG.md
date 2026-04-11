@@ -1,3 +1,10 @@
+## [6.26.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.1...v6.26.2) (2026-04-11)
+
+
+### Bug Fixes
+
+* **ci:** trigger release workflow verification ([3cccdef](https://github.com/jbelew/nms_optimizer-web/commit/3cccdefce59b44662f481c1c3d6698c82c036c58))
+
 ## [6.26.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.0...v6.26.1) (2026-04-11)
 
 
