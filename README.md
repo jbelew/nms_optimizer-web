@@ -14,8 +14,6 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 
 ![Screenshot](https://github.com/jbelew/nms_optimizer-web/blob/main/public/assets/img/screenshots/screenshot.png?raw=true)
 
----
-
 ## 🛠️ Tech Stack
 
 - **Core**: [React 19](https://react.dev/) (with React Compiler enabled)
@@ -24,8 +22,6 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 - **Build Tool**: [Vite 8](https://vitejs.dev/) / [Rolldown](https://rolldown.rs/) / [LightningCSS](https://lightningcss.dev/)
 - **i18n**: [i18next](https://www.i18next.com/) with Multi-language SSG support
 - **Monitoring**: [Sentry](https://sentry.io/) + Google Analytics 4
-
----
 
 ## 🚀 Development Workflow
 
@@ -51,21 +47,22 @@ Create a `.env.local` or update `.env.development`:
 - `npm run serve:ssg`: Preview the production build with pre-rendered content.
 - `npm run typecheck`: Run strict TypeScript validation.
 - `npm run lint`: ESLint 10 + Prettier check.
+- `npm run storybook`: Start Storybook development environment.
+- `npm run build:images`: Optimize and process raw assets into production-ready images.
+- `npm run sitemap`: Generate a fresh `sitemap.xml` for SEO indexing.
+- `npm run verify:ssg`: Run automated verification on the generated SSG output.
 
----
 
 ## 🧪 Testing Strategy
 
 - **Unit/Component**: [Vitest](https://vitest.dev/) + React Testing Library.
-- **Interaction/A11y**: [Storybook 10](https://storybook.js.org/) with automated interaction and accessibility tests.
+- **Interaction/A11y**: [Storybook 10](https://storybook.js.org/) with automated interaction and accessibility tests (`npm run test:storybook`).
 - **E2E**: [Playwright](https://playwright.dev/) for critical user path verification.
 
 Run all tests:
 ```bash
 npm run test
 ```
-
----
 
 ## 📏 Engineering Standards
 
@@ -79,12 +76,9 @@ This project enforces **Conventional Commits** (Angular style). Every commit mus
 ### Agentic JSDoc
 We follow the [**Agentic JSDoc**](https://github.com/jbelew/agentic-jsdoc) standard to ensure code is highly readable for both humans and AI agents. All public APIs and complex logic must be documented with semantic descriptions and proper type annotations.
 
-
 ### iOS Safari Rendering Policy
 > [!CAUTION]
 > Due to known rendering bugs in iOS Safari, **never** add GPU acceleration properties (`translateZ(0)`, `translate3d()`, `will-change`, etc.) unless a performance problem is verified on real physical devices. Simple, lean CSS is preferred.
-
----
 
 ## 📈 Performance & Auditing
 
@@ -99,7 +93,9 @@ To run audits locally:
 npm run build && npm run lighthouse:ci
 ```
 
----
+> [!NOTE]
+> **WSL2 Users**: If running audits in WSL2, ensure Chrome is correctly configured as per the guidelines in `GEMINI.md` to avoid connection timeouts.
+
 
 ## 🏗️ Technical Architecture
 
@@ -116,7 +112,21 @@ The build system utilizes **Vite 8** / **Rolldown** with strict declarative code
 ### Progressive Web App (PWA)
 Fully offline-capable using `vite-plugin-pwa`. It employs a `CacheFirst` strategy for images and fonts, and `NetworkFirst` for critical API data, ensuring a seamless experience even on limited connections.
 
----
+### Component Architecture (Colocated Hooks)
+To maintain a shallow component tree and minimize prop-drilling, we utilize the **Colocated Hook Pattern**. State and derived data are managed by custom hooks (e.g., `useTechTreeRow`, `useGridRowState`) that components consume directly, rather than passing state through multiple layout layers.
+
+
+## 🌐 Localization & i18n
+
+This project uses an automated translation pipeline to maintain its multi-language support (English, Spanish, French, German, and Portuguese).
+
+### Auto-Translation Workflow
+We leverage Gemini AI to keep translations in sync without manual intervention:
+1. **Trigger**: The [**Auto-Translate**](.github/workflows/auto-translate.yml) workflow runs whenever JSON files in `public/assets/locales/en/` are updated on the `main` branch.
+2. **Process**: A Python script (`scripts/translate.py`) identifies changed keys and uses the Google Gemini API to generate translations for all other supported languages.
+3. **Commit**: The workflow automatically commits the updated locale files to the repository with a `chore(l10n)` prefix.
+
+*Target files: `public/assets/locales/{lang}/*.json`*
 
 ## 🐳 Docker
 
@@ -133,8 +143,15 @@ services:
     restart: unless-stopped
 ```
 
----
+## 📂 Project Layout
+
+- `src/`: React source code (components, hooks, stores, context).
+- `scripts/`: Build-time utilities (SSG, image processing, sitemaps).
+- `server/`: Node.js/Express application for handling SSG and runtime serving.
+- `public/`: Static assets, globally available icons, and localized markdown bundles.
+- `.github/workflows/`: CI/CD pipelines for testing, deployment, and auto-translation.
 
 ## 📄 License
+
 
 This project is licensed under the [MIT License](LICENSE).
