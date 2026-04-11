@@ -1,3 +1,10 @@
+## [6.26.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.2...v6.26.3) (2026-04-11)
+
+
+### Bug Fixes
+
+* **analytics:** correct Cloudflare beacon tag configuration ([7cb4ddb](https://github.com/jbelew/nms_optimizer-web/commit/7cb4ddb8662a6880445be5a1455e4279f5a42984))
+
 ## [6.26.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.1...v6.26.2) (2026-04-11)
 
 
