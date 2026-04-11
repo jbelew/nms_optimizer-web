@@ -18,7 +18,10 @@ const config: StorybookConfig = {
   "typescript": {
     reactDocgen: 'react-docgen',
   },
-  async viteFinal(config) {
+  async viteFinal(config, { configType }) {
+    const isTest = process.env.NODE_ENV === 'test';
+    const isProduction = configType === 'PRODUCTION';
+
     const mergedConfig = mergeConfig(config, {
       define: {
         '__APP_VERSION__': JSON.stringify('1.0.0-test'),
@@ -26,7 +29,7 @@ const config: StorybookConfig = {
         'import.meta.env.VITE_BUILD_VERSION': JSON.stringify('1.0.0-test'),
       },
       plugins: [
-        ...(process.env.NODE_ENV !== 'test' ? [
+        ...(!isTest && !isProduction ? [
           splashScreen({
             logoSrc: "assets/svg/loader.svg",
             splashBg: "#000000",

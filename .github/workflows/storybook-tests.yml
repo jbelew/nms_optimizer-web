@@ -5,10 +5,16 @@ on:
     branches: [main, dev]
     paths-ignore:
       - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'docs/**'
   pull_request:
     branches: [main, dev]
     paths-ignore:
       - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
