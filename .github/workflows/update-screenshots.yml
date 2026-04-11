@@ -23,35 +23,31 @@ jobs:
               run: |
                   VERSION=$(node -p "require('./package.json').version")
                   echo "version=$VERSION" >> $GITHUB_OUTPUT
-                  echo "App Version from package.json: $VERSION"
 
-            - name: Build application
-              env:
-                  VITE_APP_VERSION: ${{ steps.get_app_version.outputs.version }}
-              run: npm run build
+            - name: Install Playwright Browsers
+              run: npx playwright install --with-deps chromium
 
-            - name: Start server
+            - name: Start production build preview
               run: |
-                  npm start &
-                  npx wait-on http://localhost:3000 --timeout 60000
+                  npm run build
+                  npm run preview -- --port 3000 &
+                  sleep 5
 
             - name: Run screenshot script
               run: BASE_URL=http://localhost:3000 npm run screenshot
 
             - name: Commit and push screenshots
-              env:
-                  - name: Commit and push screenshots
-                    run: |
-                        git config user.name "github-actions[bot]"
-                        git config user.email "github-actions[bot]@users.noreply.github.com"
-                        # Stage ALL changes (including untracked files from the script)
-                        git add .
-                        if git diff --staged --quiet; then
-                          echo "No screenshot changes to commit"
-                        else
-                          git commit --no-verify -m "chore: update screenshots for ${{ github.ref_name }}"
-                          # Fix race condition: fetch, rebase, and push
-                          git fetch origin main
-                          git rebase origin/main
-                          git push origin HEAD:main
-                        fi
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  # Stage ALL changes (including untracked files from the script)
+                  git add .
+                  if git diff --staged --quiet; then
+                    echo "No screenshot changes to commit"
+                  else
+                    git commit --no-verify -m "chore: update screenshots for ${{ github.ref_name }}"
+                    # Fix race condition: fetch, rebase, and push
+                    git fetch origin main
+                    git rebase origin/main
+                    git push origin HEAD:main
+                  fi
