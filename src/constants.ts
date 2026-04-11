@@ -1,6 +1,11 @@
 // src/constants.ts
 
 /**
+ * Application constants and configuration defaults.
+ * (Triggering release workflow test)
+ */
+
+/**
  * The base API endpoint URL for backend communication.
  *
  * This value is sourced from the `VITE_API_URL` environment variable.
