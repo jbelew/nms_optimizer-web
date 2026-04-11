@@ -1,14 +1,10 @@
 name: 'Setup Node Environment'
-description: 'Consolidates checkout, Node.js setup, and npm dependency installation'
+description: 'Sets up Node.js and installs npm dependencies'
 inputs:
   node-version:
     description: 'The version of Node.js to use'
     required: false
     default: '24'
-  fetch-depth:
-    description: 'Fetch depth for git checkout'
-    required: false
-    default: '1'
   cache:
     description: 'Whether to cache npm dependencies'
     required: false

@@ -290,8 +290,8 @@ jobs:
           ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.14.15
@@ -339,12 +339,6 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
-
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:

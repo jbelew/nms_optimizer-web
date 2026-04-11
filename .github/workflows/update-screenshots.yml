@@ -12,6 +12,8 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
 
             - name: Setup environment
               uses: ./.github/actions/setup-node-env

@@ -86,10 +86,11 @@ jobs:
 
           UPDATE_TYPE="major"
           ALLOW_NPM_MINOR=false
-          if [[ "$TITLE" == *"bump the production-minor-patch group"* ]]; then
+          TITLE_LOWER="${TITLE,,}"
+          if [[ "$TITLE_LOWER" == *"bump the production-minor-patch group"* ]]; then
             UPDATE_TYPE="minor"
             ALLOW_NPM_MINOR=true
-          elif [[ "$TITLE" == *"bump the dev-dependencies group"* ]]; then
+          elif [[ "$TITLE_LOWER" == *"bump the dev-dependencies group"* ]]; then
             UPDATE_TYPE="minor"
             ALLOW_NPM_MINOR=true
           elif [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
