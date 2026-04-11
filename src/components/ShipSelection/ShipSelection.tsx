@@ -174,7 +174,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 					showInfo(
 						"Corvette Warning!",
 						<>
-							As of version 6.24, Corvettes <strong>still</strong> have known layout
+							As of version 6.32, Corvettes <strong>still</strong> have known layout
 							issues! If you create a layout, we highly recommend using the{" "}
 							<strong>Save Build</strong> feature to keep a backup of your work.
 						</>
