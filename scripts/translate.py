@@ -1,13 +1,13 @@
 import os
 import json
 import argparse
-import google.generativeai as genai
+from google import genai
 from typing import Dict, Any
 
 # Configure Gemini
 # The API key should be set in the environment variable GOOGLE_API_KEY
-genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
+MODEL_NAME = 'gemini-2.0-flash'
 
 LANGUAGES = {
     "es": "Spanish",
@@ -37,7 +37,10 @@ def translate_text(text: str, target_lang_name: str, is_markdown: bool = False) 
     prompt += f"Source (English): {text}\n\nTranslation:"
 
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=MODEL_NAME,
+            contents=prompt
+        )
         # Handle potential empty responses or safety filters
         if not response.text:
             return text
