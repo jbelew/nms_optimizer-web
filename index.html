@@ -66,8 +66,7 @@
 
 			// Detect if this is a bot/crawler or headless browser
 			const isBot = /bot|crawler|spider|headless|phantom|webdriver/i.test(navigator.userAgent) ||
-				navigator.webdriver === true ||
-				!('onmousemove' in document);
+				navigator.webdriver === true;
 
 			if (isBot) {
 				document.documentElement.classList.add('is-bot');
@@ -595,7 +594,17 @@
 		</style>
 	</noscript>
 
-	<!-- Cloudflare Web Analytics is auto-injected by the CF Pages CDN edge. No manual script needed. -->
+	<script>
+		window.addEventListener('app-ready', function () {
+			setTimeout(function () {
+				var script = document.createElement('script');
+				script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+				script.setAttribute('data-cf-beacon', '{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}');
+				script.defer = true;
+				document.body.appendChild(script);
+			}, 2000);
+		}, { once: true });
+	</script>
 </body>
 
 </html>

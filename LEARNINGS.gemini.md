@@ -443,3 +443,27 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     *   **Service Worker Caching:** Learned that old versions of the app can be stuck in the Service Worker cache during local testing, which can lead to misleading results. Clearing the SW and caches before evaluating new builds is mandatory.
     *   **Network Initiators:** Investigating the `initiatorType` and the call stack of network requests helps distinguish between different types of loads (e.g., ad blocker detection vs. actual library load).
     *   **Dependency Management:** Building the app locally is the best way to ensure all dependencies are present and the build is truly production-ready before performing audits.
+
+## 2026-04-11: Cloudflare Analytics and Bot Detection Optimization
+
+### Perceive & Understand
+*   **Request:** Investigate suspiciously low user counts in Cloudflare Analytics.
+*   **Context:** The site is hosted on Cloudflare Pages. Cloudflare Web Analytics was previously showing significantly lower traffic than Google Analytics (10x difference).
+*   **Root Causes:**
+    1.  **Missing Script:** The Cloudflare beacon script was removed from `index.html` because it caused duplicate requests, but the Cloudflare Dashboard was set to "Enable with JS Snippet", which meant no data was being collected after the removal.
+    2.  **Aggressive Bot Detection:** An `onmousemove` check in the `index.html` bot detection logic was misidentifying legitimate mobile and accessibility users as bots.
+    3.  **SPA Navigation:** Cloudflare's default tracking often misses Single Page Application (SPA) route changes.
+
+### Reason & Plan
+*   **Plan:**
+    1.  Restore the Cloudflare beacon script to `index.html`.
+    2.  Enable SPA support (`"spa": true`) in the Cloudflare configuration to track client-side route changes.
+    3.  Defer the script load until the `app-ready` event (plus a 2s buffer) to protect performance (LCP/TBT).
+    4.  Refine the `isBot` logic in `index.html` to remove the overly aggressive `onmousemove` check.
+
+### Act & Implement
+*   **Action:** Updated `index.html` with the deferred, SPA-aware Cloudflare script and refined bot detection.
+*   **Action:** Fixed code indentation in `index.html`.
+
+### Refine & Reflect
+*   **Reflection:** Cloudflare Web Analytics requires the `spa: true` flag to accurately track Single Page Applications. When using "JS Snippet" mode in the dashboard, the script must be present in the HTML but should be deferred to avoid competing with critical rendering resources. Aggressive bot detection heuristics (like checking for mouse movement) should be avoided as they create false positives for mobile and accessibility-focused traffic.
