@@ -142,14 +142,14 @@ jobs:
         continue-on-error: true
 
       - name: Update Performance History Dashboard
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        if: github.event.pull_request.head.repo.full_name == github.repository && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
         run: |
           mkdir -p history-dir
           node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
           cp scripts/lighthouse-dashboard.html history-dir/index.html
 
       - name: Deploy Lighthouse History
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+        if: github.event.pull_request.head.repo.full_name == github.repository && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: history-dir
@@ -158,7 +158,6 @@ jobs:
 
   storybook-test:
     name: Storybook Interaction & A11y Tests
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -187,6 +186,10 @@ jobs:
     needs: [lint-test, build, storybook-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       released: ${{ steps.check_release.outputs.released }}
       tag: ${{ steps.check_release.outputs.tag }}
@@ -331,6 +334,8 @@ jobs:
     # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Trigger Downstream Jobs
         uses: actions/github-script@v8

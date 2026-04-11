@@ -27,9 +27,10 @@ jobs:
           files: public/assets/locales/en/**
 
       - name: Set up Python
-        uses: actions/setup-node@v6
+        uses: actions/setup-python@v5
         with:
-          node-version: "22"
+          python-version: "3.11"
+          cache: 'pip'
 
       - name: Install Python dependencies
         run: |
@@ -37,12 +38,9 @@ jobs:
           pip install google-genai
 
       - name: Run translation script
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            filename=$(basename "$file")
-            echo "Processing changed file: $filename"
-            python scripts/translate.py --file "$filename"
-          done
+          python scripts/translate.py --files ${{ steps.changed-files.outputs.all_changed_files }}
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
 

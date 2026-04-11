@@ -29,10 +29,12 @@ jobs:
         id: pr_info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_JSON: ${{ toJson(github.event.workflow_run.pull_requests) }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          REPO: ${{ github.repository }}
         run: |
           # Try extracting from payload first
-          PR_NUMBER=$(echo '${{ toJson(github.event.workflow_run.pull_requests) }}' | jq -r '.[0].number')
-          HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
+          PR_NUMBER=$(echo "$PR_JSON" | jq -r '.[0].number')
           
           echo "Debug: PR from payload: $PR_NUMBER"
           echo "Debug: Head branch: $HEAD_BRANCH"
@@ -40,29 +42,30 @@ jobs:
           # Fallback to searching by head branch if payload is empty
           if [ "$PR_NUMBER" == "null" ] || [ -z "$PR_NUMBER" ]; then
             echo "PR not in payload, searching by head branch: $HEAD_BRANCH..."
-            PR_NUMBER=$(gh pr list --head "$HEAD_BRANCH" --repo "${{ github.repository }}" --state all --json number -q '.[0].number' 2>&1)
+            PR_NUMBER=$(gh pr list --head "$HEAD_BRANCH" --repo "$REPO" --state all --json number -q '.[0].number' 2>&1)
             echo "Debug: PR lookup result: $PR_NUMBER"
           fi
           
           if [ "$PR_NUMBER" == "null" ] || [ -z "$PR_NUMBER" ]; then
             echo "Error: No pull request found for branch $HEAD_BRANCH"
             echo "Debug: Listing recent PRs:"
-            gh pr list --repo "${{ github.repository }}" --state all --json number,title,headRefName --limit 10
+            gh pr list --repo "$REPO" --state all --json number,title,headRefName --limit 10
             exit 1
           fi
           
           echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "url=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "url=https://github.com/$REPO/pull/$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "Resolved PR #$PR_NUMBER"
 
       - name: Determine auto-merge eligibility
         id: eligible
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.number }}
+          REPO: ${{ github.repository }}
         run: |
-          PR_NUMBER="${{ steps.pr_info.outputs.number }}"
-          LABELS=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json labels -q '.labels[].name')
-          TITLE=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json title -q '.title')
+          LABELS=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels -q '.labels[].name')
+          TITLE=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json title -q '.title')
 
           # Determine ecosystem from labels set in dependabot.yml
           IS_NPM=false
@@ -121,12 +124,16 @@ jobs:
 
       - name: Approve Dependabot PR
         if: steps.eligible.outputs.merge == 'true'
-        run: gh pr review --approve "${{ steps.pr_info.outputs.number }}" --repo "${{ github.repository }}"
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.number }}
+          REPO: ${{ github.repository }}
+        run: gh pr review --approve "$PR_NUMBER" --repo "$REPO"
 
       - name: Enable auto-merge
         if: steps.eligible.outputs.merge == 'true'
-        run: gh pr merge --auto --merge "${{ steps.pr_info.outputs.number }}" --repo "${{ github.repository }}"
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr_info.outputs.number }}
+          REPO: ${{ github.repository }}
+        run: gh pr merge --auto --merge "$PR_NUMBER" --repo "$REPO"

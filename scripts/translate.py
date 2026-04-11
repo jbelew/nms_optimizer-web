@@ -199,23 +199,35 @@ def process_markdown(target_lang: str, filename: str, force: bool = False):
         f.write(translated)
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--lang")
-    parser.add_argument("--file")
-    parser.add_argument("--force", action="store_true")
+    parser = argparse.ArgumentParser(description="Translate NMS Optimizer files using Gemini AI.")
+    parser.add_argument("--lang", help="Specific language code (e.g. es). Default: all supported.")
+    parser.add_argument("--files", nargs="+", help="One or more filenames to translate (e.g. about.md translation.json).")
+    parser.add_argument("--force", action="store_true", help="Force refresh even if already translated.")
     args = parser.parse_args()
 
     if not os.environ.get("GOOGLE_API_KEY"):
-        print("Error: GOOGLE_API_KEY not set.")
+        print("Error: GOOGLE_API_KEY environment variable not set.")
         return
 
     target_langs = [args.lang] if args.lang else list(LANGUAGES.keys())
+    
     for lang in target_langs:
-        print(f"\n--- {lang} ---")
-        if args.file:
-            if args.file.endswith(".json"): process_json(lang, args.force)
-            else: process_markdown(lang, args.file, args.force)
+        print(f"\n--- Processing {lang} ({LANGUAGES[lang]}) ---")
+        
+        # If specific files are requested, process only those
+        if args.files:
+            for filename in args.files:
+                # Handle potential path prefixes if passed from git diff
+                clean_name = os.path.basename(filename)
+                if clean_name.endswith(".json"):
+                    process_json(lang, args.force)
+                elif clean_name.endswith(".md"):
+                    if clean_name == "changelog.md":
+                        print("Skipping changelog.md (always English).")
+                        continue
+                    process_markdown(lang, clean_name, args.force)
         else:
+            # Default: Process everything (respecting work preservation logic)
             process_json(lang, args.force)
             en_dir = os.path.join(BASE_PATH, "en")
             for filename in os.listdir(en_dir):
