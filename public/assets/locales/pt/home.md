@@ -1,26 +1,26 @@
-# NMS Optimizer: Calculadora de layout técnico e bônus de adjacência para No Man's Sky
+# Otimizador de NMS: Layouts de Tecnologia e Calculadora de Bônus de Adjacência para No Man's Sky
 
-![Captura de tela do aplicativo NMS Optimizer mostrando uma grade de tecnologia de nave estelar com posicionamento de módulo otimizado](/assets/img/screenshots/screenshot.png)
+![Captura de tela do aplicativo Otimizador de NMS mostrando uma grade de tecnologia de nave com posicionamento de módulos otimizado](/assets/img/screenshots/screenshot.png)
 
-O NMS Optimizer descobre onde colocar seus módulos de tecnologia para que você não precise fazer isso. Escolha sua plataforma, selecione seus módulos, marque seus slots sobrecarregados e o otimizador calcula o layout que aproveita ao máximo seus bônus de adjacência. Funciona para naves estelares, corvetas, ferramentas múltiplas, exosuits, exocraft e cargueiros.
+O Otimizador de NMS descobre onde colocar seus módulos de tecnologia para que você não precise fazer isso. Escolha sua plataforma, selecione seus módulos, marque seus espaços sobrecarregados e o otimizador calculará o layout que aproveita ao máximo seus bônus de adjacência. Funciona para naves, corvetas, multiferramentas, exotrajes, exonaves e cargueiros.
 
 ## O que é um bônus de adjacência?
 
-Quando você coloca módulos de tecnologia compatíveis próximos uns dos outros no No Man's Sky, eles recebem um aumento nas estatísticas. O jogo não diz muito sobre como isso funciona, mas a versão resumida: módulos do mesmo tipo que compartilham uma vantagem recebem um aumento percentual em suas estatísticas. Quanto mais arestas forem compartilhadas, maior será o bônus. Descobrir o arranjo certo manualmente é entediante, especialmente em grades maiores com slots sobrecarregados para levar em conta.
+Quando você coloca módulos de tecnologia compatíveis lado a lado no No Man's Sky, eles ganham um aumento de atributos. O jogo não explica muito sobre como isso funciona, mas a versão curta é: módulos do mesmo tipo que compartilham uma borda ganham um aumento percentual em seus atributos. Quanto mais bordas compartilhadas, maior o bônus. Determinar o layout correto manualmente é tedioso, especialmente em grades grandes com espaços sobrecarregados para considerar.
 
-## O que são caça-níqueis superalimentados?
+## O que são espaços sobrecarregados?
 
-Alguns slots de inventário em No Man's Sky estão sobrecarregados. Qualquer módulo de tecnologia colocado em um recebe um grande multiplicador de estatísticas além dos bônus normais de adjacência. Eles são colocados aleatoriamente em cada peça de equipamento, então o layout ideal muda dependendo de onde seus slots superalimentados pousaram. Essa é a parte difícil e é para isso que esta ferramenta foi criada.
+Alguns espaços de inventário no No Man's Sky são sobrecarregados. Qualquer módulo de tecnologia colocado em um deles ganha um grande multiplicador de atributos, além dos bônus de adjacência normais. Eles são posicionados aleatoriamente em cada equipamento, então o layout ideal muda dependendo de onde os espaços sobrecarregados caíram. Essa é a parte difícil, e é para isso que esta ferramenta foi projetada.
 
 ## Como funciona
 
-O otimizador usa uma combinação de correspondência de padrões determinísticos e recozimento simulado. Para conjuntos de módulos menores, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o recozimento simulado explora milhares de arranjos para encontrar aquele que obtenha a pontuação mais alta possível. A pontuação leva em conta bônus de adjacência, colocação de slots sobrealimentados e pesos de estatísticas específicos do módulo. O back-end é executado em Rust para maior velocidade.
+O otimizador usa uma combinação de correspondência de padrões determinística e Simulated Annealing. Para conjuntos de módulos menores, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o Simulated Annealing explora milhares de disposições para encontrar uma que obtenha a maior pontuação possível. A pontuação leva em conta os bônus de adjacência, a localização dos espaços sobrecarregados e os pesos de atributos específicos de cada módulo. O backend roda em Rust para garantir velocidade.
 
 ## Plataformas Suportadas
 
-- Naves estelares (padrão, sentinela, solar, lutador, viva, atlântida)
+- Naves (padrão, sentinela, solar, lutadora, viva, atlante)
 - Corvetas
 - Multiferramentas (padrão e sentinela)
-- Exosuits
-- Exocraft (roamer, peregrino, nômade, colosso, minotauro, nautilon)
-- Cargueiros
+- Exotrajes
+- Exonaves (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
+- Cargueros

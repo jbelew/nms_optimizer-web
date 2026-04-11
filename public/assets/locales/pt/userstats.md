@@ -1,50 +1,50 @@
-# Estatísticas do NMS Optimizer: Layouts de tecnologia mais populares
+# Estatísticas do Otimizador de NMS: Layouts de Tecnologia Mais Populares
 
-## Estatísticas de usuários e layouts populares
+## Estatísticas de Usuário e Layouts Populares
 
-Esta página agrega dados de usuários do NMS Optimizer para revelar as tecnologias mais frequentemente sobrecarregadas em diferentes plataformas. Esteja você planejando sua próxima construção ou procurando inspiração, essas estatísticas mostram preferências e padrões reais da comunidade.
+Esta página agrega dados dos usuários do Otimizador de NMS para revelar as tecnologias mais frequentemente sobrecarregadas em diferentes plataformas. Quer você esteja planejando sua próxima build ou procurando inspiração, essas estatísticas mostram as preferências e padrões reais da comunidade.
 
-## Compreendendo os dados
+## Entendendo os Dados
 
-Os gráficos abaixo exibem estatísticas agregadas de usuários dos últimos **28 dias**, mostrando quais tecnologias os jogadores otimizam mais comumente para **slots superalimentados**. Os dados representam milhares de sessões de otimização em três tipos principais de plataforma:
+Os gráficos abaixo exibem estatísticas agregadas de usuários dos últimos **28 dias**, mostrando quais tecnologias os jogadores mais comumente otimizam para **espaços sobrecarregados**. Os dados representam milhares de sessões de otimização em três tipos principais de plataforma:
 
-- **Starship Technologies** - Incluindo variantes de naves padrão, Sentinel e Solar
-- **Tecnologias multiferramentas** - Abrangendo multiferramentas Standard, Sentinel, Atlantid e Staves
-- **Corvette Technologies** – Os navios corsários especializados introduzidos na atualização **Omega**
+- **Tecnologias de Nave** - Incluindo variantes de naves Padrão, Sentinela e Solar
+- **Tecnologias de Multiferramenta** - Cobrindo multiferramentas Padrão, Sentinela, Atlante e Cajados
+- **Tecnologias de Corveta** - As naves corsárias especializadas introduzidas na atualização **Omega**
 
-## O que esses gráficos significam
+## O Que Estes Gráficos Significam
 
-Cada gráfico mostra a popularidade relativa de diferentes tecnologias quando os usuários optam por sobrecarregá-las. Uma fatia maior significa que a tecnologia foi selecionada para sobrealimentação com mais frequência pela comunidade. Isso reflete:
+Cada gráfico mostra a popularidade relativa de diferentes tecnologias quando os usuários escolhem sobrecarregá-las. Uma fatia maior significa que aquela tecnologia foi selecionada para sobrecarga com mais frequência pela comunidade. Isso reflete:
 
-1. **Meta Eficácia** – As tecnologias que fornecem os maiores aumentos de desempenho tendem a se agrupar no topo
-2. **Preferências do Jogador** - Jogadores focados em combate priorizam tecnologias diferentes daquelas focadas em exploração
-3. **Oportunidades de sinergia** – Algumas tecnologias combinam particularmente bem com a sobrealimentação, tornando-as escolhas naturais
+1. **Efetividade do Meta** - Tecnologias que fornecem os maiores aumentos de desempenho tendem a se agrupar no topo
+2. **Preferências dos Jogadores** - Jogadores focados em combate priorizam tecnologias diferentes dos focados em exploração
+3. **Oportunidades de Sinergia** - Algumas tecnologias combinam particularmente bem com a sobrecarga, tornando-as escolhas naturais
 
-### Lendo os gráficos
+### Lendo os Gráficos
 
-- Tecnologias que representam menos de **2% do total de seleções** são agrupadas na categoria "Outros" para manter os gráficos legíveis
+- Tecnologias que representam menos de **2% das seleções totais** são agrupadas na categoria "Outras" para manter a legibilidade dos gráficos
 - As porcentagens aparecem em cada fatia quando representam pelo menos 6% do total
-- As cores da tecnologia correspondem às usadas em todo o otimizador para fácil referência
+- As cores das tecnologias correspondem às usadas em todo o otimizador para fácil referência
 
-## Por que isso é importante
+## Por Que Isso Importa
 
-Compreender os padrões da comunidade pode ajudar a informar suas próprias decisões de construção:
+Entender os padrões da comunidade pode ajudar a informar suas próprias decisões de build:
 
 - **Validação** - Se uma tecnologia que você está considerando é popular, provavelmente é por um bom motivo
-- **Descoberta** - Encontre tecnologias que você talvez não tenha considerado, vendo o que os outros priorizam
-- **Meta Shifts** - Veja como os dados mudam conforme o jogo evolui e novos conteúdos são lançados
-- **Crie variedade** - Use isso como ponto de partida e depois personalize com base no seu estilo de jogo e necessidades específicas
+- **Descoberta** - Encontre tecnologias que você pode não ter considerado vendo o que os outros priorizam
+- **Mudanças no Meta** - Observe como os dados mudam conforme o jogo evolui e novos conteúdos são lançados
+- **Variedade de Builds** - Use isso como um ponto de partida e personalize com base no seu estilo de jogo e necessidades específicas
 
 ## Começando
 
-Depois de revisar as escolhas populares aqui, vá para o [otimizador](/en) para criar sua própria compilação otimizada. Você pode:
+Depois de revisar as escolhas populares aqui, vá para o [otimizador](/pt) para criar sua própria build otimizada. Você pode:
 
-1. Selecione sua plataforma (Starship, Multi-tool, Corvette, Exosuit ou Exocraft)
-2. Configure seus **slots sobrecarregados** e **células ativas**
-3. Execute o solucionador para encontrar o layout perfeito
+1. Selecionar sua plataforma (Nave, Multiferramenta, Corveta, Exotraje ou Exonave)
+2. Configurar seus **espaços sobrecarregados** e **células ativas**
+3. Executar o otimizador para encontrar seu layout perfeito
 
-Para obter instruções detalhadas sobre como usar o otimizador, visite a [página de instruções](/en/instructions).
+Para instruções detalhadas sobre o uso do otimizador, visite a [página de instruções](/pt/instructions).
 
-## Coleta de dados
+## Coleta de Dados
 
-Esses dados são coletados anonimamente a partir de solicitações de otimização e não incluem nenhuma informação de identificação pessoal. Ele ajuda a comunidade do NMS Optimizer a entender quais tecnologias agregam mais valor e informa melhorias futuras nos algoritmos de resolução.
+Estes dados são coletados anonimamente a partir de solicitações de otimização e não incluem nenhuma informação de identificação pessoal. Isso ajuda a comunidade do Otimizador de NMS a entender quais tecnologias entregam mais valor e informa futuras melhorias nos algoritmos do otimizador.

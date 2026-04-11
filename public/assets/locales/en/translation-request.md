@@ -12,38 +12,40 @@ You don't need to be a professional translator — just fluent, familiar with th
 
 Most strings are short UI labels, tooltips, or fun status messages.
 
-## Using Crowdin (Recommended)
+## The Workflow
 
-If you want the easiest way to contribute:
+The NMS Optimizer now uses an **AI-first translation workflow** using the Gemini 2.5 Flash API. This ensures that every time the English content is updated, all other supported languages are automatically updated within minutes.
 
-1. **Visit the Crowdin Project** at [crowdin.com/project/nms-optimizer](https://crowdin.com/project/nms-optimizer).
-2. **Select your language** and start editing existing strings or adding new ones.
-3. You can use the **proofreading** feature to verify AI-suggested translations.
-4. Crowdin handles the synchronization with GitHub automatically, so you don't need to touch any code.
+However, AI isn't perfect. We rely on the community to identify and fix "hallucinations" or incorrect NMS terminology.
 
-> Crowdin uses standard [ISO language codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes): `fr` for French, `de` for German, `es` for Spanish, `pt` for Portuguese, etc.
+## How to Contribute
 
-## If You're Comfortable With GitHub
+The easiest way to contribute is directly through GitHub. You don't need to know how to code to suggest a better translation.
 
-**Fork the repo:**
-[github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+1. **Find the file**: All localization files are located in `/public/assets/locales/[language_code]/`.
+   - `translation.json`: UI labels, tooltips, and status messages.
+   - `*.md`: Content for larger dialogs (About, Instructions, etc.).
+2. **Edit directly on GitHub**: 
+   - Navigate to the file for your language (e.g., `/public/assets/locales/es/translation.json`).
+   - Click the **Pencil icon (Edit this file)**.
+   - Make your changes.
+   - Click **Commit changes...** and GitHub will automatically create a Pull Request for you.
+3. **Wait for Merge**: Once I merge your PR, the AI script will automatically detect your human edits and ensure they are preserved during future updates.
 
-**Update or Create the Translation Files:**
+## Supported Languages
 
-All localization files are located in `/public/assets/locales/[language_code]/`:
+We currently support:
+- `en` (English - Source)
+- `es` (Spanish)
+- `fr` (French)
+- `de` (German)
+- `pt` (Portuguese)
 
-- `translation.json`: Application UI labels, tooltips, and status messages.
-- `*.md`: Content for larger dialogs (About, Instructions, Changelog, etc.).
-
-You can update existing files or create a new folder for your language using the [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
-
-> _Example:_ To add or edit German translations, check `/public/assets/locales/de/`.
-
-**Submit a pull request** when you're done.
+If you'd like to add a **new language**, simply create a new folder with the appropriate [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) and I will add it to the AI's rotation!
 
 ## Notes
 
-- **Interpolation**: You'll see tags like `<1></1>` or `{{techName}}`—please keep these exactly as they are, as the app uses them to insert dynamic content or styling.
-- **Random Messages**: `randomMessages` is a list of fun status updates that appear during optimization. Feel free to get creative with these in your language!
+- **Interpolation**: You'll see tags like `<1></1>` or `{{techName}}` — **please keep these exactly as they are**, as the app uses them to insert dynamic content or styling.
+- **Human Priority**: The translation script is designed to respect human edits. If you change a value in a JSON file, the AI will not overwrite it during the next automated run.
 
 Thanks for helping make the No Man's Sky Technology Layout Optimizer better for everyone! Let me know if you have any questions — happy to help.

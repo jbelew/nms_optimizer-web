@@ -1,84 +1,84 @@
-# Como funciona o otimizador NMS
+# Como o Otimizador de NMS Funciona
 
-## O que é isso?
+## O Que É Isso?
 
-NMS Optimizer é uma ferramenta gratuita que descobre onde colocar seus módulos de tecnologia no No Man's Sky. Você escolhe seu equipamento, seleciona suas tecnologias, marca seus slots sobrecarregados e ele calcula o layout com maior pontuação.
+O Otimizador de NMS é uma ferramenta gratuita que descobre onde colocar seus módulos de tecnologia no No Man's Sky. Você escolhe seu equipamento, seleciona suas tecnologias, marca seus espaços sobrecarregados e a ferramenta calcula o layout que obtém a maior pontuação.
 
-Funciona para naves estelares (padrão, sentinela, solar, caça, viva, atlântida), corvetas, multiferramentas, exosuits, todos os tipos de exocraft e cargueiros.
+Funciona para naves (padrão, sentinela, solar, lutadora, viva, atlante), corvetas, multiferramentas, exotrajes, todos os tipos de exonaves e cargueiros.
 
-A ferramenta lida automaticamente com bônus de adjacência e posicionamento de slots sobrecarregados. Na prática, um layout otimizado normalmente pontua de 15 a 20% mais alto do que a maioria dos jogadores organiza manualmente.
+A ferramenta gerencia automaticamente os bônus de adjacência e a localização dos espaços sobrecarregados. Na prática, um layout otimizado costuma pontuar entre 15% e 20% a mais do que o que a maioria dos jogadores organiza manualmente.
 
-## O problema
+## O Problema
 
-No Man's Sky não explica bem os bônus de adjacência e não explica de forma alguma a estratégia de slots sobrecarregada. Módulos do mesmo tipo obtêm um aumento de estatísticas quando compartilham uma borda na grade. Os slots sobrecarregados oferecem um multiplicador de aproximadamente 25-30% para tudo o que você coloca neles. Descobrir o melhor arranjo significa fazer malabarismos com os dois sistemas ao mesmo tempo, em grades com milhões de permutações possíveis (~8,32 × 10⁸¹ para um layout completo).
+No Man's Sky não explica bem os bônus de adjacência e não explica nada sobre a estratégia de espaços sobrecarregados. Módulos do mesmo tipo ganham um aumento de atributos quando compartilham uma borda na grade. Espaços sobrecarregados dão um multiplicador de aproximadamente 25-30% a qualquer coisa que você colocar neles. Descobrir a melhor disposição significa equilibrar ambos os sistemas ao mesmo tempo, em grades com milhões de permutações possíveis (~8,32 × 10⁸¹ para um layout completo).
 
-Ninguém está resolvendo isso manualmente.
+Ninguém consegue resolver isso manualmente.
 
-## Como o otimizador resolve isso
+## Como o Otimizador Resolve Isso
 
-O otimizador passa por quatro etapas:
+O otimizador executa quatro etapas:
 
-1. **Correspondência de padrões** — começa com arranjos testados manualmente que apresentam boa pontuação confiável para conjuntos de módulos comuns
-2. **Previsão de ML** — se sua grade tiver slots sobrecarregados, um modelo do TensorFlow treinado em mais de 16.000 layouts de alta pontuação prevê onde colocar as tecnologias principais versus atualizações
-3. **Recozimento simulado** — um otimizador baseado em Rust troca módulos e testa milhares de arranjos em milissegundos, subindo em direção à pontuação mais alta possível
-4. **Exibição de resultados** — você vê o layout de maior pontuação com um detalhamento completo do multiplicador de adjacência
+1. **Correspondência de Padrões**: Começa com disposições testadas manualmente que pontuam bem de forma confiável para conjuntos comuns de módulos.
+2. **Previsão por ML**: Se sua grade tiver espaços sobrecarregados, um modelo TensorFlow treinado em mais de 16.000 layouts de alta pontuação prevê onde colocar as tecnologias principais em relação às melhorias.
+3. **Simulated Annealing**: Um otimizador baseado em Rust troca módulos e testa milhares de disposições em milissegundos, buscando a maior pontuação possível.
+4. **Visualização de Resultados**: Você verá o layout com a maior pontuação com um detalhamento completo do multiplicador de adjacência.
 
-Cada etapa alimenta a próxima. O modelo ML dá ao recozimento simulado um forte ponto de partida e o recozimento é refinado a partir daí.
+Cada etapa alimenta a próxima. O modelo de ML dá ao Simulated Annealing um ponto de partida sólido, e o algoritmo de Rust cuida do refino a partir daí.
 
-## O que o otimizador representa
+## O Que o Otimizador Considera
 
-- Slots padrão, sobrecarregados e inativos
-- Se uma tecnologia central ou sua melhor atualização pertence a cada slot superalimentado
-- Trade-offs entre estatísticas concorrentes (manobrabilidade vs. velocidade, dano vs. taxa de tiro)
-- Pesos estatísticos específicos do módulo e regras de parceiros adjacentes
+- Espaços padrão, sobrecarregados e inativos.
+- Se uma tecnologia principal ou sua melhor melhoria deve ir em cada espaço sobrecarregado.
+- Equilíbrio entre atributos conflitantes (manobrabilidade vs. velocidade, dano vs. cadência de tiro).
+- Pesos de atributos específicos de cada módulo e regras de adjacência.
 
-## Pilha de tecnologia
+## Pilha Tecnológica
 
-- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Solucionador de back-end:** Python, Flask, TensorFlow, NumPy, Rust (recozimento e pontuação simulados)
-- **Testes:** Vitest, Python Unittest
-- **Implantação:** Heroku (hospedagem), Cloudflare (DNS/CDN), Docker
-- **CI/CD:** Ações do GitHub
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI.
+- **Serviço de Otimização:** Python, Flask, TensorFlow, NumPy, Rust (Simulated Annealing e pontuação).
+- **Testes:** Vitest, Python Unittest.
+- **Implantação:** Heroku (hospedagem), Cloudflare (Hosting/DNS/CDN), Docker.
+- **CI/CD:** GitHub Actions.
 
 ## Repositórios
 
-- IU da Web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-- Back-end: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Interface Web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## PERGUNTAS FREQUENTES
+## Perguntas Frequentes (FAQ)
 
-### O que é um bônus de adjacência?
+### O que é bônus de adjacência?
 
-Quando você coloca módulos de tecnologia compatíveis próximos uns dos outros na grade de inventário, eles recebem um aumento nas estatísticas. Diferentes tecnologias têm diferentes parceiros adjacentes – bônus de atualizações de armas entre si, bônus de tecnologia de movimento de outras tecnologias de movimento e assim por diante. O otimizador testa todos os arranjos possíveis e escolhe aquele em que os bônus totais de adjacência são mais altos.
+Quando você coloca módulos de tecnologia compatíveis lado a lado na grade de inventário, eles ganham um aumento de atributos. Diferentes tecnologias têm diferentes parceiros de adjacência: melhorias de armas se ajudam, tecnologias de movimento se ajudam, e assim por diante. O otimizador testa todas as disposições possíveis e escolhe aquela onde os bônus totais são os mais altos.
 
-### Como funcionam os caça-níqueis superalimentados?
+### Como funcionam os espaços sobrecarregados?
 
-Slots sobrecarregados são slots de inventário raros (geralmente 4 por grade) que dão um aumento de aproximadamente 25-30% a qualquer módulo que esteja neles. A parte complicada é decidir o que vai lá. Às vezes é a tecnologia central, às vezes é a atualização de maior estatística. O modelo de ML do otimizador é treinado especificamente nesta decisão, usando mais de 16.000 layouts reais como dados de treinamento.
+Espaços sobrecarregados são espaços raros (geralmente 4 por grade) que dão um impulso de cerca de 25-30% a qualquer módulo colocado neles. A parte difícil é decidir o que colocar lá. Às vezes é a tecnologia principal, outras vezes é a melhoria com os melhores atributos. O modelo de ML do otimizador é treinado especificamente para essa decisão, usando mais de 16.000 layouts reais como dados de treinamento.
 
-### Quais tipos de equipamentos são suportados?
+### Quais tipos de equipamento são suportados?
 
 Todos eles:
 
-- **Naves** — variantes padrão, exótica, sentinela, solar, viva e atlântida
-- **Corvetas** — incluindo slots de reator e tecnologia cosmética
-- **Multiferramentas** — todos os tipos, incluindo pautas
-- **Exocraft** — nômade, peregrino, andarilho, colosso, minotauro, nautilon
-- **Exosuits** — todas as categorias de tecnologia
-- **Cargueiros** — layouts tecnológicos de naves capitais
+- **Naves:** Padrão, Exótica, Sentinela, Solar e Viva.
+- **Corvetas:** Incluindo módulos de reator únicos e espaços de tecnologia cosmética.
+- **Multiferramentas:** Todos os tipos, incluindo Cajados.
+- **Exonaves:** Todos os veículos (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
+- **Exotrajes:** Todos os tipos de tecnologia.
+- **Cargueiros:** Layouts de tecnologia de naves capitais.
 
-### É grátis?
+### É gratuito?
 
-Sim. Gratuito, sem anúncios e de código aberto (GPL-3.0). Nenhuma conta é necessária.
+Sim. Gratuito, sem anúncios, de código aberto (GPL-3.0). Sem contas ou e-mails.
 
-### Posso salvar e compartilhar compilações?
+### Posso salvar e compartilhar builds?
 
-Sim. Você pode salvar compilações como arquivos `.nms`, gerar links compartilháveis ​​ou compartilhar diretamente nas redes sociais. As compilações são validadas quanto à integridade e compatibilidade do equipamento antes do compartilhamento.
+Sim. Você pode salvar builds como arquivos `.nms`, gerar links compartilháveis ou postar diretamente nas redes sociais. As builds são validadas para garantir integridade e compatibilidade antes do compartilhamento.
 
-## Obrigado
+## Agradecimentos
 
-George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrally, Kevin Murray e todos os outros que contribuíram – seu apoio significa tudo. Cada doação, compartilhamento e palavra gentil me ajuda a continuar construindo. Obrigado.
+George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray e todos os outros que contribuíram: seu apoio significa tudo. Cada doação, cada compartilhamento da ferramenta e cada palavra de incentivo me ajuda a continuar construindo. Obrigado.
 
-## Versão inicial
+## Versão Antiga
 
-Esta é a aparência da IU em uma versão inicial: funcionava, mas o design era mínimo. A versão atual é uma grande melhoria em design, usabilidade e clareza.
-![Protótipo inicial da interface de usuário do otimizador de layout No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
+Aqui está como a interface parecia em uma versão inicial: funcionava, mas o design era mínimo. A versão atual é uma grande evolução em design, usabilidade e clareza.
+![Protótipo inicial da interface de usuário do otimizador de layouts do No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

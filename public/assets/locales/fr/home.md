@@ -1,26 +1,26 @@
-# NMS Optimizer : disposition technique et calculateur de bonus de contiguïté pour No Man's Sky
+# Optimiseur NMS : Créateur de Layouts et Calculateur de Bonus d'Adjacence pour No Man's Sky
 
-![Capture d'écran de l'application NMS Optimizer montrant une grille technologique de vaisseau spatial avec un placement de module optimisé](/assets/img/screenshots/screenshot.png)
+![Capture d'écran de l'application Optimiseur NMS montrant une grille de technologie de vaisseau avec un placement de modules optimisé](/assets/img/screenshots/screenshot.png)
 
-NMS Optimizer détermine où placer vos modules technologiques pour que vous n'ayez pas à le faire. Choisissez votre plateforme, sélectionnez vos modules, marquez vos emplacements suralimentés et l'optimiseur calcule la disposition qui tire le meilleur parti de vos bonus de contiguïté. Il fonctionne pour les vaisseaux spatiaux, les corvettes, les outils multifonctions, les exosuits, les exocraft et les cargos.
+L'Optimiseur NMS calcule pour vous le meilleur emplacement pour vos modules technologiques. Choisissez votre plateforme, sélectionnez vos modules, marquez vos emplacements surchargés, et l'optimiseur générera la disposition qui maximise vos bonus d'adjacence. Fonctionne pour les vaisseaux, corvettes, multi-outils, exocombinaisons, exonefs et cargos.
 
-## Qu'est-ce qu'un bonus de contiguïté ?
+## Qu'est-ce qu'un bonus d'adjacence ?
 
-Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans No Man's Sky, ils obtiennent une amélioration de leurs statistiques. Le jeu ne vous dit pas grand-chose sur la façon dont cela fonctionne, mais la version courte : les modules du même type qui partagent un avantage obtiennent un pourcentage d'augmentation de leurs statistiques. Plus il y a d’avantages partagés, plus le bonus est important. Déterminer manuellement le bon agencement est fastidieux, en particulier sur les réseaux plus grands avec des emplacements suralimentés à prendre en compte.
+Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans No Man's Sky, ils bénéficient d'un boost de statistiques. Le jeu explique peu ce mécanisme, mais pour faire simple : les modules de même type partageant un bord commun voient leurs attributs augmenter. Plus ils partagent de bords, plus le bonus est important. Déterminer la disposition idéale manuellement est fastidieux, surtout sur de grandes grilles avec des emplacements surchargés à prendre en compte.
 
-## Que sont les machines à sous suralimentées ?
+## Que sont les emplacements surchargés ?
 
-Certains emplacements d'inventaire dans No Man's Sky sont suralimentés. Tout module technologique placé dans un module obtient un multiplicateur de statistiques important en plus des bonus de contiguïté normaux. Ils sont placés de manière aléatoire sur chaque pièce d'équipement, de sorte que la disposition optimale change en fonction de l'endroit où vos emplacements suralimentés ont atterri. C’est la partie la plus difficile, et c’est pour cela que cet outil est conçu.
+Certains emplacements d'inventaire dans No Man's Sky sont surchargés. Tout module technologique placé sur l'un d'eux reçoit un multiplicateur de statistiques important, en plus des bonus d'adjacence habituels. Leur position est aléatoire sur chaque équipement, la disposition optimale change donc selon l'emplacement de ces slots surchargés. C'est là toute la difficulté, et c'est précisément pour cela que cet outil a été conçu.
 
-## Comment ça marche
+## Comment ça fonctionne
 
-L'optimiseur utilise une combinaison de correspondance de modèles déterministe et de recuit simulé. Pour les ensembles de modules plus petits, il peut trouver la meilleure disposition exacte. Pour les grilles plus grandes ou plus complexes, le recuit simulé explore des milliers d’arrangements pour en trouver un qui obtient le score le plus élevé possible. La notation prend en compte les bonus de contiguïté, le placement des emplacements suralimenté et les pondérations statistiques spécifiques aux modules. Le backend fonctionne dans Rust pour plus de rapidité.
+L'optimiseur utilise une combinaison de correspondance de modèles déterministe et de recuit simulé (Simulated Annealing). Pour les petits ensembles de modules, il peut trouver la solution parfaite. Pour les grilles plus complexes, le recuit simulé explore des milliers de combinaisons pour identifier celle qui offre le score le plus élevé. Le calcul prend en compte les bonus d'adjacence, la position des slots surchargés et le poids spécifique de chaque statistique de module. Le moteur de calcul est écrit en Rust pour une vitesse maximale.
 
-## Plateformes prises en charge
+## Plateformes Supportées
 
-- Vaisseaux spatiaux (standard, sentinelle, solaire, chasseur, vivant, atlantide)
-- Corvette
-- Multioutils (standard et sentinelle)
+- Vaisseaux (Standard, Sentinelle, Solaire, Combattant, Organique, Atlantide)
+- Corvettes
+- Multi-outils (Standard et Sentinelle)
 - Exocombinaisons
-- Exocraft (errant, pèlerin, nomade, colosse, minotaure, nautilon)
+- Exonefs (Vagabond, Pèlerin, Nomade, Colosse, Minotaure, Nautilon)
 - Cargos

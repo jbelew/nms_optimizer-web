@@ -1,84 +1,84 @@
-# Comment fonctionne l'optimiseur NMS
+# Comment Fonctionne l'Optimiseur NMS
 
-## Qu'est-ce que c'est?
+## Qu'est-ce que C'est ?
 
-NMS Optimizer est un outil gratuit qui détermine où placer vos modules technologiques dans No Man's Sky. Vous choisissez votre équipement, sélectionnez vos technologies, marquez vos emplacements suralimentés et il calcule la disposition qui obtient le score le plus élevé.
+L'Optimiseur NMS est un outil gratuit qui calcule l'emplacement idéal de vos modules de technologie dans No Man's Sky. Vous choisissez votre équipement, sélectionnez vos technologies, marquez vos emplacements surchargés, et l'outil génère la disposition qui obtient le meilleur score.
 
-Il fonctionne pour les vaisseaux spatiaux (standard, sentinelle, solaire, de chasse, vivant, atlantide), les corvettes, les outils multifonctions, les exosuits, tous les types d'exocraft et les cargos.
+Il fonctionne pour tous les types de vaisseaux (Standard, Sentinelle, Solaire, Combattant, Organique, Atlantide), Corvettes, Multi-outils, Exocombinaisons, Exonefs et Cargos.
 
-L’outil gère automatiquement les bonus de contiguïté et le placement des emplacements suralimentés. En pratique, une mise en page optimisée obtient généralement un score 15 à 20 % plus élevé que ce que la plupart des joueurs organisent à la main.
+L'outil gère automatiquement les bonus d'adjacence et l'optimisation des emplacements surchargés. En pratique, une build optimisée peut être 15 à 20 % plus efficace qu'une disposition faite manuellement.
 
-## Le problème
+## Le Problème
 
-No Man's Sky n'explique pas bien les bonus de contiguïté, et n'explique pas du tout la stratégie des machines à sous suralimentée. Les modules du même type obtiennent une amélioration de leurs statistiques lorsqu'ils partagent un avantage sur la grille. Les machines à sous suralimentées donnent un multiplicateur d'environ 25 à 30 % à tout ce que vous y mettez. Trouver le meilleur arrangement signifie jongler avec les deux systèmes à la fois, sur des grilles avec des millions de permutations possibles (~8,32 × 10⁸¹ pour une mise en page complète).
+No Man's Sky n'explique pas clairement le fonctionnement des bonus d'adjacence et reste très vague sur la stratégie des emplacements surchargés. Les modules de même type gagnent des bonus de statistiques lorsqu'ils sont côte à côte dans l'inventaire. Les emplacements surchargés appliquent un multiplicateur d'environ 25-30 % à tout module placé dessus. Trouver la meilleure combinaison demande de jongler avec ces deux systèmes sur des grilles offrant des millions de permutations possibles (~8,32 × 10⁸¹ pour une build complète).
 
-Personne ne résout ce problème à la main.
+C'est mathématiquement impossible à résoudre de tête.
 
-## Comment l'optimiseur le résout
+## Comment l'Optimiseur Résout Cela
 
-L'optimiseur se déroule en quatre étapes :
+L'optimisation se déroule en quatre étapes :
 
-1. **Correspondance de modèles** — cela commence par des arrangements testés manuellement qui obtiennent de bons résultats de manière fiable pour les ensembles de modules courants
-2. **Prédiction ML** — si votre grille dispose d'emplacements suralimentés, un modèle TensorFlow formé sur plus de 16 000 mises en page avec des scores élevés prédit où placer les technologies de base par rapport aux mises à niveau.
-3. **Recuit simulé** — un optimiseur basé sur Rust échange les modules et teste des milliers d'arrangements en millisecondes, grimpant vers le score le plus élevé possible
-4. **Affichage des résultats** — vous voyez la disposition la mieux notée avec une répartition complète du multiplicateur de contiguïté
+1. **Correspondance de Modèles** : Commence par des dispositions testées manuellement qui ont prouvé leur efficacité pour des ensembles de modules classiques.
+2. **Prédiction par ML** : Si votre grille comporte des slots surchargés, un modèle TensorFlow entraîné sur plus de 16 000 dispositions à haut score prédit le placement idéal des technologies principales par rapport aux améliorations.
+3. **Simulated Annealing (Recuit Simulé)** : Un moteur basé sur Rust teste des milliers de combinaisons en quelques millisecondes pour trouver le score le plus élevé possible.
+4. **Visualisation des Résultats** : Vous obtenez la disposition finale avec un détail complet des multiplicateurs d'adjacence.
 
-Chaque étape alimente la suivante. Le modèle ML donne au recuit simulé un point de départ solide, et le recuit s'affine à partir de là.
+Chaque étape alimente la suivante. Le modèle de Machine Learning donne au moteur de recuit un point de départ solide, qui se charge ensuite d'affiner le résultat.
 
-## Ce que représente l'optimiseur
+## Ce Que l'Optimiseur Prend en Compte
 
-- Emplacements standard, suralimentés et inactifs
-- Qu'une technologie de base ou sa meilleure mise à niveau ait sa place dans chaque emplacement suralimenté
-- Compromis entre statistiques concurrentes (maniabilité vs vitesse, dégâts vs cadence de tir)
-- Pondérations statistiques spécifiques au module et règles des partenaires de contiguïté
+- Les emplacements standards, surchargés et inactifs.
+- Le choix du module (technologie principale ou meilleure amélioration) pour chaque slot surchargé.
+- Les compromis entre statistiques (ex : Manœuvrabilité vs Vitesse, Dégâts vs Cadence).
+- Les poids spécifiques de chaque statistique et les règles de bonus d'adjacence.
 
-## Pile technologique
+## Pile Technologique
 
-- **Frontend :** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Solveur backend :** Python, Flask, TensorFlow, NumPy, Rust (recuit et notation simulés)
-- **Tests :** Vitest, Python Unittest
-- **Déploiement :** Heroku (hébergement), Cloudflare (DNS/CDN), Docker
-- **CI/CD :** Actions GitHub
+- **Frontend :** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI.
+- **Service d'Optimisation :** Python, Flask, TensorFlow, NumPy, Rust (Recuit simulé et calcul de score).
+- **Tests :** Vitest, Python Unittest.
+- **Déploiement :** Heroku (API), Cloudflare (Hébergement/DNS/CDN), Docker.
+- **CI/CD :** GitHub Actions.
 
 ## Dépôts
 
-- Interface utilisateur Web : [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
-- Backend : [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+- Interface Web : [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend : [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-##FAQ
+## Foire Aux Questions (FAQ)
 
-### Qu'est-ce qu'un bonus de contiguïté ?
+### Qu'est-ce qu'un bonus d'adjacence ?
 
-Lorsque vous placez des modules technologiques compatibles les uns à côté des autres sur la grille d'inventaire, ils bénéficient d'un boost de statistiques. Différentes technologies ont différents partenaires de contiguïté : les améliorations d'armes se bonus les unes par rapport aux autres, les bonus de technologie de mouvement par rapport aux autres technologies de mouvement, et ainsi de suite. L'optimiseur teste toutes les dispositions possibles et sélectionne celle où les bonus de contiguïté totaux sont les plus élevés.
+Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans votre inventaire, ils gagnent un bonus de statistiques. Les technologies ont des "partenaires" spécifiques : les améliorations d'armes se boostent mutuellement, les technologies de mouvement font de même, etc. L'optimiseur teste toutes les positions pour maximiser ces bonus cumulés.
 
-### Comment fonctionnent les machines à sous suralimentées ?
+### Comment fonctionnent les emplacements surchargés ?
 
-Les emplacements suralimentés sont des emplacements d'inventaire rares (généralement 4 par grille) qui donnent un boost d'environ 25 à 30 % au module qui s'y trouve. La partie délicate est de décider ce qui va là-bas. Parfois, il s'agit de la technologie de base, parfois de la mise à niveau la plus élevée. Le modèle ML de l'optimiseur est formé spécifiquement sur cette décision, en utilisant plus de 16 000 mises en page réelles comme données de formation.
+Ce sont des emplacements rares (généralement 4 par grille) qui boostent de 25-30 % les statistiques du module qui y est placé. La difficulté est de choisir quel module y mettre : parfois c'est la technologie de base, parfois c'est l'amélioration ayant les meilleures stats. Le modèle ML de l'outil est spécialement conçu pour trancher cette question en se basant sur des milliers de cas réels.
 
-### Quels types d'équipements sont pris en charge ?
+### Quels équipements sont supportés ?
 
 Tous :
 
-- **Vaisseaux spatiaux** — variantes standard, exotiques, sentinelles, solaires, vivantes et atlantides
-- **Corvettes** — y compris des emplacements pour réacteurs et technologies cosmétiques
-- **Multitools** — tous types, y compris les portées
-- **Exocraft** — nomade, pèlerin, vagabond, colosse, minotaure, nautilon
-- **Exosuits** — toutes les catégories technologiques
-- **Cargos** — configurations technologiques des vaisseaux capitaux
+- **Vaisseaux :** Standard, Exotique, Sentinelle, Solaire et Organique.
+- **Corvettes :** Incluant les réacteurs uniques et les slots de personnalisation cosmétique.
+- **Multi-outils :** Tous les types, y compris les Bâtons.
+- **Exonefs :** Tous les véhicules (Nomade, Colosse, Pèlerin, Vagabond, Minotaure, Nautilon).
+- **Exocombinaisons :** Toutes les technologies de survie et de mouvement.
+- **Cargos :** Dispositions technologiques des vaisseaux capitaux.
 
-### Est-ce gratuit ?
+### Est-ce gratuit ?
 
-Oui. Gratuit, sans publicité et open source (GPL-3.0). Aucun compte requis.
+Oui. Gratuit, sans publicité, et Open Source (GPL-3.0). Aucun compte ou e-mail n'est requis.
 
-### Puis-je enregistrer et partager des builds ?
+### Puis-je sauvegarder et partager mes builds ?
 
-Oui. Vous pouvez enregistrer les builds sous forme de fichiers « .nms », générer des liens partageables ou partager directement sur les réseaux sociaux. Les versions sont validées pour leur intégrité et la compatibilité des équipements avant le partage.
+Oui. Vous pouvez sauvegarder vos dispositions au format `.nms`, générer des liens de partage ou les poster sur les réseaux sociaux. Les builds sont validées pour garantir qu'elles sont compatibles avec l'équipement sélectionné.
 
-## Merci
+## Remerciements
 
-George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray et tous ceux qui ont contribué – votre soutien signifie tout. Chaque don, partage et mot gentil m'aide à continuer à construire. Merci.
+George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray et tous les autres contributeurs : votre soutien est essentiel. Chaque don, chaque partage et chaque mot d'encouragement m'aide à continuer le développement. Merci !
 
-## Première version
+## Ancienne Version
 
-Voici à quoi ressemblait l'interface utilisateur dans une première version : elle fonctionnait, mais la conception était minimale. La version actuelle constitue une amélioration majeure en termes de conception, de convivialité et de clarté.
-![Premier prototype de l'interface utilisateur de l'optimiseur de mise en page de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
+Voici à quoi ressemblait l'interface dans ses débuts : fonctionnelle, mais très minimaliste. La version actuelle est une évolution majeure en termes de design et d'ergonomie.
+![Prototype initial de l'interface de l'optimiseur No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

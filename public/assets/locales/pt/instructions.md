@@ -1,83 +1,83 @@
-# Instruções do NMS Optimizer: uso, módulos e slots supercarregados
+# Instruções do Otimizador de NMS: Uso, Módulos e Espaços Sobrecarregados
 
-## Primeiros passos com a grade
+## Primeiros Passos com a Grade
 
-- Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
-- **Clique** ou **toque duas vezes** (móvel) em um slot para marcá-lo como **Supercharged**.
-- **Ctrl-clique (Windows) / ⌘-clique (Mac) / toque único (móvel)** para alternar um slot **ativo** ou **inativo**.
-- Use **alternâncias de linha** para ativar ou desativar linhas inteiras. *(As alternâncias de linha são desativadas quando os módulos são colocados.)*
-- Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
+- Selecione uma **Plataforma** (Nave, Multiferramenta, Corveta, etc.) usando o ícone <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Clique** ou **toque duas vezes** (mobile) em um espaço para marcá-lo como **Sobrecarregado**.
+- **Ctrl-clique (Windows) / ⌘-clique (Mac) / toque simples (mobile)** para alternar entre um espaço **ativo** ou **inativo**.
+- Use os **interruptores de linha** para ativar ou desativar linhas inteiras. *(Os interruptores são desativados após a colocação de módulos).*
+- Use o botão de **seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para adicionar ou remover módulos individuais dentro de um grupo tecnológico.
 
 > 💡 **Nota:**
-> Exosuits e Exocraft possuem grades fixas. Os slots Exocraft não podem ser modificados. Nos Exosuits, apenas os estados ativo/inativo podem ser alterados – os layouts de slots sobrecarregados são corrigidos.
+> Exotrajes e Exonaves possuem grades fixas. Os espaços de Exonaves não podem ser modificados. Em Exotrajes, apenas os estados ativo/inativo podem ser alterados — os layouts de espaços sobrecarregados são fixos.
 
-## Antes de começar
+## Antes de Começar
 
-Esta ferramenta destina-se à **otimização de final de jogo** e funciona melhor quando:
+Esta ferramenta é destinada à **otimização de final de jogo (endgame)** e funciona melhor quando:
 
-- A maioria ou todos os slots da grade estão desbloqueados.
+- A maioria ou todos os espaços da grade estão desbloqueados.
 - Todas as tecnologias relevantes estão disponíveis.
-- Você tem **três módulos de atualização** por tecnologia.
+- Você possui **três módulos de melhoria** por tecnologia.
 
-Configurações parciais são suportadas, mas os resultados são otimizados para plataformas totalmente atualizadas.
+Configurações parciais são suportadas, mas os resultados são otimizados para plataformas totalmente melhoradas.
 
-## Dicas de uso
+## Dicas de Uso
 
-Os slots sobrecarregados são limitados – a colocação é importante.
+Espaços sobrecarregados são limitados — o posicionamento importa.
 
-- **Não atribua todos os slots sobrecarregados à primeira tecnologia que você colocar.** Isso geralmente bloqueia layouts gerais mais fortes posteriormente.
-- Comece atribuindo **2 a 3 slots superalimentados a uma tecnologia de alto impacto**, não todos eles.
-- Reserve pelo menos **um ou mais slots sobrealimentados** para uma **tecnologia de segunda prioridade** para melhorar a eficácia total.
-- Depois de usar todos os seus slots sobrecarregados, priorize tecnologias com **contagens maiores de módulos** antes que o espaço fique restrito.
-- Deixe o solucionador cuidar do posicionamento; sua função é **definir prioridades e distribuição**.
+- **Não atribua todos os espaços sobrecarregados à primeira tecnologia que você colocar.** Isso geralmente bloqueia layouts gerais mais fortes posteriormente.
+- Comece atribuindo **2–3 espaços sobrecarregados a uma tecnologia de alto impacto**, não todos eles.
+- Reserve pelo menos **um ou mais espaços sobrecarregados** para uma **segunda tecnologia prioritária** para melhorar a eficácia total.
+- Depois de usar todos os seus espaços sobrecarregados, priorize tecnologias com **maior contagem de módulos** antes que o espaço se torne limitado.
+- Deixe o otimizador cuidar do posicionamento; seu papel é **definir prioridades e distribuição**.
 
-Se o espaço ficar apertado, talvez seja necessário redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de otimização**.
+Se o espaço ficar apertado, você pode precisar redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de Otimização**.
 
-## Dica profissional
+## Dica Profissional
 
-O solucionador usa janelas fixas dimensionadas de acordo com a contagem de módulos de cada tecnologia para encontrar posicionamentos com eficiência de espaço.
-Se os resultados não forem ideais, **desative temporariamente os slots** para orientar o solucionador em direção a um layout melhor.
+O otimizador usa janelas fixas dimensionadas para a contagem de módulos de cada tecnologia para encontrar posicionamentos eficientes.
+Se os resultados não forem ideais, **desative espaços temporariamente** para guiar o otimizador em direção a um layout melhor.
 
-## Etiquetas Teta / Tau / Sigma
+## Rótulos Theta / Tau / Sigma
 
-Esses rótulos classificam as atualizações procedimentais **por estatísticas**, não por classe. São termos legados mantidos para fins de consistência.
+Esses rótulos classificam melhorias procedimentais **pelos atributos**, não pela classe. São termos legados mantidos para consistência.
 
-- **Theta (1)** — melhores estatísticas
-- **Tau (2)** — meio
+- **Theta (1)** — melhores atributos
+- **Tau (2)** — intermediário
 - **Sigma (3)** — mais fraco
 
-Você não verá esses rótulos no jogo. Eles são atribuídos comparando diretamente as estatísticas de atualização.
+Você não verá esses rótulos no jogo. Eles são atribuídos comparando diretamente os atributos das melhorias.
 
-### Comparação no jogo
+### Comparação No Jogo
 
-Ignore as letras das classes (S, X, etc.) e compare as estatísticas:
+Ignore as letras de classe (S, X, etc.) e compare os atributos:
 
-- Melhor → **Teta**
+- Melhor → **Theta**
 - Segundo → **Tau**
 - Pior → **Sigma**
 
-**A classe não determina a classificação.** As atualizações da Classe X podem ter desempenho superior ou inferior ao da Classe S.
+**A classe não determina a classificação.** Melhorias de Classe X podem superar ou subestimar as de Classe S.
 
-## Corvetas
+## Corbetas
 
-Os Corvettes diferem de outras plataformas: eles podem ter **até três conjuntos de atualização separados**.
+Corvetas diferem de outras plataformas: elas podem ter **até três conjuntos de melhorias separados**.
 
-- **Atualizações cosméticas** são mostradas como `Cn`.
-- **Atualizações do reator** são mostradas como `Rn`.
+- **Melhorias cosméticas** são mostradas como `Cn`.
+- **Melhorias de reator** são mostradas como `Rn`.
 
-O solucionador pode sugerir atualizações cosméticas para desempenho em vez de aparência, embora as diferenças geralmente sejam pequenas.
+O otimizador pode sugerir melhorias Cosméticas pelo desempenho em vez da aparência, embora as diferenças sejam geralmente pequenas.
 
-## Construções recomendadas
+## Builds Recomendadas
 
-Para **Exosuits** e **Exocraft**, os slots sobrecarregados são fixos e os layouts viáveis ​​são limitados.
-A ferramenta fornece **compilações recomendadas selecionadas manualmente** refletindo as combinações ideais.
+Para **Exotrajes** e **Exonaves**, os espaços sobrecarregados são fixos e os layouts viáveis são limitados.
+A ferramenta fornece **builds recomendadas selecionadas manualmente** que refletem as combinações ideais.
 
-Sugestões e layouts alternativos são bem-vindos nas discussões do projeto:
+Sugestões e layouts alternativos são bem-vindos através das discussões do projeto:
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Salvando, carregando e compartilhando
+## Salvando, Carregando e Compartilhando
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Carregue um arquivo `.nms` salvo para restaurar um layout.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar** — Carregue um arquivo `.nms` salvo para restaurar um layout.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar** — Baixe o layout atual como um arquivo `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar** — Gere um link que outras pessoas possam abrir diretamente no otimizador.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Gere uma captura de tela do layout atual.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Compartilhar** — Gere um link que outros podem abrir diretamente no otimizador.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capturar Tela** — Gere uma captura de tela do layout atual.

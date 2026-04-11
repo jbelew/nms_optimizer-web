@@ -1,26 +1,26 @@
-# Optimizador de NMS: Calculadora de bonificación de adyacencia y diseño tecnológico para No Man's Sky
+# Optimizador de NMS: Diseños tecnológicos y calculadora de bonificación de adyacencia para No Man's Sky
 
-![Captura de pantalla de la aplicación NMS Optimizer que muestra una cuadrícula de tecnología de nave espacial con ubicación optimizada del módulo](/assets/img/screenshots/screenshot.png)
+![Captura de pantalla de la aplicación Optimizador de NMS que muestra una cuadrícula de tecnología de nave espacial con ubicación de módulos optimizada](/assets/img/screenshots/screenshot.png)
 
-NMS Optimizer descubre dónde colocar sus módulos tecnológicos para que usted no tenga que hacerlo. Elija su plataforma, seleccione sus módulos, marque sus espacios supercargados y el optimizador calculará el diseño que aprovecha al máximo sus bonificaciones de adyacencia. Funciona para naves espaciales, corbetas, multiherramientas, exotrajes, exocrafts y cargueros.
+El Optimizador de NMS descubre dónde colocar tus módulos de tecnología para que no tengas que hacerlo tú. Elige tu plataforma, selecciona tus módulos, marca tus ranuras potenciadas y el optimizador calculará el diseño que aproveche al máximo tus bonificaciones de adyacencia. Funciona para naves espaciales, corbetas, multiherramientas, exotrajes, exonaves y cargueros.
 
-## ¿Qué es un bono de adyacencia?
+## ¿Qué es una bonificación de adyacencia?
 
-Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. El juego no te dice mucho sobre cómo funciona esto, pero la versión corta: los módulos del mismo tipo que comparten una ventaja obtienen un aumento porcentual en sus estadísticas. Cuantas más ventajas se compartan, mayor será la bonificación. Determinar a mano la disposición correcta es tedioso, especialmente en rejillas más grandes con ranuras sobrealimentadas que tener en cuenta.
+Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. El juego no explica mucho sobre cómo funciona esto, pero la versión corta es: los módulos del mismo tipo que comparten un borde obtienen un aumento porcentual en sus estadísticas. Cuantos más bordes compartan, mayor será la bonificación. Determinar la disposición correcta a mano es tedioso, especialmente en cuadrículas grandes con ranuras potenciadas que tener en cuenta.
 
-## ¿Qué son las tragamonedas sobrealimentadas?
+## ¿Qué son las ranuras potenciadas?
 
-Algunas ranuras del inventario en No Man's Sky están sobrecargadas. Cualquier módulo de tecnología colocado en uno obtiene un gran multiplicador de estadísticas además de las bonificaciones de adyacencia normales. Se colocan aleatoriamente en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde aterrizaron las ranuras supercargadas. Esa es la parte difícil y para eso está diseñada esta herramienta.
+Algunas ranuras de inventario en No Man's Sky están potenciadas. Cualquier módulo de tecnología colocado en una de ellas obtiene un gran multiplicador de estadísticas además de las bonificaciones de adyacencia normales. Se colocan aleatoriamente en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde hayan caído las ranuras potenciadas. Esa es la parte difícil, y es para lo que se ha diseñado esta herramienta.
 
 ## Cómo funciona
 
-El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos más pequeños, puede encontrar exactamente el mejor diseño. Para rejillas más grandes o más complejas, el recocido simulado explora miles de disposiciones para encontrar una que obtenga la puntuación más alta posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras sobrealimentadas y los pesos de estadísticas específicos del módulo. El backend se ejecuta en Rust para mayor velocidad.
+El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos pequeños, puede encontrar exactamente el mejor diseño. Para cuadrículas más grandes o complejas, el recocido simulado explora miles de disposiciones para encontrar una que obtenga la puntuación más alta posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras potenciadas y los pesos de las estadísticas específicos de cada módulo. El backend se ejecuta en Rust para mayor velocidad.
 
 ## Plataformas compatibles
 
-- Naves espaciales (estándar, centinela, solar, de combate, viviente, atlántida)
+- Naves espaciales (estándar, centinela, solar, luchadora, orgánica, atlante)
 - Corbetas
 - Multiherramientas (estándar y centinela)
 - Exotrajes
-- Exocraft (vagabundo, peregrino, nómada, coloso, minotauro, nautilon)
-- cargueros
+- Exonaves (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
+- Cargueros

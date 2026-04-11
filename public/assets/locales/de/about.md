@@ -1,84 +1,84 @@
-# Wie NMS Optimizer funktioniert
+# Wie der NMS-Optimierer Funktioniert
 
-## Was ist das?
+## Was Ist Das?
 
-NMS Optimizer ist ein kostenloses Tool, das herausfindet, wo Sie Ihre Technologiemodule in No Man's Sky platzieren können. Sie wählen Ihre Ausrüstung aus, wählen Ihre Technologien aus, markieren Ihre aufgeladenen Steckplätze und es berechnet das Layout, das die höchste Punktzahl erzielt.
+Der NMS-Optimierer ist ein kostenloses Tool, das berechnet, wo du deine Technologie-Module in No Man's Sky am besten platzieren solltest. Du wählst deine Ausrüstung, selektierst deine Technologien, markierst deine überladenen Slots und das Tool ermittelt das Layout mit der höchsten Punktzahl.
 
-Es funktioniert für Raumschiffe (Standard, Sentinel, Solar, Fighter, Living, Atlantis), Korvetten, Multitools, Exosuits, alle Exocraft-Typen und Frachter.
+Es unterstützt alle Raumschiff-Typen (Standard, Wächter, Solar, Kämpfer, Lebend, Atlantid), Korvetten, Multitools, Exo-Anzüge, alle Exofahrzeuge und Frachter.
 
-Das Tool verarbeitet Adjacency-Boni und die Platzierung von Super-Slots automatisch. In der Praxis erzielt ein optimiertes Layout in der Regel 15–20 % bessere Ergebnisse als das, was die meisten Spieler von Hand arrangieren.
+Das Tool verwaltet Adjazenzboni und die Optimierung überladener Slots automatisch. In der Praxis erzielt ein optimiertes Layout oft 15–20 % bessere Werte als eine manuelle Anordnung.
 
 ## Das Problem
 
-No Man's Sky erklärt Adjacency-Boni nicht gut und erklärt überhaupt nicht die Supercharged-Slot-Strategie. Module desselben Typs erhalten einen Stat-Boost, wenn sie sich eine Kante im Raster teilen. Supercharged-Slots bieten einen Multiplikator von ca. 25–30 % für alles, was Sie hineinstecken. Um die beste Anordnung herauszufinden, müssen beide Systeme gleichzeitig über Raster mit Millionen möglicher Permutationen (~8,32 × 10⁸¹ für ein vollständiges Layout) jongliert werden.
+No Man's Sky erklärt Adjazenzboni nur oberflächlich und bietet keinerlei Anleitung zur Strategie für überladene Slots. Module des gleichen Typs erhalten einen Stat-Bonus, wenn sie im Inventar direkt nebeneinander liegen. Überladene Slots bieten einen Multiplikator von etwa 25–30 % auf jedes darin platzierte Modul. Die beste Anordnung zu finden bedeutet, beide Systeme gleichzeitig zu balancieren – bei Millionen möglicher Kombinationen (~8,32 × 10⁸¹ für ein volles Layout).
 
-Niemand löst das von Hand.
+Das ist im Kopf unmöglich zu lösen.
 
-## Wie der Optimierer es löst
+## Wie der Optimierer es Löst
 
-Der Optimierer durchläuft vier Schritte:
+Die Optimierung erfolgt in vier Schritten:
 
-1. **Mustervergleich** – es beginnt mit handgetesteten Anordnungen, die bei gängigen Modulsätzen zuverlässig gut abschneiden
-2. **ML-Vorhersage** – Wenn Ihr Grid über aufgeladene Slots verfügt, sagt ein TensorFlow-Modell, das auf mehr als 16.000 Layouts mit hoher Punktzahl trainiert wurde, voraus, wo Kerntechnologien im Vergleich zu Upgrades platziert werden sollten
-3. **Simuliertes Ausglühen** – ein Rust-basierter Optimierer tauscht Module aus und testet Tausende von Anordnungen in Millisekunden, um die höchstmögliche Punktzahl zu erreichen
-4. **Ergebnisanzeige** – Sie sehen das Layout mit der höchsten Punktzahl und einer vollständigen Aufschlüsselung der Adjazenzmultiplikatoren
+1. **Musterabgleich**: Er beginnt mit manuell getesteten Anordnungen, die für gängige Modul-Sets zuverlässig hohe Punktzahlen liefern.
+2. **ML-Vorhersage**: Bei überladenen Slots prognostiziert ein TensorFlow-Modell (trainiert an über 16.000 High-Score-Layouts), welche Haupttechnologien oder Upgrades in diese Slots gehören.
+3. **Simulated Annealing**: Ein in Rust geschriebener Optimierer tauscht Module aus und testet tausende Kombinationen in Millisekunden, um das absolute Maximum zu finden.
+4. **Ergebnis-Visualisierung**: Du erhältst das beste Layout inklusive einer detaillierten Aufschlüsselung der Adjazenz-Multiplikatoren.
 
-Jeder Schritt geht in den nächsten über. Das ML-Modell gibt dem simulierten Glühen einen starken Ausgangspunkt und das Glühen wird von dort aus verfeinert.
+Jeder Schritt baut auf dem vorherigen auf. Das ML-Modell liefert einen soliden Startpunkt, den der Rust-Algorithmus anschließend perfektioniert.
 
-## Was der Optimierer berücksichtigt
+## Was der Optimierer Berücksichtigt
 
-- Standard-, Supercharged- und inaktive Slots
-- Ob eine Kerntechnologie oder ihr bestes Upgrade in jeden aufgeladenen Slot gehört
-- Kompromisse zwischen konkurrierenden Statistiken (Manövrierfähigkeit vs. Geschwindigkeit, Schaden vs. Feuerrate)
-- Modulspezifische Statistikgewichtungen und Regeln für Adjazenzpartner
+- Standard-Slots, überladene Slots und inaktive Slots.
+- Ob die Haupttechnologie oder das beste Upgrade in einen überladenen Slot gehört.
+- Abwägung zwischen konkurrierenden Stats (z. B. Manövrierbarkeit vs. Geschwindigkeit, Schaden vs. Feuerrate).
+- Modulspezifische Stat-Gewichtungen und Adjazenz-Regeln.
 
-## Tech-Stack
+## Technologie-Stack
 
-- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-- **Backend-Löser:** Python, Flask, TensorFlow, NumPy, Rust (simuliertes Annealing und Scoring)
-- **Testen:** Vitest, Python Unittest
-- **Bereitstellung:** Heroku (Hosting), Cloudflare (DNS/CDN), Docker
-- **CI/CD:** GitHub-Aktionen
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI.
+- **Optimierungs-Service:** Python, Flask, TensorFlow, NumPy, Rust (Simulated Annealing und Scoring).
+- **Testing:** Vitest, Python Unittest.
+- **Deployment:** Heroku (Hosting), Cloudflare (Hosting/DNS/CDN), Docker.
+- **CI/CD:** GitHub Actions.
 
-## Repositorys
+## Repositories
 
-- Web-Benutzeroberfläche: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Web-Interface: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## FAQ
+## Häufig Gestellte Fragen (FAQ)
 
-### Was ist ein Adjacency-Bonus?
+### Was ist ein Adjazenzbonus?
 
-Wenn Sie kompatible Technologiemodule nebeneinander im Inventarraster platzieren, erhalten sie einen Stat-Boost. Unterschiedliche Technologien haben unterschiedliche Nachbarschaftspartner – Waffen-Upgrades erhalten gegenseitige Boni, Bewegungstechnologie-Boni von anderen Bewegungstechnologien und so weiter. Der Optimierer testet alle möglichen Anordnungen und wählt diejenige aus, bei der die gesamten Adjazenzboni am höchsten sind.
+Wenn du kompatible Technologie-Module direkt nebeneinander im Inventar platzierst, erhalten sie einen Stat-Boost. Unterschiedliche Technologien haben unterschiedliche "Nachbarn": Waffen-Upgrades verstärken sich gegenseitig, Bewegungs-Technologien ebenso. Der Optimierer testet alle Positionen, um diese Boni zu maximieren.
 
-### Wie funktionieren Supercharged-Slots?
+### Wie funktionieren überladene Slots?
 
-Supercharged-Slots sind seltene Inventarslots (normalerweise 4 pro Raster), die dem darin enthaltenen Modul einen Boost von ca. 25–30 % verleihen. Der schwierige Teil besteht darin, zu entscheiden, was dorthin gehört. Manchmal ist es die Kerntechnologie, manchmal ist es das Upgrade mit dem höchsten Status. Das ML-Modell des Optimierers wird speziell auf diese Entscheidung trainiert und verwendet dabei mehr als 16.000 reale Layouts als Trainingsdaten.
+Überladene Slots sind seltene Inventarplätze (meist 4 pro Raster), die das darin befindliche Modul um ca. 25–30 % verstärken. Die Schwierigkeit liegt darin, zu entscheiden, was dort platziert wird: Manchmal ist es die Basistechnologie, manchmal das Upgrade mit den besten Werten. Das ML-Modell des Optimierers wurde speziell für diese Entscheidung trainiert.
 
-### Welche Gerätetypen werden unterstützt?
+### Welche Ausrüstung wird unterstützt?
 
-Alle von ihnen:
+Einfach alles:
 
-- **Raumschiffe** – Standard-, Exoten-, Sentinel-, Solar-, Wohn- und Atlantischen-Varianten
-- **Korvetten** – inklusive Reaktor- und kosmetischen Technologie-Slots
-- **Multitools** – alle Arten, einschließlich Dauben
-- **Exocraft** – Nomade, Pilger, Wanderer, Koloss, Minotaurus, Nautilon
-- **Exosuits** – alle Technologiekategorien
-- **Frachter** – technische Layouts für Großschiffe
+- **Raumschiffe:** Standard, Exotisch, Wächter, Solar und Lebend.
+- **Korvetten:** Inklusive einzigartiger Reaktor-Module und kosmetischer Slots.
+- **Multitools:** Alle Typen, inklusive Stäben.
+- **Exofahrzeuge:** Alle Fahrzeuge (Nomade, Koloss, Pilger, Streuner, Minotaurus, Nautilon).
+- **Exo-Anzüge:** Alle Überlebens- und Bewegungstechnologien.
+- **Frachter:** Technologie-Layouts für Großschiffe.
 
 ### Ist es kostenlos?
 
-Ja. Kostenlos, werbefrei, Open Source (GPL-3.0). Kein Konto erforderlich.
+Ja. Kostenlos, werbefrei und Open Source (GPL-3.0). Keine Accounts, kein Tracking persönlicher Daten.
 
 ### Kann ich Builds speichern und teilen?
 
-Ja. Sie können Builds als „.nms“-Dateien speichern, gemeinsam nutzbare Links generieren oder direkt in sozialen Medien teilen. Builds werden vor der Freigabe auf Integrität und Gerätekompatibilität überprüft.
+Ja. Du kannst Layouts als `.nms`-Dateien speichern, teilbare Links generieren oder sie direkt posten. Die Builds werden vor dem Teilen validiert, um Kompatibilität sicherzustellen.
 
-## Danke
+## Dankeschön
 
-George V, Diab, JayTee73, Boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen, die dazu beigetragen haben – Ihre Unterstützung bedeutet alles. Jede Spende, jeder Anteil und jedes freundliche Wort hilft mir, weiter aufzubauen. Danke schön.
+George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen Unterstützer: Eure Hilfe bedeutet mir viel. Jede Spende und jedes geteilte Tool hilft mir, die Entwicklung fortzusetzen. Danke!
 
-## Frühe Version
+## Alte Version
 
-So sah die Benutzeroberfläche in einer frühen Version aus: Sie funktionierte, aber das Design war minimal. Die aktuelle Version stellt eine wesentliche Verbesserung in Design, Benutzerfreundlichkeit und Übersichtlichkeit dar.
-![Früher Prototyp der Benutzeroberfläche für die Layoutoptimierung von No Man's Sky](/assets/img/screenshots/screenshot_v03.png)
+So sah das Interface in einer frühen Version aus: Es funktionierte, war aber sehr minimalistisch. Die aktuelle Version ist ein großer Sprung in Design und Bedienbarkeit.
+![Früher Prototyp des No Man's Sky Layout-Optimierers](/assets/img/screenshots/screenshot_v03.png)

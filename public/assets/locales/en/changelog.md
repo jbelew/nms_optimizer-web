@@ -4,6 +4,30 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.24 – AI-Powered Localization (2026-04-11)
+
+This update introduces a major overhaul of our translation system along with terminology improvements for better global consistency.
+
+- **Gemini-AI Translations:** Migrated to a new automated translation workflow powered by Gemini 2.5 Flash. This ensures higher-quality, context-aware translations for all supported languages.
+- **Terminology Polish:** Standardized game-specific terms like "Supercharged Slot" across all supported languages for a more consistent experience.
+- **Global Discovery:** Added international SEO improvements so players around the world can more easily find the app in their native language.
+
+## Version 6.21 – UI Polish & Sharp Visuals (2026-04-08)
+
+This update focuses on visual refinements and performance insights for a better cross-device experience.
+
+- **SVG Branding:** Switched to a high-quality SVG logo for sharper visuals on high-resolution screens.
+- **Header Refinements:** Polished the header styling and layout dimensions for better consistency across different screen sizes.
+- **Performance Insights:** Added specialized performance monitoring to ensure a smooth experience for our growing mobile community.
+
+## Version 6.19 – Performance & Optimization (2026-04-05)
+
+A deep-dive optimization update that makes the app feel faster and more responsive from the moment it loads.
+
+- **Lightning Startup:** Implemented high-priority preloading for game data (platforms and technology trees), significantly reducing the time it takes to get to your first solve.
+- **Improved Backgrounds:** Refined the background visibility logic and updated CSS selectors for a more immersive and reliable visual experience.
+- **Visual Feedback:** Added new icons and refined styles for error messages and dialog content to provide clearer feedback when things go wrong.
+
 ## Version 6.18 – Build Screenshots & Polish (2026-03-27)
 
 This update introduces a new feature for sharing your builds, along with several smaller improvements to translations and app stability.

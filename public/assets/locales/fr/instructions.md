@@ -1,83 +1,83 @@
-# Instructions de l'optimiseur NMS : utilisation, modules et emplacements suralimentés
+# Instructions de l'Optimiseur NMS : Utilisation, Modules et Slots Surchargés
 
-## Premiers pas avec la grille
+## Premiers Pas avec la Grille
 
-- Sélectionnez une **Plateforme** (Starship, Multi-Tool, Corvette, etc.) à l'aide de l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
-- **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer **Suralimenté**.
-- **Ctrl-clic (Windows) / ⌘-clic (Mac) / simple pression (mobile)** pour basculer un emplacement **actif** ou **inactif**.
-- Utilisez **row toggles** pour activer ou désactiver des lignes entières. *(Les bascules de ligne sont désactivées une fois les modules placés.)*
-- Utilisez le bouton **sélection de module** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou supprimer des modules individuels au sein d'un groupe technologique.
+- Sélectionnez une **Plateforme** (Vaisseau, Multi-outil, Corvette, etc.) via l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
+- **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer comme **Surchargé**.
+- **Ctrl-clic (Windows) / ⌘-clic (Mac) / appui simple (mobile)** pour basculer un emplacement entre **actif** et **inactif**.
+- Utilisez les **interrupteurs de rangée** pour activer ou désactiver des lignes entières. *(Ils sont désactivés une fois que des modules sont placés).*
+- Utilisez le bouton de **sélection de modules** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> pour ajouter ou retirer des modules individuels.
 
-> 💡 **Remarque :**
-> Les Exosuits et Exocraft ont des grilles fixes. Les emplacements Exocraft ne peuvent pas être modifiés. Sur les Exosuits, seuls les états actif/inactif peuvent être modifiés – la disposition des emplacements suralimentés est corrigée.
+> 💡 **Note :**
+> L'Exocombinaison et les Exonefs ont des grilles fixes. Les slots des Exonefs ne peuvent pas être modifiés. Pour l'Exocombinaison, seuls les états actif/inactif peuvent être changés ; la disposition des slots surchargés est fixe.
 
-## Avant de commencer
+## Avant de Commencer
 
-Cet outil est destiné à l'**optimisation de fin de partie** et fonctionne mieux lorsque :
+Cet outil est conçu pour l'**optimisation de fin de jeu** et fonctionne mieux quand :
 
-- La plupart ou la totalité des emplacements de grille sont déverrouillés.
+- La plupart des slots de la grille sont déverrouillés.
 - Toutes les technologies pertinentes sont disponibles.
-- Vous disposez de **trois modules de mise à niveau** par technologie.
+- Vous possédez **trois modules d'amélioration** par technologie.
 
-Les configurations partielles sont prises en charge, mais les résultats sont optimisés pour les plates-formes entièrement mises à niveau.
+Les configurations partielles sont supportées, mais les résultats sont optimisés pour les plateformes totalement améliorées.
 
-## Conseils d'utilisation
+## Conseils d'Utilisation
 
-Les emplacements suralimentés sont limités – le placement est important.
+Les emplacements surchargés sont limités — leur placement est crucial.
 
-- **N'attribuez pas tous les emplacements suralimentés à la première technologie que vous placez.** Cela bloque souvent des dispositions globales plus solides plus tard.
-- Commencez par attribuer **2 à 3 emplacements suralimentés à une technologie à fort impact**, pas tous.
-- Réservez au moins **un ou plusieurs emplacements suralimentés** pour une **technologie de deuxième priorité** afin d'améliorer l'efficacité totale.
-- Une fois que vous avez utilisé tous vos emplacements suralimentés, donnez la priorité aux technologies avec **un plus grand nombre de modules** avant que l'espace ne devienne limité.
-- Laisser le solveur gérer le placement ; votre rôle est de **définir les priorités et la répartition**.
+- **N'assignez pas tous vos slots surchargés à la première technologie que vous placez.** Cela bloque souvent des dispositions globales plus puissantes par la suite.
+- Commencez par assigner **2 à 3 slots surchargés à une technologie à fort impact**, pas la totalité.
+- Réservez au moins **un ou plusieurs slots surchargés** pour une **deuxième technologie prioritaire** afin d'améliorer l'efficacité globale.
+- Une fois vos slots surchargés épuisés, priorisez les technologies ayant le **plus grand nombre de modules** avant que l'espace ne manque.
+- Laissez le moteur de calcul gérer le placement ; votre rôle est de **fixer les priorités et la répartition**.
 
-Si l'espace devient restreint, vous devrez peut-être réinitialiser et résoudre les technologies dans un ordre différent pour éviter une **alerte d'optimisation**.
+Si l'espace devient trop restreint, vous devrez peut-être réinitialiser et optimiser les technologies dans un ordre différent pour éviter une **Alerte d'Optimisation**.
 
-## Conseil de pro
+## Astuce de Pro
 
-Le solveur utilise des fenêtres fixes dimensionnées en fonction du nombre de modules de chaque technologie pour trouver des emplacements optimisés en termes d'espace.
-Si les résultats ne sont pas idéaux, **désactivez temporairement les emplacements** pour guider le solveur vers une meilleure présentation.
+L'optimiseur utilise des fenêtres fixes dimensionnées selon le nombre de modules de chaque technologie pour trouver les emplacements les plus compacts.
+Si les résultats ne sont pas idéaux, **désactivez temporairement certains slots** pour guider l'optimiseur vers une meilleure disposition.
 
-## Étiquettes Thêta / Tau / Sigma
+## Étiquettes Theta / Tau / Sigma
 
-Ces étiquettes classent les améliorations procédurales **par statistiques**, et non par classe. Ce sont des termes hérités conservés par souci de cohérence.
+Ces labels classent les améliorations procédurales **par statistiques**, et non par classe. Ce sont des termes historiques conservés pour la cohérence.
 
-- **Thêta (1)** — meilleures statistiques
-- **Tau (2)** — milieu
-- **Sigma (3)** — le plus faible
+- **Theta (1)** — meilleures statistiques
+- **Tau (2)** — intermédiaire
+- **Sigma (3)** — plus faible
 
-Vous ne verrez pas ces étiquettes dans le jeu. Ils sont attribués en comparant directement les statistiques de mise à niveau.
+Vous ne verrez pas ces étiquettes en jeu. Elles sont attribuées en comparant directement les valeurs des améliorations.
 
-### Comparaison en jeu
+### Comparaison en Jeu
 
-Ignorez les lettres de classe (S, X, etc.) et comparez les statistiques :
+Ignorez les lettres de classe (S, X, etc.) et comparez les stats :
 
-- Meilleur → **Thêta**
-- Deuxième → **Tau**
-- Le pire → **Sigma**
+- Meilleur → **Theta**
+- Second → **Tau**
+- Moins bon → **Sigma**
 
-**La classe ne détermine pas le classement.** Les mises à niveau de la Classe X peuvent surpasser ou sous-performer la Classe S.
+**La classe ne détermine pas le rang.** Une amélioration de classe X peut être supérieure ou inférieure à une classe S.
 
-## Corvette
+## Corvettes
 
-Les corvettes diffèrent des autres plates-formes : elles peuvent avoir **jusqu'à trois ensembles de mises à niveau distincts**.
+Les Corvettes diffèrent des autres plateformes : elles peuvent avoir **jusqu'à trois ensembles d'améliorations distincts**.
 
-- **Les améliorations cosmétiques** sont affichées sous la forme « Cn ».
-- Les **mises à niveau du réacteur** sont indiquées par « Rn ».
+- Les **améliorations cosmétiques** sont notées `Cn`.
+- Les **améliorations de réacteur** sont notées `Rn`.
 
-Le solveur peut suggérer des améliorations esthétiques pour les performances par rapport à l'apparence, bien que les différences soient généralement mineures.
+L'optimiseur peut suggérer des améliorations cosmétiques pour la performance plutôt que pour l'apparence, bien que les différences soient généralement mineures.
 
-## Builds recommandées
+## Builds Recommandées
 
-Pour **Exosuits** et **Exocraft**, les emplacements suralimentés sont fixes et les configurations viables sont limitées.
-L'outil fournit des **versions recommandées sélectionnées à la main** reflétant des combinaisons optimales.
+Pour l'**Exocombinaison** et les **Exonefs**, les slots surchargés sont fixes et les dispositions viables sont limitées.
+L'outil propose des **builds recommandées sélectionnées à la main** qui reflètent les combinaisons optimales.
 
-Les suggestions et mises en page alternatives sont les bienvenues via les discussions sur le projet :
+Vos suggestions et variantes sont les bienvenues sur les discussions du projet :
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Sauvegarde, chargement et partage
+## Sauvegarder, Charger et Partager
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Load** — Téléchargez un fichier `.nms` enregistré pour restaurer une mise en page.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Enregistrer** — Téléchargez la mise en page actuelle sous forme de fichier `.nms`.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Génère un lien que d'autres peuvent ouvrir directement dans l'optimiseur.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture d'écran** — Génère une capture d'écran de la mise en page actuelle.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger** — Téléchargez un fichier `.nms` pour restaurer une build.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder** — Téléchargez la build actuelle au format `.nms`.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Partager** — Générez un lien que d'autres peuvent ouvrir directement.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Capture** — Générez une image de votre build actuelle.

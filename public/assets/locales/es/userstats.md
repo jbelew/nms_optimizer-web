@@ -1,50 +1,50 @@
-# Estadísticas del optimizador de NMS: diseños de tecnología más populares
+# Estadísticas del Optimizador de NMS: Diseños tecnológicos más populares
 
 ## Estadísticas de usuario y diseños populares
 
-Esta página agrega datos de los usuarios de NMS Optimizer para revelar las tecnologías sobrecargadas con más frecuencia en diferentes plataformas. Ya sea que esté planificando su próxima construcción o buscando inspiración, estas estadísticas muestran preferencias y patrones reales de la comunidad.
+Esta página agrega datos de los usuarios del Optimizador de NMS para mostrar las tecnologías más frecuentemente potenciadas en diferentes plataformas. Tanto si estás planeando tu próximo diseño como si buscas inspiración, estas estadísticas muestran las preferencias y patrones reales de la comunidad.
 
-## Comprender los datos
+## Comprensión de los datos
 
-Los gráficos a continuación muestran estadísticas de usuarios agregadas de los últimos **28 días**, que muestran qué tecnologías los jugadores optimizan más comúnmente para **tragamonedas supercargadas**. Los datos representan miles de sesiones de optimización en tres tipos de plataformas principales:
+Los gráficos siguientes muestran estadísticas de usuario agregadas de los últimos **28 días**, indicando qué tecnologías optimizan los jugadores con más frecuencia para las **ranuras potenciadas**. Los datos representan miles de sesiones de optimización en tres tipos de plataformas principales:
 
-- **Starship Technologies** - Incluye variantes de nave espacial estándar, Sentinel y Solar
-- **Tecnologías multiherramienta**: cubre multiherramientas Standard, Sentinel, Atlantid y Staves
-- **Corvette Technologies** - Los barcos corsarios especializados introducidos en la actualización **Omega**
+- **Tecnologías de naves espaciales**: Incluye variantes de naves estándar, centinela y solares.
+- **Tecnologías de multiherramientas**: Cubre multiherramientas estándar, centinela, atlante y báculos.
+- **Tecnologías de corbetas**: Las naves corsarias especializadas introducidas en la actualización **Omega**.
 
 ## Qué significan estos gráficos
 
-Cada gráfico muestra la popularidad relativa de diferentes tecnologías cuando los usuarios eligen potenciarlas. Una porción más grande significa que la comunidad seleccionó la tecnología para sobrealimentar con mayor frecuencia. Esto refleja:
+Cada gráfico muestra la popularidad relativa de las diferentes tecnologías cuando los usuarios eligen potenciarlas. Una porción más grande significa que esa tecnología fue seleccionada para ser potenciada con más frecuencia por la comunidad. Esto refleja:
 
-1. **Metaeficacia**: las tecnologías que proporcionan las mayores mejoras en el rendimiento tienden a agruparse hacia la cima.
-2. **Preferencias del jugador**: los jugadores centrados en el combate dan prioridad a tecnologías diferentes a las de los centrados en la exploración.
-3. **Oportunidades de sinergia**: algunas tecnologías combinan particularmente bien con la sobrealimentación, lo que las convierte en opciones naturales
+1. **Efectividad del meta**: Las tecnologías que proporcionan los mayores aumentos de rendimiento tienden a agruparse en la parte superior.
+2. **Preferencias de los jugadores**: Los jugadores centrados en el combate priorizan tecnologías diferentes a los centrados en la exploración.
+3. **Oportunidades de sinergia**: Algunas tecnologías combinan particularmente bien con las ranuras potenciadas, lo que las convierte en opciones naturales.
 
-### Leyendo los gráficos
+### Lectura de los gráficos
 
-- Las tecnologías que representan menos del **2 % del total de selecciones** se agrupan en la categoría "Otros" para mantener los gráficos legibles.
-- Los porcentajes aparecen en cada porción cuando representan al menos el 6% del total.
-- Los colores de la tecnología coinciden con los utilizados en todo el optimizador para una fácil referencia
+- Las tecnologías que representan menos del **2 % del total de selecciones** se agrupan en la categoría "Otras" para que los gráficos sean legibles.
+- Los porcentajes aparecen en cada porción cuando representan al menos el 6 % del total.
+- Los colores de las tecnologías coinciden con los utilizados en todo el optimizador para facilitar la referencia.
 
-## Por qué esto es importante
+## Por qué es importante
 
-Comprender los patrones de la comunidad puede ayudarle a fundamentar sus propias decisiones de construcción:
+Comprender los patrones de la comunidad puede ayudarte a informar tus propias decisiones de diseño:
 
-- **Validación** - Si una tecnología que estás considerando es popular, probablemente sea por una buena razón
-- **Descubrimiento**: encuentre tecnologías que quizás no haya considerado al ver lo que otros priorizan
-- **Meta Shifts**: observa cómo cambian los datos a medida que el juego evoluciona y se publican nuevos contenidos.
-- **Crea variedad**: úsalo como punto de partida y luego personalízalo según tu estilo de juego y tus necesidades específicas.
+- **Validación**: Si una tecnología que estás considerando es popular, probablemente sea por una buena razón.
+- **Descubrimiento**: Encuentra tecnologías que quizá no habías considerado viendo lo que otros priorizan.
+- **Cambios en el meta**: Observa cómo cambian los datos a medida que el juego evoluciona y se lanza nuevo contenido.
+- **Variedad de diseños**: Usa esto como punto de partida y luego personalízalo según tu estilo de juego y tus necesidades específicas.
 
-## Empezando
+## Primeros pasos
 
-Una vez que hayas revisado las opciones populares aquí, dirígete al [optimizador](/en) para crear tu propia compilación optimizada. Puede:
+Una vez que hayas revisado las opciones populares aquí, dirígete al [optimizador](/es) para crear tu propio diseño optimizado. Puedes:
 
-1. Seleccione su plataforma (Starship, Multi-tool, Corvette, Exosuit o Exocraft)
-2. Configure sus **ranuras supercargadas** y **celdas activas**
-3. Ejecute el solucionador para encontrar el diseño perfecto.
+1. Seleccionar tu plataforma (Nave espacial, Multiherramienta, Corbeta, Exotraje o Exonave).
+2. Configurar tus **ranuras potenciadas** y **celdas activas**.
+3. Ejecutar el optimizador para encontrar tu diseño perfecto.
 
-Para obtener instrucciones detalladas sobre el uso del optimizador, visite la [página de instrucciones](/en/instructions).
+Para obtener instrucciones detalladas sobre el uso del optimizador, visita la [página de instrucciones](/es/instructions).
 
 ## Recopilación de datos
 
-Estos datos se recopilan de forma anónima a partir de solicitudes de optimización y no incluyen ninguna información de identificación personal. Ayuda a la comunidad de NMS Optimizer a comprender qué tecnologías ofrecen el mayor valor e informa futuras mejoras a los algoritmos de resolución.
+Estos datos se recopilan de forma anónima a partir de las solicitudes de optimización y no incluyen ninguna información de identificación personal. Ayudan a la comunidad del Optimizador de NMS a comprender qué tecnologías ofrecen el mayor valor e informan sobre futuras mejoras en los algoritmos del optimizador.
