@@ -1,3 +1,11 @@
+## [6.26.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.3...v6.26.4) (2026-04-11)
+
+
+### Bug Fixes
+
+* **ci:** correct YAML syntax in update-screenshots workflow ([a41f939](https://github.com/jbelew/nms_optimizer-web/commit/a41f939f536d8264821e24f329325b097ba8df4e))
+* **ci:** ensure all changes are staged before rebase in screenshot workflow ([1986984](https://github.com/jbelew/nms_optimizer-web/commit/1986984ea279848f588d923c56ef22c5fcc0aa34))
+
 ## [6.26.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.2...v6.26.3) (2026-04-11)
 
 
