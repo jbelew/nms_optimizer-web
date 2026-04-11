@@ -594,17 +594,8 @@
 		</style>
 	</noscript>
 
-	<script>
-		window.addEventListener('app-ready', function () {
-			setTimeout(function () {
-				var script = document.createElement('script');
-				script.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-				script.setAttribute('data-cf-beacon', '{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}');
-				script.defer = true;
-				document.body.appendChild(script);
-			}, 2000);
-		}, { once: true });
-	</script>
+	<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'></script>
 </body>
 
 </html>
