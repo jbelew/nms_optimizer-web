@@ -1,3 +1,12 @@
+## [6.24.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.0...v6.24.1) (2026-04-11)
+
+
+### Bug Fixes
+
+* **analytics:** restore Cloudflare beacon with SPA support and refine bot detection ([4de0ca8](https://github.com/jbelew/nms_optimizer-web/commit/4de0ca8cf131ef72e596f1db066d5b18b2984b53))
+* **automation:** allow major updates for github-actions and improve version parsing ([3ae95aa](https://github.com/jbelew/nms_optimizer-web/commit/3ae95aae39b94ad2681e2ddb2e4ff89f654ebb3c))
+* **ci:** fix chromatic baseline by increasing fetch-depth and enabling for dependabot ([69cd4a6](https://github.com/jbelew/nms_optimizer-web/commit/69cd4a69a76ac99a6b8b6a12b8cc15736e42c867))
+
 # [6.24.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.23.0...v6.24.0) (2026-04-10)
 
 
