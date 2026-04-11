@@ -86,7 +86,7 @@ Application performance is tracked via [Lighthouse CI](https://github.com/Google
 
 **Strict Quality Gates:**
 - **Performance**: Must be > **90**
-- **Accessibility / Best Practices / SEO**: Must be => **96**
+- **Accessibility / Best Practices / SEO**: Must be >= **96**
 
 To run audits locally:
 ```bash
