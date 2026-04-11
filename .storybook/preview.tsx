@@ -178,7 +178,7 @@ const preview: Preview = {
 			isRotated: false,
 		},
 		theme: 'dark',
-		background: 'hidden',
+		background: 'visible',
 	},
 };
 
