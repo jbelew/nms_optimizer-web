@@ -1,3 +1,12 @@
+## [6.24.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.1...v6.24.2) (2026-04-11)
+
+
+### Bug Fixes
+
+* **ci:** restore fetch-depth and onlyChanged for Chromatic baseline stability ([c578afc](https://github.com/jbelew/nms_optimizer-web/commit/c578afcf5da455f162ca954729e0b79c840d8920))
+* **ci:** revert workflow complexity and fix chromatic blank screens ([5be58e9](https://github.com/jbelew/nms_optimizer-web/commit/5be58e96eadf1bb10bedb2444c408edcc01feee0))
+* **storybook:** resolve blank screen in Chromatic by ensuring solid background ([3ae78df](https://github.com/jbelew/nms_optimizer-web/commit/3ae78df3d64f13602853b38966bd5ad0d08f1265))
+
 ## [6.24.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.0...v6.24.1) (2026-04-11)
 
 
