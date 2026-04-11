@@ -2,7 +2,7 @@
 
 ## CI/CD Status
 
-![Tests](https://github.com/jbelew/nms_optimizer-web/actions/workflows/main.yml/badge.svg?branch=main)
+[![CI Pipeline](https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml/badge.svg)](https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml)
 ![Deployment](https://img.shields.io/badge/Deployment-Heroku-blue?logo=heroku)
 [![Build & Publish Application Docker Image](https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml/badge.svg)](https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml)
 
