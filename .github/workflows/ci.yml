@@ -26,6 +26,9 @@ jobs:
     name: Lint, Typecheck & Unit Test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
@@ -50,10 +53,13 @@ jobs:
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Set Build Version
         id: build_version
@@ -88,6 +94,9 @@ jobs:
       pull-requests: write
     continue-on-error: true
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
@@ -133,10 +142,13 @@ jobs:
     name: Storybook Interaction, A11y & Chromatic
     runs-on: ubuntu-latest
     steps:
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
@@ -148,7 +160,7 @@ jobs:
         run: npm run test:storybook:a11y
 
       - name: Run Chromatic visual tests
-        uses: chromaui/action@636060020626026dfeb6dfedebdf # Pin to a stable version
+        uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
@@ -168,10 +180,13 @@ jobs:
       released: ${{ steps.check_release.outputs.released }}
       tag: ${{ steps.check_release.outputs.tag }}
     steps:
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Release
         env:
@@ -185,6 +200,7 @@ jobs:
         id: check_release
         shell: bash
         run: |
+          git fetch --tags
           if git describe --exact-match --tags HEAD 2>/dev/null; then
             echo "released=true" >> $GITHUB_OUTPUT
             TAG=$(git describe --exact-match --tags HEAD)
@@ -202,21 +218,19 @@ jobs:
       build-version: ${{ steps.build_version.outputs.version }}
       effective-tag: ${{ steps.version_logic.outputs.version }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag || github.sha }}
+          fetch-depth: 0
+
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          fetch-depth: 0
 
       - name: Determine Effective Version
         id: version_logic
         shell: bash
-        run: |
-          if [ "${{ needs.release.outputs.released }}" == "true" ]; then
-            echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
-          else
-            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-            echo "version=${LATEST_TAG}-dev.${{ github.run_number }}" >> $GITHUB_OUTPUT
-          fi
+        run: echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
 
       - name: Set Build Tracking ID
         id: build_version
@@ -270,10 +284,14 @@ jobs:
     needs: [build-production, release]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag || github.sha }}
+          fetch-depth: 0
+
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          fetch-depth: 0
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.14.15
@@ -301,16 +319,18 @@ jobs:
     steps:
       - name: Trigger Downstream Jobs
         uses: actions/github-script@v8
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
         with:
           script: |
-            const tag = '${{ needs.release.outputs.tag }}' || '';
+            const tag = process.env.RELEASE_TAG || 'main';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
-              workflow_id: 'publish-images.yml', ref: tag || 'main'
+              workflow_id: 'publish-images.yml', ref: tag
             });
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
-              workflow_id: 'update-screenshots.yml', ref: tag || 'main'
+              workflow_id: 'update-screenshots.yml', ref: tag
             });
 
   deploy-staging:
@@ -319,6 +339,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 

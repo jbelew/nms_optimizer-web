@@ -10,6 +10,9 @@ jobs:
     update-screenshots:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
             - name: Setup environment
               uses: ./.github/actions/setup-node-env
 
@@ -34,6 +37,8 @@ jobs:
               run: BASE_URL=http://localhost:3000 npm run screenshot
 
             - name: Commit and push screenshots
+              env:
+                  REF_NAME: ${{ github.ref_name }}
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -41,7 +46,7 @@ jobs:
                   if git diff --staged --quiet; then
                     echo "No screenshot changes to commit"
                   else
-                    git commit --no-verify -m "chore: update screenshots for ${{ github.ref_name }}"
+                    git commit --no-verify -m "chore: update screenshots for $REF_NAME"
                     # Fix race condition: fetch, rebase, and push
                     git fetch origin main
                     git rebase origin/main
