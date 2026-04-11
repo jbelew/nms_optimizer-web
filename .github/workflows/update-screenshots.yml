@@ -1,9 +1,6 @@
 name: Update Screenshots on Version Bump
 
 on:
-    push:
-        tags:
-            - "v*.*.*"
     workflow_dispatch:
 
 permissions:
@@ -13,20 +10,8 @@ jobs:
     update-screenshots:
         runs-on: ubuntu-latest
         steps:
-            - name: Check out code
-              uses: actions/checkout@v6
-              with:
-                  ref: ${{ github.ref }}
-                  fetch-depth: 1
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v6
-              with:
-                  node-version: "24"
-                  cache: "npm"
-
-            - name: Install dependencies
-              run: npm ci --legacy-peer-deps
+            - name: Setup environment
+              uses: ./.github/actions/setup-node-env
 
             - name: Get App Version from package.json
               id: get_app_version
@@ -57,5 +42,8 @@ jobs:
                     echo "No screenshot changes to commit"
                   else
                     git commit --no-verify -m "chore: update screenshots for ${{ github.ref_name }}"
+                    # Fix race condition: fetch, rebase, and push
+                    git fetch origin main
+                    git rebase origin/main
                     git push origin HEAD:main
                   fi

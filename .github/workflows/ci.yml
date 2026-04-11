@@ -19,24 +19,15 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}-${{ github.workflow }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   lint-test:
     name: Lint, Typecheck & Unit Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Check formatting
         run: npm run format:check
@@ -59,19 +50,10 @@ jobs:
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
         with:
           fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
 
       - name: Set Build Version
         id: build_version
@@ -106,17 +88,8 @@ jobs:
       pull-requests: write
     continue-on-error: true
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -142,14 +115,14 @@ jobs:
         continue-on-error: true
 
       - name: Update Performance History Dashboard
-        if: github.event.pull_request.head.repo.full_name == github.repository && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
           mkdir -p history-dir
           node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
           cp scripts/lighthouse-dashboard.html history-dir/index.html
 
       - name: Deploy Lighthouse History
-        if: github.event.pull_request.head.repo.full_name == github.repository && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: history-dir
@@ -157,20 +130,13 @@ jobs:
           clean: false # Keep previous reports
 
   storybook-test:
-    name: Storybook Interaction & A11y Tests
+    name: Storybook Interaction, A11y & Chromatic
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
         with:
-          node-version: "24"
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+          fetch-depth: 0
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
@@ -180,6 +146,14 @@ jobs:
 
       - name: Run Storybook A11y Tests
         run: npm run test:storybook:a11y
+
+      - name: Run Chromatic visual tests
+        uses: chromaui/action@636060020626026dfeb6dfedebdf # Pin to a stable version
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          onlyChanged: true
+          exitOnceUploaded: true
+          exitZeroOnChanges: true
 
   release:
     name: Release
@@ -194,17 +168,11 @@ jobs:
       released: ${{ steps.check_release.outputs.released }}
       tag: ${{ steps.check_release.outputs.tag }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
         with:
           fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -212,8 +180,10 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         run: npx semantic-release
+
       - name: Check if release was created
         id: check_release
+        shell: bash
         run: |
           if git describe --exact-match --tags HEAD 2>/dev/null; then
             echo "released=true" >> $GITHUB_OUTPUT
@@ -226,27 +196,20 @@ jobs:
   build-production:
     name: Build Application (Production)
     needs: [release]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
       effective-tag: ${{ steps.version_logic.outputs.version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
         with:
-          ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
 
       - name: Determine Effective Version
         id: version_logic
+        shell: bash
         run: |
           if [ "${{ needs.release.outputs.released }}" == "true" ]; then
             echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
@@ -257,6 +220,7 @@ jobs:
 
       - name: Set Build Tracking ID
         id: build_version
+        shell: bash
         run: |
           COUNT=$(git rev-list --count HEAD)
           SHA=$(git rev-parse --short HEAD)
@@ -296,7 +260,7 @@ jobs:
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
       - name: Purge Cloudflare Cache
         run: |
-          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          curl -f -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data '{"purge_everything":true}'
@@ -306,13 +270,11 @@ jobs:
     needs: [build-production, release]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
         with:
-          ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.14.15
         with:
@@ -357,6 +319,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:

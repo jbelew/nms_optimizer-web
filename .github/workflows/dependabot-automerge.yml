@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: dependabot-automerge-${{ github.event.workflow_run.id }}
+  group: dependabot-automerge
   cancel-in-progress: true
 
 jobs:

@@ -1,0 +1,33 @@
+name: 'Setup Node Environment'
+description: 'Consolidates checkout, Node.js setup, and npm dependency installation'
+inputs:
+  node-version:
+    description: 'The version of Node.js to use'
+    required: false
+    default: '24'
+  fetch-depth:
+    description: 'Fetch depth for git checkout'
+    required: false
+    default: '1'
+  cache:
+    description: 'Whether to cache npm dependencies'
+    required: false
+    default: 'npm'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ inputs.cache }}
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci --legacy-peer-deps

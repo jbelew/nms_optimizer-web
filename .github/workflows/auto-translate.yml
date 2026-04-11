@@ -39,10 +39,11 @@ jobs:
 
       - name: Run translation script
         if: steps.changed-files.outputs.any_changed == 'true'
-        run: |
-          python scripts/translate.py --files ${{ steps.changed-files.outputs.all_changed_files }}
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          python scripts/translate.py --files $CHANGED_FILES
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
