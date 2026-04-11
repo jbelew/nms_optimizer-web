@@ -160,7 +160,6 @@ jobs:
     name: Storybook Interaction & A11y Tests
     needs: build
     runs-on: ubuntu-latest
-    continue-on-error: true # Do not block deployment
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -185,7 +184,7 @@ jobs:
 
   release:
     name: Release
-    needs: [lint-test, build]
+    needs: [lint-test, build, storybook-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
@@ -349,7 +348,7 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build]
+    needs: [lint-test, build, storybook-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
