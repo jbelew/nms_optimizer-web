@@ -134,7 +134,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			deferStylesheetsPlugin(),
+			...(!process.env.STORYBOOK_BUILD ? [deferStylesheetsPlugin()] : []),
 			...(!isCloudflarePages
 				? [
 						compression({

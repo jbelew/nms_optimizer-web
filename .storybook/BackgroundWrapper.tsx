@@ -28,7 +28,7 @@ interface BackgroundWrapperProps {
 export const BackgroundWrapper = ({ children, isVisible, theme }: BackgroundWrapperProps) => {
 	React.useEffect(() => {
 		const radixRoot = document.querySelector(".radix-themes") as HTMLElement | null;
-		const color = isVisible ? "transparent" : theme === "dark" ? "#0B161A" : "#ffffff";
+		const color = theme === "dark" ? "#0B161A" : "#ffffff";
 
 		if (isVisible) {
 			document.documentElement.style.backgroundImage = `image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x)`;
