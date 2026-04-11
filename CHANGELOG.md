@@ -1,3 +1,10 @@
+## [6.26.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.0...v6.26.1) (2026-04-11)
+
+
+### Bug Fixes
+
+* **ci:** solve local action bootstrap error and apply latest updates ([a7e6766](https://github.com/jbelew/nms_optimizer-web/commit/a7e676647a74c3915196be47bc2ac384553dc413))
+
 # [6.26.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.25.1...v6.26.0) (2026-04-11)
 
 
