@@ -1,6 +1,6 @@
 # Datenschutzbestimmungen
 
-**Zuletzt aktualisiert:** 16. März 2026
+**Zuletzt Aktualisiert:** 16. März 2026
 
 Ihr Datenschutz ist uns wichtig. Diese Datenschutzbestimmungen erläutern, wie der **NMS-Optimierer** („wir“, „uns“ oder „unser“) Ihre Informationen sammelt, nutzt und schützt, wenn Sie unsere Web-App und den dazugehörigen Optimierungs-Service nutzen.
 
@@ -9,11 +9,11 @@ Ihr Datenschutz ist uns wichtig. Diese Datenschutzbestimmungen erläutern, wie d
 ## 1. Datenerfassung
 Der NMS-Optimierer wurde als datenschutzfreundliches Tool konzipiert.
 
-* **Keine personenbezogenen Daten:** Wir erfassen keine personenbezogenen Daten (PII) wie Ihren Namen, Ihre E-Mail-Adresse oder Ihre Postanschrift. Es gibt kein Login- oder Kontosystem.
+* **Keine Personenbezogenen Daten:** Wir erfassen keine personenbezogenen Daten (PII) wie Ihren Namen, Ihre E-Mail-Adresse oder Ihre Postanschrift. Es gibt kein Login- oder Kontosystem.
 * **Lokale Speicherung:** Die App nutzt den **LocalStorage** Ihres Browsers, um Ihre Einstellungen und den Status Ihrer Builds zu speichern. Diese Daten verbleiben auf Ihrem Gerät und werden weder an unsere Server übertragen noch von uns gespeichert.
 * **Anonyme Nutzungsdaten:** Wir verwenden **Google Analytics**, um anonyme Nutzungsstatistiken zu sammeln (z. B. Seitenaufrufe und Interaktionen mit Funktionen). Diese Daten werden aggregiert und lassen keine Rückschlüsse auf Ihre Person zu.
 
-## 2. Technische Infrastruktur und Überwachung
+## 2. Technische Infrastruktur Und Überwachung
 Um sicherzustellen, dass die App sicher, schnell und fehlerfrei ist, nutzen wir folgende Dienstleister:
 
 * **Cloudflare:** Unsere App wird über Cloudflare gehostet und geschützt. Cloudflare verarbeitet IP-Adressen und technische Metadaten, um DDoS-Schutz zu bieten und die Inhaltsbereitstellung zu optimieren.
@@ -32,9 +32,9 @@ Wir setzen angemessene Sicherheitsmaßnahmen ein, einschließlich der **SSL/TLS-
 ## 5. Ihre Kontrolle
 Da Ihr Anwendungsstatus lokal gespeichert wird:
 * **Löschen Ihrer Daten:** Löschen Sie einfach die „Webseitendaten“ oder den Cache Ihres Browsers für diese Domain.
-* **Opt-out vom Tracking:** Sie können Browser-Erweiterungen (wie uBlock Origin) verwenden, um die Erfassung von Nutzungsdaten zu verhindern, ohne die Funktionalität der App zu beeinträchtigen.
+* **Opt-out Vom Tracking:** Sie können Browser-Erweiterungen (wie uBlock Origin) verwenden, um die Erfassung von Nutzungsdaten zu verhindern, ohne die Funktionalität der App zu beeinträchtigen.
 
-## 6. Änderungen dieser Bestimmungen
+## 6. Änderungen Dieser Bestimmungen
 Wir können unsere Datenschutzbestimmungen von Zeit zu Zeit aktualisieren. Wir werden Sie über Änderungen informieren, indem wir das Datum der „Letzten Aktualisierung“ oben auf dieser Seite anpassen.
 
 ## 7. Kontakt

@@ -1,17 +1,17 @@
-# NMS-Optimierer Anleitung: Nutzung, Module & überladene Slots
+# NMS-Optimierer Anleitung: Nutzung, Module & Überladene Slots
 
-## Erste Schritte mit dem Raster
+## Erste Schritte Mit Dem Raster
 
 - Wähle eine **Plattform** (Raumschiff, Multitool, Korvette, etc.) über das <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> Icon aus.
 - **Klicke** oder **doppeltippe** (Mobil) auf einen Slot, um ihn als **Überladen** zu markieren.
-- **Strg+Klick (Windows) / ⌘+Klick (Mac) / einfaches Tippen (Mobil)**, um einen Slot zwischen **aktiv** und **inaktiv** umzuschalten.
+- **Strg+Klick (Windows) / ⌘-Klick (Mac) / einfaches Tippen (Mobil)**, um einen Slot zwischen **aktiv** und **inaktiv** umzuschalten.
 - Nutze die **Reihen-Schalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. *(Die Schalter werden deaktiviert, sobald Module platziert sind).*
 - Nutze den **Modulauswahl-Button** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Module innerhalb einer Technologiegruppe hinzuzufügen oder zu entfernen.
 
 > 💡 **Hinweis:**
 > Exo-Anzüge und Exofahrzeuge haben feste Raster. Slots bei Exofahrzeugen können nicht modifiziert werden. Beim Exo-Anzug können nur die Aktiv/Inaktiv-Zustände geändert werden – das Layout der überladenen Slots ist fest vorgegeben.
 
-## Bevor du beginnst
+## Bevor Du Beginnst
 
 Dieses Tool ist für die **Endgame-Optimierung** gedacht und funktioniert am besten, wenn:
 
@@ -21,7 +21,7 @@ Dieses Tool ist für die **Endgame-Optimierung** gedacht und funktioniert am bes
 
 Teilkonfigurationen werden unterstützt, aber die Ergebnisse sind auf voll aufgerüstete Plattformen optimiert.
 
-## Tipps zur Nutzung
+## Tipps Zur Nutzung
 
 Überladene Slots sind begrenzt – ihre Platzierung ist entscheidend.
 
@@ -48,7 +48,7 @@ Diese Labels klassifizieren prozedurale Upgrades **nach ihren Werten**, nicht na
 
 Du wirst diese Labels nicht im Spiel sehen. Sie werden durch direkten Vergleich der Upgrade-Werte zugewiesen.
 
-### Vergleich im Spiel
+### Vergleich Im Spiel
 
 Ignoriere die Klassenbuchstaben (S, X, etc.) und vergleiche die Werte:
 
@@ -75,7 +75,7 @@ Das Tool bietet **handverlesene empfohlene Builds**, welche die optimalen Kombin
 Vorschläge und alternative Layouts sind über die Projektdiskussionen willkommen:
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Speichern, Laden und Teilen
+## Speichern, Laden Und Teilen
 
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** — Lade eine gespeicherte `.nms`-Datei hoch, um ein Layout wiederherzustellen.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** — Lade das aktuelle Layout als `.nms`-Datei herunter.

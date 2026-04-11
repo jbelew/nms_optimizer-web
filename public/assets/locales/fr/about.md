@@ -1,6 +1,6 @@
 # Comment Fonctionne l'Optimiseur NMS
 
-## Qu'est-ce que C'est ?
+## Qu'est-ce Que C'est ?
 
 L'Optimiseur NMS est un outil gratuit qui calcule l'emplacement idéal de vos modules de technologie dans No Man's Sky. Vous choisissez votre équipement, sélectionnez vos technologies, marquez vos emplacements surchargés, et l'outil génère la disposition qui obtient le meilleur score.
 
@@ -19,13 +19,13 @@ C'est mathématiquement impossible à résoudre de tête.
 L'optimisation se déroule en quatre étapes :
 
 1. **Correspondance de Modèles** : Commence par des dispositions testées manuellement qui ont prouvé leur efficacité pour des ensembles de modules classiques.
-2. **Prédiction par ML** : Si votre grille comporte des slots surchargés, un modèle TensorFlow entraîné sur plus de 16 000 dispositions à haut score prédit le placement idéal des technologies principales par rapport aux améliorations.
+2. **Prédiction Par ML** : Si votre grille comporte des slots surchargés, un modèle TensorFlow entraîné sur plus de 16 000 dispositions à haut score prédit le placement idéal des technologies principales par rapport aux améliorations.
 3. **Simulated Annealing (Recuit Simulé)** : Un moteur basé sur Rust teste des milliers de combinaisons en quelques millisecondes pour trouver le score le plus élevé possible.
 4. **Visualisation des Résultats** : Vous obtenez la disposition finale avec un détail complet des multiplicateurs d'adjacence.
 
 Chaque étape alimente la suivante. Le modèle de Machine Learning donne au moteur de recuit un point de départ solide, qui se charge ensuite d'affiner le résultat.
 
-## Ce Que l'Optimiseur Prend en Compte
+## Ce Que l'Optimiseur Prend En Compte
 
 - Les emplacements standards, surchargés et inactifs.
 - Le choix du module (technologie principale ou meilleure amélioration) pour chaque slot surchargé.

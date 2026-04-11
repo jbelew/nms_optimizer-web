@@ -1,4 +1,4 @@
-# Wie der NMS-Optimierer Funktioniert
+# Wie Der NMS-Optimierer Funktioniert
 
 ## Was Ist Das?
 
@@ -14,18 +14,18 @@ No Man's Sky erklärt Adjazenzboni nur oberflächlich und bietet keinerlei Anlei
 
 Das ist im Kopf unmöglich zu lösen.
 
-## Wie der Optimierer es Löst
+## Wie Der Optimierer Es Löst
 
 Die Optimierung erfolgt in vier Schritten:
 
 1. **Musterabgleich**: Er beginnt mit manuell getesteten Anordnungen, die für gängige Modul-Sets zuverlässig hohe Punktzahlen liefern.
 2. **ML-Vorhersage**: Bei überladenen Slots prognostiziert ein TensorFlow-Modell (trainiert an über 16.000 High-Score-Layouts), welche Haupttechnologien oder Upgrades in diese Slots gehören.
 3. **Simulated Annealing**: Ein in Rust geschriebener Optimierer tauscht Module aus und testet tausende Kombinationen in Millisekunden, um das absolute Maximum zu finden.
-4. **Ergebnis-Visualisierung**: Du erhältst das beste Layout inklusive einer detaillierten Aufschlüsselung der Adjazenz-Multiplikatoren.
+4. **Visualisierung Der Ergebnisse**: Du erhältst das beste Layout inklusive einer detaillierten Aufschlüsselung der Adjazenz-Multiplikatoren.
 
 Jeder Schritt baut auf dem vorherigen auf. Das ML-Modell liefert einen soliden Startpunkt, den der Rust-Algorithmus anschließend perfektioniert.
 
-## Was der Optimierer Berücksichtigt
+## Was Der Optimierer Berücksichtigt
 
 - Standard-Slots, überladene Slots und inaktive Slots.
 - Ob die Haupttechnologie oder das beste Upgrade in einen überladenen Slot gehört.
@@ -47,15 +47,15 @@ Jeder Schritt baut auf dem vorherigen auf. Das ML-Modell liefert einen soliden S
 
 ## Häufig Gestellte Fragen (FAQ)
 
-### Was ist ein Adjazenzbonus?
+### Was Ist Ein Adjazenzbonus?
 
 Wenn du kompatible Technologie-Module direkt nebeneinander im Inventar platzierst, erhalten sie einen Stat-Boost. Unterschiedliche Technologien haben unterschiedliche "Nachbarn": Waffen-Upgrades verstärken sich gegenseitig, Bewegungs-Technologien ebenso. Der Optimierer testet alle Positionen, um diese Boni zu maximieren.
 
-### Wie funktionieren überladene Slots?
+### Wie Funktionieren Überladene Slots?
 
 Überladene Slots sind seltene Inventarplätze (meist 4 pro Raster), die das darin befindliche Modul um ca. 25–30 % verstärken. Die Schwierigkeit liegt darin, zu entscheiden, was dort platziert wird: Manchmal ist es die Basistechnologie, manchmal das Upgrade mit den besten Werten. Das ML-Modell des Optimierers wurde speziell für diese Entscheidung trainiert.
 
-### Welche Ausrüstung wird unterstützt?
+### Welche Ausrüstung Wird Unterstützt?
 
 Einfach alles:
 
@@ -66,11 +66,11 @@ Einfach alles:
 - **Exo-Anzüge:** Alle Überlebens- und Bewegungstechnologien.
 - **Frachter:** Technologie-Layouts für Großschiffe.
 
-### Ist es kostenlos?
+### Ist Es Kostenlos?
 
 Ja. Kostenlos, werbefrei und Open Source (GPL-3.0). Keine Accounts, kein Tracking persönlicher Daten.
 
-### Kann ich Builds speichern und teilen?
+### Kann Ich Builds Speichern Und Teilen?
 
 Ja. Du kannst Layouts als `.nms`-Dateien speichern, teilbare Links generieren oder sie direkt posten. Die Builds werden vor dem Teilen validiert, um Kompatibilität sicherzustellen.
 

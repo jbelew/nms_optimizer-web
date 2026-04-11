@@ -1,6 +1,6 @@
 # Instructions de l'Optimiseur NMS : Utilisation, Modules et Slots Surchargés
 
-## Premiers Pas avec la Grille
+## Premiers Pas Avec La Grille
 
 - Sélectionnez une **Plateforme** (Vaisseau, Multi-outil, Corvette, etc.) via l'icône <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Cliquez** ou **appuyez deux fois** (mobile) sur un emplacement pour le marquer comme **Surchargé**.
@@ -11,7 +11,7 @@
 > 💡 **Note :**
 > L'Exocombinaison et les Exonefs ont des grilles fixes. Les slots des Exonefs ne peuvent pas être modifiés. Pour l'Exocombinaison, seuls les états actif/inactif peuvent être changés ; la disposition des slots surchargés est fixe.
 
-## Avant de Commencer
+## Avant De Commencer
 
 Cet outil est conçu pour l'**optimisation de fin de jeu** et fonctionne mieux quand :
 
@@ -33,7 +33,7 @@ Les emplacements surchargés sont limités — leur placement est crucial.
 
 Si l'espace devient trop restreint, vous devrez peut-être réinitialiser et optimiser les technologies dans un ordre différent pour éviter une **Alerte d'Optimisation**.
 
-## Astuce de Pro
+## Astuce De Pro
 
 L'optimiseur utilise des fenêtres fixes dimensionnées selon le nombre de modules de chaque technologie pour trouver les emplacements les plus compacts.
 Si les résultats ne sont pas idéaux, **désactivez temporairement certains slots** pour guider l'optimiseur vers une meilleure disposition.
@@ -48,7 +48,7 @@ Ces labels classent les améliorations procédurales **par statistiques**, et no
 
 Vous ne verrez pas ces étiquettes en jeu. Elles sont attribuées en comparant directement les valeurs des améliorations.
 
-### Comparaison en Jeu
+### Comparaison En Jeu
 
 Ignorez les lettres de classe (S, X, etc.) et comparez les stats :
 
@@ -75,7 +75,7 @@ L'outil propose des **builds recommandées sélectionnées à la main** qui refl
 Vos suggestions et variantes sont les bienvenues sur les discussions du projet :
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Sauvegarder, Charger et Partager
+## Sauvegarder, Charger Et Partager
 
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Charger** — Téléchargez un fichier `.nms` pour restaurer une build.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Sauvegarder** — Téléchargez la build actuelle au format `.nms`.

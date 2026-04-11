@@ -1,17 +1,17 @@
 # Instruções do Otimizador de NMS: Uso, Módulos e Espaços Sobrecarregados
 
-## Primeiros Passos com a Grade
+## Primeiros Passos Com A Grade
 
 - Selecione uma **Plataforma** (Nave, Multiferramenta, Corveta, etc.) usando o ícone <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Clique** ou **toque duas vezes** (mobile) em um espaço para marcá-lo como **Sobrecarregado**.
-- **Ctrl-clique (Windows) / ⌘-clique (Mac) / toque simples (mobile)** para alternar entre um espaço **ativo** ou **inativo**.
-- Use os **interruptores de linha** para ativar ou desativar linhas inteiras. *(Os interruptores são desativados após a colocação de módulos).*
+- **Ctrl-clique (Windows) / ⌘-clic (Mac) / toque simples (mobile)** para alternar entre um espaço **ativo** ou **inactive**.
+- Use os **interruptores de linha** para activar ou desativar linhas inteiras. *(Os interruptores são desativados após a colocação de módulos).*
 - Use o botão de **seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para adicionar ou remover módulos individuais dentro de um grupo tecnológico.
 
 > 💡 **Nota:**
 > Exotrajes e Exonaves possuem grades fixas. Os espaços de Exonaves não podem ser modificados. Em Exotrajes, apenas os estados ativo/inativo podem ser alterados — os layouts de espaços sobrecarregados são fixos.
 
-## Antes de Começar
+## Antes De Começar
 
 Esta ferramenta é destinada à **otimização de final de jogo (endgame)** e funciona melhor quando:
 
@@ -21,7 +21,7 @@ Esta ferramenta é destinada à **otimização de final de jogo (endgame)** e fu
 
 Configurações parciais são suportadas, mas os resultados são otimizados para plataformas totalmente melhoradas.
 
-## Dicas de Uso
+## Dicas De Uso
 
 Espaços sobrecarregados são limitados — o posicionamento importa.
 
@@ -31,12 +31,12 @@ Espaços sobrecarregados são limitados — o posicionamento importa.
 - Depois de usar todos os seus espaços sobrecarregados, priorize tecnologias com **maior contagem de módulos** antes que o espaço se torne limitado.
 - Deixe o otimizador cuidar do posicionamento; seu papel é **definir prioridades e distribuição**.
 
-Se o espaço ficar apertado, você pode precisar redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de Otimização**.
+Si o espaço ficar apertado, você pode precisar redefinir e resolver as tecnologias em uma ordem diferente para evitar um **Alerta de Otimização**.
 
 ## Dica Profissional
 
 O otimizador usa janelas fixas dimensionadas para a contagem de módulos de cada tecnologia para encontrar posicionamentos eficientes.
-Se os resultados não forem ideais, **desative espaços temporariamente** para guiar o otimizador em direção a um layout melhor.
+Si os resultados não forem ideais, **desative espaços temporariamente** para guiar o otimizador em direção a um layout melhor.
 
 ## Rótulos Theta / Tau / Sigma
 
@@ -75,7 +75,7 @@ A ferramenta fornece **builds recomendadas selecionadas manualmente** que reflet
 Sugestões e layouts alternativos são bem-vindos através das discussões do projeto:
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Salvando, Carregando e Compartilhando
+## Salvando, Carregando E Compartilhando
 
 - <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Carregar** — Carregue um arquivo `.nms` salvo para restaurar um layout.
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Salvar** — Baixe o layout atual como um arquivo `.nms`.

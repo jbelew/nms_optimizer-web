@@ -10,11 +10,11 @@ Estou procurando jogadores bilíngues para ajudar a traduzir o app — especialm
 
 Você não precisa ser um tradutor profissional — basta ser fluente, familiarizado com o jogo e disposto a ajudar. Embora as traduções geradas por IA sejam um ótimo ponto de partida, elas frequentemente perdem o contexto ou as nuances específicas do jogo. Você será creditado (ou poderá permanecer anônimo, se preferir).
 
-A maioria das frases são rótulos curtos de interface, dicas de ferramentas (tooltips) ou mensagens de status divertidas.
+La maioria das frases são rótulos curtos de interface, dicas de ferramentas (tooltips) ou mensagens de status divertidas.
 
 ## O Fluxo de Trabalho
 
-O Otimizador de NMS agora utiliza um **fluxo de trabalho de tradução focado em IA** usando a API do Gemini 2.5 Flash. Isso garante que, toda vez que o conteúdo em inglês é atualizado, todos os outros idiomas suportados sejam atualizados automaticamente em minutos.
+O Otimizador de NMS agora utiliza um **Fluxo de Trabalho de Tradução Baseado Em IA** usando a API do Gemini 2.5 Flash. Isso garante que, toda vez que o conteúdo em inglês é atualizado, todos os outros idiomas suportados sejam atualizados automaticamente em minutos.
 
 No entanto, a IA não é perfeita. Contamos com a comunidade para identificar e corrigir "alucinações" ou terminologia incorreta de NMS.
 
@@ -22,26 +22,26 @@ No entanto, a IA não é perfeita. Contamos com a comunidade para identificar e 
 
 A maneira mais fácil de contribuir é diretamente pelo GitHub. Você não precisa saber programar para sugerir uma tradução melhor.
 
-1. **Encontre o arquivo**: Todos os arquivos de localização estão em `/public/assets/locales/[codigo_do_idioma]/`.
+1. **Encontre o Arquivo**: Todos os arquivos de localização estão em `/public/assets/locales/[codigo_do_idioma]/`.
    - `translation.json`: Rótulos de interface, tooltips e mensagens de status.
    - `*.md`: Conteúdo para diálogos maiores (Sobre, Instruções, etc.).
-2. **Edite diretamente no GitHub**: 
+2. **Edite Directamente No GitHub**: 
    - Navegue até o arquivo do seu idioma (ex: `/public/assets/locales/pt/translation.json`).
    - Clique no **ícone do lápis (Edit this file)**.
    - Faça suas alterações.
    - Clique em **Commit changes...** e o GitHub criará automaticamente um Pull Request para você.
-3. **Aguarde a Fusão (Merge)**: Assim que eu fundir seu PR, o script de IA detectará automaticamente suas edições humanas e garantirá que elas sejam preservadas em atualizações futuras.
+3. **Aguarde a Fusão**: Assim que eu fundir seu PR, o script de IA detectará automaticamente suas edicões humanas e garantirá que elas sejam preservadas em atualizações futuras.
 
 ## Idiomas Suportados
 
 Atualmente suportamos:
 - `en` (Inglês - Fonte)
 - `es` (Espanhol)
-- `fr` (Francês)
+- `fr` (Francés)
 - `de` (Alemão)
 - `pt` (Português)
 
-Se você quiser adicionar um **novo idioma**, basta criar uma nova pasta com o [código ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) apropriado e eu o adicionarei à rotação da IA!
+Se você quiser adicionar um **Novo Idioma**, basta criar uma nova pasta com o [código ISO 639-1](https://pt.wikipedia.org/wiki/ISO_639-1) apropriado e eu o adicionarei à rotação da IA!
 
 ## Notas
 

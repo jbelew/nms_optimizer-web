@@ -1,6 +1,6 @@
-# Cómo funciona el Optimizador de NMS
+# Cómo Funciona el Optimizador de NMS
 
-## ¿Qué es esto?
+## ¿Qué Es Esto?
 
 El Optimizador de NMS es una herramienta gratuita que descubre dónde colocar tus módulos de tecnología en No Man's Sky. Eliges tu equipo, seleccionas tus tecnologías, marcas tus ranuras potenciadas y la herramienta calcula el diseño que obtiene la mayor puntuación.
 
@@ -8,34 +8,34 @@ Funciona para naves espaciales (estándar, centinela, solar, luchadora, orgánic
 
 La herramienta gestiona automáticamente las bonificaciones de adyacencia y la ubicación de las ranuras potenciadas. En la práctica, un diseño optimizado suele puntuar entre un 15 y un 20 % más que lo que la mayoría de los jugadores organizan a mano.
 
-## El problema
+## El Problema
 
 No Man's Sky no explica bien las bonificaciones de adyacencia y no explica en absoluto la estrategia de las ranuras potenciadas. Los módulos del mismo tipo obtienen un aumento de estadísticas cuando comparten un borde en la cuadrícula. Las ranuras potenciadas dan un multiplicador de aproximadamente un 25-30 % a cualquier cosa que pongas en ellas. Descubrir la mejor disposición significa hacer malabarismos con ambos sistemas a la vez, a través de cuadrículas con millones de permutaciones posibles (~8,32 × 10⁸¹ para un diseño completo).
 
 Nadie puede resolver eso a mano.
 
-## Cómo lo resuelve el optimizador
+## Cómo Lo Resuelve el Optimizador
 
 El optimizador se ejecuta en cuatro pasos:
 
-1. **Coincidencia de patrones**: Comienza con disposiciones probadas a mano que puntúan bien de forma fiable para conjuntos de módulos comunes.
+1. **Coincidencia de Patrones**: Comienza con disposiciones probadas a mano que puntúan bien de forma fiable para conjuntos de módulos comunes.
 2. **Predicción por ML**: Si tu cuadrícula tiene ranuras potenciadas, un modelo de TensorFlow entrenado con más de 16.000 diseños de alta puntuación predice dónde colocar las tecnologías principales frente a las mejoras.
-3. **Recocido simulado**: Un optimizador basado en Rust intercambia módulos y prueba miles de disposiciones en milisegundos, buscando la puntuación más alta posible.
-4. **Visualización de resultados**: Verás el diseño con la puntuación más alta con un desglose completo del multiplicador de adyacencia.
+3. **Recocido Simulado**: Un optimizador basado en Rust intercambia módulos y prueba miles de disposiciones en milisegundos, buscando la puntuación más alta posible.
+4. **Visualización de Resultados**: Verás el diseño con la puntuación más alta con un desglose completo del multiplicador de adyacencia.
 
 Cada paso alimenta al siguiente. El modelo de ML le da al recocido simulado un punto de partida sólido, y el recocido se encarga de refinar a partir de ahí.
 
-## Qué tiene en cuenta el optimizador
+## Qué Tiene en Cuenta el Optimizador
 
 - Ranuras estándar, potenciadas e inactivas.
 - Si una tecnología principal o su mejor mejora debe ir en cada ranura potenciada.
 - Compensaciones entre estadísticas que compiten (maniobrabilidad frente a velocidad, daño frente a cadencia de tiro).
 - Pesos de estadísticas específicos de cada módulo y reglas de compañeros de adyacencia.
 
-## Pila tecnológica
+## Pila Tecnológica
 
 - **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI.
-- **Servicio de optimización:** Python, Flask, TensorFlow, NumPy, Rust (recocido simulado y puntuación).
+- **Servicio de Optimización:** Python, Flask, TensorFlow, NumPy, Rust (recocido simulado y puntuación).
 - **Pruebas:** Vitest, Python Unittest.
 - **Despliegue:** Heroku (alojamiento), Cloudflare (Hosting/DNS/CDN), Docker.
 - **CI/CD:** GitHub Actions.
@@ -45,7 +45,7 @@ Cada paso alimenta al siguiente. El modelo de ML le da al recocido simulado un p
 - Interfaz web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Preguntas frecuentes (FAQ)
+## Preguntas Frecuentes (FAQ)
 
 ### ¿Qué es una bonificación de adyacencia?
 
@@ -78,7 +78,7 @@ Sí. Puedes guardar diseños como archivos `.nms`, generar enlaces compartibles 
 
 George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray y todos los demás que han contribuido: vuestro apoyo lo significa todo. Cada donación, cada vez que compartís la herramienta y cada palabra de aliento me ayuda a seguir construyendo. Gracias.
 
-## Versión antigua
+## Versión Antigua
 
 Así es como se veía la interfaz en una versión temprana: funcionaba, pero el diseño era mínimo. La versión actual es una gran mejora en diseño, usabilidad y claridad.
 ![Prototipo inicial de la interfaz de usuario del optimizador de diseños de No Man's Sky](/assets/img/screenshots/screenshot_v03.png)

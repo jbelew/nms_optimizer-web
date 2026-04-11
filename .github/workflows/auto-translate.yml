@@ -20,8 +20,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get changed translation files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: public/assets/locales/en/**
+
       - name: Set up Python
-        uses: actions/setup-node@v6 # Just for general stability, we use python below
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
 
@@ -31,12 +37,17 @@ jobs:
           pip install google-genai
 
       - name: Run translation script
-        run: python scripts/translate.py
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            filename=$(basename "$file")
+            echo "Processing changed file: $filename"
+            python scripts/translate.py --file "$filename"
+          done
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(l10n): auto-translate keys using Gemini AI"
+          commit_message: "chore(l10n): auto-translate changed keys using Gemini AI"
           file_pattern: 'public/assets/locales/**'

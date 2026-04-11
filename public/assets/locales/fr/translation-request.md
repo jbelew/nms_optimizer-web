@@ -14,7 +14,7 @@ La plupart des textes sont des libellés d'interface courts, des infobulles ou d
 
 ## Le Flux de Travail
 
-L'Optimiseur NMS utilise désormais un **système de traduction automatisé par IA** via l'API Gemini 2.5 Flash. Cela garantit que chaque mise à jour du contenu anglais est répercutée sur les autres langues en quelques minutes seulement.
+L'Optimiseur NMS utilise désormais un **Système de Traduction Automatisé Par IA** via l'API Gemini 2.5 Flash. Cela garantit que chaque mise à jour du contenu anglais est répercutée sur les autres langues en quelques minutes seulement.
 
 Cependant, l'IA n'est pas parfaite. Nous comptons sur la communauté pour repérer et corriger les erreurs de terminologie ou les tournures maladroites.
 
@@ -22,15 +22,15 @@ Cependant, l'IA n'est pas parfaite. Nous comptons sur la communauté pour repér
 
 La méthode la plus simple est de passer directement par GitHub. Pas besoin de savoir coder pour proposer une meilleure traduction !
 
-1. **Trouvez le fichier** : Tous les fichiers de localisation sont dans `/public/assets/locales/[code_langue]/`.
+1. **Trouvez le Fichier** : Tous les fichiers de localisation sont dans `/public/assets/locales/[code_langue]/`.
    - `translation.json` : Libellés UI, infobulles et messages de statut.
    - `*.md` : Contenu des dialogues plus longs (À propos, Instructions, etc.).
-2. **Éditez directement sur GitHub** : 
+2. **Éditez Directement Sur GitHub** : 
    - Naviguez jusqu'au fichier de votre langue (ex : `/public/assets/locales/fr/translation.json`).
    - Cliquez sur l'icône **Crayon (Modifier ce fichier)**.
    - Faites vos modifications.
    - Cliquez sur **Commit changes...** et GitHub créera automatiquement une Pull Request pour vous.
-3. **Attendez la validation** : Une fois que j'aurai validé et fusionné votre PR, le script d'IA détectera vos corrections et veillera à les préserver lors des futures mises à jour.
+3. **Attendez la Validation** : Une fois que j'aurai validé et fusionné votre PR, le script d'IA détectera vos corrections et veillera à les préserver lors des futures mises à jour.
 
 ## Langues Supportées
 
@@ -41,7 +41,7 @@ Nous supportons actuellement :
 - `de` (Allemand)
 - `pt` (Portugais)
 
-Si vous souhaitez ajouter une **nouvelle langue**, créez simplement un dossier avec le [code ISO 639-1](https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1) approprié et je l'ajouterai à la rotation de l'IA !
+Si vous souhaitez ajouter une **Nouvelle Langue**, créez simplement un dossier avec le [code ISO 639-1](https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1) approprié et je l'ajouterai à la rotation de l'IA !
 
 ## Notes
 
