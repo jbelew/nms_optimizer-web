@@ -1,3 +1,10 @@
+# [6.25.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.2...v6.25.0) (2026-04-11)
+
+
+### Features
+
+* **l10n:** migrate from Crowdin to Gemini-AI automated workflow ([6266030](https://github.com/jbelew/nms_optimizer-web/commit/626603049b2d0aa5e3821502af77e66e8274b97b))
+
 ## [6.24.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.24.1...v6.24.2) (2026-04-11)
 
 
