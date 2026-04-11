@@ -467,3 +467,26 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 
 ### Refine & Reflect
 *   **Reflection:** Cloudflare Web Analytics requires the `spa: true` flag to accurately track Single Page Applications. When using "JS Snippet" mode in the dashboard, the script must be present in the HTML but should be deferred to avoid competing with critical rendering resources. Aggressive bot detection heuristics (like checking for mouse movement) should be avoided as they create false positives for mobile and accessibility-focused traffic.
+
+## 2026-04-11: Migration from Crowdin to Gemini-AI Translation Workflow
+
+### Perceive & Understand
+*   **Request:** Replace Crowdin with a zero-cost, automated translation system that allows for community contributions.
+*   **Context:** The app has too many keys for typical "free" SaaS tiers (like Tolgee). It's an open-source NMS utility with technical jargon.
+*   **Root Cause:** Crowdin and other SaaS platforms create friction (external dashboards, key limits, monthly costs).
+
+### Reason & Plan
+*   **Plan:**
+    1.  Create a custom Python script (`scripts/translate.py`) that uses the Gemini 1.5 Flash API (free tier).
+    2.  Implement recursive JSON translation and Markdown file translation.
+    3.  Configure Gemini to preserve technical NMS terminology and `i18next` tags.
+    4.  Automate the workflow using GitHub Actions (`.github/workflows/auto-translate.yml`).
+    5.  Remove Crowdin artifacts.
+
+### Act & Implement
+*   **Action:** Created `scripts/translate.py` with smart incremental translation (only translates missing or untranslated keys).
+*   **Action:** Created `.github/workflows/auto-translate.yml` to automate the sync on pushes to `main`.
+*   **Action:** Removed `crowdin.yml` and `scripts/translate_md.py`.
+
+### Refine & Reflect
+*   **Reflection:** A "Git-native" AI workflow is ideal for open-source projects. It keeps the source of truth in the repository, allows human overrides via Pull Requests, and uses the generous free tiers of modern LLMs like Gemini to provide high-quality, context-aware translations without recurring costs.
