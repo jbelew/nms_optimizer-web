@@ -1,24 +1,23 @@
 import { renderHook } from "@testing-library/react";
-import { Location, useLocation, useNavigate } from "react-router-dom";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { Location, useLocation } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useUrlValidation } from "./useUrlValidation";
 
 vi.mock("react-router-dom", () => ({
 	useLocation: vi.fn(),
-	useNavigate: vi.fn(),
+	useNavigate: vi.fn(), // Required but not used for redirect anymore
 }));
 
 describe("useUrlValidation", () => {
-	let navigateMock: Mock;
-
 	beforeEach(() => {
 		vi.clearAllMocks();
-		navigateMock = vi.fn();
-		vi.mocked(useNavigate).mockReturnValue(navigateMock);
 	});
 
 	it("should redirect if grid is present but platform is missing", () => {
+		const replaceStateSpy = vi
+			.spyOn(window.history, "replaceState")
+			.mockImplementation(() => {});
 		vi.mocked(useLocation).mockReturnValue({
 			pathname: "/test",
 			search: "?grid=some-grid-data",
@@ -29,13 +28,17 @@ describe("useUrlValidation", () => {
 
 		renderHook(() => useUrlValidation());
 
-		expect(navigateMock).toHaveBeenCalledWith("/test?", { replace: true });
+		expect(replaceStateSpy).toHaveBeenCalledWith({}, "", "/test");
+		replaceStateSpy.mockRestore();
 	});
 
-	it("should not redirect if both grid and platform are present", () => {
+	it("should not redirect if whitelist parameters are already correct", () => {
+		const replaceStateSpy = vi
+			.spyOn(window.history, "replaceState")
+			.mockImplementation(() => {});
 		vi.mocked(useLocation).mockReturnValue({
 			pathname: "/test",
-			search: "?grid=some-grid-data&platform=starship",
+			search: "?platform=starship",
 			state: null,
 			key: "default",
 			hash: "",
@@ -43,10 +46,14 @@ describe("useUrlValidation", () => {
 
 		renderHook(() => useUrlValidation());
 
-		expect(navigateMock).not.toHaveBeenCalled();
+		expect(replaceStateSpy).not.toHaveBeenCalled();
+		replaceStateSpy.mockRestore();
 	});
 
-	it("should not redirect if neither grid nor platform is present", () => {
+	it("should redirect to strip non-whitelist parameters", () => {
+		const replaceStateSpy = vi
+			.spyOn(window.history, "replaceState")
+			.mockImplementation(() => {});
 		vi.mocked(useLocation).mockReturnValue({
 			pathname: "/test",
 			search: "?other=param",
@@ -57,13 +64,17 @@ describe("useUrlValidation", () => {
 
 		renderHook(() => useUrlValidation());
 
-		expect(navigateMock).not.toHaveBeenCalled();
+		expect(replaceStateSpy).toHaveBeenCalledWith({}, "", "/test");
+		replaceStateSpy.mockRestore();
 	});
 
-	it("should preserve other params when redirecting", () => {
+	it("should strip other params (not in whitelist) while preserving allowed ones", () => {
+		const replaceStateSpy = vi
+			.spyOn(window.history, "replaceState")
+			.mockImplementation(() => {});
 		vi.mocked(useLocation).mockReturnValue({
 			pathname: "/test",
-			search: "?grid=data&lang=en",
+			search: "?platform=sentinel&junk=data",
 			state: null,
 			key: "default",
 			hash: "",
@@ -71,6 +82,25 @@ describe("useUrlValidation", () => {
 
 		renderHook(() => useUrlValidation());
 
-		expect(navigateMock).toHaveBeenCalledWith("/test?lang=en", { replace: true });
+		expect(replaceStateSpy).toHaveBeenCalledWith({}, "", "/test?platform=sentinel");
+		replaceStateSpy.mockRestore();
+	});
+
+	it("should handle extremely corrupted URLs by stripping everything except whitelist", () => {
+		const replaceStateSpy = vi
+			.spyOn(window.history, "replaceState")
+			.mockImplementation(() => {});
+		vi.mocked(useLocation).mockReturnValue({
+			pathname: "/de/",
+			search: "?changelog%2F%3Fplatform=sentinel&platform=sentinel",
+			state: null,
+			key: "default",
+			hash: "",
+		} as Location);
+
+		renderHook(() => useUrlValidation());
+
+		expect(replaceStateSpy).toHaveBeenCalledWith({}, "", "/de/?platform=sentinel");
+		replaceStateSpy.mockRestore();
 	});
 });
