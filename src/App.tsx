@@ -9,6 +9,7 @@ import { DialogProvider } from "./context/DialogContext";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
+import { useUrlNormalization } from "./hooks/useUrlNormalization/useUrlNormalization";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
@@ -189,6 +190,7 @@ const App: FC = () => {
 	}, [showError]);
 
 	// Use the new custom hooks
+	useUrlNormalization();
 	useSeoAndTitle();
 	useUrlValidation();
 

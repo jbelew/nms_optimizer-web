@@ -75,7 +75,7 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: "standard", // Default initial value
-	setSelectedPlatform: (platform, validShipTypes, updateUrl = true, isKnownRoute = true) => {
+	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
 		if (!validShipTypes.includes(platform)) {
 			console.warn(
 				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
@@ -86,26 +86,8 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		set({ selectedPlatform: platform });
 
 		safeSetItem(LOCAL_STORAGE_KEY, platform);
-
-		if (updateUrl && isKnownRoute && typeof window !== "undefined") {
-			try {
-				const url = new URL(window.location.href);
-
-				// Ensure trailing slash for consistency with SSG
-				if (!url.pathname.endsWith("/")) {
-					url.pathname += "/";
-				}
-
-				if (url.searchParams.get("platform") !== platform) {
-					url.searchParams.set("platform", platform);
-					window.history.pushState({}, "", url.toString());
-				}
-			} catch (e) {
-				console.warn("PlatformStore: Failed to update URL", e);
-			}
-		}
 	},
-	initializePlatform: (validShipTypes: string[], isKnownRoute = true) => {
+	initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
 		if (typeof window === "undefined") {
 			set({ selectedPlatform: "standard" });
 
@@ -133,32 +115,6 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		if (usePlatformStore.getState().selectedPlatform !== initialPlatform) {
 			set({ selectedPlatform: initialPlatform });
-		}
-
-		// --- URL Normalization (Always enforce trailing slash) ---
-		if (isKnownRoute && typeof window !== "undefined") {
-			try {
-				const url = new URL(window.location.href);
-				let changed = false;
-
-				// 1. Ensure trailing slash
-				if (!url.pathname.endsWith("/")) {
-					url.pathname += "/";
-					changed = true;
-				}
-
-				// 2. Ensure platform is in URL if it was updated or missing
-				if (url.searchParams.get("platform") !== initialPlatform) {
-					url.searchParams.set("platform", initialPlatform);
-					changed = true;
-				}
-
-				if (changed) {
-					window.history.replaceState({}, "", url.toString());
-				}
-			} catch (e) {
-				console.warn("PlatformStore: Failed to normalize URL state", e);
-			}
 		}
 
 		if (updateStorageNeeded) {

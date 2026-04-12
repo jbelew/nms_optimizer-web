@@ -22,6 +22,11 @@ vi.mock("./utils/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
+/** Mock URL normalization to prevent remounts */
+vi.mock("./hooks/useUrlNormalization/useUrlNormalization", () => ({
+	useUrlNormalization: vi.fn(),
+}));
+
 vi.mock("react-i18next", async () => {
 	const original = await vi.importActual("react-i18next");
 

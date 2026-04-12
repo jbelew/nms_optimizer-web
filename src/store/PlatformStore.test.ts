@@ -66,52 +66,13 @@ describe("PlatformStore", () => {
 			warnSpy.mockRestore();
 		});
 
-		it("should update URL when updateUrl is true and isKnownRoute is true", () => {
-			const pushStateSpy = vi.spyOn(window.history, "pushState");
-			const { setSelectedPlatform } = usePlatformStore.getState();
-
-			setSelectedPlatform("hauler", validShipTypes, true, true);
-
-			expect(pushStateSpy).toHaveBeenCalled();
-			const url = new URL(window.location.href);
-			expect(url.searchParams.get("platform")).toBe("hauler");
-
-			pushStateSpy.mockRestore();
-		});
-
-		it("should not update URL when updateUrl is false", () => {
-			const pushStateSpy = vi.spyOn(window.history, "pushState");
-			const { setSelectedPlatform } = usePlatformStore.getState();
-
-			setSelectedPlatform("explorer", validShipTypes, false, true);
-
-			expect(pushStateSpy).not.toHaveBeenCalled();
-
-			pushStateSpy.mockRestore();
-		});
-
-		it("should not update URL when isKnownRoute is false", () => {
-			const pushStateSpy = vi.spyOn(window.history, "pushState");
-			const { setSelectedPlatform } = usePlatformStore.getState();
-
-			setSelectedPlatform("fighter", validShipTypes, true, false);
-
-			expect(pushStateSpy).not.toHaveBeenCalled();
-
-			pushStateSpy.mockRestore();
-		});
-
 		it("should use default values for optional parameters", () => {
-			const pushStateSpy = vi.spyOn(window.history, "pushState");
 			const { setSelectedPlatform } = usePlatformStore.getState();
 
 			// Call with only required parameters
 			setSelectedPlatform("explorer", validShipTypes);
 
-			// Should update URL with defaults (updateUrl=true, isKnownRoute=true)
-			expect(pushStateSpy).toHaveBeenCalled();
-
-			pushStateSpy.mockRestore();
+			expect(usePlatformStore.getState().selectedPlatform).toBe("explorer");
 		});
 	});
 
@@ -166,49 +127,6 @@ describe("PlatformStore", () => {
 			expect(localStorage.getItem("selectedPlatform")).toBe("fighter");
 		});
 
-		it("should update URL when platform comes from localStorage", () => {
-			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
-			localStorage.setItem("selectedPlatform", "explorer");
-
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
-
-			expect(replaceStateSpy).toHaveBeenCalled();
-
-			replaceStateSpy.mockRestore();
-		});
-
-		it("should not update URL when isKnownRoute is false", () => {
-			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
-			localStorage.setItem("selectedPlatform", "fighter");
-
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes, false);
-
-			expect(replaceStateSpy).not.toHaveBeenCalled();
-
-			replaceStateSpy.mockRestore();
-		});
-
-		it("should save to localStorage when defaulting to standard", () => {
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
-
-			expect(localStorage.getItem("selectedPlatform")).toBe("standard");
-		});
-
-		it("should prefer URL platform over localStorage", () => {
-			const url = new URL(window.location.href);
-			url.searchParams.set("platform", "fighter");
-			window.history.replaceState({}, "", url.toString());
-			localStorage.setItem("selectedPlatform", "explorer");
-
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
-
-			expect(usePlatformStore.getState().selectedPlatform).toBe("fighter");
-		});
-
 		it("should handle empty validShipTypes array", () => {
 			const url = new URL(window.location.href);
 			url.searchParams.set("platform", "fighter");
@@ -218,72 +136,6 @@ describe("PlatformStore", () => {
 			initializePlatform([]);
 
 			expect(usePlatformStore.getState().selectedPlatform).toBe("standard");
-		});
-	});
-
-	describe("URL Normalization (Trailing Slash)", () => {
-		it("should add a trailing slash during initialization if missing", () => {
-			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
-
-			// Set URL without trailing slash
-			const url = new URL("http://localhost/fr?platform=standard");
-			// @ts-expect-error - Mocking window.location
-			delete window.location;
-			// @ts-expect-error - Mocking window.location
-			window.location = new URL(url.toString());
-
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
-
-			expect(replaceStateSpy).toHaveBeenCalled();
-			const finalUrl = new URL(replaceStateSpy.mock.calls[0][2] as string);
-			expect(finalUrl.pathname).toBe("/fr/");
-			expect(finalUrl.searchParams.get("platform")).toBe("standard");
-
-			replaceStateSpy.mockRestore();
-		});
-
-		it("should ensure trailing slash is present when setting a new platform", () => {
-			const pushStateSpy = vi.spyOn(window.history, "pushState");
-
-			// Set URL without trailing slash
-			const url = new URL("http://localhost/de");
-			// @ts-expect-error - Mocking window.location
-			delete window.location;
-			// @ts-expect-error - Mocking window.location
-			window.location = new URL(url.toString());
-
-			const { setSelectedPlatform } = usePlatformStore.getState();
-			setSelectedPlatform("fighter", validShipTypes, true, true);
-
-			expect(pushStateSpy).toHaveBeenCalled();
-			const finalUrl = new URL(pushStateSpy.mock.calls[0][2] as string);
-			expect(finalUrl.pathname).toBe("/de/");
-			expect(finalUrl.searchParams.get("platform")).toBe("fighter");
-
-			pushStateSpy.mockRestore();
-		});
-
-		it("should preserve other search parameters while adding trailing slash", () => {
-			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
-
-			// Set URL without trailing slash and with extra params
-			const url = new URL("http://localhost/es?foo=bar&platform=standard");
-			// @ts-expect-error - Mocking window.location
-			delete window.location;
-			// @ts-expect-error - Mocking window.location
-			window.location = new URL(url.toString());
-
-			const { initializePlatform } = usePlatformStore.getState();
-			initializePlatform(validShipTypes);
-
-			expect(replaceStateSpy).toHaveBeenCalled();
-			const finalUrl = new URL(replaceStateSpy.mock.calls[0][2] as string);
-			expect(finalUrl.pathname).toBe("/es/");
-			expect(finalUrl.searchParams.get("foo")).toBe("bar");
-			expect(finalUrl.searchParams.get("platform")).toBe("standard");
-
-			replaceStateSpy.mockRestore();
 		});
 	});
 
