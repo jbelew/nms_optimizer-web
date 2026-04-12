@@ -1,3 +1,10 @@
+## [6.26.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.9...v6.26.10) (2026-04-12)
+
+
+### Bug Fixes
+
+* **seo:** implement robust URL sanitization to strip mangled paths and unrecognized parameters ([83650f9](https://github.com/jbelew/nms_optimizer-web/commit/83650f9644db32d11349fe8056a675d99446d114))
+
 ## [6.26.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.8...v6.26.9) (2026-04-12)
 
 
