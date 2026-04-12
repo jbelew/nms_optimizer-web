@@ -169,7 +169,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 					nonInteraction: false,
 				});
 
-				// TODO: Turn this back on if the Corvette bug shows up again
+				// TODO: Turn this back on if the Corvette bug shows up again ...
 				if (option === "corvette") {
 					showInfo(
 						"Corvette Warning!",
