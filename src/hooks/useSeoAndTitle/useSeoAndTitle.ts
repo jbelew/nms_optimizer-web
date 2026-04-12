@@ -121,7 +121,7 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
 		link.setAttribute("rel", "alternate");
 		link.setAttribute("hreflang", lang);
 
-		const path = lang === "en" ? cleanPath || "/" : `/${lang}${cleanPath}`;
+		const path = lang === "en" ? cleanPath || "/" : `/${lang}${cleanPath || "/"}`;
 		link.setAttribute("href", `${baseUrl}${path}`);
 		document.head.appendChild(link);
 	});
@@ -231,7 +231,7 @@ export const useSeoAndTitle = () => {
 		const cleanPath = currentPath === "/" ? "" : currentPath;
 		// If language is English, canonical is just the clean path. Otherwise, include lang prefix.
 		const canonicalPath =
-			i18n.language === "en" ? cleanPath || "/" : `/${i18n.language}${cleanPath}`;
+			i18n.language === "en" ? cleanPath || "/" : `/${i18n.language}${cleanPath || "/"}`;
 		const canonicalUrl = `${baseUrl}${canonicalPath}`;
 
 		updateCanonicalTag(canonicalUrl);

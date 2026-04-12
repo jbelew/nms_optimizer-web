@@ -38,14 +38,14 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const { pathname, searchParams } = url;
 
-    // 1. Language Redirects (?lng=fr -> /fr)
+    // 1. Language Redirects (?lng=fr -> /fr/)
     const lng = searchParams.get("lng");
     if (lng) {
         const supportedLang = SUPPORTED_LANGS.includes(lng) ? lng : "en";
         const newUrl = new URL(url);
         newUrl.searchParams.delete("lng");
         if (supportedLang !== "en") {
-            newUrl.pathname = `/${supportedLang}${pathname === "/" ? "" : pathname}`;
+            newUrl.pathname = `/${supportedLang}${pathname === "/" ? "/" : pathname}`;
         }
         return Response.redirect(newUrl.toString(), 301);
     }

@@ -67,7 +67,7 @@ const urlEntries = pages.flatMap((page) => {
 	const alternateUrls = languages.map((lang) => {
 		const url = new URL(page.url);
 		if (lang !== "en") {
-			url.pathname = `/${lang}${url.pathname === "/" ? "" : url.pathname}`;
+			url.pathname = `/${lang}${url.pathname === "/" ? "/" : url.pathname}`;
 		}
 		return { lang, href: url.href };
 	});

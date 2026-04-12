@@ -56,7 +56,7 @@ function generateSeoTags(pathname, lang, baseUrl) {
 	const tags = [];
 
 	// Canonical URL
-	const canonicalPath = lang === "en" ? pathname : `/${lang}${pathname}`;
+	const canonicalPath = lang === "en" ? pathname : `/${lang}${pathname === "/" ? "/" : pathname}`;
 	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
 	tags.push(`<link rel="canonical" href="${canonicalUrl}" />`);
 	tags.push(`<meta property="og:url" content="${canonicalUrl}" />`);
@@ -71,7 +71,7 @@ function generateSeoTags(pathname, lang, baseUrl) {
 
 	// Other languages
 	SUPPORTED_LANGUAGES.filter((l) => l !== "en").forEach((langCode) => {
-		const langUrl = new URL(`/${langCode}${cleanPath}`, baseUrl).href;
+		const langUrl = new URL(`/${langCode}${cleanPath || "/"}`, baseUrl).href;
 		tags.push(`<link rel="alternate" hreflang="${langCode}" href="${langUrl}" />`);
 	});
 

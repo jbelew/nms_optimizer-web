@@ -117,7 +117,7 @@ export const LanguageSelector: React.FC = () => {
 		}
 
 		const newPath =
-			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "" : basePath}`;
+			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "/" : basePath}`;
 
 		// Use startTransition to keep dropdown responsive while handling heavy updates
 		startTransition(() => {
@@ -143,7 +143,7 @@ export const LanguageSelector: React.FC = () => {
 	 */
 	const handleRequestTranslationClick = () => {
 		const lang = (i18n.language || "en").split("-")[0];
-		const path = lang === "en" ? "/translation" : `/${lang}/translation`;
+		const path = lang === "en" ? "/translation/" : `/${lang}/translation/`;
 		navigate(path + window.location.search);
 	};
 
