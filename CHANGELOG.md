@@ -1,3 +1,10 @@
+## [6.26.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.10...v6.26.11) (2026-04-12)
+
+
+### Performance Improvements
+
+* **caching:** restore edge caching strategy for HTML to improve TTFB ([f18d913](https://github.com/jbelew/nms_optimizer-web/commit/f18d9132e2b657ef8ea421d27ba765f0e061926d))
+
 ## [6.26.10](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.9...v6.26.10) (2026-04-12)
 
 
