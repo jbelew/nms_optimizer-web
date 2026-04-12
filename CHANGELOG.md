@@ -1,3 +1,10 @@
+## [6.26.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.12...v6.26.13) (2026-04-12)
+
+
+### Bug Fixes
+
+* add Sentry configuration secrets to CI build steps ([f182ace](https://github.com/jbelew/nms_optimizer-web/commit/f182acec4045e32223fff17a8f8c4a112ba7b972))
+
 ## [6.26.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.11...v6.26.12) (2026-04-12)
 
 
