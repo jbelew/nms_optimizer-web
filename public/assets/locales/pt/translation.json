@@ -610,6 +610,27 @@
 			"rerouter": "Redirecionador de Oxigênio"
 		}
 	},
+	"faq": {
+		"name": "Perguntas Frequentes do Otimizador de NMS",
+		"questions": {
+			"adjacencyBonus": {
+				"name": "O que é um bônus de adjacência em No Man's Sky?",
+				"answer": "Quando você coloca módulos de tecnologia compatíveis um ao lado do outro em No Man's Sky, eles recebem um bônus de estatísticas. Módulos do mesmo tipo que compartilham uma borda recebem um aumento percentual em suas estatísticas. Quanto mais bordas compartilhadas, maior o bônus. Descobrir a disposição correta manualmente é tedioso, especialmente em grades grandes com espaços sobrecarregados."
+			},
+			"superchargedSlots": {
+				"name": "O que são espaços sobrecarregados em No Man's Sky?",
+				"answer": "Alguns espaços de inventário em No Man's Sky são sobrecarregados. Qualquer módulo de tecnologia colocado em um deles recebe um grande multiplicador de estatísticas além dos bônus normais de adjacência. Eles são colocados aleatoriamente em cada equipamento, por isso o layout ideal muda dependendo de onde seus espaços sobrecarregados caíram."
+			},
+			"calculation": {
+				"name": "Como o Otimizador de NMS calcula o melhor layout de tecnologia?",
+				"answer": "O otimizador usa uma combinação de correspondência de padrões determinística e recozimento simulado (simulated annealing). Para conjuntos menores de módulos, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o recozimento simulado explora milhares de disposições para encontrar uma que pontue o mais alto possível. A pontuação leva em conta bônus de adjacência, localização de espaços sobrecarregados e pesos estatísticos específicos de cada módulo. O backend roda em Rust para maior velocidade."
+			},
+			"platforms": {
+				"name": "Quais plataformas o Otimizador de NMS suporta?",
+				"answer": "O Otimizador de NMS suporta Naves (padrão, sentinela, solar, combate, viva, atlantid), Corvetas, Multiferramentas (padrão e sentinela), Exotrajes, Exonaves (nomad, pilgrim, roamer, colossus, minotaur, nautilon) e Cargueiros."
+			}
+		}
+	},
 	"moduleSelection": {
 		"core": "Módulo Central",
 		"bonus": "Módulos de Bônus",

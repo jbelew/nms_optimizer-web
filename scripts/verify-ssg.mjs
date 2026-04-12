@@ -14,7 +14,17 @@ const DIST_DIR = path.join(__dirname, "../dist");
 const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
 const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats"];
 
-function checkFile(filePath, pageName, lang, expectContent = true) {
+/**
+ * Checks a generated HTML file for required SEO tags and content.
+ *
+ * @param {string} filePath - Path to the HTML file to check.
+ * @param {string} pageName - Name of the page for reporting.
+ * @param {string} lang - Language code of the page.
+ * @param {boolean} [expectContent=true] - Whether the page is expected to have pre-rendered markdown content.
+ * @param {boolean} [isRoot=false] - Whether the page is a root page (should have FAQ schema).
+ * @returns {boolean} True if all checks pass, false otherwise.
+ */
+function checkFile(filePath, pageName, lang, expectContent = true, isRoot = false) {
 	if (!fs.existsSync(filePath)) {
 		console.log(`✗ ${filePath} - NOT FOUND`);
 		return false;
@@ -26,6 +36,7 @@ function checkFile(filePath, pageName, lang, expectContent = true) {
 		hasHreflang: content.includes('hreflang='),
 		hasPrerendered: !expectContent || content.includes('data-prerendered-markdown'),
 		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"), // Has HTML content
+		hasFAQ: isRoot ? content.includes('"@type":"FAQPage"') : !content.includes('"@type":"FAQPage"'),
 	};
 
 	const allPass = Object.values(checks).every((v) => v);
@@ -57,7 +68,7 @@ SUPPORTED_LANGUAGES.forEach((lang) => {
 	const filePath = path.join(DIST_DIR, rootPath, "index.html");
 	totalPages++;
 
-	if (checkFile(filePath, lang === "en" ? "/" : `/${lang}`, lang, false)) {
+	if (checkFile(filePath, lang === "en" ? "/" : `/${lang}`, lang, false, true)) {
 		passedPages++;
 		console.log(`✓ ${lang === "en" ? "/" : "/" + lang}`);
 	}

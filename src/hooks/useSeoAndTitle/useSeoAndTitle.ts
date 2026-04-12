@@ -128,6 +128,45 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
 };
 
 /**
+ * Updates or creates a JSON-LD structured data script tag in the document's head.
+ *
+ * @remarks
+ * This helper is used to inject or remove complex structured data (like `FAQPage`)
+ * dynamically based on the current route.
+ *
+ * @param {string} id - The unique ID for the script tag to manage.
+ * @param {object | null} data - The structured data object to serialize into the script, or `null` to remove the script tag.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @example
+ * ```ts
+ * updateStructuredData("faq-schema", { "@type": "FAQPage", ... });
+ * // Result: <script type="application/ld+json" id="faq-schema">...</script>
+ * ```
+ */
+const updateStructuredData = (id: string, data: object | null) => {
+	let element = document.getElementById(id);
+
+	if (!data) {
+		if (element) {
+			element.remove();
+		}
+
+		return;
+	}
+
+	if (!element) {
+		element = document.createElement("script");
+		element.setAttribute("type", "application/ld+json");
+		element.setAttribute("id", id);
+		document.head.appendChild(element);
+	}
+
+	element.textContent = JSON.stringify(data);
+};
+
+/**
  * Custom hook for managing SEO metadata and document titles.
  *
  * @remarks
@@ -202,6 +241,77 @@ export const useSeoAndTitle = () => {
 		updateHreflangTags(baseUrl, cleanPath, supportedLangs);
 
 		document.documentElement.lang = i18n.language;
+
+		// --- Dynamic Structured Data (FAQ) ---
+		// Only inject FAQ schema on the root route
+		if (currentPath === "/") {
+			updateStructuredData("faq-schema", {
+				"@context": "https://schema.org",
+				"@type": "FAQPage",
+				"@id": `${baseUrl}/#faqpage`,
+				name: t("faq.name", "NMS Optimizer Frequently Asked Questions"),
+				mainEntity: [
+					{
+						"@type": "Question",
+						name: t(
+							"faq.questions.adjacencyBonus.name",
+							"What is an adjacency bonus in No Man's Sky?"
+						),
+						acceptedAnswer: {
+							"@type": "Answer",
+							text: t(
+								"faq.questions.adjacencyBonus.answer",
+								"When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots."
+							),
+						},
+					},
+					{
+						"@type": "Question",
+						name: t(
+							"faq.questions.superchargedSlots.name",
+							"What are supercharged slots in No Man's Sky?"
+						),
+						acceptedAnswer: {
+							"@type": "Answer",
+							text: t(
+								"faq.questions.superchargedSlots.answer",
+								"Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed."
+							),
+						},
+					},
+					{
+						"@type": "Question",
+						name: t(
+							"faq.questions.calculation.name",
+							"How does NMS Optimizer calculate the best technology layout?"
+						),
+						acceptedAnswer: {
+							"@type": "Answer",
+							text: t(
+								"faq.questions.calculation.answer",
+								"The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed."
+							),
+						},
+					},
+					{
+						"@type": "Question",
+						name: t(
+							"faq.questions.platforms.name",
+							"What platforms does NMS Optimizer support?"
+						),
+						acceptedAnswer: {
+							"@type": "Answer",
+							text: t(
+								"faq.questions.platforms.answer",
+								"NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters."
+							),
+						},
+					},
+				],
+			});
+		} else {
+			updateStructuredData("faq-schema", null);
+		}
 
 		// --- Analytics Page View ---
 		// We send this manually here because automatic page views are disabled in analytics.ts

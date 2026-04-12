@@ -610,6 +610,27 @@
 			"rerouter": "Redireccionador de Oxígeno"
 		}
 	},
+	"faq": {
+		"name": "Preguntas Frecuentes del Optimizador de NMS",
+		"questions": {
+			"adjacencyBonus": {
+				"name": "¿Qué es una bonificación de adyacencia en No Man's Sky?",
+				"answer": "Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. Los módulos del mismo tipo que comparten un borde obtienen un aumento porcentual en sus estadísticas. Cuantos más bordes compartan, mayor será la bonificación. Calcular la disposición correcta a mano es tedioso, especialmente en cuadrículas grandes con ranuras potenciadas."
+			},
+			"superchargedSlots": {
+				"name": "¿Qué son las ranuras potenciadas en No Man's Sky?",
+				"answer": "Algunas ranuras de inventario en No Man's Sky están potenciadas. Cualquier módulo de tecnología colocado en una de ellas obtiene un gran multiplicador de estadísticas además de las bonificaciones normales de adyacencia. Se colocan de forma aleatoria en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde hayan caído tus ranuras potenciadas."
+			},
+			"calculation": {
+				"name": "¿Cómo calcula el Optimizador de NMS el mejor diseño de tecnología?",
+				"answer": "El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos más pequeños, puede encontrar el diseño exacto más óptimo. Para cuadrículas más grandes o complejas, el recocido simulado explora miles de disposiciones para encontrar una que puntúe lo más alto posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras potenciadas y los pesos de estadísticas específicos de cada módulo. El backend funciona en Rust para mayor velocidad."
+			},
+			"platforms": {
+				"name": "¿Qué plataformas admite el Optimizador de NMS?",
+				"answer": "El Optimizador de NMS admite naves espaciales (estándar, centinela, solar, de combate, orgánica, atlante), corbetas, multiherramientas (estándar y centinela), exotrajes, exonaves (nómada, peregrina, errante, coloso, minotauro, nautilon) y cargueros."
+			}
+		}
+	},
 	"moduleSelection": {
 		"core": "Módulo Principal",
 		"bonus": "Módulos de Bonificación",

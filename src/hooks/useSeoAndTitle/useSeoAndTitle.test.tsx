@@ -171,4 +171,47 @@ describe("useSeoAndTitle", () => {
 			);
 		});
 	});
+
+	describe("Structured Data (JSON-LD)", () => {
+		it("should inject FAQ schema on root path", () => {
+			setupMocks("/", {
+				"faq.name": "NMS Optimizer Frequently Asked Questions",
+				"faq.questions.adjacencyBonus.name": "What is an adjacency bonus?",
+				"faq.questions.adjacencyBonus.answer": "A stat boost.",
+			});
+			renderHook(() => useSeoAndTitle());
+
+			const faqScript = document.getElementById("faq-schema");
+			expect(faqScript).not.toBeNull();
+			expect(faqScript?.getAttribute("type")).toBe("application/ld+json");
+
+			const data = JSON.parse(faqScript?.textContent || "{}");
+			expect(data["@type"]).toBe("FAQPage");
+			expect(data.name).toBe("NMS Optimizer Frequently Asked Questions");
+			expect(data.mainEntity).toHaveLength(4);
+			expect(data.mainEntity[0].name).toBe("What is an adjacency bonus?");
+			expect(data.mainEntity[0].acceptedAnswer.text).toBe("A stat boost.");
+		});
+
+		it("should NOT inject FAQ schema on non-root paths", () => {
+			setupMocks("/about");
+			renderHook(() => useSeoAndTitle());
+
+			const faqScript = document.getElementById("faq-schema");
+			expect(faqScript).toBeNull();
+		});
+
+		it("should remove FAQ schema when navigating away from root", () => {
+			// Initial render on root
+			const { rerender } = renderHook(() => useSeoAndTitle());
+			setupMocks("/");
+			rerender();
+			expect(document.getElementById("faq-schema")).not.toBeNull();
+
+			// Navigate to /about
+			setupMocks("/about");
+			rerender();
+			expect(document.getElementById("faq-schema")).toBeNull();
+		});
+	});
 });

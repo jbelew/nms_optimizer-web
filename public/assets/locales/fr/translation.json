@@ -610,6 +610,27 @@
 			"rerouter": "Redirigeur d'Oxygène"
 		}
 	},
+	"faq": {
+		"name": "Foire Aux Questions de l'Optimiseur NMS",
+		"questions": {
+			"adjacencyBonus": {
+				"name": "Qu'est-ce qu'un bonus d'adjacence dans No Man's Sky ?",
+				"answer": "Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans No Man's Sky, ils reçoivent un boost de statistiques. Les modules du même type qui partagent un bord obtiennent une augmentation en pourcentage de leurs statistiques. Plus il y a de bords partagés, plus le bonus est important. Calculer la disposition idéale à la main est fastidieux, surtout sur les grandes grilles avec des emplacements surchargés."
+			},
+			"superchargedSlots": {
+				"name": "Que sont les emplacements surchargés dans No Man's Sky ?",
+				"answer": "Certains emplacements d'inventaire dans No Man's Sky sont surchargés. Tout module technologique placé dans l'un d'eux reçoit un multiplicateur de statistiques important en plus des bonus d'adjacence habituels. Ils sont placés de manière aléatoire sur chaque pièce d'équipement, de sorte que la disposition optimale change en fonction de l'emplacement de vos cases surchargées."
+			},
+			"calculation": {
+				"name": "Comment l'Optimiseur NMS calcule-t-il la meilleure disposition technologique ?",
+				"answer": "L'optimiseur utilise une combinaison de correspondance de motifs déterministe et de recuit simulé. Pour les petits ensembles de modules, il peut trouver exactement la meilleure disposition. Pour les grilles plus grandes ou plus complexes, le recuit simulé explore des milliers de combinaisons pour trouver celle qui obtient le score le plus élevé possible. Le score prend en compte les bonus d'adjacence, l'emplacement des cases surchargées et les poids statistiques spécifiques à chaque module. Le backend fonctionne en Rust pour plus de rapidité."
+			},
+			"platforms": {
+				"name": "Quelles plateformes l'Optimiseur NMS prend-il en charge ?",
+				"answer": "L'Optimiseur NMS prend en charge les Vaisseaux (standard, sentinelle, solaire, combattant, organique, atlante), les Corvettes, les Multi-outils (standard et sentinelle), les Exocombinaisons, les Exonefs (nomade, pèlerin, vagabond, colosse, minotaure, nautilon) et les Cargos."
+			}
+		}
+	},
 	"moduleSelection": {
 		"core": "Módulo Principal",
 		"bonus": "Modules de Bonus",

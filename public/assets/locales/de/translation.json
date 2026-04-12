@@ -610,6 +610,27 @@
 			"rerouter": "Sauerstoff-Umleiter"
 		}
 	},
+	"faq": {
+		"name": "NMS-Optimierer Häufig Gestellte Fragen",
+		"questions": {
+			"adjacencyBonus": {
+				"name": "Was ist ein Adjazenzbonus in No Man's Sky?",
+				"answer": "Wenn du kompatible Technologiemodule in No Man's Sky nebeneinander platzierst, erhalten sie einen Stat-Boost. Module desselben Typs, die eine Kante teilen, erhalten eine prozentuale Steigerung ihrer Werte. Je mehr Kanten geteilt werden, desto größer ist der Bonus. Die richtige Anordnung von Hand zu finden, ist mühsam, besonders auf größeren Rastern mit überladenen Slots."
+			},
+			"superchargedSlots": {
+				"name": "Was sind überladene Slots in No Man's Sky?",
+				"answer": "Einige Inventarplätze in No Man's Sky sind überladen. Jedes dort platzierte Technologiemodul erhält einen großen Stat-Multiplikator zusätzlich zu den normalen Adjazenzboni. Sie sind zufällig auf jedem Ausrüstungsgegenstand platziert, sodass sich das optimale Layout ändert, je nachdem, wo deine überladenen Slots gelandet sind."
+			},
+			"calculation": {
+				"name": "Wie berechnet der NMS-Optimierer das beste Technologie-Layout?",
+				"answer": "Der Optimierer nutzt eine Kombination aus deterministischem Mustervergleich und simuliertem Abkühlen (Simulated Annealing). Für kleinere Modulsets kann er das exakt beste Layout finden. Für größere oder komplexere Raster erkundet das simulierte Abkühlen tausende von Anordnungen, um eine zu finden, die so hoch wie möglich punktet. Die Bewertung berücksichtigt Adjazenzboni, die Platzierung überladener Slots und modulspezifische Stat-Gewichtungen. Das Backend läuft für maximale Geschwindigkeit in Rust."
+			},
+			"platforms": {
+				"name": "Welche Plattformen unterstützt der NMS-Optimierer?",
+				"answer": "Der NMS-Optimierer unterstützt Raumschiffe (Standard, Wächter, Solar, Jäger, Lebende Schiffe, Atlantid), Korvetten, Multitools (Standard und Wächter), Exo-Anzüge, Exofahrzeuge (Streuner, Pilger, Nomade, Koloss, Minotaurus, Nautilon) und Frachter."
+			}
+		}
+	},
 	"moduleSelection": {
 		"core": "Kern-Modul",
 		"bonus": "Bonus-Module",
