@@ -35,7 +35,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install google-genai
+          pip install -r requirements.txt
 
       - name: Run translation script
         if: steps.changed-files.outputs.any_changed == 'true'
