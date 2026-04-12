@@ -1,3 +1,10 @@
+## [6.26.9](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.8...v6.26.9) (2026-04-12)
+
+
+### Bug Fixes
+
+* **seo:** standardize trailing slashes across all routes and preserve query params ([846e916](https://github.com/jbelew/nms_optimizer-web/commit/846e9164f50af75a1b722beba6440f7f48298fc5))
+
 ## [6.26.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.7...v6.26.8) (2026-04-12)
 
 
