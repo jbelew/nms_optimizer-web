@@ -490,3 +490,19 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 
 ### Refine & Reflect
 *   **Reflection:** A "Git-native" AI workflow is ideal for open-source projects. It keeps the source of truth in the repository, allows human overrides via Pull Requests, and uses the generous free tiers of modern LLMs like Gemini to provide high-quality, context-aware translations without recurring costs.
+
+## 2026-04-12: Enforcing Beads-Conductor Integration
+
+### Perceive & Understand
+* **Request:** The user wanted to ensure that Beads is only used in conjunction with Conductor for task management.
+* **Context:** Beads is the git-backed issue tracker used in this project. Conductor is the high-level task/track management system. The user wants to avoid independent Beads usage to maintain a unified workflow.
+
+### Reason & Plan
+* **Logic:** To enforce this, the rule must be codified in all major agent instruction files (`AGENTS.md`, `GEMINI.md`) and recorded in the learning log to ensure future adherence.
+
+### Act & Implement
+* **Action:** Updated `AGENTS.md` to include a **CRITICAL** rule in the Beads section: "Only use Beads in conjunction with Conductor. Do not use Beads for independent tasks unless they are part of a Conductor track or plan."
+* **Action:** Verified `GEMINI.md` already contains this rule.
+
+### Refine & Reflect
+* **Reflection:** Explicitly linking tool usage (Beads) to a specific workflow (Conductor) prevents fragmented task tracking and ensures that all "persistent memory" tasks have the broader context of a Conductor plan.

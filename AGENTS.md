@@ -100,6 +100,7 @@ bd close <id>         # Complete work
 ### Rules
 
 - Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists
+- Only use Beads in conjunction with Conductor. Do not use Beads for independent tasks unless they are part of a Conductor track or plan.
 - Run `bd prime` for detailed command reference and session close protocol
 - Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
 
