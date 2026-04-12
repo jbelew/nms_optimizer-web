@@ -54,9 +54,6 @@ frames/*
 # SEO exports
 seo/*
 
-# Build tools
-.million
-
 # AI tool caches
 .gemini
 

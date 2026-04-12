@@ -6,11 +6,11 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
-# Never cache HTML so users always get the latest asset references
+# HTML Pages: Cache at Edge, Revalidate in Browser
 /
-  Cache-Control: no-cache
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /index.html
-  Cache-Control: no-cache
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 
 # Cache rules for hashed assets (Vite output)
 /assets/*
