@@ -143,7 +143,6 @@ body {
 	letter-spacing: var(--letter-spacing-wide);
 	margin-right: calc(var(--letter-spacing-wide) * -1);
 	-webkit-text-stroke: 0.06em;
-	paint-order: stroke fill;
 	text-transform: uppercase;
 	word-spacing: -0.15em;
 }

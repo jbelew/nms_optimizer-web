@@ -11,6 +11,8 @@
  * @category Utilities
  */
 
+import * as Sentry from "@sentry/react";
+
 /**
  * Log levels for the application.
  */
@@ -78,11 +80,7 @@ export class Logger {
 	public static warn(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.WARN, message, data);
 		console.warn(`[WARN] ${message}`, data);
-		import("@sentry/react")
-			.then(({ captureMessage }) => {
-				captureMessage(message, { level: "warning", extra: data });
-			})
-			.catch(() => {});
+		Sentry.captureMessage(message, { level: "warning", extra: data });
 	}
 
 	/**
@@ -106,15 +104,11 @@ export class Logger {
 		} as Record<string, unknown>);
 		console.error(`[ERROR] ${message}`, error);
 
-		import("@sentry/react")
-			.then(({ captureException, captureMessage }) => {
-				if (error instanceof Error) {
-					captureException(error, { extra: { message, ...data } });
-				} else {
-					captureMessage(message, { level: "error", extra: { error, ...data } });
-				}
-			})
-			.catch(() => {});
+		if (error instanceof Error) {
+			Sentry.captureException(error, { extra: { message, ...data } });
+		} else {
+			Sentry.captureMessage(message, { level: "error", extra: { error, ...data } });
+		}
 	}
 
 	/**

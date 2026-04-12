@@ -16,6 +16,7 @@ import "./i18n/i18n"; // Initialize i18next
 import { StrictMode } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 import { Theme } from "@radix-ui/themes";
+import * as Sentry from "@sentry/react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -97,14 +98,10 @@ if (typeof window !== "undefined") {
 					setupServiceWorkerRegistration();
 				} catch (error) {
 					console.error("Failed to initialize deferred services:", error);
-					import("@sentry/react")
-						.then((Sentry) => {
-							Sentry.captureException(error, {
-								tags: { area: "initialization" },
-								level: "error",
-							});
-						})
-						.catch(console.error);
+					Sentry.captureException(error, {
+						tags: { area: "initialization" },
+						level: "error",
+					});
 				}
 			};
 
@@ -132,7 +129,8 @@ if (typeof window !== "undefined") {
 	);
 }
 
-const router = createBrowserRouter(routes);
+const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter);
+const router = sentryCreateBrowserRouter(routes);
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
