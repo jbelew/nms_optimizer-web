@@ -91,6 +91,11 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			try {
 				const url = new URL(window.location.href);
 
+				// Ensure trailing slash for consistency with SSG
+				if (!url.pathname.endsWith("/")) {
+					url.pathname += "/";
+				}
+
 				if (url.searchParams.get("platform") !== platform) {
 					url.searchParams.set("platform", platform);
 					window.history.pushState({}, "", url.toString());
@@ -110,7 +115,6 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		const platformFromUrl = getPlatformFromUrl();
 		const platformFromStorage = getPlatformFromStorage();
 
-		let updateUrlNeeded = false;
 		let updateStorageNeeded = false;
 		let initialPlatform: string;
 
@@ -122,10 +126,8 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			}
 		} else if (platformFromStorage && validShipTypes.includes(platformFromStorage)) {
 			initialPlatform = platformFromStorage;
-			updateUrlNeeded = true;
 		} else {
 			initialPlatform = "standard";
-			updateUrlNeeded = true;
 			updateStorageNeeded = true;
 		}
 
@@ -133,16 +135,29 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 			set({ selectedPlatform: initialPlatform });
 		}
 
-		if (updateUrlNeeded && isKnownRoute) {
+		// --- URL Normalization (Always enforce trailing slash) ---
+		if (isKnownRoute && typeof window !== "undefined") {
 			try {
 				const url = new URL(window.location.href);
+				let changed = false;
 
+				// 1. Ensure trailing slash
+				if (!url.pathname.endsWith("/")) {
+					url.pathname += "/";
+					changed = true;
+				}
+
+				// 2. Ensure platform is in URL if it was updated or missing
 				if (url.searchParams.get("platform") !== initialPlatform) {
 					url.searchParams.set("platform", initialPlatform);
+					changed = true;
+				}
+
+				if (changed) {
 					window.history.replaceState({}, "", url.toString());
 				}
 			} catch (e) {
-				console.warn("PlatformStore: Failed to replace URL state", e);
+				console.warn("PlatformStore: Failed to normalize URL state", e);
 			}
 		}
 

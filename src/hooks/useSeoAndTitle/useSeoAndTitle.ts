@@ -121,7 +121,11 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
 		link.setAttribute("rel", "alternate");
 		link.setAttribute("hreflang", lang);
 
-		const path = lang === "en" ? cleanPath || "/" : `/${lang}${cleanPath || "/"}`;
+		// Normalize: /fr/about/
+		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+		const path =
+			lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath)}`;
+
 		link.setAttribute("href", `${baseUrl}${path}`);
 		document.head.appendChild(link);
 	});
@@ -228,10 +232,16 @@ export const useSeoAndTitle = () => {
 
 		// --- Canonical & Hreflang URL Logic ---
 		const baseUrl = "https://nms-optimizer.app";
+
+		// Ensure path ends with a slash
+		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+
 		const cleanPath = currentPath === "/" ? "" : currentPath;
 		// If language is English, canonical is just the clean path. Otherwise, include lang prefix.
 		const canonicalPath =
-			i18n.language === "en" ? cleanPath || "/" : `/${i18n.language}${cleanPath || "/"}`;
+			i18n.language === "en"
+				? normalizePath(currentPath)
+				: `/${i18n.language}${normalizePath(cleanPath)}`;
 		const canonicalUrl = `${baseUrl}${canonicalPath}`;
 
 		updateCanonicalTag(canonicalUrl);

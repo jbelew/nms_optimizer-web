@@ -66,8 +66,11 @@ const urlEntries = pages.flatMap((page) => {
 	// 1. Generate all alternate URLs for this page
 	const alternateUrls = languages.map((lang) => {
 		const url = new URL(page.url);
+		const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
 		if (lang !== "en") {
-			url.pathname = `/${lang}${url.pathname === "/" ? "/" : url.pathname}`;
+			url.pathname = `/${lang}${normalizePath(url.pathname === "/" ? "" : url.pathname)}`;
+		} else {
+			url.pathname = normalizePath(url.pathname);
 		}
 		return { lang, href: url.href };
 	});

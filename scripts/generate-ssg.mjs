@@ -54,9 +54,10 @@ function readMarkdownFile(lang, fileName) {
  */
 function generateSeoTags(pathname, lang, baseUrl) {
 	const tags = [];
+	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
 
 	// Canonical URL
-	const canonicalPath = lang === "en" ? pathname : `/${lang}${pathname === "/" ? "/" : pathname}`;
+	const canonicalPath = lang === "en" ? normalizePath(pathname) : `/${lang}${normalizePath(pathname === "/" ? "" : pathname)}`;
 	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
 	tags.push(`<link rel="canonical" href="${canonicalUrl}" />`);
 	tags.push(`<meta property="og:url" content="${canonicalUrl}" />`);
@@ -65,13 +66,13 @@ function generateSeoTags(pathname, lang, baseUrl) {
 	const cleanPath = pathname === "/" ? "" : pathname;
 
 	// English (and x-default)
-	const enUrl = new URL(cleanPath || "/", baseUrl).href;
+	const enUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
 	tags.push(`<link rel="alternate" hreflang="en" href="${enUrl}" />`);
 	tags.push(`<link rel="alternate" hreflang="x-default" href="${enUrl}" />`);
 
 	// Other languages
 	SUPPORTED_LANGUAGES.filter((l) => l !== "en").forEach((langCode) => {
-		const langUrl = new URL(`/${langCode}${cleanPath || "/"}`, baseUrl).href;
+		const langUrl = new URL(`/${langCode}${normalizePath(cleanPath || "/")}`, baseUrl).href;
 		tags.push(`<link rel="alternate" hreflang="${langCode}" href="${langUrl}" />`);
 	});
 

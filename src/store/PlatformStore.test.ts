@@ -221,6 +221,72 @@ describe("PlatformStore", () => {
 		});
 	});
 
+	describe("URL Normalization (Trailing Slash)", () => {
+		it("should add a trailing slash during initialization if missing", () => {
+			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+
+			// Set URL without trailing slash
+			const url = new URL("http://localhost/fr?platform=standard");
+			// @ts-expect-error - Mocking window.location
+			delete window.location;
+			// @ts-expect-error - Mocking window.location
+			window.location = new URL(url.toString());
+
+			const { initializePlatform } = usePlatformStore.getState();
+			initializePlatform(validShipTypes);
+
+			expect(replaceStateSpy).toHaveBeenCalled();
+			const finalUrl = new URL(replaceStateSpy.mock.calls[0][2] as string);
+			expect(finalUrl.pathname).toBe("/fr/");
+			expect(finalUrl.searchParams.get("platform")).toBe("standard");
+
+			replaceStateSpy.mockRestore();
+		});
+
+		it("should ensure trailing slash is present when setting a new platform", () => {
+			const pushStateSpy = vi.spyOn(window.history, "pushState");
+
+			// Set URL without trailing slash
+			const url = new URL("http://localhost/de");
+			// @ts-expect-error - Mocking window.location
+			delete window.location;
+			// @ts-expect-error - Mocking window.location
+			window.location = new URL(url.toString());
+
+			const { setSelectedPlatform } = usePlatformStore.getState();
+			setSelectedPlatform("fighter", validShipTypes, true, true);
+
+			expect(pushStateSpy).toHaveBeenCalled();
+			const finalUrl = new URL(pushStateSpy.mock.calls[0][2] as string);
+			expect(finalUrl.pathname).toBe("/de/");
+			expect(finalUrl.searchParams.get("platform")).toBe("fighter");
+
+			pushStateSpy.mockRestore();
+		});
+
+		it("should preserve other search parameters while adding trailing slash", () => {
+			const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+
+			// Set URL without trailing slash and with extra params
+			const url = new URL("http://localhost/es?foo=bar&platform=standard");
+			// @ts-expect-error - Mocking window.location
+			delete window.location;
+			// @ts-expect-error - Mocking window.location
+			window.location = new URL(url.toString());
+
+			const { initializePlatform } = usePlatformStore.getState();
+			initializePlatform(validShipTypes);
+
+			expect(replaceStateSpy).toHaveBeenCalled();
+			const finalUrl = new URL(replaceStateSpy.mock.calls[0][2] as string);
+			expect(finalUrl.pathname).toBe("/es/");
+			expect(finalUrl.searchParams.get("foo")).toBe("bar");
+			expect(finalUrl.searchParams.get("platform")).toBe("standard");
+
+			replaceStateSpy.mockRestore();
+		});
+	});
+
 	describe("Integration", () => {
 		it("should handle complete workflow: initialize then update", () => {
 			const { initializePlatform, setSelectedPlatform } = usePlatformStore.getState();

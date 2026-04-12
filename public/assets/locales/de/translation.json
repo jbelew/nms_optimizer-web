@@ -162,11 +162,11 @@
 	},
 	"platformLabel": "PLATTFORM:",
 	"platforms": {
-		"standard": "Standard- / Exotik-Schiffe",
+		"standard": "Standard / Exotik-Schiffe",
 		"sentinel": "Wächter-Interzeptoren",
 		"solar": "Solarschiffe",
 		"living": "Lebende Raumschiffe",
-		"standard-mt": "Standard- / Exotik-Multitools",
+		"standard-mt": "Standard / Exotik-Multitools",
 		"atlantid": "Atlantid-Multitools",
 		"sentinel-mt": "Wächter-Multitools",
 		"staves": "Voltaik- / Expeditionsstäbe",

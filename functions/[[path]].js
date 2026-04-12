@@ -50,11 +50,12 @@ export async function onRequest(context) {
         return Response.redirect(newUrl.toString(), 301);
     }
 
-    // 2. Remove /en/ prefix (/en/about -> /about)
+    // 2. Remove /en/ prefix (/en/about/ -> /about/)
     const pathParts = pathname.split("/").filter(Boolean);
     if (pathParts[0] === "en") {
         const newUrl = new URL(url);
-        newUrl.pathname = `/${pathParts.slice(1).join("/")}`;
+        const subPath = pathParts.slice(1).join("/");
+        newUrl.pathname = `/${subPath}${subPath && !subPath.endsWith("/") ? "/" : ""}`;
         return Response.redirect(newUrl.toString(), 301);
     }
 

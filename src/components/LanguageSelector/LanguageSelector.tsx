@@ -116,8 +116,10 @@ export const LanguageSelector: React.FC = () => {
 			basePath = location.pathname.substring(langCand.length + 1) || "/";
 		}
 
+		// Ensure trailing slash
+		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
 		const newPath =
-			newLang === "en" ? basePath : `/${newLang}${basePath === "/" ? "/" : basePath}`;
+			newLang === "en" ? normalizePath(basePath) : `/${newLang}${normalizePath(basePath)}`;
 
 		// Use startTransition to keep dropdown responsive while handling heavy updates
 		startTransition(() => {

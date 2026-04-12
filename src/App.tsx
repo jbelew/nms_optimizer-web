@@ -2,6 +2,7 @@ import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
+import AppDialog from "./components/AppDialog/Base/AppDialog";
 import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
@@ -15,7 +16,6 @@ import { isBot } from "./utils/isBot";
 import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
 
 // Lazy-loaded components for performance optimization
-const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
 const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
 const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
 
