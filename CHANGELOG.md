@@ -1,3 +1,11 @@
+## [6.26.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.6...v6.26.7) (2026-04-12)
+
+
+### Bug Fixes
+
+* **seo:** ensure consistent trailing slashes for language-prefixed routes ([23d23eb](https://github.com/jbelew/nms_optimizer-web/commit/23d23eb50f565970bbbdfc31af1cd9973c41ffc1))
+* **translate:** add requirements.txt and improve bot detection reliability ([ea84846](https://github.com/jbelew/nms_optimizer-web/commit/ea84846ac350fb1ce512f7a10fdaf1e0e646b390))
+
 ## [6.26.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.5...v6.26.6) (2026-04-12)
 
 
