@@ -48,7 +48,7 @@ export const initializeSentry = () => {
 		integrations: [Sentry.browserTracingIntegration()],
 		environment: import.meta.env.VITE_SENTRY_ENV || "production",
 		// Performance Monitoring
-		tracesSampleRate: env.isDevMode() ? 1.0 : 0.2,
+		tracesSampleRate: env.isDevMode() ? 1.0 : 0.5,
 
 		// Set release if available
 		release: __APP_VERSION__,
