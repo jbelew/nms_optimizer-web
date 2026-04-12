@@ -1,3 +1,10 @@
+## [6.26.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.4...v6.26.5) (2026-04-12)
+
+
+### Bug Fixes
+
+* update Corvette warning ([74a6753](https://github.com/jbelew/nms_optimizer-web/commit/74a67535ac724ec3b88d4bf69f1b8701452c5944))
+
 ## [6.26.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.3...v6.26.4) (2026-04-11)
 
 
