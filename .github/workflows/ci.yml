@@ -73,6 +73,10 @@ jobs:
         env:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Verify Storybook build
         run: npm run build-storybook
@@ -246,6 +250,10 @@ jobs:
           VITE_APP_VERSION: ${{ steps.version_logic.outputs.version }}
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
           VITE_SENTRY_ENV: production
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Upload production artifact
         uses: actions/upload-artifact@v7
