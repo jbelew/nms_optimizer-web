@@ -1,3 +1,10 @@
+## [6.26.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.5...v6.26.6) (2026-04-12)
+
+
+### Bug Fixes
+
+* **seo:** implement dynamic FAQPage schema and improved bot detection for welcome dialog ([0285aaa](https://github.com/jbelew/nms_optimizer-web/commit/0285aaa2e89b412dca1a26584a838a4a0ca8c20d))
+
 ## [6.26.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.4...v6.26.5) (2026-04-12)
 
 
