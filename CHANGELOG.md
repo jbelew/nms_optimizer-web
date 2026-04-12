@@ -1,3 +1,10 @@
+## [6.26.12](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.11...v6.26.12) (2026-04-12)
+
+
+### Bug Fixes
+
+* implement pre-commit hook to enforce Beads-Conductor integration and document workflow in learnings ([a8d4430](https://github.com/jbelew/nms_optimizer-web/commit/a8d44305805dc05d39dbea1e7044cbb5d92f7c91))
+
 ## [6.26.11](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.10...v6.26.11) (2026-04-12)
 
 
