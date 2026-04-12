@@ -52,16 +52,15 @@ frames/*
 *.sw?
 
 # SEO exports
-seo/*
+seo_report/*
 
 # AI tool caches
 .gemini
+.amp
+.claude
 
 # Lighthouse temporary directories
-.lighthouseci/*.json
-.lighthouseci/*.html
-!.lighthouseci/lhr-*.json
-!.lighthouseci/lhr-*.html
+.lighthouseci/
 
 # Cloudflare API scripts
 scripts/cloudflare/*
