@@ -1,3 +1,10 @@
+## [6.26.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.7...v6.26.8) (2026-04-12)
+
+
+### Bug Fixes
+
+* **seo:** standardize trailing slashes across all routes and normalize platform URLs ([2a84a99](https://github.com/jbelew/nms_optimizer-web/commit/2a84a99682228adde767c432be0df6609b358d85))
+
 ## [6.26.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.6...v6.26.7) (2026-04-12)
 
 
