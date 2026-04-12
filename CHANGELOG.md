@@ -1,3 +1,10 @@
+## [6.26.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.13...v6.26.14) (2026-04-12)
+
+
+### Bug Fixes
+
+* increase Sentry traces sample rate from 0.2 to 0.5 in production ([82d8c50](https://github.com/jbelew/nms_optimizer-web/commit/82d8c5041ebea7906644be3c588d7077d1792fcb))
+
 ## [6.26.13](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.12...v6.26.13) (2026-04-12)
 
 
