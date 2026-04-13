@@ -1,3 +1,10 @@
+## [6.26.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.15...v6.26.16) (2026-04-13)
+
+
+### Bug Fixes
+
+* implement dynamic SEO metadata injection and hreflang tags in Cloudflare edge SPA fallback ([79a79b4](https://github.com/jbelew/nms_optimizer-web/commit/79a79b46f1e5575a856d011bb11529e93624b493))
+
 ## [6.26.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.14...v6.26.15) (2026-04-13)
 
 
