@@ -1,3 +1,10 @@
+## [6.26.15](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.14...v6.26.15) (2026-04-13)
+
+
+### Bug Fixes
+
+* integrate Sentry router instrumentation, remove unused zod dependency, and adjust font preload priority ([c2f4d26](https://github.com/jbelew/nms_optimizer-web/commit/c2f4d26513e211098e0b639d848628197498e1c2))
+
 ## [6.26.14](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.13...v6.26.14) (2026-04-12)
 
 
