@@ -506,3 +506,33 @@ This document serves as an immutable, timestamped log of PRAR cycles.
 
 ### Refine & Reflect
 * **Reflection:** Explicitly linking tool usage (Beads) to a specific workflow (Conductor) prevents fragmented task tracking and ensures that all "persistent memory" tasks have the broader context of a Conductor plan.
+
+## 2026-04-13: Cloudflare Cache Hit Ratio Audit
+
+- **Problem**: Low cache hit ratio reported after migrating to Cloudflare Pages.
+- **Research**: Verified `public/_headers` and Cloudflare Cache Rules. Used `curl -I` and `curl -X GET -I` to audit Edge behavior.
+- **Findings**: 
+    - Static assets and HTML are correctly returning `cf-cache-status: HIT` with long TTLs.
+    - API GET requests (`/tech_tree/*`, `/platforms`) are correctly cached by Rule 2 after edge warming.
+    - **Root Cause**: The app's core functionality relies on WebSockets (for optimization solves) and API POSTs (for analytics/saves). Both are inherently dynamic and cannot be cached, which mathematically lowers the aggregate "Hit Ratio" in the Cloudflare dashboard.
+    - Cloudflare Pages Functions (SPA fallback) also contribute to the "Dynamic" request count.
+- **Action**: Confirmed configuration is optimal; no changes required. Updated `scripts/cloudflare/get_cf_rules.py` to include 'Enabled' status in output for better auditing.
+
+## 2026-04-13: WWW Subdomain Redirect Fix
+
+- **Problem**: `https://www.nms-optimizer.app` was throwing a 522 error.
+- **Root Cause**: The `www` subdomain was not configured as a Custom Domain in Cloudflare Pages and was still pointing to the decommissioned Heroku frontend.
+- **Action**: 
+    - Added a Cloudflare Page Rule to redirect `www.nms-optimizer.app/*` to `https://nms-optimizer.app/$1`.
+    - Resolved an issue where the API was literalizing `$1` by patching the rule with the correct unescaped capture group.
+- **Result**: `www` requests now correctly redirect to the apex domain with path preservation. Verified via `curl`.
+
+## 2026-04-13: Cloudflare Edge SEO Injection Fix
+
+- **Problem**: Search engines were seeing generic "NO MAN'S SKY" titles for specific SPA routes (like `/userstats`).
+- **Root Cause**: Cloudflare Pages Function (`functions/[[path]].js`) was serving a static `index.html` fallback without the dynamic SEO injection logic present in the original Express server.
+- **Action**: Ported the `seoTagInjectionMiddleware` logic to the Edge.
+    - Added translation fetching and JSON-path resolution for metadata.
+    - Implemented regex replacement for `<title>` and `<meta>` tags.
+    - Added dynamic canonical and alternate hreflang tag injection at the Edge.
+- **Result**: Routes now serve unique, localized SEO metadata directly from the Cloudflare Edge, matching the behavior of the Express production environment.
