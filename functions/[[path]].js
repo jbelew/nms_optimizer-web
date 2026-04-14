@@ -74,6 +74,14 @@ function getTranslation(json, key) {
     return key.split('.').reduce((obj, i) => (obj ? obj[i] : null), json);
 }
 
+// Isolate-level in-memory cache to prevent repeated env.ASSETS.fetch calls
+// Cloudflare resets this automatically on every new deployment.
+const rawAssetCache = {
+    indexHtml: null,
+    translations: new Map() // lang -> parsed json
+};
+const generatedHtmlCache = new Map(); // cacheKey (lang + basePath) -> html string
+
 export async function onRequest(context) {
     const { request, env, next } = context;
     const url = new URL(request.url);
@@ -110,82 +118,109 @@ export async function onRequest(context) {
         const langFromPath = pathParts[0];
         const lang = SUPPORTED_LANGS.includes(langFromPath) ? langFromPath : "en";
         
-        // Normalize path for metadata lookup (Ensuring trailing slash matches shared/seo-metadata.js)
+        // Normalize path for metadata lookup
         const pagePathParts = SUPPORTED_LANGS.includes(langFromPath) ? pathParts.slice(1) : pathParts;
         let basePath = `/${pagePathParts.join("/")}`;
         if (basePath !== "/" && !basePath.endsWith("/")) {
             basePath += "/";
         }
 
-        // Concurrent fetch of index.html and translations
-        const [indexResponse, localesResponse] = await Promise.all([
-            env.ASSETS.fetch(new URL("/index.html", request.url)),
-            env.ASSETS.fetch(new URL(`/assets/locales/${lang}/translation.json`, request.url))
-        ]);
+        const cacheKey = `${lang}:${basePath}`;
+        let html;
 
-        if (!indexResponse.ok) {
-            return new Response("Internal Server Error", { status: 500 });
-        }
-
-        let html = await indexResponse.text();
-        const translations = localesResponse.ok ? await localesResponse.json() : {};
-        const metadata = seoMetadata[basePath];
-
-        if (metadata) {
-            const pageTitle = getTranslation(translations, metadata.titleKey) || "NMS Optimizer";
-            const pageDescription = getTranslation(translations, metadata.descriptionKey);
-
-            // Inject SEO tags via regex replacement (matches server/seoMiddleware.js)
-            html = html
-                .replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
-                .replace(
-                    /<meta name="description" content=".*?" \/>/,
-                    `<meta name="description" content="${pageDescription}" />`
-                )
-                .replace(
-                    /<meta property="og:title" content=".*?" \/>/,
-                    `<meta property="og:title" content="${pageTitle}" />`
-                )
-                .replace(
-                    /<meta property="og:description" content=".*?" \/>/,
-                    `<meta property="og:description" content="${pageDescription}" />`
-                )
-                .replace(
-                    /<meta name="twitter:title" content=".*?" \/>/,
-                    `<meta name="twitter:title" content="${pageTitle}" />`
-                )
-                .replace(
-                    /<meta name="twitter:description" content=".*?" \/>/,
-                    `<meta name="twitter:description" content="${pageDescription}" />`
+        if (generatedHtmlCache.has(cacheKey)) {
+            html = generatedHtmlCache.get(cacheKey);
+        } else {
+            // Concurrently fetch index.html and translations if not in raw cache
+            const fetchPromises = [];
+            
+            if (!rawAssetCache.indexHtml) {
+                fetchPromises.push(
+                    env.ASSETS.fetch(new URL("/index.html", request.url))
+                        .then(r => r.ok ? r.text() : null)
+                        .then(text => { rawAssetCache.indexHtml = text; })
                 );
-
-            // Canonical and Alternate Tags
-            const baseUrl = `https://${TARGET_HOST}`;
-            const tagsToInject = [];
+            }
             
-            // Normalize path for tags
-            const cleanPath = basePath === "/" ? "" : basePath;
-            const cleanPathname = lang === "en" ? (cleanPath || "/") : `/${lang}${cleanPath}`;
-            const canonicalUrl = `${baseUrl}${cleanPathname}`;
-            
-            tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
-            tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
+            if (!rawAssetCache.translations.has(lang)) {
+                fetchPromises.push(
+                    env.ASSETS.fetch(new URL(`/assets/locales/${lang}/translation.json`, request.url))
+                        .then(r => r.ok ? r.json() : {})
+                        .then(json => { rawAssetCache.translations.set(lang, json); })
+                );
+            }
 
-            // Hreflang injection for known routes
-            tagsToInject.push(`<link rel="alternate" hreflang="en" href="${baseUrl}${cleanPath || "/"}" />`);
-            tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${baseUrl}${cleanPath || "/"}" />`);
-            
-            OTHER_LANGS.forEach((l) => {
-                tagsToInject.push(`<link rel="alternate" hreflang="${l}" href="${baseUrl}/${l}${cleanPath}" />`);
-            });
+            if (fetchPromises.length > 0) {
+                await Promise.all(fetchPromises);
+            }
 
-            html = html.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
+            html = rawAssetCache.indexHtml;
+            const translations = rawAssetCache.translations.get(lang);
+
+            if (!html) {
+                return new Response("Internal Server Error", { status: 500 });
+            }
+
+            const metadata = seoMetadata[basePath];
+
+            if (metadata) {
+                const pageTitle = getTranslation(translations, metadata.titleKey) || "NMS Optimizer";
+                const pageDescription = getTranslation(translations, metadata.descriptionKey);
+
+                // Inject SEO tags
+                html = html
+                    .replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
+                    .replace(
+                        /<meta name="description" content=".*?" \/>/,
+                        `<meta name="description" content="${pageDescription}" />`
+                    )
+                    .replace(
+                        /<meta property="og:title" content=".*?" \/>/,
+                        `<meta property="og:title" content="${pageTitle}" />`
+                    )
+                    .replace(
+                        /<meta property="og:description" content=".*?" \/>/,
+                        `<meta property="og:description" content="${pageDescription}" />`
+                    )
+                    .replace(
+                        /<meta name="twitter:title" content=".*?" \/>/,
+                        `<meta name="twitter:title" content="${pageTitle}" />`
+                    )
+                    .replace(
+                        /<meta name="twitter:description" content=".*?" \/>/,
+                        `<meta name="twitter:description" content="${pageDescription}" />`
+                    );
+
+                // Canonical and Alternate Tags
+                const baseUrl = `https://${TARGET_HOST}`;
+                const tagsToInject = [];
+                
+                // Normalize path for tags
+                const cleanPath = basePath === "/" ? "" : basePath;
+                const cleanPathname = lang === "en" ? (cleanPath || "/") : `/${lang}${cleanPath}`;
+                const canonicalUrl = `${baseUrl}${cleanPathname}`;
+                
+                tagsToInject.push(`<link rel="canonical" href="${canonicalUrl}" />`);
+                tagsToInject.push(`<meta property="og:url" content="${canonicalUrl}" />`);
+
+                // Hreflang injection for known routes
+                tagsToInject.push(`<link rel="alternate" hreflang="en" href="${baseUrl}${cleanPath || "/"}" />`);
+                tagsToInject.push(`<link rel="alternate" hreflang="x-default" href="${baseUrl}${cleanPath || "/"}" />`);
+                
+                OTHER_LANGS.forEach((l) => {
+                    tagsToInject.push(`<link rel="alternate" hreflang="${l}" href="${baseUrl}/${l}${cleanPath}" />`);
+                });
+
+                html = html.replace("</head>", `  ${tagsToInject.join("\n  ")}\n</head>`);
+            }
+
+            // Save the fully generated HTML to the cache
+            generatedHtmlCache.set(cacheKey, html);
         }
 
         return new Response(html, {
             status: 200,
             headers: {
-                ...Object.fromEntries(indexResponse.headers),
                 "Content-Type": "text/html; charset=utf-8",
                 "Cache-Control": "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60",
             }
@@ -194,3 +229,4 @@ export async function onRequest(context) {
 
     return response;
 }
+
