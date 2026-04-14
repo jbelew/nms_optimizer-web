@@ -1,3 +1,10 @@
+## [6.26.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.16...v6.26.17) (2026-04-14)
+
+
+### Bug Fixes
+
+* **seo:** align metadata lookups with trailing slash architecture and improve edge injection ([23c4937](https://github.com/jbelew/nms_optimizer-web/commit/23c49374e8278afb5a55402884d1d6ea73e5ee1c))
+
 ## [6.26.16](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.15...v6.26.16) (2026-04-13)
 
 
