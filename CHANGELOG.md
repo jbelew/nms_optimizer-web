@@ -1,3 +1,15 @@
+## [6.26.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.17...v6.26.18) (2026-04-14)
+
+
+### Bug Fixes
+
+* implement in-memory caching for assets and generated HTML to optimize response times in Cloudflare functions ([72b774f](https://github.com/jbelew/nms_optimizer-web/commit/72b774fb832f1b3cd8360a308486f037cc49fe13))
+
+
+### Performance Improvements
+
+* fix INP regression and optimize Sentry integration ([1d9355c](https://github.com/jbelew/nms_optimizer-web/commit/1d9355c2b802be545fefadbcc550bb03186a69da))
+
 ## [6.26.17](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.16...v6.26.17) (2026-04-14)
 
 
