@@ -1,10 +1,14 @@
 module.exports = {
   ci: {
+    // Store all LHCI state and reports in /tmp to avoid Windows partition / symlink issues
+    baseDir: '/tmp/lighthouse-ci',
     collect: {
       url: ['http://127.0.0.1:4173/'],
+      // Use the Linux Chrome binary, NOT the Windows one (which LHCI might default to in WSL)
+      chromePath: '/usr/bin/google-chrome',
       startServerCommand: 'npm run preview -- --host 127.0.0.1',
-      // Store report data in a temporary system directory to keep the repo clean
-      baseDir: '/tmp/lighthouse',
+      startServerReadyPattern: 'listen|ready|http://127.0.0.1',
+      startServerReadyTimeout: 60000,
       settings: {
         formFactor: 'mobile',
         throttlingMethod: 'devtools',
@@ -30,3 +34,4 @@ module.exports = {
     },
   },
 };
+

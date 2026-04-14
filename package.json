@@ -40,7 +40,7 @@
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "STORYBOOK_BUILD=true storybook build",
 		"release": "semantic-release",
-		"lighthouse:ci": "lhci autorun",
+		"lighthouse:ci": "lhci autorun --config=scripts/lighthouserc.cjs --base-dir=/tmp/lighthouse-ci",
 		"perf:check": "node scripts/performance-check.mjs",
 		"perf:report": "open PERFORMANCE_REPORT.html || xdg-open PERFORMANCE_REPORT.html"
 	},

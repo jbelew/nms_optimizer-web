@@ -401,14 +401,13 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			cssMinify: "lightningcss",
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {
-					// Filter out non-critical vendor chunks to prevent eager preloading.
-					// We keep UI themes, core React, router, and state management preloaded for fast LCP.
+					// Restore aggressive preloading for all critical-path dependencies.
+					// We only exclude truly heavy, asynchronous chunks like charts and markdown.
 					return deps.filter(
 						(dep: string) =>
 							!dep.includes("vendor-charts") &&
 							!dep.includes("vendor-markdown") &&
-							!dep.includes("vendor-markdown-lib") &&
-							!dep.includes("vendor-events")
+							!dep.includes("vendor-markdown-lib")
 					);
 				},
 			},
@@ -422,9 +421,15 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						},
 					},
 					chunkFileNames: (chunkInfo: import("rolldown").PreRenderedChunk) => {
-						// Preserve manual chunk names starting with 'vendor-' for better preloading/filtering,
-						// use generic 'chunk-' prefix for all other naturally split modules.
-						if (chunkInfo.name && chunkInfo.name.startsWith("vendor-")) {
+						// Preserve manual chunk names starting with 'vendor-', or containing 'index'/'entry'
+						// for better preloading/debugging. Use generic 'chunk-' for all others
+						// to avoid triggering ad-blockers (e.g. 'analytics' in filename).
+						if (
+							chunkInfo.name &&
+							(chunkInfo.name.startsWith("vendor-") ||
+								chunkInfo.name.includes("index") ||
+								chunkInfo.name.includes("entry"))
+						) {
 							return "assets/[name]-[hash].js";
 						}
 						return "assets/chunk-[hash].js";
@@ -433,6 +438,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					// Declarative code splitting via groups is the native Rolldown/Vite 8 way
 					// to manage manual chunks with high performance.
 					codeSplitting: {
+						// Merge shared modules smaller than 12KB into their dependents to reduce
+						// request overhead, while allowing larger shared pieces to remain split.
+						minSize: 12000,
 						groups: [
 							{
 								// Dedicated chunk for virtual markdown bundle to keep it out of the entry path.
@@ -462,9 +470,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								priority: 100,
 							},
 							{
-								// Core framework runtime — MUST be highest priority so React is never
-								// absorbed into a lower-priority vendor chunk (e.g. vendor-markdown-lib),
-								// which would force an eager static import of that chunk.
+								// Core framework runtime — MUST be highest priority.
 								name: "vendor-core",
 								test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-is|use-sync-external-store)[\\/]/,
 								priority: 130,
