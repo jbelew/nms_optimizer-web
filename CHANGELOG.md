@@ -1,3 +1,10 @@
+## [6.26.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.19...v6.26.20) (2026-04-14)
+
+
+### Bug Fixes
+
+* optimize chunk count and harden Lighthouse CI stability ([b1ddf4e](https://github.com/jbelew/nms_optimizer-web/commit/b1ddf4e2396b9b81b9b3407a2f8915377561a28e))
+
 ## [6.26.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.18...v6.26.19) (2026-04-14)
 
 
