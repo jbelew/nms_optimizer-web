@@ -1,3 +1,11 @@
+## [6.26.19](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.18...v6.26.19) (2026-04-14)
+
+
+### Bug Fixes
+
+* update Sentry configuration to increase trace sampling and filter noise from extensions and network errors ([f14af64](https://github.com/jbelew/nms_optimizer-web/commit/f14af64513b8f4c71870de169bff424d86d9e980))
+* update Sentry ignore error comment formatting for readability ([65fe8bd](https://github.com/jbelew/nms_optimizer-web/commit/65fe8bd917be8039464b43f0365ae717228aa79c))
+
 ## [6.26.18](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.17...v6.26.18) (2026-04-14)
 
 
