@@ -537,12 +537,38 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     - Added dynamic canonical and alternate hreflang tag injection at the Edge.
 - **Result**: Routes now serve unique, localized SEO metadata directly from the Cloudflare Edge, matching the behavior of the Express production environment.
 
-## 2026-04-13: SEO Trailing Slash Alignment
+## 2026-04-14: INP Regression Fix and Sentry Optimization
 
-- **Problem**: Dynamic titles stopped updating in the SPA and lookups were failing.
-- **Root Cause**: `shared/seo-metadata.js` keys were missing trailing slashes, which conflicted with the standardized routing architecture implemented on 2026-04-11. SPA and Edge lookups for routes like `/userstats/` were failing to find metadata.
-- **Action**: 
-    - Updated `shared/seo-metadata.js` keys to include mandatory trailing slashes (e.g., `"/userstats/"`).
-    - Synchronized the Cloudflare Pages Function (`functions/[[path]].js`) to use the same slash-mandatory mapping.
-    - Reverted an incorrect attempt to strip slashes in `useSeoAndTitle.ts`.
-- **Result**: Metadata lookups now match the current routing logic, restoring dynamic titles across the entire application and ensuring Edge SEO injection remains consistent with the SPA.
+### Perceive & Understand
+*   **Request**: Investigate and fix a significant INP regression (> 2500ms on mobile) identified in `seo_report/` starting around 2026-04-03.
+*   **Context**: The regression was traced to commit `0d2e5f25`. Suspicious changes included moving Sentry initialization to `requestIdleCallback`, excluding `vendor-ui-utils` from Vite preloading, and removing compositor layers from grid cells.
+*   **Findings**:
+    1.  **Sentry**: Delaying initialization caused data loss and potential main-thread interference.
+    2.  **Preloading**: Excluding Radix primitives created a network waterfall during user interaction.
+    3.  **Compositor Layers**: Adding `will-change: opacity` to 64 cells actually *increased* overhead.
+    4.  **React Compiler**: Manual `useMemo` calls were redundant.
+    5.  **Root Cause**: Baseline INP overhead (~440ms) is primarily due to Radix Themes' positioning and layout recalculation logic.
+
+### Reason & Plan
+*   **Plan**: Follow the scientific method to isolate and fix the issues.
+    1.  Restore synchronous Sentry initialization with named imports (best practice).
+    2.  Re-include `vendor-ui-utils` in Vite's `modulePreload`.
+    3.  Verify impact of compositor layers and revert if ineffective.
+    4.  Remove redundant manual `useMemo` calls.
+    5.  Validate final state with mobile performance traces (4x CPU throttle).
+
+### Act & Implement
+*   **Action**: 
+    1.  Updated `src/main.tsx` and `src/utils/sentry.ts` to restore sync init and use named imports.
+    2.  Refactored `src/utils/logger.ts` and `src/components/ErrorBoundary/errorHandler.ts` for consistent Sentry usage.
+    3.  Updated `vite.config.ts` to preload `vendor-ui-utils`.
+    4.  Cleaned up `GridCell.tsx` by removing redundant `useMemo`.
+    5.  Verified Sentry reporting with a manual test error.
+
+### Refine & Reflect
+*   **Reflection**: 
+    1.  **Scientific Method**: Systematically testing hypotheses prevented keeping ineffective changes (like the compositor layers).
+    2.  **Sentry Best Practices**: Named imports are preferred for tree-shaking and clarity. Synchronous initialization is necessary for reliable tracing.
+    3.  **Vite 8/Rolldown**: Explicit preloading of critical vendor chunks is essential for interaction performance in code-split applications.
+    4.  **React Compiler**: Trusting the compiler for basic memoization simplifies code without sacrificing performance.
+    5.  **Remaining Bottleneck**: The interaction with Radix dropdowns remains the "Needs Improvement" ceiling (~440ms); further optimization would require alternative UI patterns or Radix-level refactoring.

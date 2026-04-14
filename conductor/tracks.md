@@ -41,8 +41,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Optimize TBT for initial landing page load**
   *Link: [./conductor/tracks/tbt_optimization_20260408/](./conductor/tracks/tbt_optimization_20260408/)*
-
----
-
-## [x] Track: Fix INP Regression & Sentry Optimization
-*Link: [./conductor/tracks/inp_regression_fix_20260414/](./conductor/tracks/inp_regression_fix_20260414/)*
