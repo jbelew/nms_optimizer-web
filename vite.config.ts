@@ -406,7 +406,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					return deps.filter(
 						(dep: string) =>
 							!dep.includes("vendor-charts") &&
-							!dep.includes("vendor-ui-utils") &&
 							!dep.includes("vendor-markdown") &&
 							!dep.includes("vendor-markdown-lib") &&
 							!dep.includes("vendor-events")

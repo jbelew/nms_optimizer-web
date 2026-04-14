@@ -11,7 +11,11 @@
  */
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/react";
+import {
+	breadcrumbsIntegration,
+	init,
+	reactRouterV7BrowserTracingIntegration,
+} from "@sentry/react";
 import {
 	createRoutesFromChildren,
 	matchRoutes,
@@ -44,17 +48,17 @@ export const initializeSentry = () => {
 		return;
 	}
 
-	Sentry.init({
+	init({
 		dsn,
 		integrations: [
-			Sentry.reactRouterV7BrowserTracingIntegration({
+			reactRouterV7BrowserTracingIntegration({
 				useEffect,
 				useLocation,
 				useNavigationType,
 				createRoutesFromChildren,
 				matchRoutes,
 			}),
-			Sentry.breadcrumbsIntegration({
+			breadcrumbsIntegration({
 				dom: false,
 			}),
 		],

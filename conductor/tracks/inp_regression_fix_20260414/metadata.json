@@ -1,0 +1,18 @@
+{
+  "track_id": "inp_regression_fix_20260414",
+  "type": "something_else",
+  "status": "new",
+  "priority": "high",
+  "depends_on": [],
+  "estimated_hours": null,
+  "created_at": "2026-04-14T17:00:00Z",
+  "updated_at": "2026-04-14T17:00:00Z",
+  "description": "Investigate and fix the INP regression identified in the seo_report/ starting from 2026-04-03, focusing on Sentry, Radix preloading, and CSS compositor layers.",
+  "beads_epic": "nms_optimizer-web-4i7",
+  "beads_tasks": {
+    "phase1": "nms_optimizer-web-4i7.1",
+    "phase2": "nms_optimizer-web-4i7.2",
+    "phase3": "nms_optimizer-web-4i7.3",
+    "phase4": "nms_optimizer-web-4i7.4"
+  }
+}

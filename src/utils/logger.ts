@@ -11,7 +11,7 @@
  * @category Utilities
  */
 
-import * as Sentry from "@sentry/react";
+import { captureException, captureMessage } from "@sentry/react";
 
 /**
  * Log levels for the application.
@@ -80,7 +80,7 @@ export class Logger {
 	public static warn(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.WARN, message, data);
 		console.warn(`[WARN] ${message}`, data);
-		Sentry.captureMessage(message, { level: "warning", extra: data });
+		captureMessage(message, { level: "warning", extra: data });
 	}
 
 	/**
@@ -105,9 +105,9 @@ export class Logger {
 		console.error(`[ERROR] ${message}`, error);
 
 		if (error instanceof Error) {
-			Sentry.captureException(error, { extra: { message, ...data } });
+			captureException(error, { extra: { message, ...data } });
 		} else {
-			Sentry.captureMessage(message, { level: "error", extra: { error, ...data } });
+			captureMessage(message, { level: "error", extra: { error, ...data } });
 		}
 	}
 

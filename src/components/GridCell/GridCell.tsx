@@ -171,18 +171,20 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
 		useGridCellStyle(cell, isTouching);
 
-	const { imageUrl, imageSrcSet } = React.useMemo(() => {
-		if (!cell.image) return { imageUrl: undefined, imageSrcSet: undefined };
+	let imageUrl: string | undefined;
+	let imageSrcSet: string | undefined;
 
+	if (cell.image) {
 		const base1x = `/assets/img/grid/${cell.image}`;
 		const base2x = base1x.replace(/\.webp$/, "@2x.webp");
 		const url1x = `${base1x}?v=${__APP_VERSION__}`;
 		const url2x = `${base2x}?v=${__APP_VERSION__}`;
 
-		return { imageUrl: url1x, imageSrcSet: `${url1x} 1x, ${url2x} 2x` };
-	}, [cell.image]);
+		imageUrl = url1x;
+		imageSrcSet = `${url1x} 1x, ${url2x} 2x`;
+	}
 
-	const upGradePriority = React.useMemo(() => getUpgradePriority(cell.label), [cell.label]);
+	const upGradePriority = getUpgradePriority(cell.label);
 
 	const cellElement = (
 		<div
@@ -226,7 +228,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 		</div>
 	);
 
-	const tooltipContent = React.useMemo(() => stripLabel(cell.label), [cell.label]);
+	const tooltipContent = stripLabel(cell.label);
 
 	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
 

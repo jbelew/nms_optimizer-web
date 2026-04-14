@@ -12,7 +12,7 @@
  */
 
 import { ErrorInfo } from "react";
-import * as Sentry from "@sentry/react";
+import { captureException } from "@sentry/react";
 
 import { sendEvent } from "../../utils/analytics";
 import { safeClear } from "../../utils/storage";
@@ -49,7 +49,7 @@ import { safeClear } from "../../utils/storage";
 export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	console.error("Uncaught error:", error, errorInfo);
 
-	Sentry.captureException(error, {
+	captureException(error, {
 		extra: {
 			componentStack: errorInfo?.componentStack,
 		},
