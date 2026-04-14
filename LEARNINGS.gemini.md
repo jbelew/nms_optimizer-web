@@ -536,3 +536,13 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     - Implemented regex replacement for `<title>` and `<meta>` tags.
     - Added dynamic canonical and alternate hreflang tag injection at the Edge.
 - **Result**: Routes now serve unique, localized SEO metadata directly from the Cloudflare Edge, matching the behavior of the Express production environment.
+
+## 2026-04-13: SEO Trailing Slash Alignment
+
+- **Problem**: Dynamic titles stopped updating in the SPA and lookups were failing.
+- **Root Cause**: `shared/seo-metadata.js` keys were missing trailing slashes, which conflicted with the standardized routing architecture implemented on 2026-04-11. SPA and Edge lookups for routes like `/userstats/` were failing to find metadata.
+- **Action**: 
+    - Updated `shared/seo-metadata.js` keys to include mandatory trailing slashes (e.g., `"/userstats/"`).
+    - Synchronized the Cloudflare Pages Function (`functions/[[path]].js`) to use the same slash-mandatory mapping.
+    - Reverted an incorrect attempt to strip slashes in `useSeoAndTitle.ts`.
+- **Result**: Metadata lookups now match the current routing logic, restoring dynamic titles across the entire application and ensuring Edge SEO injection remains consistent with the SPA.

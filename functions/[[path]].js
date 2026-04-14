@@ -22,27 +22,27 @@ const seoMetadata = {
 		titleKey: "seo.mainPageTitle",
 		descriptionKey: "seo.appDescription",
 	},
-	"/instructions": {
+	"/instructions/": {
 		titleKey: "seo.instructionsPageTitle",
 		descriptionKey: "seo.instructionsDescription",
 	},
-	"/about": {
+	"/about/": {
 		titleKey: "seo.aboutPageTitle",
 		descriptionKey: "seo.aboutDescription",
 	},
-	"/changelog": {
+	"/changelog/": {
 		titleKey: "seo.changelogPageTitle",
 		descriptionKey: "seo.changelogDescription",
 	},
-	"/translation": {
+	"/translation/": {
 		titleKey: "seo.translationPageTitle",
 		descriptionKey: "seo.translationDescription",
 	},
-	"/userstats": {
+	"/userstats/": {
 		titleKey: "seo.userstatsPageTitle",
 		descriptionKey: "seo.userstatsDescription",
 	},
-	"/privacy": {
+	"/privacy/": {
 		titleKey: "seo.privacyPageTitle",
 		descriptionKey: "seo.privacyDescription",
 	},
@@ -86,7 +86,7 @@ export async function onRequest(context) {
         const newUrl = new URL(url);
         newUrl.searchParams.delete("lng");
         if (supportedLang !== "en") {
-            newUrl.pathname = `/${supportedLang}${pathname === "/" ? "" : pathname}`;
+            newUrl.pathname = `/${supportedLang}${pathname === "/" ? "/" : pathname}`;
         }
         return Response.redirect(newUrl.toString(), 301);
     }
@@ -96,6 +96,7 @@ export async function onRequest(context) {
     if (pathParts[0] === "en") {
         const newUrl = new URL(url);
         const subPath = pathParts.slice(1).join("/");
+        // Standardize trailing slash for removed /en/
         newUrl.pathname = `/${subPath}${subPath && !subPath.endsWith("/") ? "/" : ""}`;
         return Response.redirect(newUrl.toString(), 301);
     }
@@ -109,9 +110,12 @@ export async function onRequest(context) {
         const langFromPath = pathParts[0];
         const lang = SUPPORTED_LANGS.includes(langFromPath) ? langFromPath : "en";
         
-        // Normalize path for metadata lookup
+        // Normalize path for metadata lookup (Ensuring trailing slash matches shared/seo-metadata.js)
         const pagePathParts = SUPPORTED_LANGS.includes(langFromPath) ? pathParts.slice(1) : pathParts;
-        const basePath = `/${pagePathParts.join("/")}`;
+        let basePath = `/${pagePathParts.join("/")}`;
+        if (basePath !== "/" && !basePath.endsWith("/")) {
+            basePath += "/";
+        }
 
         // Concurrent fetch of index.html and translations
         const [indexResponse, localesResponse] = await Promise.all([
@@ -159,6 +163,7 @@ export async function onRequest(context) {
             const baseUrl = `https://${TARGET_HOST}`;
             const tagsToInject = [];
             
+            // Normalize path for tags
             const cleanPath = basePath === "/" ? "" : basePath;
             const cleanPathname = lang === "en" ? (cleanPath || "/") : `/${lang}${cleanPath}`;
             const canonicalUrl = `${baseUrl}${cleanPathname}`;

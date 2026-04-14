@@ -18,15 +18,15 @@ vi.mock("../../../shared/seo-metadata.js", () => ({
 			titleKey: "seo.mainPageTitle",
 			descriptionKey: "seo.appDescription",
 		},
-		"/instructions": {
+		"/instructions/": {
 			titleKey: "seo.instructionsPageTitle",
 			descriptionKey: "seo.instructionsDescription",
 		},
-		"/about": {
+		"/about/": {
 			titleKey: "seo.aboutPageTitle",
 			descriptionKey: "seo.aboutDescription",
 		},
-		"/changelog": {
+		"/changelog/": {
 			titleKey: "seo.changelogPageTitle",
 			descriptionKey: "seo.changelogDescription",
 		},
@@ -100,8 +100,8 @@ describe("useSeoAndTitle", () => {
 			);
 		});
 
-		it("should set correct title and description for /instructions path", () => {
-			setupMocks("/instructions", {
+		it("should set correct title and description for /instructions/ path", () => {
+			setupMocks("/instructions/", {
 				"seo.instructionsPageTitle":
 					"How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
 				"seo.instructionsDescription":
@@ -118,8 +118,8 @@ describe("useSeoAndTitle", () => {
 			);
 		});
 
-		it("should set correct title and description for /about path", () => {
-			setupMocks("/about", {
+		it("should set correct title and description for /about/ path", () => {
+			setupMocks("/about/", {
 				"seo.aboutPageTitle":
 					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
@@ -135,7 +135,7 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should set correct title and description for language-prefixed path", () => {
-			setupMocks("/es/about", {
+			setupMocks("/es/about/", {
 				"seo.aboutPageTitle":
 					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
@@ -150,8 +150,8 @@ describe("useSeoAndTitle", () => {
 			expect(metaDesc?.getAttribute("content")).toContain("NMS Optimizer is a free tool");
 		});
 
-		it("should set title for /changelog path", () => {
-			setupMocks("/changelog", {
+		it("should set title for /changelog/ path", () => {
+			setupMocks("/changelog/", {
 				"seo.changelogPageTitle": "NMS Optimizer Changelog | Latest Updates & Features",
 			});
 			renderHook(() => useSeoAndTitle());
@@ -160,7 +160,7 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should fall back to default title for unknown paths", () => {
-			setupMocks("/unknown-path", {
+			setupMocks("/unknown-path/", {
 				"seo.mainPageTitle":
 					"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 			});
@@ -194,7 +194,7 @@ describe("useSeoAndTitle", () => {
 		});
 
 		it("should NOT inject FAQ schema on non-root paths", () => {
-			setupMocks("/about");
+			setupMocks("/about/");
 			renderHook(() => useSeoAndTitle());
 
 			const faqScript = document.getElementById("faq-schema");
@@ -208,8 +208,8 @@ describe("useSeoAndTitle", () => {
 			rerender();
 			expect(document.getElementById("faq-schema")).not.toBeNull();
 
-			// Navigate to /about
-			setupMocks("/about");
+			// Navigate to /about/
+			setupMocks("/about/");
 			rerender();
 			expect(document.getElementById("faq-schema")).toBeNull();
 		});

@@ -211,7 +211,7 @@ export const useSeoAndTitle = () => {
 		const pathParts = location.pathname.split("/").filter(Boolean);
 		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
 		const basePath = supportedLangs.includes(pathParts[0])
-			? `/${pathParts.slice(1).join("/")}`
+			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
 			: location.pathname;
 
 		const currentPath = basePath === "" ? "/" : basePath;

@@ -8,27 +8,27 @@ export const seoMetadata = {
 		titleKey: "seo.mainPageTitle",
 		descriptionKey: "seo.appDescription",
 	},
-	"/instructions": {
+	"/instructions/": {
 		titleKey: "seo.instructionsPageTitle",
 		descriptionKey: "seo.instructionsDescription",
 	},
-	"/about": {
+	"/about/": {
 		titleKey: "seo.aboutPageTitle",
 		descriptionKey: "seo.aboutDescription",
 	},
-	"/changelog": {
+	"/changelog/": {
 		titleKey: "seo.changelogPageTitle",
 		descriptionKey: "seo.changelogDescription",
 	},
-	"/translation": {
+	"/translation/": {
 		titleKey: "seo.translationPageTitle",
 		descriptionKey: "seo.translationDescription",
 	},
-	"/userstats": {
+	"/userstats/": {
 		titleKey: "seo.userstatsPageTitle",
 		descriptionKey: "seo.userstatsDescription",
 	},
-	"/privacy": {
+	"/privacy/": {
 		titleKey: "seo.privacyPageTitle",
 		descriptionKey: "seo.privacyDescription",
 	},
