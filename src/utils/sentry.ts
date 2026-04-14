@@ -73,12 +73,12 @@ export const initializeSentry = () => {
 			/nms-optimizer\.app/i, // Restrict errors to your domain/local configs (ignores third-party browser extensions)
 		],
 		ignoreErrors: [
-			// Chrome/Firefox Extension Noise
+			// Chrome/Firefox Extension Noise ...
 			/runtime\.sendMessage\(\).*Tab not found/i,
 			/Extension/i,
 			/vendor/i,
 
-			// Generic Network/Browser Noise
+			// Generic Network/Browser Noise ...
 			/^Network Error$/i,
 			/^Failed to fetch$/i,
 			/^Load failed$/i,
