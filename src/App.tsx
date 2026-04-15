@@ -82,6 +82,11 @@ const AppContent: FC = () => {
 	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
 	const { t } = useTranslation();
 
+	// Use the URL hooks within the DialogProvider context
+	useUrlNormalization();
+	useSeoAndTitle();
+	useUrlValidation();
+
 	const [showWelcome, setShowWelcome] = useState(!userVisited && !activeDialog && !isBot());
 
 	useEffect(() => {
@@ -188,11 +193,6 @@ const App: FC = () => {
 			hideSplashScreenAndShowBackground();
 		}
 	}, [showError]);
-
-	// Use the new custom hooks
-	useUrlNormalization();
-	useSeoAndTitle();
-	useUrlValidation();
 
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
 	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
