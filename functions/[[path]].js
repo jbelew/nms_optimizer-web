@@ -83,13 +83,13 @@ const rawAssetCache = {
 const generatedHtmlCache = new Map(); // cacheKey (lang + basePath) -> html string
 
 const SECURITY_HEADERS = {
-    "Content-Security-Policy": "default-src 'self'; script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com www.googletagmanager.com; font-src 'self'; connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app static.cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io; frame-src https://www.youtube.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com www.googletagmanager.com; font-src 'self'; connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app https://cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io; frame-src https://www.youtube.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Cross-Origin-Opener-Policy": "same-origin",
     "Permissions-Policy": "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self \"https://www.youtube.com\"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()",
-    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "Strict-Transport-Security": "max-age=3600",
 };
 
 export async function onRequest(context) {
