@@ -1,3 +1,10 @@
+## [6.26.25](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.24...v6.26.25) (2026-04-16)
+
+
+### Bug Fixes
+
+* **security:** permit web-share for self in permissions policy ([144055e](https://github.com/jbelew/nms_optimizer-web/commit/144055ef2e886fb12275a18b2b4fa04ccd8c9252))
+
 ## [6.26.24](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.23...v6.26.24) (2026-04-16)
 
 
