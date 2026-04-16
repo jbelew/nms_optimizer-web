@@ -1,3 +1,19 @@
+## [6.26.22](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.21...v6.26.22) (2026-04-15)
+
+
+### Bug Fixes
+
+* **security:** implement edge-wide security hardening headers ([0876f4b](https://github.com/jbelew/nms_optimizer-web/commit/0876f4b1a7b5ead561c1930e4f5bacdd4b012997))
+* **security:** remove HSTS header to eliminate browser lockout risk ([606e7ef](https://github.com/jbelew/nms_optimizer-web/commit/606e7efe83abc29a6ca39a5aa920174b8e3ca09b))
+* **security:** resolve CSP block and soften HSTS for testing ([90d0a11](https://github.com/jbelew/nms_optimizer-web/commit/90d0a11fcd24bc6d092b4c0c00b2014fe0d6b920))
+
+## [6.26.21](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.20...v6.26.21) (2026-04-15)
+
+
+### Bug Fixes
+
+* **seo:** implement sticky URL decoration for returning users ([6cbdb01](https://github.com/jbelew/nms_optimizer-web/commit/6cbdb015867a6492c22a9cac1213e35e26a183d7))
+
 ## [6.26.20](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.19...v6.26.20) (2026-04-14)
 
 
