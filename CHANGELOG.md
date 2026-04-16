@@ -1,3 +1,15 @@
+# [6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)
+
+
+### Bug Fixes
+
+* resolve storybook failures and restore tooltip visibility on shared grids ([2ca986e](https://github.com/jbelew/nms_optimizer-web/commit/2ca986e796bfaf62788032d6f7a8d9ccdf2d1696))
+
+
+### Features
+
+* implementation of post-audit stability fixes and test coverage improvements ([5a577ca](https://github.com/jbelew/nms_optimizer-web/commit/5a577ca02b43d2ea6bcacea9ec7fdc4fd75a5cf8))
+
 ## [6.26.27](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.26...v6.26.27) (2026-04-16)
 
 
