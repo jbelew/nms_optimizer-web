@@ -23,13 +23,15 @@ vi.mock("@/utils/apiCall", () => ({
 				Hyperdrive: [
 					{
 						key: "hyper",
+						label: "Hyperdrive",
+						color: "purple",
 						modules: [
-							{ id: "h1", name: "Hyperdrive Module", type: "upgrade", checked: true },
+							{ id: "h1", label: "Hyperdrive Module", type: "upgrade", checked: true },
 						],
 					},
 				],
-				technology: {},
-				modules: {},
+				technology: [],
+				modules: [],
 			};
 		}
 
@@ -94,13 +96,15 @@ if (typeof window !== "undefined") {
 					Hyperdrive: [
 						{
 							key: "hyper",
+							label: "Hyperdrive",
+							color: "purple",
 							modules: [
-								{ id: "h1", name: "Hyperdrive Module", type: "upgrade", checked: true },
+								{ id: "h1", label: "Hyperdrive Module", type: "upgrade", checked: true },
 							],
 						},
 					],
-					technology: {},
-					modules: {},
+					technology: [],
+					modules: [],
 				}),
 				{
 					status: 200,

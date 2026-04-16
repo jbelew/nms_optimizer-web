@@ -230,7 +230,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 
 	const tooltipContent = stripLabel(cell.label);
 
-	const isTooltipVisible = cell.module && cell.active && !isSharedGrid;
+	const isTooltipVisible = cell.module && cell.active;
 
 	return isTooltipVisible ? (
 		<ConditionalTooltip label={tooltipContent ?? ""} delayDuration={500}>

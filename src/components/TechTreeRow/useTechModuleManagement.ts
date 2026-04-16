@@ -76,7 +76,7 @@ export const useTechModuleManagement = (
 	};
 
 	modules.forEach((module) => {
-		if (module.label.toLowerCase().includes("figurine")) {
+		if (module.label?.toLowerCase().includes("figurine")) {
 			groups.figurines.push(module);
 
 			return;
@@ -186,20 +186,20 @@ export const useTechModuleManagement = (
 					const groupName = module.type || "upgrade";
 
 					if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
-						const label = module.label;
+						const label = module.label || "";
 
 						if (label.includes("Theta")) {
 							const tauModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Tau")
+								m.label?.includes("Tau")
 							);
 							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Sigma")
+								m.label?.includes("Sigma")
 							);
 							if (tauModule) finalNewValues.delete(tauModule.id);
 							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
 						} else if (label.includes("Tau")) {
 							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label.includes("Sigma")
+								m.label?.includes("Sigma")
 							);
 							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
 						}
