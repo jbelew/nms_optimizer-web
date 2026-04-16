@@ -740,11 +740,11 @@
     }
   },
   {
-    "date": "2026-04-16T15:35:32.932Z",
+    "date": "2026-04-16T15:35:41.348Z",
     "sha": "cae2fb9289003d1444d905c5ed962ff0b8719b7e",
     "scores": {
-      "performance": 0.74,
-      "accessibility": 1,
+      "performance": 0.93,
+      "accessibility": 0.96,
       "best-practices": 0.96,
       "seo": 1
     }
