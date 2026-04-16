@@ -1,3 +1,13 @@
+## [6.26.24](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.23...v6.26.24) (2026-04-16)
+
+
+### Bug Fixes
+
+* **security:** implement edge-wide security hardening headers ([93c5d30](https://github.com/jbelew/nms_optimizer-web/commit/93c5d30da4c802c85ccb5cb07d20f26eb7d66442))
+* **security:** remove HSTS header to eliminate browser lockout risk ([2c53cee](https://github.com/jbelew/nms_optimizer-web/commit/2c53cee6213213d90336c3fe434dafd11e1133b3))
+* **security:** resolve CSP block and soften HSTS for testing ([b917d30](https://github.com/jbelew/nms_optimizer-web/commit/b917d3012f71f36590cbc8503fa31d3b957e5d7d))
+* **security:** resolve merge conflicts and allow PiP for youtube ([14e9186](https://github.com/jbelew/nms_optimizer-web/commit/14e9186a0744b4a8a1fdd27741af058a59ba82aa))
+
 ## [6.26.23](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.22...v6.26.23) (2026-04-16)
 
 
