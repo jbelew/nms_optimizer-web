@@ -1,3 +1,10 @@
+## [6.26.23](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.22...v6.26.23) (2026-04-16)
+
+
+### Bug Fixes
+
+* **security:** allow picture-in-picture for youtube in permissions policy ([a129685](https://github.com/jbelew/nms_optimizer-web/commit/a129685c9782daab2437e13f3d8202169a2eb567))
+
 ## [6.26.22](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.21...v6.26.22) (2026-04-15)
 
 
