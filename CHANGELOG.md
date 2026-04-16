@@ -1,3 +1,10 @@
+## [6.26.26](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.25...v6.26.26) (2026-04-16)
+
+
+### Bug Fixes
+
+* **security:** remove unrecognized features from permissions policy ([0fb3ec8](https://github.com/jbelew/nms_optimizer-web/commit/0fb3ec8f65918ac382aab762301689f91f9c3b91))
+
 ## [6.26.25](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.24...v6.26.25) (2026-04-16)
 
 
