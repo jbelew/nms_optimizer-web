@@ -5,6 +5,7 @@ import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDebouncedValidation } from "../../../hooks/useDebouncedValidation/useDebouncedValidation";
+import { useGridStore } from "../../../store/GridStore";
 import { usePlatformStore } from "../../../store/PlatformStore";
 import { generateBuildNameWithType } from "../../../utils/buildNameGenerator";
 import { isValidFilename } from "../../../utils/filenameValidation";
@@ -54,7 +55,10 @@ interface BuildNameContentProps {
 export const BuildNameContent: FC<BuildNameContentProps> = ({ onConfirm, onCancel }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const [buildName, setBuildName] = useState(() => generateBuildNameWithType(selectedShipType));
+	const persistedBuildName = useGridStore((state) => state.buildName);
+	const [buildName, setBuildName] = useState(
+		() => persistedBuildName || generateBuildNameWithType(selectedShipType)
+	);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	/**

@@ -71,3 +71,4 @@ scripts/cloudflare/*
 
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
+docs/nestjs-replatform-analysis.md

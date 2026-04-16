@@ -261,6 +261,8 @@ export type GridStore = {
 	result: ApiResponse | null;
 	/** Whether the grid was populated from a shared URL. */
 	isSharedGrid: boolean;
+	/** The name of the currently loaded build, if any. */
+	buildName: string | null;
 	/** Whether the active layout of the grid is locked. */
 	gridFixed: boolean;
 	/** Whether the locations of supercharged slots are locked. */
@@ -279,6 +281,12 @@ export type GridStore = {
 	 * @param {boolean} isShared - Whether the current grid is from a share URL.
 	 */
 	setIsSharedGrid: (isShared: boolean) => void;
+	/**
+	 * Updates the `buildName` status.
+	 *
+	 * @param {string | null} name - The name of the loaded build.
+	 */
+	setBuildName: (name: string | null) => void;
 	/**
 	 * Updates the entire grid object.
 	 *
@@ -521,12 +529,15 @@ export const useGridStore = create<GridStore>()(
 				grid: createGrid(10, 6),
 				result: null,
 				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
+				buildName: null,
 				gridFixed: false,
 				superchargedFixed: false,
 				initialGridDefinition: undefined,
 				_initialCellStateForTap: null,
 
 				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
+
+				setBuildName: (name) => set({ buildName: name }),
 
 				setGrid: (grid) => set({ grid }),
 
@@ -545,6 +556,7 @@ export const useGridStore = create<GridStore>()(
 
 						state.result = null;
 						state.isSharedGrid = false;
+						state.buildName = null;
 					});
 					useTechStore.getState().clearResult();
 					useTechStore.getState().clearAllCheckedModules();
@@ -560,6 +572,7 @@ export const useGridStore = create<GridStore>()(
 						state.grid = newGrid;
 						state.result = null;
 						state.isSharedGrid = false;
+						state.buildName = null;
 					});
 					useTechStore.getState().clearResult();
 					useTechStore.getState().clearTechGroups();
@@ -857,6 +870,7 @@ export const useGridStore = create<GridStore>()(
 				const dataToPersist = {
 					grid: state.grid,
 					isSharedGrid: state.isSharedGrid,
+					buildName: state.buildName,
 					gridFixed: state.gridFixed,
 					superchargedFixed: state.superchargedFixed,
 					initialGridDefinition: state.initialGridDefinition,

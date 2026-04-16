@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { toCanvas } from "html-to-image";
 import { useTranslation } from "react-i18next";
 
+import { useGridStore } from "../../store/GridStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useToast } from "../useToast/useToast";
 
@@ -56,6 +57,7 @@ export function useScreenshot(): UseScreenshotReturn {
 	const { t } = useTranslation();
 	const { showSuccess, showError } = useToast();
 	const { sendEvent } = useAnalytics();
+	const buildName = useGridStore((state) => state.buildName);
 	const [isCapturing, setIsCapturing] = useState(false);
 
 	/**
@@ -74,10 +76,12 @@ export function useScreenshot(): UseScreenshotReturn {
 
 			try {
 				const padding = 20;
-				// Extra bottom padding for attribution text
-				const bottomPadding = -5;
+				// Maintain exactly the same Y position relative to the grid as original (element.offsetHeight + 5)
+				// But increase the total canvas height to give more space BELOW the label
+				const spaceBelowLabel = 20; // Originally 10
+				const originalTextY = element.offsetHeight + 5;
 				const width = element.offsetWidth + padding * 2;
-				const height = element.offsetHeight + padding + bottomPadding;
+				const height = originalTextY + spaceBelowLabel;
 
 				const elementsToHide = element.querySelectorAll<HTMLElement>(
 					'[data-screenshot-exclude="true"]'
@@ -111,17 +115,83 @@ export function useScreenshot(): UseScreenshotReturn {
 				const ctx = canvas.getContext("2d");
 
 				if (ctx) {
-					const fontSize = 14; // Large for visibility, can be adjusted
-					// Standard Canvas context doesn't have fontStyle, weight is part of 'font'
+					const fontSize = 14;
 					ctx.font = `500 ${fontSize}px Raleway, Helvetica, Arial, sans-serif`;
-					ctx.fillStyle = "#4CCCE6";
-					ctx.textAlign = "center";
 					ctx.textBaseline = "bottom";
-					ctx.fillText(
-						"Layout created with https://nms-optimizer.app",
-						canvas.width / 2,
-						canvas.height - padding / 2
-					);
+
+					// Keep the exact same distance from the grid as the original code
+					const y = element.offsetHeight + 5;
+
+					const part1 = buildName
+						? `Layout "${buildName}" created with `
+						: "Layout created with ";
+					const part2 = "https://nms-optimizer.app";
+
+					const w1 = ctx.measureText(part1).width;
+					const w2 = ctx.measureText(part2).width;
+
+					const totalWidth = w1 + w2;
+					const startX = (canvas.width - totalWidth) / 2;
+
+					ctx.textAlign = "left";
+
+					ctx.fillStyle = "#4CCCE6";
+					ctx.fillText(part1, startX, y);
+
+					ctx.fillStyle = "#FFFFFF";
+					ctx.fillText(part2, startX + w1, y);
+
+					// Round the corners of the entire screenshot to match main app card (radius-5 is typically 12px or 16px, we use 16px)
+					ctx.globalCompositeOperation = "destination-in";
+					ctx.beginPath();
+
+					if (ctx.roundRect) {
+						ctx.roundRect(0, 0, canvas.width, canvas.height, 16);
+					} else {
+						// Polyfill for older browsers
+						const r = 16;
+						ctx.moveTo(r, 0);
+						ctx.lineTo(canvas.width - r, 0);
+						ctx.arcTo(canvas.width, 0, canvas.width, r, r);
+						ctx.lineTo(canvas.width, canvas.height - r);
+						ctx.arcTo(canvas.width, canvas.height, canvas.width - r, canvas.height, r);
+						ctx.lineTo(r, canvas.height);
+						ctx.arcTo(0, canvas.height, 0, canvas.height - r, r);
+						ctx.lineTo(0, r);
+						ctx.arcTo(0, 0, r, 0, r);
+					}
+
+					ctx.fill();
+
+					// Add a 1px border replicating the main card outline
+					ctx.globalCompositeOperation = "source-over";
+					const borderColor =
+						getComputedStyle(document.documentElement)
+							.getPropertyValue("--gray-a6")
+							.trim() || "rgba(255, 255, 255, 0.1)";
+
+					ctx.beginPath();
+
+					if (ctx.roundRect) {
+						ctx.roundRect(0.5, 0.5, canvas.width - 1, canvas.height - 1, 16);
+					} else {
+						const r = 16;
+						const w = canvas.width - 0.5;
+						const h = canvas.height - 0.5;
+						ctx.moveTo(r + 0.5, 0.5);
+						ctx.lineTo(w - r, 0.5);
+						ctx.arcTo(w, 0.5, w, r + 0.5, r);
+						ctx.lineTo(w, h - r);
+						ctx.arcTo(w, h, w - r, h, r);
+						ctx.lineTo(r + 0.5, h);
+						ctx.arcTo(0.5, h, 0.5, h - r, r);
+						ctx.lineTo(0.5, r + 0.5);
+						ctx.arcTo(0.5, 0.5, r + 0.5, 0.5, r);
+					}
+
+					ctx.strokeStyle = borderColor;
+					ctx.lineWidth = 1;
+					ctx.stroke();
 				}
 
 				const dataUrl = canvas.toDataURL("image/png");
@@ -153,7 +223,7 @@ export function useScreenshot(): UseScreenshotReturn {
 				setIsCapturing(false);
 			}
 		},
-		[t, showSuccess, showError, sendEvent]
+		[t, showSuccess, showError, sendEvent, buildName]
 	);
 
 	return { handleScreenshot, isCapturing };

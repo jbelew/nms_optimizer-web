@@ -209,7 +209,7 @@ export const useBuildFileManager = () => {
 			}
 
 			// Restore state from all stores
-			useGridStore.setState(buildData.gridState);
+			useGridStore.setState({ ...buildData.gridState, buildName: buildData.name });
 			useTechStore.setState(buildData.techState);
 			useTechBonusStore.setState(buildData.bonusState);
 			useModuleSelectionStore.setState(buildData.moduleState);
