@@ -17,7 +17,7 @@ export type ErrorType = "fatal" | "recoverable";
  *
  * @category Optimization
  */
-interface OptimizeState {
+export interface OptimizeState {
 	/** Whether the global error overlay is visible. */
 	showError: boolean;
 	/** The severity level of the active error. */

@@ -1,38 +1,42 @@
 import { test, expect } from '@playwright/test';
 
-test('should not crash when applying a recommended build', async ({ page }) => {
+test('should correctly apply and reset recommended builds', async ({ page }) => {
   await page.goto('/?platform=colossus');
 
   // Wait for the recommended build button to be visible
   await page.waitForSelector('button:has-text("Apply Recommended Build")', { state: 'visible' });
 
-  for (let i = 0; i < 3; i++) {
-    // Find the button to apply the recommended build inside the loop
-    const recommendedBuildButton = page.locator('button:has-text("Apply Recommended Build")');
+  // Initial state: populated cells should be identifiable by having an <img> tag
+  const populatedLocator = page.locator('div[role="gridcell"]:has(img)');
+  const initialPopulatedCells = await populatedLocator.count();
 
-    // Apply Recommended Build
-    await recommendedBuildButton.click();
-    await page.waitForLoadState('networkidle'); // Wait for network to be idle after applying build
+  // Find the button to apply the recommended build
+  const recommendedBuildButton = page.locator('button:has-text("Apply Recommended Build")');
 
-    // Simulate user returning to the app by reloading the page
-    await page.reload();
-    await page.waitForLoadState('networkidle'); // Wait for network to be idle after reload
-    await page.waitForSelector('button:has-text("Reset Grid")', { state: 'visible' }); // Ensure reset button is visible after reload
+  // Apply Recommended Build
+  await recommendedBuildButton.click();
+  
+  // Verify grid is populated (more cells with <img>)
+  await expect(populatedLocator).not.toHaveCount(initialPopulatedCells);
+  const countAfterApply = await populatedLocator.count();
+  expect(countAfterApply).toBeGreaterThan(initialPopulatedCells);
 
-    // Check if the page is still alive after applying the build
-    let isLive = await page.evaluate(() => 1);
-    expect(isLive).toBe(1);
+  // Wait for debounced localStorage to sync (1000ms in GridStore.ts)
+  await page.waitForTimeout(1500);
 
-    // Reset Grid
-    const resetGridButton = page.locator('button:has-text("Reset Grid")');
-    await resetGridButton.click();
-    await page.waitForLoadState('networkidle'); // Wait for network to be idle after resetting grid
+  // Simulate user returning to the app by reloading the page
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+  
+  // Verify state persisted after reload
+  const countAfterReload = await populatedLocator.count();
+  expect(countAfterReload).toBe(countAfterApply);
 
-    // Check if the page is still alive after resetting the grid
-    isLive = await page.evaluate(() => 1);
-    expect(isLive).toBe(1);
-
-    // Wait for the button to be visible again before the next iteration
-    await page.waitForSelector('button:has-text("Apply Recommended Build")', { state: 'visible' });
-  }
+  // Reset Grid
+  const resetGridButton = page.locator('button:has-text("Reset Grid")');
+  await resetGridButton.click();
+  
+  // Verify grid is cleared back to initial state
+  const countAfterReset = await populatedLocator.count();
+  expect(countAfterReset).toBe(initialPopulatedCells);
 });

@@ -192,7 +192,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							<img
 								className="app-header__logo-image pt-[3px]"
 								src={nmslogo}
-								alt="No Man's Sky Atlas Logo"
+								alt=""
 								width="10"
 								height="16"
 							/>

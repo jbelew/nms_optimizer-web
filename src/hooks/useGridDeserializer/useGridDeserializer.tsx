@@ -4,13 +4,8 @@ import { createGrid, Grid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
-import {
-	fetchTechTreeAsync,
-	Module,
-	RecommendedBuild,
-	TechTree,
-	TechTreeItem,
-} from "../useTechTree/useTechTree";
+import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { fetchTechTreeAsync, RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).
@@ -328,31 +323,7 @@ export const deserialize = async (
 			);
 		}
 
-		const colors: { [key: string]: string } = {};
-		const modulesMap: { [techKey: string]: { [moduleId: string]: Module } } = {};
-		const validTechKeys = new Set<string>();
-
-		for (const techCategory in techTreeData) {
-			const techTreeItems = techTreeData[techCategory];
-
-			if (Array.isArray(techTreeItems)) {
-				for (const techTreeItem of techTreeItems) {
-					if (
-						typeof techTreeItem === "object" &&
-						techTreeItem !== null &&
-						"key" in techTreeItem
-					) {
-						colors[techTreeItem.key] = (techTreeItem as TechTreeItem).color;
-						modulesMap[techTreeItem.key] = modulesMap[techTreeItem.key] || {};
-						validTechKeys.add(techTreeItem.key);
-
-						for (const module of (techTreeItem as TechTreeItem).modules) {
-							modulesMap[techTreeItem.key][module.id] = module;
-						}
-					}
-				}
-			}
-		}
+		const { modulesMap, techColors, validTechKeys } = getTechTreeMaps(techTreeData);
 
 		// Validate that all techs in serialized grid exist in current API data
 		const missingTechs = new Set<string>();
@@ -369,7 +340,7 @@ export const deserialize = async (
 			);
 		}
 
-		setTechColors(colors);
+		setTechColors(techColors);
 
 		// --- Grid Population Loop ---
 		let index = 0;
@@ -409,28 +380,20 @@ export const deserialize = async (
 					newGrid.cells[r][c].tech = techName;
 				}
 
-				if (moduleId && techName && validTechKeys.has(techName)) {
-					const techModules = modulesMap[techName];
+				if (moduleId && techName) {
+					const moduleData = modulesMap.get(`${techName}/${moduleId}`);
 
-					if (techModules) {
-						const moduleData = techModules[moduleId];
-
-						if (moduleData) {
-							newGrid.cells[r][c].module = moduleData.id;
-							newGrid.cells[r][c].label = moduleData.label;
-							newGrid.cells[r][c].image = moduleData.image;
-							newGrid.cells[r][c].bonus = moduleData.bonus ?? 0.0;
-							newGrid.cells[r][c].value = moduleData.value ?? 0;
-							newGrid.cells[r][c].adjacency = moduleData.adjacency ?? "none";
-							newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible ?? false;
-						} else {
-							console.warn(
-								`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`
-							);
-						}
+					if (moduleData) {
+						newGrid.cells[r][c].module = moduleData.id;
+						newGrid.cells[r][c].label = moduleData.label;
+						newGrid.cells[r][c].image = moduleData.image;
+						newGrid.cells[r][c].bonus = moduleData.bonus ?? 0.0;
+						newGrid.cells[r][c].value = moduleData.value ?? 0;
+						newGrid.cells[r][c].adjacency = moduleData.adjacency ?? "none";
+						newGrid.cells[r][c].sc_eligible = moduleData.sc_eligible ?? false;
 					} else {
 						console.warn(
-							`Tech category not found for tech: ${techName}. Cell state might be incomplete.`
+							`Module data not found for tech: ${techName}, module ID: ${moduleId}. Cell state might be incomplete.`
 						);
 					}
 				}

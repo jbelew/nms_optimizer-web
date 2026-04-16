@@ -1,11 +1,15 @@
+import type { GridStore } from "../../store/GridStore";
+import type { OptimizeState } from "../../store/OptimizeStore";
+import type { PlatformState } from "../../store/PlatformStore";
+import type { TechState } from "../../store/TechStore";
 import type { Socket } from "socket.io-client";
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { GridStore, useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { TechState, useTechStore } from "../../store/TechStore";
+import { useTechStore } from "../../store/TechStore";
 import { Logger } from "../../utils/logger";
 import { createSocket } from "../../utils/socketManager";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
@@ -30,7 +34,11 @@ vi.mock("../../store/TechStore", () => ({
 		getState: vi.fn(),
 	},
 }));
-vi.mock("../../store/PlatformStore");
+vi.mock("../../store/PlatformStore", () => ({
+	usePlatformStore: Object.assign(vi.fn(), {
+		getState: vi.fn(),
+	}),
+}));
 vi.mock("../useBreakpoint/useBreakpoint");
 vi.mock("../../utils/socketManager", () => ({
 	createSocket: vi.fn(),
@@ -67,32 +75,39 @@ vi.mock("../../utils/logger", () => ({
 const mockLogger = vi.mocked(Logger);
 
 describe("useOptimize", () => {
-	const mockSocket = {
+	const createMockSocket = () => ({
 		on: vi.fn(),
 		once: vi.fn(),
 		off: vi.fn(),
 		emit: vi.fn(),
 		disconnect: vi.fn(),
 		connected: true,
-	};
+	});
+
+	let mockSocket: ReturnType<typeof createMockSocket>;
+
+	const setShowErrorMock = vi.fn();
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockSocket = createMockSocket();
 		mockCreateSocket.mockReturnValue(mockSocket as unknown as Socket);
 
 		// Mock store and hook return values
-		const mockOptimizeState = {
+		const mockOptimizeState: OptimizeState = {
 			showError: false,
 			errorType: null,
 			error: null,
-			setShowError: vi.fn(),
+			setShowError: setShowErrorMock,
 			patternNoFitTech: null,
 			setPatternNoFitTech: vi.fn(),
 		};
 
-		mockUseOptimizeStore.mockImplementation((selector) => selector(mockOptimizeState));
+		mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
+			selector(mockOptimizeState)
+		);
 
-		vi.mocked(mockUseGridStore.getState).mockReturnValue({
+		mockUseGridStore.getState.mockReturnValue({
 			setGrid: vi.fn(),
 			setResult: vi.fn(),
 			grid: {
@@ -103,12 +118,20 @@ describe("useOptimize", () => {
 			},
 		} as unknown as GridStore);
 
-		vi.mocked(mockUseTechStore.getState).mockReturnValue({
+		mockUseTechStore.getState.mockReturnValue({
 			checkedModules: {},
 			techGroups: {},
 			activeGroups: {},
 			initializeTechTree: vi.fn(),
 		} as unknown as TechState);
+
+		mockUsePlatformStore.getState.mockImplementation(
+			() =>
+				({
+					selectedPlatform: mockUsePlatformStore(),
+				}) as unknown as PlatformState
+		);
+
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
 		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn() });
@@ -155,12 +178,12 @@ describe("useOptimize", () => {
 			const selectedShipType = "hauler";
 
 			// Setup specific mock state for this test
-			vi.mocked(mockUseGridStore.getState).mockReturnValue({
+			mockUseGridStore.getState.mockReturnValue({
 				setGrid: vi.fn(),
 				setResult: vi.fn(),
 				grid,
 			} as unknown as GridStore);
-			vi.mocked(mockUseTechStore.getState).mockReturnValue({
+			mockUseTechStore.getState.mockReturnValue({
 				checkedModules,
 				techGroups: { "Test Tech": ["module1", "module2"] },
 				activeGroups: { "Test Tech": "group1" },
@@ -218,18 +241,21 @@ describe("useOptimize", () => {
 			});
 
 			// Manually trigger the 'progress' event
-			const progressCallback = mockSocket.on.mock.calls.find(
-				(call) => call[0] === "progress"
-			)?.[1];
+			const progressCallback = (
+				(mockSocket.on as unknown as Mock).mock.calls as unknown as [
+					string,
+					(data: { progress_percent: number }) => void,
+				][]
+			).find((call) => call[0] === "progress")?.[1];
 			expect(progressCallback).toBeDefined();
 			act(() => {
-				progressCallback({ progress_percent: 45 });
+				progressCallback!({ progress_percent: 45 });
 			});
 
 			expect(result.current.progressPercent).toBe(45);
 
 			act(() => {
-				progressCallback({ progress_percent: 90 });
+				progressCallback!({ progress_percent: 90 });
 			});
 
 			expect(result.current.progressPercent).toBe(90);
@@ -238,13 +264,13 @@ describe("useOptimize", () => {
 
 	describe("error and cleanup handling", () => {
 		it("should handle connection error", async () => {
-			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			const localSetShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
 					showError: false,
 					errorType: null,
 					error: null,
-					setShowError: setShowErrorMock,
+					setShowError: localSetShowErrorMock,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
 				})
@@ -255,28 +281,35 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const errorCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "connect_error"
-			)?.[1];
+			const errorCallback = (
+				(mockSocket.once as unknown as Mock).mock.calls as unknown as [
+					string,
+					(err: Error) => void,
+				][]
+			).find((call) => call[0] === "connect_error")?.[1];
 			expect(errorCallback).toBeDefined();
 
 			act(() => {
-				errorCallback(new Error("Connection failed"));
+				errorCallback!(new Error("Connection failed"));
 			});
 
-			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
+			expect(localSetShowErrorMock).toHaveBeenCalledWith(
+				true,
+				"recoverable",
+				expect.any(Error)
+			);
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.off).toHaveBeenCalled();
 		});
 
 		it("should handle invalid API response", async () => {
-			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			const localSetShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
 					showError: false,
 					errorType: null,
 					error: null,
-					setShowError: setShowErrorMock,
+					setShowError: localSetShowErrorMock,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
 				})
@@ -287,28 +320,35 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const resultCallback = mockSocket.once.mock.calls.find(
-				(call) => call[0] === "optimization_result"
-			)?.[1];
+			const resultCallback = (
+				(mockSocket.once as unknown as Mock).mock.calls as unknown as [
+					string,
+					(data: unknown) => void,
+				][]
+			).find((call) => call[0] === "optimization_result")?.[1];
 			expect(resultCallback).toBeDefined();
 
 			act(() => {
-				resultCallback({ some: "invalid data" });
+				resultCallback!({ some: "invalid data" });
 			});
 
-			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
+			expect(localSetShowErrorMock).toHaveBeenCalledWith(
+				true,
+				"recoverable",
+				expect.any(Error)
+			);
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.off).toHaveBeenCalled();
 		});
 
 		it("should silence benign disconnects (transport close)", async () => {
-			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			const localSetShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
 					showError: false,
 					errorType: null,
 					error: null,
-					setShowError: setShowErrorMock,
+					setShowError: localSetShowErrorMock,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
 				})
@@ -319,13 +359,16 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const disconnectCallback = mockSocket.on.mock.calls.find(
-				(call) => call[0] === "disconnect"
-			)?.[1];
+			const disconnectCallback = (
+				(mockSocket.on as unknown as Mock).mock.calls as unknown as [
+					string,
+					(reason: string) => void,
+				][]
+			).find((call) => call[0] === "disconnect")?.[1];
 			expect(disconnectCallback).toBeDefined();
 
 			act(() => {
-				disconnectCallback("transport close");
+				disconnectCallback!("transport close");
 			});
 
 			expect(mockLogger.info).toHaveBeenCalledWith(
@@ -336,20 +379,26 @@ describe("useOptimize", () => {
 				expect.stringContaining("disconnected during optimization"),
 				expect.any(Object)
 			);
-			expect(setShowErrorMock).not.toHaveBeenCalledWith(
-				true,
-				expect.any(String),
-				expect.any(Error)
+
+			// Initial handleOptimize calls setShowError(false)
+			// resetProgress() calls setShowError(false) again on cleanup
+			expect(localSetShowErrorMock).toHaveBeenCalledWith(false);
+
+			// Ensure it was never called with true (which would show the error modal)
+			const calledWithTrue = localSetShowErrorMock.mock.calls.some(
+				(args) => args[0] === true
 			);
+			expect(calledWithTrue).toBe(false);
+
 			expect(result.current.solving).toBe(false);
 			expect(mockSocket.off).toHaveBeenCalled();
 		});
 
 		it("should warn on genuine disconnects (ping timeout)", async () => {
-			const setShowErrorMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			const localSetShowErrorMock = vi.fn();
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					setShowError: setShowErrorMock,
+					setShowError: localSetShowErrorMock,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
 					showError: false,
@@ -363,20 +412,27 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			const disconnectCallback = mockSocket.on.mock.calls.find(
-				(call) => call[0] === "disconnect"
-			)?.[1];
+			const disconnectCallback = (
+				(mockSocket.on as unknown as Mock).mock.calls as unknown as [
+					string,
+					(reason: string) => void,
+				][]
+			).find((call) => call[0] === "disconnect")?.[1];
 			expect(disconnectCallback).toBeDefined();
 
 			act(() => {
-				disconnectCallback("ping timeout");
+				disconnectCallback!("ping timeout");
 			});
 
 			expect(mockLogger.warn).toHaveBeenCalledWith(
 				expect.stringContaining("disconnected during optimization"),
 				expect.any(Object)
 			);
-			expect(setShowErrorMock).toHaveBeenCalledWith(true, "recoverable", expect.any(Error));
+			expect(localSetShowErrorMock).toHaveBeenCalledWith(
+				true,
+				"recoverable",
+				expect.any(Error)
+			);
 			expect(result.current.solving).toBe(false);
 		});
 	});
@@ -384,7 +440,7 @@ describe("useOptimize", () => {
 	describe("remaining hook functions", () => {
 		it("should clear patternNoFitTech", () => {
 			const setPatternNoFitTechMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
 					setShowError: vi.fn(),
 					patternNoFitTech: "some-tech",
@@ -405,7 +461,7 @@ describe("useOptimize", () => {
 
 		it("should handle force-optimizing a PNF tech", async () => {
 			const setPatternNoFitTechMock = vi.fn();
-			mockUseOptimizeStore.mockImplementation((selector) =>
+			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
 					setShowError: vi.fn(),
 					patternNoFitTech: "PNF Tech",

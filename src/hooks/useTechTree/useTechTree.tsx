@@ -6,6 +6,7 @@ import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
 import { apiCall } from "../../utils/apiCall";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { getTechTreeMaps } from "../../utils/techTreeUtils";
 
 /**
  * Represents a specific technology module in No Man's Sky.
@@ -268,7 +269,7 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
  * @private
  */
 function processTechTreeMetadata(techTree: TechTree) {
-	const colors: { [key: string]: string } = {};
+	const { techColors: colors } = getTechTreeMaps(techTree);
 	const techGroups: { [key: string]: TechTreeItem[] } = {};
 	const activeGroups: { [key: string]: string } = {};
 
@@ -283,14 +284,11 @@ function processTechTreeMetadata(techTree: TechTree) {
 					if (uniqueKeys.has(item.key)) continue;
 					uniqueKeys.add(item.key);
 
-					if ("color" in item) {
-						colors[item.key] = item.color as string;
-						if (!techGroups[item.key]) techGroups[item.key] = [];
-						techGroups[item.key].push(item as TechTreeItem);
+					if (!techGroups[item.key]) techGroups[item.key] = [];
+					techGroups[item.key].push(item as TechTreeItem);
 
-						if (!activeGroups[item.key]) {
-							activeGroups[item.key] = (item.type as string) || "normal";
-						}
+					if (!activeGroups[item.key]) {
+						activeGroups[item.key] = (item.type as string) || "normal";
 					}
 				}
 			}

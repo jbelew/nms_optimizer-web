@@ -1,8 +1,10 @@
 // src/hooks/useRecommendedBuild.tsx
-import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
+import type { RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
+import { useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
 import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { getTechTreeMaps } from "../../utils/techTreeUtils";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 
@@ -46,37 +48,12 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
 	/**
-	 * Internal map of all modules, indexed by a composite key of `tech/moduleId`.
+	 * Memoized maps of modules, colors, and keys derived from the techTree.
 	 *
 	 * @remarks
-	 * Used for fast O(1) lookups during build application to resolve full module data
-	 * from the minimal IDs stored in the build layout.
-	 *
-	 * @type {Map<string, Module>}
-	 * @private
+	 * Utilizes the shared getTechTreeMaps utility to avoid redundant iterations.
 	 */
-	const modulesMap = new Map<string, Module>();
-
-	if (techTree) {
-		for (const category in techTree) {
-			const categoryItems = techTree[category];
-
-			if (Array.isArray(categoryItems)) {
-				for (const tech of categoryItems) {
-					if (
-						typeof tech === "object" &&
-						tech !== null &&
-						"key" in tech &&
-						"modules" in tech
-					) {
-						for (const module of (tech as TechTreeItem).modules) {
-							modulesMap.set(`${(tech as TechTreeItem).key}/${module.id}`, module);
-						}
-					}
-				}
-			}
-		}
-	}
+	const { modulesMap } = useMemo(() => getTechTreeMaps(techTree), [techTree]);
 
 	/**
 	 * Overwrites the current grid state with the layout defined in a recommended build.

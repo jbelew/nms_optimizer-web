@@ -109,6 +109,8 @@ export type Grid = {
 	height: number;
 	/** The number of columns in the grid. */
 	width: number;
+	/** Whether the grid configuration is valid (e.g. no overlapping modules). */
+	valid?: boolean;
 };
 
 /**

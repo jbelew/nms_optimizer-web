@@ -41,3 +41,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Optimize TBT for initial landing page load**
   *Link: [./conductor/tracks/tbt_optimization_20260408/](./conductor/tracks/tbt_optimization_20260408/)*
+
+---
+
+## [x] Track: Let's review my app for any missed bugs or anti-patterns.
+*Link: [./conductor/tracks/app_final_review_20260416/](./conductor/tracks/app_final_review_20260416/)*
+
+---
+
+## [x] Track: Post-Audit Fixes & Stability Improvements
+*Link: [./conductor/tracks/post_audit_fixes_20260416/](./conductor/tracks/post_audit_fixes_20260416/)*
