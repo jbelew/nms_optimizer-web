@@ -1,3 +1,10 @@
+## [6.26.27](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.26...v6.26.27) (2026-04-16)
+
+
+### Bug Fixes
+
+* add build name persistence to GridStore and include it in screenshot exports with rounded borders and styling ([001b2ca](https://github.com/jbelew/nms_optimizer-web/commit/001b2ca70c78f1b960e1ee4a2781b1535cb734c8))
+
 ## [6.26.26](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.25...v6.26.26) (2026-04-16)
 
 
