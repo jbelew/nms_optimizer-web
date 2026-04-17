@@ -6,11 +6,11 @@
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
-# HTML Pages: Cache at Edge, Revalidate in Browser
+# HTML Pages: Never serve stale HTML (chunk hashes change on every deploy)
 /
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
+  Cache-Control: public, no-cache, must-revalidate
 /index.html
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
+  Cache-Control: public, no-cache, must-revalidate
 
 # Cache rules for hashed assets (Vite output)
 /assets/*

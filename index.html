@@ -224,32 +224,6 @@
 			}
 		})();
 	</script>
-	<noscript data-vpss-background-noscript>
-		<style>
-			body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background-color: #000000;
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-				background-image: image-set(url("/assets/img/background.webp") 1x,
-						url("/assets/img/background@2x.webp") 2x);
-				z-index: -1;
-			}
-
-			@media (width <=639px) {
-				body::before {
-					background-image: url("/assets/img/background@mobile-blurred.webp");
-					background-position: center top;
-				}
-			}
-		</style>
-	</noscript>
 	<style>
 		html {
 			background: #000;

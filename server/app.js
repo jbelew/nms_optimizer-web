@@ -187,9 +187,8 @@ function setCacheHeaders(res, filePath) {
 	if (fileName === "sw.js") {
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	} else if (fileName === "index.html") {
-		// Use s-maxage and stale-while-revalidate for HTML to minimize origin revalidation
-		// Cloudflare can cache the HTML for a year and serve stale while fetching in background.
-		res.setHeader("Cache-Control", "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60");
+		// Never serve stale HTML — chunk hashes change on every deploy
+		res.setHeader("Cache-Control", "public, no-cache, must-revalidate");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
 	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
