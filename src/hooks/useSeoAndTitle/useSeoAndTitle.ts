@@ -324,7 +324,7 @@ export const useSeoAndTitle = () => {
 		}
 
 		// --- Analytics Page View ---
-		// We send this manually here because automatic page views are disabled in analytics.ts
+		// We send this manually here because automatic page views are disabled in tracking.ts
 		// to allow us to control the timing and include the correct document title.
 		sendEvent({
 			action: "page_view",

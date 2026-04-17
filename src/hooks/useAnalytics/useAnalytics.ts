@@ -9,7 +9,7 @@ import { sendEvent } from "../../utils/analytics/tracking";
  * @returns {{ sendEvent: (event: import('../../utils/analytics/tracking').GA4Event) => void }} An object containing the `sendEvent` function.
  *
  * @see {@link sendEvent} for the underlying tracking logic.
- * @see [Analytics Utilities](../../utils/analytics.ts)
+ * @see [Analytics Tracking](../../utils/analytics/tracking.ts)
  * @see [useAnalytics Tests](./useAnalytics.test.ts)
  *
  * @category Hooks

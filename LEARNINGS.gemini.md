@@ -572,3 +572,41 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     3.  **Vite 8/Rolldown**: Explicit preloading of critical vendor chunks is essential for interaction performance in code-split applications.
     4.  **React Compiler**: Trusting the compiler for basic memoization simplifies code without sacrificing performance.
     5.  **Remaining Bottleneck**: The interaction with Radix dropdowns remains the "Needs Improvement" ceiling (~440ms); further optimization would require alternative UI patterns or Radix-level refactoring.
+
+## 2026-04-16: Utilities Directory Consolidation and Standardization
+
+### Perceive & Understand
+*   **Request**: Review and consolidate the `src/utils/` directory, following SOLID principles and standardizing filenames to `camelCase`.
+*   **Context**: The `utils/` directory was flat and contained inconsistently named files (e.g., `HttpError.ts` and `OptimizationManager.ts` mixing with `isBot.ts`). Many small, tightly coupled files existed.
+*   **Findings**: Utilities could be logically grouped into domains: `api`, `analytics`, `validation`, `browser`, `icons`, `system`, and `optimization`.
+
+### Reason & Plan
+*   **Plan**:
+    1.  Create domain-specific subdirectories in `src/utils/`.
+    2.  Merge closely related small files into cohesive modules (e.g., all fetch-related utils into `api/network.ts`).
+    3.  Standardize all filenames to `camelCase`.
+    4.  Update all import statements project-wide.
+    5.  Fix internal relative imports and test mocks that broke during the move.
+    6.  Ensure full verification with lint, typecheck, and unit tests.
+    7.  Deploy to `dev` branch.
+
+### Act & Implement
+*   **Action**:
+    1.  Reorganized `src/utils/` into subdirectories: `api/`, `analytics/`, `validation/`, `browser/`, `icons/`, `system/`, `optimization/`.
+    2.  Consolidated 15+ files into 7 domain modules.
+    3.  Renamed `OptimizationManager.ts` to `optimizationManager.ts` and moved it.
+    4.  Refactored imports in 42+ files using the `generalist` sub-agent and manual surgical updates.
+    5.  Fixed internal relative imports in moved files (e.g., `apiPreload.ts` importing from `hooks`).
+    6.  Updated all `vi.mock` paths in test files to match the new structure.
+    7.  Resolved ESLint JSDoc warnings and fixed `any` type errors in tests.
+    8.  Successfully verified the entire codebase with `npm run lint`, `npm run typecheck`, and `npm run test` (787/787 passed).
+    9.  Fixed broken import in `.storybook/SplashHider.tsx` and updated legacy JSDoc links in `useBuildFileManager.ts`, `useAnalytics.ts`, and `useSeoAndTitle.ts`.
+    10. Verified Storybook interaction tests with `npm run test:storybook` (35 tests passed).
+    11. Committed all changes to the `dev` branch.
+
+### Refine & Reflect
+*   **Reflection**:
+    1.  **Batch Refactoring Complexity**: Large-scale directory reorganization is highly disruptive. Using a `generalist` agent for the bulk work is efficient, but manual verification of internal relative imports, Vitest mocks, and Storybook/JSDoc references is essential as automated tools often miss these.
+    2.  **Vitest Mock Paths**: `vi.mock` uses string paths that must exactly match the resolved module path. When moving files, these strings must be updated project-wide, or tests will fail with confusing errors like `TypeError: vi.mocked(...).mockImplementation is not a function`.
+    3.  **JSDoc Maintenance**: Consolidation is a good opportunity to enforce documentation standards. Missing examples and improper tags can be fixed in one pass to improve long-term maintainability and LLM comprehension. Path-based links in JSDoc must be explicitly audited.
+    4.  **Verification Rigor**: A full suite of `lint`, `typecheck`, `test`, and `test:storybook` is the only way to guarantee a successful refactor. The "0 errors" state is non-negotiable for architectural changes of this scale.
