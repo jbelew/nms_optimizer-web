@@ -26,7 +26,14 @@ import { TechTreeContent } from "./TechTreeContent";
 
 /**
  * A skeleton component that displays a loading state for the tech tree.
- * @example
+ *
+ * @returns {JSX.Element} The rendered loading state.
+ *
+ * @example Loading state
+ * ```tsx
+ * <SuspenseSkeleton />
+ * // renders randomized loading placeholders
+ * ```
  */
 const SuspenseSkeleton = () => {
 	const [skeletons] = useState(() => {
@@ -113,7 +120,16 @@ interface TechTreeProps {
 
 /**
  * A data-aware component that renders the technology list and recommended builds.
- * @example
+ *
+ * @param {TechTreeProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered technology tree.
+ *
+ * @example Internal data-aware list
+ * ```tsx
+ * <TechTreeWithData handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={500} />
+ * // renders scrollable list of technologies
+ * ```
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,

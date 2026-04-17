@@ -39,7 +39,11 @@ import { useMainAppLogic } from "./useMainAppLogic";
  *
  * @category Components
  *
- * @example
+ * @example Basic usage
+ * ```tsx
+ * <ShipTypesLoader />
+ * // returns null
+ * ```
  */
 const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();
@@ -59,7 +63,16 @@ interface SharedBuildCalloutProps {
 
 /**
  * A notification component that appears when the user is viewing a read-only shared layout.
- * @example
+ *
+ * @param {SharedBuildCalloutProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered callout.
+ *
+ * @example Shared build view
+ * ```tsx
+ * <SharedBuildCallout gridTableTotalWidth={500} />
+ * // renders informational callout
+ * ```
  */
 const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalWidth }) => {
 	return (
@@ -101,7 +114,21 @@ interface ShipSelectionHeadingProps {
 
 /**
  * A layout component that displays the current equipment platform and its selection control.
- * @example
+ *
+ * @param {ShipSelectionHeadingProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered heading section.
+ *
+ * @example Standard header
+ * ```tsx
+ * <ShipSelectionHeading
+ *   isSharedGrid={false}
+ *   solving={false}
+ *   selectedShipType="standard"
+ *   gridTableTotalWidth={500}
+ * />
+ * // renders platform selection UI
+ * ```
  */
 const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
 	isSharedGrid,
@@ -171,7 +198,16 @@ interface MainAppUtilitiesProps {
 
 /**
  * A container component for non-visual and global utility components.
- * @example
+ *
+ * @param {MainAppUtilitiesProps} props - Component properties.
+ *
+ * @returns {JSX.Element} Fragment containing utility components.
+ *
+ * @example Background utilities
+ * ```tsx
+ * <MainAppUtilities {...props} />
+ * // mounts background state managers
+ * ```
  */
 const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 	patternNoFitTech,
@@ -222,7 +258,7 @@ const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
  *
  * @remarks
  * This component orchestrates the core application flow, including:
- * - Rendering the {@link GridTable} and {@link TechTreeComponent}.
+ * - Rendering the {@link GridTable} and {@link TechTree}.
  * - Managing global headers and footers ({@link AppHeader}, {@link AppFooter}).
  * - Integrating the {@link MobileToolbar} for responsive controls.
  * - Handling various UI overlays like {@link MessageSpinner} and {@link SharedBuildCallout}.
@@ -236,7 +272,11 @@ const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
  *
  * @category Components
  *
- * @example
+ * @example Application root
+ * ```tsx
+ * <MainAppContent />
+ * // mounts primary application UI
+ * ```
  */
 export const MainAppContent = () => {
 	const { t } = useTranslation();

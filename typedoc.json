@@ -1,0 +1,20 @@
+{
+  "entryPoints": ["src/"],
+  "entryPointStrategy": "expand",
+  "out": "docs/api",
+  "theme": "default",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "externalSymbolLinkMappings": {
+    "react-router": {
+      "useLocation": "https://reactrouter.com/en/main/hooks/use-location",
+      "useRouteError": "https://reactrouter.com/en/main/hooks/use-route-error"
+    },
+    "react-i18next": {
+      "useTranslation": "https://react.i18next.com/latest/usetranslation-hook"
+    }
+  }
+}

@@ -182,7 +182,15 @@ export interface ModuleGroupProps extends Pick<
  *
  * @returns {JSX.Element} The rendered dialog header.
  *
- * @example
+ * @example Title with icon
+ * ```tsx
+ * <DialogHeader
+ *   translatedTechName="Hyperdrive"
+ *   techImage="hyperdrive.webp"
+ *   techColor="purple"
+ * />
+ * // renders styled dialog header
+ * ```
  */
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
 	translatedTechName,
@@ -229,7 +237,16 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 
 /**
  * Parses and styles parenthetical text fragments within a string.
- * @example
+ *
+ * @param {string} text - The raw string to parse.
+ *
+ * @returns {React.ReactNode} Styled fragments containing Badges for parentheses.
+ *
+ * @example Parsing ranks
+ * ```ts
+ * formatParentheses("Pulse Engine (S)");
+ * // returns Node with "Pulse Engine" and a Badge for "S"
+ * ```
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -254,7 +271,16 @@ const formatParentheses = (text: string): React.ReactNode => {
 
 /**
  * Parses and styles bracketed text fragments within a technology label.
- * @example
+ *
+ * @param {string} label - The raw label string to parse.
+ *
+ * @returns {React.ReactNode} Styled fragments containing Codes for brackets.
+ *
+ * @example Parsing shortcodes
+ * ```ts
+ * formatLabel("Thruster [HOT]");
+ * // returns Node with "Thruster" and a Code block for "[HOT]"
+ * ```
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -275,7 +301,16 @@ const formatLabel = (label: string): React.ReactNode => {
 
 /**
  * A component that renders a single selectable module row.
- * @example
+ *
+ * @param {ModuleCheckboxProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered checkbox row.
+ *
+ * @example Standard module
+ * ```tsx
+ * <ModuleCheckbox module={module} techColor="blue" isDisabled={false} />
+ * // renders checkbox with icon and label
+ * ```
  */
 export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 	module,
@@ -308,7 +343,21 @@ export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 
 /**
  * A component that renders a titled group of selectable modules.
- * @example
+ *
+ * @param {ModuleGroupProps} props - Component properties.
+ *
+ * @returns {JSX.Element | null} The rendered group or null if empty.
+ *
+ * @example Upgrade group
+ * ```tsx
+ * <ModuleGroup
+ *   groupName="upgrade"
+ *   modules={modules}
+ *   currentCheckedModules={['ID']}
+ *   techColor="blue"
+ * />
+ * // renders group with title and children
+ * ```
  */
 export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	groupName,
@@ -408,7 +457,16 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 
 /**
  * The primary content component for the module selection dialog.
- * @example
+ *
+ * @param {DialogBodyProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered dialog body.
+ *
+ * @example Interactive list
+ * ```tsx
+ * <DialogBody {...bodyProps} />
+ * // renders select-all toggle and grouped module lists
+ * ```
  */
 export const DialogBody: React.FC<DialogBodyProps> = ({
 	groupedModules,
@@ -524,7 +582,16 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 
 /**
  * The action bar component for the module selection dialog.
- * @example
+ *
+ * @param {DialogFooterProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered footer.
+ *
+ * @example Actions bar
+ * ```tsx
+ * <DialogFooter handleOptimizeClick={async () => {}} currentCheckedModules={['ID']} />
+ * // renders Cancel and Optimize buttons
+ * ```
  */
 export const DialogFooter: React.FC<DialogFooterProps> = ({
 	handleOptimizeClick,

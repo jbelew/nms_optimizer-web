@@ -1,0 +1,128 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>nms_optimizer - v6.26.27</title><meta name="description" content="Documentation for nms_optimizer"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">nms_optimizer - v6.26.27</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>nms_optimizer - v6.26.27</h1></div><div class="tsd-panel tsd-typography"><h1 id="no-mans-sky-technology-layout-optimizer-web-ui" class="tsd-anchor-link">No Man's Sky Technology Layout Optimizer (Web UI)<a href="#no-mans-sky-technology-layout-optimizer-web-ui" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="cicd-status" class="tsd-anchor-link">CI/CD Status<a href="#cicd-status" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><a href="https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml"><img src="https://github.com/jbelew/nms_optimizer-web/actions/workflows/ci.yml/badge.svg" alt="CI Pipeline"></a>
+<img src="https://img.shields.io/badge/Deployment-Heroku-blue?logo=heroku" alt="Deployment">
+<a href="https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml"><img src="https://github.com/jbelew/nms_optimizer-web/actions/workflows/publish-images.yml/badge.svg" alt="Build &amp; Publish Application Docker Image"></a></p>
+<p><strong>A high-performance Web UI for a No Man's Sky technology layout optimization tool.</strong></p>
+<p>This tool optimizes technology layouts by calculating pattern-based scores. It prioritizes supercharged slots using game-tested configurations and ensures the best fit within the grid. When additional supercharged slots are in range of a pattern, the tool runs localized Simulated Annealing or ML-driven solves to explore non-standard layouts that offer additional benefits.</p>
+<p><a href="https://nms-optimizer.app/">Live Instance</a> | <a href="https://github.com/jbelew/nms_optimizer-service">Python Solver</a></p>
+<p><img src="https://github.com/jbelew/nms_optimizer-web/blob/main/public/assets/img/screenshots/screenshot.png?raw=true" alt="Screenshot"></p>
+<h2 id="🛠️-tech-stack" class="tsd-anchor-link">🛠️ Tech Stack<a href="#🛠️-tech-stack" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>Core</strong>: <a href="https://react.dev/">React 19</a> (with React Compiler enabled)</li>
+<li><strong>State</strong>: <a href="https://github.com/pmndrs/zustand">Zustand</a> + <a href="https://immerjs.github.io/immer/">Immer</a></li>
+<li><strong>Styling</strong>: <a href="https://tailwindcss.com/">Tailwind CSS v4</a> + <a href="https://www.radix-ui.com/themes">Radix UI Themes</a></li>
+<li><strong>Build Tool</strong>: <a href="https://vitejs.dev/">Vite 8</a> / <a href="https://rolldown.rs/">Rolldown</a> / <a href="https://lightningcss.dev/">LightningCSS</a></li>
+<li><strong>i18n</strong>: <a href="https://www.i18next.com/">i18next</a> with Multi-language SSG support</li>
+<li><strong>Monitoring</strong>: <a href="https://sentry.io/">Sentry</a> + Google Analytics 4</li>
+</ul>
+<h2 id="🚀-development-workflow" class="tsd-anchor-link">🚀 Development Workflow<a href="#🚀-development-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="prerequisites" class="tsd-anchor-link">Prerequisites<a href="#prerequisites" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li>Node.js (Latest LTS recommended)</li>
+<li><a href="https://github.com/jbelew/nms_optimizer-service">Python Solver Service</a> (running locally for API features)</li>
+</ul>
+<h3 id="installation" class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">clone</span><span class="hl-1"> </span><span class="hl-2">https://github.com/jbelew/nms_optimizer-web.git</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">nms_optimizer-web</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="environment-configuration" class="tsd-anchor-link">Environment Configuration<a href="#environment-configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Create a <code>.env.local</code> or update <code>.env.development</code>:</p>
+<ul>
+<li><code>VITE_API_URL</code>: Backend service endpoint (default: <code>http://127.0.0.1:5000/</code>)</li>
+<li><code>VITE_SENTRY_DSN</code>: Sentry project DSN for error tracking.</li>
+</ul>
+<h3 id="key-scripts" class="tsd-anchor-link">Key Scripts<a href="#key-scripts" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li><code>npm run dev</code>: Start dev server (bypasses SSG).</li>
+<li><code>npm run build</code>: Full production build with SSG generation.</li>
+<li><code>npm run serve:ssg</code>: Preview the production build with pre-rendered content.</li>
+<li><code>npm run typecheck</code>: Run strict TypeScript validation.</li>
+<li><code>npm run lint</code>: ESLint 10 + Prettier check.</li>
+<li><code>npm run storybook</code>: Start Storybook development environment.</li>
+<li><code>npm run build:images</code>: Optimize and process raw assets into production-ready images.</li>
+<li><code>npm run sitemap</code>: Generate a fresh <code>sitemap.xml</code> for SEO indexing.</li>
+<li><code>npm run verify:ssg</code>: Run automated verification on the generated SSG output.</li>
+</ul>
+<h2 id="🧪-testing-strategy" class="tsd-anchor-link">🧪 Testing Strategy<a href="#🧪-testing-strategy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>Unit/Component</strong>: <a href="https://vitest.dev/">Vitest</a> + React Testing Library.</li>
+<li><strong>Interaction/A11y</strong>: <a href="https://storybook.js.org/">Storybook 10</a> with automated interaction and accessibility tests (<code>npm run test:storybook</code>).</li>
+<li><strong>E2E</strong>: <a href="https://playwright.dev/">Playwright</a> for critical user path verification.</li>
+</ul>
+<p>Run all tests:</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">test</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="📏-engineering-standards" class="tsd-anchor-link">📏 Engineering Standards<a href="#📏-engineering-standards" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="commit-convention" class="tsd-anchor-link">Commit Convention<a href="#commit-convention" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>This project enforces <strong>Conventional Commits</strong> (Angular style). Every commit must follow the format: <code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code>.</p>
+<ul>
+<li><code>feat</code>: New features</li>
+<li><code>fix</code>: Bug fixes</li>
+<li><code>docs</code>: Documentation changes</li>
+<li><code>chore</code>: Maintenance tasks</li>
+</ul>
+<h3 id="agentic-jsdoc" class="tsd-anchor-link">Agentic JSDoc<a href="#agentic-jsdoc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>We follow the <a href="https://github.com/jbelew/agentic-jsdoc"><strong>Agentic JSDoc</strong></a> standard to ensure code is highly readable for both humans and AI agents. All public APIs and complex logic must be documented with semantic descriptions and proper type annotations.</p>
+<h3 id="ios-safari-rendering-policy" class="tsd-anchor-link">iOS Safari Rendering Policy<a href="#ios-safari-rendering-policy" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<div class="tsd-alert tsd-alert-caution"><div class="tsd-alert-title"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="assets/icons.svg#icon-alertCaution"></use></svg><span>Caution</span></div><p>
+Due to known rendering bugs in iOS Safari, <strong>never</strong> add GPU acceleration properties (<code>translateZ(0)</code>, <code>translate3d()</code>, <code>will-change</code>, etc.) unless a performance problem is verified on real physical devices. Simple, lean CSS is preferred.</p>
+</div>
+<h2 id="📈-performance-auditing" class="tsd-anchor-link">📈 Performance &amp; Auditing<a href="#📈-performance-auditing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Application performance is tracked via <a href="https://github.com/GoogleChrome/lighthouse-ci">Lighthouse CI</a> and visualized on our <a href="https://jbelew.github.io/nms_optimizer-web/"><strong>Tactical Performance Dashboard</strong></a>.</p>
+<p><strong>Strict Quality Gates:</strong></p>
+<ul>
+<li><strong>Performance</strong>: Must be &gt; <strong>90</strong></li>
+<li><strong>Accessibility / Best Practices / SEO</strong>: Must be &gt;= <strong>96</strong></li>
+</ul>
+<p>To run audits locally:</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span><span class="hl-1"> &amp;&amp; </span><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lighthouse:ci</span>
+</code><button type="button">Copy</button></pre>
+
+<div class="tsd-alert tsd-alert-note"><div class="tsd-alert-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="assets/icons.svg#icon-alertNote"></use></svg><span>Note</span></div><p>
+<strong>WSL2 Users</strong>: If running audits in WSL2, ensure Chrome is correctly configured as per the guidelines in <code>GEMINI.md</code> to avoid connection timeouts.</p>
+</div>
+<h2 id="🏗️-technical-architecture" class="tsd-anchor-link">🏗️ Technical Architecture<a href="#🏗️-technical-architecture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="hybrid-rendering-bot-no-js-support" class="tsd-anchor-link">Hybrid Rendering (Bot &amp; No-JS Support)<a href="#hybrid-rendering-bot-no-js-support" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>To achieve peak SEO and support for clients without JavaScript, this project uses a build-time Static Site Generation approach:</p>
+<ul>
+<li><strong>Build Time (SSG)</strong>: Markdown content (instructions, about, changelog) is pre-rendered into static HTML and wrapped in <code>&lt;noscript&gt;</code> blocks via <code>scripts/generate-ssg.mjs</code>.</li>
+<li><strong>Search Optimization</strong>: This ensures that search engine crawlers and browsers with JavaScript disabled can access the full content of the application's informational pages.</li>
+</ul>
+<h3 id="bundle-strategy-resilience" class="tsd-anchor-link">Bundle Strategy &amp; Resilience<a href="#bundle-strategy-resilience" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>The build system utilizes <strong>Vite 8</strong> / <strong>Rolldown</strong> with strict declarative code splitting:</p>
+<ul>
+<li><strong>Ad-blocker Resilience</strong>: Tracking libraries (Sentry, GA4) are grouped into a neutrally named <code>vendor-events</code> chunk to prevent strict content filters from breaking core application logic.</li>
+<li><strong>Selective Preloading</strong>: We filter <code>modulePreload</code> dependencies to ensure only critical-path assets (React, Zustand, UI themes) are eagerly loaded, deferring charts and markdown libraries to improve LCP.</li>
+</ul>
+<h3 id="progressive-web-app-pwa" class="tsd-anchor-link">Progressive Web App (PWA)<a href="#progressive-web-app-pwa" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Fully offline-capable using <code>vite-plugin-pwa</code>. It employs a <code>CacheFirst</code> strategy for images and fonts, and <code>NetworkFirst</code> for critical API data, ensuring a seamless experience even on limited connections.</p>
+<h3 id="component-architecture-colocated-hooks" class="tsd-anchor-link">Component Architecture (Colocated Hooks)<a href="#component-architecture-colocated-hooks" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>To maintain a shallow component tree and minimize prop-drilling, we utilize the <strong>Colocated Hook Pattern</strong>. State and derived data are managed by custom hooks (e.g., <code>useTechTreeRow</code>, <code>useGridRowState</code>) that components consume directly, rather than passing state through multiple layout layers.</p>
+<h2 id="🌐-localization-i18n" class="tsd-anchor-link">🌐 Localization &amp; i18n<a href="#🌐-localization-i18n" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>This project uses an automated translation pipeline to maintain its multi-language support (English, Spanish, French, German, and Portuguese).</p>
+<h3 id="auto-translation-workflow" class="tsd-anchor-link">Auto-Translation Workflow<a href="#auto-translation-workflow" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>We leverage Gemini AI to keep translations in sync without manual intervention:</p>
+<ol>
+<li><strong>Trigger</strong>: The <a href="media/auto-translate.yml"><strong>Auto-Translate</strong></a> workflow runs whenever JSON files in <code>public/assets/locales/en/</code> are updated on the <code>main</code> branch.</li>
+<li><strong>Process</strong>: A Python script (<code>scripts/translate.py</code>) identifies changed keys and uses the Google Gemini API to generate translations for all other supported languages.</li>
+<li><strong>Commit</strong>: The workflow automatically commits the updated locale files to the repository with a <code>chore(l10n)</code> prefix.</li>
+</ol>
+<p><em>Target files: <code>public/assets/locales/{lang}/*.json</code></em></p>
+<h2 id="🐳-docker" class="tsd-anchor-link">🐳 Docker<a href="#🐳-docker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>A production-ready Docker configuration is provided:</p>
+<pre><code class="yaml"><span class="hl-3">version</span><span class="hl-1">: </span><span class="hl-2">&quot;3.8&quot;</span><br/><span class="hl-3">services</span><span class="hl-1">:</span><br/><span class="hl-1">  </span><span class="hl-3">app</span><span class="hl-1">:</span><br/><span class="hl-1">    </span><span class="hl-3">image</span><span class="hl-1">: </span><span class="hl-4">ghcr.io/jbelew/nms-optimizer-app:${TAG:-latest}</span><br/><span class="hl-1">    </span><span class="hl-3">container_name</span><span class="hl-1">: </span><span class="hl-4">nms_optimizer_app</span><br/><span class="hl-1">    </span><span class="hl-3">ports</span><span class="hl-1">:</span><br/><span class="hl-1">      - </span><span class="hl-2">&quot;8016:80&quot;</span><br/><span class="hl-1">    </span><span class="hl-3">restart</span><span class="hl-1">: </span><span class="hl-4">unless-stopped</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="📂-project-layout" class="tsd-anchor-link">📂 Project Layout<a href="#📂-project-layout" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><code>src/</code>: React source code (components, hooks, stores, context).</li>
+<li><code>scripts/</code>: Build-time utilities (SSG, image processing, sitemaps).</li>
+<li><code>server/</code>: Node.js/Express application for handling SSG and runtime serving.</li>
+<li><code>public/</code>: Static assets, globally available icons, and localized markdown bundles.</li>
+<li><code>.github/workflows/</code>: CI/CD pipelines for testing, deployment, and auto-translation.</li>
+</ul>
+<h2 id="📄-license" class="tsd-anchor-link">📄 License<a href="#📄-license" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>This project is licensed under the <a href="media/LICENSE">GNU General Public License v3.0</a>.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#no-mans-sky-technology-layout-optimizer-web-ui"><span>No <wbr/>Man&#39;s <wbr/>Sky <wbr/>Technology <wbr/>Layout <wbr/>Optimizer (<wbr/>Web <wbr/>UI)</span></a><ul><li><a href="#cicd-status"><span>CI/<wbr/>CD <wbr/>Status</span></a></li><li><a href="#🛠️-tech-stack"><span>🛠️ <wbr/>Tech <wbr/>Stack</span></a></li><li><a href="#🚀-development-workflow"><span>🚀 <wbr/>Development <wbr/>Workflow</span></a></li><li><ul><li><a href="#prerequisites"><span>Prerequisites</span></a></li><li><a href="#installation"><span>Installation</span></a></li><li><a href="#environment-configuration"><span>Environment <wbr/>Configuration</span></a></li><li><a href="#key-scripts"><span>Key <wbr/>Scripts</span></a></li></ul></li><li><a href="#🧪-testing-strategy"><span>🧪 <wbr/>Testing <wbr/>Strategy</span></a></li><li><a href="#📏-engineering-standards"><span>📏 <wbr/>Engineering <wbr/>Standards</span></a></li><li><ul><li><a href="#commit-convention"><span>Commit <wbr/>Convention</span></a></li><li><a href="#agentic-jsdoc"><span>Agentic <wbr/>JS<wbr/>Doc</span></a></li><li><a href="#ios-safari-rendering-policy"><span>i<wbr/>OS <wbr/>Safari <wbr/>Rendering <wbr/>Policy</span></a></li></ul></li><li><a href="#📈-performance-auditing"><span>📈 <wbr/>Performance &amp; <wbr/>Auditing</span></a></li><li><a href="#🏗️-technical-architecture"><span>🏗️ <wbr/>Technical <wbr/>Architecture</span></a></li><li><ul><li><a href="#hybrid-rendering-bot-no-js-support"><span>Hybrid <wbr/>Rendering (<wbr/>Bot &amp; <wbr/>No-<wbr/>JS <wbr/>Support)</span></a></li><li><a href="#bundle-strategy-resilience"><span>Bundle <wbr/>Strategy &amp; <wbr/>Resilience</span></a></li><li><a href="#progressive-web-app-pwa"><span>Progressive <wbr/>Web <wbr/>App (<wbr/>PWA)</span></a></li><li><a href="#component-architecture-colocated-hooks"><span>Component <wbr/>Architecture (<wbr/>Colocated <wbr/>Hooks)</span></a></li></ul></li><li><a href="#🌐-localization-i18n"><span>🌐 <wbr/>Localization &amp; i18n</span></a></li><li><ul><li><a href="#auto-translation-workflow"><span>Auto-<wbr/>Translation <wbr/>Workflow</span></a></li></ul></li><li><a href="#🐳-docker"><span>🐳 <wbr/>Docker</span></a></li><li><a href="#📂-project-layout"><span>📂 <wbr/>Project <wbr/>Layout</span></a></li><li><a href="#📄-license"><span>📄 <wbr/>License</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">nms_optimizer - v6.26.27</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

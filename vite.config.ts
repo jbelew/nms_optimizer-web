@@ -407,7 +407,8 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						(dep: string) =>
 							!dep.includes("vendor-charts") &&
 							!dep.includes("vendor-markdown") &&
-							!dep.includes("vendor-markdown-lib")
+							!dep.includes("vendor-markdown-lib") &&
+							!dep.includes("vendor-html-to-image")
 					);
 				},
 			},
@@ -442,6 +443,12 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						// request overhead, while allowing larger shared pieces to remain split.
 						minSize: 12000,
 						groups: [
+							{
+								// Dedicated chunk for html-to-image to keep it out of the entry path.
+								name: "vendor-html-to-image",
+								test: /[\\/]node_modules[\\/]html-to-image[\\/]/,
+								priority: 105,
+							},
 							{
 								// Dedicated chunk for virtual markdown bundle to keep it out of the entry path.
 								name: "vendor-markdown",
