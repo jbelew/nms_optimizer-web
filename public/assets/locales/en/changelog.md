@@ -4,6 +4,14 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.28 – Performance Polish & Build Sharing (2026-04-17)
+
+This update delivers massive under-the-hood speed improvements, layout-sharing enhancements, and a handful of stability fixes.
+
+- **Lightning Fast Loading:** Completely overhauled how the app is delivered to your browser, heavily optimizing edge-caching to result in near-instant load times.
+- **Shared Grids:** Restored the ability to view technology tooltips seamlessly when inspecting a grid shared by another player.
+- **Link Stability:** Polished our URL sharing logic so that returning to your bookmarked builds feels smoother and safer.
+
 ## Version 6.24 – AI-Powered Localization (2026-04-11)
 
 This update introduces a major overhaul of our translation system along with terminology improvements for better global consistency.
