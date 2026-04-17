@@ -1,3 +1,11 @@
+# [6.30.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.2...v6.30.0) (2026-04-17)
+
+
+### Features
+
+* **ui:** implement isolated recovery UI for initialization failures ([bc8dbb0](https://github.com/jbelew/nms_optimizer-web/commit/bc8dbb059df0ca9948d4f8c3125dde6855b4deab))
+* **ui:** implement isolated recovery UI for initialization failures with ad-blocker resilience ([dabdeb9](https://github.com/jbelew/nms_optimizer-web/commit/dabdeb9fd61885d7183585b3f0f43a6f67de971b))
+
 ## [6.29.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.1...v6.29.2) (2026-04-17)
 
 
