@@ -18,30 +18,60 @@
 	<meta charset="UTF-8" />
 	<script>
 		(function () {
+			var MAX_INIT_RETRIES = 2;
+			var initRecoveryStarted = false;
+
+			/**
+			 * Returns true if the URL is a same-origin app bundle asset (Vite output).
+			 * Only these are critical enough to warrant a reload on failure.
+			 */
+			function isAppAssetUrl(url) {
+				if (!url) return false;
+				try {
+					var u = new URL(url, window.location.href);
+					return u.origin === window.location.origin && u.pathname.startsWith('/assets/');
+				} catch (e) {
+					return false;
+				}
+			}
+
+			/**
+			 * Reads the retry count from the URL search param (source of truth).
+			 * Returns 0 for missing or malformed values.
+			 */
+			function getRetryCount() {
+				var raw = new URL(window.location.href).searchParams.get('init_retry');
+				var n = Number(raw);
+				return Number.isInteger(n) && n >= 0 ? n : 0;
+			}
+
 			/**
 			 * Critical error handler for initial script/chunk loading failures.
-			 * Triggered when a required module (e.g. i18n, router) 404s after a deployment.
+			 * Triggered when a required app bundle asset 404s after a deployment.
 			 */
-			function handleInitError(err) {
-				// Don't log trivial errors that often happen during background prefetching
-				if (err && err.target && err.target.tagName === 'LINK' && err.target.rel === 'preload' && !err.target.href.includes('.js')) {
-					return;
-				}
+			function handleInitError(info) {
+				if (initRecoveryStarted) return;
+				initRecoveryStarted = true;
 
-				console.error("Critical initialization failure:", err);
+				console.error("Critical initialization failure:", info);
 
-				// Reload-loop protection: Allow up to 2 automatic reloads before stopping.
-				const reloadCount = parseInt(sessionStorage.getItem("init_reload_count") || "0");
-				if (reloadCount < 2) {
-					sessionStorage.setItem("init_reload_count", (reloadCount + 1).toString());
-					window.location.reload();
+				var retryCount = getRetryCount();
+
+				if (retryCount < MAX_INIT_RETRIES) {
+					var nextCount = retryCount + 1;
+					try {
+						sessionStorage.setItem("init_reload_count", nextCount.toString());
+					} catch (e) {}
+
+					var url = new URL(window.location.href);
+					url.searchParams.set("init_retry", String(nextCount));
+					window.location.replace(url.toString());
 				} else {
-					// PIXEL-PERFECT 404.HTML CLONE: Inject stylesheet and re-render body
+					// Render fallback error UI
 					if (document.body) {
-						// Total Style Isolation: Kill any app styles that might be loading/leaking
-						document.querySelectorAll('link[rel="stylesheet"], style').forEach(el => el.remove());
+						document.querySelectorAll('link[rel="stylesheet"], style').forEach(function (el) { el.remove(); });
 
-						const style = document.createElement('style');
+						var style = document.createElement('style');
 						style.textContent = `
 							body {
 								background-color: #000 !important;
@@ -98,39 +128,46 @@
 							'</div>' +
 							'<h1 style="color: rgb(255 197 61); font-weight: bold; font-size: 1.5rem; margin-top: 0.5rem; margin-bottom: 0; letter-spacing: 0.1em;">-kzzkt- Application Load Error -kzzkt-</h1>' +
 							'<p>We are having trouble loading the required application files. This usually happens when the app has been updated.</p>' +
-							'<button onclick="sessionStorage.removeItem(\'init_reload_count\');window.location.reload();" class="error-refresh-btn">Refresh Now</button>' +
+							'<button onclick="var u=new URL(location);u.searchParams.delete(\'init_retry\');try{sessionStorage.removeItem(\'init_reload_count\');}catch(e){}location.replace(u);" class="error-refresh-btn">Refresh Now</button>' +
 							'</div>';
 					} else {
-						// Last resort: If body isn't ready, retry
-						setTimeout(() => handleInitError(err), 100);
+						initRecoveryStarted = false;
+						setTimeout(function () { handleInitError(info); }, 100);
 					}
 				}
 			}
 
 			// Listen for Vite chunk load errors (dynamic imports)
-			window.addEventListener("vite:preloadError", handleInitError);
+			window.addEventListener("vite:preloadError", function (event) {
+				event.preventDefault();
+				handleInitError({ type: 'vite:preloadError', cause: event.payload });
+			});
 
 			// Listen for static script/link load failures (initial bundle)
 			window.addEventListener("error", function (e) {
-				const target = e.target;
-				const isResourceError = target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK');
-				const isSafariFlake = (e.message || "").includes("Importing a module script failed");
+				var target = e.target;
 
-				if (isResourceError || isSafariFlake) {
-					// IGNORE errors from tracking/analytics that are commonly blocked by ad-blockers
-					const url = target ? (target.src || target.href || "") : "";
-					if (url && (
-						url.includes('google-analytics.com') ||
-						url.includes('googletagmanager.com') ||
-						url.includes('sentry.io') ||
-						url.includes('cloudflareinsights.com') ||
-						url.includes('beacon.min.js')
-					)) {
-						return;
-					}
-					handleInitError(e);
+				if (target instanceof HTMLScriptElement) {
+					if (!isAppAssetUrl(target.src)) return;
+					handleInitError({ type: 'script-load', cause: e, target: target });
+					return;
+				}
+
+				if (target instanceof HTMLLinkElement) {
+					// Ignore non-critical preloads (translations, API prefetches)
+					if (target.rel === 'preload' && target.as === 'fetch') return;
+					// Only treat modulepreload and stylesheet failures as critical
+					if (target.rel !== 'modulepreload' && target.rel !== 'stylesheet') return;
+					if (!isAppAssetUrl(target.href)) return;
+					handleInitError({ type: 'link-load', cause: e, target: target });
+					return;
+				}
+
+				if ((e.message || "").includes("Importing a module script failed")) {
+					handleInitError({ type: 'safari-module-load', cause: e });
 				}
 			}, true); // Use capture phase to catch resource errors
+
 
 			// Preload translations based on language in path (matches i18next logic)
 			const supportedLngs = ["en", "es", "fr", "de", "pt"];

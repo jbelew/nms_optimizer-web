@@ -40,8 +40,14 @@ if (typeof window !== "undefined") {
 	window.addEventListener(
 		"app-ready",
 		() => {
-			// Reset reload count on successful boot
+			// Reset reload state on successful boot
 			sessionStorage.removeItem("init_reload_count");
+			const url = new URL(window.location.href);
+
+			if (url.searchParams.has("init_retry")) {
+				url.searchParams.delete("init_retry");
+				history.replaceState(null, "", url.toString());
+			}
 
 			const initDeferredServices = async () => {
 				try {
