@@ -4,7 +4,7 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Blockquote } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
+import { useDialog } from "../../utils/system/dialogUtils";
 import { MODULE_RANK_ORDER } from "./constants";
 import { ModuleCheckbox } from "./ModuleCheckbox";
 

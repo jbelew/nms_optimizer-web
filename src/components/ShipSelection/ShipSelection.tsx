@@ -25,8 +25,8 @@ import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useToast } from "../../hooks/useToast/useToast";
-import { createGrid, useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { createGrid, useGridStore } from "../../store/grid/gridStore";
 import { Logger } from "../../utils/system/monitoring";
 
 // --- Constants for Grid Configuration ---

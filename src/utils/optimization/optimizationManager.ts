@@ -1,9 +1,9 @@
-import type { ApiResponse, Cell, Grid } from "../../store/GridStore";
+import type { ApiResponse, Cell, Grid } from "../../store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 
-import { createEmptyCell, useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { createEmptyCell, useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
 import { createSocket, TRANSPORT_ERROR_MESSAGES } from "../api/socketManager";
 import { Logger } from "../system/monitoring";
 

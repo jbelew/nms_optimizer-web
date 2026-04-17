@@ -1,11 +1,11 @@
 import { use, useEffect } from "react";
 
 import { API_URL } from "../../constants";
-import { useGridStore } from "../../store/GridStore";
-import { useTechStore } from "../../store/TechStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
+import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import { apiCall } from "../../utils/api/network";
-import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 
 /**

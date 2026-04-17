@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "@/store/GridStore";
+import { useGridStore } from "@/store/grid/gridStore";
 
 import { useGridRowState } from "./useGridRowState";
 
-vi.mock("@/store/GridStore");
+vi.mock("@/store/grid/gridStore");
 
 describe("useGridRowState", () => {
 	beforeEach(() => {

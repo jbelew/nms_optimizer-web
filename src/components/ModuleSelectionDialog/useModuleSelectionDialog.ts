@@ -4,7 +4,7 @@ import type { DialogHeaderProps } from "./DialogHeader";
 import type { ModuleSelectionDialogProps } from "./ModuleSelectionDialog";
 import { useEffect, useRef } from "react";
 
-import { usePlatformStore } from "@/store/PlatformStore";
+import { usePlatformStore } from "@/store/app/platformStore";
 
 /**
  * Coordinator hook for the `ModuleSelectionDialog` component.

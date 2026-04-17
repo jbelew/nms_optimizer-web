@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
-import { useGridStore } from "@/store/GridStore";
-import { useTechStore } from "@/store/TechStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechModuleManagement } from "./useTechModuleManagement";

@@ -25,11 +25,11 @@ vi.mock("@/hooks/useTechTreeColors/useTechTreeColors", () => ({
 }));
 
 // Mock resources to avoid real calls
-vi.mock("@/hooks/useUserStats/userStatsResource", () => ({
+vi.mock("@/utils/api/userStatsResource", () => ({
 	fetchUserStats: vi.fn(),
 }));
 
-vi.mock("@/hooks/useTechTreeColors/techTreeColorsResource", () => ({
+vi.mock("@/utils/api/techTreeColorsResource", () => ({
 	fetchTechTreeColors: vi.fn(),
 }));
 

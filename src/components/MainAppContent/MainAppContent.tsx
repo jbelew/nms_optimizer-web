@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";

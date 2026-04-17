@@ -47,7 +47,7 @@ vi.mock("../MessageSpinner/MessageSpinner", () => ({
 }));
 
 // Mock stores
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
 			grid: {
@@ -66,7 +66,7 @@ vi.mock("../../store/GridStore", () => ({
 	}),
 }));
 
-vi.mock("../../store/TechTreeLoadingStore", () => ({
+vi.mock("../../store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: vi.fn((selector) => {
 		const mockState = {
 			isLoading: false,
@@ -82,7 +82,7 @@ vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
 }));
 
 // Mock context
-vi.mock("../../context/dialog-utils", () => ({
+vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		tutorialFinished: false,
 	}),

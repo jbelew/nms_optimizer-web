@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/Base/AppDialog";
-import { useDialog } from "./context/dialog-utils";
 import { DialogProvider } from "./context/DialogContext";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
@@ -12,8 +11,9 @@ import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlNormalization } from "./hooks/useUrlNormalization/useUrlNormalization";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
-import { useOptimizeStore } from "./store/OptimizeStore";
+import { useOptimizeStore } from "./store/app/optimizeStore";
 import { isBot } from "./utils/browser/environment";
+import { useDialog } from "./utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 // Lazy-loaded components for performance optimization

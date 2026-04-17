@@ -13,7 +13,6 @@ import {
 import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
@@ -22,7 +21,8 @@ import { useScreenshot } from "../../hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
-import { useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useDialog } from "../../utils/system/dialogUtils";
 import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 

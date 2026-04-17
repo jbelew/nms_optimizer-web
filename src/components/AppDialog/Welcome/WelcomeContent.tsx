@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useDialog } from "../../../context/dialog-utils";
+import { useDialog } from "../../../utils/system/dialogUtils";
 import DynamicRadixIcon from "../Common/DynamicRadixIcon";
 
 import "./WelcomeContent.scss";

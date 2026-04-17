@@ -29,7 +29,7 @@ vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 const mockActivateRow = vi.fn();
 const mockDeActivateRow = vi.fn();
 
-vi.mock("@/store/GridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
 			activateRow: mockActivateRow,

@@ -1,15 +1,15 @@
-import type { GridStore } from "../../store/GridStore";
-import type { OptimizeState } from "../../store/OptimizeStore";
-import type { PlatformState } from "../../store/PlatformStore";
-import type { TechState } from "../../store/TechStore";
+import type { OptimizeState } from "../../store/app/optimizeStore";
+import type { PlatformState } from "../../store/app/platformStore";
+import type { GridStore } from "../../store/grid/gridStore";
+import type { TechState } from "../../store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
-import { useOptimizeStore } from "../../store/OptimizeStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
+import { useOptimizeStore } from "../../store/app/optimizeStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
 import { createSocket } from "../../utils/api/socketManager";
 import { Logger } from "../../utils/system/monitoring";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
@@ -18,8 +18,8 @@ import { useOptimize } from "./useOptimize";
 
 // Mock external dependencies
 vi.mock("../useAnalytics/useAnalytics");
-vi.mock("../../store/GridStore", async (importOriginal) => {
-	const mod = await importOriginal<typeof import("../../store/GridStore")>();
+vi.mock("../../store/grid/gridStore", async (importOriginal) => {
+	const mod = await importOriginal<typeof import("../../store/grid/gridStore")>();
 
 	return {
 		...mod,
@@ -28,13 +28,13 @@ vi.mock("../../store/GridStore", async (importOriginal) => {
 		},
 	};
 });
-vi.mock("../../store/OptimizeStore");
-vi.mock("../../store/TechStore", () => ({
+vi.mock("../../store/app/optimizeStore");
+vi.mock("../../store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(),
 	},
 }));
-vi.mock("../../store/PlatformStore", () => ({
+vi.mock("../../store/app/platformStore", () => ({
 	usePlatformStore: Object.assign(vi.fn(), {
 		getState: vi.fn(),
 	}),

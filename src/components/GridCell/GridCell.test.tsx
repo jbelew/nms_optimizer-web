@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { useCell } from "@/hooks/useCell/useCell";
 
-import { TechState, useTechStore } from "../../store/TechStore";
+import { TechState, useTechStore } from "../../store/tech/techStore";
 // Import the component after mocks are defined
 import GridCell from "./GridCell";
 
@@ -26,7 +26,7 @@ vi.mock("../../hooks/useCell/useCell", () => ({
 }));
 
 // Mock the GridStore and its actions
-vi.mock("../../store/GridStore", () => {
+vi.mock("../../store/grid/gridStore", () => {
 	const mockState = {
 		handleCellTap: vi.fn(),
 		handleCellDoubleTap: vi.fn(),
@@ -45,13 +45,13 @@ vi.mock("../../store/GridStore", () => {
 	return { useGridStore };
 });
 
-vi.mock("../../store/ShakeStore", () => ({
+vi.mock("../../store/app/shakeStore", () => ({
 	useShakeStore: vi.fn(() => ({
 		setShaking: vi.fn(),
 	})),
 }));
 
-vi.mock("../../store/TechStore", () => ({
+vi.mock("../../store/tech/techStore", () => ({
 	useTechStore: vi.fn(),
 }));
 

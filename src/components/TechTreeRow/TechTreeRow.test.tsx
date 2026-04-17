@@ -1,16 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { GridStore, useGridStore } from "@/store/GridStore";
-import { ShakeState, useShakeStore } from "@/store/ShakeStore";
-import { TechState, useTechStore } from "@/store/TechStore";
+import { ShakeState, useShakeStore } from "@/store/app/shakeStore";
+import { GridStore, useGridStore } from "@/store/grid/gridStore";
+import { TechState, useTechStore } from "@/store/tech/techStore";
 
 import { TechTreeRow, TechTreeRowProps } from "./TechTreeRow";
 
 // Mock the stores and hooks
-vi.mock("@/store/GridStore", () => ({ useGridStore: vi.fn() }));
-vi.mock("@/store/TechStore", () => ({ useTechStore: vi.fn() }));
-vi.mock("@/store/ShakeStore", () => ({ useShakeStore: vi.fn() }));
+vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
+vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
+vi.mock("@/store/app/shakeStore", () => ({ useShakeStore: vi.fn() }));
 
 vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,

@@ -14,9 +14,9 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Callout } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
-import { useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/grid/gridStore";
 import { isTouchDevice } from "../../utils/browser/environment";
+import { useDialog } from "../../utils/system/dialogUtils";
 
 /**
  * A contextual help component that displays interaction instructions for touch-enabled devices.

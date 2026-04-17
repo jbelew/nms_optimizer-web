@@ -1,8 +1,8 @@
 import { useTransition } from "react";
 
-import { useGridStore } from "@/store/GridStore";
-import { useShakeStore } from "@/store/ShakeStore";
-import { useTechStore } from "@/store/TechStore";
+import { useShakeStore } from "@/store/app/shakeStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 /**
  * Manages the optimization and reset lifecycle of a technology.

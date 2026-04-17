@@ -3,10 +3,10 @@ import { FC, lazy, Suspense } from "react";
 import { Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { fetchTechTreeColors } from "@/hooks/useTechTreeColors/techTreeColorsResource";
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
-import { fetchUserStats } from "@/hooks/useUserStats/userStatsResource";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
+import { fetchTechTreeColors } from "@/utils/api/techTreeColorsResource";
+import { fetchUserStats } from "@/utils/api/userStatsResource";
 
 /**
  * Props passed to the Recharts label renderer for the Pie chart.

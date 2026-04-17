@@ -24,11 +24,11 @@ import {
 } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useRecommendedBuild } from "../../hooks/useRecommendedBuild/useRecommendedBuild";
 import { type TechTree } from "../../hooks/useTechTree/useTechTree";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useDialog } from "../../utils/system/dialogUtils";
 
 /**
  * Props for the `RecommendedBuild` component.

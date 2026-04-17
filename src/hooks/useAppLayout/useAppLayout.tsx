@@ -1,7 +1,7 @@
 // src/hooks/useAppLayout.tsx
 import { useEffect, useRef, useState } from "react";
 
-import { useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/grid/gridStore";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 
 /**
@@ -35,7 +35,7 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
  *
  * @see {@link useGridStore} for shared grid state.
  * @see {@link useBreakpoint} for responsive logic.
- * @see [GridStore Source](../../store/GridStore.ts)
+ * @see [GridStore Source](../../store/grid/gridStore.ts)
  *
  * @category Hooks
  *

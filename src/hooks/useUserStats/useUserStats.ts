@@ -1,7 +1,7 @@
 // src/hooks/useUserStats/useUserStats.ts
 import { use } from "react";
 
-import { fetchUserStats } from "./userStatsResource";
+import { fetchUserStats } from "../../utils/api/userStatsResource";
 
 /**
  * Represents a single aggregate record of user optimization activity.

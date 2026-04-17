@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fetchShipTypes } from "../../hooks/useShipTypes/useShipTypes";
 import { fetchTechTreeAsync } from "../../hooks/useTechTree/useTechTree";
-import { resolveInitialPlatform } from "../platformResolver";
+import { resolveInitialPlatform } from "../browser/platformResolver";
 import { preloadInitialState } from "./apiPreload";
 
 vi.mock("../../hooks/useShipTypes/useShipTypes", () => ({
@@ -13,7 +13,7 @@ vi.mock("../../hooks/useTechTree/useTechTree", () => ({
 	fetchTechTreeAsync: vi.fn(),
 }));
 
-vi.mock("../platformResolver", () => ({
+vi.mock("../browser/platformResolver", () => ({
 	resolveInitialPlatform: vi.fn(),
 }));
 

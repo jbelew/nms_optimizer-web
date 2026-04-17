@@ -1,12 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
-import { useTechStore } from "@/store/TechStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 import { useTechModuleManagement } from "./useTechModuleManagement";
 
 // Mock the tech store
-vi.mock("@/store/TechStore");
+vi.mock("@/store/tech/techStore");
 
 const mockModules = [
 	{ id: "core1", label: "Core 1", image: "", type: "core" },

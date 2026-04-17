@@ -1,10 +1,10 @@
-import type { ApiResponse } from "../../store/GridStore";
+import type { ApiResponse } from "../../store/grid/gridStore";
 import { useEffect, useRef, useState } from "react";
 
-import { useGridStore } from "../../store/GridStore";
-import { useOptimizeStore } from "../../store/OptimizeStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
+import { useOptimizeStore } from "../../store/app/optimizeStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
 import { OptimizationManager } from "../../utils/optimization/optimizationManager";
 import { Logger } from "../../utils/system/monitoring";
 import { useAnalytics } from "../useAnalytics/useAnalytics";

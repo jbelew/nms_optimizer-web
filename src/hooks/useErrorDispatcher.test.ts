@@ -3,16 +3,16 @@ import { i18n, ResourceKey, TFunction } from "i18next";
 import { useTranslation, UseTranslationResponse } from "react-i18next";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { ErrorState, useErrorStore } from "@/store/ErrorStore";
-import { SessionState, useSessionStore } from "@/store/SessionStore";
+import { ErrorState, useErrorStore } from "@/store/app/errorStore";
+import { SessionState, useSessionStore } from "@/store/app/sessionStore";
 
 import { useErrorDispatcher } from "./useErrorDispatcher";
 
-vi.mock("@/store/ErrorStore", () => ({
+vi.mock("@/store/app/errorStore", () => ({
 	useErrorStore: vi.fn(),
 }));
 
-vi.mock("@/store/SessionStore", () => ({
+vi.mock("@/store/app/sessionStore", () => ({
 	useSessionStore: vi.fn(),
 }));
 

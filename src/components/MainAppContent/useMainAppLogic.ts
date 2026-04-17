@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
 import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useErrorDispatcher } from "../../hooks/useErrorDispatcher";
@@ -13,9 +12,10 @@ import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useS
 import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
 import { useToast } from "../../hooks/useToast/useToast";
 import { build, getBuildDate } from "../../routeConfig";
-import { useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useSessionStore } from "../../store/SessionStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useSessionStore } from "../../store/app/sessionStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useDialog } from "../../utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 
 /**

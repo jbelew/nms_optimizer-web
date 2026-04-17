@@ -2,9 +2,9 @@ import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
-import { useTechStore } from "../../store/TechStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
+import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import * as apiCallModule from "../../utils/api/network";
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
 
@@ -14,15 +14,15 @@ vi.mock("../../utils/api/network", () => ({
 }));
 
 // Mock the stores
-vi.mock("../../store/TechStore", () => ({
+vi.mock("../../store/tech/techStore", () => ({
 	useTechStore: vi.fn(),
 }));
 
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: vi.fn(),
 }));
 
-vi.mock("../../store/TechTreeLoadingStore", () => ({
+vi.mock("../../store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: vi.fn(),
 }));
 

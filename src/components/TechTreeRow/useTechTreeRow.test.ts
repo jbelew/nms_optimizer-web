@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "@/store/GridStore";
-import { useTechStore } from "@/store/TechStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 import { TechTreeRowProps } from "./TechTreeRow";
 import { useTechTreeRow } from "./useTechTreeRow";
@@ -28,8 +28,8 @@ vi.mock("./useTechOptimization", () => ({
 	})),
 }));
 
-vi.mock("@/store/GridStore");
-vi.mock("@/store/TechStore");
+vi.mock("@/store/grid/gridStore");
+vi.mock("@/store/tech/techStore");
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

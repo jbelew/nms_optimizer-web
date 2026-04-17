@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import i18n from "../../test/i18n";
 import { BonusStatusIcon } from "./BonusStatusIcon";
 
-vi.mock("../../store/TechBonusStore", () => ({
+vi.mock("../../store/tech/techBonusStore", () => ({
 	useTechBonusStore: vi.fn(() => ({
 		setBonusStatus: vi.fn(),
 		getBonusStatus: vi.fn(() => null),

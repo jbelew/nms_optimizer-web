@@ -15,7 +15,7 @@ import type { FC } from "react";
 import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
+import { useDialog } from "../../utils/system/dialogUtils";
 import AppDialog from "../AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/Common/LoremIpsumSkeleton";
 

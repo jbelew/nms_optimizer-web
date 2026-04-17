@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
 
-import { useDialog } from "@/context/dialog-utils";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
 

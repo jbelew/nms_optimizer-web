@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useRouteContext } from "../../context/RouteContext";
-import { createGrid, useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { createGrid, useGridStore } from "../../store/grid/gridStore";
 import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 

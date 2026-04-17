@@ -4,7 +4,6 @@ import { splashScreen } from 'vite-plugin-splash-screen';
 
 const config: StorybookConfig = {
   "stories": [
-    "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   staticDirs: ["../public"],

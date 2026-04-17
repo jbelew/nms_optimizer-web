@@ -1,10 +1,5 @@
 import { vi } from "vitest";
 
-import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";
-import { setProjectAnnotations } from "@storybook/react-vite";
-
-import * as projectAnnotations from "./preview";
-
 // Mock the API calling utility at the module level to resolve race conditions
 vi.mock("@/utils/apiCall", () => ({
 	apiCall: vi.fn().mockImplementation(async (url: string) => {
@@ -37,6 +32,11 @@ vi.mock("@/utils/apiCall", () => ({
 
 		return {};
 	}),
+}));
+
+// Mock the splash screen runtime to prevent "Splash screen not found" errors in tests
+vi.mock("vite-plugin-splash-screen/runtime", () => ({
+	hideSplashScreen: vi.fn(),
 }));
 
 declare global {
@@ -116,5 +116,3 @@ if (typeof window !== "undefined") {
 		return originalFetch(input, init);
 	};
 }
-
-setProjectAnnotations([a11yAddonAnnotations, projectAnnotations]);

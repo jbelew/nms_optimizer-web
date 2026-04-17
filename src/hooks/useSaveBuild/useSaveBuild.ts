@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
 import { useToast } from "../useToast/useToast";
