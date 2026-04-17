@@ -1,26 +1,26 @@
-# NMS-Optimierer: Technologie-Layouts & Adjazenz-Rechner Für No Man's Sky
+# NMS Optimizer: Technologie-Layout- & Adjazenzbonus-Rechner für No Man's Sky
 
-![Screenshot der NMS-Optimierer-App, die ein Raumschiff-Technologieraster mit optimierter Modulplatzierung zeigt](/assets/img/screenshots/screenshot.png)
+![Screenshot der NMS Optimizer-Anwendung, der ein Raumschiff-Technologiegitter mit optimierter Modulplatzierung zeigt](/assets/img/screenshots/screenshot.png)
 
-Der NMS-Optimierer berechnet, wo du deine Technologie-Module am besten platzierst, damit du es nicht tun musst. Wähle deine Plattform, selektiere deine Module, markiere deine überladenen Slots und der Optimierer berechnet das Layout, das deine Adjazenzboni maximiert. Funktioniert für Raumschiffe, Korvetten, Multitools, Exo-Anzüge, Exofahrzeuge und Frachter.
+NMS Optimizer findet heraus, wo Sie Ihre Technologie-Module platzieren müssen, damit Sie es nicht tun müssen. Wählen Sie Ihre Plattform, wählen Sie Ihre Module aus, markieren Sie Ihre Supercharged Slots, und der Optimierer berechnet das Layout, das das Maximum aus Ihren Adjacency Bonuses herausholt. Er funktioniert für Starships, Corvettes, Multitools, Exosuits, Exocraft und Freighters.
 
-## Was Ist Ein Adjazenzbonus?
+## Was ist ein Adjacency Bonus?
 
-Wenn du kompatible Technologie-Module in No Man's Sky direkt nebeneinander platzierst, erhalten sie einen Stat-Boost. Das Spiel erklärt nicht viel darüber, wie das funktioniert, aber kurz gesagt: Module des gleichen Typs, die sich eine Kante teilen, erhalten eine prozentuale Steigerung ihrer Attribute. Je mehr Kanten geteilt werden, desto höher der Bonus. Die korrekte Anordnung von Hand zu finden ist mühsam, besonders in großen Rastern mit überladenen Slots.
+Wenn Sie kompatible Technologie-Module in No Man's Sky nebeneinander platzieren, erhalten sie einen Stat-Boost. Das Spiel verrät nicht viel darüber, wie das funktioniert, aber kurz gesagt: Module desselben Typs, die eine Kante teilen, erhalten eine prozentuale Steigerung ihrer Stats. Je mehr Kanten geteilt werden, desto größer ist der Bonus. Die richtige Anordnung von Hand herauszufinden, ist mühsam, besonders bei größeren Gittern, bei denen Supercharged Slots berücksichtigt werden müssen.
 
-## Was Sind Überladene Slots?
+## Was sind Supercharged Slots?
 
-Einige Inventarplätze in No Man's Sky sind überladen. Jedes Technologie-Modul, das dort platziert wird, erhält einen großen Stat-Multiplikator zusätzlich zu den normalen Adjazenzboni. Da sie bei jedem Ausrüstungsstück zufällig platziert sind, ändert sich das optimale Layout je nachdem, wo sich diese Slots befinden. Das ist der schwierige Teil, für den dieses Tool entwickelt wurde.
+Einige Inventar-Slots in No Man's Sky sind supercharged. Jedes Technologie-Modul, das in einem platziert wird, erhält einen großen Stat-Multiplikator zusätzlich zu den normalen Adjacency Bonuses. Sie sind zufällig auf jedem Ausrüstungsgegenstand platziert, daher ändert sich das optimale Layout je nachdem, wo Ihre Supercharged Slots gelandet sind. Das ist der schwierige Teil, und genau das soll dieses Tool lösen.
 
-## Wie Es Funktioniert
+## Wie es funktioniert
 
-Der Optimierer nutzt eine Kombination aus deterministischem Musterabgleich und Simulated Annealing. Bei kleinen Modul-Sets kann er exakt das beste Layout finden. Bei größeren oder komplexeren Rastern erkundet das Simulated Annealing tausende Anordnungen, um diejenige mit der höchstmöglichen Punktzahl zu finden. Die Berechnung berücksichtigt Adjazenzboni, die Position überladener Slots und modulspezifische Stat-Gewichtungen. Das Backend läuft für maximale Geschwindigkeit in Rust.
+Der Optimierer verwendet eine Kombination aus deterministischer Mustererkennung und simulierter Abkühlung (Simulated Annealing). Für kleinere Modul-Sets kann er das exakt beste Layout finden. Für größere oder komplexere Gitter erforscht die simulierte Abkühlung Tausende von Anordnungen, um eine zu finden, die so hoch wie möglich punktet. Die Bewertung berücksichtigt Adjacency Bonuses, die Platzierung von Supercharged Slots und modul-spezifische Stat-Gewichtungen. Das Backend läuft in Rust für Geschwindigkeit.
 
 ## Unterstützte Plattformen
 
-- Raumschiffe (Standard, Wächter, Solar, Kämpfer, Lebend, Atlantid)
-- Korvetten
-- Multitools (Standard und Wächter)
-- Exo-Anzüge
-- Exofahrzeuge (Streuner, Pilger, Nomade, Koloss, Minotaurus, Nautilon)
-- Frachter
+- **Starships:** Standard, Exotic, Sentinel, Solar und Living
+- **Corvettes:** Einschließlich einzigartiger Reaktor-Module und kosmetischer Technologie-Slots
+- **Multitools:** Alle Typen, einschließlich Staves
+- **Exocraft:** Alle Fahrzeugtypen (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon)
+- **Exosuits:** Alle Technologie-Typen
+- **Freighters:** Technologie-Layouts für Großkampfschiffe
