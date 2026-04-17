@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { sendEvent } from "../../utils/analytics";
+import { sendEvent } from "../../utils/analytics/tracking";
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
 // Mock dependencies
 vi.mock("react-router-dom", () => ({ useLocation: vi.fn() }));
 vi.mock("react-i18next", () => ({ useTranslation: vi.fn() }));
-vi.mock("../../utils/analytics", () => ({
+vi.mock("../../utils/analytics/tracking", () => ({
 	sendEvent: vi.fn(),
 }));
 vi.mock("../../../shared/seo-metadata.js", () => ({

@@ -1,0 +1,309 @@
+import type { ApiResponse, GridStore } from "../../store/GridStore";
+import type { PlatformState } from "../../store/PlatformStore";
+import type { TechState } from "../../store/TechStore";
+import type { Socket } from "socket.io-client";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+
+import { useGridStore } from "../../store/GridStore";
+import { usePlatformStore } from "../../store/PlatformStore";
+import { useTechStore } from "../../store/TechStore";
+import { createSocket } from "../api/socketManager";
+import { OptimizationManager } from "./optimizationManager";
+
+vi.mock("../api/socketManager", () => ({
+	createSocket: vi.fn(),
+	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
+}));
+
+vi.mock("../../store/GridStore", () => ({
+	useGridStore: {
+		getState: vi.fn(),
+	},
+	createEmptyCell: vi.fn((sc, active) => ({ tech: null, supercharged: sc, active })),
+}));
+
+vi.mock("../../store/TechStore", () => ({
+	useTechStore: {
+		getState: vi.fn(),
+	},
+}));
+
+vi.mock("../../store/PlatformStore", () => ({
+	usePlatformStore: {
+		getState: vi.fn(),
+	},
+}));
+
+vi.mock("../system/monitoring", () => ({
+	Logger: {
+		info: vi.fn(),
+		warn: vi.fn(),
+		error: vi.fn(),
+	},
+}));
+
+const mockCreateSocket = vi.mocked(createSocket);
+const mockUseGridStore = vi.mocked(useGridStore);
+const mockUseTechStore = vi.mocked(useTechStore);
+const mockUsePlatformStore = vi.mocked(usePlatformStore);
+
+describe("OptimizationManager", () => {
+	const createMockSocket = () => ({
+		on: vi.fn(),
+		once: vi.fn(),
+		off: vi.fn(),
+		emit: vi.fn(),
+		disconnect: vi.fn(),
+		connected: true,
+	});
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		mockCreateSocket.mockImplementation(() => createMockSocket() as unknown as Socket);
+
+		mockUseGridStore.getState.mockReturnValue({
+			grid: {
+				cells: [],
+				width: 7,
+				height: 7,
+			},
+		} as unknown as GridStore);
+
+		mockUseTechStore.getState.mockReturnValue({
+			checkedModules: {},
+			techGroups: {},
+			activeGroups: {},
+		} as unknown as TechState);
+
+		mockUsePlatformStore.getState.mockReturnValue({
+			selectedPlatform: "standard",
+		} as unknown as PlatformState);
+	});
+
+	it("should retry on transport error and finally fail after MAX_TRANSPORT_RETRIES", () => {
+		const onError = vi.fn();
+		const onComplete = vi.fn();
+		const onProgress = vi.fn();
+		const onPatternNoFit = vi.fn();
+
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onError,
+			onComplete,
+			onProgress,
+			onPatternNoFit,
+		});
+
+		manager.start();
+		expect(mockCreateSocket).toHaveBeenCalledTimes(1);
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+
+		// Trigger first transport error
+		const handleError1 = (
+			(firstSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
+		handleError1(new Error("websocket error"));
+
+		// Should have created a new manager and started it (retryCount 1)
+		expect(mockCreateSocket).toHaveBeenCalledTimes(2);
+
+		// Trigger second transport error on the new socket
+		const secondSocket = mockCreateSocket.mock.results[1].value as Socket;
+		const handleError2 = (
+			(secondSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
+		handleError2(new Error("timeout"));
+
+		// Should have created a new manager and started it (retryCount 2)
+		expect(mockCreateSocket).toHaveBeenCalledTimes(3);
+
+		// Trigger third transport error on the third socket (retryCount 2, MAX is 2)
+		const thirdSocket = mockCreateSocket.mock.results[2].value as Socket;
+		const handleError3 = (
+			(thirdSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
+		handleError3(new Error("websocket error"));
+
+		// Should NOT retry again
+		expect(mockCreateSocket).toHaveBeenCalledTimes(3);
+		expect(onError).toHaveBeenCalledWith(expect.any(Error));
+	});
+
+	it("should complete successfully after a retry", () => {
+		const onComplete = vi.fn();
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onComplete,
+			onError: vi.fn(),
+			onProgress: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+
+		// Trigger transport error
+		const handleError = (
+			(firstSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
+		handleError(new Error("websocket error"));
+
+		expect(mockCreateSocket).toHaveBeenCalledTimes(2);
+
+		// Trigger success on the second attempt
+		const secondSocket = mockCreateSocket.mock.results[1].value as Socket;
+		const handleResult = (
+			(secondSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
+
+		const mockResponse: ApiResponse = {
+			solve_method: "Brute Force",
+			max_bonus: 100,
+			solved_bonus: 90,
+			grid: { cells: [], width: 7, height: 7 },
+		};
+		handleResult(mockResponse);
+
+		expect(onComplete).toHaveBeenCalledWith(mockResponse);
+	});
+
+	it("should handle progress updates", () => {
+		const onProgress = vi.fn();
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onProgress,
+			onComplete: vi.fn(),
+			onError: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		const handleProgress = (
+			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "progress")?.[1] as (data: {
+			progress_percent: number;
+		}) => void;
+
+		handleProgress({ progress_percent: 50 });
+		expect(onProgress).toHaveBeenCalledWith({ progress_percent: 50 });
+	});
+
+	it("should handle Pattern No Fit response", () => {
+		const onPatternNoFit = vi.fn();
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onPatternNoFit,
+			onProgress: vi.fn(),
+			onComplete: vi.fn(),
+			onError: vi.fn(),
+		});
+
+		manager.start();
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		const handleResult = (
+			(firstSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
+
+		handleResult({
+			solve_method: "Pattern No Fit",
+			max_bonus: 0,
+			solved_bonus: 0,
+			grid: null,
+		});
+		expect(onPatternNoFit).toHaveBeenCalled();
+	});
+
+	it("should handle genuine disconnect as error", () => {
+		const onError = vi.fn();
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onError,
+			onProgress: vi.fn(),
+			onComplete: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		const handleDisconnect = (
+			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "disconnect")?.[1] as (reason: string) => void;
+
+		handleDisconnect("ping timeout");
+		expect(onError).toHaveBeenCalledWith(
+			expect.objectContaining({ message: expect.stringContaining("Disconnected") })
+		);
+	});
+
+	it("should handle transport close by calling onError (for UI state reset)", () => {
+		const onError = vi.fn();
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onError,
+			onProgress: vi.fn(),
+			onComplete: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		const handleDisconnect = (
+			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "disconnect")?.[1] as (reason: string) => void;
+
+		handleDisconnect("transport close");
+		expect(onError).toHaveBeenCalledWith(
+			expect.objectContaining({ message: expect.stringContaining("transport close") })
+		);
+	});
+
+	it("should handle socket connection if not immediately connected", () => {
+		const mockSocket = createMockSocket();
+		Object.defineProperty(mockSocket, "connected", { value: false, writable: true });
+		mockCreateSocket.mockImplementation(() => mockSocket as unknown as Socket);
+
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onProgress: vi.fn(),
+			onComplete: vi.fn(),
+			onError: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		expect(mockSocket.emit).not.toHaveBeenCalled();
+
+		const handleConnect = (
+			(mockSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
+		).find((call) => call[0] === "connect")?.[1] as () => void;
+		handleConnect();
+		expect(mockSocket.emit).toHaveBeenCalledWith("optimize", expect.any(Object));
+	});
+
+	it("should include modules and solve_type in the payload", () => {
+		mockUseTechStore.getState.mockReturnValue({
+			checkedModules: { pulse: ["module1"] },
+			techGroups: { pulse: ["group1", "group2"] },
+			activeGroups: { pulse: "group1" },
+		} as unknown as TechState);
+
+		const manager = new OptimizationManager({
+			tech: "pulse",
+			onProgress: vi.fn(),
+			onComplete: vi.fn(),
+			onError: vi.fn(),
+			onPatternNoFit: vi.fn(),
+		});
+
+		manager.start();
+		const mockSocket = mockCreateSocket.mock.results[0].value as Socket;
+		expect(mockSocket.emit).toHaveBeenCalledWith(
+			"optimize",
+			expect.objectContaining({
+				available_modules: ["module1"],
+				solve_type: "group1",
+			})
+		);
+	});
+});

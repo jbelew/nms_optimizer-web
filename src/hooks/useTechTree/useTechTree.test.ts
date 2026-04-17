@@ -1,11 +1,11 @@
 import type { Module, TechTree, TechTreeItem } from "./useTechTree";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as apiCallModule from "../../utils/apiCall";
+import * as apiCallModule from "../../utils/api/network";
 import { clearTechTreeCache, fetchTechTree, fetchTechTreeAsync } from "./useTechTree";
 
 // Mock apiCall
-vi.mock("../../utils/apiCall", () => ({
+vi.mock("../../utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

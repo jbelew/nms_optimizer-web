@@ -1,13 +1,12 @@
-import type { BuildFile } from "../../utils/buildFileValidation";
+import type { BuildFile } from "../../utils/validation/dataValidation";
 
 import { useGridStore } from "../../store/GridStore";
 import { useModuleSelectionStore } from "../../store/ModuleSelectionStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechBonusStore } from "../../store/TechBonusStore";
 import { useTechStore } from "../../store/TechStore";
-import { isValidBuildFile } from "../../utils/buildFileValidation";
-import { sanitizeFilename } from "../../utils/filenameValidation";
 import { computeSHA256 } from "../../utils/hashUtils";
+import { isValidBuildFile, sanitizeFilename } from "../../utils/validation/dataValidation";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 
 /**

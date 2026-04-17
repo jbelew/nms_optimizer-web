@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/browser/environment";
 import { DialogContext } from "./dialog-utils";
 
 /** List of non-English language codes supported by the router. */

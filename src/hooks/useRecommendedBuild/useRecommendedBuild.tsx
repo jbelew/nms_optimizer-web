@@ -3,8 +3,8 @@ import type { RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
 import { useMemo } from "react";
 
 import { createEmptyCell, createGrid, resetCellContent, useGridStore } from "../../store/GridStore";
-import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
 

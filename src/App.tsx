@@ -13,8 +13,8 @@ import { useUrlNormalization } from "./hooks/useUrlNormalization/useUrlNormaliza
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
 import { useOptimizeStore } from "./store/OptimizeStore";
-import { isBot } from "./utils/isBot";
-import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
+import { isBot } from "./utils/browser/environment";
+import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 // Lazy-loaded components for performance optimization
 const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));

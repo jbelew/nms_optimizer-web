@@ -75,7 +75,7 @@ vi.mock("../../store/PlatformStore", () => ({
 }));
 
 // Mock utility
-vi.mock("../../utils/splashScreen", () => ({
+vi.mock("../../utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 

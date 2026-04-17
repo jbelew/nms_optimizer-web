@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { API_URL } from "../../constants";
 import { usePlatformStore } from "../../store/PlatformStore";
-import { apiCall } from "../../utils/apiCall";
+import { apiCall } from "../../utils/api/network";
 
 /**
  * Details of a specific ship type.

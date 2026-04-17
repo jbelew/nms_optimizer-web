@@ -14,8 +14,8 @@
 import { ErrorInfo } from "react";
 import { captureException } from "@sentry/react";
 
-import { sendEvent } from "../../utils/analytics";
-import { safeClear } from "../../utils/storage";
+import { sendEvent } from "../../utils/analytics/tracking";
+import { safeClear } from "../../utils/browser/environment";
 
 /**
  * Executes a nuclear recovery strategy after an uncaught application error.

@@ -12,7 +12,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock dialogIconMapping utility
-vi.mock("../../../utils/dialogIconMapping", () => ({
+vi.mock("../../../utils/icons/iconRegistry", () => ({
 	getDialogIconAndStyle: vi.fn(() => ({
 		IconComponent: null,
 		style: {},

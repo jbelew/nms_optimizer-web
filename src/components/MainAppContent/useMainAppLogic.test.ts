@@ -6,7 +6,7 @@ import { vi } from "vitest";
 import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useSessionStore } from "../../store/SessionStore";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 import { useMainAppLogic } from "./useMainAppLogic";
 
 // Mock external dependencies
@@ -92,7 +92,7 @@ vi.mock("../../store/GridStore", () => ({
 		selector({ isSharedGrid: false, selectHasModulesInGrid: () => true }),
 }));
 
-vi.mock("../../utils/splashScreen", () => ({
+vi.mock("../../utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 

@@ -13,7 +13,7 @@
  * @category Utilities
  */
 
-import { safeGetItem } from "./storage";
+import { safeGetItem } from "./browser/environment";
 
 /**
  * The unified local storage key for persisting the active platform.

@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { sendEvent } from "../../utils/analytics";
+import { sendEvent } from "../../utils/analytics/tracking";
 import { useAnalytics } from "./useAnalytics";
 
-// Mock the actual sendEvent function from utils/analytics
-vi.mock("../../utils/analytics", () => ({
+// Mock the actual sendEvent function from utils/analytics/tracking
+vi.mock("../../utils/analytics/tracking", () => ({
 	sendEvent: vi.fn(),
 }));
 

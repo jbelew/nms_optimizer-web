@@ -8,7 +8,7 @@ import { useDebouncedValidation } from "../../../hooks/useDebouncedValidation/us
 import { useGridStore } from "../../../store/GridStore";
 import { usePlatformStore } from "../../../store/PlatformStore";
 import { generateBuildNameWithType } from "../../../utils/buildNameGenerator";
-import { isValidFilename } from "../../../utils/filenameValidation";
+import { isValidFilename } from "../../../utils/validation/dataValidation";
 
 /**
  * Props for the `BuildNameContent` component.

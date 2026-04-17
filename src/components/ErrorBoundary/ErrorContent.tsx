@@ -18,7 +18,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Link, ScrollArea, Separator } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 import { ErrorDisplay } from "./ErrorDisplay";
 
 import "./ErrorBoundary.scss";
