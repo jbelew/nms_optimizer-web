@@ -214,7 +214,14 @@ export const useSeoAndTitle = () => {
 			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
 			: location.pathname;
 
-		const currentPath = basePath === "" ? "/" : basePath;
+		// Normalize: ensure trailing slash for lookup (except root)
+		const currentPath =
+			basePath === "/" || basePath === ""
+				? "/"
+				: basePath.endsWith("/")
+					? basePath
+					: `${basePath}/`;
+
 		// Look up metadata for the current path, falling back to root metadata
 		const metadata = seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
 

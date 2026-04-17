@@ -120,7 +120,7 @@ function generateNavigationLinks(lang, currentPage, t) {
 
 	const links = pages
 		.map(({ path, key, descKey }) => {
-			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}`;
+			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}/`;
 			const label = t(key, { defaultValue: path.slice(1) || "Home" });
 			const desc = t(descKey, { defaultValue: "" });
 			const currentPath = currentPage === "" ? "/" : `/${currentPage}`;
@@ -171,13 +171,11 @@ function generatePage(
 	ssgHeader = ""
 ) {
 	let html = indexHtml.replace(/<html lang="[^"]*">/, `<html lang="${lang}">`);
-	const pathname = pageName === "" ? "/" : `/${pageName}`;
-	const isRootPage = pageName === "";
-
-	// Remove noscript blocks from the template
-	// We only remove the original background noscript if it's in the body,
-	// but generatePage will handle inserting the new content.
 	html = html.replace(/<noscript data-ssg-template>[\s\S]*?<\/noscript>/g, "");
+
+	// Normalize pathname for metadata lookup (ensure trailing slash for non-root)
+	const pathname = pageName === "" ? "/" : `/${pageName}/`;
+	const isRootPage = pageName === "";
 
 	// --- SEO Title & Description Injection ---
 	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];

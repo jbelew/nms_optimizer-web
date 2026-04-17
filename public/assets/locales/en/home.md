@@ -18,9 +18,9 @@ The optimizer uses a combination of deterministic pattern matching and simulated
 
 ## Supported Platforms
 
-- Starships (standard, sentinel, solar, fighter, living, atlantid)
-- Corvettes
-- Multitools (standard and sentinel)
-- Exosuits
-- Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
-- Freighters
+- **Starships:** Standard, Exotic, Sentinel, Solar, and Living
+- **Corvettes:** Including unique reactor modules and cosmetic technology slots
+- **Multitools:** All types including Staves
+- **Exocraft:** All vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon)
+- **Exosuits:** All technology types
+- **Freighters:** Capital ship technology layouts
