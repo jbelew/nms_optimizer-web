@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "../../src/test/i18n";
 import { useDialog } from "../utils/system/dialogUtils";
-import { DialogProvider } from "./DialogContext";
+import { DialogProvider } from "./dialogContext";
 
 // Test the window.location.search preservation logic directly
 /**

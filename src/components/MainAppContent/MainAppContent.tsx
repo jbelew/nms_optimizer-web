@@ -1,29 +1,27 @@
 // src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import { lazy, Suspense } from "react";
-import { Box, Flex } from "@radix-ui/themes";
+import { Suspense } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Box, Callout, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
+import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
+import OptimizationAlertDialog from "../AppDialog/OptimizationAlert/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
+import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
+import { InstallPrompt } from "../InstallPrompt/InstallPrompt";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
-import { TechTreeSkeleton } from "../TechTree/TechTreeSkeleton";
-import { ShipSelectionHeading } from "./ShipSelectionHeading";
+import { ShipSelection } from "../ShipSelection/ShipSelection";
+import TechTree, { TechTreeSkeleton } from "../TechTree/TechTree";
+import { ToastRenderer } from "../Toast/ToastRenderer";
 import { useMainAppLogic } from "./useMainAppLogic";
-
-const TechTreeComponent = lazy(() => import("../TechTree/TechTree"));
-const MainAppUtilities = lazy(() =>
-	import("./MainAppUtilities").then((m) => ({ default: m.MainAppUtilities }))
-);
-const SharedBuildCallout = lazy(() =>
-	import("./SharedBuildCallout").then((m) => ({ default: m.SharedBuildCallout }))
-);
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
@@ -41,17 +39,182 @@ const SharedBuildCallout = lazy(() =>
  *
  * @category Components
  *
- * @example Suspended loading
- * ```tsx
- * <Suspense fallback={<Loading />}>
- *   <ShipTypesLoader />
- * </Suspense>
- * ```
+ * @example
  */
 const ShipTypesLoader = () => {
 	useFetchShipTypesSuspense();
 
 	return null;
+};
+
+/**
+ * Props for the `SharedBuildCallout` component.
+ *
+ * @category Components
+ */
+interface SharedBuildCalloutProps {
+	/** Total width of the grid table in pixels. */
+	gridTableTotalWidth: number | undefined;
+}
+
+/**
+ * A notification component that appears when the user is viewing a read-only shared layout.
+ * @example
+ */
+const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalWidth }) => {
+	return (
+		<Box
+			flexShrink="0"
+			style={{
+				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
+			}}
+		>
+			<Callout.Root mb="3" variant="surface" size="1">
+				<Callout.Icon>
+					<InfoCircledIcon />
+				</Callout.Icon>
+				<Callout.Text>
+					<span className="text-sm sm:text-base" style={{ color: "var(--gray-12)" }}>
+						You are viewing a <strong>Shared Build</strong>. This layout is read-only.
+					</span>
+				</Callout.Text>
+			</Callout.Root>
+		</Box>
+	);
+};
+
+/**
+ * Props for the `ShipSelectionHeading` component.
+ *
+ * @category Components
+ */
+interface ShipSelectionHeadingProps {
+	/** Whether the grid is in read-only shared mode. */
+	isSharedGrid: boolean;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
+	/** The internal identifier of the currently selected ship type. */
+	selectedShipType: string;
+	/** Total width of the grid table in pixels. */
+	gridTableTotalWidth: number | undefined;
+}
+
+/**
+ * A layout component that displays the current equipment platform and its selection control.
+ * @example
+ */
+const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
+	isSharedGrid,
+	solving,
+	selectedShipType,
+	gridTableTotalWidth,
+}) => {
+	const { t } = useTranslation();
+
+	return (
+		<Flex
+			align="center"
+			wrap="wrap"
+			gap="3"
+			className="main-app__ship-selector heading-styled"
+			style={{
+				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
+			}}
+		>
+			{!isSharedGrid && (
+				<span className="main-app__ship-selection">
+					<ShipSelection solving={solving} />
+				</span>
+			)}
+
+			<Text
+				trim="end"
+				className="main-app__ship-label"
+				style={{ opacity: solving ? 0.365 : 1 }}
+			>
+				{t("platformLabel")}
+			</Text>
+			<Text
+				trim="end"
+				className="main-app__ship-name trim-text"
+				style={{ opacity: solving ? 0.365 : 1 }}
+			>
+				{t(`platforms.${selectedShipType}`)}
+			</Text>
+		</Flex>
+	);
+};
+
+/**
+ * Props for the `MainAppUtilities` component.
+ *
+ * @category Components
+ */
+interface MainAppUtilitiesProps {
+	/** Identifier of the technology that failed pattern matching. */
+	patternNoFitTech: string | null;
+	/** Callback to clear the optimization failure alert. */
+	clearPatternNoFitTech: () => void;
+	/** Asynchronous callback to re-trigger a solve for the failed technology. */
+	handleForceCurrentPnfOptimize: () => Promise<void>;
+	/** Whether the build name entry modal is visible. */
+	isSaveBuildDialogOpen: boolean;
+	/** Callback function to save a build with the provided name. */
+	handleBuildNameConfirm: (name: string) => void;
+	/** Callback to dismiss the build naming modal. */
+	handleBuildNameCancel: () => void;
+	/** Ref to the hidden native file input used for build loading. */
+	fileInputRef: React.RefObject<HTMLInputElement | null>;
+	/** Event handler for the system file picker's change event. */
+	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+/**
+ * A container component for non-visual and global utility components.
+ * @example
+ */
+const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
+	patternNoFitTech,
+	clearPatternNoFitTech,
+	handleForceCurrentPnfOptimize,
+	isSaveBuildDialogOpen,
+	handleBuildNameConfirm,
+	handleBuildNameCancel,
+	fileInputRef,
+	handleFileSelect,
+}) => {
+	const { t } = useTranslation();
+
+	return (
+		<>
+			<InstallPrompt />
+
+			<OptimizationAlertDialog
+				isOpen={!!patternNoFitTech}
+				technologyName={patternNoFitTech}
+				onClose={clearPatternNoFitTech}
+				onForceOptimize={handleForceCurrentPnfOptimize}
+			/>
+
+			<BuildNameDialog
+				isOpen={isSaveBuildDialogOpen}
+				onConfirm={handleBuildNameConfirm}
+				onCancel={handleBuildNameCancel}
+			/>
+
+			<input
+				ref={fileInputRef}
+				type="file"
+				accept=".nms"
+				onChange={handleFileSelect}
+				className="hidden"
+				aria-label={t("buttons.loadBuild")}
+			/>
+
+			<ErrorMessageRenderer />
+			<ToastRenderer />
+		</>
+	);
 };
 
 /**
@@ -67,25 +230,13 @@ const ShipTypesLoader = () => {
  * It utilizes {@link useMainAppLogic} to encapsulate business logic and state management,
  * keeping the UI structure clean and focused on layout.
  *
- * Performance and loading:
- * - Uses `React.lazy` and `Suspense` for non-critical utilities and specialized callouts.
- * - Triggers asynchronous data fetching via {@link ShipTypesLoader}.
- *
  * @returns {JSX.Element} The root application layout structure.
- *
- * @see {@link useMainAppLogic}
- * @see {@link GridTable}
- * @see {@link AppHeader}
- * @see {@link AppFooter}
  *
  * @component
  *
  * @category Components
  *
- * @example Component usage
- * ```tsx
- * <MainAppContent />
- * ```
+ * @example
  */
 export const MainAppContent = () => {
 	const { t } = useTranslation();
@@ -188,16 +339,13 @@ export const MainAppContent = () => {
 									ref={appLayoutContainerRef}
 								>
 									{isSharedGrid && (
-										<Suspense fallback={null}>
-											<SharedBuildCallout
-												gridTableTotalWidth={gridTableTotalWidth}
-											/>
-										</Suspense>
+										<SharedBuildCallout
+											gridTableTotalWidth={gridTableTotalWidth}
+										/>
 									)}
 
 									{!isSharedGrid && (
 										<MessageSpinner
-											// isVisible={solving || (!isLargeScreen && isTechTreeLoading)}
 											isVisible={solving}
 											showProgress={!isTechTreeLoading}
 											initialMessage={
@@ -236,7 +384,7 @@ export const MainAppContent = () => {
 										className="main-app__tech-tree-section"
 									>
 										<Suspense fallback={<TechTreeSkeleton />}>
-											<TechTreeComponent
+											<TechTree
 												handleOptimize={handleOptimize}
 												solving={solving}
 												gridTableTotalWidth={gridTableTotalWidth}
@@ -257,18 +405,16 @@ export const MainAppContent = () => {
 
 				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
 
-				<Suspense fallback={null}>
-					<MainAppUtilities
-						patternNoFitTech={patternNoFitTech}
-						clearPatternNoFitTech={clearPatternNoFitTech}
-						handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
-						isSaveBuildDialogOpen={isSaveBuildDialogOpen}
-						handleBuildNameConfirm={handleBuildNameConfirm}
-						handleBuildNameCancel={handleBuildNameCancel}
-						fileInputRef={fileInputRef}
-						handleFileSelect={handleFileSelect}
-					/>
-				</Suspense>
+				<MainAppUtilities
+					patternNoFitTech={patternNoFitTech}
+					clearPatternNoFitTech={clearPatternNoFitTech}
+					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
+					isSaveBuildDialogOpen={isSaveBuildDialogOpen}
+					handleBuildNameConfirm={handleBuildNameConfirm}
+					handleBuildNameCancel={handleBuildNameCancel}
+					fileInputRef={fileInputRef}
+					handleFileSelect={handleFileSelect}
+				/>
 			</main>
 		</>
 	);

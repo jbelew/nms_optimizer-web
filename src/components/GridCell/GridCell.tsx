@@ -2,8 +2,8 @@ import "./GridCell.scss";
 
 import React from "react";
 
-import EmptyCellIcon from "@/assets/svg/EmptyCellIcon";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import EmptyCellIcon from "@/components/Icons/EmptyCellIcon";
 import { useCell } from "@/hooks/useCell/useCell";
 
 import { useGridCellInteraction } from "./useGridCellInteraction";

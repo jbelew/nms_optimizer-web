@@ -22,7 +22,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "./components/TooltipManager/TooltipManager";
-import { TooltipProvider } from "./context/TooltipContext";
+import { TooltipProvider } from "./context/tooltipContext";
 import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { initializeAnalytics, initializeAnalyticsClient } from "./utils/analytics/tracking";

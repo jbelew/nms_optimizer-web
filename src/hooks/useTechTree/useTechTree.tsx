@@ -103,7 +103,7 @@ export interface TechTreeItem {
 /**
  * Defines a pre-configured layout of technologies and modules.
  *
- * @see [useRecommendedBuild](../useRecommendedBuild/useRecommendedBuild.ts) for the hook that applies these layouts.
+ * @see [useRecommendedBuild](../useRecommendedBuild/useRecommendedBuild.tsx) for the hook that applies these layouts.
  *
  * @category Interfaces
  */

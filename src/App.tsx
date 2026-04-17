@@ -3,14 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/Base/AppDialog";
-import { DialogProvider } from "./context/DialogContext";
+import { DialogProvider } from "./context/dialogContext";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
-import { useUrlNormalization } from "./hooks/useUrlNormalization/useUrlNormalization";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
-import { useUrlValidation } from "./hooks/useUrlValidation/useUrlValidation";
+import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
 import { useOptimizeStore } from "./store/app/optimizeStore";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
