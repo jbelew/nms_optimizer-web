@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: dependabot-automerge
+  group: dependabot-automerge-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
@@ -137,4 +137,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.pr_info.outputs.number }}
           REPO: ${{ github.repository }}
-        run: gh pr merge --auto --merge "$PR_NUMBER" --repo "$REPO"
+        run: gh pr merge --merge "$PR_NUMBER" --repo "$REPO"
