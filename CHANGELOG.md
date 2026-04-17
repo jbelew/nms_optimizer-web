@@ -1,3 +1,11 @@
+## [6.29.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.0...v6.29.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* bumping to trigger release workflow ([b263ec1](https://github.com/jbelew/nms_optimizer-web/commit/b263ec117216f38fc8b66d18335560a9f43506d8))
+* shorten site title and normalize URL path handling with trailing slashes ([4ae891b](https://github.com/jbelew/nms_optimizer-web/commit/4ae891b849667868b896ff2487db68681d906682))
+
 # [6.29.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.1...v6.29.0) (2026-04-17)
 
 
