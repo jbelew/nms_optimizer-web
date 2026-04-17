@@ -134,16 +134,6 @@ export async function onRequest(context) {
             basePath += "/";
         }
 
-        const cache = caches.default;
-        const cacheUrl = new URL(request.url);
-        cacheUrl.search = ''; // Strip query parameters to increase cache hits
-        const cacheRequest = new Request(cacheUrl.toString(), request);
-        
-        let responseFromCache = await cache.match(cacheRequest);
-        if (responseFromCache) {
-            return responseFromCache;
-        }
-
         const cacheKey = `${lang}:${basePath}`;
         let html;
 
@@ -237,18 +227,14 @@ export async function onRequest(context) {
             generatedHtmlCache.set(cacheKey, html);
         }
 
-        const generatedResponse = new Response(html, {
+        return new Response(html, {
             status: 200,
             headers: {
                 "Content-Type": "text/html; charset=utf-8",
-                "Cache-Control": "public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60",
+                "Cache-Control": "no-cache, must-revalidate", // Always revalidate to avoid stale hashes
                 ...SECURITY_HEADERS,
             }
         });
-
-        context.waitUntil(cache.put(cacheRequest, generatedResponse.clone()));
-
-        return generatedResponse;
     }
 
     return response;

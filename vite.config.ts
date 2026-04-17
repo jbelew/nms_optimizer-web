@@ -194,21 +194,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 										handler: "NetworkOnly",
 									},
 									{
-										urlPattern: /^https:\/\/nms-optimizer\.app\/.*\.html$/,
-										handler: "NetworkFirst",
-										options: {
-											cacheName: "html-cache",
-											networkTimeoutSeconds: 3,
-											expiration: {
-												maxEntries: 10,
-												maxAgeSeconds: 300,
-											},
-											cacheableResponse: {
-												statuses: [0, 200],
-											},
-										},
-									},
-									{
 										urlPattern: ({ request }) => request.destination === "image",
 										handler: "CacheFirst",
 										options: {

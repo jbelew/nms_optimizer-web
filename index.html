@@ -18,6 +18,53 @@
 	<meta charset="UTF-8" />
 	<script>
 		(function () {
+			/**
+			 * Critical error handler for initial script/chunk loading failures.
+			 * Triggered when a required module (e.g. i18n, router) 404s after a deployment.
+			 */
+			function handleInitError(err) {
+				// Don't log trivial errors that often happen during background prefetching
+				if (err && err.target && err.target.tagName === 'LINK' && err.target.rel === 'preload' && !err.target.href.includes('.js')) {
+					return;
+				}
+
+				console.error("Critical initialization failure:", err);
+
+				// Reload-loop protection: Allow up to 2 automatic reloads before stopping.
+				const reloadCount = parseInt(sessionStorage.getItem("init_reload_count") || "0");
+				if (reloadCount < 2) {
+					sessionStorage.setItem("init_reload_count", (reloadCount + 1).toString());
+					window.location.reload();
+				} else {
+					// FALLBACK UI: Hide splash screen and reveal error state if app cannot boot.
+					const vpss = document.getElementById("vpss");
+					if (vpss) vpss.style.display = "none";
+					document.body.classList.add("background-visible", "error-boundary-visible");
+
+					const root = document.getElementById("root");
+					if (root && !root.innerHTML) {
+						root.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;padding:2rem;color:white;font-family:Raleway,sans-serif;">' +
+							'<h1 style="color:#4CCCE6;margin-bottom:1rem;">Application Load Error</h1>' +
+							'<p style="max-width:500px;line-height:1.6;margin-bottom:2rem;">We are having trouble loading the required application files. This usually happens when the app has been updated. Please try a hard refresh.</p>' +
+							'<button onclick="sessionStorage.removeItem(\'init_reload_count\');window.location.reload();" style="background:#00A2C7;color:white;border:none;padding:0.75rem 1.5rem;border-radius:8px;font-weight:700;cursor:pointer;transition:background 0.2s;">Refresh Now</button>' +
+							'</div>';
+					}
+				}
+			}
+
+			// Listen for Vite chunk load errors (dynamic imports)
+			window.addEventListener("vite:preloadError", handleInitError);
+
+			// Listen for static script/link load failures (initial bundle)
+			window.addEventListener("error", function (e) {
+				const isModuleError = e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK');
+				const isSafariFlake = (e.message || "").includes("Importing a module script failed");
+
+				if (isModuleError || isSafariFlake) {
+					handleInitError(e);
+				}
+			}, true); // Use capture phase to catch resource errors
+
 			// Preload translations based on language in path (matches i18next logic)
 			const supportedLngs = ["en", "es", "fr", "de", "pt"];
 			const pathParts = window.location.pathname.split('/');
