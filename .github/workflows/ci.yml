@@ -164,7 +164,7 @@ jobs:
         run: npm run test:storybook:a11y
 
       - name: Run Chromatic visual tests
-        uses: chromaui/action@v11
+        uses: chromaui/action@v16
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
