@@ -46,7 +46,7 @@ jobs:
           python scripts/translate.py --files $CHANGED_FILES
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore(l10n): auto-translate changed keys using Gemini AI"
           file_pattern: 'public/assets/locales/**'
