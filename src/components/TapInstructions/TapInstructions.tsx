@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../context/dialog-utils";
 import { useGridStore } from "../../store/GridStore";
-import { isTouchDevice } from "../../utils/isTouchDevice";
+import { isTouchDevice } from "../../utils/browser/environment";
 
 /**
  * A contextual help component that displays interaction instructions for touch-enabled devices.

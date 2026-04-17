@@ -5,11 +5,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useGridStore } from "../../store/GridStore";
 import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import * as apiCallModule from "../../utils/apiCall";
+import * as apiCallModule from "../../utils/api/network";
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
 
 // Mock apiCall
-vi.mock("../../utils/apiCall", () => ({
+vi.mock("../../utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

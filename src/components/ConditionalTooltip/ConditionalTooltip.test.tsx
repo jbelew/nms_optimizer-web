@@ -3,11 +3,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useTooltipActions } from "../../context/tooltip-utils";
-import { isTouchDevice } from "../../utils/isTouchDevice";
+import { isTouchDevice } from "../../utils/browser/environment";
 import { ConditionalTooltip } from "./ConditionalTooltip";
 
 // Mock isTouchDevice
-vi.mock("../../utils/isTouchDevice", () => ({
+vi.mock("../../utils/browser/environment", () => ({
 	isTouchDevice: vi.fn(() => false),
 }));
 

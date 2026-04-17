@@ -7,7 +7,7 @@
 import { ErrorInfo } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as analytics from "../../utils/analytics";
+import * as analytics from "../../utils/analytics/tracking";
 import { handleError } from "./errorHandler";
 
 describe("errorHandler", () => {

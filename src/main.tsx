@@ -25,10 +25,9 @@ import { TooltipManager } from "./components/TooltipManager/TooltipManager";
 import { TooltipProvider } from "./context/TooltipContext";
 import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
-import { initializeAnalytics } from "./utils/analytics";
-import { initializeAnalyticsClient } from "./utils/analyticsClient";
-import { preloadInitialState } from "./utils/apiPreload";
-import { initializeSentry } from "./utils/sentry";
+import { initializeAnalytics, initializeAnalyticsClient } from "./utils/analytics/tracking";
+import { preloadInitialState } from "./utils/api/apiPreload";
+import { initializeSentry } from "./utils/system/monitoring";
 
 // Initialize Sentry synchronously as early as possible
 // This is required for React Router tracing and early error catching
@@ -94,7 +93,7 @@ if (typeof window !== "undefined") {
 
 					// Dynamically import and initialize service worker
 					const { setupServiceWorkerRegistration } =
-						await import("./utils/setupServiceWorker");
+						await import("./utils/system/setupServiceWorker");
 					setupServiceWorkerRegistration();
 				} catch (error) {
 					console.error("Failed to initialize deferred services:", error);

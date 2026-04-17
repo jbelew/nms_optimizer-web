@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 import { ErrorContent } from "./ErrorContent";
 
 // Mock useBreakpoint hook
@@ -11,7 +11,7 @@ vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
 }));
 
 // Mock splashScreen utility
-vi.mock("../../utils/splashScreen", () => ({
+vi.mock("../../utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 

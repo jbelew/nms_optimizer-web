@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { seoMetadata } from "../../../shared/seo-metadata.js";
-import { sendEvent } from "../../utils/analytics";
+import { sendEvent } from "../../utils/analytics/tracking";
 
 /**
  * Updates or creates a meta tag in the document's head using the `name` attribute.

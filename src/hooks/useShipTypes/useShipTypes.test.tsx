@@ -7,7 +7,7 @@ vi.mock("../../constants", () => ({
 }));
 
 // Mock apiCall
-vi.mock("../../utils/apiCall", () => ({
+vi.mock("../../utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 
@@ -75,7 +75,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			hauler: { label: "Hauler", type: "Starship" },
 			sentinel: { label: "Sentinel", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/apiCall");
+		const { apiCall } = await import("../../utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// 3. Dynamically import to re-initialize the store with the new URL
@@ -99,7 +99,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/apiCall");
+		const { apiCall } = await import("../../utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT
@@ -122,7 +122,7 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/apiCall");
+		const { apiCall } = await import("../../utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT

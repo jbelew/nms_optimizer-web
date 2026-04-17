@@ -1,0 +1,512 @@
+/**
+ * Analytics utility module for Google Analytics 4 (GA4).
+ *
+ * @remarks
+ * This module provides a unified interface for tracking user interactions, errors,
+ * and performance metrics. It supports both client-side tracking via `react-ga4`
+ * and a server-side fallback for environments where client-side tracking is blocked
+ * (e.g., ad blockers).
+ *
+ * It handles:
+ * - GA4 initialization with anonymization.
+ * - Ad blocker detection for fallback routing.
+ * - Event validation and dispatching.
+ * - Web Vitals reporting.
+ *
+ * @see {@link initializeAnalytics}
+ * @see {@link sendEvent}
+ *
+ * @category Utilities
+ */
+
+import { API_URL, TRACKING_ID } from "../../constants";
+import { isBot, safeGetItem, safeSetItem } from "../browser/environment";
+
+/**
+ * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.
+ *
+ * @category Utilities
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let ReactGAInstance: any = null;
+
+/** Event queue for events sent before the ReactGA module loads */
+let queuedEvents: GA4Event[] = [];
+
+/**
+ * Interface for Google Analytics 4 event tracking.
+ *
+ * @category Utilities
+ */
+export interface GA4Event {
+	/** Event category. */
+	category: string;
+	/** Event action. */
+	action: string;
+	/** Optional event label. */
+	label?: string;
+	/** Optional numeric value. */
+	value?: number;
+	/** Whether the event is non-interactive. */
+	nonInteraction?: boolean;
+	/** Platform identifier. */
+	platform?: string;
+	/** Tech identifier. */
+	tech?: string;
+	/** Method used for solve. */
+	solve_method?: string;
+	/** Whether the build is supercharged. */
+	supercharged?: boolean;
+	/** Page identifier. */
+	page?: string;
+	/** Page title. */
+	title?: string;
+	/** SEO page title. */
+	page_title?: string;
+	/** Page location URL. */
+	page_location?: string;
+	/** Referrer URL. */
+	page_referrer?: string;
+	/** Metric name for web vitals. */
+	metric_name?: string;
+	/** Build ID. */
+	build?: string;
+	/** React component stack trace. */
+	componentStack?: string;
+	/** Error stack trace. */
+	stackTrace?: string;
+	/** Application version. */
+	app_version?: string;
+	/** Name of the build. */
+	buildName?: string;
+	/** Filename involved. */
+	fileName?: string;
+	/** Ship type category. */
+	shipType?: string;
+	/** Storage status. */
+	storageCleared?: string;
+	/** Tracking source (client/server). */
+	tracking_source?: string;
+}
+
+/**
+ * Key-value pairs for event parameters.
+ *
+ * @category Utilities
+ */
+export interface AnalyticsEventParams {
+	[key: string]: string | number | boolean | undefined;
+}
+
+/**
+ * Payload sent to the backend for server-side analytics.
+ *
+ * @category Utilities
+ */
+export interface AnalyticsEventPayload {
+	/** Unique client session ID. */
+	clientId: string;
+	/** Event name. */
+	eventName: string;
+	/** Event-specific parameters. */
+	params?: AnalyticsEventParams;
+	/** Authenticated user ID. */
+	userId?: string;
+}
+
+/** Flag indicating if GA has been initialized. */
+let gaInitialized = false;
+/** Cached promise for ad blocker detection. */
+let adBlockerDetectionPromise: Promise<boolean> | null = null;
+/** Cached result of ad blocker detection. */
+let adBlockerResult: boolean | null = null;
+/** Active client ID for the session. */
+let clientId: string;
+
+/**
+ * Environment check utilities.
+ *
+ * @category Utilities
+ */
+export const env = {
+	/**
+	 * Checks if the application is running in development mode.
+	 *
+	 * @returns {boolean} True if in dev mode.
+	 *
+	 * @example
+	 * ```ts
+	 * if (env.isDevMode()) { console.log("Dev mode active"); }
+	 * // returns boolean
+	 * ```
+	 */
+	isDevMode: (): boolean => {
+		const devEnv = import.meta.env.DEV;
+
+		if (typeof devEnv === "string") {
+			return devEnv === "true";
+		}
+
+		return devEnv;
+	},
+};
+
+/** Whether the app is installed as a PWA. */
+const globalIsInstalled =
+	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
+
+/**
+ * Detects if client-side tracking is likely being blocked.
+ *
+ * @returns {Promise<boolean>} True if blocked.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const blocked = await detectAdBlocker();
+ * // returns Promise<boolean>
+ * ```
+ */
+const detectAdBlocker = async (): Promise<boolean> => {
+	const urls = [
+		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+		"https://www.google-analytics.com/g/collect",
+	];
+
+	try {
+		await Promise.all(
+			urls.map((url) => {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+				return fetch(url, {
+					method: "HEAD",
+					mode: "no-cors",
+					cache: "no-store",
+					signal: controller.signal,
+				}).finally(() => clearTimeout(timeoutId));
+			})
+		);
+
+		return false;
+	} catch (_error) {
+		return true;
+	}
+};
+
+/**
+ * Gets the result of the ad blocker detection.
+ *
+ * @returns {Promise<boolean>} True if blocked.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const isBlocked = await getAdBlockerDetectionResult();
+ * // returns Promise<boolean>
+ * ```
+ */
+const getAdBlockerDetectionResult = async (): Promise<boolean> => {
+	if (adBlockerResult !== null) {
+		return adBlockerResult;
+	}
+
+	if (!adBlockerDetectionPromise) {
+		adBlockerDetectionPromise = detectAdBlocker().then((result) => {
+			adBlockerResult = result;
+
+			return result;
+		});
+	}
+
+	return adBlockerDetectionPromise;
+};
+
+/**
+ * Attempts to retrieve the Client ID from the Google Analytics cookie (`_ga`).
+ *
+ * @returns {string|null} The extracted ID or null.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const id = getGaClientIdFromCookie();
+ * // returns string | null
+ * ```
+ */
+const getGaClientIdFromCookie = (): string | null => {
+	if (typeof document === "undefined") return null;
+
+	const match = document.cookie.match(/(?:^|; )\s*_ga=GA1\.[0-9]+\.([^;]+)/);
+
+	return match ? match[1] : null;
+};
+
+/**
+ * Initialize the analytics client with a unique client ID.
+ *
+ * @returns {string} The initialized client ID.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const id = initializeAnalyticsClient();
+ * // returns string
+ * ```
+ */
+export const initializeAnalyticsClient = (): string => {
+	const gaId = getGaClientIdFromCookie();
+	const stored = safeGetItem("analytics_client_id");
+
+	if (gaId) {
+		clientId = gaId;
+
+		if (stored !== gaId) {
+			safeSetItem("analytics_client_id", gaId);
+		}
+	} else if (stored) {
+		clientId = stored;
+	} else {
+		clientId = `web_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+		safeSetItem("analytics_client_id", clientId);
+	}
+
+	return clientId;
+};
+
+/**
+ * Gets the current client ID, initializing it if necessary.
+ *
+ * @returns {string} The active client ID.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const id = getClientId();
+ * // returns string
+ * ```
+ */
+export const getClientId = (): string => {
+	if (!clientId) {
+		initializeAnalyticsClient();
+	}
+
+	return clientId;
+};
+
+/**
+ * Sends an analytics event to the backend for server-side relay.
+ *
+ * @param {string} eventName - Name of the event.
+ * @param {AnalyticsEventParams} [params={}] - Event parameters.
+ * @param {string} [userId] - Optional user ID.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * sendServerEvent("optimization_complete", { method: "SA" });
+ * // returns void
+ * ```
+ */
+export const sendServerEvent = (
+	eventName: string,
+	params: AnalyticsEventParams = {},
+	userId?: string
+): void => {
+	try {
+		const payload: AnalyticsEventPayload = {
+			clientId: getClientId(),
+			eventName,
+			params,
+		};
+
+		if (userId) {
+			payload.userId = userId;
+		}
+
+		const blob = new Blob([JSON.stringify(payload)], {
+			type: "application/json",
+		});
+
+		if (navigator.sendBeacon) {
+			try {
+				const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+				const success = navigator.sendBeacon(`${baseUrl}api/events`, blob);
+				if (success) return;
+			} catch (error) {
+				console.warn("navigator.sendBeacon failed, falling back to fetch:", error);
+			}
+		}
+
+		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		fetch(`${baseUrl}api/events`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+			keepalive: true,
+		}).catch((error) => {
+			console.error("Analytics event fallback failed:", error);
+		});
+	} catch (error) {
+		console.error("Error preparing analytics event:", error);
+	}
+};
+
+/**
+ * Initializes Google Analytics tracking.
+ *
+ * @returns {Promise<void>} Resolves when initialization is complete or skipped.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * await initializeAnalytics();
+ * // returns Promise<void>
+ * ```
+ */
+export const initializeAnalytics = async () => {
+	if (env.isDevMode() || gaInitialized || isBot()) {
+		return;
+	}
+
+	const isBlocked = await getAdBlockerDetectionResult();
+
+	if (!isBlocked) {
+		const ReactGAModule = await import("react-ga4");
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ReactGAInstance = (ReactGAModule.default as any)?.default ?? ReactGAModule.default;
+
+		ReactGAInstance.initialize(TRACKING_ID, {
+			gtagOptions: {
+				send_page_view: false,
+				anonymize_ip: true,
+				user_properties: {
+					app_version: __APP_VERSION__,
+					is_installed: globalIsInstalled ? "yes" : "no",
+				},
+			},
+		});
+
+		if (queuedEvents.length > 0) {
+			const eventsToFlush = [...queuedEvents];
+			queuedEvents = [];
+			eventsToFlush.forEach(sendEvent);
+		}
+	}
+
+	gaInitialized = true;
+
+	const { reportWebVitals } = await import("./reportWebVitals");
+	reportWebVitals(sendEvent);
+};
+
+/**
+ * Validates that an event has required properties.
+ *
+ * @param {GA4Event} event - Event to validate.
+ *
+ * @throws {Error} If action or category is missing.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * validateEvent({ action: "click", category: "UI" });
+ * // returns void
+ * ```
+ */
+const validateEvent = (event: GA4Event): void => {
+	if (!event.action) {
+		throw new Error("Event must have an 'action' property");
+	}
+
+	if (!event.category) {
+		throw new Error("Event must have a 'category' property");
+	}
+};
+
+/**
+ * Sends an event to Google Analytics, automatically choosing the transport method.
+ *
+ * @param {GA4Event} event - Event to send.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * sendEvent({ category: "UI", action: "click" });
+ * // returns void
+ * ```
+ */
+export const sendEvent = (event: GA4Event): void => {
+	try {
+		validateEvent(event);
+	} catch (validationError) {
+		console.error("Event validation failed:", validationError);
+
+		return;
+	}
+
+	getAdBlockerDetectionResult()
+		.then((isBlocked) => {
+			if (isBlocked) {
+				const { action, category, ...params } = event;
+				sendServerEvent(action, {
+					...params,
+					category,
+					action,
+					app_version: __APP_VERSION__,
+					is_installed: globalIsInstalled ? "yes" : "no",
+					tracking_source: "server",
+				});
+			} else {
+				if (!ReactGAInstance) {
+					queuedEvents.push(event);
+
+					return;
+				}
+
+				const { action, category, ...params } = event;
+				ReactGAInstance.event(action, {
+					...params,
+					category,
+					tracking_source: "client",
+				});
+			}
+		})
+		.catch((trackingError) => {
+			console.error("Failed to send analytics event:", trackingError);
+		});
+};
+
+/**
+ * Reset analytics initialization state for testing.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * resetAnalyticsForTesting();
+ * // returns void
+ * ```
+ */
+export const resetAnalyticsForTesting = () => {
+	gaInitialized = false;
+	adBlockerDetectionPromise = null;
+	adBlockerResult = null;
+};

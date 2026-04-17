@@ -16,7 +16,7 @@ import { build, getBuildDate } from "../../routeConfig";
 import { useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useSessionStore } from "../../store/SessionStore";
-import { hideSplashScreenAndShowBackground } from "../../utils/splashScreen";
+import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 
 /**
  * Custom hook that consolidates the high-level orchestration logic for the main application view.

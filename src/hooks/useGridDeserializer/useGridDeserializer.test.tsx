@@ -2,7 +2,7 @@ import { vi } from "vitest";
 
 import { API_URL } from "../../constants";
 import { createEmptyCell } from "../../store/GridStore"; // Import createEmptyCell
-import { apiCall } from "../../utils/apiCall";
+import { apiCall } from "../../utils/api/network";
 import { clearTechTreeCache } from "../useTechTree/useTechTree";
 import { deserialize } from "./useGridDeserializer";
 
@@ -30,11 +30,11 @@ vi.mock("../../store/GridStore", () => ({
 	})),
 }));
 
-vi.mock("../../utils/recommendedBuildValidation", () => ({
-	isValidRecommendedBuild: vi.fn(() => true),
+vi.mock("../../utils/validation/dataValidation", () => ({
+	validateRecommendedBuild: vi.fn(),
 }));
 
-vi.mock("../../utils/apiCall", () => ({
+vi.mock("../../utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

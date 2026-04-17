@@ -4,11 +4,11 @@ import { createElement, Suspense } from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as apiCallModule from "../../utils/apiCall";
+import * as apiCallModule from "../../utils/api/network";
 import { resetUserStatsCache } from "./userStatsResource";
 import { useUserStats } from "./useUserStats";
 
-vi.mock("../../utils/apiCall", () => ({
+vi.mock("../../utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

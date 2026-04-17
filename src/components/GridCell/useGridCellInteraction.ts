@@ -5,7 +5,7 @@ import { useLatest } from "../../hooks/useLatest/useLatest";
 import { useGridStore } from "../../store/GridStore";
 import { useSessionStore } from "../../store/SessionStore";
 import { useShakeStore } from "../../store/ShakeStore";
-import { Logger } from "../../utils/logger";
+import { Logger } from "../../utils/system/monitoring";
 
 // To track double taps correctly across all cells, we need a shared reference.
 // A tap on one cell should not be considered the first tap of a double tap on another.

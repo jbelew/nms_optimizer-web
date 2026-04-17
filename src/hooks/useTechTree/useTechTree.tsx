@@ -4,9 +4,9 @@ import { API_URL } from "../../constants";
 import { useGridStore } from "../../store/GridStore";
 import { useTechStore } from "../../store/TechStore";
 import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
-import { apiCall } from "../../utils/apiCall";
-import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
+import { apiCall } from "../../utils/api/network";
 import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 
 /**
  * Represents a specific technology module in No Man's Sky.

@@ -15,7 +15,7 @@ import {
 	SHIP_NAME_PREFIXES_SIMPLE,
 	SHIP_NAME_SUFFIXES,
 } from "../constants/shipNames";
-import { sanitizeFilename } from "./filenameValidation";
+import { sanitizeFilename } from "./validation/dataValidation";
 
 /**
  * Mapping of internal ship type identifiers to user-friendly display names.

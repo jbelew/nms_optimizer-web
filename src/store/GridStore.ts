@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { type Module } from "../hooks/useTechTree/useTechTree";
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/storage";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/browser/environment";
 import { useModuleSelectionStore } from "./ModuleSelectionStore";
 import { usePlatformStore } from "./PlatformStore";
 import { useTechBonusStore } from "./TechBonusStore";

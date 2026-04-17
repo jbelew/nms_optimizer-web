@@ -14,11 +14,11 @@ import { vi } from "vitest";
 import { routes } from "./routes";
 import { useOptimizeStore } from "./store/OptimizeStore";
 import { usePlatformStore } from "./store/PlatformStore";
-import { sendEvent } from "./utils/analytics";
-import { hideSplashScreenAndShowBackground } from "./utils/splashScreen";
+import { sendEvent } from "./utils/analytics/tracking";
+import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 /** Mock the splash screen utility */
-vi.mock("./utils/splashScreen", () => ({
+vi.mock("./utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
@@ -110,7 +110,7 @@ vi.mock("./hooks/useUrlValidation/useUrlValidation", () => ({
 	useUrlValidation: vi.fn(),
 }));
 
-vi.mock("./utils/analytics", () => ({
+vi.mock("./utils/analytics/tracking", () => ({
 	sendEvent: vi.fn(),
 }));
 

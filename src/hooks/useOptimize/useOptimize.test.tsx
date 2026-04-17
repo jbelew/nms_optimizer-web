@@ -10,8 +10,8 @@ import { useGridStore } from "../../store/GridStore";
 import { useOptimizeStore } from "../../store/OptimizeStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
-import { Logger } from "../../utils/logger";
-import { createSocket } from "../../utils/socketManager";
+import { createSocket } from "../../utils/api/socketManager";
+import { Logger } from "../../utils/system/monitoring";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 import { useOptimize } from "./useOptimize";
@@ -40,7 +40,7 @@ vi.mock("../../store/PlatformStore", () => ({
 	}),
 }));
 vi.mock("../useBreakpoint/useBreakpoint");
-vi.mock("../../utils/socketManager", () => ({
+vi.mock("../../utils/api/socketManager", () => ({
 	createSocket: vi.fn(),
 	SOCKET_OPTIONS: {},
 	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
@@ -64,7 +64,7 @@ const mockUseBreakpoint = vi.mocked(useBreakpoint);
 const mockUseAnalytics = vi.mocked(useAnalytics);
 const mockCreateSocket = vi.mocked(createSocket);
 
-vi.mock("../../utils/logger", () => ({
+vi.mock("../../utils/system/monitoring", () => ({
 	Logger: {
 		info: vi.fn(),
 		warn: vi.fn(),

@@ -3,8 +3,8 @@ import { useCallback } from "react";
 import { createGrid, Grid, useGridStore } from "../../store/GridStore";
 import { usePlatformStore } from "../../store/PlatformStore";
 import { useTechStore } from "../../store/TechStore";
-import { isValidRecommendedBuild } from "../../utils/recommendedBuildValidation";
 import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 import { fetchTechTreeAsync, RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
 
 /**
