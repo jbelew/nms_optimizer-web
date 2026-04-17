@@ -1,3 +1,10 @@
+## [6.30.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.1...v6.30.2) (2026-04-17)
+
+
+### Bug Fixes
+
+* disable stale HTML caching and remove unused noscript background styles ([ef56332](https://github.com/jbelew/nms_optimizer-web/commit/ef56332d1d2d25766de32494114b346d50395944))
+
 ## [6.30.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.0...v6.30.1) (2026-04-17)
 
 
