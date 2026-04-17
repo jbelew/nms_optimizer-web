@@ -1,3 +1,10 @@
+# [6.29.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.1...v6.29.0) (2026-04-17)
+
+
+### Features
+
+* **dashboard:** limit audit table to last 10 runs and link to github commits ([6a786ad](https://github.com/jbelew/nms_optimizer-web/commit/6a786ad6bbe0b0c3d4efd6d9672ed550ec14517b))
+
 ## [6.28.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.0...v6.28.1) (2026-04-17)
 
 
