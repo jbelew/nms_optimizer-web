@@ -1,7 +1,7 @@
 import type { UserStat } from "../../hooks/useUserStats/useUserStats";
 
 import { API_URL } from "../../constants";
-import { apiCall } from "../../utils/api/network";
+import { apiCall } from "./network";
 
 let userStatsPromise: Promise<UserStat[]> | null = null;
 

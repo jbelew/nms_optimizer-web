@@ -3,7 +3,7 @@ import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "../../test/i18n";
-import { BonusStatusIcon } from "./BonusStatusIcon";
+import { BonusStatusIcon } from "./TechTreeRow";
 
 vi.mock("../../store/tech/techBonusStore", () => ({
 	useTechBonusStore: vi.fn(() => ({

@@ -1,4 +1,4 @@
-// src/context/DialogContext.tsx
+// src/context/dialogContext.tsx
 import type { DialogType } from "../utils/system/dialogUtils";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
  *
  * @returns {JSX.Element} The context provider with dialog state.
  *
- * @see {@link ./dialog-utils.ts useDialog Hook}
+ * @see {@link ../utils/system/dialogUtils.ts useDialog Hook}
  * @see {@link DialogContext}
  * @see {@link DialogType}
  * @see {@link ./DialogContext.test.tsx Unit Tests}

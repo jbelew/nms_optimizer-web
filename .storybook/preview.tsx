@@ -3,7 +3,8 @@ import type { Decorator, Preview } from "@storybook/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Theme } from "@radix-ui/themes";
-import { TooltipProvider } from "../src/context/TooltipContext";
+import { TooltipProvider } from "../src/context/tooltipContext";
+import { DialogProvider } from "../src/context/dialogContext";
 import { I18nextProvider } from "react-i18next";
 
 // Custom viewports matching Tailwind breakpoints
@@ -35,7 +36,6 @@ const customViewports = {
 };
 
 import i18n from "../src/i18n/i18n";
-import { DialogProvider } from "../src/context/DialogContext";
 import { SplashHider } from "./SplashHider";
 
 // Base theme tokens

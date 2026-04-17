@@ -14,14 +14,88 @@
  */
 
 import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
-import React from "react";
-import { Box, ScrollArea } from "@radix-ui/themes";
+import React, { useState } from "react";
+import { Box, Flex, ScrollArea, Skeleton } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/app/platformStore";
+import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
 import { TechTreeContent } from "./TechTreeContent";
+
+/**
+ * A skeleton component that displays a loading state for the tech tree.
+ * @example
+ */
+const SuspenseSkeleton = () => {
+	const [skeletons] = useState(() => {
+		const totalSections = 3 + Math.floor(Math.random() * 3); // 3–5 sections
+		const elements: React.JSX.Element[] = [];
+
+		for (let i = 0; i < totalSections; i++) {
+			elements.push(
+				<Skeleton
+					key={`big-${i}`}
+					mt={i === 0 ? "0" : "4"} // first element mt="0", others mt="4"
+					height="44px"
+					width="100%"
+				/>
+			);
+
+			const smallCount = 1 + Math.floor(Math.random() * 8);
+
+			for (let j = 0; j < smallCount; j++) {
+				elements.push(<Skeleton key={`small-${i}-${j}`} height="32px" width="100%" />);
+			}
+		}
+
+		return elements;
+	});
+
+	return (
+		<Flex direction="column" gapY="2">
+			{skeletons}
+		</Flex>
+	);
+};
+
+/**
+ * A skeleton component that displays a loading state for the tech tree.
+ *
+ * @returns {JSX.Element} The rendered skeleton component.
+ *
+ * @example Loading state placeholder
+ * ```tsx
+ * <TechTreeSkeleton />
+ * ```
+ */
+export const TechTreeSkeleton: React.FC = () => {
+	const isLarge = useBreakpoint("1024px");
+	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "523px";
+
+	return (
+		<>
+			{isLarge ? (
+				<ScrollArea
+					className="main-app__tech-tree-sidebar shadow-sm"
+					style={{
+						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
+						backgroundColor: "var(--gray-a3)",
+						padding: "var(--space-5)",
+						borderRadius: "var(--radius-5)",
+					}}
+				>
+					<MessageSpinner initialMessage="Loading Tech" isInlay={true} isVisible={true} />
+				</ScrollArea>
+			) : (
+				<aside className="w-full grow pt-8" style={{ minHeight: "50vh" }}>
+					<SuspenseSkeleton />
+				</aside>
+			)}
+		</>
+	);
+};
 
 /**
  * Props for the `TechTree` and `TechTreeWithData` components.
@@ -39,28 +113,7 @@ interface TechTreeProps {
 
 /**
  * A data-aware component that renders the technology list and recommended builds.
- *
- * @remarks
- * This component handles the internal scroll area logic on large screens and
- * responsive stack behavior on mobile. It uses `useFetchTechTreeSuspense` to
- * retrieve data, ensuring it integrates with React Suspense.
- *
- * @param {TechTreeProps} props - Component properties.
- *
- * @returns {JSX.Element} The technology tree UI.
- *
- * @see {@link TechTreeContent}
- * @see {@link RecommendedBuild}
- *
- * @component
- *
- * @category Components
- *
- * @example Component usage
- * ```tsx
- * <TechTreeWithData {...props} />
- * // renders sidebar with scroll area
- * ```
+ * @example
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
 	handleOptimize,

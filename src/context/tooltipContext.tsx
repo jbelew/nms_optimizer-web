@@ -22,8 +22,8 @@ const WARM_THRESHOLD = 500;
  *
  * @returns {JSX.Element} The state and actions context providers.
  *
- * @see {@link import('./tooltip-utils').useTooltipState}
- * @see {@link import('./tooltip-utils').useTooltipActions}
+ * @see {@link import('../utils/system/tooltipUtils').useTooltipState}
+ * @see {@link import('../utils/system/tooltipUtils').useTooltipActions}
  * @see {@link TooltipState}
  * @see {@link TooltipActions}
  *
