@@ -1,3 +1,10 @@
+## [6.29.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.1...v6.29.2) (2026-04-17)
+
+
+### Bug Fixes
+
+* replace client-side error handling with robust initialization logic in index.html and disable HTML caching to prevent stale deployment errors. ([7eeb37d](https://github.com/jbelew/nms_optimizer-web/commit/7eeb37d7417565885a7f2ce5c2130f09c40df836))
+
 ## [6.29.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.0...v6.29.1) (2026-04-17)
 
 
