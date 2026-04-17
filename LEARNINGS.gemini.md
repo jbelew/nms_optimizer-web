@@ -611,3 +611,29 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     3.  **JSDoc Maintenance**: Consolidation is a good opportunity to enforce documentation standards. Missing examples and improper tags can be fixed in one pass to improve long-term maintainability and LLM comprehension. Path-based links in JSDoc must be explicitly audited.
     4.  **Verification Rigor**: A full suite of `lint`, `typecheck`, `test`, and `test:storybook` is the only way to guarantee a successful refactor. The "0 errors" state is non-negotiable for architectural changes of this scale.
     5.  **Impact Analysis**: This consolidation activity significantly optimized the build, **reducing the number of chunks by approximately 20** and **improving overall performance by 10%** due to reduced module fragmentation and fewer network waterfalls during lazy loading.
+
+## 2026-04-16: Unused JavaScript Optimization (LCP)
+
+### Perceive & Understand
+*   **Request**: Reduce "Unused JavaScript" to address Lighthouse performance warnings.
+*   **Context**: Audit revealed ~257 KiB of unused code in the critical path, primarily from `html-to-image` (~127 KiB) and Sentry tracing integrations (~140 KiB).
+*   **Safety Constraint**: Sentry must remain eager to ensure early crash reporting and reliable tracing, but `html-to-image` is purely for the "Save Image" feature and can be deferred.
+
+### Reason & Plan
+*   **Plan**:
+    1.  Lazy-load `html-to-image` via dynamic `import()` inside the `useScreenshot` hook.
+    2.  Configure Vite to split `html-to-image` into a dedicated chunk (`vendor-html-to-image`).
+    3.  Exclude this new chunk from Vite's `modulePreload` to prevent it from blocking the critical path.
+    4.  Verify the shift from "Critical Path" to "Lazy-Loaded" via local performance check.
+
+### Act & Implement
+*   **Action**:
+    1.  Refactored `src/hooks/useScreenshot/useScreenshot.ts` to dynamically import `toCanvas`.
+    2.  Updated `vite.config.ts` to add `vendor-html-to-image` group and exclude it from preloading.
+    3.  Verified uncompressed savings of ~127KB in the critical rendering path.
+
+### Refine & Reflect
+*   **Reflection**:
+    1.  **Risk Management**: While Lighthouse suggested saving ~257KB, only ~127KB was truly "optional" code. Decoupling Sentry would have compromised reliability. Identifying the boundary between "performance gain" and "system safety" is crucial.
+    2.  **Native Code Splitting**: Rolldown's declarative `codeSplitting.groups` makes it easy to isolate heavy libraries without messy manual chunking logic.
+    3.  **Verification**: Using `npm run perf:check` provided immediate empirical confirmation of the bundle shift, which is faster than waiting for a full CI Lighthouse run.

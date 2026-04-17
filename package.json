@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+		"docs:generate": "typedoc",
 		"prebuild": "node scripts/generate-radix-colors.mjs",
 		"build": "tsc -b && vite build --mode production && node scripts/generate-ssg.mjs",
 		"build:docker": "DOCKER=true vite build --mode docker && node scripts/generate-ssg.mjs",
@@ -152,6 +153,8 @@
 		"stylelint-config-standard-scss": "^17.0.0",
 		"stylelint-order": "^8.1.1",
 		"supertest": "^7.2.2",
+		"typedoc": "^0.28.19",
+		"typedoc-plugin-markdown": "^4.11.0",
 		"typescript": "~6.0.2",
 		"typescript-eslint": "^8.58.1",
 		"vite": "^8.0.8",

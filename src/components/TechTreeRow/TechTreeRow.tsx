@@ -103,7 +103,17 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
 
 /**
  * Rounds a numerical value to a fixed number of decimal places.
- * @example
+ *
+ * @param {number} value - The value to round.
+ * @param {number} decimals - Number of decimal places.
+ *
+ * @returns {number} The rounded value.
+ *
+ * @example Fixed precision
+ * ```ts
+ * round(10.1234, 2);
+ * // returns 10.12
+ * ```
  */
 function round(value: number, decimals: number) {
 	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
@@ -111,7 +121,17 @@ function round(value: number, decimals: number) {
 
 /**
  * Core logic to determine the efficiency rating and icon metadata for a technology.
- * @example
+ *
+ * @param {number} techMaxBonus - The maximum bonus possible.
+ * @param {Function} t - Translation function.
+ *
+ * @returns {import("../../store/tech/techBonusStore").BonusStatusData} Metadata for the status icon and tooltip.
+ *
+ * @example Status calculation
+ * ```ts
+ * computeBonusStatusData(105.5, t);
+ * // returns { icon: 'lightning', percent: 5.5, ... }
+ * ```
  */
 function computeBonusStatusData(
 	techMaxBonus: number,
@@ -154,7 +174,18 @@ function computeBonusStatusData(
 
 /**
  * Renders the appropriate Radix icon component based on the status type.
- * @example
+ *
+ * @param {string|null} iconType - Identifier for the icon to render.
+ * @param {string} className - CSS class for the SVG.
+ * @param {React.CSSProperties} style - Inline styles.
+ *
+ * @returns {React.ReactNode} The rendered icon or null.
+ *
+ * @example Icon mapping
+ * ```tsx
+ * renderIcon('lightning', 'icon-bolt', { color: 'amber' });
+ * // renders LightningBoltIcon
+ * ```
  */
 function renderIcon(
 	iconType: string | null,
@@ -175,7 +206,16 @@ function renderIcon(
 
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
- * @example
+ *
+ * @param {BonusStatusIconProps} props - Component properties.
+ *
+ * @returns {JSX.Element | null} The rendered icon or null if no bonus.
+ *
+ * @example Status indicator
+ * ```tsx
+ * <BonusStatusIcon tech="pulse" techMaxBonus={110} techSolvedBonus={100} />
+ * // renders lightning icon for boosted solve
+ * ```
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	tech,
@@ -237,7 +277,16 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 
 /**
  * Primary interaction buttons for a technology row.
- * @example
+ *
+ * @param {ActionButtonsProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered button group.
+ *
+ * @example Action triggers
+ * ```tsx
+ * <ActionButtons {...props} />
+ * // renders Solve/Update and Reset buttons
+ * ```
  */
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
@@ -293,7 +342,16 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFu
 
 /**
  * Renders the localized technology name with responsive typography.
- * @example
+ *
+ * @param {TechInfoProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered label.
+ *
+ * @example Tech label
+ * ```tsx
+ * <TechInfo hookData={hookData} />
+ * // renders text with localized name
+ * ```
  */
 export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 	const { translatedTechName } = hookData;
@@ -314,7 +372,16 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 
 /**
  * Status and configuration badges for a technology row.
- * @example
+ *
+ * @param {TechInfoBadgesProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered badge section.
+ *
+ * @example Metadata badges
+ * ```tsx
+ * <TechInfoBadges {...props} />
+ * // renders module count and efficiency icons
+ * ```
  */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
 	const { a11yMode } = useA11yStore();

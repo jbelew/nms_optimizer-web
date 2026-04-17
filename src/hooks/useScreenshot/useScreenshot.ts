@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { toCanvas } from "html-to-image";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "../../store/grid/gridStore";
@@ -75,6 +74,7 @@ export function useScreenshot(): UseScreenshotReturn {
 			setIsCapturing(true);
 
 			try {
+				const { toCanvas } = await import("html-to-image");
 				const padding = 20;
 				// Maintain exactly the same Y position relative to the grid as original (element.offsetHeight + 5)
 				// But increase the total canvas height to give more space BELOW the label
