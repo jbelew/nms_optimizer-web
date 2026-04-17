@@ -57,8 +57,11 @@ if (existingIndex !== -1) {
   history.push(newData);
 }
 
-// Sort by date and keep reasonable history
+// Sort by date and keep the last 10 history records
 history.sort((a, b) => new Date(a.date) - new Date(b.date));
+if (history.length > 10) {
+  history = history.slice(-10);
+}
 
 // Write updated data
 fs.writeFileSync(dataPath, JSON.stringify(history, null, 2));
