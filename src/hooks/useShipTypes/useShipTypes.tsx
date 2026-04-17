@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 import { API_URL } from "../../constants";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
 import { apiCall } from "../../utils/api/network";
 
 /**

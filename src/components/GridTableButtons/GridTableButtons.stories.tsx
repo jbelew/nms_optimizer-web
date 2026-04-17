@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import * as Toast from "@radix-ui/react-toast";
 
 import { ToastProvider } from "../../hooks/useToast/useToast";
-import { createGrid, useGridStore } from "../../store/GridStore";
+import { createGrid, useGridStore } from "../../store/grid/gridStore";
 import GridTableButtons from "./GridTableButtons";
 
 const meta: Meta<typeof GridTableButtons> = {

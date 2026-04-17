@@ -28,5 +28,5 @@ declare const __BUILD_DATE__: string;
  */
 interface Window {
 	/** Direct access to the `GridStore` for E2E testing. */
-	useGridStore: typeof import("./store/GridStore").useGridStore;
+	useGridStore: typeof import("./store/grid/gridStore").useGridStore;
 }

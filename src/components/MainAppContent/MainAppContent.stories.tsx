@@ -4,10 +4,10 @@ import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radi
 
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { ToastProvider } from "../../hooks/useToast/useToast";
-import { createGrid, useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { createGrid, useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
+import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import { MainAppContent } from "./MainAppContent";
 
 const meta = {

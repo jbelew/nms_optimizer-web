@@ -64,7 +64,7 @@ vi.mock("../../hooks/useTechTree/useTechTree", () => ({
 }));
 
 // Mock store
-vi.mock("../../store/PlatformStore", () => ({
+vi.mock("../../store/app/platformStore", () => ({
 	usePlatformStore: vi.fn((selector) => {
 		const mockState = {
 			selectedPlatform: "standard",

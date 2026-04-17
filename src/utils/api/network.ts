@@ -8,7 +8,7 @@
  * @category Utilities
  */
 
-import { useOptimizeStore } from "../../store/OptimizeStore";
+import { useOptimizeStore } from "../../store/app/optimizeStore";
 
 /**
  * Custom error class for HTTP errors.

@@ -1,16 +1,16 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "@/store/GridStore";
-import { useShakeStore } from "@/store/ShakeStore";
-import { useTechStore } from "@/store/TechStore";
+import { useShakeStore } from "@/store/app/shakeStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 import { useTechOptimization } from "./useTechOptimization";
 
 // Mock stores
-vi.mock("@/store/GridStore");
-vi.mock("@/store/ShakeStore");
-vi.mock("@/store/TechStore");
+vi.mock("@/store/grid/gridStore");
+vi.mock("@/store/app/shakeStore");
+vi.mock("@/store/tech/techStore");
 
 describe("useTechOptimization", () => {
 	const mockResetGridTech = vi.fn();

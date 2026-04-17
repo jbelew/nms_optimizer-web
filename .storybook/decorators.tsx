@@ -1,8 +1,8 @@
 import React from "react";
-import { createGrid, useGridStore } from "../src/store/GridStore";
-import { usePlatformStore } from "../src/store/PlatformStore";
-import { useTechTreeLoadingStore } from "../src/store/TechTreeLoadingStore";
-import { useTechStore } from "../src/store/TechStore";
+import { createGrid, useGridStore } from "../src/store/grid/gridStore";
+import { usePlatformStore } from "../src/store/app/platformStore";
+import { useTechTreeLoadingStore } from "../src/store/tech/techTreeLoadingStore";
+import { useTechStore } from "../src/store/tech/techStore";
 
 /**
  * A wrapper component that applies the dark/light theme class to the document root safely.

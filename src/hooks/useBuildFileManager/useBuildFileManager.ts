@@ -1,11 +1,11 @@
 import type { BuildFile } from "../../utils/validation/dataValidation";
 
-import { useGridStore } from "../../store/GridStore";
-import { useModuleSelectionStore } from "../../store/ModuleSelectionStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechBonusStore } from "../../store/TechBonusStore";
-import { useTechStore } from "../../store/TechStore";
-import { computeSHA256 } from "../../utils/hashUtils";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useModuleSelectionStore } from "../../store/tech/moduleSelectionStore";
+import { useTechBonusStore } from "../../store/tech/techBonusStore";
+import { useTechStore } from "../../store/tech/techStore";
+import { computeSHA256 } from "../../utils/system/hashUtils";
 import { isValidBuildFile, sanitizeFilename } from "../../utils/validation/dataValidation";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 

@@ -1,10 +1,10 @@
-import type { Cell } from "../../store/GridStore";
+import type { Cell } from "../../store/grid/gridStore";
 import { useRef, useState, useTransition } from "react";
 
 import { useLatest } from "../../hooks/useLatest/useLatest";
-import { useGridStore } from "../../store/GridStore";
-import { useSessionStore } from "../../store/SessionStore";
-import { useShakeStore } from "../../store/ShakeStore";
+import { useSessionStore } from "../../store/app/sessionStore";
+import { useShakeStore } from "../../store/app/shakeStore";
+import { useGridStore } from "../../store/grid/gridStore";
 import { Logger } from "../../utils/system/monitoring";
 
 // To track double taps correctly across all cells, we need a shared reference.

@@ -4,7 +4,7 @@ import React from "react";
 import { Avatar, Checkbox, CheckboxGroup, Separator, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
 import { MODULE_GROUP_ORDER } from "./constants";
 import { ModuleGroup } from "./ModuleGroup";
 

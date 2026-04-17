@@ -1,10 +1,10 @@
-import type { BonusStatusData } from "../../store/TechBonusStore";
+import type { BonusStatusData } from "../../store/tech/techBonusStore";
 import type React from "react";
 import { useEffect } from "react";
 import { Crosshair2Icon, ExclamationTriangleIcon, LightningBoltIcon } from "@radix-ui/react-icons";
 import { useTranslation } from "react-i18next";
 
-import { useTechBonusStore } from "../../store/TechBonusStore";
+import { useTechBonusStore } from "../../store/tech/techBonusStore";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 /**

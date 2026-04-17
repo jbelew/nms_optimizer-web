@@ -14,8 +14,8 @@
 
 import React, { memo, useCallback } from "react";
 
-import { useTooltipActions } from "../../context/tooltip-utils";
 import { isTouchDevice } from "../../utils/browser/environment";
+import { useTooltipActions } from "../../utils/system/tooltipUtils";
 
 /**
  * Props for the `ConditionalTooltip` component.

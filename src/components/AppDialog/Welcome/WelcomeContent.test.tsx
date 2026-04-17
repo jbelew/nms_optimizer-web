@@ -1,11 +1,11 @@
-import type { DialogContextType } from "../../../context/dialog-utils";
+import type { DialogContextType } from "../../../utils/system/dialogUtils";
 import type { ReactNode } from "react";
 import { Theme } from "@radix-ui/themes";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
-import { DialogContext } from "../../../context/dialog-utils";
+import { DialogContext } from "../../../utils/system/dialogUtils";
 import WelcomeContent from "./WelcomeContent";
 
 interface TransProps {

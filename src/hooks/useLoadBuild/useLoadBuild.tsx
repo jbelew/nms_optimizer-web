@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Code } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
 

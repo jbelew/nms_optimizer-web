@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { t } from "i18next";
 
-import { useOptimizeStore } from "../../../store/OptimizeStore";
+import { useOptimizeStore } from "../../../store/app/optimizeStore";
 import AppDialog from "../Base/AppDialog";
 import ErrorContent from "./ErrorContent";
 

@@ -1,17 +1,17 @@
-import type { PlatformState } from "../../store/PlatformStore";
+import type { PlatformState } from "../../store/app/platformStore";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useGridStore } from "../../store/grid/gridStore";
 import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
 import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
 import { useUrlSync } from "./useUrlSync";
 
-vi.mock("../../store/GridStore");
-vi.mock("../../store/PlatformStore");
+vi.mock("../../store/grid/gridStore");
+vi.mock("../../store/app/platformStore");
 vi.mock("../useGridDeserializer/useGridDeserializer");
 vi.mock("../useShipTypes/useShipTypes");
 const mockNavigate = vi.fn();

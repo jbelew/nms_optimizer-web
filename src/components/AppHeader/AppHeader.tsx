@@ -9,11 +9,11 @@ import { Trans, useTranslation } from "react-i18next";
 import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
-import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useA11yStore } from "@/store/A11yStore";
-import { useGridStore } from "@/store/GridStore";
+import { useA11yStore } from "@/store/app/a11yStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
 

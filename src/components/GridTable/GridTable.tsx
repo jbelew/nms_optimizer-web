@@ -1,11 +1,11 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
-import type { GridStore } from "../../store/GridStore";
+import type { GridStore } from "../../store/grid/gridStore";
 import React from "react";
 
-import { useGridStore } from "../../store/GridStore";
-import { useTechTreeLoadingStore } from "../../store/TechTreeLoadingStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import GridShake from "../GridShake/GridShake";

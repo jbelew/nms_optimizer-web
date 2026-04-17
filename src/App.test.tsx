@@ -12,8 +12,8 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { vi } from "vitest";
 
 import { routes } from "./routes";
-import { useOptimizeStore } from "./store/OptimizeStore";
-import { usePlatformStore } from "./store/PlatformStore";
+import { useOptimizeStore } from "./store/app/optimizeStore";
+import { usePlatformStore } from "./store/app/platformStore";
 import { sendEvent } from "./utils/analytics/tracking";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 

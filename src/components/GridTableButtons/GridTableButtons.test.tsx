@@ -73,7 +73,7 @@ vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => children,
 }));
 vi.mock("../../hooks/useBreakpoint/useBreakpoint");
-vi.mock("../../context/dialog-utils", () => ({
+vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: openDialogMock,
 		tutorialFinished: false,
@@ -92,7 +92,7 @@ vi.mock("../../hooks/useUrlSync/useUrlSync", () => ({
 		updateUrlForReset: mockUpdateUrlForReset,
 	}),
 }));
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: useGridStore,
 }));
 vi.mock("../../hooks/useBuildFileManager/useBuildFileManager", () => ({

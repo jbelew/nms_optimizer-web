@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 
-import { useModuleSelectionStore } from "@/store/ModuleSelectionStore";
-import { useTechStore } from "@/store/TechStore";
+import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 /**
  * Custom hook to manage the lifecycle of technology modules within the grid.

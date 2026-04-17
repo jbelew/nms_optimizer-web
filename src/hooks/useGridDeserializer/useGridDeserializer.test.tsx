@@ -1,13 +1,13 @@
 import { vi } from "vitest";
 
 import { API_URL } from "../../constants";
-import { createEmptyCell } from "../../store/GridStore"; // Import createEmptyCell
+import { createEmptyCell } from "../../store/grid/gridStore"; // Import createEmptyCell
 import { apiCall } from "../../utils/api/network";
 import { clearTechTreeCache } from "../useTechTree/useTechTree";
 import { deserialize } from "./useGridDeserializer";
 
 // Mock dependencies
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	createGrid: vi.fn((width, height) => ({
 		cells: Array.from({ length: height }, () =>
 			Array.from({ length: width }, () => createEmptyCell())

@@ -26,12 +26,12 @@ import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
-import { useDialog } from "@/context/dialog-utils";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 // import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
-import { useA11yStore } from "@/store/A11yStore";
-import { useGridStore } from "@/store/GridStore";
+import { useA11yStore } from "@/store/app/a11yStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * Props for the `MobileToolbar` component.

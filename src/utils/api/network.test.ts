@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useOptimizeStore } from "../../store/OptimizeStore";
+import { useOptimizeStore } from "../../store/app/optimizeStore";
 import { apiCall, fetchJson, fetchWithTimeout, HttpError } from "./network";
 
 // Mock store
-vi.mock("../../store/OptimizeStore", () => ({
+vi.mock("../../store/app/optimizeStore", () => ({
 	useOptimizeStore: {
 		getState: vi.fn(() => ({
 			setShowError: vi.fn(),

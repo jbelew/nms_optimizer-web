@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 
-import { createGrid, Grid, useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
-import { getTechTreeMaps } from "../../utils/techTreeUtils";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { createGrid, Grid, useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
+import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 import { fetchTechTreeAsync, RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
 

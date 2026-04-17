@@ -5,7 +5,7 @@ import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Flex, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useDialog } from "../../context/dialog-utils";
+import { useDialog } from "../../utils/system/dialogUtils";
 import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
 
 /**

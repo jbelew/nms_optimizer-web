@@ -5,9 +5,9 @@ import { Button, Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDebouncedValidation } from "../../../hooks/useDebouncedValidation/useDebouncedValidation";
-import { useGridStore } from "../../../store/GridStore";
-import { usePlatformStore } from "../../../store/PlatformStore";
-import { generateBuildNameWithType } from "../../../utils/buildNameGenerator";
+import { usePlatformStore } from "../../../store/app/platformStore";
+import { useGridStore } from "../../../store/grid/gridStore";
+import { generateBuildNameWithType } from "../../../utils/optimization/buildNameGenerator";
 import { isValidFilename } from "../../../utils/validation/dataValidation";
 
 /**

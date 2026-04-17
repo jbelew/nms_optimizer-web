@@ -3,8 +3,8 @@ import { renderHook } from "@testing-library/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useDialog } from "../../context/dialog-utils";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useDialog } from "../../utils/system/dialogUtils";
 import { useUrlNormalization } from "./useUrlNormalization";
 
 interface PlatformStoreState {
@@ -19,11 +19,11 @@ vi.mock("react-router-dom", () => ({
 	useNavigate: vi.fn(),
 }));
 
-vi.mock("../../context/dialog-utils", () => ({
+vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: vi.fn(),
 }));
 
-vi.mock("../../store/PlatformStore", () => ({
+vi.mock("../../store/app/platformStore", () => ({
 	usePlatformStore: vi.fn(),
 }));
 

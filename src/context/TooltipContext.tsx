@@ -5,7 +5,7 @@ import {
 	TooltipActionsContext,
 	TooltipState,
 	TooltipStateContext,
-} from "./tooltip-utils";
+} from "../utils/system/tooltipUtils";
 
 /** Time in milliseconds to maintain a "warm" state for instant tooltip re-opening. */
 const WARM_THRESHOLD = 500;
@@ -70,10 +70,10 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 			setState({ label, rect, isOpen: true, delayDuration });
 		} else {
 			// Show after delay
-			setState((prev) => ({ ...prev, label, rect, delayDuration })); // Update position immediately but not isOpen
+			setState((prev: TooltipState) => ({ ...prev, label, rect, delayDuration })); // Update position immediately but not isOpen
 			timerRef.current = window.setTimeout(() => {
 				isOpenRef.current = true;
-				setState((prev) => ({ ...prev, isOpen: true }));
+				setState((prev: TooltipState) => ({ ...prev, isOpen: true }));
 				timerRef.current = null;
 			}, delayDuration);
 		}
@@ -90,7 +90,7 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 		isOpenRef.current = false;
 		lastCloseTimeRef.current = Date.now();
-		setState((prev) => ({ ...prev, rect: null, isOpen: false }));
+		setState((prev: TooltipState) => ({ ...prev, rect: null, isOpen: false }));
 	}, []); // EMPTY dependency array - perfectly stable
 
 	const actions = useMemo(() => ({ show, hide }) as TooltipActions, [show, hide]);

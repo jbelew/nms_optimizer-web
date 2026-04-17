@@ -1,12 +1,12 @@
-import type { ApiResponse, GridStore } from "../../store/GridStore";
-import type { PlatformState } from "../../store/PlatformStore";
-import type { TechState } from "../../store/TechStore";
+import type { PlatformState } from "../../store/app/platformStore";
+import type { ApiResponse, GridStore } from "../../store/grid/gridStore";
+import type { TechState } from "../../store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { useGridStore } from "../../store/GridStore";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useTechStore } from "../../store/TechStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useGridStore } from "../../store/grid/gridStore";
+import { useTechStore } from "../../store/tech/techStore";
 import { createSocket } from "../api/socketManager";
 import { OptimizationManager } from "./optimizationManager";
 
@@ -15,20 +15,20 @@ vi.mock("../api/socketManager", () => ({
 	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
 }));
 
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(),
 	},
 	createEmptyCell: vi.fn((sc, active) => ({ tech: null, supercharged: sc, active })),
 }));
 
-vi.mock("../../store/TechStore", () => ({
+vi.mock("../../store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(),
 	},
 }));
 
-vi.mock("../../store/PlatformStore", () => ({
+vi.mock("../../store/app/platformStore", () => ({
 	usePlatformStore: {
 		getState: vi.fn(),
 	},

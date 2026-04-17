@@ -3,7 +3,7 @@ import { Dialog } from "@radix-ui/themes";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 // Mocking external dependencies
@@ -22,8 +22,8 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("../../store/PlatformStore");
-vi.mock("../../context/dialog-utils", () => ({
+vi.mock("../../store/app/platformStore");
+vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),

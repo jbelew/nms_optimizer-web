@@ -1,10 +1,10 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Cell, createEmptyCell, GridStore, useGridStore } from "../../store/GridStore";
+import { Cell, createEmptyCell, GridStore, useGridStore } from "../../store/grid/gridStore";
 import { useCell } from "./useCell";
 
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: vi.fn(),
 	createEmptyCell: vi.fn((sc, active) => ({
 		active: !!active,

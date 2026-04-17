@@ -2,12 +2,12 @@ import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useToast } from "@/hooks/useToast/useToast";
-import { useErrorStore } from "@/store/ErrorStore";
+import { useErrorStore } from "@/store/app/errorStore";
 
 import { ErrorMessageRenderer } from "./ErrorMessageRenderer";
 
 // Mock dependencies
-vi.mock("@/store/ErrorStore");
+vi.mock("@/store/app/errorStore");
 vi.mock("@/hooks/useToast/useToast");
 
 // Manual mock for react-i18next to ensure useTranslation is a spy

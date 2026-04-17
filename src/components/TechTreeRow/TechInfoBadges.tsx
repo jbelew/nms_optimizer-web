@@ -3,7 +3,7 @@ import React, { useRef, useState, useTransition } from "react";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button, Dialog } from "@radix-ui/themes";
 
-import { useA11yStore } from "@/store/A11yStore";
+import { useA11yStore } from "@/store/app/a11yStore";
 
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionDialog";

@@ -1,5 +1,5 @@
 // RowControlButton.tsx
-import type { GridStore } from "@/store/GridStore";
+import type { GridStore } from "@/store/grid/gridStore";
 import React from "react";
 import { MinusCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { IconButton } from "@radix-ui/themes";
@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
-import { useGridStore } from "@/store/GridStore";
+import { useGridStore } from "@/store/grid/gridStore";
 
 import { useGridRowState } from "./useGridRowState";
 

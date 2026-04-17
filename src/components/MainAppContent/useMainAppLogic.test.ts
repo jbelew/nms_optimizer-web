@@ -4,8 +4,8 @@ import { renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { usePlatformStore } from "../../store/PlatformStore";
-import { useSessionStore } from "../../store/SessionStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useSessionStore } from "../../store/app/sessionStore";
 import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
 import { useMainAppLogic } from "./useMainAppLogic";
 
@@ -16,7 +16,7 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("../../context/dialog-utils", () => ({
+vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),
@@ -87,7 +87,7 @@ vi.mock("../../hooks/useToast/useToast", () => ({
 	}),
 }));
 
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: (selector: (state: unknown) => unknown) =>
 		selector({ isSharedGrid: false, selectHasModulesInGrid: () => true }),
 }));
@@ -96,19 +96,19 @@ vi.mock("../../utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
-vi.mock("../../store/PlatformStore", () => ({
+vi.mock("../../store/app/platformStore", () => ({
 	usePlatformStore: vi.fn((selector: (state: unknown) => unknown) =>
 		selector({ selectedPlatform: "standard" })
 	),
 }));
 
-vi.mock("../../store/SessionStore", () => ({
+vi.mock("../../store/app/sessionStore", () => ({
 	useSessionStore: vi.fn(() => ({
 		resetSession: vi.fn(),
 	})),
 }));
 
-vi.mock("../../store/TechTreeLoadingStore", () => ({
+vi.mock("../../store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: {
 		getState: () => ({
 			setLoading: vi.fn(),

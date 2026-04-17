@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useDialog } from "../../context/dialog-utils";
-import { usePlatformStore } from "../../store/PlatformStore";
+import { usePlatformStore } from "../../store/app/platformStore";
+import { useDialog } from "../../utils/system/dialogUtils";
 
 /**
  * Custom hook that enforces URL normalization (trailing slashes and platform param).

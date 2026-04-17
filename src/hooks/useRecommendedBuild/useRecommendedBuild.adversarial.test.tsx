@@ -1,12 +1,12 @@
-import type { ApiResponse } from "../../store/GridStore";
-import type { BonusStatusData } from "../../store/TechBonusStore";
+import type { ApiResponse } from "../../store/grid/gridStore";
+import type { BonusStatusData } from "../../store/tech/techBonusStore";
 import type { TechTreeItem } from "../useTechTree/useTechTree";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createGrid, useGridStore } from "../../store/GridStore";
-import { useModuleSelectionStore } from "../../store/ModuleSelectionStore";
-import { useTechBonusStore } from "../../store/TechBonusStore";
-import { useTechStore } from "../../store/TechStore";
+import { createGrid, useGridStore } from "../../store/grid/gridStore";
+import { useModuleSelectionStore } from "../../store/tech/moduleSelectionStore";
+import { useTechBonusStore } from "../../store/tech/techBonusStore";
+import { useTechStore } from "../../store/tech/techStore";
 
 describe("useRecommendedBuild - Adversarial Tests", () => {
 	beforeEach(() => {

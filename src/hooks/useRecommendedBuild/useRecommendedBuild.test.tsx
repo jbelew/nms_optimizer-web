@@ -2,7 +2,7 @@ import type { RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/us
 import { act, renderHook } from "@testing-library/react";
 import { Mock, vi } from "vitest";
 
-import { createEmptyCell, createGrid, useGridStore } from "../../store/GridStore";
+import { createEmptyCell, createGrid, useGridStore } from "../../store/grid/gridStore";
 import {
 	__resetScrollGridIntoViewRef,
 	useScrollGridIntoView,
@@ -10,7 +10,7 @@ import {
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
-vi.mock("../../store/GridStore", () => ({
+vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(),
 	},

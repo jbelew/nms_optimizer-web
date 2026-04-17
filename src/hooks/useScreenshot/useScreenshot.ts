@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { toCanvas } from "html-to-image";
 import { useTranslation } from "react-i18next";
 
-import { useGridStore } from "../../store/GridStore";
+import { useGridStore } from "../../store/grid/gridStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useToast } from "../useToast/useToast";
 
