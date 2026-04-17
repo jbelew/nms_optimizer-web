@@ -1,3 +1,11 @@
+## [6.28.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.28.0...v6.28.1) (2026-04-17)
+
+
+### Performance Improvements
+
+* **cloudflare:** optimize edge caching and function routing ([694a5a1](https://github.com/jbelew/nms_optimizer-web/commit/694a5a1d12d6541c8e3aaf988cc2153b99f55e46))
+* merge dev to main for cloudflare optimizations ([e6b58bb](https://github.com/jbelew/nms_optimizer-web/commit/e6b58bbef62391d9705b72b32a2c6c6a95eeed34))
+
 # [6.28.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.27.0...v6.28.0) (2026-04-17)
 
 
