@@ -1,3 +1,11 @@
+# [6.28.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.27.0...v6.28.0) (2026-04-17)
+
+
+### Features
+
+* force release trigger ([0ecdb6c](https://github.com/jbelew/nms_optimizer-web/commit/0ecdb6c0d050d10c3f12605ed0651b91c98b5721))
+* re-trigger release workflow ([244c4f8](https://github.com/jbelew/nms_optimizer-web/commit/244c4f8c308cff8a561cbbb777c7cec1b77e746a))
+
 # [6.27.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.26.27...v6.27.0) (2026-04-16)
 
 
