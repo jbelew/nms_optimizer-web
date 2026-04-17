@@ -1,3 +1,10 @@
+## [6.30.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.0...v6.30.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* migrate application load retry state from sessionStorage to URL search parameters for improved resilience and recovery tracking ([fd2576f](https://github.com/jbelew/nms_optimizer-web/commit/fd2576f395ed38d46cbc255f3707c4d6ad31cd53))
+
 # [6.30.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.29.2...v6.30.0) (2026-04-17)
 
 
