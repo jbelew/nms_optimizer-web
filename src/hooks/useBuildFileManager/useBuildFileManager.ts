@@ -25,7 +25,7 @@ import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link BuildFile} for the file structure definition.
- * @see {@link ../../utils/buildFileValidation.ts Build File Validation}
+ * @see {@link ../../utils/validation/dataValidation.ts Build File Validation}
  *
  * @hook
  *

@@ -1,5 +1,5 @@
 import React from "react";
-import { hideSplashScreenAndShowBackground } from "../src/utils/splashScreen";
+import { hideSplashScreenAndShowBackground } from "../src/utils/system/splashScreen";
 
 /**
  * A utility component that ensures the application's splash screen is hidden.
