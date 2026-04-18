@@ -87,18 +87,28 @@
 				var target = e.target;
 
 				if (target instanceof HTMLScriptElement) {
-					if (!isAppAssetUrl(target.src)) return;
-					handleInitError({ type: 'script-load', cause: e, target: target });
+					// EXTREMELY IMPORTANT: Never trigger recovery for third-party scripts like Cloudflare beacon
+					var src = target.src || "";
+					if (!src || !isAppAssetUrl(src)) return;
+					
+					handleInitError({ type: 'script-load', cause: e, target_src: src });
 					return;
 				}
 
 				if (target instanceof HTMLLinkElement) {
 					// Ignore non-critical preloads (translations, API prefetches)
-					if (target.rel === 'preload' && target.as === 'fetch') return;
+					// Use getAttribute for better compatibility with some browsers
+					var rel = target.rel;
+					var as = target.getAttribute('as');
+					if (rel === 'preload' && as === 'fetch') return;
+					
 					// Only treat modulepreload and stylesheet failures as critical
-					if (target.rel !== 'modulepreload' && target.rel !== 'stylesheet') return;
-					if (!isAppAssetUrl(target.href)) return;
-					handleInitError({ type: 'link-load', cause: e, target: target });
+					if (rel !== 'modulepreload' && rel !== 'stylesheet') return;
+					
+					var href = target.href || "";
+					if (!href || !isAppAssetUrl(href)) return;
+					
+					handleInitError({ type: 'link-load', cause: e, target_href: href });
 					return;
 				}
 
