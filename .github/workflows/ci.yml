@@ -288,7 +288,6 @@ jobs:
   build-production:
     name: Build Application (Production)
     needs: [release]
-    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -308,7 +307,15 @@ jobs:
       - name: Determine Effective Version
         id: version_logic
         shell: bash
-        run: echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          GITHUB_SHA_ENV: ${{ github.sha }}
+        run: |
+          if [ -n "$RELEASE_TAG" ]; then
+            echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          else
+            echo "version=$GITHUB_SHA_ENV" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set Build Tracking ID
         id: build_version
