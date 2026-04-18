@@ -18,14 +18,14 @@
 
 ## Phase 3: Build-Time SSG Update <!-- depends: Phase 1 --> [~]
 <!-- execution: parallel -->
-- [~] Task 3.1: Update `scripts/generate-ssg.mjs` to inject shared Schema <!-- files: scripts/generate-ssg.mjs -->
+- [x] Task 3.1: Update `scripts/generate-ssg.mjs` to inject shared Schema <!-- files: scripts/generate-ssg.mjs --> e94a76d
     - [ ] Import the shared utility.
     - [ ] During the static generation of each page (for every language), call the utility to get the localized Schema.
     - [ ] Inject the resulting `<script type="application/ld+json">` into the static HTML files.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Build-Time SSG Update' (Protocol in workflow.md)
 
-## Phase 4: Build & Audit <!-- depends: Phase 2, Phase 3 --> [ ]
-- [ ] Task 4.1: Final Validation
+## Phase 4: Build & Audit <!-- depends: Phase 2, Phase 3 --> [~]
+- [~] Task 4.1: Final Validation
     - [ ] Run `npm run build` (which triggers `generate-ssg.mjs`).
     - [ ] Inspect `dist/index.html` and localized versions (e.g., `dist/fr/index.html`) to verify static Schema presence.
     - [ ] Run a local preview and check the browser console/head for CSR parity.
