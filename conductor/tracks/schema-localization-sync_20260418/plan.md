@@ -1,6 +1,6 @@
 # Implementation Plan: Schema & SEO Localization Synchronization
 
-## Phase 1: Shared Schema Logic (Build & Client) [~]
+## Phase 1: Shared Schema Logic (Build & Client) [x] [checkpoint: 7430fa1]
 - [x] Task 1.1: Create `src/utils/seo-schema.ts` (or `shared/seo-schema.js`) <!-- files: src/utils/seo-schema.ts --> fcbecc9
     - [ ] Define functions (e.g., `getLocalizedSchema(t, lang, url)`) that return Schema objects.
     - [ ] These functions must only depend on the translation function `t` and local variables.
