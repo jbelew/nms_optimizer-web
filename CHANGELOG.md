@@ -1,3 +1,10 @@
+## [6.31.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.3...v6.31.4) (2026-04-18)
+
+
+### Bug Fixes
+
+* resolve infinite reload loops and cloudflare caching issues ([dd1f5ca](https://github.com/jbelew/nms_optimizer-web/commit/dd1f5ca216328fe17858e7f0ce6d57b1deba4ec2))
+
 ## [6.31.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.2...v6.31.3) (2026-04-18)
 
 
