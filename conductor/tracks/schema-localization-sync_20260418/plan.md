@@ -10,15 +10,15 @@
 
 ## Phase 2: Client-Side React Update <!-- depends: Phase 1 --> [~]
 <!-- execution: parallel -->
-- [~] Task 2.1: Update `useSeoAndTitle.ts` to use the new shared templates <!-- files: src/hooks/useSeoAndTitle/useSeoAndTitle.ts -->
+- [x] Task 2.1: Update `useSeoAndTitle.ts` to use the new shared templates <!-- files: src/hooks/useSeoAndTitle/useSeoAndTitle.ts --> 73b6713
     - [ ] Replace hardcoded FAQ schema with calls to the shared utility.
     - [ ] Ensure all new schema types are injected into the DOM.
     - [ ] Verify with existing/updated unit tests in `useSeoAndTitle.test.tsx`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Client-Side React Update' (Protocol in workflow.md)
 
-## Phase 3: Build-Time SSG Update <!-- depends: Phase 1 --> [ ]
+## Phase 3: Build-Time SSG Update <!-- depends: Phase 1 --> [~]
 <!-- execution: parallel -->
-- [ ] Task 3.1: Update `scripts/generate-ssg.mjs` to inject shared Schema <!-- files: scripts/generate-ssg.mjs -->
+- [~] Task 3.1: Update `scripts/generate-ssg.mjs` to inject shared Schema <!-- files: scripts/generate-ssg.mjs -->
     - [ ] Import the shared utility.
     - [ ] During the static generation of each page (for every language), call the utility to get the localized Schema.
     - [ ] Inject the resulting `<script type="application/ld+json">` into the static HTML files.

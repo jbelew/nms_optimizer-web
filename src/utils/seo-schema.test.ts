@@ -1,7 +1,7 @@
 import { TFunction } from "i18next";
 import { describe, expect, it, vi } from "vitest";
 
-import { getLocalizedSchema } from "./seo-schema";
+import { getLocalizedSchema } from "../../shared/seo-schema.js";
 
 describe("getLocalizedSchema", () => {
 	const mockT = vi.fn((key: string) => {
