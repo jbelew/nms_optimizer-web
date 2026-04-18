@@ -281,21 +281,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
-      - name: Purge Cloudflare Cache
-        run: |
-          echo "Waiting 20 seconds for Cloudflare nodes to sync..."
-          sleep 20
-          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}')
-          
-          if echo "$RESPONSE" | grep -q '"success".*true'; then
-            echo "✅ Cloudflare cache purged successfully"
-          else
-            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
-            exit 1
-          fi
 
   deploy-production-heroku:
     name: Deploy to Heroku (Production)
@@ -329,13 +314,29 @@ jobs:
   post-deploy-production:
     name: Finalize Production
     needs: [deploy-production-cloudflare, deploy-production-heroku, release]
-    # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
-    if: needs.release.outputs.released == 'true'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       actions: write
     steps:
+      - name: Purge Cloudflare Cache
+        run: |
+          echo "Waiting 20 seconds for Cloudflare nodes to sync..."
+          sleep 20
+          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}')
+          
+          if echo "$RESPONSE" | grep -q '"success".*true'; then
+            echo "✅ Cloudflare cache purged successfully"
+          else
+            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
+            exit 1
+          fi
+
       - name: Trigger Downstream Jobs
+        if: needs.release.outputs.released == 'true'
         uses: actions/github-script@v8
         env:
           RELEASE_TAG: ${{ needs.release.outputs.tag }}
