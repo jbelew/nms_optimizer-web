@@ -15,7 +15,7 @@ export async function onRequest(context) {
     // 1. Canonical Host Redirect (www. -> apex)
     if (url.hostname === "www.nms-optimizer.app") {
         url.hostname = "nms-optimizer.app";
-        return Response.redirect(url.toString(), 302);
+        return Response.redirect(url.toString(), 301);
     }
 
     // 2. Trailing Slash Enforcement (e.g., /about -> /about/)
@@ -25,7 +25,7 @@ export async function onRequest(context) {
     const isReservedErrorPath = pathname === "/404" || pathname === "/500";
     if (pathname !== "/" && !pathname.endsWith("/") && !pathname.includes(".") && !isReservedErrorPath) {
         url.pathname = pathname + "/";
-        return Response.redirect(url.toString(), 302);
+        return Response.redirect(url.toString(), 301);
     }
 
     // 3. Language Redirects (?lng=fr -> /fr/)
@@ -41,7 +41,7 @@ export async function onRequest(context) {
         } else {
             newUrl.pathname = `/${supportedLang}${cleanPath}/`.replace(/\/+$/, "/");
         }
-        return Response.redirect(newUrl.toString(), 302);
+        return Response.redirect(newUrl.toString(), 301);
     }
 
     // 4. Remove /en/ prefix (/en/about/ -> /about/)
@@ -50,7 +50,7 @@ export async function onRequest(context) {
         const newUrl = new URL(url);
         const subPath = pathParts.slice(1).join("/");
         newUrl.pathname = `/${subPath}/`.replace(/\/+$/, "/");
-        return Response.redirect(newUrl.toString(), 302);
+        return Response.redirect(newUrl.toString(), 301);
     }
 
     // 5. Serve Physical SSG Asset

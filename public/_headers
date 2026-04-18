@@ -33,29 +33,26 @@
 /pt/*
   Cache-Control: public, no-cache, must-revalidate
 
-# Cache rules for hashed assets (Vite output)
-/assets/*
+# Immutable build assets (Vite JS/CSS/asset output)
+/build/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Static Assets (Images, Fonts, etc.) - Edge cache for 1 year, Browser revalidates
-/*.png
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.jpg
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.webp
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.svg
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.ico
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.woff2
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/*.mp3
+# Mutable static assets (Edge cache for 1 year, browser revalidates)
+# Avoids conflicting wildcard /*.ext rules that Cloudflare comma-joins
+/assets/*
   Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
 
-# Markdown files
-/*.md
-  Cache-Control: public, max-age=3600
+# Root-level mutable assets
+/favicon.ico
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/apple-touch-icon.png
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/apple-touch-icon-precomposed.png
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/logo.svg
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/logo-new-color-temp.svg
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
 
 # Explicitly disable caching for service worker
 /sw.js
