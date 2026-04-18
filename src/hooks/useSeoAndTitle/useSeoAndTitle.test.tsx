@@ -173,7 +173,7 @@ describe("useSeoAndTitle", () => {
 	});
 
 	describe("Structured Data (JSON-LD)", () => {
-		it("should inject FAQ schema on root path", () => {
+		it("should inject FAQ schema on root path with correct language", () => {
 			setupMocks("/", {
 				"faq.name": "NMS Optimizer Frequently Asked Questions",
 				"faq.questions.adjacencyBonus.name": "What is an adjacency bonus?",
@@ -187,10 +187,41 @@ describe("useSeoAndTitle", () => {
 
 			const data = JSON.parse(faqScript?.textContent || "{}");
 			expect(data["@type"]).toBe("FAQPage");
+			expect(data.inLanguage).toBe("en");
 			expect(data.name).toBe("NMS Optimizer Frequently Asked Questions");
 			expect(data.mainEntity).toHaveLength(4);
 			expect(data.mainEntity[0].name).toBe("What is an adjacency bonus?");
 			expect(data.mainEntity[0].acceptedAnswer.text).toBe("A stat boost.");
+		});
+
+		it("should inject FAQ schema on root path with localized language", () => {
+			mockUseLocation.mockReturnValue({ pathname: "/es/" });
+			mockUseTranslation.mockReturnValue({
+				t: vi.fn((key) => {
+					const translations: Record<string, string> = {
+						"faq.name": "Preguntas Frecuentes",
+					};
+
+					return translations[key] || key;
+				}),
+				i18n: {
+					language: "es",
+					services: {
+						resourceStore: {
+							data: { en: {}, es: {}, fr: {}, de: {}, pt: {} },
+						},
+					},
+				},
+			});
+			renderHook(() => useSeoAndTitle());
+
+			const faqScript = document.getElementById("faq-schema");
+			expect(faqScript).not.toBeNull();
+
+			const data = JSON.parse(faqScript?.textContent || "{}");
+			expect(data["@type"]).toBe("FAQPage");
+			expect(data.inLanguage).toBe("es");
+			expect(data.name).toBe("Preguntas Frecuentes");
 		});
 
 		it("should NOT inject FAQ schema on non-root paths", () => {
