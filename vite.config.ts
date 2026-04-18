@@ -41,7 +41,11 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 	const isCloudflarePages = process.env.CF_PAGES === "1";
 
 	// Use an environment variable for the app version, falling back to package.json
-	const appVersion = process.env.VITE_APP_VERSION || env.VITE_APP_VERSION || packageJson.version;
+	let appVersion = process.env.VITE_APP_VERSION || env.VITE_APP_VERSION || packageJson.version;
+	// Standardize: ensure the version always starts with 'v' to match tags and avoid analytics duplicates
+	if (appVersion && !appVersion.startsWith("v")) {
+		appVersion = `v${appVersion}`;
+	}
 	const buildDate = new Date().toISOString();
 
 	const sentryDsn = process.env.VITE_SENTRY_DSN || env.VITE_SENTRY_DSN || "";
