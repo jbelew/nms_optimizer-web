@@ -1,3 +1,10 @@
+## [6.31.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.6...v6.31.7) (2026-04-18)
+
+
+### Bug Fixes
+
+* **resilience:** avoid triggering recovery for third-party script failures ([802cbda](https://github.com/jbelew/nms_optimizer-web/commit/802cbda068e672b19eda86863327f2ac00570aca))
+
 ## [6.31.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.5...v6.31.6) (2026-04-18)
 
 
