@@ -303,7 +303,7 @@
                 createChart('seoChart', '#ffb224', 'seo');
 
                 const tableBody = document.querySelector('#historyTable tbody');
-                history.reverse().forEach(run => {
+                history.reverse().slice(0, 10).forEach(run => {
                     const row = document.createElement('tr');
                     const date = new Date(run.date).toLocaleDateString() + ' @ ' + new Date(run.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     const sha = run.sha.substring(0, 7);
@@ -312,7 +312,7 @@
 
                     row.innerHTML = `
                         <td style="font-size: 0.8125rem; opacity: 0.7;">${date}</td>
-                        <td><code class="tag">${sha}</code></td>
+                        <td><a href="https://github.com/jbelew/nms_optimizer-web/commit/${run.sha}" target="_blank"><code class="tag">${sha}</code></a></td>
                         <td>
                             <span class="score-pill ${getScoreClass(run.scores.performance)}">${Math.round(run.scores.performance * 100)}</span>
                             <span class="score-pill ${getScoreClass(run.scores.accessibility)}">${Math.round(run.scores.accessibility * 100)}</span>
