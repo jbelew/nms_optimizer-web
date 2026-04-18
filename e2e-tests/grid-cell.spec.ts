@@ -3,6 +3,11 @@ import { waitForStore, resetGrid, setCellSupercharged, doubleTapCell, getShakeCo
 
 test.describe('GridCell Supercharge Interaction', () => {
   test.beforeEach(async ({ page }) => {
+    // Suppress welcome dialog
+    await page.addInitScript(() => {
+      localStorage.setItem("user-visited", "true");
+    });
+
     await page.goto('/?platform=standard');
     
     // Wait for the app and store to be initialized
@@ -94,6 +99,11 @@ test.describe('GridCell Supercharge Interaction', () => {
 
 test.describe('Mobile Touch Interactions', () => {
   test.beforeEach(async ({ page }, testInfo) => {
+    // Suppress welcome dialog
+    await page.addInitScript(() => {
+      localStorage.setItem("user-visited", "true");
+    });
+
     test.skip(testInfo.project.name !== 'mobile-chrome', 'Only run on mobile-chrome');
     await page.goto('/?platform=standard');
     await waitForStore(page);

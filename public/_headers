@@ -1,59 +1,37 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' www.googletagmanager.com static.cloudflareinsights.com browser.sentry-cdn.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com www.googletagmanager.com; font-src 'self'; connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app https://cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io browser.sentry-cdn.com; frame-src https://www.youtube.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;
+  Content-Security-Policy: default-src 'self'; script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com www.googletagmanager.com; font-src 'self'; connect-src 'self' https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app https://cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io; frame-src https://www.youtube.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
-# HTML Pages: Browser always revalidates, edge caching disabled
-# Safe because CF Pages purges cache on every deploy and assets are content-hashed
+# HTML Pages: Always revalidate with origin.
+# Cloudflare Pages handles its own edge caching and purges on deploy.
+# Do NOT add s-maxage here — it can cause stale HTML to be served during
+# edge cache purge propagation, leading to vite:preloadError on chunk mismatches.
 /
-  Cache-Control: public, no-cache, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 /index.html
-  Cache-Control: public, no-cache, must-revalidate
-/about/*
-  Cache-Control: public, no-cache, must-revalidate
-/instructions/*
-  Cache-Control: public, no-cache, must-revalidate
-/changelog/*
-  Cache-Control: public, no-cache, must-revalidate
-/translation/*
-  Cache-Control: public, no-cache, must-revalidate
-/userstats/*
-  Cache-Control: public, no-cache, must-revalidate
-/privacy/*
-  Cache-Control: public, no-cache, must-revalidate
-/de/*
-  Cache-Control: public, no-cache, must-revalidate
-/es/*
-  Cache-Control: public, no-cache, must-revalidate
-/fr/*
-  Cache-Control: public, no-cache, must-revalidate
-/pt/*
-  Cache-Control: public, no-cache, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
-# Immutable build assets (Vite JS/CSS/asset output)
+# Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
+# Safe to cache forever — a new deploy produces new filenames.
 /build/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Mutable static assets (Edge cache for 1 year, browser revalidates)
-# Avoids conflicting wildcard /*.ext rules that Cloudflare comma-joins
+# Mutable static assets (images, fonts, translations, markdown).
+# These live in /assets/ (copied from public/assets/) and have stable filenames.
+# Cache for 1 day, serve stale for 1 day while revalidating in background.
 /assets/*
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
 
-# Root-level mutable assets
-/favicon.ico
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/apple-touch-icon.png
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/apple-touch-icon-precomposed.png
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/logo.svg
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
-/logo-new-color-temp.svg
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+# Translations and markdown content: can change on any deploy.
+/assets/locales/*
+  Cache-Control: public, max-age=3600, must-revalidate
 
-# Explicitly disable caching for service worker
+# Always fresh: version check and service worker.
+/version.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0

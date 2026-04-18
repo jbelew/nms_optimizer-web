@@ -13,9 +13,9 @@
  */
 
 import type { ErrorInfo, ReactNode } from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Link, ScrollArea, Separator } from "@radix-ui/themes";
+import { Button, Link, ScrollArea, Separator } from "@radix-ui/themes";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
@@ -113,6 +113,7 @@ const InsetMessage = () => (
  */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
 	const isLarge = useBreakpoint("1024px");
+	const [isResetting, setIsResetting] = useState(false);
 
 	useEffect(() => {
 		hideSplashScreenAndShowBackground();
@@ -121,6 +122,34 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 		return () => {
 			document.body.classList.remove("error-boundary-visible");
 		};
+	}, []);
+
+	const handleReload = useCallback(() => {
+		window.location.reload();
+	}, []);
+
+	const handleClearAndReload = useCallback(async () => {
+		setIsResetting(true);
+
+		try {
+			if ("serviceWorker" in navigator) {
+				const regs = await navigator.serviceWorker.getRegistrations();
+				await Promise.all(regs.map((r) => r.unregister()));
+			}
+
+			if ("caches" in window) {
+				const keys = await caches.keys();
+				await Promise.all(keys.map((k) => caches.delete(k)));
+			}
+
+			try {
+				sessionStorage.clear();
+			} catch {
+				// Ignore errors if sessionStorage is restricted (e.g. incognito mode)
+			}
+		} finally {
+			window.location.href = "/";
+		}
 	}, []);
 
 	const content = (
@@ -136,6 +165,20 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 			<div className="error-content__body">
 				<div className="mb-2 text-sm sm:text-base">
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
+				</div>
+				<div className="mt-4 flex gap-2">
+					<Button size="2" variant="solid" onClick={handleReload}>
+						Reload
+					</Button>
+					<Button
+						size="2"
+						variant="outline"
+						color="gray"
+						onClick={() => void handleClearAndReload()}
+						disabled={isResetting}
+					>
+						{isResetting ? "Resetting…" : "Clear offline data & reload"}
+					</Button>
 				</div>
 				<ErrorDisplay error={error} errorInfo={errorInfo} />
 			</div>

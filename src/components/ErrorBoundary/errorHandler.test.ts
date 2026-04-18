@@ -1,7 +1,7 @@
 /**
  * @file errorHandler utility tests
- * @description Tests for error handling logic including localStorage cleanup,
- * service worker unregistration, and analytics event sending.
+ * @description Tests for error handling logic including Sentry reporting
+ * and analytics event sending.
  */
 
 import { ErrorInfo } from "react";
@@ -13,67 +13,17 @@ import { handleError } from "./errorHandler";
 describe("errorHandler", () => {
 	let sendEventSpy: ReturnType<typeof vi.spyOn>;
 	let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-	let consoleLogSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
-		// No need to spy on localStorage.clear since we mock it directly when needed
-
 		// Spy on analytics.sendEvent
 		sendEventSpy = vi.spyOn(analytics, "sendEvent").mockImplementation(async () => {});
 
 		// Spy on console
 		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-		consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-		// Mock navigator.serviceWorker
-		const mockServiceWorker = {
-			getRegistrations: vi.fn().mockResolvedValue([]),
-		};
-		Object.defineProperty(navigator, "serviceWorker", {
-			value: mockServiceWorker,
-			writable: true,
-			configurable: true,
-		});
 	});
 
 	afterEach(() => {
 		vi.restoreAllMocks();
-	});
-
-	describe("localStorage handling", () => {
-		it("should clear localStorage on error", () => {
-			const error = new Error("Test error");
-			const clearSpy = vi.spyOn(localStorage, "clear");
-
-			handleError(error);
-
-			expect(clearSpy).toHaveBeenCalled();
-		});
-
-		it("should handle localStorage.clear() failures gracefully", () => {
-			// Mock localStorage directly
-			const clearSpy = vi.spyOn(localStorage, "clear").mockImplementation(() => {
-				throw new Error("localStorage is disabled");
-			});
-			const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-
-			const error = new Error("Test error");
-
-			// Should not throw
-			expect(() => {
-				handleError(error);
-			}).not.toThrow();
-
-			// Should have logged the warn message about failed clear from safeClear
-			expect(consoleWarnSpy).toHaveBeenCalledWith(
-				"Storage: Failed to clear localStorage.",
-				expect.any(Error)
-			);
-
-			// Restore
-			clearSpy.mockRestore();
-			consoleWarnSpy.mockRestore();
-		});
 	});
 
 	describe("analytics event sending", () => {
@@ -184,82 +134,6 @@ describe("errorHandler", () => {
 			const call = sendEventSpy.mock.calls[0][0];
 			expect(call.stackTrace).not.toContain("\n");
 			expect(call.componentStack).not.toContain("\n");
-		});
-	});
-
-	describe("service worker handling", () => {
-		it("should attempt to unregister service workers", async () => {
-			const mockRegistration = {
-				unregister: vi.fn().mockResolvedValue(true),
-			};
-
-			vi.mocked(navigator.serviceWorker.getRegistrations).mockResolvedValue([
-				mockRegistration,
-			] as unknown as ServiceWorkerRegistration[]);
-
-			const error = new Error("Test error");
-			handleError(error);
-
-			// Give async handler time to run
-			await new Promise((resolve) => setTimeout(resolve, 10));
-
-			expect(mockRegistration.unregister).toHaveBeenCalled();
-		});
-
-		it("should log service worker unregistration", async () => {
-			const mockRegistration = {
-				unregister: vi.fn().mockResolvedValue(true),
-			};
-
-			vi.mocked(navigator.serviceWorker.getRegistrations).mockResolvedValue([
-				mockRegistration,
-			] as unknown as ServiceWorkerRegistration[]);
-
-			const error = new Error("Test error");
-			handleError(error);
-
-			await new Promise((resolve) => setTimeout(resolve, 10));
-
-			expect(consoleLogSpy).toHaveBeenCalledWith(
-				"ErrorBoundary: Unregistered service worker."
-			);
-		});
-
-		it("should handle multiple service worker registrations", async () => {
-			const mockReg1 = { unregister: vi.fn().mockResolvedValue(true) };
-			const mockReg2 = { unregister: vi.fn().mockResolvedValue(true) };
-
-			vi.mocked(navigator.serviceWorker.getRegistrations).mockResolvedValue([
-				mockReg1,
-				mockReg2,
-			] as unknown as ServiceWorkerRegistration[]);
-
-			const error = new Error("Test error");
-			handleError(error);
-
-			await new Promise((resolve) => setTimeout(resolve, 10));
-
-			expect(mockReg1.unregister).toHaveBeenCalled();
-			expect(mockReg2.unregister).toHaveBeenCalled();
-		});
-
-		it("should handle missing serviceWorker gracefully", () => {
-			// Redefine navigator to not have serviceWorker property
-			Object.defineProperty(navigator, "serviceWorker", {
-				value: undefined,
-				writable: true,
-				configurable: true,
-			});
-
-			const error = new Error("Test error");
-
-			// Should not throw even with missing serviceWorker
-			expect(() => {
-				handleError(error);
-			}).not.toThrow();
-
-			// Should still log the error to console
-			expect(consoleErrorSpy).toHaveBeenCalledWith("Uncaught error:", error, undefined);
 		});
 	});
 

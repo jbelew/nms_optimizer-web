@@ -1,0 +1,15 @@
+name: 'Get Build Version'
+description: 'Generates a version string based on git commit count and short SHA'
+outputs:
+  version:
+    description: 'The generated version string'
+    value: ${{ steps.calc.outputs.version }}
+runs:
+  using: 'composite'
+  steps:
+    - id: calc
+      shell: bash
+      run: |
+        COUNT=$(git rev-list --count HEAD)
+        SHA=$(git rev-parse --short HEAD)
+        echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT

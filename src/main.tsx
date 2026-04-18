@@ -35,6 +35,47 @@ initializeSentry();
 
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
+	// NOTE: vite:preloadError is handled by the inline script in index.html
+	// which implements a one-reload-then-redirect-to-500 flow using window.name.
+	// Do NOT add a duplicate handler here — it would race with the redirect.
+
+	// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
+	// and "Importing a module script failed" errors on iOS Safari
+	window.addEventListener("error", (event: ErrorEvent) => {
+		const errorMessage = event.error?.message || event.message || "";
+		const errorName = event.error?.name || "";
+
+		// Suppress SecurityError from cross-origin third-party scripts (e.g. analytics, CDN assets)
+		if (errorName === "SecurityError" && errorMessage.includes("cross-origin")) {
+			event.preventDefault();
+
+			return true;
+		}
+
+		// Suppress and handle "Importing a module script failed" which is a known iOS Safari flake
+		if (errorMessage.includes("Importing a module script failed")) {
+			// Prevent the error from being reported to Sentry as an unhandled exception
+			event.preventDefault();
+
+			// Log locally for debugging but don't crash the app
+			console.warn(
+				"Caught and suppressed module import failure (Safari flake):",
+				errorMessage
+			);
+
+			return true;
+		}
+
+		// Broaden handling for other minified or uncaught errors during initialization
+		console.error("Uncaught initialization error:", event.error || event.message);
+	});
+
+	// Handle unhandled promise rejections which are common in async initialization
+	window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
+		// Suppress known non-critical rejections if needed
+		console.error("Unhandled promise rejection:", event.reason);
+	});
+
 	// Listen for the custom "app-ready" event dispatched when the splash screen is hidden
 	// This defers non-critical initializations until the critical rendering path is complete
 	window.addEventListener(
@@ -42,14 +83,9 @@ if (typeof window !== "undefined") {
 		() => {
 			// Mark application as fully initialized for resilience and testing
 			(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
-			// Reset reload state on successful boot
-			sessionStorage.removeItem("init_reload_count");
-			const url = new URL(window.location.href);
 
-			if (url.searchParams.has("init_retry")) {
-				url.searchParams.delete("init_retry");
-				history.replaceState(null, "", url.toString());
-			}
+			// Clean up preload recovery marker on successful boot
+			window.name = window.name.replace("__preload_recovery__", "");
 
 			const initDeferredServices = async () => {
 				try {

@@ -1,9 +1,9 @@
 /**
- * Global error handler and state recovery module.
+ * Global error handler and reporting module.
  *
  * @remarks
- * This module provides the `handleError` utility, which implements a comprehensive
- * cleanup and reporting strategy for fatal application crashes.
+ * This module provides the `handleError` utility, which logs and reports
+ * fatal application crashes to Sentry and Google Analytics.
  *
  * @see {@link handleError}
  * @see {@link ./errorHandler.test.ts Unit Tests}
@@ -15,27 +15,25 @@ import { ErrorInfo } from "react";
 import { captureException } from "@sentry/react";
 
 import { sendEvent } from "../../utils/analytics/tracking";
-import { safeClear } from "../../utils/browser/environment";
 
 /**
- * Executes a nuclear recovery strategy after an uncaught application error.
+ * Reports an uncaught application error to monitoring and analytics services.
  *
  * @remarks
- * This function performs the following actions to ensure a clean state for recovery:
- * 1. Logs the error to the console and Sentry.
- * 2. Purges all `localStorage` data via {@link safeClear}.
- * 3. Unregisters all active Service Workers.
- * 4. Deletes all browser caches.
- * 5. Attempts to delete all IndexedDB databases.
- * 6. Clears `sessionStorage`.
- * 7. Reports the event to Google Analytics via {@link sendEvent} with debug metadata.
+ * This function performs the following actions:
+ * 1. Logs the error to the console.
+ * 2. Reports it to Sentry with component stack context.
+ * 3. Sends a diagnostic event to Google Analytics via {@link sendEvent}.
+ *
+ * Recovery actions (clearing caches, storage, service workers) are intentionally
+ * NOT performed here. Destructive cleanup should only happen via explicit user
+ * action to avoid wiping local state on every React crash.
  *
  * @param {Error} error - The caught exception. **Must not be null.**
  * @param {ErrorInfo} [errorInfo] - The React component stack metadata.
  *
  * @returns {void} Side-effects only.
  *
- * @see {@link safeClear}
  * @see {@link sendEvent}
  *
  * @category Utilities
@@ -55,60 +53,6 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 		},
 	});
 
-	// Attempt to clear localStorage, but don't let storage errors prevent recovery
-	const localStorageCleared = safeClear();
-
-	// Clear service workers to force fresh code fetch
-	if ("serviceWorker" in navigator && navigator.serviceWorker) {
-		navigator.serviceWorker.getRegistrations().then((registrations) => {
-			registrations.forEach((reg) => {
-				reg.unregister();
-				console.log("ErrorBoundary: Unregistered service worker.");
-			});
-		});
-	}
-
-	// Clear service worker caches
-	if ("caches" in window) {
-		caches.keys().then((cacheNames) => {
-			cacheNames.forEach((cacheName) => {
-				caches.delete(cacheName);
-				console.log(`ErrorBoundary: Deleted cache "${cacheName}".`);
-			});
-		});
-	}
-
-	// Clear IndexedDB
-	if ("indexedDB" in window && typeof indexedDB.databases === "function") {
-		try {
-			indexedDB
-				.databases()
-				.then((databases) => {
-					databases.forEach((db) => {
-						if (db.name) {
-							indexedDB.deleteDatabase(db.name);
-							console.log(`ErrorBoundary: Deleted IndexedDB "${db.name}".`);
-						}
-					});
-				})
-				.catch((e) => {
-					console.error("ErrorBoundary: Failed to list IndexedDB databases.", e);
-				});
-		} catch (e) {
-			console.error("ErrorBoundary: Error accessing IndexedDB databases API.", e);
-		}
-	}
-
-	// Clear sessionStorage
-	try {
-		if (typeof window !== "undefined" && window.sessionStorage) {
-			sessionStorage.clear();
-			console.log("ErrorBoundary: Cleared sessionStorage.");
-		}
-	} catch (e) {
-		console.error("ErrorBoundary: Failed to clear sessionStorage.", e);
-	}
-
 	sendEvent({
 		category: "error",
 		action: error.name,
@@ -116,6 +60,5 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 		nonInteraction: true,
 		componentStack: errorInfo?.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
 		stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
-		storageCleared: localStorageCleared ? "yes" : "no",
 	});
 };

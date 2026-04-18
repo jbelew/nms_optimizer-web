@@ -18,106 +18,26 @@
 	<meta charset="UTF-8" />
 	<script>
 		(function () {
-			var MAX_INIT_RETRIES = 2;
-			var initRecoveryStarted = false;
+			var MARKER = "__preload_recovery__";
 
-			/**
-			 * Returns true if the URL is a same-origin app bundle asset (Vite output).
-			 * Only these are critical enough to warrant a reload on failure.
-			 */
-			function isAppAssetUrl(url) {
-				if (!url) return false;
-				try {
-					var u = new URL(url, window.location.href);
-					return u.origin === window.location.origin && u.pathname.startsWith('/build/');
-				} catch (e) {
-					return false;
-				}
-			}
-
-			/**
-			 * Reads the retry count from the URL search param (source of truth).
-			 * Returns 0 for missing or malformed values.
-			 */
-			function getRetryCount() {
-				var raw = new URL(window.location.href).searchParams.get('init_retry');
-				var n = Number(raw);
-				return Number.isInteger(n) && n >= 0 ? n : 0;
-			}
-
-			/**
-			 * Critical error handler for initial script/chunk loading failures.
-			 * Triggered when a required app bundle asset 404s after a deployment.
-			 */
-			function handleInitError(info) {
-				if (initRecoveryStarted) return;
-				initRecoveryStarted = true;
-
-				console.error("Critical initialization failure:", info);
-
-				var retryCount = getRetryCount();
-
-				if (retryCount < MAX_INIT_RETRIES) {
-					var nextCount = retryCount + 1;
-					try {
-						sessionStorage.setItem("init_reload_count", nextCount.toString());
-					} catch (e) {}
-
-					var url = new URL(window.location.href);
-					url.searchParams.set("init_retry", String(nextCount));
-					window.location.replace(url.toString());
-				} else {
-					// Redirect to dedicated error page with context
-					var errorUrl = new URL('/500.html', window.location.origin);
-					if (info && info.type) errorUrl.searchParams.set('error_type', info.type);
-					if (info && info.cause) errorUrl.searchParams.set('error_cause', String(info.cause));
-					window.location.href = errorUrl.toString();
-				}
-			}
-			window.handleInitError = handleInitError;
-
-			// Listen for Vite chunk load errors (dynamic imports)
+			// Handle stale chunk loading after deployment.
+			// One auto-reload attempt; if that fails, redirect to /500.html.
+			// Uses window.name (survives reloads, works in incognito/restricted browsers).
 			window.addEventListener("vite:preloadError", function (event) {
 				event.preventDefault();
-				handleInitError({ type: 'vite:preloadError', cause: event.payload });
+
+				if (window.name.indexOf(MARKER) === -1) {
+					window.name += MARKER;
+					console.warn("Stale chunk detected. Reloading to fetch updated assets.");
+					location.reload();
+					return;
+				}
+
+				// Reload already attempted — redirect to dedicated error page
+				window.name = window.name.replace(MARKER, "");
+				console.error("Stale chunk reload failed. Redirecting to error page.");
+				window.location.replace("/500.html");
 			});
-
-			// Listen for static script/link load failures (initial bundle)
-			window.addEventListener("error", function (e) {
-				var target = e.target;
-
-				if (target instanceof HTMLScriptElement) {
-					// EXTREMELY IMPORTANT: Never trigger recovery for third-party scripts like Cloudflare beacon
-					var src = target.src || "";
-					if (!src || !isAppAssetUrl(src)) return;
-					
-					handleInitError({ type: 'script-load', cause: e, target_src: src });
-					return;
-				}
-
-				if (target instanceof HTMLLinkElement) {
-					// Ignore non-critical preloads (translations, API prefetches)
-					// Use getAttribute for better compatibility with some browsers
-					var rel = target.rel;
-					var as = target.getAttribute('as');
-					if (rel === 'preload' && as === 'fetch') return;
-					
-					// Only treat modulepreload and stylesheet failures as critical
-					if (rel !== 'modulepreload' && rel !== 'stylesheet') return;
-					
-					var href = target.href || "";
-					if (!href || !isAppAssetUrl(href)) return;
-					
-					handleInitError({ type: 'link-load', cause: e, target_href: href });
-					return;
-				}
-
-				if ((e.message || "").includes("Importing a module script failed")) {
-					handleInitError({ type: 'safari-module-load', cause: e });
-				}
-			}, true); // Use capture phase to catch resource errors
-
-
 			// Preload translations based on language in path (matches i18next logic)
 			const supportedLngs = ["en", "es", "fr", "de", "pt"];
 			const pathParts = window.location.pathname.split('/');
@@ -173,6 +93,32 @@
 			}
 		})();
 	</script>
+	<noscript data-vpss-background-noscript>
+		<style>
+			body::before {
+				content: "";
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000000;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-image: image-set(url("/assets/img/background.webp") 1x,
+						url("/assets/img/background@2x.webp") 2x);
+				z-index: -1;
+			}
+
+			@media (width <=639px) {
+				body::before {
+					background-image: url("/assets/img/background@mobile-blurred.webp");
+					background-position: center top;
+				}
+			}
+		</style>
+	</noscript>
 	<style>
 		html {
 			background: #000;
@@ -195,7 +141,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 	<meta name="theme-color" content="#003848" />
 
-	<title>NMS Optimizer: Tech Layout Builder & Adjacency Calculator</title>
+	<title>NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky</title>
 
 	<!-- Favicons -->
 	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
@@ -291,7 +237,7 @@
 
 	<!-- Open Graph Meta Tags -->
 	<meta property="og:title"
-		content="NMS Optimizer: Tech Layout Builder & Adjacency Calculator" />
+		content="NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky" />
 	<meta property="og:description"
 		content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance." />
 	<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
@@ -305,7 +251,7 @@
 	<!-- Twitter Card Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title"
-		content="NMS Optimizer: Tech Layout Builder & Adjacency Calculator" />
+		content="NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky" />
 	<meta name="twitter:description"
 		content="Find the best No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Optimize adjacency bonuses and supercharged slots for peak performance." />
 	<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
@@ -333,7 +279,7 @@
 					"@type": "WebPage",
 					"@id": "https://nms-optimizer.app/#webpage",
 					"url": "https://nms-optimizer.app/",
-					"name": "NMS Optimizer: Tech Layout Builder & Adjacency Calculator",
+					"name": "NMS Optimizer: Tech Layout Builder & Adjacency Bonus Calculator for No Man's Sky",
 					"isPartOf": {
 						"@id": "https://nms-optimizer.app/#website"
 					},
@@ -471,12 +417,12 @@
 			<section>
 				<h2>Supported Platforms</h2>
 				<ul>
-					<li><strong>Starships:</strong> Standard, Exotic, Sentinel, Solar, and Living</li>
-					<li><strong>Corvettes:</strong> Including unique reactor modules and cosmetic technology slots</li>
-					<li><strong>Multitools:</strong> All types including Staves</li>
-					<li><strong>Exocraft:</strong> All vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon)</li>
-					<li><strong>Exosuits:</strong> All technology types</li>
-					<li><strong>Freighters:</strong> Capital ship technology layouts</li>
+					<li>Starships (standard, sentinel, solar, fighter, living, atlantid)</li>
+					<li>Corvettes</li>
+					<li>Multitools (standard and sentinel)</li>
+					<li>Exosuits</li>
+					<li>Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon)</li>
+					<li>Freighters</li>
 				</ul>
 			</section>
 
@@ -484,11 +430,11 @@
 				<h2>Navigation</h2>
 				<ul>
 					<li><a href="/">Home</a> - Use the NMS Optimizer layout calculator</li>
-					<li><a href="/instructions/">Instructions</a> - Complete guide for using the app</li>
-					<li><a href="/about/">About</a> - How it works and technical details</li>
-					<li><a href="/changelog/">Changelog</a> - Latest updates and new features</li>
-					<li><a href="/userstats/">User Statistics</a> - Popular technologies and builds</li>
-					<li><a href="/translation/">Help Translate</a> - Contribute to community localization</li>
+					<li><a href="/instructions">Instructions</a> - Complete guide for using the app</li>
+					<li><a href="/about">About</a> - How it works and technical details</li>
+					<li><a href="/changelog">Changelog</a> - Latest updates and new features</li>
+					<li><a href="/userstats">User Statistics</a> - Popular technologies and builds</li>
+					<li><a href="/translation">Help Translate</a> - Contribute to community localization</li>
 				</ul>
 			</nav>
 		</main>
@@ -599,7 +545,7 @@
 			}
 
 			main li {
-				margin-bottom: 0.5rem;
+				margin-bottom: 0.25rem;
 			}
 
 			main a {

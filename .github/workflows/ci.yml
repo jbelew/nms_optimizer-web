@@ -21,10 +21,14 @@ concurrency:
   group: ci-${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions: {}
+
 jobs:
   lint-test:
     name: Lint, Typecheck & Unit Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -50,6 +54,8 @@ jobs:
   build:
     name: Build Application (Verification)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
@@ -63,28 +69,33 @@ jobs:
 
       - name: Set Build Version
         id: build_version
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+        uses: ./.github/actions/get-build-version
 
       - name: Build project (Staging/Verification)
         run: npm run build
         env:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-
-      - name: Verify Storybook build
-        run: npm run build-storybook
+          # Conditionally pass Sentry secrets to avoid failures on fork PRs
+          VITE_SENTRY_DSN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.VITE_SENTRY_DSN || '' }}
+          SENTRY_AUTH_TOKEN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_AUTH_TOKEN || '' }}
+          SENTRY_ORG: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_ORG || '' }}
+          SENTRY_PROJECT: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_PROJECT || '' }}
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
         with:
           name: dist-bundle
+          path: dist/
+          retention-days: 1
+
+      - name: Build project (E2E)
+        run: npm run build:e2e
+
+      - name: Upload E2E dist artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-e2e
           path: dist/
           retention-days: 1
 
@@ -131,8 +142,10 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
           mkdir -p history-dir
-          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
+          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir "$GITHUB_SHA_ENV"
           cp scripts/lighthouse-dashboard.html history-dir/index.html
+        env:
+          GITHUB_SHA_ENV: ${{ github.sha }}
 
       - name: Deploy Lighthouse History
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
@@ -144,7 +157,10 @@ jobs:
 
   storybook-test:
     name: Storybook Interaction, A11y & Chromatic
+    needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -154,8 +170,19 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
+
+      - name: Build Storybook
+        run: npm run build-storybook
 
       - name: Run Storybook Interaction Tests
         run: npm run test:storybook
@@ -164,17 +191,62 @@ jobs:
         run: npm run test:storybook:a11y
 
       - name: Run Chromatic visual tests
-        uses: chromaui/action@v16
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: storybook-static
           onlyChanged: true
           exitOnceUploaded: true
           exitZeroOnChanges: true
 
+  e2e-test:
+    name: E2E Verification (Playwright)
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
+      - name: Download E2E dist artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-e2e
+          path: dist/
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run E2E Tests
+        run: npx playwright test --project=chromium --project=firefox --project=webkit
+        env:
+          CI: true
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
   release:
     name: Release
-    needs: [lint-test, build, storybook-test]
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: [lint-test, build, storybook-test, e2e-test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -216,8 +288,9 @@ jobs:
   build-production:
     name: Build Application (Production)
     needs: [release]
-    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
       effective-tag: ${{ steps.version_logic.outputs.version }}
@@ -234,15 +307,19 @@ jobs:
       - name: Determine Effective Version
         id: version_logic
         shell: bash
-        run: echo "version=${{ needs.release.outputs.tag }}" >> $GITHUB_OUTPUT
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          GITHUB_SHA_ENV: ${{ github.sha }}
+        run: |
+          if [ -n "$RELEASE_TAG" ]; then
+            echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          else
+            echo "version=$GITHUB_SHA_ENV" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set Build Tracking ID
         id: build_version
-        shell: bash
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+        uses: ./.github/actions/get-build-version
 
       - name: Build project (Production)
         run: npm run build
@@ -264,17 +341,22 @@ jobs:
 
   deploy-production-cloudflare:
     name: Deploy to Cloudflare (Production)
-    needs: [build-production]
-    if: github.ref == 'refs/heads/main'
+    needs: [build-production, release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag || github.sha }}
+
       - name: Download production artifact
         uses: actions/download-artifact@v8
         with:
           name: dist-production
           path: dist/
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
@@ -284,22 +366,17 @@ jobs:
 
       - name: Purge Cloudflare Cache
         run: |
-          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          curl -f -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}')
-          
-          if echo "$RESPONSE" | grep -q '"success".*true'; then
-            echo "✅ Cloudflare cache purged successfully"
-          else
-            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
-            exit 1
-          fi
+          --data '{"purge_everything":true}'
 
   deploy-production-heroku:
     name: Deploy to Heroku (Production)
     needs: [build-production, release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -311,7 +388,7 @@ jobs:
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.15.15
+        uses: akhileshns/heroku-deploy@v3.14.15
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "nms-optimizer-web"
@@ -328,13 +405,13 @@ jobs:
   post-deploy-production:
     name: Finalize Production
     needs: [deploy-production-cloudflare, deploy-production-heroku, release]
-    if: github.ref == 'refs/heads/main'
+    # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
+    if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: write
     steps:
       - name: Trigger Downstream Jobs
-        if: needs.release.outputs.released == 'true'
         uses: actions/github-script@v8
         env:
           RELEASE_TAG: ${{ needs.release.outputs.tag }}
@@ -352,31 +429,24 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build, storybook-test]
+    needs: [lint-test, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:
           name: dist-bundle
           path: dist/
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
-      - name: Purge Cloudflare Cache
-        run: |
-          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}')
-          
-          if echo "$RESPONSE" | grep -q '"success".*true'; then
-            echo "✅ Cloudflare cache purged successfully"
-          else
-            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
-            exit 1
-          fi
