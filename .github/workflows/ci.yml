@@ -282,6 +282,22 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
 
+      - name: Purge Cloudflare Cache
+        run: |
+          echo "Waiting 5 seconds for Cloudflare nodes to sync..."
+          sleep 5
+          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}')
+          
+          if echo "$RESPONSE" | grep -q '"success".*true'; then
+            echo "✅ Cloudflare cache purged successfully"
+          else
+            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
+            exit 1
+          fi
+
   deploy-production-heroku:
     name: Deploy to Heroku (Production)
     needs: [build-production, release]
@@ -334,41 +350,6 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner, repo: context.repo.repo,
               workflow_id: 'update-screenshots.yml', ref: tag
-            });
-
-  deploy-staging:
-    name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build, storybook-test]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download dist artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: dist-bundle
-          path: dist/
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
-      - name: Purge Cloudflare Cache
-        run: |
-          echo "Waiting 5 seconds for Cloudflare nodes to sync..."
-          sleep 5
-          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}')
-          
-          if echo "$RESPONSE" | grep -q '"success".*true'; then
-            echo "✅ Cloudflare cache purged successfully"
-          else
-            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
-            exit 1
-          fi
-tag
             });
 
   deploy-staging:
