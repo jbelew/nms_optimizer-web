@@ -38,22 +38,22 @@
 		"deactivateRow": "Désactiver la Rangée"
 	},
 	"messageSpinner": {
-		"randomMessages": [
-			"-(( Demande de conseils à l'Atlas ! ))-",
-			"-(( Recalibrage de l'alignement des nœuds surchargés ! ))-",
-			"-(( Harmonisation des interactions des accumulateurs d'amélioration ! ))-",
-			"-(( Polissage du chrome ! ))-",
-			"-(( Encore quelques calculs… promis ! ))-",
-			"-(( Tentative de raffinement de la solution ! ))-",
-			"-(( Débogage des routines de l'injecteur de plasma ! ))-",
-			"-(( Recherche de résidus de Geknip ! ))-",
-			"-(( Ne vous inquiétez pas, je connais quelqu'un ! ))-",
-			"-(( Interfaçage avec les schémas de l'Anomalie ! ))-",
-			"-(( Compilation de la pile technologique multi-threadée ! ))-",
-			"-(( Décryptage d'artéfacts technologiques anciens ! ))-",
-			"-(( Optimisation de l'optimisation ! ))-",
-			"-(( Je suis un Réseau Neuronal Convolutif entraîné, pas un faiseur de miracles ! ))-"
-		]
+		"randomMessages": {
+			"0": "-(( Demande de conseils à l'Atlas ! ))-",
+			"1": "-(( Recalibrage de l'alignement des nœuds surchargés ! ))-",
+			"2": "-(( Harmonisation des interactions des accumulateurs d'amélioration ! ))-",
+			"3": "-(( Polissage du chrome ! ))-",
+			"4": "-(( Encore quelques calculs… promis ! ))-",
+			"5": "-(( Tentative de raffinement de la solution ! ))-",
+			"6": "-(( Débogage des routines de l'injecteur de plasma ! ))-",
+			"7": "-(( Recherche de résidus de Geknip ! ))-",
+			"8": "-(( Ne vous inquiétez pas, je connais quelqu'un ! ))-",
+			"9": "-(( Interfaçage avec les schémas de l'Anomalie ! ))-",
+			"10": "-(( Compilation de la pile technologique multi-threadée ! ))-",
+			"11": "-(( Décryptage d'artéfacts technologiques anciens ! ))-",
+			"12": "-(( Optimisation de l'optimisation ! ))-",
+			"13": "-(( Je suis un Réseau Neuronal Convolutif entraîné, pas un faiseur de miracles ! ))-"
+		}
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Interruption du Signal ! –kzzkt–",
@@ -684,7 +684,8 @@
 			"userstats": "Technologies et builds populaires",
 			"translation": "Contribuez à la localisation communautaire",
 			"privacy": "Notre engagement envers la confidentialité et la sécurité de vos données"
-		}
+		},
+		"genre": "Outil de Jeu"
 	},
 	"installPrompt": {
 		"title": "Ajouter à l'Écran d'Accueil",

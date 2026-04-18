@@ -38,22 +38,22 @@
 		"deactivateRow": "Desactivar Fila"
 	},
 	"messageSpinner": {
-		"randomMessages": [
-			"-(( ¡Pidiendo orientación al Atlas! ))-",
-			"-(( ¡Recalibrando alineaciones de nodos potenciados! ))-",
-			"-(( ¡Armonizando interacciones de acumuladores de mejoras! ))-",
-			"-(( ¡Puliendo el cromo! ))-",
-			"-(( Solo unos pocos cálculos más... ¡lo prometo! ))-",
-			"-(( ¡Intentando refinar la solución! ))-",
-			"-(( ¡Depurando rutinas del inyector de plasma! ))-",
-			"-(( ¡Buscando residuos de Geknip! ))-",
-			"-(( ¡No te preocupes, conozco a un tipo! ))-",
-			"-(( ¡Interconectando con esquemas de la Anomalía! ))-",
-			"-(( ¡Compilando pila tecnológica multi-hilo! ))-",
-			"-(( ¡Desencriptando artefactos tecnológicos antiguos! ))-",
-			"-(( ¡Optimizando la optimización! ))-",
-			"-(( ¡Soy una red neuronal convolucional altamente entrenada, no hago milagros! ))-"
-		]
+		"randomMessages": {
+			"0": "-(( ¡Pidiendo orientación al Atlas! ))-",
+			"1": "-(( ¡Recalibrando alineaciones de nodos potenciados! ))-",
+			"2": "-(( ¡Armonizando interacciones de acumuladores de mejoras! ))-",
+			"3": "-(( ¡Puliendo el cromo! ))-",
+			"4": "-(( Solo unos pocos cálculos más... ¡lo prometo! ))-",
+			"5": "-(( ¡Intentando refinar la solución! ))-",
+			"6": "-(( ¡Depurando rutinas del inyector de plasma! ))-",
+			"7": "-(( ¡Buscando residuos de Geknip! ))-",
+			"8": "-(( ¡No te preocupes, conozco a un tipo! ))-",
+			"9": "-(( ¡Interconectando con esquemas de la Anomalía! ))-",
+			"10": "-(( ¡Compilando pila tecnológica multi-hilo! ))-",
+			"11": "-(( ¡Desencriptando artefactos tecnológicos antiguos! ))-",
+			"12": "-(( ¡Optimizando la optimización! ))-",
+			"13": "-(( ¡Soy una red neuronal convolucional altamente entrenada, no hago milagros! ))-"
+		}
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– ¡Disrupción de Señal! –kzzkt–",
@@ -684,7 +684,8 @@
 			"userstats": "Tecnologías y diseños populares",
 			"translation": "Contribuye a la localización comunitaria",
 			"privacy": "Nuestro compromiso con la privacidad e integridad de tus datos"
-		}
+		},
+		"genre": "Herramienta de Juego"
 	},
 	"installPrompt": {
 		"title": "Añadir a la Pantalla de Inicio",

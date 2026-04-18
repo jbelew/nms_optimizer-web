@@ -38,22 +38,22 @@
 		"deactivateRow": "Desativar Linha"
 	},
 	"messageSpinner": {
-		"randomMessages": [
-			"-(( Pedindo orientação ao Atlas! ))-",
-			"-(( Recalibrando alinhamentos de nós sobrecarregados! ))-",
-			"-(( Harmonizando interações de módulos de melhoria! ))-",
-			"-(( Polindo o cromo! ))-",
-			"-(( Só mais alguns cálculos… sério! ))-",
-			"-(( Tentando refinar a solução! ))-",
-			"-(( Depurando rotinas do injetor de plasma! ))-",
-			"-(( Verificando resíduos de Geknip! ))-",
-			"-(( Não se preocupe, eu conheço um cara! ))-",
-			"-(( Interfaceando com esquemas da Anomalia! ))-",
-			"-(( Compilando pilha tecnológica multi-threaded! ))-",
-			"-(( Descriptografando artefatos tecnológicos antigos! ))-",
-			"-(( Otimizando a otimização! ))-",
-			"-(( Eu sou uma Rede Neural Convolucional treinada, não um milagreiro! ))-"
-		]
+		"randomMessages": {
+			"0": "-(( Pedindo orientação ao Atlas! ))-",
+			"1": "-(( Recalibrando alinhamentos de nós sobrecarregados! ))-",
+			"2": "-(( Harmonizando interações de módulos de melhoria! ))-",
+			"3": "-(( Polindo o cromo! ))-",
+			"4": "-(( Só mais alguns cálculos… sério! ))-",
+			"5": "-(( Tentando refinar a solução! ))-",
+			"6": "-(( Depurando rotinas do injetor de plasma! ))-",
+			"7": "-(( Verificando resíduos de Geknip! ))-",
+			"8": "-(( Não se preocupe, eu conheço um cara! ))-",
+			"9": "-(( Interfaceando com esquemas da Anomalia! ))-",
+			"10": "-(( Compilando pilha tecnológica multi-threaded! ))-",
+			"11": "-(( Descriptografando artefatos tecnológicos antigos! ))-",
+			"12": "-(( Otimizando a otimização! ))-",
+			"13": "-(( Eu sou uma Rede Neural Convolucional treinada, não um milagreiro! ))-"
+		}
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Interrupção de Sinal! –kzzkt–",
@@ -225,7 +225,7 @@
 			"hyper": "Hipermotor",
 			"launch": "Propulsores de Lançamento",
 			"pulse": "Motores de Pulso",
-			"aquajet": "Aqua-Jets",
+			"aquajet": "Aqua-Jatos",
 			"bobble": "Bonecos",
 			"scanner": "Escâneres",
 			"economy": "Escâner de Economia",
@@ -405,7 +405,7 @@
 			"sublight": "Amplificador Sublumínico",
 			"instability": "Motor de Instabilidade",
 			"pulse-upgrade": "Melhoria de Motor de Pulso",
-			"aquajets": "Aqua-Jets",
+			"aquajets": "Aqua-Jatos",
 			"apollo": "Boneco de Apolo",
 			"atlas": "Boneco do Atlas",
 			"nada": "Boneco de Nada",
@@ -684,7 +684,8 @@
 			"userstats": "Tecnologias e builds populares",
 			"translation": "Contribua com a localização comunitária",
 			"privacy": "Nosso compromisso com a privacidade e segurança dos seus dados"
-		}
+		},
+		"genre": "Ferramenta de Jogo"
 	},
 	"installPrompt": {
 		"title": "Adicionar à Tela de Início",

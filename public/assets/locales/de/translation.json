@@ -38,22 +38,22 @@
 		"deactivateRow": "Reihe Deaktivieren"
 	},
 	"messageSpinner": {
-		"randomMessages": [
-			"-(( Erbitte Führung vom Atlas! ))-",
-			"-(( Rekalibriere Ausrichtung der überladenen Knoten! ))-",
-			"-(( Harmonisiere Upgrade-Modul-Interaktionen! ))-",
-			"-(( Poliere das Chrom! ))-",
-			"-(( Nur noch ein paar Berechnungen… versprochen! ))-",
-			"-(( Versuche die Lösung zu verfeinern! ))-",
-			"-(( Debugge Plasmainjektor-Routinen! ))-",
-			"-(( Suche nach Geknip-Rückständen! ))-",
-			"-(( Keine Sorge, ich kenne da jemanden! ))-",
-			"-(( Verbinde mit Anomalie-Bauplänen! ))-",
-			"-(( Kompiliere Multi-Thread-Technologie-Stack! ))-",
-			"-(( Entschlüssele antike Technologie-Artefakte! ))-",
-			"-(( Optimiere die Optimierung! ))-",
-			"-(( Ich bin ein hochtrainiertes neuronales Netz, kein Wunderheiler! ))-"
-		]
+		"randomMessages": {
+			"0": "-(( Erbitte Führung vom Atlas! ))-",
+			"1": "-(( Rekalibriere Ausrichtung der überladenen Knoten! ))-",
+			"2": "-(( Harmonisiere Upgrade-Modul-Interaktionen! ))-",
+			"3": "-(( Poliere das Chrom! ))-",
+			"4": "-(( Nur noch ein paar Berechnungen… versprochen! ))-",
+			"5": "-(( Versuche die Lösung zu verfeinern! ))-",
+			"6": "-(( Debugge Plasmainjektor-Routinen! ))-",
+			"7": "-(( Suche nach Geknip-Rückständen! ))-",
+			"8": "-(( Keine Sorge, ich kenne da jemanden! ))-",
+			"9": "-(( Verbinde mit Anomalie-Bauplänen! ))-",
+			"10": "-(( Kompiliere Multi-Thread-Technologie-Stack! ))-",
+			"11": "-(( Entschlüssele antike Technologie-Artefakte! ))-",
+			"12": "-(( Optimiere die Optimierung! ))-",
+			"13": "-(( Ich bin ein hochtrainiertes neuronales Netz, kein Wunderheiler! ))-"
+		}
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Signalstörung! –kzzkt–",
