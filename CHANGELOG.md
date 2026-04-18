@@ -1,3 +1,16 @@
+# [6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18)
+
+
+### Bug Fixes
+
+* **caching:** restore build directory split to fix overlapping edge cache rules ([3b92d41](https://github.com/jbelew/nms_optimizer-web/commit/3b92d412559027cc9f21979c4f373e07686cc9b0))
+* **resilience:** remove duplicate preloadError handler, fix cache check, improve recovery flow ([fb934e7](https://github.com/jbelew/nms_optimizer-web/commit/fb934e7aefbc5762e83eab0e0a0fe33aa38a6c78))
+
+
+### Features
+
+* **sync:** synchronize dev with main and resolve resilience conflicts ([e528269](https://github.com/jbelew/nms_optimizer-web/commit/e528269ba2370d384b6447c4207d50efc2acc1fb))
+
 ## [6.31.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.6...v6.31.7) (2026-04-18)
 
 
