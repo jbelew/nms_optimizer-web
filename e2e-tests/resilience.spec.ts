@@ -101,7 +101,9 @@ test.describe("Application Resilience & Recovery", () => {
 	});
 
 	test.describe("Network Throttling", () => {
-		test("should load successfully on a slow 3G connection", async ({ page }) => {
+		test("should load successfully on a slow 3G connection", async ({ page, browserName }) => {
+			test.skip(browserName !== 'chromium', 'CDP session is only available in Chromium');
+
 			const client = await page.context().newCDPSession(page);
 			await client.send("Network.emulateNetworkConditions", {
 				offline: false,
