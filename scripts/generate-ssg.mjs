@@ -12,6 +12,7 @@ import i18nextFsBackend from "i18next-fs-backend";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
+import { getLocalizedSchema } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -153,56 +154,41 @@ function generatePage(
 	html = html.replace(/<link\s+rel="canonical"[\s\S]*?\/?>/g, "");
 	html = html.replace(/<meta\s+property="og:url"[\s\S]*?\/?>/g, "");
 	html = html.replace(/<link\s+rel="alternate"\s+hreflang="[\s\S]*?\/?>/g, "");
-	html = html.replace(/<script type="application\/ld\+json" id="faq-schema">[\s\S]*?<\/script>/g, "");
+	html = html.replace(/<script type="application\/ld\+json" id="[^"]*schema">[\s\S]*?<\/script>/g, "");
 
 	// 3. SEO Tag Injection
 	const seoTags = generateSeoTags(pathname, lang, baseUrl);
-	let headInjections = `\n  ${seoTags.join("\n  ")}`;
+	const cleanPath = pathname === "/" ? "" : pathname;
+	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
+	const canonicalPath =
+		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
+	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+
+	const schemas = getLocalizedSchema(t, lang, canonicalUrl);
+	const schemaInjections = [
+		{ id: "software-schema", type: "SoftwareApplication" },
+		{ id: "website-schema", type: "WebSite" },
+		{ id: "org-schema", type: "Organization" },
+		{ id: "breadcrumb-schema", type: "BreadcrumbList" },
+	]
+		.map((item) => {
+			const data = schemas.find((s) => s["@type"] === item.type);
+			return data
+				? `<script type="application/ld+json" id="${item.id}">${JSON.stringify(data)}</script>`
+				: "";
+		})
+		.filter(Boolean);
 
 	if (isRootPage) {
-		const faqSchema = {
-			"@context": "https://schema.org",
-			"@type": "FAQPage",
-			"@id": `${baseUrl}/#faqpage`,
-			"inLanguage": lang,
-			"name": t("faq.name", "NMS Optimizer Frequently Asked Questions"),
-			"mainEntity": [
-				{
-					"@type": "Question",
-					"name": t("faq.questions.adjacencyBonus.name", "What is an adjacency bonus in No Man's Sky?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.adjacencyBonus.answer", "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.superchargedSlots.name", "What are supercharged slots in No Man's Sky?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.superchargedSlots.answer", "Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.calculation.name", "How does NMS Optimizer calculate the best technology layout?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.calculation.answer", "The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.platforms.name", "What platforms does NMS Optimizer support?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.platforms.answer", "NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters.")
-					}
-				}
-			]
-		};
-		headInjections += `\n  <script type="application/ld+json" id="faq-schema">${JSON.stringify(faqSchema)}</script>`;
+		const faqData = schemas.find((s) => s["@type"] === "FAQPage");
+		if (faqData) {
+			schemaInjections.push(
+				`<script type="application/ld+json" id="faq-schema">${JSON.stringify(faqData)}</script>`
+			);
+		}
 	}
+
+	let headInjections = `\n  ${seoTags.join("\n  ")}\n  ${schemaInjections.join("\n  ")}`;
 
 	if (html.includes("</head>")) {
 		html = html.replace("</head>", `${headInjections}\n</head>`);

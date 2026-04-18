@@ -3,15 +3,12 @@
  * Consolidates SEO schema for both React (CSR) and SSG layers to ensure parity.
  */
 
-import { TFunction } from "i18next";
-
 /**
  * Generates the full set of localized structured data for a given page.
  *
- * @param {TFunction} t - Translation function (i18next-compatible)
+ * @param {import('i18next').TFunction} t - Translation function (i18next-compatible)
  * @param {string} lang - Current language code (e.g., 'en', 'fr')
  * @param {string} url - Current page canonical URL
- *
  * @returns {Array<Record<string, unknown>>} Array of schema.org objects
  *
  * @example
@@ -19,11 +16,7 @@ import { TFunction } from "i18next";
  * const schemas = getLocalizedSchema(t, "en", "https://nms-optimizer.app/");
  * ```
  */
-export const getLocalizedSchema = (
-	t: TFunction,
-	lang: string,
-	url: string
-): Array<Record<string, unknown>> => {
+export const getLocalizedSchema = (t, lang, url) => {
 	const baseUrl = "https://nms-optimizer.app";
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const appDescription = t("seo.appDescription");
@@ -133,7 +126,6 @@ export const getLocalizedSchema = (
 	// Simple breadcrumb logic for secondary pages
 	// Handle both /page/ and /lang/page/
 	let pageName = "";
-
 	if (pathParts.length > 0 && pathParts[0] !== lang) {
 		pageName = pathParts[pathParts.length - 1];
 	} else if (pathParts.length > 1 && pathParts[0] === lang) {
