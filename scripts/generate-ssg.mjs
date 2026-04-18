@@ -9,6 +9,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
+import * as prettier from "prettier";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
@@ -30,45 +31,15 @@ const PAGE_TO_MARKDOWN_MAPPING = {
  * Read markdown file from the locales directory.
  */
 function readMarkdownFile(lang, fileName) {
-	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);
-	if (!fs.existsSync(filePath)) {
-		const enPath = path.join(LOCALES_DIR, "en", `${fileName}.md`);
-		if (fs.existsSync(enPath)) {
-			return fs.readFileSync(enPath, "utf-8");
-		}
-		return "";
+	const filePath = path.join(LOCALES_DIR, lang, `pages/${fileName}.md`);
+	if (fs.existsSync(filePath)) {
+		return fs.readFileSync(filePath, "utf-8");
 	}
-	return fs.readFileSync(filePath, "utf-8");
+	return null;
 }
 
 /**
- * Generate SEO tags for a page.
- */
-function generateSeoTags(pathname, lang, baseUrl) {
-	const tags = [];
-	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
-
-	const cleanPath = pathname === "/" ? "" : pathname;
-	const canonicalPath = lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
-	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
-	
-	tags.push(`<link rel="canonical" href="${canonicalUrl}" />`);
-	tags.push(`<meta property="og:url" content="${canonicalUrl}" />`);
-
-	const enUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
-	tags.push(`<link rel="alternate" hreflang="en" href="${enUrl}" />`);
-	tags.push(`<link rel="alternate" hreflang="x-default" href="${enUrl}" />`);
-
-	SUPPORTED_LANGUAGES.filter((l) => l !== "en").forEach((langCode) => {
-		const langUrl = new URL(`/${langCode}${normalizePath(cleanPath || "/")}`, baseUrl).href;
-		tags.push(`<link rel="alternate" hreflang="${langCode}" href="${langUrl}" />`);
-	});
-
-	return tags;
-}
-
-/**
- * Generate internal navigation links for SEO.
+ * Generate navigation links for the SSG page.
  */
 function generateNavigationLinks(lang, currentPage, t) {
 	const langPrefix = lang === "en" ? "" : `/${lang}`;
@@ -104,6 +75,49 @@ function generateNavigationLinks(lang, currentPage, t) {
 }
 
 /**
+ * Generate SEO tags for the SSG page.
+ */
+function generateSeoTags(pathname, lang, baseUrl) {
+	const tags = [];
+	const cleanPath = pathname === "/" ? "" : pathname;
+	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
+
+	// Canonical URL
+	const canonicalPath =
+		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
+	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+
+	tags.push(`<link rel="canonical" href="${canonicalUrl}" />`);
+	tags.push(`<meta property="og:url" content="${canonicalUrl}" />`);
+
+	// Hreflang Tags
+	SUPPORTED_LANGUAGES.forEach((l) => {
+		const langPath = l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
+		const langUrl = new URL(langPath, baseUrl).href;
+		tags.push(`<link rel="alternate" hreflang="${l}" href="${langUrl}" />`);
+	});
+
+	// x-default hreflang (point to English)
+	const xDefaultPath = normalizePath(cleanPath || "/");
+	const xDefaultUrl = new URL(xDefaultPath, baseUrl).href;
+	tags.push(`<link rel="alternate" hreflang="x-default" href="${xDefaultUrl}" />`);
+
+	return tags;
+}
+
+const ssgStyles = `
+  .app-header-static { text-align: center; margin-bottom: 2rem; }
+  .app-header-static h1 { margin: 0; font-size: 2rem; color: #4cc9f0; }
+  .app-header-static p { margin: 0.5rem 0 0; font-style: italic; opacity: 0.8; }
+  main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+  nav { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333; }
+  nav ul { list-style: none; padding: 0; }
+  nav li { margin-bottom: 0.5rem; }
+  nav a { color: #4cc9f0; text-decoration: none; }
+  nav a:hover { text-decoration: underline; }
+`;
+
+/**
  * Generate a complete HTML page.
  */
 function generatePage(
@@ -118,7 +132,7 @@ function generatePage(
 ) {
 	let html = indexHtml;
 	html = html.replace(/<html lang="[^"]*"/, `<html lang="${lang}"`);
-	
+
 	const pathname = pageName === "" ? "/" : `/${pageName}/`;
 	const isRootPage = pageName === "";
 
@@ -133,28 +147,53 @@ function generatePage(
 		html = html
 			.replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
 			// description
-			.replace(/<meta\s+name="description"[\s\S]*?\/?>/i, `<meta name="description" content="${pageDescription}" />`)
+			.replace(
+				/<meta\s+name="description"[\s\S]*?\/?>/i,
+				`<meta name="description" content="${pageDescription}" />`
+			)
 			// keywords
-			.replace(/<meta\s+name="keywords"[\s\S]*?\/?>/i, `<meta name="keywords" content="${pageKeywords}" />`)
+			.replace(
+				/<meta\s+name="keywords"[\s\S]*?\/?>/i,
+				`<meta name="keywords" content="${pageKeywords}" />`
+			)
 			// og:title
-			.replace(/<meta\s+property="og:title"[\s\S]*?\/?>/i, `<meta property="og:title" content="${pageTitle}" />`)
+			.replace(
+				/<meta\s+property="og:title"[\s\S]*?\/?>/i,
+				`<meta property="og:title" content="${pageTitle}" />`
+			)
 			// og:description
-			.replace(/<meta\s+property="og:description"[\s\S]*?\/?>/i, `<meta property="og:description" content="${pageDescription}" />`)
+			.replace(
+				/<meta\s+property="og:description"[\s\S]*?\/?>/i,
+				`<meta property="og:description" content="${pageDescription}" />`
+			)
 			// og:image:alt
-			.replace(/<meta\s+property="og:image:alt"[\s\S]*?\/?>/i, `<meta property="og:image:alt" content="${ogImageAlt}" />`)
+			.replace(
+				/<meta\s+property="og:image:alt"[\s\S]*?\/?>/i,
+				`<meta property="og:image:alt" content="${ogImageAlt}" />`
+			)
 			// twitter:title
-			.replace(/<meta\s+name="twitter:title"[\s\S]*?\/?>/i, `<meta name="twitter:title" content="${pageTitle}" />`)
+			.replace(
+				/<meta\s+name="twitter:title"[\s\S]*?\/?>/i,
+				`<meta name="twitter:title" content="${pageTitle}" />`
+			)
 			// twitter:description
-			.replace(/<meta\s+name="twitter:description"[\s\S]*?\/?>/i, `<meta name="twitter:description" content="${pageDescription}" />`)
+			.replace(
+				/<meta\s+name="twitter:description"[\s\S]*?\/?>/i,
+				`<meta name="twitter:description" content="${pageDescription}" />`
+			)
 			// twitter:image:alt
-			.replace(/<meta\s+name="twitter:image:alt"[\s\S]*?\/?>/i, `<meta name="twitter:image:alt" content="${ogImageAlt}" />`);
+			.replace(
+				/<meta\s+name="twitter:image:alt"[\s\S]*?\/?>/i,
+				`<meta name="twitter:image:alt" content="${ogImageAlt}" />`
+			);
 	}
 
 	// 2. Cleanup old SEO tags that we will re-inject fresh
 	html = html.replace(/<link\s+rel="canonical"[\s\S]*?\/?>/g, "");
 	html = html.replace(/<meta\s+property="og:url"[\s\S]*?\/?>/g, "");
 	html = html.replace(/<link\s+rel="alternate"\s+hreflang="[\s\S]*?\/?>/g, "");
-	html = html.replace(/<script type="application\/ld\+json" id="[^"]*schema">[\s\S]*?<\/script>/g, "");
+	// Remove all JSON-LD script tags (with or without IDs) to ensure a clean slate
+	html = html.replace(/<script type="application\/ld\+json"[\s\S]*?<\/script>/g, "");
 
 	// 3. SEO Tag Injection
 	const seoTags = generateSeoTags(pathname, lang, baseUrl);
@@ -173,6 +212,7 @@ function generatePage(
 	]
 		.map((item) => {
 			const data = schemas.find((s) => s["@type"] === item.type);
+			// Use small indent for readable JSON inside the tag
 			return data
 				? `<script type="application/ld+json" id="${item.id}">${JSON.stringify(data)}</script>`
 				: "";
@@ -188,7 +228,8 @@ function generatePage(
 		}
 	}
 
-	let headInjections = `\n  ${seoTags.join("\n  ")}\n  ${schemaInjections.join("\n  ")}`;
+	// Use tabs (\t) for indentation to match index.html style
+	let headInjections = `\n\t${seoTags.join("\n\t")}\n\t${schemaInjections.join("\n\t")}`;
 
 	if (html.includes("</head>")) {
 		html = html.replace("</head>", `${headInjections}\n</head>`);
@@ -218,8 +259,8 @@ function generatePage(
     </style>
   </noscript>`;
 
-		if (html.includes("</body>")) {
-			html = html.replace("</body>", `${contentBlock}\n</body>`);
+		if (html.includes('<div id="root"></div>')) {
+			html = html.replace('<div id="root"></div>', `<div id="root"></div>\n  ${contentBlock}`);
 		} else {
 			html += contentBlock;
 		}
@@ -246,7 +287,9 @@ async function generateSsg() {
 	const baseUrl = `https://${TARGET_HOST}`;
 
 	// Extract template blocks
-	const ssgBlockMatch = baseIndexHtml.match(/<noscript(?: [^>]*?)?>([\s\S]*?<header class="app-header-static">[\s\S]*?)<\/noscript>/);
+	const ssgBlockMatch = baseIndexHtml.match(
+		/<noscript(?: [^>]*?)?>([\s\S]*?<header class="app-header-static">[\s\S]*?)<\/noscript>/
+	);
 	const ssgBlock = ssgBlockMatch ? ssgBlockMatch[1] : "";
 
 	const ssgStyleMatch = ssgBlock.match(/<style>([\s\S]*?)<\/style>/);
@@ -263,6 +306,7 @@ async function generateSsg() {
 	}
 
 	const mdProcessor = createMarkdownProcessor();
+	const prettierConfig = (await prettier.resolveConfig(path.join(__dirname, "../.prettierrc.cjs"))) || {};
 
 	await i18next.use(i18nextFsBackend).init({
 		supportedLngs: SUPPORTED_LANGUAGES,
@@ -280,10 +324,23 @@ async function generateSsg() {
 	for (const lang of SUPPORTED_LANGUAGES) {
 		const t = i18next.getFixedT(lang);
 		const rootPath = lang === "en" ? "" : lang;
-		const rootPageHtml = generatePage(baseIndexHtml, lang, "", baseUrl, mdProcessor, t, ssgStyles, ssgHeader);
+		const rootPageHtml = generatePage(
+			baseIndexHtml,
+			lang,
+			"",
+			baseUrl,
+			mdProcessor,
+			t,
+			ssgStyles,
+			ssgHeader
+		);
+		const formattedRootHtml = await prettier.format(rootPageHtml, {
+			...prettierConfig,
+			parser: "html",
+		});
 		const rootDir = path.join(DIST_DIR, rootPath);
 		fs.mkdirSync(rootDir, { recursive: true });
-		fs.writeFileSync(path.join(rootDir, "index.html"), rootPageHtml);
+		fs.writeFileSync(path.join(rootDir, "index.html"), formattedRootHtml);
 		console.log(`✓ Generated ${lang === "en" ? "/" : "/" + lang}`);
 		generatedCount++;
 
@@ -291,8 +348,21 @@ async function generateSsg() {
 			const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
 			const pageDir = path.join(DIST_DIR, pagePath);
 			fs.mkdirSync(pageDir, { recursive: true });
-			const pageHtml = generatePage(baseIndexHtml, lang, dialog, baseUrl, mdProcessor, t, ssgStyles, ssgHeader);
-			fs.writeFileSync(path.join(pageDir, "index.html"), pageHtml);
+			const pageHtml = generatePage(
+				baseIndexHtml,
+				lang,
+				dialog,
+				baseUrl,
+				mdProcessor,
+				t,
+				ssgStyles,
+				ssgHeader
+			);
+			const formattedPageHtml = await prettier.format(pageHtml, {
+				...prettierConfig,
+				parser: "html",
+			});
+			fs.writeFileSync(path.join(pageDir, "index.html"), formattedPageHtml);
 			console.log(`✓ Generated /${pagePath}`);
 			generatedCount++;
 		}
