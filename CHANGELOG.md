@@ -1,3 +1,10 @@
+# [6.31.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.2...v6.31.0) (2026-04-18)
+
+
+### Features
+
+* **cloudflare:** optimize delivery pipeline and harden error recovery ([08edfdf](https://github.com/jbelew/nms_optimizer-web/commit/08edfdf02469dc6d9f77776ecb5707ac110af151)), closes [#root](https://github.com/jbelew/nms_optimizer-web/issues/root) [hi#performance](https://github.com/hi/issues/performance)
+
 ## [6.30.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.30.1...v6.30.2) (2026-04-17)
 
 
