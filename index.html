@@ -36,7 +36,7 @@
 				// Reload already attempted — redirect to dedicated error page
 				window.name = window.name.replace(MARKER, "");
 				console.error("Stale chunk reload failed. Redirecting to error page.");
-				window.location.href = "/500.html";
+				window.location.replace("/500.html");
 			});
 			// Preload translations based on language in path (matches i18next logic)
 			const supportedLngs = ["en", "es", "fr", "de", "pt"];

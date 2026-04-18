@@ -35,10 +35,9 @@ initializeSentry();
 
 // Initialize analytics and PWA after render is complete
 if (typeof window !== "undefined") {
-	// Add global handler for Vite chunk load failures (e.g. after deployments)
-	window.addEventListener("vite:preloadError", () => {
-		window.location.reload();
-	});
+	// NOTE: vite:preloadError is handled by the inline script in index.html
+	// which implements a one-reload-then-redirect-to-500 flow using window.name.
+	// Do NOT add a duplicate handler here — it would race with the redirect.
 
 	// Add global error handler to suppress SecurityErrors from cross-origin third-party scripts
 	// and "Importing a module script failed" errors on iOS Safari

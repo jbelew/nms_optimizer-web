@@ -16,6 +16,8 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Explicitly disable caching for service worker
+# Explicitly disable caching for version check and service worker
+/version.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0

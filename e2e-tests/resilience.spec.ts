@@ -1,18 +1,30 @@
 import { expect, test } from "@playwright/test";
 
+/**
+ * Application Resilience & Recovery Tests
+ *
+ * Tests the vite:preloadError recovery flow:
+ * 1. First chunk failure → auto-reload via window.name marker
+ * 2. Second chunk failure → redirect to static /500.html
+ * 3. /500.html "Hard Reset" button → clears SW + caches, reloads
+ *
+ * The mechanism uses window.name ("__preload_recovery__") as a reload marker
+ * because it survives page reloads and works in incognito/restricted browsers.
+ */
 test.describe("Application Resilience & Recovery", () => {
 	test.beforeEach(async ({ page }) => {
-		// Suppress welcome dialog via localStorage for resilience tests to avoid race conditions with mocks
+		// Suppress welcome dialog via localStorage to avoid race conditions with mocks
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
 		});
 	});
 
-	test.describe("Retry cycle", () => {
-		test("should show recovery UI when a critical chunk fails to load after max retries", async ({
+	test.describe("Preload error recovery cycle", () => {
+		test("should auto-reload once on first chunk failure, then redirect to 500.html on second", async ({
 			page,
 		}) => {
-			await page.route("**/build/*.js", async (route) => {
+			// Block all Vite-generated JS chunks under /assets/
+			await page.route("**/assets/*.js", async (route) => {
 				await route.fulfill({
 					status: 404,
 					contentType: "application/javascript",
@@ -20,11 +32,10 @@ test.describe("Application Resilience & Recovery", () => {
 				});
 			});
 
-			// Navigate with init_retry=2 so the error UI appears immediately
-			await page.goto("/?init_retry=2");
+			await page.goto("/");
 
-			// Wait for redirect to 500.html
-			await page.waitForURL("**/500.html*");
+			// The flow is: load → chunk fails → set marker + reload → chunk fails again → redirect to 500.html
+			await page.waitForURL("**/500.html*", { timeout: 30000 });
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible({ timeout: 15000 });
@@ -33,47 +44,37 @@ test.describe("Application Resilience & Recovery", () => {
 			await expect(refreshButton).toBeVisible();
 		});
 
-		test("should exhaust retries and show error UI when chunks keep failing", async ({
-			page,
-		}) => {
-			await page.route("**/build/*.js", async (route) => {
+		test("should clear window.name marker after redirect to 500.html", async ({ page }) => {
+			await page.route("**/assets/*.js", async (route) => {
 				await route.fulfill({ status: 404 });
 			});
 
 			await page.goto("/");
-
-			// Wait for redirect to 500.html after exhausting retries
 			await page.waitForURL("**/500.html*", { timeout: 30000 });
 
-			// After exhausting retries (0 -> 1 -> 2 -> error UI)
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).toBeVisible();
-			expect(page.url()).toContain("500.html");
+			// After redirect, the marker should have been cleared by the index.html handler
+			const windowName = await page.evaluate(() => window.name);
+			expect(windowName).not.toContain("__preload_recovery__");
 		});
 
-		test("refresh button should clear retry state", async ({ page }) => {
-			await page.route("**/build/*.js", async (route) => {
-				await route.fulfill({
-					status: 404,
-					contentType: "application/javascript",
-					body: "/* Mock 404 */",
-				});
+		test("reset button should clear caches and reload to root", async ({ page }) => {
+			await page.route("**/assets/*.js", async (route) => {
+				await route.fulfill({ status: 404 });
 			});
 
-			await page.goto("/?init_retry=2");
-
-			// Wait for redirect to 500.html
-			await page.waitForURL("**/500.html*");
+			await page.goto("/");
+			await page.waitForURL("**/500.html*", { timeout: 30000 });
 
 			const refreshButton = page.locator("button", { hasText: "Hard Reset & Refresh" });
 			await expect(refreshButton).toBeVisible({ timeout: 15000 });
+
+			// Unblock assets before clicking reset so the app can actually load
 			await page.unroute("**/assets/*.js");
 
-			// In 500.html, the button clears EVERYTHING and reloads with ?reload=timestamp
 			await refreshButton.click();
-			
-			await page.waitForURL(/\/\?reload=\d+/);
-			expect(page.url()).not.toContain("init_retry");
+
+			// 500.html redirects to /?reload=<timestamp>
+			await page.waitForURL(/\/\?reload=\d+/, { timeout: 15000 });
 		});
 	});
 
@@ -86,18 +87,17 @@ test.describe("Application Resilience & Recovery", () => {
 
 			await page.goto("/");
 
-			// The app should load normally — no error UI
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
 
-			// Verify init_retry was NOT added to the URL
-			expect(page.url()).not.toContain("init_retry");
+			// Verify app loaded normally — no redirect to 500.html
+			expect(page.url()).not.toContain("500.html");
 		});
 
 		test("should NOT trigger recovery when a non-asset same-origin resource fails", async ({
 			page,
 		}) => {
-			// Inject a failing non-asset script (e.g., a random path not under /assets/)
+			// Inject a failing non-asset script (not under /assets/)
 			await page.addInitScript(() => {
 				const script = document.createElement("script");
 				script.src = "/some-random-path/widget.js";
@@ -108,7 +108,7 @@ test.describe("Application Resilience & Recovery", () => {
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("init_retry");
+			expect(page.url()).not.toContain("500.html");
 		});
 
 		test("should NOT trigger recovery when a preload fetch link fails", async ({ page }) => {
@@ -121,7 +121,7 @@ test.describe("Application Resilience & Recovery", () => {
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("init_retry");
+			expect(page.url()).not.toContain("500.html");
 		});
 
 		test("should NOT trigger recovery when favicon or manifest fails", async ({ page }) => {
@@ -136,36 +136,29 @@ test.describe("Application Resilience & Recovery", () => {
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("init_retry");
+			expect(page.url()).not.toContain("500.html");
 		});
 	});
 
-	test.describe("Malformed input handling", () => {
-		test("should treat malformed init_retry as 0 and retry normally", async ({ page }) => {
-			await page.route("**/build/*.js", async (route) => {
-				await route.fulfill({ status: 404 });
+	test.describe("Successful boot cleanup", () => {
+		test("should clear __preload_recovery__ marker from window.name after successful boot", async ({
+			page,
+		}) => {
+			// Pre-set the marker as if a previous recovery reload occurred
+			await page.addInitScript(() => {
+				window.name = "__preload_recovery__";
 			});
 
-			// Navigate with a garbage init_retry value
-			await page.goto("/?init_retry=abc");
+			await page.goto("/");
 
-			// Should treat as 0 and retry (landing at init_retry=1, then 2, then redirect to 500.html)
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).toBeVisible();
-		});
+			// Wait for the app-ready event to fire (which clears the marker)
+			await page.waitForFunction(
+				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
+				{ timeout: 30000 }
+			);
 
-		test("should treat negative init_retry as 0 and retry normally", async ({ page }) => {
-			await page.route("**/build/*.js", async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			await page.goto("/?init_retry=-5");
-
-			// Should treat as 0 and retry (landing at init_retry=1, then 2, then redirect to 500.html)
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).toBeVisible();
+			const windowName = await page.evaluate(() => window.name);
+			expect(windowName).not.toContain("__preload_recovery__");
 		});
 	});
 
@@ -174,57 +167,20 @@ test.describe("Application Resilience & Recovery", () => {
 			const client = await page.context().newCDPSession(page);
 			await client.send("Network.emulateNetworkConditions", {
 				offline: false,
-				downloadThroughput: (800 * 1024) / 8, // 800 kbps (slightly faster than 400 for CI stability)
-				uploadThroughput: (400 * 1024) / 8, 
-				latency: 200, 
+				downloadThroughput: (800 * 1024) / 8,
+				uploadThroughput: (400 * 1024) / 8,
+				latency: 200,
 			});
 
-			// We need a higher timeout for slow network
 			await page.goto("/", { timeout: 60000 });
 
-			// Use a robust wait that checks for both a flag and the event
-			await page.waitForFunction(() => {
-				return (window as any).__APP_READY__ || false;
-			}, { timeout: 30000 });
-
-			const grid = page.locator(".gridTable");
-			await expect(grid).toBeVisible();
-		});
-	});
-
-	test.describe("API Failure Recovery", () => {
-		test("should redirect to 500.html when critical API fails", async ({ page }) => {
-			// Mock critical platforms API failure
-			await page.route("**/platforms", async (route) => {
-				await route.fulfill({ status: 500 });
-			});
-
-			// Mock critical tech-tree API failure
-			await page.route("**/tech_tree/**", async (route) => {
-				await route.fulfill({ status: 500 });
-			});
-
-			await page.goto("/");
-
-			// Should redirect to 500.html
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).toBeVisible();
-		});
-	});
-
-	test.describe("Successful boot cleanup", () => {
-		test("should clear init_retry from URL after successful app boot", async ({ page }) => {
-			// Navigate with a leftover init_retry=1 (simulating a recovered first retry)
-			await page.goto("/?init_retry=1");
-
-			// Wait for the app to fully boot (the app-ready event fires and clears the param)
 			await page.waitForFunction(
-				() => !new URL(window.location.href).searchParams.has("init_retry"),
+				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
 				{ timeout: 30000 }
 			);
 
-			expect(page.url()).not.toContain("init_retry");
+			const grid = page.locator(".gridTable");
+			await expect(grid).toBeVisible();
 		});
 	});
 });
