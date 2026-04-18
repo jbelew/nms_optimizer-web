@@ -1,3 +1,11 @@
+## [6.31.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.4...v6.31.5) (2026-04-18)
+
+
+### Bug Fixes
+
+* **ci:** restore 5s sleep before cloudflare cache purge ([7f62547](https://github.com/jbelew/nms_optimizer-web/commit/7f62547c61fe0ab85dd5418ab13f624542f1c877))
+* **ci:** restore cloudflare cache purge step in production deploy ([e37eb80](https://github.com/jbelew/nms_optimizer-web/commit/e37eb8074b9e90e5a9876d7ef7d1ef2600458ce6))
+
 ## [6.31.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.3...v6.31.4) (2026-04-18)
 
 
