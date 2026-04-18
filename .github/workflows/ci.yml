@@ -227,10 +227,10 @@ jobs:
             playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run E2E Tests
-        run: npx playwright test --project=chromium
+        run: npx playwright test --project=chromium --project=firefox --project=webkit
         env:
           CI: true
 
