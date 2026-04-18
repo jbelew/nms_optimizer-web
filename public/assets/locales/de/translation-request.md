@@ -1,4 +1,4 @@
-# Den NMS-Optimierer Übersetzen: Hilf Bei Der Lokalisierung Der App
+# Hilf bei der Übersetzung des NMS-Optimierers: Werde Teil unserer Community-Lokalisierung
 
 ## Hilf Bei Der Übersetzung Des NMS-Optimierers
 

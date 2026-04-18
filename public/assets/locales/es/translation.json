@@ -651,8 +651,9 @@
 		"cancelButton": "Cancelar"
 	},
 	"seo": {
-		"mainPageTitle": "Optimizador de NMS: Constructor de Diseños Tecnológicos y Calculadora de Adyacencia",
+		"mainPageTitle": "Optimizador de NMS: Constructor de Diseños Tecnológicos y Calculadora de Adjacencia",
 		"appDescription": "Calcula diseños de tecnología óptimos para tu nave espacial, corbeta, multiherramienta, exotraje y exonave en No Man's Sky. Gestiona las bonificaciones de adyacencia y la ubicación de ranuras potenciadas por ti.",
+		"keywords": "No Man's Sky, NMS, diseño de nave espacial, construcción de nave espacial, diseño de multiherramienta, construcción de multiherramienta, diseño de exonave, construcción de exonave, diseño de exotraje, construcción de exotraje, optimizador de nave espacial, optimizador NMS, optimizador de tecnología, bonificaciones de adyacencia, ranuras potenciadas, herramienta de diseño, diseño de corbeta, construcción de corbeta, optimizador de corbeta",
 		"instructionsPageTitle": "Instrucciones del Optimizador de NMS: Módulos y Ranuras Potenciadas",
 		"instructionsDescription": "Instrucciones completas para usar la aplicación Optimizador de NMS. Aprende a seleccionar plataformas, marcar ranuras potenciadas, optimizar diseños y maximizar las bonificaciones de adyacencia.",
 		"aboutPageTitle": "Acerca del Optimizador de NMS: Cómo Funciona la Optimización de Diseños",
@@ -665,21 +666,24 @@
 		"translationDescription": "Ayuda a traducir el Optimizador de NMS a tu idioma y hazlo accesible para más jugadores de No Man's Sky en todo el mundo.",
 		"privacyPageTitle": "Política de Privacidad del Optimizador de NMS: Tus Datos y Seguridad",
 		"privacyDescription": "Lee la política de privacidad del Optimizador de NMS. Aprende cómo tratamos tus datos, nuestro compromiso con la privacidad y el uso de análisis anónimos.",
+		"ogImageAlt": "Una captura de pantalla de la aplicación Optimizador de No Man's Sky, mostrando la cuadrícula y los iconos de tecnología.",
 		"nav": {
 			"home": "Inicio",
 			"instructions": "Instrucciones",
 			"about": "Acerca de",
 			"changelog": "Registro de Cambios",
 			"userstats": "Estadísticas",
-			"translation": "Ayuda a Traducir"
+			"translation": "Ayuda a Traducir",
+			"privacy": "Política de Privacidad"
 		},
 		"navDescriptions": {
 			"home": "Usa la calculadora de diseños tecnológicos y bonificaciones de adyacencia",
 			"instructions": "Guía completa para usar la aplicación",
-			"about": "Cómo funciona y detalles técnicos",
+			"about": "Cómo funciona e detalles técnicos",
 			"changelog": "Últimas actualizaciones y nuevas funciones",
 			"userstats": "Tecnologías y diseños populares",
-			"translation": "Contribuye a la localización comunitaria"
+			"translation": "Contribuye a la localización comunitaria",
+			"privacy": "Nuestro compromiso con la privacidad e integridad de tus datos"
 		}
 	},
 	"installPrompt": {

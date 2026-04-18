@@ -1,4 +1,4 @@
-# Translate NMS Optimizer: Help Localize the App
+# Help Translate NMS Optimizer: Join Our Community Localization
 
 ## Help Translate the NMS Optimizer
 

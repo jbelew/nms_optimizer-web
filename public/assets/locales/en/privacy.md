@@ -1,4 +1,4 @@
-# Privacy Policy
+# NMS Optimizer Privacy Policy: Your Data & Security
 
 **Last Updated:** March 16, 2026
 

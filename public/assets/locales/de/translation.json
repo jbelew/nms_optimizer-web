@@ -653,6 +653,7 @@
 	"seo": {
 		"mainPageTitle": "NMS-Optimierer: Technologie-Layout-Planer und Adjazenz-Rechner",
 		"appDescription": "Berechne optimale Technologie-Layouts für dein Raumschiff, deine Korvette, dein Multitool, deinen Exo-Anzug und dein Exofahrzeug in No Man's Sky. Verwalte Adjazenzboni und die Platzierung überladener Slots.",
+		"keywords": "No Man's Sky, NMS, Raumschiff-Layout, Raumschiff-Build, Multitool-Layout, Multitool-Build, Exofahrzeug-Layout, Exofahrzeug-Build, Exoanzug-Layout, Exoanzug-Build, Raumschiff-Optimierer, NMS-Optimierer, Technologie-Optimierer, Adjazenzboni, überladene Slots, Layout-Tool, Korvetten-Layout, Korvetten-Build, Korvetten-Optimierer",
 		"instructionsPageTitle": "NMS-Optimierer Anleitung: Module und überladene Slots",
 		"instructionsDescription": "Vollständige Anleitung zur Nutzung der NMS-Optimierer-App. Lerne, wie man Plattformen auswählt, überladene Slots markiert, Layouts optimiert und Adjazenzboni maximiert.",
 		"aboutPageTitle": "Über den NMS-Optimierer: Wie die Layout-Optimierung funktioniert",
@@ -665,13 +666,15 @@
 		"translationDescription": "Hilf mit, den NMS-Optimierer in deine Sprache zu übersetzen und ihn für mehr No Man's Sky-Spieler weltweit zugänglich zu machen.",
 		"privacyPageTitle": "NMS-Optimierer Datenschutz: Deine Daten und Sicherheit",
 		"privacyDescription": "Lies die Datenschutzbestimmungen des NMS-Optimierers. Erfahre, wie wir mit deinen Daten umgehen, unser Versprechen zum Datenschutz und die Nutzung anonymer Analysen.",
+		"ogImageAlt": "Ein Screenshot der NMS Optimizer-Anwendung, der das Gitter und die Technologie-Symbole zeigt.",
 		"nav": {
 			"home": "Startseite",
 			"instructions": "Anleitung",
 			"about": "Über Uns",
 			"changelog": "Neuigkeiten",
 			"userstats": "Statistiken",
-			"translation": "Helfen"
+			"translation": "Helfen",
+			"privacy": "Datenschutz"
 		},
 		"navDescriptions": {
 			"home": "Nutze den Technologie-Layout- und Adjazenz-Rechner",
@@ -679,7 +682,8 @@
 			"about": "Funktionsweise und technische Details",
 			"changelog": "Neueste Updates und Funktionen",
 			"userstats": "Beliebte Technologien und Builds",
-			"translation": "Trage zur Community-Lokalisierung bei"
+			"translation": "Trage zur Community-Lokalisierung bei",
+			"privacy": "Unser Versprechen zum Schutz Ihrer Daten und Sicherheit"
 		}
 	},
 	"installPrompt": {

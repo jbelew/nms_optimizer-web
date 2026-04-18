@@ -1,4 +1,4 @@
-# Traduire l'Optimiseur NMS : Aidez à Localiser l'Application
+# Aidez à Traduire l'Optimiseur NMS : Rejoignez la Localisation Communautaire
 
 ## Participez à la Traduction de l'Optimiseur NMS
 

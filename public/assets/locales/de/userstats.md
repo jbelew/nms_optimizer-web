@@ -1,4 +1,4 @@
-# NMS-Optimierer Statistiken: Beliebteste Technologie-Layouts
+# NMS-Optimierer Statistiken: Community-Daten zu überladenen Technologien
 
 ## Benutzerstatistiken Und Beliebte Layouts
 

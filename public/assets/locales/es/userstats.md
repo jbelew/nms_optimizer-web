@@ -1,4 +1,4 @@
-# Estadísticas del Optimizador de NMS: Diseños Tecnológicos Más Populares
+# Estadísticas del Optimizador de NMS: Datos de la Comunidad Sobre Tecnologías Potenciadas
 
 ## Estadísticas de Usuario y Diseños Populares
 

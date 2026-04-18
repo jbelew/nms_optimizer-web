@@ -1,7 +1,6 @@
 /**
  * @file Verification script for SSG output
- * Run: node scripts/verify-ssg.mjs
- * Checks that all generated pages have proper SEO tags and content
+ * Checks that all generated pages have proper SEO tags, localized content, and social metadata.
  */
 
 import fs from "fs";
@@ -12,17 +11,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
 
 const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
-const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats"];
+const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats", "privacy"];
 
 /**
- * Checks a generated HTML file for required SEO tags and content.
- *
- * @param {string} filePath - Path to the HTML file to check.
- * @param {string} pageName - Name of the page for reporting.
- * @param {string} lang - Language code of the page.
- * @param {boolean} [expectContent=true] - Whether the page is expected to have pre-rendered markdown content.
- * @param {boolean} [isRoot=false] - Whether the page is a root page (should have FAQ schema).
- * @returns {boolean} True if all checks pass, false otherwise.
+ * Robust check for a generated HTML file.
  */
 function checkFile(filePath, pageName, lang, expectContent = true, isRoot = false) {
 	if (!fs.existsSync(filePath)) {
@@ -31,57 +23,67 @@ function checkFile(filePath, pageName, lang, expectContent = true, isRoot = fals
 	}
 
 	const content = fs.readFileSync(filePath, "utf-8");
+	
+	// Helper for flexible multiline matching
+	const hasTag = (pattern) => new RegExp(pattern, "i").test(content);
+
 	const checks = {
-		hasCanonical: content.includes('rel="canonical"'),
-		hasHreflang: content.includes('hreflang='),
-		hasPrerendered: !expectContent || content.includes('data-prerendered-markdown'),
-		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"), // Has HTML content
-		hasFAQ: isRoot ? content.includes('"@type":"FAQPage"') : !content.includes('"@type":"FAQPage"'),
+		hasTitle: hasTag('<title>[\\s\\S]*?<\\/title>'),
+		hasDescription: hasTag('<meta\\s+name="description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasKeywords: hasTag('<meta\\s+name="keywords"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasCanonical: hasTag('<link\\s+rel="canonical"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
+		hasOgTitle: hasTag('<meta\\s+property="og:title"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgDescription: hasTag('<meta\\s+property="og:description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgUrl: hasTag('<meta\\s+property="og:url"\\s+content="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
+		hasOgImageAlt: hasTag('<meta\\s+property="og:image:alt"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasHreflang: hasTag('<link\\s+rel="alternate"\\s+hreflang="[^"]+?"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
+		hasNavigation: content.includes('aria-label="Site navigation"'),
+		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"),
+		hasFAQ: isRoot ? hasTag('"@type"\\s*:\\s*"FAQPage"') : true,
+		hasRoot: content.includes('id="root"')
 	};
 
-	const allPass = Object.values(checks).every((v) => v);
+	// Specific check for the userstats title fix we made
+	if (lang === 'en' && pageName === 'userstats') {
+		checks.correctUserStatsLabel = content.includes('User Statistics');
+	}
 
-	if (!allPass) {
-		console.log(
-			`✗ /${pageName} (${lang}): ${Object.entries(checks)
-				.filter(([_, v]) => !v)
-				.map(([k]) => k)
-				.join(", ")}`
-		);
+	const failedChecks = Object.entries(checks).filter(([_, v]) => !v).map(([k]) => k);
+
+	if (failedChecks.length > 0) {
+		console.log(`✗ /${pageName} (${lang}): ${failedChecks.join(", ")}`);
 		return false;
 	}
 
 	return true;
 }
 
-console.log("Verifying SSG output...\n");
+console.log("🚀 Verifying SSG Output and SEO parity...\n");
 
 let totalPages = 0;
 let passedPages = 0;
 
-// Pages that have markdown content
-const PAGES_WITH_CONTENT = ["about", "instructions", "changelog"];
+const PAGES_WITH_CONTENT = ["about", "instructions", "changelog", "privacy", ""];
 
-// Check root pages for each language (no markdown content expected)
+// 1. Check Root Pages
 SUPPORTED_LANGUAGES.forEach((lang) => {
 	const rootPath = lang === "en" ? "" : lang;
 	const filePath = path.join(DIST_DIR, rootPath, "index.html");
 	totalPages++;
 
-	if (checkFile(filePath, lang === "en" ? "/" : `/${lang}`, lang, false, true)) {
+	if (checkFile(filePath, lang === "en" ? "/" : `/${lang}`, lang, true, true)) {
 		passedPages++;
 		console.log(`✓ ${lang === "en" ? "/" : "/" + lang}`);
 	}
 });
 
-// Check dialog pages for each language
+// 2. Check Dialog Pages
 SUPPORTED_LANGUAGES.forEach((lang) => {
 	KNOWN_DIALOGS.forEach((dialog) => {
 		const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
 		const filePath = path.join(DIST_DIR, pagePath, "index.html");
 		totalPages++;
 
-		// translation and userstats may not have content
 		const hasContent = PAGES_WITH_CONTENT.includes(dialog);
 		if (checkFile(filePath, dialog, lang, hasContent)) {
 			passedPages++;
@@ -90,9 +92,7 @@ SUPPORTED_LANGUAGES.forEach((lang) => {
 	});
 });
 
-console.log(
-	`\n${passedPages === totalPages ? "✅" : "⚠️"} ${passedPages}/${totalPages} pages verified`
-);
+console.log(`\n${passedPages === totalPages ? "✅" : "⚠️"} ${passedPages}/${totalPages} pages verified`);
 
 if (passedPages !== totalPages) {
 	process.exit(1);

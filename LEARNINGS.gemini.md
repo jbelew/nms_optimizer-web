@@ -637,3 +637,13 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     1.  **Risk Management**: While Lighthouse suggested saving ~257KB, only ~127KB was truly "optional" code. Decoupling Sentry would have compromised reliability. Identifying the boundary between "performance gain" and "system safety" is crucial.
     2.  **Native Code Splitting**: Rolldown's declarative `codeSplitting.groups` makes it easy to isolate heavy libraries without messy manual chunking logic.
     3.  **Verification**: Using `npm run perf:check` provided immediate empirical confirmation of the bundle shift, which is faster than waiting for a full CI Lighthouse run.
+
+## 2026-04-17: Cloudflare & SSG Overhaul - The 'Validation' Lesson
+- **Issue**: Repeated implementation failures across redirects, metadata, and error recovery.
+- **Root Cause**: Reliance on assumptions and flawed regex patterns instead of empirical testing (Playwright/curl).
+- **Resolution**:
+    - Simplified Cloudflare Function to a high-performance 302 redirector.
+    - Robust SSG script with non-greedy regex, font extraction, and #root protection.
+    - Non-blocking 'Nuclear Reset' logic for PWA recovery on 500.html.
+    - Verified GA4/Sentry integration with Playwright (handling CSP and SRI).
+- **Critical Lesson**: NEVER skip validation. The minifier removes optional tags; the Service Worker hangs on await; the CSP blocks new CDNs. Only empirical evidence counts.

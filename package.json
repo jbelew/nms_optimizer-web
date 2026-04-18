@@ -162,7 +162,8 @@
 		"vite-plugin-pwa": "^1.2.0",
 		"vite-plugin-splash-screen": "^0.2.0",
 		"vitest": "^4.1.4",
-		"vitest-websocket-mock": "^0.5.0"
+		"vitest-websocket-mock": "^0.5.0",
+		"wrangler": "^4.83.0"
 	},
 	"config": {
 		"commitizen": {

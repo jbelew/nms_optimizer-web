@@ -1,4 +1,4 @@
-# Datenschutzbestimmungen
+# NMS-Optimierer Datenschutz: Deine Daten und Sicherheit
 
 **Zuletzt Aktualisiert:** 16. März 2026
 

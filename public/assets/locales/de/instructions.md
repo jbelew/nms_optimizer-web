@@ -1,4 +1,4 @@
-# NMS-Optimierer Anleitung: Nutzung, Module & Überladene Slots
+# NMS-Optimierer Anleitung: Module und überladene Slots
 
 ## Erste Schritte Mit Dem Raster
 

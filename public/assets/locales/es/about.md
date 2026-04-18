@@ -1,4 +1,4 @@
-# Cómo Funciona el Optimizador de NMS
+# Acerca del Optimizador de NMS: Cómo Funciona la Optimización de Diseños
 
 ## ¿Qué Es Esto?
 

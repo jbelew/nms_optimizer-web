@@ -1,4 +1,4 @@
-# Instrucciones del Optimizador de NMS: Uso, Módulos y Ranuras Potenciadas
+# Instrucciones del Optimizador de NMS: Módulos y Ranuras Potenciadas
 
 ## Primeros Pasos con la Cuadrícula
 

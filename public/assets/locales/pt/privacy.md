@@ -1,4 +1,4 @@
-# Política de Privacidade
+# Política de Privacidade do Otimizador de NMS: Seus Dados e Segurança
 
 **Última Atualização:** 16 de março de 2026
 

@@ -1,4 +1,4 @@
-# NMS Optimizer Updates: Latest Features & Improvements
+# NMS Optimizer Changelog: Latest Updates, Features & Improvements
 
 The full commit history for this project is available on [GitHub](https://github.com/jbelew/nms_optimizer-web/blob/main/CHANGELOG.md).
 

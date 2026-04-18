@@ -1,4 +1,4 @@
-# Wie Der NMS-Optimierer Funktioniert
+# Über den NMS-Optimierer: Wie die Layout-Optimierung funktioniert
 
 ## Was Ist Das?
 

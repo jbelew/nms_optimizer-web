@@ -1,4 +1,4 @@
-# Como o Otimizador de NMS Funciona
+# Sobre o Otimizador de NMS: Como a Otimização Funciona
 
 ## O Que É Isso?
 

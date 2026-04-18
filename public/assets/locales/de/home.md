@@ -1,4 +1,4 @@
-# NMS Optimizer: Technologie-Layout- & Adjazenzbonus-Rechner für No Man's Sky
+# NMS-Optimierer: Technologie-Layout-Planer und Adjazenz-Rechner
 
 ![Screenshot der NMS Optimizer-Anwendung, der ein Raumschiff-Technologiegitter mit optimierter Modulplatzierung zeigt](/assets/img/screenshots/screenshot.png)
 

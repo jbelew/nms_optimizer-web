@@ -10,13 +10,14 @@ import { fileURLToPath } from "url";
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
 
-import { BASE_KNOWN_PATHS, KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
+import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
+const FONTS_CSS_PATH = path.join(__dirname, "../src/assets/css/fonts.css");
 
 // Map route names to markdown filenames when they differ
 const PAGE_TO_MARKDOWN_MAPPING = {
@@ -26,15 +27,10 @@ const PAGE_TO_MARKDOWN_MAPPING = {
 
 /**
  * Read markdown file from the locales directory.
- *
- * @param {string} lang - The language code (e.g., 'en', 'es').
- * @param {string} fileName - The name of the markdown file (without extension).
- * @returns {string} The content of the markdown file, or an empty string if not found.
  */
 function readMarkdownFile(lang, fileName) {
 	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);
 	if (!fs.existsSync(filePath)) {
-		// Fallback to English
 		const enPath = path.join(LOCALES_DIR, "en", `${fileName}.md`);
 		if (fs.existsSync(enPath)) {
 			return fs.readFileSync(enPath, "utf-8");
@@ -46,31 +42,22 @@ function readMarkdownFile(lang, fileName) {
 
 /**
  * Generate SEO tags for a page.
- *
- * @param {string} pathname - The URL path of the page (e.g., '/', '/about').
- * @param {string} lang - The language code for the page.
- * @param {string} baseUrl - The base URL of the site.
- * @returns {string[]} An array of HTML link and meta tag strings.
  */
 function generateSeoTags(pathname, lang, baseUrl) {
 	const tags = [];
 	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
 
-	// Canonical URL
-	const canonicalPath = lang === "en" ? normalizePath(pathname) : `/${lang}${normalizePath(pathname === "/" ? "" : pathname)}`;
+	const cleanPath = pathname === "/" ? "" : pathname;
+	const canonicalPath = lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
 	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+	
 	tags.push(`<link rel="canonical" href="${canonicalUrl}" />`);
 	tags.push(`<meta property="og:url" content="${canonicalUrl}" />`);
 
-	// Hreflang tags
-	const cleanPath = pathname === "/" ? "" : pathname;
-
-	// English (and x-default)
 	const enUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
 	tags.push(`<link rel="alternate" hreflang="en" href="${enUrl}" />`);
 	tags.push(`<link rel="alternate" hreflang="x-default" href="${enUrl}" />`);
 
-	// Other languages
 	SUPPORTED_LANGUAGES.filter((l) => l !== "en").forEach((langCode) => {
 		const langUrl = new URL(`/${langCode}${normalizePath(cleanPath || "/")}`, baseUrl).href;
 		tags.push(`<link rel="alternate" hreflang="${langCode}" href="${langUrl}" />`);
@@ -81,41 +68,17 @@ function generateSeoTags(pathname, lang, baseUrl) {
 
 /**
  * Generate internal navigation links for SEO.
- *
- * @param {string} lang - The language code for the links.
- * @param {string} currentPage - The name of the current page.
- * @param {Function} t - The i18next translation function.
- * @returns {string} HTML string containing the navigation section.
  */
 function generateNavigationLinks(lang, currentPage, t) {
 	const langPrefix = lang === "en" ? "" : `/${lang}`;
 	const pages = [
 		{ path: "/", key: "seo.nav.home", descKey: "seo.navDescriptions.home" },
-		{
-			path: "/instructions",
-			key: "seo.nav.instructions",
-			descKey: "seo.navDescriptions.instructions",
-		},
-		{
-			path: "/about",
-			key: "seo.nav.about",
-			descKey: "seo.navDescriptions.about",
-		},
-		{
-			path: "/changelog",
-			key: "seo.nav.changelog",
-			descKey: "seo.navDescriptions.changelog",
-		},
-		{
-			path: "/userstats",
-			key: "seo.nav.userstats",
-			descKey: "seo.navDescriptions.userstats",
-		},
-		{
-			path: "/translation",
-			key: "seo.nav.translation",
-			descKey: "seo.navDescriptions.translation",
-		},
+		{ path: "/instructions", key: "seo.nav.instructions", descKey: "seo.navDescriptions.instructions" },
+		{ path: "/about", key: "seo.nav.about", descKey: "seo.navDescriptions.about" },
+		{ path: "/changelog", key: "seo.nav.changelog", descKey: "seo.navDescriptions.changelog" },
+		{ path: "/userstats", key: "seo.nav.userstats", descKey: "seo.navDescriptions.userstats" },
+		{ path: "/translation", key: "seo.nav.translation", descKey: "seo.navDescriptions.translation" },
+		{ path: "/privacy", key: "seo.nav.privacy", descKey: "seo.navDescriptions.privacy" },
 	];
 
 	const links = pages
@@ -140,25 +103,7 @@ function generateNavigationLinks(lang, currentPage, t) {
 }
 
 /**
- * Generate a complete HTML page with pre-rendered content and SEO tags.
- *
- * @remarks
- * This function is the core of the SSG process. It takes the base template,
- * injects page-specific metadata, SEO tags, and pre-rendered markdown content
- * within a `<noscript>` block for better search engine indexing of SPA content.
- *
- * It also handles the conditional injection of the `FAQPage` structured data
- * only for the root page.
- *
- * @param {string} indexHtml - The base HTML template from `index.html`.
- * @param {string} lang - The language code for the page.
- * @param {string} pageName - The name of the page to generate (e.g., '', 'about').
- * @param {string} baseUrl - The base URL for canonical and social tags.
- * @param {Function} mdProcessor - A function that converts markdown to HTML.
- * @param {Function} t - The i18next translation function.
- * @param {string} [ssgStyles=""] - Optional CSS to include in the noscript block.
- * @param {string} [ssgHeader=""] - Optional HTML header for the noscript block.
- * @returns {string} The fully assembled HTML page.
+ * Generate a complete HTML page.
  */
 function generatePage(
 	indexHtml,
@@ -170,47 +115,49 @@ function generatePage(
 	ssgStyles = "",
 	ssgHeader = ""
 ) {
-	let html = indexHtml.replace(/<html lang="[^"]*">/, `<html lang="${lang}">`);
-	html = html.replace(/<noscript data-ssg-template>[\s\S]*?<\/noscript>/g, "");
-
-	// Normalize pathname for metadata lookup (ensure trailing slash for non-root)
+	let html = indexHtml;
+	html = html.replace(/<html lang="[^"]*"/, `<html lang="${lang}"`);
+	
 	const pathname = pageName === "" ? "/" : `/${pageName}/`;
 	const isRootPage = pageName === "";
 
-	// --- SEO Title & Description Injection ---
-	const metadata = seoMetadata[pathname === "/" ? "/" : pathname];
-
+	// 1. Metadata updates (Aggressive multiline regex to catch all attribute orders)
+	const metadata = seoMetadata[pathname];
 	if (metadata) {
 		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
 		const pageDescription = t(metadata.descriptionKey);
+		const pageKeywords = t("seo.keywords", { defaultValue: "" });
+		const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
 
-		// Replace title and meta description placeholders
 		html = html
 			.replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`)
-			.replace(
-				/<meta name="description"[\s\S]*?\/>/,
-				`<meta name="description" content="${pageDescription}" />`
-			);
+			// description
+			.replace(/<meta\s+name="description"[\s\S]*?\/?>/i, `<meta name="description" content="${pageDescription}" />`)
+			// keywords
+			.replace(/<meta\s+name="keywords"[\s\S]*?\/?>/i, `<meta name="keywords" content="${pageKeywords}" />`)
+			// og:title
+			.replace(/<meta\s+property="og:title"[\s\S]*?\/?>/i, `<meta property="og:title" content="${pageTitle}" />`)
+			// og:description
+			.replace(/<meta\s+property="og:description"[\s\S]*?\/?>/i, `<meta property="og:description" content="${pageDescription}" />`)
+			// og:image:alt
+			.replace(/<meta\s+property="og:image:alt"[\s\S]*?\/?>/i, `<meta property="og:image:alt" content="${ogImageAlt}" />`)
+			// twitter:title
+			.replace(/<meta\s+name="twitter:title"[\s\S]*?\/?>/i, `<meta name="twitter:title" content="${pageTitle}" />`)
+			// twitter:description
+			.replace(/<meta\s+name="twitter:description"[\s\S]*?\/?>/i, `<meta name="twitter:description" content="${pageDescription}" />`)
+			// twitter:image:alt
+			.replace(/<meta\s+name="twitter:image:alt"[\s\S]*?\/?>/i, `<meta name="twitter:image:alt" content="${ogImageAlt}" />`);
 	}
 
-	// Generate SEO tags (canonical, hreflang)
+	// 2. Cleanup old SEO tags that we will re-inject fresh
+	html = html.replace(/<link\s+rel="canonical"[\s\S]*?\/?>/g, "");
+	html = html.replace(/<meta\s+property="og:url"[\s\S]*?\/?>/g, "");
+	html = html.replace(/<link\s+rel="alternate"\s+hreflang="[\s\S]*?\/?>/g, "");
+	html = html.replace(/<script type="application\/ld\+json" id="faq-schema">[\s\S]*?<\/script>/g, "");
+
+	// 3. SEO Tag Injection
 	const seoTags = generateSeoTags(pathname, lang, baseUrl);
-
-	// Inject SEO tags before closing </head>
-	html = html.replace("</head>", `  ${seoTags.join("\n  ")}\n</head>`);
-
-	// --- Dynamic Structured Data (FAQ) ---
-	// In the template index.html, we have a base JSON-LD in <script type="application/ld+json">.
-	// We need to either keep it (for root) or strip the FAQPage item from it (for other pages).
-	// However, since we now handle FAQPage dynamically in the client, 
-	// we should ensure the SSG also only includes it when appropriate.
-	if (!isRootPage) {
-		// Strip the FAQPage object from the @graph array if it exists in the template.
-		// Note: The template now has FAQPage removed, so it's mostly a safety measure 
-		// if the template still had it. Since I removed it from index.html, 
-		// we don't need to strip it, but we SHOULD inject the dynamic one for the root page 
-		// so it's present in the static HTML for crawlers.
-	}
+	let headInjections = `\n  ${seoTags.join("\n  ")}`;
 
 	if (isRootPage) {
 		const faqSchema = {
@@ -224,67 +171,51 @@ function generatePage(
 					"name": t("faq.questions.adjacencyBonus.name", "What is an adjacency bonus in No Man's Sky?"),
 					"acceptedAnswer": {
 						"@type": "Answer",
-						"text": t("faq.questions.adjacencyBonus.answer", "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.superchargedSlots.name", "What are supercharged slots in No Man's Sky?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.superchargedSlots.answer", "Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.calculation.name", "How does NMS Optimizer calculate the best technology layout?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.calculation.answer", "The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed.")
-					}
-				},
-				{
-					"@type": "Question",
-					"name": t("faq.questions.platforms.name", "What platforms does NMS Optimizer support?"),
-					"acceptedAnswer": {
-						"@type": "Answer",
-						"text": t("faq.questions.platforms.answer", "NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters.")
+						"text": t("faq.questions.adjacencyBonus.answer", "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost.")
 					}
 				}
 			]
 		};
-
-		const faqScript = `\n  <script type="application/ld+json" id="faq-schema">${JSON.stringify(faqSchema)}</script>`;
-		html = html.replace("</head>", `${faqScript}\n</head>`);
+		headInjections += `\n  <script type="application/ld+json" id="faq-schema">${JSON.stringify(faqSchema)}</script>`;
 	}
 
-	// Read and render markdown content for pre-rendering
-	if (pageName !== null) {
-		const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
-		const markdownContent = readMarkdownFile(lang, markdownFileName);
+	if (html.includes("</head>")) {
+		html = html.replace("</head>", `${headInjections}\n</head>`);
+	} else if (html.includes("<body")) {
+		html = html.replace("<body", `${headInjections}\n<body`);
+	}
 
-		if (markdownContent) {
-			// Render markdown to HTML
-			const renderedHtml = mdProcessor(markdownContent);
+	// 4. SSG Content Injection
+	const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
+	const markdownContent = readMarkdownFile(lang, markdownFileName);
 
-			// Generate navigation links
-			const navigationHtml = generateNavigationLinks(lang, pageName, t);
+	// STRIP ALL NOSCRIPT BLOCKS TO PREVENT DUPLICATES
+	html = html.replace(/<noscript[\s\S]*?<\/noscript>/g, "");
 
-			// Create a noscript block with the rendered markdown
-			const contentBlock = `<noscript>
+	if (markdownContent) {
+		const renderedHtml = mdProcessor(markdownContent);
+		const navigationHtml = generateNavigationLinks(lang, pageName, t);
+
+		const contentBlock = `<noscript>
     <main>
       ${ssgHeader}
       ${renderedHtml}
       ${navigationHtml}
     </main>
     <style>
-      ${ssgStyles || 'main { color: #fff; padding: 2rem; font-family: Raleway, sans-serif; }'}
+      ${ssgStyles}
     </style>
   </noscript>`;
 
-			// Insert the noscript block before closing body tag
+		if (html.includes("</body>")) {
 			html = html.replace("</body>", `${contentBlock}\n</body>`);
+		} else {
+			html += contentBlock;
 		}
+	}
+
+	if (!html.includes('id="root"')) {
+		html = html.replace(/<body[^>]*?>/, (match) => `${match}\n<div id="root"></div>`);
 	}
 
 	return html;
@@ -294,41 +225,34 @@ function generatePage(
  * Generate all static pages
  */
 async function generateSsg() {
-	// Read the base index.html
 	const indexPath = path.join(DIST_DIR, "index.html");
 	if (!fs.existsSync(indexPath)) {
-		console.error(
-			`Error: index.html not found at ${indexPath}. Please run 'npm run build' first.`
-		);
+		console.error(`Error: index.html not found at ${indexPath}. Please run 'npm run build' first.`);
 		process.exit(1);
 	}
 
 	const baseIndexHtml = fs.readFileSync(indexPath, "utf-8");
 	const baseUrl = `https://${TARGET_HOST}`;
 
-	// --- CSS & Header Extraction ---
-	// Extract the <style> and <header> content from the specific noscript block in index.html body
-	// We look for the one with data-ssg-template to avoid matching the head's background noscript
-	const ssgBlockMatch = baseIndexHtml.match(/<noscript data-ssg-template>([\s\S]*?)<\/noscript>/);
+	// Extract template blocks
+	const ssgBlockMatch = baseIndexHtml.match(/<noscript(?: [^>]*?)?>([\s\S]*?<header class="app-header-static">[\s\S]*?)<\/noscript>/);
 	const ssgBlock = ssgBlockMatch ? ssgBlockMatch[1] : "";
 
 	const ssgStyleMatch = ssgBlock.match(/<style>([\s\S]*?)<\/style>/);
-	const ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
+	let ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
 
 	const ssgHeaderMatch = ssgBlock.match(/(<header class="app-header-static">[\s\S]*?<\/header>)/);
 	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
 
-	if (!ssgStyles) {
-		console.warn("⚠️  Warning: Could not extract SSG styles from index.html. Using fallback styles.");
-	}
-	if (!ssgHeader) {
-		console.warn("⚠️  Warning: Could not extract static header from index.html.");
+	// --- FONT FIX: Extract from source fonts.css ---
+	if (fs.existsSync(FONTS_CSS_PATH)) {
+		const fontsCss = fs.readFileSync(FONTS_CSS_PATH, "utf-8");
+		ssgStyles = fontsCss + "\n" + ssgStyles;
+		console.log("✓ Included fonts from src/assets/css/fonts.css");
 	}
 
-	// Create markdown processor
 	const mdProcessor = createMarkdownProcessor();
 
-	// Initialize i18next for translations
 	await i18next.use(i18nextFsBackend).init({
 		supportedLngs: SUPPORTED_LANGUAGES,
 		preload: SUPPORTED_LANGUAGES,
@@ -336,51 +260,27 @@ async function generateSsg() {
 		ns: ["translation"],
 		defaultNS: "translation",
 		backend: {
-			loadPath: path.join(DIST_DIR, "assets/locales/{{lng}}/{{ns}}.json"),
+			loadPath: path.join(LOCALES_DIR, "{{lng}}/{{ns}}.json"),
 		},
 	});
 
 	let generatedCount = 0;
 
-	// Generate pages for each language
 	for (const lang of SUPPORTED_LANGUAGES) {
-		// Get translation function for this language
 		const t = i18next.getFixedT(lang);
-
-		// Root path
 		const rootPath = lang === "en" ? "" : lang;
-		const rootPageHtml = generatePage(
-			baseIndexHtml,
-			lang,
-			"",
-			baseUrl,
-			mdProcessor,
-			t,
-			ssgStyles,
-			ssgHeader
-		);
+		const rootPageHtml = generatePage(baseIndexHtml, lang, "", baseUrl, mdProcessor, t, ssgStyles, ssgHeader);
 		const rootDir = path.join(DIST_DIR, rootPath);
 		fs.mkdirSync(rootDir, { recursive: true });
 		fs.writeFileSync(path.join(rootDir, "index.html"), rootPageHtml);
 		console.log(`✓ Generated ${lang === "en" ? "/" : "/" + lang}`);
 		generatedCount++;
 
-		// Generate dialog/page routes
 		for (const dialog of KNOWN_DIALOGS) {
 			const pagePath = lang === "en" ? dialog : `${lang}/${dialog}`;
 			const pageDir = path.join(DIST_DIR, pagePath);
 			fs.mkdirSync(pageDir, { recursive: true });
-
-			const pageHtml = generatePage(
-				baseIndexHtml,
-				lang,
-				dialog,
-				baseUrl,
-				mdProcessor,
-				t,
-				ssgStyles,
-				ssgHeader
-			);
+			const pageHtml = generatePage(baseIndexHtml, lang, dialog, baseUrl, mdProcessor, t, ssgStyles, ssgHeader);
 			fs.writeFileSync(path.join(pageDir, "index.html"), pageHtml);
 			console.log(`✓ Generated /${pagePath}`);
 			generatedCount++;

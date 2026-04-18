@@ -1,4 +1,4 @@
-# Comment Fonctionne l'Optimiseur NMS
+# À Propos de l'Optimiseur NMS : Fonctionnement de l'Optimisation
 
 ## Qu'est-ce Que C'est ?
 

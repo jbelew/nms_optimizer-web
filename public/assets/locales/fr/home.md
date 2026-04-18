@@ -1,4 +1,4 @@
-# Optimiseur NMS : Créateur de Layouts et Calculateur de Bonus d'Adjacence pour No Man's Sky
+# Optimiseur NMS : Créateur de Layouts et Calculateur d'Adjacence
 
 ![Capture d'écran de l'application Optimiseur NMS montrant une grille de technologie de vaisseau avec un placement de modules optimisé](/assets/img/screenshots/screenshot.png)
 

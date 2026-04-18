@@ -1,4 +1,4 @@
-# Estatísticas do Otimizador de NMS: Layouts de Tecnologia Mais Populares
+# Estatísticas do Otimizador de NMS: Dados da Comunidade sobre Tecnologias
 
 ## Estatísticas de Usuário E Layouts Populares
 

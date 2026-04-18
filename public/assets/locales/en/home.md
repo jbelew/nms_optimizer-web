@@ -1,4 +1,4 @@
-# NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky
+# NMS Optimizer: Tech Layout Builder & Adjacency Calculator
 
 ![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 

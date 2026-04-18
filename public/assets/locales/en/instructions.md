@@ -1,4 +1,4 @@
-# NMS Optimizer Instructions: Usage, Modules & Supercharged Slots
+# NMS Optimizer Instructions: Modules & Supercharged Slots
 
 ## Getting Started with the Grid
 

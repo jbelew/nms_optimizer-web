@@ -1,4 +1,4 @@
-# Optimizador de NMS: Diseños Tecnológicos y Calculadora de Bonificación de Adyacencia para No Man's Sky
+# Optimizador de NMS: Constructor de Diseños Tecnológicos y Calculadora de Adjacencia
 
 ![Captura de pantalla de la aplicación Optimizador de NMS que muestra una cuadrícula de tecnología de nave espacial con ubicación de módulos optimizada](/assets/img/screenshots/screenshot.png)
 

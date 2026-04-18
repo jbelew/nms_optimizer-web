@@ -653,6 +653,7 @@
 	"seo": {
 		"mainPageTitle": "Otimizador de NMS: Criador de Layouts e Calculadora de Adjacência",
 		"appDescription": "Calcule layouts ideais de tecnologia no No Man's Sky para sua Nave, Corveta, Multiferramenta, Exotraje e Exonave. Gerencia bônus de adjacência e espaços sobrecarregados.",
+		"keywords": "No Man's Sky, NMS, layout de nave, build de nave, layout de multiferramenta, build de multiferramenta, layout de exonave, build de exonave, layout de exotraje, build de exotraje, otimizador de nave, otimizador NMS, otimizador de tecnologia, bônus de adjacência, espaços sobrecarregados, ferramenta de layout, layout de corveta, build de corveta, otimizador de corveta",
 		"instructionsPageTitle": "Instruções do Otimizador de NMS: Módulos e Espaços Sobrecarregados",
 		"instructionsDescription": "Instruções completas para usar o app Otimizador de NMS. Aprenda a selecionar plataformas, marcar espaços sobrecarregados, otimizar layouts e maximizar bônus de adjacência.",
 		"aboutPageTitle": "Sobre o Otimizador de NMS: Como a Otimização Funciona",
@@ -665,13 +666,15 @@
 		"translationDescription": "Ajude a traduzir o Otimizador de NMS para seu idioma e torne-o acessível para mais jogadores em todo o mundo.",
 		"privacyPageTitle": "Política de Privacidade do Otimizador de NMS: Seus Dados e Segurança",
 		"privacyDescription": "Leia a política de privacidade do Otimizador de NMS. Saiba como lidamos com seus dados e nosso compromisso com sua segurança e anonimato.",
+		"ogImageAlt": "Uma captura de tela do aplicativo NMS Optimizer, mostrando a grade e os ícones de tecnologia.",
 		"nav": {
 			"home": "Início",
 			"instructions": "Instruções",
 			"about": "Sobre",
 			"changelog": "Novidades",
 			"userstats": "Estatísticas",
-			"translation": "Ajude a Traduzir"
+			"translation": "Ajude a Traduzir",
+			"privacy": "Política de Privacidade"
 		},
 		"navDescriptions": {
 			"home": "Use a Calculadora de Layouts e Bônus de Adjacência",
@@ -679,7 +682,8 @@
 			"about": "Como funciona e detalhes técnicos",
 			"changelog": "Últimas atualizações e novos recursos",
 			"userstats": "Tecnologias e builds populares",
-			"translation": "Contribua com a localização comunitária"
+			"translation": "Contribua com a localização comunitária",
+			"privacy": "Nosso compromisso com a privacidade e segurança dos seus dados"
 		}
 	},
 	"installPrompt": {

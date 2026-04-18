@@ -1,4 +1,4 @@
-# Otimizador de NMS: Layouts de Tecnologia e Calculadora de Bônus de Adjacência para No Man's Sky
+# Otimizador de NMS: Criador de Layouts e Calculadora de Adjacência
 
 ![Captura de tela do aplicativo Otimizador de NMS mostrando uma grade de tecnologia de nave com posicionamento de módulos otimizado](/assets/img/screenshots/screenshot.png)
 

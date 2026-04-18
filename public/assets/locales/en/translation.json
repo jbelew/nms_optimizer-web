@@ -653,6 +653,7 @@
 	"seo": {
 		"mainPageTitle": "NMS Optimizer: Tech Layout Builder & Adjacency Calculator",
 		"appDescription": "Calculate optimal No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Handles adjacency bonuses and supercharged slot placement so you don't have to.",
+		"keywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool, Corvette layout, Corvette build, Corvette optimizer",
 		"instructionsPageTitle": "NMS Optimizer Instructions: Modules & Supercharged Slots",
 		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
 		"aboutPageTitle": "About NMS Optimizer: How the Layout Optimization Works",
@@ -665,13 +666,15 @@
 		"translationDescription": "Help translate the NMS Optimizer into your language and make it accessible to more No Man's Sky players worldwide.",
 		"privacyPageTitle": "NMS Optimizer Privacy Policy: Your Data & Security",
 		"privacyDescription": "Read the NMS Optimizer privacy policy. Learn how we handle your data, our commitment to privacy, and our use of anonymous analytics.",
+		"ogImageAlt": "A screenshot of the No Man's Sky Optimizer application, showing the grid and technology icons.",
 		"nav": {
 			"home": "Home",
 			"instructions": "Instructions",
 			"about": "About",
 			"changelog": "Changelog",
 			"userstats": "User Statistics",
-			"translation": "Help Translate"
+			"translation": "Help Translate",
+			"privacy": "Privacy Policy"
 		},
 		"navDescriptions": {
 			"home": "Use the Tech Layout & Adjacency Bonus Calculator",
@@ -679,7 +682,8 @@
 			"about": "How it works and technical details",
 			"changelog": "Latest updates and new features",
 			"userstats": "Popular technologies and builds",
-			"translation": "Contribute to community localization"
+			"translation": "Contribute to community localization",
+			"privacy": "Our commitment to your data privacy and security"
 		}
 	},
 	"installPrompt": {

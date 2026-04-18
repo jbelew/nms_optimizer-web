@@ -1,4 +1,4 @@
-# How NMS Optimizer Works
+# About NMS Optimizer: How the Layout Optimization Works
 
 ## What Is This?
 

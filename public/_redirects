@@ -1,1 +1,1 @@
-/* /index.html 200
+# No catch-all redirect. Let real 404s happen for missing SSG files.

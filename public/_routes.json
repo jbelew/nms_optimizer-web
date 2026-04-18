@@ -1,17 +1,18 @@
 {
   "version": 1,
-  "include": ["/*"],
+  "include": [
+    "/*"
+  ],
   "exclude": [
     "/assets/*",
-    "/favicon.ico",
-    "/apple-touch-icon*",
-    "/robots.txt",
-    "/sitemap.xml",
-    "/sw.js",
-    "/logo*",
-    "/workbox-*.js",
-    "/workbox-*.js.map",
+    "/*.js",
+    "/*.css",
+    "/*.png",
+    "/*.jpg",
+    "/*.svg",
+    "/*.ico",
     "/*.json",
-    "/sw.js.map"
+    "/*.woff2",
+    "/*.mp3"
   ]
 }
