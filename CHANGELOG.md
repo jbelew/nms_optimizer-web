@@ -1,3 +1,11 @@
+## [6.31.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.2...v6.31.3) (2026-04-18)
+
+
+### Bug Fixes
+
+* **ci:** move cloudflare cache purge to finalize production step ([7c2324d](https://github.com/jbelew/nms_optimizer-web/commit/7c2324d84ca632d1855b103bd634f96032a73744))
+* **cloudflare:** implement 1-year edge caching for static assets with browser revalidation ([b4c6960](https://github.com/jbelew/nms_optimizer-web/commit/b4c6960b2ae8d948e8e3657516f171b61bf19bdc))
+
 ## [6.31.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.1...v6.31.2) (2026-04-18)
 
 
