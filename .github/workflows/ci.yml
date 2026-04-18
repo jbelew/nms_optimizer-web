@@ -78,6 +78,9 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
+      - name: Build project (E2E)
+        run: npm run build:e2e
+
       - name: Verify Storybook build
         run: npm run build-storybook
 
@@ -85,6 +88,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dist-bundle
+          path: dist/
+          retention-days: 1
+
+      - name: Upload E2E dist artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-e2e
           path: dist/
           retention-days: 1
 
@@ -144,6 +154,7 @@ jobs:
 
   storybook-test:
     name: Storybook Interaction, A11y & Chromatic
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -153,6 +164,14 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
@@ -182,11 +201,25 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
+      - name: Download E2E dist artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: dist-e2e
+          path: dist/
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
       - name: Run E2E Tests
-        run: npm run test:e2e
+        run: npx playwright test --project=chromium
         env:
           CI: true
 
