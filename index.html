@@ -18,6 +18,26 @@
 	<meta charset="UTF-8" />
 	<script>
 		(function () {
+			var MARKER = "__preload_recovery__";
+
+			// Handle stale chunk loading after deployment.
+			// One auto-reload attempt; if that fails, redirect to /500.html.
+			// Uses window.name (survives reloads, works in incognito/restricted browsers).
+			window.addEventListener("vite:preloadError", function (event) {
+				event.preventDefault();
+
+				if (window.name.indexOf(MARKER) === -1) {
+					window.name += MARKER;
+					console.warn("Stale chunk detected. Reloading to fetch updated assets.");
+					location.reload();
+					return;
+				}
+
+				// Reload already attempted — redirect to dedicated error page
+				window.name = window.name.replace(MARKER, "");
+				console.error("Stale chunk reload failed. Redirecting to error page.");
+				window.location.href = "/500.html";
+			});
 			// Preload translations based on language in path (matches i18next logic)
 			const supportedLngs = ["en", "es", "fr", "de", "pt"];
 			const pathParts = window.location.pathname.split('/');

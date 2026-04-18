@@ -82,6 +82,12 @@ if (typeof window !== "undefined") {
 	window.addEventListener(
 		"app-ready",
 		() => {
+			// Mark application as fully initialized for resilience and testing
+			(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
+
+			// Clean up preload recovery marker on successful boot
+			window.name = window.name.replace("__preload_recovery__", "");
+
 			const initDeferredServices = async () => {
 				try {
 					// Eagerly preload required API calls to avoid render waterfalls,

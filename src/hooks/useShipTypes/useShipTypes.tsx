@@ -149,9 +149,9 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 			})
 			.catch((error) => {
 				console.error("Error fetching ship types:", error);
-
 				// Error dialog is already triggered by apiCall
 				// Return empty object to prevent Suspense from throwing
+
 				return {} as ShipTypes;
 			});
 
