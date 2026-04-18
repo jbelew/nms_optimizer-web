@@ -99,9 +99,6 @@ jobs:
           path: dist/
           retention-days: 1
 
-      - name: Verify Storybook build
-        run: npm run build-storybook
-
   lighthouse:
     name: Lighthouse Audit & History
     needs: build
@@ -184,6 +181,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build Storybook
+        run: npm run build-storybook
+
       - name: Run Storybook Interaction Tests
         run: npm run test:storybook
 
@@ -195,6 +195,7 @@ jobs:
         uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: storybook-static
           onlyChanged: true
           exitOnceUploaded: true
           exitZeroOnChanges: true
