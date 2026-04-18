@@ -71,9 +71,10 @@ def translate_batch(batch: Dict[str, str], target_lang_name: str) -> Dict[str, s
             return json.loads(response.text)
         except Exception as e:
             error_str = str(e)
-            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
-                wait_time = (attempt * 15) + 15
-                print(f"Rate limit hit. Retrying in {wait_time}s...")
+            # Handle rate limits (429) and high demand (503)
+            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "503" in error_str or "UNAVAILABLE" in error_str:
+                wait_time = (attempt * 20) + 30 # Increased wait for 503s
+                print(f"API busy or rate limited ({ '503' if '503' in error_str else '429' }). Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
                 time.sleep(wait_time)
                 continue
             print(f"Error in batch translation: {e}")
@@ -94,8 +95,11 @@ def translate_markdown(text: str, target_lang_name: str) -> str:
                 return text
             return response.text.strip()
         except Exception as e:
-            if "429" in str(e):
-                time.sleep(30)
+            error_str = str(e)
+            if "429" in error_str or "503" in error_str or "UNAVAILABLE" in error_str:
+                wait_time = (attempt * 20) + 30
+                print(f"Markdown API busy ({ '503' if '503' in error_str else '429' }). Retrying in {wait_time}s...")
+                time.sleep(wait_time)
                 continue
             print(f"Markdown error: {e}")
             return text
@@ -110,27 +114,55 @@ def flatten_json(data: Any, prefix: str = "") -> Dict[str, str]:
             items.update(flatten_json(v, new_key))
     elif isinstance(data, list):
         for i, v in enumerate(data):
-            new_key = f"{prefix}.{i}" if prefix else str(i)
+            # Special marker for array indices to distinguish them from numeric keys in objects
+            new_key = f"{prefix}.[{i}]" if prefix else f"[{i}]"
             items.update(flatten_json(v, new_key))
     else:
         items[prefix] = str(data)
     return items
 
-def unflatten_json(items: Dict[str, str]) -> Dict[str, Any]:
-    """Converts a dot-notated dict back into a nested JSON structure."""
-    result = {}
+def unflatten_json(items: Dict[str, str]) -> Any:
+    """Converts a dot-notated dict back into a nested JSON structure, preserving arrays."""
+    result = None
+    
     for key, value in items.items():
         parts = key.split(".")
-        d = result
-        for part in parts[:-1]:
-            if part not in d:
-                d[part] = {}
-            d = d[part]
-        last_part = parts[-1]
-        try:
-            d[last_part] = value
-        except:
-            pass
+        
+        # Initialize result based on the first key type
+        if result is None:
+            result = [] if parts[0].startswith("[") and parts[0].endswith("]") else {}
+
+        current = result
+        for i, part in enumerate(parts):
+            is_array_part = part.startswith("[") and part.endswith("]")
+            clean_part = part[1:-1] if is_array_part else part
+            
+            # If we're at the last part, set the value
+            if i == len(parts) - 1:
+                if is_array_part:
+                    idx = int(clean_part)
+                    while len(current) <= idx:
+                        current.append(None)
+                    current[idx] = value
+                else:
+                    current[clean_part] = value
+            else:
+                # Need to look ahead to know what container to create
+                next_part = parts[i+1]
+                is_next_array = next_part.startswith("[") and next_part.endswith("]")
+                
+                if is_array_part:
+                    idx = int(clean_part)
+                    while len(current) <= idx:
+                        current.append(None)
+                    if current[idx] is None:
+                        current[idx] = [] if is_next_array else {}
+                    current = current[idx]
+                else:
+                    if clean_part not in current:
+                        current[clean_part] = [] if is_next_array else {}
+                    current = current[clean_part]
+                    
     return result
 
 def process_json(target_lang: str, force: bool = False):

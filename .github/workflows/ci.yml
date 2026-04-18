@@ -309,12 +309,14 @@ jobs:
         shell: bash
         env:
           RELEASE_TAG: ${{ needs.release.outputs.tag }}
-          GITHUB_SHA_ENV: ${{ github.sha }}
         run: |
           if [ -n "$RELEASE_TAG" ]; then
             echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
           else
-            echo "version=$GITHUB_SHA_ENV" >> $GITHUB_OUTPUT
+            # Fallback to package.json version + commit count for UI (avoid breaking UI with long hashes)
+            PACKAGE_VERSION=$(node -p "require('./package.json').version")
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            echo "version=v${PACKAGE_VERSION}-${COMMIT_COUNT}" >> $GITHUB_OUTPUT
           fi
 
       - name: Set Build Tracking ID
