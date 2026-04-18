@@ -6,7 +6,7 @@
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
-# HTML Pages: Browser always revalidates, edge caches for 1 hour
+# HTML Pages: Browser always revalidates, edge caching disabled
 # Safe because CF Pages purges cache on every deploy and assets are content-hashed
 /
   Cache-Control: public, no-cache, must-revalidate
