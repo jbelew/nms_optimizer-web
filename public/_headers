@@ -37,6 +37,26 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Static Assets (Images, Fonts, etc.) - Edge cache for 1 year, Browser revalidates
+/*.png
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.jpg
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.webp
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.svg
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.ico
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.woff2
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+/*.mp3
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate
+
+# Markdown files
+/*.md
+  Cache-Control: public, max-age=3600
+
 # Explicitly disable caching for service worker
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
