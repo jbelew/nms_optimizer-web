@@ -15,6 +15,8 @@ import type { ErrorInfo, ReactNode } from "react";
 
 import "./ErrorBoundary.scss";
 
+import { Code } from "@radix-ui/themes";
+
 /**
  * Props for the `ErrorDisplay` component.
  */
@@ -66,7 +68,7 @@ export const ErrorDisplay = ({
 		<div className={`flex flex-col items-center gap-4 ${className}`} style={containerStyle}>
 			{children && <p className="text-sm sm:text-base">{children}</p>}
 			<div
-				className="w-full text-left font-mono text-xs"
+				className="mt-2 mb-2 w-full text-left font-mono text-sm sm:text-base"
 				style={{
 					whiteSpace: "pre-wrap",
 					overflowWrap: "break-word",
@@ -74,17 +76,17 @@ export const ErrorDisplay = ({
 				}}
 			>
 				{error?.message && (
-					<p>
+					<Code color="red" className="block">
 						<strong>Error:</strong> {error.message}
-					</p>
+					</Code>
 				)}
 				{hasStackTrace && (
-					<p className="mt-2">
+					<Code color="red" className="block">
 						<strong>Stack Trace:</strong>
-					</p>
+					</Code>
 				)}
-				{error?.stack && <p>{error.stack}</p>}
-				{errorInfo?.componentStack && <p>{errorInfo.componentStack}</p>}
+				{error?.stack && <Code color="red">{error.stack}</Code>}
+				{errorInfo?.componentStack && <Code color="red">{errorInfo.componentStack}</Code>}
 			</div>
 		</div>
 	);
