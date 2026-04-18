@@ -189,6 +189,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	const cellElement = (
 		<div
 			role="gridcell"
+			data-testid="grid-cell"
 			aria-colindex={columnIndex + 1}
 			tabIndex={isSharedGrid ? -1 : 0}
 			data-accent-color={techColor}

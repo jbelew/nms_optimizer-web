@@ -171,9 +171,36 @@ jobs:
           exitOnceUploaded: true
           exitZeroOnChanges: true
 
+  e2e-test:
+    name: E2E Verification (Playwright)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E Tests
+        run: npm run test:e2e
+        env:
+          CI: true
+
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
   release:
     name: Release
-    needs: [lint-test, build, storybook-test]
+    needs: [lint-test, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -343,7 +370,7 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build, storybook-test]
+    needs: [lint-test, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:

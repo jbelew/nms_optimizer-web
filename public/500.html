@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Application Error - No Man's Sky Technology Layout Optimizer</title>
-		
+
 		<!-- Sentry Error Tracking -->
 		<script
 			src="https://browser.sentry-cdn.com/8.54.0/bundle.min.js"
@@ -16,7 +16,7 @@
 				dsn: "https://1b696a8b6eedd183fde61c368c9f1de9@o4510908417572864.ingest.us.sentry.io/4510908554543104",
 				environment: "production",
 			});
-			
+
 			// Capture error context from URL if present
 			const urlParams = new URLSearchParams(window.location.search);
 			const errorType = urlParams.get('error_type');
@@ -130,10 +130,10 @@
 			document.getElementById('reset-btn').onclick = function() {
 				this.disabled = true;
 				this.innerText = 'Resetting...';
-				
+
 				// 1. Clear session storage immediately
 				try { sessionStorage.clear(); } catch(e) {}
-				
+
 				// 2. Trigger non-blocking Service Worker unregistration
 				if ('serviceWorker' in navigator) {
 					navigator.serviceWorker.getRegistrations().then(function(regs) {
@@ -142,7 +142,7 @@
 						}
 					}).catch(function(e) { console.warn('SW reset failed', e); });
 				}
-				
+
 				// 3. Trigger non-blocking Cache deletion
 				if ('caches' in window) {
 					caches.keys().then(function(keys) {
@@ -151,7 +151,7 @@
 						}
 					}).catch(function(e) { console.warn('Cache reset failed', e); });
 				}
-				
+
 				// 4. Force reload after a tiny delay (100ms) to allow the above triggers to fire.
 				// We don't await them because they can hang indefinitely if the SW is broken.
 				setTimeout(function() {

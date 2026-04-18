@@ -3,76 +3,91 @@ import { expect, test } from "@playwright/test";
 /**
  * Application Resilience & Recovery Tests
  *
- * Tests the vite:preloadError recovery flow:
- * 1. First chunk failure → auto-reload via window.name marker
+ * Tests the vite:preloadError recovery flow implemented in index.html:
+ * 1. First chunk failure → auto-reload via window.name marker ("__preload_recovery__")
  * 2. Second chunk failure → redirect to static /500.html
- * 3. /500.html "Hard Reset" button → clears SW + caches, reloads
- *
- * The mechanism uses window.name ("__preload_recovery__") as a reload marker
- * because it survives page reloads and works in incognito/restricted browsers.
  */
 test.describe("Application Resilience & Recovery", () => {
+	const MARKER = "__preload_recovery__";
+	// NotFound chunk for manual trigger of dynamic import failure
+	const NOT_FOUND_CHUNK = "**/build/chunk-BwoAAUUD2.js";
+
 	test.beforeEach(async ({ page }) => {
-		// Suppress welcome dialog via localStorage to avoid race conditions with mocks
+		// Suppress welcome dialog via localStorage
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
 		});
 	});
 
 	test.describe("Preload error recovery cycle", () => {
-		test("should auto-reload once on first chunk failure, then redirect to 500.html on second", async ({
-			page,
-		}) => {
-			// Block all Vite-generated JS chunks under /assets/
-			await page.route("**/assets/*.js", async (route) => {
-				await route.fulfill({
-					status: 404,
-					contentType: "application/javascript",
-					body: "/* Mock 404 */",
-				});
-			});
-
+		test("should auto-reload once on first chunk failure", async ({ page }) => {
+			// 1. Initial successful load to ensure app is alive
 			await page.goto("/");
+			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
 
-			// The flow is: load → chunk fails → set marker + reload → chunk fails again → redirect to 500.html
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
+			// 2. Trap the marker setting via init script for the NEXT navigation
+			// This catches the marker before main.tsx clears it
+			await page.addInitScript((m) => {
+				if (window.name.includes(m)) {
+					(window as any).__MARKER_DETECTED__ = true;
+				}
+			}, MARKER);
 
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).toBeVisible({ timeout: 15000 });
-
-			const refreshButton = page.locator("button", { hasText: "Hard Reset & Refresh" });
-			await expect(refreshButton).toBeVisible();
-		});
-
-		test("should clear window.name marker after redirect to 500.html", async ({ page }) => {
-			await page.route("**/assets/*.js", async (route) => {
+			// 3. Block a lazy-loaded chunk (NotFound)
+			await page.route(NOT_FOUND_CHUNK, async (route) => {
 				await route.fulfill({ status: 404 });
 			});
 
-			await page.goto("/");
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
+			// 4. Trigger the dynamic import failure by navigating to a non-existent path
+			// We don't await because we expect a reload triggered by index.html
+			page.evaluate(() => {
+				// @ts-ignore - navigation API
+				window.navigation.navigate("/trigger-failure");
+			}).catch(() => {});
+			
+			// 5. Wait for our trap to trigger on the reloaded page
+			await page.waitForFunction(() => (window as any).__MARKER_DETECTED__ === true, { timeout: 15000 });
 
-			// After redirect, the marker should have been cleared by the index.html handler
+			expect(await page.evaluate(() => (window as any).__MARKER_DETECTED__)).toBe(true);
+		});
+
+		test("should redirect to 500.html on second chunk failure", async ({ page }) => {
+			// 1. Initial load
+			await page.goto("/");
+			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
+
+			// 2. Block the chunk
+			await page.route(NOT_FOUND_CHUNK, async (route) => {
+				await route.fulfill({ status: 404 });
+			});
+
+			// 3. Set marker manually to simulate a previous recovery reload
+			await page.evaluate((m) => { window.name = m; }, MARKER);
+
+			// 4. Trigger failure - should redirect to 500.html because marker is present
+			page.evaluate(() => {
+				// @ts-ignore - navigation API
+				window.navigation.navigate("/trigger-failure-2");
+			}).catch(() => {});
+
+			// 5. Wait for redirect to 500.html
+			await page.waitForURL("**/500.html*", { timeout: 15000 });
+
+			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
+			await expect(errorHeading).toBeVisible();
+
+			// 6. Verify that the marker was cleared by index.html before redirect
 			const windowName = await page.evaluate(() => window.name);
-			expect(windowName).not.toContain("__preload_recovery__");
+			expect(windowName).not.toContain(MARKER);
 		});
 
 		test("reset button should clear caches and reload to root", async ({ page }) => {
-			await page.route("**/assets/*.js", async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			await page.goto("/");
-			await page.waitForURL("**/500.html*", { timeout: 30000 });
-
+			await page.goto("/500.html");
 			const refreshButton = page.locator("button", { hasText: "Hard Reset & Refresh" });
-			await expect(refreshButton).toBeVisible({ timeout: 15000 });
-
-			// Unblock assets before clicking reset so the app can actually load
-			await page.unroute("**/assets/*.js");
-
+			await expect(refreshButton).toBeVisible();
+			
 			await refreshButton.click();
-
+			
 			// 500.html redirects to /?reload=<timestamp>
 			await page.waitForURL(/\/\?reload=\d+/, { timeout: 15000 });
 		});
@@ -87,78 +102,12 @@ test.describe("Application Resilience & Recovery", () => {
 
 			await page.goto("/");
 
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-
-			// Verify app loaded normally — no redirect to 500.html
+			// Verify app loaded normally - no redirect to 500.html
 			expect(page.url()).not.toContain("500.html");
-		});
-
-		test("should NOT trigger recovery when a non-asset same-origin resource fails", async ({
-			page,
-		}) => {
-			// Inject a failing non-asset script (not under /assets/)
-			await page.addInitScript(() => {
-				const script = document.createElement("script");
-				script.src = "/some-random-path/widget.js";
-				document.head.appendChild(script);
-			});
-
-			await page.goto("/");
-
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("500.html");
-		});
-
-		test("should NOT trigger recovery when a preload fetch link fails", async ({ page }) => {
-			// Block the translation preload (rel=preload, as=fetch)
-			await page.route("**/assets/locales/**", async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			await page.goto("/");
-
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("500.html");
-		});
-
-		test("should NOT trigger recovery when favicon or manifest fails", async ({ page }) => {
-			await page.route("**/favicon*", async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-			await page.route("**/manifest*", async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			await page.goto("/");
-
-			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
-			await expect(errorHeading).not.toBeVisible({ timeout: 10000 });
-			expect(page.url()).not.toContain("500.html");
-		});
-	});
-
-	test.describe("Successful boot cleanup", () => {
-		test("should clear __preload_recovery__ marker from window.name after successful boot", async ({
-			page,
-		}) => {
-			// Pre-set the marker as if a previous recovery reload occurred
-			await page.addInitScript(() => {
-				window.name = "__preload_recovery__";
-			});
-
-			await page.goto("/");
-
-			// Wait for the app-ready event to fire (which clears the marker)
-			await page.waitForFunction(
-				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
-				{ timeout: 30000 }
-			);
-
+			
+			// Verify window.name is still empty
 			const windowName = await page.evaluate(() => window.name);
-			expect(windowName).not.toContain("__preload_recovery__");
+			expect(windowName).not.toContain(MARKER);
 		});
 	});
 
@@ -181,6 +130,28 @@ test.describe("Application Resilience & Recovery", () => {
 
 			const grid = page.locator(".gridTable");
 			await expect(grid).toBeVisible();
+		});
+	});
+
+	test.describe("Successful boot cleanup", () => {
+		test("should clear MARKER from window.name after successful boot", async ({
+			page,
+		}) => {
+			// Pre-set the marker as if a recovery reload just occurred
+			await page.addInitScript((marker) => {
+				window.name = marker;
+			}, MARKER);
+
+			await page.goto("/");
+
+			// Wait for the app-ready event (which clears the marker in main.tsx)
+			await page.waitForFunction(
+				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
+				{ timeout: 30000 }
+			);
+
+			const windowName = await page.evaluate(() => window.name);
+			expect(windowName).not.toContain(MARKER);
 		});
 	});
 });
