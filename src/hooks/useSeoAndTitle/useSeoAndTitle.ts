@@ -266,6 +266,7 @@ export const useSeoAndTitle = () => {
 				"@context": "https://schema.org",
 				"@type": "FAQPage",
 				"@id": `${baseUrl}/#faqpage`,
+				inLanguage: i18n.language,
 				name: t("faq.name", "NMS Optimizer Frequently Asked Questions"),
 				mainEntity: [
 					{

@@ -164,6 +164,7 @@ function generatePage(
 			"@context": "https://schema.org",
 			"@type": "FAQPage",
 			"@id": `${baseUrl}/#faqpage`,
+			"inLanguage": lang,
 			"name": t("faq.name", "NMS Optimizer Frequently Asked Questions"),
 			"mainEntity": [
 				{
@@ -171,7 +172,31 @@ function generatePage(
 					"name": t("faq.questions.adjacencyBonus.name", "What is an adjacency bonus in No Man's Sky?"),
 					"acceptedAnswer": {
 						"@type": "Answer",
-						"text": t("faq.questions.adjacencyBonus.answer", "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost.")
+						"text": t("faq.questions.adjacencyBonus.answer", "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots.")
+					}
+				},
+				{
+					"@type": "Question",
+					"name": t("faq.questions.superchargedSlots.name", "What are supercharged slots in No Man's Sky?"),
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": t("faq.questions.superchargedSlots.answer", "Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed.")
+					}
+				},
+				{
+					"@type": "Question",
+					"name": t("faq.questions.calculation.name", "How does NMS Optimizer calculate the best technology layout?"),
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": t("faq.questions.calculation.answer", "The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed.")
+					}
+				},
+				{
+					"@type": "Question",
+					"name": t("faq.questions.platforms.name", "What platforms does NMS Optimizer support?"),
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": t("faq.questions.platforms.answer", "NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters.")
 					}
 				}
 			]
