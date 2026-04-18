@@ -8,9 +8,9 @@
     - [ ] Write Vitest unit tests to ensure the JSON structure is correct for multiple languages.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Shared Schema Logic' (Protocol in workflow.md)
 
-## Phase 2: Client-Side React Update <!-- depends: Phase 1 --> [ ]
+## Phase 2: Client-Side React Update <!-- depends: Phase 1 --> [~]
 <!-- execution: parallel -->
-- [ ] Task 2.1: Update `useSeoAndTitle.ts` to use the new shared templates <!-- files: src/hooks/useSeoAndTitle/useSeoAndTitle.ts -->
+- [~] Task 2.1: Update `useSeoAndTitle.ts` to use the new shared templates <!-- files: src/hooks/useSeoAndTitle/useSeoAndTitle.ts -->
     - [ ] Replace hardcoded FAQ schema with calls to the shared utility.
     - [ ] Ensure all new schema types are injected into the DOM.
     - [ ] Verify with existing/updated unit tests in `useSeoAndTitle.test.tsx`.

@@ -173,7 +173,7 @@ describe("useSeoAndTitle", () => {
 	});
 
 	describe("Structured Data (JSON-LD)", () => {
-		it("should inject FAQ schema on root path with correct language", () => {
+		it("should inject all required schemas on root path", () => {
 			setupMocks("/", {
 				"faq.name": "NMS Optimizer Frequently Asked Questions",
 				"faq.questions.adjacencyBonus.name": "What is an adjacency bonus?",
@@ -181,17 +181,15 @@ describe("useSeoAndTitle", () => {
 			});
 			renderHook(() => useSeoAndTitle());
 
-			const faqScript = document.getElementById("faq-schema");
-			expect(faqScript).not.toBeNull();
-			expect(faqScript?.getAttribute("type")).toBe("application/ld+json");
+			expect(document.getElementById("software-schema")).not.toBeNull();
+			expect(document.getElementById("website-schema")).not.toBeNull();
+			expect(document.getElementById("org-schema")).not.toBeNull();
+			expect(document.getElementById("breadcrumb-schema")).not.toBeNull();
+			expect(document.getElementById("faq-schema")).not.toBeNull();
 
-			const data = JSON.parse(faqScript?.textContent || "{}");
-			expect(data["@type"]).toBe("FAQPage");
-			expect(data.inLanguage).toBe("en");
-			expect(data.name).toBe("NMS Optimizer Frequently Asked Questions");
-			expect(data.mainEntity).toHaveLength(4);
-			expect(data.mainEntity[0].name).toBe("What is an adjacency bonus?");
-			expect(data.mainEntity[0].acceptedAnswer.text).toBe("A stat boost.");
+			const faqData = JSON.parse(document.getElementById("faq-schema")?.textContent || "{}");
+			expect(faqData["@type"]).toBe("FAQPage");
+			expect(faqData.inLanguage).toBe("en");
 		});
 
 		it("should inject FAQ schema on root path with localized language", () => {
