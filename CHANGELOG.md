@@ -1,3 +1,23 @@
+# [6.33.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.32.0...v6.33.0) (2026-04-18)
+
+
+### Bug Fixes
+
+* clean version display, repair translations, and harden auto-translate workflow ([1e64935](https://github.com/jbelew/nms_optimizer-web/commit/1e64935310dc357e61ca4f423d108b38d1655547))
+* **translate:** preserve JSON arrays and handle 503 errors with retries ([c4082da](https://github.com/jbelew/nms_optimizer-web/commit/c4082da5f58687c72e54a669eaa3b1a73ea59114))
+
+
+### Features
+
+* **seo:** Create shared localized Schema utility ([9a4f15b](https://github.com/jbelew/nms_optimizer-web/commit/9a4f15bc75dbeae58c7d31e42c6965a2434d0131))
+* **seo:** Create shared localized Schema utility ([fcbecc9](https://github.com/jbelew/nms_optimizer-web/commit/fcbecc94289eaf7a1d885dec64261a407bebbf98))
+* **seo:** localize JSON-LD FAQ schema for client and SSG ([3982b6b](https://github.com/jbelew/nms_optimizer-web/commit/3982b6b1d878fba10382f6a3f4dd3cc23f84bffc))
+* **seo:** localize JSON-LD FAQ schema for client and SSG ([a7e074c](https://github.com/jbelew/nms_optimizer-web/commit/a7e074ce0d41b96bb002faa6c69bff558320ad94))
+* **seo:** Sync localized Schema across CSR and SSG ([8ab1a09](https://github.com/jbelew/nms_optimizer-web/commit/8ab1a09f2eecef80c6fa8a8c668e3de63d3fa238))
+* **seo:** Sync localized Schema across CSR and SSG ([e94a76d](https://github.com/jbelew/nms_optimizer-web/commit/e94a76d46a9443be6c741dfb803d0313ea9cff02))
+* **seo:** Update useSeoAndTitle to use shared localized Schema ([423822f](https://github.com/jbelew/nms_optimizer-web/commit/423822f5b8db50e077447b165e7f1e882d5af54f))
+* **seo:** Update useSeoAndTitle to use shared localized Schema ([73b6713](https://github.com/jbelew/nms_optimizer-web/commit/73b6713a5b5750531a6d4c527c2c744238a8095d))
+
 # [6.32.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.7...v6.32.0) (2026-04-18)
 
 
