@@ -166,21 +166,22 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 				<div className="mb-2 text-sm sm:text-base">
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
 				</div>
-				<div className="mt-4 flex gap-2">
-					<Button size="2" variant="solid" onClick={handleReload}>
-						Reload
-					</Button>
+
+				<ErrorDisplay error={error} errorInfo={errorInfo} />
+
+				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
 					<Button
+						variant="soft"
 						size="2"
-						variant="outline"
-						color="gray"
 						onClick={() => void handleClearAndReload()}
 						disabled={isResetting}
 					>
-						{isResetting ? "Resetting…" : "Clear offline data & reload"}
+						{isResetting ? "Resetting…" : "Clear Offline Data & Reload"}
+					</Button>
+					<Button size="2" variant="solid" autoFocus onClick={handleReload}>
+						Reload
 					</Button>
 				</div>
-				<ErrorDisplay error={error} errorInfo={errorInfo} />
 			</div>
 		</div>
 	);

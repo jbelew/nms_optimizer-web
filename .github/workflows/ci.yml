@@ -313,7 +313,7 @@ jobs:
           if [ -n "$RELEASE_TAG" ]; then
             echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
           else
-            # Fallback to package.json version only (keep UI clean for non-release builds)
+            # Fallback to package.json version only (keep UI/GA4 clean)
             PACKAGE_VERSION=$(node -p "require('./package.json').version")
             echo "version=v${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
           fi
