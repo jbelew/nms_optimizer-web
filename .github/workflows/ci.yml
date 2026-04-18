@@ -264,7 +264,8 @@ jobs:
 
   deploy-production-cloudflare:
     name: Deploy to Cloudflare (Production)
-    needs: [build-production, release]
+    needs: [build-production]
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -282,10 +283,19 @@ jobs:
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
       - name: Purge Cloudflare Cache
         run: |
-          curl -f -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          echo "Waiting 20 seconds for Cloudflare nodes to sync..."
+          sleep 20
+          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -H "Content-Type: application/json" \
-          --data '{"purge_everything":true}'
+          --data '{"purge_everything":true}')
+          
+          if echo "$RESPONSE" | grep -q '"success".*true'; then
+            echo "✅ Cloudflare cache purged successfully"
+          else
+            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
+            exit 1
+          fi
 
   deploy-production-heroku:
     name: Deploy to Heroku (Production)
@@ -358,3 +368,18 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
+      - name: Purge Cloudflare Cache (Staging)
+        run: |
+          echo "Waiting 20 seconds for Cloudflare nodes to sync..."
+          sleep 20
+          RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}')
+          
+          if echo "$RESPONSE" | grep -q '"success".*true'; then
+            echo "✅ Cloudflare cache purged successfully"
+          else
+            echo "❌ Failed to purge Cloudflare cache: $RESPONSE"
+            exit 1
+          fi

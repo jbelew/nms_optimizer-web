@@ -9,29 +9,29 @@
 # HTML Pages: Browser always revalidates, edge caches for 1 hour
 # Safe because CF Pages purges cache on every deploy and assets are content-hashed
 /
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /index.html
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /about/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /instructions/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /changelog/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /translation/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /userstats/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /privacy/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /de/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /es/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /fr/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 /pt/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=30
+  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
 
 # Cache rules for hashed assets (Vite output)
 /assets/*
