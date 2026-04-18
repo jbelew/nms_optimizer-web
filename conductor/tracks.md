@@ -57,3 +57,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: E2E Test Reliability & Resilience**
   *Link: [./conductor/tracks/e2e_reliability_20260417/](./conductor/tracks/e2e_reliability_20260417/)*
 
+
+---
+
+## [~] Track: Review ld+json implementation across React and SSG
+*Link: [./conductor/tracks/schema-localization-sync_20260418/](./conductor/tracks/schema-localization-sync_20260418/)*
