@@ -63,7 +63,7 @@ seo_report/*
 .lighthouseci/
 
 # Cloudflare API scripts
-scripts/cloudflare/*
+# scripts/cloudflare/*
 
 # Dolt database files (added by bd init)
 .dolt/
@@ -72,3 +72,6 @@ scripts/cloudflare/*
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
 docs/nestjs-replatform-analysis.md
+
+# Cloudflare Scripts
+scripts/cloudflare/
