@@ -9,8 +9,6 @@ import { expect, test } from "@playwright/test";
  */
 test.describe("Application Resilience & Recovery", () => {
 	const MARKER = "__preload_recovery__";
-	// NotFound chunk for manual trigger of dynamic import failure
-	const NOT_FOUND_CHUNK = "**/build/chunk-BwoAAUUD2.js";
 
 	test.beforeEach(async ({ page }) => {
 		// Suppress welcome dialog via localStorage
@@ -21,31 +19,28 @@ test.describe("Application Resilience & Recovery", () => {
 
 	test.describe("Preload error recovery cycle", () => {
 		test("should auto-reload once on first chunk failure", async ({ page }) => {
-			// 1. Initial successful load to ensure app is alive
+			// 1. Initial successful load
 			await page.goto("/");
 			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
 
-			// 2. Trap the marker setting via init script for the NEXT navigation
-			// This catches the marker before main.tsx clears it
+			// 2. Setup marker detection trap
 			await page.addInitScript((m) => {
 				if (window.name.includes(m)) {
 					(window as any).__MARKER_DETECTED__ = true;
 				}
 			}, MARKER);
 
-			// 3. Block a lazy-loaded chunk (NotFound)
-			await page.route(NOT_FOUND_CHUNK, async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			// 4. Trigger the dynamic import failure by navigating to a non-existent path
-			// We don't await because we expect a reload triggered by index.html
-			page.evaluate(() => {
-				// @ts-ignore - navigation API
-				window.navigation.navigate("/trigger-failure");
-			}).catch(() => {});
+			// 3. Manually dispatch vite:preloadError to simulate a dynamic import failure
+			// This is build-agnostic and robust in CI.
+			await Promise.all([
+				page.waitForNavigation({ waitUntil: 'commit' }),
+				page.evaluate(() => {
+					const event = new Event("vite:preloadError");
+					window.dispatchEvent(event);
+				})
+			]);
 			
-			// 5. Wait for our trap to trigger on the reloaded page
+			// 4. Wait for our trap to trigger on the reloaded page
 			await page.waitForFunction(() => (window as any).__MARKER_DETECTED__ === true, { timeout: 15000 });
 
 			expect(await page.evaluate(() => (window as any).__MARKER_DETECTED__)).toBe(true);
@@ -56,27 +51,22 @@ test.describe("Application Resilience & Recovery", () => {
 			await page.goto("/");
 			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
 
-			// 2. Block the chunk
-			await page.route(NOT_FOUND_CHUNK, async (route) => {
-				await route.fulfill({ status: 404 });
-			});
-
-			// 3. Set marker manually to simulate a previous recovery reload
+			// 2. Set marker manually to simulate a previous recovery reload
 			await page.evaluate((m) => { window.name = m; }, MARKER);
 
-			// 4. Trigger failure - should redirect to 500.html because marker is present
-			page.evaluate(() => {
-				// @ts-ignore - navigation API
-				window.navigation.navigate("/trigger-failure-2");
-			}).catch(() => {});
-
-			// 5. Wait for redirect to 500.html
-			await page.waitForURL("**/500.html*", { timeout: 15000 });
+			// 3. Dispatch vite:preloadError - should redirect to 500.html because marker is present
+			await Promise.all([
+				page.waitForURL("**/500.html*", { timeout: 15000 }),
+				page.evaluate(() => {
+					const event = new Event("vite:preloadError");
+					window.dispatchEvent(event);
+				})
+			]);
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible();
 
-			// 6. Verify that the marker was cleared by index.html before redirect
+			// 4. Verify that the marker was cleared by index.html before redirect
 			const windowName = await page.evaluate(() => window.name);
 			expect(windowName).not.toContain(MARKER);
 		});
@@ -95,7 +85,6 @@ test.describe("Application Resilience & Recovery", () => {
 
 	test.describe("False positive prevention", () => {
 		test("should NOT trigger recovery when a third-party script fails", async ({ page }) => {
-			// Block a third-party analytics script (common with ad-blockers)
 			await page.route("**/www.googletagmanager.com/**", async (route) => {
 				await route.abort("blockedbyclient");
 			});
@@ -137,14 +126,12 @@ test.describe("Application Resilience & Recovery", () => {
 		test("should clear MARKER from window.name after successful boot", async ({
 			page,
 		}) => {
-			// Pre-set the marker as if a recovery reload just occurred
 			await page.addInitScript((marker) => {
 				window.name = marker;
 			}, MARKER);
 
 			await page.goto("/");
 
-			// Wait for the app-ready event (which clears the marker in main.tsx)
 			await page.waitForFunction(
 				() => (window as typeof window & { __APP_READY__?: boolean }).__APP_READY__,
 				{ timeout: 30000 }

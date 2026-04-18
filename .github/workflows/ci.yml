@@ -21,10 +21,14 @@ concurrency:
   group: ci-${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions: {}
+
 jobs:
   lint-test:
     name: Lint, Typecheck & Unit Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -50,6 +54,8 @@ jobs:
   build:
     name: Build Application (Verification)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
@@ -63,26 +69,18 @@ jobs:
 
       - name: Set Build Version
         id: build_version
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+        uses: ./.github/actions/get-build-version
 
       - name: Build project (Staging/Verification)
         run: npm run build
         env:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-
-      - name: Build project (E2E)
-        run: npm run build:e2e
-
-      - name: Verify Storybook build
-        run: npm run build-storybook
+          # Conditionally pass Sentry secrets to avoid failures on fork PRs
+          VITE_SENTRY_DSN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.VITE_SENTRY_DSN || '' }}
+          SENTRY_AUTH_TOKEN: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_AUTH_TOKEN || '' }}
+          SENTRY_ORG: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_ORG || '' }}
+          SENTRY_PROJECT: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_PROJECT || '' }}
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v7
@@ -91,12 +89,18 @@ jobs:
           path: dist/
           retention-days: 1
 
+      - name: Build project (E2E)
+        run: npm run build:e2e
+
       - name: Upload E2E dist artifact
         uses: actions/upload-artifact@v7
         with:
           name: dist-e2e
           path: dist/
           retention-days: 1
+
+      - name: Verify Storybook build
+        run: npm run build-storybook
 
   lighthouse:
     name: Lighthouse Audit & History
@@ -141,8 +145,10 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
           mkdir -p history-dir
-          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir ${{ github.sha }}
+          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir "$GITHUB_SHA_ENV"
           cp scripts/lighthouse-dashboard.html history-dir/index.html
+        env:
+          GITHUB_SHA_ENV: ${{ github.sha }}
 
       - name: Deploy Lighthouse History
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
@@ -156,6 +162,8 @@ jobs:
     name: Storybook Interaction, A11y & Chromatic
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -183,6 +191,7 @@ jobs:
         run: npm run test:storybook:a11y
 
       - name: Run Chromatic visual tests
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: chromaui/action@v11
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -194,6 +203,8 @@ jobs:
     name: E2E Verification (Playwright)
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -278,6 +289,8 @@ jobs:
     needs: [release]
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       build-version: ${{ steps.build_version.outputs.version }}
       effective-tag: ${{ steps.version_logic.outputs.version }}
@@ -298,11 +311,7 @@ jobs:
 
       - name: Set Build Tracking ID
         id: build_version
-        shell: bash
-        run: |
-          COUNT=$(git rev-list --count HEAD)
-          SHA=$(git rev-parse --short HEAD)
-          echo "version=${COUNT}-${SHA}" >> $GITHUB_OUTPUT
+        uses: ./.github/actions/get-build-version
 
       - name: Build project (Production)
         run: npm run build
@@ -326,20 +335,27 @@ jobs:
     name: Deploy to Cloudflare (Production)
     needs: [build-production, release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.release.outputs.tag || github.sha }}
+
       - name: Download production artifact
         uses: actions/download-artifact@v8
         with:
           name: dist-production
           path: dist/
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nms-optimizer-web --branch=main
+
       - name: Purge Cloudflare Cache
         run: |
           curl -f -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
@@ -351,6 +367,8 @@ jobs:
     name: Deploy to Heroku (Production)
     needs: [build-production, release]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -406,12 +424,18 @@ jobs:
     needs: [lint-test, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Download dist artifact
         uses: actions/download-artifact@v8
         with:
           name: dist-bundle
           path: dist/
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
