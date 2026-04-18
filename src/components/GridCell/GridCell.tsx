@@ -190,6 +190,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 		<div
 			role="gridcell"
 			aria-colindex={columnIndex + 1}
+			data-testid="grid-cell"
 			tabIndex={isSharedGrid ? -1 : 0}
 			data-accent-color={techColor}
 			onContextMenu={handleContextMenu}

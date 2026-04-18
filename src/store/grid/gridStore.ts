@@ -907,10 +907,16 @@ export const useGridStore = create<GridStore>()(
 	)
 );
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore - for e2e testing
-	window.useGridStore = useGridStore;
-	// @ts-expect-error - For e2e testing
-	window.handleCellDoubleTap = useGridStore.getState().handleCellDoubleTap;
+// Always expose for E2E if the flag is set, using a method that survives minification
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		__E2E_EXPOSE__?: boolean;
+		useGridStore?: typeof useGridStore;
+		handleCellDoubleTap?: (row: number, col: number) => void;
+	};
+
+	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
+		w["useGridStore"] = useGridStore;
+		w["handleCellDoubleTap"] = useGridStore.getState().handleCellDoubleTap;
+	}
 }

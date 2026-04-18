@@ -162,6 +162,8 @@ export async function fetchJson<T>(
 export interface ApiCallOptions extends RequestInit {
 	/** Whether to skip showing the global error dialog on failure. Defaults to `false`. */
 	skipGlobalError?: boolean;
+	/** Whether the call is critical for app boot. If true, error dialog is skipped. */
+	isCritical?: boolean;
 }
 
 /**
@@ -169,7 +171,7 @@ export interface ApiCallOptions extends RequestInit {
  *
  * @remarks
  * All HTTP errors and network failures automatically trigger the `ErrorContent` dialog
- * via the `OptimizeStore` unless `skipGlobalError` is set to `true`. This ensures a
+ * via the `OptimizeStore` unless `skipGlobalError` or `isCritical` is set to `true`. This ensures a
  * consistent error experience across the application without manual try-catch in every hook.
  *
  * It uses {@link fetchJson} internally for the actual network request and JSON parsing.
@@ -205,15 +207,15 @@ export async function apiCall<T = unknown>(
 	options: ApiCallOptions = {},
 	timeout: number = 10000
 ): Promise<T> {
-	const { skipGlobalError = false, ...fetchOptions } = options;
+	const { skipGlobalError = false, isCritical = false, ...fetchOptions } = options;
 
 	try {
 		return await fetchJson<T>(url, fetchOptions, timeout);
 	} catch (error) {
 		console.error("API call failed:", error);
 
-		if (!skipGlobalError) {
-			// Always trigger error dialog for any failure in apiCall unless skipped
+		if (!skipGlobalError && !isCritical) {
+			// Always trigger error dialog for any failure in apiCall unless skipped or critical
 			useOptimizeStore
 				.getState()
 				.setShowError(

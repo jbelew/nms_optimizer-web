@@ -284,8 +284,6 @@ jobs:
 
       - name: Purge Cloudflare Cache
         run: |
-          echo "Waiting 5 seconds for Cloudflare nodes to sync..."
-          sleep 5
           RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -H "Content-Type: application/json" \
@@ -371,8 +369,6 @@ jobs:
           command: pages deploy dist --project-name=nms-optimizer-web --branch=dev
       - name: Purge Cloudflare Cache
         run: |
-          echo "Waiting 5 seconds for Cloudflare nodes to sync..."
-          sleep 5
           RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
           -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -H "Content-Type: application/json" \

@@ -49,5 +49,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: Post-Audit Fixes & Stability Improvements
-*Link: [./conductor/tracks/post_audit_fixes_20260416/](./conductor/tracks/post_audit_fixes_20260416/)*
+- [x] **Track: Post-Audit Fixes & Stability Improvements**
+  *Link: [./conductor/tracks/post_audit_fixes_20260416/](./conductor/tracks/post_audit_fixes_20260416/)*
+
+---
+
+- [x] **Track: E2E Test Reliability & Resilience**
+  *Link: [./conductor/tracks/e2e_reliability_20260417/](./conductor/tracks/e2e_reliability_20260417/)*
+

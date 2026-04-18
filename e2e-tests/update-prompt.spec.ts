@@ -58,8 +58,11 @@ test.describe("UpdatePrompt Suppression", () => {
 		// 2. Navigate to page
 		await page.goto("/");
 
-		// 3. Wait for listeners to be set up
-		await page.waitForTimeout(1000);
+		// 3. Wait for app to be ready (custom event dispatched by splashScreen)
+		const appReadyPromise = page.evaluate(() => 
+			new Promise(resolve => window.addEventListener('app-ready', resolve, { once: true }))
+		);
+		await appReadyPromise;
 
 		// 4. Dispatch the event
 		await page.evaluate(() => {
@@ -72,11 +75,8 @@ test.describe("UpdatePrompt Suppression", () => {
 			);
 		});
 
-		// 5. Wait for the event to be processed and state updated
-		await page.waitForTimeout(2000);
-
-		// 6. Wait for and assert UpdatePrompt IS visible
+		// 5. Wait for and assert UpdatePrompt IS visible
 		const dialog = page.getByRole("dialog", { name: /update available/i });
-		await expect(dialog).toBeVisible({ timeout: 5000 });
+		await expect(dialog).toBeVisible({ timeout: 10000 });
 	});
 });

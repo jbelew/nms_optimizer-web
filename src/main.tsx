@@ -40,6 +40,7 @@ if (typeof window !== "undefined") {
 	window.addEventListener(
 		"app-ready",
 		() => {
+			(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
 			// Reset reload state on successful boot
 			sessionStorage.removeItem("init_reload_count");
 			const url = new URL(window.location.href);

@@ -29,7 +29,7 @@
 				if (!url) return false;
 				try {
 					var u = new URL(url, window.location.href);
-					return u.origin === window.location.origin && u.pathname.startsWith('/assets/');
+					return u.origin === window.location.origin && u.pathname.startsWith('/build/');
 				} catch (e) {
 					return false;
 				}
@@ -74,6 +74,7 @@
 					window.location.href = errorUrl.toString();
 				}
 			}
+			window.handleInitError = handleInitError;
 
 			// Listen for Vite chunk load errors (dynamic imports)
 			window.addEventListener("vite:preloadError", function (event) {

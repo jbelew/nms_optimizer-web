@@ -130,7 +130,7 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 
 	if (!cache.has(cacheKey)) {
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
-		const promise = apiCall<ShipTypes>(`${baseUrl}platforms`, {}, 10000)
+		const promise = apiCall<ShipTypes>(`${baseUrl}platforms`, { isCritical: true }, 10000)
 			.then((data) => {
 				console.log("Fetched ship types:", data);
 				const shipTypesState = useShipTypesStore.getState();
@@ -149,6 +149,15 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 			})
 			.catch((error) => {
 				console.error("Error fetching ship types:", error);
+
+				// If it's a critical boot fetch, trigger the global error handler
+				if (
+					typeof window !== "undefined" &&
+					"handleInitError" in window &&
+					typeof window.handleInitError === "function"
+				) {
+					(window.handleInitError as (err: unknown) => void)(error);
+				}
 
 				// Error dialog is already triggered by apiCall
 				// Return empty object to prevent Suspense from throwing
