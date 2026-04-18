@@ -651,8 +651,9 @@
 		"cancelButton": "Abbrechen"
 	},
 	"seo": {
-		"mainPageTitle": "NMS-Optimierer: Technologie-Layout-Planer und Adjazenz-Rechner",
+		"mainPageTitle": "NMS-Optimierer: Tech-Layout-Builder & Adjazenz-Rechner",
 		"appDescription": "Berechne optimale Technologie-Layouts für dein Raumschiff, deine Korvette, dein Multitool, deinen Exo-Anzug und dein Exofahrzeug in No Man's Sky. Verwalte Adjazenzboni und die Platzierung überladener Slots.",
+		"genre": "Spielwerkzeug",
 		"keywords": "No Man's Sky, NMS, Raumschiff-Layout, Raumschiff-Build, Multitool-Layout, Multitool-Build, Exofahrzeug-Layout, Exofahrzeug-Build, Exoanzug-Layout, Exoanzug-Build, Raumschiff-Optimierer, NMS-Optimierer, Technologie-Optimierer, Adjazenzboni, überladene Slots, Layout-Tool, Korvetten-Layout, Korvetten-Build, Korvetten-Optimierer",
 		"instructionsPageTitle": "NMS-Optimierer Anleitung: Module und überladene Slots",
 		"instructionsDescription": "Vollständige Anleitung zur Nutzung der NMS-Optimierer-App. Lerne, wie man Plattformen auswählt, überladene Slots markiert, Layouts optimiert und Adjazenzboni maximiert.",

@@ -30,7 +30,7 @@ export const getLocalizedSchema = (t, lang, url) => {
 		description: appDescription,
 		operatingSystem: "Web",
 		applicationCategory: "UtilitiesApplication",
-		genre: "Game Tool",
+		genre: t("seo.genre", { defaultValue: "Game Tool" }),
 		url: baseUrl,
 		inLanguage: lang,
 		offers: {
@@ -50,7 +50,7 @@ export const getLocalizedSchema = (t, lang, url) => {
 		"@context": "https://schema.org",
 		"@type": "Organization",
 		"@id": `${baseUrl}/#organization`,
-		name: "NMS Optimizer",
+		name: appName,
 		url: baseUrl,
 		logo: `${baseUrl}/logo.svg`,
 		sameAs: ["https://github.com/jbelew/nms_optimizer-web"],

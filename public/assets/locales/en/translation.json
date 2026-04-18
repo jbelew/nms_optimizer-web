@@ -653,6 +653,7 @@
 	"seo": {
 		"mainPageTitle": "NMS Optimizer: Tech Layout Builder & Adjacency Calculator",
 		"appDescription": "Calculate optimal No Man's Sky technology layouts for your Starship, Corvette, Multitool, Exosuit, and Exocraft. Handles adjacency bonuses and supercharged slot placement so you don't have to.",
+		"genre": "Game Tool",
 		"keywords": "No Man's Sky, NMS, Starship layout, Starship build, Multitool layout, Multitool build, Exocraft layout, Exocraft build, Exosuit layout, Exosuit build, Starship optimizer, NMS optimizer, tech optimizer, adjacency bonuses, supercharged slots, layout tool, Corvette layout, Corvette build, Corvette optimizer",
 		"instructionsPageTitle": "NMS Optimizer Instructions: Modules & Supercharged Slots",
 		"instructionsDescription": "Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
