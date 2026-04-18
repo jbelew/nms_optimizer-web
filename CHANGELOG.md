@@ -1,3 +1,12 @@
+## [6.31.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.1...v6.31.2) (2026-04-18)
+
+
+### Bug Fixes
+
+* **caching:** completely disable edge caching for html files to fix deployments ([879a85b](https://github.com/jbelew/nms_optimizer-web/commit/879a85b7342868ee8c3ed00fe21f42e06bc88e83))
+* **cloudflare:** disable caching for all HTML entry points to ensure instant updates ([2595c9d](https://github.com/jbelew/nms_optimizer-web/commit/2595c9df68130df873d8612efcdd0673604f4438))
+* **deployment:** trigger release to deploy caching fixes ([2096a33](https://github.com/jbelew/nms_optimizer-web/commit/2096a33249d1c0ca43a3882e68d18cf2561e7d10))
+
 ## [6.31.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.31.0...v6.31.1) (2026-04-18)
 
 
