@@ -6,17 +6,31 @@
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
-# HTML Pages: Cache at Edge, Revalidate in Browser
+# HTML Pages: Always revalidate with origin.
+# Cloudflare Pages handles its own edge caching and purges on deploy.
+# Do NOT add s-maxage here — it can cause stale HTML to be served during
+# edge cache purge propagation, leading to vite:preloadError on chunk mismatches.
 /
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
+  Cache-Control: public, max-age=0, must-revalidate
 /index.html
-  Cache-Control: public, max-age=0, s-maxage=31536000, must-revalidate, stale-while-revalidate=60
+  Cache-Control: public, max-age=0, must-revalidate
 
-# Cache rules for hashed assets (Vite output)
-/assets/*
+# Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
+# Safe to cache forever — a new deploy produces new filenames.
+/build/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Explicitly disable caching for version check and service worker
+# Mutable static assets (images, fonts, translations, markdown).
+# These live in /assets/ (copied from public/assets/) and have stable filenames.
+# Cache for 1 day, serve stale for 1 day while revalidating in background.
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+
+# Translations and markdown content: can change on any deploy.
+/assets/locales/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Always fresh: version check and service worker.
 /version.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js

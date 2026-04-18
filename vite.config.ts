@@ -431,11 +431,11 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								chunkInfo.name.includes("index") ||
 								chunkInfo.name.includes("entry"))
 						) {
-							return "assets/[name]-[hash].js";
+							return "build/[name]-[hash].js";
 						}
-						return "assets/chunk-[hash].js";
+						return "build/chunk-[hash].js";
 					},
-					entryFileNames: "assets/entry-[hash].js",
+					entryFileNames: "build/entry-[hash].js",
 					// Declarative code splitting via groups is the native Rolldown/Vite 8 way
 					// to manage manual chunks with high performance.
 					codeSplitting: {
@@ -519,8 +519,8 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					},
 					assetFileNames: (assetInfo: import("rolldown").PreRenderedAsset) =>
 						assetInfo.name?.endsWith(".css")
-							? "assets/[name]-[hash].css"
-							: "assets/[name]-[hash].[ext]",
+							? "build/[name]-[hash].css"
+							: "build/[name]-[hash].[ext]",
 				},
 			},
 		},
