@@ -177,7 +177,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						<button
 							type="button"
 							className="app-header__logo-button"
-							aria-label="Show easter egg coordinates"
+							aria-label={t("buttons.showEasterEgg") ?? ""}
 							onClick={() => {
 								startTransition(() => {
 									sendEvent({

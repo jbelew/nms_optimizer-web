@@ -164,7 +164,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 								variant="ghost"
 								size="1"
 								className="dialog-close"
-								aria-label="Close dialog"
+								aria-label={t("common.closeDialog") ?? ""}
 							>
 								<Cross2Icon />
 							</IconButton>

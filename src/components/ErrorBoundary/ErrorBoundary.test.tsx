@@ -65,7 +65,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// ErrorPage displays error information
-			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 
 		it("should not render children when error is caught", () => {
@@ -103,7 +103,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Check that ErrorPage is rendered (which means state was updated)
-			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 
 		it("should catch errors and set hasError to true", () => {
@@ -114,7 +114,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Verify error page is displayed
-			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 	});
 
@@ -129,7 +129,7 @@ describe("ErrorBoundary", () => {
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 	});
 
@@ -153,7 +153,7 @@ describe("ErrorBoundary", () => {
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText(/Boundary Error/i)).toBeInTheDocument();
+			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 
 			// Re-render with the same error
 			rerender(
@@ -163,7 +163,9 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Should still show error page
-			expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+			expect(
+				screen.getByText((content) => content.includes("errorContent.defaultMessage"))
+			).toBeInTheDocument();
 		});
 
 		it("should render children after boundary is reset", () => {

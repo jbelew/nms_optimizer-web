@@ -93,12 +93,12 @@ describe("GridTable", () => {
 		vi.clearAllMocks();
 	});
 
-	test("should render grid with correct role and ARIA attributes", () => {
+	it("should render grid with correct role and ARIA attributes", () => {
 		const { container } = render(<GridTable solving={false} sharedGrid={false} />);
 
 		const grid = container.querySelector('[role="grid"]');
 		expect(grid).toBeInTheDocument();
-		expect(grid).toHaveAttribute("aria-label", "Technology Grid");
+		expect(grid).toHaveAttribute("aria-label", "gridTable.ariaLabel");
 		expect(grid).toHaveAttribute("aria-rowcount", "5");
 		expect(grid).toHaveAttribute("aria-colcount", "4"); // 3 columns + 1 for buttons
 	});

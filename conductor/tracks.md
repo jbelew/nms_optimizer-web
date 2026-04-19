@@ -59,9 +59,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Localization Audit and Remediation
-*Link: [./conductor/tracks/localization_remediation_20260418/](./conductor/tracks/localization_remediation_20260418/)*
-
-
----
 

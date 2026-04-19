@@ -28,20 +28,24 @@ describe("ErrorContent", () => {
 	it("should render page variant correctly", () => {
 		render(<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo} />);
 
-		expect(screen.getByText("Boundary Error!")).toBeInTheDocument();
+		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
 		// Check for default page message
-		expect(screen.getByText(/This page may be/)).toBeInTheDocument();
+		expect(
+			screen.getByText((content) => content.includes("errorContent.defaultMessage"))
+		).toBeInTheDocument();
 	});
 
 	it("should render inset variant correctly", () => {
 		(useBreakpoint as Mock).mockReturnValue(false); // Mobile view
 		render(<ErrorContent variant="inset" error={mockError} errorInfo={mockErrorInfo} />);
 
-		expect(screen.getByText("Boundary Error!")).toBeInTheDocument();
+		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
 		// Check for inset message
-		expect(screen.getByText(/Try/)).toBeInTheDocument();
+		expect(
+			screen.getByText((content) => content.includes("errorContent.insetMessage"))
+		).toBeInTheDocument();
 	});
 
 	it("should render children if provided", () => {
@@ -53,7 +57,9 @@ describe("ErrorContent", () => {
 
 		expect(screen.getByText("Custom Error Message")).toBeInTheDocument();
 		// Should not render default message
-		expect(screen.queryByText(/This page may be/)).not.toBeInTheDocument();
+		expect(
+			screen.queryByText((content) => content.includes("errorContent.defaultMessage"))
+		).not.toBeInTheDocument();
 	});
 
 	it("should render large inset variant with scroll area", () => {

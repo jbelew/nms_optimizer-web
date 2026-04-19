@@ -75,13 +75,13 @@ describe("ErrorContent", () => {
 
 	test("should render close button with correct label", () => {
 		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
-		expect(screen.getByText("dialogs.userStats.closeButton")).toBeInTheDocument();
+		expect(screen.getByText("common.dismiss")).toBeInTheDocument();
 	});
 
 	test("should call onClose when close button is clicked", () => {
 		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
 		const closeButton = screen.getByRole("button", {
-			name: /dialogs\.userStats\.closeButton/i,
+			name: /common\.dismiss/i,
 		});
 		fireEvent.click(closeButton);
 		expect(mockOnClose).toHaveBeenCalledTimes(1);

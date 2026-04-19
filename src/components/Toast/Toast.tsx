@@ -22,6 +22,10 @@ import {
 import "./Toast.scss";
 
 import { Button, Separator } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
+import { ErrorDisplay } from "../ErrorBoundary/ErrorDisplay";
 
 /**
  * Props for the `NmsToast` component.
@@ -53,6 +57,10 @@ type ToastProps = {
  *
  * @returns {JSX.Element} The rendered toast notification.
  *
+ * @see {@link ErrorDisplay}
+ * @see {@link hideSplashScreenAndShowBackground}
+ * @see {@link ./Toast.stories.tsx Storybook}
+ *
  * @component
  *
  * @category Components
@@ -71,6 +79,7 @@ export const NmsToast = ({
 	variant,
 	duration = 5000,
 }: ToastProps) => {
+	const { t } = useTranslation();
 	const titleClassName =
 		variant === "error"
 			? "Toast__title Toast__title--error"
@@ -97,13 +106,13 @@ export const NmsToast = ({
 			<ToastDescription className="Toast__description">{description}</ToastDescription>
 			<Button
 				className="Toast__close"
-				aria-label="Dismiss"
+				aria-label={t("common.dismiss") ?? ""}
 				variant="soft"
 				size="2"
 				mb="1"
 				onClick={() => onOpenChange(false)}
 			>
-				Dismiss
+				{t("common.dismiss")}
 			</Button>
 		</ToastRoot>
 	);

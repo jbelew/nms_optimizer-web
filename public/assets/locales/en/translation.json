@@ -7,10 +7,28 @@
 		"changeLanguage": "Change Language",
 		"selectLanguage": "Select Language"
 	},
+	"common": {
+		"closeDialog": "Close dialog",
+		"dismiss": "Dismiss",
+		"error": "Error",
+		"retry": "Retry",
+		"reload": "Reload",
+		"copyLink": "Copy Link",
+		"loading": "Loading..."
+	},
 	"shipSelection": {
-		"dropdownTooltip": "Select Platform Type"
+		"dropdownTooltip": "Select Platform Type",
+		"selectPlatform": "Select Platform",
+		"ariaLabel": "Select ship type",
+		"corvetteWarning": {
+			"title": "Corvette Warning!",
+			"description": "As of version 6.33, Corvettes <strong>still</strong> have known layout issues! If you create a layout, we highly recommend using the <strong>Save Build</strong> feature to keep a backup of your work."
+		}
 	},
 	"appName": "No Man's Sky Technology Layout Optimizer",
+	"mainApp": {
+		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only."
+	},
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "About",
@@ -27,11 +45,15 @@
 		"generateName": "Generate",
 		"buildManagement": "Build Management",
 		"utilities": "Dialogs and App Controls",
-		"screenshot": "Capture Build Screenshot"
+		"screenshot": "Capture Build Screenshot",
+		"viewSourceOnGithub": "View source on GitHub",
+		"viewProfileOnLinkedin": "View profile on LinkedIn",
+		"showEasterEgg": "Show easter egg coordinates"
 	},
 	"gridTable": {
 		"optimizing": "OPTIMIZING!",
-		"tapInstructions": "Tap once to disable a slot, or double-tap to mark it as supercharged."
+		"tapInstructions": "Tap once to disable a slot, or double-tap to mark it as supercharged.",
+		"ariaLabel": "Technology Grid"
 	},
 	"gridControls": {
 		"activateRow": "Activate Row",
@@ -55,9 +77,19 @@
 			"-(( I'm a highly trained Convolutional Neural Network, not a miracle worker! ))-"
 		]
 	},
+	"errorDisplay": {
+		"header": "Something failed!",
+		"errorLabel": "Error:",
+		"stackTraceLabel": "Stack Trace:"
+	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Signal Disruption! –kzzkt–",
-		"serverErrorDetails": "<strong>There was a temporary error retrieving data.</strong> If the issue persists, please consider <1>file a bug report</1>."
+		"serverErrorDetails": "<strong>There was a temporary error retrieving data.</strong> If the issue persists, please consider <1>file a bug report</1>.",
+		"boundaryError": "Boundary Error!",
+		"defaultMessage": "Something went wrong! This page may be <strong>out of date</strong>. Try <strong>reloading the page</strong> to get the latest updates. If the problem continues, please consider <1>filing a bug report</1>.",
+		"insetMessage": "Something went wrong! Try <strong>reloading the page</strong> to see if that resolves the issue. If the problem continues, please consider <1>filing a bug report</1>.",
+		"resetting": "Resetting…",
+		"clearAndReload": "Clear Offline Data & Reload"
 	},
 	"dialogs": {
 		"titles": {
@@ -103,6 +135,7 @@
 		},
 		"shareLink": {
 			"description": "Copy the link below to share your current grid layout. Please note that this URL is a snapshot and will not update automatically.",
+			"tip": "<strong>Tip:</strong> Open the link and Bookmark the page to easily return to this layout later.",
 			"copyButton": "Copy Link",
 			"copiedButton": "Copied!",
 			"closeButton": "Close",
@@ -154,7 +187,9 @@
 	},
 	"footer": {
 		"issuePrompt": "Something off with your solve or found a bug? <1>Open an issue on GitHub</1> and let us know!",
-		"builtBy": "Built by jbelew (Looking for Work BTW!) • {{buildVersion}}",
+		"builtBy": "Built by jbelew",
+		"license": "GPL-3.0",
+		"buildLabel": "Build",
 		"supportPrompt": "This app will always be free and ad-free. If you’ve found it useful, consider supporting development with: "
 	},
 	"translationRequest": {
@@ -208,6 +243,8 @@
 			"Movement Systems": "Movement Systems"
 		},
 		"recommendedBuilds": {
+			"aboutRecommendedBuildsTooltip": "About Recommended Builds",
+			"selectBuildLabel": "Select Build",
 			"selectBuildButton": "Select a Recommended Build",
 			"applyBuildButton": "Apply Recommended Build",
 			"summary": "Technologies with <1>fixed Supercharged slots</1> support <5>recommended builds</5>."
@@ -632,6 +669,7 @@
 		}
 	},
 	"moduleSelection": {
+		"aboutUpgradeLabelsTooltip": "About Upgrade Labels",
 		"core": "Core Module",
 		"bonus": "Bonus Modules",
 		"upgrade": "Upgrade Modules",
@@ -641,6 +679,7 @@
 		"trails": "Starship Trails",
 		"figurines": "Figurines",
 		"title": "{{techName}} MODULE SELECTION",
+		"tooltip": "{{techName}} Module Selection",
 		"warning": "<p>Default Corvette selections are <i>suggestions</i>. Procedural upgrade modules generally provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to maximize this technology; however, most layouts only have room for <strong>3–4</strong> fully maxed technologies.</p>",
 		"selectAll": "Select All",
 		"closeDialogLabel": "Close dialog",

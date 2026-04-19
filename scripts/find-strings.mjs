@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, extname, basename } from 'path';
 
-const IGNORE_FILES = ['EasterEggCoordinates.tsx'];
+const IGNORE_FILES = ['EasterEggCoordinates.tsx', 'LoremIpsumSkeleton.tsx'];
 const IGNORE_DIRS = ['node_modules', '.git', 'dist', 'build', 'storybook-static'];
 const SRC_DIR = 'src';
 

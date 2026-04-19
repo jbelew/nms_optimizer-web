@@ -118,10 +118,10 @@ const ErrorContent: React.FC<ErrorContentProps> = ({ onClose }) => {
 
 			<Flex gap="2" mt="6" mb="2" justify="end">
 				{errorType === "fatal" ? (
-					<Button onClick={handleRetry}>Retry</Button>
+					<Button onClick={handleRetry}>{t("common.retry")}</Button>
 				) : (
 					<DialogClose asChild>
-						<Button onClick={onClose}>{t("dialogs.userStats.closeButton")}</Button>
+						<Button onClick={onClose}>{t("common.dismiss")}</Button>
 					</DialogClose>
 				)}
 			</Flex>

@@ -3,6 +3,7 @@ import "./GridTable.scss";
 
 import type { GridStore } from "../../store/grid/gridStore";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "../../store/grid/gridStore";
 import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
@@ -51,6 +52,7 @@ function GridTableComponent(
 	{ solving, sharedGrid }: GridTableProps,
 	ref: React.Ref<HTMLDivElement>
 ) {
+	const { t } = useTranslation();
 	const gridHeight = useGridStore((state) => state.grid.height);
 	const gridWidth = useGridStore((state) => state.grid.width);
 	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
@@ -66,7 +68,7 @@ function GridTableComponent(
 			<div
 				ref={ref}
 				role="grid"
-				aria-label="Technology Grid"
+				aria-label={t("gridTable.ariaLabel") ?? ""}
 				aria-rowcount={gridHeight}
 				aria-colcount={totalAriaColumnCount}
 				className={`gridTable ${solving ? "opacity-25" : ""}`}

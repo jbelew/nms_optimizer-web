@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 /**
  * Props for the `ShareLinkContent` component.
@@ -87,8 +87,7 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose 
 				{t("dialogs.shareLink.description")}
 			</Text>
 			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
-				<strong>Tip:</strong> Open the link and Bookmark the page to easily return to this
-				layout later.
+				<Trans i18nKey="dialogs.shareLink.tip" />
 			</Text>
 			<TextArea
 				id="share-url-input"

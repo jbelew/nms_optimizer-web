@@ -226,10 +226,20 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	const { setBonusStatus, getBonusStatus } = useTechBonusStore();
 	const cachedBonusStatus = getBonusStatus(tech);
 
-	const contentData =
-		techMaxBonus === 0 && cachedBonusStatus
-			? cachedBonusStatus
+	// Always use fresh translation for the tooltip to avoid stale language after switch
+	const contentData = React.useMemo(() => {
+		return techMaxBonus === 0 && cachedBonusStatus
+			? {
+					...cachedBonusStatus,
+					tooltipContent:
+						cachedBonusStatus.icon === "check"
+							? t("techTree.tooltips.validSolve")
+							: cachedBonusStatus.icon === "warning"
+								? `${t("techTree.tooltips.insufficientSpace")} -${cachedBonusStatus.percent}%`
+								: `${t("techTree.tooltips.boostedSolve")} +${cachedBonusStatus.percent}%`,
+				}
 			: computeBonusStatusData(techMaxBonus, t);
+	}, [techMaxBonus, cachedBonusStatus, t]);
 
 	useEffect(() => {
 		if (techSolvedBonus <= 0) {
@@ -384,6 +394,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
  * ```
  */
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
+	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
@@ -446,7 +457,10 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 						variant={modules.length === 1 ? "surface" : "solid"}
 						color={hasTechInGrid ? "gray" : techColor}
 						disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
-						aria-label={`x${currentCheckedModules.length}, ${translatedTechName} Module Selection`}
+						aria-label={t("moduleSelection.tooltip", {
+							techName: translatedTechName,
+							count: currentCheckedModules.length,
+						})}
 					>
 						x{currentCheckedModules.length}
 						<OpenInNewWindowIcon />
@@ -482,7 +496,9 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 				/>
 			)}
 			{modules.length > 1 ? (
-				<ConditionalTooltip label={`${translatedTechName} Module Selection`}>
+				<ConditionalTooltip
+					label={t("moduleSelection.tooltip", { techName: translatedTechName })}
+				>
 					{badgeContent}
 				</ConditionalTooltip>
 			) : (

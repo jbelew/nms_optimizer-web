@@ -12,6 +12,8 @@
  */
 
 import type { ErrorInfo, ReactNode } from "react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 import "./ErrorBoundary.scss";
 
@@ -62,6 +64,7 @@ export const ErrorDisplay = ({
 	className = "",
 	containerStyle,
 }: ErrorDisplayProps) => {
+	const { t } = useTranslation();
 	const hasStackTrace = error?.stack || errorInfo?.componentStack;
 
 	return (
@@ -77,12 +80,12 @@ export const ErrorDisplay = ({
 			>
 				{error?.message && (
 					<Code color="red" className="block">
-						<strong>Error:</strong> {error.message}
+						<strong>{t("errorDisplay.errorLabel")}</strong> {error.message}
 					</Code>
 				)}
 				{hasStackTrace && (
 					<Code color="red" className="block">
-						<strong>Stack Trace:</strong>
+						<strong>{t("errorDisplay.stackTraceLabel")}</strong>
 					</Code>
 				)}
 				{error?.stack && <Code color="red">{error.stack}</Code>}

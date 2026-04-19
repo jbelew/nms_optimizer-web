@@ -63,7 +63,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 								className="text-base! sm:text-lg!"
 								style={{ color: "var(--accent-a11)" }}
 							>
-								<Skeleton>Starship Technologies</Skeleton>
+								<Skeleton>{t("dialogs.userStats.starshipChartTitle")}</Skeleton>
 							</Heading>
 							<Skeleton height="248px" width="100%" />
 							<Heading
@@ -73,7 +73,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 								className="text-base! sm:text-lg!"
 								style={{ color: "var(--accent-a11)" }}
 							>
-								<Skeleton>Multi-tool Technologies</Skeleton>
+								<Skeleton>{t("dialogs.userStats.multitoolChartTitle")}</Skeleton>
 							</Heading>
 							<Skeleton height="248px" width="100%" />
 						</Flex>

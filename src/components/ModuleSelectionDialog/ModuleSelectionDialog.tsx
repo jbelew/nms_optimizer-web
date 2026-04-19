@@ -38,6 +38,8 @@ import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";
 
+import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
 /** Base path for grid module images. */
@@ -416,13 +418,15 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 			>
 				{titleOverride || t(`moduleSelection.${groupName}`)}
 				{modules.some((m) => m.label?.includes("[") && m.label?.includes("]")) && (
-					<InfoCircledIcon
-						className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
-						onClick={() => {
-							onClose?.();
-							openDialog("instructions", { section: "section-5" });
-						}}
-					/>
+					<ConditionalTooltip label={t("moduleSelection.aboutUpgradeLabelsTooltip")}>
+						<InfoCircledIcon
+							className="shrink-0 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
+							onClick={() => {
+								onClose?.();
+								openDialog("instructions", { section: "section-5" });
+							}}
+						/>
+					</ConditionalTooltip>
 				)}
 			</div>
 

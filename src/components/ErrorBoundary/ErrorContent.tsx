@@ -16,6 +16,7 @@ import type { ErrorInfo, ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Button, Link, ScrollArea, Separator } from "@radix-ui/themes";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
@@ -45,21 +46,16 @@ interface ErrorContentProps {
  * ```
  */
 const DefaultMessage = () => (
-	<>
-		Something went wrong! This page may be <strong>out of date</strong>. Try{" "}
-		<strong>reloading the page</strong> to get the latest updates. If the problem continues,
-		please consider{" "}
+	<Trans i18nKey="errorContent.defaultMessage">
+		errorContent.defaultMessage
 		<Link
 			href="https://github.com/jbelew/nms_optimizer-web/issues"
 			target="_blank"
 			rel="noopener noreferrer"
 			underline="always"
 			weight="medium"
-		>
-			filing a bug report
-		</Link>
-		.
-	</>
+		/>
+	</Trans>
 );
 
 /**
@@ -70,20 +66,16 @@ const DefaultMessage = () => (
  * ```
  */
 const InsetMessage = () => (
-	<>
-		Something went wrong! Try <strong>reloading the page</strong> to see if that resolves the
-		issue. If the problem continues, please consider{" "}
+	<Trans i18nKey="errorContent.insetMessage">
+		errorContent.insetMessage
 		<Link
 			href="https://github.com/jbelew/nms_optimizer-web/issues"
 			target="_blank"
 			rel="noopener noreferrer"
 			underline="always"
 			weight="medium"
-		>
-			filing a bug report
-		</Link>
-		.
-	</>
+		/>
+	</Trans>
 );
 
 /**
@@ -112,6 +104,7 @@ const InsetMessage = () => (
  * ```
  */
 export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
+	const { t } = useTranslation();
 	const isLarge = useBreakpoint("1024px");
 	const [isResetting, setIsResetting] = useState(false);
 
@@ -157,7 +150,7 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 			<section className="error-content__header">
 				<h2 className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
 					<ExclamationTriangleIcon className="error-content__icon h-5 w-5" />
-					<span>Boundary Error!</span>
+					<span>{t("errorContent.boundaryError")}</span>
 				</h2>
 				<Separator mt="2" mb="4" size="4" orientation="horizontal" decorative />
 			</section>
@@ -167,7 +160,9 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
 				</div>
 
-				<ErrorDisplay error={error} errorInfo={errorInfo} />
+				<ErrorDisplay error={error} errorInfo={errorInfo}>
+					{t("errorDisplay.header")}
+				</ErrorDisplay>
 
 				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
 					<Button
@@ -176,10 +171,12 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 						onClick={() => void handleClearAndReload()}
 						disabled={isResetting}
 					>
-						{isResetting ? "Resetting…" : "Clear Offline Data & Reload"}
+						{isResetting
+							? t("errorContent.resetting")
+							: t("errorContent.clearAndReload")}
 					</Button>
 					<Button size="2" variant="solid" autoFocus onClick={handleReload}>
-						Reload
+						{t("common.reload")}
 					</Button>
 				</div>
 			</div>

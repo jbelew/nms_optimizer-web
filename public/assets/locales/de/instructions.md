@@ -1,83 +1,83 @@
-# NMS-Optimierer Anleitung: Module und überladene Slots
+# NMS Optimizer Anweisungen: Modules & Supercharged Slots
 
-## Erste Schritte Mit Dem Raster
+## Erste Schritte mit dem Raster
 
-- Wähle eine **Plattform** (Raumschiff, Multitool, Korvette, etc.) über das <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> Icon aus.
-- **Klicke** oder **doppeltippe** (Mobil) auf einen Slot, um ihn als **Überladen** zu markieren.
-- **Strg+Klick (Windows) / ⌘-Klick (Mac) / einfaches Tippen (Mobil)**, um einen Slot zwischen **aktiv** und **inaktiv** umzuschalten.
-- Nutze die **Reihen-Schalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. *(Die Schalter werden deaktiviert, sobald Module platziert sind).*
-- Nutze den **Modulauswahl-Button** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Module innerhalb einer Technologiegruppe hinzuzufügen oder zu entfernen.
+- Wählen Sie eine **Plattform** (Starship, Multi-Tool, Corvette, etc.) über das <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> Symbol aus.
+- **Klicken** oder **doppeltippen** (mobil) Sie auf einen Slot, um ihn als **Supercharged** zu markieren.
+- **Strg-Klick (Windows) / ⌘-Klick (Mac) / einfaches Tippen (mobil)**, um einen Slot als **aktiv** oder **inaktiv** umzuschalten.
+- Verwenden Sie die **Reihen-Umschalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. *(Reihen-Umschalter sind deaktiviert, sobald Modules platziert wurden.)*
+- Verwenden Sie die Schaltfläche zur **Modul-Auswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Modules innerhalb einer Technology-Gruppe hinzuzufügen oder zu entfernen.
 
 > 💡 **Hinweis:**
-> Exo-Anzüge und Exofahrzeuge haben feste Raster. Slots bei Exofahrzeugen können nicht modifiziert werden. Beim Exo-Anzug können nur die Aktiv/Inaktiv-Zustände geändert werden – das Layout der überladenen Slots ist fest vorgegeben.
+> Exosuits und Exocraft haben feste Raster. Exocraft-Slots können nicht modifiziert werden. Bei Exosuits können nur aktive/inaktive Zustände geändert werden – Supercharged Slot-Layouts sind fest.
 
-## Bevor Du Beginnst
+## Bevor Sie beginnen
 
 Dieses Tool ist für die **Endgame-Optimierung** gedacht und funktioniert am besten, wenn:
 
-- Die meisten oder alle Slots des Rasters freigeschaltet sind.
-- Alle relevanten Technologien verfügbar sind.
-- Du **drei Upgrade-Module** pro Technologie besitzt.
+- Die meisten oder alle Raster-Slots freigeschaltet sind.
+- Alle relevanten Technologies verfügbar sind.
+- Sie **drei Upgrade Modules** pro Technology haben.
 
-Teilkonfigurationen werden unterstützt, aber die Ergebnisse sind auf voll aufgerüstete Plattformen optimiert.
+Teilweise Setups werden unterstützt, aber die Ergebnisse sind für vollständig aufgerüstete Plattformen optimiert.
 
-## Tipps Zur Nutzung
+## Nutzungstipps
 
-Überladene Slots sind begrenzt – ihre Platzierung ist entscheidend.
+Supercharged Slots sind begrenzt – die Platzierung ist entscheidend.
 
-- **Weise nicht alle überladenen Slots der ersten Technologie zu, die du platzierst.** Dies blockiert oft stärkere Gesamtlayouts zu einem späteren Zeitpunkt.
-- Beginne damit, **2–3 überladene Slots einer Technologie mit hoher Wirkung** zuzuweisen, nicht alle.
-- Reserviere mindestens **einen oder mehrere überladene Slots** für eine **zweite wichtige Technologie**, um die Gesamteffektivität zu steigern.
-- Sobald deine überladenen Slots verbraucht sind, priorisiere Technologien mit der **höchsten Modulanzahl**, bevor der Platz knapp wird.
-- Überlass die Platzierung dem Optimierer; deine Aufgabe ist es, die **Prioritäten und Verteilung** festzulegen.
+- **Weisen Sie nicht alle Supercharged Slots der ersten Technology zu, die Sie platzieren.** Dies blockiert oft später stärkere Gesamt-Layouts.
+- Beginnen Sie damit, **2–3 Supercharged Slots einer High-Impact Technology** zuzuweisen, nicht alle.
+- Reservieren Sie mindestens **einen oder mehrere Supercharged Slots** für eine **zweite Prioritäts-Technology**, um die Gesamteffektivität zu verbessern.
+- Sobald Sie alle Ihre Supercharged Slots verwendet haben, priorisieren Sie Technologies mit **größeren Module Counts**, bevor der Platz knapp wird.
+- Lassen Sie den Solver die Platzierung übernehmen; Ihre Rolle ist es, **Prioritäten und Verteilung festzulegen**.
 
-Wenn der Platz knapp wird, musst du möglicherweise zurücksetzen und die Technologien in einer anderen Reihenfolge optimieren, um eine **Optimierungswarnung** zu vermeiden.
+Wenn der Platz knapp wird, müssen Sie möglicherweise zurücksetzen und Technologies in einer anderen Reihenfolge lösen, um eine **Optimization Alert** zu vermeiden.
 
-## Profi-Tipp
+## Pro-Tipp
 
-Der Optimierer nutzt feste Fenster, deren Größe auf der Modulanzahl jeder Technologie basiert, um platzsparende Positionen zu finden.
-Wenn die Ergebnisse nicht ideal sind, **deaktiviere Slots vorübergehend**, um den Optimierer zu einem besseren Layout zu führen.
+Der Solver verwendet feste Fenster, die an die Module Count jeder Technology angepasst sind, um platzsparende Platzierungen zu finden.
+Wenn die Ergebnisse nicht ideal sind, **deaktivieren Sie temporär Slots**, um den Solver zu einem besseren Layout zu führen.
 
-## Theta / Tau / Sigma Labels
+## Theta / Tau / Sigma Bezeichnungen
 
-Diese Labels klassifizieren prozedurale Upgrades **nach ihren Werten**, nicht nach ihrer Klasse. Es handelt sich um klassische Begriffe, die zur Konsistenz beibehalten wurden.
+Diese Bezeichnungen ranken Procedural Upgrades **nach Stats**, nicht nach Class. Es sind veraltete Begriffe, die aus Konsistenzgründen beibehalten wurden.
 
-- **Theta (1)** — beste Werte
-- **Tau (2)** — mittelmäßig
-- **Sigma (3)** — schwächer
+- **Theta (1)** — beste Stats
+- **Tau (2)** — mittel
+- **Sigma (3)** — schwächste
 
-Du wirst diese Labels nicht im Spiel sehen. Sie werden durch direkten Vergleich der Upgrade-Werte zugewiesen.
+Sie werden diese Bezeichnungen im Spiel nicht sehen. Sie werden durch den direkten Vergleich der Upgrade Stats zugewiesen.
 
-### Vergleich Im Spiel
+### In-Game Vergleich
 
-Ignoriere die Klassenbuchstaben (S, X, etc.) und vergleiche die Werte:
+Ignorieren Sie Class-Buchstaben (S, X, etc.) und vergleichen Sie Stats:
 
-- Bestes → **Theta**
-- Zweitbestes → **Tau**
-- Schlechtestes → **Sigma**
+- Beste → **Theta**
+- Zweite → **Tau**
+- Schlechteste → **Sigma**
 
-**Die Klasse bestimmt nicht den Rang.** Ein X-Klasse Upgrade kann besser oder schlechter als ein S-Klasse Upgrade sein.
+**Class bestimmt nicht den Rang.** X-Class Upgrades können S-Class übertreffen oder unterbieten.
 
-## Korvetten
+## Corvettes
 
-Korvetten unterscheiden sich von anderen Plattformen: Sie können **bis zu drei separate Upgrade-Sets** haben.
+Corvettes unterscheiden sich von anderen Plattformen: Sie können **bis zu drei separate Upgrade Sets** haben.
 
-- **Kosmetische Upgrades** werden als `Cn` angezeigt.
-- **Reaktor-Upgrades** werden als `Rn` angezeigt.
+- **Cosmetic Upgrades** werden als `Cn` angezeigt.
+- **Reactor Upgrades** werden als `Rn` angezeigt.
 
-Der Optimierer schlägt möglicherweise kosmetische Upgrades aufgrund der Leistung statt der Optik vor, wobei die Unterschiede meist minimal sind.
+Der Solver kann Cosmetic Upgrades für die Leistung gegenüber dem Aussehen vorschlagen, obwohl die Unterschiede normalerweise gering sind.
 
 ## Empfohlene Builds
 
-Für **Exo-Anzüge** und **Exofahrzeuge** sind die überladenen Slots fest vorgegeben und die sinnvollen Layouts begrenzt.
-Das Tool bietet **handverlesene empfohlene Builds**, welche die optimalen Kombinationen widerspiegeln.
+Für **Exosuits** und **Exocraft** sind Supercharged Slots fest und praktikable Layouts begrenzt.
+Das Tool bietet **handverlesene empfohlene Builds**, die optimale Kombinationen widerspiegeln.
 
 Vorschläge und alternative Layouts sind über die Projektdiskussionen willkommen:
 https://github.com/jbelew/nms_optimizer-web/discussions
 
-## Speichern, Laden Und Teilen
+## Speichern, Laden und Teilen
 
-- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** — Lade eine gespeicherte `.nms`-Datei hoch, um ein Layout wiederherzustellen.
-- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** — Lade das aktuelle Layout als `.nms`-Datei herunter.
-- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Teilen** — Generiere einen Link, den andere direkt im Optimierer öffnen können.
-- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Erstelle einen Screenshot deines aktuellen Layouts.
+- <radix-icon name="FileIcon" size="20" color="var(--accent-11)"></radix-icon> **Laden** — Laden Sie eine gespeicherte `.nms`-Datei hoch, um ein Layout wiederherzustellen.
+- <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Speichern** — Laden Sie das aktuelle Layout als `.nms`-Datei herunter.
+- <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Teilen** — Erzeugen Sie einen Link, den andere direkt im Optimizer öffnen können.
+- <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Erzeugen Sie einen Screenshot des aktuellen Layouts.

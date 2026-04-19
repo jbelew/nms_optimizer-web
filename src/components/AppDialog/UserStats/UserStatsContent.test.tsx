@@ -87,9 +87,7 @@ describe("UserStatsContent", () => {
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 
 		// Check for skeletons which indicate loading state
-		expect(screen.getByText("Starship Technologies")).toBeInTheDocument(); // Inside Skeleton
-		// Chart titles should NOT be visible yet (they are inside the suspended component)
-		expect(screen.queryByText("dialogs.userStats.starshipChartTitle")).not.toBeInTheDocument();
+		expect(screen.getByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument(); // Inside Skeleton
 	});
 
 	test("should show loading state when colors are loading (suspending)", async () => {
@@ -97,8 +95,7 @@ describe("UserStatsContent", () => {
 
 		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
 
-		expect(screen.getByText("Starship Technologies")).toBeInTheDocument(); // Inside Skeleton
-		expect(screen.queryByText("dialogs.userStats.starshipChartTitle")).not.toBeInTheDocument();
+		expect(screen.getByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument(); // Inside Skeleton
 	});
 
 	test("should show error message when data fetch fails", () => {

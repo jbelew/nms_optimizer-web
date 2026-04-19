@@ -18,7 +18,7 @@ import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useRouteContext } from "../../context/RouteContext";
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
@@ -60,6 +60,7 @@ interface ShipSelectionProps {
  * ```
  */
 const ShipSelectionLoadingState = () => {
+	const { t } = useTranslation();
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
@@ -68,7 +69,7 @@ const ShipSelectionLoadingState = () => {
 				<Button
 					size="2"
 					variant="soft"
-					aria-label="Select ship type"
+					aria-label={t("shipSelection.ariaLabel") ?? ""}
 					className="p-2!"
 					disabled
 				>
@@ -80,7 +81,7 @@ const ShipSelectionLoadingState = () => {
 				<IconButton
 					size="2"
 					variant="soft"
-					aria-label="Select ship type"
+					aria-label={t("shipSelection.ariaLabel") ?? ""}
 					className="mt-1!"
 					disabled
 				>
@@ -172,12 +173,8 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 				// TODO: Turn this back on if the Corvette bug shows up again ...
 				if (option === "corvette") {
 					showInfo(
-						"Corvette Warning!",
-						<>
-							As of version 6.33, Corvettes <strong>still</strong> have known layout
-							issues! If you create a layout, we highly recommend using the{" "}
-							<strong>Save Build</strong> feature to keep a backup of your work.
-						</>
+						t("shipSelection.corvetteWarning.title"),
+						<Trans i18nKey="shipSelection.corvetteWarning.description" />
 					);
 				}
 
@@ -193,7 +190,12 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 		<>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger disabled={solving || isPending}>
-					<Button size="2" variant="soft" aria-label="Select ship type" className="p-2!">
+					<Button
+						size="2"
+						variant="soft"
+						aria-label={t("shipSelection.ariaLabel") ?? ""}
+						className="p-2!"
+					>
 						<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						<Separator
 							orientation="vertical"

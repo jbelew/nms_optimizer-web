@@ -4,7 +4,7 @@ import "./MainAppContent.scss";
 import { Suspense } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Box, Callout, Flex, Text } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
@@ -88,7 +88,7 @@ const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalW
 				</Callout.Icon>
 				<Callout.Text>
 					<span className="text-sm sm:text-base" style={{ color: "var(--gray-12)" }}>
-						You are viewing a <strong>Shared Build</strong>. This layout is read-only.
+						<Trans i18nKey="mainApp.viewingSharedBuild" />
 					</span>
 				</Callout.Text>
 			</Callout.Root>

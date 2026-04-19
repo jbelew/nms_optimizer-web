@@ -10,6 +10,7 @@ vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
 		t: (key: string) => key,
 	}),
+	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 }));
 
 // Mock clipboard API
@@ -59,7 +60,7 @@ describe("ShareLinkContent", () => {
 
 	test("should render tip text", () => {
 		renderWithDialog(<ShareLinkContent shareUrl={testUrl} onClose={mockOnClose} />);
-		expect(screen.getByText(/Open the link and Bookmark the page/)).toBeInTheDocument();
+		expect(screen.getByText("dialogs.shareLink.tip")).toBeInTheDocument();
 	});
 
 	test("should render open link button with external link icon", () => {

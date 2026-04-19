@@ -43,7 +43,7 @@ interface AppFooterProps {
  * ```
  */
 const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
-	const { i18n } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const { openDialog } = useDialog();
 
 	return (
@@ -70,12 +70,12 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 						}}
 					/>
 					<br />
-					Built by jbelew (void23 | QQ9Y-EJRS-P8KGW)
+					{t("footer.builtBy")} (void23 | QQ9Y-EJRS-P8KGW)
 					<a
 						href="https://github.com/jbelew/nms_optimizer-web"
 						target="_blank"
 						rel="noopener noreferrer"
-						aria-label="View source on GitHub"
+						aria-label={t("buttons.viewSourceOnGithub") ?? ""}
 					>
 						<GitHubLogoIcon className="app-footer__link--icon" />
 					</a>
@@ -83,7 +83,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 						href="https://www.linkedin.com/in/jobelew/"
 						target="_blank"
 						rel="noopener noreferrer"
-						aria-label="View profile on LinkedIn"
+						aria-label={t("buttons.viewProfileOnLinkedin") ?? ""}
 					>
 						<LinkedInLogoIcon className="app-footer__link--icon-linkedin" />
 					</a>
@@ -102,7 +102,7 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 						rel="noopener noreferrer"
 						className="app-footer__link"
 					>
-						GPL-3.0
+						{t("footer.license")}
 					</a>{" "}
 					•{" "}
 					<a
@@ -113,9 +113,9 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 							openDialog("privacy");
 						}}
 					>
-						Privacy Policy
+						{t("buttons.privacy")}
 					</a>{" "}
-					• Build {buildVersion}{" "}
+					• {t("footer.buildLabel")} {buildVersion}{" "}
 					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>
 				<Separator decorative size="3" mt="1" mb="1" />

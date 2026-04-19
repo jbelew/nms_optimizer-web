@@ -29,6 +29,7 @@ import { useRecommendedBuild } from "../../hooks/useRecommendedBuild/useRecommen
 import { type TechTree } from "../../hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "../../store/app/platformStore";
 import { useDialog } from "../../utils/system/dialogUtils";
+import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 
 /**
  * Props for the `RecommendedBuild` component.
@@ -137,7 +138,7 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
 						<DropdownMenu.Label className="shipSelection__header heading-styled">
-							Select Build
+							{t("techTree.recommendedBuilds.selectBuildLabel")}
 						</DropdownMenu.Label>
 						{builds.map((build) => (
 							<DropdownMenu.Item
@@ -174,10 +175,14 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 						variant="ghost"
 						size="1"
 						radius="full"
-						aria-label={t("buttons.changelog")}
+						aria-label={t("techTree.recommendedBuilds.aboutRecommendedBuildsTooltip")}
 						onClick={handleOpenInstructions}
 					>
-						<InfoCircledIcon width="20" height="20" className="shrink-0" />
+						<ConditionalTooltip
+							label={t("techTree.recommendedBuilds.aboutRecommendedBuildsTooltip")}
+						>
+							<InfoCircledIcon width="20" height="20" className="shrink-0" />
+						</ConditionalTooltip>
 					</IconButton>
 				</div>
 			) : (

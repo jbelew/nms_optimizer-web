@@ -52,7 +52,7 @@ describe("AppDialog", () => {
 		render(<AppDialog {...defaultProps} />);
 
 		// Find the close button (aria-label="Close dialog")
-		const closeButton = screen.getByLabelText("Close dialog");
+		const closeButton = screen.getByLabelText("common.closeDialog");
 		fireEvent.click(closeButton);
 
 		await waitFor(() => {

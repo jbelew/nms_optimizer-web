@@ -22,6 +22,6 @@ const initReactI18next = {
 	init: vi.fn(),
 };
 
-const Trans = ({ children }: { children: React.ReactNode }) => children;
+const Trans = ({ children, i18nKey }: { children?: React.ReactNode; i18nKey?: string }) => children || i18nKey;
 
 export { useTranslation, initReactI18next, Trans };
