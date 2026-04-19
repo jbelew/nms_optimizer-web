@@ -48,12 +48,13 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 	}
 	const buildDate = new Date().toISOString();
 
+	const sentryEnabled = env.VITE_SENTRY_ENABLED === "true";
 	const sentryDsn = process.env.VITE_SENTRY_DSN || env.VITE_SENTRY_DSN || "";
 	const sentryEnv = process.env.VITE_SENTRY_ENV || env.VITE_SENTRY_ENV || "production";
 	const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN || env.SENTRY_AUTH_TOKEN;
 
 	// Fail build if Sentry token is missing in production to avoid "deploy and pray"
-	if (mode === "production" && !sentryAuthToken && !process.env.CI) {
+	if (mode === "production" && sentryEnabled && !sentryAuthToken && !process.env.CI) {
 		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
 	}
 
@@ -63,6 +64,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			__BUILD_DATE__: JSON.stringify(buildDate),
 			"import.meta.env.VITE_SENTRY_DSN": JSON.stringify(sentryDsn),
 			"import.meta.env.VITE_SENTRY_ENV": JSON.stringify(sentryEnv),
+			"import.meta.env.VITE_SENTRY_ENABLED": JSON.stringify(env.VITE_SENTRY_ENABLED),
 			__VUE_OPTIONS_API__: false,
 			__VUE_PROD_DEVTOOLS__: false,
 			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
@@ -116,7 +118,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			}),
 			tailwindcss(),
 			// Sentry is positioned after transforms to ensure it captures all generated sourcemaps.
-			...(!process.env.STORYBOOK_BUILD
+			...(!process.env.STORYBOOK_BUILD && sentryEnabled
 				? [
 						sentryVitePlugin({
 							org: process.env.SENTRY_ORG || env.SENTRY_ORG || "personal-4gm",
@@ -358,6 +360,14 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			alias: {
 				react: path.resolve(__dirname, "node_modules/react"),
 				"react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+				...(!sentryEnabled
+					? {
+							"@sentry/react": path.resolve(
+								__dirname,
+								"src/utils/system/sentryMock.ts"
+							),
+						}
+					: {}),
 			},
 			dedupe: ["react", "react-dom"],
 		},
@@ -450,12 +460,16 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								test: /[\\/]node_modules[\\/](react-markdown|remark-gfm|rehype-raw|micromark|vfile|unified|unist|mdast|hast|decode-named-character-reference|character-entities|property-information|space-separated-tokens|comma-separated-tokens|web-namespaces|zwitch|html-void-elements)[\\/]/,
 								priority: 115,
 							},
-							{
-								// Group all Sentry monitoring code into a chunk.
-								name: "vendor-monitoring",
-								test: /[\\/]node_modules[\\/]@sentry[\\/]/,
-								priority: 110,
-							},
+							// Group all Sentry monitoring code into a chunk only if enabled.
+							...(sentryEnabled
+								? [
+										{
+											name: "vendor-monitoring",
+											test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+											priority: 110,
+										},
+									]
+								: []),
 							{
 								// Group GA4 and related tracking packages into a neutrally named chunk.
 								// Anchored to node_modules so app-level analytics.ts / analyticsClient.ts

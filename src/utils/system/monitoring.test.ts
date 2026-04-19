@@ -1,20 +1,33 @@
 import type { MockInstance } from "vitest";
-import * as Sentry from "@sentry/react";
+import * as reactRouter from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Logger, LogLevel } from "./monitoring";
+import {
+	__setSentryInstance,
+	captureException,
+	createAppRouter,
+	initializeSentry,
+	Logger,
+	LogLevel,
+} from "./monitoring";
 
-// Mock Sentry
-vi.mock("@sentry/react", async () => {
-	const actual = await vi.importActual("@sentry/react");
+// Mock Sentry-like object
+const sentryMock = {
+	captureException: vi.fn(),
+	captureMessage: vi.fn(),
+	init: vi.fn(),
+	reactRouterV7BrowserTracingIntegration: vi.fn(),
+	breadcrumbsIntegration: vi.fn(),
+	wrapCreateBrowserRouterV7: vi.fn((cb) => cb),
+};
+
+// Mock react-router-dom
+vi.mock("react-router-dom", async () => {
+	const actual = await vi.importActual("react-router-dom");
 
 	return {
 		...actual,
-		captureException: vi.fn(),
-		captureMessage: vi.fn(),
-		init: vi.fn(),
-		reactRouterV7BrowserTracingIntegration: vi.fn(),
-		breadcrumbsIntegration: vi.fn(),
+		createBrowserRouter: vi.fn((routes) => ({ routes, mocked: true })),
 	};
 });
 
@@ -25,16 +38,17 @@ describe("monitoring utilities", () => {
 		let consoleErrorSpy: MockInstance;
 
 		beforeEach(() => {
-			// Clear logs and spies before each test
 			Logger.clearLogs();
 			consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 			consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			vi.clearAllMocks();
+			__setSentryInstance(sentryMock);
 		});
 
 		afterEach(() => {
 			vi.restoreAllMocks();
+			__setSentryInstance(null);
 		});
 
 		it("should log info messages to console and internal storage", () => {
@@ -50,32 +64,44 @@ describe("monitoring utilities", () => {
 			});
 		});
 
-		it("should log warn messages to console, Sentry, and internal storage", async () => {
-			Logger.warn("Test warn message");
+		it("should log warn messages to console, Sentry, and internal storage", () => {
+			Logger.warn("Test warn message", { meta: "data" });
 
-			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test warn message", undefined);
+			expect(consoleWarnSpy).toHaveBeenCalledWith("[WARN] Test warn message", {
+				meta: "data",
+			});
 
-			expect(Sentry.captureMessage).toHaveBeenCalledWith(
-				"Test warn message",
-				expect.any(Object)
-			);
+			expect(sentryMock.captureMessage).toHaveBeenCalledWith("Test warn message", {
+				level: "warning",
+				extra: { meta: "data" },
+			});
 
 			const logs = Logger.getLogs();
 			expect(logs).toHaveLength(1);
 			expect(logs[0].level).toBe(LogLevel.WARN);
 		});
 
-		it("should log error messages to console, Sentry, and internal storage", async () => {
+		it("should log error messages to console, Sentry, and internal storage", () => {
 			const error = new Error("Test error");
-			Logger.error("Test error message", error);
+			Logger.error("Test error message", error, { extra: "context" });
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error);
 
-			expect(Sentry.captureException).toHaveBeenCalledWith(error, expect.any(Object));
+			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {
+				extra: { message: "Test error message", extra: "context" },
+			});
 
 			const logs = Logger.getLogs();
 			expect(logs).toHaveLength(1);
 			expect(logs[0].level).toBe(LogLevel.ERROR);
+		});
+
+		it("should handle non-Error objects in Logger.error", () => {
+			Logger.error("String error", "oops");
+			expect(sentryMock.captureMessage).toHaveBeenCalledWith("String error", {
+				level: "error",
+				extra: { error: "oops" },
+			});
 		});
 
 		it("should respect max log size", () => {
@@ -93,6 +119,53 @@ describe("monitoring utilities", () => {
 			expect(Logger.getLogs()).toHaveLength(1);
 			Logger.clearLogs();
 			expect(Logger.getLogs()).toHaveLength(0);
+		});
+	});
+
+	describe("Sentry Wrappers", () => {
+		beforeEach(() => {
+			vi.clearAllMocks();
+			__setSentryInstance(sentryMock);
+		});
+
+		it("captureException should proxy to Sentry if initialized", () => {
+			const err = new Error("test");
+			captureException(err, { tag: "val" });
+			expect(sentryMock.captureException).toHaveBeenCalledWith(err, { tag: "val" });
+		});
+
+		it("createAppRouter should wrap router if Sentry enabled", () => {
+			// Mock env
+			vi.stubEnv("VITE_SENTRY_ENABLED", "true");
+
+			const routes = [{ path: "/" }];
+			createAppRouter(routes);
+
+			expect(sentryMock.wrapCreateBrowserRouterV7).toHaveBeenCalled();
+			expect(reactRouter.createBrowserRouter).toHaveBeenCalledWith(routes);
+
+			vi.unstubAllEnvs();
+		});
+
+		it("createAppRouter should NOT wrap router if Sentry disabled", () => {
+			vi.stubEnv("VITE_SENTRY_ENABLED", "false");
+
+			const routes = [{ path: "/" }];
+			createAppRouter(routes);
+
+			expect(sentryMock.wrapCreateBrowserRouterV7).not.toHaveBeenCalled();
+			expect(reactRouter.createBrowserRouter).toHaveBeenCalledWith(routes);
+
+			vi.unstubAllEnvs();
+		});
+	});
+
+	describe("initializeSentry", () => {
+		it("should skip if disabled", async () => {
+			vi.stubEnv("VITE_SENTRY_ENABLED", "false");
+			await initializeSentry();
+			expect(sentryMock.init).not.toHaveBeenCalled();
+			vi.unstubAllEnvs();
 		});
 	});
 });

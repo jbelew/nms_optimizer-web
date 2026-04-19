@@ -9,20 +9,55 @@
  * @category Utilities
  */
 
+import type {
+	BrowserOptions,
+	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
+	reactRouterV7BrowserTracingIntegration as SentryRouterTracingIntegration,
+} from "@sentry/react";
 import { useEffect } from "react";
 import {
-	breadcrumbsIntegration,
-	captureException,
-	captureMessage,
-	init,
-	reactRouterV7BrowserTracingIntegration,
-} from "@sentry/react";
-import {
+	createBrowserRouter,
 	createRoutesFromChildren,
 	matchRoutes,
+	RouteObject,
 	useLocation,
 	useNavigationType,
 } from "react-router-dom";
+
+/**
+ * Type definition for Sentry Integration.
+ * Extracted from existing integration functions to avoid using 'any' or @sentry/core directly.
+ */
+type SentryIntegration =
+	| ReturnType<typeof SentryBreadcrumbsIntegration>
+	| ReturnType<typeof SentryRouterTracingIntegration>;
+
+/**
+ * Type definition for the Sentry SDK interface we interact with.
+ * This allows us to maintain strict typing while supporting both the real SDK and mocks.
+ *
+ * @private
+ */
+interface SentrySDK {
+	/** Initializes the Sentry SDK */
+	init: (options: BrowserOptions) => void;
+	/** Captures an exception and sends it to Sentry */
+	captureException: (error: unknown, options?: Record<string, unknown>) => void;
+	/** Captures a message and sends it to Sentry */
+	captureMessage: (message: string, options?: Record<string, unknown>) => void;
+	/** Instrumentation for React Router v7 */
+	wrapCreateBrowserRouterV7: (
+		cb: typeof createBrowserRouter
+	) => (routes: RouteObject[]) => ReturnType<typeof createBrowserRouter>;
+	/** Performance tracing integration for React Router v7 */
+	reactRouterV7BrowserTracingIntegration: (
+		options: Parameters<typeof SentryRouterTracingIntegration>[0]
+	) => SentryIntegration;
+	/** Automatic breadcrumb collection */
+	breadcrumbsIntegration: (
+		options: Parameters<typeof SentryBreadcrumbsIntegration>[0]
+	) => SentryIntegration;
+}
 
 /**
  * Log levels for the application.
@@ -53,6 +88,15 @@ export interface LogEntry {
 const MAX_LOGS = 100;
 
 /**
+ * Internal reference to Sentry SDK if initialized.
+ * This is used to proxy calls to Sentry without requiring static imports
+ * that would bloat the bundle even when Sentry is disabled.
+ *
+ * @private
+ */
+let sentryInstance: SentrySDK | null = null;
+
+/**
  * A centralized logger for the application.
  *
  * Collects logs in memory and automatically forwards warnings and errors to Sentry.
@@ -70,7 +114,10 @@ export class Logger {
 	 * @returns {void}
 	 *
 	 * @example
+	 * ```ts
 	 * Logger.info("Application started", { version: "1.0.0" });
+	 * // returns void
+	 * ```
 	 */
 	public static info(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.INFO, message, data);
@@ -86,12 +133,18 @@ export class Logger {
 	 * @returns {void}
 	 *
 	 * @example
+	 * ```ts
 	 * Logger.warn("Deprecated API called", { api: "legacyFetch" });
+	 * // returns void
+	 * ```
 	 */
 	public static warn(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.WARN, message, data);
 		console.warn(`[WARN] ${message}`, data);
-		captureMessage(message, { level: "warning", extra: data });
+
+		if (sentryInstance) {
+			sentryInstance.captureMessage(message, { level: "warning", extra: data });
+		}
 	}
 
 	/**
@@ -106,7 +159,10 @@ export class Logger {
 	 * @returns {void}
 	 *
 	 * @example
+	 * ```ts
 	 * Logger.error("Failed to fetch user", error, { userId: 123 });
+	 * // returns void
+	 * ```
 	 */
 	public static error(message: string, error?: unknown, data?: Record<string, unknown>) {
 		this.log(LogLevel.ERROR, message, {
@@ -115,10 +171,15 @@ export class Logger {
 		} as Record<string, unknown>);
 		console.error(`[ERROR] ${message}`, error);
 
-		if (error instanceof Error) {
-			captureException(error, { extra: { message, ...data } });
-		} else {
-			captureMessage(message, { level: "error", extra: { error, ...data } });
+		if (sentryInstance) {
+			if (error instanceof Error) {
+				sentryInstance.captureException(error, { extra: { message, ...data } });
+			} else {
+				sentryInstance.captureMessage(message, {
+					level: "error",
+					extra: { error, ...data },
+				});
+			}
 		}
 	}
 
@@ -128,7 +189,10 @@ export class Logger {
 	 * @returns {LogEntry[]} A copy of the current log entries in memory.
 	 *
 	 * @example
+	 * ```ts
 	 * const history = Logger.getLogs();
+	 * // returns LogEntry[]
+	 * ```
 	 */
 	public static getLogs(): LogEntry[] {
 		return [...this.logs];
@@ -185,53 +249,131 @@ export class Logger {
  * @remarks
  * Configures Sentry with React Router v7 integration and sets up sampling rates
  * based on the environment (DEV vs PROD). Initialization is skipped if
- * `VITE_SENTRY_DSN` is missing from the environment.
+ * `VITE_SENTRY_ENABLED` is not "true" or `VITE_SENTRY_DSN` is missing.
  *
- * @returns {void} Side-effects only.
+ * This function uses dynamic imports to ensure Sentry SDK is only bundled
+ * and loaded if enabled via feature flag.
+ *
+ * @returns {Promise<void>} Side-effects only.
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * initializeSentry();
+ * await initializeSentry();
  * // returns void
  * ```
  */
-export const initializeSentry = () => {
+export const initializeSentry = async () => {
+	// Build-time feature flag to completely tree-shake Sentry out
+	if (import.meta.env.VITE_SENTRY_ENABLED !== "true") {
+		return;
+	}
+
 	const dsn = import.meta.env.VITE_SENTRY_DSN || "";
 
 	if (!dsn) {
 		return;
 	}
 
-	init({
-		dsn,
-		integrations: [
-			reactRouterV7BrowserTracingIntegration({
-				useEffect,
-				useLocation,
-				useNavigationType,
-				createRoutesFromChildren,
-				matchRoutes,
-			}),
-			breadcrumbsIntegration({
-				dom: false, // Good performance practice: disables expensive DOM click serialization
-			}),
-		],
-		environment: import.meta.env.VITE_SENTRY_ENV || "production",
-		tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.25,
-		maxBreadcrumbs: 50,
-		release: __APP_VERSION__,
-		allowUrls: [/localhost/, /127\.0\.0\.1/, /nms-optimizer\.app/i],
-		ignoreErrors: [
-			/runtime\.sendMessage\(\).*Tab not found/i,
-			/Extension/i,
-			/vendor/i,
-			/^Network Error$/i,
-			/^Failed to fetch$/i,
-			/^Load failed$/i,
-			/Importing a module script failed/i,
-			/Non-Error promise rejection captured/i,
-		],
-	});
+	try {
+		// Dynamically import Sentry to avoid bundling it when disabled
+		const Sentry = (await import("@sentry/react")) as unknown as SentrySDK;
+		sentryInstance = Sentry;
+
+		Sentry.init({
+			dsn,
+			integrations: [
+				Sentry.reactRouterV7BrowserTracingIntegration({
+					useEffect,
+					useLocation,
+					useNavigationType,
+					createRoutesFromChildren,
+					matchRoutes,
+				}),
+				Sentry.breadcrumbsIntegration({
+					dom: false, // Good performance practice: disables expensive DOM click serialization
+				}),
+			],
+			environment: (import.meta.env.VITE_SENTRY_ENV as string) || "production",
+			tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.25,
+			maxBreadcrumbs: 50,
+			release: __APP_VERSION__,
+			allowUrls: [/localhost/, /127\.0\.0\.1/, /nms-optimizer\.app/i],
+			ignoreErrors: [
+				/runtime\.sendMessage\(\).*Tab not found/i,
+				/Extension/i,
+				/vendor/i,
+				/^Network Error$/i,
+				/^Failed to fetch$/i,
+				/^Load failed$/i,
+				/Importing a module script failed/i,
+				/Non-Error promise rejection captured/i,
+			],
+		});
+	} catch (e) {
+		console.error("Failed to initialize Sentry:", e);
+	}
+};
+
+/**
+ * Wrapper for Sentry's `captureException` that is safe to use when Sentry is disabled.
+ *
+ * @param {unknown} error - The caught exception or error object.
+ * @param {Record<string, unknown>} [options] - Additional context for the error report.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @example
+ * ```ts
+ * captureException(new Error("Network failure"), { tags: { retry: true } });
+ * // returns void
+ * ```
+ */
+export const captureException = (error: unknown, options?: Record<string, unknown>) => {
+	if (sentryInstance) {
+		sentryInstance.captureException(error, options);
+	}
+};
+
+/**
+ * Wrapper for createBrowserRouter that includes Sentry tracing if enabled.
+ * Uses a dynamic check to avoid static Sentry imports in the main entry point.
+ *
+ * @param {RouteObject[]} routes - Array of route objects to initialize.
+ *
+ * @returns {ReturnType<typeof createBrowserRouter>} The instrumented or standard router.
+ *
+ * @example
+ * ```ts
+ * const router = createAppRouter([{ path: "/", element: <Home /> }]);
+ * // returns Router
+ * ```
+ */
+export const createAppRouter = (routes: RouteObject[]) => {
+	// If Sentry is enabled and initialized, wrap the router creator
+	if (import.meta.env.VITE_SENTRY_ENABLED === "true" && sentryInstance) {
+		return sentryInstance.wrapCreateBrowserRouterV7(createBrowserRouter)(routes);
+	}
+
+	return createBrowserRouter(routes);
+};
+
+/**
+ * Internal test helper to inject a Sentry mock.
+ *
+ * @param {SentrySDK | null} instance - The mock object to use as Sentry SDK.
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @example
+ * ```ts
+ * __setSentryInstance(mockSDK as unknown as SentrySDK);
+ * // returns void
+ * ```
+ *
+ * @private
+ */
+export const __setSentryInstance = (instance: SentrySDK | null) => {
+	sentryInstance = instance;
 };

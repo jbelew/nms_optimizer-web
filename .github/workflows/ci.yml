@@ -400,8 +400,6 @@ jobs:
           HD_VITE_APP_VERSION: ${{ needs.build-production.outputs.effective-tag }}
           HD_VITE_BUILD_VERSION: ${{ needs.build-production.outputs.build-version }}
           HD_VITE_SENTRY_ENV: production
-          HD_VITE_USE_SERVER_ANALYTICS: "false"
-          HD_VITE_DUAL_ANALYTICS: "true"
 
   post-deploy-production:
     name: Finalize Production
