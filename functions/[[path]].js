@@ -31,7 +31,8 @@ export async function onRequest(context) {
     // 3. Language Redirects (?lng=fr -> /fr/)
     const lng = searchParams.get("lng");
     if (lng) {
-        const supportedLang = SUPPORTED_LANGS.includes(lng) ? lng : "en";
+        const normalizedLng = lng.toLowerCase();
+        const supportedLang = SUPPORTED_LANGS.includes(normalizedLng) ? normalizedLng : "en";
         const newUrl = new URL(url);
         newUrl.searchParams.delete("lng");
         const cleanPath = pathname === "/" ? "" : pathname.replace(/\/+$/, "");
