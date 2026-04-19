@@ -1,3 +1,10 @@
+## [6.33.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.2...v6.33.3) (2026-04-19)
+
+
+### Performance Improvements
+
+* optimize cache efficacy and enforce entry point bypass ([e5c8106](https://github.com/jbelew/nms_optimizer-web/commit/e5c8106e1ff6eefc2910a775855600c7764299fe))
+
 ## [6.33.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.1...v6.33.2) (2026-04-18)
 
 
