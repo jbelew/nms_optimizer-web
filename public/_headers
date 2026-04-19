@@ -6,29 +6,50 @@
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
-# HTML Pages: Always revalidate with origin.
-# Cloudflare Pages handles its own edge caching and purges on deploy.
-# Do NOT add s-maxage here — it can cause stale HTML to be served during
-# edge cache purge propagation, leading to vite:preloadError on chunk mismatches.
+# Entry Points: Aggressively prevent caching to avoid vite:preloadError on redeploys.
 /
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, no-store, must-revalidate
 /index.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Static Assets (Root)
+/favicon.ico
+  Cache-Control: public, max-age=604800, immutable
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800, immutable
+/apple-touch-icon-precomposed.png
+  Cache-Control: public, max-age=604800, immutable
+/logo.svg
+  Cache-Control: public, max-age=604800, immutable
+
+# Error Pages: Cache for 1 day, purged automatically by Cloudflare on deploy.
+/404.html
+  Cache-Control: public, max-age=86400
+/500.html
+  Cache-Control: public, max-age=86400
+/maintenance.html
+  Cache-Control: public, max-age=86400
+
+# SEO and Bot files
+/robots.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+/sitemap.xml
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 
 # Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
 # Safe to cache forever — a new deploy produces new filenames.
 /build/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Mutable static assets (images, fonts, translations, markdown).
-# These live in /assets/ (copied from public/assets/) and have stable filenames.
+# Mutable static assets (images, fonts).
 # Cache for 1 day, serve stale for 1 day while revalidating in background.
 /assets/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=86400
 
 # Translations and markdown content: can change on any deploy.
+# Always revalidate with the edge to ensure immediate updates after a deploy purge.
 /assets/locales/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
 # Always fresh: version check and service worker.
 /version.json
