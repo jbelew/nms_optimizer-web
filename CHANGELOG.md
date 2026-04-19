@@ -1,3 +1,10 @@
+## [6.33.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.3...v6.33.4) (2026-04-19)
+
+
+### Performance Improvements
+
+* de-bundle Sentry, optimize cache efficacy, and clean up obsolete config ([64ab79b](https://github.com/jbelew/nms_optimizer-web/commit/64ab79b48bf7acf585aa1bea3720aaf611032a94))
+
 ## [6.33.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.2...v6.33.3) (2026-04-19)
 
 
