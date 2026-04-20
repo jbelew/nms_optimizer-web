@@ -288,7 +288,7 @@ async function generateSsg() {
 
 	// Extract template blocks
 	const ssgBlockMatch = baseIndexHtml.match(
-		/<noscript(?: [^>]*?)?>([\s\S]*?<header class="app-header-static">[\s\S]*?)<\/noscript>/
+		/<noscript(?: [^>]*?)?>([\s\S]*?)<\/noscript>/
 	);
 	const ssgBlock = ssgBlockMatch ? ssgBlockMatch[1] : "";
 
