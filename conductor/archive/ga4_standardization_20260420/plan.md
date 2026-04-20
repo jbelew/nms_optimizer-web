@@ -24,7 +24,7 @@
 - [x] Task: Update `LCP`, `CLS`, `INP`, `FCP`, and `TBT` (via performance trace utility) event structures.
 - [x] Task: Conductor - User Manual Verification 'Performance Metrics & Web Vitals Refinement' (Protocol in workflow.md)
 
-## Phase 5: Final Validation & Documentation
+## Phase 5: Final Validation & Documentation [checkpoint: da25251]
 - [x] Task: Verify all events in GA4 Realtime reports (via browser manual verification).
 - [x] Task: Document the final GA4 Event Schema in `learnings.md`.
 - [x] Task: Conductor - User Manual Verification 'Final Validation & Documentation' (Protocol in workflow.md)
