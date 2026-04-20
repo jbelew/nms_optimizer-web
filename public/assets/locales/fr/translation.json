@@ -635,19 +635,23 @@
 		"questions": {
 			"adjacencyBonus": {
 				"name": "Qu'est-ce qu'un bonus d'adjacence dans No Man's Sky ?",
-				"answer": "Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans No Man's Sky, ils reçoivent un boost de statistiques. Les modules du même type qui partagent un bord obtiennent une augmentation en pourcentage de leurs statistiques. Plus il y a de bords partagés, plus le bonus est important. Calculer la disposition idéale à la main est fastidieux, surtout sur les grandes grilles avec des emplacements surchargés."
+				"answer": "Lorsque vous placez des modules technologiques compatibles les uns à côté des autres, ils reçoivent un boost de statistiques. Les modules du même type qui partagent un bord obtiennent une augmentation en pourcentage de leur efficacité. Plus il y a de bords partagés, plus le bonus est important."
 			},
 			"superchargedSlots": {
-				"name": "Que sont les emplacements surchargés dans No Man's Sky ?",
-				"answer": "Certains emplacements d'inventaire dans No Man's Sky sont surchargés. Tout module technologique placé dans l'un d'eux reçoit un multiplicateur de statistiques important en plus des bonus d'adjacence habituels. Ils sont placés de manière aléatoire sur chaque pièce d'équipement, de sorte que la disposition optimale change en fonction de l'emplacement de vos cases surchargées."
+				"name": "Que sont les slots surchargés et comment fonctionnent-ils ?",
+				"answer": "Les slots surchargés fournissent un multiplicateur massif aux statistiques de base de tout module technologique qui y est placé. Ce boost s'ajoute aux bonus d'adjacence normaux, rendant leur placement critique pour les builds de haute performance."
+			},
+			"maximizeBonus": {
+				"name": "Comment maximiser les bonus d'adjacence et les slots surchargés ?",
+				"answer": "Pour obtenir les meilleures statistiques, regroupez les technologies similaires en forme de carré ou de 'L' et placez vos modules les plus puissants (comme l'arme principale ou le moteur central) dans des slots surchargés adjacents aux autres modules du groupe."
 			},
 			"calculation": {
-				"name": "Comment l'Optimiseur NMS calcule-t-il la meilleure disposition technologique ?",
-				"answer": "L'optimiseur utilise une combinaison de correspondance de motifs déterministe et de recuit simulé. Pour les petits ensembles de modules, il peut trouver exactement la meilleure disposition. Pour les grilles plus grandes ou plus complexes, le recuit simulé explore des milliers de combinaisons pour trouver celle qui obtient le score le plus élevé possible. Le score prend en compte les bonus d'adjacence, l'emplacement des cases surchargées et les poids statistiques spécifiques à chaque module. Le backend fonctionne en Rust pour plus de rapidité."
+				"name": "Comment l'Optimiseur NMS trouve-t-il la meilleure disposition technologique ?",
+				"answer": "L'optimiseur utilise des algorithmes avancés pour explorer des milliers de dispositions possibles en quelques secondes. Il évalue chaque disposition en fonction des bonus d'adjacence, des multiplicateurs de slots surchargés et des poids spécifiques aux modules pour trouver l'optimum mathématique pour votre équipement."
 			},
 			"platforms": {
-				"name": "Quelles plateformes l'Optimiseur NMS prend-il en charge ?",
-				"answer": "L'Optimiseur NMS prend en charge les Vaisseaux (standard, sentinelle, solaire, combattant, organique, atlante), les Corvettes, les Multi-outils (standard et sentinelle), les Exocombinaisons, les Exonefs (nomade, pèlerin, vagabond, colosse, minotaure, nautilon) et les Cargos."
+				"name": "Quels types d'équipements et de vaisseaux l'Optimiseur NMS supporte-t-il ?",
+				"answer": "L'Optimiseur NMS supporte tous les équipements majeurs : Vaisseaux (y compris les vaisseaux Sentinelles et Organiques), Corvettes, Multi-outils, Exocombinaisons, Exonefs et Cargos."
 			}
 		}
 	},
@@ -673,20 +677,20 @@
 		"aboutUpgradeLabelsTooltip": "À propos des étiquettes d'amélioration"
 	},
 	"seo": {
-		"mainPageTitle": "Optimiseur NMS : Calculateur de Bonus d'Adjacence et de Slots Surchargés",
-		"appDescription": "Optimisez vos layouts technologiques No Man's Sky via le machine learning et des algorithmes avancés. Maximisez les bonus d'adjacence et les boosts de slots surchargés pour Vaisseaux, Multi-outils, Exocombinaisons, Exonefs et Cargos.",
-		"keywords": "No Man's Sky, NMS, calculateur bonus adjacence, optimisation slot surchargé, machine learning, outil layout NMS, disposition vaisseau, bonus adjacence, optimiseur technologie, construction vaisseau, layout cargo, TensorFlow",
-		"instructionsPageTitle": "Instructions Optimiseur NMS : Maximiser les Bonus d'Adjacence et Slots Surchargés",
-		"instructionsDescription": "Instructions techniques pour l'Optimiseur NMS. Apprenez à configurer la grille, marquer les boosts surchargés et comprendre le classement Theta/Tau/Sigma pour toutes les plateformes.",
-		"aboutPageTitle": "À Propos de l'Optimiseur NMS : Algorithmes et Optimisation Avancée",
-		"aboutDescription": "Découvrez comment l'Optimiseur NMS utilise le machine learning, un modèle TensorFlow entraîné sur 16 000+ layouts et un solveur Rust pour optimiser vos modules.",
-		"changelogPageTitle": "Notes de Version de l'Optimiseur NMS : Mises à Jour et Améliorations",
-		"changelogDescription": "Suivez les dernières fonctionnalités, corrections et améliorations de l'algorithme de l'Optimiseur NMS. Découvrez les nouveautés du meilleur outil de layout No Man's Sky.",
-		"userstatsPageTitle": "Stats de l'Optimiseur NMS : Meta Communautaire et Technologies Populaires",
-		"userstatsDescription": "Explorez la meta No Man's Sky actuelle. Consultez les technologies surchargées les plus populaires des 28 derniers jours via les sessions de la communauté.",
-		"translationPageTitle": "Aidez à Traduire l'Optimiseur NMS : Rejoignez l'Équipe de Localisation",
+		"mainPageTitle": "Optimiseur NMS : Slots Surchargés et Bonus d'Adjacence",
+		"appDescription": "Optimisez vos dispositions technologiques No Man's Sky à l'aide d'algorithmes avancés. Maximisez les bonus d'adjacence et les boosts de slots surchargés pour les vaisseaux, multi-outils, corvettes et plus encore.",
+		"keywords": "NMS Optimizer, No Man's Sky, bonus d'adjacence, slots surchargés, outil de layout NMS, disposition technique vaisseau, build multi-outil, calculateur de slot surchargé",
+		"instructionsPageTitle": "NMS Optimizer : Comment optimiser vos technologies",
+		"instructionsDescription": "Apprenez à utiliser la grille, les slots surchargés et le système Theta/Tau/Sigma pour vos builds No Man's Sky.",
+		"aboutPageTitle": "NMS Optimizer : À propos des algorithmes d'optimisation",
+		"aboutDescription": "Découvrez comment NMS Optimizer utilise des algorithmes et Rust pour calculer le meilleur placement de vos modules.",
+		"changelogPageTitle": "NMS Optimizer : Dernières nouveautés et mises à jour",
+		"changelogDescription": "Restez informé des dernières fonctionnalités, corrections et améliorations de l'algorithme de l'Optimiseur NMS. Découvrez les nouveautés du meilleur outil d'optimisation No Man's Sky.",
+		"userstatsPageTitle": "NMS Optimizer : Meta communautaire et statistiques",
+		"userstatsDescription": "Explorez la meta No Man's Sky. Découvrez les technologies surchargées les plus populaires de la communauté.",
+		"translationPageTitle": "Aidez à traduire NMS Optimizer : Rejoignez l'équipe",
 		"translationDescription": "Contribuez à la communauté No Man's Sky en aidant à traduire l'Optimiseur NMS. Rendez le meilleur outil de layout accessible à tous les voyageurs.",
-		"privacyPageTitle": "Politique de Confidentialité de l'Optimiseur NMS : Votre Vie Privée",
+		"privacyPageTitle": "NMS Optimizer : Politique de confidentialité",
 		"privacyDescription": "Découvrez notre engagement pour votre vie privée. Nous utilisons des analyses anonymes pour améliorer l'outil sans jamais suivre votre identité ou vos sauvegardes.",
 		"ogImageAlt": "Une capture d'écran détaillée de l'application NMS Optimizer montrant une grille de vaisseau optimisée avec des bonus d'adjacence élevés.",
 		"nav": {

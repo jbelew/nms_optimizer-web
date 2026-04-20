@@ -13,6 +13,8 @@ describe("getLocalizedSchema", () => {
 			"faq.questions.adjacencyBonus.answer": "A stat boost.",
 			"faq.questions.superchargedSlots.name": "What are supercharged slots?",
 			"faq.questions.superchargedSlots.answer": "Boosted slots.",
+			"faq.questions.maximizeBonus.name": "How to maximize?",
+			"faq.questions.maximizeBonus.answer": "Group them together.",
 			"faq.questions.calculation.name": "How is it calculated?",
 			"faq.questions.calculation.answer": "Simulated annealing.",
 			"faq.questions.platforms.name": "What platforms are supported?",
@@ -44,7 +46,7 @@ describe("getLocalizedSchema", () => {
 		expect(faqPage).toBeDefined();
 		expect(faqPage.name).toBe("Frequently Asked Questions");
 		const mainEntity = faqPage.mainEntity as unknown[];
-		expect(mainEntity.length).toBe(4);
+		expect(mainEntity.length).toBe(5);
 	});
 
 	it("should generate WebSite schema", () => {

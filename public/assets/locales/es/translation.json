@@ -634,20 +634,24 @@
 		"name": "Preguntas Frecuentes del Optimizador de NMS",
 		"questions": {
 			"adjacencyBonus": {
-				"name": "¿Qué es una bonificación de adyacencia en No Man's Sky?",
-				"answer": "Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. Los módulos del mismo tipo que comparten un borde obtienen un aumento porcentual en sus estadísticas. Cuantos más bordes compartan, mayor será la bonificación. Calcular la disposición correcta a mano es tedioso, especialmente en cuadrículas grandes con ranuras potenciadas."
+				"name": "¿Qué es un bonus de adyacencia en No Man's Sky?",
+				"answer": "Cuando colocas módulos de tecnología compatibles uno al lado del otro, reciben un aumento de estadísticas. Los módulos del mesmo tipo que comparten un borde obtienen un aumento porcentual en su efectividad. Cuantos más bordes compartan, mayor será el bonus."
 			},
 			"superchargedSlots": {
-				"name": "¿Qué son las ranuras potenciadas en No Man's Sky?",
-				"answer": "Algunas ranuras de inventario en No Man's Sky están potenciadas. Cualquier módulo de tecnología colocado en una de ellas obtiene un gran multiplicador de estadísticas además de las bonificaciones normales de adyacencia. Se colocan de forma aleatoria en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde hayan caído tus ranuras potenciadas."
+				"name": "¿Qué son las ranuras potenciadas y cómo funcionan?",
+				"answer": "Las ranuras potenciadas proporcionan un multiplicador masivo a las estadísticas base de cualquier módulo de tecnología colocado en ellas. Este impulso se aplica además de los bonus de adyacencia normales, lo que hace que su ubicación sea crítica para diseños de alto rendimiento."
+			},
+			"maximizeBonus": {
+				"name": "¿Cómo maximizo los bonus de adyacencia y las ranuras potenciadas?",
+				"answer": "Para obtener las mejores estadísticas, agrupa tecnologías similares en forma de cuadrado o 'L' y coloca tus módulos más potentes (como el arma principal o el motor central) en ranuras potenciadas que sean adyacentes a otros módulos del grupo."
 			},
 			"calculation": {
-				"name": "¿Cómo calcula el Optimizador de NMS el mejor diseño de tecnología?",
-				"answer": "El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos más pequeños, puede encontrar el diseño exacto más óptimo. Para cuadrículas más grandes o complejas, el recocido simulado explora miles de disposiciones para encontrar una que puntúe lo más alto posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras potenciadas y los pesos de estadísticas específicos de cada módulo. El backend funciona en Rust para mayor velocidad."
+				"name": "¿Cómo encuentra NMS Optimizer el mejor diseño de tecnología?",
+				"answer": "El optimizador utiliza algoritmos avanzados para explorar miles de posibles disposiciones en segundos. Puntúa cada diseño basándose en los bonus de adyacencia, los multiplicadores de ranuras potenciadas y los pesos específicos de cada módulo para encontrar el óptimo matemático para tu equipo."
 			},
 			"platforms": {
-				"name": "¿Qué plataformas admite el Optimizador de NMS?",
-				"answer": "El Optimizador de NMS admite naves espaciales (estándar, centinela, solar, de combate, orgánica, atlante), corbetas, multiherramientas (estándar y centinela), exotrajes, exonaves (nómada, peregrina, errante, coloso, minotauro, nautilon) y cargueros."
+				"name": "¿Qué equipo y tipos de naves admite NMS Optimizer?",
+				"answer": "NMS Optimizer admite todo el equipo principal: Naves Espaciales (incluyendo naves Centinela y Orgánicas), Corbetas, Multiherramientas, Exotrajes, Exonaves y Cargueros."
 			}
 		}
 	},
@@ -673,20 +677,20 @@
 		"aboutUpgradeLabelsTooltip": "Acerca de las Etiquetas de Mejora"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Calculadora de Bonos de Adyacencia y Optimizador de Espacios Potenciados",
-		"appDescription": "Optimiza tus diseños tecnológicos de No Man's Sky usando aprendizaje automático y algoritmos avanzados. Maximiza los bonos de adyacencia y potenciadores de espacios supercargados para Naves, Multiherramientas, Exotrajes, Exonaves y Cargueros.",
-		"keywords": "No Man's Sky, NMS, calculadora de bonos de adyacencia, optimización de espacios potenciados, aprendizaje automático, herramienta de diseño NMS, diseño técnico de naves, diseño de multiherramientas, bono de adyacencia, optimizador de diseños tecnológicos, construcción de naves, diseño de corbetas, diseño de exotrajes, optimización de exonaves, diseño de cargueros, TensorFlow",
-		"instructionsPageTitle": "Instrucciones de NMS Optimizer: Maximiza Bonos de Adyacencia y Espacios Potenciados",
-		"instructionsDescription": "Instrucciones técnicas para usar NMS Optimizer. Aprende a configurar celdas, marcar potenciadores supercargados y entender el sistema de clasificación Theta/Tau/Sigma para todas las plataformas.",
-		"aboutPageTitle": "Sobre NMS Optimizer: Algoritmos Avanzados para Diseños de No Man's Sky",
-		"aboutDescription": "Descubre cómo NMS Optimizer utiliza aprendizaje automático, un modelo de TensorFlow entrenado con más de 16,000 diseños y un optimizador en Rust para encontrar el mejor lugar para tus módulos.",
-		"changelogPageTitle": "NMS Optimizer Changelog: Últimas Actualizaciones, Funciones y Mejoras",
-		"changelogDescription": "Mantente al día con las últimas funciones, correcciones y mejoras del algoritmo de NMS Optimizer. Descubre las novedades de la mejor herramienta de optimización para No Man's Sky.",
-		"userstatsPageTitle": "Estadísticas de NMS Optimizer: Meta de la Comunidad y Tecnologías Potenciadas Populares",
-		"userstatsDescription": "Explora el meta actual de No Man's Sky. Consulta las tecnologías potenciadas más populares de los últimos 28 días de sesiones de optimización de la comunidad.",
-		"translationPageTitle": "Ayuda a Traducir NMS Optimizer: Únete a Nuestro Equipo de Localización",
+		"mainPageTitle": "NMS Optimizer: Ranuras Potenciadas y Bonus de Adyacencia",
+		"appDescription": "Optimiza los diseños de tecnología de No Man's Sky usando algoritmos avanzados. Maximiza los bonus de adyacencia y potenciadores de ranuras para naves, multiherramientas, corbetas y más.",
+		"keywords": "NMS Optimizer, No Man's Sky, bonus de adyacencia, ranuras potenciadas, herramienta de diseño NMS, diseño técnico de naves, construcción de multiherramientas, calculadora de ranuras potenciadas",
+		"instructionsPageTitle": "NMS Optimizer: Cómo optimizar tu diseño técnico",
+		"instructionsDescription": "Aprende a usar la cuadrícula, gestionar ranuras potenciadas y el sistema Theta/Tau/Sigma para diseños óptimos en No Man's Sky.",
+		"aboutPageTitle": "NMS Optimizer: Sobre los algoritmos de optimización",
+		"aboutDescription": "Descubre cómo NMS Optimizer usa algoritmos avanzados y Rust para calcular la mejor ubicación de módulos para tu equipo.",
+		"changelogPageTitle": "NMS Optimizer: Últimas funciones y actualizaciones",
+		"changelogDescription": "Mantente al día con las últimas funciones, correcciones y mejoras del algoritmo de NMS Optimizer. Descubre las novedades de la mejor herramienta de optimización de No Man's Sky.",
+		"userstatsPageTitle": "NMS Optimizer: Meta de la comunidad y estadísticas",
+		"userstatsDescription": "Explora el meta de No Man's Sky. Mira las tecnologías potenciadas más populares basadas en miles de optimizaciones.",
+		"translationPageTitle": "Ayuda a traducir NMS Optimizer: Únete al equipo",
 		"translationDescription": "Contribuye a la comunidad de No Man's Sky ayudando a traducir NMS Optimizer. Haz que la mejor herramienta de diseño sea accesible para viajeros en todos los idiomas.",
-		"privacyPageTitle": "Política de Privacidad de NMS Optimizer: Tu Privacidad es lo Primero",
+		"privacyPageTitle": "NMS Optimizer: Política de privacidad",
 		"privacyDescription": "Lee sobre nuestro compromiso con tu privacidad. Usamos análisis anónimos para mejorar el optimizador sin rastrear nunca tu identidad personal o datos de guardado.",
 		"ogImageAlt": "Una captura de pantalla detallada de la aplicación NMS Optimizer que muestra una cuadrícula de tecnología de nave optimizada con altos bonos de adyacencia.",
 		"nav": {

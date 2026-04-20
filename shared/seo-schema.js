@@ -94,6 +94,14 @@ export const getLocalizedSchema = (t, lang, url) => {
 			},
 			{
 				"@type": "Question",
+				name: t("faq.questions.maximizeBonus.name"),
+				acceptedAnswer: {
+					"@type": "Answer",
+					text: t("faq.questions.maximizeBonus.answer"),
+				},
+			},
+			{
+				"@type": "Question",
 				name: t("faq.questions.calculation.name"),
 				acceptedAnswer: {
 					"@type": "Answer",

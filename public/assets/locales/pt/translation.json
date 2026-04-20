@@ -307,7 +307,7 @@
 		},
 		"exocraft": {
 			"fusion": "Motor de Fusão",
-			"icarus": "Sistema de Combustível Ícaro",
+			"icarus": "Sistema de Combustible Ícaro",
 			"boost": "Impulso de Exonave",
 			"slide": "Suspensão de Alto Deslizamento",
 			"drift": "Suspensão de Derrapagem",
@@ -634,20 +634,24 @@
 		"name": "Perguntas Frequentes do Otimizador de NMS",
 		"questions": {
 			"adjacencyBonus": {
-				"name": "O que é um bônus de adjacência em No Man's Sky?",
-				"answer": "Quando você coloca módulos de tecnologia compatíveis um ao lado do outro em No Man's Sky, eles recebem um bônus de estatísticas. Módulos do mesmo tipo que compartilham uma borda recebem um aumento percentual em suas estatísticas. Quanto mais bordas compartilhadas, maior o bônus. Descobrir a disposição correta manualmente é tedioso, especialmente em grades grandes com espaços sobrecarregados."
+				"name": "O que é um bônus de adjacência no No Man's Sky?",
+				"answer": "Quando você coloca módulos de tecnologia compatíveis um ao lado do outro, eles recebem um aumento de estatísticas. Módulos do mesmo tipo que compartilham uma borda recebem um aumento percentual em sua eficácia. Quanto mais bordas compartilhadas, maior o bônus."
 			},
 			"superchargedSlots": {
-				"name": "O que são espaços sobrecarregados em No Man's Sky?",
-				"answer": "Alguns espaços de inventário em No Man's Sky são sobrecarregados. Qualquer módulo de tecnologia colocado em um deles recebe um grande multiplicador de estatísticas além dos bônus normais de adjacência. Eles são colocados aleatoriamente em cada equipamento, por isso o layout ideal muda dependendo de onde seus espaços sobrecarregados caíram."
+				"name": "O que são espaços sobrecarregados e como eles funcionam?",
+				"answer": "Espaços sobrecarregados fornecem um multiplicador massivo às estatísticas base de qualquer módulo de tecnologia colocado neles. Este impulso é aplicado além dos bônus normais de adjacência, tornando sua localização crítica para builds de alto desempenho."
+			},
+			"maximizeBonus": {
+				"name": "Como maximizo bônus de adjacência e espaços sobrecarregados?",
+				"answer": "Para obter as melhores estatísticas, agrupe tecnologias semelhantes em forma de quadrado ou 'L' e coloque seus módulos mais potentes (como a arma principal ou o motor central) em espaços sobrecarregados adjacentes a outros módulos do grupo."
 			},
 			"calculation": {
-				"name": "Como o Otimizador de NMS calcula o melhor layout de tecnologia?",
-				"answer": "O otimizador usa uma combinação de correspondência de padrões determinística e recozimento simulado (simulated annealing). Para conjuntos menores de módulos, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o recozimento simulado explora milhares de disposições para encontrar uma que pontue o mais alto possível. A pontuação leva em conta bônus de adjacência, localização de espaços sobrecarregados e pesos estatísticos específicos de cada módulo. O backend roda em Rust para maior velocidade."
+				"name": "Como o NMS Optimizer encontra o melhor layout de tecnologia?",
+				"answer": "O otimizador usa algoritmos avançados para explorar milhares de disposições possíveis em segundos. Ele pontua cada layout com base nos bônus de adjacência, multiplicadores de espaços sobrecarregados e pesos específicos de cada módulo para encontrar o ideal matemático para seu equipamento."
 			},
 			"platforms": {
-				"name": "Quais plataformas o Otimizador de NMS suporta?",
-				"answer": "O Otimizador de NMS suporta Naves (padrão, sentinela, solar, combate, viva, atlantid), Corvetas, Multiferramentas (padrão e sentinela), Exotrajes, Exonaves (nomad, pilgrim, roamer, colossus, minotaur, nautilon) e Cargueiros."
+				"name": "Quais equipamentos e tipos de naves o NMS Optimizer suporta?",
+				"answer": "O NMS Optimizer suporta todos os principais equipamentos: Naves Espaciais (incluindo naves Sentinelas e Vivas), Corvetas, Multiferramentas, Exotrajes, Exonaves e Cargueiros."
 			}
 		}
 	},
@@ -673,20 +677,20 @@
 		"aboutUpgradeLabelsTooltip": "Sobre Rótulos de Melhoria"
 	},
 	"seo": {
-		"mainPageTitle": "Otimizador de NMS: Calculadora de Bônus de Adjacência e Espaços Sobrecarregados",
-		"appDescription": "Otimize seus layouts de tecnologia no No Man's Sky usando aprendizado de máquina e algoritmos avançados. Maximize os bônus de adjacência e boosts de espaços sobrecarregados para Naves, Multiferramentas, Exotrajes, Exonaves e Cargueiros.",
-		"keywords": "No Man's Sky, NMS, calculadora de bônus de adjacência, otimizar espaços sobrecarregados, aprendizado de máquina, ferramenta de layout NMS, design de naves, bônus de adjacência, otimizador de tecnologia, build de nave, layout de cargueiro, TensorFlow",
-		"instructionsPageTitle": "Instruções do Otimizador de NMS: Maximize Bônus de Adjacência e Espaços Sobrecarregados",
-		"instructionsDescription": "Instruções técnicas para usar o Otimizador de NMS. Aprenda a configurar a grade, marcar boosts sobrecarregados e entender o sistema de classificação Theta/Tau/Sigma para todas as plataformas.",
-		"aboutPageTitle": "Sobre o Otimizador de NMS: Algoritmos e Otimização Avançada",
-		"aboutDescription": "Saiba como o Otimizador de NMS usa aprendizado de máquina, um modelo TensorFlow treinado em mais de 16.000 layouts e um solver em Rust para encontrar o melhor lugar para seus módulos.",
-		"changelogPageTitle": "Histórico do Otimizador de NMS: Atualizações e Melhorias",
-		"changelogDescription": "Fique por dentro das últimas funcionalidades, correções e melhorias no algoritmo do Otimizador de NMS. Conheça a melhor ferramenta de layout para No Man's Sky.",
-		"userstatsPageTitle": "Estatísticas do Otimizador de NMS: Meta da Comunidade e Tecnologias Populares",
-		"userstatsDescription": "Explore o meta atual do No Man's Sky. Veja as tecnologias sobrecarregadas mais populares dos últimos 28 dias de sessões da comunidade.",
-		"translationPageTitle": "Ajude a Traduzir o Otimizador de NMS: Una-se à Equipe de Localização",
+		"mainPageTitle": "NMS Optimizer: Espaços Sobrecarregados e Bônus de Adjacência",
+		"appDescription": "Otimize os layouts de tecnologia de No Man's Sky usando algoritmos avançados. Maximize bônus de adjacência e impulsos de espaços sobrecarregados para naves, multiferramentas, corvetas e muito mais.",
+		"keywords": "NMS Optimizer, No Man's Sky, bônus de adjacência, espaços sobrecarregados, ferramenta de layout NMS, layout técnico de naves, build de multiferramenta, calculadora de espaço sobrecarregado",
+		"instructionsPageTitle": "NMS Optimizer: Como otimizar seu layout técnico",
+		"instructionsDescription": "Aprenda a usar a grade, gerenciar espaços sobrecarregados e o sistema Theta/Tau/Sigma para builds de No Man's Sky.",
+		"aboutPageTitle": "NMS Optimizer: Sobre os algoritmos de otimização",
+		"aboutDescription": "Descubra como o NMS Optimizer usa algoritmos e Rust para calcular o melhor posicionamento de módulos para seu equipamento.",
+		"changelogPageTitle": "NMS Optimizer: Últimas novidades e atualizações",
+		"changelogDescription": "Fique por dentro das últimas funcionalidades, correções e melhorias no algoritmo do NMS Optimizer. Conheça a melhor ferramenta de layout para No Man's Sky.",
+		"userstatsPageTitle": "NMS Optimizer: Meta da comunidade e estatísticas",
+		"userstatsDescription": "Explore o meta de No Man's Sky. Veja as tecnologias sobrecarregadas mais populares da comunidade.",
+		"translationPageTitle": "Ajude a traduzir o NMS Optimizer: Una-se à equipe",
 		"translationDescription": "Contribua com a comunidade de No Man's Sky ajudando a traduzir o Otimizador de NMS. Torne a melhor ferramenta de layout acessível a todos os viajantes.",
-		"privacyPageTitle": "Política de Privacidade do Otimizador de NMS: Sua Privacidade é Prioridade",
+		"privacyPageTitle": "NMS Optimizer: Política de Privacidade",
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {
@@ -695,7 +699,7 @@
 			"about": "Sobre",
 			"changelog": "Novidades",
 			"userstats": "Estatísticas",
-			"translation": "Ajude a Traduzir",
+			"translation": "Ajude a Traduir",
 			"privacy": "Política de Privacidade"
 		},
 		"navDescriptions": {

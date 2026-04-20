@@ -652,19 +652,23 @@
 		"questions": {
 			"adjacencyBonus": {
 				"name": "What is an adjacency bonus in No Man's Sky?",
-				"answer": "When you place compatible technology modules next to each other in No Man's Sky, they get a stat boost. Modules of the same type that share an edge get a percentage increase to their stats. The more edges shared, the bigger the bonus. Figuring out the right arrangement by hand is tedious, especially on larger grids with supercharged slots."
+				"answer": "When you place compatible technology modules next to each other, they receive a stat boost. Modules of the same type that share an edge get a percentage increase to their effectiveness. The more edges shared, the bigger the bonus."
 			},
 			"superchargedSlots": {
-				"name": "What are supercharged slots in No Man's Sky?",
-				"answer": "Some inventory slots in No Man's Sky are supercharged. Any technology module placed in one gets a large stat multiplier on top of normal adjacency bonuses. They're randomly placed on each piece of gear, so the optimal layout changes depending on where your supercharged slots landed."
+				"name": "What are supercharged slots and how do they work?",
+				"answer": "Supercharged slots provide a massive multiplier to the base stats of any technology module placed within them. This boost is applied on top of normal adjacency bonuses, making their placement critical for high-performance builds."
+			},
+			"maximizeBonus": {
+				"name": "How do I maximize adjacency bonuses and supercharged slots?",
+				"answer": "To get the highest stats, group similar technologies in a square or 'L' shape and place your most powerful modules (like the main weapon or core engine) in supercharged slots that are adjacent to other modules in the group."
 			},
 			"calculation": {
-				"name": "How does NMS Optimizer calculate the best technology layout?",
-				"answer": "The optimizer uses a combination of deterministic pattern matching and simulated annealing. For smaller module sets it can find the exact best layout. For larger or more complex grids, simulated annealing explores thousands of arrangements to find one that scores as high as possible. The scoring accounts for adjacency bonuses, supercharged slot placement, and module-specific stat weights. The backend runs in Rust for speed."
+				"name": "How does NMS Optimizer find the best technology layout?",
+				"answer": "The optimizer uses advanced algorithms to explore thousands of possible arrangements in seconds. It scores each layout based on adjacency bonuses, supercharged slot multipliers, and module-specific weights to find the mathematical optimum for your gear."
 			},
 			"platforms": {
-				"name": "What platforms does NMS Optimizer support?",
-				"answer": "NMS Optimizer supports Starships (standard, sentinel, solar, fighter, living, atlantid), Corvettes, Multitools (standard and sentinel), Exosuits, Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon), and Freighters."
+				"name": "What gear and ship types does NMS Optimizer support?",
+				"answer": "NMS Optimizer supports all major gear: Starships (including Sentinel and Living ships), Corvettes, Multitools, Exosuits, Exocraft, and Freighters."
 			}
 		}
 	},
@@ -690,23 +694,23 @@
 		"cancelButton": "Cancel"
 	},
 	"seo": {
-		"mainPageTitle": "NMS Optimizer: Adjacency Bonus Calculator & Supercharged Slot Optimizer",
-		"appDescription": "Optimize No Man's Sky technology layouts using machine learning and advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Exosuits, Exocraft, and Freighters.",
+		"mainPageTitle": "NMS Optimizer: Supercharged Slots & Adjacency Bonus",
+		"appDescription": "Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more.",
 		"genre": "Game Tool",
-		"keywords": "No Man's Sky, NMS, adjacency bonus calculator, supercharged slot optimization, machine learning, NMS layout tool, starship tech layout, multitool weapon layout, adjacency bonus, technology layout optimizer, starship build, corvette layout, exosuit build, exocraft optimization, freighter layout, TensorFlow",
-		"instructionsPageTitle": "NMS Optimizer: Maximize Adjacency Bonuses & Supercharged Slots",
-		"instructionsDescription": "Technical instructions for using the NMS Optimizer. Learn to toggle slots, mark supercharged boosts, and understand the Theta/Tau/Sigma ranking system for all platforms.",
-		"aboutPageTitle": "NMS Optimizer: Advanced Algorithms for No Man's Sky Layouts",
-		"aboutDescription": "Learn how NMS Optimizer uses machine learning, a TensorFlow model trained on 16,000+ layouts, and a Rust solver to find the absolute best module placement for your gear.",
-		"changelogPageTitle": "NMS Optimizer Changelog: Latest Updates, Features & Improvements",
+		"keywords": "NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator",
+		"instructionsPageTitle": "NMS Optimizer: How to Optimize Your Tech Layout",
+		"instructionsDescription": "Learn how to use the grid, manage supercharged slots, and understand the Theta/Tau/Sigma module ranking system for optimal No Man's Sky builds.",
+		"aboutPageTitle": "NMS Optimizer: About the Optimization Algorithms",
+		"aboutDescription": "Discover how NMS Optimizer uses advanced algorithms and a high-performance Rust solver to calculate the absolute best module placements for your gear.",
+		"changelogPageTitle": "NMS Optimizer: Latest Features and Updates",
 		"changelogDescription": "Stay updated with the latest NMS Optimizer features, bug fixes, and algorithm improvements. See what's new in the best No Man's Sky layout optimization tool.",
-		"userstatsPageTitle": "NMS Optimizer Stats: Most Popular Supercharged Technologies",
-		"userstatsDescription": "Explore current No Man's Sky build meta. See the most popular supercharged technologies from the last 28 days of community optimization sessions.",
-		"translationPageTitle": "Help Translate NMS Optimizer: Join Our Localization Team",
+		"userstatsPageTitle": "NMS Optimizer: Community Meta & Tech Stats",
+		"userstatsDescription": "Explore the current No Man's Sky build meta. See the most popular supercharged technologies based on thousands of community optimization sessions.",
+		"translationPageTitle": "Help Translate NMS Optimizer: Join the Team",
 		"translationDescription": "Contribute to the No Man's Sky community by helping translate the NMS Optimizer. Make the best layout tool accessible to travelers in every language.",
-		"privacyPageTitle": "NMS Optimizer Privacy Policy: Your Data Privacy Matters",
+		"privacyPageTitle": "NMS Optimizer: Privacy Policy",
 		"privacyDescription": "Read about our commitment to your privacy. We use anonymous analytics to improve the optimizer without ever tracking your personal identity or save data.",
-		"ogImageAlt": "A detailed screenshot of the NMS Optimizer application showing an optimized starship technology grid with high adjacency bonuses.",
+		"ogImageAlt": "A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
 		"nav": {
 			"home": "Home",
 			"instructions": "Instructions",

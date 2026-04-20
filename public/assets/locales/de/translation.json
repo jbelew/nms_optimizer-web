@@ -635,19 +635,23 @@
 		"questions": {
 			"adjacencyBonus": {
 				"name": "Was ist ein Adjazenzbonus in No Man's Sky?",
-				"answer": "Wenn du kompatible Technologiemodule in No Man's Sky nebeneinander platzierst, erhalten sie einen Stat-Boost. Module desselben Typs, die eine Kante teilen, erhalten eine prozentuale Steigerung ihrer Werte. Je mehr Kanten geteilt werden, desto größer ist der Bonus. Die richtige Anordnung von Hand zu finden, ist mühsam, besonders auf größeren Rastern mit überladenen Slots."
+				"answer": "Wenn du kompatible Technologiemodule nebeneinander platzierst, erhalten sie einen Stat-Boost. Module desselben Typs, die eine Kante teilen, erhalten eine prozentuale Steigerung ihrer Effektivität. Je mehr Kanten geteilt werden, desto größer ist der Bonus."
 			},
 			"superchargedSlots": {
-				"name": "Was sind überladene Slots in No Man's Sky?",
-				"answer": "Einige Inventarplätze in No Man's Sky sind überladen. Jedes dort platzierte Technologiemodul erhält einen großen Stat-Multiplikator zusätzlich zu den normalen Adjazenzboni. Sie sind zufällig auf jedem Ausrüstungsgegenstand platziert, sodass sich das optimale Layout ändert, je nachdem, wo deine überladenen Slots gelandet sind."
+				"name": "Was sind überladene Slots und wie funktionieren sie?",
+				"answer": "Überladene Slots bieten einen massiven Multiplikator auf die Basiswerte jedes dort platzierten Technologiemoduls. Dieser Boost wird zusätzlich zu den normalen Adjazenzboni angewendet, was ihre Platzierung entscheidend für Hochleistungs-Builds macht."
+			},
+			"maximizeBonus": {
+				"name": "Wie maximiere ich Adjazenzboni und überladene Slots?",
+				"answer": "Um die höchsten Werte zu erzielen, gruppiere ähnliche Technologien in Quadrat- oder 'L'-Form und platziere deine stärksten Module (wie die Hauptwaffe oder den Kernmotor) in überladenen Slots, die an andere Module der Gruppe angrenzen."
 			},
 			"calculation": {
-				"name": "Wie berechnet der NMS-Optimierer das beste Technologie-Layout?",
-				"answer": "Der Optimierer nutzt eine Kombination aus deterministischem Mustervergleich und simuliertem Abkühlen (Simulated Annealing). Für kleinere Modulsets kann er das exakt beste Layout finden. Für größere oder komplexere Raster erkundet das simulierte Abkühlen tausende von Anordnungen, um eine zu finden, die so hoch wie möglich punktet. Die Bewertung berücksichtigt Adjazenzboni, die Platzierung überladener Slots und modulspezifische Stat-Gewichtungen. Das Backend läuft für maximale Geschwindigkeit in Rust."
+				"name": "Wie findet der NMS-Optimierer das beste Technologie-Layout?",
+				"answer": "Der Optimierer nutzt fortschrittliche Algorithmen, um in Sekundenschnelle Tausende möglicher Anordnungen zu erkunden. Er bewertet jedes Layout basierend auf Adjazenzboni, Multiplikatoren für überladene Slots und modulspezifischen Gewichtungen, um das mathematische Optimum für deine Ausrüstung zu finden."
 			},
 			"platforms": {
-				"name": "Welche Plattformen unterstützt der NMS-Optimierer?",
-				"answer": "Der NMS-Optimierer unterstützt Raumschiffe (Standard, Wächter, Solar, Jäger, Lebende Schiffe, Atlantid), Korvetten, Multitools (Standard und Wächter), Exo-Anzüge, Exofahrzeuge (Streuner, Pilger, Nomade, Koloss, Minotaurus, Nautilon) und Frachter."
+				"name": "Welche Ausrüstung und Schiffstypen unterstützt der NMS-Optimierer?",
+				"answer": "Der NMS-Optimierer unterstützt alle wichtigen Ausrüstungen: Raumschiffe (einschließlich Wächter- und lebende Schiffe), Korvetten, Multitools, Exo-Anzüge, Exofahrzeuge und Frachter."
 			}
 		}
 	},
@@ -673,20 +677,20 @@
 		"aboutUpgradeLabelsTooltip": "Über Upgrade-Bezeichnungen"
 	},
 	"seo": {
-		"mainPageTitle": "NMS-Optimierer: Adjazenz-Bonus-Rechner & Optimierer für überladene Slots",
-		"appDescription": "Optimiere deine No Man's Sky Technologie-Layouts mit Machine Learning und fortschrittlichen Algorithmen. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools, Exo-Anzügen, Exofahrzeugen und Frachtern.",
-		"keywords": "No Man's Sky, NMS, Adjazenz-Bonus-Rechner, überladene Slots optimieren, Machine Learning, NMS-Layout-Tool, Raumschiff-Tech-Layout, Adjazenzbonus, Technologie-Optimierer, Raumschiff-Build, Frachter-Layout, TensorFlow",
-		"instructionsPageTitle": "NMS-Optimierer Anleitung: Adjazenzboni & überladene Slots maximieren",
-		"instructionsDescription": "Technische Anleitung für den NMS-Optimierer. Lerne, Slots zu konfigurieren, überladene Boosts zu markieren und das Theta/Tau/Sigma-Rangsystem für alle Plattformen zu verstehen.",
-		"aboutPageTitle": "Über den NMS-Optimierer: Machine Learning & Rust-Algorithmen",
-		"aboutDescription": "Erfahre, wie der NMS-Optimierer Machine Learning, ein auf 16.000+ Layouts trainiertes TensorFlow-Modell und einen Rust-Solver nutzt, um deine Module perfekt zu platzieren.",
-		"changelogPageTitle": "NMS-Optimierer Änderungsprotokoll: Updates & Verbesserungen",
+		"mainPageTitle": "NMS-Optimierer: Überladene Slots & Adjazenzbonus",
+		"appDescription": "Optimiere deine No Man's Sky Technologie-Layouts mit fortschrittlichen Algorithmen. Maximiere Adjazenzboni und Boosts für überladene Slots bei Raumschiffen, Multitools, Korvetten und mehr.",
+		"keywords": "NMS-Optimierer, No Man's Sky, Adjazenzbonus, überladene Slots, NMS-Layout-Tool, Raumschiff-Tech-Layout, Multitool-Build, Rechner für überladene Slots",
+		"instructionsPageTitle": "NMS Optimizer: So optimierst du dein Tech-Layout",
+		"instructionsDescription": "Lerne das Raster, überladene Slots und das Theta/Tau/Sigma-System für optimale No Man's Sky Builds kennen.",
+		"aboutPageTitle": "NMS Optimizer: Über die Optimierungsalgorithmen",
+		"aboutDescription": "Erfahre, wie der NMS-Optimierer mit Algorithmen und Rust die absolut besten Modulplatzierungen für dein Gear berechnet.",
+		"changelogPageTitle": "NMS Optimizer: Neueste Funktionen und Updates",
 		"changelogDescription": "Bleibe auf dem Laufenden mit den neuesten Funktionen, Fehlerbehebungen und Algorithmus-Verbesserungen des NMS-Optimierers. Entdecke das beste Layout-Tool für No Man's Sky.",
-		"userstatsPageTitle": "NMS-Optimierer Statistiken: Community-Meta & Beliebte Technologien",
-		"userstatsDescription": "Erkunde das aktuelle No Man's Sky Build-Meta. Sieh dir die beliebtesten überladenen Technologien aus den Community-Optimierungen der letzten 28 Tage an.",
-		"translationPageTitle": "Hilf bei der Übersetzung des NMS-Optimierers: Werde Teil des Teams",
+		"userstatsPageTitle": "NMS Optimizer: Community-Meta & Tech-Statistiken",
+		"userstatsDescription": "Entdecke das No Man's Sky Meta. Sieh dir die beliebtesten überladenen Technologien der Community an.",
+		"translationPageTitle": "Hilf beim Übersetzen: Werde Teil von NMS Optimizer",
 		"translationDescription": "Trage zur No Man's Sky Community bei, indem du bei der Übersetzung des NMS-Optimierers hilfst. Mache das beste Layout-Tool für Reisende in jeder Sprache zugänglich.",
-		"privacyPageTitle": "NMS-Optimierer Datenschutz: Deine Privatsphäre zählt",
+		"privacyPageTitle": "NMS Optimizer: Datenschutzrichtlinie",
 		"privacyDescription": "Lies unser Versprechen zum Datenschutz. Wir nutzen anonyme Analysen, um den Optimierer zu verbessern, ohne jemals deine Identität oder Spieldaten zu verfolgen.",
 		"ogImageAlt": "Ein detaillierter Screenshot des NMS-Optimierers, der ein optimiertes Raumschiff-Gitter mit hohen Adjazenzboni zeigt.",
 		"nav": {
