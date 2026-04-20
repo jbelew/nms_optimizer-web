@@ -25,8 +25,8 @@ type SendEventFunction = (event: GA4Event) => void;
  * Sends a web vitals metric to Google Analytics.
  *
  * @remarks
- * Converts the metric value to milliseconds (or multiplies by 1000 for CLS)
- * before sending to GA4. Ensures metrics are tracked as non-interactive events.
+ * Converts the metric value to numerical event parameters suitable for GA4 custom metrics.
+ * Ensures metrics are tracked as non-interactive events.
  *
  * @param {Metric} metric - The web vitals metric to send.
  * @param {SendEventFunction} sendEvent - The function to send the event.
@@ -43,14 +43,64 @@ type SendEventFunction = (event: GA4Event) => void;
  */
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
-		action: `web_vitals_${metric.name}`,
-		category: "Web Vitals",
+		action: "performance_metric",
+		category: "performance",
 		label: metric.id,
 		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
 		nonInteraction: true,
 		metric_name: metric.name,
 		app_version: __APP_VERSION__,
 	});
+};
+
+/**
+ * Captures Total Blocking Time (TBT) and reports it to analytics.
+ *
+ * @param {SendEventFunction} sendEvent - The function to send the event.
+ *
+ * @example
+ * ```ts
+ * reportTBT(sendEvent);
+ * ```
+ */
+const reportTBT = (sendEvent: SendEventFunction) => {
+	if (typeof window === "undefined" || !("PerformanceObserver" in window)) return;
+
+	let tbt = 0;
+	const fcpEntry = performance.getEntriesByName("first-contentful-paint")[0];
+	const fcpTime = fcpEntry ? fcpEntry.startTime : 0;
+
+	try {
+		const observer = new PerformanceObserver((list) => {
+			list.getEntries().forEach((entry) => {
+				// Only track long tasks after FCP
+				if (entry.startTime >= fcpTime) {
+					tbt += entry.duration - 50;
+				}
+			});
+		});
+
+		observer.observe({ type: "longtask", buffered: true });
+
+		// Report TBT after a delay to capture initial load tasks
+		// In a production app, you might want to report this on page visibility change or at a fixed interval
+		setTimeout(() => {
+			if (tbt > 0) {
+				sendEvent({
+					action: "performance_metric",
+					category: "performance",
+					metric_name: "TBT",
+					value: Math.round(tbt),
+					nonInteraction: true,
+					app_version: __APP_VERSION__,
+				});
+			}
+
+			observer.disconnect();
+		}, 10000);
+	} catch (_e) {
+		// Silent catch for browsers that don't support longtask type
+	}
 };
 
 /**
@@ -80,4 +130,7 @@ export function reportWebVitals(sendEvent: SendEventFunction) {
 	onFCP((metric) => sendVitalsMetric(metric, sendEvent));
 	onLCP((metric) => sendVitalsMetric(metric, sendEvent));
 	onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
+
+	// Add TBT reporting
+	reportTBT(sendEvent);
 }

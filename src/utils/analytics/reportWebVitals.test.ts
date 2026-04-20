@@ -73,8 +73,8 @@ describe("reportWebVitals", () => {
 		clsCallback(mockMetric);
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			action: "web_vitals_CLS",
-			category: "Web Vitals",
+			action: "performance_metric",
+			category: "performance",
 			label: "v3-1234567890",
 			value: 50, // 0.05 * 1000
 			nonInteraction: true,
@@ -100,8 +100,8 @@ describe("reportWebVitals", () => {
 		inpCallback(mockMetric);
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			action: "web_vitals_INP",
-			category: "Web Vitals",
+			action: "performance_metric",
+			category: "performance",
 			label: "v3-1234567890",
 			value: 151, // Math.round(150.5)
 			nonInteraction: true,
@@ -127,8 +127,8 @@ describe("reportWebVitals", () => {
 		fcpCallback(mockMetric);
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			action: "web_vitals_FCP",
-			category: "Web Vitals",
+			action: "performance_metric",
+			category: "performance",
 			label: "v3-1234567890",
 			value: 1201, // Math.round(1200.7)
 			nonInteraction: true,
@@ -154,8 +154,8 @@ describe("reportWebVitals", () => {
 		lcpCallback(mockMetric);
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			action: "web_vitals_LCP",
-			category: "Web Vitals",
+			action: "performance_metric",
+			category: "performance",
 			label: "v3-1234567890",
 			value: 2500, // Math.round(2500.4)
 			nonInteraction: true,
@@ -181,8 +181,8 @@ describe("reportWebVitals", () => {
 		ttfbCallback(mockMetric);
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			action: "web_vitals_TTFB",
-			category: "Web Vitals",
+			action: "performance_metric",
+			category: "performance",
 			label: "v3-1234567890",
 			value: 501, // Math.round(500.6)
 			nonInteraction: true,
@@ -237,7 +237,7 @@ describe("reportWebVitals", () => {
 		);
 	});
 
-	test("should set category to 'Web Vitals' for all metrics", () => {
+	test("should set category to 'performance' for all metrics", () => {
 		reportWebVitals(mockSendEvent);
 
 		const metric = {
@@ -252,7 +252,7 @@ describe("reportWebVitals", () => {
 
 		expect(mockSendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
-				category: "Web Vitals",
+				category: "performance",
 			})
 		);
 	});

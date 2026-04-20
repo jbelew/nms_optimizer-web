@@ -13,15 +13,15 @@
 - [x] Task: Update Platform Selection tracking to use `select_content` with `content_type: 'platform'`. <!-- files: src/components/Header/PlatformSelector.tsx -->
 - [x] Task: Conductor - User Manual Verification 'Core Infrastructure & Standard Refactoring' (Protocol in workflow.md)
 
-## Phase 3: Enhanced Action & Management Tracking
+## Phase 3: Enhanced Action & Management Tracking [checkpoint: 9102300]
 <!-- execution: parallel -->
 - [x] Task: Update "Solve" event tracking with refined parameters (preserving `optimize_tech` as required). <!-- files: src/components/Solver/SolveButton.tsx -->
 - [x] Task: Implement `method` parameter for `share_build`, `save_build`, `load_build`, and `screenshot_build`. <!-- files: src/components/BuildManagement/BuildActions.tsx, src/utils/sharing.ts -->
-- [~] Task: Conductor - User Manual Verification 'Enhanced Action & Management Tracking' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Enhanced Action & Management Tracking' (Protocol in workflow.md)
 
 ## Phase 4: Performance Metrics & Web Vitals Refinement
-- [ ] Task: Refine Web Vitals event payload to ensure numerical values are sent correctly for GA4 custom metrics.
-- [ ] Task: Update `LCP`, `CLS`, `INP`, `FCP`, and `TBT` (via performance trace utility) event structures.
+- [~] Task: Refine Web Vitals event payload to ensure numerical values are sent correctly for GA4 custom metrics.
+- [~] Task: Update `LCP`, `CLS`, `INP`, `FCP`, and `TBT` (via performance trace utility) event structures.
 - [ ] Task: Conductor - User Manual Verification 'Performance Metrics & Web Vitals Refinement' (Protocol in workflow.md)
 
 ## Phase 5: Final Validation & Documentation
