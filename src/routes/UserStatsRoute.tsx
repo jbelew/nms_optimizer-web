@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
 
+import { useSeoAndTitle } from "@/hooks/useSeoAndTitle/useSeoAndTitle";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/UserStatsDialog"));
@@ -21,6 +22,8 @@ const UserStatsDialog = lazy(() => import("@/components/AppDialog/UserStats/User
  */
 export const UserStatsRoute: FC = () => {
 	const { closeDialog } = useDialog();
+
+	useSeoAndTitle();
 
 	return (
 		<Suspense fallback={null}>

@@ -1,6 +1,6 @@
 import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/Base/AppDialog";
 import { DialogProvider } from "./context/dialogContext";
@@ -84,6 +84,7 @@ const AppContent: FC = () => {
 	const { showError, errorType } = useOptimizeStore();
 	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
 	const { t } = useTranslation();
+	const location = useLocation();
 
 	// Use the URL hooks within the DialogProvider context
 	useUrlNormalization();
@@ -120,29 +121,17 @@ const AppContent: FC = () => {
 	useEffect(() => {
 		if (showError && errorType === "fatal") {
 			sendEvent({
-				category: "ui",
-				action: "screen_view",
-				firebase_screen: "error",
-				screen_class: "AppDialog",
+				category: "engagement",
+				action: "page_view",
+				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
+				page_location: window.location.href,
+				page: `${location.pathname}${location.search}#error`,
 				nonInteraction: true,
 			});
 		}
-	}, [showError, errorType, sendEvent]);
+	}, [showError, errorType, sendEvent, t, location.pathname, location.search]);
 
-	// Track User Stats screen if shown
-	useEffect(() => {
-		if (activeDialog === "userstats") {
-			sendEvent({
-				category: "ui",
-				action: "screen_view",
-				firebase_screen: "user_stats",
-				screen_class: "UserStatsRoute",
-				nonInteraction: true,
-			});
-		}
-	}, [activeDialog, sendEvent]);
-
-	// Use the URL sync hook at the top level to handle popstate and share-link loading
+	// useUrlSync() and other hooks...
 	useUrlSync();
 
 	// If an API error occurred during loading, don't render the main app
@@ -231,10 +220,11 @@ const App: FC = () => {
 	useEffect(() => {
 		if (showUpdatePrompt) {
 			sendEvent({
-				category: "ui",
-				action: "screen_view",
-				firebase_screen: "update_prompt",
-				screen_class: "UpdatePrompt",
+				category: "engagement",
+				action: "page_view",
+				page_title: "NMS Optimizer: Update Available",
+				page_location: window.location.href,
+				page: `${window.location.pathname}${window.location.search}#update`,
 				nonInteraction: true,
 			});
 		}

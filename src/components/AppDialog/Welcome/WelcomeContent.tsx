@@ -52,10 +52,11 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	// Track welcome screen view on mount
 	React.useEffect(() => {
 		sendEvent({
-			category: "ui",
-			action: "screen_view",
-			firebase_screen: "welcome",
-			screen_class: "AppDialog",
+			category: "engagement",
+			action: "page_view",
+			page_title: "NMS Optimizer: Welcome",
+			page_location: window.location.href,
+			page: `${window.location.pathname}${window.location.search}#welcome`,
 			nonInteraction: true,
 		});
 	}, [sendEvent]);

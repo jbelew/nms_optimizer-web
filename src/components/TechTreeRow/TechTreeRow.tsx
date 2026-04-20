@@ -430,12 +430,12 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 				setIsOpen(open);
 
 				sendEvent({
-					category: "ui",
-					action: "screen_view",
-					firebase_screen: "module_selection",
-					screen_class: "ModuleSelectionDialog",
-					tech: tech,
-					nonInteraction: false,
+					category: "engagement",
+					action: "page_view",
+					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
+					page_location: window.location.href,
+					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
+					nonInteraction: true,
 				});
 			});
 		} else {
