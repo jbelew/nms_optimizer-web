@@ -1,3 +1,15 @@
+# [6.34.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.4...v6.34.0) (2026-04-20)
+
+
+### Bug Fixes
+
+* **ssg:** restore CSS by making template extraction regex more resilient ([e961864](https://github.com/jbelew/nms_optimizer-web/commit/e9618644a4b77ce69cabf668e77c7980aa0f6e4e))
+
+
+### Features
+
+* **ssg:** automate H1 synchronization with standardized page titles ([90f02fb](https://github.com/jbelew/nms_optimizer-web/commit/90f02fbc301f91ea041d0762d0854e8d8c4f3b6f))
+
 ## [6.33.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.3...v6.33.4) (2026-04-19)
 
 
