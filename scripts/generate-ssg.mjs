@@ -45,11 +45,19 @@ function generateNavigationLinks(lang, currentPage, t) {
 	const langPrefix = lang === "en" ? "" : `/${lang}`;
 	const pages = [
 		{ path: "/", key: "seo.nav.home", descKey: "seo.navDescriptions.home" },
-		{ path: "/instructions", key: "seo.nav.instructions", descKey: "seo.navDescriptions.instructions" },
+		{
+			path: "/instructions",
+			key: "seo.nav.instructions",
+			descKey: "seo.navDescriptions.instructions",
+		},
 		{ path: "/about", key: "seo.nav.about", descKey: "seo.navDescriptions.about" },
 		{ path: "/changelog", key: "seo.nav.changelog", descKey: "seo.navDescriptions.changelog" },
 		{ path: "/userstats", key: "seo.nav.userstats", descKey: "seo.navDescriptions.userstats" },
-		{ path: "/translation", key: "seo.nav.translation", descKey: "seo.navDescriptions.translation" },
+		{
+			path: "/translation",
+			key: "seo.nav.translation",
+			descKey: "seo.navDescriptions.translation",
+		},
 		{ path: "/privacy", key: "seo.nav.privacy", descKey: "seo.navDescriptions.privacy" },
 	];
 
@@ -92,7 +100,8 @@ function generateSeoTags(pathname, lang, baseUrl) {
 
 	// Hreflang Tags
 	SUPPORTED_LANGUAGES.forEach((l) => {
-		const langPath = l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
+		const langPath =
+			l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
 		const langUrl = new URL(langPath, baseUrl).href;
 		tags.push(`<link rel="alternate" hreflang="${l}" href="${langUrl}" />`);
 	});
@@ -104,18 +113,6 @@ function generateSeoTags(pathname, lang, baseUrl) {
 
 	return tags;
 }
-
-const ssgStyles = `
-  .app-header-static { text-align: center; margin-bottom: 2rem; }
-  .app-header-static h1 { margin: 0; font-size: 2rem; color: #4cc9f0; }
-  .app-header-static p { margin: 0.5rem 0 0; font-style: italic; opacity: 0.8; }
-  main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
-  nav { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333; }
-  nav ul { list-style: none; padding: 0; }
-  nav li { margin-bottom: 0.5rem; }
-  nav a { color: #4cc9f0; text-decoration: none; }
-  nav a:hover { text-decoration: underline; }
-`;
 
 /**
  * Generate a complete HTML page.
@@ -138,8 +135,9 @@ function generatePage(
 
 	// 1. Metadata updates (Aggressive multiline regex to catch all attribute orders)
 	const metadata = seoMetadata[pathname];
+	let pageTitle = t("appName");
 	if (metadata) {
-		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
+		pageTitle = t(metadata.titleKey, { defaultValue: t("appName") });
 		const pageDescription = t(metadata.descriptionKey);
 		const pageKeywords = t("seo.keywords", { defaultValue: "" });
 		const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
@@ -245,8 +243,16 @@ function generatePage(
 	html = html.replace(/<noscript[\s\S]*?<\/noscript>/g, "");
 
 	if (markdownContent) {
-		const renderedHtml = mdProcessor(markdownContent);
+		let renderedHtml = mdProcessor(markdownContent);
 		const navigationHtml = generateNavigationLinks(lang, pageName, t);
+
+		// Synchronize the first H1 with the actual page title
+		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
+		if (h1Regex.test(renderedHtml)) {
+			renderedHtml = renderedHtml.replace(h1Regex, `<h1>${pageTitle}</h1>`);
+		} else {
+			renderedHtml = `<h1>${pageTitle}</h1>\n${renderedHtml}`;
+		}
 
 		const contentBlock = `<noscript>
     <main>
@@ -284,18 +290,21 @@ async function generateSsg() {
 	}
 
 	const baseIndexHtml = fs.readFileSync(indexPath, "utf-8");
+	const sourceIndexHtml = fs.readFileSync(path.join(__dirname, "../index.html"), "utf-8");
 	const baseUrl = `https://${TARGET_HOST}`;
 
-	// Extract template blocks
-	const ssgBlockMatch = baseIndexHtml.match(
-		/<noscript(?: [^>]*?)?>([\s\S]*?)<\/noscript>/
+	// Extract template blocks from source to avoid build-time stripping
+	const sourceSsgBlockMatch = sourceIndexHtml.match(
+		/<noscript data-ssg-template>([\s\S]*?)<\/noscript>/
 	);
-	const ssgBlock = ssgBlockMatch ? ssgBlockMatch[1] : "";
+	const sourceSsgBlock = sourceSsgBlockMatch ? sourceSsgBlockMatch[1] : "";
 
-	const ssgStyleMatch = ssgBlock.match(/<style>([\s\S]*?)<\/style>/);
+	const ssgStyleMatch = sourceSsgBlock.match(/<style>([\s\S]*?)<\/style>/);
 	let ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
 
-	const ssgHeaderMatch = ssgBlock.match(/(<header class="app-header-static">[\s\S]*?<\/header>)/);
+	const ssgHeaderMatch = sourceSsgBlock.match(
+		/(<header class="app-header-static">[\s\S]*?<\/header>)/
+	);
 	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
 
 	// --- FONT FIX: Extract from source fonts.css ---
@@ -306,7 +315,8 @@ async function generateSsg() {
 	}
 
 	const mdProcessor = createMarkdownProcessor();
-	const prettierConfig = (await prettier.resolveConfig(path.join(__dirname, "../.prettierrc.cjs"))) || {};
+	const prettierConfig =
+		(await prettier.resolveConfig(path.join(__dirname, "../.prettierrc.cjs"))) || {};
 
 	await i18next.use(i18nextFsBackend).init({
 		supportedLngs: SUPPORTED_LANGUAGES,
