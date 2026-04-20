@@ -166,31 +166,19 @@ describe("GridTableButtons", () => {
 		expect(screen.getByLabelText("buttons.about")).toBeDisabled();
 	});
 
-	it("calls handleShowInstructions and tracks GA event on instructions button click", () => {
+	it("calls handleShowInstructions on instructions button click", () => {
 		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByLabelText("buttons.instructions"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("instructions");
 		expect(markTutorialFinishedMock).toHaveBeenCalled();
-		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "ui",
-			action: "show_instructions",
-			value: 1,
-			nonInteraction: false,
-		});
 	});
 
-	it("calls handleShowAboutPage and tracks GA event on about button click", () => {
+	it("calls handleShowAboutPage on about button click", () => {
 		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
 		fireEvent.click(screen.getByLabelText("buttons.about"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("about");
-		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "ui",
-			action: "show_about",
-			value: 1,
-			nonInteraction: false,
-		});
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
@@ -201,7 +189,8 @@ describe("GridTableButtons", () => {
 		expect(openDialogMock).toHaveBeenCalledWith(null, { shareUrl: "http://share.url" });
 		expect(mockSendEvent).toHaveBeenCalledWith({
 			category: "ui",
-			action: "share_link",
+			action: "share",
+			method: "url",
 			value: 1,
 			nonInteraction: false,
 		});

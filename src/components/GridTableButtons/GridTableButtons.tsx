@@ -107,12 +107,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 				markTutorialFinished();
 			}
 		});
-		sendEvent({
-			category: "ui",
-			action: "show_instructions",
-			value: 1,
-			nonInteraction: false,
-		});
 	};
 
 	/**
@@ -124,12 +118,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 	const handleShowAboutPage = () => {
 		startInfoTransition(() => {
 			openDialog("about");
-		});
-		sendEvent({
-			category: "ui",
-			action: "show_about",
-			value: 1,
-			nonInteraction: false,
 		});
 	};
 
@@ -144,7 +132,13 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 			const shareUrl = updateUrlForShare();
 			openDialog(null, { shareUrl });
 		});
-		sendEvent({ category: "ui", action: "share_link", value: 1, nonInteraction: false });
+		sendEvent({
+			category: "ui",
+			action: "share",
+			method: "url",
+			value: 1,
+			nonInteraction: false,
+		});
 	};
 
 	/**

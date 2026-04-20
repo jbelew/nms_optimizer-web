@@ -128,8 +128,9 @@ export const LanguageSelector: React.FC = () => {
 
 			sendEvent({
 				category: "ui",
-				action: "language_selection",
-				label: newLang,
+				action: "select_content",
+				content_type: "language",
+				item_id: newLang,
 				value: 1,
 				nonInteraction: false,
 			});

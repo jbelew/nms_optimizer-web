@@ -86,6 +86,17 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 		set({ selectedPlatform: platform });
 
 		safeSetItem(LOCAL_STORAGE_KEY, platform);
+
+		// Update GA4 user property if initialized
+		if (typeof window !== "undefined" && "gtag" in window) {
+			(window.gtag as (command: string, ...args: unknown[]) => void)(
+				"set",
+				"user_properties",
+				{
+					platform_type: platform,
+				}
+			);
+		}
 	},
 	initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
 		if (typeof window === "undefined") {

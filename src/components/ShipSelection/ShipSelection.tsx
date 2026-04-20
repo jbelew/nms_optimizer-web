@@ -164,8 +164,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 			startTransition(() => {
 				sendEvent({
 					category: "ui",
-					action: "platform_selection",
-					platform: option,
+					action: "select_content",
+					content_type: "platform",
+					item_id: option,
 					value: 1,
 					nonInteraction: false,
 				});

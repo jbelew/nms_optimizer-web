@@ -36,27 +36,53 @@ let queuedEvents: GA4Event[] = [];
 /**
  * Interface for Google Analytics 4 event tracking.
  *
+ * @remarks
+ * This interface is designed to support both custom events and GA4 recommended events.
+ * It uses `snake_case` for all parameters to align with GA4 best practices.
+ *
  * @category Utilities
  */
 export interface GA4Event {
-	/** Event category. */
+	/** Event category (e.g., 'ui', 'performance', 'error'). */
 	category: string;
-	/** Event action. */
+	/** Event action/name (e.g., 'optimize_tech', 'select_content', 'share'). */
 	action: string;
-	/** Optional event label. */
+	/** Optional event label (legacy/custom). */
 	label?: string;
-	/** Optional numeric value. */
+	/** Optional numeric value (legacy/custom). */
 	value?: number;
 	/** Whether the event is non-interactive. */
 	nonInteraction?: boolean;
-	/** Platform identifier. */
+
+	// --- GA4 Recommended Parameters ---
+	/** The type of content selected (e.g., 'platform', 'language'). */
+	content_type?: string;
+	/** The identifier of the selected item. */
+	item_id?: string;
+	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
+	method?: string;
+	/** Screen name for screen_view events. */
+	firebase_screen?: string;
+	/** Screen class for screen_view events. */
+	screen_class?: string;
+	/** Virtual currency name for earn_virtual_currency events. */
+	virtual_currency_name?: string;
+
+	// --- Custom Dimensions (Mapped in GA4) ---
+	/** Platform identifier (e.g., 'starship', 'multitool'). Maps to customEvent:platform. */
 	platform?: string;
-	/** Tech identifier. */
+	/** Tech identifier (e.g., 'pulse', 'hyperdrive'). Maps to customEvent:tech. */
 	tech?: string;
-	/** Method used for solve. */
-	solve_method?: string;
-	/** Whether the build is supercharged. */
+	/** Whether the build is supercharged. Maps to customEvent:supercharged. */
 	supercharged?: boolean;
+	/** Application version. Maps to customEvent:app_version. */
+	app_version?: string;
+	/** Tracking source (client/server). Maps to customEvent:tracking_source. */
+	tracking_source?: string;
+
+	// --- Legacy/Other Parameters ---
+	/** Method used for legacy solve tracking. */
+	solve_method?: string;
 	/** Page identifier. */
 	page?: string;
 	/** Page title. */
@@ -75,8 +101,6 @@ export interface GA4Event {
 	componentStack?: string;
 	/** Error stack trace. */
 	stackTrace?: string;
-	/** Application version. */
-	app_version?: string;
 	/** Name of the build. */
 	buildName?: string;
 	/** Filename involved. */
@@ -85,8 +109,6 @@ export interface GA4Event {
 	shipType?: string;
 	/** Storage status. */
 	storageCleared?: string;
-	/** Tracking source (client/server). */
-	tracking_source?: string;
 }
 
 /**
@@ -325,7 +347,12 @@ export const sendServerEvent = (
 		const payload: AnalyticsEventPayload = {
 			clientId: getClientId(),
 			eventName,
-			params,
+			params: {
+				...params,
+				app_version: __APP_VERSION__,
+				is_installed: globalIsInstalled ? "yes" : "no",
+				tracking_source: "server",
+			},
 		};
 
 		if (userId) {
@@ -394,6 +421,7 @@ export const initializeAnalytics = async () => {
 				user_properties: {
 					app_version: __APP_VERSION__,
 					is_installed: globalIsInstalled ? "yes" : "no",
+					platform_type: safeGetItem("selectedPlatform") || "starship",
 				},
 			},
 		});

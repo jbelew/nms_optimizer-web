@@ -31,7 +31,7 @@ const PAGE_TO_MARKDOWN_MAPPING = {
  * Read markdown file from the locales directory.
  */
 function readMarkdownFile(lang, fileName) {
-	const filePath = path.join(LOCALES_DIR, lang, `pages/${fileName}.md`);
+	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);
 	if (fs.existsSync(filePath)) {
 		return fs.readFileSync(filePath, "utf-8");
 	}

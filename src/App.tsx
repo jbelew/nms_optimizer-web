@@ -4,14 +4,16 @@ import { Outlet } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/Base/AppDialog";
 import { DialogProvider } from "./context/dialogContext";
-import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 // Import the new custom hooks
+import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
+import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
 import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
 import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
 import { useOptimizeStore } from "./store/app/optimizeStore";
+import { sendEvent } from "./utils/analytics/tracking";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
@@ -78,6 +80,7 @@ const UserStatsRoute = lazy(() =>
  * ```
  */
 const AppContent: FC = () => {
+	const { sendEvent } = useAnalytics();
 	const { showError, errorType } = useOptimizeStore();
 	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
 	const { t } = useTranslation();
@@ -113,7 +116,44 @@ const AppContent: FC = () => {
 		markUserVisited();
 	};
 
-	// useFetchShipTypesSuspense() - Moved down to allow header rendering
+	// Track welcome screen if shown
+	useEffect(() => {
+		if (showWelcome) {
+			sendEvent({
+				category: "ui",
+				action: "screen_view",
+				firebase_screen: "welcome",
+				screen_class: "AppDialog",
+				nonInteraction: false,
+			});
+		}
+	}, [showWelcome, sendEvent]);
+
+	// Track error screen if shown
+	useEffect(() => {
+		if (showError && errorType === "fatal") {
+			sendEvent({
+				category: "ui",
+				action: "screen_view",
+				firebase_screen: "error",
+				screen_class: "AppDialog",
+				nonInteraction: false,
+			});
+		}
+	}, [showError, errorType, sendEvent]);
+
+	// Track User Stats screen if shown
+	useEffect(() => {
+		if (activeDialog === "userstats") {
+			sendEvent({
+				category: "ui",
+				action: "screen_view",
+				firebase_screen: "user_stats",
+				screen_class: "UserStatsRoute",
+				nonInteraction: false,
+			});
+		}
+	}, [activeDialog, sendEvent]);
 
 	// Use the URL sync hook at the top level to handle popstate and share-link loading
 	useUrlSync();
@@ -199,6 +239,19 @@ const App: FC = () => {
 
 	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
 	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
+
+	// Centralized update prompt tracking
+	useEffect(() => {
+		if (showUpdatePrompt) {
+			sendEvent({
+				category: "ui",
+				action: "screen_view",
+				firebase_screen: "update_prompt",
+				screen_class: "UpdatePrompt",
+				nonInteraction: true,
+			});
+		}
+	}, [showUpdatePrompt]);
 
 	useUpdateCheck((updateSW) => {
 		updateSWRef.current = updateSW;
@@ -297,5 +350,3 @@ const App: FC = () => {
 };
 
 export default App;
-// Trigger release workflow
-// Trigger build

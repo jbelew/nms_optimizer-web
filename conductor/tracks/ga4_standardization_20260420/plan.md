@@ -1,17 +1,17 @@
 # Implementation Plan: GA4 Measurement Strategy & Event Standardization
 
-## Phase 1: Audit & Baseline Verification
+## Phase 1: Audit & Baseline Verification [checkpoint: 19e8b1f]
 - [x] Task: Audit existing tracking implementation in `src/utils/analytics.ts` and related components.
 - [x] Task: Verify usage of `optimize_tech` to ensure it and its parameters (`platform`, `tech`, `supercharged`) remain unchanged.
 - [x] Task: Map current events to proposed `snake_case` and GA4 recommended equivalents.
-- [~] Task: Conductor - User Manual Verification 'Audit & Baseline Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Audit & Baseline Verification' (Protocol in workflow.md)
 
 ## Phase 2: Core Infrastructure & Standard Refactoring
 <!-- execution: parallel -->
-- [ ] Task: Refactor `analytics.ts` utility to enforce `snake_case` and support new parameter structures. <!-- files: src/utils/analytics.ts -->
-- [ ] Task: Implement `platform_type` user-scoped custom dimension. <!-- files: src/utils/analytics.ts, src/store/useStore.ts -->
-- [ ] Task: Update Platform Selection tracking to use `select_content` with `content_type: 'platform'`. <!-- files: src/components/Header/PlatformSelector.tsx -->
-- [ ] Task: Conductor - User Manual Verification 'Core Infrastructure & Standard Refactoring' (Protocol in workflow.md)
+- [x] Task: Refactor `analytics.ts` utility to enforce `snake_case` and support new parameter structures. <!-- files: src/utils/analytics.ts -->
+- [x] Task: Implement `platform_type` user-scoped custom dimension. <!-- files: src/utils/analytics.ts, src/store/useStore.ts -->
+- [x] Task: Update Platform Selection tracking to use `select_content` with `content_type: 'platform'`. <!-- files: src/components/Header/PlatformSelector.tsx -->
+- [~] Task: Conductor - User Manual Verification 'Core Infrastructure & Standard Refactoring' (Protocol in workflow.md)
 
 ## Phase 3: Enhanced Action & Management Tracking
 <!-- execution: parallel -->

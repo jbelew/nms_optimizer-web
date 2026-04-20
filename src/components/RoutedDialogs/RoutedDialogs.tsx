@@ -12,9 +12,10 @@
  */
 
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useDialog } from "../../utils/system/dialogUtils";
 import AppDialog from "../AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/Common/LoremIpsumSkeleton";
@@ -48,6 +49,20 @@ const MarkdownContentRenderer = lazy(() => import("../AppDialog/Markdown/Markdow
 export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();
 	const { activeDialog, closeDialog, sectionToScrollTo } = useDialog();
+	const { sendEvent } = useAnalytics();
+
+	// Centralized screen view tracking for routed dialogs
+	useEffect(() => {
+		if (activeDialog && activeDialog !== "userstats") {
+			sendEvent({
+				category: "ui",
+				action: "screen_view",
+				firebase_screen: activeDialog,
+				screen_class: "AppDialog",
+				nonInteraction: false,
+			});
+		}
+	}, [activeDialog, sendEvent]);
 
 	return (
 		<>

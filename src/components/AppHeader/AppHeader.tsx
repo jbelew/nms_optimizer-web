@@ -103,14 +103,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							}}
 							onClick={() => {
 								onShowChangelog();
-								startTransition(() => {
-									sendEvent({
-										category: "ui",
-										action: "show_changelog",
-										value: 1,
-										nonInteraction: false,
-									});
-								});
 							}}
 						>
 							<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -126,14 +118,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							}}
 							onClick={() => {
 								openDialog("userstats");
-								startTransition(() => {
-									sendEvent({
-										category: "ui",
-										action: "show_user_stats",
-										value: 1,
-										nonInteraction: false,
-									});
-								});
 							}}
 						>
 							<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -182,7 +166,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								startTransition(() => {
 									sendEvent({
 										category: "ui",
-										action: "found_secret",
+										action: "earn_virtual_currency",
+										virtual_currency_name: "easter_egg",
 										value: 1,
 										nonInteraction: false,
 									});

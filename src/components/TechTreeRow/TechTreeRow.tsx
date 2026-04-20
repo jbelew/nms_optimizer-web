@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import { useA11yStore } from "@/store/app/a11yStore";
 
+import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { useTechBonusStore } from "../../store/tech/techBonusStore";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
@@ -396,6 +397,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
+	const { sendEvent } = useAnalytics();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
@@ -426,6 +428,15 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 			optimizeClickedRef.current = false;
 			startTransition(() => {
 				setIsOpen(open);
+
+				sendEvent({
+					category: "ui",
+					action: "screen_view",
+					firebase_screen: "module_selection",
+					screen_class: "ModuleSelectionDialog",
+					tech: tech,
+					nonInteraction: false,
+				});
 			});
 		} else {
 			startTransition(() => {
