@@ -19,12 +19,12 @@
 - [x] Task: Implement `method` parameter for `share_build`, `save_build`, `load_build`, and `screenshot_build`. <!-- files: src/components/BuildManagement/BuildActions.tsx, src/utils/sharing.ts -->
 - [x] Task: Conductor - User Manual Verification 'Enhanced Action & Management Tracking' (Protocol in workflow.md)
 
-## Phase 4: Performance Metrics & Web Vitals Refinement
-- [~] Task: Refine Web Vitals event payload to ensure numerical values are sent correctly for GA4 custom metrics.
-- [~] Task: Update `LCP`, `CLS`, `INP`, `FCP`, and `TBT` (via performance trace utility) event structures.
-- [ ] Task: Conductor - User Manual Verification 'Performance Metrics & Web Vitals Refinement' (Protocol in workflow.md)
+## Phase 4: Performance Metrics & Web Vitals Refinement [checkpoint: 0a45971]
+- [x] Task: Refine Web Vitals event payload to ensure numerical values are sent correctly for GA4 custom metrics.
+- [x] Task: Update `LCP`, `CLS`, `INP`, `FCP`, and `TBT` (via performance trace utility) event structures.
+- [x] Task: Conductor - User Manual Verification 'Performance Metrics & Web Vitals Refinement' (Protocol in workflow.md)
 
 ## Phase 5: Final Validation & Documentation
-- [ ] Task: Verify all events in GA4 Realtime reports (via browser manual verification).
-- [ ] Task: Document the final GA4 Event Schema in `learnings.md`.
-- [ ] Task: Conductor - User Manual Verification 'Final Validation & Documentation' (Protocol in workflow.md)
+- [x] Task: Verify all events in GA4 Realtime reports (via browser manual verification).
+- [x] Task: Document the final GA4 Event Schema in `learnings.md`.
+- [x] Task: Conductor - User Manual Verification 'Final Validation & Documentation' (Protocol in workflow.md)
