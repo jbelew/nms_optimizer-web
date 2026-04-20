@@ -6,18 +6,18 @@
 - [x] Task: Map current events to proposed `snake_case` and GA4 recommended equivalents.
 - [x] Task: Conductor - User Manual Verification 'Audit & Baseline Verification' (Protocol in workflow.md)
 
-## Phase 2: Core Infrastructure & Standard Refactoring
+## Phase 2: Core Infrastructure & Standard Refactoring [checkpoint: f038fb5]
 <!-- execution: parallel -->
 - [x] Task: Refactor `analytics.ts` utility to enforce `snake_case` and support new parameter structures. <!-- files: src/utils/analytics.ts -->
 - [x] Task: Implement `platform_type` user-scoped custom dimension. <!-- files: src/utils/analytics.ts, src/store/useStore.ts -->
 - [x] Task: Update Platform Selection tracking to use `select_content` with `content_type: 'platform'`. <!-- files: src/components/Header/PlatformSelector.tsx -->
-- [~] Task: Conductor - User Manual Verification 'Core Infrastructure & Standard Refactoring' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Core Infrastructure & Standard Refactoring' (Protocol in workflow.md)
 
 ## Phase 3: Enhanced Action & Management Tracking
 <!-- execution: parallel -->
-- [ ] Task: Update "Solve" event tracking with refined parameters (preserving `optimize_tech` as required). <!-- files: src/components/Solver/SolveButton.tsx -->
-- [ ] Task: Implement `method` parameter for `share_build`, `save_build`, `load_build`, and `screenshot_build`. <!-- files: src/components/BuildManagement/BuildActions.tsx, src/utils/sharing.ts -->
-- [ ] Task: Conductor - User Manual Verification 'Enhanced Action & Management Tracking' (Protocol in workflow.md)
+- [x] Task: Update "Solve" event tracking with refined parameters (preserving `optimize_tech` as required). <!-- files: src/components/Solver/SolveButton.tsx -->
+- [x] Task: Implement `method` parameter for `share_build`, `save_build`, `load_build`, and `screenshot_build`. <!-- files: src/components/BuildManagement/BuildActions.tsx, src/utils/sharing.ts -->
+- [~] Task: Conductor - User Manual Verification 'Enhanced Action & Management Tracking' (Protocol in workflow.md)
 
 ## Phase 4: Performance Metrics & Web Vitals Refinement
 - [ ] Task: Refine Web Vitals event payload to ensure numerical values are sent correctly for GA4 custom metrics.

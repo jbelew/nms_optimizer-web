@@ -10,7 +10,6 @@ import { useOptimize } from "../../hooks/useOptimize/useOptimize";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
 import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
-import { useToast } from "../../hooks/useToast/useToast";
 import { build, getBuildDate } from "../../routeConfig";
 import { usePlatformStore } from "../../store/app/platformStore";
 import { useSessionStore } from "../../store/app/sessionStore";
@@ -66,18 +65,13 @@ export const useMainAppLogic = () => {
 	const { isVisible, toolbarRef, forceShow } = useScrollHide(80);
 	const { resetSession } = useSessionStore();
 
-	const { showSuccess, showError } = useToast();
-
 	const optimize = useOptimize();
 
 	const appLayout = useAppLayout();
 
 	const saveBuild = useSaveBuild();
 
-	const loadBuild = useLoadBuild({
-		showSuccess,
-		showError,
-	});
+	const loadBuild = useLoadBuild();
 
 	// Reset error counts when ship type changes
 	useEffect(() => {

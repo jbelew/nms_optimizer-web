@@ -119,9 +119,10 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 			sendEvent({
 				category: "ui",
 				action: "save_build",
-				value: 1,
-				buildName,
+				method: "nms_file",
+				build_name: buildName,
 				shipType: selectedShipType,
+				value: 1,
 				nonInteraction: false,
 			});
 		} catch (error) {

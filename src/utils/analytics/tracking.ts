@@ -103,8 +103,12 @@ export interface GA4Event {
 	stackTrace?: string;
 	/** Name of the build. */
 	buildName?: string;
+	/** Name of the build (snake_case). */
+	build_name?: string;
 	/** Filename involved. */
 	fileName?: string;
+	/** Filename involved (snake_case). */
+	file_name?: string;
 	/** Ship type category. */
 	shipType?: string;
 	/** Storage status. */

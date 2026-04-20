@@ -19,7 +19,6 @@ import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
 import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
 import { useScreenshot } from "../../hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useToast } from "../../hooks/useToast/useToast";
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/grid/gridStore";
 import { useDialog } from "../../utils/system/dialogUtils";
@@ -68,7 +67,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const { showSuccess, showError } = useToast();
 	const {
 		isSaveBuildDialogOpen,
 		handleSaveBuild,
@@ -76,10 +74,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 		handleBuildNameCancel,
 		isSavePending,
 	} = useSaveBuild();
-	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild({
-		showSuccess,
-		showError,
-	});
+	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
 	const { handleScreenshot, isCapturing } = useScreenshot();
 	const isAbove1024 = useBreakpoint("1024px");
 	const scrollOptions = { skipOnLargeScreens: false };

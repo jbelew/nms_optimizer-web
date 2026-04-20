@@ -116,19 +116,6 @@ const AppContent: FC = () => {
 		markUserVisited();
 	};
 
-	// Track welcome screen if shown
-	useEffect(() => {
-		if (showWelcome) {
-			sendEvent({
-				category: "ui",
-				action: "screen_view",
-				firebase_screen: "welcome",
-				screen_class: "AppDialog",
-				nonInteraction: false,
-			});
-		}
-	}, [showWelcome, sendEvent]);
-
 	// Track error screen if shown
 	useEffect(() => {
 		if (showError && errorType === "fatal") {
@@ -137,7 +124,7 @@ const AppContent: FC = () => {
 				action: "screen_view",
 				firebase_screen: "error",
 				screen_class: "AppDialog",
-				nonInteraction: false,
+				nonInteraction: true,
 			});
 		}
 	}, [showError, errorType, sendEvent]);
@@ -150,7 +137,7 @@ const AppContent: FC = () => {
 				action: "screen_view",
 				firebase_screen: "user_stats",
 				screen_class: "UserStatsRoute",
-				nonInteraction: false,
+				nonInteraction: true,
 			});
 		}
 	}, [activeDialog, sendEvent]);

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
+import { useAnalytics } from "../../../hooks/useAnalytics/useAnalytics";
 import { useDialog } from "../../../utils/system/dialogUtils";
 import DynamicRadixIcon from "../Common/DynamicRadixIcon";
 
@@ -43,9 +44,21 @@ interface WelcomeContentProps {
 const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
+	const { sendEvent } = useAnalytics();
 
 	const iconSize = 16;
 	const iconColor = "var(--accent-11)";
+
+	// Track welcome screen view on mount
+	React.useEffect(() => {
+		sendEvent({
+			category: "ui",
+			action: "screen_view",
+			firebase_screen: "welcome",
+			screen_class: "AppDialog",
+			nonInteraction: true,
+		});
+	}, [sendEvent]);
 
 	/**
 	 * Closes the welcome dialog and immediately opens the instructions dialog.

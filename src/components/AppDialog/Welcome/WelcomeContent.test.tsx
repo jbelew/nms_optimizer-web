@@ -8,6 +8,12 @@ import { vi } from "vitest";
 import { DialogContext } from "../../../utils/system/dialogUtils";
 import WelcomeContent from "./WelcomeContent";
 
+vi.mock("../../../hooks/useAnalytics/useAnalytics", () => ({
+	useAnalytics: () => ({
+		sendEvent: vi.fn(),
+	}),
+}));
+
 interface TransProps {
 	i18nKey: string;
 	children?: ReactNode;

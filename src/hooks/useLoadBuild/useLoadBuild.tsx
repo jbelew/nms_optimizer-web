@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { usePlatformStore } from "../../store/app/platformStore";
 import { useAnalytics } from "../useAnalytics/useAnalytics";
 import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
+import { useToast } from "../useToast/useToast";
 
 /**
  * Return type for the `useLoadBuild` hook.
@@ -12,121 +13,77 @@ import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager"
 export interface UseLoadBuildReturn {
 	/** Ref to the hidden file input element. */
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
-	/** Function to programmatically trigger the file input click. */
+	/** Triggers the native file selection dialog. */
 	handleLoadBuild: () => void;
-	/**
-	 * Handler for the file input's `onChange` event.
-	 *
-	 * @param {React.ChangeEvent<HTMLInputElement>} event - The change event from the file input.
-	 *
-	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
-	 */
+	/** Processes the user's selected file. */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-	/** Whether a build is currently being parsed and loaded. */
+	/** Whether a file is currently being parsed and loaded. */
 	isLoadPending: boolean;
 }
 
 /**
- * Props for the `useLoadBuild` hook.
- */
-export interface UseLoadBuildProps {
-	/**
-	 * Callback to display a success toast.
-	 *
-	 * @param {string} title - The title of the toast.
-	 * @param {string | React.ReactNode} description - The description or content of the toast.
-	 * @param {number} [duration] - Optional duration in milliseconds.
-	 */
-	showSuccess: (title: string, description: string | React.ReactNode, duration?: number) => void;
-	/**
-	 * Callback to display an error toast.
-	 *
-	 * @param {string} title - The title of the toast.
-	 * @param {string} description - The description of the error.
-	 * @param {number} [duration] - Optional duration in milliseconds.
-	 */
-	showError: (title: string, description: string, duration?: number) => void;
-}
-
-/**
- * Custom hook for managing the "Load Build" workflow.
+ * Custom hook for managing the asynchronous loading of `.nms` build files.
  *
  * @remarks
- * It handles the file selection process, delegates parsing to `useBuildFileManager`,
- * tracks loading state, sends analytics events, and manages success/error notifications.
+ * This hook handles the complete file loading workflow, including:
+ * - Programmatic triggering of the file input.
+ * - Validation and parsing of the selected file.
+ * - Updating the global grid state.
+ * - Error reporting and success notifications via toasts.
+ * - Analytics tracking of load events.
  *
- * @param {UseLoadBuildProps} [props] - Optional callbacks for displaying notifications.
+ * @returns {UseLoadBuildReturn} An object containing the file input ref and handlers.
  *
- * @returns {UseLoadBuildReturn} State and event handlers for build loading.
- *
- * @see {@link useBuildFileManager} for the underlying file parsing logic.
- * @see {@link useAnalytics} for event tracking.
- * @see {@link usePlatformStore} for retrieving the currently selected ship type.
- *
- * @hook
+ * @see {@link useBuildFileManager} for the underlying parsing logic.
+ * @see {@link useToast} for user notifications.
  *
  * @category Hooks
  *
  * @example
  * ```tsx
- * const { handleLoadBuild, isLoadPending, fileInputRef, handleFileSelect } = useLoadBuild({
- *   showSuccess: (title, desc) => console.log(title, desc),
- *   showError: (title, err) => console.error(title, err)
- * });
+ * const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
  *
  * return (
  *   <>
- *     <button onClick={handleLoadBuild} disabled={isLoadPending}>
- *       Load Save File
- *     </button>
- *     <input
- *       type="file"
- *       ref={fileInputRef}
- *       onChange={handleFileSelect}
- *       style={{ display: 'none' }}
- *       accept=".nms"
- *     />
+ *     <input type="file" ref={fileInputRef} onChange={handleFileSelect} hidden />
+ *     <Button onClick={handleLoadBuild} loading={isLoadPending}>Load</Button>
  *   </>
  * );
  * ```
  */
-export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
+export const useLoadBuild = (): UseLoadBuildReturn => {
 	const { t } = useTranslation();
 	const { loadBuildFromFile } = useBuildFileManager();
+	const { showSuccess, showError } = useToast();
 	const { sendEvent } = useAnalytics();
-	const { showSuccess, showError } = props || { showSuccess: () => {}, showError: () => {} };
-	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isLoadPending, setIsLoadPending] = useState(false);
+	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 
 	/**
-	 * Opens the system file picker dialog.
-	 *
-	 * @returns {void} Side-effects only.
+	 * Programmatically clicks the hidden file input to open the browser's picker.
 	 *
 	 * @example
-	 * ```typescript
 	 * handleLoadBuild();
-	 * // returns void, side-effect: opens file dialog
-	 * ```
 	 */
 	const handleLoadBuild = () => {
-		fileInputRef.current?.click();
+		if (fileInputRef.current) {
+			fileInputRef.current.click();
+		}
 	};
 
 	/**
-	 * Processes the selected build file and updates the application state.
+	 * Handler for the file input's `change` event.
 	 *
-	 * @param {import("react").ChangeEvent<HTMLInputElement>} event - The change event from the file input.
+	 * It extracts the first selected file, invokes the `loadBuildFromFile` utility,
+	 * and manages the pending state and user feedback.
 	 *
-	 * @returns {Promise<void>} Resolves when the file is processed and state is updated.
+	 * @param {React.ChangeEvent<HTMLInputElement>} event - The browser's change event.
+	 *
+	 * @returns {Promise<void>} Resolves when the file is processed.
 	 *
 	 * @example
-	 * ```tsx
 	 * <input type="file" onChange={handleFileSelect} />
-	 * // returns Promise<void>, side-effect: parses file and updates GridStore
-	 * ```
 	 */
 	const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
@@ -146,9 +103,10 @@ export const useLoadBuild = (props?: UseLoadBuildProps): UseLoadBuildReturn => {
 				sendEvent({
 					category: "ui",
 					action: "load_build",
-					value: 1,
-					fileName: file.name,
+					method: "nms_file",
+					file_name: file.name,
 					shipType: selectedShipType,
+					value: 1,
 					nonInteraction: false,
 				});
 			} catch (error) {

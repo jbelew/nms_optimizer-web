@@ -228,18 +228,27 @@ export const useSeoAndTitle = () => {
 
 		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
 		const pageDescription = t(metadata.descriptionKey);
+		const pageKeywords = t("seo.keywords", { defaultValue: "" });
+		const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
 
 		document.title = pageTitle;
 		updateMetaTag("description", pageDescription);
+		updateMetaTag("keywords", pageKeywords);
+
+		// --- Canonical & Hreflang URL Logic ---
+		const baseUrl = "https://nms-optimizer.app";
+		const ogImageUrl = `${baseUrl}/assets/img/screenshots/screenshot.png`;
 
 		// --- Social Media Tags ---
 		updateMetaPropertyTag("og:title", pageTitle);
 		updateMetaPropertyTag("og:description", pageDescription);
+		updateMetaPropertyTag("og:image", ogImageUrl);
+		updateMetaPropertyTag("og:image:alt", ogImageAlt);
+
 		updateMetaTag("twitter:title", pageTitle);
 		updateMetaTag("twitter:description", pageDescription);
-
-		// --- Canonical & Hreflang URL Logic ---
-		const baseUrl = "https://nms-optimizer.app";
+		updateMetaTag("twitter:image", ogImageUrl);
+		updateMetaTag("twitter:image:alt", ogImageAlt);
 
 		// Ensure path ends with a slash
 		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);

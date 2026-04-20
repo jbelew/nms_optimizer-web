@@ -54,11 +54,12 @@ const NotFound: FC = () => {
 		document.title = pageTitle;
 
 		sendEvent({
-			action: "page_view",
 			category: "navigation",
+			action: "page_view",
 			page_title: pageTitle,
 			page_location: window.location.href,
 			page: window.location.pathname,
+			nonInteraction: true,
 		});
 
 		sendEvent({

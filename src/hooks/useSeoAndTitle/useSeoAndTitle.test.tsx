@@ -88,6 +88,17 @@ describe("useSeoAndTitle", () => {
 				document.querySelector("meta[name='twitter:title']")?.getAttribute("content")
 			).toBe("NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky");
 
+			// Check keywords and images
+			expect(document.querySelector("meta[name='keywords']")?.getAttribute("content")).toBe(
+				"seo.keywords"
+			);
+			expect(
+				document.querySelector("meta[property='og:image']")?.getAttribute("content")
+			).toBe("https://nms-optimizer.app/assets/img/screenshots/screenshot.png");
+			expect(
+				document.querySelector("meta[property='og:image:alt']")?.getAttribute("content")
+			).toBe("seo.ogImageAlt");
+
 			// Check analytics call
 			expect(sendEvent).toHaveBeenCalledWith(
 				expect.objectContaining({

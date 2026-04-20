@@ -208,7 +208,8 @@ export function useScreenshot(): UseScreenshotReturn {
 				);
 				sendEvent({
 					category: "ui",
-					action: "screenshot_grid",
+					action: "screenshot_build",
+					method: "png",
 					value: 1,
 					nonInteraction: false,
 				});
