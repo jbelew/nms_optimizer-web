@@ -647,4 +647,46 @@ This document serves as an immutable, timestamped log of PRAR cycles.
     - Non-blocking 'Nuclear Reset' logic for PWA recovery on 500.html.
     - Verified GA4/Sentry integration with Playwright (handling CSP and SRI).
 - **Critical Lesson**: NEVER skip validation. The minifier removes optional tags; the Service Worker hangs on await; the CSP blocks new CDNs. Only empirical evidence counts.
-\n## PRAR Cycle: E2E Test Reliability & Resilience (2026-04-17)\n\n### Problem\nThe E2E test suite was brittle due to manual timeouts, incorrect asset paths, and conflated element selectors. Application resilience logic was also misaligned with the current build structure, preventing proper error recovery.\n\n### Research\n- Audited existing tests and found widespread use of `waitForTimeout`.\n- Identified that `index.html` was looking for assets in `/assets/` while the build output moved them to `/build/`.\n- Discovered `gridcell` role was being used for both tech cells and row control buttons, causing flaky selector targeting.\n- Found that production minification was stripping test-only store exposure code.\n\n### Act\n- Fixed `index.html` asset path recognition to include `/build/`.\n- Implemented `isCritical` flag for API calls to trigger global `handleInitError` on boot-level fetch failures.\n- Added `data-testid='grid-cell'` for unambiguous element targeting.\n- Robustified store exposure in `gridStore.ts` to survive minification using a dynamic `window` check.\n- Replaced `waitForTimeout` with `window.__APP_READY__` flag and event-based waiting.\n- Added mobile touch interaction coverage with a dedicated `mobile-chrome` Playwright project.\n- Optimized Playwright config for CI (retries, timeouts, single-worker mode).\n\n### Results\n- 40/40 Chromium tests passing consistently in CI mode.\n- Application gracefully redirects to `500.html` on critical API failures.\n- Improved developer experience with standardized store interaction helpers.\n- Codebase meets all linting, formatting, and unit test standards.
+
+## PRAR Cycle: E2E Test Reliability & Resilience (2026-04-17)
+
+### Problem
+The E2E test suite was brittle due to manual timeouts, incorrect asset paths, and conflated element selectors. Application resilience logic was also misaligned with the current build structure, preventing proper error recovery.
+
+### Research
+- Audited existing tests and found widespread use of `waitForTimeout`.
+- Identified that `index.html` was looking for assets in `/assets/` while the build output moved them to `/build/`.
+- Discovered `gridcell` role was being used for both tech cells and row control buttons, causing flaky selector targeting.
+- Found that production minification was stripping test-only store exposure code.
+
+### Act
+- Fixed `index.html` asset path recognition to include `/build/`.
+- Implemented `isCritical` flag for API calls to trigger global `handleInitError` on boot-level fetch failures.
+- Added `data-testid='grid-cell'` for unambiguous element targeting.
+- Robustified store exposure in `gridStore.ts` to survive minification using a dynamic `window` check.
+- Replaced `waitForTimeout` with `window.__APP_READY__` flag and event-based waiting.
+- Added mobile touch interaction coverage with a dedicated `mobile-chrome` Playwright project.
+- Optimized Playwright config for CI (retries, timeouts, single-worker mode).
+
+### Results
+- 40/40 Chromium tests passing consistently in CI mode.
+- Application gracefully redirects to `500.html` on critical API failures.
+- Improved developer experience with standardized store interaction helpers.
+- Codebase meets all linting, formatting, and unit test standards.
+
+## 2026-04-19: Screenshot Corner Color Adjustment
+
+### Perceive & Understand
+*   **Request:** Change the background of rounded corners in screenshots from white (transparent) to black.
+*   **Context:** The `useScreenshot` hook clips the captured grid to rounded corners using `destination-in`. This creates transparency. When viewed in certain environments (like a white page or standard image viewer), these transparent corners appear white. The user wants them to be black.
+
+### Reason & Plan
+*   **Plan:** Modify `src/hooks/useScreenshot/useScreenshot.ts` to fill the corners with black.
+*   **Strategy:** Use `globalCompositeOperation = "destination-over"` with a black fill after the clipping step. This ensures that any area that was made transparent by the clipping (the corners) is filled with black, while the main content (where Alpha was 1) remains unchanged.
+
+### Act & Implement
+*   **Action:** Added a black `fillRect` with `destination-over` composite operation in `handleScreenshot`.
+*   **Action:** Verified the logic is sound for canvas manipulation.
+
+### Refine & Reflect
+*   **Reflection:** Using `destination-over` is the most efficient way to provide a "fallback" background for transparent areas in a canvas. This directly solves the problem of "exposed" backgrounds in exported images.

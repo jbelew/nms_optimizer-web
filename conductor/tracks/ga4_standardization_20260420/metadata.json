@@ -1,0 +1,11 @@
+{
+  "track_id": "ga4_standardization_20260420",
+  "type": "feature",
+  "status": "new",
+  "priority": "medium",
+  "depends_on": [],
+  "estimated_hours": null,
+  "created_at": "2026-04-20T18:40:00Z",
+  "updated_at": "2026-04-20T18:40:00Z",
+  "description": "Review GA4 implementation, ensure best practices, and improve visibility into user interactions while preserving critical userStats (popular_data) compatibility."
+}

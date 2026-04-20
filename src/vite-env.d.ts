@@ -29,4 +29,8 @@ declare const __BUILD_DATE__: string;
 interface Window {
 	/** Direct access to the `GridStore` for E2E testing. */
 	useGridStore: typeof import("./store/grid/gridStore").useGridStore;
+	/** PWA File Handling API `launchQueue`. */
+	launchQueue?: {
+		setConsumer(callback: (params: { files: FileSystemFileHandle[] }) => void): void;
+	};
 }

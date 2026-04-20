@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 
 import AppDialog from "./components/AppDialog/Base/AppDialog";
 import { DialogProvider } from "./context/dialogContext";
+import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 // Import the new custom hooks
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
@@ -185,6 +186,9 @@ const AppContent: FC = () => {
 const App: FC = () => {
 	const { t } = useTranslation();
 	const { showError, setShowError } = useOptimizeStore();
+
+	// Initialize file handling for PWA file association
+	useFileHandling();
 
 	// Automatically hide splash screen if a global error occurs
 	useEffect(() => {
