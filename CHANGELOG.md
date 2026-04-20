@@ -1,3 +1,10 @@
+## [6.34.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.0...v6.34.1) (2026-04-20)
+
+
+### Bug Fixes
+
+* refine SEO titles and descriptions across all pages and languages, and update tests ([0c69330](https://github.com/jbelew/nms_optimizer-web/commit/0c6933080a3315301232035ce8d77f5ddc304c44))
+
 # [6.34.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.33.4...v6.34.0) (2026-04-20)
 
 
