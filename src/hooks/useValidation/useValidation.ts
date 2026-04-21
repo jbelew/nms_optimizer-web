@@ -110,14 +110,12 @@ export const useUrlValidation = () => {
 
 		// 1. Strip junk parameters and mangled paths
 		// We only keep keys that are in our whitelist.
-		const allKeys = Array.from(currentParams.keys());
-
-		for (const key of allKeys) {
+		Array.from(currentParams.keys()).forEach((key) => {
 			if (!allowedKeys.includes(key)) {
 				currentParams.delete(key);
 				changed = true;
 			}
-		}
+		});
 
 		// 2. Validate data integrity: grid requires platform
 		if (currentParams.has("grid") && !currentParams.has("platform")) {

@@ -123,35 +123,37 @@ export const decompressRLE = (input: string): string => {
  * ```
  */
 export const serialize = (grid: Grid): string => {
-	let gridString = ""; // Raw grid string (0, 1, 2)
-	let techString = "";
-	let moduleString = "";
-	let adjBonusString = ""; // String for adjacency_bonus status ('T'/'F')
 	const techMap: { [key: string]: string } = {};
 	const moduleMap: { [key: string]: string } = {};
 	let nextTechCode = 3;
 	let nextModuleCode = 0;
 
-	for (const row of grid.cells) {
-		for (const cell of row) {
-			// Grid state (active/supercharged)
-			gridString += cell.active ? (cell.supercharged ? "2" : "1") : "0";
+	const allCells = grid.cells.flat();
 
-			// Tech mapping
-			techString += cell.tech
+	const gridString = allCells
+		.map((cell) => (cell.active ? (cell.supercharged ? "2" : "1") : "0"))
+		.join("");
+
+	const techString = allCells
+		.map((cell) =>
+			cell.tech
 				? techMap[cell.tech] || (techMap[cell.tech] = String.fromCharCode(nextTechCode++))
-				: " ";
+				: " "
+		)
+		.join("");
 
-			// Module mapping
-			moduleString += cell.module
+	const moduleString = allCells
+		.map((cell) =>
+			cell.module
 				? moduleMap[cell.module] ||
 					(moduleMap[cell.module] = String.fromCharCode(nextModuleCode++ + 65))
-				: " ";
+				: " "
+		)
+		.join("");
 
-			// Adjacency Bonus status
-			adjBonusString += (cell.adjacency_bonus ?? 0) != 0 ? "T" : "F";
-		}
-	}
+	const adjBonusString = allCells
+		.map((cell) => ((cell.adjacency_bonus ?? 0) != 0 ? "T" : "F"))
+		.join("");
 
 	// Compress the other strings
 	const compressedTech = compressRLE(techString);

@@ -729,54 +729,30 @@ export const useGridStore = create<GridStore>()(
 				hasTechInGrid: (tech: string): boolean => {
 					const grid = get().grid;
 
-					// Use early exit optimization with for loops instead of nested .some()
-					for (const row of grid.cells) {
-						for (const cell of row) {
-							if (cell.tech === tech) {
-								return true;
-							}
-						}
-					}
-
-					return false;
+					return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
 				},
 
 				isGridFull: (): boolean => {
 					const grid = get().grid;
 					if (!grid || !grid.cells) return false;
 
-					let activeCellsCount = 0;
-					let allActiveCellsHaveModules = true;
+					const activeCells = grid.cells.flat().filter((cell) => cell.active);
 
-					for (const row of grid.cells) {
-						for (const cell of row) {
-							if (cell.active) {
-								activeCellsCount++;
-
-								if (cell.module === null) {
-									allActiveCellsHaveModules = false;
-								}
-							}
-						}
-					}
-
-					if (activeCellsCount === 0) {
+					if (activeCells.length === 0) {
 						return false;
 					}
 
-					return allActiveCellsHaveModules;
+					return activeCells.every((cell) => cell.module !== null);
 				},
 				resetGridTech: (tech: string) => {
 					set((state) => {
-						// Use for loops instead of nested forEach for better performance
-						// and clearer early exit semantics
-						for (const row of state.grid.cells) {
-							for (const cell of row) {
+						state.grid.cells.forEach((row) => {
+							row.forEach((cell) => {
 								if (cell.tech === tech) {
 									resetCellContent(cell);
 								}
-							}
-						}
+							});
+						});
 					});
 				},
 
@@ -784,18 +760,12 @@ export const useGridStore = create<GridStore>()(
 					const grid = get().grid;
 					if (!grid || !grid.cells) return 0;
 
-					// Avoid .flat() which creates intermediate array; count directly
-					let count = 0;
-
-					for (const row of grid.cells) {
-						for (const cell of row) {
-							if (cell.supercharged) {
-								count++;
-							}
-						}
-					}
-
-					return count;
+					return grid.cells.reduce(
+						(total, row) =>
+							total +
+							row.reduce((count, cell) => count + (cell.supercharged ? 1 : 0), 0),
+						0
+					);
 				},
 
 				selectHasModulesInGrid: () => {

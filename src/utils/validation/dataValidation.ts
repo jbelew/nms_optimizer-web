@@ -70,13 +70,17 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 		"moduleState",
 	];
 
-	for (const prop of requiredProps) {
+	const allPropsPresent = requiredProps.every((prop) => {
 		if (!(prop in buildFile)) {
 			console.error(`Validation Error: BuildFile missing '${prop}' property.`, buildFile);
 
 			return false;
 		}
-	}
+
+		return true;
+	});
+
+	if (!allPropsPresent) return false;
 
 	if (typeof buildFile.name !== "string") return false;
 	if (typeof buildFile.shipType !== "string") return false;
@@ -191,28 +195,24 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 		return false;
 	}
 
-	for (const row of recommendedBuild.layout) {
+	return recommendedBuild.layout.every((row) => {
 		if (!Array.isArray(row)) return false;
 
-		for (const cellData of row) {
-			if (cellData !== null) {
-				if (typeof cellData !== "object") return false;
-				// Basic structural check
-				if (
-					"tech" in cellData &&
-					typeof cellData.tech !== "string" &&
-					cellData.tech !== null
-				)
-					return false;
-				if (
-					"module" in cellData &&
-					typeof cellData.module !== "string" &&
-					cellData.module !== null
-				)
-					return false;
-			}
-		}
-	}
+		return row.every((cellData) => {
+			if (cellData === null) return true;
+			if (typeof cellData !== "object") return false;
 
-	return true;
+			// Basic structural check
+			const techValid =
+				!("tech" in cellData) ||
+				typeof cellData.tech === "string" ||
+				cellData.tech === null;
+			const moduleValid =
+				!("module" in cellData) ||
+				typeof cellData.module === "string" ||
+				cellData.module === null;
+
+			return techValid && moduleValid;
+		});
+	});
 }

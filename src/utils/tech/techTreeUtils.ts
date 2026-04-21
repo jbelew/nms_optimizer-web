@@ -10,6 +10,10 @@ export interface TechTreeMaps {
 	techColors: Record<string, string>;
 	/** Set of all valid tech keys in the current tree */
 	validTechKeys: Set<string>;
+	/** Grouped tech items by their primary key */
+	techGroups: Record<string, TechTreeItem[]>;
+	/** Map of tech keys to their current active type/mode */
+	activeGroups: Record<string, string>;
 }
 
 /**
@@ -28,15 +32,21 @@ export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
 	const modulesMap = new Map<string, Module>();
 	const techColors: Record<string, string> = {};
 	const validTechKeys = new Set<string>();
+	const techGroups: Record<string, TechTreeItem[]> = {};
+	const activeGroups: Record<string, string> = {};
 
 	if (!techTree) {
-		return { modulesMap, techColors, validTechKeys };
+		return { modulesMap, techColors, validTechKeys, techGroups, activeGroups };
 	}
 
 	for (const category in techTree) {
 		const categoryItems = techTree[category];
 
+		if (category === "recommended_builds" || category === "grid_definition") continue;
+
 		if (Array.isArray(categoryItems)) {
+			const uniqueKeysInCat = new Set<string>();
+
 			for (const item of categoryItems) {
 				if (
 					typeof item === "object" &&
@@ -48,6 +58,17 @@ export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
 					validTechKeys.add(techItem.key);
 					techColors[techItem.key] = techItem.color;
 
+					if (!uniqueKeysInCat.has(techItem.key)) {
+						uniqueKeysInCat.add(techItem.key);
+
+						if (!techGroups[techItem.key]) techGroups[techItem.key] = [];
+						techGroups[techItem.key].push(techItem);
+
+						if (!activeGroups[techItem.key]) {
+							activeGroups[techItem.key] = techItem.type || "normal";
+						}
+					}
+
 					for (const module of techItem.modules) {
 						modulesMap.set(`${techItem.key}/${module.id}`, module);
 					}
@@ -56,5 +77,5 @@ export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
 		}
 	}
 
-	return { modulesMap, techColors, validTechKeys };
+	return { modulesMap, techColors, validTechKeys, techGroups, activeGroups };
 };

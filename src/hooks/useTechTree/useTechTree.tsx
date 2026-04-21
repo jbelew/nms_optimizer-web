@@ -252,53 +252,6 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
 }
 
 /**
- * Extracts metadata (colors, groups) from a raw tech tree object.
- *
- * @remarks
- * Processes the tech tree to build indexed maps for UI coloring and grouping.
- *
- * @param {TechTree} techTree - The tech tree to process.
- *
- * @returns {object} Extracted metadata containing colors, groups, and types.
- *
- * @example Meta extraction
- * ```typescript
- * const { colors, techGroups } = processTechTreeMetadata(treeData);
- * ```
- *
- * @private
- */
-function processTechTreeMetadata(techTree: TechTree) {
-	const { techColors: colors } = getTechTreeMaps(techTree);
-	const techGroups: { [key: string]: TechTreeItem[] } = {};
-	const activeGroups: { [key: string]: string } = {};
-
-	for (const [category, items] of Object.entries(techTree)) {
-		if (category === "recommended_builds" || category === "grid_definition") continue;
-
-		if (Array.isArray(items)) {
-			const uniqueKeys = new Set<string>();
-
-			for (const item of items) {
-				if (typeof item === "object" && item !== null && "key" in item) {
-					if (uniqueKeys.has(item.key)) continue;
-					uniqueKeys.add(item.key);
-
-					if (!techGroups[item.key]) techGroups[item.key] = [];
-					techGroups[item.key].push(item as TechTreeItem);
-
-					if (!activeGroups[item.key]) {
-						activeGroups[item.key] = (item.type as string) || "normal";
-					}
-				}
-			}
-		}
-	}
-
-	return { colors, techGroups, activeGroups };
-}
-
-/**
  * Custom hook for retrieving the technology tree within a Suspense boundary.
  *
  * @remarks
@@ -336,8 +289,8 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0) {
-			const { colors, techGroups, activeGroups } = processTechTreeMetadata(data);
-			useTechStore.getState().initializeTechTree(colors, techGroups, activeGroups);
+			const { techColors, techGroups, activeGroups } = getTechTreeMaps(data);
+			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
 
 			if (data.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
 				const gridStore = useGridStore.getState();
