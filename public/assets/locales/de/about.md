@@ -1,84 +1,64 @@
-# Über NMS Optimizer: Wie die Layout-Optimierung funktioniert
+# About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator
 
-## Was ist das?
+NMS Optimizer is a 100% free, ad-free tool designed to figure out exactly where to place your technology modules in *No Man's Sky*. You pick your equipment, select your S-Class or X-Class upgrade modules, mark your supercharged slots, and our calculator almost instantly generates the layout that maximizes your in-game stats.
 
-NMS Optimizer ist ein kostenloses Tool, das herausfindet, wo Sie Ihre Technologie-Module in No Man's Sky platzieren sollten. Sie wählen Ihre Ausrüstung, Ihre Technologien, markieren Ihre Supercharged Slots, und es berechnet das Layout, das die höchste Punktzahl erzielt.
+By perfectly balancing game mechanics, an optimized layout typically scores **15-20% higher** than what most players can arrange by hand.
 
-Es funktioniert für Raumschiffe (Standard, Sentinel, Solar, Fighter, Living, Atlantid), Korvetten, Multitools, Exosuits, alle Exocraft-Typen und Frachter.
+## The Problem: Maximizing Adjacency Bonuses & Supercharged Slots
+*No Man's Sky* doesn't explicitly explain adjacency bonuses, and offers no guidance on supercharged slot strategy. Maximizing your starship's maneuverability or your multi-tool's damage means juggling two complex systems:
 
-Das Tool handhabt Adjacency Bonuses und die Platzierung von Supercharged Slots automatisch. In der Praxis erzielt ein optimiertes Layout typischerweise 15-20% höhere Werte als das, was die meisten Spieler von Hand anordnen.
+*   **Adjacency Bonuses:** When you place compatible technology modules next to each other on the inventory grid, they get a stat boost. Different technologies have different adjacency partners—weapon upgrades boost each other, movement tech boosts other movement tech, and the more shared edges you create, the bigger the cumulative bonus.
+*   **Supercharged Slots:** These rare inventory slots (usually up to 4 per grid) give a massive ~25-30% stat multiplier to whatever module is placed inside them.
 
-## Das Problem
+Figuring out the absolute best arrangement means testing combinations across millions of possible permutations—up to roughly 8.32 × 10⁸¹ for a fully expanded grid. Nobody is solving that by hand.
 
-No Man's Sky erklärt Adjacency Bonuses nicht gut und die Strategie für Supercharged Slots überhaupt nicht. Module desselben Typs erhalten einen Statistik-Boost, wenn sie eine Kante auf dem Raster teilen. Supercharged Slots geben einen Multiplikator von ~25-30% auf alles, was Sie darin platzieren. Die beste Anordnung zu finden, bedeutet, beide Systeme gleichzeitig zu jonglieren, über Raster mit Millionen möglicher Permutationen (~8.32 × 10⁸¹ für ein vollständiges Layout).
+## How the Layout Optimization Engine Works
+We don't rely on guesswork. The NMS Optimizer engine uses a sophisticated four-step pipeline to automatically find your best build:
 
-Das löst niemand von Hand.
+1.  **Pattern Matching:** The solver starts with hand-tested, community-proven arrangements that reliably score well for common module sets.
+2.  **Machine Learning (AI):** If your grid has unique supercharged slots, a TensorFlow machine learning model—trained on over 16,000 high-scoring layouts—predicts the smartest placements for your core technologies versus your upgrade modules.
+3.  **Simulated Annealing:** Our core optimization engine, built in Rust, rapidly swaps modules and tests thousands of arrangements in milliseconds to climb toward the absolute highest possible score.
+4.  **Result Display:** You immediately see the winning layout alongside a full adjacency multiplier breakdown.
 
-## Wie der Optimizer es löst
+## Supported Equipment
+The NMS Optimizer provides dynamic solving for every major platform in the game:
+*   **Starships:** Standard, Exotic, Sentinel Interceptor, Solar, Fighter, Living, and Atlantid ships.
+*   **Multi-Tools:** All weapon and mining variants, including Staves.
+*   **Exosuits & Exocraft:** All Exosuit technologies and vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
+*   **Freighters:** Capital ship hyperdrive and fleet coordination technology.
+*   **Corvettes:** Support for complex layouts, including unique reactor modules and cosmetic technology slots.
 
-Der Optimizer durchläuft vier Schritte:
+## Frequently Asked Questions (FAQ)
 
-1.  **Mustererkennung** — Er beginnt mit handgetesteten Anordnungen, die für gängige Modul-Sets zuverlässig gut abschneiden.
-2.  **ML-Vorhersage** — Wenn Ihr Raster Supercharged Slots hat, sagt ein `TensorFlow`-Modell, das mit über 16.000 hoch bewerteten Layouts trainiert wurde, voraus, wo Kerntechnologien im Vergleich zu Upgrades platziert werden sollen.
-3.  **Simulated Annealing** — Ein `Rust`-basierter Optimizer tauscht Module aus und testet Tausende von Anordnungen in Millisekunden, um die höchstmögliche Punktzahl zu erreichen.
-4.  **Ergebnisanzeige** — Sie sehen das Layout mit der höchsten Punktzahl und einer vollständigen Aufschlüsselung des Adjacency Multipliers.
+**What should I put in my supercharged slots?**
+It depends on your layout! Sometimes it's best to supercharge your core technology, and other times it's better to supercharge your highest-rolled upgrade. Our AI model was trained on 16,000+ real layouts specifically to make this decision for you.
 
-Jeder Schritt speist den nächsten. Das ML-Modell gibt `Simulated Annealing` einen starken Ausgangspunkt, und `Annealing` verfeinert von dort aus.
+**Is the NMS Optimizer free?**
+Yes. It is 100% free, ad-free, and open-source (GPL-3.0). You do not need to create an account or provide an email.
 
-## Was der Optimizer berücksichtigt
+**Can I save and share my layouts?**
+Yes! You can save your favorite builds locally as `.nms` files, generate shareable links to send to friends, or share high-quality layout screenshots directly to social media. Builds are validated for integrity before sharing.
 
--   Standard-, Supercharged- und inaktive Slots
--   Ob eine Kerntechnologie oder ihr bestes Upgrade in jeden Supercharged Slot gehört
--   Kompromisse zwischen konkurrierenden Statistiken (Manövrierfähigkeit vs. Geschwindigkeit, Schaden vs. Feuerrate)
--   Modulspezifische Statistik-Gewichtungen und Adjacency Partner-Regeln
+**Why does the tool not show in-game stats?**
+The tool intentionally avoids calculating standard in-game metrics like DPS or Light Year range. Because exact numbers require hidden ship seeds inaccessible without a save editor, the optimizer relies on a "percentage of maximum" score instead.
 
-## Tech Stack
+## Under the Hood: Our Tech Stack
+For the developers and data nerds, here is the technology stack powering the NMS Optimizer:
+*   **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+*   **Backend Solver:** Python, Flask, TensorFlow, NumPy, Rust (powers the simulated annealing and scoring engine)
+*   **Testing:** Vitest, Python Unittest
+*   **Deployment & Hosting:** Heroku (API hosting), Cloudflare (DNS/CDN), Docker
+*   **CI/CD:** GitHub Actions
 
--   **Frontend:** `TypeScript`, `React`, `Zustand`, `Vite`, `Tailwind CSS`, `Radix UI`
--   **Backend-Solver:** `Python`, `Flask`, `TensorFlow`, `NumPy`, `Rust` (`Simulated Annealing` und Scoring)
--   **Testing:** `Vitest`, `Python Unittest`
--   **Deployment:** `Heroku` (Hosting), `Cloudflare` (Hosting/DNS/CDN), `Docker`
--   **CI/CD:** `GitHub Actions`
+### Open Source Repositories
+Want to contribute? The NMS Optimizer is fully open-source.
+- Web UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+- Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## Repositories
+## A Huge Thank You to the Community
+This project wouldn't be possible without the incredible *No Man's Sky* community. A special thank you to George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, and everyone else who has contributed. Your support, donations, shares, and kind words mean everything and help keep this project alive.
 
--   Web-UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
--   Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
+## A Look Back: Early Versions
+![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.png)
+If you were with us in the beginning, you might remember what the UI looked like in its early alpha stages. It worked, but the design was minimal. The current version represents a major, ongoing improvement in design, mobile usability, and overall clarity.
 
-## FAQ
-
-### Was ist ein Adjacency Bonus?
-
-Wenn Sie kompatible Technologie-Module nebeneinander auf dem Inventarraster platzieren, erhalten sie einen Statistik-Boost. Verschiedene Technologien haben unterschiedliche Adjacency Partner – Waffen-Upgrades profitieren voneinander, Bewegungstechnologien profitieren von anderen Bewegungstechnologien und so weiter. Der Optimizer testet alle möglichen Anordnungen und wählt diejenige aus, bei der die gesamten Adjacency Bonuses am höchsten sind.
-
-### Wie funktionieren Supercharged Slots?
-
-Supercharged Slots sind seltene Inventar-Slots (normalerweise 4 pro Raster), die einen Boost von ~25-30% auf jedes Modul geben, das sich darin befindet. Der knifflige Teil ist die Entscheidung, was dorthin gehört. Manchmal ist es die Kerntechnologie, manchmal das Upgrade mit den höchsten Statistiken. Das ML-Modell des Optimizers ist speziell auf diese Entscheidung trainiert und verwendet über 16.000 reale Layouts als Trainingsdaten.
-
-### Welche Ausrüstungstypen werden unterstützt?
-
-Alle davon:
-
--   **Raumschiffe:** Standard, Exotisch, Sentinel, Solar und Living
--   **Korvetten:** Einschließlich einzigartiger Reaktormodule und kosmetischer Technologie-Slots
--   **Multitools:** Alle Typen einschließlich Stäbe
--   **Exocraft:** Alle Fahrzeugtypen (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon)
--   **Exosuits:** Alle Technologie-Typen
--   **Frachter:** Technologie-Layouts für Großkampfschiffe
-
-### Ist es kostenlos?
-
-Ja. Kostenlos, werbefrei, Open Source (GPL-3.0). Keine Konten oder E-Mail erforderlich.
-
-### Kann ich Builds speichern und teilen?
-
-Ja. Sie können Builds als `.nms`-Dateien speichern, teilbare Links generieren oder direkt in sozialen Medien teilen. Builds werden vor dem Teilen auf Integrität und Ausrüstungskompatibilität überprüft.
-
-## Vielen Dank
-
-George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen, die beigetragen haben – Ihre Unterstützung bedeutet alles. Jede Spende, jeder Share und jedes nette Wort hilft mir, weiter zu entwickeln. Vielen Dank.
-
-## Frühe Version
-
-So sah die Benutzeroberfläche in einer frühen Version aus – sie funktionierte, aber das Design war minimalistisch. Die aktuelle Version ist eine wesentliche Verbesserung in Design, Benutzerfreundlichkeit und Klarheit.
-![Früher Prototyp der Benutzeroberfläche des No Man's Sky Layout-Optimierers](/assets/img/screenshots/screenshot_v03.png)
