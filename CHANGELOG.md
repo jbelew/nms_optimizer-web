@@ -1,3 +1,10 @@
+## [6.34.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.2...v6.34.3) (2026-04-21)
+
+
+### Bug Fixes
+
+* **pwa:** rename analytics chunk and fix favicon path for incognito reliability ([977b33d](https://github.com/jbelew/nms_optimizer-web/commit/977b33d45bbadd6cd423d010695924cd24837b48))
+
 ## [6.34.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.1...v6.34.2) (2026-04-21)
 
 
