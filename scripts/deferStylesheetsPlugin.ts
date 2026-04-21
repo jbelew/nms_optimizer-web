@@ -45,6 +45,7 @@ export default function deferStylesheetsPlugin(): Plugin {
 
 				// Avoid processing links inside <noscript> tags. This is a simple check.
 				const preMatchHtml = html.substring(0, match.index);
+
 				if ((preMatchHtml.match(/<noscript/g) || []).length > (preMatchHtml.match(/<\/noscript>/g) || []).length) {
 					continue;
 				}
@@ -53,7 +54,6 @@ export default function deferStylesheetsPlugin(): Plugin {
 				let otherAttributes = preHrefAttributes ? preHrefAttributes + ' ' : '';
 				otherAttributes += postHrefAttributes ? postHrefAttributes : '';
 				otherAttributes = otherAttributes.trim();
-
 
 				const newTag = `<link ${otherAttributes} rel="stylesheet" href="${href}" media="print" onload="this.media='all'">`;
 				replacements.push({ originalTag, newTag, href });

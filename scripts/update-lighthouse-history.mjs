@@ -16,6 +16,7 @@ if (!resultsDir || !historyDir || !sha) {
 }
 
 const manifestPath = path.join(resultsDir, 'manifest.json');
+
 if (!fs.existsSync(manifestPath)) {
   console.error('Manifest not found at', manifestPath);
   process.exit(1);
@@ -44,13 +45,14 @@ let history = [];
 if (fs.existsSync(dataPath)) {
   try {
     history = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-  } catch (e) {
+  } catch (_e) {
     console.warn('Failed to parse existing data.json, starting fresh');
   }
 }
 
 // Check for duplicate SHA (e.g. re-runs)
 const existingIndex = history.findIndex(d => d.sha === sha);
+
 if (existingIndex !== -1) {
   history[existingIndex] = newData;
 } else {
@@ -65,16 +67,19 @@ fs.writeFileSync(dataPath, JSON.stringify(history, null, 2));
 
 // Copy the HTML report to a versioned folder
 const reportsDir = path.join(historyDir, 'reports', sha);
+
 if (!fs.existsSync(reportsDir)) {
   fs.mkdirSync(reportsDir, { recursive: true });
 }
 
 // Robust report discovery
 let reportPath = path.join(resultsDir, run.htmlPath || '');
+
 if (!fs.existsSync(reportPath)) {
   // Fallback: search for any HTML file in the results directory
   const files = fs.readdirSync(resultsDir);
   const htmlFile = files.find(f => f.endsWith('.html') && !f.includes('manifest'));
+
   if (htmlFile) {
     reportPath = path.join(resultsDir, htmlFile);
   }
@@ -92,11 +97,14 @@ if (fs.existsSync(reportPath)) {
 // Copy font assets to ensure dashboard renders correctly on the history branch
 const fontsSourceDir = 'public/assets/fonts';
 const fontsDestDir = path.join(historyDir, 'assets/fonts');
+
 if (fs.existsSync(fontsSourceDir)) {
   if (!fs.existsSync(fontsDestDir)) {
     fs.mkdirSync(fontsDestDir, { recursive: true });
   }
+
   const fontFiles = fs.readdirSync(fontsSourceDir);
+
   for (const file of fontFiles) {
     fs.copyFileSync(path.join(fontsSourceDir, file), path.join(fontsDestDir, file));
   }

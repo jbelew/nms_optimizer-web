@@ -176,6 +176,18 @@ export default tseslint.config(
 	{ ignores: ["dist", "coverage/", "**/tmp", "/tmp", "storybook-static"] },
 
 	//
+	// --- BUILD & UTILITY SCRIPTS ---
+	//
+	{
+		...shared,
+		files: ["scripts/**/*.{js,mjs,ts}"],
+		rules: {
+			...shared.rules,
+			"jsdoc/require-jsdoc": "off", // Optional for internal scripts
+		},
+	},
+
+	//
 	// --- MAIN SOURCE FILES (Business Logic & UI) ---
 	//
 	{

@@ -59,6 +59,7 @@ const optimizedColorContents = [];
 
 // 1. Process base tokens (black-a, white-a, transparent, etc)
 const baseInputPath = join(projectRoot, "node_modules/@radix-ui/themes/tokens/base.css");
+
 try {
 	const baseCss = readFileSync(baseInputPath, "utf-8");
 	// base.css doesn't have the same structure as color files, just strip p3

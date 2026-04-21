@@ -1,6 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="dark background-visible" style="color-scheme: dark">
-<!--
+	<!--
 
 ███╗   ██╗███╗   ███╗███████╗     ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗
 ████╗  ██║████╗ ████║██╔════╝    ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗
@@ -12,471 +12,622 @@
 	                        Built by jbelew (void23 | QQ9Y-EJRS-P8KGW)
 	                                      GPL-3.0 license
 	                       https://github.com/jbelew/nms_optimizer-web
--->
+--><head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<script>
+			(function () {
+				var MARKER = "__preload_recovery__";
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="0" />
-	<script>
-		(function () {
-			var MARKER = "__preload_recovery__";
+				// Handle stale chunk loading after deployment.
+				// One auto-reload attempt; if that fails, redirect to /500.html.
+				// Uses window.name (survives reloads, works in incognito/restricted browsers).
+				window.addEventListener("vite:preloadError", function (event) {
+					event.preventDefault();
 
-			// Handle stale chunk loading after deployment.
-			// One auto-reload attempt; if that fails, redirect to /500.html.
-			// Uses window.name (survives reloads, works in incognito/restricted browsers).
-			window.addEventListener("vite:preloadError", function (event) {
-				event.preventDefault();
+					if (window.name.indexOf(MARKER) === -1) {
+						window.name += MARKER;
+						console.warn("Stale chunk detected. Reloading to fetch updated assets.");
+						location.reload();
+						return;
+					}
 
-				if (window.name.indexOf(MARKER) === -1) {
-					window.name += MARKER;
-					console.warn("Stale chunk detected. Reloading to fetch updated assets.");
-					location.reload();
-					return;
+					// Reload already attempted — redirect to dedicated error page
+					window.name = window.name.replace(MARKER, "");
+					console.error("Stale chunk reload failed. Redirecting to error page.");
+					window.location.replace("/500.html");
+				});
+				// Preload translations based on language in path (matches i18next logic)
+				const supportedLngs = ["en", "es", "fr", "de", "pt"];
+				const pathParts = window.location.pathname.split("/");
+				const detectedLng = supportedLngs.includes(pathParts[1]) ? pathParts[1] : "en";
+				const link = document.createElement("link");
+				link.id = "preload-translations";
+				link.rel = "preload";
+				link.as = "fetch";
+				link.type = "application/json";
+				link.href = "/assets/locales/" + detectedLng + "/translation.json";
+				link.crossOrigin = "anonymous";
+				link.setAttribute("fetchpriority", "high");
+				document.head.appendChild(link);
+
+				// --- PRELOAD API DATA FOR LCP OPTIMIZATION ---
+				// 1. Heuristically guess the selected platform safely
+				let platform = "standard";
+				try {
+					const queryPlatform = new URLSearchParams(window.location.search).get("platform");
+					const storagePlatform = localStorage.getItem("selectedPlatform");
+					if (queryPlatform) platform = queryPlatform;
+					else if (storagePlatform) platform = storagePlatform;
+				} catch (e) {}
+
+				// We use the same API URL already hardcoded in the <link rel="preconnect"> below
+				const apiUrl = "https://api.nms-optimizer.app";
+
+				// 2. Preload Base Platforms Dictionary
+				const platformsLink = document.createElement("link");
+				platformsLink.rel = "preload";
+				platformsLink.as = "fetch";
+				platformsLink.href = apiUrl + "/platforms";
+				platformsLink.crossOrigin = "anonymous";
+				platformsLink.setAttribute("fetchpriority", "high");
+				document.head.appendChild(platformsLink);
+
+				// 3. Preload Tech Tree Payload
+				const techTreeLink = document.createElement("link");
+				techTreeLink.rel = "preload";
+				techTreeLink.as = "fetch";
+				techTreeLink.href = apiUrl + "/tech_tree/" + platform;
+				techTreeLink.crossOrigin = "anonymous";
+				techTreeLink.setAttribute("fetchpriority", "high");
+				document.head.appendChild(techTreeLink);
+				// ---------------------------------------------
+
+				// Detect if this is a bot/crawler or headless browser
+				const isBot =
+					/bot|crawler|spider|headless|phantom|webdriver|google|lighthouse|chrome-lighthouse/i.test(
+						navigator.userAgent
+					) || navigator.webdriver === true;
+
+				if (isBot) {
+					document.documentElement.classList.add("is-bot");
+				}
+			})();
+		</script>
+		<noscript data-vpss-background-noscript="">
+			<style>
+				body::before {
+					content: "";
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-color: #000000;
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+					background-image: image-set(
+						url("/assets/img/background.webp") 1x,
+						url("/assets/img/background@2x.webp") 2x
+					);
+					z-index: -1;
 				}
 
-				// Reload already attempted — redirect to dedicated error page
-				window.name = window.name.replace(MARKER, "");
-				console.error("Stale chunk reload failed. Redirecting to error page.");
-				window.location.replace("/500.html");
-			});
-			// Preload translations based on language in path (matches i18next logic)
-			const supportedLngs = ["en", "es", "fr", "de", "pt"];
-			const pathParts = window.location.pathname.split('/');
-			const detectedLng = supportedLngs.includes(pathParts[1]) ? pathParts[1] : 'en';
-			const link = document.createElement('link');
-			link.id = 'preload-translations';
-			link.rel = 'preload';
-			link.as = 'fetch';
-			link.type = 'application/json';
-			link.href = '/assets/locales/' + detectedLng + '/translation.json';
-			link.crossOrigin = 'anonymous';
-			link.setAttribute('fetchpriority', 'high');
-			document.head.appendChild(link);
-
-			// --- PRELOAD API DATA FOR LCP OPTIMIZATION ---
-			// 1. Heuristically guess the selected platform safely
-			let platform = "standard";
-			try {
-				const queryPlatform = new URLSearchParams(window.location.search).get("platform");
-				const storagePlatform = localStorage.getItem("selectedPlatform");
-				if (queryPlatform) platform = queryPlatform;
-				else if (storagePlatform) platform = storagePlatform;
-			} catch (e) {}
-
-			// We use the same API URL already hardcoded in the <link rel="preconnect"> below
-			const apiUrl = "https://api.nms-optimizer.app";
-
-			// 2. Preload Base Platforms Dictionary
-			const platformsLink = document.createElement('link');
-			platformsLink.rel = 'preload';
-			platformsLink.as = 'fetch';
-			platformsLink.href = apiUrl + '/platforms';
-			platformsLink.crossOrigin = 'anonymous';
-			platformsLink.setAttribute('fetchpriority', 'high');
-			document.head.appendChild(platformsLink);
-
-			// 3. Preload Tech Tree Payload
-			const techTreeLink = document.createElement('link');
-			techTreeLink.rel = 'preload';
-			techTreeLink.as = 'fetch';
-			techTreeLink.href = apiUrl + '/tech_tree/' + platform;
-			techTreeLink.crossOrigin = 'anonymous';
-			techTreeLink.setAttribute('fetchpriority', 'high');
-			document.head.appendChild(techTreeLink);
-			// ---------------------------------------------
-
-			// Detect if this is a bot/crawler or headless browser
-			const isBot = /bot|crawler|spider|headless|phantom|webdriver|google|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) ||
-				navigator.webdriver === true;
-
-			if (isBot) {
-				document.documentElement.classList.add('is-bot');
-			}
-		})();
-	</script>
-	<noscript data-vpss-background-noscript>
+				@media (width <=639px) {
+					body::before {
+						background-image: url("/assets/img/background@mobile-blurred.webp");
+						background-position: center top;
+					}
+				}
+			</style>
+		</noscript>
 		<style>
-			body::before {
+			html {
+				background: #000;
+				color: #fff;
+				scrollbar-gutter: stable;
+			}
+		</style>
+		<style id="vpss-style">
+			.vpss-logo img,
+			.vpss-logo svg {
+				height: 48px !important;
+				width: 48px !important;
+				display: block;
+				margin-bottom: 4px;
+			}
+			.is-bot #vpss {
+				display: none !important;
+			}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="theme-color" content="#003848" />
+
+		<title>NMS Optimizer: Supercharged Slots &amp; Adjacency Bonus</title>
+		<meta
+			name="description"
+			content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more."
+		/>
+		<meta
+			name="keywords"
+			content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator"
+		/>
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="NMS Optimizer: Supercharged Slots &amp; Adjacency Bonus" />
+		<meta
+			property="og:description"
+			content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more."
+		/>
+		<meta
+			property="og:image"
+			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
+		/>
+		<meta
+			property="og:image:alt"
+			content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+		/>
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="NMS Optimizer: Supercharged Slots &amp; Adjacency Bonus" />
+		<meta
+			name="twitter:description"
+			content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more."
+		/>
+		<meta
+			name="twitter:image"
+			content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png"
+		/>
+		<meta
+			name="twitter:image:alt"
+			content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+		/>
+
+		<!-- Favicons -->
+		<link
+			rel="icon"
+			href="/assets/svg/favicon-light.svg"
+			type="image/svg+xml"
+			media="(prefers-color-scheme: light)"
+		/>
+		<link
+			rel="icon"
+			href="/assets/svg/favicon-dark.svg"
+			type="image/svg+xml"
+			media="(prefers-color-scheme: dark)"
+		/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="/assets/img/favicons/apple-touch-icon.png?v=3"
+		/>
+
+		<link rel="stylesheet" href="/src/assets/css/fonts.css" />
+
+		<style>
+			html.background-visible body::before,
+			.is-bot body::before {
 				content: "";
 				position: fixed;
 				top: 0;
 				left: 0;
 				width: 100%;
 				height: 100%;
+
+				/* Set all background properties except image */
 				background-color: #000000;
 				background-position: center;
 				background-repeat: no-repeat;
 				background-size: cover;
-				background-image: image-set(url("/assets/img/background.webp") 1x,
-						url("/assets/img/background@2x.webp") 2x);
+
+				/* Default desktop image-set */
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
 				z-index: -1;
 			}
 
+			/* Mobile (≤639px): Show the blurred mobile background for LCP optimization */
 			@media (width <=639px) {
-				body::before {
+				html.background-visible body::before {
 					background-image: url("/assets/img/background@mobile-blurred.webp");
 					background-position: center top;
 				}
 			}
-		</style>
-	</noscript>
-	<style>
-		html {
-			background: #000;
-			color: #fff;
-			scrollbar-gutter: stable;
-		}
-	</style>
-	<style id="vpss-style">
-		.vpss-logo img,
-		.vpss-logo svg {
-			height: 48px !important;
-			width: 48px !important;
-			display: block;
-			margin-bottom: 4px;
-		}
-		.is-bot #vpss {
-			display: none !important;
-		}
-	</style>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-	<meta name="theme-color" content="#003848" />
 
-	<title>NMS Optimizer: Supercharged Slots & Adjacency Bonus</title>
-	<meta name="description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta name="keywords" content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator" />
-
-	<!-- Open Graph / Facebook -->
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content="NMS Optimizer: Supercharged Slots & Adjacency Bonus" />
-	<meta property="og:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
-	<meta property="og:image:alt" content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
-
-	<!-- Twitter -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="NMS Optimizer: Supercharged Slots & Adjacency Bonus" />
-	<meta name="twitter:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
-	<meta name="twitter:image:alt" content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
-
-	<!-- Favicons -->
-	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
-	<link rel="icon" href="/assets/svg/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
-	<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
-	<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=3" />
-
-	<link rel="stylesheet" href="/src/assets/css/fonts.css" />
-
-	<style>
-		html.background-visible body::before,
-		.is-bot body::before {
-			content: "";
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-
-			/* Set all background properties except image */
-			background-color: #000000;
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: cover;
-
-			/* Default desktop image-set */
-			background-image: image-set(url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x);
-			z-index: -1;
-		}
-
-		/* Mobile (≤639px): Show the blurred mobile background for LCP optimization */
-		@media (width <=639px) {
-			html.background-visible body::before {
-				background-image: url("/assets/img/background@mobile-blurred.webp");
-				background-position: center top;
+			/* Show background on mobile when error boundary is visible (fallback) */
+			body.error-boundary-visible::before {
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
 			}
-		}
 
-		/* Show background on mobile when error boundary is visible (fallback) */
-		body.error-boundary-visible::before {
-			background-image: image-set(url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x);
-		}
+			body.a11y-font::before {
+				background-image: none !important;
+				background-color: #0b161a;
+			}
 
-		body.a11y-font::before {
-			background-image: none !important;
-			background-color: #0B161A;
-		}
+			body {
+				background-color: transparent;
+			}
 
-		body {
-			background-color: transparent;
-		}
+			body.vpss-active {
+				overflow: hidden;
+			}
+		</style>
 
-		body.vpss-active {
-			overflow: hidden;
-		}
-	</style>
+		<!-- Preload mobile blurred background (critical for mobile LCP) -->
+		<link
+			rel="preload"
+			as="image"
+			href="/assets/img/background@mobile-blurred.webp"
+			media="(max-width: 640px)"
+			fetchpriority="high"
+		/>
 
-	<!-- Preload mobile blurred background (critical for mobile LCP) -->
-	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
-		fetchpriority="high" />
+		<!-- Preload responsive desktop background with image-set capabilities -->
+		<link
+			rel="preload"
+			as="image"
+			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
+			media="(min-width: 641px)"
+			fetchpriority="low"
+		/>
 
-	<!-- Preload responsive desktop background with image-set capabilities -->
-	<link rel="preload" as="image" imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" fetchpriority="low" />
+		<!-- Fonts (highest priority) -->
+		<link
+			rel="preload"
+			href="/assets/fonts/geonms.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="high"
+		/>
 
-	<!-- Fonts (highest priority) -->
-	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="high" />
+		<link
+			rel="preload"
+			href="/assets/fonts/raleway.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="high"
+		/>
 
-	<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="high" />
+		<link
+			rel="preload"
+			href="/assets/fonts/acumin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="low"
+		/>
 
-	<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="low" />
+		<!-- Preconnect -->
+		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
+		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
+		<link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin="" />
+		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
 
-	<!-- Preconnect -->
-	<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-	<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin />
-	<link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin />
-	<link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+		<!-- Entry Point (Critical Path) -->
+		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+	</head>
 
-	<!-- Entry Point (Critical Path) -->
-	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
-</head>
+	<body class="background-visible">
+		<div id="root"></div>
 
-<body class="background-visible">
-	<div id="root"></div>
-
-	<noscript data-ssg-template>
-		<main>
-
-			<header class="app-header-static">
-				<div class="app-header-static__logo-text" style="margin-bottom: 4px;">NO MAN'S SKY</div>
-				<div class="app-header-static__separator-container">
-					<span class="app-header-static__separator"></span>
-					<img alt="No Man's Sky Atlas Logo" width="16" height="20" src="/assets/img/nms-icon.webp" />
-					<span class="app-header-static__separator"></span>
-				</div>
-				<h2 class="app-header-static__title">
-					Technology Layout Optimizer <span style="color: #4CCCE6;">ML/RUST</span>
+		<noscript data-ssg-template="">
+			<main>
+				<header class="app-header-static">
+					<div class="app-header-static__logo-text" style="margin-bottom: 4px">NO MAN'S SKY</div>
+					<div class="app-header-static__separator-container">
+						<span class="app-header-static__separator"></span>
+						<img
+							alt="No Man's Sky Atlas Logo"
+							width="16"
+							height="20"
+							src="/assets/img/nms-icon.webp"
+						/>
+						<span class="app-header-static__separator"></span>
+					</div>
+					<h2 class="app-header-static__title">
+						Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>
+					</h2>
+				</header>
+				<h1>No Man's Sky Technology Layout Optimizer</h1>
+				<p class="mb-2 text-sm sm:text-base">
+					<img
+						src="/assets/img/screenshots/screenshot.png"
+						alt="Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement"
+						title=""
+						style="max-width: 100%"
+					/>
+				</p>
+				<p class="mb-2 text-sm sm:text-base">
+					Welcome to the <strong>NMS Optimizer</strong>, a 100% free, ad-free, and open-source tool
+					designed to help you find the absolute best technology layouts in <em>No Man's Sky</em>.
+					Stop guessing where to place your S-Class and X-Class upgrade modules. Pick your platform,
+					select your tech, mark your supercharged slots, and let our calculator instantly generate
+					a layout that maximizes your DPS, maneuverability, and hyperdrive range.
+				</p>
+				<p class="mb-2 text-sm sm:text-base">
+					An optimized layout typically scores <strong>15-20% higher</strong> than what most players
+					can arrange by hand.
+				</p>
+				<h2
+					id="section-maximize-adjacency-bonuses-supercharged-slots"
+					class="mb-3 text-base sm:text-lg"
+				>
+					Maximize Adjacency Bonuses &amp; Supercharged Slots
 				</h2>
-			</header>
-
-			<section>
-				<h1>NMS Optimizer: Tech Layout & Adjacency Bonus Calculator for No Man's Sky</h1>
-				<img src="/assets/img/screenshots/screenshot.png" alt="Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement" />
-				<br />
-				<p>
-					NMS Optimizer figures out where to put your technology modules so you don't have to.
-					Pick your platform, select your modules, mark your supercharged slots, and the
-					optimizer calculates the layout that gets the most out of your adjacency bonuses.
-					It works for starships, corvettes, multitools, exosuits, exocraft, and freighters.
+				<p class="mb-2 text-sm sm:text-base">
+					Finding the perfect tech layout in NMS means balancing two complex game mechanics across
+					millions of possible permutations (up to ~8.32 × 10⁸¹ for a full grid!):
 				</p>
-			</section>
-
-			<section>
-				<h2>What Is an Adjacency Bonus?</h2>
-				<p>
-					When you place compatible technology modules next to each other in No Man's Sky,
-					they get a stat boost. The game doesn't tell you much about how this works, but
-					the short version: modules of the same type that share an edge get a percentage
-					increase to their stats. The more edges shared, the bigger the bonus. Figuring
-					out the right arrangement by hand is tedious, especially on larger grids with
-					supercharged slots to account for.
-				</p>
-			</section>
-
-			<section>
-				<h2>What Are Supercharged Slots?</h2>
-				<p>
-					Some inventory slots in No Man's Sky are supercharged. Any technology module
-					placed in one gets a large stat multiplier on top of normal adjacency bonuses.
-					They're randomly placed on each piece of gear, so the optimal layout changes
-					depending on where your supercharged slots landed. That's the hard part, and
-					it's what this tool is built to solve.
-				</p>
-			</section>
-
-			<section>
-				<h2>How It Works</h2>
-				<p>
-					The optimizer uses a combination of deterministic pattern matching and simulated
-					annealing. For smaller module sets it can find the exact best layout. For larger
-					or more complex grids, simulated annealing explores thousands of arrangements
-					to find one that scores as high as possible. The scoring accounts for adjacency
-					bonuses, supercharged slot placement, and module-specific stat weights. The
-					backend runs in Rust for speed.
-				</p>
-			</section>
-
-			<section>
-				<h2>Supported Platforms</h2>
-				<ul>
-					<li>Starships (standard, sentinel, solar, fighter, living, atlantid)</li>
-					<li>Corvettes</li>
-					<li>Multitools (standard and sentinel)</li>
-					<li>Exosuits</li>
-					<li>Exocraft (roamer, pilgrim, nomad, colossus, minotaur, nautilon)</li>
-					<li>Freighters</li>
+				<ul class="mb-2 list-disc pl-6">
+					<li class="mb-1">
+						<strong>Adjacency Bonuses:</strong> When compatible technology modules (like your Pulse
+						Engine and its S-Class/X-Class upgrades) share an edge on your inventory grid, they
+						receive a percentage increase to their stats. The more shared edges you create, the
+						bigger the bonus.
+					</li>
+					<li class="mb-1">
+						<strong>Supercharged Slots:</strong> These rare inventory slots (up to 4 per grid)
+						provide a massive ~25-30% stat multiplier to whatever module is placed inside them.
+						Because these slots are randomly generated on almost every piece of gear, the "perfect
+						layout" changes for every single ship or tool you find.
+					</li>
 				</ul>
-			</section>
-
-			<nav aria-label="Site navigation">
-				<h2>Navigation</h2>
-				<ul>
-					<li><a href="/">Home</a> - Use the NMS Optimizer layout calculator</li>
-					<li><a href="/instructions">Instructions</a> - Complete guide for using the app</li>
-					<li><a href="/about">About</a> - How it works and technical details</li>
-					<li><a href="/changelog">Changelog</a> - Latest updates and new features</li>
-					<li><a href="/userstats">User Statistics</a> - Popular technologies and builds</li>
-					<li><a href="/translation">Help Translate</a> - Contribute to community localization</li>
+				<p class="mb-2 text-sm sm:text-base">
+					Our layout builder tests thousands of configurations in milliseconds to find the perfect
+					balance between your core technologies, your highest-rolled X-Class upgrades, and your
+					unique supercharged slots.
+				</p>
+				<h2 id="section-supported-platforms-equipment" class="mb-3 text-base sm:text-lg">
+					Supported Platforms &amp; Equipment
+				</h2>
+				<p class="mb-2 text-sm sm:text-base">
+					The NMS Optimizer provides dynamic solving and hand-curated recommended builds for every
+					major equipment type in the game:
+				</p>
+				<ul class="mb-2 list-disc pl-6">
+					<li class="mb-1">
+						<strong>Starships:</strong> Find the highest DPS and maneuverability for Fighters,
+						Explorers, Haulers, Exotics, Solar Ships, Sentinel Interceptors, and Living Ships.
+					</li>
+					<li class="mb-1">
+						<strong>Multi-Tools:</strong> Maximize your mining beam yield or weapon damage across
+						all variants, including standard, Sentinel, Atlantid, and Staves.
+					</li>
+					<li class="mb-1">
+						<strong>Exosuits &amp; Exocraft:</strong> Access optimal, community-tested builds for
+						your Exosuit hazard protection and all vehicles (Minotaur, Roamer, Nomad, Colossus,
+						Pilgrim, and Nautilon).
+					</li>
+					<li class="mb-1">
+						<strong>Freighters:</strong> Optimize your capital ship's hyperdrive range and fleet
+						coordination technology.
+					</li>
 				</ul>
-			</nav>
-		</main>
+				<h2 id="section-powered-by-ai-advanced-algorithms" class="mb-3 text-base sm:text-lg">
+					Powered by AI &amp; Advanced Algorithms
+				</h2>
+				<p class="mb-2 text-sm sm:text-base">
+					We don't just guess. The NMS Optimizer engine uses a sophisticated pipeline to guarantee
+					the best results:
+				</p>
+				<ol class="mb-2 list-decimal pl-6">
+					<li class="mb-1">
+						<strong>Pattern Matching:</strong> We start with hand-tested, community-proven
+						arrangements.
+					</li>
+					<li class="mb-1">
+						<strong>Machine Learning (AI):</strong> A TensorFlow neural network, trained on over
+						16,000 high-scoring layouts, predicts the smartest placements for your supercharged
+						slots.
+					</li>
+					<li class="mb-1">
+						<strong>Simulated Annealing:</strong> Our lightning-fast backend, built in Rust, rapidly
+						swaps modules to climb toward the highest possible stats.
+					</li>
+				</ol>
+				<h2 id="section-privacy-first-community-driven" class="mb-3 text-base sm:text-lg">
+					Privacy-First &amp; Community Driven
+				</h2>
+				<ul class="mb-2 list-disc pl-6">
+					<li class="mb-1">
+						<strong>100% Free &amp; Open Source:</strong> Licensed under GPL-3.0 with zero ads.
+					</li>
+					<li class="mb-1">
+						<strong>No Login Required:</strong> Your build data is saved securely in your browser's
+						local storage.
+					</li>
+					<li class="mb-1">
+						<strong>Save &amp; Share:</strong> Export your favorite layouts, generate shareable
+						links for your friends, or capture high-quality layout screenshots directly from the
+						app.
+					</li>
+				</ul>
+				<p class="mb-2 text-sm sm:text-base">
+					<strong>Enable JavaScript to Start Building Your Perfect Layout Now!</strong>
+				</p>
 
-		<style>
-			/* Static header styles (for SSG/No-JS) */
-			.app-header-static {
-				align-items: center;
-				display: flex;
-				flex-direction: column;
-				padding-top: 24px;
-				background-image: linear-gradient(to bottom, black, transparent);
-				position: relative;
-				z-index: 1;
-			}
+				<nav aria-label="Site navigation">
+					<h2>Navigation</h2>
+					<ul>
+						<li aria-current="page">
+							<a href="/">Home</a> - Use the Tech Layout &amp; Adjacency Bonus Calculator
+						</li>
+						<li><a href="/instructions/">Instructions</a> - Complete guide for using the app</li>
+						<li><a href="/about/">About</a> - How it works and technical details</li>
+						<li><a href="/changelog/">Changelog</a> - Latest updates and new features</li>
+						<li><a href="/userstats/">User Statistics</a> - Popular technologies and builds</li>
+						<li>
+							<a href="/translation/">Help Translate</a> - Contribute to community localization
+						</li>
+						<li>
+							<a href="/privacy/">Privacy Policy</a> - Our commitment to your data privacy and
+							security
+						</li>
+					</ul>
+				</nav>
+			</main>
 
-			.app-header-static__logo-text {
-				font-family: Geosans, Helvetica, Arial, sans-serif;
-				font-size: 1.875rem;
-				font-weight: 400;
-				letter-spacing: 0.35em;
-				line-height: 2rem;
-				margin-right: -0.35em;
-				text-align: center;
-				-webkit-text-stroke: 2.5px;
-				text-transform: uppercase;
-				word-spacing: -0.25rem;
-				color: white;
-			}
-
-			@media (width >=640px) {
-				.app-header-static__logo-text {
-					filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
-					font-size: 2.25rem;
-					line-height: 2.5rem;
+			<style>
+				/* Static header styles (for SSG/No-JS) */
+				.app-header-static {
+					align-items: center;
+					display: flex;
+					flex-direction: column;
+					padding-top: 24px;
+					background-image: linear-gradient(to bottom, black, transparent);
+					position: relative;
+					z-index: 1;
 				}
-			}
 
-			.app-header-static__separator-container {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-				width: 100%;
-				margin: 4px 0;
-			}
+				.app-header-static__logo-text {
+					font-family: Geosans, Helvetica, Arial, sans-serif;
+					font-size: 1.875rem;
+					font-weight: 400;
+					letter-spacing: 0.35em;
+					line-height: 2rem;
+					margin-right: -0.35em;
+					text-align: center;
+					-webkit-text-stroke: 2.5px;
+					text-transform: uppercase;
+					word-spacing: -0.25rem;
+					color: white;
+				}
 
-			.app-header-static__separator {
-				height: 1px;
-				background-color: #363A3F;
-				flex: 1;
-			}
+				@media (width >=640px) {
+					.app-header-static__logo-text {
+						filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5))
+							drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
+						font-size: 2.25rem;
+						line-height: 2.5rem;
+					}
+				}
 
-			.app-header-static__title {
-				color: #edeef0;
-				font-family: Raleway, Helvetica, Arial, sans-serif;
-				font-size: 16px;
-				font-weight: 700;
-				line-height: 22px;
-				text-align: center;
-				margin-top: 4px;
-			}
+				.app-header-static__separator-container {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					width: 100%;
+					margin: 4px 0;
+				}
 
-			main {
-				color: #fff;
-				background-color: #000;
-				margin: 2rem auto;
-				padding: 2rem;
-				padding-top: 0;
-				max-width: 85ch;
-				border-radius: 16px;
-				font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-			}
+				.app-header-static__separator {
+					height: 1px;
+					background-color: #363a3f;
+					flex: 1;
+				}
 
-			main h1 {
-				color: #4CCCE6;
-				margin: 1.5rem 0 1rem 0;
-				font-size: 1.5rem;
-				font-weight: bold;
-			}
+				.app-header-static__title {
+					color: #edeef0;
+					font-family: Raleway, Helvetica, Arial, sans-serif;
+					font-size: 16px;
+					font-weight: 700;
+					line-height: 22px;
+					text-align: center;
+					margin-top: 4px;
+				}
 
-			main h2 {
-				color: #4CCCE6;
-				margin: 1.5rem 0 1rem 0;
-				font-size: 1.125rem;
-				font-weight: bold;
-			}
+				main {
+					color: #fff;
+					background-color: #000;
+					margin: 2rem auto;
+					padding: 2rem;
+					padding-top: 0;
+					max-width: 85ch;
+					border-radius: 16px;
+					font-family:
+						Raleway,
+						-apple-system,
+						BlinkMacSystemFont,
+						"Segoe UI",
+						sans-serif;
+				}
 
-			main h3 {
-				color: #4CCCE6;
-				margin: 1rem 0 0.75rem 0;
-				font-size: 1rem;
-				font-weight: bold;
-			}
+				main h1 {
+					color: #4ccce6;
+					margin: 1.5rem 0 1rem 0;
+					font-size: 1.5rem;
+					font-weight: bold;
+				}
 
-			main p {
-				margin-bottom: 0.5rem;
-				line-height: 1.6;
-			}
+				main h2 {
+					color: #4ccce6;
+					margin: 1.5rem 0 1rem 0;
+					font-size: 1.125rem;
+					font-weight: bold;
+				}
 
-			main ul {
-				list-style: disc;
-				margin: 0.5rem 0 0.5rem 1.5rem;
-			}
+				main h3 {
+					color: #4ccce6;
+					margin: 1rem 0 0.75rem 0;
+					font-size: 1rem;
+					font-weight: bold;
+				}
 
-			main ol {
-				list-style: decimal;
-				margin: 0.5rem 0 0.5rem 1.5rem;
-			}
+				main p {
+					margin-bottom: 0.5rem;
+					line-height: 1.6;
+				}
 
-			main li {
-				margin-bottom: 0.25rem;
-			}
+				main ul {
+					list-style: disc;
+					margin: 0.5rem 0 0.5rem 1.5rem;
+				}
 
-			main a {
-				color: #4CCCE6;
-				text-decoration: underline;
-			}
+				main ol {
+					list-style: decimal;
+					margin: 0.5rem 0 0.5rem 1.5rem;
+				}
 
-			main code {
-				background-color: rgba(0, 162, 199, 0.1);
-				padding: 0.125rem 0.25rem;
-				border-radius: 0.25rem;
-				color: #4CCCE6;
-			}
+				main li {
+					margin-bottom: 0.25rem;
+				}
 
-			main blockquote {
-				border-left: 4px solid #4CCCE6;
-				padding-left: 1rem;
-				margin: 0.5rem 0;
-				font-style: italic;
-				color: #cbd5e1;
-			}
+				main a {
+					color: #4ccce6;
+					text-decoration: underline;
+				}
 
-			main nav {
-				margin-top: 2rem;
-				padding-top: 1rem;
-				border-top: 1px solid rgba(11, 165, 233, 0.3);
-			}
-		</style>
-	</noscript>
+				main code {
+					background-color: rgba(0, 162, 199, 0.1);
+					padding: 0.125rem 0.25rem;
+					border-radius: 0.25rem;
+					color: #4ccce6;
+				}
 
-	<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
-		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'></script>
-</body>
+				main blockquote {
+					border-left: 4px solid #4ccce6;
+					padding-left: 1rem;
+					margin: 0.5rem 0;
+					font-style: italic;
+					color: #cbd5e1;
+				}
 
+				main nav {
+					margin-top: 2rem;
+					padding-top: 1rem;
+					border-top: 1px solid rgba(11, 165, 233, 0.3);
+				}
+			</style>
+		</noscript>
+
+		<script
+			defer=""
+			src="https://static.cloudflareinsights.com/beacon.min.js"
+			data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'
+		></script>
+	</body>
 </html>

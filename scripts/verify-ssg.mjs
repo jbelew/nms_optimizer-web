@@ -19,6 +19,7 @@ const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "use
 function checkFile(filePath, pageName, lang, expectContent = true, isRoot = false) {
 	if (!fs.existsSync(filePath)) {
 		console.log(`✗ ${filePath} - NOT FOUND`);
+
 		return false;
 	}
 
@@ -52,6 +53,7 @@ function checkFile(filePath, pageName, lang, expectContent = true, isRoot = fals
 
 	if (failedChecks.length > 0) {
 		console.log(`✗ /${pageName} (${lang}): ${failedChecks.join(", ")}`);
+
 		return false;
 	}
 
@@ -85,6 +87,7 @@ SUPPORTED_LANGUAGES.forEach((lang) => {
 		totalPages++;
 
 		const hasContent = PAGES_WITH_CONTENT.includes(dialog);
+
 		if (checkFile(filePath, dialog, lang, hasContent)) {
 			passedPages++;
 			console.log(`✓ /${pagePath}`);

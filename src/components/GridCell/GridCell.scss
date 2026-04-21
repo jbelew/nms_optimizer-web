@@ -196,7 +196,7 @@
 
 	&--glow {
 		background-color: var(--purple-a7) !important;
-		box-shadow: 0 0 4px 2px var(--purple-indicator);
+		box-shadow: 0 0 2px 1px var(--purple-a7);
 
 		&::after {
 			animation: pulseGlowOpacity 2s infinite alternate ease-in-out;
@@ -210,6 +210,8 @@
 		}
 
 		@media (width >= 640px) {
+			box-shadow: 0 0 4px 2px var(--purple-a7);
+
 			&::after {
 				border-width: 2px;
 				inset: -2px;

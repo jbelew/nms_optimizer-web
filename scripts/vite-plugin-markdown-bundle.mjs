@@ -20,6 +20,7 @@ function loadMarkdownContent() {
 	// Read all language directories
 	const languages = fs.readdirSync(LOCALES_DIR).filter((file) => {
 		const filePath = path.join(LOCALES_DIR, file);
+
 		return fs.statSync(filePath).isDirectory();
 	});
 
@@ -106,6 +107,7 @@ export function markdownBundlePlugin() {
 				if (!markdownContent) {
 					markdownContent = loadMarkdownContent();
 				}
+
 				return generateModuleCode(markdownContent);
 			}
 		},
@@ -114,9 +116,11 @@ export function markdownBundlePlugin() {
 			if (file.startsWith(LOCALES_DIR) && file.endsWith(".md")) {
 				markdownContent = null; // Invalidate cache
 				const module = server.moduleGraph.getModuleById(resolvedId);
+
 				if (module) {
 					server.moduleGraph.invalidateModule(module);
 				}
+
 				return [];
 			}
 		},

@@ -50,6 +50,7 @@ async function processImages() {
 
 			const processFile = async (filePath) => {
 				const ext = path.extname(filePath);
+
 				if (![".png", ".jpg", ".jpeg", ".webp"].includes(ext.toLowerCase())) {
 					return;
 				}
@@ -73,9 +74,11 @@ async function processImages() {
 
 			const processDirectory = async (dir) => {
 				const entries = await readdir(dir);
+
 				for (const entry of entries) {
 					const fullPath = path.join(dir, entry);
 					const stats = await stat(fullPath);
+
 					if (stats.isDirectory()) {
 						await processDirectory(fullPath);
 					} else {
@@ -114,6 +117,7 @@ async function processImages() {
 						.toFile(outputPath);
 				}
 			}
+
 			console.log(`Image ${sourceFile} processed successfully!`);
 		} catch (error) {
 			console.error(`Error processing image ${sourceFile}:`, error);

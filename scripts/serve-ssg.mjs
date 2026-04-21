@@ -19,6 +19,7 @@ const server = http.createServer((req, res) => {
 
 	// Normalize path
 	let pathname = req.url.split("?")[0];
+
 	if (pathname === "/") {
 		pathname = "/index.html";
 	}
@@ -34,6 +35,7 @@ const server = http.createServer((req, res) => {
 	// If file doesn't exist, try with .html
 	if (!fs.existsSync(filePath) && !pathname.endsWith(".html")) {
 		const htmlPath = filePath + ".html";
+
 		if (fs.existsSync(htmlPath)) {
 			filePath = htmlPath;
 		}
@@ -42,6 +44,7 @@ const server = http.createServer((req, res) => {
 	// If still doesn't exist, try directory/index.html
 	if (!fs.existsSync(filePath)) {
 		const dirPath = path.join(DIST_DIR, pathname, "index.html");
+
 		if (fs.existsSync(dirPath)) {
 			filePath = dirPath;
 		}

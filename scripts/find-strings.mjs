@@ -14,15 +14,18 @@ const ATTR_TEXT_REGEX = /(label|title|placeholder|description|aria-label)="([^"{
 function getFiles(dir) {
   const files = readdirSync(dir);
   let allFiles = [];
+
   for (const file of files) {
     const path = join(dir, file);
     if (IGNORE_DIRS.includes(file)) continue;
+
     if (statSync(path).isDirectory()) {
       allFiles = allFiles.concat(getFiles(path));
     } else if (extname(file) === '.tsx' && !IGNORE_FILES.includes(basename(file))) {
       allFiles.push(path);
     }
   }
+
   return allFiles;
 }
 
@@ -31,8 +34,10 @@ function auditFile(filePath) {
   const results = [];
 
   let match;
+
   while ((match = JSX_TEXT_REGEX.exec(content)) !== null) {
     const text = match[1].trim();
+
     if (text && text.length > 1 && !/^[0-9\s.,!?-]+$/.test(text) && !UNIVERSAL_STRINGS.includes(text)) {
       results.push({ line: getLineNumber(content, match.index), text, type: 'JSX Text' });
     }
@@ -41,6 +46,7 @@ function auditFile(filePath) {
   while ((match = ATTR_TEXT_REGEX.exec(content)) !== null) {
     const attr = match[1];
     const text = match[2].trim();
+
     if (text && !text.includes('t(')) {
        results.push({ line: getLineNumber(content, match.index), text: `${attr}="${text}"`, type: 'Attribute' });
     }
@@ -59,6 +65,7 @@ console.log(`Auditing ${files.length} files...`);
 const allResults = {};
 files.forEach(file => {
   const results = auditFile(file);
+
   if (results.length > 0) {
     allResults[file] = results;
   }

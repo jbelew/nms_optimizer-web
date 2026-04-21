@@ -67,11 +67,13 @@ const urlEntries = pages.flatMap((page) => {
 	const alternateUrls = languages.map((lang) => {
 		const url = new URL(page.url);
 		const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
+
 		if (lang !== "en") {
 			url.pathname = `/${lang}${normalizePath(url.pathname === "/" ? "" : url.pathname)}`;
 		} else {
 			url.pathname = normalizePath(url.pathname);
 		}
+
 		return { lang, href: url.href };
 	});
 

@@ -48,6 +48,7 @@ export default function inlineCriticalCssPlugin(options?: Options): PluginOption
 			const criticalCssPath = path.resolve(outDir, criticalCssFileName);
 
 			const pluginName = "vite-plugin-inline-critical-css";
+
 			try {
 				console.log(`[${pluginName}] Starting critical CSS inlining...`);
 				console.log(`[${pluginName}] Output directory: ${outDir}`);
@@ -59,6 +60,7 @@ export default function inlineCriticalCssPlugin(options?: Options): PluginOption
 
 				if (!criticalCSS) {
 					console.warn(`[${pluginName}] Critical CSS file not found or empty at ${criticalCssPath}. Skipping inlining.`);
+
 					return;
 				}
 
@@ -77,6 +79,7 @@ export default function inlineCriticalCssPlugin(options?: Options): PluginOption
 					console.log(`[${pluginName}] Inlined critical CSS at the end of the <head> tag.`);
 				} else {
 					console.warn(`[${pluginName}] Could not find a suitable place to inline critical CSS (no <link rel="stylesheet"> or </head>).`);
+
 					return;
 				}
 
