@@ -178,9 +178,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							manifestFilename: "manifest.json",
 							registerType: "prompt",
 							includeAssets: [
-								"favicon.svg",
+								"assets/svg/favicon.svg",
 								"robots.txt",
-								"/assets/img/favicons/apple-touch-icon.png",
+								"assets/img/favicons/apple-touch-icon.png",
 								"assets/fonts/*.woff2",
 								"assets/locales/*/translation.json",
 							],
@@ -423,6 +423,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					// We only exclude truly heavy, asynchronous chunks like charts and markdown.
 					return deps.filter(
 						(dep: string) =>
+							!dep.includes("vendor-telemetry") &&
 							!dep.includes("vendor-charts") &&
 							!dep.includes("vendor-markdown") &&
 							!dep.includes("vendor-markdown-lib") &&
@@ -493,8 +494,8 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								// Group GA4 and related tracking packages into a neutrally named chunk.
 								// Anchored to node_modules so app-level analytics.ts / analyticsClient.ts
 								// are NOT inadvertently captured here.
-								// Name avoids 'analytics' to reduce automatic blocking by iOS content filters.
-								name: "vendor-events",
+								// Name avoids 'analytics' or 'events' to reduce automatic blocking by privacy filters.
+								name: "vendor-telemetry",
 								test: /[\\/]node_modules[\\/](react-ga4|google-analytics|gtag\.js|web-vitals)[\\/]/,
 								priority: 100,
 							},

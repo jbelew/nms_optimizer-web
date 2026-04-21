@@ -77,4 +77,4 @@ docs/nestjs-replatform-analysis.md
 scripts/cloudflare/
 
 # Wrangler temp files
-.wrangler/tmp
+.wrangler/
