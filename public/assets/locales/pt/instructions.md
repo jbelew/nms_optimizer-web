@@ -5,7 +5,7 @@
 - Selecione uma **Plataforma** (Nave, Multiferramenta, Corveta, etc.) usando o ícone <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Clique** ou **toque duas vezes** (mobile) em um espaço para marcá-lo como **Sobrecarregado**.
 - **Ctrl-clique (Windows) / ⌘-clic (Mac) / toque simples (mobile)** para alternar entre um espaço **ativo** ou **inactive**.
-- Use os **interruptores de linha** para activar ou desativar linhas inteiras. *(Os interruptores são desativados após a colocação de módulos).*
+- Use os **interruptores de linha** para activar ou desativar linhas inteiras. _(Os interruptores são desativados após a colocação de módulos)._
 - Use o botão de **seleção de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para adicionar ou remover módulos individuais dentro de um grupo tecnológico.
 
 > 💡 **Nota:**

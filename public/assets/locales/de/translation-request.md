@@ -23,18 +23,19 @@ Allerdings ist KI nicht perfekt. Wir verlassen uns auf die Community, um „Hall
 Der einfachste Weg, einen Beitrag zu leisten, ist direkt über GitHub. Du musst nicht programmieren können, um eine bessere Übersetzung vorzuschlagen.
 
 1. **Finde die Datei**: Alle Lokalisierungsdateien befinden sich in `/public/assets/locales/[language_code]/`.
-   - `translation.json`: UI-Beschriftungen, Tooltips und Statusmeldungen.
-   - `*.md`: Inhalt für größere Dialoge (Über, Anweisungen usw.).
+    - `translation.json`: UI-Beschriftungen, Tooltips und Statusmeldungen.
+    - `*.md`: Inhalt für größere Dialoge (Über, Anweisungen usw.).
 2. **Direkt auf GitHub bearbeiten**:
-   - Navigiere zur Datei für deine Sprache (z.B. `/public/assets/locales/es/translation.json`).
-   - Klicke auf das **Bleistiftsymbol (Diese Datei bearbeiten)**.
-   - Nimm deine Änderungen vor.
-   - Klicke auf **Änderungen committen...** und GitHub erstellt automatisch einen Pull Request für dich.
+    - Navigiere zur Datei für deine Sprache (z.B. `/public/assets/locales/es/translation.json`).
+    - Klicke auf das **Bleistiftsymbol (Diese Datei bearbeiten)**.
+    - Nimm deine Änderungen vor.
+    - Klicke auf **Änderungen committen...** und GitHub erstellt automatisch einen Pull Request für dich.
 3. **Auf Zusammenführung warten**: Sobald ich deinen PR zusammenführe, erkennt das KI-Skript deine menschlichen Bearbeitungen automatisch und stellt sicher, dass sie bei zukünftigen Updates erhalten bleiben.
 
 ## Unterstützte Sprachen
 
 Wir unterstützen derzeit:
+
 - `en` (Englisch - Quelle)
 - `es` (Spanisch)
 - `fr` (Französisch)

@@ -1,64 +1,76 @@
-# About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator
+# Über den NMS-Optimierer: Der ultimative No Man's Sky Technologie-Layout-Rechner
 
-NMS Optimizer is a 100% free, ad-free tool designed to figure out exactly where to place your technology modules in *No Man's Sky*. You pick your equipment, select your S-Class or X-Class upgrade modules, mark your supercharged slots, and our calculator almost instantly generates the layout that maximizes your in-game stats.
+Der NMS-Optimierer ist ein 100 % kostenloses, werbefreies Tool, das entwickelt wurde, um genau herauszufinden, wo du deine Technologie-Module in _No Man's Sky_ platzieren solltest. Du wählst deine Ausrüstung, wählst deine S-Klasse- oder X-Klasse-Upgrade-Module aus, markierst deine aufgeladenen Plätze (Supercharged Slots) und unser Rechner generiert fast sofort das Layout, das deine In-Game-Werte maximiert.
 
-By perfectly balancing game mechanics, an optimized layout typically scores **15-20% higher** than what most players can arrange by hand.
+Durch die perfekte Ausbalancierung der Spielmechaniken erzielt ein optimiertes Layout typischerweise eine **15-20 % höhere** Punktzahl als das, was die meisten Spieler manuell arrangieren können.
 
-## The Problem: Maximizing Adjacency Bonuses & Supercharged Slots
-*No Man's Sky* doesn't explicitly explain adjacency bonuses, and offers no guidance on supercharged slot strategy. Maximizing your starship's maneuverability or your multi-tool's damage means juggling two complex systems:
+## Das Problem: Maximierung von Adjazenz-Boni (Adjacency Bonuses) & aufgeladenen Plätzen
 
-*   **Adjacency Bonuses:** When you place compatible technology modules next to each other on the inventory grid, they get a stat boost. Different technologies have different adjacency partners—weapon upgrades boost each other, movement tech boosts other movement tech, and the more shared edges you create, the bigger the cumulative bonus.
-*   **Supercharged Slots:** These rare inventory slots (usually up to 4 per grid) give a massive ~25-30% stat multiplier to whatever module is placed inside them.
+_No Man's Sky_ erklärt Adjazenz-Boni nicht ausdrücklich und bietet keine Anleitung zur Strategie für aufgeladene Plätze. Die Maximierung der Manövrierfähigkeit deines Raumschiffs oder des Schadens deines Multifunktionswerkzeugs erfordert das Jonglieren mit zwei komplexen Systemen:
 
-Figuring out the absolute best arrangement means testing combinations across millions of possible permutations—up to roughly 8.32 × 10⁸¹ for a fully expanded grid. Nobody is solving that by hand.
+- **Adjazenz-Boni:** Wenn du kompatible Technologie-Module nebeneinander auf dem Inventar-Raster platzierst, erhalten sie einen Werte-Boost. Verschiedene Technologien haben unterschiedliche Adjazenz-Partner — Waffen-Upgrades verstärken sich gegenseitig, Bewegungstechnologie verstärkt andere Bewegungstechnologie, und je mehr gemeinsame Kanten du erstellst, desto größer ist der kumulative Bonus.
+- **Aufgeladene Plätze:** Diese seltenen Inventarplätze (normalerweise bis zu 4 pro Raster) geben einen massiven ~25-30%igen Werte-Multiplikator für jedes Modul, das darin platziert wird.
 
-## How the Layout Optimization Engine Works
-We don't rely on guesswork. The NMS Optimizer engine uses a sophisticated four-step pipeline to automatically find your best build:
+Die absolut beste Anordnung herauszufinden, bedeutet, Kombinationen über Millionen möglicher Permutationen hinweg zu testen — bis zu etwa 8.32 × 10⁸¹ für ein vollständig erweitertes Raster. Niemand löst das manuell.
 
-1.  **Pattern Matching:** The solver starts with hand-tested, community-proven arrangements that reliably score well for common module sets.
-2.  **Machine Learning (AI):** If your grid has unique supercharged slots, a TensorFlow machine learning model—trained on over 16,000 high-scoring layouts—predicts the smartest placements for your core technologies versus your upgrade modules.
-3.  **Simulated Annealing:** Our core optimization engine, built in Rust, rapidly swaps modules and tests thousands of arrangements in milliseconds to climb toward the absolute highest possible score.
-4.  **Result Display:** You immediately see the winning layout alongside a full adjacency multiplier breakdown.
+## Wie die Layout-Optimierungs-Engine funktioniert
 
-## Supported Equipment
-The NMS Optimizer provides dynamic solving for every major platform in the game:
-*   **Starships:** Standard, Exotic, Sentinel Interceptor, Solar, Fighter, Living, and Atlantid ships.
-*   **Multi-Tools:** All weapon and mining variants, including Staves.
-*   **Exosuits & Exocraft:** All Exosuit technologies and vehicle types (Nomad, Colossus, Pilgrim, Roamer, Minotaur, Nautilon).
-*   **Freighters:** Capital ship hyperdrive and fleet coordination technology.
-*   **Corvettes:** Support for complex layouts, including unique reactor modules and cosmetic technology slots.
+Wir verlassen uns nicht auf Vermutungen. Die Engine des NMS-Optimierers nutzt eine ausgeklügelte vierstufige Pipeline, um automatisch deinen besten Build zu finden:
 
-## Frequently Asked Questions (FAQ)
+1.  **Mustererkennung:** Der Solver beginnt mit manuell getesteten, von der Community bewährten Anordnungen, die für gängige Modulsätze zuverlässig gute Ergebnisse erzielen.
+2.  **Maschinelles Lernen (KI):** Wenn dein Raster einzigartige aufgeladene Plätze hat, sagt ein TensorFlow-Modell für maschinelles Lernen — trainiert mit über 16.000 Layouts mit hohen Punktzahlen — die intelligentesten Platzierungen für deine Kerntechnologien im Vergleich zu deinen Upgrade-Modulen voraus.
+3.  **Simulated Annealing:** Unsere Kern-Optimierungs-Engine, entwickelt in Rust, tauscht Module rasant aus und testet Tausende von Anordnungen in Millisekunden, um zur absolut höchstmöglichen Punktzahl aufzusteigen.
+4.  **Ergebnisanzeige:** Du siehst sofort das Gewinner-Layout zusammen mit einer vollständigen Aufschlüsselung der Adjazenz-Multiplikatoren.
 
-**What should I put in my supercharged slots?**
-It depends on your layout! Sometimes it's best to supercharge your core technology, and other times it's better to supercharge your highest-rolled upgrade. Our AI model was trained on 16,000+ real layouts specifically to make this decision for you.
+## Unterstützte Ausrüstung
 
-**Is the NMS Optimizer free?**
-Yes. It is 100% free, ad-free, and open-source (GPL-3.0). You do not need to create an account or provide an email.
+Der NMS-Optimierer bietet dynamische Lösungsfindung für jede wichtige Plattform im Spiel:
 
-**Can I save and share my layouts?**
-Yes! You can save your favorite builds locally as `.nms` files, generate shareable links to send to friends, or share high-quality layout screenshots directly to social media. Builds are validated for integrity before sharing.
+- **Raumschiffe (Starships):** Standard-, Exotische (Exotic), Wächter-Abfangjäger (Sentinel Interceptor), Solar-, Jäger- (Fighter), Lebende (Living) und Atlantid-Schiffe.
+- **Multifunktionswerkzeuge (Multi-Tools):** Alle Waffen- und Abbauvarianten, einschließlich Stäbe (Staves).
+- **Exo-Anzüge (Exosuits) & Exofahrzeuge (Exocraft):** Alle Exo-Anzug-Technologien und Fahrzeugtypen (Nomad, Koloss, Pilgrim, Roamer, Minotaurus, Nautilon).
+- **Frachter (Freighters):** Hyperantrieb und Flotten-Koordinationstechnologie von Großkampfschiffen.
+- **Korvetten (Corvettes):** Unterstützung für komplexe Layouts, einschließlich einzigartiger Reaktormodule und kosmetischer Technologie-Slots.
 
-**Why does the tool not show in-game stats?**
-The tool intentionally avoids calculating standard in-game metrics like DPS or Light Year range. Because exact numbers require hidden ship seeds inaccessible without a save editor, the optimizer relies on a "percentage of maximum" score instead.
+## Häufig gestellte Fragen (FAQ)
 
-## Under the Hood: Our Tech Stack
-For the developers and data nerds, here is the technology stack powering the NMS Optimizer:
-*   **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
-*   **Backend Solver:** Python, Flask, TensorFlow, NumPy, Rust (powers the simulated annealing and scoring engine)
-*   **Testing:** Vitest, Python Unittest
-*   **Deployment & Hosting:** Heroku (API hosting), Cloudflare (DNS/CDN), Docker
-*   **CI/CD:** GitHub Actions
+**Was sollte ich in meine aufgeladenen Plätze legen?**
+Das hängt von deinem Layout ab! Manchmal ist es am besten, deine Kerntechnologie aufzuladen, und manchmal ist es besser, dein Upgrade mit den höchsten Werten aufzuladen. Unser KI-Modell wurde mit über 16.000 echten Layouts trainiert, speziell um diese Entscheidung für dich zu treffen.
 
-### Open Source Repositories
-Want to contribute? The NMS Optimizer is fully open-source.
-- Web UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
+**Ist der NMS-Optimierer kostenlos?**
+Ja. Es ist zu 100 % kostenlos, werbefrei und Open Source (GPL-3.0). Du musst kein Konto erstellen oder eine E-Mail-Adresse angeben.
+
+**Kann ich meine Layouts speichern und teilen?**
+Ja! Du kannst deine Lieblings-Builds lokal als `.nms`-Dateien speichern, teilbare Links generieren, um sie an Freunde zu senden, oder hochwertige Layout-Screenshots direkt in den sozialen Medien teilen. Builds werden vor dem Teilen auf Integrität geprüft.
+
+**Warum zeigt das Tool keine In-Game-Werte an?**
+Das Tool vermeidet absichtlich die Berechnung von Standard-In-Game-Metriken wie SPS oder Lichtjahre-Reichweite. Da genaue Zahlen verborgene Schiffs-Seeds erfordern, die ohne einen Save-Editor unzugänglich sind, verlässt sich der Optimierer stattdessen auf eine "Prozentual vom Maximum"-Punktzahl.
+
+**Warum enthält das optimierte Layout nicht mein spezifisches Expeditionsmodul?**
+Der NMS-Optimierer unterstützt vollständig alle **Expeditions- und Expeditions-Redux-Belohnungen**, die nach dem _Worlds Part I_-Update angeboten wurden. Da jedoch nicht alle Spieler diese seltenen Gegenstände besitzen, sind diese optionalen Module standardmäßig nicht in deinen Lösungen enthalten. Du kannst sie ganz einfach für deinen Build aktivieren, indem du die **Modulauswahl-Schnittstelle** öffnest.
+
+## Unter der Haube: Unser Tech-Stack
+
+Für die Entwickler und Daten-Nerds ist hier der Tech-Stack, der den NMS-Optimierer antreibt:
+
+- **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
+- **Backend Solver:** Python, Flask, TensorFlow, NumPy, Rust (treibt das Simulated Annealing und die Bewertungs-Engine an)
+- **Tests:** Vitest, Python Unittest
+- **Bereitstellung & Hosting:** Heroku (API-Hosting), Cloudflare (DNS/CDN), Docker
+- **CI/CD:** GitHub Actions
+
+### Open-Source-Repositories
+
+Möchtest du beitragen? Der NMS-Optimierer ist vollständig Open Source.
+
+- Web-UI: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)
 
-## A Huge Thank You to the Community
-This project wouldn't be possible without the incredible *No Man's Sky* community. A special thank you to George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray, and everyone else who has contributed. Your support, donations, shares, and kind words mean everything and help keep this project alive.
+## Ein riesiges Dankeschön an die Community
 
-## A Look Back: Early Versions
+Dieses Projekt wäre ohne die unglaubliche _No Man's Sky_-Community nicht möglich. Ein besonderer Dank geht an George V, Diab, JayTee73, boldfish, Jason Hawks, Jeremy Ricketts, H. Blumenthal, u/rrrrreally, Kevin Murray und alle anderen, die beigetragen haben. Eure Unterstützung, Spenden, das Teilen und die freundlichen Worte bedeuten uns alles und helfen, dieses Projekt am Leben zu erhalten.
+
+## Ein Rückblick: Frühe Versionen
+
 ![Early prototype of No Man's Sky layout optimizer user interface](/assets/img/screenshots/screenshot_v03.png)
-If you were with us in the beginning, you might remember what the UI looked like in its early alpha stages. It worked, but the design was minimal. The current version represents a major, ongoing improvement in design, mobile usability, and overall clarity.
-
+Wenn du von Anfang an dabei warst, erinnerst du dich vielleicht daran, wie die Benutzeroberfläche in ihren frühen Alpha-Phasen aussah. Sie funktionierte, aber das Design war minimal. Die aktuelle Version stellt eine wesentliche, fortlaufende Verbesserung in den Bereichen Design, mobile Benutzerfreundlichkeit und allgemeine Übersichtlichkeit dar.

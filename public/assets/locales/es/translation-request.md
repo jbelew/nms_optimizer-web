@@ -23,18 +23,19 @@ Sin embargo, la IA no es perfecta. Confiamos en la comunidad para identificar y 
 La forma más fácil de contribuir es directamente a través de GitHub. No necesitas saber programar para sugerir una traducción mejor.
 
 1. **Encuentra el Archivo**: Todos los archivos de localización se encuentran en `/public/assets/locales/[código_de_idioma]/`.
-   - `translation.json`: Etiquetas de la interfaz, descripciones emergentes y mensajes de estado.
-   - `*.md`: Contenido para los diálogos más extensos (Acerca de, Instrucciones, etc.).
-2. **Edita Directamente en GitHub**: 
-   - Navega hasta el archivo de tu idioma (por ejemplo, `/public/assets/locales/es/translation.json`).
-   - Haz clic en el **icono del lápiz (Editar este archivo)**.
-   - Realiza tus cambios.
-   - Haz clic en **Commit changes...** (Confirmar cambios) y GitHub creará automáticamente un Pull Request (solicitud de extracción) por ti.
+    - `translation.json`: Etiquetas de la interfaz, descripciones emergentes y mensajes de estado.
+    - `*.md`: Contenido para los diálogos más extensos (Acerca de, Instrucciones, etc.).
+2. **Edita Directamente en GitHub**:
+    - Navega hasta el archivo de tu idioma (por ejemplo, `/public/assets/locales/es/translation.json`).
+    - Haz clic en el **icono del lápiz (Editar este archivo)**.
+    - Realiza tus cambios.
+    - Haz clic en **Commit changes...** (Confirmar cambios) y GitHub creará automáticamente un Pull Request (solicitud de extracción) por ti.
 3. **Espera a la Fusión**: Una vez que fusione tu PR, el script de IA detectará automáticamente tus ediciones humanas y se asegurará de que se conserven en futuras actualizaciones.
 
 ## Idiomas Admitidos
 
 Actualmente admitimos:
+
 - `en` (Inglés - Fuente)
 - `es` (Español)
 - `fr` (Francés)

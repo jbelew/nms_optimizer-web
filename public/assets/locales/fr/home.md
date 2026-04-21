@@ -1,26 +1,41 @@
-# Optimiseur NMS : Créateur de Layouts et Calculateur d'Adjacence
+# Optimiseur de NMS : Créateur de Dispositions de Technologie & Calculateur d'Adjacence
 
-![Capture d'écran de l'application Optimiseur NMS montrant une grille de technologie de vaisseau avec un placement de modules optimisé](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-L'Optimiseur NMS calcule pour vous le meilleur emplacement pour vos modules technologiques. Choisissez votre plateforme, sélectionnez vos modules, marquez vos emplacements surchargés, et l'optimiseur générera la disposition qui maximise vos bonus d'adjacence. Fonctionne pour les vaisseaux, corvettes, multi-outils, exocombinaisons, exonefs et cargos.
+Bienvenue sur **l'Optimiseur de NMS**, un outil 100 % gratuit, sans publicité et open-source conçu pour vous aider à trouver les meilleures dispositions de technologie dans _No Man's Sky_. Arrêtez de deviner où placer vos modules d'amélioration de Classe S et de Classe X. Choisissez votre plateforme, sélectionnez votre technologie, marquez vos emplacements suralimentés (Supercharged Slots), et laissez notre calculateur générer instantanément une disposition qui maximise votre DPS, votre maniabilité et la portée de votre Hyperpropulsion (Hyperdrive).
 
-## Qu'est-ce Qu'un Bonus d'Adjacence ?
+Une disposition optimisée obtient généralement un score **15-20 % plus élevé** que ce que la plupart des joueurs peuvent arranger manuellement.
 
-Lorsque vous placez des modules technologiques compatibles les uns à côté des autres dans No Man's Sky, ils bénéficient d'un boost de statistiques. Le jeu explique peu ce mécanisme, mais pour faire simple : les modules de même type partageant un bord commun voient leurs attributs augmenter. Plus ils partagent de bords, plus le bonus est important. Déterminer la disposition idéale manuellement est fastidieux, surtout sur de grandes grilles avec des emplacements surchargés à prendre en compte.
+## Maximisez les Bonus d'Adjacence (Adjacency Bonuses) & les Emplacements Suralimentés
 
-## Que Sont Les Emplacements Surchargés ?
+Trouver la disposition de technologie parfaite dans NMS implique d'équilibrer deux mécanismes de jeu complexes sur des millions de permutations possibles (jusqu'à ~8.32 × 10⁸¹ pour une grille complète !) :
 
-Certains emplacements d'inventaire dans No Man's Sky sont surchargés. Tout module technologique placé sur l'un d'eux reçoit un multiplicateur de statistiques important, en plus des bonus d'adjacence habituels. Leur position est aléatoire sur chaque équipement, la disposition optimale change donc selon l'emplacement de ces slots surchargés. C'est là toute la difficulté, et c'est précisément pour cela que cet outil a été conçu.
+- **Bonus d'Adjacence :** Lorsque des modules de technologie compatibles (comme votre Réacteur à Impulsion (Pulse Engine) et ses améliorations de Classe S/Classe X) partagent un bord sur votre grille d'inventaire, ils reçoivent une augmentation en pourcentage de leurs statistiques. Plus vous créez de bords partagés, plus le bonus est important.
+- **Emplacements Suralimentés :** Ces rares emplacements d'inventaire (jusqu'à 4 par grille) offrent un multiplicateur de statistiques massif de ~25-30 % à tout module placé à l'intérieur. Parce que ces emplacements sont générés aléatoirement sur presque chaque pièce d'équipement, la "disposition parfaite" change pour chaque vaisseau ou outil que vous trouvez.
 
-## Comment Ça Fonctionne
+Notre créateur de dispositions teste des milliers de configurations en quelques millisecondes pour trouver l'équilibre parfait entre vos technologies principales, vos améliorations de Classe X avec les meilleures statistiques, et vos emplacements suralimentés uniques.
 
-L'optimiseur utilise une combinaison de correspondance de modèles déterministe et de recuit simulé (Simulated Annealing). Pour les petits ensembles de modules, il peut trouver la solution parfaite. Pour les grilles plus complexes, le recuit simulé explore des milliers de combinaisons pour identifier celle qui offre le score le plus élevé. Le calcul prend en compte les bonus d'adjacence, la position des slots surchargés et le poids spécifique de chaque statistique de module. Le moteur de calcul est écrit en Rust pour une vitesse maximale.
+## Plateformes & Équipements Pris en Charge
 
-## Plateformes Supportées
+L'Optimiseur de NMS fournit une résolution dynamique et des builds recommandés sélectionnés à la main pour chaque type d'équipement majeur du jeu :
 
-- Vaisseaux (Standard, Sentinelle, Solaire, Combattant, Organique, Atlantide)
-- Corvettes
-- Multi-outils (Standard et Sentinelle)
-- Exocombinaisons
-- Exonefs (Vagabond, Pèlerin, Nomade, Colosse, Minotaure, Nautilon)
-- Cargos
+- **Vaisseaux (Starships) :** Trouvez le plus haut DPS et la meilleure maniabilité pour les Chasseurs (Fighters), les Explorateurs (Explorers), les Transporteurs (Haulers), les Exotiques (Exotics), les Vaisseaux Solaires (Solar Ships), les Intercepteurs Sentinelles (Sentinel Interceptors) et les Vaisseaux Vivants (Living Ships).
+- **Multi-outils (Multi-Tools) :** Maximisez le rendement de votre Rayon d'Extraction (Mining Beam) ou les dégâts de vos armes sur toutes les variantes, y compris standard, Sentinelle (Sentinel), Atlantide et les Bâtons (Staves).
+- **Exocombinaisons (Exosuits) & Exonefs (Exocraft) :** Accédez à des builds optimaux et testés par la communauté pour la protection environnementale de votre Exocombinaison et tous les véhicules (Minotaure, Vagabond, Nomade, Colosse, Pèlerin et Nautilon).
+- **Cargos (Freighters) :** Optimisez la portée de l'Hyperpropulsion de votre vaisseau amiral et la technologie de coordination de la flotte.
+
+## Propulsé par l'IA & des Algorithmes Avancés
+
+Nous ne faisons pas que deviner. Le moteur de l'Optimiseur de NMS utilise un flux de travail sophistiqué pour garantir les meilleurs résultats :
+
+1.  **Reconnaissance de Modèles :** Nous commençons par des arrangements testés manuellement et approuvés par la communauté.
+2.  **Apprentissage Automatique (IA) :** Un réseau de neurones TensorFlow, entraîné sur plus de 16 000 dispositions à haut score, prédit les placements les plus intelligents pour vos emplacements suralimentés.
+3.  **Recuit Simulé (Simulated Annealing) :** Notre backend ultra-rapide, construit en Rust, échange rapidement les modules pour grimper vers les statistiques les plus élevées possibles.
+
+## Confidentialité d'Abord & Axé sur la Communauté
+
+- **100 % Gratuit & Open Source :** Sous licence GPL-3.0 avec zéro publicité.
+- **Aucune Connexion Requise :** Les données de vos builds sont enregistrées en toute sécurité dans le stockage local de votre navigateur.
+- **Sauvegarder & Partager :** Exportez vos dispositions préférées, générez des liens partageables pour vos amis, ou capturez des captures d'écran de haute qualité de vos dispositions directement depuis l'application.
+
+**Activez JavaScript pour Commencer à Construire Votre Disposition Parfaite Dès Maintenant !**

@@ -23,18 +23,19 @@ Cependant, l'IA n'est pas parfaite. Nous comptons sur la communauté pour repér
 La méthode la plus simple est de passer directement par GitHub. Pas besoin de savoir coder pour proposer une meilleure traduction !
 
 1. **Trouvez le Fichier** : Tous les fichiers de localisation sont dans `/public/assets/locales/[code_langue]/`.
-   - `translation.json` : Libellés UI, infobulles et messages de statut.
-   - `*.md` : Contenu des dialogues plus longs (À propos, Instructions, etc.).
-2. **Éditez Directement Sur GitHub** : 
-   - Naviguez jusqu'au fichier de votre langue (ex : `/public/assets/locales/fr/translation.json`).
-   - Cliquez sur l'icône **Crayon (Modifier ce fichier)**.
-   - Faites vos modifications.
-   - Cliquez sur **Commit changes...** et GitHub créera automatiquement une Pull Request pour vous.
+    - `translation.json` : Libellés UI, infobulles et messages de statut.
+    - `*.md` : Contenu des dialogues plus longs (À propos, Instructions, etc.).
+2. **Éditez Directement Sur GitHub** :
+    - Naviguez jusqu'au fichier de votre langue (ex : `/public/assets/locales/fr/translation.json`).
+    - Cliquez sur l'icône **Crayon (Modifier ce fichier)**.
+    - Faites vos modifications.
+    - Cliquez sur **Commit changes...** et GitHub créera automatiquement une Pull Request pour vous.
 3. **Attendez la Validation** : Une fois que j'aurai validé et fusionné votre PR, le script d'IA détectera vos corrections et veillera à les préserver lors des futures mises à jour.
 
 ## Langues Supportées
 
 Nous supportons actuellement :
+
 - `en` (Anglais - Source)
 - `es` (Espagnol)
 - `fr` (Français)

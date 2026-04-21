@@ -40,7 +40,7 @@ A deep-dive optimization update that makes the app feel faster and more responsi
 
 This update introduces a new feature for sharing your builds, along with several smaller improvements to translations and app stability.
 
-- **Grid Screenshots:** A new screenshot tool lets you easily capture high-quality, attributed images of your optimized grid layouts. *(Note: This tool is temporarily disabled on the mobile web-app toolbar while we fix a compatibility issue).*
+- **Grid Screenshots:** A new screenshot tool lets you easily capture high-quality, attributed images of your optimized grid layouts. _(Note: This tool is temporarily disabled on the mobile web-app toolbar while we fix a compatibility issue)._
 - **Clearer Instructions:** Improved the optimization and module selection descriptions across all supported languages.
 - **Global Discovery:** Added international SEO improvements so players around the world can more easily find the app in their native language.
 - **Rendering & Stability:** Fixed a timing bug related to loading text content, updated privacy dialog icons for better clarity, and upgraded various internal systems.
@@ -76,15 +76,15 @@ This release introduces a new first-run onboarding experience, alongside a large
 - Improved **optimization workflow stability**, including safer async handling, stronger WebSocket lifecycle management, and protection against race conditions and duplicate requests.
 - Significantly enhanced **URL synchronization and navigation reliability**, reducing desynchronization, unnecessary re-renders, and history-related edge cases.
 - Improved **error handling and recovery** across the app:
-  - Safer localStorage and IndexedDB access with defensive checks.
-  - Reduced unhandled promise rejections and state updates on unmounted components.
-  - Clearer handling of cross-origin and browser security errors.
+    - Safer localStorage and IndexedDB access with defensive checks.
+    - Reduced unhandled promise rejections and state updates on unmounted components.
+    - Clearer handling of cross-origin and browser security errors.
 - Refined **instructional and help text** for improved clarity, readability, and conciseness.
 - Continued **performance optimizations**, including improved bundle chunking, lazy loading, and reduced non-critical runtime overhead.
 - Major **observability and monitoring refinements**, which surfaced a number of real-world issues that were not reproducible through local testing alone:
-  - Improved release tracking and version detection.
-  - Tuned performance and profiling sample rates for production.
-  - Simplified monitoring setup by removing unnecessary integrations and dashboards.
+    - Improved release tracking and version detection.
+    - Tuned performance and profiling sample rates for production.
+    - Simplified monitoring setup by removing unnecessary integrations and dashboards.
 - Improved **build, deployment, and infrastructure configuration**, including better environment handling, safer script loading, and more reliable CI diagnostics.
 
 This update focuses on robustness and polish—reducing friction during everyday use while strengthening the underlying systems that support optimization, navigation, and long-running sessions.
@@ -110,9 +110,9 @@ This update introduces a small but important grid-behavior enhancement, alongsid
 - Improved **analytics reliability and error handling**, with better ad-blocker detection and corrected event timing.
 - Enhanced **security configuration**, ensuring required third-party services load correctly under strict content policies.
 - Continued **performance improvements**, including:
-  - Faster initial page load and improved Largest Contentful Paint (LCP).
-  - Optimized bundle chunking and CSS delivery.
-  - Deferred non-critical analytics events to keep the UI responsive.
+    - Faster initial page load and improved Largest Contentful Paint (LCP).
+    - Optimized bundle chunking and CSS delivery.
+    - Deferred non-critical analytics events to keep the UI responsive.
 
 This release continues the focus on polish and correctness, reducing friction in everyday use while laying groundwork for future grid and layout features.
 
@@ -121,11 +121,11 @@ This release continues the focus on polish and correctness, reducing friction in
 This update focuses on clarity around supercharged and fixed cells, with new error messages and improved guidance for grid constraints.
 
 - Added **constraint messages** for supercharged and fixed slots:
-  - Maximum of four supercharged slots allowed.
-  - Supercharged slots for **Exocraft and Exosuits** cannot be changed.
-  - Slots containing modules cannot be changed; remove the module group first.
-  - Supercharged slots can only be placed in the first four rows.
-  - Fixed Exocraft slot locations cannot be modified.
+    - Maximum of four supercharged slots allowed.
+    - Supercharged slots for **Exocraft and Exosuits** cannot be changed.
+    - Slots containing modules cannot be changed; remove the module group first.
+    - Supercharged slots can only be placed in the first four rows.
+    - Fixed Exocraft slot locations cannot be modified.
 - Refined **grid-cell feedback**, so players see instant responses when actions are unavailable.
 - Enhanced **accessibility**, including wrapping bonus icons in buttons for better keyboard and screen reader support.
 - Minor **performance and responsiveness improvements** across the UI.
@@ -177,10 +177,10 @@ This update focuses on making the app far more stable and consistent on mobile d
 - Improved performance and caching across the entire app, resulting in faster loading—especially on repeat visits.
 - Fonts and static assets now load more efficiently for smoother startup.
 - The backend optimization engine received major stability and correctness updates, including:
-- - Better module placement to minimize wasted space on the grid.
-  - More reliable handling of missing or unusual module data.
-  - More robust solving logic across different grid sizes.
-  - Expanded automated test coverage to ensure better long-term stability and fewer regressions.
+-   - Better module placement to minimize wasted space on the grid.
+    - More reliable handling of missing or unusual module data.
+    - More robust solving logic across different grid sizes.
+    - Expanded automated test coverage to ensure better long-term stability and fewer regressions.
 
 ## Version 5.13 - New Artwork (2025-11-21)
 
@@ -257,10 +257,10 @@ This update focuses on making the app far more stable and consistent on mobile d
 
 - Added GA4-compliant analytics event names.
 - Implemented multiple patches to recover from iOS Service Worker corruption:
-  - Forced unregister for corrupted SWs
-  - Temporary PWA disablement on iOS
-  - Updated splash screen behavior
-  - Added reliability guards to prevent offline lockouts
+    - Forced unregister for corrupted SWs
+    - Temporary PWA disablement on iOS
+    - Updated splash screen behavior
+    - Added reliability guards to prevent offline lockouts
 - Improved image optimization and caching for static API responses.
 - Fixed issues with i18n routing, deserialization, toasts, and layout instability.
 - Updated corvette solve maps for more accurate scoring.
@@ -367,7 +367,7 @@ Version 5 introduces a complete solver overhaul focused on speed, accuracy, and 
 ## Version 3.11 (2025-09-06)
 
 - Corvettes now support both **cosmetic** and **min/max** solves.
-  *Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!*
+  _Note: space is limited, so you'll only be able to fit two or three min/max solves — choose carefully!_
 
 ## Version 3.10 (2025-09-02)
 

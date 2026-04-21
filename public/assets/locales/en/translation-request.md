@@ -23,18 +23,19 @@ However, AI isn't perfect. We rely on the community to identify and fix "halluci
 The easiest way to contribute is directly through GitHub. You don't need to know how to code to suggest a better translation.
 
 1. **Find the file**: All localization files are located in `/public/assets/locales/[language_code]/`.
-   - `translation.json`: UI labels, tooltips, and status messages.
-   - `*.md`: Content for larger dialogs (About, Instructions, etc.).
-2. **Edit directly on GitHub**: 
-   - Navigate to the file for your language (e.g., `/public/assets/locales/es/translation.json`).
-   - Click the **Pencil icon (Edit this file)**.
-   - Make your changes.
-   - Click **Commit changes...** and GitHub will automatically create a Pull Request for you.
+    - `translation.json`: UI labels, tooltips, and status messages.
+    - `*.md`: Content for larger dialogs (About, Instructions, etc.).
+2. **Edit directly on GitHub**:
+    - Navigate to the file for your language (e.g., `/public/assets/locales/es/translation.json`).
+    - Click the **Pencil icon (Edit this file)**.
+    - Make your changes.
+    - Click **Commit changes...** and GitHub will automatically create a Pull Request for you.
 3. **Wait for Merge**: Once I merge your PR, the AI script will automatically detect your human edits and ensure they are preserved during future updates.
 
 ## Supported Languages
 
 We currently support:
+
 - `en` (English - Source)
 - `es` (Spanish)
 - `fr` (French)

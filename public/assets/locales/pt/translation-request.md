@@ -23,18 +23,19 @@ No entanto, a IA não é perfeita. Contamos com a comunidade para identificar e 
 A maneira mais fácil de contribuir é diretamente pelo GitHub. Você não precisa saber programar para sugerir uma tradução melhor.
 
 1. **Encontre o Arquivo**: Todos os arquivos de localização estão em `/public/assets/locales/[codigo_do_idioma]/`.
-   - `translation.json`: Rótulos de interface, tooltips e mensagens de status.
-   - `*.md`: Conteúdo para diálogos maiores (Sobre, Instruções, etc.).
-2. **Edite Directamente No GitHub**: 
-   - Navegue até o arquivo do seu idioma (ex: `/public/assets/locales/pt/translation.json`).
-   - Clique no **ícone do lápis (Edit this file)**.
-   - Faça suas alterações.
-   - Clique em **Commit changes...** e o GitHub criará automaticamente um Pull Request para você.
+    - `translation.json`: Rótulos de interface, tooltips e mensagens de status.
+    - `*.md`: Conteúdo para diálogos maiores (Sobre, Instruções, etc.).
+2. **Edite Directamente No GitHub**:
+    - Navegue até o arquivo do seu idioma (ex: `/public/assets/locales/pt/translation.json`).
+    - Clique no **ícone do lápis (Edit this file)**.
+    - Faça suas alterações.
+    - Clique em **Commit changes...** e o GitHub criará automaticamente um Pull Request para você.
 3. **Aguarde a Fusão**: Assim que eu fundir seu PR, o script de IA detectará automaticamente suas edicões humanas e garantirá que elas sejam preservadas em atualizações futuras.
 
 ## Idiomas Suportados
 
 Atualmente suportamos:
+
 - `en` (Inglês - Fonte)
 - `es` (Espanhol)
 - `fr` (Francés)

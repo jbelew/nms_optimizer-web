@@ -1,26 +1,41 @@
-# Optimizador de NMS: Constructor de Diseños Tecnológicos y Calculadora de Adjacencia
+# Optimizador de NMS: Creador de Diseños de Tecnología y Calculadora de Adyacencia
 
-![Captura de pantalla de la aplicación Optimizador de NMS que muestra una cuadrícula de tecnología de nave espacial con ubicación de módulos optimizada](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-El Optimizador de NMS descubre dónde colocar tus módulos de tecnología para que no tengas que hacerlo tú. Elige tu plataforma, selecciona tus módulos, marca tus ranuras potenciadas y el optimizador calculará el diseño que aproveche al máximo tus bonificaciones de adyacencia. Funciona para naves espaciales, corbetas, multiherramientas, exotrajes, exonaves y cargueros.
+Bienvenido al **Optimizador de NMS**, una herramienta 100% gratuita, sin anuncios y de código abierto diseñada para ayudarte a encontrar los mejores diseños de tecnología en _No Man's Sky_. Deja de adivinar dónde colocar tus módulos de actualización de Clase S y Clase X. Elige tu plataforma, selecciona tu tecnología, marca tus ranuras potenciadas (Supercharged Slots) y deja que nuestra calculadora genere al instante un diseño que maximice tu DPS, maniobrabilidad y rango del Hiperturbo (Hyperdrive).
 
-## ¿Qué Es Una Bonificación de Adyacencia?
+Un diseño optimizado normalmente obtiene una puntuación **15-20% mayor** que lo que la mayoría de los jugadores pueden organizar a mano.
 
-Cuando colocas módulos de tecnología compatibles uno al lado del otro en No Man's Sky, obtienen un aumento de estadísticas. El juego no explica mucho sobre cómo funciona esto, pero la versión corta es: los módulos del mismo tipo que comparten un borde obtienen un aumento porcentual en sus estadísticas. Cuantos más bordes compartan, mayor será la bonificación. Determinar la disposición correcta a mano es tedioso, especialmente en cuadrículas grandes con ranuras potenciadas que tener en cuenta.
+## Maximiza las Bonificaciones de Adyacencia (Adjacency Bonuses) y las Ranuras Potenciadas
 
-## ¿Qué Son Las Ranuras Potenciadas?
+Encontrar el diseño de tecnología perfecto en NMS significa equilibrar dos complejas mecánicas de juego a lo largo de millones de permutaciones posibles (¡hasta ~8.32 × 10⁸¹ para una cuadrícula completa!):
 
-Algunas ranuras de inventario en No Man's Sky están potenciadas. Cualquier módulo de tecnología colocado en una de ellas obtiene un gran multiplicador de estadísticas además de las bonificaciones de adyacencia normales. Se colocan aleatoriamente en cada pieza de equipo, por lo que el diseño óptimo cambia dependiendo de dónde hayan caído las ranuras potenciadas. Esa es la parte difícil, y es para lo que se ha diseñado esta herramienta.
+- **Bonificaciones de Adyacencia:** Cuando módulos de tecnología compatibles (como tu Motor de Pulso (Pulse Engine) y sus actualizaciones de Clase S/Clase X) comparten un borde en tu cuadrícula de inventario, reciben un aumento porcentual en sus estadísticas. Cuantos más bordes compartidos crees, mayor será la bonificación.
+- **Ranuras Potenciadas:** Estas raras ranuras de inventario (hasta 4 por cuadrícula) proporcionan un multiplicador masivo de ~25-30% a cualquier módulo que se coloque dentro de ellas. Debido a que estas ranuras se generan al azar en casi todas las piezas de equipo, el "diseño perfecto" cambia para cada nave o herramienta individual que encuentres.
 
-## Cómo Funciona
+Nuestro creador de diseños prueba miles de configuraciones en milisegundos para encontrar el equilibrio perfecto entre tus tecnologías principales, tus actualizaciones de Clase X con las mejores estadísticas y tus ranuras potenciadas únicas.
 
-El optimizador utiliza una combinación de coincidencia de patrones determinista y recocido simulado. Para conjuntos de módulos pequeños, puede encontrar exactamente el mejor diseño. Para cuadrículas más grandes o complejas, el recocido simulado explora miles de disposiciones para encontrar una que obtenga la puntuación más alta posible. La puntuación tiene en cuenta las bonificaciones de adyacencia, la ubicación de las ranuras potenciadas y los pesos de las estadísticas específicos de cada módulo. El backend se ejecuta en Rust para mayor velocidad.
+## Plataformas y Equipos Compatibles
 
-## Plataformas Compatibles
+El Optimizador de NMS proporciona resolución dinámica y construcciones recomendadas seleccionadas a mano para cada tipo de equipo principal en el juego:
 
-- Naves espaciales (estándar, centinela, solar, luchadora, orgánica, atlante)
-- Corbetas
-- Multiherramientas (estándar y centinela)
-- Exotrajes
-- Exonaves (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
-- Cargueros
+- **Naves (Starships):** Encuentra el mayor DPS y maniobrabilidad para Naves de Combate (Fighters), Exploradores (Explorers), Transportistas (Haulers), Exóticas (Exotics), Naves Solares (Solar Ships), Interceptores Centinela (Sentinel Interceptors) y Naves Vivas (Living Ships).
+- **Multiherramientas (Multi-Tools):** Maximiza tu rendimiento del Rayo Minero (Mining Beam) o daño de armas en todas las variantes, incluyendo estándar, Centinela (Sentinel), Atlantid y Báculos (Staves).
+- **Exotrajes (Exosuits) y Exovehículos (Exocraft):** Accede a construcciones óptimas y probadas por la comunidad para la protección contra peligros de tu Exotraje y todos los vehículos (Minotauro, Roamer, Nómada, Coloso, Peregrino y Nautilon).
+- **Cargueros (Freighters):** Optimiza el rango del Hiperturbo de tu nave capital y la tecnología de coordinación de la flota.
+
+## Impulsado por IA y Algoritmos Avanzados
+
+No solo adivinamos. El motor del Optimizador de NMS utiliza un sofisticado flujo de trabajo para garantizar los mejores resultados:
+
+1.  **Reconocimiento de Patrones:** Comenzamos con arreglos probados a mano y comprobados por la comunidad.
+2.  **Aprendizaje Automático (IA):** Una red neuronal de TensorFlow, entrenada en más de 16,000 diseños de alta puntuación, predice las colocaciones más inteligentes para tus ranuras potenciadas.
+3.  **Recocido Simulado (Simulated Annealing):** Nuestro backend ultrarrápido, construido en Rust, intercambia rápidamente módulos para escalar hacia las estadísticas más altas posibles.
+
+## Privacidad Primero e Impulsado por la Comunidad
+
+- **100% Gratis y de Código Abierto:** Licenciado bajo GPL-3.0 sin anuncios.
+- **No Requiere Inicio de Sesión:** Los datos de tus construcciones se guardan de forma segura en el almacenamiento local de tu navegador.
+- **Guardar y Compartir:** Exporta tus diseños favoritos, genera enlaces para compartir con tus amigos o captura capturas de pantalla de alta calidad de tus diseños directamente desde la aplicación.
+
+**¡Habilita JavaScript para Empezar a Crear Tu Diseño Perfecto Ahora!**

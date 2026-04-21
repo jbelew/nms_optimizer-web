@@ -5,7 +5,7 @@
 - Select a **Platform** (Starship, Multi-Tool, Corvette, etc.) using the <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> icon.
 - **Click** or **double-tap** (mobile) a slot to mark it **Supercharged**.
 - **Ctrl-click (Windows) / ⌘-click (Mac) / single-tap (mobile)** to toggle a slot **active** or **inactive**.
-- Use **row toggles** to enable or disable entire rows. *(Row toggles are disabled once modules are placed.)*
+- Use **row toggles** to enable or disable entire rows. _(Row toggles are disabled once modules are placed.)_
 - Use the **module selection** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> button to add or remove individual modules within a technology group.
 
 > 💡 **Note:**
@@ -81,5 +81,3 @@ https://github.com/jbelew/nms_optimizer-web/discussions
 - <radix-icon name="DownloadIcon" size="20" color="var(--accent-11)"></radix-icon> **Save** — Download the current layout as a `.nms` file.
 - <radix-icon name="Share1Icon" size="20" color="var(--accent-11)"></radix-icon> **Share** — Generate a link others can open directly in the optimizer.
 - <radix-icon name="CameraIcon" size="20" color="var(--accent-11)"></radix-icon> **Screenshot** — Generate a screenshot of the current layout.
-
-

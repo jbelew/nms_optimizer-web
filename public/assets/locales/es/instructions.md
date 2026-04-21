@@ -5,7 +5,7 @@
 - Selecciona una **Plataforma** (Nave espacial, Multiherramienta, Corbeta, etc.) usando el icono <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon>.
 - **Haz clic** o **pulsa dos veces** (móvil) en una ranura para marcarla como **Potenciada**.
 - **Ctrl-clic (Windows) / ⌘-clic (Mac) / pulsar (móvil)** para alternar entre una ranura **activa** o **inactiva**.
-- Usa los **interruptores de fila** para activar o desactivar filas enteras. *(Los interruptores de fila se desactivan una vez colocados los módulos).*
+- Usa los **interruptores de fila** para activar o desactivar filas enteras. _(Los interruptores de fila se desactivan una vez colocados los módulos)._
 - Usa el botón de **selección de módulos** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> para añadir o quitar módulos individuales dentro de un grupo tecnológico.
 
 > 💡 **Nota:**

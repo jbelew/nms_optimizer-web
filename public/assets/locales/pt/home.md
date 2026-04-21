@@ -1,26 +1,41 @@
-# Otimizador de NMS: Criador de Layouts e Calculadora de Adjacência
+# Otimizador NMS: Criador de Layouts de Tecnologia & Calculadora de Adjacência
 
-![Captura de tela do aplicativo Otimizador de NMS mostrando uma grade de tecnologia de nave com posicionamento de módulos otimizado](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-O Otimizador de NMS descobre onde colocar seus módulos de tecnologia para que você não precise fazer isso. Escolha sua plataforma, selecione seus módulos, marque seus espaços sobrecarregados e o otimizador calculará o layout que aproveita ao máximo seus bônus de adjacência. Funciona para naves, corvetas, multiferramentas, exotrajes, exonaves e cargueiros.
+Bem-vindo ao **Otimizador NMS**, uma ferramenta 100% gratuita, sem anúncios e de código aberto projetada para ajudá-lo a encontrar os melhores layouts de tecnologia em _No Man's Sky_. Pare de adivinhar onde colocar seus módulos de atualização Classe S e Classe X. Escolha sua plataforma, selecione sua tecnologia, marque seus espaços superalimentados (Supercharged Slots) e deixe nossa calculadora gerar instantaneamente um layout que maximiza seu DPS, manobrabilidade e alcance do Hiperpropulsor (Hyperdrive).
 
-## O Que É Um Bônus de Adjacência?
+Um layout otimizado normalmente pontua **15-20% mais alto** do que a maioria dos jogadores pode organizar à mão.
 
-Quando você coloca módulos de tecnologia compatíveis lado a lado no No Man's Sky, eles ganham um aumento de atributos. O jogo não explica muito sobre como isso funciona, mas a versão curta é: módulos do mesmo tipo que compartilham uma borda ganham um aumento percentual em seus atributos. Quanto mais bordas compartilhadas, maior o bônus. Determinar o layout correto manualmente é tedioso, especialmente em grades grandes com espaços sobrecarregados para considerar.
+## Maximize Bônus de Adjacência (Adjacency Bonuses) & Espaços Superalimentados
 
-## O Que São Espaços Sobrecarregados?
+Encontrar o layout de tecnologia perfeito em NMS significa equilibrar duas mecânicas de jogo complexas através de milhões de permutações possíveis (até ~8.32 × 10⁸¹ para uma grade completa!):
 
-Alguns espaços de inventário no No Man's Sky são sobrecarregados. Qualquer módulo de tecnologia colocado em um deles ganha um grande multiplicador de atributos, além dos bônus de adjacência normais. Eles são posicionados aleatoriamente em cada equipamento, então o layout ideal muda dependendo de onde os espaços sobrecarregados caíram. Essa é a parte difícil, e é para isso que esta ferramenta foi projetada.
+- **Bônus de Adjacência:** Quando módulos de tecnologia compatíveis (como seu Motor de Pulso (Pulse Engine) e suas atualizações Classe S/Classe X) compartilham uma borda na grade do seu inventário, eles recebem um aumento percentual em seus atributos. Quanto mais bordas compartilhadas você criar, maior será o bônus.
+- **Espaços Superalimentados:** Esses raros espaços de inventário (até 4 por grade) fornecem um enorme multiplicador de atributos de ~25-30% para qualquer módulo colocado dentro deles. Como esses espaços são gerados aleatoriamente em quase todas as peças de equipamento, o "layout perfeito" muda para cada nave ou ferramenta individual que você encontrar.
 
-## Como Funciona
+Nosso criador de layouts testa milhares de configurações em milissegundos para encontrar o equilíbrio perfeito entre suas tecnologias principais, suas atualizações Classe X com os melhores atributos e seus espaços superalimentados únicos.
 
-O otimizador usa uma combinação de correspondência de padrões determinística e Simulated Annealing. Para conjuntos de módulos menores, ele pode encontrar exatamente o melhor layout. Para grades maiores ou mais complexas, o Simulated Annealing explora milhares de disposições para encontrar uma que obtenha a maior pontuação possível. A pontuação leva em conta os bônus de adjacência, la localização dos espaços sobrecarregados e os pesos de atributos específicos de cada módulo. O backend roda em Rust para garantir velocidade.
+## Plataformas & Equipamentos Suportados
 
-## Plataformas Suportadas
+O Otimizador NMS fornece resolução dinâmica e builds recomendadas selecionadas a dedo para cada tipo principal de equipamento no jogo:
 
-- Naves (padrão, sentinela, solar, lutadora, viva, atlante)
-- Corvetas
-- Multiferramentas (padrão e sentinela)
-- Exotrajes
-- Exonaves (roamer, pilgrim, nomad, colossus, minotaur, nautilon)
-- Cargueros
+- **Naves (Starships):** Encontre o maior DPS e manobrabilidade para Caças (Fighters), Exploradores (Explorers), Transportadores (Haulers), Exóticas (Exotics), Naves Solares (Solar Ships), Interceptadores Sentinela (Sentinel Interceptors) e Naves Vivas (Living Ships).
+- **Multiferramentas (Multi-Tools):** Maximize o rendimento do seu Feixe de Mineração (Mining Beam) ou dano de armas em todas as variantes, incluindo padrão, Sentinela (Sentinel), Atlantid e Cajados (Staves).
+- **Exotrajes (Exosuits) & Exoveículos (Exocraft):** Acesse builds ideais testadas pela comunidade para a proteção contra perigos do seu Exotraje e todos os veículos (Minotauro, Roamer, Nômade, Colosso, Pilgrim e Nautilon).
+- **Cargueiros (Freighters):** Otimize o alcance do Hiperpropulsor de sua nave capital e a tecnologia de coordenação de frota.
+
+## Alimentado por IA & Algoritmos Avançados
+
+Nós não estamos apenas adivinhando. O motor do Otimizador NMS usa um fluxo de trabalho sofisticado para garantir os melhores resultados:
+
+1.  **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e aprovados pela comunidade.
+2.  **Aprendizado de Máquina (IA):** Uma rede neural do TensorFlow, treinada em mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços superalimentados.
+3.  **Recozimento Simulado (Simulated Annealing):** Nosso backend ultrarrápido, construído em Rust, troca rapidamente os módulos para escalar em direção às estatísticas mais altas possíveis.
+
+## Privacidade em Primeiro Lugar & Focado na Comunidade
+
+- **100% Gratuito & Código Aberto:** Licenciado sob GPL-3.0 com zero anúncios.
+- **Nenhum Login Necessário:** Os dados de seus builds são salvos com segurança no armazenamento local do seu navegador.
+- **Salvar & Compartilhar:** Exporte seus layouts favoritos, gere links compartilháveis para seus amigos ou faça capturas de tela de alta qualidade de seus layouts diretamente do aplicativo.
+
+**Ative o JavaScript para Começar a Construir Seu Layout Perfeito Agora!**

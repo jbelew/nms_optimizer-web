@@ -1,36 +1,41 @@
-# NMS Optimizer: Tech Layout Builder & Adjacency Calculator
+# NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner
 
 ![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-Welcome to the **NMS Optimizer**, a 100% free, ad-free, and open-source tool designed to help you find the absolute best technology layouts in *No Man's Sky*. Stop guessing where to place your S-Class and X-Class upgrade modules. Pick your platform, select your tech, mark your supercharged slots, and let our calculator instantly generate a layout that maximizes your DPS, maneuverability, and hyperdrive range.
+Willkommen beim **NMS-Optimierer**, einem 100 % kostenlosen, werbefreien und quelloffenen Tool, das dir hilft, die absolut besten Technologie-Layouts in _No Man's Sky_ zu finden. Hör auf zu raten, wo du deine S-Klasse- und X-Klasse-Upgrade-Module platzieren sollst. Wähle deine Plattform, wähle deine Technologie, markiere deine aufgeladenen Plätze (Supercharged Slots) und lass unseren Rechner sofort ein Layout generieren, das deinen SPS (DPS), deine Manövrierfähigkeit und deine Hyperantrieb-Reichweite maximiert.
 
-An optimized layout typically scores **15-20% higher** than what most players can arrange by hand.
+Ein optimiertes Layout erzielt typischerweise eine **15-20 % höhere** Punktzahl als das, was die meisten Spieler manuell arrangieren können.
 
-## Maximize Adjacency Bonuses & Supercharged Slots
-Finding the perfect tech layout in NMS means balancing two complex game mechanics across millions of possible permutations (up to ~8.32 × 10⁸¹ for a full grid!):
+## Maximiere Adjazenz-Boni (Adjacency Bonuses) & aufgeladene Plätze
 
-*   **Adjacency Bonuses:** When compatible technology modules (like your Pulse Engine and its S-Class/X-Class upgrades) share an edge on your inventory grid, they receive a percentage increase to their stats. The more shared edges you create, the bigger the bonus.
-*   **Supercharged Slots:** These rare inventory slots (up to 4 per grid) provide a massive ~25-30% stat multiplier to whatever module is placed inside them. Because these slots are randomly generated on almost every piece of gear, the "perfect layout" changes for every single ship or tool you find.
+Das perfekte Technologie-Layout in NMS zu finden, bedeutet, zwei komplexe Spielmechaniken über Millionen möglicher Permutationen (bis zu ~8.32 × 10⁸¹ für ein volles Raster!) auszubalancieren:
 
-Our layout builder tests thousands of configurations in milliseconds to find the perfect balance between your core technologies, your highest-rolled X-Class upgrades, and your unique supercharged slots.
+- **Adjazenz-Boni:** Wenn kompatible Technologie-Module (wie dein Impulsantrieb (Pulse Engine) und seine S-Klasse/X-Klasse-Upgrades) eine Kante auf deinem Inventar-Raster teilen, erhalten sie eine prozentuale Erhöhung ihrer Werte. Je mehr gemeinsame Kanten du erstellst, desto größer ist der Bonus.
+- **Aufgeladene Plätze:** Diese seltenen Inventarplätze (bis zu 4 pro Raster) bieten einen massiven ~25-30%igen Werte-Multiplikator für jedes Modul, das darin platziert wird. Da diese Plätze auf fast jedem Ausrüstungsteil zufällig generiert werden, ändert sich das "perfekte Layout" für jedes einzelne Schiff oder Werkzeug, das du findest.
 
-## Supported Platforms & Equipment
-The NMS Optimizer provides dynamic solving and hand-curated recommended builds for every major equipment type in the game:
+Unser Layout-Generator testet in Millisekunden Tausende von Konfigurationen, um das perfekte Gleichgewicht zwischen deinen Kerntechnologien, deinen X-Klasse-Upgrades mit den besten Werten und deinen einzigartigen aufgeladenen Plätzen zu finden.
 
-*   **Starships:** Find the highest DPS and maneuverability for Fighters, Explorers, Haulers, Exotics, Solar Ships, Sentinel Interceptors, and Living Ships.
-*   **Multi-Tools:** Maximize your mining beam yield or weapon damage across all variants, including standard, Sentinel, Atlantid, and Staves.
-*   **Exosuits & Exocraft:** Access optimal, community-tested builds for your Exosuit hazard protection and all vehicles (Minotaur, Roamer, Nomad, Colossus, Pilgrim, and Nautilon).
-*   **Freighters:** Optimize your capital ship's hyperdrive range and fleet coordination technology.
+## Unterstützte Plattformen & Ausrüstung
 
-## Powered by AI & Advanced Algorithms
-We don't just guess. The NMS Optimizer engine uses a sophisticated pipeline to guarantee the best results:
-1.  **Pattern Matching:** We start with hand-tested, community-proven arrangements.
-2.  **Machine Learning (AI):** A TensorFlow neural network, trained on over 16,000 high-scoring layouts, predicts the smartest placements for your supercharged slots.
-3.  **Simulated Annealing:** Our lightning-fast backend, built in Rust, rapidly swaps modules to climb toward the highest possible stats.
+Der NMS-Optimierer bietet dynamische Lösungsfindung und handverlesene empfohlene Builds für jeden wichtigen Ausrüstungstyp im Spiel:
 
-## Privacy-First & Community Driven
-*   **100% Free & Open Source:** Licensed under GPL-3.0 with zero ads.
-*   **No Login Required:** Your build data is saved securely in your browser's local storage.
-*   **Save & Share:** Export your favorite layouts, generate shareable links for your friends, or capture high-quality layout screenshots directly from the app.
+- **Raumschiffe (Starships):** Finde den höchsten SPS und die beste Manövrierfähigkeit für Jäger (Fighters), Entdecker (Explorers), Transporter (Haulers), Exoten (Exotics), Solarschiffe (Solar Ships), Wächter-Abfangjäger (Sentinel Interceptors) und Lebende Schiffe (Living Ships).
+- **Multifunktionswerkzeuge (Multi-Tools):** Maximiere den Ertrag deines Minenlasers (Mining Beam) oder deinen Waffenschaden bei allen Varianten, einschließlich Standard, Wächter (Sentinel), Atlantid und Stäben (Staves).
+- **Exo-Anzüge (Exosuits) & Exofahrzeuge (Exocraft):** Greife auf optimale, von der Community getestete Builds für deinen Exo-Anzug-Gefahrenschutz und alle Fahrzeuge (Minotaurus, Roamer, Nomad, Koloss, Pilgrim und Nautilon) zu.
+- **Frachter (Freighters):** Optimiere die Hyperantrieb-Reichweite deines Großkampfschiffs und die Flotten-Koordinationstechnologie.
 
-**Enable JavaScript to Start Building Your Perfect Layout Now!**
+## Angetrieben durch KI & fortschrittliche Algorithmen
+
+Wir raten nicht nur. Die Engine des NMS-Optimierers nutzt eine ausgeklügelte Pipeline, um die besten Ergebnisse zu garantieren:
+
+1.  **Mustererkennung:** Wir beginnen mit manuell getesteten, von der Community bewährten Anordnungen.
+2.  **Maschinelles Lernen (KI):** Ein neuronales Netzwerk von TensorFlow, trainiert mit über 16.000 Layouts mit hohen Punktzahlen, sagt die intelligentesten Platzierungen für deine aufgeladenen Plätze voraus.
+3.  **Simulated Annealing:** Unser blitzschnelles Backend, entwickelt in Rust, tauscht Module rasant aus, um die höchstmöglichen Werte zu erreichen.
+
+## Datenschutz zuerst & Community-gesteuert
+
+- **100 % kostenlos & Open Source:** Lizenziert unter GPL-3.0 mit null Werbung.
+- **Kein Login erforderlich:** Deine Build-Daten werden sicher im lokalen Speicher deines Browsers gespeichert.
+- **Speichern & Teilen:** Exportiere deine Lieblingslayouts, generiere teilbare Links für deine Freunde oder nimm hochwertige Layout-Screenshots direkt aus der App auf.
+
+**Aktiviere JavaScript, um jetzt mit dem Bau deines perfekten Layouts zu beginnen!**

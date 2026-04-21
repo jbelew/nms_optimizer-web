@@ -5,7 +5,7 @@
 - Wählen Sie eine **Plattform** (Starship, Multi-Tool, Corvette, etc.) über das <radix-icon name="GearIcon" size="20" color="var(--accent-11)"></radix-icon> Symbol aus.
 - **Klicken** oder **doppeltippen** (mobil) Sie auf einen Slot, um ihn als **Supercharged** zu markieren.
 - **Strg-Klick (Windows) / ⌘-Klick (Mac) / einfaches Tippen (mobil)**, um einen Slot als **aktiv** oder **inaktiv** umzuschalten.
-- Verwenden Sie die **Reihen-Umschalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. *(Reihen-Umschalter sind deaktiviert, sobald Modules platziert wurden.)*
+- Verwenden Sie die **Reihen-Umschalter**, um ganze Reihen zu aktivieren oder zu deaktivieren. _(Reihen-Umschalter sind deaktiviert, sobald Modules platziert wurden.)_
 - Verwenden Sie die Schaltfläche zur **Modul-Auswahl** <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon>, um einzelne Modules innerhalb einer Technology-Gruppe hinzuzufügen oder zu entfernen.
 
 > 💡 **Hinweis:**
