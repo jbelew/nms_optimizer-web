@@ -13,7 +13,7 @@
 		"ariaLabel": "Sélectionner le type de vaisseau",
 		"corvetteWarning": {
 			"title": "Avertissement Corvette !",
-			"description": "Depuis la version 6.33, les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder la construction</strong> pour conserver une sauvegarde de votre travail."
+			"description": "Depuis la version 6.34, les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder la construction</strong> pour conserver une sauvegarde de votre travail."
 		}
 	},
 	"appName": "Optimiseur de Disposition de Technologie No Man's Sky",

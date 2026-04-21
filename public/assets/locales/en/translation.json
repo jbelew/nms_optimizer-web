@@ -22,7 +22,7 @@
 		"ariaLabel": "Select ship type",
 		"corvetteWarning": {
 			"title": "Corvette Warning!",
-			"description": "As of version 6.33, Corvettes <strong>still</strong> have known layout issues! If you create a layout, we highly recommend using the <strong>Save Build</strong> feature to keep a backup of your work."
+			"description": "As of version 6.34, Corvettes <strong>still</strong> have known layout issues! If you create a layout, we highly recommend using the <strong>Save Build</strong> feature to keep a backup of your work."
 		}
 	},
 	"appName": "No Man's Sky Technology Layout Optimizer",

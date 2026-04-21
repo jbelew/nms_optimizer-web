@@ -13,7 +13,7 @@
 		"ariaLabel": "Schiffstyp auswählen",
 		"corvetteWarning": {
 			"title": "Korvetten-Warnung!",
-			"description": "Ab Version 6.33 haben Korvetten <strong>immer noch</strong> bekannte Layout-Probleme! Wenn du ein Layout erstellst, empfehlen wir dringend, die Funktion <strong>Build speichern</strong> zu verwenden, um eine Sicherung deiner Arbeit zu erstellen."
+			"description": "Ab Version 6.34 haben Korvetten <strong>immer noch</strong> bekannte Layout-Probleme! Wenn du ein Layout erstellst, empfehlen wir dringend, die Funktion <strong>Build speichern</strong> zu verwenden, um eine Sicherung deiner Arbeit zu erstellen."
 		}
 	},
 	"appName": "No Man's Sky Technologie-Layout-Optimierer",
