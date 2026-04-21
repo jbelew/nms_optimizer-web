@@ -39,17 +39,7 @@ describe("getLocalizedSchema", () => {
 		});
 	});
 
-	it("should generate FAQPage schema", () => {
-		const schemas = getLocalizedSchema(mockT, lang, url);
-		const faqPage = schemas.find((s) => s["@type"] === "FAQPage") as Record<string, unknown>;
-
-		expect(faqPage).toBeDefined();
-		expect(faqPage.name).toBe("Frequently Asked Questions");
-		const mainEntity = faqPage.mainEntity as unknown[];
-		expect(mainEntity.length).toBe(5);
-	});
-
-	it("should generate WebSite schema", () => {
+	it("should generate BreadcrumbList schema", () => {
 		const schemas = getLocalizedSchema(mockT, lang, url);
 		const website = schemas.find((s) => s["@type"] === "WebSite");
 

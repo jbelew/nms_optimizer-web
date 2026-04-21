@@ -68,57 +68,6 @@ export const getLocalizedSchema = (t, lang, url) => {
 		publisher: { "@id": `${baseUrl}/#organization` },
 	};
 
-	// 4. FAQPage (Localized)
-	const faqPage = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		"@id": `${url}#faqpage`,
-		inLanguage: lang,
-		name: t("faq.name", { defaultValue: "NMS Optimizer Frequently Asked Questions" }),
-		mainEntity: [
-			{
-				"@type": "Question",
-				name: t("faq.questions.adjacencyBonus.name"),
-				acceptedAnswer: {
-					"@type": "Answer",
-					text: t("faq.questions.adjacencyBonus.answer"),
-				},
-			},
-			{
-				"@type": "Question",
-				name: t("faq.questions.superchargedSlots.name"),
-				acceptedAnswer: {
-					"@type": "Answer",
-					text: t("faq.questions.superchargedSlots.answer"),
-				},
-			},
-			{
-				"@type": "Question",
-				name: t("faq.questions.maximizeBonus.name"),
-				acceptedAnswer: {
-					"@type": "Answer",
-					text: t("faq.questions.maximizeBonus.answer"),
-				},
-			},
-			{
-				"@type": "Question",
-				name: t("faq.questions.calculation.name"),
-				acceptedAnswer: {
-					"@type": "Answer",
-					text: t("faq.questions.calculation.answer"),
-				},
-			},
-			{
-				"@type": "Question",
-				name: t("faq.questions.platforms.name"),
-				acceptedAnswer: {
-					"@type": "Answer",
-					text: t("faq.questions.platforms.answer"),
-				},
-			},
-		],
-	};
-
 	// 5. BreadcrumbList
 	const urlObj = new URL(url);
 	const pathParts = urlObj.pathname.split("/").filter(Boolean);
@@ -155,5 +104,5 @@ export const getLocalizedSchema = (t, lang, url) => {
 		itemListElement,
 	};
 
-	return [softwareApp, organization, webSite, faqPage, breadcrumbList];
+	return [softwareApp, organization, webSite, breadcrumbList];
 };

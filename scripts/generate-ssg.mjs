@@ -168,7 +168,7 @@ function updateMetadata(document, metadata, t) {
 /**
  * Inject SEO schemas (JSON-LD) and canonical/hreflang tags into the HTML head.
  */
-function injectSeoSchemas(document, pathname, lang, baseUrl, t, isRootPage) {
+function injectSeoSchemas(document, pathname, lang, baseUrl, t) {
 	// 1. Remove old SEO tags
 	const selectors = [
 		'link[rel="canonical"]',
@@ -227,10 +227,6 @@ function injectSeoSchemas(document, pathname, lang, baseUrl, t, isRootPage) {
 		{ id: "org-schema", type: "Organization" },
 		{ id: "breadcrumb-schema", type: "BreadcrumbList" },
 	];
-
-	if (isRootPage) {
-		schemaConfigs.push({ id: "faq-schema", type: "FAQPage" });
-	}
 
 	schemaConfigs.forEach((config) => {
 		const data = schemas.find((s) => s["@type"] === config.type);
@@ -323,14 +319,13 @@ export function generatePage(
 	if (htmlEl) htmlEl.setAttribute("lang", lang);
 
 	const pathname = pageName === "" ? "/" : `/${pageName}/`;
-	const isRootPage = pageName === "";
 
 	// 1. Metadata updates
 	const metadata = seoMetadata[pathname];
 	const pageTitle = updateMetadata(document, metadata, t);
 
 	// 2. SEO Tag and Schema Injection
-	injectSeoSchemas(document, pathname, lang, baseUrl, t, isRootPage);
+	injectSeoSchemas(document, pathname, lang, baseUrl, t);
 
 	// 3. SSG Content Injection (Injects placeholder)
 	const realNoscript = injectSsgContent(

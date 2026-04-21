@@ -16,7 +16,7 @@ const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "use
 /**
  * Robust check for a generated HTML file.
  */
-function checkFile(filePath, pageName, lang, expectContent = true, isRoot = false) {
+function checkFile(filePath, pageName, lang, expectContent = true) {
 	if (!fs.existsSync(filePath)) {
 		console.log(`✗ ${filePath} - NOT FOUND`);
 
@@ -40,7 +40,6 @@ function checkFile(filePath, pageName, lang, expectContent = true, isRoot = fals
 		hasHreflang: hasTag('<link\\s+rel="alternate"\\s+hreflang="[^"]+?"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
 		hasNavigation: content.includes('aria-label="Site navigation"'),
 		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"),
-		hasFAQ: isRoot ? hasTag('"@type"\\s*:\\s*"FAQPage"') : true,
 		hasRoot: content.includes('id="root"')
 	};
 

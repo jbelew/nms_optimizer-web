@@ -185,72 +185,13 @@ describe("useSeoAndTitle", () => {
 
 	describe("Structured Data (JSON-LD)", () => {
 		it("should inject all required schemas on root path", () => {
-			setupMocks("/", {
-				"faq.name": "NMS Optimizer Frequently Asked Questions",
-				"faq.questions.adjacencyBonus.name": "What is an adjacency bonus?",
-				"faq.questions.adjacencyBonus.answer": "A stat boost.",
-			});
+			setupMocks("/", {});
 			renderHook(() => useSeoAndTitle());
 
 			expect(document.getElementById("software-schema")).not.toBeNull();
 			expect(document.getElementById("website-schema")).not.toBeNull();
 			expect(document.getElementById("org-schema")).not.toBeNull();
 			expect(document.getElementById("breadcrumb-schema")).not.toBeNull();
-			expect(document.getElementById("faq-schema")).not.toBeNull();
-
-			const faqData = JSON.parse(document.getElementById("faq-schema")?.textContent || "{}");
-			expect(faqData["@type"]).toBe("FAQPage");
-			expect(faqData.inLanguage).toBe("en");
-		});
-
-		it("should inject FAQ schema on root path with localized language", () => {
-			mockUseLocation.mockReturnValue({ pathname: "/es/" });
-			mockUseTranslation.mockReturnValue({
-				t: vi.fn((key) => {
-					const translations: Record<string, string> = {
-						"faq.name": "Preguntas Frecuentes",
-					};
-
-					return translations[key] || key;
-				}),
-				i18n: {
-					language: "es",
-					services: {
-						resourceStore: {
-							data: { en: {}, es: {}, fr: {}, de: {}, pt: {} },
-						},
-					},
-				},
-			});
-			renderHook(() => useSeoAndTitle());
-
-			const faqScript = document.getElementById("faq-schema");
-			expect(faqScript).not.toBeNull();
-
-			const data = JSON.parse(faqScript?.textContent || "{}");
-			expect(data["@type"]).toBe("FAQPage");
-			expect(data.inLanguage).toBe("es");
-			expect(data.name).toBe("Preguntas Frecuentes");
-		});
-
-		it("should NOT inject FAQ schema on non-root paths", () => {
-			setupMocks("/about/");
-			renderHook(() => useSeoAndTitle());
-
-			const faqScript = document.getElementById("faq-schema");
-			expect(faqScript).toBeNull();
-		});
-
-		it("should remove FAQ schema when navigating away from root", () => {
-			// Initial render on root
-			const { rerender } = renderHook(() => useSeoAndTitle());
-			setupMocks("/");
-			rerender();
-			expect(document.getElementById("faq-schema")).not.toBeNull();
-
-			// Navigate to /about/
-			setupMocks("/about/");
-			rerender();
 			expect(document.getElementById("faq-schema")).toBeNull();
 		});
 	});

@@ -146,8 +146,8 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
  *
  * @example
  * ```ts
- * updateStructuredData("faq-schema", { "@type": "FAQPage", ... });
- * // Result: <script type="application/ld+json" id="faq-schema">...</script>
+ * updateStructuredData("software-schema", { "@type": "SoftwareApplication", ... });
+ * // Result: <script type="application/ld+json" id="software-schema">...</script>
  * ```
  */
 const updateStructuredData = (id: string, data: object | null) => {
