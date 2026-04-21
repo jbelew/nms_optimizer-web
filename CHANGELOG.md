@@ -1,3 +1,10 @@
+## [6.34.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.1...v6.34.2) (2026-04-21)
+
+
+### Performance Improvements
+
+* remove deferStylesheetsPlugin to eliminate FOUC ([d67bcce](https://github.com/jbelew/nms_optimizer-web/commit/d67bcced80729504e63a9e9a4162fbb45b48c1c7))
+
 ## [6.34.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.0...v6.34.1) (2026-04-20)
 
 
