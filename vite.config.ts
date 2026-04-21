@@ -13,7 +13,6 @@ import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
 import packageJson from "./package.json";
-import deferStylesheetsPlugin from "./scripts/deferStylesheetsPlugin";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
 
 /**
@@ -140,7 +139,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			...(!process.env.STORYBOOK_BUILD ? [deferStylesheetsPlugin()] : []),
 			...(!isCloudflarePages
 				? [
 						compression({
