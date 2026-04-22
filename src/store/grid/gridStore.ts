@@ -379,30 +379,35 @@ const debouncedStorage = {
 
 	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
 		try {
-			// Collect keys to remove first to avoid mutating collection during iteration
-			const keysToRemove: string[] = [];
-
 			if (typeof window !== "undefined" && window.localStorage) {
-				try {
-					const len = localStorage.length;
+				const performCleanup = () => {
+					try {
+						const len = localStorage.length;
+						const keysToRemove: string[] = [];
 
-					for (let i = 0; i < len; i++) {
-						const key = localStorage.key(i);
+						for (let i = 0; i < len; i++) {
+							const key = localStorage.key(i);
 
-						if (key && key.startsWith("app-state") && key !== name) {
-							keysToRemove.push(key);
+							if (key && key.startsWith("app-state") && key !== name) {
+								keysToRemove.push(key);
+							}
 						}
+
+						keysToRemove.forEach((key) => {
+							console.log(`GridStore: Removing old app-state key: ${key}`);
+							safeRemoveItem(key);
+						});
+					} catch (e) {
+						console.warn("GridStore: Failed to enumerate localStorage keys.", e);
 					}
-				} catch (e) {
-					console.warn("GridStore: Failed to enumerate localStorage keys.", e);
+				};
+
+				if ("requestIdleCallback" in window) {
+					window.requestIdleCallback(performCleanup, { timeout: 2000 });
+				} else {
+					setTimeout(performCleanup, 500);
 				}
 			}
-
-			// Remove collected keys in a separate loop
-			keysToRemove.forEach((key) => {
-				console.log(`GridStore: Removing old app-state key: ${key}`);
-				safeRemoveItem(key);
-			});
 
 			const storedData = safeGetItem(name);
 
