@@ -57,6 +57,35 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 		console.warn("⚠️  SENTRY_AUTH_TOKEN is missing. Source maps will not be uploaded.");
 	}
 
+	const deferManifestPlugin = () => ({
+		name: "defer-manifest",
+		enforce: "post" as const,
+		transformIndexHtml: {
+			order: "post" as const,
+			handler(html: string) {
+				// Remove the automatically injected manifest link (handles various formats)
+				const manifestRegex = /<link rel="manifest"[^>]*href="[^"]*manifest\.json"[^>]*>/;
+				const hasManifest = manifestRegex.test(html);
+				let newHtml = html.replace(manifestRegex, "");
+
+				if (hasManifest) {
+					// Inject it via script after load
+					const script = `
+		<script>
+			window.addEventListener('load', function() {
+				var link = document.createElement('link');
+				link.rel = 'manifest';
+				link.href = '/manifest.json';
+				document.head.appendChild(link);
+			});
+		</script>`;
+					newHtml = newHtml.replace("</head>", `${script}\n	</head>`);
+				}
+				return newHtml;
+			},
+		},
+	});
+
 	return {
 		define: {
 			__APP_VERSION__: JSON.stringify(appVersion),
@@ -373,6 +402,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						}),
 					]
 				: []),
+			deferManifestPlugin(),
 		],
 		resolve: {
 			tsconfigPaths: true,
@@ -414,7 +444,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			target: "baseline-widely-available",
 			manifest: "build-manifest.json",
 			chunkSizeWarningLimit: 600,
-			cssCodeSplit: true,
+			cssCodeSplit: false,
 			sourcemap: true,
 			cssMinify: "lightningcss",
 			modulePreload: {
@@ -458,9 +488,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 					// Declarative code splitting via groups is the native Rolldown/Vite 8 way
 					// to manage manual chunks with high performance.
 					codeSplitting: {
-						// Merge shared modules smaller than 12KB into their dependents to reduce
+						// Merge shared modules smaller than 20KB into their dependents to reduce
 						// request overhead, while allowing larger shared pieces to remain split.
-						minSize: 12000,
+						minSize: 20000,
 						groups: [
 							{
 								// Dedicated chunk for html-to-image to keep it out of the entry path.
@@ -506,31 +536,15 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								priority: 130,
 							},
 							{
-								// Routing logic
-								name: "vendor-router",
-								test: /[\\/]node_modules[\\/](react-router|react-router-dom|@remix-run\/router)[\\/]/,
-								priority: 92,
-							},
-							{
-								// State management and core utilities
-								name: "vendor-state",
-								test: /[\\/]node_modules[\\/](zustand|immer|clsx|tailwind-merge|tiny-invariant)[\\/]/,
+								// Group common libraries to reduce request overhead
+								name: "vendor-libs",
+								test: /[\\/]node_modules[\\/](react-router|react-router-dom|@remix-run\/router|zustand|immer|clsx|tailwind-merge|tiny-invariant|i18next|react-i18next|@formatjs|intl-messageformat|@radix-ui\/|@floating-ui\/|aria-hidden|react-remove-scroll|focus-lock)/,
 								priority: 90,
 							},
 							{
 								name: "vendor-ui-themes",
 								test: /[\\/]node_modules[\\/]@radix-ui\/themes[\\/]|[\\/]assets[\\/]css[\\/]radix-colors[\\/]/,
 								priority: 80,
-							},
-							{
-								name: "vendor-ui-utils",
-								test: /[\\/]node_modules[\\/](@radix-ui\/|@floating-ui\/|aria-hidden|react-remove-scroll|focus-lock)/,
-								priority: 70,
-							},
-							{
-								name: "vendor-i18n",
-								test: /[\\/]node_modules[\\/](i18next|react-i18next|@formatjs|intl-messageformat)/,
-								priority: 60,
 							},
 							{
 								// Stable name for charts to enable its exclusion from eager preloading via modulePreload.
