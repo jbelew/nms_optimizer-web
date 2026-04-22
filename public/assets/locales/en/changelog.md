@@ -4,6 +4,45 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 6.34 – SEO & Page Title Synchronization (2026-04-20)
+
+This update refines how the app presents itself to search engines and users, ensuring consistent page titles across the experience.
+
+- **Consistent Titles:** Standardized page titles across the app and automated H1 synchronization so the title you see always matches the page content perfectly.
+- **Visual Stability:** Fixed an issue where the background styles could be temporarily lost during the initial page load.
+
+## Version 6.33 – SEO Schema & Translation Polish (2026-04-18)
+
+This update focuses on making the app's structural data more accessible to international search engines and fixing some translation edge cases.
+
+- **Localized Search Data:** Added localized FAQ schemas to help global search engines better understand the app's content in different languages.
+- **Translation Fixes:** Repaired several translation issues, ensured missing values are handled gracefully, and cleaned up how the app's version is displayed.
+
+## Version 6.32 – Application Resilience & Stability (2026-04-18)
+
+This update focuses on eliminating loading errors and improving cache behavior after a new version of the app is released.
+
+- **Robust Caching:** Fixed overlapping edge cache rules to ensure you always receive the latest assets without running into stale data.
+- **Smoother Upgrades:** Improved the recovery flow when loading old cached versions of the app, eliminating annoying reload loops.
+
+## Version 6.31 – Delivery Pipeline Optimizations (2026-04-18)
+
+This update hardens the app's delivery pipeline to ensure a smoother and more reliable experience.
+
+- **Delivery Pipeline:** Optimized how the app is delivered from the edge, making the initial load more robust against network interruptions and caching issues.
+
+## Version 6.30 – Recovery & Resilience (2026-04-17)
+
+This update introduces a new safety net to help users recover if the application fails to start correctly.
+
+- **Initialization Recovery UI:** Implemented a new isolated recovery screen that helps you safely reload the app if a strict ad-blocker or network error prevents the app from starting up.
+
+## Version 6.29 – Dashboard Enhancements (2026-04-17)
+
+This minor update improves the usability of the github hosted performance dashboard.
+
+- **Audit Log Polish:** Streamlined the performance dashboard by limiting the audit table to the 10 most recent runs and adding direct links to the relevant code commits.
+
 ## Version 6.28 – Performance Polish & Build Sharing (2026-04-17)
 
 This update delivers massive under-the-hood speed improvements, layout-sharing enhancements, and a handful of stability fixes.
