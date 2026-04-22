@@ -1540,10 +1540,10 @@
     }
   },
   {
-    "date": "2026-04-22T18:30:31.347Z",
+    "date": "2026-04-22T18:30:42.437Z",
     "sha": "a5f16ded677b5f29b48b091a0c6588c313e3647a",
     "scores": {
-      "performance": 0.8,
+      "performance": 0.91,
       "accessibility": 0.96,
       "best-practices": 0.96,
       "seo": 1
