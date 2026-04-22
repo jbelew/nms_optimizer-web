@@ -1,6 +1,6 @@
 # À Propos de l'Optimiseur de NMS : Le Calculateur de Disposition de Technologie Ultime pour No Man's Sky
 
-L'Optimiseur de NMS est un outil 100 % gratuit et sans publicité conçu pour déterminer exactement où placer vos modules de technologie dans _No Man's Sky_. Vous choisissez votre équipement, sélectionnez vos modules d'amélioration de Classe S ou de Classe X, marquez vos emplacements suralimentés (Supercharged Slots), et notre calculateur génère presque instantanément la disposition qui maximise vos statistiques en jeu.
+**NMS Optimizer** est un outil 100 % gratuit et sans publicité conçu pour déterminer exactement où placer vos modules de technologie dans _No Man's Sky_. Vous choisissez votre équipement, sélectionnez vos modules d'amélioration de Classe S ou de Classe X, marquez vos emplacements suralimentés (Supercharged Slots), et notre calculateur génère presque instantanément la disposition qui maximise vos statistiques en jeu.
 
 En équilibrant parfaitement les mécanismes du jeu, une disposition optimisée obtient généralement un score **15-20 % plus élevé** que ce que la plupart des joueurs peuvent arranger manuellement.
 
@@ -47,7 +47,7 @@ Oui ! Vous pouvez sauvegarder vos builds préférés localement sous forme de fi
 L'outil évite intentionnellement de calculer les métriques standard du jeu comme le DPS ou la Portée en Années-Lumière. Parce que les nombres exacts nécessitent des seeds de vaisseau cachées inaccessibles sans un éditeur de sauvegarde, l'optimiseur s'appuie plutôt sur un score en "pourcentage du maximum".
 
 **Pourquoi la disposition optimisée n'inclut-elle pas mon module d'Expédition spécifique ?**
-L'Optimiseur de NMS prend entièrement en charge toutes les **Récompenses d'Expédition et Redux d'Expédition** offertes après la mise à jour _Worlds Part I_. Cependant, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas inclus par défaut dans vos résolutions. Vous pouvez facilement les activer pour votre build en ouvrant l'**interface de Sélection des Modules**.
+L'Optimiseur de NMS prend entièrement en charge toutes les **Récompenses d'Expédition et Redux d'Expédition** offertes après la mise à jour _Worlds Part I_. Cependant, comme tous les joueurs ne possèdent pas ces objets rares, ces modules optionnels ne sont pas inclus par défaut dans vos résolutions. Vous pouvez facilement les activer pour votre build en ouvrant <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> l'**interface de Sélection des Modules**.
 
 ## Sous le Capot : Notre Pile Technologique
 

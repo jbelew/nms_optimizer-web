@@ -1,6 +1,6 @@
 # Sobre o Otimizador NMS: A Calculadora Definitiva de Layouts de Tecnologia para No Man's Sky
 
-O Otimizador NMS é uma ferramenta 100% gratuita e sem anúncios projetada para descobrir exatamente onde colocar seus módulos de tecnologia em _No Man's Sky_. Você escolhe seu equipamento, seleciona seus módulos de atualização Classe S ou Classe X, marca seus espaços superalimentados (Supercharged Slots) e nossa calculadora gera quase instantaneamente o layout que maximiza seus atributos no jogo.
+**NMS Optimizer** é uma ferramenta 100% gratuita e sem anúncios projetada para descobrir exatamente onde colocar seus módulos de tecnologia em _No Man's Sky_. Você escolhe seu equipamento, seleciona seus módulos de atualização Classe S ou Classe X, marca seus espaços superalimentados (Supercharged Slots) e nossa calculadora gera quase instantaneamente o layout que maximiza seus atributos no jogo.
 
 Ao equilibrar perfeitamente as mecânicas de jogo, um layout otimizado normalmente pontua **15-20% mais alto** do que a maioria dos jogadores consegue organizar à mão.
 
@@ -47,7 +47,7 @@ Sim! Você pode salvar suas builds favoritas localmente como arquivos `.nms`, ge
 A ferramenta evita intencionalmente calcular métricas padrão do jogo, como DPS ou Alcance de Anos-Luz. Como números exatos requerem "seeds" (sementes) ocultas da nave, inacessíveis sem um editor de save, o otimizador confia em uma pontuação de "porcentagem do máximo" em seu lugar.
 
 **Por que o layout otimizado não inclui meu módulo específico de Expedição?**
-O Otimizador NMS suporta totalmente todas as **Recompensas de Expedição e Redux de Expedição** oferecidas após a atualização _Worlds Part I_. No entanto, como nem todos os jogadores possuem esses itens raros, esses módulos opcionais não são incluídos por padrão em suas soluções. Você pode ativá-los facilmente para sua build abrindo a **Interface de Seleção de Módulos**.
+O Otimizador NMS suporta totalmente todas as **Recompensas de Expedição e Redux de Expedição** oferecidas após a atualização _Worlds Part I_. No entanto, como nem todos os jogadores possuem esses itens raros, esses módulos opcionais não são incluídos por padrão em suas soluções. Você pode ativá-los facilmente para sua build abrindo a <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Interface de Seleção de Módulos**.
 
 ## Sob o Capô: Nossa Pilha de Tecnologia
 

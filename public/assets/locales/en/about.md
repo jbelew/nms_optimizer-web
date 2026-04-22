@@ -1,6 +1,6 @@
 # About NMS Optimizer: The Ultimate No Man's Sky Tech Layout Calculator
 
-NMS Optimizer is a 100% free, ad-free tool designed to figure out exactly where to place your technology modules in _No Man's Sky_. You pick your equipment, select your S-Class or X-Class upgrade modules, mark your supercharged slots, and our calculator almost instantly generates the layout that maximizes your in-game stats.
+**NMS Optimizer** is a 100% free, ad-free tool designed to figure out exactly where to place your technology modules in _No Man's Sky_. You pick your equipment, select your S-Class or X-Class upgrade modules, mark your supercharged slots, and our calculator almost instantly generates the layout that maximizes your in-game stats.
 
 By perfectly balancing game mechanics, an optimized layout typically scores **15-20% higher** than what most players can arrange by hand.
 
@@ -43,11 +43,11 @@ Yes. It is 100% free, ad-free, and open-source (GPL-3.0). You do not need to cre
 **Can I save and share my layouts?**
 Yes! You can save your favorite builds locally as `.nms` files, generate shareable links to send to friends, or share high-quality layout screenshots directly to social media. Builds are validated for integrity before sharing.
 
-**Why does the tool not show in-game stats?**
+**Why doesn't the tool not show in-game stats?**
 The tool intentionally avoids calculating standard in-game metrics like DPS or Light Year range. Because exact numbers require hidden ship seeds inaccessible without a save editor, the optimizer relies on a "percentage of maximum" score instead.
 
 **Why doesn't the optimized layout include my specific Expedition module?**
-The NMS Optimizer fully supports all **Expedition and Expedition-Redux Rewards** offered after the _Worlds Part I_ update. However, because not all players possess these rare items, these optional modules are not included by default into your solves. You can easily activate them for your build by opening the **Module Selection interface**.
+The NMS Optimizer fully supports all **Expedition and Expedition-Redux Rewards** offered after the _Worlds Part I_ update. However, because not all players possess these rare items, these optional modules are not included by default into your solves. You can easily activate them for your build by opening the <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Module Selection interface**.
 
 ## Under the Hood: Our Tech Stack
 

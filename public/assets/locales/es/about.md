@@ -1,6 +1,6 @@
 # Acerca del Optimizador de NMS: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky
 
-El Optimizador de NMS es una herramienta 100% gratuita y sin anuncios diseñada para descifrar exactamente dónde colocar tus módulos de tecnología en _No Man's Sky_. Tú eliges tu equipo, seleccionas tus módulos de actualización de Clase S o Clase X, marcas tus ranuras potenciadas (Supercharged Slots) y nuestra calculadora genera casi al instante el diseño que maximiza tus estadísticas dentro del juego.
+**NMS Optimizer** es una herramienta 100% gratuita y sin anuncios diseñada para descifrar exactamente dónde colocar tus módulos de tecnología en _No Man's Sky_. Tú eliges tu equipo, seleccionas tus módulos de actualización de Clase S o Clase X, marcas tus ranuras potenciadas (Supercharged Slots) y nuestra calculadora genera casi al instante el diseño que maximiza tus estadísticas dentro del juego.
 
 Al equilibrar perfectamente las mecánicas del juego, un diseño optimizado normalmente obtiene una puntuación **15-20% mayor** que lo que la mayoría de los jugadores pueden organizar a mano.
 
@@ -47,7 +47,7 @@ Sí. Es 100% gratuito, sin anuncios y de código abierto (GPL-3.0). No necesitas
 La herramienta evita intencionalmente calcular métricas estándar dentro del juego como DPS o Rango en Años Luz. Debido a que los números exactos requieren semillas de nave ocultas que son inaccesibles sin un editor de guardado, el optimizador confía en un puntaje de "porcentaje del máximo" en su lugar.
 
 **¿Por qué el diseño optimizado no incluye mi módulo específico de Expedición?**
-El Optimizador de NMS apoya completamente todas las **Recompensas de Expedición y Redux de Expedición** ofrecidas tras la actualización _Worlds Part I_. Sin embargo, debido a que no todos los jugadores poseen estos artículos raros, estos módulos opcionales no se incluyen por defecto en tus soluciones. Puedes activarlos fácilmente para tu construcción abriendo la **interfaz de Selección de Módulos**.
+El Optimizador de NMS apoya completamente todas las **Recompensas de Expedición y Redux de Expedición** ofrecidas tras la actualización _Worlds Part I_. Sin embargo, debido a que no todos los jugadores poseen estos artículos raros, estos módulos opcionales no se incluyen por defecto en tus soluciones. Puedes activarlos fácilmente para tu construcción abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de Módulos**.
 
 ## Bajo el Capó: Nuestra Pila Tecnológica
 

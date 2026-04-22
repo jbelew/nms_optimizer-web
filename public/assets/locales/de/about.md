@@ -1,6 +1,6 @@
 # Über den NMS-Optimierer: Der ultimative No Man's Sky Technologie-Layout-Rechner
 
-Der NMS-Optimierer ist ein 100 % kostenloses, werbefreies Tool, das entwickelt wurde, um genau herauszufinden, wo du deine Technologie-Module in _No Man's Sky_ platzieren solltest. Du wählst deine Ausrüstung, wählst deine S-Klasse- oder X-Klasse-Upgrade-Module aus, markierst deine aufgeladenen Plätze (Supercharged Slots) und unser Rechner generiert fast sofort das Layout, das deine In-Game-Werte maximiert.
+Der **NMS Optimierer** ist ein 100 % kostenloses, werbefreies Tool, das entwickelt wurde, um genau herauszufinden, wo du deine Technologie-Module in _No Man's Sky_ platzieren solltest. Du wählst deine Ausrüstung, wählst deine S-Klasse- oder X-Klasse-Upgrade-Module aus, markierst deine aufgeladenen Plätze (Supercharged Slots) und unser Rechner generiert fast sofort das Layout, das deine In-Game-Werte maximiert.
 
 Durch die perfekte Ausbalancierung der Spielmechaniken erzielt ein optimiertes Layout typischerweise eine **15-20 % höhere** Punktzahl als das, was die meisten Spieler manuell arrangieren können.
 
@@ -47,7 +47,7 @@ Ja! Du kannst deine Lieblings-Builds lokal als `.nms`-Dateien speichern, teilbar
 Das Tool vermeidet absichtlich die Berechnung von Standard-In-Game-Metriken wie SPS oder Lichtjahre-Reichweite. Da genaue Zahlen verborgene Schiffs-Seeds erfordern, die ohne einen Save-Editor unzugänglich sind, verlässt sich der Optimierer stattdessen auf eine "Prozentual vom Maximum"-Punktzahl.
 
 **Warum enthält das optimierte Layout nicht mein spezifisches Expeditionsmodul?**
-Der NMS-Optimierer unterstützt vollständig alle **Expeditions- und Expeditions-Redux-Belohnungen**, die nach dem _Worlds Part I_-Update angeboten wurden. Da jedoch nicht alle Spieler diese seltenen Gegenstände besitzen, sind diese optionalen Module standardmäßig nicht in deinen Lösungen enthalten. Du kannst sie ganz einfach für deinen Build aktivieren, indem du die **Modulauswahl-Schnittstelle** öffnest.
+Der NMS-Optimierer unterstützt vollständig alle **Expeditions- und Expeditions-Redux-Belohnungen**, die nach dem _Worlds Part I_-Update angeboten wurden. Da jedoch nicht alle Spieler diese seltenen Gegenstände besitzen, sind diese optionalen Module standardmäßig nicht in deinen Lösungen enthalten. Du kannst sie ganz einfach für deinen Build aktivieren, indem du die <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **Modulauswahl-Schnittstelle** öffnest.
 
 ## Unter der Haube: Unser Tech-Stack
 
