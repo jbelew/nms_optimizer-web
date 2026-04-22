@@ -182,7 +182,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build Storybook
-        run: npm run build-storybook
+        run: npm run build-storybook -- --webpack-stats-json
 
       - name: Run Storybook Interaction Tests
         run: npm run test:storybook
@@ -192,7 +192,7 @@ jobs:
 
       - name: Run Chromatic visual tests
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
-        uses: chromaui/action@v11
+        uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           storybookBuildDir: storybook-static
