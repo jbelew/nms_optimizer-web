@@ -1,3 +1,10 @@
+## [6.34.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.3...v6.34.4) (2026-04-22)
+
+
+### Performance Improvements
+
+* consolidate CSS and JS chunks, and defer manifest loading to optimize LCP and TBT ([38165c4](https://github.com/jbelew/nms_optimizer-web/commit/38165c48360d580145736324aaa19393701f94ee))
+
 ## [6.34.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.2...v6.34.3) (2026-04-21)
 
 
