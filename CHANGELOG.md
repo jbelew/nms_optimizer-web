@@ -1,3 +1,11 @@
+## [6.34.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.4...v6.34.5) (2026-04-22)
+
+
+### Performance Improvements
+
+* add Vite plugin to purge unused Radix Themes CSS from production builds ([0fbba95](https://github.com/jbelew/nms_optimizer-web/commit/0fbba951bb4130c45c8ccd108d5eb1a3706404d9))
+* revert chunk consolidation to fix TBT/LCP regressions, keep manifest deferral ([7735fb3](https://github.com/jbelew/nms_optimizer-web/commit/7735fb315e70cc63245996ae85c5c45577feb11f))
+
 ## [6.34.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.3...v6.34.4) (2026-04-22)
 
 
