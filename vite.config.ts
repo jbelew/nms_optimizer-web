@@ -14,6 +14,7 @@ import { splashScreen } from "vite-plugin-splash-screen";
 
 import packageJson from "./package.json";
 import { markdownBundlePlugin } from "./scripts/vite-plugin-markdown-bundle.mjs";
+import { purgeRadixCss } from "./scripts/vite-plugin-purge-radix-css.mjs";
 
 /**
  * Vite 8 / Rolldown Configuration
@@ -184,6 +185,9 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 						}),
 					]
 				: []),
+			// Purge unused Radix Themes component CSS to reduce TBT from style recalculation.
+			// Must run in production builds only (the plugin uses generateBundle hook).
+			purgeRadixCss(),
 			...(!process.env.STORYBOOK_BUILD
 				? [
 						visualizer({

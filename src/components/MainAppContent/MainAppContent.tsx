@@ -1,7 +1,7 @@
 // src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import { Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Box, Callout, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
@@ -14,14 +14,23 @@ import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
 import OptimizationAlertDialog from "../AppDialog/OptimizationAlert/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
-import { ErrorMessageRenderer } from "../ErrorMessageRenderer/ErrorMessageRenderer";
 import { GridTable } from "../GridTable/GridTable";
-import { InstallPrompt } from "../InstallPrompt/InstallPrompt";
 import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTree, { TechTreeSkeleton } from "../TechTree/TechTree";
-import { ToastRenderer } from "../Toast/ToastRenderer";
 import { useMainAppLogic } from "./useMainAppLogic";
+
+const ErrorMessageRenderer = lazy(() =>
+	import("../ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
+		default: m.ErrorMessageRenderer,
+	}))
+);
+const InstallPrompt = lazy(() =>
+	import("../InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
+);
+const ToastRenderer = lazy(() =>
+	import("../Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
+);
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
@@ -220,35 +229,48 @@ const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 	handleFileSelect,
 }) => {
 	const { t } = useTranslation();
+	const [mountUtilities, setMountUtilities] = useState(false);
+
+	useEffect(() => {
+		if ("requestIdleCallback" in window) {
+			window.requestIdleCallback(() => setMountUtilities(true), { timeout: 2000 });
+		} else {
+			setTimeout(() => setMountUtilities(true), 1000);
+		}
+	}, []);
 
 	return (
 		<>
-			<InstallPrompt />
+			{mountUtilities && (
+				<Suspense fallback={null}>
+					<InstallPrompt />
 
-			<OptimizationAlertDialog
-				isOpen={!!patternNoFitTech}
-				technologyName={patternNoFitTech}
-				onClose={clearPatternNoFitTech}
-				onForceOptimize={handleForceCurrentPnfOptimize}
-			/>
+					<OptimizationAlertDialog
+						isOpen={!!patternNoFitTech}
+						technologyName={patternNoFitTech}
+						onClose={clearPatternNoFitTech}
+						onForceOptimize={handleForceCurrentPnfOptimize}
+					/>
 
-			<BuildNameDialog
-				isOpen={isSaveBuildDialogOpen}
-				onConfirm={handleBuildNameConfirm}
-				onCancel={handleBuildNameCancel}
-			/>
+					<BuildNameDialog
+						isOpen={isSaveBuildDialogOpen}
+						onConfirm={handleBuildNameConfirm}
+						onCancel={handleBuildNameCancel}
+					/>
 
-			<input
-				ref={fileInputRef}
-				type="file"
-				accept=".nms"
-				onChange={handleFileSelect}
-				className="hidden"
-				aria-label={t("buttons.loadBuild")}
-			/>
+					<input
+						ref={fileInputRef}
+						type="file"
+						accept=".nms"
+						onChange={handleFileSelect}
+						className="hidden"
+						aria-label={t("buttons.loadBuild")}
+					/>
 
-			<ErrorMessageRenderer />
-			<ToastRenderer />
+					<ErrorMessageRenderer />
+					<ToastRenderer />
+				</Suspense>
+			)}
 		</>
 	);
 };
