@@ -10,11 +10,14 @@
  * @category Components
  */
 
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useRouteError } from "react-router-dom";
 
-import { ErrorContent } from "./ErrorContent";
 import { handleError } from "./errorHandler";
+
+const ErrorContent = lazy(() =>
+	import("./ErrorContent").then((module) => ({ default: module.ErrorContent }))
+);
 
 /**
  * A fallback component for React Router's error boundaries.
@@ -48,5 +51,9 @@ export const RouteError = () => {
 		handleError(error);
 	}, [error]);
 
-	return <ErrorContent error={error} variant="page" />;
+	return (
+		<Suspense fallback={null}>
+			<ErrorContent error={error} variant="page" />
+		</Suspense>
+	);
 };

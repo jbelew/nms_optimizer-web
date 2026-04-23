@@ -455,8 +455,11 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				resolveDependencies: (filename: string, deps: string[]) => {
 					// Restore aggressive preloading for all critical-path dependencies.
 					// We only exclude truly heavy, asynchronous chunks like charts and markdown.
+					// We also exclude CSS files to prevent double-loading issues when Vite
+					// injects them separately into the HTML.
 					return deps.filter(
 						(dep: string) =>
+							!dep.endsWith(".css") &&
 							!dep.includes("vendor-telemetry") &&
 							!dep.includes("vendor-charts") &&
 							!dep.includes("vendor-markdown") &&

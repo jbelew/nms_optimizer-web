@@ -16,9 +16,9 @@ import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../utils/system/dialogUtils";
-import AppDialog from "../AppDialog/Base/AppDialog";
 import LoremIpsumSkeleton from "../AppDialog/Common/LoremIpsumSkeleton";
 
+const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
 const MarkdownContentRenderer = lazy(() => import("../AppDialog/Markdown/MarkdownContentRenderer"));
 
 /**
@@ -50,7 +50,7 @@ export const RoutedDialogs: FC = () => {
 	const { activeDialog, closeDialog, sectionToScrollTo } = useDialog();
 
 	return (
-		<>
+		<Suspense fallback={null}>
 			{/* Dialog for "About" information */}
 			<AppDialog
 				isOpen={activeDialog === "about"}
@@ -114,6 +114,6 @@ export const RoutedDialogs: FC = () => {
 					</Suspense>
 				}
 			/>
-		</>
+		</Suspense>
 	);
 };

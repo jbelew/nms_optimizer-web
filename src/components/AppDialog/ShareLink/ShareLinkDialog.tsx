@@ -1,8 +1,10 @@
 import type { FC } from "react";
+import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
-import AppDialog from "../Base/AppDialog";
 import { ShareLinkContent } from "./ShareLinkContent";
+
+const AppDialog = lazy(() => import("../Base/AppDialog"));
 
 /**
  * Props for the `ShareLinkDialog` component.
@@ -45,13 +47,15 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 	const { t } = useTranslation();
 
 	return (
-		<AppDialog
-			isOpen={isOpen}
-			onClose={onClose}
-			titleKey="dialogs.titles.shareLink"
-			title={t("dialogs.titles.shareLink")}
-			content={<ShareLinkContent shareUrl={shareUrl} onClose={onClose} />}
-		/>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				titleKey="dialogs.titles.shareLink"
+				title={t("dialogs.titles.shareLink")}
+				content={<ShareLinkContent shareUrl={shareUrl} onClose={onClose} />}
+			/>
+		</Suspense>
 	);
 };
 

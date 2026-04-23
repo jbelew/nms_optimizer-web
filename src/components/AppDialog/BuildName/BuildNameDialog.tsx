@@ -1,10 +1,12 @@
 import type { FC } from "react";
+import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
-import AppDialog from "../Base/AppDialog";
 import { BuildNameContent } from "./BuildNameContent";
 
 import "./BuildNameDialog.scss";
+
+const AppDialog = lazy(() => import("../Base/AppDialog"));
 
 /**
  * Props for the `BuildNameDialog` component.
@@ -53,14 +55,16 @@ const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onConfirm, onCancel
 	const { t } = useTranslation();
 
 	return (
-		<AppDialog
-			isOpen={isOpen}
-			onClose={onCancel}
-			titleKey="dialog.buildName.title"
-			title={t("dialog.buildName.title") || "Save Build"}
-			content={<BuildNameContent onConfirm={onConfirm} onCancel={onCancel} />}
-			className="buildNameDialog__content"
-		/>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				onClose={onCancel}
+				titleKey="dialog.buildName.title"
+				title={t("dialog.buildName.title") || "Save Build"}
+				content={<BuildNameContent onConfirm={onConfirm} onCancel={onCancel} />}
+				className="buildNameDialog__content"
+			/>
+		</Suspense>
 	);
 };
 

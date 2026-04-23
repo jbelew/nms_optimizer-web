@@ -57,7 +57,7 @@ describe("ErrorBoundary", () => {
 			expect(screen.getByText("Safe component")).toBeInTheDocument();
 		});
 
-		it("should render ErrorPage when error is thrown", () => {
+		it("should render ErrorPage when error is thrown", async () => {
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -65,7 +65,7 @@ describe("ErrorBoundary", () => {
 			);
 
 			// ErrorPage displays error information
-			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 
 		it("should not render children when error is caught", () => {
@@ -95,7 +95,7 @@ describe("ErrorBoundary", () => {
 			expect(errorInfo).toBeDefined();
 		});
 
-		it("should update state with error and errorInfo", () => {
+		it("should update state with error and errorInfo", async () => {
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -103,10 +103,10 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Check that ErrorPage is rendered (which means state was updated)
-			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 
-		it("should catch errors and set hasError to true", () => {
+		it("should catch errors and set hasError to true", async () => {
 			render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
@@ -114,12 +114,12 @@ describe("ErrorBoundary", () => {
 			);
 
 			// Verify error page is displayed
-			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 	});
 
 	describe("nested error boundaries", () => {
-		it("should handle errors from nested components", () => {
+		it("should handle errors from nested components", async () => {
 			render(
 				<ErrorBoundary>
 					<div>
@@ -129,7 +129,7 @@ describe("ErrorBoundary", () => {
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
 		});
 	});
 
@@ -146,14 +146,14 @@ describe("ErrorBoundary", () => {
 	});
 
 	describe("edge cases", () => {
-		it("should handle multiple errors gracefully", () => {
+		it("should handle multiple errors gracefully", async () => {
 			const { rerender } = render(
 				<ErrorBoundary>
 					<ThrowError shouldThrow={true} />
 				</ErrorBoundary>
 			);
 
-			expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
+			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
 
 			// Re-render with the same error
 			rerender(
@@ -164,7 +164,9 @@ describe("ErrorBoundary", () => {
 
 			// Should still show error page
 			expect(
-				screen.getByText((content) => content.includes("errorContent.defaultMessage"))
+				await screen.findByText((content) =>
+					content.includes("errorContent.defaultMessage")
+				)
 			).toBeInTheDocument();
 		});
 

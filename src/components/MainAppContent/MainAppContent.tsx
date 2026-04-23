@@ -10,8 +10,6 @@ import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 
 import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
 import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
-import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
-import OptimizationAlertDialog from "../AppDialog/OptimizationAlert/OptimizationAlertDialog";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
@@ -19,6 +17,11 @@ import MessageSpinner from "../MessageSpinner/MessageSpinner";
 import { ShipSelection } from "../ShipSelection/ShipSelection";
 import TechTree, { TechTreeSkeleton } from "../TechTree/TechTree";
 import { useMainAppLogic } from "./useMainAppLogic";
+
+const BuildNameDialog = lazy(() => import("../AppDialog/BuildName/BuildNameDialog"));
+const OptimizationAlertDialog = lazy(
+	() => import("../AppDialog/OptimizationAlert/OptimizationAlertDialog")
+);
 
 const ErrorMessageRenderer = lazy(() =>
 	import("../ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({

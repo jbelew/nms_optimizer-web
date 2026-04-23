@@ -22,8 +22,9 @@ import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScro
 import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "../../store/grid/gridStore";
 import { useDialog } from "../../utils/system/dialogUtils";
-import BuildNameDialog from "../AppDialog/BuildName/BuildNameDialog";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+
+const BuildNameDialog = React.lazy(() => import("../AppDialog/BuildName/BuildNameDialog"));
 
 /**
  * Props for the `GridTableButtons` component.
@@ -204,11 +205,13 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 
 	return (
 		<>
-			<BuildNameDialog
-				isOpen={isSaveBuildDialogOpen}
-				onConfirm={handleBuildNameConfirm}
-				onCancel={handleBuildNameCancel}
-			/>
+			<React.Suspense fallback={null}>
+				<BuildNameDialog
+					isOpen={isSaveBuildDialogOpen}
+					onConfirm={handleBuildNameConfirm}
+					onCancel={handleBuildNameCancel}
+				/>
+			</React.Suspense>
 			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
 				<div className="gridTable-buttons__left">
 					{renderResponsiveButton(
