@@ -218,6 +218,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								"assets/locales/*/translation.json",
 							],
 							workbox: {
+								globIgnores: ["maintenance.html", "404.html", "500.html"],
 								clientsClaim: false,
 								skipWaiting: false,
 								navigationPreload: false,
