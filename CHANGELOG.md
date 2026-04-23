@@ -1,3 +1,12 @@
+## [6.34.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.5...v6.34.6) (2026-04-23)
+
+
+### Performance Improvements
+
+* add Vite plugin to purge unused Radix Themes CSS from production builds ([eed8e13](https://github.com/jbelew/nms_optimizer-web/commit/eed8e1367458901a1c6a5c05c754233acca6fc78))
+* eliminate render-blocking CSS and fix E2E regressions ([34f9bdd](https://github.com/jbelew/nms_optimizer-web/commit/34f9bdd2fb6f54c3f5b49669205480cf25e0ffc1))
+* eliminate render-blocking CSS via comprehensive lazy-loading ([611c135](https://github.com/jbelew/nms_optimizer-web/commit/611c135e216de550882a8806b6b2086a442718d6))
+
 ## [6.34.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.4...v6.34.5) (2026-04-22)
 
 
