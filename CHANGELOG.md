@@ -1,3 +1,10 @@
+## [6.34.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.6...v6.34.7) (2026-04-23)
+
+
+### Bug Fixes
+
+* update maintenance page styles and exclude static error pages from service worker caching ([ed5ee0a](https://github.com/jbelew/nms_optimizer-web/commit/ed5ee0a60d01f68f07e7ab51d7572cd713e8baa6))
+
 ## [6.34.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.5...v6.34.6) (2026-04-23)
 
 
