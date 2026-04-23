@@ -6,7 +6,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useGridStore } from "../../store/grid/gridStore";
-import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import GridCell from "../GridCell/GridCell";
 import GridControlButtons from "../GridControlButtons/GridControlButtons";
 import GridShake from "../GridShake/GridShake";
@@ -55,13 +54,40 @@ function GridTableComponent(
 	const { t } = useTranslation();
 	const gridHeight = useGridStore((state) => state.grid.height);
 	const gridWidth = useGridStore((state) => state.grid.width);
-	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
+	const deferredHeight = React.useDeferredValue(gridHeight);
+	const deferredWidth = React.useDeferredValue(gridWidth);
 
-	if (!gridHeight || !gridWidth) {
+	const totalAriaColumnCount = deferredWidth + 1;
+
+	const gridContent = React.useMemo(
+		() =>
+			Array.from({ length: deferredHeight }).map((_, rowIndex) => (
+				<div
+					key={rowIndex}
+					role="row"
+					aria-rowindex={rowIndex + 1}
+					className="gridTable__row"
+				>
+					{/* Direct row-less rendering of cells for performance */}
+					{Array.from({ length: deferredWidth }).map((__, columnIndex) => (
+						<GridCell
+							key={`${rowIndex}-${columnIndex}`}
+							rowIndex={rowIndex}
+							columnIndex={columnIndex}
+							isSharedGrid={sharedGrid}
+						/>
+					))}
+					<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
+						<GridControlButtons rowIndex={rowIndex} />
+					</div>
+				</div>
+			)),
+		[deferredHeight, deferredWidth, sharedGrid, totalAriaColumnCount]
+	);
+
+	if (!deferredHeight || !deferredWidth) {
 		return <div ref={ref} className="gridTable-empty"></div>;
 	}
-
-	const totalAriaColumnCount = gridWidth + 1;
 
 	return (
 		<GridShake duration={500}>
@@ -69,31 +95,11 @@ function GridTableComponent(
 				ref={ref}
 				role="grid"
 				aria-label={t("gridTable.ariaLabel") ?? ""}
-				aria-rowcount={gridHeight}
+				aria-rowcount={deferredHeight}
 				aria-colcount={totalAriaColumnCount}
 				className={`gridTable ${solving ? "opacity-25" : ""}`}
 			>
-				{Array.from({ length: gridHeight }).map((_, rowIndex) => (
-					<div
-						key={rowIndex}
-						role="row"
-						aria-rowindex={rowIndex + 1}
-						className="gridTable__row"
-					>
-						{/* Direct row-less rendering of cells for performance */}
-						{Array.from({ length: gridWidth }).map((__, columnIndex) => (
-							<GridCell
-								key={`${rowIndex}-${columnIndex}`}
-								rowIndex={rowIndex}
-								columnIndex={columnIndex}
-								isSharedGrid={sharedGrid}
-							/>
-						))}
-						<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
-							<GridControlButtons rowIndex={rowIndex} isLoading={isTechTreeLoading} />
-						</div>
-					</div>
-				))}
+				{gridContent}
 			</div>
 
 			<GridTableButtons

@@ -58,3 +58,8 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./conductor/tracks/e2e_reliability_20260417/](./conductor/tracks/e2e_reliability_20260417/)*
 
 ---
+
+- [x] **Track: Improve INP Score**
+  *Link: [./conductor/tracks/improve_inp_20260423/](./conductor/tracks/improve_inp_20260423/)*
+
+---

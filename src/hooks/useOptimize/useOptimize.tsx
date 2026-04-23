@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../../store/grid/gridStore";
-import { useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 
 import { useOptimizeStore } from "../../store/app/optimizeStore";
 import { usePlatformStore } from "../../store/app/platformStore";
@@ -141,6 +141,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 	 * ```
 	 */
 	const handleOptimize = async (tech: string, forced: boolean = false) => {
+		performance.mark("optimize-start");
+
 		if (isOptimizingRef.current) {
 			Logger.warn("Optimization already in progress, ignoring request");
 
@@ -169,10 +171,14 @@ export const useOptimize = (): UseOptimizeReturn => {
 			isLarge,
 			onProgress: (data) => {
 				if (!isMountedRef.current) return;
-				setProgressPercent(data.progress_percent);
-				if (data.best_grid) setGrid(data.best_grid);
+				startTransition(() => {
+					setProgressPercent(data.progress_percent);
+					if (data.best_grid) setGrid(data.best_grid);
+				});
 			},
 			onComplete: (data: ApiResponse) => {
+				performance.mark("optimize-complete");
+				performance.measure("optimize-to-complete", "optimize-start", "optimize-complete");
 				if (!isMountedRef.current) return;
 				if (patternNoFitTech === tech) setPatternNoFitTech(null);
 

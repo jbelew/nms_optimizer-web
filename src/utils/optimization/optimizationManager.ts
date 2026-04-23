@@ -107,27 +107,8 @@ export class OptimizationManager {
 	 */
 	public start() {
 		const { tech, forced, isLarge, retryCount = 0 } = this.options;
-		const { grid } = useGridStore.getState();
 		const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
 		const selectedShipType = usePlatformStore.getState().selectedPlatform;
-
-		const updatedGrid: Grid = {
-			...grid,
-			cells: grid.cells.map((row: Cell[]) => {
-				let rowChanged = false;
-				const newRow = row.map((cell: Cell) => {
-					if (cell.tech === tech) {
-						rowChanged = true;
-
-						return { ...createEmptyCell(cell.supercharged, cell.active) };
-					}
-
-					return cell;
-				});
-
-				return rowChanged ? newRow : row;
-			}),
-		};
 
 		this.socket = createSocket();
 
@@ -212,22 +193,46 @@ export class OptimizationManager {
 		});
 
 		const solve_type = techGroups[tech]?.length > 1 ? activeGroups[tech] : undefined;
-		const payload = {
-			ship: selectedShipType,
-			tech,
-			available_modules: checkedModules[tech] || [],
-			grid: updatedGrid,
-			forced,
-			send_grid_updates: isLarge,
-			solve_type,
+
+		const emitOptimize = () => {
+			if (!this.socket || this.isCleaningUp) return;
+
+			const { grid } = useGridStore.getState();
+			const updatedGrid: Grid = {
+				...grid,
+				cells: grid.cells.map((row: Cell[]) => {
+					let rowChanged = false;
+					const newRow = row.map((cell: Cell) => {
+						if (cell.tech === tech) {
+							rowChanged = true;
+
+							return { ...createEmptyCell(cell.supercharged, cell.active) };
+						}
+
+						return cell;
+					});
+
+					return rowChanged ? newRow : row;
+				}),
+			};
+
+			const payload = {
+				ship: selectedShipType,
+				tech,
+				available_modules: checkedModules[tech] || [],
+				grid: updatedGrid,
+				forced,
+				send_grid_updates: isLarge,
+				solve_type,
+			};
+
+			this.socket.emit("optimize", payload);
 		};
 
 		if (this.socket.connected) {
-			this.socket.emit("optimize", payload);
+			emitOptimize();
 		} else {
-			this.socket.once("connect", () => {
-				this.socket?.emit("optimize", payload);
-			});
+			this.socket.once("connect", emitOptimize);
 		}
 	}
 

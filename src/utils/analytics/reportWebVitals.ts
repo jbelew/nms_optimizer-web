@@ -125,12 +125,20 @@ const reportTBT = (sendEvent: SendEventFunction) => {
  * ```
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
-	onCLS((metric) => sendVitalsMetric(metric, sendEvent));
-	onINP((metric) => sendVitalsMetric(metric, sendEvent));
-	onFCP((metric) => sendVitalsMetric(metric, sendEvent));
-	onLCP((metric) => sendVitalsMetric(metric, sendEvent));
-	onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
+	const init = () => {
+		onCLS((metric) => sendVitalsMetric(metric, sendEvent));
+		onINP((metric) => sendVitalsMetric(metric, sendEvent));
+		onFCP((metric) => sendVitalsMetric(metric, sendEvent));
+		onLCP((metric) => sendVitalsMetric(metric, sendEvent));
+		onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
 
-	// Add TBT reporting
-	reportTBT(sendEvent);
+		// Add TBT reporting
+		reportTBT(sendEvent);
+	};
+
+	if ("requestIdleCallback" in window) {
+		window.requestIdleCallback(() => init());
+	} else {
+		setTimeout(init, 2000);
+	}
 }

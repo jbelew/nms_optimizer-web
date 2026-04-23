@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 
 import { useGridRowState } from "./useGridRowState";
 
@@ -35,8 +36,6 @@ const selectHasAnyActiveCells = (state: GridStore) =>
 interface RowControlButtonProps {
 	/** The zero-based index of the row being controlled. **Must be a valid row index.** */
 	rowIndex: number;
-	/** Whether the grid data is currently being fetched or processed. */
-	isLoading?: boolean;
 }
 
 /**
@@ -69,7 +68,7 @@ interface RowControlButtonProps {
  * <GridControlButtons rowIndex={5} isLoading={false} />
  * ```
  */
-const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoading }) => {
+const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 	const { isFirstInactiveRow, isLastActiveRow } = useGridRowState(rowIndex);
 	const { t } = useTranslation();
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
@@ -78,6 +77,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex, isLoadi
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const gridFixed = useGridStore((state) => state.gridFixed);
 	const hasAnyActiveCells = useGridStore(selectHasAnyActiveCells);
+	const isLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
 	return (
 		<div

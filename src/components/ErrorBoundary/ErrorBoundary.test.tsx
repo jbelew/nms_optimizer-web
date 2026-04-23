@@ -4,8 +4,8 @@
  * state management, localStorage cleanup, service worker unregistration, and analytics.
  */
 
-import { FC } from "react";
-import { render, screen } from "@testing-library/react";
+import { FC, Suspense } from "react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import ErrorBoundary from "./ErrorBoundary";
@@ -59,13 +59,17 @@ describe("ErrorBoundary", () => {
 
 		it("should render ErrorPage when error is thrown", async () => {
 			render(
-				<ErrorBoundary>
-					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<ThrowError shouldThrow={true} />
+					</ErrorBoundary>
+				</Suspense>
 			);
 
 			// ErrorPage displays error information
-			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
+			await waitFor(() =>
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+			);
 		});
 
 		it("should not render children when error is caught", () => {
@@ -97,39 +101,51 @@ describe("ErrorBoundary", () => {
 
 		it("should update state with error and errorInfo", async () => {
 			render(
-				<ErrorBoundary>
-					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<ThrowError shouldThrow={true} />
+					</ErrorBoundary>
+				</Suspense>
 			);
 
 			// Check that ErrorPage is rendered (which means state was updated)
-			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
+			await waitFor(() =>
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+			);
 		});
 
 		it("should catch errors and set hasError to true", async () => {
 			render(
-				<ErrorBoundary>
-					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<ThrowError shouldThrow={true} />
+					</ErrorBoundary>
+				</Suspense>
 			);
 
 			// Verify error page is displayed
-			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
+			await waitFor(() =>
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+			);
 		});
 	});
 
 	describe("nested error boundaries", () => {
 		it("should handle errors from nested components", async () => {
 			render(
-				<ErrorBoundary>
-					<div>
-						<SafeComponent />
-						<ThrowError shouldThrow={true} />
-					</div>
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<div>
+							<SafeComponent />
+							<ThrowError shouldThrow={true} />
+						</div>
+					</ErrorBoundary>
+				</Suspense>
 			);
 
-			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
+			await waitFor(() =>
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+			);
 		});
 	});
 
@@ -148,26 +164,32 @@ describe("ErrorBoundary", () => {
 	describe("edge cases", () => {
 		it("should handle multiple errors gracefully", async () => {
 			const { rerender } = render(
-				<ErrorBoundary>
-					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<ThrowError shouldThrow={true} />
+					</ErrorBoundary>
+				</Suspense>
 			);
 
-			expect(await screen.findByText("errorContent.boundaryError")).toBeInTheDocument();
+			await waitFor(() =>
+				expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument()
+			);
 
 			// Re-render with the same error
 			rerender(
-				<ErrorBoundary>
-					<ThrowError shouldThrow={true} />
-				</ErrorBoundary>
+				<Suspense fallback={null}>
+					<ErrorBoundary>
+						<ThrowError shouldThrow={true} />
+					</ErrorBoundary>
+				</Suspense>
 			);
 
 			// Should still show error page
-			expect(
-				await screen.findByText((content) =>
-					content.includes("errorContent.defaultMessage")
-				)
-			).toBeInTheDocument();
+			await waitFor(() =>
+				expect(
+					screen.getByText((content) => content.includes("errorContent.defaultMessage"))
+				).toBeInTheDocument()
+			);
 		});
 
 		it("should render children after boundary is reset", () => {

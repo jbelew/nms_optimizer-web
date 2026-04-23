@@ -4,6 +4,17 @@ import { vi } from "vitest";
 
 import GridControlButtons from "./GridControlButtons";
 
+// Mock useTechTreeLoadingStore
+let mockIsLoading = false;
+
+vi.mock("@/store/tech/techTreeLoadingStore", () => ({
+	useTechTreeLoadingStore: vi.fn((selector) => {
+		const mockState = { isLoading: mockIsLoading };
+
+		return selector(mockState);
+	}),
+}));
+
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
@@ -69,17 +80,18 @@ describe("GridControlButtons", () => {
 		vi.clearAllMocks();
 		mockActivateRow.mockClear();
 		mockDeActivateRow.mockClear();
+		mockIsLoading = false;
 	});
 
 	test("should render nothing when neither first inactive nor last active row", () => {
-		const { container } = render(<GridControlButtons rowIndex={2} isLoading={false} />);
+		const { container } = render(<GridControlButtons rowIndex={2} />);
 
 		const buttons = container.querySelectorAll("button");
 		expect(buttons.length).toBe(0);
 	});
 
 	test("should render activate button when first inactive row", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.activateRow/,
@@ -88,7 +100,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should render deactivate button when last active row", () => {
-		render(<GridControlButtons rowIndex={0} isLoading={false} />);
+		render(<GridControlButtons rowIndex={0} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.deactivateRow/,
@@ -99,19 +111,19 @@ describe("GridControlButtons", () => {
 	test("should render both buttons when both conditions are true", () => {
 		// Would need a different rowIndex in the mock to have both true
 		// For now, test that both can be rendered separately
-		const { rerender } = render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		const { rerender } = render(<GridControlButtons rowIndex={1} />);
 		expect(
 			screen.getByRole("button", { name: /gridControls\.activateRow/ })
 		).toBeInTheDocument();
 
-		rerender(<GridControlButtons rowIndex={0} isLoading={false} />);
+		rerender(<GridControlButtons rowIndex={0} />);
 		expect(
 			screen.getByRole("button", { name: /gridControls\.deactivateRow/ })
 		).toBeInTheDocument();
 	});
 
 	test("should call activateRow with correct rowIndex when activate button clicked", async () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.activateRow/,
@@ -124,7 +136,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should call deActivateRow with correct rowIndex when deactivate button clicked", async () => {
-		render(<GridControlButtons rowIndex={0} isLoading={false} />);
+		render(<GridControlButtons rowIndex={0} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.deactivateRow/,
@@ -137,7 +149,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should enable activate button when conditions are favorable", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.activateRow/,
@@ -146,7 +158,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should disable deactivate button when has modules in grid", () => {
-		render(<GridControlButtons rowIndex={0} isLoading={false} />);
+		render(<GridControlButtons rowIndex={0} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.deactivateRow/,
@@ -156,7 +168,8 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should disable button when loading", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={true} />);
+		mockIsLoading = true;
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button", {
 			name: /gridControls\.activateRow/,
@@ -165,14 +178,14 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should render button with correct tooltip", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const tooltip = screen.getByTestId("tooltip");
 		expect(tooltip).toHaveAttribute("title", "gridControls.activateRow");
 	});
 
 	test("should render with correct icon button size on medium+ screens", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button");
 		// Size "2" is applied on medium+ screens
@@ -180,7 +193,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should have correct container styling", () => {
-		const { container } = render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		const { container } = render(<GridControlButtons rowIndex={1} />);
 
 		const controlDiv = container.querySelector('[data-is-grid-control-column="true"]');
 		expect(controlDiv).toHaveClass("flex");
@@ -190,7 +203,7 @@ describe("GridControlButtons", () => {
 	});
 
 	test("should render with correct button variant", () => {
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 
 		const button = screen.getByRole("button");
 		expect(button).toBeInTheDocument();
@@ -199,7 +212,7 @@ describe("GridControlButtons", () => {
 	test("should handle both activate and deactivate buttons together", () => {
 		// Both true conditions would need a row that matches both
 		// For now, verify each renders correctly individually
-		render(<GridControlButtons rowIndex={1} isLoading={false} />);
+		render(<GridControlButtons rowIndex={1} />);
 		expect(
 			screen.getByRole("button", { name: /gridControls\.activateRow/ })
 		).toBeInTheDocument();

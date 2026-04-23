@@ -33,7 +33,7 @@ import { useTechStore } from "../../store/tech/techStore";
  * ```
  */
 export function useGridCellStyle(cell: Cell, isTouching: boolean) {
-	const currentTechColorFromStore = useTechStore((state) => state.getTechColor(cell.tech ?? ""));
+	const currentTechColorFromStore = useTechStore((state) => state.techColors[cell.tech ?? ""]);
 
 	// Using hex values instead of CSS variables for screenshot compatibility (html-to-image)
 	const emptyIconFillColor = cell.supercharged ? "#c150ff2d" : "#00befd28";

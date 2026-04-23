@@ -65,11 +65,14 @@ export const useTechOptimization = (
 	 * ```
 	 */
 	const handleReset = () => {
+		performance.mark("reset-start");
 		startResetTransition(() => {
 			handleResetGridTech(tech);
 			clearTechMaxBonus(tech);
 			clearTechSolvedBonus(tech);
 		});
+		performance.mark("reset-end");
+		performance.measure("reset-duration", "reset-start", "reset-end");
 	};
 
 	/**

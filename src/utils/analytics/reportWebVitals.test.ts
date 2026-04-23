@@ -16,6 +16,18 @@ vi.mock("web-vitals", () => ({
 describe("reportWebVitals", () => {
 	let mockSendEvent: (event: GA4Event) => void;
 
+	beforeAll(() => {
+		// Mock requestIdleCallback to execute immediately
+		global.requestIdleCallback = vi.fn((cb) => {
+			cb({
+				didTimeout: false,
+				timeRemaining: () => 10,
+			} as IdleDeadline);
+
+			return 0;
+		}) as unknown as typeof window.requestIdleCallback;
+	});
+
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockSendEvent = vi.fn();
