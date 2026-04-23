@@ -13,12 +13,14 @@
  */
 
 import type { FC } from "react";
+import { lazy, Suspense } from "react";
 import { Close as DialogClose } from "@radix-ui/react-dialog";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import AppDialog from "../AppDialog/Base/AppDialog";
+
+const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `UpdatePrompt` component.
@@ -86,13 +88,15 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 	);
 
 	return (
-		<AppDialog
-			isOpen={isOpen}
-			titleKey="dialogs.titles.updatePrompt"
-			title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
-			onClose={onDismiss}
-			content={content}
-		/>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				titleKey="dialogs.titles.updatePrompt"
+				title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
+				onClose={onDismiss}
+				content={content}
+			/>
+		</Suspense>
 	);
 };
 

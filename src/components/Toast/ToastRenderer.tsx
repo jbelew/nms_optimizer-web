@@ -10,6 +10,8 @@
  * @category Components
  */
 
+import "./Toast.scss";
+
 import { useToast } from "../../hooks/useToast/useToast";
 import { NmsToast } from "./Toast";
 

@@ -1,8 +1,10 @@
 import type { FC } from "react";
+import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 
-import AppDialog from "../Base/AppDialog";
 import { OptimizationAlertContent } from "./OptimizationAlertContent";
+
+const AppDialog = lazy(() => import("../Base/AppDialog"));
 
 /**
  * Props for the `OptimizationAlertDialog` component.
@@ -60,19 +62,21 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	if (!technologyName) return null;
 
 	return (
-		<AppDialog
-			isOpen={isOpen}
-			onClose={onClose}
-			titleKey="dialogs.titles.optimizationAlert"
-			title={t("dialogs.titles.optimizationAlert")}
-			content={
-				<OptimizationAlertContent
-					technologyName={technologyName}
-					onClose={onClose}
-					onForceOptimize={onForceOptimize}
-				/>
-			}
-		/>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				titleKey="dialogs.titles.optimizationAlert"
+				title={t("dialogs.titles.optimizationAlert")}
+				content={
+					<OptimizationAlertContent
+						technologyName={technologyName}
+						onClose={onClose}
+						onForceOptimize={onForceOptimize}
+					/>
+				}
+			/>
+		</Suspense>
 	);
 };
 

@@ -1,36 +1,32 @@
-import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
+import { FC, lazy, Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
-import AppDialog from "./components/AppDialog/Base/AppDialog";
+import ErrorDialog from "./components/AppDialog/Error/ErrorDialog";
 import { DialogProvider } from "./context/dialogContext";
-// Import the new custom hooks
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
-import { useUpdateCheck } from "./hooks/useUpdateCheck/useUpdateCheck";
-import { useUrlSync } from "./hooks/useUrlSync/useUrlSync"; // Added for URL synchronization
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
 import { useOptimizeStore } from "./store/app/optimizeStore";
-import { sendEvent } from "./utils/analytics/tracking";
 import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 // Lazy-loaded components for performance optimization
 const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
-const UpdatePrompt = lazy(() => import("./components/UpdatePrompt/UpdatePrompt"));
-
-/**
- * Lazy-loaded component for displaying technical error details and recovery actions.
- */
-const ErrorContent = lazy(() => import("./components/AppDialog/Error/ErrorContent"));
+const UpdatePromptWrapper = lazy(() => import("./components/UpdatePrompt/UpdatePromptWrapper"));
 
 /**
  * Lazy-loaded dialog for generating and displaying shareable build URLs.
  */
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
+
+/**
+ * Lazy-loaded component for the base dialog structure.
+ */
+const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
 
 /**
  * Lazy-loaded content for the initial application welcome and introduction.
@@ -59,8 +55,7 @@ const UserStatsRoute = lazy(() =>
  * Inner component that manages core data loading and dialog orchestration.
  *
  * @remarks
- * It uses `useFetchShipTypesSuspense` to trigger the initial data fetch and
- * `useUrlSync` to restore state from URL parameters. It also manages the
+ * It uses `useUrlSync` to restore state from URL parameters. It also manages the
  * conditional rendering of routed dialogs and the initial welcome dialog.
  * This component handles the core logic of the application after the initial
  * setup in the `App` component.
@@ -69,13 +64,11 @@ const UserStatsRoute = lazy(() =>
  *
  * @see {@link App}
  * @see {@link useDialog}
- * @see {@link useUrlSync}
  *
  * @category Components
  *
  * @example
  * ```tsx
- * // Typically rendered within App's DialogProvider
  * <AppContent />
  * ```
  */
@@ -102,15 +95,8 @@ const AppContent: FC = () => {
 	/**
 	 * Dismisses the welcome dialog and records the visit.
 	 *
-	 * @remarks
-	 * This ensures that the user doesn't see the welcome dialog on subsequent
-	 * visits to the application.
-	 *
 	 * @example
-	 * ```tsx
 	 * handleCloseWelcome();
-	 * // returns void, side-effect: sets showWelcome to false and marks visit
-	 * ```
 	 */
 	const handleCloseWelcome = () => {
 		setShowWelcome(false);
@@ -131,9 +117,6 @@ const AppContent: FC = () => {
 		}
 	}, [showError, errorType, sendEvent, t, location.pathname, location.search]);
 
-	// useUrlSync() and other hooks...
-	useUrlSync();
-
 	// If an API error occurred during loading, don't render the main app
 	if (showError && errorType === "fatal") {
 		return null;
@@ -143,11 +126,13 @@ const AppContent: FC = () => {
 		<>
 			<Outlet />
 			{shareUrl ? (
-				<ShareLinkDialog
-					isOpen={!!shareUrl}
-					shareUrl={shareUrl || ""}
-					onClose={closeDialog}
-				/>
+				<Suspense fallback={null}>
+					<ShareLinkDialog
+						isOpen={!!shareUrl}
+						shareUrl={shareUrl || ""}
+						onClose={closeDialog}
+					/>
+				</Suspense>
 			) : null}
 			{activeDialog && activeDialog !== "userstats" ? <RoutedDialogs /> : null}
 			{activeDialog === "userstats" ? (
@@ -178,17 +163,16 @@ const AppContent: FC = () => {
  * This component sets up the high-level application environment, including:
  * - SEO and Title management via `useSeoAndTitle`.
  * - URL validation and sanitization.
- * - Global update detection for the PWA.
- * - Root-level error handling and service worker update prompts.
+ * - Global update detection for the PWA via UpdatePromptWrapper.
+ * - Root-level error handling via ErrorDialog.
  *
  * It wraps the entire application in a `DialogProvider` to enable routed modals.
  *
  * @returns {JSX.Element} The rendered root component.
  *
  * @see {@link DialogProvider}
- * @see {@link useSeoAndTitle}
- * @see {@link useUpdateCheck}
- * @see {@link ./App.test.tsx Unit Tests}
+ * @see {@link ErrorDialog}
+ * @see {@link UpdatePromptWrapper}
  *
  * @component
  *
@@ -200,8 +184,7 @@ const AppContent: FC = () => {
  * ```
  */
 const App: FC = () => {
-	const { t } = useTranslation();
-	const { showError, setShowError } = useOptimizeStore();
+	const { showError } = useOptimizeStore();
 
 	// Initialize file handling for PWA file association
 	useFileHandling();
@@ -212,28 +195,6 @@ const App: FC = () => {
 			hideSplashScreenAndShowBackground();
 		}
 	}, [showError]);
-
-	const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
-	const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | undefined>(undefined);
-
-	// Centralized update prompt tracking
-	useEffect(() => {
-		if (showUpdatePrompt) {
-			sendEvent({
-				category: "engagement",
-				action: "page_view",
-				page_title: "NMS Optimizer: Update Available",
-				page_location: window.location.href,
-				page: `${window.location.pathname}${window.location.search}#update`,
-				nonInteraction: true,
-			});
-		}
-	}, [showUpdatePrompt]);
-
-	useUpdateCheck((updateSW) => {
-		updateSWRef.current = updateSW;
-		setShowUpdatePrompt(true);
-	});
 
 	// Mount-time operations
 	useEffect(() => {
@@ -254,48 +215,6 @@ const App: FC = () => {
 		}
 	}, []);
 
-	/**
-	 * Triggers a hard reload to activate the newly installed service worker.
-	 *
-	 * @remarks
-	 * Calls `updateSW(true)` if the reference exists, which should trigger a page
-	 * reload after the worker updates. Fallback to `window.location.reload()`
-	 * if the update function is not available.
-	 *
-	 * @example
-	 * ```tsx
-	 * handleRefresh();
-	 * // returns void, side-effect: triggers a page reload
-	 * ```
-	 */
-	const handleRefresh = () => {
-		if (updateSWRef.current) {
-			updateSWRef.current(true).catch((e) => {
-				console.error("Failed to update SW:", e);
-				window.location.reload();
-			});
-		} else {
-			window.location.reload();
-		}
-	};
-
-	/**
-	 * Hides the application update notification.
-	 *
-	 * @remarks
-	 * Dismisses the `UpdatePrompt` dialog, allowing the user to continue using
-	 * the application without updating immediately.
-	 *
-	 * @example
-	 * ```tsx
-	 * handleDismissUpdatePrompt();
-	 * // returns void, side-effect: sets showUpdatePrompt to false
-	 * ```
-	 */
-	const handleDismissUpdatePrompt = () => {
-		setShowUpdatePrompt(false);
-	};
-
 	return (
 		<DialogProvider>
 			<Suspense fallback={null}>
@@ -305,22 +224,11 @@ const App: FC = () => {
 			<AppContent />
 
 			{/* Error dialog - rendered at App level so it's always available */}
-			<Suspense fallback={null}>
-				<AppDialog
-					isOpen={showError}
-					onClose={() => setShowError(false)}
-					content={<ErrorContent onClose={() => setShowError(false)} />}
-					titleKey="dialogs.titles.serverError"
-					title={t("dialogs.titles.serverError")}
-				/>
-			</Suspense>
+			<ErrorDialog />
 
+			{/* Update prompt - manages its own lifecycle and analytics */}
 			<Suspense fallback={null}>
-				<UpdatePrompt
-					isOpen={showUpdatePrompt}
-					onRefresh={handleRefresh}
-					onDismiss={handleDismissUpdatePrompt}
-				/>
+				<UpdatePromptWrapper />
 			</Suspense>
 		</DialogProvider>
 	);

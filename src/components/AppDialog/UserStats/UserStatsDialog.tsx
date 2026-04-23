@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import AppDialog from "../Base/AppDialog";
+const AppDialog = lazy(() => import("../Base/AppDialog"));
 
 const LazyUserStatsContent = lazy(() =>
 	import("./UserStatsContent").then((module) => ({
@@ -49,17 +49,19 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();
 
 	return (
-		<AppDialog
-			isOpen={isOpen}
-			onClose={onClose}
-			titleKey="dialogs.titles.userStats"
-			title={t("dialogs.titles.userStats")}
-			content={
-				<Suspense fallback={<Skeleton height="900px" width="100%" />}>
-					<LazyUserStatsContent onClose={onClose} isOpen={isOpen} />
-				</Suspense>
-			}
-		/>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				titleKey="dialogs.titles.userStats"
+				title={t("dialogs.titles.userStats")}
+				content={
+					<Suspense fallback={<Skeleton height="900px" width="100%" />}>
+						<LazyUserStatsContent onClose={onClose} isOpen={isOpen} />
+					</Suspense>
+				}
+			/>
+		</Suspense>
 	);
 };
 

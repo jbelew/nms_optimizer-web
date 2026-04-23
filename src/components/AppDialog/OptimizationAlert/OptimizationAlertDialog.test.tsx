@@ -90,7 +90,7 @@ describe("OptimizationAlertDialog", () => {
 		expect(screen.queryByTestId("app-dialog")).not.toBeInTheDocument();
 	});
 
-	test("should render when isOpen is true and technologyName is provided", () => {
+	test("should render when isOpen is true and technologyName is provided", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -100,7 +100,7 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		expect(screen.getByTestId("app-dialog")).toBeInTheDocument();
+		expect(await screen.findByTestId("app-dialog")).toBeInTheDocument();
 	});
 
 	test("should not render when isOpen is false", () => {
@@ -117,7 +117,7 @@ describe("OptimizationAlertDialog", () => {
 		expect(screen.queryByTestId("app-dialog")).not.toBeInTheDocument();
 	});
 
-	test("should render with correct title key", () => {
+	test("should render with correct title key", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -127,10 +127,10 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		expect(screen.getByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
+		expect(await screen.findByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
 	});
 
-	test("should pass technologyName to OptimizationAlertContent", () => {
+	test("should pass technologyName to OptimizationAlertContent", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -140,10 +140,10 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		expect(screen.getByText(testTechName)).toBeInTheDocument();
+		expect(await screen.findByText(testTechName)).toBeInTheDocument();
 	});
 
-	test("should pass onClose callback to AppDialog", () => {
+	test("should pass onClose callback to AppDialog", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -153,7 +153,7 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		const closeButton = screen.getByText("Close");
+		const closeButton = await screen.findByText("Close");
 		closeButton.click();
 
 		expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -169,7 +169,7 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		const forceOptimizeButton = screen.getByText("Force Optimize");
+		const forceOptimizeButton = await screen.findByText("Force Optimize");
 		forceOptimizeButton.click();
 
 		await waitFor(() => {
@@ -177,7 +177,7 @@ describe("OptimizationAlertDialog", () => {
 		});
 	});
 
-	test("should handle different technology names", () => {
+	test("should handle different technology names", async () => {
 		const { rerender } = render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -187,7 +187,7 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		expect(screen.getByText("TechA")).toBeInTheDocument();
+		expect(await screen.findByText("TechA")).toBeInTheDocument();
 
 		rerender(
 			<OptimizationAlertDialog
@@ -198,10 +198,10 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		expect(screen.getByText("TechB")).toBeInTheDocument();
+		expect(await screen.findByText("TechB")).toBeInTheDocument();
 	});
 
-	test("should properly use translation for title and fallback", () => {
+	test("should properly use translation for title and fallback", async () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
@@ -213,7 +213,7 @@ describe("OptimizationAlertDialog", () => {
 
 		// Both titleKey and title are passed to AppDialog
 		// In real implementation, titleKey is used for i18n translation
-		expect(screen.getByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
+		expect(await screen.findByText("dialogs.titles.optimizationAlert")).toBeInTheDocument();
 	});
 
 	test("should handle async onForceOptimize", async () => {
@@ -230,7 +230,7 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		const forceOptimizeButton = screen.getByText("Force Optimize");
+		const forceOptimizeButton = await screen.findByText("Force Optimize");
 		forceOptimizeButton.click();
 
 		await waitFor(() => {
