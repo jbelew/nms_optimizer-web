@@ -310,6 +310,17 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 											/^https:\/\/api\.nms-optimizer\.app\/api\/events$/,
 										handler: "NetworkOnly",
 										method: "POST",
+										options: {
+											plugins: [
+												{
+													handlerDidError: async () =>
+														new Response(null, {
+															status: 204,
+															statusText: "No Content",
+														}),
+												},
+											],
+										},
 									},
 									{
 										urlPattern: /^https:\/\/www\.googletagmanager\.com\//,
@@ -326,6 +337,17 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 									{
 										urlPattern: /^https:\/\/www\.google-analytics\.com\//,
 										handler: "NetworkOnly",
+										options: {
+											plugins: [
+												{
+													handlerDidError: async () =>
+														new Response(null, {
+															status: 204,
+															statusText: "No Content",
+														}),
+												},
+											],
+										},
 									},
 								],
 							},

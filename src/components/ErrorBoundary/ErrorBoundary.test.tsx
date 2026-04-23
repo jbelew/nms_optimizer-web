@@ -11,6 +11,24 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ErrorBoundary from "./ErrorBoundary";
 import * as errorHandler from "./errorHandler";
 
+// Mock ErrorContent synchronously for tests
+vi.mock("./ErrorContent", () => ({
+	ErrorContent: ({ children, variant }: { children?: React.ReactNode; variant: string }) => (
+		<div data-testid="error-content">
+			{children || (
+				<div>
+					<div>errorContent.boundaryError</div>
+					{variant === "page" ? (
+						<div>errorContent.defaultMessage</div>
+					) : (
+						<div>errorContent.insetMessage</div>
+					)}
+				</div>
+			)}
+		</div>
+	),
+}));
+
 /**
  * Test component that throws an error
  * @example Test usage
