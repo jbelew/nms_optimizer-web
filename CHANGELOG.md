@@ -1,3 +1,10 @@
+## [6.34.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.7...v6.34.8) (2026-04-23)
+
+
+### Performance Improvements
+
+* improve INP score via concurrent rendering and task deferral ([24df5f1](https://github.com/jbelew/nms_optimizer-web/commit/24df5f1e7128ed4bc51640ce19e89374d8f77b4c))
+
 ## [6.34.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.6...v6.34.7) (2026-04-23)
 
 
