@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
 import ErrorDialog from "./components/AppDialog/Error/ErrorDialog";
+import UpdatePromptWrapper from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
 import { useSeoAndTitle } from "./hooks/useSeoAndTitle/useSeoAndTitle";
 import { fetchTechTree } from "./hooks/useTechTree/useTechTree";
+import { useUrlSync } from "./hooks/useUrlSync/useUrlSync";
 import { useUrlNormalization, useUrlValidation } from "./hooks/useValidation/useValidation";
 import { useOptimizeStore } from "./store/app/optimizeStore";
 import { isBot } from "./utils/browser/environment";
@@ -16,7 +18,6 @@ import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
 // Lazy-loaded components for performance optimization
 const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
-const UpdatePromptWrapper = lazy(() => import("./components/UpdatePrompt/UpdatePromptWrapper"));
 
 /**
  * Lazy-loaded dialog for generating and displaying shareable build URLs.
@@ -80,6 +81,7 @@ const AppContent: FC = () => {
 	const location = useLocation();
 
 	// Use the URL hooks within the DialogProvider context
+	useUrlSync();
 	useUrlNormalization();
 	useSeoAndTitle();
 	useUrlValidation();
@@ -227,9 +229,7 @@ const App: FC = () => {
 			<ErrorDialog />
 
 			{/* Update prompt - manages its own lifecycle and analytics */}
-			<Suspense fallback={null}>
-				<UpdatePromptWrapper />
-			</Suspense>
+			<UpdatePromptWrapper />
 		</DialogProvider>
 	);
 };
