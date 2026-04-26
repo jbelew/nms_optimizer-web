@@ -37,7 +37,10 @@
 		gtag('config', 'G-P5VBZQ69Q9', {
 			'page_title': '500: Application Error',
 			'page_path': window.location.pathname,
-			'error_type': errorType || 'unknown'
+			'error_type': errorType || 'unknown',
+			'anonymize_ip': true,
+			'allow_ad_personalization_signals': false,
+			'allow_google_signals': false
 		});
 	</script>
 

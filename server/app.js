@@ -53,7 +53,7 @@ const csp = [
 	"style-src 'self' 'unsafe-inline'",
 	"img-src 'self' data: www.google-analytics.com www.googletagmanager.com",
 	"font-src 'self'",
-	"connect-src 'self' https://*.google-analytics.com https://*.googletagmanager.com https://www.google.com https://api.nms-optimizer.app cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io",
+	"connect-src 'self' https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io",
 	"frame-src https://www.youtube.com",
 	"frame-ancestors 'none'",
 	"object-src 'none'",
