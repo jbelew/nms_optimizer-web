@@ -78,7 +78,7 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		const metrics = new Set<string>();
 
 		raw.forEach((item) => {
-			if (item.metric_name === "CLS") return; // Skip CLS early
+			if (item.metric_name === "TBT") return; // Skip TBT early
 
 			const dateObj = new Date(item.timestamp);
 
@@ -112,6 +112,11 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 				metrics.forEach((m) => {
 					if (normalizedPoint[m] === undefined) {
 						normalizedPoint[m] = null as unknown as number;
+					} else if (normalizedPoint[m] !== null) {
+						const originalValue = normalizedPoint[m] as number;
+						normalizedPoint[`${m}_original`] = originalValue;
+						// Ensure a minimum visual thickness for 0 or near-0 values
+						normalizedPoint[m] = Math.max(originalValue, 10);
 					}
 				});
 
@@ -138,10 +143,10 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		lastVersion = point.appVersion;
 	});
 
-	const displayOrder = ["TTFB", "TBT", "INP", "FCP", "LCP"];
+	const displayOrder = ["TTFB", "CLS", "INP", "FCP", "LCP"];
 	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
 
-	const stackOrder = ["LCP", "FCP", "INP", "TBT", "TTFB"].filter((m) =>
+	const stackOrder = ["LCP", "FCP", "INP", "CLS", "TTFB"].filter((m) =>
 		uniqueMetrics.includes(m)
 	);
 
@@ -154,7 +159,7 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 					return "purple";
 				case "INP":
 					return "crimson";
-				case "TBT":
+				case "CLS":
 					return "orange";
 				case "TTFB":
 					return "amber";
@@ -166,8 +171,9 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		return `var(--${base}-${weight})`;
 	};
 
-	const getStatusColor = (metric: string, value: number | string | undefined) => {
-		if (!value || typeof value === "string") return "var(--gray-11)";
+	const getStatusColor = (metric: string, value: number | string | undefined | null) => {
+		if (value === undefined || value === null || typeof value === "string")
+			return "var(--gray-11)";
 
 		switch (metric) {
 			case "LCP":
@@ -177,10 +183,15 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 						? "var(--amber-11)"
 						: "var(--red-11)";
 			case "INP":
-			case "TBT":
 				return value <= 200
 					? "var(--green-11)"
 					: value <= 500
+						? "var(--amber-11)"
+						: "var(--red-11)";
+			case "CLS":
+				return value <= 100
+					? "var(--green-11)"
+					: value <= 250
 						? "var(--amber-11)"
 						: "var(--red-11)";
 			case "FCP":
@@ -202,7 +213,8 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 
 	const getLatestValue = (metric: string): number | null => {
 		for (let i = chartData.length - 1; i >= 0; i--) {
-			const val = chartData[i][metric];
+			const originalVal = chartData[i][`${metric}_original`];
+			const val = originalVal !== undefined ? originalVal : chartData[i][metric];
 
 			if (val !== null && typeof val === "number") {
 				return val;
@@ -227,9 +239,13 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 								</Text>
 
 								<Text size="5" weight="medium" style={{ color }}>
-									{val !== null ? Math.round(val) : "—"}
+									{val !== null
+										? metric === "CLS"
+											? (val / 1000).toFixed(2)
+											: Math.round(val)
+										: "—"}
 									<Text size="1" ml="1">
-										ms
+										{metric === "CLS" ? "" : "ms"}
 									</Text>
 								</Text>
 							</Flex>
@@ -305,11 +321,24 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 						}}
 						formatter={(
 							value: number | string | ReadonlyArray<number | string> | undefined,
-							name: string | number | undefined
+							name: string | number | undefined,
+							props: { payload?: Record<string, unknown> }
 						) => {
-							const numericValue = typeof value === "number" ? value : 0;
+							const originalValue = props.payload
+								? props.payload[`${name}_original`]
+								: undefined;
+							const numericValue =
+								typeof originalValue === "number"
+									? originalValue
+									: typeof value === "number"
+										? value
+										: 0;
+							const formattedValue =
+								name === "CLS"
+									? (numericValue / 1000).toFixed(2)
+									: `${Math.round(numericValue)}ms`;
 
-							return [`${Math.round(numericValue)}ms`, String(name || "")];
+							return [formattedValue, String(name || "")];
 						}}
 						contentStyle={{
 							backgroundColor: "var(--gray-2)",
