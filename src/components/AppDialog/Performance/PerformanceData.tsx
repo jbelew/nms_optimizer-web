@@ -336,21 +336,21 @@ const LazyPerformanceChart = lazy(async () => {
 
 						<XAxis
 							dataKey="timestamp"
-							type="category"
+							type="number"
+							scale="time"
+							domain={["dataMin", "dataMax"]}
 							axisLine={false}
 							tickLine={false}
 							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-							tickFormatter={(_val: number, index: number) => {
-								const item = chartData[index];
-								if (!item) return "";
+							minTickGap={40}
+							tickFormatter={(val: number) => {
+								const dateObj = new Date(val);
+								// Use a short month/day format for the automatically generated time ticks
 
-								const dateObj = new Date(item.timestamp);
-
-								if (dateObj.getHours() === 0 || index === 0) {
-									return item.displayDate;
-								}
-
-								return "";
+								return new Intl.DateTimeFormat(locale, {
+									month: "numeric",
+									day: "numeric",
+								}).format(dateObj);
 							}}
 						/>
 

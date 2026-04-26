@@ -1,1 +1,8 @@
 # No catch-all redirect. Let real 404s happen for missing SSG files.
+
+# Explicit SPA fallbacks for client-side-only routes
+/performance /index.html 200
+/es/performance /es/index.html 200
+/fr/performance /fr/index.html 200
+/de/performance /de/index.html 200
+/pt/performance /pt/index.html 200
