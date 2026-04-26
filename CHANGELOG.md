@@ -1,3 +1,10 @@
+## [6.35.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.6...v6.35.7) (2026-04-26)
+
+
+### Bug Fixes
+
+* enable navigation preload and prioritize network-only navigation requests to optimize TTFB ([d1ddc44](https://github.com/jbelew/nms_optimizer-web/commit/d1ddc4494095633660471a1cbb8c11025ff9fca7))
+
 ## [6.35.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.5...v6.35.6) (2026-04-26)
 
 
