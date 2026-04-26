@@ -1,3 +1,10 @@
+## [6.35.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.5...v6.35.6) (2026-04-26)
+
+
+### Bug Fixes
+
+* update production websocket URL and replace TBT with CLS in performance metrics visualization ([d3792df](https://github.com/jbelew/nms_optimizer-web/commit/d3792dfd4e5c87109e909b893c646fe08a0b0b3c))
+
 ## [6.35.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.4...v6.35.5) (2026-04-26)
 
 
