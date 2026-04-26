@@ -1,3 +1,10 @@
+# [6.36.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.8...v6.36.0) (2026-04-26)
+
+
+### Features
+
+* **analytics:** implement multi-probe adblocker detection with anti-spoofing ([52dc7ec](https://github.com/jbelew/nms_optimizer-web/commit/52dc7ec40e512812c36f75ac06436e3c2b23a67e))
+
 ## [6.35.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.7...v6.35.8) (2026-04-26)
 
 
