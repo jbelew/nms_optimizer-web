@@ -1,3 +1,10 @@
+## [6.35.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.7...v6.35.8) (2026-04-26)
+
+
+### Bug Fixes
+
+* implement periodic service worker updates and update PWA and E2E environment configurations ([143749e](https://github.com/jbelew/nms_optimizer-web/commit/143749e13248152156d378c77ccf804970ac85db))
+
 ## [6.35.7](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.6...v6.35.7) (2026-04-26)
 
 
