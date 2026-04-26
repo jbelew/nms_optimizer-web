@@ -1,3 +1,10 @@
+## [6.35.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.3...v6.35.4) (2026-04-26)
+
+
+### Bug Fixes
+
+* robust CSP, resolve ReferenceLine closure scope natively, and fix local SW fetch errors ([13bba80](https://github.com/jbelew/nms_optimizer-web/commit/13bba807e0dc23882ade03475497aaedea2eba0b))
+
 ## [6.35.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.2...v6.35.3) (2026-04-26)
 
 
