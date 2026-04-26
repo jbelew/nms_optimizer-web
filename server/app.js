@@ -49,12 +49,13 @@ const INDEX_PATH = path.join(DIST_DIR, "index.html");
  */
 const csp = [
 	"default-src 'self'",
-	"script-src 'self' www.googletagmanager.com static.cloudflareinsights.com 'unsafe-inline'",
+	"script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://static.cloudflareinsights.com https://browser.sentry-cdn.com https://*.sentry-cdn.com",
 	"style-src 'self' 'unsafe-inline'",
-	"img-src 'self' data: www.google-analytics.com www.googletagmanager.com",
-	"font-src 'self'",
-	"connect-src 'self' https://*.google-analytics.com https://*.googletagmanager.com https://api.nms-optimizer.app cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io",
-	"frame-src https://www.youtube.com",
+	"img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.google.com https://*.gstatic.com",
+	"font-src 'self' data:",
+	"connect-src 'self' https://api.nms-optimizer.app https://*.google-analytics.com https://*.googletagmanager.com https://*.cloudflareinsights.com https://*.ingest.us.sentry.io https://*.sentry.io https://*.google.com https://nms-optimizer-service-afebcfd47e2a.herokuapp.com wss://nms-optimizer-service-afebcfd47e2a.herokuapp.com",
+	"frame-src https://www.youtube.com https://*.googletagmanager.com",
+	"worker-src 'self' blob:",
 	"frame-ancestors 'none'",
 	"object-src 'none'",
 	"base-uri 'self'",

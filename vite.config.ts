@@ -332,6 +332,15 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 												maxEntries: 50,
 												maxAgeSeconds: 86400,
 											},
+											plugins: [
+												{
+													handlerDidError: async () =>
+														new Response(null, {
+															status: 204,
+															statusText: "No Content",
+														}),
+												},
+											],
 										},
 									},
 									{

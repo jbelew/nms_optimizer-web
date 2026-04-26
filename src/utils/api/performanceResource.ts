@@ -37,7 +37,7 @@ export const fetchPerformanceData = (): Promise<PerformanceMetric[]> => {
 		const timestamp = new Date().getTime();
 		performanceDataPromise = apiCall<PerformanceMetric[]>(
 			`${API_URL}analytics/performance_data?start_date=30daysAgo&end_date=today&_=${timestamp}`,
-			{},
+			{ skipGlobalError: true },
 			10000
 		)
 			.then((data) => {

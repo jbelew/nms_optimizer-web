@@ -1,4 +1,4 @@
-import { FC, lazy, ReactNode, Suspense } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import { Card, Flex, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -34,20 +34,28 @@ interface ChartDataPoint {
 }
 
 /**
- * Lazily loaded Recharts line chart component.
+ * Internal chart renderer.
  *
  * @remarks
- * This internal component encapsulates all Recharts logic to isolate the charting
- * library from the main application bundle. It handles data transformation,
- * localization of timestamps, and the rendering of the stacked area visualization.
+ * Renders the responsive performance chart and metric summary cards. Data is transformed
+ * internally from the flat payload into a timestamp-keyed structure required by Recharts.
  *
- * @component
+ * @param {Object} props - Component properties.
+ * @param {PerformanceMetric[]} props.data - Raw performance metrics from the API.
+ * @param {typeof import("recharts")} props.recharts - The loaded Recharts library.
  *
- * @category Components
+ * @returns {JSX.Element} The rendered chart and cards.
  *
- * @internal
+ * @example
+ * ```tsx
+ * // Internal usage by LazyChartLoader
+ * <PerformanceChart data={data} recharts={recharts} />
+ * ```
  */
-const LazyPerformanceChart = lazy(async () => {
+const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import("recharts") }> = ({
+	data,
+	recharts,
+}) => {
 	const {
 		ResponsiveContainer,
 		AreaChart,
@@ -59,386 +67,322 @@ const LazyPerformanceChart = lazy(async () => {
 		Legend,
 		ReferenceLine,
 		Label,
-	} = await import("recharts");
+	} = recharts;
 
-	/**
-	 * Internal chart renderer.
-	 *
-	 * @remarks
-	 * Renders the responsive performance chart and metric summary cards. Data is transformed
-	 * internally from the flat payload into a timestamp-keyed structure required by Recharts.
-	 *
-	 * @param {Object} props - Component properties.
-	 * @param {PerformanceMetric[]} props.data - Raw performance metrics from the API.
-	 *
-	 * @returns {JSX.Element} The rendered chart and cards.
-	 *
-	 * @component
-	 *
-	 * @example
-	 * ```tsx
-	 * <PerformanceChart data={data} />
-	 * ```
-	 */
-	const PerformanceChart: FC<{ data: PerformanceMetric[] }> = ({ data }) => {
-		const { i18n } = useTranslation();
-		const locale = i18n.language;
+	const { i18n } = useTranslation();
+	const locale = i18n.language;
 
-		// Transform flat data into timeseries format
-		const transformData = (raw: PerformanceMetric[]) => {
-			const dateMap: Record<number, ChartDataPoint> = {};
-			const metrics = new Set<string>();
+	// Transform flat data into timeseries format
+	const transformData = (raw: PerformanceMetric[]) => {
+		const dateMap: Record<number, ChartDataPoint> = {};
+		const metrics = new Set<string>();
 
-			raw.forEach((item) => {
-				if (item.metric_name === "CLS") return; // Skip CLS early
+		raw.forEach((item) => {
+			if (item.metric_name === "CLS") return; // Skip CLS early
 
-				// item.timestamp is now Unix millis from the API
-				const dateObj = new Date(item.timestamp);
+			const dateObj = new Date(item.timestamp);
 
-				const formattedDate = new Intl.DateTimeFormat(locale, {
-					month: "numeric",
-					day: "numeric",
-				}).format(dateObj);
+			const formattedDate = new Intl.DateTimeFormat(locale, {
+				month: "numeric",
+				day: "numeric",
+			}).format(dateObj);
 
-				const formattedHour = new Intl.DateTimeFormat(locale, {
-					hour: "numeric",
-					minute: "numeric",
-				}).format(dateObj);
+			const formattedHour = new Intl.DateTimeFormat(locale, {
+				hour: "numeric",
+				minute: "numeric",
+			}).format(dateObj);
 
-				if (!dateMap[item.timestamp]) {
-					dateMap[item.timestamp] = {
-						timestamp: item.timestamp,
-						displayDate: formattedDate,
-						hour: formattedHour,
-						appVersion: item.app_version,
-					};
-				}
-
-				dateMap[item.timestamp][item.metric_name] = item.average_value;
-				metrics.add(item.metric_name);
-			});
-
-			const chartData = Object.values(dateMap)
-				.sort((a, b) => a.timestamp - b.timestamp)
-				.map((point) => {
-					const normalizedPoint = { ...point };
-					metrics.forEach((m) => {
-						if (normalizedPoint[m] === undefined) {
-							normalizedPoint[m] = null as unknown as number; // Use null to prevent 0-value plotting
-						}
-					});
-
-					return normalizedPoint;
-				});
-
-			return {
-				chartData,
-				uniqueMetrics: Array.from(metrics),
-			};
-		};
-
-		const { chartData, uniqueMetrics } = transformData(data);
-
-		// Identify version change points for vertical markers
-		const versionChanges: { timestamp: number; version: string }[] = [];
-		let lastVersion: string | null = null;
-
-		chartData.forEach((point) => {
-			if (lastVersion && point.appVersion !== lastVersion) {
-				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+			if (!dateMap[item.timestamp]) {
+				dateMap[item.timestamp] = {
+					timestamp: item.timestamp,
+					displayDate: formattedDate,
+					hour: formattedHour,
+					appVersion: item.app_version,
+				};
 			}
 
-			lastVersion = point.appVersion;
+			dateMap[item.timestamp][item.metric_name] = item.average_value;
+			metrics.add(item.metric_name);
 		});
 
-		// Define explicit orders for consistent rendering
-		// Visual/Legend/Card order (Top to Bottom / Left to Right)
-		const displayOrder = ["TTFB", "TBT", "INP", "FCP", "LCP"];
-		const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
+		const chartData = Object.values(dateMap)
+			.sort((a, b) => a.timestamp - b.timestamp)
+			.map((point) => {
+				const normalizedPoint = { ...point };
+				metrics.forEach((m) => {
+					if (normalizedPoint[m] === undefined) {
+						normalizedPoint[m] = null as unknown as number;
+					}
+				});
 
-		// Stacking order (Bottom of chart to Top)
-		// Recharts AreaChart stacks from first child (bottom) to last child (top)
-		const stackOrder = ["LCP", "FCP", "INP", "TBT", "TTFB"].filter((m) =>
-			uniqueMetrics.includes(m)
-		);
+				return normalizedPoint;
+			});
 
-		/**
-		 * Identifies high-contrast colors for each Web Vital category.
-		 *
-		 * @remarks
-		 * Maps each core metric (LCP, FCP, INP, etc.) to a consistent Radix UI color scale
-		 * for visual identification across charts and legends.
-		 *
-		 * @param {string} name - The performance metric name (e.g., "LCP", "INP").
-		 * @param {9 | 11} [weight=9] - The Radix color scale weight to use.
-		 *
-		 * @returns {string} The CSS variable representing the Radix color.
-		 *
-		 * @default {weight: 9}
-		 *
-		 * @example
-		 * ```ts
-		 * getMetricColor("LCP", 11); // returns "var(--iris-11)"
-		 * ```
-		 */
-		const getMetricColor = (name: string, weight: 9 | 11 = 9) => {
-			const base = (() => {
-				switch (name) {
-					case "LCP":
-						return "iris";
-					case "FCP":
-						return "purple";
-					case "INP":
-						return "crimson";
-					case "TBT":
-						return "orange";
-					case "TTFB":
-						return "amber";
-					default:
-						return "accent";
-				}
-			})();
-
-			return `var(--${base}-${weight})`;
+		return {
+			chartData,
+			uniqueMetrics: Array.from(metrics),
 		};
-
-		/**
-		 * Calculates traffic-light status colors based on Google's p75 thresholds.
-		 *
-		 * @remarks
-		 * Uses Web Vitals baseline thresholds to return green, amber, or red CSS color variables.
-		 *
-		 * @param {string} metric - The performance metric name.
-		 * @param {number|string|undefined} value - The actual metric value to evaluate.
-		 *
-		 * @returns {string} The CSS variable for the status color (green, amber, or red).
-		 *
-		 * @example
-		 * ```ts
-		 * getStatusColor("LCP", 2600); // returns "var(--amber-11)"
-		 * ```
-		 */
-		const getStatusColor = (metric: string, value: number | string | undefined) => {
-			if (!value || typeof value === "string") return "var(--gray-11)";
-
-			switch (metric) {
-				case "LCP":
-					return value <= 2500
-						? "var(--green-11)"
-						: value <= 4000
-							? "var(--amber-11)"
-							: "var(--red-11)";
-				case "INP":
-				case "TBT":
-					return value <= 200
-						? "var(--green-11)"
-						: value <= 500
-							? "var(--amber-11)"
-							: "var(--red-11)";
-				case "FCP":
-					return value <= 1800
-						? "var(--green-11)"
-						: value <= 3000
-							? "var(--amber-11)"
-							: "var(--red-11)";
-				case "TTFB":
-					return value <= 800
-						? "var(--green-11)"
-						: value <= 1800
-							? "var(--amber-11)"
-							: "var(--red-11)";
-				default:
-					return "var(--gray-11)";
-			}
-		};
-
-		/**
-		 * Finds the latest non-null value for a given metric across the entire dataset.
-		 *
-		 * @remarks
-		 * Iterates backwards through the transformed chart data to find the most recent
-		 * recorded value for a specific metric. Useful for summary cards where some metrics
-		 * might be missing in the latest timestamp.
-		 *
-		 * @param {string} metric - The performance metric name.
-		 *
-		 * @returns {number | null} The latest value or null if not found.
-		 *
-		 * @example
-		 * ```ts
-		 * getLatestValue("LCP"); // returns 2450
-		 * ```
-		 */
-		const getLatestValue = (metric: string): number | null => {
-			for (let i = chartData.length - 1; i >= 0; i--) {
-				const val = chartData[i][metric];
-
-				if (val !== null && typeof val === "number") {
-					return val;
-				}
-			}
-
-			return null;
-		};
-
-		return (
-			<Flex direction="column" gap="4">
-				<Flex gap="3" wrap="wrap" justify="between">
-					{activeMetrics.map((metric) => {
-						const val = getLatestValue(metric);
-						const color = getStatusColor(metric, val ?? undefined);
-
-						return (
-							<Card key={`stat-${metric}`} style={{ flex: "1 1 120px" }}>
-								<Flex direction="column" align="center">
-									<Text size="1" color="gray" weight="medium">
-										{metric}
-									</Text>
-
-									<Text size="5" weight="medium" style={{ color }}>
-										{val !== null ? Math.round(val) : "—"}
-										<Text size="1" ml="1">
-											ms
-										</Text>
-									</Text>
-								</Flex>
-							</Card>
-						);
-					})}
-				</Flex>
-
-				<ResponsiveContainer width="100%" height={350}>
-					<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
-						<CartesianGrid
-							strokeDasharray="3 3"
-							vertical={false}
-							stroke="var(--gray-5)"
-						/>
-
-						{versionChanges.map((change) => (
-							<ReferenceLine
-								key={change.timestamp}
-								x={change.timestamp}
-								stroke="var(--gray-8)"
-								strokeDasharray="3 3"
-								strokeWidth={1}
-							>
-								<Label
-									value={`v${change.version}`}
-									position="insideTopLeft"
-									fill="var(--gray-10)"
-									fontSize={10}
-									fontWeight={500}
-									offset={5}
-								/>
-							</ReferenceLine>
-						))}
-
-						<XAxis
-							dataKey="timestamp"
-							type="number"
-							scale="time"
-							domain={["dataMin", "dataMax"]}
-							axisLine={false}
-							tickLine={false}
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-							minTickGap={40}
-							tickFormatter={(val: number) => {
-								const dateObj = new Date(val);
-								// Use a short month/day format for the automatically generated time ticks
-
-								return new Intl.DateTimeFormat(locale, {
-									month: "numeric",
-									day: "numeric",
-								}).format(dateObj);
-							}}
-						/>
-
-						<YAxis
-							axisLine={false}
-							tickLine={false}
-							width={40}
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-						/>
-
-						<Tooltip
-							itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
-							wrapperStyle={{ pointerEvents: "none" }}
-							allowEscapeViewBox={{ x: false, y: false }}
-							isAnimationActive={false}
-							offset={10}
-							labelFormatter={(_label: ReactNode, payload) => {
-								const item = payload[0]?.payload as ChartDataPoint | undefined;
-								const baseLabel = item
-									? `${item.displayDate} ${item.hour}`
-									: String(_label);
-
-								return item?.appVersion
-									? `${baseLabel} (${item.appVersion})`
-									: baseLabel;
-							}}
-							formatter={(
-								value: number | string | ReadonlyArray<number | string> | undefined,
-								name: string | number | undefined
-							) => {
-								const numericValue = typeof value === "number" ? value : 0;
-
-								return [`${Math.round(numericValue)}ms`, String(name || "")];
-							}}
-							contentStyle={{
-								backgroundColor: "var(--gray-2)",
-								borderColor: "var(--gray-6)",
-								borderRadius: "8px",
-								color: "var(--gray-12)",
-								fontSize: "12px",
-								fontWeight: 500,
-							}}
-						/>
-
-						<Legend
-							content={() => (
-								<Flex gap="4" justify="center" mt="2" wrap="wrap">
-									{activeMetrics.map((metric) => (
-										<Flex key={metric} align="center" gap="2">
-											<div
-												style={{
-													width: "12px",
-													height: "12px",
-													backgroundColor: getMetricColor(metric, 11),
-													borderRadius: "2px",
-												}}
-											/>
-
-											<Text size="1" weight="medium" color="gray">
-												{metric}
-											</Text>
-										</Flex>
-									))}
-								</Flex>
-							)}
-						/>
-
-						{stackOrder.map((metric) => (
-							<Area
-								key={metric}
-								type="monotone"
-								dataKey={metric}
-								stackId="1"
-								stroke={getMetricColor(metric, 11)}
-								fill={getMetricColor(metric, 9)}
-								fillOpacity={0.9}
-								strokeWidth={2}
-								connectNulls
-							/>
-						))}
-					</AreaChart>
-				</ResponsiveContainer>
-			</Flex>
-		);
 	};
 
-	return { default: PerformanceChart };
-});
+	const { chartData, uniqueMetrics } = transformData(data);
+
+	// Identify version change points for vertical markers
+	const versionChanges: { timestamp: number; version: string }[] = [];
+	let lastVersion: string | null = null;
+
+	chartData.forEach((point) => {
+		if (lastVersion && point.appVersion !== lastVersion) {
+			versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+		}
+
+		lastVersion = point.appVersion;
+	});
+
+	const displayOrder = ["TTFB", "TBT", "INP", "FCP", "LCP"];
+	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
+
+	const stackOrder = ["LCP", "FCP", "INP", "TBT", "TTFB"].filter((m) =>
+		uniqueMetrics.includes(m)
+	);
+
+	const getMetricColor = (name: string, weight: 9 | 11 = 9) => {
+		const base = (() => {
+			switch (name) {
+				case "LCP":
+					return "iris";
+				case "FCP":
+					return "purple";
+				case "INP":
+					return "crimson";
+				case "TBT":
+					return "orange";
+				case "TTFB":
+					return "amber";
+				default:
+					return "accent";
+			}
+		})();
+
+		return `var(--${base}-${weight})`;
+	};
+
+	const getStatusColor = (metric: string, value: number | string | undefined) => {
+		if (!value || typeof value === "string") return "var(--gray-11)";
+
+		switch (metric) {
+			case "LCP":
+				return value <= 2500
+					? "var(--green-11)"
+					: value <= 4000
+						? "var(--amber-11)"
+						: "var(--red-11)";
+			case "INP":
+			case "TBT":
+				return value <= 200
+					? "var(--green-11)"
+					: value <= 500
+						? "var(--amber-11)"
+						: "var(--red-11)";
+			case "FCP":
+				return value <= 1800
+					? "var(--green-11)"
+					: value <= 3000
+						? "var(--amber-11)"
+						: "var(--red-11)";
+			case "TTFB":
+				return value <= 800
+					? "var(--green-11)"
+					: value <= 1800
+						? "var(--amber-11)"
+						: "var(--red-11)";
+			default:
+				return "var(--gray-11)";
+		}
+	};
+
+	const getLatestValue = (metric: string): number | null => {
+		for (let i = chartData.length - 1; i >= 0; i--) {
+			const val = chartData[i][metric];
+
+			if (val !== null && typeof val === "number") {
+				return val;
+			}
+		}
+
+		return null;
+	};
+
+	return (
+		<Flex direction="column" gap="4">
+			<Flex gap="3" wrap="wrap" justify="between">
+				{activeMetrics.map((metric) => {
+					const val = getLatestValue(metric);
+					const color = getStatusColor(metric, val ?? undefined);
+
+					return (
+						<Card key={`stat-${metric}`} style={{ flex: "1 1 120px" }}>
+							<Flex direction="column" align="center">
+								<Text size="1" color="gray" weight="medium">
+									{metric}
+								</Text>
+
+								<Text size="5" weight="medium" style={{ color }}>
+									{val !== null ? Math.round(val) : "—"}
+									<Text size="1" ml="1">
+										ms
+									</Text>
+								</Text>
+							</Flex>
+						</Card>
+					);
+				})}
+			</Flex>
+
+			<ResponsiveContainer width="100%" height={350}>
+				<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
+					<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
+
+					{versionChanges.map((change) => (
+						<ReferenceLine
+							key={change.timestamp}
+							x={change.timestamp}
+							stroke="var(--gray-8)"
+							strokeDasharray="3 3"
+							strokeWidth={1}
+						>
+							<Label
+								value={`v${change.version}`}
+								position="insideTopLeft"
+								fill="var(--gray-10)"
+								fontSize={10}
+								fontWeight={500}
+								offset={5}
+							/>
+						</ReferenceLine>
+					))}
+
+					<XAxis
+						dataKey="timestamp"
+						type="number"
+						scale="time"
+						domain={["dataMin", "dataMax"]}
+						axisLine={false}
+						tickLine={false}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+						minTickGap={40}
+						tickFormatter={(val: number) => {
+							const dateObj = new Date(val);
+
+							return new Intl.DateTimeFormat(locale, {
+								month: "numeric",
+								day: "numeric",
+							}).format(dateObj);
+						}}
+					/>
+
+					<YAxis
+						axisLine={false}
+						tickLine={false}
+						width={40}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+					/>
+
+					<Tooltip
+						itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
+						wrapperStyle={{ pointerEvents: "none" }}
+						allowEscapeViewBox={{ x: false, y: false }}
+						isAnimationActive={false}
+						offset={10}
+						labelFormatter={(_label, payload) => {
+							const item = payload[0]?.payload as ChartDataPoint | undefined;
+							const baseLabel = item
+								? `${item.displayDate} ${item.hour}`
+								: String(_label);
+
+							return item?.appVersion
+								? `${baseLabel} (${item.appVersion})`
+								: baseLabel;
+						}}
+						formatter={(
+							value: number | string | ReadonlyArray<number | string> | undefined,
+							name: string | number | undefined
+						) => {
+							const numericValue = typeof value === "number" ? value : 0;
+
+							return [`${Math.round(numericValue)}ms`, String(name || "")];
+						}}
+						contentStyle={{
+							backgroundColor: "var(--gray-2)",
+							borderColor: "var(--gray-6)",
+							borderRadius: "8px",
+							color: "var(--gray-12)",
+							fontSize: "12px",
+							fontWeight: 500,
+						}}
+					/>
+
+					<Legend
+						content={() => (
+							<Flex gap="4" justify="center" mt="2" wrap="wrap">
+								{activeMetrics.map((metric) => (
+									<Flex key={metric} align="center" gap="2">
+										<div
+											style={{
+												width: "12px",
+												height: "12px",
+												backgroundColor: getMetricColor(metric, 11),
+												borderRadius: "2px",
+											}}
+										/>
+
+										<Text size="1" weight="medium" color="gray">
+											{metric}
+										</Text>
+									</Flex>
+								))}
+							</Flex>
+						)}
+					/>
+
+					{stackOrder.map((metric) => (
+						<Area
+							key={metric}
+							type="monotone"
+							dataKey={metric}
+							stackId="1"
+							stroke={getMetricColor(metric, 11)}
+							fill={getMetricColor(metric, 9)}
+							fillOpacity={0.9}
+							strokeWidth={2}
+							connectNulls
+						/>
+					))}
+				</AreaChart>
+			</ResponsiveContainer>
+		</Flex>
+	);
+};
+
+/**
+ * Lazily loaded Recharts library wrapper.
+ * @example
+ * ```tsx
+ * <LazyChartLoader data={data} />
+ * ```
+ */
+const LazyChartLoader: FC<{ data: PerformanceMetric[] }> = ({ data }) => {
+	const [recharts, setRecharts] = useState<typeof import("recharts") | null>(null);
+
+	useEffect(() => {
+		import("recharts").then((mod) => setRecharts(mod));
+	}, []);
+
+	if (!recharts) {
+		return <Skeleton height="434px" width="100%" />;
+	}
+
+	return <PerformanceChart data={data} recharts={recharts} />;
+};
 
 /**
  * Data orchestration component for performance metrics.
@@ -469,9 +413,11 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
 	// Trigger fetching when open. fetchPerformanceData handles its own promise stability.
-	if (isOpen) {
-		fetchPerformanceData();
-	}
+	useEffect(() => {
+		if (isOpen) {
+			fetchPerformanceData();
+		}
+	}, [isOpen]);
 
 	const data = usePerformanceData();
 
@@ -482,7 +428,7 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	return (
 		<Flex direction="column" gap="4" style={{ overflow: "hidden" }}>
 			<Suspense fallback={<Skeleton height="434px" width="100%" />}>
-				<LazyPerformanceChart data={data} />
+				<LazyChartLoader data={data} />
 			</Suspense>
 		</Flex>
 	);
