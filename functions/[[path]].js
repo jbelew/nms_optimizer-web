@@ -54,6 +54,16 @@ export async function onRequest(context) {
         return Response.redirect(newUrl.toString(), 301);
     }
 
-    // 5. Serve Physical SSG Asset
+    // 5. Explicit SPA Fallbacks
+    // Cloudflare Pages Functions ignore _redirects, so we must handle client-only routes here.
+    const isPerformanceRoute = /^\/(?:(?:es|fr|de|pt)\/)?performance(?:\/|$)/.test(pathname);
+    if (isPerformanceRoute) {
+        const langMatch = pathname.match(/^\/(es|fr|de|pt)\//);
+        const langPrefix = langMatch ? `/${langMatch[1]}` : "";
+        const indexUrl = new URL(`${langPrefix}/index.html`, url.origin);
+        return context.env.ASSETS.fetch(new Request(indexUrl, request));
+    }
+
+    // 6. Serve Physical SSG Asset
     return await next();
 }
