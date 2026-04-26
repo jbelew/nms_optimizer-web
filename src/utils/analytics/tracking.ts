@@ -456,6 +456,8 @@ export const initializeAnalytics = async () => {
 			gtagOptions: {
 				send_page_view: false,
 				anonymize_ip: true,
+				allow_ad_personalization_signals: false,
+				allow_google_signals: false,
 				user_properties: {
 					app_version: __APP_VERSION__,
 					is_installed: globalIsInstalled ? "yes" : "no",

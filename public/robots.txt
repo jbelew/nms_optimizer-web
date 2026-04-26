@@ -1,27 +1,35 @@
 User-agent: *
 Allow: /
+Disallow: /performance/
 Crawl-delay: 1
 
 # Explicitly allow AI and Search crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /performance/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /performance/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /performance/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /performance/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /performance/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /performance/
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /performance/
 
 Sitemap: https://nms-optimizer.app/sitemap.xml

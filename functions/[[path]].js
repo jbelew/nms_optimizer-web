@@ -56,12 +56,20 @@ export async function onRequest(context) {
 
     // 5. Explicit SPA Fallbacks
     // Cloudflare Pages Functions ignore _redirects, so we must handle client-only routes here.
+    // NOTE: We fetch the canonical "/" (not "/index.html") because Cloudflare's "Pretty URLs"
+    // feature 308-redirects /index.html -> /, and that redirect would leak to the browser
+    // and dump the user back on the homepage.
     const isPerformanceRoute = /^\/(?:(?:es|fr|de|pt)\/)?performance(?:\/|$)/.test(pathname);
     if (isPerformanceRoute) {
         const langMatch = pathname.match(/^\/(es|fr|de|pt)\//);
         const langPrefix = langMatch ? `/${langMatch[1]}` : "";
-        const indexUrl = new URL(`${langPrefix}/index.html`, url.origin);
-        return context.env.ASSETS.fetch(new Request(indexUrl, request));
+        const shellUrl = new URL(`${langPrefix}/`, url.origin);
+        const shellResponse = await context.env.ASSETS.fetch(new Request(shellUrl, { method: "GET" }));
+        // Re-wrap so any redirect status from the asset pipeline can't propagate.
+        return new Response(shellResponse.body, {
+            status: 200,
+            headers: shellResponse.headers,
+        });
     }
 
     // 6. Serve Physical SSG Asset
