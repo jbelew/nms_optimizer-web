@@ -1,3 +1,10 @@
+## [6.35.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.0...v6.35.1) (2026-04-26)
+
+
+### Bug Fixes
+
+* update sitemap timestamps, add CI sync step, and add SPA redirect wildcards for performance routes ([ed8d3ee](https://github.com/jbelew/nms_optimizer-web/commit/ed8d3ee77eb351b812063670da2d69edbea8f86f))
+
 # [6.35.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.8...v6.35.0) (2026-04-26)
 
 
