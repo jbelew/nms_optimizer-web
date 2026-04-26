@@ -1,3 +1,10 @@
+## [6.35.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.4...v6.35.5) (2026-04-26)
+
+
+### Bug Fixes
+
+* add cloudflareinsights.com to Content-Security-Policy connect-src directive ([fb59d64](https://github.com/jbelew/nms_optimizer-web/commit/fb59d644b1a714556ec143b474a7cab63ddd4632))
+
 ## [6.35.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.3...v6.35.4) (2026-04-26)
 
 
