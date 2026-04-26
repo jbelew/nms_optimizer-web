@@ -1,3 +1,10 @@
+## [6.36.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.0...v6.36.1) (2026-04-26)
+
+
+### Bug Fixes
+
+* add performance metric trend indicators and update description translations ([20073b7](https://github.com/jbelew/nms_optimizer-web/commit/20073b783521fc25f18a5bf730668a9e04088043))
+
 # [6.36.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.8...v6.36.0) (2026-04-26)
 
 
