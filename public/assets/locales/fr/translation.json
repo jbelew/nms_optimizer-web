@@ -86,7 +86,8 @@
 			"userStats": "Statistiques Utilisateur",
 			"updatePrompt": "Mise à Jour Disponible",
 			"welcome": "Bienvenue",
-			"privacy": "Politique de Confidentialité"
+			"privacy": "Politique de Confidentialité",
+			"performance": "Mesures de Performance"
 		},
 		"welcome": {
 			"title": "Bienvenue sur l'Optimiseur NMS !",
@@ -128,6 +129,12 @@
 			"description": "Une nouvelle version de l'Optimiseur NMS est disponible. Pour une expérience optimale, veuillez actualiser la page pour charger les dernières nouveautés.",
 			"later": "Plus Tard",
 			"refreshNow": "Actualiser"
+		},
+		"performance": {
+			"description": "Agrège les Core Web Vitals et les mesures de performance des sessions utilisateur réelles (données de terrain).",
+			"error": "Échec du chargement des mesures de performance.",
+			"noData": "Aucune donnée de performance disponible.",
+			"closeButton": "Fermer"
 		}
 	},
 	"dialog": {
@@ -700,7 +707,8 @@
 			"changelog": "Quoi de Neuf",
 			"userstats": "Statistiques",
 			"translation": "Aidez à Traduire",
-			"privacy": "Politique de Confidentialité"
+			"privacy": "Politique de Confidentialité",
+			"performance": "Performance"
 		},
 		"navDescriptions": {
 			"home": "Utilisez le calculateur de layouts et de bonus d'adjacence",
@@ -709,9 +717,12 @@
 			"changelog": "Dernières mises à jour et nouvelles fonctions",
 			"userstats": "Technologies et builds populaires",
 			"translation": "Contribuez à la localisation communautaire",
-			"privacy": "Notre engagement envers la confidentialité et la sécurité de vos données"
+			"privacy": "Notre engagement envers la confidentialité et la sécurité de vos données",
+			"performance": "Mesures de performance de l'application"
 		},
-		"genre": "Outil de Jeu"
+		"genre": "Outil de Jeu",
+		"performancePageTitle": "Optimiseur NMS : Mesures de Performance",
+		"performanceDescription": "Mesures de performance en temps réel et Core Web Vitals pour l'application Optimiseur NMS."
 	},
 	"installPrompt": {
 		"title": "Ajouter à l'Écran d'Accueil",

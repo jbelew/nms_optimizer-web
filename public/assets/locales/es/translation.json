@@ -86,7 +86,8 @@
 			"userStats": "Estadísticas de Usuario",
 			"updatePrompt": "Actualización Disponible",
 			"welcome": "Bienvenido",
-			"privacy": "Política de Privacidad"
+			"privacy": "Política de Privacidad",
+			"performance": "Métricas de Rendimiento"
 		},
 		"welcome": {
 			"title": "¡Bienvenido al Optimizador de NMS!",
@@ -128,6 +129,12 @@
 			"description": "Hay una nueva versión disponible del Optimizador de NMS. Para la mejor experiencia, por favor actualiza la página para cargar las últimas novedades y funciones.",
 			"later": "Actualizar Más Tarde",
 			"refreshNow": "Actualizar Ahora"
+		},
+		"performance": {
+			"description": "Agrega Core Web Vitals y métricas de rendimiento de sesiones de usuarios reales (datos de campo).",
+			"error": "No se pudieron cargar las métricas de rendimiento.",
+			"noData": "No hay datos de rendimiento disponibles.",
+			"closeButton": "Cerrar"
 		}
 	},
 	"dialog": {
@@ -700,7 +707,8 @@
 			"changelog": "Registro de Cambios",
 			"userstats": "Estadísticas",
 			"translation": "Ayuda a Traducir",
-			"privacy": "Política de Privacidad"
+			"privacy": "Política de Privacidad",
+			"performance": "Rendimiento"
 		},
 		"navDescriptions": {
 			"home": "Usa la calculadora de diseños tecnológicos y bonos de adyacencia",
@@ -709,9 +717,12 @@
 			"changelog": "Últimas actualizaciones y nuevas funciones",
 			"userstats": "Tecnologías y diseños populares",
 			"translation": "Contribuye a la localización comunitaria",
-			"privacy": "Nuestro compromiso con la privacidad e integridad de tus datos"
+			"privacy": "Nuestro compromiso con la privacidad e integridad de tus datos",
+			"performance": "Métricas de rendimiento de la aplicación"
 		},
-		"genre": "Herramienta de Juego"
+		"genre": "Herramienta de Juego",
+		"performancePageTitle": "Optimizador NMS: Métricas de Rendimiento",
+		"performanceDescription": "Métricas de rendimiento en tiempo real y Core Web Vitals para la aplicación Optimizador NMS."
 	},
 	"installPrompt": {
 		"title": "Añadir a la Pantalla de Inicio",

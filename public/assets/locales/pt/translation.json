@@ -86,7 +86,8 @@
 			"userStats": "Estatísticas de Uso",
 			"updatePrompt": "Atualização Disponível",
 			"welcome": "Bem-vindo",
-			"privacy": "Política de Privacidade"
+			"privacy": "Política de Privacidade",
+			"performance": "Métricas de Desempenho"
 		},
 		"welcome": {
 			"title": "Bem-vindo ao Otimizador de NMS!",
@@ -128,6 +129,12 @@
 			"description": "Uma nova versão do Otimizador de NMS está disponível. Para a melhor experiência, atualize a página para carregar as últimas melhorias.",
 			"later": "Atualizar Depois",
 			"refreshNow": "Atualizar Agora"
+		},
+		"performance": {
+			"description": "Agrega Core Web Vitals e métricas de desempenho de sessões de usuários reais (dados de campo).",
+			"error": "Falha ao carregar métricas de desempenho.",
+			"noData": "Nenhum dado de desempenho disponível.",
+			"closeButton": "Fechar"
 		}
 	},
 	"dialog": {
@@ -700,7 +707,8 @@
 			"changelog": "Novidades",
 			"userstats": "Estatísticas",
 			"translation": "Ajude a Traduir",
-			"privacy": "Política de Privacidade"
+			"privacy": "Política de Privacidade",
+			"performance": "Desempenho"
 		},
 		"navDescriptions": {
 			"home": "Use a Calculadora de Layouts e Bônus de Adjacência",
@@ -709,9 +717,12 @@
 			"changelog": "Últimas atualizações e novos recursos",
 			"userstats": "Tecnologias e builds populares",
 			"translation": "Contribua com a localização comunitária",
-			"privacy": "Nosso compromisso com a privacidade e segurança dos seus dados"
+			"privacy": "Nosso compromisso com a privacidade e segurança dos seus dados",
+			"performance": "Métricas de desempenho do aplicativo"
 		},
-		"genre": "Ferramenta de Jogo"
+		"genre": "Ferramenta de Jogo",
+		"performancePageTitle": "Otimizador NMS: Métricas de Desempenho",
+		"performanceDescription": "Métricas de desempenho em tempo real e Core Web Vitals para o aplicativo Otimizador NMS."
 	},
 	"installPrompt": {
 		"title": "Adicionar à Tela de Início",

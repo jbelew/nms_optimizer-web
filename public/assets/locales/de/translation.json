@@ -86,7 +86,8 @@
 			"userStats": "Benutzerstatistiken",
 			"updatePrompt": "Update Verfügbar",
 			"welcome": "Willkommen",
-			"privacy": "Datenschutz"
+			"privacy": "Datenschutz",
+			"performance": "Leistungsmetriken"
 		},
 		"welcome": {
 			"title": "Willkommen beim NMS-Optimierer!",
@@ -128,6 +129,12 @@
 			"description": "Eine neue Version des NMS-Optimierers ist verfügbar. Für das beste Erlebnis aktualisiere bitte die Seite, um die neuesten Funktionen zu laden.",
 			"later": "Später",
 			"refreshNow": "Jetzt Aktualisieren"
+		},
+		"performance": {
+			"description": "Aggregierte Core Web Vitals und Leistungsmetriken aus echten Benutzersitzungen (Felddaten).",
+			"error": "Fehler beim Laden der Leistungsmetriken.",
+			"noData": "Keine Leistungsdaten verfügbar.",
+			"closeButton": "Schließen"
 		}
 	},
 	"dialog": {
@@ -700,7 +707,8 @@
 			"changelog": "Neuigkeiten",
 			"userstats": "Statistiken",
 			"translation": "Helfen",
-			"privacy": "Datenschutz"
+			"privacy": "Datenschutz",
+			"performance": "Leistung"
 		},
 		"navDescriptions": {
 			"home": "Nutze den Technologie-Layout- und Adjazenz-Rechner",
@@ -709,9 +717,12 @@
 			"changelog": "Neueste Updates und Funktionen",
 			"userstats": "Beliebte Technologien und Builds",
 			"translation": "Trage zur Community-Lokalisierung bei",
-			"privacy": "Unser Versprechen zum Schutz Ihrer Daten und Sicherheit"
+			"privacy": "Unser Versprechen zum Schutz Ihrer Daten und Sicherheit",
+			"performance": "Leistungsmetriken der Anwendung"
 		},
-		"genre": "Spielwerkzeug"
+		"genre": "Spielwerkzeug",
+		"performancePageTitle": "NMS Optimierer: Leistungsmetriken",
+		"performanceDescription": "Echtzeit-Leistungsmetriken und Core Web Vitals für die NMS Optimierer-Anwendung."
 	},
 	"installPrompt": {
 		"title": "Zum Startbildschirm Hinzufügen",
