@@ -131,7 +131,7 @@
 			"refreshNow": "Jetzt Aktualisieren"
 		},
 		"performance": {
-			"description": "Aggregierte Core Web Vitals und Leistungsmetriken aus echten Benutzersitzungen (Felddaten).",
+			"description": "Aggregierte Core Web Vitals und Leistungsmetriken aus echten Benutzersitzungen (Felddaten). Die Zusammenfassungskarten spiegeln die Daten der letzten Stunde wider.",
 			"error": "Fehler beim Laden der Leistungsmetriken.",
 			"noData": "Keine Leistungsdaten verfügbar.",
 			"closeButton": "Schließen"

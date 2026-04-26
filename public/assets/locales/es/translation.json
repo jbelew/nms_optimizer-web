@@ -131,7 +131,7 @@
 			"refreshNow": "Actualizar Ahora"
 		},
 		"performance": {
-			"description": "Agrega Core Web Vitals y métricas de rendimiento de sesiones de usuarios reales (datos de campo).",
+			"description": "Agrega Core Web Vitals y métricas de rendimiento de sesiones de usuarios reales (datos de campo). Las tarjetas de resumen reflejan los datos de la última hora.",
 			"error": "No se pudieron cargar las métricas de rendimiento.",
 			"noData": "No hay datos de rendimiento disponibles.",
 			"closeButton": "Cerrar"

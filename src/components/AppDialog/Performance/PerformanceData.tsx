@@ -1,4 +1,5 @@
 import { FC, Suspense, useEffect, useState } from "react";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
@@ -224,12 +225,58 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		return null;
 	};
 
+	/**
+	 * Determines the trend of a metric compared to its previous data point.
+	 *
+	 * @param {string} metric - The name of the metric to analyze.
+	 *
+	 * @returns {"improvement" | "regression" | "neutral"} The trend status.
+	 *
+	 * @example
+	 * ```ts
+	 * const trend = getMetricTrend("LCP"); // returns "improvement", "regression", or "neutral"
+	 * ```
+	 */
+	const getMetricTrend = (metric: string): "improvement" | "regression" | "neutral" => {
+		const values: number[] = [];
+
+		for (let i = chartData.length - 1; i >= 0; i--) {
+			const originalVal = chartData[i][`${metric}_original`];
+			const val = originalVal !== undefined ? originalVal : chartData[i][metric];
+
+			if (val !== null && typeof val === "number") {
+				values.push(val);
+			}
+
+			if (values.length === 2) break;
+		}
+
+		if (values.length < 2) {
+			return "neutral";
+		}
+
+		const latest = values[0];
+		const previous = values[1];
+
+		// For current metrics (LCP, FCP, INP, TTFB, CLS), lower is always better
+		if (latest < previous) {
+			return "improvement";
+		}
+
+		if (latest > previous) {
+			return "regression";
+		}
+
+		return "neutral";
+	};
+
 	return (
 		<Flex direction="column" gap="4">
 			<Flex gap="3" wrap="wrap" justify="between">
 				{activeMetrics.map((metric) => {
 					const val = getLatestValue(metric);
 					const color = getStatusColor(metric, val ?? undefined);
+					const trend = getMetricTrend(metric);
 
 					return (
 						<Card key={`stat-${metric}`} style={{ flex: "1 1 120px" }}>
@@ -238,16 +285,30 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 									{metric}
 								</Text>
 
-								<Text size="5" weight="medium" style={{ color }}>
-									{val !== null
-										? metric === "CLS"
-											? (val / 1000).toFixed(2)
-											: Math.round(val)
-										: "—"}
-									<Text size="1" ml="1">
-										{metric === "CLS" ? "" : "ms"}
+								<Flex align="center" gap="1">
+									<Text size="5" weight="medium" style={{ color }}>
+										{val !== null
+											? metric === "CLS"
+												? (val / 1000).toFixed(2)
+												: Math.round(val)
+											: "—"}
+										<Text size="1" ml="1">
+											{metric === "CLS" ? "" : "ms"}
+										</Text>
 									</Text>
-								</Text>
+
+									{trend === "improvement" && (
+										<Text color="green">
+											<ArrowDownIcon />
+										</Text>
+									)}
+
+									{trend === "regression" && (
+										<Text color="red">
+											<ArrowUpIcon />
+										</Text>
+									)}
+								</Flex>
 							</Flex>
 						</Card>
 					);
@@ -267,10 +328,14 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 							strokeWidth={1}
 						>
 							<Label
-								value={`v${change.version}`}
+								value={
+									change.version.startsWith("v")
+										? change.version
+										: `v${change.version}`
+								}
 								position="insideTopLeft"
-								fill="var(--gray-10)"
-								fontSize={10}
+								fill="var(--gray-11)"
+								fontSize={11}
 								fontWeight={500}
 								offset={5}
 							/>

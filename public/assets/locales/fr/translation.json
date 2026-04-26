@@ -131,7 +131,7 @@
 			"refreshNow": "Actualiser"
 		},
 		"performance": {
-			"description": "Agrège les Core Web Vitals et les mesures de performance des sessions utilisateur réelles (données de terrain).",
+			"description": "Agrège les Core Web Vitals et les mesures de performance des sessions utilisateur réelles (données de terrain). Les cartes de synthèse reflètent les données de la dernière heure.",
 			"error": "Échec du chargement des mesures de performance.",
 			"noData": "Aucune donnée de performance disponible.",
 			"closeButton": "Fermer"
