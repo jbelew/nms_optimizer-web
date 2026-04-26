@@ -77,6 +77,14 @@
 		transform: translate(-50%, -50%);
 		width: clamp(280px, 90vw, 520px);
 
+		&--wide {
+			width: clamp(280px, 94vw, 840px);
+		}
+
+		&--full {
+			width: clamp(280px, 98vw, 1200px);
+		}
+
 		@media (width <= 639px) {
 			padding: calc(var(--spacing) * 3) calc(var(--spacing) * 1) calc(var(--spacing) * 3)
 				calc(var(--spacing) * 3);

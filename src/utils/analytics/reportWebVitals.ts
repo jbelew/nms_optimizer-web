@@ -90,6 +90,7 @@ const reportTBT = (sendEvent: SendEventFunction) => {
 					action: "performance_metric",
 					category: "performance",
 					metric_name: "TBT",
+					label: `tbt-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
 					value: Math.round(tbt),
 					nonInteraction: true,
 					app_version: __APP_VERSION__,
@@ -125,20 +126,22 @@ const reportTBT = (sendEvent: SendEventFunction) => {
  * ```
  */
 export function reportWebVitals(sendEvent: SendEventFunction) {
-	const init = () => {
-		onCLS((metric) => sendVitalsMetric(metric, sendEvent));
-		onINP((metric) => sendVitalsMetric(metric, sendEvent));
-		onFCP((metric) => sendVitalsMetric(metric, sendEvent));
-		onLCP((metric) => sendVitalsMetric(metric, sendEvent));
-		onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
+	// Register CWV listeners synchronously so the underlying PerformanceObservers
+	// attach as early as possible. This minimizes the chance of missing the first
+	// LCP/FCP/CLS entries on slow devices and ensures the web-vitals library can
+	// flush its final values on `pagehide` / `visibilitychange`.
+	onCLS((metric) => sendVitalsMetric(metric, sendEvent));
+	onINP((metric) => sendVitalsMetric(metric, sendEvent));
+	onFCP((metric) => sendVitalsMetric(metric, sendEvent));
+	onLCP((metric) => sendVitalsMetric(metric, sendEvent));
+	onTTFB((metric) => sendVitalsMetric(metric, sendEvent));
 
-		// Add TBT reporting
-		reportTBT(sendEvent);
-	};
+	// Defer only the longer-running TBT longtask observer to idle time.
+	const startTBT = () => reportTBT(sendEvent);
 
-	if ("requestIdleCallback" in window) {
-		window.requestIdleCallback(() => init());
+	if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+		window.requestIdleCallback(startTBT);
 	} else {
-		setTimeout(init, 2000);
+		setTimeout(startTBT, 2000);
 	}
 }

@@ -194,31 +194,61 @@ const globalIsInstalled =
  * // returns Promise<boolean>
  * ```
  */
-const detectAdBlocker = async (): Promise<boolean> => {
-	const urls = [
-		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-		"https://www.google-analytics.com/g/collect",
-	];
-
-	try {
-		await Promise.all(
-			urls.map((url) => {
+const detectAdBlocker = (): Promise<boolean> => {
+	// Script-injection probe is more reliable than `fetch({mode: "no-cors"})`,
+	// which resolves opaquely even when ad blockers (e.g. uBlock Origin) return
+	// synthetic empty responses — producing false negatives.
+	if (typeof document === "undefined" || !document.head) {
+		// SSR / non-DOM environment — fall back to fetch probe used historically
+		// (and exercised by the existing test suite).
+		return (async () => {
+			try {
 				const controller = new AbortController();
 				const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-				return fetch(url, {
+				await fetch(`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`, {
 					method: "HEAD",
 					mode: "no-cors",
 					cache: "no-store",
 					signal: controller.signal,
 				}).finally(() => clearTimeout(timeoutId));
-			})
-		);
 
-		return false;
-	} catch (_error) {
-		return true;
+				return false;
+			} catch {
+				return true;
+			}
+		})();
 	}
+
+	return new Promise<boolean>((resolve) => {
+		let settled = false;
+
+		const finish = (blocked: boolean) => {
+			if (settled) return;
+			settled = true;
+
+			try {
+				script.remove();
+			} catch {
+				/* noop */
+			}
+
+			resolve(blocked);
+		};
+
+		const script = document.createElement("script");
+		script.src = `https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`;
+		script.async = true;
+		script.onload = () => finish(false);
+		script.onerror = () => finish(true);
+		// Treat lack of response within 3s as blocked (network filter / DNS sink).
+		setTimeout(() => finish(true), 3000);
+
+		try {
+			document.head.appendChild(script);
+		} catch {
+			finish(true);
+		}
+	});
 };
 
 /**
@@ -363,22 +393,26 @@ export const sendServerEvent = (
 			payload.userId = userId;
 		}
 
-		const blob = new Blob([JSON.stringify(payload)], {
-			type: "application/json",
-		});
+		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
+		const endpoint = `${baseUrl}api/events`;
 
 		if (navigator.sendBeacon) {
 			try {
-				const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
-				const success = navigator.sendBeacon(`${baseUrl}api/events`, blob);
+				// Tag the transport so the server-side relay can distinguish beacon
+				// vs keepalive-fetch deliveries in GA4 reports.
+				payload.params = { ...payload.params, transport: "beacon" };
+				const beaconBlob = new Blob([JSON.stringify(payload)], {
+					type: "application/json",
+				});
+				const success = navigator.sendBeacon(endpoint, beaconBlob);
 				if (success) return;
 			} catch (error) {
 				console.warn("navigator.sendBeacon failed, falling back to fetch:", error);
 			}
 		}
 
-		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
-		fetch(`${baseUrl}api/events`, {
+		payload.params = { ...payload.params, transport: "fetch-keepalive" };
+		fetch(endpoint, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -407,7 +441,7 @@ export const sendServerEvent = (
  * ```
  */
 export const initializeAnalytics = async () => {
-	if (env.isDevMode() || gaInitialized || isBot()) {
+	if (import.meta.env.VITE_ANALYTICS_ENABLED === "false" || gaInitialized || isBot()) {
 		return;
 	}
 
@@ -429,15 +463,39 @@ export const initializeAnalytics = async () => {
 				},
 			},
 		});
+	}
 
-		if (queuedEvents.length > 0) {
-			const eventsToFlush = [...queuedEvents];
-			queuedEvents = [];
-			eventsToFlush.forEach(sendEvent);
-		}
+	// Drain any events queued before detection completed. When blocked, route
+	// them through the server fallback instead of dropping them on the floor.
+	if (queuedEvents.length > 0) {
+		const eventsToFlush = queuedEvents;
+		queuedEvents = [];
+		eventsToFlush.forEach(sendEvent);
 	}
 
 	gaInitialized = true;
+
+	// Flush remaining queued events synchronously when the page is hidden so
+	// late-firing Web Vitals (CLS/INP/LCP) survive tab close.
+	if (typeof window !== "undefined" && typeof document !== "undefined") {
+		const flushOnHide = () => {
+			if (document.visibilityState !== "hidden" || queuedEvents.length === 0) return;
+			const eventsToFlush = queuedEvents;
+			queuedEvents = [];
+			eventsToFlush.forEach((event) => {
+				const { action, category, ...params } = event;
+				sendServerEvent(action, {
+					...params,
+					category,
+					action,
+					tracking_source: "server",
+				});
+			});
+		};
+
+		document.addEventListener("visibilitychange", flushOnHide);
+		window.addEventListener("pagehide", flushOnHide);
+	}
 
 	const { reportWebVitals } = await import("./reportWebVitals");
 	reportWebVitals(sendEvent);
@@ -483,6 +541,53 @@ const validateEvent = (event: GA4Event): void => {
  * // returns void
  * ```
  */
+const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
+	if (isBlocked) {
+		const { action, category, ...params } = event;
+		sendServerEvent(action, {
+			...params,
+			category,
+			action,
+			app_version: __APP_VERSION__,
+			is_installed: globalIsInstalled ? "yes" : "no",
+			tracking_source: "server",
+		});
+
+		return;
+	}
+
+	if (!ReactGAInstance) {
+		queuedEvents.push(event);
+
+		return;
+	}
+
+	const { action, category, ...params } = event;
+	ReactGAInstance.event(action, {
+		...params,
+		category,
+		tracking_source: "client",
+		transport: "gtag",
+	});
+};
+
+/**
+ * Dispatches a validated GA4 event to all configured destinations.
+ *
+ * @remarks
+ * This function provides a synchronous dispatch path for performance and
+ * reliability. It first validates the event using {@link validateEvent},
+ * then routes it to the local analytics buffer and the Google Analytics
+ * instance. It automatically injects `tracking_source` and `transport`
+ * metadata.
+ *
+ * @param {GA4Event} event - The structured event payload to transmit.
+ *
+ * @example
+ * ```ts
+ * sendEvent({ action: "page_view", page_title: "Home" });
+ * ```
+ */
 export const sendEvent = (event: GA4Event): void => {
 	try {
 		validateEvent(event);
@@ -492,33 +597,17 @@ export const sendEvent = (event: GA4Event): void => {
 		return;
 	}
 
+	// Fast synchronous path once detection has resolved. This is critical so
+	// late-firing events (e.g. Web Vitals on `visibilitychange`) are dispatched
+	// before the browser tears the page down — `await` would lose them.
+	if (adBlockerResult !== null) {
+		dispatchEvent(event, adBlockerResult);
+
+		return;
+	}
+
 	getAdBlockerDetectionResult()
-		.then((isBlocked) => {
-			if (isBlocked) {
-				const { action, category, ...params } = event;
-				sendServerEvent(action, {
-					...params,
-					category,
-					action,
-					app_version: __APP_VERSION__,
-					is_installed: globalIsInstalled ? "yes" : "no",
-					tracking_source: "server",
-				});
-			} else {
-				if (!ReactGAInstance) {
-					queuedEvents.push(event);
-
-					return;
-				}
-
-				const { action, category, ...params } = event;
-				ReactGAInstance.event(action, {
-					...params,
-					category,
-					tracking_source: "client",
-				});
-			}
-		})
+		.then((isBlocked) => dispatchEvent(event, isBlocked))
 		.catch((trackingError) => {
 			console.error("Failed to send analytics event:", trackingError);
 		});

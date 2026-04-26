@@ -53,6 +53,15 @@ const UserStatsRoute = lazy(() =>
 );
 
 /**
+ * Lazy-loaded route component for displaying application performance metrics.
+ */
+const PerformanceRoute = lazy(() =>
+	import("./routes/PerformanceRoute").then((module) => ({
+		default: module.PerformanceRoute,
+	}))
+);
+
+/**
  * Inner component that manages core data loading and dialog orchestration.
  *
  * @remarks
@@ -136,10 +145,17 @@ const AppContent: FC = () => {
 					/>
 				</Suspense>
 			) : null}
-			{activeDialog && activeDialog !== "userstats" ? <RoutedDialogs /> : null}
+			{activeDialog && activeDialog !== "userstats" && activeDialog !== "performance" ? (
+				<RoutedDialogs />
+			) : null}
 			{activeDialog === "userstats" ? (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
+				</Suspense>
+			) : null}
+			{activeDialog === "performance" ? (
+				<Suspense fallback={null}>
+					<PerformanceRoute />
 				</Suspense>
 			) : null}
 

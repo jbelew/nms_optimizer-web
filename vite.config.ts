@@ -595,7 +595,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 							{
 								// Stable name for charts to enable its exclusion from eager preloading via modulePreload.
 								name: "vendor-charts",
-								test: /[\\/]node_modules[\\/](recharts|d3|victory-vendor|@reduxjs\/toolkit|react-redux)/,
+								test: /[\\/]node_modules[\\/](recharts|d3-|d3$|victory-vendor|@reduxjs\/toolkit|react-redux)/,
 								priority: 50,
 							},
 						],

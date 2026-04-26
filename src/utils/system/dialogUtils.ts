@@ -15,6 +15,7 @@ export type DialogType =
 	| "translation"
 	| "userstats"
 	| "privacy"
+	| "performance"
 	| null;
 
 /**

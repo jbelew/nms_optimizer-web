@@ -59,6 +59,15 @@ interface AppDialogProps {
 	content: ReactNode;
 	/** Optional CSS class names to apply to the dialog content container. */
 	className?: string;
+	/**
+	 * The visual size of the dialog.
+	 * - `default`: Standard width (520px max).
+	 * - `wide`: Increased width (840px max) for charts/large content.
+	 * - `full`: Maximum width (1200px max).
+	 *
+	 * @default "default"
+	 */
+	size?: "default" | "wide" | "full";
 }
 
 /**
@@ -99,6 +108,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	titleKey,
 	title = "Information",
 	className = "",
+	size = "default",
 }) => {
 	/**
 	 * Manages the Escape key listener for the dialog.
@@ -132,7 +142,11 @@ const AppDialog: React.FC<AppDialogProps> = ({
 			<DialogPortal>
 				<Theme>
 					<DialogOverlay className="appDialog__overlay" />
-					<DialogContent className={`appDialog__content ${className}`}>
+					<DialogContent
+						className={`appDialog__content ${
+							size !== "default" ? `appDialog__content--${size}` : ""
+						} ${className}`}
+					>
 						<DialogTitle className="mr-2">
 							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
 								{IconComponent && (

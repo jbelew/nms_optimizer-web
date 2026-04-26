@@ -101,6 +101,7 @@
 			"translationRequest": "Translators Needed!",
 			"shareLink": "Share Build",
 			"userStats": "User Statistics",
+			"performance": "Performance Metrics",
 			"updatePrompt": "Update Available",
 			"welcome": "Welcome",
 			"privacy": "Privacy Policy"
@@ -145,6 +146,12 @@
 			"description": "A new version of NMS Optimizer is available. For the best experience, please refresh the page to load the latest updates and features.",
 			"later": "Update Later",
 			"refreshNow": "Refresh Now"
+		},
+		"performance": {
+			"description": "Aggregate Core Web Vitals and performance metrics from real user sessions (field data).",
+			"error": "Failed to load performance metrics.",
+			"noData": "No performance data available.",
+			"closeButton": "Close"
 		}
 	},
 	"dialog": {
@@ -710,6 +717,8 @@
 		"translationDescription": "Contribute to the No Man's Sky community by helping translate the NMS Optimizer. Make the best layout tool accessible to travelers in every language.",
 		"privacyPageTitle": "NMS Optimizer: Privacy Policy",
 		"privacyDescription": "Read about our commitment to your privacy. We use anonymous analytics to improve the optimizer without ever tracking your personal identity or save data.",
+		"performancePageTitle": "NMS Optimizer: Performance Metrics",
+		"performanceDescription": "Real-time performance metrics and Core Web Vitals for the NMS Optimizer application.",
 		"ogImageAlt": "A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
 		"nav": {
 			"home": "Home",
@@ -718,7 +727,8 @@
 			"changelog": "Changelog",
 			"userstats": "User Statistics",
 			"translation": "Help Translate",
-			"privacy": "Privacy Policy"
+			"privacy": "Privacy Policy",
+			"performance": "Performance"
 		},
 		"navDescriptions": {
 			"home": "Use the Tech Layout & Adjacency Bonus Calculator",
@@ -727,7 +737,8 @@
 			"changelog": "Latest updates and new features",
 			"userstats": "Popular technologies and builds",
 			"translation": "Contribute to community localization",
-			"privacy": "Our commitment to your data privacy and security"
+			"privacy": "Our commitment to your data privacy and security",
+			"performance": "Application performance metrics"
 		}
 	},
 	"installPrompt": {

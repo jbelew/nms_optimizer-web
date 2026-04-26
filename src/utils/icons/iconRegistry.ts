@@ -25,6 +25,7 @@ import {
 	PieChartIcon,
 	QuestionMarkCircledIcon,
 	ReloadIcon,
+	RocketIcon,
 	Share1Icon,
 } from "@radix-ui/react-icons";
 
@@ -51,6 +52,7 @@ export const radixIconRegistry: Record<string, ElementType> = {
 	PieChartIcon,
 	QuestionMarkCircledIcon,
 	ReloadIcon,
+	RocketIcon,
 	Share1Icon,
 	CameraIcon,
 };
@@ -83,6 +85,7 @@ const iconMap: Record<string, ElementType> = {
 	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
 	"dialogs.titles.privacy": EyeNoneIcon,
 	"dialogs.titles.updatePrompt": ReloadIcon,
+	"dialogs.titles.performance": RocketIcon,
 	"dialog.buildName.title": DownloadIcon,
 	"dialogs.titles.welcome": InfoCircledIcon,
 };
@@ -95,6 +98,7 @@ const iconMap: Record<string, ElementType> = {
 const iconStyle: Record<string, CSSProperties> = {
 	"dialogs.titles.serverError": { color: "var(--red-track)" },
 	"dialogs.titles.optimizationAlert": { color: "var(--red-track)" },
+	"dialogs.titles.performance": { color: "var(--cyan-track)" },
 	default: { color: "var(--accent-track)" },
 };
 

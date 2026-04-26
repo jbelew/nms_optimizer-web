@@ -29,17 +29,45 @@ describe("Analytics Tracking", () => {
 			sendBeacon: vi.fn().mockReturnValue(true),
 		});
 
-		// Mock document
+		// Mock document. The script-injection probe used by `detectAdBlocker`
+		// triggers `onload` (not blocked) or `onerror` (blocked) on appendChild,
+		// driven by whether the mocked `fetch` resolves or rejects — preserving
+		// the existing test contract.
+		const head = {
+			appendChild: vi.fn((script: { onload?: () => void; onerror?: () => void }) => {
+				const probe = (globalThis as unknown as { fetch: Mock }).fetch;
+
+				try {
+					const result = probe?.("https://www.googletagmanager.com/gtag/js");
+					Promise.resolve(result)
+						.then(() => script.onload?.())
+						.catch(() => script.onerror?.());
+				} catch {
+					script.onerror?.();
+				}
+
+				return script;
+			}),
+		};
 		vi.stubGlobal("document", {
 			cookie: "",
+			visibilityState: "visible",
 			querySelector: vi.fn().mockReturnValue(null),
 			createElement: vi.fn().mockImplementation((tag: string) => {
-				if (tag === "script") return { setAttribute: vi.fn() };
+				if (tag === "script") {
+					return {
+						setAttribute: vi.fn(),
+						remove: vi.fn(),
+						onload: undefined,
+						onerror: undefined,
+					};
+				}
 
 				return {};
 			}),
 			addEventListener: vi.fn(),
 			removeEventListener: vi.fn(),
+			head,
 			body: {
 				appendChild: vi.fn(),
 			},
@@ -52,6 +80,8 @@ describe("Analytics Tracking", () => {
 				pathname: "/",
 				search: "",
 			},
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
 			matchMedia: vi.fn().mockReturnValue({ matches: false }),
 			localStorage: {
 				getItem: vi.fn((key) => localStorage.getItem(key)),
@@ -73,10 +103,20 @@ describe("Analytics Tracking", () => {
 	});
 
 	describe("Initialization", () => {
-		it("should not initialize GA4 in development mode", async () => {
-			vi.spyOn(tracking.env, "isDevMode").mockReturnValue(true);
-			await tracking.initializeAnalytics();
-			expect(ReactGA.initialize).not.toHaveBeenCalled();
+		it("should not initialize GA4 when analytics are disabled via env", async () => {
+			const originalEnv = import.meta.env.VITE_ANALYTICS_ENABLED;
+			vi.stubEnv("VITE_ANALYTICS_ENABLED", "false");
+
+			try {
+				await tracking.initializeAnalytics();
+				expect(ReactGA.initialize).not.toHaveBeenCalled();
+			} finally {
+				if (originalEnv === undefined) {
+					vi.unstubAllEnvs();
+				} else {
+					vi.stubEnv("VITE_ANALYTICS_ENABLED", originalEnv);
+				}
+			}
 		});
 
 		it("should not initialize GA4 if the user is a bot", async () => {

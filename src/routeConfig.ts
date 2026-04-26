@@ -12,7 +12,15 @@ export const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
  *
  * @category Routing
  */
-export const pages = ["changelog", "instructions", "about", "translation", "userstats", "privacy"];
+export const pages = [
+	"changelog",
+	"instructions",
+	"about",
+	"translation",
+	"userstats",
+	"privacy",
+	"performance",
+];
 
 /**
  * List of ISO language codes supported by the router's path prefixing.

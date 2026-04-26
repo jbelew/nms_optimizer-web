@@ -3,13 +3,9 @@ import { lazy, Suspense } from "react";
 import { Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-const AppDialog = lazy(() => import("../Base/AppDialog"));
+import { UserStatsContent } from "./UserStatsContent";
 
-const LazyUserStatsContent = lazy(() =>
-	import("./UserStatsContent").then((module) => ({
-		default: module.UserStatsContent,
-	}))
-);
+const AppDialog = lazy(() => import("../Base/AppDialog"));
 
 /**
  * Props for the `UserStatsDialog` component.
@@ -57,7 +53,7 @@ const UserStatsDialog: FC<UserStatsDialogProps> = ({ isOpen, onClose }) => {
 				title={t("dialogs.titles.userStats")}
 				content={
 					<Suspense fallback={<Skeleton height="900px" width="100%" />}>
-						<LazyUserStatsContent onClose={onClose} isOpen={isOpen} />
+						<UserStatsContent onClose={onClose} isOpen={isOpen} />
 					</Suspense>
 				}
 			/>

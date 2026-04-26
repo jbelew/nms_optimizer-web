@@ -80,7 +80,8 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		dialogPath === "changelog" ||
 		dialogPath === "translation" ||
 		dialogPath === "userstats" ||
-		dialogPath === "privacy"
+		dialogPath === "privacy" ||
+		dialogPath === "performance"
 			? dialogPath
 			: null;
 
