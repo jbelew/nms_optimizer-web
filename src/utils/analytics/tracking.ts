@@ -182,35 +182,62 @@ const globalIsInstalled =
 	typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches;
 
 /**
- * Detects if client-side tracking is likely being blocked.
+ * Detects if an ad blocker or tracking protection is active.
  *
- * @returns {Promise<boolean>} True if blocked.
+ * @remarks
+ * This function uses a multi-probe strategy to identify both browser-level script
+ * blockers (like uBlock Origin) and network-level DNS filters (like Pi-hole).
+ *
+ * The strategy includes:
+ * 1.  **GTM Script Probe**: Attempts to inject the Google Tag Manager script. Verified
+ *     against "spoofing" by checking for the `window.google_tag_manager` global.
+ * 2.  **GA Collect Probe**: A `fetch` HEAD request to the GA4 collection endpoint.
+ *     This specifically catches DNS sinkholes that might allow scripts but block data.
+ * 3.  **Fail-Fast Settlement**: The promise resolves to `true` as soon as any probe fails,
+ *     triggering the server-side fallback immediately.
+ * 4.  **Timeout Safeguard**: Resolves to `true` after 3.5s if the network silently drops
+ *     the requests without an immediate error.
+ *
+ * @returns {Promise<boolean>} A promise resolving to `true` if blocking is detected.
+ *
+ * @see {@link getAdBlockerDetectionResult}
+ * @see {@link ./tracking.test.ts Unit Tests}
  *
  * @category Utilities
  *
  * @example
  * ```ts
  * const blocked = await detectAdBlocker();
- * // returns Promise<boolean>
+ * // returns true if blocked, false otherwise
  * ```
  */
 const detectAdBlocker = (): Promise<boolean> => {
-	// Script-injection probe is more reliable than `fetch({mode: "no-cors"})`,
-	// which resolves opaquely even when ad blockers (e.g. uBlock Origin) return
-	// synthetic empty responses — producing false negatives.
+	const probes = [
+		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
+		"https://www.google-analytics.com/g/collect",
+	];
+
+	// Fallback for SSR / non-DOM environments
 	if (typeof document === "undefined" || !document.head) {
-		// SSR / non-DOM environment — fall back to fetch probe used historically
-		// (and exercised by the existing test suite).
 		return (async () => {
 			try {
-				const controller = new AbortController();
-				const timeoutId = setTimeout(() => controller.abort(), 3000);
-				await fetch(`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`, {
-					method: "HEAD",
-					mode: "no-cors",
-					cache: "no-store",
-					signal: controller.signal,
-				}).finally(() => clearTimeout(timeoutId));
+				await Promise.all(
+					probes.map(async (url) => {
+						const controller = new AbortController();
+						const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+						try {
+							await fetch(url, {
+								method: "HEAD",
+								mode: "no-cors",
+								cache: "no-store",
+								signal: controller.signal,
+							});
+						} finally {
+							clearTimeout(timeoutId);
+						}
+					})
+				);
 
 				return false;
 			} catch {
@@ -221,10 +248,34 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 	return new Promise<boolean>((resolve) => {
 		let settled = false;
+		let failures = 0;
+		let successes = 0;
 
 		const finish = (blocked: boolean) => {
 			if (settled) return;
 			settled = true;
+
+			resolve(blocked);
+		};
+
+		// 1. Script injection probe (GTM)
+		const script = document.createElement("script");
+		script.src = probes[0];
+		script.async = true;
+
+		script.onload = () => {
+			// Verify it's not a dummy script injected by uBlock/Brave
+			const gtmLoaded = !!(window as unknown as { google_tag_manager?: object })
+				.google_tag_manager;
+
+			if (!gtmLoaded) {
+				failures++;
+				finish(true);
+
+				return;
+			}
+
+			successes++;
 
 			try {
 				script.remove();
@@ -232,19 +283,47 @@ const detectAdBlocker = (): Promise<boolean> => {
 				/* noop */
 			}
 
-			resolve(blocked);
+			if (successes + failures === probes.length) finish(failures > 0);
 		};
 
-		const script = document.createElement("script");
-		script.src = `https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`;
-		script.async = true;
-		script.onload = () => finish(false);
-		script.onerror = () => finish(true);
-		// Treat lack of response within 3s as blocked (network filter / DNS sink).
-		setTimeout(() => finish(true), 3000);
+		script.onerror = () => {
+			failures++;
+
+			try {
+				script.remove();
+			} catch {
+				/* noop */
+			}
+
+			finish(true);
+		};
+
+		// 2. Fetch probe (GA Collect)
+		const fetchProbe = async () => {
+			try {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 3000);
+				await fetch(probes[1], {
+					method: "HEAD",
+					mode: "no-cors",
+					cache: "no-store",
+					signal: controller.signal,
+				}).finally(() => clearTimeout(timeoutId));
+				successes++;
+
+				if (successes + failures === probes.length) finish(failures > 0);
+			} catch {
+				failures++;
+				finish(true);
+			}
+		};
+
+		// Treat lack of response within 3.5s as blocked.
+		setTimeout(() => finish(true), 3500);
 
 		try {
 			document.head.appendChild(script);
+			void fetchProbe();
 		} catch {
 			finish(true);
 		}
@@ -252,16 +331,24 @@ const detectAdBlocker = (): Promise<boolean> => {
 };
 
 /**
- * Gets the result of the ad blocker detection.
+ * Gets the cached result of the ad blocker detection or triggers a new detection.
  *
- * @returns {Promise<boolean>} True if blocked.
+ * @remarks
+ * This is the primary accessor for the detection state. It ensures that the detection
+ * logic only runs once per session and caches the result for synchronous access in
+ * {@link sendEvent}.
+ *
+ * @returns {Promise<boolean>} A promise resolving to `true` if blocking is detected.
+ *
+ * @see {@link detectAdBlocker}
+ * @see {@link initializeAnalytics}
  *
  * @category Utilities
  *
  * @example
  * ```ts
  * const isBlocked = await getAdBlockerDetectionResult();
- * // returns Promise<boolean>
+ * // returns true if blocked
  * ```
  */
 const getAdBlockerDetectionResult = async (): Promise<boolean> => {

@@ -29,26 +29,48 @@ describe("Analytics Tracking", () => {
 			sendBeacon: vi.fn().mockReturnValue(true),
 		});
 
+		// Mock window
+		vi.stubGlobal("window", {
+			location: {
+				pathname: "/",
+				search: "",
+			},
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			matchMedia: vi.fn().mockReturnValue({ matches: false }),
+			localStorage: {
+				getItem: vi.fn((key) => localStorage.getItem(key)),
+				setItem: vi.fn((key, value) => localStorage.setItem(key, value)),
+				removeItem: vi.fn((key) => localStorage.removeItem(key)),
+				clear: vi.fn(() => localStorage.clear()),
+			},
+			// Define this so the script probe can verify it
+			google_tag_manager: {},
+		});
+
 		// Mock document. The script-injection probe used by `detectAdBlocker`
 		// triggers `onload` (not blocked) or `onerror` (blocked) on appendChild,
 		// driven by whether the mocked `fetch` resolves or rejects — preserving
 		// the existing test contract.
 		const head = {
-			appendChild: vi.fn((script: { onload?: () => void; onerror?: () => void }) => {
-				const probe = (globalThis as unknown as { fetch: Mock }).fetch;
+			appendChild: vi.fn(
+				(script: { src: string; onload?: () => void; onerror?: () => void }) => {
+					const probe = (globalThis as unknown as { fetch: Mock }).fetch;
 
-				try {
-					const result = probe?.("https://www.googletagmanager.com/gtag/js");
-					Promise.resolve(result)
-						.then(() => script.onload?.())
-						.catch(() => script.onerror?.());
-				} catch {
-					script.onerror?.();
+					try {
+						const result = probe?.(script.src);
+						Promise.resolve(result)
+							.then(() => script.onload?.())
+							.catch(() => script.onerror?.());
+					} catch {
+						script.onerror?.();
+					}
+
+					return script;
 				}
-
-				return script;
-			}),
+			),
 		};
+
 		vi.stubGlobal("document", {
 			cookie: "",
 			visibilityState: "visible",
@@ -72,23 +94,6 @@ describe("Analytics Tracking", () => {
 				appendChild: vi.fn(),
 			},
 			title: "Test Title",
-		});
-
-		// Mock window
-		vi.stubGlobal("window", {
-			location: {
-				pathname: "/",
-				search: "",
-			},
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
-			matchMedia: vi.fn().mockReturnValue({ matches: false }),
-			localStorage: {
-				getItem: vi.fn((key) => localStorage.getItem(key)),
-				setItem: vi.fn((key, value) => localStorage.setItem(key, value)),
-				removeItem: vi.fn((key) => localStorage.removeItem(key)),
-				clear: vi.fn(() => localStorage.clear()),
-			},
 		});
 
 		// Mock env.isDevMode to return false by default for tests
