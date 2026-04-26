@@ -1,3 +1,10 @@
+# [6.35.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.8...v6.35.0) (2026-04-26)
+
+
+### Features
+
+* add performance monitoring dialog and improve analytics tracking reliability ([b0ee519](https://github.com/jbelew/nms_optimizer-web/commit/b0ee5199f12aea0047d8fd114f8eac91eaec2748))
+
 ## [6.34.8](https://github.com/jbelew/nms_optimizer-web/compare/v6.34.7...v6.34.8) (2026-04-23)
 
 
