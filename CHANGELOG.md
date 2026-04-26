@@ -1,3 +1,10 @@
+## [6.35.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.1...v6.35.2) (2026-04-26)
+
+
+### Bug Fixes
+
+* migrate SPA route fallbacks to Cloudflare Functions and select highest performance score from lighthouse manifest ([3b9ceeb](https://github.com/jbelew/nms_optimizer-web/commit/3b9ceeb5df5c72c8d6b5ace38ed7fa86b2c6e3e9))
+
 ## [6.35.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.0...v6.35.1) (2026-04-26)
 
 
