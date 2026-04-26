@@ -1,3 +1,10 @@
+## [6.35.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.2...v6.35.3) (2026-04-26)
+
+
+### Bug Fixes
+
+* disallow crawlers on performance routes and update SPA shell fetching to prevent redirect propagation ([6811af7](https://github.com/jbelew/nms_optimizer-web/commit/6811af707c672799be26bce9dd9faf885e66d2de))
+
 ## [6.35.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.35.1...v6.35.2) (2026-04-26)
 
 
