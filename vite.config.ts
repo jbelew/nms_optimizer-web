@@ -428,19 +428,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 										accept: {
 											"application/x-nms": [".nms"],
 										},
-										icons: [
-											{
-												src: "/assets/img/favicons/pwa-192x192.png",
-												sizes: "192x192",
-												type: "image/png",
-											},
-											{
-												src: "/assets/img/favicons/pwa-512x512.png",
-												sizes: "512x512",
-												type: "image/png",
-											},
-										],
-										launch_type: "single-client",
 									},
 								],
 							},

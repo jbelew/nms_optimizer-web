@@ -60,6 +60,35 @@ export function setupServiceWorkerRegistration() {
 					},
 					onRegistered(registration) {
 						console.log("Service Worker registered:", registration);
+
+						if (!registration) return;
+
+						// Periodically check for SW updates (every 60s).
+						// This catches the case where a new SW enters the
+						// `waiting` state but the `statechange` event was
+						// missed because registration was deferred.
+						setInterval(
+							async () => {
+								// Skip if another install is already in progress
+								if (registration.installing) return;
+
+								// Use fetch to check if the SW script changed,
+								// bypassing the HTTP cache to get a fresh copy.
+								try {
+									const resp = await fetch("/sw.js", {
+										cache: "no-store",
+										headers: { "cache-control": "no-cache" },
+									});
+
+									if (resp?.status === 200) {
+										await registration.update();
+									}
+								} catch {
+									// Network error — skip this cycle
+								}
+							},
+							60 * 1000 // every 60 seconds
+						);
 					},
 					onRegisterError(error) {
 						console.error("Service Worker registration failed:", error);
