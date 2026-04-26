@@ -221,12 +221,21 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								globIgnores: ["maintenance.html", "404.html", "500.html"],
 								clientsClaim: false,
 								skipWaiting: false,
-								navigationPreload: false,
+								navigationPreload: true,
 								cleanupOutdatedCaches: true,
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 								navigateFallback: undefined,
 								dontCacheBustURLsMatching: /\/build\/.*\.(js|css|woff2?)$/,
 								runtimeCaching: [
+									{
+										// TTFB optimization: match navigation requests immediately
+										// with NetworkOnly so Workbox skips evaluating all other
+										// rules. Combined with navigationPreload, the browser starts
+										// the network fetch in parallel with SW boot, eliminating
+										// the SW startup penalty from TTFB entirely.
+										urlPattern: ({ request }) => request.mode === "navigate",
+										handler: "NetworkOnly",
+									},
 									{
 										urlPattern: /\/version\.json$/,
 										handler: "NetworkOnly",
