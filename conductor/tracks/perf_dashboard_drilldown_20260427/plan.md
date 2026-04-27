@@ -1,10 +1,10 @@
 # Implementation Plan: Performance Dashboard Drill-in
 
-## Phase 1: Backend Data Enhancement (`nms_optimizer-service`)
+## Phase 1: Backend Data Enhancement (`nms_optimizer-service`) [checkpoint: a0d7d92]
 - [x] Task: Update BigQuery query in `src.app.py` to calculate p50, p75, and p90 percentiles.
 - [x] Task: Update `/analytics/performance_data` endpoint to return the new percentile fields.
 - [x] Task: Add/Update tests for the analytics endpoint to verify the new data structure.
-- [ ] Task: Conductor - User Manual Verification 'Backend Data Enhancement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Backend Data Enhancement' (Protocol in workflow.md) [a0d7d92]
 
 ## Phase 2: Frontend State & Card UI (`nms_optimizer-web`)
 - [ ] Task: Update `PerformanceMetric` type and data transformation in `src/hooks/usePerformanceData/usePerformanceData.ts` and `src/components/AppDialog/Performance/PerformanceData.tsx`.
