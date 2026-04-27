@@ -1,3 +1,11 @@
+# [6.37.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.2...v6.37.0) (2026-04-27)
+
+
+### Features
+
+* **ui:** complete modular performance dashboard with overall score and trend indicators ([184ad78](https://github.com/jbelew/nms_optimizer-web/commit/184ad78ddc58b2b059f86f1fa53b5a5c7543b053))
+* **ui:** implement interactive metric cards and selection state ([47c5eb2](https://github.com/jbelew/nms_optimizer-web/commit/47c5eb2fd07a65087265b543517c31309ea421f4))
+
 ## [6.36.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.1...v6.36.2) (2026-04-27)
 
 
