@@ -62,7 +62,4 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Improve INP Score**
   *Link: [./conductor/tracks/improve_inp_20260423/](./conductor/tracks/improve_inp_20260423/)*
 
----
 
-## [~] Track: Performance Dashboard Drill-in
-*Link: [./conductor/tracks/perf_dashboard_drilldown_20260427/](./conductor/tracks/perf_dashboard_drilldown_20260427/)*

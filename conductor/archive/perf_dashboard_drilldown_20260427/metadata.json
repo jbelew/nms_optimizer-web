@@ -1,0 +1,12 @@
+{
+  "track_id": "perf_dashboard_drilldown_20260427",
+  "type": "feature",
+  "status": "completed",
+  "priority": "high",
+  "depends_on": [],
+  "estimated_hours": 4,
+  "created_at": "2026-04-27T10:00:00Z",
+  "updated_at": "2026-04-27T15:45:00Z",
+  "description": "Improve performance dashboard drill-down with p50/p75/p90 composed chart.",
+  "beads_epic": "nms_optimizer-web-opw"
+}

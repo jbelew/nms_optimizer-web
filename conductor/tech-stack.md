@@ -16,6 +16,14 @@
 - **Image Processing:** [Sharp](https://sharp.pixelplumbing.com/) - High performance Node.js image processing.
 - **Release Management:** [Semantic Release](https://github.com/semantic-release/semantic-release) - Fully automated version management and package publishing.
 
+## Backend Tech Stack
+- **Runtime:** [Python 3.12+](https://www.python.org/)
+- **Framework:** [Flask](https://flask.palletsprojects.com/) - Lightweight WSGI web application framework.
+- **WebSocket:** [Flask-SocketIO](https://flask-socketio.readthedocs.io/) - Real-time communication for optimization progress.
+- **Analytics:** [BigQuery](https://cloud.google.com/bigquery) & [Google Analytics 4](https://developers.google.com/analytics/devguides/reporting/data/v1) - Field data warehousing and reporting.
+- **Architecture:** Modular Blueprints for domain separation (Optimization vs Analytics).
+- **Caching:** In-memory TTL caching for expensive analytics queries.
+
 ## Testing & Quality Assurance
 - **Unit/Integration Testing:** [Vitest](https://vitest.dev/) - A Vite-native unit test framework.
 - **End-to-End Testing:** [Playwright](https://playwright.dev/) - Reliable end-to-end testing for modern web apps.
