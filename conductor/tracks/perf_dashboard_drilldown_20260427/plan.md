@@ -6,12 +6,12 @@
 - [x] Task: Add/Update tests for the analytics endpoint to verify the new data structure.
 - [x] Task: Conductor - User Manual Verification 'Backend Data Enhancement' (Protocol in workflow.md) [a0d7d92]
 
-## Phase 2: Frontend State & Card UI (`nms_optimizer-web`)
+## Phase 2: Frontend State & Card UI (`nms_optimizer-web`) [checkpoint: 47c5eb2]
 - [x] Task: Update `PerformanceMetric` type and data transformation in `src/hooks/usePerformanceData/usePerformanceData.ts` and `src/components/AppDialog/Performance/PerformanceData.tsx`.
 - [x] Task: Implement selection state (Zustand or local state) in `PerformanceData` to track the active metric.
 - [x] Task: Enhance `Card` components in `PerformanceData.tsx` to be interactive and display the selected state visually.
-- [ ] Task: Add unit tests for the updated state logic and Card interactions.
-- [ ] Task: Conductor - User Manual Verification 'Frontend State & Card UI' (Protocol in workflow.md)
+- [x] Task: Add unit tests for the updated state logic and Card interactions.
+- [x] Task: Conductor - User Manual Verification 'Frontend State & Card UI' (Protocol in workflow.md) [47c5eb2]
 
 ## Phase 3: Detailed Chart Implementation (`nms_optimizer-web`)
 - [ ] Task: Create a new `MetricDetailChart` component (or enhance `PerformanceChart`) to render the p50-p90 Area and p75 Line.
