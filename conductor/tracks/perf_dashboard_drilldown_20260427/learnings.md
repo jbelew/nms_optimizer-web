@@ -17,4 +17,14 @@ Patterns, gotchas, and context discovered during implementation.
 - **Learnings:**
   - Patterns: Used `APPROX_QUANTILES(column, 100)[OFFSET(N)]` for percentile calculation in BigQuery.
   - Gotchas: `unittest.mock.patch` was used to mock the BigQuery client for local testing.
+
+---
+
+## 2026-04-27 10:45 - Phase 2 Task 1-4: Frontend State & Card UI
+- **Implemented:** Updated `PerformanceMetric` type, updated `transformData` to handle p50/p75/p90, added `selectedMetric` state, and made `Card` components interactive. Added unit tests.
+- **Files changed:** `src/hooks/usePerformanceData/usePerformanceData.ts`, `src/components/AppDialog/Performance/PerformanceData.tsx`, `src/components/AppDialog/Performance/PerformanceData.test.tsx`
+- **Commit:** 47c5eb2
+- **Learnings:**
+  - Patterns: Managed selection state locally within `PerformanceChart` for simplicity.
+  - Gotchas: Recharts dynamic import requires careful mocking in unit tests if testing chart internals, but here we focused on card interaction.
 ---

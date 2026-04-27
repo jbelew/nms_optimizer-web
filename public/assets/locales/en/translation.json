@@ -148,7 +148,7 @@
 			"refreshNow": "Refresh Now"
 		},
 		"performance": {
-			"description": "Aggregate Core Web Vitals and performance metrics from real user sessions (field data). Summary cards reflect the last hour's data.",
+			"description": "Aggregate Core Web Vitals and performance metrics from real user sessions (field data). Summary cards reflect the last hour's P75 data.",
 			"error": "Failed to load performance metrics.",
 			"noData": "No performance data available.",
 			"closeButton": "Close"

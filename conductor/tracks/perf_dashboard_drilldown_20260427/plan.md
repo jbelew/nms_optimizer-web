@@ -14,9 +14,10 @@
 - [x] Task: Conductor - User Manual Verification 'Frontend State & Card UI' (Protocol in workflow.md) [47c5eb2]
 
 ## Phase 3: Detailed Chart Implementation (`nms_optimizer-web`)
-- [ ] Task: Create a new `MetricDetailChart` component (or enhance `PerformanceChart`) to render the p50-p90 Area and p75 Line.
-- [ ] Task: Integrate the toggle logic to switch between the aggregate stacked chart and the detailed metric chart.
-- [ ] Task: Verify responsive behavior and tooltips for the new composed chart.
+- [x] Task: Create a new `MetricDetailChart` component (or enhance `PerformanceChart`) to render the p50-p90 Area and p75 Line.
+- [x] Task: Integrate the toggle logic to switch between the aggregate stacked chart and the detailed metric chart.
+- [x] Task: Verify responsive behavior and tooltips for the new composed chart.
+- [x] Task: Implement logical clamping for P90 outliers in the detail chart.
 - [ ] Task: Conductor - User Manual Verification 'Detailed Chart Implementation' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation & Polish

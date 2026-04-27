@@ -1,0 +1,517 @@
+import { FC, useState } from "react";
+import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
+import { Card, Flex, Text } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
+
+import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+
+import { MetricDetailChart } from "./MetricDetailChart";
+import { ChartDataPoint } from "./PerformanceTypes";
+import {
+	computeLogNormalScore,
+	getMetricColor,
+	getStatusColor,
+	LIGHTHOUSE_CONFIG,
+} from "./PerformanceUtils";
+
+/**
+ * Properties for the PerformanceChart component.
+ */
+interface PerformanceChartProps {
+	/** Raw performance metric records from the API. */
+	data: PerformanceMetric[];
+	/** The dynamic Recharts library module. */
+	recharts: typeof import("recharts");
+}
+
+/**
+ * Main chart and card renderer for the performance dashboard.
+ *
+ * @remarks
+ * This component manages the high-level dashboard state, including:
+ * - Data transformation into timeseries format.
+ * - Overall performance score calculation using Lighthouse logic.
+ * - Interactive metric selection and view switching.
+ *
+ * It renders a row of summary cards followed by either an aggregate stacked
+ * AreaChart or a detailed MetricDetailChart.
+ *
+ * @param {PerformanceChartProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered performance dashboard UI.
+ *
+ * @see {@link MetricDetailChart}
+ * @see {@link computeLogNormalScore}
+ * @see {@link PerformanceMetric}
+ *
+ * @component
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * // Renders the performance dashboard with raw data
+ * <PerformanceChart data={apiData} recharts={recharts} />
+ * ```
+ */
+export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) => {
+	const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+	const {
+		ResponsiveContainer,
+		AreaChart,
+		Area,
+		XAxis,
+		YAxis,
+		CartesianGrid,
+		Tooltip,
+		ReferenceLine,
+		Label,
+	} = recharts;
+
+	const { i18n } = useTranslation();
+	const locale = i18n.language;
+
+	/**
+	 * Transforms flat API records into a timestamp-keyed structure for Recharts.
+	 *
+	 * @example
+	 * ```ts
+	 * // Returns chartData and uniqueMetrics set
+	 * const { chartData } = transformData(rawMetrics);
+	 * ```
+	 */
+	const transformData = (raw: PerformanceMetric[]) => {
+		const dateMap: Record<number, ChartDataPoint> = {};
+		const metrics = new Set<string>();
+
+		raw.forEach((item) => {
+			if (item.metric_name === "TBT") return;
+
+			const dateObj = new Date(item.timestamp);
+			const formattedDate = new Intl.DateTimeFormat(locale, {
+				month: "numeric",
+				day: "numeric",
+			}).format(dateObj);
+			const formattedHour = new Intl.DateTimeFormat(locale, {
+				hour: "numeric",
+				minute: "numeric",
+			}).format(dateObj);
+
+			if (!dateMap[item.timestamp]) {
+				dateMap[item.timestamp] = {
+					timestamp: item.timestamp,
+					displayDate: formattedDate,
+					hour: formattedHour,
+					appVersion: item.app_version,
+				};
+			}
+
+			dateMap[item.timestamp][item.metric_name] = item.average_value;
+			if (item.p50 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p50`] = item.p50;
+			if (item.p75 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p75`] = item.p75;
+			if (item.p90 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p90`] = item.p90;
+
+			if (item.p50 !== undefined && item.p90 !== undefined) {
+				dateMap[item.timestamp][`${item.metric_name}_range`] = [item.p50, item.p90];
+			}
+
+			metrics.add(item.metric_name);
+		});
+
+		const chartData = Object.values(dateMap)
+			.sort((a, b) => a.timestamp - b.timestamp)
+			.map((point) => {
+				const normalizedPoint = { ...point };
+				metrics.forEach((m) => {
+					if (normalizedPoint[m] === undefined) {
+						normalizedPoint[m] = undefined;
+					} else {
+						const originalValue = normalizedPoint[m] as number;
+						normalizedPoint[`${m}_original`] = originalValue;
+						// Minimum visual height for aggregate stacked chart
+						normalizedPoint[m] = Math.max(originalValue, 80);
+					}
+
+					[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
+						if (normalizedPoint[pKey] === undefined) normalizedPoint[pKey] = undefined;
+					});
+				});
+
+				return normalizedPoint;
+			});
+
+		return { chartData, uniqueMetrics: Array.from(metrics) };
+	};
+
+	const { chartData, uniqueMetrics } = transformData(data);
+
+	const versionChanges: { timestamp: number; version: string }[] = [];
+	let lastVersion: string | null = null;
+	chartData.forEach((point) => {
+		if (lastVersion && point.appVersion !== lastVersion) {
+			versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+		}
+
+		lastVersion = point.appVersion;
+	});
+
+	const displayOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"];
+	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
+	const stackOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"].filter((m) =>
+		uniqueMetrics.includes(m)
+	);
+
+	/**
+	 * Retrieves the most recent value for a metric from the timeseries.
+	 *
+	 * @example
+	 * ```ts
+	 * // returns 1250
+	 * const val = getLatestValue("LCP");
+	 * ```
+	 */
+	const getLatestValue = (metric: string): number | null => {
+		for (let i = chartData.length - 1; i >= 0; i--) {
+			const originalVal = chartData[i][`${metric}_original`];
+			const val =
+				originalVal !== undefined
+					? (originalVal as number)
+					: (chartData[i][metric] as number);
+			if (val !== undefined && val !== null) return val;
+		}
+
+		return null;
+	};
+
+	/**
+	 * Determines the trend direction between the two most recent data points.
+	 *
+	 * @example
+	 * ```ts
+	 * // returns "improvement"
+	 * const trend = getMetricTrend("FCP");
+	 * ```
+	 */
+	const getMetricTrend = (metric: string): "improvement" | "regression" | "neutral" => {
+		const values: number[] = [];
+
+		for (let i = chartData.length - 1; i >= 0; i--) {
+			const originalVal = chartData[i][`${metric}_original`];
+			const val =
+				originalVal !== undefined
+					? (originalVal as number)
+					: (chartData[i][metric] as number);
+			if (val !== undefined && val !== null) values.push(val);
+			if (values.length === 2) break;
+		}
+
+		if (values.length < 2) return "neutral";
+
+		return values[0] < values[1]
+			? "improvement"
+			: values[0] > values[1]
+				? "regression"
+				: "neutral";
+	};
+
+	/**
+	 * Computes the weighted overall performance score.
+	 *
+	 * @example
+	 * ```ts
+	 * // returns 92
+	 * const score = calculateOverallScore();
+	 * ```
+	 */
+	const calculateOverallScore = () => {
+		let totalWeight = 0,
+			totalScore = 0;
+		activeMetrics.forEach((m) => {
+			const val = getLatestValue(m);
+			const metricConfig = LIGHTHOUSE_CONFIG[m];
+
+			if (val !== null && metricConfig) {
+				totalScore +=
+					computeLogNormalScore(val, metricConfig.p90, metricConfig.p50) *
+					metricConfig.weight;
+				totalWeight += metricConfig.weight;
+			}
+		});
+
+		return totalWeight > 0 ? Math.round(totalScore / totalWeight) : null;
+	};
+
+	const overallScore = calculateOverallScore();
+
+	/**
+	 * Determines the overall trend by averaging individual metric trends.
+	 * @example
+	 */
+	const getOverallTrend = (): "improvement" | "regression" | "neutral" => {
+		let improvementCount = 0;
+		let regressionCount = 0;
+
+		activeMetrics.forEach((m) => {
+			const trend = getMetricTrend(m);
+			if (trend === "improvement") improvementCount++;
+			else if (trend === "regression") regressionCount++;
+		});
+
+		if (improvementCount > regressionCount) return "improvement";
+		if (regressionCount > improvementCount) return "regression";
+
+		return "neutral";
+	};
+
+	const overallTrend = getOverallTrend();
+
+	return (
+		<Flex direction="column" gap="4">
+			<Flex gap="3" wrap="wrap" justify="between">
+				{/* Overall Summary Toggle Card */}
+				<Card
+					style={{
+						flex: "1 1 120px",
+						cursor: "pointer",
+						transition: "all 0.2s ease-in-out",
+						border:
+							selectedMetric === null
+								? "2px solid var(--accent-11)"
+								: "2px solid transparent",
+						backgroundColor: selectedMetric === null ? "var(--gray-3)" : undefined,
+					}}
+					onClick={() => setSelectedMetric(null)}
+					onKeyDown={(e) =>
+						(e.key === "Enter" || e.key === " ") && setSelectedMetric(null)
+					}
+					role="button"
+					aria-pressed={selectedMetric === null}
+					tabIndex={0}
+				>
+					<Flex direction="column" align="center">
+						<Text size="1" weight="bold">
+							OVERALL
+						</Text>
+						<Flex align="center" gap="1">
+							<Text
+								size="5"
+								weight="medium"
+								style={{
+									color:
+										overallScore !== null
+											? overallScore >= 90
+												? "var(--green-11)"
+												: overallScore >= 50
+													? "var(--amber-11)"
+													: "var(--red-11)"
+											: "var(--gray-11)",
+								}}
+							>
+								{overallScore ?? "—"}
+							</Text>
+							{overallTrend === "improvement" && (
+								<Text color="green">
+									<ArrowUpIcon />
+								</Text>
+							)}
+							{overallTrend === "regression" && (
+								<Text color="red">
+									<ArrowDownIcon />
+								</Text>
+							)}
+						</Flex>
+					</Flex>
+				</Card>
+
+				{activeMetrics.map((metric) => {
+					const val = getLatestValue(metric);
+					const isSelected = selectedMetric === metric;
+
+					return (
+						<Card
+							key={`stat-${metric}`}
+							style={{
+								flex: "1 1 120px",
+								cursor: "pointer",
+								transition: "all 0.2s ease-in-out",
+								border: isSelected
+									? `2px solid ${getMetricColor(metric, 11)}`
+									: "2px solid transparent",
+								backgroundColor: isSelected ? "var(--gray-3)" : undefined,
+							}}
+							onClick={() => setSelectedMetric(isSelected ? null : metric)}
+							onKeyDown={(e) =>
+								(e.key === "Enter" || e.key === " ") &&
+								setSelectedMetric(isSelected ? null : metric)
+							}
+							role="button"
+							aria-pressed={isSelected}
+							tabIndex={0}
+						>
+							<Flex direction="column" align="center">
+								<Text
+									size="1"
+									weight="bold"
+									style={{ color: getMetricColor(metric, 11) }}
+								>
+									{metric}
+								</Text>
+								<Flex align="center" gap="1">
+									<Text
+										size="5"
+										weight="medium"
+										style={{ color: getStatusColor(metric, val) }}
+									>
+										{val !== null
+											? metric === "CLS"
+												? (val / 1000).toFixed(2)
+												: Math.round(val)
+											: "—"}
+										<Text size="1" ml="1">
+											{metric === "CLS" ? "" : "ms"}
+										</Text>
+									</Text>
+									{getMetricTrend(metric) === "improvement" && (
+										<Text color="green">
+											<ArrowDownIcon />
+										</Text>
+									)}
+									{getMetricTrend(metric) === "regression" && (
+										<Text color="red">
+											<ArrowUpIcon />
+										</Text>
+									)}
+								</Flex>
+							</Flex>
+						</Card>
+					);
+				})}
+			</Flex>
+
+			{selectedMetric ? (
+				<MetricDetailChart
+					metric={selectedMetric}
+					chartData={chartData}
+					versionChanges={versionChanges}
+					recharts={recharts}
+					locale={locale}
+				/>
+			) : (
+				<ResponsiveContainer width="100%" height={350}>
+					<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
+						<CartesianGrid
+							strokeDasharray="3 3"
+							vertical={false}
+							stroke="var(--gray-5)"
+						/>
+						{versionChanges.map((change) => (
+							<ReferenceLine
+								key={change.timestamp}
+								x={change.timestamp}
+								stroke="var(--gray-8)"
+								strokeDasharray="3 3"
+								strokeWidth={1}
+							>
+								<Label
+									value={
+										change.version.startsWith("v")
+											? change.version
+											: `v${change.version}`
+									}
+									position="insideTopLeft"
+									fill="var(--gray-11)"
+									fontSize={11}
+									fontWeight={500}
+									offset={5}
+								/>
+							</ReferenceLine>
+						))}
+						<XAxis
+							dataKey="timestamp"
+							type="number"
+							scale="time"
+							domain={["dataMin", "dataMax"]}
+							axisLine={false}
+							tickLine={false}
+							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+							minTickGap={40}
+							tickFormatter={(val) =>
+								new Intl.DateTimeFormat(locale, {
+									month: "numeric",
+									day: "numeric",
+								}).format(new Date(val))
+							}
+						/>
+						<YAxis
+							axisLine={false}
+							tickLine={false}
+							width={40}
+							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+						/>
+						<Tooltip
+							itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
+							wrapperStyle={{ pointerEvents: "none" }}
+							allowEscapeViewBox={{ x: false, y: false }}
+							isAnimationActive={false}
+							offset={10}
+							labelFormatter={(_label, payload) => {
+								const item = payload[0]?.payload as ChartDataPoint | undefined;
+								const baseLabel = item
+									? `${item.displayDate} ${item.hour}`
+									: String(_label);
+
+								return item?.appVersion
+									? `${baseLabel} (${item.appVersion})`
+									: baseLabel;
+							}}
+							formatter={(
+								value,
+								name,
+								props: { payload?: Record<string, unknown> }
+							) => {
+								const originalValue = props.payload?.[`${name}_original`];
+								const numericValue =
+									typeof originalValue === "number"
+										? originalValue
+										: typeof value === "number"
+											? value
+											: 0;
+
+								return [
+									name === "CLS"
+										? (numericValue / 1000).toFixed(2)
+										: `${Math.round(numericValue)}ms`,
+									String(name),
+								];
+							}}
+							contentStyle={{
+								backgroundColor: "var(--gray-3)",
+								borderColor: "var(--gray-6)",
+								borderRadius: "8px",
+								color: "var(--gray-12)",
+								fontSize: "12px",
+								fontWeight: 500,
+							}}
+						/>
+						{stackOrder.map((metric) => (
+							<Area
+								key={metric}
+								type="monotone"
+								dataKey={metric}
+								stackId="1"
+								stroke={getMetricColor(metric, 11)}
+								fill={getMetricColor(metric, 10)}
+								fillOpacity={0.9}
+								strokeWidth={2}
+								connectNulls
+							/>
+						))}
+					</AreaChart>
+				</ResponsiveContainer>
+			)}
+		</Flex>
+	);
+};
