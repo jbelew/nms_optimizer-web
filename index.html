@@ -124,13 +124,111 @@
 				}
 			</style>
 		</noscript>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="theme-color" content="#003848" />
+
+		<!-- Critical Resource Preloads -->
+		<link
+			rel="preload"
+			href="/assets/fonts/geonms.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="high"
+		/>
+		<link
+			rel="preload"
+			href="/assets/fonts/raleway.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="high"
+		/>
+		<link
+			rel="preload"
+			href="/assets/fonts/acumin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+			fetchpriority="low"
+		/>
+
+		<!-- Preload mobile blurred background (critical for mobile LCP) -->
+		<link
+			rel="preload"
+			as="image"
+			href="/assets/img/background@mobile-blurred.webp"
+			media="(max-width: 640px)"
+			fetchpriority="high"
+		/>
+
+		<!-- Preload responsive desktop background with image-set capabilities -->
+		<link
+			rel="preload"
+			as="image"
+			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
+			media="(min-width: 641px)"
+			fetchpriority="low"
+		/>
+
+		<link rel="stylesheet" href="/src/assets/css/fonts.css" />
+
 		<style>
+			/* Base Styles */
 			html {
 				background: #000;
 				color: #fff;
 				scrollbar-gutter: stable;
 			}
+
+			body {
+				background-color: transparent;
+			}
+
+			body.vpss-active {
+				overflow: hidden;
+			}
+
+			/* Background Layers */
+			html.background-visible body::before,
+			.is-bot body::before {
+				content: "";
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #000000;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
+				z-index: -1;
+			}
+
+			@media (width <= 639px) {
+				html.background-visible body::before {
+					background-image: url("/assets/img/background@mobile-blurred.webp");
+					background-position: center top;
+				}
+			}
+
+			body.error-boundary-visible::before {
+				background-image: image-set(
+					url("/assets/img/background.webp") 1x,
+					url("/assets/img/background@2x.webp") 2x
+				);
+			}
+
+			body.a11y-font::before {
+				background-image: none !important;
+				background-color: #0b161a;
+			}
 		</style>
+
 		<style id="vpss-style">
 			.vpss-logo img,
 			.vpss-logo svg {
@@ -143,8 +241,6 @@
 				display: none !important;
 			}
 		</style>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-		<meta name="theme-color" content="#003848" />
 
 		<title>NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator</title>
 		<meta
@@ -156,6 +252,15 @@
 			content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator"
 		/>
 
+		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
+		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
+		<link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin="" />
+		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
+
+		<!-- Entry Point (Critical Path) -->
+		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+
+		<!-- Deferred Metadata -->
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
 		<meta
@@ -172,7 +277,7 @@
 		/>
 		<meta
 			property="og:image:alt"
-			content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+			content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
 		/>
 
 		<!-- Twitter -->
@@ -191,7 +296,7 @@
 		/>
 		<meta
 			name="twitter:image:alt"
-			content="A screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
+			content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
 		/>
 
 		<!-- Favicons -->
@@ -214,117 +319,6 @@
 			sizes="180x180"
 			href="/assets/img/favicons/apple-touch-icon.png?v=3"
 		/>
-
-		<link rel="stylesheet" href="/src/assets/css/fonts.css" />
-
-		<style>
-			html.background-visible body::before,
-			.is-bot body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-
-				/* Set all background properties except image */
-				background-color: #000000;
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-
-				/* Default desktop image-set */
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-				z-index: -1;
-			}
-
-			/* Mobile (≤639px): Show the blurred mobile background for LCP optimization */
-			@media (width <=639px) {
-				html.background-visible body::before {
-					background-image: url("/assets/img/background@mobile-blurred.webp");
-					background-position: center top;
-				}
-			}
-
-			/* Show background on mobile when error boundary is visible (fallback) */
-			body.error-boundary-visible::before {
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-			}
-
-			body.a11y-font::before {
-				background-image: none !important;
-				background-color: #0b161a;
-			}
-
-			body {
-				background-color: transparent;
-			}
-
-			body.vpss-active {
-				overflow: hidden;
-			}
-		</style>
-
-		<!-- Preload mobile blurred background (critical for mobile LCP) -->
-		<link
-			rel="preload"
-			as="image"
-			href="/assets/img/background@mobile-blurred.webp"
-			media="(max-width: 640px)"
-			fetchpriority="high"
-		/>
-
-		<!-- Preload responsive desktop background with image-set capabilities -->
-		<link
-			rel="preload"
-			as="image"
-			imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
-			media="(min-width: 641px)"
-			fetchpriority="low"
-		/>
-
-		<!-- Fonts (highest priority) -->
-		<link
-			rel="preload"
-			href="/assets/fonts/geonms.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="high"
-		/>
-
-		<link
-			rel="preload"
-			href="/assets/fonts/raleway.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="high"
-		/>
-
-		<link
-			rel="preload"
-			href="/assets/fonts/acumin.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin="anonymous"
-			fetchpriority="low"
-		/>
-
-		<!-- Preconnect -->
-		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
-		<link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin="" />
-		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
-
-		<!-- Entry Point (Critical Path) -->
-		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
 	</head>
 
 	<body class="background-visible">

@@ -98,9 +98,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			__VUE_PROD_DEVTOOLS__: false,
 			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
 		},
-		devtools: {
-			enabled: command === "serve",
-		},
 
 		oxc: {
 			jsx: {
@@ -109,17 +106,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			},
 		},
 		plugins: [
-			// DevTools only loaded during `vite dev` (command === 'serve'), never during builds
-			...(command === "serve"
-				? await (async () => {
-						try {
-							const { DevTools } = await import("@vitejs/devtools");
-							return await DevTools();
-						} catch {
-							return [];
-						}
-					})()
-				: []),
 			markdownBundlePlugin(),
 			...(!process.env.STORYBOOK_BUILD
 				? [
