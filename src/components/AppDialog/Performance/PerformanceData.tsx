@@ -65,7 +65,6 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		YAxis,
 		CartesianGrid,
 		Tooltip,
-		Legend,
 		ReferenceLine,
 		Label,
 	} = recharts;
@@ -117,7 +116,7 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 						const originalValue = normalizedPoint[m] as number;
 						normalizedPoint[`${m}_original`] = originalValue;
 						// Ensure a minimum visual thickness for 0 or near-0 values
-						normalizedPoint[m] = Math.max(originalValue, 10);
+						normalizedPoint[m] = Math.max(originalValue, 80);
 					}
 				});
 
@@ -144,25 +143,25 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 		lastVersion = point.appVersion;
 	});
 
-	const displayOrder = ["TTFB", "CLS", "INP", "FCP", "LCP"];
+	const displayOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"];
 	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
 
-	const stackOrder = ["LCP", "FCP", "INP", "CLS", "TTFB"].filter((m) =>
+	const stackOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"].filter((m) =>
 		uniqueMetrics.includes(m)
 	);
 
-	const getMetricColor = (name: string, weight: 9 | 11 = 9) => {
+	const getMetricColor = (name: string, weight: 10 | 11 = 10) => {
 		const base = (() => {
 			switch (name) {
-				case "LCP":
-					return "iris";
+				case "TTFB":
+					return "cyan";
 				case "FCP":
 					return "purple";
-				case "INP":
-					return "crimson";
+				case "LCP":
+					return "red";
 				case "CLS":
 					return "orange";
-				case "TTFB":
+				case "INP":
 					return "amber";
 				default:
 					return "accent";
@@ -281,7 +280,11 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 					return (
 						<Card key={`stat-${metric}`} style={{ flex: "1 1 120px" }}>
 							<Flex direction="column" align="center">
-								<Text size="1" color="gray" weight="medium">
+								<Text
+									size="1"
+									weight="bold"
+									style={{ color: getMetricColor(metric, 11) }}
+								>
 									{metric}
 								</Text>
 
@@ -415,29 +418,6 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 						}}
 					/>
 
-					<Legend
-						content={() => (
-							<Flex gap="4" justify="center" mt="2" wrap="wrap">
-								{activeMetrics.map((metric) => (
-									<Flex key={metric} align="center" gap="2">
-										<div
-											style={{
-												width: "12px",
-												height: "12px",
-												backgroundColor: getMetricColor(metric, 11),
-												borderRadius: "2px",
-											}}
-										/>
-
-										<Text size="1" weight="medium" color="gray">
-											{metric}
-										</Text>
-									</Flex>
-								))}
-							</Flex>
-						)}
-					/>
-
 					{stackOrder.map((metric) => (
 						<Area
 							key={metric}
@@ -445,7 +425,7 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 							dataKey={metric}
 							stackId="1"
 							stroke={getMetricColor(metric, 11)}
-							fill={getMetricColor(metric, 9)}
+							fill={getMetricColor(metric, 10)}
 							fillOpacity={0.9}
 							strokeWidth={2}
 							connectNulls
