@@ -57,6 +57,7 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 	data,
 	recharts,
 }) => {
+	const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
 	const {
 		ResponsiveContainer,
 		AreaChart,
@@ -102,6 +103,12 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 			}
 
 			dateMap[item.timestamp][item.metric_name] = item.average_value;
+			if (item.p50 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p50`] = item.p50;
+			if (item.p75 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p75`] = item.p75;
+			if (item.p90 !== undefined)
+				dateMap[item.timestamp][`${item.metric_name}_p90`] = item.p90;
 			metrics.add(item.metric_name);
 		});
 
@@ -115,9 +122,16 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 					} else if (normalizedPoint[m] !== null) {
 						const originalValue = normalizedPoint[m] as number;
 						normalizedPoint[`${m}_original`] = originalValue;
-						// Ensure a minimum visual thickness for 0 or near-0 values
+						// Ensure a minimum visual thickness for 0 or near-0 values for aggregate chart
 						normalizedPoint[m] = Math.max(originalValue, 80);
 					}
+
+					// Also ensure percentiles are present or null
+					[`${m}_p50`, `${m}_p75`, `${m}_p90`].forEach((pKey) => {
+						if (normalizedPoint[pKey] === undefined) {
+							normalizedPoint[pKey] = null as unknown as number;
+						}
+					});
 				});
 
 				return normalizedPoint;
@@ -276,9 +290,31 @@ const PerformanceChart: FC<{ data: PerformanceMetric[]; recharts: typeof import(
 					const val = getLatestValue(metric);
 					const color = getStatusColor(metric, val ?? undefined);
 					const trend = getMetricTrend(metric);
+					const isSelected = selectedMetric === metric;
 
 					return (
-						<Card key={`stat-${metric}`} style={{ flex: "1 1 120px" }}>
+						<Card
+							key={`stat-${metric}`}
+							style={{
+								flex: "1 1 120px",
+								cursor: "pointer",
+								transition: "all 0.2s ease-in-out",
+								border: isSelected
+									? `2px solid ${getMetricColor(metric, 11)}`
+									: "2px solid transparent",
+								backgroundColor: isSelected ? "var(--gray-3)" : undefined,
+							}}
+							onClick={() => setSelectedMetric(isSelected ? null : metric)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									setSelectedMetric(isSelected ? null : metric);
+								}
+							}}
+							role="button"
+							aria-pressed={isSelected}
+							tabIndex={0}
+						>
 							<Flex direction="column" align="center">
 								<Text
 									size="1"

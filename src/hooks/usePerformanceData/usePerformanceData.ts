@@ -25,6 +25,12 @@ export type PerformanceMetric = {
 	timestamp: number;
 	/** The name of the performance metric (e.g., `LCP`, `FCP`, `INP`, `TBT`). */
 	metric_name: string;
+	/** The 50th percentile (p50) value of the metric. */
+	p50?: number;
+	/** The 75th percentile (p75) value of the metric. */
+	p75?: number;
+	/** The 90th percentile (p90) value of the metric. */
+	p90?: number;
 	/** The 75th percentile (p75) value of the metric for this time bucket. */
 	average_value: number;
 	/** The application version associated with this metric. */

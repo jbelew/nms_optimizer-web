@@ -7,9 +7,9 @@
 - [x] Task: Conductor - User Manual Verification 'Backend Data Enhancement' (Protocol in workflow.md) [a0d7d92]
 
 ## Phase 2: Frontend State & Card UI (`nms_optimizer-web`)
-- [ ] Task: Update `PerformanceMetric` type and data transformation in `src/hooks/usePerformanceData/usePerformanceData.ts` and `src/components/AppDialog/Performance/PerformanceData.tsx`.
-- [ ] Task: Implement selection state (Zustand or local state) in `PerformanceData` to track the active metric.
-- [ ] Task: Enhance `Card` components in `PerformanceData.tsx` to be interactive and display the selected state visually.
+- [x] Task: Update `PerformanceMetric` type and data transformation in `src/hooks/usePerformanceData/usePerformanceData.ts` and `src/components/AppDialog/Performance/PerformanceData.tsx`.
+- [x] Task: Implement selection state (Zustand or local state) in `PerformanceData` to track the active metric.
+- [x] Task: Enhance `Card` components in `PerformanceData.tsx` to be interactive and display the selected state visually.
 - [ ] Task: Add unit tests for the updated state logic and Card interactions.
 - [ ] Task: Conductor - User Manual Verification 'Frontend State & Card UI' (Protocol in workflow.md)
 
