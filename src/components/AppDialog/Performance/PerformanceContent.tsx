@@ -65,7 +65,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ onClose, isOpe
 				<Suspense
 					fallback={
 						<Flex direction="column" gap="4">
-							<Skeleton height="434px" width="100%" />
+							<Skeleton height="414px" width="100%" />
 						</Flex>
 					}
 				>

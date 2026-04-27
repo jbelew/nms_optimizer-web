@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Flex, Text } from "@radix-ui/themes";
 
 import { ChartDataPoint } from "./PerformanceTypes";
-import { getMetricColor, METRIC_THRESHOLDS } from "./PerformanceUtils";
+import { getFormatter, getMetricColor, METRIC_THRESHOLDS } from "./PerformanceUtils";
 
 /**
  * Properties for the MetricDetailChart component.
@@ -80,17 +80,15 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	const rangeKey = `${metric}_range`;
 	const threshold = METRIC_THRESHOLDS[metric] || 10000;
 
-	// Process data to clamp the p90 visual but keep original for tooltip
+	// Process data to clamp the visual range but keep original for tooltip
 	const clampedData = chartData.map((p) => {
 		const range = p[rangeKey] as [number, number] | undefined;
 		const p75 = p[p75Key] as number | undefined;
 
 		return {
 			...p,
-			[`${rangeKey}_range_clamped`]: range
-				? [range[0], Math.min(range[1], threshold)]
-				: undefined,
-			[`${p75Key}_p75_clamped`]: p75 !== undefined ? Math.min(p75, threshold) : undefined,
+			range_clamped: range ? [range[0], Math.min(range[1], threshold)] : undefined,
+			p75_clamped: p75 !== undefined ? Math.min(p75, threshold) : undefined,
 		};
 	});
 
@@ -134,7 +132,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 					tickFormatter={(val: number) => {
 						const dateObj = new Date(val);
 
-						return new Intl.DateTimeFormat(locale, {
+						return getFormatter(locale, {
 							month: "numeric",
 							day: "numeric",
 						}).format(dateObj);
@@ -150,6 +148,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 				/>
 
 				<Tooltip
+					isAnimationActive={false}
 					content={({ active, payload, label: _label }) => {
 						if (active && payload && payload.length) {
 							const item = payload[0].payload as ChartDataPoint;
@@ -216,7 +215,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 				/>
 
 				<Bar
-					dataKey={`${rangeKey}_range_clamped`}
+					dataKey="range_clamped"
 					fill={color}
 					fillOpacity={0.2}
 					radius={[2, 2, 2, 2]}
@@ -225,7 +224,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 
 				<Line
 					type="monotone"
-					dataKey={`${p75Key}_p75_clamped`}
+					dataKey="p75_clamped"
 					stroke={color}
 					strokeWidth={3}
 					dot={false}

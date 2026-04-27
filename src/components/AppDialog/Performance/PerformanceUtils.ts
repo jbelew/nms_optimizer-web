@@ -175,3 +175,37 @@ export const LIGHTHOUSE_CONFIG: Record<string, { weight: number; p90: number; p5
 	FCP: { weight: 0.1, p90: 1800, p50: 3000 },
 	TTFB: { weight: 0.05, p90: 800, p50: 1800 },
 };
+
+/**
+ * Cache for Intl.DateTimeFormat objects to avoid expensive constructor calls.
+ * @internal
+ */
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+/**
+ * Retrieves a memoized Intl.DateTimeFormat instance.
+ *
+ * @param {string} locale - The user locale.
+ * @param {Intl.DateTimeFormatOptions} options - Formatting options.
+ *
+ * @returns {Intl.DateTimeFormat} A cached or new formatter instance.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const formatter = getFormatter("en-US", { month: "numeric" });
+ * ```
+ */
+export const getFormatter = (
+	locale: string,
+	options: Intl.DateTimeFormatOptions
+): Intl.DateTimeFormat => {
+	const key = `${locale}-${JSON.stringify(options)}`;
+
+	if (!formatterCache.has(key)) {
+		formatterCache.set(key, new Intl.DateTimeFormat(locale, options));
+	}
+
+	return formatterCache.get(key)!;
+};

@@ -9,18 +9,33 @@ import { MetricDetailChart } from "./MetricDetailChart";
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	computeLogNormalScore,
+	getFormatter,
 	getMetricColor,
 	getStatusColor,
 	LIGHTHOUSE_CONFIG,
 } from "./PerformanceUtils";
 
 /**
- * Properties for the PerformanceChart component.
+ * Properties for the {@link PerformanceChart} component.
+ *
+ * @remarks
+ * This interface defines the data and library dependencies required to render
+ * the performance timeseries charts. It uses dynamic imports for `recharts`
+ * to support code-splitting.
+ *
+ * @see {@link PerformanceChart}
+ * @see {@link PerformanceMetric}
  */
 interface PerformanceChartProps {
-	/** Raw performance metric records from the API. */
+	/**
+	 * Raw performance metric records fetched from the API.
+	 * @see {@link PerformanceMetric}
+	 */
 	data: PerformanceMetric[];
-	/** The dynamic Recharts library module. */
+	/**
+	 * The dynamic Recharts library module.
+	 * Required because Recharts is loaded lazily to reduce initial bundle size.
+	 */
 	recharts: typeof import("recharts");
 }
 
@@ -28,13 +43,14 @@ interface PerformanceChartProps {
  * Main chart and card renderer for the performance dashboard.
  *
  * @remarks
- * This component manages the high-level dashboard state, including:
- * - Data transformation into timeseries format.
- * - Overall performance score calculation using Lighthouse logic.
- * - Interactive metric selection and view switching.
+ * This component manages the high-level dashboard state and orchestration:
+ * - Data transformation: Converts flat API records into timestamp-keyed timeseries.
+ * - Score Calculation: Computes a weighted overall performance score using Lighthouse logic.
+ * - Interaction: Handles metric selection, view switching, and trend analysis.
  *
- * It renders a row of summary cards followed by either an aggregate stacked
- * AreaChart or a detailed MetricDetailChart.
+ * It renders a responsive grid of summary cards for each metric, followed by either:
+ * 1. An aggregate stacked `AreaChart` (when no metric is selected).
+ * 2. A detailed `MetricDetailChart` for the specific selected metric.
  *
  * @param {PerformanceChartProps} props - Component properties.
  *
@@ -43,6 +59,7 @@ interface PerformanceChartProps {
  * @see {@link MetricDetailChart}
  * @see {@link computeLogNormalScore}
  * @see {@link PerformanceMetric}
+ * @see {@link LIGHTHOUSE_CONFIG}
  *
  * @component
  *
@@ -50,8 +67,13 @@ interface PerformanceChartProps {
  *
  * @example
  * ```tsx
- * // Renders the performance dashboard with raw data
- * <PerformanceChart data={apiData} recharts={recharts} />
+ * import * as recharts from 'recharts';
+ *
+ * // Renders the dashboard with raw data and Recharts dependency
+ * <PerformanceChart
+ *   data={apiPerformanceData}
+ *   recharts={recharts}
+ * />
  * ```
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) => {
@@ -74,28 +96,49 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	/**
 	 * Transforms flat API records into a timestamp-keyed structure for Recharts.
 	 *
+	 * @remarks
+	 * This transformation performs several key operations:
+	 * 1. Groups individual metric records by their `timestamp`.
+	 * 2. Formats dates and hours according to the current `locale`.
+	 * 3. Extracts unique metric names (excluding 'TBT').
+	 * 4. Normalizes data points to ensure all metrics have at least an `undefined` value
+	 *    to prevent rendering gaps.
+	 * 5. Applies a minimum visual height (80ms) for stacked aggregate charts to ensure
+	 *    visibility of small values while preserving original values for tooltips.
+	 *
+	 * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
+	 *
+	 * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} The transformed
+	 * timeseries data and the list of active metrics.
+	 *
+	 * @see {@link ChartDataPoint}
+	 * @see {@link getFormatter}
+	 *
 	 * @example
 	 * ```ts
-	 * // Returns chartData and uniqueMetrics set
-	 * const { chartData } = transformData(rawMetrics);
+	 * const { chartData, uniqueMetrics } = transformData(apiMetrics);
+	 * // returns { chartData: [...], uniqueMetrics: ["FCP", "LCP", ...] }
 	 * ```
 	 */
 	const transformData = (raw: PerformanceMetric[]) => {
 		const dateMap: Record<number, ChartDataPoint> = {};
 		const metrics = new Set<string>();
 
+		const dateFormatter = getFormatter(locale, {
+			month: "numeric",
+			day: "numeric",
+		});
+		const hourFormatter = getFormatter(locale, {
+			hour: "numeric",
+			minute: "numeric",
+		});
+
 		raw.forEach((item) => {
 			if (item.metric_name === "TBT") return;
 
 			const dateObj = new Date(item.timestamp);
-			const formattedDate = new Intl.DateTimeFormat(locale, {
-				month: "numeric",
-				day: "numeric",
-			}).format(dateObj);
-			const formattedHour = new Intl.DateTimeFormat(locale, {
-				hour: "numeric",
-				minute: "numeric",
-			}).format(dateObj);
+			const formattedDate = dateFormatter.format(dateObj);
+			const formattedHour = hourFormatter.format(dateObj);
 
 			if (!dateMap[item.timestamp]) {
 				dateMap[item.timestamp] = {
@@ -167,10 +210,19 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	/**
 	 * Retrieves the most recent value for a metric from the timeseries.
 	 *
+	 * @remarks
+	 * Iterates backwards through the `chartData` to find the latest non-null value
+	 * for the specified metric. It prioritizes the `_original` value if available
+	 * (which avoids the visual normalization used for stacked charts).
+	 *
+	 * @param {string} metric - The name of the metric (e.g., "LCP", "FCP").
+	 *
+	 * @returns {number | null} The latest numeric value or null if not found.
+	 *
 	 * @example
 	 * ```ts
-	 * // returns 1250
-	 * const val = getLatestValue("LCP");
+	 * const latestLCP = getLatestValue("LCP");
+	 * // returns 1250 (in ms)
 	 * ```
 	 */
 	const getLatestValue = (metric: string): number | null => {
@@ -189,10 +241,20 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	/**
 	 * Determines the trend direction between the two most recent data points.
 	 *
+	 * @remarks
+	 * Compares the latest value with the previous one in the timeseries.
+	 * - `improvement`: The value has decreased (better performance).
+	 * - `regression`: The value has increased (worse performance).
+	 * - `neutral`: No change or insufficient data.
+	 *
+	 * @param {string} metric - The name of the metric to analyze.
+	 *
+	 * @returns {"improvement" | "regression" | "neutral"} The trend status.
+	 *
 	 * @example
 	 * ```ts
-	 * // returns "improvement"
 	 * const trend = getMetricTrend("FCP");
+	 * // returns "improvement"
 	 * ```
 	 */
 	const getMetricTrend = (metric: string): "improvement" | "regression" | "neutral" => {
@@ -220,10 +282,22 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	/**
 	 * Computes the weighted overall performance score.
 	 *
+	 * @remarks
+	 * Calculates the score by:
+	 * 1. Fetching the latest value for each active metric.
+	 * 2. Computing the log-normal score for each value using `computeLogNormalScore`.
+	 * 3. Applying weights defined in `LIGHTHOUSE_CONFIG`.
+	 * 4. Returning a weighted average (0-100).
+	 *
+	 * @returns {number | null} The overall score or null if no metrics are available.
+	 *
+	 * @see {@link computeLogNormalScore}
+	 * @see {@link LIGHTHOUSE_CONFIG}
+	 *
 	 * @example
 	 * ```ts
-	 * // returns 92
 	 * const score = calculateOverallScore();
+	 * // returns 92
 	 * ```
 	 */
 	const calculateOverallScore = () => {
@@ -248,7 +322,19 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 
 	/**
 	 * Determines the overall trend by averaging individual metric trends.
+	 *
+	 * @remarks
+	 * This heuristic counts the number of improvements vs regressions across all
+	 * active metrics. The majority trend is returned. If they are equal or
+	 * zero, it returns `neutral`.
+	 *
+	 * @returns {"improvement" | "regression" | "neutral"} The overall aggregate trend.
+	 *
 	 * @example
+	 * ```ts
+	 * const status = getOverallTrend();
+	 * // returns "improvement"
+	 * ```
 	 */
 	const getOverallTrend = (): "improvement" | "regression" | "neutral" => {
 		let improvementCount = 0;
@@ -288,6 +374,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 						(e.key === "Enter" || e.key === " ") && setSelectedMetric(null)
 					}
 					role="button"
+					aria-label="View overall performance summary"
 					aria-pressed={selectedMetric === null}
 					tabIndex={0}
 				>
@@ -348,6 +435,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 								setSelectedMetric(isSelected ? null : metric)
 							}
 							role="button"
+							aria-label={`View detailed ${metric} chart`}
 							aria-pressed={isSelected}
 							tabIndex={0}
 						>
