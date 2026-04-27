@@ -1,3 +1,10 @@
+## [6.36.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.1...v6.36.2) (2026-04-27)
+
+
+### Performance Improvements
+
+* optimize initial load by refactoring index.html resource preloads and removing Vite DevTools dependency ([87fc359](https://github.com/jbelew/nms_optimizer-web/commit/87fc359493cbc953d7ce4bd60c36d2668a80cb01))
+
 ## [6.36.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.0...v6.36.1) (2026-04-26)
 
 
