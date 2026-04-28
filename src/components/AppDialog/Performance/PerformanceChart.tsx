@@ -3,6 +3,7 @@ import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
 import { MetricDetailChart } from "./MetricDetailChart";
@@ -93,6 +94,9 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	const { i18n } = useTranslation();
 	const locale = i18n.language;
 
+	const isDesktop = useBreakpoint("640px");
+	const maxPoints = isDesktop ? 48 : 24;
+
 	/**
 	 * Transforms flat API records into a timestamp-keyed structure for Recharts.
 	 *
@@ -164,7 +168,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 			metrics.add(item.metric_name);
 		});
 
-		const chartData = Object.values(dateMap)
+		const fullChartData = Object.values(dateMap)
 			.sort((a, b) => a.timestamp - b.timestamp)
 			.map((point) => {
 				const normalizedPoint = { ...point };
@@ -185,6 +189,23 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 
 				return normalizedPoint;
 			});
+
+		// Sub-sample if we have too many points to maintain readability and performance
+		let chartData = fullChartData;
+
+		if (fullChartData.length > maxPoints) {
+			const sampledData: ChartDataPoint[] = [];
+			const step = (fullChartData.length - 1) / (maxPoints - 1);
+
+			for (let i = 0; i < maxPoints; i++) {
+				// Rounding ensures we pick a point as close as possible to the step interval,
+				// and ensures the first (i=0) and last (i=maxPoints-1) points are always included.
+				const index = Math.round(i * step);
+				sampledData.push(fullChartData[index]);
+			}
+
+			chartData = sampledData;
+		}
 
 		return { chartData, uniqueMetrics: Array.from(metrics) };
 	};
@@ -587,7 +608,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 						{stackOrder.map((metric) => (
 							<Area
 								key={metric}
-								type="natural"
+								type="basis"
 								dataKey={metric}
 								stackId="1"
 								stroke={getMetricColor(metric, 11)}

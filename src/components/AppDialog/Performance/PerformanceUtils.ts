@@ -16,6 +16,17 @@ export const METRIC_THRESHOLDS: Record<string, number> = {
 };
 
 /**
+ * Maximum number of data points to display in the performance charts.
+ *
+ * @remarks
+ * If the number of points exceeds this value, they will be sub-sampled
+ * to maintain chart readability and performance.
+ *
+ * @category Constants
+ */
+export const MAX_CHART_POINTS = 48;
+
+/**
  * Returns a consistent color for a given performance metric.
  *
  * @remarks
