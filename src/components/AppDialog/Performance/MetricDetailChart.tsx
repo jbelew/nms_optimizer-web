@@ -122,8 +122,8 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 					<ReferenceLine
 						key={change.timestamp}
 						x={change.timestamp}
-						stroke="var(--gray-8)"
-						strokeDasharray="3 3"
+						stroke="var(--gray-7)"
+						strokeDasharray="2 4"
 						strokeWidth={1}
 					>
 						<Label
@@ -133,10 +133,10 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 									: `v${change.version}`
 							}
 							position="insideTopLeft"
-							fill="var(--gray-11)"
-							fontSize={11}
-							fontWeight={500}
-							offset={5}
+							fill="var(--gray-10)"
+							fontSize={10}
+							fontWeight={600}
+							offset={4}
 						/>
 					</ReferenceLine>
 				))}

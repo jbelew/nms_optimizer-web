@@ -230,9 +230,18 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 
 	const versionChanges: { timestamp: number; version: string }[] = [];
 	let lastVersion: string | null = null;
-	chartData.forEach((point) => {
+	let lastAddedIndex = -100;
+
+	chartData.forEach((point, i) => {
 		if (lastVersion && point.appVersion !== lastVersion) {
-			versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+			// Ensure a minimum visual gap between version markers (approx 15% of max points)
+			// to prevent overlapping labels when deployments are frequent.
+			const minGap = Math.max(4, Math.floor(maxPoints * 0.15));
+
+			if (i - lastAddedIndex >= minGap) {
+				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+				lastAddedIndex = i;
+			}
 		}
 
 		lastVersion = point.appVersion;
@@ -536,8 +545,8 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 							<ReferenceLine
 								key={change.timestamp}
 								x={change.timestamp}
-								stroke="var(--gray-8)"
-								strokeDasharray="3 3"
+								stroke="var(--gray-7)"
+								strokeDasharray="2 4"
 								strokeWidth={1}
 							>
 								<Label
@@ -547,10 +556,10 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 											: `v${change.version}`
 									}
 									position="insideTopLeft"
-									fill="var(--gray-11)"
-									fontSize={11}
-									fontWeight={500}
-									offset={5}
+									fill="var(--gray-10)"
+									fontSize={10}
+									fontWeight={600}
+									offset={4}
 								/>
 							</ReferenceLine>
 						))}
