@@ -65,7 +65,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ onClose, isOpe
 				<Suspense
 					fallback={
 						<Flex direction="column" gap="4">
-							<Skeleton height="438px" width="100%" />
+							<Skeleton height="446px" width="100%" />
 						</Flex>
 					}
 				>
@@ -73,7 +73,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ onClose, isOpe
 				</Suspense>
 			</ErrorBoundary>
 
-			<Flex gap="2" mt="3" mb="3" justify="end">
+			<Flex gap="2" mt="2" mb="3" mr="1" justify="end">
 				<DialogClose asChild>
 					<Button variant="soft" onClick={onClose}>
 						{t("dialogs.performance.closeButton", "Close")}

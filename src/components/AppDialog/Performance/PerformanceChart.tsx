@@ -355,7 +355,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 	const overallTrend = getOverallTrend();
 
 	return (
-		<Flex direction="column" gap="4">
+		<Flex mt="1" mb="1" mr="1" ml="1" direction="column" gap="4">
 			<Flex gap="3" wrap="wrap" justify="between">
 				{/* Overall Summary Toggle Card */}
 				<Card
@@ -587,7 +587,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 						{stackOrder.map((metric) => (
 							<Area
 								key={metric}
-								type="monotone"
+								type="natural"
 								dataKey={metric}
 								stackId="1"
 								stroke={getMetricColor(metric, 11)}

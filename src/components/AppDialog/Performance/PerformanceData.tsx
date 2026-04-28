@@ -43,7 +43,7 @@ const LazyChartLoader: FC<LazyChartLoaderProps> = ({ data }) => {
 	}, []);
 
 	if (!recharts) {
-		return <Skeleton height="438px" width="100%" />;
+		return <Skeleton height="446px" width="100%" />;
 	}
 
 	return <PerformanceChart data={data} recharts={recharts} />;
@@ -95,7 +95,7 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 
 	return (
 		<Flex direction="column" gap="4" style={{ overflow: "hidden" }}>
-			<Suspense fallback={<Skeleton height="438px" width="100%" />}>
+			<Suspense fallback={<Skeleton height="446px" width="100%" />}>
 				<LazyChartLoader data={data} />
 			</Suspense>
 		</Flex>
