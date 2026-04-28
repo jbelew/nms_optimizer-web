@@ -63,7 +63,7 @@ seo_report/*
 .lighthouseci/
 
 # Cloudflare API scripts
-# scripts/cloudflare/*
+scripts/cloudflare/*
 
 # Dolt database files (added by bd init)
 .dolt/

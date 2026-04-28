@@ -6,9 +6,28 @@
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
 # Entry Points: Aggressively prevent caching to avoid vite:preloadError on redeploys.
+# This includes every per-locale PWA shell, since they reference the same
+# build-hashed JS/CSS bundles and would otherwise serve stale module URLs after a deploy.
+
 /
   Cache-Control: no-cache
 /index.html
+  Cache-Control: no-cache
+/es/
+  Cache-Control: no-cache
+/es/index.html
+  Cache-Control: no-cache
+/fr/
+  Cache-Control: no-cache
+/fr/index.html
+  Cache-Control: no-cache
+/de/
+  Cache-Control: no-cache
+/de/index.html
+  Cache-Control: no-cache
+/pt/
+  Cache-Control: no-cache
+/pt/index.html
   Cache-Control: no-cache
 
 # Static Assets (Root)

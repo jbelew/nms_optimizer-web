@@ -6,6 +6,10 @@
   "exclude": [
     "/",
     "/index.html",
+    "/es/index.html",
+    "/fr/index.html",
+    "/de/index.html",
+    "/pt/index.html",
     "/build/*",
     "/assets/*",
     "/*.js",
