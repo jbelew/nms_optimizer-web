@@ -7,9 +7,9 @@
 
 # Entry Points: Aggressively prevent caching to avoid vite:preloadError on redeploys.
 /
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
 /index.html
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
 
 # Static Assets (Root)
 /favicon.ico

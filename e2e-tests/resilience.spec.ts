@@ -25,7 +25,7 @@ test.describe("Application Resilience & Recovery", () => {
 
 			// 2. Setup marker detection trap
 			await page.addInitScript((m) => {
-				if (window.name.includes(m)) {
+				if (sessionStorage.getItem(m)) {
 					(window as any).__MARKER_DETECTED__ = true;
 				}
 			}, MARKER);
@@ -33,15 +33,17 @@ test.describe("Application Resilience & Recovery", () => {
 			// 3. Manually dispatch vite:preloadError to simulate a dynamic import failure
 			// This is build-agnostic and robust in CI.
 			await Promise.all([
-				page.waitForNavigation({ waitUntil: 'commit' }),
+				page.waitForNavigation({ waitUntil: "commit" }),
 				page.evaluate(() => {
 					const event = new Event("vite:preloadError");
 					window.dispatchEvent(event);
-				})
+				}),
 			]);
-			
+
 			// 4. Wait for our trap to trigger on the reloaded page
-			await page.waitForFunction(() => (window as any).__MARKER_DETECTED__ === true, { timeout: 15000 });
+			await page.waitForFunction(() => (window as any).__MARKER_DETECTED__ === true, {
+				timeout: 15000,
+			});
 
 			expect(await page.evaluate(() => (window as any).__MARKER_DETECTED__)).toBe(true);
 		});
@@ -52,7 +54,9 @@ test.describe("Application Resilience & Recovery", () => {
 			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
 
 			// 2. Set marker manually to simulate a previous recovery reload
-			await page.evaluate((m) => { window.name = m; }, MARKER);
+			await page.evaluate((m) => {
+				sessionStorage.setItem(m, "1");
+			}, MARKER);
 
 			// 3. Dispatch vite:preloadError - should redirect to 500.html because marker is present
 			await Promise.all([
@@ -60,24 +64,24 @@ test.describe("Application Resilience & Recovery", () => {
 				page.evaluate(() => {
 					const event = new Event("vite:preloadError");
 					window.dispatchEvent(event);
-				})
+				}),
 			]);
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible();
 
 			// 4. Verify that the marker was cleared by index.html before redirect
-			const windowName = await page.evaluate(() => window.name);
-			expect(windowName).not.toContain(MARKER);
+			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
+			expect(markerValue).toBeNull();
 		});
 
 		test("reset button should clear caches and reload to root", async ({ page }) => {
 			await page.goto("/500.html");
 			const refreshButton = page.locator("button", { hasText: "Hard Reset & Refresh" });
 			await expect(refreshButton).toBeVisible();
-			
+
 			await refreshButton.click();
-			
+
 			// 500.html redirects to /?reload=<timestamp>
 			await page.waitForURL(/\/\?reload=\d+/, { timeout: 15000 });
 		});
@@ -93,16 +97,16 @@ test.describe("Application Resilience & Recovery", () => {
 
 			// Verify app loaded normally - no redirect to 500.html
 			expect(page.url()).not.toContain("500.html");
-			
-			// Verify window.name is still empty
-			const windowName = await page.evaluate(() => window.name);
-			expect(windowName).not.toContain(MARKER);
+
+			// Verify marker is still empty
+			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
+			expect(markerValue).toBeNull();
 		});
 	});
 
 	test.describe("Network Throttling", () => {
 		test("should load successfully on a slow 3G connection", async ({ page, browserName }) => {
-			test.skip(browserName !== 'chromium', 'CDP session is only available in Chromium');
+			test.skip(browserName !== "chromium", "CDP session is only available in Chromium");
 
 			const client = await page.context().newCDPSession(page);
 			await client.send("Network.emulateNetworkConditions", {
@@ -125,11 +129,9 @@ test.describe("Application Resilience & Recovery", () => {
 	});
 
 	test.describe("Successful boot cleanup", () => {
-		test("should clear MARKER from window.name after successful boot", async ({
-			page,
-		}) => {
+		test("should clear MARKER from sessionStorage after successful boot", async ({ page }) => {
 			await page.addInitScript((marker) => {
-				window.name = marker;
+				sessionStorage.setItem(marker, "1");
 			}, MARKER);
 
 			await page.goto("/");
@@ -139,8 +141,8 @@ test.describe("Application Resilience & Recovery", () => {
 				{ timeout: 30000 }
 			);
 
-			const windowName = await page.evaluate(() => window.name);
-			expect(windowName).not.toContain(MARKER);
+			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
+			expect(markerValue).toBeNull();
 		});
 	});
 });

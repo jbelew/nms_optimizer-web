@@ -14,30 +14,47 @@
 	                       https://github.com/jbelew/nms_optimizer-web
 --><head>
 		<meta charset="UTF-8" />
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Expires" content="0" />
 		<script>
 			(function () {
 				var MARKER = "__preload_recovery__";
 
+				// Clear recovery marker on every successful page load.
+				// If a previous reload recovered from a stale chunk, this prevents
+				// the marker from persisting and causing a false-positive skip on
+				// the next deploy.
+				try {
+					if (sessionStorage.getItem(MARKER)) {
+						sessionStorage.removeItem(MARKER);
+					}
+				} catch (e) {}
+
 				// Handle stale chunk loading after deployment.
-				// One auto-reload attempt; if that fails, redirect to /500.html.
-				// Uses window.name (survives reloads, works in incognito/restricted browsers).
+				// One auto-reload attempt with cache-busting; if that fails,
+				// redirect to /500.html with error context.
 				window.addEventListener("vite:preloadError", function (event) {
 					event.preventDefault();
+					var payload = event.payload;
 
-					if (window.name.indexOf(MARKER) === -1) {
-						window.name += MARKER;
-						console.warn("Stale chunk detected. Reloading to fetch updated assets.");
-						location.reload();
-						return;
+					try {
+						if (!sessionStorage.getItem(MARKER)) {
+							sessionStorage.setItem(MARKER, "1");
+							// Cache-busting query param forces a fresh index.html from the CDN
+							window.location.replace(window.location.pathname + "?_cb=" + Date.now());
+							return;
+						}
+					} catch (e) {
+						// sessionStorage blocked (rare): fall through to error page
 					}
 
 					// Reload already attempted — redirect to dedicated error page
-					window.name = window.name.replace(MARKER, "");
-					console.error("Stale chunk reload failed. Redirecting to error page.");
-					window.location.replace("/500.html");
+					try {
+						sessionStorage.removeItem(MARKER);
+					} catch (e) {}
+					var errorUrl = "/500.html?error_type=stale_chunk";
+					if (payload && payload.message) {
+						errorUrl += "&error_cause=" + encodeURIComponent(payload.message);
+					}
+					window.location.replace(errorUrl);
 				});
 				// Preload translations based on language in path (matches i18next logic)
 				const supportedLngs = ["en", "es", "fr", "de", "pt"];
