@@ -2,7 +2,12 @@
 import "./AppHeader.scss";
 
 import React, { useEffect, useTransition } from "react";
-import { CounterClockwiseClockIcon, EyeOpenIcon, PieChartIcon } from "@radix-ui/react-icons";
+import {
+	CounterClockwiseClockIcon,
+	EyeOpenIcon,
+	PieChartIcon,
+	RocketIcon,
+} from "@radix-ui/react-icons";
 import { Box, Flex, Heading, IconButton, Popover, Separator, Switch } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -123,6 +128,23 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						</IconButton>
 					</ConditionalTooltip>
+					{isLg && (
+						<ConditionalTooltip label="I'm a nerd!">
+							<IconButton
+								variant="soft"
+								aria-label="Performance Metrics"
+								onMouseEnter={() => {
+									// Prefetch performance chart logic
+									void import("../AppDialog/Performance/PerformanceChart");
+								}}
+								onClick={() => {
+									openDialog("performance");
+								}}
+							>
+								<RocketIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							</IconButton>
+						</ConditionalTooltip>
+					)}
 
 					{isLg && (
 						<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
