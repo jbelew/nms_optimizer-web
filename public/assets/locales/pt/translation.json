@@ -16,7 +16,7 @@
 			"description": "A partir da versão 6.34, as Corvetas <strong>ainda</strong> apresentam problemas de layout conhecidos! Se você criar um layout, recomendamos fortemente usar o recurso <strong>Salvar Construção</strong> para manter um backup do seu trabalho."
 		}
 	},
-	"appName": "Otimizador de Layout de Tecnologia de No Man's Sky",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Instruções",
 		"about": "Sobre",
@@ -701,14 +701,14 @@
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {
-			"home": "Início",
-			"instructions": "Instruções",
-			"about": "Sobre",
-			"changelog": "Novidades",
-			"userstats": "Estatísticas",
-			"translation": "Ajude a Traduir",
+			"home": "Calculadora de Layouts",
+			"instructions": "Como Usar",
+			"about": "Sobre os Algoritmos",
+			"changelog": "Últimas Atualizações",
+			"userstats": "Meta da Comunidade",
+			"translation": "Junte-se à Equipa de Tradução",
 			"privacy": "Política de Privacidade",
-			"performance": "Desempenho"
+			"performance": "Métricas de Desempenho"
 		},
 		"navDescriptions": {
 			"home": "Use a Calculadora de Layouts e Bônus de Adjacência",

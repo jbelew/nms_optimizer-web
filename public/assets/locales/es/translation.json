@@ -16,7 +16,7 @@
 			"description": "¡A partir de la versión 6.34, las Corbetas <strong>todavía</strong> tienen problemas de diseño conocidos! Si creas un diseño, te recomendamos encarecidamente usar la función <strong>Guardar Diseño</strong> para mantener una copia de seguridad de tu trabajo."
 		}
 	},
-	"appName": "Optimizador de Diseño de Tecnología No Man's Sky",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Instrucciones",
 		"about": "Acerca de",
@@ -701,12 +701,12 @@
 		"privacyDescription": "Lee sobre nuestro compromiso con tu privacidad. Usamos análisis anónimos para mejorar el optimizador sin rastrear nunca tu identidad personal o datos de guardado.",
 		"ogImageAlt": "Una captura de pantalla detallada de la aplicación NMS Optimizer que muestra una cuadrícula de tecnología de nave optimizada con altos bonos de adyacencia.",
 		"nav": {
-			"home": "Inicio",
-			"instructions": "Instrucciones",
-			"about": "Acerca de",
-			"changelog": "Registro de Cambios",
-			"userstats": "Estadísticas",
-			"translation": "Ayuda a Traducir",
+			"home": "Calculadora de Diseños",
+			"instructions": "Cómo Usar",
+			"about": "Sobre los Algoritmos",
+			"changelog": "Últimas Actualizaciones",
+			"userstats": "Meta de la Comunidad",
+			"translation": "Únete al Equipo de Traducción",
 			"privacy": "Política de Privacidad",
 			"performance": "Rendimiento"
 		},

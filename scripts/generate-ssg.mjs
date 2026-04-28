@@ -142,6 +142,7 @@ function updateMetadata(document, metadata, t) {
 		{ selector: 'meta[name="description"]', content: pageDescription, name: "description" },
 		{ selector: 'meta[name="keywords"]', content: pageKeywords, name: "keywords" },
 		{ selector: 'meta[property="og:title"]', content: pageTitle, property: "og:title" },
+		{ selector: 'meta[property="og:site_name"]', content: appName, property: "og:site_name" },
 		{ selector: 'meta[property="og:description"]', content: pageDescription, property: "og:description" },
 		{ selector: 'meta[property="og:image:alt"]', content: ogImageAlt, property: "og:image:alt" },
 		{ selector: 'meta[name="twitter:title"]', content: pageTitle, name: "twitter:title" },

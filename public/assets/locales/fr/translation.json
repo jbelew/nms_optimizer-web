@@ -16,7 +16,7 @@
 			"description": "Depuis la version 6.34, les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder la construction</strong> pour conserver une sauvegarde de votre travail."
 		}
 	},
-	"appName": "Optimiseur de Disposition de Technologie No Man's Sky",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "À Propos",
@@ -701,14 +701,14 @@
 		"privacyDescription": "Découvrez notre engagement pour votre vie privée. Nous utilisons des analyses anonymes pour améliorer l'outil sans jamais suivre votre identité ou vos sauvegardes.",
 		"ogImageAlt": "Une capture d'écran détaillée de l'application NMS Optimizer montrant une grille de vaisseau optimisée avec des bonus d'adjacence élevés.",
 		"nav": {
-			"home": "Accueil",
-			"instructions": "Instructions",
-			"about": "À Propos",
-			"changelog": "Quoi de Neuf",
-			"userstats": "Statistiques",
-			"translation": "Aidez à Traduire",
+			"home": "Calculateur de Disposition",
+			"instructions": "Comment Utiliser",
+			"about": "À Propos des Algorithmes",
+			"changelog": "Mises à Jour & Nouveautés",
+			"userstats": "Méta de la Communauté",
+			"translation": "Rejoindre l'Équipe de Traduction",
 			"privacy": "Politique de Confidentialité",
-			"performance": "Performance"
+			"performance": "Mesures de Performance"
 		},
 		"navDescriptions": {
 			"home": "Utilisez le calculateur de layouts et de bonus d'adjacence",

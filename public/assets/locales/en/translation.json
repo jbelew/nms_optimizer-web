@@ -25,7 +25,7 @@
 			"description": "As of version 6.34, Corvettes <strong>still</strong> have known layout issues! If you create a layout, we highly recommend using the <strong>Save Build</strong> feature to keep a backup of your work."
 		}
 	},
-	"appName": "No Man's Sky Technology Layout Optimizer",
+	"appName": "NMS Optimizer",
 	"mainApp": {
 		"viewingSharedBuild": "You are viewing a <strong>Shared Build</strong>. This layout is read-only."
 	},
@@ -721,14 +721,14 @@
 		"performanceDescription": "Real-time performance metrics and Core Web Vitals for the NMS Optimizer application.",
 		"ogImageAlt": "A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
 		"nav": {
-			"home": "Home",
-			"instructions": "Instructions",
-			"about": "About",
-			"changelog": "Changelog",
-			"userstats": "User Statistics",
-			"translation": "Help Translate",
+			"home": "Tech Layout Calculator",
+			"instructions": "How to Use",
+			"about": "About the Algorithms",
+			"changelog": "Latest Updates & Features",
+			"userstats": "Community Tech Meta",
+			"translation": "Join the Translation Team",
 			"privacy": "Privacy Policy",
-			"performance": "Performance"
+			"performance": "App Performance Metrics"
 		},
 		"navDescriptions": {
 			"home": "Use the Tech Layout & Adjacency Bonus Calculator",

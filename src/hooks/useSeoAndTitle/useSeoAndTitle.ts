@@ -240,6 +240,7 @@ export const useSeoAndTitle = () => {
 		const ogImageUrl = `${baseUrl}/assets/img/screenshots/screenshot.png`;
 
 		// --- Social Media Tags ---
+		updateMetaPropertyTag("og:site_name", t("appName"));
 		updateMetaPropertyTag("og:title", pageTitle);
 		updateMetaPropertyTag("og:description", pageDescription);
 		updateMetaPropertyTag("og:image", ogImageUrl);
