@@ -1,3 +1,10 @@
+## [6.37.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.0...v6.37.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* implement data sub-sampling in performance charts and update line interpolation to basis ([cd7481a](https://github.com/jbelew/nms_optimizer-web/commit/cd7481a73ac43177ef113c7d33df9017b76e9aec))
+
 # [6.37.0](https://github.com/jbelew/nms_optimizer-web/compare/v6.36.2...v6.37.0) (2026-04-27)
 
 
