@@ -33,7 +33,7 @@ export const MAX_CHART_POINTS = 48;
  * Maps Core Web Vital metric names to Radix UI color tokens.
  *
  * @param {string} name - The name of the performance metric (e.g., `LCP`).
- * @param {10 | 11} [weight=10] - The Radix color weight (10 for fills, 11 for borders/text).
+ * @param {number | string} [weight=10] - The Radix color weight or alpha token (e.g., 11, "a3").
  *
  * @returns {string} A CSS variable reference to the Radix color.
  *
@@ -41,10 +41,10 @@ export const MAX_CHART_POINTS = 48;
  *
  * @example
  * ```ts
- * const color = getMetricColor("LCP", 11); // returns "var(--red-11)"
+ * const color = getMetricColor("LCP", "a3"); // returns "var(--red-a3)"
  * ```
  */
-export const getMetricColor = (name: string, weight: 10 | 11 = 10): string => {
+export const getMetricColor = (name: string, weight: number | string = 10): string => {
 	const base = (() => {
 		switch (name) {
 			case "TTFB":

@@ -2,7 +2,12 @@ import { FC } from "react";
 import { Flex, Text } from "@radix-ui/themes";
 
 import { ChartDataPoint } from "./PerformanceTypes";
-import { getFormatter, getMetricColor, METRIC_THRESHOLDS } from "./PerformanceUtils";
+import {
+	getFormatter,
+	getMetricColor,
+	LIGHTHOUSE_CONFIG,
+	METRIC_THRESHOLDS,
+} from "./PerformanceUtils";
 
 /**
  * Properties for the MetricDetailChart component.
@@ -72,8 +77,11 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 		CartesianGrid,
 		Tooltip,
 		ReferenceLine,
+		ReferenceArea,
 		Label,
 	} = recharts;
+
+	const config = LIGHTHOUSE_CONFIG[metric] || { p90: 2500, p50: 4000 };
 
 	const color = getMetricColor(metric, 11);
 	const p75Key = `${metric}_p75`;
@@ -96,6 +104,19 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 		<ResponsiveContainer width="100%" height={350}>
 			<ComposedChart data={clampedData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
 				<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
+
+				{/* Background Threshold Shading: Highlight the 'Good' zone using the metric's theme color */}
+				<ReferenceArea
+					y1={0}
+					y2={config.p90}
+					fill={getMetricColor(metric, "a4")}
+					stroke="none"
+				/>
+				<ReferenceLine
+					y={config.p90}
+					stroke={getMetricColor(metric, "a7")}
+					strokeWidth={1}
+				/>
 
 				{versionChanges.map((change) => (
 					<ReferenceLine
