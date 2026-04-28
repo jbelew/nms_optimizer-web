@@ -220,3 +220,39 @@ export const getFormatter = (
 
 	return formatterCache.get(key)!;
 };
+
+/**
+ * Calculates a Simple Moving Average (SMA) for a timeseries.
+ *
+ * @remarks
+ * This utility computes the average of the current point and the N-1 preceding points.
+ * If a window contains `undefined` values, it averages the remaining valid numeric points.
+ *
+ * @param {(number | undefined)[]} data - The sequence of numeric values.
+ * @param {number} period - The window size (e.g., 5).
+ *
+ * @returns {(number | undefined)[]} The smoothed timeseries.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const sma = calculateSMA([10, 20, 30, 40], 2); // returns [10, 15, 25, 35]
+ * ```
+ */
+export const calculateSMA = (
+	data: (number | undefined)[],
+	period: number
+): (number | undefined)[] => {
+	return data.map((_, index) => {
+		const start = Math.max(0, index - period + 1);
+		const window = data.slice(start, index + 1);
+		const validValues = window.filter((v): v is number => v !== undefined);
+
+		if (validValues.length === 0) return undefined;
+
+		const sum = validValues.reduce((acc, val) => acc + val, 0);
+
+		return sum / validValues.length;
+	});
+};

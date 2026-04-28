@@ -224,7 +224,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 
 				<Line
 					type="basis"
-					dataKey="p75_clamped"
+					dataKey={`${metric}_p75_sma`}
 					stroke={color}
 					strokeWidth={3}
 					dot={false}

@@ -9,6 +9,7 @@ import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData
 import { MetricDetailChart } from "./MetricDetailChart";
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
+	calculateSMA,
 	computeLogNormalScore,
 	getFormatter,
 	getMetricColor,
@@ -206,6 +207,21 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 
 			chartData = sampledData;
 		}
+
+		// Calculate 5-point Simple Moving Average (SMA) for all metrics
+		// This is done after sub-sampling so the SMA reflects the visual trend
+		metrics.forEach((m) => {
+			const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
+			const p75SmaValues = calculateSMA(p75Values, 5);
+
+			const mainValues = chartData.map((p) => p[`${m}_original`] as number | undefined);
+			const mainSmaValues = calculateSMA(mainValues, 5);
+
+			chartData.forEach((p, i) => {
+				p[`${m}_p75_sma`] = p75SmaValues[i];
+				p[`${m}_sma`] = mainSmaValues[i];
+			});
+		});
 
 		return { chartData, uniqueMetrics: Array.from(metrics) };
 	};
