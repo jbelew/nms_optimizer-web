@@ -1,3 +1,11 @@
+## [6.37.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.1...v6.37.2) (2026-04-29)
+
+
+### Performance Improvements
+
+* allow caching of manifest.json ([34dc6bd](https://github.com/jbelew/nms_optimizer-web/commit/34dc6bde146c3538c111ebb174212663c9d02b11))
+* optimize cloudflare caching by resolving header overlaps and bypassing functions for static content ([a51505a](https://github.com/jbelew/nms_optimizer-web/commit/a51505a07f5733f3a32e41851d445ed92aed98d9))
+
 ## [6.37.1](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.0...v6.37.1) (2026-04-28)
 
 
