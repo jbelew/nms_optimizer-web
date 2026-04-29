@@ -1,3 +1,10 @@
+## [6.37.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.5...v6.37.6) (2026-04-29)
+
+
+### Bug Fixes
+
+* **pwa:** disable navigation preload to resolve cancelled request error on 404 navigation ([4be7c63](https://github.com/jbelew/nms_optimizer-web/commit/4be7c639c26e7fd85736261c0ed7a0ff9c665d26))
+
 ## [6.37.5](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.4...v6.37.5) (2026-04-29)
 
 
