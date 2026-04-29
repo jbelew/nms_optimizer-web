@@ -63,6 +63,22 @@ async function verify() {
         }
     }
 
+    // 1.1 Check SSG sub-path no-cache (The "Fucking Hell" fix)
+    console.log('\n--- 1.1 SSG Sub-path No-Cache Check ---');
+    const aboutHeaders = getHeaders('/es/about/');
+
+    if (aboutHeaders) {
+        const cc = aboutHeaders['cache-control'] || '';
+
+        if (cc.includes('no-cache')) {
+            console.log('✓ /es/about/ - Correctly returning no-cache');
+        } else {
+            console.log('✗ /es/about/ - MISSING NO-CACHE HEADER');
+            console.log(`  Value: ${cc}`);
+            errors++;
+        }
+    }
+
     // 2. Check SSG Cache Status (Should be HIT, not DYNAMIC)
     console.log('\n--- 2. SSG Cache Status (Pages Function Bypass) ---');
 
