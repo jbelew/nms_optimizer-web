@@ -135,60 +135,12 @@ describe("functions/[[path]].js", () => {
 	});
 
 	describe("SPA fallback (probe → shell)", () => {
-		it("serves the root shell for /performance/", async () => {
-			const ctx = makeContext("https://nms-optimizer.app/performance/", {
-				nextResponse: new Response("404", { status: 404 }),
-				assetsFetch: (req) => {
-					expect(new URL(req.url).pathname).toBe("/index.html");
-
-					return new Response("<html lang=\"en\"></html>", { status: 200 });
-				},
+		it("returns 404 for unknown extensionless paths (Probe fail)", async () => {
+			const ctx = makeContext("https://nms-optimizer.app/not-a-real-page/", {
+				nextResponse: new Response("Not Found", { status: 404 }),
 			});
 			const res = await onRequest(ctx);
-			expect(res.status).toBe(200);
-			expect(res.headers.get("X-SPA-Fallback")).toBe("true");
-			expect(ctx.env.ASSETS.fetch).toHaveBeenCalledTimes(1);
-		});
-
-		it("serves the localized shell for /es/performance/", async () => {
-			const ctx = makeContext("https://nms-optimizer.app/es/performance/", {
-				nextResponse: new Response("404", { status: 404 }),
-				assetsFetch: (req) => {
-					expect(new URL(req.url).pathname).toBe("/es/index.html");
-
-					return new Response("<html lang=\"es\"></html>", { status: 200 });
-				},
-			});
-			const res = await onRequest(ctx);
-			expect(res.status).toBe(200);
-			expect(res.headers.get("X-SPA-Fallback")).toBe("true");
-			expect(await res.text()).toContain('lang="es"');
-		});
-
-		it("serves the localized shell for each supported locale", async () => {
-			for (const lang of ["fr", "de", "pt"]) {
-				const ctx = makeContext(`https://nms-optimizer.app/${lang}/performance/`, {
-					nextResponse: new Response("404", { status: 404 }),
-					assetsFetch: (req) => {
-						expect(new URL(req.url).pathname).toBe(`/${lang}/index.html`);
-
-						return new Response(`<html lang="${lang}"></html>`, { status: 200 });
-					},
-				});
-				const res = await onRequest(ctx);
-				expect(res.status).toBe(200);
-				expect(res.headers.get("X-SPA-Fallback")).toBe("true");
-			}
-		});
-
-		it("forces status 200 even if shell asset replies 308 (redirect leak guard)", async () => {
-			const ctx = makeContext("https://nms-optimizer.app/performance/", {
-				nextResponse: new Response("404", { status: 404 }),
-				assetsFetch: () =>
-					new Response(null, { status: 308, headers: { location: "/" } }),
-			});
-			const res = await onRequest(ctx);
-			expect(res.status).toBe(200);
+			expect(res.status).toBe(404); // Probe fails, next() was called, function returns 404 next response
 		});
 	});
 });

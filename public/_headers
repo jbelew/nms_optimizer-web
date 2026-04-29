@@ -44,9 +44,13 @@
   Cache-Control: public, max-age=604800, immutable
 /logo.svg
   Cache-Control: public, max-age=604800, immutable
+/.well-known/*
+  Cache-Control: public, max-age=604800, immutable
 
 # Error Pages: Cache for 1 day, purged automatically by Cloudflare on deploy.
 /404.html
+  Cache-Control: public, max-age=86400
+/500.html
   Cache-Control: public, max-age=86400
 /500.html
   Cache-Control: public, max-age=86400
@@ -82,7 +86,7 @@
 /assets/locales/*
   Cache-Control: public, max-age=60, stale-while-revalidate=300
 
-# Always fresh: version check and service worker.
+# Always fresh: version check and service worker (PWA core).
 /version.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js

@@ -24,7 +24,7 @@ const LOCALE_LANGS = SUPPORTED_LANGS.filter((l) => l !== "en");
  * known page AND has no `dist/{page}/index.html`, and that any page lacking
  * SSG output is listed here.
  */
-const SPA_ROUTES = new Set(["performance"]);
+const SPA_ROUTES = new Set([]);
 
 export async function onRequest(context) {
 	const { request, next } = context;
