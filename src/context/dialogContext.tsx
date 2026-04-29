@@ -8,7 +8,7 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/browser/envir
 import { DialogContext } from "../utils/system/dialogUtils";
 
 /** List of non-English language codes supported by the router. */
-const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
+const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
 
 /**
  * Provider component for managing the state and logic of routed dialogs.

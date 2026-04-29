@@ -160,9 +160,7 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 					{children || (variant === "page" ? <DefaultMessage /> : <InsetMessage />)}
 				</div>
 
-				<ErrorDisplay error={error} errorInfo={errorInfo}>
-					{t("errorDisplay.header")}
-				</ErrorDisplay>
+				<ErrorDisplay error={error} errorInfo={errorInfo} />
 
 				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
 					<Button

@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
 import ErrorContent from "./ErrorContent";
@@ -57,38 +57,22 @@ const renderWithDialog = (component: React.ReactElement) => {
 };
 
 describe("ErrorContent", () => {
-	const mockOnClose = vi.fn();
-
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
 	test("should render error title", () => {
-		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
+		renderWithDialog(<ErrorContent />);
 		expect(screen.getByText("errorContent.signalDisruption")).toBeInTheDocument();
 	});
 
 	test("should render error details text", () => {
-		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
+		renderWithDialog(<ErrorContent />);
 		expect(screen.getByText("errorContent.serverErrorDetails")).toBeInTheDocument();
 	});
 
-	test("should render close button with correct label", () => {
-		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
-		expect(screen.getByText("common.dismiss")).toBeInTheDocument();
-	});
-
-	test("should call onClose when close button is clicked", () => {
-		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
-		const closeButton = screen.getByRole("button", {
-			name: /common\.dismiss/i,
-		});
-		fireEvent.click(closeButton);
-		expect(mockOnClose).toHaveBeenCalledTimes(1);
-	});
-
 	test("should render link to GitHub issues", () => {
-		renderWithDialog(<ErrorContent onClose={mockOnClose} />);
+		renderWithDialog(<ErrorContent />);
 		const githubLink = screen.getByRole("link");
 		expect(githubLink).toHaveAttribute(
 			"href",
@@ -99,11 +83,10 @@ describe("ErrorContent", () => {
 	});
 
 	test("should be memoized for performance", () => {
-		const { rerender } = renderWithDialog(<ErrorContent onClose={mockOnClose} />);
+		const { rerender } = renderWithDialog(<ErrorContent />);
 		const initialContent = screen.getByText("errorContent.signalDisruption");
 
 		// Create a new function reference with same behavior
-		const newMockOnClose = vi.fn();
 		rerender(
 			<Dialog.Root open={true}>
 				<Dialog.Content>
@@ -111,7 +94,7 @@ describe("ErrorContent", () => {
 					<Dialog.Description className="sr-only">
 						Error dialog with details
 					</Dialog.Description>
-					<ErrorContent onClose={newMockOnClose} />
+					<ErrorContent />
 				</Dialog.Content>
 			</Dialog.Root>
 		);

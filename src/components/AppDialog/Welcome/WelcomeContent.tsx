@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 import { useAnalytics } from "../../../hooks/useAnalytics/useAnalytics";
@@ -141,7 +141,7 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 				</li>
 			</ul>
 
-			<Flex gap="2" mt="2" mb="4" align="start">
+			<Flex gap="2" mt="2" align="start">
 				<Text>
 					<Trans
 						i18nKey="dialogs.welcome.viewInstructions"
@@ -156,12 +156,6 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 						}}
 					/>
 				</Text>
-			</Flex>
-
-			<Flex justify="end">
-				<Button onClick={onClose} mb="3" className="cursor-pointer">
-					{t("dialogs.welcome.getStarted")}
-				</Button>
 			</Flex>
 		</Flex>
 	);

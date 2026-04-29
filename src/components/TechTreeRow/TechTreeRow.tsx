@@ -10,7 +10,7 @@ import {
 	ResetIcon,
 	UpdateIcon,
 } from "@radix-ui/react-icons";
-import { Avatar, Button, Dialog, IconButton, Text } from "@radix-ui/themes";
+import { Avatar, Button, IconButton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useA11yStore } from "@/store/app/a11yStore";
@@ -457,43 +457,39 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 
 	const badgeContent = (
 		<div>
-			<Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
-				<Dialog.Trigger>
-					<Button
-						mt="1"
-						className="ml-1! align-top font-mono! tabular-nums"
-						size="1"
-						radius="medium"
-						highContrast={a11yMode}
-						variant={modules.length === 1 ? "surface" : "solid"}
-						color={hasTechInGrid ? "gray" : techColor}
-						disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
-						aria-label={t("moduleSelection.tooltip", {
-							techName: translatedTechName,
-							count: currentCheckedModules.length,
-						})}
-					>
-						x{currentCheckedModules.length}
-						<OpenInNewWindowIcon />
-					</Button>
-				</Dialog.Trigger>
-				{isOpen && (
-					<ModuleSelectionDialog
-						translatedTechName={translatedTechName}
-						groupedModules={groupedModules}
-						currentCheckedModules={currentCheckedModules}
-						handleValueChange={handleValueChange}
-						handleSelectAllChange={handleSelectAllChange}
-						handleOptimizeClick={handleOptimizeWrapper}
-						onClose={() => handleOpenChange(false)}
-						allModulesSelected={allModulesSelected}
-						isIndeterminate={isIndeterminate}
-						techColor={techColor}
-						techImage={techImage}
-						tech={tech}
-					/>
-				)}
-			</Dialog.Root>
+			<Button
+				mt="1"
+				className="ml-1! align-top font-mono! tabular-nums"
+				size="1"
+				radius="medium"
+				highContrast={a11yMode}
+				variant={modules.length === 1 ? "surface" : "solid"}
+				color={hasTechInGrid ? "gray" : techColor}
+				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
+				onClick={() => handleOpenChange(true)}
+				aria-label={t("moduleSelection.tooltip", {
+					techName: translatedTechName,
+					count: currentCheckedModules.length,
+				})}
+			>
+				x{currentCheckedModules.length}
+				<OpenInNewWindowIcon />
+			</Button>
+			<ModuleSelectionDialog
+				isOpen={isOpen}
+				translatedTechName={translatedTechName}
+				groupedModules={groupedModules}
+				currentCheckedModules={currentCheckedModules}
+				handleValueChange={handleValueChange}
+				handleSelectAllChange={handleSelectAllChange}
+				handleOptimizeClick={handleOptimizeWrapper}
+				onClose={() => handleOpenChange(false)}
+				allModulesSelected={allModulesSelected}
+				isIndeterminate={isIndeterminate}
+				techColor={techColor}
+				techImage={techImage}
+				tech={tech}
+			/>
 		</div>
 	);
 

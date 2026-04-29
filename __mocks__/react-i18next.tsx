@@ -6,7 +6,7 @@ const useTranslation = () => ({
 		changeLanguage: vi.fn(),
 		language: "en",
 		options: {
-			supportedLngs: ["en", "es", "fr", "de", "pt"],
+			supportedLngs: ["en", "es", "fr", "de", "pt", "it"],
 			fallbackLng: ["en"],
 		},
 		services: {

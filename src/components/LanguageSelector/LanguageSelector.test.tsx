@@ -25,7 +25,7 @@ const mockWindowLocation = (search: string) => {
  */
 const useLanguageSelectorNavigation = (pathParts: string[], newLang: string) => {
 	const langCand = pathParts[0];
-	const languages = ["es", "fr", "de", "pt"];
+	const languages = ["es", "fr", "de", "pt", "it"];
 	let basePath = "/" + pathParts.join("/");
 
 	if (languages.includes(langCand)) {
@@ -109,6 +109,14 @@ describe("LanguageSelector - Query Parameter Preservation", () => {
 
 		expect(result).toContain("url=https%3A%2F%2Fexample.com");
 		expect(result).toContain("encoded=test%20value");
+	});
+
+	it("should correctly handle changing language to Italian", () => {
+		mockWindowLocation("?platform=standard&grid=it_test");
+
+		const result = useLanguageSelectorNavigation([], "it");
+
+		expect(result).toBe("/it?platform=standard&grid=it_test");
 	});
 
 	it("should preserve query parameters when navigating to translation request dialog", () => {

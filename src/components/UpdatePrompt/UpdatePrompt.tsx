@@ -14,8 +14,7 @@
 
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
-import { Close as DialogClose } from "@radix-ui/react-dialog";
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Button, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
@@ -64,27 +63,23 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 	const isDesktop = useBreakpoint("1024px");
 
 	const content = (
-		<>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
-				{t("dialogs.updatePrompt.description", {
-					defaultValue:
-						"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
-				})}
-			</Text>
+		<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+			{t("dialogs.updatePrompt.description", {
+				defaultValue:
+					"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
+			})}
+		</Text>
+	);
 
-			<Flex gap="3" mt="6" mb="2" justify="end">
-				<DialogClose asChild>
-					<Button variant="soft" onClick={onDismiss}>
-						{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
-					</Button>
-				</DialogClose>
-				<DialogClose asChild>
-					<Button onClick={onRefresh} autoFocus={isDesktop}>
-						{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
-					</Button>
-				</DialogClose>
-			</Flex>
-		</>
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={onDismiss}>
+				{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
+			</Button>
+			<Button onClick={onRefresh} autoFocus={isDesktop}>
+				{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
+			</Button>
+		</div>
 	);
 
 	return (
@@ -94,6 +89,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 				titleKey="dialogs.titles.updatePrompt"
 				title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
 				onClose={onDismiss}
+				footer={footer}
 				content={content}
 			/>
 		</Suspense>

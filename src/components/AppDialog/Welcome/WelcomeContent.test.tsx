@@ -71,7 +71,6 @@ describe("WelcomeContent", () => {
 		expect(container.querySelector(".welcomeContent__list")).toBeInTheDocument();
 		expect(container.querySelectorAll(".welcomeContent__item")).toHaveLength(6);
 		expect(screen.getByTestId("dialogs.welcome.viewInstructions")).toBeInTheDocument();
-		expect(screen.getByText("dialogs.welcome.getStarted")).toBeInTheDocument();
 	});
 
 	it("calls onClose and openDialog when instructions link is clicked", async () => {
@@ -89,21 +88,5 @@ describe("WelcomeContent", () => {
 
 		expect(onClose).toHaveBeenCalledTimes(1);
 		expect(mockDialogContext.openDialog).toHaveBeenCalledWith("instructions");
-	});
-
-	it("calls onClose when the get started button is clicked", async () => {
-		const onClose = vi.fn();
-		render(
-			<DialogContext.Provider value={mockDialogContext}>
-				<Theme>
-					<WelcomeContent onClose={onClose} />
-				</Theme>
-			</DialogContext.Provider>
-		);
-
-		const button = screen.getByText("dialogs.welcome.getStarted");
-		await userEvent.click(button);
-
-		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 });

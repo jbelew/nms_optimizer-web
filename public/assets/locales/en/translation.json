@@ -8,7 +8,7 @@
 		"selectLanguage": "Select Language"
 	},
 	"common": {
-		"closeDialog": "Close dialog",
+		"closeDialog": "Close",
 		"dismiss": "Dismiss",
 		"error": "Error",
 		"retry": "Retry",
@@ -693,7 +693,7 @@
 		"tooltip": "{{techName}} Module Selection",
 		"warning": "<p>Default Corvette selections are <i>suggestions</i>. Procedural upgrade modules generally provide greater benefit than cosmetic items or reactor upgrades and should be prioritized.</p><p style=\"margin-top: .5rem\">Use <strong>Select All</strong> to maximize this technology; however, most layouts only have room for <strong>3–4</strong> fully maxed technologies.</p>",
 		"selectAll": "Select All",
-		"closeDialogLabel": "Close dialog",
+		"closeDialogLabel": "Close",
 		"cosmeticInfo": "<p>Suggested cosmetic modules can provide a small stat boost, but they shouldn’t limit your design ideas. For a good solve, just match the same number of cosmetic modules on your Corvette.</p>",
 		"trailsInfo": "<strong>Starship Trails have changed with v6.2 (Remnant Update)!</strong> In most cases, select no more than <strong>three Starship Trails</strong>. The Tentacled Figurine to <strong>does not</strong> boost in-atmosphere speed! Starship Trails are applied in priority order, with <strong>[P1] Chromatic</strong> having the highest priority. ",
 		"description": "Suggested modules are selected by default. You can add or remove specific modules to customize this technology's optimization.",

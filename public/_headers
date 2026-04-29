@@ -6,10 +6,36 @@
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self "https://www.youtube.com"), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self "https://www.youtube.com"), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=()
 
 # Entry Points: Aggressively prevent caching to avoid vite:preloadError on redeploys.
+# This ensures every localized page and SPA route serves the latest JS/CSS references.
+
 /
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
 /index.html
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: no-cache
+/about/*
+  Cache-Control: no-cache
+/instructions/*
+  Cache-Control: no-cache
+/changelog/*
+  Cache-Control: no-cache
+/translation/*
+  Cache-Control: no-cache
+/userstats/*
+  Cache-Control: no-cache
+/privacy/*
+  Cache-Control: no-cache
+/performance/*
+  Cache-Control: no-cache
+/es/*
+  Cache-Control: no-cache
+/fr/*
+  Cache-Control: no-cache
+/de/*
+  Cache-Control: no-cache
+/pt/*
+  Cache-Control: no-cache
+/it/*
+  Cache-Control: no-cache
 
 # Static Assets (Root)
 /favicon.ico
@@ -20,9 +46,13 @@
   Cache-Control: public, max-age=604800, immutable
 /logo.svg
   Cache-Control: public, max-age=604800, immutable
+/.well-known/*
+  Cache-Control: public, max-age=604800, immutable
 
 # Error Pages: Cache for 1 day, purged automatically by Cloudflare on deploy.
 /404.html
+  Cache-Control: public, max-age=86400
+/500.html
   Cache-Control: public, max-age=86400
 /500.html
   Cache-Control: public, max-age=86400
@@ -34,6 +64,8 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 /sitemap.xml
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+/manifest.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 
 # Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
 # Safe to cache forever — a new deploy produces new filenames.
@@ -41,19 +73,23 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Mutable static assets (images, fonts).
-# Cache for 1 day, serve stale for 1 day while revalidating in background.
-/assets/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+# Cache for 7 days, serve stale for 1 day while revalidating in background.
+/assets/img/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/fonts/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/svg/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/assets/video/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 # Translations and markdown content: can change on any deploy.
 # Cache for 1 minute, serve stale for 5 minutes during background revalidation.
 /assets/locales/*
   Cache-Control: public, max-age=60, stale-while-revalidate=300
 
-# Always fresh: version check and service worker.
+# Always fresh: version check and service worker (PWA core).
 /version.json
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
-/manifest.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0

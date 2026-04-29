@@ -24,11 +24,13 @@ vi.mock("../Base/AppDialog", () => ({
 		onClose,
 		titleKey,
 		content,
+		footer,
 	}: {
 		isOpen?: boolean;
 		onClose?: () => void;
 		titleKey?: string;
 		content?: React.ReactNode;
+		footer?: React.ReactNode;
 	}) => {
 		if (!isOpen) return null;
 
@@ -36,6 +38,7 @@ vi.mock("../Base/AppDialog", () => ({
 			<div data-testid="app-dialog" role="dialog">
 				<h2>{titleKey}</h2>
 				<div>{content}</div>
+				<div>{footer}</div>
 				<button onClick={onClose}>Close</button>
 			</div>
 		);
@@ -44,11 +47,7 @@ vi.mock("../Base/AppDialog", () => ({
 
 // Mock ErrorContent component
 vi.mock("./ErrorContent", () => ({
-	default: ({ onClose }: { onClose?: () => void }) => (
-		<div data-testid="error-content">
-			<button onClick={onClose}>Dismiss Error</button>
-		</div>
-	),
+	default: () => <div data-testid="error-content" />,
 }));
 
 describe("ErrorDialog", () => {
@@ -89,20 +88,6 @@ describe("ErrorDialog", () => {
 
 		const closeButton = await screen.findByText("Close");
 		closeButton.click();
-
-		expect(mockSetShowError).toHaveBeenCalledWith(false);
-	});
-
-	test("should call setShowError(false) when error content is dismissed", async () => {
-		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			showError: true,
-			setShowError: mockSetShowError,
-		});
-
-		render(<ErrorDialog />);
-
-		const dismissButton = await screen.findByText("Dismiss Error");
-		dismissButton.click();
 
 		expect(mockSetShowError).toHaveBeenCalledWith(false);
 	});

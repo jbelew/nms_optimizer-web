@@ -40,7 +40,7 @@
 					window.location.replace("/500.html");
 				});
 				// Preload translations based on language in path (matches i18next logic)
-				const supportedLngs = ["en", "es", "fr", "de", "pt"];
+				const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
 				const pathParts = window.location.pathname.split("/");
 				const detectedLng = supportedLngs.includes(pathParts[1]) ? pathParts[1] : "en";
 				const link = document.createElement("link");
@@ -225,7 +225,7 @@
 
 			body.a11y-font::before {
 				background-image: none !important;
-				background-color: #0b161a;
+				background-color: #101B20;
 			}
 		</style>
 

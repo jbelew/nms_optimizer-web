@@ -4,7 +4,7 @@ import Backend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
 
 /** Array of ISO language codes supported by the application. */
-export const languages = ["en", "es", "fr", "de", "pt"];
+export const languages = ["en", "es", "fr", "de", "pt", "it"];
 
 /**
  * Mapping of language codes to their native language names.
@@ -17,6 +17,7 @@ export const nativeLanguageNames: { [key: string]: string } = {
 	fr: "Français",
 	de: "Deutsch",
 	pt: "Português",
+	it: "Italiano",
 };
 
 /**

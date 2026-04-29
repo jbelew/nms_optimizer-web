@@ -14,8 +14,8 @@
  */
 
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import React from "react";
-import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
+import React, { lazy, Suspense } from "react";
+import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
 	Badge,
@@ -24,8 +24,6 @@ import {
 	Checkbox,
 	CheckboxGroup,
 	Code,
-	Dialog,
-	IconButton,
 	Separator,
 	Text,
 } from "@radix-ui/themes";
@@ -39,6 +37,8 @@ import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 import "./ModuleSelectionDialog.scss";
 
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+
+const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
 
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
@@ -72,6 +72,8 @@ export interface GroupedModules {
  * Props for the `ModuleSelectionDialog` component.
  */
 export interface ModuleSelectionDialogProps {
+	/** Whether the dialog is currently visible. */
+	isOpen: boolean;
 	/** Localized name of the technology being configured. */
 	translatedTechName: string;
 	/** Modules organized into categories for display. **Must be provided.** */
@@ -95,19 +97,7 @@ export interface ModuleSelectionDialogProps {
 	/** The unique technology key. */
 	tech?: string;
 	/** Optional callback triggered when the dialog closes. */
-	onClose?: () => void;
-}
-
-/**
- * Props for the `DialogHeader` component.
- */
-export interface DialogHeaderProps {
-	/** Localized name of the technology. **Must be provided.** */
-	translatedTechName: string;
-	/** Icon filename for the technology. `null` to use fallback. */
-	techImage: string | null;
-	/** Theme color for the technology avatar. */
-	techColor: TechTreeRowProps["techColor"];
+	onClose: () => void;
 }
 
 /**
@@ -142,6 +132,8 @@ export interface DialogFooterProps {
 	handleOptimizeClick: () => Promise<void>;
 	/** Array of currently selected module IDs. Used to determine if the optimize button should be disabled. */
 	currentCheckedModules: string[];
+	/** Callback triggered when the dialog is dismissed. */
+	onClose?: () => void;
 }
 
 /**
@@ -172,70 +164,6 @@ export interface ModuleGroupProps extends Pick<
 	/** Callback function to close the parent dialog. */
 	onClose?: () => void;
 }
-
-/**
- * A header component for the module selection dialog.
- *
- * It displays the technology's avatar and localized title. It also provides
- * the primary close button for the dialog. It handles resolution-aware image
- * path generation for the technology icon.
- *
- * @param {DialogHeaderProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered dialog header.
- *
- * @example Title with icon
- * ```tsx
- * <DialogHeader
- *   translatedTechName="Hyperdrive"
- *   techImage="hyperdrive.webp"
- *   techColor="purple"
- * />
- * // renders styled dialog header
- * ```
- */
-export const DialogHeader: React.FC<DialogHeaderProps> = ({
-	translatedTechName,
-	techImage,
-	techColor,
-}) => {
-	const { t } = useTranslation();
-
-	const techImagePath = techImage ? `/assets/img/tech/${techImage}` : fallbackImage;
-	const techImagePath2x = techImage
-		? `/assets/img/tech/${techImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1")}`
-		: fallbackImage.replace(/\.(webp|png|jpg|jpeg)$/, "@2x.$1");
-
-	return (
-		<>
-			<Dialog.Title className="heading-styled flex items-start text-xl sm:text-2xl">
-				<Avatar
-					size="2"
-					radius="full"
-					alt={translatedTechName}
-					fallback="IK"
-					src={techImagePath}
-					color={techColor}
-					srcSet={`${techImagePath} 1x, ${techImagePath2x} 2x`}
-				/>
-				<span className="mt-0.5 mr-6 ml-2 text-xl sm:mt-0 sm:text-2xl">
-					{t("moduleSelection.title", { techName: translatedTechName })}
-				</span>
-			</Dialog.Title>
-
-			<Dialog.Close>
-				<IconButton
-					variant="ghost"
-					size="1"
-					className="dialog-close"
-					aria-label={t("moduleSelection.closeDialogLabel")}
-				>
-					<Cross2Icon />
-				</IconButton>
-			</Dialog.Close>
-		</>
-	);
-};
 
 /**
  * Parses and styles parenthetical text fragments within a string.
@@ -600,15 +528,16 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 export const DialogFooter: React.FC<DialogFooterProps> = ({
 	handleOptimizeClick,
 	currentCheckedModules,
+	onClose,
 }) => {
 	const { t } = useTranslation();
 	const isOptimizeDisabled = currentCheckedModules.length === 0;
 
 	return (
-		<div className="mt-4 mb-1 flex justify-end gap-2">
-			<Dialog.Close>
-				<Button variant="soft">{t("moduleSelection.cancelButton")}</Button>
-			</Dialog.Close>
+		<div className="mb-1 flex justify-end gap-2">
+			<Button variant="soft" onClick={onClose}>
+				{t("moduleSelection.cancelButton")}
+			</Button>
 			<Button onClick={handleOptimizeClick} disabled={isOptimizeDisabled}>
 				{t("moduleSelection.optimizeButton")}
 			</Button>
@@ -630,7 +559,6 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
  *
  * @see {@link useModuleSelectionDialog}
  * @see {@link DialogBody}
- * @see {@link DialogHeader}
  * @see {@link DialogFooter}
  *
  * @component
@@ -644,23 +572,23 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
  * ```
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
-	const { headerProps, bodyProps, footerProps } = useModuleSelectionDialog(props);
+	const { bodyProps, footerProps } = useModuleSelectionDialog(props);
 	const { t } = useTranslation();
 
+	const { translatedTechName, isOpen, onClose } = props;
+
 	return (
-		<Dialog.Content size={{ initial: "1", sm: "2" }}>
-			<DialogHeader {...headerProps} />
-
-			<Dialog.Description className="sr-only">
-				{t(
-					"moduleSelection.description",
-					"Select modules to include in the optimization calculation."
-				)}
-			</Dialog.Description>
-
-			<DialogBody {...bodyProps} />
-
-			<DialogFooter {...footerProps} />
-		</Dialog.Content>
+		<Suspense fallback={null}>
+			<AppDialog
+				isOpen={isOpen}
+				onClose={onClose}
+				title={t("moduleSelection.title", { techName: translatedTechName })}
+				headerIcon={
+					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
+				}
+				content={<DialogBody {...bodyProps} />}
+				footer={<DialogFooter {...footerProps} onClose={onClose} />}
+			/>
+		</Suspense>
 	);
 };

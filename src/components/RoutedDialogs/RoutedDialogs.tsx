@@ -13,6 +13,7 @@
 
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useDialog } from "../../utils/system/dialogUtils";
@@ -49,6 +50,14 @@ export const RoutedDialogs: FC = () => {
 	const { t } = useTranslation();
 	const { activeDialog, closeDialog, sectionToScrollTo } = useDialog();
 
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={closeDialog}>
+				{t("common.closeDialog")}
+			</Button>
+		</div>
+	);
+
 	return (
 		<Suspense fallback={null}>
 			{/* Dialog for "About" information */}
@@ -57,6 +66,7 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.about"
 				title={t("dialogs.titles.about")}
+				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="about" />
@@ -69,6 +79,7 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.instructions"
 				title={t("dialogs.titles.instructions")}
+				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer
@@ -84,6 +95,7 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.changelog"
 				title={t("dialogs.titles.changelog")}
+				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="changelog" />
@@ -96,6 +108,7 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.translationRequest"
 				title={t("dialogs.titles.translationRequest")}
+				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="translation-request" />
@@ -108,6 +121,7 @@ export const RoutedDialogs: FC = () => {
 				onClose={closeDialog}
 				titleKey="dialogs.titles.privacy"
 				title={t("dialogs.titles.privacy")}
+				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="privacy" />

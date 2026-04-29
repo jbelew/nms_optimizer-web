@@ -1,6 +1,5 @@
 import type { FC } from "react";
-import { Close as DialogClose } from "@radix-ui/react-dialog";
-import { Button, Flex, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 /**
@@ -11,10 +10,6 @@ import { Trans, useTranslation } from "react-i18next";
 interface OptimizationAlertContentProps {
 	/** The display name of the technology that could not be optimized. **Must not be empty.** */
 	technologyName: string;
-	/** Callback function triggered when the user cancels the alert. */
-	onClose: () => void;
-	/** Asynchronous callback to initiate a forced optimization solve. */
-	onForceOptimize: () => Promise<void>;
 }
 
 /**
@@ -40,31 +35,11 @@ interface OptimizationAlertContentProps {
  * ```tsx
  * <OptimizationAlertContent
  *   technologyName="Pulse Engine"
- *   onClose={handleClose}
- *   onForceOptimize={handleForce}
  * />
  * ```
  */
-export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
-	technologyName,
-	onClose,
-	onForceOptimize,
-}) => {
+export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({ technologyName }) => {
 	const { t } = useTranslation();
-
-	/**
-	 * Executes the forced optimization callback.
-	 *
-	 * @returns {Promise<void>}
-	 *
-	 * @example Interaction handler
-	 * ```typescript
-	 * handleForceOptimizeClick();
-	 * ```
-	 */
-	const handleForceOptimizeClick = async () => {
-		await onForceOptimize();
-	};
 
 	return (
 		<>
@@ -93,27 +68,6 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({
 					}}
 				/>
 			</Text>
-			<Flex gap="3" mt="6" mb="2" justify="end">
-				<DialogClose asChild>
-					<Button
-						variant="soft"
-						onClick={onClose}
-						aria-label={t("dialogs.optimizationAlert.cancelButton")}
-					>
-						{t("dialogs.optimizationAlert.cancelButton")}
-					</Button>
-				</DialogClose>
-				<DialogClose asChild>
-					<Button
-						onClick={() => {
-							void handleForceOptimizeClick();
-						}}
-						aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
-					>
-						{t("dialogs.optimizationAlert.forceOptimizeButton")}
-					</Button>
-				</DialogClose>
-			</Flex>
 		</>
 	);
 };

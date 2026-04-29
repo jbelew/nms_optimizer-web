@@ -29,7 +29,7 @@ export const pages = [
  *
  * @category Routing
  */
-export const languages = ["en", "es", "fr", "de", "pt"];
+export const languages = ["en", "es", "fr", "de", "pt", "it"];
 
 /**
  * Retrieves the application build date string defined at compile time.
