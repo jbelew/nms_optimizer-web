@@ -53,6 +53,8 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 /sitemap.xml
   Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+/manifest.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
 
 # Immutable build output: Vite JS/CSS with content hashes (e.g. vendor-core-Ab12Cd.js).
 # Safe to cache forever — a new deploy produces new filenames.
@@ -77,8 +79,6 @@
 
 # Always fresh: version check and service worker.
 /version.json
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
-/manifest.json
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, max-age=0
