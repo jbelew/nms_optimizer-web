@@ -1,3 +1,10 @@
+## [6.37.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.2...v6.37.3) (2026-04-29)
+
+
+### Performance Improvements
+
+* seal cache holes by using wildcard matching for all entry points ([52a9cdf](https://github.com/jbelew/nms_optimizer-web/commit/52a9cdf457403f5cce64ada442e007c7d831f71c))
+
 ## [6.37.2](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.1...v6.37.2) (2026-04-29)
 
 
