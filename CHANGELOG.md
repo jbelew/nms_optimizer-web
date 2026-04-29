@@ -1,3 +1,10 @@
+## [6.37.4](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.3...v6.37.4) (2026-04-29)
+
+
+### Performance Improvements
+
+* finalize transition to full SSG and consolidate caching strategy ([b7ff2d4](https://github.com/jbelew/nms_optimizer-web/commit/b7ff2d45126a2a203d0817b7aa5191cdcdcc59eb))
+
 ## [6.37.3](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.2...v6.37.3) (2026-04-29)
 
 
