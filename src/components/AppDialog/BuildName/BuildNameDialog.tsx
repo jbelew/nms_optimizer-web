@@ -1,5 +1,7 @@
+import type { BuildNameContentRef } from "./BuildNameContent";
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useRef } from "react";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { BuildNameContent } from "./BuildNameContent";
@@ -53,6 +55,16 @@ interface BuildNameDialogProps {
  */
 const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onConfirm, onCancel }) => {
 	const { t } = useTranslation();
+	const contentRef = useRef<BuildNameContentRef>(null);
+
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={onCancel}>
+				{t("buttons.cancel")}
+			</Button>
+			<Button onClick={() => contentRef.current?.handleConfirm()}>{t("buttons.save")}</Button>
+		</div>
+	);
 
 	return (
 		<Suspense fallback={null}>
@@ -61,7 +73,10 @@ const BuildNameDialog: FC<BuildNameDialogProps> = ({ isOpen, onConfirm, onCancel
 				onClose={onCancel}
 				titleKey="dialog.buildName.title"
 				title={t("dialog.buildName.title") || "Save Build"}
-				content={<BuildNameContent onConfirm={onConfirm} onCancel={onCancel} />}
+				footer={footer}
+				content={
+					<BuildNameContent onConfirm={onConfirm} onCancel={onCancel} ref={contentRef} />
+				}
 				className="buildNameDialog__content"
 			/>
 		</Suspense>

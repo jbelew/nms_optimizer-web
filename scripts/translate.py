@@ -14,7 +14,8 @@ LANGUAGES = {
     "es": "Spanish",
     "fr": "French",
     "de": "German",
-    "pt": "Portuguese"
+    "pt": "Portuguese",
+    "it": "Italian"
 }
 
 BASE_PATH = "public/assets/locales"

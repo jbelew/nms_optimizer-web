@@ -34,6 +34,8 @@
   Cache-Control: no-cache
 /pt/*
   Cache-Control: no-cache
+/it/*
+  Cache-Control: no-cache
 
 # Static Assets (Root)
 /favicon.ico

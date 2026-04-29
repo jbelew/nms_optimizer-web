@@ -534,8 +534,8 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 					locale={locale}
 				/>
 			) : (
-				<ResponsiveContainer width="100%" height={350}>
-					<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
+				<ResponsiveContainer width="100%" height={350} className="mb-2">
+					<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
 						<CartesianGrid
 							strokeDasharray="3 3"
 							vertical={false}

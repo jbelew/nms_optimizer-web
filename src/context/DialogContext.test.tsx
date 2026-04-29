@@ -16,7 +16,7 @@ import { DialogProvider } from "./dialogContext";
 const testDialogNavigation = (pathname: string, search: string, dialog: string, lang: string) => {
 	const pathParts = pathname.split("/").filter(Boolean);
 	const langCand = pathParts[0];
-	const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
+	const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
 
 	if (OTHER_LANGUAGES.includes(langCand)) {
 		// dialogPath would be pathParts[1] || null

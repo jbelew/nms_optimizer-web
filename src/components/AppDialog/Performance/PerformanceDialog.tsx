@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
-import { Skeleton } from "@radix-ui/themes";
+import { Button, Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { PerformanceContent } from "./PerformanceContent";
@@ -43,6 +43,14 @@ interface PerformanceDialogProps {
 const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 	const { t } = useTranslation();
 
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={onClose}>
+				{t("dialogs.performance.closeButton", "Close")}
+			</Button>
+		</div>
+	);
+
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
@@ -51,9 +59,10 @@ const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 				size="wide"
 				titleKey="dialogs.titles.performance"
 				title={t("dialogs.titles.performance", "Performance Metrics")}
+				footer={footer}
 				content={
 					<Suspense fallback={<Skeleton height="534px" width="100%" />}>
-						<PerformanceContent onClose={onClose} isOpen={isOpen} />
+						<PerformanceContent isOpen={isOpen} />
 					</Suspense>
 				}
 			/>

@@ -56,7 +56,6 @@ const suspend = () => {
 };
 
 describe("UserStatsContent", () => {
-	const mockOnClose = vi.fn();
 	const mockUseUserStats = useUserStats as ReturnType<typeof vi.fn>;
 	const mockUseTechTreeColors = useTechTreeColors as ReturnType<typeof vi.fn>;
 
@@ -68,23 +67,15 @@ describe("UserStatsContent", () => {
 	});
 
 	test("should render description text", () => {
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 		expect(screen.getByText("dialogs.userStats.description")).toBeInTheDocument();
-	});
-
-	test("should render close button", () => {
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
-		const closeButton = screen.getByRole("button", {
-			name: /dialogs\.userStats\.closeButton/i,
-		});
-		expect(closeButton).toBeInTheDocument();
 	});
 
 	test("should show loading state when data is loading (suspending)", async () => {
 		// Mock hook to suspend
 		mockUseUserStats.mockImplementation(suspend);
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 
 		// Check for skeletons which indicate loading state
 		expect(screen.getByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument(); // Inside Skeleton
@@ -93,7 +84,7 @@ describe("UserStatsContent", () => {
 	test("should show loading state when colors are loading (suspending)", async () => {
 		mockUseTechTreeColors.mockImplementation(suspend);
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 
 		expect(screen.getByText("dialogs.userStats.starshipChartTitle")).toBeInTheDocument(); // Inside Skeleton
 	});
@@ -106,7 +97,7 @@ describe("UserStatsContent", () => {
 			throw new Error("Failed to fetch data");
 		});
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 		expect(screen.getByText("dialogs.userStats.error")).toBeInTheDocument();
 
 		consoleSpy.mockRestore();
@@ -119,7 +110,7 @@ describe("UserStatsContent", () => {
 			throw new Error("Failed to fetch colors");
 		});
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 		expect(screen.getByText("dialogs.userStats.error")).toBeInTheDocument();
 
 		consoleSpy.mockRestore();
@@ -128,17 +119,8 @@ describe("UserStatsContent", () => {
 	test("should show 'no data for chart' message when data is empty", () => {
 		mockUseUserStats.mockReturnValue([]);
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 		expect(screen.getAllByText("dialogs.userStats.noDataForChart").length).toBeGreaterThan(0);
-	});
-
-	test("should call onClose when close button is clicked", () => {
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
-		const closeButton = screen.getByRole("button", {
-			name: /dialogs\.userStats\.closeButton/i,
-		});
-		closeButton.click();
-		expect(mockOnClose).toHaveBeenCalledTimes(1);
 	});
 
 	test("should render chart titles when not loading and no errors", async () => {
@@ -152,7 +134,7 @@ describe("UserStatsContent", () => {
 		]);
 		mockUseTechTreeColors.mockReturnValue({});
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 
 		// When data is present, chart titles should render
 		// Need waitFor because Recharts or internal suspense might cause async rendering?
@@ -166,7 +148,7 @@ describe("UserStatsContent", () => {
 	});
 
 	test("should pass isOpen to useTechTreeColors hook", () => {
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 		// isOpen is true in renderWithDialog
 		expect(mockUseTechTreeColors).toHaveBeenCalledWith(true);
 	});
@@ -179,7 +161,7 @@ describe("UserStatsContent", () => {
 		mockUseTechTreeColors.mockReturnValue(techColors);
 		mockUseUserStats.mockReturnValue([]);
 
-		renderWithDialog(<UserStatsContent onClose={mockOnClose} isOpen={true} />);
+		renderWithDialog(<UserStatsContent isOpen={true} />);
 
 		expect(screen.getByText("dialogs.userStats.description")).toBeInTheDocument();
 	});

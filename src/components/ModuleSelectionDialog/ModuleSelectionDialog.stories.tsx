@@ -1,7 +1,7 @@
 import type { GroupedModules, SelectionModule } from "./ModuleSelectionDialog";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Dialog, Theme } from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 
 import { usePlatformStore } from "../../store/app/platformStore";
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
@@ -49,9 +49,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 	decorators: [
 		(Story) => (
 			<Theme>
-				<Dialog.Root open={true}>
-					<Story />
-				</Dialog.Root>
+				<Story />
 			</Theme>
 		),
 	],
@@ -99,6 +97,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		return (
 			<ModuleSelectionDialog
 				{...args}
+				isOpen={args.isOpen ?? true}
 				groupedModules={groupedModules}
 				currentCheckedModules={currentCheckedModules}
 				handleValueChange={(values) => {

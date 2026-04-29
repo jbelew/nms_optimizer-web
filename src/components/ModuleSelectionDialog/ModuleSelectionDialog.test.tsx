@@ -1,5 +1,4 @@
 import React from "react";
-import { Dialog } from "@radix-ui/themes";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
@@ -29,6 +28,17 @@ vi.mock("../../utils/system/dialogUtils", () => ({
 	}),
 }));
 
+// Mock AppDialog to avoid lazy loading issues and focus on ModuleSelectionDialog logic
+vi.mock("../AppDialog/Base/AppDialog", () => ({
+	default: ({ title, content, footer }: Record<string, React.ReactNode>) => (
+		<div>
+			<h1>{title}</h1>
+			<div>{content}</div>
+			<div>{footer}</div>
+		</div>
+	),
+}));
+
 const mockGroupedModules = {
 	core: [{ id: "core1", label: "Core Module", image: "core.png" }],
 	bonus: [
@@ -45,6 +55,8 @@ const mockGroupedModules = {
 };
 
 const defaultProps = {
+	isOpen: true,
+	onClose: vi.fn(),
 	translatedTechName: "Hyperdrive",
 	groupedModules: mockGroupedModules,
 	currentCheckedModules: ["bonus1", "upgrade_tau"],
@@ -66,11 +78,7 @@ const renderDialog = (props = {}) => {
 		selectedPlatform: "explorer",
 	});
 
-	return render(
-		<Dialog.Root open={true}>
-			<ModuleSelectionDialog {...defaultProps} {...props} />
-		</Dialog.Root>
-	);
+	return render(<ModuleSelectionDialog {...defaultProps} {...props} />);
 };
 
 describe("ModuleSelectionDialog", () => {
@@ -78,30 +86,30 @@ describe("ModuleSelectionDialog", () => {
 		vi.clearAllMocks();
 	});
 
-	it("renders the dialog with the correct title", () => {
+	it("renders the dialog with the correct title", async () => {
 		renderDialog();
-		expect(screen.getByText("Modules for Hyperdrive")).toBeInTheDocument();
+		expect(await screen.findByText("Modules for Hyperdrive")).toBeInTheDocument();
 	});
 
-	it("renders module groups correctly", () => {
+	it("renders module groups correctly", async () => {
 		renderDialog();
-		expect(screen.getByText("Bonus Modules")).toBeInTheDocument();
+		expect(await screen.findByText("Bonus Modules")).toBeInTheDocument();
 		expect(screen.getByText("Alpha Bonus")).toBeInTheDocument();
 		expect(screen.getByText("upgrade")).toBeInTheDocument();
 		expect(screen.getByText("Cosmetic Modules")).toBeInTheDocument();
 	});
 
-	it("sorts 'bonus' modules alphabetically", () => {
+	it("sorts 'bonus' modules alphabetically", async () => {
 		renderDialog();
-		const bonusModules = screen
-			.getByText("Bonus Modules")
-			.parentElement?.querySelectorAll("label");
+		const bonusModules = (
+			await screen.findByText("Bonus Modules")
+		).parentElement?.querySelectorAll("label");
 		expect(bonusModules).not.toBeNull();
 		expect(bonusModules![0]).toHaveTextContent("Alpha Bonus");
 		expect(bonusModules![1]).toHaveTextContent("Beta Bonus");
 	});
 
-	it("sorts 'trails' and 'figurines' modules alphabetically", () => {
+	it("sorts 'trails' and 'figurines' modules alphabetically", async () => {
 		const props = {
 			...defaultProps,
 			groupedModules: {
@@ -118,69 +126,71 @@ describe("ModuleSelectionDialog", () => {
 		};
 		renderDialog(props);
 
-		const trailModules = screen
-			.getByText("Starship Trails")
-			.parentElement?.querySelectorAll("label");
+		const trailModules = (
+			await screen.findByText("Starship Trails")
+		).parentElement?.querySelectorAll("label");
 		expect(trailModules![0]).toHaveTextContent("Alpha Trail");
 		expect(trailModules![1]).toHaveTextContent("Beta Trail");
 
-		const figModules = screen.getByText("Figurines").parentElement?.querySelectorAll("label");
+		const figModules = (await screen.findByText("Figurines")).parentElement?.querySelectorAll(
+			"label"
+		);
 		expect(figModules![0]).toHaveTextContent("Alpha Figurine");
 		expect(figModules![1]).toHaveTextContent("Beta Figurine");
 	});
 
-	it("disables an upgrade module if its prerequisite is not selected", () => {
+	it("disables an upgrade module if its prerequisite is not selected", async () => {
 		// Prerequisite 'upgrade_tau' is not included in currentCheckedModules
 		renderDialog({ currentCheckedModules: ["bonus1"] });
 		// Radix checkboxes are buttons with a role of checkbox
-		const sigmaCheckbox = screen.getByRole("checkbox", { name: "Upgrade Sigma" });
+		const sigmaCheckbox = await screen.findByRole("checkbox", { name: "Upgrade Sigma" });
 		expect(sigmaCheckbox).toBeDisabled();
 	});
 
-	it("enables an upgrade module if its prerequisite is selected", () => {
+	it("enables an upgrade module if its prerequisite is selected", async () => {
 		// Prerequisite 'upgrade_tau' is included
 		renderDialog({ currentCheckedModules: ["bonus1", "upgrade_tau"] });
-		const sigmaCheckbox = screen.getByRole("checkbox", { name: "Upgrade Sigma" });
+		const sigmaCheckbox = await screen.findByRole("checkbox", { name: "Upgrade Sigma" });
 		expect(sigmaCheckbox).not.toBeDisabled();
 	});
 
-	it("renames 'bonus' group to 'Starship Trails' when tech is 'trails'", () => {
+	it("renames 'bonus' group to 'Starship Trails' when tech is 'trails'", async () => {
 		renderDialog({ tech: "trails" });
-		expect(screen.getByText("Starship Trails")).toBeInTheDocument();
+		expect(await screen.findByText("Starship Trails")).toBeInTheDocument();
 		expect(screen.queryByText("bonus")).not.toBeInTheDocument();
 	});
 
-	it("does not rename 'bonus' group when tech is not 'trails'", () => {
+	it("does not rename 'bonus' group when tech is not 'trails'", async () => {
 		renderDialog({ tech: "hyperdrive" });
-		expect(screen.getByText("Bonus Modules")).toBeInTheDocument();
+		expect(await screen.findByText("Bonus Modules")).toBeInTheDocument();
 		expect(screen.queryByText("Starship Trails")).not.toBeInTheDocument();
 	});
 
-	it("calls handleValueChange when a checkbox is clicked", () => {
+	it("calls handleValueChange when a checkbox is clicked", async () => {
 		renderDialog();
 		// CheckboxGroup.Item is a button inside the label
-		fireEvent.click(screen.getByRole("checkbox", { name: "Alpha Bonus" }));
+		fireEvent.click(await screen.findByRole("checkbox", { name: "Alpha Bonus" }));
 		// The CheckboxGroup.Root `onValueChange` is called with the new array of values.
 		// "Alpha Bonus" (id: bonus1) was checked, so clicking unchecks it.
 		// The new array should not contain "bonus1".
 		expect(defaultProps.handleValueChange).toHaveBeenCalledWith(["upgrade_tau"]);
 	});
 
-	it("calls handleSelectAllChange when 'Select All' is clicked", () => {
+	it("calls handleSelectAllChange when 'Select All' is clicked", async () => {
 		renderDialog();
-		fireEvent.click(screen.getByRole("checkbox", { name: "selectAll" }));
+		fireEvent.click(await screen.findByRole("checkbox", { name: "selectAll" }));
 		expect(defaultProps.handleSelectAllChange).toHaveBeenCalledWith(true);
 	});
 
-	it("disables the optimize button when no modules are checked", () => {
+	it("disables the optimize button when no modules are checked", async () => {
 		renderDialog({ currentCheckedModules: [] });
-		const optimizeButton = screen.getByRole("button", { name: /optimizeButton/i });
+		const optimizeButton = await screen.findByRole("button", { name: /optimizeButton/i });
 		expect(optimizeButton).toBeDisabled();
 	});
 
-	it("calls handleOptimizeClick when the optimize button is clicked", () => {
+	it("calls handleOptimizeClick when the optimize button is clicked", async () => {
 		renderDialog();
-		const optimizeButton = screen.getByRole("button", { name: /optimizeButton/i });
+		const optimizeButton = await screen.findByRole("button", { name: /optimizeButton/i });
 		fireEvent.click(optimizeButton);
 		expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
 	});

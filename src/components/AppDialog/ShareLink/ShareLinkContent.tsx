@@ -1,8 +1,6 @@
 import type { FC } from "react";
-import { useEffect, useRef, useState } from "react";
-import { Close as DialogClose } from "@radix-ui/react-dialog";
-import { CheckIcon, CopyIcon, ExternalLinkIcon } from "@radix-ui/react-icons";
-import { Button, Flex, Link, Text, TextArea } from "@radix-ui/themes";
+import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import { Link, Text, TextArea } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
 /**
@@ -11,8 +9,6 @@ import { Trans, useTranslation } from "react-i18next";
 interface ShareLinkContentProps {
 	/** The full shareable URL string. **Must be a valid URL.** */
 	shareUrl: string;
-	/** Callback function to close the parent dialog. */
-	onClose: () => void;
 }
 
 /**
@@ -34,90 +30,35 @@ interface ShareLinkContentProps {
  *
  * @example
  * ```tsx
- * <ShareLinkContent shareUrl="https://example.com" onClose={() => {}} />
+ * <ShareLinkContent shareUrl="https://example.com" />
  * // mounts ShareLinkContent with a shareable URL
  * ```
  */
-export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl, onClose }) => {
+export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl }) => {
 	const { t } = useTranslation();
-	const [copied, setCopied] = useState(false);
-	const copiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-	// Cleanup timeout on unmount
-	useEffect(() => {
-		return () => {
-			if (copiedTimeoutRef.current) {
-				clearTimeout(copiedTimeoutRef.current);
-			}
-		};
-	}, []);
-
-	/**
-	 * Copies the `shareUrl` to the system clipboard and toggles the success state.
-	 *
-	 * @returns {Promise<void>}
-	 *
-	 * @example Interaction handler
-	 * ```typescript
-	 * handleCopyClick();
-	 * ```
-	 */
-	const handleCopyClick = async () => {
-		try {
-			await navigator.clipboard.writeText(shareUrl);
-			setCopied(true);
-
-			// Clear any existing timeout before setting a new one
-			if (copiedTimeoutRef.current) {
-				clearTimeout(copiedTimeoutRef.current);
-			}
-
-			copiedTimeoutRef.current = setTimeout(() => {
-				setCopied(false);
-				copiedTimeoutRef.current = null;
-			}, 2000);
-		} catch (err) {
-			console.error("Failed to copy: ", err);
-		}
-	};
 
 	return (
 		<>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+			<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
 				{t("dialogs.shareLink.description")}
 			</Text>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+			<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
 				<Trans i18nKey="dialogs.shareLink.tip" />
 			</Text>
 			<TextArea
 				id="share-url-input"
 				name="shareUrl"
-				ml="1"
-				mr="1"
 				size={{ initial: "2", sm: "3" }}
 				readOnly
 				value={shareUrl}
 				rows={8}
 			/>
-			<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="4" align="right">
+			<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="2" align="right">
 				<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
 					{t("dialogs.shareLink.openLink")}
 					<ExternalLinkIcon className="ml-1 inline-block" />
 				</Link>
 			</Text>
-			<Flex gap="2" mt="4" mb="2" justify="end">
-				<DialogClose asChild>
-					<Button variant="soft" onClick={onClose}>
-						{t("dialogs.shareLink.closeButton")}
-					</Button>
-				</DialogClose>
-				<Button onClick={handleCopyClick}>
-					{copied ? <CheckIcon /> : <CopyIcon />}
-					{copied
-						? t("dialogs.shareLink.copiedButton")
-						: t("dialogs.shareLink.copyButton")}
-				</Button>
-			</Flex>
 		</>
 	);
 };

@@ -29,11 +29,13 @@ vi.mock("../Base/AppDialog", () => ({
 		onClose,
 		titleKey,
 		content,
+		footer,
 	}: {
 		isOpen?: boolean;
 		onClose?: () => void;
 		titleKey?: string;
 		content?: React.ReactNode;
+		footer?: React.ReactNode;
 	}) => {
 		if (!isOpen) return null;
 
@@ -41,6 +43,7 @@ vi.mock("../Base/AppDialog", () => ({
 			<div data-testid="app-dialog" role="dialog">
 				<h2>{titleKey}</h2>
 				<div>{content}</div>
+				<div>{footer}</div>
 				<button onClick={onClose}>Close</button>
 			</div>
 		);
@@ -49,19 +52,9 @@ vi.mock("../Base/AppDialog", () => ({
 
 // Mock OptimizationAlertContent to verify it's being passed correctly
 vi.mock("./OptimizationAlertContent", () => ({
-	OptimizationAlertContent: ({
-		technologyName,
-		onClose,
-		onForceOptimize,
-	}: {
-		technologyName?: string;
-		onClose?: () => void;
-		onForceOptimize?: () => void;
-	}) => (
+	OptimizationAlertContent: ({ technologyName }: { technologyName?: string }) => (
 		<div data-testid="optimization-alert-content">
 			<span>{technologyName}</span>
-			<button onClick={onClose}>Cancel</button>
-			<button onClick={onForceOptimize}>Force Optimize</button>
 		</div>
 	),
 }));
@@ -169,7 +162,9 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		const forceOptimizeButton = await screen.findByText("Force Optimize");
+		const forceOptimizeButton = await screen.findByText(
+			"dialogs.optimizationAlert.forceOptimizeButton"
+		);
 		forceOptimizeButton.click();
 
 		await waitFor(() => {
@@ -230,7 +225,9 @@ describe("OptimizationAlertDialog", () => {
 			/>
 		);
 
-		const forceOptimizeButton = await screen.findByText("Force Optimize");
+		const forceOptimizeButton = await screen.findByText(
+			"dialogs.optimizationAlert.forceOptimizeButton"
+		);
 		forceOptimizeButton.click();
 
 		await waitFor(() => {

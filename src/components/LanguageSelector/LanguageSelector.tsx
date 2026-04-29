@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import deFlagPath from "../../assets/svg/flags/de.svg";
 import esFlagPath from "../../assets/svg/flags/es.svg";
 import frFlagPath from "../../assets/svg/flags/fr.svg";
+import itFlagPath from "../../assets/svg/flags/it.svg";
 import ptFlagPath from "../../assets/svg/flags/pt.svg";
 import usFlagPath from "../../assets/svg/flags/us.svg";
 import xxFlagPath from "../../assets/svg/flags/xx.svg";
@@ -44,6 +45,7 @@ const languageFlagPaths: LanguageFlagPaths = {
 	de: deFlagPath,
 	es: esFlagPath,
 	fr: frFlagPath,
+	it: itFlagPath,
 	pt: ptFlagPath,
 };
 

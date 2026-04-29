@@ -101,8 +101,8 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	});
 
 	return (
-		<ResponsiveContainer width="100%" height={350}>
-			<ComposedChart data={clampedData} margin={{ top: 20, right: 10, left: 0, bottom: 5 }}>
+		<ResponsiveContainer width="100%" height={350} className="mb-2">
+			<ComposedChart data={clampedData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
 				<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
 
 				{/* Background Threshold Shading: Highlight the 'Good' zone using the metric's theme color */}

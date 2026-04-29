@@ -12,7 +12,7 @@
  * `env.ASSETS.fetch()` calls hit the CDN directly.
  */
 
-const SUPPORTED_LANGS = ["en", "es", "fr", "de", "pt"];
+const SUPPORTED_LANGS = ["en", "es", "fr", "de", "pt", "it"];
 /** Non-default locales that get a path prefix (e.g. /es/...). */
 const LOCALE_LANGS = SUPPORTED_LANGS.filter((l) => l !== "en");
 

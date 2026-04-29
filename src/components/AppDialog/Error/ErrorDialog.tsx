@@ -1,4 +1,5 @@
 import { FC, lazy, Suspense } from "react";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useOptimizeStore } from "../../../store/app/optimizeStore";
@@ -38,12 +39,21 @@ export const ErrorDialog: FC = () => {
 		return null;
 	}
 
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={() => setShowError(false)}>
+				{t("common.closeDialog")}
+			</Button>
+		</div>
+	);
+
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
 				isOpen={showError}
 				onClose={() => setShowError(false)}
-				content={<ErrorContent onClose={() => setShowError(false)} />}
+				content={<ErrorContent />}
+				footer={footer}
 				titleKey="dialogs.titles.serverError"
 				title={t("dialogs.titles.serverError")}
 			/>

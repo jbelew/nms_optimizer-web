@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { OptimizationAlertContent } from "./OptimizationAlertContent";
@@ -61,6 +62,26 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 
 	if (!technologyName) return null;
 
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button
+				variant="soft"
+				onClick={onClose}
+				aria-label={t("dialogs.optimizationAlert.cancelButton")}
+			>
+				{t("dialogs.optimizationAlert.cancelButton")}
+			</Button>
+			<Button
+				onClick={async () => {
+					await onForceOptimize();
+				}}
+				aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
+			>
+				{t("dialogs.optimizationAlert.forceOptimizeButton")}
+			</Button>
+		</div>
+	);
+
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
@@ -68,13 +89,8 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 				onClose={onClose}
 				titleKey="dialogs.titles.optimizationAlert"
 				title={t("dialogs.titles.optimizationAlert")}
-				content={
-					<OptimizationAlertContent
-						technologyName={technologyName}
-						onClose={onClose}
-						onForceOptimize={onForceOptimize}
-					/>
-				}
+				footer={footer}
+				content={<OptimizationAlertContent technologyName={technologyName} />}
 			/>
 		</Suspense>
 	);

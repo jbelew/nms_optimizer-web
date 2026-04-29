@@ -1,7 +1,6 @@
 import type {
 	DialogBodyProps,
 	DialogFooterProps,
-	DialogHeaderProps,
 	ModuleSelectionDialogProps,
 } from "./ModuleSelectionDialog";
 import { useEffect, useRef } from "react";
@@ -25,7 +24,6 @@ import { usePlatformStore } from "@/store/app/platformStore";
  */
 export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 	const {
-		translatedTechName,
 		groupedModules,
 		currentCheckedModules,
 		handleValueChange,
@@ -34,7 +32,6 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		allModulesSelected,
 		isIndeterminate,
 		techColor,
-		techImage,
 		tech,
 		onClose,
 	} = props;
@@ -56,13 +53,6 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		}
 	}, [isIndeterminate]);
 
-	// Structured props for DialogHeader
-	const headerProps: DialogHeaderProps = {
-		translatedTechName,
-		techImage,
-		techColor,
-	};
-
 	// Structured props for DialogBody
 	const bodyProps: DialogBodyProps = {
 		groupedModules,
@@ -83,7 +73,6 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 	};
 
 	return {
-		headerProps,
 		bodyProps,
 		footerProps,
 		isCorvette,

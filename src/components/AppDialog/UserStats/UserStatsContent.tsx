@@ -1,6 +1,5 @@
 import { FC, Suspense } from "react";
-import { Close as DialogClose } from "@radix-ui/react-dialog";
-import { Button, Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
+import { Flex, Heading, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
@@ -11,8 +10,6 @@ import { UserStatsData } from "./UserStatsData";
  * Props for the `UserStatsContent` component.
  */
 interface UserStatsContentProps {
-	/** Callback function to close the dialog. */
-	onClose: () => void;
 	/** Whether the dialog is currently open. Used to trigger lazy data fetching. */
 	isOpen: boolean;
 }
@@ -40,10 +37,10 @@ interface UserStatsContentProps {
  *
  * @example
  * ```tsx
- * <UserStatsContent isOpen={true} onClose={() => setOpen(false)} />
+ * <UserStatsContent isOpen={true} />
  * ```
  */
-export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen }) => {
+export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -82,14 +79,6 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ onClose, isOpen })
 					<UserStatsData isOpen={isOpen} />
 				</Suspense>
 			</ErrorBoundary>
-
-			<Flex gap="2" mt="4" mb="2" justify="end">
-				<DialogClose asChild>
-					<Button variant="soft" onClick={onClose}>
-						{t("dialogs.userStats.closeButton")}
-					</Button>
-				</DialogClose>
-			</Flex>
 		</>
 	);
 };

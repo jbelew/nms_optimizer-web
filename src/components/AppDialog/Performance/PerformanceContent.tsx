@@ -1,6 +1,5 @@
 import { FC, Suspense } from "react";
-import { Close as DialogClose } from "@radix-ui/react-dialog";
-import { Button, Flex, Skeleton, Text } from "@radix-ui/themes";
+import { Flex, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
@@ -13,8 +12,6 @@ import { PerformanceData } from "./PerformanceData";
  * @category Props
  */
 interface PerformanceContentProps {
-	/** Callback function to close the dialog. */
-	onClose: () => void;
 	/**
 	 * Whether the dialog is currently open.
 	 * @remarks Used to trigger lazy data fetching via the child `PerformanceData` component.
@@ -40,10 +37,10 @@ interface PerformanceContentProps {
  *
  * @example
  * ```tsx
- * <PerformanceContent isOpen={true} onClose={() => {}} />
+ * <PerformanceContent isOpen={true} />
  * ```
  */
-export const PerformanceContent: FC<PerformanceContentProps> = ({ onClose, isOpen }) => {
+export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -72,14 +69,6 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ onClose, isOpe
 					<PerformanceData isOpen={isOpen} />
 				</Suspense>
 			</ErrorBoundary>
-
-			<Flex gap="2" mt="2" mb="3" mr="1" justify="end">
-				<DialogClose asChild>
-					<Button variant="soft" onClick={onClose}>
-						{t("dialogs.performance.closeButton", "Close")}
-					</Button>
-				</DialogClose>
-			</Flex>
 		</>
 	);
 };

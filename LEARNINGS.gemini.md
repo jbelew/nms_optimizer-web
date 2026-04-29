@@ -699,3 +699,8 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 - **Action**: Removed the unsupported `color="amber"` prop from the Radix UI Themes `Card` component.
 - **Result**: TypeScript compilation passed, and linting remains clean.
 - **Lesson**: Radix UI Themes `Card` component does not support a `color` prop. Status colors should be applied to child components (like `Text`) or via `style` if a background color is needed.
+
+## 2026-04-29 - AppDialog Refactoring Tests
+- Finished fixing the AppDialog test suites after refactoring.
+- Since action buttons (Close, Retry, Copy) are now managed by the parent `AppDialog` component (passed via the `footer` prop) rather than the internal content components (`WelcomeContent`, `ShareLinkContent`, `ErrorContent`, `OptimizationAlertContent`, `PerformanceContent`, `UserStatsContent`), we updated the tests for these components to remove assertions related to button clicks and onClose callbacks.
+- Updated `OptimizationAlertDialog.test.tsx` to match button rendering correctly using translation keys instead of raw strings, taking into account how the i18next mock is set up.

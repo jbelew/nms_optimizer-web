@@ -1,5 +1,7 @@
 import type { FC } from "react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ShareLinkContent } from "./ShareLinkContent";
@@ -45,6 +47,47 @@ interface ShareLinkDialogProps {
  */
 const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }) => {
 	const { t } = useTranslation();
+	const [copied, setCopied] = useState(false);
+	const copiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Cleanup timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (copiedTimeoutRef.current) {
+				clearTimeout(copiedTimeoutRef.current);
+			}
+		};
+	}, []);
+
+	const handleCopyClick = async () => {
+		try {
+			await navigator.clipboard.writeText(shareUrl);
+			setCopied(true);
+
+			if (copiedTimeoutRef.current) {
+				clearTimeout(copiedTimeoutRef.current);
+			}
+
+			copiedTimeoutRef.current = setTimeout(() => {
+				setCopied(false);
+				copiedTimeoutRef.current = null;
+			}, 2000);
+		} catch (err) {
+			console.error("Failed to copy: ", err);
+		}
+	};
+
+	const footer = (
+		<div className="flex justify-end gap-2">
+			<Button variant="soft" onClick={onClose}>
+				{t("dialogs.shareLink.closeButton")}
+			</Button>
+			<Button onClick={handleCopyClick}>
+				{copied ? <CheckIcon /> : <CopyIcon />}
+				{copied ? t("dialogs.shareLink.copiedButton") : t("dialogs.shareLink.copyButton")}
+			</Button>
+		</div>
+	);
 
 	return (
 		<Suspense fallback={null}>
@@ -53,7 +96,8 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 				onClose={onClose}
 				titleKey="dialogs.titles.shareLink"
 				title={t("dialogs.titles.shareLink")}
-				content={<ShareLinkContent shareUrl={shareUrl} onClose={onClose} />}
+				footer={footer}
+				content={<ShareLinkContent shareUrl={shareUrl} />}
 			/>
 		</Suspense>
 	);

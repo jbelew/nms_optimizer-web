@@ -21,7 +21,7 @@ export const TARGET_HOST = "nms-optimizer.app";
  * @type {string[]}
  * @category Localization
  */
-export const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
+export const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
 
 /**
  * A list of supported language codes, excluding the default ('en').
@@ -29,7 +29,7 @@ export const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
  * @type {string[]}
  * @category Localization
  */
-export const OTHER_LANGUAGES = ["es", "fr", "de", "pt"];
+export const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
 
 /**
  * A list of known dialog routes that can be accessed via URL paths.

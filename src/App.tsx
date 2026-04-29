@@ -1,4 +1,5 @@
 import { FC, lazy, Suspense, useEffect, useState } from "react";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -165,6 +166,17 @@ const AppContent: FC = () => {
 						isOpen={showWelcome}
 						onClose={handleCloseWelcome}
 						content={<WelcomeContent onClose={handleCloseWelcome} />}
+						footer={
+							<div className="flex justify-end gap-2">
+								<Button
+									onClick={handleCloseWelcome}
+									mb="1"
+									className="cursor-pointer"
+								>
+									{t("dialogs.welcome.getStarted")}
+								</Button>
+							</div>
+						}
 						titleKey="dialogs.titles.welcome"
 						title={t("dialogs.titles.welcome", "Welcome")}
 					/>

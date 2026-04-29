@@ -68,6 +68,10 @@ interface AppDialogProps {
 	 * @default "default"
 	 */
 	size?: "default" | "wide" | "full";
+	/** Optional custom avatar or element to render before the title. */
+	headerIcon?: ReactNode;
+	/** Optional footer content (e.g., action buttons) rendered below the scrollable area. */
+	footer?: ReactNode;
 }
 
 /**
@@ -109,6 +113,8 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	title = "Information",
 	className = "",
 	size = "default",
+	headerIcon,
+	footer,
 }) => {
 	/**
 	 * Manages the Escape key listener for the dialog.
@@ -148,11 +154,18 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						} ${className}`}
 					>
 						<DialogTitle className="mr-2">
-							<span className="heading-styled flex items-center gap-2 text-xl sm:text-2xl">
-								{IconComponent && (
-									<IconComponent className="inline h-6 w-6" style={style} />
+							<span className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
+								{(headerIcon || IconComponent) && (
+									<div className="mt-px shrink-0 sm:mt-[4px]">
+										{headerIcon ||
+											(IconComponent && (
+												<IconComponent className="h-6 w-6" style={style} />
+											))}
+									</div>
 								)}
-								{titleKey ? t(titleKey) : title}
+								<span className={headerIcon || IconComponent ? "mr-6" : ""}>
+									{titleKey ? t(titleKey) : title}
+								</span>
 							</span>
 							<Separator mt="2" size="4" orientation="horizontal" decorative />
 						</DialogTitle>
@@ -172,6 +185,8 @@ const AppDialog: React.FC<AppDialogProps> = ({
 						>
 							{content}
 						</section>
+
+						{footer && <div className="appDialog__footer">{footer}</div>}
 
 						<DialogClose asChild>
 							<IconButton

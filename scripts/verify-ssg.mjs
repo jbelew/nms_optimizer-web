@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
 
-const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt"];
+const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
 const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats", "privacy"];
 
 /**
