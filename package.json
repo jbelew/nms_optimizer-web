@@ -31,6 +31,8 @@
 		"test:ci": "vitest run -c vitest.unit.config.ts --coverage",
 		"typecheck": "tsc --noEmit",
 		"verify:ssg": "node scripts/verify-ssg.mjs",
+		"verify:routes": "node scripts/verify-routes-consistency.mjs",
+		"verify:deployment": "node scripts/verify-deployment.mjs",
 		"format:check": "prettier --check --write ./src",
 		"format": "prettier --write ./src",
 		"format:locales": "prettier --write \"public/assets/locales/**/*.json\"",

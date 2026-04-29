@@ -61,7 +61,13 @@
 
 # Mutable static assets (images, fonts).
 # Cache for 1 day, serve stale for 1 day while revalidating in background.
-/assets/*
+/assets/img/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/assets/fonts/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/assets/svg/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+/assets/video/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=86400
 
 # Translations and markdown content: can change on any deploy.
