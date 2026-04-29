@@ -207,7 +207,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 								globIgnores: ["maintenance.html", "404.html", "500.html"],
 								clientsClaim: false,
 								skipWaiting: false,
-								navigationPreload: true,
+								navigationPreload: false,
 								cleanupOutdatedCaches: true,
 								maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 								navigateFallback: undefined,
