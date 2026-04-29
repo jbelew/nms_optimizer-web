@@ -66,6 +66,11 @@ export function generateNavigationLinks(lang, currentPage, t) {
 			key: "seo.nav.translation",
 			descKey: "seo.navDescriptions.translation",
 		},
+		{
+			path: "/performance",
+			key: "seo.nav.performance",
+			descKey: "seo.navDescriptions.performance",
+		},
 		{ path: "/privacy", key: "seo.nav.privacy", descKey: "seo.navDescriptions.privacy" },
 	];
 

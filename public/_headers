@@ -67,15 +67,15 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Mutable static assets (images, fonts).
-# Cache for 1 day, serve stale for 1 day while revalidating in background.
+# Cache for 7 days, serve stale for 1 day while revalidating in background.
 /assets/img/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 /assets/fonts/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 /assets/svg/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 /assets/video/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 # Translations and markdown content: can change on any deploy.
 # Cache for 1 minute, serve stale for 5 minutes during background revalidation.

@@ -70,8 +70,8 @@ async function verify() {
     if (aboutHeaders) {
         const cc = aboutHeaders['cache-control'] || '';
 
-        if (cc.includes('no-cache')) {
-            console.log('✓ /es/about/ - Correctly returning no-cache');
+        if (cc.includes('no-cache') || cc.includes('max-age=0')) {
+            console.log('✓ /es/about/ - Correctly returning no-cache / max-age=0');
         } else {
             console.log('✗ /es/about/ - MISSING NO-CACHE HEADER');
             console.log(`  Value: ${cc}`);

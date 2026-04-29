@@ -14,7 +14,6 @@ import { fileURLToPath } from "url";
 import express from "express";
 import expressStaticGzip from "express-static-gzip";
 
-import { seoTagInjectionMiddleware } from "./seoMiddleware.js";
 import {
 	BASE_KNOWN_PATHS,
 	KNOWN_DIALOGS,
@@ -185,17 +184,21 @@ function setCacheHeaders(res, filePath) {
 	let fileName = path.basename(filePath).replace(/\.(br|gz)$/, "");
 	const hashedAsset = /-[0-9a-zA-Z_-]{8,}\.(js|css|woff2?|png|jpe?g|webp|svg)$/;
 
-	if (fileName === "sw.js") {
+	if (fileName === "sw.js" || fileName === "version.json") {
 		res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	} else if (fileName === "index.html") {
 		// Never serve stale HTML — chunk hashes change on every deploy
 		res.setHeader("Cache-Control", "public, no-cache, must-revalidate");
+	} else if (fileName === "manifest.json" || fileName === "robots.txt" || fileName === "sitemap.xml") {
+		res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=3600");
 	} else if (hashedAsset.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico)$/.test(fileName)) {
-		res.setHeader("Cache-Control", "public, max-age=604800");
+	} else if (/\.(woff2?|ttf|otf|eot|png|jpe?g|gif|svg|webp|ico|mp3|mp4|webm)$/.test(fileName)) {
+		res.setHeader("Cache-Control", "public, max-age=604800, stale-while-revalidate=86400");
 	} else if (/\.md$/.test(fileName)) {
 		res.setHeader("Cache-Control", "public, max-age=3600");
+	} else if (filePath.includes("/assets/locales/")) {
+		res.setHeader("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
 	} else {
 		res.setHeader("Cache-Control", "public, max-age=86400");
 	}
@@ -243,10 +246,40 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.use((req, res, next) => {
+	const lng = req.query.lng;
+	if (lng) {
+		const lang = Array.isArray(lng) ? String(lng[0]) : String(lng);
+		const supportedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : "en";
+
+		const newURL = new URL(req.originalUrl, `https://${req.headers.host}`);
+		newURL.searchParams.delete("lng");
+
+		if (supportedLang !== "en") {
+			newURL.pathname = `/${supportedLang}${newURL.pathname === "/" ? "" : newURL.pathname}`;
+		}
+
+		return res.redirect(301, newURL.href);
+	}
+
+	const pathParts = req.path.split("/").filter(Boolean);
+	if (pathParts[0] === "en") {
+		const cleanPath = `/${pathParts.slice(1).join("/")}`;
+		const newURL = new URL(cleanPath, `https://${req.headers.host}`);
+		const search = req.originalUrl.split("?")[1];
+		if (search) {
+			newURL.search = search;
+		}
+		return res.redirect(301, newURL.href);
+	}
+	next();
+});
+
 if (process.env.NODE_ENV === "production") {
 	app.use((req, res, next) => {
 		const host = req.headers.host?.toLowerCase();
-		if (host && host !== TARGET_HOST.toLowerCase()) {
+		// Canonical Apex Host Enforcement
+		if (host === `www.${TARGET_HOST.toLowerCase()}`) {
 			return res.redirect(301, `https://${TARGET_HOST}${req.originalUrl}`);
 		}
 		next();
@@ -254,9 +287,18 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use((req, res, next) => {
-	if (req.path.length > 1 && req.path.endsWith("/")) {
+	const pathname = req.path;
+	const isReservedErrorPath = pathname === "/404" || pathname === "/500";
+	
+	// Trailing Slash Enforcement (match Cloudflare Function)
+	if (
+		pathname !== "/" &&
+		!pathname.endsWith("/") &&
+		!pathname.includes(".") &&
+		!isReservedErrorPath
+	) {
 		const query = req.url.slice(req.path.length);
-		return res.redirect(301, req.path.slice(0, -1) + query);
+		return res.redirect(301, pathname + "/" + query);
 	}
 	next();
 });
@@ -337,11 +379,7 @@ app.get(/^[^.]*$/, async (req, res, next) => {
 		return res.sendFile(fullPath);
 	}
 
-	try {
-		await seoTagInjectionMiddleware(req, res, loadIndexHtml, csp);
-	} catch (error) {
-		next(error);
-	}
+	next();
 });
 
 // ============================================================================

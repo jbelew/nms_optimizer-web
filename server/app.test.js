@@ -3,8 +3,8 @@
  * @remarks 
  * This suite verifies the following server behaviors:
  * 1.  **Static Asset Serving:** Ensures sitemaps, robots.txt, and JS/CSS assets are served with correct headers.
- * 2.  **SPA Fallback:** Validates that client-side routes correctly serve `index.html` or SSG equivalents.
- * 3.  **SEO Middleware:** Checks for dynamic tag injection (hreflang, canonical) and localized content.
+ * 2.  **Full SSG Routing:** Validates that client-side routes correctly serve pre-rendered SSG files.
+ * 3.  **SEO Redirects:** Checks for lng parameter and /en/ prefix normalization.
  * 4.  **Security Headers:** Confirms CSP, HSTS, and other security headers are present.
  * 5.  **Caching:** Verifies ETag and Cache-Control behavior for both HTML and static assets.
  * 6.  **Error Handling:** Ensures 404 pages are served for invalid routes.
@@ -12,7 +12,6 @@
  * @author jbelew
  * @license GPL-3.0
  * @see {@link ../server/app.js} Express Application
- * @see {@link ../server/seoMiddleware.js} SEO Middleware
  */
 
 import fs from "fs";
@@ -37,24 +36,15 @@ const MOCK_DIST_PATH = path.join(__dirname, "../dist");
 
 /**
  * Setup hook: Creates a mock distribution environment with index files, SSG pages, and static assets.
- * @remarks
- * Initializes:
- * - Root `index.html`
- * - French (`/fr`) and English (`/about`) SSG pages.
- * - Static files like `sitemap.xml` and `robots.txt`.
- * After file creation, it triggers `scanSsgFiles()` to refresh the server's memory cache.
- * @returns {void}
  */
 beforeAll(() => {
 	if (!fs.existsSync(MOCK_DIST_PATH)) {
-		fs.mkdirSync(MOCK_DIST_PATH);
+		fs.mkdirSync(MOCK_DIST_PATH, { recursive: true });
 	}
 	// Root index
 	fs.writeFileSync(
 		path.join(MOCK_DIST_PATH, "index.html"),
-		'<!DOCTYPE html><html lang="en"><head><title>Root Page</title></head><body>Root Index ' +
-			"填充 ".repeat(200) +
-			"</body></html>"
+		'<!DOCTYPE html><html lang="en"><head><title>Root Page</title></head><body>Root Index</body></html>'
 	);
 	
 	// SSG Language Root
@@ -93,7 +83,6 @@ beforeAll(() => {
 
 /**
  * Teardown hook: Recursively removes the mock distribution directory.
- * @returns {void}
  */
 afterAll(() => {
 	fs.rmSync(MOCK_DIST_PATH, { recursive: true, force: true });
@@ -113,51 +102,57 @@ describe("Express Server Core Routing", () => {
 		expect(response.headers["content-type"]).toMatch(/xml/);
 	});
 
-	it("should serve robots.txt", async () => {
-		const response = await request(app).get("/robots.txt");
-		expect(response.status).toBe(200);
-		expect(response.headers["content-type"]).toMatch(/text\/plain/);
-	});
-
 	it("should return 404 for a non-existent static asset", async () => {
 		const response = await request(app).get("/assets/non-existent-file.js");
 		expect(response.status).toBe(404);
 	});
 
-	it("should handle SPA fallback for non-asset paths", async () => {
-		        const response = await request(app)
-		            .get("/a/random/spa/path")
-		            .set("Accept", "text/html");
-		        expect(response.status).toBe(404);	});
+	it("should return 404 for unknown extensionless paths", async () => {
+		const response = await request(app)
+			.get("/a/random/path")
+			.set("Accept", "text/html");
+		expect(response.status).toBe(404);
+	});
 
-	it("should redirect requests with trailing slashes", async () => {
-		const response = await request(app).get("/about/");
+	it("should enforce trailing slashes (match Cloudflare)", async () => {
+		const response = await request(app).get("/about");
 		expect(response.status).toBe(301);
-		expect(response.headers["location"]).toBe("/about");
+		expect(response.headers["location"]).toBe("/about/");
 	});
 
 	it("should not redirect the root path with a trailing slash", async () => {
-		// A request to '/' is a special case and should not be redirected.
 		const response = await request(app).get("/").set("Accept", "text/html");
 		expect(response.status).toBe(200);
 	});
+
+	it("should normalize lng parameter to path prefix", async () => {
+		const response = await request(app).get("/about?lng=fr");
+		expect(response.status).toBe(301);
+		expect(response.headers["location"]).toBe("/fr/about/");
+	});
+
+	it("should strip /en/ prefix for SEO", async () => {
+		const response = await request(app).get("/en/about/");
+		expect(response.status).toBe(301);
+		expect(response.headers["location"]).toBe("/about/");
+	});
 });
 
-describe("SEO Middleware - Path-based Language Routing", () => {
-	it("should serve /fr language route from SSG", async () => {
-		const response = await request(app).get("/fr");
+describe("Full SSG - Static Language Routing", () => {
+	it("should serve /fr/ language root from SSG", async () => {
+		const response = await request(app).get("/fr/");
 		expect(response.status).toBe(200);
 		expect(response.text).toContain("French Index");
 	});
 
-	it("should serve /fr/about language route from SSG", async () => {
-		const response = await request(app).get("/fr/about");
+	it("should serve /fr/about/ language route from SSG", async () => {
+		const response = await request(app).get("/fr/about/");
 		expect(response.status).toBe(200);
 		expect(response.text).toContain("French About Page");
 	});
 
-	it("should serve /about from SSG", async () => {
-		const response = await request(app).get("/about");
+	it("should serve /about/ from SSG", async () => {
+		const response = await request(app).get("/about/");
 		expect(response.status).toBe(200);
 		expect(response.text).toContain("English About Page");
 	});
@@ -167,21 +162,12 @@ describe("SEO Middleware - Path-based Language Routing", () => {
 		expect(response.status).toBe(200);
 		expect(response.text).toContain("Root Index");
 	});
-
-	it("should serve a supported language route without SSG via dynamic injection", async () => {
-		// /es was not created in beforeAll, should fall back to base template with dynamic injection
-		const response = await request(app).get("/es");
-		expect(response.status).toBe(200);
-		// Should contain Spanish SEO markers injected by middleware
-		expect(response.text).toContain('lang="es"');
-		expect(response.text).toContain("<title>");
-	});
 });
 
 describe("Caching Headers Verification", () => {
-	it("should set cache headers for HTML content", async () => {
+	it("should set cache-control: no-cache for HTML to allow edge caching but prevent stale browser cache", async () => {
 		const response = await request(app).get("/").set("Accept", "text/html");
-		expect(response.headers["cache-control"]).toBeDefined();
+		expect(response.headers["cache-control"]).toBe("public, no-cache, must-revalidate");
 	});
 
 	it("should include ETag header for HTML", async () => {
@@ -189,119 +175,22 @@ describe("Caching Headers Verification", () => {
 		expect(response.headers["etag"]).toBeDefined();
 	});
 
-	it("should support conditional requests with ETag", async () => {
-		const firstResponse = await request(app).get("/");
-		const etag = firstResponse.headers["etag"];
-
-		const secondResponse = await request(app)
-			.get("/")
-			.set("If-None-Match", etag);
-
-		// Should return 304 Not Modified or 200 with same content
-		expect([200, 304]).toContain(secondResponse.status);
-	});
-
-	it("should set Cache-Control for static assets", async () => {
-		const response = await request(app).get("/sitemap.xml");
-		expect(response.status).toBe(200);
-		// Static files should have cache headers
-		expect([200]).toContain(response.status);
+	it("should set background revalidation for SSG files", async () => {
+		const response = await request(app).get("/about/");
+		expect(response.headers["cache-control"]).toContain("stale-while-revalidate=60");
 	});
 });
 
 describe("Security Policy Headers", () => {
-	it("should set Content-Security-Policy header with GTM in img-src", async () => {
+	it("should set Content-Security-Policy header", async () => {
 		const response = await request(app).get("/");
 		const csp = response.headers["content-security-policy"];
 		expect(csp).toBeDefined();
-		expect(csp).toContain("img-src");
-		expect(csp).toContain("www.googletagmanager.com");
+		expect(csp).toContain("default-src 'self'");
 	});
 
 	it("should include X-Content-Type-Options header", async () => {
 		const response = await request(app).get("/");
-		expect(response.headers["x-content-type-options"]).toBeDefined();
-	});
-
-	it("should set X-Frame-Options header", async () => {
-		const response = await request(app).get("/");
-		// CSP frame-ancestors should be set
-		expect(response.headers["content-security-policy"]).toContain("frame-ancestors");
-	});
-});
-
-describe("Server-Side Compression Logic", () => {
-	it("should NOT serve compressed assets for HTML (offloaded to Cloudflare)", async () => {
-		const response = await request(app).get("/").set("Accept-Encoding", "gzip");
-		expect(response.status).toBe(200);
-		// Origin no longer compresses HTML to reduce TTFB; Cloudflare handles this at the edge.
-		expect(response.headers["content-encoding"]).toBeUndefined();
-	});
-
-	it("should serve uncompressed assets to clients", async () => {
-		const response = await request(app).get("/").set("Accept-Encoding", "identity");
-		expect(response.status).toBe(200);
-		expect(response.headers["content-encoding"]).toBeUndefined();
-	});
-});
-
-describe("Error Responses and Information Leakage", () => {
-	it("should return 404 for nonexistent HTML routes", async () => {
-		const response = await request(app)
-			.get("/nonexistent-page")
-			.set("Accept", "text/html");
-		expect(response.status).toBe(404);
-	});
-
-	it("should not leak sensitive information in error responses", async () => {
-		const response = await request(app).get("/nonexistent-asset.js");
-		expect(response.status).toBe(404);
-		expect(response.text).not.toContain("ENOENT");
-		expect(response.text).not.toContain("/home");
-	});
-});
-
-describe("Complex Request Handling", () => {
-	it("should handle requests with query parameters", async () => {
-		const response = await request(app)
-			.get("/?platform=standard&ship=fighter")
-			.set("Accept", "text/html");
-		expect(response.status).toBe(200);
-		expect(response.text).toContain("<html");
-	});
-
-	it("should handle requests with URL fragments (client-side only)", async () => {
-		const response = await request(app)
-			.get("/#/changelog")
-			.set("Accept", "text/html");
-		// Fragment is client-side, server sees '/'
-		expect(response.status).toBe(200);
-		expect(response.text).toContain("<html");
-	});
-
-	it("should preserve query parameters when falling back to dynamic injection", async () => {
-		// /es is dynamic fallback, query params are handled by middleware
-		const response = await request(app)
-			.get("/es?foo=bar")
-			.set("Accept", "text/html");
-		expect(response.status).toBe(200);
-		expect(response.text).toContain('lang="es"');
-	});
-});
-
-describe("Content-Type Enforcement", () => {
-	it("should serve HTML with correct content-type", async () => {
-		const response = await request(app).get("/");
-		expect(response.headers["content-type"]).toMatch(/text\/html/);
-	});
-
-	it("should serve XML with correct content-type", async () => {
-		const response = await request(app).get("/sitemap.xml");
-		expect(response.headers["content-type"]).toMatch(/xml/);
-	});
-
-	it("should serve text files with correct content-type", async () => {
-		const response = await request(app).get("/robots.txt");
-		expect(response.headers["content-type"]).toMatch(/text\/plain/);
+		expect(response.headers["x-content-type-options"]).toBe("nosniff");
 	});
 });

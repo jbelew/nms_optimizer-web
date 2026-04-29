@@ -44,6 +44,7 @@ export const KNOWN_DIALOGS = [
 	"translation",
 	"userstats",
 	"privacy",
+	"performance",
 ];
 
 /**
