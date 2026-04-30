@@ -6,6 +6,12 @@
 		background-image: linear-gradient(to bottom, black, transparent);
 	}
 
+	body.a11y-font & {
+		:is(.dark, .dark-theme) & {
+			background-image: linear-gradient(to bottom, var(--gray-2), transparent);
+		}
+	}
+
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
