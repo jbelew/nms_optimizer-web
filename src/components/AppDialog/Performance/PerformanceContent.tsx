@@ -5,6 +5,44 @@ import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 import { PerformanceData } from "./PerformanceData";
+import { CHART_HEIGHT, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
+
+/**
+ * A structured skeleton that mimics the layout of the dashboard data area.
+ *
+ * @example
+ * ```tsx
+ * <DashboardSkeleton />
+ * ```
+ */
+const DashboardSkeleton: FC = () => (
+	<Flex
+		direction="column"
+		gap="4"
+		style={{
+			marginTop: "4px",
+			marginBottom: "4px",
+			marginRight: "4px",
+			marginLeft: "4px",
+		}}
+	>
+		{/* Summary Cards Row (gap="3") */}
+		<Flex gap="3" wrap="wrap" justify="between">
+			{[...Array(6)].map((_, i) => (
+				<Skeleton
+					key={i}
+					height={`${SUMMARY_CARDS_HEIGHT}px`}
+					style={{ flex: "1 1 120px" }}
+				/>
+			))}
+		</Flex>
+
+		{/* Chart Area (gap="4" from cards row) */}
+		<div style={{ marginBottom: "8px" }}>
+			<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />
+		</div>
+	</Flex>
+);
 
 /**
  * Props for the `PerformanceContent` component.
@@ -24,8 +62,8 @@ interface PerformanceContentProps {
  *
  * @remarks
  * Renders the high-level description, summary cards, and the main trend chart.
- * It is wrapped in an `ErrorBoundary` and `Suspense` to handle data loading
- * states gracefully.
+ * The static description is visible immediately, while the data-dependent
+ * dashboard is wrapped in Suspense and an ErrorBoundary.
  *
  * @param {PerformanceContentProps} props - Component properties.
  *
@@ -54,18 +92,12 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 
 			<ErrorBoundary
 				fallback={
-					<Text color="red">
+					<div className="p-4 text-red-500">
 						{t("dialogs.performance.error", "Failed to load performance metrics.")}
-					</Text>
+					</div>
 				}
 			>
-				<Suspense
-					fallback={
-						<Flex direction="column" gap="4">
-							<Skeleton height="446px" width="100%" />
-						</Flex>
-					}
-				>
+				<Suspense fallback={<DashboardSkeleton />}>
 					<PerformanceData isOpen={isOpen} />
 				</Suspense>
 			</ErrorBoundary>

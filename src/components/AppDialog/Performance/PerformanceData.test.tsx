@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Theme } from "@radix-ui/themes";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
@@ -25,11 +25,33 @@ vi.mock("@/utils/api/performanceResource", () => ({
 	fetchPerformanceData: vi.fn(),
 }));
 
-// Mock Recharts
-// PerformanceData uses LazyChartLoader which imports recharts dynamically.
-// We need to mock the dynamic import or the component that uses it.
-// Actually PerformanceData renders Suspense + LazyChartLoader.
-// LazyChartLoader then renders PerformanceChart which uses the recharts prop.
+// Mock PerformanceChart to avoid dynamic import issues in tests
+vi.mock("./PerformanceChart", async () => {
+	const { useState } = await import("react");
+
+	return {
+		PerformanceChart: ({ data }: { data: Array<{ metric_name: string }> }) => {
+			const [selected, setSelected] = useState<string | null>(null);
+
+			// Filter unique metrics from mock data
+			const metrics = Array.from(new Set(data.map((d) => d.metric_name)));
+
+			return (
+				<div data-testid="performance-chart">
+					{metrics.map((m) => (
+						<button
+							key={m}
+							aria-pressed={selected === m ? "true" : "false"}
+							onClick={() => setSelected(selected === m ? null : m)}
+						>
+							{m}
+						</button>
+					))}
+				</div>
+			);
+		},
+	};
+});
 
 const mockData = [
 	{
@@ -63,7 +85,9 @@ describe("PerformanceData", () => {
 	test("should render metric cards", async () => {
 		render(
 			<Theme>
-				<PerformanceData isOpen={true} />
+				<Suspense fallback={<div>Loading...</div>}>
+					<PerformanceData isOpen={true} />
+				</Suspense>
 			</Theme>
 		);
 
@@ -75,7 +99,9 @@ describe("PerformanceData", () => {
 	test("should toggle metric selection on click", async () => {
 		render(
 			<Theme>
-				<PerformanceData isOpen={true} />
+				<Suspense fallback={<div>Loading...</div>}>
+					<PerformanceData isOpen={true} />
+				</Suspense>
 			</Theme>
 		);
 
@@ -96,7 +122,9 @@ describe("PerformanceData", () => {
 	test("should allow switching between metrics", async () => {
 		render(
 			<Theme>
-				<PerformanceData isOpen={true} />
+				<Suspense fallback={<div>Loading...</div>}>
+					<PerformanceData isOpen={true} />
+				</Suspense>
 			</Theme>
 		);
 

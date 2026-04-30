@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { lazy, Suspense } from "react";
-import { Button, Skeleton } from "@radix-ui/themes";
+import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { PerformanceContent } from "./PerformanceContent";
@@ -37,7 +37,7 @@ interface PerformanceDialogProps {
  *
  * @example
  * ```tsx
- * <PerformanceDialog isOpen={show} onClose={hide} />
+ * <PerformanceDialog isOpen={true} onClose={hide} />
  * ```
  */
 const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
@@ -60,11 +60,7 @@ const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 				titleKey="dialogs.titles.performance"
 				title={t("dialogs.titles.performance", "Performance Metrics")}
 				footer={footer}
-				content={
-					<Suspense fallback={<Skeleton height="534px" width="100%" />}>
-						<PerformanceContent isOpen={isOpen} />
-					</Suspense>
-				}
+				content={<PerformanceContent isOpen={isOpen} />}
 			/>
 		</Suspense>
 	);

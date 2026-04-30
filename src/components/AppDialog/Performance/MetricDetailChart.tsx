@@ -1,8 +1,22 @@
 import { FC } from "react";
 import { Flex, Text } from "@radix-ui/themes";
+import {
+	Bar,
+	CartesianGrid,
+	ComposedChart,
+	Label,
+	Line,
+	ReferenceArea,
+	ReferenceLine,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
 
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
+	CHART_HEIGHT,
 	getFormatter,
 	getMetricColor,
 	LIGHTHOUSE_CONFIG,
@@ -19,8 +33,6 @@ interface MetricDetailChartProps {
 	chartData: ChartDataPoint[];
 	/** A list of app version change events for reference lines. */
 	versionChanges: { timestamp: number; version: string }[];
-	/** The dynamic Recharts library module. */
-	recharts: typeof import("recharts");
 	/** The active user locale for date formatting. */
 	locale: string;
 }
@@ -64,23 +76,8 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	metric,
 	chartData,
 	versionChanges,
-	recharts,
 	locale,
 }) => {
-	const {
-		ResponsiveContainer,
-		ComposedChart,
-		Line,
-		Bar,
-		XAxis,
-		YAxis,
-		CartesianGrid,
-		Tooltip,
-		ReferenceLine,
-		ReferenceArea,
-		Label,
-	} = recharts;
-
 	const config = LIGHTHOUSE_CONFIG[metric] || { p90: 2500, p50: 4000 };
 
 	const color = getMetricColor(metric, 11);
@@ -101,7 +98,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	});
 
 	return (
-		<ResponsiveContainer width="100%" height={350} className="mb-2">
+		<ResponsiveContainer width="100%" height={CHART_HEIGHT} className="mb-2">
 			<ComposedChart data={clampedData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
 				<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
 

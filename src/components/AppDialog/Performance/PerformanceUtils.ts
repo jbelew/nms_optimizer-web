@@ -27,6 +27,43 @@ export const METRIC_THRESHOLDS: Record<string, number> = {
 export const MAX_CHART_POINTS = 48;
 
 /**
+ * Standard height for performance charts across the dashboard.
+ *
+ * @remarks
+ * Centralizing this value ensures that loading skeletons perfectly match
+ * the rendered charts, preventing layout shift (CLS).
+ *
+ * @category Constants
+ */
+export const CHART_HEIGHT = 350;
+
+/**
+ * Approximate height of the summary cards row.
+ * Used for skeleton alignment.
+ * @category Constants
+ */
+export const SUMMARY_CARDS_HEIGHT = 80;
+
+/**
+ * Standard gap between dashboard elements (corresponds to Radix gap="4").
+ * @category Constants
+ */
+export const DASHBOARD_GAP = 16;
+
+/**
+ * Approximate height of the description text row (line height + margin).
+ * @category Constants
+ */
+export const DESCRIPTION_ROW_HEIGHT = 40;
+
+/**
+ * Total height of the performance content (including description, cards, and chart).
+ * Used for the top-level dialog skeleton to prevent CLS.
+ * @category Constants
+ */
+export const FULL_DASHBOARD_HEIGHT = 502;
+
+/**
  * Returns a consistent color for a given performance metric.
  *
  * @remarks

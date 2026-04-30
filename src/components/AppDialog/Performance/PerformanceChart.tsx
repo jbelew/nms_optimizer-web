@@ -1,15 +1,15 @@
-import { FC, useState } from "react";
+import { FC, lazy, Suspense, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import { Card, Flex, Text } from "@radix-ui/themes";
+import { Card, Flex, Skeleton, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
-import { MetricDetailChart } from "./MetricDetailChart";
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	calculateSMA,
+	CHART_HEIGHT,
 	computeLogNormalScore,
 	getFormatter,
 	getMetricColor,
@@ -17,13 +17,13 @@ import {
 	LIGHTHOUSE_CONFIG,
 } from "./PerformanceUtils";
 
+const PerformanceChartsContainer = lazy(() => import("./PerformanceChartsContainer"));
+
 /**
  * Properties for the {@link PerformanceChart} component.
  *
  * @remarks
- * This interface defines the data and library dependencies required to render
- * the performance timeseries charts. It uses dynamic imports for `recharts`
- * to support code-splitting.
+ * This interface defines the data required to render the performance timeseries charts.
  *
  * @see {@link PerformanceChart}
  * @see {@link PerformanceMetric}
@@ -34,11 +34,6 @@ interface PerformanceChartProps {
 	 * @see {@link PerformanceMetric}
 	 */
 	data: PerformanceMetric[];
-	/**
-	 * The dynamic Recharts library module.
-	 * Required because Recharts is loaded lazily to reduce initial bundle size.
-	 */
-	recharts: typeof import("recharts");
 }
 
 /**
@@ -58,7 +53,7 @@ interface PerformanceChartProps {
  *
  * @returns {JSX.Element} The rendered performance dashboard UI.
  *
- * @see {@link MetricDetailChart}
+ * @see {@link PerformanceChartsContainer}
  * @see {@link computeLogNormalScore}
  * @see {@link PerformanceMetric}
  * @see {@link LIGHTHOUSE_CONFIG}
@@ -69,28 +64,12 @@ interface PerformanceChartProps {
  *
  * @example
  * ```tsx
- * import * as recharts from 'recharts';
- *
- * // Renders the dashboard with raw data and Recharts dependency
- * <PerformanceChart
- *   data={apiPerformanceData}
- *   recharts={recharts}
- * />
+ * // Mounts the performance chart with raw metric data
+ * <PerformanceChart data={apiResponseData} />
  * ```
  */
-export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) => {
+export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
-	const {
-		ResponsiveContainer,
-		AreaChart,
-		Area,
-		XAxis,
-		YAxis,
-		CartesianGrid,
-		Tooltip,
-		ReferenceLine,
-		Label,
-	} = recharts;
 
 	const { i18n } = useTranslation();
 	const locale = i18n.language;
@@ -249,9 +228,6 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 
 	const displayOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"];
 	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
-	const stackOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"].filter((m) =>
-		uniqueMetrics.includes(m)
-	);
 
 	/**
 	 * Retrieves the most recent value for a metric from the timeseries.
@@ -515,7 +491,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 									)}
 									{getMetricTrend(metric) === "regression" && (
 										<Text color="red">
-											<ArrowUpIcon />
+											<ArrowDownIcon />
 										</Text>
 									)}
 								</Flex>
@@ -525,127 +501,15 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data, recharts }) 
 				})}
 			</Flex>
 
-			{selectedMetric ? (
-				<MetricDetailChart
-					metric={selectedMetric}
+			<Suspense fallback={<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />}>
+				<PerformanceChartsContainer
+					selectedMetric={selectedMetric}
 					chartData={chartData}
+					uniqueMetrics={uniqueMetrics}
 					versionChanges={versionChanges}
-					recharts={recharts}
 					locale={locale}
 				/>
-			) : (
-				<ResponsiveContainer width="100%" height={350} className="mb-2">
-					<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
-						<CartesianGrid
-							strokeDasharray="3 3"
-							vertical={false}
-							stroke="var(--gray-5)"
-						/>
-						{versionChanges.map((change) => (
-							<ReferenceLine
-								key={change.timestamp}
-								x={change.timestamp}
-								stroke="var(--gray-7)"
-								strokeDasharray="2 4"
-								strokeWidth={1}
-							>
-								<Label
-									value={
-										change.version.startsWith("v")
-											? change.version
-											: `v${change.version}`
-									}
-									position="insideTopLeft"
-									fill="var(--gray-10)"
-									fontSize={10}
-									fontWeight={600}
-									offset={4}
-								/>
-							</ReferenceLine>
-						))}
-						<XAxis
-							dataKey="timestamp"
-							type="number"
-							scale="time"
-							domain={["dataMin", "dataMax"]}
-							axisLine={false}
-							tickLine={false}
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-							minTickGap={40}
-							tickFormatter={(val) =>
-								new Intl.DateTimeFormat(locale, {
-									month: "numeric",
-									day: "numeric",
-								}).format(new Date(val))
-							}
-						/>
-						<YAxis
-							axisLine={false}
-							tickLine={false}
-							width={40}
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-						/>
-						<Tooltip
-							itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
-							wrapperStyle={{ pointerEvents: "none" }}
-							allowEscapeViewBox={{ x: false, y: false }}
-							isAnimationActive={false}
-							offset={10}
-							labelFormatter={(_label, payload) => {
-								const item = payload[0]?.payload as ChartDataPoint | undefined;
-								const baseLabel = item
-									? `${item.displayDate} ${item.hour}`
-									: String(_label);
-
-								return item?.appVersion
-									? `${baseLabel} (${item.appVersion})`
-									: baseLabel;
-							}}
-							formatter={(
-								value,
-								name,
-								props: { payload?: Record<string, unknown> }
-							) => {
-								const originalValue = props.payload?.[`${name}_original`];
-								const numericValue =
-									typeof originalValue === "number"
-										? originalValue
-										: typeof value === "number"
-											? value
-											: 0;
-
-								return [
-									name === "CLS"
-										? (numericValue / 1000).toFixed(2)
-										: `${Math.round(numericValue)}ms`,
-									String(name),
-								];
-							}}
-							contentStyle={{
-								backgroundColor: "var(--gray-3)",
-								borderColor: "var(--gray-6)",
-								borderRadius: "8px",
-								color: "var(--gray-12)",
-								fontSize: "12px",
-								fontWeight: 500,
-							}}
-						/>
-						{stackOrder.map((metric) => (
-							<Area
-								key={metric}
-								type="basis"
-								dataKey={metric}
-								stackId="1"
-								stroke={getMetricColor(metric, 11)}
-								fill={getMetricColor(metric, 10)}
-								fillOpacity={0.9}
-								strokeWidth={2}
-								connectNulls
-							/>
-						))}
-					</AreaChart>
-				</ResponsiveContainer>
-			)}
+			</Suspense>
 		</Flex>
 	);
 };
