@@ -6,6 +6,11 @@
  * It contains standard metadata (timestamp, version) and dynamic metric keys
  * that correspond to actual CWV names (e.g., `LCP`).
  *
+ * It supports:
+ * - Raw metric values (`number`)
+ * - Formatted display strings (`string`)
+ * - Range values for bar charts (`[number, number]`)
+ *
  * @category Interfaces
  */
 export interface ChartDataPoint {
@@ -20,7 +25,6 @@ export interface ChartDataPoint {
 	/**
 	 * Dynamic performance metric values or ranges.
 	 * Metrics are stored as numbers (e.g., `1250`).
-	 * Clamped visual values use the `_clamped` suffix.
 	 * Ranges for bar charts are `[p50, p90]`.
 	 */
 	[metricName: string]: string | number | [number, number] | undefined;

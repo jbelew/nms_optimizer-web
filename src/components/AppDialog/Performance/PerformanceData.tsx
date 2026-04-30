@@ -1,11 +1,11 @@
-import { FC, useEffect } from "react";
-import { Flex, Text } from "@radix-ui/themes";
+import { FC, lazy, useEffect } from "react";
+import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
 import { fetchPerformanceData } from "@/utils/api/performanceResource";
 
-import { PerformanceChart } from "./PerformanceChart";
+const PerformanceChart = lazy(() => import("./PerformanceChart"));
 
 /**
  * Data orchestration component for performance metrics.
@@ -14,7 +14,7 @@ import { PerformanceChart } from "./PerformanceChart";
  * This component handles the data lifecycle for the performance dashboard:
  * 1. Triggers an eager fetch via `fetchPerformanceData` when the dialog opens.
  * 2. Consumes the streamable data via the `usePerformanceData` hook.
- * 3. Renders the specialized timeseries visualizations.
+ * 3. Renders the lazy-loaded `PerformanceChart` visualization.
  *
  * @param {Object} props - Component properties.
  * @param {boolean} props.isOpen - Indicates if the parent dialog is visible.
@@ -24,6 +24,7 @@ import { PerformanceChart } from "./PerformanceChart";
  * @see {@link PerformanceChart}
  * @see {@link fetchPerformanceData}
  * @see {@link usePerformanceData}
+ * @see {@link ./PerformanceData.test.tsx Unit Tests}
  *
  * @component
  *
@@ -31,7 +32,6 @@ import { PerformanceChart } from "./PerformanceChart";
  *
  * @example
  * ```tsx
- * // Mounts the performance dashboard orchestration component
  * <PerformanceData isOpen={true} />
  * ```
  */
@@ -50,11 +50,7 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		return <Text>{t("dialogs.performance.noData", "No performance data available.")}</Text>;
 	}
 
-	return (
-		<Flex direction="column" gap="4" style={{ overflow: "hidden" }}>
-			<PerformanceChart data={data} />
-		</Flex>
-	);
+	return <PerformanceChart data={data} />;
 };
 
 export default PerformanceData;

@@ -29,27 +29,30 @@ vi.mock("@/utils/api/performanceResource", () => ({
 vi.mock("./PerformanceChart", async () => {
 	const { useState } = await import("react");
 
+	const MockPerformanceChart = ({ data }: { data: Array<{ metric_name: string }> }) => {
+		const [selected, setSelected] = useState<string | null>(null);
+
+		// Filter unique metrics from mock data
+		const metrics = Array.from(new Set(data.map((d) => d.metric_name)));
+
+		return (
+			<div data-testid="performance-chart">
+				{metrics.map((m) => (
+					<button
+						key={m}
+						aria-pressed={selected === m ? "true" : "false"}
+						onClick={() => setSelected(selected === m ? null : m)}
+					>
+						{m}
+					</button>
+				))}
+			</div>
+		);
+	};
+
 	return {
-		PerformanceChart: ({ data }: { data: Array<{ metric_name: string }> }) => {
-			const [selected, setSelected] = useState<string | null>(null);
-
-			// Filter unique metrics from mock data
-			const metrics = Array.from(new Set(data.map((d) => d.metric_name)));
-
-			return (
-				<div data-testid="performance-chart">
-					{metrics.map((m) => (
-						<button
-							key={m}
-							aria-pressed={selected === m ? "true" : "false"}
-							onClick={() => setSelected(selected === m ? null : m)}
-						>
-							{m}
-						</button>
-					))}
-				</div>
-			);
-		},
+		PerformanceChart: MockPerformanceChart,
+		default: MockPerformanceChart,
 	};
 });
 

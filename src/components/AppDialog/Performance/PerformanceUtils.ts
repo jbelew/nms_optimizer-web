@@ -5,17 +5,26 @@ import { ChartDataPoint } from "./PerformanceTypes";
 /**
  * Formats a metric value for display, handling metric-specific scaling (like CLS).
  *
- * @param {string} metric - The name of the metric.
- * @param {number} value - The numeric value.
+ * @remarks
+ * This utility ensures that Core Web Vitals are displayed in their standard units.
+ * For CLS, values are scaled from thousands (raw telemetry) to the 0.00-1.00 range.
+ * All other metrics are rounded to the nearest integer.
+ *
+ * @param {string} metric - The name of the metric (e.g., `LCP`, `CLS`).
+ * @param {number} value - The raw numeric value from telemetry.
  * @param {boolean} [includeUnit=true] - Whether to include the unit suffix (e.g., "ms").
  *
- * @returns {string} The formatted string.
+ * @returns {string} The formatted string suitable for UI display.
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * const formatted = formatMetricValue("LCP", 1250); // returns "1250ms"
+ * const formatted = formatMetricValue("LCP", 1250);
+ * // returns "1250ms"
+ *
+ * const cls = formatMetricValue("CLS", 125);
+ * // returns "0.13"
  * ```
  */
 export const formatMetricValue = (metric: string, value: number, includeUnit = true): string => {
@@ -118,7 +127,7 @@ export const CHART_TOOLTIP_STYLE: React.CSSProperties = {
  * Used for the top-level dialog skeleton to prevent CLS.
  * @category Constants
  */
-export const FULL_DASHBOARD_HEIGHT = 502;
+export const FULL_DASHBOARD_HEIGHT = 510;
 
 /**
  * Returns a consistent color for a given performance metric.
@@ -135,7 +144,8 @@ export const FULL_DASHBOARD_HEIGHT = 502;
  *
  * @example
  * ```ts
- * const color = getMetricColor("LCP", "a3"); // returns "var(--red-a3)"
+ * const color = getMetricColor("LCP", "a3");
+ * // returns "var(--red-a3)"
  * ```
  */
 export const getMetricColor = (name: string, weight: number | string = 10): string => {
@@ -165,7 +175,7 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
  * @remarks
  * Uses standard "Good", "Needs Improvement", and "Poor" ranges for each CWV metric.
  *
- * @param {string} metric - The name of the metric.
+ * @param {string} metric - The name of the metric (e.g., `LCP`, `FCP`).
  * @param {number | undefined | null} value - The actual metric value.
  *
  * @returns {string} A CSS variable reference to a green, amber, or red color.
@@ -174,7 +184,8 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
  *
  * @example
  * ```ts
- * const color = getStatusColor("LCP", 1200); // returns "var(--green-11)"
+ * const color = getStatusColor("LCP", 1200);
+ * // returns "var(--green-11)"
  * ```
  */
 export const getStatusColor = (metric: string, value: number | undefined | null): string => {
@@ -233,7 +244,8 @@ export const getStatusColor = (metric: string, value: number | undefined | null)
  *
  * @example
  * ```ts
- * const score = computeLogNormalScore(2500, 2500, 4000); // returns 90
+ * const score = computeLogNormalScore(2500, 2500, 4000);
+ * // returns 90
  * ```
  */
 export const computeLogNormalScore = (value: number, p90: number, p50: number): number => {
@@ -290,8 +302,11 @@ const formatterCache = new Map<string, Intl.DateTimeFormat>();
 /**
  * Retrieves a memoized Intl.DateTimeFormat instance.
  *
- * @param {string} locale - The user locale.
- * @param {Intl.DateTimeFormatOptions} options - Formatting options.
+ * @remarks
+ * This utility optimizes performance by caching formatters by locale and options.
+ *
+ * @param {string} locale - The user locale (e.g., `en-US`).
+ * @param {Intl.DateTimeFormatOptions} options - Standard Intl formatting options.
  *
  * @returns {Intl.DateTimeFormat} A cached or new formatter instance.
  *
@@ -331,7 +346,8 @@ export const getFormatter = (
  *
  * @example
  * ```ts
- * const sma = calculateSMA([10, 20, 30, 40], 2); // returns [10, 15, 25, 35]
+ * const sma = calculateSMA([10, 20, 30, 40], 2);
+ * // returns [10, 15, 25, 35]
  * ```
  */
 export const calculateSMA = (
@@ -354,11 +370,22 @@ export const calculateSMA = (
 /**
  * Transforms flat API records into a timestamp-keyed structure for Recharts.
  *
+ * @remarks
+ * This function performs several data preparation steps:
+ * 1. Groups metrics by timestamp.
+ * 2. Filters out irrelevant metrics like `TBT`.
+ * 3. Formats timestamps into human-readable strings.
+ * 4. Sub-samples data if it exceeds `maxPoints`.
+ * 5. Calculates 5-point SMAs for all active metrics.
+ *
  * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
- * @param {string} locale - The user locale for formatting.
+ * @param {string} locale - The user locale for date formatting.
  * @param {number} maxPoints - Maximum number of points to include in the output.
  *
- * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} The transformed timeseries data.
+ * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} Transformed data and active metric names.
+ *
+ * @see {@link ChartDataPoint}
+ * @see {@link calculateSMA}
  *
  * @category Utilities
  *
@@ -416,14 +443,10 @@ export const transformPerformanceData = (
 		.sort((a, b) => a.timestamp - b.timestamp)
 		.map((point) => {
 			const normalizedPoint = { ...point };
+
 			metrics.forEach((m) => {
-				if (normalizedPoint[m] === undefined) {
-					normalizedPoint[m] = undefined;
-				} else {
-					const originalValue = normalizedPoint[m] as number;
-					normalizedPoint[`${m}_original`] = originalValue;
-					// Minimum visual height for aggregate stacked chart
-					normalizedPoint[m] = Math.max(originalValue, 80);
+				if (normalizedPoint[m] !== undefined) {
+					normalizedPoint[`${m}_original`] = normalizedPoint[m] as number;
 				}
 
 				[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
@@ -467,6 +490,10 @@ export const transformPerformanceData = (
 /**
  * Identifies version change points in the timeseries for reference markers.
  *
+ * @remarks
+ * This utility helps visualize performance trends across application releases.
+ * It enforces a minimum gap between markers to prevent overlapping labels.
+ *
  * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
  * @param {number} maxPoints - Maximum number of points in the chart (used for spacing logic).
  *
@@ -508,11 +535,10 @@ export const getVersionChanges = (
  *
  * @remarks
  * Iterates backwards through the `chartData` to find the latest non-null value
- * for the specified metric. It prioritizes the `_original` value if available
- * (which avoids the visual normalization used for stacked charts).
+ * for the specified metric. It prioritizes the `_original` value if available.
  *
  * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {string} metric - The name of the metric (e.g., "LCP", "FCP").
+ * @param {string} metric - The name of the metric (e.g., `LCP`, `FCP`).
  *
  * @returns {number | null} The latest numeric value or null if not found.
  *

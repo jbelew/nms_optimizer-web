@@ -10,7 +10,7 @@ const AppDialog = lazy(() => import("../Base/AppDialog"));
 /**
  * Props for the `PerformanceDialog` component.
  *
- * @category Props
+ * @category Interfaces
  */
 interface PerformanceDialogProps {
 	/** Whether the performance dialog is currently visible in the UI. */
@@ -31,13 +31,16 @@ interface PerformanceDialogProps {
  *
  * @returns {JSX.Element} The rendered performance dialog.
  *
+ * @see {@link PerformanceContent}
+ * @see {@link AppDialog}
+ *
  * @component
  *
  * @category Components
  *
  * @example
  * ```tsx
- * <PerformanceDialog isOpen={true} onClose={hide} />
+ * <PerformanceDialog isOpen={true} onClose={handleClose} />
  * ```
  */
 const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {

@@ -5,10 +5,16 @@ import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 import { PerformanceData } from "./PerformanceData";
-import { CHART_HEIGHT, CHART_MARGIN_BOTTOM, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
+import { CHART_HEIGHT, FULL_DASHBOARD_HEIGHT, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
 
 /**
  * A structured skeleton that mimics the layout of the dashboard data area.
+ *
+ * @remarks
+ * This skeleton is used to prevent layout shifts while the performance data
+ * and charting components are loading.
+ *
+ * @returns {JSX.Element} The rendered dashboard skeleton.
  *
  * @example
  * ```tsx
@@ -16,17 +22,8 @@ import { CHART_HEIGHT, CHART_MARGIN_BOTTOM, SUMMARY_CARDS_HEIGHT } from "./Perfo
  * ```
  */
 const DashboardSkeleton: FC = () => (
-	<Flex
-		direction="column"
-		gap="4"
-		style={{
-			marginTop: "4px",
-			marginBottom: "4px",
-			marginRight: "4px",
-			marginLeft: "4px",
-		}}
-	>
-		{/* Summary Cards Row (gap="3") */}
+	<Flex direction="column" gap="4">
+		{/* Summary Cards Row */}
 		<Flex gap="3" wrap="wrap" justify="between">
 			{[...Array(6)].map((_, i) => (
 				<Skeleton
@@ -37,23 +34,18 @@ const DashboardSkeleton: FC = () => (
 			))}
 		</Flex>
 
-		{/* Chart Area (gap="4" from cards row) */}
-		<div style={{ marginBottom: CHART_MARGIN_BOTTOM }}>
-			<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />
-		</div>
+		{/* Chart Area */}
+		<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />
 	</Flex>
 );
 
 /**
  * Props for the `PerformanceContent` component.
  *
- * @category Props
+ * @category Interfaces
  */
 interface PerformanceContentProps {
-	/**
-	 * Whether the dialog is currently open.
-	 * @remarks Used to trigger lazy data fetching via the child `PerformanceData` component.
-	 */
+	/** Whether the dialog is currently open, triggering data fetching. */
 	isOpen: boolean;
 }
 
@@ -69,6 +61,10 @@ interface PerformanceContentProps {
  *
  * @returns {JSX.Element} The rendered performance content UI.
  *
+ * @see {@link PerformanceData}
+ * @see {@link DashboardSkeleton}
+ * @see {@link ./PerformanceContent.test.tsx Unit Tests}
+ *
  * @component
  *
  * @category Components
@@ -82,8 +78,8 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
 	return (
-		<>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+		<div style={{ minHeight: FULL_DASHBOARD_HEIGHT, padding: "4px" }}>
+			<Text size={{ initial: "2", sm: "3" }} as="p" mb="5" style={{ height: "40px" }}>
 				{t(
 					"dialogs.performance.description",
 					"Aggregate Core Web Vitals and performance metrics from real user sessions (field data)."
@@ -101,7 +97,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 					<PerformanceData isOpen={isOpen} />
 				</Suspense>
 			</ErrorBoundary>
-		</>
+		</div>
 	);
 };
 

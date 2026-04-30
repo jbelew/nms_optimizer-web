@@ -27,7 +27,9 @@ import {
 } from "./PerformanceUtils";
 
 /**
- * Properties for the MetricDetailChart component.
+ * Properties for the {@link MetricDetailChart} component.
+ *
+ * @category Interfaces
  */
 interface MetricDetailChartProps {
 	/** The name of the performance metric to display (e.g., `LCP`). */
@@ -48,8 +50,9 @@ interface MetricDetailChartProps {
  * 1. A `Bar` representing the range between the 50th and 90th percentiles.
  * 2. A `Line` representing the 75th percentile trend.
  * 3. `ReferenceLine` markers for application version changes.
+ * 4. `ReferenceArea` highlighting the "Good" performance zone.
  *
- * Values are logically clamped to a metric-specific threshold (from `METRIC_THRESHOLDS`)
+ * Values are visually capped to a metric-specific threshold (from `METRIC_THRESHOLDS`)
  * to maintain visual resolution, while the original values are preserved in tooltips.
  *
  * @param {MetricDetailChartProps} props - Component properties.
@@ -70,7 +73,6 @@ interface MetricDetailChartProps {
  *   metric="LCP"
  *   chartData={data}
  *   versionChanges={versions}
- *   recharts={recharts}
  *   locale="en-US"
  * />
  * ```
@@ -84,29 +86,21 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	const config = LIGHTHOUSE_CONFIG[metric] || { p90: 2500, p50: 4000 };
 
 	const color = getMetricColor(metric, 11);
-	const p75Key = `${metric}_p75`;
 	const rangeKey = `${metric}_range`;
 	const threshold = METRIC_THRESHOLDS[metric] || 10000;
 
-	// Process data to clamp the visual range but keep original for tooltip
-	const clampedData = chartData.map((p) => {
-		const range = p[rangeKey] as [number, number] | undefined;
-		const p75 = p[p75Key] as number | undefined;
-
-		return {
-			...p,
-			range_clamped: range ? [range[0], Math.min(range[1], threshold)] : undefined,
-			p75_clamped: p75 !== undefined ? Math.min(p75, threshold) : undefined,
-		};
-	});
-
 	return (
-		<div style={{ height: CHART_HEIGHT, marginBottom: CHART_MARGIN_BOTTOM }}>
-			<ResponsiveContainer width="100%" height="100%">
-				<ComposedChart
-					data={clampedData}
-					margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
-				>
+		<div
+			style={{
+				height: CHART_HEIGHT,
+				width: "100%",
+				minWidth: 0,
+				position: "relative",
+				marginBottom: CHART_MARGIN_BOTTOM,
+			}}
+		>
+			<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={50}>
+				<ComposedChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
 					<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
 
 					{/* Background Threshold Shading: Highlight the 'Good' zone using the metric's theme color */}
@@ -169,6 +163,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 						tickLine={false}
 						width={40}
 						domain={[0, threshold]}
+						allowDataOverflow
 						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
 					/>
 
@@ -226,7 +221,7 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 					/>
 
 					<Bar
-						dataKey="range_clamped"
+						dataKey={rangeKey}
 						fill={color}
 						fillOpacity={0.2}
 						radius={[2, 2, 2, 2]}

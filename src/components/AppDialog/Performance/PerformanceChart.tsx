@@ -1,15 +1,29 @@
-import { FC, lazy, Suspense, useState } from "react";
+import { FC, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import { Card, Flex, Skeleton, Text } from "@radix-ui/themes";
+import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+import {
+	Area,
+	AreaChart,
+	CartesianGrid,
+	Label,
+	ReferenceLine,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
+import { MetricDetailChart } from "./MetricDetailChart";
+import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	calculateOverallPerformanceScore,
 	CHART_HEIGHT,
 	CHART_MARGIN_BOTTOM,
+	CHART_TOOLTIP_STYLE,
 	formatMetricValue,
 	getLatestMetricValue,
 	getMetricColor,
@@ -21,46 +35,29 @@ import {
 	transformPerformanceData,
 } from "./PerformanceUtils";
 
-const PerformanceChartsContainer = lazy(() => import("./PerformanceChartsContainer"));
-
 /**
  * Properties for the {@link PerformanceChart} component.
- *
- * @remarks
- * This interface defines the data required to render the performance timeseries charts.
- *
- * @see {@link PerformanceChart}
- * @see {@link PerformanceMetric}
  */
 interface PerformanceChartProps {
-	/**
-	 * Raw performance metric records fetched from the API.
-	 * @see {@link PerformanceMetric}
-	 */
+	/** Raw performance metric records fetched from the API. */
 	data: PerformanceMetric[];
 }
 
 /**
- * Main chart and card renderer for the performance dashboard.
+ * Main dashboard renderer for performance statistics.
  *
  * @remarks
- * This component manages the high-level dashboard state and orchestration:
- * - Data transformation: Converts flat API records into timestamp-keyed timeseries.
- * - Score Calculation: Computes a weighted overall performance score using Lighthouse logic.
- * - Interaction: Handles metric selection, view switching, and trend analysis.
+ * This component handles the high-level dashboard logic:
+ * - Data transformation: Converts flat API records into timeseries.
+ * - Score Calculation: Computes weighted overall performance.
+ * - Interaction: Handles metric selection and view switching.
  *
- * It renders a responsive grid of summary cards for each metric, followed by either:
- * 1. An aggregate stacked `AreaChart` (when no metric is selected).
- * 2. A detailed `MetricDetailChart` for the specific selected metric.
+ * It renders a responsive grid of summary cards followed by an aggregate
+ * AreaChart or a detailed MetricDetailChart.
  *
  * @param {PerformanceChartProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered performance dashboard UI.
- *
- * @see {@link PerformanceChartsContainer}
- * @see {@link import("./PerformanceUtils").computeLogNormalScore}
- * @see {@link PerformanceMetric}
- * @see {@link import("./PerformanceUtils").LIGHTHOUSE_CONFIG}
  *
  * @component
  *
@@ -68,8 +65,7 @@ interface PerformanceChartProps {
  *
  * @example
  * ```tsx
- * // Mounts the performance chart with raw metric data
- * <PerformanceChart data={apiResponseData} />
+ * <PerformanceChart data={mockData} />
  * ```
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
@@ -90,7 +86,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const overallTrend = getOverallTrend(chartData, activeMetrics);
 
 	return (
-		<Flex mt="1" mb="1" mr="1" ml="1" direction="column" gap="4">
+		<Flex direction="column" gap="4" style={{ width: "100%", flexGrow: 1, minWidth: 0 }}>
 			<Flex gap="3" wrap="wrap" justify="between">
 				{/* Overall Summary Toggle Card */}
 				<Card
@@ -207,23 +203,132 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				})}
 			</Flex>
 
-			<Suspense
-				fallback={
-					<Skeleton
-						height={`${CHART_HEIGHT}px`}
-						width="100%"
-						style={{ marginBottom: CHART_MARGIN_BOTTOM }}
-					/>
-				}
-			>
-				<PerformanceChartsContainer
-					selectedMetric={selectedMetric}
+			{selectedMetric ? (
+				<MetricDetailChart
+					metric={selectedMetric}
 					chartData={chartData}
-					uniqueMetrics={uniqueMetrics}
 					versionChanges={versionChanges}
 					locale={locale}
 				/>
-			</Suspense>
+			) : (
+				<div
+					style={{
+						height: CHART_HEIGHT,
+						width: "100%",
+						minWidth: 0,
+						position: "relative",
+						marginBottom: CHART_MARGIN_BOTTOM,
+					}}
+				>
+					<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={50}>
+						<AreaChart
+							data={chartData}
+							margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+						>
+							<CartesianGrid
+								strokeDasharray="3 3"
+								vertical={false}
+								stroke="var(--gray-5)"
+							/>
+							{versionChanges.map((change) => (
+								<ReferenceLine
+									key={change.timestamp}
+									x={change.timestamp}
+									stroke="var(--gray-7)"
+									strokeDasharray="2 4"
+									strokeWidth={1}
+								>
+									<Label
+										value={
+											change.version.startsWith("v")
+												? change.version
+												: `v${change.version}`
+										}
+										position="insideTopLeft"
+										fill="var(--gray-10)"
+										fontSize={10}
+										fontWeight={600}
+										offset={4}
+									/>
+								</ReferenceLine>
+							))}
+							<XAxis
+								dataKey="timestamp"
+								type="number"
+								scale="time"
+								domain={["dataMin", "dataMax"]}
+								axisLine={false}
+								tickLine={false}
+								tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+								minTickGap={40}
+								tickFormatter={(val) =>
+									new Intl.DateTimeFormat(locale, {
+										month: "numeric",
+										day: "numeric",
+									}).format(new Date(val))
+								}
+							/>
+							<YAxis
+								axisLine={false}
+								tickLine={false}
+								width={40}
+								tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+							/>
+							<Tooltip
+								itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
+								wrapperStyle={{ pointerEvents: "none" }}
+								allowEscapeViewBox={{ x: false, y: false }}
+								isAnimationActive={false}
+								offset={10}
+								labelFormatter={(_label, payload) => {
+									const item = payload[0]?.payload as ChartDataPoint | undefined;
+									const baseLabel = item
+										? `${item.displayDate} ${item.hour}`
+										: String(_label);
+
+									return item?.appVersion
+										? `${baseLabel} (${item.appVersion})`
+										: baseLabel;
+								}}
+								formatter={(
+									value,
+									name,
+									props: { payload?: Record<string, unknown> }
+								) => {
+									const originalValue = props.payload?.[`${name}_original`];
+									const numericValue =
+										typeof originalValue === "number"
+											? originalValue
+											: typeof value === "number"
+												? value
+												: 0;
+
+									return [
+										formatMetricValue(String(name), numericValue),
+										String(name),
+									];
+								}}
+								contentStyle={CHART_TOOLTIP_STYLE}
+							/>
+							{activeMetrics.map((metric) => (
+								<Area
+									key={metric}
+									type="basis"
+									dataKey={metric}
+									stackId="1"
+									stroke={getMetricColor(metric, 11)}
+									fill={getMetricColor(metric, 10)}
+									fillOpacity={0.9}
+									strokeWidth={2}
+									connectNulls
+								/>
+							))}
+						</AreaChart>
+					</ResponsiveContainer>
+				</div>
+			)}
 		</Flex>
 	);
 };
+
+export default PerformanceChart;
