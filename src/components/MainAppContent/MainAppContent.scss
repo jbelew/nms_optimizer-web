@@ -36,11 +36,15 @@ $panel-border: 1px solid var(--gray-6);
 		@media (width >= 1024px) {
 			border-radius: var(--radius-5);
 
-			/* Frost inset + allow Tailwind shadow */
+			/* Theme-aware inset shadow + allow Tailwind shadow */
 			box-shadow:
-				inset 0 0 16px rgb(255 255 255 / 5%),
+				inset 0 0 16px var(--main-app-inset-shadow, rgb(0 0 0 / 5%)),
 				var(--tw-shadow, 0 0 #0000);
 			outline: 1px solid var(--gray-a6);
+
+			:is(.dark, .dark-theme) & {
+				--main-app-inset-shadow: rgb(255 255 255 / 5%);
+			}
 		}
 
 		// Tablet: Fill full height (no container padding)
@@ -60,7 +64,7 @@ $panel-border: 1px solid var(--gray-6);
 		// Accessibility override
 		body.a11y-font & {
 			backdrop-filter: none;
-			background-color: var(--gray-a6);
+			background-color: var(--gray-4);
 		}
 	}
 
