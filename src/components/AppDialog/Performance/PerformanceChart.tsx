@@ -6,15 +6,19 @@ import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
-import { ChartDataPoint } from "./PerformanceTypes";
 import {
-	calculateSMA,
+	calculateOverallPerformanceScore,
 	CHART_HEIGHT,
-	computeLogNormalScore,
-	getFormatter,
+	CHART_MARGIN_BOTTOM,
+	formatMetricValue,
+	getLatestMetricValue,
 	getMetricColor,
+	getMetricTrend,
+	getOverallTrend,
 	getStatusColor,
-	LIGHTHOUSE_CONFIG,
+	getVersionChanges,
+	METRIC_DISPLAY_ORDER,
+	transformPerformanceData,
 } from "./PerformanceUtils";
 
 const PerformanceChartsContainer = lazy(() => import("./PerformanceChartsContainer"));
@@ -54,9 +58,9 @@ interface PerformanceChartProps {
  * @returns {JSX.Element} The rendered performance dashboard UI.
  *
  * @see {@link PerformanceChartsContainer}
- * @see {@link computeLogNormalScore}
+ * @see {@link import("./PerformanceUtils").computeLogNormalScore}
  * @see {@link PerformanceMetric}
- * @see {@link LIGHTHOUSE_CONFIG}
+ * @see {@link import("./PerformanceUtils").LIGHTHOUSE_CONFIG}
  *
  * @component
  *
@@ -77,304 +81,13 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const isDesktop = useBreakpoint("640px");
 	const maxPoints = isDesktop ? 48 : 24;
 
-	/**
-	 * Transforms flat API records into a timestamp-keyed structure for Recharts.
-	 *
-	 * @remarks
-	 * This transformation performs several key operations:
-	 * 1. Groups individual metric records by their `timestamp`.
-	 * 2. Formats dates and hours according to the current `locale`.
-	 * 3. Extracts unique metric names (excluding 'TBT').
-	 * 4. Normalizes data points to ensure all metrics have at least an `undefined` value
-	 *    to prevent rendering gaps.
-	 * 5. Applies a minimum visual height (80ms) for stacked aggregate charts to ensure
-	 *    visibility of small values while preserving original values for tooltips.
-	 *
-	 * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
-	 *
-	 * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} The transformed
-	 * timeseries data and the list of active metrics.
-	 *
-	 * @see {@link ChartDataPoint}
-	 * @see {@link getFormatter}
-	 *
-	 * @example
-	 * ```ts
-	 * const { chartData, uniqueMetrics } = transformData(apiMetrics);
-	 * // returns { chartData: [...], uniqueMetrics: ["FCP", "LCP", ...] }
-	 * ```
-	 */
-	const transformData = (raw: PerformanceMetric[]) => {
-		const dateMap: Record<number, ChartDataPoint> = {};
-		const metrics = new Set<string>();
+	const { chartData, uniqueMetrics } = transformPerformanceData(data, locale, maxPoints);
+	const versionChanges = getVersionChanges(chartData, maxPoints);
 
-		const dateFormatter = getFormatter(locale, {
-			month: "numeric",
-			day: "numeric",
-		});
-		const hourFormatter = getFormatter(locale, {
-			hour: "numeric",
-			minute: "numeric",
-		});
+	const activeMetrics = METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m));
 
-		raw.forEach((item) => {
-			if (item.metric_name === "TBT") return;
-
-			const dateObj = new Date(item.timestamp);
-			const formattedDate = dateFormatter.format(dateObj);
-			const formattedHour = hourFormatter.format(dateObj);
-
-			if (!dateMap[item.timestamp]) {
-				dateMap[item.timestamp] = {
-					timestamp: item.timestamp,
-					displayDate: formattedDate,
-					hour: formattedHour,
-					appVersion: item.app_version,
-				};
-			}
-
-			dateMap[item.timestamp][item.metric_name] = item.average_value;
-			if (item.p50 !== undefined)
-				dateMap[item.timestamp][`${item.metric_name}_p50`] = item.p50;
-			if (item.p75 !== undefined)
-				dateMap[item.timestamp][`${item.metric_name}_p75`] = item.p75;
-			if (item.p90 !== undefined)
-				dateMap[item.timestamp][`${item.metric_name}_p90`] = item.p90;
-
-			if (item.p50 !== undefined && item.p90 !== undefined) {
-				dateMap[item.timestamp][`${item.metric_name}_range`] = [item.p50, item.p90];
-			}
-
-			metrics.add(item.metric_name);
-		});
-
-		const fullChartData = Object.values(dateMap)
-			.sort((a, b) => a.timestamp - b.timestamp)
-			.map((point) => {
-				const normalizedPoint = { ...point };
-				metrics.forEach((m) => {
-					if (normalizedPoint[m] === undefined) {
-						normalizedPoint[m] = undefined;
-					} else {
-						const originalValue = normalizedPoint[m] as number;
-						normalizedPoint[`${m}_original`] = originalValue;
-						// Minimum visual height for aggregate stacked chart
-						normalizedPoint[m] = Math.max(originalValue, 80);
-					}
-
-					[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
-						if (normalizedPoint[pKey] === undefined) normalizedPoint[pKey] = undefined;
-					});
-				});
-
-				return normalizedPoint;
-			});
-
-		// Sub-sample if we have too many points to maintain readability and performance
-		let chartData = fullChartData;
-
-		if (fullChartData.length > maxPoints) {
-			const sampledData: ChartDataPoint[] = [];
-			const step = (fullChartData.length - 1) / (maxPoints - 1);
-
-			for (let i = 0; i < maxPoints; i++) {
-				// Rounding ensures we pick a point as close as possible to the step interval,
-				// and ensures the first (i=0) and last (i=maxPoints-1) points are always included.
-				const index = Math.round(i * step);
-				sampledData.push(fullChartData[index]);
-			}
-
-			chartData = sampledData;
-		}
-
-		// Calculate 5-point Simple Moving Average (SMA) for all metrics
-		// This is done after sub-sampling so the SMA reflects the visual trend
-		metrics.forEach((m) => {
-			const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
-			const p75SmaValues = calculateSMA(p75Values, 5);
-
-			const mainValues = chartData.map((p) => p[`${m}_original`] as number | undefined);
-			const mainSmaValues = calculateSMA(mainValues, 5);
-
-			chartData.forEach((p, i) => {
-				p[`${m}_p75_sma`] = p75SmaValues[i];
-				p[`${m}_sma`] = mainSmaValues[i];
-			});
-		});
-
-		return { chartData, uniqueMetrics: Array.from(metrics) };
-	};
-
-	const { chartData, uniqueMetrics } = transformData(data);
-
-	const versionChanges: { timestamp: number; version: string }[] = [];
-	let lastVersion: string | null = null;
-	let lastAddedIndex = -100;
-
-	chartData.forEach((point, i) => {
-		if (lastVersion && point.appVersion !== lastVersion) {
-			// Ensure a minimum visual gap between version markers (approx 15% of max points)
-			// to prevent overlapping labels when deployments are frequent.
-			const minGap = Math.max(4, Math.floor(maxPoints * 0.15));
-
-			if (i - lastAddedIndex >= minGap) {
-				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
-				lastAddedIndex = i;
-			}
-		}
-
-		lastVersion = point.appVersion;
-	});
-
-	const displayOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"];
-	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
-
-	/**
-	 * Retrieves the most recent value for a metric from the timeseries.
-	 *
-	 * @remarks
-	 * Iterates backwards through the `chartData` to find the latest non-null value
-	 * for the specified metric. It prioritizes the `_original` value if available
-	 * (which avoids the visual normalization used for stacked charts).
-	 *
-	 * @param {string} metric - The name of the metric (e.g., "LCP", "FCP").
-	 *
-	 * @returns {number | null} The latest numeric value or null if not found.
-	 *
-	 * @example
-	 * ```ts
-	 * const latestLCP = getLatestValue("LCP");
-	 * // returns 1250 (in ms)
-	 * ```
-	 */
-	const getLatestValue = (metric: string): number | null => {
-		for (let i = chartData.length - 1; i >= 0; i--) {
-			const originalVal = chartData[i][`${metric}_original`];
-			const val =
-				originalVal !== undefined
-					? (originalVal as number)
-					: (chartData[i][metric] as number);
-			if (val !== undefined && val !== null) return val;
-		}
-
-		return null;
-	};
-
-	/**
-	 * Determines the trend direction between the two most recent data points.
-	 *
-	 * @remarks
-	 * Compares the latest value with the previous one in the timeseries.
-	 * - `improvement`: The value has decreased (better performance).
-	 * - `regression`: The value has increased (worse performance).
-	 * - `neutral`: No change or insufficient data.
-	 *
-	 * @param {string} metric - The name of the metric to analyze.
-	 *
-	 * @returns {"improvement" | "regression" | "neutral"} The trend status.
-	 *
-	 * @example
-	 * ```ts
-	 * const trend = getMetricTrend("FCP");
-	 * // returns "improvement"
-	 * ```
-	 */
-	const getMetricTrend = (metric: string): "improvement" | "regression" | "neutral" => {
-		const values: number[] = [];
-
-		for (let i = chartData.length - 1; i >= 0; i--) {
-			const originalVal = chartData[i][`${metric}_original`];
-			const val =
-				originalVal !== undefined
-					? (originalVal as number)
-					: (chartData[i][metric] as number);
-			if (val !== undefined && val !== null) values.push(val);
-			if (values.length === 2) break;
-		}
-
-		if (values.length < 2) return "neutral";
-
-		return values[0] < values[1]
-			? "improvement"
-			: values[0] > values[1]
-				? "regression"
-				: "neutral";
-	};
-
-	/**
-	 * Computes the weighted overall performance score.
-	 *
-	 * @remarks
-	 * Calculates the score by:
-	 * 1. Fetching the latest value for each active metric.
-	 * 2. Computing the log-normal score for each value using `computeLogNormalScore`.
-	 * 3. Applying weights defined in `LIGHTHOUSE_CONFIG`.
-	 * 4. Returning a weighted average (0-100).
-	 *
-	 * @returns {number | null} The overall score or null if no metrics are available.
-	 *
-	 * @see {@link computeLogNormalScore}
-	 * @see {@link LIGHTHOUSE_CONFIG}
-	 *
-	 * @example
-	 * ```ts
-	 * const score = calculateOverallScore();
-	 * // returns 92
-	 * ```
-	 */
-	const calculateOverallScore = () => {
-		let totalWeight = 0,
-			totalScore = 0;
-		activeMetrics.forEach((m) => {
-			const val = getLatestValue(m);
-			const metricConfig = LIGHTHOUSE_CONFIG[m];
-
-			if (val !== null && metricConfig) {
-				totalScore +=
-					computeLogNormalScore(val, metricConfig.p90, metricConfig.p50) *
-					metricConfig.weight;
-				totalWeight += metricConfig.weight;
-			}
-		});
-
-		return totalWeight > 0 ? Math.round(totalScore / totalWeight) : null;
-	};
-
-	const overallScore = calculateOverallScore();
-
-	/**
-	 * Determines the overall trend by averaging individual metric trends.
-	 *
-	 * @remarks
-	 * This heuristic counts the number of improvements vs regressions across all
-	 * active metrics. The majority trend is returned. If they are equal or
-	 * zero, it returns `neutral`.
-	 *
-	 * @returns {"improvement" | "regression" | "neutral"} The overall aggregate trend.
-	 *
-	 * @example
-	 * ```ts
-	 * const status = getOverallTrend();
-	 * // returns "improvement"
-	 * ```
-	 */
-	const getOverallTrend = (): "improvement" | "regression" | "neutral" => {
-		let improvementCount = 0;
-		let regressionCount = 0;
-
-		activeMetrics.forEach((m) => {
-			const trend = getMetricTrend(m);
-			if (trend === "improvement") improvementCount++;
-			else if (trend === "regression") regressionCount++;
-		});
-
-		if (improvementCount > regressionCount) return "improvement";
-		if (regressionCount > improvementCount) return "regression";
-
-		return "neutral";
-	};
-
-	const overallTrend = getOverallTrend();
+	const overallScore = calculateOverallPerformanceScore(chartData, activeMetrics);
+	const overallTrend = getOverallTrend(chartData, activeMetrics);
 
 	return (
 		<Flex mt="1" mb="1" mr="1" ml="1" direction="column" gap="4">
@@ -436,7 +149,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				</Card>
 
 				{activeMetrics.map((metric) => {
-					const val = getLatestValue(metric);
+					const val = getLatestMetricValue(chartData, metric);
 					const isSelected = selectedMetric === metric;
 
 					return (
@@ -475,21 +188,14 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 										weight="medium"
 										style={{ color: getStatusColor(metric, val) }}
 									>
-										{val !== null
-											? metric === "CLS"
-												? (val / 1000).toFixed(2)
-												: Math.round(val)
-											: "—"}
-										<Text size="1" ml="1">
-											{metric === "CLS" ? "" : "ms"}
-										</Text>
+										{val !== null ? formatMetricValue(metric, val) : "—"}
 									</Text>
-									{getMetricTrend(metric) === "improvement" && (
+									{getMetricTrend(chartData, metric) === "improvement" && (
 										<Text color="green">
 											<ArrowDownIcon />
 										</Text>
 									)}
-									{getMetricTrend(metric) === "regression" && (
+									{getMetricTrend(chartData, metric) === "regression" && (
 										<Text color="red">
 											<ArrowDownIcon />
 										</Text>
@@ -501,7 +207,15 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				})}
 			</Flex>
 
-			<Suspense fallback={<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />}>
+			<Suspense
+				fallback={
+					<Skeleton
+						height={`${CHART_HEIGHT}px`}
+						width="100%"
+						style={{ marginBottom: CHART_MARGIN_BOTTOM }}
+					/>
+				}
+			>
 				<PerformanceChartsContainer
 					selectedMetric={selectedMetric}
 					chartData={chartData}

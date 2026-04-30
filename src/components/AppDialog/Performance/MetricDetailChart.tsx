@@ -17,6 +17,9 @@ import {
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	CHART_HEIGHT,
+	CHART_MARGIN_BOTTOM,
+	CHART_TOOLTIP_STYLE,
+	formatMetricValue,
 	getFormatter,
 	getMetricColor,
 	LIGHTHOUSE_CONFIG,
@@ -98,158 +101,149 @@ export const MetricDetailChart: FC<MetricDetailChartProps> = ({
 	});
 
 	return (
-		<ResponsiveContainer width="100%" height={CHART_HEIGHT} className="mb-2">
-			<ComposedChart data={clampedData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
-				<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
+		<div style={{ height: CHART_HEIGHT, marginBottom: CHART_MARGIN_BOTTOM }}>
+			<ResponsiveContainer width="100%" height="100%">
+				<ComposedChart
+					data={clampedData}
+					margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+				>
+					<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
 
-				{/* Background Threshold Shading: Highlight the 'Good' zone using the metric's theme color */}
-				<ReferenceArea
-					y1={0}
-					y2={config.p90}
-					fill={getMetricColor(metric, "a4")}
-					stroke="none"
-				/>
-				<ReferenceLine
-					y={config.p90}
-					stroke={getMetricColor(metric, "a7")}
-					strokeWidth={1}
-				/>
-
-				{versionChanges.map((change) => (
+					{/* Background Threshold Shading: Highlight the 'Good' zone using the metric's theme color */}
+					<ReferenceArea
+						y1={0}
+						y2={config.p90}
+						fill={getMetricColor(metric, "a4")}
+						stroke="none"
+					/>
 					<ReferenceLine
-						key={change.timestamp}
-						x={change.timestamp}
-						stroke="var(--gray-7)"
-						strokeDasharray="2 4"
+						y={config.p90}
+						stroke={getMetricColor(metric, "a7")}
 						strokeWidth={1}
-					>
-						<Label
-							value={
-								change.version.startsWith("v")
-									? change.version
-									: `v${change.version}`
+					/>
+
+					{versionChanges.map((change) => (
+						<ReferenceLine
+							key={change.timestamp}
+							x={change.timestamp}
+							stroke="var(--gray-7)"
+							strokeDasharray="2 4"
+							strokeWidth={1}
+						>
+							<Label
+								value={
+									change.version.startsWith("v")
+										? change.version
+										: `v${change.version}`
+								}
+								position="insideTopLeft"
+								fill="var(--gray-10)"
+								fontSize={10}
+								fontWeight={600}
+								offset={4}
+							/>
+						</ReferenceLine>
+					))}
+
+					<XAxis
+						dataKey="timestamp"
+						type="number"
+						scale="time"
+						domain={["dataMin", "dataMax"]}
+						axisLine={false}
+						tickLine={false}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+						minTickGap={40}
+						tickFormatter={(val: number) => {
+							const dateObj = new Date(val);
+
+							return getFormatter(locale, {
+								month: "numeric",
+								day: "numeric",
+							}).format(dateObj);
+						}}
+					/>
+
+					<YAxis
+						axisLine={false}
+						tickLine={false}
+						width={40}
+						domain={[0, threshold]}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+					/>
+
+					<Tooltip
+						isAnimationActive={false}
+						content={({ active, payload, label: _label }) => {
+							if (active && payload && payload.length) {
+								const item = payload[0].payload as ChartDataPoint;
+								const format = (v: number) => formatMetricValue(metric, v);
+
+								const p50 = item[`${metric}_p50`] as number | undefined;
+								const p75 = item[`${metric}_p75`] as number | undefined;
+								const p90 = item[`${metric}_p90`] as number | undefined;
+
+								return (
+									<Flex direction="column" gap="1" style={CHART_TOOLTIP_STYLE}>
+										<Text size="1" color="gray" mb="1">
+											{item.displayDate} {item.hour}
+											{item.appVersion ? ` (${item.appVersion})` : ""}
+										</Text>
+										{p90 !== undefined && (
+											<Flex justify="between" gap="4">
+												<Text color="gray">p90</Text>
+												<Text weight="bold" style={{ color }}>
+													{p90 > threshold
+														? `>${format(threshold)}`
+														: format(p90)}
+												</Text>
+											</Flex>
+										)}
+										{p75 !== undefined && (
+											<Flex justify="between" gap="4">
+												<Text color="gray">p75</Text>
+												<Text weight="bold" style={{ color }}>
+													{p75 > threshold
+														? `>${format(threshold)}`
+														: format(p75)}
+												</Text>
+											</Flex>
+										)}
+										{p50 !== undefined && (
+											<Flex justify="between" gap="4">
+												<Text color="gray">p50</Text>
+												<Text weight="bold" style={{ color }}>
+													{format(p50)}
+												</Text>
+											</Flex>
+										)}
+									</Flex>
+								);
 							}
-							position="insideTopLeft"
-							fill="var(--gray-10)"
-							fontSize={10}
-							fontWeight={600}
-							offset={4}
-						/>
-					</ReferenceLine>
-				))}
 
-				<XAxis
-					dataKey="timestamp"
-					type="number"
-					scale="time"
-					domain={["dataMin", "dataMax"]}
-					axisLine={false}
-					tickLine={false}
-					tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-					minTickGap={40}
-					tickFormatter={(val: number) => {
-						const dateObj = new Date(val);
+							return null;
+						}}
+					/>
 
-						return getFormatter(locale, {
-							month: "numeric",
-							day: "numeric",
-						}).format(dateObj);
-					}}
-				/>
+					<Bar
+						dataKey="range_clamped"
+						fill={color}
+						fillOpacity={0.2}
+						radius={[2, 2, 2, 2]}
+						barSize={12}
+					/>
 
-				<YAxis
-					axisLine={false}
-					tickLine={false}
-					width={40}
-					domain={[0, threshold]}
-					tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-				/>
-
-				<Tooltip
-					isAnimationActive={false}
-					content={({ active, payload, label: _label }) => {
-						if (active && payload && payload.length) {
-							const item = payload[0].payload as ChartDataPoint;
-							const format = (v: number) =>
-								metric === "CLS" ? (v / 1000).toFixed(2) : `${Math.round(v)}ms`;
-
-							const p50 = item[`${metric}_p50`] as number | undefined;
-							const p75 = item[`${metric}_p75`] as number | undefined;
-							const p90 = item[`${metric}_p90`] as number | undefined;
-
-							return (
-								<Flex
-									direction="column"
-									gap="1"
-									style={{
-										backgroundColor: "var(--gray-3)",
-										border: "1px solid var(--gray-6)",
-										padding: "8px",
-										borderRadius: "8px",
-										color: "var(--gray-12)",
-										fontSize: "12px",
-										fontWeight: 500,
-										boxShadow: "var(--shadow-3)",
-									}}
-								>
-									<Text size="1" color="gray" mb="1">
-										{item.displayDate} {item.hour}
-										{item.appVersion ? ` (${item.appVersion})` : ""}
-									</Text>
-									{p90 !== undefined && (
-										<Flex justify="between" gap="4">
-											<Text color="gray">p90</Text>
-											<Text weight="bold" style={{ color }}>
-												{p90 > threshold
-													? `>${format(threshold)}`
-													: format(p90)}
-											</Text>
-										</Flex>
-									)}
-									{p75 !== undefined && (
-										<Flex justify="between" gap="4">
-											<Text color="gray">p75</Text>
-											<Text weight="bold" style={{ color }}>
-												{p75 > threshold
-													? `>${format(threshold)}`
-													: format(p75)}
-											</Text>
-										</Flex>
-									)}
-									{p50 !== undefined && (
-										<Flex justify="between" gap="4">
-											<Text color="gray">p50</Text>
-											<Text weight="bold" style={{ color }}>
-												{format(p50)}
-											</Text>
-										</Flex>
-									)}
-								</Flex>
-							);
-						}
-
-						return null;
-					}}
-				/>
-
-				<Bar
-					dataKey="range_clamped"
-					fill={color}
-					fillOpacity={0.2}
-					radius={[2, 2, 2, 2]}
-					barSize={12}
-				/>
-
-				<Line
-					type="basis"
-					dataKey={`${metric}_p75_sma`}
-					stroke={color}
-					strokeWidth={3}
-					dot={false}
-					activeDot={{ r: 4 }}
-					connectNulls
-				/>
-			</ComposedChart>
-		</ResponsiveContainer>
+					<Line
+						type="basis"
+						dataKey={`${metric}_p75_sma`}
+						stroke={color}
+						strokeWidth={3}
+						dot={false}
+						activeDot={{ r: 4 }}
+						connectNulls
+					/>
+				</ComposedChart>
+			</ResponsiveContainer>
+		</div>
 	);
 };

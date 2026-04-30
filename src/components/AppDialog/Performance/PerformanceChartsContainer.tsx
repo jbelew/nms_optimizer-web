@@ -14,7 +14,14 @@ import {
 
 import { MetricDetailChart } from "./MetricDetailChart";
 import { ChartDataPoint } from "./PerformanceTypes";
-import { CHART_HEIGHT, getMetricColor } from "./PerformanceUtils";
+import {
+	CHART_HEIGHT,
+	CHART_MARGIN_BOTTOM,
+	CHART_TOOLTIP_STYLE,
+	formatMetricValue,
+	getMetricColor,
+	METRIC_DISPLAY_ORDER,
+} from "./PerformanceUtils";
 
 interface PerformanceChartsContainerProps {
 	selectedMetric: string | null;
@@ -63,11 +70,8 @@ export const PerformanceChartsContainer: FC<PerformanceChartsContainerProps> = (
 	versionChanges,
 	locale,
 }) => {
-	const displayOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"];
-	const activeMetrics = displayOrder.filter((m) => uniqueMetrics.includes(m));
-	const stackOrder = ["TTFB", "FCP", "LCP", "CLS", "INP"].filter((m) =>
-		uniqueMetrics.includes(m)
-	);
+	const activeMetrics = METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m));
+	const stackOrder = activeMetrics;
 
 	if (selectedMetric) {
 		return (
@@ -81,107 +85,99 @@ export const PerformanceChartsContainer: FC<PerformanceChartsContainerProps> = (
 	}
 
 	return (
-		<ResponsiveContainer width="100%" height={CHART_HEIGHT} className="mb-2">
-			<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
-				<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
-				{versionChanges.map((change) => (
-					<ReferenceLine
-						key={change.timestamp}
-						x={change.timestamp}
-						stroke="var(--gray-7)"
-						strokeDasharray="2 4"
-						strokeWidth={1}
-					>
-						<Label
-							value={
-								change.version.startsWith("v")
-									? change.version
-									: `v${change.version}`
-							}
-							position="insideTopLeft"
-							fill="var(--gray-10)"
-							fontSize={10}
-							fontWeight={600}
-							offset={4}
-						/>
-					</ReferenceLine>
-				))}
-				<XAxis
-					dataKey="timestamp"
-					type="number"
-					scale="time"
-					domain={["dataMin", "dataMax"]}
-					axisLine={false}
-					tickLine={false}
-					tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-					minTickGap={40}
-					tickFormatter={(val) =>
-						new Intl.DateTimeFormat(locale, {
-							month: "numeric",
-							day: "numeric",
-						}).format(new Date(val))
-					}
-				/>
-				<YAxis
-					axisLine={false}
-					tickLine={false}
-					width={40}
-					tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-				/>
-				<Tooltip
-					itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
-					wrapperStyle={{ pointerEvents: "none" }}
-					allowEscapeViewBox={{ x: false, y: false }}
-					isAnimationActive={false}
-					offset={10}
-					labelFormatter={(_label, payload) => {
-						const item = payload[0]?.payload as ChartDataPoint | undefined;
-						const baseLabel = item
-							? `${item.displayDate} ${item.hour}`
-							: String(_label);
-
-						return item?.appVersion ? `${baseLabel} (${item.appVersion})` : baseLabel;
-					}}
-					formatter={(value, name, props: { payload?: Record<string, unknown> }) => {
-						const originalValue = props.payload?.[`${name}_original`];
-						const numericValue =
-							typeof originalValue === "number"
-								? originalValue
-								: typeof value === "number"
-									? value
-									: 0;
-
-						return [
-							name === "CLS"
-								? (numericValue / 1000).toFixed(2)
-								: `${Math.round(numericValue)}ms`,
-							String(name),
-						];
-					}}
-					contentStyle={{
-						backgroundColor: "var(--gray-3)",
-						borderColor: "var(--gray-6)",
-						borderRadius: "8px",
-						color: "var(--gray-12)",
-						fontSize: "12px",
-						fontWeight: 500,
-					}}
-				/>
-				{stackOrder.map((metric) => (
-					<Area
-						key={metric}
-						type="basis"
-						dataKey={metric}
-						stackId="1"
-						stroke={getMetricColor(metric, 11)}
-						fill={getMetricColor(metric, 10)}
-						fillOpacity={0.9}
-						strokeWidth={2}
-						connectNulls
+		<div style={{ height: CHART_HEIGHT, marginBottom: CHART_MARGIN_BOTTOM }}>
+			<ResponsiveContainer width="100%" height="100%">
+				<AreaChart data={chartData} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
+					<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--gray-5)" />
+					{versionChanges.map((change) => (
+						<ReferenceLine
+							key={change.timestamp}
+							x={change.timestamp}
+							stroke="var(--gray-7)"
+							strokeDasharray="2 4"
+							strokeWidth={1}
+						>
+							<Label
+								value={
+									change.version.startsWith("v")
+										? change.version
+										: `v${change.version}`
+								}
+								position="insideTopLeft"
+								fill="var(--gray-10)"
+								fontSize={10}
+								fontWeight={600}
+								offset={4}
+							/>
+						</ReferenceLine>
+					))}
+					<XAxis
+						dataKey="timestamp"
+						type="number"
+						scale="time"
+						domain={["dataMin", "dataMax"]}
+						axisLine={false}
+						tickLine={false}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+						minTickGap={40}
+						tickFormatter={(val) =>
+							new Intl.DateTimeFormat(locale, {
+								month: "numeric",
+								day: "numeric",
+							}).format(new Date(val))
+						}
 					/>
-				))}
-			</AreaChart>
-		</ResponsiveContainer>
+					<YAxis
+						axisLine={false}
+						tickLine={false}
+						width={40}
+						tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+					/>
+					<Tooltip
+						itemSorter={(item) => activeMetrics.indexOf(item.dataKey as string)}
+						wrapperStyle={{ pointerEvents: "none" }}
+						allowEscapeViewBox={{ x: false, y: false }}
+						isAnimationActive={false}
+						offset={10}
+						labelFormatter={(_label, payload) => {
+							const item = payload[0]?.payload as ChartDataPoint | undefined;
+							const baseLabel = item
+								? `${item.displayDate} ${item.hour}`
+								: String(_label);
+
+							return item?.appVersion
+								? `${baseLabel} (${item.appVersion})`
+								: baseLabel;
+						}}
+						formatter={(value, name, props: { payload?: Record<string, unknown> }) => {
+							const originalValue = props.payload?.[`${name}_original`];
+							const numericValue =
+								typeof originalValue === "number"
+									? originalValue
+									: typeof value === "number"
+										? value
+										: 0;
+
+							return [formatMetricValue(String(name), numericValue), String(name)];
+						}}
+						contentStyle={CHART_TOOLTIP_STYLE}
+					/>
+					{stackOrder.map((metric) => (
+						<Area
+							key={metric}
+							type="basis"
+							dataKey={metric}
+							stackId="1"
+							stroke={getMetricColor(metric, 11)}
+							fill={getMetricColor(metric, 10)}
+							fillOpacity={0.9}
+							strokeWidth={2}
+							connectNulls
+						/>
+					))}
+				</AreaChart>
+			</ResponsiveContainer>
+		</div>
 	);
 };
 

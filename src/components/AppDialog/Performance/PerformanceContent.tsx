@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 import { PerformanceData } from "./PerformanceData";
-import { CHART_HEIGHT, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
+import { CHART_HEIGHT, CHART_MARGIN_BOTTOM, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
 
 /**
  * A structured skeleton that mimics the layout of the dashboard data area.
@@ -38,7 +38,7 @@ const DashboardSkeleton: FC = () => (
 		</Flex>
 
 		{/* Chart Area (gap="4" from cards row) */}
-		<div style={{ marginBottom: "8px" }}>
+		<div style={{ marginBottom: CHART_MARGIN_BOTTOM }}>
 			<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />
 		</div>
 	</Flex>
