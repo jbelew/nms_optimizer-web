@@ -85,12 +85,12 @@
 	}
 
 	&--active {
-		background-color: var(--accent-a3);
+		background-color: var(--accent-surface);
 		border-color: var(--accent-indicator);
 
 		@media (hover: hover) {
 			&:hover {
-				background-color: var(--accent-a4);
+				background-color: var(--accent-hover);
 			}
 		}
 

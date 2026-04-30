@@ -27,23 +27,18 @@ interface BackgroundWrapperProps {
  */
 export const BackgroundWrapper = ({ children, isVisible, theme }: BackgroundWrapperProps) => {
 	React.useEffect(() => {
-		const radixRoot = document.querySelector(".radix-themes") as HTMLElement | null;
-		const color = theme === "dark" ? "#0B161A" : "#ffffff";
+		const root = document.documentElement;
 
+		// Handle theme classes
+		root.classList.remove("light", "dark", "light-theme", "dark-theme");
+		root.classList.add(theme, `${theme}-theme`);
+		root.style.colorScheme = theme;
+
+		// Handle background visibility class
 		if (isVisible) {
-			document.documentElement.style.backgroundImage = `image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x)`;
-			document.documentElement.style.backgroundPosition = "center";
-			document.documentElement.style.backgroundRepeat = "no-repeat";
-			document.documentElement.style.backgroundSize = "cover";
+			root.classList.add("background-visible");
 		} else {
-			document.documentElement.style.backgroundImage = "none";
-		}
-
-		document.documentElement.style.backgroundColor = color;
-		document.body.style.backgroundColor = color;
-
-		if (radixRoot) {
-			radixRoot.style.backgroundColor = color;
+			root.classList.remove("background-visible");
 		}
 	}, [isVisible, theme]);
 

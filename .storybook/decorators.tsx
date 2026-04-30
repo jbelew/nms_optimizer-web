@@ -26,9 +26,11 @@ export const ThemeWrapper = ({
 }) => {
     React.useEffect(() => {
         if (theme === "dark") {
-            document.documentElement.classList.add("dark");
+            document.documentElement.classList.add("dark", "dark-theme");
+            document.documentElement.classList.remove("light", "light-theme");
         } else {
-            document.documentElement.classList.remove("dark");
+            document.documentElement.classList.add("light", "light-theme");
+            document.documentElement.classList.remove("dark", "dark-theme");
         }
     }, [theme]);
 

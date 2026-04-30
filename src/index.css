@@ -19,7 +19,69 @@
 	--letter-spacing-wide: 0.175em;
 	--font-weight-bold: 700;
 	--font-weight-medium: 550;
-	--color-background: var(--gray-a1);
+
+	/* Theme-specific overrides */
+	&:is(.light, .light-theme),
+	:is(.light, .light-theme) & {
+		--accent-3: var(--accent-a4) !important;
+		--accent-a3: var(--accent-a4) !important;
+	}
+}
+
+/* ============================================ */
+/* THEME & BACKGROUND SYSTEM                   */
+/* ============================================ */
+
+/* 1. Global Background Canvas (Dark Mode) */
+html.background-visible:is(.dark, .dark-theme) {
+	background-color: #000 !important;
+	background-image: url("/assets/img/background@2x.webp") !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+	background-size: cover !important;
+	background-attachment: fixed !important;
+}
+
+/* 2. Mobile Responsive Backgrounds */
+@media (width <= 639px) {
+	html.background-visible:is(.dark, .dark-theme) {
+		background-image: url("/assets/img/background@mobile-blurred.webp") !important;
+		background-position: center top !important;
+	}
+}
+
+/* 3. State & Accessibility Overrides */
+html.background-visible:has(body.a11y-font),
+html:has(body.a11y-font),
+body.a11y-font {
+	background-image: none !important;
+	background-color: #101b20 !important;
+}
+
+/* 4. UI Transparency Bridge */
+/* Ensure the body and main app containers are transparent to reveal the html background */
+/* We only target .radix-themes inside our roots to avoid making portal-based dropdowns transparent */
+html.background-visible:is(.dark, .dark-theme) body,
+html.background-visible:is(.dark, .dark-theme) :is(#root, #storybook-root) .radix-themes {
+	background-color: transparent !important;
+}
+
+/* 5. Light Mode Solid Canvas */
+html:is(.light, .light-theme) {
+	background-color: #fff !important;
+	background-image: none !important;
+}
+
+/* Ensure panels and dropdowns remain solid even when the root is transparent */
+:where(.radix-themes)
+	:is(
+		.rt-BaseMenuContent,
+		.rt-SelectContent,
+		.rt-PopoverContent,
+		.rt-DialogContent,
+		.rt-TooltipContent
+	) {
+	background-color: var(--color-panel-background) !important;
 }
 
 .rt-Link {
@@ -33,12 +95,8 @@
 }
 
 .rt-BaseButton {
-	--tw-shadow:
-		0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
-		0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-	box-shadow:
-		var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
-		var(--tw-ring-shadow), var(--tw-shadow);
+	/* Use filter instead of box-shadow to avoid clobbering Radix variant outlines */
+	filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
 }
 
 body.a11y-font .radix-themes {

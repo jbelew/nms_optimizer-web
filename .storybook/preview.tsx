@@ -122,10 +122,12 @@ const withStoreReset: Decorator = (Story) => {
 	);
 };
 
-const withGlobalProviders: Decorator = (Story) => {
+const withGlobalProviders: Decorator = (Story, context) => {
+	const theme = context.globals.theme || "dark";
+
 	return (
 		<BrowserRouter>
-			<Theme accentColor="cyan">
+			<Theme appearance={theme as "light" | "dark"} accentColor="cyan" panelBackground="solid">
 				<TooltipProvider>
 					<DialogProvider>
 						<SplashHider />

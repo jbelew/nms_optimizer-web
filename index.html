@@ -198,6 +198,11 @@
 				scrollbar-gutter: stable;
 			}
 
+			html:is(.light, .light-theme) {
+				background: #fff !important;
+				color: #000 !important;
+			}
+
 			body {
 				background-color: transparent;
 			}
@@ -206,43 +211,15 @@
 				overflow: hidden;
 			}
 
-			/* Background Layers */
-			html.background-visible body::before,
-			.is-bot body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background-color: #000000;
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-				z-index: -1;
+			/* Background transparency for HTML root - Dark Mode Only */
+			html.background-visible:is(.dark, .dark-theme) {
+				background: transparent !important;
 			}
 
-			@media (width <= 639px) {
-				html.background-visible body::before {
-					background-image: url("/assets/img/background@mobile-blurred.webp");
-					background-position: center top;
-				}
-			}
-
-			body.error-boundary-visible::before {
-				background-image: image-set(
-					url("/assets/img/background.webp") 1x,
-					url("/assets/img/background@2x.webp") 2x
-				);
-			}
-
-			body.a11y-font::before {
+			/* Hide background image in light mode */
+			html:is(.light, .light-theme) body::before {
 				background-image: none !important;
-				background-color: #101b20;
+				background-color: #fff !important;
 			}
 		</style>
 
