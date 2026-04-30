@@ -7,9 +7,11 @@
 	}
 
 	// Lighten the top of the fade
-	body.a11y-font & {
-		:is(.dark, .dark-theme) & {
-			background-image: linear-gradient(to bottom, var(--gray-2), transparent);
+	@media (width >= 640px) {
+		body.a11y-font & {
+			:is(.dark, .dark-theme) & {
+				background-image: linear-gradient(to bottom, var(--gray-2), transparent);
+			}
 		}
 	}
 
