@@ -6,16 +6,17 @@ The full commit history for this project is available on [GitHub](https://github
 
 ## Version 7.0 (2026-05-01)
 
-This update brings full Italian language support and a lot of under-the-hood work to make the app load faster and feel more stable. 
+This update brings full Italian language support and a lot of under-the-hood work to make the app load faster and feel more stable.
 
 **Please note:** This will be our last planned release until the game makes major changes to its core mechanics.
 
 - **Italian Translation:** The app is now fully translated into Italian.
 - **Faster Loading:** We moved pop-up dialogs and CSS to load on-demand instead of blocking the main page. The app should load noticeably faster from a cold start.
-- **Visual Fixes:** Fixed the brief "flash of unstyled content" that happened on slower connections, and stopped the page layout from jumping around as things load in. 
+- **Visual Fixes:** Fixed the brief "flash of unstyled content" that happened on slower connections, and stopped the page layout from jumping around as things load in.
 - **Focus Mode:** Tweaked the desktop background to improve contrast for Focus Mode users.
 - **Privacy & Ad-Blockers:** The app now runs smoothly even with strict privacy settings or ad-blockers enabled, and the site icon displays reliably in incognito mode.
 - **Update Prompts:** You'll now get a small notification when a new version is out so you know when to refresh.
+- **For the Web Dev Nerds:** Check out the new icon on the desktop interface.
 
 ## Version 6.34 – SEO & Page Title Synchronization (2026-04-20)
 
