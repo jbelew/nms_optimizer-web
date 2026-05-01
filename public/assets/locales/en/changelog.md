@@ -4,17 +4,18 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
-## Version 7.0 – Italian Translation & Instant Responsiveness (2026-05-01)
+## Version 7.0 (2026-05-01)
 
-This major release expands our global reach with full Italian language support, alongside massive under-the-hood optimizations that make the app feel instantly responsive. **Please note: This will be our final planned release until there are significant changes to the game's core mechanics.**
+This update brings full Italian language support and a lot of under-the-hood work to make the app load faster and feel more stable. 
 
-- **Benvenuto! (Italian Support):** NMS Optimizer is now fully translated into Italian! Welcome to all our Italian-speaking players.
-- **Focus Mode Enhancements:** Refined the desktop background to ensure a high-contrast and perfectly readable experience when using Focus Mode.
-- **Lightning Fast:** Deep optimizations to how we load styles and resources have drastically improved how quickly the app loads, making the entire experience smoother.
-- **Consistent Dialog Behavior:** Standardized how all of our pop-up dialogs operate behind the scenes. They now load reliably on-demand, which also speeds up the initial launch of the app.
-- **Visual Stability:** Eliminated the "flash of unstyled content" that could occur on slower connections or in incognito mode, so the app looks perfect from the very first second. We also fixed layout shifting to prevent annoying visual jumps when the app loads.
-- **Reliability:** Improved the app's overall stability across different browsers and privacy settings, and fixed an issue where the site icon wouldn't load in incognito mode.
-- **Update Notifications:** You'll now be reliably notified whenever a new version of the app is available, making it easy to refresh and get the latest features and optimizations.
+**Please note:** This will be our last planned release until the game makes major changes to its core mechanics.
+
+- **Italian Translation:** The app is now fully translated into Italian.
+- **Faster Loading:** We moved pop-up dialogs and CSS to load on-demand instead of blocking the main page. The app should load noticeably faster from a cold start.
+- **Visual Fixes:** Fixed the brief "flash of unstyled content" that happened on slower connections, and stopped the page layout from jumping around as things load in. 
+- **Focus Mode:** Tweaked the desktop background to improve contrast for Focus Mode users.
+- **Privacy & Ad-Blockers:** The app now runs smoothly even with strict privacy settings or ad-blockers enabled, and the site icon displays reliably in incognito mode.
+- **Update Prompts:** You'll now get a small notification when a new version is out so you know when to refresh.
 
 ## Version 6.34 – SEO & Page Title Synchronization (2026-04-20)
 
