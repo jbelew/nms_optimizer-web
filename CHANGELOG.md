@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.0...v7.0.1) (2026-05-01)
+
+
+### Bug Fixes
+
+* rebrand Optimiseur/Optimizador de NMS to NMS Optimizer across all locales and assets ([29b5053](https://github.com/jbelew/nms_optimizer-web/commit/29b50530f818f10cb2aff8f63b3c9ab7d1d2467c))
+
 ## [6.37.6](https://github.com/jbelew/nms_optimizer-web/compare/v6.37.5...v6.37.6) (2026-04-29)
 
 
