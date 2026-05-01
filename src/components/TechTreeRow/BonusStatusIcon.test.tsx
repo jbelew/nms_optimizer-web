@@ -1,9 +1,40 @@
+import { Theme } from "@radix-ui/themes";
 import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { isTouchDevice } from "@/utils/browser/environment";
+
 import i18n from "../../test/i18n";
 import { BonusStatusIcon } from "./TechTreeRow";
+
+vi.mock("@/utils/browser/environment", async () => {
+	const actual = await vi.importActual("@/utils/browser/environment");
+
+	return {
+		...actual,
+		isTouchDevice: vi.fn(() => false),
+	};
+});
+
+vi.mock("@radix-ui/themes", async () => {
+	const actual = await vi.importActual("@radix-ui/themes");
+
+	return {
+		...actual,
+		Popover: {
+			Root: ({ children }: { children: React.ReactNode }) => (
+				<div data-testid="popover-root">{children}</div>
+			),
+			Trigger: ({ children }: { children: React.ReactNode }) => (
+				<div data-testid="popover-trigger">{children}</div>
+			),
+			Content: ({ children }: { children: React.ReactNode }) => (
+				<div data-testid="popover-content">{children}</div>
+			),
+		},
+	};
+});
 
 vi.mock("../../store/tech/techBonusStore", () => ({
 	useTechBonusStore: vi.fn(() => ({
@@ -13,40 +44,64 @@ vi.mock("../../store/tech/techBonusStore", () => ({
 }));
 
 vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
-	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => (
+		<div data-testid="conditional-tooltip">{children}</div>
+	),
 }));
 
 describe("BonusStatusIcon Component", () => {
 	const renderComponent = (techMaxBonus: number, techSolvedBonus: number) => {
 		return render(
 			<I18nextProvider i18n={i18n}>
-				<BonusStatusIcon
-					tech="test-tech"
-					techMaxBonus={techMaxBonus}
-					techSolvedBonus={techSolvedBonus}
-				/>
+				<Theme>
+					<BonusStatusIcon
+						tech="test-tech"
+						techMaxBonus={techMaxBonus}
+						techSolvedBonus={techSolvedBonus}
+					/>
+				</Theme>
 			</I18nextProvider>
 		);
 	};
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.mocked(isTouchDevice).mockReturnValue(false);
+	});
+
+	describe("Rendering based on device type", () => {
+		it("should render with ConditionalTooltip on non-touch devices", () => {
+			const { getByTestId, queryByTestId } = renderComponent(100, 10);
+			expect(getByTestId("conditional-tooltip")).toBeInTheDocument();
+			expect(queryByTestId("popover-root")).not.toBeInTheDocument();
+		});
+
+		it("should render with Popover on touch devices", () => {
+			vi.mocked(isTouchDevice).mockReturnValue(true);
+
+			const { getByTestId, queryByTestId } = renderComponent(100, 10);
+			expect(getByTestId("popover-root")).toBeInTheDocument();
+			expect(getByTestId("popover-trigger")).toBeInTheDocument();
+			expect(getByTestId("popover-content")).toBeInTheDocument();
+			expect(queryByTestId("conditional-tooltip")).not.toBeInTheDocument();
+		});
 	});
 
 	describe("Rendering based on bonus values", () => {
 		it("should return null when techSolvedBonus is 0 and no cached data", () => {
 			const { container } = renderComponent(100, 0);
-			expect(container.firstChild).toBeNull();
+			// Theme wrapper renders a div, so check if it has any children
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
 		});
 
 		it("should return null when techSolvedBonus is negative and no cached data", () => {
 			const { container } = renderComponent(100, -5);
-			expect(container.firstChild).toBeNull();
+			expect(container.querySelector(".radix-themes")?.childNodes.length).toBe(0);
 		});
 
 		it("should render an icon when techSolvedBonus is positive", () => {
 			const { container } = renderComponent(100, 10);
-			expect(container.firstChild).not.toBeNull();
+			expect(container.querySelector("svg")).not.toBeNull();
 		});
 	});
 

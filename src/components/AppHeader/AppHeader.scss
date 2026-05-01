@@ -74,6 +74,10 @@
 		text-transform: uppercase;
 		word-spacing: -0.25rem;
 
+		:is(.light, .light-theme) & {
+			color: var(--accent-12);
+		}
+
 		@media (width >= 640px) {
 			filter: drop-shadow(0 0 4px var(--accent-a8)) drop-shadow(0 0 8px var(--gray-a7));
 			font-size: 2.25rem;

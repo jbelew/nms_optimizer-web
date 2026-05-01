@@ -10,10 +10,11 @@ import {
 	ResetIcon,
 	UpdateIcon,
 } from "@radix-ui/react-icons";
-import { Avatar, Button, IconButton, Text } from "@radix-ui/themes";
+import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { useA11yStore } from "@/store/app/a11yStore";
+import { isTouchDevice } from "@/utils/browser/environment";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
@@ -282,6 +283,19 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			{icon}
 		</button>
 	);
+
+	if (isTouchDevice()) {
+		return (
+			<Popover.Root>
+				<Popover.Trigger>{trigger}</Popover.Trigger>
+				<Popover.Content size="1">
+					<Text as="p" trim="both" size="1">
+						{contentData.tooltipContent}
+					</Text>
+				</Popover.Content>
+			</Popover.Root>
+		);
+	}
 
 	return <ConditionalTooltip label={contentData.tooltipContent}>{trigger}</ConditionalTooltip>;
 };

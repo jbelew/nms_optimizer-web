@@ -42,11 +42,29 @@ html.background-visible:is(.dark, .dark-theme) {
 	background-attachment: fixed !important;
 }
 
-/* 2. Mobile Responsive Backgrounds */
+/* 2. Global Background Canvas (Light Mode) */
+html.background-visible:is(.light, .light-theme) {
+	background-color: #fff !important;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+		url("/assets/img/background@2x.webp") !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+	background-size: cover !important;
+	background-attachment: fixed !important;
+}
+
+/* 3. Mobile Responsive Backgrounds */
 @media (width <= 639px) {
 	html.background-visible:is(.dark, .dark-theme) {
 		background-image: url("/assets/img/background@mobile-blurred.webp") !important;
 		background-position: center top !important;
+	}
+
+	html.background-visible:is(.light, .light-theme) {
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+			url("/assets/img/background@mobile-blurred.webp") !important;
 	}
 }
 
@@ -55,21 +73,15 @@ html.background-visible:has(body.a11y-font),
 html:has(body.a11y-font),
 body.a11y-font {
 	background-image: none !important;
-	background-color: #101b20 !important;
+	background-color: #111113 !important;
 }
 
 /* 4. UI Transparency Bridge */
 /* Ensure the body and main app containers are transparent to reveal the html background */
 /* We only target .radix-themes inside our roots to avoid making portal-based dropdowns transparent */
-html.background-visible:is(.dark, .dark-theme) body,
-html.background-visible:is(.dark, .dark-theme) :is(#root, #storybook-root) .radix-themes {
+html.background-visible body,
+html.background-visible :is(#root, #storybook-root) .radix-themes {
 	background-color: transparent !important;
-}
-
-/* 5. Light Mode Solid Canvas */
-html:is(.light, .light-theme) {
-	background-color: #fff !important;
-	background-image: none !important;
 }
 
 /* Ensure panels and dropdowns remain solid even when the root is transparent */
