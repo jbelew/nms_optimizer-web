@@ -45,8 +45,9 @@ function stripP3Colors(css) {
 		""
 	);
 
-	// Remove light mode colors (everything from ':root, .light' to the closing brace before '.dark')
-	result = result.replace(/:root,\s*\.light,\s*\.light-theme\s*\{[\s\S]*?\n\}\n\n/m, "");
+	// Remove light mode colors (everything from ':root, .light' to the closing brace)
+	// Improved regex to handle cases where there is only one newline after the brace
+	result = result.replace(/:root,\s*\.light,\s*\.light-theme\s*\{[\s\S]*?\n\}(?:\n|$)/m, "");
 
 	return result;
 }
@@ -62,11 +63,8 @@ const baseInputPath = join(projectRoot, "node_modules/@radix-ui/themes/tokens/ba
 
 try {
 	const baseCss = readFileSync(baseInputPath, "utf-8");
-	// base.css doesn't have the same structure as color files, just strip p3
-	const optimizedBaseCss = baseCss.replace(
-		/@supports \(color: color\(display-p3[^}]+\)\) \{[\s\S]*?\n\}(?=\n|$)/gm,
-		""
-	);
+	// Apply full optimization to base.css as well
+	const optimizedBaseCss = stripP3Colors(baseCss);
 	optimizedColorContents.push(optimizedBaseCss);
 	console.log(`✓ base.css optimized`);
 } catch (error) {

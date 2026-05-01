@@ -1,4 +1,4 @@
-# Politique de Confidentialité de l'Optimiseur NMS : Vos Données et Sécurité
+# Politique de Confidentialité de l'NMS Optimizer : Vos Données et Sécurité
 
 **Dernière Mise à Jour :** 16 mars 2026
 

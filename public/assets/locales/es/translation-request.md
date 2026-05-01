@@ -1,6 +1,6 @@
-# Ayuda a Traducir el Optimizador de NMS: Únete a Nuestra Localización Comunitaria
+# Ayuda a Traducir el NMS Optimizer: Únete a Nuestra Localización Comunitaria
 
-## Ayuda a Traducir el Optimizador de NMS
+## Ayuda a Traducir el NMS Optimizer
 
 Las estadísticas muestran visitantes de todo el mundo y me encantaría hacerlo más accesible para la comunidad global de No Man's Sky, y ahí es donde entras tú.
 
@@ -14,7 +14,7 @@ La mayoría de las cadenas son etiquetas de interfaz cortas, descripciones emerg
 
 ## El Flujo de Trabajo
 
-El Optimizador de NMS utiliza ahora un **flujo de trabajo de traducción basado en IA** mediante la API de Gemini 2.5 Flash. Esto garantiza que cada vez que se actualiza el contenido en inglés, todos los demás idiomas admitidos se actualicen automáticamente en cuestión de minutos.
+El NMS Optimizer utiliza ahora un **flujo de trabajo de traducción basado en IA** mediante la API de Gemini 2.5 Flash. Esto garantiza que cada vez que se actualiza el contenido en inglés, todos los demás idiomas admitidos se actualicen automáticamente en cuestión de minutos.
 
 Sin embargo, la IA no es perfecta. Confiamos en la comunidad para identificar y corregir "alucinaciones" o terminología incorrecta de NMS.
 

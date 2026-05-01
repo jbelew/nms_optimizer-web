@@ -1,8 +1,8 @@
-# Estadísticas del Optimizador de NMS: Datos de la Comunidad Sobre Tecnologías Potenciadas
+# Estadísticas del NMS Optimizer: Datos de la Comunidad Sobre Tecnologías Potenciadas
 
 ## Estadísticas de Usuario y Diseños Populares
 
-Esta página agrega datos de los usuarios del Optimizador de NMS para mostrar las tecnologías más frecuentemente potenciadas en diferentes plataformas. Tanto si estás planeando tu próximo diseño como si buscas inspiración, estas estadísticas muestran las preferencias y patrones reales de la comunidad.
+Esta página agrega datos de los usuarios del NMS Optimizer para mostrar las tecnologías más frecuentemente potenciadas en diferentes plataformas. Tanto si estás planeando tu próximo diseño como si buscas inspiración, estas estadísticas muestran las preferencias y patrones reales de la comunidad.
 
 ## Comprensión de los Datos
 
@@ -47,4 +47,4 @@ Para obtener instrucciones detalladas sobre el uso del optimizador, visita la [p
 
 ## Recopilación de Datos
 
-Estos datos se recopilan de forma anónima a partir de las solicitudes de optimización y no incluyen ninguna información de identificación personal. Ayudan a la comunidad del Optimizador de NMS a comprender qué tecnologías ofrecen el mayor valor e informan sobre futuras mejoras en los algoritmos del optimizador.
+Estos datos se recopilan de forma anónima a partir de las solicitudes de optimización y no incluyen ninguna información de identificación personal. Ayudan a la comunidad del NMS Optimizer a comprender qué tecnologías ofrecen el mayor valor e informan sobre futuras mejoras en los algoritmos del optimizador.

@@ -147,6 +147,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				{activeMetrics.map((metric) => {
 					const val = getLatestMetricValue(chartData, metric);
 					const isSelected = selectedMetric === metric;
+					const trend = getMetricTrend(chartData, metric);
 
 					return (
 						<Card
@@ -186,14 +187,14 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 									>
 										{val !== null ? formatMetricValue(metric, val) : "—"}
 									</Text>
-									{getMetricTrend(chartData, metric) === "improvement" && (
+									{trend === "improvement" && (
 										<Text color="green">
 											<ArrowDownIcon />
 										</Text>
 									)}
-									{getMetricTrend(chartData, metric) === "regression" && (
+									{trend === "regression" && (
 										<Text color="red">
-											<ArrowDownIcon />
+											<ArrowUpIcon />
 										</Text>
 									)}
 								</Flex>

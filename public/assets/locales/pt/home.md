@@ -1,8 +1,8 @@
-# Otimizador NMS: Criador de Layouts de Tecnologia & Calculadora de Adjacência
+# NMS Optimizer: Criador de Layouts de Tecnologia & Calculadora de Adjacência
 
 ![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-Bem-vindo ao **Otimizador NMS**, uma ferramenta 100% gratuita, sem anúncios e de código aberto projetada para ajudá-lo a encontrar os melhores layouts de tecnologia em _No Man's Sky_. Pare de adivinhar onde colocar seus módulos de atualização Classe S e Classe X. Escolha sua plataforma, selecione sua tecnologia, marque seus espaços superalimentados (Supercharged Slots) e deixe nossa calculadora gerar instantaneamente um layout que maximiza seu DPS, manobrabilidade e alcance do Hiperpropulsor (Hyperdrive).
+Bem-vindo ao **NMS Optimizer**, uma ferramenta 100% gratuita, sem anúncios e de código aberto projetada para ajudá-lo a encontrar os melhores layouts de tecnologia em _No Man's Sky_. Pare de adivinhar onde colocar seus módulos de atualização Classe S e Classe X. Escolha sua plataforma, selecione sua tecnologia, marque seus espaços superalimentados (Supercharged Slots) e deixe nossa calculadora gerar instantaneamente um layout que maximiza seu DPS, manobrabilidade e alcance do Hiperpropulsor (Hyperdrive).
 
 Um layout otimizado normalmente pontua **15-20% mais alto** do que a maioria dos jogadores pode organizar à mão.
 
@@ -17,7 +17,7 @@ Nosso criador de layouts testa milhares de configurações em milissegundos para
 
 ## Plataformas & Equipamentos Suportados
 
-O Otimizador NMS fornece resolução dinâmica e builds recomendadas selecionadas a dedo para cada tipo principal de equipamento no jogo:
+O NMS Optimizer fornece resolução dinâmica e builds recomendadas selecionadas a dedo para cada tipo principal de equipamento no jogo:
 
 - **Naves (Starships):** Encontre o maior DPS e manobrabilidade para Caças (Fighters), Exploradores (Explorers), Transportadores (Haulers), Exóticas (Exotics), Naves Solares (Solar Ships), Interceptadores Sentinela (Sentinel Interceptors) e Naves Vivas (Living Ships).
 - **Multiferramentas (Multi-Tools):** Maximize o rendimento do seu Feixe de Mineração (Mining Beam) ou dano de armas em todas as variantes, incluindo padrão, Sentinela (Sentinel), Atlantid e Cajados (Staves).
@@ -26,7 +26,7 @@ O Otimizador NMS fornece resolução dinâmica e builds recomendadas selecionada
 
 ## Alimentado por IA & Algoritmos Avançados
 
-Nós não estamos apenas adivinhando. O motor do Otimizador NMS usa um fluxo de trabalho sofisticado para garantir os melhores resultados:
+Nós não estamos apenas adivinhando. O motor do NMS Optimizer usa um fluxo de trabalho sofisticado para garantir os melhores resultados:
 
 1.  **Reconhecimento de Padrões:** Começamos com arranjos testados manualmente e aprovados pela comunidade.
 2.  **Aprendizado de Máquina (IA):** Uma rede neural do TensorFlow, treinada em mais de 16.000 layouts de alta pontuação, prevê os posicionamentos mais inteligentes para seus espaços superalimentados.

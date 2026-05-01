@@ -1,6 +1,6 @@
 # Über den NMS-Optimierer: Der ultimative No Man's Sky Technologie-Layout-Rechner
 
-Der **NMS Optimierer** ist ein 100 % kostenloses, werbefreies Tool, das entwickelt wurde, um genau herauszufinden, wo du deine Technologie-Module in _No Man's Sky_ platzieren solltest. Du wählst deine Ausrüstung, wählst deine S-Klasse- oder X-Klasse-Upgrade-Module aus, markierst deine aufgeladenen Plätze (Supercharged Slots) und unser Rechner generiert fast sofort das Layout, das deine In-Game-Werte maximiert.
+Der **NMS Optimizer** ist ein 100 % kostenloses, werbefreies Tool, das entwickelt wurde, um genau herauszufinden, wo du deine Technologie-Module in _No Man's Sky_ platzieren solltest. Du wählst deine Ausrüstung, wählst deine S-Klasse- oder X-Klasse-Upgrade-Module aus, markierst deine aufgeladenen Plätze (Supercharged Slots) und unser Rechner generiert fast sofort das Layout, das deine In-Game-Werte maximiert.
 
 Durch die perfekte Ausbalancierung der Spielmechaniken erzielt ein optimiertes Layout typischerweise eine **15-20 % höhere** Punktzahl als das, was die meisten Spieler manuell arrangieren können.
 

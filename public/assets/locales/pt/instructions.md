@@ -1,4 +1,4 @@
-# Instruções do Otimizador de NMS: Módulos e Espaços Sobrecarregados
+# Instruções do NMS Optimizer: Módulos e Espaços Sobrecarregados
 
 ## Primeiros Passos Com A Grade
 

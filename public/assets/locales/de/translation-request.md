@@ -1,6 +1,6 @@
-# Hilf bei der Übersetzung des NMS Optimierers: Werde Teil unserer Community-Lokalisierung
+# Hilf bei der Übersetzung des NMS Optimizers: Werde Teil unserer Community-Lokalisierung
 
-## Hilf bei der Übersetzung des NMS Optimierers
+## Hilf bei der Übersetzung des NMS Optimizers
 
 Analysen zeigen Besucher aus der ganzen Welt, und ich möchte die App der globalen No Man's Sky-Community zugänglicher machen – und hier kommst du ins Spiel.
 
@@ -14,7 +14,7 @@ Die meisten Zeichenketten sind kurze UI-Beschriftungen, Tooltips oder lustige St
 
 ## Der Arbeitsablauf
 
-Der NMS Optimierer verwendet jetzt einen **KI-basierten Übersetzungs-Workflow** unter Nutzung der Gemini 2.5 Flash API. Dies stellt sicher, dass jedes Mal, wenn der englische Inhalt aktualisiert wird, alle anderen unterstützten Sprachen innerhalb von Minuten automatisch aktualisiert werden.
+Der NMS Optimizer verwendet jetzt einen **KI-basierten Übersetzungs-Workflow** unter Nutzung der Gemini 2.5 Flash API. Dies stellt sicher, dass jedes Mal, wenn der englische Inhalt aktualisiert wird, alle anderen unterstützten Sprachen innerhalb von Minuten automatisch aktualisiert werden.
 
 Allerdings ist KI nicht perfekt. Wir verlassen uns auf die Community, um „Halluzinationen“ oder falsche NMS-Terminologie zu identifizieren und zu korrigieren.
 

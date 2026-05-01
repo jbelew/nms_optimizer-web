@@ -16,7 +16,7 @@
 			"description": "Ab Version 6.34 haben Korvetten <strong>immer noch</strong> bekannte Layout-Probleme! Wenn du ein Layout erstellst, empfehlen wir dringend, die Funktion <strong>Build speichern</strong> zu verwenden, um eine Sicherung deiner Arbeit zu erstellen."
 		}
 	},
-	"appName": "NMS Optimierer",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Anleitung",
 		"about": "Über Uns",
@@ -721,8 +721,8 @@
 			"performance": "Leistungsmetriken der Anwendung"
 		},
 		"genre": "Spielwerkzeug",
-		"performancePageTitle": "NMS Optimierer: Leistungsmetriken",
-		"performanceDescription": "Echtzeit-Leistungsmetriken und Core Web Vitals für die NMS Optimierer-Anwendung."
+		"performancePageTitle": "NMS Optimizer: Leistungsmetriken",
+		"performanceDescription": "Echtzeit-Leistungsmetriken und Core Web Vitals für die NMS Optimizer-Anwendung."
 	},
 	"installPrompt": {
 		"title": "Zum Startbildschirm Hinzufügen",

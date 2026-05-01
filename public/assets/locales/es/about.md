@@ -1,4 +1,4 @@
-# Acerca del Optimizador de NMS: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky
+# Acerca del NMS Optimizer: La Calculadora Definitiva de Diseños de Tecnología para No Man's Sky
 
 **NMS Optimizer** es una herramienta 100% gratuita y sin anuncios diseñada para descifrar exactamente dónde colocar tus módulos de tecnología en _No Man's Sky_. Tú eliges tu equipo, seleccionas tus módulos de actualización de Clase S o Clase X, marcas tus ranuras potenciadas (Supercharged Slots) y nuestra calculadora genera casi al instante el diseño que maximiza tus estadísticas dentro del juego.
 
@@ -15,7 +15,7 @@ Descubrir el mejor arreglo absoluto significa probar combinaciones a lo largo de
 
 ## Cómo Funciona el Motor de Optimización de Diseños
 
-No dependemos de conjeturas. El motor del Optimizador de NMS utiliza un sofisticado flujo de trabajo de cuatro pasos para encontrar automáticamente tu mejor construcción:
+No dependemos de conjeturas. El motor del NMS Optimizer utiliza un sofisticado flujo de trabajo de cuatro pasos para encontrar automáticamente tu mejor construcción:
 
 1.  **Reconocimiento de Patrones:** El solucionador comienza con arreglos probados a mano y comprobados por la comunidad que de manera confiable obtienen buenas puntuaciones para conjuntos de módulos comunes.
 2.  **Aprendizaje Automático (IA):** Si tu cuadrícula tiene ranuras potenciadas únicas, un modelo de aprendizaje automático de TensorFlow, entrenado en más de 16,000 diseños de alta puntuación, predice las colocaciones más inteligentes para tus tecnologías principales frente a tus módulos de actualización.
@@ -24,7 +24,7 @@ No dependemos de conjeturas. El motor del Optimizador de NMS utiliza un sofistic
 
 ## Equipos Compatibles
 
-El Optimizador de NMS proporciona resolución dinámica para cada plataforma principal del juego:
+El NMS Optimizer proporciona resolución dinámica para cada plataforma principal del juego:
 
 - **Naves (Starships):** Naves Estándar, Exóticas (Exotic), Interceptores Centinela (Sentinel Interceptor), Solares, de Combate (Fighter), Vivas (Living) y Atlantid.
 - **Multiherramientas (Multi-Tools):** Todas las variantes de armas y minería, incluidos los Báculos (Staves).
@@ -37,7 +37,7 @@ El Optimizador de NMS proporciona resolución dinámica para cada plataforma pri
 **¿Qué debería poner en mis ranuras potenciadas?**
 ¡Depende de tu diseño! A veces es mejor potenciar tu tecnología principal y otras veces es mejor potenciar tu actualización con los números más altos. Nuestro modelo de IA fue entrenado en más de 16,000 diseños reales específicamente para tomar esta decisión por ti.
 
-**¿Es gratuito el Optimizador de NMS?**
+**¿Es gratuito el NMS Optimizer?**
 Sí. Es 100% gratuito, sin anuncios y de código abierto (GPL-3.0). No necesitas crear una cuenta ni proporcionar un correo electrónico.
 
 **¿Puedo guardar y compartir mis diseños?**
@@ -47,11 +47,11 @@ Sí. Es 100% gratuito, sin anuncios y de código abierto (GPL-3.0). No necesitas
 La herramienta evita intencionalmente calcular métricas estándar dentro del juego como DPS o Rango en Años Luz. Debido a que los números exactos requieren semillas de nave ocultas que son inaccesibles sin un editor de guardado, el optimizador confía en un puntaje de "porcentaje del máximo" en su lugar.
 
 **¿Por qué el diseño optimizado no incluye mi módulo específico de Expedición?**
-El Optimizador de NMS apoya completamente todas las **Recompensas de Expedición y Redux de Expedición** ofrecidas tras la actualización _Worlds Part I_. Sin embargo, debido a que no todos los jugadores poseen estos artículos raros, estos módulos opcionales no se incluyen por defecto en tus soluciones. Puedes activarlos fácilmente para tu construcción abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de Módulos**.
+El NMS Optimizer apoya completamente todas las **Recompensas de Expedición y Redux de Expedición** ofrecidas tras la actualización _Worlds Part I_. Sin embargo, debido a que no todos los jugadores poseen estos artículos raros, estos módulos opcionales no se incluyen por defecto en tus soluciones. Puedes activarlos fácilmente para tu construcción abriendo la <radix-icon name="OpenInNewWindowIcon" size="20" color="var(--accent-11)"></radix-icon> **interfaz de Selección de Módulos**.
 
 ## Bajo el Capó: Nuestra Pila Tecnológica
 
-Para los desarrolladores y fanáticos de los datos, aquí está la tecnología que impulsa el Optimizador de NMS:
+Para los desarrolladores y fanáticos de los datos, aquí está la tecnología que impulsa el NMS Optimizer:
 
 - **Frontend:** TypeScript, React, Zustand, Vite, Tailwind CSS, Radix UI
 - **Backend Solucionador:** Python, Flask, TensorFlow, NumPy, Rust (impulsa el recocido simulado y el motor de puntuación)
@@ -61,7 +61,7 @@ Para los desarrolladores y fanáticos de los datos, aquí está la tecnología q
 
 ### Repositorios de Código Abierto
 
-¿Quieres contribuir? El Optimizador de NMS es completamente de código abierto.
+¿Quieres contribuir? El NMS Optimizer es completamente de código abierto.
 
 - Interfaz Web: [github.com/jbelew/nms_optimizer-web](https://github.com/jbelew/nms_optimizer-web)
 - Backend: [github.com/jbelew/nms_optimizer-service](https://github.com/jbelew/nms_optimizer-service)

@@ -1,6 +1,6 @@
-# Aidez à Traduire l'Optimiseur NMS : Rejoignez la Localisation Communautaire
+# Aidez à Traduire l'NMS Optimizer : Rejoignez la Localisation Communautaire
 
-## Participez à la Traduction de l'Optimiseur NMS
+## Participez à la Traduction de l'NMS Optimizer
 
 Les statistiques montrent des visiteurs venant du monde entier, et je serais ravi de rendre cet outil plus accessible à toute la communauté No Man's Sky. C'est là que vous intervenez !
 
@@ -14,7 +14,7 @@ La plupart des textes sont des libellés d'interface courts, des infobulles ou d
 
 ## Le Flux de Travail
 
-L'Optimiseur NMS utilise désormais un **Système de Traduction Automatisé Par IA** via l'API Gemini 2.5 Flash. Cela garantit que chaque mise à jour du contenu anglais est répercutée sur les autres langues en quelques minutes seulement.
+L'NMS Optimizer utilise désormais un **Système de Traduction Automatisé Par IA** via l'API Gemini 2.5 Flash. Cela garantit que chaque mise à jour du contenu anglais est répercutée sur les autres langues en quelques minutes seulement.
 
 Cependant, l'IA n'est pas parfaite. Nous comptons sur la communauté pour repérer et corriger les erreurs de terminologie ou les tournures maladroites.
 

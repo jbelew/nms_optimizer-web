@@ -1,14 +1,14 @@
-# Política de Privacidad del Optimizador de NMS: Tus Datos y Seguridad
+# Política de Privacidad del NMS Optimizer: Tus Datos y Seguridad
 
 **Última Actualización:** 16 de marzo de 2026
 
-Tu privacidad es importante para nosotros. Esta Política de Privacidad explica cómo el **Optimizador de NMS** ("nosotros", "nos" o "nuestro") recopila, utiliza y protege tu información cuando utilizas nuestra aplicación web y su motor de optimización asociado.
+Tu privacidad es importante para nosotros. Esta Política de Privacidad explica cómo el **NMS Optimizer** ("nosotros", "nos" o "nuestro") recopila, utiliza y protege tu información cuando utilizas nuestra aplicación web y su motor de optimización asociado.
 
 ---
 
 ## 1. Recopilación de Información
 
-El Optimizador de NMS está diseñado para ser una herramienta centrada en la privacidad.
+El NMS Optimizer está diseñado para ser una herramienta centrada en la privacidad.
 
 - **Sin Información Personal:** No recopilamos información de identificación personal (PII), como tu nombre, dirección de correo electrónico o dirección física. No existe un sistema de inicio de sesión o de cuentas.
 - **Almacenamiento Local:** La aplicación utiliza el **LocalStorage** de tu navegador para guardar tus preferencias y el estado de tus diseños. Estos datos permanecen en tu dispositivo y no se transmiten a nuestros servidores ni son almacenados por nosotros.
@@ -24,7 +24,7 @@ Para garantizar que la aplicación sea segura, rápida y esté libre de errores,
 
 ## 3. Procesamiento de Datos (API Interna)
 
-El Optimizador de NMS interactúa con una API dedicada, creada por nosotros y alojada en Heroku, para realizar los cálculos de diseño tecnológico.
+El NMS Optimizer interactúa con una API dedicada, creada por nosotros y alojada en Heroku, para realizar los cálculos de diseño tecnológico.
 
 - **Propósito:** Cuando realizas una optimización, los parámetros técnicos de la tecnología y el diseño de tu cuadrícula se envían a esta API.
 - **Privacidad:** Esta interacción es estrictamente funcional. No se envían datos personales ni identificadores de usuario persistentes con estas solicitudes. Los datos se procesan en memoria y no se guardan en una base de datos.

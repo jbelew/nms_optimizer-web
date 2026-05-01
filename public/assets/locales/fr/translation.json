@@ -16,7 +16,7 @@
 			"description": "Depuis la version 6.34, les Corvettes ont <strong>toujours</strong> des problèmes de disposition connus ! Si vous créez une disposition, nous vous recommandons fortement d'utiliser la fonction <strong>Sauvegarder la construction</strong> pour conserver une sauvegarde de votre travail."
 		}
 	},
-	"appName": "Optimiseur NMS",
+	"appName": "NMS Optimizer",
 	"buttons": {
 		"instructions": "Instructions",
 		"about": "À Propos",
@@ -90,7 +90,7 @@
 			"performance": "Mesures de Performance"
 		},
 		"welcome": {
-			"title": "Bienvenue sur l'Optimiseur NMS !",
+			"title": "Bienvenue sur l'NMS Optimizer !",
 			"description": "Voici un guide rapide pour tirer le meilleur parti de cet outil :",
 			"item1": "Sélectionnez une <strong>Plateforme</strong> via l'icône <icon/>.",
 			"item2": "<strong>Cliquez</strong> ou <strong>appuyez deux fois</strong> sur un emplacement pour le marquer comme <strong>Surchargé</strong>.",
@@ -126,7 +126,7 @@
 			"tip": "<strong>Astuce :</strong> Ouvrez le lien et ajoutez la page à vos favoris pour revenir facilement à cette disposition plus tard."
 		},
 		"updatePrompt": {
-			"description": "Une nouvelle version de l'Optimiseur NMS est disponible. Pour une expérience optimale, veuillez actualiser la page pour charger les dernières nouveautés.",
+			"description": "Une nouvelle version de l'NMS Optimizer est disponible. Pour une expérience optimale, veuillez actualiser la page pour charger les dernières nouveautés.",
 			"later": "Plus Tard",
 			"refreshNow": "Actualiser"
 		},
@@ -638,7 +638,7 @@
 		}
 	},
 	"faq": {
-		"name": "Foire Aux Questions de l'Optimiseur NMS",
+		"name": "Foire Aux Questions de l'NMS Optimizer",
 		"questions": {
 			"adjacencyBonus": {
 				"name": "Qu'est-ce qu'un bonus d'adjacence dans No Man's Sky ?",
@@ -653,12 +653,12 @@
 				"answer": "Pour obtenir les meilleures statistiques, regroupez les technologies similaires en forme de carré ou de 'L' et placez vos modules les plus puissants (comme l'arme principale ou le moteur central) dans des slots surchargés adjacents aux autres modules du groupe."
 			},
 			"calculation": {
-				"name": "Comment l'Optimiseur NMS trouve-t-il la meilleure disposition technologique ?",
+				"name": "Comment l'NMS Optimizer trouve-t-il la meilleure disposition technologique ?",
 				"answer": "L'optimiseur utilise des algorithmes avancés pour explorer des milliers de dispositions possibles en quelques secondes. Il évalue chaque disposition en fonction des bonus d'adjacence, des multiplicateurs de slots surchargés et des poids spécifiques aux modules pour trouver l'optimum mathématique pour votre équipement."
 			},
 			"platforms": {
-				"name": "Quels types d'équipements et de vaisseaux l'Optimiseur NMS supporte-t-il ?",
-				"answer": "L'Optimiseur NMS supporte tous les équipements majeurs : Vaisseaux (y compris les vaisseaux Sentinelles et Organiques), Corvettes, Multi-outils, Exocombinaisons, Exonefs et Cargos."
+				"name": "Quels types d'équipements et de vaisseaux l'NMS Optimizer supporte-t-il ?",
+				"answer": "L'NMS Optimizer supporte tous les équipements majeurs : Vaisseaux (y compris les vaisseaux Sentinelles et Organiques), Corvettes, Multi-outils, Exocombinaisons, Exonefs et Cargos."
 			}
 		}
 	},
@@ -692,11 +692,11 @@
 		"aboutPageTitle": "NMS Optimizer : À propos des algorithmes d'optimisation",
 		"aboutDescription": "Découvrez comment NMS Optimizer utilise des algorithmes et Rust pour calculer le meilleur placement de vos modules.",
 		"changelogPageTitle": "NMS Optimizer : Dernières nouveautés et mises à jour",
-		"changelogDescription": "Restez informé des dernières fonctionnalités, corrections et améliorations de l'algorithme de l'Optimiseur NMS. Découvrez les nouveautés du meilleur outil d'optimisation No Man's Sky.",
+		"changelogDescription": "Restez informé des dernières fonctionnalités, corrections et améliorations de l'algorithme de l'NMS Optimizer. Découvrez les nouveautés du meilleur outil d'optimisation No Man's Sky.",
 		"userstatsPageTitle": "NMS Optimizer : Meta communautaire et statistiques",
 		"userstatsDescription": "Explorez la meta No Man's Sky. Découvrez les technologies surchargées les plus populaires de la communauté.",
 		"translationPageTitle": "Aidez à traduire NMS Optimizer : Rejoignez l'équipe",
-		"translationDescription": "Contribuez à la communauté No Man's Sky en aidant à traduire l'Optimiseur NMS. Rendez le meilleur outil de layout accessible à tous les voyageurs.",
+		"translationDescription": "Contribuez à la communauté No Man's Sky en aidant à traduire l'NMS Optimizer. Rendez le meilleur outil de layout accessible à tous les voyageurs.",
 		"privacyPageTitle": "NMS Optimizer : Politique de confidentialité",
 		"privacyDescription": "Découvrez notre engagement pour votre vie privée. Nous utilisons des analyses anonymes pour améliorer l'outil sans jamais suivre votre identité ou vos sauvegardes.",
 		"ogImageAlt": "Une capture d'écran détaillée de l'application NMS Optimizer montrant une grille de vaisseau optimisée avec des bonus d'adjacence élevés.",
@@ -721,8 +721,8 @@
 			"performance": "Mesures de performance de l'application"
 		},
 		"genre": "Outil de Jeu",
-		"performancePageTitle": "Optimiseur NMS : Mesures de Performance",
-		"performanceDescription": "Mesures de performance en temps réel et Core Web Vitals pour l'application Optimiseur NMS."
+		"performancePageTitle": "NMS Optimizer : Mesures de Performance",
+		"performanceDescription": "Mesures de performance en temps réel et Core Web Vitals pour l'application NMS Optimizer."
 	},
 	"installPrompt": {
 		"title": "Ajouter à l'Écran d'Accueil",

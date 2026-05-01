@@ -159,19 +159,19 @@ describe("useGridDeserializer Integration", () => {
 			expect(deserializedGrid.height).toBe(originalGrid.height);
 
 			// Compare specific high-value cells
-			// Cell [0,0] - Cockpit
-			expect(deserializedGrid.cells[0][0].tech).toBe("cockpit");
-			expect(deserializedGrid.cells[0][0].module).toBe("CP");
-			expect(deserializedGrid.cells[0][0].active).toBe(true);
+			// Cell [1,0] - Cockpit
+			expect(deserializedGrid.cells[1][0].tech).toBe("cockpit");
+			expect(deserializedGrid.cells[1][0].module).toBe("CP");
+			expect(deserializedGrid.cells[1][0].active).toBe(true);
 
-			// Cell [1,5] - Pulse Engine Upgrade (Supercharged)
-			expect(deserializedGrid.cells[1][5].tech).toBe("pulse");
-			expect(deserializedGrid.cells[1][5].module).toBe("Xa");
-			expect(deserializedGrid.cells[1][5].supercharged).toBe(true);
+			// Cell [0,2] - Pulse Engine Upgrade (Supercharged)
+			expect(deserializedGrid.cells[0][2].tech).toBe("pulse");
+			expect(deserializedGrid.cells[0][2].module).toBe("Xa");
+			expect(deserializedGrid.cells[0][2].supercharged).toBe(true);
 
 			// Verify adjacency bonus flags
-			expect(deserializedGrid.cells[0][0].adjacency_bonus).toBe(1.0); // Active in fixture
-			expect(deserializedGrid.cells[5][1].active).toBe(true); // Economy Scanner
+			expect(deserializedGrid.cells[1][0].adjacency_bonus).toBe(1.0); // Active in fixture
+			expect(deserializedGrid.cells[5][1].active).toBe(true); // Economy Scanner replaced but still active
 		}
 	});
 
@@ -191,9 +191,9 @@ describe("useGridDeserializer Integration", () => {
 
 		if (deserializedGrid) {
 			// Known tech should be restored
-			expect(deserializedGrid.cells[0][0].tech).toBe("cockpit");
-			// Unknown tech (e.g. pulse at 0,4) should be null
-			expect(deserializedGrid.cells[0][4].tech).toBeNull();
+			expect(deserializedGrid.cells[1][0].tech).toBe("cockpit");
+			// Unknown tech (e.g. cargo_scanner at 0,0) should be null in this mock
+			expect(deserializedGrid.cells[0][0].tech).toBeNull();
 		}
 	});
 });

@@ -1,8 +1,8 @@
-# Optimiseur de NMS : Créateur de Dispositions de Technologie & Calculateur d'Adjacence
+# NMS Optimizer : Créateur de Dispositions de Technologie & Calculateur d'Adjacence
 
 ![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
 
-Bienvenue sur **l'Optimiseur de NMS**, un outil 100 % gratuit, sans publicité et open-source conçu pour vous aider à trouver les meilleures dispositions de technologie dans _No Man's Sky_. Arrêtez de deviner où placer vos modules d'amélioration de Classe S et de Classe X. Choisissez votre plateforme, sélectionnez votre technologie, marquez vos emplacements suralimentés (Supercharged Slots), et laissez notre calculateur générer instantanément une disposition qui maximise votre DPS, votre maniabilité et la portée de votre Hyperpropulsion (Hyperdrive).
+Bienvenue sur **l'NMS Optimizer**, un outil 100 % gratuit, sans publicité et open-source conçu pour vous aider à trouver les meilleures dispositions de technologie dans _No Man's Sky_. Arrêtez de deviner où placer vos modules d'amélioration de Classe S et de Classe X. Choisissez votre plateforme, sélectionnez votre technologie, marquez vos emplacements suralimentés (Supercharged Slots), et laissez notre calculateur générer instantanément une disposition qui maximise votre DPS, votre maniabilité et la portée de votre Hyperpropulsion (Hyperdrive).
 
 Une disposition optimisée obtient généralement un score **15-20 % plus élevé** que ce que la plupart des joueurs peuvent arranger manuellement.
 
@@ -17,7 +17,7 @@ Notre créateur de dispositions teste des milliers de configurations en quelques
 
 ## Plateformes & Équipements Pris en Charge
 
-L'Optimiseur de NMS fournit une résolution dynamique et des builds recommandés sélectionnés à la main pour chaque type d'équipement majeur du jeu :
+L'NMS Optimizer fournit une résolution dynamique et des builds recommandés sélectionnés à la main pour chaque type d'équipement majeur du jeu :
 
 - **Vaisseaux (Starships) :** Trouvez le plus haut DPS et la meilleure maniabilité pour les Chasseurs (Fighters), les Explorateurs (Explorers), les Transporteurs (Haulers), les Exotiques (Exotics), les Vaisseaux Solaires (Solar Ships), les Intercepteurs Sentinelles (Sentinel Interceptors) et les Vaisseaux Vivants (Living Ships).
 - **Multi-outils (Multi-Tools) :** Maximisez le rendement de votre Rayon d'Extraction (Mining Beam) ou les dégâts de vos armes sur toutes les variantes, y compris standard, Sentinelle (Sentinel), Atlantide et les Bâtons (Staves).
@@ -26,7 +26,7 @@ L'Optimiseur de NMS fournit une résolution dynamique et des builds recommandés
 
 ## Propulsé par l'IA & des Algorithmes Avancés
 
-Nous ne faisons pas que deviner. Le moteur de l'Optimiseur de NMS utilise un flux de travail sophistiqué pour garantir les meilleurs résultats :
+Nous ne faisons pas que deviner. Le moteur de l'NMS Optimizer utilise un flux de travail sophistiqué pour garantir les meilleurs résultats :
 
 1.  **Reconnaissance de Modèles :** Nous commençons par des arrangements testés manuellement et approuvés par la communauté.
 2.  **Apprentissage Automatique (IA) :** Un réseau de neurones TensorFlow, entraîné sur plus de 16 000 dispositions à haut score, prédit les placements les plus intelligents pour vos emplacements suralimentés.

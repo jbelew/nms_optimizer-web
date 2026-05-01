@@ -1,4 +1,4 @@
-# Instructions de l'Optimiseur NMS : Modules et Emplacements Surchargés
+# Instructions de l'NMS Optimizer : Modules et Emplacements Surchargés
 
 ## Premiers Pas Avec La Grille
 

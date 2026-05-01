@@ -1,8 +1,8 @@
-# Stats de l'Optimiseur NMS : Données Communautaires sur les Technologies
+# Stats de l'NMS Optimizer : Données Communautaires sur les Technologies
 
 ## Statistiques Utilisateur Et Layouts Populaires
 
-Cette page regroupe les données des utilisateurs de l'Optimiseur NMS pour révéler les technologies les plus fréquemment surchargées sur les différentes plateformes. Que vous planifiiez votre prochaine build ou cherchiez l'inspiration, ces statistiques reflètent les préférences réelles de la communauté.
+Cette page regroupe les données des utilisateurs de l'NMS Optimizer pour révéler les technologies les plus fréquemment surchargées sur les différentes plateformes. Que vous planifiiez votre prochaine build ou cherchiez l'inspiration, ces statistiques reflètent les préférences réelles de la communauté.
 
 ## Comprendre Les Données
 

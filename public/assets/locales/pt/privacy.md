@@ -1,14 +1,14 @@
-# Política de Privacidade do Otimizador de NMS: Seus Dados e Segurança
+# Política de Privacidade do NMS Optimizer: Seus Dados e Segurança
 
 **Última Atualização:** 16 de março de 2026
 
-Sua privacidade é importante para nós. Esta Política de Privacidade explica como o **Otimizador de NMS** ("nós" ou "nosso") coleta, usa e protege suas informações ao utilizar nossa aplicação web e seu motor de otimização associado.
+Sua privacidade é importante para nós. Esta Política de Privacidade explica como o **NMS Optimizer** ("nós" ou "nosso") coleta, usa e protege suas informações ao utilizar nossa aplicação web e seu motor de otimização associado.
 
 ---
 
 ## 1. Coleta De Informações
 
-O Otimizador de NMS foi projetado para ser uma ferramenta focada em privacidade.
+O NMS Optimizer foi projetado para ser uma ferramenta focada em privacidade.
 
 - **Nenhuma Informação Pessoal:** Não coletamos informações de identificação pessoal (PII), como seu nome, endereço de e-mail ou endereço físico. Não existe sistema de login ou contas.
 - **Armazenamento Local:** A aplicação utiliza o **LocalStorage** do seu navegador para salvar suas preferências e o estado das suas builds. Esses dados permanecem no seu dispositivo e não são transmitidos aos nossos servidores nem armazenados por nós.
@@ -24,7 +24,7 @@ Para garantir que a aplicação seja segura, rápida e livre de bugs, utilizamos
 
 ## 3. Processamento De Dados (API Interna)
 
-O Otimizador de NMS interage com uma API dedicada, de nossa autoria e hospedada no Heroku, para realizar os cálculos de layout de tecnologia.
+O NMS Optimizer interage com uma API dedicada, de nossa autoria e hospedada no Heroku, para realizar os cálculos de layout de tecnologia.
 
 - **Finalidade:** Quando você realiza uma otimização, os parâmetros técnicos da tecnologia e seu layout de grade são enviados para esta API.
 - **Privacidade:** Esta interação é estritamente funcional. Nenhum dado pessoal ou identificador persistente de usuário é enviado com essas requisições. Os dados são processados em memória e não são persistidos em um banco de dados.

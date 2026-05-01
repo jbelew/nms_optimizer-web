@@ -1,8 +1,8 @@
-# Estatísticas do Otimizador de NMS: Dados da Comunidade sobre Tecnologias
+# Estatísticas do NMS Optimizer: Dados da Comunidade sobre Tecnologias
 
 ## Estatísticas de Usuário E Layouts Populares
 
-Esta página agrega dados dos usuários do Otimizador de NMS para revelar as tecnologias mais frequentemente sobrecarregadas em diferentes plataformas. Quer você esteja planejando sua próxima build ou procurando inspiração, estas estatísticas mostram as preferências e padrões reais da comunidade.
+Esta página agrega dados dos usuários do NMS Optimizer para revelar as tecnologias mais frequentemente sobrecarregadas em diferentes plataformas. Quer você esteja planejando sua próxima build ou procurando inspiração, estas estatísticas mostram as preferências e padrões reais da comunidade.
 
 ## Entendendo Os Dados
 
@@ -47,4 +47,4 @@ Para instruções detalhadas sobre o uso do otimizador, visite a [página de ins
 
 ## Coleta De Dados
 
-Estes dados são coletados anonimamente a partir de solicitações de otimização e não incluem nenhuma informação de identificación pessoal. Isso ajuda a comunidade do Otimizador de NMS a entender quais tecnologias entregam mais valor e informa futuras melhorias nos algoritmos do otimizador.
+Estes dados são coletados anonimamente a partir de solicitações de otimização e não incluem nenhuma informação de identificación pessoal. Isso ajuda a comunidade do NMS Optimizer a entender quais tecnologias entregam mais valor e informa futuras melhorias nos algoritmos do otimizador.
