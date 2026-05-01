@@ -32,54 +32,51 @@
 /* THEME & BACKGROUND SYSTEM                   */
 /* ============================================ */
 
-/* 1. Global Background Canvas (Dark Mode) */
-html.background-visible:is(.dark, .dark-theme) {
-	background-color: #000 !important;
-	background-image: url("/assets/img/background@2x.webp") !important;
-	background-position: center !important;
-	background-repeat: no-repeat !important;
-	background-size: cover !important;
-	background-attachment: fixed !important;
+/* 1. Global Background Canvas */
+html.background-visible body {
+	background-color: #000;
+	background-image: image-set(
+		url("/assets/img/background.webp") 1x,
+		url("/assets/img/background@2x.webp") 2x
+	);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
 }
 
-/* 2. Global Background Canvas (Light Mode) */
-html.background-visible:is(.light, .light-theme) {
-	background-color: #fff !important;
+/* 2. Light Theme Background */
+html.background-visible:is(.light, .light-theme) body {
+	background-color: #fff;
 	background-image:
 		linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-		url("/assets/img/background@2x.webp") !important;
-	background-position: center !important;
-	background-repeat: no-repeat !important;
-	background-size: cover !important;
-	background-attachment: fixed !important;
+		image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
 }
 
-/* 3. Mobile Responsive Backgrounds */
-@media (width <= 639px) {
-	html.background-visible:is(.dark, .dark-theme) {
-		background-image: url("/assets/img/background@mobile-blurred.webp") !important;
-		background-position: center top !important;
+/* 3. Accessibility Mode Background */
+html.background-visible body.a11y-font {
+	background-image:
+		linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+		image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+}
+
+/* 4. Mobile Responsive Backgrounds */
+@media (width < 640px) {
+	html.background-visible body {
+		background-image: url("/assets/img/background@mobile-blurred.webp");
+		background-position: center top;
 	}
 
-	html.background-visible:is(.light, .light-theme) {
+	html.background-visible:is(.light, .light-theme) body {
 		background-image:
 			linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-			url("/assets/img/background@mobile-blurred.webp") !important;
+			url("/assets/img/background@mobile-blurred.webp");
 	}
 }
 
-/* 3. State & Accessibility Overrides */
-html.background-visible:has(body.a11y-font),
-html:has(body.a11y-font),
-body.a11y-font {
-	background-image: none !important;
-	background-color: #111113 !important;
-}
-
-/* 4. UI Transparency Bridge */
-/* Ensure the body and main app containers are transparent to reveal the html background */
+/* 5. UI Transparency Bridge */
+/* Ensure the main app containers are transparent to reveal the body background */
 /* We only target .radix-themes inside our roots to avoid making portal-based dropdowns transparent */
-html.background-visible body,
 html.background-visible :is(#root, #storybook-root) .radix-themes {
 	background-color: transparent !important;
 }
@@ -169,22 +166,21 @@ body.a11y-font .radix-themes {
 	--empty-icon-color-supercharged: #c150ff2d;
 }
 
-/* Desktop (Large Screen) Override */
-@media (width >=1024px) {
-	:root {
-		--grid-padding: 48px;
-	}
-}
-
 /* Landscape / Tablet Notch Support */
-@media (width >=639px) and (width <=1023px) {
+@media (width >= 640px) and (width < 1024px) {
 	:root {
 		/* Base padding for content */
 		--app-content-padding-base: 32px;
 
 		/* Update grid variable to map to safe padding */
-		--grid-padding: 0px;
 		--grid-cell-max: 72px;
+	}
+}
+
+/* Desktop (Large Screen) Override */
+@media (width >= 1024px) {
+	:root {
+		--grid-padding: 48px;
 	}
 }
 
@@ -195,7 +191,7 @@ body {
 	overflow-y: auto;
 }
 
-@media (max-width: 1023px) {
+@media (width < 1024px) {
 	body {
 		padding-right: calc(100dvw - 100%) !important;
 		overflow-x: hidden;
@@ -226,7 +222,7 @@ body.a11y-font .heading-styled {
 	text-transform: uppercase;
 }
 
-@media (min-width: 640px) {
+@media (width >= 640px) {
 	.heading-styled {
 		text-shadow: 0 1px 2px rgb(0 0 0 / 0.1);
 	}
@@ -237,19 +233,6 @@ body.a11y-font .heading-styled {
 	position: absolute;
 	right: 9px;
 	top: 10px;
-}
-
-/* Visually hide an element but keep it accessible to screen readers */
-.sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border-width: 0;
 }
 
 /* ============================================ */
