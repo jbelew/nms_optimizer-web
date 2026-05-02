@@ -1,3 +1,10 @@
+## [7.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.3...v7.0.4) (2026-05-02)
+
+
+### Bug Fixes
+
+* performance dashboard synchronization, deep-linking, and tooltip coloring ([4d22f61](https://github.com/jbelew/nms_optimizer-web/commit/4d22f616fbf9d7107d258e4559634c3317837da3))
+
 ## [7.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.2...v7.0.3) (2026-05-02)
 
 
