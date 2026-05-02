@@ -1,3 +1,10 @@
+## [7.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.4...v7.0.5) (2026-05-02)
+
+
+### Bug Fixes
+
+* resolve Cloudflare 404 on performance sub-route reload ([4234a67](https://github.com/jbelew/nms_optimizer-web/commit/4234a6778ba99d95e692de49a3d0a5da8bb67c15))
+
 ## [7.0.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.3...v7.0.4) (2026-05-02)
 
 
