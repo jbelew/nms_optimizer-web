@@ -601,7 +601,7 @@ export const getVersionChanges = (
 	for (let i = 1; i < chartData.length; i++) {
 		const point = chartData[i];
 
-		if (point.appVersion !== lastVersion) {
+		if (point.appVersion && point.appVersion !== lastVersion) {
 			// Enforce minimum gap to prevent label collision
 			const sinceLastMarker = i - lastPushedIndex;
 

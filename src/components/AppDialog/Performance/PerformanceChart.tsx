@@ -1,8 +1,18 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+	FC,
+	KeyboardEvent,
+	memo,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
 	Bar,
 	CartesianGrid,
@@ -43,6 +53,73 @@ import {
 const CHART_TICK_STYLE = { fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 };
 const ACTIVE_DOT_STYLE = { r: 4 };
 const OVERALL_DOT_STYLE = { r: 5 };
+const CHART_MARGIN = { top: 20, right: 10, left: 0, bottom: 0 };
+const TOOLTIP_WRAPPER_STYLE = { pointerEvents: "none" as const };
+const TOOLTIP_ALLOW_ESCAPE = { x: false, y: false };
+const RESPONSIVE_CONTAINER_DEBOUNCE = 50;
+const OVERALL_Y_DOMAIN: [number, number] = [0, 100];
+const X_AXIS_DOMAIN = ["dataMin", "dataMax"] as const;
+const SCORE_BAND_COLOR = (score: number | undefined): string =>
+	score === undefined
+		? "var(--gray-11)"
+		: score >= 90
+			? "var(--green-11)"
+			: score >= 50
+				? "var(--amber-11)"
+				: "var(--red-11)";
+
+/**
+ * Internal summary card used for both the OVERALL toggle and per-metric cards.
+ *
+ * @remarks
+ * Encapsulates the shared Card structure, accessibility props (`role`,
+ * `aria-pressed`, `tabIndex`), and keyboard activation behavior so styling
+ * and a11y fixes stay consistent across all summary cards.
+ */
+interface MetricSummaryCardProps {
+	isSelected: boolean;
+	borderColor: string;
+	ariaLabel: string;
+	onActivate: () => void;
+	children: ReactNode;
+}
+
+const MetricSummaryCard: FC<MetricSummaryCardProps> = ({
+	isSelected,
+	borderColor,
+	ariaLabel,
+	onActivate,
+	children,
+}) => {
+	const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			onActivate();
+		}
+	};
+
+	return (
+		<Card
+			style={{
+				flex: "1 1 120px",
+				cursor: "pointer",
+				transition: "all 0.2s ease-in-out",
+				border: isSelected ? `2px solid ${borderColor}` : "2px solid transparent",
+				backgroundColor: isSelected ? "var(--gray-3)" : undefined,
+			}}
+			onClick={onActivate}
+			onKeyDown={handleKeyDown}
+			role="button"
+			aria-label={ariaLabel}
+			aria-pressed={isSelected}
+			tabIndex={0}
+		>
+			<Flex direction="column" align="center">
+				{children}
+			</Flex>
+		</Card>
+	);
+};
 
 /**
  * Duration (ms) used for both Recharts line animations and the matching
@@ -50,6 +127,156 @@ const OVERALL_DOT_STYLE = { r: 5 };
  * overlay finishes morphing exactly when the per-metric lines reappear.
  */
 const LINE_ANIMATION_DURATION = 500;
+
+/**
+ * Props for the {@link ChartTooltipContent} component.
+ *
+ * @remarks
+ * Recharts re-mounts/updates the tooltip content with `active`/`payload` props
+ * controlled by hover state.
+ */
+interface ChartTooltipContentProps {
+	/** Whether the tooltip is currently active (hovered). */
+	active?: boolean;
+	/** Recharts data payload for the active point. */
+	payload?: ReadonlyArray<{ payload?: ChartDataPoint }>;
+	/** The currently selected metric ID, or null for the overall view. */
+	selectedMetric: string | null;
+	/** List of all metrics being displayed in the chart. */
+	activeMetrics: string[];
+}
+
+/**
+ * Custom tooltip content for the performance chart.
+ *
+ * @remarks
+ * Renders metric details (p50, p75, p90) when a specific metric is selected,
+ * or an overall score summary when viewing the aggregate trend.
+ *
+ * @param props - Component properties.
+ *
+ * @returns {JSX.Element | null} The rendered tooltip or null if inactive.
+ *
+ * @see {@link ./PerformanceChart.test.tsx Unit Tests}
+ */
+const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltipContent({
+	active,
+	payload,
+	selectedMetric,
+	activeMetrics,
+}) {
+	if (!active || !payload || !payload.length) return null;
+
+	const item = payload[0].payload;
+	if (!item) return null;
+
+	if (selectedMetric) {
+		const format = (v: number) => formatMetricValue(selectedMetric, v);
+		const p50 = item[`${selectedMetric}_p50`] as number | undefined;
+		const p75 = item[`${selectedMetric}_p75`] as number | undefined;
+		const p90 = item[`${selectedMetric}_p90`] as number | undefined;
+		const threshold = METRIC_THRESHOLDS[selectedMetric] || 10000;
+
+		return (
+			<Flex direction="column" gap="1" style={CHART_TOOLTIP_STYLE}>
+				<Text size="1" color="gray" mb="1">
+					{item.displayDate} {item.hour}
+					{item.appVersion ? ` (${item.appVersion})` : ""}
+				</Text>
+				{p90 !== undefined && (
+					<Flex justify="between" gap="4">
+						<Text color="gray">p90</Text>
+						<Text weight="bold" style={{ color: getStatusColor(selectedMetric, p90) }}>
+							{p90 > threshold ? `>${format(threshold)}` : format(p90)}
+						</Text>
+					</Flex>
+				)}
+				{p75 !== undefined && (
+					<Flex justify="between" gap="4">
+						<Text color="gray">p75</Text>
+						<Text weight="bold" style={{ color: getStatusColor(selectedMetric, p75) }}>
+							{p75 > threshold ? `>${format(threshold)}` : format(p75)}
+						</Text>
+					</Flex>
+				)}
+				{p50 !== undefined && (
+					<Flex justify="between" gap="4">
+						<Text color="gray">p50</Text>
+						<Text weight="bold" style={{ color: getStatusColor(selectedMetric, p50) }}>
+							{format(p50)}
+						</Text>
+					</Flex>
+				)}
+			</Flex>
+		);
+	}
+
+	const score = item.overall_score_p75_sma as number | undefined;
+
+	return (
+		<Flex direction="column" gap="2" style={CHART_TOOLTIP_STYLE}>
+			<Flex direction="column" gap="0">
+				<Text size="1" color="gray">
+					{item.displayDate} {item.hour}
+					{item.appVersion ? ` (${item.appVersion})` : ""}
+				</Text>
+				<Flex align="center" gap="2">
+					<Text size="3" weight="bold" style={{ color: SCORE_BAND_COLOR(score) }}>
+						{score !== undefined ? Math.round(score) : "—"}
+					</Text>
+					<Text size="1" color="gray">
+						OVERALL SCORE
+					</Text>
+				</Flex>
+			</Flex>
+
+			<Flex
+				direction="column"
+				gap="1"
+				style={{
+					borderTop: "1px solid var(--gray-5)",
+					paddingTop: "4px",
+				}}
+			>
+				{activeMetrics.map((m) => {
+					const val = item[`${m}_original`] as number | undefined;
+					const mDeficit = item[`${m}_deficit`] as number | undefined;
+					const mScore = mDeficit !== undefined ? 100 - mDeficit : undefined;
+
+					return (
+						<Flex key={m} justify="between" gap="4" align="center">
+							<Flex align="center" gap="2">
+								<div
+									style={{
+										width: 8,
+										height: 8,
+										borderRadius: 2,
+										backgroundColor: getMetricColor(m, 11),
+									}}
+								/>
+								<Text size="1" style={{ color: getMetricColor(m, 11) }}>
+									{m}
+								</Text>
+							</Flex>
+							<Flex align="center" gap="2">
+								<Text
+									size="1"
+									weight="bold"
+									style={{ color: getStatusColor(m, val) }}
+								>
+									{val !== undefined ? formatMetricValue(m, val) : "—"}
+								</Text>
+								<Text size="1" color="gray">
+									({mScore !== undefined ? Math.round(mScore) : "—"})
+								</Text>
+							</Flex>
+						</Flex>
+					);
+				})}
+			</Flex>
+		</Flex>
+	);
+});
 
 /**
  * Properties for the {@link PerformanceChart} component.
@@ -87,6 +314,7 @@ interface PerformanceChartProps {
 export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const { metric } = useParams<{ metric?: string }>();
 	const navigate = useNavigate();
+	const { search } = useLocation();
 	const { i18n } = useTranslation();
 
 	const selectedMetric = useMemo(() => (metric ? metric.toUpperCase() : null), [metric]);
@@ -133,12 +361,12 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 			const basePath = isDefaultLang ? "/performance" : `/${lang}/performance`;
 
 			if (next) {
-				navigate(`${basePath}/${next.toLowerCase()}/${window.location.search}`);
+				navigate(`${basePath}/${next.toLowerCase()}/${search}`);
 			} else {
-				navigate(`${basePath}/${window.location.search}`);
+				navigate(`${basePath}/${search}`);
 			}
 		},
-		[navigate, i18n.language]
+		[navigate, i18n.language, search]
 	);
 	const locale = i18n.language;
 
@@ -170,67 +398,72 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 		[chartData, activeMetrics]
 	);
 
-	const yDomain = selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : [0, 100];
+	const yDomain = useMemo<[number, number]>(
+		() => (selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : OVERALL_Y_DOMAIN),
+		[selectedMetric]
+	);
 	const selectedMetricConfig = selectedMetric ? LIGHTHOUSE_CONFIG[selectedMetric] : null;
+
+	const xTickFormatter = useCallback(
+		(val: number) =>
+			getFormatter(locale, { month: "numeric", day: "numeric" }).format(new Date(val)),
+		[locale]
+	);
+
+	const renderTooltip = useCallback(
+		(props: { active?: boolean; payload?: ReadonlyArray<{ payload?: ChartDataPoint }> }) => (
+			<ChartTooltipContent
+				active={props.active}
+				payload={props.payload}
+				selectedMetric={selectedMetric}
+				activeMetrics={activeMetrics}
+			/>
+		),
+		[selectedMetric, activeMetrics]
+	);
 
 	return (
 		<Flex direction="column" gap="4" style={{ width: "100%", flexGrow: 1, minWidth: 0 }}>
 			<Flex gap="3" wrap="wrap" justify="between">
 				{/* Overall Summary Toggle Card */}
-				<Card
-					style={{
-						flex: "1 1 120px",
-						cursor: "pointer",
-						transition: "all 0.2s ease-in-out",
-						border:
-							selectedMetric === null
-								? "2px solid var(--accent-11)"
-								: "2px solid transparent",
-						backgroundColor: selectedMetric === null ? "var(--gray-3)" : undefined,
-					}}
-					onClick={() => updateSelectedMetric(null)}
-					onKeyDown={(e) =>
-						(e.key === "Enter" || e.key === " ") && updateSelectedMetric(null)
-					}
-					role="button"
-					aria-label="View overall performance summary"
-					aria-pressed={selectedMetric === null}
-					tabIndex={0}
+				<MetricSummaryCard
+					isSelected={selectedMetric === null}
+					borderColor="var(--accent-11)"
+					ariaLabel="View overall performance summary"
+					onActivate={() => updateSelectedMetric(null)}
 				>
-					<Flex direction="column" align="center">
-						<Text size="1" weight="bold">
-							OVERALL
+					<Text size="1" weight="bold">
+						OVERALL
+					</Text>
+					<Flex align="center" gap="1">
+						<Text
+							size="5"
+							weight="medium"
+							style={{
+								color:
+									overallScore !== null
+										? overallScore >= 90
+											? "var(--green-11)"
+											: overallScore >= 50
+												? "var(--amber-11)"
+												: "var(--red-11)"
+										: "var(--gray-11)",
+							}}
+						>
+							{overallScore ?? "—"}
 						</Text>
-						<Flex align="center" gap="1">
-							<Text
-								size="5"
-								weight="medium"
-								style={{
-									color:
-										overallScore !== null
-											? overallScore >= 90
-												? "var(--green-11)"
-												: overallScore >= 50
-													? "var(--amber-11)"
-													: "var(--red-11)"
-											: "var(--gray-11)",
-								}}
-							>
-								{overallScore ?? "—"}
+						{overallTrend === "improvement" && (
+							<Text color="green">
+								<ArrowUpIcon />
 							</Text>
-							{overallTrend === "improvement" && (
-								<Text color="green">
-									<ArrowUpIcon />
-								</Text>
-							)}
-							{overallTrend === "regression" && (
-								<Text color="red">
-									<ArrowDownIcon />
-								</Text>
-							)}
-						</Flex>
+						)}
+						{overallTrend === "regression" && (
+							<Text color="red">
+								<ArrowDownIcon />
+							</Text>
+						)}
 					</Flex>
-				</Card>
+				</MetricSummaryCard>
 
 				{activeMetrics.map((metric) => {
 					const val = getLatestMetricValue(chartData, metric);
@@ -238,56 +471,40 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 					const trend = getMetricTrend(chartData, metric);
 
 					return (
-						<Card
+						<MetricSummaryCard
 							key={`stat-${metric}`}
-							style={{
-								flex: "1 1 120px",
-								cursor: "pointer",
-								transition: "all 0.2s ease-in-out",
-								border: isSelected
-									? `2px solid ${getMetricColor(metric, 11)}`
-									: "2px solid transparent",
-								backgroundColor: isSelected ? "var(--gray-3)" : undefined,
-							}}
-							onClick={() => updateSelectedMetric(isSelected ? null : metric)}
-							onKeyDown={(e) =>
-								(e.key === "Enter" || e.key === " ") &&
-								updateSelectedMetric(isSelected ? null : metric)
-							}
-							role="button"
-							aria-label={`View detailed ${metric} chart`}
-							aria-pressed={isSelected}
-							tabIndex={0}
+							isSelected={isSelected}
+							borderColor={getMetricColor(metric, 11)}
+							ariaLabel={`View detailed ${metric} chart`}
+							onActivate={() => updateSelectedMetric(isSelected ? null : metric)}
 						>
-							<Flex direction="column" align="center">
+							<Text
+								size="1"
+								weight="bold"
+								style={{ color: getMetricColor(metric, 11) }}
+							>
+								{metric}
+							</Text>
+							<Flex align="center" gap="1">
 								<Text
-									size="1"
-									weight="bold"
-									style={{ color: getMetricColor(metric, 11) }}
+									size="5"
+									weight="medium"
+									style={{ color: getStatusColor(metric, val) }}
 								>
-									{metric}
+									{val !== null ? formatMetricValue(metric, val) : "—"}
 								</Text>
-								<Flex align="center" gap="1">
-									<Text
-										size="5"
-										weight="medium"
-										style={{ color: getStatusColor(metric, val) }}
-									>
-										{val !== null ? formatMetricValue(metric, val) : "—"}
+								{trend === "improvement" && (
+									<Text color="green">
+										<ArrowDownIcon />
 									</Text>
-									{trend === "improvement" && (
-										<Text color="green">
-											<ArrowDownIcon />
-										</Text>
-									)}
-									{trend === "regression" && (
-										<Text color="red">
-											<ArrowUpIcon />
-										</Text>
-									)}
-								</Flex>
+								)}
+								{trend === "regression" && (
+									<Text color="red">
+										<ArrowUpIcon />
+									</Text>
+								)}
 							</Flex>
-						</Card>
+						</MetricSummaryCard>
 					);
 				})}
 			</Flex>
@@ -301,12 +518,17 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 					marginBottom: CHART_MARGIN_BOTTOM,
 				}}
 			>
-				<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={0}>
+				<ResponsiveContainer
+					width="100%"
+					height={CHART_HEIGHT}
+					debounce={RESPONSIVE_CONTAINER_DEBOUNCE}
+				>
 					<ComposedChart
+						accessibilityLayer
 						role="img"
 						aria-label="Performance metrics timeseries chart"
 						data={chartData}
-						margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+						margin={CHART_MARGIN}
 					>
 						<CartesianGrid
 							strokeDasharray="3 3"
@@ -403,19 +625,12 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							dataKey="timestamp"
 							type="number"
 							scale="time"
-							domain={["dataMin", "dataMax"]}
+							domain={X_AXIS_DOMAIN as unknown as [string, string]}
 							axisLine={false}
 							tickLine={false}
 							tick={CHART_TICK_STYLE}
 							minTickGap={30}
-							tickFormatter={(val: number) => {
-								const dateObj = new Date(val);
-
-								return getFormatter(locale, {
-									month: "numeric",
-									day: "numeric",
-								}).format(dateObj);
-							}}
+							tickFormatter={xTickFormatter}
 						/>
 
 						<YAxis
@@ -430,220 +645,14 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 						{/* Hidden secondary axis so the overall (0-100) score can stay
 						 * visible in detail views without being squished against the
 						 * metric's threshold domain. */}
-						<YAxis yAxisId="overall" hide domain={[0, 100]} allowDataOverflow />
+						<YAxis yAxisId="overall" hide domain={OVERALL_Y_DOMAIN} allowDataOverflow />
 
 						<Tooltip
-							wrapperStyle={{ pointerEvents: "none" }}
-							allowEscapeViewBox={{ x: false, y: false }}
+							wrapperStyle={TOOLTIP_WRAPPER_STYLE}
+							allowEscapeViewBox={TOOLTIP_ALLOW_ESCAPE}
 							isAnimationActive={false}
 							offset={10}
-							content={({ active, payload }) => {
-								if (active && payload && payload.length) {
-									const item = payload[0].payload as ChartDataPoint;
-
-									if (selectedMetric) {
-										// Detailed Tooltip View
-										const format = (v: number) =>
-											formatMetricValue(selectedMetric, v);
-										const p50 = item[`${selectedMetric}_p50`] as
-											| number
-											| undefined;
-										const p75 = item[`${selectedMetric}_p75`] as
-											| number
-											| undefined;
-										const p90 = item[`${selectedMetric}_p90`] as
-											| number
-											| undefined;
-										const threshold =
-											METRIC_THRESHOLDS[selectedMetric] || 10000;
-
-										return (
-											<Flex
-												direction="column"
-												gap="1"
-												style={CHART_TOOLTIP_STYLE}
-											>
-												<Text size="1" color="gray" mb="1">
-													{item.displayDate} {item.hour}
-													{item.appVersion ? ` (${item.appVersion})` : ""}
-												</Text>
-												{p90 !== undefined && (
-													<Flex justify="between" gap="4">
-														<Text color="gray">p90</Text>
-														<Text
-															weight="bold"
-															style={{
-																color: getStatusColor(
-																	selectedMetric,
-																	p90
-																),
-															}}
-														>
-															{p90 > threshold
-																? `>${format(threshold)}`
-																: format(p90)}
-														</Text>
-													</Flex>
-												)}
-												{p75 !== undefined && (
-													<Flex justify="between" gap="4">
-														<Text color="gray">p75</Text>
-														<Text
-															weight="bold"
-															style={{
-																color: getStatusColor(
-																	selectedMetric,
-																	p75
-																),
-															}}
-														>
-															{p75 > threshold
-																? `>${format(threshold)}`
-																: format(p75)}
-														</Text>
-													</Flex>
-												)}
-												{p50 !== undefined && (
-													<Flex justify="between" gap="4">
-														<Text color="gray">p50</Text>
-														<Text
-															weight="bold"
-															style={{
-																color: getStatusColor(
-																	selectedMetric,
-																	p50
-																),
-															}}
-														>
-															{format(p50)}
-														</Text>
-													</Flex>
-												)}
-											</Flex>
-										);
-									}
-
-									// Aggregate Tooltip View
-									const score = item.overall_score_p75_sma as number | undefined;
-
-									return (
-										<Flex
-											direction="column"
-											gap="2"
-											style={CHART_TOOLTIP_STYLE}
-										>
-											<Flex direction="column" gap="0">
-												<Text size="1" color="gray">
-													{item.displayDate} {item.hour}
-													{item.appVersion ? ` (${item.appVersion})` : ""}
-												</Text>
-												<Flex align="center" gap="2">
-													<Text
-														size="3"
-														weight="bold"
-														style={{
-															color:
-																score !== undefined
-																	? score >= 90
-																		? "var(--green-11)"
-																		: score >= 50
-																			? "var(--amber-11)"
-																			: "var(--red-11)"
-																	: "var(--gray-11)",
-														}}
-													>
-														{score !== undefined
-															? Math.round(score)
-															: "—"}
-													</Text>
-													<Text size="1" color="gray">
-														OVERALL SCORE
-													</Text>
-												</Flex>
-											</Flex>
-
-											<Flex
-												direction="column"
-												gap="1"
-												style={{
-													borderTop: "1px solid var(--gray-5)",
-													paddingTop: "4px",
-												}}
-											>
-												{activeMetrics.map((m) => {
-													const val = item[`${m}_original`] as
-														| number
-														| undefined;
-													const mDeficit = item[`${m}_deficit`] as
-														| number
-														| undefined;
-													const mScore =
-														mDeficit !== undefined
-															? 100 - mDeficit
-															: undefined;
-
-													return (
-														<Flex
-															key={m}
-															justify="between"
-															gap="4"
-															align="center"
-														>
-															<Flex align="center" gap="2">
-																<div
-																	style={{
-																		width: 8,
-																		height: 8,
-																		borderRadius: 2,
-																		backgroundColor:
-																			getMetricColor(m, 11),
-																	}}
-																/>
-																<Text
-																	size="1"
-																	style={{
-																		color: getMetricColor(
-																			m,
-																			11
-																		),
-																	}}
-																>
-																	{m}
-																</Text>
-															</Flex>
-															<Flex align="center" gap="2">
-																<Text
-																	size="1"
-																	weight="bold"
-																	style={{
-																		color: getStatusColor(
-																			m,
-																			val
-																		),
-																	}}
-																>
-																	{val !== undefined
-																		? formatMetricValue(m, val)
-																		: "—"}
-																</Text>
-																<Text size="1" color="gray">
-																	(
-																	{mScore !== undefined
-																		? Math.round(mScore)
-																		: "—"}
-																	)
-																</Text>
-															</Flex>
-														</Flex>
-													);
-												})}
-											</Flex>
-										</Flex>
-									);
-								}
-
-								return null;
-							}}
+							content={renderTooltip}
 						/>
 
 						{/* Unified Dynamic Range Bar (Stable Identity) */}

@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Theme } from "@radix-ui/themes";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
@@ -25,26 +25,17 @@ vi.mock("@/utils/api/performanceResource", () => ({
 	fetchPerformanceData: vi.fn(),
 }));
 
-// Mock PerformanceChart to avoid dynamic import issues in tests
-vi.mock("./PerformanceChart", async () => {
-	const { useState } = await import("react");
-
+// Mock PerformanceChart to avoid dynamic import issues in tests.
+// Render only the metric labels so the parent's data orchestration can be
+// asserted without pulling in the full charting stack.
+vi.mock("./PerformanceChart", () => {
 	const MockPerformanceChart = ({ data }: { data: Array<{ metric_name: string }> }) => {
-		const [selected, setSelected] = useState<string | null>(null);
-
-		// Filter unique metrics from mock data
 		const metrics = Array.from(new Set(data.map((d) => d.metric_name)));
 
 		return (
 			<div data-testid="performance-chart">
 				{metrics.map((m) => (
-					<button
-						key={m}
-						aria-pressed={selected === m ? "true" : "false"}
-						onClick={() => setSelected(selected === m ? null : m)}
-					>
-						{m}
-					</button>
+					<span key={m}>{m}</span>
 				))}
 			</div>
 		);
@@ -97,49 +88,5 @@ describe("PerformanceData", () => {
 		// Card labels should be present
 		expect(await screen.findByText("LCP")).toBeInTheDocument();
 		expect(await screen.findByText("FCP")).toBeInTheDocument();
-	});
-
-	test("should toggle metric selection on click", async () => {
-		render(
-			<Theme>
-				<Suspense fallback={<div>Loading...</div>}>
-					<PerformanceData isOpen={true} />
-				</Suspense>
-			</Theme>
-		);
-
-		const lcpCard = await screen.findByRole("button", { name: /LCP/i });
-
-		// Initial state: not selected
-		expect(lcpCard).toHaveAttribute("aria-pressed", "false");
-
-		// Click to select
-		fireEvent.click(lcpCard);
-		expect(lcpCard).toHaveAttribute("aria-pressed", "true");
-
-		// Click to deselect
-		fireEvent.click(lcpCard);
-		expect(lcpCard).toHaveAttribute("aria-pressed", "false");
-	});
-
-	test("should allow switching between metrics", async () => {
-		render(
-			<Theme>
-				<Suspense fallback={<div>Loading...</div>}>
-					<PerformanceData isOpen={true} />
-				</Suspense>
-			</Theme>
-		);
-
-		const lcpCard = await screen.findByRole("button", { name: /LCP/i });
-		const fcpCard = await screen.findByRole("button", { name: /FCP/i });
-
-		fireEvent.click(lcpCard);
-		expect(lcpCard).toHaveAttribute("aria-pressed", "true");
-		expect(fcpCard).toHaveAttribute("aria-pressed", "false");
-
-		fireEvent.click(fcpCard);
-		expect(lcpCard).toHaveAttribute("aria-pressed", "false");
-		expect(fcpCard).toHaveAttribute("aria-pressed", "true");
 	});
 });
