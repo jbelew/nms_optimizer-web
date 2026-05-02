@@ -1,3 +1,10 @@
+## [7.0.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.2...v7.0.3) (2026-05-02)
+
+
+### Bug Fixes
+
+* sync overall score with graph, implement performance metric sub-routes with trailing slashes ([f0d5882](https://github.com/jbelew/nms_optimizer-web/commit/f0d5882b346683cdf751a569f5a86d59335f2954))
+
 ## [7.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.1...v7.0.2) (2026-05-02)
 
 
