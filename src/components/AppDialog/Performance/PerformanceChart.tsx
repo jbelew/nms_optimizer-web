@@ -91,25 +91,39 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	// While true, per-metric lines hide and a stable-key overlay handles the morph.
 	const [isMorphing, setIsMorphing] = useState(false);
 	const morphTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const lastMetricRef = useRef<string | null>(selectedMetric);
 
+	// Cleanup on unmount
 	useEffect(() => {
 		return () => {
 			if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
 		};
 	}, []);
 
+	// Synchronize morphing state with metric changes (including back/forward navigation)
+	useEffect(() => {
+		if (
+			lastMetricRef.current !== null &&
+			selectedMetric !== null &&
+			lastMetricRef.current !== selectedMetric
+		) {
+			// Trigger morphing for detail-to-detail transitions
+			setIsMorphing(true);
+			if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
+			morphTimeoutRef.current = setTimeout(
+				() => setIsMorphing(false),
+				LINE_ANIMATION_DURATION
+			);
+		}
+
+		lastMetricRef.current = selectedMetric;
+	}, [selectedMetric]);
+
 	const updateSelectedMetric = useCallback(
 		(next: string | null) => {
-			if (selectedMetric !== null && next !== null && selectedMetric !== next) {
-				setIsMorphing(true);
-				if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
-				morphTimeoutRef.current = setTimeout(
-					() => setIsMorphing(false),
-					LINE_ANIMATION_DURATION
-				);
-			}
-
-			// Update URL to match selection - selectedMetric is now derived from URL
+			// updateSelectedMetric now strictly handles the navigation intent.
+			// The morphing state is handled by the useEffect above to cover all
+			// navigation types (clicks, back/forward buttons, deep links).
 			const lang = (i18n.language || "en").split("-")[0];
 			const isDefaultLang = lang === "en";
 			const basePath = isDefaultLang ? "/performance" : `/${lang}/performance`;
@@ -120,7 +134,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				navigate(`${basePath}/${window.location.search}`);
 			}
 		},
-		[selectedMetric, navigate, i18n.language]
+		[navigate, i18n.language]
 	);
 	const locale = i18n.language;
 
@@ -420,7 +434,6 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 											| undefined;
 										const threshold =
 											METRIC_THRESHOLDS[selectedMetric] || 10000;
-										const color = getMetricColor(selectedMetric, 11);
 
 										return (
 											<Flex
@@ -435,7 +448,15 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 												{p90 !== undefined && (
 													<Flex justify="between" gap="4">
 														<Text color="gray">p90</Text>
-														<Text weight="bold" style={{ color }}>
+														<Text
+															weight="bold"
+															style={{
+																color: getStatusColor(
+																	selectedMetric,
+																	p90
+																),
+															}}
+														>
 															{p90 > threshold
 																? `>${format(threshold)}`
 																: format(p90)}
@@ -445,7 +466,15 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 												{p75 !== undefined && (
 													<Flex justify="between" gap="4">
 														<Text color="gray">p75</Text>
-														<Text weight="bold" style={{ color }}>
+														<Text
+															weight="bold"
+															style={{
+																color: getStatusColor(
+																	selectedMetric,
+																	p75
+																),
+															}}
+														>
 															{p75 > threshold
 																? `>${format(threshold)}`
 																: format(p75)}
@@ -455,7 +484,15 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 												{p50 !== undefined && (
 													<Flex justify="between" gap="4">
 														<Text color="gray">p50</Text>
-														<Text weight="bold" style={{ color }}>
+														<Text
+															weight="bold"
+															style={{
+																color: getStatusColor(
+																	selectedMetric,
+																	p50
+																),
+															}}
+														>
 															{format(p50)}
 														</Text>
 													</Flex>
@@ -553,7 +590,16 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 																</Text>
 															</Flex>
 															<Flex align="center" gap="2">
-																<Text size="1" weight="medium">
+																<Text
+																	size="1"
+																	weight="bold"
+																	style={{
+																		color: getStatusColor(
+																			m,
+																			val
+																		),
+																	}}
+																>
 																	{val !== undefined
 																		? formatMetricValue(m, val)
 																		: "—"}
