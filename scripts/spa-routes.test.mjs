@@ -57,6 +57,12 @@ function readPages() {
 		.filter(Boolean);
 }
 
+/**
+ * Routes that are "Hybrid" (have SSG output for the base path but client-only sub-routes).
+ * These are allowed to be in both SPA_ROUTES and have SSG output.
+ */
+const HYBRID_ROUTES = ["performance"];
+
 const hasSsgOutput = (page) => fs.existsSync(path.join(DIST, page, "index.html"));
 
 describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
@@ -81,12 +87,14 @@ describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
 		).toEqual([]);
 	});
 
-	maybeIt("SPA_ROUTES entries do not have SSG output (otherwise fallback is dead code)", () => {
-		const shadowed = spaRoutes.filter((r) => hasSsgOutput(r));
+	maybeIt("SPA_ROUTES entries do not have SSG output (unless they are Hybrid)", () => {
+		const shadowed = spaRoutes
+			.filter((r) => hasSsgOutput(r))
+			.filter((r) => !HYBRID_ROUTES.includes(r));
 		expect(
 			shadowed,
 			`These routes are in SPA_ROUTES but ALSO have dist/{route}/index.html. ` +
-				`Remove from SPA_ROUTES: ${shadowed.join(", ")}`
+				`If they are not Hybrid routes with sub-paths, remove from SPA_ROUTES: ${shadowed.join(", ")}`
 		).toEqual([]);
 	});
 });

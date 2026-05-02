@@ -23,8 +23,11 @@ const LOCALE_LANGS = SUPPORTED_LANGS.filter((l) => l !== "en");
  * `scripts/spa-routes.test.mjs` test asserts that every entry here is a
  * known page AND has no `dist/{page}/index.html`, and that any page lacking
  * SSG output is listed here.
+ *
+ * NOTE: Some routes may be "Hybrid" (have SSG output for the base path but
+ * client-only sub-routes). These should also be listed here.
  */
-const SPA_ROUTES = new Set([]);
+const SPA_ROUTES = new Set(["performance"]);
 
 export async function onRequest(context) {
 	const { request, next } = context;
