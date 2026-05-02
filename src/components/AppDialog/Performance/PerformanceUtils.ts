@@ -590,14 +590,22 @@ export const getVersionChanges = (
 	if (chartData.length < 2) return [];
 
 	let lastVersion = chartData[0].appVersion;
+	let lastPushedIndex = -1;
+	// Minimum gap between markers to prevent label collision.
+	// 4 points is roughly enough space for a 'v1.2.3' label at 10px font.
+	const minGap = 4;
 
 	for (let i = 1; i < chartData.length; i++) {
 		const point = chartData[i];
 
 		if (point.appVersion !== lastVersion) {
+			// Enforce minimum gap to prevent label collision
+			const sinceLastMarker = i - lastPushedIndex;
+
 			// Skip ticks at the very start to avoid layout pressure against Y-axis
-			if (i > 3) {
+			if (i > 3 && (lastPushedIndex === -1 || sinceLastMarker >= minGap)) {
 				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
+				lastPushedIndex = i;
 			}
 
 			lastVersion = point.appVersion;

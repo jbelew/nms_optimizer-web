@@ -336,7 +336,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								<ReferenceArea
 									y1={50}
 									y2={90}
-									fill="var(--orange-a4)"
+									fill="var(--yellow-a4)"
 									stroke="none"
 								/>
 
@@ -349,7 +349,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								/>
 
 								<ReferenceLine y={90} stroke="var(--green-a7)" strokeWidth={1} />
-								<ReferenceLine y={50} stroke="var(--orange-a7)" strokeWidth={1} />
+								<ReferenceLine y={50} stroke="var(--yellow-a7)" strokeWidth={1} />
 								<ReferenceLine y={10} stroke="var(--green-a7)" strokeWidth={1} />
 							</>
 						)}
