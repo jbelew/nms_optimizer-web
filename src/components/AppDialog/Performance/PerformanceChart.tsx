@@ -78,7 +78,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const { i18n } = useTranslation();
 	const locale = i18n.language;
 
-	const isDesktop = useBreakpoint("640px");
+	const isDesktop = useBreakpoint("768px");
 	const maxPoints = isDesktop ? 168 : 72;
 
 	const { chartData, uniqueMetrics } = transformPerformanceData(data, locale, maxPoints);
@@ -220,7 +220,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 					marginBottom: CHART_MARGIN_BOTTOM,
 				}}
 			>
-				<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={50}>
+				<ResponsiveContainer width="99%" height={CHART_HEIGHT}>
 					<ComposedChart
 						data={chartData}
 						margin={{ top: 20, right: 10, left: 0, bottom: 0 }}

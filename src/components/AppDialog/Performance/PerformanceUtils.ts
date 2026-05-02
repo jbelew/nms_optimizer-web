@@ -359,7 +359,7 @@ export const calculateSMA = (
  *
  * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
  * @param {string} locale - The user locale for date formatting.
- * @param {number} maxPoints - Maximum number of points to include in the output.
+ * @param {number} maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
  *
  * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} Transformed data and active metric names.
  *
@@ -439,15 +439,33 @@ export const transformPerformanceData = (
 	let chartData = fullChartData;
 
 	if (fullChartData.length > maxPoints) {
-		const sampledData: ChartDataPoint[] = [];
-		const step = (fullChartData.length - 1) / (maxPoints - 1);
+		const sampledIndices = new Set<number>();
 
-		for (let i = 0; i < maxPoints; i++) {
-			const index = Math.round(i * step);
-			sampledData.push(fullChartData[index]);
+		// Always include the first and last points to preserve the range
+		sampledIndices.add(0);
+		sampledIndices.add(fullChartData.length - 1);
+
+		// Always include every single point where the version changes
+		for (let i = 1; i < fullChartData.length; i++) {
+			if (fullChartData[i].appVersion !== fullChartData[i - 1].appVersion) {
+				sampledIndices.add(i);
+			}
 		}
 
-		chartData = sampledData;
+		// Calculate how many more points we can add
+		const remainingCount = maxPoints - sampledIndices.size;
+
+		if (remainingCount > 0) {
+			const step = (fullChartData.length - 1) / (maxPoints - 1);
+
+			for (let i = 0; i < maxPoints; i++) {
+				sampledIndices.add(Math.round(i * step));
+			}
+		}
+
+		chartData = Array.from(sampledIndices)
+			.sort((a, b) => a - b)
+			.map((index) => fullChartData[index]);
 	}
 
 	metrics.forEach((m) => {
@@ -534,7 +552,7 @@ export const transformPerformanceData = (
  * It enforces a minimum gap between markers to prevent overlapping labels.
  *
  * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {number} maxPoints - Maximum number of points in the chart (used for spacing logic).
+ * @param {number} _maxPoints - Maximum number of points in the chart (ignored in this version).
  *
  * @returns {{ timestamp: number; version: string }[]} A list of version change events.
  *
@@ -547,24 +565,26 @@ export const transformPerformanceData = (
  */
 export const getVersionChanges = (
 	chartData: ChartDataPoint[],
-	maxPoints: number
+	_maxPoints: number
 ): { timestamp: number; version: string }[] => {
 	const versionChanges: { timestamp: number; version: string }[] = [];
-	let lastVersion: string | null = null;
-	let lastAddedIndex = -100;
 
-	chartData.forEach((point, i) => {
-		if (lastVersion && point.appVersion !== lastVersion) {
-			const minGap = Math.max(4, Math.floor(maxPoints * 0.08));
+	if (chartData.length < 2) return [];
 
-			if (i - lastAddedIndex >= minGap) {
+	let lastVersion = chartData[0].appVersion;
+
+	for (let i = 1; i < chartData.length; i++) {
+		const point = chartData[i];
+
+		if (point.appVersion !== lastVersion) {
+			// Skip ticks at the very start to avoid layout pressure against Y-axis
+			if (i > 3) {
 				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
-				lastAddedIndex = i;
 			}
-		}
 
-		lastVersion = point.appVersion;
-	});
+			lastVersion = point.appVersion;
+		}
+	}
 
 	return versionChanges;
 };
