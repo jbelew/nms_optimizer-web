@@ -49,8 +49,11 @@ import { captureException, createAppRouter, initializeSentry } from "./utils/sys
  * @returns {JSX.Element} The rendered root component with all providers.
  *
  * @example
+ * ```tsx
+ * <Root />
+ * ```
  */
-const Root = () => {
+export const Root = () => {
 	const { appearance } = useThemeStore();
 	const router = React.useMemo(() => createAppRouter(routes), []);
 

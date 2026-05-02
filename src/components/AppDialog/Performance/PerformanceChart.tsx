@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -40,6 +40,13 @@ import {
 } from "./PerformanceUtils";
 
 /**
+ * Duration (ms) used for both Recharts line animations and the matching
+ * detail↔detail morph window. The two MUST stay equal so the stable-key
+ * overlay finishes morphing exactly when the per-metric lines reappear.
+ */
+const LINE_ANIMATION_DURATION = 500;
+
+/**
  * Properties for the {@link PerformanceChart} component.
  */
 interface PerformanceChartProps {
@@ -74,6 +81,32 @@ interface PerformanceChartProps {
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+	// True for the ~500ms window during which a detail→detail morph is in flight.
+	// While true, per-metric lines hide and a stable-key overlay handles the morph.
+	const [isMorphing, setIsMorphing] = useState(false);
+	const morphTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	useEffect(() => {
+		return () => {
+			if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
+		};
+	}, []);
+
+	const updateSelectedMetric = useCallback(
+		(next: string | null) => {
+			if (selectedMetric !== null && next !== null && selectedMetric !== next) {
+				setIsMorphing(true);
+				if (morphTimeoutRef.current) clearTimeout(morphTimeoutRef.current);
+				morphTimeoutRef.current = setTimeout(
+					() => setIsMorphing(false),
+					LINE_ANIMATION_DURATION
+				);
+			}
+
+			setSelectedMetric(next);
+		},
+		[selectedMetric]
+	);
 
 	const { i18n } = useTranslation();
 	const locale = i18n.language;
@@ -124,9 +157,9 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								: "2px solid transparent",
 						backgroundColor: selectedMetric === null ? "var(--gray-3)" : undefined,
 					}}
-					onClick={() => setSelectedMetric(null)}
+					onClick={() => updateSelectedMetric(null)}
 					onKeyDown={(e) =>
-						(e.key === "Enter" || e.key === " ") && setSelectedMetric(null)
+						(e.key === "Enter" || e.key === " ") && updateSelectedMetric(null)
 					}
 					role="button"
 					aria-label="View overall performance summary"
@@ -185,10 +218,10 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 									: "2px solid transparent",
 								backgroundColor: isSelected ? "var(--gray-3)" : undefined,
 							}}
-							onClick={() => setSelectedMetric(isSelected ? null : metric)}
+							onClick={() => updateSelectedMetric(isSelected ? null : metric)}
 							onKeyDown={(e) =>
 								(e.key === "Enter" || e.key === " ") &&
-								setSelectedMetric(isSelected ? null : metric)
+								updateSelectedMetric(isSelected ? null : metric)
 							}
 							role="button"
 							aria-label={`View detailed ${metric} chart`}
@@ -344,6 +377,11 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							allowDataOverflow
 							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
 						/>
+
+						{/* Hidden secondary axis so the overall (0-100) score can stay
+						 * visible in detail views without being squished against the
+						 * metric's threshold domain. */}
+						<YAxis yAxisId="overall" hide domain={[0, 100]} allowDataOverflow />
 
 						<Tooltip
 							wrapperStyle={{ pointerEvents: "none" }}
@@ -539,39 +577,64 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							barSize={12}
 						/>
 
-						{/* Individual Metric Lines (Morphed) */}
-						{activeMetrics.map((m) => (
-							<Line
-								key={`metric-line-${m}`}
-								type="monotone"
-								dataKey={selectedMetric === m ? `${m}_p75_sma` : `${m}_deficit_sma`}
-								stroke={getMetricColor(m, 11)}
-								strokeWidth={selectedMetric === m ? 3 : 1.75}
-								strokeOpacity={
-									selectedMetric === null ? 1 : selectedMetric === m ? 1 : 0
-								}
-								dot={false}
-								activeDot={selectedMetric === m ? { r: 4 } : false}
-								connectNulls
-								isAnimationActive={true}
-								animationDuration={500}
-							/>
-						))}
+						{/* Individual Metric Lines (Morphed) — original null↔detail behavior.
+						 * Hidden during a detail↔detail morph; the overlay below handles that. */}
+						{activeMetrics.map((m) => {
+							const isSelected = selectedMetric === m;
+							const visible = !isMorphing && (selectedMetric === null || isSelected);
 
-						{/* Overall Trend Line (Morphed) */}
+							return (
+								<Line
+									key={`metric-line-${m}`}
+									type="monotone"
+									dataKey={isSelected ? `${m}_p75_sma` : `${m}_deficit_sma`}
+									stroke={getMetricColor(m, 11)}
+									strokeWidth={isSelected ? 3 : 1.75}
+									strokeOpacity={visible ? 1 : 0}
+									dot={false}
+									activeDot={isSelected && !isMorphing ? { r: 4 } : false}
+									connectNulls
+									isAnimationActive={true}
+									animationDuration={LINE_ANIMATION_DURATION}
+								/>
+							);
+						})}
+
+						{/* Overall Trend Line — primary in overall view; in detail views,
+						 * rendered as a secondary reference using the same 1.75px solid
+						 * style as the per-metric deficit lines, plotted against the
+						 * hidden 0-100 axis. */}
 						<Line
 							key="overall-trend-line"
+							yAxisId="overall"
 							type="monotone"
 							dataKey="overall_score_p75_sma"
 							stroke={getMetricColor("OVERALL", 11)}
-							strokeWidth={3}
-							strokeOpacity={selectedMetric === null ? 1 : 0}
+							strokeWidth={selectedMetric === null ? 3 : 1.75}
+							strokeOpacity={selectedMetric === null ? 1 : 0.5}
 							dot={false}
-							activeDot={{ r: 5 }}
+							activeDot={selectedMetric === null ? { r: 5 } : false}
 							connectNulls
 							isAnimationActive={true}
-							animationDuration={500}
+							animationDuration={LINE_ANIMATION_DURATION}
 						/>
+
+						{/* Detail↔detail morph overlay — stable key, only visible while morphing */}
+						{selectedMetric && (
+							<Line
+								key="selected-detail-line"
+								type="monotone"
+								dataKey={`${selectedMetric}_p75_sma`}
+								stroke={getMetricColor(selectedMetric, 11)}
+								strokeWidth={3}
+								strokeOpacity={isMorphing ? 1 : 0}
+								dot={false}
+								activeDot={isMorphing ? { r: 4 } : false}
+								connectNulls
+								isAnimationActive={true}
+								animationDuration={LINE_ANIMATION_DURATION}
+							/>
+						)}
 					</ComposedChart>
 				</ResponsiveContainer>
 			</div>
