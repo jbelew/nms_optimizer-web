@@ -1,3 +1,10 @@
+## [7.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.5...v7.0.6) (2026-05-02)
+
+
+### Bug Fixes
+
+* update overall performance chart threshold band to yellow and fix lint errors ([5ea1796](https://github.com/jbelew/nms_optimizer-web/commit/5ea1796f47bf0dad7b2585f8af91ae37c4380bd5))
+
 ## [7.0.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.4...v7.0.5) (2026-05-02)
 
 
