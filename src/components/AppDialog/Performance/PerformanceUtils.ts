@@ -55,17 +55,6 @@ export const METRIC_THRESHOLDS: Record<string, number> = {
 };
 
 /**
- * Maximum number of data points to display in the performance charts.
- *
- * @remarks
- * If the number of points exceeds this value, they will be sub-sampled
- * to maintain chart readability and performance.
- *
- * @category Constants
- */
-export const MAX_CHART_POINTS = 48;
-
-/**
  * Standard height for performance charts across the dashboard.
  *
  * @remarks
@@ -88,18 +77,6 @@ export const CHART_MARGIN_BOTTOM = 8;
  * @category Constants
  */
 export const SUMMARY_CARDS_HEIGHT = 80;
-
-/**
- * Standard gap between dashboard elements (corresponds to Radix gap="4").
- * @category Constants
- */
-export const DASHBOARD_GAP = 16;
-
-/**
- * Approximate height of the description text row (line height + margin).
- * @category Constants
- */
-export const DESCRIPTION_ROW_HEIGHT = 40;
 
 /**
  * Standard display order for performance metrics across the dashboard.
@@ -161,6 +138,8 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
 				return "orange";
 			case "INP":
 				return "amber";
+			case "OVERALL":
+				return "green";
 			default:
 				return "accent";
 		}
@@ -376,7 +355,7 @@ export const calculateSMA = (
  * 2. Filters out irrelevant metrics like `TBT`.
  * 3. Formats timestamps into human-readable strings.
  * 4. Sub-samples data if it exceeds `maxPoints`.
- * 5. Calculates 5-point SMAs for all active metrics.
+ * 5. Calculates 3-point SMAs for all active metrics.
  *
  * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
  * @param {string} locale - The user locale for date formatting.
@@ -473,15 +452,75 @@ export const transformPerformanceData = (
 
 	metrics.forEach((m) => {
 		const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
-		const p75SmaValues = calculateSMA(p75Values, 5);
+		const p75SmaValues = calculateSMA(p75Values, 3);
 
-		const mainValues = chartData.map((p) => p[`${m}_original`] as number | undefined);
-		const mainSmaValues = calculateSMA(mainValues, 5);
+		const config = LIGHTHOUSE_CONFIG[m];
 
 		chartData.forEach((p, i) => {
 			p[`${m}_p75_sma`] = p75SmaValues[i];
-			p[`${m}_sma`] = mainSmaValues[i];
+
+			if (config && p[`${m}_p75`] !== undefined) {
+				const score = computeLogNormalScore(
+					p[`${m}_p75`] as number,
+					config.p90,
+					config.p50
+				);
+				// Individual metrics use DEFICIT (0 is best, at bottom)
+				p[`${m}_deficit`] = 100 - score;
+			}
 		});
+
+		const deficitValues = chartData.map((p) => p[`${m}_deficit`] as number | undefined);
+		const deficitSmaValues = calculateSMA(deficitValues, 3);
+
+		chartData.forEach((p, i) => {
+			p[`${m}_deficit_sma`] = deficitSmaValues[i];
+		});
+	});
+
+	// Calculate overall weighted scores for the "Ceiling" view (100 is best, at top)
+	chartData.forEach((p) => {
+		let totalP50 = 0,
+			totalP75 = 0,
+			totalP90 = 0,
+			totalWeight = 0;
+
+		METRIC_DISPLAY_ORDER.forEach((m) => {
+			const config = LIGHTHOUSE_CONFIG[m];
+			if (!config) return;
+
+			const p50 = (p[`${m}_p50`] ?? p[`${m}_original`]) as number | undefined;
+			const p75 = (p[`${m}_p75`] ?? p[`${m}_original`]) as number | undefined;
+			const p90 = (p[`${m}_p90`] ?? p[`${m}_original`]) as number | undefined;
+
+			if (p75 !== undefined) {
+				totalWeight += config.weight;
+
+				const s50 = computeLogNormalScore(p50 ?? p75, config.p90, config.p50);
+				const s75 = computeLogNormalScore(p75, config.p90, config.p50);
+				const s90 = computeLogNormalScore(p90 ?? p75, config.p90, config.p50);
+
+				totalP50 += s50 * config.weight;
+				totalP75 += s75 * config.weight;
+				totalP90 += s90 * config.weight;
+			}
+		});
+
+		if (totalWeight > 0) {
+			p.overall_p50 = totalP50 / totalWeight;
+			p.overall_p75 = totalP75 / totalWeight;
+			p.overall_p90 = totalP90 / totalWeight;
+			// The overall score range for top-ceiling bars
+			p.overall_score_range = [p.overall_p90, p.overall_p50];
+		}
+	});
+
+	// Apply SMA to the overall p75 score trend
+	const overallP75Values = chartData.map((p) => p.overall_p75 as number | undefined);
+	const overallP75SmaValues = calculateSMA(overallP75Values, 3);
+
+	chartData.forEach((p, i) => {
+		p.overall_score_p75_sma = overallP75SmaValues[i];
 	});
 
 	return { chartData, uniqueMetrics: Array.from(metrics) };
@@ -516,7 +555,7 @@ export const getVersionChanges = (
 
 	chartData.forEach((point, i) => {
 		if (lastVersion && point.appVersion !== lastVersion) {
-			const minGap = Math.max(4, Math.floor(maxPoints * 0.15));
+			const minGap = Math.max(4, Math.floor(maxPoints * 0.08));
 
 			if (i - lastAddedIndex >= minGap) {
 				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
