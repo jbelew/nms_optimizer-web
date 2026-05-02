@@ -1,3 +1,10 @@
+## [7.0.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.1...v7.0.2) (2026-05-02)
+
+
+### Bug Fixes
+
+* resolve linting, formatting, and JSDoc issues ([a178048](https://github.com/jbelew/nms_optimizer-web/commit/a1780488900ad969ec5b60c332fe4338100d00ee))
+
 ## [7.0.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.0...v7.0.1) (2026-05-01)
 
 
