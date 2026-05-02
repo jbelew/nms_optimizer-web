@@ -1,3 +1,10 @@
+## [7.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.6...v7.0.7) (2026-05-02)
+
+
+### Bug Fixes
+
+* finalize performance dashboard design with unified hierarchical styling and optimized deep-linking ([8922e1b](https://github.com/jbelew/nms_optimizer-web/commit/8922e1b4f70a132c8d4ab3905df93c0f8ff01646))
+
 ## [7.0.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.5...v7.0.6) (2026-05-02)
 
 
