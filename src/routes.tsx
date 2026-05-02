@@ -30,10 +30,16 @@ const NotFound = async () => {
  * Generates route objects for each functional page (about, instructions, etc.).
  * These are rendered via the `MainAppContent` component which handles modal display.
  */
-const pageRoutes: RouteObject[] = pages.map((page) => ({
-	path: page,
-	Component: MainAppContent,
-}));
+const pageRoutes: RouteObject[] = [
+	...pages.map((page) => ({
+		path: `${page}/`,
+		Component: MainAppContent,
+	})),
+	{
+		path: "performance/:metric/",
+		Component: MainAppContent,
+	},
+];
 
 /**
  * Generates language-prefixed versions of all application routes.
@@ -41,13 +47,17 @@ const pageRoutes: RouteObject[] = pages.map((page) => ({
  */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
-		path: lang,
+		path: `${lang}/`,
 		Component: MainAppContent,
 	},
 	...pages.map((page) => ({
-		path: `${lang}/${page}`,
+		path: `${lang}/${page}/`,
 		Component: MainAppContent,
 	})),
+	{
+		path: `${lang}/performance/:metric/`,
+		Component: MainAppContent,
+	},
 ]);
 
 /**

@@ -315,9 +315,13 @@ export const getFormatter = (
  * @remarks
  * This utility computes the average of the current point and the N-1 preceding points.
  * If a window contains `undefined` values, it averages the remaining valid numeric points.
+ * If `anchorEnd` is true, the very last point in the returned array will exactly
+ * match the last valid numeric point in the input data, ensuring trend lines
+ * "land" on the current raw value shown in summary cards.
  *
  * @param {(number | undefined)[]} data - The sequence of numeric values.
  * @param {number} period - The window size (e.g., 5).
+ * @param {boolean} [anchorEnd=false] - Whether to force the last point to match the raw data.
  *
  * @returns {(number | undefined)[]} The smoothed timeseries.
  *
@@ -327,13 +331,17 @@ export const getFormatter = (
  * ```ts
  * const sma = calculateSMA([10, 20, 30, 40], 2);
  * // returns [10, 15, 25, 35]
+ *
+ * const anchored = calculateSMA([10, 20, 30, 40], 3, true);
+ * // returns [10, 15, 20, 40]
  * ```
  */
 export const calculateSMA = (
 	data: (number | undefined)[],
-	period: number
+	period: number,
+	anchorEnd = false
 ): (number | undefined)[] => {
-	return data.map((_, index) => {
+	const sma = data.map((_, index) => {
 		const start = Math.max(0, index - period + 1);
 		const window = data.slice(start, index + 1);
 		const validValues = window.filter((v): v is number => v !== undefined);
@@ -344,6 +352,16 @@ export const calculateSMA = (
 
 		return sum / validValues.length;
 	});
+
+	if (anchorEnd && data.length > 0) {
+		const lastValidIndex = data.length - 1;
+
+		if (data[lastValidIndex] !== undefined) {
+			sma[lastValidIndex] = data[lastValidIndex];
+		}
+	}
+
+	return sma;
 };
 
 /**
@@ -470,7 +488,7 @@ export const transformPerformanceData = (
 
 	metrics.forEach((m) => {
 		const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
-		const p75SmaValues = calculateSMA(p75Values, 3);
+		const p75SmaValues = calculateSMA(p75Values, 3, true);
 
 		const config = LIGHTHOUSE_CONFIG[m];
 
@@ -489,7 +507,7 @@ export const transformPerformanceData = (
 		});
 
 		const deficitValues = chartData.map((p) => p[`${m}_deficit`] as number | undefined);
-		const deficitSmaValues = calculateSMA(deficitValues, 3);
+		const deficitSmaValues = calculateSMA(deficitValues, 3, true);
 
 		chartData.forEach((p, i) => {
 			p[`${m}_deficit_sma`] = deficitSmaValues[i];
@@ -535,7 +553,7 @@ export const transformPerformanceData = (
 
 	// Apply SMA to the overall p75 score trend
 	const overallP75Values = chartData.map((p) => p.overall_p75 as number | undefined);
-	const overallP75SmaValues = calculateSMA(overallP75Values, 3);
+	const overallP75SmaValues = calculateSMA(overallP75Values, 3, true);
 
 	chartData.forEach((p, i) => {
 		p.overall_score_p75_sma = overallP75SmaValues[i];

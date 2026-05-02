@@ -109,7 +109,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		if (data?.shareUrl) {
 			setShareUrl(data.shareUrl);
 		} else if (dialog) {
-			const path = lang === "en" ? `/${dialog}` : `/${lang}/${dialog}`;
+			const path = lang === "en" ? `/${dialog}/` : `/${lang}/${dialog}/`;
 			navigate(path + window.location.search);
 		}
 
@@ -136,7 +136,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		if (shareUrl) {
 			setShareUrl("");
 		} else if (activeDialog) {
-			const path = lang === "en" ? "/" : `/${lang}`;
+			const path = lang === "en" ? "/" : `/${lang}/`;
 			navigate(path + window.location.search);
 		}
 

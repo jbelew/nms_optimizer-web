@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	Bar,
 	CartesianGrid,
@@ -80,7 +81,12 @@ interface PerformanceChartProps {
  * ```
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
-	const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+	const { metric } = useParams<{ metric?: string }>();
+	const navigate = useNavigate();
+	const { i18n } = useTranslation();
+
+	const selectedMetric = useMemo(() => (metric ? metric.toUpperCase() : null), [metric]);
+
 	// True for the ~500ms window during which a detail→detail morph is in flight.
 	// While true, per-metric lines hide and a stable-key overlay handles the morph.
 	const [isMorphing, setIsMorphing] = useState(false);
@@ -103,12 +109,19 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 				);
 			}
 
-			setSelectedMetric(next);
-		},
-		[selectedMetric]
-	);
+			// Update URL to match selection - selectedMetric is now derived from URL
+			const lang = (i18n.language || "en").split("-")[0];
+			const isDefaultLang = lang === "en";
+			const basePath = isDefaultLang ? "/performance" : `/${lang}/performance`;
 
-	const { i18n } = useTranslation();
+			if (next) {
+				navigate(`${basePath}/${next.toLowerCase()}/${window.location.search}`);
+			} else {
+				navigate(`${basePath}/${window.location.search}`);
+			}
+		},
+		[selectedMetric, navigate, i18n.language]
+	);
 	const locale = i18n.language;
 
 	const isDesktop = useBreakpoint("768px");
