@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -81,13 +81,30 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	const isDesktop = useBreakpoint("768px");
 	const maxPoints = isDesktop ? 168 : 72;
 
-	const { chartData, uniqueMetrics } = transformPerformanceData(data, locale, maxPoints);
-	const versionChanges = getVersionChanges(chartData, maxPoints);
+	const { chartData, uniqueMetrics } = useMemo(
+		() => transformPerformanceData(data, locale, maxPoints),
+		[data, locale, maxPoints]
+	);
 
-	const activeMetrics = METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m));
+	const versionChanges = useMemo(
+		() => getVersionChanges(chartData, maxPoints),
+		[chartData, maxPoints]
+	);
 
-	const overallScore = calculateOverallPerformanceScore(chartData, activeMetrics);
-	const overallTrend = getOverallTrend(chartData, activeMetrics);
+	const activeMetrics = useMemo(
+		() => METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m)),
+		[uniqueMetrics]
+	);
+
+	const overallScore = useMemo(
+		() => calculateOverallPerformanceScore(chartData, activeMetrics),
+		[chartData, activeMetrics]
+	);
+
+	const overallTrend = useMemo(
+		() => getOverallTrend(chartData, activeMetrics),
+		[chartData, activeMetrics]
+	);
 
 	const yDomain = selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : [0, 100];
 	const selectedMetricConfig = selectedMetric ? LIGHTHOUSE_CONFIG[selectedMetric] : null;
@@ -220,7 +237,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 					marginBottom: CHART_MARGIN_BOTTOM,
 				}}
 			>
-				<ResponsiveContainer width="99%" height={CHART_HEIGHT}>
+				<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={50}>
 					<ComposedChart
 						data={chartData}
 						margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
@@ -308,7 +325,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							axisLine={false}
 							tickLine={false}
 							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
-							minTickGap={40}
+							minTickGap={30}
 							tickFormatter={(val: number) => {
 								const dateObj = new Date(val);
 
@@ -510,26 +527,17 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							}}
 						/>
 
-						{/* Dynamic Range Bars */}
-						{selectedMetric ? (
-							<Bar
-								key={`range-${selectedMetric}`}
-								dataKey={`${selectedMetric}_range`}
-								fill={getMetricColor(selectedMetric, 11)}
-								fillOpacity={0.2}
-								radius={[2, 2, 2, 2]}
-								barSize={12}
-							/>
-						) : (
-							<Bar
-								key="overall-range"
-								dataKey="overall_score_range"
-								fill={getMetricColor("OVERALL", 11)}
-								fillOpacity={0.2}
-								radius={[2, 2, 2, 2]}
-								barSize={12}
-							/>
-						)}
+						{/* Unified Dynamic Range Bar (Stable Identity) */}
+						<Bar
+							key="unified-range-bar"
+							dataKey={
+								selectedMetric ? `${selectedMetric}_range` : "overall_score_range"
+							}
+							fill={getMetricColor(selectedMetric ?? "OVERALL", 11)}
+							fillOpacity={0.2}
+							radius={[2, 2, 2, 2]}
+							barSize={12}
+						/>
 
 						{/* Individual Metric Lines (Morphed) */}
 						{activeMetrics.map((m) => (
@@ -545,12 +553,14 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								dot={false}
 								activeDot={selectedMetric === m ? { r: 4 } : false}
 								connectNulls
-								hide={selectedMetric !== null && selectedMetric !== m}
+								isAnimationActive={true}
+								animationDuration={500}
 							/>
 						))}
 
-						{/* Overall Trend Line (Visible only in Aggregate View) */}
+						{/* Overall Trend Line (Morphed) */}
 						<Line
+							key="overall-trend-line"
 							type="monotone"
 							dataKey="overall_score_p75_sma"
 							stroke={getMetricColor("OVERALL", 11)}
@@ -559,7 +569,8 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							dot={false}
 							activeDot={{ r: 5 }}
 							connectNulls
-							hide={selectedMetric !== null}
+							isAnimationActive={true}
+							animationDuration={500}
 						/>
 					</ComposedChart>
 				</ResponsiveContainer>
