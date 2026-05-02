@@ -40,6 +40,10 @@ import {
 	transformPerformanceData,
 } from "./PerformanceUtils";
 
+const CHART_TICK_STYLE = { fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 };
+const ACTIVE_DOT_STYLE = { r: 4 };
+const OVERALL_DOT_STYLE = { r: 5 };
+
 /**
  * Duration (ms) used for both Recharts line animations and the matching
  * detail↔detail morph window. The two MUST stay equal so the stable-key
@@ -297,15 +301,17 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 					marginBottom: CHART_MARGIN_BOTTOM,
 				}}
 			>
-				<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={50}>
+				<ResponsiveContainer width="100%" height={CHART_HEIGHT} debounce={0}>
 					<ComposedChart
+						role="img"
+						aria-label="Performance metrics timeseries chart"
 						data={chartData}
 						margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
 					>
 						<CartesianGrid
 							strokeDasharray="3 3"
 							vertical={false}
-							stroke="var(--gray-5)"
+							stroke="var(--gray-4)"
 						/>
 
 						{/* Dynamic Background Threshold Bands */}
@@ -321,12 +327,13 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								<ReferenceLine
 									y={selectedMetricConfig?.p90 || 1000}
 									stroke={getMetricColor(selectedMetric, "a7")}
-									strokeWidth={1}
+									strokeWidth={1.5}
+									strokeDasharray="0"
 								/>
 							</>
 						) : (
 							<>
-								{/* Overall Ceiling: Success (90-100) and Needs Improvement (50-90) */}
+								{/* Overall Ceiling: Success (90-100 score) and Needs Improvement (50-90 score) */}
 								<ReferenceArea
 									y1={90}
 									y2={100}
@@ -340,7 +347,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 									stroke="none"
 								/>
 
-								{/* Metric Floor: Success (0-10) */}
+								{/* Metric Floor: Success (0-10 deficit) */}
 								<ReferenceArea
 									y1={0}
 									y2={10}
@@ -348,9 +355,24 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 									stroke="none"
 								/>
 
-								<ReferenceLine y={90} stroke="var(--green-a7)" strokeWidth={1} />
-								<ReferenceLine y={50} stroke="var(--yellow-a7)" strokeWidth={1} />
-								<ReferenceLine y={10} stroke="var(--green-a7)" strokeWidth={1} />
+								<ReferenceLine
+									y={90}
+									stroke="var(--green-a7)"
+									strokeWidth={1.5}
+									strokeDasharray="0"
+								/>
+								<ReferenceLine
+									y={50}
+									stroke="var(--yellow-a7)"
+									strokeWidth={1.5}
+									strokeDasharray="0"
+								/>
+								<ReferenceLine
+									y={10}
+									stroke="var(--green-a7)"
+									strokeWidth={1.5}
+									strokeDasharray="0"
+								/>
 							</>
 						)}
 
@@ -384,7 +406,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							domain={["dataMin", "dataMax"]}
 							axisLine={false}
 							tickLine={false}
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+							tick={CHART_TICK_STYLE}
 							minTickGap={30}
 							tickFormatter={(val: number) => {
 								const dateObj = new Date(val);
@@ -402,7 +424,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							width={40}
 							domain={yDomain}
 							allowDataOverflow
-							tick={{ fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 }}
+							tick={CHART_TICK_STYLE}
 						/>
 
 						{/* Hidden secondary axis so the overall (0-100) score can stay
@@ -651,7 +673,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 									strokeWidth={isSelected ? 3 : 1.75}
 									strokeOpacity={visible ? 1 : 0}
 									dot={false}
-									activeDot={isSelected && !isMorphing ? { r: 4 } : false}
+									activeDot={isSelected && !isMorphing ? ACTIVE_DOT_STYLE : false}
 									connectNulls
 									isAnimationActive={true}
 									animationDuration={LINE_ANIMATION_DURATION}
@@ -668,11 +690,11 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 							yAxisId="overall"
 							type="monotone"
 							dataKey="overall_score_p75_sma"
-							stroke={getMetricColor("OVERALL", 11)}
+							stroke={getMetricColor("OVERALL", selectedMetric === null ? 11 : "a7")}
 							strokeWidth={selectedMetric === null ? 3 : 1.75}
-							strokeOpacity={selectedMetric === null ? 1 : 0.5}
+							strokeOpacity={selectedMetric === null ? 1 : 0.8}
 							dot={false}
-							activeDot={selectedMetric === null ? { r: 5 } : false}
+							activeDot={selectedMetric === null ? OVERALL_DOT_STYLE : false}
 							connectNulls
 							isAnimationActive={true}
 							animationDuration={LINE_ANIMATION_DURATION}
@@ -688,7 +710,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 								strokeWidth={3}
 								strokeOpacity={isMorphing ? 1 : 0}
 								dot={false}
-								activeDot={isMorphing ? { r: 4 } : false}
+								activeDot={isMorphing ? ACTIVE_DOT_STYLE : false}
 								connectNulls
 								isAnimationActive={true}
 								animationDuration={LINE_ANIMATION_DURATION}

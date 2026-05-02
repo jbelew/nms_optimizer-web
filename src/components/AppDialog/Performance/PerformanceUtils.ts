@@ -556,7 +556,10 @@ export const transformPerformanceData = (
 	const overallP75SmaValues = calculateSMA(overallP75Values, 3, true);
 
 	chartData.forEach((p, i) => {
-		p.overall_score_p75_sma = overallP75SmaValues[i];
+		const score = overallP75SmaValues[i];
+		p.overall_score_p75_sma = score;
+		// Add deficit for unified chart plotting (0 is perfect)
+		p.overall_deficit_p75_sma = score !== undefined ? 100 - score : undefined;
 	});
 
 	return { chartData, uniqueMetrics: Array.from(metrics) };
