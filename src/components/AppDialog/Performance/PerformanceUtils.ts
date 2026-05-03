@@ -488,7 +488,7 @@ export const transformPerformanceData = (
 
 	metrics.forEach((m) => {
 		const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
-		const p75SmaValues = calculateSMA(p75Values, 3, true);
+		const p75SmaValues = calculateSMA(p75Values, 2, true);
 
 		const config = LIGHTHOUSE_CONFIG[m];
 
@@ -507,7 +507,7 @@ export const transformPerformanceData = (
 		});
 
 		const deficitValues = chartData.map((p) => p[`${m}_deficit`] as number | undefined);
-		const deficitSmaValues = calculateSMA(deficitValues, 3, true);
+		const deficitSmaValues = calculateSMA(deficitValues, 2, true);
 
 		chartData.forEach((p, i) => {
 			p[`${m}_deficit_sma`] = deficitSmaValues[i];
@@ -553,7 +553,7 @@ export const transformPerformanceData = (
 
 	// Apply SMA to the overall p75 score trend
 	const overallP75Values = chartData.map((p) => p.overall_p75 as number | undefined);
-	const overallP75SmaValues = calculateSMA(overallP75Values, 3, true);
+	const overallP75SmaValues = calculateSMA(overallP75Values, 2, true);
 
 	chartData.forEach((p, i) => {
 		const score = overallP75SmaValues[i];
