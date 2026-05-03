@@ -1,3 +1,10 @@
+## [7.0.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.7...v7.0.8) (2026-05-03)
+
+
+### Bug Fixes
+
+* update performance trend logic to use formatted values and composite scores for UI consistency and add tests ([b9c2772](https://github.com/jbelew/nms_optimizer-web/commit/b9c277259d6e88aca4fd38691356c37b6b8005c9))
+
 ## [7.0.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.6...v7.0.7) (2026-05-02)
 
 
