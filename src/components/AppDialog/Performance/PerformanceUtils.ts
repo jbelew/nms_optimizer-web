@@ -694,7 +694,20 @@ export const getMetricTrend = (
 
 	if (values.length < 2) return "neutral";
 
-	return values[0] < values[1] ? "improvement" : values[0] > values[1] ? "regression" : "neutral";
+	// Use formatted values to ignore insignificant changes that don't affect the UI display
+	const currentFormatted = formatMetricValue(metric, values[0], false);
+	const previousFormatted = formatMetricValue(metric, values[1], false);
+
+	if (currentFormatted === previousFormatted) return "neutral";
+
+	const currentNum = parseFloat(currentFormatted);
+	const previousNum = parseFloat(previousFormatted);
+
+	return currentNum < previousNum
+		? "improvement"
+		: currentNum > previousNum
+			? "regression"
+			: "neutral";
 };
 
 /**
@@ -772,17 +785,18 @@ export const getOverallTrend = (
 	chartData: ChartDataPoint[],
 	activeMetrics: string[]
 ): "improvement" | "regression" | "neutral" => {
-	let improvementCount = 0;
-	let regressionCount = 0;
+	if (chartData.length < 2) return "neutral";
 
-	activeMetrics.forEach((m) => {
-		const trend = getMetricTrend(chartData, m);
-		if (trend === "improvement") improvementCount++;
-		else if (trend === "regression") regressionCount++;
-	});
+	// We calculate the "composite" score for the current state and the previous state.
+	// This ensures the trend arrow is perfectly in sync with the rounded number
+	// shown on the "OVERALL" summary card.
+	const latestScore = calculateOverallPerformanceScore(chartData, activeMetrics);
+	const previousScore = calculateOverallPerformanceScore(chartData.slice(0, -1), activeMetrics);
 
-	if (improvementCount > regressionCount) return "improvement";
-	if (regressionCount > improvementCount) return "regression";
+	if (latestScore === null || previousScore === null) return "neutral";
+
+	if (latestScore > previousScore) return "improvement";
+	if (latestScore < previousScore) return "regression";
 
 	return "neutral";
 };
