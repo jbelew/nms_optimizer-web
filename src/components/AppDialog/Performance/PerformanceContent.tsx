@@ -1,43 +1,47 @@
 import { FC, Suspense } from "react";
-import { Flex, Skeleton, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import MessageSpinner from "@/components/MessageSpinner/MessageSpinner";
 
 import { PerformanceData } from "./PerformanceData";
-import { CHART_HEIGHT, FULL_DASHBOARD_HEIGHT, SUMMARY_CARDS_HEIGHT } from "./PerformanceUtils";
+import { FULL_DASHBOARD_HEIGHT, PERFORMANCE_LAYOUT } from "./PerformanceUtils";
 
 /**
- * A structured skeleton that mimics the layout of the dashboard data area.
+ * Loading skeleton that perfectly mirrors the performance dashboard layout.
  *
  * @remarks
- * This skeleton is used to prevent layout shifts while the performance data
- * and charting components are loading.
+ * Uses a single MessageSpinner centered in the dashboard area to provide
+ * a clean loading experience without the overhead of maintaining individual
+ * skeleton pieces.
  *
- * @returns {JSX.Element} The rendered dashboard skeleton.
+ * @component
  *
  * @example
- * ```tsx
  * <DashboardSkeleton />
- * ```
  */
-const DashboardSkeleton: FC = () => (
-	<Flex direction="column" gap="4">
-		{/* Summary Cards Row */}
-		<Flex gap="3" wrap="wrap" justify="between">
-			{[...Array(6)].map((_, i) => (
-				<Skeleton
-					key={i}
-					height={`${SUMMARY_CARDS_HEIGHT}px`}
-					style={{ flex: "1 1 120px" }}
-				/>
-			))}
-		</Flex>
+const DashboardSkeleton: FC = () => {
+	const { t } = useTranslation();
 
-		{/* Chart Area */}
-		<Skeleton height={`${CHART_HEIGHT}px`} width="100%" />
-	</Flex>
-);
+	return (
+		<div
+			style={{
+				height: FULL_DASHBOARD_HEIGHT,
+				position: "relative",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				paddingTop: PERFORMANCE_LAYOUT.FOOTER_HEIGHT,
+			}}
+		>
+			<MessageSpinner
+				isVisible={true}
+				initialMessage={t("dialogs.performance.loading", "Loading performance data...")}
+			/>
+		</div>
+	);
+};
 
 /**
  * Props for the `PerformanceContent` component.
@@ -78,14 +82,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 	const { t } = useTranslation();
 
 	return (
-		<div style={{ minHeight: FULL_DASHBOARD_HEIGHT, padding: "4px" }}>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="5" style={{ height: "40px" }}>
-				{t(
-					"dialogs.performance.description",
-					"Aggregate Core Web Vitals and performance metrics from real user sessions (field data)."
-				)}
-			</Text>
-
+		<div style={{ minHeight: FULL_DASHBOARD_HEIGHT }}>
 			<ErrorBoundary
 				fallback={
 					<div className="p-4 text-red-500">
@@ -94,6 +91,13 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 				}
 			>
 				<Suspense fallback={<DashboardSkeleton />}>
+					<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
+						{t(
+							"dialogs.performance.description",
+							"Aggregate Core Web Vitals and performance metrics from real user sessions (field data)."
+						)}
+					</Text>
+
 					<PerformanceData isOpen={isOpen} />
 				</Suspense>
 			</ErrorBoundary>

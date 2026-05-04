@@ -55,28 +55,52 @@ export const METRIC_THRESHOLDS: Record<string, number> = {
 };
 
 /**
- * Standard height for performance charts across the dashboard.
+ * Authority for performance dashboard dimensions and spacing.
  *
  * @remarks
- * Centralizing this value ensures that loading skeletons perfectly match
+ * Centralizing these values ensures that the loading skeletons perfectly match
  * the rendered charts, preventing layout shift (CLS).
  *
  * @category Constants
  */
-export const CHART_HEIGHT = 342;
+export const PERFORMANCE_LAYOUT = {
+	/** Standard height for performance charts across the dashboard. */
+	CHART_HEIGHT: 260,
+	/** Standard bottom margin for performance charts. */
+	CHART_MARGIN_BOTTOM: 0,
+	/** Approximate height of the summary cards row. */
+	SUMMARY_CARDS_HEIGHT: 72,
+	/** Gap between the summary cards and the range selector row. */
+	CARDS_TO_RANGE_GAP: 12,
+	/** Height of the range selector row. */
+	RANGE_HEIGHT: 24,
+	/** Gap between the range selector and the chart. */
+	RANGE_TO_CHART_GAP: 0,
+	/** Approximate height of the description text + its margin. */
+	DESCRIPTION_AREA_HEIGHT: 60,
+	/** Vertical padding applied to the content container. */
+	CONTAINER_PADDING_Y: 0,
+	/** Approximate height of the dialog footer (Close button area). */
+	FOOTER_HEIGHT: 52,
+} as const;
+
+/**
+ * Standard height for performance charts across the dashboard.
+ * @deprecated Use PERFORMANCE_LAYOUT.CHART_HEIGHT
+ */
+export const CHART_HEIGHT = PERFORMANCE_LAYOUT.CHART_HEIGHT;
 
 /**
  * Standard bottom margin for performance charts.
- * @category Constants
+ * @deprecated Use PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM
  */
-export const CHART_MARGIN_BOTTOM = 8;
+export const CHART_MARGIN_BOTTOM = PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
 
 /**
  * Approximate height of the summary cards row.
- * Used for skeleton alignment.
- * @category Constants
+ * @deprecated Use PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT
  */
-export const SUMMARY_CARDS_HEIGHT = 80;
+export const SUMMARY_CARDS_HEIGHT = PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT;
 
 /**
  * Standard display order for performance metrics across the dashboard.
@@ -104,7 +128,15 @@ export const CHART_TOOLTIP_STYLE: React.CSSProperties = {
  * Used for the top-level dialog skeleton to prevent CLS.
  * @category Constants
  */
-export const FULL_DASHBOARD_HEIGHT = 510;
+export const FULL_DASHBOARD_HEIGHT =
+	PERFORMANCE_LAYOUT.CONTAINER_PADDING_Y +
+	PERFORMANCE_LAYOUT.DESCRIPTION_AREA_HEIGHT +
+	PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT +
+	PERFORMANCE_LAYOUT.CARDS_TO_RANGE_GAP +
+	PERFORMANCE_LAYOUT.RANGE_HEIGHT +
+	PERFORMANCE_LAYOUT.RANGE_TO_CHART_GAP +
+	PERFORMANCE_LAYOUT.CHART_HEIGHT +
+	PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
 
 /**
  * Returns a consistent color for a given performance metric.
@@ -378,6 +410,7 @@ export const calculateSMA = (
  * @param {PerformanceMetric[]} raw - The raw array of metric records from the API.
  * @param {string} locale - The user locale for date formatting.
  * @param {number} maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
+ * @param {number} [smaPeriod=3] - The window size for SMA smoothing.
  *
  * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} Transformed data and active metric names.
  *
@@ -394,7 +427,8 @@ export const calculateSMA = (
 export const transformPerformanceData = (
 	raw: PerformanceMetric[],
 	locale: string,
-	maxPoints: number
+	maxPoints: number,
+	smaPeriod = 3
 ): { chartData: ChartDataPoint[]; uniqueMetrics: string[] } => {
 	const dateMap: Record<number, ChartDataPoint> = {};
 	const metrics = new Set<string>();
@@ -456,39 +490,88 @@ export const transformPerformanceData = (
 
 	let chartData = fullChartData;
 
-	if (fullChartData.length > maxPoints) {
+	if (fullChartData.length > 0) {
 		const sampledIndices = new Set<number>();
 
-		// Always include the first and last points to preserve the range
+		// Always include the first and last points
 		sampledIndices.add(0);
 		sampledIndices.add(fullChartData.length - 1);
 
-		// Always include every single point where the version changes
+		// Always include every point where the version changes
 		for (let i = 1; i < fullChartData.length; i++) {
 			if (fullChartData[i].appVersion !== fullChartData[i - 1].appVersion) {
 				sampledIndices.add(i);
 			}
 		}
 
-		// Calculate how many more points we can add
-		const remainingCount = maxPoints - sampledIndices.size;
-
-		if (remainingCount > 0) {
+		// Linearly sample more points until we have exactly maxPoints or reach the raw length
+		if (fullChartData.length > maxPoints) {
 			const step = (fullChartData.length - 1) / (maxPoints - 1);
 
 			for (let i = 0; i < maxPoints; i++) {
 				sampledIndices.add(Math.round(i * step));
 			}
-		}
 
-		chartData = Array.from(sampledIndices)
-			.sort((a, b) => a - b)
-			.map((index) => fullChartData[index]);
+			// If we still have more than maxPoints (due to version changes),
+			// we must prune the non-version-change points to keep the count EXACT.
+			if (sampledIndices.size > maxPoints) {
+				const indices = Array.from(sampledIndices).sort((a, b) => a - b);
+				const toKeep = new Set<number>();
+
+				// Always keep first, last, and version changes
+				toKeep.add(indices[0]);
+				toKeep.add(indices[indices.length - 1]);
+
+				for (let i = 1; i < fullChartData.length; i++) {
+					if (fullChartData[i].appVersion !== fullChartData[i - 1].appVersion) {
+						toKeep.add(i);
+					}
+				}
+
+				// Fill remaining slots from the sampled set
+				for (const idx of indices) {
+					if (toKeep.size >= maxPoints) break;
+					toKeep.add(idx);
+				}
+
+				chartData = Array.from(toKeep)
+					.sort((a, b) => a - b)
+					.map((index) => fullChartData[index]);
+			} else {
+				chartData = Array.from(sampledIndices)
+					.sort((a, b) => a - b)
+					.map((index) => fullChartData[index]);
+			}
+		} else {
+			// Data is shorter than maxPoints. To keep width consistent, we must pad
+			// the beginning with "empty" data points so the total array length is EXACT.
+			chartData = fullChartData;
+
+			const paddingCount = maxPoints - fullChartData.length;
+
+			if (paddingCount > 0) {
+				const firstPoint = fullChartData[0];
+				const hourMs = 3600000;
+				const padding: ChartDataPoint[] = [];
+
+				for (let i = paddingCount; i > 0; i--) {
+					const ts = firstPoint.timestamp - i * hourMs;
+					padding.push({
+						timestamp: ts,
+						displayDate: "", // Empty so they don't show on X-axis
+						hour: "",
+						appVersion: "",
+					});
+				}
+
+				chartData = [...padding, ...fullChartData];
+			}
+		}
 	}
 
 	metrics.forEach((m) => {
 		const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
-		const p75SmaValues = calculateSMA(p75Values, 2, true);
+		const p75SmaValues = calculateSMA(p75Values, smaPeriod, true);
 
 		const config = LIGHTHOUSE_CONFIG[m];
 
@@ -507,7 +590,7 @@ export const transformPerformanceData = (
 		});
 
 		const deficitValues = chartData.map((p) => p[`${m}_deficit`] as number | undefined);
-		const deficitSmaValues = calculateSMA(deficitValues, 2, true);
+		const deficitSmaValues = calculateSMA(deficitValues, smaPeriod, true);
 
 		chartData.forEach((p, i) => {
 			p[`${m}_deficit_sma`] = deficitSmaValues[i];
@@ -553,7 +636,7 @@ export const transformPerformanceData = (
 
 	// Apply SMA to the overall p75 score trend
 	const overallP75Values = chartData.map((p) => p.overall_p75 as number | undefined);
-	const overallP75SmaValues = calculateSMA(overallP75Values, 2, true);
+	const overallP75SmaValues = calculateSMA(overallP75Values, smaPeriod, true);
 
 	chartData.forEach((p, i) => {
 		const score = overallP75SmaValues[i];

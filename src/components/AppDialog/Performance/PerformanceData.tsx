@@ -1,9 +1,9 @@
-import { FC, lazy, useEffect } from "react";
+import { FC, lazy, useEffect, useState, useTransition } from "react";
 import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
-import { fetchPerformanceData } from "@/utils/api/performanceResource";
+import { fetchPerformanceData, isPerformanceDataCached } from "@/utils/api/performanceResource";
 
 const PerformanceChart = lazy(() => import("./PerformanceChart"));
 
@@ -13,8 +13,9 @@ const PerformanceChart = lazy(() => import("./PerformanceChart"));
  * @remarks
  * This component handles the data lifecycle for the performance dashboard:
  * 1. Triggers an eager fetch via `fetchPerformanceData` when the dialog opens.
- * 2. Consumes the streamable data via the `usePerformanceData` hook.
- * 3. Renders the lazy-loaded `PerformanceChart` visualization.
+ * 2. Manages the selected date range (3, 7, or 14 days).
+ * 3. Consumes the streamable data via the `usePerformanceData` hook.
+ * 4. Renders the lazy-loaded `PerformanceChart` visualization.
  *
  * @param {Object} props - Component properties.
  * @param {boolean} props.isOpen - Indicates if the parent dialog is visible.
@@ -37,20 +38,45 @@ const PerformanceChart = lazy(() => import("./PerformanceChart"));
  */
 export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
+	const [range, setRange] = useState(3);
+	const [isPending, startTransition] = useTransition();
+
+	const startDate = `${range}daysAgo`;
 
 	useEffect(() => {
 		if (isOpen) {
-			fetchPerformanceData();
+			fetchPerformanceData(startDate);
 		}
-	}, [isOpen]);
+	}, [isOpen, startDate]);
 
-	const data = usePerformanceData();
+	const data = usePerformanceData(startDate);
+
+	const handleRangeChange = (newRange: number) => {
+		const nextStartDate = `${newRange}daysAgo`;
+
+		if (isPerformanceDataCached(nextStartDate)) {
+			// If cached, just set it directly to avoid the transition dimming
+			setRange(newRange);
+		} else {
+			// Otherwise use transition to show feedback while fetching
+			startTransition(() => {
+				setRange(newRange);
+			});
+		}
+	};
 
 	if (!data || data.length === 0) {
 		return <Text>{t("dialogs.performance.noData", "No performance data available.")}</Text>;
 	}
 
-	return <PerformanceChart data={data} />;
+	return (
+		<PerformanceChart
+			data={data}
+			range={range}
+			onRangeChange={handleRangeChange}
+			isPending={isPending}
+		/>
+	);
 };
 
 export default PerformanceData;

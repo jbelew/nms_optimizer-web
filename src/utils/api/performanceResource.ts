@@ -4,39 +4,45 @@ import { API_URL } from "../../constants";
 import { apiCall } from "./network";
 
 /**
- * Cached promise to prevent redundant API calls during the same session.
+ * Cached promises for different date ranges to prevent redundant API calls.
  * @internal
  */
-let performanceDataPromise: Promise<PerformanceMetric[]> | null = null;
+const performanceDataPromises = new Map<string, Promise<PerformanceMetric[]>>();
 
 /**
  * Fetches performance data statistics from the analytics endpoint.
  *
  * @remarks
- * This utility retrieves aggregate p75 performance metrics (e.g., `LCP`, `FCP`, `INP`, `TBT`)
- * for the past 30 days grouped by hour. The result is cached in a promise to optimize
- * performance within the same session. It includes a cache-busting timestamp to ensure
- * hourly updates are always fresh when the cache is reset.
+ * This utility retrieves aggregate performance metrics (e.g., `LCP`, `FCP`, `INP`)
+ * for a specified date range. Results are cached per range to optimize
+ * performance. A cache-busting timestamp is included to ensure freshness.
+ *
+ * @param {string} [startDate="30daysAgo"] - The start date for the data (GA4 relative format or YYYY-MM-DD).
+ * @param {string} [endDate="today"] - The end date for the data.
  *
  * @returns {Promise<PerformanceMetric[]>} A promise resolving to an array of performance metrics.
  *
- * @throws {Error} Throws if the `apiCall` fails or the network times out.
+ * @throws {Error} Throws if the `apiCall` fails.
  *
  * @see {@link apiCall} for the underlying network implementation.
- * @see {@link import('../../hooks/usePerformanceData/usePerformanceData').usePerformanceData} for the React hook consumer.
  *
  * @category Data Fetching
  *
  * @example
  * ```ts
- * const data = await fetchPerformanceData();
+ * const data = await fetchPerformanceData("7daysAgo", "today");
  * ```
  */
-export const fetchPerformanceData = (): Promise<PerformanceMetric[]> => {
-	if (!performanceDataPromise) {
+export const fetchPerformanceData = (
+	startDate = "30daysAgo",
+	endDate = "today"
+): Promise<PerformanceMetric[]> => {
+	const rangeKey = `${startDate}-${endDate}`;
+
+	if (!performanceDataPromises.has(rangeKey)) {
 		const timestamp = new Date().getTime();
-		performanceDataPromise = apiCall<PerformanceMetric[]>(
-			`${API_URL}analytics/performance_data?start_date=30daysAgo&end_date=today&_=${timestamp}`,
+		const promise = apiCall<PerformanceMetric[]>(
+			`${API_URL}analytics/performance_data?start_date=${startDate}&end_date=${endDate}&_=${timestamp}`,
 			{ skipGlobalError: true },
 			10000
 		)
@@ -45,12 +51,33 @@ export const fetchPerformanceData = (): Promise<PerformanceMetric[]> => {
 			})
 			.catch((error) => {
 				// Reset promise on error so we can retry
-				performanceDataPromise = null;
+				performanceDataPromises.delete(rangeKey);
 				throw error;
 			});
+
+		performanceDataPromises.set(rangeKey, promise);
 	}
 
-	return performanceDataPromise;
+	return performanceDataPromises.get(rangeKey)!;
+};
+
+/**
+ * Checks if performance data for a given range is already cached.
+ *
+ * @param {string} [startDate="30daysAgo"] - The start date.
+ * @param {string} [endDate="today"] - The end date.
+ *
+ * @returns {boolean} True if the data is cached.
+ *
+ * @example
+ * ```ts
+ * const cached = isPerformanceDataCached("7daysAgo");
+ * ```
+ */
+export const isPerformanceDataCached = (startDate = "30daysAgo", endDate = "today"): boolean => {
+	const rangeKey = `${startDate}-${endDate}`;
+
+	return performanceDataPromises.has(rangeKey);
 };
 
 /**
@@ -68,5 +95,5 @@ export const fetchPerformanceData = (): Promise<PerformanceMetric[]> => {
  * ```
  */
 export const resetPerformanceDataCache = () => {
-	performanceDataPromise = null;
+	performanceDataPromises.clear();
 };

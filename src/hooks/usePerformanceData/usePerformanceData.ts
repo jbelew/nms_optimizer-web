@@ -42,15 +42,17 @@ export type PerformanceMetric = {
  *
  * @remarks
  * This hook uses React's `use()` for promise unwrapping, allowing it to be used
- * within `<Suspense>` boundaries. It retrieves hourly p75 performance data
- * from the last 30 days via BigQuery.
+ * within `<Suspense>` boundaries. It retrieves hourly performance data
+ * for the specified date range.
+ *
+ * @param {string} [startDate] - The start date for the data.
+ * @param {string} [endDate] - The end date for the data.
  *
  * @returns {PerformanceMetric[]} An array of performance metrics.
  *
  * @throws {Error} Propagates errors from the underlying `apiCall` if the fetch fails.
  *
  * @see {@link fetchPerformanceData} for the underlying API resource.
- * @see {@link PerformanceMetric} for the data structure.
  *
  * @hook
  *
@@ -59,11 +61,11 @@ export type PerformanceMetric = {
  * @example
  * ```tsx
  * const PerformanceDashboard = () => {
- *   const data = usePerformanceData();
+ *   const data = usePerformanceData("7daysAgo");
  *   return <PerformanceChart data={data} />;
  * };
  * ```
  */
-export const usePerformanceData = (): PerformanceMetric[] => {
-	return use(fetchPerformanceData());
+export const usePerformanceData = (startDate?: string, endDate?: string): PerformanceMetric[] => {
+	return use(fetchPerformanceData(startDate, endDate));
 };

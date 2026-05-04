@@ -63,11 +63,10 @@ describe("PerformanceContent", () => {
 
 	test("should show loading state when data is loading (suspending)", () => {
 		mockUsePerformanceData.mockImplementation(suspend);
-		const { container } = renderWithDialog(<PerformanceContent isOpen={true} />);
+		renderWithDialog(<PerformanceContent isOpen={true} />);
 
-		// The skeleton is rendered inside Suspense
-		const skeleton = container.querySelector(".rt-Skeleton");
-		expect(skeleton).toBeInTheDocument();
+		// The MessageSpinner is rendered inside Suspense with this key
+		expect(screen.getByText("dialogs.performance.loading")).toBeInTheDocument();
 	});
 
 	test("should show error message when data fetch fails", () => {

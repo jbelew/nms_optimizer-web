@@ -10,7 +10,7 @@ import {
 	useState,
 } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
-import { Card, Flex, Text } from "@radix-ui/themes";
+import { Card, Flex, SegmentedControl, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -27,14 +27,12 @@ import {
 	YAxis,
 } from "recharts";
 
-import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
+import { PerformanceDashboardLayout } from "./PerformanceLayout";
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	calculateOverallPerformanceScore,
-	CHART_HEIGHT,
-	CHART_MARGIN_BOTTOM,
 	CHART_TOOLTIP_STYLE,
 	formatMetricValue,
 	getFormatter,
@@ -47,18 +45,18 @@ import {
 	LIGHTHOUSE_CONFIG,
 	METRIC_DISPLAY_ORDER,
 	METRIC_THRESHOLDS,
+	PERFORMANCE_LAYOUT,
 	transformPerformanceData,
 } from "./PerformanceUtils";
 
 const CHART_TICK_STYLE = { fill: "var(--gray-11)", fontSize: 11, fontWeight: 500 };
 const ACTIVE_DOT_STYLE = { r: 4 };
 const OVERALL_DOT_STYLE = { r: 5 };
-const CHART_MARGIN = { top: 20, right: 10, left: 0, bottom: 0 };
+const CHART_MARGIN = { top: 10, right: 10, left: 0, bottom: 0 };
 const TOOLTIP_WRAPPER_STYLE = { pointerEvents: "none" as const };
 const TOOLTIP_ALLOW_ESCAPE = { x: false, y: false };
 const RESPONSIVE_CONTAINER_DEBOUNCE = 50;
 const OVERALL_Y_DOMAIN: [number, number] = [0, 100];
-const X_AXIS_DOMAIN = ["dataMin", "dataMax"] as const;
 const SCORE_BAND_COLOR = (score: number | undefined): string =>
 	score === undefined
 		? "var(--gray-11)"
@@ -284,6 +282,12 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 interface PerformanceChartProps {
 	/** Raw performance metric records fetched from the API. */
 	data: PerformanceMetric[];
+	/** Currently selected date range in days. */
+	range?: number;
+	/** Callback triggered when the date range selection changes. */
+	onRangeChange?: (range: number) => void;
+	/** Whether a data transition is currently in flight. */
+	isPending?: boolean;
 }
 
 /**
@@ -311,7 +315,12 @@ interface PerformanceChartProps {
  * <PerformanceChart data={mockData} />
  * ```
  */
-export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
+export const PerformanceChart: FC<PerformanceChartProps> = ({
+	data,
+	range,
+	onRangeChange,
+	isPending,
+}) => {
 	const { metric } = useParams<{ metric?: string }>();
 	const navigate = useNavigate();
 	const { search } = useLocation();
@@ -319,7 +328,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 
 	const selectedMetric = useMemo(() => (metric ? metric.toUpperCase() : null), [metric]);
 
-	// True for the ~500ms window during which a detail→detail morph is in flight.
+	// True for the ~500ms window during which a detail↔detail morph is in flight.
 	// While true, per-metric lines hide and a stable-key overlay handles the morph.
 	const [isMorphing, setIsMorphing] = useState(false);
 	const morphTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -370,11 +379,10 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	);
 	const locale = i18n.language;
 
-	const isDesktop = useBreakpoint("768px");
-	const maxPoints = isDesktop ? 168 : 72;
+	const maxPoints = 72;
 
 	const { chartData, uniqueMetrics } = useMemo(
-		() => transformPerformanceData(data, locale, maxPoints),
+		() => transformPerformanceData(data, locale, maxPoints, 3),
 		[data, locale, maxPoints]
 	);
 
@@ -423,312 +431,336 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({ data }) => {
 	);
 
 	return (
-		<Flex direction="column" gap="4" style={{ width: "100%", flexGrow: 1, minWidth: 0 }}>
-			<Flex gap="3" wrap="wrap" justify="between">
-				{/* Overall Summary Toggle Card */}
-				<MetricSummaryCard
-					isSelected={selectedMetric === null}
-					borderColor="var(--accent-11)"
-					ariaLabel="View overall performance summary"
-					onActivate={() => updateSelectedMetric(null)}
-				>
-					<Text size="1" weight="bold">
-						OVERALL
-					</Text>
-					<Flex align="center" gap="1">
-						<Text
-							size="5"
-							weight="medium"
-							style={{
-								color:
-									overallScore !== null
-										? overallScore >= 90
-											? "var(--green-11)"
-											: overallScore >= 50
-												? "var(--amber-11)"
-												: "var(--red-11)"
-										: "var(--gray-11)",
-							}}
-						>
-							{overallScore ?? "—"}
-						</Text>
-						{overallTrend === "improvement" && (
-							<Text color="green">
-								<ArrowUpIcon />
-							</Text>
-						)}
-						{overallTrend === "regression" && (
-							<Text color="red">
-								<ArrowDownIcon />
-							</Text>
-						)}
-					</Flex>
-				</MetricSummaryCard>
-
-				{activeMetrics.map((metric) => {
-					const val = getLatestMetricValue(chartData, metric);
-					const isSelected = selectedMetric === metric;
-					const trend = getMetricTrend(chartData, metric);
-
-					return (
-						<MetricSummaryCard
-							key={`stat-${metric}`}
-							isSelected={isSelected}
-							borderColor={getMetricColor(metric, 11)}
-							ariaLabel={`View detailed ${metric} chart`}
-							onActivate={() => updateSelectedMetric(isSelected ? null : metric)}
-						>
-							<Text
-								size="1"
-								weight="bold"
-								style={{ color: getMetricColor(metric, 11) }}
-							>
-								{metric}
-							</Text>
-							<Flex align="center" gap="1">
-								<Text
-									size="5"
-									weight="medium"
-									style={{ color: getStatusColor(metric, val) }}
-								>
-									{val !== null ? formatMetricValue(metric, val) : "—"}
-								</Text>
-								{trend === "improvement" && (
-									<Text color="green">
-										<ArrowDownIcon />
-									</Text>
-								)}
-								{trend === "regression" && (
-									<Text color="red">
-										<ArrowUpIcon />
-									</Text>
-								)}
-							</Flex>
-						</MetricSummaryCard>
-					);
-				})}
-			</Flex>
-
-			<div
-				style={{
-					height: CHART_HEIGHT,
-					width: "100%",
-					minWidth: 0,
-					position: "relative",
-					marginBottom: CHART_MARGIN_BOTTOM,
-				}}
-			>
-				<ResponsiveContainer
-					width="100%"
-					height={CHART_HEIGHT}
-					debounce={RESPONSIVE_CONTAINER_DEBOUNCE}
-				>
-					<ComposedChart
-						accessibilityLayer
-						role="img"
-						aria-label="Performance metrics timeseries chart"
-						data={chartData}
-						margin={CHART_MARGIN}
+		<PerformanceDashboardLayout
+			cards={
+				<Flex gap="3" wrap="wrap" justify="between">
+					{/* Overall Summary Toggle Card */}
+					<MetricSummaryCard
+						isSelected={selectedMetric === null}
+						borderColor="var(--accent-11)"
+						ariaLabel="View overall performance summary"
+						onActivate={() => updateSelectedMetric(null)}
 					>
-						<CartesianGrid
-							strokeDasharray="3 3"
-							vertical={false}
-							stroke="var(--gray-4)"
-						/>
-
-						{/* Dynamic Background Threshold Bands */}
-						{selectedMetric ? (
-							<>
-								{/* Detail View: Highlight the 'Good' zone */}
-								<ReferenceArea
-									y1={0}
-									y2={selectedMetricConfig?.p90 || 1000}
-									fill={getMetricColor(selectedMetric, "a4")}
-									stroke="none"
-								/>
-								<ReferenceLine
-									y={selectedMetricConfig?.p90 || 1000}
-									stroke={getMetricColor(selectedMetric, "a7")}
-									strokeWidth={1.5}
-									strokeDasharray="0"
-								/>
-							</>
-						) : (
-							<>
-								{/* Overall Ceiling: Success (90-100 score) and Needs Improvement (50-90 score) */}
-								<ReferenceArea
-									y1={90}
-									y2={100}
-									fill="var(--green-a4)"
-									stroke="none"
-								/>
-								<ReferenceArea
-									y1={50}
-									y2={90}
-									fill="var(--yellow-a4)"
-									stroke="none"
-								/>
-
-								{/* Metric Floor: Success (0-10 deficit) */}
-								<ReferenceArea
-									y1={0}
-									y2={10}
-									fill="var(--green-a4)"
-									stroke="none"
-								/>
-
-								<ReferenceLine
-									y={90}
-									stroke="var(--green-a7)"
-									strokeWidth={1.5}
-									strokeDasharray="0"
-								/>
-								<ReferenceLine
-									y={50}
-									stroke="var(--yellow-a7)"
-									strokeWidth={1.5}
-									strokeDasharray="0"
-								/>
-								<ReferenceLine
-									y={10}
-									stroke="var(--green-a7)"
-									strokeWidth={1.5}
-									strokeDasharray="0"
-								/>
-							</>
-						)}
-
-						{versionChanges.map((change) => (
-							<ReferenceLine
-								key={change.timestamp}
-								x={change.timestamp}
-								stroke="var(--gray-9)"
-								strokeDasharray="2 4"
-								strokeWidth={1}
+						<Text size="1" weight="bold">
+							OVERALL
+						</Text>
+						<Flex align="center" gap="1">
+							<Text
+								size="5"
+								weight="medium"
+								style={{
+									color:
+										overallScore !== null
+											? overallScore >= 90
+												? "var(--green-11)"
+												: overallScore >= 50
+													? "var(--amber-11)"
+													: "var(--red-11)"
+											: "var(--gray-11)",
+								}}
 							>
-								<Label
-									value={
-										change.version.startsWith("v")
-											? change.version
-											: `v${change.version}`
-									}
-									position="insideTopLeft"
-									fill="var(--gray-11)"
-									fontSize={10}
-									fontWeight={600}
-									offset={4}
-								/>
-							</ReferenceLine>
-						))}
+								{overallScore ?? "—"}
+							</Text>
+							{overallTrend === "improvement" && (
+								<Text color="green">
+									<ArrowUpIcon />
+								</Text>
+							)}
+							{overallTrend === "regression" && (
+								<Text color="red">
+									<ArrowDownIcon />
+								</Text>
+							)}
+						</Flex>
+					</MetricSummaryCard>
 
-						<XAxis
-							dataKey="timestamp"
-							type="number"
-							scale="time"
-							domain={X_AXIS_DOMAIN as unknown as [string, string]}
-							axisLine={false}
-							tickLine={false}
-							tick={CHART_TICK_STYLE}
-							minTickGap={30}
-							tickFormatter={xTickFormatter}
-						/>
+					{activeMetrics.map((metric) => {
+						const val = getLatestMetricValue(chartData, metric);
+						const isSelected = selectedMetric === metric;
+						const trend = getMetricTrend(chartData, metric);
 
-						<YAxis
-							axisLine={false}
-							tickLine={false}
-							width={40}
-							domain={yDomain}
-							allowDataOverflow
-							tick={CHART_TICK_STYLE}
-						/>
+						return (
+							<MetricSummaryCard
+								key={`stat-${metric}`}
+								isSelected={isSelected}
+								borderColor={getMetricColor(metric, 11)}
+								ariaLabel={`View detailed ${metric} chart`}
+								onActivate={() => updateSelectedMetric(isSelected ? null : metric)}
+							>
+								<Text
+									size="1"
+									weight="bold"
+									style={{ color: getMetricColor(metric, 11) }}
+								>
+									{metric}
+								</Text>
+								<Flex align="center" gap="1">
+									<Text
+										size="5"
+										weight="medium"
+										style={{ color: getStatusColor(metric, val) }}
+									>
+										{val !== null ? formatMetricValue(metric, val) : "—"}
+									</Text>
+									{trend === "improvement" && (
+										<Text color="green">
+											<ArrowDownIcon />
+										</Text>
+									)}
+									{trend === "regression" && (
+										<Text color="red">
+											<ArrowUpIcon />
+										</Text>
+									)}
+								</Flex>
+							</MetricSummaryCard>
+						);
+					})}
+				</Flex>
+			}
+			range={
+				<SegmentedControl.Root
+					size="1"
+					value={String(range || 3)}
+					onValueChange={(v) => onRangeChange?.(Number(v))}
+				>
+					<SegmentedControl.Item value="3">3d</SegmentedControl.Item>
+					<SegmentedControl.Item value="7">7d</SegmentedControl.Item>
+					<SegmentedControl.Item value="14">14d</SegmentedControl.Item>
+				</SegmentedControl.Root>
+			}
+			chart={
+				<div
+					style={{
+						height: PERFORMANCE_LAYOUT.CHART_HEIGHT,
+						width: "100%",
+						minWidth: 0,
+						position: "relative",
+						opacity: isPending ? 0.7 : 1,
+						transition: "opacity 0.2s",
+					}}
+				>
+					<ResponsiveContainer
+						width="100%"
+						height={PERFORMANCE_LAYOUT.CHART_HEIGHT}
+						debounce={RESPONSIVE_CONTAINER_DEBOUNCE}
+					>
+						<ComposedChart
+							accessibilityLayer
+							role="img"
+							aria-label="Performance metrics timeseries chart"
+							data={chartData}
+							margin={CHART_MARGIN}
+						>
+							<CartesianGrid
+								strokeDasharray="3 3"
+								vertical={false}
+								stroke="var(--gray-4)"
+							/>
 
-						{/* Hidden secondary axis so the overall (0-100) score can stay
-						 * visible in detail views without being squished against the
-						 * metric's threshold domain. */}
-						<YAxis yAxisId="overall" hide domain={OVERALL_Y_DOMAIN} allowDataOverflow />
+							{/* Dynamic Background Threshold Bands */}
+							{selectedMetric ? (
+								<>
+									{/* Detail View: Highlight the 'Good' zone */}
+									<ReferenceArea
+										y1={0}
+										y2={selectedMetricConfig?.p90 || 1000}
+										fill={getMetricColor(selectedMetric, "a4")}
+										stroke="none"
+									/>
+									<ReferenceLine
+										y={selectedMetricConfig?.p90 || 1000}
+										stroke={getMetricColor(selectedMetric, "a7")}
+										strokeWidth={1.5}
+										strokeDasharray="0"
+									/>
+								</>
+							) : (
+								<>
+									{/* Overall Ceiling: Success (90-100 score) and Needs Improvement (50-90 score) */}
+									<ReferenceArea
+										y1={90}
+										y2={100}
+										fill="var(--green-a4)"
+										stroke="none"
+									/>
+									<ReferenceArea
+										y1={50}
+										y2={90}
+										fill="var(--yellow-a4)"
+										stroke="none"
+									/>
 
-						<Tooltip
-							wrapperStyle={TOOLTIP_WRAPPER_STYLE}
-							allowEscapeViewBox={TOOLTIP_ALLOW_ESCAPE}
-							isAnimationActive={false}
-							offset={10}
-							content={renderTooltip}
-						/>
+									{/* Metric Floor: Success (0-10 deficit) */}
+									<ReferenceArea
+										y1={0}
+										y2={10}
+										fill="var(--green-a4)"
+										stroke="none"
+									/>
 
-						{/* Unified Dynamic Range Bar (Stable Identity) */}
-						<Bar
-							key="unified-range-bar"
-							dataKey={
-								selectedMetric ? `${selectedMetric}_range` : "overall_score_range"
-							}
-							fill={getMetricColor(selectedMetric ?? "OVERALL", 11)}
-							fillOpacity={0.2}
-							radius={[2, 2, 2, 2]}
-							barSize={12}
-						/>
+									<ReferenceLine
+										y={90}
+										stroke="var(--green-a7)"
+										strokeWidth={1.5}
+										strokeDasharray="0"
+									/>
+									<ReferenceLine
+										y={50}
+										stroke="var(--yellow-a7)"
+										strokeWidth={1.5}
+										strokeDasharray="0"
+									/>
+									<ReferenceLine
+										y={10}
+										stroke="var(--green-a7)"
+										strokeWidth={1.5}
+										strokeDasharray="0"
+									/>
+								</>
+							)}
 
-						{/* Individual Metric Lines (Morphed) — original null↔detail behavior.
-						 * Hidden during a detail↔detail morph; the overlay below handles that. */}
-						{activeMetrics.map((m) => {
-							const isSelected = selectedMetric === m;
-							const visible = !isMorphing && (selectedMetric === null || isSelected);
+							{versionChanges.map((change) => (
+								<ReferenceLine
+									key={change.timestamp}
+									x={change.timestamp}
+									stroke="var(--gray-9)"
+									strokeDasharray="2 4"
+									strokeWidth={1}
+								>
+									<Label
+										value={
+											change.version.startsWith("v")
+												? change.version
+												: `v${change.version}`
+										}
+										position="insideTopLeft"
+										fill="var(--gray-11)"
+										fontSize={10}
+										fontWeight={600}
+										offset={4}
+									/>
+								</ReferenceLine>
+							))}
 
-							return (
-								<Line
-									key={`metric-line-${m}`}
-									type="monotone"
-									dataKey={isSelected ? `${m}_p75_sma` : `${m}_deficit_sma`}
-									stroke={getMetricColor(m, 11)}
-									strokeWidth={isSelected ? 3 : 1.75}
-									strokeOpacity={visible ? 1 : 0}
-									dot={false}
-									activeDot={isSelected && !isMorphing ? ACTIVE_DOT_STYLE : false}
-									connectNulls
-									isAnimationActive={true}
-									animationDuration={LINE_ANIMATION_DURATION}
-								/>
-							);
-						})}
+							<XAxis
+								dataKey="timestamp"
+								axisLine={false}
+								tickLine={false}
+								tick={CHART_TICK_STYLE}
+								minTickGap={30}
+								tickFormatter={xTickFormatter}
+							/>
 
-						{/* Overall Trend Line — primary in overall view; in detail views,
-						 * rendered as a secondary reference using the same 1.75px solid
-						 * style as the per-metric deficit lines, plotted against the
-						 * hidden 0-100 axis. */}
-						<Line
-							key="overall-trend-line"
-							yAxisId="overall"
-							type="monotone"
-							dataKey="overall_score_p75_sma"
-							stroke={getMetricColor("OVERALL", selectedMetric === null ? 11 : "a7")}
-							strokeWidth={selectedMetric === null ? 3 : 1.75}
-							strokeOpacity={selectedMetric === null ? 1 : 0.8}
-							dot={false}
-							activeDot={selectedMetric === null ? OVERALL_DOT_STYLE : false}
-							connectNulls
-							isAnimationActive={true}
-							animationDuration={LINE_ANIMATION_DURATION}
-						/>
+							<YAxis
+								axisLine={false}
+								tickLine={false}
+								width={40}
+								domain={yDomain}
+								allowDataOverflow
+								tick={CHART_TICK_STYLE}
+							/>
 
-						{/* Detail↔detail morph overlay — stable key, only visible while morphing */}
-						{selectedMetric && (
+							{/* Hidden secondary axis so the overall (0-100) score can stay
+							 * visible in detail views without being squished against the
+							 * metric's threshold domain. */}
+							<YAxis
+								yAxisId="overall"
+								hide
+								domain={OVERALL_Y_DOMAIN}
+								allowDataOverflow
+							/>
+
+							<Tooltip
+								wrapperStyle={TOOLTIP_WRAPPER_STYLE}
+								allowEscapeViewBox={TOOLTIP_ALLOW_ESCAPE}
+								isAnimationActive={false}
+								offset={10}
+								content={renderTooltip}
+							/>
+
+							{/* Unified Dynamic Range Bar (Stable Identity) */}
+							<Bar
+								key="unified-range-bar"
+								dataKey={
+									selectedMetric
+										? `${selectedMetric}_range`
+										: "overall_score_range"
+								}
+								fill={getMetricColor(selectedMetric ?? "OVERALL", 11)}
+								fillOpacity={0.2}
+								radius={[2, 2, 2, 2]}
+							/>
+
+							{/* Individual Metric Lines (Morphed) — original null↔detail behavior.
+							 * Hidden during a detail↔detail morph; the overlay below handles that. */}
+							{activeMetrics.map((m) => {
+								const isSelected = selectedMetric === m;
+								const visible =
+									!isMorphing && (selectedMetric === null || isSelected);
+
+								return (
+									<Line
+										key={`metric-line-${m}`}
+										type="monotone"
+										dataKey={isSelected ? `${m}_p75_sma` : `${m}_deficit_sma`}
+										stroke={getMetricColor(m, 11)}
+										strokeWidth={isSelected ? 3 : 1.75}
+										strokeOpacity={visible ? 1 : 0}
+										dot={false}
+										activeDot={
+											isSelected && !isMorphing ? ACTIVE_DOT_STYLE : false
+										}
+										connectNulls
+										isAnimationActive={true}
+										animationDuration={LINE_ANIMATION_DURATION}
+									/>
+								);
+							})}
+
+							{/* Overall Trend Line — primary in overall view; in detail views,
+							 * rendered as a secondary reference using the same 1.75px solid
+							 * style as the per-metric deficit lines, plotted against the
+							 * hidden 0-10 axis. */}
 							<Line
-								key="selected-detail-line"
+								key="overall-trend-line"
+								yAxisId="overall"
 								type="monotone"
-								dataKey={`${selectedMetric}_p75_sma`}
-								stroke={getMetricColor(selectedMetric, 11)}
-								strokeWidth={3}
-								strokeOpacity={isMorphing ? 1 : 0}
+								dataKey="overall_score_p75_sma"
+								stroke={getMetricColor(
+									"OVERALL",
+									selectedMetric === null ? 11 : "a7"
+								)}
+								strokeWidth={selectedMetric === null ? 3 : 1.75}
+								strokeOpacity={selectedMetric === null ? 1 : 0.8}
 								dot={false}
-								activeDot={isMorphing ? ACTIVE_DOT_STYLE : false}
+								activeDot={selectedMetric === null ? OVERALL_DOT_STYLE : false}
 								connectNulls
 								isAnimationActive={true}
 								animationDuration={LINE_ANIMATION_DURATION}
 							/>
-						)}
-					</ComposedChart>
-				</ResponsiveContainer>
-			</div>
-		</Flex>
+
+							{/* Detail↔detail morph overlay — stable key, only visible while morphing */}
+							{selectedMetric && (
+								<Line
+									key="selected-detail-line"
+									type="monotone"
+									dataKey={`${selectedMetric}_p75_sma`}
+									stroke={getMetricColor(selectedMetric, 11)}
+									strokeWidth={3}
+									strokeOpacity={isMorphing ? 1 : 0}
+									dot={false}
+									activeDot={isMorphing ? ACTIVE_DOT_STYLE : false}
+									connectNulls
+									isAnimationActive={true}
+									animationDuration={LINE_ANIMATION_DURATION}
+								/>
+							)}
+						</ComposedChart>
+					</ResponsiveContainer>
+				</div>
+			}
+		/>
 	);
 };
 
