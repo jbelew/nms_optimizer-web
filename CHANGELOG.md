@@ -1,3 +1,12 @@
+# [7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)
+
+
+### Features
+
+* **performance:** add version-based trend visualization in detail view ([0ee49c2](https://github.com/jbelew/nms_optimizer-web/commit/0ee49c2dc96bf1dbc1206d93632057c8d70cf33d))
+* **performance:** align chart tooltips with SMA trend lines and cleanup dead code ([d5fa0e9](https://github.com/jbelew/nms_optimizer-web/commit/d5fa0e9f5ebd0bcf7ebbd157f2646c03ec6badc3))
+* **performance:** standardize dashboard layout and optimize transitions ([34ce81f](https://github.com/jbelew/nms_optimizer-web/commit/34ce81f3379f14733445960a335cba2efaa6e2a5))
+
 ## [7.0.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.7...v7.0.8) (2026-05-03)
 
 
