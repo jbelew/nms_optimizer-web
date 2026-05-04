@@ -1,3 +1,16 @@
+# [7.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.1...v7.2.0) (2026-05-04)
+
+
+### Bug Fixes
+
+* **performance:** correctly handle telemetry gaps in summary trend calculation ([8d6ed45](https://github.com/jbelew/nms_optimizer-web/commit/8d6ed45f4e2f42a0ac7eaa506aadad30d3bfb866))
+* **performance:** ensure consistent date-only x-axis labels across all ranges ([28927f7](https://github.com/jbelew/nms_optimizer-web/commit/28927f7d921eb764218721676dc7fc832feec1a3))
+
+
+### Features
+
+* **performance:** decouple summary cards from chart sampling and verify UI stability ([5dc0ba1](https://github.com/jbelew/nms_optimizer-web/commit/5dc0ba15c74157b295aa8254f9d8d2c5cc96219e))
+
 ## [7.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.0...v7.1.1) (2026-05-04)
 
 
