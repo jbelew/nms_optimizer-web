@@ -1,3 +1,10 @@
+## [7.1.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.0...v7.1.1) (2026-05-04)
+
+
+### Bug Fixes
+
+* force numeric timestamp conversion, correctly handle zero values, and validate totalWeight before calculating performance trends ([2f9c321](https://github.com/jbelew/nms_optimizer-web/commit/2f9c321c7a9a56cb003a407fd642a6808fe4fa6f))
+
 # [7.1.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.0.8...v7.1.0) (2026-05-04)
 
 
