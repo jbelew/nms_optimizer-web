@@ -398,14 +398,11 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	const xTickFormatter = useCallback(
 		(val: number) => {
 			const date = new Date(val);
-			const formatOptions: Intl.DateTimeFormatOptions =
-				range <= 3
-					? { hour: "numeric", minute: "numeric" }
-					: { month: "numeric", day: "numeric" };
+			const formatOptions: Intl.DateTimeFormatOptions = { month: "numeric", day: "numeric" };
 
 			return getFormatter(locale, formatOptions).format(date);
 		},
-		[locale, range]
+		[locale]
 	);
 
 	const renderTooltip = useCallback(
