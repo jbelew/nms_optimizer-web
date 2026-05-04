@@ -741,6 +741,27 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 									animationDuration={LINE_ANIMATION_DURATION}
 								/>
 							)}
+
+							{/* Version-average trend line — stepped line showing the mean
+							 * value per app version for quick release-to-release comparison */}
+							{selectedMetric && (
+								<Line
+									key="version-avg-line"
+									type="linear"
+									dataKey={`${selectedMetric}_version_avg`}
+									stroke={getMetricColor(selectedMetric, 9)}
+									strokeWidth={2}
+									dot={{
+										r: 4,
+										fill: getMetricColor(selectedMetric, 9),
+										stroke: "var(--color-background)",
+										strokeWidth: 2,
+									}}
+									activeDot={false}
+									connectNulls
+									isAnimationActive={false}
+								/>
+							)}
 						</ComposedChart>
 					</ResponsiveContainer>
 				</div>

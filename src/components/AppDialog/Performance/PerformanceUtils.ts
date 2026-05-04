@@ -677,6 +677,71 @@ export const transformPerformanceData = (
 		p.overall_deficit_p75_sma = score !== undefined ? 100 - score : undefined;
 	});
 
+	// Compute per-version averages for version-to-version trend lines.
+	// Groups data points by appVersion, computes the mean p75 for each metric
+	// and the mean overall score, then stamps every point with the average
+	// for its version segment.
+	const versionSegments: Map<string, number[]> = new Map();
+	chartData.forEach((p, i) => {
+		const v = p.appVersion || "__unknown__";
+		if (!versionSegments.has(v)) versionSegments.set(v, []);
+		versionSegments.get(v)!.push(i);
+	});
+
+	const allSegments = Array.from(versionSegments.values());
+
+	allSegments.forEach((indices, segIdx) => {
+		const startIdx = indices[0];
+		const isLastSegment = segIdx === allSegments.length - 1;
+		const lastIdx = indices[indices.length - 1];
+
+		// Per-metric version averages
+		metrics.forEach((m) => {
+			let sum = 0;
+			let count = 0;
+
+			for (const i of indices) {
+				const val = chartData[i][`${m}_p75`] as number | undefined;
+
+				if (val !== undefined) {
+					sum += val;
+					count++;
+				}
+			}
+
+			const avg = count > 0 ? sum / count : undefined;
+
+			chartData[startIdx][`${m}_version_avg`] = avg;
+
+			// Close the gap on the right for the current version
+			if (isLastSegment) {
+				chartData[lastIdx][`${m}_version_avg`] = avg;
+			}
+		});
+
+		// Overall score version average
+		let overallSum = 0;
+		let overallCount = 0;
+
+		for (const i of indices) {
+			const val = chartData[i].overall_p75 as number | undefined;
+
+			if (val !== undefined) {
+				overallSum += val;
+				overallCount++;
+			}
+		}
+
+		const overallAvg = overallCount > 0 ? overallSum / overallCount : undefined;
+
+		chartData[startIdx].overall_version_avg = overallAvg;
+
+		// Close the gap on the right for the current version
+		if (isLastSegment) {
+			chartData[lastIdx].overall_version_avg = overallAvg;
+		}
+	});
+
 	return { chartData, uniqueMetrics: Array.from(metrics) };
 };
 
