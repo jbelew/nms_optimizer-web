@@ -6,7 +6,7 @@ import {
 	calculateSMA,
 	computeLogNormalScore,
 	formatMetricValue,
-	getRawPerformanceSummary,
+	getPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
 	transformPerformanceData,
@@ -218,21 +218,33 @@ describe("getStatusColor", () => {
 });
 
 // ---------------------------------------------------------------------------
-// getRawPerformanceSummary
+// getPerformanceSummary
 // ---------------------------------------------------------------------------
-describe("getRawPerformanceSummary", () => {
+describe("getPerformanceSummary", () => {
 	it("returns null for empty data", () => {
-		expect(getRawPerformanceSummary([])).toBeNull();
+		expect(
+			getPerformanceSummary(transformPerformanceData([], "en-US", 0, 1, 0).chartData)
+		).toBeNull();
 	});
 
 	it("returns null for undefined data", () => {
-		expect(getRawPerformanceSummary(undefined as unknown as PerformanceMetric[])).toBeNull();
+		expect(
+			getPerformanceSummary(
+				transformPerformanceData(
+					undefined as unknown as PerformanceMetric[],
+					"en-US",
+					0,
+					1,
+					0
+				).chartData
+			)
+		).toBeNull();
 	});
 
 	it("computes scores for the latest timestamp", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
 				average_value: 2500,
 				p75: 2500,
@@ -240,7 +252,9 @@ describe("getRawPerformanceSummary", () => {
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		expect(result).not.toBeNull();
 		// Score at the p90 control point — high but not exactly 90
 		expect(result!.metrics.LCP.score).toBeGreaterThanOrEqual(75);
@@ -250,14 +264,14 @@ describe("getRawPerformanceSummary", () => {
 	it("detects improvement when metric value decreases", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
 				average_value: 3000,
 				p75: 3000,
 				app_version: "v1",
 			} as PerformanceMetric,
 			{
-				timestamp: 2000,
+				timestamp: 3600000,
 				metric_name: "LCP",
 				average_value: 2000,
 				p75: 2000,
@@ -265,21 +279,23 @@ describe("getRawPerformanceSummary", () => {
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		expect(result!.trends.LCP).toBe("improvement");
 	});
 
 	it("detects regression when metric value increases", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
 				average_value: 2000,
 				p75: 2000,
 				app_version: "v1",
 			} as PerformanceMetric,
 			{
-				timestamp: 2000,
+				timestamp: 3600000,
 				metric_name: "LCP",
 				average_value: 3000,
 				p75: 3000,
@@ -287,14 +303,16 @@ describe("getRawPerformanceSummary", () => {
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		expect(result!.trends.LCP).toBe("regression");
 	});
 
 	it("returns neutral for single-timestamp data", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
 				average_value: 2500,
 				p75: 2500,
@@ -302,21 +320,23 @@ describe("getRawPerformanceSummary", () => {
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		expect(result!.trends.LCP).toBe("neutral");
 	});
 
 	it("returns neutral when change is below 1% threshold", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
 				average_value: 2500,
 				p75: 2500,
 				app_version: "v1",
 			} as PerformanceMetric,
 			{
-				timestamp: 2000,
+				timestamp: 3600000,
 				metric_name: "LCP",
 				average_value: 2505,
 				p75: 2505,
@@ -324,7 +344,9 @@ describe("getRawPerformanceSummary", () => {
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		// 5/2500 = 0.2% < 1% threshold
 		expect(result!.trends.LCP).toBe("neutral");
 	});
@@ -332,22 +354,24 @@ describe("getRawPerformanceSummary", () => {
 	it("computes overall score and trend", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 1000,
+				timestamp: 0,
 				metric_name: "LCP",
-				average_value: 4000,
-				p75: 4000,
+				average_value: 3000,
+				p75: 3000,
 				app_version: "v1",
 			} as PerformanceMetric,
 			{
-				timestamp: 2000,
+				timestamp: 3600000,
 				metric_name: "LCP",
-				average_value: 2500,
-				p75: 2500,
+				average_value: 2000,
+				p75: 2000,
 				app_version: "v1",
 			} as PerformanceMetric,
 		];
 
-		const result = getRawPerformanceSummary(data);
+		const result = getPerformanceSummary(
+			transformPerformanceData(data, "en-US", 0, 1, 0).chartData
+		);
 		expect(result!.metrics.OVERALL).toBeDefined();
 		expect(result!.trends.OVERALL).toBe("improvement");
 	});

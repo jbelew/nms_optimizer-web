@@ -36,7 +36,7 @@ import {
 	formatMetricValue,
 	getFormatter,
 	getMetricColor,
-	getRawPerformanceSummary,
+	getPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
 	LIGHTHOUSE_CONFIG,
@@ -388,7 +388,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 		[uniqueMetrics]
 	);
 
-	const summary = useMemo(() => getRawPerformanceSummary(data), [data]);
+	const summary = useMemo(() => getPerformanceSummary(chartData), [chartData]);
 	const overallScore = summary?.metrics.OVERALL?.score;
 	const overallTrend = summary?.trends.OVERALL ?? "neutral";
 

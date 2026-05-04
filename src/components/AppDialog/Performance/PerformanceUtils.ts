@@ -418,6 +418,10 @@ export const transformPerformanceData = (
 	smaPeriod = 3,
 	rangeDays?: number
 ): { chartData: ChartDataPoint[]; uniqueMetrics: string[] } => {
+	if (!raw || !Array.isArray(raw)) {
+		return { chartData: [], uniqueMetrics: [] };
+	}
+
 	const dateMap: Record<number, ChartDataPoint> = {};
 	const metrics = new Set<string>();
 
@@ -746,123 +750,89 @@ export const transformPerformanceData = (
 };
 
 /**
- * Calculates a complete, range-independent performance summary from raw API data.
+ * Calculates a complete, range-independent performance summary from transformed chart data.
  *
  * @remarks
- * This function extracts the most recent hour's p75 values and compares them
- * to the previous hour's data to determine trends. By using the raw data
- * directly, it ensures that summary cards and arrows remain stable even
- * when the chart's sampling or smoothing changes due to range switches.
+ * This function extracts the most recent point's smoothed values and compares them
+ * to the previous point's data to determine trends. By using the transformed data,
+ * it ensures that summary cards and trend arrows stay synchronized with the visual chart.
  *
- * @param {PerformanceMetric[]} raw - The raw performance metric records.
+ * @param {ChartDataPoint[]} chartData - The transformed performance data used for the chart.
  *
- * @returns {RawPerformanceSummary | null} Stable summary data for cards and arrows.
+ * @returns {RawPerformanceSummary | null} Summary data for cards and arrows.
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * const summary = getRawPerformanceSummary(rawData);
+ * const summary = getPerformanceSummary(chartData);
  * ```
  */
-export const getRawPerformanceSummary = (
-	raw: PerformanceMetric[]
+export const getPerformanceSummary = (
+	chartData: ChartDataPoint[]
 ): RawPerformanceSummary | null => {
-	if (!raw || raw.length === 0) return null;
+	if (!chartData || chartData.length === 0) return null;
 
-	// 1. Identify the absolute latest and second-latest hours in the raw data
-	const timestamps = Array.from(new Set(raw.map((r) => Number(r.timestamp)))).sort(
-		(a, b) => b - a
-	);
-	const t1 = timestamps[0];
-	const t2 = timestamps[1];
-
-	const getMetricsForHour = (ts: number) => {
-		const records = raw.filter((r) => Number(r.timestamp) === ts);
-		const metrics: Record<string, number> = {};
-		records.forEach((r) => {
-			// Use != null to catch both null and undefined
-			metrics[r.metric_name] = r.p75 != null ? r.p75 : r.average_value;
-		});
-
-		// Calculate raw overall score for this hour
-		let totalWeight = 0;
-		let weightedScoreSum = 0;
-		METRIC_DISPLAY_ORDER.forEach((m) => {
-			const config = LIGHTHOUSE_CONFIG[m];
-			const val = metrics[m];
-
-			if (config && val != null) {
-				const score = computeLogNormalScore(val, config.p90, config.p50);
-				weightedScoreSum += score * config.weight;
-				totalWeight += config.weight;
-			}
-		});
-
-		const overall = totalWeight > 0 ? weightedScoreSum / totalWeight : 0;
-
-		return { metrics, overall, totalWeight };
-	};
-
-	const latest = getMetricsForHour(t1);
-	const previous = t2 !== undefined ? getMetricsForHour(t2) : null;
+	const latest = chartData[chartData.length - 1];
+	const previous = chartData.length > 1 ? chartData[chartData.length - 2] : null;
 
 	const summary: RawPerformanceSummary = {
-		timestamp: t1,
+		timestamp: latest.timestamp,
 		metrics: {},
 		trends: {},
 	};
 
-	// 2. Individual Metric Metrics and Trends
-	METRIC_DISPLAY_ORDER.forEach((m) => {
-		const val1 = latest.metrics[m];
-		const val2 = previous?.metrics[m];
+	// 1. Overall Metric and Trend (using SMA smoothed values)
+	const latestScore = latest.overall_score_p75_sma ?? latest.overall_p75 ?? 0;
+	const previousScore = previous?.overall_score_p75_sma ?? previous?.overall_p75 ?? 0;
 
-		summary.metrics[m] = {
-			value: val1 ?? 0,
-			score:
-				val1 != null
-					? computeLogNormalScore(
-							val1,
-							LIGHTHOUSE_CONFIG[m].p90,
-							LIGHTHOUSE_CONFIG[m].p50
-						)
-					: 0,
-		};
-
-		if (val1 != null && val2 != null) {
-			const diff = val1 - val2;
-			const threshold = val2 * 0.01;
-
-			if (Math.abs(diff) < threshold) {
-				summary.trends[m] = "neutral";
-			} else {
-				summary.trends[m] = diff < 0 ? "improvement" : "regression";
-			}
-		} else {
-			summary.trends[m] = "neutral";
-		}
-	});
-
-	// 3. Overall Metric and Trend
 	summary.metrics.OVERALL = {
-		value: latest.overall,
-		score: latest.overall,
+		value: latest.overall_p75 || 0,
+		score: latest.overall_p75 || 0,
 	};
 
-	if (previous && latest.totalWeight > 0 && previous.totalWeight > 0) {
-		const diff = latest.overall - previous.overall;
+	if (previous) {
+		const diff = latestScore - previousScore;
 
-		// Use a slightly larger threshold (0.5 points) for the overall score
-		// to avoid flickering arrows on tiny, unrounded changes.
-		if (Math.abs(diff) < 0.5) {
+		if (Math.abs(diff) < 0.01) {
 			summary.trends.OVERALL = "neutral";
+		} else if (diff > 0) {
+			summary.trends.OVERALL = "improvement";
 		} else {
-			summary.trends.OVERALL = diff > 0 ? "improvement" : "regression";
+			summary.trends.OVERALL = "regression";
 		}
 	} else {
 		summary.trends.OVERALL = "neutral";
 	}
+
+	// 2. Individual Metrics
+	METRIC_DISPLAY_ORDER.forEach((m) => {
+		const val1 = latest[`${m}_p75`] as number | undefined;
+		const val2 = previous ? (previous[`${m}_p75`] as number | undefined) : undefined;
+		const sma1 = latest[`${m}_p75_sma`] as number | undefined;
+		const sma2 = previous ? (previous[`${m}_p75_sma`] as number | undefined) : undefined;
+
+		if (val1 !== undefined) {
+			const config = LIGHTHOUSE_CONFIG[m];
+			summary.metrics[m] = {
+				value: val1,
+				score: computeLogNormalScore(val1, config.p90, config.p50),
+			};
+
+			if (val2 !== undefined && sma1 !== undefined && sma2 !== undefined) {
+				const sDiff = sma1 - sma2;
+				const threshold = Math.max(sma2 * 0.01, m === "CLS" ? 0.005 : 1);
+
+				if (Math.abs(sDiff) <= threshold) {
+					summary.trends[m] = "neutral";
+				} else {
+					summary.trends[m] = sDiff < 0 ? "improvement" : "regression";
+				}
+			} else {
+				summary.trends[m] = "neutral";
+			}
+		}
+	});
 
 	return summary;
 };
