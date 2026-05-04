@@ -37,7 +37,7 @@ const DashboardSkeleton: FC = () => {
 		>
 			<MessageSpinner
 				isVisible={true}
-				initialMessage={t("dialogs.performance.loading", "Loading performance data...")}
+				initialMessage={t("dialogs.performance.loading", "Loading perf data...")}
 			/>
 		</div>
 	);

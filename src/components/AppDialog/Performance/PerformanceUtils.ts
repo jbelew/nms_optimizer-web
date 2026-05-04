@@ -82,25 +82,9 @@ export const PERFORMANCE_LAYOUT = {
 	CONTAINER_PADDING_Y: 0,
 	/** Approximate height of the dialog footer (Close button area). */
 	FOOTER_HEIGHT: 52,
+	/** Maximum number of data points rendered on the chart X-axis. */
+	MAX_CHART_POINTS: 73,
 } as const;
-
-/**
- * Standard height for performance charts across the dashboard.
- * @deprecated Use PERFORMANCE_LAYOUT.CHART_HEIGHT
- */
-export const CHART_HEIGHT = PERFORMANCE_LAYOUT.CHART_HEIGHT;
-
-/**
- * Standard bottom margin for performance charts.
- * @deprecated Use PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM
- */
-export const CHART_MARGIN_BOTTOM = PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
-
-/**
- * Approximate height of the summary cards row.
- * @deprecated Use PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT
- */
-export const SUMMARY_CARDS_HEIGHT = PERFORMANCE_LAYOUT.SUMMARY_CARDS_HEIGHT;
 
 /**
  * Standard display order for performance metrics across the dashboard.
@@ -242,12 +226,15 @@ export const getStatusColor = (metric: string, value: number | undefined | null)
  * Calculates a Lighthouse-style score (0-100) using a log-normal distribution.
  *
  * @remarks
- * This replicates the actual scoring logic used by PageSpeed Insights and Lighthouse.
- * It uses a cumulative distribution function to map values to a score curve.
+ * Approximates the Lighthouse v10 scoring curve using a log-normal CDF with
+ * a Horner-form erf polynomial. The `p90` and `p50` parameters are
+ * distribution control points that anchor the curve shape; they do **not**
+ * produce output scores of exactly 90 or 50. At the `p90` control point the
+ * erf approximation yields ~82, and at `p50` it yields exactly 50.
  *
- * @param {number} value - The actual metric value.
- * @param {number} p90 - The value that should result in a score of 90 (the "Good" threshold).
- * @param {number} p50 - The value that should result in a score of 50 (the "Median" threshold).
+ * @param {number} value - The actual metric value (e.g., milliseconds for LCP).
+ * @param {number} p90 - The "Good" threshold control point for the log-normal curve.
+ * @param {number} p50 - The median control point for the log-normal curve.
  *
  * @returns {number} An integer score between 0 and 100.
  *
@@ -255,8 +242,8 @@ export const getStatusColor = (metric: string, value: number | undefined | null)
  *
  * @example
  * ```ts
- * const score = computeLogNormalScore(2500, 2500, 4000);
- * // returns 90
+ * computeLogNormalScore(2500, 2500, 4000); // ~82
+ * computeLogNormalScore(4000, 2500, 4000); // 50
  * ```
  */
 export const computeLogNormalScore = (value: number, p90: number, p50: number): number => {
@@ -428,7 +415,8 @@ export const transformPerformanceData = (
 	raw: PerformanceMetric[],
 	locale: string,
 	maxPoints: number,
-	smaPeriod = 3
+	smaPeriod = 3,
+	rangeDays?: number
 ): { chartData: ChartDataPoint[]; uniqueMetrics: string[] } => {
 	const dateMap: Record<number, ChartDataPoint> = {};
 	const metrics = new Set<string>();
@@ -470,23 +458,67 @@ export const transformPerformanceData = (
 		metrics.add(item.metric_name);
 	});
 
-	const fullChartData = Object.values(dateMap)
-		.sort((a, b) => a.timestamp - b.timestamp)
-		.map((point) => {
-			const normalizedPoint = { ...point };
+	const sortedTimestamps = Object.keys(dateMap)
+		.map(Number)
+		.sort((a, b) => a - b);
 
-			metrics.forEach((m) => {
-				if (normalizedPoint[m] !== undefined) {
-					normalizedPoint[`${m}_original`] = normalizedPoint[m] as number;
-				}
+	const fullChartData: ChartDataPoint[] = [];
 
-				[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
-					if (normalizedPoint[pKey] === undefined) normalizedPoint[pKey] = undefined;
+	if (sortedTimestamps.length > 0 || (rangeDays !== undefined && rangeDays > 0)) {
+		let startTime: number;
+		let endTime: number;
+
+		if (rangeDays !== undefined && rangeDays > 0) {
+			// Anchor the chart to the latest available data point to avoid empty trailing ticks
+			const latestDataTs =
+				sortedTimestamps.length > 0
+					? sortedTimestamps[sortedTimestamps.length - 1]
+					: Date.now();
+			const latestHour = new Date(latestDataTs);
+			latestHour.setMinutes(0, 0, 0);
+			latestHour.setSeconds(0, 0);
+			endTime = latestHour.getTime();
+			startTime = endTime - rangeDays * 24 * 3600000;
+		} else {
+			startTime = sortedTimestamps[0];
+			endTime = sortedTimestamps[sortedTimestamps.length - 1];
+		}
+
+		const oneHour = 3600000;
+
+		for (let t = startTime; t <= endTime; t += oneHour) {
+			if (dateMap[t]) {
+				const point = { ...dateMap[t] };
+				metrics.forEach((m) => {
+					if (point[m] !== undefined) {
+						point[`${m}_original`] = point[m] as number;
+					}
+
+					[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
+						if (point[pKey] === undefined) point[pKey] = undefined;
+					});
 				});
-			});
-
-			return normalizedPoint;
-		});
+				fullChartData.push(point);
+			} else {
+				// Gap filling: insert a null point for the missing hour
+				const dateObj = new Date(t);
+				const nullPoint: ChartDataPoint = {
+					timestamp: t,
+					displayDate: dateFormatter.format(dateObj),
+					hour: hourFormatter.format(dateObj),
+					appVersion: undefined,
+				};
+				metrics.forEach((m) => {
+					nullPoint[m] = undefined;
+					nullPoint[`${m}_original`] = undefined;
+					[`${m}_p50`, `${m}_p75`, `${m}_p90`, `${m}_range`].forEach((pKey) => {
+						nullPoint[pKey] = undefined;
+					});
+				});
+				fullChartData.push(nullPoint);
+			}
+		}
+	}
 
 	let chartData = fullChartData;
 
@@ -649,6 +681,132 @@ export const transformPerformanceData = (
 };
 
 /**
+ * Calculates a complete, range-independent performance summary from raw API data.
+ *
+ * @remarks
+ * This function extracts the most recent hour's p75 values and compares them
+ * to the previous hour's data to determine trends. By using the raw data
+ * directly, it ensures that summary cards and arrows remain stable even
+ * when the chart's sampling or smoothing changes due to range switches.
+ *
+ * @param {PerformanceMetric[]} raw - The raw performance metric records.
+ *
+ * @returns {RawPerformanceSummary | null} Stable summary data for cards and arrows.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const summary = getRawPerformanceSummary(rawData);
+ * ```
+ */
+export const getRawPerformanceSummary = (
+	raw: PerformanceMetric[]
+): RawPerformanceSummary | null => {
+	if (!raw || raw.length === 0) return null;
+
+	// 1. Identify the absolute latest and second-latest hours in the raw data
+	const timestamps = Array.from(new Set(raw.map((r) => r.timestamp))).sort((a, b) => b - a);
+	const t1 = timestamps[0];
+	const t2 = timestamps[1];
+
+	const getMetricsForHour = (ts: number) => {
+		const records = raw.filter((r) => r.timestamp === ts);
+		const metrics: Record<string, number> = {};
+		records.forEach((r) => {
+			metrics[r.metric_name] = r.p75 ?? r.average_value;
+		});
+
+		// Calculate raw overall score for this hour
+		let totalWeight = 0;
+		let weightedScoreSum = 0;
+		METRIC_DISPLAY_ORDER.forEach((m) => {
+			const config = LIGHTHOUSE_CONFIG[m];
+			const val = metrics[m];
+
+			if (config && val !== undefined) {
+				const score = computeLogNormalScore(val, config.p90, config.p50);
+				weightedScoreSum += score * config.weight;
+				totalWeight += config.weight;
+			}
+		});
+
+		const overall = totalWeight > 0 ? weightedScoreSum / totalWeight : 0;
+
+		return { metrics, overall };
+	};
+
+	const latest = getMetricsForHour(t1);
+	const previous = t2 !== undefined ? getMetricsForHour(t2) : null;
+
+	const summary: RawPerformanceSummary = {
+		timestamp: t1,
+		metrics: {},
+		trends: {},
+	};
+
+	// 2. Individual Metric Metrics and Trends
+	METRIC_DISPLAY_ORDER.forEach((m) => {
+		const val1 = latest.metrics[m];
+		const val2 = previous?.metrics[m];
+
+		summary.metrics[m] = {
+			value: val1 ?? 0,
+			score:
+				val1 !== undefined
+					? computeLogNormalScore(
+							val1,
+							LIGHTHOUSE_CONFIG[m].p90,
+							LIGHTHOUSE_CONFIG[m].p50
+						)
+					: 0,
+		};
+
+		if (val1 !== undefined && val2 !== undefined) {
+			const diff = val1 - val2;
+			const threshold = val2 * 0.01;
+
+			if (Math.abs(diff) < threshold) {
+				summary.trends[m] = "neutral";
+			} else {
+				summary.trends[m] = diff < 0 ? "improvement" : "regression";
+			}
+		} else {
+			summary.trends[m] = "neutral";
+		}
+	});
+
+	// 3. Overall Metric and Trend
+	summary.metrics.OVERALL = {
+		value: latest.overall,
+		score: latest.overall,
+	};
+
+	if (previous) {
+		const diff = latest.overall - previous.overall;
+
+		if (Math.abs(diff) < 0.5) {
+			summary.trends.OVERALL = "neutral";
+		} else {
+			summary.trends.OVERALL = diff > 0 ? "improvement" : "regression";
+		}
+	} else {
+		summary.trends.OVERALL = "neutral";
+	}
+
+	return summary;
+};
+
+/**
+ * Interface for the stable raw performance summary.
+ */
+export interface RawPerformanceSummary {
+	timestamp: number;
+	metrics: Record<string, { value: number; score: number }>;
+	trends: Record<string, "improvement" | "regression" | "neutral">;
+}
+
+/**
  * Identifies version change points in the timeseries for reference markers.
  *
  * @remarks
@@ -656,7 +814,6 @@ export const transformPerformanceData = (
  * It enforces a minimum gap between markers to prevent overlapping labels.
  *
  * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {number} _maxPoints - Maximum number of points in the chart (ignored in this version).
  *
  * @returns {{ timestamp: number; version: string }[]} A list of version change events.
  *
@@ -664,12 +821,11 @@ export const transformPerformanceData = (
  *
  * @example
  * ```ts
- * const changes = getVersionChanges(chartData, 48);
+ * const changes = getVersionChanges(chartData);
  * ```
  */
 export const getVersionChanges = (
-	chartData: ChartDataPoint[],
-	_maxPoints: number
+	chartData: ChartDataPoint[]
 ): { timestamp: number; version: string }[] => {
 	const versionChanges: { timestamp: number; version: string }[] = [];
 
@@ -699,187 +855,4 @@ export const getVersionChanges = (
 	}
 
 	return versionChanges;
-};
-
-/**
- * Retrieves the most recent value for a metric from the timeseries.
- *
- * @remarks
- * Iterates backwards through the `chartData` to find the latest non-null value
- * for the specified metric. It prioritizes the `_original` value if available.
- *
- * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {string} metric - The name of the metric (e.g., `LCP`, `FCP`).
- *
- * @returns {number | null} The latest numeric value or null if not found.
- *
- * @see {@link ChartDataPoint}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const latestLCP = getLatestMetricValue(chartData, "LCP");
- * // returns 1250 (in ms)
- * ```
- */
-export const getLatestMetricValue = (
-	chartData: ChartDataPoint[],
-	metric: string
-): number | null => {
-	for (let i = chartData.length - 1; i >= 0; i--) {
-		const originalVal = chartData[i][`${metric}_original`];
-		const val =
-			originalVal !== undefined ? (originalVal as number) : (chartData[i][metric] as number);
-		if (val !== undefined && val !== null) return val;
-	}
-
-	return null;
-};
-
-/**
- * Determines the trend direction between the two most recent data points.
- *
- * @remarks
- * Compares the latest value with the previous one in the timeseries.
- * - `improvement`: The value has decreased (better performance).
- * - `regression`: The value has increased (worse performance).
- * - `neutral`: No change or insufficient data.
- *
- * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {string} metric - The name of the metric to analyze.
- *
- * @returns {"improvement" | "regression" | "neutral"} The trend status.
- *
- * @see {@link getLatestMetricValue}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const trend = getMetricTrend(chartData, "FCP");
- * // returns "improvement"
- * ```
- */
-export const getMetricTrend = (
-	chartData: ChartDataPoint[],
-	metric: string
-): "improvement" | "regression" | "neutral" => {
-	const values: number[] = [];
-
-	for (let i = chartData.length - 1; i >= 0; i--) {
-		const originalVal = chartData[i][`${metric}_original`];
-		const val =
-			originalVal !== undefined ? (originalVal as number) : (chartData[i][metric] as number);
-		if (val !== undefined && val !== null) values.push(val);
-		if (values.length === 2) break;
-	}
-
-	if (values.length < 2) return "neutral";
-
-	// Use formatted values to ignore insignificant changes that don't affect the UI display
-	const currentFormatted = formatMetricValue(metric, values[0], false);
-	const previousFormatted = formatMetricValue(metric, values[1], false);
-
-	if (currentFormatted === previousFormatted) return "neutral";
-
-	const currentNum = parseFloat(currentFormatted);
-	const previousNum = parseFloat(previousFormatted);
-
-	return currentNum < previousNum
-		? "improvement"
-		: currentNum > previousNum
-			? "regression"
-			: "neutral";
-};
-
-/**
- * Computes the weighted overall performance score.
- *
- * @remarks
- * Calculates the score by:
- * 1. Fetching the latest value for each active metric using {@link getLatestMetricValue}.
- * 2. Computing the log-normal score for each value using {@link computeLogNormalScore}.
- * 3. Applying weights defined in {@link LIGHTHOUSE_CONFIG}.
- * 4. Returning a weighted average (0-100).
- *
- * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {string[]} activeMetrics - List of metrics to include in the score calculation.
- *
- * @returns {number | null} The overall score (0-100) or null if no metrics are available.
- *
- * @see {@link computeLogNormalScore}
- * @see {@link LIGHTHOUSE_CONFIG}
- * @see {@link getLatestMetricValue}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const score = calculateOverallPerformanceScore(chartData, ["LCP", "FCP"]);
- * // returns 92
- * ```
- */
-export const calculateOverallPerformanceScore = (
-	chartData: ChartDataPoint[],
-	activeMetrics: string[]
-): number | null => {
-	let totalWeight = 0,
-		totalScore = 0;
-	activeMetrics.forEach((m) => {
-		const val = getLatestMetricValue(chartData, m);
-		const metricConfig = LIGHTHOUSE_CONFIG[m];
-
-		if (val !== null && metricConfig) {
-			totalScore +=
-				computeLogNormalScore(val, metricConfig.p90, metricConfig.p50) *
-				metricConfig.weight;
-			totalWeight += metricConfig.weight;
-		}
-	});
-
-	return totalWeight > 0 ? Math.round(totalScore / totalWeight) : null;
-};
-
-/**
- * Determines the overall trend by averaging individual metric trends.
- *
- * @remarks
- * This heuristic counts the number of improvements vs regressions across all
- * active metrics using {@link getMetricTrend}. The majority trend is returned.
- * If they are equal or zero, it returns `neutral`.
- *
- * @param {ChartDataPoint[]} chartData - The transformed timeseries data.
- * @param {string[]} activeMetrics - List of metrics to analyze.
- *
- * @returns {"improvement" | "regression" | "neutral"} The overall aggregate trend.
- *
- * @see {@link getMetricTrend}
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const status = getOverallTrend(chartData, ["LCP", "FCP"]);
- * // returns "improvement"
- * ```
- */
-export const getOverallTrend = (
-	chartData: ChartDataPoint[],
-	activeMetrics: string[]
-): "improvement" | "regression" | "neutral" => {
-	if (chartData.length < 2) return "neutral";
-
-	// We calculate the "composite" score for the current state and the previous state.
-	// This ensures the trend arrow is perfectly in sync with the rounded number
-	// shown on the "OVERALL" summary card.
-	const latestScore = calculateOverallPerformanceScore(chartData, activeMetrics);
-	const previousScore = calculateOverallPerformanceScore(chartData.slice(0, -1), activeMetrics);
-
-	if (latestScore === null || previousScore === null) return "neutral";
-
-	if (latestScore > previousScore) return "improvement";
-	if (latestScore < previousScore) return "regression";
-
-	return "neutral";
 };

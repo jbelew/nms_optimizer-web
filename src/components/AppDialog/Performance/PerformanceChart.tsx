@@ -32,14 +32,11 @@ import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData
 import { PerformanceDashboardLayout } from "./PerformanceLayout";
 import { ChartDataPoint } from "./PerformanceTypes";
 import {
-	calculateOverallPerformanceScore,
 	CHART_TOOLTIP_STYLE,
 	formatMetricValue,
 	getFormatter,
-	getLatestMetricValue,
 	getMetricColor,
-	getMetricTrend,
-	getOverallTrend,
+	getRawPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
 	LIGHTHOUSE_CONFIG,
@@ -171,7 +168,7 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 	if (selectedMetric) {
 		const format = (v: number) => formatMetricValue(selectedMetric, v);
 		const p50 = item[`${selectedMetric}_p50`] as number | undefined;
-		const p75 = item[`${selectedMetric}_p75`] as number | undefined;
+		const p75 = item[`${selectedMetric}_p75_sma`] as number | undefined;
 		const p90 = item[`${selectedMetric}_p90`] as number | undefined;
 		const threshold = METRIC_THRESHOLDS[selectedMetric] || 10000;
 
@@ -237,8 +234,8 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 				}}
 			>
 				{activeMetrics.map((m) => {
-					const val = item[`${m}_original`] as number | undefined;
-					const mDeficit = item[`${m}_deficit`] as number | undefined;
+					const val = item[`${m}_p75_sma`] as number | undefined;
+					const mDeficit = item[`${m}_deficit_sma`] as number | undefined;
 					const mScore = mDeficit !== undefined ? 100 - mDeficit : undefined;
 
 					return (
@@ -317,7 +314,7 @@ interface PerformanceChartProps {
  */
 export const PerformanceChart: FC<PerformanceChartProps> = ({
 	data,
-	range,
+	range = 3,
 	onRangeChange,
 	isPending,
 }) => {
@@ -379,32 +376,21 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	);
 	const locale = i18n.language;
 
-	const maxPoints = 72;
-
 	const { chartData, uniqueMetrics } = useMemo(
-		() => transformPerformanceData(data, locale, maxPoints, 3),
-		[data, locale, maxPoints]
+		() => transformPerformanceData(data, locale, PERFORMANCE_LAYOUT.MAX_CHART_POINTS, 3, range),
+		[data, locale, range]
 	);
 
-	const versionChanges = useMemo(
-		() => getVersionChanges(chartData, maxPoints),
-		[chartData, maxPoints]
-	);
+	const versionChanges = useMemo(() => getVersionChanges(chartData), [chartData]);
 
 	const activeMetrics = useMemo(
 		() => METRIC_DISPLAY_ORDER.filter((m) => uniqueMetrics.includes(m)),
 		[uniqueMetrics]
 	);
 
-	const overallScore = useMemo(
-		() => calculateOverallPerformanceScore(chartData, activeMetrics),
-		[chartData, activeMetrics]
-	);
-
-	const overallTrend = useMemo(
-		() => getOverallTrend(chartData, activeMetrics),
-		[chartData, activeMetrics]
-	);
+	const summary = useMemo(() => getRawPerformanceSummary(data), [data]);
+	const overallScore = summary?.metrics.OVERALL?.score;
+	const overallTrend = summary?.trends.OVERALL ?? "neutral";
 
 	const yDomain = useMemo<[number, number]>(
 		() => (selectedMetric ? [0, METRIC_THRESHOLDS[selectedMetric] || 10000] : OVERALL_Y_DOMAIN),
@@ -413,9 +399,16 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 	const selectedMetricConfig = selectedMetric ? LIGHTHOUSE_CONFIG[selectedMetric] : null;
 
 	const xTickFormatter = useCallback(
-		(val: number) =>
-			getFormatter(locale, { month: "numeric", day: "numeric" }).format(new Date(val)),
-		[locale]
+		(val: number) => {
+			const date = new Date(val);
+			const formatOptions: Intl.DateTimeFormatOptions =
+				range <= 3
+					? { hour: "numeric", minute: "numeric" }
+					: { month: "numeric", day: "numeric" };
+
+			return getFormatter(locale, formatOptions).format(date);
+		},
+		[locale, range]
 	);
 
 	const renderTooltip = useCallback(
@@ -448,18 +441,9 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 							<Text
 								size="5"
 								weight="medium"
-								style={{
-									color:
-										overallScore !== null
-											? overallScore >= 90
-												? "var(--green-11)"
-												: overallScore >= 50
-													? "var(--amber-11)"
-													: "var(--red-11)"
-											: "var(--gray-11)",
-								}}
+								style={{ color: SCORE_BAND_COLOR(overallScore) }}
 							>
-								{overallScore ?? "—"}
+								{overallScore !== undefined ? Math.round(overallScore) : "—"}
 							</Text>
 							{overallTrend === "improvement" && (
 								<Text color="green">
@@ -475,9 +459,10 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 					</MetricSummaryCard>
 
 					{activeMetrics.map((metric) => {
-						const val = getLatestMetricValue(chartData, metric);
+						const metricData = summary?.metrics[metric];
+						const val = metricData?.value ?? null;
 						const isSelected = selectedMetric === metric;
-						const trend = getMetricTrend(chartData, metric);
+						const trend = summary?.trends[metric] ?? "neutral";
 
 						return (
 							<MetricSummaryCard
@@ -646,7 +631,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 							<XAxis
 								dataKey="timestamp"
 								axisLine={false}
-								tickLine={false}
+								tickLine={true}
 								tick={CHART_TICK_STYLE}
 								minTickGap={30}
 								tickFormatter={xTickFormatter}

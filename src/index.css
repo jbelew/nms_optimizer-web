@@ -260,6 +260,16 @@ body.a11y-font .heading-styled {
 	/* Prevents outline from triggering repaint of adjacent elements */
 }
 
+/**
+ * Recharts accessibilityLayer adds tabIndex="0" to various internal elements,
+ * which causes distracting focus outlines when clicking.
+ * We only want to show the outline when navigating via keyboard (focus-visible).
+ */
+.recharts-wrapper:focus:not(:focus-visible),
+.recharts-wrapper *:focus:not(:focus-visible) {
+	outline: none !important;
+}
+
 /* ============================================ */
 /* RADIX UI ACCESSIBILITY FIXES                */
 /* ============================================ */
