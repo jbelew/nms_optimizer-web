@@ -2310,10 +2310,10 @@
     }
   },
   {
-    "date": "2026-05-04T06:11:34.956Z",
+    "date": "2026-05-04T06:28:23.215Z",
     "sha": "0ee49c2dc96bf1dbc1206d93632057c8d70cf33d",
     "scores": {
-      "performance": 0.99,
+      "performance": 0.96,
       "accessibility": 1,
       "best-practices": 0.96,
       "seo": 1
