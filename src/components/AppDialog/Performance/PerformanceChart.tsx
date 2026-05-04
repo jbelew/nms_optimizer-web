@@ -36,7 +36,6 @@ import {
 	formatMetricValue,
 	getFormatter,
 	getMetricColor,
-	getPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
 	LIGHTHOUSE_CONFIG,
@@ -375,8 +374,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 		[navigate, i18n.language, search]
 	);
 	const locale = i18n.language;
-
-	const { chartData, uniqueMetrics } = useMemo(
+	const { chartData, summary, uniqueMetrics } = useMemo(
 		() => transformPerformanceData(data, locale, PERFORMANCE_LAYOUT.MAX_CHART_POINTS, 3, range),
 		[data, locale, range]
 	);
@@ -388,7 +386,6 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 		[uniqueMetrics]
 	);
 
-	const summary = useMemo(() => getPerformanceSummary(chartData), [chartData]);
 	const overallScore = summary?.metrics.OVERALL?.score;
 	const overallTrend = summary?.trends.OVERALL ?? "neutral";
 

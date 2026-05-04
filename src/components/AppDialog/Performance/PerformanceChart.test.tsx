@@ -164,4 +164,74 @@ describe("PerformanceChart summary cards", () => {
 			screen.getByRole("button", { name: /overall performance summary/i })
 		).toHaveAttribute("aria-pressed", "true");
 	});
+
+	test("summary card values remain stable across range changes", () => {
+		const hourMs = 3600000;
+		const baseDate = new Date();
+		baseDate.setMinutes(0, 0, 0);
+		const baseTs = baseDate.getTime();
+
+		// We need to provide all metrics for overall score to be stable
+		const metrics = ["TTFB", "FCP", "LCP", "CLS", "INP"];
+		const fullMockData: PerformanceMetric[] = metrics.flatMap((m) =>
+			Array.from({ length: 10 * 24 }, (_, i) => ({
+				timestamp: baseTs - i * hourMs,
+				metric_name: m,
+				average_value: 1000 + i * 10,
+				p50: 800 + i * 10,
+				p75: 1000 + i * 10,
+				p90: 1200 + i * 10,
+				app_version: "v1.0.0",
+			}))
+		) as PerformanceMetric[];
+
+		const onRangeChange = vi.fn();
+
+		const { rerender } = render(
+			<Theme>
+				<MemoryRouter initialEntries={["/performance"]}>
+					<Routes>
+						<Route
+							path="/performance"
+							element={
+								<PerformanceChart
+									data={fullMockData}
+									range={3}
+									onRangeChange={onRangeChange}
+								/>
+							}
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Theme>
+		);
+
+		// Get initial values (3d range)
+		const lcpValue3d = screen.getAllByText("1000ms")[0]; // latest hour i=0 (anchorEnd forces to 1000)
+		expect(lcpValue3d).toBeInTheDocument();
+
+		// Switch to 14d range
+		rerender(
+			<Theme>
+				<MemoryRouter initialEntries={["/performance"]}>
+					<Routes>
+						<Route
+							path="/performance"
+							element={
+								<PerformanceChart
+									data={fullMockData}
+									range={14}
+									onRangeChange={onRangeChange}
+								/>
+							}
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Theme>
+		);
+
+		// Value should still be 1000ms
+		const lcpValue14d = screen.getAllByText("1000ms")[0];
+		expect(lcpValue14d).toBeInTheDocument();
+	});
 });

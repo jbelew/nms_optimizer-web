@@ -41,24 +41,26 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const [range, setRange] = useState(3);
 	const [isPending, startTransition] = useTransition();
 
-	const startDate = `${range}daysAgo`;
+	// Always fetch the maximum range (14 days) to ensure the summary cards (latest hour)
+	// and trends (prior hour) remain absolute and stable regardless of the
+	// user's selected chart view. This also prevents redundant network requests
+	// when switching between 3d, 7d, and 14d views.
+	const fetchRange = "14daysAgo";
 
 	useEffect(() => {
 		if (isOpen) {
-			fetchPerformanceData(startDate);
+			fetchPerformanceData(fetchRange);
 		}
-	}, [isOpen, startDate]);
+	}, [isOpen]);
 
-	const data = usePerformanceData(startDate);
+	const data = usePerformanceData(fetchRange);
 
 	const handleRangeChange = (newRange: number) => {
-		const nextStartDate = `${newRange}daysAgo`;
-
-		if (isPerformanceDataCached(nextStartDate)) {
-			// If cached, just set it directly to avoid the transition dimming
+		if (isPerformanceDataCached(fetchRange)) {
+			// If cached, just set it directly
 			setRange(newRange);
 		} else {
-			// Otherwise use transition to show feedback while fetching
+			// Otherwise use transition
 			startTransition(() => {
 				setRange(newRange);
 			});

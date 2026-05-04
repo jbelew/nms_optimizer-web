@@ -399,16 +399,17 @@ export const calculateSMA = (
  * @param {number} maxPoints - Maximum number of points (e.g., 168 for 7 days or 72 for 3 days).
  * @param {number} [smaPeriod=3] - The window size for SMA smoothing.
  *
- * @returns {{ chartData: ChartDataPoint[], uniqueMetrics: string[] }} Transformed data and active metric names.
+ * @returns {{ chartData: ChartDataPoint[]; summary: RawPerformanceSummary | null; uniqueMetrics: string[] }} Transformed data, decoupled summary, and active metric names.
  *
  * @see {@link ChartDataPoint}
  * @see {@link calculateSMA}
+ * @see {@link getPerformanceSummary}
  *
  * @category Utilities
  *
  * @example
  * ```ts
- * const { chartData, uniqueMetrics } = transformPerformanceData(raw, "en-US", 48);
+ * const { chartData, summary, uniqueMetrics } = transformPerformanceData(raw, "en-US", 48);
  * ```
  */
 export const transformPerformanceData = (
@@ -417,9 +418,13 @@ export const transformPerformanceData = (
 	maxPoints: number,
 	smaPeriod = 3,
 	rangeDays?: number
-): { chartData: ChartDataPoint[]; uniqueMetrics: string[] } => {
+): {
+	chartData: ChartDataPoint[];
+	summary: RawPerformanceSummary | null;
+	uniqueMetrics: string[];
+} => {
 	if (!raw || !Array.isArray(raw)) {
-		return { chartData: [], uniqueMetrics: [] };
+		return { chartData: [], summary: null, uniqueMetrics: [] };
 	}
 
 	const dateMap: Record<number, ChartDataPoint> = {};
@@ -468,25 +473,19 @@ export const transformPerformanceData = (
 
 	const fullChartData: ChartDataPoint[] = [];
 
-	if (sortedTimestamps.length > 0 || (rangeDays !== undefined && rangeDays > 0)) {
-		let startTime: number;
-		let endTime: number;
+	if (sortedTimestamps.length > 0) {
+		const latestDataTs = sortedTimestamps[sortedTimestamps.length - 1];
+		const latestHour = new Date(latestDataTs);
+		latestHour.setMinutes(0, 0, 0);
+		latestHour.setSeconds(0, 0);
+		const endTime = latestHour.getTime();
 
-		if (rangeDays !== undefined && rangeDays > 0) {
-			// Anchor the chart to the latest available data point to avoid empty trailing ticks
-			const latestDataTs =
-				sortedTimestamps.length > 0
-					? sortedTimestamps[sortedTimestamps.length - 1]
-					: Date.now();
-			const latestHour = new Date(latestDataTs);
-			latestHour.setMinutes(0, 0, 0);
-			latestHour.setSeconds(0, 0);
-			endTime = latestHour.getTime();
-			startTime = endTime - rangeDays * 24 * 3600000;
-		} else {
-			startTime = sortedTimestamps[0];
-			endTime = sortedTimestamps[sortedTimestamps.length - 1];
-		}
+		// Calculate the absolute start time based on the entire dataset available in raw,
+		// but at minimum ensure it covers the requested rangeDays if specified.
+		const earliestDataTs = sortedTimestamps[0];
+		const rangeStartTs =
+			rangeDays !== undefined && rangeDays > 0 ? endTime - rangeDays * 24 * 3600000 : endTime;
+		const startTime = Math.min(earliestDataTs, rangeStartTs);
 
 		const oneHour = 3600000;
 
@@ -524,94 +523,16 @@ export const transformPerformanceData = (
 		}
 	}
 
-	let chartData = fullChartData;
-
-	if (fullChartData.length > 0) {
-		const sampledIndices = new Set<number>();
-
-		// Always include the first and last points
-		sampledIndices.add(0);
-		sampledIndices.add(fullChartData.length - 1);
-
-		// Always include every point where the version changes
-		for (let i = 1; i < fullChartData.length; i++) {
-			if (fullChartData[i].appVersion !== fullChartData[i - 1].appVersion) {
-				sampledIndices.add(i);
-			}
-		}
-
-		// Linearly sample more points until we have exactly maxPoints or reach the raw length
-		if (fullChartData.length > maxPoints) {
-			const step = (fullChartData.length - 1) / (maxPoints - 1);
-
-			for (let i = 0; i < maxPoints; i++) {
-				sampledIndices.add(Math.round(i * step));
-			}
-
-			// If we still have more than maxPoints (due to version changes),
-			// we must prune the non-version-change points to keep the count EXACT.
-			if (sampledIndices.size > maxPoints) {
-				const indices = Array.from(sampledIndices).sort((a, b) => a - b);
-				const toKeep = new Set<number>();
-
-				// Always keep first, last, and version changes
-				toKeep.add(indices[0]);
-				toKeep.add(indices[indices.length - 1]);
-
-				for (let i = 1; i < fullChartData.length; i++) {
-					if (fullChartData[i].appVersion !== fullChartData[i - 1].appVersion) {
-						toKeep.add(i);
-					}
-				}
-
-				// Fill remaining slots from the sampled set
-				for (const idx of indices) {
-					if (toKeep.size >= maxPoints) break;
-					toKeep.add(idx);
-				}
-
-				chartData = Array.from(toKeep)
-					.sort((a, b) => a - b)
-					.map((index) => fullChartData[index]);
-			} else {
-				chartData = Array.from(sampledIndices)
-					.sort((a, b) => a - b)
-					.map((index) => fullChartData[index]);
-			}
-		} else {
-			// Data is shorter than maxPoints. To keep width consistent, we must pad
-			// the beginning with "empty" data points so the total array length is EXACT.
-			chartData = fullChartData;
-
-			const paddingCount = maxPoints - fullChartData.length;
-
-			if (paddingCount > 0) {
-				const firstPoint = fullChartData[0];
-				const hourMs = 3600000;
-				const padding: ChartDataPoint[] = [];
-
-				for (let i = paddingCount; i > 0; i--) {
-					const ts = firstPoint.timestamp - i * hourMs;
-					padding.push({
-						timestamp: ts,
-						displayDate: "", // Empty so they don't show on X-axis
-						hour: "",
-						appVersion: "",
-					});
-				}
-
-				chartData = [...padding, ...fullChartData];
-			}
-		}
-	}
-
+	// Calculate SMA and overall scores on the ABSOLUTE FULL unsampled dataset
+	// to ensure summary cards reflect the absolute last hour and trend
+	// vs. the prior hour, independent of chart sub-sampling or user range selection.
 	metrics.forEach((m) => {
-		const p75Values = chartData.map((p) => p[`${m}_p75`] as number | undefined);
+		const p75Values = fullChartData.map((p) => p[`${m}_p75`] as number | undefined);
 		const p75SmaValues = calculateSMA(p75Values, smaPeriod, true);
 
 		const config = LIGHTHOUSE_CONFIG[m];
 
-		chartData.forEach((p, i) => {
+		fullChartData.forEach((p, i) => {
 			p[`${m}_p75_sma`] = p75SmaValues[i];
 
 			if (config && p[`${m}_p75`] !== undefined) {
@@ -625,16 +546,16 @@ export const transformPerformanceData = (
 			}
 		});
 
-		const deficitValues = chartData.map((p) => p[`${m}_deficit`] as number | undefined);
+		const deficitValues = fullChartData.map((p) => p[`${m}_deficit`] as number | undefined);
 		const deficitSmaValues = calculateSMA(deficitValues, smaPeriod, true);
 
-		chartData.forEach((p, i) => {
+		fullChartData.forEach((p, i) => {
 			p[`${m}_deficit_sma`] = deficitSmaValues[i];
 		});
 	});
 
 	// Calculate overall weighted scores for the "Ceiling" view (100 is best, at top)
-	chartData.forEach((p) => {
+	fullChartData.forEach((p) => {
 		let totalP50 = 0,
 			totalP75 = 0,
 			totalP90 = 0,
@@ -671,15 +592,108 @@ export const transformPerformanceData = (
 	});
 
 	// Apply SMA to the overall p75 score trend
-	const overallP75Values = chartData.map((p) => p.overall_p75 as number | undefined);
+	const overallP75Values = fullChartData.map((p) => p.overall_p75 as number | undefined);
 	const overallP75SmaValues = calculateSMA(overallP75Values, smaPeriod, true);
 
-	chartData.forEach((p, i) => {
+	fullChartData.forEach((p, i) => {
 		const score = overallP75SmaValues[i];
 		p.overall_score_p75_sma = score;
 		// Add deficit for unified chart plotting (0 is perfect)
 		p.overall_deficit_p75_sma = score !== undefined ? 100 - score : undefined;
 	});
+
+	// Extract high-resolution summary from the ABSOLUTE full dataset.
+	const summary = getPerformanceSummary(fullChartData);
+
+	// Slice the full dataset down to the user's requested range for the chart view.
+	let slicedData = fullChartData;
+
+	if (rangeDays !== undefined && rangeDays > 0 && fullChartData.length > 0) {
+		const latestTs = fullChartData[fullChartData.length - 1].timestamp;
+		const startTs = latestTs - rangeDays * 24 * 3600000;
+		slicedData = fullChartData.filter((p) => p.timestamp >= startTs);
+	}
+
+	let chartData = slicedData;
+
+	if (slicedData.length > 0) {
+		const sampledIndices = new Set<number>();
+
+		// Always include the first and last points
+		sampledIndices.add(0);
+		sampledIndices.add(slicedData.length - 1);
+
+		// Always include every point where the version changes
+		for (let i = 1; i < slicedData.length; i++) {
+			if (slicedData[i].appVersion !== slicedData[i - 1].appVersion) {
+				sampledIndices.add(i);
+			}
+		}
+
+		// Linearly sample more points until we have exactly maxPoints or reach the raw length
+		if (slicedData.length > maxPoints) {
+			const step = (slicedData.length - 1) / (maxPoints - 1);
+
+			for (let i = 0; i < maxPoints; i++) {
+				sampledIndices.add(Math.round(i * step));
+			}
+
+			// If we still have more than maxPoints (due to version changes),
+			// we must prune the non-version-change points to keep the count EXACT.
+			if (sampledIndices.size > maxPoints) {
+				const indices = Array.from(sampledIndices).sort((a, b) => a - b);
+				const toKeep = new Set<number>();
+
+				// Always keep first, last, and version changes
+				toKeep.add(indices[0]);
+				toKeep.add(indices[indices.length - 1]);
+
+				for (let i = 1; i < slicedData.length; i++) {
+					if (slicedData[i].appVersion !== slicedData[i - 1].appVersion) {
+						toKeep.add(i);
+					}
+				}
+
+				// Fill remaining slots from the sampled set
+				for (const idx of indices) {
+					if (toKeep.size >= maxPoints) break;
+					toKeep.add(idx);
+				}
+
+				chartData = Array.from(toKeep)
+					.sort((a, b) => a - b)
+					.map((index) => slicedData[index]);
+			} else {
+				chartData = Array.from(sampledIndices)
+					.sort((a, b) => a - b)
+					.map((index) => slicedData[index]);
+			}
+		} else {
+			// Data is shorter than maxPoints. To keep width consistent, we must pad
+			// the beginning with "empty" data points so the total array length is EXACT.
+			chartData = slicedData;
+
+			const paddingCount = maxPoints - slicedData.length;
+
+			if (paddingCount > 0) {
+				const firstPoint = slicedData[0];
+				const hourMs = 3600000;
+				const padding: ChartDataPoint[] = [];
+
+				for (let i = paddingCount; i > 0; i--) {
+					const ts = firstPoint.timestamp - i * hourMs;
+					padding.push({
+						timestamp: ts,
+						displayDate: "", // Empty so they don't show on X-axis
+						hour: "",
+						appVersion: "",
+					});
+				}
+
+				chartData = [...padding, ...slicedData];
+			}
+		}
+	}
 
 	// Compute per-version averages for version-to-version trend lines.
 	// Groups data points by appVersion, computes the mean p75 for each metric
@@ -746,7 +760,7 @@ export const transformPerformanceData = (
 		}
 	});
 
-	return { chartData, uniqueMetrics: Array.from(metrics) };
+	return { chartData, summary, uniqueMetrics: Array.from(metrics) };
 };
 
 /**

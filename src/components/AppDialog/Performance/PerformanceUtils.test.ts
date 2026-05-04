@@ -553,4 +553,75 @@ describe("transformPerformanceData", () => {
 		expect(chartData.length).toBeLessThanOrEqual(maxPoints);
 		expect(chartData.length).toBeGreaterThan(0);
 	});
+
+	it("returns high-resolution summary data independent of sampling", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+		const maxPoints = 2; // Extreme sampling
+
+		// Create 20 data points (T to T+19h)
+		// LCP increases by 100ms every hour.
+		// T+18h: 4300ms, T+19h: 4400ms
+		const raw = Array.from({ length: 20 }, (_, i) =>
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 100)
+		);
+
+		const { chartData, summary } = transformPerformanceData(raw, "en", maxPoints, 1);
+
+		// Chart data is sampled to 2 points: T and T+19h
+		expect(chartData).toHaveLength(2);
+		expect(chartData[0].timestamp).toBe(baseTs);
+		expect(chartData[1].timestamp).toBe(baseTs + 19 * hourMs);
+
+		// Summary should reflect T+19h vs T+18h, NOT T+19h vs T
+		expect(summary).not.toBeNull();
+
+		if (summary) {
+			expect(summary.metrics.LCP.value).toBe(4400); // T+19h
+
+			// If it compared T+19h (4400) to T (2500), it would be a huge regression.
+			// If it correctly compares T+19h (4400) to T+18h (4300), it's a smaller regression.
+			// We can check the actual value used for comparison in the trend calculation.
+			// Since we don't expose the 'previousValue' directly in summary,
+			// we can verify the score and value are correct.
+			expect(summary.timestamp).toBe(baseTs + 19 * hourMs);
+		}
+	});
+
+	it("returns identical summary for different sampling rates", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		const raw = Array.from({ length: 48 }, (_, i) =>
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10)
+		);
+
+		const { summary: summaryHigh } = transformPerformanceData(raw, "en", 100, 3);
+		const { summary: summaryLow } = transformPerformanceData(raw, "en", 10, 3);
+
+		expect(summaryHigh).toEqual(summaryLow);
+	});
+
+	it("returns summary for the absolute latest data point even when requested range is smaller", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		// Create 10 days of data
+		const raw = Array.from({ length: 10 * 24 }, (_, i) =>
+			makeMetric(baseTs + i * hourMs, "LCP", 2500 + i * 10)
+		);
+
+		const absoluteLatestTs = baseTs + (10 * 24 - 1) * hourMs;
+		const latestValue = 2500 + (10 * 24 - 1) * 10;
+
+		// Request only 3 days
+		const { summary } = transformPerformanceData(raw, "en", 72, 3, 3);
+
+		expect(summary).not.toBeNull();
+
+		if (summary) {
+			expect(summary.timestamp).toBe(absoluteLatestTs);
+			expect(summary.metrics.LCP.value).toBe(latestValue);
+		}
+	});
 });

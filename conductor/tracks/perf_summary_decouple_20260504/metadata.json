@@ -1,0 +1,22 @@
+{
+  "track_id": "perf_summary_decouple_20260504",
+  "type": "feature",
+  "status": "new",
+  "priority": "medium",
+  "depends_on": [],
+  "estimated_hours": 2,
+  "created_at": "2026-05-04T10:00:00Z",
+  "updated_at": "2026-05-04T15:30:00Z",
+  "description": "The top summary cards in the Performance Dialog should always show the last hours value and the trend vs. the prior hour. They should have nothing to do with chart resolution (3d, 7d, 14d).",
+  "beads_epic": "nms_optimizer-web-9ry",
+  "beads_tasks": {
+    "phase1": "nms_optimizer-web-9ry.1",
+    "phase1_task1": "nms_optimizer-web-9ry.2",
+    "phase1_task2": "nms_optimizer-web-9ry.3",
+    "phase1_task3": "nms_optimizer-web-9ry.4",
+    "phase2": "nms_optimizer-web-9ry.5",
+    "phase2_task1": "nms_optimizer-web-9ry.6",
+    "phase2_task2": "nms_optimizer-web-9ry.7",
+    "phase2_task3": "nms_optimizer-web-9ry.8"
+  }
+}
