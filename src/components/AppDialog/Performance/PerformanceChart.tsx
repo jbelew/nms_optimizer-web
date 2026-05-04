@@ -759,7 +759,8 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 									}}
 									activeDot={false}
 									connectNulls
-									isAnimationActive={false}
+									isAnimationActive={true}
+									animationDuration={LINE_ANIMATION_DURATION}
 								/>
 							)}
 						</ComposedChart>
