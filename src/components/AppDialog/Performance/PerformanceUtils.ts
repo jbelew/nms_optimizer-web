@@ -771,15 +771,18 @@ export const getRawPerformanceSummary = (
 	if (!raw || raw.length === 0) return null;
 
 	// 1. Identify the absolute latest and second-latest hours in the raw data
-	const timestamps = Array.from(new Set(raw.map((r) => r.timestamp))).sort((a, b) => b - a);
+	const timestamps = Array.from(new Set(raw.map((r) => Number(r.timestamp)))).sort(
+		(a, b) => b - a
+	);
 	const t1 = timestamps[0];
 	const t2 = timestamps[1];
 
 	const getMetricsForHour = (ts: number) => {
-		const records = raw.filter((r) => r.timestamp === ts);
+		const records = raw.filter((r) => Number(r.timestamp) === ts);
 		const metrics: Record<string, number> = {};
 		records.forEach((r) => {
-			metrics[r.metric_name] = r.p75 ?? r.average_value;
+			// Use != null to catch both null and undefined
+			metrics[r.metric_name] = r.p75 != null ? r.p75 : r.average_value;
 		});
 
 		// Calculate raw overall score for this hour
@@ -789,7 +792,7 @@ export const getRawPerformanceSummary = (
 			const config = LIGHTHOUSE_CONFIG[m];
 			const val = metrics[m];
 
-			if (config && val !== undefined) {
+			if (config && val != null) {
 				const score = computeLogNormalScore(val, config.p90, config.p50);
 				weightedScoreSum += score * config.weight;
 				totalWeight += config.weight;
@@ -798,7 +801,7 @@ export const getRawPerformanceSummary = (
 
 		const overall = totalWeight > 0 ? weightedScoreSum / totalWeight : 0;
 
-		return { metrics, overall };
+		return { metrics, overall, totalWeight };
 	};
 
 	const latest = getMetricsForHour(t1);
@@ -818,7 +821,7 @@ export const getRawPerformanceSummary = (
 		summary.metrics[m] = {
 			value: val1 ?? 0,
 			score:
-				val1 !== undefined
+				val1 != null
 					? computeLogNormalScore(
 							val1,
 							LIGHTHOUSE_CONFIG[m].p90,
@@ -827,7 +830,7 @@ export const getRawPerformanceSummary = (
 					: 0,
 		};
 
-		if (val1 !== undefined && val2 !== undefined) {
+		if (val1 != null && val2 != null) {
 			const diff = val1 - val2;
 			const threshold = val2 * 0.01;
 
@@ -847,9 +850,11 @@ export const getRawPerformanceSummary = (
 		score: latest.overall,
 	};
 
-	if (previous) {
+	if (previous && latest.totalWeight > 0 && previous.totalWeight > 0) {
 		const diff = latest.overall - previous.overall;
 
+		// Use a slightly larger threshold (0.5 points) for the overall score
+		// to avoid flickering arrows on tiny, unrounded changes.
 		if (Math.abs(diff) < 0.5) {
 			summary.trends.OVERALL = "neutral";
 		} else {
