@@ -64,7 +64,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Decouple Performance Summary Cards from Chart Resolution
-*Link: [./conductor/tracks/perf_summary_decouple_20260504/](./conductor/tracks/perf_summary_decouple_20260504/)*
+- [x] **Track: Decouple Performance Summary Cards from Chart Resolution**
+  *Link: [./conductor/tracks/perf_summary_decouple_20260504/](./conductor/tracks/perf_summary_decouple_20260504/)*
 
 

@@ -624,4 +624,30 @@ describe("transformPerformanceData", () => {
 			expect(summary.metrics.LCP.value).toBe(latestValue);
 		}
 	});
+
+	it("handles gaps in telemetry by comparing against the most recent valid preceding hour", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+
+		// Create data for T-5h, T-4h, then a gap, then T.
+		// T-4h: LCP=2000 (SMA=2000)
+		// T: LCP=3000
+		const raw = [
+			makeMetric(baseTs, "LCP", 2000), // T-5h
+			makeMetric(baseTs + hourMs, "LCP", 2000), // T-4h
+			// Gap of 3 hours
+			makeMetric(baseTs + 5 * hourMs, "LCP", 3000), // T (latest)
+		];
+
+		const { summary } = transformPerformanceData(raw, "en", 72, 1); // smaPeriod=1 for simplicity
+
+		expect(summary).not.toBeNull();
+
+		if (summary) {
+			expect(summary.metrics.LCP.value).toBe(3000);
+			// Trend should be regression because it compares T (3000) against T-4h (2000),
+			// bypassing the null points in between.
+			expect(summary.trends.LCP).toBe("regression");
+		}
+	});
 });

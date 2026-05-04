@@ -788,7 +788,6 @@ export const getPerformanceSummary = (
 	if (!chartData || chartData.length === 0) return null;
 
 	const latest = chartData[chartData.length - 1];
-	const previous = chartData.length > 1 ? chartData[chartData.length - 2] : null;
 
 	const summary: RawPerformanceSummary = {
 		timestamp: latest.timestamp,
@@ -796,16 +795,28 @@ export const getPerformanceSummary = (
 		trends: {},
 	};
 
+	// Helper to find the most recent preceding point with valid data
+	const findPreviousValidPoint = (checkFn: (p: ChartDataPoint) => boolean) => {
+		for (let i = chartData.length - 2; i >= 0; i--) {
+			if (checkFn(chartData[i])) return chartData[i];
+		}
+
+		return null;
+	};
+
 	// 1. Overall Metric and Trend (using SMA smoothed values)
+	const previousOverall = findPreviousValidPoint((p) => p.overall_p75 !== undefined);
+
 	const latestScore = latest.overall_score_p75_sma ?? latest.overall_p75 ?? 0;
-	const previousScore = previous?.overall_score_p75_sma ?? previous?.overall_p75 ?? 0;
+	const previousScore =
+		previousOverall?.overall_score_p75_sma ?? previousOverall?.overall_p75 ?? 0;
 
 	summary.metrics.OVERALL = {
 		value: latest.overall_p75 || 0,
 		score: latest.overall_p75 || 0,
 	};
 
-	if (previous) {
+	if (previousOverall) {
 		const diff = latestScore - previousScore;
 
 		if (Math.abs(diff) < 0.01) {
@@ -822,9 +833,16 @@ export const getPerformanceSummary = (
 	// 2. Individual Metrics
 	METRIC_DISPLAY_ORDER.forEach((m) => {
 		const val1 = latest[`${m}_p75`] as number | undefined;
-		const val2 = previous ? (previous[`${m}_p75`] as number | undefined) : undefined;
 		const sma1 = latest[`${m}_p75_sma`] as number | undefined;
-		const sma2 = previous ? (previous[`${m}_p75_sma`] as number | undefined) : undefined;
+
+		const previousMetric = findPreviousValidPoint((p) => p[`${m}_p75`] !== undefined);
+
+		const val2 = previousMetric
+			? (previousMetric[`${m}_p75`] as number | undefined)
+			: undefined;
+		const sma2 = previousMetric
+			? (previousMetric[`${m}_p75_sma`] as number | undefined)
+			: undefined;
 
 		if (val1 !== undefined) {
 			const config = LIGHTHOUSE_CONFIG[m];
