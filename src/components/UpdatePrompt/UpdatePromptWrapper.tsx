@@ -59,11 +59,19 @@ export const UpdatePromptWrapper: FC = () => {
 	 * Triggers a hard reload to activate the newly installed service worker.
 	 *
 	 * @remarks
+	 * Calls the stored `updateServiceWorker` function provided by the
+	 * `new-version-available` event.
+	 *
+	 * A 2.5s fallback timeout is implemented to ensure a page reload occurs
+	 * even if the service worker activation fails to trigger the browser's
+	 * automatic reload or the `controllerchange` event.
+	 *
+	 * @returns {void} Side-effects only.
 	 *
 	 * @example
-	 * Calls `updateSW(true)` if the reference exists, which should trigger a page
-	 * reload after the worker updates. Fallback to `window.location.reload()`
-	 * if the update function is not available.
+	 * ```ts
+	 * handleRefresh();
+	 * ```
 	 */
 	const handleRefresh = () => {
 		if (updateSWRef.current) {

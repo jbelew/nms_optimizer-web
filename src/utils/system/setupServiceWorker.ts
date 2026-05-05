@@ -22,9 +22,15 @@ import { isBot } from "../browser/environment";
  * This setup enables offline capabilities, background sync, and update prompts.
  * Registration is deferred until the page has loaded and is skipped for bots.
  *
+ * When a new version is available, it dispatches a `new-version-available`
+ * custom event on the `window` object. The event detail contains a wrapper
+ * function that triggers the service worker update to avoid race conditions
+ * during registration.
+ *
  * @returns {void} Side-effects only.
  *
  * @see {@link isBot}
+ * @see {@link ./setupServiceWorker.test.ts Unit Tests}
  *
  * @category Utilities
  *
