@@ -50,8 +50,11 @@ const mockProps: TechTreeRowProps = {
 describe("useTechTreeRow", () => {
 	beforeEach(() => {
 		(useGridStore as unknown as Mock).mockImplementation(
-			(selector: (state: { hasTechInGrid: (tech: string) => boolean }) => unknown) =>
-				selector({ hasTechInGrid: vi.fn(() => false) })
+			(selector: (state: Record<string, unknown>) => unknown) =>
+				selector({
+					activeTechs: new Set(),
+					hasTechInGrid: vi.fn(() => false),
+				})
 		);
 		(useTechStore as unknown as Mock).mockImplementation(
 			(

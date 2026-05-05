@@ -85,12 +85,20 @@
 	}
 
 	&--active {
-		background-color: var(--accent-surface);
+		background-color: var(--accent-a4);
 		border-color: var(--accent-indicator);
 
 		@media (hover: hover) {
 			&:hover {
-				background-color: var(--accent-hover);
+				background-color: var(--accent-a5);
+			}
+
+			&.gridCell--supercharged:not(.gridCell--empty):hover {
+				background-color: var(--purple-a8) !important;
+			}
+
+			&.gridCell--supercharged.gridCell--empty:hover {
+				background-color: var(--purple-a4) !important;
 			}
 		}
 
@@ -154,7 +162,7 @@
 
 		@media (hover: hover) {
 			&:hover {
-				background-color: var(--purple-a4) !important;
+				background-color: var(--purple-hover) !important;
 			}
 		}
 

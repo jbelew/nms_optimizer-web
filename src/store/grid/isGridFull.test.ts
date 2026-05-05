@@ -29,6 +29,7 @@ describe("isGridFull selector in GridStore", () => {
 				result: null,
 				isSharedGrid: false,
 			});
+			useGridStore.getState().triggerRecompute();
 		});
 	};
 
@@ -41,6 +42,7 @@ describe("isGridFull selector in GridStore", () => {
 				result: null,
 				isSharedGrid: false,
 			});
+			useGridStore.getState().triggerRecompute();
 		});
 	};
 
@@ -55,6 +57,7 @@ describe("isGridFull selector in GridStore", () => {
 				})
 			);
 			useGridStore.setState({ grid: defaultGrid });
+			useGridStore.getState().triggerRecompute();
 		});
 	});
 

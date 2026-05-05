@@ -3,7 +3,7 @@ import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
-import { fetchPerformanceData, isPerformanceDataCached } from "@/utils/api/performanceResource";
+import { fetchPerformanceData } from "@/utils/api/performanceResource";
 
 const PerformanceChart = lazy(() => import("./PerformanceChart"));
 
@@ -56,15 +56,12 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const data = usePerformanceData(fetchRange);
 
 	const handleRangeChange = (newRange: number) => {
-		if (isPerformanceDataCached(fetchRange)) {
-			// If cached, just set it directly
+		// Always wrap in startTransition so the heavy synchronous chart
+		// re-render (data transformation + Recharts) keeps the SegmentedControl
+		// responsive, regardless of whether the network data is already cached.
+		startTransition(() => {
 			setRange(newRange);
-		} else {
-			// Otherwise use transition
-			startTransition(() => {
-				setRange(newRange);
-			});
-		}
+		});
 	};
 
 	if (!data || data.length === 0) {

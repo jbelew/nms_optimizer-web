@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useEffect, useRef, useState } from "react";
+import { FC, lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "../../hooks/useUpdateCheck/useUpdateCheck";
@@ -48,10 +48,12 @@ export const UpdatePromptWrapper: FC = () => {
 		}
 	}, [showUpdatePrompt, sendEvent]);
 
-	useUpdateCheck((updateSW) => {
-		updateSWRef.current = updateSW;
-		setShowUpdatePrompt(true);
-	});
+	useUpdateCheck(
+		useCallback((updateSW: (reloadPage?: boolean) => Promise<void>) => {
+			updateSWRef.current = updateSW;
+			setShowUpdatePrompt(true);
+		}, [])
+	);
 
 	/**
 	 * Triggers a hard reload to activate the newly installed service worker.
@@ -65,10 +67,17 @@ export const UpdatePromptWrapper: FC = () => {
 	 */
 	const handleRefresh = () => {
 		if (updateSWRef.current) {
-			updateSWRef.current(true).catch((e) => {
-				console.error("Failed to update SW:", e);
-				window.location.reload();
-			});
+			updateSWRef
+				.current(true)
+				.then(() => {
+					// Fallback reload if it doesn't happen automatically in 2.5 seconds
+					setTimeout(() => {
+						window.location.reload();
+					}, 2500);
+				})
+				.catch(() => {
+					window.location.reload();
+				});
 		} else {
 			window.location.reload();
 		}

@@ -83,6 +83,7 @@ vi.mock("../../utils/system/dialogUtils", () => ({
 vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendEvent: mockSendEvent,
+		sendDeferredEvent: vi.fn(),
 	}),
 }));
 vi.mock("../../hooks/useOptimize/useOptimize");

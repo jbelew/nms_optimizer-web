@@ -161,4 +161,10 @@ describe("GridCell", () => {
 		const cellElement = screen.getByRole("gridcell");
 		expect(cellElement.querySelector(".corner.top-left")).not.toBeInTheDocument();
 	});
+
+	it("should be wrapped in React.memo for performance", () => {
+		// React.memo wraps the component, setting $$typeof to Symbol.for("react.memo")
+		// and placing the original component in the `type` property.
+		expect(GridCell).toHaveProperty("$$typeof", Symbol.for("react.memo"));
+	});
 });

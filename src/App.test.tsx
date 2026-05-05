@@ -112,6 +112,10 @@ vi.mock("./hooks/useUrlValidation/useUrlValidation", () => ({
 
 vi.mock("./utils/analytics/tracking", () => ({
 	sendEvent: vi.fn(),
+	sendDeferredEvent: vi.fn(),
+	initializeAnalytics: vi.fn(),
+	initializeAnalyticsClient: vi.fn(),
+	resetAnalyticsForTesting: vi.fn(),
 }));
 
 vi.mock("./components/AppDialog/Base/AppDialog", () => ({

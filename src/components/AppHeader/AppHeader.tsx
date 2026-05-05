@@ -1,7 +1,7 @@
 // src/components/AppHeader/AppHeader.tsx
 import "./AppHeader.scss";
 
-import React, { useEffect, useTransition } from "react";
+import React, { useEffect } from "react";
 import {
 	CounterClockwiseClockIcon,
 	EyeOpenIcon,
@@ -60,12 +60,11 @@ interface AppHeaderProps {
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const { t, i18n } = useTranslation();
 	const { openDialog } = useDialog();
-	const { sendEvent } = useAnalytics();
+	const { sendDeferredEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
 	const isSm = useBreakpoint("640px");
 	const { a11yMode, toggleA11yMode } = useA11yStore();
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const [, startTransition] = useTransition();
 
 	useEffect(() => {
 		if (a11yMode) {
@@ -185,14 +184,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							className="app-header__logo-button"
 							aria-label={t("buttons.showEasterEgg") ?? ""}
 							onClick={() => {
-								startTransition(() => {
-									sendEvent({
-										category: "ui",
-										action: "earn_virtual_currency",
-										virtual_currency_name: "easter_egg",
-										value: 1,
-										nonInteraction: false,
-									});
+								sendDeferredEvent({
+									category: "ui",
+									action: "earn_virtual_currency",
+									virtual_currency_name: "easter_egg",
+									value: 1,
+									nonInteraction: false,
 								});
 							}}
 						>

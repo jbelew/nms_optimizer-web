@@ -11,6 +11,7 @@ import WelcomeContent from "./WelcomeContent";
 vi.mock("../../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendEvent: vi.fn(),
+		sendDeferredEvent: vi.fn(),
 	}),
 }));
 

@@ -134,7 +134,7 @@ describe("useOptimize", () => {
 
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
-		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn() });
+		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn(), sendDeferredEvent: vi.fn() });
 	});
 
 	afterEach(() => {

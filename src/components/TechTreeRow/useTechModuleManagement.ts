@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -60,38 +60,46 @@ export const useTechModuleManagement = (
 		}
 	}, [tech, currentCheckedModules, setModuleSelection, getModuleSelection]);
 
-	const coreModuleIds = modules.filter((m) => m.type === "core").map((m) => m.id);
+	const coreModuleIds = useMemo(
+		() => modules.filter((m) => m.type === "core").map((m) => m.id),
+		[modules]
+	);
 
-	const nonCoreModuleIds = modules.filter((m) => m.type !== "core").map((m) => m.id);
+	const nonCoreModuleIds = useMemo(
+		() => modules.filter((m) => m.type !== "core").map((m) => m.id),
+		[modules]
+	);
 
-	const groups: { [key: string]: typeof modules } = {
-		core: [],
-		bonus: [],
-		upgrade: [],
-		reactor: [],
-		cosmetic: [],
-		atlantid: [],
-		trails: [],
-		figurines: [],
-	};
+	const groupedModules = useMemo(() => {
+		const groups: { [key: string]: typeof modules } = {
+			core: [],
+			bonus: [],
+			upgrade: [],
+			reactor: [],
+			cosmetic: [],
+			atlantid: [],
+			trails: [],
+			figurines: [],
+		};
 
-	modules.forEach((module) => {
-		if (module.label?.toLowerCase().includes("figurine")) {
-			groups.figurines.push(module);
+		modules.forEach((module) => {
+			if (module.label?.toLowerCase().includes("figurine")) {
+				groups.figurines.push(module);
 
-			return;
-		}
+				return;
+			}
 
-		const type = module.type || "upgrade";
+			const type = module.type || "upgrade";
 
-		if (groups[type]) {
-			groups[type].push(module);
-		} else {
-			groups.upgrade.push(module);
-		}
-	});
+			if (groups[type]) {
+				groups[type].push(module);
+			} else {
+				groups.upgrade.push(module);
+			}
+		});
 
-	const groupedModules = groups;
+		return groups;
+	}, [modules]);
 
 	/**
 	 * Toggles the selection status of a single module.
@@ -105,15 +113,18 @@ export const useTechModuleManagement = (
 	 * handleCheckboxChange("MOD_1");
 	 * ```
 	 */
-	const handleCheckboxChange = (moduleId: string) => {
-		setCheckedModules(tech, (prevChecked = []) => {
-			const isChecked = prevChecked.includes(moduleId);
+	const handleCheckboxChange = useCallback(
+		(moduleId: string) => {
+			setCheckedModules(tech, (prevChecked = []) => {
+				const isChecked = prevChecked.includes(moduleId);
 
-			return isChecked
-				? prevChecked.filter((id) => id !== moduleId)
-				: [...prevChecked, moduleId];
-		});
-	};
+				return isChecked
+					? prevChecked.filter((id) => id !== moduleId)
+					: [...prevChecked, moduleId];
+			});
+		},
+		[tech, setCheckedModules]
+	);
 
 	/**
 	 * Replaces the entire selection list for this technology.
@@ -127,9 +138,12 @@ export const useTechModuleManagement = (
 	 * handleAllCheckboxesChange(["MOD_1", "MOD_2"]);
 	 * ```
 	 */
-	const handleAllCheckboxesChange = (moduleIds: string[]) => {
-		setCheckedModules(tech, () => moduleIds);
-	};
+	const handleAllCheckboxesChange = useCallback(
+		(moduleIds: string[]) => {
+			setCheckedModules(tech, () => moduleIds);
+		},
+		[tech, setCheckedModules]
+	);
 
 	/**
 	 * Handles the "Select All" toggle interaction.
@@ -143,13 +157,16 @@ export const useTechModuleManagement = (
 	 * handleSelectAllChange(true); // Selects all non-core modules
 	 * ```
 	 */
-	const handleSelectAllChange = (checked: boolean | "indeterminate") => {
-		if (checked) {
-			handleAllCheckboxesChange([...nonCoreModuleIds, ...coreModuleIds]);
-		} else {
-			handleAllCheckboxesChange(coreModuleIds);
-		}
-	};
+	const handleSelectAllChange = useCallback(
+		(checked: boolean | "indeterminate") => {
+			if (checked) {
+				handleAllCheckboxesChange([...nonCoreModuleIds, ...coreModuleIds]);
+			} else {
+				handleAllCheckboxesChange(coreModuleIds);
+			}
+		},
+		[handleAllCheckboxesChange, nonCoreModuleIds, coreModuleIds]
+	);
 
 	/**
 	 * Processes a batch value change from the checkbox group.
@@ -167,52 +184,68 @@ export const useTechModuleManagement = (
 	 * handleValueChange(["MOD_CORE", "MOD_THETA"]);
 	 * ```
 	 */
-	const handleValueChange = (newValues: string[]) => {
-		const oldValues = new Set(currentCheckedModules);
-		const newValuesSet = new Set(newValues);
+	const handleValueChange = useCallback(
+		(newValues: string[]) => {
+			const oldValues = new Set(currentCheckedModules);
+			const newValuesSet = new Set(newValues);
 
-		const added = [...newValuesSet].filter((id) => !oldValues.has(id));
-		const removed = [...oldValues].filter((id) => !newValuesSet.has(id));
+			const added = [...newValuesSet].filter((id) => !oldValues.has(id));
+			const removed = [...oldValues].filter((id) => !newValuesSet.has(id));
 
-		if (added.length > 0) {
-			handleCheckboxChange(added[0]);
-		} else if (removed.length > 0) {
-			const finalNewValues = new Set(newValuesSet);
+			if (added.length > 0) {
+				handleCheckboxChange(added[0]);
+			} else if (removed.length > 0) {
+				const finalNewValues = new Set(newValuesSet);
 
-			for (const removedId of removed) {
-				const module = modules.find((m) => m.id === removedId);
+				for (const removedId of removed) {
+					const module = modules.find((m) => m.id === removedId);
 
-				if (module) {
-					const groupName = module.type || "upgrade";
+					if (module) {
+						const groupName = module.type || "upgrade";
 
-					if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
-						const label = module.label || "";
+						if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
+							const label = module.label || "";
 
-						if (label.includes("Theta")) {
-							const tauModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Tau")
-							);
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Sigma")
-							);
-							if (tauModule) finalNewValues.delete(tauModule.id);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
-						} else if (label.includes("Tau")) {
-							const sigmaModule = groupedModules[groupName].find((m) =>
-								m.label?.includes("Sigma")
-							);
-							if (sigmaModule) finalNewValues.delete(sigmaModule.id);
+							if (label.includes("Theta")) {
+								const tauModule = groupedModules[groupName].find((m) =>
+									m.label?.includes("Tau")
+								);
+								const sigmaModule = groupedModules[groupName].find((m) =>
+									m.label?.includes("Sigma")
+								);
+								if (tauModule) finalNewValues.delete(tauModule.id);
+								if (sigmaModule) finalNewValues.delete(sigmaModule.id);
+							} else if (label.includes("Tau")) {
+								const sigmaModule = groupedModules[groupName].find((m) =>
+									m.label?.includes("Sigma")
+								);
+								if (sigmaModule) finalNewValues.delete(sigmaModule.id);
+							}
 						}
 					}
 				}
+
+				handleAllCheckboxesChange(Array.from(finalNewValues));
 			}
+		},
+		[
+			currentCheckedModules,
+			handleCheckboxChange,
+			handleAllCheckboxesChange,
+			modules,
+			groupedModules,
+		]
+	);
 
-			handleAllCheckboxesChange(Array.from(finalNewValues));
-		}
-	};
+	const allModulesSelected = useMemo(
+		() => nonCoreModuleIds.every((id) => currentCheckedModules.includes(id)),
+		[nonCoreModuleIds, currentCheckedModules]
+	);
 
-	const allModulesSelected = nonCoreModuleIds.every((id) => currentCheckedModules.includes(id));
-	const isIndeterminate = currentCheckedModules.length > 0 && !allModulesSelected;
+	const isIndeterminate = useMemo(
+		() => currentCheckedModules.length > 0 && !allModulesSelected,
+		[currentCheckedModules.length, allModulesSelected]
+	);
 
 	return {
 		currentCheckedModules,

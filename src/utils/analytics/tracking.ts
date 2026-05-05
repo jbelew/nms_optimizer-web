@@ -686,20 +686,35 @@ export const sendEvent = (event: GA4Event): void => {
 		return;
 	}
 
-	// Fast synchronous path once detection has resolved. This is critical so
-	// late-firing events (e.g. Web Vitals on `visibilitychange`) are dispatched
-	// before the browser tears the page down — `await` would lose them.
-	if (adBlockerResult !== null) {
-		dispatchEvent(event, adBlockerResult);
+	// Synchronous dispatch is critical for late-firing events (e.g. Web Vitals
+	// on `visibilitychange`) to ensure they fire before page teardown.
+	// We use the cached adBlockerResult if available, defaulting to false.
+	dispatchEvent(event, adBlockerResult ?? false);
+};
 
-		return;
+/**
+ * Defer a GA4 event so it does not block UI interactions (good for INP).
+ *
+ * Wraps `sendEvent` in `requestIdleCallback` (or `setTimeout` fallback). Use
+ * this from click/tap handlers where the analytics call is incidental to the
+ * interaction. Do NOT use this for late-firing events (Web Vitals,
+ * `visibilitychange`, unload) — those must call `sendEvent` synchronously.
+ *
+ * @param {GA4Event} event - The structured event payload to transmit.
+ *
+ * @example
+ * ```ts
+ * onClick={() => sendDeferredEvent({ category: "ui", action: "click_logo" })}
+ * ```
+ */
+export const sendDeferredEvent = (event: GA4Event): void => {
+	const dispatch = () => sendEvent(event);
+
+	if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+		window.requestIdleCallback(dispatch, { timeout: 1000 });
+	} else {
+		setTimeout(dispatch, 0);
 	}
-
-	getAdBlockerDetectionResult()
-		.then((isBlocked) => dispatchEvent(event, isBlocked))
-		.catch((trackingError) => {
-			console.error("Failed to send analytics event:", trackingError);
-		});
 };
 
 /**

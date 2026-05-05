@@ -175,7 +175,9 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 			<Flex direction="column" gap="1" style={CHART_TOOLTIP_STYLE}>
 				<Text size="1" color="gray" mb="1">
 					{item.displayDate} {item.hour}
-					{item.appVersion ? ` (${item.appVersion})` : ""}
+					{item.originalVersion || item.appVersion
+						? ` (${item.originalVersion || item.appVersion})`
+						: ""}
 				</Text>
 				{p90 !== undefined && (
 					<Flex justify="between" gap="4">
@@ -212,7 +214,9 @@ const ChartTooltipContent = memo<ChartTooltipContentProps>(function ChartTooltip
 			<Flex direction="column" gap="0">
 				<Text size="1" color="gray">
 					{item.displayDate} {item.hour}
-					{item.appVersion ? ` (${item.appVersion})` : ""}
+					{item.originalVersion || item.appVersion
+						? ` (${item.originalVersion || item.appVersion})`
+						: ""}
 				</Text>
 				<Flex align="center" gap="2">
 					<Text size="3" weight="bold" style={{ color: SCORE_BAND_COLOR(score) }}>
@@ -515,7 +519,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 						width: "100%",
 						minWidth: 0,
 						position: "relative",
-						opacity: isPending ? 0.7 : 1,
+						opacity: isPending ? 0.365 : 1,
 						transition: "opacity 0.2s",
 					}}
 				>

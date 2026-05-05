@@ -124,7 +124,7 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 	const setGridAndResetAuxiliaryState = useGridStore(
 		(state) => state.setGridAndResetAuxiliaryState
 	);
-	const { sendEvent } = useAnalytics();
+	const { sendDeferredEvent } = useAnalytics();
 	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
 	const { isKnownRoute } = useRouteContext();
@@ -162,15 +162,6 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 			Logger.info(`Platform selected: ${option}`, { platform: option });
 			// Use startTransition to keep dropdown responsive while handling heavy updates
 			startTransition(() => {
-				sendEvent({
-					category: "ui",
-					action: "select_content",
-					content_type: "platform",
-					item_id: option,
-					value: 1,
-					nonInteraction: false,
-				});
-
 				// TODO: Turn this back on if the Corvette bug shows up again ...
 				if (option === "corvette") {
 					showInfo(
@@ -180,9 +171,17 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 				}
 
 				setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
-
 				const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
 				setGridAndResetAuxiliaryState(initialGrid);
+			});
+
+			sendDeferredEvent({
+				category: "ui",
+				action: "select_content",
+				content_type: "platform",
+				item_id: option,
+				value: 1,
+				nonInteraction: false,
 			});
 		}
 	};

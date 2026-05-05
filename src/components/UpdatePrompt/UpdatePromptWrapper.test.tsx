@@ -52,6 +52,7 @@ describe("UpdatePromptWrapper", () => {
 		vi.clearAllMocks();
 		(useAnalytics as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
 			sendEvent: mockSendEvent,
+			sendDeferredEvent: vi.fn(),
 		});
 		(useUpdateCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation((cb) => {
 			updateCallback = cb;

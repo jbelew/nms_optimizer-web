@@ -140,6 +140,7 @@ describe("Analytics Tracking", () => {
 	describe("Event Dispatching", () => {
 		it("should call client-side analytics when tracking is not blocked", async () => {
 			(fetch as Mock).mockResolvedValue({ status: 200 });
+			await tracking.initializeAnalytics();
 			tracking.sendEvent(testEvent);
 
 			await vi.waitFor(() => {
@@ -154,6 +155,7 @@ describe("Analytics Tracking", () => {
 
 		it("should call server-side analytics when tracking is blocked", async () => {
 			(fetch as Mock).mockRejectedValue(new Error("Blocked"));
+			await tracking.initializeAnalytics();
 			tracking.sendEvent(testEvent);
 
 			await vi.waitFor(() => {

@@ -123,6 +123,19 @@ export const FULL_DASHBOARD_HEIGHT =
 	PERFORMANCE_LAYOUT.CHART_MARGIN_BOTTOM;
 
 /**
+ * Maps Core Web Vital metric names to Radix UI color names.
+ * @internal
+ */
+const METRIC_COLOR_MAP: Record<string, string> = {
+	TTFB: "cyan",
+	FCP: "purple",
+	LCP: "red",
+	CLS: "orange",
+	INP: "amber",
+	OVERALL: "green",
+};
+
+/**
  * Returns a consistent color for a given performance metric.
  *
  * @remarks
@@ -142,24 +155,7 @@ export const FULL_DASHBOARD_HEIGHT =
  * ```
  */
 export const getMetricColor = (name: string, weight: number | string = 10): string => {
-	const base = (() => {
-		switch (name) {
-			case "TTFB":
-				return "cyan";
-			case "FCP":
-				return "purple";
-			case "LCP":
-				return "red";
-			case "CLS":
-				return "orange";
-			case "INP":
-				return "amber";
-			case "OVERALL":
-				return "green";
-			default:
-				return "accent";
-		}
-	})();
+	const base = METRIC_COLOR_MAP[name] ?? "accent";
 
 	return `var(--${base}-${weight})`;
 };
@@ -186,40 +182,13 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
 export const getStatusColor = (metric: string, value: number | undefined | null): string => {
 	if (value === undefined || value === null) return "var(--gray-11)";
 
-	switch (metric) {
-		case "LCP":
-			return value <= 2500
-				? "var(--green-11)"
-				: value <= 4000
-					? "var(--amber-11)"
-					: "var(--red-11)";
-		case "INP":
-			return value <= 200
-				? "var(--green-11)"
-				: value <= 500
-					? "var(--amber-11)"
-					: "var(--red-11)";
-		case "CLS":
-			return value <= 100
-				? "var(--green-11)"
-				: value <= 250
-					? "var(--amber-11)"
-					: "var(--red-11)";
-		case "FCP":
-			return value <= 1800
-				? "var(--green-11)"
-				: value <= 3000
-					? "var(--amber-11)"
-					: "var(--red-11)";
-		case "TTFB":
-			return value <= 800
-				? "var(--green-11)"
-				: value <= 1800
-					? "var(--amber-11)"
-					: "var(--red-11)";
-		default:
-			return "var(--gray-11)";
-	}
+	const config = LIGHTHOUSE_CONFIG[metric];
+	if (!config) return "var(--gray-11)";
+
+	if (value <= config.p90) return "var(--green-11)";
+	if (value <= config.p50) return "var(--amber-11)";
+
+	return "var(--red-11)";
 };
 
 /**
@@ -695,6 +664,19 @@ export const transformPerformanceData = (
 		}
 	}
 
+	// Create a virtual "LIVE" version for the final plot point.
+	// This forces the version grouping logic below to treat the current live value
+	// as its own segment, creating a sloping connection from the current version's
+	// period average to the latest telemetry.
+	if (chartData.length > 0) {
+		const lastPoint = chartData[chartData.length - 1];
+
+		if (lastPoint.displayDate) {
+			lastPoint.originalVersion = lastPoint.appVersion;
+			lastPoint.appVersion = "LIVE";
+		}
+	}
+
 	// Compute per-version averages for version-to-version trend lines.
 	// Groups data points by appVersion, computes the mean p75 for each metric
 	// and the mean overall score, then stamps every point with the average
@@ -708,10 +690,8 @@ export const transformPerformanceData = (
 
 	const allSegments = Array.from(versionSegments.values());
 
-	allSegments.forEach((indices, segIdx) => {
+	allSegments.forEach((indices) => {
 		const startIdx = indices[0];
-		const isLastSegment = segIdx === allSegments.length - 1;
-		const lastIdx = indices[indices.length - 1];
 
 		// Per-metric version averages
 		metrics.forEach((m) => {
@@ -730,14 +710,8 @@ export const transformPerformanceData = (
 			const avg = count > 0 ? sum / count : undefined;
 
 			chartData[startIdx][`${m}_version_avg`] = avg;
-
-			// Close the gap on the right for the current version
-			if (isLastSegment) {
-				chartData[lastIdx][`${m}_version_avg`] = avg;
-			}
 		});
 
-		// Overall score version average
 		let overallSum = 0;
 		let overallCount = 0;
 
@@ -753,11 +727,6 @@ export const transformPerformanceData = (
 		const overallAvg = overallCount > 0 ? overallSum / overallCount : undefined;
 
 		chartData[startIdx].overall_version_avg = overallAvg;
-
-		// Close the gap on the right for the current version
-		if (isLastSegment) {
-			chartData[lastIdx].overall_version_avg = overallAvg;
-		}
 	});
 
 	return { chartData, summary, uniqueMetrics: Array.from(metrics) };
@@ -916,8 +885,11 @@ export const getVersionChanges = (
 			// Enforce minimum gap to prevent label collision
 			const sinceLastMarker = i - lastPushedIndex;
 
-			// Skip ticks at the very start to avoid layout pressure against Y-axis
-			if (i > 3 && (lastPushedIndex === -1 || sinceLastMarker >= minGap)) {
+			// Skip ticks at the very start to avoid layout pressure against Y-axis.
+			// Always allow the "LIVE" marker at the very end regardless of gap.
+			const isLive = point.appVersion === "LIVE";
+
+			if (!isLive && i > 3 && (lastPushedIndex === -1 || sinceLastMarker >= minGap)) {
 				versionChanges.push({ timestamp: point.timestamp, version: point.appVersion });
 				lastPushedIndex = i;
 			}

@@ -96,12 +96,11 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 	) => {
 		const { t } = useTranslation();
 		const { openDialog } = useDialog();
-		const { sendEvent } = useAnalytics();
+		const { sendDeferredEvent } = useAnalytics();
 		const { a11yMode, toggleA11yMode } = useA11yStore();
 		const { updateUrlForShare } = useUrlSync();
 		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 		const [isSharePending, startShareTransition] = useTransition();
-		const [, startTransition] = useTransition();
 		// const { handleScreenshot, isCapturing } = useScreenshot();
 
 		/**
@@ -114,12 +113,12 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 			startShareTransition(() => {
 				const shareUrl = updateUrlForShare();
 				openDialog(null, { shareUrl });
-				sendEvent({
-					category: "ui",
-					action: "share_link",
-					value: 1,
-					nonInteraction: false,
-				});
+			});
+			sendDeferredEvent({
+				category: "ui",
+				action: "share_link",
+				value: 1,
+				nonInteraction: false,
 			});
 		};
 
@@ -203,13 +202,11 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							onShowChangelog();
-							startTransition(() => {
-								sendEvent({
-									category: "ui",
-									action: "show_changelog",
-									value: 1,
-									nonInteraction: false,
-								});
+							sendDeferredEvent({
+								category: "ui",
+								action: "show_changelog",
+								value: 1,
+								nonInteraction: false,
 							});
 						}}
 					>
@@ -222,13 +219,11 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							openDialog("userstats");
-							startTransition(() => {
-								sendEvent({
-									category: "ui",
-									action: "show_user_stats",
-									value: 1,
-									nonInteraction: false,
-								});
+							sendDeferredEvent({
+								category: "ui",
+								action: "show_user_stats",
+								value: 1,
+								nonInteraction: false,
 							});
 						}}
 					>

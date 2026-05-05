@@ -28,6 +28,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 				result: null,
 				isSharedGrid: false,
 			});
+			useGridStore.getState().triggerRecompute();
 		});
 	};
 
@@ -42,6 +43,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 				})
 			);
 			useGridStore.setState({ grid: defaultGrid });
+			useGridStore.getState().triggerRecompute();
 		});
 	});
 

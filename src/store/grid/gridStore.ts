@@ -274,6 +274,20 @@ export type GridStore = {
 		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
 		| undefined;
 
+	// --- Precomputed derived state (updated inside every grid-mutating action) ---
+	/** Set of technology keys currently placed in at least one grid cell. */
+	activeTechs: Set<string>;
+	/** Whether every active cell has a module assigned. */
+	_isGridFull: boolean;
+	/** Count of cells where `supercharged === true`. */
+	_totalSuperchargedCells: number;
+	/** Whether any cell in the grid has a non-null module. */
+	_hasModulesInGrid: boolean;
+	/** Index of the first row where every cell is inactive, or -1. */
+	_firstInactiveRowIndex: number;
+	/** Index of the last row containing at least one active cell, or -1. */
+	_lastActiveRowIndex: number;
+
 	/** Internal state tracking for tap/double-tap logic. */
 	_initialCellStateForTap?: Cell | null;
 
@@ -357,6 +371,8 @@ export type GridStore = {
 	}) => void;
 	/** Batch applies modules to the grid by linear index. */
 	applyModulesToGrid: (modules: (Module | null)[]) => void;
+	/** Triggers a manual recomputation of all precomputed derived state fields. */
+	triggerRecompute: () => void;
 };
 
 const debouncedStorage = {
@@ -531,6 +547,86 @@ export const useGridStore = create<GridStore>()(
 				state.superchargedFixed = definition.superchargedFixed;
 			};
 
+			/**
+			 * Scans the grid once and updates all precomputed derived state fields.
+			 *
+			 * @param state - The current mutable Immer draft state.
+			 *
+			 * @example
+			 * ```typescript
+			 * set((state) => {
+			 *   state.grid.cells[0][0].active = true;
+			 *   recomputeDerivedState(state);
+			 * });
+			 * ```
+			 */
+			const recomputeDerivedState = (state: GridStore) => {
+				if (!state.grid) {
+					state.activeTechs = new Set();
+					state._isGridFull = false;
+					state._totalSuperchargedCells = 0;
+					state._hasModulesInGrid = false;
+					state._firstInactiveRowIndex = 0;
+					state._lastActiveRowIndex = -1;
+
+					return;
+				}
+
+				const { cells } = state.grid;
+
+				if (!cells) {
+					state.activeTechs = new Set();
+					state._isGridFull = false;
+					state._totalSuperchargedCells = 0;
+					state._hasModulesInGrid = false;
+					state._firstInactiveRowIndex = 0;
+					state._lastActiveRowIndex = -1;
+
+					return;
+				}
+
+				const techs = new Set<string>();
+				let superchargedCount = 0;
+				let hasModules = false;
+				let activeCount = 0;
+				let activeWithModuleCount = 0;
+				let firstInactiveRow = -1;
+				let lastActiveRow = -1;
+
+				for (let r = 0; r < cells.length; r++) {
+					const row = cells[r];
+					let rowHasActive = false;
+					let rowAllInactive = true;
+
+					for (let c = 0; c < row.length; c++) {
+						const cell = row[c];
+						if (cell.tech) techs.add(cell.tech);
+
+						if (cell.supercharged) superchargedCount++;
+
+						if (cell.module !== null) hasModules = true;
+
+						if (cell.active) {
+							rowHasActive = true;
+							rowAllInactive = false;
+							activeCount++;
+
+							if (cell.module !== null) activeWithModuleCount++;
+						}
+					}
+
+					if (rowHasActive) lastActiveRow = r;
+					if (rowAllInactive && firstInactiveRow === -1) firstInactiveRow = r;
+				}
+
+				state.activeTechs = techs;
+				state._totalSuperchargedCells = superchargedCount;
+				state._hasModulesInGrid = hasModules;
+				state._isGridFull = activeCount > 0 && activeCount === activeWithModuleCount;
+				state._firstInactiveRowIndex = firstInactiveRow;
+				state._lastActiveRowIndex = lastActiveRow;
+			};
+
 			return {
 				version: 1, // Initialize version to 1
 				grid: createGrid(10, 6),
@@ -542,11 +638,23 @@ export const useGridStore = create<GridStore>()(
 				initialGridDefinition: undefined,
 				_initialCellStateForTap: null,
 
+				// Precomputed derived state — defaults for empty grid
+				activeTechs: new Set<string>(),
+				_isGridFull: false,
+				_totalSuperchargedCells: 0,
+				_hasModulesInGrid: false,
+				_firstInactiveRowIndex: 0,
+				_lastActiveRowIndex: -1,
+
 				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
 
 				setBuildName: (name) => set({ buildName: name }),
 
-				setGrid: (grid) => set({ grid }),
+				setGrid: (grid) =>
+					set((state) => {
+						state.grid = grid;
+						recomputeDerivedState(state);
+					}),
 
 				resetGrid: () => {
 					set((state) => {
@@ -564,6 +672,7 @@ export const useGridStore = create<GridStore>()(
 						state.result = null;
 						state.isSharedGrid = false;
 						state.buildName = null;
+						recomputeDerivedState(state);
 					});
 					useTechStore.getState().clearResult();
 					useTechStore.getState().clearAllCheckedModules();
@@ -580,6 +689,7 @@ export const useGridStore = create<GridStore>()(
 						state.result = null;
 						state.isSharedGrid = false;
 						state.buildName = null;
+						recomputeDerivedState(state);
 					});
 					useTechStore.getState().clearResult();
 					useTechStore.getState().clearTechGroups();
@@ -616,6 +726,8 @@ export const useGridStore = create<GridStore>()(
 								cell.supercharged = false;
 							}
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -630,6 +742,7 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						state._initialCellStateForTap = null;
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -644,6 +757,7 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						state._initialCellStateForTap = null;
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -666,6 +780,8 @@ export const useGridStore = create<GridStore>()(
 						} else {
 							console.error(`Cell not found at [${rowIndex}, ${columnIndex}]`);
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -684,6 +800,7 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						cell.supercharged = !cell.supercharged;
+						recomputeDerivedState(state);
 					}),
 
 				setCellActive: (rowIndex, columnIndex, active) => {
@@ -697,6 +814,8 @@ export const useGridStore = create<GridStore>()(
 								cell.supercharged = false;
 							}
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -707,6 +826,8 @@ export const useGridStore = create<GridStore>()(
 						if (cell) {
 							if (cell.active || !supercharged) cell.supercharged = supercharged;
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -717,6 +838,8 @@ export const useGridStore = create<GridStore>()(
 								cell.active = true;
 							});
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -728,26 +851,17 @@ export const useGridStore = create<GridStore>()(
 								cell.supercharged = false;
 							});
 						}
+
+						recomputeDerivedState(state);
 					});
 				},
 
 				hasTechInGrid: (tech: string): boolean => {
-					const grid = get().grid;
-
-					return grid.cells.some((row) => row.some((cell) => cell.tech === tech));
+					return get().activeTechs.has(tech);
 				},
 
 				isGridFull: (): boolean => {
-					const grid = get().grid;
-					if (!grid || !grid.cells) return false;
-
-					const activeCells = grid.cells.flat().filter((cell) => cell.active);
-
-					if (activeCells.length === 0) {
-						return false;
-					}
-
-					return activeCells.every((cell) => cell.module !== null);
+					return get()._isGridFull;
 				},
 				resetGridTech: (tech: string) => {
 					set((state) => {
@@ -758,40 +872,25 @@ export const useGridStore = create<GridStore>()(
 								}
 							});
 						});
+
+						recomputeDerivedState(state);
 					});
 				},
 
 				selectTotalSuperchargedCells: () => {
-					const grid = get().grid;
-					if (!grid || !grid.cells) return 0;
-
-					return grid.cells.reduce(
-						(total, row) =>
-							total +
-							row.reduce((count, cell) => count + (cell.supercharged ? 1 : 0), 0),
-						0
-					);
+					return get()._totalSuperchargedCells;
 				},
 
 				selectHasModulesInGrid: () => {
-					const grid = get().grid;
-					if (!grid || !grid.cells) return false;
-
-					return grid.cells.some((row) => row.some((cell) => cell.module !== null));
+					return get()._hasModulesInGrid;
 				},
 
 				selectFirstInactiveRowIndex: () => {
-					const grid = get().grid;
-					if (!grid || !grid.cells) return 0;
-
-					return grid.cells.findIndex((r) => r.every((cell) => !cell.active));
+					return get()._firstInactiveRowIndex;
 				},
 
 				selectLastActiveRowIndex: () => {
-					const grid = get().grid;
-					if (!grid || !grid.cells) return -1;
-
-					return grid.cells.map((r) => r.some((cell) => cell.active)).lastIndexOf(true);
+					return get()._lastActiveRowIndex;
 				},
 
 				setGridFixed: (fixed) => set({ gridFixed: fixed }),
@@ -802,6 +901,7 @@ export const useGridStore = create<GridStore>()(
 				setGridFromInitialDefinition: (definition) => {
 					set((state) => {
 						applyGridDefinition(state, definition);
+						recomputeDerivedState(state);
 					});
 				},
 
@@ -835,6 +935,14 @@ export const useGridStore = create<GridStore>()(
 								}
 							}
 						});
+
+						recomputeDerivedState(state);
+					});
+				},
+
+				triggerRecompute: () => {
+					set((state) => {
+						recomputeDerivedState(state);
 					});
 				},
 			};
@@ -843,6 +951,11 @@ export const useGridStore = create<GridStore>()(
 			name: "gridState",
 			version: 1, // Current version of the storage schema
 			storage: debouncedStorage,
+			onRehydrateStorage: () => (state) => {
+				if (state) {
+					state.triggerRecompute();
+				}
+			},
 			partialize: (state) => {
 				const dataToPersist = {
 					grid: state.grid,

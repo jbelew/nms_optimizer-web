@@ -44,23 +44,21 @@ export function setupServiceWorkerRegistration() {
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 
 				const updateServiceWorker = registerSW({
-					onOfflineReady() {
-						console.log("App is ready to work offline");
-					},
+					onOfflineReady() {},
 					onNeedRefresh() {
-						// Directly dispatch an event for the UI to handle the update.
-						// The onNeedRefresh event is only triggered by Workbox when a
-						// new service worker is available and waiting.
-						console.log("New service worker available. Prompting user.");
-						window.dispatchEvent(
-							new CustomEvent("new-version-available", {
-								detail: updateServiceWorker, // Pass the updateServiceWorker function
-							})
-						);
+						// Use a small timeout to ensure the updateServiceWorker assignment is complete
+						// and wrap the call to ensure it resolves correctly at execution time.
+						setTimeout(() => {
+							window.dispatchEvent(
+								new CustomEvent("new-version-available", {
+									detail: (reload?: boolean) => {
+										return updateServiceWorker(reload);
+									},
+								})
+							);
+						}, 0);
 					},
 					onRegistered(registration) {
-						console.log("Service Worker registered:", registration);
-
 						if (!registration) return;
 
 						// Periodically check for SW updates (every 60s).

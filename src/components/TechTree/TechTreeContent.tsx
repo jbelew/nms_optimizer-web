@@ -11,7 +11,7 @@
  * @category Components
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 
 import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { useGridStore } from "../../store/grid/gridStore";
@@ -58,63 +58,67 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 	solving,
 	techTree,
 }) => {
-	const isGridFull = useGridStore((state) => state.isGridFull()); // Calculate isGridFull once here
+	const isGridFull = useGridStore((state) => state._isGridFull);
 
 	/**
 	 * Processed version of the tech tree.
 	 * Filters out non-technology categories, ensures correct types, and sorts technologies alphabetically.
 	 */
-	const result: { [key: string]: TechTreeItem[] } = {};
-	Object.entries(techTree).forEach(([category, technologies]) => {
-		if (
-			category === "recommended_builds" ||
-			category === "grid" ||
-			category === "grid_definition"
-		)
-			return;
-
-		const safeTechnologies = Array.isArray(technologies) ? technologies : [];
-
-		if (!Array.isArray(technologies)) {
-			console.warn(
-				`TechTree: Expected 'technologies' to be an array for category '${category}', but received:`,
-				technologies
-			);
-		}
-
-		const mappedAndSortedTechnologies = safeTechnologies
-			.filter(
-				(tech): tech is TechTreeItem =>
-					typeof tech === "object" && tech !== null && "key" in tech
+	const processedTechTree = useMemo(() => {
+		const result: { [key: string]: TechTreeItem[] } = {};
+		Object.entries(techTree).forEach(([category, technologies]) => {
+			if (
+				category === "recommended_builds" ||
+				category === "grid" ||
+				category === "grid_definition"
 			)
-			.map((tech: TechTreeItem) => ({
-				...tech,
-				modules: tech.modules || [],
-				image: tech.image || null,
-			}))
-			.sort((a, b) => a.label.localeCompare(b.label));
+				return;
 
-		result[category] = mappedAndSortedTechnologies;
-	});
+			const safeTechnologies = Array.isArray(technologies) ? technologies : [];
 
-	const processedTechTree = result;
+			if (!Array.isArray(technologies)) {
+				console.warn(
+					`TechTree: Expected 'technologies' to be an array for category '${category}', but received:`,
+					technologies
+				);
+			}
+
+			const mappedAndSortedTechnologies = safeTechnologies
+				.filter(
+					(tech): tech is TechTreeItem =>
+						typeof tech === "object" && tech !== null && "key" in tech
+				)
+				.map((tech: TechTreeItem) => ({
+					...tech,
+					modules: tech.modules || [],
+					image: tech.image || null,
+				}))
+				.sort((a, b) => a.label.localeCompare(b.label));
+
+			result[category] = mappedAndSortedTechnologies;
+		});
+
+		return result;
+	}, [techTree]);
 
 	/**
 	 * Array of `TechTreeSection` components to be rendered.
 	 * Each section represents a category of technologies.
 	 */
-	const renderedTechTree = Object.entries(processedTechTree).map(
-		([type, technologies], index) => (
-			<TechTreeSection
-				key={type}
-				type={type}
-				technologies={technologies as TechTreeItem[]}
-				handleOptimize={handleOptimize}
-				solving={solving}
-				index={index}
-				isGridFull={isGridFull} // Pass isGridFull down
-			/>
-		)
+	const renderedTechTree = useMemo(
+		() =>
+			Object.entries(processedTechTree).map(([type, technologies], index) => (
+				<TechTreeSection
+					key={type}
+					type={type}
+					technologies={technologies as TechTreeItem[]}
+					handleOptimize={handleOptimize}
+					solving={solving}
+					index={index}
+					isGridFull={isGridFull} // Pass isGridFull down
+				/>
+			)),
+		[processedTechTree, handleOptimize, solving, isGridFull]
 	);
 
 	return <>{renderedTechTree}</>;

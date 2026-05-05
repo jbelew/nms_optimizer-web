@@ -463,7 +463,7 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 			manifest: "build-manifest.json",
 			chunkSizeWarningLimit: 600,
 			cssCodeSplit: true,
-			sourcemap: true,
+			sourcemap: false,
 			cssMinify: "lightningcss",
 			modulePreload: {
 				resolveDependencies: (filename: string, deps: string[]) => {

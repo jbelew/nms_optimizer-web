@@ -108,9 +108,7 @@ describe("setupServiceWorkerRegistration", () => {
 	});
 
 	it("should dispatch a 'new-version-available' event when onNeedRefresh is called", async () => {
-		let onNeedRefreshCallback: (
-			updateServiceWorker: (reloadPage?: boolean) => Promise<void>
-		) => void;
+		let onNeedRefreshCallback: () => void;
 
 		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
 			if (options?.onNeedRefresh) {
@@ -132,19 +130,31 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(onNeedRefreshCallback!).toBeDefined();
 
 		// Simulate the onNeedRefresh event from the PWA library
-		await onNeedRefreshCallback!(vi.fn());
+		onNeedRefreshCallback!();
+
+		// Advance timers for the setTimeout(() => dispatchEvent, 0)
+		vi.advanceTimersByTime(1);
+		await vi.runAllTimersAsync();
 
 		// Assert: Check if the custom event was dispatched
 		expect(window.dispatchEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "new-version-available",
-				detail: mockUpdateSW, // Assert that the detail is the mockUpdateSW function
 			})
 		);
+
+		const call = vi
+			.mocked(window.dispatchEvent)
+			.mock.calls.find((c) => (c[0] as CustomEvent).type === "new-version-available");
+		const event = call![0] as CustomEvent;
+		expect(typeof event.detail).toBe("function");
+
+		// Calling detail should trigger mockUpdateSW
+		await event.detail(true);
+		expect(mockUpdateSW).toHaveBeenCalledWith(true);
 	});
 
-	it("should log to console when onOfflineReady is called", async () => {
-		const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+	it("should have an onOfflineReady callback", async () => {
 		let onOfflineReadyCallback: () => void;
 
 		mockRegisterSW.mockImplementationOnce((options?: RegisterSWOptions) => {
@@ -158,7 +168,6 @@ describe("setupServiceWorkerRegistration", () => {
 		setupServiceWorkerRegistration();
 		await Promise.resolve();
 
-		// Act
 		window.dispatchEvent(new Event("load"));
 		vi.advanceTimersByTime(2000);
 		await vi.runAllTimersAsync();
@@ -166,10 +175,7 @@ describe("setupServiceWorkerRegistration", () => {
 		expect(mockRegisterSW).toHaveBeenCalledTimes(1);
 		expect(onOfflineReadyCallback!).toBeDefined();
 
-		onOfflineReadyCallback!();
-
-		// Assert
-		expect(consoleLogSpy).toHaveBeenCalledWith("App is ready to work offline");
-		consoleLogSpy.mockRestore();
+		// Just verify it doesn't throw
+		expect(() => onOfflineReadyCallback!()).not.toThrow();
 	});
 });

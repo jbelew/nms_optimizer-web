@@ -16,6 +16,7 @@ vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
 vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendEvent: vi.fn(),
+		sendDeferredEvent: vi.fn(),
 	}),
 }));
 

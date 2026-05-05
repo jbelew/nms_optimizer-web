@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -65,14 +66,19 @@ export const useTechTreeRow = ({
 	const { t } = useTranslation();
 
 	// State from stores
-	const hasTechInGrid = useGridStore((state) => state.hasTechInGrid(tech));
-	const techGroups = useTechStore((state) => state.techGroups);
-	const techMaxBonus = useTechStore((state) => state.max_bonus?.[tech] ?? 0);
-	const techSolvedBonus = useTechStore((state) => state.solved_bonus?.[tech] ?? 0);
+	const hasTechInGrid = useGridStore((state) => state.activeTechs.has(tech));
+
+	const { techGroup, techMaxBonus, techSolvedBonus } = useTechStore(
+		useShallow((state) => ({
+			techGroup: state.techGroups[tech],
+			techMaxBonus: state.max_bonus?.[tech] ?? 0,
+			techSolvedBonus: state.solved_bonus?.[tech] ?? 0,
+		}))
+	);
 
 	// Derived state
-	const modules = techGroups[tech]?.[0]?.modules || EMPTY_MODULES_ARRAY;
-	const moduleCount = techGroups[tech]?.[0]?.module_count || 0;
+	const modules = techGroup?.[0]?.modules || EMPTY_MODULES_ARRAY;
+	const moduleCount = techGroup?.[0]?.module_count || 0;
 
 	// Specialized hooks
 	const { handleOptimizeClick, handleReset, isResetting } = useTechOptimization(

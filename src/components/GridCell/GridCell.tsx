@@ -242,4 +242,4 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	);
 };
 
-export default GridCell;
+export default React.memo(GridCell);

@@ -8,6 +8,7 @@ describe("Grid Store Selectors", () => {
 		// avoiding issues with resetGrid if state.grid is null from a previous test.
 		// Default dimensions (10,6) are from the main store's initialization.
 		useGridStore.setState({ grid: createGrid(10, 6), result: null, isSharedGrid: false });
+		useGridStore.getState().triggerRecompute();
 	});
 
 	describe("selectTotalSuperchargedCells", () => {

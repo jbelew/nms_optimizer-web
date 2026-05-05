@@ -14,7 +14,7 @@
  */
 
 import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
-import React, { lazy, Suspense } from "react";
+import React, { lazy, memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -571,7 +571,7 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
  * // renders technology configuration dialog
  * ```
  */
-export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (props) => {
+export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
 	const { bodyProps, footerProps } = useModuleSelectionDialog(props);
 	const { t } = useTranslation();
 
@@ -591,4 +591,4 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = (prop
 			/>
 		</Suspense>
 	);
-};
+});

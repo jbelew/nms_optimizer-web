@@ -79,7 +79,7 @@ export const LanguageSelector: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
-	const { sendEvent } = useAnalytics();
+	const { sendDeferredEvent } = useAnalytics();
 	const { clearErrors } = useErrorStore();
 	const [, startTransition] = useTransition();
 
@@ -127,15 +127,15 @@ export const LanguageSelector: React.FC = () => {
 		startTransition(() => {
 			void i18n.changeLanguage(newLang);
 			navigate(newPath + window.location.search);
+		});
 
-			sendEvent({
-				category: "ui",
-				action: "select_content",
-				content_type: "language",
-				item_id: newLang,
-				value: 1,
-				nonInteraction: false,
-			});
+		sendDeferredEvent({
+			category: "ui",
+			action: "select_content",
+			content_type: "language",
+			item_id: newLang,
+			value: 1,
+			nonInteraction: false,
 		});
 	};
 

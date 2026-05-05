@@ -1,6 +1,6 @@
 import "./TechTreeRow.scss";
 
-import React, { useEffect, useRef, useState, useTransition } from "react";
+import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -411,7 +411,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
-	const { sendEvent } = useAnalytics();
+	const { sendDeferredEvent } = useAnalytics();
 	const [isOpen, setIsOpen] = useState(false);
 	const [initialModules, setInitialModules] = useState<string[]>([]);
 	const optimizeClickedRef = useRef(false);
@@ -436,14 +436,16 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 		translatedTechName,
 	} = hookData;
 
-	const handleOpenChange = (open: boolean) => {
-		if (open) {
-			setInitialModules(currentCheckedModules);
-			optimizeClickedRef.current = false;
-			startTransition(() => {
-				setIsOpen(open);
+	const handleOpenChange = useCallback(
+		(open: boolean) => {
+			if (open) {
+				setInitialModules(currentCheckedModules);
+				optimizeClickedRef.current = false;
+				startTransition(() => {
+					setIsOpen(open);
+				});
 
-				sendEvent({
+				sendDeferredEvent({
 					category: "engagement",
 					action: "page_view",
 					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
@@ -451,23 +453,33 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
 					nonInteraction: true,
 				});
-			});
-		} else {
-			startTransition(() => {
-				if (!optimizeClickedRef.current) {
-					handleAllCheckboxesChange(initialModules);
-				}
+			} else {
+				startTransition(() => {
+					if (!optimizeClickedRef.current) {
+						handleAllCheckboxesChange(initialModules);
+					}
 
-				setIsOpen(open);
-			});
-		}
-	};
+					setIsOpen(open);
+				});
+			}
+		},
+		[
+			currentCheckedModules,
+			handleAllCheckboxesChange,
+			initialModules,
+			sendDeferredEvent,
+			tech,
+			translatedTechName,
+		]
+	);
 
-	const handleOptimizeWrapper = async () => {
+	const handleOptimizeWrapper = useCallback(async () => {
 		optimizeClickedRef.current = true;
 		await handleOptimizeClick();
 		handleOpenChange(false);
-	};
+	}, [handleOptimizeClick, handleOpenChange]);
+
+	const handleOnClose = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
 	const badgeContent = (
 		<div>
@@ -497,7 +509,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 				handleValueChange={handleValueChange}
 				handleSelectAllChange={handleSelectAllChange}
 				handleOptimizeClick={handleOptimizeWrapper}
-				onClose={() => handleOpenChange(false)}
+				onClose={handleOnClose}
 				allModulesSelected={allModulesSelected}
 				isIndeterminate={isIndeterminate}
 				techColor={techColor}
@@ -566,7 +578,7 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
  * />
  * ```
  */
-export const TechTreeRow: React.FC<TechTreeRowProps> = (props) => {
+export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
 	const hookData = useTechTreeRow(props);
 	const { translatedTechName, imagePath, techColor, imagePath2x } = hookData;
 
@@ -595,6 +607,6 @@ export const TechTreeRow: React.FC<TechTreeRowProps> = (props) => {
 			</div>
 		</div>
 	);
-};
+});
 
 TechTreeRow.displayName = "TechTreeRow";

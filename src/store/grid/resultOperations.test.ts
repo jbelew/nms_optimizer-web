@@ -16,6 +16,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				result: null,
 				initialGridDefinition: undefined,
 			});
+			useGridStore.getState().triggerRecompute();
 			useTechStore.setState({
 				max_bonus: {},
 				solved_bonus: {},
@@ -126,6 +127,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			const grid = createGrid(3, 3);
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const hasTech = useGridStore.getState().hasTechInGrid("defense");
@@ -138,6 +140,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			grid.cells[0][0].tech = "defense";
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const hasTech = useGridStore.getState().hasTechInGrid("defense");
@@ -152,6 +155,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			grid.cells[2][2].tech = "defense";
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const hasTech = useGridStore.getState().hasTechInGrid("defense");
@@ -166,6 +170,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			grid.cells[2][2].tech = "shield";
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const state = useGridStore.getState();
@@ -180,6 +185,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			grid.cells[0][0].tech = null;
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const hasTech = useGridStore.getState().hasTechInGrid("defense");
@@ -191,6 +197,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			const grid = createGrid(3, 3);
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			const hasTech = useGridStore.getState().hasTechInGrid("defense");
@@ -214,6 +221,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -235,6 +243,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -258,6 +267,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -282,6 +292,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -299,6 +310,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("nonexistent");
 			});
 
@@ -321,6 +333,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -346,6 +359,7 @@ describe("GridStore - Result and Tech Operations", () => {
 
 			act(() => {
 				useGridStore.setState({ grid });
+				useGridStore.getState().triggerRecompute();
 				useGridStore.getState().resetGridTech("defense");
 			});
 
@@ -434,6 +448,7 @@ describe("GridStore - Result and Tech Operations", () => {
 			act(() => {
 				const modGrid = createGrid(5, 5);
 				useGridStore.setState({ grid: modGrid });
+				useGridStore.getState().triggerRecompute();
 			});
 
 			expect(useGridStore.getState().grid.height).toBe(5);

@@ -445,6 +445,20 @@ describe("getVersionChanges", () => {
 		// v2 at index 5 should be added, but v3 at 6 and v4 at 7 are too close (gap < 4)
 		expect(result.length).toBeLessThanOrEqual(2);
 	});
+	it("skips the virtual 'LIVE' marker", () => {
+		const data: ChartDataPoint[] = [
+			{ timestamp: 1000, appVersion: "v1" } as ChartDataPoint,
+			{ timestamp: 2000, appVersion: "v1" } as ChartDataPoint,
+			{ timestamp: 3000, appVersion: "v1" } as ChartDataPoint,
+			{ timestamp: 4000, appVersion: "v1" } as ChartDataPoint,
+			{ timestamp: 5000, appVersion: "v1" } as ChartDataPoint,
+			{ timestamp: 6000, appVersion: "LIVE" } as ChartDataPoint,
+		];
+
+		const result = getVersionChanges(data);
+		// Should not contain the LIVE version change
+		expect(result.find((r) => r.version === "LIVE")).toBeUndefined();
+	});
 });
 
 // ---------------------------------------------------------------------------
@@ -645,9 +659,16 @@ describe("transformPerformanceData", () => {
 
 		if (summary) {
 			expect(summary.metrics.LCP.value).toBe(3000);
-			// Trend should be regression because it compares T (3000) against T-4h (2000),
-			// bypassing the null points in between.
 			expect(summary.trends.LCP).toBe("regression");
 		}
+	});
+
+	it("tags the last point with virtual 'LIVE' version and preserves original", () => {
+		const raw = [makeMetric(1619370000000, "LCP", 2500, "v1.0.0")];
+		const { chartData } = transformPerformanceData(raw, "en", 72, 1);
+
+		const lastPoint = chartData[chartData.length - 1];
+		expect(lastPoint.appVersion).toBe("LIVE");
+		expect(lastPoint.originalVersion).toBe("v1.0.0");
 	});
 });
