@@ -44,7 +44,6 @@ export const KNOWN_DIALOGS = [
 	"translation",
 	"userstats",
 	"privacy",
-	"performance",
 ];
 
 /**
@@ -54,7 +53,7 @@ export const KNOWN_DIALOGS = [
  * @see {@link isSpaRoute} for usage.
  * @category Routing
  */
-export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS];
+export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS, "performance"];
 
 /**
  * Flag to enable/disable maintenance mode.

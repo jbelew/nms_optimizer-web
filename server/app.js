@@ -224,10 +224,10 @@ function isSpaRoute(pathname) {
 
 	if (SUPPORTED_LANGUAGES.includes(parts[0])) {
 		const page = parts[1];
-		return !page || KNOWN_DIALOGS.includes(page);
+		return !page || BASE_KNOWN_PATHS.includes(page);
 	}
 
-	return KNOWN_DIALOGS.includes(parts[0]);
+	return BASE_KNOWN_PATHS.includes(parts[0]);
 }
 
 // ============================================================================

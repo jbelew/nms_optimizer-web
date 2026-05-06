@@ -43,6 +43,17 @@ export function readMarkdownFile(lang, fileName) {
 		return fs.readFileSync(filePath, "utf-8");
 	}
 
+	// Fallback to English if localized markdown is missing
+	if (lang !== "en") {
+		const fallbackPath = path.join(LOCALES_DIR, "en", `${fileName}.md`);
+
+		if (fs.existsSync(fallbackPath)) {
+			console.info(`Info: Using English fallback for ${fileName} in ${lang}`);
+
+			return fs.readFileSync(fallbackPath, "utf-8");
+		}
+	}
+
 	return null;
 }
 
