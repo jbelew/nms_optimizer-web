@@ -66,11 +66,6 @@ export function generateNavigationLinks(lang, currentPage, t) {
 			key: "seo.nav.translation",
 			descKey: "seo.navDescriptions.translation",
 		},
-		{
-			path: "/performance",
-			key: "seo.nav.performance",
-			descKey: "seo.navDescriptions.performance",
-		},
 		{ path: "/privacy", key: "seo.nav.privacy", descKey: "seo.navDescriptions.privacy" },
 	];
 
@@ -251,7 +246,7 @@ function injectSeoSchemas(document, pathname, lang, baseUrl, t) {
  * Inject SSG content into the HTML body.
  * Returns the real noscript block HTML to be used for post-serialization replacement.
  */
-function injectSsgContent(document, lang, pageName, pageTitle, mdProcessor, t, ssgStyles, ssgHeader) {
+function injectSsgContent(document, lang, pageName, pageTitle, mdProcessor, t, ssgStyles) {
 	const markdownFileName = PAGE_TO_MARKDOWN_MAPPING[pageName] || pageName;
 	const markdownContent = readMarkdownFile(lang, markdownFileName);
 
@@ -281,9 +276,25 @@ function injectSsgContent(document, lang, pageName, pageTitle, mdProcessor, t, s
 			renderedHtml = `<h1>${pageTitle}</h1>\n${renderedHtml}`;
 		}
 
+		// Localize the header for the SSG view
+		const rawSubTitle = t("appHeader.subTitle", { defaultValue: 'Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>' });
+		// Convert i18next tags like <1>...</1> to span with brand color
+		const subTitle = rawSubTitle.replace(/<(\d+)>([\s\S]*?)<\/\1>/g, '<span style="color: #4ccce6">$2</span>');
+
+		const localizedHeader = `
+		<header class="app-header-static">
+			<div class="app-header-static__logo-text" style="margin-bottom: 4px">NO MAN'S SKY</div>
+			<div class="app-header-static__separator-container">
+				<span class="app-header-static__separator"></span>
+				<img alt="No Man's Sky Atlas Logo" width="16" height="20" src="/assets/img/nms-icon.webp" />
+				<span class="app-header-static__separator"></span>
+			</div>
+			<h2 class="app-header-static__title">${subTitle}</h2>
+		</header>`;
+
 		const realNoscript = `<noscript>
     <main>
-      ${ssgHeader}
+      ${localizedHeader}
       ${renderedHtml}
       ${navigationHtml}
     </main>
@@ -315,8 +326,7 @@ export function generatePage(
 	baseUrl,
 	mdProcessor,
 	t,
-	ssgStyles = "",
-	ssgHeader = ""
+	ssgStyles = ""
 ) {
 	const dom = new JSDOM(indexHtml);
 	const { document } = dom.window;
@@ -341,8 +351,7 @@ export function generatePage(
 		pageTitle,
 		mdProcessor,
 		t,
-		ssgStyles,
-		ssgHeader
+		ssgStyles
 	);
 
 	let serialized = dom.serialize();
@@ -502,7 +511,6 @@ export async function generateSsg() {
 
 	// Extract template blocks from the updated source HTML
 	const template = extractSsgTemplate(sourceIndexHtml);
-	const ssgHeader = template.ssgHeader;
 	let ssgStyles = template.ssgStyles;
 
 	// --- FONT FIX: Extract from source fonts.css ---
@@ -543,8 +551,7 @@ export async function generateSsg() {
 			baseUrl,
 			mdProcessor,
 			t,
-			ssgStyles,
-			ssgHeader
+			ssgStyles
 		);
 		const formattedRootHtml = await prettier.format(rootPageHtml, {
 			...prettierConfig,
@@ -569,8 +576,7 @@ export async function generateSsg() {
 				baseUrl,
 				mdProcessor,
 				t,
-				ssgStyles,
-				ssgHeader
+				ssgStyles
 			);
 			const formattedPageHtml = await prettier.format(pageHtml, {
 				...prettierConfig,

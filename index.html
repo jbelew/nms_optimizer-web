@@ -96,7 +96,7 @@
 				const techTreeLink = document.createElement("link");
 				techTreeLink.rel = "preload";
 				techTreeLink.as = "fetch";
-				techTreeLink.href = apiUrl + "/tech_tree/" + platform;
+				techTreeLink.href = apiUrl + "/tech_tree/" + encodeURIComponent(platform);
 				techTreeLink.crossOrigin = "anonymous";
 				techTreeLink.setAttribute("fetchpriority", "high");
 				document.head.appendChild(techTreeLink);
@@ -133,7 +133,7 @@
 					z-index: -1;
 				}
 
-				@media (width <=639px) {
+				@media (max-width: 640px) {
 					body::before {
 						background-image: url("/assets/img/background@mobile-blurred.webp");
 						background-position: center top;
@@ -243,14 +243,17 @@
 
 		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
 		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
-		<link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin="" />
+		<!-- <link rel="preconnect" href="https://o4510908417572864.ingest.us.sentry.io" crossorigin="" /> -->
 		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
 
 		<!-- Entry Point (Critical Path) -->
 		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
 
+		<link rel="canonical" href="https://nms-optimizer.app/" />
+
 		<!-- Deferred Metadata -->
 		<!-- Open Graph / Facebook -->
+		<meta property="og:url" content="https://nms-optimizer.app/" />
 		<meta property="og:type" content="website" />
 		<meta
 			property="og:title"
@@ -268,6 +271,8 @@
 			property="og:image:alt"
 			content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses."
 		/>
+		<meta property="og:image:width" content="1280" />
+		<meta property="og:image:height" content="880" />
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
@@ -466,9 +471,6 @@
 						<li>
 							<a href="/translation/">Join the Translation Team</a> - Contribute to community
 							localization
-						</li>
-						<li>
-							<a href="/performance/">App Performance Metrics</a> - Application performance metrics
 						</li>
 						<li>
 							<a href="/privacy/">Privacy Policy</a> - Our commitment to your data privacy and

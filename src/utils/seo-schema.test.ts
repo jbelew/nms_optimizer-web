@@ -24,7 +24,6 @@ describe("getLocalizedSchema", () => {
 		return translations[key] || key;
 	}) as unknown as TFunction;
 
-	const baseUrl = "https://nms-optimizer.app";
 	const lang = "en";
 	const url = "https://nms-optimizer.app/";
 
@@ -39,13 +38,13 @@ describe("getLocalizedSchema", () => {
 		});
 	});
 
-	it("should generate BreadcrumbList schema", () => {
+	it("should generate WebSite schema", () => {
 		const schemas = getLocalizedSchema(mockT, lang, url);
 		const website = schemas.find((s) => s["@type"] === "WebSite");
 
 		expect(website).toBeDefined();
 		expect(website).toMatchObject({
-			url: baseUrl,
+			url: url,
 		});
 	});
 

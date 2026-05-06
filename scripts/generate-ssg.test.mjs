@@ -168,9 +168,8 @@ describe("generate-ssg.mjs", () => {
 
             return `<div>${md}</div>`;
         });
-        const t = vi.fn((key) => {
+        const t = vi.fn((key, options) => {
             // Simulate i18next: if it doesn't find the key in the loaded namespaces, it returns the key.
-            // In our SSG, we preload 'translation' but maybe getLocalizedSchema calls it without prefix.
             const translations = {
                 "appName": "NMS Optimizer",
                 "seo.mainPageTitle": "Home Title",
@@ -178,10 +177,11 @@ describe("generate-ssg.mjs", () => {
                 "faq.name": "FAQ Name",
                 "faq.questions.adjacencyBonus.name": "Adjacency Question",
                 "faq.questions.adjacencyBonus.answer": "Adjacency Answer",
-                "seo.nav.home": "Home Nav"
+                "seo.nav.home": "Home Nav",
+                "appHeader.subTitle": "Localized Header <1>ML/RUST</1>"
             };
 
-            return translations[key] || key;
+            return translations[key] || options?.defaultValue || key;
         });
 
         beforeEach(async () => {
@@ -209,19 +209,24 @@ describe("generate-ssg.mjs", () => {
             expect(result).toMatch(/<link rel="alternate" hreflang="es" href="https:\/\/nms-optimizer\.app\/es\/"\/?>/);
         });
 
-        it("injects markdown content into noscript block", () => {
+        it("injects markdown content into noscript block with localized header", () => {
             const result = generatePage(indexHtml, "en", "", baseUrl, mdProcessor, t);
             expect(result).toContain("<noscript>");
-            // We synchronized H1, which in our mock replaces the whole string if it was "# Title"
-            // Let's just check it contains the noscript and some structural elements
+            expect(result).toContain('<h2 class="app-header-static__title">Localized Header <span style="color: #4ccce6">ML/RUST</span></h2>');
             expect(result).toContain("<main>");
             expect(result).toContain("</noscript>");
         });
 
         it("injects ssgStyles into the noscript block", () => {
             const ssgStyles = ".test-css { color: red; }";
-            const result = generatePage(indexHtml, "en", "", baseUrl, mdProcessor, t, ssgStyles, "");
+            const result = generatePage(indexHtml, "en", "", baseUrl, mdProcessor, t, ssgStyles);
             expect(result).toContain(".test-css { color: red; }");
+        });
+
+        it("injects correct localized JSON-LD schema", () => {
+            const result = generatePage(indexHtml, "es", "", baseUrl, mdProcessor, t);
+            expect(result).toContain('"@id":"https://nms-optimizer.app/es/#software"');
+            expect(result).toContain('"url":"https://nms-optimizer.app/es/"');
         });
 
         it("handles pages without specific metadata (fixed title behavior)", () => {

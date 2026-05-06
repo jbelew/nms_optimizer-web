@@ -25,13 +25,13 @@ export const getLocalizedSchema = (t, lang, url) => {
 	const softwareApp = {
 		"@context": "https://schema.org",
 		"@type": "SoftwareApplication",
-		"@id": `${baseUrl}/#software`,
+		"@id": `${url}#software`,
 		name: appName,
 		description: appDescription,
 		operatingSystem: "Web",
 		applicationCategory: "UtilitiesApplication",
 		genre: t("seo.genre", { defaultValue: "Game Tool" }),
-		url: baseUrl,
+		url: url,
 		inLanguage: lang,
 		offers: {
 			"@type": "Offer",
@@ -60,9 +60,9 @@ export const getLocalizedSchema = (t, lang, url) => {
 	const webSite = {
 		"@context": "https://schema.org",
 		"@type": "WebSite",
-		"@id": `${baseUrl}/#website`,
+		"@id": `${url}#website`,
 		name: appName,
-		url: baseUrl,
+		url: url,
 		description: appDescription,
 		inLanguage: lang,
 		publisher: { "@id": `${baseUrl}/#organization` },
