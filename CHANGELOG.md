@@ -1,3 +1,11 @@
+## [7.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.2...v7.2.3) (2026-05-06)
+
+
+### Bug Fixes
+
+* implement English fallback for missing localized markdown and add performance route to BASE_KNOWN_PATHS ([215e5e1](https://github.com/jbelew/nms_optimizer-web/commit/215e5e1f8daa6e3515efd4af3930b3e0f913e360))
+* implement localized JSON-LD schema generation and header SSG injection with improved metadata and tests. ([b59ddec](https://github.com/jbelew/nms_optimizer-web/commit/b59ddec789d690c929cb1f03ef41f29d83c68bd2))
+
 ## [7.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.1...v7.2.2) (2026-05-06)
 
 
