@@ -212,10 +212,7 @@ const globalIsInstalled =
  * ```
  */
 const detectAdBlocker = (): Promise<boolean> => {
-	const probes = [
-		`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`,
-		"https://www.google-analytics.com/g/collect",
-	];
+	const probes = [`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`];
 
 	// Fallback for SSR / non-DOM environments
 	if (typeof document === "undefined" || !document.head) {
@@ -298,32 +295,8 @@ const detectAdBlocker = (): Promise<boolean> => {
 			finish(true);
 		};
 
-		// 2. Fetch probe (GA Collect)
-		const fetchProbe = async () => {
-			try {
-				const controller = new AbortController();
-				const timeoutId = setTimeout(() => controller.abort(), 3000);
-				await fetch(probes[1], {
-					method: "HEAD",
-					mode: "no-cors",
-					cache: "no-store",
-					signal: controller.signal,
-				}).finally(() => clearTimeout(timeoutId));
-				successes++;
-
-				if (successes + failures === probes.length) finish(failures > 0);
-			} catch {
-				failures++;
-				finish(true);
-			}
-		};
-
-		// Treat lack of response within 3.5s as blocked.
-		setTimeout(() => finish(true), 3500);
-
 		try {
 			document.head.appendChild(script);
-			void fetchProbe();
 		} catch {
 			finish(true);
 		}
