@@ -5,6 +5,7 @@ import { immer } from "zustand/middleware/immer";
 
 import { type Module } from "../../hooks/useTechTree/useTechTree";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/environment";
+import { resolveInitialPlatform } from "../../utils/browser/platformResolver";
 import { usePlatformStore } from "../app/platformStore";
 import { useModuleSelectionStore } from "../tech/moduleSelectionStore";
 import { useTechBonusStore } from "../tech/techBonusStore";
@@ -448,10 +449,7 @@ const debouncedStorage = {
 				return null;
 			}
 
-			const urlParams = new URLSearchParams(getWindowSearch());
-			const platformFromUrl = urlParams.get("platform");
-			const platformFromStorage = safeGetItem("selectedPlatform");
-			const currentPlatform = platformFromUrl || platformFromStorage || "standard";
+			const currentPlatform = resolveInitialPlatform();
 			const storedGridPlatform = parsedData.state?.selectedPlatform;
 
 			if (storedGridPlatform && storedGridPlatform !== currentPlatform) {
@@ -508,6 +506,7 @@ const getWindowSearch = () =>
  * @see {@link ./createGrid.test.ts createGrid Tests}
  * @see {@link ./gridSelectors.test.ts Selectors Tests}
  * @see {@link ./hasTechInGrid.test.ts hasTechInGrid Tests}
+ * @see {@link ./persistence_regression.test.ts Regression Test}
  *
  * @hook
  *

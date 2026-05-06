@@ -6,6 +6,7 @@ import {
 	getPlatformFromStorage,
 	getPlatformFromUrl,
 	PLATFORM_STORAGE_KEY,
+	resolveInitialPlatform,
 } from "../../utils/browser/platformResolver";
 
 /**
@@ -65,16 +66,19 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<PlatformState>>} The platform store hook.
  *
  * @see {@link PlatformState}
+ * @see {@link ../grid/persistence_regression.test.ts Regression Test}
  *
  * @category State
  *
  * @example
+ * ```tsx
  * const selectedPlatform = usePlatformStore((s) => s.selectedPlatform);
  *
  * // returns "solar"
+ * ```
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
-	selectedPlatform: "standard", // Default initial value
+	selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
 	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
 		if (!validShipTypes.includes(platform)) {
 			console.warn(
