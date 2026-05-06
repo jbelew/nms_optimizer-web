@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.0...v7.2.1) (2026-05-06)
+
+
+### Performance Improvements
+
+* optimize INP by replacing O(N) store selectors with precomputed primitives, memoizing component derivations, and deferring analytics tasks. ([338ee9e](https://github.com/jbelew/nms_optimizer-web/commit/338ee9e58ff3cbdd2177a840b8dcb412e07c0f67))
+
 # [7.2.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.1.1...v7.2.0) (2026-05-04)
 
 
