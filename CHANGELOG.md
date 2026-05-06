@@ -1,3 +1,10 @@
+## [7.2.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.1...v7.2.2) (2026-05-06)
+
+
+### Bug Fixes
+
+* consolidate platform initialization logic and add regression test to prevent grid persistence race conditions ([a95f0d1](https://github.com/jbelew/nms_optimizer-web/commit/a95f0d1f69a799c553e7c5d6265d7d91ed739303))
+
 ## [7.2.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.0...v7.2.1) (2026-05-06)
 
 
