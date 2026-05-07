@@ -191,8 +191,33 @@ describe("useSeoAndTitle", () => {
 			expect(document.getElementById("software-schema")).not.toBeNull();
 			expect(document.getElementById("website-schema")).not.toBeNull();
 			expect(document.getElementById("org-schema")).not.toBeNull();
-			expect(document.getElementById("breadcrumb-schema")).not.toBeNull();
+			// BreadcrumbList must contain at least 2 items per Google's structured-data
+			// guidance, so it is intentionally omitted on the homepage.
+			expect(document.getElementById("breadcrumb-schema")).toBeNull();
 			expect(document.getElementById("faq-schema")).toBeNull();
+		});
+
+		it("should inject BreadcrumbList on a sub-page", () => {
+			setupMocks("/about/", {});
+			renderHook(() => useSeoAndTitle());
+
+			const breadcrumbEl = document.getElementById("breadcrumb-schema");
+			expect(breadcrumbEl).not.toBeNull();
+			const data = JSON.parse(breadcrumbEl!.textContent || "{}");
+			expect(data["@type"]).toBe("BreadcrumbList");
+			expect(data.itemListElement).toHaveLength(2);
+		});
+
+		it("should set og:locale and og:locale:alternate tags", () => {
+			setupMocks("/", {});
+			renderHook(() => useSeoAndTitle());
+
+			const ogLocale = document.querySelector('meta[property="og:locale"]');
+			expect(ogLocale?.getAttribute("content")).toBe("en_US");
+
+			const alternates = document.querySelectorAll('meta[property="og:locale:alternate"]');
+			// 5 alternates (all supported langs minus current `en`)
+			expect(alternates).toHaveLength(5);
 		});
 	});
 });

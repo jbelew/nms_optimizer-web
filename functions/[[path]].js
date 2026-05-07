@@ -118,8 +118,21 @@ export async function onRequest(context) {
 	// Re-wrap so any 308/redirect from the asset pipeline cannot leak to the browser.
 	const headers = new Headers(shellResponse.headers);
 	headers.set("X-SPA-Fallback", "true");
-	return new Response(shellResponse.body, {
-		status: 200,
-		headers,
-	});
+
+	// SEO guard: the shell we just fetched carries the *homepage* canonical and
+	// metadata, not the SPA route's. Inject `noindex,follow` so crawlers that
+	// don't execute JS (and any that ignore robots.txt) won't index the route
+	// under the wrong canonical. Client-side React updates the meta after hydrate.
+	const rewritten = new HTMLRewriter()
+		.on("head", {
+			element(el) {
+				el.prepend(
+					'<meta name="robots" content="noindex,follow" data-spa-fallback="true">',
+					{ html: true }
+				);
+			},
+		})
+		.transform(new Response(shellResponse.body, { status: 200, headers }));
+
+	return rewritten;
 }

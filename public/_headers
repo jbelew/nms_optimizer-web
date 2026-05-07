@@ -54,8 +54,6 @@
   Cache-Control: public, max-age=86400
 /500.html
   Cache-Control: public, max-age=86400
-/500.html
-  Cache-Control: public, max-age=86400
 /maintenance.html
   Cache-Control: public, max-age=86400
 

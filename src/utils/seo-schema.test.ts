@@ -58,8 +58,19 @@ describe("getLocalizedSchema", () => {
 		});
 	});
 
-	it("should generate BreadcrumbList schema", () => {
+	it("should NOT generate BreadcrumbList schema on the homepage", () => {
+		// A single-item breadcrumb (Home → Home) is invalid per Google's
+		// structured-data guidance, so the schema must be omitted entirely on
+		// the root URL.
 		const schemas = getLocalizedSchema(mockT, lang, url);
+		const breadcrumb = schemas.find((s) => s["@type"] === "BreadcrumbList");
+
+		expect(breadcrumb).toBeUndefined();
+	});
+
+	it("should generate BreadcrumbList schema on a sub-page", () => {
+		const subPageUrl = "https://nms-optimizer.app/about/";
+		const schemas = getLocalizedSchema(mockT, lang, subPageUrl);
 		const breadcrumb = schemas.find((s) => s["@type"] === "BreadcrumbList") as Record<
 			string,
 			unknown
@@ -67,7 +78,7 @@ describe("getLocalizedSchema", () => {
 
 		expect(breadcrumb).toBeDefined();
 		const itemListElement = breadcrumb.itemListElement as unknown[];
-		expect(itemListElement.length).toBeGreaterThan(0);
+		expect(itemListElement.length).toBe(2);
 	});
 
 	it("should handle localized URLs for breadcrumbs", () => {

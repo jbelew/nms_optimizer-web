@@ -4,6 +4,30 @@
  */
 
 /**
+ * Maps a supported i18next language code to a Facebook/Open Graph locale tag
+ * (BCP-47 with underscore, e.g. `en_US`).
+ *
+ * @type {Record<string, string>}
+ */
+export const OG_LOCALE_MAP = {
+	en: "en_US",
+	es: "es_ES",
+	fr: "fr_FR",
+	de: "de_DE",
+	pt: "pt_PT",
+	it: "it_IT",
+};
+
+/**
+ * Returns the Open Graph locale for a given language code, falling back to
+ * `en_US` when the language is not in the mapping.
+ *
+ * @param {string} lang - i18n language code (e.g. `de`)
+ * @returns {string} OG locale tag (e.g. `de_DE`)
+ */
+export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
+
+/**
  * Generates the full set of localized structured data for a given page.
  *
  * @param {import('i18next').TFunction} t - Translation function (i18next-compatible)
@@ -98,11 +122,18 @@ export const getLocalizedSchema = (t, lang, url) => {
 		});
 	}
 
-	const breadcrumbList = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement,
-	};
+	const schemas = [softwareApp, organization, webSite];
 
-	return [softwareApp, organization, webSite, breadcrumbList];
+	// Per Google's structured-data guidance, BreadcrumbList must contain at
+	// least 2 items. Emitting a single-item breadcrumb (e.g. on the homepage)
+	// is treated as invalid markup, so omit the schema entirely in that case.
+	if (itemListElement.length >= 2) {
+		schemas.push({
+			"@context": "https://schema.org",
+			"@type": "BreadcrumbList",
+			itemListElement,
+		});
+	}
+
+	return schemas;
 };

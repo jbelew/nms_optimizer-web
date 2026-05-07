@@ -35,9 +35,13 @@ const CHANGE_FREQUENCIES = {
 	changelog: "monthly",
 };
 
+// Routes excluded from the sitemap. These are either disallowed in robots.txt
+// or are client-only utility routes that should not be indexed.
+const EXCLUDED_FROM_SITEMAP = new Set(["performance"]);
+
 const pages = [
-	{ path: null, url: `${baseUrl}/`, priority: PRIORITIES.root, changefreq: "weekly", lastmod: today },
-	...KNOWN_DIALOGS.map((page) => ({
+	{ path: "public/assets/locales/en/home.md", url: `${baseUrl}/`, priority: PRIORITIES.root, changefreq: "weekly" },
+	...KNOWN_DIALOGS.filter((page) => !EXCLUDED_FROM_SITEMAP.has(page)).map((page) => ({
 		path: PAGE_TO_FILE_MAPPING[page],
 		url: `${baseUrl}/${page}`,
 		priority: PRIORITIES[page] || "0.5",

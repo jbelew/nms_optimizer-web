@@ -16,7 +16,7 @@ import * as prettier from "prettier";
 
 import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
-import { getLocalizedSchema } from "../shared/seo-schema.js";
+import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
 
 const gzip = promisify(zlib.gzip);
@@ -185,6 +185,8 @@ function injectSeoSchemas(document, pathname, lang, baseUrl, t) {
 	const selectors = [
 		'link[rel="canonical"]',
 		'meta[property="og:url"]',
+		'meta[property="og:locale"]',
+		'meta[property="og:locale:alternate"]',
 		'link[rel="alternate"][hreflang]',
 		'script[type="application/ld+json"]',
 	];
@@ -210,6 +212,21 @@ function injectSeoSchemas(document, pathname, lang, baseUrl, t) {
 	ogUrl.setAttribute("property", "og:url");
 	ogUrl.setAttribute("content", canonicalUrl);
 	document.head.appendChild(ogUrl);
+
+	// OG Locale (current page language) + alternate locales for the others.
+	// Helps Facebook serve the right localized share preview.
+	const ogLocale = document.createElement("meta");
+	ogLocale.setAttribute("property", "og:locale");
+	ogLocale.setAttribute("content", getOgLocale(lang));
+	document.head.appendChild(ogLocale);
+
+	Object.entries(OG_LOCALE_MAP).forEach(([code, locale]) => {
+		if (code === lang) return;
+		const alt = document.createElement("meta");
+		alt.setAttribute("property", "og:locale:alternate");
+		alt.setAttribute("content", locale);
+		document.head.appendChild(alt);
+	});
 
 	// Hreflang Tags
 	SUPPORTED_LANGUAGES.forEach((l) => {

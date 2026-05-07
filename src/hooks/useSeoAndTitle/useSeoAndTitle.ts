@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { seoMetadata } from "../../../shared/seo-metadata.js";
-import { getLocalizedSchema } from "../../../shared/seo-schema.js";
+import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../../../shared/seo-schema.js";
 import { sendEvent } from "../../utils/analytics/tracking";
 
 /**
@@ -129,6 +129,40 @@ const updateHreflangTags = (baseUrl: string, cleanPath: string, languages: strin
 
 		link.setAttribute("href", `${baseUrl}${path}`);
 		document.head.appendChild(link);
+	});
+};
+
+/**
+ * Updates the `og:locale` meta tag and rewrites the set of
+ * `og:locale:alternate` tags for the current language.
+ *
+ * @remarks
+ * `og:locale:alternate` is multi-valued, so existing alternates are removed
+ * before re-injecting the full set.
+ *
+ * @param {string} lang - i18n language code for the current page (e.g. `de`).
+ *
+ * @returns {void} Side-effects only.
+ *
+ * @example
+ * ```ts
+ * updateOgLocaleTags("de");
+ * // <meta property="og:locale" content="de_DE">
+ * // <meta property="og:locale:alternate" content="en_US">
+ * // ...one alternate per other supported language
+ * ```
+ */
+const updateOgLocaleTags = (lang: string) => {
+	updateMetaPropertyTag("og:locale", getOgLocale(lang));
+
+	document.querySelectorAll('meta[property="og:locale:alternate"]').forEach((el) => el.remove());
+
+	Object.entries(OG_LOCALE_MAP).forEach(([code, locale]) => {
+		if (code === lang) return;
+		const el = document.createElement("meta");
+		el.setAttribute("property", "og:locale:alternate");
+		el.setAttribute("content", locale);
+		document.head.appendChild(el);
 	});
 };
 
@@ -264,6 +298,7 @@ export const useSeoAndTitle = () => {
 
 		updateCanonicalTag(canonicalUrl);
 		updateMetaPropertyTag("og:url", canonicalUrl);
+		updateOgLocaleTags(i18n.language);
 
 		// Update hreflang tags for multilingual SEO
 		updateHreflangTags(baseUrl, cleanPath, supportedLangs);
