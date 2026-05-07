@@ -1,3 +1,10 @@
+## [7.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.3...v7.2.4) (2026-05-07)
+
+
+### Bug Fixes
+
+* enhance SEO with dynamic Open Graph locale tags, improved BreadcrumbList logic, and SPA crawl-blocking via meta tags and sitemap filtering. ([67c25c1](https://github.com/jbelew/nms_optimizer-web/commit/67c25c16372d7a35053c53eadc4066298e94cb58))
+
 ## [7.2.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.2...v7.2.3) (2026-05-06)
 
 
