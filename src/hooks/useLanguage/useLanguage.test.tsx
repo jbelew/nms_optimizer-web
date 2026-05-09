@@ -17,7 +17,6 @@ const createMockLocation = (pathname: string): Location => ({
 	hash: "",
 	state: null,
 	key: "default",
-	unstable_mask: undefined,
 });
 
 // No need to declare useLocationMock at top level anymore
