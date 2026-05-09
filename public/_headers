@@ -24,6 +24,10 @@
   Cache-Control: no-cache
 /privacy/*
   Cache-Control: no-cache
+/performance
+  Cache-Control: no-cache
+/performance/
+  Cache-Control: no-cache
 /performance/*
   Cache-Control: no-cache
 /es/*

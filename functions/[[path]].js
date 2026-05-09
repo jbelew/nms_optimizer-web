@@ -110,7 +110,13 @@ export async function onRequest(context) {
 	const lang = LOCALE_LANGS.includes(pathParts[0]) ? pathParts[0] : null;
 	const shellPath = lang ? `/${lang}/index.html` : "/index.html";
 	const shellUrl = new URL(shellPath, url.origin);
-	shellUrl.search = url.search; // Preserve query params (e.g. ?_cb=) to bypass stale internal edge cache
+	// Always append an internal cache-buster for the asset fetch to ensure we
+	// get the latest index.html from the deployment, bypassing any stale internal edge cache.
+	shellUrl.searchParams.set("__cf_shell_cb", Date.now().toString());
+	// Also preserve any user-provided query params (like ?_cb= from the recovery script)
+	for (const [key, val] of url.searchParams) {
+		shellUrl.searchParams.set(key, val);
+	}
 
 	// Because `_routes.json` excludes locale shells, this fetch goes straight
 	// to the CDN and does NOT re-invoke this Function.
@@ -119,6 +125,9 @@ export async function onRequest(context) {
 	// Re-wrap so any 308/redirect from the asset pipeline cannot leak to the browser.
 	const headers = new Headers(shellResponse.headers);
 	headers.set("X-SPA-Fallback", "true");
+	headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
+	headers.set("Pragma", "no-cache");
+	headers.set("Expires", "0");
 
 	// SEO guard: the shell we just fetched carries the *homepage* canonical and
 	// metadata, not the SPA route's. Inject `noindex,follow` so crawlers that

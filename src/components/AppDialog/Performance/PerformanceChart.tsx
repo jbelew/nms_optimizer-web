@@ -577,7 +577,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 									{/* Metric Floor: Success (0-10 deficit) */}
 									<ReferenceArea
 										y1={0}
-										y2={10}
+										y2={20}
 										fill="var(--green-a4)"
 										stroke="none"
 									/>
@@ -595,7 +595,7 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 										strokeDasharray="0"
 									/>
 									<ReferenceLine
-										y={10}
+										y={20}
 										stroke="var(--green-a7)"
 										strokeWidth={1.5}
 										strokeDasharray="0"
