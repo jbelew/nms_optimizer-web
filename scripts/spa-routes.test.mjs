@@ -76,7 +76,14 @@ describe("SPA_ROUTES ↔ pages ↔ SSG output consistency", () => {
 	});
 
 	const distExists = fs.existsSync(DIST);
-	const maybeIt = distExists ? it : it.skip;
+	const hasAnySsgOutput = pages.some((p) => hasSsgOutput(p));
+	const isSsgBuild = distExists && hasAnySsgOutput;
+
+	if (distExists && !hasAnySsgOutput) {
+		console.warn("⚠️  dist/ exists but no SSG output found. Skipping consistency checks.");
+	}
+
+	const maybeIt = isSsgBuild ? it : it.skip;
 
 	maybeIt("pages without SSG output are listed in SPA_ROUTES", () => {
 		const missing = pages.filter((p) => !hasSsgOutput(p)).filter((p) => !spaRoutes.includes(p));

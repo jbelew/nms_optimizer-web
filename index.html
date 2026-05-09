@@ -18,15 +18,7 @@
 			(function () {
 				var MARKER = "__preload_recovery__";
 
-				// Clear recovery marker on every successful page load.
-				// If a previous reload recovered from a stale chunk, this prevents
-				// the marker from persisting and causing a false-positive skip on
-				// the next deploy.
-				try {
-					if (sessionStorage.getItem(MARKER)) {
-						sessionStorage.removeItem(MARKER);
-					}
-				} catch (e) {}
+				// The marker is cleared by main.tsx upon successful application boot.
 
 				// Handle stale chunk loading after deployment.
 				// One auto-reload attempt with cache-busting; if that fails,
@@ -60,23 +52,28 @@
 				});
 
 				// Catch static import failures (which bypass vite:preloadError)
-				window.addEventListener("error", function (event) {
-					var msg = (event.message || "").toLowerCase();
-					var isModuleError = msg.includes("importing a module script failed") ||
-					                    msg.includes("error resolving module specifier") ||
-					                    msg.includes("failed to fetch dynamically imported module");
-					
-					var isScriptElementError = event.target && event.target.nodeName === "SCRIPT";
+				window.addEventListener(
+					"error",
+					function (event) {
+						var msg = (event.message || "").toLowerCase();
+						var isModuleError =
+							msg.includes("importing a module script failed") ||
+							msg.includes("error resolving module specifier") ||
+							msg.includes("failed to fetch dynamically imported module");
 
-					if (isModuleError || isScriptElementError) {
-						// Only handle errors originating from our own build chunks
-						var src = event.target && event.target.src ? event.target.src : "";
-						if (isModuleError || src.includes("/build/")) {
-							event.preventDefault();
-							handleStaleChunkError(event.message || "Script load error");
+						var isScriptElementError = event.target && event.target.nodeName === "SCRIPT";
+
+						if (isModuleError || isScriptElementError) {
+							// Only handle errors originating from our own build chunks
+							var src = event.target && event.target.src ? event.target.src : "";
+							if (isModuleError || src.includes("/build/")) {
+								event.preventDefault();
+								handleStaleChunkError(event.message || "Script load error");
+							}
 						}
-					}
-				}, true);
+					},
+					true
+				);
 				// Preload translations based on language in path (matches i18next logic)
 				const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
 				const pathParts = window.location.pathname.split("/");

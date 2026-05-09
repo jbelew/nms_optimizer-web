@@ -143,7 +143,12 @@ const bootstrap = async () => {
 			"app-ready",
 			() => {
 				(window as typeof window & { __APP_READY__?: boolean }).__APP_READY__ = true;
-				window.name = window.name.replace("__preload_recovery__", "");
+
+				try {
+					sessionStorage.removeItem("__preload_recovery__");
+				} catch (_e) {
+					// ignore
+				}
 
 				const initDeferredServices = async () => {
 					try {
