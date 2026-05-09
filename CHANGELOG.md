@@ -1,3 +1,10 @@
+## [7.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.4...v7.2.5) (2026-05-09)
+
+
+### Bug Fixes
+
+* preserve query parameters for cache busting and expand stale chunk detection to include standard script import errors ([5bf7e2f](https://github.com/jbelew/nms_optimizer-web/commit/5bf7e2f4d8e9178773e43f53797c24679bb0d578))
+
 ## [7.2.4](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.3...v7.2.4) (2026-05-07)
 
 
