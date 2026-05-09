@@ -36,10 +36,8 @@ test.describe("Application Resilience & Recovery", () => {
 
 			// 3. Force a reload. The browser will try to fetch the blocked chunk
 			// and trigger our global error listener, which redirects to ?_cb=
-			await Promise.all([
-				page.waitForURL("**/*_cb=*", { timeout: 15000 }),
-				page.evaluate(() => location.reload()),
-			]);
+			await page.evaluate(() => location.reload());
+			await page.waitForURL("**/*_cb=*", { timeout: 15000, waitUntil: "commit" });
 
 			// 4. Wait for the app to successfully boot on the reloaded page
 			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
@@ -65,15 +63,13 @@ test.describe("Application Resilience & Recovery", () => {
 			});
 
 			// 4. Reload - should redirect to 500.html because marker is present
-			await Promise.all([
-				page.waitForURL("**/500.html*", { timeout: 15000 }),
-				page.evaluate(() => location.reload()),
-			]);
+			await page.evaluate(() => location.reload());
+			await page.waitForURL("**/500.html*", { timeout: 15000, waitUntil: "commit" });
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible();
 
-			// 4. Verify that the marker was cleared by index.html before redirect
+			// 5. Verify that the marker was cleared by index.html before redirect
 			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
 			expect(markerValue).toBeNull();
 		});
