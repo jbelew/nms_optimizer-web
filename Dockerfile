@@ -1,8 +1,8 @@
 # Stage 1: Build Frontend
 ARG TARGETARCH
 
-FROM --platform=$BUILDPLATFORM node:24-alpine AS frontend-builder_amd64
-FROM --platform=$BUILDPLATFORM node:24-alpine AS frontend-builder_arm64
+FROM --platform=$BUILDPLATFORM node:26-alpine AS frontend-builder_amd64
+FROM --platform=$BUILDPLATFORM node:26-alpine AS frontend-builder_arm64
 
 FROM frontend-builder_${TARGETARCH} AS frontend-builder
 
