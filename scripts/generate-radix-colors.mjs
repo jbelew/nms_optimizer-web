@@ -33,12 +33,12 @@ const colors = [
 const outputDir = join(projectRoot, "src/assets/css/radix-colors");
 
 /**
- * Strip P3 color definitions and light mode colors from CSS content
+ * Strip P3 color definitions, light mode colors, and light color-schemes
  * Keep only dark mode colors since the app uses appearance="dark"
  * @param {string} css - Original CSS content
- * @returns {string} CSS with only dark mode colors
+ * @returns {string} Optimized CSS
  */
-function stripP3Colors(css) {
+function optimizeCss(css) {
 	// First, remove P3 @supports blocks
 	let result = css.replace(
 		/@supports \(color: color\(display-p3[^}]+\)\) \{[\s\S]*?\n\}(?=\n|$)/gm,
@@ -46,11 +46,20 @@ function stripP3Colors(css) {
 	);
 
 	// Remove light mode colors (everything from ':root, .light' to the closing brace)
-	// Improved regex to handle cases where there is only one newline after the brace
 	result = result.replace(/:root,\s*\.light,\s*\.light-theme\s*\{[\s\S]*?\n\}(?:\n|$)/m, "");
+
+	// Remove color-scheme: light blocks
+	result = result.replace(/\.radix-themes:where\(\.light, \.light-theme\)[^{]*\{[\s\S]*?\n\}(?:\n|$)/g, "");
 
 	return result;
 }
+
+const ALL_RADIX_COLORS = [
+	"gray", "gold", "bronze", "brown", "yellow", "amber", "orange", "tomato", 
+	"red", "ruby", "crimson", "pink", "plum", "purple", "violet", "iris", 
+	"indigo", "blue", "cyan", "teal", "jade", "green", "grass", "lime", 
+	"mint", "sky", "mauve", "slate", "sage", "olive", "sand"
+];
 
 console.log("Generating optimized Radix UI color files...\n");
 
@@ -64,7 +73,25 @@ const baseInputPath = join(projectRoot, "node_modules/@radix-ui/themes/tokens/ba
 try {
 	const baseCss = readFileSync(baseInputPath, "utf-8");
 	// Apply full optimization to base.css as well
-	const optimizedBaseCss = stripP3Colors(baseCss);
+	let optimizedBaseCss = optimizeCss(baseCss);
+
+	// Strip unused accent colors and gray colors from base.css to save space
+	for (const color of ALL_RADIX_COLORS) {
+		if (!colors.includes(color)) {
+			// We always want to preserve the 'gray' accent block because components 
+			// might use color="gray" which maps to the configured grayColor (e.g. slate)
+			if (color !== "gray") {
+				// Remove [data-accent-color='color'] block
+				const accentRegex = new RegExp(`\\[data-accent-color=['"]${color}['"]\\]\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`, "g");
+				optimizedBaseCss = optimizedBaseCss.replace(accentRegex, "");
+			}
+			
+			// Remove .radix-themes:where([data-gray-color='color']) block
+			const grayRegex = new RegExp(`\\.radix-themes:where\\(\\[data-gray-color=['"]${color}['"]\\]\\)\\s*\\{[\\s\\S]*?\\n\\}(?:\\n|$)`, "g");
+			optimizedBaseCss = optimizedBaseCss.replace(grayRegex, "");
+		}
+	}
+
 	optimizedColorContents.push(optimizedBaseCss);
 	console.log(`✓ base.css optimized`);
 } catch (error) {
@@ -77,7 +104,7 @@ for (const color of colors) {
 
 	try {
 		const originalCss = readFileSync(inputPath, "utf-8");
-		const optimizedCss = stripP3Colors(originalCss);
+		const optimizedCss = optimizeCss(originalCss);
 
 		optimizedColorContents.push(optimizedCss);
 

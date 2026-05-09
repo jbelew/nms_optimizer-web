@@ -66,7 +66,7 @@ describe("PerformanceContent", () => {
 		renderWithDialog(<PerformanceContent isOpen={true} />);
 
 		// The MessageSpinner is rendered inside Suspense with this key
-		expect(screen.getByText("dialogs.performance.loading")).toBeInTheDocument();
+		expect(screen.getByRole("status")).toBeInTheDocument();
 	});
 
 	test("should show error message when data fetch fails", () => {

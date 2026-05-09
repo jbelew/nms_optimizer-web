@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
 import { fetchPerformanceData } from "@/utils/api/performanceResource";
+import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
 const PerformanceChart = lazy(() => import("./PerformanceChart"));
 
@@ -38,7 +39,19 @@ const PerformanceChart = lazy(() => import("./PerformanceChart"));
  */
 export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	const { t } = useTranslation();
-	const [range, setRange] = useState(3);
+	const [range, setRange] = useState(() => {
+		const saved = safeGetItem("nms-perf-range");
+
+		if (saved) {
+			const parsed = parseInt(saved, 10);
+
+			if (!isNaN(parsed) && [3, 7, 14].includes(parsed)) {
+				return parsed;
+			}
+		}
+
+		return 3;
+	});
 	const [isPending, startTransition] = useTransition();
 
 	// Always fetch the maximum range (14 days) to ensure the summary cards (latest hour)
@@ -61,6 +74,7 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		// responsive, regardless of whether the network data is already cached.
 		startTransition(() => {
 			setRange(newRange);
+			safeSetItem("nms-perf-range", newRange.toString());
 		});
 	};
 

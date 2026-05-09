@@ -22,7 +22,7 @@ import { FULL_DASHBOARD_HEIGHT, PERFORMANCE_LAYOUT } from "./PerformanceUtils";
  * <DashboardSkeleton />
  */
 const DashboardSkeleton: FC = () => {
-	const { t } = useTranslation();
+	useTranslation();
 
 	return (
 		<div
@@ -35,10 +35,7 @@ const DashboardSkeleton: FC = () => {
 				paddingTop: PERFORMANCE_LAYOUT.FOOTER_HEIGHT,
 			}}
 		>
-			<MessageSpinner
-				isVisible={true}
-				initialMessage={t("dialogs.performance.loading", "Loading perf data...")}
-			/>
+			<MessageSpinner isVisible={true} />
 		</div>
 	);
 };
