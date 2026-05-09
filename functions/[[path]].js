@@ -110,6 +110,7 @@ export async function onRequest(context) {
 	const lang = LOCALE_LANGS.includes(pathParts[0]) ? pathParts[0] : null;
 	const shellPath = lang ? `/${lang}/index.html` : "/index.html";
 	const shellUrl = new URL(shellPath, url.origin);
+	shellUrl.search = url.search; // Preserve query params (e.g. ?_cb=) to bypass stale internal edge cache
 
 	// Because `_routes.json` excludes locale shells, this fetch goes straight
 	// to the CDN and does NOT re-invoke this Function.

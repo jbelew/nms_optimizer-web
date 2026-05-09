@@ -31,10 +31,7 @@
 				// Handle stale chunk loading after deployment.
 				// One auto-reload attempt with cache-busting; if that fails,
 				// redirect to /500.html with error context.
-				window.addEventListener("vite:preloadError", function (event) {
-					event.preventDefault();
-					var payload = event.payload;
-
+				function handleStaleChunkError(payloadMessage) {
 					try {
 						if (!sessionStorage.getItem(MARKER)) {
 							sessionStorage.setItem(MARKER, "1");
@@ -51,11 +48,35 @@
 						sessionStorage.removeItem(MARKER);
 					} catch (e) {}
 					var errorUrl = "/500.html?error_type=stale_chunk";
-					if (payload && payload.message) {
-						errorUrl += "&error_cause=" + encodeURIComponent(payload.message);
+					if (payloadMessage) {
+						errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
 					}
 					window.location.replace(errorUrl);
+				}
+
+				window.addEventListener("vite:preloadError", function (event) {
+					event.preventDefault();
+					handleStaleChunkError(event.payload && event.payload.message);
 				});
+
+				// Catch static import failures (which bypass vite:preloadError)
+				window.addEventListener("error", function (event) {
+					var msg = (event.message || "").toLowerCase();
+					var isModuleError = msg.includes("importing a module script failed") ||
+					                    msg.includes("error resolving module specifier") ||
+					                    msg.includes("failed to fetch dynamically imported module");
+					
+					var isScriptElementError = event.target && event.target.nodeName === "SCRIPT";
+
+					if (isModuleError || isScriptElementError) {
+						// Only handle errors originating from our own build chunks
+						var src = event.target && event.target.src ? event.target.src : "";
+						if (isModuleError || src.includes("/build/")) {
+							event.preventDefault();
+							handleStaleChunkError(event.message || "Script load error");
+						}
+					}
+				}, true);
 				// Preload translations based on language in path (matches i18next logic)
 				const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
 				const pathParts = window.location.pathname.split("/");
