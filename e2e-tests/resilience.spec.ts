@@ -35,8 +35,10 @@ test.describe("Application Resilience & Recovery", () => {
 			await Promise.all([
 				page.waitForNavigation({ waitUntil: "commit" }),
 				page.evaluate(() => {
-					const event = new Event("vite:preloadError");
-					window.dispatchEvent(event);
+					setTimeout(() => {
+						const event = new Event("vite:preloadError");
+						window.dispatchEvent(event);
+					}, 0);
 				}),
 			]);
 
@@ -62,8 +64,10 @@ test.describe("Application Resilience & Recovery", () => {
 			await Promise.all([
 				page.waitForURL("**/500.html*", { timeout: 15000 }),
 				page.evaluate(() => {
-					const event = new Event("vite:preloadError");
-					window.dispatchEvent(event);
+					setTimeout(() => {
+						const event = new Event("vite:preloadError");
+						window.dispatchEvent(event);
+					}, 0);
 				}),
 			]);
 
