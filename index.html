@@ -16,31 +16,74 @@
 		<meta charset="UTF-8" />
 		<script>
 			(function () {
-				var MARKER = "__preload_recovery__";
-				var recoveryInProgress = false;
+				const MARKER = "__preload_recovery__";
+				let recoveryInProgress = false;
 
 				// The marker is cleared by main.tsx upon successful application boot.
 
-				// Temporary one-time SW nuke to clear stale state from the last 24h
+				// One-time Service Worker unregister to clear stale precache state
+				// from sessions that installed an older SW with an outdated chunk
+				// graph. Bumps the key when re-deployed so each affected cohort gets
+				// a single forced reload.
 				try {
-					if (!localStorage.getItem("__sw_nuke_v1__")) {
+					if (!localStorage.getItem("__sw_nuke_v2__")) {
 						if ("serviceWorker" in navigator) {
-							navigator.serviceWorker.getRegistrations().then(function (registrations) {
-								if (registrations.length > 0) {
-									for (var i = 0; i < registrations.length; i++) {
-										registrations[i].unregister();
+							navigator.serviceWorker
+								.getRegistrations()
+								.then(function (registrations) {
+									if (registrations.length === 0) {
+										localStorage.setItem("__sw_nuke_v2__", "1");
+										return;
 									}
-									localStorage.setItem("__sw_nuke_v1__", "1");
-									window.location.reload();
-								} else {
-									localStorage.setItem("__sw_nuke_v1__", "1");
-								}
-							});
+									Promise.all(
+										registrations.map(function (r) {
+											return r.unregister();
+										})
+									)
+										.catch(function () {})
+										.then(function () {
+											// Also drop CacheStorage so the next page load can't be served
+											// from a stale Workbox precache by any leftover SW instance.
+											if ("caches" in window) {
+												return caches
+													.keys()
+													.then(function (names) {
+														return Promise.all(
+															names.map(function (n) {
+																return caches.delete(n);
+															})
+														);
+													})
+													.catch(function () {});
+											}
+										})
+										.then(function () {
+											localStorage.setItem("__sw_nuke_v2__", "1");
+											window.location.reload();
+										});
+								})
+								.catch(function () {
+									localStorage.setItem("__sw_nuke_v2__", "1");
+								});
 						} else {
-							localStorage.setItem("__sw_nuke_v1__", "1");
+							localStorage.setItem("__sw_nuke_v2__", "1");
 						}
 					}
 				} catch (e) {}
+
+				// Build a cache-busting URL that preserves the original search params and hash.
+				function buildCacheBustUrl() {
+					const search = window.location.search || "";
+					const sep = search ? "&" : "?";
+					return (
+						window.location.pathname +
+						search +
+						sep +
+						"_cb=" +
+						Date.now() +
+						(window.location.hash || "")
+					);
+				}
 
 				// Handle stale chunk loading after deployment.
 				// One auto-reload attempt with cache-busting; if that fails,
@@ -51,36 +94,60 @@
 
 					try {
 						// Bump observability counter for E2E tests (read in resilience.spec.ts)
-						var prev = parseInt(sessionStorage.getItem("__recovery_attempts__") || "0", 10);
+						const prev = parseInt(sessionStorage.getItem("__recovery_attempts__") || "0", 10);
 						sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
 					} catch (e) {}
 
+					let firstAttempt = false;
 					try {
 						if (!sessionStorage.getItem(MARKER)) {
 							sessionStorage.setItem(MARKER, "1");
-							// Clear CacheStorage to nuke any stale Service Worker or asset caches
-							if ("caches" in window) {
-								try {
-									caches.keys().then(function (names) {
-										for (var i = 0; i < names.length; i++) {
-											caches.delete(names[i]);
-										}
-									});
-								} catch (e) {}
-							}
-							// Cache-busting query param forces a fresh index.html from the CDN
-							window.location.replace(window.location.pathname + "?_cb=" + Date.now());
-							return;
+							firstAttempt = true;
 						}
 					} catch (e) {
 						// sessionStorage blocked (rare): fall through to error page
+					}
+
+					if (firstAttempt) {
+						const reloadUrl = buildCacheBustUrl();
+						// Safety timeout in case caches.delete hangs (rare on some browsers).
+						let reloaded = false;
+						const doReload = function () {
+							if (reloaded) return;
+							reloaded = true;
+							window.location.replace(reloadUrl);
+						};
+						setTimeout(doReload, 500);
+
+						// Clear CacheStorage to nuke any stale Service Worker or asset caches
+						// before reloading; otherwise the SW could re-serve the stale chunk.
+						if ("caches" in window) {
+							try {
+								caches
+									.keys()
+									.then(function (names) {
+										return Promise.all(
+											names.map(function (n) {
+												return caches.delete(n);
+											})
+										);
+									})
+									.catch(function () {})
+									.then(doReload);
+							} catch (e) {
+								doReload();
+							}
+						} else {
+							doReload();
+						}
+						return;
 					}
 
 					// Reload already attempted — redirect to dedicated error page
 					try {
 						sessionStorage.removeItem(MARKER);
 					} catch (e) {}
-					var errorUrl = "/500.html?error_type=stale_chunk";
+					let errorUrl = "/500.html?error_type=stale_chunk";
 					if (payloadMessage) {
 						errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
 					}
@@ -89,6 +156,7 @@
 
 				window.addEventListener("vite:preloadError", function (event) {
 					event.preventDefault();
+					// Vite's vite:preloadError event has a `payload` of type Error.
 					handleStaleChunkError(event.payload && event.payload.message);
 				});
 
@@ -106,21 +174,22 @@
 				window.addEventListener(
 					"error",
 					function (event) {
-						var msg = (event.message || "").toLowerCase();
-						var isModuleError =
+						const msg = (event.message || "").toLowerCase();
+						const isModuleError =
 							msg.includes("importing a module script failed") ||
 							msg.includes("error resolving module specifier") ||
 							msg.includes("failed to fetch dynamically imported module");
 
-						var isScriptElementError = event.target && event.target.nodeName === "SCRIPT";
+						const target = event.target;
+						const src = target && target.src ? target.src : "";
+						const isOurChunk = src.includes("/build/");
+						const isScriptElementError = target && target.nodeName === "SCRIPT" && isOurChunk;
 
+						// Only handle errors originating from our own build chunks to avoid
+						// triggering recovery on unrelated 3rd-party script failures.
 						if (isModuleError || isScriptElementError) {
-							// Only handle errors originating from our own build chunks
-							var src = event.target && event.target.src ? event.target.src : "";
-							if (isModuleError || src.includes("/build/")) {
-								event.preventDefault();
-								handleStaleChunkError(event.message || "Script load error");
-							}
+							event.preventDefault();
+							handleStaleChunkError(event.message || "Script load error");
 						}
 					},
 					true
@@ -171,9 +240,10 @@
 				document.head.appendChild(techTreeLink);
 				// ---------------------------------------------
 
-				// Detect if this is a bot/crawler or headless browser
+				// Detect if this is a bot/crawler or headless browser.
+				// Note: avoid bare /google/ — it matches GoogleApp WebViews used by real users.
 				const isBot =
-					/bot|crawler|spider|headless|phantom|webdriver|google|lighthouse|chrome-lighthouse/i.test(
+					/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(
 						navigator.userAgent
 					) || navigator.webdriver === true;
 

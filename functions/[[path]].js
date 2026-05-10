@@ -125,7 +125,10 @@ export async function onRequest(context) {
 	// Re-wrap so any 308/redirect from the asset pipeline cannot leak to the browser.
 	const headers = new Headers(shellResponse.headers);
 	headers.set("X-SPA-Fallback", "true");
-	headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
+	// Match `_headers` for / and other shells exactly, including `max-age=0`,
+	// so SPA-fallback responses can never be cached or heuristically aged by
+	// browsers/intermediaries.
+	headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 	headers.set("Pragma", "no-cache");
 	headers.set("Expires", "0");
 

@@ -219,8 +219,17 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 										// rules. Combined with navigationPreload, the browser starts
 										// the network fetch in parallel with SW boot, eliminating
 										// the SW startup penalty from TTFB entirely.
+										//
+										// `cache: "reload"` forces the underlying fetch to bypass the
+										// browser HTTP cache. Without this, a stale `/performance/` (or
+										// any SPA-fallback shell) cached during a prior `no-cache`-only
+										// header era can be served via 304 revalidation and ship users
+										// HTML that references chunks that no longer exist.
 										urlPattern: ({ request }) => request.mode === "navigate",
 										handler: "NetworkOnly",
+										options: {
+											fetchOptions: { cache: "reload" },
+										},
 									},
 									{
 										urlPattern: /\/version\.json$/,
