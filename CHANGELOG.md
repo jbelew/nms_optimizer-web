@@ -1,3 +1,10 @@
+## [7.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.5...v7.2.6) (2026-05-10)
+
+
+### Bug Fixes
+
+* enforce strict cache busting for SPA shell and update performance chart success threshold to 20ms ([19543d6](https://github.com/jbelew/nms_optimizer-web/commit/19543d67f8c089fc59cdf6785a86a9a0a4ae3a99))
+
 ## [7.2.5](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.4...v7.2.5) (2026-05-09)
 
 
