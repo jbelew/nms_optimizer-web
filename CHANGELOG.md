@@ -1,3 +1,10 @@
+## [7.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.6...v7.2.7) (2026-05-10)
+
+
+### Bug Fixes
+
+* strengthen cache headers and implement forced service worker/cache cleanup to resolve stale deployment issues ([5c3baed](https://github.com/jbelew/nms_optimizer-web/commit/5c3baed0856db4ab60b3bff2036a1dc67172b35b))
+
 ## [7.2.6](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.5...v7.2.6) (2026-05-10)
 
 
