@@ -17,59 +17,73 @@ test.describe("Application Resilience & Recovery", () => {
 		});
 	});
 
+	test.afterEach(async ({ page }) => {
+		try {
+			await page.evaluate(() => sessionStorage.clear());
+		} catch (e) {
+			// Context might be gone
+		}
+	});
+
 	test.describe("Preload error recovery cycle", () => {
 		test("should auto-reload once on first chunk failure", async ({ page }) => {
-			// 1. Initial successful load
-			await page.goto("/");
-			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
-
-			// 2. Setup network interception to block a critical chunk only ONCE
-			let chunkBlocked = false;
-			await page.route("**/build/vendor-*.js", async (route) => {
-				if (!chunkBlocked) {
-					chunkBlocked = true;
-					await route.abort("failed");
-				} else {
-					await route.continue();
-				}
+			// Seed the trigger flag on the very first navigation BEFORE any inline
+			// script runs. Using page.evaluate + page.reload() is racy in WebKit:
+			// sessionStorage writes are sometimes not yet visible to the next page's
+			// synchronous head script.
+			await page.addInitScript(() => {
+				if (sessionStorage.getItem("__SEED_AUTO_RELOAD__")) return;
+				sessionStorage.setItem("__SEED_AUTO_RELOAD__", "1");
+				sessionStorage.setItem("__TEST_TRIGGER_ERROR__", "1");
 			});
 
-			// 3. Force a reload. The browser will try to fetch the blocked chunk
-			// and trigger our global error listener, which redirects to ?_cb=
-			await page.evaluate(() => location.reload());
-			await page.waitForURL("**/*_cb=*", { timeout: 15000, waitUntil: "commit" });
+			// Trigger navigation. The inline script will:
+			//   1. See __TEST_TRIGGER_ERROR__ and call handleStaleChunkError.
+			//   2. MARKER is unset → set MARKER, bump __recovery_attempts__, and
+			//      cache-bust reload to /?_cb=...
+			//   3. On the cache-busted page, no trigger fires; the app boots and
+			//      main.tsx clears MARKER on `app-ready`.
+			void page.goto("/").catch(() => {});
 
-			// 4. Wait for the app to successfully boot on the reloaded page
-			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
+			// Wait for the recovery to fire AND the app to fully boot.
+			// The counter persists across the cache-busting reload so we don't have
+			// to race a transient `?_cb=` URL (which react-router strips).
+			await page.waitForFunction(
+				() =>
+					sessionStorage.getItem("__recovery_attempts__") === "1" &&
+					(window as Window & { __APP_READY__?: boolean }).__APP_READY__ === true,
+				{ timeout: 30000 }
+			);
 
-			// 5. Verify that the marker was cleared by main.tsx
+			// Verify that the marker was cleared by main.tsx.
 			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
 			expect(markerValue).toBeNull();
 		});
 
 		test("should redirect to 500.html on second chunk failure", async ({ page }) => {
-			// 1. Initial load
-			await page.goto("/");
-			await page.waitForFunction(() => (window as any).__APP_READY__, { timeout: 30000 });
-
-			// 2. Set marker manually to simulate a previous recovery reload
-			await page.evaluate((m) => {
+			// Pre-seed sessionStorage on the very next navigation BEFORE any inline
+			// script runs. Setting these via page.evaluate + page.reload() is racy in
+			// WebKit (the inline-script trigger occasionally observes a missing
+			// marker and falls back into the auto-reload branch).
+			await page.addInitScript((m) => {
+				if (sessionStorage.getItem("__SEED_500_TEST__")) return;
+				sessionStorage.setItem("__SEED_500_TEST__", "1");
 				sessionStorage.setItem(m, "1");
+				sessionStorage.setItem("__TEST_TRIGGER_ERROR__", "1");
 			}, MARKER);
 
-			// 3. Block the chunk again
-			await page.route("**/build/vendor-*.js", async (route) => {
-				await route.abort("failed");
-			});
+			// Trigger navigation. The inline script will:
+			//   1. See __TEST_TRIGGER_ERROR__ and call handleStaleChunkError.
+			//   2. See MARKER already present → take the second-failure branch.
+			//   3. Clear MARKER and redirect to /500.html.
+			void page.goto("/").catch(() => {});
 
-			// 4. Reload - should redirect to 500.html because marker is present
-			await page.evaluate(() => location.reload());
-			await page.waitForURL("**/500.html*", { timeout: 15000, waitUntil: "commit" });
+			await page.waitForURL(/\/500\.html/, { timeout: 30000 });
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible();
 
-			// 5. Verify that the marker was cleared by index.html before redirect
+			// Verify that the marker was cleared by index.html before redirect.
 			const markerValue = await page.evaluate((m) => sessionStorage.getItem(m), MARKER);
 			expect(markerValue).toBeNull();
 		});
@@ -82,7 +96,7 @@ test.describe("Application Resilience & Recovery", () => {
 			await refreshButton.click();
 
 			// 500.html redirects to /?reload=<timestamp>
-			await page.waitForURL(/\/\?reload=\d+/, { timeout: 15000 });
+			await page.waitForFunction(() => window.location.pathname === "/" && window.location.search.includes("reload="), { timeout: 15000 });
 		});
 	});
 

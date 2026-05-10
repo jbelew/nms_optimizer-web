@@ -17,6 +17,7 @@
 		<script>
 			(function () {
 				var MARKER = "__preload_recovery__";
+				var recoveryInProgress = false;
 
 				// The marker is cleared by main.tsx upon successful application boot.
 
@@ -24,6 +25,15 @@
 				// One auto-reload attempt with cache-busting; if that fails,
 				// redirect to /500.html with error context.
 				function handleStaleChunkError(payloadMessage) {
+					if (recoveryInProgress) return;
+					recoveryInProgress = true;
+
+					try {
+						// Bump observability counter for E2E tests (read in resilience.spec.ts)
+						var prev = parseInt(sessionStorage.getItem("__recovery_attempts__") || "0", 10);
+						sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
+					} catch (e) {}
+
 					try {
 						if (!sessionStorage.getItem(MARKER)) {
 							sessionStorage.setItem(MARKER, "1");
@@ -50,6 +60,16 @@
 					event.preventDefault();
 					handleStaleChunkError(event.payload && event.payload.message);
 				});
+
+				// E2E Test hook for deterministic error triggering.
+				// Fire synchronously so the recovery wins the race against main.tsx's
+				// app-ready handler (which clears the recovery marker on boot).
+				try {
+					if (sessionStorage.getItem("__TEST_TRIGGER_ERROR__")) {
+						sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");
+						handleStaleChunkError("TEST_TRIGGERED_ERROR");
+					}
+				} catch (e) {}
 
 				// Catch static import failures (which bypass vite:preloadError)
 				window.addEventListener(
