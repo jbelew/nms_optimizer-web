@@ -1,3 +1,10 @@
+## [7.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.7...v7.2.8) (2026-05-10)
+
+
+### Bug Fixes
+
+* improve SPA chunk recovery logic, disable caching for shell responses, and refine bot detection criteria ([5da7a2d](https://github.com/jbelew/nms_optimizer-web/commit/5da7a2d73c4c6de6f8c3cd2e62f29157fd68fdc1))
+
 ## [7.2.7](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.6...v7.2.7) (2026-05-10)
 
 
