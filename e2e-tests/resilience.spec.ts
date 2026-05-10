@@ -11,9 +11,16 @@ test.describe("Application Resilience & Recovery", () => {
 	const MARKER = "__preload_recovery__";
 
 	test.beforeEach(async ({ page }) => {
-		// Suppress welcome dialog via localStorage
+		// Suppress welcome dialog via localStorage and clear Service Workers to ensure fresh tests
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
+			if ("serviceWorker" in navigator) {
+				navigator.serviceWorker.getRegistrations().then((registrations) => {
+					for (const registration of registrations) {
+						registration.unregister();
+					}
+				});
+			}
 		});
 	});
 
@@ -78,7 +85,9 @@ test.describe("Application Resilience & Recovery", () => {
 			//   3. Clear MARKER and redirect to /500.html.
 			void page.goto("/").catch(() => {});
 
-			await page.waitForURL(/\/500\.html/, { timeout: 30000 });
+			await page.waitForFunction(() => window.location.pathname.includes("/500.html"), {
+				timeout: 30000,
+			});
 
 			const errorHeading = page.locator("h1", { hasText: "Application Load Error" });
 			await expect(errorHeading).toBeVisible();

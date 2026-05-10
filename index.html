@@ -20,6 +20,27 @@
 				var recoveryInProgress = false;
 
 				// The marker is cleared by main.tsx upon successful application boot.
+				
+				// Temporary one-time SW nuke to clear stale state from the last 24h
+				try {
+					if (!localStorage.getItem("__sw_nuke_v1__")) {
+						if ("serviceWorker" in navigator) {
+							navigator.serviceWorker.getRegistrations().then(function (registrations) {
+								if (registrations.length > 0) {
+									for (var i = 0; i < registrations.length; i++) {
+										registrations[i].unregister();
+									}
+									localStorage.setItem("__sw_nuke_v1__", "1");
+									window.location.reload();
+								} else {
+									localStorage.setItem("__sw_nuke_v1__", "1");
+								}
+							});
+						} else {
+							localStorage.setItem("__sw_nuke_v1__", "1");
+						}
+					}
+				} catch (e) {}
 
 				// Handle stale chunk loading after deployment.
 				// One auto-reload attempt with cache-busting; if that fails,
@@ -37,6 +58,16 @@
 					try {
 						if (!sessionStorage.getItem(MARKER)) {
 							sessionStorage.setItem(MARKER, "1");
+							// Clear CacheStorage to nuke any stale Service Worker or asset caches
+							if ("caches" in window) {
+								try {
+									caches.keys().then(function (names) {
+										for (var i = 0; i < names.length; i++) {
+											caches.delete(names[i]);
+										}
+									});
+								} catch (e) {}
+							}
 							// Cache-busting query param forces a fresh index.html from the CDN
 							window.location.replace(window.location.pathname + "?_cb=" + Date.now());
 							return;
