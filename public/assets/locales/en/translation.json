@@ -721,14 +721,14 @@
 		"performanceDescription": "Real-time performance metrics and Core Web Vitals for the NMS Optimizer application.",
 		"ogImageAlt": "A detailed screenshot of the NMS Optimizer application showing an optimized technology grid with high adjacency bonuses.",
 		"nav": {
-			"home": "Tech Layout Calculator",
-			"instructions": "How to Use",
-			"about": "About the Algorithms",
-			"changelog": "Latest Updates & Features",
-			"userstats": "Community Tech Meta",
-			"translation": "Join the Translation Team",
-			"privacy": "Privacy Policy",
-			"performance": "App Performance Metrics"
+			"home": "Home",
+			"instructions": "Instructions",
+			"about": "About",
+			"changelog": "Changelog",
+			"userstats": "Community Stats",
+			"translation": "Translate",
+			"privacy": "Privacy",
+			"performance": "Performance"
 		},
 		"navDescriptions": {
 			"home": "Use the Tech Layout & Adjacency Bonus Calculator",

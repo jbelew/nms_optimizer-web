@@ -701,13 +701,13 @@
 		"privacyDescription": "Lee sobre nuestro compromiso con tu privacidad. Usamos análisis anónimos para mejorar el optimizador sin rastrear nunca tu identidad personal o datos de guardado.",
 		"ogImageAlt": "Una captura de pantalla detallada de la aplicación NMS Optimizer que muestra una cuadrícula de tecnología de nave optimizada con altos bonos de adyacencia.",
 		"nav": {
-			"home": "Calculadora de Diseños",
-			"instructions": "Cómo Usar",
-			"about": "Sobre los Algoritmos",
-			"changelog": "Últimas Actualizaciones",
-			"userstats": "Meta de la Comunidad",
-			"translation": "Únete al Equipo de Traducción",
-			"privacy": "Política de Privacidad",
+			"home": "Inicio",
+			"instructions": "Instrucciones",
+			"about": "Acerca de",
+			"changelog": "Cambios",
+			"userstats": "Estadísticas",
+			"translation": "Traducir",
+			"privacy": "Privacidad",
 			"performance": "Rendimiento"
 		},
 		"navDescriptions": {

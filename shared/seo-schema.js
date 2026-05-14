@@ -122,7 +122,28 @@ export const getLocalizedSchema = (t, lang, url) => {
 		});
 	}
 
-	const schemas = [softwareApp, organization, webSite];
+	// 6. SiteNavigationElement
+	const navPaths = [
+		{ name: t("seo.nav.instructions"), url: `${baseUrl}/instructions/` },
+		{ name: t("seo.nav.about"), url: `${baseUrl}/about/` },
+		{ name: t("seo.nav.changelog"), url: `${baseUrl}/changelog/` },
+		{ name: t("seo.nav.userstats"), url: `${baseUrl}/userstats/` },
+		{ name: t("seo.nav.privacy"), url: `${baseUrl}/privacy/` },
+	];
+
+	const siteNavigation = {
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		name: t("seo.nav.home", { defaultValue: "Site Navigation" }),
+		itemListElement: navPaths.map((nav, index) => ({
+			"@type": "SiteNavigationElement",
+			position: index + 1,
+			name: nav.name,
+			url: nav.url,
+		})),
+	};
+
+	const schemas = [softwareApp, organization, webSite, siteNavigation];
 
 	// Per Google's structured-data guidance, BreadcrumbList must contain at
 	// least 2 items. Emitting a single-item breadcrumb (e.g. on the homepage)

@@ -21,55 +21,6 @@
 
 				// The marker is cleared by main.tsx upon successful application boot.
 
-				// One-time Service Worker unregister to clear stale precache state
-				// from sessions that installed an older SW with an outdated chunk
-				// graph. Bumps the key when re-deployed so each affected cohort gets
-				// a single forced reload.
-				try {
-					if (!localStorage.getItem("__sw_nuke_v2__")) {
-						if ("serviceWorker" in navigator) {
-							navigator.serviceWorker
-								.getRegistrations()
-								.then(function (registrations) {
-									if (registrations.length === 0) {
-										localStorage.setItem("__sw_nuke_v2__", "1");
-										return;
-									}
-									Promise.all(
-										registrations.map(function (r) {
-											return r.unregister();
-										})
-									)
-										.catch(function () {})
-										.then(function () {
-											// Also drop CacheStorage so the next page load can't be served
-											// from a stale Workbox precache by any leftover SW instance.
-											if ("caches" in window) {
-												return caches
-													.keys()
-													.then(function (names) {
-														return Promise.all(
-															names.map(function (n) {
-																return caches.delete(n);
-															})
-														);
-													})
-													.catch(function () {});
-											}
-										})
-										.then(function () {
-											localStorage.setItem("__sw_nuke_v2__", "1");
-											window.location.reload();
-										});
-								})
-								.catch(function () {
-									localStorage.setItem("__sw_nuke_v2__", "1");
-								});
-						} else {
-							localStorage.setItem("__sw_nuke_v2__", "1");
-						}
-					}
-				} catch (e) {}
 
 				// Build a cache-busting URL that preserves the original search params and hash.
 				function buildCacheBustUrl() {
@@ -460,19 +411,35 @@
 		<noscript data-ssg-template="">
 			<main>
 				<header class="app-header-static">
-					<div class="app-header-static__logo-text" style="margin-bottom: 4px">NO MAN'S SKY</div>
-					<div class="app-header-static__separator-container">
+					<h1
+						style="
+							margin: 0;
+							font-size: inherit;
+							font-weight: inherit;
+							position: absolute;
+							width: 1px;
+							height: 1px;
+							padding: 0;
+							margin: -1px;
+							overflow: hidden;
+							clip: rect(0, 0, 0, 0);
+							white-space: nowrap;
+							border: 0;
+						"
+					>
+						NMS Optimizer
+					</h1>
+					<div class="app-header-static__logo-text" style="margin-bottom: 4px" aria-hidden="true">
+						NO MAN'S SKY
+					</div>
+					<div class="app-header-static__separator-container" aria-hidden="true">
 						<span class="app-header-static__separator"></span>
-						<img
-							alt="No Man's Sky Atlas Logo"
-							width="16"
-							height="20"
-							src="/assets/img/nms-icon.webp"
-						/>
+						<img alt="" width="16" height="20" src="/assets/img/nms-icon.webp" />
 						<span class="app-header-static__separator"></span>
 					</div>
 					<h2 class="app-header-static__title">
-						Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>
+						Technology Layout Optimizer
+						<span style="color: #4ccce6" aria-hidden="true">ML/RUST</span>
 					</h2>
 				</header>
 				<h1>NMS Optimizer</h1>
@@ -597,23 +564,15 @@
 					<h2>Navigation</h2>
 					<ul>
 						<li aria-current="page">
-							<a href="/">Tech Layout Calculator</a> - Use the Tech Layout &amp; Adjacency Bonus
-							Calculator
+							<a href="/">Home</a> - Use the Tech Layout &amp; Adjacency Bonus Calculator
 						</li>
-						<li><a href="/instructions/">How to Use</a> - Complete guide for using the app</li>
-						<li><a href="/about/">About the Algorithms</a> - How it works and technical details</li>
+						<li><a href="/instructions/">Instructions</a> - Complete guide for using the app</li>
+						<li><a href="/about/">About</a> - How it works and technical details</li>
+						<li><a href="/changelog/">Changelog</a> - Latest updates and new features</li>
+						<li><a href="/userstats/">Community Stats</a> - Popular technologies and builds</li>
+						<li><a href="/translation/">Translate</a> - Contribute to community localization</li>
 						<li>
-							<a href="/changelog/">Latest Updates &amp; Features</a> - Latest updates and new
-							features
-						</li>
-						<li><a href="/userstats/">Community Tech Meta</a> - Popular technologies and builds</li>
-						<li>
-							<a href="/translation/">Join the Translation Team</a> - Contribute to community
-							localization
-						</li>
-						<li>
-							<a href="/privacy/">Privacy Policy</a> - Our commitment to your data privacy and
-							security
+							<a href="/privacy/">Privacy</a> - Our commitment to your data privacy and security
 						</li>
 					</ul>
 				</nav>

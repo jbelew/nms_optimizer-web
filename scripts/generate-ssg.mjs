@@ -311,10 +311,28 @@ function injectSsgContent(document, lang, pageName, pageTitle, mdProcessor, t, s
 
 		const localizedHeader = `
 		<header class="app-header-static">
-			<div class="app-header-static__logo-text" style="margin-bottom: 4px">NO MAN'S SKY</div>
-			<div class="app-header-static__separator-container">
+			<h1
+				style="
+					margin: 0;
+					font-size: inherit;
+					font-weight: inherit;
+					position: absolute;
+					width: 1px;
+					height: 1px;
+					padding: 0;
+					margin: -1px;
+					overflow: hidden;
+					clip: rect(0, 0, 0, 0);
+					white-space: nowrap;
+					border: 0;
+				"
+			>
+				NMS Optimizer
+			</h1>
+			<div class="app-header-static__logo-text" style="margin-bottom: 4px" aria-hidden="true">NO MAN'S SKY</div>
+			<div class="app-header-static__separator-container" aria-hidden="true">
 				<span class="app-header-static__separator"></span>
-				<img alt="No Man's Sky Atlas Logo" width="16" height="20" src="/assets/img/nms-icon.webp" />
+				<img alt="" width="16" height="20" src="/assets/img/nms-icon.webp" />
 				<span class="app-header-static__separator"></span>
 			</div>
 			<h2 class="app-header-static__title">${subTitle}</h2>

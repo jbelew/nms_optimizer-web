@@ -701,14 +701,14 @@
 		"privacyDescription": "Leia sobre nosso compromisso com sua privacidade. Usamos análises anônimas para melhorar o otimizador sem nunca rastrear sua identidade ou dados de jogo.",
 		"ogImageAlt": "Uma captura de tela detalhada do aplicativo NMS Optimizer mostrando uma grade de nave otimizada com bônus de adjacência elevados.",
 		"nav": {
-			"home": "Calculadora de Layouts",
-			"instructions": "Como Usar",
-			"about": "Sobre os Algoritmos",
-			"changelog": "Últimas Atualizações",
-			"userstats": "Meta da Comunidade",
-			"translation": "Junte-se à Equipa de Tradução",
-			"privacy": "Política de Privacidade",
-			"performance": "Métricas de Desempenho"
+			"home": "Início",
+			"instructions": "Instruções",
+			"about": "Sobre",
+			"changelog": "Novidades",
+			"userstats": "Estatísticas",
+			"translation": "Traduzir",
+			"privacy": "Privacidade",
+			"performance": "Desempenho"
 		},
 		"navDescriptions": {
 			"home": "Use a Calculadora de Layouts e Bônus de Adjacência",

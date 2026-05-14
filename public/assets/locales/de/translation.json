@@ -701,14 +701,14 @@
 		"privacyDescription": "Lies unser Versprechen zum Datenschutz. Wir nutzen anonyme Analysen, um den Optimierer zu verbessern, ohne jemals deine Identität oder Spieldaten zu verfolgen.",
 		"ogImageAlt": "Ein detaillierter Screenshot des NMS-Optimierers, der ein optimiertes Raumschiff-Gitter mit hohen Adjazenzboni zeigt.",
 		"nav": {
-			"home": "Layout-Rechner",
-			"instructions": "Bedienungsanleitung",
-			"about": "Über die Algorithmen",
-			"changelog": "Updates & Neue Funktionen",
-			"userstats": "Community-Technologie-Meta",
-			"translation": "Übersetzungsteam beitreten",
+			"home": "Home",
+			"instructions": "Anleitung",
+			"about": "Über",
+			"changelog": "Changelog",
+			"userstats": "Statistiken",
+			"translation": "Mitwirken",
 			"privacy": "Datenschutz",
-			"performance": "Leistungsmetriken"
+			"performance": "Leistung"
 		},
 		"navDescriptions": {
 			"home": "Nutze den Technologie-Layout- und Adjazenz-Rechner",
