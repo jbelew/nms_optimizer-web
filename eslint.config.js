@@ -184,7 +184,7 @@ export default tseslint.config(
 	//
 	// --- GLOBAL IGNORES ---
 	//
-	{ ignores: ["dist", "coverage/", "**/tmp", "/tmp", "storybook-static"] },
+	{ ignores: ["dist", "coverage/", "**/tmp", "/tmp", "storybook-static", "docs"] },
 
 	//
 	// --- BUILD & UTILITY SCRIPTS ---
