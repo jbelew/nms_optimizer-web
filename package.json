@@ -3,6 +3,10 @@
 	"private": true,
 	"version": "7.2.8",
 	"type": "module",
+	"engines": {
+		"node": ">=24.0.0",
+		"bun": ">=1.2.0"
+	},
 	"scripts": {
 		"dev": "bun x vite",
 		"docs:generate": "bun x typedoc",

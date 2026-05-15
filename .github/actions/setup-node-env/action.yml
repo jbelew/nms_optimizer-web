@@ -1,14 +1,23 @@
-name: 'Setup Bun Environment'
-description: 'Sets up Bun and installs dependencies'
+name: 'Setup Bun and Node Environment'
+description: 'Sets up Bun and Node.js and installs dependencies'
 inputs:
   bun-version:
     description: 'The version of Bun to use'
     required: false
     default: 'latest'
+  node-version:
+    description: 'The version of Node.js to use'
+    required: false
+    default: '24'
 
 runs:
   using: "composite"
   steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
     - name: Set up Bun
       uses: oven-sh/setup-bun@v2
       with:
