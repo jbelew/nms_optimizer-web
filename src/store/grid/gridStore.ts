@@ -372,6 +372,8 @@ export type GridStore = {
 	}) => void;
 	/** Batch applies modules to the grid by linear index. */
 	applyModulesToGrid: (modules: (Module | null)[]) => void;
+	/** Restores the entire grid state from a saved build while ensuring derived state is recomputed. */
+	restoreGridState: (savedState: Partial<GridStore>) => void;
 	/** Triggers a manual recomputation of all precomputed derived state fields. */
 	triggerRecompute: () => void;
 };
@@ -938,6 +940,17 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
+
+				restoreGridState: (savedState) =>
+					set((state) => {
+						// Safely merge saved state into current draft
+						// We use Object.assign on the state draft to update fields
+						// Immer will handle the proxy correctly.
+						Object.assign(state, savedState);
+
+						// Ensure derived state is re-calculated based on restored data
+						recomputeDerivedState(state);
+					}),
 
 				triggerRecompute: () => {
 					set((state) => {

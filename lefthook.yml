@@ -1,15 +1,19 @@
 # Lefthook configuration for nms_optimizer-web
 # Faster, Bun-friendly git hooks
+#
+# Per-file-type commands run only against staged files matching their glob.
+# A metadata-only commit will skip every file-scoped command automatically.
 
 pre-commit:
-  parallel: false
+  parallel: true
   commands:
+    # ----- Policy gate (always runs) -----
     beads-enforcement:
-      tags: backend
+      tags: policy
       run: |
         STAGED_FILES=$(git diff --cached --name-only)
-        BEADS_MATCHES=$(echo "$STAGED_FILES" | grep -E "^\.beads/" | wc -l)
-        CONDUCTOR_MATCHES=$(echo "$STAGED_FILES" | grep -E "^conductor/|^plan\.md|^task\.md" | wc -l)
+        BEADS_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^\.beads/" || true)
+        CONDUCTOR_MATCHES=$(printf '%s\n' "$STAGED_FILES" | grep -cE "^conductor/|^plan\.md|^task\.md" || true)
         if [ "$BEADS_MATCHES" -gt 0 ] && [ "$CONDUCTOR_MATCHES" -eq 0 ]; then
           ACTIVE_TRACKS=$(grep -r "\"status\": \"in-progress\"" conductor/tracks/ 2>/dev/null | wc -l)
           if [ "$ACTIVE_TRACKS" -eq 0 ]; then
@@ -18,31 +22,45 @@ pre-commit:
             exit 1
           fi
         fi
-    verify:
-      # This command runs the full verification suite if source files or config files change
-      # It ignores metadata files for the purpose of triggering the full suite
-      run: |
-        STAGED_FILES=$(git diff --cached --name-only)
-        
-        # Categorize changes
-        BEADS_MATCHES=$(echo "$STAGED_FILES" | grep -E "^\.beads/" | wc -l)
-        CONDUCTOR_MATCHES=$(echo "$STAGED_FILES" | grep -E "^conductor/|^plan\.md|^task\.md" | wc -l)
-        AGENT_DOC_MATCHES=$(echo "$STAGED_FILES" | grep -E "^LEARNINGS\.gemini\.md|^walkthrough\.md|^implementation_plan\.md|^AGENTS\.md|^GEMINI\.md" | wc -l)
-        
-        TOTAL_FILES=$(echo "$STAGED_FILES" | wc -l)
-        METADATA_FILES_COUNT=$((BEADS_MATCHES + CONDUCTOR_MATCHES + AGENT_DOC_MATCHES))
-        
-        if [ "$TOTAL_FILES" -eq "$METADATA_FILES_COUNT" ]; then
-            echo "📝 Metadata-only commit detected. Skipping verification suite..."
-            bun run format:check
-        else
-            echo "🚀 Source changes detected. Running full verification suite..."
-            bun run format:check
-            git add -u
-            bun run lint:fix
-            bun run lint:css:fix
-            bun run typecheck
-            bun run test:ci
-            bun run test:scripts
-            git add -u
-        fi
+
+    # ----- Lint & format (per-file-type, scoped to staged files) -----
+    eslint:
+      tags: lint
+      glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
+      run: bunx eslint --fix {staged_files}
+      stage_fixed: true
+
+    stylelint:
+      tags: lint
+      glob: "*.scss"
+      run: bunx stylelint --fix {staged_files}
+      stage_fixed: true
+
+    prettier:
+      tags: format
+      # Mirrors `bun run format` which only targets ./src
+      glob: "src/**/*.{ts,tsx,js,jsx,cjs,mjs,css,scss,md,json,html}"
+      run: bunx prettier --write {staged_files}
+      stage_fixed: true
+
+    # ----- Whole-project checks (only when TS/TSX changes) -----
+    typecheck:
+      tags: types
+      glob: "*.{ts,tsx}"
+      # tsc -b uses project references and cannot be scoped to individual files
+      run: bun run typecheck
+
+    test:
+      tags: test
+      glob: "*.{ts,tsx}"
+      run: bun run test:ci
+
+    test-scripts:
+      tags: test
+      glob: "scripts/**/*.{ts,js,mjs,cjs}"
+      run: bun run test:scripts
+
+commit-msg:
+  commands:
+    commitlint:
+      run: bunx commitlint --edit {1}

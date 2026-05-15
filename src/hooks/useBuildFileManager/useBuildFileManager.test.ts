@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useBuildFileManager } from "./useBuildFileManager";
 
 // Mock dependencies
+const mockRestoreGridState = vi.fn();
 vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(() => ({
@@ -13,6 +14,7 @@ vi.mock("../../store/grid/gridStore", () => ({
 			gridFixed: false,
 			superchargedFixed: false,
 			initialGridDefinition: undefined,
+			restoreGridState: mockRestoreGridState,
 		})),
 		setState: vi.fn(),
 	},
@@ -146,6 +148,12 @@ describe("useBuildFileManager", () => {
 			});
 
 			await expect(result.current.loadBuildFromFile(file)).resolves.not.toThrow();
+
+			// Verify that restoreGridState was called with the correct data
+			expect(mockRestoreGridState).toHaveBeenCalledWith({
+				...buildFile.gridState,
+				buildName: buildFile.name,
+			});
 		});
 
 		it("should reject file with invalid JSON", async () => {
