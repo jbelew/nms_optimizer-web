@@ -74,6 +74,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 		}
 	}, [a11yMode]);
 
+	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
+
 	return (
 		<Box key={i18n.language} className="app-header">
 			{!isSharedGrid && !isLg && isSm && (
@@ -113,21 +115,23 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 						</IconButton>
 					</ConditionalTooltip>
 
-					<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
-						<IconButton
-							variant="soft"
-							aria-label={t("buttons.userStats") ?? ""}
-							onMouseEnter={() => {
-								void import("../../routes/UserStatsRoute");
-							}}
-							onClick={() => {
-								openDialog("userstats");
-							}}
-						>
-							<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-						</IconButton>
-					</ConditionalTooltip>
-					{isLg && (
+					{!isDockerBuild && (
+						<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
+							<IconButton
+								variant="soft"
+								aria-label={t("buttons.userStats") ?? ""}
+								onMouseEnter={() => {
+									void import("../../routes/UserStatsRoute");
+								}}
+								onClick={() => {
+									openDialog("userstats");
+								}}
+							>
+								<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+							</IconButton>
+						</ConditionalTooltip>
+					)}
+					{isLg && !isDockerBuild && (
 						<ConditionalTooltip label="I'm a nerd!">
 							<IconButton
 								variant="soft"

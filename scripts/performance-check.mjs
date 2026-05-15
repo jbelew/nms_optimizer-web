@@ -111,8 +111,8 @@ function main() {
 	console.log(`  ✅ Router (23K) and Socket.io (5K) now lazy-loaded\n`);
 
 	console.log(`\n📋 NEXT STEPS:\n`);
-	console.log(`  1. npm run build  # Rebuild with optimizations`);
-	console.log(`  2. npx lighthouse --view  # Measure Lighthouse score`);
+	console.log(`  1. bun run build  # Rebuild with optimizations`);
+	console.log(`  2. bunx lighthouse --view  # Measure Lighthouse score`);
 	console.log(`  3. Check total-blocking-time metric in Chrome DevTools\n`);
 
 	console.log("=".repeat(60) + "\n");

@@ -1,24 +1,19 @@
-name: 'Setup Node Environment'
-description: 'Sets up Node.js and installs npm dependencies'
+name: 'Setup Bun Environment'
+description: 'Sets up Bun and installs dependencies'
 inputs:
-  node-version:
-    description: 'The version of Node.js to use'
+  bun-version:
+    description: 'The version of Bun to use'
     required: false
-    default: '24'
-  cache:
-    description: 'Whether to cache npm dependencies'
-    required: false
-    default: 'npm'
+    default: 'latest'
 
 runs:
   using: "composite"
   steps:
-    - name: Set up Node.js
-      uses: actions/setup-node@v6
+    - name: Set up Bun
+      uses: oven-sh/setup-bun@v2
       with:
-        node-version: ${{ inputs.node-version }}
-        cache: ${{ inputs.cache }}
+        bun-version: ${{ inputs.bun-version }}
 
     - name: Install dependencies
       shell: bash
-      run: npm ci --legacy-peer-deps
+      run: bun install --frozen-lockfile

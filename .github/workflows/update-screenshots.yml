@@ -21,20 +21,20 @@ jobs:
             - name: Get App Version from package.json
               id: get_app_version
               run: |
-                  VERSION=$(node -p "require('./package.json').version")
+                  VERSION=$(bun -p "require('./package.json').version")
                   echo "version=$VERSION" >> $GITHUB_OUTPUT
 
             - name: Install Playwright Browsers
-              run: npx playwright install --with-deps chromium
+              run: bunx playwright install --with-deps chromium
 
             - name: Start production build preview
               run: |
-                  npm run build
-                  npm run preview -- --port 3000 &
+                  bun run build
+                  bun run preview -- --port 3000 &
                   sleep 5
 
             - name: Run screenshot script
-              run: BASE_URL=http://localhost:3000 npm run screenshot
+              run: BASE_URL=http://localhost:3000 bun run screenshot
 
             - name: Commit and push screenshots
               run: |

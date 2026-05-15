@@ -11,7 +11,7 @@
  *   3. Every entry in `SPA_ROUTES` actually lacks SSG output (otherwise the
  *      fallback is dead code and SSG content is being shadowed).
  *
- * Run after `npm run build` (the test gracefully skips if `dist/` is absent so
+ * Run after `bun run build` (the test gracefully skips if `dist/` is absent so
  * CI dev loops without a build still pass).
  */
 

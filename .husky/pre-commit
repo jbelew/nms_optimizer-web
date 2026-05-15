@@ -35,18 +35,18 @@ fi
 # 4. OPTIMIZATION: Metadata-only commits skip heavy checks
 if [ "$TOTAL_FILES" -eq "$METADATA_FILES_COUNT" ]; then
     echo "📝 Metadata-only commit detected. Skipping verification suite..."
-    npm run format:check
+    bun run format:check
     exit 0
 fi
 
 # 5. Standard Workflow (Source code changed)
 echo "🚀 Source changes detected. Running full verification suite..."
 
-npm run format:check
+bun run format:check
 git add -u
-npm run lint:fix
-npm run lint:css:fix
-npm run typecheck
-npm test
-npm run test:scripts
+bun run lint:fix
+bun run lint:css:fix
+bun run typecheck
+bun run test:ci
+bun run test:scripts
 git add -u

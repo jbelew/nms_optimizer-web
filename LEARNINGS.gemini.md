@@ -726,3 +726,29 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: Keeping a clean `package.json` is important for developer onboarding and CI reliability. Redundant or broken scripts can lead to confusion and maintenance overhead. Ensuring consistency between local build scripts and deployment-specific scripts (like `heroku-postbuild`) prevents "works on my machine" issues.
+
+## 2026-05-15: Bun Migration Verification and Cleanup
+
+### Perceive & Understand
+- **Request**: Verify that the migration from NPM to Bun is complete and thorough.
+- **Context**: The project had already transitioned its `package.json` scripts to use Bun, but many references to `npm` and `npx` remained in CI/CD workflows, documentation, and utility scripts.
+
+### Reason & Plan
+- **Audit**: Identified remaining NPM/NPX references in:
+    - `.github/workflows/update-screenshots.yml`
+    - `.github/workflows/ci.yml`
+    - `.github/workflows/dependabot-automerge.yml`
+    - `.releaserc.json`
+    - `README.md`, `AGENTS.md`, `GEMINI.md`
+    - Internal scripts (`performance-check.mjs`, `spa-routes.test.mjs`, etc.)
+- **Plan**: Systematically replace `npm`/`npx` with `bun`/`bunx` (where appropriate) and rename ecosystem flags (e.g., `IS_NPM` -> `IS_JS`) to reflect the new primary toolset while maintaining functionality.
+
+### Act & Implement
+- **Action**: Updated all GitHub Workflows to use `bun` and `bunx`.
+- **Action**: Renamed `IS_NPM` to `IS_JS` and `ALLOW_NPM_MINOR` to `ALLOW_JS_MINOR` in `dependabot-automerge.yml`.
+- **Action**: Updated `.releaserc.json` to use `bunx sentry-cli`.
+- **Action**: Updated documentation (`README.md`, `AGENTS.md`, `GEMINI.md`) to use `bun` commands.
+- **Action**: Updated utility scripts to use `bun` for sub-commands and warnings.
+
+### Refine & Reflect
+- **Reflection**: A successful migration requires more than just changing the lockfile and primary commands; it requires a sweep of all automation and documentation to ensure consistency. Using `bunx` as a drop-in replacement for `npx` works for most cases and maintains the speed benefits of Bun throughout the development lifecycle.

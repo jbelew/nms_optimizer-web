@@ -21,7 +21,7 @@
     [
       "@semantic-release/exec",
       {
-        "successCmd": "npx sentry-cli releases set-commits ${nextRelease.version} --auto"
+        "successCmd": "bunx sentry-cli releases set-commits ${nextRelease.version} --auto"
       }
     ]
   ]

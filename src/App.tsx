@@ -134,6 +134,8 @@ const AppContent: FC = () => {
 		return null;
 	}
 
+	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
+
 	return (
 		<>
 			<Outlet />
@@ -149,12 +151,12 @@ const AppContent: FC = () => {
 			{activeDialog && activeDialog !== "userstats" && activeDialog !== "performance" ? (
 				<RoutedDialogs />
 			) : null}
-			{activeDialog === "userstats" ? (
+			{activeDialog === "userstats" && !isDockerBuild ? (
 				<Suspense fallback={null}>
 					<UserStatsRoute />
 				</Suspense>
 			) : null}
-			{activeDialog === "performance" ? (
+			{activeDialog === "performance" && !isDockerBuild ? (
 				<Suspense fallback={null}>
 					<PerformanceRoute />
 				</Suspense>

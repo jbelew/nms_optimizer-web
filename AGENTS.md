@@ -2,17 +2,17 @@
 
 ## Build & Test Commands
 
-- **Dev**: `npm run dev` (http://localhost:5173, expects API at http://127.0.0.1:5000)
-- **Build**: `npm run build` (production, includes SSG)
-- **Test all**: `npm run test` (Vitest unit/component tests with coverage)
-- **Test single file**: `npm run test -- src/path/to/file.test.tsx`
-- **Test watch**: `npm run test -- --watch`
-- **Storybook tests**: `npm run test:storybook` (runs story-based tests with Vitest)
-- **Storybook watch**: `npm run test:storybook:watch`
-- **Storybook a11y**: `npm run test:storybook:a11y` (accessibility violations via CLI)
-- **Lint**: `npm run lint` (ESLint 10) and `npm run lint:fix`
-- **Format**: `npm run format` (Prettier, src/ only)
-- **Type check**: `npm run typecheck` (TypeScript 5.9+)
+- **Dev**: `bun run dev` (http://localhost:5173, expects API at http://127.0.0.1:5000)
+- **Build**: `bun run build` (production, includes SSG)
+- **Test all**: `bun run test` (Vitest unit/component tests with coverage)
+- **Test single file**: `bun run test -- src/path/to/file.test.tsx`
+- **Test watch**: `bun run test -- --watch`
+- **Storybook tests**: `bun run test:storybook` (runs story-based tests with Vitest)
+- **Storybook watch**: `bun run test:storybook:watch`
+- **Storybook a11y**: `bun run test:storybook:a11y` (accessibility violations via CLI)
+- **Lint**: `bun run lint` (ESLint 10) and `bun run lint:fix`
+- **Format**: `bun run format` (Prettier, src/ only)
+- **Type check**: `bun run typecheck` (TypeScript 6.0+)
 
 ## Architecture
 
@@ -27,7 +27,7 @@
 **Hybrid Rendering Flow**:
 - **SSG (Build Time)**: `scripts/generate-ssg.mjs` pre-renders markdown files into static HTML wrapped in `<noscript>` blocks for SEO.
 - **Client Fallback**: `MarkdownContentRenderer.tsx` checks for `data-prerendered-markdown` in the DOM. If found, it uses `PrerenderedMarkdownRenderer` to inject the static HTML.
-- **Verification**: Use `npm run build` then `npm run serve:ssg` to verify pre-rendered content. `npm run dev` bypasses pre-rendering.
+- **Verification**: Use `bun run build` then `bun run serve:ssg` to verify pre-rendered content. `bun run dev` bypasses pre-rendering.
 
 **Bundle Strategy**:
 - `vite.config.ts` uses `manualChunks` to group tracking-related libraries (Sentry, GA4) into a neutral `vendor-events` chunk to improve resilience against strict ad-blockers. **Do not rename or break this chunking logic.**

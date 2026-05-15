@@ -13,7 +13,7 @@ To run performance audits (Lighthouse/LHCI) in WSL2, you MUST follow these steps
 **Example Command**:
 
 ```bash
-npm run preview -- --host 127.0.0.1 & \
+bun run preview -- --host 127.0.0.1 & \
 sleep 5 && \
 lhci autorun --config=scripts/lighthouserc.cjs
 ```

@@ -31,6 +31,8 @@ export const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
  */
 export const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
 
+const isDocker = process.env.VITE_DOCKER === "true" || process.env.DOCKER === "true";
+
 /**
  * A list of known dialog routes that can be accessed via URL paths.
  * @remarks These paths correspond to client-side modal dialogs that are deep-linkable.
@@ -42,7 +44,7 @@ export const KNOWN_DIALOGS = [
 	"about",
 	"changelog",
 	"translation",
-	"userstats",
+	...(isDocker ? [] : ["userstats"]),
 	"privacy",
 ];
 
@@ -53,7 +55,7 @@ export const KNOWN_DIALOGS = [
  * @see {@link isSpaRoute} for usage.
  * @category Routing
  */
-export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS, "performance"];
+export const BASE_KNOWN_PATHS = ["/", ...KNOWN_DIALOGS, ...(isDocker ? [] : ["performance"])];
 
 /**
  * Flag to enable/disable maintenance mode.

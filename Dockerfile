@@ -1,16 +1,16 @@
 # Stage 1: Build Frontend
 ARG TARGETARCH
 
-FROM --platform=$BUILDPLATFORM node:26-alpine AS frontend-builder_amd64
-FROM --platform=$BUILDPLATFORM node:26-alpine AS frontend-builder_arm64
+FROM --platform=$BUILDPLATFORM oven/bun:1.2-alpine AS frontend-builder_amd64
+FROM --platform=$BUILDPLATFORM oven/bun:1.2-alpine AS frontend-builder_arm64
 
 FROM frontend-builder_${TARGETARCH} AS frontend-builder
 
 WORKDIR /app
-COPY package.json package-lock.json tsconfig.json vite.config.ts ./
-RUN npm ci --ignore-scripts --legacy-peer-deps
+COPY package.json bun.lock tsconfig.json vite.config.ts ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build:docker
+RUN bun run build:docker
 
 # Stage 2: Prepare Backend
 FROM --platform=$BUILDPLATFORM python:3.14-slim AS backend-builder_amd64

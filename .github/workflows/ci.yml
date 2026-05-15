@@ -37,19 +37,19 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Check formatting
-        run: npm run format:check
+        run: bun run format:check
 
       - name: Run JS linter
-        run: npm run lint
+        run: bun run lint
 
       - name: Run CSS linter
-        run: npm run lint:css
+        run: bun run lint:css
 
       - name: Type check
-        run: npm run typecheck
+        run: bun run typecheck
 
       - name: Run unit tests
-        run: npm run test:ci
+        run: bun run test:ci
 
   build:
     name: Build Application (Verification)
@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/actions/get-build-version
 
       - name: Build project (Staging/Verification)
-        run: npm run build
+        run: bun run build
         env:
           VITE_SENTRY_ENV: staging
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}
@@ -90,7 +90,7 @@ jobs:
           retention-days: 1
 
       - name: Build project (E2E)
-        run: npm run build:e2e
+        run: bun run build:e2e
 
       - name: Upload E2E dist artifact
         uses: actions/upload-artifact@v7
@@ -142,7 +142,7 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         run: |
           mkdir -p history-dir
-          node scripts/update-lighthouse-history.mjs .lighthouseci history-dir "$GITHUB_SHA_ENV"
+          bun scripts/update-lighthouse-history.mjs .lighthouseci history-dir "$GITHUB_SHA_ENV"
           cp scripts/lighthouse-dashboard.html history-dir/index.html
         env:
           GITHUB_SHA_ENV: ${{ github.sha }}
@@ -174,21 +174,21 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
           restore-keys: |
             playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: Build Storybook
-        run: npm run build-storybook -- --webpack-stats-json
+        run: bun run build-storybook -- --webpack-stats-json
 
       - name: Run Storybook Interaction Tests
-        run: npm run test:storybook
+        run: bun run test:storybook
 
       - name: Run Storybook A11y Tests
-        run: npm run test:storybook:a11y
+        run: bun run test:storybook:a11y
 
       - name: Run Chromatic visual tests
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
@@ -223,15 +223,15 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
           restore-keys: |
             playwright-${{ runner.os }}-
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: bunx playwright install --with-deps chromium firefox webkit
 
       - name: Run E2E Tests
-        run: npx playwright test --project=chromium --project=firefox --project=webkit
+        run: bunx playwright test --project=chromium --project=firefox --project=webkit
         env:
           CI: true
 
@@ -275,7 +275,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        run: npx semantic-release
+        run: bunx semantic-release
 
       - name: Check if release was created
         id: check_release
@@ -319,7 +319,7 @@ jobs:
             echo "version=$RELEASE_TAG" >> $GITHUB_OUTPUT
           else
             # Fallback to package.json version only (keep UI/GA4 clean)
-            PACKAGE_VERSION=$(node -p "require('./package.json').version")
+            PACKAGE_VERSION=$(bun -p "require('./package.json').version")
             echo "version=v${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
           fi
 
@@ -328,7 +328,7 @@ jobs:
         uses: ./.github/actions/get-build-version
 
       - name: Build project (Production)
-        run: npm run build
+        run: bun run build
         env:
           VITE_APP_VERSION: ${{ steps.version_logic.outputs.version }}
           VITE_BUILD_VERSION: ${{ steps.build_version.outputs.version }}

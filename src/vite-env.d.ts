@@ -1,19 +1,17 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-pwa/client" />
 
-/**
- * Interface for environment variables accessible via `import.meta.env`.
- */
 interface ImportMetaEnv {
+	readonly VITE_DOCKER: string;
+	readonly VITE_SENTRY_DSN: string;
+	readonly VITE_SENTRY_ENV: string;
+	readonly VITE_SENTRY_ENABLED: string;
 	/** The base URL for the backend API. */
 	readonly VITE_API_URL: string;
 	/** The semantic version string of the current build. */
 	readonly VITE_BUILD_VERSION: string;
 }
 
-/**
- * Type extension for Vite's `ImportMeta` to include custom environment variables.
- */
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }

@@ -6,7 +6,7 @@ module.exports = {
       url: ['http://127.0.0.1:4173/'],
       // Use the Linux Chrome binary, NOT the Windows one (which LHCI might default to in WSL)
       chromePath: '/usr/bin/google-chrome',
-      startServerCommand: 'npm run preview -- --host 127.0.0.1',
+      startServerCommand: 'bun run preview -- --host 127.0.0.1',
       startServerReadyPattern: 'listen|ready|http://127.0.0.1',
       startServerReadyTimeout: 60000,
       settings: {

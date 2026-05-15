@@ -1,7 +1,7 @@
 version: 2
 updates:
-    # NPM dependencies (production and development)
-    - package-ecosystem: "npm"
+    # Bun dependencies (production and development)
+    - package-ecosystem: "bun"
       directory: "/"
       target-branch: "main"
       schedule:
@@ -13,6 +13,7 @@ updates:
       open-pull-requests-limit: 10
       labels:
           - "dependencies"
+          - "bun"
           - "javascript"
       groups:
           dev-dependencies:

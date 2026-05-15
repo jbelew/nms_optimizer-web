@@ -68,9 +68,9 @@ jobs:
           TITLE=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json title -q '.title')
 
           # Determine ecosystem from labels set in dependabot.yml
-          IS_NPM=false
+          IS_JS=false
           if echo "$LABELS" | grep -q "javascript"; then
-            IS_NPM=true
+            IS_JS=true
           fi
 
           # Parse version bump from PR title (e.g., "from 1.0.0 to 1.0.1" or "from 8 to 9")
@@ -85,14 +85,14 @@ jobs:
           fi
 
           UPDATE_TYPE="major"
-          ALLOW_NPM_MINOR=false
+          ALLOW_JS_MINOR=false
           TITLE_LOWER="${TITLE,,}"
           if [[ "$TITLE_LOWER" == *"bump the production-minor-patch group"* ]]; then
             UPDATE_TYPE="minor"
-            ALLOW_NPM_MINOR=true
+            ALLOW_JS_MINOR=true
           elif [[ "$TITLE_LOWER" == *"bump the dev-dependencies group"* ]]; then
             UPDATE_TYPE="minor"
-            ALLOW_NPM_MINOR=true
+            ALLOW_JS_MINOR=true
           elif [ -n "$OLD_VER" ] && [ -n "$NEW_VER" ]; then
             OLD_MAJOR=$(echo "$OLD_VER" | cut -d. -f1)
             OLD_MINOR=$(echo "$OLD_VER" | cut -d. -f2)
@@ -107,17 +107,17 @@ jobs:
             fi
           fi
 
-          echo "ecosystem_npm=$IS_NPM is_action=$IS_ACTION update_type=$UPDATE_TYPE"
+          echo "ecosystem_js=$IS_JS is_action=$IS_ACTION update_type=$UPDATE_TYPE"
 
           # Auto-merge eligibility:
           # 1. GitHub Actions: always merge (patch/minor/major)
-          # 2. NPM: patch only, or explicitly approved groups
+          # 2. JS: patch only, or explicitly approved groups
           # 3. Rest (Docker, etc): patch or minor
           if [ "$IS_ACTION" == "true" ]; then
             echo "merge=true" >> $GITHUB_OUTPUT
-          elif [ "$IS_NPM" == "true" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$ALLOW_NPM_MINOR" == "true" ]); then
+          elif [ "$IS_JS" == "true" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$ALLOW_JS_MINOR" == "true" ]); then
             echo "merge=true" >> $GITHUB_OUTPUT
-          elif [ "$IS_NPM" == "false" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$UPDATE_TYPE" == "minor" ]); then
+          elif [ "$IS_JS" == "false" ] && ([ "$UPDATE_TYPE" == "patch" ] || [ "$UPDATE_TYPE" == "minor" ]); then
             echo "merge=true" >> $GITHUB_OUTPUT
           else
             echo "merge=false" >> $GITHUB_OUTPUT

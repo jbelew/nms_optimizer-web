@@ -34,7 +34,7 @@ function getAllHtmlFiles(dir, base = '') {
 
 function verify() {
     if (!fs.existsSync(DIST)) {
-        console.warn('⚠️ dist directory not found. Run npm run build first.');
+        console.warn('⚠️ dist directory not found. Run bun run build first.');
         process.exit(0);
     }
 

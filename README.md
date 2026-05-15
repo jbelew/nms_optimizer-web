@@ -33,7 +33,7 @@ This tool optimizes technology layouts by calculating pattern-based scores. It p
 ```bash
 git clone https://github.com/jbelew/nms_optimizer-web.git
 cd nms_optimizer-web
-npm install
+bun install
 ```
 
 ### Environment Configuration
@@ -42,26 +42,26 @@ Create a `.env.local` or update `.env.development`:
 - `VITE_SENTRY_DSN`: Sentry project DSN for error tracking.
 
 ### Key Scripts
-- `npm run dev`: Start dev server (bypasses SSG).
-- `npm run build`: Full production build with SSG generation.
-- `npm run serve:ssg`: Preview the production build with pre-rendered content.
-- `npm run typecheck`: Run strict TypeScript validation.
-- `npm run lint`: ESLint 10 + Prettier check.
-- `npm run storybook`: Start Storybook development environment.
-- `npm run build:images`: Optimize and process raw assets into production-ready images.
-- `npm run sitemap`: Generate a fresh `sitemap.xml` for SEO indexing.
-- `npm run verify:ssg`: Run automated verification on the generated SSG output.
+- `bun run dev`: Start dev server (bypasses SSG).
+- `bun run build`: Full production build with SSG generation.
+- `bun run serve:ssg`: Preview the production build with pre-rendered content.
+- `bun run typecheck`: Run strict TypeScript validation.
+- `bun run lint`: ESLint 10 + Prettier check.
+- `bun run storybook`: Start Storybook development environment.
+- `bun run build:images`: Optimize and process raw assets into production-ready images.
+- `bun run sitemap`: Generate a fresh `sitemap.xml` for SEO indexing.
+- `bun run verify:ssg`: Run automated verification on the generated SSG output.
 
 
 ## 🧪 Testing Strategy
 
 - **Unit/Component**: [Vitest](https://vitest.dev/) + React Testing Library.
-- **Interaction/A11y**: [Storybook 10](https://storybook.js.org/) with automated interaction and accessibility tests (`npm run test:storybook`).
+- **Interaction/A11y**: [Storybook 10](https://storybook.js.org/) with automated interaction and accessibility tests (`bun run test:storybook`).
 - **E2E**: [Playwright](https://playwright.dev/) for critical user path verification.
 
 Run all tests:
 ```bash
-npm run test
+bun run test
 ```
 
 ## 📏 Engineering Standards
@@ -90,7 +90,7 @@ Application performance is tracked via [Lighthouse CI](https://github.com/Google
 
 To run audits locally:
 ```bash
-npm run build && npm run lighthouse:ci
+bun run build && bun run lighthouse:ci
 ```
 
 > [!NOTE]
