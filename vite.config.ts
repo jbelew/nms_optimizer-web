@@ -8,7 +8,6 @@ import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, loadEnv } from "vite";
-import compression from "vite-plugin-compression";
 import { VitePWA } from "vite-plugin-pwa";
 import { splashScreen } from "vite-plugin-splash-screen";
 
@@ -34,11 +33,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 
 	// Load browserslist for LightningCSS targets to ensure CSS polyfilling matches JS support.
 	const browserslistTargets = browserslist();
-
-	// Cloudflare Pages sets CF_PAGES=1 during builds. Skip pre-compression since
-	// Cloudflare handles brotli/gzip natively, and pre-compressed .br/.gz files
-	// alongside assets can cause MIME type errors.
-	const isCloudflarePages = process.env.CF_PAGES === "1";
 
 	// Use an environment variable for the app version, falling back to package.json
 	let appVersion = process.env.VITE_APP_VERSION || env.VITE_APP_VERSION || packageJson.version;
@@ -155,22 +149,6 @@ export default defineConfig(async ({ mode, command }): Promise<import("vite").Us
 				loaderBg: "#00A2C7",
 				loaderType: "dots",
 			}),
-			...(!isCloudflarePages
-				? [
-						compression({
-							algorithm: "brotliCompress",
-							ext: ".br",
-							threshold: 10240,
-							deleteOriginFile: false,
-						}),
-						compression({
-							algorithm: "gzip",
-							ext: ".gz",
-							threshold: 10240,
-							deleteOriginFile: false,
-						}),
-					]
-				: []),
 			// Purge unused Radix Themes component CSS to reduce TBT from style recalculation.
 			// Must run in production builds only (the plugin uses generateBundle hook).
 			purgeRadixCss(),

@@ -383,41 +383,9 @@ jobs:
           -H "Content-Type: application/json" \
           --data '{"purge_everything":true}'
 
-  deploy-production-heroku:
-    name: Deploy to Heroku (Production)
-    needs: [build-production, release]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ needs.release.outputs.tag || github.sha }}
-          fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup-node-env
-
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
-
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.15.15
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "nms-optimizer-web"
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          # Use HEAD to push the exact release commit/tag checked out above
-          branch: HEAD
-        env:
-          HD_VITE_APP_VERSION: ${{ needs.build-production.outputs.effective-tag }}
-          HD_VITE_BUILD_VERSION: ${{ needs.build-production.outputs.build-version }}
-          HD_VITE_SENTRY_ENV: production
-
   post-deploy-production:
     name: Finalize Production
-    needs: [deploy-production-cloudflare, deploy-production-heroku, release]
+    needs: [deploy-production-cloudflare, release]
     # Only fire downstream triggers (Docker/Screenshots) on literal version bumps
     if: needs.release.outputs.released == 'true'
     runs-on: ubuntu-latest

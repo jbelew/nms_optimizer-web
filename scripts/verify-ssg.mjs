@@ -7,11 +7,10 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES } from "../shared/config.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.join(__dirname, "../dist");
-
-const SUPPORTED_LANGUAGES = ["en", "es", "fr", "de", "pt", "it"];
-const KNOWN_DIALOGS = ["about", "instructions", "changelog", "translation", "userstats", "privacy"];
 
 /**
  * Robust check for a generated HTML file.

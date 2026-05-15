@@ -9,7 +9,7 @@ import fs from "node:fs/promises";
 import i18next from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
 
-import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../server/config.js";
+import { KNOWN_DIALOGS, SUPPORTED_LANGUAGES, TARGET_HOST } from "../shared/config.js";
 import { seoMetadata } from "../shared/seo-metadata.js";
 import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../shared/seo-schema.js";
 import { createMarkdownProcessor } from "./markdown-processor.mjs";
@@ -534,10 +534,6 @@ export async function generateSsg() {
 			
 			await fs.writeFile(rootFile, rootPageHtml);
 
-			// Compression
-			const content = await fs.readFile(rootFile);
-			await fs.writeFile(`${rootFile}.gz`, Bun.gzipSync(new Uint8Array(content)));
-
 			console.log(`✓ Generated ${lang === "en" ? "/" : "/" + lang}`);
 			generatedCount++;
 
@@ -557,9 +553,6 @@ export async function generateSsg() {
 				const pageFile = path.join(pageDir, "index.html");
 				await fs.mkdir(pageDir, { recursive: true });
 				await fs.writeFile(pageFile, pageHtml);
-				
-				const pContent = await fs.readFile(pageFile);
-				await fs.writeFile(`${pageFile}.gz`, Bun.gzipSync(new Uint8Array(pContent)));
 
 				console.log(`✓ Generated /${pagePath}`);
 				generatedCount++;
