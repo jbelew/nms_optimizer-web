@@ -292,8 +292,15 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 			const { techColors, techGroups, activeGroups } = getTechTreeMaps(data);
 			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
 
-			if (data.grid_definition && !useGridStore.getState().selectHasModulesInGrid()) {
-				const gridStore = useGridStore.getState();
+			const gridStore = useGridStore.getState();
+			const hasModules = gridStore.selectHasModulesInGrid();
+
+			console.log(
+				`[useFetchTechTreeSuspense] Effect for ${shipType}. hasModules: ${hasModules}`
+			);
+
+			if (data.grid_definition && !hasModules) {
+				console.log(`[useFetchTechTreeSuspense] Initializing empty grid for ${shipType}`);
 				gridStore.setInitialGridDefinition(data.grid_definition);
 				gridStore.setGridFromInitialDefinition(data.grid_definition);
 			}
