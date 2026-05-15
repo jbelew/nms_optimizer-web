@@ -794,3 +794,28 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: Explicitly opting into the next-generation runner runtime ensures that the CI pipeline remains robust and warning-free as GitHub phases out older Node.js versions. This complement's the project's own upgrade to Node.js 24 for application and script execution.
+
+## 2026-05-15: Migration to Lefthook for Faster Git Hooks
+
+### Perceive & Understand
+- **Request**: Migrate from Husky to Lefthook for faster, Bun-friendly git hooks.
+- **Context**: The project was using Husky, which relies on a Node-based wrapper. Lefthook is implemented in Go and offers better performance and simpler configuration.
+
+### Reason & Plan
+- **Audit**: Analyzed `.husky/pre-commit` logic, which included Beads enforcement and optimized verification for metadata-only changes.
+- **Plan**:
+    1. Install `lefthook` as a dev dependency.
+    2. Port Husky's shell logic into `lefthook.yml`.
+    3. Uninstall Husky and clean up `.husky/` artifacts.
+    4. Update `package.json` to use `lefthook install` in the `prepare` script.
+    5. Verify the hook execution.
+
+### Act & Implement
+- **Action**: Installed `lefthook` and created `lefthook.yml`.
+- **Action**: Configured `beads-enforcement` and `verify` commands in `lefthook.yml`, maintaining the "skip heavy tests for metadata" optimization.
+- **Action**: Unset `core.hooksPath` to restore standard `.git/hooks` usage and installed Lefthook hooks.
+- **Action**: Removed `husky` from `package.json` and deleted the `.husky/` directory.
+- **Action**: Updated `package.json` `prepare` script to `"lefthook install"`.
+
+### Refine & Reflect
+- **Reflection**: Lefthook's configuration is cleaner and avoids the hidden `.husky/_` directory overhead. The porting of complex shell logic into `lefthook.yml` ensures that project-specific enforcements (like the Beads/Conductor link) remain active while benefitting from Lefthook's faster execution model.
