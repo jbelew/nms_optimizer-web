@@ -172,6 +172,37 @@ const jsdocRules = {
 
 export default tseslint.config(
 	//
+	// --- GLOBAL IGNORES ---
+	// Must be the first object in the array for Flat Config to apply globally
+	//
+	{
+		ignores: [
+			"**/dist/**",
+			"**/node_modules/**",
+			"**/coverage/**",
+			"**/venv/**",
+			"**/docs/**",
+			"**/public/**",
+			"**/storybook-static/**",
+			"**/test-results/**",
+			"**/playwright-report/**",
+			"**/seo_report/**",
+			"**/audio/**",
+			"**/source_images/**",
+			"**/tmp/**",
+			"**/.wrangler/**",
+			"**/.beads/**",
+			"**/.lighthouseci/**",
+			"**/.elsikora/**",
+			"**/.git/**",
+			"**/.gemini/**",
+			"**/.vitest/**",
+			"**/.playwright-mcp/**",
+			"**/scratch/**",
+		],
+	},
+
+	//
 	// --- PERFECTIONIST (Automated Sorting) ---
 	//
 	perfectionist.configs["recommended-natural"],
@@ -180,11 +211,6 @@ export default tseslint.config(
 			"perfectionist/sort-imports": "off", // Handled by @ianvs/prettier-plugin-sort-imports
 		},
 	},
-
-	//
-	// --- GLOBAL IGNORES ---
-	//
-	{ ignores: ["dist", "coverage/", "**/tmp", "/tmp", "storybook-static", "docs"] },
 
 	//
 	// --- BUILD & UTILITY SCRIPTS ---
