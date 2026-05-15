@@ -25,8 +25,3 @@ export const WS_URL = import.meta.env.VITE_WS_URL;
  * The canonical Google Analytics 4 Measurement ID for the application.
  */
 export const TRACKING_ID = "G-P5VBZQ69Q9";
-
-/**
- * The full display name of the application, used in headers and meta tags.
- */
-export const APP_NAME = "No Man's Sky Technology Layout Optimizer";

@@ -27,7 +27,7 @@ import { fetchTechTreeAsync, RecommendedBuild, TechTree } from "../useTechTree/u
  * // returns "A4B3C2"
  * ```
  */
-export const compressRLE = (input: string): string => {
+const compressRLE = (input: string): string => {
 	if (!input) return "";
 	let compressed = "";
 	let count = 1;
@@ -70,7 +70,7 @@ export const compressRLE = (input: string): string => {
  * // returns "AAAABBBCC"
  * ```
  */
-export const decompressRLE = (input: string): string => {
+const decompressRLE = (input: string): string => {
 	if (!input) return "";
 	let decompressed = "";
 	let i = 0;

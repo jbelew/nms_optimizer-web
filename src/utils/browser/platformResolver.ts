@@ -27,7 +27,7 @@ export const PLATFORM_STORAGE_KEY = "selectedPlatform";
  *
  * @category Utilities
  */
-export const DEFAULT_PLATFORM = "standard";
+const DEFAULT_PLATFORM = "standard";
 
 /**
  * Safely extracts the requested platform identifier from the browser URL.
