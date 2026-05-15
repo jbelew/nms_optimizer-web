@@ -11,7 +11,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FN_URL = `file://${path.join(__dirname, "../functions/[[path]].js")}`;
@@ -22,25 +22,25 @@ const { onRequest } = await import(FN_URL);
  * `nextResponse` controls what `next()` returns; `assetsFetch` controls
  * what `env.ASSETS.fetch()` returns.
  */
-function makeContext(url, { nextResponse, assetsFetch } = {}) {
+function makeContext(url, { assetsFetch, nextResponse } = {}) {
 	const next = vi.fn(
 		async () =>
 			nextResponse ??
-			new Response("OK", { status: 200, headers: { "content-type": "text/html" } })
+			new Response("OK", { headers: { "content-type": "text/html" }, status: 200 })
 	);
 	const fetchAssets = vi.fn(
 		async (req) =>
 			(assetsFetch && assetsFetch(req)) ??
 			new Response("<html lang=\"en\"></html>", {
-				status: 200,
 				headers: { "content-type": "text/html" },
+				status: 200,
 			})
 	);
 
 	return {
-		request: new Request(url),
-		next,
 		env: { ASSETS: { fetch: fetchAssets } },
+		next,
+		request: new Request(url),
 	};
 }
 

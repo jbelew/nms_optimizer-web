@@ -43,8 +43,8 @@ const scores = run.summary;
 
 const newData = {
   date: new Date().toISOString(),
-  sha: sha,
-  scores: scores
+  scores: scores,
+  sha: sha
 };
 
 const dataPath = path.join(historyDir, 'data.json');

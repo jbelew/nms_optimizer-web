@@ -39,6 +39,7 @@ const COMPONENT_CSS_MAP = {
 	// --- Components NOT typically used (candidates for removal) ---
 	Badge: ["Badge"],
 	Card: ["Card", "BaseCard"],
+	Checkbox: ["CheckboxRoot", "BaseCheckboxRoot", "BaseCheckboxIndicator"],
 	CheckboxCards: ["CheckboxCardCheckbox", "CheckboxCardsItem", "CheckboxCardsRoot"],
 	CheckboxGroup: [
 		"CheckboxGroupItem",
@@ -46,7 +47,6 @@ const COMPONENT_CSS_MAP = {
 		"CheckboxGroupItemInner",
 		"CheckboxGroupRoot",
 	],
-	Checkbox: ["CheckboxRoot", "BaseCheckboxRoot", "BaseCheckboxIndicator"],
 	Container: ["Container", "ContainerInner"],
 	ContextMenu: ["ContextMenuContent"],
 	Em: ["Em"],
@@ -81,14 +81,6 @@ const COMPONENT_CSS_MAP = {
 	],
 	Slider: ["SliderRange", "SliderRoot", "SliderThumb", "SliderTrack"],
 	Strong: ["Strong"],
-	TabNav: [
-		"TabNavItem",
-		"TabNavLink",
-		"BaseTabList",
-		"BaseTabListTrigger",
-		"BaseTabListTriggerInner",
-		"BaseTabListTriggerInnerHidden",
-	],
 	Table: [
 		"TableBody",
 		"TableCell",
@@ -98,6 +90,14 @@ const COMPONENT_CSS_MAP = {
 		"TableRootTable",
 		"TableRow",
 		"TableRowHeaderCell",
+	],
+	TabNav: [
+		"TabNavItem",
+		"TabNavLink",
+		"BaseTabList",
+		"BaseTabListTrigger",
+		"BaseTabListTriggerInner",
+		"BaseTabListTriggerInnerHidden",
 	],
 	Tabs: ["TabsContent"],
 	ThemePanel: [
@@ -110,49 +110,74 @@ const COMPONENT_CSS_MAP = {
 };
 
 /**
- * Scans the source directory for Radix Themes component imports and returns
- * the set of component names that are actually used.
+ * Vite plugin that removes unused Radix Themes component CSS from the production build.
  *
- * @param {string} srcDir - Absolute path to the source directory to scan.
+ * @remarks
+ * The plugin runs in the `generateBundle` hook (production builds only) and processes
+ * all CSS assets in the output bundle. It scans `src/` for Radix Themes imports to
+ * determine which components are used, then strips CSS rules for unused components.
  *
- * @returns {Set<string>} Set of Radix Themes component names found in imports.
+ * This is safe because:
+ * 1. It only removes rules where ALL `.rt-*` selectors reference unused components.
+ * 2. Shared base classes (like `.rt-reset`) are never removed.
+ * 3. Responsive/utility classes (`.rt-r-*`) are never removed.
+ *
+ * @returns {import("vite").Plugin} The Vite plugin object.
  */
-function scanUsedRadixComponents(srcDir) {
-	const used = new Set();
+export function purgeRadixCss() {
+	let srcDir;
 
-	/**
-	 * Recursively walks a directory and processes .ts/.tsx files.
-	 *
-	 * @param {string} dir - Directory to walk.
-	 */
-	function walk(dir) {
-		for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-			const fullPath = path.join(dir, entry.name);
+	return {
+		configResolved(config) {
+			srcDir = path.resolve(config.root, "src");
+		},
+		enforce: "post",
 
-			if (entry.isDirectory() && entry.name !== "node_modules") {
-				walk(fullPath);
-			} else if (/\.(tsx?|jsx?)$/.test(entry.name)) {
-				const content = fs.readFileSync(fullPath, "utf-8");
-				// Use a global regex to match single and multi-line imports
-				const importPattern = /import\s*\{([^}]+)\}\s*from\s+["']@radix-ui\/themes["']/g;
-				let match;
+		generateBundle(_options, bundle) {
+			// Scan source for used Radix components
+			const usedComponents = scanUsedRadixComponents(srcDir);
+			const unusedPrefixes = buildUnusedPrefixes(usedComponents);
 
-				while ((match = importPattern.exec(content)) !== null) {
-					match[1].split(",").forEach((name) => {
-						const trimmed = name.replace(/\s+as\s+\w+/, "").trim();
+			if (unusedPrefixes.size === 0) {
+				console.log("[purge-radix-css] All Radix components are in use, nothing to purge.");
 
-						if (trimmed && !trimmed.startsWith("type ")) {
-							used.add(trimmed);
-						}
-					});
+				return;
+			}
+
+			let totalRemoved = 0;
+			let totalOriginal = 0;
+
+			// Process all CSS assets in the bundle
+			for (const [fileName, chunk] of Object.entries(bundle)) {
+				if (chunk.type === "asset" && fileName.endsWith(".css")) {
+					const originalSize = chunk.source.length;
+					const { css, removedBytes } = purgeUnusedRadixRules(
+						chunk.source.toString(),
+						unusedPrefixes,
+					);
+
+					if (removedBytes > 0) {
+						chunk.source = css;
+						totalRemoved += removedBytes;
+						totalOriginal += originalSize;
+					}
 				}
 			}
-		}
-	}
 
-	walk(srcDir);
+			if (totalRemoved > 0) {
+				const pct = ((totalRemoved / totalOriginal) * 100).toFixed(1);
 
-	return used;
+				console.log(
+					`[purge-radix-css] Removed ${(totalRemoved / 1024).toFixed(1)} KB of unused Radix CSS (${pct}% reduction)`,
+				);
+				console.log(
+					`[purge-radix-css] Used components: ${[...usedComponents].sort().join(", ")}`,
+				);
+			}
+		},
+
+		name: "purge-radix-css",
+	};
 }
 
 /**
@@ -277,72 +302,47 @@ function purgeUnusedRadixRules(css, unusedPrefixes) {
 }
 
 /**
- * Vite plugin that removes unused Radix Themes component CSS from the production build.
+ * Scans the source directory for Radix Themes component imports and returns
+ * the set of component names that are actually used.
  *
- * @remarks
- * The plugin runs in the `generateBundle` hook (production builds only) and processes
- * all CSS assets in the output bundle. It scans `src/` for Radix Themes imports to
- * determine which components are used, then strips CSS rules for unused components.
+ * @param {string} srcDir - Absolute path to the source directory to scan.
  *
- * This is safe because:
- * 1. It only removes rules where ALL `.rt-*` selectors reference unused components.
- * 2. Shared base classes (like `.rt-reset`) are never removed.
- * 3. Responsive/utility classes (`.rt-r-*`) are never removed.
- *
- * @returns {import("vite").Plugin} The Vite plugin object.
+ * @returns {Set<string>} Set of Radix Themes component names found in imports.
  */
-export function purgeRadixCss() {
-	let srcDir;
+function scanUsedRadixComponents(srcDir) {
+	const used = new Set();
 
-	return {
-		name: "purge-radix-css",
-		enforce: "post",
+	/**
+	 * Recursively walks a directory and processes .ts/.tsx files.
+	 *
+	 * @param {string} dir - Directory to walk.
+	 */
+	function walk(dir) {
+		for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+			const fullPath = path.join(dir, entry.name);
 
-		configResolved(config) {
-			srcDir = path.resolve(config.root, "src");
-		},
+			if (entry.isDirectory() && entry.name !== "node_modules") {
+				walk(fullPath);
+			} else if (/\.(tsx?|jsx?)$/.test(entry.name)) {
+				const content = fs.readFileSync(fullPath, "utf-8");
+				// Use a global regex to match single and multi-line imports
+				const importPattern = /import\s*\{([^}]+)\}\s*from\s+["']@radix-ui\/themes["']/g;
+				let match;
 
-		generateBundle(_options, bundle) {
-			// Scan source for used Radix components
-			const usedComponents = scanUsedRadixComponents(srcDir);
-			const unusedPrefixes = buildUnusedPrefixes(usedComponents);
+				while ((match = importPattern.exec(content)) !== null) {
+					match[1].split(",").forEach((name) => {
+						const trimmed = name.replace(/\s+as\s+\w+/, "").trim();
 
-			if (unusedPrefixes.size === 0) {
-				console.log("[purge-radix-css] All Radix components are in use, nothing to purge.");
-
-				return;
-			}
-
-			let totalRemoved = 0;
-			let totalOriginal = 0;
-
-			// Process all CSS assets in the bundle
-			for (const [fileName, chunk] of Object.entries(bundle)) {
-				if (chunk.type === "asset" && fileName.endsWith(".css")) {
-					const originalSize = chunk.source.length;
-					const { css, removedBytes } = purgeUnusedRadixRules(
-						chunk.source.toString(),
-						unusedPrefixes,
-					);
-
-					if (removedBytes > 0) {
-						chunk.source = css;
-						totalRemoved += removedBytes;
-						totalOriginal += originalSize;
-					}
+						if (trimmed && !trimmed.startsWith("type ")) {
+							used.add(trimmed);
+						}
+					});
 				}
 			}
+		}
+	}
 
-			if (totalRemoved > 0) {
-				const pct = ((totalRemoved / totalOriginal) * 100).toFixed(1);
+	walk(srcDir);
 
-				console.log(
-					`[purge-radix-css] Removed ${(totalRemoved / 1024).toFixed(1)} KB of unused Radix CSS (${pct}% reduction)`,
-				);
-				console.log(
-					`[purge-radix-css] Used components: ${[...usedComponents].sort().join(", ")}`,
-				);
-			}
-		},
-	};
+	return used;
 }

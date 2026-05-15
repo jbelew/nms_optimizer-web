@@ -110,8 +110,8 @@ export function createMarkdownProcessor() {
 
 	// Set options
 	marked.setOptions({
-		renderer,
 		breaks: true,
+		renderer,
 	});
 
 	return (markdownContent) => {

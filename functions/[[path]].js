@@ -30,7 +30,7 @@ const LOCALE_LANGS = SUPPORTED_LANGS.filter((l) => l !== "en");
 const SPA_ROUTES = new Set(["performance"]);
 
 export async function onRequest(context) {
-	const { request, next } = context;
+	const { next, request } = context;
 	const url = new URL(request.url);
 	const pathname = url.pathname;
 	const searchParams = url.searchParams;
@@ -145,7 +145,7 @@ export async function onRequest(context) {
 				);
 			},
 		})
-		.transform(new Response(shellResponse.body, { status: 200, headers }));
+		.transform(new Response(shellResponse.body, { headers, status: 200 }));
 
 	return rewritten;
 }

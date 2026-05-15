@@ -36,10 +36,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 				fit: "fill",
 			})
 			.extract({
+				height: mobileHeight,
 				left: Math.round((scaledWidth - mobileWidth) / 2),
 				top: 0,
 				width: mobileWidth,
-				height: mobileHeight,
 			})
 			.webp()
 			.toBuffer();
@@ -50,7 +50,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 		const page = await browser.newPage();
 
 		// Set viewport to mobile dimensions
-		await page.setViewportSize({ width: mobileWidth, height: mobileHeight });
+		await page.setViewportSize({ height: mobileHeight, width: mobileWidth });
 
 		const html = `
 		<!DOCTYPE html>

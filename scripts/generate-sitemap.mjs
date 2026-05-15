@@ -15,19 +15,19 @@ const PAGE_TO_FILE_MAPPING = {
 	about: "public/assets/locales/en/about.md",
 	changelog: "public/assets/locales/en/changelog.md",
 	instructions: "public/assets/locales/en/instructions.md",
+	privacy: "public/assets/locales/en/privacy.md",
 	translation: "public/assets/locales/en/translation-request.md",
 	userstats: "src/components/AppDialog/UserStats/UserStatsDialog.tsx",
-	privacy: "public/assets/locales/en/privacy.md",
 };
 
 /** SEO priorities for different pages */
 const PRIORITIES = {
-	root: "1.0",
 	about: "1.0",
-	instructions: "0.9",
-	userstats: "0.8",
 	changelog: "0.3",
+	instructions: "0.9",
+	root: "1.0",
 	translation: "0.6",
+	userstats: "0.8",
 };
 
 /** Crawl frequencies — changelog is low-value for search so reduce its frequency */
@@ -40,12 +40,12 @@ const CHANGE_FREQUENCIES = {
 const EXCLUDED_FROM_SITEMAP = new Set(["performance"]);
 
 const pages = [
-	{ path: "public/assets/locales/en/home.md", url: `${baseUrl}/`, priority: PRIORITIES.root, changefreq: "weekly" },
+	{ changefreq: "weekly", path: "public/assets/locales/en/home.md", priority: PRIORITIES.root, url: `${baseUrl}/` },
 	...KNOWN_DIALOGS.filter((page) => !EXCLUDED_FROM_SITEMAP.has(page)).map((page) => ({
-		path: PAGE_TO_FILE_MAPPING[page],
-		url: `${baseUrl}/${page}`,
-		priority: PRIORITIES[page] || "0.5",
 		changefreq: CHANGE_FREQUENCIES[page] || "weekly",
+		path: PAGE_TO_FILE_MAPPING[page],
+		priority: PRIORITIES[page] || "0.5",
+		url: `${baseUrl}/${page}`,
 	})),
 ];
 
@@ -78,7 +78,7 @@ const urlEntries = pages.flatMap((page) => {
 			url.pathname = normalizePath(url.pathname);
 		}
 
-		return { lang, href: url.href };
+		return { href: url.href, lang };
 	});
 
 	// 2. For each alternate URL, create a <url> entry

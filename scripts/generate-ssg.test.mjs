@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach, mock } from "bun:test";
+import { beforeEach, describe, expect, it, mock, vi } from "bun:test";
 
 // Mock node:fs/promises globally with implementations
 const fsMock = {
+    mkdir: vi.fn().mockResolvedValue(undefined),
     readFile: vi.fn().mockResolvedValue("# Content"),
     writeFile: vi.fn().mockResolvedValue(undefined),
-    mkdir: vi.fn().mockResolvedValue(undefined),
 };
 
 mock.module("node:fs/promises", () => ({
@@ -40,14 +40,14 @@ describe("generate-ssg.mjs", () => {
                 </body>
                 </html>
             `;
-            const { ssgStyles, ssgHeader } = await generateSsgModule.extractSsgTemplate(sourceHtml);
+            const { ssgHeader, ssgStyles } = await generateSsgModule.extractSsgTemplate(sourceHtml);
             expect(ssgStyles).toContain(".test { color: red; }");
             expect(ssgStyles).toContain("body { background: black; }");
             expect(ssgHeader).toBe('<header class="app-header-static">Header Content</header>');
         });
 
         it("returns empty strings if template not found", async () => {
-            const { ssgStyles, ssgHeader } = await generateSsgModule.extractSsgTemplate("<html></html>");
+            const { ssgHeader, ssgStyles } = await generateSsgModule.extractSsgTemplate("<html></html>");
             expect(ssgStyles).toBe("");
             expect(ssgHeader).toBe("");
         });
@@ -108,11 +108,11 @@ describe("generate-ssg.mjs", () => {
         const mdProcessor = vi.fn((md) => `<div>${md}</div>`);
         const t = vi.fn((key, options) => {
             const translations = {
+                "appHeader.subTitle": "Localized Header <1>ML/RUST</1>",
                 "appName": "NMS Optimizer",
-                "seo.mainPageTitle": "Home Title",
                 "seo.appDescription": "App Description",
-                "seo.nav.home": "Home Nav",
-                "appHeader.subTitle": "Localized Header <1>ML/RUST</1>"
+                "seo.mainPageTitle": "Home Title",
+                "seo.nav.home": "Home Nav"
             };
 
             return translations[key] || options?.defaultValue || key;

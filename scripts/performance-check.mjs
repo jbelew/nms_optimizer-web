@@ -28,10 +28,10 @@ function analyzeBundle() {
 			const stat = fs.statSync(filePath);
 
 			return {
+				isCritical: !f.includes("node_modules") && !f.includes("Markdown") && !f.includes("recharts"),
 				name: f.replace(".br", ""),
 				size: stat.size / 1024, // Convert to KB
 				type: f.includes(".js") ? "JS" : "CSS",
-				isCritical: !f.includes("node_modules") && !f.includes("Markdown") && !f.includes("recharts"),
 			};
 		})
 		.sort((a, b) => b.size - a.size);

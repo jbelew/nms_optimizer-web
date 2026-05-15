@@ -16,18 +16,18 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 (async () => {
 	console.log("Attempting to launch browser...");
 	const browser = await chromium.launch({
-		headless: true,
 		args: [
 			"--no-sandbox",
 			"--disable-setuid-sandbox",
 			"--disable-dev-shm-usage",
 			"--disable-blink-features=AutomationControlled",
 		],
+		headless: true,
 	});
 	const context = await browser.newContext({
 		userAgent:
 			"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-		viewport: { width: 1280, height: 880 },
+		viewport: { height: 880, width: 1280 },
 	});
 
 	await context.addInitScript(() => {
@@ -67,16 +67,16 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 		console.log("Taking standard screenshot ...");
 		await page.screenshot({
-			path: "public/assets/img/screenshots/screenshot.png",
 			fullPage: true,
+			path: "public/assets/img/screenshots/screenshot.png",
 		});
 		await page.screenshot({
-			path: "public/assets/img/screenshots/screenshot_desktop.png",
 			fullPage: true,
+			path: "public/assets/img/screenshots/screenshot_desktop.png",
 		});
 
 		console.log("Taking mobile screenshot ...");
-		await page.setViewportSize({ width: 375, height: 600 });
+		await page.setViewportSize({ height: 600, width: 375 });
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
 		});
@@ -92,12 +92,12 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		`,
 		});
 		await page.screenshot({
-			path: "public/assets/img/screenshots/screenshot_mobile.png",
 			fullPage: false,
+			path: "public/assets/img/screenshots/screenshot_mobile.png",
 		});
 
 		console.log("Taking tablet screenshot ...");
-		await page.setViewportSize({ width: 800, height: 1280 });
+		await page.setViewportSize({ height: 1280, width: 800 });
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
 		});
@@ -113,8 +113,8 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		`,
 		});
 		await page.screenshot({
-			path: "public/assets/img/screenshots/screenshot_tablet.png",
 			fullPage: false,
+			path: "public/assets/img/screenshots/screenshot_tablet.png",
 		});
 	} catch (error) {
 		console.error("Screenshot script failed:", error);

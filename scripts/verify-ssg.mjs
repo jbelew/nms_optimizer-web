@@ -28,18 +28,18 @@ function checkFile(filePath, pageName, lang, expectContent = true) {
 	const hasTag = (pattern) => new RegExp(pattern, "i").test(content);
 
 	const checks = {
-		hasTitle: hasTag('<title>[\\s\\S]*?<\\/title>'),
-		hasDescription: hasTag('<meta\\s+name="description"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasKeywords: hasTag('<meta\\s+name="keywords"\\s+content="[^"]+?"\\s*\\/?>'),
 		hasCanonical: hasTag('<link\\s+rel="canonical"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
-		hasOgTitle: hasTag('<meta\\s+property="og:title"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasOgDescription: hasTag('<meta\\s+property="og:description"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasOgUrl: hasTag('<meta\\s+property="og:url"\\s+content="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
-		hasOgImageAlt: hasTag('<meta\\s+property="og:image:alt"\\s+content="[^"]+?"\\s*\\/?>'),
-		hasHreflang: hasTag('<link\\s+rel="alternate"\\s+hreflang="[^"]+?"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
-		hasNavigation: content.includes('aria-label="Site navigation"'),
 		hasContent: !expectContent || content.includes("<h2") || content.includes("<p"),
-		hasRoot: content.includes('id="root"')
+		hasDescription: hasTag('<meta\\s+name="description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasHreflang: hasTag('<link\\s+rel="alternate"\\s+hreflang="[^"]+?"\\s+href="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
+		hasKeywords: hasTag('<meta\\s+name="keywords"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasNavigation: content.includes('aria-label="Site navigation"'),
+		hasOgDescription: hasTag('<meta\\s+property="og:description"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgImageAlt: hasTag('<meta\\s+property="og:image:alt"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgTitle: hasTag('<meta\\s+property="og:title"\\s+content="[^"]+?"\\s*\\/?>'),
+		hasOgUrl: hasTag('<meta\\s+property="og:url"\\s+content="https:\\/\\/nms-optimizer\\.app\\/[^"]*?"\\s*\\/?>'),
+		hasRoot: content.includes('id="root"'),
+		hasTitle: hasTag('<title>[\\s\\S]*?<\\/title>')
 	};
 
 	// Specific check for the userstats title fix we made

@@ -4,54 +4,54 @@ import sharp from "sharp";
 
 const imageDirs = [
 	{
-		sourceDir: "source_images/grid",
 		outputDir: "public/assets/img/grid",
 		resolutions: [
-			{ width: 60, height: 60, suffix: "" },
-			{ width: 120, height: 120, suffix: "@2x" },
+			{ height: 60, suffix: "", width: 60 },
+			{ height: 120, suffix: "@2x", width: 120 },
 		],
+		sourceDir: "source_images/grid",
 	},
 	{
-		sourceDir: "source_images/tech",
 		outputDir: "public/assets/img/tech",
 		resolutions: [
-			{ width: 60, height: 60, suffix: "" },
-			{ width: 120, height: 120, suffix: "@2x" },
+			{ height: 60, suffix: "", width: 60 },
+			{ height: 120, suffix: "@2x", width: 120 },
 		],
+		sourceDir: "source_images/tech",
 	},
 	{
-		sourceDir: "source_images/sidebar",
 		outputDir: "public/assets/img/sidebar",
 		resolutions: [
-			{ width: 36, height: 24, suffix: "" },
-			{ width: 72, height: 48, suffix: "@2x" },
+			{ height: 24, suffix: "", width: 36 },
+			{ height: 48, suffix: "@2x", width: 72 },
 		],
+		sourceDir: "source_images/sidebar",
 	},
 ];
 
 const singleImages = [
 	{
-		sourceFile: "source_images/background.png",
 		outputDir: "public/assets/img",
 		resolutions: [
-			{ width: 1920, suffix: "" },
-			{ width: 2880, suffix: "@2x" }, // Reduced from 3840
-			{ width: 640, height: 1136, suffix: "@mobile" },
+			{ suffix: "", width: 1920 },
+			{ suffix: "@2x", width: 2880 }, // Reduced from 3840
+			{ height: 1136, suffix: "@mobile", width: 640 },
 		],
-		webpOptions: { quality: 55, effort: 6 },
+		sourceFile: "source_images/background.png",
+		webpOptions: { effort: 6, quality: 55 },
 	},
 ];
 
 async function processImages() {
 	// Process directories
-	for (const { sourceDir, outputDir, resolutions } of imageDirs) {
+	for (const { outputDir, resolutions, sourceDir } of imageDirs) {
 		try {
 			await mkdir(outputDir, { recursive: true });
 
 			const processFile = async (filePath) => {
 				const ext = path.extname(filePath);
 
-				if (![".png", ".jpg", ".jpeg", ".webp"].includes(ext.toLowerCase())) {
+				if (![".jpeg", ".jpg", ".png", ".webp"].includes(ext.toLowerCase())) {
 					return;
 				}
 
@@ -67,7 +67,7 @@ async function processImages() {
 
 					await sharp(filePath)
 						.resize(res.width, res.height)
-						.webp({ quality: res.suffix === "@2x" ? 55 : 65, effort: 6 })
+						.webp({ effort: 6, quality: res.suffix === "@2x" ? 55 : 65 })
 						.toFile(outputPath);
 				}
 			};
@@ -95,7 +95,7 @@ async function processImages() {
 	}
 
 	// Process single images
-	for (const { sourceFile, outputDir, resolutions, webpOptions } of singleImages) {
+	for (const { outputDir, resolutions, sourceFile, webpOptions } of singleImages) {
 		try {
 			await mkdir(outputDir, { recursive: true });
 			const ext = path.extname(sourceFile);

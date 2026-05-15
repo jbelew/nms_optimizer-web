@@ -20,35 +20,30 @@ const FONTS_CSS_PATH = path.resolve("src/assets/css/fonts.css");
 
 // Map route names to markdown filenames when they differ
 export const PAGE_TO_MARKDOWN_MAPPING = {
-	translation: "translation-request",
 	"": "home",
+	translation: "translation-request",
 };
 
 /**
- * Read markdown file from the locales directory.
+ * Extract SSG template blocks from source index.html
  */
-export async function readMarkdownFile(lang, fileName) {
-	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);
+export async function extractSsgTemplate(sourceIndexHtml) {
+	const sourceSsgBlockMatch = sourceIndexHtml.match(
+		/<noscript\s+[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/noscript>/
+	);
+	if (!sourceSsgBlockMatch) return { ssgHeader: "", ssgStyles: "" };
 
-	try {
-		return await fs.readFile(filePath, "utf-8");
-	} catch (_e) {
-		// Fallback to English if localized markdown is missing
-		if (lang !== "en") {
-			const fallbackPath = path.join(LOCALES_DIR, "en", `${fileName}.md`);
+	const sourceSsgBlock = sourceSsgBlockMatch[1];
 
-			try {
-				const content = await fs.readFile(fallbackPath, "utf-8");
-				console.info(`Info: Using English fallback for ${fileName} in ${lang}`);
+	const ssgStyleMatch = sourceSsgBlock.match(/<style[^>]*?>([\s\S]*?)<\/style>/);
+	const ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
 
-				return content;
-			} catch (_err) {
-				return null;
-			}
-		}
+	const ssgHeaderMatch = sourceSsgBlock.match(
+		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/
+	);
+	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
 
-		return null;
-	}
+	return { ssgHeader, ssgStyles };
 }
 
 /**
@@ -58,27 +53,27 @@ export function generateNavigationLinks(lang, currentPage, t) {
 	const isDocker = process.env.VITE_DOCKER === "true" || process.env.DOCKER === "true";
 	const langPrefix = lang === "en" ? "" : `/${lang}`;
 	const pages = [
-		{ path: "/", key: "seo.nav.home", descKey: "seo.navDescriptions.home" },
+		{ descKey: "seo.navDescriptions.home", key: "seo.nav.home", path: "/" },
 		{
-			path: "/instructions",
-			key: "seo.nav.instructions",
 			descKey: "seo.navDescriptions.instructions",
+			key: "seo.nav.instructions",
+			path: "/instructions",
 		},
-		{ path: "/about", key: "seo.nav.about", descKey: "seo.navDescriptions.about" },
-		{ path: "/changelog", key: "seo.nav.changelog", descKey: "seo.navDescriptions.changelog" },
+		{ descKey: "seo.navDescriptions.about", key: "seo.nav.about", path: "/about" },
+		{ descKey: "seo.navDescriptions.changelog", key: "seo.nav.changelog", path: "/changelog" },
 		...(!isDocker
-			? [{ path: "/userstats", key: "seo.nav.userstats", descKey: "seo.navDescriptions.userstats" }]
+			? [{ descKey: "seo.navDescriptions.userstats", key: "seo.nav.userstats", path: "/userstats" }]
 			: []),
 		{
-			path: "/translation",
-			key: "seo.nav.translation",
 			descKey: "seo.navDescriptions.translation",
+			key: "seo.nav.translation",
+			path: "/translation",
 		},
-		{ path: "/privacy", key: "seo.nav.privacy", descKey: "seo.navDescriptions.privacy" },
+		{ descKey: "seo.navDescriptions.privacy", key: "seo.nav.privacy", path: "/privacy" },
 	];
 
 	const links = pages
-		.map(({ path, key, descKey }) => {
+		.map(({ descKey, key, path }) => {
 			const href = path === "/" ? langPrefix || "/" : `${langPrefix}${path}/`;
 			const label = t(key, { defaultValue: path.slice(1) || "Home" });
 			const desc = t(descKey, { defaultValue: "" });
@@ -96,146 +91,6 @@ export function generateNavigationLinks(lang, currentPage, t) {
         ${links}
       </ul>
     </nav>`;
-}
-
-/**
- * Extract SSG template blocks from source index.html
- */
-export async function extractSsgTemplate(sourceIndexHtml) {
-	const sourceSsgBlockMatch = sourceIndexHtml.match(
-		/<noscript\s+[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/noscript>/
-	);
-	if (!sourceSsgBlockMatch) return { ssgStyles: "", ssgHeader: "" };
-
-	const sourceSsgBlock = sourceSsgBlockMatch[1];
-
-	const ssgStyleMatch = sourceSsgBlock.match(/<style[^>]*?>([\s\S]*?)<\/style>/);
-	const ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
-
-	const ssgHeaderMatch = sourceSsgBlock.match(
-		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/
-	);
-	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
-
-	return { ssgStyles, ssgHeader };
-}
-
-/**
- * Initialize i18next instance for SSG
- */
-export async function initI18n() {
-	const i18nInstance = i18next.createInstance();
-	await i18nInstance.use(i18nextFsBackend).init({
-		supportedLngs: SUPPORTED_LANGUAGES,
-		preload: SUPPORTED_LANGUAGES,
-		fallbackLng: "en",
-		ns: ["translation"],
-		defaultNS: "translation",
-		backend: {
-			loadPath: path.join(LOCALES_DIR, "{{lng}}/{{ns}}.json"),
-		},
-	});
-
-	return i18nInstance;
-}
-
-/**
- * Generate SEO tags for a page.
- */
-export function generateSeoTags(pathname, lang, baseUrl, _t) {
-	const cleanPath = pathname === "/" ? "" : pathname;
-	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
-	const canonicalPath =
-		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
-	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
-
-	let tags = `
-    <link rel="canonical" href="${canonicalUrl}" />
-    <meta property="og:url" content="${canonicalUrl}" />
-    <meta property="og:locale" content="${getOgLocale(lang)}" />`;
-
-	for (const [code, locale] of Object.entries(OG_LOCALE_MAP)) {
-		if (code === lang) continue;
-		tags += `\n    <meta property="og:locale:alternate" content="${locale}" />`;
-	}
-
-	for (const l of SUPPORTED_LANGUAGES) {
-		const lPath =
-			l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
-		const lUrl = new URL(lPath, baseUrl).href;
-		tags += `\n    <link rel="alternate" hreflang="${l}" href="${lUrl}" />`;
-	}
-
-	const xDefaultUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
-	tags += `\n    <link rel="alternate" hreflang="x-default" href="${xDefaultUrl}" />`;
-
-	return tags;
-}
-
-/**
- * Update the source index.html noscript block with content from home.md.
- * Ensures home.md is the single source of truth for the root route.
- */
-export async function updateIndexHtmlTemplate(mdProcessor, t) {
-	const indexPath = path.resolve("index.html");
-	
-	try {
-		const sourceIndexHtml = await fs.readFile(indexPath, "utf-8");
-		const markdownContent = await readMarkdownFile("en", "home");
-
-		if (!markdownContent) return;
-
-		const renderedHtml = mdProcessor(markdownContent);
-		const navigationHtml = generateNavigationLinks("en", "", t);
-		const appName = t("appName");
-
-		// Synchronize the first H1 with the actual app name/title
-		let finalRendered = renderedHtml;
-		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
-
-		if (h1Regex.test(finalRendered)) {
-			finalRendered = finalRendered.replace(h1Regex, `<h1>${appName}</h1>`);
-		} else {
-			finalRendered = `<h1>${appName}</h1>\n${finalRendered}`;
-		}
-
-		const template = await extractSsgTemplate(sourceIndexHtml);
-		const ssgHeader = template.ssgHeader;
-
-		const subTitleRaw = t("appHeader.subTitle", {
-			defaultValue: 'Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>',
-		});
-		const subTitle = subTitleRaw.replace(
-			/<(\d+)>([\s\S]*?)<\/\1>/g,
-			'<span style="color: #4ccce6">$2</span>'
-		);
-
-		// Localize subtitle in the extracted header
-		const localizedHeader = ssgHeader.replace(
-			/<h2 class="app-header-static__title">[\s\S]*?<\/h2>/,
-			`<h2 class="app-header-static__title">${subTitle}</h2>`
-		);
-
-		const updatedHtml = await new HTMLRewriter()
-			.on("noscript[data-ssg-template] main", {
-				element(el) {
-					el.setInnerContent(
-						`
-			${localizedHeader}
-			${finalRendered}
-			${navigationHtml}
-		`,
-						{ html: true }
-					);
-				},
-			})
-			.transform(sourceIndexHtml);
-
-		await fs.writeFile(indexPath, updatedHtml);
-		console.log("✓ Synchronized home.md content to index.html noscript block");
-	} catch (err) {
-		console.warn(`Warning: Could not update index.html template: ${err.message}`);
-	}
 }
 
 /**
@@ -466,6 +321,39 @@ export async function generatePage(
 }
 
 /**
+ * Generate SEO tags for a page.
+ */
+export function generateSeoTags(pathname, lang, baseUrl, _t) {
+	const cleanPath = pathname === "/" ? "" : pathname;
+	const normalizePath = (p) => (p.endsWith("/") ? p : `${p}/`);
+	const canonicalPath =
+		lang === "en" ? normalizePath(cleanPath || "/") : `/${lang}${normalizePath(cleanPath || "/")}`;
+	const canonicalUrl = new URL(canonicalPath, baseUrl).href;
+
+	let tags = `
+    <link rel="canonical" href="${canonicalUrl}" />
+    <meta property="og:url" content="${canonicalUrl}" />
+    <meta property="og:locale" content="${getOgLocale(lang)}" />`;
+
+	for (const [code, locale] of Object.entries(OG_LOCALE_MAP)) {
+		if (code === lang) continue;
+		tags += `\n    <meta property="og:locale:alternate" content="${locale}" />`;
+	}
+
+	for (const l of SUPPORTED_LANGUAGES) {
+		const lPath =
+			l === "en" ? normalizePath(cleanPath || "/") : `/${l}${normalizePath(cleanPath || "/")}`;
+		const lUrl = new URL(lPath, baseUrl).href;
+		tags += `\n    <link rel="alternate" hreflang="${l}" href="${lUrl}" />`;
+	}
+
+	const xDefaultUrl = new URL(normalizePath(cleanPath || "/"), baseUrl).href;
+	tags += `\n    <link rel="alternate" hreflang="x-default" href="${xDefaultUrl}" />`;
+
+	return tags;
+}
+
+/**
  * Generate all static pages
  */
 export async function generateSsg() {
@@ -568,6 +456,118 @@ export async function generateSsg() {
 		}
 
 		process.exit(1);
+	}
+}
+
+/**
+ * Initialize i18next instance for SSG
+ */
+export async function initI18n() {
+	const i18nInstance = i18next.createInstance();
+	await i18nInstance.use(i18nextFsBackend).init({
+		backend: {
+			loadPath: path.join(LOCALES_DIR, "{{lng}}/{{ns}}.json"),
+		},
+		defaultNS: "translation",
+		fallbackLng: "en",
+		ns: ["translation"],
+		preload: SUPPORTED_LANGUAGES,
+		supportedLngs: SUPPORTED_LANGUAGES,
+	});
+
+	return i18nInstance;
+}
+
+/**
+ * Read markdown file from the locales directory.
+ */
+export async function readMarkdownFile(lang, fileName) {
+	const filePath = path.join(LOCALES_DIR, lang, `${fileName}.md`);
+
+	try {
+		return await fs.readFile(filePath, "utf-8");
+	} catch (_e) {
+		// Fallback to English if localized markdown is missing
+		if (lang !== "en") {
+			const fallbackPath = path.join(LOCALES_DIR, "en", `${fileName}.md`);
+
+			try {
+				const content = await fs.readFile(fallbackPath, "utf-8");
+				console.info(`Info: Using English fallback for ${fileName} in ${lang}`);
+
+				return content;
+			} catch (_err) {
+				return null;
+			}
+		}
+
+		return null;
+	}
+}
+
+/**
+ * Update the source index.html noscript block with content from home.md.
+ * Ensures home.md is the single source of truth for the root route.
+ */
+export async function updateIndexHtmlTemplate(mdProcessor, t) {
+	const indexPath = path.resolve("index.html");
+	
+	try {
+		const sourceIndexHtml = await fs.readFile(indexPath, "utf-8");
+		const markdownContent = await readMarkdownFile("en", "home");
+
+		if (!markdownContent) return;
+
+		const renderedHtml = mdProcessor(markdownContent);
+		const navigationHtml = generateNavigationLinks("en", "", t);
+		const appName = t("appName");
+
+		// Synchronize the first H1 with the actual app name/title
+		let finalRendered = renderedHtml;
+		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
+
+		if (h1Regex.test(finalRendered)) {
+			finalRendered = finalRendered.replace(h1Regex, `<h1>${appName}</h1>`);
+		} else {
+			finalRendered = `<h1>${appName}</h1>\n${finalRendered}`;
+		}
+
+		const template = await extractSsgTemplate(sourceIndexHtml);
+		const ssgHeader = template.ssgHeader;
+
+		const subTitleRaw = t("appHeader.subTitle", {
+			defaultValue: 'Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>',
+		});
+		const subTitle = subTitleRaw.replace(
+			/<(\d+)>([\s\S]*?)<\/\1>/g,
+			'<span style="color: #4ccce6">$2</span>'
+		);
+
+		// Localize subtitle in the extracted header
+		const localizedHeader = ssgHeader.replace(
+			/<h2 class="app-header-static__title">[\s\S]*?<\/h2>/,
+			`<h2 class="app-header-static__title">${subTitle}</h2>`
+		);
+
+		const updatedHtml = await new HTMLRewriter()
+			.on("noscript[data-ssg-template] main", {
+				element(el) {
+					el.setInnerContent(
+						`
+			${localizedHeader}
+			${finalRendered}
+			${navigationHtml}
+		`,
+						{ html: true }
+					);
+				},
+			})
+			.transform(sourceIndexHtml);
+
+		await fs.writeFile(indexPath, updatedHtml);
+		console.log("✓ Synchronized home.md content to index.html noscript block");
+	} catch (err) {
+		console.warn(`Warning: Could not update index.html template: ${err.message}`);
 	}
 }
 

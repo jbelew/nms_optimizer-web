@@ -19,28 +19,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const FN_PATH = path.join(ROOT, "functions/[[path]].js");
 const ROUTE_CONFIG_PATH = path.join(ROOT, "src/routeConfig.ts");
-
-/**
- * Extract the SPA_ROUTES literal set from the Function source without importing it
- * (it depends on the Cloudflare Workers runtime).
- */
-function readSpaRoutes() {
-	const src = fs.readFileSync(FN_PATH, "utf-8");
-	const match = src.match(/SPA_ROUTES\s*=\s*new Set\(\s*\[([^\]]*)\]/);
-	if (!match) throw new Error("Could not find SPA_ROUTES in functions/[[path]].js");
-
-	return match[1]
-		.split(",")
-		.map((s) => s.trim().replace(/^["']|["']$/g, ""))
-		.filter(Boolean);
-}
 
 /**
  * Extract the `pages` array from `src/routeConfig.ts` via a regex (TS import in
@@ -50,6 +35,21 @@ function readPages() {
 	const src = fs.readFileSync(ROUTE_CONFIG_PATH, "utf-8");
 	const match = src.match(/export const pages\s*=\s*\[([^\]]*)\]/);
 	if (!match) throw new Error("Could not find `pages` in src/routeConfig.ts");
+
+	return match[1]
+		.split(",")
+		.map((s) => s.trim().replace(/^["']|["']$/g, ""))
+		.filter(Boolean);
+}
+
+/**
+ * Extract the SPA_ROUTES literal set from the Function source without importing it
+ * (it depends on the Cloudflare Workers runtime).
+ */
+function readSpaRoutes() {
+	const src = fs.readFileSync(FN_PATH, "utf-8");
+	const match = src.match(/SPA_ROUTES\s*=\s*new Set\(\s*\[([^\]]*)\]/);
+	if (!match) throw new Error("Could not find SPA_ROUTES in functions/[[path]].js");
 
 	return match[1]
 		.split(",")

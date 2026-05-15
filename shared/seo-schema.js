@@ -10,12 +10,12 @@
  * @type {Record<string, string>}
  */
 export const OG_LOCALE_MAP = {
+	de: "de_DE",
 	en: "en_US",
 	es: "es_ES",
 	fr: "fr_FR",
-	de: "de_DE",
-	pt: "pt_PT",
 	it: "it_IT",
+	pt: "pt_PT",
 };
 
 /**
@@ -48,48 +48,48 @@ export const getLocalizedSchema = (t, lang, url) => {
 	// 1. SoftwareApplication
 	const softwareApp = {
 		"@context": "https://schema.org",
-		"@type": "SoftwareApplication",
 		"@id": `${url}#software`,
-		name: appName,
-		description: appDescription,
-		operatingSystem: "Web",
+		"@type": "SoftwareApplication",
 		applicationCategory: "UtilitiesApplication",
-		genre: t("seo.genre", { defaultValue: "Game Tool" }),
-		url: url,
-		inLanguage: lang,
-		offers: {
-			"@type": "Offer",
-			price: "0",
-			priceCurrency: "USD",
-		},
 		author: {
 			"@type": "Person",
 			name: "jbelew",
 			url: "https://github.com/jbelew",
 		},
+		description: appDescription,
+		genre: t("seo.genre", { defaultValue: "Game Tool" }),
+		inLanguage: lang,
+		name: appName,
+		offers: {
+			"@type": "Offer",
+			price: "0",
+			priceCurrency: "USD",
+		},
+		operatingSystem: "Web",
+		url: url,
 	};
 
 	// 2. Organization
 	const organization = {
 		"@context": "https://schema.org",
-		"@type": "Organization",
 		"@id": `${baseUrl}/#organization`,
-		name: appName,
-		url: baseUrl,
+		"@type": "Organization",
 		logo: `${baseUrl}/logo.svg`,
+		name: appName,
 		sameAs: ["https://github.com/jbelew/nms_optimizer-web"],
+		url: baseUrl,
 	};
 
 	// 3. WebSite
 	const webSite = {
 		"@context": "https://schema.org",
-		"@type": "WebSite",
 		"@id": `${url}#website`,
-		name: appName,
-		url: url,
+		"@type": "WebSite",
 		description: appDescription,
 		inLanguage: lang,
+		name: appName,
 		publisher: { "@id": `${baseUrl}/#organization` },
+		url: url,
 	};
 
 	// 5. BreadcrumbList
@@ -98,9 +98,9 @@ export const getLocalizedSchema = (t, lang, url) => {
 	const itemListElement = [
 		{
 			"@type": "ListItem",
-			position: 1,
-			name: t("seo.nav.home", { defaultValue: "Home" }),
 			item: `${baseUrl}/`,
+			name: t("seo.nav.home", { defaultValue: "Home" }),
+			position: 1,
 		},
 	];
 
@@ -116,9 +116,9 @@ export const getLocalizedSchema = (t, lang, url) => {
 	if (pageName) {
 		itemListElement.push({
 			"@type": "ListItem",
-			position: 2,
-			name: t(`seo.nav.${pageName}`, { defaultValue: pageName }),
 			item: url,
+			name: t(`seo.nav.${pageName}`, { defaultValue: pageName }),
+			position: 2,
 		});
 	}
 
@@ -134,13 +134,13 @@ export const getLocalizedSchema = (t, lang, url) => {
 	const siteNavigation = {
 		"@context": "https://schema.org",
 		"@type": "ItemList",
-		name: t("seo.nav.home", { defaultValue: "Site Navigation" }),
 		itemListElement: navPaths.map((nav, index) => ({
 			"@type": "SiteNavigationElement",
-			position: index + 1,
 			name: nav.name,
+			position: index + 1,
 			url: nav.url,
 		})),
+		name: t("seo.nav.home", { defaultValue: "Site Navigation" }),
 	};
 
 	const schemas = [softwareApp, organization, webSite, siteNavigation];

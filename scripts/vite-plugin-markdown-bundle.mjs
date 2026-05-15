@@ -11,35 +11,46 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = path.join(__dirname, "../public/assets/locales");
 
 /**
- * Recursively reads markdown files from the locales directory
- * @returns {Object} Object mapping language to markdown file content
+ * Vite plugin that creates a virtual markdown bundle module
+ * Usage: Import from 'virtual:markdown-bundle' in your code
  */
-function loadMarkdownContent() {
-	const content = {};
+export function markdownBundlePlugin() {
+	const virtualModuleId = "virtual:markdown-bundle";
+	const resolvedId = "\0" + virtualModuleId;
+	let markdownContent = null;
 
-	// Read all language directories
-	const languages = fs.readdirSync(LOCALES_DIR).filter((file) => {
-		const filePath = path.join(LOCALES_DIR, file);
+	return {
+		// Watch markdown files for changes in dev mode
+		async handleHotUpdate({ file, server }) {
+			if (file.startsWith(LOCALES_DIR) && file.endsWith(".md")) {
+				markdownContent = null; // Invalidate cache
+				const module = server.moduleGraph.getModuleById(resolvedId);
 
-		return fs.statSync(filePath).isDirectory();
-	});
+				if (module) {
+					server.moduleGraph.invalidateModule(module);
+				}
 
-	languages.forEach((lang) => {
-		content[lang] = {};
-		const langDir = path.join(LOCALES_DIR, lang);
+				return [];
+			}
+		},
+		// Load the virtual module content
+		load(id) {
+			if (id === resolvedId) {
+				if (!markdownContent) {
+					markdownContent = loadMarkdownContent();
+				}
 
-		// Read all markdown files in this language directory
-		const mdFiles = fs.readdirSync(langDir).filter((file) => file.endsWith(".md"));
-
-		mdFiles.forEach((file) => {
-			const fileName = file.replace(/\.md$/, "");
-			const filePath = path.join(langDir, file);
-			const fileContent = fs.readFileSync(filePath, "utf-8");
-			content[lang][fileName] = fileContent;
-		});
-	});
-
-	return content;
+				return generateModuleCode(markdownContent);
+			}
+		},
+		name: "markdown-bundle",
+		// Resolve the virtual module ID
+		resolveId(id) {
+			if (id === virtualModuleId) {
+				return resolvedId;
+			}
+		},
+	};
 }
 
 /**
@@ -85,44 +96,33 @@ export function getMarkdown(lang, fileName) {
 }
 
 /**
- * Vite plugin that creates a virtual markdown bundle module
- * Usage: Import from 'virtual:markdown-bundle' in your code
+ * Recursively reads markdown files from the locales directory
+ * @returns {Object} Object mapping language to markdown file content
  */
-export function markdownBundlePlugin() {
-	const virtualModuleId = "virtual:markdown-bundle";
-	const resolvedId = "\0" + virtualModuleId;
-	let markdownContent = null;
+function loadMarkdownContent() {
+	const content = {};
 
-	return {
-		name: "markdown-bundle",
-		// Resolve the virtual module ID
-		resolveId(id) {
-			if (id === virtualModuleId) {
-				return resolvedId;
-			}
-		},
-		// Load the virtual module content
-		load(id) {
-			if (id === resolvedId) {
-				if (!markdownContent) {
-					markdownContent = loadMarkdownContent();
-				}
+	// Read all language directories
+	const languages = fs.readdirSync(LOCALES_DIR).filter((file) => {
+		const filePath = path.join(LOCALES_DIR, file);
 
-				return generateModuleCode(markdownContent);
-			}
-		},
-		// Watch markdown files for changes in dev mode
-		async handleHotUpdate({ file, server }) {
-			if (file.startsWith(LOCALES_DIR) && file.endsWith(".md")) {
-				markdownContent = null; // Invalidate cache
-				const module = server.moduleGraph.getModuleById(resolvedId);
+		return fs.statSync(filePath).isDirectory();
+	});
 
-				if (module) {
-					server.moduleGraph.invalidateModule(module);
-				}
+	languages.forEach((lang) => {
+		content[lang] = {};
+		const langDir = path.join(LOCALES_DIR, lang);
 
-				return [];
-			}
-		},
-	};
+		// Read all markdown files in this language directory
+		const mdFiles = fs.readdirSync(langDir).filter((file) => file.endsWith(".md"));
+
+		mdFiles.forEach((file) => {
+			const fileName = file.replace(/\.md$/, "");
+			const filePath = path.join(langDir, file);
+			const fileContent = fs.readFileSync(filePath, "utf-8");
+			content[lang][fileName] = fileContent;
+		});
+	});
+
+	return content;
 }

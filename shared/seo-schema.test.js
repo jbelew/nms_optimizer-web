@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { getLocalizedSchema } from "./seo-schema.js";
 
 describe("seo-schema.js", () => {
@@ -7,8 +7,8 @@ describe("seo-schema.js", () => {
 			appName: "NMS Optimizer",
 			"seo.appDescription": "Optimize technology layouts.",
 			"seo.genre": "Game Tool",
-			"seo.nav.home": "Home",
 			"seo.nav.about": "About",
+			"seo.nav.home": "Home",
 		};
 
 		return translations[key] || options?.defaultValue || key;
