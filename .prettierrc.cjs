@@ -1,14 +1,8 @@
 module.exports = {
-  useTabs: true,
-  trailingComma: "es5",
-  semi: true,
-  singleQuote: false,
-  printWidth: 100,
-  bracketSpacing: true,
   arrowParens: "always",
-  endOfLine: "lf",
   bracketSameLine: false,
-  plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  bracketSpacing: true,
+  endOfLine: "lf",
   importOrder: [
     "<TYPES>",
     "^(react|react-dom)$",
@@ -20,4 +14,10 @@ module.exports = {
   ],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
   importOrderTypeScriptVersion: "5.0.0",
+  plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  printWidth: 100,
+  semi: true,
+  singleQuote: false,
+  trailingComma: "es5",
+  useTabs: true,
 };
