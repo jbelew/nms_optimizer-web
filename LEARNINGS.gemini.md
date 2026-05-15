@@ -773,3 +773,24 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: Even in a Bun-primary project, it's crucial to maintain a modern Node.js environment for toolchain compatibility. Explicitly defining the version in both `package.json` and CI configuration prevents "runtime mismatch" errors during critical deployment phases.
+
+## 2026-05-15: Opting into Node.js 24 for GitHub Actions Runtime
+
+### Perceive & Understand
+- **Request**: Resolve deprecation warnings in CI stating that actions are running on Node.js 20.
+- **Context**: GitHub Actions is transitioning to Node.js 24 as the default runtime for JavaScript actions. Existing actions (like `setup-node@v4`) still trigger warnings if not explicitly forced to a newer version during the transition period.
+
+### Reason & Plan
+- **Audit**: Confirmed that multiple jobs in `ci.yml` and other workflows were generating deprecation notices for Node.js 20.
+- **Plan**: Set the `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` environment variable at the workflow level across all automation files to opt into the modern runtime and silence the warnings.
+
+### Act & Implement
+- **Action**: Added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` to the global `env` block in:
+    - `ci.yml`
+    - `auto-translate.yml`
+    - `update-screenshots.yml`
+    - `publish-images.yml`
+    - `dependabot-automerge.yml`
+
+### Refine & Reflect
+- **Reflection**: Explicitly opting into the next-generation runner runtime ensures that the CI pipeline remains robust and warning-free as GitHub phases out older Node.js versions. This complement's the project's own upgrade to Node.js 24 for application and script execution.
