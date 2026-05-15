@@ -357,6 +357,9 @@ jobs:
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
 
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
       - name: Download production artifact
         uses: actions/download-artifact@v8
         with:
@@ -389,6 +392,9 @@ jobs:
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
@@ -442,8 +448,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
       - name: Download dist artifact
         uses: actions/download-artifact@v8
+
         with:
           name: dist-bundle
           path: dist/

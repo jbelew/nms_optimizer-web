@@ -45,6 +45,9 @@ jobs:
         run: |
           python scripts/translate.py --files $CHANGED_FILES
 
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-env
+
       - name: Validate translation files
         if: steps.changed-files.outputs.any_changed == 'true'
         shell: bash
@@ -52,10 +55,10 @@ jobs:
           echo "Verifying JSON integrity and structure..."
           for f in $(find public/assets/locales/ -name "translation.json"); do
             # 1. Check for valid JSON syntax
-            node -e "JSON.parse(require('fs').readFileSync('$f', 'utf8'))" || (echo "❌ Invalid JSON syntax in $f" && exit 1)
+            bun -e "JSON.parse(require('fs').readFileSync('$f', 'utf8'))" || (echo "❌ Invalid JSON syntax in $f" && exit 1)
             
             # 2. Check for semantic integrity (randomMessages MUST be an array)
-            node -e "
+            bun -e "
               const data = JSON.parse(require('fs').readFileSync('$f', 'utf8'));
               if (data.messageSpinner && data.messageSpinner.randomMessages && !Array.isArray(data.messageSpinner.randomMessages)) {
                 console.error('❌ Corruption detected in $f: messageSpinner.randomMessages is an object instead of an array.');
