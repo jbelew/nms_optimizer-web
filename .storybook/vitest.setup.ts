@@ -6,9 +6,9 @@ vi.mock("@/utils/apiCall", () => ({
 		// Mock platforms/ship types
 		if (url.includes("/platforms")) {
 			return {
-				standard: { type: "Starship" },
 				corvette: { type: "Starship" },
 				exosuit: { type: "Exosuit" },
+				standard: { type: "Starship" },
 			};
 		}
 
@@ -17,16 +17,16 @@ vi.mock("@/utils/apiCall", () => ({
 			return {
 				Hyperdrive: [
 					{
+						color: "purple",
 						key: "hyper",
 						label: "Hyperdrive",
-						color: "purple",
 						modules: [
-							{ id: "h1", label: "Hyperdrive Module", type: "upgrade", checked: true },
+							{ checked: true, id: "h1", label: "Hyperdrive Module", type: "upgrade" },
 						],
 					},
 				],
-				technology: [],
 				modules: [],
+				technology: [],
 			};
 		}
 
@@ -54,15 +54,15 @@ if (typeof window !== "undefined") {
 		let store: { [key: string]: string } = {};
 
 		return {
-			getItem: (key: string) => store[key] || null,
-			setItem: (key: string, value: string) => {
-				store[key] = value.toString();
-			},
 			clear: () => {
 				store = {};
 			},
+			getItem: (key: string) => store[key] || null,
 			removeItem: (key: string) => {
 				delete store[key];
+			},
+			setItem: (key: string, value: string) => {
+				store[key] = value.toString();
 			},
 		};
 	})();
@@ -81,11 +81,11 @@ if (typeof window !== "undefined") {
 		if (url.includes("/platforms")) {
 			return new Response(
 				JSON.stringify({
-					standard: { type: "Starship" },
 					corvette: { type: "Starship" },
 					exosuit: { type: "Exosuit" },
+					standard: { type: "Starship" },
 				}),
-				{ status: 200, headers: { "Content-Type": "application/json" } }
+				{ headers: { "Content-Type": "application/json" }, status: 200 }
 			);
 		}
 
@@ -95,20 +95,20 @@ if (typeof window !== "undefined") {
 				JSON.stringify({
 					Hyperdrive: [
 						{
+							color: "purple",
 							key: "hyper",
 							label: "Hyperdrive",
-							color: "purple",
 							modules: [
-								{ id: "h1", label: "Hyperdrive Module", type: "upgrade", checked: true },
+								{ checked: true, id: "h1", label: "Hyperdrive Module", type: "upgrade" },
 							],
 						},
 					],
-					technology: [],
 					modules: [],
+					technology: [],
 				}),
 				{
-					status: 200,
 					headers: { "Content-Type": "application/json" },
+					status: 200,
 				}
 			);
 		}

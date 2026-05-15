@@ -3,10 +3,6 @@ import { mergeConfig } from 'vite';
 import { splashScreen } from 'vite-plugin-splash-screen';
 
 const config: StorybookConfig = {
-  "stories": [
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
-  ],
-  staticDirs: ["../public"],
   "addons": [
     "@chromatic-com/storybook",
     "@storybook/addon-vitest",
@@ -14,6 +10,10 @@ const config: StorybookConfig = {
     "@storybook/addon-docs"
   ],
   "framework": "@storybook/react-vite",
+  staticDirs: ["../public"],
+  "stories": [
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+  ],
   "typescript": {
     reactDocgen: 'react-docgen',
   },
@@ -30,10 +30,10 @@ const config: StorybookConfig = {
       plugins: [
         ...(!isTest && !isProduction ? [
           splashScreen({
-            logoSrc: "assets/svg/loader.svg",
-            splashBg: "#000000",
             loaderBg: "#00A2C7",
             loaderType: "dots",
+            logoSrc: "assets/svg/loader.svg",
+            splashBg: "#000000",
           }),
         ] : []),
       ],

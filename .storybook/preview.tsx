@@ -9,29 +9,29 @@ import { I18nextProvider } from "react-i18next";
 
 // Custom viewports matching Tailwind breakpoints
 const customViewports = {
+	desktop: {
+		name: "Desktop (1280px)",
+		styles: {
+			height: "860px",
+			width: "1280px",
+		},
+		type: "desktop" as const,
+	},
 	mobile: {
 		name: "Mobile (375px)",
 		styles: {
-			width: "384px",
 			height: "667px",
+			width: "384px",
 		},
 		type: "mobile" as const,
 	},
 	tablet: {
 		name: "Tablet (768px)",
 		styles: {
-			width: "768px",
 			height: "1024px",
+			width: "768px",
 		},
 		type: "tablet" as const,
-	},
-	desktop: {
-		name: "Desktop (1280px)",
-		styles: {
-			width: "1280px",
-			height: "860px",
-		},
-		type: "desktop" as const,
 	},
 };
 
@@ -69,27 +69,27 @@ import { BackgroundWrapper } from "./BackgroundWrapper";
  *
  */
 export const globalTypes = {
-	theme: {
-		description: "Global theme for components",
-		defaultValue: "light",
-		toolbar: {
-			title: "Theme",
-			icon: "circlehollow",
-			items: ["light", "dark"],
-			dynamicTitle: true,
-		},
-	},
 	background: {
-		description: "Background image visibility",
 		defaultValue: "visible",
+		description: "Background image visibility",
 		toolbar: {
-			title: "Background",
+			dynamicTitle: true,
 			icon: "image",
 			items: [
-				{ value: "visible", title: "Visible" },
-				{ value: "hidden", title: "Hidden" },
+				{ title: "Visible", value: "visible" },
+				{ title: "Hidden", value: "hidden" },
 			],
+			title: "Background",
+		},
+	},
+	theme: {
+		defaultValue: "light",
+		description: "Global theme for components",
+		toolbar: {
 			dynamicTitle: true,
+			icon: "circlehollow",
+			items: ["light", "dark"],
+			title: "Theme",
 		},
 	},
 };
@@ -127,7 +127,7 @@ const withGlobalProviders: Decorator = (Story, context) => {
 
 	return (
 		<BrowserRouter>
-			<Theme appearance={theme as "light" | "dark"} accentColor="cyan" panelBackground="solid">
+			<Theme accentColor="cyan" appearance={theme as "dark" | "light"} panelBackground="solid">
 				<TooltipProvider>
 					<DialogProvider>
 						<SplashHider />
@@ -144,16 +144,15 @@ const withGlobalProviders: Decorator = (Story, context) => {
 // Global mock handling is now in vitest.setup.ts to ensure it catches early resource initialization
 const preview: Preview = {
 	decorators: [withGlobalProviders, withTheme, withBackground, withStoreReset],
-	parameters: {
+	initialGlobals: {
+		background: 'visible',
+		theme: 'dark',
 		viewport: {
-			options: customViewports,
+			isRotated: false,
+			value: 'desktop',
 		},
-		controls: {
-			matchers: {
-				color: /(background|color)$/i,
-				date: /Date$/i,
-			},
-		},
+	},
+	parameters: {
 		a11y: {
 			config: {
 				rules: [
@@ -165,22 +164,23 @@ const preview: Preview = {
 						selector: '[aria-controls^="radix-"]',
 					},
 					{
+						enabled: false,
 						// Disable color-contrast checks
 						// The app uses a custom theme with intentional color choices
 						id: 'color-contrast',
-						enabled: false,
 					},
 				],
 			},
 		},
-	},
-	initialGlobals: {
-		viewport: {
-			value: 'desktop',
-			isRotated: false,
+		controls: {
+			matchers: {
+				color: /(background|color)$/i,
+				date: /Date$/i,
+			},
 		},
-		theme: 'dark',
-		background: 'visible',
+		viewport: {
+			options: customViewports,
+		},
 	},
 };
 

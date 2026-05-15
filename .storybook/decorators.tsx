@@ -57,9 +57,9 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
         // Reset GridStore
         useGridStore.setState({
             grid: createGrid(10, 6),
-            result: null,
-            isSharedGrid: false,
             gridFixed: false,
+            isSharedGrid: false,
+            result: null,
             superchargedFixed: false,
         });
 
@@ -71,13 +71,13 @@ export const StoreResetWrapper = ({ children }: { children: React.ReactNode }) =
 
         // Reset TechStore (basic reset, full reset might need more data if available)
         useTechStore.setState({
+            activeGroups: {},
+            checkedModules: {},
+            max_bonus: {},
+            solve_method: {},
+            solved_bonus: {},
             techColors: {},
             techGroups: {},
-            max_bonus: {},
-            solved_bonus: {},
-            solve_method: {},
-            checkedModules: {},
-            activeGroups: {},
         });
     }, []);
 
