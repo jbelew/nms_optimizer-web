@@ -752,3 +752,24 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: A successful migration requires more than just changing the lockfile and primary commands; it requires a sweep of all automation and documentation to ensure consistency. Using `bunx` as a drop-in replacement for `npx` works for most cases and maintains the speed benefits of Bun throughout the development lifecycle.
+
+## 2026-05-15: Node.js Upgrade to v24 for CI/CD Compatibility
+
+### Perceive & Understand
+- **Request**: Resolve a CI failure where `cloudflare/wrangler-action` could not find Node.js v22+ (it was using v20).
+- **Context**: The project migrated to Bun, but deployment tools like Wrangler still require a modern Node.js runtime.
+
+### Reason & Plan
+- **Audit**: Identified that the `ubuntu-latest` GitHub runner default Node version (v20) was insufficient for the latest Wrangler.
+- **Plan**: 
+    1. Update the `setup-node-env` composite action to explicitly install Node.js v24 alongside Bun.
+    2. Update `package.json` `engines` field to reflect the new requirement.
+    3. Ensure all deployment and validation jobs use the updated environment setup.
+
+### Act & Implement
+- **Action**: Modified `.github/actions/setup-node-env/action.yml` to include `actions/setup-node@v4` with version `24`.
+- **Action**: Updated `package.json` to include `"node": ">=24.0.0"`.
+- **Action**: Verified all `ci.yml` and `auto-translate.yml` jobs use the updated environment.
+
+### Refine & Reflect
+- **Reflection**: Even in a Bun-primary project, it's crucial to maintain a modern Node.js environment for toolchain compatibility. Explicitly defining the version in both `package.json` and CI configuration prevents "runtime mismatch" errors during critical deployment phases.
