@@ -21,6 +21,9 @@ concurrency:
   group: ci-${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions: {}
 
 jobs:
@@ -31,7 +34,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
@@ -60,7 +63,7 @@ jobs:
       build-version: ${{ steps.build_version.outputs.version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -83,7 +86,7 @@ jobs:
           SENTRY_PROJECT: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.SENTRY_PROJECT || '' }}
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v9
+        uses: actions/upload-artifact@v7
         with:
           name: dist-bundle
           path: dist/
@@ -93,7 +96,7 @@ jobs:
         run: bun run build:e2e
 
       - name: Upload E2E dist artifact
-        uses: actions/upload-artifact@v9
+        uses: actions/upload-artifact@v7
         with:
           name: dist-e2e
           path: dist/
@@ -110,13 +113,13 @@ jobs:
     continue-on-error: true
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v9
+        uses: actions/download-artifact@v8
         with:
           name: dist-bundle
           path: dist/
@@ -132,7 +135,7 @@ jobs:
 
       - name: Checkout Lighthouse History Branch
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           ref: lighthouse-check
           path: history-dir
@@ -163,7 +166,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -171,7 +174,7 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Cache Playwright Browsers
-        uses: actions/cache@v6
+        uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -208,19 +211,19 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
       - name: Download E2E dist artifact
-        uses: actions/download-artifact@v9
+        uses: actions/download-artifact@v8
         with:
           name: dist-e2e
           path: dist/
 
       - name: Cache Playwright Browsers
-        uses: actions/cache@v6
+        uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
@@ -237,7 +240,7 @@ jobs:
 
       - name: Upload Playwright Report
         if: always()
-        uses: actions/upload-artifact@v9
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report/
@@ -257,7 +260,7 @@ jobs:
       tag: ${{ steps.check_release.outputs.tag }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -301,7 +304,7 @@ jobs:
       effective-tag: ${{ steps.version_logic.outputs.version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
           fetch-depth: 0
@@ -339,7 +342,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Upload production artifact
-        uses: actions/upload-artifact@v9
+        uses: actions/upload-artifact@v7
         with:
           name: dist-production
           path: dist/
@@ -353,7 +356,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.release.outputs.tag || github.sha }}
 
@@ -361,13 +364,13 @@ jobs:
         uses: ./.github/actions/setup-node-env
 
       - name: Download production artifact
-        uses: actions/download-artifact@v9
+        uses: actions/download-artifact@v8
         with:
           name: dist-production
           path: dist/
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v5
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -390,7 +393,7 @@ jobs:
       actions: write
     steps:
       - name: Trigger Downstream Jobs
-        uses: actions/github-script@v9
+        uses: actions/github-script@v8
         env:
           RELEASE_TAG: ${{ needs.release.outputs.tag }}
         with:
@@ -414,20 +417,20 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v9
+        uses: actions/download-artifact@v8
 
         with:
           name: dist-bundle
           path: dist/
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v5
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_PAGES_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
