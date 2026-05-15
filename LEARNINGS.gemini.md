@@ -704,3 +704,25 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 - Finished fixing the AppDialog test suites after refactoring.
 - Since action buttons (Close, Retry, Copy) are now managed by the parent `AppDialog` component (passed via the `footer` prop) rather than the internal content components (`WelcomeContent`, `ShareLinkContent`, `ErrorContent`, `OptimizationAlertContent`, `PerformanceContent`, `UserStatsContent`), we updated the tests for these components to remove assertions related to button clicks and onClose callbacks.
 - Updated `OptimizationAlertDialog.test.tsx` to match button rendering correctly using translation keys instead of raw strings, taking into account how the i18next mock is set up.
+
+## 2026-05-15: dead package.json commands removal
+
+### Perceive & Understand
+- **Request**: Remove any "dead" package.json commands.
+- **Context**: The project had several scripts that were either broken, redundant, or leftover from experiments.
+
+### Reason & Plan
+- **Audit**: Identified several suspicious commands:
+    - `lint:mcp`: Required an unlisted dependency (`@eslint/mcp`) and was not used in CI.
+    - `coverage:merge` and `coverage:report`: Were not valid Vitest subcommands and produced incorrect behavior.
+    - `perf:report`: Attempted to open a non-existent file.
+    - `format:check`: Contained a redundant `--write` flag that conflicted with its purpose as a check-only CI command.
+    - `heroku-postbuild`: Was inconsistent with the main `build` command.
+- **Plan**: Remove the dead/broken commands, fix the `format:check` command, and synchronize `heroku-postbuild` with `npm run build`.
+
+### Act & Implement
+- **Action**: Modified `package.json` to remove the identified scripts and update the remaining ones.
+- **Verification**: Ran `npm run format:check` to ensure it still works (it now correctly performs a check-only operation and passes). Verified `npm run build` initiates correctly.
+
+### Refine & Reflect
+- **Reflection**: Keeping a clean `package.json` is important for developer onboarding and CI reliability. Redundant or broken scripts can lead to confusion and maintenance overhead. Ensuring consistency between local build scripts and deployment-specific scripts (like `heroku-postbuild`) prevents "works on my machine" issues.
