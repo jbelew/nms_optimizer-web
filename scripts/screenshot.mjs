@@ -36,10 +36,6 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 	const page = await context.newPage();
 
-	page.on("console", (msg) => {
-		console.log(`BROWSER [${msg.type()}]: ${msg.text()}`);
-	});
-
 	try {
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
@@ -65,21 +61,9 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		});
 
 		// Wait for the build to load and modules to appear
-		console.log("Waiting for grid to be rendered...");
-		await page.waitForSelector(".gridCell", { timeout: 15000 });
-		console.log("Grid cells found. Checking for modules...");
-
-		// Wait a bit more for state synchronization
-		await page.waitForTimeout(3000);
-
+		await page.waitForSelector("[data-tech]", { timeout: 15000 });
 		const moduleCount = await page.locator("[data-tech]").count();
-		console.log(`✅ Current grid state: Found ${moduleCount} modules.`);
-
-		if (moduleCount === 0) {
-			console.log("Dumping page content for debugging...");
-			const content = await page.content();
-			console.log(content.slice(0, 1000)); // Log first 1000 chars
-		}
+		console.log(`✅ Build loaded successfully. Found ${moduleCount} modules in the grid.`);
 
 		console.log("Taking standard screenshot ...");
 		await page.screenshot({
