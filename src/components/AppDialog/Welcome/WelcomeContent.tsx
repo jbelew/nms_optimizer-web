@@ -52,12 +52,12 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	// Track welcome screen view on mount
 	React.useEffect(() => {
 		sendEvent({
-			category: "engagement",
 			action: "page_view",
-			page_title: "NMS Optimizer: Welcome",
-			page_location: window.location.href,
-			page: `${window.location.pathname}${window.location.search}#welcome`,
+			category: "engagement",
 			nonInteraction: true,
+			page: `${window.location.pathname}${window.location.search}#welcome`,
+			page_location: window.location.href,
+			page_title: "NMS Optimizer: Welcome",
 		});
 	}, [sendEvent]);
 
@@ -80,80 +80,80 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 	};
 
 	return (
-		<Flex direction="column" className="welcomeContent text-sm sm:text-base">
+		<Flex className="welcomeContent text-sm sm:text-base" direction="column">
 			<Text mb="2" weight="medium">
 				{t("dialogs.welcome.description")}
 			</Text>
 			<ul className="welcomeContent__list pr-2">
 				<li className="welcomeContent__item">
 					<Trans
-						i18nKey="dialogs.welcome.item1"
 						components={{
-							strong: <strong />,
 							icon: (
 								<DynamicRadixIcon
+									color={iconColor}
 									name="GearIcon"
 									size={iconSize}
-									color={iconColor}
 								/>
 							),
+							strong: <strong />,
 						}}
+						i18nKey="dialogs.welcome.item1"
 					/>
 				</li>
 				<li className="welcomeContent__item">
-					<Trans i18nKey="dialogs.welcome.item2" components={{ strong: <strong /> }} />
+					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item2" />
 				</li>
 				<li className="welcomeContent__item">
-					<Trans i18nKey="dialogs.welcome.item3" components={{ strong: <strong /> }} />
+					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item3" />
 				</li>
 				<li className="welcomeContent__item">
-					<Trans i18nKey="dialogs.welcome.item4" components={{ strong: <strong /> }} />
+					<Trans components={{ strong: <strong /> }} i18nKey="dialogs.welcome.item4" />
 				</li>
 				<li className="welcomeContent__item">
 					<Trans
-						i18nKey="dialogs.welcome.item5"
 						components={{
-							strong: <strong />,
 							icon: (
 								<DynamicRadixIcon
+									color={iconColor}
 									name="OpenInNewWindowIcon"
 									size={iconSize}
-									color={iconColor}
 								/>
 							),
+							strong: <strong />,
 						}}
+						i18nKey="dialogs.welcome.item5"
 					/>
 				</li>
 				<li className="welcomeContent__item">
 					<Trans
-						i18nKey="dialogs.welcome.item6"
 						components={{
-							strong: <strong />,
 							icon: (
 								<DynamicRadixIcon
+									color={iconColor}
 									name="EyeOpenIcon"
 									size={iconSize}
-									color={iconColor}
 								/>
 							),
+							strong: <strong />,
 						}}
+						i18nKey="dialogs.welcome.item6"
 					/>
 				</li>
 			</ul>
 
-			<Flex gap="2" mt="2" align="start">
+			<Flex align="start" gap="2" mt="2">
 				<Text>
 					<Trans
-						i18nKey="dialogs.welcome.viewInstructions"
 						components={{
 							1: (
 								<a
+									className="welcomeContent__link"
 									href="#"
 									onClick={handleViewInstructions}
-									className="welcomeContent__link"
 								/>
 							),
 						}}
+						i18nKey="dialogs.welcome.viewInstructions"
 					/>
 				</Text>
 			</Flex>

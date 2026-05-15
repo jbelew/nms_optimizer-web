@@ -69,25 +69,25 @@ export const useBuildFileManager = () => {
 			const moduleState = useModuleSelectionStore.getState();
 
 			const stateData = {
+				bonusState: {
+					bonusStatus: bonusState.bonusStatus,
+				},
 				gridState: {
 					grid: gridState.grid,
-					result: gridState.result,
-					isSharedGrid: gridState.isSharedGrid,
 					gridFixed: gridState.gridFixed,
-					superchargedFixed: gridState.superchargedFixed,
 					initialGridDefinition: gridState.initialGridDefinition,
+					isSharedGrid: gridState.isSharedGrid,
+					result: gridState.result,
+					superchargedFixed: gridState.superchargedFixed,
+				},
+				moduleState: {
+					moduleSelections: moduleState.moduleSelections,
 				},
 				techState: {
 					checkedModules: techState.checkedModules,
 					max_bonus: techState.max_bonus,
-					solved_bonus: techState.solved_bonus,
 					solve_method: techState.solve_method,
-				},
-				bonusState: {
-					bonusStatus: bonusState.bonusStatus,
-				},
-				moduleState: {
-					moduleSelections: moduleState.moduleSelections,
+					solved_bonus: techState.solved_bonus,
 				},
 			};
 
@@ -96,10 +96,10 @@ export const useBuildFileManager = () => {
 			const checksum = await computeSHA256(stateDataJson);
 
 			const buildData: BuildFile = {
+				checksum,
 				name: buildName,
 				shipType: selectedShipType,
 				timestamp: Date.now(),
-				checksum,
 				...stateData,
 			};
 
@@ -178,10 +178,10 @@ export const useBuildFileManager = () => {
 
 			// Verify checksum for integrity
 			const stateDataToVerify = {
-				gridState: buildData.gridState,
-				techState: buildData.techState,
 				bonusState: buildData.bonusState,
+				gridState: buildData.gridState,
 				moduleState: buildData.moduleState,
+				techState: buildData.techState,
 			};
 			const stateDataJson = JSON.stringify(stateDataToVerify);
 			const computedChecksum = await computeSHA256(stateDataJson);
@@ -228,5 +228,5 @@ export const useBuildFileManager = () => {
 		}
 	};
 
-	return { saveBuildToFile, loadBuildFromFile };
+	return { loadBuildFromFile, saveBuildToFile };
 };

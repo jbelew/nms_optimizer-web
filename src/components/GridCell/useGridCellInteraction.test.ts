@@ -34,23 +34,23 @@ const mockUseSessionStore = useSessionStore as unknown as Mock;
 
 describe("useGridCellInteraction", () => {
 	const baseMockGridStoreState = {
-		handleCellTap: mockHandleCellTap,
+		clearInitialCellStateForTap: mockClearInitialCellStateForTap,
+		gridFixed: false,
 		handleCellDoubleTap: mockHandleCellDoubleTap,
+		handleCellTap: mockHandleCellTap,
 		revertCellTap: mockRevertCellTap,
 		selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
 		superchargedFixed: false,
-		gridFixed: false,
 		toggleCellActive: mockToggleCellActive,
 		toggleCellSupercharged: mockToggleCellSupercharged,
-		clearInitialCellStateForTap: mockClearInitialCellStateForTap,
 	};
 
 	const baseMockSessionStoreState = {
-		incrementSuperchargedLimit: mockIncrementSuperchargedLimit,
-		incrementSuperchargedFixed: mockIncrementSuperchargedFixed,
 		incrementGridFixed: mockIncrementGridFixed,
 		incrementModuleLocked: mockIncrementModuleLocked,
 		incrementRowLimit: mockIncrementRowLimit,
+		incrementSuperchargedFixed: mockIncrementSuperchargedFixed,
+		incrementSuperchargedLimit: mockIncrementSuperchargedLimit,
 	};
 
 	let mockGetGridState: Mock;
@@ -101,8 +101,8 @@ describe("useGridCellInteraction", () => {
 	const renderGridCellHook = (cellOverrides = {}, isSharedGrid = false, rowIndex = 0) => {
 		const cell = {
 			active: false,
-			supercharged: false,
 			module: null, // Default to empty cell
+			supercharged: false,
 			...cellOverrides,
 		} as Cell;
 
@@ -119,9 +119,9 @@ describe("useGridCellInteraction", () => {
 	const createMockMouseEvent = (overrides = {}) =>
 		({
 			cancelable: true,
-			preventDefault: vi.fn(),
 			ctrlKey: false,
 			metaKey: false,
+			preventDefault: vi.fn(),
 			...overrides,
 		}) as unknown as React.MouseEvent;
 

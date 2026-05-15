@@ -10,22 +10,22 @@ import { generateBuildNameWithType } from "../../../utils/optimization/buildName
 import { isValidFilename } from "../../../utils/validation/dataValidation";
 
 /**
+ * Reference interface for the BuildNameContent component.
+ */
+export interface BuildNameContentRef {
+	handleConfirm: () => void;
+}
+
+/**
  * Props for the `BuildNameContent` component.
  *
  * @category Components
  */
 interface BuildNameContentProps {
-	/** Callback function triggered when the user confirms the build name. **Receives the validated name.** */
-	onConfirm: (buildName: string) => void;
 	/** Callback function triggered when the user cancels the input process. */
 	onCancel: () => void;
-}
-
-/**
- * Reference interface for the BuildNameContent component.
- */
-export interface BuildNameContentRef {
-	handleConfirm: () => void;
+	/** Callback function triggered when the user confirms the build name. **Receives the validated name.** */
+	onConfirm: (buildName: string) => void;
 }
 
 /**
@@ -59,7 +59,7 @@ export interface BuildNameContentRef {
  * ```
  */
 export const BuildNameContent = forwardRef<BuildNameContentRef, BuildNameContentProps>(
-	({ onConfirm, onCancel }, ref) => {
+	({ onCancel, onConfirm }, ref) => {
 		const { t } = useTranslation();
 		const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 		const persistedBuildName = useGridStore((state) => state.buildName);
@@ -80,7 +80,7 @@ export const BuildNameContent = forwardRef<BuildNameContentRef, BuildNameContent
 		 * createValidator("cool-build");
 		 * ```
 		 */
-		const createValidator = (value: string): string | null => {
+		const createValidator = (value: string): null | string => {
 			const trimmed = value.trim();
 
 			if (!trimmed) {
@@ -194,32 +194,32 @@ export const BuildNameContent = forwardRef<BuildNameContentRef, BuildNameContent
 
 		return (
 			<>
-				<Flex direction="column" mb="2" gap="2">
+				<Flex direction="column" gap="2" mb="2">
 					<Text as="label" htmlFor="build-name-input" size="2" weight="medium">
 						{t("dialog.buildName.description")}
 					</Text>
 					<Flex gap="2">
 						<TextField.Root
-							ref={inputRef}
 							id="build-name-input"
 							name="buildName"
-							placeholder={t("dialog.buildName.placeholder")}
-							value={buildName}
 							onChange={handleBuildNameChange}
 							onKeyDown={handleKeyDown}
+							placeholder={t("dialog.buildName.placeholder")}
+							ref={inputRef}
 							style={{ flex: 1, fontSize: "16px" }}
+							value={buildName}
 						/>
 						<IconButton
-							variant="soft"
-							onClick={handleGenerateName}
 							aria-label={t("buttons.generateName")}
+							onClick={handleGenerateName}
 							title={t("buttons.generateName")}
+							variant="soft"
 						>
 							<ReloadIcon />
 						</IconButton>
 					</Flex>
 					{validationError && (
-						<Text size="1" color="red" ml="1">
+						<Text color="red" ml="1" size="1">
 							{validationError}
 						</Text>
 					)}

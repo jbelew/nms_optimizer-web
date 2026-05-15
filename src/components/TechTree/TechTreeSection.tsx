@@ -31,38 +31,38 @@ type TypeImageMap = {
  * Registry of sidebar icons indexed by technology category name.
  */
 const typeImageMap: TypeImageMap = {
-	Weaponry: "weaponry.webp",
 	"Defensive Systems": "defensive.webp",
-	Hyperdrive: "hyperdrive.webp",
-	Mining: "mining.webp",
-	"Secondary Weapons": "secondary.webp",
 	"Fleet Upgrades": "upgrade.webp",
-	Scanners: "scanners.webp",
-	Utilities: "secondary.webp",
-	Propulsion: "propulsion.webp",
 	"Hazard Protection": "hazard.webp",
+	Hyperdrive: "hyperdrive.webp",
 	"Life Support": "health.webp",
+	Mining: "mining.webp",
 	"Movement Systems": "movement.webp",
+	Propulsion: "propulsion.webp",
 	"Quest Rewards": "secondary2.webp",
+	Scanners: "scanners.webp",
+	"Secondary Weapons": "secondary.webp",
 	"Upgrade Modules": "upgrade.webp",
+	Utilities: "secondary.webp",
+	Weaponry: "weaponry.webp",
 };
 
 /**
  * Props for the `TechTreeSection` component.
  */
 interface TechTreeSectionProps {
-	/** The category identifier for this section (e.g., 'Weaponry'). **Must exist in translations.** */
-	type: string;
-	/** Array of individual technology items to render in this section. */
-	technologies: TechTreeItem[];
-	/** Index of the section for ordering purposes. */
-	index: number;
 	/** Asynchronous callback for triggering an optimization solve. */
 	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether any optimization solve is currently running. */
-	solving: boolean;
+	/** Index of the section for ordering purposes. */
+	index: number;
 	/** Whether the grid has reached its module capacity. */
 	isGridFull: boolean;
+	/** Whether any optimization solve is currently running. */
+	solving: boolean;
+	/** Array of individual technology items to render in this section. */
+	technologies: TechTreeItem[];
+	/** The category identifier for this section (e.g., 'Weaponry'). **Must exist in translations.** */
+	type: string;
 }
 
 /**
@@ -90,11 +90,11 @@ interface TechTreeSectionProps {
  * ```
  */
 export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
-	type,
-	technologies,
 	handleOptimize,
-	solving,
 	isGridFull,
+	solving,
+	technologies,
+	type,
 }) => {
 	const { t } = useTranslation();
 	// Determine the image path from the typeImageMap
@@ -109,12 +109,12 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 				{imagePath &&
 					typeImageMap[type] && ( // Ensure type exists in map before rendering image
 						<img
+							alt={type}
+							className="mt-px mr-1 ml-1 opacity-35 sm:mt-1"
+							height="24"
 							src={imagePath}
 							srcSet={`${imagePath.replace(".webp", "@2x.webp")} 2x`}
-							alt={type}
 							width="36"
-							height="24"
-							className="mt-px mr-1 ml-1 opacity-35 sm:mt-1"
 						/>
 					)}
 				<h2 className="heading-styled text-xl sm:text-2xl">
@@ -122,18 +122,18 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 				</h2>
 			</div>
 
-			<Separator orientation="horizontal" size="4" className="sidebar__separator mt-2 mb-4" />
+			<Separator className="sidebar__separator mt-2 mb-4" orientation="horizontal" size="4" />
 
 			{/* Render each technology as a TechTreeRow */}
 			{technologies.map((tech: TechTreeItem) => (
 				<TechTreeRow
-					key={tech.key}
-					tech={tech.key}
 					handleOptimize={handleOptimize}
-					solving={solving}
-					techImage={tech.image} // Pass the tech.image here
 					isGridFull={isGridFull} // Pass isGridFull down
+					key={tech.key}
+					solving={solving}
+					tech={tech.key}
 					techColor={tech.color} // Pass tech.color
+					techImage={tech.image} // Pass the tech.image here
 				/>
 			))}
 		</div>

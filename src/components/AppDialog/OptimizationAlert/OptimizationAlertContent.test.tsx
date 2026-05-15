@@ -7,9 +7,6 @@ import { OptimizationAlertContent } from "./OptimizationAlertContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
-	useTranslation: () => ({
-		t: (key: string) => key,
-	}),
 	Trans: ({ i18nKey, values }: { i18nKey: string; values?: Record<string, unknown> }) => {
 		// Simple mock that renders with values
 		if ((values as Record<string, string> | undefined)?.technologyName) {
@@ -22,6 +19,9 @@ vi.mock("react-i18next", () => ({
 
 		return <span>{i18nKey}</span>;
 	},
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
 }));
 
 // Helper to render component within Dialog context

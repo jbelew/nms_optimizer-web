@@ -26,6 +26,8 @@ export interface Module {
 	adjacency_bonus: number;
 	/** The base bonus value provided by this module. */
 	bonus: number;
+	/** Optional flag indicating if the module is selected in the UI. */
+	checked?: boolean;
 	/** Unique identifier for the module (e.g., `'PULSE_MODULE_1'`). */
 	id: string;
 	/** Filename or URL for the module's icon. */
@@ -42,8 +44,43 @@ export interface Module {
 	type: string;
 	/** Numerical value associated with the module's primary stat. */
 	value: number;
-	/** Optional flag indicating if the module is selected in the UI. */
-	checked?: boolean;
+}
+
+/**
+ * Defines a pre-configured layout of technologies and modules.
+ *
+ * @see [useRecommendedBuild](../useRecommendedBuild/useRecommendedBuild.tsx) for the hook that applies these layouts.
+ *
+ * @category Interfaces
+ */
+export interface RecommendedBuild {
+	/** 2D array representing the grid layout of modules. */
+	layout: (null | {
+		active?: boolean;
+		adjacency_bonus?: number;
+		module?: null | string;
+		supercharged?: boolean;
+		tech?: null | string;
+	})[][];
+	/** Display title for the build. */
+	title: string;
+}
+
+/**
+ * Root structure for technology tree data fetched from the API.
+ *
+ * @see {@link TechTreeItem}
+ * @see {@link RecommendedBuild}
+ *
+ * @category Interfaces
+ */
+export interface TechTree {
+	/** Dynamic categories containing lists of technologies. */
+	[key: string]: RecommendedBuild[] | TechTreeItem[] | undefined | { grid: Module[][] };
+	/** Optional grid layout and constraints defined for the ship type. */
+	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
+	/** List of recommended builds for this ship type. */
+	recommended_builds?: RecommendedBuild[];
 }
 
 /**
@@ -58,83 +95,46 @@ export interface Module {
  * @category Interfaces
  */
 export interface TechTreeItem {
-	/** Display label for the technology. */
-	label: string;
-	/** Unique key for the technology (e.g., `'pulse'`). */
-	key: string;
-	/** List of modules available for this technology. */
-	modules: Module[];
-	/** Optional icon for the technology. */
-	image: string | null;
 	/** Theme color assigned to the technology in the UI. */
 	color:
-		| "gray"
-		| "gold"
+		| "amber"
+		| "blue"
 		| "bronze"
 		| "brown"
-		| "yellow"
-		| "amber"
-		| "orange"
-		| "tomato"
-		| "red"
-		| "ruby"
 		| "crimson"
+		| "cyan"
+		| "gold"
+		| "grass"
+		| "gray"
+		| "green"
+		| "indigo"
+		| "iris"
+		| "jade"
+		| "lime"
+		| "mint"
+		| "orange"
 		| "pink"
 		| "plum"
 		| "purple"
-		| "violet"
-		| "iris"
-		| "indigo"
-		| "blue"
-		| "cyan"
+		| "red"
+		| "ruby"
+		| "sky"
 		| "teal"
-		| "jade"
-		| "green"
-		| "grass"
-		| "lime"
-		| "mint"
-		| "sky";
+		| "tomato"
+		| "violet"
+		| "yellow";
+	/** Optional icon for the technology. */
+	image: null | string;
+	/** Unique key for the technology (e.g., `'pulse'`). */
+	key: string;
+	/** Display label for the technology. */
+	label: string;
 	/** Total number of modules in this category. */
 	module_count: number;
+	/** List of modules available for this technology. */
+	modules: Module[];
 	/** Optional type classification (e.g., `'normal'`, `'weapon'`). */
 	type?: string;
-}
-
-/**
- * Defines a pre-configured layout of technologies and modules.
- *
- * @see [useRecommendedBuild](../useRecommendedBuild/useRecommendedBuild.tsx) for the hook that applies these layouts.
- *
- * @category Interfaces
- */
-export interface RecommendedBuild {
-	/** Display title for the build. */
-	title: string;
-	/** 2D array representing the grid layout of modules. */
-	layout: ({
-		tech?: string | null;
-		module?: string | null;
-		supercharged?: boolean;
-		active?: boolean;
-		adjacency_bonus?: number;
-	} | null)[][];
-}
-
-/**
- * Root structure for technology tree data fetched from the API.
- *
- * @see {@link TechTreeItem}
- * @see {@link RecommendedBuild}
- *
- * @category Interfaces
- */
-export interface TechTree {
-	/** Optional grid layout and constraints defined for the ship type. */
-	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
-	/** List of recommended builds for this ship type. */
-	recommended_builds?: RecommendedBuild[];
-	/** Dynamic categories containing lists of technologies. */
-	[key: string]: TechTreeItem[] | { grid: Module[][] } | RecommendedBuild[] | undefined;
 }
 
 /**
@@ -158,6 +158,29 @@ const cache = new Map<string, Promise<TechTree>>();
 export const clearTechTreeCache = () => {
 	cache.clear();
 };
+
+/**
+ * Synchronous-looking wrapper for `fetchTechTreeAsync`.
+ *
+ * @remarks
+ * Provides a cleaner API for standard fetch requests.
+ *
+ * @param {string} [shipType="standard"] - The identifier for the ship type.
+ *
+ * @returns {Promise<TechTree>} A promise resolving to the tech tree data.
+ *
+ * @see {@link fetchTechTreeAsync}
+ *
+ * @category Data Fetching
+ *
+ * @example Basic usage
+ * ```typescript
+ * fetchTechTree("standard").then(tree => console.log(tree));
+ * ```
+ */
+export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
+	return fetchTechTreeAsync(shipType);
+}
 
 /**
  * Fetches the technology tree for a specific ship type asynchronously.
@@ -229,29 +252,6 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 }
 
 /**
- * Synchronous-looking wrapper for `fetchTechTreeAsync`.
- *
- * @remarks
- * Provides a cleaner API for standard fetch requests.
- *
- * @param {string} [shipType="standard"] - The identifier for the ship type.
- *
- * @returns {Promise<TechTree>} A promise resolving to the tech tree data.
- *
- * @see {@link fetchTechTreeAsync}
- *
- * @category Data Fetching
- *
- * @example Basic usage
- * ```typescript
- * fetchTechTree("standard").then(tree => console.log(tree));
- * ```
- */
-export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> {
-	return fetchTechTreeAsync(shipType);
-}
-
-/**
  * Custom hook for retrieving the technology tree within a Suspense boundary.
  *
  * @remarks
@@ -289,7 +289,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0) {
-			const { techColors, techGroups, activeGroups } = getTechTreeMaps(data);
+			const { activeGroups, techColors, techGroups } = getTechTreeMaps(data);
 			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
 
 			const gridStore = useGridStore.getState();

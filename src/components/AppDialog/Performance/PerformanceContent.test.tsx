@@ -10,8 +10,8 @@ import { PerformanceContent } from "./PerformanceContent";
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => key,
 		i18n: { language: "en" },
+		t: (key: string) => key,
 	}),
 }));
 

@@ -23,19 +23,6 @@ vi.mock("../RecommendedBuild/RecommendedBuild", () => ({
 }));
 
 vi.mock("@radix-ui/themes", () => ({
-	ScrollArea: ({
-		children,
-		className,
-		style,
-	}: {
-		children?: React.ReactNode;
-		className?: string;
-		style?: React.CSSProperties;
-	}) => (
-		<div data-testid="scroll-area" className={className} style={style}>
-			{children}
-		</div>
-	),
 	Box: ({
 		children,
 		className,
@@ -45,7 +32,20 @@ vi.mock("@radix-ui/themes", () => ({
 		className?: string;
 		style?: React.CSSProperties;
 	}) => (
-		<div className={className} style={style} data-testid="box">
+		<div className={className} data-testid="box" style={style}>
+			{children}
+		</div>
+	),
+	ScrollArea: ({
+		children,
+		className,
+		style,
+	}: {
+		children?: React.ReactNode;
+		className?: string;
+		style?: React.CSSProperties;
+	}) => (
+		<div className={className} data-testid="scroll-area" style={style}>
 			{children}
 		</div>
 	),
@@ -93,9 +93,9 @@ describe("TechTree", () => {
 	test("should render TechTreeContent on large screens", () => {
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -105,9 +105,9 @@ describe("TechTree", () => {
 	test("should render ScrollArea on large screens", () => {
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -117,9 +117,9 @@ describe("TechTree", () => {
 	test("should pass handleOptimize to TechTreeContent", () => {
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -136,9 +136,9 @@ describe("TechTree", () => {
 
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -149,9 +149,9 @@ describe("TechTree", () => {
 	test("should handle solving prop", () => {
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={true}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -162,21 +162,21 @@ describe("TechTree", () => {
 		const customTechTree = {
 			Weaponry: [
 				{
-					key: "weapon1",
-					label: "Weapon 1",
-					modules: [],
-					module_count: 0,
 					color: "",
 					image: null,
+					key: "weapon1",
+					label: "Weapon 1",
+					module_count: 0,
+					modules: [],
 				},
 			],
 		};
 
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 				techTree={customTechTree as TechTree}
 			/>
 		);
@@ -187,9 +187,9 @@ describe("TechTree", () => {
 	test("should adjust scroll area height based on recommended builds", () => {
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 
@@ -205,9 +205,9 @@ describe("TechTree", () => {
 
 		render(
 			<TechTreeComponent
+				gridTableTotalWidth={undefined}
 				handleOptimize={mockHandleOptimize}
 				solving={false}
-				gridTableTotalWidth={undefined}
 			/>
 		);
 

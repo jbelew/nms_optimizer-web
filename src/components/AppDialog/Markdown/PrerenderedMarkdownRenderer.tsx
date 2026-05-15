@@ -93,9 +93,9 @@ const PrerenderedMarkdownRenderer: React.FC<PrerenderedMarkdownRendererProps> = 
 	if (prerenderedElement) {
 		return (
 			<article
-				ref={articleRef}
 				className="text-sm sm:text-base"
 				dangerouslySetInnerHTML={{ __html: prerenderedElement.innerHTML }}
+				ref={articleRef}
 			/>
 		);
 	}

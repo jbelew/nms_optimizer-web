@@ -28,7 +28,7 @@ function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number
 ): (name: string, value: StorageValue<Partial<ModuleSelectionStore>>) => Promise<void> {
-	let timeoutId: number | null = null;
+	let timeoutId: null | number = null;
 
 	return (name: string, value: StorageValue<Partial<ModuleSelectionStore>>): Promise<void> => {
 		if (typeof window === "undefined") {
@@ -59,15 +59,15 @@ const debouncedStorage = {
 
 		return item ? JSON.parse(item) : null;
 	},
+	removeItem: (name: string) => {
+		safeRemoveItem(name);
+	},
 	setItem: debounceSetItem(
 		async (name: string, value: StorageValue<Partial<ModuleSelectionStore>>) => {
 			safeSetItem(name, JSON.stringify(value));
 		},
 		500
 	),
-	removeItem: (name: string) => {
-		safeRemoveItem(name);
-	},
 };
 
 /**
@@ -76,6 +76,28 @@ const debouncedStorage = {
  * @category State
  */
 export type ModuleSelectionStore = {
+	/**
+	 * Resets the entire module selection registry.
+	 *
+	 * @returns {void} Side-effects only.
+	 */
+	clearAllModuleSelections: () => void;
+	/**
+	 * Removes all module selections for a specific technology.
+	 *
+	 * @param {string} tech - The unique technology identifier to clear.
+	 *
+	 * @returns {void} Side-effects only.
+	 */
+	clearModuleSelection: (tech: string) => void;
+	/**
+	 * Retrieves the currently selected module IDs for a given technology.
+	 *
+	 * @param {string} tech - The unique technology identifier.
+	 *
+	 * @returns {string[] | null} The list of selected IDs, or `null` if none are found.
+	 */
+	getModuleSelection: (tech: string) => null | string[];
 	/** A mapping where keys are technology identifiers and values are arrays of selected module IDs. */
 	moduleSelections: Record<string, string[]>;
 	/**
@@ -87,28 +109,6 @@ export type ModuleSelectionStore = {
 	 * @returns {void} Side-effects only.
 	 */
 	setModuleSelection: (tech: string, moduleIds: string[]) => void;
-	/**
-	 * Retrieves the currently selected module IDs for a given technology.
-	 *
-	 * @param {string} tech - The unique technology identifier.
-	 *
-	 * @returns {string[] | null} The list of selected IDs, or `null` if none are found.
-	 */
-	getModuleSelection: (tech: string) => string[] | null;
-	/**
-	 * Removes all module selections for a specific technology.
-	 *
-	 * @param {string} tech - The unique technology identifier to clear.
-	 *
-	 * @returns {void} Side-effects only.
-	 */
-	clearModuleSelection: (tech: string) => void;
-	/**
-	 * Resets the entire module selection registry.
-	 *
-	 * @returns {void} Side-effects only.
-	 */
-	clearAllModuleSelections: () => void;
 };
 
 /**
@@ -139,16 +139,10 @@ export type ModuleSelectionStore = {
 export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 	persist(
 		immer((set, get) => ({
-			moduleSelections: {},
-
-			setModuleSelection: (tech: string, moduleIds: string[]) => {
+			clearAllModuleSelections: () => {
 				set((state) => {
-					state.moduleSelections[tech] = moduleIds;
+					state.moduleSelections = {};
 				});
-			},
-
-			getModuleSelection: (tech: string): string[] | null => {
-				return get().moduleSelections[tech] ?? null;
 			},
 
 			clearModuleSelection: (tech: string) => {
@@ -157,18 +151,24 @@ export const useModuleSelectionStore = create<ModuleSelectionStore>()(
 				});
 			},
 
-			clearAllModuleSelections: () => {
+			getModuleSelection: (tech: string): null | string[] => {
+				return get().moduleSelections[tech] ?? null;
+			},
+
+			moduleSelections: {},
+
+			setModuleSelection: (tech: string, moduleIds: string[]) => {
 				set((state) => {
-					state.moduleSelections = {};
+					state.moduleSelections[tech] = moduleIds;
 				});
 			},
 		})),
 		{
 			name: "moduleSelectionState",
-			storage: debouncedStorage,
 			partialize: (state) => ({
 				moduleSelections: state.moduleSelections,
 			}),
+			storage: debouncedStorage,
 		}
 	)
 );

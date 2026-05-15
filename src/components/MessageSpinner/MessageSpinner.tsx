@@ -21,16 +21,16 @@ import { useTranslation } from "react-i18next";
  * Props for the `MessageSpinner` component.
  */
 interface MessageSpinnerProps {
-	/** Whether the spinner and overlay are visible. */
-	isVisible: boolean;
-	/** If `true`, the spinner is absolutely positioned to cover its parent container. Defaults to `true`. */
-	isInlay?: boolean;
-	/** Whether to display the progress bar alongside the spinner. */
-	showProgress?: boolean;
 	/** The primary message to display below the spinner. */
 	initialMessage?: string;
+	/** If `true`, the spinner is absolutely positioned to cover its parent container. Defaults to `true`. */
+	isInlay?: boolean;
+	/** Whether the spinner and overlay are visible. */
+	isVisible: boolean;
 	/** The current progress value (0-100). */
 	progressPercent?: number;
+	/** Whether to display the progress bar alongside the spinner. */
+	showProgress?: boolean;
 }
 
 /**
@@ -56,11 +56,11 @@ interface MessageSpinnerProps {
  * ```
  */
 export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
+	initialMessage,
 	isInlay = true,
 	isVisible,
-	initialMessage,
-	showProgress,
 	progressPercent,
+	showProgress,
 }) => {
 	const [currentRandomMessage, setCurrentRandomMessage] = useState<string>("");
 	const [showRandomMessage, setShowRandomMessage] = useState<boolean>(false);
@@ -130,7 +130,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	const hasMessage = initialMessage != null;
 
 	return (
-		<div className={containerClasses.trim()} role="status" aria-live="polite">
+		<div aria-live="polite" className={containerClasses.trim()} role="status">
 			<Spinner className="messageSpinner__spinner" />
 
 			{hasMessage && (
@@ -143,14 +143,14 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 						{progressPercent !== undefined && showProgress ? (
 							<div className="mb-10 lg:mb-18">
 								<Progress
+									aria-label={
+										initialMessage || t("messageSpinner.loadingProgress")
+									}
 									value={Math.min(
 										isNaN(progressPercent) ? 0 : progressPercent,
 										100
 									)}
 									variant="soft"
-									aria-label={
-										initialMessage || t("messageSpinner.loadingProgress")
-									}
 								/>
 								<div className="flex h-12 justify-center pt-3 font-medium">
 									<Text

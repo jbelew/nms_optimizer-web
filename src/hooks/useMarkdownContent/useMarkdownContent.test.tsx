@@ -52,7 +52,7 @@ describe("useMarkdownContent", () => {
 	it("should use cached content if available", async () => {
 		mockGetMarkdown.mockReturnValue("# Cached Markdown");
 
-		const { result, rerender } = renderHook(() => useMarkdownContent("cached-file"));
+		const { rerender, result } = renderHook(() => useMarkdownContent("cached-file"));
 
 		// Wait for first load
 		await waitFor(() => {

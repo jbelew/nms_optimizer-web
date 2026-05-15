@@ -34,12 +34,12 @@ const mockUseTechStore = vi.mocked(useTechStore);
 const mockUseShakeStore = vi.mocked(useShakeStore);
 
 const defaultProps: TechTreeRowProps = {
-	tech: "testTech",
 	handleOptimize: vi.fn(),
-	solving: false,
-	techImage: "test.webp",
 	isGridFull: false,
+	solving: false,
+	tech: "testTech",
 	techColor: "blue",
+	techImage: "test.webp",
 };
 
 // Helper to render
@@ -69,23 +69,31 @@ const setupMocks = (hasTechInGrid: boolean) => {
 
 	mockUseTechStore.mockImplementation((selector?: (state: TechState) => unknown) => {
 		const state: Partial<TechState> = {
+			checkedModules: { testTech: ["module1"] },
+
+			clearTechMaxBonus: vi.fn(),
+
+			clearTechSolvedBonus: vi.fn(),
+
+			max_bonus: {},
+
+			solved_bonus: {},
+
 			techGroups: {
 				testTech: [
 					{
-						label: "Test Tech Group",
-
-						key: "testTech",
+						color: "blue",
 
 						image: null,
 
-						color: "blue",
+						key: "testTech",
+
+						label: "Test Tech Group",
+
+						module_count: 1,
 
 						modules: [
 							{
-								id: "module1",
-
-								label: "Module 1",
-
 								active: false,
 
 								adjacency: "",
@@ -94,7 +102,11 @@ const setupMocks = (hasTechInGrid: boolean) => {
 
 								bonus: 0,
 
+								id: "module1",
+
 								image: "",
+
+								label: "Module 1",
 
 								sc_eligible: false,
 
@@ -107,21 +119,9 @@ const setupMocks = (hasTechInGrid: boolean) => {
 								value: 0,
 							},
 						],
-
-						module_count: 1,
 					},
 				],
 			},
-
-			max_bonus: {},
-
-			solved_bonus: {},
-
-			checkedModules: { testTech: ["module1"] },
-
-			clearTechMaxBonus: vi.fn(),
-
-			clearTechSolvedBonus: vi.fn(),
 		};
 
 		return selector ? selector(state as TechState) : (state as TechState);

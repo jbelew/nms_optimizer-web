@@ -7,7 +7,7 @@ import { TechTreeContent } from "./TechTreeContent";
 
 // Mock TechTreeSection
 vi.mock("./TechTreeSection", () => ({
-	TechTreeSection: ({ type, technologies }: { type: string; technologies: unknown[] }) => (
+	TechTreeSection: ({ technologies, type }: { technologies: unknown[]; type: string }) => (
 		<div data-testid={`tech-tree-section-${type}`}>
 			Section: {type} ({technologies.length} techs)
 		</div>
@@ -28,36 +28,36 @@ vi.mock("../../store/grid/gridStore", () => ({
 describe("TechTreeContent", () => {
 	const mockHandleOptimize = vi.fn();
 	const mockTechTree = {
-		Weaponry: [
-			{
-				key: "weapon1",
-				label: "Weapon 1",
-				modules: [],
-				image: null,
-				color: "",
-				module_count: 0,
-			},
-			{
-				key: "weapon2",
-				label: "Weapon 2",
-				modules: [],
-				image: null,
-				color: "",
-				module_count: 0,
-			},
-		],
+		grid: {}, // Should be filtered out
+		recommended_builds: [], // Should be filtered out
 		Utilities: [
 			{
+				color: "",
+				image: null,
 				key: "util1",
 				label: "Utility 1",
-				modules: [],
-				image: null,
-				color: "",
 				module_count: 0,
+				modules: [],
 			},
 		],
-		recommended_builds: [], // Should be filtered out
-		grid: {}, // Should be filtered out
+		Weaponry: [
+			{
+				color: "",
+				image: null,
+				key: "weapon1",
+				label: "Weapon 1",
+				module_count: 0,
+				modules: [],
+			},
+			{
+				color: "",
+				image: null,
+				key: "weapon2",
+				label: "Weapon 2",
+				module_count: 0,
+				modules: [],
+			},
+		],
 	};
 
 	beforeEach(() => {
@@ -110,28 +110,28 @@ describe("TechTreeContent", () => {
 		const unsortedTechTree = {
 			Weaponry: [
 				{
+					color: "",
+					image: null,
 					key: "weapon_z",
 					label: "Zulu Weapon",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 				{
+					color: "",
+					image: null,
 					key: "weapon_a",
 					label: "Alpha Weapon",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 				{
+					color: "",
+					image: null,
 					key: "weapon_m",
 					label: "Mike Weapon",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 			],
 		};
@@ -152,8 +152,8 @@ describe("TechTreeContent", () => {
 
 	test("should handle empty technology arrays", () => {
 		const emptyTechTree = {
-			Weaponry: [],
 			Utilities: [],
+			Weaponry: [],
 		};
 
 		render(
@@ -188,12 +188,12 @@ describe("TechTreeContent", () => {
 		const malformedTechTree = {
 			Weaponry: [
 				{
+					color: "",
+					image: null,
 					key: "weapon1",
 					label: "Weapon 1",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 				"invalid_entry", // This should be filtered out
 				null, // This should be filtered out
@@ -217,12 +217,12 @@ describe("TechTreeContent", () => {
 		const minimalTechTree = {
 			Weaponry: [
 				{
+					color: "",
+					image: null,
 					key: "weapon1",
 					label: "Weapon 1",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 			],
 		};
@@ -269,17 +269,17 @@ describe("TechTreeContent", () => {
 
 	test("should handle grid_definition category", () => {
 		const techTreeWithGridDef = {
+			grid_definition: {}, // Should be filtered out
 			Weaponry: [
 				{
+					color: "",
+					image: null,
 					key: "weapon1",
 					label: "Weapon 1",
-					modules: [],
-					image: null,
-					color: "",
 					module_count: 0,
+					modules: [],
 				},
 			],
-			grid_definition: {}, // Should be filtered out
 		};
 
 		render(

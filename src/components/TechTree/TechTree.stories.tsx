@@ -6,20 +6,6 @@ import TechTree from "./TechTree";
 
 const meta = {
 	component: TechTree,
-	title: "Components/TechTree",
-	parameters: {
-		docs: {
-			description: {
-				component:
-					"Technology tree component for selecting and optimizing ship technology modules.",
-			},
-		},
-		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
-	},
 	loaders: [
 		async () => {
 			try {
@@ -39,6 +25,20 @@ const meta = {
 			}
 		},
 	],
+	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+		docs: {
+			description: {
+				component:
+					"Technology tree component for selecting and optimizing ship technology modules.",
+			},
+		},
+		layout: "fullscreen",
+	},
+	title: "Components/TechTree",
 } satisfies Meta<typeof TechTree>;
 
 export default meta;
@@ -84,20 +84,20 @@ const withLocalProviders = (Story: React.FC) => (
 export const Desktop: Story = {
 	args: {
 		gridTableTotalWidth: 400,
-		techTree: {},
 		handleOptimize: async (tech: string) => {
 			console.log(`Optimizing ${tech}`);
 		},
 		solving: false,
+		techTree: {},
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
-	render: (args, { loaded }) => <TechTree {...args} {...loaded} />,
 	globals: {
 		viewport: {
-			value: "desktop",
 			isRotated: false,
+			value: "desktop",
 		},
 	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -105,7 +105,7 @@ export const Desktop: Story = {
 			},
 		},
 	},
-	loaders: meta.loaders,
+	render: (args, { loaded }) => <TechTree {...args} {...loaded} />,
 };
 
 export const Tablet: Story = {
@@ -113,13 +113,13 @@ export const Tablet: Story = {
 		...Desktop.args,
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
-	render: Desktop.render,
 	globals: {
 		viewport: {
-			value: "tablet",
 			isRotated: false,
+			value: "tablet",
 		},
 	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -127,7 +127,7 @@ export const Tablet: Story = {
 			},
 		},
 	},
-	loaders: meta.loaders,
+	render: Desktop.render,
 };
 
 export const Mobile: Story = {
@@ -135,13 +135,13 @@ export const Mobile: Story = {
 		...Desktop.args,
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
-	render: Desktop.render,
 	globals: {
 		viewport: {
-			value: "mobile",
 			isRotated: false,
+			value: "mobile",
 		},
 	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -149,5 +149,5 @@ export const Mobile: Story = {
 			},
 		},
 	},
-	loaders: meta.loaders,
+	render: Desktop.render,
 };

@@ -25,17 +25,17 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Mock navigator.serviceWorker to be present by default for most tests
 		Object.defineProperty(window.navigator, "serviceWorker", {
-			writable: true,
 			value: {
 				getRegistration: vi.fn(), // Mock enough of the ServiceWorkerContainer
 				// We don't need a full ServiceWorkerContainer mock for these tests, just its presence
 			},
+			writable: true,
 		});
 
 		// Mock user agent to not be a bot
 		Object.defineProperty(window.navigator, "userAgent", {
-			writable: true,
 			value: "Test User Agent",
+			writable: true,
 		});
 	});
 
@@ -46,12 +46,12 @@ describe("setupServiceWorkerRegistration", () => {
 
 		// Restore original globals
 		Object.defineProperty(window.navigator, "serviceWorker", {
-			writable: true,
 			value: originalServiceWorker,
+			writable: true,
 		});
 		Object.defineProperty(window.navigator, "userAgent", {
-			writable: true,
 			value: originalUserAgent,
+			writable: true,
 		});
 
 		// Clean up any potential global event listeners that might have been added

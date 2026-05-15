@@ -11,14 +11,14 @@ import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
 vi.mock("../../store/grid/gridStore", () => ({
-	useGridStore: {
-		getState: vi.fn(),
-	},
-	createGrid: vi.fn(),
 	createEmptyCell: vi.fn(),
+	createGrid: vi.fn(),
 	resetCellContent: vi.fn((cell) => {
 		Object.assign(cell, createEmptyCell(cell.supercharged, cell.active));
 	}),
+	useGridStore: {
+		getState: vi.fn(),
+	},
 }));
 
 // Mock useBreakpoint to return false for all breakpoints (simulate small screen)
@@ -52,20 +52,20 @@ describe("useRecommendedBuild", () => {
 			cells: Array(height)
 				.fill(0)
 				.map(() => Array(width).fill(null)),
-			width,
 			height,
+			width,
 		}));
 		(createEmptyCell as Mock).mockImplementation((supercharged = false, active = false) => ({
-			tech: null,
-			module: null,
-
-			image: null,
-			bonus: 0,
+			active,
 			adjacency: "none",
+
+			adjacency_bonus: 0.0,
+			bonus: 0,
+			image: null,
+			module: null,
 			sc_eligible: false,
 			supercharged,
-			active,
-			adjacency_bonus: 0.0,
+			tech: null,
 			type: "",
 		}));
 
@@ -79,52 +79,52 @@ describe("useRecommendedBuild", () => {
 		Object.defineProperty(window, "pageYOffset", { value: 0, writable: true });
 
 		mockTechTree = {
-			Weapon: [
+			Shield: [
 				{
-					label: "Boltcaster",
-					key: "weapon",
-					color: "red", // Add a color, as it's required by TechTreeItem
-					module_count: 1, // Add module_count
+					color: "blue", // Add a color
 					image: null, // Add image
+					key: "shield",
+					label: "Shield",
+					module_count: 1, // Add module_count
 					modules: [
 						{
-							id: "S1",
-							label: "S-Class",
-							bonus: 10,
-							image: "img.png",
-							adjacency: "none", // Corrected type to string
-							sc_eligible: true,
-							value: 1,
-							type: "weapon",
 							active: true, // Added missing property
+							adjacency: "none", // Corrected type to string
 							adjacency_bonus: 0, // Added missing property
+							bonus: 20,
+							id: "X1",
+							image: "img2.png",
+							label: "X-Class",
+							sc_eligible: false,
 							supercharged: false, // Added missing property
-							tech: "Weapon", // Added missing property
+							tech: "Shield", // Added missing property
+							type: "shield",
+							value: 2,
 						},
 					],
 				},
 			] as TechTreeItem[],
-			Shield: [
+			Weapon: [
 				{
-					label: "Shield",
-					key: "shield",
-					color: "blue", // Add a color
-					module_count: 1, // Add module_count
+					color: "red", // Add a color, as it's required by TechTreeItem
 					image: null, // Add image
+					key: "weapon",
+					label: "Boltcaster",
+					module_count: 1, // Add module_count
 					modules: [
 						{
-							id: "X1",
-							label: "X-Class",
-							bonus: 20,
-							image: "img2.png",
-							adjacency: "none", // Corrected type to string
-							sc_eligible: false,
-							value: 2,
-							type: "shield",
 							active: true, // Added missing property
+							adjacency: "none", // Corrected type to string
 							adjacency_bonus: 0, // Added missing property
+							bonus: 10,
+							id: "S1",
+							image: "img.png",
+							label: "S-Class",
+							sc_eligible: true,
 							supercharged: false, // Added missing property
-							tech: "Shield", // Added missing property
+							tech: "Weapon", // Added missing property
+							type: "weapon",
+							value: 1,
 						},
 					],
 				},
@@ -133,17 +133,17 @@ describe("useRecommendedBuild", () => {
 
 		mockGridContainerRef = { current: document.createElement("div") };
 		Object.defineProperty(mockGridContainerRef.current, "getBoundingClientRect", {
+			configurable: true,
 			value: () => ({
-				top: 100,
+				bottom: 0,
 				height: 0,
+				left: 0,
+				right: 0,
+				top: 100,
 				width: 0,
 				x: 0,
 				y: 0,
-				right: 0,
-				bottom: 0,
-				left: 0,
 			}),
-			configurable: true,
 		});
 	});
 
@@ -158,29 +158,29 @@ describe("useRecommendedBuild", () => {
 	 * Tests that a recommended build is correctly applied to the grid.
 	 */ it("should apply a recommended build and set the grid", async () => {
 		const mockBuild: RecommendedBuild = {
-			title: "Test Build",
 			layout: [
 				[
 					{
-						tech: "weapon",
-						module: "S1",
-						supercharged: true,
 						active: true,
 						adjacency_bonus: 1.0,
+						module: "S1",
+						supercharged: true,
+						tech: "weapon",
 					},
 					null,
 				],
 				[
 					null,
 					{
-						tech: "shield",
-						module: "X1",
-						supercharged: false,
 						active: true,
 						adjacency_bonus: 0.0,
+						module: "X1",
+						supercharged: false,
+						tech: "shield",
 					},
 				],
 			],
+			title: "Test Build",
 		};
 
 		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
@@ -193,34 +193,34 @@ describe("useRecommendedBuild", () => {
 		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
 		expect(newGrid.cells[0][0]).toEqual(
 			expect.objectContaining({
-				tech: "weapon",
-				module: "S1",
-				supercharged: true,
 				active: true,
-				adjacency_bonus: 1.0,
-				label: "S-Class",
-				image: "img.png",
-				bonus: 10,
-				value: 1,
 				adjacency: "none",
+				adjacency_bonus: 1.0,
+				bonus: 10,
+				image: "img.png",
+				label: "S-Class",
+				module: "S1",
 				sc_eligible: true,
+				supercharged: true,
+				tech: "weapon",
 				type: "weapon",
+				value: 1,
 			})
 		);
 		expect(newGrid.cells[1][1]).toEqual(
 			expect.objectContaining({
-				tech: "shield",
-				module: "X1",
-				supercharged: false,
 				active: true,
-				adjacency_bonus: 0.0,
-				label: "X-Class",
-				image: "img2.png",
-				bonus: 20,
-				value: 2,
 				adjacency: "none",
+				adjacency_bonus: 0.0,
+				bonus: 20,
+				image: "img2.png",
+				label: "X-Class",
+				module: "X1",
 				sc_eligible: false,
+				supercharged: false,
+				tech: "shield",
 				type: "shield",
+				value: 2,
 			})
 		);
 		expect(newGrid.cells[0][1]).toEqual(
@@ -238,18 +238,18 @@ describe("useRecommendedBuild", () => {
 	 * Ensures that modules are correctly applied when build tech matches techTree key.
 	 */ it("should correctly apply modules when build tech matches techTree key", async () => {
 		const mockBuild: RecommendedBuild = {
-			title: "Key Match Test",
 			layout: [
 				[
 					{
-						tech: "weapon", // Matches mockTechTree.Weapon.key
-						module: "S1",
-						supercharged: false,
 						active: true,
 						adjacency_bonus: 0.0,
+						module: "S1",
+						supercharged: false,
+						tech: "weapon", // Matches mockTechTree.Weapon.key
 					},
 				],
 			],
+			title: "Key Match Test",
 		};
 
 		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
@@ -262,18 +262,18 @@ describe("useRecommendedBuild", () => {
 		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
 		expect(newGrid.cells[0][0]).toEqual(
 			expect.objectContaining({
-				tech: "weapon",
-				module: "S1",
-				label: "S-Class",
-				image: "img.png",
-				bonus: 10,
-				value: 1,
-				adjacency: "none",
-				sc_eligible: true,
-				type: "weapon",
-				supercharged: false,
 				active: true,
+				adjacency: "none",
 				adjacency_bonus: 0.0,
+				bonus: 10,
+				image: "img.png",
+				label: "S-Class",
+				module: "S1",
+				sc_eligible: true,
+				supercharged: false,
+				tech: "weapon",
+				type: "weapon",
+				value: 1,
 			})
 		);
 	});
@@ -283,26 +283,26 @@ describe("useRecommendedBuild", () => {
 	 * Ensures that empty cells have their module property set to null.
 	 */ it("should set cell.module to null for empty cells in recommended build", async () => {
 		const mockBuild: RecommendedBuild = {
-			title: "Empty Cell Test",
 			layout: [
 				[
 					{
-						tech: "weapon",
+						active: true,
+						adjacency_bonus: 0.0,
 						module: "S1",
 						supercharged: false,
-						active: true,
-						adjacency_bonus: 0.0,
+						tech: "weapon",
 					},
 					{
-						// This cell has no module, so its module property should be null
-						tech: null,
-						module: null,
-						supercharged: false,
 						active: true,
 						adjacency_bonus: 0.0,
+						module: null,
+						supercharged: false,
+						// This cell has no module, so its module property should be null
+						tech: null,
 					},
 				],
 			],
+			title: "Empty Cell Test",
 		};
 
 		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
@@ -315,11 +315,11 @@ describe("useRecommendedBuild", () => {
 		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
 		expect(newGrid.cells[0][1]).toEqual(
 			expect.objectContaining({
-				tech: null,
-				module: null,
-				supercharged: false,
 				active: true,
 				adjacency_bonus: 0.0,
+				module: null,
+				supercharged: false,
+				tech: null,
 			})
 		);
 	});
@@ -328,8 +328,8 @@ describe("useRecommendedBuild", () => {
 	 * Verifies that the grid container scrolls into view after applying a build.
 	 */ it("should scroll to grid container after applying build", async () => {
 		const mockBuild: RecommendedBuild = {
+			layout: [[{ module: "S1", tech: "weapon" }]], // Updated tech to "weapon"
 			title: "Test Build",
-			layout: [[{ tech: "weapon", module: "S1" }]], // Updated tech to "weapon"
 		};
 
 		// Initialize the shared ref with mockGridContainerRef
@@ -346,8 +346,8 @@ describe("useRecommendedBuild", () => {
 
 		expect(requestAnimationFrameMock).toHaveBeenCalled();
 		expect(scrollToMock).toHaveBeenCalledWith({
-			top: 60, // 100 (top) + 0 (pageYOffset) - 40 (GRID_SCROLL_OFFSET_SMALL)
 			behavior: "smooth",
+			top: 60, // 100 (top) + 0 (pageYOffset) - 40 (GRID_SCROLL_OFFSET_SMALL)
 		});
 	});
 
@@ -357,7 +357,7 @@ describe("useRecommendedBuild", () => {
 		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
 
 		await act(async () => {
-			result.current.applyRecommendedBuild({ title: "Empty", layout: [] });
+			result.current.applyRecommendedBuild({ layout: [], title: "Empty" });
 		});
 		expect(setGridAndResetAuxiliaryStateMock).not.toHaveBeenCalled();
 	});
@@ -366,10 +366,10 @@ describe("useRecommendedBuild", () => {
 	 * Tests the handling of missing modules within the recommended build layout.
 	 */ it("should handle missing module in layout", async () => {
 		const mockBuild: RecommendedBuild = {
-			title: "Test Build",
 			layout: [
-				[{ tech: "nonexistent", module: "module", supercharged: false, active: true }],
+				[{ active: true, module: "module", supercharged: false, tech: "nonexistent" }],
 			],
+			title: "Test Build",
 		};
 
 		const { result } = renderHook(() => useRecommendedBuild(mockTechTree));
@@ -382,8 +382,8 @@ describe("useRecommendedBuild", () => {
 		const newGrid = setGridAndResetAuxiliaryStateMock.mock.calls[0][0];
 		expect(newGrid.cells[0][0]).toEqual(
 			expect.objectContaining({
-				tech: null, // Should be null if module not found
 				module: null,
+				tech: null, // Should be null if module not found
 			})
 		);
 	});

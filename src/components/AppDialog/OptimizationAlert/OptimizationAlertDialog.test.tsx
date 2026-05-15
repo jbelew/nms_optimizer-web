@@ -6,9 +6,6 @@ import OptimizationAlertDialog from "./OptimizationAlertDialog";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
-	useTranslation: () => ({
-		t: (key: string) => key,
-	}),
 	Trans: ({ i18nKey, values }: { i18nKey?: string; values?: Record<string, unknown> }) => {
 		if ((values as Record<string, string> | undefined)?.technologyName) {
 			return (
@@ -20,22 +17,25 @@ vi.mock("react-i18next", () => ({
 
 		return <span>{i18nKey}</span>;
 	},
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
 }));
 
 // Mock AppDialog component to simplify testing
 vi.mock("../Base/AppDialog", () => ({
 	default: ({
+		content,
+		footer,
 		isOpen,
 		onClose,
 		titleKey,
-		content,
-		footer,
 	}: {
+		content?: React.ReactNode;
+		footer?: React.ReactNode;
 		isOpen?: boolean;
 		onClose?: () => void;
 		titleKey?: string;
-		content?: React.ReactNode;
-		footer?: React.ReactNode;
 	}) => {
 		if (!isOpen) return null;
 
@@ -73,9 +73,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={null}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={null}
 			/>
 		);
 
@@ -87,9 +87,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -100,9 +100,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={false}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -114,9 +114,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -127,9 +127,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -140,9 +140,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -156,9 +156,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -176,9 +176,9 @@ describe("OptimizationAlertDialog", () => {
 		const { rerender } = render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName="TechA"
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName="TechA"
 			/>
 		);
 
@@ -187,9 +187,9 @@ describe("OptimizationAlertDialog", () => {
 		rerender(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName="TechB"
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName="TechB"
 			/>
 		);
 
@@ -200,9 +200,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={mockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 
@@ -219,9 +219,9 @@ describe("OptimizationAlertDialog", () => {
 		render(
 			<OptimizationAlertDialog
 				isOpen={true}
-				technologyName={testTechName}
 				onClose={mockOnClose}
 				onForceOptimize={asyncMockOnForceOptimize}
+				technologyName={testTechName}
 			/>
 		);
 

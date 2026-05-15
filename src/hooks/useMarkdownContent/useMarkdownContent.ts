@@ -8,12 +8,12 @@ import { useTranslation } from "react-i18next";
  * @category Interfaces
  */
 export interface MarkdownContentState {
-	/** The raw or pre-rendered markdown string. */
-	markdown: string;
+	/** Error message if retrieval failed, otherwise `null`. */
+	error: null | string;
 	/** Whether the content is currently being retrieved. */
 	isLoading: boolean;
-	/** Error message if retrieval failed, otherwise `null`. */
-	error: string | null;
+	/** The raw or pre-rendered markdown string. */
+	markdown: string;
 }
 
 /** Global override for the browser Window object. */
@@ -60,7 +60,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 	const { i18n } = useTranslation();
 	const [markdown, setMarkdown] = useState<string>("");
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<null | string>(null);
 
 	useEffect(() => {
 		const loadMarkdown = async () => {
@@ -104,5 +104,5 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 		loadMarkdown();
 	}, [i18n.language, markdownFileName]);
 
-	return { markdown, isLoading, error };
+	return { error, isLoading, markdown };
 };

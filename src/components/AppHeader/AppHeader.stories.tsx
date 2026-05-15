@@ -6,8 +6,11 @@ import AppHeader from "./AppHeader";
 
 const meta = {
 	component: AppHeader,
-	title: "Components/AppHeader",
 	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
 		docs: {
 			description: {
 				component:
@@ -15,11 +18,8 @@ const meta = {
 			},
 		},
 		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
 	},
+	title: "Components/AppHeader",
 } satisfies Meta<typeof AppHeader>;
 
 export default meta;
@@ -65,8 +65,8 @@ export const Desktop: Story = {
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "desktop",
 			isRotated: false,
+			value: "desktop",
 		},
 	},
 	parameters: {
@@ -85,8 +85,8 @@ export const Tablet: Story = {
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "tablet",
 			isRotated: false,
+			value: "tablet",
 		},
 	},
 	parameters: {
@@ -105,8 +105,8 @@ export const Mobile: Story = {
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "mobile",
 			isRotated: false,
+			value: "mobile",
 		},
 	},
 	parameters: {

@@ -13,12 +13,12 @@ const AppDialog = lazy(() => import("../Base/AppDialog"));
 interface OptimizationAlertDialogProps {
 	/** Whether the alert dialog is currently visible. */
 	isOpen: boolean;
-	/** The display name of the technology that triggered the alert. `null` to suppress. */
-	technologyName: string | null;
 	/** Callback function to close the dialog. */
 	onClose: () => void;
 	/** Asynchronous callback to trigger a "forced" optimization solve. */
 	onForceOptimize: () => Promise<void>;
+	/** The display name of the technology that triggered the alert. `null` to suppress. */
+	technologyName: null | string;
 }
 
 /**
@@ -54,9 +54,9 @@ interface OptimizationAlertDialogProps {
  */
 const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	isOpen,
-	technologyName,
 	onClose,
 	onForceOptimize,
+	technologyName,
 }) => {
 	const { t } = useTranslation();
 
@@ -65,17 +65,17 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	const footer = (
 		<div className="flex justify-end gap-2">
 			<Button
-				variant="soft"
-				onClick={onClose}
 				aria-label={t("dialogs.optimizationAlert.cancelButton")}
+				onClick={onClose}
+				variant="soft"
 			>
 				{t("dialogs.optimizationAlert.cancelButton")}
 			</Button>
 			<Button
+				aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
 				onClick={async () => {
 					await onForceOptimize();
 				}}
-				aria-label={t("dialogs.optimizationAlert.forceOptimizeButton")}
 			>
 				{t("dialogs.optimizationAlert.forceOptimizeButton")}
 			</Button>
@@ -85,12 +85,12 @@ const OptimizationAlertDialog: FC<OptimizationAlertDialogProps> = ({
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
+				content={<OptimizationAlertContent technologyName={technologyName} />}
+				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}
-				titleKey="dialogs.titles.optimizationAlert"
 				title={t("dialogs.titles.optimizationAlert")}
-				footer={footer}
-				content={<OptimizationAlertContent technologyName={technologyName} />}
+				titleKey="dialogs.titles.optimizationAlert"
 			/>
 		</Suspense>
 	);

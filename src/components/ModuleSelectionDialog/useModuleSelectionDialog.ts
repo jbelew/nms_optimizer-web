@@ -24,16 +24,16 @@ import { usePlatformStore } from "@/store/app/platformStore";
  */
 export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 	const {
-		groupedModules,
-		currentCheckedModules,
-		handleValueChange,
-		handleSelectAllChange,
-		handleOptimizeClick,
 		allModulesSelected,
+		currentCheckedModules,
+		groupedModules,
+		handleOptimizeClick,
+		handleSelectAllChange,
+		handleValueChange,
 		isIndeterminate,
-		techColor,
-		tech,
 		onClose,
+		tech,
+		techColor,
 	} = props;
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
@@ -55,21 +55,21 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 
 	// Structured props for DialogBody
 	const bodyProps: DialogBodyProps = {
-		groupedModules,
-		currentCheckedModules,
-		handleValueChange,
-		handleSelectAllChange,
 		allModulesSelected,
-		techColor,
+		currentCheckedModules,
+		groupedModules,
+		handleSelectAllChange,
+		handleValueChange,
+		onClose,
 		selectAllCheckboxRef,
 		tech,
-		onClose,
+		techColor,
 	};
 
 	// Structured props for DialogFooter
 	const footerProps: DialogFooterProps = {
-		handleOptimizeClick,
 		currentCheckedModules,
+		handleOptimizeClick,
 	};
 
 	return {

@@ -4,7 +4,6 @@ import AppFooter from "./AppFooter";
 
 const meta = {
 	component: AppFooter,
-	title: "Components/AppFooter",
 	decorators: [
 		(Story) => (
 			<div className="flex items-center justify-center">
@@ -13,6 +12,10 @@ const meta = {
 		),
 	],
 	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
 		docs: {
 			description: {
 				component:
@@ -20,11 +23,8 @@ const meta = {
 			},
 		},
 		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
 	},
+	title: "Components/AppFooter",
 } satisfies Meta<typeof AppFooter>;
 
 export default meta;
@@ -33,13 +33,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Desktop: Story = {
 	args: {
-		buildVersion: "6.1.2",
 		buildDate: "2024-11-25T15:30:00Z",
+		buildVersion: "6.1.2",
 	},
 	globals: {
 		viewport: {
-			value: "desktop",
 			isRotated: false,
+			value: "desktop",
 		},
 	},
 	parameters: {
@@ -57,8 +57,8 @@ export const Tablet: Story = {
 	},
 	globals: {
 		viewport: {
-			value: "tablet",
 			isRotated: false,
+			value: "tablet",
 		},
 	},
 	parameters: {
@@ -76,8 +76,8 @@ export const Mobile: Story = {
 	},
 	globals: {
 		viewport: {
-			value: "mobile",
 			isRotated: false,
+			value: "mobile",
 		},
 	},
 	parameters: {

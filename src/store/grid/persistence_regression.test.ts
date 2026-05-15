@@ -40,8 +40,8 @@ describe("GridStore Persistence Regression (Reproduction)", () => {
 		// Setup URL
 		const url = new URL("http://localhost/?platform=solar");
 		vi.stubGlobal("location", {
-			search: "?platform=solar",
 			href: url.toString(),
+			search: "?platform=solar",
 		});
 
 		// Access store via dynamic import

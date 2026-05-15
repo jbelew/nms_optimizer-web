@@ -33,7 +33,7 @@ const ErrorContent = lazy(() => import("./ErrorContent"));
  */
 export const ErrorDialog: FC = () => {
 	const { t } = useTranslation();
-	const { showError, setShowError } = useOptimizeStore();
+	const { setShowError, showError } = useOptimizeStore();
 
 	if (!showError) {
 		return null;
@@ -41,7 +41,7 @@ export const ErrorDialog: FC = () => {
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button variant="soft" onClick={() => setShowError(false)}>
+			<Button onClick={() => setShowError(false)} variant="soft">
 				{t("common.closeDialog")}
 			</Button>
 		</div>
@@ -50,12 +50,12 @@ export const ErrorDialog: FC = () => {
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				isOpen={showError}
-				onClose={() => setShowError(false)}
 				content={<ErrorContent />}
 				footer={footer}
-				titleKey="dialogs.titles.serverError"
+				isOpen={showError}
+				onClose={() => setShowError(false)}
 				title={t("dialogs.titles.serverError")}
+				titleKey="dialogs.titles.serverError"
 			/>
 		</Suspense>
 	);

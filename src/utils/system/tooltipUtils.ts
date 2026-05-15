@@ -1,24 +1,6 @@
 import { createContext, useContext } from "react";
 
 /**
- * Represents the visual and data state of the active tooltip.
- *
- * @see {@link import('./TooltipContext').TooltipProvider}
- *
- * @category Tooltip
- */
-export interface TooltipState {
-	/** The text content to display. */
-	label: string;
-	/** The bounding rectangle of the target element, used for positioning. */
-	rect: DOMRect | null;
-	/** Whether the tooltip is currently visible. */
-	isOpen: boolean;
-	/** The delay in milliseconds before the tooltip appears. */
-	delayDuration: number;
-}
-
-/**
  * Functional interface for controlling the tooltip visibility.
  *
  * @see {@link import('./TooltipContext').TooltipProvider}
@@ -27,6 +9,10 @@ export interface TooltipState {
  */
 export interface TooltipActions {
 	/**
+	 * Requests to hide the tooltip.
+	 */
+	hide: () => void;
+	/**
 	 * Displays the tooltip with specific content and position.
 	 *
 	 * @param {string} label - The text to show.
@@ -34,10 +20,24 @@ export interface TooltipActions {
 	 * @param {number} [delayDuration] - Optional override for the show delay.
 	 */
 	show: (label: string, rect: DOMRect, delayDuration?: number) => void;
-	/**
-	 * Requests to hide the tooltip.
-	 */
-	hide: () => void;
+}
+
+/**
+ * Represents the visual and data state of the active tooltip.
+ *
+ * @see {@link import('./TooltipContext').TooltipProvider}
+ *
+ * @category Tooltip
+ */
+export interface TooltipState {
+	/** The delay in milliseconds before the tooltip appears. */
+	delayDuration: number;
+	/** Whether the tooltip is currently visible. */
+	isOpen: boolean;
+	/** The text content to display. */
+	label: string;
+	/** The bounding rectangle of the target element, used for positioning. */
+	rect: DOMRect | null;
 }
 
 /** Context for the tooltip's data state. */
@@ -71,7 +71,7 @@ export const useTooltipState = () => {
 	if (context === undefined) {
 		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider
 		if (process.env.NODE_ENV === "test") {
-			return { label: "", rect: null, isOpen: false, delayDuration: 500 };
+			return { delayDuration: 500, isOpen: false, label: "", rect: null };
 		}
 
 		throw new Error("useTooltipState must be used within a TooltipProvider");
@@ -105,7 +105,7 @@ export const useTooltipActions = () => {
 	if (context === undefined) {
 		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider
 		if (process.env.NODE_ENV === "test") {
-			return { show: () => {}, hide: () => {} };
+			return { hide: () => {}, show: () => {} };
 		}
 
 		throw new Error("useTooltipActions must be used within a TooltipProvider");

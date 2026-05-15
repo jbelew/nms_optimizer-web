@@ -6,21 +6,13 @@ import { NmsToast } from "./Toast";
 
 const meta = {
 	component: NmsToast,
-	title: "Components/Toast/NmsToast",
-	parameters: {
-		docs: {
-			description: {
-				component: "A customizable toast notification component.",
-			},
-		},
-	},
 	decorators: [
 		(Story) => {
 			return (
 				<Toast.Provider swipeDirection="right">
 					<div
 						className="flex min-h-screen items-center justify-center p-4"
-						style={{ maxWidth: "800px", margin: "0 auto" }}
+						style={{ margin: "0 auto", maxWidth: "800px" }}
 					>
 						<Story />
 					</div>
@@ -29,6 +21,14 @@ const meta = {
 			);
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: "A customizable toast notification component.",
+			},
+		},
+	},
+	title: "Components/Toast/NmsToast",
 } satisfies Meta<typeof NmsToast>;
 
 export default meta;
@@ -37,10 +37,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		title: "Default Toast",
 		description: "This is a basic toast notification to inform the user about a general event.",
-		open: true,
 		onOpenChange: () => {},
+		open: true,
+		title: "Default Toast",
 	},
 	parameters: {
 		docs: {
@@ -54,11 +54,11 @@ export const Default: Story = {
 
 export const Success: Story = {
 	args: {
-		title: "Success!",
 		description: "Your changes have been saved successfully. Good job!",
-		variant: "success",
-		open: true,
 		onOpenChange: () => {},
+		open: true,
+		title: "Success!",
+		variant: "success",
 	},
 	parameters: {
 		docs: {
@@ -72,15 +72,15 @@ export const Success: Story = {
 
 export const Error: Story = {
 	args: {
-		title: "Error!",
 		description: (
 			<span>
 				Failed to load data. Please <a href="#">try again</a> or contact support.
 			</span>
 		),
-		variant: "error",
-		open: true,
 		onOpenChange: () => {},
+		open: true,
+		title: "Error!",
+		variant: "error",
 	},
 	parameters: {
 		docs: {

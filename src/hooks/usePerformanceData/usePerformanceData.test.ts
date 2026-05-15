@@ -34,10 +34,10 @@ describe("usePerformanceData", () => {
 	it("should call fetchPerformanceData via the resource", () => {
 		const mockData: PerformanceMetric[] = [
 			{
-				timestamp: 1619370000000,
-				metric_name: "LCP",
-				average_value: 1200,
 				app_version: "v1.0.0",
+				average_value: 1200,
+				metric_name: "LCP",
+				timestamp: 1619370000000,
 			},
 		];
 

@@ -55,23 +55,23 @@ describe("useUrlSync", () => {
 		(usePlatformStore as unknown as Mock).mockImplementation(
 			(selector: (state: PlatformState) => unknown) => {
 				const state = {
+					initializePlatform: vi.fn(),
 					selectedPlatform: "test-platform",
 					setSelectedPlatform: mockSetSelectedPlatform,
-					initializePlatform: vi.fn(),
 				};
 
 				return typeof selector === "function" ? selector(state) : state;
 			}
 		);
 		(usePlatformStore as unknown as { getState: Mock }).getState = vi.fn().mockReturnValue({
+			initializePlatform: vi.fn(),
 			selectedPlatform: "test-platform",
 			setSelectedPlatform: mockSetSelectedPlatform,
-			initializePlatform: vi.fn(),
 		});
 
 		(useGridDeserializer as unknown as Mock).mockReturnValue({
-			serializeGrid: mockSerializeGrid,
 			deserializeGrid: mockDeserializeGrid,
+			serializeGrid: mockSerializeGrid,
 		});
 		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
 			"test-platform": { label: "Test Platform", type: "Starship" },
@@ -132,8 +132,8 @@ describe("useUrlSync", () => {
 	it("should handle popstate events", () => {
 		// Mock ship types to include both test-platform and new-platform
 		(useFetchShipTypesSuspense as unknown as Mock).mockReturnValue({
-			"test-platform": { label: "Test Platform", type: "Starship" },
 			"new-platform": { label: "New Platform", type: "Starship" },
+			"test-platform": { label: "Test Platform", type: "Starship" },
 		});
 
 		renderHook(() => useUrlSync(), { wrapper: MemoryRouter });
@@ -146,7 +146,7 @@ describe("useUrlSync", () => {
 		expect(mockDeserializeGrid).toHaveBeenCalledWith("new-serialized-grid");
 		expect(mockSetSelectedPlatform).toHaveBeenCalledWith(
 			"new-platform",
-			["test-platform", "new-platform"],
+			["new-platform", "test-platform"],
 			false,
 			true
 		);

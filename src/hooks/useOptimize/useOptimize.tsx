@@ -19,10 +19,12 @@ import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridInt
  * @category Hooks
  */
 export interface UseOptimizeReturn {
-	/** Whether an optimization is currently in progress. */
-	solving: boolean;
-	/** The current progress percentage (0-100). */
-	progressPercent: number;
+	/** Function to clear the "No Fit" warning state. */
+	clearPatternNoFitTech: () => void;
+	/** Ref to the grid container for automated scrolling. */
+	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
+	/** Function to re-run optimization with forced solving for the current PNF tech. */
+	handleForceCurrentPnfOptimize: () => Promise<void>;
 	/**
 	 * Initiates optimization for a specific technology.
 	 *
@@ -32,14 +34,12 @@ export interface UseOptimizeReturn {
 	 * @returns {Promise<void>} Resolves when the optimization request is handled.
 	 */
 	handleOptimize: (tech: string, forced?: boolean) => Promise<void>;
-	/** Ref to the grid container for automated scrolling. */
-	gridContainerRef: React.MutableRefObject<HTMLDivElement | null>;
 	/** The technology identifier that failed to fit using pattern solving, if any. */
-	patternNoFitTech: string | null;
-	/** Function to clear the "No Fit" warning state. */
-	clearPatternNoFitTech: () => void;
-	/** Function to re-run optimization with forced solving for the current PNF tech. */
-	handleForceCurrentPnfOptimize: () => Promise<void>;
+	patternNoFitTech: null | string;
+	/** The current progress percentage (0-100). */
+	progressPercent: number;
+	/** Whether an optimization is currently in progress. */
+	solving: boolean;
 }
 
 /**
@@ -93,7 +93,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const [solving, setSolving] = useState(false);
 	const [progressPercent, setProgressPercent] = useState(0);
 	const isOptimizingRef = useRef(false);
-	const managerRef = useRef<OptimizationManager | null>(null);
+	const managerRef = useRef<null | OptimizationManager>(null);
 	const isMountedRef = useRef(true);
 
 	const scrollOptions = { skipOnLargeScreens: true };
@@ -160,22 +160,14 @@ export const useOptimize = (): UseOptimizeReturn => {
 		if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
 
 		Logger.info(`Optimization started for ${tech}`, {
-			tech,
 			forced,
 			platform: selectedShipType,
+			tech,
 		});
 
 		const manager = new OptimizationManager({
-			tech,
 			forced,
 			isLarge,
-			onProgress: (data) => {
-				if (!isMountedRef.current) return;
-				startTransition(() => {
-					setProgressPercent(data.progress_percent);
-					if (data.best_grid) setGrid(data.best_grid);
-				});
-			},
 			onComplete: (data: ApiResponse) => {
 				performance.mark("optimize-complete");
 				performance.measure("optimize-to-complete", "optimize-start", "optimize-complete");
@@ -183,9 +175,9 @@ export const useOptimize = (): UseOptimizeReturn => {
 				if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
 				Logger.info(`Optimization complete for ${tech}`, {
-					tech,
-					method: data.solve_method,
 					bonus: data.max_bonus,
+					method: data.solve_method,
+					tech,
 				});
 
 				setResult(data, tech);
@@ -194,14 +186,14 @@ export const useOptimize = (): UseOptimizeReturn => {
 
 				if (data.grid) {
 					sendEvent({
-						category: "ui",
 						action: "optimize_tech",
-						platform: selectedShipType,
-						tech: gaTech,
-						solve_method: data.solve_method,
-						value: 1,
+						category: "ui",
 						nonInteraction: false,
+						platform: selectedShipType,
+						solve_method: data.solve_method,
 						supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
+						tech: gaTech,
+						value: 1,
 					});
 					setGrid(data.grid);
 				}
@@ -224,20 +216,28 @@ export const useOptimize = (): UseOptimizeReturn => {
 			onPatternNoFit: () => {
 				if (!isMountedRef.current) return;
 				Logger.info(`Optimization "Pattern No Fit" for ${tech}`, {
-					tech,
 					platform: selectedShipType,
+					tech,
 				});
 				setPatternNoFitTech(tech);
 				sendEvent({
-					category: "ui",
 					action: "no_fit_warning",
+					category: "ui",
+					nonInteraction: false,
 					platform: selectedShipType,
 					tech,
 					value: 1,
-					nonInteraction: false,
 				});
 				resetProgress();
 			},
+			onProgress: (data) => {
+				if (!isMountedRef.current) return;
+				startTransition(() => {
+					setProgressPercent(data.progress_percent);
+					if (data.best_grid) setGrid(data.best_grid);
+				});
+			},
+			tech,
 		});
 
 		managerRef.current = manager;
@@ -267,12 +267,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 	};
 
 	return {
-		solving,
-		progressPercent,
-		handleOptimize,
-		gridContainerRef,
-		patternNoFitTech,
 		clearPatternNoFitTech,
+		gridContainerRef,
 		handleForceCurrentPnfOptimize,
+		handleOptimize,
+		patternNoFitTech,
+		progressPercent,
+		solving,
 	};
 };

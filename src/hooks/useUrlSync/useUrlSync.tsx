@@ -54,7 +54,7 @@ export const useUrlSync = () => {
 	const { isKnownRoute } = useRouteContext();
 	const selectedShipTypeFromStore = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipTypeInStore = usePlatformStore((state) => state.setSelectedPlatform);
-	const { serializeGrid, deserializeGrid } = useGridDeserializer();
+	const { deserializeGrid, serializeGrid } = useGridDeserializer();
 	const shipTypes = useFetchShipTypesSuspense();
 
 	// Use a ref to prevent multiple simultaneous sync operations
@@ -212,5 +212,5 @@ export const useUrlSync = () => {
 		}
 	};
 
-	return { updateUrlForShare, updateUrlForReset };
+	return { updateUrlForReset, updateUrlForShare };
 };

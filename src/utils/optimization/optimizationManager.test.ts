@@ -12,14 +12,14 @@ import { OptimizationManager } from "./optimizationManager";
 
 vi.mock("../api/socketManager", () => ({
 	createSocket: vi.fn(),
-	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
+	TRANSPORT_ERROR_MESSAGES: new Set(["timeout", "websocket error"]),
 }));
 
 vi.mock("../../store/grid/gridStore", () => ({
+	createEmptyCell: vi.fn((sc, active) => ({ active, supercharged: sc, tech: null })),
 	useGridStore: {
 		getState: vi.fn(),
 	},
-	createEmptyCell: vi.fn((sc, active) => ({ tech: null, supercharged: sc, active })),
 }));
 
 vi.mock("../../store/tech/techStore", () => ({
@@ -36,9 +36,9 @@ vi.mock("../../store/app/platformStore", () => ({
 
 vi.mock("../system/monitoring", () => ({
 	Logger: {
+		error: vi.fn(),
 		info: vi.fn(),
 		warn: vi.fn(),
-		error: vi.fn(),
 	},
 }));
 
@@ -49,12 +49,12 @@ const mockUsePlatformStore = vi.mocked(usePlatformStore);
 
 describe("OptimizationManager", () => {
 	const createMockSocket = () => ({
+		connected: true,
+		disconnect: vi.fn(),
+		emit: vi.fn(),
+		off: vi.fn(),
 		on: vi.fn(),
 		once: vi.fn(),
-		off: vi.fn(),
-		emit: vi.fn(),
-		disconnect: vi.fn(),
-		connected: true,
 	});
 
 	beforeEach(() => {
@@ -64,15 +64,15 @@ describe("OptimizationManager", () => {
 		mockUseGridStore.getState.mockReturnValue({
 			grid: {
 				cells: [],
-				width: 7,
 				height: 7,
+				width: 7,
 			},
 		} as unknown as GridStore);
 
 		mockUseTechStore.getState.mockReturnValue({
+			activeGroups: {},
 			checkedModules: {},
 			techGroups: {},
-			activeGroups: {},
 		} as unknown as TechState);
 
 		mockUsePlatformStore.getState.mockReturnValue({
@@ -87,11 +87,11 @@ describe("OptimizationManager", () => {
 		const onPatternNoFit = vi.fn();
 
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onError,
 			onComplete,
-			onProgress,
+			onError,
 			onPatternNoFit,
+			onProgress,
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -132,11 +132,11 @@ describe("OptimizationManager", () => {
 	it("should complete successfully after a retry", () => {
 		const onComplete = vi.fn();
 		const manager = new OptimizationManager({
-			tech: "pulse",
 			onComplete,
 			onError: vi.fn(),
-			onProgress: vi.fn(),
 			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -157,10 +157,10 @@ describe("OptimizationManager", () => {
 		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
 
 		const mockResponse: ApiResponse = {
-			solve_method: "Brute Force",
+			grid: { cells: [], height: 7, width: 7 },
 			max_bonus: 100,
+			solve_method: "Brute Force",
 			solved_bonus: 90,
-			grid: { cells: [], width: 7, height: 7 },
 		};
 		handleResult(mockResponse);
 
@@ -170,11 +170,11 @@ describe("OptimizationManager", () => {
 	it("should handle progress updates", () => {
 		const onProgress = vi.fn();
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onProgress,
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
+			onProgress,
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -192,11 +192,11 @@ describe("OptimizationManager", () => {
 	it("should handle Pattern No Fit response", () => {
 		const onPatternNoFit = vi.fn();
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onPatternNoFit,
-			onProgress: vi.fn(),
 			onComplete: vi.fn(),
 			onError: vi.fn(),
+			onPatternNoFit,
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -206,10 +206,10 @@ describe("OptimizationManager", () => {
 		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
 
 		handleResult({
-			solve_method: "Pattern No Fit",
-			max_bonus: 0,
-			solved_bonus: 0,
 			grid: null,
+			max_bonus: 0,
+			solve_method: "Pattern No Fit",
+			solved_bonus: 0,
 		});
 		expect(onPatternNoFit).toHaveBeenCalled();
 	});
@@ -217,11 +217,11 @@ describe("OptimizationManager", () => {
 	it("should handle genuine disconnect as error", () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onError,
-			onProgress: vi.fn(),
 			onComplete: vi.fn(),
+			onError,
 			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -239,11 +239,11 @@ describe("OptimizationManager", () => {
 	it("should handle transport close by calling onError (for UI state reset)", () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onError,
-			onProgress: vi.fn(),
 			onComplete: vi.fn(),
+			onError,
 			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -264,11 +264,11 @@ describe("OptimizationManager", () => {
 		mockCreateSocket.mockImplementation(() => mockSocket as unknown as Socket);
 
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onProgress: vi.fn(),
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();
@@ -283,17 +283,17 @@ describe("OptimizationManager", () => {
 
 	it("should include modules and solve_type in the payload", () => {
 		mockUseTechStore.getState.mockReturnValue({
+			activeGroups: { pulse: "group1" },
 			checkedModules: { pulse: ["module1"] },
 			techGroups: { pulse: ["group1", "group2"] },
-			activeGroups: { pulse: "group1" },
 		} as unknown as TechState);
 
 		const manager = new OptimizationManager({
-			tech: "pulse",
-			onProgress: vi.fn(),
 			onComplete: vi.fn(),
 			onError: vi.fn(),
 			onPatternNoFit: vi.fn(),
+			onProgress: vi.fn(),
+			tech: "pulse",
 		});
 
 		manager.start();

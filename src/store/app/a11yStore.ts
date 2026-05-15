@@ -41,11 +41,11 @@ export const useA11yStore = create<A11yState>()(
 
 					return item ? JSON.parse(item) : null;
 				},
-				setItem: (name, value) => {
-					safeSetItem(name, JSON.stringify(value));
-				},
 				removeItem: (name) => {
 					safeRemoveItem(name);
+				},
+				setItem: (name, value) => {
+					safeSetItem(name, JSON.stringify(value));
 				},
 			},
 		}

@@ -32,5 +32,5 @@ import { sendDeferredEvent, sendEvent } from "../../utils/analytics/tracking";
  * ```
  */
 export const useAnalytics = () => {
-	return { sendEvent, sendDeferredEvent };
+	return { sendDeferredEvent, sendEvent };
 };

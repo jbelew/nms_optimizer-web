@@ -23,7 +23,7 @@ import { Logger } from "../system/monitoring";
  * These represent network-layer failures (not application errors) and should be
  * retried silently before surfacing to the user.
  */
-export const TRANSPORT_ERROR_MESSAGES = new Set(["websocket error", "timeout"]);
+export const TRANSPORT_ERROR_MESSAGES = new Set(["timeout", "websocket error"]);
 
 /**
  * Standard configuration options for the WebSocket connection.
@@ -33,10 +33,10 @@ export const TRANSPORT_ERROR_MESSAGES = new Set(["websocket error", "timeout"]);
  * - `transports: ["websocket", "polling"]` — allows fallback to long-polling.
  */
 export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
-	transports: ["websocket", "polling"],
-	reconnection: false,
 	forceNew: true,
+	reconnection: false,
 	timeout: 20000,
+	transports: ["websocket", "polling"],
 };
 
 /**
@@ -62,7 +62,7 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  * // returns Socket or null
  * ```
  */
-export const createSocket = (): Socket | null => {
+export const createSocket = (): null | Socket => {
 	try {
 		Logger.info("Creating new WebSocket connection", { url: WS_URL });
 

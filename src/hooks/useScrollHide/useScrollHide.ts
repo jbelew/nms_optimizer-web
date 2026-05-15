@@ -6,12 +6,12 @@ import { useEffect, useRef, useState } from "react";
  * @category Types
  */
 export type UseScrollHideReturn = {
+	/** Function to programmatically force the element to be visible. */
+	forceShow: () => void;
 	/** Whether the element should currently be visible. */
 	isVisible: boolean;
 	/** Ref to attach to the element being controlled (e.g., a toolbar). */
 	toolbarRef: React.RefObject<HTMLElement | null>;
-	/** Function to programmatically force the element to be visible. */
-	forceShow: () => void;
 };
 
 /**
@@ -61,7 +61,7 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	const toolbarRef = useRef<HTMLElement>(null);
 	const lastScrollYRef = useRef(0);
 	const directionBaseRef = useRef(0);
-	const lastDirectionRef = useRef<"up" | "down" | null>(null);
+	const lastDirectionRef = useRef<"down" | "up" | null>(null);
 	const isForcedRef = useRef(false);
 	const scrollStopTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -78,7 +78,7 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 	};
 
 	useEffect(() => {
-		let rafId: number | null = null;
+		let rafId: null | number = null;
 
 		const handleScroll = () => {
 			if (rafId !== null) {
@@ -165,5 +165,5 @@ export const useScrollHide = (threshold = 10, hysteresis = 20): UseScrollHideRet
 		};
 	}, [threshold, hysteresis]);
 
-	return { isVisible, toolbarRef, forceShow };
+	return { forceShow, isVisible, toolbarRef };
 };

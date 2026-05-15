@@ -12,10 +12,10 @@ import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
 interface AppLayout {
 	/** Ref to the main content container. */
 	containerRef: React.RefObject<HTMLDivElement | null>;
+	/** Calculated height of the grid. `null` if the grid is not in side-by-side mode. */
+	gridHeight: null | number;
 	/** Ref to the grid table container. */
 	gridTableRef: React.RefObject<HTMLDivElement | null>;
-	/** Calculated height of the grid. `null` if the grid is not in side-by-side mode. */
-	gridHeight: number | null;
 	/** Calculated total width of the grid table, including adjustments. */
 	gridTableTotalWidth: number | undefined;
 	/** Whether the viewport matches the 'large' breakpoint (1024px). */
@@ -53,7 +53,7 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 export const useAppLayout = (): AppLayout => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gridTableRef = useRef<HTMLDivElement>(null);
-	const [gridHeight, setGridHeight] = useState<number | null>(null);
+	const [gridHeight, setGridHeight] = useState<null | number>(null);
 	const [gridTableTotalWidth, setGridTableTotalWidth] = useState<number | undefined>(undefined);
 	const isLarge = useBreakpoint("1024px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
@@ -93,8 +93,8 @@ export const useAppLayout = (): AppLayout => {
 
 	return {
 		containerRef,
-		gridTableRef,
 		gridHeight,
+		gridTableRef,
 		gridTableTotalWidth,
 		isLarge,
 	};

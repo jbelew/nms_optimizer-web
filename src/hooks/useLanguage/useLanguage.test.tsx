@@ -12,11 +12,11 @@ import { useLanguage } from "./useLanguage";
  * @example
  */
 const createMockLocation = (pathname: string): Location => ({
+	hash: "",
+	key: "default",
 	pathname,
 	search: "",
-	hash: "",
 	state: null,
-	key: "default",
 });
 
 // No need to declare useLocationMock at top level anymore
@@ -60,7 +60,7 @@ describe("useLanguage", () => {
 
 	it("should return the language from the URL if it is supported", async () => {
 		useLocationMock.mockReturnValue(createMockLocation("/fr"));
-		const { result, rerender } = renderHook(() => useLanguage(), {
+		const { rerender, result } = renderHook(() => useLanguage(), {
 			wrapper: ({ children }) => (
 				<I18nextProvider i18n={i18n}>
 					<MemoryRouter>{children}</MemoryRouter>

@@ -11,13 +11,13 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 	beforeEach(() => {
 		useModuleSelectionStore.setState({ moduleSelections: {} });
 		useTechStore.setState({
-			techGroups: {},
-			checkedModules: {},
 			activeGroups: {},
+			checkedModules: {},
 			max_bonus: {},
-			solved_bonus: {},
 			solve_method: {},
+			solved_bonus: {},
 			techColors: {},
+			techGroups: {},
 		});
 		useTechBonusStore.setState({ bonusStatus: {} });
 		useGridStore.setState({ grid: useGridStore.getState().grid });
@@ -62,16 +62,16 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 	it("should clear techGroups and checkedModules when switching ship types", () => {
 		const mockModule = {
-			id: "module1",
-			checked: true,
 			bonus: 10,
+			checked: true,
+			id: "module1",
 			label: "Module 1",
 		} as unknown as TechTreeItem["modules"][0];
 		const mockTechGroup = {
-			key: "tech1",
-			type: "normal",
 			color: "#FF0000",
+			key: "tech1",
 			modules: [mockModule],
+			type: "normal",
 		} as unknown as TechTreeItem;
 
 		const mockTechGroups = {
@@ -98,16 +98,16 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 	it("should not carry over selections from ship 1 to ship 2", () => {
 		// Ship 1: Set selections
 		const ship1Module = {
-			id: "ship1module",
-			checked: true,
 			bonus: 10,
+			checked: true,
+			id: "ship1module",
 			label: "Module",
 		} as unknown as TechTreeItem["modules"][0];
 		const ship1TechGroup = {
-			key: "ship1tech",
-			type: "normal",
 			color: "#FF0000",
+			key: "ship1tech",
 			modules: [ship1Module],
+			type: "normal",
 		} as unknown as TechTreeItem;
 
 		const ship1Groups = {
@@ -123,16 +123,16 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Load Ship 2 tech groups
 		const ship2Module = {
-			id: "ship2module",
-			checked: false,
 			bonus: 5,
+			checked: false,
+			id: "ship2module",
 			label: "Module",
 		} as unknown as TechTreeItem["modules"][0];
 		const ship2TechGroup = {
-			key: "ship2tech",
-			type: "normal",
 			color: "#0000FF",
+			key: "ship2tech",
 			modules: [ship2Module],
+			type: "normal",
 		} as unknown as TechTreeItem;
 
 		const ship2Groups = {
@@ -179,10 +179,10 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		// Set some bonus state
 		const bonusData: BonusStatusData = {
 			icon: "check",
-			percent: 100,
-			tooltipContent: "Test",
 			iconClassName: "test",
 			iconStyle: { color: "green" },
+			percent: 100,
+			tooltipContent: "Test",
 		};
 		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
 
@@ -198,12 +198,12 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 	it("should handle multiple sequential ship switches without leaking state", () => {
 		// Ship 1
-		const ship1Module = { id: "mod1", checked: true } as unknown as TechTreeItem["modules"][0];
+		const ship1Module = { checked: true, id: "mod1" } as unknown as TechTreeItem["modules"][0];
 		const ship1TechGroup = {
-			key: "tech1",
-			type: "normal",
 			color: "#FF0000",
+			key: "tech1",
 			modules: [ship1Module],
+			type: "normal",
 		} as unknown as TechTreeItem;
 		const ship1Groups = {
 			tech1: [ship1TechGroup],
@@ -215,12 +215,12 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		let newGrid = createGrid(10, 6);
 		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
 
-		const ship2Module = { id: "mod2", checked: false } as unknown as TechTreeItem["modules"][0];
+		const ship2Module = { checked: false, id: "mod2" } as unknown as TechTreeItem["modules"][0];
 		const ship2TechGroup = {
-			key: "tech2",
-			type: "normal",
 			color: "#0000FF",
+			key: "tech2",
 			modules: [ship2Module],
+			type: "normal",
 		} as unknown as TechTreeItem;
 		const ship2Groups = {
 			tech2: [ship2TechGroup],
@@ -232,12 +232,12 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		newGrid = createGrid(10, 6);
 		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
 
-		const ship3Module = { id: "mod3", checked: true } as unknown as TechTreeItem["modules"][0];
+		const ship3Module = { checked: true, id: "mod3" } as unknown as TechTreeItem["modules"][0];
 		const ship3TechGroup = {
-			key: "tech3",
-			type: "normal",
 			color: "#00FF00",
+			key: "tech3",
 			modules: [ship3Module],
+			type: "normal",
 		} as unknown as TechTreeItem;
 		const ship3Groups = {
 			tech3: [ship3TechGroup],

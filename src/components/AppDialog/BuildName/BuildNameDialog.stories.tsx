@@ -4,15 +4,6 @@ import BuildNameDialog from "./BuildNameDialog";
 
 const meta = {
 	component: BuildNameDialog,
-	title: "Components/AppDialog/BuildName/BuildNameDialog",
-	parameters: {
-		docs: {
-			description: {
-				component:
-					"Modal dialog for entering and confirming a build name when saving a grid configuration.",
-			},
-		},
-	},
 	decorators: [
 		(Story) => {
 			// Seed Math.random for consistent visual tests
@@ -22,19 +13,28 @@ const meta = {
 			return (
 				<div
 					className="flex min-h-screen items-center justify-center p-4"
-					style={{ maxWidth: "800px", margin: "0 auto" }}
 					onMouseEnter={() => {
 						Math.random = originalRandom;
 					}}
 					onMouseLeave={() => {
 						Math.random = () => 0.5;
 					}}
+					style={{ margin: "0 auto", maxWidth: "800px" }}
 				>
 					<Story />
 				</div>
 			);
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					"Modal dialog for entering and confirming a build name when saving a grid configuration.",
+			},
+		},
+	},
+	title: "Components/AppDialog/BuildName/BuildNameDialog",
 } satisfies Meta<typeof BuildNameDialog>;
 
 export default meta;
@@ -44,8 +44,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		isOpen: true,
-		onConfirm: (name: string) => console.log("Build saved as:", name),
 		onCancel: () => console.log("Cancelled"),
+		onConfirm: (name: string) => console.log("Build saved as:", name),
 	},
 	parameters: {
 		docs: {

@@ -38,12 +38,12 @@ export const UpdatePromptWrapper: FC = () => {
 	useEffect(() => {
 		if (showUpdatePrompt) {
 			sendEvent({
-				category: "engagement",
 				action: "page_view",
-				page_title: "NMS Optimizer: Update Available",
-				page_location: window.location.href,
-				page: `${window.location.pathname}${window.location.search}#update`,
+				category: "engagement",
 				nonInteraction: true,
+				page: `${window.location.pathname}${window.location.search}#update`,
+				page_location: window.location.href,
+				page_title: "NMS Optimizer: Update Available",
 			});
 		}
 	}, [showUpdatePrompt, sendEvent]);
@@ -109,8 +109,8 @@ export const UpdatePromptWrapper: FC = () => {
 		<Suspense fallback={null}>
 			<UpdatePrompt
 				isOpen={showUpdatePrompt}
-				onRefresh={handleRefresh}
 				onDismiss={handleDismissUpdatePrompt}
+				onRefresh={handleRefresh}
 			/>
 		</Suspense>
 	);

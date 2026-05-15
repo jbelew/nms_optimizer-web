@@ -14,52 +14,22 @@ export const MAX_TRANSPORT_RETRIES = 2;
  * Options for configuring an optimization request.
  */
 export interface OptimizationOptions {
-	/** The unique identifier for the technology to optimize. */
-	tech: string;
 	/** If true, bypasses pattern matching and uses advanced solvers immediately. */
 	forced?: boolean;
 	/** Whether to send periodic grid updates during long solves. */
 	isLarge?: boolean;
-	/** Internal retry counter for transport errors. */
-	retryCount?: number;
-	/** Callback for progress updates. */
-	onProgress: (data: { progress_percent: number; best_grid?: Grid }) => void;
 	/** Callback for successful completion. */
 	onComplete: (data: ApiResponse) => void;
 	/** Callback for handled errors. */
 	onError: (error: Error) => void;
 	/** Callback when a pattern-no-fit result is encountered. */
 	onPatternNoFit: () => void;
-}
-
-/**
- * Validates that a value conforms to the `ApiResponse` structure.
- *
- * @param {unknown} value - The value to validate.
- *
- * @returns {value is ApiResponse} True if valid.
- *
- * @example
- * ```ts
- * if (isApiResponse(data)) { ... }
- * ```
- */
-function isApiResponse(value: unknown): value is ApiResponse {
-	if (typeof value !== "object" || value === null) return false;
-	const obj = value as Record<string, unknown>;
-	if (typeof obj.solve_method !== "string") return false;
-
-	if (obj.grid !== null) {
-		if (typeof obj.grid !== "object" || !obj.grid) return false;
-		const gridCandidate = obj.grid as Record<string, unknown>;
-		if (!Array.isArray(gridCandidate.cells) || typeof gridCandidate.width !== "number")
-			return false;
-	}
-
-	if ("max_bonus" in obj && typeof obj.max_bonus !== "number") return false;
-	if ("solved_bonus" in obj && typeof obj.solved_bonus !== "number") return false;
-
-	return true;
+	/** Callback for progress updates. */
+	onProgress: (data: { best_grid?: Grid; progress_percent: number }) => void;
+	/** Internal retry counter for transport errors. */
+	retryCount?: number;
+	/** The unique identifier for the technology to optimize. */
+	tech: string;
 }
 
 /**
@@ -69,12 +39,12 @@ function isApiResponse(value: unknown): value is ApiResponse {
  * @category Utilities
  */
 export class OptimizationManager {
-	/** The current WebSocket instance. */
-	private socket: Socket | null = null;
-	/** Configuration options for the current solve. */
-	private options: OptimizationOptions;
 	/** Flag to prevent callbacks firing during teardown. */
 	private isCleaningUp = false;
+	/** Configuration options for the current solve. */
+	private options: OptimizationOptions;
+	/** The current WebSocket instance. */
+	private socket: null | Socket = null;
 
 	/**
 	 * Initializes a new manager instance.
@@ -96,6 +66,26 @@ export class OptimizationManager {
 	}
 
 	/**
+	 * Tears down the WebSocket connection and removes listeners.
+	 *
+	 * @returns {void}
+	 *
+	 * @example
+	 * ```ts
+	 * manager.cleanup();
+	 * ```
+	 */
+	public cleanup() {
+		this.isCleaningUp = true;
+
+		if (this.socket) {
+			this.socket.off(); // Remove all listeners
+			this.socket.disconnect();
+			this.socket = null;
+		}
+	}
+
+	/**
 	 * Connects to the server and initiates the optimization request.
 	 *
 	 * @returns {void}
@@ -106,8 +96,8 @@ export class OptimizationManager {
 	 * ```
 	 */
 	public start() {
-		const { tech, forced, isLarge, retryCount = 0 } = this.options;
-		const { checkedModules, techGroups, activeGroups } = useTechStore.getState();
+		const { forced, isLarge, retryCount = 0, tech } = this.options;
+		const { activeGroups, checkedModules, techGroups } = useTechStore.getState();
 		const selectedShipType = usePlatformStore.getState().selectedPlatform;
 
 		this.socket = createSocket();
@@ -217,13 +207,13 @@ export class OptimizationManager {
 			};
 
 			const payload = {
-				ship: selectedShipType,
-				tech,
 				available_modules: checkedModules[tech] || [],
-				grid: updatedGrid,
 				forced,
+				grid: updatedGrid,
 				send_grid_updates: isLarge,
+				ship: selectedShipType,
 				solve_type,
+				tech,
 			};
 
 			this.socket.emit("optimize", payload);
@@ -235,24 +225,34 @@ export class OptimizationManager {
 			this.socket.once("connect", emitOptimize);
 		}
 	}
+}
 
-	/**
-	 * Tears down the WebSocket connection and removes listeners.
-	 *
-	 * @returns {void}
-	 *
-	 * @example
-	 * ```ts
-	 * manager.cleanup();
-	 * ```
-	 */
-	public cleanup() {
-		this.isCleaningUp = true;
+/**
+ * Validates that a value conforms to the `ApiResponse` structure.
+ *
+ * @param {unknown} value - The value to validate.
+ *
+ * @returns {value is ApiResponse} True if valid.
+ *
+ * @example
+ * ```ts
+ * if (isApiResponse(data)) { ... }
+ * ```
+ */
+function isApiResponse(value: unknown): value is ApiResponse {
+	if (typeof value !== "object" || value === null) return false;
+	const obj = value as Record<string, unknown>;
+	if (typeof obj.solve_method !== "string") return false;
 
-		if (this.socket) {
-			this.socket.off(); // Remove all listeners
-			this.socket.disconnect();
-			this.socket = null;
-		}
+	if (obj.grid !== null) {
+		if (typeof obj.grid !== "object" || !obj.grid) return false;
+		const gridCandidate = obj.grid as Record<string, unknown>;
+		if (!Array.isArray(gridCandidate.cells) || typeof gridCandidate.width !== "number")
+			return false;
 	}
+
+	if ("max_bonus" in obj && typeof obj.max_bonus !== "number") return false;
+	if ("solved_bonus" in obj && typeof obj.solved_bonus !== "number") return false;
+
+	return true;
 }

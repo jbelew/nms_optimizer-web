@@ -16,22 +16,22 @@ import type { RecommendedBuild } from "../../hooks/useTechTree/useTechTree";
  * @category Utilities
  */
 export type BuildFile = {
-	/** The display name of the build. */
-	name: string;
-	/** The ship type identifier. */
-	shipType: string;
-	/** Unix timestamp when the build was saved. */
-	timestamp: number;
+	/** Serialized tech bonus state. */
+	bonusState: Record<string, unknown>;
 	/** Checksum of the build data for integrity. */
 	checksum: string;
 	/** Serialized grid state. */
 	gridState: Record<string, unknown>;
-	/** Serialized technology state. */
-	techState: Record<string, unknown>;
-	/** Serialized tech bonus state. */
-	bonusState: Record<string, unknown>;
 	/** Serialized module selection state. */
 	moduleState: Record<string, unknown>;
+	/** The display name of the build. */
+	name: string;
+	/** The ship type identifier. */
+	shipType: string;
+	/** Serialized technology state. */
+	techState: Record<string, unknown>;
+	/** Unix timestamp when the build was saved. */
+	timestamp: number;
 };
 
 /**

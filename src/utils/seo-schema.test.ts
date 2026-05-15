@@ -7,18 +7,18 @@ describe("getLocalizedSchema", () => {
 	const mockT = vi.fn((key: string) => {
 		const translations: Record<string, string> = {
 			appName: "NMS Optimizer",
-			"seo.appDescription": "Calculate optimal technology layouts.",
 			"faq.name": "Frequently Asked Questions",
-			"faq.questions.adjacencyBonus.name": "What is adjacency bonus?",
 			"faq.questions.adjacencyBonus.answer": "A stat boost.",
-			"faq.questions.superchargedSlots.name": "What are supercharged slots?",
-			"faq.questions.superchargedSlots.answer": "Boosted slots.",
-			"faq.questions.maximizeBonus.name": "How to maximize?",
-			"faq.questions.maximizeBonus.answer": "Group them together.",
-			"faq.questions.calculation.name": "How is it calculated?",
+			"faq.questions.adjacencyBonus.name": "What is adjacency bonus?",
 			"faq.questions.calculation.answer": "Simulated annealing.",
-			"faq.questions.platforms.name": "What platforms are supported?",
+			"faq.questions.calculation.name": "How is it calculated?",
+			"faq.questions.maximizeBonus.answer": "Group them together.",
+			"faq.questions.maximizeBonus.name": "How to maximize?",
 			"faq.questions.platforms.answer": "Starships, etc.",
+			"faq.questions.platforms.name": "What platforms are supported?",
+			"faq.questions.superchargedSlots.answer": "Boosted slots.",
+			"faq.questions.superchargedSlots.name": "What are supercharged slots?",
+			"seo.appDescription": "Calculate optimal technology layouts.",
 		};
 
 		return translations[key] || key;
@@ -33,8 +33,8 @@ describe("getLocalizedSchema", () => {
 
 		expect(softwareApp).toBeDefined();
 		expect(softwareApp).toMatchObject({
-			name: "NMS Optimizer",
 			inLanguage: "en",
+			name: "NMS Optimizer",
 		});
 	});
 

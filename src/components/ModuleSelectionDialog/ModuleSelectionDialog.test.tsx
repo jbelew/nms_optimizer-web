@@ -30,7 +30,7 @@ vi.mock("../../utils/system/dialogUtils", () => ({
 
 // Mock AppDialog to avoid lazy loading issues and focus on ModuleSelectionDialog logic
 vi.mock("../AppDialog/Base/AppDialog", () => ({
-	default: ({ title, content, footer }: Record<string, React.ReactNode>) => (
+	default: ({ content, footer, title }: Record<string, React.ReactNode>) => (
 		<div>
 			<h1>{title}</h1>
 			<div>{content}</div>
@@ -40,33 +40,33 @@ vi.mock("../AppDialog/Base/AppDialog", () => ({
 }));
 
 const mockGroupedModules = {
-	core: [{ id: "core1", label: "Core Module", image: "core.png" }],
-	bonus: [
-		{ id: "bonus2", label: "Beta Bonus", image: "bonus.png" },
-		{ id: "bonus1", label: "Alpha Bonus", image: "bonus.png" },
-	],
-	upgrade: [
-		{ id: "upgrade_sigma", label: "Upgrade Sigma", image: "upgrade.png" },
-		{ id: "upgrade_tau", label: "Upgrade Tau", image: "upgrade.png" },
-	],
-	cosmetic: [{ id: "cosmetic1", label: "Cosmetic Module", image: "cosmetic.png" }],
 	atlantid: [],
+	bonus: [
+		{ id: "bonus2", image: "bonus.png", label: "Beta Bonus" },
+		{ id: "bonus1", image: "bonus.png", label: "Alpha Bonus" },
+	],
+	core: [{ id: "core1", image: "core.png", label: "Core Module" }],
+	cosmetic: [{ id: "cosmetic1", image: "cosmetic.png", label: "Cosmetic Module" }],
 	reactor: [],
+	upgrade: [
+		{ id: "upgrade_sigma", image: "upgrade.png", label: "Upgrade Sigma" },
+		{ id: "upgrade_tau", image: "upgrade.png", label: "Upgrade Tau" },
+	],
 };
 
 const defaultProps = {
+	allModulesSelected: false,
+	currentCheckedModules: ["bonus1", "upgrade_tau"],
+	groupedModules: mockGroupedModules,
+	handleOptimizeClick: vi.fn(),
+	handleSelectAllChange: vi.fn(),
+	handleValueChange: vi.fn(),
+	isIndeterminate: true,
 	isOpen: true,
 	onClose: vi.fn(),
-	translatedTechName: "Hyperdrive",
-	groupedModules: mockGroupedModules,
-	currentCheckedModules: ["bonus1", "upgrade_tau"],
-	handleValueChange: vi.fn(),
-	handleSelectAllChange: vi.fn(),
-	handleOptimizeClick: vi.fn(),
-	allModulesSelected: false,
-	isIndeterminate: true,
 	techColor: "blue" as const,
 	techImage: "hyperdrive.png",
+	translatedTechName: "Hyperdrive",
 };
 
 /**
@@ -114,13 +114,13 @@ describe("ModuleSelectionDialog", () => {
 			...defaultProps,
 			groupedModules: {
 				...mockGroupedModules,
-				trails: [
-					{ id: "trail2", label: "Beta Trail", image: "trail.png" },
-					{ id: "trail1", label: "Alpha Trail", image: "trail.png" },
-				],
 				figurines: [
-					{ id: "fig2", label: "Beta Figurine", image: "fig.png" },
-					{ id: "fig1", label: "Alpha Figurine", image: "fig.png" },
+					{ id: "fig2", image: "fig.png", label: "Beta Figurine" },
+					{ id: "fig1", image: "fig.png", label: "Alpha Figurine" },
+				],
+				trails: [
+					{ id: "trail2", image: "trail.png", label: "Beta Trail" },
+					{ id: "trail1", image: "trail.png", label: "Alpha Trail" },
 				],
 			},
 		};

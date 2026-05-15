@@ -17,8 +17,8 @@ describe("UpdatePrompt", () => {
 
 	const defaultProps = {
 		isOpen: true,
-		onRefresh: mockOnRefresh,
 		onDismiss: mockOnDismiss,
+		onRefresh: mockOnRefresh,
 	};
 
 	beforeEach(() => {
@@ -42,7 +42,7 @@ describe("UpdatePrompt", () => {
 	test("should accept and not throw with onRefresh prop", () => {
 		const mockOnRefreshLocal = vi.fn();
 		const { container } = render(
-			<UpdatePrompt isOpen={true} onRefresh={mockOnRefreshLocal} onDismiss={mockOnDismiss} />
+			<UpdatePrompt isOpen={true} onDismiss={mockOnDismiss} onRefresh={mockOnRefreshLocal} />
 		);
 
 		expect(container).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("UpdatePrompt", () => {
 	test("should accept and not throw with onDismiss prop", () => {
 		const mockOnDismissLocal = vi.fn();
 		const { container } = render(
-			<UpdatePrompt isOpen={true} onRefresh={mockOnRefresh} onDismiss={mockOnDismissLocal} />
+			<UpdatePrompt isOpen={true} onDismiss={mockOnDismissLocal} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe("UpdatePrompt", () => {
 		// Test changing props
 		const newMockOnDismiss = vi.fn();
 		rerender(
-			<UpdatePrompt isOpen={true} onRefresh={mockOnRefresh} onDismiss={newMockOnDismiss} />
+			<UpdatePrompt isOpen={true} onDismiss={newMockOnDismiss} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();
@@ -80,20 +80,20 @@ describe("UpdatePrompt", () => {
 	});
 
 	test("should handle state changes with rerender", () => {
-		const { rerender, container } = render(<UpdatePrompt {...defaultProps} />);
+		const { container, rerender } = render(<UpdatePrompt {...defaultProps} />);
 
 		expect(container).toBeInTheDocument();
 
 		// Rerender with isOpen false
 		rerender(
-			<UpdatePrompt isOpen={false} onRefresh={mockOnRefresh} onDismiss={mockOnDismiss} />
+			<UpdatePrompt isOpen={false} onDismiss={mockOnDismiss} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();
 
 		// Rerender with isOpen true again
 		rerender(
-			<UpdatePrompt isOpen={true} onRefresh={mockOnRefresh} onDismiss={mockOnDismiss} />
+			<UpdatePrompt isOpen={true} onDismiss={mockOnDismiss} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();
@@ -104,7 +104,7 @@ describe("UpdatePrompt", () => {
 		const onDismissFn = vi.fn();
 
 		const { container } = render(
-			<UpdatePrompt isOpen={true} onRefresh={onRefreshFn} onDismiss={onDismissFn} />
+			<UpdatePrompt isOpen={true} onDismiss={onDismissFn} onRefresh={onRefreshFn} />
 		);
 
 		expect(container).toBeInTheDocument();
@@ -115,15 +115,15 @@ describe("UpdatePrompt", () => {
 	});
 
 	test("should render AppDialog with isOpen matching props", () => {
-		const { rerender, container } = render(
-			<UpdatePrompt isOpen={true} onRefresh={mockOnRefresh} onDismiss={mockOnDismiss} />
+		const { container, rerender } = render(
+			<UpdatePrompt isOpen={true} onDismiss={mockOnDismiss} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();
 
 		// When isOpen changes, AppDialog should receive the change
 		rerender(
-			<UpdatePrompt isOpen={false} onRefresh={mockOnRefresh} onDismiss={mockOnDismiss} />
+			<UpdatePrompt isOpen={false} onDismiss={mockOnDismiss} onRefresh={mockOnRefresh} />
 		);
 
 		expect(container).toBeInTheDocument();

@@ -37,20 +37,20 @@ import { useDialog } from "@/utils/system/dialogUtils";
  * Props for the `MobileToolbar` component.
  */
 type MobileToolbarProps = {
-	/** Whether the toolbar is currently visible on the screen. */
-	isVisible: boolean;
-	/** Whether an optimization solve is currently active. */
-	solving: boolean;
+	/** Ref to the grid DOM element, used for screenshot capture. */
+	gridRef: React.RefObject<HTMLDivElement | null>;
 	/** Whether any technology modules are currently placed in the grid. */
 	hasModulesInGrid: boolean;
+	/** Whether the toolbar is currently visible on the screen. */
+	isVisible: boolean;
 	/** Callback to trigger the build loading workflow. */
 	onLoadBuild: () => void;
 	/** Callback to trigger the build saving workflow. */
 	onSaveBuild: () => void;
 	/** Callback to display the application changelog. */
 	onShowChangelog: () => void;
-	/** Ref to the grid DOM element, used for screenshot capture. */
-	gridRef: React.RefObject<HTMLDivElement | null>;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
 };
 
 /**
@@ -84,12 +84,12 @@ type MobileToolbarProps = {
 export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 	(
 		{
-			isVisible,
-			solving,
 			hasModulesInGrid,
+			isVisible,
 			onLoadBuild,
 			onSaveBuild,
 			onShowChangelog,
+			solving,
 			// gridRef,
 		},
 		ref
@@ -115,10 +115,10 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 				openDialog(null, { shareUrl });
 			});
 			sendDeferredEvent({
-				category: "ui",
 				action: "share_link",
-				value: 1,
+				category: "ui",
 				nonInteraction: false,
+				value: 1,
 			});
 		};
 
@@ -136,46 +136,46 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 
 		return (
 			<ToolbarRoot
-				ref={ref}
 				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
+				ref={ref}
 				style={{
 					backgroundColor: "var(--accent-4)",
-					WebkitUserSelect: "none",
-					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
 					paddingLeft: "var(--app-safe-pl)",
 					paddingRight: "var(--app-safe-pr)",
+					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
+					WebkitUserSelect: "none",
 				}}
 			>
 				<ToolbarToggleGroup
-					type="multiple"
-					className="flex items-center gap-2"
 					aria-label={t("buttons.buildManagement") ?? ""}
+					className="flex items-center gap-2"
+					type="multiple"
 				>
 					{/* Load/Save/Share buttons for mobile - far left */}
 					<IconButton
-						variant="soft"
-						size="2"
 						aria-label={t("buttons.loadBuild") ?? ""}
-						onClick={onLoadBuild}
 						disabled={solving || isSharedGrid}
+						onClick={onLoadBuild}
+						size="2"
+						variant="soft"
 					>
 						<FileIcon />
 					</IconButton>
 					<IconButton
-						variant="soft"
-						size="2"
 						aria-label={t("buttons.saveBuild") ?? ""}
-						onClick={onSaveBuild}
 						disabled={solving || !hasModulesInGrid || isSharedGrid}
+						onClick={onSaveBuild}
+						size="2"
+						variant="soft"
 					>
 						<DownloadIcon />
 					</IconButton>
 					<IconButton
-						variant="soft"
-						size="2"
 						aria-label={t("buttons.share") ?? ""}
-						onClick={handleShareClick}
 						disabled={solving || !hasModulesInGrid || isSharePending || isSharedGrid}
+						onClick={handleShareClick}
+						size="2"
+						variant="soft"
 					>
 						<Share1Icon className="h-4 w-4" />
 					</IconButton>
@@ -192,50 +192,50 @@ export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
 				</ToolbarToggleGroup>
 
 				<ToolbarToggleGroup
-					type="multiple"
-					className="flex items-center gap-2"
 					aria-label={t("buttons.utilities") ?? ""}
+					className="flex items-center gap-2"
+					type="multiple"
 				>
 					<IconButton
-						variant="soft"
-						size="2"
 						aria-label={t("buttons.changelog") ?? ""}
 						onClick={() => {
 							onShowChangelog();
 							sendDeferredEvent({
-								category: "ui",
 								action: "show_changelog",
-								value: 1,
+								category: "ui",
 								nonInteraction: false,
+								value: 1,
 							});
 						}}
+						size="2"
+						variant="soft"
 					>
 						<CounterClockwiseClockIcon className="h-4 w-4" />
 					</IconButton>
 
 					<IconButton
-						variant="soft"
-						size="2"
 						aria-label={t("buttons.userStats") ?? ""}
 						onClick={() => {
 							openDialog("userstats");
 							sendDeferredEvent({
-								category: "ui",
 								action: "show_user_stats",
-								value: 1,
+								category: "ui",
 								nonInteraction: false,
+								value: 1,
 							});
 						}}
+						size="2"
+						variant="soft"
 					>
 						<PieChartIcon className="h-4 w-4" />
 					</IconButton>
 
 					{/* A11y mode switch */}
 					<IconButton
-						variant={a11yMode ? "solid" : "surface"}
-						size="2"
-						onClick={toggleA11yMode}
 						aria-label={t("buttons.accessibility") ?? ""}
+						onClick={toggleA11yMode}
+						size="2"
+						variant={a11yMode ? "solid" : "surface"}
 					>
 						<EyeOpenIcon className="h-4 w-4" />
 					</IconButton>

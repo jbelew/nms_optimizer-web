@@ -9,22 +9,14 @@ import { GridTable } from "./GridTable";
 
 const meta = {
 	component: GridTable,
-	title: "Components/GridTable",
-	parameters: {
-		docs: {
-			description: {
-				component: "Grid table component for displaying and managing the grid layout.",
-			},
-		},
-	},
 	decorators: [
 		(Story) => {
 			useEffect(() => {
 				useGridStore.setState({
 					grid: createGrid(10, 6),
-					result: null,
-					isSharedGrid: false,
 					gridFixed: false,
+					isSharedGrid: false,
+					result: null,
 					superchargedFixed: false,
 				});
 				useTechTreeLoadingStore.setState({
@@ -41,13 +33,13 @@ const meta = {
 					<ToastProvider>
 						<div
 							className="flex min-h-screen items-center justify-center p-4"
-							style={{ maxWidth: "800px", margin: "0 auto" }}
 							onMouseEnter={() => {
 								Math.random = originalRandom;
 							}}
 							onMouseLeave={() => {
 								Math.random = () => 0.3;
 							}}
+							style={{ margin: "0 auto", maxWidth: "800px" }}
 						>
 							<Story />
 						</div>
@@ -57,6 +49,14 @@ const meta = {
 			);
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: "Grid table component for displaying and managing the grid layout.",
+			},
+		},
+	},
+	title: "Components/GridTable",
 } satisfies Meta<typeof GridTable>;
 
 export default meta;
@@ -65,8 +65,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		solving: false,
 		sharedGrid: false,
+		solving: false,
 	},
 	parameters: {
 		docs: {
@@ -80,8 +80,8 @@ export const Default: Story = {
 
 export const Solving: Story = {
 	args: {
-		solving: true,
 		sharedGrid: false,
+		solving: true,
 	},
 	parameters: {
 		docs: {

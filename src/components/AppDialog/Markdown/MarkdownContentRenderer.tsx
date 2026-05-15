@@ -79,7 +79,7 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	const [hasPrerendered, setHasPrerendered] = useState(false);
 
 	// Always call hooks at the top level
-	const { markdown, isLoading, error } = useMarkdownContent(markdownFileName);
+	const { error, isLoading, markdown } = useMarkdownContent(markdownFileName);
 	const [remarkGfm, setRemarkGfm] = useState<(() => void) | undefined>(undefined);
 
 	const h2CounterRef = useRef(0);
@@ -165,6 +165,96 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	}, [isLoading, error, markdown, targetSectionId]);
 
 	const components = {
+		a: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
+			<Link
+				href={href}
+				rel="noopener noreferrer"
+				target="_blank"
+				underline="always"
+				weight="bold"
+			>
+				{children}
+			</Link>
+		),
+		blockquote: ({ children }: { children?: React.ReactNode }) => (
+			<Blockquote mb="2" mt="2">
+				{children}
+			</Blockquote>
+		),
+
+		code: ({ children }: { children?: React.ReactNode }) => (
+			<Code variant="soft">{children}</Code>
+		),
+		del: ({ children }: { children?: React.ReactNode }) => (
+			<Text style={{ textDecoration: "line-through" }}>{children}</Text>
+		),
+		// TODO -- Overloading the md files
+		h1: ({ children: _children }: { children?: React.ReactNode }) => {
+			return null;
+		},
+		h2: ({ children }: { children?: React.ReactNode }) => {
+			let id = h2IdMapRef.current.get(children);
+
+			if (!id) {
+				h2CounterRef.current++;
+				id = `section-${h2CounterRef.current}`;
+				h2IdMapRef.current.set(children, id);
+			}
+
+			return (
+				<>
+					{id !== "section-1" && (
+						<Separator decorative mb="2" mt="2" orientation="horizontal" size="4" />
+					)}
+					<Heading
+						as="h2"
+						className="text-base! font-bold! sm:text-lg!"
+						id={id}
+						mb="3"
+						style={{ color: "var(--accent-a11)" }}
+						trim="end"
+					>
+						{children}
+					</Heading>
+				</>
+			);
+		},
+		h3: ({ children }: { children?: React.ReactNode }) => {
+			return (
+				<Heading
+					as="h3"
+					className="text-sm! sm:text-base!"
+					style={{ color: "var(--accent-a11)" }}
+				>
+					{children}
+				</Heading>
+			);
+		},
+		hr: () => <Separator decorative mb="2" orientation="horizontal" size="4" />,
+		iframe: ({ src, title }: { src?: string; title?: string }) => (
+			<Box asChild mb="2">
+				<iframe
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowFullScreen
+					frameBorder="0"
+					height="400"
+					src={src}
+					style={{ borderRadius: "6px" }}
+					title={title}
+					width="100%"
+				/>
+			</Box>
+		),
+		img: ({ alt, src, title }: { alt?: string; src?: string; title?: string }) => (
+			<img alt={alt} src={src} style={{ maxWidth: "100%" }} title={title} />
+		),
+		kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
+		li: ({ children }: { children?: React.ReactNode }) => <li className="mb-1">{children}</li>,
+		ol: ({ children }: { children?: React.ReactNode }) => (
+			<Box asChild mb="2">
+				<ol className="list-decimal pl-6">{children}</ol>
+			</Box>
+		),
 		p: ({ children }: { children?: React.ReactNode }) => {
 			// Check if this paragraph contains a YouTube embed pattern
 			const text =
@@ -184,109 +274,19 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 				</Text>
 			);
 		},
-		// TODO -- Overloading the md files
-		h1: ({ children: _children }: { children?: React.ReactNode }) => {
-			return null;
-		},
+		"radix-icon": (props: { color?: string; name: string; size?: number | string }) => {
+			const { color, name, size, ...rest } = props;
 
-		h2: ({ children }: { children?: React.ReactNode }) => {
-			let id = h2IdMapRef.current.get(children);
-
-			if (!id) {
-				h2CounterRef.current++;
-				id = `section-${h2CounterRef.current}`;
-				h2IdMapRef.current.set(children, id);
-			}
-
-			return (
-				<>
-					{id !== "section-1" && (
-						<Separator size="4" orientation="horizontal" decorative mt="2" mb="2" />
-					)}
-					<Heading
-						trim="end"
-						as="h2"
-						mb="3"
-						className="text-base! font-bold! sm:text-lg!"
-						id={id}
-						style={{ color: "var(--accent-a11)" }}
-					>
-						{children}
-					</Heading>
-				</>
-			);
+			return <DynamicRadixIcon color={color} name={name} size={size} {...rest} />;
 		},
-		h3: ({ children }: { children?: React.ReactNode }) => {
-			return (
-				<Heading
-					as="h3"
-					className="text-sm! sm:text-base!"
-					style={{ color: "var(--accent-a11)" }}
-				>
-					{children}
-				</Heading>
-			);
-		},
-		a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
-			<Link
-				weight="bold"
-				href={href}
-				target="_blank"
-				rel="noopener noreferrer"
-				underline="always"
-			>
-				{children}
-			</Link>
-		),
 		strong: ({ children }: { children?: React.ReactNode }) => (
 			<Text weight="bold">{children}</Text>
-		),
-		del: ({ children }: { children?: React.ReactNode }) => (
-			<Text style={{ textDecoration: "line-through" }}>{children}</Text>
-		),
-		blockquote: ({ children }: { children?: React.ReactNode }) => (
-			<Blockquote mt="2" mb="2">
-				{children}
-			</Blockquote>
 		),
 		ul: ({ children }: { children?: React.ReactNode }) => (
 			<Box asChild mb="2">
 				<ul className="list-disc pl-6">{children}</ul>
 			</Box>
 		),
-		ol: ({ children }: { children?: React.ReactNode }) => (
-			<Box asChild mb="2">
-				<ol className="list-decimal pl-6">{children}</ol>
-			</Box>
-		),
-		li: ({ children }: { children?: React.ReactNode }) => <li className="mb-1">{children}</li>,
-		code: ({ children }: { children?: React.ReactNode }) => (
-			<Code variant="soft">{children}</Code>
-		),
-		kbd: ({ children }: { children?: React.ReactNode }) => <Kbd>{children}</Kbd>,
-		img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => (
-			<img src={src} alt={alt} title={title} style={{ maxWidth: "100%" }} />
-		),
-		iframe: ({ src, title }: { src?: string; title?: string }) => (
-			<Box asChild mb="2">
-				<iframe
-					width="100%"
-					height="400"
-					src={src}
-					title={title}
-					frameBorder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-					allowFullScreen
-					style={{ borderRadius: "6px" }}
-				/>
-			</Box>
-		),
-		hr: () => <Separator size="4" orientation="horizontal" decorative mb="2" />,
-		"radix-icon": (props: { name: string; size?: string | number; color?: string }) => {
-			const { name, size, color, ...rest } = props;
-
-			return <DynamicRadixIcon name={name} size={size} color={color} {...rest} />;
-		},
 	};
 
 	if (error) {
@@ -303,14 +303,14 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 	}
 
 	return (
-		<article ref={articleRef} className="text-sm sm:text-base">
+		<article className="text-sm sm:text-base" ref={articleRef}>
 			{isLoading || !remarkGfm || !rehypeRaw ? (
 				<LoremIpsumSkeleton />
 			) : (
 				<LazyReactMarkdown
 					components={components}
-					remarkPlugins={[remarkGfm]}
 					rehypePlugins={[rehypeRaw]}
+					remarkPlugins={[remarkGfm]}
 				>
 					{markdown}
 				</LazyReactMarkdown>

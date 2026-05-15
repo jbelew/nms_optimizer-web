@@ -4,16 +4,16 @@ import type { Module, TechTree, TechTreeItem } from "../../hooks/useTechTree/use
  * Results of tech tree processing including flat maps and sets for lookup.
  */
 export interface TechTreeMaps {
+	/** Map of tech keys to their current active type/mode */
+	activeGroups: Record<string, string>;
 	/** Flat map of all modules, keyed by "techKey/moduleId" */
 	modulesMap: Map<string, Module>;
 	/** Map of tech keys to their associated brand color */
 	techColors: Record<string, string>;
-	/** Set of all valid tech keys in the current tree */
-	validTechKeys: Set<string>;
 	/** Grouped tech items by their primary key */
 	techGroups: Record<string, TechTreeItem[]>;
-	/** Map of tech keys to their current active type/mode */
-	activeGroups: Record<string, string>;
+	/** Set of all valid tech keys in the current tree */
+	validTechKeys: Set<string>;
 }
 
 /**
@@ -28,7 +28,7 @@ export interface TechTreeMaps {
  * const { modulesMap } = getTechTreeMaps(techTree);
  * ```
  */
-export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
+export const getTechTreeMaps = (techTree: null | TechTree): TechTreeMaps => {
 	const modulesMap = new Map<string, Module>();
 	const techColors: Record<string, string> = {};
 	const validTechKeys = new Set<string>();
@@ -36,7 +36,7 @@ export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
 	const activeGroups: Record<string, string> = {};
 
 	if (!techTree) {
-		return { modulesMap, techColors, validTechKeys, techGroups, activeGroups };
+		return { activeGroups, modulesMap, techColors, techGroups, validTechKeys };
 	}
 
 	for (const category in techTree) {
@@ -77,5 +77,5 @@ export const getTechTreeMaps = (techTree: TechTree | null): TechTreeMaps => {
 		}
 	}
 
-	return { modulesMap, techColors, validTechKeys, techGroups, activeGroups };
+	return { activeGroups, modulesMap, techColors, techGroups, validTechKeys };
 };

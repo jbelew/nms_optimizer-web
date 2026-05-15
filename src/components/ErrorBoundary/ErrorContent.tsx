@@ -28,14 +28,14 @@ import "./ErrorBoundary.scss";
  * Props for the `ErrorContent` component.
  */
 interface ErrorContentProps {
+	/** Optional custom React nodes to display as the error message. */
+	children?: ReactNode;
 	/** The exception that was caught by the boundary. */
 	error?: Error;
 	/** Metadata regarding the React component stack. */
 	errorInfo?: ErrorInfo;
 	/** Controls the visual layout of the error UI. */
-	variant: "page" | "inset";
-	/** Optional custom React nodes to display as the error message. */
-	children?: ReactNode;
+	variant: "inset" | "page";
 }
 
 /**
@@ -50,8 +50,8 @@ const DefaultMessage = () => (
 		errorContent.defaultMessage
 		<Link
 			href="https://github.com/jbelew/nms_optimizer-web/issues"
-			target="_blank"
 			rel="noopener noreferrer"
+			target="_blank"
 			underline="always"
 			weight="medium"
 		/>
@@ -70,8 +70,8 @@ const InsetMessage = () => (
 		errorContent.insetMessage
 		<Link
 			href="https://github.com/jbelew/nms_optimizer-web/issues"
-			target="_blank"
 			rel="noopener noreferrer"
+			target="_blank"
 			underline="always"
 			weight="medium"
 		/>
@@ -103,7 +103,7 @@ const InsetMessage = () => (
  * // renders full page error overlay
  * ```
  */
-export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorContentProps) => {
+export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorContentProps) => {
 	const { t } = useTranslation();
 	const isLarge = useBreakpoint("1024px");
 	const [isResetting, setIsResetting] = useState(false);
@@ -152,7 +152,7 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 					<ExclamationTriangleIcon className="error-content__icon h-5 w-5" />
 					<span>{t("errorContent.boundaryError")}</span>
 				</h2>
-				<Separator mt="2" mb="4" size="4" orientation="horizontal" decorative />
+				<Separator decorative mb="4" mt="2" orientation="horizontal" size="4" />
 			</section>
 
 			<div className="error-content__body">
@@ -164,16 +164,16 @@ export const ErrorContent = ({ error, errorInfo, variant, children }: ErrorConte
 
 				<div className="mt-4 mr-1 mb-1 flex justify-end gap-2">
 					<Button
-						variant="soft"
-						size="2"
-						onClick={() => void handleClearAndReload()}
 						disabled={isResetting}
+						onClick={() => void handleClearAndReload()}
+						size="2"
+						variant="soft"
 					>
 						{isResetting
 							? t("errorContent.resetting")
 							: t("errorContent.clearAndReload")}
 					</Button>
-					<Button size="2" variant="solid" autoFocus onClick={handleReload}>
+					<Button autoFocus onClick={handleReload} size="2" variant="solid">
 						{t("common.reload")}
 					</Button>
 				</div>

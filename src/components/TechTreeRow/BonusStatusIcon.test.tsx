@@ -23,14 +23,14 @@ vi.mock("@radix-ui/themes", async () => {
 	return {
 		...actual,
 		Popover: {
+			Content: ({ children }: { children: React.ReactNode }) => (
+				<div data-testid="popover-content">{children}</div>
+			),
 			Root: ({ children }: { children: React.ReactNode }) => (
 				<div data-testid="popover-root">{children}</div>
 			),
 			Trigger: ({ children }: { children: React.ReactNode }) => (
 				<div data-testid="popover-trigger">{children}</div>
-			),
-			Content: ({ children }: { children: React.ReactNode }) => (
-				<div data-testid="popover-content">{children}</div>
 			),
 		},
 	};
@@ -38,8 +38,8 @@ vi.mock("@radix-ui/themes", async () => {
 
 vi.mock("../../store/tech/techBonusStore", () => ({
 	useTechBonusStore: vi.fn(() => ({
-		setBonusStatus: vi.fn(),
 		getBonusStatus: vi.fn(() => null),
+		setBonusStatus: vi.fn(),
 	})),
 }));
 

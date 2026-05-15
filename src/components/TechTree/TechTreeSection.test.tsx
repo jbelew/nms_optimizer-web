@@ -18,7 +18,7 @@ vi.mock("@radix-ui/themes", () => ({
 
 // Mock TechTreeRow
 vi.mock("../TechTreeRow/TechTreeRow", () => ({
-	TechTreeRow: ({ tech }: { tech: string; handleOptimize?: unknown }) => (
+	TechTreeRow: ({ tech }: { handleOptimize?: unknown; tech: string }) => (
 		<div data-testid={`tech-tree-row-${tech}`}>Row: {tech}</div>
 	),
 }));
@@ -26,28 +26,28 @@ vi.mock("../TechTreeRow/TechTreeRow", () => ({
 describe("TechTreeSection", () => {
 	const mockHandleOptimize = vi.fn();
 	const mockTechnologies: Array<{
+		color: "blue" | "red";
+		image: null;
 		key: string;
 		label: string;
-		color: "red" | "blue";
-		image: null;
-		modules: [];
 		module_count: number;
+		modules: [];
 	}> = [
 		{
-			key: "weapon1",
-			label: "Weapon 1",
 			color: "red",
 			image: null,
-			modules: [],
+			key: "weapon1",
+			label: "Weapon 1",
 			module_count: 0,
+			modules: [],
 		},
 		{
-			key: "weapon2",
-			label: "Weapon 2",
 			color: "blue",
 			image: null,
-			modules: [],
+			key: "weapon2",
+			label: "Weapon 2",
 			module_count: 0,
+			modules: [],
 		},
 	];
 
@@ -58,12 +58,12 @@ describe("TechTreeSection", () => {
 	test("should render section with correct type", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -74,12 +74,12 @@ describe("TechTreeSection", () => {
 	test("should render TechTreeRow for each technology", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -90,12 +90,12 @@ describe("TechTreeSection", () => {
 	test("should render separator", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -105,12 +105,12 @@ describe("TechTreeSection", () => {
 	test("should render section image when available", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -124,12 +124,12 @@ describe("TechTreeSection", () => {
 	test("should not render image for unknown types", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="UnknownType"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="UnknownType"
 			/>
 		);
 
@@ -140,12 +140,12 @@ describe("TechTreeSection", () => {
 	test("should pass solving prop to TechTreeRow", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={true}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={true}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -155,12 +155,12 @@ describe("TechTreeSection", () => {
 	test("should pass isGridFull prop to TechTreeRow", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={true}
 				index={0}
+				isGridFull={true}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -169,20 +169,20 @@ describe("TechTreeSection", () => {
 
 	test("should handle different technology types", () => {
 		const typeTests = [
-			{ type: "Hyperdrive", image: "hyperdrive.webp" },
-			{ type: "Mining", image: "mining.webp" },
-			{ type: "Scanners", image: "scanners.webp" },
+			{ image: "hyperdrive.webp", type: "Hyperdrive" },
+			{ image: "mining.webp", type: "Mining" },
+			{ image: "scanners.webp", type: "Scanners" },
 		];
 
-		typeTests.forEach(({ type, image }) => {
+		typeTests.forEach(({ image, type }) => {
 			const { container } = render(
 				<TechTreeSection
-					type={type}
-					technologies={mockTechnologies}
 					handleOptimize={mockHandleOptimize}
-					solving={false}
-					isGridFull={false}
 					index={0}
+					isGridFull={false}
+					solving={false}
+					technologies={mockTechnologies}
+					type={type}
 				/>
 			);
 
@@ -196,12 +196,12 @@ describe("TechTreeSection", () => {
 	test("should render section with correct CSS classes", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -213,12 +213,12 @@ describe("TechTreeSection", () => {
 	test("should render heading with correct styling", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -231,12 +231,12 @@ describe("TechTreeSection", () => {
 	test("should handle empty technologies array", () => {
 		render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={[]}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={[]}
+				type="Weaponry"
 			/>
 		);
 
@@ -247,12 +247,12 @@ describe("TechTreeSection", () => {
 	test("should memoize component for performance", () => {
 		const { rerender } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -261,12 +261,12 @@ describe("TechTreeSection", () => {
 		// Rerender with same props
 		rerender(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -280,12 +280,12 @@ describe("TechTreeSection", () => {
 	test("should include image srcSet for retina displays", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 
@@ -299,12 +299,12 @@ describe("TechTreeSection", () => {
 	test("should apply correct image dimensions", () => {
 		const { container } = render(
 			<TechTreeSection
-				type="Weaponry"
-				technologies={mockTechnologies}
 				handleOptimize={mockHandleOptimize}
-				solving={false}
-				isGridFull={false}
 				index={0}
+				isGridFull={false}
+				solving={false}
+				technologies={mockTechnologies}
+				type="Weaponry"
 			/>
 		);
 

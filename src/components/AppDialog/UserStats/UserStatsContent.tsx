@@ -45,7 +45,7 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 
 	return (
 		<>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+			<Text as="p" mb="4" size={{ initial: "2", sm: "3" }}>
 				{t("dialogs.userStats.description")}
 			</Text>
 
@@ -54,21 +54,21 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 					fallback={
 						<Flex direction="column" gap="4">
 							<Heading
-								trim="end"
 								as="h2"
-								mb="3"
 								className="text-base! sm:text-lg!"
+								mb="3"
 								style={{ color: "var(--accent-a11)" }}
+								trim="end"
 							>
 								<Skeleton>{t("dialogs.userStats.starshipChartTitle")}</Skeleton>
 							</Heading>
 							<Skeleton height="248px" width="100%" />
 							<Heading
-								trim="end"
 								as="h2"
-								mb="3"
 								className="text-base! sm:text-lg!"
+								mb="3"
 								style={{ color: "var(--accent-a11)" }}
+								trim="end"
 							>
 								<Skeleton>{t("dialogs.userStats.multitoolChartTitle")}</Skeleton>
 							</Heading>

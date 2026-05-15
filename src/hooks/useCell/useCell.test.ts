@@ -5,23 +5,23 @@ import { Cell, createEmptyCell, GridStore, useGridStore } from "../../store/grid
 import { useCell } from "./useCell";
 
 vi.mock("../../store/grid/gridStore", () => ({
-	useGridStore: vi.fn(),
 	createEmptyCell: vi.fn((sc, active) => ({
 		active: !!active,
 		adjacency: "none",
 		adjacency_bonus: 0,
 		bonus: 0,
+		group_adjacent: false,
 		image: null,
-		module: null,
 		label: "",
+		module: null,
 		sc_eligible: false,
 		supercharged: !!sc,
-		group_adjacent: false,
 		tech: null,
 		total: 0,
 		type: "",
 		value: 0,
 	})),
+	useGridStore: vi.fn(),
 }));
 
 // Mock useShallow to just return the selector for easy testing
@@ -44,8 +44,8 @@ describe("useCell", () => {
 				[createEmptyCell(), createEmptyCell()],
 				[createEmptyCell(), mockCell],
 			],
-			width: 2,
 			height: 2,
+			width: 2,
 		};
 
 		// Mock the store implementation using a type-safe approach

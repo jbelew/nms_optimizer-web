@@ -20,14 +20,14 @@ describe("Data Validation Utilities", () => {
 
 	describe("isValidBuildFile", () => {
 		const validBuildFile = {
-			name: "Test Build",
-			shipType: "fighter",
-			timestamp: 123456789,
+			bonusState: {},
 			checksum: "abc-123",
 			gridState: {},
-			techState: {},
-			bonusState: {},
 			moduleState: {},
+			name: "Test Build",
+			shipType: "fighter",
+			techState: {},
+			timestamp: 123456789,
 		};
 
 		it("should return true for a valid build file", () => {
@@ -68,19 +68,19 @@ describe("Data Validation Utilities", () => {
 	describe("isValidRecommendedBuild", () => {
 		it("should return true for a valid RecommendedBuild object", () => {
 			const validBuild = {
-				title: "Test Build",
 				layout: [
 					[
 						{
-							tech: "tech1",
-							module: "module1",
-							supercharged: true,
 							active: true,
 							adjacency_bonus: 10,
+							module: "module1",
+							supercharged: true,
+							tech: "tech1",
 						},
 					],
 					[null],
 				],
+				title: "Test Build",
 			};
 			expect(isValidRecommendedBuild(validBuild)).toBe(true);
 		});

@@ -18,6 +18,18 @@ import {
  * @category State
  */
 export interface PlatformState {
+	/**
+	 * Restores the platform selection from URL parameters or `localStorage`.
+	 *
+	 * This method is typically called during application initialization or route changes.
+	 * It prioritizes URL parameters over stored values.
+	 *
+	 * @param {string[]} validShipTypes - Array of valid ship type identifiers for validation.
+	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
+	 *
+	 * @returns {void} Side-effects only.
+	 */
+	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 	/** The currently selected ship type identifier (e.g., `'solar'`, `'freighter'`). Defaults to `'standard'`. */
 	selectedPlatform: string;
 	/**
@@ -40,18 +52,6 @@ export interface PlatformState {
 		updateUrl?: boolean,
 		isKnownRoute?: boolean
 	) => void;
-	/**
-	 * Restores the platform selection from URL parameters or `localStorage`.
-	 *
-	 * This method is typically called during application initialization or route changes.
-	 * It prioritizes URL parameters over stored values.
-	 *
-	 * @param {string[]} validShipTypes - Array of valid ship type identifiers for validation.
-	 * @param {boolean} [isKnownRoute=true] - Whether to allow URL synchronization.
-	 *
-	 * @returns {void} Side-effects only.
-	 */
-	initializePlatform: (validShipTypes: string[], isKnownRoute?: boolean) => void;
 }
 
 const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
@@ -78,30 +78,6 @@ const LOCAL_STORAGE_KEY = PLATFORM_STORAGE_KEY;
  * ```
  */
 export const usePlatformStore = create<PlatformState>((set) => ({
-	selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
-	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
-		if (!validShipTypes.includes(platform)) {
-			console.warn(
-				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
-			);
-			platform = "standard";
-		}
-
-		set({ selectedPlatform: platform });
-
-		safeSetItem(LOCAL_STORAGE_KEY, platform);
-
-		// Update GA4 user property if initialized
-		if (typeof window !== "undefined" && "gtag" in window) {
-			(window.gtag as (command: string, ...args: unknown[]) => void)(
-				"set",
-				"user_properties",
-				{
-					platform_type: platform,
-				}
-			);
-		}
-	},
 	initializePlatform: (validShipTypes: string[], _isKnownRoute = true) => {
 		if (typeof window === "undefined") {
 			set({ selectedPlatform: "standard" });
@@ -134,6 +110,30 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 
 		if (updateStorageNeeded) {
 			safeSetItem(LOCAL_STORAGE_KEY, initialPlatform);
+		}
+	},
+	selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
+	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
+		if (!validShipTypes.includes(platform)) {
+			console.warn(
+				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
+			);
+			platform = "standard";
+		}
+
+		set({ selectedPlatform: platform });
+
+		safeSetItem(LOCAL_STORAGE_KEY, platform);
+
+		// Update GA4 user property if initialized
+		if (typeof window !== "undefined" && "gtag" in window) {
+			(window.gtag as (command: string, ...args: unknown[]) => void)(
+				"set",
+				"user_properties",
+				{
+					platform_type: platform,
+				}
+			);
 		}
 	},
 }));

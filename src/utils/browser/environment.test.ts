@@ -70,10 +70,10 @@ describe("environment utilities", () => {
 
 	describe("storage utility", () => {
 		const mockLocalStorage = {
-			getItem: vi.fn(),
-			setItem: vi.fn(),
-			removeItem: vi.fn(),
 			clear: vi.fn(),
+			getItem: vi.fn(),
+			removeItem: vi.fn(),
+			setItem: vi.fn(),
 		};
 
 		beforeEach(() => {

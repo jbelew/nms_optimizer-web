@@ -44,12 +44,12 @@ type SendEventFunction = (event: GA4Event) => void;
 const sendVitalsMetric = (metric: Metric, sendEvent: SendEventFunction) => {
 	sendEvent({
 		action: "performance_metric",
+		app_version: __APP_VERSION__,
 		category: "performance",
 		label: metric.id,
-		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
-		nonInteraction: true,
 		metric_name: metric.name,
-		app_version: __APP_VERSION__,
+		nonInteraction: true,
+		value: Math.round(metric.name === "CLS" ? metric.delta * 1000 : metric.delta),
 	});
 };
 
@@ -80,7 +80,7 @@ const reportTBT = (sendEvent: SendEventFunction) => {
 			});
 		});
 
-		observer.observe({ type: "longtask", buffered: true });
+		observer.observe({ buffered: true, type: "longtask" });
 
 		// Report TBT after a delay to capture initial load tasks
 		// In a production app, you might want to report this on page visibility change or at a fixed interval
@@ -88,12 +88,12 @@ const reportTBT = (sendEvent: SendEventFunction) => {
 			if (tbt > 0) {
 				sendEvent({
 					action: "performance_metric",
-					category: "performance",
-					metric_name: "TBT",
-					label: `tbt-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-					value: Math.round(tbt),
-					nonInteraction: true,
 					app_version: __APP_VERSION__,
+					category: "performance",
+					label: `tbt-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+					metric_name: "TBT",
+					nonInteraction: true,
+					value: Math.round(tbt),
 				});
 			}
 

@@ -27,12 +27,12 @@ const DashboardSkeleton: FC = () => {
 	return (
 		<div
 			style={{
-				height: FULL_DASHBOARD_HEIGHT,
-				position: "relative",
-				display: "flex",
 				alignItems: "center",
+				display: "flex",
+				height: FULL_DASHBOARD_HEIGHT,
 				justifyContent: "center",
 				paddingTop: PERFORMANCE_LAYOUT.FOOTER_HEIGHT,
+				position: "relative",
 			}}
 		>
 			<MessageSpinner isVisible={true} />
@@ -88,7 +88,7 @@ export const PerformanceContent: FC<PerformanceContentProps> = ({ isOpen }) => {
 				}
 			>
 				<Suspense fallback={<DashboardSkeleton />}>
-					<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
+					<Text as="p" mb="3" size={{ initial: "2", sm: "3" }}>
 						{t(
 							"dialogs.performance.description",
 							"Aggregate Core Web Vitals and performance metrics from real user sessions (field data)."

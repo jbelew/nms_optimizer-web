@@ -8,13 +8,13 @@ const mockRestoreGridState = vi.fn();
 vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(() => ({
-			grid: { cells: [], width: 0, height: 0 },
-			result: null,
-			isSharedGrid: false,
+			grid: { cells: [], height: 0, width: 0 },
 			gridFixed: false,
-			superchargedFixed: false,
 			initialGridDefinition: undefined,
+			isSharedGrid: false,
 			restoreGridState: mockRestoreGridState,
+			result: null,
+			superchargedFixed: false,
 		})),
 		setState: vi.fn(),
 	},
@@ -25,8 +25,8 @@ vi.mock("../../store/tech/techStore", () => ({
 		getState: vi.fn(() => ({
 			checkedModules: {},
 			max_bonus: {},
-			solved_bonus: {},
 			solve_method: {},
+			solved_bonus: {},
 		})),
 		setState: vi.fn(),
 	},
@@ -67,9 +67,9 @@ vi.mock("../../store/app/platformStore", () => {
 
 vi.mock("../useShipTypes/useShipTypes", () => ({
 	useFetchShipTypesSuspense: () => ({
-		freighter: {},
 		explorer: {},
 		fighter: {},
+		freighter: {},
 		shuttle: {},
 	}),
 }));
@@ -83,30 +83,30 @@ vi.mock("../../utils/system/hashUtils", () => ({
  * @example
  */
 const createValidBuildFile = () => ({
-	name: "Test Build",
-	shipType: "freighter",
-	timestamp: Date.now(),
-	checksum: "abc123def456", // Mock checksum - tests will mock computeSHA256 to return this
-	gridState: {
-		grid: { cells: [], width: 0, height: 0 },
-		result: null,
-		isSharedGrid: false,
-		gridFixed: false,
-		superchargedFixed: false,
-		initialGridDefinition: undefined,
-	},
-	techState: {
-		checkedModules: {},
-		max_bonus: {},
-		solved_bonus: {},
-		solve_method: {},
-	},
 	bonusState: {
 		bonusStatus: {},
+	},
+	checksum: "abc123def456", // Mock checksum - tests will mock computeSHA256 to return this
+	gridState: {
+		grid: { cells: [], height: 0, width: 0 },
+		gridFixed: false,
+		initialGridDefinition: undefined,
+		isSharedGrid: false,
+		result: null,
+		superchargedFixed: false,
 	},
 	moduleState: {
 		moduleSelections: {},
 	},
+	name: "Test Build",
+	shipType: "freighter",
+	techState: {
+		checkedModules: {},
+		max_bonus: {},
+		solve_method: {},
+		solved_bonus: {},
+	},
+	timestamp: Date.now(),
 });
 
 describe("useBuildFileManager", () => {
@@ -119,14 +119,14 @@ describe("useBuildFileManager", () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
 			const buildFileWithoutGridState = {
+				bonusState: {},
+				checksum: "abc123def456",
+				moduleState: {},
 				name: "Test Build",
 				shipType: "freighter",
-				timestamp: Date.now(),
-				checksum: "abc123def456",
 				// Missing gridState
 				techState: {},
-				bonusState: {},
-				moduleState: {},
+				timestamp: Date.now(),
 			};
 
 			const file = new File([JSON.stringify(buildFileWithoutGridState)], "test.nms", {

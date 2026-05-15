@@ -10,8 +10,8 @@ import { PerformanceChart } from "./PerformanceChart";
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => key,
 		i18n: { language: "en" },
+		t: (key: string) => key,
 	}),
 }));
 
@@ -43,22 +43,22 @@ vi.mock("recharts", () => {
 
 const mockData: PerformanceMetric[] = [
 	{
-		timestamp: 1619370000000,
-		metric_name: "LCP",
+		app_version: "v1.0.0",
 		average_value: 1200,
+		metric_name: "LCP",
 		p50: 1000,
 		p75: 1200,
 		p90: 1500,
-		app_version: "v1.0.0",
+		timestamp: 1619370000000,
 	} as PerformanceMetric,
 	{
-		timestamp: 1619370000000,
-		metric_name: "FCP",
+		app_version: "v1.0.0",
 		average_value: 800,
+		metric_name: "FCP",
 		p50: 700,
 		p75: 800,
 		p90: 1000,
-		app_version: "v1.0.0",
+		timestamp: 1619370000000,
 	} as PerformanceMetric,
 ];
 
@@ -67,10 +67,10 @@ const renderChart = (initialEntry = "/performance") =>
 		<Theme>
 			<MemoryRouter initialEntries={[initialEntry]}>
 				<Routes>
-					<Route path="/performance" element={<PerformanceChart data={mockData} />} />
+					<Route element={<PerformanceChart data={mockData} />} path="/performance" />
 					<Route
-						path="/performance/:metric"
 						element={<PerformanceChart data={mockData} />}
+						path="/performance/:metric"
 					/>
 				</Routes>
 			</MemoryRouter>
@@ -133,7 +133,7 @@ describe("PerformanceChart summary cards", () => {
 		renderChart();
 
 		const lcpCard = screen.getByRole("button", { name: /detailed LCP chart/i });
-		const event = fireEvent.keyDown(lcpCard, { key: " ", code: "Space" });
+		const event = fireEvent.keyDown(lcpCard, { code: "Space", key: " " });
 
 		// preventDefault was called → fireEvent returns false
 		expect(event).toBe(false);
@@ -175,13 +175,13 @@ describe("PerformanceChart summary cards", () => {
 		const metrics = ["TTFB", "FCP", "LCP", "CLS", "INP"];
 		const fullMockData: PerformanceMetric[] = metrics.flatMap((m) =>
 			Array.from({ length: 10 * 24 }, (_, i) => ({
-				timestamp: baseTs - i * hourMs,
-				metric_name: m,
+				app_version: "v1.0.0",
 				average_value: 1000 + i * 10,
+				metric_name: m,
 				p50: 800 + i * 10,
 				p75: 1000 + i * 10,
 				p90: 1200 + i * 10,
-				app_version: "v1.0.0",
+				timestamp: baseTs - i * hourMs,
 			}))
 		) as PerformanceMetric[];
 
@@ -192,14 +192,14 @@ describe("PerformanceChart summary cards", () => {
 				<MemoryRouter initialEntries={["/performance"]}>
 					<Routes>
 						<Route
-							path="/performance"
 							element={
 								<PerformanceChart
 									data={fullMockData}
-									range={3}
 									onRangeChange={onRangeChange}
+									range={3}
 								/>
 							}
+							path="/performance"
 						/>
 					</Routes>
 				</MemoryRouter>
@@ -216,14 +216,14 @@ describe("PerformanceChart summary cards", () => {
 				<MemoryRouter initialEntries={["/performance"]}>
 					<Routes>
 						<Route
-							path="/performance"
 							element={
 								<PerformanceChart
 									data={fullMockData}
-									range={14}
 									onRangeChange={onRangeChange}
+									range={14}
 								/>
 							}
+							path="/performance"
 						/>
 					</Routes>
 				</MemoryRouter>

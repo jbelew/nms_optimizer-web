@@ -13,7 +13,7 @@ vi.mock("react-i18next", () => ({
 
 // Mock child components
 vi.mock("../GridCell/GridCell", () => ({
-	default: ({ rowIndex, columnIndex }: { rowIndex: number; columnIndex: number }) => (
+	default: ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => (
 		<div data-testid={`grid-cell-${rowIndex}-${columnIndex}`}>
 			Cell {rowIndex}-{columnIndex}
 		</div>
@@ -28,7 +28,7 @@ vi.mock("../GridControlButtons/GridControlButtons", () => ({
 
 vi.mock("../GridTableButtons/GridTableButtons", () => ({
 	default: ({ solving }: { solving: boolean }) => (
-		<div data-testid="grid-table-buttons" data-solving={solving}>
+		<div data-solving={solving} data-testid="grid-table-buttons">
 			Grid Table Buttons
 		</div>
 	),
@@ -51,15 +51,15 @@ vi.mock("../../store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
 			grid: {
-				height: 5,
-				width: 3,
 				cells: Array.from({ length: 5 }, () =>
 					Array.from({ length: 3 }, () => ({ active: false }))
 				),
+				height: 5,
+				width: 3,
 			},
-			superchargedFixed: false,
 			selectFirstInactiveRowIndex: () => 0,
 			selectLastActiveRowIndex: () => -1,
+			superchargedFixed: false,
 		};
 
 		return selector(mockState);
@@ -94,7 +94,7 @@ describe("GridTable", () => {
 	});
 
 	it("should render grid with correct role and ARIA attributes", () => {
-		const { container } = render(<GridTable solving={false} sharedGrid={false} />);
+		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
 
 		const grid = container.querySelector('[role="grid"]');
 		expect(grid).toBeInTheDocument();
@@ -104,12 +104,12 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridShake wrapper", () => {
-		render(<GridTable solving={false} sharedGrid={false} />);
+		render(<GridTable sharedGrid={false} solving={false} />);
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 	});
 
 	test("should render grid cells and control buttons based on grid dimensions", () => {
-		render(<GridTable solving={false} sharedGrid={false} />);
+		render(<GridTable sharedGrid={false} solving={false} />);
 
 		// Should render 5 * 3 cells (based on mocked grid dimensions)
 		for (let r = 0; r < 5; r++) {
@@ -123,25 +123,25 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridTableButtons", () => {
-		render(<GridTable solving={false} sharedGrid={false} />);
+		render(<GridTable sharedGrid={false} solving={false} />);
 		expect(screen.getByTestId("grid-table-buttons")).toBeInTheDocument();
 	});
 
 	test("should pass solving prop to GridTableButtons", () => {
-		render(<GridTable solving={true} sharedGrid={false} />);
+		render(<GridTable sharedGrid={false} solving={true} />);
 		const buttons = screen.getByTestId("grid-table-buttons");
 		expect(buttons).toHaveAttribute("data-solving", "true");
 	});
 
 	test("should apply opacity class when solving", () => {
-		const { container } = render(<GridTable solving={true} sharedGrid={false} />);
+		const { container } = render(<GridTable sharedGrid={false} solving={true} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).toHaveClass("opacity-25");
 	});
 
 	test("should not apply opacity class when not solving", () => {
-		const { container } = render(<GridTable solving={false} sharedGrid={false} />);
+		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).not.toHaveClass("opacity-25");
@@ -149,19 +149,19 @@ describe("GridTable", () => {
 
 	test("should forward ref to grid container", () => {
 		const ref = React.createRef<HTMLDivElement>();
-		render(<GridTable ref={ref} solving={false} sharedGrid={false} />);
+		render(<GridTable ref={ref} sharedGrid={false} solving={false} />);
 
 		expect(ref.current).toBeInTheDocument();
 		expect(ref.current).toHaveAttribute("role", "grid");
 	});
 
 	test("should be memoized for performance", () => {
-		const { rerender } = render(<GridTable solving={false} sharedGrid={false} />);
+		const { rerender } = render(<GridTable sharedGrid={false} solving={false} />);
 
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 
 		// Rerender with same solving state
-		rerender(<GridTable solving={false} sharedGrid={false} />);
+		rerender(<GridTable sharedGrid={false} solving={false} />);
 
 		// Should still render grid
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();

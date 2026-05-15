@@ -44,7 +44,7 @@ describe("activateRow and deActivateRow actions in GridStore", () => {
 					}
 				});
 			});
-			useGridStore.setState({ grid: defaultTestGrid, result: null, isSharedGrid: false });
+			useGridStore.setState({ grid: defaultTestGrid, isSharedGrid: false, result: null });
 		});
 	});
 

@@ -67,23 +67,23 @@ const ShipSelectionLoadingState = () => {
 		<>
 			{isSmallAndUp ? (
 				<Button
-					size="2"
-					variant="soft"
 					aria-label={t("shipSelection.ariaLabel") ?? ""}
 					className="p-2!"
 					disabled
+					size="2"
+					variant="soft"
 				>
 					<Spinner size="3" />
-					<Separator orientation="vertical" color="gray" decorative />
+					<Separator color="gray" decorative orientation="vertical" />
 					<DropdownMenu.TriggerIcon />
 				</Button>
 			) : (
 				<IconButton
-					size="2"
-					variant="soft"
 					aria-label={t("shipSelection.ariaLabel") ?? ""}
 					className="mt-1!"
 					disabled
+					size="2"
+					variant="soft"
 				>
 					<Spinner size="3" />
 				</IconButton>
@@ -140,11 +140,11 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 				acc[type] = [];
 			}
 
-			acc[type].push({ key, label: t(`platforms.${key}`), details });
+			acc[type].push({ details, key, label: t(`platforms.${key}`) });
 
 			return acc;
 		},
-		{} as Record<string, { key: string; label: string; details: ShipTypeDetail }[]>
+		{} as Record<string, { details: ShipTypeDetail; key: string; label: string }[]>
 	);
 
 	/**
@@ -176,12 +176,12 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 			});
 
 			sendDeferredEvent({
-				category: "ui",
 				action: "select_content",
+				category: "ui",
 				content_type: "platform",
 				item_id: option,
-				value: 1,
 				nonInteraction: false,
+				value: 1,
 			});
 		}
 	};
@@ -191,16 +191,16 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger disabled={solving || isPending}>
 					<Button
-						size="2"
-						variant="soft"
 						aria-label={t("shipSelection.ariaLabel") ?? ""}
 						className="p-2!"
+						size="2"
+						variant="soft"
 					>
 						<GearIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						<Separator
-							orientation="vertical"
 							color={solving || isPending ? "gray" : "cyan"}
 							decorative
+							orientation="vertical"
 						/>
 						<DropdownMenu.TriggerIcon />
 					</Button>
@@ -210,9 +210,9 @@ const ShipSelectionInternal: React.FC<ShipSelectionProps> = ({ solving }) => {
 						{t("shipSelection.selectPlatform", "Select Platform")}
 					</DropdownMenu.Label>
 					<ShipTypesDropdown
-						selectedShipType={selectedShipType}
-						handleOptionSelect={handleOptionSelect}
 						groupedShipTypes={groupedShipTypes}
+						handleOptionSelect={handleOptionSelect}
+						selectedShipType={selectedShipType}
 					/>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
@@ -264,12 +264,12 @@ export const ShipSelection = ShipSelectionComponent;
  * Props for the `ShipTypesDropdown` helper component.
  */
 interface ShipTypesDropdownProps {
-	/** The ID of the currently active ship type. */
-	selectedShipType: string;
+	/** Map of grouped ship type data for rendering sections. */
+	groupedShipTypes: Record<string, { details: ShipTypeDetail; key: string; label: string }[]>;
 	/** Callback function for when a new type is selected. */
 	handleOptionSelect: (option: string) => void;
-	/** Map of grouped ship type data for rendering sections. */
-	groupedShipTypes: Record<string, { key: string; label: string; details: ShipTypeDetail }[]>;
+	/** The ID of the currently active ship type. */
+	selectedShipType: string;
 }
 
 /**
@@ -298,17 +298,17 @@ interface ShipTypesDropdownProps {
  * ```
  */
 const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({
-	selectedShipType,
-	handleOptionSelect,
 	groupedShipTypes,
+	handleOptionSelect,
+	selectedShipType,
 }) => {
 	return (
-		<DropdownMenu.RadioGroup value={selectedShipType} onValueChange={handleOptionSelect}>
+		<DropdownMenu.RadioGroup onValueChange={handleOptionSelect} value={selectedShipType}>
 			{Object.entries(groupedShipTypes).map(([type, items], groupIndex) => (
 				<React.Fragment key={type}>
 					{groupIndex > 0 && <DropdownMenu.Separator />}
 					{items.map(({ key, label }) => (
-						<DropdownMenu.RadioItem key={key} value={key} className="font-medium">
+						<DropdownMenu.RadioItem className="font-medium" key={key} value={key}>
 							{label}
 						</DropdownMenu.RadioItem>
 					))}

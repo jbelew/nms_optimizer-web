@@ -21,7 +21,7 @@ describe("resetGridTech action in GridStore", () => {
 				})
 			);
 			cellConfigurator(newGrid.cells);
-			useGridStore.setState({ grid: newGrid, result: null, isSharedGrid: false });
+			useGridStore.setState({ grid: newGrid, isSharedGrid: false, result: null });
 		});
 	};
 

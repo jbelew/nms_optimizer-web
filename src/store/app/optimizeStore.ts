@@ -18,12 +18,18 @@ export type ErrorType = "fatal" | "recoverable";
  * @category Optimization
  */
 export interface OptimizeState {
-	/** Whether the global error overlay is visible. */
-	showError: boolean;
-	/** The severity level of the active error. */
-	errorType: ErrorType | null;
 	/** The actual error object containing details of the failure. */
 	error: Error | null;
+	/** The severity level of the active error. */
+	errorType: ErrorType | null;
+	/** The technology identifier that failed to fit using pattern solving. */
+	patternNoFitTech: null | string;
+	/**
+	 * Sets or clears the current "Pattern No Fit" technology warning.
+	 *
+	 * @param {string | null} tech - The technology key to set, or `null` to clear.
+	 */
+	setPatternNoFitTech: (tech: null | string) => void;
 	/**
 	 * Updates the error visibility and metadata.
 	 *
@@ -32,14 +38,8 @@ export interface OptimizeState {
 	 * @param {Error | null} [error=null] - The exception or error details.
 	 */
 	setShowError: (show: boolean, type?: ErrorType, error?: Error | null) => void;
-	/** The technology identifier that failed to fit using pattern solving. */
-	patternNoFitTech: string | null;
-	/**
-	 * Sets or clears the current "Pattern No Fit" technology warning.
-	 *
-	 * @param {string | null} tech - The technology key to set, or `null` to clear.
-	 */
-	setPatternNoFitTech: (tech: string | null) => void;
+	/** Whether the global error overlay is visible. */
+	showError: boolean;
 }
 
 /**
@@ -60,11 +60,11 @@ export interface OptimizeState {
  * // returns { showError: false, error: null }
  */
 export const useOptimizeStore = create<OptimizeState>((set) => ({
-	showError: false,
-	errorType: null,
 	error: null,
-	setShowError: (show, type = "recoverable", error = null) =>
-		set({ showError: show, errorType: show ? type : null, error: show ? error : null }),
+	errorType: null,
 	patternNoFitTech: null,
 	setPatternNoFitTech: (tech) => set({ patternNoFitTech: tech }),
+	setShowError: (show, type = "recoverable", error = null) =>
+		set({ error: show ? error : null, errorType: show ? type : null, showError: show }),
+	showError: false,
 }));

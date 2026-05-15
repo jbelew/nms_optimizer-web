@@ -2,9 +2,9 @@ import { useContext } from "react";
 
 import { ToastContext } from "../../context/createToastContext";
 
-export { ToastProvider } from "../../context/ToastContext";
-
 export type { ToastConfig } from "../../context/createToastContext";
+
+export { ToastProvider } from "../../context/ToastContext";
 
 /**
  * Custom hook for accessing the application's toast notification system.

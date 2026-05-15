@@ -28,71 +28,71 @@ vi.mock("../../store/tech/techTreeLoadingStore", () => ({
 
 describe("useFetchTechTreeSuspense", () => {
 	const mockTechTree: TechTree = {
-		starship: [
-			{
-				label: "Defense",
-				key: "defense",
-				modules: [],
-				image: null,
-				color: "red",
-				module_count: 5,
-			} as TechTreeItem,
-			{
-				label: "Shield",
-				key: "shield",
-				modules: [],
-				image: null,
-				color: "blue",
-				module_count: 3,
-			} as TechTreeItem,
-		],
 		exosuit: [
 			{
-				label: "Health",
-				key: "health",
-				modules: [],
-				image: null,
 				color: "green",
+				image: null,
+				key: "health",
+				label: "Health",
 				module_count: 2,
+				modules: [],
 			} as TechTreeItem,
-		],
-		recommended_builds: [
-			{
-				title: "Build 1",
-				layout: [[{ tech: "defense" }]],
-			} as RecommendedBuild,
 		],
 		grid_definition: {
 			grid: [] as Array<[]>,
 			gridFixed: true,
 			superchargedFixed: false,
 		},
+		recommended_builds: [
+			{
+				layout: [[{ tech: "defense" }]],
+				title: "Build 1",
+			} as RecommendedBuild,
+		],
+		starship: [
+			{
+				color: "red",
+				image: null,
+				key: "defense",
+				label: "Defense",
+				module_count: 5,
+				modules: [],
+			} as TechTreeItem,
+			{
+				color: "blue",
+				image: null,
+				key: "shield",
+				label: "Shield",
+				module_count: 3,
+				modules: [],
+			} as TechTreeItem,
+		],
 	} as TechTree;
 
 	type MockTechStoreState = {
-		setTechColors: (colors: Record<string, string>) => void;
-		setTechGroups: (groups: Record<string, TechTreeItem[]>) => void;
-		setActiveGroup: (key: string, type: string) => void;
-		setActiveGroups: (groups: Record<string, string>) => void;
+		activeGroups: Record<string, string>;
 		initializeTechTree: (
 			colors: Record<string, string>,
 			techGroups: Record<string, TechTreeItem[]>,
 			activeGroups: Record<string, string>
 		) => void;
+		setActiveGroup: (key: string, type: string) => void;
+		setActiveGroups: (groups: Record<string, string>) => void;
+		setTechColors: (colors: Record<string, string>) => void;
+		setTechGroups: (groups: Record<string, TechTreeItem[]>) => void;
 		techColors: Record<string, string>;
 		techGroups: Record<string, TechTreeItem[]>;
-		activeGroups: Record<string, string>;
 	};
 
 	type MockGridStoreState = {
-		setInitialGridDefinition: (def: unknown) => void;
-		setGridFromInitialDefinition: () => void;
 		selectHasModulesInGrid: () => boolean;
+		setGridFromInitialDefinition: () => void;
+		setInitialGridDefinition: (def: unknown) => void;
 	};
 
 	type MockTechTreeLoadingState = {
-		setLoading: (loading: boolean) => void;
 		isLoading: boolean;
+		setLoading: (loading: boolean) => void;
 	};
 
 	const setupMocks = (hasGridModules = false) => {
@@ -107,14 +107,14 @@ describe("useFetchTechTreeSuspense", () => {
 
 		vi.mocked(useTechStore).mockImplementation((selector) => {
 			const state: MockTechStoreState = {
-				setTechColors: mockSetTechColors,
-				setTechGroups: mockSetTechGroups,
+				activeGroups: {},
+				initializeTechTree: mockInitializeTechTree,
 				setActiveGroup: mockSetActiveGroup,
 				setActiveGroups: mockSetActiveGroups,
-				initializeTechTree: mockInitializeTechTree,
+				setTechColors: mockSetTechColors,
+				setTechGroups: mockSetTechGroups,
 				techColors: {},
 				techGroups: {},
-				activeGroups: {},
 			};
 
 			return selector(state as never);
@@ -122,9 +122,9 @@ describe("useFetchTechTreeSuspense", () => {
 
 		vi.mocked(useGridStore).mockImplementation((selector) => {
 			const state: MockGridStoreState = {
-				setInitialGridDefinition: mockSetInitialGridDefinition,
-				setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 				selectHasModulesInGrid: () => hasGridModules,
+				setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
+				setInitialGridDefinition: mockSetInitialGridDefinition,
 			};
 
 			return selector(state as never);
@@ -132,27 +132,27 @@ describe("useFetchTechTreeSuspense", () => {
 
 		// Mock getState at module level
 		(useGridStore as unknown as { getState: () => MockGridStoreState }).getState = () => ({
-			setInitialGridDefinition: mockSetInitialGridDefinition,
-			setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 			selectHasModulesInGrid: () => hasGridModules,
+			setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
+			setInitialGridDefinition: mockSetInitialGridDefinition,
 		});
 
 		// Mock getState for useTechStore to support setActiveGroups
 		(useTechStore as unknown as { getState: () => MockTechStoreState }).getState = () => ({
-			setTechColors: mockSetTechColors,
-			setTechGroups: mockSetTechGroups,
+			activeGroups: {},
+			initializeTechTree: mockInitializeTechTree,
 			setActiveGroup: mockSetActiveGroup,
 			setActiveGroups: mockSetActiveGroups,
-			initializeTechTree: mockInitializeTechTree,
+			setTechColors: mockSetTechColors,
+			setTechGroups: mockSetTechGroups,
 			techColors: {},
 			techGroups: {},
-			activeGroups: {},
 		});
 
 		vi.mocked(useTechTreeLoadingStore).mockImplementation((selector) => {
 			const state: MockTechTreeLoadingState = {
-				setLoading: mockSetLoading,
 				isLoading: false,
+				setLoading: mockSetLoading,
 			};
 
 			return selector(state as never);
@@ -162,19 +162,19 @@ describe("useFetchTechTreeSuspense", () => {
 		(
 			useTechTreeLoadingStore as unknown as { getState: () => MockTechTreeLoadingState }
 		).getState = () => ({
-			setLoading: mockSetLoading,
 			isLoading: false,
+			setLoading: mockSetLoading,
 		});
 
 		return {
-			mockSetTechColors,
-			mockSetTechGroups,
+			mockInitializeTechTree,
 			mockSetActiveGroup,
 			mockSetActiveGroups,
-			mockInitializeTechTree,
-			mockSetInitialGridDefinition,
 			mockSetGridFromInitialDefinition,
+			mockSetInitialGridDefinition,
 			mockSetLoading,
+			mockSetTechColors,
+			mockSetTechGroups,
 		};
 	};
 
@@ -254,8 +254,8 @@ describe("useFetchTechTreeSuspense", () => {
 		const callArg = mockInitializeTechTree.mock.calls[0]?.[2];
 		expect(callArg).toEqual({
 			defense: "normal",
-			shield: "normal",
 			health: "normal",
+			shield: "normal",
 		});
 	});
 
@@ -277,7 +277,7 @@ describe("useFetchTechTreeSuspense", () => {
 	});
 
 	it("should call setInitialGridDefinition when grid is empty", async () => {
-		const { mockSetInitialGridDefinition, mockSetGridFromInitialDefinition } =
+		const { mockSetGridFromInitialDefinition, mockSetInitialGridDefinition } =
 			setupMocks(false); // Grid is empty
 
 		await act(async () => {
@@ -300,12 +300,12 @@ describe("useFetchTechTreeSuspense", () => {
 		const techTreeWithTypes: TechTree = {
 			starship: [
 				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
 					module_count: 5,
+					modules: [],
 					type: "max",
 				} as TechTreeItem,
 			],
@@ -337,20 +337,20 @@ describe("useFetchTechTreeSuspense", () => {
 		const techTreeWithDuplicates: TechTree = {
 			starship: [
 				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
 					module_count: 5,
+					modules: [],
 				} as TechTreeItem,
 				{
-					label: "Defense Max",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "ruby",
+					image: null,
+					key: "defense",
+					label: "Defense Max",
 					module_count: 5,
+					modules: [],
 					type: "max",
 				} as TechTreeItem,
 			],
@@ -441,34 +441,34 @@ describe("useFetchTechTreeSuspense", () => {
 
 	it("should handle tech tree with multiple categories", async () => {
 		const multiCategoryTree: TechTree = {
-			starship: [
-				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
-					color: "red",
-					module_count: 5,
-				} as TechTreeItem,
-			],
 			exosuit: [
 				{
-					label: "Health",
-					key: "health",
-					modules: [],
-					image: null,
 					color: "green",
+					image: null,
+					key: "health",
+					label: "Health",
 					module_count: 2,
+					modules: [],
 				} as TechTreeItem,
 			],
 			multitool: [
 				{
-					label: "Damage",
-					key: "damage",
-					modules: [],
-					image: null,
 					color: "orange",
+					image: null,
+					key: "damage",
+					label: "Damage",
 					module_count: 3,
+					modules: [],
+				} as TechTreeItem,
+			],
+			starship: [
+				{
+					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
+					module_count: 5,
+					modules: [],
 				} as TechTreeItem,
 			],
 		};
@@ -499,12 +499,12 @@ describe("useFetchTechTreeSuspense", () => {
 		const techTreeWithInvalidItems: TechTree = {
 			starship: [
 				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
 					module_count: 5,
+					modules: [],
 				} as TechTreeItem,
 				// Invalid item without proper key
 				{
@@ -537,25 +537,25 @@ describe("useFetchTechTreeSuspense", () => {
 
 	it("should filter out invalid recommended builds", async () => {
 		const techTreeWithInvalidBuilds: TechTree = {
-			starship: [
-				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
-					color: "red",
-					module_count: 5,
-				} as TechTreeItem,
-			],
 			recommended_builds: [
 				{
-					title: "Valid Build",
 					layout: [[{ tech: "defense" }]],
+					title: "Valid Build",
 				} as RecommendedBuild,
 				{
-					title: "Invalid Build",
 					layout: [], // Empty layout - invalid
+					title: "Invalid Build",
 				} as RecommendedBuild,
+			],
+			starship: [
+				{
+					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
+					module_count: 5,
+					modules: [],
+				} as TechTreeItem,
 			],
 		};
 

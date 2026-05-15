@@ -25,8 +25,8 @@ describe("ConditionalTooltip", () => {
 		vi.clearAllMocks();
 		vi.mocked(isTouchDevice).mockReturnValue(false);
 		vi.mocked(useTooltipActions).mockReturnValue({
-			show: mockShow,
 			hide: mockHide,
+			show: mockShow,
 		});
 	});
 
@@ -102,7 +102,7 @@ describe("ConditionalTooltip", () => {
 
 	it("should pass custom delayDuration", () => {
 		render(
-			<ConditionalTooltip label="Test Label" delayDuration={1234}>
+			<ConditionalTooltip delayDuration={1234} label="Test Label">
 				<button>Custom delay</button>
 			</ConditionalTooltip>
 		);

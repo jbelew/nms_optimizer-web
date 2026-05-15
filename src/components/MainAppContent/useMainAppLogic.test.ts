@@ -41,30 +41,30 @@ vi.mock("../../hooks/useErrorDispatcher", () => ({
 vi.mock("../../hooks/useLoadBuild/useLoadBuild", () => ({
 	useLoadBuild: () => ({
 		fileInputRef: { current: null },
-		handleLoadBuild: vi.fn(),
 		handleFileSelect: vi.fn(),
+		handleLoadBuild: vi.fn(),
 	}),
 }));
 
 vi.mock("../../hooks/useOptimize/useOptimize", () => ({
 	useOptimize: () => ({
-		solving: false,
-		progressPercent: 0,
-		status: "idle",
-		handleOptimize: vi.fn(),
-		gridContainerRef: { current: null },
-		patternNoFitTech: null,
 		clearPatternNoFitTech: vi.fn(),
+		gridContainerRef: { current: null },
 		handleForceCurrentPnfOptimize: vi.fn(),
+		handleOptimize: vi.fn(),
+		patternNoFitTech: null,
+		progressPercent: 0,
+		solving: false,
+		status: "idle",
 	}),
 }));
 
 vi.mock("../../hooks/useSaveBuild/useSaveBuild", () => ({
 	useSaveBuild: () => ({
-		isSaveBuildDialogOpen: false,
-		handleSaveBuild: vi.fn(),
-		handleBuildNameConfirm: vi.fn(),
 		handleBuildNameCancel: vi.fn(),
+		handleBuildNameConfirm: vi.fn(),
+		handleSaveBuild: vi.fn(),
+		isSaveBuildDialogOpen: false,
 	}),
 }));
 
@@ -74,16 +74,16 @@ vi.mock("../../hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
 
 vi.mock("../../hooks/useScrollHide/useScrollHide", () => ({
 	useScrollHide: () => ({
+		forceShow: vi.fn(),
 		isVisible: true,
 		toolbarRef: { current: null },
-		forceShow: vi.fn(),
 	}),
 }));
 
 vi.mock("../../hooks/useToast/useToast", () => ({
 	useToast: () => ({
-		showSuccess: vi.fn(),
 		showError: vi.fn(),
+		showSuccess: vi.fn(),
 	}),
 }));
 

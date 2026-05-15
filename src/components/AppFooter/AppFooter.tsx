@@ -12,10 +12,10 @@ import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
  * Props for the `AppFooter` component.
  */
 interface AppFooterProps {
-	/** The semantic version string of the application. **Must be provided.** */
-	buildVersion: string;
 	/** The ISO date string when the application was last built. */
 	buildDate?: string;
+	/** The semantic version string of the application. **Must be provided.** */
+	buildVersion: string;
 }
 
 /**
@@ -42,72 +42,72 @@ interface AppFooterProps {
  * <AppFooter buildVersion="1.2.3" buildDate="2023-10-27T10:00:00Z" />
  * ```
  */
-const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
-	const { t, i18n } = useTranslation();
+const AppFooter: React.FC<AppFooterProps> = ({ buildDate, buildVersion }) => {
+	const { i18n, t } = useTranslation();
 	const { openDialog } = useDialog();
 
 	return (
-		<footer key={i18n.language} data-build-date={buildDate} className="app-footer">
+		<footer className="app-footer" data-build-date={buildDate} key={i18n.language}>
 			<Flex
-				direction="column"
 				align="center"
+				className="app-footer__wrapper"
+				direction="column"
 				gap="1"
 				pb={{ initial: "6", md: "0" }}
-				className="app-footer__wrapper"
 			>
 				<div className="app-footer__content">
 					<Trans
-						i18nKey="footer.issuePrompt"
 						components={{
 							1: (
 								<a
-									href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
-									target="_blank"
 									className="app-footer__link"
+									href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 									rel="noopener noreferrer"
+									target="_blank"
 								/>
 							),
 						}}
+						i18nKey="footer.issuePrompt"
 					/>
 					<br />
 					{t("footer.builtBy")} (void23 | QQ9Y-EJRS-P8KGW)
 					<a
-						href="https://github.com/jbelew/nms_optimizer-web"
-						target="_blank"
-						rel="noopener noreferrer"
 						aria-label={t("buttons.viewSourceOnGithub") ?? ""}
+						href="https://github.com/jbelew/nms_optimizer-web"
+						rel="noopener noreferrer"
+						target="_blank"
 					>
 						<GitHubLogoIcon className="app-footer__link--icon" />
 					</a>
 					<a
-						href="https://www.linkedin.com/in/jobelew/"
-						target="_blank"
-						rel="noopener noreferrer"
 						aria-label={t("buttons.viewProfileOnLinkedin") ?? ""}
+						href="https://www.linkedin.com/in/jobelew/"
+						rel="noopener noreferrer"
+						target="_blank"
 					>
 						<LinkedInLogoIcon className="app-footer__link--icon-linkedin" />
 					</a>
 					<a
-						href="https://www.linkedin.com/in/jobelew/"
-						target="_blank"
-						rel="noopener noreferrer"
 						className="app-footer__link"
+						href="https://www.linkedin.com/in/jobelew/"
+						rel="noopener noreferrer"
+						target="_blank"
 					>
 						#OpenToWork
 					</a>
 					&nbsp;•{" "}
 					<a
-						href="https://raw.githubusercontent.com/jbelew/nms_optimizer-web/refs/heads/main/LICENSE"
-						target="_blank"
-						rel="noopener noreferrer"
 						className="app-footer__link"
+						href="https://raw.githubusercontent.com/jbelew/nms_optimizer-web/refs/heads/main/LICENSE"
+						rel="noopener noreferrer"
+						target="_blank"
 					>
 						{t("footer.license")}
 					</a>{" "}
 					•{" "}
 					<a
-						href={i18n.language === "en" ? "/privacy" : `/${i18n.language}/privacy`}
 						className="app-footer__link"
+						href={i18n.language === "en" ? "/privacy" : `/${i18n.language}/privacy`}
 						onClick={(e) => {
 							e.preventDefault();
 							openDialog("privacy");
@@ -118,13 +118,13 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildVersion, buildDate }) => {
 					• {t("footer.buildLabel")} {buildVersion}{" "}
 					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>
-				<Separator decorative size="3" mt="1" mb="1" />
+				<Separator decorative mb="1" mt="1" size="3" />
 				<Flex
 					align="center"
-					gap={{ initial: "2", lg: "1" }}
-					wrap="wrap"
-					justify="center"
 					className="app-footer__support"
+					gap={{ initial: "2", lg: "1" }}
+					justify="center"
+					wrap="wrap"
 				>
 					<Trans i18nKey="footer.supportPrompt" />
 					<Buymeacoffee />

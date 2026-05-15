@@ -9,13 +9,13 @@ import { useTechModuleManagement } from "./useTechModuleManagement";
 vi.mock("@/store/tech/techStore");
 
 const mockModules = [
-	{ id: "core1", label: "Core 1", image: "", type: "core" },
-	{ id: "bonus1", label: "Bonus 1", image: "", type: "bonus" },
-	{ id: "upgradeC", label: "Sigma Upgrade", image: "", type: "upgrade" },
-	{ id: "upgradeB", label: "Tau Upgrade", image: "", type: "upgrade" },
-	{ id: "upgradeA", label: "Theta Upgrade", image: "", type: "upgrade" },
-	{ id: "reactor1", label: "Reactor 1", image: "", type: "reactor" },
-	{ id: "cosmetic1", label: "Cosmetic 1", image: "", type: "cosmetic" },
+	{ id: "core1", image: "", label: "Core 1", type: "core" },
+	{ id: "bonus1", image: "", label: "Bonus 1", type: "bonus" },
+	{ id: "upgradeC", image: "", label: "Sigma Upgrade", type: "upgrade" },
+	{ id: "upgradeB", image: "", label: "Tau Upgrade", type: "upgrade" },
+	{ id: "upgradeA", image: "", label: "Theta Upgrade", type: "upgrade" },
+	{ id: "reactor1", image: "", label: "Reactor 1", type: "reactor" },
+	{ id: "cosmetic1", image: "", label: "Cosmetic 1", type: "cosmetic" },
 ];
 
 describe("useTechModuleManagement", () => {
@@ -23,8 +23,8 @@ describe("useTechModuleManagement", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					setCheckedModules: () => void;
 					checkedModules: { [key: string]: string[] };
+					setCheckedModules: () => void;
 				}) => unknown
 			) =>
 				selector({
@@ -47,8 +47,8 @@ describe("useTechModuleManagement", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					setCheckedModules: () => void;
 					checkedModules: { [key: string]: string[] };
+					setCheckedModules: () => void;
 				}) => unknown
 			) =>
 				selector({
@@ -90,8 +90,8 @@ describe("useTechModuleManagement", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					setCheckedModules: () => void;
 					checkedModules: { [key: string]: string[] };
+					setCheckedModules: () => void;
 				}) => unknown
 			) =>
 				selector({

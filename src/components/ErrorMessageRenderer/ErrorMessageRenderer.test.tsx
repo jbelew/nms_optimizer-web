@@ -26,19 +26,19 @@ describe("ErrorMessageRenderer", () => {
 
 		// Default mocks
 		vi.mocked(useToast).mockReturnValue({
-			toastConfig: null,
+			closeToast: vi.fn(),
 			isOpen: false,
-			showToast: vi.fn(),
-			showSuccess: vi.fn(),
 			showError: mockShowError,
 			showInfo: vi.fn(),
-			closeToast: vi.fn(),
+			showSuccess: vi.fn(),
+			showToast: vi.fn(),
+			toastConfig: null,
 		});
 
 		mockUseTranslation.mockReturnValue({
-			t: mockTranslate,
 			i18n: {} as Record<string, unknown>,
 			ready: true,
+			t: mockTranslate,
 		});
 
 		vi.mocked(useErrorStore).mockReturnValue({

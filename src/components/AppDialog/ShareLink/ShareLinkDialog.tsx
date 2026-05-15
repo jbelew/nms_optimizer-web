@@ -14,10 +14,10 @@ const AppDialog = lazy(() => import("../Base/AppDialog"));
 interface ShareLinkDialogProps {
 	/** Whether the share dialog is currently visible. */
 	isOpen: boolean;
-	/** The full URL generated for sharing the current grid state. **Must be a valid URL.** */
-	shareUrl: string;
 	/** Callback function to close the dialog. */
 	onClose: () => void;
+	/** The full URL generated for sharing the current grid state. **Must be a valid URL.** */
+	shareUrl: string;
 }
 
 /**
@@ -45,7 +45,7 @@ interface ShareLinkDialogProps {
  * // mounts ShareLinkDialog with a shareable URL
  * ```
  */
-const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }) => {
+const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }) => {
 	const { t } = useTranslation();
 	const [copied, setCopied] = useState(false);
 	const copiedTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,7 +79,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button variant="soft" onClick={onClose}>
+			<Button onClick={onClose} variant="soft">
 				{t("dialogs.shareLink.closeButton")}
 			</Button>
 			<Button onClick={handleCopyClick}>
@@ -92,12 +92,12 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, shareUrl, onClose }
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
+				content={<ShareLinkContent shareUrl={shareUrl} />}
+				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}
-				titleKey="dialogs.titles.shareLink"
 				title={t("dialogs.titles.shareLink")}
-				footer={footer}
-				content={<ShareLinkContent shareUrl={shareUrl} />}
+				titleKey="dialogs.titles.shareLink"
 			/>
 		</Suspense>
 	);

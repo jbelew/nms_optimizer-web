@@ -6,8 +6,8 @@ import { useAnalytics } from "./useAnalytics";
 
 // Mock the actual sendEvent function from utils/analytics/tracking
 vi.mock("../../utils/analytics/tracking", () => ({
-	sendEvent: vi.fn(),
 	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 describe("useAnalytics", () => {

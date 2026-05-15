@@ -14,7 +14,7 @@ describe("handleCellDoubleTap action in GridStore", () => {
 					Object.assign(cell, createEmptyCell(false, true)); // Default: active, not supercharged
 				})
 			);
-			useGridStore.setState({ grid: defaultTestGrid, result: null, isSharedGrid: false });
+			useGridStore.setState({ grid: defaultTestGrid, isSharedGrid: false, result: null });
 		});
 	});
 

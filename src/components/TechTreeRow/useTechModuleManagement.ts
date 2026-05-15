@@ -33,11 +33,11 @@ import { useTechStore } from "@/store/tech/techStore";
  */
 export const useTechModuleManagement = (
 	tech: string,
-	modules: { label: string; id: string; image: string; type?: string }[]
+	modules: { id: string; image: string; label: string; type?: string }[]
 ) => {
 	const setCheckedModules = useTechStore((state) => state.setCheckedModules);
 	const allCheckedModules = useTechStore((state) => state.checkedModules);
-	const { setModuleSelection, getModuleSelection } = useModuleSelectionStore();
+	const { getModuleSelection, setModuleSelection } = useModuleSelectionStore();
 
 	const currentCheckedModules = useMemo(
 		() => allCheckedModules[tech] || [],
@@ -72,14 +72,14 @@ export const useTechModuleManagement = (
 
 	const groupedModules = useMemo(() => {
 		const groups: { [key: string]: typeof modules } = {
-			core: [],
-			bonus: [],
-			upgrade: [],
-			reactor: [],
-			cosmetic: [],
 			atlantid: [],
-			trails: [],
+			bonus: [],
+			core: [],
+			cosmetic: [],
 			figurines: [],
+			reactor: [],
+			trails: [],
+			upgrade: [],
 		};
 
 		modules.forEach((module) => {
@@ -158,7 +158,7 @@ export const useTechModuleManagement = (
 	 * ```
 	 */
 	const handleSelectAllChange = useCallback(
-		(checked: boolean | "indeterminate") => {
+		(checked: "indeterminate" | boolean) => {
 			if (checked) {
 				handleAllCheckboxesChange([...nonCoreModuleIds, ...coreModuleIds]);
 			} else {
@@ -203,7 +203,7 @@ export const useTechModuleManagement = (
 					if (module) {
 						const groupName = module.type || "upgrade";
 
-						if ([`upgrade`, `cosmetic`, `reactor`, `atlantid`].includes(groupName)) {
+						if ([`atlantid`, `cosmetic`, `reactor`, `upgrade`].includes(groupName)) {
 							const label = module.label || "";
 
 							if (label.includes("Theta")) {
@@ -248,12 +248,12 @@ export const useTechModuleManagement = (
 	);
 
 	return {
+		allModulesSelected,
 		currentCheckedModules,
 		groupedModules,
-		allModulesSelected,
-		isIndeterminate,
-		handleValueChange,
-		handleSelectAllChange,
 		handleAllCheckboxesChange,
+		handleSelectAllChange,
+		handleValueChange,
+		isIndeterminate,
 	};
 };

@@ -7,10 +7,10 @@ import { ShareLinkContent } from "./ShareLinkContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
+	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 	useTranslation: () => ({
 		t: (key: string) => key,
 	}),
-	Trans: ({ i18nKey }: { i18nKey: string }) => <span>{i18nKey}</span>,
 }));
 
 // Mock clipboard API
@@ -20,8 +20,8 @@ const mockClipboard = {
 
 // Setup clipboard mock
 Object.defineProperty(navigator, "clipboard", {
-	value: mockClipboard,
 	configurable: true,
+	value: mockClipboard,
 });
 
 // Helper to render component within Dialog context

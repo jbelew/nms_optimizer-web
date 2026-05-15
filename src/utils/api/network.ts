@@ -11,6 +11,18 @@
 import { useOptimizeStore } from "../../store/app/optimizeStore";
 
 /**
+ * Options for the `apiCall` function, extending standard `RequestInit`.
+ *
+ * @category Utilities
+ */
+export interface ApiCallOptions extends RequestInit {
+	/** Whether the call is critical for app boot. If true, error dialog is skipped. */
+	isCritical?: boolean;
+	/** Whether to skip showing the global error dialog on failure. Defaults to `false`. */
+	skipGlobalError?: boolean;
+}
+
+/**
  * Custom error class for HTTP errors.
  *
  * @remarks
@@ -55,6 +67,108 @@ export class HttpError extends Error {
 		this.status = status;
 		this.statusText = statusText;
 	}
+}
+
+/**
+ * Centralized API call wrapper that handles errors and triggers the global error dialog.
+ *
+ * @remarks
+ * All HTTP errors and network failures automatically trigger the `ErrorContent` dialog
+ * via the `OptimizeStore` unless `skipGlobalError` or `isCritical` is set to `true`. This ensures a
+ * consistent error experience across the application without manual try-catch in every hook.
+ *
+ * It uses {@link fetchJson} internally for the actual network request and JSON parsing.
+ *
+ * @template T - The expected return type of the JSON data.
+ *
+ * @param url - The API endpoint URL. Must be a valid URL.
+ * @param options - Fetch options plus custom logic flags.
+ * @param timeout - Timeout in milliseconds. Must be a positive integer.
+ *
+ * @returns A promise that resolves to the parsed JSON response of type `T`.
+ *
+ * @throws {HttpError} Throws if the response status is not "ok" (e.g., 4xx, 5xx).
+ * @throws {Error} Throws on network failure, timeout, or JSON parsing error.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * try {
+ *   const result = await apiCall<{ success: boolean }>("/api/submit", {
+ *     method: "POST",
+ *     body: JSON.stringify(payload)
+ *   });
+ *   console.log("Success:", result.success);
+ * } catch (error) {
+ *   // Error dialog already shown unless skipGlobalError: true
+ * }
+ * ```
+ */
+export async function apiCall<T = unknown>(
+	url: string,
+	options: ApiCallOptions = {},
+	timeout: number = 10000
+): Promise<T> {
+	const { isCritical = false, skipGlobalError = false, ...fetchOptions } = options;
+
+	try {
+		return await fetchJson<T>(url, fetchOptions, timeout);
+	} catch (error) {
+		console.error("API call failed:", error);
+
+		if (!skipGlobalError && !isCritical) {
+			// Always trigger error dialog for any failure in apiCall unless skipped or critical
+			useOptimizeStore
+				.getState()
+				.setShowError(
+					true,
+					"fatal",
+					error instanceof Error ? error : new Error(String(error))
+				);
+		}
+
+		throw error;
+	}
+}
+
+/**
+ * Fetches a JSON resource from the network with built-in error handling and timeout.
+ *
+ * @remarks
+ * Automatically checks if the response is successful and parses the body as JSON.
+ * It uses {@link fetchWithTimeout} internally to ensure requests do not hang indefinitely.
+ *
+ * @template T - The expected return type of the JSON data.
+ *
+ * @param url - The URL to fetch. Must be a valid URL string.
+ * @param options - Standard `fetch` options.
+ * @param timeout - Timeout in milliseconds. Must be a positive integer.
+ *
+ * @returns A promise that resolves to the parsed JSON response of type `T`.
+ *
+ * @throws {HttpError} Throws an `HttpError` if the response status is not "ok" (200-299).
+ * @throws {Error} Throws a timeout error if the request exceeds the `timeout` duration.
+ *
+ * @category Utilities
+ *
+ * @example
+ * ```ts
+ * const data = await fetchJson<{ id: number }>("/api/user/1");
+ * ```
+ */
+export async function fetchJson<T>(
+	url: string,
+	options?: RequestInit,
+	timeout: number = 10000
+): Promise<T> {
+	const response = await fetchWithTimeout(url, options, timeout);
+
+	if (!response.ok) {
+		throw new HttpError(response.status, response.statusText);
+	}
+
+	return response.json();
 }
 
 /**
@@ -112,119 +226,5 @@ export async function fetchWithTimeout(
 		throw error;
 	} finally {
 		clearTimeout(timeoutId);
-	}
-}
-
-/**
- * Fetches a JSON resource from the network with built-in error handling and timeout.
- *
- * @remarks
- * Automatically checks if the response is successful and parses the body as JSON.
- * It uses {@link fetchWithTimeout} internally to ensure requests do not hang indefinitely.
- *
- * @template T - The expected return type of the JSON data.
- *
- * @param url - The URL to fetch. Must be a valid URL string.
- * @param options - Standard `fetch` options.
- * @param timeout - Timeout in milliseconds. Must be a positive integer.
- *
- * @returns A promise that resolves to the parsed JSON response of type `T`.
- *
- * @throws {HttpError} Throws an `HttpError` if the response status is not "ok" (200-299).
- * @throws {Error} Throws a timeout error if the request exceeds the `timeout` duration.
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * const data = await fetchJson<{ id: number }>("/api/user/1");
- * ```
- */
-export async function fetchJson<T>(
-	url: string,
-	options?: RequestInit,
-	timeout: number = 10000
-): Promise<T> {
-	const response = await fetchWithTimeout(url, options, timeout);
-
-	if (!response.ok) {
-		throw new HttpError(response.status, response.statusText);
-	}
-
-	return response.json();
-}
-
-/**
- * Options for the `apiCall` function, extending standard `RequestInit`.
- *
- * @category Utilities
- */
-export interface ApiCallOptions extends RequestInit {
-	/** Whether to skip showing the global error dialog on failure. Defaults to `false`. */
-	skipGlobalError?: boolean;
-	/** Whether the call is critical for app boot. If true, error dialog is skipped. */
-	isCritical?: boolean;
-}
-
-/**
- * Centralized API call wrapper that handles errors and triggers the global error dialog.
- *
- * @remarks
- * All HTTP errors and network failures automatically trigger the `ErrorContent` dialog
- * via the `OptimizeStore` unless `skipGlobalError` or `isCritical` is set to `true`. This ensures a
- * consistent error experience across the application without manual try-catch in every hook.
- *
- * It uses {@link fetchJson} internally for the actual network request and JSON parsing.
- *
- * @template T - The expected return type of the JSON data.
- *
- * @param url - The API endpoint URL. Must be a valid URL.
- * @param options - Fetch options plus custom logic flags.
- * @param timeout - Timeout in milliseconds. Must be a positive integer.
- *
- * @returns A promise that resolves to the parsed JSON response of type `T`.
- *
- * @throws {HttpError} Throws if the response status is not "ok" (e.g., 4xx, 5xx).
- * @throws {Error} Throws on network failure, timeout, or JSON parsing error.
- *
- * @category Utilities
- *
- * @example
- * ```ts
- * try {
- *   const result = await apiCall<{ success: boolean }>("/api/submit", {
- *     method: "POST",
- *     body: JSON.stringify(payload)
- *   });
- *   console.log("Success:", result.success);
- * } catch (error) {
- *   // Error dialog already shown unless skipGlobalError: true
- * }
- * ```
- */
-export async function apiCall<T = unknown>(
-	url: string,
-	options: ApiCallOptions = {},
-	timeout: number = 10000
-): Promise<T> {
-	const { skipGlobalError = false, isCritical = false, ...fetchOptions } = options;
-
-	try {
-		return await fetchJson<T>(url, fetchOptions, timeout);
-	} catch (error) {
-		console.error("API call failed:", error);
-
-		if (!skipGlobalError && !isCritical) {
-			// Always trigger error dialog for any failure in apiCall unless skipped or critical
-			useOptimizeStore
-				.getState()
-				.setShowError(
-					true,
-					"fatal",
-					error instanceof Error ? error : new Error(String(error))
-				);
-		}
-
-		throw error;
 	}
 }

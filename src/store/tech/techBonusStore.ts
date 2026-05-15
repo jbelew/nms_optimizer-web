@@ -28,7 +28,7 @@ function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number
 ): (name: string, value: StorageValue<Partial<TechBonusStore>>) => Promise<void> {
-	let timeoutId: number | null = null;
+	let timeoutId: null | number = null;
 
 	return (name: string, value: StorageValue<Partial<TechBonusStore>>): Promise<void> => {
 		if (typeof window === "undefined") {
@@ -59,12 +59,12 @@ const debouncedStorage = {
 
 		return item ? JSON.parse(item) : null;
 	},
-	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechBonusStore>>) => {
-		safeSetItem(name, JSON.stringify(value));
-	}, 500),
 	removeItem: (name: string) => {
 		safeRemoveItem(name);
 	},
+	setItem: debounceSetItem(async (name: string, value: StorageValue<Partial<TechBonusStore>>) => {
+		safeSetItem(name, JSON.stringify(value));
+	}, 500),
 };
 
 /**
@@ -72,15 +72,15 @@ const debouncedStorage = {
  */
 export type BonusStatusData = {
 	/** Identifier for the icon to display in the UI. */
-	icon: "warning" | "check" | "lightning" | null;
-	/** The calculated efficiency percentage. */
-	percent: number;
-	/** Localized string for the status tooltip. */
-	tooltipContent: string;
+	icon: "check" | "lightning" | "warning" | null;
 	/** CSS class name for icon styling. */
 	iconClassName: string;
 	/** Inline CSS styles for the icon. */
 	iconStyle: { color: string };
+	/** The calculated efficiency percentage. */
+	percent: number;
+	/** Localized string for the status tooltip. */
+	tooltipContent: string;
 };
 
 /**
@@ -94,12 +94,15 @@ export type TechBonusStore = {
 	/** Mapping of technology keys to their calculated status data. */
 	bonusStatus: Record<string, BonusStatusData>;
 	/**
-	 * Sets the bonus status for a technology.
+	 * Resets all technology status mappings.
+	 */
+	clearAllBonusStatus: () => void;
+	/**
+	 * Clears the status for a specific technology.
 	 *
 	 * @param {string} tech - The technology identifier.
-	 * @param {BonusStatusData} data - The calculated status metadata.
 	 */
-	setBonusStatus: (tech: string, data: BonusStatusData) => void;
+	clearBonusStatus: (tech: string) => void;
 	/**
 	 * Retrieves the current status data for a technology.
 	 *
@@ -109,15 +112,12 @@ export type TechBonusStore = {
 	 */
 	getBonusStatus: (tech: string) => BonusStatusData | null;
 	/**
-	 * Clears the status for a specific technology.
+	 * Sets the bonus status for a technology.
 	 *
 	 * @param {string} tech - The technology identifier.
+	 * @param {BonusStatusData} data - The calculated status metadata.
 	 */
-	clearBonusStatus: (tech: string) => void;
-	/**
-	 * Resets all technology status mappings.
-	 */
-	clearAllBonusStatus: () => void;
+	setBonusStatus: (tech: string, data: BonusStatusData) => void;
 };
 
 /**
@@ -148,14 +148,10 @@ export const useTechBonusStore = create<TechBonusStore>()(
 		immer((set, get) => ({
 			bonusStatus: {},
 
-			setBonusStatus: (tech: string, data: BonusStatusData) => {
+			clearAllBonusStatus: () => {
 				set((state) => {
-					state.bonusStatus[tech] = data;
+					state.bonusStatus = {};
 				});
-			},
-
-			getBonusStatus: (tech: string): BonusStatusData | null => {
-				return get().bonusStatus[tech] ?? null;
 			},
 
 			clearBonusStatus: (tech: string) => {
@@ -164,18 +160,22 @@ export const useTechBonusStore = create<TechBonusStore>()(
 				});
 			},
 
-			clearAllBonusStatus: () => {
+			getBonusStatus: (tech: string): BonusStatusData | null => {
+				return get().bonusStatus[tech] ?? null;
+			},
+
+			setBonusStatus: (tech: string, data: BonusStatusData) => {
 				set((state) => {
-					state.bonusStatus = {};
+					state.bonusStatus[tech] = data;
 				});
 			},
 		})),
 		{
 			name: "techBonusState",
-			storage: debouncedStorage,
 			partialize: (state) => ({
 				bonusStatus: state.bonusStatus,
 			}),
+			storage: debouncedStorage,
 		}
 	)
 );

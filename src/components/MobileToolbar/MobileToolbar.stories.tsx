@@ -5,7 +5,18 @@ import { MobileToolbar } from "./MobileToolbar";
 
 const meta = {
 	component: MobileToolbar,
-	title: "Components/MobileToolbar",
+	decorators: [
+		(Story) => {
+			return (
+				<div
+					className="flex min-h-screen items-center justify-center p-4"
+					style={{ margin: "0 auto", maxWidth: "800px" }}
+				>
+					<Story />
+				</div>
+			);
+		},
+	],
 	parameters: {
 		docs: {
 			description: {
@@ -13,18 +24,7 @@ const meta = {
 			},
 		},
 	},
-	decorators: [
-		(Story) => {
-			return (
-				<div
-					className="flex min-h-screen items-center justify-center p-4"
-					style={{ maxWidth: "800px", margin: "0 auto" }}
-				>
-					<Story />
-				</div>
-			);
-		},
-	],
+	title: "Components/MobileToolbar",
 } satisfies Meta<typeof MobileToolbar>;
 
 export default meta;
@@ -33,13 +33,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		isVisible: true,
-		solving: false,
+		gridRef: createRef<HTMLDivElement>(),
 		hasModulesInGrid: true,
+		isVisible: true,
 		onLoadBuild: () => console.log("Load Build"),
 		onSaveBuild: () => console.log("Save Build"),
 		onShowChangelog: () => console.log("Show Changelog"),
-		gridRef: createRef<HTMLDivElement>(),
+		solving: false,
 	},
 	parameters: {
 		docs: {

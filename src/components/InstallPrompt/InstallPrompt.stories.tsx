@@ -7,14 +7,6 @@ import { InstallPrompt } from "./InstallPrompt";
 
 const meta = {
 	component: InstallPrompt,
-	title: "Components/InstallPrompt",
-	parameters: {
-		docs: {
-			description: {
-				component: "Prompt to ask user to install the app as a PWA.",
-			},
-		},
-	},
 	decorators: [
 		(Story) => {
 			// Seed localStorage so the component thinks this is a return visit
@@ -23,9 +15,9 @@ const meta = {
 
 			// Mock touch device so isTouchDevice() returns true
 			Object.defineProperty(navigator, "maxTouchPoints", {
+				configurable: true,
 				value: 1,
 				writable: true,
-				configurable: true,
 			});
 
 			return (
@@ -33,7 +25,7 @@ const meta = {
 					<ToastProvider>
 						<div
 							className="flex min-h-screen items-center justify-center p-4"
-							style={{ maxWidth: "800px", margin: "0 auto" }}
+							style={{ margin: "0 auto", maxWidth: "800px" }}
 						>
 							<Story />
 							<ToastRenderer />
@@ -44,6 +36,14 @@ const meta = {
 			);
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: "Prompt to ask user to install the app as a PWA.",
+			},
+		},
+	},
+	title: "Components/InstallPrompt",
 } satisfies Meta<typeof InstallPrompt>;
 
 export default meta;

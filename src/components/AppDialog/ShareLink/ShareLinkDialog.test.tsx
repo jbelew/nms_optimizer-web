@@ -14,15 +14,15 @@ vi.mock("react-i18next", () => ({
 // Mock AppDialog component
 vi.mock("../Base/AppDialog", () => ({
 	default: ({
+		content,
 		isOpen,
 		onClose,
 		titleKey,
-		content,
 	}: {
+		content?: React.ReactNode;
 		isOpen?: boolean;
 		onClose?: () => void;
 		titleKey?: string;
-		content?: React.ReactNode;
 	}) => {
 		if (!isOpen) return null;
 
@@ -38,7 +38,7 @@ vi.mock("../Base/AppDialog", () => ({
 
 // Mock ShareLinkContent component
 vi.mock("./ShareLinkContent", () => ({
-	ShareLinkContent: ({ shareUrl, onClose }: { shareUrl?: string; onClose?: () => void }) => (
+	ShareLinkContent: ({ onClose, shareUrl }: { onClose?: () => void; shareUrl?: string }) => (
 		<div data-testid="share-link-content">
 			<input readOnly value={shareUrl} />
 			<button onClick={onClose}>Close Link Share</button>
@@ -56,33 +56,33 @@ describe("ShareLinkDialog", () => {
 
 	test("should not render when isOpen is false", () => {
 		const { container } = render(
-			<ShareLinkDialog isOpen={false} shareUrl={testUrl} onClose={mockOnClose} />
+			<ShareLinkDialog isOpen={false} onClose={mockOnClose} shareUrl={testUrl} />
 		);
 
 		expect(container.firstChild).toBeNull();
 	});
 
 	test("should render when isOpen is true", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		expect(await screen.findByTestId("app-dialog")).toBeInTheDocument();
 	});
 
 	test("should render with correct title key", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		expect(await screen.findByText("dialogs.titles.shareLink")).toBeInTheDocument();
 	});
 
 	test("should pass shareUrl to ShareLinkContent", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		const input = await screen.findByRole("textbox");
 		expect(input).toHaveValue(testUrl);
 	});
 
 	test("should pass onClose callback to AppDialog", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		const closeButton = await screen.findByText("Close");
 		closeButton.click();
@@ -94,8 +94,8 @@ describe("ShareLinkDialog", () => {
 		const { rerender } = render(
 			<ShareLinkDialog
 				isOpen={true}
-				shareUrl="https://example.com/url1"
 				onClose={mockOnClose}
+				shareUrl="https://example.com/url1"
 			/>
 		);
 
@@ -105,8 +105,8 @@ describe("ShareLinkDialog", () => {
 		rerender(
 			<ShareLinkDialog
 				isOpen={true}
-				shareUrl="https://example.com/url2"
 				onClose={mockOnClose}
+				shareUrl="https://example.com/url2"
 			/>
 		);
 
@@ -115,20 +115,20 @@ describe("ShareLinkDialog", () => {
 	});
 
 	test("should render ShareLinkContent component", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		expect(await screen.findByTestId("share-link-content")).toBeInTheDocument();
 	});
 
 	test("should properly use translation for title", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		// Both titleKey (i18n) and translated title are passed
 		expect(await screen.findByText("dialogs.titles.shareLink")).toBeInTheDocument();
 	});
 
 	test("should call onClose from AppDialog", async () => {
-		render(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		render(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		const closeButton = await screen.findByText("Close");
 		closeButton.click();
@@ -137,17 +137,17 @@ describe("ShareLinkDialog", () => {
 	});
 
 	test("should toggle visibility based on isOpen prop", async () => {
-		const { rerender, container } = render(
-			<ShareLinkDialog isOpen={false} shareUrl={testUrl} onClose={mockOnClose} />
+		const { container, rerender } = render(
+			<ShareLinkDialog isOpen={false} onClose={mockOnClose} shareUrl={testUrl} />
 		);
 
 		expect(container.firstChild).toBeNull();
 
-		rerender(<ShareLinkDialog isOpen={true} shareUrl={testUrl} onClose={mockOnClose} />);
+		rerender(<ShareLinkDialog isOpen={true} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		expect(await screen.findByTestId("app-dialog")).toBeInTheDocument();
 
-		rerender(<ShareLinkDialog isOpen={false} shareUrl={testUrl} onClose={mockOnClose} />);
+		rerender(<ShareLinkDialog isOpen={false} onClose={mockOnClose} shareUrl={testUrl} />);
 
 		expect(screen.queryByTestId("app-dialog")).not.toBeInTheDocument();
 	});

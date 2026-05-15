@@ -31,18 +31,18 @@ import { ErrorDisplay } from "../ErrorBoundary/ErrorDisplay";
  * Props for the `NmsToast` component.
  */
 type ToastProps = {
-	/** Whether the toast is currently visible on the screen. */
-	open: boolean;
-	/** Callback function triggered when the open state changes (e.g., auto-close or manual dismiss). */
-	onOpenChange: (open: boolean) => void;
-	/** The primary text to display at the top of the toast. **Must not be empty.** */
-	title: string;
 	/** The detailed message. Can be a string or complex React nodes. */
-	description: string | ReactNode;
-	/** The visual style and icon to use. */
-	variant?: "success" | "error";
+	description: ReactNode | string;
 	/** Time in milliseconds before the toast auto-closes. Defaults to `5000`. */
 	duration?: number;
+	/** Callback function triggered when the open state changes (e.g., auto-close or manual dismiss). */
+	onOpenChange: (open: boolean) => void;
+	/** Whether the toast is currently visible on the screen. */
+	open: boolean;
+	/** The primary text to display at the top of the toast. **Must not be empty.** */
+	title: string;
+	/** The visual style and icon to use. */
+	variant?: "error" | "success";
 };
 
 /**
@@ -72,12 +72,12 @@ type ToastProps = {
  * ```
  */
 export const NmsToast = ({
-	open,
-	onOpenChange,
-	title,
 	description,
-	variant,
 	duration = 5000,
+	onOpenChange,
+	open,
+	title,
+	variant,
 }: ToastProps) => {
 	const { t } = useTranslation();
 	const titleClassName =
@@ -97,20 +97,20 @@ export const NmsToast = ({
 		);
 
 	return (
-		<ToastRoot duration={duration} className="Toast" open={open} onOpenChange={onOpenChange}>
+		<ToastRoot className="Toast" duration={duration} onOpenChange={onOpenChange} open={open}>
 			<div className="Toast__title-container">
 				{icon}
 				<ToastTitle className={`${titleClassName} heading-styled mb-1`}>{title}</ToastTitle>
 			</div>
-			<Separator size="4" mb="1" />
+			<Separator mb="1" size="4" />
 			<ToastDescription className="Toast__description">{description}</ToastDescription>
 			<Button
-				className="Toast__close"
 				aria-label={t("common.dismiss") ?? ""}
-				variant="soft"
-				size="2"
+				className="Toast__close"
 				mb="1"
 				onClick={() => onOpenChange(false)}
+				size="2"
+				variant="soft"
 			>
 				{t("common.dismiss")}
 			</Button>

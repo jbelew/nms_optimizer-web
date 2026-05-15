@@ -10,13 +10,13 @@ import { useTechTreeRow } from "./useTechTreeRow";
 // Mock child hooks and stores
 vi.mock("./useTechModuleManagement", () => ({
 	useTechModuleManagement: vi.fn(() => ({
+		allModulesSelected: false,
 		currentCheckedModules: ["module1"],
 		groupedModules: {},
-		allModulesSelected: false,
-		isIndeterminate: true,
-		handleValueChange: vi.fn(),
-		handleSelectAllChange: vi.fn(),
 		handleAllCheckboxesChange: vi.fn(),
+		handleSelectAllChange: vi.fn(),
+		handleValueChange: vi.fn(),
+		isIndeterminate: true,
 	})),
 }));
 
@@ -39,12 +39,12 @@ vi.mock("react-i18next", () => ({
 }));
 
 const mockProps: TechTreeRowProps = {
-	tech: "testTech",
 	handleOptimize: vi.fn(),
-	solving: false,
-	techImage: "test.webp",
 	isGridFull: false,
+	solving: false,
+	tech: "testTech",
 	techColor: "blue",
+	techImage: "test.webp",
 };
 
 describe("useTechTreeRow", () => {
@@ -59,15 +59,15 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					techGroups: { [key: string]: [{ modules: unknown[] }] };
 					max_bonus: { [key: string]: number };
 					solved_bonus: { [key: string]: number };
+					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
-					techGroups: { testTech: [{ modules: [] }] },
 					max_bonus: {},
 					solved_bonus: {},
+					techGroups: { testTech: [{ modules: [] }] },
 				})
 		);
 	});
@@ -105,7 +105,7 @@ describe("useTechTreeRow", () => {
 	});
 
 	it("should memoize image paths and translation (no recalculation on non-dependency changes)", () => {
-		const { result, rerender } = renderHook(
+		const { rerender, result } = renderHook(
 			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
@@ -122,7 +122,7 @@ describe("useTechTreeRow", () => {
 	});
 
 	it("should update image paths when techImage dependency changes", () => {
-		const { result, rerender } = renderHook(
+		const { rerender, result } = renderHook(
 			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
@@ -151,15 +151,15 @@ describe("useTechTreeRow", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
-					techGroups: { [key: string]: [{ modules: unknown[] }] };
 					max_bonus: { [key: string]: number };
 					solved_bonus: { [key: string]: number };
+					techGroups: { [key: string]: [{ modules: unknown[] }] };
 				}) => unknown
 			) =>
 				selector({
-					techGroups: {}, // No testTech key
 					max_bonus: {},
 					solved_bonus: {},
+					techGroups: {}, // No testTech key
 				})
 		);
 

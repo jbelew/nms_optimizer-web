@@ -35,10 +35,10 @@ import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
  * Props for the `RecommendedBuild` component.
  */
 interface RecommendedBuildProps {
-	/** The technology tree data containing available builds for the current ship. **Must not be null.** */
-	techTree: TechTree;
 	/** Whether the screen matches the 'large' (desktop) breakpoint. */
 	isLarge: boolean;
+	/** The technology tree data containing available builds for the current ship. **Must not be null.** */
+	techTree: TechTree;
 }
 
 /**
@@ -67,7 +67,7 @@ interface RecommendedBuildProps {
  * // renders build selection UI
  * ```
  */
-const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }) => {
+const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ isLarge, techTree }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { applyRecommendedBuild } = useRecommendedBuild(techTree);
@@ -91,12 +91,12 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 		setTimeout(async () => {
 			await applyRecommendedBuild(build);
 			sendEvent({
-				category: "build",
 				action: "apply_build",
 				build: build.title,
+				category: "build",
+				nonInteraction: false,
 				platform: selectedPlatform,
 				value: 1,
-				nonInteraction: false,
 			});
 		}, 0);
 	};
@@ -172,16 +172,16 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 				<div className="mt-4 flex items-center justify-center gap-2">
 					{renderBuildButton()}
 					<IconButton
-						variant="ghost"
-						size="1"
-						radius="full"
 						aria-label={t("techTree.recommendedBuilds.aboutRecommendedBuildsTooltip")}
 						onClick={handleOpenInstructions}
+						radius="full"
+						size="1"
+						variant="ghost"
 					>
 						<ConditionalTooltip
 							label={t("techTree.recommendedBuilds.aboutRecommendedBuildsTooltip")}
 						>
-							<InfoCircledIcon width="20" height="20" className="shrink-0" />
+							<InfoCircledIcon className="shrink-0" height="20" width="20" />
 						</ConditionalTooltip>
 					</IconButton>
 				</div>
@@ -193,29 +193,29 @@ const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ techTree, isLarge }
 					<Callout.Text>
 						<span className="text-sm sm:text-base">
 							<Trans
-								i18nKey="techTree.recommendedBuilds.summary"
 								components={{
 									1: <Strong />,
 									3: <Strong />,
 									5: (
 										<Link
 											href="#"
-											underline="always"
-											weight="medium"
 											onClick={(e) => {
 												e.preventDefault(); // Prevent jump to top
 												handleOpenInstructions();
 											}}
+											underline="always"
+											weight="medium"
 										/>
 									),
 								}}
+								i18nKey="techTree.recommendedBuilds.summary"
 							/>
 						</span>
 					</Callout.Text>
 					<div>
 						{renderBuildButton({
-							mt: "0",
 							mb: "1",
+							mt: "0",
 						})}
 					</div>
 				</Callout.Root>

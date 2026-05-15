@@ -2,7 +2,7 @@ import type { TechTree } from "../../hooks/useTechTree/useTechTree";
 
 import { fetchTechTreeAsync } from "../../hooks/useTechTree/useTechTree";
 
-let techTreeColorsPromise: Promise<Record<string, string>> | null = null;
+let techTreeColorsPromise: null | Promise<Record<string, string>> = null;
 
 /**
  * Aggregates technology colors across all major ship and tool categories.

@@ -41,8 +41,8 @@ interface LanguageFlagPaths {
 }
 
 const languageFlagPaths: LanguageFlagPaths = {
-	en: usFlagPath,
 	de: deFlagPath,
+	en: usFlagPath,
 	es: esFlagPath,
 	fr: frFlagPath,
 	it: itFlagPath,
@@ -75,7 +75,7 @@ const languageFlagPaths: LanguageFlagPaths = {
 export const LanguageSelector: React.FC = () => {
 	const isSm = useBreakpoint("640px");
 	const isMd = useBreakpoint("1024px");
-	const { t, i18n } = useTranslation();
+	const { i18n, t } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const currentLanguage = i18n.language.split("-")[0]; // Get base language code
@@ -92,7 +92,7 @@ export const LanguageSelector: React.FC = () => {
 			const label = nativeLanguageNames[code] ?? code.toUpperCase();
 			const flagPath = languageFlagPaths[code] || xxFlagPath; // Fallback flag path
 
-			return { code, label, flagPath };
+			return { code, flagPath, label };
 		})
 		.filter((lang) => lang.flagPath)
 		.sort((a, b) => a.label.localeCompare(b.label));
@@ -130,12 +130,12 @@ export const LanguageSelector: React.FC = () => {
 		});
 
 		sendDeferredEvent({
-			category: "ui",
 			action: "select_content",
+			category: "ui",
 			content_type: "language",
 			item_id: newLang,
-			value: 1,
 			nonInteraction: false,
+			value: 1,
 		});
 	};
 
@@ -160,57 +160,57 @@ export const LanguageSelector: React.FC = () => {
 			<DropdownMenu.Trigger>
 				{!isSm || isMd ? (
 					<Button
-						variant="soft"
 						aria-label={t("languageInfo.changeLanguage") || "Change language"}
+						variant="soft"
 					>
 						<img
-							src={currentFlagPath}
 							alt=""
-							width="20"
-							height="14"
 							className="h-3 w-4 sm:h-3.5 sm:w-5"
+							height="14"
+							src={currentFlagPath}
+							width="20"
 						/>
-						<Separator orientation="vertical" decorative />
+						<Separator decorative orientation="vertical" />
 						<DropdownMenu.TriggerIcon />
 					</Button>
 				) : (
 					<IconButton
-						variant="soft"
 						aria-label={t("languageInfo.changeLanguage") || "Change language"}
+						variant="soft"
 					>
 						<img
-							src={currentFlagPath}
 							alt=""
-							width="16"
-							height="12"
 							className="h-[12] w-[16] sm:h-[14] sm:w-[20]"
+							height="12"
+							src={currentFlagPath}
+							width="16"
 						/>
 					</IconButton>
 				)}
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content sideOffset={5} align="end">
+			<DropdownMenu.Content align="end" sideOffset={5}>
 				<DropdownMenu.Label className="selectLanguage__header heading-styled">
 					{t("languageInfo.selectLanguage") || "Select Language"}
 				</DropdownMenu.Label>
 				<DropdownMenu.RadioGroup
-					value={currentLanguage}
 					onValueChange={handleLanguageChange}
+					value={currentLanguage}
 				>
-					{supportedLanguages.map(({ code, label, flagPath }) => (
+					{supportedLanguages.map(({ code, flagPath, label }) => (
 						<DropdownMenu.RadioItem key={code} value={code}>
 							<img
-								src={flagPath}
 								alt={label}
-								width="20"
-								height="14"
 								className="mr-2 h-auto w-5"
+								height="14"
+								src={flagPath}
+								width="20"
 							/>
 							<span className="ml-1 font-medium">{label}</span>
 						</DropdownMenu.RadioItem>
 					))}
 				</DropdownMenu.RadioGroup>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item onClick={handleRequestTranslationClick} className="font-medium">
+				<DropdownMenu.Item className="font-medium" onClick={handleRequestTranslationClick}>
 					<GlobeIcon className="mr-2 h-auto w-5" style={{ color: "var(--accent-a11)" }} />
 					{t("translationRequest.openDialogLabel")}
 				</DropdownMenu.Item>

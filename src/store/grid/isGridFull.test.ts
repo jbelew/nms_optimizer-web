@@ -26,8 +26,8 @@ describe("isGridFull selector in GridStore", () => {
 
 			useGridStore.setState({
 				grid: newGrid,
-				result: null,
 				isSharedGrid: false,
+				result: null,
 			});
 			useGridStore.getState().triggerRecompute();
 		});
@@ -39,8 +39,8 @@ describe("isGridFull selector in GridStore", () => {
 			useGridStore.getState().resetGrid();
 			useGridStore.setState({
 				grid: grid === null ? createGrid(0, 0) : grid,
-				result: null,
 				isSharedGrid: false,
+				result: null,
 			});
 			useGridStore.getState().triggerRecompute();
 		});

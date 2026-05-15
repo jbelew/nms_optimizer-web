@@ -8,11 +8,11 @@ import { usePlatformStore } from "../../store/app/platformStore";
 import { useDialog } from "../../utils/system/dialogUtils";
 import { useDebouncedValidation, useUrlNormalization, useUrlValidation } from "./useValidation";
 
+type PlatformStoreSelector = (state: PlatformStoreState) => string;
+
 interface PlatformStoreState {
 	selectedPlatform: string;
 }
-
-type PlatformStoreSelector = (state: PlatformStoreState) => string;
 
 // Mock dependencies
 vi.mock("react-router-dom", () => ({
@@ -133,11 +133,11 @@ describe("Validation Hooks", () => {
 				.spyOn(window.history, "replaceState")
 				.mockImplementation(() => {});
 			vi.mocked(useLocation).mockReturnValue({
+				hash: "",
+				key: "default",
 				pathname: "/test",
 				search: "?grid=some-grid-data",
 				state: null,
-				key: "default",
-				hash: "",
 			} as Location);
 
 			renderHook(() => useUrlValidation());
@@ -151,11 +151,11 @@ describe("Validation Hooks", () => {
 				.spyOn(window.history, "replaceState")
 				.mockImplementation(() => {});
 			vi.mocked(useLocation).mockReturnValue({
+				hash: "",
+				key: "default",
 				pathname: "/test",
 				search: "?platform=starship",
 				state: null,
-				key: "default",
-				hash: "",
 			} as Location);
 
 			renderHook(() => useUrlValidation());
@@ -169,11 +169,11 @@ describe("Validation Hooks", () => {
 				.spyOn(window.history, "replaceState")
 				.mockImplementation(() => {});
 			vi.mocked(useLocation).mockReturnValue({
+				hash: "",
+				key: "default",
 				pathname: "/test",
 				search: "?other=param",
 				state: null,
-				key: "default",
-				hash: "",
 			} as Location);
 
 			renderHook(() => useUrlValidation());
@@ -187,11 +187,11 @@ describe("Validation Hooks", () => {
 				.spyOn(window.history, "replaceState")
 				.mockImplementation(() => {});
 			vi.mocked(useLocation).mockReturnValue({
+				hash: "",
+				key: "default",
 				pathname: "/test",
 				search: "?platform=sentinel&junk=data",
 				state: null,
-				key: "default",
-				hash: "",
 			} as Location);
 
 			renderHook(() => useUrlValidation());
@@ -205,11 +205,11 @@ describe("Validation Hooks", () => {
 				.spyOn(window.history, "replaceState")
 				.mockImplementation(() => {});
 			vi.mocked(useLocation).mockReturnValue({
+				hash: "",
+				key: "default",
 				pathname: "/de/",
 				search: "?changelog%2F%3Fplatform=sentinel&platform=sentinel",
 				state: null,
-				key: "default",
-				hash: "",
 			} as Location);
 
 			renderHook(() => useUrlValidation());

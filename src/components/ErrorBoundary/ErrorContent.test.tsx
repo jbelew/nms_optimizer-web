@@ -20,13 +20,13 @@ describe("ErrorContent", () => {
 	const mockErrorInfo = { componentStack: "Test stack" };
 
 	it("should call hideSplashScreenAndShowBackground on mount", () => {
-		render(<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo} />);
+		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />);
 
 		expect(hideSplashScreenAndShowBackground).toHaveBeenCalledTimes(1);
 	});
 
 	it("should render page variant correctly", () => {
-		render(<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo} />);
+		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page" />);
 
 		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe("ErrorContent", () => {
 
 	it("should render inset variant correctly", () => {
 		(useBreakpoint as Mock).mockReturnValue(false); // Mobile view
-		render(<ErrorContent variant="inset" error={mockError} errorInfo={mockErrorInfo} />);
+		render(<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="inset" />);
 
 		expect(screen.getByText("errorContent.boundaryError")).toBeInTheDocument();
 		expect(screen.getByText("Test error")).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("ErrorContent", () => {
 
 	it("should render children if provided", () => {
 		render(
-			<ErrorContent variant="page" error={mockError} errorInfo={mockErrorInfo}>
+			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="page">
 				Custom Error Message
 			</ErrorContent>
 		);
@@ -65,7 +65,7 @@ describe("ErrorContent", () => {
 	it("should render large inset variant with scroll area", () => {
 		(useBreakpoint as Mock).mockReturnValue(true); // Desktop view
 		const { container } = render(
-			<ErrorContent variant="inset" error={mockError} errorInfo={mockErrorInfo} />
+			<ErrorContent error={mockError} errorInfo={mockErrorInfo} variant="inset" />
 		);
 
 		// Check for scroll area container class or style

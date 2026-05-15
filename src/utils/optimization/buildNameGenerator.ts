@@ -23,23 +23,23 @@ import { sanitizeFilename } from "../validation/dataValidation";
  * @category Utilities
  */
 const SHIP_TYPE_NAMES: Record<string, string> = {
-	standard: "Starship",
-	sentinel: "Sentinel",
-	solar: "Solar",
-	living: "Living",
-	"standard-mt": "MultiTool",
 	atlantid: "Atlantid",
-	"sentinel-mt": "Sentinel MultiTool",
-	staves: "Staff",
+	colossus: "Colossus",
+	corvette: "Corvette",
+	exosuit: "Exosuit",
 	freighter: "Freighter",
+	living: "Living",
+	minotaur: "Minotaur",
+	nautilon: "Nautilon",
 	nomad: "Nomad",
 	pilgrim: "Pilgrim",
 	roamer: "Roamer",
-	nautilon: "Nautilon",
-	colossus: "Colossus",
-	minotaur: "Minotaur",
-	exosuit: "Exosuit",
-	corvette: "Corvette",
+	sentinel: "Sentinel",
+	"sentinel-mt": "Sentinel MultiTool",
+	solar: "Solar",
+	standard: "Starship",
+	"standard-mt": "MultiTool",
+	staves: "Staff",
 };
 
 /**

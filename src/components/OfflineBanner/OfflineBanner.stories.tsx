@@ -4,25 +4,25 @@ import OfflineBanner from "./OfflineBanner";
 
 const meta = {
 	component: OfflineBanner,
-	title: "components/OfflineBanner",
-	parameters: {
-		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
-	},
 	decorators: [
 		(Story) => {
 			// Mock navigator.onLine to return false for the story
 			Object.defineProperty(navigator, "onLine", {
-				writable: true,
 				value: false,
+				writable: true,
 			});
 
 			return <Story />;
 		},
 	],
+	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+		layout: "fullscreen",
+	},
+	title: "components/OfflineBanner",
 } satisfies Meta<typeof OfflineBanner>;
 
 export default meta;

@@ -20,17 +20,17 @@ vi.mock("../../../store/app/optimizeStore", () => ({
 // Mock AppDialog component
 vi.mock("../Base/AppDialog", () => ({
 	default: ({
+		content,
+		footer,
 		isOpen,
 		onClose,
 		titleKey,
-		content,
-		footer,
 	}: {
+		content?: React.ReactNode;
+		footer?: React.ReactNode;
 		isOpen?: boolean;
 		onClose?: () => void;
 		titleKey?: string;
-		content?: React.ReactNode;
-		footer?: React.ReactNode;
 	}) => {
 		if (!isOpen) return null;
 
@@ -56,8 +56,8 @@ describe("ErrorDialog", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			showError: false,
 			setShowError: mockSetShowError,
+			showError: false,
 		});
 	});
 
@@ -68,8 +68,8 @@ describe("ErrorDialog", () => {
 
 	test("should render when showError is true", async () => {
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			showError: true,
 			setShowError: mockSetShowError,
+			showError: true,
 		});
 
 		render(<ErrorDialog />);
@@ -80,8 +80,8 @@ describe("ErrorDialog", () => {
 
 	test("should call setShowError(false) when dialog is closed", async () => {
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			showError: true,
 			setShowError: mockSetShowError,
+			showError: true,
 		});
 
 		render(<ErrorDialog />);

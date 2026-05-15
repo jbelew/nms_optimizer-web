@@ -3,7 +3,7 @@ import type { UserStat } from "../../hooks/useUserStats/useUserStats";
 import { API_URL } from "../../constants";
 import { apiCall } from "./network";
 
-let userStatsPromise: Promise<UserStat[]> | null = null;
+let userStatsPromise: null | Promise<UserStat[]> = null;
 
 /**
  * Fetches popular data statistics from the analytics endpoint.

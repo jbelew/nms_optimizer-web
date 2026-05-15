@@ -7,10 +7,7 @@ import ErrorContent from "./ErrorContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
-	useTranslation: () => ({
-		t: (key: string) => key,
-	}),
-	Trans: ({ i18nKey, components }: { i18nKey: string; components?: unknown[] }) => {
+	Trans: ({ components, i18nKey }: { components?: unknown[]; i18nKey: string }) => {
 		// Render the trans component to properly handle nested components
 		if (components?.[1]) {
 			// Insert the link component
@@ -28,6 +25,9 @@ vi.mock("react-i18next", () => ({
 
 		return <span>{i18nKey}</span>;
 	},
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
 }));
 
 // Helper to render component within Dialog context

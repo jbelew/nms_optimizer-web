@@ -22,10 +22,10 @@ vi.mock("../../../utils/icons/iconRegistry", () => ({
 describe("AppDialog", () => {
 	const mockOnClose = vi.fn();
 	const defaultProps = {
+		content: <div>Test Content</div>,
 		isOpen: true,
 		onClose: mockOnClose,
 		title: "Test Dialog",
-		content: <div>Test Content</div>,
 	};
 
 	beforeEach(() => {
@@ -64,7 +64,7 @@ describe("AppDialog", () => {
 		render(<AppDialog {...defaultProps} />);
 
 		// Simulate pressing the Escape key
-		fireEvent.keyDown(window, { key: "Escape", code: "Escape" });
+		fireEvent.keyDown(window, { code: "Escape", key: "Escape" });
 
 		await waitFor(() => {
 			expect(mockOnClose).toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe("AppDialog", () => {
 		}));
 
 		render(
-			<AppDialog {...defaultProps} titleKey="dialogs.titles.test" title="Fallback Title" />
+			<AppDialog {...defaultProps} title="Fallback Title" titleKey="dialogs.titles.test" />
 		);
 
 		// Should use titleKey for translation (appears in both Title and Description)
@@ -110,7 +110,7 @@ describe("AppDialog", () => {
 	test("should not call onClose for non-Escape keys", async () => {
 		render(<AppDialog {...defaultProps} />);
 
-		fireEvent.keyDown(window, { key: "Enter", code: "Enter" });
+		fireEvent.keyDown(window, { code: "Enter", key: "Enter" });
 
 		// Should not trigger onClose
 		expect(mockOnClose).not.toHaveBeenCalled();
@@ -134,8 +134,8 @@ describe("AppDialog", () => {
 		render(
 			<AppDialog
 				{...defaultProps}
-				titleKey="dialogs.titles.about"
 				content={<div>About Content</div>}
+				titleKey="dialogs.titles.about"
 			/>
 		);
 
@@ -148,8 +148,8 @@ describe("AppDialog", () => {
 		render(
 			<AppDialog
 				{...defaultProps}
-				titleKey="dialogs.titles.serverError"
 				content={<div>Error Content</div>}
+				titleKey="dialogs.titles.serverError"
 			/>
 		);
 
@@ -162,7 +162,7 @@ describe("AppDialog", () => {
 		render(<AppDialog {...defaultProps} />);
 
 		// Simulate the Radix Dialog's onOpenChange being triggered
-		fireEvent.keyDown(window, { key: "Escape", code: "Escape" });
+		fireEvent.keyDown(window, { code: "Escape", key: "Escape" });
 
 		await waitFor(() => {
 			expect(mockOnClose).toHaveBeenCalled();

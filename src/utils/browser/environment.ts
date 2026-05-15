@@ -103,7 +103,7 @@ export const isTouchDevice = (): boolean => {
  * @example
  * const theme = safeGetItem("app_theme");
  */
-export const safeGetItem = (key: string): string | null => {
+export const safeGetItem = (key: string): null | string => {
 	try {
 		if (typeof window !== "undefined" && window.localStorage) {
 			return localStorage.getItem(key);

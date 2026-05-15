@@ -4,7 +4,18 @@ import OptimizationAlertDialog from "./OptimizationAlertDialog";
 
 const meta = {
 	component: OptimizationAlertDialog,
-	title: "Components/AppDialog/OptimizationAlert/OptimizationAlertDialog",
+	decorators: [
+		(Story) => {
+			return (
+				<div
+					className="flex min-h-screen items-center justify-center p-4"
+					style={{ margin: "0 auto", maxWidth: "800px" }}
+				>
+					<Story />
+				</div>
+			);
+		},
+	],
 	parameters: {
 		docs: {
 			description: {
@@ -13,18 +24,7 @@ const meta = {
 			},
 		},
 	},
-	decorators: [
-		(Story) => {
-			return (
-				<div
-					className="flex min-h-screen items-center justify-center p-4"
-					style={{ maxWidth: "800px", margin: "0 auto" }}
-				>
-					<Story />
-				</div>
-			);
-		},
-	],
+	title: "Components/AppDialog/OptimizationAlert/OptimizationAlertDialog",
 } satisfies Meta<typeof OptimizationAlertDialog>;
 
 export default meta;
@@ -34,9 +34,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		isOpen: true,
-		technologyName: "Hyperdrive",
 		onClose: () => console.log("Dialog closed"),
 		onForceOptimize: async () => console.log("Force optimize"),
+		technologyName: "Hyperdrive",
 	},
 	parameters: {
 		docs: {

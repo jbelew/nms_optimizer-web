@@ -39,7 +39,7 @@ import { NmsToast } from "./Toast";
  * ```
  */
 export const ToastRenderer = () => {
-	const { toastConfig, isOpen, closeToast } = useToast();
+	const { closeToast, isOpen, toastConfig } = useToast();
 
 	if (!toastConfig) {
 		return null;
@@ -47,13 +47,13 @@ export const ToastRenderer = () => {
 
 	return (
 		<NmsToast
-			key={toastConfig.id}
-			open={isOpen}
-			onOpenChange={closeToast}
-			title={toastConfig.title}
 			description={toastConfig.description}
-			variant={toastConfig.variant}
 			duration={toastConfig.duration}
+			key={toastConfig.id}
+			onOpenChange={closeToast}
+			open={isOpen}
+			title={toastConfig.title}
+			variant={toastConfig.variant}
 		/>
 	);
 };

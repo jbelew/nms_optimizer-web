@@ -8,21 +8,12 @@ import GridTableButtons from "./GridTableButtons";
 
 const meta: Meta<typeof GridTableButtons> = {
 	component: GridTableButtons,
-	title: "Components/GridTableButtons",
-	parameters: {
-		docs: {
-			description: {
-				component:
-					"Control buttons for grid operations including load/save builds, share grid, reset, and help/about dialogs.",
-			},
-		},
-	},
 	decorators: [
 		(Story) => {
 			useEffect(() => {
 				useGridStore.setState({
-					isSharedGrid: false,
 					grid: createGrid(10, 6),
+					isSharedGrid: false,
 				});
 			}, []);
 
@@ -32,9 +23,9 @@ const meta: Meta<typeof GridTableButtons> = {
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
 						<div
-							ref={gridRef}
 							className="flex min-h-screen items-center justify-center p-4"
-							style={{ maxWidth: "800px", margin: "0 auto" }}
+							ref={gridRef}
+							style={{ margin: "0 auto", maxWidth: "800px" }}
 						>
 							<Story args={{ gridRef }} />
 						</div>
@@ -44,6 +35,15 @@ const meta: Meta<typeof GridTableButtons> = {
 			);
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					"Control buttons for grid operations including load/save builds, share grid, reset, and help/about dialogs.",
+			},
+		},
+	},
+	title: "Components/GridTableButtons",
 };
 
 export default meta;
@@ -52,8 +52,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		solving: false,
 		gridRef: { current: null },
+		solving: false,
 	},
 	parameters: {
 		docs: {

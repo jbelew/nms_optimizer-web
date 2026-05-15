@@ -23,16 +23,16 @@ import { Code } from "@radix-ui/themes";
  * Props for the `ErrorDisplay` component.
  */
 interface ErrorDisplayProps {
-	/** The caught exception object. */
-	error?: Error;
-	/** React-specific error metadata, including component stack. */
-	errorInfo?: ErrorInfo;
 	/** Optional descriptive text to show above the stack trace. */
 	children?: ReactNode;
 	/** Optional CSS class names. */
 	className?: string;
 	/** Optional inline styles for the container. */
 	containerStyle?: React.CSSProperties;
+	/** The caught exception object. */
+	error?: Error;
+	/** React-specific error metadata, including component stack. */
+	errorInfo?: ErrorInfo;
 }
 
 /**
@@ -58,11 +58,11 @@ interface ErrorDisplayProps {
  * ```
  */
 export const ErrorDisplay = ({
-	error,
-	errorInfo,
 	children,
 	className = "",
 	containerStyle,
+	error,
+	errorInfo,
 }: ErrorDisplayProps) => {
 	const { t } = useTranslation();
 	const hasStackTrace = error?.stack || errorInfo?.componentStack;
@@ -73,18 +73,18 @@ export const ErrorDisplay = ({
 			<div
 				className="mt-2 mb-2 w-full text-left font-mono text-sm sm:text-base"
 				style={{
-					whiteSpace: "pre-wrap",
 					overflowWrap: "break-word",
+					whiteSpace: "pre-wrap",
 					wordBreak: "break-word",
 				}}
 			>
 				{error?.message && (
-					<Code color="red" className="block">
+					<Code className="block" color="red">
 						<strong>{t("errorDisplay.errorLabel")}</strong> {error.message}
 					</Code>
 				)}
 				{hasStackTrace && (
-					<Code color="red" className="block">
+					<Code className="block" color="red">
 						<strong>{t("errorDisplay.stackTraceLabel")}</strong>
 					</Code>
 				)}

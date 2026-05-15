@@ -54,7 +54,7 @@ interface UseScreenshotReturn {
  */
 export function useScreenshot(): UseScreenshotReturn {
 	const { t } = useTranslation();
-	const { showSuccess, showError } = useToast();
+	const { showError, showSuccess } = useToast();
 	const { sendEvent } = useAnalytics();
 	const buildName = useGridStore((state) => state.buildName);
 	const [isCapturing, setIsCapturing] = useState(false);
@@ -97,14 +97,14 @@ export function useScreenshot(): UseScreenshotReturn {
 
 					canvas = await toCanvas(element, {
 						backgroundColor: "#082C36",
-						pixelRatio: 1,
-						width,
 						height,
+						pixelRatio: 1,
 						style: {
 							padding: `${padding}px`,
 							// No extra bottom padding in style, we handle it via canvas height
 							paddingBottom: "0px",
 						},
+						width,
 					});
 				} finally {
 					elementsToHide.forEach(
@@ -207,11 +207,11 @@ export function useScreenshot(): UseScreenshotReturn {
 					5000
 				);
 				sendEvent({
-					category: "ui",
 					action: "screenshot_build",
+					category: "ui",
 					method: "png",
-					value: 1,
 					nonInteraction: false,
+					value: 1,
 				});
 			} catch (error) {
 				console.error("Screenshot failed:", error);

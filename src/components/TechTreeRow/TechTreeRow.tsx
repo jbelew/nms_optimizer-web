@@ -27,44 +27,44 @@ import { useTechTreeRow } from "./useTechTreeRow";
  * Props for the {@link TechTreeRow} component.
  */
 export interface TechTreeRowProps {
-	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
-	tech: string;
 	/** Asynchronous callback to trigger an optimization solve for this row. */
 	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether any optimization solve is currently running globally. */
-	solving: boolean;
-	/** Filename of the icon image to display. `null` if no icon is available. */
-	techImage: string | null;
 	/** Whether all active grid slots are currently occupied. */
 	isGridFull: boolean;
+	/** Whether any optimization solve is currently running globally. */
+	solving: boolean;
+	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
+	tech: string;
 	/** The theme color identifier for the technology's avatar and UI accents. */
 	techColor:
-		| "gray"
-		| "gold"
+		| "amber"
+		| "blue"
 		| "bronze"
 		| "brown"
-		| "yellow"
-		| "amber"
-		| "orange"
-		| "tomato"
-		| "red"
-		| "ruby"
 		| "crimson"
+		| "cyan"
+		| "gold"
+		| "grass"
+		| "gray"
+		| "green"
+		| "indigo"
+		| "iris"
+		| "jade"
+		| "lime"
+		| "mint"
+		| "orange"
 		| "pink"
 		| "plum"
 		| "purple"
-		| "violet"
-		| "iris"
-		| "indigo"
-		| "blue"
-		| "cyan"
+		| "red"
+		| "ruby"
+		| "sky"
 		| "teal"
-		| "jade"
-		| "green"
-		| "grass"
-		| "lime"
-		| "mint"
-		| "sky";
+		| "tomato"
+		| "violet"
+		| "yellow";
+	/** Filename of the icon image to display. `null` if no icon is available. */
+	techImage: null | string;
 }
 
 /**
@@ -88,14 +88,6 @@ interface BonusStatusIconProps {
 }
 
 /**
- * Props for the `TechInfoProps` component.
- */
-interface TechInfoProps {
-	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
-	hookData: ReturnType<typeof useTechTreeRow>;
-}
-
-/**
  * Props for the `TechInfoBadges` component.
  */
 interface TechInfoBadgesProps extends TechTreeRowProps {
@@ -104,21 +96,11 @@ interface TechInfoBadgesProps extends TechTreeRowProps {
 }
 
 /**
- * Rounds a numerical value to a fixed number of decimal places.
- *
- * @param {number} value - The value to round.
- * @param {number} decimals - Number of decimal places.
- *
- * @returns {number} The rounded value.
- *
- * @example Fixed precision
- * ```ts
- * round(10.1234, 2);
- * // returns 10.12
- * ```
+ * Props for the `TechInfoProps` component.
  */
-function round(value: number, decimals: number) {
-	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
+interface TechInfoProps {
+	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
+	hookData: ReturnType<typeof useTechTreeRow>;
 }
 
 /**
@@ -146,9 +128,9 @@ function computeBonusStatusData(
 
 		return {
 			icon: "warning",
-			percent,
 			iconClassName: "mt-2 inline-block cursor-pointer align-text-top",
 			iconStyle: { color: "var(--red-a8)" },
+			percent,
 			tooltipContent: `${t("techTree.tooltips.insufficientSpace")} -${percent}%`,
 		};
 	}
@@ -156,9 +138,9 @@ function computeBonusStatusData(
 	if (roundedMaxBonus === 100) {
 		return {
 			icon: "check",
-			percent: 0,
 			iconClassName: "mt-[7px] inline-block cursor-pointer align-text-top",
 			iconStyle: { color: "var(--gray-a10)" },
+			percent: 0,
 			tooltipContent: `${t("techTree.tooltips.validSolve")} `,
 		};
 	}
@@ -167,9 +149,9 @@ function computeBonusStatusData(
 
 	return {
 		icon: "lightning",
-		percent,
 		iconClassName: "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
 		iconStyle: { color: "var(--amber-a8)" },
+		percent,
 		tooltipContent: `${t("techTree.tooltips.boostedSolve")} +${percent}%`,
 	};
 }
@@ -190,20 +172,38 @@ function computeBonusStatusData(
  * ```
  */
 function renderIcon(
-	iconType: string | null,
+	iconType: null | string,
 	className: string,
 	style: React.CSSProperties
 ): React.ReactNode {
 	switch (iconType) {
-		case "warning":
-			return <ExclamationTriangleIcon className={className} style={style} />;
 		case "check":
 			return <Crosshair2Icon className={className} style={style} />;
 		case "lightning":
 			return <LightningBoltIcon className={className} style={style} />;
+		case "warning":
+			return <ExclamationTriangleIcon className={className} style={style} />;
 		default:
 			return null;
 	}
+}
+
+/**
+ * Rounds a numerical value to a fixed number of decimal places.
+ *
+ * @param {number} value - The value to round.
+ * @param {number} decimals - Number of decimal places.
+ *
+ * @returns {number} The rounded value.
+ *
+ * @example Fixed precision
+ * ```ts
+ * round(10.1234, 2);
+ * // returns 10.12
+ * ```
+ */
+function round(value: number, decimals: number) {
+	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
 }
 
 /**
@@ -225,7 +225,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	techSolvedBonus,
 }) => {
 	const { t } = useTranslation();
-	const { setBonusStatus, getBonusStatus } = useTechBonusStore();
+	const { getBonusStatus, setBonusStatus } = useTechBonusStore();
 	const cachedBonusStatus = getBonusStatus(tech);
 
 	// Always use fresh translation for the tooltip to avoid stale language after switch
@@ -276,9 +276,9 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 
 	const trigger = (
 		<button
-			type="button"
-			className="flex cursor-pointer appearance-none border-none bg-transparent p-0"
 			aria-label={contentData.tooltipContent}
+			className="flex cursor-pointer appearance-none border-none bg-transparent p-0"
+			type="button"
 		>
 			{icon}
 		</button>
@@ -289,7 +289,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 			<Popover.Root>
 				<Popover.Trigger>{trigger}</Popover.Trigger>
 				<Popover.Content size="1">
-					<Text as="p" trim="both" size="1">
+					<Text as="p" size="1" trim="both">
 						{contentData.tooltipContent}
 					</Text>
 				</Popover.Content>
@@ -316,13 +316,13 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
 	const {
-		hasTechInGrid,
-		solving,
-		translatedTechName,
+		currentCheckedModules,
 		handleOptimizeClick,
 		handleReset,
-		currentCheckedModules,
+		hasTechInGrid,
 		isResetting,
+		solving,
+		translatedTechName,
 	} = hookData;
 
 	let tooltipLabel: string;
@@ -341,11 +341,11 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFu
 		<>
 			<ConditionalTooltip label={tooltipLabel}>
 				<IconButton
-					onClick={handleOptimizeClick}
-					disabled={isOptimizeButtonDisabled}
 					aria-label={`${tooltipLabel} ${translatedTechName}`}
-					id={tech}
 					className={`techRow__resetButton ${!isOptimizeButtonDisabled ? "cursor-pointer!" : ""}`.trim()}
+					disabled={isOptimizeButtonDisabled}
+					id={tech}
+					onClick={handleOptimizeClick}
 				>
 					<OptimizeIconComponent />
 				</IconButton>
@@ -353,10 +353,10 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFu
 
 			<ConditionalTooltip label={t("techTree.tooltips.reset")}>
 				<IconButton
-					onClick={handleReset}
-					disabled={!hasTechInGrid || solving || isResetting}
 					aria-label={`${t("techTree.tooltips.reset")} ${translatedTechName}`}
 					className={`techRow__resetButton ${hasTechInGrid && !solving ? "cursor-pointer!" : ""}`.trim()}
+					disabled={!hasTechInGrid || solving || isResetting}
+					onClick={handleReset}
 				>
 					<ResetIcon />
 				</IconButton>
@@ -385,10 +385,10 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 	return (
 		<Text
 			as="div"
-			wrap="balance"
-			weight="medium"
-			size={isSmallAndUp ? "3" : "2"}
 			className="techRow__label block flex-1 pt-1"
+			size={isSmallAndUp ? "3" : "2"}
+			weight="medium"
+			wrap="balance"
 		>
 			{translatedTechName}
 		</Text>
@@ -408,7 +408,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
  * // renders module count and efficiency icons
  * ```
  */
-export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, isGridFull }) => {
+export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
 	const { sendDeferredEvent } = useAnalytics();
@@ -418,21 +418,21 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 	const [, startTransition] = useTransition();
 
 	const {
-		hasTechInGrid,
-		techColor,
-		techMaxBonus,
-		techSolvedBonus,
-		modules,
+		allModulesSelected,
 		currentCheckedModules,
-		techImage,
-		solving,
+		groupedModules,
 		handleAllCheckboxesChange,
 		handleOptimizeClick,
-		groupedModules,
-		allModulesSelected,
-		isIndeterminate,
-		handleValueChange,
 		handleSelectAllChange,
+		handleValueChange,
+		hasTechInGrid,
+		isIndeterminate,
+		modules,
+		solving,
+		techColor,
+		techImage,
+		techMaxBonus,
+		techSolvedBonus,
 		translatedTechName,
 	} = hookData;
 
@@ -446,12 +446,12 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 				});
 
 				sendDeferredEvent({
-					category: "engagement",
 					action: "page_view",
-					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
-					page_location: window.location.href,
-					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
+					category: "engagement",
 					nonInteraction: true,
+					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
+					page_location: window.location.href,
+					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
 				});
 			} else {
 				startTransition(() => {
@@ -484,37 +484,37 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
 	const badgeContent = (
 		<div>
 			<Button
-				mt="1"
+				aria-label={t("moduleSelection.tooltip", {
+					count: currentCheckedModules.length,
+					techName: translatedTechName,
+				})}
 				className="ml-1! align-top font-mono! tabular-nums"
-				size="1"
-				radius="medium"
-				highContrast={a11yMode}
-				variant={modules.length === 1 ? "surface" : "solid"}
 				color={hasTechInGrid ? "gray" : techColor}
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
+				highContrast={a11yMode}
+				mt="1"
 				onClick={() => handleOpenChange(true)}
-				aria-label={t("moduleSelection.tooltip", {
-					techName: translatedTechName,
-					count: currentCheckedModules.length,
-				})}
+				radius="medium"
+				size="1"
+				variant={modules.length === 1 ? "surface" : "solid"}
 			>
 				x{currentCheckedModules.length}
 				<OpenInNewWindowIcon />
 			</Button>
 			<ModuleSelectionDialog
-				isOpen={isOpen}
-				translatedTechName={translatedTechName}
-				groupedModules={groupedModules}
-				currentCheckedModules={currentCheckedModules}
-				handleValueChange={handleValueChange}
-				handleSelectAllChange={handleSelectAllChange}
-				handleOptimizeClick={handleOptimizeWrapper}
-				onClose={handleOnClose}
 				allModulesSelected={allModulesSelected}
+				currentCheckedModules={currentCheckedModules}
+				groupedModules={groupedModules}
+				handleOptimizeClick={handleOptimizeWrapper}
+				handleSelectAllChange={handleSelectAllChange}
+				handleValueChange={handleValueChange}
 				isIndeterminate={isIndeterminate}
+				isOpen={isOpen}
+				onClose={handleOnClose}
+				tech={tech}
 				techColor={techColor}
 				techImage={techImage}
-				tech={tech}
+				translatedTechName={translatedTechName}
 			/>
 		</div>
 	);
@@ -580,19 +580,19 @@ export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, tech, 
  */
 export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
 	const hookData = useTechTreeRow(props);
-	const { translatedTechName, imagePath, techColor, imagePath2x } = hookData;
+	const { imagePath, imagePath2x, techColor, translatedTechName } = hookData;
 
 	return (
 		<div className="items-top optimizationButton mt-2 mb-2 ml-0 flex gap-2 sm:ml-1 lg:mr-1">
 			<ActionButtons {...props} hookData={hookData} />
 
 			<Avatar
-				size="2"
-				radius="full"
 				alt={translatedTechName}
-				fallback="IK"
-				src={imagePath}
 				color={techColor}
+				fallback="IK"
+				radius="full"
+				size="2"
+				src={imagePath}
 				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
 			/>
 

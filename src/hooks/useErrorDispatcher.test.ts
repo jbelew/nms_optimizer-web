@@ -25,57 +25,57 @@ describe("useErrorDispatcher", () => {
 	let tMock: Mock;
 
 	const mockSessionState: SessionState = {
-		supercharged_limit: 0,
-		supercharged_fixed: 0,
 		grid_fixed: 0,
-		module_locked: 0,
-		row_limit: 0,
-		incrementSuperchargedLimit: vi.fn(),
-		incrementSuperchargedFixed: vi.fn(),
 		incrementGridFixed: vi.fn(),
 		incrementModuleLocked: vi.fn(),
 		incrementRowLimit: vi.fn(),
+		incrementSuperchargedFixed: vi.fn(),
+		incrementSuperchargedLimit: vi.fn(),
+		module_locked: 0,
 		resetSession: vi.fn(),
+		row_limit: 0,
+		supercharged_fixed: 0,
+		supercharged_limit: 0,
 	};
 
 	const mockErrorState: ErrorState = {
-		errors: [],
 		addError: vi.fn(),
-		removeError: vi.fn(),
 		clearErrors: vi.fn(),
+		errors: [],
+		removeError: vi.fn(),
 	};
 
 	const mockI18n = {
+		addResource: vi.fn(),
+		addResourceBundle: vi.fn(),
+		addResources: vi.fn(),
+		changeLanguage: vi.fn(),
+		dir: vi.fn(),
+		emit: vi.fn(),
+		exists: vi.fn(),
+		format: vi.fn(),
+		getDataByLanguage: vi.fn(),
+		getFixedT: vi.fn(),
+		getResourceBundle: vi.fn(),
+		hasResourceBundle: vi.fn(),
+		isInitialized: true,
 		language: "en",
 		languages: ["en"],
-		changeLanguage: vi.fn(),
-		exists: vi.fn(),
-		getFixedT: vi.fn(),
-		dir: vi.fn(),
-		format: vi.fn(),
-		on: vi.fn(),
-		off: vi.fn(),
-		emit: vi.fn(),
-		loadNamespaces: vi.fn(),
 		loadLanguages: vi.fn(),
+		loadNamespaces: vi.fn(),
 		loadResources: vi.fn(),
-		options: {},
-		isInitialized: true,
-		resolvedLanguage: "en",
-		reloadResources: vi.fn(),
-		use: vi.fn(),
-		getDataByLanguage: vi.fn(),
-		hasResourceBundle: vi.fn(),
-		getResourceBundle: vi.fn(),
-		addResource: vi.fn(),
-		addResources: vi.fn(),
-		addResourceBundle: vi.fn(),
-		removeResourceBundle: vi.fn(),
-		setDefaultNamespace: vi.fn(),
-		t: vi.fn((key: string) => key) as unknown as TFunction,
-		store: {} as ResourceKey,
-		services: {} as Record<string, unknown>,
 		modules: {} as Record<string, unknown>,
+		off: vi.fn(),
+		on: vi.fn(),
+		options: {},
+		reloadResources: vi.fn(),
+		removeResourceBundle: vi.fn(),
+		resolvedLanguage: "en",
+		services: {} as Record<string, unknown>,
+		setDefaultNamespace: vi.fn(),
+		store: {} as ResourceKey,
+		t: vi.fn((key: string) => key) as unknown as TFunction,
+		use: vi.fn(),
 	} as unknown as i18n;
 
 	beforeEach(() => {
@@ -92,9 +92,9 @@ describe("useErrorDispatcher", () => {
 
 		vi.mocked(useTranslation).mockReturnValue(
 			Object.assign([tMock as unknown as TFunction, mockI18n, true], {
-				t: tMock as unknown as TFunction,
 				i18n: mockI18n,
 				ready: true,
+				t: tMock as unknown as TFunction,
 			}) as unknown as UseTranslationResponse<string, undefined>
 		);
 	});
@@ -198,8 +198,8 @@ describe("useErrorDispatcher", () => {
 	it("should handle multiple thresholds simultaneously", () => {
 		vi.mocked(useSessionStore).mockReturnValue({
 			...mockSessionState,
-			supercharged_limit: 3,
 			supercharged_fixed: 3,
+			supercharged_limit: 3,
 		});
 
 		renderHook(() => useErrorDispatcher());

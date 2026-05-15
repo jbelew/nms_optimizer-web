@@ -87,17 +87,17 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 			{isFirstInactiveRow && hasAnyActiveCells && (
 				<ConditionalTooltip label={t("gridControls.activateRow")}>
 					<IconButton
-						size="1"
-						radius="full"
-						variant="ghost"
-						color="green"
-						className={`${hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells ? "cursor-not-allowed!" : ""}`}
-						onClick={() => activateRow(rowIndex)}
-						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
 						aria-label={t("gridControls.activateRow")}
+						className={`${hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells ? "cursor-not-allowed!" : ""}`}
+						color="green"
+						disabled={hasModulesInGrid || gridFixed || isLoading || !hasAnyActiveCells}
+						onClick={() => activateRow(rowIndex)}
+						radius="full"
+						size="1"
+						variant="ghost"
 					>
 						{isMediumOrLarger ? (
-							<PlusCircledIcon width="20" height="20" className="shrink-0" />
+							<PlusCircledIcon className="shrink-0" height="20" width="20" />
 						) : (
 							<PlusCircledIcon className="shrink-0" />
 						)}
@@ -108,17 +108,17 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 			{isLastActiveRow && hasAnyActiveCells && (
 				<ConditionalTooltip label={t("gridControls.deactivateRow")}>
 					<IconButton
-						variant="ghost"
+						aria-label={t("gridControls.deactivateRow")}
+						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
+						color="red"
+						disabled={hasModulesInGrid || gridFixed || isLoading}
+						onClick={() => deActivateRow(rowIndex)}
 						radius="full"
 						size="1"
-						color="red"
-						className={`${!hasModulesInGrid && !isLoading ? "cursor-pointer!" : ""}`}
-						onClick={() => deActivateRow(rowIndex)}
-						disabled={hasModulesInGrid || gridFixed || isLoading}
-						aria-label={t("gridControls.deactivateRow")}
+						variant="ghost"
 					>
 						{isMediumOrLarger ? (
-							<MinusCircledIcon width="20" height="20" className="shrink-0" />
+							<MinusCircledIcon className="shrink-0" height="20" width="20" />
 						) : (
 							<MinusCircledIcon className="shrink-0" />
 						)}

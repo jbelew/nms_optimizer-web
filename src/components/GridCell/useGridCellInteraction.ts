@@ -10,8 +10,8 @@ import { Logger } from "../../utils/system/monitoring";
 // To track double taps correctly across all cells, we need a shared reference.
 // A tap on one cell should not be considered the first tap of a double tap on another.
 let lastTapInfo = {
-	time: 0,
 	cell: [-1, -1], // [rowIndex, columnIndex]
+	time: 0,
 };
 
 const DOUBLE_TAP_THRESHOLD = 400; // ms
@@ -60,7 +60,7 @@ export const useGridCellInteraction = (
 	const isSharedGridRef = useLatest(isSharedGrid);
 
 	// Refs to track gestures (scroll, zoom) vs taps
-	const gestureStartRef = useRef<{ x: number; y: number } | null>(null);
+	const gestureStartRef = useRef<null | { x: number; y: number }>(null);
 	const isGestureRef = useRef(false);
 
 	/**
@@ -111,7 +111,7 @@ export const useGridCellInteraction = (
 
 		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
 			// Double tap on the same cell
-			lastTapInfo = { time: 0, cell: [-1, -1] }; // Reset after double tap
+			lastTapInfo = { cell: [-1, -1], time: 0 }; // Reset after double tap
 			const totalSupercharged = gridState.selectTotalSuperchargedCells();
 			const isInvalidDoubleTap =
 				gridState.superchargedFixed ||
@@ -141,7 +141,7 @@ export const useGridCellInteraction = (
 			}
 		} else {
 			// Single tap or tap on a different cell
-			lastTapInfo = { time: currentTime, cell: [rowIndex, columnIndex] };
+			lastTapInfo = { cell: [rowIndex, columnIndex], time: currentTime };
 			const isInvalidSingleTap =
 				gridState.gridFixed || (gridState.superchargedFixed && latestCell.supercharged);
 
@@ -241,7 +241,7 @@ export const useGridCellInteraction = (
 	 * <div onTouchEnd={handleTouchEnd} />
 	 * ```
 	 */
-	const handleTouchEnd = (event: React.TouchEvent | React.MouseEvent) => {
+	const handleTouchEnd = (event: React.MouseEvent | React.TouchEvent) => {
 		setIsTouching(false);
 
 		// If it was a gesture (scroll/zoom), ignore the tap
@@ -307,7 +307,7 @@ export const useGridCellInteraction = (
 		const sessionState = useSessionStore.getState();
 		const latestCell = cellRef.current;
 
-		const { superchargedFixed, gridFixed } = gridState;
+		const { gridFixed, superchargedFixed } = gridState;
 
 		if (isSharedGridRef.current) {
 			return;
@@ -334,9 +334,9 @@ export const useGridCellInteraction = (
 				triggerShake();
 			} else {
 				Logger.info(`Cell active toggled: [${rowIndex}, ${columnIndex}]`, {
-					rowIndex,
-					columnIndex,
 					active: !latestCell.active,
+					columnIndex,
+					rowIndex,
 				});
 				startTransition(() => {
 					gridState.toggleCellActive(rowIndex, columnIndex);
@@ -363,8 +363,8 @@ export const useGridCellInteraction = (
 				triggerShake();
 			} else {
 				Logger.info(`Cell supercharged toggled: [${rowIndex}, ${columnIndex}]`, {
-					rowIndex,
 					columnIndex,
+					rowIndex,
 					supercharged: !latestCell.supercharged,
 				});
 				startTransition(() => {
@@ -437,13 +437,13 @@ export const useGridCellInteraction = (
 	};
 
 	return {
-		isTouching,
 		handleClick,
 		handleContextMenu,
-		handleTouchStart,
-		handleTouchMove,
-		handleTouchEnd,
-		handleTouchCancel,
 		handleKeyDown,
+		handleTouchCancel,
+		handleTouchEnd,
+		handleTouchMove,
+		handleTouchStart,
+		isTouching,
 	};
 };

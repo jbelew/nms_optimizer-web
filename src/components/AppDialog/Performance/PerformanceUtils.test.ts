@@ -244,11 +244,11 @@ describe("getPerformanceSummary", () => {
 	it("computes scores for the latest timestamp", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 2500,
-				p75: 2500,
 				app_version: "v1",
+				average_value: 2500,
+				metric_name: "LCP",
+				p75: 2500,
+				timestamp: 0,
 			} as PerformanceMetric,
 		];
 
@@ -264,18 +264,18 @@ describe("getPerformanceSummary", () => {
 	it("detects improvement when metric value decreases", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 3000,
-				p75: 3000,
 				app_version: "v1",
+				average_value: 3000,
+				metric_name: "LCP",
+				p75: 3000,
+				timestamp: 0,
 			} as PerformanceMetric,
 			{
-				timestamp: 3600000,
-				metric_name: "LCP",
-				average_value: 2000,
-				p75: 2000,
 				app_version: "v1",
+				average_value: 2000,
+				metric_name: "LCP",
+				p75: 2000,
+				timestamp: 3600000,
 			} as PerformanceMetric,
 		];
 
@@ -288,18 +288,18 @@ describe("getPerformanceSummary", () => {
 	it("detects regression when metric value increases", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 2000,
-				p75: 2000,
 				app_version: "v1",
+				average_value: 2000,
+				metric_name: "LCP",
+				p75: 2000,
+				timestamp: 0,
 			} as PerformanceMetric,
 			{
-				timestamp: 3600000,
-				metric_name: "LCP",
-				average_value: 3000,
-				p75: 3000,
 				app_version: "v1",
+				average_value: 3000,
+				metric_name: "LCP",
+				p75: 3000,
+				timestamp: 3600000,
 			} as PerformanceMetric,
 		];
 
@@ -312,11 +312,11 @@ describe("getPerformanceSummary", () => {
 	it("returns neutral for single-timestamp data", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 2500,
-				p75: 2500,
 				app_version: "v1",
+				average_value: 2500,
+				metric_name: "LCP",
+				p75: 2500,
+				timestamp: 0,
 			} as PerformanceMetric,
 		];
 
@@ -329,18 +329,18 @@ describe("getPerformanceSummary", () => {
 	it("returns neutral when change is below 1% threshold", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 2500,
-				p75: 2500,
 				app_version: "v1",
+				average_value: 2500,
+				metric_name: "LCP",
+				p75: 2500,
+				timestamp: 0,
 			} as PerformanceMetric,
 			{
-				timestamp: 3600000,
-				metric_name: "LCP",
-				average_value: 2505,
-				p75: 2505,
 				app_version: "v1",
+				average_value: 2505,
+				metric_name: "LCP",
+				p75: 2505,
+				timestamp: 3600000,
 			} as PerformanceMetric,
 		];
 
@@ -354,18 +354,18 @@ describe("getPerformanceSummary", () => {
 	it("computes overall score and trend", () => {
 		const data: PerformanceMetric[] = [
 			{
-				timestamp: 0,
-				metric_name: "LCP",
-				average_value: 3000,
-				p75: 3000,
 				app_version: "v1",
+				average_value: 3000,
+				metric_name: "LCP",
+				p75: 3000,
+				timestamp: 0,
 			} as PerformanceMetric,
 			{
-				timestamp: 3600000,
-				metric_name: "LCP",
-				average_value: 2000,
-				p75: 2000,
 				app_version: "v1",
+				average_value: 2000,
+				metric_name: "LCP",
+				p75: 2000,
+				timestamp: 3600000,
 			} as PerformanceMetric,
 		];
 
@@ -383,7 +383,7 @@ describe("getPerformanceSummary", () => {
 describe("getVersionChanges", () => {
 	it("returns empty array for fewer than 2 data points", () => {
 		expect(getVersionChanges([])).toEqual([]);
-		expect(getVersionChanges([{ timestamp: 1, appVersion: "v1" } as ChartDataPoint])).toEqual(
+		expect(getVersionChanges([{ appVersion: "v1", timestamp: 1 } as ChartDataPoint])).toEqual(
 			[]
 		);
 	});
@@ -393,8 +393,8 @@ describe("getVersionChanges", () => {
 			{ length: 10 },
 			(_, i) =>
 				({
-					timestamp: i,
 					appVersion: "v1",
+					timestamp: i,
 				}) as ChartDataPoint
 		);
 		expect(getVersionChanges(data)).toEqual([]);
@@ -405,8 +405,8 @@ describe("getVersionChanges", () => {
 			{ length: 10 },
 			(_, i) =>
 				({
-					timestamp: i * 1000,
 					appVersion: i < 5 ? "v1" : "v2",
+					timestamp: i * 1000,
 				}) as ChartDataPoint
 		);
 
@@ -420,8 +420,8 @@ describe("getVersionChanges", () => {
 			{ length: 10 },
 			(_, i) =>
 				({
-					timestamp: i * 1000,
 					appVersion: i < 2 ? "v1" : "v2",
+					timestamp: i * 1000,
 				}) as ChartDataPoint
 		);
 
@@ -436,8 +436,8 @@ describe("getVersionChanges", () => {
 			{ length: 15 },
 			(_, i) =>
 				({
-					timestamp: i * 1000,
 					appVersion: i < 5 ? "v1" : i < 6 ? "v2" : i < 7 ? "v3" : "v4",
+					timestamp: i * 1000,
 				}) as ChartDataPoint
 		);
 
@@ -447,12 +447,12 @@ describe("getVersionChanges", () => {
 	});
 	it("skips the virtual 'LIVE' marker", () => {
 		const data: ChartDataPoint[] = [
-			{ timestamp: 1000, appVersion: "v1" } as ChartDataPoint,
-			{ timestamp: 2000, appVersion: "v1" } as ChartDataPoint,
-			{ timestamp: 3000, appVersion: "v1" } as ChartDataPoint,
-			{ timestamp: 4000, appVersion: "v1" } as ChartDataPoint,
-			{ timestamp: 5000, appVersion: "v1" } as ChartDataPoint,
-			{ timestamp: 6000, appVersion: "LIVE" } as ChartDataPoint,
+			{ appVersion: "v1", timestamp: 1000 } as ChartDataPoint,
+			{ appVersion: "v1", timestamp: 2000 } as ChartDataPoint,
+			{ appVersion: "v1", timestamp: 3000 } as ChartDataPoint,
+			{ appVersion: "v1", timestamp: 4000 } as ChartDataPoint,
+			{ appVersion: "v1", timestamp: 5000 } as ChartDataPoint,
+			{ appVersion: "LIVE", timestamp: 6000 } as ChartDataPoint,
 		];
 
 		const result = getVersionChanges(data);
@@ -467,13 +467,13 @@ describe("getVersionChanges", () => {
 describe("transformPerformanceData", () => {
 	const makeMetric = (ts: number, name: string, avg: number, version = "v1"): PerformanceMetric =>
 		({
-			timestamp: ts,
-			metric_name: name,
+			app_version: version,
 			average_value: avg,
+			metric_name: name,
 			p50: avg * 0.8,
 			p75: avg,
 			p90: avg * 1.2,
-			app_version: version,
+			timestamp: ts,
 		}) as PerformanceMetric;
 
 	it("returns empty data for empty input", () => {

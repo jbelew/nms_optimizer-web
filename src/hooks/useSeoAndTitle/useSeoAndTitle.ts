@@ -184,7 +184,7 @@ const updateOgLocaleTags = (lang: string) => {
  * // Result: <script type="application/ld+json" id="software-schema">...</script>
  * ```
  */
-const updateStructuredData = (id: string, data: object | null) => {
+const updateStructuredData = (id: string, data: null | object) => {
 	let element = document.getElementById(id);
 
 	if (!data) {
@@ -237,7 +237,7 @@ const updateStructuredData = (id: string, data: object | null) => {
  * ```
  */
 export const useSeoAndTitle = () => {
-	const { t, i18n } = useTranslation();
+	const { i18n, t } = useTranslation();
 	const location = useLocation();
 	const prevUrlRef = useRef<string>(document.referrer);
 
@@ -343,10 +343,10 @@ export const useSeoAndTitle = () => {
 		sendEvent({
 			action: "page_view",
 			category: "engagement",
-			page_title: pageTitle,
+			page: location.pathname + location.search,
 			page_location: window.location.href,
 			page_referrer: prevUrlRef.current,
-			page: location.pathname + location.search,
+			page_title: pageTitle,
 		});
 
 		// Update prevUrlRef for the next navigation

@@ -12,16 +12,16 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 	beforeEach(() => {
 		useModuleSelectionStore.setState({ moduleSelections: {} });
 		useTechStore.setState({
-			techGroups: {},
-			checkedModules: {},
 			activeGroups: {},
+			checkedModules: {},
 			max_bonus: {},
-			solved_bonus: {},
 			solve_method: {},
+			solved_bonus: {},
 			techColors: {},
+			techGroups: {},
 		});
 		useTechBonusStore.setState({ bonusStatus: {} });
-		useGridStore.setState({ grid: createGrid(10, 6), result: null, isSharedGrid: false });
+		useGridStore.setState({ grid: createGrid(10, 6), isSharedGrid: false, result: null });
 		localStorage.clear();
 	});
 
@@ -50,10 +50,10 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 		// This is the opposite of switching ships
 		const bonusData: BonusStatusData = {
 			icon: "check",
-			percent: 100,
-			tooltipContent: "Test",
 			iconClassName: "test",
 			iconStyle: { color: "green" },
+			percent: 100,
+			tooltipContent: "Test",
 		};
 		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
 		useModuleSelectionStore.getState().setModuleSelection("bonus_tech", ["bonus_module"]);
@@ -136,10 +136,10 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 		// Set bonus status
 		const bonusData: BonusStatusData = {
 			icon: "lightning",
-			percent: 150,
-			tooltipContent: "Boosted!",
 			iconClassName: "boosted",
 			iconStyle: { color: "gold" },
+			percent: 150,
+			tooltipContent: "Boosted!",
 		};
 		useTechBonusStore.getState().setBonusStatus("boosted_tech", bonusData);
 
@@ -154,16 +154,16 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 	it("should NOT clear checked modules when applying recommended build", () => {
 		// Set up tech groups with checked modules
 		const mockModule = {
-			id: "checked_module",
-			checked: true,
 			bonus: 10,
+			checked: true,
+			id: "checked_module",
 			label: "Module",
 		} as unknown as TechTreeItem["modules"][0];
 		const mockTechGroup = {
-			key: "checked_tech",
-			type: "normal",
 			color: "#FF0000",
+			key: "checked_tech",
 			modules: [mockModule],
+			type: "normal",
 		} as unknown as TechTreeItem;
 
 		useTechStore.getState().setTechGroups({ checked_tech: [mockTechGroup] });
@@ -184,10 +184,10 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1"]);
 		useTechBonusStore.getState().setBonusStatus("tech1", {
 			icon: "check",
-			percent: 100,
-			tooltipContent: "Test",
 			iconClassName: "test",
 			iconStyle: { color: "green" },
+			percent: 100,
+			tooltipContent: "Test",
 		});
 
 		// Apply a build - selections preserved
@@ -220,8 +220,8 @@ describe("useRecommendedBuild - Adversarial Tests", () => {
 		const mockResult: ApiResponse = {
 			grid: null,
 			max_bonus: 100,
-			solved_bonus: 50,
 			solve_method: "method1",
+			solved_bonus: 50,
 		};
 		useGridStore.getState().setResult(mockResult, "tech1");
 

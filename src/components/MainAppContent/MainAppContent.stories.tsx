@@ -12,20 +12,6 @@ import { MainAppContent } from "./MainAppContent";
 
 const meta = {
 	component: MainAppContent,
-	title: "Components/MainAppContent",
-	parameters: {
-		docs: {
-			description: {
-				component:
-					"The core component that orchestrates the main application layout, including header, grid table, tech tree, and dialogs.",
-			},
-		},
-		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
-	},
 	loaders: [
 		async () => {
 			try {
@@ -45,6 +31,20 @@ const meta = {
 			}
 		},
 	],
+	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+		docs: {
+			description: {
+				component:
+					"The core component that orchestrates the main application layout, including header, grid table, tech tree, and dialogs.",
+			},
+		},
+		layout: "fullscreen",
+	},
+	title: "Components/MainAppContent",
 } satisfies Meta<typeof MainAppContent>;
 
 export default meta;
@@ -58,23 +58,23 @@ type Story = StoryObj<typeof meta>;
  */
 const StorybookWrapper = ({
 	children,
-	resetStores = true,
 	isSharedGrid = false,
+	resetStores = true,
 	techTree,
 }: {
 	children: React.ReactNode;
-	resetStores?: boolean;
 	isSharedGrid?: boolean;
+	resetStores?: boolean;
 	techTree?: TechTree;
 }) => {
 	useEffect(() => {
 		if (resetStores) {
 			// Reset GridStore with proper grid structure (10 width, 6 height)
 			useGridStore.setState({
-				isSharedGrid,
 				grid: createGrid(10, 6),
-				result: null,
 				gridFixed: false,
+				isSharedGrid,
+				result: null,
 				superchargedFixed: false,
 			});
 
@@ -99,13 +99,13 @@ const StorybookWrapper = ({
 				});
 
 				useTechStore.setState({
+					activeGroups: {},
+					checkedModules: {},
+					max_bonus: {},
+					solve_method: {},
+					solved_bonus: {},
 					techColors,
 					techGroups,
-					max_bonus: {},
-					solved_bonus: {},
-					solve_method: {},
-					checkedModules: {},
-					activeGroups: {},
 				});
 			}
 		}
@@ -136,7 +136,13 @@ const withLocalProviders =
 
 export const Desktop: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
-	render: () => <MainAppContent />,
+	globals: {
+		viewport: {
+			isRotated: false,
+			value: "desktop",
+		},
+	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -144,18 +150,18 @@ export const Desktop: Story = {
 			},
 		},
 	},
-	globals: {
-		viewport: {
-			value: "desktop",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
+	render: () => <MainAppContent />,
 };
 
 export const Tablet: Story = {
 	decorators: [(Story, context) => withLocalProviders(false, context.loaded.techTree)(Story)],
-	render: () => <MainAppContent />,
+	globals: {
+		viewport: {
+			isRotated: false,
+			value: "tablet",
+		},
+	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -163,13 +169,7 @@ export const Tablet: Story = {
 			},
 		},
 	},
-	globals: {
-		viewport: {
-			value: "tablet",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
+	render: () => <MainAppContent />,
 };
 
 export const Mobile: Story = {
@@ -177,15 +177,21 @@ export const Mobile: Story = {
 		(Story, context) => {
 			// Mock touch device for mobile story to show TapInstructions
 			Object.defineProperty(navigator, "maxTouchPoints", {
+				configurable: true,
 				value: 1,
 				writable: true,
-				configurable: true,
 			});
 
 			return withLocalProviders(false, context.loaded.techTree)(Story);
 		},
 	],
-	render: () => <MainAppContent />,
+	globals: {
+		viewport: {
+			isRotated: false,
+			value: "mobile",
+		},
+	},
+	loaders: meta.loaders,
 	parameters: {
 		docs: {
 			description: {
@@ -193,11 +199,5 @@ export const Mobile: Story = {
 			},
 		},
 	},
-	globals: {
-		viewport: {
-			value: "mobile",
-			isRotated: false,
-		},
-	},
-	loaders: meta.loaders,
+	render: () => <MainAppContent />,
 };

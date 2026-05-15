@@ -64,10 +64,10 @@ export const InstallPrompt: React.FC = () => {
 			const description = t("installPrompt.iosInstructions");
 
 			showToast({
-				title: t("installPrompt.title"),
 				description: <div dangerouslySetInnerHTML={{ __html: description }} />,
-				variant: "success",
 				duration: 10000,
+				title: t("installPrompt.title"),
+				variant: "success",
 			});
 
 			safeSetItem(INSTALL_PROMPT_DISMISSED_KEY, "true");

@@ -39,24 +39,24 @@ import { useTooltipState } from "../../utils/system/tooltipUtils";
  * ```
  */
 export const TooltipManager: React.FC = () => {
-	const { label, rect, isOpen } = useTooltipState();
+	const { isOpen, label, rect } = useTooltipState();
 
 	if (!rect) return null;
 
 	// Calculate position for the dummy trigger
 	const style: React.CSSProperties = {
+		height: rect.height,
+		left: rect.left,
+		pointerEvents: "none",
 		position: "fixed",
 		top: rect.top,
-		left: rect.left,
 		width: rect.width,
-		height: rect.height,
-		pointerEvents: "none",
 		zIndex: 9999, // Ensure it's above other elements
 	};
 
 	return (
-		<Tooltip open={isOpen} content={label} className="font-medium!">
-			<div style={style} aria-hidden="true" />
+		<Tooltip className="font-medium!" content={label} open={isOpen}>
+			<div aria-hidden="true" style={style} />
 		</Tooltip>
 	);
 };

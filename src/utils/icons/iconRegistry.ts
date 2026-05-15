@@ -40,6 +40,7 @@ import {
  * @category Utilities
  */
 export const radixIconRegistry: Record<string, ElementType> = {
+	CameraIcon,
 	CounterClockwiseClockIcon,
 	DownloadIcon,
 	ExclamationTriangleIcon,
@@ -54,7 +55,6 @@ export const radixIconRegistry: Record<string, ElementType> = {
 	ReloadIcon,
 	RocketIcon,
 	Share1Icon,
-	CameraIcon,
 };
 
 /**
@@ -75,18 +75,18 @@ interface DialogIconAndStyle {
  * @category Utilities
  */
 const iconMap: Record<string, ElementType> = {
-	"dialogs.titles.instructions": InfoCircledIcon,
-	"dialogs.titles.changelog": CounterClockwiseClockIcon,
-	"dialogs.titles.about": QuestionMarkCircledIcon,
-	"dialogs.titles.serverError": ExclamationTriangleIcon,
-	"dialogs.titles.translationRequest": GlobeIcon,
-	"dialogs.titles.shareLink": Share1Icon,
-	"dialogs.titles.userStats": PieChartIcon,
-	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
-	"dialogs.titles.privacy": EyeNoneIcon,
-	"dialogs.titles.updatePrompt": ReloadIcon,
-	"dialogs.titles.performance": RocketIcon,
 	"dialog.buildName.title": DownloadIcon,
+	"dialogs.titles.about": QuestionMarkCircledIcon,
+	"dialogs.titles.changelog": CounterClockwiseClockIcon,
+	"dialogs.titles.instructions": InfoCircledIcon,
+	"dialogs.titles.optimizationAlert": ExclamationTriangleIcon,
+	"dialogs.titles.performance": RocketIcon,
+	"dialogs.titles.privacy": EyeNoneIcon,
+	"dialogs.titles.serverError": ExclamationTriangleIcon,
+	"dialogs.titles.shareLink": Share1Icon,
+	"dialogs.titles.translationRequest": GlobeIcon,
+	"dialogs.titles.updatePrompt": ReloadIcon,
+	"dialogs.titles.userStats": PieChartIcon,
 	"dialogs.titles.welcome": InfoCircledIcon,
 };
 
@@ -96,10 +96,10 @@ const iconMap: Record<string, ElementType> = {
  * @category Utilities
  */
 const iconStyle: Record<string, CSSProperties> = {
-	"dialogs.titles.serverError": { color: "var(--red-track)" },
+	default: { color: "var(--accent-track)" },
 	"dialogs.titles.optimizationAlert": { color: "var(--red-track)" },
 	"dialogs.titles.performance": { color: "var(--cyan-track)" },
-	default: { color: "var(--accent-track)" },
+	"dialogs.titles.serverError": { color: "var(--red-track)" },
 };
 
 /**

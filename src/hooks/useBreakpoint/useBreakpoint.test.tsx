@@ -37,11 +37,7 @@ const createMatchMediaMock = (matches: boolean) => {
 	});
 
 	return {
-		matches,
-		media: "",
-		onchange: null,
 		addEventListener: addEventListenerMock,
-		removeEventListener: removeEventListenerMock,
 		// Alias for older methods
 		addListener: vi.fn(function (
 			this: MediaQueryList,
@@ -49,6 +45,16 @@ const createMatchMediaMock = (matches: boolean) => {
 		) {
 			listeners.push(listener);
 		}),
+		dispatchEvent: vi.fn(function (this: MediaQueryList, event: Partial<MediaQueryListEvent>) {
+			// Call listeners with the correct 'this' context
+			listeners.forEach((listener) => listener.call(this, event as MediaQueryListEvent));
+
+			return true;
+		}),
+		matches,
+		media: "",
+		onchange: null,
+		removeEventListener: removeEventListenerMock,
 		removeListener: vi.fn(function (
 			this: MediaQueryList,
 			listener: (this: MediaQueryList, ev: MediaQueryListEvent) => void
@@ -58,12 +64,6 @@ const createMatchMediaMock = (matches: boolean) => {
 			if (index > -1) {
 				listeners.splice(index, 1);
 			}
-		}),
-		dispatchEvent: vi.fn(function (this: MediaQueryList, event: Partial<MediaQueryListEvent>) {
-			// Call listeners with the correct 'this' context
-			listeners.forEach((listener) => listener.call(this, event as MediaQueryListEvent));
-
-			return true;
 		}),
 	};
 };
@@ -116,7 +116,7 @@ describe("useBreakpoint", () => {
 
 	it("should handle different breakpoints", () => {
 		matchMediaMock.matches = false;
-		const { result, rerender } = renderHook(({ bp }) => useBreakpoint(bp), {
+		const { rerender, result } = renderHook(({ bp }) => useBreakpoint(bp), {
 			initialProps: { bp: "480px" },
 		});
 		expect(result.current).toBe(false);

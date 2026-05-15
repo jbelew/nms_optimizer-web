@@ -54,11 +54,11 @@ export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
 	});
 
 	sendEvent({
-		category: "error",
 		action: error.name,
+		category: "error",
+		componentStack: errorInfo?.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
 		label: error.message,
 		nonInteraction: true,
-		componentStack: errorInfo?.componentStack?.replace(/\n/g, " ").substring(0, 100) || "N/A",
 		stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
 	});
 };

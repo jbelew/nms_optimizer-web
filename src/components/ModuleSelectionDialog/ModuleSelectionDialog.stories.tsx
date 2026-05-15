@@ -15,12 +15,12 @@ import "./ModuleSelectionDialog.scss";
  */
 const groupModules = (modules: SelectionModule[]): GroupedModules => {
 	const groups: GroupedModules = {
-		core: [],
-		bonus: [],
-		upgrade: [],
-		reactor: [],
-		cosmetic: [],
 		atlantid: [],
+		bonus: [],
+		core: [],
+		cosmetic: [],
+		reactor: [],
+		upgrade: [],
 	};
 
 	modules.forEach((module) => {
@@ -37,15 +37,7 @@ const groupModules = (modules: SelectionModule[]): GroupedModules => {
 };
 
 const meta: Meta<typeof ModuleSelectionDialog> = {
-	title: "Components/ModuleSelectionDialog",
 	component: ModuleSelectionDialog,
-	parameters: {
-		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
-	},
 	decorators: [
 		(Story) => (
 			<Theme>
@@ -65,11 +57,18 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 				.filter((m: SelectionModule) => m.checked)
 				.map((m: SelectionModule) => m.id);
 
-			return { groupedModules, modules, initialChecked };
+			return { groupedModules, initialChecked, modules };
 		},
 	],
+	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
+		layout: "fullscreen",
+	},
 	render: function Render(args, { loaded }) {
-		const { groupedModules, modules, initialChecked } = loaded;
+		const { groupedModules, initialChecked, modules } = loaded;
 		const [currentCheckedModules, setCurrentCheckedModules] = React.useState(initialChecked);
 
 		const nonCoreModuleIds = modules
@@ -84,7 +83,7 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 			!allModulesSelected &&
 			nonCoreModuleIds.some((id: string) => currentCheckedModules.includes(id));
 
-		const handleSelectAllChange = (checked: boolean | "indeterminate") => {
+		const handleSelectAllChange = (checked: "indeterminate" | boolean) => {
 			console.log("handleSelectAllChange", checked);
 
 			if (checked) {
@@ -97,19 +96,20 @@ const meta: Meta<typeof ModuleSelectionDialog> = {
 		return (
 			<ModuleSelectionDialog
 				{...args}
-				isOpen={args.isOpen ?? true}
-				groupedModules={groupedModules}
+				allModulesSelected={allModulesSelected}
 				currentCheckedModules={currentCheckedModules}
+				groupedModules={groupedModules}
+				handleSelectAllChange={handleSelectAllChange}
 				handleValueChange={(values) => {
 					console.log("handleValueChange", values);
 					setCurrentCheckedModules(values);
 				}}
-				allModulesSelected={allModulesSelected}
 				isIndeterminate={isIndeterminate}
-				handleSelectAllChange={handleSelectAllChange}
+				isOpen={args.isOpen ?? true}
 			/>
 		);
 	},
+	title: "Components/ModuleSelectionDialog",
 };
 
 export default meta;
@@ -118,19 +118,19 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		translatedTechName: "Hyperdrive",
 		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
 		techColor: "blue",
 		techImage: "starship/hyper.webp",
+		translatedTechName: "Hyperdrive",
 	},
 };
 
 export const Corvette: Story = {
 	args: {
-		translatedTechName: "Hyperdrive",
 		handleOptimizeClick: async () => console.log("handleOptimizeClick"),
 		techColor: "blue",
 		techImage: "starship/hyper.webp",
+		translatedTechName: "Hyperdrive",
 	},
 	decorators: [
 		(Story) => {
@@ -151,7 +151,7 @@ export const Corvette: Story = {
 				.filter((m: SelectionModule) => m.checked)
 				.map((m: SelectionModule) => m.id);
 
-			return { groupedModules, modules, initialChecked };
+			return { groupedModules, initialChecked, modules };
 		},
 	],
 };

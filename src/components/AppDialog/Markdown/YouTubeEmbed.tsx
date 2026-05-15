@@ -5,10 +5,10 @@ import { Box } from "@radix-ui/themes";
  * Properties for the `YouTubeEmbed` component.
  */
 interface YouTubeEmbedProps {
-	/** The unique identifier of the YouTube video. */
-	videoId: string;
 	/** Accessible title for the iframe. */
 	title?: string;
+	/** The unique identifier of the YouTube video. */
+	videoId: string;
 }
 
 /**
@@ -31,17 +31,17 @@ interface YouTubeEmbedProps {
  * <YouTubeEmbed videoId="dQw4w9WgXcQ" title="Example video" />
  * ```
  */
-export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ videoId, title }) => (
+export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) => (
 	<Box asChild mb="2">
 		<iframe
-			width="100%"
-			height="400"
-			src={`https://www.youtube.com/embed/${videoId}`}
-			title={title || "YouTube video"}
-			frameBorder="0"
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowFullScreen
+			frameBorder="0"
+			height="400"
+			src={`https://www.youtube.com/embed/${videoId}`}
 			style={{ borderRadius: "6px" }}
+			title={title || "YouTube video"}
+			width="100%"
 		/>
 	</Box>
 );

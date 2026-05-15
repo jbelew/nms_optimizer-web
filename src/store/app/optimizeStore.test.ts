@@ -6,8 +6,8 @@ describe("OptimizeStore", () => {
 	beforeEach(() => {
 		// Reset the store state before each test
 		useOptimizeStore.setState({
-			showError: false,
 			patternNoFitTech: null,
+			showError: false,
 		});
 	});
 
@@ -158,7 +158,7 @@ describe("OptimizeStore", () => {
 
 	describe("State management", () => {
 		it("should allow independent updates to both properties", () => {
-			const { setShowError, setPatternNoFitTech } = useOptimizeStore.getState();
+			const { setPatternNoFitTech, setShowError } = useOptimizeStore.getState();
 
 			setShowError(true);
 			expect(useOptimizeStore.getState().showError).toBe(true);
@@ -174,43 +174,43 @@ describe("OptimizeStore", () => {
 		});
 
 		it("should manage complex update sequences", () => {
-			const { setShowError, setPatternNoFitTech } = useOptimizeStore.getState();
+			const { setPatternNoFitTech, setShowError } = useOptimizeStore.getState();
 
 			// Scenario 1: Set error
 			setShowError(true);
 			setPatternNoFitTech("armor-plating");
 
 			expect(useOptimizeStore.getState()).toEqual({
-				showError: true,
-				errorType: "recoverable",
 				error: null,
+				errorType: "recoverable",
 				patternNoFitTech: "armor-plating",
-				setShowError,
 				setPatternNoFitTech,
+				setShowError,
+				showError: true,
 			});
 
 			// Scenario 2: Clear error
 			setShowError(false);
 
 			expect(useOptimizeStore.getState()).toEqual({
-				showError: false,
-				errorType: null,
 				error: null,
+				errorType: null,
 				patternNoFitTech: "armor-plating",
-				setShowError,
 				setPatternNoFitTech,
+				setShowError,
+				showError: false,
 			});
 
 			// Scenario 3: Clear tech
 			setPatternNoFitTech(null);
 
 			expect(useOptimizeStore.getState()).toEqual({
-				showError: false,
-				errorType: null,
 				error: null,
+				errorType: null,
 				patternNoFitTech: null,
-				setShowError,
 				setPatternNoFitTech,
+				setShowError,
+				showError: false,
 			});
 		});
 	});
@@ -244,8 +244,8 @@ describe("OptimizeStore", () => {
 	describe("Integration", () => {
 		it("should work with direct setState", () => {
 			useOptimizeStore.setState({
-				showError: true,
 				patternNoFitTech: "hyperdrive",
+				showError: true,
 			});
 
 			const state = useOptimizeStore.getState();

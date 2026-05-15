@@ -6,7 +6,7 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/en
 /**
  * Valid theme appearance types.
  */
-export type ThemeAppearance = "light" | "dark";
+export type ThemeAppearance = "dark" | "light";
 
 /**
  * State and actions for the application's theme management.
@@ -47,11 +47,11 @@ export const useThemeStore = create<ThemeState>()(
 
 					return item ? JSON.parse(item) : null;
 				},
-				setItem: (name, value) => {
-					safeSetItem(name, JSON.stringify(value));
-				},
 				removeItem: (name) => {
 					safeRemoveItem(name);
+				},
+				setItem: (name, value) => {
+					safeSetItem(name, JSON.stringify(value));
 				},
 			},
 		}

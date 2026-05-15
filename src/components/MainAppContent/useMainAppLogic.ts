@@ -62,7 +62,7 @@ export const useMainAppLogic = () => {
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
-	const { isVisible, toolbarRef, forceShow } = useScrollHide(80);
+	const { forceShow, isVisible, toolbarRef } = useScrollHide(80);
 	const { resetSession } = useSessionStore();
 
 	const optimize = useOptimize();
@@ -105,20 +105,20 @@ export const useMainAppLogic = () => {
 	};
 
 	return {
-		buildVersion,
+		appLayout,
 		buildDate,
-		t,
-		isSmallScreen,
+		buildVersion,
+		handleShowChangelog,
+		hasModulesInGrid,
 		isLargeScreen,
 		isSharedGrid,
-		hasModulesInGrid,
-		selectedShipType,
+		isSmallScreen,
 		isVisible,
-		toolbarRef,
-		optimize,
-		appLayout,
-		saveBuild,
 		loadBuild,
-		handleShowChangelog,
+		optimize,
+		saveBuild,
+		selectedShipType,
+		t,
+		toolbarRef,
 	};
 };

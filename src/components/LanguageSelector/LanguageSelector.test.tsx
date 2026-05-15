@@ -8,13 +8,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockWindowLocation = (search: string) => {
 	const formattedSearch = search ? (search.startsWith("?") ? search : "?" + search) : "";
 	Object.defineProperty(window, "location", {
+		configurable: true,
 		value: {
 			...window.location,
-			search: formattedSearch,
 			href: `http://localhost${formattedSearch}`,
+			search: formattedSearch,
 		},
 		writable: true,
-		configurable: true,
 	});
 };
 

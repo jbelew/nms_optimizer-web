@@ -13,10 +13,10 @@ import { useToast } from "../useToast/useToast";
 export interface UseLoadBuildReturn {
 	/** Ref to the hidden file input element. */
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
-	/** Triggers the native file selection dialog. */
-	handleLoadBuild: () => void;
 	/** Processes the user's selected file. */
 	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+	/** Triggers the native file selection dialog. */
+	handleLoadBuild: () => void;
 	/** Whether a file is currently being parsed and loaded. */
 	isLoadPending: boolean;
 }
@@ -54,7 +54,7 @@ export interface UseLoadBuildReturn {
 export const useLoadBuild = (): UseLoadBuildReturn => {
 	const { t } = useTranslation();
 	const { loadBuildFromFile } = useBuildFileManager();
-	const { showSuccess, showError } = useToast();
+	const { showError, showSuccess } = useToast();
 	const { sendEvent } = useAnalytics();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [isLoadPending, setIsLoadPending] = useState(false);
@@ -101,13 +101,13 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 					5000
 				);
 				sendEvent({
-					category: "ui",
 					action: "load_build",
-					method: "nms_file",
+					category: "ui",
 					file_name: file.name,
+					method: "nms_file",
+					nonInteraction: false,
 					shipType: selectedShipType,
 					value: 1,
-					nonInteraction: false,
 				});
 			} catch (error) {
 				console.error("Load failed:", error);
@@ -125,8 +125,8 @@ export const useLoadBuild = (): UseLoadBuildReturn => {
 
 	return {
 		fileInputRef,
-		handleLoadBuild,
 		handleFileSelect,
+		handleLoadBuild,
 		isLoadPending,
 	};
 };

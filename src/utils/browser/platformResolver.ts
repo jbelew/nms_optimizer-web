@@ -45,7 +45,7 @@ const DEFAULT_PLATFORM = "standard";
  * const platform = getPlatformFromUrl();
  * // returns "solar"
  */
-export const getPlatformFromUrl = (): string | null => {
+export const getPlatformFromUrl = (): null | string => {
 	if (typeof window === "undefined") return null;
 
 	let urlParams: URLSearchParams;
@@ -76,7 +76,7 @@ export const getPlatformFromUrl = (): string | null => {
  * const platform = getPlatformFromStorage();
  * // returns "solar" or null
  */
-export const getPlatformFromStorage = (): string | null => {
+export const getPlatformFromStorage = (): null | string => {
 	return safeGetItem(PLATFORM_STORAGE_KEY);
 };
 

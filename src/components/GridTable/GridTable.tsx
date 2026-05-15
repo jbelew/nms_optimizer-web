@@ -23,10 +23,10 @@ import GridTableButtons from "../GridTableButtons/GridTableButtons";
  * @category Components
  */
 interface GridTableProps {
-	/** Whether an optimization solve is currently active. */
-	solving: boolean;
 	/** Whether the grid is being viewed in read-only shared mode. */
 	sharedGrid: boolean;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
 }
 
 /**
@@ -48,7 +48,7 @@ interface GridTableProps {
  * ```
  */
 function GridTableComponent(
-	{ solving, sharedGrid }: GridTableProps,
+	{ sharedGrid, solving }: GridTableProps,
 	ref: React.Ref<HTMLDivElement>
 ) {
 	const { t } = useTranslation();
@@ -63,21 +63,21 @@ function GridTableComponent(
 		() =>
 			Array.from({ length: deferredHeight }).map((_, rowIndex) => (
 				<div
-					key={rowIndex}
-					role="row"
 					aria-rowindex={rowIndex + 1}
 					className="gridTable__row"
+					key={rowIndex}
+					role="row"
 				>
 					{/* Direct row-less rendering of cells for performance */}
 					{Array.from({ length: deferredWidth }).map((__, columnIndex) => (
 						<GridCell
-							key={`${rowIndex}-${columnIndex}`}
-							rowIndex={rowIndex}
 							columnIndex={columnIndex}
 							isSharedGrid={sharedGrid}
+							key={`${rowIndex}-${columnIndex}`}
+							rowIndex={rowIndex}
 						/>
 					))}
-					<div role="gridcell" className="w-6" aria-colindex={totalAriaColumnCount}>
+					<div aria-colindex={totalAriaColumnCount} className="w-6" role="gridcell">
 						<GridControlButtons rowIndex={rowIndex} />
 					</div>
 				</div>
@@ -86,25 +86,25 @@ function GridTableComponent(
 	);
 
 	if (!deferredHeight || !deferredWidth) {
-		return <div ref={ref} className="gridTable-empty"></div>;
+		return <div className="gridTable-empty" ref={ref}></div>;
 	}
 
 	return (
 		<GridShake duration={500}>
 			<div
-				ref={ref}
-				role="grid"
+				aria-colcount={totalAriaColumnCount}
 				aria-label={t("gridTable.ariaLabel") ?? ""}
 				aria-rowcount={deferredHeight}
-				aria-colcount={totalAriaColumnCount}
 				className={`gridTable ${solving ? "opacity-25" : ""}`}
+				ref={ref}
+				role="grid"
 			>
 				{gridContent}
 			</div>
 
 			<GridTableButtons
-				solving={solving}
 				gridRef={ref as React.RefObject<HTMLDivElement | null>}
+				solving={solving}
 			/>
 		</GridShake>
 	);

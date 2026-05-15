@@ -73,12 +73,12 @@ const getUpgradePriority = (label: string | undefined): string => {
  * @category Components
  */
 interface GridCellProps {
-	/** The row index of the cell within the grid (0-based). */
-	rowIndex: number;
 	/** The column index of the cell within the grid (0-based). */
 	columnIndex: number;
 	/** Whether the grid is currently in read-only shared mode. */
 	isSharedGrid: boolean;
+	/** The row index of the cell within the grid (0-based). */
+	rowIndex: number;
 }
 
 /**
@@ -154,21 +154,21 @@ const CORNER_SPANS = (
  * - Full keyboard navigation support (Space/Enter for activation).
  * - ARIA `gridcell` role and index mapping.
  */
-const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid }) => {
+const GridCell: React.FC<GridCellProps> = ({ columnIndex, isSharedGrid, rowIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);
 
 	const {
-		isTouching,
 		handleClick,
 		handleContextMenu,
 		handleKeyDown,
-		handleTouchStart,
-		handleTouchMove,
-		handleTouchEnd,
 		handleTouchCancel,
+		handleTouchEnd,
+		handleTouchMove,
+		handleTouchStart,
+		isTouching,
 	} = useGridCellInteraction(cell, rowIndex, columnIndex, isSharedGrid);
 
-	const { techColor, cellClassName, cellElementStyle, showEmptyIcon, emptyIconFillColor } =
+	const { cellClassName, cellElementStyle, emptyIconFillColor, showEmptyIcon, techColor } =
 		useGridCellStyle(cell, isTouching);
 
 	let imageUrl: string | undefined;
@@ -188,31 +188,31 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 
 	const cellElement = (
 		<div
-			role="gridcell"
-			data-testid="grid-cell"
 			aria-colindex={columnIndex + 1}
-			tabIndex={isSharedGrid ? -1 : 0}
-			data-accent-color={techColor}
-			onContextMenu={handleContextMenu}
-			onClick={handleClick}
-			onTouchStart={handleTouchStart}
-			onTouchMove={handleTouchMove}
-			onTouchEnd={handleTouchEnd}
-			onTouchCancel={handleTouchCancel}
-			onKeyDown={handleKeyDown}
 			className={cellClassName}
+			data-accent-color={techColor}
+			data-testid="grid-cell"
+			onClick={handleClick}
+			onContextMenu={handleContextMenu}
+			onKeyDown={handleKeyDown}
+			onTouchCancel={handleTouchCancel}
+			onTouchEnd={handleTouchEnd}
+			onTouchMove={handleTouchMove}
+			onTouchStart={handleTouchStart}
+			role="gridcell"
 			style={cellElementStyle as React.CSSProperties}
+			tabIndex={isSharedGrid ? -1 : 0}
 		>
 			{imageUrl ? (
 				<img
+					alt=""
+					className="absolute inset-0 h-full w-full object-cover object-center"
+					decoding="async"
+					height="64"
+					loading={rowIndex < 5 ? "eager" : "lazy"}
 					src={imageUrl}
 					srcSet={imageSrcSet}
-					alt=""
 					width="64"
-					height="64"
-					decoding="async"
-					loading={rowIndex < 5 ? "eager" : "lazy"}
-					className="absolute inset-0 h-full w-full object-cover object-center"
 				/>
 			) : null}
 			{showEmptyIcon ? <EmptyCellIcon fillColor={emptyIconFillColor} /> : null}
@@ -234,7 +234,7 @@ const GridCell: React.FC<GridCellProps> = ({ rowIndex, columnIndex, isSharedGrid
 	const isTooltipVisible = cell.module && cell.active;
 
 	return isTooltipVisible ? (
-		<ConditionalTooltip label={tooltipContent ?? ""} delayDuration={500}>
+		<ConditionalTooltip delayDuration={500} label={tooltipContent ?? ""}>
 			{cellElement}
 		</ConditionalTooltip>
 	) : (

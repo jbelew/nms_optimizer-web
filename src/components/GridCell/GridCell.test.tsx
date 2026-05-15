@@ -12,11 +12,11 @@ import GridCell from "./GridCell";
 
 let mockCellState = {
 	active: false,
-	supercharged: false,
-	module: "some-module",
+	adjacency_bonus: 1,
 	image: "some-image.webp",
 	label: "My Module",
-	adjacency_bonus: 1,
+	module: "some-module",
+	supercharged: false,
 	tech: "some-tech",
 };
 
@@ -28,15 +28,15 @@ vi.mock("../../hooks/useCell/useCell", () => ({
 // Mock the GridStore and its actions
 vi.mock("../../store/grid/gridStore", () => {
 	const mockState = {
-		handleCellTap: vi.fn(),
-		handleCellDoubleTap: vi.fn(),
-		revertCellTap: vi.fn(),
 		clearInitialCellStateForTap: vi.fn(),
-		toggleCellActive: vi.fn(),
-		toggleCellSupercharged: vi.fn(),
+		gridFixed: false,
+		handleCellDoubleTap: vi.fn(),
+		handleCellTap: vi.fn(),
+		revertCellTap: vi.fn(),
 		selectTotalSuperchargedCells: vi.fn(() => 0),
 		superchargedFixed: false,
-		gridFixed: false,
+		toggleCellActive: vi.fn(),
+		toggleCellSupercharged: vi.fn(),
 	};
 	const useGridStore = vi.fn(() => mockState);
 	// @ts-expect-error - Mocking getState
@@ -73,11 +73,11 @@ describe("GridCell", () => {
 		// Reset mock state for each test
 		mockCellState = {
 			active: false,
-			supercharged: false,
-			module: "some-module",
+			adjacency_bonus: 1,
 			image: "some-image.webp",
 			label: "My Module",
-			adjacency_bonus: 1,
+			module: "some-module",
+			supercharged: false,
 			tech: "some-tech",
 		};
 
@@ -87,29 +87,29 @@ describe("GridCell", () => {
 		(useTechStore as unknown as Mock).mockImplementation(
 			(selector: (state: TechState) => unknown) => {
 				const state: TechState = {
-					max_bonus: {},
-					solved_bonus: {},
-					solve_method: {},
-					techColors: {},
-					checkedModules: {},
-					techGroups: {},
 					activeGroups: {},
-					clearTechMaxBonus: vi.fn(),
-					setTechMaxBonus: vi.fn(),
-					clearTechSolvedBonus: vi.fn(),
-					setTechSolvedBonus: vi.fn(),
-					setTechSolveMethod: vi.fn(),
-					setTechColors: vi.fn(),
-					initializeTechTree: vi.fn(),
-					getTechColor: vi.fn(() => "blue"),
-					setCheckedModules: vi.fn(),
-					clearCheckedModules: vi.fn(),
+					checkedModules: {},
 					clearAllCheckedModules: vi.fn(),
-					clearTechGroups: vi.fn(),
+					clearCheckedModules: vi.fn(),
 					clearResult: vi.fn(),
-					setTechGroups: vi.fn(),
+					clearTechGroups: vi.fn(),
+					clearTechMaxBonus: vi.fn(),
+					clearTechSolvedBonus: vi.fn(),
+					getTechColor: vi.fn(() => "blue"),
+					initializeTechTree: vi.fn(),
+					max_bonus: {},
 					setActiveGroup: vi.fn(),
 					setActiveGroups: vi.fn(),
+					setCheckedModules: vi.fn(),
+					setTechColors: vi.fn(),
+					setTechGroups: vi.fn(),
+					setTechMaxBonus: vi.fn(),
+					setTechSolvedBonus: vi.fn(),
+					setTechSolveMethod: vi.fn(),
+					solve_method: {},
+					solved_bonus: {},
+					techColors: {},
+					techGroups: {},
 				};
 
 				return selector(state);
@@ -121,7 +121,7 @@ describe("GridCell", () => {
 		// Mutate mockCellState with overrides before rendering
 		Object.assign(mockCellState, cellOverrides);
 
-		return render(<GridCell rowIndex={0} columnIndex={0} isSharedGrid={false} {...props} />);
+		return render(<GridCell columnIndex={0} isSharedGrid={false} rowIndex={0} {...props} />);
 	};
 
 	it("renders correctly", () => {
@@ -145,13 +145,13 @@ describe("GridCell", () => {
 	});
 
 	it("renders corner elements when not supercharged and no image is present", () => {
-		renderComponent({ supercharged: false, image: null });
+		renderComponent({ image: null, supercharged: false });
 		const cellElement = screen.getByRole("gridcell");
 		expect(cellElement.querySelector(".corner.top-left")).toBeInTheDocument();
 	});
 
 	it("does not render corner elements when an image is present", () => {
-		renderComponent({ supercharged: false, image: "some-image.webp" });
+		renderComponent({ image: "some-image.webp", supercharged: false });
 		const cellElement = screen.getByRole("gridcell");
 		expect(cellElement.querySelector(".corner.top-left")).not.toBeInTheDocument();
 	});

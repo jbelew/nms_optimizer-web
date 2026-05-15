@@ -90,8 +90,8 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 				)
 				.map((tech: TechTreeItem) => ({
 					...tech,
-					modules: tech.modules || [],
 					image: tech.image || null,
+					modules: tech.modules || [],
 				}))
 				.sort((a, b) => a.label.localeCompare(b.label));
 
@@ -109,13 +109,13 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 		() =>
 			Object.entries(processedTechTree).map(([type, technologies], index) => (
 				<TechTreeSection
-					key={type}
-					type={type}
-					technologies={technologies as TechTreeItem[]}
 					handleOptimize={handleOptimize}
-					solving={solving}
 					index={index}
 					isGridFull={isGridFull} // Pass isGridFull down
+					key={type}
+					solving={solving}
+					technologies={technologies as TechTreeItem[]}
+					type={type}
 				/>
 			)),
 		[processedTechTree, handleOptimize, solving, isGridFull]

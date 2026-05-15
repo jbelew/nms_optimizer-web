@@ -114,7 +114,7 @@ export const useScrollGridIntoView = (options?: { skipOnLargeScreens?: boolean }
 		const element = gridContainerRef.current;
 		requestAnimationFrame(() => {
 			const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
-			window.scrollTo({ top, behavior: "smooth" });
+			window.scrollTo({ behavior: "smooth", top });
 		});
 	};
 

@@ -6,19 +6,19 @@ import ErrorDialog from "./ErrorDialog";
 
 const meta = {
 	component: ErrorDialog,
-	title: "Components/AppDialog/Error/ErrorDialog",
 	decorators: [
 		(Story) => {
 			return (
 				<div
 					className="flex min-h-screen items-center justify-center p-4"
-					style={{ maxWidth: "800px", margin: "0 auto" }}
+					style={{ margin: "0 auto", maxWidth: "800px" }}
 				>
 					<Story />
 				</div>
 			);
 		},
 	],
+	title: "Components/AppDialog/Error/ErrorDialog",
 } satisfies Meta<typeof ErrorDialog>;
 
 export default meta;

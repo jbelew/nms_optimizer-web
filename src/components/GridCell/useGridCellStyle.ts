@@ -63,5 +63,5 @@ export function useGridCellStyle(cell: Cell, isTouching: boolean) {
 
 	const showEmptyIcon = !cell.module && cell.active;
 
-	return { techColor, cellClassName, cellElementStyle, emptyIconFillColor, showEmptyIcon };
+	return { cellClassName, cellElementStyle, emptyIconFillColor, showEmptyIcon, techColor };
 }

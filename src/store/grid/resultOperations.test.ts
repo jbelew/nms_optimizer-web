@@ -13,14 +13,14 @@ describe("GridStore - Result and Tech Operations", () => {
 		act(() => {
 			useGridStore.setState({
 				grid: createGrid(10, 6),
-				result: null,
 				initialGridDefinition: undefined,
+				result: null,
 			});
 			useGridStore.getState().triggerRecompute();
 			useTechStore.setState({
 				max_bonus: {},
-				solved_bonus: {},
 				solve_method: {},
+				solved_bonus: {},
 			});
 		});
 	});
@@ -30,8 +30,8 @@ describe("GridStore - Result and Tech Operations", () => {
 			const result = {
 				grid: null,
 				max_bonus: 500,
-				solved_bonus: 400,
 				solve_method: "greedy",
+				solved_bonus: 400,
 			};
 
 			act(() => {
@@ -45,8 +45,8 @@ describe("GridStore - Result and Tech Operations", () => {
 			const result = {
 				grid: null,
 				max_bonus: 500,
-				solved_bonus: 400,
 				solve_method: "greedy",
+				solved_bonus: 400,
 			};
 
 			act(() => {
@@ -65,8 +65,8 @@ describe("GridStore - Result and Tech Operations", () => {
 					{
 						grid: null,
 						max_bonus: 100,
-						solved_bonus: 80,
 						solve_method: "test",
+						solved_bonus: 80,
 					},
 					"defense"
 				);
@@ -82,8 +82,8 @@ describe("GridStore - Result and Tech Operations", () => {
 			const result = {
 				grid: gridData,
 				max_bonus: 600,
-				solved_bonus: 500,
 				solve_method: "optimal",
+				solved_bonus: 500,
 			};
 
 			act(() => {
@@ -99,15 +99,15 @@ describe("GridStore - Result and Tech Operations", () => {
 			const defenseResult = {
 				grid: null,
 				max_bonus: 500,
-				solved_bonus: 400,
 				solve_method: "greedy",
+				solved_bonus: 400,
 			};
 
 			const attackResult = {
 				grid: null,
 				max_bonus: 600,
-				solved_bonus: 550,
 				solve_method: "optimal",
+				solved_bonus: 550,
 			};
 
 			act(() => {

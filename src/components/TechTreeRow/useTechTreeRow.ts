@@ -9,7 +9,7 @@ import { useTechModuleManagement } from "./useTechModuleManagement";
 import { useTechOptimization } from "./useTechOptimization";
 
 /** Default empty array for modules to ensure stable reference for hooks. */
-const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: string }[] = [];
+const EMPTY_MODULES_ARRAY: { id: string; image: string; label: string; type?: string }[] = [];
 
 /**
  * Orchestrates the complex logic for a single technology sidebar row.
@@ -56,12 +56,12 @@ const EMPTY_MODULES_ARRAY: { label: string; id: string; image: string; type?: st
  * ```
  */
 export const useTechTreeRow = ({
-	tech,
 	handleOptimize,
-	solving,
-	techImage,
 	isGridFull,
+	solving,
+	tech,
 	techColor,
+	techImage,
 }: TechTreeRowProps) => {
 	const { t } = useTranslation();
 
@@ -89,13 +89,13 @@ export const useTechTreeRow = ({
 	);
 
 	const {
+		allModulesSelected,
 		currentCheckedModules,
 		groupedModules,
-		allModulesSelected,
-		isIndeterminate,
-		handleValueChange,
-		handleSelectAllChange,
 		handleAllCheckboxesChange,
+		handleSelectAllChange,
+		handleValueChange,
+		isIndeterminate,
 	} = useTechModuleManagement(tech, modules);
 
 	// Other logic specific to TechTreeRow
@@ -116,31 +116,31 @@ export const useTechTreeRow = ({
 		: fallbackImage2x;
 
 	return {
-		// State and derived data
-		hasTechInGrid,
-		techColor,
-		moduleCount,
-		techMaxBonus,
-		techSolvedBonus,
-		modules,
-		translatedTechName,
-		imagePath,
-		imagePath2x,
-		solving,
-		techImage,
-		isResetting,
-
+		allModulesSelected,
 		// Module management
 		currentCheckedModules,
 		groupedModules,
-		allModulesSelected,
-		isIndeterminate,
-
+		handleAllCheckboxesChange,
 		// Callbacks
 		handleOptimizeClick,
 		handleReset,
-		handleAllCheckboxesChange,
-		handleValueChange,
 		handleSelectAllChange,
+		handleValueChange,
+		// State and derived data
+		hasTechInGrid,
+		imagePath,
+		imagePath2x,
+		isIndeterminate,
+
+		isResetting,
+		moduleCount,
+		modules,
+		solving,
+
+		techColor,
+		techImage,
+		techMaxBonus,
+		techSolvedBonus,
+		translatedTechName,
 	};
 };

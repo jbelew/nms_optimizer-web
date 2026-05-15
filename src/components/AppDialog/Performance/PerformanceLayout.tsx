@@ -24,11 +24,11 @@ import { PERFORMANCE_LAYOUT } from "./PerformanceUtils";
 export const PerformanceDashboardLayout: FC<{
 	/** The summary cards row content. */
 	cards: ReactNode;
-	/** The range selector row content. */
-	range: ReactNode;
 	/** The main chart area content. */
 	chart: ReactNode;
-}> = ({ cards, range, chart }) => (
+	/** The range selector row content. */
+	range: ReactNode;
+}> = ({ cards, chart, range }) => (
 	<Flex direction="column" gap="0">
 		{/* Summary Cards Row */}
 		{cards}

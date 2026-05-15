@@ -16,16 +16,16 @@ interface PieLabelRenderProps {
 	cx: number;
 	/** The y-coordinate of the pie chart center. */
 	cy: number;
-	/** The bisector angle of the current slice in degrees. */
-	midAngle: number;
 	/** The inner radius of the donut ring in pixels. */
 	innerRadius: number;
+	/** The bisector angle of the current slice in degrees. */
+	midAngle: number;
+	/** The technology name displayed as the slice label. */
+	name: string;
 	/** The outer radius of the donut ring in pixels. */
 	outerRadius: number;
 	/** The fractional value (0–1) this slice represents of the whole. */
 	percent: number;
-	/** The technology name displayed as the slice label. */
-	name: string;
 }
 
 /** Default color palette for the pie chart segments. */
@@ -40,17 +40,17 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28DFF", "#FF6F61"
  * code-split into a separate chunk and only fetched when charts are rendered.
  */
 const LazyRechartsChart = lazy(async () => {
-	const { ResponsiveContainer, PieChart, Pie, Cell } = await import("recharts");
+	const { Cell, Pie, PieChart, ResponsiveContainer } = await import("recharts");
 
 	return {
 		default: ({
 			chartData,
-			techColors,
 			COLORS,
+			techColors,
 		}: {
 			chartData: { name: string; value: number }[];
-			techColors: Record<string, string>;
 			COLORS: string[];
+			techColors: Record<string, string>;
 		}) => {
 			const getCellFill = (entry: { name: string; value: number }, index: number) => {
 				if (entry.name.toLowerCase() === "photonix") {
@@ -69,25 +69,23 @@ const LazyRechartsChart = lazy(async () => {
 			};
 
 			return (
-				<ResponsiveContainer width="100%" height={248}>
+				<ResponsiveContainer height={248} width="100%">
 					<PieChart>
 						<Pie
-							data={chartData}
 							cx="50%"
 							cy="50%"
-							innerRadius="50%"
-							outerRadius="100%"
-							paddingAngle={0}
+							data={chartData}
 							dataKey="value"
+							innerRadius="50%"
 							label={(props: unknown) => {
 								const {
 									cx: cx_,
 									cy: cy_,
-									midAngle,
 									innerRadius: innerRadius_,
+									midAngle,
+									name,
 									outerRadius: outerRadius_,
 									percent,
-									name,
 								} = props as PieLabelRenderProps;
 
 								const RADIAN = Math.PI / 180;
@@ -102,18 +100,18 @@ const LazyRechartsChart = lazy(async () => {
 
 								return (
 									<text
-										x={x}
-										y={y}
-										fill="white"
-										textAnchor="middle"
 										dominantBaseline="middle"
+										fill="white"
 										fontSize={14}
 										fontWeight="medium"
+										textAnchor="middle"
+										x={x}
+										y={y}
 									>
-										<tspan x={x} dy="-0.4em">
+										<tspan dy="-0.4em" x={x}>
 											{name}
 										</tspan>
-										<tspan x={x} dy="1.2em" className="tabular-nums">
+										<tspan className="tabular-nums" dy="1.2em" x={x}>
 											{percent && percent * 100 >= 6
 												? `${(percent * 100).toFixed(0)}%`
 												: ""}
@@ -122,12 +120,14 @@ const LazyRechartsChart = lazy(async () => {
 								);
 							}}
 							labelLine={false}
+							outerRadius="100%"
+							paddingAngle={0}
 						>
 							{chartData.map(
 								(entry: { name: string; value: number }, index: number) => (
 									<Cell
-										key={`cell-${index}`}
 										fill={getCellFill(entry, index)}
+										key={`cell-${index}`}
 										stroke="black"
 										strokeWidth={1}
 									/>
@@ -199,7 +199,7 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	 * const starshipData = aggregateData(stats, ["standard", "sentinel", "solar"]);
 	 * ```
 	 */
-	const aggregateData = (rawData: UserStat[] | null, shipTypes: string[]) => {
+	const aggregateData = (rawData: null | UserStat[], shipTypes: string[]) => {
 		if (!rawData) return [];
 
 		const aggregated = rawData
@@ -268,19 +268,19 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		return (
 			<>
 				<Heading
-					trim="end"
 					as="h2"
-					mb="3"
 					className="text-base! sm:text-lg!"
+					mb="3"
 					style={{ color: "var(--accent-a11)" }}
+					trim="end"
 				>
 					{t(titleKey)}
 				</Heading>
 				<Suspense fallback={<Skeleton height="248px" width="100%" />}>
 					<LazyRechartsChart
 						chartData={chartData}
-						techColors={techColors}
 						COLORS={COLORS}
+						techColors={techColors}
 					/>
 				</Suspense>
 			</>

@@ -43,9 +43,9 @@ const SuspenseSkeleton = () => {
 		for (let i = 0; i < totalSections; i++) {
 			elements.push(
 				<Skeleton
+					height="44px"
 					key={`big-${i}`}
 					mt={i === 0 ? "0" : "4"} // first element mt="0", others mt="4"
-					height="44px"
 					width="100%"
 				/>
 			);
@@ -53,7 +53,7 @@ const SuspenseSkeleton = () => {
 			const smallCount = 1 + Math.floor(Math.random() * 8);
 
 			for (let j = 0; j < smallCount; j++) {
-				elements.push(<Skeleton key={`small-${i}-${j}`} height="32px" width="100%" />);
+				elements.push(<Skeleton height="32px" key={`small-${i}-${j}`} width="100%" />);
 			}
 		}
 
@@ -87,9 +87,9 @@ export const TechTreeSkeleton: React.FC = () => {
 				<ScrollArea
 					className="main-app__tech-tree-sidebar shadow-sm"
 					style={{
+						borderRadius: "var(--radius-5)",
 						height: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT,
 						padding: "var(--space-5)",
-						borderRadius: "var(--radius-5)",
 					}}
 				>
 					<MessageSpinner initialMessage="Loading Tech" isInlay={true} isVisible={true} />
@@ -107,12 +107,12 @@ export const TechTreeSkeleton: React.FC = () => {
  * Props for the `TechTree` and `TechTreeWithData` components.
  */
 interface TechTreeProps {
+	/** Total width of the grid table, used for responsive layout matching. */
+	gridTableTotalWidth: number | undefined;
 	/** Function to trigger a solver run for a specific technology. **Must be asynchronous.** */
 	handleOptimize: (tech: string) => Promise<void>;
 	/** Whether an optimization solve is currently in progress. */
 	solving: boolean;
-	/** Total width of the grid table, used for responsive layout matching. */
-	gridTableTotalWidth: number | undefined;
 	/** Optional pre-fetched technology tree data. */
 	techTree?: TechTreeType;
 }
@@ -151,10 +151,10 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		: DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT;
 
 	const scrollAreaStyle = {
+		borderRadius: "var(--radius-5)",
 		height: scrollAreaHeight,
 		padding: "var(--space-4)",
 		paddingRight: "var(--space-5)",
-		borderRadius: "var(--radius-5)",
 	};
 
 	return (
@@ -162,10 +162,10 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 			{isLarge ? (
 				<>
 					<ScrollArea
-						type="always"
-						scrollbars="vertical"
 						className="main-app__tech-tree-sidebar shadow-sm"
+						scrollbars="vertical"
 						style={scrollAreaStyle}
+						type="always"
 					>
 						<TechTreeContent
 							handleOptimize={handleOptimize}
@@ -175,14 +175,14 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 					</ScrollArea>
 
 					{hasRecommendedBuilds && (
-						<RecommendedBuild techTree={techTree} isLarge={isLarge} />
+						<RecommendedBuild isLarge={isLarge} techTree={techTree} />
 					)}
 				</>
 			) : (
 				<>
 					<Box mt="4">
 						{hasRecommendedBuilds && (
-							<RecommendedBuild techTree={techTree} isLarge={isLarge} />
+							<RecommendedBuild isLarge={isLarge} techTree={techTree} />
 						)}
 					</Box>
 					<Box mt="4">

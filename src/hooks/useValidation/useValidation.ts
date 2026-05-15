@@ -41,11 +41,11 @@ interface UseDebouncedValidationOptions {
  * ```
  */
 export const useDebouncedValidation = (
-	validator: (value: string) => string | null,
+	validator: (value: string) => null | string,
 	{ debounceMs = 250 }: UseDebouncedValidationOptions = {}
 ) => {
-	const [error, setError] = useState<string | null>(null);
-	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [error, setError] = useState<null | string>(null);
+	const debounceTimerRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
 	const handleChange = (value: string) => {
 		// Clear existing timer

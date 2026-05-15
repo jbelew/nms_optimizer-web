@@ -47,8 +47,8 @@ const ErrorContent: React.FC = () => {
 
 		if (error) {
 			sendEvent({
-				category: "error",
 				action: error.name || "HandledError",
+				category: "error",
 				label: error.message,
 				nonInteraction: true,
 				stackTrace: error.stack?.replace(/\n/g, " ").substring(0, 500) || "N/A",
@@ -65,20 +65,20 @@ const ErrorContent: React.FC = () => {
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("errorContent.signalDisruption")}
 			</span>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+			<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
 				<Trans
-					i18nKey="errorContent.serverErrorDetails"
 					components={{
 						1: (
 							<Link
 								href="https://github.com/jbelew/nms_optimizer-web/issues"
-								target="_blank"
 								rel="noopener noreferrer"
+								target="_blank"
 								underline="always"
 								weight="medium"
 							/>
 						),
 					}}
+					i18nKey="errorContent.serverErrorDetails"
 				/>
 			</Text>
 

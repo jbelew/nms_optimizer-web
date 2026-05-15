@@ -47,18 +47,18 @@ const ROUTED_DIALOG_TITLE_KEYS = [
  * @category Components
  */
 interface AppDialogProps {
-	/** Callback function triggered when the dialog requests to close. **Must be provided.** */
-	onClose: () => void;
-	/** Fallback static title if `titleKey` is not provided. */
-	title?: string;
-	/** Translation key for the dialog's localized title. */
-	titleKey?: string;
-	/** Whether the dialog is currently visible. */
-	isOpen: boolean;
-	/** The React components or text to render inside the dialog body. */
-	content: ReactNode;
 	/** Optional CSS class names to apply to the dialog content container. */
 	className?: string;
+	/** The React components or text to render inside the dialog body. */
+	content: ReactNode;
+	/** Optional footer content (e.g., action buttons) rendered below the scrollable area. */
+	footer?: ReactNode;
+	/** Optional custom avatar or element to render before the title. */
+	headerIcon?: ReactNode;
+	/** Whether the dialog is currently visible. */
+	isOpen: boolean;
+	/** Callback function triggered when the dialog requests to close. **Must be provided.** */
+	onClose: () => void;
 	/**
 	 * The visual size of the dialog.
 	 * - `default`: Standard width (520px max).
@@ -67,11 +67,11 @@ interface AppDialogProps {
 	 *
 	 * @default "default"
 	 */
-	size?: "default" | "wide" | "full";
-	/** Optional custom avatar or element to render before the title. */
-	headerIcon?: ReactNode;
-	/** Optional footer content (e.g., action buttons) rendered below the scrollable area. */
-	footer?: ReactNode;
+	size?: "default" | "full" | "wide";
+	/** Fallback static title if `titleKey` is not provided. */
+	title?: string;
+	/** Translation key for the dialog's localized title. */
+	titleKey?: string;
 }
 
 /**
@@ -106,15 +106,15 @@ interface AppDialogProps {
  * ```
  */
 const AppDialog: React.FC<AppDialogProps> = ({
-	onClose,
-	content,
-	isOpen,
-	titleKey,
-	title = "Information",
 	className = "",
-	size = "default",
-	headerIcon,
+	content,
 	footer,
+	headerIcon,
+	isOpen,
+	onClose,
+	size = "default",
+	title = "Information",
+	titleKey,
 }) => {
 	/**
 	 * Manages the Escape key listener for the dialog.
@@ -144,7 +144,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
 
 	return (
-		<DialogRoot open={isOpen} onOpenChange={(open) => !open && onClose()}>
+		<DialogRoot onOpenChange={(open) => !open && onClose()} open={isOpen}>
 			<DialogPortal>
 				<Theme>
 					<DialogOverlay className="appDialog__overlay" />
@@ -167,7 +167,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
 									{titleKey ? t(titleKey) : title}
 								</span>
 							</span>
-							<Separator mt="2" size="4" orientation="horizontal" decorative />
+							<Separator decorative mt="2" orientation="horizontal" size="4" />
 						</DialogTitle>
 
 						<DialogDescription className="sr-only">
@@ -190,10 +190,10 @@ const AppDialog: React.FC<AppDialogProps> = ({
 
 						<DialogClose asChild>
 							<IconButton
-								variant="ghost"
-								size="1"
-								className="dialog-close"
 								aria-label={t("common.closeDialog") ?? ""}
+								className="dialog-close"
+								size="1"
+								variant="ghost"
 							>
 								<Cross2Icon />
 							</IconButton>

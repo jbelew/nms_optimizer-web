@@ -50,7 +50,6 @@ export function setupServiceWorkerRegistration() {
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 
 				const updateServiceWorker = registerSW({
-					onOfflineReady() {},
 					onNeedRefresh() {
 						// Use a small timeout to ensure the updateServiceWorker assignment is complete
 						// and wrap the call to ensure it resolves correctly at execution time.
@@ -64,6 +63,7 @@ export function setupServiceWorkerRegistration() {
 							);
 						}, 0);
 					},
+					onOfflineReady() {},
 					onRegistered(registration) {
 						if (!registration) return;
 

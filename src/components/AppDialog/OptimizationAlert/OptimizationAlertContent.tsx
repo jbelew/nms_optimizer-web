@@ -46,10 +46,8 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({ te
 			<span className="errorContent__title block pb-2 text-center text-xl font-semibold tracking-widest">
 				{t("dialogs.optimizationAlert.warning")}
 			</span>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+			<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
 				<Trans
-					i18nKey="dialogs.optimizationAlert.insufficientSpace"
-					values={{ technologyName }}
 					components={{
 						1: (
 							<span
@@ -58,14 +56,16 @@ export const OptimizationAlertContent: FC<OptimizationAlertContentProps> = ({ te
 							/>
 						),
 					}}
+					i18nKey="dialogs.optimizationAlert.insufficientSpace"
+					values={{ technologyName }}
 				/>
 			</Text>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="4">
+			<Text as="p" mb="4" size={{ initial: "2", sm: "3" }}>
 				<Trans
-					i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
 					components={{
 						1: <strong />,
 					}}
+					i18nKey="dialogs.optimizationAlert.forceOptimizeSuggestion"
 				/>
 			</Text>
 		</>

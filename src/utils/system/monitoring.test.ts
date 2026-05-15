@@ -13,11 +13,11 @@ import {
 
 // Mock Sentry-like object
 const sentryMock = {
+	breadcrumbsIntegration: vi.fn(),
 	captureException: vi.fn(),
 	captureMessage: vi.fn(),
 	init: vi.fn(),
 	reactRouterV7BrowserTracingIntegration: vi.fn(),
-	breadcrumbsIntegration: vi.fn(),
 	wrapCreateBrowserRouterV7: vi.fn((cb) => cb),
 };
 
@@ -27,7 +27,7 @@ vi.mock("react-router-dom", async () => {
 
 	return {
 		...actual,
-		createBrowserRouter: vi.fn((routes) => ({ routes, mocked: true })),
+		createBrowserRouter: vi.fn((routes) => ({ mocked: true, routes })),
 	};
 });
 
@@ -58,9 +58,9 @@ describe("monitoring utilities", () => {
 			const logs = Logger.getLogs();
 			expect(logs).toHaveLength(1);
 			expect(logs[0]).toMatchObject({
+				data: { data: 123 },
 				level: LogLevel.INFO,
 				message: "Test info message",
-				data: { data: 123 },
 			});
 		});
 
@@ -72,8 +72,8 @@ describe("monitoring utilities", () => {
 			});
 
 			expect(sentryMock.captureMessage).toHaveBeenCalledWith("Test warn message", {
-				level: "warning",
 				extra: { meta: "data" },
+				level: "warning",
 			});
 
 			const logs = Logger.getLogs();
@@ -88,7 +88,7 @@ describe("monitoring utilities", () => {
 			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error);
 
 			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {
-				extra: { message: "Test error message", extra: "context" },
+				extra: { extra: "context", message: "Test error message" },
 			});
 
 			const logs = Logger.getLogs();
@@ -99,8 +99,8 @@ describe("monitoring utilities", () => {
 		it("should handle non-Error objects in Logger.error", () => {
 			Logger.error("String error", "oops");
 			expect(sentryMock.captureMessage).toHaveBeenCalledWith("String error", {
-				level: "error",
 				extra: { error: "oops" },
+				level: "error",
 			});
 		});
 

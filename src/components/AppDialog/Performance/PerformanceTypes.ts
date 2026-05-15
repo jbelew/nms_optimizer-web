@@ -14,15 +14,21 @@
  * @category Interfaces
  */
 export interface ChartDataPoint {
-	/** Unix timestamp in milliseconds for consistent sorting. */
-	timestamp: number;
+	/**
+	 * Dynamic per-metric values or ranges.
+	 * Metrics are stored as numbers (e.g., `1250`).
+	 * Ranges for bar charts are `[p50, p90]`.
+	 */
+	[metricName: string]: [number, number] | number | string | undefined;
+	/** The application version for this data point. */
+	appVersion?: string;
 	/** Localized formatted MM/DD string for X-axis display. */
 	displayDate: string;
 	/** Localized formatted hour string (e.g., "5 PM") for tooltip display. */
 	hour: string;
-	/** The application version for this data point. */
-	appVersion?: string;
 
+	/** SMA-smoothed overall deficit (100 - score) for inverted chart. */
+	overall_deficit_p75_sma?: number;
 	// Known overall computed fields (typed explicitly for safety)
 	/** Weighted overall p50 score (0-100). */
 	overall_p50?: number;
@@ -34,13 +40,7 @@ export interface ChartDataPoint {
 	overall_score_p75_sma?: number;
 	/** Overall score range [p90, p50] for bar chart visualization. */
 	overall_score_range?: [number, number];
-	/** SMA-smoothed overall deficit (100 - score) for inverted chart. */
-	overall_deficit_p75_sma?: number;
 
-	/**
-	 * Dynamic per-metric values or ranges.
-	 * Metrics are stored as numbers (e.g., `1250`).
-	 * Ranges for bar charts are `[p50, p90]`.
-	 */
-	[metricName: string]: string | number | [number, number] | undefined;
+	/** Unix timestamp in milliseconds for consistent sorting. */
+	timestamp: number;
 }

@@ -48,7 +48,7 @@ const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button variant="soft" onClick={onClose}>
+			<Button onClick={onClose} variant="soft">
 				{t("dialogs.performance.closeButton", "Close")}
 			</Button>
 		</div>
@@ -57,13 +57,13 @@ const PerformanceDialog: FC<PerformanceDialogProps> = ({ isOpen, onClose }) => {
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
+				content={<PerformanceContent isOpen={isOpen} />}
+				footer={footer}
 				isOpen={isOpen}
 				onClose={onClose}
 				size="wide"
-				titleKey="dialogs.titles.performance"
 				title={t("dialogs.titles.performance", "Performance Metrics")}
-				footer={footer}
-				content={<PerformanceContent isOpen={isOpen} />}
+				titleKey="dialogs.titles.performance"
 			/>
 		</Suspense>
 	);

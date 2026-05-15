@@ -8,16 +8,16 @@ import { radixIconRegistry } from "../../../utils/icons/iconRegistry";
  * @category Components
  */
 interface DynamicRadixIconProps {
-	/** The name of the icon in the registry (e.g., 'InfoCircled'). **Suffixing with 'Icon' is optional.** */
-	name: string;
 	/** Optional CSS class name. */
 	className?: string;
-	/** Optional inline styles. */
-	style?: React.CSSProperties;
-	/** The width and height of the icon. Accepts CSS lengths. */
-	size?: number | string;
 	/** The fill or stroke color of the icon. */
 	color?: string;
+	/** The name of the icon in the registry (e.g., 'InfoCircled'). **Suffixing with 'Icon' is optional.** */
+	name: string;
+	/** The width and height of the icon. Accepts CSS lengths. */
+	size?: number | string;
+	/** Optional inline styles. */
+	style?: React.CSSProperties;
 }
 
 /**
@@ -50,11 +50,11 @@ interface DynamicRadixIconProps {
  * ```
  */
 const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
-	name,
 	className,
-	style,
-	size,
 	color,
+	name,
+	size,
+	style,
 }) => {
 	// Map the incoming name to a registry key
 	const iconName = name.endsWith("Icon") ? name : `${name}Icon`;
@@ -67,11 +67,11 @@ const DynamicRadixIcon: React.FC<DynamicRadixIconProps> = ({
 	}
 
 	const iconStyles: React.CSSProperties = {
+		color: color,
 		display: "inline-block",
+		height: size,
 		verticalAlign: "middle",
 		width: size,
-		height: size,
-		color: color,
 		...style,
 	};
 

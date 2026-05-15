@@ -10,8 +10,8 @@ import { PerformanceData } from "./PerformanceData";
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
 	useTranslation: () => ({
-		t: (key: string) => key,
 		i18n: { language: "en" },
+		t: (key: string) => key,
 	}),
 }));
 
@@ -42,29 +42,29 @@ vi.mock("./PerformanceChart", () => {
 	};
 
 	return {
-		PerformanceChart: MockPerformanceChart,
 		default: MockPerformanceChart,
+		PerformanceChart: MockPerformanceChart,
 	};
 });
 
 const mockData = [
 	{
-		timestamp: 1619370000000,
-		metric_name: "LCP",
+		app_version: "v1.0.0",
 		average_value: 1200,
+		metric_name: "LCP",
 		p50: 1000,
 		p75: 1200,
 		p90: 1500,
-		app_version: "v1.0.0",
+		timestamp: 1619370000000,
 	},
 	{
-		timestamp: 1619370000000,
-		metric_name: "FCP",
+		app_version: "v1.0.0",
 		average_value: 800,
+		metric_name: "FCP",
 		p50: 700,
 		p75: 800,
 		p90: 1000,
-		app_version: "v1.0.0",
+		timestamp: 1619370000000,
 	},
 ];
 

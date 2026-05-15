@@ -10,22 +10,19 @@ import WelcomeContent from "./WelcomeContent";
 
 vi.mock("../../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
-		sendEvent: vi.fn(),
 		sendDeferredEvent: vi.fn(),
+		sendEvent: vi.fn(),
 	}),
 }));
 
 interface TransProps {
-	i18nKey: string;
 	children?: ReactNode;
-	components?: Record<string, ReactNode> | ReactNode[];
+	components?: ReactNode[] | Record<string, ReactNode>;
+	i18nKey: string;
 }
 
 vi.mock("react-i18next", () => ({
-	useTranslation: () => ({
-		t: (key: string) => key,
-	}),
-	Trans: ({ i18nKey, children, components }: TransProps) => {
+	Trans: ({ children, components, i18nKey }: TransProps) => {
 		if (components) {
 			const comp = Array.isArray(components)
 				? components[0]
@@ -43,18 +40,21 @@ vi.mock("react-i18next", () => ({
 
 		return <span data-testid={i18nKey}>{i18nKey || children}</span>;
 	},
+	useTranslation: () => ({
+		t: (key: string) => key,
+	}),
 }));
 
 const mockDialogContext: DialogContextType = {
 	activeDialog: null,
-	openDialog: vi.fn(),
 	closeDialog: vi.fn(),
-	tutorialFinished: false,
 	markTutorialFinished: vi.fn(),
-	userVisited: false,
 	markUserVisited: vi.fn(),
-	shareUrl: "",
+	openDialog: vi.fn(),
 	sectionToScrollTo: undefined,
+	shareUrl: "",
+	tutorialFinished: false,
+	userVisited: false,
 };
 
 describe("WelcomeContent", () => {

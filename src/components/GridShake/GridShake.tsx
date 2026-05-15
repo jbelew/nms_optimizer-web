@@ -77,7 +77,7 @@ const GridShake: React.FC<GridShakeProps> = ({ children, duration }) => {
 	}, [shakeCount, duration]);
 
 	return (
-		<div ref={ref} className={`gridTable__shakeWrapper relative`}>
+		<div className={`gridTable__shakeWrapper relative`} ref={ref}>
 			{children}
 		</div>
 	);

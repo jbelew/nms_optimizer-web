@@ -25,17 +25,49 @@ describe("useGridDeserializer Integration", () => {
 		vi.clearAllMocks();
 		// Setup the mock to return data that matches the expected ship type in the fixture
 		(useTechTree.fetchTechTreeAsync as Mock).mockResolvedValue({
+			aqua: [{ color: "#777777", key: "aqua", modules: [{ id: "AJ" }] }],
+			cargo_scanner: [{ color: "#333333", key: "cargo_scanner", modules: [{ id: "CD" }] }],
+			ceto: [{ color: "#222222", key: "ceto", modules: [{ id: "Cb" }, { id: "Ca" }] }],
 			cockpit: [
 				{
-					key: "cockpit",
 					color: "#FF0000",
+					key: "cockpit",
 					modules: [{ id: "CP" }, { id: "Ca" }, { id: "Cb" }],
+				},
+			],
+			conflict_scanner: [
+				{ color: "#111111", key: "conflict_scanner", modules: [{ id: "CS" }] },
+			],
+			economy_scanner: [
+				{ color: "#555555", key: "economy_scanner", modules: [{ id: "ES" }] },
+			],
+			habitation: [
+				{
+					color: "#FF00FF",
+					key: "habitation",
+					modules: [{ id: "Hc" }, { id: "Ha" }, { id: "Hb" }],
+				},
+			],
+			hyper: [
+				{
+					color: "#444444",
+					key: "hyper",
+					modules: [
+						{ id: "AD" },
+						{ id: "Xc" },
+						{ id: "Zb" },
+						{ id: "HD" },
+						{ id: "Xa" },
+						{ id: "Xb" },
+						{ id: "Zc" },
+						{ id: "Za" },
+					],
 				},
 			],
 			launch: [
 				{
-					key: "launch",
 					color: "#00FF00",
+					key: "launch",
 					modules: [
 						{ id: "Aa" },
 						{ id: "Ab" },
@@ -47,10 +79,26 @@ describe("useGridDeserializer Integration", () => {
 					],
 				},
 			],
+			phase: [
+				{
+					color: "#FFFF00",
+					key: "phase",
+					modules: [
+						{ id: "Cb" },
+						{ id: "Ca" },
+						{ id: "FD" },
+						{ id: "Xb" },
+						{ id: "Xa" },
+						{ id: "PB" },
+						{ id: "Xc" },
+						{ id: "Cc" },
+					],
+				},
+			],
 			pulse: [
 				{
-					key: "pulse",
 					color: "#0000FF",
+					key: "pulse",
 					modules: [
 						{ id: "SL" },
 						{ id: "PC" },
@@ -65,41 +113,18 @@ describe("useGridDeserializer Integration", () => {
 					],
 				},
 			],
-			phase: [
-				{
-					key: "phase",
-					color: "#FFFF00",
-					modules: [
-						{ id: "Cb" },
-						{ id: "Ca" },
-						{ id: "FD" },
-						{ id: "Xb" },
-						{ id: "Xa" },
-						{ id: "PB" },
-						{ id: "Xc" },
-						{ id: "Cc" },
-					],
-				},
-			],
-			habitation: [
-				{
-					key: "habitation",
-					color: "#FF00FF",
-					modules: [{ id: "Hc" }, { id: "Ha" }, { id: "Hb" }],
-				},
-			],
-			teleporter: [{ key: "teleporter", color: "#00FFFF", modules: [{ id: "TP" }] }],
 			shield: [
 				{
-					key: "shield",
 					color: "#FFFFFF",
+					key: "shield",
 					modules: [{ id: "AA" }, { id: "Ca" }, { id: "DS" }, { id: "Cb" }],
 				},
 			],
+			teleporter: [{ color: "#00FFFF", key: "teleporter", modules: [{ id: "TP" }] }],
 			trails: [
 				{
-					key: "trails",
 					color: "#888888",
+					key: "trails",
 					modules: [
 						{ id: "RT" },
 						{ id: "GT" },
@@ -111,31 +136,6 @@ describe("useGridDeserializer Integration", () => {
 					],
 				},
 			],
-			hyper: [
-				{
-					key: "hyper",
-					color: "#444444",
-					modules: [
-						{ id: "AD" },
-						{ id: "Xc" },
-						{ id: "Zb" },
-						{ id: "HD" },
-						{ id: "Xa" },
-						{ id: "Xb" },
-						{ id: "Zc" },
-						{ id: "Za" },
-					],
-				},
-			],
-			ceto: [{ key: "ceto", color: "#222222", modules: [{ id: "Cb" }, { id: "Ca" }] }],
-			conflict_scanner: [
-				{ key: "conflict_scanner", color: "#111111", modules: [{ id: "CS" }] },
-			],
-			cargo_scanner: [{ key: "cargo_scanner", color: "#333333", modules: [{ id: "CD" }] }],
-			economy_scanner: [
-				{ key: "economy_scanner", color: "#555555", modules: [{ id: "ES" }] },
-			],
-			aqua: [{ key: "aqua", color: "#777777", modules: [{ id: "AJ" }] }],
 		});
 	});
 
@@ -178,7 +178,7 @@ describe("useGridDeserializer Integration", () => {
 	it("should handle partial or missing tech tree data gracefully during deserialization", async () => {
 		// Mocking a scenario where some tech categories are missing
 		(useTechTree.fetchTechTreeAsync as Mock).mockResolvedValue({
-			cockpit: [{ key: "cockpit", color: "#FF0000", modules: [{ id: "CP" }] }],
+			cockpit: [{ color: "#FF0000", key: "cockpit", modules: [{ id: "CP" }] }],
 		});
 
 		const originalGrid = nmsFixture.gridState.grid;

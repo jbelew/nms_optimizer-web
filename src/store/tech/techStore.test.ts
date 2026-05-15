@@ -6,16 +6,16 @@ describe("TechStore", () => {
 	beforeEach(() => {
 		// Reset the store before each test
 		useTechStore.setState(() => ({
-			max_bonus: {},
-			solved_bonus: {},
-			solve_method: {},
-			techColors: {},
 			checkedModules: {}, // Add closing parenthesis here
+			max_bonus: {},
+			solve_method: {},
+			solved_bonus: {},
+			techColors: {},
 		}));
 	});
 
 	it("should have a default state", () => {
-		const { max_bonus, solved_bonus, solve_method, techColors, checkedModules } =
+		const { checkedModules, max_bonus, solve_method, solved_bonus, techColors } =
 			useTechStore.getState();
 		expect(max_bonus).toEqual({});
 		expect(solved_bonus).toEqual({});
@@ -25,7 +25,7 @@ describe("TechStore", () => {
 	});
 
 	it("should set and clear max bonus for a tech", () => {
-		const { setTechMaxBonus, clearTechMaxBonus } = useTechStore.getState();
+		const { clearTechMaxBonus, setTechMaxBonus } = useTechStore.getState();
 		setTechMaxBonus("test-tech", 100);
 		expect(useTechStore.getState().max_bonus["test-tech"]).toBe(100);
 		clearTechMaxBonus("test-tech");
@@ -33,7 +33,7 @@ describe("TechStore", () => {
 	});
 
 	it("should set and clear solved bonus for a tech", () => {
-		const { setTechSolvedBonus, clearTechSolvedBonus } = useTechStore.getState();
+		const { clearTechSolvedBonus, setTechSolvedBonus } = useTechStore.getState();
 		setTechSolvedBonus("test-tech", 90);
 		expect(useTechStore.getState().solved_bonus["test-tech"]).toBe(90);
 		clearTechSolvedBonus("test-tech");
@@ -47,7 +47,7 @@ describe("TechStore", () => {
 	});
 
 	it("should set and get tech colors", () => {
-		const { setTechColors, getTechColor } = useTechStore.getState();
+		const { getTechColor, setTechColors } = useTechStore.getState();
 		const colors = { "test-tech": "red" };
 		setTechColors(colors);
 		expect(useTechStore.getState().techColors).toEqual(colors);
@@ -56,7 +56,7 @@ describe("TechStore", () => {
 	});
 
 	it("should set and clear checked modules for a tech", () => {
-		const { setCheckedModules, clearCheckedModules } = useTechStore.getState();
+		const { clearCheckedModules, setCheckedModules } = useTechStore.getState();
 		setCheckedModules("test-tech", () => ["module1", "module2"]);
 		expect(useTechStore.getState().checkedModules["test-tech"]).toEqual(["module1", "module2"]);
 		clearCheckedModules("test-tech");
@@ -71,7 +71,7 @@ describe("TechStore", () => {
 	});
 
 	it("should clear result", () => {
-		const { setTechMaxBonus, setTechSolvedBonus, clearResult } = useTechStore.getState();
+		const { clearResult, setTechMaxBonus, setTechSolvedBonus } = useTechStore.getState();
 		setTechMaxBonus("test-tech", 100);
 		setTechSolvedBonus("test-tech", 90);
 		clearResult();
@@ -84,16 +84,19 @@ describe("TechStore", () => {
 		const mockTechGroups = {
 			"test-tech": [
 				{
-					label: "Test",
+					color: "red" as const,
+					image: null,
 					key: "test-tech",
+					label: "Test",
+					module_count: 2,
 					modules: [
 						{
-							id: "mod1",
-							checked: true,
 							active: true,
 							adjacency: "",
 							adjacency_bonus: 0,
 							bonus: 5,
+							checked: true,
+							id: "mod1",
 							image: "",
 							label: "Module 1",
 							sc_eligible: false,
@@ -103,12 +106,12 @@ describe("TechStore", () => {
 							value: 10,
 						},
 						{
-							id: "mod2",
-							checked: false,
 							active: true,
 							adjacency: "",
 							adjacency_bonus: 0,
 							bonus: 3,
+							checked: false,
+							id: "mod2",
 							image: "",
 							label: "Module 2",
 							sc_eligible: false,
@@ -118,9 +121,6 @@ describe("TechStore", () => {
 							value: 8,
 						},
 					],
-					image: null,
-					color: "red" as const,
-					module_count: 2,
 				},
 			],
 		};
@@ -134,12 +134,12 @@ describe("TechStore", () => {
 		const mockTechGroups = {
 			"test-tech": [
 				{
-					label: "Test",
-					key: "test-tech",
-					modules: [],
-					image: null,
 					color: "red" as const,
+					image: null,
+					key: "test-tech",
+					label: "Test",
 					module_count: 0,
+					modules: [],
 				},
 			],
 		};

@@ -8,37 +8,37 @@ import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import GridTableButtons from "./GridTableButtons";
 
 const {
-	mockSetIsSharedGrid,
-	mockResetGrid,
-	mockUpdateUrlForShare,
-	mockUpdateUrlForReset,
-	mockSendEvent,
-	openDialogMock,
 	markTutorialFinishedMock,
+	mockResetGrid,
+	mockSendEvent,
+	mockSetIsSharedGrid,
+	mockUpdateUrlForReset,
+	mockUpdateUrlForShare,
+	openDialogMock,
 } = vi.hoisted(() => ({
-	mockSetIsSharedGrid: vi.fn(),
-	mockResetGrid: vi.fn(),
-	mockUpdateUrlForShare: vi.fn(() => "http://share.url"),
-	mockUpdateUrlForReset: vi.fn(),
-	mockSendEvent: vi.fn(),
-	openDialogMock: vi.fn(),
 	markTutorialFinishedMock: vi.fn(),
+	mockResetGrid: vi.fn(),
+	mockSendEvent: vi.fn(),
+	mockSetIsSharedGrid: vi.fn(),
+	mockUpdateUrlForReset: vi.fn(),
+	mockUpdateUrlForShare: vi.fn(() => "http://share.url"),
+	openDialogMock: vi.fn(),
 }));
 
-const { useGridStore, setGridStoreState } = vi.hoisted(() => {
+const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 	let isSharedGrid = false;
 	let hasModulesInGrid = true;
 
 	const store = {
-		isSharedGrid,
 		hasModulesInGrid,
-		setIsSharedGrid: mockSetIsSharedGrid,
+		isSharedGrid,
 		resetGrid: mockResetGrid,
 		selectHasModulesInGrid: () => hasModulesInGrid,
+		setIsSharedGrid: mockSetIsSharedGrid,
 	};
 
 	const useGridStoreMock = vi.fn((selector?: (state: unknown) => unknown) => {
-		const currentState = { ...store, isSharedGrid, hasModulesInGrid };
+		const currentState = { ...store, hasModulesInGrid, isSharedGrid };
 
 		if (typeof selector === "function") {
 			return selector(currentState);
@@ -55,11 +55,11 @@ const { useGridStore, setGridStoreState } = vi.hoisted(() => {
 	});
 
 	return {
-		useGridStore: useGridStoreMock,
 		setGridStoreState: (isShared: boolean, hasModules: boolean) => {
 			isSharedGrid = isShared;
 			hasModulesInGrid = hasModules;
 		},
+		useGridStore: useGridStoreMock,
 	};
 });
 
@@ -75,22 +75,22 @@ vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
 vi.mock("../../hooks/useBreakpoint/useBreakpoint");
 vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
+		markTutorialFinished: markTutorialFinishedMock,
 		openDialog: openDialogMock,
 		tutorialFinished: false,
-		markTutorialFinished: markTutorialFinishedMock,
 	}),
 }));
 vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
-		sendEvent: mockSendEvent,
 		sendDeferredEvent: vi.fn(),
+		sendEvent: mockSendEvent,
 	}),
 }));
 vi.mock("../../hooks/useOptimize/useOptimize");
 vi.mock("../../hooks/useUrlSync/useUrlSync", () => ({
 	useUrlSync: () => ({
-		updateUrlForShare: mockUpdateUrlForShare,
 		updateUrlForReset: mockUpdateUrlForReset,
+		updateUrlForShare: mockUpdateUrlForShare,
 	}),
 }));
 vi.mock("../../store/grid/gridStore", () => ({
@@ -98,17 +98,17 @@ vi.mock("../../store/grid/gridStore", () => ({
 }));
 vi.mock("../../hooks/useBuildFileManager/useBuildFileManager", () => ({
 	useBuildFileManager: () => ({
-		saveBuildToFile: vi.fn(),
 		loadBuildFromFile: vi.fn(),
+		saveBuildToFile: vi.fn(),
 	}),
 }));
 vi.mock("../../hooks/useToast/useToast", () => ({
 	useToast: () => ({
-		toastConfig: null,
-		isOpen: false,
-		showSuccess: vi.fn(),
-		showError: vi.fn(),
 		closeToast: vi.fn(),
+		isOpen: false,
+		showError: vi.fn(),
+		showSuccess: vi.fn(),
+		toastConfig: null,
 	}),
 }));
 vi.mock("../../hooks/useScreenshot/useScreenshot", () => ({
@@ -128,7 +128,7 @@ describe("GridTableButtons", () => {
 	});
 
 	it("renders all buttons when not shared grid and has modules", () => {
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		expect(screen.getByLabelText("buttons.instructions")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.about")).toBeInTheDocument();
 		expect(screen.getByLabelText("buttons.share")).toBeInTheDocument();
@@ -137,38 +137,38 @@ describe("GridTableButtons", () => {
 
 	it("does not render share button when isSharedGrid is true", () => {
 		setGridStoreState(true, true); // Set shared grid to true
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		expect(screen.queryByLabelText("buttons.share")).not.toBeInTheDocument();
 	});
 
 	it("disables share button when solving is true", () => {
-		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={true} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables share button when hasModulesInGrid is false", () => {
 		setGridStoreState(false, false); // Set hasModulesInGrid to false
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		expect(screen.getByLabelText("buttons.share")).toBeDisabled();
 	});
 
 	it("disables reset button when solving is true", () => {
-		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={true} />);
 		expect(screen.getByLabelText("Reset Grid Button")).toBeDisabled();
 	});
 
 	it("disables instructions button when solving is true", () => {
-		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={true} />);
 		expect(screen.getByLabelText("buttons.instructions")).toBeDisabled();
 	});
 
 	it("disables about button when solving is true", () => {
-		render(<GridTableButtons solving={true} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={true} />);
 		expect(screen.getByLabelText("buttons.about")).toBeDisabled();
 	});
 
 	it("calls handleShowInstructions on instructions button click", () => {
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.instructions"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("instructions");
@@ -176,36 +176,36 @@ describe("GridTableButtons", () => {
 	});
 
 	it("calls handleShowAboutPage on about button click", () => {
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.about"));
 
 		expect(openDialogMock).toHaveBeenCalledWith("about");
 	});
 
 	it("calls handleShareClick and tracks GA event on share button click", () => {
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		fireEvent.click(screen.getByLabelText("buttons.share"));
 
 		expect(mockUpdateUrlForShare).toHaveBeenCalled();
 		expect(openDialogMock).toHaveBeenCalledWith(null, { shareUrl: "http://share.url" });
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "ui",
 			action: "share",
+			category: "ui",
 			method: "url",
-			value: 1,
 			nonInteraction: false,
+			value: 1,
 		});
 	});
 
 	it("calls reset grid and related functions on reset button click", () => {
-		render(<GridTableButtons solving={false} gridRef={mockGridRef} />);
+		render(<GridTableButtons gridRef={mockGridRef} solving={false} />);
 		fireEvent.click(screen.getByText("Reset Grid Button"));
 
 		expect(mockSendEvent).toHaveBeenCalledWith({
-			category: "ui",
 			action: "reset_grid",
-			value: 1,
+			category: "ui",
 			nonInteraction: false,
+			value: 1,
 		});
 
 		// Check that the functions inside handleResetGrid are called

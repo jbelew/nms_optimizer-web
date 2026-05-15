@@ -26,12 +26,12 @@ vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 vi.mock("./UpdatePrompt", () => ({
 	default: ({
 		isOpen,
-		onRefresh,
 		onDismiss,
+		onRefresh,
 	}: {
 		isOpen?: boolean;
-		onRefresh?: () => void;
 		onDismiss?: () => void;
+		onRefresh?: () => void;
 	}) => {
 		if (!isOpen) return null;
 
@@ -51,8 +51,8 @@ describe("UpdatePromptWrapper", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		(useAnalytics as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			sendEvent: mockSendEvent,
 			sendDeferredEvent: vi.fn(),
+			sendEvent: mockSendEvent,
 		});
 		(useUpdateCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation((cb) => {
 			updateCallback = cb;
@@ -84,8 +84,8 @@ describe("UpdatePromptWrapper", () => {
 		expect(await screen.findByTestId("update-prompt")).toBeInTheDocument();
 		expect(mockSendEvent).toHaveBeenCalledWith(
 			expect.objectContaining({
-				category: "engagement",
 				action: "page_view",
+				category: "engagement",
 			})
 		);
 	});

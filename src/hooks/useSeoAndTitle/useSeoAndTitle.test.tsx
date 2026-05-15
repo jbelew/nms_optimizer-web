@@ -15,20 +15,20 @@ vi.mock("../../utils/analytics/tracking", () => ({
 vi.mock("../../../shared/seo-metadata.js", () => ({
 	seoMetadata: {
 		"/": {
-			titleKey: "seo.mainPageTitle",
 			descriptionKey: "seo.appDescription",
-		},
-		"/instructions/": {
-			titleKey: "seo.instructionsPageTitle",
-			descriptionKey: "seo.instructionsDescription",
+			titleKey: "seo.mainPageTitle",
 		},
 		"/about/": {
-			titleKey: "seo.aboutPageTitle",
 			descriptionKey: "seo.aboutDescription",
+			titleKey: "seo.aboutPageTitle",
 		},
 		"/changelog/": {
-			titleKey: "seo.changelogPageTitle",
 			descriptionKey: "seo.changelogDescription",
+			titleKey: "seo.changelogPageTitle",
+		},
+		"/instructions/": {
+			descriptionKey: "seo.instructionsDescription",
+			titleKey: "seo.instructionsPageTitle",
 		},
 	},
 }));
@@ -40,15 +40,15 @@ describe("useSeoAndTitle", () => {
 	const setupMocks = (pathname: string, translations: Record<string, string> = {}) => {
 		mockUseLocation.mockReturnValue({ pathname });
 		mockUseTranslation.mockReturnValue({
-			t: vi.fn((key) => translations[key] || key),
 			i18n: {
 				language: "en",
 				services: {
 					resourceStore: {
-						data: { en: {}, es: {}, fr: {}, de: {}, pt: {} },
+						data: { de: {}, en: {}, es: {}, fr: {}, pt: {} },
 					},
 				},
 			},
+			t: vi.fn((key) => translations[key] || key),
 		});
 	};
 
@@ -65,10 +65,10 @@ describe("useSeoAndTitle", () => {
 	describe("Document Title and Meta Description", () => {
 		it("should set default title and description for root path", () => {
 			setupMocks("/", {
-				"seo.mainPageTitle":
-					"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 				"seo.appDescription":
 					"The best No Man's Sky layout calculator and optimizer. Find optimal technology placements with maximum adjacency bonuses for Starship, Corvette, Multitool, Exocraft, and Exosuit builds. Free tool with supercharged slot optimization.",
+				"seo.mainPageTitle":
+					"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 			});
 			renderHook(() => useSeoAndTitle());
 
@@ -103,20 +103,20 @@ describe("useSeoAndTitle", () => {
 			expect(sendEvent).toHaveBeenCalledWith(
 				expect.objectContaining({
 					action: "page_view",
-					page_title:
-						"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 					page_location: expect.any(String),
 					page_referrer: expect.any(String),
+					page_title:
+						"NMS Optimizer | Tech Layout Builder & Adjacency Calculator for No Man's Sky",
 				})
 			);
 		});
 
 		it("should set correct title and description for /instructions/ path", () => {
 			setupMocks("/instructions/", {
-				"seo.instructionsPageTitle":
-					"How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
 				"seo.instructionsDescription":
 					"Complete instructions for using the NMS Optimizer app. Learn how to select platforms, mark supercharged slots, optimize layouts, and maximize adjacency bonuses for Starships, Corvettes, Multitools, and more.",
+				"seo.instructionsPageTitle":
+					"How to Use NMS Optimizer | Complete App Usage Guide for No Man's Sky",
 			});
 			renderHook(() => useSeoAndTitle());
 
@@ -131,10 +131,10 @@ describe("useSeoAndTitle", () => {
 
 		it("should set correct title and description for /about/ path", () => {
 			setupMocks("/about/", {
-				"seo.aboutPageTitle":
-					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
 					"NMS Optimizer is a free tool that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
+				"seo.aboutPageTitle":
+					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 			});
 			renderHook(() => useSeoAndTitle());
 
@@ -147,10 +147,10 @@ describe("useSeoAndTitle", () => {
 
 		it("should set correct title and description for language-prefixed path", () => {
 			setupMocks("/es/about/", {
-				"seo.aboutPageTitle":
-					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 				"seo.aboutDescription":
 					"NMS Optimizer is a free tool that finds the best technology layouts for No Man's Sky. Uses advanced optimization algorithms to maximize adjacency bonuses for your Starship, Corvette, Multitool, Exocraft, and Exosuit.",
+				"seo.aboutPageTitle":
+					"About NMS Optimizer | Free No Man's Sky Tech Layout Calculator",
 			});
 			renderHook(() => useSeoAndTitle());
 

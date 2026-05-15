@@ -21,8 +21,8 @@ describe("useUpdateCheck", () => {
 	it("should call onUpdateAvailable when server returns different build date", async () => {
 		// Mock fetch to return a different build date
 		vi.mocked(global.fetch).mockResolvedValue({
-			ok: true,
 			json: async () => ({ buildDate: "2023-10-28T10:00:00.000Z" }),
+			ok: true,
 		} as Response);
 
 		renderHook(() => useUpdateCheck(onUpdateAvailable));
@@ -39,8 +39,8 @@ describe("useUpdateCheck", () => {
 	it("should NOT call onUpdateAvailable when server returns same build date", async () => {
 		// Mock fetch to return the same build date
 		vi.mocked(global.fetch).mockResolvedValue({
-			ok: true,
 			json: async () => ({ buildDate: mockBuildDate }),
+			ok: true,
 		} as Response);
 
 		renderHook(() => useUpdateCheck(onUpdateAvailable));

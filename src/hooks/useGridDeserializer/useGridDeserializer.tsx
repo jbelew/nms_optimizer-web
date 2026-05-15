@@ -495,5 +495,5 @@ export const useGridDeserializer = () => {
 		[setGrid, setIsSharedGrid, setTechColors]
 	);
 
-	return { serializeGrid, deserializeGrid };
+	return { deserializeGrid, serializeGrid };
 };

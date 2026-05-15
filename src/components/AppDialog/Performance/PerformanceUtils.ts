@@ -47,11 +47,11 @@ export const formatMetricValue = (metric: string, value: number, includeUnit = t
  * @category Constants
  */
 export const METRIC_THRESHOLDS: Record<string, number> = {
-	LCP: 8000,
+	CLS: 1000,
 	FCP: 4000,
 	INP: 1000,
+	LCP: 8000,
 	TTFB: 2500,
-	CLS: 1000,
 };
 
 /**
@@ -64,26 +64,26 @@ export const METRIC_THRESHOLDS: Record<string, number> = {
  * @category Constants
  */
 export const PERFORMANCE_LAYOUT = {
+	/** Gap between the summary cards and the range selector row. */
+	CARDS_TO_RANGE_GAP: 12,
 	/** Standard height for performance charts across the dashboard. */
 	CHART_HEIGHT: 260,
 	/** Standard bottom margin for performance charts. */
 	CHART_MARGIN_BOTTOM: 0,
-	/** Approximate height of the summary cards row. */
-	SUMMARY_CARDS_HEIGHT: 72,
-	/** Gap between the summary cards and the range selector row. */
-	CARDS_TO_RANGE_GAP: 12,
-	/** Height of the range selector row. */
-	RANGE_HEIGHT: 24,
-	/** Gap between the range selector and the chart. */
-	RANGE_TO_CHART_GAP: 0,
-	/** Approximate height of the description text + its margin. */
-	DESCRIPTION_AREA_HEIGHT: 60,
 	/** Vertical padding applied to the content container. */
 	CONTAINER_PADDING_Y: 0,
+	/** Approximate height of the description text + its margin. */
+	DESCRIPTION_AREA_HEIGHT: 60,
 	/** Approximate height of the dialog footer (Close button area). */
 	FOOTER_HEIGHT: 52,
 	/** Maximum number of data points rendered on the chart X-axis. */
 	MAX_CHART_POINTS: 73,
+	/** Height of the range selector row. */
+	RANGE_HEIGHT: 24,
+	/** Gap between the range selector and the chart. */
+	RANGE_TO_CHART_GAP: 0,
+	/** Approximate height of the summary cards row. */
+	SUMMARY_CARDS_HEIGHT: 72,
 } as const;
 
 /**
@@ -99,12 +99,12 @@ export const METRIC_DISPLAY_ORDER = ["TTFB", "FCP", "LCP", "CLS", "INP"];
 export const CHART_TOOLTIP_STYLE: React.CSSProperties = {
 	backgroundColor: "var(--gray-3)",
 	border: "1px solid var(--gray-6)",
-	padding: "8px",
 	borderRadius: "8px",
+	boxShadow: "var(--shadow-3)",
 	color: "var(--gray-12)",
 	fontSize: "12px",
 	fontWeight: 500,
-	boxShadow: "var(--shadow-3)",
+	padding: "8px",
 };
 
 /**
@@ -127,12 +127,12 @@ export const FULL_DASHBOARD_HEIGHT =
  * @internal
  */
 const METRIC_COLOR_MAP: Record<string, string> = {
-	TTFB: "cyan",
-	FCP: "purple",
-	LCP: "red",
 	CLS: "orange",
+	FCP: "purple",
 	INP: "amber",
+	LCP: "red",
 	OVERALL: "green",
+	TTFB: "cyan",
 };
 
 /**
@@ -179,7 +179,7 @@ export const getMetricColor = (name: string, weight: number | string = 10): stri
  * // returns "var(--green-11)"
  * ```
  */
-export const getStatusColor = (metric: string, value: number | undefined | null): string => {
+export const getStatusColor = (metric: string, value: null | number | undefined): string => {
 	if (value === undefined || value === null) return "var(--gray-11)";
 
 	const config = LIGHTHOUSE_CONFIG[metric];
@@ -252,12 +252,12 @@ export const computeLogNormalScore = (value: number, p90: number, p50: number): 
  *
  * @category Constants
  */
-export const LIGHTHOUSE_CONFIG: Record<string, { weight: number; p90: number; p50: number }> = {
-	LCP: { weight: 0.3, p90: 2500, p50: 4000 },
-	INP: { weight: 0.3, p90: 200, p50: 500 },
-	CLS: { weight: 0.25, p90: 100, p50: 250 },
-	FCP: { weight: 0.1, p90: 1800, p50: 3000 },
-	TTFB: { weight: 0.05, p90: 800, p50: 1800 },
+export const LIGHTHOUSE_CONFIG: Record<string, { p50: number; p90: number; weight: number }> = {
+	CLS: { p50: 250, p90: 100, weight: 0.25 },
+	FCP: { p50: 3000, p90: 1800, weight: 0.1 },
+	INP: { p50: 500, p90: 200, weight: 0.3 },
+	LCP: { p50: 4000, p90: 2500, weight: 0.3 },
+	TTFB: { p50: 1800, p90: 800, weight: 0.05 },
 };
 
 /**
@@ -389,7 +389,7 @@ export const transformPerformanceData = (
 	rangeDays?: number
 ): {
 	chartData: ChartDataPoint[];
-	summary: RawPerformanceSummary | null;
+	summary: null | RawPerformanceSummary;
 	uniqueMetrics: string[];
 } => {
 	if (!raw || !Array.isArray(raw)) {
@@ -400,8 +400,8 @@ export const transformPerformanceData = (
 	const metrics = new Set<string>();
 
 	const dateFormatter = getFormatter(locale, {
-		month: "numeric",
 		day: "numeric",
+		month: "numeric",
 	});
 	const hourFormatter = getFormatter(locale, {
 		hour: "numeric",
@@ -417,10 +417,10 @@ export const transformPerformanceData = (
 
 		if (!dateMap[item.timestamp]) {
 			dateMap[item.timestamp] = {
-				timestamp: item.timestamp,
+				appVersion: item.app_version,
 				displayDate: formattedDate,
 				hour: formattedHour,
-				appVersion: item.app_version,
+				timestamp: item.timestamp,
 			};
 		}
 
@@ -475,10 +475,10 @@ export const transformPerformanceData = (
 				// Gap filling: insert a null point for the missing hour
 				const dateObj = new Date(t);
 				const nullPoint: ChartDataPoint = {
-					timestamp: t,
+					appVersion: undefined,
 					displayDate: dateFormatter.format(dateObj),
 					hour: hourFormatter.format(dateObj),
-					appVersion: undefined,
+					timestamp: t,
 				};
 				metrics.forEach((m) => {
 					nullPoint[m] = undefined;
@@ -652,10 +652,10 @@ export const transformPerformanceData = (
 				for (let i = paddingCount; i > 0; i--) {
 					const ts = firstPoint.timestamp - i * hourMs;
 					padding.push({
-						timestamp: ts,
+						appVersion: "",
 						displayDate: "", // Empty so they don't show on X-axis
 						hour: "",
-						appVersion: "",
+						timestamp: ts,
 					});
 				}
 
@@ -753,14 +753,14 @@ export const transformPerformanceData = (
  */
 export const getPerformanceSummary = (
 	chartData: ChartDataPoint[]
-): RawPerformanceSummary | null => {
+): null | RawPerformanceSummary => {
 	if (!chartData || chartData.length === 0) return null;
 
 	const latest = chartData[chartData.length - 1];
 
 	const summary: RawPerformanceSummary = {
-		timestamp: latest.timestamp,
 		metrics: {},
+		timestamp: latest.timestamp,
 		trends: {},
 	};
 
@@ -781,8 +781,8 @@ export const getPerformanceSummary = (
 		previousOverall?.overall_score_p75_sma ?? previousOverall?.overall_p75 ?? 0;
 
 	summary.metrics.OVERALL = {
-		value: latest.overall_p75 || 0,
 		score: latest.overall_p75 || 0,
+		value: latest.overall_p75 || 0,
 	};
 
 	if (previousOverall) {
@@ -816,8 +816,8 @@ export const getPerformanceSummary = (
 		if (val1 !== undefined) {
 			const config = LIGHTHOUSE_CONFIG[m];
 			summary.metrics[m] = {
-				value: val1,
 				score: computeLogNormalScore(val1, config.p90, config.p50),
+				value: val1,
 			};
 
 			if (val2 !== undefined && sma1 !== undefined && sma2 !== undefined) {
@@ -842,9 +842,9 @@ export const getPerformanceSummary = (
  * Interface for the stable raw performance summary.
  */
 export interface RawPerformanceSummary {
+	metrics: Record<string, { score: number; value: number }>;
 	timestamp: number;
-	metrics: Record<string, { value: number; score: number }>;
-	trends: Record<string, "improvement" | "regression" | "neutral">;
+	trends: Record<string, "improvement" | "neutral" | "regression">;
 }
 
 /**

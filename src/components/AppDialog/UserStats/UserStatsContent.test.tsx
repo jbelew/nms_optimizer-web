@@ -127,8 +127,8 @@ describe("UserStatsContent", () => {
 		mockUseUserStats.mockReturnValue([
 			{
 				ship_type: "standard",
-				technology: "shield-matrix",
 				supercharged: "true",
+				technology: "shield-matrix",
 				total_events: 10,
 			},
 		]);
@@ -155,8 +155,8 @@ describe("UserStatsContent", () => {
 
 	test("should handle tech colors from hook", async () => {
 		const techColors = {
-			"shield-matrix": "accent-8",
 			"pulse-cannon": "accent-9",
+			"shield-matrix": "accent-8",
 		};
 		mockUseTechTreeColors.mockReturnValue(techColors);
 		mockUseUserStats.mockReturnValue([]);

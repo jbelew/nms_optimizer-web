@@ -21,10 +21,10 @@ describe("ErrorStore", () => {
 		const { errors } = useErrorStore.getState();
 		expect(errors).toHaveLength(1);
 		expect(errors[0]).toMatchObject({
+			dismissible: true,
 			id,
 			message,
 			type,
-			dismissible: true,
 		});
 		expect(typeof errors[0].timestamp).toBe("number");
 	});

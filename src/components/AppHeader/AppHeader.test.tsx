@@ -15,15 +15,15 @@ vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
 
 vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
-		sendEvent: vi.fn(),
 		sendDeferredEvent: vi.fn(),
+		sendEvent: vi.fn(),
 	}),
 }));
 
 vi.mock("../../utils/system/dialogUtils", () => ({
 	useDialog: () => ({
-		openDialog: vi.fn(),
 		closeDialog: vi.fn(),
+		openDialog: vi.fn(),
 	}),
 }));
 

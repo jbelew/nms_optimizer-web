@@ -6,15 +6,15 @@ import * as tracking from "./tracking";
 // Mock external dependencies
 vi.mock("react-ga4", () => ({
 	default: {
-		initialize: vi.fn(),
 		event: vi.fn(),
+		initialize: vi.fn(),
 	},
 }));
 
 describe("Analytics Tracking", () => {
 	const testEvent = {
-		category: "Test",
 		action: "Test Action",
+		category: "Test",
 		label: "Test Label",
 	};
 
@@ -25,27 +25,27 @@ describe("Analytics Tracking", () => {
 		// Use a simple mock that doesn't involve AbortController complexity in tests
 		vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ status: 200 }));
 		vi.stubGlobal("navigator", {
-			userAgent: "Mozilla/5.0",
 			sendBeacon: vi.fn().mockReturnValue(true),
+			userAgent: "Mozilla/5.0",
 		});
 
 		// Mock window
 		vi.stubGlobal("window", {
+			addEventListener: vi.fn(),
+			// Define this so the script probe can verify it
+			google_tag_manager: {},
+			localStorage: {
+				clear: vi.fn(() => localStorage.clear()),
+				getItem: vi.fn((key) => localStorage.getItem(key)),
+				removeItem: vi.fn((key) => localStorage.removeItem(key)),
+				setItem: vi.fn((key, value) => localStorage.setItem(key, value)),
+			},
 			location: {
 				pathname: "/",
 				search: "",
 			},
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
 			matchMedia: vi.fn().mockReturnValue({ matches: false }),
-			localStorage: {
-				getItem: vi.fn((key) => localStorage.getItem(key)),
-				setItem: vi.fn((key, value) => localStorage.setItem(key, value)),
-				removeItem: vi.fn((key) => localStorage.removeItem(key)),
-				clear: vi.fn(() => localStorage.clear()),
-			},
-			// Define this so the script probe can verify it
-			google_tag_manager: {},
+			removeEventListener: vi.fn(),
 		});
 
 		// Mock document. The script-injection probe used by `detectAdBlocker`
@@ -54,7 +54,7 @@ describe("Analytics Tracking", () => {
 		// the existing test contract.
 		const head = {
 			appendChild: vi.fn(
-				(script: { src: string; onload?: () => void; onerror?: () => void }) => {
+				(script: { onerror?: () => void; onload?: () => void; src: string }) => {
 					const probe = (globalThis as unknown as { fetch: Mock }).fetch;
 
 					try {
@@ -72,28 +72,28 @@ describe("Analytics Tracking", () => {
 		};
 
 		vi.stubGlobal("document", {
+			addEventListener: vi.fn(),
+			body: {
+				appendChild: vi.fn(),
+			},
 			cookie: "",
-			visibilityState: "visible",
-			querySelector: vi.fn().mockReturnValue(null),
 			createElement: vi.fn().mockImplementation((tag: string) => {
 				if (tag === "script") {
 					return {
-						setAttribute: vi.fn(),
-						remove: vi.fn(),
-						onload: undefined,
 						onerror: undefined,
+						onload: undefined,
+						remove: vi.fn(),
+						setAttribute: vi.fn(),
 					};
 				}
 
 				return {};
 			}),
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
 			head,
-			body: {
-				appendChild: vi.fn(),
-			},
+			querySelector: vi.fn().mockReturnValue(null),
+			removeEventListener: vi.fn(),
 			title: "Test Title",
+			visibilityState: "visible",
 		});
 
 		// Mock env.isDevMode to return false by default for tests
@@ -174,8 +174,8 @@ describe("Analytics Tracking", () => {
 		it("should prioritize GA cookie ID over localStorage", () => {
 			const gaId = "123456.789012";
 			Object.defineProperty(document, "cookie", {
-				writable: true,
 				value: `_ga=GA1.1.${gaId}`,
+				writable: true,
 			});
 
 			const clientId = tracking.initializeAnalyticsClient();
@@ -192,8 +192,8 @@ describe("Analytics Tracking", () => {
 			expect(fetchMock).toHaveBeenCalledWith(
 				expect.stringContaining("api/events"),
 				expect.objectContaining({
-					method: "POST",
 					keepalive: true,
+					method: "POST",
 				})
 			);
 		});

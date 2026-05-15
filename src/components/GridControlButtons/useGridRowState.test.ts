@@ -16,15 +16,15 @@ describe("useGridRowState", () => {
 		(useGridStore as unknown as Mock).mockImplementation(
 			(
 				selector: (state: {
+					grid: { cells: { every: () => boolean; some: () => boolean }[] };
 					selectFirstInactiveRowIndex: () => number;
 					selectLastActiveRowIndex: () => number;
-					grid: { cells: { every: () => boolean; some: () => boolean }[] };
 				}) => unknown
 			) => {
 				const mockState = {
+					grid: { cells: [] },
 					selectFirstInactiveRowIndex: () => 2,
 					selectLastActiveRowIndex: () => 5,
-					grid: { cells: [] },
 				};
 
 				return selector(mockState);
@@ -43,9 +43,9 @@ describe("useGridRowState", () => {
 		(useGridStore as unknown as Mock).mockImplementation(
 			(selector: (state: Record<string, unknown>) => unknown) => {
 				const mockState = {
+					grid: { cells: [null, null, mockRow] },
 					selectFirstInactiveRowIndex: () => 2,
 					selectLastActiveRowIndex: () => 1,
-					grid: { cells: [null, null, mockRow] },
 				};
 
 				return selector(mockState);
@@ -64,9 +64,9 @@ describe("useGridRowState", () => {
 		(useGridStore as unknown as Mock).mockImplementation(
 			(selector: (state: Record<string, unknown>) => unknown) => {
 				const mockState = {
+					grid: { cells: [null, null, mockRow] },
 					selectFirstInactiveRowIndex: () => 3,
 					selectLastActiveRowIndex: () => 1,
-					grid: { cells: [null, null, mockRow] },
 				};
 
 				return selector(mockState);
@@ -83,9 +83,9 @@ describe("useGridRowState", () => {
 		const mockRow = [{ active: true }, { active: false }, { active: true }];
 
 		const mockState = {
+			grid: { cells: [null, null, null, null, null, null, null, mockRow, null, null] },
 			selectFirstInactiveRowIndex: () => 5,
 			selectLastActiveRowIndex: () => 7,
-			grid: { cells: [null, null, null, null, null, null, null, mockRow, null, null] },
 		};
 
 		(useGridStore as unknown as Mock).mockImplementation(
@@ -106,9 +106,9 @@ describe("useGridRowState", () => {
 		const mockRow = [{ active: true }, { active: false }, { active: true }];
 
 		const mockState = {
+			grid: { cells: [null, mockRow, null, null, null, null, null, null] },
 			selectFirstInactiveRowIndex: () => 2,
 			selectLastActiveRowIndex: () => 1,
-			grid: { cells: [null, mockRow, null, null, null, null, null, null] },
 		};
 
 		(useGridStore as unknown as Mock).mockImplementation(
@@ -131,11 +131,11 @@ describe("useGridRowState", () => {
 		(useGridStore as unknown as Mock).mockImplementation(
 			(selector: (state: Record<string, unknown>) => unknown) => {
 				const mockState = {
-					selectFirstInactiveRowIndex: () => 5,
-					selectLastActiveRowIndex: () => 7,
 					grid: {
 						cells: [null, null, null, null, null, null, null, mockRow, null, null],
 					},
+					selectFirstInactiveRowIndex: () => 5,
+					selectLastActiveRowIndex: () => 7,
 				};
 
 				return selector(mockState);
@@ -152,9 +152,9 @@ describe("useGridRowState", () => {
 		const mockRow = [{ active: true }, { active: true }];
 
 		const mockState = {
+			grid: { cells: [null, null, null, null, null, null, null, null, null, mockRow] },
 			selectFirstInactiveRowIndex: () => 10,
 			selectLastActiveRowIndex: () => 9,
-			grid: { cells: [null, null, null, null, null, null, null, null, null, mockRow] },
 		};
 
 		(useGridStore as unknown as Mock).mockImplementation(

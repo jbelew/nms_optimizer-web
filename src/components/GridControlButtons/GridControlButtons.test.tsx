@@ -45,16 +45,16 @@ vi.mock("@/store/grid/gridStore", () => ({
 		const mockState = {
 			activateRow: mockActivateRow,
 			deActivateRow: mockDeActivateRow,
-			selectHasModulesInGrid: () => false,
-			selectFirstInactiveRowIndex: () => 1,
-			selectLastActiveRowIndex: () => 0,
-			gridFixed: false,
 			grid: {
 				cells: [
 					[{ active: true }, { active: true }],
 					[{ active: false }, { active: false }],
 				],
 			},
+			gridFixed: false,
+			selectFirstInactiveRowIndex: () => 1,
+			selectHasModulesInGrid: () => false,
+			selectLastActiveRowIndex: () => 0,
 		};
 
 		return selector(mockState);

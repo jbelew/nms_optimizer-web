@@ -30,10 +30,10 @@ const BuildNameDialog = React.lazy(() => import("../AppDialog/BuildName/BuildNam
  * Props for the `GridTableButtons` component.
  */
 interface GridTableButtonsProps {
-	/** Whether an optimization solve is currently active. */
-	solving: boolean;
 	/** Ref to the grid DOM element, used for screenshot capture. */
 	gridRef: React.RefObject<HTMLDivElement | null>;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
 }
 
 /**
@@ -55,8 +55,8 @@ interface GridTableButtonsProps {
  * @example
  * <GridTableButtons solving={false} />
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef }) => {
-	const { updateUrlForShare, updateUrlForReset } = useUrlSync();
+const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving }) => {
+	const { updateUrlForReset, updateUrlForShare } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
@@ -64,18 +64,18 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 	const [isInfoPending, startInfoTransition] = useTransition();
 	const [isSharePending, startShareTransition] = useTransition();
 
-	const { openDialog, tutorialFinished, markTutorialFinished } = useDialog();
+	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
 	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
 	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const {
-		isSaveBuildDialogOpen,
-		handleSaveBuild,
-		handleBuildNameConfirm,
 		handleBuildNameCancel,
+		handleBuildNameConfirm,
+		handleSaveBuild,
+		isSaveBuildDialogOpen,
 		isSavePending,
 	} = useSaveBuild();
-	const { fileInputRef, handleLoadBuild, handleFileSelect, isLoadPending } = useLoadBuild();
+	const { fileInputRef, handleFileSelect, handleLoadBuild, isLoadPending } = useLoadBuild();
 	const { handleScreenshot, isCapturing } = useScreenshot();
 	const isAbove1024 = useBreakpoint("1024px");
 	const scrollOptions = { skipOnLargeScreens: false };
@@ -129,11 +129,11 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 			openDialog(null, { shareUrl });
 		});
 		sendEvent({
-			category: "ui",
 			action: "share",
+			category: "ui",
 			method: "url",
-			value: 1,
 			nonInteraction: false,
+			value: 1,
 		});
 	};
 
@@ -149,7 +149,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 			scrollIntoView();
 		}
 
-		sendEvent({ category: "ui", action: "reset_grid", value: 1, nonInteraction: false });
+		sendEvent({ action: "reset_grid", category: "ui", nonInteraction: false, value: 1 });
 
 		startResetTransition(() => {
 			useGridStore.getState().resetGrid();
@@ -179,24 +179,24 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 
 		return isSmallAndUp ? (
 			<Button
+				aria-label={translatedLabel}
+				className={className}
+				disabled={disabled}
+				onClick={onClick}
 				size="2"
 				variant={variant}
-				className={className}
-				onClick={onClick}
-				aria-label={translatedLabel}
-				disabled={disabled}
 			>
 				{icon}
 				<span className="hidden sm:inline">{translatedLabel}</span>
 			</Button>
 		) : (
 			<IconButton
+				aria-label={translatedLabel}
+				className={className}
+				disabled={disabled}
+				onClick={onClick}
 				size="2"
 				variant={variant}
-				className={className}
-				onClick={onClick}
-				aria-label={translatedLabel}
-				disabled={disabled}
 			>
 				{icon}
 			</IconButton>
@@ -208,8 +208,8 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 			<React.Suspense fallback={null}>
 				<BuildNameDialog
 					isOpen={isSaveBuildDialogOpen}
-					onConfirm={handleBuildNameConfirm}
 					onCancel={handleBuildNameCancel}
+					onConfirm={handleBuildNameConfirm}
 				/>
 			</React.Suspense>
 			<div className="gridTable-buttons__container" data-screenshot-exclude="true">
@@ -235,12 +235,12 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 						<>
 							<ConditionalTooltip label={t("buttons.loadBuild") ?? ""}>
 								<IconButton
+									aria-label={t("buttons.loadBuild")}
+									className="gridTable__button gridTable__button--load"
+									disabled={solving || isLoadPending}
+									onClick={handleLoadBuild}
 									size="2"
 									variant="soft"
-									className="gridTable__button gridTable__button--load"
-									onClick={handleLoadBuild}
-									disabled={solving || isLoadPending}
-									aria-label={t("buttons.loadBuild")}
 								>
 									<FileIcon />
 								</IconButton>
@@ -248,12 +248,12 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 
 							<ConditionalTooltip label={t("buttons.saveBuild") ?? ""}>
 								<IconButton
+									aria-label={t("buttons.saveBuild")}
+									className="gridTable__button gridTable__button--save"
+									disabled={solving || !hasModulesInGrid || isSavePending}
+									onClick={handleSaveBuild}
 									size="2"
 									variant="soft"
-									className="gridTable__button gridTable__button--save"
-									onClick={handleSaveBuild}
-									disabled={solving || !hasModulesInGrid || isSavePending}
-									aria-label={t("buttons.saveBuild")}
 								>
 									<DownloadIcon />
 								</IconButton>
@@ -262,24 +262,24 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 					)}
 
 					<input
+						accept=".nms"
+						aria-label={t("buttons.loadBuild")}
+						className="hidden"
+						onChange={handleFileSelect}
 						ref={fileInputRef}
 						type="file"
-						accept=".nms"
-						onChange={handleFileSelect}
-						className="hidden"
-						aria-label={t("buttons.loadBuild")}
 					/>
 
 					{/* Share button - hidden on mobile, shown on sm and up */}
 					{isSmallAndUp && !isSharedGrid && (
 						<ConditionalTooltip label={t("buttons.share") ?? ""}>
 							<IconButton
+								aria-label={t("buttons.share")}
+								className="gridTable__button gridTable__button--share"
+								disabled={solving || !hasModulesInGrid || isSharePending}
+								onClick={handleShareClick}
 								size="2"
 								variant="soft"
-								className="gridTable__button gridTable__button--share"
-								onClick={handleShareClick}
-								disabled={solving || !hasModulesInGrid || isSharePending}
-								aria-label={t("buttons.share")}
 							>
 								<Share1Icon />
 							</IconButton>
@@ -290,12 +290,12 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 					{isSmallAndUp && (
 						<ConditionalTooltip label={t("buttons.screenshot") ?? ""}>
 							<IconButton
+								aria-label={t("buttons.screenshot")}
+								className="gridTable__button gridTable__button--screenshot"
+								disabled={solving || !hasModulesInGrid || isCapturing}
+								onClick={handleScreenshotClick}
 								size="2"
 								variant="soft"
-								className="gridTable__button gridTable__button--screenshot"
-								onClick={handleScreenshotClick}
-								disabled={solving || !hasModulesInGrid || isCapturing}
-								aria-label={t("buttons.screenshot")}
 							>
 								<CameraIcon />
 							</IconButton>
@@ -305,12 +305,12 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving, gridRef })
 
 				<div className="gridTable-buttons__right">
 					<Button
-						size="2"
-						className="gridTable__button gridTable__button--reset"
-						variant="solid"
-						onClick={handleResetGrid}
-						disabled={solving || isResetPending}
 						aria-label={t("buttons.resetGrid")}
+						className="gridTable__button gridTable__button--reset"
+						disabled={solving || isResetPending}
+						onClick={handleResetGrid}
+						size="2"
+						variant="solid"
 					>
 						<ResetIcon />
 						{t("buttons.resetGrid")}

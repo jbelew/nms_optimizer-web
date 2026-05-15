@@ -46,19 +46,39 @@ const fallbackImage = "/assets/img/grid/infra.webp";
 const baseImagePath = "/assets/img/grid/";
 
 /**
- * Represents a simplified technology module definition used within the selection UI.
+ * Props for the `DialogBody` component.
  */
-export interface SelectionModule {
-	/** Display name of the module. */
-	label: string;
-	/** Unique identifier for the module. */
-	id: string;
-	/** Icon filename. */
-	image: string;
-	/** Optional classification (e.g., 'upgrade'). */
-	type?: string;
-	/** Initial checked status. */
-	checked?: boolean;
+export interface DialogBodyProps {
+	/** Whether all modules in the dialog are currently selected. */
+	allModulesSelected: boolean;
+	/** Array of IDs for currently selected modules. */
+	currentCheckedModules: string[];
+	/** Modules organized into categories for display. **Must be provided.** */
+	groupedModules: GroupedModules;
+	/** Callback for the "Select All" toggle checkbox. */
+	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
+	/** Callback for selection changes within the checkbox group. */
+	handleValueChange: (newValues: string[]) => void;
+	/** Callback triggered when the dialog is dismissed. */
+	onClose?: () => void;
+	/** Ref to the "Select All" checkbox element. */
+	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
+	/** The unique identifier of the technology being configured. */
+	tech?: string;
+	/** Theme color for the technology avatar. */
+	techColor: TechTreeRowProps["techColor"];
+}
+
+/**
+ * Props for the `DialogFooter` component.
+ */
+export interface DialogFooterProps {
+	/** Array of currently selected module IDs. Used to determine if the optimize button should be disabled. */
+	currentCheckedModules: string[];
+	/** Asynchronous callback to trigger the optimization solver. **Must be provided.** */
+	handleOptimizeClick: () => Promise<void>;
+	/** Callback triggered when the dialog is dismissed. */
+	onClose?: () => void;
 }
 
 /**
@@ -69,83 +89,15 @@ export interface GroupedModules {
 }
 
 /**
- * Props for the `ModuleSelectionDialog` component.
- */
-export interface ModuleSelectionDialogProps {
-	/** Whether the dialog is currently visible. */
-	isOpen: boolean;
-	/** Localized name of the technology being configured. */
-	translatedTechName: string;
-	/** Modules organized into categories for display. **Must be provided.** */
-	groupedModules: GroupedModules;
-	/** Array of IDs for currently selected modules. */
-	currentCheckedModules: string[];
-	/** Callback for individual module selection changes. */
-	handleValueChange: (newValues: string[]) => void;
-	/** Callback for the "Select All" toggle. */
-	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
-	/** Asynchronous callback to trigger an optimization using the current selection. */
-	handleOptimizeClick: () => Promise<void>;
-	/** Whether all modules in the dialog are selected. */
-	allModulesSelected: boolean;
-	/** Whether the "Select All" checkbox is in an indeterminate state. */
-	isIndeterminate: boolean;
-	/** Theme color for the technology icon/avatar. */
-	techColor: TechTreeRowProps["techColor"];
-	/** Icon filename for the main technology. */
-	techImage: string | null;
-	/** The unique technology key. */
-	tech?: string;
-	/** Optional callback triggered when the dialog closes. */
-	onClose: () => void;
-}
-
-/**
- * Props for the `DialogBody` component.
- */
-export interface DialogBodyProps {
-	/** Modules organized into categories for display. **Must be provided.** */
-	groupedModules: GroupedModules;
-	/** Array of IDs for currently selected modules. */
-	currentCheckedModules: string[];
-	/** Callback for selection changes within the checkbox group. */
-	handleValueChange: (newValues: string[]) => void;
-	/** Callback for the "Select All" toggle checkbox. */
-	handleSelectAllChange: (checked: boolean | "indeterminate") => void;
-	/** Whether all modules in the dialog are currently selected. */
-	allModulesSelected: boolean;
-	/** Theme color for the technology avatar. */
-	techColor: TechTreeRowProps["techColor"];
-	/** Ref to the "Select All" checkbox element. */
-	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
-	/** The unique identifier of the technology being configured. */
-	tech?: string;
-	/** Callback triggered when the dialog is dismissed. */
-	onClose?: () => void;
-}
-
-/**
- * Props for the `DialogFooter` component.
- */
-export interface DialogFooterProps {
-	/** Asynchronous callback to trigger the optimization solver. **Must be provided.** */
-	handleOptimizeClick: () => Promise<void>;
-	/** Array of currently selected module IDs. Used to determine if the optimize button should be disabled. */
-	currentCheckedModules: string[];
-	/** Callback triggered when the dialog is dismissed. */
-	onClose?: () => void;
-}
-
-/**
  * Props for the `ModuleCheckbox` component.
  */
 export interface ModuleCheckboxProps {
+	/** Whether the checkbox is in a read-only or blocked state. */
+	isDisabled: boolean;
 	/** The module object containing label, ID, and image data. **Must be valid.** */
 	module: SelectionModule;
 	/** The theme color applied to the module's avatar background. */
 	techColor: TechTreeRowProps["techColor"];
-	/** Whether the checkbox is in a read-only or blocked state. */
-	isDisabled: boolean;
 }
 
 /**
@@ -159,10 +111,58 @@ export interface ModuleGroupProps extends Pick<
 	groupName: string;
 	/** Array of modules belonging to this group. */
 	modules: SelectionModule[];
-	/** Optional title to display instead of the localized group name. */
-	titleOverride?: string;
 	/** Callback function to close the parent dialog. */
 	onClose?: () => void;
+	/** Optional title to display instead of the localized group name. */
+	titleOverride?: string;
+}
+
+/**
+ * Props for the `ModuleSelectionDialog` component.
+ */
+export interface ModuleSelectionDialogProps {
+	/** Whether all modules in the dialog are selected. */
+	allModulesSelected: boolean;
+	/** Array of IDs for currently selected modules. */
+	currentCheckedModules: string[];
+	/** Modules organized into categories for display. **Must be provided.** */
+	groupedModules: GroupedModules;
+	/** Asynchronous callback to trigger an optimization using the current selection. */
+	handleOptimizeClick: () => Promise<void>;
+	/** Callback for the "Select All" toggle. */
+	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
+	/** Callback for individual module selection changes. */
+	handleValueChange: (newValues: string[]) => void;
+	/** Whether the "Select All" checkbox is in an indeterminate state. */
+	isIndeterminate: boolean;
+	/** Whether the dialog is currently visible. */
+	isOpen: boolean;
+	/** Optional callback triggered when the dialog closes. */
+	onClose: () => void;
+	/** The unique technology key. */
+	tech?: string;
+	/** Theme color for the technology icon/avatar. */
+	techColor: TechTreeRowProps["techColor"];
+	/** Icon filename for the main technology. */
+	techImage: null | string;
+	/** Localized name of the technology being configured. */
+	translatedTechName: string;
+}
+
+/**
+ * Represents a simplified technology module definition used within the selection UI.
+ */
+export interface SelectionModule {
+	/** Initial checked status. */
+	checked?: boolean;
+	/** Unique identifier for the module. */
+	id: string;
+	/** Icon filename. */
+	image: string;
+	/** Display name of the module. */
+	label: string;
+	/** Optional classification (e.g., 'upgrade'). */
+	type?: string;
 }
 
 /**
@@ -191,7 +191,7 @@ const formatParentheses = (text: string): React.ReactNode => {
 		<React.Fragment key={index}>
 			{part}
 			{matches[index] && (
-				<Badge ml="1" className="hidden! font-mono! sm:inline!">
+				<Badge className="hidden! font-mono! sm:inline!" ml="1">
 					{matches[index].slice(1, -1)}
 				</Badge>
 			)}
@@ -243,9 +243,9 @@ const formatLabel = (label: string): React.ReactNode => {
  * ```
  */
 export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
+	isDisabled,
 	module,
 	techColor,
-	isDisabled,
 }) => {
 	const imagePath = module.image
 		? `${baseImagePath}${module.image}?v=${__APP_VERSION__}`
@@ -253,18 +253,18 @@ export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
 
 	return (
 		<label
-			key={module.id}
 			className="mb-2 flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base"
+			key={module.id}
 			style={{ cursor: "pointer" }}
 		>
-			<CheckboxGroup.Item value={module.id} disabled={isDisabled} />
+			<CheckboxGroup.Item disabled={isDisabled} value={module.id} />
 			<Avatar
-				size="1"
-				radius="full"
 				alt={module.label}
-				fallback={module.id}
-				src={imagePath}
 				color={techColor}
+				fallback={module.id}
+				radius="full"
+				size="1"
+				src={imagePath}
 			/>
 			<span className="flex-1">{formatLabel(module.label ?? module.id)}</span>
 		</label>
@@ -290,23 +290,23 @@ export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
  * ```
  */
 export const ModuleGroup: React.FC<ModuleGroupProps> = ({
+	currentCheckedModules,
 	groupName,
 	modules,
-	currentCheckedModules,
+	onClose,
 	techColor,
 	titleOverride,
-	onClose,
 }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
 
-	const sortedModules = ["bonus", "trails", "figurines"].includes(groupName)
+	const sortedModules = ["bonus", "figurines", "trails"].includes(groupName)
 		? [...modules].sort((a, b) => (a.label ?? "").localeCompare(b.label ?? ""))
 		: modules;
 
 	const dependencyMap = new Map<string, string>();
 
-	if (["upgrade", "cosmetic", "reactor", "atlantid"].includes(groupName)) {
+	if (["atlantid", "cosmetic", "reactor", "upgrade"].includes(groupName)) {
 		const rankToModuleMap = new Map<string, string>();
 		modules.forEach((module) => {
 			if (!module.label) return;
@@ -361,11 +361,11 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 			{groupName === "cosmetic" && (
 				<Blockquote
 					className="text-sm sm:text-base"
-					mb="3"
-					mt="1"
 					dangerouslySetInnerHTML={{
 						__html: t("moduleSelection.cosmeticInfo"),
 					}}
+					mb="3"
+					mt="1"
 				/>
 			)}
 			{sortedModules.map((module) => {
@@ -376,10 +376,10 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
 
 				return (
 					<ModuleCheckbox
+						isDisabled={isDisabled}
 						key={module.id}
 						module={module}
 						techColor={techColor}
-						isDisabled={isDisabled}
 					/>
 				);
 			})}
@@ -401,21 +401,21 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
  * ```
  */
 export const DialogBody: React.FC<DialogBodyProps> = ({
-	groupedModules,
-	currentCheckedModules,
-	handleValueChange,
-	handleSelectAllChange,
 	allModulesSelected,
-	techColor,
+	currentCheckedModules,
+	groupedModules,
+	handleSelectAllChange,
+	handleValueChange,
+	onClose,
 	selectAllCheckboxRef,
 	tech,
-	onClose,
+	techColor,
 }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
 
-	const onSelectAllChange = (checked: boolean | "indeterminate") => {
+	const onSelectAllChange = (checked: "indeterminate" | boolean) => {
 		handleSelectAllChange(checked);
 	};
 
@@ -441,15 +441,15 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
-					ref={selectAllCheckboxRef}
 					checked={allModulesSelected}
 					onCheckedChange={onSelectAllChange}
+					ref={selectAllCheckboxRef}
 				/>
-				<Text ml="2" className="text-sm font-medium sm:text-base">
+				<Text className="text-sm font-medium sm:text-base" ml="2">
 					{t("moduleSelection.selectAll")}
 				</Text>
 			</label>
-			<Separator size="4" className="mt-2" mb="3" />
+			<Separator className="mt-2" mb="3" size="4" />
 			<div className="flex flex-col gap-2">
 				{groupedModules["core"]?.length > 0 && (
 					<div key="core">
@@ -466,17 +466,17 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 
 							return (
 								<label
-									key={module.id}
 									className="mb-2 flex items-center gap-2 text-sm font-medium sm:text-base"
+									key={module.id}
 								>
 									<Checkbox checked={true} disabled={true} />
 									<Avatar
-										size="1"
-										radius="full"
 										alt={module.label}
-										fallback="IK"
-										src={imagePath}
 										color={techColor}
+										fallback="IK"
+										radius="full"
+										size="1"
+										src={imagePath}
 									/>
 									{module.label}
 								</label>
@@ -484,7 +484,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root value={currentCheckedModules} onValueChange={handleValueChange}>
+				<CheckboxGroup.Root onValueChange={handleValueChange} value={currentCheckedModules}>
 					{MODULE_GROUP_ORDER.filter((g) => g !== "core").map((groupName) => {
 						if (!groupedModules[groupName]?.length) return null;
 
@@ -496,13 +496,13 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
 
 						return (
 							<ModuleGroup
-								key={groupName}
-								groupName={groupName}
-								modules={groupedModules[groupName]}
 								currentCheckedModules={currentCheckedModules}
+								groupName={groupName}
+								key={groupName}
+								modules={groupedModules[groupName]}
+								onClose={onClose}
 								techColor={techColor}
 								titleOverride={titleOverride}
-								onClose={onClose}
 							/>
 						);
 					})}
@@ -526,8 +526,8 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
  * ```
  */
 export const DialogFooter: React.FC<DialogFooterProps> = ({
-	handleOptimizeClick,
 	currentCheckedModules,
+	handleOptimizeClick,
 	onClose,
 }) => {
 	const { t } = useTranslation();
@@ -535,10 +535,10 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
 
 	return (
 		<div className="mb-1 flex justify-end gap-2">
-			<Button variant="soft" onClick={onClose}>
+			<Button onClick={onClose} variant="soft">
 				{t("moduleSelection.cancelButton")}
 			</Button>
-			<Button onClick={handleOptimizeClick} disabled={isOptimizeDisabled}>
+			<Button disabled={isOptimizeDisabled} onClick={handleOptimizeClick}>
 				{t("moduleSelection.optimizeButton")}
 			</Button>
 		</div>
@@ -575,19 +575,19 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo(
 	const { bodyProps, footerProps } = useModuleSelectionDialog(props);
 	const { t } = useTranslation();
 
-	const { translatedTechName, isOpen, onClose } = props;
+	const { isOpen, onClose, translatedTechName } = props;
 
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				isOpen={isOpen}
-				onClose={onClose}
-				title={t("moduleSelection.title", { techName: translatedTechName })}
+				content={<DialogBody {...bodyProps} />}
+				footer={<DialogFooter {...footerProps} onClose={onClose} />}
 				headerIcon={
 					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
 				}
-				content={<DialogBody {...bodyProps} />}
-				footer={<DialogFooter {...footerProps} onClose={onClose} />}
+				isOpen={isOpen}
+				onClose={onClose}
+				title={t("moduleSelection.title", { techName: translatedTechName })}
 			/>
 		</Suspense>
 	);

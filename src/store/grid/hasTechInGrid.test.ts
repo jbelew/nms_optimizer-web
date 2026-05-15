@@ -25,8 +25,8 @@ describe("hasTechInGrid selector in GridStore", () => {
 
 			useGridStore.setState({
 				grid: gridToSet,
-				result: null,
 				isSharedGrid: false,
+				result: null,
 			});
 			useGridStore.getState().triggerRecompute();
 		});

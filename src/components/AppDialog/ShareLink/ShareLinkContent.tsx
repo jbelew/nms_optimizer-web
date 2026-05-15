@@ -39,22 +39,22 @@ export const ShareLinkContent: FC<ShareLinkContentProps> = ({ shareUrl }) => {
 
 	return (
 		<>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
+			<Text as="p" mb="3" size={{ initial: "2", sm: "3" }}>
 				{t("dialogs.shareLink.description")}
 			</Text>
-			<Text size={{ initial: "2", sm: "3" }} as="p" mb="3">
+			<Text as="p" mb="3" size={{ initial: "2", sm: "3" }}>
 				<Trans i18nKey="dialogs.shareLink.tip" />
 			</Text>
 			<TextArea
 				id="share-url-input"
 				name="shareUrl"
-				size={{ initial: "2", sm: "3" }}
 				readOnly
-				value={shareUrl}
 				rows={8}
+				size={{ initial: "2", sm: "3" }}
+				value={shareUrl}
 			/>
-			<Text as="p" size={{ initial: "2", sm: "3" }} mt="2" mb="2" align="right">
-				<Link href={shareUrl} target="_blank" rel="noopener noreferrer">
+			<Text align="right" as="p" mb="2" mt="2" size={{ initial: "2", sm: "3" }}>
+				<Link href={shareUrl} rel="noopener noreferrer" target="_blank">
 					{t("dialogs.shareLink.openLink")}
 					<ExternalLinkIcon className="ml-1 inline-block" />
 				</Link>

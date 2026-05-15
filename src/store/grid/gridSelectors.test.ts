@@ -7,7 +7,7 @@ describe("Grid Store Selectors", () => {
 		// Directly reset to a known initial state for the grid part,
 		// avoiding issues with resetGrid if state.grid is null from a previous test.
 		// Default dimensions (10,6) are from the main store's initialization.
-		useGridStore.setState({ grid: createGrid(10, 6), result: null, isSharedGrid: false });
+		useGridStore.setState({ grid: createGrid(10, 6), isSharedGrid: false, result: null });
 		useGridStore.getState().triggerRecompute();
 	});
 
@@ -90,7 +90,7 @@ describe("Grid Store Selectors", () => {
 		it("should return 0 if grid.cells is null (though store initializes grid.cells)", () => {
 			const state = useGridStore.getState();
 			// @ts-expect-error For testing this specific scenario
-			state.setGrid({ cells: null, width: 0, height: 0 });
+			state.setGrid({ cells: null, height: 0, width: 0 });
 			expect(state.selectTotalSuperchargedCells()).toBe(0);
 		});
 	});
@@ -180,7 +180,7 @@ describe("Grid Store Selectors", () => {
 		it("should return false if grid.cells is null (though store initializes grid.cells)", () => {
 			const state = useGridStore.getState();
 			// @ts-expect-error For testing this specific scenario
-			state.setGrid({ cells: null, width: 0, height: 0 });
+			state.setGrid({ cells: null, height: 0, width: 0 });
 			expect(state.selectHasModulesInGrid()).toBe(false);
 		});
 	});

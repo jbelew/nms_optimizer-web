@@ -58,7 +58,7 @@ interface AppHeaderProps {
  * ```
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
-	const { t, i18n } = useTranslation();
+	const { i18n, t } = useTranslation();
 	const { openDialog } = useDialog();
 	const { sendDeferredEvent } = useAnalytics();
 	const isLg = useBreakpoint("1024px");
@@ -77,9 +77,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 	const isDockerBuild = import.meta.env.VITE_DOCKER === "true";
 
 	return (
-		<Box key={i18n.language} className="app-header">
+		<Box className="app-header" key={i18n.language}>
 			{!isSharedGrid && !isLg && isSm && (
-				<Flex gap="2" className="app-header__controls app-header__controls--left">
+				<Flex className="app-header__controls app-header__controls--left" gap="2">
 					<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
 						<Flex align="center" gap="2">
 							<EyeOpenIcon
@@ -87,10 +87,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								style={{ color: "var(--accent-a11)" }}
 							/>
 							<Switch
-								variant="soft"
+								aria-label={t("buttons.accessibility") ?? ""}
 								checked={a11yMode}
 								onCheckedChange={toggleA11yMode}
-								aria-label={t("buttons.accessibility") ?? ""}
+								variant="soft"
 							/>
 						</Flex>
 					</ConditionalTooltip>
@@ -98,18 +98,18 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 			)}
 
 			{!isSharedGrid && isSm && (
-				<Flex gap="2" className="app-header__controls app-header__controls--right">
+				<Flex className="app-header__controls app-header__controls--right" gap="2">
 					<ConditionalTooltip label={t("buttons.changelog") ?? ""}>
 						<IconButton
-							variant="soft"
 							aria-label={t("buttons.changelog") ?? ""}
+							onClick={() => {
+								onShowChangelog();
+							}}
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
 								void import("../AppDialog/Markdown/MarkdownContentRenderer");
 							}}
-							onClick={() => {
-								onShowChangelog();
-							}}
+							variant="soft"
 						>
 							<CounterClockwiseClockIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 						</IconButton>
@@ -118,14 +118,14 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					{!isDockerBuild && (
 						<ConditionalTooltip label={t("buttons.userStats") ?? ""}>
 							<IconButton
-								variant="soft"
 								aria-label={t("buttons.userStats") ?? ""}
-								onMouseEnter={() => {
-									void import("../../routes/UserStatsRoute");
-								}}
 								onClick={() => {
 									openDialog("userstats");
 								}}
+								onMouseEnter={() => {
+									void import("../../routes/UserStatsRoute");
+								}}
+								variant="soft"
 							>
 								<PieChartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 							</IconButton>
@@ -134,15 +134,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					{isLg && !isDockerBuild && (
 						<ConditionalTooltip label="I'm a nerd!">
 							<IconButton
-								variant="soft"
 								aria-label="Performance Metrics"
+								onClick={() => {
+									openDialog("performance");
+								}}
 								onMouseEnter={() => {
 									// Prefetch performance chart logic
 									void import("../AppDialog/Performance/PerformanceChart");
 								}}
-								onClick={() => {
-									openDialog("performance");
-								}}
+								variant="soft"
 							>
 								<RocketIcon className="h-4 w-4 sm:h-5 sm:w-5" />
 							</IconButton>
@@ -157,10 +157,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									style={{ color: "var(--accent-a11)" }}
 								/>
 								<Switch
-									variant="soft"
+									aria-label={t("buttons.accessibility") ?? ""}
 									checked={a11yMode}
 									onCheckedChange={toggleA11yMode}
-									aria-label={t("buttons.accessibility") ?? ""}
+									variant="soft"
 								/>
 							</Flex>
 						</ConditionalTooltip>
@@ -174,35 +174,35 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 
 			<Flex
 				align="center"
+				className="app-header__separator-container"
 				gap="2"
 				my="1"
 				width="100%"
-				className="app-header__separator-container"
 			>
-				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
+				<Separator className="flex-1" decorative orientation="horizontal" size="1" />
 
 				<Popover.Root>
 					<Popover.Trigger>
 						<button
-							type="button"
-							className="app-header__logo-button"
 							aria-label={t("buttons.showEasterEgg") ?? ""}
+							className="app-header__logo-button"
 							onClick={() => {
 								sendDeferredEvent({
-									category: "ui",
 									action: "earn_virtual_currency",
-									virtual_currency_name: "easter_egg",
-									value: 1,
+									category: "ui",
 									nonInteraction: false,
+									value: 1,
+									virtual_currency_name: "easter_egg",
 								});
 							}}
+							type="button"
 						>
 							<img
-								className="app-header__logo-image pt-[3px]"
-								src={nmslogo}
 								alt=""
-								width="10"
+								className="app-header__logo-image pt-[3px]"
 								height="16"
+								src={nmslogo}
+								width="10"
 							/>
 						</button>
 					</Popover.Trigger>
@@ -213,22 +213,22 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 					</Popover.Content>
 				</Popover.Root>
 
-				<Separator size="1" orientation="horizontal" decorative className="flex-1" />
+				<Separator className="flex-1" decorative orientation="horizontal" size="1" />
 			</Flex>
 
 			<Heading
-				wrap="pretty"
 				align="center"
 				as="h2"
+				className="app-header__title"
 				mt="1"
 				size={isSm ? "3" : "2"}
-				className="app-header__title"
+				wrap="pretty"
 			>
 				<Trans
-					i18nKey="appHeader.subTitle"
 					components={{
 						1: <span className="font-mono" style={{ color: "var(--accent-11)" }} />,
 					}}
+					i18nKey="appHeader.subTitle"
 				/>
 				<span className="font-medium" style={{ color: "var(--gray-11)" }}>
 					{" "}

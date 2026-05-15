@@ -85,9 +85,9 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 	return (
 		<PerformanceChart
 			data={data}
-			range={range}
-			onRangeChange={handleRangeChange}
 			isPending={isPending}
+			onRangeChange={handleRangeChange}
+			range={range}
 		/>
 	);
 };

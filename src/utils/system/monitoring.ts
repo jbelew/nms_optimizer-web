@@ -25,6 +25,32 @@ import {
 } from "react-router-dom";
 
 /**
+ * Log levels for the application.
+ */
+export enum LogLevel {
+	/** Error messages for critical failures. */
+	ERROR = "ERROR",
+	/** Informational messages for tracking execution flow. */
+	INFO = "INFO",
+	/** Warning messages for non-critical issues that should be investigated. */
+	WARN = "WARN",
+}
+
+/**
+ * Represents a single log entry captured by the `Logger`.
+ */
+export interface LogEntry {
+	/** Optional metadata associated with the log. */
+	data?: Record<string, unknown>;
+	/** The severity level of the log. */
+	level: LogLevel;
+	/** The log message. */
+	message: string;
+	/** Unix timestamp when the log entry was created. */
+	timestamp: number;
+}
+
+/**
  * Type definition for Sentry Integration.
  * Extracted from existing integration functions to avoid using 'any' or @sentry/core directly.
  */
@@ -39,50 +65,24 @@ type SentryIntegration =
  * @private
  */
 interface SentrySDK {
-	/** Initializes the Sentry SDK */
-	init: (options: BrowserOptions) => void;
-	/** Captures an exception and sends it to Sentry */
-	captureException: (error: unknown, options?: Record<string, unknown>) => void;
-	/** Captures a message and sends it to Sentry */
-	captureMessage: (message: string, options?: Record<string, unknown>) => void;
-	/** Instrumentation for React Router v7 */
-	wrapCreateBrowserRouterV7: (
-		cb: typeof createBrowserRouter
-	) => (routes: RouteObject[]) => ReturnType<typeof createBrowserRouter>;
-	/** Performance tracing integration for React Router v7 */
-	reactRouterV7BrowserTracingIntegration: (
-		options: Parameters<typeof SentryRouterTracingIntegration>[0]
-	) => SentryIntegration;
 	/** Automatic breadcrumb collection */
 	breadcrumbsIntegration: (
 		options: Parameters<typeof SentryBreadcrumbsIntegration>[0]
 	) => SentryIntegration;
-}
-
-/**
- * Log levels for the application.
- */
-export enum LogLevel {
-	/** Informational messages for tracking execution flow. */
-	INFO = "INFO",
-	/** Warning messages for non-critical issues that should be investigated. */
-	WARN = "WARN",
-	/** Error messages for critical failures. */
-	ERROR = "ERROR",
-}
-
-/**
- * Represents a single log entry captured by the `Logger`.
- */
-export interface LogEntry {
-	/** The severity level of the log. */
-	level: LogLevel;
-	/** The log message. */
-	message: string;
-	/** Optional metadata associated with the log. */
-	data?: Record<string, unknown>;
-	/** Unix timestamp when the log entry was created. */
-	timestamp: number;
+	/** Captures an exception and sends it to Sentry */
+	captureException: (error: unknown, options?: Record<string, unknown>) => void;
+	/** Captures a message and sends it to Sentry */
+	captureMessage: (message: string, options?: Record<string, unknown>) => void;
+	/** Initializes the Sentry SDK */
+	init: (options: BrowserOptions) => void;
+	/** Performance tracing integration for React Router v7 */
+	reactRouterV7BrowserTracingIntegration: (
+		options: Parameters<typeof SentryRouterTracingIntegration>[0]
+	) => SentryIntegration;
+	/** Instrumentation for React Router v7 */
+	wrapCreateBrowserRouterV7: (
+		cb: typeof createBrowserRouter
+	) => (routes: RouteObject[]) => ReturnType<typeof createBrowserRouter>;
 }
 
 const MAX_LOGS = 100;
@@ -94,7 +94,7 @@ const MAX_LOGS = 100;
  *
  * @private
  */
-let sentryInstance: SentrySDK | null = null;
+let sentryInstance: null | SentrySDK = null;
 
 /**
  * A centralized logger for the application.
@@ -104,6 +104,72 @@ let sentryInstance: SentrySDK | null = null;
  */
 export class Logger {
 	private static logs: LogEntry[] = [];
+
+	/**
+	 * Clears the in-memory log buffer.
+	 *
+	 * @returns {void}
+	 *
+	 * @example
+	 * ```ts
+	 * Logger.clearLogs();
+	 * // returns void
+	 * ```
+	 */
+	public static clearLogs() {
+		this.logs = [];
+	}
+
+	/**
+	 * Logs an error message and sends it to Sentry.
+	 *
+	 * Automatically handles both `Error` objects and generic error messages.
+	 *
+	 * @param {string} message - The error description. **Must not be empty.**
+	 * @param {unknown} [error] - The error object or exception caught.
+	 * @param {Record<string, unknown>} [data] - Additional context for the error report.
+	 *
+	 * @returns {void}
+	 *
+	 * @example
+	 * ```ts
+	 * Logger.error("Failed to fetch user", error, { userId: 123 });
+	 * // returns void
+	 * ```
+	 */
+	public static error(message: string, error?: unknown, data?: Record<string, unknown>) {
+		this.log(LogLevel.ERROR, message, {
+			...(typeof error === "object" && error !== null ? error : { error }),
+			...data,
+		} as Record<string, unknown>);
+		console.error(`[ERROR] ${message}`, error);
+
+		if (sentryInstance) {
+			if (error instanceof Error) {
+				sentryInstance.captureException(error, { extra: { message, ...data } });
+			} else {
+				sentryInstance.captureMessage(message, {
+					extra: { error, ...data },
+					level: "error",
+				});
+			}
+		}
+	}
+
+	/**
+	 * Retrieves the current circular buffer of log entries.
+	 *
+	 * @returns {LogEntry[]} A copy of the current log entries in memory.
+	 *
+	 * @example
+	 * ```ts
+	 * const history = Logger.getLogs();
+	 * // returns LogEntry[]
+	 * ```
+	 */
+	public static getLogs(): LogEntry[] {
+		return [...this.logs];
+	}
 
 	/**
 	 * Logs an informational message to the console and memory.
@@ -143,74 +209,8 @@ export class Logger {
 		console.warn(`[WARN] ${message}`, data);
 
 		if (sentryInstance) {
-			sentryInstance.captureMessage(message, { level: "warning", extra: data });
+			sentryInstance.captureMessage(message, { extra: data, level: "warning" });
 		}
-	}
-
-	/**
-	 * Logs an error message and sends it to Sentry.
-	 *
-	 * Automatically handles both `Error` objects and generic error messages.
-	 *
-	 * @param {string} message - The error description. **Must not be empty.**
-	 * @param {unknown} [error] - The error object or exception caught.
-	 * @param {Record<string, unknown>} [data] - Additional context for the error report.
-	 *
-	 * @returns {void}
-	 *
-	 * @example
-	 * ```ts
-	 * Logger.error("Failed to fetch user", error, { userId: 123 });
-	 * // returns void
-	 * ```
-	 */
-	public static error(message: string, error?: unknown, data?: Record<string, unknown>) {
-		this.log(LogLevel.ERROR, message, {
-			...(typeof error === "object" && error !== null ? error : { error }),
-			...data,
-		} as Record<string, unknown>);
-		console.error(`[ERROR] ${message}`, error);
-
-		if (sentryInstance) {
-			if (error instanceof Error) {
-				sentryInstance.captureException(error, { extra: { message, ...data } });
-			} else {
-				sentryInstance.captureMessage(message, {
-					level: "error",
-					extra: { error, ...data },
-				});
-			}
-		}
-	}
-
-	/**
-	 * Retrieves the current circular buffer of log entries.
-	 *
-	 * @returns {LogEntry[]} A copy of the current log entries in memory.
-	 *
-	 * @example
-	 * ```ts
-	 * const history = Logger.getLogs();
-	 * // returns LogEntry[]
-	 * ```
-	 */
-	public static getLogs(): LogEntry[] {
-		return [...this.logs];
-	}
-
-	/**
-	 * Clears the in-memory log buffer.
-	 *
-	 * @returns {void}
-	 *
-	 * @example
-	 * ```ts
-	 * Logger.clearLogs();
-	 * // returns void
-	 * ```
-	 */
-	public static clearLogs() {
-		this.logs = [];
 	}
 
 	/**
@@ -229,9 +229,9 @@ export class Logger {
 	 */
 	private static log(level: LogLevel, message: string, data?: Record<string, unknown>) {
 		const entry: LogEntry = {
+			data,
 			level,
 			message,
-			data,
 			timestamp: Date.now(),
 		};
 
@@ -282,24 +282,9 @@ export const initializeSentry = async () => {
 		sentryInstance = Sentry;
 
 		Sentry.init({
-			dsn,
-			integrations: [
-				Sentry.reactRouterV7BrowserTracingIntegration({
-					useEffect,
-					useLocation,
-					useNavigationType,
-					createRoutesFromChildren,
-					matchRoutes,
-				}),
-				Sentry.breadcrumbsIntegration({
-					dom: false, // Good performance practice: disables expensive DOM click serialization
-				}),
-			],
-			environment: (import.meta.env.VITE_SENTRY_ENV as string) || "production",
-			tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.25,
-			maxBreadcrumbs: 50,
-			release: __APP_VERSION__,
 			allowUrls: [/localhost/, /127\.0\.0\.1/, /nms-optimizer\.app/i],
+			dsn,
+			environment: (import.meta.env.VITE_SENTRY_ENV as string) || "production",
 			ignoreErrors: [
 				/runtime\.sendMessage\(\).*Tab not found/i,
 				/Extension/i,
@@ -310,6 +295,21 @@ export const initializeSentry = async () => {
 				/Importing a module script failed/i,
 				/Non-Error promise rejection captured/i,
 			],
+			integrations: [
+				Sentry.reactRouterV7BrowserTracingIntegration({
+					createRoutesFromChildren,
+					matchRoutes,
+					useEffect,
+					useLocation,
+					useNavigationType,
+				}),
+				Sentry.breadcrumbsIntegration({
+					dom: false, // Good performance practice: disables expensive DOM click serialization
+				}),
+			],
+			maxBreadcrumbs: 50,
+			release: __APP_VERSION__,
+			tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.25,
 		});
 	} catch (e) {
 		console.error("Failed to initialize Sentry:", e);
@@ -374,6 +374,6 @@ export const createAppRouter = (routes: RouteObject[]) => {
  *
  * @private
  */
-export const __setSentryInstance = (instance: SentrySDK | null) => {
+export const __setSentryInstance = (instance: null | SentrySDK) => {
 	sentryInstance = instance;
 };

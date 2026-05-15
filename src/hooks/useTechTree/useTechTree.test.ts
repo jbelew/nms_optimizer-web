@@ -23,12 +23,12 @@ describe("useTechTree utilities", () => {
 		const mockTechTree: TechTree = {
 			starship: [
 				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
 					module_count: 5,
+					modules: [],
 				} as TechTreeItem,
 			],
 		};
@@ -86,24 +86,24 @@ describe("useTechTree utilities", () => {
 
 		it("should filter out invalid recommended builds", async () => {
 			const mockData = {
-				starship: [
-					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
-						color: "red",
-						module_count: 5,
-					},
-				],
 				recommended_builds: [
 					{
-						title: "Valid Build",
 						layout: [[{ tech: "defense" }]],
+						title: "Valid Build",
 					},
 					{
-						title: "Invalid Build",
 						layout: [], // Invalid: empty layout
+						title: "Invalid Build",
+					},
+				],
+				starship: [
+					{
+						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
+						module_count: 5,
+						modules: [],
 					},
 				],
 			};
@@ -137,12 +137,12 @@ describe("useTechTree utilities", () => {
 		const mockTechTree: TechTree = {
 			starship: [
 				{
-					label: "Defense",
-					key: "defense",
-					modules: [],
-					image: null,
 					color: "red",
+					image: null,
+					key: "defense",
+					label: "Defense",
 					module_count: 5,
+					modules: [],
 				},
 			],
 		};
@@ -187,12 +187,12 @@ describe("useTechTree utilities", () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
 						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
 						module_count: 5,
+						modules: [],
 					},
 				],
 			};
@@ -261,24 +261,24 @@ describe("useTechTree utilities", () => {
 	describe("Data structure validation", () => {
 		it("should handle tech tree with multiple categories", async () => {
 			const mockData: TechTree = {
-				starship: [
-					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
-						color: "red",
-						module_count: 0,
-					},
-				],
 				exosuit: [
 					{
-						label: "Health",
-						key: "health",
-						modules: [],
-						image: null,
 						color: "green",
+						image: null,
+						key: "health",
+						label: "Health",
 						module_count: 0,
+						modules: [],
+					},
+				],
+				starship: [
+					{
+						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
+						module_count: 0,
+						modules: [],
 					},
 				],
 			};
@@ -312,12 +312,12 @@ describe("useTechTree utilities", () => {
 			const mockData: TechTree = {
 				starship: [
 					{
-						label: "Defense",
-						key: "defense",
-						modules: [mockModule],
-						image: null,
 						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
 						module_count: 1,
+						modules: [mockModule],
 					},
 				],
 			};
@@ -380,12 +380,12 @@ describe("useTechTree utilities", () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
 						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
 						module_count: 5,
+						modules: [],
 					},
 				],
 			};
@@ -405,12 +405,12 @@ describe("useTechTree utilities", () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
 						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
 						module_count: 5,
+						modules: [],
 					},
 				],
 			};
@@ -429,12 +429,12 @@ describe("useTechTree utilities", () => {
 			const mockTechTree: TechTree = {
 				starship: [
 					{
-						label: "Defense",
-						key: "defense",
-						modules: [],
-						image: null,
 						color: "red",
+						image: null,
+						key: "defense",
+						label: "Defense",
 						module_count: 5,
+						modules: [],
 					},
 				],
 			};

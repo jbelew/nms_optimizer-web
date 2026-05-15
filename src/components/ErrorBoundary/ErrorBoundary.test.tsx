@@ -173,8 +173,8 @@ describe("ErrorBoundary", () => {
 			const result = ErrorBoundary.getDerivedStateFromError(testError);
 
 			expect(result).toEqual({
-				hasError: true,
 				error: testError,
+				hasError: true,
 			});
 		});
 	});

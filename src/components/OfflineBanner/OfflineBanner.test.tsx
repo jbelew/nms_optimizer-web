@@ -6,12 +6,12 @@ import OfflineBanner from "./OfflineBanner";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
+	Trans: ({ defaults, i18nKey }: { defaults?: string; i18nKey: string }) => (
+		<span>{defaults || i18nKey}</span>
+	),
 	useTranslation: () => ({
 		t: (key: string) => key,
 	}),
-	Trans: ({ i18nKey, defaults }: { i18nKey: string; defaults?: string }) => (
-		<span>{defaults || i18nKey}</span>
-	),
 }));
 
 describe("OfflineBanner", () => {
@@ -19,22 +19,22 @@ describe("OfflineBanner", () => {
 		vi.clearAllMocks();
 		// Reset navigator.onLine to online by default
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 	});
 
 	afterEach(() => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 	});
 
 	test("should not render banner when online", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -44,8 +44,8 @@ describe("OfflineBanner", () => {
 
 	test("should render banner when offline", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		render(<OfflineBanner />);
@@ -60,8 +60,8 @@ describe("OfflineBanner", () => {
 
 	test("should show banner when offline event is dispatched", async () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -80,8 +80,8 @@ describe("OfflineBanner", () => {
 
 	test("should hide banner when online event is dispatched", async () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -91,8 +91,8 @@ describe("OfflineBanner", () => {
 
 		// Dispatch online event
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 		fireEvent.online(window);
 
@@ -104,8 +104,8 @@ describe("OfflineBanner", () => {
 
 	test("should render offline icon SVG", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -120,8 +120,8 @@ describe("OfflineBanner", () => {
 		const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { unmount } = render(<OfflineBanner />);
@@ -138,8 +138,8 @@ describe("OfflineBanner", () => {
 		const addEventListenerSpy = vi.spyOn(window, "addEventListener");
 
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 
 		render(<OfflineBanner />);
@@ -152,8 +152,8 @@ describe("OfflineBanner", () => {
 
 	test("should render the offline title with correct styling", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -165,8 +165,8 @@ describe("OfflineBanner", () => {
 
 	test("should render the offline logo div", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -178,8 +178,8 @@ describe("OfflineBanner", () => {
 
 	test("should wrap content in offline container with full width", () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
@@ -191,16 +191,16 @@ describe("OfflineBanner", () => {
 
 	test("should handle multiple offline/online toggles", async () => {
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 
 		const { container } = render(<OfflineBanner />);
 
 		// Go offline
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 		fireEvent.offline(window);
 
@@ -210,8 +210,8 @@ describe("OfflineBanner", () => {
 
 		// Go online
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: true,
+			writable: true,
 		});
 		fireEvent.online(window);
 
@@ -221,8 +221,8 @@ describe("OfflineBanner", () => {
 
 		// Go offline again
 		Object.defineProperty(window.navigator, "onLine", {
-			writable: true,
 			value: false,
+			writable: true,
 		});
 		fireEvent.offline(window);
 

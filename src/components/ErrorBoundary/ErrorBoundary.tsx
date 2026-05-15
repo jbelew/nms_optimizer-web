@@ -34,12 +34,12 @@ interface Props {
  * Internal state for the `ErrorBoundary` class component.
  */
 interface State {
-	/** Whether an error has been detected in the current lifecycle. */
-	hasError: boolean;
 	/** The exception that was caught. */
 	error?: Error;
 	/** Metadata about the component stack where the error originated. */
 	errorInfo?: ErrorInfo;
+	/** Whether an error has been detected in the current lifecycle. */
+	hasError: boolean;
 }
 
 /**
@@ -98,7 +98,7 @@ class ErrorBoundary extends Component<Props, State> {
 	static getDerivedStateFromError(error: Error) {
 		console.log("ErrorBoundary: Caught error, updating state.");
 
-		return { hasError: true, error };
+		return { error, hasError: true };
 	}
 
 	/**
@@ -128,8 +128,8 @@ class ErrorBoundary extends Component<Props, State> {
 	 * ```
 	 */
 	render() {
-		const { hasError, error, errorInfo } = this.state;
-		const { fallback, children } = this.props;
+		const { error, errorInfo, hasError } = this.state;
+		const { children, fallback } = this.props;
 
 		if (hasError) {
 			if (fallback) {

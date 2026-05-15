@@ -13,34 +13,29 @@ import { useModuleSelectionStore } from "./moduleSelectionStore";
  * @category State
  */
 export interface TechState {
-	/** Mapping of technology keys to their theoretical maximum bonus. */
-	max_bonus: { [key: string]: number };
-	/** Mapping of technology keys to the actual bonus achieved in the last solve. */
-	solved_bonus: { [key: string]: number };
-	/** Mapping of technology keys to the solver method string used (e.g., `'SA'`). */
-	solve_method: { [key: string]: string };
-	/** Global registry of colors assigned to each technology category. */
-	techColors: { [key: string]: string };
-	/** User-selected module IDs for each technology, used as input for the solver. */
-	checkedModules: { [key: string]: string[] };
-	/** List of available technology variants/groups (e.g., `'Standard'` vs `'Photonix'` for Pulse). */
-	techGroups: { [key: string]: TechTreeItem[] };
 	/** The currently active group identifier for each technology. */
 	activeGroups: { [key: string]: string };
-
+	/** User-selected module IDs for each technology, used as input for the solver. */
+	checkedModules: { [key: string]: string[] };
+	/** Resets all technologies to their default module selections as defined in the tech tree. */
+	clearAllCheckedModules: () => void;
+	/**
+	 * Deselects all modules for a specific technology.
+	 *
+	 * @param {string} tech - The technology key.
+	 */
+	clearCheckedModules: (tech: string) => void;
+	/** Purges all previous optimization results (max bonus and solved bonus). */
+	clearResult: () => void;
+	/** Purges all technology metadata, active groups, and module selections. */
+	clearTechGroups: () => void;
 	/**
 	 * Resets the maximum bonus value for a technology to zero.
 	 *
 	 * @param {string} tech - The technology key to clear.
 	 */
 	clearTechMaxBonus: (tech: string) => void;
-	/**
-	 * Sets the maximum bonus value for a technology.
-	 *
-	 * @param {string} tech - The technology key.
-	 * @param {number} bonus - The new maximum bonus value.
-	 */
-	setTechMaxBonus: (tech: string, bonus: number) => void;
+
 	/**
 	 * Resets the solved bonus value for a technology to zero.
 	 *
@@ -48,25 +43,13 @@ export interface TechState {
 	 */
 	clearTechSolvedBonus: (tech: string) => void;
 	/**
-	 * Sets the solved bonus value for a technology.
+	 * Returns the color assigned to a specific technology.
 	 *
 	 * @param {string} tech - The technology key.
-	 * @param {number} bonus - The new solved bonus value.
-	 */
-	setTechSolvedBonus: (tech: string, bonus: number) => void;
-	/**
-	 * Sets the identifier for the solver method used for a technology.
 	 *
-	 * @param {string} tech - The technology key.
-	 * @param {string} method - The name of the solver method.
+	 * @returns {string|undefined} The assigned color, or `undefined` if not found.
 	 */
-	setTechSolveMethod: (tech: string, method: string) => void;
-	/**
-	 * Updates the global technology color registry.
-	 *
-	 * @param {Record<string, string>} colors - Mapping of tech keys to hex or CSS color names.
-	 */
-	setTechColors: (colors: { [key: string]: string }) => void;
+	getTechColor: (tech: string) => string | undefined;
 	/**
 	 * Initializes the entire technology store from API metadata.
 	 *
@@ -84,41 +67,8 @@ export interface TechState {
 		techGroups: { [key: string]: TechTreeItem[] },
 		activeGroups: { [key: string]: string }
 	) => void;
-	/**
-	 * Returns the color assigned to a specific technology.
-	 *
-	 * @param {string} tech - The technology key.
-	 *
-	 * @returns {string|undefined} The assigned color, or `undefined` if not found.
-	 */
-	getTechColor: (tech: string) => string | undefined;
-	/**
-	 * Functional update for a technology's checked modules.
-	 *
-	 * @param {string} tech - The technology key.
-	 * @param {function(string[]): string[]} updater - Function that receives current modules and returns updated ones.
-	 */
-	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
-	/**
-	 * Deselects all modules for a specific technology.
-	 *
-	 * @param {string} tech - The technology key.
-	 */
-	clearCheckedModules: (tech: string) => void;
-	/** Resets all technologies to their default module selections as defined in the tech tree. */
-	clearAllCheckedModules: () => void;
-	/** Purges all technology metadata, active groups, and module selections. */
-	clearTechGroups: () => void;
-	/** Purges all previous optimization results (max bonus and solved bonus). */
-	clearResult: () => void;
-	/**
-	 * Updates the available technology groups.
-	 *
-	 * Re-initializes checked modules based on the new groups and existing module selections.
-	 *
-	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
-	 */
-	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
+	/** Mapping of technology keys to their theoretical maximum bonus. */
+	max_bonus: { [key: string]: number };
 	/**
 	 * Sets the active group variant for a technology.
 	 *
@@ -132,6 +82,56 @@ export interface TechState {
 	 * @param {Record<string, string>} groups - Mapping of tech keys to their new active group identifiers.
 	 */
 	setActiveGroups: (groups: { [key: string]: string }) => void;
+	/**
+	 * Functional update for a technology's checked modules.
+	 *
+	 * @param {string} tech - The technology key.
+	 * @param {function(string[]): string[]} updater - Function that receives current modules and returns updated ones.
+	 */
+	setCheckedModules: (tech: string, updater: (prev?: string[]) => string[]) => void;
+	/**
+	 * Updates the global technology color registry.
+	 *
+	 * @param {Record<string, string>} colors - Mapping of tech keys to hex or CSS color names.
+	 */
+	setTechColors: (colors: { [key: string]: string }) => void;
+	/**
+	 * Updates the available technology groups.
+	 *
+	 * Re-initializes checked modules based on the new groups and existing module selections.
+	 *
+	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
+	 */
+	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
+	/**
+	 * Sets the maximum bonus value for a technology.
+	 *
+	 * @param {string} tech - The technology key.
+	 * @param {number} bonus - The new maximum bonus value.
+	 */
+	setTechMaxBonus: (tech: string, bonus: number) => void;
+	/**
+	 * Sets the solved bonus value for a technology.
+	 *
+	 * @param {string} tech - The technology key.
+	 * @param {number} bonus - The new solved bonus value.
+	 */
+	setTechSolvedBonus: (tech: string, bonus: number) => void;
+	/**
+	 * Sets the identifier for the solver method used for a technology.
+	 *
+	 * @param {string} tech - The technology key.
+	 * @param {string} method - The name of the solver method.
+	 */
+	setTechSolveMethod: (tech: string, method: string) => void;
+	/** Mapping of technology keys to the solver method string used (e.g., `'SA'`). */
+	solve_method: { [key: string]: string };
+	/** Mapping of technology keys to the actual bonus achieved in the last solve. */
+	solved_bonus: { [key: string]: number };
+	/** Global registry of colors assigned to each technology category. */
+	techColors: { [key: string]: string };
+	/** List of available technology variants/groups (e.g., `'Standard'` vs `'Photonix'` for Pulse). */
+	techGroups: { [key: string]: TechTreeItem[] };
 }
 
 /**
@@ -153,35 +153,42 @@ export interface TechState {
  * // returns { max_bonus: { pulse: 124.5 }, ... }
  */
 export const useTechStore = create<TechState>((set, get) => ({
-	// Note the 'get' parameter
-	max_bonus: {},
-	solved_bonus: {},
-	solve_method: {},
-	techColors: {},
-	checkedModules: {},
-	techGroups: {},
 	activeGroups: {},
+	checkedModules: {},
+	clearAllCheckedModules: () => {
+		set((state) => {
+			// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
+			const resetCheckedModules = Object.keys(state.techGroups).reduce(
+				(acc, tech) => {
+					const group = state.techGroups[tech]?.[0];
+
+					if (group) {
+						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+					}
+
+					return acc;
+				},
+				{} as { [key: string]: string[] }
+			);
+
+			return { checkedModules: resetCheckedModules };
+		});
+	},
+	clearCheckedModules: (tech) =>
+		set((state) => ({
+			checkedModules: { ...state.checkedModules, [tech]: [] },
+		})),
+	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
+	clearTechGroups: () => set({ activeGroups: {}, checkedModules: {}, techGroups: {} }),
 	clearTechMaxBonus: (tech) =>
 		set((state) => ({
 			max_bonus: { ...state.max_bonus, [tech]: 0 },
-		})),
-	setTechMaxBonus: (tech, max_bonus) =>
-		set((state) => ({
-			max_bonus: { ...state.max_bonus, [tech]: max_bonus },
 		})),
 	clearTechSolvedBonus: (tech) =>
 		set((state) => ({
 			solved_bonus: { ...state.solved_bonus, [tech]: 0 },
 		})),
-	setTechSolvedBonus: (tech, bonus) =>
-		set((state) => ({
-			solved_bonus: { ...state.solved_bonus, [tech]: bonus },
-		})),
-	setTechSolveMethod: (tech, solve_method) =>
-		set((state) => ({
-			solve_method: { ...state.solve_method, [tech]: solve_method },
-		})),
-	setTechColors: (colors) => set({ techColors: colors }),
+	getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
 	initializeTechTree: (
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
@@ -208,13 +215,22 @@ export const useTechStore = create<TechState>((set, get) => ({
 		);
 
 		set({
+			activeGroups,
+			checkedModules: initialCheckedModules,
 			techColors: colors,
 			techGroups,
-			checkedModules: initialCheckedModules,
-			activeGroups,
 		});
 	},
-	getTechColor: (tech) => get().techColors[tech], // Access state using 'get'
+	// Note the 'get' parameter
+	max_bonus: {},
+	setActiveGroup: (tech, groupType) =>
+		set((state) => ({
+			activeGroups: { ...state.activeGroups, [tech]: groupType },
+		})),
+	setActiveGroups: (groups) =>
+		set((state) => ({
+			activeGroups: { ...state.activeGroups, ...groups },
+		})),
 	setCheckedModules: (tech, updater) =>
 		set((state) => ({
 			checkedModules: {
@@ -222,31 +238,7 @@ export const useTechStore = create<TechState>((set, get) => ({
 				[tech]: updater(state.checkedModules[tech]),
 			},
 		})),
-	clearCheckedModules: (tech) =>
-		set((state) => ({
-			checkedModules: { ...state.checkedModules, [tech]: [] },
-		})),
-	clearAllCheckedModules: () => {
-		set((state) => {
-			// Reset all checked modules to their API defaults (modules marked as checked in techGroups)
-			const resetCheckedModules = Object.keys(state.techGroups).reduce(
-				(acc, tech) => {
-					const group = state.techGroups[tech]?.[0];
-
-					if (group) {
-						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
-					}
-
-					return acc;
-				},
-				{} as { [key: string]: string[] }
-			);
-
-			return { checkedModules: resetCheckedModules };
-		});
-	},
-	clearTechGroups: () => set({ techGroups: {}, checkedModules: {}, activeGroups: {} }),
-	clearResult: () => set({ max_bonus: {}, solved_bonus: {} }), // Implement clearResult
+	setTechColors: (colors) => set({ techColors: colors }),
 	setTechGroups: (techGroups) => {
 		const moduleSelectionStore = useModuleSelectionStore.getState();
 		const initialCheckedModules = Object.keys(techGroups).reduce(
@@ -269,14 +261,22 @@ export const useTechStore = create<TechState>((set, get) => ({
 			{} as { [key: string]: string[] }
 		);
 
-		set({ techGroups, checkedModules: initialCheckedModules });
+		set({ checkedModules: initialCheckedModules, techGroups });
 	},
-	setActiveGroup: (tech, groupType) =>
+	setTechMaxBonus: (tech, max_bonus) =>
 		set((state) => ({
-			activeGroups: { ...state.activeGroups, [tech]: groupType },
+			max_bonus: { ...state.max_bonus, [tech]: max_bonus },
 		})),
-	setActiveGroups: (groups) =>
+	setTechSolvedBonus: (tech, bonus) =>
 		set((state) => ({
-			activeGroups: { ...state.activeGroups, ...groups },
+			solved_bonus: { ...state.solved_bonus, [tech]: bonus },
 		})),
+	setTechSolveMethod: (tech, solve_method) =>
+		set((state) => ({
+			solve_method: { ...state.solve_method, [tech]: solve_method },
+		})),
+	solve_method: {},
+	solved_bonus: {},
+	techColors: {},
+	techGroups: {},
 }));

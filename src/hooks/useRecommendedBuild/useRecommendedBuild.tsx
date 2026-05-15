@@ -95,13 +95,13 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 			}
 
 			const newGrid = createGrid(10, 6);
-			const layout = build.layout as ({
-				tech: string;
-				module: string;
-				supercharged?: boolean;
+			const layout = build.layout as (null | {
 				active?: boolean;
 				adjacency_bonus?: number;
-			} | null)[][];
+				module: string;
+				supercharged?: boolean;
+				tech: string;
+			})[][];
 
 			for (let r = 0; r < layout.length; r++) {
 				for (let c = 0; c < layout[r].length; c++) {
@@ -124,13 +124,13 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 							if (module) {
 								cell = {
 									...cell,
-									label: module.label ?? "",
-									image: module.image ?? null,
-									bonus: module.bonus ?? 0,
-									value: module.value ?? 0,
 									adjacency: module.adjacency ?? "none",
+									bonus: module.bonus ?? 0,
+									image: module.image ?? null,
+									label: module.label ?? "",
 									sc_eligible: module.sc_eligible ?? false,
 									type: module.type ?? "", // Add the missing 'type' property
+									value: module.value ?? 0,
 								};
 							} else {
 								// If module not found, reset the cell to empty state

@@ -61,10 +61,10 @@ export default function BuyMeACoffee() {
 
 		// Send the Google Analytics event
 		sendEvent({
-			category: "ui",
 			action: "buy_me_a_coffee_click",
-			value: 1,
+			category: "ui",
 			nonInteraction: false,
+			value: 1,
 		});
 
 		// Delay to ensure GA event is captured
@@ -80,7 +80,7 @@ export default function BuyMeACoffee() {
 
 	return (
 		<div>
-			<Button size={isLargeScreen ? "1" : "1"} variant="solid" asChild>
+			<Button asChild size={isLargeScreen ? "1" : "1"} variant="solid">
 				<a href="https://www.buymeacoffee.com/jbelew" onClick={handleButtonClick}>
 					☕ Buy me a Coffee!
 				</a>

@@ -43,17 +43,17 @@ describe("MarkdownContentRenderer", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: mockMarkdownContent,
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: mockMarkdownContent,
 		});
 	});
 
 	test("should render loading skeleton when markdown is loading", () => {
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: "",
-			isLoading: true,
 			error: null,
+			isLoading: true,
+			markdown: "",
 		});
 
 		render(<MarkdownContentRenderer markdownFileName="test.md" />);
@@ -63,9 +63,9 @@ describe("MarkdownContentRenderer", () => {
 	test("should render error message when markdown fails to load", () => {
 		const errorMessage = "Failed to fetch markdown";
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: "",
-			isLoading: false,
 			error: errorMessage,
+			isLoading: false,
+			markdown: "",
 		});
 
 		render(<MarkdownContentRenderer markdownFileName="test.md" />);
@@ -87,9 +87,9 @@ describe("MarkdownContentRenderer", () => {
 
 	test("should render skeleton when remarkGfm is not yet loaded", async () => {
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: mockMarkdownContent,
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: mockMarkdownContent,
 		});
 
 		// Mock remark-gfm not being loaded immediately
@@ -108,9 +108,9 @@ describe("MarkdownContentRenderer", () => {
 	test("should accept markdownFileName prop", () => {
 		const fileName = "about.md";
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: "# About",
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: "# About",
 		});
 
 		render(<MarkdownContentRenderer markdownFileName={fileName} />);
@@ -121,9 +121,9 @@ describe("MarkdownContentRenderer", () => {
 	test("should accept optional targetSectionId prop", () => {
 		const targetId = "section-1";
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: mockMarkdownContent,
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: mockMarkdownContent,
 		});
 
 		render(<MarkdownContentRenderer markdownFileName="test.md" targetSectionId={targetId} />);
@@ -142,9 +142,9 @@ describe("MarkdownContentRenderer", () => {
 
 	test("should render nothing in article when both isLoading and error are not present", async () => {
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: "",
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: "",
 		});
 
 		const { container } = render(<MarkdownContentRenderer markdownFileName="test.md" />);
@@ -157,9 +157,9 @@ describe("MarkdownContentRenderer", () => {
 		const { rerender } = render(<MarkdownContentRenderer markdownFileName="test1.md" />);
 
 		mockUseMarkdownContent.mockReturnValue({
-			markdown: "# New Content",
-			isLoading: false,
 			error: null,
+			isLoading: false,
+			markdown: "# New Content",
 		});
 
 		rerender(<MarkdownContentRenderer markdownFileName="test2.md" />);

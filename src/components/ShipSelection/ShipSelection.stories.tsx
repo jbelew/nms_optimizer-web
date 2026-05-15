@@ -25,16 +25,6 @@ i18n.addResourceBundle(
 
 const meta = {
 	component: ShipSelection,
-	title: "Components/ShipSelection",
-	parameters: {
-		docs: {
-			description: {
-				component:
-					"Dropdown component for selecting ship types (Standard, Hauler, Corvette, etc). Manages platform selection and grid reset on change.",
-			},
-		},
-		layout: "fullscreen",
-	},
 	decorators: [
 		(Story) => {
 			// Ensure we have a clean state for the store
@@ -72,14 +62,24 @@ const meta = {
 				// Fallback data to ensure tests pass even without network
 				return {
 					shipTypes: {
-						standard: { type: "Starship" },
 						corvette: { type: "Starship" },
 						exosuit: { type: "Exosuit" },
+						standard: { type: "Starship" },
 					},
 				};
 			}
 		},
 	],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					"Dropdown component for selecting ship types (Standard, Hauler, Corvette, etc). Manages platform selection and grid reset on change.",
+			},
+		},
+		layout: "fullscreen",
+	},
+	title: "Components/ShipSelection",
 } satisfies Meta<typeof ShipSelection>;
 
 export default meta;

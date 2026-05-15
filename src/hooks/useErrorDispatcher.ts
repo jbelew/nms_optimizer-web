@@ -13,29 +13,29 @@ import { useSessionStore } from "@/store/app/sessionStore";
  * @private
  */
 const ERROR_THRESHOLDS = {
-	supercharged_limit: {
-		threshold: 3,
-		messageKey: "restrictions.superchargedLimit",
-		type: "warning" as const,
-	},
-	supercharged_fixed: {
-		threshold: 3,
-		messageKey: "restrictions.superchargedFixed",
-		type: "warning" as const,
-	},
 	grid_fixed: {
-		threshold: 3,
 		messageKey: "restrictions.gridFixed",
+		threshold: 3,
 		type: "warning" as const,
 	},
 	module_locked: {
-		threshold: 3,
 		messageKey: "restrictions.moduleLocked",
+		threshold: 3,
 		type: "warning" as const,
 	},
 	row_limit: {
-		threshold: 3,
 		messageKey: "restrictions.rowLimit",
+		threshold: 3,
+		type: "warning" as const,
+	},
+	supercharged_fixed: {
+		messageKey: "restrictions.superchargedFixed",
+		threshold: 3,
+		type: "warning" as const,
+	},
+	supercharged_limit: {
+		messageKey: "restrictions.superchargedLimit",
+		threshold: 3,
 		type: "warning" as const,
 	},
 };
@@ -66,17 +66,17 @@ const ERROR_THRESHOLDS = {
  */
 export const useErrorDispatcher = () => {
 	const { t } = useTranslation();
-	const { supercharged_limit, supercharged_fixed, grid_fixed, module_locked, row_limit } =
+	const { grid_fixed, module_locked, row_limit, supercharged_fixed, supercharged_limit } =
 		useSessionStore();
 	const { addError } = useErrorStore();
 
 	// Track which thresholds have been triggered to avoid duplicate errors
 	const triggeredRef = useRef({
-		supercharged_limit: false,
-		supercharged_fixed: false,
 		grid_fixed: false,
 		module_locked: false,
 		row_limit: false,
+		supercharged_fixed: false,
+		supercharged_limit: false,
 	});
 
 	// Reset triggered flags when session resets (all counters back to 0)
@@ -89,11 +89,11 @@ export const useErrorDispatcher = () => {
 			row_limit === 0
 		) {
 			triggeredRef.current = {
-				supercharged_limit: false,
-				supercharged_fixed: false,
 				grid_fixed: false,
 				module_locked: false,
 				row_limit: false,
+				supercharged_fixed: false,
+				supercharged_limit: false,
 			};
 		}
 	}, [supercharged_limit, supercharged_fixed, grid_fixed, module_locked, row_limit]);

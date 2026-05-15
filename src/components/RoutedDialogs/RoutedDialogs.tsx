@@ -52,7 +52,7 @@ export const RoutedDialogs: FC = () => {
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button variant="soft" onClick={closeDialog}>
+			<Button onClick={closeDialog} variant="soft">
 				{t("common.closeDialog")}
 			</Button>
 		</div>
@@ -62,24 +62,19 @@ export const RoutedDialogs: FC = () => {
 		<Suspense fallback={null}>
 			{/* Dialog for "About" information */}
 			<AppDialog
-				isOpen={activeDialog === "about"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.about"
-				title={t("dialogs.titles.about")}
-				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="about" />
 					</Suspense>
 				}
+				footer={footer}
+				isOpen={activeDialog === "about"}
+				onClose={closeDialog}
+				title={t("dialogs.titles.about")}
+				titleKey="dialogs.titles.about"
 			/>
 			{/* Dialog for "Instructions" information */}
 			<AppDialog
-				isOpen={activeDialog === "instructions"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.instructions"
-				title={t("dialogs.titles.instructions")}
-				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer
@@ -88,45 +83,50 @@ export const RoutedDialogs: FC = () => {
 						/>
 					</Suspense>
 				}
+				footer={footer}
+				isOpen={activeDialog === "instructions"}
+				onClose={closeDialog}
+				title={t("dialogs.titles.instructions")}
+				titleKey="dialogs.titles.instructions"
 			/>
 			{/* Dialog for "Changelog" information */}
 			<AppDialog
-				isOpen={activeDialog === "changelog"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.changelog"
-				title={t("dialogs.titles.changelog")}
-				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="changelog" />
 					</Suspense>
 				}
+				footer={footer}
+				isOpen={activeDialog === "changelog"}
+				onClose={closeDialog}
+				title={t("dialogs.titles.changelog")}
+				titleKey="dialogs.titles.changelog"
 			/>
 			{/* Dialog for "Translation Request" information */}
 			<AppDialog
-				isOpen={activeDialog === "translation"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.translationRequest"
-				title={t("dialogs.titles.translationRequest")}
-				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="translation-request" />
 					</Suspense>
 				}
+				footer={footer}
+				isOpen={activeDialog === "translation"}
+				onClose={closeDialog}
+				title={t("dialogs.titles.translationRequest")}
+				titleKey="dialogs.titles.translationRequest"
 			/>
 			{/* Dialog for "Privacy Policy" information */}
 			<AppDialog
-				isOpen={activeDialog === "privacy"}
-				onClose={closeDialog}
-				titleKey="dialogs.titles.privacy"
-				title={t("dialogs.titles.privacy")}
-				footer={footer}
 				content={
 					<Suspense fallback={<LoremIpsumSkeleton />}>
 						<MarkdownContentRenderer markdownFileName="privacy" />
 					</Suspense>
 				}
+				footer={footer}
+				isOpen={activeDialog === "privacy"}
+				onClose={closeDialog}
+				title={t("dialogs.titles.privacy")}
+				titleKey="dialogs.titles.privacy"
 			/>
 		</Suspense>
 	);

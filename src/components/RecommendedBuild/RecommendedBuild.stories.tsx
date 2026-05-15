@@ -12,26 +12,25 @@ import RecommendedBuild from "./RecommendedBuild";
 const mockTechTree: TechTree = {
 	exosuit: [
 		{
+			color: "blue",
 			key: "exosuit_tech",
 			label: "Exosuit Tech",
-			color: "blue",
 			module_count: 1,
-			type: "technology",
 			modules: [
 				{
+					bonus: 10,
 					id: "ET",
 					label: "Exosuit Tech",
-					bonus: 10,
-					value: 100,
 					sc_eligible: true,
 					type: "tech",
+					value: 100,
 				},
 			],
+			type: "technology",
 		},
 	] as TechTreeItem[],
 	recommended_builds: [
 		{
-			title: "Exosuit Standard Build",
 			layout: [
 				[
 					{
@@ -40,25 +39,26 @@ const mockTechTree: TechTree = {
 					},
 				],
 			],
+			title: "Exosuit Standard Build",
 		},
 	],
 };
 
 const meta = {
 	component: RecommendedBuild,
-	title: "Components/RecommendedBuild",
 	parameters: {
+		backgrounds: {
+			default: "Default",
+			values: [{ name: "Default", value: "var(--color-background)" }],
+		},
 		docs: {
 			description: {
 				component: "Component for displaying and applying recommended technology builds.",
 			},
 		},
 		layout: "fullscreen",
-		backgrounds: {
-			default: "Default",
-			values: [{ name: "Default", value: "var(--color-background)" }],
-		},
 	},
+	title: "Components/RecommendedBuild",
 } satisfies Meta<typeof RecommendedBuild>;
 
 export default meta;
@@ -102,14 +102,14 @@ const withLocalProviders = (Story: React.FC) => (
 
 export const Desktop: Story = {
 	args: {
-		techTree: mockTechTree,
 		isLarge: true,
+		techTree: mockTechTree,
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "desktop",
 			isRotated: false,
+			value: "desktop",
 		},
 	},
 	parameters: {
@@ -145,28 +145,28 @@ export const Desktop: Story = {
 
 export const Tablet: Story = {
 	args: {
-		techTree: mockTechTree,
 		isLarge: false,
+		techTree: mockTechTree,
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "tablet",
 			isRotated: false,
+			value: "tablet",
 		},
 	},
 };
 
 export const Mobile: Story = {
 	args: {
-		techTree: mockTechTree,
 		isLarge: false,
+		techTree: mockTechTree,
 	},
 	decorators: [(Story) => withLocalProviders(Story)],
 	globals: {
 		viewport: {
-			value: "mobile",
 			isRotated: false,
+			value: "mobile",
 		},
 	},
 };

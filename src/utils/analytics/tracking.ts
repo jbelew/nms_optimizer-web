@@ -34,94 +34,12 @@ let ReactGAInstance: any = null;
 let queuedEvents: GA4Event[] = [];
 
 /**
- * Interface for Google Analytics 4 event tracking.
- *
- * @remarks
- * This interface is designed to support both custom events and GA4 recommended events.
- * It uses `snake_case` for all parameters to align with GA4 best practices.
- *
- * @category Utilities
- */
-export interface GA4Event {
-	/** Event category (e.g., 'ui', 'performance', 'error'). */
-	category: string;
-	/** Event action/name (e.g., 'optimize_tech', 'select_content', 'share'). */
-	action: string;
-	/** Optional event label (legacy/custom). */
-	label?: string;
-	/** Optional numeric value (legacy/custom). */
-	value?: number;
-	/** Whether the event is non-interactive. */
-	nonInteraction?: boolean;
-
-	// --- GA4 Recommended Parameters ---
-	/** The type of content selected (e.g., 'platform', 'language'). */
-	content_type?: string;
-	/** The identifier of the selected item. */
-	item_id?: string;
-	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
-	method?: string;
-	/** Screen name for screen_view events. */
-	firebase_screen?: string;
-	/** Screen class for screen_view events. */
-	screen_class?: string;
-	/** Virtual currency name for earn_virtual_currency events. */
-	virtual_currency_name?: string;
-
-	// --- Custom Dimensions (Mapped in GA4) ---
-	/** Platform identifier (e.g., 'starship', 'multitool'). Maps to customEvent:platform. */
-	platform?: string;
-	/** Tech identifier (e.g., 'pulse', 'hyperdrive'). Maps to customEvent:tech. */
-	tech?: string;
-	/** Whether the build is supercharged. Maps to customEvent:supercharged. */
-	supercharged?: boolean;
-	/** Application version. Maps to customEvent:app_version. */
-	app_version?: string;
-	/** Tracking source (client/server). Maps to customEvent:tracking_source. */
-	tracking_source?: string;
-
-	// --- Legacy/Other Parameters ---
-	/** Method used for legacy solve tracking. */
-	solve_method?: string;
-	/** Page identifier. */
-	page?: string;
-	/** Page title. */
-	title?: string;
-	/** SEO page title. */
-	page_title?: string;
-	/** Page location URL. */
-	page_location?: string;
-	/** Referrer URL. */
-	page_referrer?: string;
-	/** Metric name for web vitals. */
-	metric_name?: string;
-	/** Build ID. */
-	build?: string;
-	/** React component stack trace. */
-	componentStack?: string;
-	/** Error stack trace. */
-	stackTrace?: string;
-	/** Name of the build. */
-	buildName?: string;
-	/** Name of the build (snake_case). */
-	build_name?: string;
-	/** Filename involved. */
-	fileName?: string;
-	/** Filename involved (snake_case). */
-	file_name?: string;
-	/** Ship type category. */
-	shipType?: string;
-	/** Storage status. */
-	storageCleared?: string;
-}
-
-/**
  * Key-value pairs for event parameters.
  *
  * @category Utilities
  */
 export interface AnalyticsEventParams {
-	[key: string]: string | number | boolean | undefined;
+	[key: string]: boolean | number | string | undefined;
 }
 
 /**
@@ -140,10 +58,92 @@ export interface AnalyticsEventPayload {
 	userId?: string;
 }
 
+/**
+ * Interface for Google Analytics 4 event tracking.
+ *
+ * @remarks
+ * This interface is designed to support both custom events and GA4 recommended events.
+ * It uses `snake_case` for all parameters to align with GA4 best practices.
+ *
+ * @category Utilities
+ */
+export interface GA4Event {
+	/** Event action/name (e.g., 'optimize_tech', 'select_content', 'share'). */
+	action: string;
+	/** Application version. Maps to customEvent:app_version. */
+	app_version?: string;
+	/** Build ID. */
+	build?: string;
+	/** Name of the build (snake_case). */
+	build_name?: string;
+	/** Name of the build. */
+	buildName?: string;
+
+	/** Event category (e.g., 'ui', 'performance', 'error'). */
+	category: string;
+	/** React component stack trace. */
+	componentStack?: string;
+	// --- GA4 Recommended Parameters ---
+	/** The type of content selected (e.g., 'platform', 'language'). */
+	content_type?: string;
+	/** Filename involved (snake_case). */
+	file_name?: string;
+	/** Filename involved. */
+	fileName?: string;
+	/** Screen name for screen_view events. */
+	firebase_screen?: string;
+
+	/** The identifier of the selected item. */
+	item_id?: string;
+	/** Optional event label (legacy/custom). */
+	label?: string;
+	/** The method used for the action (e.g., 'nms_file', 'url', 'png'). */
+	method?: string;
+	/** Metric name for web vitals. */
+	metric_name?: string;
+	/** Whether the event is non-interactive. */
+	nonInteraction?: boolean;
+
+	/** Page identifier. */
+	page?: string;
+	/** Page location URL. */
+	page_location?: string;
+	/** Referrer URL. */
+	page_referrer?: string;
+	/** SEO page title. */
+	page_title?: string;
+	// --- Custom Dimensions (Mapped in GA4) ---
+	/** Platform identifier (e.g., 'starship', 'multitool'). Maps to customEvent:platform. */
+	platform?: string;
+	/** Screen class for screen_view events. */
+	screen_class?: string;
+	/** Ship type category. */
+	shipType?: string;
+	// --- Legacy/Other Parameters ---
+	/** Method used for legacy solve tracking. */
+	solve_method?: string;
+	/** Error stack trace. */
+	stackTrace?: string;
+	/** Storage status. */
+	storageCleared?: string;
+	/** Whether the build is supercharged. Maps to customEvent:supercharged. */
+	supercharged?: boolean;
+	/** Tech identifier (e.g., 'pulse', 'hyperdrive'). Maps to customEvent:tech. */
+	tech?: string;
+	/** Page title. */
+	title?: string;
+	/** Tracking source (client/server). Maps to customEvent:tracking_source. */
+	tracking_source?: string;
+	/** Optional numeric value (legacy/custom). */
+	value?: number;
+	/** Virtual currency name for earn_virtual_currency events. */
+	virtual_currency_name?: string;
+}
+
 /** Flag indicating if GA has been initialized. */
 let gaInitialized = false;
 /** Cached promise for ad blocker detection. */
-let adBlockerDetectionPromise: Promise<boolean> | null = null;
+let adBlockerDetectionPromise: null | Promise<boolean> = null;
 /** Cached result of ad blocker detection. */
 let adBlockerResult: boolean | null = null;
 /** Active client ID for the session. */
@@ -225,9 +225,9 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 						try {
 							await fetch(url, {
+								cache: "no-store",
 								method: "HEAD",
 								mode: "no-cors",
-								cache: "no-store",
 								signal: controller.signal,
 							});
 						} finally {
@@ -353,7 +353,7 @@ const getAdBlockerDetectionResult = async (): Promise<boolean> => {
  * // returns string | null
  * ```
  */
-const getGaClientIdFromCookie = (): string | null => {
+const getGaClientIdFromCookie = (): null | string => {
 	if (typeof document === "undefined") return null;
 
 	const match = document.cookie.match(/(?:^|; )\s*_ga=GA1\.[0-9]+\.([^;]+)/);
@@ -473,12 +473,12 @@ export const sendServerEvent = (
 
 		payload.params = { ...payload.params, transport: "fetch-keepalive" };
 		fetch(endpoint, {
-			method: "POST",
+			body: JSON.stringify(payload),
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(payload),
 			keepalive: true,
+			method: "POST",
 		}).catch((error) => {
 			console.error("Analytics event fallback failed:", error);
 		});
@@ -514,10 +514,10 @@ export const initializeAnalytics = async () => {
 
 		ReactGAInstance.initialize(TRACKING_ID, {
 			gtagOptions: {
-				send_page_view: false,
-				anonymize_ip: true,
 				allow_ad_personalization_signals: false,
 				allow_google_signals: false,
+				anonymize_ip: true,
+				send_page_view: false,
 				user_properties: {
 					app_version: __APP_VERSION__,
 					is_installed: globalIsInstalled ? "yes" : "no",
@@ -548,8 +548,8 @@ export const initializeAnalytics = async () => {
 				const { action, category, ...params } = event;
 				sendServerEvent(action, {
 					...params,
-					category,
 					action,
+					category,
 					tracking_source: "server",
 				});
 			});
@@ -608,9 +608,9 @@ const dispatchEvent = (event: GA4Event, isBlocked: boolean): void => {
 		const { action, category, ...params } = event;
 		sendServerEvent(action, {
 			...params,
-			category,
 			action,
 			app_version: __APP_VERSION__,
+			category,
 			is_installed: globalIsInstalled ? "yes" : "no",
 			tracking_source: "server",
 		});

@@ -94,7 +94,7 @@ const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalW
 				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
 			}}
 		>
-			<Callout.Root mb="3" variant="surface" size="1">
+			<Callout.Root mb="3" size="1" variant="surface">
 				<Callout.Icon>
 					<InfoCircledIcon />
 				</Callout.Icon>
@@ -114,14 +114,14 @@ const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalW
  * @category Components
  */
 interface ShipSelectionHeadingProps {
-	/** Whether the grid is in read-only shared mode. */
-	isSharedGrid: boolean;
-	/** Whether an optimization solve is currently active. */
-	solving: boolean;
-	/** The internal identifier of the currently selected ship type. */
-	selectedShipType: string;
 	/** Total width of the grid table in pixels. */
 	gridTableTotalWidth: number | undefined;
+	/** Whether the grid is in read-only shared mode. */
+	isSharedGrid: boolean;
+	/** The internal identifier of the currently selected ship type. */
+	selectedShipType: string;
+	/** Whether an optimization solve is currently active. */
+	solving: boolean;
 }
 
 /**
@@ -143,22 +143,22 @@ interface ShipSelectionHeadingProps {
  * ```
  */
 const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
-	isSharedGrid,
-	solving,
-	selectedShipType,
 	gridTableTotalWidth,
+	isSharedGrid,
+	selectedShipType,
+	solving,
 }) => {
 	const { t } = useTranslation();
 
 	return (
 		<Flex
 			align="center"
-			wrap="wrap"
-			gap="3"
 			className="main-app__ship-selector heading-styled"
+			gap="3"
 			style={{
 				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
 			}}
+			wrap="wrap"
 		>
 			{!isSharedGrid && (
 				<span className="main-app__ship-selection">
@@ -167,16 +167,16 @@ const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
 			)}
 
 			<Text
-				trim="end"
 				className="main-app__ship-label"
 				style={{ opacity: solving ? 0.365 : 1 }}
+				trim="end"
 			>
 				{t("platformLabel")}
 			</Text>
 			<Text
-				trim="end"
 				className="main-app__ship-name trim-text"
 				style={{ opacity: solving ? 0.365 : 1 }}
+				trim="end"
 			>
 				{t(`platforms.${selectedShipType}`)}
 			</Text>
@@ -190,22 +190,22 @@ const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
  * @category Components
  */
 interface MainAppUtilitiesProps {
-	/** Identifier of the technology that failed pattern matching. */
-	patternNoFitTech: string | null;
 	/** Callback to clear the optimization failure alert. */
 	clearPatternNoFitTech: () => void;
+	/** Ref to the hidden native file input used for build loading. */
+	fileInputRef: React.RefObject<HTMLInputElement | null>;
+	/** Callback to dismiss the build naming modal. */
+	handleBuildNameCancel: () => void;
+	/** Callback function to save a build with the provided name. */
+	handleBuildNameConfirm: (name: string) => void;
+	/** Event handler for the system file picker's change event. */
+	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	/** Asynchronous callback to re-trigger a solve for the failed technology. */
 	handleForceCurrentPnfOptimize: () => Promise<void>;
 	/** Whether the build name entry modal is visible. */
 	isSaveBuildDialogOpen: boolean;
-	/** Callback function to save a build with the provided name. */
-	handleBuildNameConfirm: (name: string) => void;
-	/** Callback to dismiss the build naming modal. */
-	handleBuildNameCancel: () => void;
-	/** Ref to the hidden native file input used for build loading. */
-	fileInputRef: React.RefObject<HTMLInputElement | null>;
-	/** Event handler for the system file picker's change event. */
-	handleFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	/** Identifier of the technology that failed pattern matching. */
+	patternNoFitTech: null | string;
 }
 
 /**
@@ -222,14 +222,14 @@ interface MainAppUtilitiesProps {
  * ```
  */
 const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
-	patternNoFitTech,
 	clearPatternNoFitTech,
+	fileInputRef,
+	handleBuildNameCancel,
+	handleBuildNameConfirm,
+	handleFileSelect,
 	handleForceCurrentPnfOptimize,
 	isSaveBuildDialogOpen,
-	handleBuildNameConfirm,
-	handleBuildNameCancel,
-	fileInputRef,
-	handleFileSelect,
+	patternNoFitTech,
 }) => {
 	const { t } = useTranslation();
 	const [mountUtilities, setMountUtilities] = useState(false);
@@ -250,24 +250,24 @@ const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 
 					<OptimizationAlertDialog
 						isOpen={!!patternNoFitTech}
-						technologyName={patternNoFitTech}
 						onClose={clearPatternNoFitTech}
 						onForceOptimize={handleForceCurrentPnfOptimize}
+						technologyName={patternNoFitTech}
 					/>
 
 					<BuildNameDialog
 						isOpen={isSaveBuildDialogOpen}
-						onConfirm={handleBuildNameConfirm}
 						onCancel={handleBuildNameCancel}
+						onConfirm={handleBuildNameConfirm}
 					/>
 
 					<input
+						accept=".nms"
+						aria-label={t("buttons.loadBuild")}
+						className="hidden"
+						onChange={handleFileSelect}
 						ref={fileInputRef}
 						type="file"
-						accept=".nms"
-						onChange={handleFileSelect}
-						className="hidden"
-						aria-label={t("buttons.loadBuild")}
 					/>
 
 					<ErrorMessageRenderer />
@@ -306,30 +306,30 @@ const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({
 export const MainAppContent = () => {
 	const { t } = useTranslation();
 	const {
-		buildVersion,
+		appLayout,
 		buildDate,
-		isSmallScreen,
+		buildVersion,
+		handleShowChangelog,
+		hasModulesInGrid,
 		isLargeScreen,
 		isSharedGrid,
-		hasModulesInGrid,
-		selectedShipType,
+		isSmallScreen,
 		isVisible,
-		toolbarRef,
-		optimize,
-		appLayout,
-		saveBuild,
 		loadBuild,
-		handleShowChangelog,
+		optimize,
+		saveBuild,
+		selectedShipType,
+		toolbarRef,
 	} = useMainAppLogic();
 
 	const {
-		solving,
-		progressPercent,
-		handleOptimize,
-		gridContainerRef,
-		patternNoFitTech,
 		clearPatternNoFitTech,
+		gridContainerRef,
 		handleForceCurrentPnfOptimize,
+		handleOptimize,
+		patternNoFitTech,
+		progressPercent,
+		solving,
 	} = optimize;
 
 	const {
@@ -339,13 +339,13 @@ export const MainAppContent = () => {
 	} = appLayout;
 
 	const {
-		isSaveBuildDialogOpen,
-		handleSaveBuild,
-		handleBuildNameConfirm,
 		handleBuildNameCancel,
+		handleBuildNameConfirm,
+		handleSaveBuild,
+		isSaveBuildDialogOpen,
 	} = saveBuild;
 
-	const { fileInputRef, handleLoadBuild, handleFileSelect } = loadBuild;
+	const { fileInputRef, handleFileSelect, handleLoadBuild } = loadBuild;
 
 	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
 
@@ -353,24 +353,24 @@ export const MainAppContent = () => {
 		<>
 			{isSmallScreen && (
 				<MobileToolbar
-					ref={toolbarRef as React.Ref<HTMLDivElement>}
-					isVisible={isVisible}
-					solving={solving}
+					gridRef={appLayoutContainerRef}
 					hasModulesInGrid={hasModulesInGrid}
+					isVisible={isVisible}
 					onLoadBuild={handleLoadBuild}
 					onSaveBuild={handleSaveBuild}
 					onShowChangelog={handleShowChangelog}
-					gridRef={appLayoutContainerRef}
+					ref={toolbarRef as React.Ref<HTMLDivElement>}
+					solving={solving}
 				/>
 			)}
 
 			<a
-				href="#main-content"
 				className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded focus:bg-(--accent-9) focus:px-4 focus:py-2 focus:text-white"
+				href="#main-content"
 			>
 				Skip to main content
 			</a>
-			<main id="main-content" className="main-app__container">
+			<main className="main-app__container" id="main-content">
 				<div className="main-app__card lg:shadow-lg">
 					<div className="main-app__background-wrapper">
 						<AppHeader onShowChangelog={handleShowChangelog} />
@@ -379,28 +379,28 @@ export const MainAppContent = () => {
 							fallback={
 								<Flex
 									align="center"
-									justify="center"
 									className="main-app__content"
+									justify="center"
 									style={{ minHeight: "400px", width: "100%" }}
 								>
 									<MessageSpinner
-										isVisible={true}
 										initialMessage={t("techTree.loading")}
+										isVisible={true}
 									/>
 								</Flex>
 							}
 						>
 							<ShipTypesLoader />
 							<Flex
-								direction={{ initial: "column", md: "row" }}
 								align={{ initial: "center", md: "start" }}
 								className="main-app__content"
+								direction={{ initial: "column", md: "row" }}
 								ref={gridContainerRef}
 							>
 								{/* Grid section */}
 								<Box
-									flexShrink={{ initial: "1", md: "0" }}
 									className="main-app__grid-section relative"
+									flexShrink={{ initial: "1", md: "0" }}
 									ref={appLayoutContainerRef}
 								>
 									{isSharedGrid && (
@@ -411,48 +411,48 @@ export const MainAppContent = () => {
 
 									{!isSharedGrid && (
 										<MessageSpinner
-											isVisible={solving}
-											showProgress={!isTechTreeLoading}
 											initialMessage={
 												isTechTreeLoading
 													? t("techTree.loading")
 													: t("gridTable.optimizing")
 											}
+											isVisible={solving}
 											progressPercent={progressPercent}
+											showProgress={!isTechTreeLoading}
 										/>
 									)}
 
 									<ShipSelectionHeading
-										isSharedGrid={isSharedGrid}
-										solving={solving}
-										selectedShipType={selectedShipType}
 										gridTableTotalWidth={gridTableTotalWidth}
+										isSharedGrid={isSharedGrid}
+										selectedShipType={selectedShipType}
+										solving={solving}
 									/>
 
 									<GridTable
-										solving={solving}
-										sharedGrid={isSharedGrid}
 										ref={appLayoutGridTableRef}
+										sharedGrid={isSharedGrid}
+										solving={solving}
 									/>
 								</Box>
 
 								{/* Tech tree section */}
 								{!isSharedGrid && (
 									<Flex
+										className="main-app__tech-tree-section"
 										direction="column"
+										ml={{ md: "5" }}
 										width={
 											!isLargeScreen && gridTableTotalWidth
 												? `${gridTableTotalWidth}px`
 												: "100%"
 										}
-										ml={{ md: "5" }}
-										className="main-app__tech-tree-section"
 									>
 										<Suspense fallback={<TechTreeSkeleton />}>
 											<TechTree
+												gridTableTotalWidth={gridTableTotalWidth}
 												handleOptimize={handleOptimize}
 												solving={solving}
-												gridTableTotalWidth={gridTableTotalWidth}
 											/>
 										</Suspense>
 									</Flex>
@@ -463,22 +463,22 @@ export const MainAppContent = () => {
 
 					{!isLargeScreen && (
 						<div className="main-app__footer-wrapper">
-							<AppFooter buildVersion={buildVersion} buildDate={buildDate} />
+							<AppFooter buildDate={buildDate} buildVersion={buildVersion} />
 						</div>
 					)}
 				</div>
 
-				{isLargeScreen && <AppFooter buildVersion={buildVersion} buildDate={buildDate} />}
+				{isLargeScreen && <AppFooter buildDate={buildDate} buildVersion={buildVersion} />}
 
 				<MainAppUtilities
-					patternNoFitTech={patternNoFitTech}
 					clearPatternNoFitTech={clearPatternNoFitTech}
+					fileInputRef={fileInputRef}
+					handleBuildNameCancel={handleBuildNameCancel}
+					handleBuildNameConfirm={handleBuildNameConfirm}
+					handleFileSelect={handleFileSelect}
 					handleForceCurrentPnfOptimize={handleForceCurrentPnfOptimize}
 					isSaveBuildDialogOpen={isSaveBuildDialogOpen}
-					handleBuildNameConfirm={handleBuildNameConfirm}
-					handleBuildNameCancel={handleBuildNameCancel}
-					fileInputRef={fileInputRef}
-					handleFileSelect={handleFileSelect}
+					patternNoFitTech={patternNoFitTech}
 				/>
 			</main>
 		</>

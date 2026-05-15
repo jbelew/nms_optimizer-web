@@ -43,7 +43,7 @@ vi.mock("../useBreakpoint/useBreakpoint");
 vi.mock("../../utils/api/socketManager", () => ({
 	createSocket: vi.fn(),
 	SOCKET_OPTIONS: {},
-	TRANSPORT_ERROR_MESSAGES: new Set(["websocket error", "timeout"]),
+	TRANSPORT_ERROR_MESSAGES: new Set(["timeout", "websocket error"]),
 }));
 
 // Mock constants
@@ -66,9 +66,9 @@ const mockCreateSocket = vi.mocked(createSocket);
 
 vi.mock("../../utils/system/monitoring", () => ({
 	Logger: {
+		error: vi.fn(),
 		info: vi.fn(),
 		warn: vi.fn(),
-		error: vi.fn(),
 	},
 }));
 
@@ -76,12 +76,12 @@ const mockLogger = vi.mocked(Logger);
 
 describe("useOptimize", () => {
 	const createMockSocket = () => ({
+		connected: true,
+		disconnect: vi.fn(),
+		emit: vi.fn(),
+		off: vi.fn(),
 		on: vi.fn(),
 		once: vi.fn(),
-		off: vi.fn(),
-		emit: vi.fn(),
-		disconnect: vi.fn(),
-		connected: true,
 	});
 
 	let mockSocket: ReturnType<typeof createMockSocket>;
@@ -95,12 +95,12 @@ describe("useOptimize", () => {
 
 		// Mock store and hook return values
 		const mockOptimizeState: OptimizeState = {
-			showError: false,
-			errorType: null,
 			error: null,
-			setShowError: setShowErrorMock,
+			errorType: null,
 			patternNoFitTech: null,
 			setPatternNoFitTech: vi.fn(),
+			setShowError: setShowErrorMock,
+			showError: false,
 		};
 
 		mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
@@ -108,21 +108,21 @@ describe("useOptimize", () => {
 		);
 
 		mockUseGridStore.getState.mockReturnValue({
-			setGrid: vi.fn(),
-			setResult: vi.fn(),
 			grid: {
 				cells: [],
-				width: 7,
 				height: 7,
 				valid: true,
+				width: 7,
 			},
+			setGrid: vi.fn(),
+			setResult: vi.fn(),
 		} as unknown as GridStore);
 
 		mockUseTechStore.getState.mockReturnValue({
-			checkedModules: {},
-			techGroups: {},
 			activeGroups: {},
+			checkedModules: {},
 			initializeTechTree: vi.fn(),
+			techGroups: {},
 		} as unknown as TechState);
 
 		mockUsePlatformStore.getState.mockImplementation(
@@ -134,7 +134,7 @@ describe("useOptimize", () => {
 
 		mockUsePlatformStore.mockReturnValue("standard");
 		mockUseBreakpoint.mockReturnValue(true);
-		mockUseAnalytics.mockReturnValue({ sendEvent: vi.fn(), sendDeferredEvent: vi.fn() });
+		mockUseAnalytics.mockReturnValue({ sendDeferredEvent: vi.fn(), sendEvent: vi.fn() });
 	});
 
 	afterEach(() => {
@@ -166,27 +166,27 @@ describe("useOptimize", () => {
 			const grid = {
 				cells: [
 					[
-						{ tech: "some-other-tech", supercharged: false, active: false },
-						{ tech: "Test Tech", supercharged: false, active: false },
+						{ active: false, supercharged: false, tech: "some-other-tech" },
+						{ active: false, supercharged: false, tech: "Test Tech" },
 					],
 				],
-				width: 2,
 				height: 1,
 				valid: true,
+				width: 2,
 			};
 			const checkedModules = { "Test Tech": ["module1"] };
 			const selectedShipType = "hauler";
 
 			// Setup specific mock state for this test
 			mockUseGridStore.getState.mockReturnValue({
+				grid,
 				setGrid: vi.fn(),
 				setResult: vi.fn(),
-				grid,
 			} as unknown as GridStore);
 			mockUseTechStore.getState.mockReturnValue({
+				activeGroups: { "Test Tech": "group1" },
 				checkedModules,
 				techGroups: { "Test Tech": ["module1", "module2"] },
-				activeGroups: { "Test Tech": "group1" },
 			} as unknown as TechState);
 			mockUsePlatformStore.mockReturnValue(selectedShipType);
 
@@ -201,18 +201,18 @@ describe("useOptimize", () => {
 				...grid,
 				cells: [
 					[
-						{ tech: "some-other-tech", supercharged: false, active: false },
+						{ active: false, supercharged: false, tech: "some-other-tech" },
 						{
 							active: false,
 							adjacency: "none",
 							adjacency_bonus: 0,
 							bonus: 0,
+							group_adjacent: false,
 							image: null,
 							label: "",
 							module: null,
 							sc_eligible: false,
 							supercharged: false,
-							group_adjacent: false,
 							tech: null,
 							total: 0,
 							type: "",
@@ -223,13 +223,13 @@ describe("useOptimize", () => {
 			};
 
 			expect(mockSocket.emit).toHaveBeenCalledWith("optimize", {
-				ship: selectedShipType,
-				tech: tech,
 				available_modules: ["module1"],
-				grid: expectedGrid,
 				forced: false,
+				grid: expectedGrid,
 				send_grid_updates: true,
+				ship: selectedShipType,
 				solve_type: "group1",
+				tech: tech,
 			});
 		});
 
@@ -267,12 +267,12 @@ describe("useOptimize", () => {
 			const localSetShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					showError: false,
-					errorType: null,
 					error: null,
-					setShowError: localSetShowErrorMock,
+					errorType: null,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
+					setShowError: localSetShowErrorMock,
+					showError: false,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -306,12 +306,12 @@ describe("useOptimize", () => {
 			const localSetShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					showError: false,
-					errorType: null,
 					error: null,
-					setShowError: localSetShowErrorMock,
+					errorType: null,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
+					setShowError: localSetShowErrorMock,
+					showError: false,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -345,12 +345,12 @@ describe("useOptimize", () => {
 			const localSetShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					showError: false,
-					errorType: null,
 					error: null,
-					setShowError: localSetShowErrorMock,
+					errorType: null,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
+					setShowError: localSetShowErrorMock,
+					showError: false,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -398,12 +398,12 @@ describe("useOptimize", () => {
 			const localSetShowErrorMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					setShowError: localSetShowErrorMock,
+					error: null,
+					errorType: null,
 					patternNoFitTech: null,
 					setPatternNoFitTech: vi.fn(),
+					setShowError: localSetShowErrorMock,
 					showError: false,
-					errorType: null,
-					error: null,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -442,12 +442,12 @@ describe("useOptimize", () => {
 			const setPatternNoFitTechMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					setShowError: vi.fn(),
+					error: null,
+					errorType: null,
 					patternNoFitTech: "some-tech",
 					setPatternNoFitTech: setPatternNoFitTechMock,
+					setShowError: vi.fn(),
 					showError: false,
-					errorType: null,
-					error: null,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -463,12 +463,12 @@ describe("useOptimize", () => {
 			const setPatternNoFitTechMock = vi.fn();
 			mockUseOptimizeStore.mockImplementation((selector: (s: OptimizeState) => unknown) =>
 				selector({
-					setShowError: vi.fn(),
+					error: null,
+					errorType: null,
 					patternNoFitTech: "PNF Tech",
 					setPatternNoFitTech: setPatternNoFitTechMock,
+					setShowError: vi.fn(),
 					showError: false,
-					errorType: null,
-					error: null,
 				})
 			);
 			const { result } = renderHook(() => useOptimize());
@@ -480,8 +480,8 @@ describe("useOptimize", () => {
 			expect(mockSocket.emit).toHaveBeenCalledWith(
 				"optimize",
 				expect.objectContaining({
-					tech: "PNF Tech",
 					forced: true,
+					tech: "PNF Tech",
 				})
 			);
 		});

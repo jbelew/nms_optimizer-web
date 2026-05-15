@@ -27,10 +27,10 @@ const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
 interface UpdatePromptProps {
 	/** Whether the update notification dialog is visible. */
 	isOpen: boolean;
-	/** Callback function to trigger the application reload/update. */
-	onRefresh: () => void;
 	/** Callback function to dismiss the update prompt without updating. */
 	onDismiss: () => void;
+	/** Callback function to trigger the application reload/update. */
+	onRefresh: () => void;
 }
 
 /**
@@ -58,12 +58,12 @@ interface UpdatePromptProps {
  * // renders update dialog
  * ```
  */
-const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) => {
+const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) => {
 	const { t } = useTranslation();
 	const isDesktop = useBreakpoint("1024px");
 
 	const content = (
-		<Text size={{ initial: "2", sm: "3" }} as="p" mb="2">
+		<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
 			{t("dialogs.updatePrompt.description", {
 				defaultValue:
 					"A new version of the application is available. Refresh now to get the latest features and bug fixes.",
@@ -73,10 +73,10 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 
 	const footer = (
 		<div className="flex justify-end gap-2">
-			<Button variant="soft" onClick={onDismiss}>
+			<Button onClick={onDismiss} variant="soft">
 				{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
 			</Button>
-			<Button onClick={onRefresh} autoFocus={isDesktop}>
+			<Button autoFocus={isDesktop} onClick={onRefresh}>
 				{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 			</Button>
 		</div>
@@ -85,12 +85,12 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onRefresh, onDismiss }) =
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				isOpen={isOpen}
-				titleKey="dialogs.titles.updatePrompt"
-				title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
-				onClose={onDismiss}
-				footer={footer}
 				content={content}
+				footer={footer}
+				isOpen={isOpen}
+				onClose={onDismiss}
+				title={t("dialogs.titles.updatePrompt", { defaultValue: "Update Available" })}
+				titleKey="dialogs.titles.updatePrompt"
 			/>
 		</Suspense>
 	);

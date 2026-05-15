@@ -12,16 +12,8 @@ import { useToast } from "../useToast/useToast";
  * @category Interfaces
  */
 export interface UseSaveBuildReturn {
-	/** Whether the build name entry dialog is currently open. */
-	isSaveBuildDialogOpen: boolean;
-	/**
-	 * Function to manually update the dialog open state.
-	 *
-	 * @param {boolean} open - The new state of the dialog.
-	 */
-	setIsSaveBuildDialogOpen: (open: boolean) => void;
-	/** Function to initiate the save workflow by opening the naming dialog. */
-	handleSaveBuild: () => void;
+	/** Handler for canceling the save workflow and closing the dialog. */
+	handleBuildNameCancel: () => void;
 	/**
 	 * Handler for confirming the build name and executing the save to disk.
 	 *
@@ -30,10 +22,18 @@ export interface UseSaveBuildReturn {
 	 * @returns {Promise<void>} Resolves when the file is generated and downloaded.
 	 */
 	handleBuildNameConfirm: (buildName: string) => Promise<void>;
-	/** Handler for canceling the save workflow and closing the dialog. */
-	handleBuildNameCancel: () => void;
+	/** Function to initiate the save workflow by opening the naming dialog. */
+	handleSaveBuild: () => void;
+	/** Whether the build name entry dialog is currently open. */
+	isSaveBuildDialogOpen: boolean;
 	/** Whether the build is currently being processed and saved to disk. */
 	isSavePending: boolean;
+	/**
+	 * Function to manually update the dialog open state.
+	 *
+	 * @param {boolean} open - The new state of the dialog.
+	 */
+	setIsSaveBuildDialogOpen: (open: boolean) => void;
 }
 
 /**
@@ -75,7 +75,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	const { t } = useTranslation();
 	const { saveBuildToFile } = useBuildFileManager();
 	const { sendEvent } = useAnalytics();
-	const { showSuccess, showError } = useToast();
+	const { showError, showSuccess } = useToast();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 
 	const [isSaveBuildDialogOpen, setIsSaveBuildDialogOpen] = useState(false);
@@ -117,13 +117,13 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 			await saveBuildToFile(buildName);
 			showSuccess(t("toast.buildSaved.title"), t("toast.buildSaved.description"), 5000);
 			sendEvent({
-				category: "ui",
 				action: "save_build",
-				method: "nms_file",
 				build_name: buildName,
+				category: "ui",
+				method: "nms_file",
+				nonInteraction: false,
 				shipType: selectedShipType,
 				value: 1,
-				nonInteraction: false,
 			});
 		} catch (error) {
 			console.error("Save failed:", error);
@@ -149,11 +149,11 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 	};
 
 	return {
-		isSaveBuildDialogOpen,
-		setIsSaveBuildDialogOpen,
-		handleSaveBuild,
-		handleBuildNameConfirm,
 		handleBuildNameCancel,
+		handleBuildNameConfirm,
+		handleSaveBuild,
+		isSaveBuildDialogOpen,
 		isSavePending,
+		setIsSaveBuildDialogOpen,
 	};
 };

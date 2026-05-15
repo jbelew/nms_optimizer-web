@@ -5,6 +5,18 @@ import { usePlatformStore } from "../../store/app/platformStore";
 import { apiCall } from "../../utils/api/network";
 
 /**
+ * A generic resource object compatible with React Suspense.
+ *
+ * @template T - The type of data being loaded.
+ *
+ * @category Types
+ */
+export type Resource<T> = {
+	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
+	read: () => T;
+};
+
+/**
  * Details of a specific ship type.
  *
  * @category Interfaces
@@ -24,18 +36,6 @@ export interface ShipTypeDetail {
 export interface ShipTypes {
 	[key: string]: ShipTypeDetail;
 }
-
-/**
- * A generic resource object compatible with React Suspense.
- *
- * @template T - The type of data being loaded.
- *
- * @category Types
- */
-export type Resource<T> = {
-	/** Returns the data if ready, or throws a promise/error for Suspense to handle. */
-	read: () => T;
-};
 
 /**
  * Creates a Suspense-compatible resource object from a promise.
@@ -59,7 +59,7 @@ export type Resource<T> = {
  * ```
  */
 const createResource = <T,>(promise: Promise<T>): Resource<T> => {
-	let status: "pending" | "success" | "error" = "pending";
+	let status: "error" | "pending" | "success" = "pending";
 	let result: T;
 	let error: Error;
 
@@ -103,6 +103,22 @@ const cache = new Map<string, Resource<ShipTypes>>();
 export const clearShipTypesCache = () => {
 	cache.clear();
 };
+
+/**
+ * State and actions for the ship types store.
+ *
+ * @category Interfaces
+ */
+export interface ShipTypesState {
+	/**
+	 * Updates the ship types in the store.
+	 *
+	 * @param {ShipTypes} shipTypes - The new dictionary of ship types.
+	 */
+	setShipTypes: (shipTypes: ShipTypes) => void;
+	/** The dictionary of available ship types. */
+	shipTypes: null | ShipTypes;
+}
 
 /**
  * Initiates a fetch for all available ship types from the API.
@@ -191,22 +207,6 @@ export function useFetchShipTypesSuspense(): ShipTypes {
 }
 
 /**
- * State and actions for the ship types store.
- *
- * @category Interfaces
- */
-export interface ShipTypesState {
-	/** The dictionary of available ship types. */
-	shipTypes: ShipTypes | null;
-	/**
-	 * Updates the ship types in the store.
-	 *
-	 * @param {ShipTypes} shipTypes - The new dictionary of ship types.
-	 */
-	setShipTypes: (shipTypes: ShipTypes) => void;
-}
-
-/**
  * Zustand store for managing the global state of available ship types.
  *
  * @remarks
@@ -217,7 +217,7 @@ export interface ShipTypesState {
  */
 export const useShipTypesStore = create<ShipTypesState>((set) => {
 	return {
-		shipTypes: null,
 		setShipTypes: (shipTypes) => set({ shipTypes }),
+		shipTypes: null,
 	};
 });

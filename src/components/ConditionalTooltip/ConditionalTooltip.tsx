@@ -23,10 +23,10 @@ import { useTooltipActions } from "../../utils/system/tooltipUtils";
 interface ConditionalTooltipProps {
 	/** The child element that will trigger the tooltip on hover. **Must be a valid React element.** */
 	children: React.ReactNode;
-	/** The text content to display within the tooltip. */
-	label: string;
 	/** The delay in milliseconds before the tooltip appears. Defaults to `500`. */
 	delayDuration?: number;
+	/** The text content to display within the tooltip. */
+	label: string;
 }
 
 /**
@@ -57,8 +57,8 @@ interface ConditionalTooltipProps {
  * ```
  */
 export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
-	({ children, label, delayDuration = 500 }) => {
-		const { show, hide } = useTooltipActions();
+	({ children, delayDuration = 500, label }) => {
+		const { hide, show } = useTooltipActions();
 		const isTouch = isTouchDevice();
 
 		/**
@@ -131,9 +131,9 @@ export const ConditionalTooltip: React.FC<ConditionalTooltipProps> = memo(
 			? React.cloneElement(
 					children as React.ReactElement,
 					{
+						onClick: handleClick,
 						onPointerEnter: handlePointerEnter,
 						onPointerLeave: handlePointerLeave,
-						onClick: handleClick,
 					} as React.HTMLAttributes<HTMLElement>
 				)
 			: (children as unknown as React.ReactElement);

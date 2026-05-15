@@ -11,6 +11,83 @@ import { useModuleSelectionStore } from "../tech/moduleSelectionStore";
 import { useTechBonusStore } from "../tech/techBonusStore";
 import { useTechStore } from "../tech/techStore";
 
+/**
+ * Structure for the optimization engine's successful result.
+ *
+ * @see {@link Grid}
+ *
+ * @category State
+ */
+export type ApiResponse = {
+	/** The newly optimized grid layout. `null` if the solve failed. */
+	grid: Grid | null;
+	/** The theoretical maximum bonus for the configuration. */
+	max_bonus: number;
+	/** The identifier of the solver method used (e.g., `'SA'`, `'Pattern'`). */
+	solve_method: string;
+	/** The actual bonus achieved by the solver. */
+	solved_bonus: number;
+};
+
+/**
+ * Represents a single cell within the technology grid.
+ *
+ * Each cell maintains its own state for active/inactive status, supercharged status,
+ * and the specific module currently placed within it.
+ *
+ * @category State
+ */
+export type Cell = {
+	/** Whether the cell is part of the active layout. */
+	active: boolean;
+	/** The type of adjacency bonus the module in this cell provides. */
+	adjacency: string;
+	/** The calculated bonus multiplier from adjacent technologies. */
+	adjacency_bonus: number;
+	/** The base bonus value from the module itself. */
+	bonus: number;
+	/** Whether the cell belongs to an adjacency grouping. */
+	group_adjacent: boolean;
+	/** Optional icon path/URL for the module. */
+	image: null | string;
+	/** Display label for the module. */
+	label: string;
+	/** The unique ID of the module currently placed in this cell. */
+	module: null | string;
+	/** Whether this cell is allowed to be supercharged. */
+	sc_eligible: boolean;
+	/** Whether the cell is currently supercharged. */
+	supercharged: boolean;
+	/** The technology category key (e.g., `'pulse'`). */
+	tech: null | string;
+	/** The final calculated score/bonus for this specific cell. */
+	total: number;
+	/** The category/type of the module. */
+	type: string;
+	/** The raw stat value of the module. */
+	value: number;
+};
+
+/**
+ * Represents the entire technology grid state.
+ *
+ * The grid is a 2D structure of `Cell` objects, providing a workspace for module placement.
+ *
+ * @see {@link Cell}
+ *
+ * @category State
+ */
+export type Grid = {
+	/** 2D array of grid cells. Row-major order. */
+	cells: Cell[][];
+	/** The number of rows in the grid. */
+	height: number;
+	/** Whether the grid configuration is valid (e.g. no overlapping modules). */
+	valid?: boolean;
+	/** The number of columns in the grid. */
+	width: number;
+};
+
 type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void>;
 
 /**
@@ -34,7 +111,7 @@ function debounceSetItem(
 	setItemFn: SetItemFunction,
 	msToWait: number
 ): (name: string, value: StorageValue<Partial<GridStore>>) => Promise<void> {
-	let timeoutId: number | null = null;
+	let timeoutId: null | number = null;
 
 	return (name: string, value: StorageValue<Partial<GridStore>>): Promise<void> => {
 		if (timeoutId !== null) {
@@ -54,83 +131,6 @@ function debounceSetItem(
 		return Promise.resolve();
 	};
 }
-
-/**
- * Represents a single cell within the technology grid.
- *
- * Each cell maintains its own state for active/inactive status, supercharged status,
- * and the specific module currently placed within it.
- *
- * @category State
- */
-export type Cell = {
-	/** Whether the cell is part of the active layout. */
-	active: boolean;
-	/** The type of adjacency bonus the module in this cell provides. */
-	adjacency: string;
-	/** The calculated bonus multiplier from adjacent technologies. */
-	adjacency_bonus: number;
-	/** The base bonus value from the module itself. */
-	bonus: number;
-	/** Optional icon path/URL for the module. */
-	image: string | null;
-	/** The unique ID of the module currently placed in this cell. */
-	module: string | null;
-	/** Display label for the module. */
-	label: string;
-	/** Whether this cell is allowed to be supercharged. */
-	sc_eligible: boolean;
-	/** Whether the cell is currently supercharged. */
-	supercharged: boolean;
-	/** Whether the cell belongs to an adjacency grouping. */
-	group_adjacent: boolean;
-	/** The technology category key (e.g., `'pulse'`). */
-	tech: string | null;
-	/** The final calculated score/bonus for this specific cell. */
-	total: number;
-	/** The category/type of the module. */
-	type: string;
-	/** The raw stat value of the module. */
-	value: number;
-};
-
-/**
- * Represents the entire technology grid state.
- *
- * The grid is a 2D structure of `Cell` objects, providing a workspace for module placement.
- *
- * @see {@link Cell}
- *
- * @category State
- */
-export type Grid = {
-	/** 2D array of grid cells. Row-major order. */
-	cells: Cell[][];
-	/** The number of rows in the grid. */
-	height: number;
-	/** The number of columns in the grid. */
-	width: number;
-	/** Whether the grid configuration is valid (e.g. no overlapping modules). */
-	valid?: boolean;
-};
-
-/**
- * Structure for the optimization engine's successful result.
- *
- * @see {@link Grid}
- *
- * @category State
- */
-export type ApiResponse = {
-	/** The newly optimized grid layout. `null` if the solve failed. */
-	grid: Grid | null;
-	/** The theoretical maximum bonus for the configuration. */
-	max_bonus: number;
-	/** The actual bonus achieved by the solver. */
-	solved_bonus: number;
-	/** The identifier of the solver method used (e.g., `'SA'`, `'Pattern'`). */
-	solve_method: string;
-};
 
 /**
  * Factory function to create a default, empty grid cell.
@@ -156,12 +156,12 @@ export const createEmptyCell = (supercharged = false, active = false): Cell => (
 	adjacency: "none",
 	adjacency_bonus: 0.0,
 	bonus: 0.0,
+	group_adjacent: false,
 	image: null,
-	module: null,
 	label: "",
+	module: null,
 	sc_eligible: false,
 	supercharged: supercharged,
-	group_adjacent: false,
 	tech: null,
 	total: 0.0,
 	type: "",
@@ -192,8 +192,8 @@ export const createGrid = (width: number, height: number): Grid => ({
 	cells: Array.from({ length: height }, () =>
 		Array.from({ length: width }, () => createEmptyCell())
 	),
-	width,
 	height,
+	width,
 });
 
 /**
@@ -214,12 +214,12 @@ const createCellFromModuleData = (moduleData: Module): Cell => {
 		adjacency: moduleData?.adjacency ?? "none",
 		adjacency_bonus: moduleData?.adjacency_bonus ?? 0.0,
 		bonus: moduleData?.bonus ?? 0.0,
+		group_adjacent: false,
 		image: moduleData?.image ?? null,
-		module: moduleData?.id ?? null,
 		label: moduleData?.label ?? "",
+		module: moduleData?.id ?? null,
 		sc_eligible: moduleData?.sc_eligible ?? false,
 		supercharged: moduleData?.supercharged === true,
-		group_adjacent: false,
 		tech: moduleData?.tech ?? null,
 		total: 0.0,
 		type: moduleData?.type ?? "",
@@ -256,147 +256,130 @@ export const resetCellContent = (cell: Cell) => {
  * @category State
  */
 export type GridStore = {
-	/** Version of the persisted state schema. */
-	version: number;
-	/** The current 2D grid of cells. */
-	grid: Grid;
-	/** The most recent optimization result from the server. */
-	result: ApiResponse | null;
-	/** Whether the grid was populated from a shared URL. */
-	isSharedGrid: boolean;
-	/** The name of the currently loaded build, if any. */
-	buildName: string | null;
-	/** Whether the active layout of the grid is locked. */
-	gridFixed: boolean;
-	/** Whether the locations of supercharged slots are locked. */
-	superchargedFixed: boolean;
-	/** The default layout definition for the current ship type. */
-	initialGridDefinition:
-		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
-		| undefined;
-
+	/** Index of the first row where every cell is inactive, or -1. */
+	_firstInactiveRowIndex: number;
+	/** Whether any cell in the grid has a non-null module. */
+	_hasModulesInGrid: boolean;
+	/** Internal state tracking for tap/double-tap logic. */
+	_initialCellStateForTap?: Cell | null;
+	/** Whether every active cell has a module assigned. */
+	_isGridFull: boolean;
+	/** Index of the last row containing at least one active cell, or -1. */
+	_lastActiveRowIndex: number;
+	/** Count of cells where `supercharged === true`. */
+	_totalSuperchargedCells: number;
+	/** Activates all cells in the specified row. */
+	activateRow: (rowIndex: number) => void;
 	// --- Precomputed derived state (updated inside every grid-mutating action) ---
 	/** Set of technology keys currently placed in at least one grid cell. */
 	activeTechs: Set<string>;
-	/** Whether every active cell has a module assigned. */
-	_isGridFull: boolean;
-	/** Count of cells where `supercharged === true`. */
-	_totalSuperchargedCells: number;
-	/** Whether any cell in the grid has a non-null module. */
-	_hasModulesInGrid: boolean;
-	/** Index of the first row where every cell is inactive, or -1. */
-	_firstInactiveRowIndex: number;
-	/** Index of the last row containing at least one active cell, or -1. */
-	_lastActiveRowIndex: number;
 
-	/** Internal state tracking for tap/double-tap logic. */
-	_initialCellStateForTap?: Cell | null;
+	/** Batch applies modules to the grid by linear index. */
+	applyModulesToGrid: (modules: (Module | null)[]) => void;
+	/** The name of the currently loaded build, if any. */
+	buildName: null | string;
+	/** Clears the temporary interaction state. */
+	clearInitialCellStateForTap: () => void;
+	/** Deactivates all cells in the specified row. */
+	deActivateRow: (rowIndex: number) => void;
+	/** The current 2D grid of cells. */
+	grid: Grid;
+	/** Whether the active layout of the grid is locked. */
+	gridFixed: boolean;
 
-	/**
-	 * Updates the `isSharedGrid` status.
-	 *
-	 * @param {boolean} isShared - Whether the current grid is from a share URL.
-	 */
-	setIsSharedGrid: (isShared: boolean) => void;
+	/** Handles a double tap on a grid cell. */
+	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
+
+	/** Handles a single tap on a grid cell. */
+	handleCellTap: (rowIndex: number, columnIndex: number) => void;
+	/** Checks if a specific technology is currently present in the grid. */
+	hasTechInGrid: (tech: string) => boolean;
+	/** The default layout definition for the current ship type. */
+	initialGridDefinition:
+		| undefined
+		| { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
+	/** Checks if all active grid cells have a module assigned. */
+	isGridFull: () => boolean;
+	/** Whether the grid was populated from a shared URL. */
+	isSharedGrid: boolean;
+	/** Resets the grid to its initial state, clearing all modules and results. */
+	resetGrid: () => void;
+
+	/** Removes all modules of a specific technology from the grid. */
+	resetGridTech: (tech: string) => void;
+	/** Restores the entire grid state from a saved build while ensuring derived state is recomputed. */
+	restoreGridState: (savedState: Partial<GridStore>) => void;
+	/** The most recent optimization result from the server. */
+	result: ApiResponse | null;
+	/** Restores a cell to its state prior to a tap interaction. */
+	revertCellTap: (rowIndex: number, columnIndex: number) => void;
+
+	/** Returns the index of the first row containing only inactive cells. */
+	selectFirstInactiveRowIndex: () => number;
+	/** Returns true if any cell in the grid has a module. */
+	selectHasModulesInGrid: () => boolean;
+	/** Returns the index of the last row containing at least one active cell. */
+	selectLastActiveRowIndex: () => number;
+	/** Returns the total count of supercharged cells. */
+	selectTotalSuperchargedCells: () => number;
+
 	/**
 	 * Updates the `buildName` status.
 	 *
 	 * @param {string | null} name - The name of the loaded build.
 	 */
-	setBuildName: (name: string | null) => void;
+	setBuildName: (name: null | string) => void;
+	/** Sets the `active` status of a cell explicitly. */
+	setCellActive: (rowIndex: number, columnIndex: number, active: boolean) => void;
+
+	/** Sets the `supercharged` status of a cell explicitly. */
+	setCellSupercharged: (rowIndex: number, columnIndex: number, supercharged: boolean) => void;
 	/**
 	 * Updates the entire grid object.
 	 *
 	 * @param {Grid} grid - The new grid state.
 	 */
 	setGrid: (grid: Grid) => void;
-	/** Resets the grid to its initial state, clearing all modules and results. */
-	resetGrid: () => void;
 	/** Sets a new grid and purges auxiliary results/selections. Used when switching ships. */
 	setGridAndResetAuxiliaryState: (newGrid: Grid) => void;
-	/** Updates the optimization result and synchronizes tech-specific stats. */
-	setResult: (result: ApiResponse | null, tech: string) => void;
-
-	/** Handles a single tap on a grid cell. */
-	handleCellTap: (rowIndex: number, columnIndex: number) => void;
-	/** Handles a double tap on a grid cell. */
-	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
-	/** Restores a cell to its state prior to a tap interaction. */
-	revertCellTap: (rowIndex: number, columnIndex: number) => void;
-	/** Clears the temporary interaction state. */
-	clearInitialCellStateForTap: () => void;
-
-	/** Toggles the `active` status of a cell. */
-	toggleCellActive: (rowIndex: number, columnIndex: number) => void;
-	/** Toggles the `supercharged` status of a cell. */
-	toggleCellSupercharged: (rowIndex: number, columnIndex: number) => void;
-	/** Sets the `active` status of a cell explicitly. */
-	setCellActive: (rowIndex: number, columnIndex: number, active: boolean) => void;
-	/** Sets the `supercharged` status of a cell explicitly. */
-	setCellSupercharged: (rowIndex: number, columnIndex: number, supercharged: boolean) => void;
-
-	/** Activates all cells in the specified row. */
-	activateRow: (rowIndex: number) => void;
-	/** Deactivates all cells in the specified row. */
-	deActivateRow: (rowIndex: number) => void;
-
-	/** Checks if a specific technology is currently present in the grid. */
-	hasTechInGrid: (tech: string) => boolean;
-	/** Checks if all active grid cells have a module assigned. */
-	isGridFull: () => boolean;
-	/** Removes all modules of a specific technology from the grid. */
-	resetGridTech: (tech: string) => void;
-
-	/** Returns the total count of supercharged cells. */
-	selectTotalSuperchargedCells: () => number;
-	/** Returns true if any cell in the grid has a module. */
-	selectHasModulesInGrid: () => boolean;
-	/** Returns the index of the first row containing only inactive cells. */
-	selectFirstInactiveRowIndex: () => number;
-	/** Returns the index of the last row containing at least one active cell. */
-	selectLastActiveRowIndex: () => number;
 
 	/** Toggles the grid layout lock. */
 	setGridFixed: (fixed: boolean) => void;
-	/** Toggles the supercharged slot lock. */
-	setSuperchargedFixed: (fixed: boolean) => void;
-	/** Stores the default grid definition for the current ship. */
-	setInitialGridDefinition: (
-		definition: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean } | undefined
-	) => void;
 	/** Builds and sets the grid state from a static definition. */
 	setGridFromInitialDefinition: (definition: {
 		grid: Module[][];
 		gridFixed: boolean;
 		superchargedFixed: boolean;
 	}) => void;
-	/** Batch applies modules to the grid by linear index. */
-	applyModulesToGrid: (modules: (Module | null)[]) => void;
-	/** Restores the entire grid state from a saved build while ensuring derived state is recomputed. */
-	restoreGridState: (savedState: Partial<GridStore>) => void;
+	/** Stores the default grid definition for the current ship. */
+	setInitialGridDefinition: (
+		definition: undefined | { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean }
+	) => void;
+	/**
+	 * Updates the `isSharedGrid` status.
+	 *
+	 * @param {boolean} isShared - Whether the current grid is from a share URL.
+	 */
+	setIsSharedGrid: (isShared: boolean) => void;
+
+	/** Updates the optimization result and synchronizes tech-specific stats. */
+	setResult: (result: ApiResponse | null, tech: string) => void;
+	/** Toggles the supercharged slot lock. */
+	setSuperchargedFixed: (fixed: boolean) => void;
+	/** Whether the locations of supercharged slots are locked. */
+	superchargedFixed: boolean;
+	/** Toggles the `active` status of a cell. */
+	toggleCellActive: (rowIndex: number, columnIndex: number) => void;
+	/** Toggles the `supercharged` status of a cell. */
+	toggleCellSupercharged: (rowIndex: number, columnIndex: number) => void;
 	/** Triggers a manual recomputation of all precomputed derived state fields. */
 	triggerRecompute: () => void;
+	/** Version of the persisted state schema. */
+	version: number;
 };
 
 const debouncedStorage = {
-	setItem: debounceSetItem((name: string, value: StorageValue<Partial<GridStore>>) => {
-		try {
-			const storageValue = JSON.stringify(value);
-			const success = safeSetItem(name, storageValue);
-
-			return success ? Promise.resolve() : Promise.reject(new Error("Storage blocked"));
-		} catch (e) {
-			console.error("Failed to save to localStorage:", e);
-
-			if (e instanceof Error) {
-				return Promise.reject(e);
-			}
-
-			return Promise.reject(new Error(String(e)));
-		}
-	}, 1000),
-
-	getItem: (name: string): StorageValue<Partial<GridStore>> | null => {
+	getItem: (name: string): null | StorageValue<Partial<GridStore>> => {
 		try {
 			if (typeof window !== "undefined" && window.localStorage) {
 				const performCleanup = () => {
@@ -473,6 +456,23 @@ const debouncedStorage = {
 	removeItem: (name: string): void => {
 		safeRemoveItem(name);
 	},
+
+	setItem: debounceSetItem((name: string, value: StorageValue<Partial<GridStore>>) => {
+		try {
+			const storageValue = JSON.stringify(value);
+			const success = safeSetItem(name, storageValue);
+
+			return success ? Promise.resolve() : Promise.reject(new Error("Storage blocked"));
+		} catch (e) {
+			console.error("Failed to save to localStorage:", e);
+
+			if (e instanceof Error) {
+				return Promise.reject(e);
+			}
+
+			return Promise.reject(new Error(String(e)));
+		}
+	}, 1000),
 };
 
 /**
@@ -629,33 +629,123 @@ export const useGridStore = create<GridStore>()(
 			};
 
 			return {
-				version: 1, // Initialize version to 1
-				grid: createGrid(10, 6),
-				result: null,
-				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
-				buildName: null,
-				gridFixed: false,
-				superchargedFixed: false,
-				initialGridDefinition: undefined,
+				_firstInactiveRowIndex: 0,
+				_hasModulesInGrid: false,
 				_initialCellStateForTap: null,
+				_isGridFull: false,
+				_lastActiveRowIndex: -1,
+				_totalSuperchargedCells: 0,
+				activateRow: (rowIndex: number) => {
+					set((state) => {
+						if (state.grid.cells[rowIndex]) {
+							state.grid.cells[rowIndex].forEach((cell: Cell) => {
+								cell.active = true;
+							});
+						}
 
+						recomputeDerivedState(state);
+					});
+				},
 				// Precomputed derived state — defaults for empty grid
 				activeTechs: new Set<string>(),
-				_isGridFull: false,
-				_totalSuperchargedCells: 0,
-				_hasModulesInGrid: false,
-				_firstInactiveRowIndex: 0,
-				_lastActiveRowIndex: -1,
-
-				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
-
-				setBuildName: (name) => set({ buildName: name }),
-
-				setGrid: (grid) =>
+				applyModulesToGrid: (modules: (Module | null)[]) => {
 					set((state) => {
-						state.grid = grid;
+						modules.forEach((moduleData, index) => {
+							const rowIndex = Math.floor(index / state.grid.width);
+							const colIndex = index % state.grid.width;
+							const cell = state.grid.cells[rowIndex]?.[colIndex];
+
+							if (cell) {
+								if (moduleData) {
+									const m = moduleData as Module & { group_adjacent?: boolean };
+									Object.assign(cell, {
+										active: m.active ?? cell.active,
+										adjacency: m.adjacency ?? cell.adjacency,
+										adjacency_bonus: m.adjacency_bonus ?? cell.adjacency_bonus,
+										bonus: m.bonus ?? cell.bonus,
+										group_adjacent: m.group_adjacent ?? cell.group_adjacent,
+										image: m.image ?? cell.image,
+										label: m.label ?? cell.label,
+										module: m.id ?? cell.module,
+										sc_eligible: m.sc_eligible ?? cell.sc_eligible,
+										supercharged: m.supercharged ?? cell.supercharged,
+										tech: m.tech ?? cell.tech,
+										type: m.type ?? cell.type,
+										value: m.value ?? cell.value,
+									});
+								} else {
+									resetCellContent(cell);
+								}
+							}
+						});
+
 						recomputeDerivedState(state);
-					}),
+					});
+				},
+
+				buildName: null,
+				clearInitialCellStateForTap: () => {
+					set((state) => {
+						state._initialCellStateForTap = null;
+					});
+				},
+				deActivateRow: (rowIndex: number) => {
+					set((state) => {
+						if (state.grid.cells[rowIndex]) {
+							state.grid.cells[rowIndex].forEach((cell: Cell) => {
+								cell.active = false;
+								cell.supercharged = false;
+							});
+						}
+
+						recomputeDerivedState(state);
+					});
+				},
+				grid: createGrid(10, 6),
+				gridFixed: false,
+				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (initialCellState && currentCell) {
+							currentCell.supercharged = !initialCellState.supercharged;
+							currentCell.active = true;
+						}
+
+						state._initialCellStateForTap = null;
+						recomputeDerivedState(state);
+					});
+				},
+
+				handleCellTap: (rowIndex: number, columnIndex: number) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (cell) {
+							state._initialCellStateForTap = { ...cell };
+							cell.active = !cell.active;
+
+							if (!cell.active) {
+								cell.supercharged = false;
+							}
+						}
+
+						recomputeDerivedState(state);
+					});
+				},
+
+				hasTechInGrid: (tech: string): boolean => {
+					return get().activeTechs.has(tech);
+				},
+
+				initialGridDefinition: undefined,
+
+				isGridFull: (): boolean => {
+					return get()._isGridFull;
+				},
+
+				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
 
 				resetGrid: () => {
 					set((state) => {
@@ -684,6 +774,99 @@ export const useGridStore = create<GridStore>()(
 					safeRemoveItem("moduleSelectionState");
 				},
 
+				resetGridTech: (tech: string) => {
+					set((state) => {
+						state.grid.cells.forEach((row) => {
+							row.forEach((cell) => {
+								if (cell.tech === tech) {
+									resetCellContent(cell);
+								}
+							});
+						});
+
+						recomputeDerivedState(state);
+					});
+				},
+
+				restoreGridState: (savedState) =>
+					set((state) => {
+						// Safely merge saved state into current draft
+						// We use Object.assign on the state draft to update fields
+						// Immer will handle the proxy correctly.
+						Object.assign(state, savedState);
+
+						// Ensure derived state is re-calculated based on restored data
+						recomputeDerivedState(state);
+					}),
+
+				result: null,
+
+				revertCellTap: (rowIndex: number, columnIndex: number) => {
+					set((state) => {
+						const initialCellState = state._initialCellStateForTap;
+						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (initialCellState && currentCell) {
+							currentCell.active = initialCellState.active;
+							currentCell.supercharged = initialCellState.supercharged;
+						}
+
+						state._initialCellStateForTap = null;
+						recomputeDerivedState(state);
+					});
+				},
+
+				selectFirstInactiveRowIndex: () => {
+					return get()._firstInactiveRowIndex;
+				},
+
+				selectHasModulesInGrid: () => {
+					return get()._hasModulesInGrid;
+				},
+
+				selectLastActiveRowIndex: () => {
+					return get()._lastActiveRowIndex;
+				},
+
+				selectTotalSuperchargedCells: () => {
+					return get()._totalSuperchargedCells;
+				},
+
+				setBuildName: (name) => set({ buildName: name }),
+
+				setCellActive: (rowIndex, columnIndex, active) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (cell) {
+							cell.active = active;
+
+							if (!active) {
+								cell.supercharged = false;
+							}
+						}
+
+						recomputeDerivedState(state);
+					});
+				},
+
+				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
+					set((state) => {
+						const cell = state.grid.cells[rowIndex]?.[columnIndex];
+
+						if (cell) {
+							if (cell.active || !supercharged) cell.supercharged = supercharged;
+						}
+
+						recomputeDerivedState(state);
+					});
+				},
+
+				setGrid: (grid) =>
+					set((state) => {
+						state.grid = grid;
+						recomputeDerivedState(state);
+					}),
 				setGridAndResetAuxiliaryState: (newGrid) => {
 					set((state) => {
 						state.grid = newGrid;
@@ -701,6 +884,20 @@ export const useGridStore = create<GridStore>()(
 					safeRemoveItem("moduleSelectionState");
 				},
 
+				setGridFixed: (fixed) => set({ gridFixed: fixed }),
+
+				setGridFromInitialDefinition: (definition) => {
+					set((state) => {
+						applyGridDefinition(state, definition);
+						recomputeDerivedState(state);
+					});
+				},
+
+				setInitialGridDefinition: (definition) =>
+					set({ initialGridDefinition: definition }),
+
+				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
+
 				setResult: (result, tech) => {
 					const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } =
 						useTechStore.getState();
@@ -714,59 +911,8 @@ export const useGridStore = create<GridStore>()(
 						setTechSolveMethod(tech, result.solve_method);
 					}
 				},
-
-				handleCellTap: (rowIndex: number, columnIndex: number) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							state._initialCellStateForTap = { ...cell };
-							cell.active = !cell.active;
-
-							if (!cell.active) {
-								cell.supercharged = false;
-							}
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (initialCellState && currentCell) {
-							currentCell.supercharged = !initialCellState.supercharged;
-							currentCell.active = true;
-						}
-
-						state._initialCellStateForTap = null;
-						recomputeDerivedState(state);
-					});
-				},
-
-				revertCellTap: (rowIndex: number, columnIndex: number) => {
-					set((state) => {
-						const initialCellState = state._initialCellStateForTap;
-						const currentCell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (initialCellState && currentCell) {
-							currentCell.active = initialCellState.active;
-							currentCell.supercharged = initialCellState.supercharged;
-						}
-
-						state._initialCellStateForTap = null;
-						recomputeDerivedState(state);
-					});
-				},
-
-				clearInitialCellStateForTap: () => {
-					set((state) => {
-						state._initialCellStateForTap = null;
-					});
-				},
+				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
+				superchargedFixed: false,
 
 				toggleCellActive: (rowIndex, columnIndex) => {
 					set((state) => {
@@ -804,182 +950,28 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					}),
 
-				setCellActive: (rowIndex, columnIndex, active) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							cell.active = active;
-
-							if (!active) {
-								cell.supercharged = false;
-							}
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				setCellSupercharged: (rowIndex, columnIndex, supercharged) => {
-					set((state) => {
-						const cell = state.grid.cells[rowIndex]?.[columnIndex];
-
-						if (cell) {
-							if (cell.active || !supercharged) cell.supercharged = supercharged;
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				activateRow: (rowIndex: number) => {
-					set((state) => {
-						if (state.grid.cells[rowIndex]) {
-							state.grid.cells[rowIndex].forEach((cell: Cell) => {
-								cell.active = true;
-							});
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				deActivateRow: (rowIndex: number) => {
-					set((state) => {
-						if (state.grid.cells[rowIndex]) {
-							state.grid.cells[rowIndex].forEach((cell: Cell) => {
-								cell.active = false;
-								cell.supercharged = false;
-							});
-						}
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				hasTechInGrid: (tech: string): boolean => {
-					return get().activeTechs.has(tech);
-				},
-
-				isGridFull: (): boolean => {
-					return get()._isGridFull;
-				},
-				resetGridTech: (tech: string) => {
-					set((state) => {
-						state.grid.cells.forEach((row) => {
-							row.forEach((cell) => {
-								if (cell.tech === tech) {
-									resetCellContent(cell);
-								}
-							});
-						});
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				selectTotalSuperchargedCells: () => {
-					return get()._totalSuperchargedCells;
-				},
-
-				selectHasModulesInGrid: () => {
-					return get()._hasModulesInGrid;
-				},
-
-				selectFirstInactiveRowIndex: () => {
-					return get()._firstInactiveRowIndex;
-				},
-
-				selectLastActiveRowIndex: () => {
-					return get()._lastActiveRowIndex;
-				},
-
-				setGridFixed: (fixed) => set({ gridFixed: fixed }),
-				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
-				setInitialGridDefinition: (definition) =>
-					set({ initialGridDefinition: definition }),
-
-				setGridFromInitialDefinition: (definition) => {
-					set((state) => {
-						applyGridDefinition(state, definition);
-						recomputeDerivedState(state);
-					});
-				},
-
-				applyModulesToGrid: (modules: (Module | null)[]) => {
-					set((state) => {
-						modules.forEach((moduleData, index) => {
-							const rowIndex = Math.floor(index / state.grid.width);
-							const colIndex = index % state.grid.width;
-							const cell = state.grid.cells[rowIndex]?.[colIndex];
-
-							if (cell) {
-								if (moduleData) {
-									const m = moduleData as Module & { group_adjacent?: boolean };
-									Object.assign(cell, {
-										active: m.active ?? cell.active,
-										adjacency: m.adjacency ?? cell.adjacency,
-										adjacency_bonus: m.adjacency_bonus ?? cell.adjacency_bonus,
-										bonus: m.bonus ?? cell.bonus,
-										image: m.image ?? cell.image,
-										module: m.id ?? cell.module,
-										label: m.label ?? cell.label,
-										sc_eligible: m.sc_eligible ?? cell.sc_eligible,
-										supercharged: m.supercharged ?? cell.supercharged,
-										group_adjacent: m.group_adjacent ?? cell.group_adjacent,
-										tech: m.tech ?? cell.tech,
-										type: m.type ?? cell.type,
-										value: m.value ?? cell.value,
-									});
-								} else {
-									resetCellContent(cell);
-								}
-							}
-						});
-
-						recomputeDerivedState(state);
-					});
-				},
-
-				restoreGridState: (savedState) =>
-					set((state) => {
-						// Safely merge saved state into current draft
-						// We use Object.assign on the state draft to update fields
-						// Immer will handle the proxy correctly.
-						Object.assign(state, savedState);
-
-						// Ensure derived state is re-calculated based on restored data
-						recomputeDerivedState(state);
-					}),
-
 				triggerRecompute: () => {
 					set((state) => {
 						recomputeDerivedState(state);
 					});
 				},
+
+				version: 1, // Initialize version to 1
 			};
 		}),
 		{
-			name: "gridState",
-			version: 1, // Current version of the storage schema
-			storage: debouncedStorage,
-			onRehydrateStorage: () => (state) => {
-				if (state) {
-					state.triggerRecompute();
-				}
-			},
-			partialize: (state) => {
-				const dataToPersist = {
-					grid: state.grid,
-					isSharedGrid: state.isSharedGrid,
-					buildName: state.buildName,
-					gridFixed: state.gridFixed,
-					superchargedFixed: state.superchargedFixed,
-					initialGridDefinition: state.initialGridDefinition,
-					selectedPlatform: usePlatformStore.getState().selectedPlatform,
-				};
+			merge: (persistedState, currentState) => {
+				const stateFromStorage = persistedState as Partial<GridStore>;
+				const currentUrlHasGrid = new URLSearchParams(getWindowSearch()).has("grid");
 
-				return dataToPersist;
+				return {
+					...currentState,
+					...stateFromStorage,
+					initialGridDefinition:
+						stateFromStorage.initialGridDefinition ||
+						currentState.initialGridDefinition,
+					isSharedGrid: currentUrlHasGrid,
+				};
 			},
 			migrate: (persistedState: unknown, version: number) => {
 				const state = persistedState as Partial<GridStore>;
@@ -990,19 +982,27 @@ export const useGridStore = create<GridStore>()(
 
 				return state;
 			},
-			merge: (persistedState, currentState) => {
-				const stateFromStorage = persistedState as Partial<GridStore>;
-				const currentUrlHasGrid = new URLSearchParams(getWindowSearch()).has("grid");
-
-				return {
-					...currentState,
-					...stateFromStorage,
-					isSharedGrid: currentUrlHasGrid,
-					initialGridDefinition:
-						stateFromStorage.initialGridDefinition ||
-						currentState.initialGridDefinition,
-				};
+			name: "gridState",
+			onRehydrateStorage: () => (state) => {
+				if (state) {
+					state.triggerRecompute();
+				}
 			},
+			partialize: (state) => {
+				const dataToPersist = {
+					buildName: state.buildName,
+					grid: state.grid,
+					gridFixed: state.gridFixed,
+					initialGridDefinition: state.initialGridDefinition,
+					isSharedGrid: state.isSharedGrid,
+					selectedPlatform: usePlatformStore.getState().selectedPlatform,
+					superchargedFixed: state.superchargedFixed,
+				};
+
+				return dataToPersist;
+			},
+			storage: debouncedStorage,
+			version: 1, // Current version of the storage schema
 		}
 	)
 );
@@ -1011,8 +1011,8 @@ export const useGridStore = create<GridStore>()(
 if (typeof window !== "undefined") {
 	const w = window as typeof window & {
 		__E2E_EXPOSE__?: boolean;
-		useGridStore?: typeof useGridStore;
 		handleCellDoubleTap?: (row: number, col: number) => void;
+		useGridStore?: typeof useGridStore;
 	};
 
 	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {

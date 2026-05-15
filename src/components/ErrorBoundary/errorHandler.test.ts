@@ -37,8 +37,8 @@ describe("errorHandler", () => {
 
 			expect(sendEventSpy).toHaveBeenCalledWith(
 				expect.objectContaining({
-					category: "error",
 					action: "Error",
+					category: "error",
 					label: "Test error",
 					nonInteraction: true,
 				})
