@@ -819,3 +819,27 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: Lefthook's configuration is cleaner and avoids the hidden `.husky/_` directory overhead. The porting of complex shell logic into `lefthook.yml` ensures that project-specific enforcements (like the Beads/Conductor link) remain active while benefitting from Lefthook's faster execution model.
+
+## 2026-05-15: CSS Pipeline Simplification (Tailwind v4 + LightningCSS)
+
+### Perceive & Understand
+- **Request**: Audit the CSS stack (Sass, LightningCSS, PostCSS, Autoprefixer) for redundancies following the Tailwind v4 migration.
+- **Context**: Tailwind v4 uses LightningCSS internally for many tasks previously handled by separate PostCSS plugins. The project is already using `@tailwindcss/vite`.
+
+### Reason & Plan
+- **Audit**: Confirmed that `vite.config.ts` is already configured to use `lightningcss` as the CSS transformer and minifier.
+- **Redundancy**: Identified that `autoprefixer` and `@tailwindcss/postcss` (in `postcss.config.mjs`) were redundant because:
+    1. `@tailwindcss/vite` handles Tailwind directives in CSS files.
+    2. LightningCSS handles vendor prefixing (replacing Autoprefixer) and minification for all styles, including compiled Scss.
+- **Plan**: 
+    1. Remove `postcss.config.mjs`.
+    2. Uninstall `@tailwindcss/postcss` and `autoprefixer`.
+    3. Verify that Sass compilation and CSS linting remain functional.
+
+### Act & Implement
+- **Action**: Deleted `postcss.config.mjs`.
+- **Action**: Uninstalled redundant dependencies via `bun remove`.
+- **Action**: Ran `bun run lint:css` and the full test suite to ensure style integrity.
+
+### Refine & Reflect
+- **Reflection**: Moving to a unified CSS pipeline powered by Vite 8 and LightningCSS significantly reduces configuration surface area and build complexity. The project now relies on native Vite/LightningCSS features for modern CSS processing, keeping the toolchain lean and focused.
