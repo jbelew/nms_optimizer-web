@@ -1,0 +1,14 @@
+{
+	"$schema": "https://unpkg.com/knip@6/schema.json",
+	"entry": [
+		"scripts/**/*.{js,mjs,cjs}",
+		".storybook/**/*.{ts,tsx,js}",
+		"src/**/*.stories.{ts,tsx}",
+		"src/**/*.test.{ts,tsx}",
+		"e2e-tests/**/*.{ts,js}",
+		"functions/**/*.{ts,js}"
+	],
+	"project": ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{js,mjs,cjs}"],
+	"ignore": ["typedoc.json"],
+	"ignoreDependencies": []
+}

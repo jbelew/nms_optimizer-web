@@ -1,0 +1,47 @@
+[
+	{
+		"name": "Entry chunk (initial JS)",
+		"path": "dist/build/entry-*.js",
+		"limit": "80 KB"
+	},
+	{
+		"name": "React core vendor",
+		"path": "dist/build/vendor-core-*.js",
+		"limit": "75 KB"
+	},
+	{
+		"name": "Router vendor",
+		"path": "dist/build/vendor-router-*.js",
+		"limit": "35 KB"
+	},
+	{
+		"name": "Radix UI themes vendor",
+		"path": "dist/build/vendor-ui-themes-*.js",
+		"limit": "55 KB"
+	},
+	{
+		"name": "i18n vendor",
+		"path": "dist/build/vendor-i18n-*.js",
+		"limit": "30 KB"
+	},
+	{
+		"name": "Recharts vendor (lazy)",
+		"path": "dist/build/vendor-charts-*.js",
+		"limit": "120 KB"
+	},
+	{
+		"name": "Markdown vendor (lazy)",
+		"path": "dist/build/vendor-markdown-*.js",
+		"limit": "150 KB"
+	},
+	{
+		"name": "Telemetry vendor (events chunk)",
+		"path": "dist/build/vendor-telemetry-*.js",
+		"limit": "10 KB"
+	},
+	{
+		"name": "Total app JS (gzipped)",
+		"path": "dist/build/*.js",
+		"limit": "650 KB"
+	}
+]

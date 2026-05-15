@@ -89,35 +89,6 @@ export interface GroupedModules {
 }
 
 /**
- * Props for the `ModuleCheckbox` component.
- */
-export interface ModuleCheckboxProps {
-	/** Whether the checkbox is in a read-only or blocked state. */
-	isDisabled: boolean;
-	/** The module object containing label, ID, and image data. **Must be valid.** */
-	module: SelectionModule;
-	/** The theme color applied to the module's avatar background. */
-	techColor: TechTreeRowProps["techColor"];
-}
-
-/**
- * Props for the `ModuleGroup` component.
- */
-export interface ModuleGroupProps extends Pick<
-	ModuleSelectionDialogProps,
-	"currentCheckedModules" | "techColor"
-> {
-	/** The internal name of the group (e.g., 'upgrade', 'bonus'). **Must be a valid category key.** */
-	groupName: string;
-	/** Array of modules belonging to this group. */
-	modules: SelectionModule[];
-	/** Callback function to close the parent dialog. */
-	onClose?: () => void;
-	/** Optional title to display instead of the localized group name. */
-	titleOverride?: string;
-}
-
-/**
  * Props for the `ModuleSelectionDialog` component.
  */
 export interface ModuleSelectionDialogProps {
@@ -163,6 +134,35 @@ export interface SelectionModule {
 	label: string;
 	/** Optional classification (e.g., 'upgrade'). */
 	type?: string;
+}
+
+/**
+ * Props for the `ModuleCheckbox` component.
+ */
+interface ModuleCheckboxProps {
+	/** Whether the checkbox is in a read-only or blocked state. */
+	isDisabled: boolean;
+	/** The module object containing label, ID, and image data. **Must be valid.** */
+	module: SelectionModule;
+	/** The theme color applied to the module's avatar background. */
+	techColor: TechTreeRowProps["techColor"];
+}
+
+/**
+ * Props for the `ModuleGroup` component.
+ */
+interface ModuleGroupProps extends Pick<
+	ModuleSelectionDialogProps,
+	"currentCheckedModules" | "techColor"
+> {
+	/** The internal name of the group (e.g., 'upgrade', 'bonus'). **Must be a valid category key.** */
+	groupName: string;
+	/** Array of modules belonging to this group. */
+	modules: SelectionModule[];
+	/** Callback function to close the parent dialog. */
+	onClose?: () => void;
+	/** Optional title to display instead of the localized group name. */
+	titleOverride?: string;
 }
 
 /**
@@ -242,11 +242,7 @@ const formatLabel = (label: string): React.ReactNode => {
  * // renders checkbox with icon and label
  * ```
  */
-export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
-	isDisabled,
-	module,
-	techColor,
-}) => {
+const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({ isDisabled, module, techColor }) => {
 	const imagePath = module.image
 		? `${baseImagePath}${module.image}?v=${__APP_VERSION__}`
 		: fallbackImage;
@@ -289,7 +285,7 @@ export const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({
  * // renders group with title and children
  * ```
  */
-export const ModuleGroup: React.FC<ModuleGroupProps> = ({
+const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	currentCheckedModules,
 	groupName,
 	modules,
@@ -400,7 +396,7 @@ export const ModuleGroup: React.FC<ModuleGroupProps> = ({
  * // renders select-all toggle and grouped module lists
  * ```
  */
-export const DialogBody: React.FC<DialogBodyProps> = ({
+const DialogBody: React.FC<DialogBodyProps> = ({
 	allModulesSelected,
 	currentCheckedModules,
 	groupedModules,
@@ -525,7 +521,7 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
  * // renders Cancel and Optimize buttons
  * ```
  */
-export const DialogFooter: React.FC<DialogFooterProps> = ({
+const DialogFooter: React.FC<DialogFooterProps> = ({
 	currentCheckedModules,
 	handleOptimizeClick,
 	onClose,

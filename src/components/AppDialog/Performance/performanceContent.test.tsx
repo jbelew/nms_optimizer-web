@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
 
-import { PerformanceContent } from "./PerformanceContent";
+import { PerformanceContent } from "./performanceContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

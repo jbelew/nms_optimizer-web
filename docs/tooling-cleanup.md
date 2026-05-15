@@ -5,7 +5,7 @@ Items are ranked by impact / effort.
 
 ---
 
-## 1. Remove unused dependencies (quick win)
+## 1. Remove unused dependencies (quick win) ✅ DONE
 
 Both screenshot scripts (`scripts/screenshot.mjs`, `scripts/screenshot-blurred-background.js`)
 already use Playwright's `chromium`. `puppeteer` and `puppeteer-core` appear unused.
@@ -20,7 +20,7 @@ bun remove puppeteer puppeteer-core
 
 ---
 
-## 2. Audit PostCSS / autoprefixer
+## 2. Audit PostCSS / autoprefixer ✅ DONE
 
 `postcss.config.mjs` is currently empty. Tailwind v4 + Lightning CSS handle
 vendor prefixing internally, so the PostCSS pipeline is likely dead weight.
@@ -37,7 +37,7 @@ Verify with `bun run build` after removal.
 
 ---
 
-## 3. CI: cache Bun's install store
+## 3. CI: cache Bun's install store ✅ DONE
 
 `oven-sh/setup-bun@v2` does **not** auto-cache. The composite action
 `.github/actions/setup-node-env` runs `bun install --frozen-lockfile` every
@@ -56,11 +56,10 @@ Typical savings: 30–60s per CI job.
 
 ---
 
-## 4. CI: Bun-native test runner for `scripts/`
+## 4. CI: Bun-native test runner for `scripts/` ✅ DONE
 
-`bun test scripts/` is already wired into `package.json` and Lefthook now runs
-it on `scripts/**` changes. Mirror this in CI and consider dropping the
-separate `vitest.scripts.config.ts` if Bun's test runner covers it fully.
+`bun test scripts/` runs in CI via `bun run test:scripts`
+(`.github/workflows/ci.yml`). Lefthook also runs it on `scripts/**` changes.
 
 ---
 
@@ -75,7 +74,7 @@ Test by removing the `actions/setup-node@v4` step from
 
 ---
 
-## 6. Replace `commitizen` + AI plugin
+## 6. Replace `commitizen` + AI plugin ✅ DONE
 
 `commit-msg` Lefthook hook now enforces commitlint, so commitizen is only
 needed if a developer interactively uses `cz`. If no one does, remove:
@@ -86,34 +85,26 @@ needed if a developer interactively uses `cz`. If no one does, remove:
 
 ---
 
-## 7. Consolidate Vitest configs
+## 7. Consolidate Vitest configs ✅ DONE
 
-Currently four configs:
+Previously two configs:
 
-- `vitest.config.ts`
-- `vitest.unit.config.ts`
-- `vitest.scripts.config.ts`
-- `vitest.server.config.ts`
+- `vitest.config.ts` (Storybook + browser tests)
+- `vitest.unit.config.ts` (jsdom unit tests)
 
-Vitest 4 supports **workspaces** natively (`vitest.workspace.ts` or
-`test.projects` in a single config). Collapsing gives:
-
-- Single `bunx vitest` run for everything
-- Shared transform / coverage setup
-- Easier navigation in `--ui`
+Now collapsed into a single `vitest.config.ts` using Vitest 4's
+`test.projects` field. Two named projects: `unit` and `storybook`.
+Scripts updated to use `--project unit` / `--project storybook`.
 
 ---
 
-## 8. Review `wrangler`
+## 8. Review `wrangler` ✅ KEEP
 
-`wrangler` is in `devDependencies`, plus there's a `.wrangler/` cache, a
-`functions/` directory, and `scripts/cloudflare/`. Production deploys via
-Heroku (`Procfile`). If Cloudflare Pages/Workers is no longer used, this is
-dead weight. If used in parallel, leave it alone — just confirm.
+Confirmed in active use. No action needed.
 
 ---
 
-## 9. Delete `.npmrc`
+## 9. Delete `.npmrc` ✅ DONE
 
 Contents:
 
@@ -149,22 +140,37 @@ independent.
 
 ## Summary
 
-**Remove**
+**Completed**
 
-- `puppeteer`, `puppeteer-core`
-- `commitizen`, `@elsikora/commitizen-plugin-commitlint-ai`
-- `postcss`, `autoprefixer`, `@tailwindcss/postcss`, `postcss.config.mjs`
-- `.npmrc`
+- ✅ Removed `puppeteer`, `puppeteer-core`
+- ✅ Removed `commitizen`, `@elsikora/commitizen-plugin-commitlint-ai`
+- ✅ Removed `postcss`, `autoprefixer`, `@tailwindcss/postcss`, `postcss.config.mjs`
+- ✅ Removed `.npmrc`
+- ✅ Added Bun install-cache step in CI
+- ✅ Wired `bun test scripts/` into CI
+- ✅ Consolidated Vitest configs into one workspace
+- ✅ Confirmed `wrangler` is in active use (kept)
 
-**Add**
+**Outstanding**
 
-- Bun install-cache step in CI
+- ⏳ #5 — Investigate whether Node.js can be dropped from CI
 
-**Consolidate**
+---
 
-- Four Vitest configs → one workspace
+## Round 2: New tooling added
 
-**Verify**
-
-- `wrangler` is still needed
-- Node.js can be dropped from CI
+- ✅ **Knip** ([knip.json](../knip.json)) — unused export/dep/file detection.
+  CI runs `bun run lint:knip` (`continue-on-error: true` while the team
+  works through the baseline findings).
+- ✅ **Oxlint** ([.oxlintrc.json](../.oxlintrc.json)) — fast Rust-based
+  pre-pass. Runs in `lint-js` lefthook command before ESLint and via
+  `bun run lint`. Passes cleanly (15 real a11y findings flagged as warnings
+  for later cleanup).
+- ✅ **size-limit** ([.size-limit.json](../.size-limit.json)) — bundle
+  size budgets enforced in CI after `build`. All chunks currently under
+  budget; total app JS = ~486 KB brotli.
+- ❌ **cspell** — installed and tested, then removed. Too many
+  project-specific terms (NMS lore, bot UAs, language names) to maintain
+  a curated dictionary; would have been net-friction.
+- ⏸️ **act** — not installed (system tool). Install via package manager
+  when needed: `apt install act` or `brew install act`.

@@ -6,7 +6,7 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/en
 /**
  * Valid theme appearance types.
  */
-export type ThemeAppearance = "dark" | "light";
+type ThemeAppearance = "dark" | "light";
 
 /**
  * State and actions for the application's theme management.

@@ -13,8 +13,8 @@ import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
 import AppFooter from "../AppFooter/AppFooter";
 import AppHeader from "../AppHeader/AppHeader";
 import { GridTable } from "../GridTable/GridTable";
-import MessageSpinner from "../MessageSpinner/MessageSpinner";
-import { ShipSelection } from "../ShipSelection/ShipSelection";
+import { MessageSpinner } from "../MessageSpinner/messageSpinner";
+import { ShipSelection } from "../ShipSelection/shipSelection";
 import TechTree, { TechTreeSkeleton } from "../TechTree/TechTree";
 import { useMainAppLogic } from "./useMainAppLogic";
 

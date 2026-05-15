@@ -6,7 +6,7 @@ import { vi } from "vitest";
 import { useTechTreeColors } from "@/hooks/useTechTreeColors/useTechTreeColors";
 import { useUserStats } from "@/hooks/useUserStats/useUserStats";
 
-import { UserStatsContent } from "./UserStatsContent";
+import { UserStatsContent } from "./userStatsContent";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

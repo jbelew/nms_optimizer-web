@@ -24,10 +24,11 @@ pre-commit:
         fi
 
     # ----- Lint & format (per-file-type, scoped to staged files) -----
-    eslint:
+    # oxlint + eslint run sequentially in one command to avoid races on --fix
+    lint-js:
       tags: lint
       glob: "*.{js,jsx,ts,tsx,cjs,mjs}"
-      run: bunx eslint --fix {staged_files}
+      run: bunx oxlint --fix {staged_files} && bunx eslint --fix {staged_files}
       stage_fixed: true
 
     stylelint:

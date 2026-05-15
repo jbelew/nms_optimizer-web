@@ -60,5 +60,3 @@ export const ErrorDialog: FC = () => {
 		</Suspense>
 	);
 };
-
-export default ErrorDialog;

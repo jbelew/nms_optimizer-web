@@ -4,7 +4,7 @@ import { vi } from "vitest";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "../../hooks/useUpdateCheck/useUpdateCheck";
-import UpdatePromptWrapper from "./UpdatePromptWrapper";
+import { UpdatePromptWrapper } from "./updatePromptWrapper";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

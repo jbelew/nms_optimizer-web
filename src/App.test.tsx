@@ -33,30 +33,30 @@ vi.mock("react-i18next", async () => {
 	return {
 		...original,
 		useTranslation: () => ({
-			t: (str: string) => str,
 			i18n: {
 				changeLanguage: vi.fn(),
 				language: "en",
 				services: {
 					resourceStore: {
 						data: {
+							de: { translation: {} },
 							en: { translation: {} },
 							es: { translation: {} },
 							fr: { translation: {} },
-							de: { translation: {} },
 							pt: { translation: {} },
 						},
 					},
 				},
 			},
+			t: (str: string) => str,
 		}),
 	};
 });
 
 vi.mock("./hooks/useUrlSync/useUrlSync", () => ({
 	useUrlSync: vi.fn(() => ({
-		updateUrlForShare: vi.fn(),
 		updateUrlForReset: vi.fn(),
+		updateUrlForShare: vi.fn(),
 	})),
 }));
 
@@ -65,41 +65,41 @@ vi.mock("./hooks/useShipTypes/useShipTypes", () => ({
 	useFetchShipTypesSuspense: vi.fn(() => ({
 		standard: {
 			label: "Standard",
-			type: "ship",
 			technologies: [],
+			type: "ship",
 		},
 	})),
 }));
 
 // Mock useTechTree to prevent network requests
 vi.mock("./hooks/useTechTree/useTechTree", () => ({
+	fetchTechTree: vi.fn(() => Promise.resolve({})),
+	useFetchTechTreeSuspense: vi.fn(() => ({
+		recommended_builds: [], // Add recommended_builds to satisfy the interface
+		// Mock the return value of useFetchTechTreeSuspense
+		// This should match the expected structure of the tech tree data
+		standard: [
+			{
+				color: "blue",
+				image: null,
+				key: "tech1",
+				label: "Technology 1",
+				module_count: 0,
+				modules: [],
+			},
+		],
+	})),
 	useTechTree: vi.fn(() => ({
+		error: null,
+		fetchTechTree: vi.fn(),
+		isLoading: false,
 		techTree: {
 			standard: {
 				name: "Standard",
 				technologies: [], // Provide an empty array for technologies
 			},
 		},
-		isLoading: false,
-		error: null,
-		fetchTechTree: vi.fn(),
 	})),
-	useFetchTechTreeSuspense: vi.fn(() => ({
-		// Mock the return value of useFetchTechTreeSuspense
-		// This should match the expected structure of the tech tree data
-		standard: [
-			{
-				label: "Technology 1",
-				key: "tech1",
-				modules: [],
-				image: null,
-				color: "blue",
-				module_count: 0,
-			},
-		],
-		recommended_builds: [], // Add recommended_builds to satisfy the interface
-	})),
-	fetchTechTree: vi.fn(() => Promise.resolve({})),
 }));
 
 vi.mock("./components/MainAppContent/MainAppContent", () => ({
@@ -111,22 +111,22 @@ vi.mock("./hooks/useUrlValidation/useUrlValidation", () => ({
 }));
 
 vi.mock("./utils/analytics/tracking", () => ({
-	sendEvent: vi.fn(),
-	sendDeferredEvent: vi.fn(),
 	initializeAnalytics: vi.fn(),
 	initializeAnalyticsClient: vi.fn(),
 	resetAnalyticsForTesting: vi.fn(),
+	sendDeferredEvent: vi.fn(),
+	sendEvent: vi.fn(),
 }));
 
 vi.mock("./components/AppDialog/Base/AppDialog", () => ({
 	default: ({
-		title,
 		content,
 		isOpen,
+		title,
 	}: {
-		title: string;
 		content: React.ReactNode;
 		isOpen: boolean;
+		title: string;
 	}) =>
 		isOpen ? (
 			<div data-testid="app-dialog">
@@ -158,7 +158,7 @@ describe("App", () => {
 		// Reset the platform store before each test
 		usePlatformStore.setState({ selectedPlatform: "standard" });
 		// Reset the optimize store before each test to prevent state leakage
-		useOptimizeStore.setState({ showError: false, errorType: null, error: null });
+		useOptimizeStore.setState({ error: null, errorType: null, showError: false });
 		// Clear all mocks
 		vi.clearAllMocks();
 	});
@@ -213,8 +213,8 @@ describe("App", () => {
 				);
 				expect(sendEvent).toHaveBeenCalledWith(
 					expect.objectContaining({
-						category: "navigation",
 						action: "not_found",
+						category: "navigation",
 						nonInteraction: true,
 					})
 				);

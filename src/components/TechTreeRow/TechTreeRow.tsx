@@ -313,7 +313,7 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
  * // renders Solve/Update and Reset buttons
  * ```
  */
-export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
+const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
 	const {
 		currentCheckedModules,
@@ -378,7 +378,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFu
  * // renders text with localized name
  * ```
  */
-export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
+const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 	const { translatedTechName } = hookData;
 	const isSmallAndUp = useBreakpoint("640px");
 
@@ -408,7 +408,7 @@ export const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
  * // renders module count and efficiency icons
  * ```
  */
-export const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, tech }) => {
+const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, tech }) => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
 	const { sendDeferredEvent } = useAnalytics();

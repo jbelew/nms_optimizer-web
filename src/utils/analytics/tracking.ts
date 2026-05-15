@@ -43,22 +43,6 @@ export interface AnalyticsEventParams {
 }
 
 /**
- * Payload sent to the backend for server-side analytics.
- *
- * @category Utilities
- */
-export interface AnalyticsEventPayload {
-	/** Unique client session ID. */
-	clientId: string;
-	/** Event name. */
-	eventName: string;
-	/** Event-specific parameters. */
-	params?: AnalyticsEventParams;
-	/** Authenticated user ID. */
-	userId?: string;
-}
-
-/**
  * Interface for Google Analytics 4 event tracking.
  *
  * @remarks
@@ -138,6 +122,22 @@ export interface GA4Event {
 	value?: number;
 	/** Virtual currency name for earn_virtual_currency events. */
 	virtual_currency_name?: string;
+}
+
+/**
+ * Payload sent to the backend for server-side analytics.
+ *
+ * @category Utilities
+ */
+interface AnalyticsEventPayload {
+	/** Unique client session ID. */
+	clientId: string;
+	/** Event name. */
+	eventName: string;
+	/** Event-specific parameters. */
+	params?: AnalyticsEventParams;
+	/** Authenticated user ID. */
+	userId?: string;
 }
 
 /** Flag indicating if GA has been initialized. */
@@ -407,7 +407,7 @@ export const initializeAnalyticsClient = (): string => {
  * // returns string
  * ```
  */
-export const getClientId = (): string => {
+const getClientId = (): string => {
 	if (!clientId) {
 		initializeAnalyticsClient();
 	}

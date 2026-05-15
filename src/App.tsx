@@ -3,8 +3,8 @@ import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
-import ErrorDialog from "./components/AppDialog/Error/ErrorDialog";
-import UpdatePromptWrapper from "./components/UpdatePrompt/UpdatePromptWrapper";
+import { ErrorDialog } from "./components/AppDialog/Error/errorDialog";
+import { UpdatePromptWrapper } from "./components/UpdatePrompt/updatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";
@@ -85,8 +85,8 @@ const PerformanceRoute = lazy(() =>
  */
 const AppContent: FC = () => {
 	const { sendEvent } = useAnalytics();
-	const { showError, errorType } = useOptimizeStore();
-	const { closeDialog, shareUrl, activeDialog, userVisited, markUserVisited } = useDialog();
+	const { errorType, showError } = useOptimizeStore();
+	const { activeDialog, closeDialog, markUserVisited, shareUrl, userVisited } = useDialog();
 	const { t } = useTranslation();
 	const location = useLocation();
 
@@ -119,12 +119,12 @@ const AppContent: FC = () => {
 	useEffect(() => {
 		if (showError && errorType === "fatal") {
 			sendEvent({
-				category: "engagement",
 				action: "page_view",
-				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
-				page_location: window.location.href,
-				page: `${location.pathname}${location.search}#error`,
+				category: "engagement",
 				nonInteraction: true,
+				page: `${location.pathname}${location.search}#error`,
+				page_location: window.location.href,
+				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
 			});
 		}
 	}, [showError, errorType, sendEvent, t, location.pathname, location.search]);
@@ -143,8 +143,8 @@ const AppContent: FC = () => {
 				<Suspense fallback={null}>
 					<ShareLinkDialog
 						isOpen={!!shareUrl}
-						shareUrl={shareUrl || ""}
 						onClose={closeDialog}
+						shareUrl={shareUrl || ""}
 					/>
 				</Suspense>
 			) : null}
@@ -165,22 +165,22 @@ const AppContent: FC = () => {
 			{showWelcome ? (
 				<Suspense fallback={null}>
 					<AppDialog
-						isOpen={showWelcome}
-						onClose={handleCloseWelcome}
 						content={<WelcomeContent onClose={handleCloseWelcome} />}
 						footer={
 							<div className="flex justify-end gap-2">
 								<Button
-									onClick={handleCloseWelcome}
-									mb="1"
 									className="cursor-pointer"
+									mb="1"
+									onClick={handleCloseWelcome}
 								>
 									{t("dialogs.welcome.getStarted")}
 								</Button>
 							</div>
 						}
-						titleKey="dialogs.titles.welcome"
+						isOpen={showWelcome}
+						onClose={handleCloseWelcome}
 						title={t("dialogs.titles.welcome", "Welcome")}
+						titleKey="dialogs.titles.welcome"
 					/>
 				</Suspense>
 			) : null}

@@ -33,7 +33,7 @@ import { ToastContext } from "./createToastContext";
  * ```
  */
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	const [toastConfig, setToastConfig] = useState<ToastConfig | null>(null);
+	const [toastConfig, setToastConfig] = useState<null | ToastConfig>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**
@@ -71,7 +71,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * ```
 	 */
 	const showSuccess = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ title, description, variant: "success", duration });
+		showToast({ description, duration, title, variant: "success" });
 	};
 
 	/**
@@ -89,7 +89,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * ```
 	 */
 	const showError = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ title, description, variant: "error", duration });
+		showToast({ description, duration, title, variant: "error" });
 	};
 
 	/**
@@ -107,7 +107,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * ```
 	 */
 	const showInfo = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ title, description, duration });
+		showToast({ description, duration, title });
 	};
 
 	/**
@@ -150,13 +150,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	}, [isOpen]);
 
 	const value: ToastContextType = {
-		toastConfig,
+		closeToast,
 		isOpen,
-		showToast,
-		showSuccess,
 		showError,
 		showInfo,
-		closeToast,
+		showSuccess,
+		showToast,
+		toastConfig,
 	};
 
 	return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;

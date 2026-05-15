@@ -81,4 +81,3 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 };
 
 /** Type representing the return value of the coordinator hook. */
-export type UseModuleSelectionDialogReturn = ReturnType<typeof useModuleSelectionDialog>;

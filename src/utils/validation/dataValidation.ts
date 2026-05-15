@@ -102,7 +102,7 @@ const CONTROL_CHARS = "\x00-\x1F";
  *
  * @category Utilities
  */
-export const FILENAME_REGEX = new RegExp(
+const FILENAME_REGEX = new RegExp(
 	`^(?=.{1,255}$)(?!^(CON|PRn|AUX|NUL|COM[1-9]|LPT[1-9])$)[^<>:"/\\\\|?*${CONTROL_CHARS}]+(?<![ .])$`,
 	"i"
 );

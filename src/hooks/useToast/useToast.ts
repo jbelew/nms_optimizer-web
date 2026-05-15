@@ -2,8 +2,6 @@ import { useContext } from "react";
 
 import { ToastContext } from "../../context/createToastContext";
 
-export type { ToastConfig } from "../../context/createToastContext";
-
 export { ToastProvider } from "../../context/ToastContext";
 
 /**

@@ -843,3 +843,25 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 
 ### Refine & Reflect
 - **Reflection**: Moving to a unified CSS pipeline powered by Vite 8 and LightningCSS significantly reduces configuration surface area and build complexity. The project now relies on native Vite/LightningCSS features for modern CSS processing, keeping the toolchain lean and focused.
+
+## 2026-05-15: Installing 'act' for Local Workflow Testing
+
+### Perceive & Understand
+- **Request**: Install `act` to test GitHub Actions workflows locally.
+- **Context**: The user wanted to be able to run and debug CI pipelines without pushing to GitHub. The environment is Ubuntu 24.04 (WSL2).
+
+### Reason & Plan
+- **Plan**:
+    1. Verify if `act` is already installed.
+    2. Determine the best installation method for Ubuntu (official curl script).
+    3. Install `act` to `~/.local/bin` to ensure it's in the PATH and avoid sudo issues.
+    4. Create a `.actrc` configuration file to define default runner images and avoid interactive prompts.
+
+### Act & Implement
+- **Action**: Installed `act` version 0.2.88 using the official installation script.
+- **Action**: Created a `.actrc` file in the project root with mappings for `ubuntu-latest`, `ubuntu-24.04`, `ubuntu-22.04`, and `ubuntu-20.04` to `catthehacker/ubuntu:act-*` images.
+- **Action**: Verified installation with `act --version` and `act -l`.
+
+### Refine & Reflect
+- **Reflection**: `act` provides a powerful way to validate complex YAML workflows locally. By pre-configuring `.actrc`, we ensure a smoother developer experience and avoid the need for manual image selection on first run. It's important to note that `act` requires a running Docker daemon and might require additional secrets configuration for certain jobs.
+

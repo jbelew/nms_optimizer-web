@@ -62,7 +62,7 @@ const SHIP_TYPE_NAMES: Record<string, string> = {
  * const name = getShipTypeName("living"); // Returns "Living"
  * ```
  */
-export const getShipTypeName = (shipType: string): string => {
+const getShipTypeName = (shipType: string): string => {
 	return SHIP_TYPE_NAMES[shipType.toLowerCase()] || shipType;
 };
 

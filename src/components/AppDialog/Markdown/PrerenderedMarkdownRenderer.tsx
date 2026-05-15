@@ -26,7 +26,7 @@ interface PrerenderedMarkdownRendererProps {
  *
  * @returns {JSX.Element | null} The injected article, or `null` if no content is found.
  *
- * @see {@link import('./MarkdownContentRenderer').MarkdownContentRenderer}
+ * @see {@link import('./markdownContentRenderer').MarkdownContentRenderer}
  *
  * @component
  *

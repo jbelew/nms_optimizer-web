@@ -115,5 +115,3 @@ export const UpdatePromptWrapper: FC = () => {
 		</Suspense>
 	);
 };
-
-export default UpdatePromptWrapper;

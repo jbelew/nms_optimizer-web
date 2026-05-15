@@ -16,7 +16,7 @@ type RouteContextType = {
  *
  * @default { isKnownRoute: true }
  */
-export const RouteContext = createContext<RouteContextType>({
+const RouteContext = createContext<RouteContextType>({
 	isKnownRoute: true,
 });
 

@@ -4,7 +4,7 @@ import { vi } from "vitest";
 
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
-import MarkdownContentRenderer from "./MarkdownContentRenderer";
+import { MarkdownContentRenderer } from "./markdownContentRenderer";
 
 // Mock useMarkdownContent hook
 vi.mock("@/hooks/useMarkdownContent/useMarkdownContent", () => ({

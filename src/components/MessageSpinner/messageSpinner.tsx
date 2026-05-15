@@ -11,7 +11,7 @@
  * @category Components
  */
 
-import "./MessageSpinner.scss";
+import "./messageSpinner.scss";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Progress, Spinner, Text } from "@radix-ui/themes";
@@ -173,5 +173,3 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 		</div>
 	);
 };
-
-export default MessageSpinner;

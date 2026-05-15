@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceData";
 
-import { PerformanceData } from "./PerformanceData";
+import { PerformanceData } from "./performanceData";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
@@ -28,7 +28,7 @@ vi.mock("@/utils/api/performanceResource", () => ({
 // Mock PerformanceChart to avoid dynamic import issues in tests.
 // Render only the metric labels so the parent's data orchestration can be
 // asserted without pulling in the full charting stack.
-vi.mock("./PerformanceChart", () => {
+vi.mock("./performanceChart", () => {
 	const MockPerformanceChart = ({ data }: { data: Array<{ metric_name: string }> }) => {
 		const metrics = Array.from(new Set(data.map((d) => d.metric_name)));
 

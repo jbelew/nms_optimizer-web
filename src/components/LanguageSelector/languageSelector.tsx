@@ -12,7 +12,7 @@
  * @category Components
  */
 
-import "./LanguageSelector.scss";
+import "./languageSelector.scss";
 
 import React, { useTransition } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
@@ -218,5 +218,3 @@ export const LanguageSelector: React.FC = () => {
 		</DropdownMenu.Root>
 	);
 };
-
-export default LanguageSelector;

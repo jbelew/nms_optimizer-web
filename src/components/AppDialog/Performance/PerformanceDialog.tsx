@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { PerformanceContent } from "./PerformanceContent";
+import { PerformanceContent } from "./performanceContent";
 
 const AppDialog = lazy(() => import("../Base/AppDialog"));
 

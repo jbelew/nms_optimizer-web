@@ -102,7 +102,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 */
 	const openDialog = (
 		dialog: NonNullable<DialogType> | null,
-		data?: { shareUrl?: string; section?: string }
+		data?: { section?: string; shareUrl?: string }
 	) => {
 		const lang = (i18n.language || "en").split("-")[0];
 
@@ -179,14 +179,14 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	const value = {
 		activeDialog,
-		openDialog,
 		closeDialog,
-		tutorialFinished,
 		markTutorialFinished,
-		userVisited,
 		markUserVisited,
-		shareUrl,
+		openDialog,
 		sectionToScrollTo,
+		shareUrl,
+		tutorialFinished,
+		userVisited,
 	};
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;

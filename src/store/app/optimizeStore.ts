@@ -2,15 +2,6 @@
 import { create } from "zustand";
 
 /**
- * Types of errors that can occur during the optimization solve process.
- *
- * @see {@link useOptimizeStore}
- *
- * @category Optimization
- */
-export type ErrorType = "fatal" | "recoverable";
-
-/**
  * State and actions for tracking the status and errors of optimization solves.
  *
  * @see {@link useOptimizeStore}
@@ -41,6 +32,15 @@ export interface OptimizeState {
 	/** Whether the global error overlay is visible. */
 	showError: boolean;
 }
+
+/**
+ * Types of errors that can occur during the optimization solve process.
+ *
+ * @see {@link useOptimizeStore}
+ *
+ * @category Optimization
+ */
+type ErrorType = "fatal" | "recoverable";
 
 /**
  * Zustand store for managing UI-blocking errors and specific solver warnings.

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
-import { UserStatsData } from "./UserStatsData";
+import { UserStatsData } from "./userStatsData";
 
 /**
  * Props for the `UserStatsContent` component.
@@ -82,5 +82,3 @@ export const UserStatsContent: FC<UserStatsContentProps> = ({ isOpen }) => {
 		</>
 	);
 };
-
-export default UserStatsContent;

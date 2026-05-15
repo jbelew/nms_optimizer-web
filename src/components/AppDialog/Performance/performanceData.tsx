@@ -6,7 +6,9 @@ import { usePerformanceData } from "@/hooks/usePerformanceData/usePerformanceDat
 import { fetchPerformanceData } from "@/utils/api/performanceResource";
 import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
-const PerformanceChart = lazy(() => import("./PerformanceChart"));
+const PerformanceChart = lazy(() =>
+	import("./performanceChart").then((m) => ({ default: m.PerformanceChart }))
+);
 
 /**
  * Data orchestration component for performance metrics.
@@ -91,5 +93,3 @@ export const PerformanceData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		/>
 	);
 };
-
-export default PerformanceData;

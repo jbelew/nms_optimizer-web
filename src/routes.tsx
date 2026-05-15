@@ -32,12 +32,12 @@ const NotFound = async () => {
  */
 const pageRoutes: RouteObject[] = [
 	...pages.map((page) => ({
-		path: `${page}/`,
 		Component: MainAppContent,
+		path: `${page}/`,
 	})),
 	{
-		path: "performance/:metric/",
 		Component: MainAppContent,
+		path: "performance/:metric/",
 	},
 ];
 
@@ -47,16 +47,16 @@ const pageRoutes: RouteObject[] = [
  */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
-		path: `${lang}/`,
 		Component: MainAppContent,
+		path: `${lang}/`,
 	},
 	...pages.map((page) => ({
-		path: `${lang}/${page}/`,
 		Component: MainAppContent,
+		path: `${lang}/${page}/`,
 	})),
 	{
-		path: `${lang}/performance/:metric/`,
 		Component: MainAppContent,
+		path: `${lang}/performance/:metric/`,
 	},
 ]);
 
@@ -71,20 +71,20 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
  */
 export const routes: RouteObject[] = [
 	{
-		path: "/",
-		Component: App,
-		ErrorBoundary: RouteError,
 		children: [
 			{
-				index: true,
 				Component: MainAppContent,
+				index: true,
 			},
 			...pageRoutes,
 			...languageRoutes,
 		],
+		Component: App,
+		ErrorBoundary: RouteError,
+		path: "/",
 	},
 	{
-		path: "*",
 		lazy: NotFound,
+		path: "*",
 	},
 ];

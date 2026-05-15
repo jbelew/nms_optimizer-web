@@ -36,5 +36,3 @@ export const PerformanceRoute: FC = () => {
 		</Suspense>
 	);
 };
-
-export default PerformanceRoute;

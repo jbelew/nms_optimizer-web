@@ -4,7 +4,7 @@ import * as Toast from "@radix-ui/react-toast";
 import { ToastProvider } from "../../hooks/useToast/useToast";
 import i18n from "../../i18n/i18n";
 import { usePlatformStore } from "../../store/app/platformStore";
-import { ShipSelection } from "./ShipSelection";
+import { ShipSelection } from "./shipSelection";
 
 // Pre-load essential translation keys for the interaction test
 // This ensures the test passes in headless environments where the HTTP backend might not load

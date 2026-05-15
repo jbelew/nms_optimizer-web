@@ -1,19 +1,24 @@
 name: 'Setup Bun and Node Environment'
-description: 'Sets up Bun and Node.js and installs dependencies'
+description: 'Sets up Bun (and optionally Node.js) and installs dependencies'
 inputs:
   bun-version:
     description: 'The version of Bun to use'
     required: false
     default: 'latest'
   node-version:
-    description: 'The version of Node.js to use'
+    description: 'The version of Node.js to use (only applied when setup-node is true)'
     required: false
     default: '24'
+  setup-node:
+    description: 'Whether to install Node.js. Set to "false" for jobs that run purely on Bun.'
+    required: false
+    default: 'true'
 
 runs:
   using: "composite"
   steps:
     - name: Set up Node.js
+      if: inputs.setup-node == 'true'
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
@@ -22,6 +27,14 @@ runs:
       uses: oven-sh/setup-bun@v2
       with:
         bun-version: ${{ inputs.bun-version }}
+
+    - name: Cache Bun store
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+        restore-keys: |
+          bun-${{ runner.os }}-
 
     - name: Install dependencies
       shell: bash

@@ -38,6 +38,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Check formatting
         run: bun run format:check
@@ -54,6 +56,13 @@ jobs:
       - name: Run unit tests
         run: bun run test:ci
 
+      - name: Run script tests
+        run: bun run test:scripts
+
+      - name: Detect unused code (Knip)
+        run: bun run lint:knip
+        continue-on-error: true
+
   build:
     name: Build Application (Verification)
     runs-on: ubuntu-latest
@@ -69,6 +78,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Set Build Version
         id: build_version
@@ -91,6 +102,9 @@ jobs:
           name: dist-bundle
           path: dist/
           retention-days: 1
+
+      - name: Check bundle size budgets
+        run: bun run size
 
       - name: Build project (E2E)
         run: bun run build:e2e
@@ -117,6 +131,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -215,6 +231,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Download E2E dist artifact
         uses: actions/download-artifact@v8
@@ -311,6 +329,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Determine Effective Version
         id: version_logic
@@ -362,6 +382,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Download production artifact
         uses: actions/download-artifact@v8
@@ -421,6 +443,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
+        with:
+          setup-node: 'false'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8

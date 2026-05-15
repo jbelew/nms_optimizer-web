@@ -13,7 +13,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import LanguageSelector from "@/components/LanguageSelector/LanguageSelector";
+import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";
@@ -107,7 +107,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							}}
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
-								void import("../AppDialog/Markdown/MarkdownContentRenderer");
+								void import("../AppDialog/Markdown/markdownContentRenderer");
 							}}
 							variant="soft"
 						>
@@ -140,7 +140,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								}}
 								onMouseEnter={() => {
 									// Prefetch performance chart logic
-									void import("../AppDialog/Performance/PerformanceChart");
+									void import("../AppDialog/Performance/performanceChart");
 								}}
 								variant="soft"
 							>

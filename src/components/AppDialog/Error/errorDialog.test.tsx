@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { useOptimizeStore } from "../../../store/app/optimizeStore";
-import ErrorDialog from "./ErrorDialog";
+import { ErrorDialog } from "./errorDialog";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

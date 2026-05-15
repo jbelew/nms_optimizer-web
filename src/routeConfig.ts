@@ -32,6 +32,24 @@ export const pages = [
 export const languages = ["en", "es", "fr", "de", "pt", "it"];
 
 /**
+ * Union type of all supported language codes.
+ *
+ * @see {@link languages}
+ *
+ * @category Routing
+ */
+type LanguageCode = (typeof languages)[number];
+
+/**
+ * Union type of all valid page identifiers.
+ *
+ * @see {@link pages}
+ *
+ * @category Routing
+ */
+type PageName = (typeof pages)[number];
+
+/**
  * Retrieves the application build date string defined at compile time.
  *
  * @returns {string} The ISO date string of the build.
@@ -46,21 +64,3 @@ export const languages = ["en", "es", "fr", "de", "pt", "it"];
 export function getBuildDate(): string {
 	return __BUILD_DATE__;
 }
-
-/**
- * Union type of all valid page identifiers.
- *
- * @see {@link pages}
- *
- * @category Routing
- */
-export type PageName = (typeof pages)[number];
-
-/**
- * Union type of all supported language codes.
- *
- * @see {@link languages}
- *
- * @category Routing
- */
-export type LanguageCode = (typeof languages)[number];

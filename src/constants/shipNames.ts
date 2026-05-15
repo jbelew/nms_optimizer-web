@@ -487,4 +487,3 @@ export const SHIP_NAME_SUFFIXES = [
 /**
  * SHIP_NAME_PREFIXES combines both simple and compound for backwards compatibility
  */
-export const SHIP_NAME_PREFIXES = [...SHIP_NAME_PREFIXES_SIMPLE, ...SHIP_NAME_PREFIXES_COMPOUND];

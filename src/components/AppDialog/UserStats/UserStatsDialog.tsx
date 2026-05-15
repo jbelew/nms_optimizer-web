@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { Button, Skeleton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { UserStatsContent } from "./UserStatsContent";
+import { UserStatsContent } from "./userStatsContent";
 
 const AppDialog = lazy(() => import("../Base/AppDialog"));
 
@@ -30,7 +30,7 @@ interface UserStatsDialogProps {
  * @returns {JSX.Element} The rendered statistics dialog.
  *
  * @see {@link AppDialog}
- * @see {@link import('./UserStatsContent').UserStatsContent}
+ * @see {@link import('./userStatsContent').UserStatsContent}
  *
  * @component
  *

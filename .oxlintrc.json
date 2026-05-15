@@ -1,0 +1,48 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["react", "typescript", "import", "jsx-a11y"],
+	"categories": {
+		"correctness": "error",
+		"suspicious": "warn",
+		"perf": "warn"
+	},
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"no-underscore-dangle": "off",
+		"no-await-in-loop": "off",
+		"no-shadow": "off",
+		"no-unused-vars": "off",
+		"import/no-unassigned-import": "off",
+		"import/no-named-as-default": "off",
+		"import/no-named-as-default-member": "off",
+		"jsx-a11y/prefer-tag-over-role": "off",
+		"react/no-array-index-key": "off",
+		"jsx-a11y/iframe-has-title": "warn",
+		"jsx-a11y/anchor-has-content": "warn",
+		"jsx-a11y/anchor-is-valid": "warn",
+		"jsx-a11y/control-has-associated-label": "warn",
+		"jsx-a11y/no-autofocus": "warn",
+		"react/iframe-missing-sandbox": "warn",
+		"react/jsx-no-constructed-context-values": "warn",
+		"typescript/no-extraneous-class": "warn"
+	},
+	"env": {
+		"browser": true,
+		"es2024": true,
+		"node": true
+	},
+	"ignorePatterns": [
+		"dist/",
+		"storybook-static/",
+		"coverage/",
+		"playwright-report/",
+		"node_modules/",
+		"**/*.d.ts",
+		"public/",
+		".lighthouseci/",
+		"docs/",
+		"functions/",
+		"bundle/",
+		".wrangler/"
+	]
+}

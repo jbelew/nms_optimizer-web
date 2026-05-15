@@ -77,6 +77,3 @@ export const fetchTechTreeColors = (): Promise<Record<string, string>> => {
  * @example
  * resetTechTreeColorsCache();
  */
-export const resetTechTreeColorsCache = () => {
-	techTreeColorsPromise = null;
-};

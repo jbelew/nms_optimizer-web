@@ -12,12 +12,12 @@ export const languages = ["en", "es", "fr", "de", "pt", "it"];
  * Used for displaying user-friendly language selection options in the UI.
  */
 export const nativeLanguageNames: { [key: string]: string } = {
+	de: "Deutsch",
 	en: "English",
 	es: "Español",
 	fr: "Français",
-	de: "Deutsch",
-	pt: "Português",
 	it: "Italiano",
+	pt: "Português",
 };
 
 /**
@@ -35,22 +35,22 @@ void i18n
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
-		supportedLngs: languages,
-		fallbackLng: "en",
-		debug: process.env.NODE_ENV === "development",
-		detection: {
-			order: ["path"],
-			caches: ["localStorage", "cookie"],
-			lookupFromPathIndex: 0,
-		},
 		backend: {
 			loadPath: "/assets/locales/{{lng}}/{{ns}}.json",
 		},
+		debug: process.env.NODE_ENV === "development",
+		defaultNS: "translation",
+		detection: {
+			caches: ["localStorage", "cookie"],
+			lookupFromPathIndex: 0,
+			order: ["path"],
+		},
+		fallbackLng: "en",
 		interpolation: {
 			escapeValue: false,
 		},
 		ns: ["translation"],
-		defaultNS: "translation",
+		supportedLngs: languages,
 	});
 
 /** The pre-configured i18next instance used globally for localization. */

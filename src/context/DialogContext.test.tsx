@@ -46,12 +46,12 @@ const testDialogClosing = (pathname: string, search: string, lang: string) => {
  */
 const mockWindowLocationSearch = (search: string) => {
 	Object.defineProperty(window, "location", {
+		configurable: true,
 		value: {
 			...window.location,
 			search,
 		},
 		writable: true,
-		configurable: true,
 	});
 };
 
@@ -134,11 +134,11 @@ describe("DialogProvider Component", () => {
 	const TestComponent = () => {
 		const {
 			activeDialog,
-			openDialog,
 			closeDialog,
-			tutorialFinished,
 			markTutorialFinished,
+			openDialog,
 			shareUrl,
+			tutorialFinished,
 		} = useDialog();
 
 		return (

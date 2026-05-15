@@ -144,5 +144,3 @@ const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(GridTableComp
 GridTable.displayName = "GridTable";
 
 export { GridTable };
-
-export default GridTable;

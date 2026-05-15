@@ -100,16 +100,13 @@ const cache = new Map<string, Resource<ShipTypes>>();
  * // returns void, side-effect: clears cache map
  * ```
  */
-export const clearShipTypesCache = () => {
-	cache.clear();
-};
 
 /**
  * State and actions for the ship types store.
  *
  * @category Interfaces
  */
-export interface ShipTypesState {
+interface ShipTypesState {
 	/**
 	 * Updates the ship types in the store.
 	 *
@@ -215,7 +212,7 @@ export function useFetchShipTypesSuspense(): ShipTypes {
  *
  * @category Stores
  */
-export const useShipTypesStore = create<ShipTypesState>((set) => {
+const useShipTypesStore = create<ShipTypesState>((set) => {
 	return {
 		setShipTypes: (shipTypes) => set({ shipTypes }),
 		shipTypes: null,

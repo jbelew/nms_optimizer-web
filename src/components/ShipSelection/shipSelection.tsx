@@ -12,7 +12,7 @@
  * @category Components
  */
 
-import "./ShipSelection.scss";
+import "./shipSelection.scss";
 
 import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useTransition } from "react";
@@ -317,5 +317,3 @@ const ShipTypesDropdown: React.FC<ShipTypesDropdownProps> = ({
 		</DropdownMenu.RadioGroup>
 	);
 };
-
-export default ShipSelection;

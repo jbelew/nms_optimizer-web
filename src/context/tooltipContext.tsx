@@ -36,13 +36,13 @@ const WARM_THRESHOLD = 500;
  */
 export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [state, setState] = useState<TooltipState>({
+		delayDuration: 500,
+		isOpen: false,
 		label: "",
 		rect: null,
-		isOpen: false,
-		delayDuration: 500,
 	});
 
-	const timerRef = useRef<number | null>(null);
+	const timerRef = useRef<null | number>(null);
 	const lastCloseTimeRef = useRef<number>(0);
 	const isOpenRef = useRef(false);
 
@@ -67,10 +67,10 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 		if (isWarm || isOpenRef.current) {
 			// Show immediately if we were just open or are moving between elements
 			isOpenRef.current = true;
-			setState({ label, rect, isOpen: true, delayDuration });
+			setState({ delayDuration, isOpen: true, label, rect });
 		} else {
 			// Show after delay
-			setState((prev: TooltipState) => ({ ...prev, label, rect, delayDuration })); // Update position immediately but not isOpen
+			setState((prev: TooltipState) => ({ ...prev, delayDuration, label, rect })); // Update position immediately but not isOpen
 			timerRef.current = window.setTimeout(() => {
 				isOpenRef.current = true;
 				setState((prev: TooltipState) => ({ ...prev, isOpen: true }));
@@ -90,10 +90,10 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 		isOpenRef.current = false;
 		lastCloseTimeRef.current = Date.now();
-		setState((prev: TooltipState) => ({ ...prev, rect: null, isOpen: false }));
+		setState((prev: TooltipState) => ({ ...prev, isOpen: false, rect: null }));
 	}, []); // EMPTY dependency array - perfectly stable
 
-	const actions = useMemo(() => ({ show, hide }) as TooltipActions, [show, hide]);
+	const actions = useMemo(() => ({ hide, show }) as TooltipActions, [show, hide]);
 
 	return (
 		<TooltipStateContext.Provider value={state}>

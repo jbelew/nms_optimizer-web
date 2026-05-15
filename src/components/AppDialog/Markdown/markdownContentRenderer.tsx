@@ -5,7 +5,7 @@ import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownConten
 
 import DynamicRadixIcon from "../Common/DynamicRadixIcon";
 import LoremIpsumSkeleton from "../Common/LoremIpsumSkeleton";
-import YouTubeEmbed from "./YouTubeEmbed";
+import { YouTubeEmbed } from "./youTubeEmbed";
 
 /**
  * Properties for the `MarkdownContentRenderer` component.
@@ -318,5 +318,3 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 		</article>
 	);
 };
-
-export default MarkdownContentRenderer;

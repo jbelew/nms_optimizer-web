@@ -72,10 +72,10 @@ export const Root = () => {
 		<StrictMode>
 			<ErrorBoundary>
 				<Theme
-					appearance={appearance}
-					panelBackground="solid"
 					accentColor="cyan"
+					appearance={appearance}
 					grayColor="slate"
+					panelBackground="solid"
 					scaling="100%"
 				>
 					<TooltipProvider>
@@ -162,8 +162,8 @@ const bootstrap = async () => {
 					} catch (error) {
 						console.error("Failed to initialize deferred services:", error);
 						captureException(error, {
-							tags: { area: "initialization" },
 							level: "error",
+							tags: { area: "initialization" },
 						});
 					}
 				};

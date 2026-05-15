@@ -45,5 +45,3 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) =>
 		/>
 	</Box>
 );
-
-export default YouTubeEmbed;

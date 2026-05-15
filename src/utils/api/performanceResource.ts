@@ -74,11 +74,6 @@ export const fetchPerformanceData = (
  * const cached = isPerformanceDataCached("7daysAgo");
  * ```
  */
-export const isPerformanceDataCached = (startDate = "30daysAgo", endDate = "today"): boolean => {
-	const rangeKey = `${startDate}-${endDate}`;
-
-	return performanceDataPromises.has(rangeKey);
-};
 
 /**
  * Resets the cached promise for performance data.

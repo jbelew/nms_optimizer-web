@@ -20,7 +20,11 @@ import { useDialog } from "../../utils/system/dialogUtils";
 import LoremIpsumSkeleton from "../AppDialog/Common/LoremIpsumSkeleton";
 
 const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
-const MarkdownContentRenderer = lazy(() => import("../AppDialog/Markdown/MarkdownContentRenderer"));
+const MarkdownContentRenderer = lazy(() =>
+	import("../AppDialog/Markdown/markdownContentRenderer").then((m) => ({
+		default: m.MarkdownContentRenderer,
+	}))
+);
 
 /**
  * A central orchestrator for dialogs that are mapped to specific application routes.

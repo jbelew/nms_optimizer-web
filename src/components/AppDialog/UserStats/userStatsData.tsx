@@ -299,5 +299,3 @@ export const UserStatsData: FC<{ isOpen: boolean }> = ({ isOpen }) => {
 		</Flex>
 	);
 };
-
-export default UserStatsData;

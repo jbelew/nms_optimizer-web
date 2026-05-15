@@ -8,7 +8,7 @@ import { createSocket, TRANSPORT_ERROR_MESSAGES } from "../api/socketManager";
 import { Logger } from "../system/monitoring";
 
 /** Maximum number of silent transport-error retries before showing the error modal. */
-export const MAX_TRANSPORT_RETRIES = 2;
+const MAX_TRANSPORT_RETRIES = 2;
 
 /**
  * Options for configuring an optimization request.

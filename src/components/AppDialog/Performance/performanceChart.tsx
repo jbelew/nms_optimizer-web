@@ -768,5 +768,3 @@ export const PerformanceChart: FC<PerformanceChartProps> = ({
 		/>
 	);
 };
-
-export default PerformanceChart;
