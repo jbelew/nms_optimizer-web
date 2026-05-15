@@ -16,7 +16,7 @@
 			"description": "Ab Version 6.34 haben Korvetten <strong>immer noch</strong> bekannte Layout-Probleme! Wenn du ein Layout erstellst, empfehlen wir dringend, die Funktion <strong>Build speichern</strong> zu verwenden, um eine Sicherung deiner Arbeit zu erstellen."
 		}
 	},
-	"appName": "NMS Optimizer",
+	"appName": "NMS Optimierer",
 	"buttons": {
 		"instructions": "Anleitung",
 		"about": "Über Uns",
@@ -701,10 +701,10 @@
 		"privacyDescription": "Lies unser Versprechen zum Datenschutz. Wir nutzen anonyme Analysen, um den Optimierer zu verbessern, ohne jemals deine Identität oder Spieldaten zu verfolgen.",
 		"ogImageAlt": "Ein detaillierter Screenshot des NMS-Optimierers, der ein optimiertes Raumschiff-Gitter mit hohen Adjazenzboni zeigt.",
 		"nav": {
-			"home": "Home",
+			"home": "Startseite",
 			"instructions": "Anleitung",
 			"about": "Über",
-			"changelog": "Changelog",
+			"changelog": "Änderungsprotokoll",
 			"userstats": "Statistiken",
 			"translation": "Mitwirken",
 			"privacy": "Datenschutz",

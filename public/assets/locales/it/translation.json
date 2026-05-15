@@ -80,7 +80,7 @@
 	"errorDisplay": {
 		"header": "Qualcosa è andato storto!",
 		"errorLabel": "Errore:",
-		"stackTraceLabel": "Stack Trace:"
+		"stackTraceLabel": "Traccia dello Stack:"
 	},
 	"errorContent": {
 		"signalDisruption": "–kzzkt– Interruzione Segnale! –kzzkt–",
@@ -231,7 +231,7 @@
 			"gridFull": "Griglia piena!",
 			"update": "Aggiorna",
 			"solve": "Risolvi",
-			"reset": "Reset"
+			"reset": "Ripristina"
 		},
 		"categories": {
 			"Defensive Systems": "Sistemi Difensivi",
