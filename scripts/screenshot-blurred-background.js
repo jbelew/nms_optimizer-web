@@ -1,13 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import puppeteer from "puppeteer";
+import { chromium } from "playwright";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 (async () => {
 	try {
-		console.log("🎨 Generating blurred and tinted mobile background with Chromium...");
+		console.log("🎨 Generating blurred and tinted mobile background with Chromium (Playwright)...");
 
 		// Use the high-res desktop background as source to ensure quality
 		const bgImagePath = path.resolve(__dirname, "../public/assets/img/background@2x.webp");
@@ -46,11 +46,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 		const base64Image = croppedImageBuffer.toString("base64");
 		const dataUrl = `data:image/webp;base64,${base64Image}`;
 
-		const browser = await puppeteer.launch();
+		const browser = await chromium.launch();
 		const page = await browser.newPage();
 
 		// Set viewport to mobile dimensions
-		await page.setViewport({ width: mobileWidth, height: mobileHeight });
+		await page.setViewportSize({ width: mobileWidth, height: mobileHeight });
 
 		const html = `
 		<!DOCTYPE html>
