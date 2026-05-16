@@ -1,6 +1,6 @@
 # NMS Optimizer: Costruttore di Layout Tecnologici e Calcolatore di Adjacency
 
-![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.webp)
 
 Benvenuto in **NMS Optimizer**, uno strumento 100% gratuito, senza pubblicità e open-source, progettato per aiutarti a trovare i migliori layout tecnologici in _No Man's Sky_. Smetti di indovinare dove posizionare i tuoi moduli di potenziamento S-Class e X-Class. Scegli la tua piattaforma, seleziona la tua tecnologia, segna i tuoi supercharged slots e lascia che il nostro calcolatore generi istantaneamente un layout che massimizza il tuo DPS, la manovrabilità e il raggio dell'Hyperdrive.
 

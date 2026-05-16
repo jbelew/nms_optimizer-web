@@ -77,7 +77,7 @@ export function createMarkdownProcessor() {
 
 	// Override image
 	renderer.image = (token) => {
-		return `<img src="${token.href}" alt="${token.text}" title="${token.title || ""}" style="max-width: 100%;" />`;
+		return `<img src="${token.href}" alt="${token.text}" title="${token.title || ""}" style="max-width: 100%; height: auto;" loading="lazy" decoding="async" />`;
 	};
 
 	// Override hr
