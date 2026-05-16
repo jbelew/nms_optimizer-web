@@ -1,3 +1,22 @@
+# [7.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.9...v7.3.0) (2026-05-16)
+
+
+### Bug Fixes
+
+* **e2e:** restore test trigger hook in index.html and update knip ignores ([f8da451](https://github.com/jbelew/nms_optimizer-web/commit/f8da451940f1e066e46718e0ef7fe81bad8b1f1e))
+* optimize Cloudflare Insights loading with resource hints ([37f053c](https://github.com/jbelew/nms_optimizer-web/commit/37f053cae61d3177c105118e0a11d99bc1224e04))
+* resolve SEO issues, URL inconsistencies, and template redundancies ([108305e](https://github.com/jbelew/nms_optimizer-web/commit/108305eb6b4f34ce0218090675a549afb957bb61))
+* restore SSG formatting and clean up unused variables ([94878e1](https://github.com/jbelew/nms_optimizer-web/commit/94878e104aa34baf17045c7cab4c7fffcde2f39e))
+* **test:** update SSG unit tests to match new DOM structure and function signatures ([e58eac7](https://github.com/jbelew/nms_optimizer-web/commit/e58eac77aced8ec9786736b0d1987bb66e46f4b4))
+
+
+### Features
+
+* finalized index.html cleanup and SSG script optimizations ([2cb3e79](https://github.com/jbelew/nms_optimizer-web/commit/2cb3e79594085733143c54f9693e21719f6e24fb))
+* improve SEO by moving SSG content out of noscript and removing duplicate H1 ([405e203](https://github.com/jbelew/nms_optimizer-web/commit/405e203c515adab317dea77814ff57afc33a7d28))
+* simplify source index.html and confirm redundancy ([3a35ac1](https://github.com/jbelew/nms_optimizer-web/commit/3a35ac11aa8c0da23bf1ffb168b6411cc9756717))
+* simplify source index.html by removing redundant SSG content ([1d57a9f](https://github.com/jbelew/nms_optimizer-web/commit/1d57a9f40851aa925361b2c49b1f6c4abcd490e4))
+
 ## [7.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.8...v7.2.9) (2026-05-16)
 
 

@@ -1,7 +1,7 @@
 {
 	"name": "nms_optimizer",
 	"private": true,
-	"version": "7.2.9",
+	"version": "7.3.0",
 	"type": "module",
 	"engines": {
 		"node": ">=24.0.0",
