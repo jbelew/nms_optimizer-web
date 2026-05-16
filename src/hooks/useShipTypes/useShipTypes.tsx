@@ -90,18 +90,6 @@ const createResource = <T,>(promise: Promise<T>): Resource<T> => {
 const cache = new Map<string, Resource<ShipTypes>>();
 
 /**
- * Clears the internal ship types resource cache.
- *
- * @returns {void} Side-effects only.
- *
- * @example
- * ```typescript
- * clearShipTypesCache();
- * // returns void, side-effect: clears cache map
- * ```
- */
-
-/**
  * State and actions for the ship types store.
  *
  * @category Interfaces

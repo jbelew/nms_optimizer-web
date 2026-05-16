@@ -99,7 +99,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
 		const promise = apiCall<TechTree>(`${baseUrl}tech_tree/${shipType}`, {}, 10000)
-			.then(async (data) => {
+			.then((data) => {
 				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
 					data.recommended_builds = data.recommended_builds.filter(
 						(build: RecommendedBuild) => {
@@ -169,15 +169,21 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0) {
-			const { activeGroups, techColors, techGroups } = getTechTreeMaps(data);
-			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
+			const initStores = () => {
+				const { activeGroups, techColors, techGroups } = getTechTreeMaps(data);
+				useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
 
-			const gridStore = useGridStore.getState();
+				const gridStore = useGridStore.getState();
 
-			if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
-				gridStore.setInitialGridDefinition(data.grid_definition);
-				gridStore.setGridFromInitialDefinition(data.grid_definition);
-			}
+				if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
+					gridStore.setInitialGridDefinition(data.grid_definition);
+					gridStore.setGridFromInitialDefinition(data.grid_definition);
+				}
+
+				useTechTreeLoadingStore.getState().setLoading(false);
+			};
+
+			initStores();
 		}
 	}, [data, shipType]);
 
