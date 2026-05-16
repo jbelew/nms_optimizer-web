@@ -7,6 +7,7 @@ FROM --platform=$BUILDPLATFORM oven/bun:1.3-alpine AS frontend-builder_arm64
 FROM frontend-builder_${TARGETARCH} AS frontend-builder
 
 WORKDIR /app
+RUN apk add --no-cache git
 COPY package.json bun.lock tsconfig.json vite.config.ts ./
 RUN bun install --frozen-lockfile
 COPY . .
