@@ -4,6 +4,21 @@ The full commit history for this project is available on [GitHub](https://github
 
 ---
 
+## Version 7.2 – Faster Startup & Lighter Loading (2026-05-16)
+
+This update focuses on making the app lighter to download and faster to get started.
+
+- **Lighter Initial Load:** Switched to a high-efficiency image format for the app's preview screen, reducing its download size by over 90% (saving ~800KB) for a faster cold start.
+- **Improved Boot Speed:** Refined the app's startup sequence to ensure the interface appears on screen as quickly as possible.
+- **Seamless Loading:** Optimized how internal data is handled to ensure the most efficient path for loading technology trees and platforms.
+
+## Version 7.1 – Build Loading Fix & Snappier UI (2026-05-15)
+
+This update resolves a critical issue with loading saved layouts and improves overall interface responsiveness.
+
+- **Reliable Build Loading:** Fixed a rare issue where saved `.nms` files would occasionally fail to load. Your favorite layouts should now open perfectly every time.
+- **Responsive Interactions:** Performed internal cleanup and performance tuning to ensure the interface remains snappy and responsive during complex solves.
+
 ## Version 7.0 (2026-05-01)
 
 This update brings full Italian language support and a lot of under-the-hood work to make the app load faster and feel more stable.

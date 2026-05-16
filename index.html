@@ -109,6 +109,7 @@
 				if (/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) || navigator.webdriver === true) {
 					document.documentElement.classList.add("is-bot");
 				}
+				document.documentElement.classList.add("js-enabled");
 			})();
 		</script>
 
@@ -179,7 +180,7 @@
 			html:is(.light, .light-theme) body::before { background-image: none !important; background-color: #fff !important; }
 
 			/* Fallback Management */
-			html.app-mounted .ssg-fallback { display: none !important; }
+			html.js-enabled .ssg-fallback { display: none !important; }
 			.vpss-logo img, .vpss-logo svg { height: 48px !important; width: 48px !important; display: block; margin-bottom: 4px; }
 			.is-bot #vpss { display: none !important; }
 		</style>
