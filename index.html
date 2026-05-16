@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark background-visible" style="color-scheme: dark">
-<!--
+	<!--
 ███╗   ██╗███╗   ███╗███████╗     ██████╗ ██████╗ ████████╗██╗███╗   ███╗██╗███████╗███████╗██████╗
 ████╗  ██║████╗ ████║██╔════╝    ██╔═══██╗██╔══██╗╚══██╔══╝██║████╗ ████║██║╚══███╔╝██╔════╝██╔══██╗
 ██╔██╗ ██║██╔████╔██║███████╗    ██║   ██║██████╔╝   ██║   ██║██╔████╔██║██║  ███╔╝ █████╗  ██████╔╝
@@ -11,368 +11,200 @@
 	                        Built by jbelew (void23 | QQ9Y-EJRS-P8KGW)
 	                                      GPL-3.0 license
 	                       https://github.com/jbelew/nms_optimizer-web
--->
+--><head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta name="theme-color" content="#003848" />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-	<meta name="theme-color" content="#003848" />
+		<script>
+			(function () {
+				const MARKER = "__preload_recovery__";
+				let recoveryInProgress = false;
 
-	<script>
-		(function () {
-			const MARKER = "__preload_recovery__";
-			let recoveryInProgress = false;
+				function buildCacheBustUrl() {
+					const search = window.location.search || "";
+					const sep = search ? "&" : "?";
+					return window.location.pathname + search + sep + "_cb=" + Date.now() + (window.location.hash || "");
+				}
 
-			function buildCacheBustUrl() {
-				const search = window.location.search || "";
-				const sep = search ? "&" : "?";
-				return window.location.pathname + search + sep + "_cb=" + Date.now() + (window.location.hash || "");
-			}
+				function handleStaleChunkError(payloadMessage) {
+					if (recoveryInProgress) return;
+					recoveryInProgress = true;
+					try {
+						const prev = parseInt(sessionStorage.getItem("__recovery_attempts__") || "0", 10);
+						sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
+					} catch (e) {}
 
-			function handleStaleChunkError(payloadMessage) {
-				if (recoveryInProgress) return;
-				recoveryInProgress = true;
-				try {
-					const prev = parseInt(sessionStorage.getItem("__recovery_attempts__") || "0", 10);
-					sessionStorage.setItem("__recovery_attempts__", String(prev + 1));
-				} catch (e) { }
+					let firstAttempt = false;
+					try {
+						if (!sessionStorage.getItem(MARKER)) {
+							sessionStorage.setItem(MARKER, "1");
+							firstAttempt = true;
+						}
+					} catch (e) {}
 
-				let firstAttempt = false;
-				try {
-					if (!sessionStorage.getItem(MARKER)) {
-						sessionStorage.setItem(MARKER, "1");
-						firstAttempt = true;
+					if (firstAttempt) {
+						const reloadUrl = buildCacheBustUrl();
+						let reloaded = false;
+						const doReload = () => { if (!reloaded) { reloaded = true; window.location.replace(reloadUrl); } };
+						setTimeout(doReload, 500);
+						if ("caches" in window) {
+							caches.keys().then((names) => Promise.all(names.map((n) => caches.delete(n))).catch(() => {}).then(doReload));
+						} else doReload();
+						return;
 					}
-				} catch (e) { }
 
-				if (firstAttempt) {
-					const reloadUrl = buildCacheBustUrl();
-					let reloaded = false;
-					const doReload = () => { if (!reloaded) { reloaded = true; window.location.replace(reloadUrl); } };
-					setTimeout(doReload, 500);
-					if ("caches" in window) {
-						caches.keys().then((names) => Promise.all(names.map((n) => caches.delete(n))).catch(() => { }).then(doReload));
-					} else doReload();
-					return;
+					try { sessionStorage.removeItem(MARKER); } catch (e) {}
+					let errorUrl = "/500.html?error_type=stale_chunk";
+					if (payloadMessage) errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
+					window.location.replace(errorUrl);
 				}
 
-				try { sessionStorage.removeItem(MARKER); } catch (e) { }
-				let errorUrl = "/500.html?error_type=stale_chunk";
-				if (payloadMessage) errorUrl += "&error_cause=" + encodeURIComponent(payloadMessage);
-				window.location.replace(errorUrl);
-			}
-
-			window.addEventListener("vite:preloadError", (e) => {
-				e.preventDefault();
-				handleStaleChunkError(e.payload && e.payload.message);
-			});
-
-			window.addEventListener("error", (e) => {
-				const msg = (e.message || "").toLowerCase();
-				const isModuleError = /importing|resolving|dynamically imported/i.test(msg);
-				const src = e.target && e.target.src ? e.target.src : "";
-				if (isModuleError || (e.target && e.target.nodeName === "SCRIPT" && src.includes("/build/"))) {
+				window.addEventListener("vite:preloadError", (e) => {
 					e.preventDefault();
-					handleStaleChunkError(e.message || "Script load error");
+					handleStaleChunkError(e.payload && e.payload.message);
+				});
+
+				window.addEventListener("error", (e) => {
+					const msg = (e.message || "").toLowerCase();
+					const isModuleError = /importing|resolving|dynamically imported/i.test(msg);
+					const src = e.target && e.target.src ? e.target.src : "";
+					if (isModuleError || (e.target && e.target.nodeName === "SCRIPT" && src.includes("/build/"))) {
+						e.preventDefault();
+						handleStaleChunkError(e.message || "Script load error");
+					}
+				}, true);
+
+				// Resource Preloading
+				const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
+				const detectedLng = supportedLngs.includes(window.location.pathname.split("/")[1]) ? window.location.pathname.split("/")[1] : "en";
+				const apiUrl = "https://api.nms-optimizer.app";
+
+				const preload = (href, as, type) => {
+					const link = document.createElement("link");
+					link.rel = "preload"; link.as = as; link.href = href; link.crossOrigin = "anonymous";
+					link.setAttribute("fetchpriority", "high");
+					if (type) link.type = type;
+					document.head.appendChild(link);
+				};
+
+				preload("/assets/locales/" + detectedLng + "/translation.json", "fetch", "application/json");
+				preload(apiUrl + "/platforms", "fetch");
+
+				let platform = "standard";
+				try { platform = new URLSearchParams(window.location.search).get("platform") || localStorage.getItem("selectedPlatform") || "standard"; } catch (e) {}
+				preload(apiUrl + "/tech_tree/" + encodeURIComponent(platform), "fetch");
+
+				// Environment Detection
+				if (/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) || navigator.webdriver === true) {
+					document.documentElement.classList.add("is-bot");
 				}
-			}, true);
+				document.documentElement.classList.add("js-enabled");
+			})();
+		</script>
 
-			// Resource Preloading
-			const supportedLngs = ["en", "es", "fr", "de", "pt", "it"];
-			const detectedLng = supportedLngs.includes(window.location.pathname.split("/")[1]) ? window.location.pathname.split("/")[1] : "en";
-			const apiUrl = "https://api.nms-optimizer.app";
-
-			const preload = (href, as, type) => {
-				const link = document.createElement("link");
-				link.rel = "preload"; link.as = as; link.href = href; link.crossOrigin = "anonymous";
-				link.setAttribute("fetchpriority", "high");
-				if (type) link.type = type;
-				document.head.appendChild(link);
-			};
-
-			preload("/assets/locales/" + detectedLng + "/translation.json", "fetch", "application/json");
-			preload(apiUrl + "/platforms", "fetch");
-
-			let platform = "standard";
-			try { platform = new URLSearchParams(window.location.search).get("platform") || localStorage.getItem("selectedPlatform") || "standard"; } catch (e) { }
-			preload(apiUrl + "/tech_tree/" + encodeURIComponent(platform), "fetch");
-
-			// Environment Detection
-			if (/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) || navigator.webdriver === true) {
-				document.documentElement.classList.add("is-bot");
-			}
-			document.documentElement.classList.add("js-enabled");
-		})();
-	</script>
-
-	<noscript data-vpss-background-noscript="">
-		<style>
-			body::before {
-				content: "";
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background-color: #000;
-				background-position: center;
-				background-repeat: no-repeat;
-				background-size: cover;
-				background-image: image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
-				z-index: -1;
-			}
-
-			@media (max-width: 640px) {
+		<noscript data-vpss-background-noscript="">
+			<style>
 				body::before {
-					background-image: url("/assets/img/background@mobile-blurred.webp");
-					background-position: center top;
+					content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+					background-color: #000; background-position: center; background-repeat: no-repeat; background-size: cover;
+					background-image: image-set(url("/assets/img/background.webp") 1x, url("/assets/img/background@2x.webp") 2x);
+					z-index: -1;
 				}
-			}
+				@media (max-width: 640px) { body::before { background-image: url("/assets/img/background@mobile-blurred.webp"); background-position: center top; } }
+			</style>
+		</noscript>
+
+		<title>NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator</title>
+		<meta name="description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
+		<meta name="keywords" content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator" />
+
+		<!-- Canonical & Social Metadata -->
+		<link rel="canonical" href="https://nms-optimizer.app/" />
+		<meta property="og:url" content="https://nms-optimizer.app/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="NMS Optimizer" />
+		<meta property="og:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
+		<meta property="og:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
+		<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+		<meta property="og:image:alt" content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
+		<meta property="og:image:width" content="1280" />
+		<meta property="og:image:height" content="880" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
+		<meta name="twitter:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
+		<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+		<meta name="twitter:image:alt" content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
+
+		<!-- Resource Hints -->
+		<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
+		<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
+		<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
+
+		<!-- Favicons -->
+		<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+		<link rel="icon" href="/assets/svg/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=3" />
+
+		<!-- Critical Assets -->
+		<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous" fetchpriority="high" />
+		<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous" fetchpriority="high" />
+		<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous" fetchpriority="low" />
+		<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)" fetchpriority="high" />
+		<link rel="preload" as="image" imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x" media="(min-width: 641px)" fetchpriority="low" />
+
+		<link rel="stylesheet" href="/src/assets/css/fonts.css" />
+
+		<style>
+			/* App Base & Reset */
+			html { background: #000; color: #fff; scrollbar-gutter: stable; }
+			body { background-color: transparent; margin: 0; }
+			body.vpss-active { overflow: hidden; }
+
+			/* Theme & Visibility */
+			html.background-visible:is(.dark, .dark-theme) { background: transparent !important; }
+			html:is(.light, .light-theme) body::before { background-image: none !important; background-color: #fff !important; }
+
+			/* Fallback Management */
+			html.js-enabled .ssg-fallback { display: none !important; }
+			.vpss-logo img, .vpss-logo svg { height: 48px !important; width: 48px !important; display: block; margin-bottom: 4px; }
+			.is-bot #vpss { display: none !important; }
 		</style>
-	</noscript>
 
-	<title>NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator</title>
-	<meta name="description"
-		content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta name="keywords"
-		content="NMS Optimizer, No Man's Sky, adjacency bonus, supercharged slots, NMS layout tool, starship tech layout, multitool build, supercharged slot calculator" />
+		<style id="ssg-fallback-styles">
+			/* Static Header (SEO Only) */
+			.app-header-static { align-items: center; display: flex; flex-direction: column; padding-top: 24px; background-image: linear-gradient(to bottom, black, transparent); position: relative; z-index: 1; }
+			.app-header-static__logo-text { font-family: Geosans, Helvetica, Arial, sans-serif; font-size: 1.875rem; font-weight: 400; letter-spacing: 0.35em; line-height: 2rem; margin-right: -0.35em; text-align: center; -webkit-text-stroke: 2.5px; text-transform: uppercase; word-spacing: -0.25rem; color: white; }
+			@media (width >= 640px) { .app-header-static__logo-text { filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4)); font-size: 2.25rem; line-height: 2.5rem; } }
+			.app-header-static__separator-container { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0; }
+			.app-header-static__separator { height: 1px; background-color: #363a3f; flex: 1; }
+			.app-header-static__title { color: #edeef0; font-family: Raleway, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; line-height: 22px; text-align: center; margin-top: 4px; }
 
-	<!-- Canonical & Social Metadata -->
-	<link rel="canonical" href="https://nms-optimizer.app/" />
-	<meta property="og:url" content="https://nms-optimizer.app/" />
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="NMS Optimizer" />
-	<meta property="og:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
-	<meta property="og:description"
-		content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
-	<meta property="og:image:alt"
-		content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
-	<meta property="og:image:width" content="1280" />
-	<meta property="og:image:height" content="880" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
-	<meta name="twitter:description"
-		content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-	<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
-	<meta name="twitter:image:alt"
-		content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
+			/* SSG Fallback Layout */
+			.ssg-fallback { color: #fff; background-color: #000; margin: 2rem auto; padding: 0 2rem 2rem; max-width: 85ch; border-radius: 16px; font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+			.ssg-fallback h1, .ssg-fallback h2, .ssg-fallback h3 { color: #4ccce6; margin: 1.5rem 0 1rem; font-weight: bold; }
+			.ssg-fallback h1 { font-size: 1.5rem; }
+			.ssg-fallback h2 { font-size: 1.125rem; }
+			.ssg-fallback h3 { font-size: 1rem; }
+			.ssg-fallback p { margin-bottom: 0.5rem; line-height: 1.6; }
+			.ssg-fallback ul, .ssg-fallback ol { margin: 0.5rem 0 0.5rem 1.5rem; }
+			.ssg-fallback ul { list-style: disc; }
+			.ssg-fallback ol { list-style: decimal; }
+			.ssg-fallback li { margin-bottom: 0.25rem; }
+			.ssg-fallback a { color: #4ccce6; text-decoration: underline; }
+			.ssg-fallback code { background-color: rgba(0, 162, 199, 0.1); padding: 0.125rem 0.25rem; border-radius: 0.25rem; color: #4ccce6; }
+			.ssg-fallback blockquote { border-left: 4px solid #4ccce6; padding-left: 1rem; margin: 0.5rem 0; font-style: italic; color: #cbd5e1; }
+			.ssg-fallback nav { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(11, 165, 233, 0.3); }
+		</style>
 
-	<!-- Resource Hints -->
-	<link rel="dns-prefetch" href="https://api.nms-optimizer.app" />
-	<link rel="preconnect" href="https://api.nms-optimizer.app" crossorigin="" />
-	<link rel="preconnect" href="https://www.google-analytics.com" crossorigin="" />
+		<!-- Application Boot (Critical Path) -->
+		<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
+	</head>
 
-	<!-- Favicons -->
-	<link rel="icon" href="/assets/svg/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
-	<link rel="icon" href="/assets/svg/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
-	<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png" />
-	<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=3" />
-
-	<!-- Critical Assets -->
-	<link rel="preload" href="/assets/fonts/geonms.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="high" />
-	<link rel="preload" href="/assets/fonts/raleway.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="high" />
-	<link rel="preload" href="/assets/fonts/acumin.woff2" as="font" type="font/woff2" crossorigin="anonymous"
-		fetchpriority="low" />
-	<link rel="preload" as="image" href="/assets/img/background@mobile-blurred.webp" media="(max-width: 640px)"
-		fetchpriority="high" />
-	<link rel="preload" as="image" imagesrcset="/assets/img/background.webp 1x, /assets/img/background@2x.webp 2x"
-		media="(min-width: 641px)" fetchpriority="low" />
-
-	<link rel="stylesheet" href="/src/assets/css/fonts.css" />
-
-	<style>
-		/* App Base & Reset */
-		html {
-			background: #000;
-			color: #fff;
-			scrollbar-gutter: stable;
-		}
-
-		body {
-			background-color: transparent;
-			margin: 0;
-		}
-
-		body.vpss-active {
-			overflow: hidden;
-		}
-
-		/* Theme & Visibility */
-		html.background-visible:is(.dark, .dark-theme) {
-			background: transparent !important;
-		}
-
-		html:is(.light, .light-theme) body::before {
-			background-image: none !important;
-			background-color: #fff !important;
-		}
-
-		/* Fallback Management */
-		html.js-enabled .ssg-fallback {
-			display: none !important;
-		}
-
-		.vpss-logo img,
-		.vpss-logo svg {
-			height: 48px !important;
-			width: 48px !important;
-			display: block;
-			margin-bottom: 4px;
-		}
-
-		.is-bot #vpss {
-			display: none !important;
-		}
-	</style>
-
-	<style id="ssg-fallback-styles">
-		/* Static Header (SEO Only) */
-		.app-header-static {
-			align-items: center;
-			display: flex;
-			flex-direction: column;
-			padding-top: 24px;
-			background-image: linear-gradient(to bottom, black, transparent);
-			position: relative;
-			z-index: 1;
-		}
-
-		.app-header-static__logo-text {
-			font-family: Geosans, Helvetica, Arial, sans-serif;
-			font-size: 1.875rem;
-			font-weight: 400;
-			letter-spacing: 0.35em;
-			line-height: 2rem;
-			margin-right: -0.35em;
-			text-align: center;
-			-webkit-text-stroke: 2.5px;
-			text-transform: uppercase;
-			word-spacing: -0.25rem;
-			color: white;
-		}
-
-		@media (width >=640px) {
-			.app-header-static__logo-text {
-				filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5)) drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
-				font-size: 2.25rem;
-				line-height: 2.5rem;
-			}
-		}
-
-		.app-header-static__separator-container {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			width: 100%;
-			margin: 4px 0;
-		}
-
-		.app-header-static__separator {
-			height: 1px;
-			background-color: #363a3f;
-			flex: 1;
-		}
-
-		.app-header-static__title {
-			color: #edeef0;
-			font-family: Raleway, Helvetica, Arial, sans-serif;
-			font-size: 16px;
-			font-weight: 700;
-			line-height: 22px;
-			text-align: center;
-			margin-top: 4px;
-		}
-
-		/* SSG Fallback Layout */
-		.ssg-fallback {
-			color: #fff;
-			background-color: #000;
-			margin: 2rem auto;
-			padding: 0 2rem 2rem;
-			max-width: 85ch;
-			border-radius: 16px;
-			font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-		}
-
-		.ssg-fallback h1,
-		.ssg-fallback h2,
-		.ssg-fallback h3 {
-			color: #4ccce6;
-			margin: 1.5rem 0 1rem;
-			font-weight: bold;
-		}
-
-		.ssg-fallback h1 {
-			font-size: 1.5rem;
-		}
-
-		.ssg-fallback h2 {
-			font-size: 1.125rem;
-		}
-
-		.ssg-fallback h3 {
-			font-size: 1rem;
-		}
-
-		.ssg-fallback p {
-			margin-bottom: 0.5rem;
-			line-height: 1.6;
-		}
-
-		.ssg-fallback ul,
-		.ssg-fallback ol {
-			margin: 0.5rem 0 0.5rem 1.5rem;
-		}
-
-		.ssg-fallback ul {
-			list-style: disc;
-		}
-
-		.ssg-fallback ol {
-			list-style: decimal;
-		}
-
-		.ssg-fallback li {
-			margin-bottom: 0.25rem;
-		}
-
-		.ssg-fallback a {
-			color: #4ccce6;
-			text-decoration: underline;
-		}
-
-		.ssg-fallback code {
-			background-color: rgba(0, 162, 199, 0.1);
-			padding: 0.125rem 0.25rem;
-			border-radius: 0.25rem;
-			color: #4ccce6;
-		}
-
-		.ssg-fallback blockquote {
-			border-left: 4px solid #4ccce6;
-			padding-left: 1rem;
-			margin: 0.5rem 0;
-			font-style: italic;
-			color: #cbd5e1;
-		}
-
-		.ssg-fallback nav {
-			margin-top: 2rem;
-			padding-top: 1rem;
-			border-top: 1px solid rgba(11, 165, 233, 0.3);
-		}
-	</style>
-
-	<!-- Application Boot (Critical Path) -->
-	<script type="module" src="/src/main.tsx" fetchpriority="high"></script>
-</head>
-
-<body class="background-visible">
-	<div id="root"></div>
+	<body class="background-visible">
+		<div id="root"></div>
 
 		<main class="ssg-fallback" data-ssg-template="">
 			<header class="app-header-static">
@@ -433,8 +265,6 @@
     </nav>
 		</main>
 
-	<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js"
-		data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'></script>
-</body>
-
+		<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "614f4aacf3d1446bae6719e156ecc36e", "spa": true}'></script>
+	</body>
 </html>
