@@ -1,3 +1,23 @@
+## [7.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.0...v7.3.1) (2026-05-16)
+
+
+### Performance Improvements
+
+* massive TBT reduction by lazy loading main content and fixing test flakiness ([2ce23f0](https://github.com/jbelew/nms_optimizer-web/commit/2ce23f0daf5831353f96e5e72d76928058b680f1))
+* massive TBT reduction by lazy loading main content and fixing test flakiness ([94535a9](https://github.com/jbelew/nms_optimizer-web/commit/94535a9bb6ec122cf613e121c8507fce4dc88bb2))
+* move Sentry out of critical bootstrap path and fix SSG fallback visibility ([f56be7c](https://github.com/jbelew/nms_optimizer-web/commit/f56be7c11228bfa7bc0192e88d5e2e14579df08c))
+* move Sentry out of critical bootstrap path and fix SSG fallback visibility ([47fbf28](https://github.com/jbelew/nms_optimizer-web/commit/47fbf2807d94c45f30297d7a21d666761cd14018))
+* optimize assets and bootstrap while restoring stable UI flow ([522705d](https://github.com/jbelew/nms_optimizer-web/commit/522705de51d8e028b89b2f2c0401508cfc06882c))
+* optimize assets and bootstrap while restoring stable UI flow ([c5ffdb6](https://github.com/jbelew/nms_optimizer-web/commit/c5ffdb62faf7ed594ae6a19fe4e6ab7568954af4))
+* optimize SSG fallback images with WebP, lazy loading, and async decoding ([9722820](https://github.com/jbelew/nms_optimizer-web/commit/9722820d3f63b661de30134510ad75e52cd62d38))
+* optimize SSG fallback images with WebP, lazy loading, and async decoding ([4135f82](https://github.com/jbelew/nms_optimizer-web/commit/4135f82fbed326f552a417d9877da5ae8c2eeb33))
+* resize SSG fallback screenshot to 768x528 and optimize ([44099d4](https://github.com/jbelew/nms_optimizer-web/commit/44099d4717cc6a6c293c57f05735d1fb23c2e0c4))
+* resize SSG fallback screenshot to 768x528 and optimize ([f176740](https://github.com/jbelew/nms_optimizer-web/commit/f176740116a878a284773bdf08ca7c1c055977f8))
+* resolve ineffective dynamic imports by reverting to static store imports ([2d3eacc](https://github.com/jbelew/nms_optimizer-web/commit/2d3eacc905a40e54d6841f48eaee7be7a59337a0))
+* resolve ineffective dynamic imports by reverting to static store imports ([3a0a838](https://github.com/jbelew/nms_optimizer-web/commit/3a0a83826d1303a0bab79d98d4b2b7d8f38a270c))
+* restore bfcache by replacing 'no-store' with 'no-cache' in headers and fetch calls ([62a585c](https://github.com/jbelew/nms_optimizer-web/commit/62a585cab10290f9a836dedb04f1172d746a307b))
+* restore bfcache by replacing 'no-store' with 'no-cache' in headers and fetch calls ([4430f42](https://github.com/jbelew/nms_optimizer-web/commit/4430f421d00422c96c3e5de94ee5e2d5a1f59162))
+
 # [7.3.0](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.9...v7.3.0) (2026-05-16)
 
 
