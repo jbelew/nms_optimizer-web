@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Link, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useAnalytics } from "../../../hooks/useAnalytics/useAnalytics";
-import { useOptimizeStore } from "../../../store/app/optimizeStore";
-import { ErrorDisplay } from "../../ErrorBoundary/ErrorDisplay";
+import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorDisplay";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useOptimizeStore } from "@/store/app/optimizeStore";
 
 import "./ErrorContent.scss";
 

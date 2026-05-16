@@ -28,7 +28,7 @@ interface UserStatsContentProps {
  * @returns {JSX.Element} The rendered statistics content UI.
  *
  * @see {@link ./UserStatsContent.test.tsx Unit Tests}
- * @see {@link import('../../../hooks/useUserStats/useUserStats').useUserStats}
+ * @see {@link import('@/hooks/useUserStats/useUserStats').useUserStats}
  * @see {@link UserStatsData}
  * @see {@link ErrorBoundary}
  *

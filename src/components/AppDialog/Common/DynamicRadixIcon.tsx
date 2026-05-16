@@ -1,6 +1,6 @@
 import React from "react";
 
-import { radixIconRegistry } from "../../../utils/icons/iconRegistry";
+import { radixIconRegistry } from "@/utils/icons/iconRegistry";
 
 /**
  * Props for the `DynamicRadixIcon` component.

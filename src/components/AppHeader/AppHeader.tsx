@@ -107,7 +107,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 							}}
 							onMouseEnter={() => {
 								// Prefetch the component when user hovers
-								void import("../AppDialog/Markdown/markdownContentRenderer");
+								void import("@/components/AppDialog/Markdown/markdownContentRenderer");
 							}}
 							variant="soft"
 						>
@@ -123,7 +123,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 									openDialog("userstats");
 								}}
 								onMouseEnter={() => {
-									void import("../../routes/UserStatsRoute");
+									void import("@/routes/UserStatsRoute");
 								}}
 								variant="soft"
 							>
@@ -140,7 +140,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {
 								}}
 								onMouseEnter={() => {
 									// Prefetch performance chart logic
-									void import("../AppDialog/Performance/performanceChart");
+									void import("@/components/AppDialog/Performance/performanceChart");
 								}}
 								variant="soft"
 							>

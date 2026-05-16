@@ -1,8 +1,8 @@
 import { useContext } from "react";
 
-import { ToastContext } from "../../context/createToastContext";
+import { ToastContext } from "@/context/createToastContext";
 
-export { ToastProvider } from "../../context/ToastContext";
+export { ToastProvider } from "@/context/ToastContext";
 
 /**
  * Custom hook for accessing the application's toast notification system.
@@ -13,12 +13,12 @@ export { ToastProvider } from "../../context/ToastContext";
  *
  * It is a wrapper around the `ToastContext`.
  *
- * @returns {import('../../context/createToastContext').ToastContextType} The toast context containing notification handlers.
+ * @returns {import('@/context/createToastContext').ToastContextType} The toast context containing notification handlers.
  *
- * @throws {Error} If called outside of a {@link import('../../context/ToastContext').ToastProvider}.
+ * @throws {Error} If called outside of a {@link import('@/context/ToastContext').ToastProvider}.
  *
  * @see {@link ToastContext} for the underlying context definition.
- * @see {@link import('../../context/ToastContext').ToastProvider} for the required provider component.
+ * @see {@link import('@/context/ToastContext').ToastProvider} for the required provider component.
  *
  * @hook
  *

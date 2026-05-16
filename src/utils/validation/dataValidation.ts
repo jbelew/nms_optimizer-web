@@ -8,7 +8,7 @@
  * @category Utilities
  */
 
-import type { RecommendedBuild } from "../../types/tech";
+import type { RecommendedBuild } from "@/types/tech";
 
 /**
  * Type definition for a saved build file (.nms).

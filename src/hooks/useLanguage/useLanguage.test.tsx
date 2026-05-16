@@ -7,7 +7,8 @@ import { MemoryRouter } from "react-router-dom"; // Import Location
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import i18n from "../../test/i18n";
+import i18n from "@/test/i18n";
+
 import { useLanguage } from "./useLanguage";
 
 // Helper function to create a mock Location object

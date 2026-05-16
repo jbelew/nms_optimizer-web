@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { fetchShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import { fetchTechTreeAsync } from "../../hooks/useTechTree/useTechTree";
-import { resolveInitialPlatform } from "../browser/platformResolver";
+import { fetchShipTypes } from "@/hooks/useShipTypes/useShipTypes";
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
+import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
+
 import { preloadInitialState } from "./apiPreload";
 
 vi.mock("../../hooks/useShipTypes/useShipTypes", () => ({

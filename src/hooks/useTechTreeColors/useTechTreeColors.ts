@@ -1,7 +1,7 @@
 // src/hooks/useTechTreeColors/useTechTreeColors.ts
 import { use } from "react";
 
-import { fetchTechTreeColors } from "../../utils/api/techTreeColorsResource";
+import { fetchTechTreeColors } from "@/utils/api/techTreeColorsResource";
 
 /**
  * Custom hook for retrieving the global technology color registry.

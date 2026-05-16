@@ -15,8 +15,8 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { sendEvent } from "../../utils/analytics/tracking";
-import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
+import { sendEvent } from "@/utils/analytics/tracking";
+import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 import "./NotFound.scss";
 

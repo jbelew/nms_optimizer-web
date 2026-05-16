@@ -12,7 +12,7 @@ import { useSyncExternalStore } from "react";
  * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
  *
  * @see [useBreakpoint Tests](./useBreakpoint.test.tsx)
- * @see {@link import('../useAppLayout/useAppLayout').useAppLayout} for layout-specific responsive logic.
+ * @see {@link import('@/hooks/useAppLayout/useAppLayout').useAppLayout} for layout-specific responsive logic.
  *
  * @category Hooks
  *

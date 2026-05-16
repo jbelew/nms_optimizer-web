@@ -17,9 +17,9 @@ import { lazy, Suspense } from "react";
 import { Button, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
-const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `UpdatePrompt` component.

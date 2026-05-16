@@ -2,20 +2,20 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAppLayout } from "../../hooks/useAppLayout/useAppLayout";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useErrorDispatcher } from "../../hooks/useErrorDispatcher";
-import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
-import { useOptimize } from "../../hooks/useOptimize/useOptimize";
-import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
-import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useScrollHide } from "../../hooks/useScrollHide/useScrollHide";
-import { build, getBuildDate } from "../../routeConfig";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useSessionStore } from "../../store/app/sessionStore";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useDialog } from "../../utils/system/dialogUtils";
-import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
+import { useAppLayout } from "@/hooks/useAppLayout/useAppLayout";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useErrorDispatcher } from "@/hooks/useErrorDispatcher";
+import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
+import { useOptimize } from "@/hooks/useOptimize/useOptimize";
+import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
+import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { useScrollHide } from "@/hooks/useScrollHide/useScrollHide";
+import { build, getBuildDate } from "@/routeConfig";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useSessionStore } from "@/store/app/sessionStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useDialog } from "@/utils/system/dialogUtils";
+import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 /**
  * Custom hook that consolidates the high-level orchestration logic for the main application view.

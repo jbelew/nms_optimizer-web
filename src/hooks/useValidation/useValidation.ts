@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useDialog } from "../../utils/system/dialogUtils";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * Options for the `useDebouncedValidation` hook.

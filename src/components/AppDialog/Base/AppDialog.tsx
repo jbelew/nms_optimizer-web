@@ -15,7 +15,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { IconButton, Separator, Theme } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { getDialogIconAndStyle } from "../../../utils/icons/iconRegistry";
+import { getDialogIconAndStyle } from "@/utils/icons/iconRegistry";
 
 /**
  * List of dialog title keys that require extra padding.

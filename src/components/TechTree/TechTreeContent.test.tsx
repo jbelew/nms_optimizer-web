@@ -1,4 +1,4 @@
-import type { TechTree } from "../../hooks/useTechTree/useTechTree";
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";

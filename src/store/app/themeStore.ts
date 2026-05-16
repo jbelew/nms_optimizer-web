@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/environment";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 
 /**
  * Valid theme appearance types.

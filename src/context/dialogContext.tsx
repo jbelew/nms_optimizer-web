@@ -1,11 +1,11 @@
 // src/context/dialogContext.tsx
-import type { DialogType } from "../utils/system/dialogUtils";
+import type { DialogType } from "@/utils/system/dialogUtils";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../utils/browser/environment";
-import { DialogContext } from "../utils/system/dialogUtils";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { DialogContext } from "@/utils/system/dialogUtils";
 
 /** List of non-English language codes supported by the router. */
 const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];

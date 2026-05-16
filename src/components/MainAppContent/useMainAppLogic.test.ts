@@ -3,10 +3,11 @@ import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { registerToolbarForceShow } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useSessionStore } from "../../store/app/sessionStore";
-import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
+import { registerToolbarForceShow } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useSessionStore } from "@/store/app/sessionStore";
+import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
+
 import { useMainAppLogic } from "./useMainAppLogic";
 
 // Mock external dependencies

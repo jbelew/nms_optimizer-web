@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 
-import { useGridStore } from "../../store/grid/gridStore";
+import { useGridStore } from "@/store/grid/gridStore";
+
 import AppHeader from "./AppHeader";
 
 const meta = {

@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useUpdateCheck } from "../../hooks/useUpdateCheck/useUpdateCheck";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
 
 const UpdatePrompt = lazy(() => import("./UpdatePrompt"));
 

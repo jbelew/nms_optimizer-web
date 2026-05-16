@@ -135,7 +135,7 @@ const CORNER_SPANS = (
  * @see {@link useGridCellInteraction}
  * @see {@link useGridCellStyle}
  * @see {@link useCell}
- * @see {@link import('../../store/grid/gridStore').GridStore}
+ * @see {@link import('@/store/grid/gridStore').GridStore}
  * @see {@link ./GridCell.test.tsx Unit Tests}
  *
  * @component

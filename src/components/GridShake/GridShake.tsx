@@ -14,7 +14,7 @@ import "./GridShake.scss";
 
 import React, { useEffect, useRef } from "react";
 
-import { useShakeStore } from "../../store/app/shakeStore";
+import { useShakeStore } from "@/store/app/shakeStore";
 
 /**
  * Props for the `GridShake` component.

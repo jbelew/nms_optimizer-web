@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import { expect, userEvent, waitFor, within } from "@storybook/test";
 
-import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useGridStore } from "../../store/grid/gridStore";
+import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+
 import RecommendedBuild from "./RecommendedBuild";
 
 // Simplified to a single build to match Exosuit behavior.

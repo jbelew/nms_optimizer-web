@@ -1,13 +1,13 @@
 // src/store/app/platformStore.ts
 import { create } from "zustand";
 
-import { safeGetItem, safeSetItem } from "../../utils/browser/environment";
+import { safeGetItem, safeSetItem } from "@/utils/browser/environment";
 import {
 	getPlatformFromStorage,
 	getPlatformFromUrl,
 	PLATFORM_STORAGE_KEY,
 	resolveInitialPlatform,
-} from "../../utils/browser/platformResolver";
+} from "@/utils/browser/platformResolver";
 
 /**
  * State and actions for the ship type (platform) selection.

@@ -1,14 +1,15 @@
-import type { PlatformState } from "../../store/app/platformStore";
-import type { ApiResponse, GridStore } from "../../store/grid/gridStore";
-import type { TechState } from "../../store/tech/techStore";
+import type { PlatformState } from "@/store/app/platformStore";
+import type { ApiResponse, GridStore } from "@/store/grid/gridStore";
+import type { TechState } from "@/store/tech/techStore";
 import type { Socket } from "socket.io-client";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { createSocket } from "../api/socketManager";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { createSocket } from "@/utils/api/socketManager";
+
 import { OptimizationManager } from "./optimizationManager";
 
 vi.mock("../api/socketManager", () => ({

@@ -2,12 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useEffect } from "react";
 import { Provider as ToastProviderRadix, Viewport as ToastViewport } from "@radix-ui/react-toast";
 
-import { type TechTree, type TechTreeItem } from "../../hooks/useTechTree/useTechTree";
-import { ToastProvider } from "../../hooks/useToast/useToast";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { createGrid, useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
+import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
+import { ToastProvider } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+
 import { MainAppContent } from "./MainAppContent";
 
 const meta = {

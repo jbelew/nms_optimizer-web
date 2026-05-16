@@ -24,8 +24,8 @@ import "./Toast.scss";
 import { Button, Separator } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";
-import { ErrorDisplay } from "../ErrorBoundary/ErrorDisplay";
+import { ErrorDisplay } from "@/components/ErrorBoundary/ErrorDisplay";
+import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 
 /**
  * Props for the `NmsToast` component.

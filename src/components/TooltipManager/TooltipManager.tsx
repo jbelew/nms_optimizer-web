@@ -13,7 +13,7 @@
 import React from "react";
 import { Tooltip } from "@radix-ui/themes";
 
-import { useTooltipState } from "../../utils/system/tooltipUtils";
+import { useTooltipState } from "@/utils/system/tooltipUtils";
 
 /**
  * A singleton tooltip management component.

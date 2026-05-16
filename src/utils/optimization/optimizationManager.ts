@@ -1,11 +1,11 @@
-import type { ApiResponse, Cell, Grid } from "../../store/grid/gridStore";
+import type { ApiResponse, Cell, Grid } from "@/store/grid/gridStore";
 import type { Socket } from "socket.io-client";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { createEmptyCell, useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { createSocket, TRANSPORT_ERROR_MESSAGES } from "../api/socketManager";
-import { Logger } from "../system/monitoring";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { createEmptyCell, useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { createSocket, TRANSPORT_ERROR_MESSAGES } from "@/utils/api/socketManager";
+import { Logger } from "@/utils/system/monitoring";
 
 /** Maximum number of silent transport-error retries before showing the error modal. */
 const MAX_TRANSPORT_RETRIES = 2;

@@ -4,8 +4,9 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import i18n from "../../src/test/i18n";
-import { useDialog } from "../utils/system/dialogUtils";
+import i18n from "@/test/i18n";
+import { useDialog } from "@/utils/system/dialogUtils";
+
 import { DialogProvider } from "./dialogContext";
 
 // Test the window.location.search preservation logic directly

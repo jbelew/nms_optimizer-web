@@ -1,13 +1,14 @@
-import type { RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
+import type { RecommendedBuild, TechTree, TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { createEmptyCell, createGrid, useGridStore } from "../../store/grid/gridStore";
 import {
 	__resetScrollGridIntoViewRef,
 	useScrollGridIntoView,
-} from "../useScrollGridIntoView/useScrollGridIntoView";
+} from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { createEmptyCell, createGrid, useGridStore } from "@/store/grid/gridStore";
+
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore

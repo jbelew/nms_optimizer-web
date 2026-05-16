@@ -1,7 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { sendDeferredEvent, sendEvent } from "../../utils/analytics/tracking";
+import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
+
 import { useAnalytics } from "./useAnalytics";
 
 // Mock the actual sendEvent function from utils/analytics/tracking

@@ -1,14 +1,15 @@
-import type { PlatformState } from "../../store/app/platformStore";
+import type { PlatformState } from "@/store/app/platformStore";
 import type { Mock } from "vitest";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
-import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
+import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserializer";
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+
 import { useUrlSync } from "./useUrlSync";
 
 vi.mock("../../store/grid/gridStore");

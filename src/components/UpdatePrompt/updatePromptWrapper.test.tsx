@@ -2,8 +2,9 @@ import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useUpdateCheck } from "../../hooks/useUpdateCheck/useUpdateCheck";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useUpdateCheck } from "@/hooks/useUpdateCheck/useUpdateCheck";
+
 import { UpdatePromptWrapper } from "./updatePromptWrapper";
 
 // Mock react-i18next

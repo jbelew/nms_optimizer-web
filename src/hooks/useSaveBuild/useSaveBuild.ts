@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useAnalytics } from "../useAnalytics/useAnalytics";
-import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
-import { useToast } from "../useToast/useToast";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
+import { useToast } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
 
 /**
  * Return type for the `useSaveBuild` hook.

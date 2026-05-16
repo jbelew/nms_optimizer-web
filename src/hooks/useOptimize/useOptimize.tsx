@@ -1,15 +1,15 @@
-import type { ApiResponse } from "../../store/grid/gridStore";
+import type { ApiResponse } from "@/store/grid/gridStore";
 import { startTransition, useEffect, useRef, useState } from "react";
 
-import { useOptimizeStore } from "../../store/app/optimizeStore";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { OptimizationManager } from "../../utils/optimization/optimizationManager";
-import { Logger } from "../../utils/system/monitoring";
-import { useAnalytics } from "../useAnalytics/useAnalytics";
-import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
-import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { useOptimizeStore } from "@/store/app/optimizeStore";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { OptimizationManager } from "@/utils/optimization/optimizationManager";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * The return type of the `useOptimize` hook.

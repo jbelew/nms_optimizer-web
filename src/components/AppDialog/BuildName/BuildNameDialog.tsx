@@ -8,7 +8,7 @@ import { BuildNameContent } from "./BuildNameContent";
 
 import "./BuildNameDialog.scss";
 
-const AppDialog = lazy(() => import("../Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `BuildNameDialog` component.

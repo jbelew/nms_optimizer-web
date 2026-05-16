@@ -3,7 +3,8 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "../../store/app/platformStore";
+import { usePlatformStore } from "@/store/app/platformStore";
+
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 // Mocking external dependencies

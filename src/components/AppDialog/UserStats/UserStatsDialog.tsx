@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { UserStatsContent } from "./userStatsContent";
 
-const AppDialog = lazy(() => import("../Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `UserStatsDialog` component.

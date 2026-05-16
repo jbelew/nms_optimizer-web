@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as Toast from "@radix-ui/react-toast";
 
-import { ToastProvider } from "../../hooks/useToast/useToast";
-import i18n from "../../i18n/i18n";
-import { usePlatformStore } from "../../store/app/platformStore";
+import { ToastProvider } from "@/hooks/useToast/useToast";
+import i18n from "@/i18n/i18n";
+import { usePlatformStore } from "@/store/app/platformStore";
+
 import { ShipSelection } from "./shipSelection";
 
 // Pre-load essential translation keys for the interaction test

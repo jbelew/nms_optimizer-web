@@ -2,8 +2,9 @@ import type { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { WS_URL } from "../../constants";
-import { Logger } from "../system/monitoring";
+import { WS_URL } from "@/constants";
+import { Logger } from "@/utils/system/monitoring";
+
 import { createSocket, SOCKET_OPTIONS } from "./socketManager";
 
 vi.mock("socket.io-client", () => ({

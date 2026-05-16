@@ -5,7 +5,8 @@
 import { act } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useTechStore } from "../tech/techStore";
+import { useTechStore } from "@/store/tech/techStore";
+
 import { createGrid, useGridStore } from "./gridStore";
 
 describe("GridStore - Result and Tech Operations", () => {

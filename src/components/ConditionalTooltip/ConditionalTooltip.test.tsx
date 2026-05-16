@@ -2,8 +2,9 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { isTouchDevice } from "../../utils/browser/environment";
-import { useTooltipActions } from "../../utils/system/tooltipUtils";
+import { isTouchDevice } from "@/utils/browser/environment";
+import { useTooltipActions } from "@/utils/system/tooltipUtils";
+
 import { ConditionalTooltip } from "./ConditionalTooltip";
 
 // Mock isTouchDevice

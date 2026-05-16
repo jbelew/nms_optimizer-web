@@ -1,9 +1,10 @@
 import { vi } from "vitest";
 
-import { API_URL } from "../../constants";
-import { createEmptyCell } from "../../store/grid/gridStore"; // Import createEmptyCell
-import { apiCall } from "../../utils/api/network";
-import { clearTechTreeCache } from "../useTechTree/useTechTree";
+import { API_URL } from "@/constants";
+import { clearTechTreeCache } from "@/hooks/useTechTree/useTechTree";
+import { createEmptyCell } from "@/store/grid/gridStore"; // Import createEmptyCell
+import { apiCall } from "@/utils/api/network";
+
 import { deserialize } from "./useGridDeserializer";
 
 // Mock dependencies

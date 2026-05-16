@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { PerformanceContent } from "./performanceContent";
 
-const AppDialog = lazy(() => import("../Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `PerformanceDialog` component.

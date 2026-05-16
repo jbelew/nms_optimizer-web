@@ -1,4 +1,4 @@
-import { useGridStore } from "../../store/grid/gridStore";
+import { useGridStore } from "@/store/grid/gridStore";
 
 /**
  * Number of rows from the bottom of the grid where the deactivate button is allowed to appear.
@@ -13,7 +13,7 @@ const LAST_N_ROWS_THRESHOLD = 3;
  * Custom hook for deriving the control state of a specific grid row.
  *
  * @remarks
- * It uses specialized selectors from {@link import('../../store/grid/gridStore').GridStore} to determine if a row is the
+ * It uses specialized selectors from {@link import('@/store/grid/gridStore').GridStore} to determine if a row is the
  * "frontier" for expansion (first inactive row) or the "frontier" for
  * contraction (last active row within the threshold).
  *
@@ -25,7 +25,7 @@ const LAST_N_ROWS_THRESHOLD = 3;
  * @returns {object} Derived boolean flags: `isFirstInactiveRow` and `isLastActiveRow`.
  *
  * @see {@link import('./GridControlButtons').GridControlButtons}
- * @see {@link import('../../store/grid/gridStore').GridStore}
+ * @see {@link import('@/store/grid/gridStore').GridStore}
  *
  * @hook
  *

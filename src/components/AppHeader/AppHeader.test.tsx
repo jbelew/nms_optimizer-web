@@ -4,8 +4,9 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import i18n from "../../test/i18n";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import i18n from "@/test/i18n";
+
 import AppHeader from "./AppHeader";
 
 // Mock hooks

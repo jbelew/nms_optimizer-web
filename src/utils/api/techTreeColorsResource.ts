@@ -1,6 +1,6 @@
-import type { TechTree } from "../../hooks/useTechTree/useTechTree";
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 
-import { fetchTechTreeAsync } from "../../hooks/useTechTree/useTechTree";
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
 
 let techTreeColorsPromise: null | Promise<Record<string, string>> = null;
 

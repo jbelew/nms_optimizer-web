@@ -1,4 +1,4 @@
-import { sendDeferredEvent, sendEvent } from "../../utils/analytics/tracking";
+import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 
 /**
  * Custom hook for accessing Google Analytics event tracking.
@@ -11,7 +11,7 @@ import { sendDeferredEvent, sendEvent } from "../../utils/analytics/tracking";
  * the main thread free during the interaction. Use `sendEvent` for late-firing
  * events (Web Vitals, `visibilitychange`) that must dispatch synchronously.
  *
- * @returns {{ sendEvent: (event: import('../../utils/analytics/tracking').GA4Event) => void, sendDeferredEvent: (event: import('../../utils/analytics/tracking').GA4Event) => void }} An object containing the tracking functions.
+ * @returns {{ sendEvent: (event: import('@/utils/analytics/tracking').GA4Event) => void, sendDeferredEvent: (event: import('@/utils/analytics/tracking').GA4Event) => void }} An object containing the tracking functions.
  *
  * @see {@link sendEvent} for the underlying tracking logic.
  * @see {@link sendDeferredEvent} for the INP-friendly deferred variant.

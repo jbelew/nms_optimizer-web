@@ -1,4 +1,4 @@
-import type { TechTreeRowProps } from "../../types/props";
+import type { TechTreeRowProps } from "@/types/props";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
