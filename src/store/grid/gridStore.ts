@@ -1,9 +1,9 @@
+import type { Module } from "../../types/tech";
 import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { type Module } from "../../hooks/useTechTree/useTechTree";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/environment";
 import { resolveInitialPlatform } from "../../utils/browser/platformResolver";
 import { usePlatformStore } from "../app/platformStore";

@@ -1,4 +1,4 @@
-import type { TechTreeRowProps } from "./TechTreeRow";
+import type { TechTreeRowProps } from "../../types/props";
 import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";

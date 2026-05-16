@@ -51,6 +51,11 @@ pre-commit:
       # tsc -b uses project references and cannot be scoped to individual files
       run: bun run typecheck
 
+    circular:
+      tags: lint
+      glob: "*.{ts,tsx}"
+      run: bun run lint:circular
+
     test:
       tags: test
       glob: "*.{ts,tsx}"

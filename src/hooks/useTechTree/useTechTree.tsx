@@ -1,3 +1,16 @@
+/**
+ * Custom hook and utility module for fetching and managing technology trees.
+ *
+ * @remarks
+ * This module provides the `useFetchTechTreeSuspense` hook, which retrieves
+ * technology and module data for a specific ship type. It handles caching,
+ * data validation, and provides derived maps for efficient access to
+ * technology metadata.
+ *
+ * @category Hooks
+ */
+
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "../../types/tech";
 import { use, useEffect } from "react";
 
 import { API_URL } from "../../constants";
@@ -8,134 +21,7 @@ import { apiCall } from "../../utils/api/network";
 import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
 
-/**
- * Represents a specific technology module in No Man's Sky.
- *
- * @remarks
- * Each module contains its base stats, adjacency identifiers, and UI state flags.
- * Modules are the atomic units placed within the technology grid.
- *
- * @category Interfaces
- */
-export interface Module {
-	/** Whether the module is currently active. */
-	active: boolean;
-	/** Adjacency type identifier (e.g., `'pulse'`, `'photonix'`). Used for bonus calculations. */
-	adjacency: string;
-	/** Multiplier for adjacency bonuses (e.g., `0.05` for 5%). */
-	adjacency_bonus: number;
-	/** The base bonus value provided by this module. */
-	bonus: number;
-	/** Optional flag indicating if the module is selected in the UI. */
-	checked?: boolean;
-	/** Unique identifier for the module (e.g., `'PULSE_MODULE_1'`). */
-	id: string;
-	/** Filename or URL for the module's icon. */
-	image: string;
-	/** Display name of the module. */
-	label: string;
-	/** Whether this module can be placed in a supercharged slot. */
-	sc_eligible: boolean;
-	/** Whether the module is currently in a supercharged slot. */
-	supercharged: boolean;
-	/** The key of the technology category this module belongs to. */
-	tech: string;
-	/** The specific type classification of the module (e.g., `'normal'`, `'proc'`). */
-	type: string;
-	/** Numerical value associated with the module's primary stat. */
-	value: number;
-}
-
-/**
- * Defines a pre-configured layout of technologies and modules.
- *
- * @see [useRecommendedBuild](../useRecommendedBuild/useRecommendedBuild.tsx) for the hook that applies these layouts.
- *
- * @category Interfaces
- */
-export interface RecommendedBuild {
-	/** 2D array representing the grid layout of modules. */
-	layout: (null | {
-		active?: boolean;
-		adjacency_bonus?: number;
-		module?: null | string;
-		supercharged?: boolean;
-		tech?: null | string;
-	})[][];
-	/** Display title for the build. */
-	title: string;
-}
-
-/**
- * Root structure for technology tree data fetched from the API.
- *
- * @see {@link TechTreeItem}
- * @see {@link RecommendedBuild}
- *
- * @category Interfaces
- */
-export interface TechTree {
-	/** Dynamic categories containing lists of technologies. */
-	[key: string]: RecommendedBuild[] | TechTreeItem[] | undefined | { grid: Module[][] };
-	/** Optional grid layout and constraints defined for the ship type. */
-	grid_definition?: { grid: Module[][]; gridFixed: boolean; superchargedFixed: boolean };
-	/** List of recommended builds for this ship type. */
-	recommended_builds?: RecommendedBuild[];
-}
-
-/**
- * Represents a technology category within the tech tree.
- *
- * @remarks
- * Groupings of modules that share a common purpose (e.g., Hyperdrive, Launch Thruster).
- * Includes UI theme colors and metadata for categorization.
- *
- * @see {@link Module}
- *
- * @category Interfaces
- */
-export interface TechTreeItem {
-	/** Theme color assigned to the technology in the UI. */
-	color:
-		| "amber"
-		| "blue"
-		| "bronze"
-		| "brown"
-		| "crimson"
-		| "cyan"
-		| "gold"
-		| "grass"
-		| "gray"
-		| "green"
-		| "indigo"
-		| "iris"
-		| "jade"
-		| "lime"
-		| "mint"
-		| "orange"
-		| "pink"
-		| "plum"
-		| "purple"
-		| "red"
-		| "ruby"
-		| "sky"
-		| "teal"
-		| "tomato"
-		| "violet"
-		| "yellow";
-	/** Optional icon for the technology. */
-	image: null | string;
-	/** Unique key for the technology (e.g., `'pulse'`). */
-	key: string;
-	/** Display label for the technology. */
-	label: string;
-	/** Total number of modules in this category. */
-	module_count: number;
-	/** List of modules available for this technology. */
-	modules: Module[];
-	/** Optional type classification (e.g., `'normal'`, `'weapon'`). */
-	type?: string;
-}
+export type { Module, RecommendedBuild, TechTree, TechTreeItem };
 
 /**
  * Internal promise cache to prevent redundant tech tree fetches.
@@ -196,7 +82,6 @@ export function fetchTechTree(shipType: string = "standard"): Promise<TechTree> 
  * @see {@link useTechTreeLoadingStore} for monitoring fetch status.
  * @see {@link apiCall} for the underlying network implementation.
  * @see {@link isValidRecommendedBuild} for build validation.
- * @see {@link ./useTechTree.test.ts Unit Tests}
  *
  * @example Fetching standard telemetry
  * ```ts
@@ -262,11 +147,8 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * @returns {TechTree} The loaded technology tree data structure.
  *
  * @see {@link fetchTechTree} for the promise creator.
- * @see [useBreakpoint](../useBreakpoint/useBreakpoint.tsx) for media query support.
- * @see [useAppLayout](../useAppLayout/useAppLayout.tsx) for layout-specific responsive logic.
  * @see {@link useTechStore} for technology grouping and coloring.
  * @see {@link useGridStore} for grid initialization.
- * @see {@link ./useFetchTechTreeSuspense.test.ts Unit Tests}
  *
  * @hook
  *

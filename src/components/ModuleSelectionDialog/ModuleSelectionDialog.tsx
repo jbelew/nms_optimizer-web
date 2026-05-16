@@ -13,7 +13,6 @@
  * @category Components
  */
 
-import type { TechTreeRowProps } from "../TechTreeRow/TechTreeRow";
 import React, { lazy, memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
@@ -36,7 +35,17 @@ import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";
 
+import type {
+	GroupedModules,
+	ModuleDialogBodyProps,
+	ModuleDialogFooterProps,
+	ModuleSelectionDialogProps,
+	SelectionModule,
+} from "../../types/props";
+
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+
+export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 
 const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
 
@@ -46,137 +55,7 @@ const fallbackImage = "/assets/img/grid/infra.webp";
 const baseImagePath = "/assets/img/grid/";
 
 /**
- * Props for the `DialogBody` component.
- */
-export interface DialogBodyProps {
-	/** Whether all modules in the dialog are currently selected. */
-	allModulesSelected: boolean;
-	/** Array of IDs for currently selected modules. */
-	currentCheckedModules: string[];
-	/** Modules organized into categories for display. **Must be provided.** */
-	groupedModules: GroupedModules;
-	/** Callback for the "Select All" toggle checkbox. */
-	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
-	/** Callback for selection changes within the checkbox group. */
-	handleValueChange: (newValues: string[]) => void;
-	/** Callback triggered when the dialog is dismissed. */
-	onClose?: () => void;
-	/** Ref to the "Select All" checkbox element. */
-	selectAllCheckboxRef?: React.RefObject<HTMLButtonElement | null>;
-	/** The unique identifier of the technology being configured. */
-	tech?: string;
-	/** Theme color for the technology avatar. */
-	techColor: TechTreeRowProps["techColor"];
-}
-
-/**
- * Props for the `DialogFooter` component.
- */
-export interface DialogFooterProps {
-	/** Array of currently selected module IDs. Used to determine if the optimize button should be disabled. */
-	currentCheckedModules: string[];
-	/** Asynchronous callback to trigger the optimization solver. **Must be provided.** */
-	handleOptimizeClick: () => Promise<void>;
-	/** Callback triggered when the dialog is dismissed. */
-	onClose?: () => void;
-}
-
-/**
- * A dictionary of module lists, keyed by their grouping category (e.g., 'Procedural Upgrades').
- */
-export interface GroupedModules {
-	[key: string]: SelectionModule[];
-}
-
-/**
- * Props for the `ModuleSelectionDialog` component.
- */
-export interface ModuleSelectionDialogProps {
-	/** Whether all modules in the dialog are selected. */
-	allModulesSelected: boolean;
-	/** Array of IDs for currently selected modules. */
-	currentCheckedModules: string[];
-	/** Modules organized into categories for display. **Must be provided.** */
-	groupedModules: GroupedModules;
-	/** Asynchronous callback to trigger an optimization using the current selection. */
-	handleOptimizeClick: () => Promise<void>;
-	/** Callback for the "Select All" toggle. */
-	handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
-	/** Callback for individual module selection changes. */
-	handleValueChange: (newValues: string[]) => void;
-	/** Whether the "Select All" checkbox is in an indeterminate state. */
-	isIndeterminate: boolean;
-	/** Whether the dialog is currently visible. */
-	isOpen: boolean;
-	/** Optional callback triggered when the dialog closes. */
-	onClose: () => void;
-	/** The unique technology key. */
-	tech?: string;
-	/** Theme color for the technology icon/avatar. */
-	techColor: TechTreeRowProps["techColor"];
-	/** Icon filename for the main technology. */
-	techImage: null | string;
-	/** Localized name of the technology being configured. */
-	translatedTechName: string;
-}
-
-/**
- * Represents a simplified technology module definition used within the selection UI.
- */
-export interface SelectionModule {
-	/** Initial checked status. */
-	checked?: boolean;
-	/** Unique identifier for the module. */
-	id: string;
-	/** Icon filename. */
-	image: string;
-	/** Display name of the module. */
-	label: string;
-	/** Optional classification (e.g., 'upgrade'). */
-	type?: string;
-}
-
-/**
- * Props for the `ModuleCheckbox` component.
- */
-interface ModuleCheckboxProps {
-	/** Whether the checkbox is in a read-only or blocked state. */
-	isDisabled: boolean;
-	/** The module object containing label, ID, and image data. **Must be valid.** */
-	module: SelectionModule;
-	/** The theme color applied to the module's avatar background. */
-	techColor: TechTreeRowProps["techColor"];
-}
-
-/**
- * Props for the `ModuleGroup` component.
- */
-interface ModuleGroupProps extends Pick<
-	ModuleSelectionDialogProps,
-	"currentCheckedModules" | "techColor"
-> {
-	/** The internal name of the group (e.g., 'upgrade', 'bonus'). **Must be a valid category key.** */
-	groupName: string;
-	/** Array of modules belonging to this group. */
-	modules: SelectionModule[];
-	/** Callback function to close the parent dialog. */
-	onClose?: () => void;
-	/** Optional title to display instead of the localized group name. */
-	titleOverride?: string;
-}
-
-/**
  * Parses and styles parenthetical text fragments within a string.
- *
- * @param {string} text - The raw string to parse.
- *
- * @returns {React.ReactNode} Styled fragments containing Badges for parentheses.
- *
- * @example Parsing ranks
- * ```ts
- * formatParentheses("Pulse Engine (S)");
- * // returns Node with "Pulse Engine" and a Badge for "S"
- * ```
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -201,16 +80,6 @@ const formatParentheses = (text: string): React.ReactNode => {
 
 /**
  * Parses and styles bracketed text fragments within a technology label.
- *
- * @param {string} label - The raw label string to parse.
- *
- * @returns {React.ReactNode} Styled fragments containing Codes for brackets.
- *
- * @example Parsing shortcodes
- * ```ts
- * formatLabel("Thruster [HOT]");
- * // returns Node with "Thruster" and a Code block for "[HOT]"
- * ```
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -230,21 +99,17 @@ const formatLabel = (label: string): React.ReactNode => {
 };
 
 /**
- * A component that renders a single selectable module row.
- *
- * @param {ModuleCheckboxProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered checkbox row.
- *
- * @example Standard module
- * ```tsx
- * <ModuleCheckbox module={module} techColor="blue" isDisabled={false} />
- * // renders checkbox with icon and label
- * ```
+ * Individual module selection checkbox with icon and label.
  */
+interface ModuleCheckboxProps {
+	isDisabled: boolean;
+	module: SelectionModule;
+	techColor: ModuleSelectionDialogProps["techColor"];
+}
+
 const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({ isDisabled, module, techColor }) => {
 	const imagePath = module.image
-		? `${baseImagePath}${module.image}?v=${__APP_VERSION__}`
+		? `${baseImagePath}${module.image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
 		: fallbackImage;
 
 	return (
@@ -268,23 +133,17 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({ isDisabled, module, tec
 };
 
 /**
- * A component that renders a titled group of selectable modules.
- *
- * @param {ModuleGroupProps} props - Component properties.
- *
- * @returns {JSX.Element | null} The rendered group or null if empty.
- *
- * @example Upgrade group
- * ```tsx
- * <ModuleGroup
- *   groupName="upgrade"
- *   modules={modules}
- *   currentCheckedModules={['ID']}
- *   techColor="blue"
- * />
- * // renders group with title and children
- * ```
+ * Categorized group of module checkboxes.
  */
+interface ModuleGroupProps {
+	currentCheckedModules: string[];
+	groupName: string;
+	modules: SelectionModule[];
+	onClose?: () => void;
+	techColor: ModuleSelectionDialogProps["techColor"];
+	titleOverride?: string;
+}
+
 const ModuleGroup: React.FC<ModuleGroupProps> = ({
 	currentCheckedModules,
 	groupName,
@@ -385,35 +244,29 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 
 /**
  * The primary content component for the module selection dialog.
- *
- * @param {DialogBodyProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered dialog body.
- *
- * @example Interactive list
- * ```tsx
- * <DialogBody {...bodyProps} />
- * // renders select-all toggle and grouped module lists
- * ```
  */
-const DialogBody: React.FC<DialogBodyProps> = ({
+const DialogBody: React.FC<
+	ModuleDialogBodyProps & {
+		allModulesSelected: boolean;
+		handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
+		handleValueChange: (v: string[]) => void;
+		onClose: () => void;
+		tech?: string;
+		techColor: ModuleSelectionDialogProps["techColor"];
+	}
+> = ({
 	allModulesSelected,
-	currentCheckedModules,
 	groupedModules,
 	handleSelectAllChange,
 	handleValueChange,
 	onClose,
-	selectAllCheckboxRef,
+	selectedModules,
 	tech,
 	techColor,
 }) => {
 	const { t } = useTranslation();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
-
-	const onSelectAllChange = (checked: "indeterminate" | boolean) => {
-		handleSelectAllChange(checked);
-	};
 
 	return (
 		<>
@@ -437,9 +290,9 @@ const DialogBody: React.FC<DialogBodyProps> = ({
 			)}
 			<label className="flex cursor-pointer items-center text-sm font-medium transition-colors duration-200 hover:text-(--accent-a12) sm:text-base">
 				<Checkbox
+					aria-label="selectAll"
 					checked={allModulesSelected}
-					onCheckedChange={onSelectAllChange}
-					ref={selectAllCheckboxRef}
+					onCheckedChange={handleSelectAllChange}
 				/>
 				<Text className="text-sm font-medium sm:text-base" ml="2">
 					{t("moduleSelection.selectAll")}
@@ -480,7 +333,7 @@ const DialogBody: React.FC<DialogBodyProps> = ({
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root onValueChange={handleValueChange} value={currentCheckedModules}>
+				<CheckboxGroup.Root onValueChange={handleValueChange} value={selectedModules}>
 					{MODULE_GROUP_ORDER.filter((g) => g !== "core").map((groupName) => {
 						if (!groupedModules[groupName]?.length) return null;
 
@@ -492,7 +345,7 @@ const DialogBody: React.FC<DialogBodyProps> = ({
 
 						return (
 							<ModuleGroup
-								currentCheckedModules={currentCheckedModules}
+								currentCheckedModules={selectedModules}
 								groupName={groupName}
 								key={groupName}
 								modules={groupedModules[groupName]}
@@ -510,18 +363,8 @@ const DialogBody: React.FC<DialogBodyProps> = ({
 
 /**
  * The action bar component for the module selection dialog.
- *
- * @param {DialogFooterProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered footer.
- *
- * @example Actions bar
- * ```tsx
- * <DialogFooter handleOptimizeClick={async () => {}} currentCheckedModules={['ID']} />
- * // renders Cancel and Optimize buttons
- * ```
  */
-const DialogFooter: React.FC<DialogFooterProps> = ({
+const DialogFooter: React.FC<ModuleDialogFooterProps & { onClose: () => void }> = ({
 	currentCheckedModules,
 	handleOptimizeClick,
 	onClose,
@@ -534,7 +377,11 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
 			<Button onClick={onClose} variant="soft">
 				{t("moduleSelection.cancelButton")}
 			</Button>
-			<Button disabled={isOptimizeDisabled} onClick={handleOptimizeClick}>
+			<Button
+				aria-label="optimizeButton"
+				disabled={isOptimizeDisabled}
+				onClick={handleOptimizeClick}
+			>
 				{t("moduleSelection.optimizeButton")}
 			</Button>
 		</div>
@@ -542,41 +389,37 @@ const DialogFooter: React.FC<DialogFooterProps> = ({
 };
 
 /**
- * A dialog component that allows users to pick which specific modules to include in an optimization run.
- *
- * @remarks
- * It features categorical groupings, individual module checkboxes, resolution-aware
- * icons, and a "Select All" convenience toggle. It uses `useModuleSelectionDialog`
- * to manage the complex state of multi-select and property mapping.
- *
- * @param {ModuleSelectionDialogProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered module selection UI.
- *
- * @see {@link useModuleSelectionDialog}
- * @see {@link DialogBody}
- * @see {@link DialogFooter}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <ModuleSelectionDialog {...props} />
- * // renders technology configuration dialog
- * ```
+ * Interactive dialog for selecting specific technology modules for optimization.
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
 	const { bodyProps, footerProps } = useModuleSelectionDialog(props);
 	const { t } = useTranslation();
 
-	const { isOpen, onClose, translatedTechName } = props;
+	const {
+		allModulesSelected,
+		handleSelectAllChange,
+		handleValueChange,
+		isOpen,
+		onClose,
+		tech,
+		techColor,
+		translatedTechName,
+	} = props;
 
 	return (
 		<Suspense fallback={null}>
 			<AppDialog
-				content={<DialogBody {...bodyProps} />}
+				content={
+					<DialogBody
+						{...bodyProps}
+						allModulesSelected={allModulesSelected}
+						handleSelectAllChange={handleSelectAllChange}
+						handleValueChange={handleValueChange}
+						onClose={onClose}
+						tech={tech}
+						techColor={techColor}
+					/>
+				}
 				footer={<DialogFooter {...footerProps} onClose={onClose} />}
 				headerIcon={
 					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
