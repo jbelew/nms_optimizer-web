@@ -58,6 +58,29 @@ jobs:
         run: bun run lint:knip
         continue-on-error: true
 
+  security-scan:
+    name: Security Analysis (CodeQL)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # Use 'braced' queries for more comprehensive results
+          queries: security-extended,security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+
   build:
     name: Build Application (Verification)
     runs-on: ubuntu-latest
@@ -255,7 +278,7 @@ jobs:
 
   release:
     name: Release
-    needs: [lint-test, build, storybook-test, e2e-test]
+    needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -417,7 +440,7 @@ jobs:
 
   deploy-staging:
     name: Deploy to Staging (Cloudflare)
-    needs: [lint-test, build, storybook-test, e2e-test]
+    needs: [lint-test, security-scan, build, storybook-test, e2e-test]
     if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     permissions:
