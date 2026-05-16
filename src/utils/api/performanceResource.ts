@@ -1,4 +1,4 @@
-import type { PerformanceMetric } from "../../hooks/usePerformanceData/usePerformanceData";
+import type { PerformanceMetric } from "../../types/performance";
 
 import { API_URL } from "../../constants";
 import { apiCall } from "./network";

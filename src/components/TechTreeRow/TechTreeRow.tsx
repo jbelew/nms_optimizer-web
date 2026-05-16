@@ -1,6 +1,7 @@
 import "./TechTreeRow.scss";
 
 import type { BonusStatusData } from "../../store/tech/techBonusStore";
+import type { TechTreeRowProps } from "../../types/props";
 import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
 	Crosshair2Icon,
@@ -23,50 +24,6 @@ import { useTechBonusStore } from "../../store/tech/techBonusStore";
 import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
 import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionDialog";
 import { useTechTreeRow } from "./useTechTreeRow";
-
-/**
- * Props for the {@link TechTreeRow} component.
- */
-export interface TechTreeRowProps {
-	/** Asynchronous callback to trigger an optimization solve for this row. */
-	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether all active grid slots are currently occupied. */
-	isGridFull: boolean;
-	/** Whether any optimization solve is currently running globally. */
-	solving: boolean;
-	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
-	tech: string;
-	/** The theme color identifier for the technology's avatar and UI accents. */
-	techColor:
-		| "amber"
-		| "blue"
-		| "bronze"
-		| "brown"
-		| "crimson"
-		| "cyan"
-		| "gold"
-		| "grass"
-		| "gray"
-		| "green"
-		| "indigo"
-		| "iris"
-		| "jade"
-		| "lime"
-		| "mint"
-		| "orange"
-		| "pink"
-		| "plum"
-		| "purple"
-		| "red"
-		| "ruby"
-		| "sky"
-		| "teal"
-		| "tomato"
-		| "violet"
-		| "yellow";
-	/** Filename of the icon image to display. `null` if no icon is available. */
-	techImage: null | string;
-}
 
 /**
  * Props for the `ActionButtons` component.

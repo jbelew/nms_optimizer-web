@@ -1,4 +1,4 @@
-import type { TechTreeRowProps } from "./TechTreeRow";
+import type { TechTreeRowProps } from "../../types/props";
 import type { ShakeState } from "@/store/app/shakeStore";
 import type { GridStore } from "@/store/grid/gridStore";
 import type { TechState } from "@/store/tech/techStore";

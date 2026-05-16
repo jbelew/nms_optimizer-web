@@ -1,4 +1,4 @@
-import type { UserStat } from "../../hooks/useUserStats/useUserStats";
+import type { UserStat } from "../../types/userStats";
 
 import { API_URL } from "../../constants";
 import { apiCall } from "./network";

@@ -1,4 +1,4 @@
-import type { Module, TechTree, TechTreeItem } from "../../hooks/useTechTree/useTechTree";
+import type { Module, TechTree, TechTreeItem } from "../../types/tech";
 
 /**
  * Results of tech tree processing including flat maps and sets for lookup.

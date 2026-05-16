@@ -45,6 +45,9 @@ jobs:
       - name: Run CSS linter
         run: bun run lint:css
 
+      - name: Check for circular dependencies
+        run: bun run lint:circular
+
       - name: Type check
         run: bun run typecheck
 
