@@ -507,6 +507,7 @@ export async function updateIndexHtmlTemplate(mdProcessor, t) {
 			finalRendered = `<h1>${appName}</h1>\n${finalRendered}`;
 		}
 
+		const template = await extractSsgTemplate(sourceIndexHtml);
 		const ssgHeader = template.ssgHeader;
 
 		const subTitleRaw = t("appHeader.subTitle", {
