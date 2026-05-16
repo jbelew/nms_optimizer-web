@@ -65,6 +65,16 @@
 					handleStaleChunkError(e.payload && e.payload.message);
 				});
 
+				// E2E Test hook for deterministic error triggering.
+				// Fire synchronously so the recovery wins the race against main.tsx's
+				// app-ready handler (which clears the recovery marker on boot).
+				try {
+					if (sessionStorage.getItem("__TEST_TRIGGER_ERROR__")) {
+						sessionStorage.removeItem("__TEST_TRIGGER_ERROR__");
+						handleStaleChunkError("TEST_TRIGGERED_ERROR");
+					}
+				} catch (e) {}
+
 				window.addEventListener("error", (e) => {
 					const msg = (e.message || "").toLowerCase();
 					const isModuleError = /importing|resolving|dynamically imported/i.test(msg);
