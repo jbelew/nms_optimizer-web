@@ -1,3 +1,18 @@
+## [7.2.9](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.8...v7.2.9) (2026-05-16)
+
+
+### Bug Fixes
+
+* **ci:** ensure Bun is available in all deployment and validation steps ([0942dd3](https://github.com/jbelew/nms_optimizer-web/commit/0942dd3df80e936c554f923495d6767cd175c4ee))
+* **grid:** resolve race condition when loading .nms builds by ensuring derived state is recomputed ([4a69179](https://github.com/jbelew/nms_optimizer-web/commit/4a691790b8b13de21617a810048750ed6752015e))
+
+
+### Performance Improvements
+
+* integrate tsgo for 5x faster typechecking ([cb82d53](https://github.com/jbelew/nms_optimizer-web/commit/cb82d5396d286b61a3ea219dde0f67ec1b146bd7))
+* move ESLint ignores to top and strictly narrow authored scope ([7099d07](https://github.com/jbelew/nms_optimizer-web/commit/7099d07d89600d17353ef59e939dac723eca8bad))
+* update build script to use tsgo -b ([36f33cb](https://github.com/jbelew/nms_optimizer-web/commit/36f33cb5ffe3d1ea5d86afed2a9499ca252b661f))
+
 ## [7.2.8](https://github.com/jbelew/nms_optimizer-web/compare/v7.2.7...v7.2.8) (2026-05-10)
 
 
