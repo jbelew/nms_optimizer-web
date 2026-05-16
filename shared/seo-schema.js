@@ -41,7 +41,7 @@ export const getOgLocale = (lang) => OG_LOCALE_MAP[lang] || "en_US";
  * ```
  */
 export const getLocalizedSchema = (t, lang, url) => {
-	const baseUrl = "https://nms-optimizer.app";
+	const baseUrl = "https://nms-optimizer.app/";
 	const appName = t("appName", { defaultValue: "NMS Optimizer" });
 	const appDescription = t("seo.appDescription");
 
@@ -72,9 +72,9 @@ export const getLocalizedSchema = (t, lang, url) => {
 	// 2. Organization
 	const organization = {
 		"@context": "https://schema.org",
-		"@id": `${baseUrl}/#organization`,
+		"@id": `${baseUrl}#organization`,
 		"@type": "Organization",
-		logo: `${baseUrl}/logo.svg`,
+		logo: `${baseUrl}logo.svg`,
 		name: appName,
 		sameAs: ["https://github.com/jbelew/nms_optimizer-web"],
 		url: baseUrl,

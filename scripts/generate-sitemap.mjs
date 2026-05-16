@@ -22,17 +22,23 @@ const PAGE_TO_FILE_MAPPING = {
 
 /** SEO priorities for different pages */
 const PRIORITIES = {
-	about: "1.0",
-	changelog: "0.3",
-	instructions: "0.9",
+	about: "0.8",
+	changelog: "0.5",
+	instructions: "0.8",
+	privacy: "0.5",
 	root: "1.0",
-	translation: "0.6",
-	userstats: "0.8",
+	translation: "0.5",
+	userstats: "0.5",
 };
 
-/** Crawl frequencies — changelog is low-value for search so reduce its frequency */
+/** Crawl frequencies — shift static docs to monthly to reduce noise */
 const CHANGE_FREQUENCIES = {
+	about: "monthly",
 	changelog: "monthly",
+	instructions: "monthly",
+	privacy: "monthly",
+	translation: "monthly",
+	userstats: "monthly",
 };
 
 // Routes excluded from the sitemap. These are either disallowed in robots.txt

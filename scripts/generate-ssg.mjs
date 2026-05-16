@@ -100,8 +100,10 @@ export async function generatePage(
 	baseUrl,
 	mdProcessor,
 	t,
-	fontStyles = ""
-) {	const pathname = pageName === "" ? "/" : `/${pageName}/`;
+	fontStyles = "",
+	ssgHeader = ""
+) {
+	const pathname = pageName === "" ? "/" : `/${pageName}/`;
 	const metadata = seoMetadata[pathname];
 
 	const appName = t("appName");
@@ -150,19 +152,11 @@ export async function generatePage(
 			'<span style="color: #4ccce6">$2</span>'
 		);
 
-		// We'll extract and localize the header on the fly if needed, or pass it in.
-		// For simplicity in generatePage, let's reconstruct it using the same structure
-		// but ensuring it matches the legacy's output exactly (whitespace-wise).
-		const localizedHeader = `
-		<header class="app-header-static">
-			<div class="app-header-static__logo-text" style="margin-bottom: 4px" aria-hidden="true">NO MAN'S SKY</div>
-			<div class="app-header-static__separator-container" aria-hidden="true">
-				<span class="app-header-static__separator"></span>
-				<img alt="" width="16" height="20" src="/assets/img/nms-icon.webp" />
-				<span class="app-header-static__separator"></span>
-			</div>
-			<h2 class="app-header-static__title">${subTitle}</h2>
-		</header>`;
+		// Single Source of Truth: Localize the subtitle in the header extracted from the template
+		const localizedHeader = ssgHeader.replace(
+			/<h2 class="app-header-static__title">[\s\S]*?<\/h2>/,
+			`<h2 class="app-header-static__title">${subTitle}</h2>`
+		);
 
 		noscriptBlock = `
 		<main class="ssg-fallback">
@@ -171,7 +165,7 @@ export async function generatePage(
 			${navigationHtml}
 			${fontStyles ? `<style>${fontStyles}</style>` : ""}
 		</main>`;
-		}
+	}
 
 	const rewriter = new HTMLRewriter()
 		.on("html", {
@@ -338,19 +332,18 @@ export function generateSeoTags(pathname, lang, baseUrl, _t) {
 export async function generateSsg() {
 	const mdProcessor = createMarkdownProcessor();
 	const i18nInstance = await initI18n();
-	const tEn = i18nInstance.getFixedT("en", "translation");
-
-	// 1. Sync home.md to source index.html
-	await updateIndexHtmlTemplate(mdProcessor, tEn);
 
 	// Now read the freshly updated files from disk
 	const indexPath = path.join(DIST_DIR, "index.html");
 
 	try {
 		const baseIndexHtml = await fs.readFile(indexPath, "utf-8");
+		const sourceIndexHtml = await fs.readFile(path.resolve("index.html"), "utf-8");
 		const baseUrl = `https://${TARGET_HOST}`;
 
-		// Extract template blocks
+		// Extract template blocks from source index.html
+		const template = await extractSsgTemplate(sourceIndexHtml);
+		const ssgHeader = template.ssgHeader;
 		let fontStyles = "";
 
 		// --- FONT FIX: Extract from source fonts.css ---
@@ -387,15 +380,16 @@ export async function generateSsg() {
 				baseUrl,
 				mdProcessor,
 				t,
-				fontStyles
-				);
+				fontStyles,
+				ssgHeader
+			);
 			const rootDir = path.join(DIST_DIR, rootPath);
 			const rootFile = path.join(rootDir, "index.html");
-			
+
 			if (rootPath) {
 				await fs.mkdir(rootDir, { recursive: true });
 			}
-			
+
 			await fs.writeFile(rootFile, rootPageHtml);
 
 			console.log(`✓ Generated ${lang === "en" ? "/" : "/" + lang}`);
@@ -411,8 +405,9 @@ export async function generateSsg() {
 					baseUrl,
 					mdProcessor,
 					t,
-					fontStyles
-					);
+					fontStyles,
+					ssgHeader
+				);
 				const pageFile = path.join(pageDir, "index.html");
 				await fs.mkdir(pageDir, { recursive: true });
 				await fs.writeFile(pageFile, pageHtml);
@@ -426,7 +421,7 @@ export async function generateSsg() {
 	} catch (err) {
 		console.error(`Error during SSG generation: ${err.message}`);
 
-		if (err.code === 'ENOENT') {
+		if (err.code === "ENOENT") {
 			console.error("Hint: Make sure to run 'bun run build' first to generate dist/index.html");
 		}
 
@@ -477,72 +472,6 @@ export async function readMarkdownFile(lang, fileName) {
 		}
 
 		return null;
-	}
-}
-
-/**
- * Update the source index.html noscript block with content from home.md.
- * Ensures home.md is the single source of truth for the root route.
- */
-export async function updateIndexHtmlTemplate(mdProcessor, t) {
-	const indexPath = path.resolve("index.html");
-	
-	try {
-		const sourceIndexHtml = await fs.readFile(indexPath, "utf-8");
-		const markdownContent = await readMarkdownFile("en", "home");
-
-		if (!markdownContent) return;
-
-		const renderedHtml = mdProcessor(markdownContent);
-		const navigationHtml = generateNavigationLinks("en", "", t);
-		const appName = t("appName");
-
-		// Synchronize the first H1 with the actual app name/title
-		let finalRendered = renderedHtml;
-		const h1Regex = /<h1[^>]*?>([\s\S]*?)<\/h1>/i;
-
-		if (h1Regex.test(finalRendered)) {
-			finalRendered = finalRendered.replace(h1Regex, `<h1>${appName}</h1>`);
-		} else {
-			finalRendered = `<h1>${appName}</h1>\n${finalRendered}`;
-		}
-
-		const template = await extractSsgTemplate(sourceIndexHtml);
-		const ssgHeader = template.ssgHeader;
-
-		const subTitleRaw = t("appHeader.subTitle", {
-			defaultValue: 'Technology Layout Optimizer <span style="color: #4ccce6">ML/RUST</span>',
-		});
-		const subTitle = subTitleRaw.replace(
-			/<(\d+)>([\s\S]*?)<\/\1>/g,
-			'<span style="color: #4ccce6">$2</span>'
-		);
-
-		// Localize subtitle in the extracted header
-		const localizedHeader = ssgHeader.replace(
-			/<h2 class="app-header-static__title">[\s\S]*?<\/h2>/,
-			`<h2 class="app-header-static__title">${subTitle}</h2>`
-		);
-
-		const updatedHtml = await new HTMLRewriter()
-			.on("main.ssg-fallback[data-ssg-template]", {
-				element(el) {
-					el.setInnerContent(
-						`
-			${localizedHeader}
-			${finalRendered}
-			${navigationHtml}
-		`,
-						{ html: true }
-					);
-				},
-			})
-			.transform(sourceIndexHtml);
-
-		await fs.writeFile(indexPath, updatedHtml);
-		console.log("✓ Synchronized home.md content to index.html fallback block");
-	} catch (err) {
-		console.warn(`Warning: Could not update index.html template: ${err.message}`);
 	}
 }
 
