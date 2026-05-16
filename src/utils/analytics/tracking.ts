@@ -147,7 +147,7 @@ const detectAdBlocker = (): Promise<boolean> => {
 
 						try {
 							await fetch(url, {
-								cache: "no-store",
+								cache: "no-cache",
 								method: "HEAD",
 								mode: "no-cors",
 								signal: controller.signal,

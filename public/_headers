@@ -9,37 +9,37 @@
 # This ensures every localized page and SPA route serves the latest JS/CSS references.
 
 /
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /index.html
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /about/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /instructions/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /changelog/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /translation/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /userstats/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /privacy/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /performance
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /performance/
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /performance/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /es/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /fr/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /de/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /pt/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /it/*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 
 # Static Assets (Root)
 /favicon.ico
@@ -92,6 +92,6 @@
 
 # Always fresh: version check and service worker (PWA core).
 /version.json
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0
 /sw.js
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Cache-Control: no-cache, must-revalidate, max-age=0

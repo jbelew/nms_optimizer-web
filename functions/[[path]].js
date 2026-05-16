@@ -138,7 +138,7 @@ export async function onRequest(context) {
 	// Match `_headers` for / and other shells exactly, including `max-age=0`,
 	// so SPA-fallback responses can never be cached or heuristically aged by
 	// browsers/intermediaries.
-	headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+	headers.set("Cache-Control", "no-cache, must-revalidate, max-age=0");
 	headers.set("Pragma", "no-cache");
 	headers.set("Expires", "0");
 
