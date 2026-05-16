@@ -201,9 +201,6 @@ const bootstrap = async () => {
 	}
 
 	createRoot(document.getElementById("root")!).render(<Root />);
-
-	// Mark application as mounted to hide SSG fallback
-	document.documentElement.classList.add("app-mounted");
 };
 
 void bootstrap();
