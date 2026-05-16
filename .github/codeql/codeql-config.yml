@@ -1,0 +1,13 @@
+name: "NMS Optimizer CodeQL Config"
+
+paths-ignore:
+  - "**/node_modules"
+  - "**/dist"
+  - "**/storybook-static"
+  - "**/playwright-report"
+  - "**/coverage"
+  - "**/venv"
+  - "**/*.min.js"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "scripts/Corvette - Akamai Terror VI.nms"
