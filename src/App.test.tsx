@@ -277,12 +277,16 @@ describe("App", () => {
 		});
 
 		test("should remove event listener on unmount", async () => {
+			const addEventListenerSpy = vi.spyOn(window, "addEventListener");
 			const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 			const { unmount } = renderApp(["/"]);
 
-			// The event listener is added in the effect
+			// Wait for listener to be added first
 			await vi.waitFor(() => {
-				expect(removeEventListenerSpy).not.toHaveBeenCalled();
+				expect(addEventListenerSpy).toHaveBeenCalledWith(
+					"new-version-available",
+					expect.any(Function)
+				);
 			});
 
 			// Unmount should trigger cleanup
@@ -290,6 +294,8 @@ describe("App", () => {
 
 			// Cleanup removes the listener
 			expect(removeEventListenerSpy).toHaveBeenCalled();
+
+			addEventListenerSpy.mockRestore();
 			removeEventListenerSpy.mockRestore();
 		});
 	});
