@@ -1,6 +1,6 @@
 # NMS-Optimierer: Technologie-Layout-Generator & Adjazenz-Rechner
 
-![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.png)
+![Screenshot of NMS Optimizer application showing a starship technology grid with optimized module placement](/assets/img/screenshots/screenshot.webp)
 
 Willkommen beim **NMS-Optimierer**, einem 100 % kostenlosen, werbefreien und quelloffenen Tool, das dir hilft, die absolut besten Technologie-Layouts in _No Man's Sky_ zu finden. Hör auf zu raten, wo du deine S-Klasse- und X-Klasse-Upgrade-Module platzieren sollst. Wähle deine Plattform, wähle deine Technologie, markiere deine aufgeladenen Plätze (Supercharged Slots) und lass unseren Rechner sofort ein Layout generieren, das deinen SPS (DPS), deine Manövrierfähigkeit und deine Hyperantrieb-Reichweite maximiert.
 
