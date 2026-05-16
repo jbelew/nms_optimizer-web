@@ -7,18 +7,23 @@ import type { RouteObject } from "react-router-dom";
 
 import App from "./App";
 import { RouteError } from "./components/ErrorBoundary/RouteError";
-import { MainAppContent } from "./components/MainAppContent/MainAppContent";
 import { languages, pages } from "./routeConfig";
+
+/**
+ * Lazily loads the primary application content.
+ *
+ * @returns {Promise<{ Component: React.ComponentType }>} A promise resolving to the component for lazy loading.
+ */
+const MainAppContent = async () => {
+	const { MainAppContent: Component } = await import("./components/MainAppContent/MainAppContent");
+
+	return { Component };
+};
 
 /**
  * Lazily loads the 404 Not Found component.
  *
  * @returns {Promise<{ Component: React.ComponentType }>} A promise resolving to the component for lazy loading.
- *
- * @example Lazy load trigger
- * ```ts
- * const route = { path: "*", lazy: NotFound };
- * ```
  */
 const NotFound = async () => {
 	const { default: Component } = await import("./components/NotFound/NotFound");
@@ -32,11 +37,11 @@ const NotFound = async () => {
  */
 const pageRoutes: RouteObject[] = [
 	...pages.map((page) => ({
-		Component: MainAppContent,
+		lazy: MainAppContent,
 		path: `${page}/`,
 	})),
 	{
-		Component: MainAppContent,
+		lazy: MainAppContent,
 		path: "performance/:metric/",
 	},
 ];
@@ -47,15 +52,15 @@ const pageRoutes: RouteObject[] = [
  */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
-		Component: MainAppContent,
+		lazy: MainAppContent,
 		path: `${lang}/`,
 	},
 	...pages.map((page) => ({
-		Component: MainAppContent,
+		lazy: MainAppContent,
 		path: `${lang}/${page}/`,
 	})),
 	{
-		Component: MainAppContent,
+		lazy: MainAppContent,
 		path: `${lang}/performance/:metric/`,
 	},
 ]);
@@ -73,8 +78,8 @@ export const routes: RouteObject[] = [
 	{
 		children: [
 			{
-				Component: MainAppContent,
 				index: true,
+				lazy: MainAppContent,
 			},
 			...pageRoutes,
 			...languageRoutes,
