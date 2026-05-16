@@ -1,4 +1,4 @@
-import { TFunction } from "i18next";
+import type { TFunction } from "i18next";
 import { describe, expect, it, vi } from "vitest";
 
 import { getLocalizedSchema } from "../../shared/seo-schema.js";

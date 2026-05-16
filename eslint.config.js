@@ -46,10 +46,12 @@ const blankLineRules = {
 const shared = {
 	extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
 	languageOptions: {
-		ecmaVersion: 2020,
+		ecmaVersion: "latest",
 		globals: {
 			...globals.browser,
 			...globals.node,
+			...globals.serviceworker,
+			HTMLRewriter: "readonly", // Cloudflare Workers/Pages global
 		},
 		parserOptions: {
 			tsconfigRootDir: import.meta.dirname,
@@ -57,6 +59,7 @@ const shared = {
 	},
 	plugins: {
 		jsdoc,
+		perfectionist,
 		"react-hooks": reactHooks,
 		"react-refresh": reactRefresh,
 	},
@@ -66,6 +69,8 @@ const shared = {
 		...blankLineRules,
 
 		// TypeScript strict rules
+		// Enforce `import type` for type-only imports — benefits React Compiler & tree-shakers
+		"@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
 		"@typescript-eslint/no-explicit-any": "error",
 		"@typescript-eslint/no-unused-vars": [
 			"error",
@@ -75,6 +80,11 @@ const shared = {
 				varsIgnorePattern: "^_",
 			},
 		],
+		// Perfectionist sorting rules
+		...perfectionist.configs["recommended-natural"].rules,
+		// These two are handled by @ianvs/prettier-plugin-sort-imports — disable to avoid conflict
+		"perfectionist/sort-imports": "off",
+		"perfectionist/sort-named-imports": "off",
 	},
 	settings: {
 		jsdoc: {
@@ -127,7 +137,8 @@ const jsdocRules = {
 		},
 	],
 	"jsdoc/require-description": "warn",
-	"jsdoc/require-example": "warn",
+	// Examples are added selectively by the agentic-jsdoc skill — blanket enforcement is too noisy
+	"jsdoc/require-example": "off",
 	"jsdoc/require-hyphen-before-param-description": "warn",
 	"jsdoc/require-jsdoc": [
 		"warn",
@@ -173,7 +184,7 @@ const jsdocRules = {
 export default tseslint.config(
 	//
 	// --- GLOBAL IGNORES ---
-	// Must be the first object in the array for Flat Config to apply globally
+	// Must be first in Flat Config
 	//
 	{
 		ignores: [
@@ -198,26 +209,19 @@ export default tseslint.config(
 			"**/.gemini/**",
 			"**/.vitest/**",
 			"**/.playwright-mcp/**",
+			"**/.agents/**",
 			"**/scratch/**",
+			// Declaration files are ambient — inline import() is intentional and correct here
+			"**/*.d.ts",
 		],
 	},
 
 	//
-	// --- PERFECTIONIST (Automated Sorting) ---
-	//
-	perfectionist.configs["recommended-natural"],
-	{
-		rules: {
-			"perfectionist/sort-imports": "off", // Handled by @ianvs/prettier-plugin-sort-imports
-		},
-	},
-
-	//
-	// --- BUILD & UTILITY SCRIPTS ---
+	// --- BUILD, UTILITY & SHARED SCRIPTS ---
 	//
 	{
 		...shared,
-		files: ["scripts/**/*.{js,mjs,ts}"],
+		files: ["scripts/**/*.{js,mjs,cjs,ts}", "functions/**/*.{js,ts}", "shared/**/*.{js,ts}", "*.{js,mjs,cjs,ts}"],
 		rules: {
 			...shared.rules,
 			"jsdoc/require-jsdoc": "off", // Optional for internal scripts
@@ -234,6 +238,8 @@ export default tseslint.config(
 		rules: {
 			...shared.rules,
 			...jsdocRules,
+			// Disallow stray console.log in production source
+			"no-console": ["warn", { allow: ["warn", "error"] }],
 		},
 	},
 
@@ -242,13 +248,20 @@ export default tseslint.config(
 	//
 	{
 		...shared,
-		files: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.tsx", "**/test-jsdoc.ts"],
+		files: [
+			"src/**/*.test.{ts,tsx}",
+			"src/**/*.stories.tsx",
+			"**/test-jsdoc.ts",
+			"e2e-tests/**/*.{ts,js}",
+			"__mocks__/**/*.{ts,tsx,js}",
+			"vitest-mocks/**/*.{ts,js}",
+		],
 		rules: {
 			...shared.rules,
 			"jsdoc/require-description": "off",
 			"jsdoc/require-example": "off",
-			// explicit overrides to keep them clean
 			"jsdoc/require-jsdoc": "off",
+			"react-refresh/only-export-components": "off",
 		},
 	},
 

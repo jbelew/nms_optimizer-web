@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import type { Mock } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as useTechTree from "../../useTechTree/useTechTree";
 import { deserialize, serialize } from "../useGridDeserializer";

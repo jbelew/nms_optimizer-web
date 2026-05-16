@@ -60,7 +60,7 @@ interface UpdatePromptProps {
  */
 const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) => {
 	const { t } = useTranslation();
-	const isDesktop = useBreakpoint("1024px");
+	const _isDesktop = useBreakpoint("1024px");
 
 	const content = (
 		<Text as="p" mb="2" size={{ initial: "2", sm: "3" }}>
@@ -76,7 +76,7 @@ const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) =
 			<Button onClick={onDismiss} variant="soft">
 				{t("dialogs.updatePrompt.later", { defaultValue: "Later" })}
 			</Button>
-			<Button autoFocus={isDesktop} onClick={onRefresh}>
+			<Button onClick={onRefresh}>
 				{t("dialogs.updatePrompt.refreshNow", { defaultValue: "Refresh Now" })}
 			</Button>
 		</div>

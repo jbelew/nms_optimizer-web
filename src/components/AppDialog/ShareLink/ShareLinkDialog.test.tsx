@@ -40,7 +40,7 @@ vi.mock("../Base/AppDialog", () => ({
 vi.mock("./ShareLinkContent", () => ({
 	ShareLinkContent: ({ onClose, shareUrl }: { onClose?: () => void; shareUrl?: string }) => (
 		<div data-testid="share-link-content">
-			<input readOnly value={shareUrl} />
+			<input aria-label="Share URL" readOnly value={shareUrl} />
 			<button onClick={onClose}>Close Link Share</button>
 		</div>
 	),

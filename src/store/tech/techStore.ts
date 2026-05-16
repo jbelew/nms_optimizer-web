@@ -1,7 +1,7 @@
 // src/store/tech/techStore.ts
+import type { TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { create } from "zustand";
 
-import { TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import { useModuleSelectionStore } from "./moduleSelectionStore";
 
 /**

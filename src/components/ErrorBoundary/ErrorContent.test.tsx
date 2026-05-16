@@ -1,5 +1,6 @@
+import type { Mock } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, Mock, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
 import { hideSplashScreenAndShowBackground } from "../../utils/system/splashScreen";

@@ -19,6 +19,8 @@
  * @category Utilities
  */
 
+import type ReactGA from "react-ga4";
+
 import { API_URL, TRACKING_ID } from "../../constants";
 import { isBot, safeGetItem, safeSetItem } from "../browser/environment";
 
@@ -508,9 +510,14 @@ export const initializeAnalytics = async () => {
 	const isBlocked = await getAdBlockerDetectionResult();
 
 	if (!isBlocked) {
-		const ReactGAModule = await import("react-ga4");
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		ReactGAInstance = (ReactGAModule.default as any)?.default ?? ReactGAModule.default;
+		const ReactGAModule = (await import("react-ga4")) as unknown as {
+			default: typeof ReactGA & {
+				default?: typeof ReactGA;
+			};
+		};
+
+		// Handle potentially nested default export in certain build environments
+		ReactGAInstance = ReactGAModule.default.default ?? ReactGAModule.default;
 
 		ReactGAInstance.initialize(TRACKING_ID, {
 			gtagOptions: {

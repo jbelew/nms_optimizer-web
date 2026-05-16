@@ -1,11 +1,15 @@
+import type { TechTreeRowProps } from "./TechTreeRow";
+import type { ShakeState } from "@/store/app/shakeStore";
+import type { GridStore } from "@/store/grid/gridStore";
+import type { TechState } from "@/store/tech/techStore";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ShakeState, useShakeStore } from "@/store/app/shakeStore";
-import { GridStore, useGridStore } from "@/store/grid/gridStore";
-import { TechState, useTechStore } from "@/store/tech/techStore";
+import { useShakeStore } from "@/store/app/shakeStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
 
-import { TechTreeRow, TechTreeRowProps } from "./TechTreeRow";
+import { TechTreeRow } from "./TechTreeRow";
 
 // Mock the stores and hooks
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));

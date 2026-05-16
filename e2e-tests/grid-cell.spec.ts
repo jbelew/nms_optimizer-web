@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { waitForStore, resetGrid, setCellSupercharged, doubleTapCell, getShakeCount } from './helpers/store-helpers';
+import { expect, test } from '@playwright/test';
+import { getShakeCount, resetGrid, waitForStore } from './helpers/store-helpers';
 
 test.describe('GridCell Supercharge Interaction', () => {
   test.beforeEach(async ({ page }) => {
@@ -58,7 +58,7 @@ test.describe('GridCell Supercharge Interaction', () => {
       const target = cells[15];
       const row = parseInt(target.parentElement!.getAttribute('aria-rowindex')!) - 1;
       const col = parseInt(target.getAttribute('aria-colindex')!) - 1;
-      (window as any).useGridStore.getState().toggleCellSupercharged(row, col);
+      window.useGridStore.getState().toggleCellSupercharged(row, col);
     });
     
     // Assert supercharged state - use a more flexible matcher if needed, but gridCell--supercharged should be there
@@ -133,7 +133,7 @@ test.describe('Mobile Touch Interactions', () => {
       const target = cells[idx];
       const row = parseInt(target.parentElement!.getAttribute('aria-rowindex')!) - 1;
       const col = parseInt(target.getAttribute('aria-colindex')!) - 1;
-      (window as any).useGridStore.getState().toggleCellSupercharged(row, col);
+      window.useGridStore.getState().toggleCellSupercharged(row, col);
     }, targetIndex);
     
     await expect(targetCell).toHaveClass(/gridCell--supercharged/);
@@ -143,7 +143,7 @@ test.describe('Mobile Touch Interactions', () => {
       const target = cells[idx];
       const row = parseInt(target.parentElement!.getAttribute('aria-rowindex')!) - 1;
       const col = parseInt(target.getAttribute('aria-colindex')!) - 1;
-      (window as any).useGridStore.getState().toggleCellSupercharged(row, col);
+      window.useGridStore.getState().toggleCellSupercharged(row, col);
     }, targetIndex);
     await expect(targetCell).not.toHaveClass(/gridCell--supercharged/);
   });

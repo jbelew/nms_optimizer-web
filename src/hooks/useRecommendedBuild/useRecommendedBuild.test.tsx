@@ -1,6 +1,7 @@
 import type { RecommendedBuild, TechTree, TechTreeItem } from "../useTechTree/useTechTree";
+import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { Mock, vi } from "vitest";
+import { vi } from "vitest";
 
 import { createEmptyCell, createGrid, useGridStore } from "../../store/grid/gridStore";
 import {

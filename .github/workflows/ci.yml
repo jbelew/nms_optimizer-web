@@ -38,8 +38,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Check formatting
         run: bun run format:check
@@ -78,8 +76,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Set Build Version
         id: build_version
@@ -131,8 +127,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -231,8 +225,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Download E2E dist artifact
         uses: actions/download-artifact@v8
@@ -329,8 +321,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Determine Effective Version
         id: version_logic
@@ -382,8 +372,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Download production artifact
         uses: actions/download-artifact@v8
@@ -443,8 +431,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup-node-env
-        with:
-          setup-node: 'false'
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8

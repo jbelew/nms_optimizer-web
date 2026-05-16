@@ -100,25 +100,28 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * openDialog("changelog", { section: "v2.0" });
 	 * ```
 	 */
-	const openDialog = (
-		dialog: NonNullable<DialogType> | null,
-		data?: { section?: string; shareUrl?: string }
-	) => {
-		const lang = (i18n.language || "en").split("-")[0];
+	const openDialog = React.useCallback(
+		(
+			dialog: NonNullable<DialogType> | null,
+			data?: { section?: string; shareUrl?: string }
+		) => {
+			const lang = (i18n.language || "en").split("-")[0];
 
-		if (data?.shareUrl) {
-			setShareUrl(data.shareUrl);
-		} else if (dialog) {
-			const path = lang === "en" ? `/${dialog}/` : `/${lang}/${dialog}/`;
-			navigate(path + window.location.search);
-		}
+			if (data?.shareUrl) {
+				setShareUrl(data.shareUrl);
+			} else if (dialog) {
+				const path = lang === "en" ? `/${dialog}/` : `/${lang}/${dialog}/`;
+				navigate(path + window.location.search);
+			}
 
-		if (data?.section) {
-			setSectionToScrollTo(data.section);
-		} else {
-			setSectionToScrollTo(undefined);
-		}
-	};
+			if (data?.section) {
+				setSectionToScrollTo(data.section);
+			} else {
+				setSectionToScrollTo(undefined);
+			}
+		},
+		[i18n.language, navigate]
+	);
 
 	/**
 	 * Clears the active dialog state and navigates back to the root route.
@@ -130,7 +133,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * closeDialog();
 	 * ```
 	 */
-	const closeDialog = () => {
+	const closeDialog = React.useCallback(() => {
 		const lang = (i18n.language || "en").split("-")[0];
 
 		if (shareUrl) {
@@ -141,7 +144,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		}
 
 		setSectionToScrollTo(undefined);
-	};
+	}, [activeDialog, i18n.language, navigate, shareUrl]);
 
 	/**
 	 * Updates state and `localStorage` to indicate the user has completed the tutorial.
@@ -153,12 +156,12 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * markTutorialFinished();
 	 * ```
 	 */
-	const markTutorialFinished = () => {
+	const markTutorialFinished = React.useCallback(() => {
 		if (!tutorialFinished) {
 			setTutorialFinished(true);
 			safeSetItem("tutorialFinished", "true");
 		}
-	};
+	}, [tutorialFinished]);
 
 	/**
 	 * Updates state and `localStorage` to indicate the user has visited the app at least once.
@@ -170,24 +173,37 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	 * markUserVisited();
 	 * ```
 	 */
-	const markUserVisited = () => {
+	const markUserVisited = React.useCallback(() => {
 		if (!userVisited) {
 			setUserVisited(true);
 			safeSetItem("userVisited", "true");
 		}
-	};
+	}, [userVisited]);
 
-	const value = {
-		activeDialog,
-		closeDialog,
-		markTutorialFinished,
-		markUserVisited,
-		openDialog,
-		sectionToScrollTo,
-		shareUrl,
-		tutorialFinished,
-		userVisited,
-	};
+	const value = React.useMemo(
+		() => ({
+			activeDialog,
+			closeDialog,
+			markTutorialFinished,
+			markUserVisited,
+			openDialog,
+			sectionToScrollTo,
+			shareUrl,
+			tutorialFinished,
+			userVisited,
+		}),
+		[
+			activeDialog,
+			closeDialog,
+			markTutorialFinished,
+			markUserVisited,
+			openDialog,
+			sectionToScrollTo,
+			shareUrl,
+			tutorialFinished,
+			userVisited,
+		]
+	);
 
 	return <DialogContext.Provider value={value}>{children}</DialogContext.Provider>;
 };

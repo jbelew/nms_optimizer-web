@@ -1,5 +1,6 @@
+import type { Mock } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, Mock, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { useGridStore } from "@/store/grid/gridStore";
 

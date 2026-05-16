@@ -41,7 +41,6 @@
 		"public/",
 		".lighthouseci/",
 		"docs/",
-		"functions/",
 		"bundle/",
 		".wrangler/"
 	]

@@ -231,20 +231,25 @@ export const MarkdownContentRenderer: React.FC<MarkdownContentRendererProps> = (
 			);
 		},
 		hr: () => <Separator decorative mb="2" orientation="horizontal" size="4" />,
-		iframe: ({ src, title }: { src?: string; title?: string }) => (
-			<Box asChild mb="2">
-				<iframe
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-					allowFullScreen
-					frameBorder="0"
-					height="400"
-					src={src}
-					style={{ borderRadius: "6px" }}
-					title={title}
-					width="100%"
-				/>
-			</Box>
-		),
+		iframe: ({ src, title }: { src?: string; title?: string }) => {
+			const iframeTitle = title || "Embedded Content";
+
+			return (
+				<Box asChild mb="2">
+					<iframe
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowFullScreen
+						frameBorder="0"
+						height="400"
+						sandbox="allow-scripts allow-popups allow-presentation"
+						src={src}
+						style={{ borderRadius: "6px" }}
+						title={iframeTitle}
+						width="100%"
+					/>
+				</Box>
+			);
+		},
 		img: ({ alt, src, title }: { alt?: string; src?: string; title?: string }) => (
 			<img alt={alt} src={src} style={{ maxWidth: "100%" }} title={title} />
 		),

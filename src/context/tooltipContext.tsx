@@ -1,11 +1,7 @@
+import type { TooltipActions, TooltipState } from "../utils/system/tooltipUtils";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 
-import {
-	TooltipActions,
-	TooltipActionsContext,
-	TooltipState,
-	TooltipStateContext,
-} from "../utils/system/tooltipUtils";
+import { TooltipActionsContext, TooltipStateContext } from "../utils/system/tooltipUtils";
 
 /** Time in milliseconds to maintain a "warm" state for instant tooltip re-opening. */
 const WARM_THRESHOLD = 500;

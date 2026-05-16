@@ -1,14 +1,14 @@
 declare module 'critical' {
 	export interface GenerateOptions {
 		base?: string;
-		src?: string;
-		target?: string | { html?: string; css?: string };
-		inline?: boolean;
-		width?: number;
-		height?: number;
 		extract?: boolean;
+		height?: number;
+		inline?: boolean;
 		minify?: boolean;
 		penthouse?: unknown;
+		src?: string;
+		target?: string | { css?: string; html?: string; };
+		width?: number;
 	}
 
 	export function generate(options: GenerateOptions): Promise<void>;

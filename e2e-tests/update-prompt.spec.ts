@@ -15,12 +15,12 @@ test.describe("UpdatePrompt Suppression", () => {
 		// 3. Mock /version.json to return the SAME build date
 		await page.route("/version.json", async (route) => {
 			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
 				body: JSON.stringify({
-					version: "unknown",
 					buildDate: currentBuildDate,
+					version: "unknown",
 				}),
+				contentType: "application/json",
+				status: 200,
 			});
 		});
 
@@ -46,12 +46,12 @@ test.describe("UpdatePrompt Suppression", () => {
 		// 1. Mock /version.json BEFORE navigating
 		await page.route("/version.json", async (route) => {
 			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
 				body: JSON.stringify({
-					version: "unknown",
 					buildDate: "2025-11-23T10:00:00.000Z", // Different from current build
+					version: "unknown",
 				}),
+				contentType: "application/json",
+				status: 200,
 			});
 		});
 

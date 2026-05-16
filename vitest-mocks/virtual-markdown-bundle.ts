@@ -1,4 +1,4 @@
-export async function getMarkdown(path: string): Promise<string> {
+export async function getMarkdown(_path: string): Promise<string> {
 	// Mock implementation
 	return "";
 }

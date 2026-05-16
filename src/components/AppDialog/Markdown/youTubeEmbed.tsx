@@ -31,17 +31,22 @@ interface YouTubeEmbedProps {
  * <YouTubeEmbed videoId="dQw4w9WgXcQ" title="Example video" />
  * ```
  */
-export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) => (
-	<Box asChild mb="2">
-		<iframe
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-			allowFullScreen
-			frameBorder="0"
-			height="400"
-			src={`https://www.youtube.com/embed/${videoId}`}
-			style={{ borderRadius: "6px" }}
-			title={title || "YouTube video"}
-			width="100%"
-		/>
-	</Box>
-);
+export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ title, videoId }) => {
+	const iframeTitle = title || "YouTube Video";
+
+	return (
+		<Box asChild mb="2">
+			<iframe
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				allowFullScreen
+				frameBorder="0"
+				height="400"
+				sandbox="allow-scripts allow-popups allow-presentation"
+				src={`https://www.youtube.com/embed/${videoId}`}
+				style={{ borderRadius: "6px" }}
+				title={iframeTitle}
+				width="100%"
+			/>
+		</Box>
+	);
+};

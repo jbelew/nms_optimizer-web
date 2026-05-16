@@ -10,24 +10,30 @@ const dirname =
 
 const sharedAlias = {
 	"@": path.resolve(dirname, "./src"),
-	"virtual:pwa-register": path.resolve(dirname, "./vitest-mocks/virtual-pwa-register.ts"),
 	"virtual:markdown-bundle": path.resolve(dirname, "./vitest-mocks/virtual-markdown-bundle.ts"),
+	"virtual:pwa-register": path.resolve(dirname, "./vitest-mocks/virtual-pwa-register.ts"),
 };
 
 export default defineConfig({
 	resolve: { alias: sharedAlias },
 	test: {
+		coverage: {
+			exclude: ["node_modules", "src/**/*.stories.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
+			include: ["src/**/*.{ts,tsx}"],
+			provider: "v8",
+			reporter: ["text", "json", "html"],
+		},
 		projects: [
 			{
 				plugins: [react()],
 				resolve: { alias: sharedAlias },
 				test: {
-					name: "unit",
-					globals: true,
 					environment: "jsdom",
-					setupFiles: ["./vitest.setup.ts"],
-					include: ["src/**/*.test.{ts,tsx}"],
 					exclude: ["node_modules", "dist", ".storybook"],
+					globals: true,
+					include: ["src/**/*.test.{ts,tsx}"],
+					name: "unit",
+					setupFiles: ["./vitest.setup.ts"],
 					silent: true,
 				},
 			},
@@ -38,25 +44,18 @@ export default defineConfig({
 				],
 				resolve: { alias: sharedAlias },
 				test: {
-					name: "storybook",
-					globals: true,
-					environment: "jsdom",
-					setupFiles: [path.resolve(dirname, ".storybook/vitest.setup.ts")],
 					browser: {
 						enabled: true,
-						name: "chromium",
-						provider: playwright(),
 						headless: true,
 						instances: [{ browser: "chromium" }],
+						name: "chromium",
+						provider: playwright(),
 					},
+					globals: true,
+					name: "storybook",
+					setupFiles: [path.resolve(dirname, ".storybook/vitest.setup.ts")],
 				},
 			},
 		],
-		coverage: {
-			provider: "v8",
-			reporter: ["text", "json", "html"],
-			include: ["src/**/*.{ts,tsx}"],
-			exclude: ["node_modules", "src/**/*.stories.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
-		},
 	},
 });

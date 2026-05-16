@@ -48,13 +48,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * showToast({ title: "Updated", description: "Config saved", variant: "success" });
 	 * ```
 	 */
-	const showToast = (config: ToastConfig) => {
+	const showToast = React.useCallback((config: ToastConfig) => {
 		setToastConfig({
 			...config,
 			id: config.id || Date.now().toString(),
 		});
 		setIsOpen(true);
-	};
+	}, []);
 
 	/**
 	 * Triggers a success notification.
@@ -70,9 +70,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * showSuccess("Success", "Build applied successfully");
 	 * ```
 	 */
-	const showSuccess = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ description, duration, title, variant: "success" });
-	};
+	const showSuccess = React.useCallback(
+		(title: string, description: ReactNode, duration?: number) => {
+			showToast({ description, duration, title, variant: "success" });
+		},
+		[showToast]
+	);
 
 	/**
 	 * Triggers an error notification.
@@ -88,9 +91,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * showError("Error", "Failed to connect to solver");
 	 * ```
 	 */
-	const showError = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ description, duration, title, variant: "error" });
-	};
+	const showError = React.useCallback(
+		(title: string, description: ReactNode, duration?: number) => {
+			showToast({ description, duration, title, variant: "error" });
+		},
+		[showToast]
+	);
 
 	/**
 	 * Triggers an informational notification.
@@ -106,9 +112,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * showInfo("Info", "Connecting...");
 	 * ```
 	 */
-	const showInfo = (title: string, description: ReactNode, duration?: number) => {
-		showToast({ description, duration, title });
-	};
+	const showInfo = React.useCallback(
+		(title: string, description: ReactNode, duration?: number) => {
+			showToast({ description, duration, title });
+		},
+		[showToast]
+	);
 
 	/**
 	 * Hides the current toast and clears its configuration after an animation delay.
@@ -120,13 +129,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * closeToast();
 	 * ```
 	 */
-	const closeToast = () => {
+	const closeToast = React.useCallback(() => {
 		setIsOpen(false);
 		// Optionally clear config after a small delay to allow for exit animation
 		setTimeout(() => {
 			setToastConfig(null);
 		}, 500);
-	};
+	}, []);
 
 	// Dismiss toast on any click/touch outside or inside
 	React.useEffect(() => {
@@ -147,17 +156,20 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 			window.removeEventListener("click", handleGlobalDismiss);
 			window.removeEventListener("touchstart", handleGlobalDismiss);
 		};
-	}, [isOpen]);
+	}, [closeToast, isOpen]);
 
-	const value: ToastContextType = {
-		closeToast,
-		isOpen,
-		showError,
-		showInfo,
-		showSuccess,
-		showToast,
-		toastConfig,
-	};
+	const value = React.useMemo<ToastContextType>(
+		() => ({
+			closeToast,
+			isOpen,
+			showError,
+			showInfo,
+			showSuccess,
+			showToast,
+			toastConfig,
+		}),
+		[closeToast, isOpen, showError, showInfo, showSuccess, showToast, toastConfig]
+	);
 
 	return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 };

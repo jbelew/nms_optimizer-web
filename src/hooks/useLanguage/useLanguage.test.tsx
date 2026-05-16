@@ -1,7 +1,11 @@
+import type * as ReactRouterDom from "react-router-dom";
+import type { Location } from "react-router-dom";
+import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
-import { Location, MemoryRouter } from "react-router-dom"; // Import Location
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { MemoryRouter } from "react-router-dom"; // Import Location
+
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n from "../../test/i18n";
 import { useLanguage } from "./useLanguage";
@@ -23,7 +27,7 @@ const createMockLocation = (pathname: string): Location => ({
 // let useLocationMock: Mock<() => Location>; // This line will be removed
 
 vi.mock("react-router-dom", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("react-router-dom")>();
+	const actual = (await importOriginal()) as typeof ReactRouterDom;
 
 	return {
 		...actual,

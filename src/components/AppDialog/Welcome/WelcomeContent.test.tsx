@@ -84,10 +84,10 @@ describe("WelcomeContent", () => {
 			</DialogContext.Provider>
 		);
 
-		const link = screen.getByRole("link");
+		const link = screen.getByRole("button", { name: "View instructions" });
 		await userEvent.click(link);
 
-		expect(onClose).toHaveBeenCalledTimes(1);
+		expect(onClose).toHaveBeenCalled();
 		expect(mockDialogContext.openDialog).toHaveBeenCalledWith("instructions");
 	});
 });

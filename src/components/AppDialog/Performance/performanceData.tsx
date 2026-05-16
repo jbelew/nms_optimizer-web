@@ -1,4 +1,5 @@
-import { FC, lazy, useEffect, useState, useTransition } from "react";
+import type { FC } from "react";
+import { lazy, useEffect, useState, useTransition } from "react";
 import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 

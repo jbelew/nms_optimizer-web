@@ -1,4 +1,5 @@
-import { FC, lazy, Suspense, useEffect, useState } from "react";
+import type { FC} from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";

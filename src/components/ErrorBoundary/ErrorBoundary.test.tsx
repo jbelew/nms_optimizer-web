@@ -4,7 +4,8 @@
  * state management, localStorage cleanup, service worker unregistration, and analytics.
  */
 
-import { FC, Suspense } from "react";
+import type { FC } from "react";
+import { Suspense } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

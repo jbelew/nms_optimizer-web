@@ -8,7 +8,7 @@
 		"e2e-tests/**/*.{ts,js}",
 		"functions/**/*.{ts,js}"
 	],
-	"project": ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{js,mjs,cjs}"],
+	"project": ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{js,mjs,cjs}", "shared/**/*.{ts,js}"],
 	"ignore": ["typedoc.json"],
 	"ignoreDependencies": []
 }

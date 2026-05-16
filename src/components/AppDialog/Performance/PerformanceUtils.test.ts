@@ -1,7 +1,7 @@
+import type { ChartDataPoint } from "./PerformanceTypes";
 import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 import { describe, expect, it } from "vitest";
 
-import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	calculateSMA,
 	computeLogNormalScore,

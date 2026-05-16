@@ -4,7 +4,7 @@
  * and analytics event sending.
  */
 
-import { ErrorInfo } from "react";
+import type { ErrorInfo } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as analytics from "../../utils/analytics/tracking";

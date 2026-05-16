@@ -74,7 +74,11 @@ export const Error: Story = {
 	args: {
 		description: (
 			<span>
-				Failed to load data. Please <a href="#">try again</a> or contact support.
+				Failed to load data. Please{" "}
+				<button className="cursor-pointer underline" type="button">
+					try again
+				</button>{" "}
+				or contact support.
 			</span>
 		),
 		onOpenChange: () => {},

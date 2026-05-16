@@ -38,6 +38,7 @@ export async function onRequest(context) {
 	// 1. Canonical Host Redirect (www. -> apex)
 	if (url.hostname === "www.nms-optimizer.app") {
 		url.hostname = "nms-optimizer.app";
+
 		return Response.redirect(url.toString(), 301);
 	}
 
@@ -46,6 +47,7 @@ export async function onRequest(context) {
 	// We EXPLICITLY skip /404 and /500 to allow Cloudflare to map them to the .html files
 	// without creating a loop with its internal "Pretty URLs" 308 redirects.
 	const isReservedErrorPath = pathname === "/404" || pathname === "/500";
+
 	if (
 		pathname !== "/" &&
 		!pathname.endsWith("/") &&
@@ -53,11 +55,13 @@ export async function onRequest(context) {
 		!isReservedErrorPath
 	) {
 		url.pathname = pathname + "/";
+
 		return Response.redirect(url.toString(), 301);
 	}
 
 	// 3. Language Redirects (?lng=fr -> /fr/)
 	const lng = searchParams.get("lng");
+
 	if (lng) {
 		const normalizedLng = lng.toLowerCase();
 		const supportedLang = SUPPORTED_LANGS.includes(normalizedLng) ? normalizedLng : "en";
@@ -70,15 +74,18 @@ export async function onRequest(context) {
 		} else {
 			newUrl.pathname = `/${supportedLang}${cleanPath}/`.replace(/\/+$/, "/");
 		}
+
 		return Response.redirect(newUrl.toString(), 301);
 	}
 
 	// 4. Remove /en/ prefix (/en/about/ -> /about/)
 	const pathParts = pathname.split("/").filter(Boolean);
+
 	if (pathParts[0] === "en") {
 		const newUrl = new URL(url);
 		const subPath = pathParts.slice(1).join("/");
 		newUrl.pathname = `/${subPath}/`.replace(/\/+$/, "/");
+
 		return Response.redirect(newUrl.toString(), 301);
 	}
 
@@ -97,12 +104,14 @@ export async function onRequest(context) {
 	// would mask broken links as soft-200s.
 	const lastSegment = pathParts[pathParts.length - 1];
 	const isExtensionless = lastSegment && !lastSegment.includes(".");
+
 	if (!isExtensionless) {
 		return response;
 	}
 
 	// Strip locale prefix to identify the route name.
 	const routeName = LOCALE_LANGS.includes(pathParts[0]) ? pathParts[1] : pathParts[0];
+
 	if (!SPA_ROUTES.has(routeName)) {
 		return response;
 	}
@@ -113,6 +122,7 @@ export async function onRequest(context) {
 	// Always append an internal cache-buster for the asset fetch to ensure we
 	// get the latest index.html from the deployment, bypassing any stale internal edge cache.
 	shellUrl.searchParams.set("__cf_shell_cb", Date.now().toString());
+
 	// Also preserve any user-provided query params (like ?_cb= from the recovery script)
 	for (const [key, val] of url.searchParams) {
 		shellUrl.searchParams.set(key, val);

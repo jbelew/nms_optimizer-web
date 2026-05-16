@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { Flex } from "@radix-ui/themes";
 
 import { PERFORMANCE_LAYOUT } from "./PerformanceUtils";

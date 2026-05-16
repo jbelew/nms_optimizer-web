@@ -1,5 +1,6 @@
+import type { Mock } from "vitest";
 import ReactGA from "react-ga4";
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as tracking from "./tracking";
 

@@ -1,4 +1,5 @@
-import { FC, Suspense } from "react";
+import type { FC } from "react";
+import { Suspense } from "react";
 import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 

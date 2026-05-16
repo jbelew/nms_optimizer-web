@@ -173,7 +173,7 @@ export const ErrorContent = ({ children, error, errorInfo, variant }: ErrorConte
 							? t("errorContent.resetting")
 							: t("errorContent.clearAndReload")}
 					</Button>
-					<Button autoFocus onClick={handleReload} size="2" variant="solid">
+					<Button onClick={handleReload} size="2" variant="solid">
 						{t("common.reload")}
 					</Button>
 				</div>

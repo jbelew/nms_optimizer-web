@@ -14,6 +14,7 @@ test.describe("Application Resilience & Recovery", () => {
 		// Suppress welcome dialog via localStorage and clear Service Workers to ensure fresh tests
 		await page.addInitScript(() => {
 			localStorage.setItem("user-visited", "true");
+
 			if ("serviceWorker" in navigator) {
 				navigator.serviceWorker.getRegistrations().then((registrations) => {
 					for (const registration of registrations) {
@@ -27,8 +28,7 @@ test.describe("Application Resilience & Recovery", () => {
 	test.afterEach(async ({ page }) => {
 		try {
 			await page.evaluate(() => sessionStorage.clear());
-		} catch (e) {
-			// Context might be gone
+		} catch (_e) {			// Context might be gone
 		}
 	});
 
@@ -127,15 +127,15 @@ test.describe("Application Resilience & Recovery", () => {
 	});
 
 	test.describe("Network Throttling", () => {
-		test("should load successfully on a slow 3G connection", async ({ page, browserName }) => {
+		test("should load successfully on a slow 3G connection", async ({ browserName, page }) => {
 			test.skip(browserName !== "chromium", "CDP session is only available in Chromium");
 
 			const client = await page.context().newCDPSession(page);
 			await client.send("Network.emulateNetworkConditions", {
-				offline: false,
 				downloadThroughput: (800 * 1024) / 8,
-				uploadThroughput: (400 * 1024) / 8,
 				latency: 200,
+				offline: false,
+				uploadThroughput: (400 * 1024) / 8,
 			});
 
 			await page.goto("/", { timeout: 60000 });

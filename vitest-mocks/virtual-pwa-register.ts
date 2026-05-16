@@ -1,10 +1,10 @@
 export interface RegisterSWOptions {
 	immediate?: boolean;
-	onOfflineReady?: () => void;
 	onNeedRefresh?: (updateServiceWorker: () => Promise<void>) => void;
+	onOfflineReady?: () => void;
 }
 
-export function registerSW(options?: RegisterSWOptions): () => Promise<void> {
+export function registerSW(_options?: RegisterSWOptions): () => Promise<void> {
 	return async () => {
 		// Mock implementation
 	};

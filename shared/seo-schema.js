@@ -107,6 +107,7 @@ export const getLocalizedSchema = (t, lang, url) => {
 	// Simple breadcrumb logic for secondary pages
 	// Handle both /page/ and /lang/page/
 	let pageName = "";
+
 	if (pathParts.length > 0 && pathParts[0] !== lang) {
 		pageName = pathParts[pathParts.length - 1];
 	} else if (pathParts.length > 1 && pathParts[0] === lang) {

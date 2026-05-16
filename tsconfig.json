@@ -4,18 +4,18 @@
 			"@/*": ["./src/*"]
 		},
 		"target": "esnext",
-		"lib": ["dom", "esnext"],
+		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
+		"verbatimModuleSyntax": true,
 		"forceConsistentCasingInFileNames": true,
 		"module": "esnext",
 		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
-		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom", "@playwright/test"]
+		"types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
 	},
 	"include": ["src", ".storybook", "scripts"],
 	"exclude": ["node_modules", "**/tmp", "/tmp", "**/dist"]

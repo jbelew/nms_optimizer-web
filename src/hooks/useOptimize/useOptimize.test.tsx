@@ -1,10 +1,13 @@
+import type * as Constants from "../../constants";
 import type { OptimizeState } from "../../store/app/optimizeStore";
 import type { PlatformState } from "../../store/app/platformStore";
+import type * as GridStoreModule from "../../store/grid/gridStore";
 import type { GridStore } from "../../store/grid/gridStore";
 import type { TechState } from "../../store/tech/techStore";
 import type { Socket } from "socket.io-client";
+import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useOptimizeStore } from "../../store/app/optimizeStore";
 import { usePlatformStore } from "../../store/app/platformStore";
@@ -19,7 +22,7 @@ import { useOptimize } from "./useOptimize";
 // Mock external dependencies
 vi.mock("../useAnalytics/useAnalytics");
 vi.mock("../../store/grid/gridStore", async (importOriginal) => {
-	const mod = await importOriginal<typeof import("../../store/grid/gridStore")>();
+	const mod = (await importOriginal()) as typeof GridStoreModule;
 
 	return {
 		...mod,
@@ -48,7 +51,7 @@ vi.mock("../../utils/api/socketManager", () => ({
 
 // Mock constants
 vi.mock("../../constants", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("../../constants")>();
+	const actual = (await importOriginal()) as typeof Constants;
 
 	return {
 		...actual,

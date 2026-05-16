@@ -1,8 +1,9 @@
 import type { PlatformState } from "../../store/app/platformStore";
+import type { Mock } from "vitest";
 import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { usePlatformStore } from "../../store/app/platformStore";
 import { useGridStore } from "../../store/grid/gridStore";

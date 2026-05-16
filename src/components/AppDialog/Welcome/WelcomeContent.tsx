@@ -146,10 +146,11 @@ const WelcomeContent: React.FC<WelcomeContentProps> = ({ onClose }) => {
 					<Trans
 						components={{
 							1: (
-								<a
+								<button
+									aria-label="View instructions"
 									className="welcomeContent__link"
-									href="#"
 									onClick={handleViewInstructions}
+									type="button"
 								/>
 							),
 						}}

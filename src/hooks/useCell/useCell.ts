@@ -1,6 +1,7 @@
+import type { Cell } from "../../store/grid/gridStore";
 import { useShallow } from "zustand/react/shallow";
 
-import { Cell, useGridStore } from "../../store/grid/gridStore";
+import { useGridStore } from "../../store/grid/gridStore";
 
 /**
  * Custom hook to retrieve a specific cell from the grid store.

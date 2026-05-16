@@ -1,4 +1,5 @@
-import { io, Socket } from "socket.io-client";
+import type { Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { WS_URL } from "../../constants";

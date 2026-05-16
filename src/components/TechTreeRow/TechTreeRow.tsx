@@ -1,5 +1,6 @@
 import "./TechTreeRow.scss";
 
+import type { BonusStatusData } from "../../store/tech/techBonusStore";
 import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
 	Crosshair2Icon,
@@ -109,7 +110,7 @@ interface TechInfoProps {
  * @param {number} techMaxBonus - The maximum bonus possible.
  * @param {Function} t - Translation function.
  *
- * @returns {import("../../store/tech/techBonusStore").BonusStatusData} Metadata for the status icon and tooltip.
+ * @returns {BonusStatusData} Metadata for the status icon and tooltip.
  *
  * @example Status calculation
  * ```ts
@@ -117,10 +118,7 @@ interface TechInfoProps {
  * // returns { icon: 'lightning', percent: 5.5, ... }
  * ```
  */
-function computeBonusStatusData(
-	techMaxBonus: number,
-	t: (key: string) => string
-): import("../../store/tech/techBonusStore").BonusStatusData {
+function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
 	const roundedMaxBonus = round(techMaxBonus, 2);
 
 	if (roundedMaxBonus < 100) {

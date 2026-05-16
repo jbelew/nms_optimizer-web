@@ -14,12 +14,12 @@ import type {
 	breadcrumbsIntegration as SentryBreadcrumbsIntegration,
 	reactRouterV7BrowserTracingIntegration as SentryRouterTracingIntegration,
 } from "@sentry/react";
+import type { RouteObject } from "react-router-dom";
 import { useEffect } from "react";
 import {
 	createBrowserRouter,
 	createRoutesFromChildren,
 	matchRoutes,
-	RouteObject,
 	useLocation,
 	useNavigationType,
 } from "react-router-dom";
@@ -96,15 +96,19 @@ const MAX_LOGS = 100;
  */
 let sentryInstance: null | SentrySDK = null;
 
+/** In-memory log buffer. */
+let logs: LogEntry[] = [];
+
 /**
  * A centralized logger for the application.
  *
+ * @remarks
  * Collects logs in memory and automatically forwards warnings and errors to Sentry.
  * Maintains a circular buffer of the last 100 log entries.
+ *
+ * @category Utilities
  */
-export class Logger {
-	private static logs: LogEntry[] = [];
-
+export const Logger = {
 	/**
 	 * Clears the in-memory log buffer.
 	 *
@@ -116,9 +120,9 @@ export class Logger {
 	 * // returns void
 	 * ```
 	 */
-	public static clearLogs() {
-		this.logs = [];
-	}
+	clearLogs() {
+		logs = [];
+	},
 
 	/**
 	 * Logs an error message and sends it to Sentry.
@@ -137,7 +141,7 @@ export class Logger {
 	 * // returns void
 	 * ```
 	 */
-	public static error(message: string, error?: unknown, data?: Record<string, unknown>) {
+	error(message: string, error?: unknown, data?: Record<string, unknown>) {
 		this.log(LogLevel.ERROR, message, {
 			...(typeof error === "object" && error !== null ? error : { error }),
 			...data,
@@ -154,7 +158,7 @@ export class Logger {
 				});
 			}
 		}
-	}
+	},
 
 	/**
 	 * Retrieves the current circular buffer of log entries.
@@ -167,9 +171,9 @@ export class Logger {
 	 * // returns LogEntry[]
 	 * ```
 	 */
-	public static getLogs(): LogEntry[] {
-		return [...this.logs];
-	}
+	getLogs(): LogEntry[] {
+		return [...logs];
+	},
 
 	/**
 	 * Logs an informational message to the console and memory.
@@ -185,10 +189,39 @@ export class Logger {
 	 * // returns void
 	 * ```
 	 */
-	public static info(message: string, data?: Record<string, unknown>) {
+	info(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.INFO, message, data);
 		console.log(`[INFO] ${message}`, data);
-	}
+	},
+
+	/**
+	 * Internal method to add a log entry to memory and maintain the buffer size.
+	 *
+	 * @param {LogLevel} level - The log level.
+	 * @param {string} message - The log message.
+	 * @param {Record<string, unknown>} [data] - Optional metadata.
+	 *
+	 * @example Internal log dispatch
+	 * ```ts
+	 * Logger.log(LogLevel.INFO, \"test message\");
+	 * ```
+	 *
+	 * @private
+	 */
+	log(level: LogLevel, message: string, data?: Record<string, unknown>) {
+		const entry: LogEntry = {
+			data,
+			level,
+			message,
+			timestamp: Date.now(),
+		};
+
+		logs.push(entry);
+
+		if (logs.length > MAX_LOGS) {
+			logs.shift();
+		}
+	},
 
 	/**
 	 * Logs a warning message and sends it to Sentry.
@@ -204,44 +237,15 @@ export class Logger {
 	 * // returns void
 	 * ```
 	 */
-	public static warn(message: string, data?: Record<string, unknown>) {
+	warn(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.WARN, message, data);
 		console.warn(`[WARN] ${message}`, data);
 
 		if (sentryInstance) {
 			sentryInstance.captureMessage(message, { extra: data, level: "warning" });
 		}
-	}
-
-	/**
-	 * Internal method to add a log entry to memory and maintain the buffer size.
-	 *
-	 * @param {LogLevel} level - The log level.
-	 * @param {string} message - The log message.
-	 * @param {Record<string, unknown>} [data] - Optional metadata.
-	 *
-	 * @example Internal log dispatch
-	 * ```ts
-	 * Logger.log(LogLevel.INFO, "test message");
-	 * ```
-	 *
-	 * @private
-	 */
-	private static log(level: LogLevel, message: string, data?: Record<string, unknown>) {
-		const entry: LogEntry = {
-			data,
-			level,
-			message,
-			timestamp: Date.now(),
-		};
-
-		this.logs.push(entry);
-
-		if (this.logs.length > MAX_LOGS) {
-			this.logs.shift();
-		}
-	}
-}
+	},
+};
 
 /**
  * Initializes Sentry for error tracking and performance monitoring.
@@ -249,7 +253,7 @@ export class Logger {
  * @remarks
  * Configures Sentry with React Router v7 integration and sets up sampling rates
  * based on the environment (DEV vs PROD). Initialization is skipped if
- * `VITE_SENTRY_ENABLED` is not "true" or `VITE_SENTRY_DSN` is missing.
+ * `VITE_SENTRY_ENABLED` is not \"true\" or `VITE_SENTRY_DSN` is missing.
  *
  * This function uses dynamic imports to ensure Sentry SDK is only bundled
  * and loaded if enabled via feature flag.
@@ -282,11 +286,11 @@ export const initializeSentry = async () => {
 		sentryInstance = Sentry;
 
 		Sentry.init({
-			allowUrls: [/localhost/, /127\.0\.0\.1/, /nms-optimizer\.app/i],
+			allowUrls: [/localhost/, /127\\.0\\.0\\.1/, /nms-optimizer\\.app/i],
 			dsn,
 			environment: (import.meta.env.VITE_SENTRY_ENV as string) || "production",
 			ignoreErrors: [
-				/runtime\.sendMessage\(\).*Tab not found/i,
+				/runtime\\.sendMessage\\(\\).*Tab not found/i,
 				/Extension/i,
 				/vendor/i,
 				/^Network Error$/i,

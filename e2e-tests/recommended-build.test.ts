@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('should correctly apply and reset recommended builds', async ({ page }) => {
   await page.goto('/?platform=colossus');

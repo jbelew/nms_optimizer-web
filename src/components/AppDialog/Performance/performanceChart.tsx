@@ -1,14 +1,7 @@
-import {
-	FC,
-	KeyboardEvent,
-	memo,
-	ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import type { ChartDataPoint } from "./PerformanceTypes";
+import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
+import type { FC, KeyboardEvent, ReactNode } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@radix-ui/react-icons";
 import { Card, Flex, SegmentedControl, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
@@ -27,10 +20,7 @@ import {
 	YAxis,
 } from "recharts";
 
-import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
-
 import { PerformanceDashboardLayout } from "./PerformanceLayout";
-import { ChartDataPoint } from "./PerformanceTypes";
 import {
 	CHART_TOOLTIP_STYLE,
 	formatMetricValue,

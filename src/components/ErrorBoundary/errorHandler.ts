@@ -11,7 +11,7 @@
  * @category Utilities
  */
 
-import { ErrorInfo } from "react";
+import type { ErrorInfo } from "react";
 
 import { sendEvent } from "../../utils/analytics/tracking";
 import { captureException } from "../../utils/system/monitoring";

@@ -64,7 +64,9 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildDate, buildVersion }) => {
 									href="https://github.com/jbelew/nms_optimizer-web/issues/new/choose"
 									rel="noopener noreferrer"
 									target="_blank"
-								/>
+								>
+									Issue
+								</a>
 							),
 						}}
 						i18nKey="footer.issuePrompt"
@@ -105,16 +107,16 @@ const AppFooter: React.FC<AppFooterProps> = ({ buildDate, buildVersion }) => {
 						{t("footer.license")}
 					</a>{" "}
 					•{" "}
-					<a
+					<button
 						className="app-footer__link"
-						href={i18n.language === "en" ? "/privacy" : `/${i18n.language}/privacy`}
 						onClick={(e) => {
 							e.preventDefault();
 							openDialog("privacy");
 						}}
+						type="button"
 					>
 						{t("buttons.privacy")}
-					</a>{" "}
+					</button>{" "}
 					• {t("footer.buildLabel")} {buildVersion}{" "}
 					{buildDate && `(${new Date(buildDate).toLocaleString()})`}
 				</div>

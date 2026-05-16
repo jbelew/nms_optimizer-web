@@ -1,4 +1,5 @@
-import { FC, lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import type { FC } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
 import { useUpdateCheck } from "../../hooks/useUpdateCheck/useUpdateCheck";

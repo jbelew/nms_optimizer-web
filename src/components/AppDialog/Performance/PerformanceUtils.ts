@@ -1,6 +1,5 @@
-import { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
-
-import { ChartDataPoint } from "./PerformanceTypes";
+import type { ChartDataPoint } from "./PerformanceTypes";
+import type { PerformanceMetric } from "@/hooks/usePerformanceData/usePerformanceData";
 
 /**
  * Formats a metric value for display, handling metric-specific scaling (like CLS).

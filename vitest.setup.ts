@@ -3,8 +3,10 @@ import { vi } from "vitest";
 
 // Suppress known console warnings from Radix UI accessibility checks during tests
 const originalWarn = console.warn;
+
 console.warn = (...args: unknown[]) => {
 	const message = String(args[0]);
+
 	if (
 		message.includes("DialogContent") ||
 		message.includes("VisuallyHidden") ||
@@ -13,12 +15,13 @@ console.warn = (...args: unknown[]) => {
 	) {
 		return;
 	}
+
 	originalWarn(...args);
 };
 
 // Mock virtual modules
 vi.mock("virtual:pwa-register", () => ({
-	registerSW: vi.fn((options: unknown) => vi.fn()),
+	registerSW: vi.fn((_options: unknown) => vi.fn()),
 }));
 
 vi.mock("virtual:markdown-bundle", () => ({
@@ -37,49 +40,54 @@ if (typeof globalThis !== "undefined") {
 }
 
 // Mock window.matchMedia
-Object.defineProperty(window, "matchMedia", {
-	writable: true,
-	value: vi.fn().mockImplementation((query) => ({
-		matches: false,
-		media: query,
-		onchange: null,
-		addListener: vi.fn(),
-		removeListener: vi.fn(),
-		addEventListener: vi.fn(),
-		removeEventListener: vi.fn(),
-		dispatchEvent: vi.fn(),
-	})),
-});
+if (typeof window !== "undefined") {
+	Object.defineProperty(window, "matchMedia", {
+		value: vi.fn().mockImplementation((query) => ({
+			addEventListener: vi.fn(),
+			addListener: vi.fn(),
+			dispatchEvent: vi.fn(),
+			matches: false,
+			media: query,
+			onchange: null,
+			removeEventListener: vi.fn(),
+			removeListener: vi.fn(),
+		})),
+		writable: true,
+	});
+}
 
 // Mock localStorage
 const localStorageMock = (() => {
 	let store: { [key: string]: string } = {};
 
 	return {
-		getItem: (key: string) => store[key] || null,
-		setItem: (key: string, value: string) => {
-			store[key] = value.toString();
-		},
 		clear: () => {
 			store = {};
 		},
-		removeItem: (key: string) => {
-			delete store[key];
-		},
+		getItem: (key: string) => store[key] || null,
 		key: (index: number) => {
 			const keys = Object.keys(store);
+
 			return keys[index] || null;
 		},
 		get length() {
 			return Object.keys(store).length;
 		},
+		removeItem: (key: string) => {
+			delete store[key];
+		},
+		setItem: (key: string, value: string) => {
+			store[key] = value.toString();
+		},
 	};
 })();
 
-Object.defineProperty(window, "localStorage", { value: localStorageMock });
+if (typeof window !== "undefined") {
+	Object.defineProperty(window, "localStorage", { value: localStorageMock });
+}
 
 // Mock File.prototype.text() method for file reading in tests
-if (!File.prototype.text) {
+if (typeof File !== "undefined" && !File.prototype.text) {
 	Object.defineProperty(File.prototype, "text", {
 		value: async function () {
 			return new Promise<string>((resolve, reject) => {

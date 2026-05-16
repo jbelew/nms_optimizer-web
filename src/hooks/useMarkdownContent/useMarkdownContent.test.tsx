@@ -1,6 +1,7 @@
+import type { Mock } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useTranslation } from "react-i18next";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useMarkdownContent } from "./useMarkdownContent";
 
