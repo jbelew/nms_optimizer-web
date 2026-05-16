@@ -6,7 +6,8 @@
 		"src/**/*.stories.{ts,tsx}",
 		"src/**/*.test.{ts,tsx}",
 		"e2e-tests/**/*.{ts,js}",
-		"functions/**/*.{ts,js}"
+		"functions/**/*.{ts,js}",
+		"src/utils/system/sentryMock.ts"
 	],
 	"project": ["src/**/*.{ts,tsx,js,jsx}", "scripts/**/*.{js,mjs,cjs}", "shared/**/*.{ts,js}"],
 	"ignore": ["typedoc.json"],

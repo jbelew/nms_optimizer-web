@@ -29,7 +29,7 @@ export const PAGE_TO_MARKDOWN_MAPPING = {
  */
 export async function extractSsgTemplate(sourceIndexHtml) {
 	const sourceSsgBlockMatch = sourceIndexHtml.match(
-		/<noscript\s+[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/noscript>/
+		/<main\s+[^>]*?class="ssg-fallback"[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/main>/
 	);
 	if (!sourceSsgBlockMatch) return { ssgHeader: "", ssgStyles: "" };
 
@@ -159,24 +159,6 @@ export async function generatePage(
 		// but ensuring it matches the legacy's output exactly (whitespace-wise).
 		const localizedHeader = `
 		<header class="app-header-static">
-			<h1
-				style="
-					margin: 0;
-					font-size: inherit;
-					font-weight: inherit;
-					position: absolute;
-					width: 1px;
-					height: 1px;
-					padding: 0;
-					margin: -1px;
-					overflow: hidden;
-					clip: rect(0, 0, 0, 0);
-					white-space: nowrap;
-					border: 0;
-				"
-			>
-				NMS Optimizer
-			</h1>
 			<div class="app-header-static__logo-text" style="margin-bottom: 4px" aria-hidden="true">NO MAN'S SKY</div>
 			<div class="app-header-static__separator-container" aria-hidden="true">
 				<span class="app-header-static__separator"></span>
@@ -186,16 +168,15 @@ export async function generatePage(
 			<h2 class="app-header-static__title">${subTitle}</h2>
 		</header>`;
 
-		noscriptBlock = `<noscript>
-    <main>
-      ${localizedHeader}
-      ${renderedHtml}
-      ${navigationHtml}
-    </main>
-    <style>
-      ${ssgStyles}
-    </style>
-  </noscript>`;
+		noscriptBlock = `
+		<main class="ssg-fallback">
+			${localizedHeader}
+			${renderedHtml}
+			${navigationHtml}
+			<style>
+				${ssgStyles}
+			</style>
+		</main>`;
 	}
 
 	const rewriter = new HTMLRewriter()
@@ -296,8 +277,12 @@ export async function generatePage(
 		// Body content
 		.on("body", {
 			element(_el) {
-				// Strip old noscripts in body
-				// (HTMLRewriter can't easily select based on parent, but we can target all noscripts and filter if needed)
+				// Strip old fallback blocks in body
+			},
+		})
+		.on("main.ssg-fallback", {
+			element(el) {
+				el.remove();
 			},
 		})
 		.on("noscript", {
@@ -550,7 +535,7 @@ export async function updateIndexHtmlTemplate(mdProcessor, t) {
 		);
 
 		const updatedHtml = await new HTMLRewriter()
-			.on("noscript[data-ssg-template] main", {
+			.on("main.ssg-fallback[data-ssg-template]", {
 				element(el) {
 					el.setInnerContent(
 						`
@@ -565,7 +550,7 @@ export async function updateIndexHtmlTemplate(mdProcessor, t) {
 			.transform(sourceIndexHtml);
 
 		await fs.writeFile(indexPath, updatedHtml);
-		console.log("✓ Synchronized home.md content to index.html noscript block");
+		console.log("✓ Synchronized home.md content to index.html fallback block");
 	} catch (err) {
 		console.warn(`Warning: Could not update index.html template: ${err.message}`);
 	}
