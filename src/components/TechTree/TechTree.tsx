@@ -13,15 +13,16 @@
  * @category Components
  */
 
-import type { TechTree as TechTreeType } from "../../hooks/useTechTree/useTechTree";
+import type { TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import React, { useState } from "react";
 import { Box, Flex, ScrollArea, Skeleton } from "@radix-ui/themes";
 
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useFetchTechTreeSuspense } from "../../hooks/useTechTree/useTechTree";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { MessageSpinner } from "../MessageSpinner/messageSpinner";
-import RecommendedBuild from "../RecommendedBuild/RecommendedBuild";
+import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
+import RecommendedBuild from "@/components/RecommendedBuild/RecommendedBuild";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
+import { usePlatformStore } from "@/store/app/platformStore";
+
 import { TechTreeContent } from "./TechTreeContent";
 
 /**

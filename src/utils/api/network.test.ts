@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useOptimizeStore } from "../../store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/app/optimizeStore";
+
 import { apiCall, fetchJson, fetchWithTimeout, HttpError } from "./network";
 
 // Mock store

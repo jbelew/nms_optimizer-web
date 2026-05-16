@@ -1,9 +1,10 @@
-import type { TechTree } from "../../hooks/useTechTree/useTechTree";
+import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 
-import * as useBreakpointModule from "../../hooks/useBreakpoint/useBreakpoint";
+import * as useBreakpointModule from "@/hooks/useBreakpoint/useBreakpoint";
+
 import TechTreeComponent from "./TechTree";
 
 // Mock react-i18next

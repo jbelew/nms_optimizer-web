@@ -13,8 +13,8 @@
 
 import type { ErrorInfo } from "react";
 
-import { sendEvent } from "../../utils/analytics/tracking";
-import { captureException } from "../../utils/system/monitoring";
+import { sendEvent } from "@/utils/analytics/tracking";
+import { captureException } from "@/utils/system/monitoring";
 
 /**
  * Reports an uncaught application error to monitoring and analytics services.

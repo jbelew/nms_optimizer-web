@@ -75,12 +75,12 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			hauler: { label: "Hauler", type: "Starship" },
 			sentinel: { label: "Sentinel", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/api/network");
+		const { apiCall } = await import("@/utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// 3. Dynamically import to re-initialize the store with the new URL
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../../store/app/platformStore");
+		const { usePlatformStore } = await import("@/store/app/platformStore");
 
 		// ACT: Trigger the fetch and wait for the internal promise chain to complete
 		await act(async () => {
@@ -99,12 +99,12 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/api/network");
+		const { apiCall } = await import("@/utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../../store/app/platformStore");
+		const { usePlatformStore } = await import("@/store/app/platformStore");
 
 		await act(async () => {
 			fetchShipTypes();
@@ -122,12 +122,12 @@ describe("useShipTypes Store and Fetch Logic", () => {
 			atlantid: { label: "Atlantid", type: "Starship" },
 			standard: { label: "Standard", type: "Starship" },
 		};
-		const { apiCall } = await import("../../utils/api/network");
+		const { apiCall } = await import("@/utils/api/network");
 		vi.mocked(apiCall).mockResolvedValue(mockShipTypes);
 
 		// ACT
 		const { fetchShipTypes } = await import("./useShipTypes");
-		const { usePlatformStore } = await import("../../store/app/platformStore");
+		const { usePlatformStore } = await import("@/store/app/platformStore");
 
 		await act(async () => {
 			fetchShipTypes();

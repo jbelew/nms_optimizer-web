@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as Toast from "@radix-ui/react-toast";
 
-import { ToastProvider } from "../../hooks/useToast/useToast";
-import { ToastRenderer } from "../Toast/ToastRenderer";
+import { ToastRenderer } from "@/components/Toast/ToastRenderer";
+import { ToastProvider } from "@/hooks/useToast/useToast";
+
 import { InstallPrompt } from "./InstallPrompt";
 
 const meta = {

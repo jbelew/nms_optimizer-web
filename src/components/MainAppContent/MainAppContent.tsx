@@ -6,33 +6,33 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Box, Callout, Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
+import AppFooter from "@/components/AppFooter/AppFooter";
+import AppHeader from "@/components/AppHeader/AppHeader";
+import { GridTable } from "@/components/GridTable/GridTable";
+import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
+import { ShipSelection } from "@/components/ShipSelection/shipSelection";
+import TechTree, { TechTreeSkeleton } from "@/components/TechTree/TechTree";
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 
-import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
-import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
-import AppFooter from "../AppFooter/AppFooter";
-import AppHeader from "../AppHeader/AppHeader";
-import { GridTable } from "../GridTable/GridTable";
-import { MessageSpinner } from "../MessageSpinner/messageSpinner";
-import { ShipSelection } from "../ShipSelection/shipSelection";
-import TechTree, { TechTreeSkeleton } from "../TechTree/TechTree";
 import { useMainAppLogic } from "./useMainAppLogic";
 
-const BuildNameDialog = lazy(() => import("../AppDialog/BuildName/BuildNameDialog"));
+const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
 const OptimizationAlertDialog = lazy(
-	() => import("../AppDialog/OptimizationAlert/OptimizationAlertDialog")
+	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
 );
 
 const ErrorMessageRenderer = lazy(() =>
-	import("../ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
+	import("@/components/ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
 		default: m.ErrorMessageRenderer,
 	}))
 );
 const InstallPrompt = lazy(() =>
-	import("../InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
+	import("@/components/InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
 );
 const ToastRenderer = lazy(() =>
-	import("../Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
+	import("@/components/Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
 );
 
 /**

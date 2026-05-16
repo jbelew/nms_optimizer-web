@@ -28,8 +28,9 @@ import {
 } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useDialog } from "../../utils/system/dialogUtils";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useDialog } from "@/utils/system/dialogUtils";
+
 import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
 import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
 
@@ -41,13 +42,13 @@ import type {
 	ModuleDialogFooterProps,
 	ModuleSelectionDialogProps,
 	SelectionModule,
-} from "../../types/props";
+} from "@/types/props";
 
-import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 
-const AppDialog = lazy(() => import("../AppDialog/Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";

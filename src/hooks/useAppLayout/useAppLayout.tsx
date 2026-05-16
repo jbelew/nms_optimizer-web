@@ -1,8 +1,8 @@
 // src/hooks/useAppLayout.tsx
 import { useEffect, useRef, useState } from "react";
 
-import { useGridStore } from "../../store/grid/gridStore";
-import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useGridStore } from "@/store/grid/gridStore";
 
 /**
  * Interface representing the dimensions and refs for the application layout.

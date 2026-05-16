@@ -2,10 +2,11 @@ import type { RecommendedBuild, TechTree, TechTreeItem } from "./useTechTree";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
-import * as apiCallModule from "../../utils/api/network";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import * as apiCallModule from "@/utils/api/network";
+
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
 
 // Mock apiCall

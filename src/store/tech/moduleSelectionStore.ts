@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/environment";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 
 type SetItemFunction = (
 	name: string,

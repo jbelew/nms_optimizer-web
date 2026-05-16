@@ -8,7 +8,7 @@
  * @category Utilities
  */
 
-import { useOptimizeStore } from "../../store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/app/optimizeStore";
 
 /**
  * Options for the `apiCall` function, extending standard `RequestInit`.

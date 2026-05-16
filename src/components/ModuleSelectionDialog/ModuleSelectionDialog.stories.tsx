@@ -3,7 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Theme } from "@radix-ui/themes";
 
-import { usePlatformStore } from "../../store/app/platformStore";
+import { usePlatformStore } from "@/store/app/platformStore";
+
 import { ModuleSelectionDialog } from "./ModuleSelectionDialog";
 
 import "./ModuleSelectionDialog.scss";

@@ -1,10 +1,10 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Blockquote, Box, Code, Heading, Kbd, Link, Separator, Text } from "@radix-ui/themes";
 
+import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
+import LoremIpsumSkeleton from "@/components/AppDialog/Common/LoremIpsumSkeleton";
 import { useMarkdownContent } from "@/hooks/useMarkdownContent/useMarkdownContent";
 
-import DynamicRadixIcon from "../Common/DynamicRadixIcon";
-import LoremIpsumSkeleton from "../Common/LoremIpsumSkeleton";
 import { YouTubeEmbed } from "./youTubeEmbed";
 
 /**

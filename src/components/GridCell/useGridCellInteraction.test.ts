@@ -1,12 +1,13 @@
 // We need to import from the mocked modules
-import type { Cell } from "../../store/grid/gridStore";
+import type { Cell } from "@/store/grid/gridStore";
 import type { Mock } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useSessionStore } from "../../store/app/sessionStore";
-import { useShakeStore } from "../../store/app/shakeStore";
-import { useGridStore } from "../../store/grid/gridStore";
+import { useSessionStore } from "@/store/app/sessionStore";
+import { useShakeStore } from "@/store/app/shakeStore";
+import { useGridStore } from "@/store/grid/gridStore";
+
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 // Mock stores

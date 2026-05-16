@@ -1,7 +1,7 @@
-import type { TechTreeRowProps } from "../../types/props";
 import type { ShakeState } from "@/store/app/shakeStore";
 import type { GridStore } from "@/store/grid/gridStore";
 import type { TechState } from "@/store/tech/techStore";
+import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

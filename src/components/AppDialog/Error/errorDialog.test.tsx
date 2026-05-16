@@ -2,7 +2,8 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { useOptimizeStore } from "../../../store/app/optimizeStore";
+import { useOptimizeStore } from "@/store/app/optimizeStore";
+
 import { ErrorDialog } from "./errorDialog";
 
 // Mock react-i18next

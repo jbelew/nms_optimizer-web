@@ -13,7 +13,7 @@
 
 import { registerSW } from "virtual:pwa-register";
 
-import { isBot } from "../browser/environment";
+import { isBot } from "@/utils/browser/environment";
 
 /**
  * Registers the PWA service worker using Vite PWA's standard registration.

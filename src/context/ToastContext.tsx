@@ -17,7 +17,7 @@ import { ToastContext } from "./createToastContext";
  *
  * @returns {JSX.Element} The provider element wrapping children.
  *
- * @see {@link import('../hooks/useToast/useToast').useToast} for the consumer hook.
+ * @see {@link import('@/hooks/useToast/useToast').useToast} for the consumer hook.
  * @see {@link ToastContext}
  * @see {@link ToastConfig}
  *

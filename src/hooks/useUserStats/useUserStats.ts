@@ -1,7 +1,7 @@
-import type { UserStat } from "../../types/userStats";
+import type { UserStat } from "@/types/userStats";
 import { use } from "react";
 
-import { fetchUserStats } from "../../utils/api/userStatsResource";
+import { fetchUserStats } from "@/utils/api/userStatsResource";
 
 export type { UserStat };
 

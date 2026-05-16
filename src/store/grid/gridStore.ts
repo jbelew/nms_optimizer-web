@@ -1,15 +1,15 @@
-import type { Module } from "../../types/tech";
+import type { Module } from "@/types/tech";
 import type { StorageValue } from "zustand/middleware";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { safeGetItem, safeRemoveItem, safeSetItem } from "../../utils/browser/environment";
-import { resolveInitialPlatform } from "../../utils/browser/platformResolver";
-import { usePlatformStore } from "../app/platformStore";
-import { useModuleSelectionStore } from "../tech/moduleSelectionStore";
-import { useTechBonusStore } from "../tech/techBonusStore";
-import { useTechStore } from "../tech/techStore";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
+import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 
 /**
  * Structure for the optimization engine's successful result.

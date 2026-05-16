@@ -5,8 +5,8 @@ import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Flex, Separator } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useDialog } from "../../utils/system/dialogUtils";
-import Buymeacoffee from "../BuyMeACoffee/BuyMeACoffee";
+import Buymeacoffee from "@/components/BuyMeACoffee/BuyMeACoffee";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * Props for the `AppFooter` component.

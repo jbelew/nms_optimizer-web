@@ -4,8 +4,9 @@ import { act, renderHook } from "@testing-library/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useDialog } from "../../utils/system/dialogUtils";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useDialog } from "@/utils/system/dialogUtils";
+
 import { useDebouncedValidation, useUrlNormalization, useUrlValidation } from "./useValidation";
 
 type PlatformStoreSelector = (state: PlatformStoreState) => string;

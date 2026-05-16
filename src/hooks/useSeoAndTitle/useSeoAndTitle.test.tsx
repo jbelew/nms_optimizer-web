@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { sendEvent } from "../../utils/analytics/tracking";
+import { sendEvent } from "@/utils/analytics/tracking";
+
 import { useSeoAndTitle } from "./useSeoAndTitle";
 
 // Mock dependencies

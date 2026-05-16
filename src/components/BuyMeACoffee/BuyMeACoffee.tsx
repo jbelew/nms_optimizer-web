@@ -13,8 +13,8 @@
 import { useRef } from "react";
 import { Button } from "@radix-ui/themes";
 
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 /**
  * Stylized donation button linking to "Buy Me A Coffee".

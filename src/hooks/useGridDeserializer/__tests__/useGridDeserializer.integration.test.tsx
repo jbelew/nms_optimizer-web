@@ -3,8 +3,8 @@ import path from "node:path";
 import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import * as useTechTree from "../../useTechTree/useTechTree";
-import { deserialize, serialize } from "../useGridDeserializer";
+import { deserialize, serialize } from "@/hooks/useGridDeserializer/useGridDeserializer";
+import * as useTechTree from "@/hooks/useTechTree/useTechTree";
 
 const fixturePath = path.resolve(__dirname, "../../../../scripts/Corvette - Akamai Terror VI.nms");
 const nmsFixture = JSON.parse(fs.readFileSync(fixturePath, "utf-8"));

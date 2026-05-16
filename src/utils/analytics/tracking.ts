@@ -28,11 +28,11 @@
  *
  * @category Utilities
  */
-import type { AnalyticsEventParams, GA4Event } from "../../types/analytics";
+import type { AnalyticsEventParams, GA4Event } from "@/types/analytics";
 import type ReactGA from "react-ga4";
 
-import { API_URL, TRACKING_ID } from "../../constants";
-import { isBot, safeGetItem, safeSetItem } from "../browser/environment";
+import { API_URL, TRACKING_ID } from "@/constants";
+import { isBot, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
 /**
  * Resolved `react-ga4` module instance, accounting for CJS/ESM interop in Rolldown.

@@ -10,10 +10,10 @@ import type {
 	ModuleDialogFooterProps,
 	ModuleSelectionDialogProps,
 	SelectionModule,
-} from "../../types/props";
+} from "@/types/props";
 import { useCallback, useMemo } from "react";
 
-import { usePlatformStore } from "../../store/app/platformStore";
+import { usePlatformStore } from "@/store/app/platformStore";
 
 /**
  * Coordinator hook for the `ModuleSelectionDialog` component.

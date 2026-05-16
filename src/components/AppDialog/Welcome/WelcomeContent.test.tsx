@@ -1,11 +1,12 @@
-import type { DialogContextType } from "../../../utils/system/dialogUtils";
+import type { DialogContextType } from "@/utils/system/dialogUtils";
 import type { ReactNode } from "react";
 import { Theme } from "@radix-ui/themes";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
-import { DialogContext } from "../../../utils/system/dialogUtils";
+import { DialogContext } from "@/utils/system/dialogUtils";
+
 import WelcomeContent from "./WelcomeContent";
 
 vi.mock("../../../hooks/useAnalytics/useAnalytics", () => ({

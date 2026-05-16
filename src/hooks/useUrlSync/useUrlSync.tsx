@@ -2,11 +2,11 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useRouteContext } from "../../context/RouteContext";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { createGrid, useGridStore } from "../../store/grid/gridStore";
-import { useGridDeserializer } from "../useGridDeserializer/useGridDeserializer";
-import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
+import { useRouteContext } from "@/context/RouteContext";
+import { useGridDeserializer } from "@/hooks/useGridDeserializer/useGridDeserializer";
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { createGrid, useGridStore } from "@/store/grid/gridStore";
 
 /**
  * Custom hook for synchronizing application state with the browser's URL.

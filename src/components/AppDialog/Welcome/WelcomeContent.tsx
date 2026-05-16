@@ -2,9 +2,9 @@ import React from "react";
 import { Flex, Text } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useAnalytics } from "../../../hooks/useAnalytics/useAnalytics";
-import { useDialog } from "../../../utils/system/dialogUtils";
-import DynamicRadixIcon from "../Common/DynamicRadixIcon";
+import DynamicRadixIcon from "@/components/AppDialog/Common/DynamicRadixIcon";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useDialog } from "@/utils/system/dialogUtils";
 
 import "./WelcomeContent.scss";
 

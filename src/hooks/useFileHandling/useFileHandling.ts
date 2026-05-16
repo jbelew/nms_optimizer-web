@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useBuildFileManager } from "../useBuildFileManager/useBuildFileManager";
+import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 
 /**
  * Custom hook to handle the PWA File Handling API.

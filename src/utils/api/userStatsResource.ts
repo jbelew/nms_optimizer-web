@@ -1,6 +1,7 @@
-import type { UserStat } from "../../types/userStats";
+import type { UserStat } from "@/types/userStats";
 
-import { API_URL } from "../../constants";
+import { API_URL } from "@/constants";
+
 import { apiCall } from "./network";
 
 let userStatsPromise: null | Promise<UserStat[]> = null;
@@ -19,7 +20,7 @@ let userStatsPromise: null | Promise<UserStat[]> = null;
  * @returns {Promise<UserStat[]>} A promise resolving to an array of statistics objects.
  *
  * @see {@link apiCall} for the underlying network implementation.
- * @see {@link import('../../hooks/useUserStats/useUserStats').useUserStats} for the React hook consumer.
+ * @see {@link import('@/hooks/useUserStats/useUserStats').useUserStats} for the React hook consumer.
  *
  * @category Data Fetching
  *

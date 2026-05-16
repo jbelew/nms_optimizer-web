@@ -1,13 +1,13 @@
-import type { Grid } from "../../store/grid/gridStore";
-import type { RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
+import type { RecommendedBuild, TechTree } from "@/hooks/useTechTree/useTechTree";
+import type { Grid } from "@/store/grid/gridStore";
 import { useCallback } from "react";
 
-import { usePlatformStore } from "../../store/app/platformStore";
-import { createGrid, useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
-import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
-import { fetchTechTreeAsync } from "../useTechTree/useTechTree";
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
+import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
 /**
  * Compresses a string using Run-Length Encoding (RLE).

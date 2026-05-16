@@ -10,16 +10,16 @@
  * @category Hooks
  */
 
-import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "../../types/tech";
+import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
 import { use, useEffect } from "react";
 
-import { API_URL } from "../../constants";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { useTechTreeLoadingStore } from "../../store/tech/techTreeLoadingStore";
-import { apiCall } from "../../utils/api/network";
-import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
-import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
+import { API_URL } from "@/constants";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+import { apiCall } from "@/utils/api/network";
+import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
+import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
 export type { Module, RecommendedBuild, TechTree, TechTreeItem };
 

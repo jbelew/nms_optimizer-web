@@ -13,18 +13,20 @@ import {
 import { Button, IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useLoadBuild } from "../../hooks/useLoadBuild/useLoadBuild";
-import { useSaveBuild } from "../../hooks/useSaveBuild/useSaveBuild";
-import { useScreenshot } from "../../hooks/useScreenshot/useScreenshot";
-import { useScrollGridIntoView } from "../../hooks/useScrollGridIntoView/useScrollGridIntoView";
-import { useUrlSync } from "../../hooks/useUrlSync/useUrlSync";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useDialog } from "../../utils/system/dialogUtils";
-import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useLoadBuild } from "@/hooks/useLoadBuild/useLoadBuild";
+import { useSaveBuild } from "@/hooks/useSaveBuild/useSaveBuild";
+import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
+import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
+import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useDialog } from "@/utils/system/dialogUtils";
 
-const BuildNameDialog = React.lazy(() => import("../AppDialog/BuildName/BuildNameDialog"));
+const BuildNameDialog = React.lazy(
+	() => import("@/components/AppDialog/BuildName/BuildNameDialog")
+);
 
 /**
  * Props for the `GridTableButtons` component.

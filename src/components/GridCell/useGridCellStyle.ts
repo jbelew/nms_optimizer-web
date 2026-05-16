@@ -1,6 +1,6 @@
-import type { Cell } from "../../store/grid/gridStore";
+import type { Cell } from "@/store/grid/gridStore";
 
-import { useTechStore } from "../../store/tech/techStore";
+import { useTechStore } from "@/store/tech/techStore";
 
 /**
  * Custom hook for computing the visual presentation of a technology grid cell.
@@ -20,7 +20,7 @@ import { useTechStore } from "../../store/tech/techStore";
  * @returns {string} returns.emptyIconFillColor - Fill color for the `EmptyCellIcon`.
  * @returns {boolean} returns.showEmptyIcon - Whether to render the empty cell icon.
  *
- * @see {@link import('../../store/tech/techStore').TechStore}
+ * @see {@link import('@/store/tech/techStore').TechStore}
  * @see {@link Cell}
  *
  * @hook

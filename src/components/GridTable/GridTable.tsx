@@ -1,15 +1,15 @@
 // src/components/GridTable/GridTable.tsx
 import "./GridTable.scss";
 
-import type { GridStore } from "../../store/grid/gridStore";
+import type { GridStore } from "@/store/grid/gridStore";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { useGridStore } from "../../store/grid/gridStore";
-import GridCell from "../GridCell/GridCell";
-import GridControlButtons from "../GridControlButtons/GridControlButtons";
-import GridShake from "../GridShake/GridShake";
-import GridTableButtons from "../GridTableButtons/GridTableButtons";
+import GridCell from "@/components/GridCell/GridCell";
+import GridControlButtons from "@/components/GridControlButtons/GridControlButtons";
+import GridShake from "@/components/GridShake/GridShake";
+import GridTableButtons from "@/components/GridTableButtons/GridTableButtons";
+import { useGridStore } from "@/store/grid/gridStore";
 
 /**
  * Props for the {@link GridTable} component.

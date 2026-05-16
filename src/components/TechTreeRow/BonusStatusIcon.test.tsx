@@ -3,9 +3,9 @@ import { render } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import i18n from "@/test/i18n";
 import { isTouchDevice } from "@/utils/browser/environment";
 
-import i18n from "../../test/i18n";
 import { BonusStatusIcon } from "./TechTreeRow";
 
 vi.mock("@/utils/browser/environment", async () => {

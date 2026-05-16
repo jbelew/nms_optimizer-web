@@ -21,17 +21,17 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // Import your SVG flag components
-import deFlagPath from "../../assets/svg/flags/de.svg";
-import esFlagPath from "../../assets/svg/flags/es.svg";
-import frFlagPath from "../../assets/svg/flags/fr.svg";
-import itFlagPath from "../../assets/svg/flags/it.svg";
-import ptFlagPath from "../../assets/svg/flags/pt.svg";
-import usFlagPath from "../../assets/svg/flags/us.svg";
-import xxFlagPath from "../../assets/svg/flags/xx.svg";
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { languages, nativeLanguageNames } from "../../i18n/i18n";
-import { useErrorStore } from "../../store/app/errorStore";
+import deFlagPath from "@/assets/svg/flags/de.svg";
+import esFlagPath from "@/assets/svg/flags/es.svg";
+import frFlagPath from "@/assets/svg/flags/fr.svg";
+import itFlagPath from "@/assets/svg/flags/it.svg";
+import ptFlagPath from "@/assets/svg/flags/pt.svg";
+import usFlagPath from "@/assets/svg/flags/us.svg";
+import xxFlagPath from "@/assets/svg/flags/xx.svg";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { languages, nativeLanguageNames } from "@/i18n/i18n";
+import { useErrorStore } from "@/store/app/errorStore";
 
 /**
  * Mapping of language codes to their respective SVG flag asset paths.

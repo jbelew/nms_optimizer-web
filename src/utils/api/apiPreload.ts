@@ -11,9 +11,9 @@
  * @category Utilities
  */
 
-import { fetchShipTypes } from "../../hooks/useShipTypes/useShipTypes";
-import { fetchTechTreeAsync } from "../../hooks/useTechTree/useTechTree";
-import { resolveInitialPlatform } from "../browser/platformResolver";
+import { fetchShipTypes } from "@/hooks/useShipTypes/useShipTypes";
+import { fetchTechTreeAsync } from "@/hooks/useTechTree/useTechTree";
+import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 
 /**
  * Initiates critical API calls early in the bootstrap process.

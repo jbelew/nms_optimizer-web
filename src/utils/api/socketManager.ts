@@ -14,8 +14,8 @@
 import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 import { io } from "socket.io-client";
 
-import { WS_URL } from "../../constants";
-import { Logger } from "../system/monitoring";
+import { WS_URL } from "@/constants";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * The canonical set of transient transport-level error messages from engine.io-client.

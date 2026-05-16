@@ -20,7 +20,7 @@
 		"lint": "bunx oxlint && bunx eslint .",
 		"lint:css": "bunx stylelint '**/*.scss'",
 		"lint:css:fix": "bunx stylelint '**/*.scss' --fix",
-		"lint:circular": "bunx madge --circular --extensions ts,tsx src/",
+		"lint:circular": "bunx madge --circular --extensions ts,tsx --ts-config tsconfig.json src/",
 		"lint:knip": "bunx knip",
 		"size": "bunx size-limit",
 		"sitemap": "bun scripts/generate-sitemap.mjs",

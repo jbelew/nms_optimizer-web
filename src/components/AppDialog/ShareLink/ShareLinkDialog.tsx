@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { ShareLinkContent } from "./ShareLinkContent";
 
-const AppDialog = lazy(() => import("../Base/AppDialog"));
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `ShareLinkDialog` component.

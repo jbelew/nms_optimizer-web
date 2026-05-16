@@ -1,62 +1,55 @@
-import type { BuildFile } from "../../utils/validation/dataValidation";
-
-import { usePlatformStore } from "../../store/app/platformStore";
-import { useGridStore } from "../../store/grid/gridStore";
-import { useModuleSelectionStore } from "../../store/tech/moduleSelectionStore";
-import { useTechBonusStore } from "../../store/tech/techBonusStore";
-import { useTechStore } from "../../store/tech/techStore";
-import { computeSHA256 } from "../../utils/system/hashUtils";
-import { isValidBuildFile, sanitizeFilename } from "../../utils/validation/dataValidation";
-import { useFetchShipTypesSuspense } from "../useShipTypes/useShipTypes";
-
 /**
- * Custom hook for managing the saving and loading of `.nms` build files.
+ * Custom hook for managing build file operations (save/load).
  *
  * @remarks
- * This hook orchestrates state extraction from multiple stores, computes
- * checksums for integrity, and handles file system interactions (downloading/uploading).
- * It aggregates:
- * - `GridStore` (layout and results)
- * - `TechStore` (selected modules and bonuses)
- * - `TechBonusStore` (calculated efficiency status)
- * - `ModuleSelectionStore` (persistent user choices)
+ * This hook encapsulates the logic for serializing the application state
+ * into a `.nms` build file and restoring state from a loaded file. It performs
+ * validation on file type, size, JSON structure, and data integrity (checksum).
  *
- * @returns {object} Functions to save and load build states.
+ * @returns {object} An object containing `saveBuildToFile` and `loadBuildFromFile` functions.
  *
  * @see {@link ./useBuildFileManager.test.ts Unit Tests}
  * @see {@link BuildFile} for the file structure definition.
- * @see {@link ../../utils/validation/dataValidation.ts Build File Validation}
+ * @see {@link "@/utils/validation/dataValidation.ts" Build File Validation}
  *
  * @hook
  *
  * @category Hooks
+ */
+
+import type { BuildFile } from "@/utils/validation/dataValidation";
+
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
+import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
+import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useTechStore } from "@/store/tech/techStore";
+import { computeSHA256 } from "@/utils/system/hashUtils";
+import { isValidBuildFile, sanitizeFilename } from "@/utils/validation/dataValidation";
+
+/**
+ * Custom hook for managing build file operations (save/load).
  *
- * @example
- * ```tsx
- * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
- * // returns { saveBuildToFile, loadBuildFromFile }
- * ```
+ * @returns {object} An object containing `saveBuildToFile` and `loadBuildFromFile` functions.
  */
 export const useBuildFileManager = () => {
+	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedPlatform = usePlatformStore((state) => state.setSelectedPlatform);
-	const shipTypes = useFetchShipTypesSuspense();
 
 	/**
-	 * Captures the current application state and downloads it as a `.nms` file.
+	 * Serializes the current application state and triggers a file download.
 	 *
-	 * @remarks
-	 * Includes state from `GridStore`, `TechStore`, `TechBonusStore`, and `ModuleSelectionStore`.
+	 * @param {string} buildName - The name to assign to the saved build.
 	 *
-	 * @param {string} buildName - The display name for the build. **Must not be empty.**
+	 * @returns {Promise<void>} Resolves when the file download is triggered.
 	 *
-	 * @returns {Promise<void>} Resolves when the file download is initiated.
-	 *
-	 * @throws {Error} If state extraction, checksum computation, or file creation fails.
+	 * @throws {Error} If state serialization or file creation fails.
 	 *
 	 * @example
 	 * ```typescript
-	 * await saveBuildToFile("My Fighter");
+	 * await saveBuildToFile("My Fighter Build");
 	 * // returns Promise<void>, side-effect: triggers browser download
 	 * ```
 	 */
@@ -68,28 +61,35 @@ export const useBuildFileManager = () => {
 			const bonusState = useTechBonusStore.getState();
 			const moduleState = useModuleSelectionStore.getState();
 
+			/**
+			 * CRITICAL: The order of keys in this object MUST remain stable.
+			 * Checksums for .nms files are calculated by stringifying this object.
+			 * Changing the key order will break integrity checks for existing files.
+			 */
+			/* eslint-disable perfectionist/sort-objects */
 			const stateData = {
-				bonusState: {
-					bonusStatus: bonusState.bonusStatus,
-				},
 				gridState: {
 					grid: gridState.grid,
-					gridFixed: gridState.gridFixed,
-					initialGridDefinition: gridState.initialGridDefinition,
-					isSharedGrid: gridState.isSharedGrid,
 					result: gridState.result,
+					isSharedGrid: gridState.isSharedGrid,
+					gridFixed: gridState.gridFixed,
 					superchargedFixed: gridState.superchargedFixed,
-				},
-				moduleState: {
-					moduleSelections: moduleState.moduleSelections,
+					initialGridDefinition: gridState.initialGridDefinition,
 				},
 				techState: {
 					checkedModules: techState.checkedModules,
 					max_bonus: techState.max_bonus,
-					solve_method: techState.solve_method,
 					solved_bonus: techState.solved_bonus,
+					solve_method: techState.solve_method,
+				},
+				bonusState: {
+					bonusStatus: bonusState.bonusStatus,
+				},
+				moduleState: {
+					moduleSelections: moduleState.moduleSelections,
 				},
 			};
+			/* eslint-enable perfectionist/sort-objects */
 
 			// Compute checksum of the state data
 			const stateDataJson = JSON.stringify(stateData);
@@ -121,52 +121,45 @@ export const useBuildFileManager = () => {
 	};
 
 	/**
-	 * Parses a `.nms` file and restores the application state.
+	 * Parses a build file and restores the application state.
 	 *
-	 * @remarks
-	 * Performs validation on file type, size, JSON structure, and data integrity (checksum).
-	 * **Will switch the active ship type if the file contains a different one.**
+	 * @param {File} file - The `.nms` file to load.
 	 *
-	 * @param {File} file - The file object to load. **Must have a `.nms` extension.**
+	 * @returns {Promise<void>} Resolves when state is restored.
 	 *
-	 * @returns {Promise<void>} Resolves when the state has been successfully restored to all stores.
-	 *
-	 * @throws {Error} If validation (type, size, JSON, checksum, shipType) or restoration fails.
+	 * @throws {Error} If validation fails or the file is corrupt.
 	 *
 	 * @example
 	 * ```typescript
-	 * await loadBuildFromFile(selectedFile);
-	 * // returns Promise<void>, side-effect: updates multiple global stores
+	 * const file = event.target.files[0];
+	 * await loadBuildFromFile(file);
 	 * ```
 	 */
 	const loadBuildFromFile = async (file: File) => {
 		try {
-			// Validate file extension
+			// Performs validation on file type, size, JSON structure, and data integrity (checksum).
 			if (!file.name.endsWith(".nms")) {
-				throw new Error("Invalid file type. Please select a .nms file.");
+				throw new Error("Invalid file type. Please select a .nms build file.");
 			}
 
-			// Validate file size (max 10MB - builds should be much smaller)
-			const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-			if (file.size > MAX_FILE_SIZE) {
+			if (file.size > 10 * 1024 * 1024) {
 				throw new Error("File is too large. Build files should be under 10MB.");
 			}
 
-			// Validate file is not empty
-			if (file.size === 0) {
+			const text = await file.text();
+
+			if (!text) {
 				throw new Error("File is empty. Please select a valid build file.");
 			}
 
-			const fileContent = await file.text();
-
-			// Parse JSON with error handling
-			let buildData;
+			let buildData: BuildFile;
 
 			try {
-				buildData = JSON.parse(fileContent);
-			} catch {
-				throw new Error("File contains invalid JSON. The build file may be corrupted.");
+				buildData = JSON.parse(text);
+			} catch (e) {
+				throw new Error("File contains invalid JSON. The build file may be corrupted.", {
+					cause: e,
+				});
 			}
 
 			// Validate build file structure
@@ -176,13 +169,19 @@ export const useBuildFileManager = () => {
 				);
 			}
 
-			// Verify checksum for integrity
+			/**
+			 * CRITICAL: The order of keys in this object MUST match the order used during save.
+			 * Checksums are sensitive to property order during stringification.
+			 */
+			/* eslint-disable perfectionist/sort-objects */
 			const stateDataToVerify = {
-				bonusState: buildData.bonusState,
 				gridState: buildData.gridState,
-				moduleState: buildData.moduleState,
 				techState: buildData.techState,
+				bonusState: buildData.bonusState,
+				moduleState: buildData.moduleState,
 			};
+			/* eslint-enable perfectionist/sort-objects */
+
 			const stateDataJson = JSON.stringify(stateDataToVerify);
 			const computedChecksum = await computeSHA256(stateDataJson);
 
@@ -217,14 +216,7 @@ export const useBuildFileManager = () => {
 			useModuleSelectionStore.setState(buildData.moduleState);
 		} catch (error) {
 			console.error("Failed to load build file:", error);
-
-			if (error instanceof Error) {
-				throw error;
-			}
-
-			throw new Error("An unexpected error occurred while loading the build file.", {
-				cause: error,
-			});
+			throw error;
 		}
 	};
 

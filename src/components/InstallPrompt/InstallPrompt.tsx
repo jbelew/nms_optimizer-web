@@ -14,8 +14,8 @@
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useToast } from "../../hooks/useToast/useToast";
-import { isTouchDevice, safeGetItem, safeSetItem } from "../../utils/browser/environment";
+import { useToast } from "@/hooks/useToast/useToast";
+import { isTouchDevice, safeGetItem, safeSetItem } from "@/utils/browser/environment";
 
 /** LocalStorage key for tracking if the user has already dismissed the prompt. */
 const INSTALL_PROMPT_DISMISSED_KEY = "installPromptDismissed";

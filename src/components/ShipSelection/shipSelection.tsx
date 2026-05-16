@@ -14,20 +14,20 @@
 
 import "./shipSelection.scss";
 
-import type { ShipTypeDetail } from "../../hooks/useShipTypes/useShipTypes";
+import type { ShipTypeDetail } from "@/hooks/useShipTypes/useShipTypes";
 import React, { Suspense, useTransition } from "react";
 import { GearIcon } from "@radix-ui/react-icons";
 import { Button, DropdownMenu, IconButton, Separator, Spinner } from "@radix-ui/themes";
 import { Trans, useTranslation } from "react-i18next";
 
-import { useRouteContext } from "../../context/RouteContext";
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useFetchShipTypesSuspense } from "../../hooks/useShipTypes/useShipTypes";
-import { useToast } from "../../hooks/useToast/useToast";
-import { usePlatformStore } from "../../store/app/platformStore";
-import { createGrid, useGridStore } from "../../store/grid/gridStore";
-import { Logger } from "../../utils/system/monitoring";
+import { useRouteContext } from "@/context/RouteContext";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { useToast } from "@/hooks/useToast/useToast";
+import { usePlatformStore } from "@/store/app/platformStore";
+import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { Logger } from "@/utils/system/monitoring";
 
 // --- Constants for Grid Configuration ---
 const DEFAULT_GRID_HEIGHT = 10;

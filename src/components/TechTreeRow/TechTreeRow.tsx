@@ -1,7 +1,7 @@
 import "./TechTreeRow.scss";
 
-import type { BonusStatusData } from "../../store/tech/techBonusStore";
-import type { TechTreeRowProps } from "../../types/props";
+import type { BonusStatusData } from "@/store/tech/techBonusStore";
+import type { TechTreeRowProps } from "@/types/props";
 import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
 	Crosshair2Icon,
@@ -15,14 +15,14 @@ import {
 import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+import { ModuleSelectionDialog } from "@/components/ModuleSelectionDialog/ModuleSelectionDialog";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";
+import { useTechBonusStore } from "@/store/tech/techBonusStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
-import { useAnalytics } from "../../hooks/useAnalytics/useAnalytics";
-import { useBreakpoint } from "../../hooks/useBreakpoint/useBreakpoint";
-import { useTechBonusStore } from "../../store/tech/techBonusStore";
-import { ConditionalTooltip } from "../ConditionalTooltip/ConditionalTooltip";
-import { ModuleSelectionDialog } from "../ModuleSelectionDialog/ModuleSelectionDialog";
 import { useTechTreeRow } from "./useTechTreeRow";
 
 /**

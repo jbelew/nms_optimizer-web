@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { PLATFORM_STORAGE_KEY } from "../../utils/browser/platformResolver";
+import { PLATFORM_STORAGE_KEY } from "@/utils/browser/platformResolver";
 
 /**
  * Regression test for GridStore persistence race condition.
@@ -26,7 +26,7 @@ describe("GridStore Persistence Regression (Reproduction)", () => {
 		localStorage.setItem(PLATFORM_STORAGE_KEY, "freighter");
 
 		// Access store via dynamic import to ensure fresh initialization
-		const { usePlatformStore } = await import("../app/platformStore");
+		const { usePlatformStore } = await import("@/store/app/platformStore");
 		const platform = usePlatformStore.getState().selectedPlatform;
 
 		expect(platform).toBe("freighter");
@@ -45,7 +45,7 @@ describe("GridStore Persistence Regression (Reproduction)", () => {
 		});
 
 		// Access store via dynamic import
-		const { usePlatformStore } = await import("../app/platformStore");
+		const { usePlatformStore } = await import("@/store/app/platformStore");
 		const platform = usePlatformStore.getState().selectedPlatform;
 
 		expect(platform).toBe("solar");

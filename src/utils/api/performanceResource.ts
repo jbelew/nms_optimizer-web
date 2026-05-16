@@ -1,6 +1,7 @@
-import type { PerformanceMetric } from "../../types/performance";
+import type { PerformanceMetric } from "@/types/performance";
 
-import { API_URL } from "../../constants";
+import { API_URL } from "@/constants";
+
 import { apiCall } from "./network";
 
 /**

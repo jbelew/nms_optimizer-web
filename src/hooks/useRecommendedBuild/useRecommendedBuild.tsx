@@ -1,17 +1,17 @@
 // src/hooks/useRecommendedBuild.tsx
-import type { RecommendedBuild, TechTree } from "../useTechTree/useTechTree";
+import type { RecommendedBuild, TechTree } from "@/hooks/useTechTree/useTechTree";
 import { useMemo } from "react";
 
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
+import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import {
 	createEmptyCell,
 	createGrid,
 	resetCellContent,
 	useGridStore,
-} from "../../store/grid/gridStore";
-import { getTechTreeMaps } from "../../utils/tech/techTreeUtils";
-import { isValidRecommendedBuild } from "../../utils/validation/dataValidation";
-import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
-import { useScrollGridIntoView } from "../useScrollGridIntoView/useScrollGridIntoView";
+} from "@/store/grid/gridStore";
+import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
+import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
 /**
  * Custom hook for applying pre-defined "Recommended Builds" to the technology grid.

@@ -1,8 +1,9 @@
-import type { TechTreeItem } from "../../hooks/useTechTree/useTechTree";
 import type { BonusStatusData } from "./techBonusStore";
+import type { TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createGrid, useGridStore } from "../grid/gridStore";
+import { createGrid, useGridStore } from "@/store/grid/gridStore";
+
 import { useModuleSelectionStore } from "./moduleSelectionStore";
 import { useTechBonusStore } from "./techBonusStore";
 import { useTechStore } from "./techStore";

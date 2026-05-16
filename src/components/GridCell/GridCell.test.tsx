@@ -1,14 +1,14 @@
 /// <reference types="@testing-library/jest-dom" />
 
-import type { TechState } from "../../store/tech/techStore";
+import type { TechState } from "@/store/tech/techStore";
 import type { Mock } from "vitest";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useCell } from "@/hooks/useCell/useCell";
+import { useTechStore } from "@/store/tech/techStore";
 
-import { useTechStore } from "../../store/tech/techStore";
 // Import the component after mocks are defined
 import GridCell from "./GridCell";
 

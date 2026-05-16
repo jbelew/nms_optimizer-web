@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useGridStore } from "../../store/grid/gridStore";
-import { useAnalytics } from "../useAnalytics/useAnalytics";
-import { useToast } from "../useToast/useToast";
+import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useToast } from "@/hooks/useToast/useToast";
+import { useGridStore } from "@/store/grid/gridStore";
 
 /**
  * Return type for the `useScreenshot` hook.

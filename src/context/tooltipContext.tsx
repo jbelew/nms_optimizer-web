@@ -1,7 +1,7 @@
-import type { TooltipActions, TooltipState } from "../utils/system/tooltipUtils";
+import type { TooltipActions, TooltipState } from "@/utils/system/tooltipUtils";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 
-import { TooltipActionsContext, TooltipStateContext } from "../utils/system/tooltipUtils";
+import { TooltipActionsContext, TooltipStateContext } from "@/utils/system/tooltipUtils";
 
 /** Time in milliseconds to maintain a "warm" state for instant tooltip re-opening. */
 const WARM_THRESHOLD = 500;
@@ -18,8 +18,8 @@ const WARM_THRESHOLD = 500;
  *
  * @returns {JSX.Element} The state and actions context providers.
  *
- * @see {@link import('../utils/system/tooltipUtils').useTooltipState}
- * @see {@link import('../utils/system/tooltipUtils').useTooltipActions}
+ * @see {@link import('@/utils/system/tooltipUtils').useTooltipState}
+ * @see {@link import('@/utils/system/tooltipUtils').useTooltipActions}
  * @see {@link TooltipState}
  * @see {@link TooltipActions}
  *

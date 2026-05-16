@@ -1,4 +1,4 @@
-import { useBreakpoint } from "../useBreakpoint/useBreakpoint";
+import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 const GRID_SCROLL_OFFSET_SMALL = 40; // < 640px
 const GRID_SCROLL_OFFSET_MEDIUM = 0; // 640px - 768px
@@ -22,7 +22,7 @@ let sharedForceShow: (() => void) | null = null;
  *
  * @returns {void} Side-effects only.
  *
- * @see {@link import('../useScrollHide/useScrollHide').useScrollHide} for the source of the `forceShow` callback.
+ * @see {@link import('@/hooks/useScrollHide/useScrollHide').useScrollHide} for the source of the `forceShow` callback.
  *
  * @example Callback registration
  * ```ts
