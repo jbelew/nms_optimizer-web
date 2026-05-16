@@ -33,13 +33,12 @@ vi.mock("react-router-dom", async () => {
 
 describe("monitoring utilities", () => {
 	describe("Logger", () => {
-		let consoleLogSpy: MockInstance;
 		let consoleWarnSpy: MockInstance;
 		let consoleErrorSpy: MockInstance;
 
 		beforeEach(() => {
 			Logger.clearLogs();
-			consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+			vi.spyOn(console, "log").mockImplementation(() => {});
 			consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 			consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 			vi.clearAllMocks();
@@ -51,10 +50,9 @@ describe("monitoring utilities", () => {
 			__setSentryInstance(null);
 		});
 
-		it("should log info messages to console and internal storage", () => {
+		it("should log info messages to internal storage", () => {
 			Logger.info("Test info message", { data: 123 });
 
-			expect(consoleLogSpy).toHaveBeenCalledWith("[INFO] Test info message", { data: 123 });
 			const logs = Logger.getLogs();
 			expect(logs).toHaveLength(1);
 			expect(logs[0]).toMatchObject({
