@@ -201,7 +201,6 @@ export async function fetchWithTimeout(
 ): Promise<Response> {
 	const controller = new AbortController();
 	let timeoutTriggered = false;
-	console.log(`[fetchWithTimeout] Starting fetch with ${timeoutMs}ms timeout: ${url}`);
 	const timeoutId = setTimeout(() => {
 		timeoutTriggered = true;
 		console.warn(`[fetchWithTimeout] Timeout (${timeoutMs}ms) TRIGGERED for: ${url}`);

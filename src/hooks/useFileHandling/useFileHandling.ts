@@ -47,9 +47,6 @@ export const useFileHandling = () => {
 								// should have already filtered this.
 								if (file.name.endsWith(".nms")) {
 									await loadBuildFromFile(file);
-									console.info(
-										`Successfully loaded build from file: ${file.name}`
-									);
 								}
 							} catch (error) {
 								// Fail silently but log the error for debugging

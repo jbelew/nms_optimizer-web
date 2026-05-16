@@ -396,7 +396,6 @@ const debouncedStorage = {
 						}
 
 						keysToRemove.forEach((key) => {
-							console.log(`GridStore: Removing old app-state key: ${key}`);
 							safeRemoveItem(key);
 						});
 					} catch (e) {
@@ -414,8 +413,6 @@ const debouncedStorage = {
 			const storedData = safeGetItem(name);
 
 			if (!storedData) {
-				console.log(`GridStore: No stored data found for key: ${name}`);
-
 				return null;
 			}
 

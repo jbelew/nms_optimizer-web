@@ -59,14 +59,8 @@ export const useUpdateCheck = (
 				const latestBuildDate = data.buildDate;
 				const currentBuildDate = __BUILD_DATE__;
 
-				console.log(`Current build: ${currentBuildDate}, Latest build: ${latestBuildDate}`);
-
 				if (latestBuildDate !== currentBuildDate) {
 					onUpdateAvailable(event.detail);
-				} else {
-					console.log(
-						"Update prompt suppressed: Server version matches current version."
-					);
 				}
 			} catch (error) {
 				console.error("Error checking version:", error);

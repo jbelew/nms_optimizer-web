@@ -215,8 +215,6 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
 		const promise = apiCall<TechTree>(`${baseUrl}tech_tree/${shipType}`, {}, 10000)
 			.then(async (data) => {
-				console.log("Fetched tech tree:", data);
-
 				if (data.recommended_builds && Array.isArray(data.recommended_builds)) {
 					data.recommended_builds = data.recommended_builds.filter(
 						(build: RecommendedBuild) => {

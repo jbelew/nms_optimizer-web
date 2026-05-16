@@ -412,8 +412,6 @@ export const deserialize = async (
 			);
 		}
 
-		console.log("Deserialized Grid (using raw gridString):", newGrid);
-
 		return newGrid;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
@@ -482,12 +480,10 @@ export const useGridDeserializer = () => {
 	 */
 	const deserializeGrid = useCallback(
 		async (serializedGrid: string) => {
-			console.log("Attempting to deserialize:", serializedGrid);
 			const currentPlatform = usePlatformStore.getState().selectedPlatform;
 			const newGrid = await deserialize(serializedGrid, currentPlatform, setTechColors);
 
 			if (newGrid) {
-				console.log("Deserialization successful, setting grid and colors.");
 				setGrid(newGrid); // Update grid state
 				setIsSharedGrid(true);
 			} else {

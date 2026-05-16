@@ -72,12 +72,9 @@ export const useErrorStore = create<ErrorState>((set) => ({
 			],
 		}));
 
-		console.log(`Error added: ${message} (Type: ${type})`);
-
 		return id;
 	},
 	clearErrors: () => {
-		console.log("Clearing errors");
 		set({ errors: [] });
 	},
 	errors: [],

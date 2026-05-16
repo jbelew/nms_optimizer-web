@@ -145,7 +145,6 @@ export function fetchShipTypes(): Resource<ShipTypes> {
 		const baseUrl = API_URL ? (API_URL.endsWith("/") ? API_URL : `${API_URL}/`) : "/";
 		const promise = apiCall<ShipTypes>(`${baseUrl}platforms`, {}, 10000)
 			.then((data) => {
-				console.log("Fetched ship types:", data);
 				const shipTypesState = useShipTypesStore.getState();
 				shipTypesState.setShipTypes(data);
 

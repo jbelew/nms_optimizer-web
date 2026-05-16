@@ -191,7 +191,6 @@ export const Logger = {
 	 */
 	info(message: string, data?: Record<string, unknown>) {
 		this.log(LogLevel.INFO, message, data);
-		console.log(`[INFO] ${message}`, data);
 	},
 
 	/**
