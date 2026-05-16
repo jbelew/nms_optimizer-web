@@ -80,7 +80,7 @@ export function setupServiceWorkerRegistration() {
 								// bypassing the HTTP cache to get a fresh copy.
 								try {
 									const resp = await fetch("/sw.js", {
-										cache: "no-store",
+										cache: "no-cache",
 										headers: { "cache-control": "no-cache" },
 									});
 

@@ -49,7 +49,7 @@ export const useUpdateCheck = (
 			if (!(event instanceof CustomEvent)) return;
 
 			try {
-				const response = await fetch("/version.json", { cache: "no-store" });
+				const response = await fetch("/version.json", { cache: "no-cache" });
 
 				if (!response.ok) {
 					throw new Error("Failed to fetch version.json");
