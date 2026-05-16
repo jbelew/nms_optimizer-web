@@ -97,6 +97,3 @@ export const useModuleSelectionDialog = (props: ModuleSelectionDialogProps) => {
 		isIndeterminate,
 	};
 };
-
-/** Type representing the return value of the coordinator hook. */
-export type UseModuleSelectionDialogReturn = ReturnType<typeof useModuleSelectionDialog>;

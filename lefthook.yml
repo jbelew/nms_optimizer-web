@@ -56,6 +56,11 @@ pre-commit:
       glob: "*.{ts,tsx}"
       run: bun run lint:circular
 
+    knip:
+      tags: lint
+      glob: "*.{ts,tsx}"
+      run: bun run lint:knip
+
     test:
       tags: test
       glob: "*.{ts,tsx}"
