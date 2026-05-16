@@ -310,9 +310,151 @@
 				background-image: none !important;
 				background-color: #fff !important;
 			}
+		</style>
+
+		<style id="ssg-fallback-styles">
+			/* Static header styles (for SSG/No-JS) */
+			.app-header-static {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				padding-top: 24px;
+				background-image: linear-gradient(to bottom, black, transparent);
+				position: relative;
+				z-index: 1;
+			}
+
+			.app-header-static__logo-text {
+				font-family: Geosans, Helvetica, Arial, sans-serif;
+				font-size: 1.875rem;
+				font-weight: 400;
+				letter-spacing: 0.35em;
+				line-height: 2rem;
+				margin-right: -0.35em;
+				text-align: center;
+				-webkit-text-stroke: 2.5px;
+				text-transform: uppercase;
+				word-spacing: -0.25rem;
+				color: white;
+			}
+
+			@media (width >= 640px) {
+				.app-header-static__logo-text {
+					filter: drop-shadow(0 0 4px rgba(0, 162, 199, 0.5))
+						drop-shadow(0 0 8px rgba(128, 128, 128, 0.4));
+					font-size: 2.25rem;
+					line-height: 2.5rem;
+				}
+			}
+
+			.app-header-static__separator-container {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				width: 100%;
+				margin: 4px 0;
+			}
+
+			.app-header-static__separator {
+				height: 1px;
+				background-color: #363a3f;
+				flex: 1;
+			}
+
+			.app-header-static__title {
+				color: #edeef0;
+				font-family: Raleway, Helvetica, Arial, sans-serif;
+				font-size: 16px;
+				font-weight: 700;
+				line-height: 22px;
+				text-align: center;
+				margin-top: 4px;
+			}
+
+			.ssg-fallback {
+				color: #fff;
+				background-color: #000;
+				margin: 2rem auto;
+				padding: 2rem;
+				padding-top: 0;
+				max-width: 85ch;
+				border-radius: 16px;
+				font-family:
+					Raleway,
+					-apple-system,
+					BlinkMacSystemFont,
+					"Segoe UI",
+					sans-serif;
+			}
+
+			.ssg-fallback h1 {
+				color: #4ccce6;
+				margin: 1.5rem 0 1rem 0;
+				font-size: 1.5rem;
+				font-weight: bold;
+			}
+
+			.ssg-fallback h2 {
+				color: #4ccce6;
+				margin: 1.5rem 0 1rem 0;
+				font-size: 1.125rem;
+				font-weight: bold;
+			}
+
+			.ssg-fallback h3 {
+				color: #4ccce6;
+				margin: 1rem 0 0.75rem 0;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+
+			.ssg-fallback p {
+				margin-bottom: 0.5rem;
+				line-height: 1.6;
+			}
+
+			.ssg-fallback ul {
+				list-style: disc;
+				margin: 0.5rem 0 0.5rem 1.5rem;
+			}
+
+			.ssg-fallback ol {
+				list-style: decimal;
+				margin: 0.5rem 0 0.5rem 1.5rem;
+			}
+
+			.ssg-fallback li {
+				margin-bottom: 0.25rem;
+			}
+
+			.ssg-fallback a {
+				color: #4ccce6;
+				text-decoration: underline;
+			}
+
+			.ssg-fallback code {
+				background-color: rgba(0, 162, 199, 0.1);
+				padding: 0.125rem 0.25rem;
+				border-radius: 0.25rem;
+				color: #4ccce6;
+			}
+
+			.ssg-fallback blockquote {
+				border-left: 4px solid #4ccce6;
+				padding-left: 1rem;
+				margin: 0.5rem 0;
+				font-style: italic;
+				color: #cbd5e1;
+			}
+
+			.ssg-fallback nav {
+				margin-top: 2rem;
+				padding-top: 1rem;
+				border-top: 1px solid rgba(11, 165, 233, 0.3);
+			}
 
 			/* Hide SSG fallback for JS-enabled users to avoid layout duplication */
-			html.js-enabled main.ssg-fallback {
+			html.js-enabled .ssg-fallback {
 				display: none !important;
 			}
 		</style>

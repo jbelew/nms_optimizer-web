@@ -31,19 +31,16 @@ export async function extractSsgTemplate(sourceIndexHtml) {
 	const sourceSsgBlockMatch = sourceIndexHtml.match(
 		/<main\s+[^>]*?class="ssg-fallback"[^>]*?data-ssg-template[^>]*?>([\s\S]*?)<\/main>/
 	);
-	if (!sourceSsgBlockMatch) return { ssgHeader: "", ssgStyles: "" };
+	if (!sourceSsgBlockMatch) return { ssgHeader: "" };
 
 	const sourceSsgBlock = sourceSsgBlockMatch[1];
-
-	const ssgStyleMatch = sourceSsgBlock.match(/<style[^>]*?>([\s\S]*?)<\/style>/);
-	const ssgStyles = ssgStyleMatch ? ssgStyleMatch[1].trim() : "";
 
 	const ssgHeaderMatch = sourceSsgBlock.match(
 		/(<header[^>]*?class="app-header-static"[^>]*?>[\s\S]*?<\/header>)/
 	);
 	const ssgHeader = ssgHeaderMatch ? ssgHeaderMatch[1].trim() : "";
 
-	return { ssgHeader, ssgStyles };
+	return { ssgHeader };
 }
 
 /**
@@ -103,9 +100,8 @@ export async function generatePage(
 	baseUrl,
 	mdProcessor,
 	t,
-	ssgStyles = ""
-) {
-	const pathname = pageName === "" ? "/" : `/${pageName}/`;
+	fontStyles = ""
+) {	const pathname = pageName === "" ? "/" : `/${pageName}/`;
 	const metadata = seoMetadata[pathname];
 
 	const appName = t("appName");
@@ -173,11 +169,9 @@ export async function generatePage(
 			${localizedHeader}
 			${renderedHtml}
 			${navigationHtml}
-			<style>
-				${ssgStyles}
-			</style>
+			${fontStyles ? `<style>${fontStyles}</style>` : ""}
 		</main>`;
-	}
+		}
 
 	const rewriter = new HTMLRewriter()
 		.on("html", {
@@ -354,17 +348,15 @@ export async function generateSsg() {
 
 	try {
 		const baseIndexHtml = await fs.readFile(indexPath, "utf-8");
-		const sourceIndexHtml = await fs.readFile(path.resolve("index.html"), "utf-8");
 		const baseUrl = `https://${TARGET_HOST}`;
 
 		// Extract template blocks
-		const template = await extractSsgTemplate(sourceIndexHtml);
-		let ssgStyles = template.ssgStyles;
+		let fontStyles = "";
 
 		// --- FONT FIX: Extract from source fonts.css ---
 		try {
 			const fontsCss = await fs.readFile(FONTS_CSS_PATH, "utf-8");
-			ssgStyles = fontsCss + "\n" + ssgStyles;
+			fontStyles = fontsCss;
 			console.log("✓ Included fonts from src/assets/css/fonts.css");
 		} catch (_err) {
 			console.warn("Warning: fonts.css not found, skipping font extraction.");
@@ -395,9 +387,8 @@ export async function generateSsg() {
 				baseUrl,
 				mdProcessor,
 				t,
-				ssgStyles
-			);
-
+				fontStyles
+				);
 			const rootDir = path.join(DIST_DIR, rootPath);
 			const rootFile = path.join(rootDir, "index.html");
 			
@@ -420,9 +411,8 @@ export async function generateSsg() {
 					baseUrl,
 					mdProcessor,
 					t,
-					ssgStyles
-				);
-
+					fontStyles
+					);
 				const pageFile = path.join(pageDir, "index.html");
 				await fs.mkdir(pageDir, { recursive: true });
 				await fs.writeFile(pageFile, pageHtml);
@@ -517,7 +507,6 @@ export async function updateIndexHtmlTemplate(mdProcessor, t) {
 			finalRendered = `<h1>${appName}</h1>\n${finalRendered}`;
 		}
 
-		const template = await extractSsgTemplate(sourceIndexHtml);
 		const ssgHeader = template.ssgHeader;
 
 		const subTitleRaw = t("appHeader.subTitle", {
