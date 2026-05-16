@@ -1,4 +1,4 @@
-import type { FC} from "react";
+import type { FC } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
