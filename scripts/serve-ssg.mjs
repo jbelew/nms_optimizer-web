@@ -17,15 +17,19 @@ const server = http.createServer((req, res) => {
 	// Log request
 	console.log(`${req.method} ${req.url}`);
 
-	// Normalize path
-	let pathname = req.url.split("?")[0];
+	// Normalize and resolve path to prevent path traversal
+	const pathname = req.url.split("?")[0];
+	const resolvedPath = path.resolve(path.join(DIST_DIR, pathname));
 
-	if (pathname === "/") {
-		pathname = "/index.html";
+	// Ensure the resolved path is within DIST_DIR
+	if (!resolvedPath.startsWith(DIST_DIR)) {
+		res.writeHead(403, { "Content-Type": "text/plain" });
+		res.end("Forbidden");
+
+		return;
 	}
 
-	// Try to find the file
-	let filePath = path.join(DIST_DIR, pathname);
+	let filePath = resolvedPath;
 
 	// If it's a directory, try index.html
 	if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
