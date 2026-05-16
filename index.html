@@ -109,7 +109,6 @@
 				if (/bot|crawler|spider|headless|phantom|webdriver|googlebot|google-inspectiontool|lighthouse|chrome-lighthouse/i.test(navigator.userAgent) || navigator.webdriver === true) {
 					document.documentElement.classList.add("is-bot");
 				}
-				document.documentElement.classList.add("js-enabled");
 			})();
 		</script>
 
@@ -136,14 +135,14 @@
 		<meta property="og:site_name" content="NMS Optimizer" />
 		<meta property="og:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
 		<meta property="og:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-		<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+		<meta property="og:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.webp" />
 		<meta property="og:image:alt" content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
 		<meta property="og:image:width" content="1280" />
 		<meta property="og:image:height" content="880" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="NMS Optimizer: Tech Layout &amp; Adjacency Bonus Calculator" />
 		<meta name="twitter:description" content="Optimize No Man's Sky technology layouts using advanced algorithms. Maximize adjacency bonuses and supercharged slot boosts for Starships, Multitools, Corvettes, and more." />
-		<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.png" />
+		<meta name="twitter:image" content="https://nms-optimizer.app/assets/img/screenshots/screenshot.webp" />
 		<meta name="twitter:image:alt" content="A detailed screenshot of the NMS Optimizer application, showing an optimized technology grid with high adjacency bonuses." />
 
 		<!-- Resource Hints -->
@@ -180,7 +179,7 @@
 			html:is(.light, .light-theme) body::before { background-image: none !important; background-color: #fff !important; }
 
 			/* Fallback Management */
-			html.js-enabled .ssg-fallback { display: none !important; }
+			html.app-mounted .ssg-fallback { display: none !important; }
 			.vpss-logo img, .vpss-logo svg { height: 48px !important; width: 48px !important; display: block; margin-bottom: 4px; }
 			.is-bot #vpss { display: none !important; }
 		</style>

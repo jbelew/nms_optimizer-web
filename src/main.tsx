@@ -105,9 +105,11 @@ export const Root = () => {
  * ```
  */
 const bootstrap = async () => {
-	// Initialize Sentry as early as possible
-	// This uses dynamic imports internally and is only bundled if VITE_SENTRY_ENABLED is true
-	await initializeSentry();
+	// Initialize Sentry as early as possible if enabled.
+	// We don't await this to keep it out of the critical path and avoid blocking the mount.
+	if (import.meta.env.VITE_SENTRY_ENABLED === "true") {
+		void initializeSentry();
+	}
 
 	// Initialize analytics and PWA after render is complete
 	if (typeof window !== "undefined") {
@@ -199,6 +201,9 @@ const bootstrap = async () => {
 	}
 
 	createRoot(document.getElementById("root")!).render(<Root />);
+
+	// Mark application as mounted to hide SSG fallback
+	document.documentElement.classList.add("app-mounted");
 };
 
 void bootstrap();
