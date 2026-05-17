@@ -1,4 +1,5 @@
 import type { BuildFile } from "@/utils/validation/dataValidation";
+import { startTransition } from "react";
 
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { usePlatformStore } from "@/store/app/platformStore";
@@ -217,14 +218,16 @@ export const useBuildFileManager = () => {
 				setSelectedPlatform(buildData.shipType, validShipTypes, true, true);
 			}
 
-			// Restore state from all stores
-			useGridStore
-				.getState()
-				.restoreGridState({ ...buildData.gridState, buildName: buildData.name });
+			// Restore state from all stores inside a transition to prevent long UI blocks
+			startTransition(() => {
+				useGridStore
+					.getState()
+					.restoreGridState({ ...buildData.gridState, buildName: buildData.name });
 
-			useTechStore.setState(buildData.techState);
-			useTechBonusStore.setState(buildData.bonusState);
-			useModuleSelectionStore.setState(buildData.moduleState);
+				useTechStore.setState(buildData.techState);
+				useTechBonusStore.setState(buildData.bonusState);
+				useModuleSelectionStore.setState(buildData.moduleState);
+			});
 		} catch (error) {
 			console.error("Failed to load build file:", error);
 			throw error;

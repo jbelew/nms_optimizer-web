@@ -7,12 +7,12 @@ Focus: Simplify component tree and eliminate boolean prop proliferation.
 
 - [x] Task: Audit and Refactor Layout Components
 - [x] Task: Refactor Grid/Optimizer Components to Compound Pattern
-- [~] Task: Conductor - User Manual Verification 'Architecture Finalization' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Architecture Finalization' (Protocol in workflow.md)
 
 ## Phase 2: Performance Optimization (Vercel Best Practices)
 Focus: Resolve high INP and optimize LCP/rendering.
 
-- [ ] Task: INP Profiling and Long Task Mitigation
+- [~] Task: INP Profiling and Long Task Mitigation
 - [ ] Task: LCP Optimization (Asset Loading & Hydration)
 - [ ] Task: Render Cycle Optimization (useMemo/useCallback Audit)
 - [ ] Task: Conductor - User Manual Verification 'Performance Optimization' (Protocol in workflow.md)

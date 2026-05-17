@@ -1,6 +1,6 @@
 // src/hooks/useRecommendedBuild.tsx
 import type { RecommendedBuild, TechTree } from "@/hooks/useTechTree/useTechTree";
-import { useMemo } from "react";
+import { startTransition, useMemo } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
@@ -148,7 +148,9 @@ export const useRecommendedBuild = (techTree: TechTree) => {
 				}
 			}
 
-			useGridStore.getState().setGrid(newGrid);
+			startTransition(() => {
+				useGridStore.getState().setGrid(newGrid);
+			});
 		}
 	};
 
