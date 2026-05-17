@@ -50,7 +50,7 @@ const AppHeaderAccessibilityToggle: React.FC = () => {
 
 	return (
 		<ConditionalTooltip label={t("buttons.accessibility") ?? ""}>
-			<Flex align="center" gap="2">
+			<Flex align="center" gap="1">
 				<EyeOpenIcon aria-hidden="true" style={{ color: "var(--accent-a11)" }} />
 				<Switch
 					aria-label={t("buttons.accessibility") ?? ""}
