@@ -24,7 +24,8 @@ import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
-import { TechTreeRowProvider, useTechTreeRowContext } from "./TechTreeRowContext";
+import { TechTreeRowProvider } from "./TechTreeRowContext";
+import { useTechTreeRowContext } from "./useTechTreeRowContext";
 
 /**
  * Props for the `BonusStatusIcon` component.

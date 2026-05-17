@@ -18,7 +18,7 @@ import {
 	useMainAppGlobal,
 	useMainAppLayout,
 	useMainAppOptimization,
-} from "./MainAppContext";
+} from "./useMainAppContext";
 
 const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
 const OptimizationAlertDialog = lazy(

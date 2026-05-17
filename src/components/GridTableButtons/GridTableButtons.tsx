@@ -24,7 +24,7 @@ import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
-import { useGridContext } from "../GridTable/GridContext";
+import { useGridContext } from "../GridTable/useGridContext";
 
 const BuildNameDialog = React.lazy(
 	() => import("@/components/AppDialog/BuildName/BuildNameDialog")

@@ -1,24 +1,11 @@
-import React, { use, useMemo } from "react";
+import React, { useMemo } from "react";
 
 import { GridContext } from "./createGridContext";
 
 /**
- * Hook to consume the Grid context.
- *
- * @throws {Error} If used outside of a GridProvider.
- */
-export const useGridContext = () => {
-	const context = use(GridContext);
-
-	if (!context) {
-		throw new Error("useGridContext must be used within a GridProvider");
-	}
-
-	return context;
-};
-
-/**
  * Provider for the Grid context.
+ *
+ * @category Components
  */
 export const GridProvider: React.FC<{
 	children: React.ReactNode;

@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 
-import { MainAppProvider, useMainAppOptimization } from "./MainAppContext";
+import { MainAppProvider } from "./MainAppContext";
 import {
 	BuildNameUtility,
 	FilePickerUtility,
@@ -20,6 +20,7 @@ import {
 	OptimizationAlertUtility,
 	ShipTypesLoader,
 } from "./MainAppLayout";
+import { useMainAppOptimization } from "./useMainAppContext";
 
 const ErrorMessageRenderer = lazy(() =>
 	import("@/components/ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({

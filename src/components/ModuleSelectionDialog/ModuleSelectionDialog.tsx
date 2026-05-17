@@ -21,7 +21,8 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
-import { ModuleSelectionProvider, useModuleSelectionContext } from "./ModuleSelectionContext";
+import { ModuleSelectionProvider } from "./ModuleSelectionContext";
+import { useModuleSelectionContext } from "./useModuleSelectionContext";
 
 import "./ModuleSelectionDialog.scss";
 
