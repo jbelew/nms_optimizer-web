@@ -108,6 +108,18 @@ describe("GridTable", () => {
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 	});
 
+	test("should render GridTableButtons OUTSIDE of the grid container", () => {
+		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
+
+		const grid = container.querySelector('[role="grid"]');
+		const buttons = screen.getByTestId("grid-table-buttons");
+
+		expect(grid).toBeInTheDocument();
+		expect(buttons).toBeInTheDocument();
+		// The buttons should NOT be a descendant of the grid role element
+		expect(grid?.contains(buttons)).toBe(false);
+	});
+
 	test("should render grid cells and control buttons based on grid dimensions", () => {
 		render(<GridTable sharedGrid={false} solving={false} />);
 

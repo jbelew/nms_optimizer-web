@@ -31,7 +31,16 @@ Patterns, gotchas, and context discovered during implementation.
 - **Learnings:**
   - Patterns: Context-Provider Split. To support React Fast Refresh, split context definition/hooks into `.ts` and providers into `.tsx`.
   - Gotchas: Perfectionist linting rules (sorting) triggered on new files.
-  - Context: Granular compound components (like `AppHeader.LogoText` and `AppHeader.Subtitle`) allow for more flexible layout control in parent components while maintaining the compound pattern.
+  - Context: Granular compound components allow for more flexible layout control.
+
+## [2026-05-17 13:20] - Phase 1 Task 2: Refactor Grid/Optimizer Components to Compound Pattern
+- **Implemented:** Refactored GridTable, TechTree, ShipSelection, and RecommendedBuild into compound components.
+- **Files changed:** src/components/GridTable/GridTable.tsx, src/components/TechTree/TechTree.tsx, src/components/ShipSelection/shipSelection.tsx, src/components/RecommendedBuild/RecommendedBuild.tsx, plus 18 new sub-component and provider files.
+- **Commit:** fe23fcfe
+- **Learnings:**
+  - Patterns: Compound Component File Splitting. To maintain Fast Refresh compatibility, every exported React component should live in its own file if the aggregator file uses `Object.assign` or other non-component exports.
+  - Gotchas: Refactoring core layout components can easily break Suspense boundaries and conditional rendering logic (e.g. breakpoint-based visibility).
+  - Context: Granular Suspense boundaries (e.g. only around the Sidebar content) are crucial for maintaining a good UX and avoiding unnecessary CLS.
 ---
 
 <!-- Learnings from implementation will be appended below -->

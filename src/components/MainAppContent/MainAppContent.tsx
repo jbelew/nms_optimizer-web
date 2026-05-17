@@ -1,95 +1,31 @@
 // src/components/MainAppContent/MainAppContent.tsx
 import "./MainAppContent.scss";
 
-import { lazy, Suspense } from "react";
-import { Flex } from "@radix-ui/themes";
+import React, { Suspense } from "react";
 
 import { MainAppProvider } from "./MainAppContext";
-import {
-	BuildNameUtility,
-	FilePickerUtility,
-	MainAppBackgroundServices,
-	MainAppFooter,
-	MainAppGridSection,
-	MainAppHeader,
-	MainAppMobileToolbar,
-	MainAppSidebarSection,
-	OptimizationAlertUtility,
-	ShipTypesLoader,
-} from "./MainAppLayout";
-import { useMainAppOptimization } from "./useMainAppContext";
-
-const ErrorMessageRenderer = lazy(() =>
-	import("@/components/ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
-		default: m.ErrorMessageRenderer,
-	}))
-);
-const InstallPrompt = lazy(() =>
-	import("@/components/InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
-);
-const ToastRenderer = lazy(() =>
-	import("@/components/Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
-);
-
-/**
- * Component that renders the application layout structure.
- */
-const MainAppLayoutContent = () => {
-	const { gridContainerRef } = useMainAppOptimization();
-
-	return (
-		<>
-			<MainAppMobileToolbar />
-
-			<a
-				className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded focus:bg-(--accent-9) focus:px-4 focus:py-2 focus:text-white"
-				href="#main-content"
-			>
-				Skip to main content
-			</a>
-			<main className="main-app__container" id="main-content">
-				<div className="main-app__card lg:shadow-lg">
-					<div className="main-app__background-wrapper">
-						<MainAppHeader />
-
-						<Flex
-							align={{ initial: "center", md: "start" }}
-							className="main-app__content"
-							direction={{ initial: "column", md: "row" }}
-							ref={gridContainerRef}
-						>
-							<MainAppGridSection />
-							<MainAppSidebarSection />
-						</Flex>
-					</div>
-
-					<MainAppFooter position="bottom-mobile" />
-				</div>
-
-				<MainAppFooter position="bottom-desktop" />
-
-				<MainAppBackgroundServices>
-					<InstallPrompt />
-					<OptimizationAlertUtility />
-					<BuildNameUtility />
-					<FilePickerUtility />
-					<ErrorMessageRenderer />
-					<ToastRenderer />
-				</MainAppBackgroundServices>
-			</main>
-		</>
-	);
-};
+import { MainAppLayoutContent, ShipTypesLoader } from "./MainAppLayout";
 
 /**
  * The primary layout component for the application's main functional area.
+ *
+ * @remarks
+ * This component provides the necessary contexts and triggers the initial
+ * data loading via Suspense. It wraps the core layout structure.
+ *
+ * @returns {JSX.Element} The orchestrated main application content.
+ *
+ * @category Components
  */
 export const MainAppContent = () => {
 	return (
 		<MainAppProvider>
+			{/* Load ship types and tech definitions - suspends and allows layout to render once ready */}
 			<Suspense fallback={null}>
 				<ShipTypesLoader />
 			</Suspense>
+
+			{/* Core application layout structure */}
 			<MainAppLayoutContent />
 		</MainAppProvider>
 	);

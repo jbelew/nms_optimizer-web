@@ -27,6 +27,17 @@ const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/Buil
 const OptimizationAlertDialog = lazy(
 	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
 );
+const ErrorMessageRenderer = lazy(() =>
+	import("@/components/ErrorMessageRenderer/ErrorMessageRenderer").then((m) => ({
+		default: m.ErrorMessageRenderer,
+	}))
+);
+const InstallPrompt = lazy(() =>
+	import("@/components/InstallPrompt/InstallPrompt").then((m) => ({ default: m.InstallPrompt }))
+);
+const ToastRenderer = lazy(() =>
+	import("@/components/Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
+);
 
 /**
  * Inner component that triggers the ship types fetch via Suspense.
@@ -117,9 +128,7 @@ const ShipSelectionHeading: React.FC = () => {
 /**
  * Component that manages deferred background utilities.
  */
-export const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> = ({
-	children,
-}) => {
+const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [mount, setMount] = useState(false);
 
 	useEffect(() => {
@@ -150,40 +159,44 @@ export const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> 
 /**
  * Optimization alert utility.
  */
-export const OptimizationAlertUtility: React.FC = () => {
+const OptimizationAlertUtility: React.FC = () => {
 	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
 		useMainAppOptimization();
 
 	return (
-		<OptimizationAlertDialog
-			isOpen={!!patternNoFitTech}
-			onClose={clearPatternNoFitTech}
-			onForceOptimize={handleForceCurrentPnfOptimize}
-			technologyName={patternNoFitTech}
-		/>
+		<Suspense fallback={null}>
+			<OptimizationAlertDialog
+				isOpen={!!patternNoFitTech}
+				onClose={clearPatternNoFitTech}
+				onForceOptimize={handleForceCurrentPnfOptimize}
+				technologyName={patternNoFitTech}
+			/>
+		</Suspense>
 	);
 };
 
 /**
  * Build naming utility.
  */
-export const BuildNameUtility: React.FC = () => {
+const BuildNameUtility: React.FC = () => {
 	const { saveBuild } = useMainAppBuildManagement();
 	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
 
 	return (
-		<BuildNameDialog
-			isOpen={isSaveBuildDialogOpen}
-			onCancel={handleBuildNameCancel}
-			onConfirm={handleBuildNameConfirm}
-		/>
+		<Suspense fallback={null}>
+			<BuildNameDialog
+				isOpen={isSaveBuildDialogOpen}
+				onCancel={handleBuildNameCancel}
+				onConfirm={handleBuildNameConfirm}
+			/>
+		</Suspense>
 	);
 };
 
 /**
  * File picker utility for loading builds.
  */
-export const FilePickerUtility: React.FC = () => {
+const FilePickerUtility: React.FC = () => {
 	const { t } = useTranslation();
 	const { loadBuild } = useMainAppBuildManagement();
 	const { fileInputRef, handleFileSelect } = loadBuild;
@@ -203,7 +216,7 @@ export const FilePickerUtility: React.FC = () => {
 /**
  * Component that renders the mobile toolbar.
  */
-export const MainAppMobileToolbar: React.FC = () => {
+const MainAppMobileToolbar: React.FC = () => {
 	const { containerRef } = useMainAppLayout();
 	const { handleShowChangelog, hasModulesInGrid, isSmallScreen, isVisible, toolbarRef } =
 		useMainAppGlobal();
@@ -235,13 +248,13 @@ export const MainAppHeader: React.FC = () => {
 	return (
 		<AppHeader.Provider onShowChangelog={handleShowChangelog}>
 			<AppHeader.Root>
-				{!isSharedGrid && !isLargeScreen && isSmallScreen && (
+				{!isSharedGrid && !isLargeScreen && !isSmallScreen && (
 					<AppHeader.LeftControls>
 						<AppHeader.AccessibilityToggle />
 					</AppHeader.LeftControls>
 				)}
 
-				{!isSharedGrid && isSmallScreen && (
+				{!isSharedGrid && !isSmallScreen && (
 					<AppHeader.RightControls>
 						<AppHeader.ChangelogButton />
 						<AppHeader.UserStatsButton />
@@ -262,7 +275,7 @@ export const MainAppHeader: React.FC = () => {
 /**
  * Component that renders the application footer.
  */
-export const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> = ({
+const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> = ({
 	position,
 }) => {
 	const { buildDate, buildVersion, isLargeScreen } = useMainAppGlobal();
@@ -285,7 +298,7 @@ export const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobi
 /**
  * Component that renders the grid section.
  */
-export const MainAppGridSection: React.FC = () => {
+const MainAppGridSection: React.FC = () => {
 	const { t } = useTranslation();
 	const { containerRef, gridTableRef } = useMainAppLayout();
 	const { isSharedGrid } = useMainAppGlobal();
@@ -387,5 +400,55 @@ export const MainAppSidebarSection: React.FC = () => {
 				<MainAppSidebarContent />
 			</Suspense>
 		</Flex>
+	);
+};
+
+/**
+ * Component that renders the application layout structure.
+ */
+export const MainAppLayoutContent = () => {
+	const { gridContainerRef } = useMainAppOptimization();
+
+	return (
+		<>
+			<MainAppMobileToolbar />
+
+			<a
+				className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded focus:bg-(--accent-9) focus:px-4 focus:py-2 focus:text-white"
+				href="#main-content"
+			>
+				Skip to main content
+			</a>
+			<main className="main-app__container" id="main-content">
+				<div className="main-app__card lg:shadow-lg">
+					<div className="main-app__background-wrapper">
+						<MainAppHeader />
+
+						<Flex
+							align={{ initial: "center", md: "start" }}
+							className="main-app__content"
+							direction={{ initial: "column", md: "row" }}
+							ref={gridContainerRef}
+						>
+							<MainAppGridSection />
+							<MainAppSidebarSection />
+						</Flex>
+					</div>
+
+					<MainAppFooter position="bottom-mobile" />
+				</div>
+
+				<MainAppFooter position="bottom-desktop" />
+
+				<MainAppBackgroundServices>
+					<InstallPrompt />
+					<OptimizationAlertUtility />
+					<BuildNameUtility />
+					<FilePickerUtility />
+					<ErrorMessageRenderer />
+					<ToastRenderer />
+				</MainAppBackgroundServices>
+			</main>
+		</>
 	);
 };

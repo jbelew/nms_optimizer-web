@@ -1,4 +1,3 @@
-// src/hooks/useAppLayout.tsx
 import { useEffect, useRef, useState } from "react";
 
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -64,19 +63,22 @@ export const useAppLayout = (): AppLayout => {
 		const gridTableElement = gridTableRef.current;
 
 		const observer = new ResizeObserver((entries) => {
-			for (const entry of entries) {
-				if (entry.target === containerElement) {
-					if (isLarge && !isSharedGrid) {
-						setGridHeight(Math.round(entry.contentRect.height));
-					} else {
-						setGridHeight(null);
+			// Use requestAnimationFrame to break the sync loop and avoid "ResizeObserver loop completed with undelivered notifications"
+			window.requestAnimationFrame(() => {
+				for (const entry of entries) {
+					if (entry.target === containerElement) {
+						if (isLarge && !isSharedGrid) {
+							setGridHeight(Math.round(entry.contentRect.height));
+						} else {
+							setGridHeight(null);
+						}
+					} else if (entry.target === gridTableElement) {
+						setGridTableTotalWidth(
+							Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT)
+						);
 					}
-				} else if (entry.target === gridTableElement) {
-					setGridTableTotalWidth(
-						Math.round(entry.contentRect.width + GRID_TABLE_WIDTH_ADJUSTMENT)
-					);
 				}
-			}
+			});
 		});
 
 		if (containerElement) {

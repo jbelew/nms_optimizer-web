@@ -22,9 +22,10 @@ vi.mock("./utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
-/** Mock URL normalization to prevent remounts */
-vi.mock("./hooks/useUrlNormalization/useUrlNormalization", () => ({
+/** Mock URL normalization and validation to prevent remounts */
+vi.mock("./hooks/useValidation/useValidation", () => ({
 	useUrlNormalization: vi.fn(),
+	useUrlValidation: vi.fn(),
 }));
 
 vi.mock("react-i18next", async () => {
@@ -106,10 +107,6 @@ vi.mock("./components/MainAppContent/MainAppContent", () => ({
 	MainAppContent: () => <div>mainApp.title</div>,
 }));
 
-vi.mock("./hooks/useUrlValidation/useUrlValidation", () => ({
-	useUrlValidation: vi.fn(),
-}));
-
 vi.mock("./utils/analytics/tracking", () => ({
 	initializeAnalytics: vi.fn(),
 	initializeAnalyticsClient: vi.fn(),
@@ -147,6 +144,10 @@ vi.mock("./components/AppDialog/Welcome/WelcomeContent", () => ({
 
 vi.mock("./components/OfflineBanner/OfflineBanner", () => ({
 	default: () => <div data-testid="offline-banner" />,
+}));
+
+vi.mock("./components/RoutedDialogs/RoutedDialogs", () => ({
+	RoutedDialogs: () => <div data-testid="routed-dialogs">dialogs.titles.instructions</div>,
 }));
 
 vi.mock("./components/UpdatePrompt/UpdatePrompt", () => ({
@@ -382,9 +383,8 @@ describe("App", () => {
 			});
 
 			// Instructions dialog title SHOULD be in the document
-			await vi.waitFor(() => {
-				expect(rendered.getAllByText("dialogs.titles.instructions")[0]).toBeInTheDocument();
-			});
+			const instructionsTitle = await rendered.findAllByTestId("routed-dialogs");
+			expect(instructionsTitle[0]).toBeInTheDocument();
 
 			// userVisited should be marked as true by useEffect in AppContent
 			await vi.waitFor(() => {

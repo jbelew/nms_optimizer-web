@@ -6,8 +6,8 @@ This plan follows a phased approach: completing architecture cleanup, resolving 
 Focus: Simplify component tree and eliminate boolean prop proliferation.
 
 - [x] Task: Audit and Refactor Layout Components
-- [~] Task: Refactor Grid/Optimizer Components to Compound Pattern
-- [ ] Task: Conductor - User Manual Verification 'Architecture Finalization' (Protocol in workflow.md)
+- [x] Task: Refactor Grid/Optimizer Components to Compound Pattern
+- [~] Task: Conductor - User Manual Verification 'Architecture Finalization' (Protocol in workflow.md)
 
 ## Phase 2: Performance Optimization (Vercel Best Practices)
 Focus: Resolve high INP and optimize LCP/rendering.

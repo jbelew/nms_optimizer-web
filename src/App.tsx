@@ -154,7 +154,9 @@ const AppContent: FC = () => {
 				</Suspense>
 			) : null}
 			{activeDialog && activeDialog !== "userstats" && activeDialog !== "performance" ? (
-				<RoutedDialogs />
+				<Suspense fallback={null}>
+					<RoutedDialogs />
+				</Suspense>
 			) : null}
 			{activeDialog === "userstats" && !isDockerBuild ? (
 				<Suspense fallback={null}>
