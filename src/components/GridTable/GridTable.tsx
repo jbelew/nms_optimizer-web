@@ -11,6 +11,16 @@ import { GridTableContent } from "./GridTableContent";
 import { GridTableGrid } from "./GridTableGrid";
 import { GridTableRoot } from "./GridTableRoot";
 
+export { GridProvider } from "./GridContext";
+
+export { GridTableContent } from "./GridTableContent";
+
+export { GridTableGrid } from "./GridTableGrid";
+
+export { GridTableRoot } from "./GridTableRoot";
+
+export { GridTableButtons };
+
 /**
  * Properties for the {@link GridTable} component.
  */
@@ -22,9 +32,9 @@ interface GridTableProps {
 }
 
 /**
- * Default composite component for GridTable.
+ * GridTable component.
  */
-const GridTableComp = React.forwardRef<HTMLDivElement, GridTableProps>(
+export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
 	({ sharedGrid, solving }, ref) => {
 		const gridHeight = useGridStore((state) => state.grid.height);
 		const deferredHeight = React.useDeferredValue(gridHeight);
@@ -48,15 +58,4 @@ const GridTableComp = React.forwardRef<HTMLDivElement, GridTableProps>(
 	}
 );
 
-GridTableComp.displayName = "GridTable";
-
-/**
- * Compound component for GridTable.
- */
-export const GridTable = Object.assign(GridTableComp, {
-	Buttons: GridTableButtons,
-	Content: GridTableContent,
-	Grid: GridTableGrid,
-	Provider: GridProvider,
-	Root: GridTableRoot,
-});
+GridTable.displayName = "GridTable";

@@ -9,6 +9,16 @@ import { ShipSelectionRoot } from "./ShipSelectionRoot";
 import { ShipSelectionSkeleton } from "./ShipSelectionSkeleton";
 import { ShipSelectionTrigger } from "./ShipSelectionTrigger";
 
+export { ShipSelectionContent } from "./ShipSelectionContent";
+
+export { ShipSelectionProvider } from "./ShipSelectionProvider";
+
+export { ShipSelectionRoot } from "./ShipSelectionRoot";
+
+export { ShipSelectionSkeleton } from "./ShipSelectionSkeleton";
+
+export { ShipSelectionTrigger } from "./ShipSelectionTrigger";
+
 /**
  * Props for the `ShipSelection` component.
  */
@@ -20,7 +30,7 @@ interface ShipSelectionProps {
 /**
  * The default composite ShipSelection component.
  */
-const ShipSelectionComp: React.FC<ShipSelectionProps> = ({ solving }) => {
+export const ShipSelection: React.FC<ShipSelectionProps> = ({ solving }) => {
 	return (
 		<Suspense fallback={<ShipSelectionSkeleton />}>
 			<ShipSelectionProvider solving={solving}>
@@ -32,14 +42,3 @@ const ShipSelectionComp: React.FC<ShipSelectionProps> = ({ solving }) => {
 		</Suspense>
 	);
 };
-
-/**
- * Compound component for ShipSelection.
- */
-export const ShipSelection = Object.assign(ShipSelectionComp, {
-	Content: ShipSelectionContent,
-	Provider: ShipSelectionProvider,
-	Root: ShipSelectionRoot,
-	Skeleton: ShipSelectionSkeleton,
-	Trigger: ShipSelectionTrigger,
-});

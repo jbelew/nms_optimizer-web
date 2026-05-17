@@ -7,6 +7,14 @@ import { RecommendedBuildInfo } from "./RecommendedBuildInfo";
 import { RecommendedBuildProvider } from "./RecommendedBuildProvider";
 import { RecommendedBuildRoot } from "./RecommendedBuildRoot";
 
+export { RecommendedBuildButton } from "./RecommendedBuildButton";
+
+export { RecommendedBuildInfo } from "./RecommendedBuildInfo";
+
+export { RecommendedBuildProvider } from "./RecommendedBuildProvider";
+
+export { RecommendedBuildRoot } from "./RecommendedBuildRoot";
+
 /**
  * Props for the `RecommendedBuild` component.
  */
@@ -20,7 +28,7 @@ interface RecommendedBuildProps {
 /**
  * The default composite RecommendedBuild component.
  */
-const RecommendedBuildComp: React.FC<RecommendedBuildProps> = ({ isLarge, techTree }) => {
+export const RecommendedBuild: React.FC<RecommendedBuildProps> = ({ isLarge, techTree }) => {
 	return (
 		<RecommendedBuildProvider isLarge={isLarge} techTree={techTree}>
 			<RecommendedBuildRoot>
@@ -30,13 +38,3 @@ const RecommendedBuildComp: React.FC<RecommendedBuildProps> = ({ isLarge, techTr
 		</RecommendedBuildProvider>
 	);
 };
-
-/**
- * Compound component for RecommendedBuild.
- */
-export const RecommendedBuild = Object.assign(RecommendedBuildComp, {
-	Button: RecommendedBuildButton,
-	Info: RecommendedBuildInfo,
-	Provider: RecommendedBuildProvider,
-	Root: RecommendedBuildRoot,
-});

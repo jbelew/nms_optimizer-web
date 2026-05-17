@@ -1,0 +1,30 @@
+{
+	"$schema": "../../node_modules/tachometer/config.schema.json",
+	"sampleSize": 50,
+	"timeout": 5,
+	"autoSampleConditions": ["0%", "5%"],
+	"benchmarks": [
+		{
+			"name": "production",
+			"url": "https://nms-optimizer.app/",
+			"measurement": "fcp",
+			"browser": {
+				"name": "chrome",
+				"headless": true,
+				"windowSize": { "width": 1280, "height": 800 },
+				"addArguments": ["--no-sandbox", "--disable-dev-shm-usage"]
+			}
+		},
+		{
+			"name": "local",
+			"url": "http://127.0.0.1:8888/",
+			"measurement": "fcp",
+			"browser": {
+				"name": "chrome",
+				"headless": true,
+				"windowSize": { "width": 1280, "height": 800 },
+				"addArguments": ["--no-sandbox", "--disable-dev-shm-usage"]
+			}
+		}
+	]
+}

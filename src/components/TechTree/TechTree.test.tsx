@@ -29,6 +29,12 @@ vi.mock("@/components/RecommendedBuild/RecommendedBuild", () => ({
 			<div data-testid="recommended-build-root">{children}</div>
 		),
 	},
+	RecommendedBuildButton: () => <div data-testid="recommended-build-button">Button</div>,
+	RecommendedBuildInfo: () => <div data-testid="recommended-build-info">Info</div>,
+	RecommendedBuildProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+	RecommendedBuildRoot: ({ children }: { children: React.ReactNode }) => (
+		<div data-testid="recommended-build-root">{children}</div>
+	),
 }));
 
 vi.mock("@radix-ui/themes", () => ({

@@ -1,0 +1,206 @@
+name: Bundle Size
+
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore:
+      - '.beads/**'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'docs/**'
+
+concurrency:
+  group: bundle-size-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    name: Measure (${{ matrix.label }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: head
+            ref: ${{ github.sha }}
+            artifact: size-head
+          - label: parent
+            # Compare against the first parent of the push HEAD.
+            # For merge commits this is the previous tip of the branch.
+            ref: ${{ github.event.before }}
+            artifact: size-parent
+    steps:
+      - name: Resolve checkout ref
+        id: resolve
+        shell: bash
+        env:
+          REF: ${{ matrix.ref }}
+        run: |
+          # `github.event.before` is "0000…0000" on the first push to a new
+          # branch (no parent to compare against). Detect that and skip.
+          if [[ -z "$REF" || "$REF" =~ ^0+$ ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "No parent commit available — skipping measurement."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout (${{ matrix.label }})
+        if: steps.resolve.outputs.skip != 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.resolve.outputs.ref }}
+
+      - name: Setup environment
+        if: steps.resolve.outputs.skip != 'true'
+        uses: ./.github/actions/setup-node-env
+
+      - name: Build
+        if: steps.resolve.outputs.skip != 'true'
+        run: bun run build
+        env:
+          VITE_SENTRY_ENV: staging
+
+      - name: Run size-limit (JSON)
+        if: steps.resolve.outputs.skip != 'true'
+        # size-limit writes JSON to stdout even when bundles exceed their
+        # budget (it exits non-zero in that case). We always want to publish
+        # the comparison comment, so we capture the report regardless of
+        # exit status. The existing `build` job in ci.yml is what enforces
+        # the budget on the head ref.
+        shell: bash
+        run: |
+          set +e
+          bunx size-limit --json > size.json
+          if [ ! -s size.json ]; then
+            echo "size-limit produced no output (likely missing config on this ref)."
+            echo "[]" > size.json
+          fi
+          exit 0
+
+      - name: Emit empty report (skipped)
+        if: steps.resolve.outputs.skip == 'true'
+        run: echo "[]" > size.json
+
+      - name: Upload size report
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: size.json
+          retention-days: 7
+
+  report:
+    name: Comment bundle size diff
+    needs: measure
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download head report
+        uses: actions/download-artifact@v8
+        with:
+          name: size-head
+          path: head/
+
+      - name: Download parent report
+        uses: actions/download-artifact@v8
+        with:
+          name: size-parent
+          path: parent/
+
+      - name: Post commit comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+
+            const head = JSON.parse(fs.readFileSync('head/size.json', 'utf8'));
+            const parent = JSON.parse(fs.readFileSync('parent/size.json', 'utf8'));
+
+            // If there's no head report we have nothing to say.
+            if (head.length === 0) {
+              console.log('No head report — skipping comment.');
+              return;
+            }
+
+            const parentMap = new Map(parent.map((e) => [e.name, e]));
+            const firstPush = parent.length === 0;
+
+            const fmt = (b) => {
+              if (b === 0) return '0 B';
+              if (Math.abs(b) < 1024) return `${b} B`;
+              if (Math.abs(b) < 1024 * 1024) return `${(b / 1024).toFixed(2)} KB`;
+              return `${(b / 1024 / 1024).toFixed(2)} MB`;
+            };
+
+            const pct = (delta, baseSize) =>
+              baseSize > 0 ? `${((delta / baseSize) * 100).toFixed(2)}%` : '—';
+
+            let regressed = false;
+            let overBudget = false;
+            let anyDelta = false;
+
+            const rows = head.map((e) => {
+              const p = parentMap.get(e.name);
+              const parentSize = p ? p.size : 0;
+              const delta = e.size - parentSize;
+              if (delta !== 0) anyDelta = true;
+              if (delta > 0) regressed = true;
+              if (e.passed === false) overBudget = true;
+
+              const sign = delta > 0 ? '🔺 +' : delta < 0 ? '🟢 ' : '';
+              const deltaStr =
+                delta === 0 || firstPush
+                  ? '—'
+                  : `${sign}${fmt(delta)} (${pct(delta, parentSize)})`;
+
+              const budget = e.sizeLimit
+                ? `${fmt(e.sizeLimit)} ${e.passed === false ? '❌' : '✅'}`
+                : '—';
+
+              return `| ${e.name} | ${fmt(parentSize)} | ${fmt(e.size)} | ${deltaStr} | ${budget} |`;
+            });
+
+            // Skip noisy comments when nothing changed.
+            if (!anyDelta && !overBudget && !firstPush) {
+              console.log('No bundle size changes — skipping comment.');
+              return;
+            }
+
+            const status = overBudget
+              ? '❌ **One or more bundles are over budget.**'
+              : firstPush
+                ? 'ℹ️ No parent commit to compare against (first push on this branch).'
+                : regressed
+                  ? '⚠️ Bundle size increased — review the diff above.'
+                  : '✅ Bundle sizes decreased or held steady.';
+
+            const headSha = context.sha.slice(0, 7);
+            const parentSha = context.payload.before
+              ? context.payload.before.slice(0, 7)
+              : '—';
+
+            const body = [
+              '## 📦 Bundle Size Report',
+              '',
+              `Comparing \`${headSha}\` ↔ parent \`${parentSha}\``,
+              '',
+              '| Asset | Parent | This commit | Δ | Budget |',
+              '|-------|-------:|------------:|---:|-------:|',
+              ...rows,
+              '',
+              status,
+              '',
+              '<sub>Sizes are gzipped. Budgets are enforced in `.size-limit.json` and `bun run size`.</sub>',
+            ].join('\n');
+
+            await github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body,
+            });

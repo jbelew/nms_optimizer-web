@@ -11,12 +11,22 @@ import { TechTreeProvider } from "./TechTreeProvider";
 import { TechTreeRecommended } from "./TechTreeRecommended";
 import { TechTreeRoot } from "./TechTreeRoot";
 
+export { TechTreeList } from "./TechTreeList";
+
+export { TechTreeProvider } from "./TechTreeProvider";
+
+export { TechTreeRecommended } from "./TechTreeRecommended";
+
+export { TechTreeRoot } from "./TechTreeRoot";
+
 export { TechTreeSkeleton } from "./TechTreeSkeleton";
 
 /**
  * Properties for the {@link TechTree} component.
  */
 interface TechTreeProps {
+	/** Optional children to render instead of the default TechTreeContent. */
+	children?: React.ReactNode;
 	/** Function to trigger a solver run for a specific technology. */
 	handleOptimize: (tech: string) => Promise<void>;
 	/** Whether an optimization solve is currently in progress. */
@@ -28,7 +38,7 @@ interface TechTreeProps {
 /**
  * Composite component for the TechTree.
  */
-const TechTreeComp: React.FC<TechTreeProps> = ({
+export const TechTree: React.FC<TechTreeProps> = ({
 	handleOptimize,
 	solving,
 	techTree: techTreeProp,
@@ -50,13 +60,3 @@ const TechTreeComp: React.FC<TechTreeProps> = ({
 		</TechTreeProvider>
 	);
 };
-
-/**
- * Compound component for TechTree.
- */
-export const TechTree = Object.assign(TechTreeComp, {
-	List: TechTreeList,
-	Provider: TechTreeProvider,
-	Recommended: TechTreeRecommended,
-	Root: TechTreeRoot,
-});

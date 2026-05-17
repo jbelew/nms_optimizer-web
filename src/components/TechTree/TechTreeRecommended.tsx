@@ -1,7 +1,12 @@
 import type { TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 
-import { RecommendedBuild } from "@/components/RecommendedBuild/RecommendedBuild";
+import {
+	RecommendedBuildButton,
+	RecommendedBuildInfo,
+	RecommendedBuildProvider,
+	RecommendedBuildRoot,
+} from "@/components/RecommendedBuild/RecommendedBuild";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 /**
@@ -15,11 +20,11 @@ export const TechTreeRecommended: React.FC<{ techTree: TechTreeType }> = ({ tech
 	if (!hasRecommendedBuilds) return null;
 
 	return (
-		<RecommendedBuild.Provider isLarge={isLarge} techTree={techTree}>
-			<RecommendedBuild.Root>
-				<RecommendedBuild.Button mb={isLarge ? "0" : "1"} />
-				<RecommendedBuild.Info />
-			</RecommendedBuild.Root>
-		</RecommendedBuild.Provider>
+		<RecommendedBuildProvider isLarge={isLarge} techTree={techTree}>
+			<RecommendedBuildRoot>
+				<RecommendedBuildButton mb={isLarge ? "0" : "1"} />
+				<RecommendedBuildInfo />
+			</RecommendedBuildRoot>
+		</RecommendedBuildProvider>
 	);
 };

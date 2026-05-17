@@ -5,12 +5,30 @@ import { Trans, useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
-import { GridTable } from "@/components/GridTable/GridTable";
+import {
+	GridProvider,
+	GridTableButtons,
+	GridTableContent,
+	GridTableGrid,
+	GridTableRoot,
+} from "@/components/GridTable/GridTable";
 import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
-import { ShipSelection } from "@/components/ShipSelection/shipSelection";
-import { TechTree, TechTreeSkeleton } from "@/components/TechTree/TechTree";
+import {
+	ShipSelectionContent,
+	ShipSelectionProvider,
+	ShipSelectionRoot,
+	ShipSelectionSkeleton,
+	ShipSelectionTrigger,
+} from "@/components/ShipSelection/shipSelection";
+import {
+	TechTreeList,
+	TechTreeProvider,
+	TechTreeRecommended,
+	TechTreeRoot,
+	TechTreeSkeleton,
+} from "@/components/TechTree/TechTree";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -96,13 +114,13 @@ const ShipSelectionHeading: React.FC = () => {
 		>
 			{!isSharedGrid && (
 				<span className="main-app__ship-selection">
-					<Suspense fallback={<ShipSelection.Skeleton />}>
-						<ShipSelection.Provider solving={solving}>
-							<ShipSelection.Root>
-								<ShipSelection.Trigger />
-								<ShipSelection.Content />
-							</ShipSelection.Root>
-						</ShipSelection.Provider>
+					<Suspense fallback={<ShipSelectionSkeleton />}>
+						<ShipSelectionProvider solving={solving}>
+							<ShipSelectionRoot>
+								<ShipSelectionTrigger />
+								<ShipSelectionContent />
+							</ShipSelectionRoot>
+						</ShipSelectionProvider>
 					</Suspense>
 				</span>
 			)}
@@ -327,18 +345,14 @@ const MainAppGridSection: React.FC = () => {
 
 			<ShipSelectionHeading />
 
-			<GridTable.Provider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
-				<GridTable.Root>
-					<GridTable.Grid
-						gridHeight={gridHeight}
-						gridRef={gridTableRef}
-						solving={solving}
-					>
-						<GridTable.Content gridHeight={gridHeight} sharedGrid={isSharedGrid} />
-					</GridTable.Grid>
-					<GridTable.Buttons solving={solving} />
-				</GridTable.Root>
-			</GridTable.Provider>
+			<GridProvider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
+				<GridTableRoot>
+					<GridTableGrid gridHeight={gridHeight} gridRef={gridTableRef} solving={solving}>
+						<GridTableContent gridHeight={gridHeight} sharedGrid={isSharedGrid} />
+					</GridTableGrid>
+					<GridTableButtons solving={solving} />
+				</GridTableRoot>
+			</GridProvider>
 		</Box>
 	);
 };
@@ -356,27 +370,23 @@ const MainAppSidebarContent: React.FC = () => {
 		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;
 
 	return (
-		<TechTree.Provider
-			handleOptimize={handleOptimize}
-			isGridFull={isGridFull}
-			solving={solving}
-		>
+		<TechTreeProvider handleOptimize={handleOptimize} isGridFull={isGridFull} solving={solving}>
 			{isLargeScreen ? (
 				<>
-					<TechTree.Root hasRecommendedBuilds={hasRecommendedBuilds}>
-						<TechTree.List techTree={techTree} />
-					</TechTree.Root>
-					<TechTree.Recommended techTree={techTree} />
+					<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
+						<TechTreeList techTree={techTree} />
+					</TechTreeRoot>
+					<TechTreeRecommended techTree={techTree} />
 				</>
 			) : (
 				<>
-					<TechTree.Recommended techTree={techTree} />
-					<TechTree.Root hasRecommendedBuilds={hasRecommendedBuilds}>
-						<TechTree.List techTree={techTree} />
-					</TechTree.Root>
+					<TechTreeRecommended techTree={techTree} />
+					<TechTreeRoot hasRecommendedBuilds={hasRecommendedBuilds}>
+						<TechTreeList techTree={techTree} />
+					</TechTreeRoot>
 				</>
 			)}
-		</TechTree.Provider>
+		</TechTreeProvider>
 	);
 };
 
