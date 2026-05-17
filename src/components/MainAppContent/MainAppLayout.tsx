@@ -6,6 +6,7 @@ import { Trans, useTranslation } from "react-i18next";
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
 import { GridTable } from "@/components/GridTable/GridTable";
+import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import { ShipSelection } from "@/components/ShipSelection/shipSelection";
@@ -220,9 +221,33 @@ export const MainAppMobileToolbar: React.FC = () => {
  * Component that renders the application header.
  */
 export const MainAppHeader: React.FC = () => {
-	const { handleShowChangelog } = useMainAppGlobal();
+	const { handleShowChangelog, isLargeScreen, isSharedGrid, isSmallScreen } = useMainAppGlobal();
 
-	return <AppHeader onShowChangelog={handleShowChangelog} />;
+	return (
+		<AppHeader.Provider onShowChangelog={handleShowChangelog}>
+			<AppHeader.Root>
+				{!isSharedGrid && !isLargeScreen && !isSmallScreen && (
+					<AppHeader.LeftControls>
+						<AppHeader.AccessibilityToggle />
+					</AppHeader.LeftControls>
+				)}
+
+				{!isSharedGrid && !isSmallScreen && (
+					<AppHeader.RightControls>
+						<AppHeader.ChangelogButton />
+						<AppHeader.UserStatsButton />
+						<AppHeader.PerformanceButton />
+						{isLargeScreen && <AppHeader.AccessibilityToggle />}
+						<LanguageSelector />
+					</AppHeader.RightControls>
+				)}
+
+				<AppHeader.LogoText />
+				<AppHeader.Logo />
+				<AppHeader.Subtitle />
+			</AppHeader.Root>
+		</AppHeader.Provider>
+	);
 };
 
 /**
@@ -238,7 +263,12 @@ export const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobi
 
 	return (
 		<div className={position === "bottom-mobile" ? "main-app__footer-wrapper" : ""}>
-			<AppFooter buildDate={buildDate} buildVersion={buildVersion} />
+			<AppFooter.Provider buildDate={buildDate} buildVersion={buildVersion}>
+				<AppFooter.Root>
+					<AppFooter.Content />
+					<AppFooter.Support />
+				</AppFooter.Root>
+			</AppFooter.Provider>
 		</div>
 	);
 };

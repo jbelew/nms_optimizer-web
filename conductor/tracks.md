@@ -39,6 +39,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+## [~] Track: Application Optimization & Patterns Review
+*Link: [./conductor/tracks/app_perf_view_transitions_20260517/](./conductor/tracks/app_perf_view_transitions_20260517/)*
+
+
+---
+
 - [x] **Track: Optimize TBT for initial landing page load**
   *Link: [./conductor/tracks/tbt_optimization_20260408/](./conductor/tracks/tbt_optimization_20260408/)*
 
