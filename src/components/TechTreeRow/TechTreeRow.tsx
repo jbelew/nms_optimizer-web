@@ -2,7 +2,7 @@ import "./TechTreeRow.scss";
 
 import type { BonusStatusData } from "@/store/tech/techBonusStore";
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -16,12 +16,11 @@ import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { ModuleSelectionDialog } from "@/components/ModuleSelectionDialog/ModuleSelectionDialog";
 import { useTechTree } from "@/components/TechTree/useTechTreeContext";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
 import { TechTreeRowProvider } from "./TechTreeRowContext";
@@ -266,27 +265,20 @@ const TechTreeRowLabel: React.FC = () => {
 
 /**
  * Status and configuration badges for a technology row.
+ *
+ * @remarks
+ * The module count badge opens the shared `ModuleSelectionDialog` via the
+ * Zustand store, rather than instantiating a per-row dialog instance.
  */
 const TechTreeRowBadges: React.FC = () => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
-	const { sendDeferredEvent } = useAnalytics();
 	const { isGridFull, solving } = useTechTree();
-	const [isOpen, setIsOpen] = useState(false);
-	const [initialModules, setInitialModules] = useState<string[]>([]);
-	const optimizeClickedRef = useRef(false);
-	const [, startTransition] = useTransition();
+	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
 
 	const {
-		allModulesSelected,
 		currentCheckedModules,
-		groupedModules,
-		handleAllCheckboxesChange,
-		handleOptimizeClick,
-		handleSelectAllChange,
-		handleValueChange,
 		hasTechInGrid,
-		isIndeterminate,
 		modules,
 		tech,
 		techColor,
@@ -296,50 +288,10 @@ const TechTreeRowBadges: React.FC = () => {
 		translatedTechName,
 	} = useTechTreeRowContext();
 
-	const handleOpenChange = useCallback(
-		(open: boolean) => {
-			if (open) {
-				setInitialModules(currentCheckedModules);
-				optimizeClickedRef.current = false;
-				startTransition(() => {
-					setIsOpen(open);
-				});
-
-				sendDeferredEvent({
-					action: "page_view",
-					category: "engagement",
-					nonInteraction: true,
-					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
-					page_location: window.location.href,
-					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
-				});
-			} else {
-				startTransition(() => {
-					if (!optimizeClickedRef.current) {
-						handleAllCheckboxesChange(initialModules);
-					}
-
-					setIsOpen(open);
-				});
-			}
-		},
-		[
-			currentCheckedModules,
-			handleAllCheckboxesChange,
-			initialModules,
-			sendDeferredEvent,
-			tech,
-			translatedTechName,
-		]
+	const handleOpenDialog = useMemo(
+		() => () => openDialog({ tech, techColor, techImage }),
+		[openDialog, tech, techColor, techImage]
 	);
-
-	const handleOptimizeWrapper = useCallback(async () => {
-		optimizeClickedRef.current = true;
-		await handleOptimizeClick();
-		handleOpenChange(false);
-	}, [handleOptimizeClick, handleOpenChange]);
-
-	const handleOnClose = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
 	const badgeContent = (
 		<div>
@@ -353,7 +305,7 @@ const TechTreeRowBadges: React.FC = () => {
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
 				highContrast={a11yMode}
 				mt="1"
-				onClick={() => handleOpenChange(true)}
+				onClick={handleOpenDialog}
 				radius="medium"
 				size="1"
 				variant={modules.length === 1 ? "surface" : "solid"}
@@ -361,21 +313,6 @@ const TechTreeRowBadges: React.FC = () => {
 				x{currentCheckedModules.length}
 				<OpenInNewWindowIcon />
 			</Button>
-			<ModuleSelectionDialog
-				allModulesSelected={allModulesSelected}
-				currentCheckedModules={currentCheckedModules}
-				groupedModules={groupedModules}
-				handleOptimizeClick={handleOptimizeWrapper}
-				handleSelectAllChange={handleSelectAllChange}
-				handleValueChange={handleValueChange}
-				isIndeterminate={isIndeterminate}
-				isOpen={isOpen}
-				onClose={handleOnClose}
-				tech={tech}
-				techColor={techColor}
-				techImage={techImage}
-				translatedTechName={translatedTechName}
-			/>
 		</div>
 	);
 

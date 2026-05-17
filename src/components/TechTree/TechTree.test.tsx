@@ -1,7 +1,7 @@
 import type { TechTree } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import * as useBreakpointModule from "@/hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";

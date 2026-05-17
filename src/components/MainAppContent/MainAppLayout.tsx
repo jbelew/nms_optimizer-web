@@ -15,6 +15,7 @@ import {
 import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
+import { SharedModuleSelectionDialog } from "@/components/ModuleSelectionDialog/SharedModuleSelectionDialog";
 import {
 	ShipSelectionContent,
 	ShipSelectionProvider,
@@ -386,6 +387,7 @@ const MainAppSidebarContent: React.FC = () => {
 					</TechTreeRoot>
 				</>
 			)}
+			<SharedModuleSelectionDialog />
 		</TechTreeProvider>
 	);
 };

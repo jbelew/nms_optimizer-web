@@ -2,6 +2,7 @@
 import type { TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import React from "react";
 
+import { SharedModuleSelectionDialog } from "@/components/ModuleSelectionDialog/SharedModuleSelectionDialog";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -57,6 +58,7 @@ export const TechTree: React.FC<TechTreeProps> = ({
 				<TechTreeList techTree={techTree} />
 			</TechTreeRoot>
 			<TechTreeRecommended techTree={techTree} />
+			<SharedModuleSelectionDialog />
 		</TechTreeProvider>
 	);
 };
