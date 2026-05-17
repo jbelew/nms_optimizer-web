@@ -37,8 +37,21 @@ vi.mock("@/components/AppDialog/Base/AppDialog", () => {
 	const MockBody = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
 	const MockFooter = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
 
+	interface MockAppDialogProps {
+		content?: React.ReactNode;
+		footer?: React.ReactNode;
+		title?: React.ReactNode;
+	}
+	const MockAppDialog = ({ content, footer, title }: MockAppDialogProps) => (
+		<div>
+			<h1>{title}</h1>
+			<div>{content}</div>
+			<div>{footer}</div>
+		</div>
+	);
+
 	return {
-		default: Object.assign(() => null, {
+		default: Object.assign(MockAppDialog, {
 			Body: MockBody,
 			Footer: MockFooter,
 			Root: MockRoot,

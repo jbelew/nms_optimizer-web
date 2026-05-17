@@ -2,7 +2,7 @@
  * Interactive technology module configuration dialog module.
  */
 
-import React, { memo, Suspense } from "react";
+import React, { lazy, memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -28,8 +28,9 @@ import "./ModuleSelectionDialog.scss";
 
 import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
 
-import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
+
+const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
 
@@ -347,24 +348,19 @@ export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo(
 	return (
 		<ModuleSelectionProvider props={props}>
 			<Suspense fallback={null}>
-				<AppDialog.Root isOpen={isOpen} onClose={onClose}>
-					<AppDialog.Title
-						headerIcon={
-							<CheckCircledIcon
-								className="h-6 w-6"
-								style={{ color: "var(--accent-11)" }}
-							/>
-						}
-					>
-						{t("moduleSelection.title", { techName: translatedTechName })}
-					</AppDialog.Title>
-					<AppDialog.Body>
-						<DialogBody />
-					</AppDialog.Body>
-					<AppDialog.Footer>
-						<DialogFooter />
-					</AppDialog.Footer>
-				</AppDialog.Root>
+				<AppDialog
+					content={<DialogBody />}
+					footer={<DialogFooter />}
+					headerIcon={
+						<CheckCircledIcon
+							className="h-6 w-6"
+							style={{ color: "var(--accent-11)" }}
+						/>
+					}
+					isOpen={isOpen}
+					onClose={onClose}
+					title={t("moduleSelection.title", { techName: translatedTechName })}
+				/>
 			</Suspense>
 		</ModuleSelectionProvider>
 	);

@@ -15,7 +15,7 @@ export default defineConfig({
 	/* Run tests in files in parallel */
 	fullyParallel: false,
 	/* Configure projects for major browsers */
-	projects: [
+	projects: process.env.CI ? [
 		{
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"], hasTouch: true },
@@ -39,6 +39,11 @@ export default defineConfig({
 		{
 			name: "Mobile Safari",
 			use: { ...devices["iPhone 12"] },
+		},
+	] : [
+		{
+			name: "chromium",
+			use: { ...devices["Desktop Chrome"], hasTouch: true },
 		},
 	],
 	/* Reporter to use. See https://playwright.dev/docs/reporters */
