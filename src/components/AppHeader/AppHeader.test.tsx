@@ -10,18 +10,18 @@ import i18n from "@/test/i18n";
 import AppHeader from "./AppHeader";
 
 // Mock hooks
-vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(),
 }));
 
-vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendDeferredEvent: vi.fn(),
 		sendEvent: vi.fn(),
 	}),
 }));
 
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		closeDialog: vi.fn(),
 		openDialog: vi.fn(),

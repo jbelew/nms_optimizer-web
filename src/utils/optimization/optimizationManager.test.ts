@@ -12,31 +12,31 @@ import { createSocket } from "@/utils/api/socketManager";
 
 import { OptimizationManager } from "./optimizationManager";
 
-vi.mock("../api/socketManager", () => ({
+vi.mock("@/utils/api/socketManager", () => ({
 	createSocket: vi.fn(),
 	TRANSPORT_ERROR_MESSAGES: new Set(["timeout", "websocket error"]),
 }));
 
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	createEmptyCell: vi.fn((sc, active) => ({ active, supercharged: sc, tech: null })),
 	useGridStore: {
 		getState: vi.fn(),
 	},
 }));
 
-vi.mock("../../store/tech/techStore", () => ({
+vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(),
 	},
 }));
 
-vi.mock("../../store/app/platformStore", () => ({
+vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: {
 		getState: vi.fn(),
 	},
 }));
 
-vi.mock("../system/monitoring", () => ({
+vi.mock("@/utils/system/monitoring", () => ({
 	Logger: {
 		error: vi.fn(),
 		info: vi.fn(),

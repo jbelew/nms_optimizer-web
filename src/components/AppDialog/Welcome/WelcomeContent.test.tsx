@@ -9,7 +9,7 @@ import { DialogContext } from "@/utils/system/dialogUtils";
 
 import WelcomeContent from "./WelcomeContent";
 
-vi.mock("../../../hooks/useAnalytics/useAnalytics", () => ({
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendDeferredEvent: vi.fn(),
 		sendEvent: vi.fn(),

@@ -70,40 +70,40 @@ vi.mock("react-i18next", () => ({
 		t: (key: string) => (key === "buttons.resetGrid" ? "Reset Grid Button" : key),
 	}),
 }));
-vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => children,
 }));
-vi.mock("../../hooks/useBreakpoint/useBreakpoint");
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint");
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		markTutorialFinished: markTutorialFinishedMock,
 		openDialog: openDialogMock,
 		tutorialFinished: false,
 	}),
 }));
-vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: () => ({
 		sendDeferredEvent: vi.fn(),
 		sendEvent: mockSendEvent,
 	}),
 }));
-vi.mock("../../hooks/useOptimize/useOptimize");
-vi.mock("../../hooks/useUrlSync/useUrlSync", () => ({
+vi.mock("@/hooks/useOptimize/useOptimize");
+vi.mock("@/hooks/useUrlSync/useUrlSync", () => ({
 	useUrlSync: () => ({
 		updateUrlForReset: mockUpdateUrlForReset,
 		updateUrlForShare: mockUpdateUrlForShare,
 	}),
 }));
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: useGridStore,
 }));
-vi.mock("../../hooks/useBuildFileManager/useBuildFileManager", () => ({
+vi.mock("@/hooks/useBuildFileManager/useBuildFileManager", () => ({
 	useBuildFileManager: () => ({
 		loadBuildFromFile: vi.fn(),
 		saveBuildToFile: vi.fn(),
 	}),
 }));
-vi.mock("../../hooks/useToast/useToast", () => ({
+vi.mock("@/hooks/useToast/useToast", () => ({
 	useToast: () => ({
 		closeToast: vi.fn(),
 		isOpen: false,
@@ -112,7 +112,7 @@ vi.mock("../../hooks/useToast/useToast", () => ({
 		toastConfig: null,
 	}),
 }));
-vi.mock("../../hooks/useScreenshot/useScreenshot", () => ({
+vi.mock("@/hooks/useScreenshot/useScreenshot", () => ({
 	useScreenshot: () => ({
 		handleScreenshot: vi.fn(),
 		isCapturing: false,

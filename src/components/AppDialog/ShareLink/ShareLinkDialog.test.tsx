@@ -12,7 +12,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock AppDialog component
-vi.mock("../Base/AppDialog", () => ({
+vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 	default: ({
 		content,
 		isOpen,

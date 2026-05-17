@@ -17,3 +17,11 @@ Patterns, gotchas, and context discovered during implementation.
 ---
 
 <!-- Learnings from implementation will be appended below -->
+
+## 2026-05-17 16:05 - Phase 2: Import Refactor (@ Alias)
+- **Implemented:** Project-wide refactor of internal imports to use the '@/' alias for parent-directory references, following the Hybrid Approach (siblings remain relative).
+- **Files changed:** Refactored over 30 files across src/components, src/hooks, src/context, and src/utils.
+- **Learnings:**
+  - Patterns: Automated import refactoring using a Python script (scripts/refactor_imports.py) is highly effective for large-scale alias migrations.
+  - Gotchas: Always verify with 'bun run typecheck' after bulk refactoring to catch any missed edge cases or incorrect path resolutions.
+---

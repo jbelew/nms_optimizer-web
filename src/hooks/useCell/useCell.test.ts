@@ -6,7 +6,7 @@ import { createEmptyCell, useGridStore } from "@/store/grid/gridStore";
 
 import { useCell } from "./useCell";
 
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	createEmptyCell: vi.fn((sc, active) => ({
 		active: !!active,
 		adjacency: "none",

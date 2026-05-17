@@ -5,7 +5,7 @@ import { useBuildFileManager } from "./useBuildFileManager";
 
 // Mock dependencies
 const mockRestoreGridState = vi.fn();
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: {
 		getState: vi.fn(() => ({
 			grid: { cells: [], height: 0, width: 0 },
@@ -20,7 +20,7 @@ vi.mock("../../store/grid/gridStore", () => ({
 	},
 }));
 
-vi.mock("../../store/tech/techStore", () => ({
+vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(() => ({
 			checkedModules: {},
@@ -32,7 +32,7 @@ vi.mock("../../store/tech/techStore", () => ({
 	},
 }));
 
-vi.mock("../../store/tech/techBonusStore", () => ({
+vi.mock("@/store/tech/techBonusStore", () => ({
 	useTechBonusStore: {
 		getState: vi.fn(() => ({
 			bonusStatus: {},
@@ -41,7 +41,7 @@ vi.mock("../../store/tech/techBonusStore", () => ({
 	},
 }));
 
-vi.mock("../../store/tech/moduleSelectionStore", () => ({
+vi.mock("@/store/tech/moduleSelectionStore", () => ({
 	useModuleSelectionStore: {
 		getState: vi.fn(() => ({
 			moduleSelections: {},
@@ -50,7 +50,7 @@ vi.mock("../../store/tech/moduleSelectionStore", () => ({
 	},
 }));
 
-vi.mock("../../store/app/platformStore", () => {
+vi.mock("@/store/app/platformStore", () => {
 	const usePlatformStoreMock = vi.fn((selector) => {
 		const store = {
 			selectedPlatform: "freighter",
@@ -65,7 +65,7 @@ vi.mock("../../store/app/platformStore", () => {
 	};
 });
 
-vi.mock("../useShipTypes/useShipTypes", () => ({
+vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
 	useFetchShipTypesSuspense: () => ({
 		explorer: {},
 		fighter: {},
@@ -74,7 +74,7 @@ vi.mock("../useShipTypes/useShipTypes", () => ({
 	}),
 }));
 
-vi.mock("../../utils/system/hashUtils", () => ({
+vi.mock("@/utils/system/hashUtils", () => ({
 	computeSHA256: vi.fn(async () => "abc123def456"),
 }));
 

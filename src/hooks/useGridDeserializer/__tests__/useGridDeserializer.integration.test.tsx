@@ -10,8 +10,8 @@ const fixturePath = path.resolve(__dirname, "../../../../scripts/Corvette - Akam
 const nmsFixture = JSON.parse(fs.readFileSync(fixturePath, "utf-8"));
 
 // Mock the tech tree fetcher to return stable data matching the fixture
-vi.mock("../../useTechTree/useTechTree", async () => {
-	const actual = await vi.importActual("../../useTechTree/useTechTree");
+vi.mock("@/hooks/useTechTree/useTechTree", async () => {
+	const actual = await vi.importActual("@/hooks/useTechTree/useTechTree");
 
 	return {
 		...actual,

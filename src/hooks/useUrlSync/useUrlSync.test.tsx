@@ -12,10 +12,10 @@ import { useGridStore } from "@/store/grid/gridStore";
 
 import { useUrlSync } from "./useUrlSync";
 
-vi.mock("../../store/grid/gridStore");
-vi.mock("../../store/app/platformStore");
-vi.mock("../useGridDeserializer/useGridDeserializer");
-vi.mock("../useShipTypes/useShipTypes");
+vi.mock("@/store/grid/gridStore");
+vi.mock("@/store/app/platformStore");
+vi.mock("@/hooks/useGridDeserializer/useGridDeserializer");
+vi.mock("@/hooks/useShipTypes/useShipTypes");
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
 	const original = await vi.importActual("react-router-dom");
@@ -25,7 +25,7 @@ vi.mock("react-router-dom", async () => {
 		useNavigate: () => mockNavigate,
 	};
 });
-vi.mock("../../context/RouteContext", () => ({
+vi.mock("@/context/RouteContext", () => ({
 	useRouteContext: vi.fn(() => ({ isKnownRoute: true })),
 }));
 

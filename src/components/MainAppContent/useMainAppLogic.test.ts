@@ -17,13 +17,13 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),
 }));
 
-vi.mock("../../hooks/useAppLayout/useAppLayout", () => ({
+vi.mock("@/hooks/useAppLayout/useAppLayout", () => ({
 	useAppLayout: () => ({
 		containerRef: { current: null },
 		gridTableRef: { current: null },
@@ -31,15 +31,15 @@ vi.mock("../../hooks/useAppLayout/useAppLayout", () => ({
 	}),
 }));
 
-vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: (breakpoint: string) => breakpoint === "1024px",
 }));
 
-vi.mock("../../hooks/useErrorDispatcher", () => ({
+vi.mock("@/hooks/useErrorDispatcher", () => ({
 	useErrorDispatcher: vi.fn(),
 }));
 
-vi.mock("../../hooks/useLoadBuild/useLoadBuild", () => ({
+vi.mock("@/hooks/useLoadBuild/useLoadBuild", () => ({
 	useLoadBuild: () => ({
 		fileInputRef: { current: null },
 		handleFileSelect: vi.fn(),
@@ -47,7 +47,7 @@ vi.mock("../../hooks/useLoadBuild/useLoadBuild", () => ({
 	}),
 }));
 
-vi.mock("../../hooks/useOptimize/useOptimize", () => ({
+vi.mock("@/hooks/useOptimize/useOptimize", () => ({
 	useOptimize: () => ({
 		clearPatternNoFitTech: vi.fn(),
 		gridContainerRef: { current: null },
@@ -60,7 +60,7 @@ vi.mock("../../hooks/useOptimize/useOptimize", () => ({
 	}),
 }));
 
-vi.mock("../../hooks/useSaveBuild/useSaveBuild", () => ({
+vi.mock("@/hooks/useSaveBuild/useSaveBuild", () => ({
 	useSaveBuild: () => ({
 		handleBuildNameCancel: vi.fn(),
 		handleBuildNameConfirm: vi.fn(),
@@ -69,11 +69,11 @@ vi.mock("../../hooks/useSaveBuild/useSaveBuild", () => ({
 	}),
 }));
 
-vi.mock("../../hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
+vi.mock("@/hooks/useScrollGridIntoView/useScrollGridIntoView", () => ({
 	registerToolbarForceShow: vi.fn(),
 }));
 
-vi.mock("../../hooks/useScrollHide/useScrollHide", () => ({
+vi.mock("@/hooks/useScrollHide/useScrollHide", () => ({
 	useScrollHide: () => ({
 		forceShow: vi.fn(),
 		isVisible: true,
@@ -81,35 +81,35 @@ vi.mock("../../hooks/useScrollHide/useScrollHide", () => ({
 	}),
 }));
 
-vi.mock("../../hooks/useToast/useToast", () => ({
+vi.mock("@/hooks/useToast/useToast", () => ({
 	useToast: () => ({
 		showError: vi.fn(),
 		showSuccess: vi.fn(),
 	}),
 }));
 
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: (selector: (state: unknown) => unknown) =>
 		selector({ isSharedGrid: false, selectHasModulesInGrid: () => true }),
 }));
 
-vi.mock("../../utils/system/splashScreen", () => ({
+vi.mock("@/utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
-vi.mock("../../store/app/platformStore", () => ({
+vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: vi.fn((selector: (state: unknown) => unknown) =>
 		selector({ selectedPlatform: "standard" })
 	),
 }));
 
-vi.mock("../../store/app/sessionStore", () => ({
+vi.mock("@/store/app/sessionStore", () => ({
 	useSessionStore: vi.fn(() => ({
 		resetSession: vi.fn(),
 	})),
 }));
 
-vi.mock("../../store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: {
 		getState: () => ({
 			setLoading: vi.fn(),

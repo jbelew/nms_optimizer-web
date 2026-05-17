@@ -16,7 +16,7 @@ vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/app/shakeStore", () => ({ useShakeStore: vi.fn() }));
 
-vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 

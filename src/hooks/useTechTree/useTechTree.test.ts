@@ -6,7 +6,7 @@ import * as apiCallModule from "@/utils/api/network";
 import { clearTechTreeCache, fetchTechTree, fetchTechTreeAsync } from "./useTechTree";
 
 // Mock apiCall
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

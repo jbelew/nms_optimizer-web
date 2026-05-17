@@ -17,7 +17,7 @@ vi.mock("@radix-ui/themes", () => ({
 }));
 
 // Mock TechTreeRow
-vi.mock("../TechTreeRow/TechTreeRow", () => ({
+vi.mock("@/components/TechTreeRow/TechTreeRow", () => ({
 	TechTreeRow: ({ tech }: { handleOptimize?: unknown; tech: string }) => (
 		<div data-testid={`tech-tree-row-${tech}`}>Row: {tech}</div>
 	),

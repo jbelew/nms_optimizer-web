@@ -6,7 +6,7 @@ import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 import { useAnalytics } from "./useAnalytics";
 
 // Mock the actual sendEvent function from utils/analytics/tracking
-vi.mock("../../utils/analytics/tracking", () => ({
+vi.mock("@/utils/analytics/tracking", () => ({
 	sendDeferredEvent: vi.fn(),
 	sendEvent: vi.fn(),
 }));

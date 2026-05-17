@@ -23,12 +23,12 @@ let mockCellState = {
 };
 
 // Mock the useCell hook
-vi.mock("../../hooks/useCell/useCell", () => ({
+vi.mock("@/hooks/useCell/useCell", () => ({
 	useCell: vi.fn(),
 }));
 
 // Mock the GridStore and its actions
-vi.mock("../../store/grid/gridStore", () => {
+vi.mock("@/store/grid/gridStore", () => {
 	const mockState = {
 		clearInitialCellStateForTap: vi.fn(),
 		gridFixed: false,
@@ -47,13 +47,13 @@ vi.mock("../../store/grid/gridStore", () => {
 	return { useGridStore };
 });
 
-vi.mock("../../store/app/shakeStore", () => ({
+vi.mock("@/store/app/shakeStore", () => ({
 	useShakeStore: vi.fn(() => ({
 		setShaking: vi.fn(),
 	})),
 }));
 
-vi.mock("../../store/tech/techStore", () => ({
+vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: vi.fn(),
 }));
 

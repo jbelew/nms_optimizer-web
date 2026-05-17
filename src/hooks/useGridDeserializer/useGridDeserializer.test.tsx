@@ -8,7 +8,7 @@ import { apiCall } from "@/utils/api/network";
 import { deserialize } from "./useGridDeserializer";
 
 // Mock dependencies
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	createEmptyCell: vi.fn(() => ({
 		active: false,
 		adjacency: "none",
@@ -31,11 +31,11 @@ vi.mock("../../store/grid/gridStore", () => ({
 	})),
 }));
 
-vi.mock("../../utils/validation/dataValidation", () => ({
+vi.mock("@/utils/validation/dataValidation", () => ({
 	validateRecommendedBuild: vi.fn(),
 }));
 
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

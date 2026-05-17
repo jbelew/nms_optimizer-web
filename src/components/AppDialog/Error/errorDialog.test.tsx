@@ -14,12 +14,12 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock optimizeStore
-vi.mock("../../../store/app/optimizeStore", () => ({
+vi.mock("@/store/app/optimizeStore", () => ({
 	useOptimizeStore: vi.fn(),
 }));
 
 // Mock AppDialog component
-vi.mock("../Base/AppDialog", () => ({
+vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 	default: ({
 		content,
 		footer,

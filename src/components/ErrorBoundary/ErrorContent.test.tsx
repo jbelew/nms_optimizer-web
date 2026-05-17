@@ -8,12 +8,12 @@ import { hideSplashScreenAndShowBackground } from "@/utils/system/splashScreen";
 import { ErrorContent } from "./ErrorContent";
 
 // Mock useBreakpoint hook
-vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(),
 }));
 
 // Mock splashScreen utility
-vi.mock("../../utils/system/splashScreen", () => ({
+vi.mock("@/utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 

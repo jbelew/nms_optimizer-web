@@ -21,11 +21,11 @@ vi.mock("react-router-dom", () => ({
 	useNavigate: vi.fn(),
 }));
 
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: vi.fn(),
 }));
 
-vi.mock("../../store/app/platformStore", () => ({
+vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: vi.fn(),
 }));
 

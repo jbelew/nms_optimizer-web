@@ -19,7 +19,7 @@ vi.mock("./TechTreeContent", () => ({
 	TechTreeContent: () => <div data-testid="tech-tree-content">TechTreeContent</div>,
 }));
 
-vi.mock("../RecommendedBuild/RecommendedBuild", () => ({
+vi.mock("@/components/RecommendedBuild/RecommendedBuild", () => ({
 	default: () => <div data-testid="recommended-build">RecommendedBuild</div>,
 }));
 
@@ -53,11 +53,11 @@ vi.mock("@radix-ui/themes", () => ({
 }));
 
 // Mock hooks
-vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => true), // Default to large screen
 }));
 
-vi.mock("../../hooks/useTechTree/useTechTree", () => ({
+vi.mock("@/hooks/useTechTree/useTechTree", () => ({
 	useFetchTechTreeSuspense: vi.fn(() => ({
 		recommended_builds: [],
 		Weaponry: [],
@@ -65,7 +65,7 @@ vi.mock("../../hooks/useTechTree/useTechTree", () => ({
 }));
 
 // Mock store
-vi.mock("../../store/app/platformStore", () => ({
+vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: vi.fn((selector) => {
 		const mockState = {
 			selectedPlatform: "standard",
@@ -76,7 +76,7 @@ vi.mock("../../store/app/platformStore", () => ({
 }));
 
 // Mock utility
-vi.mock("../../utils/system/splashScreen", () => ({
+vi.mock("@/utils/system/splashScreen", () => ({
 	hideSplashScreenAndShowBackground: vi.fn(),
 }));
 
@@ -128,7 +128,7 @@ describe("TechTree", () => {
 	});
 
 	test("should render RecommendedBuild when tech tree has recommended builds", () => {
-		vi.doMock("../../hooks/useTechTree/useTechTree", () => ({
+		vi.doMock("@/hooks/useTechTree/useTechTree", () => ({
 			useFetchTechTreeSuspense: vi.fn(() => ({
 				recommended_builds: [{ name: "Build 1" }],
 				Weaponry: [],

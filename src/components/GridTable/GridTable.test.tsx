@@ -12,7 +12,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock child components
-vi.mock("../GridCell/GridCell", () => ({
+vi.mock("@/components/GridCell/GridCell", () => ({
 	default: ({ columnIndex, rowIndex }: { columnIndex: number; rowIndex: number }) => (
 		<div data-testid={`grid-cell-${rowIndex}-${columnIndex}`}>
 			Cell {rowIndex}-{columnIndex}
@@ -20,13 +20,13 @@ vi.mock("../GridCell/GridCell", () => ({
 	),
 }));
 
-vi.mock("../GridControlButtons/GridControlButtons", () => ({
+vi.mock("@/components/GridControlButtons/GridControlButtons", () => ({
 	default: ({ rowIndex }: { rowIndex: number }) => (
 		<div data-testid={`grid-control-buttons-${rowIndex}`}>Control {rowIndex}</div>
 	),
 }));
 
-vi.mock("../GridTableButtons/GridTableButtons", () => ({
+vi.mock("@/components/GridTableButtons/GridTableButtons", () => ({
 	default: ({ solving }: { solving: boolean }) => (
 		<div data-solving={solving} data-testid="grid-table-buttons">
 			Grid Table Buttons
@@ -34,20 +34,20 @@ vi.mock("../GridTableButtons/GridTableButtons", () => ({
 	),
 }));
 
-vi.mock("../GridShake/GridShake", () => ({
+vi.mock("@/components/GridShake/GridShake", () => ({
 	default: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="grid-shake">{children}</div>
 	),
 }));
 
-vi.mock("../MessageSpinner/MessageSpinner", () => ({
+vi.mock("@/components/MessageSpinner/MessageSpinner", () => ({
 	default: ({ isVisible }: { isVisible: boolean }) => (
 		<div data-testid="message-spinner" data-visible={isVisible} />
 	),
 }));
 
 // Mock stores
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
 			grid: {
@@ -66,7 +66,7 @@ vi.mock("../../store/grid/gridStore", () => ({
 	}),
 }));
 
-vi.mock("../../store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: vi.fn((selector) => {
 		const mockState = {
 			isLoading: false,
@@ -77,12 +77,12 @@ vi.mock("../../store/tech/techTreeLoadingStore", () => ({
 }));
 
 // Mock hooks
-vi.mock("../../hooks/useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => true),
 }));
 
 // Mock context
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		tutorialFinished: false,
 	}),

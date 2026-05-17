@@ -7,9 +7,9 @@
 
 ## Phase 2: Import Refactor (@ Alias)
 <!-- execution: parallel -->
-- [ ] Task: Refactor imports in `src/components/` <!-- files: src/components/**/* -->
-- [ ] Task: Refactor imports in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
-- [ ] Task: Refactor imports in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
+- [~] Task: Refactor imports in `src/components/` <!-- files: src/components/**/* -->
+- [~] Task: Refactor imports in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
+- [~] Task: Refactor imports in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
 - [ ] Task: Refactor remaining files in `src/` (root files, routes, etc.) <!-- files: src/*.tsx, src/*.ts -->
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 

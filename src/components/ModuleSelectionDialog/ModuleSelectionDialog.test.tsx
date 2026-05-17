@@ -23,15 +23,15 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("../../store/app/platformStore");
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/store/app/platformStore");
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),
 }));
 
 // Mock AppDialog to avoid lazy loading issues and focus on ModuleSelectionDialog logic
-vi.mock("../AppDialog/Base/AppDialog", () => ({
+vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
 	default: ({ content, footer, headerIcon, title }: Record<string, React.ReactNode>) => (
 		<div>
 			<h1>{title}</h1>

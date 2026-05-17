@@ -5,7 +5,7 @@ import { useOptimizeStore } from "@/store/app/optimizeStore";
 import { apiCall, fetchJson, fetchWithTimeout, HttpError } from "./network";
 
 // Mock store
-vi.mock("../../store/app/optimizeStore", () => ({
+vi.mock("@/store/app/optimizeStore", () => ({
 	useOptimizeStore: {
 		getState: vi.fn(() => ({
 			setShowError: vi.fn(),
