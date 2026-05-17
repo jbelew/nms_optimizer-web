@@ -19,6 +19,8 @@ export type Resource<T> = {
 /**
  * Details of a specific ship type.
  *
+ * @see {@link ShipTypes}
+ *
  * @category Interfaces
  */
 export interface ShipTypeDetail {
@@ -30,6 +32,8 @@ export interface ShipTypeDetail {
 
 /**
  * A dictionary of ship types, where each key is a ship type identifier.
+ *
+ * @see {@link ShipTypeDetail}
  *
  * @category Interfaces
  */

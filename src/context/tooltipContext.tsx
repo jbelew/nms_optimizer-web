@@ -9,6 +9,7 @@ const WARM_THRESHOLD = 500;
 /**
  * Provider component for the global custom tooltip system.
  *
+ * @remarks
  * It manages the shared state of the single active tooltip, including its content,
  * screen position, and visibility logic (delays, "warm" transitions). Using a
  * single provider prevents multiple tooltips from overlapping and optimizes performance.
@@ -23,12 +24,14 @@ const WARM_THRESHOLD = 500;
  * @see {@link TooltipState}
  * @see {@link TooltipActions}
  *
- * @category Components
+ * @category Context
  *
  * @example Application wrapper
+ * ```tsx
  * <TooltipProvider>
  *   <MainApp />
  * </TooltipProvider>
+ * ```
  */
 export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [state, setState] = useState<TooltipState>({
@@ -45,11 +48,16 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 	/**
 	 * Requests to show the tooltip with the specified content and position.
 	 *
+	 * @remarks
 	 * Handles delay logic and instant-open if moving between elements.
+	 * If the user moves the mouse between elements within the `WARM_THRESHOLD`,
+	 * the tooltip will skip the delay and open immediately.
 	 *
 	 * @param {string} label - The text to display.
 	 * @param {DOMRect} rect - The bounding rectangle of the anchor element.
 	 * @param {number} [delayDuration=500] - Time in ms before showing.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	const show = useCallback((label: string, rect: DOMRect, delayDuration = 500) => {
 		if (timerRef.current) {
@@ -77,6 +85,11 @@ export const TooltipProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
 	/**
 	 * Hides the tooltip and records the close time for warmth logic.
+	 *
+	 * @remarks
+	 * Immediately clears any pending show timers and sets `isOpen` to `false`.
+	 *
+	 * @returns {void} Side-effects only.
 	 */
 	const hide = useCallback(() => {
 		if (timerRef.current) {

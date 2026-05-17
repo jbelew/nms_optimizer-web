@@ -1,5 +1,6 @@
 import "./GridCell.scss";
 
+import type { GridStore } from "@/store/grid/gridStore";
 import React from "react";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
@@ -14,17 +15,19 @@ import { useGridCellStyle } from "./useGridCellStyle";
  *
  * @remarks
  * Logic maps technology tiers (Theta, Tau, Sigma) and categories (Salvaged, Forbidden, Reactor)
- * to a short alphanumeric code used for visual identification in the grid.
+ * to a short alphanumeric code used for visual identification in the grid. This helper
+ * ensures consistent labeling across different technology types.
  *
  * @param {string} [label] - The technology label to analyze.
  *
  * @returns {string} A 1-2 character priority code (e.g., "S1", "F2", "1") or an empty string.
  *
- * @category Helpers
+ * @category Utilities
  *
  * @example
  * ```ts
- * getUpgradePriority("Salvaged Theta Module"); // returns "S1"
+ * getUpgradePriority("Salvaged Theta Module");
+ * // returns "S1"
  * ```
  */
 const getUpgradePriority = (label: string | undefined): string => {
@@ -68,7 +71,11 @@ const getUpgradePriority = (label: string | undefined): string => {
 };
 
 /**
- * Properties for the `GridCell` component.
+ * Properties for the {@link GridCell} component.
+ *
+ * @remarks
+ * Encapsulates the coordinates and mode flags required to render and manage
+ * an individual cell within the optimization grid.
  *
  * @category Components
  */
@@ -86,17 +93,19 @@ interface GridCellProps {
  *
  * @remarks
  * Used for cleaning up raw tech labels (e.g., from save files) before
- * displaying them in tooltips or grid labels.
+ * displaying them in tooltips or grid labels. This improves UI readability
+ * by removing technical or internal suffixes.
  *
  * @param {string} [label] - The raw label string.
  *
  * @returns {string} The cleaned label string.
  *
- * @category Helpers
+ * @category Utilities
  *
  * @example
  * ```ts
- * stripLabel("Photonic Core [Active]"); // returns "Photonic Core"
+ * stripLabel("Photonic Core [Active]");
+ * // returns "Photonic Core"
  * ```
  */
 const stripLabel = (label: string | undefined): string => {
@@ -109,7 +118,7 @@ const stripLabel = (label: string | undefined): string => {
  * Static elements for the cell's corner highlights.
  *
  * @remarks
- * Rendered for non-supercharged, non-imaged cells to provide grid structure.
+ * Rendered for non-supercharged, non-imaged cells to provide visual grid structure.
  */
 const CORNER_SPANS = (
 	<>
@@ -124,9 +133,9 @@ const CORNER_SPANS = (
  * A component representing an individual interactive cell in the optimization grid.
  *
  * @remarks
- * Manages its own styling via `useGridCellStyle` and handles complex interactions
- * (touch, gestures, keyboard) via `useGridCellInteraction`. Cell data is
- * reactively retrieved from `GridStore` using the `useCell` hook.
+ * Manages its own styling via {@link useGridCellStyle} and handles complex interactions
+ * (touch, gestures, keyboard) via {@link useGridCellInteraction}. Cell data is
+ * reactively retrieved from `GridStore` using the {@link useCell} hook.
  *
  * @param {GridCellProps} props - Component properties.
  *
@@ -135,7 +144,7 @@ const CORNER_SPANS = (
  * @see {@link useGridCellInteraction}
  * @see {@link useGridCellStyle}
  * @see {@link useCell}
- * @see {@link import('@/store/grid/gridStore').GridStore}
+ * @see {@link GridStore}
  * @see {@link ./GridCell.test.tsx Unit Tests}
  *
  * @component
@@ -145,14 +154,8 @@ const CORNER_SPANS = (
  * @example
  * ```tsx
  * <GridCell rowIndex={0} columnIndex={5} isSharedGrid={false} />
+ * // mounts Component
  * ```
- *
- * @performance
- * - Avoids full grid re-renders by subscribing only to specific cell data.
- * - Optimized asset loading (eager vs lazy) based on grid position.
- * @accessibility
- * - Full keyboard navigation support (Space/Enter for activation).
- * - ARIA `gridcell` role and index mapping.
  */
 const GridCell: React.FC<GridCellProps> = ({ columnIndex, isSharedGrid, rowIndex }) => {
 	const cell = useCell(rowIndex, columnIndex);

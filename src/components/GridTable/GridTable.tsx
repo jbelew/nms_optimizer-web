@@ -16,9 +16,8 @@ import { useGridStore } from "@/store/grid/gridStore";
  *
  * @remarks
  * Defines the operational mode of the grid, including whether it's interactive
- * or a static shared view.
- *
- * @see {@link GridTable}
+ * or a static shared view. These properties control the global state and
+ * visibility of grid controls.
  *
  * @category Components
  */
@@ -42,9 +41,12 @@ interface GridTableProps {
  *
  * @returns {JSX.Element} The rendered grid table structure.
  *
+ * @category Components
+ *
  * @example
  * ```tsx
  * <GridTableComponent solving={false} sharedGrid={false} />
+ * // mounts Component
  * ```
  */
 function GridTableComponent(

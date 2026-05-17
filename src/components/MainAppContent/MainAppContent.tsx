@@ -41,6 +41,7 @@ const ToastRenderer = lazy(() =>
  * @remarks
  * This allows the parent {@link MainAppContent} to render the header and other
  * static elements immediately, while only this part of the UI is suspended.
+ * It ensures that platform data is available before rendering the main grid.
  *
  * This component is technically a "side-effect only" component as it returns null
  * but performs a fetch on mount via {@link useFetchShipTypesSuspense}.
@@ -51,7 +52,7 @@ const ToastRenderer = lazy(() =>
  *
  * @category Components
  *
- * @example Basic usage
+ * @example
  * ```tsx
  * <ShipTypesLoader />
  * // returns null
@@ -64,7 +65,11 @@ const ShipTypesLoader = () => {
 };
 
 /**
- * Props for the `SharedBuildCallout` component.
+ * Props for the {@link SharedBuildCallout} component.
+ *
+ * @remarks
+ * Defines the layout constraints for the shared build notification, ensuring
+ * it matches the width of the grid table.
  *
  * @category Components
  */
@@ -76,14 +81,22 @@ interface SharedBuildCalloutProps {
 /**
  * A notification component that appears when the user is viewing a read-only shared layout.
  *
+ * @remarks
+ * Informs the user that the current view is a shared build and provides context
+ * for the read-only state of the grid. It dynamically adjusts its width to
+ * align with the {@link GridTable}.
+ *
  * @param {SharedBuildCalloutProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered callout.
  *
- * @example Shared build view
+ * @see {@link GridTable} for the target width source.
+ *
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <SharedBuildCallout gridTableTotalWidth={500} />
- * // renders informational callout
  * ```
  */
 const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalWidth }) => {
@@ -109,7 +122,11 @@ const SharedBuildCallout: React.FC<SharedBuildCalloutProps> = ({ gridTableTotalW
 };
 
 /**
- * Props for the `ShipSelectionHeading` component.
+ * Props for the {@link ShipSelectionHeading} component.
+ *
+ * @remarks
+ * Encapsulates the state required to render the platform selection header,
+ * including visibility flags and current selection data.
  *
  * @category Components
  */
@@ -127,11 +144,20 @@ interface ShipSelectionHeadingProps {
 /**
  * A layout component that displays the current equipment platform and its selection control.
  *
+ * @remarks
+ * Provides the primary UI for switching between different technology platforms
+ * (e.g., Starship, Exosuit, Multi-tool). It integrates {@link ShipSelection}
+ * for interactive changes and displays the translated platform name.
+ *
  * @param {ShipSelectionHeadingProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered heading section.
  *
- * @example Standard header
+ * @see {@link ShipSelection} for the interactive toggle.
+ *
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <ShipSelectionHeading
  *   isSharedGrid={false}
@@ -139,7 +165,6 @@ interface ShipSelectionHeadingProps {
  *   selectedShipType="standard"
  *   gridTableTotalWidth={500}
  * />
- * // renders platform selection UI
  * ```
  */
 const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
@@ -185,7 +210,11 @@ const ShipSelectionHeading: React.FC<ShipSelectionHeadingProps> = ({
 };
 
 /**
- * Props for the `MainAppUtilities` component.
+ * Props for the {@link MainAppUtilities} component.
+ *
+ * @remarks
+ * Defines the callback functions and state flags required by the application's
+ * background utility components and dialogs.
  *
  * @category Components
  */
@@ -211,14 +240,27 @@ interface MainAppUtilitiesProps {
 /**
  * A container component for non-visual and global utility components.
  *
+ * @remarks
+ * Manages the mounting and orchestration of background services and global
+ * dialogs, such as the install prompt, optimization alerts, and toast
+ * notifications. It uses `requestIdleCallback` to defer mounting of non-critical
+ * utilities, improving initial load performance.
+ *
  * @param {MainAppUtilitiesProps} props - Component properties.
  *
  * @returns {JSX.Element} Fragment containing utility components.
  *
- * @example Background utilities
+ * @see {@link InstallPrompt}
+ * @see {@link OptimizationAlertDialog}
+ * @see {@link BuildNameDialog}
+ * @see {@link ErrorMessageRenderer}
+ * @see {@link ToastRenderer}
+ *
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <MainAppUtilities {...props} />
- * // mounts background state managers
  * ```
  */
 const MainAppUtilities: React.FC<MainAppUtilitiesProps> = ({

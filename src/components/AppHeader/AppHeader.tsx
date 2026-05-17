@@ -23,7 +23,13 @@ import { useDialog } from "@/utils/system/dialogUtils";
 const EasterEggCoordinates = React.lazy(() => import("./EasterEggCoordinates"));
 
 /**
- * Props for the `AppHeader` component.
+ * Props for the {@link AppHeader} component.
+ *
+ * @remarks
+ * Defines the configuration and event handlers for the application's global
+ * header, primarily focused on navigation and changelog visibility.
+ *
+ * @category Components
  */
 interface AppHeaderProps {
 	/** Callback function to trigger the changelog dialog. **Must be provided.** */
@@ -46,6 +52,7 @@ interface AppHeaderProps {
  * @see {@link LanguageSelector}
  * @see {@link ConditionalTooltip}
  * @see {@link useDialog}
+ * @see {@link ./AppHeader.test.tsx Unit Tests}
  * @see {@link ./AppHeader.stories.tsx Storybook}
  *
  * @component
@@ -54,7 +61,8 @@ interface AppHeaderProps {
  *
  * @example
  * ```tsx
- * <AppHeader onShowChangelog={() => setChangelogOpen(true)} />
+ * <AppHeader onShowChangelog={() => console.log("Show Changelog")} />
+ * // mounts Component
  * ```
  */
 const AppHeader: React.FC<AppHeaderProps> = ({ onShowChangelog }) => {

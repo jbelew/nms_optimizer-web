@@ -48,6 +48,13 @@ import { captureException, createAppRouter, initializeSentry } from "./utils/sys
  *
  * @returns {JSX.Element} The rendered root component with all providers.
  *
+ * @see {@link useThemeStore}
+ * @see {@link ErrorBoundary}
+ * @see {@link TooltipProvider}
+ * @see {@link ToastProvider}
+ *
+ * @category Components
+ *
  * @example
  * ```tsx
  * <Root />
@@ -96,7 +103,20 @@ export const Root = () => {
 /**
  * Bootstraps the application and handles high-level initialization.
  *
+ * @remarks
+ * Performs early initialization of:
+ * - Sentry error tracking
+ * - Global error event listeners
+ * - Analytics and PWA service worker (deferred)
+ * - Root React mounting
+ *
  * @returns {Promise<void>} Side-effects only.
+ *
+ * @see {@link initializeSentry}
+ * @see {@link initializeAnalytics}
+ * @see {@link preloadInitialState}
+ *
+ * @category Utilities
  *
  * @example
  * ```ts

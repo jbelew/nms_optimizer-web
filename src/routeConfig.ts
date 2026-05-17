@@ -2,7 +2,14 @@
  * @file Route configuration constants and metadata.
  */
 
-/** The semantic version string of the current build. Defaults to `devmode`. */
+/**
+ * The semantic version string of the current build.
+ *
+ * @remarks
+ * Defaults to `devmode` if the `VITE_BUILD_VERSION` environment variable is not set.
+ *
+ * @category Routing
+ */
 export const build: string = import.meta.env.VITE_BUILD_VERSION ?? "devmode";
 
 /**

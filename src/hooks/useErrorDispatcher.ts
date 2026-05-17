@@ -43,6 +43,7 @@ const ERROR_THRESHOLDS = {
 /**
  * Monitors session counters and dispatches user-friendly error messages when thresholds are reached.
  *
+ * @remarks
  * This hook evaluates violations of application constraints (e.g., trying to supercharge
  * too many cells) and queues notifications in the `ErrorStore`. It uses a ref to ensure
  * each threshold violation is only reported once per session.
@@ -51,8 +52,8 @@ const ERROR_THRESHOLDS = {
  *
  * @see {@link useErrorStore} for error dispatching.
  * @see {@link useSessionStore} for counter values.
- * @see [SessionStore Source](../store/app/sessionStore.ts)
- * @see [ErrorStore Source](../store/app/errorStore.ts)
+ * @see {@link ../store/app/sessionStore.ts SessionStore Source}
+ * @see {@link ../store/app/errorStore.ts ErrorStore Source}
  *
  * @category Hooks
  *

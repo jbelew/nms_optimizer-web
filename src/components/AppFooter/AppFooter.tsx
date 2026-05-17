@@ -10,6 +10,11 @@ import { useDialog } from "@/utils/system/dialogUtils";
 
 /**
  * Props for the `AppFooter` component.
+ *
+ * @remarks
+ * Defines the build-time metadata displayed in the application footer.
+ *
+ * @category Components
  */
 interface AppFooterProps {
 	/** The ISO date string when the application was last built. */
@@ -24,13 +29,14 @@ interface AppFooterProps {
  * @remarks
  * It renders credits, social links, license information, and the build version.
  * It also includes a call-to-action for supporting the project via "Buy Me a Coffee".
+ * The layout is responsive, adjusting padding and alignment for mobile devices.
  *
  * @param {AppFooterProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered application footer.
  *
- * @see {@link Buymeacoffee}
- * @see {@link useDialog}
+ * @see {@link Buymeacoffee} for support links.
+ * @see {@link useDialog} for opening the privacy policy.
  * @see {@link ./AppFooter.stories.tsx Storybook}
  *
  * @component
@@ -39,7 +45,7 @@ interface AppFooterProps {
  *
  * @example
  * ```tsx
- * <AppFooter buildVersion="1.2.3" buildDate="2023-10-27T10:00:00Z" />
+ * <AppFooter buildVersion="1.2.3" buildDate="2024-05-17T12:00:00Z" />
  * ```
  */
 const AppFooter: React.FC<AppFooterProps> = ({ buildDate, buildVersion }) => {

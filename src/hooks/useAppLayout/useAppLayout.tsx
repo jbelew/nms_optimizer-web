@@ -7,7 +7,7 @@ import { useGridStore } from "@/store/grid/gridStore";
 /**
  * Interface representing the dimensions and refs for the application layout.
  *
- * @category Interfaces
+ * @category Hooks
  */
 interface AppLayout {
 	/** Ref to the main content container. */
@@ -27,6 +27,7 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
 /**
  * Custom hook for managing dynamic application layout and responsiveness.
  *
+ * @remarks
  * It uses `ResizeObserver` to track the dimensions of the main container and grid table.
  * On large screens, it synchronizes the grid height with the container height to enable
  * side-by-side scrolling.
@@ -35,7 +36,7 @@ const GRID_TABLE_WIDTH_ADJUSTMENT = 0;
  *
  * @see {@link useGridStore} for shared grid state.
  * @see {@link useBreakpoint} for responsive logic.
- * @see [GridStore Source](../../store/grid/gridStore.ts)
+ * @see {@link ../../store/grid/gridStore.ts GridStore Source}
  *
  * @category Hooks
  *

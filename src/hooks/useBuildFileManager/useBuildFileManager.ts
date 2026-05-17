@@ -1,22 +1,3 @@
-/**
- * Custom hook for managing build file operations (save/load).
- *
- * @remarks
- * This hook encapsulates the logic for serializing the application state
- * into a `.nms` build file and restoring state from a loaded file. It performs
- * validation on file type, size, JSON structure, and data integrity (checksum).
- *
- * @returns {object} An object containing `saveBuildToFile` and `loadBuildFromFile` functions.
- *
- * @see {@link ./useBuildFileManager.test.ts Unit Tests}
- * @see {@link BuildFile} for the file structure definition.
- * @see {@link "@/utils/validation/dataValidation.ts" Build File Validation}
- *
- * @hook
- *
- * @category Hooks
- */
-
 import type { BuildFile } from "@/utils/validation/dataValidation";
 
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
@@ -31,7 +12,27 @@ import { isValidBuildFile, sanitizeFilename } from "@/utils/validation/dataValid
 /**
  * Custom hook for managing build file operations (save/load).
  *
+ * @remarks
+ * This hook encapsulates the logic for serializing the application state
+ * into a `.nms` build file and restoring state from a loaded file. It performs
+ * validation on file type, size, JSON structure, and data integrity (checksum).
+ *
  * @returns {object} An object containing `saveBuildToFile` and `loadBuildFromFile` functions.
+ * @returns {Function} returns.saveBuildToFile - Serializes and downloads the current build.
+ * @returns {Function} returns.loadBuildFromFile - Parses and restores a build from a file.
+ *
+ * @see {@link ./useBuildFileManager.test.ts Unit Tests}
+ * @see {@link BuildFile} for the file structure definition.
+ * @see {@link ../../utils/validation/dataValidation.ts Build File Validation}
+ *
+ * @hook
+ *
+ * @category Hooks
+ *
+ * @example
+ * ```tsx
+ * const { saveBuildToFile, loadBuildFromFile } = useBuildFileManager();
+ * ```
  */
 export const useBuildFileManager = () => {
 	const shipTypes = useFetchShipTypesSuspense();
@@ -40,6 +41,11 @@ export const useBuildFileManager = () => {
 
 	/**
 	 * Serializes the current application state and triggers a file download.
+	 *
+	 * @remarks
+	 * This method gathers state from multiple stores (Grid, Tech, Bonus, ModuleSelection),
+	 * calculates a SHA-256 checksum for integrity, and triggers a browser download
+	 * of a `.nms` file.
 	 *
 	 * @param {string} buildName - The name to assign to the saved build.
 	 *
@@ -50,7 +56,7 @@ export const useBuildFileManager = () => {
 	 * @example
 	 * ```typescript
 	 * await saveBuildToFile("My Fighter Build");
-	 * // returns Promise<void>, side-effect: triggers browser download
+	 * // triggers browser download
 	 * ```
 	 */
 	const saveBuildToFile = async (buildName: string) => {
@@ -122,6 +128,11 @@ export const useBuildFileManager = () => {
 
 	/**
 	 * Parses a build file and restores the application state.
+	 *
+	 * @remarks
+	 * This method reads a `.nms` file, validates its structure and integrity (checksum),
+	 * and if valid, updates all application stores to reflect the saved state.
+	 * It also handles switching the ship type if the build was saved for a different one.
 	 *
 	 * @param {File} file - The `.nms` file to load.
 	 *

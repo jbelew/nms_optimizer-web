@@ -28,12 +28,19 @@ import { TechTreeContent } from "./TechTreeContent";
 /**
  * A skeleton component that displays a loading state for the tech tree.
  *
+ * @remarks
+ * Generates a randomized set of loading placeholders to simulate the structure
+ * of the technology list. This provides a smoother visual transition while
+ * data is being fetched.
+ *
  * @returns {JSX.Element} The rendered loading state.
  *
- * @example Loading state
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <SuspenseSkeleton />
- * // renders randomized loading placeholders
+ * // mounts Component
  * ```
  */
 const SuspenseSkeleton = () => {
@@ -69,13 +76,20 @@ const SuspenseSkeleton = () => {
 };
 
 /**
- * A skeleton component that displays a loading state for the tech tree.
+ * A responsive skeleton component that displays a loading state for the tech tree.
+ *
+ * @remarks
+ * Adapts its layout based on the viewport size, showing a scrollable message
+ * spinner on large screens and a detailed skeleton on smaller ones.
  *
  * @returns {JSX.Element} The rendered skeleton component.
  *
- * @example Loading state placeholder
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <TechTreeSkeleton />
+ * // mounts Component
  * ```
  */
 export const TechTreeSkeleton: React.FC = () => {
@@ -105,7 +119,13 @@ export const TechTreeSkeleton: React.FC = () => {
 };
 
 /**
- * Props for the `TechTree` and `TechTreeWithData` components.
+ * Props for the {@link TechTree} and {@link TechTreeWithData} components.
+ *
+ * @remarks
+ * Defines the necessary data and handlers for rendering the technology sidebar,
+ * including optimization controls and optional pre-fetched tree data.
+ *
+ * @category Components
  */
 interface TechTreeProps {
 	/** Total width of the grid table, used for responsive layout matching. */
@@ -121,14 +141,21 @@ interface TechTreeProps {
 /**
  * A data-aware component that renders the technology list and recommended builds.
  *
+ * @remarks
+ * Orchestrates the rendering of categorized technology modules and recommended
+ * equipment builds. It utilizes {@link useFetchTechTreeSuspense} for data fetching
+ * when pre-fetched data is not provided.
+ *
  * @param {TechTreeProps} props - Component properties.
  *
  * @returns {JSX.Element} The rendered technology tree.
  *
- * @example Internal data-aware list
+ * @category Components
+ *
+ * @example
  * ```tsx
  * <TechTreeWithData handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={500} />
- * // renders scrollable list of technologies
+ * // mounts Component
  * ```
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
@@ -213,15 +240,16 @@ TechTreeWithData.displayName = "TechTreeWithData";
  * @returns {JSX.Element} The rendered technology tree component.
  *
  * @see {@link TechTreeWithData}
+ * @see {@link TechTreeProps}
  *
  * @component
  *
  * @category Components
  *
- * @example Component usage
+ * @example
  * ```tsx
  * <TechTree handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={600} />
- * // renders technology tree UI
+ * // mounts Component
  * ```
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {

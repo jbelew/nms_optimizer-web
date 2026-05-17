@@ -87,7 +87,7 @@ interface AppDialogProps {
  * @returns {JSX.Element} The rendered dialog component.
  *
  * @see {@link AppDialogProps}
- * @see {@link getDialogIconAndStyle}
+ * @see {@link getDialogIconAndStyle} for icon selection logic.
  * @see {@link ./AppDialog.test.tsx Unit Tests}
  *
  * @component
@@ -100,9 +100,8 @@ interface AppDialogProps {
  *   isOpen={true}
  *   onClose={() => setOpen(false)}
  *   titleKey="dialogs.titles.about"
- *   content={<AboutContent />}
+ *   content={<div>Dialog content</div>}
  * />
- * // mounts a modal dialog with the "about" icon and translated title
  * ```
  */
 const AppDialog: React.FC<AppDialogProps> = ({
@@ -118,6 +117,10 @@ const AppDialog: React.FC<AppDialogProps> = ({
 }) => {
 	/**
 	 * Manages the Escape key listener for the dialog.
+	 *
+	 * @remarks
+	 * Registers a global `keydown` listener to handle closing the dialog when
+	 * the user presses the Escape key.
 	 */
 	useEffect(() => {
 		/**
@@ -127,8 +130,8 @@ const AppDialog: React.FC<AppDialogProps> = ({
 		 *
 		 * @returns {void}
 		 *
-		 * @example Interaction handler
-		 * ```typescript
+		 * @example
+		 * ```ts
 		 * handleEscapeKey(event);
 		 * ```
 		 */

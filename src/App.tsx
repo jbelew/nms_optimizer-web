@@ -18,7 +18,11 @@ import { isBot } from "./utils/browser/environment";
 import { useDialog } from "./utils/system/dialogUtils";
 import { hideSplashScreenAndShowBackground } from "./utils/system/splashScreen";
 
-// Lazy-loaded components for performance optimization
+/**
+ * Lazy-loaded component that displays a banner when the user is offline.
+ *
+ * @category Components
+ */
 const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanner"));
 
 /**

@@ -23,6 +23,11 @@ const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /**
  * Props for the `UpdatePrompt` component.
+ *
+ * @remarks
+ * Defines the visibility state and interaction handlers for the update notification.
+ *
+ * @category Components
  */
 interface UpdatePromptProps {
 	/** Whether the update notification dialog is visible. */
@@ -47,6 +52,8 @@ interface UpdatePromptProps {
  *
  * @see {@link AppDialog}
  * @see {@link useBreakpoint}
+ * @see {@link ./UpdatePrompt.test.tsx Unit Tests}
+ * @see {@link ./UpdatePrompt.stories.tsx Storybook}
  *
  * @component
  *
@@ -54,8 +61,7 @@ interface UpdatePromptProps {
  *
  * @example
  * ```tsx
- * <UpdatePrompt isOpen={true} onRefresh={doUpdate} onDismiss={hideFn} />
- * // renders update dialog
+ * <UpdatePrompt isOpen={true} onRefresh={() => window.location.reload()} onDismiss={() => {}} />
  * ```
  */
 const UpdatePrompt: FC<UpdatePromptProps> = ({ isOpen, onDismiss, onRefresh }) => {

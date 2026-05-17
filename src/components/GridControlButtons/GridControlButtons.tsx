@@ -31,6 +31,9 @@ const selectHasAnyActiveCells = (state: GridStore) =>
 /**
  * Props for the {@link GridControlButtons} component.
  *
+ * @remarks
+ * Defines the required data for identifying the target row for control actions.
+ *
  * @category Components
  */
 interface RowControlButtonProps {
@@ -58,6 +61,7 @@ interface RowControlButtonProps {
  * @see {@link RowControlButtonProps}
  * @see {@link useGridRowState}
  * @see {@link useGridStore}
+ * @see {@link ./GridControlButtons.test.tsx Unit Tests}
  *
  * @component
  *
@@ -65,7 +69,7 @@ interface RowControlButtonProps {
  *
  * @example
  * ```tsx
- * <GridControlButtons rowIndex={5} isLoading={false} />
+ * <GridControlButtons rowIndex={5} />
  * ```
  */
 const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
