@@ -154,6 +154,13 @@ const bootstrap = async () => {
 				return true;
 			}
 
+			if (errorMessage.includes("ResizeObserver loop")) {
+				event.preventDefault();
+
+				// This is a benign error that occurs when a resize observer triggers another layout shift in the same frame.
+				return true;
+			}
+
 			console.error("Uncaught initialization error:", event.error || event.message);
 		});
 

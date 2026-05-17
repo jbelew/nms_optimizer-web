@@ -12,8 +12,8 @@ Focus: Simplify component tree and eliminate boolean prop proliferation.
 ## Phase 2: Performance Optimization (Vercel Best Practices)
 Focus: Resolve high INP and optimize LCP/rendering.
 
-- [~] Task: INP Profiling and Long Task Mitigation
-- [ ] Task: LCP Optimization (Asset Loading & Hydration)
+- [x] Task: INP Profiling and Long Task Mitigation
+- [~] Task: LCP Optimization (Asset Loading & Hydration)
 - [ ] Task: Render Cycle Optimization (useMemo/useCallback Audit)
 - [ ] Task: Conductor - User Manual Verification 'Performance Optimization' (Protocol in workflow.md)
 

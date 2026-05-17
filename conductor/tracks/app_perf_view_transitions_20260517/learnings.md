@@ -41,6 +41,14 @@ Patterns, gotchas, and context discovered during implementation.
   - Patterns: Compound Component File Splitting. To maintain Fast Refresh compatibility, every exported React component should live in its own file if the aggregator file uses `Object.assign` or other non-component exports.
   - Gotchas: Refactoring core layout components can easily break Suspense boundaries and conditional rendering logic (e.g. breakpoint-based visibility).
   - Context: Granular Suspense boundaries (e.g. only around the Sidebar content) are crucial for maintaining a good UX and avoiding unnecessary CLS.
+## [2026-05-17 14:15] - Phase 2 Task 1: INP Profiling and Long Task Mitigation
+- **Implemented:** Wrapped expensive grid state updates in `useOptimize` and `useRecommendedBuild` with `startTransition`.
+- **Files changed:** `src/hooks/useOptimize/useOptimize.tsx`, `src/hooks/useRecommendedBuild/useRecommendedBuild.tsx`, `src/hooks/useBuildFileManager/useBuildFileManager.ts`
+- **Commit:** fdfef43
+- **Learnings:**
+  - Patterns: State Update Transitions. Using React 18's `startTransition` around synchronous, heavy state updates (like replacing a 10x6 grid of objects) yields the main thread to the browser, significantly reducing INP.
+  - Gotchas: Ensure `startTransition` is actually imported from `react`.
+
 ---
 
 <!-- Learnings from implementation will be appended below -->
