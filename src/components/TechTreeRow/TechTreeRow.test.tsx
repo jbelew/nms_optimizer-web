@@ -5,7 +5,7 @@ import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useTechTree } from "@/components/TechTree/createTechTreeContext";
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -16,7 +16,7 @@ import { TechTreeRow } from "./TechTreeRow";
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/app/shakeStore", () => ({ useShakeStore: vi.fn() }));
-vi.mock("@/components/TechTree/createTechTreeContext", () => ({
+vi.mock("@/components/TechTree/useTechTreeContext", () => ({
 	useTechTree: vi.fn(),
 }));
 

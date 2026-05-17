@@ -1,7 +1,7 @@
 import type { TechTreeRowProps } from "@/types/props";
 import React, { useMemo } from "react";
 
-import { useTechTree } from "@/components/TechTree/createTechTreeContext";
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 
 import { TechTreeRowContext } from "./createTechTreeRowContext";
 import { useTechTreeRow } from "./useTechTreeRow";

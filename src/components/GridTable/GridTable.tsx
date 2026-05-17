@@ -2,15 +2,14 @@
 import "./GridTable.scss";
 
 import React from "react";
-import { useTranslation } from "react-i18next";
 
-import GridCell from "@/components/GridCell/GridCell";
-import GridControlButtons from "@/components/GridControlButtons/GridControlButtons";
-import GridShake from "@/components/GridShake/GridShake";
 import GridTableButtons from "@/components/GridTableButtons/GridTableButtons";
 import { useGridStore } from "@/store/grid/gridStore";
 
 import { GridProvider } from "./GridContext";
+import { GridTableContent } from "./GridTableContent";
+import { GridTableGrid } from "./GridTableGrid";
+import { GridTableRoot } from "./GridTableRoot";
 
 /**
  * Properties for the {@link GridTable} component.
@@ -23,71 +22,41 @@ interface GridTableProps {
 }
 
 /**
- * Internal implementation of the GridTable component.
+ * Default composite component for GridTable.
  */
-function GridTable({
-	ref,
-	sharedGrid,
-	solving,
-}: GridTableProps & { ref?: React.Ref<HTMLDivElement> }) {
-	const { t } = useTranslation();
-	const gridHeight = useGridStore((state) => state.grid.height);
-	const gridWidth = useGridStore((state) => state.grid.width);
-	const deferredHeight = React.useDeferredValue(gridHeight);
-	const deferredWidth = React.useDeferredValue(gridWidth);
+const GridTableComp = React.forwardRef<HTMLDivElement, GridTableProps>(
+	({ sharedGrid, solving }, ref) => {
+		const gridHeight = useGridStore((state) => state.grid.height);
+		const deferredHeight = React.useDeferredValue(gridHeight);
+		const gridWidth = useGridStore((state) => state.grid.width);
+		const deferredWidth = React.useDeferredValue(gridWidth);
 
-	const totalAriaColumnCount = deferredWidth + 1;
+		if (!deferredHeight || !deferredWidth) {
+			return <div className="gridTable-empty" ref={ref}></div>;
+		}
 
-	const gridContent = React.useMemo(
-		() =>
-			Array.from({ length: deferredHeight }).map((_, rowIndex) => (
-				<div
-					aria-rowindex={rowIndex + 1}
-					className="gridTable__row"
-					key={rowIndex}
-					role="row"
-				>
-					{/* Direct row-less rendering of cells for performance */}
-					{Array.from({ length: deferredWidth }).map((__, columnIndex) => (
-						<GridCell
-							columnIndex={columnIndex}
-							isSharedGrid={sharedGrid}
-							key={`${rowIndex}-${columnIndex}`}
-							rowIndex={rowIndex}
-						/>
-					))}
-					<div aria-colindex={totalAriaColumnCount} className="w-6" role="gridcell">
-						<GridControlButtons rowIndex={rowIndex} />
-					</div>
-				</div>
-			)),
-		[deferredHeight, deferredWidth, sharedGrid, totalAriaColumnCount]
-	);
-
-	if (!deferredHeight || !deferredWidth) {
-		return <div className="gridTable-empty" ref={ref}></div>;
+		return (
+			<GridProvider gridRef={ref as React.RefObject<HTMLDivElement | null>}>
+				<GridTableRoot>
+					<GridTableGrid gridHeight={deferredHeight} gridRef={ref} solving={solving}>
+						<GridTableContent gridHeight={deferredHeight} sharedGrid={sharedGrid} />
+					</GridTableGrid>
+					<GridTableButtons solving={solving} />
+				</GridTableRoot>
+			</GridProvider>
+		);
 	}
+);
 
-	return (
-		<GridProvider gridRef={ref as React.RefObject<HTMLDivElement | null>}>
-			<GridShake duration={500}>
-				<div
-					aria-colcount={totalAriaColumnCount}
-					aria-label={t("gridTable.ariaLabel") ?? ""}
-					aria-rowcount={deferredHeight}
-					className={`gridTable ${solving ? "opacity-25" : ""}`}
-					ref={ref}
-					role="grid"
-				>
-					{gridContent}
-				</div>
+GridTableComp.displayName = "GridTable";
 
-				<GridTableButtons solving={solving} />
-			</GridShake>
-		</GridProvider>
-	);
-}
-
-GridTable.displayName = "GridTable";
-
-export { GridTable };
+/**
+ * Compound component for GridTable.
+ */
+export const GridTable = Object.assign(GridTableComp, {
+	Buttons: GridTableButtons,
+	Content: GridTableContent,
+	Grid: GridTableGrid,
+	Provider: GridProvider,
+	Root: GridTableRoot,
+});

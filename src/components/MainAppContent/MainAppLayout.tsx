@@ -10,8 +10,10 @@ import { LanguageSelector } from "@/components/LanguageSelector/languageSelector
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import { ShipSelection } from "@/components/ShipSelection/shipSelection";
-import TechTree, { TechTreeSkeleton } from "@/components/TechTree/TechTree";
+import { TechTree, TechTreeSkeleton } from "@/components/TechTree/TechTree";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
+import { useGridStore } from "@/store/grid/gridStore";
 import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 
 import {
@@ -83,7 +85,14 @@ const ShipSelectionHeading: React.FC = () => {
 		>
 			{!isSharedGrid && (
 				<span className="main-app__ship-selection">
-					<ShipSelection solving={solving} />
+					<Suspense fallback={<ShipSelection.Skeleton />}>
+						<ShipSelection.Provider solving={solving}>
+							<ShipSelection.Root>
+								<ShipSelection.Trigger />
+								<ShipSelection.Content />
+							</ShipSelection.Root>
+						</ShipSelection.Provider>
+					</Suspense>
 				</span>
 			)}
 
@@ -226,13 +235,13 @@ export const MainAppHeader: React.FC = () => {
 	return (
 		<AppHeader.Provider onShowChangelog={handleShowChangelog}>
 			<AppHeader.Root>
-				{!isSharedGrid && !isLargeScreen && !isSmallScreen && (
+				{!isSharedGrid && !isLargeScreen && isSmallScreen && (
 					<AppHeader.LeftControls>
 						<AppHeader.AccessibilityToggle />
 					</AppHeader.LeftControls>
 				)}
 
-				{!isSharedGrid && !isSmallScreen && (
+				{!isSharedGrid && isSmallScreen && (
 					<AppHeader.RightControls>
 						<AppHeader.ChangelogButton />
 						<AppHeader.UserStatsButton />
@@ -282,6 +291,7 @@ export const MainAppGridSection: React.FC = () => {
 	const { isSharedGrid } = useMainAppGlobal();
 	const { progressPercent, solving } = useMainAppOptimization();
 	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
+	const gridHeight = useGridStore((state) => state.grid.height);
 
 	return (
 		<Box
@@ -304,8 +314,56 @@ export const MainAppGridSection: React.FC = () => {
 
 			<ShipSelectionHeading />
 
-			<GridTable ref={gridTableRef} sharedGrid={isSharedGrid} solving={solving} />
+			<GridTable.Provider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
+				<GridTable.Root>
+					<GridTable.Grid
+						gridHeight={gridHeight}
+						gridRef={gridTableRef}
+						solving={solving}
+					>
+						<GridTable.Content gridHeight={gridHeight} sharedGrid={isSharedGrid} />
+					</GridTable.Grid>
+					<GridTable.Buttons solving={solving} />
+				</GridTable.Root>
+			</GridTable.Provider>
 		</Box>
+	);
+};
+
+/**
+ * Inner component that renders the tech tree list/recommended builds.
+ */
+const MainAppSidebarContent: React.FC = () => {
+	const { isLargeScreen, selectedShipType } = useMainAppGlobal();
+	const { handleOptimize, solving } = useMainAppOptimization();
+	const techTree = useFetchTechTreeSuspense(selectedShipType);
+	const isGridFull = useGridStore((state) => state._isGridFull);
+
+	const hasRecommendedBuilds =
+		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;
+
+	return (
+		<TechTree.Provider
+			handleOptimize={handleOptimize}
+			isGridFull={isGridFull}
+			solving={solving}
+		>
+			{isLargeScreen ? (
+				<>
+					<TechTree.Root hasRecommendedBuilds={hasRecommendedBuilds}>
+						<TechTree.List techTree={techTree} />
+					</TechTree.Root>
+					<TechTree.Recommended techTree={techTree} />
+				</>
+			) : (
+				<>
+					<TechTree.Recommended techTree={techTree} />
+					<TechTree.Root hasRecommendedBuilds={hasRecommendedBuilds}>
+						<TechTree.List techTree={techTree} />
+					</TechTree.Root>
+				</>
+			)}
+		</TechTree.Provider>
 	);
 };
 
@@ -315,7 +373,6 @@ export const MainAppGridSection: React.FC = () => {
 export const MainAppSidebarSection: React.FC = () => {
 	const { gridTableTotalWidth } = useMainAppLayout();
 	const { isLargeScreen, isSharedGrid } = useMainAppGlobal();
-	const { handleOptimize, solving } = useMainAppOptimization();
 
 	if (isSharedGrid) return null;
 
@@ -327,11 +384,7 @@ export const MainAppSidebarSection: React.FC = () => {
 			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
 		>
 			<Suspense fallback={<TechTreeSkeleton />}>
-				<TechTree
-					gridTableTotalWidth={gridTableTotalWidth}
-					handleOptimize={handleOptimize}
-					solving={solving}
-				/>
+				<MainAppSidebarContent />
 			</Suspense>
 		</Flex>
 	);

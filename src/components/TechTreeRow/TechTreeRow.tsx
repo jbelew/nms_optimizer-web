@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 import { ModuleSelectionDialog } from "@/components/ModuleSelectionDialog/ModuleSelectionDialog";
-import { useTechTree } from "@/components/TechTree/createTechTreeContext";
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";

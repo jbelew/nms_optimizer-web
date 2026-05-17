@@ -3,9 +3,6 @@ import "./MainAppContent.scss";
 
 import { lazy, Suspense } from "react";
 import { Flex } from "@radix-ui/themes";
-import { useTranslation } from "react-i18next";
-
-import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 
 import { MainAppProvider } from "./MainAppContext";
 import {
@@ -38,7 +35,6 @@ const ToastRenderer = lazy(() =>
  * Component that renders the application layout structure.
  */
 const MainAppLayoutContent = () => {
-	const { t } = useTranslation();
 	const { gridContainerRef } = useMainAppOptimization();
 
 	return (
@@ -56,32 +52,15 @@ const MainAppLayoutContent = () => {
 					<div className="main-app__background-wrapper">
 						<MainAppHeader />
 
-						<Suspense
-							fallback={
-								<Flex
-									align="center"
-									className="main-app__content"
-									justify="center"
-									style={{ minHeight: "400px", width: "100%" }}
-								>
-									<MessageSpinner
-										initialMessage={t("techTree.loading")}
-										isVisible={true}
-									/>
-								</Flex>
-							}
+						<Flex
+							align={{ initial: "center", md: "start" }}
+							className="main-app__content"
+							direction={{ initial: "column", md: "row" }}
+							ref={gridContainerRef}
 						>
-							<ShipTypesLoader />
-							<Flex
-								align={{ initial: "center", md: "start" }}
-								className="main-app__content"
-								direction={{ initial: "column", md: "row" }}
-								ref={gridContainerRef}
-							>
-								<MainAppGridSection />
-								<MainAppSidebarSection />
-							</Flex>
-						</Suspense>
+							<MainAppGridSection />
+							<MainAppSidebarSection />
+						</Flex>
 					</div>
 
 					<MainAppFooter position="bottom-mobile" />
@@ -108,6 +87,9 @@ const MainAppLayoutContent = () => {
 export const MainAppContent = () => {
 	return (
 		<MainAppProvider>
+			<Suspense fallback={null}>
+				<ShipTypesLoader />
+			</Suspense>
 			<MainAppLayoutContent />
 		</MainAppProvider>
 	);

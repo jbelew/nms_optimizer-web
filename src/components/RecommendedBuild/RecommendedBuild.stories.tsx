@@ -6,7 +6,7 @@ import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTre
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
 
-import RecommendedBuild from "./RecommendedBuild";
+import { RecommendedBuild } from "./RecommendedBuild";
 
 // Simplified to a single build to match Exosuit behavior.
 // We include the tech/module definition so modulesMap can resolve properties.
