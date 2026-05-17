@@ -13,16 +13,16 @@
 - [x] Task: Refactor remaining files in `src/` (root files, routes, etc.) <!-- files: src/*.tsx, src/*.ts -->
 - [x] Task: Conductor - User Manual Verification .Phase 2. (Protocol in workflow.md)
 
-## Phase 3: JSDoc Audit & Update
+## Phase 3: JSDoc Audit & Update [checkpoint: 005d77e]
 <!-- execution: parallel -->
-- [~] Task: Audit and update JSDoc in `src/components/` <!-- files: src/components/**/* -->
-- [ ] Task: Audit and update JSDoc in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
-- [ ] Task: Audit and update JSDoc in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
-- [ ] Task: Audit and update JSDoc in remaining `src/` files <!-- files: src/*.tsx, src/*.ts -->
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: Audit and update JSDoc in `src/components/` <!-- files: src/components/**/* -->
+- [x] Task: Audit and update JSDoc in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
+- [x] Task: Audit and update JSDoc in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
+- [x] Task: Audit and update JSDoc in remaining `src/` files <!-- files: src/*.tsx, src/*.ts -->
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ## Phase 4: Final Validation
-- [ ] Task: Run project-wide linting and fix any remaining style issues
-- [ ] Task: Run full TypeScript type check
-- [ ] Task: Verify application still builds and runs correctly
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Run project-wide linting and fix any remaining style issues
+- [x] Task: Run full TypeScript type check
+- [x] Task: Verify application still builds and runs correctly
+- [x] Task: Conductor - User Manual Verification .Phase 4. (Protocol in workflow.md)

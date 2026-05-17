@@ -51,14 +51,8 @@ const typeImageMap: TypeImageMap = {
  * Props for the `TechTreeSection` component.
  */
 interface TechTreeSectionProps {
-	/** Asynchronous callback for triggering an optimization solve. */
-	handleOptimize: (tech: string) => Promise<void>;
 	/** Index of the section for ordering purposes. */
 	index: number;
-	/** Whether the grid has reached its module capacity. */
-	isGridFull: boolean;
-	/** Whether any optimization solve is currently running. */
-	solving: boolean;
 	/** Array of individual technology items to render in this section. */
 	technologies: TechTreeItem[];
 	/** The category identifier for this section (e.g., 'Weaponry'). **Must exist in translations.** */
@@ -85,17 +79,11 @@ interface TechTreeSectionProps {
  *
  * @example
  * ```tsx
- * <TechTreeSection type="Propulsion" technologies={items} index={0} handleOptimize={fn} solving={false} isGridFull={false} />
+ * <TechTreeSection type="Propulsion" technologies={items} index={0} />
  * // renders Propulsion header and child rows
  * ```
  */
-export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
-	handleOptimize,
-	isGridFull,
-	solving,
-	technologies,
-	type,
-}) => {
+export const TechTreeSection: React.FC<TechTreeSectionProps> = ({ technologies, type }) => {
 	const { t } = useTranslation();
 	// Determine the image path from the typeImageMap
 	const imagePath = typeImageMap[type]
@@ -127,10 +115,7 @@ export const TechTreeSection: React.FC<TechTreeSectionProps> = ({
 			{/* Render each technology as a TechTreeRow */}
 			{technologies.map((tech: TechTreeItem) => (
 				<TechTreeRow
-					handleOptimize={handleOptimize}
-					isGridFull={isGridFull} // Pass isGridFull down
 					key={tech.key}
-					solving={solving}
 					tech={tech.key}
 					techColor={tech.color} // Pass tech.color
 					techImage={tech.image} // Pass the tech.image here

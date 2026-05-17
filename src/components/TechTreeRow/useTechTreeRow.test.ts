@@ -39,7 +39,11 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-const mockProps: TechTreeRowProps = {
+const mockProps: TechTreeRowProps & {
+	handleOptimize: (tech: string) => Promise<void>;
+	isGridFull: boolean;
+	solving: boolean;
+} = {
 	handleOptimize: vi.fn(),
 	isGridFull: false,
 	solving: false,
@@ -107,7 +111,15 @@ describe("useTechTreeRow", () => {
 
 	it("should memoize image paths and translation (no recalculation on non-dependency changes)", () => {
 		const { rerender, result } = renderHook(
-			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
+			({
+				props,
+			}: {
+				props: TechTreeRowProps & {
+					handleOptimize: (tech: string) => Promise<void>;
+					isGridFull: boolean;
+					solving: boolean;
+				};
+			}) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
 
@@ -124,7 +136,15 @@ describe("useTechTreeRow", () => {
 
 	it("should update image paths when techImage dependency changes", () => {
 		const { rerender, result } = renderHook(
-			({ props }: { props: TechTreeRowProps }) => useTechTreeRow(props),
+			({
+				props,
+			}: {
+				props: TechTreeRowProps & {
+					handleOptimize: (tech: string) => Promise<void>;
+					isGridFull: boolean;
+					solving: boolean;
+				};
+			}) => useTechTreeRow(props),
 			{ initialProps: { props: mockProps } }
 		);
 

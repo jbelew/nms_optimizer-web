@@ -132,17 +132,17 @@ describe("GridCell", () => {
 	});
 
 	it("renders upgrade priority label when applicable", () => {
-		renderComponent({ label: "Upgrade sigma" });
+		renderComponent({ active: true, label: "Upgrade sigma" });
 		expect(screen.getByText("3")).toBeInTheDocument();
 	});
 
 	it("renders 'S1' for 'Salvaged Upgrade Module Theta'", () => {
-		renderComponent({ label: "Salvaged Upgrade Module Theta" });
+		renderComponent({ active: true, label: "Salvaged Upgrade Module Theta" });
 		expect(screen.getByText("S1")).toBeInTheDocument();
 	});
 
 	it("renders 'F1' for 'Forbidden Upgrade Module Theta'", () => {
-		renderComponent({ label: "Forbidden Upgrade Module Theta" });
+		renderComponent({ active: true, label: "Forbidden Upgrade Module Theta" });
 		expect(screen.getByText("F1")).toBeInTheDocument();
 	});
 

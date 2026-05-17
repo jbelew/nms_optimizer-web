@@ -71,5 +71,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Update project to use @ imports and ensure JSDoc's are up to date using the agentic-jsdocs skill.
-*Link: [./conductor/tracks/import_jsdoc_refactor_20260517/](./conductor/tracks/import_jsdoc_refactor_20260517/)*

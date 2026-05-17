@@ -25,3 +25,10 @@ Patterns, gotchas, and context discovered during implementation.
   - Patterns: Automated import refactoring using a Python script (scripts/refactor_imports.py) is highly effective for large-scale alias migrations.
   - Gotchas: Always verify with 'bun run typecheck' after bulk refactoring to catch any missed edge cases or incorrect path resolutions.
 ---
+
+## 2026-05-17 16:40 - Phase 4: Final Validation
+- **Implemented:** Project-wide validation including linting, type-checking, and production build.
+- **Learnings:**
+  - JSDoc: Use the `import('./Path').Symbol` syntax in `{@link}` tags to avoid `jsdoc/no-undefined-types` warnings when cross-referencing symbols that aren't imported as types.
+  - Build: The `purge-radix-css` plugin successfully reduced CSS size by 18.8%.
+---

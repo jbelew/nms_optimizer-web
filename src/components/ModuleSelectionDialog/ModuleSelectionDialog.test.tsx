@@ -30,17 +30,22 @@ vi.mock("@/utils/system/dialogUtils", () => ({
 	}),
 }));
 
-// Mock AppDialog to avoid lazy loading issues and focus on ModuleSelectionDialog logic
-vi.mock("@/components/AppDialog/Base/AppDialog", () => ({
-	default: ({ content, footer, headerIcon, title }: Record<string, React.ReactNode>) => (
-		<div>
-			<h1>{title}</h1>
-			<div>{headerIcon}</div>
-			<div>{content}</div>
-			<div>{footer}</div>
-		</div>
-	),
-}));
+// Mock AppDialog to support compound component pattern
+vi.mock("@/components/AppDialog/Base/AppDialog", () => {
+	const MockRoot = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+	const MockTitle = ({ children }: { children: React.ReactNode }) => <h1>{children}</h1>;
+	const MockBody = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+	const MockFooter = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+
+	return {
+		default: Object.assign(() => null, {
+			Body: MockBody,
+			Footer: MockFooter,
+			Root: MockRoot,
+			Title: MockTitle,
+		}),
+	};
+});
 
 const mockGroupedModules = {
 	atlantid: [],

@@ -1,18 +1,3 @@
-/**
- * Technology tree sidebar container module.
- *
- * @remarks
- * This module provides the main `TechTree` component, which organizes the
- * equipment sidebar, including categorized technology rows and build
- * recommendations.
- *
- * @see {@link TechTree}
- * @see {@link ./TechTree.test.tsx Unit Tests}
- * @see {@link ./TechTree.stories.tsx Storybook}
- *
- * @category Components
- */
-
 import type { TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
 import React, { useState } from "react";
 import { Box, Flex, ScrollArea, Skeleton } from "@radix-ui/themes";
@@ -22,26 +7,13 @@ import RecommendedBuild from "@/components/RecommendedBuild/RecommendedBuild";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { useGridStore } from "@/store/grid/gridStore";
 
+import { TechTreeContext } from "./createTechTreeContext";
 import { TechTreeContent } from "./TechTreeContent";
 
 /**
  * A skeleton component that displays a loading state for the tech tree.
- *
- * @remarks
- * Generates a randomized set of loading placeholders to simulate the structure
- * of the technology list. This provides a smoother visual transition while
- * data is being fetched.
- *
- * @returns {JSX.Element} The rendered loading state.
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <SuspenseSkeleton />
- * // mounts Component
- * ```
  */
 const SuspenseSkeleton = () => {
 	const [skeletons] = useState(() => {
@@ -77,20 +49,6 @@ const SuspenseSkeleton = () => {
 
 /**
  * A responsive skeleton component that displays a loading state for the tech tree.
- *
- * @remarks
- * Adapts its layout based on the viewport size, showing a scrollable message
- * spinner on large screens and a detailed skeleton on smaller ones.
- *
- * @returns {JSX.Element} The rendered skeleton component.
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <TechTreeSkeleton />
- * // mounts Component
- * ```
  */
 export const TechTreeSkeleton: React.FC = () => {
 	const isLarge = useBreakpoint("1024px");
@@ -120,14 +78,10 @@ export const TechTreeSkeleton: React.FC = () => {
 
 /**
  * Props for the {@link TechTree} and {@link TechTreeWithData} components.
- *
- * @remarks
- * Defines the necessary data and handlers for rendering the technology sidebar,
- * including optimization controls and optional pre-fetched tree data.
- *
- * @category Components
  */
 interface TechTreeProps {
+	/** Optional children to render instead of the default TechTreeContent. */
+	children?: React.ReactNode;
 	/** Total width of the grid table, used for responsive layout matching. */
 	gridTableTotalWidth: number | undefined;
 	/** Function to trigger a solver run for a specific technology. **Must be asynchronous.** */
@@ -140,25 +94,9 @@ interface TechTreeProps {
 
 /**
  * A data-aware component that renders the technology list and recommended builds.
- *
- * @remarks
- * Orchestrates the rendering of categorized technology modules and recommended
- * equipment builds. It utilizes {@link useFetchTechTreeSuspense} for data fetching
- * when pre-fetched data is not provided.
- *
- * @param {TechTreeProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered technology tree.
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <TechTreeWithData handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={500} />
- * // mounts Component
- * ```
  */
 const TechTreeWithData: React.FC<TechTreeProps> = ({
+	children,
 	handleOptimize,
 	solving,
 	techTree: techTreeProp,
@@ -167,6 +105,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform) || "standard";
 	const fetchedTechTree = useFetchTechTreeSuspense(selectedShipType);
 	const techTree = techTreeProp || fetchedTechTree;
+	const isGridFull = useGridStore((state) => state._isGridFull);
 
 	const DEFAULT_TECH_TREE_SCROLL_AREA_HEIGHT = "523px";
 
@@ -185,8 +124,15 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 		paddingRight: "var(--space-5)",
 	};
 
+	const contextValue = React.useMemo(
+		() => ({ handleOptimize, isGridFull, solving }),
+		[handleOptimize, isGridFull, solving]
+	);
+
+	const content = children || <TechTreeContent techTree={techTree} />;
+
 	return (
-		<>
+		<TechTreeContext.Provider value={contextValue}>
 			{isLarge ? (
 				<>
 					<ScrollArea
@@ -195,11 +141,7 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 						style={scrollAreaStyle}
 						type="always"
 					>
-						<TechTreeContent
-							handleOptimize={handleOptimize}
-							solving={solving}
-							techTree={techTree}
-						/>
+						{content}
 					</ScrollArea>
 
 					{hasRecommendedBuilds && (
@@ -213,16 +155,10 @@ const TechTreeWithData: React.FC<TechTreeProps> = ({
 							<RecommendedBuild isLarge={isLarge} techTree={techTree} />
 						)}
 					</Box>
-					<Box mt="4">
-						<TechTreeContent
-							handleOptimize={handleOptimize}
-							solving={solving}
-							techTree={techTree}
-						/>
-					</Box>
+					<Box mt="4">{content}</Box>
 				</>
 			)}
-		</>
+		</TechTreeContext.Provider>
 	);
 };
 
@@ -230,27 +166,6 @@ TechTreeWithData.displayName = "TechTreeWithData";
 
 /**
  * Main entry point for the technology tree feature.
- *
- * @remarks
- * It manages the high-level layout and data fetching for the available technologies
- * and their modules. Designed to be rendered within a `Suspense` boundary.
- *
- * @param {TechTreeProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered technology tree component.
- *
- * @see {@link TechTreeWithData}
- * @see {@link TechTreeProps}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <TechTree handleOptimize={optimizeFn} solving={false} gridTableTotalWidth={600} />
- * // mounts Component
- * ```
  */
 const TechTree: React.FC<TechTreeProps> = (props) => {
 	return <TechTreeWithData {...props} />;

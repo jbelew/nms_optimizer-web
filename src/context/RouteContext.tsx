@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 
 /**
  * Context value representing global routing metadata.
@@ -47,4 +47,4 @@ const RouteContext = createContext<RouteContextType>({
  * // returns { isKnownRoute: true }
  * ```
  */
-export const useRouteContext = () => useContext(RouteContext);
+export const useRouteContext = () => use(RouteContext);

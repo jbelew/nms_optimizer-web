@@ -1,7 +1,7 @@
 import "./AppDialog.scss";
 
 import type { ReactNode } from "react";
-import React, { useEffect } from "react";
+import React, { createContext, useEffect, useMemo } from "react";
 import {
 	Close as DialogClose,
 	Content as DialogContent,
@@ -19,13 +19,6 @@ import { getDialogIconAndStyle } from "@/utils/icons/iconRegistry";
 
 /**
  * List of dialog title keys that require extra padding.
- *
- * @remarks
- * These keys correspond to full routed pages that render longer, page-like content.
- * Applying additional padding (`pr-4`) to the scrollable content area ensures
- * that the scrollbar does not overlap the text on smaller viewports.
- *
- * @category Components
  */
 const ROUTED_DIALOG_TITLE_KEYS = [
 	"about",
@@ -35,177 +28,169 @@ const ROUTED_DIALOG_TITLE_KEYS = [
 	"translations",
 ];
 
-/**
- * Properties for the `AppDialog` component.
- *
- * @remarks
- * Defines the configuration for the modal dialog, including visibility state,
- * title localization, and content to be rendered.
- *
- * @see {@link AppDialog}
- *
- * @category Components
- */
-interface AppDialogProps {
-	/** Optional CSS class names to apply to the dialog content container. */
-	className?: string;
-	/** The React components or text to render inside the dialog body. */
-	content: ReactNode;
-	/** Optional footer content (e.g., action buttons) rendered below the scrollable area. */
-	footer?: ReactNode;
-	/** Optional custom avatar or element to render before the title. */
-	headerIcon?: ReactNode;
-	/** Whether the dialog is currently visible. */
+interface AppDialogContextValue {
 	isOpen: boolean;
-	/** Callback function triggered when the dialog requests to close. **Must be provided.** */
 	onClose: () => void;
-	/**
-	 * The visual size of the dialog.
-	 * - `default`: Standard width (520px max).
-	 * - `wide`: Increased width (840px max) for charts/large content.
-	 * - `full`: Maximum width (1200px max).
-	 *
-	 * @default "default"
-	 */
+	size: "default" | "full" | "wide";
+}
+
+const AppDialogContext = createContext<AppDialogContextValue | null>(null);
+
+interface AppDialogProps {
+	children: ReactNode;
+	className?: string;
+	isOpen: boolean;
+	onClose: () => void;
 	size?: "default" | "full" | "wide";
-	/** Fallback static title if `titleKey` is not provided. */
-	title?: string;
-	/** Translation key for the dialog's localized title. */
-	titleKey?: string;
 }
 
 /**
- * A reusable modal dialog component built on top of Radix UI.
- *
- * @remarks
- * This component provides a consistent look and feel for all application modals,
- * including automated icon selection based on the title, standard scrollable
- * content areas, and keyboard navigation (Escape key support).
- *
- * @param {AppDialogProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered dialog component.
- *
- * @see {@link AppDialogProps}
- * @see {@link getDialogIconAndStyle} for icon selection logic.
- * @see {@link ./AppDialog.test.tsx Unit Tests}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <AppDialog
- *   isOpen={true}
- *   onClose={() => setOpen(false)}
- *   titleKey="dialogs.titles.about"
- *   content={<div>Dialog content</div>}
- * />
- * ```
+ * A compound dialog component providing layout and context.
  */
-const AppDialog: React.FC<AppDialogProps> = ({
+const AppDialogRoot: React.FC<AppDialogProps> = ({
+	children,
 	className = "",
-	content,
-	footer,
-	headerIcon,
 	isOpen,
 	onClose,
 	size = "default",
-	title = "Information",
-	titleKey,
 }) => {
-	/**
-	 * Manages the Escape key listener for the dialog.
-	 *
-	 * @remarks
-	 * Registers a global `keydown` listener to handle closing the dialog when
-	 * the user presses the Escape key.
-	 */
+	const { t } = useTranslation();
 	useEffect(() => {
-		/**
-		 * Closes the dialog if the Escape key is pressed.
-		 *
-		 * @param {KeyboardEvent} event - The keyboard event.
-		 *
-		 * @returns {void}
-		 *
-		 * @example
-		 * ```ts
-		 * handleEscapeKey(event);
-		 * ```
-		 */
 		const handleEscapeKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
-
 		window.addEventListener("keydown", handleEscapeKey);
 
 		return () => window.removeEventListener("keydown", handleEscapeKey);
 	}, [onClose]);
 
-	const { t } = useTranslation();
-
-	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
+	const contextValue = useMemo(() => ({ isOpen, onClose, size }), [isOpen, onClose, size]);
 
 	return (
-		<DialogRoot onOpenChange={(open) => !open && onClose()} open={isOpen}>
-			<DialogPortal>
-				<Theme>
-					<DialogOverlay className="appDialog__overlay" />
-					<DialogContent
-						className={`appDialog__content ${
-							size !== "default" ? `appDialog__content--${size}` : ""
-						} ${className}`}
-					>
-						<DialogTitle className="mr-2">
-							<span className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
-								{(headerIcon || IconComponent) && (
-									<div className="mt-px shrink-0 sm:mt-[4px]">
-										{headerIcon ||
-											(IconComponent && (
-												<IconComponent className="h-6 w-6" style={style} />
-											))}
-									</div>
-								)}
-								<span className={headerIcon || IconComponent ? "mr-6" : ""}>
-									{titleKey ? t(titleKey) : title}
-								</span>
-							</span>
-							<Separator decorative mt="2" orientation="horizontal" size="4" />
-						</DialogTitle>
-
-						<DialogDescription className="sr-only">
-							{titleKey ? t(titleKey) : title}
-						</DialogDescription>
-
-						<section
-							className={`appDialog__scrollable-content flex-1 overflow-y-auto ${
-								ROUTED_DIALOG_TITLE_KEYS.includes(
-									(titleKey || "").split(".").pop() || ""
-								)
-									? "pr-4"
-									: "pr-2"
-							}`}
+		<AppDialogContext.Provider value={contextValue}>
+			<DialogRoot onOpenChange={(open) => !open && onClose()} open={isOpen}>
+				<DialogPortal>
+					<Theme>
+						<DialogOverlay className="appDialog__overlay" />
+						<DialogContent
+							className={`appDialog__content ${
+								size !== "default" ? `appDialog__content--${size}` : ""
+							} ${className}`}
 						>
-							{content}
-						</section>
+							{children}
 
-						{footer && <div className="appDialog__footer">{footer}</div>}
-
-						<DialogClose asChild>
-							<IconButton
-								aria-label={t("common.closeDialog") ?? ""}
-								className="dialog-close"
-								size="1"
-								variant="ghost"
-							>
-								<Cross2Icon />
-							</IconButton>
-						</DialogClose>
-					</DialogContent>
-				</Theme>
-			</DialogPortal>
-		</DialogRoot>
+							<DialogClose asChild>
+								<IconButton
+									aria-label={t("common.closeDialog")}
+									className="dialog-close"
+									size="1"
+									variant="ghost"
+								>
+									<Cross2Icon />
+								</IconButton>
+							</DialogClose>
+						</DialogContent>
+					</Theme>
+				</DialogPortal>
+			</DialogRoot>
+		</AppDialogContext.Provider>
 	);
 };
+
+/**
+ * Title component for AppDialog.
+ */
+const AppDialogTitle: React.FC<{
+	children?: ReactNode;
+	headerIcon?: ReactNode;
+	title?: string;
+	titleKey?: string;
+}> = ({ children, headerIcon, title, titleKey }) => {
+	const { t } = useTranslation();
+	const { IconComponent, style } = getDialogIconAndStyle(titleKey);
+
+	const displayTitle = children || (titleKey ? t(titleKey) : title);
+
+	return (
+		<DialogTitle className="mr-2">
+			<span className="heading-styled flex items-start gap-2 text-xl sm:text-2xl">
+				{(headerIcon || IconComponent) && (
+					<div className="mt-px shrink-0 sm:mt-[4px]">
+						{headerIcon ||
+							(IconComponent && <IconComponent className="h-6 w-6" style={style} />)}
+					</div>
+				)}
+				<span className={headerIcon || IconComponent ? "mr-6" : ""}>{displayTitle}</span>
+			</span>
+			<Separator decorative mt="2" orientation="horizontal" size="4" />
+			<DialogDescription className="sr-only">{displayTitle}</DialogDescription>
+		</DialogTitle>
+	);
+};
+
+/**
+ * Content component for AppDialog.
+ */
+const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }> = ({
+	children,
+	titleKey,
+}) => {
+	const isRouted = ROUTED_DIALOG_TITLE_KEYS.includes((titleKey || "").split(".").pop() || "");
+
+	return (
+		<section
+			className={`appDialog__scrollable-content flex-1 overflow-y-auto ${isRouted ? "pr-4" : "pr-2"}`}
+		>
+			{children}
+		</section>
+	);
+};
+
+/**
+ * Footer component for AppDialog.
+ */
+const AppDialogFooter: React.FC<{ children: ReactNode }> = ({ children }) => {
+	return <div className="appDialog__footer">{children}</div>;
+};
+
+/**
+ * Legacy compatibility component for AppDialog.
+ */
+interface LegacyAppDialogProps {
+	className?: string;
+	content: ReactNode;
+	footer?: ReactNode;
+	headerIcon?: ReactNode;
+	isOpen: boolean;
+	onClose: () => void;
+	size?: "default" | "full" | "wide";
+	title?: string;
+	titleKey?: string;
+}
+
+const LegacyAppDialog: React.FC<LegacyAppDialogProps> = ({
+	className,
+	content,
+	footer,
+	headerIcon,
+	isOpen,
+	onClose,
+	size,
+	title,
+	titleKey,
+}) => {
+	return (
+		<AppDialogRoot className={className} isOpen={isOpen} onClose={onClose} size={size}>
+			<AppDialogTitle headerIcon={headerIcon} title={title} titleKey={titleKey} />
+			<AppDialogBody titleKey={titleKey}>{content}</AppDialogBody>
+			{footer && <AppDialogFooter>{footer}</AppDialogFooter>}
+		</AppDialogRoot>
+	);
+};
+
+const AppDialog = Object.assign(LegacyAppDialog, {
+	Body: AppDialogBody,
+	Footer: AppDialogFooter,
+	Root: AppDialogRoot,
+	Title: AppDialogTitle,
+});
 
 export default AppDialog;

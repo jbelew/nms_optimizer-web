@@ -1,0 +1,308 @@
+import React, { lazy, Suspense, useEffect, useState } from "react";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Box, Callout, Flex, Text } from "@radix-ui/themes";
+import { Trans, useTranslation } from "react-i18next";
+
+import AppFooter from "@/components/AppFooter/AppFooter";
+import AppHeader from "@/components/AppHeader/AppHeader";
+import { GridTable } from "@/components/GridTable/GridTable";
+import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
+import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
+import { ShipSelection } from "@/components/ShipSelection/shipSelection";
+import TechTree, { TechTreeSkeleton } from "@/components/TechTree/TechTree";
+import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
+import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
+
+import {
+	useMainAppBuildManagement,
+	useMainAppGlobal,
+	useMainAppLayout,
+	useMainAppOptimization,
+} from "./MainAppContext";
+
+const BuildNameDialog = lazy(() => import("@/components/AppDialog/BuildName/BuildNameDialog"));
+const OptimizationAlertDialog = lazy(
+	() => import("@/components/AppDialog/OptimizationAlert/OptimizationAlertDialog")
+);
+
+/**
+ * Inner component that triggers the ship types fetch via Suspense.
+ */
+export const ShipTypesLoader = () => {
+	useFetchShipTypesSuspense();
+
+	return null;
+};
+
+/**
+ * A notification component that appears when the user is viewing a read-only shared layout.
+ */
+const SharedBuildCallout: React.FC = () => {
+	const { gridTableTotalWidth } = useMainAppLayout();
+
+	return (
+		<Box
+			flexShrink="0"
+			style={{
+				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
+			}}
+		>
+			<Callout.Root mb="3" size="1" variant="surface">
+				<Callout.Icon>
+					<InfoCircledIcon />
+				</Callout.Icon>
+				<Callout.Text>
+					<span className="text-sm sm:text-base" style={{ color: "var(--gray-12)" }}>
+						<Trans i18nKey="mainApp.viewingSharedBuild" />
+					</span>
+				</Callout.Text>
+			</Callout.Root>
+		</Box>
+	);
+};
+
+/**
+ * A layout component that displays the current equipment platform and its selection control.
+ */
+const ShipSelectionHeading: React.FC = () => {
+	const { t } = useTranslation();
+	const { gridTableTotalWidth } = useMainAppLayout();
+	const { isSharedGrid, selectedShipType } = useMainAppGlobal();
+	const { solving } = useMainAppOptimization();
+
+	return (
+		<Flex
+			align="center"
+			className="main-app__ship-selector heading-styled"
+			gap="3"
+			style={{
+				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
+			}}
+			wrap="wrap"
+		>
+			{!isSharedGrid && (
+				<span className="main-app__ship-selection">
+					<ShipSelection solving={solving} />
+				</span>
+			)}
+
+			<Text
+				className="main-app__ship-label"
+				style={{ opacity: solving ? 0.365 : 1 }}
+				trim="end"
+			>
+				{t("platformLabel")}
+			</Text>
+			<Text
+				className="main-app__ship-name trim-text"
+				style={{ opacity: solving ? 0.365 : 1 }}
+				trim="end"
+			>
+				{t(`platforms.${selectedShipType}`)}
+			</Text>
+		</Flex>
+	);
+};
+
+/**
+ * Component that manages deferred background utilities.
+ */
+export const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> = ({
+	children,
+}) => {
+	const [mount, setMount] = useState(false);
+
+	useEffect(() => {
+		let handle: number | undefined;
+
+		if ("requestIdleCallback" in window) {
+			handle = window.requestIdleCallback(() => setMount(true), { timeout: 2000 });
+		} else {
+			handle = setTimeout(() => setMount(true), 1000) as unknown as number;
+		}
+
+		return () => {
+			if (handle !== undefined) {
+				if ("cancelIdleCallback" in window) {
+					window.cancelIdleCallback(handle);
+				} else {
+					clearTimeout(handle);
+				}
+			}
+		};
+	}, []);
+
+	if (!mount) return null;
+
+	return <Suspense fallback={null}>{children}</Suspense>;
+};
+
+/**
+ * Optimization alert utility.
+ */
+export const OptimizationAlertUtility: React.FC = () => {
+	const { clearPatternNoFitTech, handleForceCurrentPnfOptimize, patternNoFitTech } =
+		useMainAppOptimization();
+
+	return (
+		<OptimizationAlertDialog
+			isOpen={!!patternNoFitTech}
+			onClose={clearPatternNoFitTech}
+			onForceOptimize={handleForceCurrentPnfOptimize}
+			technologyName={patternNoFitTech}
+		/>
+	);
+};
+
+/**
+ * Build naming utility.
+ */
+export const BuildNameUtility: React.FC = () => {
+	const { saveBuild } = useMainAppBuildManagement();
+	const { handleBuildNameCancel, handleBuildNameConfirm, isSaveBuildDialogOpen } = saveBuild;
+
+	return (
+		<BuildNameDialog
+			isOpen={isSaveBuildDialogOpen}
+			onCancel={handleBuildNameCancel}
+			onConfirm={handleBuildNameConfirm}
+		/>
+	);
+};
+
+/**
+ * File picker utility for loading builds.
+ */
+export const FilePickerUtility: React.FC = () => {
+	const { t } = useTranslation();
+	const { loadBuild } = useMainAppBuildManagement();
+	const { fileInputRef, handleFileSelect } = loadBuild;
+
+	return (
+		<input
+			accept=".nms"
+			aria-label={t("buttons.loadBuild")}
+			className="hidden"
+			onChange={handleFileSelect}
+			ref={fileInputRef}
+			type="file"
+		/>
+	);
+};
+
+/**
+ * Component that renders the mobile toolbar.
+ */
+export const MainAppMobileToolbar: React.FC = () => {
+	const { containerRef } = useMainAppLayout();
+	const { handleShowChangelog, hasModulesInGrid, isSmallScreen, isVisible, toolbarRef } =
+		useMainAppGlobal();
+	const { loadBuild, saveBuild } = useMainAppBuildManagement();
+	const { solving } = useMainAppOptimization();
+
+	if (!isSmallScreen) return null;
+
+	return (
+		<MobileToolbar
+			gridRef={containerRef}
+			hasModulesInGrid={hasModulesInGrid}
+			isVisible={isVisible}
+			onLoadBuild={loadBuild.handleLoadBuild}
+			onSaveBuild={saveBuild.handleSaveBuild}
+			onShowChangelog={handleShowChangelog}
+			ref={toolbarRef as React.Ref<HTMLDivElement>}
+			solving={solving}
+		/>
+	);
+};
+
+/**
+ * Component that renders the application header.
+ */
+export const MainAppHeader: React.FC = () => {
+	const { handleShowChangelog } = useMainAppGlobal();
+
+	return <AppHeader onShowChangelog={handleShowChangelog} />;
+};
+
+/**
+ * Component that renders the application footer.
+ */
+export const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> = ({
+	position,
+}) => {
+	const { buildDate, buildVersion, isLargeScreen } = useMainAppGlobal();
+
+	if (position === "bottom-mobile" && isLargeScreen) return null;
+	if (position === "bottom-desktop" && !isLargeScreen) return null;
+
+	return (
+		<div className={position === "bottom-mobile" ? "main-app__footer-wrapper" : ""}>
+			<AppFooter buildDate={buildDate} buildVersion={buildVersion} />
+		</div>
+	);
+};
+
+/**
+ * Component that renders the grid section.
+ */
+export const MainAppGridSection: React.FC = () => {
+	const { t } = useTranslation();
+	const { containerRef, gridTableRef } = useMainAppLayout();
+	const { isSharedGrid } = useMainAppGlobal();
+	const { progressPercent, solving } = useMainAppOptimization();
+	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
+
+	return (
+		<Box
+			className="main-app__grid-section relative"
+			flexShrink={{ initial: "1", md: "0" }}
+			ref={containerRef}
+		>
+			{isSharedGrid && <SharedBuildCallout />}
+
+			{!isSharedGrid && (
+				<MessageSpinner
+					initialMessage={
+						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
+					}
+					isVisible={solving}
+					progressPercent={progressPercent}
+					showProgress={!isTechTreeLoading}
+				/>
+			)}
+
+			<ShipSelectionHeading />
+
+			<GridTable ref={gridTableRef} sharedGrid={isSharedGrid} solving={solving} />
+		</Box>
+	);
+};
+
+/**
+ * Component that renders the technology tree section.
+ */
+export const MainAppSidebarSection: React.FC = () => {
+	const { gridTableTotalWidth } = useMainAppLayout();
+	const { isLargeScreen, isSharedGrid } = useMainAppGlobal();
+	const { handleOptimize, solving } = useMainAppOptimization();
+
+	if (isSharedGrid) return null;
+
+	return (
+		<Flex
+			className="main-app__tech-tree-section"
+			direction="column"
+			ml={{ md: "5" }}
+			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
+		>
+			<Suspense fallback={<TechTreeSkeleton />}>
+				<TechTree
+					gridTableTotalWidth={gridTableTotalWidth}
+					handleOptimize={handleOptimize}
+					solving={solving}
+				/>
+			</Suspense>
+		</Flex>
+	);
+};

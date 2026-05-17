@@ -1,5 +1,5 @@
 // src/utils/system/dialogUtils.ts
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 
 /**
  * Context type for the application's routed dialog system.
@@ -84,7 +84,7 @@ export const DialogContext = createContext<DialogContextType | undefined>(undefi
  * ```
  */
 export const useDialog = () => {
-	const context = useContext(DialogContext);
+	const context = use(DialogContext);
 
 	if (context === undefined) {
 		throw new Error("useDialog must be used within a DialogProvider");

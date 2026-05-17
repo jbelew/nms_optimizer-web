@@ -14,26 +14,6 @@ export interface GroupedModules {
 }
 
 /**
- * Props for the `DialogBody` internal component of ModuleSelectionDialog.
- */
-export interface ModuleDialogBodyProps {
-	/** Organized modules for display. */
-	groupedModules: GroupedModules;
-	/** Currently selected module IDs. */
-	selectedModules: string[];
-}
-
-/**
- * Props for the `DialogFooter` internal component of ModuleSelectionDialog.
- */
-export interface ModuleDialogFooterProps {
-	/** Active selection of module IDs. */
-	currentCheckedModules: string[];
-	/** Optimization trigger. */
-	handleOptimizeClick: () => Promise<void>;
-}
-
-/**
  * Properties for the `ModuleSelectionDialog` component.
  */
 export interface ModuleSelectionDialogProps {
@@ -85,12 +65,6 @@ export interface SelectionModule {
  * Properties for the `TechTreeRow` component and its sub-components.
  */
 export interface TechTreeRowProps {
-	/** Asynchronous callback to trigger an optimization solve for this row. */
-	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether all active grid slots are currently occupied. */
-	isGridFull: boolean;
-	/** Whether any optimization solve is currently running globally. */
-	solving: boolean;
 	/** Unique identifier for the technology (e.g., 'launch_thrusters'). **Must be a valid key.** */
 	tech: string;
 	/** The theme color identifier for the technology's avatar and UI accents. */

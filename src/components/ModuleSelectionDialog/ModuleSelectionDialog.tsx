@@ -1,19 +1,8 @@
 /**
  * Interactive technology module configuration dialog module.
- *
- * @remarks
- * This module provides the `ModuleSelectionDialog`, which allows users to
- * precisely control which technology upgrades are included in optimization
- * calculations. It supports categorical filtering and mass-selection.
- *
- * @see {@link ModuleSelectionDialog}
- * @see {@link ./ModuleSelectionDialog.test.tsx Unit Tests}
- * @see {@link ./ModuleSelectionDialog.stories.tsx Storybook}
- *
- * @category Components
  */
 
-import React, { lazy, memo, Suspense } from "react";
+import React, { memo, Suspense } from "react";
 import { CheckCircledIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
 	Avatar,
@@ -32,23 +21,16 @@ import { usePlatformStore } from "@/store/app/platformStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { MODULE_GROUP_ORDER, MODULE_RANK_ORDER } from "./constants";
-import { useModuleSelectionDialog } from "./useModuleSelectionDialog";
+import { ModuleSelectionProvider, useModuleSelectionContext } from "./ModuleSelectionContext";
 
 import "./ModuleSelectionDialog.scss";
 
-import type {
-	GroupedModules,
-	ModuleDialogBodyProps,
-	ModuleDialogFooterProps,
-	ModuleSelectionDialogProps,
-	SelectionModule,
-} from "@/types/props";
+import type { GroupedModules, ModuleSelectionDialogProps, SelectionModule } from "@/types/props";
 
+import AppDialog from "@/components/AppDialog/Base/AppDialog";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
 
 export type { GroupedModules, ModuleSelectionDialogProps, SelectionModule };
-
-const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 
 /** Path to the fallback technology icon. */
 const fallbackImage = "/assets/img/grid/infra.webp";
@@ -57,19 +39,6 @@ const baseImagePath = "/assets/img/grid/";
 
 /**
  * Parses and styles parenthetical text fragments within a string.
- *
- * @remarks
- * Fragments matching `(text)` are wrapped in a `Badge` component for visual distinction.
- *
- * @param {string} text - The input string to parse.
- *
- * @returns {React.ReactNode} The parsed content with React components.
- *
- * @example
- * ```tsx
- * formatParentheses("Item (New)");
- * // returns [ "Item ", <Badge>New</Badge> ]
- * ```
  */
 const formatParentheses = (text: string): React.ReactNode => {
 	const pattern = /\([^)]+\)/g;
@@ -94,20 +63,6 @@ const formatParentheses = (text: string): React.ReactNode => {
 
 /**
  * Parses and styles bracketed text fragments within a technology label.
- *
- * @remarks
- * Fragments matching `[text]` are wrapped in a `Code` component. It also calls
- * `formatParentheses` for nested formatting.
- *
- * @param {string} label - The label string to parse.
- *
- * @returns {React.ReactNode} The formatted React tree.
- *
- * @example
- * ```tsx
- * formatLabel("Tech [v1]");
- * // returns [ "Tech ", <Code>v1</Code> ]
- * ```
  */
 const formatLabel = (label: string): React.ReactNode => {
 	const pattern = /\[.*?\]/g;
@@ -128,26 +83,12 @@ const formatLabel = (label: string): React.ReactNode => {
 
 /**
  * Individual module selection checkbox with icon and label.
- *
- * @remarks
- * Renders a checkbox item with a associated technology icon and a formatted label.
- *
- * @param {ModuleCheckboxProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered checkbox item.
- *
- * @category Components
  */
-interface ModuleCheckboxProps {
-	/** Whether the module is disabled due to missing prerequisites. */
-	isDisabled: boolean;
-	/** Metadata for the technology module. */
-	module: SelectionModule;
-	/** Color theme derived from the technology category. */
-	techColor: ModuleSelectionDialogProps["techColor"];
-}
-
-const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({ isDisabled, module, techColor }) => {
+const ModuleCheckbox: React.FC<{ isDisabled: boolean; module: SelectionModule }> = ({
+	isDisabled,
+	module,
+}) => {
+	const { techColor } = useModuleSelectionContext();
 	const imagePath = module.image
 		? `${baseImagePath}${module.image}?v=${typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "1.0"}`
 		: fallbackImage;
@@ -174,42 +115,15 @@ const ModuleCheckbox: React.FC<ModuleCheckboxProps> = ({ isDisabled, module, tec
 
 /**
  * Categorized group of module checkboxes.
- *
- * @remarks
- * Handles sorting of modules within a group (e.g., alphabetically for figurines)
- * and enforces prerequisite dependencies (e.g., higher-tier upgrades).
- *
- * @param {ModuleGroupProps} props - Component properties.
- *
- * @returns {JSX.Element | null} The rendered module group or null if empty.
- *
- * @category Components
  */
-interface ModuleGroupProps {
-	/** List of currently selected module IDs. */
-	currentCheckedModules: string[];
-	/** Semantic name of the group (e.g., 'upgrade', 'bonus'). */
+const ModuleGroup: React.FC<{
 	groupName: string;
-	/** List of modules belonging to this group. */
 	modules: SelectionModule[];
-	/** Optional closure handler for the parent dialog. */
-	onClose?: () => void;
-	/** Color theme for the group icons. */
-	techColor: ModuleSelectionDialogProps["techColor"];
-	/** Optional title to display instead of the i18n lookup. */
 	titleOverride?: string;
-}
-
-const ModuleGroup: React.FC<ModuleGroupProps> = ({
-	currentCheckedModules,
-	groupName,
-	modules,
-	onClose,
-	techColor,
-	titleOverride,
-}) => {
+}> = ({ groupName, modules, titleOverride }) => {
 	const { t } = useTranslation();
 	const { openDialog } = useDialog();
+	const { currentCheckedModules, onClose } = useModuleSelectionContext();
 
 	const sortedModules = ["bonus", "figurines", "trails"].includes(groupName)
 		? [...modules].sort((a, b) => (a.label ?? "").localeCompare(b.label ?? ""))
@@ -285,14 +199,7 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 					? !currentCheckedModules.includes(prerequisiteId)
 					: false;
 
-				return (
-					<ModuleCheckbox
-						isDisabled={isDisabled}
-						key={module.id}
-						module={module}
-						techColor={techColor}
-					/>
-				);
+				return <ModuleCheckbox isDisabled={isDisabled} key={module.id} module={module} />;
 			})}
 		</div>
 	);
@@ -300,42 +207,18 @@ const ModuleGroup: React.FC<ModuleGroupProps> = ({
 
 /**
  * The primary content component for the module selection dialog.
- *
- * @remarks
- * Renders warnings, the "Select All" toggle, and groups of module checkboxes.
- *
- * @param {Object} props - Component properties.
- *
- * @returns {JSX.Element} The rendered dialog body.
- *
- * @category Components
  */
-const DialogBody: React.FC<
-	ModuleDialogBodyProps & {
-		/** Whether all modules in the current view are checked. */
-		allModulesSelected: boolean;
-		/** Handler for the "Select All" checkbox state change. */
-		handleSelectAllChange: (checked: "indeterminate" | boolean) => void;
-		/** Handler for individual checkbox value changes. */
-		handleValueChange: (v: string[]) => void;
-		/** Callback to close the parent dialog. */
-		onClose: () => void;
-		/** The identifier for the technology being configured. */
-		tech?: string;
-		/** Color theme for icons and badges. */
-		techColor: ModuleSelectionDialogProps["techColor"];
-	}
-> = ({
-	allModulesSelected,
-	groupedModules,
-	handleSelectAllChange,
-	handleValueChange,
-	onClose,
-	selectedModules,
-	tech,
-	techColor,
-}) => {
+const DialogBody: React.FC = () => {
 	const { t } = useTranslation();
+	const {
+		allModulesSelected,
+		currentCheckedModules,
+		groupedModules,
+		handleSelectAllChange,
+		handleValueChange,
+		tech,
+		techColor,
+	} = useModuleSelectionContext();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const isCorvette = selectedShipType === "corvette";
 
@@ -404,7 +287,7 @@ const DialogBody: React.FC<
 						})}
 					</div>
 				)}
-				<CheckboxGroup.Root onValueChange={handleValueChange} value={selectedModules}>
+				<CheckboxGroup.Root onValueChange={handleValueChange} value={currentCheckedModules}>
 					{MODULE_GROUP_ORDER.filter((g) => g !== "core").map((groupName) => {
 						if (!groupedModules[groupName]?.length) return null;
 
@@ -416,12 +299,9 @@ const DialogBody: React.FC<
 
 						return (
 							<ModuleGroup
-								currentCheckedModules={selectedModules}
 								groupName={groupName}
 								key={groupName}
 								modules={groupedModules[groupName]}
-								onClose={onClose}
-								techColor={techColor}
 								titleOverride={titleOverride}
 							/>
 						);
@@ -434,23 +314,10 @@ const DialogBody: React.FC<
 
 /**
  * The action bar component for the module selection dialog.
- *
- * @remarks
- * Provides "Cancel" and "Optimize" buttons. The "Optimize" button is disabled
- * if no modules are selected.
- *
- * @param {Object} props - Component properties.
- *
- * @returns {JSX.Element} The rendered footer.
- *
- * @category Components
  */
-const DialogFooter: React.FC<ModuleDialogFooterProps & { onClose: () => void }> = ({
-	currentCheckedModules,
-	handleOptimizeClick,
-	onClose,
-}) => {
+const DialogFooter: React.FC = () => {
 	const { t } = useTranslation();
+	const { currentCheckedModules, handleOptimizeClick, onClose } = useModuleSelectionContext();
 	const isOptimizeDisabled = currentCheckedModules.length === 0;
 
 	return (
@@ -471,76 +338,35 @@ const DialogFooter: React.FC<ModuleDialogFooterProps & { onClose: () => void }> 
 
 /**
  * Interactive dialog for selecting specific technology modules for optimization.
- *
- * @remarks
- * This component allows users to pick exactly which upgrades and core components
- * are considered by the solver. It provides:
- * - Localized technology names.
- * - Tier-based prerequisite enforcement.
- * - Categorical grouping (Core, Upgrade, Bonus, etc.).
- * - "Select All" functionality.
- *
- * @param {ModuleSelectionDialogProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered selection dialog.
- *
- * @see {@link useModuleSelectionDialog} for the underlying state management.
- * @see {@link AppDialog} for the base modal component.
- * @see {@link ./ModuleSelectionDialog.test.tsx Unit Tests}
- * @see {@link ./ModuleSelectionDialog.stories.tsx Storybook}
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <ModuleSelectionDialog
- *   isOpen={true}
- *   tech="pulse"
- *   translatedTechName="Pulse Engine"
- *   techColor="blue"
- *   onClose={() => {}}
- * />
- * ```
  */
 export const ModuleSelectionDialog: React.FC<ModuleSelectionDialogProps> = memo((props) => {
-	const { bodyProps, footerProps } = useModuleSelectionDialog(props);
 	const { t } = useTranslation();
-
-	const {
-		allModulesSelected,
-		handleSelectAllChange,
-		handleValueChange,
-		isOpen,
-		onClose,
-		tech,
-		techColor,
-		translatedTechName,
-	} = props;
+	const { isOpen, onClose, translatedTechName } = props;
 
 	return (
-		<Suspense fallback={null}>
-			<AppDialog
-				content={
-					<DialogBody
-						{...bodyProps}
-						allModulesSelected={allModulesSelected}
-						handleSelectAllChange={handleSelectAllChange}
-						handleValueChange={handleValueChange}
-						onClose={onClose}
-						tech={tech}
-						techColor={techColor}
-					/>
-				}
-				footer={<DialogFooter {...footerProps} onClose={onClose} />}
-				headerIcon={
-					<CheckCircledIcon className="h-6 w-6" style={{ color: "var(--accent-11)" }} />
-				}
-				isOpen={isOpen}
-				onClose={onClose}
-				title={t("moduleSelection.title", { techName: translatedTechName })}
-			/>
-		</Suspense>
+		<ModuleSelectionProvider props={props}>
+			<Suspense fallback={null}>
+				<AppDialog.Root isOpen={isOpen} onClose={onClose}>
+					<AppDialog.Title
+						headerIcon={
+							<CheckCircledIcon
+								className="h-6 w-6"
+								style={{ color: "var(--accent-11)" }}
+							/>
+						}
+					>
+						{t("moduleSelection.title", { techName: translatedTechName })}
+					</AppDialog.Title>
+					<AppDialog.Body>
+						<DialogBody />
+					</AppDialog.Body>
+					<AppDialog.Footer>
+						<DialogFooter />
+					</AppDialog.Footer>
+				</AppDialog.Root>
+			</Suspense>
+		</ModuleSelectionProvider>
 	);
 });
+
+ModuleSelectionDialog.displayName = "ModuleSelectionDialog";

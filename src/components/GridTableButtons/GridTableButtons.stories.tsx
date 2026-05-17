@@ -5,6 +5,7 @@ import * as Toast from "@radix-ui/react-toast";
 import { ToastProvider } from "@/hooks/useToast/useToast";
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
 
+import { GridProvider } from "../GridTable/GridContext";
 import GridTableButtons from "./GridTableButtons";
 
 const meta: Meta<typeof GridTableButtons> = {
@@ -23,13 +24,15 @@ const meta: Meta<typeof GridTableButtons> = {
 			return (
 				<Toast.Provider swipeDirection="right">
 					<ToastProvider>
-						<div
-							className="flex min-h-screen items-center justify-center p-4"
-							ref={gridRef}
-							style={{ margin: "0 auto", maxWidth: "800px" }}
-						>
-							<Story args={{ gridRef }} />
-						</div>
+						<GridProvider gridRef={gridRef}>
+							<div
+								className="flex min-h-screen items-center justify-center p-4"
+								ref={gridRef}
+								style={{ margin: "0 auto", maxWidth: "800px" }}
+							>
+								<Story />
+							</div>
+						</GridProvider>
 					</ToastProvider>
 					<Toast.Viewport className="ToastViewport" />
 				</Toast.Provider>
@@ -53,7 +56,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		gridRef: { current: null },
 		solving: false,
 	},
 	parameters: {

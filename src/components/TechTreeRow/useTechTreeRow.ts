@@ -62,7 +62,11 @@ export const useTechTreeRow = ({
 	tech,
 	techColor,
 	techImage,
-}: TechTreeRowProps) => {
+}: TechTreeRowProps & {
+	handleOptimize: (tech: string) => Promise<void>;
+	isGridFull: boolean;
+	solving: boolean;
+}) => {
 	const { t } = useTranslation();
 
 	// State from stores
@@ -137,6 +141,7 @@ export const useTechTreeRow = ({
 		modules,
 		solving,
 
+		tech,
 		techColor,
 		techImage,
 		techMaxBonus,
