@@ -13,9 +13,9 @@ Focus: Simplify component tree and eliminate boolean prop proliferation.
 Focus: Resolve high INP and optimize LCP/rendering.
 
 - [x] Task: INP Profiling and Long Task Mitigation
-- [~] Task: LCP Optimization (Asset Loading & Hydration)
-- [ ] Task: Render Cycle Optimization (useMemo/useCallback Audit)
-- [ ] Task: Conductor - User Manual Verification 'Performance Optimization' (Protocol in workflow.md)
+- [x] Task: LCP Optimization (Asset Loading & Hydration)
+- [x] Task: Render Cycle Optimization (useMemo/useCallback Audit)
+- [~] Task: Conductor - User Manual Verification 'Performance Optimization' (Protocol in workflow.md)
 
 ## Phase 3: Motion Design (View Transitions)
 Focus: Implement smooth, native-feeling transitions using React View Transition API.
