@@ -4,7 +4,6 @@ import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
-import { Seo } from "./components/Seo/Seo";
 import {
 	AppDialogBody,
 	AppDialogFooter,
@@ -12,6 +11,7 @@ import {
 	AppDialogTitle,
 } from "./components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "./components/AppDialog/Error/ErrorDialog";
+import { Seo } from "./components/Seo/Seo";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";

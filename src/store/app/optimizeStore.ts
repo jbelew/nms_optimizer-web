@@ -56,9 +56,9 @@ type ErrorType = "fatal" | "recoverable";
  * @category Optimization
  */
 type OptimizeStatus =
-	| { details: Error | null; severity: ErrorType; type: "error"; }
-	| { progress: number; type: "solving"; }
-	| { tech: string; type: "warning"; }
+	| { details: Error | null; severity: ErrorType; type: "error" }
+	| { progress: number; type: "solving" }
+	| { tech: string; type: "warning" }
 	| { type: "idle" };
 
 /**

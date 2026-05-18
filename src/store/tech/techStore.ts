@@ -6,7 +6,7 @@ import { create } from "zustand";
  * State and actions for managing technology definitions, metadata, and solve results.
  *
  * @see {@link TechTreeItem}
- * @see {@link useModuleSelectionStore}
+ * @see {@link import('@/store/tech/moduleSelectionStore').useModuleSelectionStore}
  *
  * @category State
  */
@@ -58,7 +58,7 @@ export interface TechState {
 	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
 	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
 	 *
-	 * @see {@link useModuleSelectionStore}
+	 * @see {@link import('@/store/tech/moduleSelectionStore').useModuleSelectionStore}
 	 */
 	initializeTechTree: (
 		colors: { [key: string]: string },

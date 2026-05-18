@@ -36,7 +36,7 @@ export const TRACKING_ID = "G-P5VBZQ69Q9";
 
 /**
  * Common timing and duration constants used across the application.
- * 
+ *
  * @category Utilities
  */
 export const UI_TIMING = {
@@ -47,4 +47,3 @@ export const UI_TIMING = {
 	/** Fallback timeout in ms for requestIdleCallback */
 	IDLE_TIMEOUT_MS: 2000,
 } as const;
-

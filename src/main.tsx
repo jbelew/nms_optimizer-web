@@ -16,6 +16,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 import { UI_TIMING } from "@/constants";
+
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "./components/TooltipManager/TooltipManager";
 import { TooltipProvider } from "./context/TooltipContext";
@@ -24,13 +25,13 @@ import { routes } from "./routes";
 import { useThemeStore } from "./store/app/themeStore";
 import { initializeAnalytics, initializeAnalyticsClient } from "./utils/analytics/tracking";
 import { preloadInitialState } from "./utils/api/apiPreload";
+import { runWhenIdle } from "./utils/system/idle";
 import {
 	captureException,
 	createAppRouter,
 	initializeSentry,
 	Logger,
 } from "./utils/system/monitoring";
-import { runWhenIdle } from "./utils/system/idle";
 
 /**
  * Root component that manages global theme and provider orchestration.

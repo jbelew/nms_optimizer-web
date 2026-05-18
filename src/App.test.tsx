@@ -236,7 +236,9 @@ describe("App", () => {
 
 	describe("AppContent component", () => {
 		test("should hide splash screen when status is error", async () => {
-			useOptimizeStore.setState({ status: { details: null, severity: "recoverable", type: "error" } });
+			useOptimizeStore.setState({
+				status: { details: null, severity: "recoverable", type: "error" },
+			});
 			renderApp(["/"]);
 
 			await vi.waitFor(() => {
