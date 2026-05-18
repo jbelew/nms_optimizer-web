@@ -21,8 +21,8 @@ import { Logger } from "@/utils/system/monitoring";
 import { useOptimize } from "./useOptimize";
 
 // Mock external dependencies
-vi.mock("../useAnalytics/useAnalytics");
-vi.mock("../../store/grid/gridStore", async (importOriginal) => {
+vi.mock("@/hooks/useAnalytics/useAnalytics");
+vi.mock("@/store/grid/gridStore", async (importOriginal) => {
 	const mod = (await importOriginal()) as typeof GridStoreModule;
 
 	return {
@@ -32,26 +32,26 @@ vi.mock("../../store/grid/gridStore", async (importOriginal) => {
 		},
 	};
 });
-vi.mock("../../store/app/optimizeStore");
-vi.mock("../../store/tech/techStore", () => ({
+vi.mock("@/store/app/optimizeStore");
+vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: {
 		getState: vi.fn(),
 	},
 }));
-vi.mock("../../store/app/platformStore", () => ({
+vi.mock("@/store/app/platformStore", () => ({
 	usePlatformStore: Object.assign(vi.fn(), {
 		getState: vi.fn(),
 	}),
 }));
-vi.mock("../useBreakpoint/useBreakpoint");
-vi.mock("../../utils/api/socketManager", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint");
+vi.mock("@/utils/api/socketManager", () => ({
 	createSocket: vi.fn(),
 	SOCKET_OPTIONS: {},
 	TRANSPORT_ERROR_MESSAGES: new Set(["timeout", "websocket error"]),
 }));
 
 // Mock constants
-vi.mock("../../constants", async (importOriginal) => {
+vi.mock("@/constants", async (importOriginal) => {
 	const actual = (await importOriginal()) as typeof Constants;
 
 	return {
@@ -68,7 +68,7 @@ const mockUseBreakpoint = vi.mocked(useBreakpoint);
 const mockUseAnalytics = vi.mocked(useAnalytics);
 const mockCreateSocket = vi.mocked(createSocket);
 
-vi.mock("../../utils/system/monitoring", () => ({
+vi.mock("@/utils/system/monitoring", () => ({
 	Logger: {
 		error: vi.fn(),
 		info: vi.fn(),

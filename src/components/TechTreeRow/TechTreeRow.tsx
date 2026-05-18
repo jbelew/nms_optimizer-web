@@ -2,7 +2,7 @@ import "./TechTreeRow.scss";
 
 import type { BonusStatusData } from "@/store/tech/techBonusStore";
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -16,22 +16,15 @@ import { Avatar, Button, IconButton, Popover, Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { ModuleSelectionDialog } from "@/components/ModuleSelectionDialog/ModuleSelectionDialog";
-import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 import { useA11yStore } from "@/store/app/a11yStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
+import { useModuleSelectionDialogStore } from "@/store/ui/moduleSelectionDialogStore";
 import { isTouchDevice } from "@/utils/browser/environment";
 
-import { useTechTreeRow } from "./useTechTreeRow";
-
-/**
- * Props for the `ActionButtons` component.
- */
-interface ActionButtonsProps extends TechTreeRowProps {
-	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
-	hookData: ReturnType<typeof useTechTreeRow>;
-}
+import { TechTreeRowProvider } from "./TechTreeRowContext";
+import { useTechTreeRowContext } from "./useTechTreeRowContext";
 
 /**
  * Props for the `BonusStatusIcon` component.
@@ -46,34 +39,7 @@ interface BonusStatusIconProps {
 }
 
 /**
- * Props for the `TechInfoBadges` component.
- */
-interface TechInfoBadgesProps extends TechTreeRowProps {
-	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
-	hookData: ReturnType<typeof useTechTreeRow>;
-}
-
-/**
- * Props for the `TechInfoProps` component.
- */
-interface TechInfoProps {
-	/** Consolidated state and handlers from the `useTechTreeRow` hook. */
-	hookData: ReturnType<typeof useTechTreeRow>;
-}
-
-/**
  * Core logic to determine the efficiency rating and icon metadata for a technology.
- *
- * @param {number} techMaxBonus - The maximum bonus possible.
- * @param {Function} t - Translation function.
- *
- * @returns {BonusStatusData} Metadata for the status icon and tooltip.
- *
- * @example Status calculation
- * ```ts
- * computeBonusStatusData(105.5, t);
- * // returns { icon: 'lightning', percent: 5.5, ... }
- * ```
  */
 function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
 	const roundedMaxBonus = round(techMaxBonus, 2);
@@ -113,18 +79,6 @@ function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string
 
 /**
  * Renders the appropriate Radix icon component based on the status type.
- *
- * @param {string|null} iconType - Identifier for the icon to render.
- * @param {string} className - CSS class for the SVG.
- * @param {React.CSSProperties} style - Inline styles.
- *
- * @returns {React.ReactNode} The rendered icon or null.
- *
- * @example Icon mapping
- * ```tsx
- * renderIcon('lightning', 'icon-bolt', { color: 'amber' });
- * // renders LightningBoltIcon
- * ```
  */
 function renderIcon(
 	iconType: null | string,
@@ -145,17 +99,6 @@ function renderIcon(
 
 /**
  * Rounds a numerical value to a fixed number of decimal places.
- *
- * @param {number} value - The value to round.
- * @param {number} decimals - Number of decimal places.
- *
- * @returns {number} The rounded value.
- *
- * @example Fixed precision
- * ```ts
- * round(10.1234, 2);
- * // returns 10.12
- * ```
  */
 function round(value: number, decimals: number) {
 	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
@@ -163,16 +106,6 @@ function round(value: number, decimals: number) {
 
 /**
  * A component that displays a status icon representing the optimization quality of a technology.
- *
- * @param {BonusStatusIconProps} props - Component properties.
- *
- * @returns {JSX.Element | null} The rendered icon or null if no bonus.
- *
- * @example Status indicator
- * ```tsx
- * <BonusStatusIcon tech="pulse" techMaxBonus={110} techSolvedBonus={100} />
- * // renders lightning icon for boosted solve
- * ```
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	tech,
@@ -183,7 +116,6 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 	const { getBonusStatus, setBonusStatus } = useTechBonusStore();
 	const cachedBonusStatus = getBonusStatus(tech);
 
-	// Always use fresh translation for the tooltip to avoid stale language after switch
 	const contentData = React.useMemo(() => {
 		return techMaxBonus === 0 && cachedBonusStatus
 			? {
@@ -257,28 +189,19 @@ export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
 
 /**
  * Primary interaction buttons for a technology row.
- *
- * @param {ActionButtonsProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered button group.
- *
- * @example Action triggers
- * ```tsx
- * <ActionButtons {...props} />
- * // renders Solve/Update and Reset buttons
- * ```
  */
-const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tech }) => {
+const TechTreeRowActions: React.FC = () => {
 	const { t } = useTranslation();
+	const { isGridFull, solving } = useTechTree();
 	const {
 		currentCheckedModules,
 		handleOptimizeClick,
 		handleReset,
 		hasTechInGrid,
 		isResetting,
-		solving,
+		tech,
 		translatedTechName,
-	} = hookData;
+	} = useTechTreeRowContext();
 
 	let tooltipLabel: string;
 
@@ -322,19 +245,9 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ hookData, isGridFull, tec
 
 /**
  * Renders the localized technology name with responsive typography.
- *
- * @param {TechInfoProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered label.
- *
- * @example Tech label
- * ```tsx
- * <TechInfo hookData={hookData} />
- * // renders text with localized name
- * ```
  */
-const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
-	const { translatedTechName } = hookData;
+const TechTreeRowLabel: React.FC = () => {
+	const { translatedTechName } = useTechTreeRowContext();
 	const isSmallAndUp = useBreakpoint("640px");
 
 	return (
@@ -353,88 +266,32 @@ const TechInfo: React.FC<TechInfoProps> = ({ hookData }) => {
 /**
  * Status and configuration badges for a technology row.
  *
- * @param {TechInfoBadgesProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered badge section.
- *
- * @example Metadata badges
- * ```tsx
- * <TechInfoBadges {...props} />
- * // renders module count and efficiency icons
- * ```
+ * @remarks
+ * The module count badge opens the shared `ModuleSelectionDialog` via the
+ * Zustand store, rather than instantiating a per-row dialog instance.
  */
-const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, tech }) => {
+const TechTreeRowBadges: React.FC = () => {
 	const { t } = useTranslation();
 	const { a11yMode } = useA11yStore();
-	const { sendDeferredEvent } = useAnalytics();
-	const [isOpen, setIsOpen] = useState(false);
-	const [initialModules, setInitialModules] = useState<string[]>([]);
-	const optimizeClickedRef = useRef(false);
-	const [, startTransition] = useTransition();
+	const { isGridFull, solving } = useTechTree();
+	const openDialog = useModuleSelectionDialogStore((state) => state.openDialog);
 
 	const {
-		allModulesSelected,
 		currentCheckedModules,
-		groupedModules,
-		handleAllCheckboxesChange,
-		handleOptimizeClick,
-		handleSelectAllChange,
-		handleValueChange,
 		hasTechInGrid,
-		isIndeterminate,
 		modules,
-		solving,
+		tech,
 		techColor,
 		techImage,
 		techMaxBonus,
 		techSolvedBonus,
 		translatedTechName,
-	} = hookData;
+	} = useTechTreeRowContext();
 
-	const handleOpenChange = useCallback(
-		(open: boolean) => {
-			if (open) {
-				setInitialModules(currentCheckedModules);
-				optimizeClickedRef.current = false;
-				startTransition(() => {
-					setIsOpen(open);
-				});
-
-				sendDeferredEvent({
-					action: "page_view",
-					category: "engagement",
-					nonInteraction: true,
-					page: `${window.location.pathname}${window.location.search}#module-selection-${tech}`,
-					page_location: window.location.href,
-					page_title: `NMS Optimizer: ${translatedTechName} Selection`,
-				});
-			} else {
-				startTransition(() => {
-					if (!optimizeClickedRef.current) {
-						handleAllCheckboxesChange(initialModules);
-					}
-
-					setIsOpen(open);
-				});
-			}
-		},
-		[
-			currentCheckedModules,
-			handleAllCheckboxesChange,
-			initialModules,
-			sendDeferredEvent,
-			tech,
-			translatedTechName,
-		]
+	const handleOpenDialog = useMemo(
+		() => () => openDialog({ tech, techColor, techImage }),
+		[openDialog, tech, techColor, techImage]
 	);
-
-	const handleOptimizeWrapper = useCallback(async () => {
-		optimizeClickedRef.current = true;
-		await handleOptimizeClick();
-		handleOpenChange(false);
-	}, [handleOptimizeClick, handleOpenChange]);
-
-	const handleOnClose = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
 	const badgeContent = (
 		<div>
@@ -448,7 +305,7 @@ const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, t
 				disabled={modules.length === 1 || (isGridFull && !hasTechInGrid) || solving}
 				highContrast={a11yMode}
 				mt="1"
-				onClick={() => handleOpenChange(true)}
+				onClick={handleOpenDialog}
 				radius="medium"
 				size="1"
 				variant={modules.length === 1 ? "surface" : "solid"}
@@ -456,21 +313,6 @@ const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, t
 				x{currentCheckedModules.length}
 				<OpenInNewWindowIcon />
 			</Button>
-			<ModuleSelectionDialog
-				allModulesSelected={allModulesSelected}
-				currentCheckedModules={currentCheckedModules}
-				groupedModules={groupedModules}
-				handleOptimizeClick={handleOptimizeWrapper}
-				handleSelectAllChange={handleSelectAllChange}
-				handleValueChange={handleValueChange}
-				isIndeterminate={isIndeterminate}
-				isOpen={isOpen}
-				onClose={handleOnClose}
-				tech={tech}
-				techColor={techColor}
-				techImage={techImage}
-				translatedTechName={translatedTechName}
-			/>
 		</div>
 	);
 
@@ -497,70 +339,45 @@ const TechInfoBadges: React.FC<TechInfoBadgesProps> = ({ hookData, isGridFull, t
 };
 
 /**
- * A single row in the technology sidebar providing configuration and status.
- *
- * @remarks
- * This component represents a specific technology category. It provides:
- * - An avatar icon for visual identification.
- * - {@link ActionButtons} for triggering optimization or resetting state.
- * - {@link TechInfo} for displaying the localized technology name.
- * - {@link TechInfoBadges} for module selection and efficiency status.
- *
- * It uses the {@link useTechTreeRow} hook to centralize logic and derived state.
- *
- * @param {TechTreeRowProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered technology row.
- *
- * @see {@link ActionButtons} for optimization and reset triggers.
- * @see {@link TechInfo} for the responsive name display.
- * @see {@link TechInfoBadges} for module management and badges.
- * @see {@link useTechTreeRow} for the underlying business logic.
- *
- * @component
- *
- * @category Components
- *
- * @example
- * ```tsx
- * <TechTreeRow
- *   tech="pulse"
- *   techColor="blue"
- *   solving={false}
- *   isGridFull={false}
- *   handleOptimize={async (id) => console.log('Optimize', id)}
- *   techImage="pulse.webp"
- * />
- * ```
+ * Avatar component for a technology row.
  */
-export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
-	const hookData = useTechTreeRow(props);
-	const { imagePath, imagePath2x, techColor, translatedTechName } = hookData;
+const TechTreeRowAvatar: React.FC = () => {
+	const { imagePath, imagePath2x, techColor, translatedTechName } = useTechTreeRowContext();
 
 	return (
-		<div className="items-top optimizationButton mt-2 mb-2 ml-0 flex gap-2 sm:ml-1 lg:mr-1">
-			<ActionButtons {...props} hookData={hookData} />
+		<Avatar
+			alt={translatedTechName}
+			color={techColor}
+			fallback="IK"
+			radius="full"
+			size="2"
+			src={imagePath}
+			srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
+		/>
+	);
+};
 
-			<Avatar
-				alt={translatedTechName}
-				color={techColor}
-				fallback="IK"
-				radius="full"
-				size="2"
-				src={imagePath}
-				srcSet={`${imagePath} 1x, ${imagePath2x} 2x`}
-			/>
+/**
+ * A single row in the technology sidebar providing configuration and status.
+ */
+export const TechTreeRow = React.memo((props: TechTreeRowProps) => {
+	return (
+		<TechTreeRowProvider props={props}>
+			<div className="items-top optimizationButton mt-2 mb-2 ml-0 flex gap-2 sm:ml-1 lg:mr-1">
+				<TechTreeRowActions />
+				<TechTreeRowAvatar />
 
-			<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
-				<div className="flex justify-start">
-					<TechInfo hookData={hookData} />
-				</div>
+				<div className="grid flex-1 grid-cols-[1fr_auto] items-start gap-2">
+					<div className="flex justify-start">
+						<TechTreeRowLabel />
+					</div>
 
-				<div className="flex items-start justify-end gap-1">
-					<TechInfoBadges {...props} hookData={hookData} />
+					<div className="flex items-start justify-end gap-1">
+						<TechTreeRowBadges />
+					</div>
 				</div>
 			</div>
-		</div>
+		</TechTreeRowProvider>
 	);
 });
 

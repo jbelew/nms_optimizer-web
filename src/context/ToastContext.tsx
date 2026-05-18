@@ -13,7 +13,7 @@ import { ToastContext } from "./createToastContext";
  * the user clicks or touches anywhere else on the screen.
  *
  * @param {object} props - Component properties.
- * @param {import("react").ReactNode} props.children - The application tree to wrap.
+ * @param {React.ReactNode} props.children - The application tree to wrap.
  *
  * @returns {JSX.Element} The provider element wrapping children.
  *
@@ -23,7 +23,7 @@ import { ToastContext } from "./createToastContext";
  *
  * @component
  *
- * @category Components
+ * @category Context
  *
  * @example Application wrapper
  * ```tsx
@@ -39,9 +39,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	/**
 	 * Activates a new toast notification.
 	 *
+	 * @remarks
+	 * Automatically generates a unique ID if one is not provided in the configuration.
+	 *
 	 * @param {ToastConfig} config - The settings for the toast.
 	 *
 	 * @returns {void} Side-effects only.
+	 *
+	 * @see {@link ToastConfig}
 	 *
 	 * @example Manual trigger
 	 * ```typescript
@@ -60,7 +65,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * Triggers a success notification.
 	 *
 	 * @param {string} title - The primary text.
-	 * @param {import("react").ReactNode} description - The detailed message.
+	 * @param {React.ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 *
 	 * @returns {void} Side-effects only.
@@ -81,7 +86,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * Triggers an error notification.
 	 *
 	 * @param {string} title - The primary text.
-	 * @param {import("react").ReactNode} description - The detailed message.
+	 * @param {React.ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 *
 	 * @returns {void} Side-effects only.
@@ -102,7 +107,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 	 * Triggers an informational notification.
 	 *
 	 * @param {string} title - The primary text.
-	 * @param {import("react").ReactNode} description - The detailed message.
+	 * @param {React.ReactNode} description - The detailed message.
 	 * @param {number} [duration] - Expiry delay in ms.
 	 *
 	 * @returns {void} Side-effects only.
@@ -121,6 +126,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 	/**
 	 * Hides the current toast and clears its configuration after an animation delay.
+	 *
+	 * @remarks
+	 * Uses a 500ms timeout before clearing the configuration to allow for exit animations.
 	 *
 	 * @returns {void} Side-effects only.
 	 *

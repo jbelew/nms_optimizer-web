@@ -2,12 +2,12 @@ import { act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the API_URL constant
-vi.mock("../../constants", () => ({
+vi.mock("@/constants", () => ({
 	API_URL: "http://mock-api.com/",
 }));
 
 // Mock apiCall
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

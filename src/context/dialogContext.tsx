@@ -20,7 +20,7 @@ const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
  * language and search parameters.
  *
  * @param {object} props - Component properties.
- * @param {import("react").ReactNode} props.children - The child components to wrap.
+ * @param {React.ReactNode} props.children - The child components to wrap.
  *
  * @returns {JSX.Element} The context provider with dialog state.
  *
@@ -29,7 +29,7 @@ const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
  * @see {@link DialogType}
  * @see {@link ./DialogContext.test.tsx Unit Tests}
  *
- * @category Components
+ * @category Context
  *
  * @example Application wrapper
  * ```tsx
@@ -88,6 +88,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	/**
 	 * Navigates to a specific dialog route or sets the share URL state.
 	 *
+	 * @remarks
+	 * This method handles language prefixing and preserves existing search parameters.
+	 * It can also be used to trigger the share dialog by passing a `shareUrl` in the `data` object.
+	 *
 	 * @param {NonNullable<DialogType> | null} dialog - The identifier of the dialog to open.
 	 * @param {object} [data] - Optional metadata for the dialog.
 	 * @param {string} [data.shareUrl] - A specific URL for the share dialog.
@@ -125,6 +129,10 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	/**
 	 * Clears the active dialog state and navigates back to the root route.
+	 *
+	 * @remarks
+	 * Resets both routing-based dialogs and the non-routed share dialog.
+	 * Also clears any pending scroll sections.
 	 *
 	 * @returns {void} Side-effects only.
 	 *

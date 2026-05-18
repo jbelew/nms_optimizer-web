@@ -8,12 +8,12 @@ import { useTooltipActions } from "@/utils/system/tooltipUtils";
 import { ConditionalTooltip } from "./ConditionalTooltip";
 
 // Mock isTouchDevice
-vi.mock("../../utils/browser/environment", () => ({
+vi.mock("@/utils/browser/environment", () => ({
 	isTouchDevice: vi.fn(() => false),
 }));
 
 // Mock useTooltip hook
-vi.mock("../../utils/system/tooltipUtils", () => ({
+vi.mock("@/utils/system/tooltipUtils", () => ({
 	useTooltipActions: vi.fn(),
 	useTooltipState: vi.fn(),
 }));

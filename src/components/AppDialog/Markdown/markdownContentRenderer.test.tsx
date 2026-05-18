@@ -12,7 +12,7 @@ vi.mock("@/hooks/useMarkdownContent/useMarkdownContent", () => ({
 }));
 
 // Mock LoremIpsumSkeleton
-vi.mock("../Common/LoremIpsumSkeleton", () => ({
+vi.mock("@/components/AppDialog/Common/LoremIpsumSkeleton", () => ({
 	default: () => <div data-testid="lorem-ipsum-skeleton">Loading...</div>,
 }));
 

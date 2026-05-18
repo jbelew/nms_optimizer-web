@@ -4,15 +4,17 @@ import { useSyncExternalStore } from "react";
 /**
  * Custom hook for tracking whether a media query breakpoint is currently matched.
  *
+ * @remarks
  * Uses `useSyncExternalStore` for performant, tear-free subscription to the
- * `window.matchMedia` API.
+ * `window.matchMedia` API. This hook is useful for implementing responsive
+ * logic in JavaScript.
  *
  * @param {string} breakpoint - The minimum width breakpoint to track (e.g., "768px"). **Must be a valid CSS length.**
  *
  * @returns {boolean} `true` if the viewport is at least as wide as the `breakpoint`, otherwise `false`.
  *
- * @see [useBreakpoint Tests](./useBreakpoint.test.tsx)
- * @see {@link import('@/hooks/useAppLayout/useAppLayout').useAppLayout} for layout-specific responsive logic.
+ * @see {@link ./useBreakpoint.test.tsx Unit Tests}
+ * @see {@link import('../useAppLayout/useAppLayout').useAppLayout} for layout-specific responsive logic.
  *
  * @category Hooks
  *
@@ -21,6 +23,7 @@ import { useSyncExternalStore } from "react";
  * const isDesktop = useBreakpoint("1024px");
  *
  * return <div>{isDesktop ? "Desktop View" : "Mobile/Tablet View"}</div>;
+ * // returns true or false
  * ```
  */
 export const useBreakpoint = (breakpoint: string) => {

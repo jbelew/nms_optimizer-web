@@ -12,7 +12,7 @@ import { useLayoutEffect, useRef } from "react";
  *
  * @param {T} value - The value to store in the ref.
  *
- * @returns {MutableRefObject<T>} A ref object whose `.current` property matches the latest `value`.
+ * @returns {import('react').MutableRefObject<T>} A ref object whose `.current` property matches the latest `value`.
  *
  * @hook
  *

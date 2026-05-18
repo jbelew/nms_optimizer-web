@@ -153,11 +153,12 @@ export const useOptimize = (): UseOptimizeReturn => {
 		const { checkedModules } = useTechStore.getState();
 
 		isOptimizingRef.current = true;
-		setSolving(true);
-		setProgressPercent(0);
-		setShowErrorStore(false);
-
-		if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
+		startTransition(() => {
+			setSolving(true);
+			setProgressPercent(0);
+			setShowErrorStore(false);
+			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
+		});
 
 		Logger.info(`Optimization started for ${tech}`, {
 			forced,
@@ -172,33 +173,39 @@ export const useOptimize = (): UseOptimizeReturn => {
 				performance.mark("optimize-complete");
 				performance.measure("optimize-to-complete", "optimize-start", "optimize-complete");
 				if (!isMountedRef.current) return;
-				if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
-				Logger.info(`Optimization complete for ${tech}`, {
-					bonus: data.max_bonus,
-					method: data.solve_method,
-					tech,
-				});
+				startTransition(() => {
+					if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
-				setResult(data, tech);
-				const gaTech =
-					tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
-
-				if (data.grid) {
-					sendEvent({
-						action: "optimize_tech",
-						category: "ui",
-						nonInteraction: false,
-						platform: selectedShipType,
-						solve_method: data.solve_method,
-						supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
-						tech: gaTech,
-						value: 1,
+					Logger.info(`Optimization complete for ${tech}`, {
+						bonus: data.max_bonus,
+						method: data.solve_method,
+						tech,
 					});
-					setGrid(data.grid);
-				}
 
-				resetProgress();
+					setResult(data, tech);
+					const gaTech =
+						tech === "pulse" && checkedModules[tech]?.includes("PC")
+							? "photonix"
+							: tech;
+
+					if (data.grid) {
+						sendEvent({
+							action: "optimize_tech",
+							category: "ui",
+							nonInteraction: false,
+							platform: selectedShipType,
+							solve_method: data.solve_method,
+							supercharged:
+								typeof data.max_bonus === "number" && data.max_bonus > 100,
+							tech: gaTech,
+							value: 1,
+						});
+						setGrid(data.grid);
+					}
+
+					resetProgress();
+				});
 			},
 			onError: (err: Error) => {
 				if (!isMountedRef.current) return;

@@ -35,6 +35,11 @@ import { useErrorStore } from "@/store/app/errorStore";
 
 /**
  * Mapping of language codes to their respective SVG flag asset paths.
+ *
+ * @remarks
+ * Uses local SVG imports for consistent rendering across environments.
+ *
+ * @category Components
  */
 interface LanguageFlagPaths {
 	[key: string]: string;
@@ -59,17 +64,17 @@ const languageFlagPaths: LanguageFlagPaths = {
  *
  * @returns {JSX.Element} The rendered language selection dropdown.
  *
- * @see {@link useTranslation}
- * @see {@link useAnalytics}
+ * @see {@link useTranslation} for internationalization state.
+ * @see {@link useAnalytics} for event tracking.
+ * @see {@link ./languageSelector.test.tsx Unit Tests}
  *
  * @component
  *
  * @category Components
  *
- * @example Component usage
+ * @example
  * ```tsx
  * <LanguageSelector />
- * // renders localized flag dropdown
  * ```
  */
 export const LanguageSelector: React.FC = () => {
@@ -100,10 +105,15 @@ export const LanguageSelector: React.FC = () => {
 	/**
 	 * Finalizes the language transition by updating the URL and i18n store.
 	 *
+	 * @remarks
+	 * Automatically handles URL prefixing (e.g., `/fr/`) and preserves query parameters.
+	 *
 	 * @param {string} newLang - The ISO language code to switch to. **Must be supported.**
 	 *
-	 * @example Switching to German
-	 * ```typescript
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example
+	 * ```ts
 	 * handleLanguageChange("de");
 	 * ```
 	 */
@@ -141,8 +151,14 @@ export const LanguageSelector: React.FC = () => {
 
 	/**
 	 * Navigates the user to the translation request route.
-	 * @example Trigger navigation
-	 * ```typescript
+	 *
+	 * @remarks
+	 * Redirects to the localized `/translation/` page.
+	 *
+	 * @returns {void} Side-effects only.
+	 *
+	 * @example
+	 * ```ts
 	 * handleRequestTranslationClick();
 	 * ```
 	 */

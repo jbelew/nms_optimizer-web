@@ -14,7 +14,6 @@
 import React, { useMemo } from "react";
 
 import { type TechTree, type TechTreeItem } from "@/hooks/useTechTree/useTechTree";
-import { useGridStore } from "@/store/grid/gridStore";
 
 import { TechTreeSection } from "./TechTreeSection";
 
@@ -22,10 +21,6 @@ import { TechTreeSection } from "./TechTreeSection";
  * Props for the `TechTreeContent` component.
  */
 interface TechTreeContentProps {
-	/** Asynchronous callback function to trigger a solve for a technology. **Must be provided.** */
-	handleOptimize: (tech: string) => Promise<void>;
-	/** Whether an optimization solve is currently in progress. */
-	solving: boolean;
 	/** The full technology tree data structure to render. **Must be valid `TechTree` data.** */
 	techTree: TechTree;
 }
@@ -50,17 +45,11 @@ interface TechTreeContentProps {
  *
  * @example
  * ```tsx
- * <TechTreeContent techTree={fetchedTree} handleOptimize={fn} solving={false} />
+ * <TechTreeContent techTree={fetchedTree} />
  * // renders list of tech categories
  * ```
  */
-export const TechTreeContent: React.FC<TechTreeContentProps> = ({
-	handleOptimize,
-	solving,
-	techTree,
-}) => {
-	const isGridFull = useGridStore((state) => state._isGridFull);
-
+export const TechTreeContent: React.FC<TechTreeContentProps> = ({ techTree }) => {
 	/**
 	 * Processed version of the tech tree.
 	 * Filters out non-technology categories, ensures correct types, and sorts technologies alphabetically.
@@ -110,16 +99,13 @@ export const TechTreeContent: React.FC<TechTreeContentProps> = ({
 		() =>
 			Object.entries(processedTechTree).map(([type, technologies], index) => (
 				<TechTreeSection
-					handleOptimize={handleOptimize}
 					index={index}
-					isGridFull={isGridFull} // Pass isGridFull down
 					key={type}
-					solving={solving}
 					technologies={technologies as TechTreeItem[]}
 					type={type}
 				/>
 			)),
-		[processedTechTree, handleOptimize, solving, isGridFull]
+		[processedTechTree]
 	);
 
 	return <>{renderedTechTree}</>;

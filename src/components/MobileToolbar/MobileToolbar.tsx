@@ -12,7 +12,7 @@
  * @category Components
  */
 
-import React, { forwardRef, useTransition } from "react";
+import React, { useTransition } from "react";
 import {
 	CounterClockwiseClockIcon,
 	DownloadIcon,
@@ -62,8 +62,7 @@ type MobileToolbarProps = {
  * It animates its position based on the `isVisible` prop, typically controlled by
  * the user's scroll direction.
  *
- * @param {MobileToolbarProps} props - Component properties.
- * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the root toolbar container.
+ * @param {MobileToolbarProps & { ref?: React.Ref<HTMLDivElement> }} props - Component properties including optional ref.
  *
  * @returns {JSX.Element} The rendered mobile toolbar.
  *
@@ -81,170 +80,166 @@ type MobileToolbarProps = {
  * // renders animated top toolbar
  * ```
  */
-export const MobileToolbar = forwardRef<HTMLDivElement, MobileToolbarProps>(
-	(
-		{
-			hasModulesInGrid,
-			isVisible,
-			onLoadBuild,
-			onSaveBuild,
-			onShowChangelog,
-			solving,
-			// gridRef,
-		},
-		ref
-	) => {
-		const { t } = useTranslation();
-		const { openDialog } = useDialog();
-		const { sendDeferredEvent } = useAnalytics();
-		const { a11yMode, toggleA11yMode } = useA11yStore();
-		const { updateUrlForShare } = useUrlSync();
-		const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-		const [isSharePending, startShareTransition] = useTransition();
-		// const { handleScreenshot, isCapturing } = useScreenshot();
+export const MobileToolbar = ({
+	hasModulesInGrid,
+	isVisible,
+	onLoadBuild,
+	onSaveBuild,
+	onShowChangelog,
+	ref,
+	solving,
+	// gridRef,
+}: MobileToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+	const { t } = useTranslation();
+	const { openDialog } = useDialog();
+	const { sendDeferredEvent } = useAnalytics();
+	const { a11yMode, toggleA11yMode } = useA11yStore();
+	const { updateUrlForShare } = useUrlSync();
+	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
+	const [isSharePending, startShareTransition] = useTransition();
+	// const { handleScreenshot, isCapturing } = useScreenshot();
 
-		/**
-		 * Generates a share link and opens the share dialog.
-		 *
-		 * @example
-		 * handleShareClick();
-		 */
-		const handleShareClick = () => {
-			startShareTransition(() => {
-				const shareUrl = updateUrlForShare();
-				openDialog(null, { shareUrl });
-			});
-			sendDeferredEvent({
-				action: "share_link",
-				category: "ui",
-				nonInteraction: false,
-				value: 1,
-			});
-		};
+	/**
+	 * Generates a share link and opens the share dialog.
+	 *
+	 * @example
+	 * handleShareClick();
+	 */
+	const handleShareClick = () => {
+		startShareTransition(() => {
+			const shareUrl = updateUrlForShare();
+			openDialog(null, { shareUrl });
+		});
+		sendDeferredEvent({
+			action: "share_link",
+			category: "ui",
+			nonInteraction: false,
+			value: 1,
+		});
+	};
 
-		/**
-		 * Captures the grid section as a screenshot.
-		 *
-		 * @example
-		 * handleScreenshotClick();
-		 */
-		// const handleScreenshotClick = () => {
-		// 	if (gridRef.current) {
-		// 		handleScreenshot(gridRef.current);
-		// 	}
-		// };
+	/**
+	 * Captures the grid section as a screenshot.
+	 *
+	 * @example
+	 * handleScreenshotClick();
+	 */
+	// const handleScreenshotClick = () => {
+	// 	if (gridRef.current) {
+	// 		handleScreenshot(gridRef.current);
+	// 	}
+	// };
 
-		return (
-			<ToolbarRoot
-				className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
-				ref={ref}
-				style={{
-					backgroundColor: "var(--accent-4)",
-					paddingLeft: "var(--app-safe-pl)",
-					paddingRight: "var(--app-safe-pr)",
-					transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
-					WebkitUserSelect: "none",
-				}}
+	return (
+		<ToolbarRoot
+			className="fixed top-0 right-0 left-0 z-50 -mb-px flex items-center justify-between gap-2 py-2 transition-transform duration-300 ease-in-out"
+			ref={ref}
+			style={{
+				backgroundColor: "var(--accent-4)",
+				paddingLeft: "var(--app-safe-pl)",
+				paddingRight: "var(--app-safe-pr)",
+				transform: isVisible ? "translateY(0)" : "translateY(calc(-100% - 8px))",
+				WebkitUserSelect: "none",
+			}}
+		>
+			<ToolbarToggleGroup
+				aria-label={t("buttons.buildManagement") ?? ""}
+				className="flex items-center gap-2"
+				type="multiple"
 			>
-				<ToolbarToggleGroup
-					aria-label={t("buttons.buildManagement") ?? ""}
-					className="flex items-center gap-2"
-					type="multiple"
+				{/* Load/Save/Share buttons for mobile - far left */}
+				<IconButton
+					aria-label={t("buttons.loadBuild") ?? ""}
+					disabled={solving || isSharedGrid}
+					onClick={onLoadBuild}
+					size="2"
+					variant="soft"
 				>
-					{/* Load/Save/Share buttons for mobile - far left */}
-					<IconButton
-						aria-label={t("buttons.loadBuild") ?? ""}
-						disabled={solving || isSharedGrid}
-						onClick={onLoadBuild}
-						size="2"
-						variant="soft"
-					>
-						<FileIcon />
-					</IconButton>
-					<IconButton
-						aria-label={t("buttons.saveBuild") ?? ""}
-						disabled={solving || !hasModulesInGrid || isSharedGrid}
-						onClick={onSaveBuild}
-						size="2"
-						variant="soft"
-					>
-						<DownloadIcon />
-					</IconButton>
-					<IconButton
-						aria-label={t("buttons.share") ?? ""}
-						disabled={solving || !hasModulesInGrid || isSharePending || isSharedGrid}
-						onClick={handleShareClick}
-						size="2"
-						variant="soft"
-					>
-						<Share1Icon className="h-4 w-4" />
-					</IconButton>
-					{/* {					<IconButton
-						size="2"
-						variant="soft"
-						className="gridTable__button gridTable__button--screenshot"
-						onClick={handleScreenshotClick}
-						disabled={solving || !hasModulesInGrid || isCapturing}
-						aria-label={t("buttons.screenshot")}
-					>
-						<CameraIcon />
-					</IconButton>} */}
-				</ToolbarToggleGroup>
-
-				<ToolbarToggleGroup
-					aria-label={t("buttons.utilities") ?? ""}
-					className="flex items-center gap-2"
-					type="multiple"
+					<FileIcon />
+				</IconButton>
+				<IconButton
+					aria-label={t("buttons.saveBuild") ?? ""}
+					disabled={solving || !hasModulesInGrid || isSharedGrid}
+					onClick={onSaveBuild}
+					size="2"
+					variant="soft"
 				>
-					<IconButton
-						aria-label={t("buttons.changelog") ?? ""}
-						onClick={() => {
-							onShowChangelog();
-							sendDeferredEvent({
-								action: "show_changelog",
-								category: "ui",
-								nonInteraction: false,
-								value: 1,
-							});
-						}}
-						size="2"
-						variant="soft"
-					>
-						<CounterClockwiseClockIcon className="h-4 w-4" />
-					</IconButton>
+					<DownloadIcon />
+				</IconButton>
+				<IconButton
+					aria-label={t("buttons.share") ?? ""}
+					disabled={solving || !hasModulesInGrid || isSharePending || isSharedGrid}
+					onClick={handleShareClick}
+					size="2"
+					variant="soft"
+				>
+					<Share1Icon className="h-4 w-4" />
+				</IconButton>
+				{/* {					<IconButton
+					size="2"
+					variant="soft"
+					className="gridTable__button gridTable__button--screenshot"
+					onClick={handleScreenshotClick}
+					disabled={solving || !hasModulesInGrid || isCapturing}
+					aria-label={t("buttons.screenshot")}
+				>
+					<CameraIcon />
+				</IconButton>} */}
+			</ToolbarToggleGroup>
 
-					<IconButton
-						aria-label={t("buttons.userStats") ?? ""}
-						onClick={() => {
-							openDialog("userstats");
-							sendDeferredEvent({
-								action: "show_user_stats",
-								category: "ui",
-								nonInteraction: false,
-								value: 1,
-							});
-						}}
-						size="2"
-						variant="soft"
-					>
-						<PieChartIcon className="h-4 w-4" />
-					</IconButton>
+			<ToolbarToggleGroup
+				aria-label={t("buttons.utilities") ?? ""}
+				className="flex items-center gap-2"
+				type="multiple"
+			>
+				<IconButton
+					aria-label={t("buttons.changelog") ?? ""}
+					onClick={() => {
+						onShowChangelog();
+						sendDeferredEvent({
+							action: "show_changelog",
+							category: "ui",
+							nonInteraction: false,
+							value: 1,
+						});
+					}}
+					size="2"
+					variant="soft"
+				>
+					<CounterClockwiseClockIcon className="h-4 w-4" />
+				</IconButton>
 
-					{/* A11y mode switch */}
-					<IconButton
-						aria-label={t("buttons.accessibility") ?? ""}
-						onClick={toggleA11yMode}
-						size="2"
-						variant={a11yMode ? "solid" : "surface"}
-					>
-						<EyeOpenIcon className="h-4 w-4" />
-					</IconButton>
+				<IconButton
+					aria-label={t("buttons.userStats") ?? ""}
+					onClick={() => {
+						openDialog("userstats");
+						sendDeferredEvent({
+							action: "show_user_stats",
+							category: "ui",
+							nonInteraction: false,
+							value: 1,
+						});
+					}}
+					size="2"
+					variant="soft"
+				>
+					<PieChartIcon className="h-4 w-4" />
+				</IconButton>
 
-					<LanguageSelector />
-				</ToolbarToggleGroup>
-			</ToolbarRoot>
-		);
-	}
-);
+				{/* A11y mode switch */}
+				<IconButton
+					aria-label={t("buttons.accessibility") ?? ""}
+					onClick={toggleA11yMode}
+					size="2"
+					variant={a11yMode ? "solid" : "surface"}
+				>
+					<EyeOpenIcon className="h-4 w-4" />
+				</IconButton>
+
+				<LanguageSelector />
+			</ToolbarToggleGroup>
+		</ToolbarRoot>
+	);
+};
 
 MobileToolbar.displayName = "MobileToolbar";

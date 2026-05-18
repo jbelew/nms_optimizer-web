@@ -1,0 +1,28 @@
+# Implementation Plan: Import Refactor & JSDoc Audit
+
+## Phase 1: Setup & Environment Verification [checkpoint: 8698d16]
+- [x] Task: Verify `agentic-jsdoc` skill configuration and ESLint rules
+- [x] Task: Baseline check - Ensure current project passes `npm run lint` and `tsc`
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+
+## Phase 2: Import Refactor (@ Alias) [checkpoint: 3a0333d]
+<!-- execution: parallel -->
+- [x] Task: Refactor imports in `src/components/` <!-- files: src/components/**/* -->
+- [x] Task: Refactor imports in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
+- [x] Task: Refactor imports in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
+- [x] Task: Refactor remaining files in `src/` (root files, routes, etc.) <!-- files: src/*.tsx, src/*.ts -->
+- [x] Task: Conductor - User Manual Verification .Phase 2. (Protocol in workflow.md)
+
+## Phase 3: JSDoc Audit & Update [checkpoint: 005d77e]
+<!-- execution: parallel -->
+- [x] Task: Audit and update JSDoc in `src/components/` <!-- files: src/components/**/* -->
+- [x] Task: Audit and update JSDoc in `src/hooks/` and `src/context/` <!-- files: src/hooks/**/*, src/context/**/* -->
+- [x] Task: Audit and update JSDoc in `src/utils/`, `src/constants/`, and `src/types/` <!-- files: src/utils/**/*, src/constants/**/*, src/types/**/* -->
+- [x] Task: Audit and update JSDoc in remaining `src/` files <!-- files: src/*.tsx, src/*.ts -->
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+
+## Phase 4: Final Validation
+- [x] Task: Run project-wide linting and fix any remaining style issues
+- [x] Task: Run full TypeScript type check
+- [x] Task: Verify application still builds and runs correctly
+- [x] Task: Conductor - User Manual Verification .Phase 4. (Protocol in workflow.md)

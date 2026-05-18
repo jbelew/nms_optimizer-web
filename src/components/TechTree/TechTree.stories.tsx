@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import { usePlatformStore } from "@/store/app/platformStore";
 
-import TechTree from "./TechTree";
+import { TechTree } from "./TechTree";
 
 const meta = {
 	component: TechTree,
@@ -84,7 +84,6 @@ const withLocalProviders = (Story: React.FC) => (
 
 export const Desktop: Story = {
 	args: {
-		gridTableTotalWidth: 400,
 		handleOptimize: async (tech: string) => {
 			console.log(`Optimizing ${tech}`);
 		},

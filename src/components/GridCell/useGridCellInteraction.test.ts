@@ -11,9 +11,9 @@ import { useGridStore } from "@/store/grid/gridStore";
 import { useGridCellInteraction } from "./useGridCellInteraction";
 
 // Mock stores
-vi.mock("../../store/grid/gridStore");
-vi.mock("../../store/app/shakeStore");
-vi.mock("../../store/app/sessionStore");
+vi.mock("@/store/grid/gridStore");
+vi.mock("@/store/app/shakeStore");
+vi.mock("@/store/app/sessionStore");
 
 // Define mock functions
 const mockHandleCellTap = vi.fn();

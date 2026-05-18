@@ -10,20 +10,20 @@ import * as apiCallModule from "@/utils/api/network";
 import { clearTechTreeCache, useFetchTechTreeSuspense } from "./useTechTree";
 
 // Mock apiCall
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 
 // Mock the stores
-vi.mock("../../store/tech/techStore", () => ({
+vi.mock("@/store/tech/techStore", () => ({
 	useTechStore: vi.fn(),
 }));
 
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn(),
 }));
 
-vi.mock("../../store/tech/techTreeLoadingStore", () => ({
+vi.mock("@/store/tech/techTreeLoadingStore", () => ({
 	useTechTreeLoadingStore: vi.fn(),
 }));
 

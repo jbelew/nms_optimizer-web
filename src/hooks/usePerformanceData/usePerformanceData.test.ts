@@ -8,11 +8,11 @@ import * as resourceModule from "@/utils/api/performanceResource";
 
 import { usePerformanceData } from "./usePerformanceData";
 
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 
-vi.mock("../../utils/api/performanceResource", () => ({
+vi.mock("@/utils/api/performanceResource", () => ({
 	fetchPerformanceData: vi.fn(),
 	resetPerformanceDataCache: vi.fn(),
 }));

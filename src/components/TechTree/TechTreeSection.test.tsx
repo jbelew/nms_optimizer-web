@@ -17,14 +17,13 @@ vi.mock("@radix-ui/themes", () => ({
 }));
 
 // Mock TechTreeRow
-vi.mock("../TechTreeRow/TechTreeRow", () => ({
-	TechTreeRow: ({ tech }: { handleOptimize?: unknown; tech: string }) => (
+vi.mock("@/components/TechTreeRow/TechTreeRow", () => ({
+	TechTreeRow: ({ tech }: { tech: string }) => (
 		<div data-testid={`tech-tree-row-${tech}`}>Row: {tech}</div>
 	),
 }));
 
 describe("TechTreeSection", () => {
-	const mockHandleOptimize = vi.fn();
 	const mockTechnologies: Array<{
 		color: "blue" | "red";
 		image: null;
@@ -56,62 +55,28 @@ describe("TechTreeSection", () => {
 	});
 
 	test("should render section with correct type", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
+		render(<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />);
 
 		// The text gets converted to uppercase
 		expect(screen.getByText("TECHTREE.CATEGORIES.WEAPONRY")).toBeInTheDocument();
 	});
 
 	test("should render TechTreeRow for each technology", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
+		render(<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />);
 
 		expect(screen.getByTestId("tech-tree-row-weapon1")).toBeInTheDocument();
 		expect(screen.getByTestId("tech-tree-row-weapon2")).toBeInTheDocument();
 	});
 
 	test("should render separator", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
+		render(<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />);
 
 		expect(screen.getByTestId("separator")).toBeInTheDocument();
 	});
 
 	test("should render section image when available", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		const img = container.querySelector(
@@ -123,48 +88,11 @@ describe("TechTreeSection", () => {
 
 	test("should not render image for unknown types", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="UnknownType"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="UnknownType" />
 		);
 
 		const images = container.querySelectorAll("img");
 		expect(images.length).toBe(0);
-	});
-
-	test("should pass solving prop to TechTreeRow", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={true}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
-
-		expect(screen.getByTestId("tech-tree-row-weapon1")).toBeInTheDocument();
-	});
-
-	test("should pass isGridFull prop to TechTreeRow", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={true}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
-
-		expect(screen.getByTestId("tech-tree-row-weapon1")).toBeInTheDocument();
 	});
 
 	test("should handle different technology types", () => {
@@ -176,14 +104,7 @@ describe("TechTreeSection", () => {
 
 		typeTests.forEach(({ image, type }) => {
 			const { container } = render(
-				<TechTreeSection
-					handleOptimize={mockHandleOptimize}
-					index={0}
-					isGridFull={false}
-					solving={false}
-					technologies={mockTechnologies}
-					type={type}
-				/>
+				<TechTreeSection index={0} technologies={mockTechnologies} type={type} />
 			);
 
 			const img = container.querySelector(
@@ -195,14 +116,7 @@ describe("TechTreeSection", () => {
 
 	test("should render section with correct CSS classes", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		const section = container.querySelector(".sidebar__section");
@@ -212,14 +126,7 @@ describe("TechTreeSection", () => {
 
 	test("should render heading with correct styling", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		const heading = container.querySelector("h2");
@@ -229,16 +136,7 @@ describe("TechTreeSection", () => {
 	});
 
 	test("should handle empty technologies array", () => {
-		render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={[]}
-				type="Weaponry"
-			/>
-		);
+		render(<TechTreeSection index={0} technologies={[]} type="Weaponry" />);
 
 		expect(screen.getByText("TECHTREE.CATEGORIES.WEAPONRY")).toBeInTheDocument();
 		expect(screen.queryByTestId(/tech-tree-row/)).not.toBeInTheDocument();
@@ -246,29 +144,13 @@ describe("TechTreeSection", () => {
 
 	test("should memoize component for performance", () => {
 		const { rerender } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		expect(screen.getByTestId("tech-tree-row-weapon1")).toBeInTheDocument();
 
 		// Rerender with same props
-		rerender(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
-		);
+		rerender(<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />);
 
 		expect(screen.getByTestId("tech-tree-row-weapon1")).toBeInTheDocument();
 	});
@@ -279,14 +161,7 @@ describe("TechTreeSection", () => {
 
 	test("should include image srcSet for retina displays", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		const img = container.querySelector("img");
@@ -298,14 +173,7 @@ describe("TechTreeSection", () => {
 
 	test("should apply correct image dimensions", () => {
 		const { container } = render(
-			<TechTreeSection
-				handleOptimize={mockHandleOptimize}
-				index={0}
-				isGridFull={false}
-				solving={false}
-				technologies={mockTechnologies}
-				type="Weaponry"
-			/>
+			<TechTreeSection index={0} technologies={mockTechnologies} type="Weaponry" />
 		);
 
 		const img = container.querySelector("img");

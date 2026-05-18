@@ -5,6 +5,7 @@ import type { TechTreeRowProps } from "@/types/props";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { useTechTree } from "@/components/TechTree/useTechTreeContext";
 import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
@@ -15,8 +16,11 @@ import { TechTreeRow } from "./TechTreeRow";
 vi.mock("@/store/grid/gridStore", () => ({ useGridStore: vi.fn() }));
 vi.mock("@/store/tech/techStore", () => ({ useTechStore: vi.fn() }));
 vi.mock("@/store/app/shakeStore", () => ({ useShakeStore: vi.fn() }));
+vi.mock("@/components/TechTree/useTechTreeContext", () => ({
+	useTechTree: vi.fn(),
+}));
 
-vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
@@ -36,11 +40,9 @@ vi.mock("react-i18next", () => ({
 const mockUseGridStore = vi.mocked(useGridStore);
 const mockUseTechStore = vi.mocked(useTechStore);
 const mockUseShakeStore = vi.mocked(useShakeStore);
+const mockUseTechTree = vi.mocked(useTechTree);
 
 const defaultProps: TechTreeRowProps = {
-	handleOptimize: vi.fn(),
-	isGridFull: false,
-	solving: false,
 	tech: "testTech",
 	techColor: "blue",
 	techImage: "test.webp",
@@ -60,7 +62,13 @@ const renderWithProviders = (ui: React.ReactElement) => {
  *
  * @example
  */
-const setupMocks = (hasTechInGrid: boolean) => {
+const setupMocks = (hasTechInGrid: boolean, solving = false) => {
+	mockUseTechTree.mockReturnValue({
+		handleOptimize: vi.fn(),
+		isGridFull: false,
+		solving,
+	});
+
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
 		const state: Partial<GridStore> = {
 			activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
@@ -171,9 +179,15 @@ describe("TechTreeRow", () => {
 
 	it("should call handleOptimize when the solve button is clicked", () => {
 		// Arrange
-		setupMocks(false);
 		const handleOptimizeMock = vi.fn();
-		renderWithProviders(<TechTreeRow {...defaultProps} handleOptimize={handleOptimizeMock} />);
+		setupMocks(false);
+		mockUseTechTree.mockReturnValue({
+			handleOptimize: handleOptimizeMock,
+			isGridFull: false,
+			solving: false,
+		});
+
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		// Act
 		const solveButton = screen.getByRole("button", { name: "Solve Test Tech Name" });
@@ -185,8 +199,8 @@ describe("TechTreeRow", () => {
 
 	it("should disable buttons when solving", () => {
 		// Arrange
-		setupMocks(true); // Tech can be in grid or not, doesn't matter
-		renderWithProviders(<TechTreeRow {...defaultProps} solving={true} />);
+		setupMocks(true, true);
+		renderWithProviders(<TechTreeRow {...defaultProps} />);
 
 		// Assert
 		const updateButton = screen.getByRole("button", { name: "Update Test Tech Name" });

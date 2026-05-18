@@ -22,6 +22,11 @@ const ErrorContent = lazy(() =>
 
 /**
  * Props for the `ErrorBoundary` component.
+ *
+ * @remarks
+ * Defines the content and fallback UI for the error monitoring boundary.
+ *
+ * @category Components
  */
 interface Props {
 	/** The child component tree that is monitored for runtime errors. */
@@ -32,6 +37,11 @@ interface Props {
 
 /**
  * Internal state for the `ErrorBoundary` class component.
+ *
+ * @remarks
+ * Tracks the error presence and associated metadata for reporting and rendering.
+ *
+ * @category Components
  */
 interface State {
 	/** The exception that was caught. */

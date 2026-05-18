@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 
 /**
  * Functional interface for controlling the tooltip visibility.
@@ -66,7 +66,7 @@ export const TooltipActionsContext = createContext<TooltipActions | undefined>(u
  * ```
  */
 export const useTooltipState = () => {
-	const context = useContext(TooltipStateContext);
+	const context = use(TooltipStateContext);
 
 	if (context === undefined) {
 		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider
@@ -100,7 +100,7 @@ export const useTooltipState = () => {
  * ```
  */
 export const useTooltipActions = () => {
-	const context = useContext(TooltipActionsContext);
+	const context = use(TooltipActionsContext);
 
 	if (context === undefined) {
 		// Degrade gracefully in tests to avoid needing to wrap every single unit test in a Provider

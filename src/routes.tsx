@@ -23,7 +23,13 @@ const NotFound = async () => {
 
 /**
  * Generates route objects for each functional page (about, instructions, etc.).
+ *
+ * @remarks
  * These are rendered via the `MainAppContent` component which handles modal display.
+ *
+ * @see {@link pages}
+ *
+ * @category Routing
  */
 const pageRoutes: RouteObject[] = [
 	...pages.map((page) => ({
@@ -38,7 +44,13 @@ const pageRoutes: RouteObject[] = [
 
 /**
  * Generates language-prefixed versions of all application routes.
+ *
+ * @remarks
  * This enables deep-linking to specific languages (e.g., /fr/instructions).
+ *
+ * @see {@link languages}
+ *
+ * @category Routing
  */
 const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 	{
@@ -58,11 +70,18 @@ const languageRoutes: RouteObject[] = languages.flatMap((lang) => [
 /**
  * The master route configuration for the React Router.
  *
+ * @remarks
  * This structure defines the application's URL hierarchy, including:
  * - The root layout wrapper (`App`).
  * - Language-prefixed path groups.
  * - Routed modal pages.
  * - Global 404 handling.
+ *
+ * @see {@link App}
+ * @see {@link MainAppContent}
+ * @see {@link RouteError}
+ *
+ * @category Routing
  */
 export const routes: RouteObject[] = [
 	{

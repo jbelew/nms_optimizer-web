@@ -15,7 +15,7 @@ vi.mock("./TechTreeSection", () => ({
 }));
 
 // Mock GridStore
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
 			isGridFull: () => false,
@@ -26,7 +26,6 @@ vi.mock("../../store/grid/gridStore", () => ({
 }));
 
 describe("TechTreeContent", () => {
-	const mockHandleOptimize = vi.fn();
 	const mockTechTree = {
 		grid: {}, // Should be filtered out
 		recommended_builds: [], // Should be filtered out
@@ -67,8 +66,6 @@ describe("TechTreeContent", () => {
 	test("should render TechTreeSection for each category", () => {
 		render(
 			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
 				// @ts-expect-error - Test data doesn't match exact type
 				techTree={mockTechTree as TechTree}
 			/>
@@ -81,8 +78,6 @@ describe("TechTreeContent", () => {
 	test("should filter out recommended_builds category", () => {
 		render(
 			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
 				// @ts-expect-error - Test data doesn't match exact type
 				techTree={mockTechTree as TechTree}
 			/>
@@ -96,8 +91,6 @@ describe("TechTreeContent", () => {
 	test("should filter out grid category", () => {
 		render(
 			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
 				// @ts-expect-error - Test data doesn't match exact type
 				techTree={mockTechTree as TechTree}
 			/>
@@ -136,13 +129,7 @@ describe("TechTreeContent", () => {
 			],
 		};
 
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={unsortedTechTree as unknown as TechTree}
-			/>
-		);
+		render(<TechTreeContent techTree={unsortedTechTree as unknown as TechTree} />);
 
 		// Should render the section with sorted technologies
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
@@ -156,30 +143,12 @@ describe("TechTreeContent", () => {
 			Weaponry: [],
 		};
 
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={emptyTechTree as unknown as TechTree}
-			/>
-		);
+		render(<TechTreeContent techTree={emptyTechTree as unknown as TechTree} />);
 
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 		// Both Weaponry and Utilities sections render with 0 techs, so we need to be more specific
 		const textMatches = screen.getAllByText(/0 techs/);
 		expect(textMatches.length).toBeGreaterThan(0);
-	});
-
-	test("should pass solving prop to TechTreeSection", () => {
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={true}
-				techTree={mockTechTree as unknown as TechTree}
-			/>
-		);
-
-		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 	});
 
 	test("should handle malformed technology entries", () => {
@@ -200,13 +169,7 @@ describe("TechTreeContent", () => {
 			] as unknown[],
 		};
 
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={malformedTechTree as unknown as TechTree}
-			/>
-		);
+		render(<TechTreeContent techTree={malformedTechTree as unknown as TechTree} />);
 
 		// Should still render the section with only valid entries
 		expect(screen.getByText(/1 techs/)).toBeInTheDocument();
@@ -227,13 +190,7 @@ describe("TechTreeContent", () => {
 			],
 		};
 
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={minimalTechTree as unknown as TechTree}
-			/>
-		);
+		render(<TechTreeContent techTree={minimalTechTree as unknown as TechTree} />);
 
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 		expect(screen.getByText(/1 techs/)).toBeInTheDocument();
@@ -241,23 +198,13 @@ describe("TechTreeContent", () => {
 
 	test("should memoize component for performance", () => {
 		const { rerender } = render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={mockTechTree as unknown as TechTree}
-			/>
+			<TechTreeContent techTree={mockTechTree as unknown as TechTree} />
 		);
 
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 
 		// Rerender with same props
-		rerender(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={mockTechTree as unknown as TechTree}
-			/>
-		);
+		rerender(<TechTreeContent techTree={mockTechTree as unknown as TechTree} />);
 
 		// Should still have sections
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
@@ -282,13 +229,7 @@ describe("TechTreeContent", () => {
 			],
 		};
 
-		render(
-			<TechTreeContent
-				handleOptimize={mockHandleOptimize}
-				solving={false}
-				techTree={techTreeWithGridDef as unknown as TechTree}
-			/>
-		);
+		render(<TechTreeContent techTree={techTreeWithGridDef as unknown as TechTree} />);
 
 		expect(screen.getByTestId("tech-tree-section-Weaponry")).toBeInTheDocument();
 		expect(screen.queryByTestId("tech-tree-section-grid_definition")).not.toBeInTheDocument();

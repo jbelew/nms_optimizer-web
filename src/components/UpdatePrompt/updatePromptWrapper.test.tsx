@@ -15,11 +15,11 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock custom hooks
-vi.mock("../../hooks/useUpdateCheck/useUpdateCheck", () => ({
+vi.mock("@/hooks/useUpdateCheck/useUpdateCheck", () => ({
 	useUpdateCheck: vi.fn(),
 }));
 
-vi.mock("../../hooks/useAnalytics/useAnalytics", () => ({
+vi.mock("@/hooks/useAnalytics/useAnalytics", () => ({
 	useAnalytics: vi.fn(),
 }));
 

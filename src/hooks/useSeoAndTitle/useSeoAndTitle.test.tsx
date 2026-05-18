@@ -11,7 +11,7 @@ import { useSeoAndTitle } from "./useSeoAndTitle";
 // Mock dependencies
 vi.mock("react-router-dom", () => ({ useLocation: vi.fn() }));
 vi.mock("react-i18next", () => ({ useTranslation: vi.fn() }));
-vi.mock("../../utils/analytics/tracking", () => ({
+vi.mock("@/utils/analytics/tracking", () => ({
 	sendEvent: vi.fn(),
 }));
 vi.mock("../../../shared/seo-metadata.js", () => ({

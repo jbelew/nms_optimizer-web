@@ -6,15 +6,15 @@ import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 
 import { preloadInitialState } from "./apiPreload";
 
-vi.mock("../../hooks/useShipTypes/useShipTypes", () => ({
+vi.mock("@/hooks/useShipTypes/useShipTypes", () => ({
 	fetchShipTypes: vi.fn(),
 }));
 
-vi.mock("../../hooks/useTechTree/useTechTree", () => ({
+vi.mock("@/hooks/useTechTree/useTechTree", () => ({
 	fetchTechTreeAsync: vi.fn(),
 }));
 
-vi.mock("../browser/platformResolver", () => ({
+vi.mock("@/utils/browser/platformResolver", () => ({
 	resolveInitialPlatform: vi.fn(),
 }));
 

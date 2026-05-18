@@ -23,24 +23,42 @@ vi.mock("react-i18next", () => ({
 	}),
 }));
 
-vi.mock("../../store/app/platformStore");
-vi.mock("../../utils/system/dialogUtils", () => ({
+vi.mock("@/store/app/platformStore");
+vi.mock("@/utils/system/dialogUtils", () => ({
 	useDialog: () => ({
 		openDialog: vi.fn(),
 	}),
 }));
 
-// Mock AppDialog to avoid lazy loading issues and focus on ModuleSelectionDialog logic
-vi.mock("../AppDialog/Base/AppDialog", () => ({
-	default: ({ content, footer, headerIcon, title }: Record<string, React.ReactNode>) => (
+// Mock AppDialog to support compound component pattern
+vi.mock("@/components/AppDialog/Base/AppDialog", () => {
+	const MockRoot = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+	const MockTitle = ({ children }: { children: React.ReactNode }) => <h1>{children}</h1>;
+	const MockBody = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+	const MockFooter = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+
+	interface MockAppDialogProps {
+		content?: React.ReactNode;
+		footer?: React.ReactNode;
+		title?: React.ReactNode;
+	}
+	const MockAppDialog = ({ content, footer, title }: MockAppDialogProps) => (
 		<div>
 			<h1>{title}</h1>
-			<div>{headerIcon}</div>
 			<div>{content}</div>
 			<div>{footer}</div>
 		</div>
-	),
-}));
+	);
+
+	return {
+		default: Object.assign(MockAppDialog, {
+			Body: MockBody,
+			Footer: MockFooter,
+			Root: MockRoot,
+			Title: MockTitle,
+		}),
+	};
+});
 
 const mockGroupedModules = {
 	atlantid: [],

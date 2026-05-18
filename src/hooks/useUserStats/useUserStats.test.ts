@@ -9,7 +9,7 @@ import { resetUserStatsCache } from "@/utils/api/userStatsResource";
 
 import { useUserStats } from "./useUserStats";
 
-vi.mock("../../utils/api/network", () => ({
+vi.mock("@/utils/api/network", () => ({
 	apiCall: vi.fn(),
 }));
 

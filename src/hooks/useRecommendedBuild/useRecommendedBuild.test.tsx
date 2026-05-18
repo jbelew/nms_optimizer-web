@@ -12,7 +12,7 @@ import { createEmptyCell, createGrid, useGridStore } from "@/store/grid/gridStor
 import { useRecommendedBuild } from "./useRecommendedBuild";
 
 // Mock useGridStore
-vi.mock("../../store/grid/gridStore", () => ({
+vi.mock("@/store/grid/gridStore", () => ({
 	createEmptyCell: vi.fn(),
 	createGrid: vi.fn(),
 	resetCellContent: vi.fn((cell) => {
@@ -24,7 +24,7 @@ vi.mock("../../store/grid/gridStore", () => ({
 }));
 
 // Mock useBreakpoint to return false for all breakpoints (simulate small screen)
-vi.mock("../useBreakpoint/useBreakpoint", () => ({
+vi.mock("@/hooks/useBreakpoint/useBreakpoint", () => ({
 	useBreakpoint: vi.fn(() => false),
 }));
 

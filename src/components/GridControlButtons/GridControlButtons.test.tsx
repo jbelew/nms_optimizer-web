@@ -62,7 +62,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 }));
 
 // Mock useGridRowState hook
-vi.mock("../GridRow/useGridRowState", () => ({
+vi.mock("@/components/GridRow/useGridRowState", () => ({
 	useGridRowState: (rowIndex: number) => {
 		// Mock implementation that matches our test scenarios
 		if (rowIndex === 0) {

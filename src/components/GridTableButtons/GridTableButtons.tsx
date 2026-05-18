@@ -24,6 +24,8 @@ import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useDialog } from "@/utils/system/dialogUtils";
 
+import { useGridContext } from "../GridTable/useGridContext";
+
 const BuildNameDialog = React.lazy(
 	() => import("@/components/AppDialog/BuildName/BuildNameDialog")
 );
@@ -32,32 +34,15 @@ const BuildNameDialog = React.lazy(
  * Props for the `GridTableButtons` component.
  */
 interface GridTableButtonsProps {
-	/** Ref to the grid DOM element, used for screenshot capture. */
-	gridRef: React.RefObject<HTMLDivElement | null>;
 	/** Whether an optimization solve is currently active. */
 	solving: boolean;
 }
 
 /**
  * A container component for the various action buttons located below the technology grid.
- *
- * It provides buttons for global grid actions, including:
- * - Opening Instructions and About dialogs.
- * - Loading and Saving `.nms` build files.
- * - Generating and opening the Share Link dialog.
- * - Resetting the entire grid to its initial state.
- *
- * The component adapts its layout for mobile and desktop, using `IconButton` on
- * small screens and full `Button` with text on larger viewports.
- *
- * @param {GridTableButtonsProps} props - Component properties.
- *
- * @returns {JSX.Element} The rendered control button area.
- *
- * @example
- * <GridTableButtons solving={false} />
  */
-const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving }) => {
+const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
+	const { gridRef } = useGridContext();
 	const { updateUrlForReset, updateUrlForShare } = useUrlSync();
 	const isSmallAndUp = useBreakpoint("640px"); // sm breakpoint
 	const { t } = useTranslation();
@@ -83,6 +68,9 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 	const scrollOptions = { skipOnLargeScreens: false };
 	const { scrollIntoView } = useScrollGridIntoView(scrollOptions);
 
+	/**
+	 * Handles the screenshot capture of the grid section.
+	 */
 	const handleScreenshotClick = () => {
 		const section = gridRef.current?.closest<HTMLElement>(".main-app__grid-section");
 
@@ -93,9 +81,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 
 	/**
 	 * Navigates to the instructions dialog and updates completion state.
-	 *
-	 * @example
-	 * handleShowInstructions();
 	 */
 	const handleShowInstructions = () => {
 		startInfoTransition(() => {
@@ -109,9 +94,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 
 	/**
 	 * Navigates to the about dialog.
-	 *
-	 * @example
-	 * handleShowAboutPage();
 	 */
 	const handleShowAboutPage = () => {
 		startInfoTransition(() => {
@@ -121,9 +103,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 
 	/**
 	 * Creates a shareable link and opens the share dialog.
-	 *
-	 * @example
-	 * handleShareClick();
 	 */
 	const handleShareClick = () => {
 		startShareTransition(() => {
@@ -141,9 +120,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 
 	/**
 	 * Purges the current grid state and resets the URL.
-	 *
-	 * @example
-	 * handleResetGrid();
 	 */
 	const handleResetGrid = () => {
 		// Scroll immediately before computations on screens < 1024px
@@ -165,9 +141,6 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ gridRef, solving })
 
 	/**
 	 * Internal helper to render a button that collapses to an icon on mobile.
-	 *
-	 * @example
-	 * renderResponsiveButton(<Icon />, "buttons.label", onClick, false, "className");
 	 */
 	const renderResponsiveButton = (
 		icon: React.ReactNode,

@@ -14,11 +14,12 @@ import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileMan
  * It is designed to be used at the top level of the application to ensure
  * it captures any incoming launch requests.
  *
+ * @returns {void} Side-effects only.
+ *
  * @see {@link https://developer.chrome.com/docs/capabilities/web-apps/file-handling File Handling API}
  * @see {@link useBuildFileManager}
  *
  * @hook
- * @component
  *
  * @category Hooks
  *

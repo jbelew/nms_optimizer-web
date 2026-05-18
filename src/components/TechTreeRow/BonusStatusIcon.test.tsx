@@ -36,14 +36,14 @@ vi.mock("@radix-ui/themes", async () => {
 	};
 });
 
-vi.mock("../../store/tech/techBonusStore", () => ({
+vi.mock("@/store/tech/techBonusStore", () => ({
 	useTechBonusStore: vi.fn(() => ({
 		getBonusStatus: vi.fn(() => null),
 		setBonusStatus: vi.fn(),
 	})),
 }));
 
-vi.mock("../ConditionalTooltip/ConditionalTooltip", () => ({
+vi.mock("@/components/ConditionalTooltip/ConditionalTooltip", () => ({
 	ConditionalTooltip: ({ children }: { children: React.ReactNode }) => (
 		<div data-testid="conditional-tooltip">{children}</div>
 	),

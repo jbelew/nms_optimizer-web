@@ -7,6 +7,8 @@
  * data validation, and provides derived maps for efficient access to
  * technology metadata.
  *
+ * @see {@link ./useTechTree.test.ts Unit Tests}
+ *
  * @category Hooks
  */
 

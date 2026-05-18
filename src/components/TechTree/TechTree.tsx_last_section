@@ -1,0 +1,9 @@
+/**
+ * Compound component for TechTree.
+ */
+export const TechTree = Object.assign(TechTreeComp, {
+	List: TechTreeList,
+	Provider: TechTreeProvider,
+	Recommended: TechTreeRecommended,
+	Root: TechTreeRoot,
+});

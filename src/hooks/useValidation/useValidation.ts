@@ -147,9 +147,19 @@ export const useUrlValidation = () => {
  *
  * @returns {void} Side-effects only.
  *
+ * @see {@link ./useValidation.test.ts Unit Tests}
+ *
+ * @hook
+ *
+ * @category Hooks
+ *
  * @example
  * ```tsx
- * useUrlNormalization();
+ * const App = () => {
+ *   // Enforces trailing slash and platform parameter
+ *   useUrlNormalization();
+ *   return <MainContent />;
+ * };
  * ```
  */
 export const useUrlNormalization = () => {

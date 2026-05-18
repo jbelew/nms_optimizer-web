@@ -11,7 +11,7 @@ vi.mock("socket.io-client", () => ({
 	io: vi.fn(),
 }));
 
-vi.mock("../system/monitoring", () => ({
+vi.mock("@/utils/system/monitoring", () => ({
 	Logger: {
 		error: vi.fn(),
 		info: vi.fn(),

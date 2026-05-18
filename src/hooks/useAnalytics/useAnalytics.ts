@@ -3,6 +3,7 @@ import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
 /**
  * Custom hook for accessing Google Analytics event tracking.
  *
+ * @remarks
  * Provides a React-friendly interface to the global `sendEvent` and
  * `sendDeferredEvent` functions, ensuring consistent event tracking across the
  * application.
@@ -11,12 +12,14 @@ import { sendDeferredEvent, sendEvent } from "@/utils/analytics/tracking";
  * the main thread free during the interaction. Use `sendEvent` for late-firing
  * events (Web Vitals, `visibilitychange`) that must dispatch synchronously.
  *
- * @returns {{ sendEvent: (event: import('@/utils/analytics/tracking').GA4Event) => void, sendDeferredEvent: (event: import('@/utils/analytics/tracking').GA4Event) => void }} An object containing the tracking functions.
+ * @returns {object} An object containing the tracking functions.
+ * @returns {Function} returns.sendEvent - Synchronous event dispatcher.
+ * @returns {Function} returns.sendDeferredEvent - INP-friendly deferred event dispatcher.
  *
  * @see {@link sendEvent} for the underlying tracking logic.
  * @see {@link sendDeferredEvent} for the INP-friendly deferred variant.
- * @see [Analytics Tracking](../../utils/analytics/tracking.ts)
- * @see [useAnalytics Tests](./useAnalytics.test.ts)
+ * @see {@link ../../utils/analytics/tracking.ts Analytics Tracking}
+ * @see {@link ./useAnalytics.test.ts Unit Tests}
  *
  * @category Hooks
  *
