@@ -33,3 +33,18 @@ export const WS_URL = import.meta.env.VITE_WS_URL;
  * @category Utilities
  */
 export const TRACKING_ID = "G-P5VBZQ69Q9";
+
+/**
+ * Common timing and duration constants used across the application.
+ * 
+ * @category Utilities
+ */
+export const UI_TIMING = {
+	/** Delay in ms before writing to localStorage (debounced) */
+	DEBOUNCE_SAVE_MS: 1000,
+	/** Max time in ms between taps to register as a double-tap */
+	DOUBLE_TAP_THRESHOLD: 400,
+	/** Fallback timeout in ms for requestIdleCallback */
+	IDLE_TIMEOUT_MS: 2000,
+} as const;
+

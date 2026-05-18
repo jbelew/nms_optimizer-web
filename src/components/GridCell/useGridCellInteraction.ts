@@ -1,14 +1,13 @@
 import type { Cell } from "@/store/grid/gridStore";
 import { useRef, useState, useTransition } from "react";
 
+import { UI_TIMING } from "@/constants";
 import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useSessionStore } from "@/store/app/sessionStore";
 import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useInteractionStore } from "@/store/grid/interactionStore";
 import { Logger } from "@/utils/system/monitoring";
-
-const DOUBLE_TAP_THRESHOLD = 400; // ms
 
 /**
  * Custom hook for managing complex user interactions with an individual grid cell.
@@ -107,7 +106,11 @@ export const useGridCellInteraction = (
 			interactionState._lastTapCell[0] === rowIndex &&
 			interactionState._lastTapCell[1] === columnIndex;
 
-		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
+		if (
+			isSameCell &&
+			timeSinceLastTap < UI_TIMING.DOUBLE_TAP_THRESHOLD &&
+			timeSinceLastTap > 0
+		) {
 			// Double tap on the same cell - handled by handleCellDoubleTap which also resets lastTap
 			const totalSupercharged = gridState.totalSuperchargedCells;
 			const isInvalidDoubleTap =

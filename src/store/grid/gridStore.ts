@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import { UI_TIMING } from "@/constants";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { runWhenIdle } from "@/utils/system/idle";
@@ -382,7 +383,7 @@ const debouncedStorage = {
 					}
 				};
 
-				runWhenIdle(performCleanup, { timeout: 2000 });
+				runWhenIdle(performCleanup, { timeout: UI_TIMING.IDLE_TIMEOUT_MS });
 			}
 
 			const storedData = safeGetItem(name);
@@ -444,7 +445,7 @@ const debouncedStorage = {
 
 			return Promise.reject(new Error(String(e)));
 		}
-	}, 1000),
+	}, UI_TIMING.DEBOUNCE_SAVE_MS),
 };
 
 /**

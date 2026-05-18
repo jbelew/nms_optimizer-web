@@ -15,6 +15,7 @@ import { Theme } from "@radix-ui/themes";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
+import { UI_TIMING } from "@/constants";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "./components/TooltipManager/TooltipManager";
 import { TooltipProvider } from "./context/tooltipContext";
@@ -188,7 +189,7 @@ const bootstrap = async () => {
 					() => {
 						void initDeferredServices();
 					},
-					{ timeout: 2000 }
+					{ timeout: UI_TIMING.IDLE_TIMEOUT_MS }
 				);
 			},
 			{ once: true }
