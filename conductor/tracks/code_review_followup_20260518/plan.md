@@ -46,20 +46,20 @@ Deeper structural changes to state management for better performance and decoupl
 - [x] **Task 2: Refactor - Discriminated Union for `OptimizeStore` (N4)** <!-- files: src/store/app/optimizeStore.ts --> bc7ce2a
   - Refactor `OptimizeStore` to use a `status` field with a discriminated union (idle/solving/error/etc.).
   - Update consumers to handle the new state shape.
-- [~] **Task 3: Refactor - Clean up `gridStore` public API (N5, N6)** <!-- files: src/store/grid/gridStore.ts -->
+- [x] **Task 3: Refactor - Clean up `gridStore` public API (N5, N6)** <!-- files: src/store/grid/gridStore.ts --> 79c57b5
   - Remove zero-arg getters like `isGridFull()` in favor of direct state access or dedicated selectors.
   - Ensure cache fields (starting with `_`) are not part of the public `GridStore` interface.
-- [ ] **Task 4: Refactor - Finalize `techStore` and `gridStore` decoupling (P3, NEW11)** <!-- files: src/store/tech/techStore.ts, src/store/grid/gridStore.ts, src/store/sessionCoordinator.ts --> <!-- depends: Task 3 -->
+- [x] **Task 4: Refactor - Finalize `techStore` and `gridStore` decoupling (P3, NEW11)** <!-- files: src/store/tech/techStore.ts, src/store/grid/gridStore.ts, src/store/sessionCoordinator.ts --> f0c1675
   - Move `techStore` initialization logic that depends on `moduleSelectionStore` into `sessionCoordinator`.
   - Move the `partialize` platform check from `gridStore` to a more appropriate location (e.g., storage adapter or coordinator).
-- [ ] **Task 5: Performance - Memoize `GridCell` string operations (N10)** <!-- files: src/components/GridCell/GridCell.tsx -->
+- [x] **Task 5: Performance - Memoize `GridCell` string operations (N10)** <!-- files: src/components/GridCell/GridCell.tsx --> f0c1675
   - Memoize `srcSet` and other string operations in `GridCell` or `ModuleContent`.
-- [ ] **Task 6: Conductor - User Manual Verification 'Phase 3: Store Refactoring & Performance' (Protocol in workflow.md)**
+- [x] **Task 6: Conductor - User Manual Verification 'Phase 3: Store Refactoring & Performance' (Protocol in workflow.md)**
 
 ## Phase 4: Standards & Naming Consistency <!-- depends: Phase 3 -->
 Final pass for naming conventions, magic numbers, and documentation.
 
-- [ ] **Task 1: Standards - Extract Magic Numbers (N9)** <!-- files: src/constants.ts, src/components/GridCell/useGridCellInteraction.ts, src/store/grid/gridStore.ts -->
+- [~] **Task 1: Standards - Extract Magic Numbers (N9)** <!-- files: src/constants.ts, src/components/GridCell/useGridCellInteraction.ts, src/store/grid/gridStore.ts -->
   - Identify and move magic numbers (e.g., 400ms tap threshold, 1000ms debounce, 500ms cleanup) to `src/constants.ts` or appropriate module constants.
 - [ ] **Task 2: Standards - PascalCase Renaming (N11)** <!-- files: src/components/LanguageSelector/LanguageSelector.tsx, src/components/MessageSpinner/MessageSpinner.tsx, src/components/MarkdownContentRenderer/MarkdownContentRenderer.tsx, src/context/TooltipContext.tsx, src/context/CreateToastContext.ts, src/components/AppDialog/Error/ErrorDialog.tsx, src/components/UpdatePrompt/UpdatePromptWrapper.tsx, src/components/ShipSelection/ShipSelection.tsx -->
   - Rename identified files to PascalCase.

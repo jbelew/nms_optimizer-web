@@ -17,7 +17,7 @@ import { use, useEffect, useMemo } from "react";
 
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechStore } from "@/store/tech/techStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 import { apiCall } from "@/utils/api/network";
 import { Logger } from "@/utils/system/monitoring";
@@ -150,7 +150,6 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * @returns {TechTree} The loaded technology tree data structure.
  *
  * @see {@link fetchTechTree} for the promise creator.
- * @see {@link useTechStore} for technology grouping and coloring.
  * @see {@link useGridStore} for grid initialization.
  *
  * @hook
@@ -175,7 +174,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 	useEffect(() => {
 		if (data && Object.keys(data).length > 0 && maps) {
 			const { activeGroups, techColors, techGroups } = maps;
-			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
+			sessionCoordinator.initializeTechTree(techColors, techGroups, activeGroups);
 
 			const gridStore = useGridStore.getState();
 
