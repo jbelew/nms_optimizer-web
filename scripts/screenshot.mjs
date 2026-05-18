@@ -36,6 +36,22 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 
 	const page = await context.newPage();
 
+	page.on("console", (msg) => {
+		console.log(`BROWSER LOG [${msg.type()}]: ${msg.text()}`);
+	});
+	page.on("pageerror", (err) => {
+		console.error(`BROWSER ERROR: ${err.stack || err.message}`);
+	});
+	page.on("requestfailed", (request) => {
+		console.warn(`REQUEST FAILED: ${request.url()} - ${request.failure()?.errorText || "Unknown error"}`);
+	});
+	page.on("request", (request) => {
+		console.log(`REQUEST: ${request.method()} ${request.url()}`);
+	});
+	page.on("response", (response) => {
+		console.log(`RESPONSE: ${response.status()} ${response.url()}`);
+	});
+
 	try {
 		await page.goto(baseUrl, {
 			waitUntil: "networkidle",
@@ -61,8 +77,8 @@ console.log(`Screenshot script started. Using BASE_URL: ${baseUrl}`);
 		});
 
 		// Wait for the build to load and modules to appear
-		await page.waitForSelector("[data-tech]", { timeout: 15000 });
-		const moduleCount = await page.locator("[data-tech]").count();
+		await page.waitForSelector(".gridCell img", { timeout: 15000 });
+		const moduleCount = await page.locator(".gridCell img").count();
 		console.log(`✅ Build loaded successfully. Found ${moduleCount} modules in the grid.`);
 
 		console.log("Taking standard screenshot ...");
