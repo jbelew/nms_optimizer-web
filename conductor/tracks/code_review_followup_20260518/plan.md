@@ -61,12 +61,12 @@ Final pass for naming conventions, magic numbers, and documentation.
 
 - [x] **Task 1: Standards - Extract Magic Numbers (N9)** <!-- files: src/constants.ts, src/components/GridCell/useGridCellInteraction.ts, src/store/grid/gridStore.ts --> e7edc28
   - Identify and move magic numbers (e.g., 400ms tap threshold, 1000ms debounce, 500ms cleanup) to `src/constants.ts` or appropriate module constants.
-- [~] **Task 2: Standards - PascalCase Renaming (N11)** <!-- files: src/components/LanguageSelector/LanguageSelector.tsx, src/components/MessageSpinner/MessageSpinner.tsx, src/components/MarkdownContentRenderer/MarkdownContentRenderer.tsx, src/context/TooltipContext.tsx, src/context/CreateToastContext.ts, src/components/AppDialog/Error/ErrorDialog.tsx, src/components/UpdatePrompt/UpdatePromptWrapper.tsx, src/components/ShipSelection/ShipSelection.tsx -->
+- [x] **Task 2: Standards - PascalCase Renaming (N11)** <!-- files: src/components/LanguageSelector/LanguageSelector.tsx, src/components/MessageSpinner/MessageSpinner.tsx, src/components/MarkdownContentRenderer/MarkdownContentRenderer.tsx, src/context/TooltipContext.tsx, src/context/CreateToastContext.ts, src/components/AppDialog/Error/ErrorDialog.tsx, src/components/UpdatePrompt/UpdatePromptWrapper.tsx, src/components/ShipSelection/ShipSelection.tsx --> aad21bb
   - Rename identified files to PascalCase.
   - Update all import references.
-- [ ] **Task 3: Documentation - `Cell` field naming (N12)** <!-- files: src/types/grid.ts -->
+- [x] **Task 3: Documentation - `Cell` field naming (N12)** <!-- files: src/types/grid.ts --> eab1224
   - Add JSDoc to `Cell` type explaining the mix of snake_case/camelCase (e.g., API compatibility).
-- [ ] **Task 4: Testing - Unit tests for `PerformanceUtils.ts` (N13)** <!-- files: src/utils/PerformanceUtils.ts, src/utils/PerformanceUtils.test.ts -->
+- [x] **Task 4: Testing - Unit tests for `PerformanceUtils.ts` (N13)** <!-- files: src/utils/PerformanceUtils.ts, src/utils/PerformanceUtils.test.ts --> 164e165
   - Add unit tests for `PerformanceUtils.ts` to ensure reliability.
-- [ ] **Task 5: Conductor - User Manual Verification 'Phase 4: Standards & Naming Consistency' (Protocol in workflow.md)**
+- [x] **Task 5: Conductor - User Manual Verification 'Phase 4: Standards & Naming Consistency' (Protocol in workflow.md)**
 
