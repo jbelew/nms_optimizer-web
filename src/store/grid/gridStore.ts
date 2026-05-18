@@ -266,6 +266,10 @@ export type GridStore = {
 	_isGridFull: boolean;
 	/** Index of the last row containing at least one active cell, or -1. */
 	_lastActiveRowIndex: number;
+	/** Row and column index of the last tapped cell. */
+	_lastTapCell: [number, number];
+	/** Timestamp of the last tap for double-tap detection. */
+	_lastTapTime: number;
 	/** Count of cells where `supercharged === true`. */
 	_totalSuperchargedCells: number;
 	/** Activates all cells in the specified row. */
@@ -361,6 +365,9 @@ export type GridStore = {
 	 * @param {boolean} isShared - Whether the current grid is from a share URL.
 	 */
 	setIsSharedGrid: (isShared: boolean) => void;
+
+	/** Sets the last tap coordinates and timestamp. */
+	setLastTap: (cell: [number, number], time: number) => void;
 
 	/** Updates the optimization result and synchronizes tech-specific stats. */
 	setResult: (result: ApiResponse | null, tech: string) => void;
@@ -631,6 +638,8 @@ export const useGridStore = create<GridStore>()(
 				_initialCellStateForTap: null,
 				_isGridFull: false,
 				_lastActiveRowIndex: -1,
+				_lastTapCell: [-1, -1],
+				_lastTapTime: 0,
 				_totalSuperchargedCells: 0,
 				activateRow: (rowIndex: number) => {
 					set((state) => {
@@ -711,6 +720,8 @@ export const useGridStore = create<GridStore>()(
 						}
 
 						state._initialCellStateForTap = null;
+						state._lastTapCell = [-1, -1];
+						state._lastTapTime = 0;
 						recomputeDerivedState(state);
 					});
 				},
@@ -760,6 +771,8 @@ export const useGridStore = create<GridStore>()(
 						state.result = null;
 						state.isSharedGrid = false;
 						state.buildName = null;
+						state._lastTapCell = [-1, -1];
+						state._lastTapTime = 0;
 						recomputeDerivedState(state);
 					});
 					useTechStore.getState().clearResult();
@@ -894,6 +907,12 @@ export const useGridStore = create<GridStore>()(
 					set({ initialGridDefinition: definition }),
 
 				setIsSharedGrid: (isShared) => set({ isSharedGrid: isShared }),
+
+				setLastTap: (cell, time) =>
+					set((state) => {
+						state._lastTapCell = cell;
+						state._lastTapTime = time;
+					}),
 
 				setResult: (result, tech) => {
 					const { setTechMaxBonus, setTechSolvedBonus, setTechSolveMethod } =

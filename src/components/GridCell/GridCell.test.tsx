@@ -123,7 +123,7 @@ describe("GridCell", () => {
 		// Mutate mockCellState with overrides before rendering
 		Object.assign(mockCellState, cellOverrides);
 
-		return render(<GridCell columnIndex={0} isSharedGrid={false} rowIndex={0} {...props} />);
+		return render(<GridCell columnIndex={0} rowIndex={0} {...props} />);
 	};
 
 	it("renders correctly", () => {

@@ -7,13 +7,6 @@ import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
 import { Logger } from "@/utils/system/monitoring";
 
-// To track double taps correctly across all cells, we need a shared reference.
-// A tap on one cell should not be considered the first tap of a double tap on another.
-let lastTapInfo = {
-	cell: [-1, -1], // [rowIndex, columnIndex]
-	time: 0,
-};
-
 const DOUBLE_TAP_THRESHOLD = 400; // ms
 
 /**
@@ -106,12 +99,12 @@ export const useGridCellInteraction = (
 		const latestCell = cellRef.current;
 
 		const currentTime = new Date().getTime();
-		const timeSinceLastTap = currentTime - lastTapInfo.time;
-		const isSameCell = lastTapInfo.cell[0] === rowIndex && lastTapInfo.cell[1] === columnIndex;
+		const timeSinceLastTap = currentTime - gridState._lastTapTime;
+		const isSameCell =
+			gridState._lastTapCell[0] === rowIndex && gridState._lastTapCell[1] === columnIndex;
 
 		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
-			// Double tap on the same cell
-			lastTapInfo = { cell: [-1, -1], time: 0 }; // Reset after double tap
+			// Double tap on the same cell - handled by handleCellDoubleTap which also resets lastTap
 			const totalSupercharged = gridState.selectTotalSuperchargedCells();
 			const isInvalidDoubleTap =
 				gridState.superchargedFixed ||
@@ -141,7 +134,7 @@ export const useGridCellInteraction = (
 			}
 		} else {
 			// Single tap or tap on a different cell
-			lastTapInfo = { cell: [rowIndex, columnIndex], time: currentTime };
+			gridState.setLastTap([rowIndex, columnIndex], currentTime);
 			const isInvalidSingleTap =
 				gridState.gridFixed || (gridState.superchargedFixed && latestCell.supercharged);
 

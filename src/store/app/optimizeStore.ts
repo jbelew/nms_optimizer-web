@@ -15,12 +15,20 @@ export interface OptimizeState {
 	errorType: ErrorType | null;
 	/** The technology identifier that failed to fit using pattern solving. */
 	patternNoFitTech: null | string;
+	/** The current progress percentage (0-100). */
+	progressPercent: number;
 	/**
 	 * Sets or clears the current "Pattern No Fit" technology warning.
 	 *
 	 * @param {string | null} tech - The technology key to set, or `null` to clear.
 	 */
 	setPatternNoFitTech: (tech: null | string) => void;
+	/**
+	 * Updates the optimization progress percentage.
+	 *
+	 * @param {number} percent - The current progress percentage.
+	 */
+	setProgressPercent: (percent: number) => void;
 	/**
 	 * Updates the error visibility and metadata.
 	 *
@@ -29,8 +37,16 @@ export interface OptimizeState {
 	 * @param {Error | null} [error=null] - The exception or error details.
 	 */
 	setShowError: (show: boolean, type?: ErrorType, error?: Error | null) => void;
+	/**
+	 * Updates the "solving" status.
+	 *
+	 * @param {boolean} solving - Whether an optimization is in progress.
+	 */
+	setSolving: (solving: boolean) => void;
 	/** Whether the global error overlay is visible. */
 	showError: boolean;
+	/** Whether an optimization is currently in progress. */
+	solving: boolean;
 }
 
 /**
@@ -63,8 +79,12 @@ export const useOptimizeStore = create<OptimizeState>((set) => ({
 	error: null,
 	errorType: null,
 	patternNoFitTech: null,
+	progressPercent: 0,
 	setPatternNoFitTech: (tech) => set({ patternNoFitTech: tech }),
+	setProgressPercent: (percent) => set({ progressPercent: percent }),
 	setShowError: (show, type = "recoverable", error = null) =>
 		set({ error: show ? error : null, errorType: show ? type : null, showError: show }),
+	setSolving: (solving) => set({ solving }),
 	showError: false,
+	solving: false,
 }));

@@ -6,8 +6,12 @@ describe("OptimizeStore", () => {
 	beforeEach(() => {
 		// Reset the store state before each test
 		useOptimizeStore.setState({
+			error: null,
+			errorType: null,
 			patternNoFitTech: null,
+			progressPercent: 0,
 			showError: false,
+			solving: false,
 		});
 	});
 
@@ -17,19 +21,33 @@ describe("OptimizeStore", () => {
 			expect(store.showError).toBe(false);
 		});
 
+		it("should have solving set to false by default", () => {
+			const store = useOptimizeStore.getState();
+			expect(store.solving).toBe(false);
+		});
+
+		it("should have progressPercent set to 0 by default", () => {
+			const store = useOptimizeStore.getState();
+			expect(store.progressPercent).toBe(0);
+		});
+
 		it("should have patternNoFitTech set to null by default", () => {
 			const store = useOptimizeStore.getState();
 			expect(store.patternNoFitTech).toBeNull();
 		});
+	});
 
-		it("should have setShowError function", () => {
-			const store = useOptimizeStore.getState();
-			expect(typeof store.setShowError).toBe("function");
+	describe("Actions", () => {
+		it("should set solving to true", () => {
+			const { setSolving } = useOptimizeStore.getState();
+			setSolving(true);
+			expect(useOptimizeStore.getState().solving).toBe(true);
 		});
 
-		it("should have setPatternNoFitTech function", () => {
-			const store = useOptimizeStore.getState();
-			expect(typeof store.setPatternNoFitTech).toBe("function");
+		it("should set progressPercent", () => {
+			const { setProgressPercent } = useOptimizeStore.getState();
+			setProgressPercent(50);
+			expect(useOptimizeStore.getState().progressPercent).toBe(50);
 		});
 	});
 
@@ -174,7 +192,8 @@ describe("OptimizeStore", () => {
 		});
 
 		it("should manage complex update sequences", () => {
-			const { setPatternNoFitTech, setShowError } = useOptimizeStore.getState();
+			const { setPatternNoFitTech, setProgressPercent, setShowError, setSolving } =
+				useOptimizeStore.getState();
 
 			// Scenario 1: Set error
 			setShowError(true);
@@ -184,9 +203,13 @@ describe("OptimizeStore", () => {
 				error: null,
 				errorType: "recoverable",
 				patternNoFitTech: "armor-plating",
+				progressPercent: 0,
 				setPatternNoFitTech,
+				setProgressPercent,
 				setShowError,
+				setSolving,
 				showError: true,
+				solving: false,
 			});
 
 			// Scenario 2: Clear error
@@ -196,9 +219,13 @@ describe("OptimizeStore", () => {
 				error: null,
 				errorType: null,
 				patternNoFitTech: "armor-plating",
+				progressPercent: 0,
 				setPatternNoFitTech,
+				setProgressPercent,
 				setShowError,
+				setSolving,
 				showError: false,
+				solving: false,
 			});
 
 			// Scenario 3: Clear tech
@@ -208,9 +235,13 @@ describe("OptimizeStore", () => {
 				error: null,
 				errorType: null,
 				patternNoFitTech: null,
+				progressPercent: 0,
 				setPatternNoFitTech,
+				setProgressPercent,
 				setShowError,
+				setSolving,
 				showError: false,
+				solving: false,
 			});
 		});
 	});

@@ -353,7 +353,7 @@ const MainAppGridSection: React.FC = () => {
 			<GridProvider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
 				<GridTableRoot>
 					<GridTableGrid gridHeight={gridHeight} gridRef={gridTableRef} solving={solving}>
-						<GridTableContent gridHeight={gridHeight} sharedGrid={isSharedGrid} />
+						<GridTableContent gridHeight={gridHeight} />
 					</GridTableGrid>
 					<GridTableButtons solving={solving} />
 				</GridTableRoot>

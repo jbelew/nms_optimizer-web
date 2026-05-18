@@ -1,5 +1,5 @@
 import type { ApiResponse } from "@/store/grid/gridStore";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
@@ -86,12 +86,15 @@ export const useOptimize = (): UseOptimizeReturn => {
 	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
 	const setPatternNoFitTech = useOptimizeStore((s) => s.setPatternNoFitTech);
 	const patternNoFitTech = useOptimizeStore((s) => s.patternNoFitTech);
+	const solving = useOptimizeStore((s) => s.solving);
+	const setSolving = useOptimizeStore((s) => s.setSolving);
+	const progressPercent = useOptimizeStore((s) => s.progressPercent);
+	const setProgressPercent = useOptimizeStore((s) => s.setProgressPercent);
+
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { sendEvent } = useAnalytics();
 	const isLarge = useBreakpoint("1024px");
 
-	const [solving, setSolving] = useState(false);
-	const [progressPercent, setProgressPercent] = useState(0);
 	const isOptimizingRef = useRef(false);
 	const managerRef = useRef<null | OptimizationManager>(null);
 	const isMountedRef = useRef(true);
@@ -153,12 +156,10 @@ export const useOptimize = (): UseOptimizeReturn => {
 		const { checkedModules } = useTechStore.getState();
 
 		isOptimizingRef.current = true;
-		startTransition(() => {
-			setSolving(true);
-			setProgressPercent(0);
-			setShowErrorStore(false);
-			if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
-		});
+		setSolving(true);
+		setProgressPercent(0);
+		setShowErrorStore(false);
+		if (forced || patternNoFitTech === tech) setPatternNoFitTech(null);
 
 		Logger.info(`Optimization started for ${tech}`, {
 			forced,
@@ -174,38 +175,33 @@ export const useOptimize = (): UseOptimizeReturn => {
 				performance.measure("optimize-to-complete", "optimize-start", "optimize-complete");
 				if (!isMountedRef.current) return;
 
-				startTransition(() => {
-					if (patternNoFitTech === tech) setPatternNoFitTech(null);
+				if (patternNoFitTech === tech) setPatternNoFitTech(null);
 
-					Logger.info(`Optimization complete for ${tech}`, {
-						bonus: data.max_bonus,
-						method: data.solve_method,
-						tech,
-					});
-
-					setResult(data, tech);
-					const gaTech =
-						tech === "pulse" && checkedModules[tech]?.includes("PC")
-							? "photonix"
-							: tech;
-
-					if (data.grid) {
-						sendEvent({
-							action: "optimize_tech",
-							category: "ui",
-							nonInteraction: false,
-							platform: selectedShipType,
-							solve_method: data.solve_method,
-							supercharged:
-								typeof data.max_bonus === "number" && data.max_bonus > 100,
-							tech: gaTech,
-							value: 1,
-						});
-						setGrid(data.grid);
-					}
-
-					resetProgress();
+				Logger.info(`Optimization complete for ${tech}`, {
+					bonus: data.max_bonus,
+					method: data.solve_method,
+					tech,
 				});
+
+				setResult(data, tech);
+				const gaTech =
+					tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
+
+				if (data.grid) {
+					sendEvent({
+						action: "optimize_tech",
+						category: "ui",
+						nonInteraction: false,
+						platform: selectedShipType,
+						solve_method: data.solve_method,
+						supercharged: typeof data.max_bonus === "number" && data.max_bonus > 100,
+						tech: gaTech,
+						value: 1,
+					});
+					setGrid(data.grid);
+				}
+
+				resetProgress();
 			},
 			onError: (err: Error) => {
 				if (!isMountedRef.current) return;
@@ -239,10 +235,8 @@ export const useOptimize = (): UseOptimizeReturn => {
 			},
 			onProgress: (data) => {
 				if (!isMountedRef.current) return;
-				startTransition(() => {
-					setProgressPercent(data.progress_percent);
-					if (data.best_grid) setGrid(data.best_grid);
-				});
+				setProgressPercent(data.progress_percent);
+				if (data.best_grid) setGrid(data.best_grid);
 			},
 			tech,
 		});

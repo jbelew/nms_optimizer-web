@@ -37,12 +37,18 @@ const mockUseSessionStore = useSessionStore as unknown as Mock;
 
 describe("useGridCellInteraction", () => {
 	const baseMockGridStoreState = {
+		_lastTapCell: [-1, -1] as [number, number],
+		_lastTapTime: 0,
 		clearInitialCellStateForTap: mockClearInitialCellStateForTap,
 		gridFixed: false,
 		handleCellDoubleTap: mockHandleCellDoubleTap,
 		handleCellTap: mockHandleCellTap,
 		revertCellTap: mockRevertCellTap,
 		selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
+		setLastTap: (cell: [number, number], time: number) => {
+			baseMockGridStoreState._lastTapCell = cell;
+			baseMockGridStoreState._lastTapTime = time;
+		},
 		superchargedFixed: false,
 		toggleCellActive: mockToggleCellActive,
 		toggleCellSupercharged: mockToggleCellSupercharged,

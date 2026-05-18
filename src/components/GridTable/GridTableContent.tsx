@@ -9,8 +9,7 @@ import { useGridStore } from "@/store/grid/gridStore";
  */
 export const GridTableContent: React.FC<{
 	gridHeight: number;
-	sharedGrid: boolean;
-}> = ({ gridHeight, sharedGrid }) => {
+}> = ({ gridHeight }) => {
 	const gridWidth = useGridStore((state) => state.grid.width);
 	const deferredWidth = React.useDeferredValue(gridWidth);
 	const totalAriaColumnCount = deferredWidth + 1;
@@ -27,7 +26,6 @@ export const GridTableContent: React.FC<{
 					{Array.from({ length: deferredWidth }).map((__, columnIndex) => (
 						<GridCell
 							columnIndex={columnIndex}
-							isSharedGrid={sharedGrid}
 							key={`${rowIndex}-${columnIndex}`}
 							rowIndex={rowIndex}
 						/>
@@ -37,6 +35,6 @@ export const GridTableContent: React.FC<{
 					</div>
 				</div>
 			)),
-		[gridHeight, deferredWidth, sharedGrid, totalAriaColumnCount]
+		[gridHeight, deferredWidth, totalAriaColumnCount]
 	);
 };

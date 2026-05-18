@@ -94,7 +94,7 @@ describe("GridTable", () => {
 	});
 
 	it("should render grid with correct role and ARIA attributes", () => {
-		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
+		const { container } = render(<GridTable solving={false} />);
 
 		const grid = container.querySelector('[role="grid"]');
 		expect(grid).toBeInTheDocument();
@@ -104,12 +104,12 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridShake wrapper", () => {
-		render(<GridTable sharedGrid={false} solving={false} />);
+		render(<GridTable solving={false} />);
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 	});
 
 	test("should render GridTableButtons OUTSIDE of the grid container", () => {
-		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
+		const { container } = render(<GridTable solving={false} />);
 
 		const grid = container.querySelector('[role="grid"]');
 		const buttons = screen.getByTestId("grid-table-buttons");
@@ -121,7 +121,7 @@ describe("GridTable", () => {
 	});
 
 	test("should render grid cells and control buttons based on grid dimensions", () => {
-		render(<GridTable sharedGrid={false} solving={false} />);
+		render(<GridTable solving={false} />);
 
 		// Should render 5 * 3 cells (based on mocked grid dimensions)
 		for (let r = 0; r < 5; r++) {
@@ -135,25 +135,25 @@ describe("GridTable", () => {
 	});
 
 	test("should render GridTableButtons", () => {
-		render(<GridTable sharedGrid={false} solving={false} />);
+		render(<GridTable solving={false} />);
 		expect(screen.getByTestId("grid-table-buttons")).toBeInTheDocument();
 	});
 
 	test("should pass solving prop to GridTableButtons", () => {
-		render(<GridTable sharedGrid={false} solving={true} />);
+		render(<GridTable solving={true} />);
 		const buttons = screen.getByTestId("grid-table-buttons");
 		expect(buttons).toHaveAttribute("data-solving", "true");
 	});
 
 	test("should apply opacity class when solving", () => {
-		const { container } = render(<GridTable sharedGrid={false} solving={true} />);
+		const { container } = render(<GridTable solving={true} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).toHaveClass("opacity-25");
 	});
 
 	test("should not apply opacity class when not solving", () => {
-		const { container } = render(<GridTable sharedGrid={false} solving={false} />);
+		const { container } = render(<GridTable solving={false} />);
 
 		const grid = container.querySelector(".gridTable");
 		expect(grid).not.toHaveClass("opacity-25");
@@ -161,19 +161,19 @@ describe("GridTable", () => {
 
 	test("should forward ref to grid container", () => {
 		const ref = React.createRef<HTMLDivElement>();
-		render(<GridTable ref={ref} sharedGrid={false} solving={false} />);
+		render(<GridTable ref={ref} solving={false} />);
 
 		expect(ref.current).toBeInTheDocument();
 		expect(ref.current).toHaveAttribute("role", "grid");
 	});
 
 	test("should be memoized for performance", () => {
-		const { rerender } = render(<GridTable sharedGrid={false} solving={false} />);
+		const { rerender } = render(<GridTable solving={false} />);
 
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();
 
 		// Rerender with same solving state
-		rerender(<GridTable sharedGrid={false} solving={false} />);
+		rerender(<GridTable solving={false} />);
 
 		// Should still render grid
 		expect(screen.getByTestId("grid-shake")).toBeInTheDocument();

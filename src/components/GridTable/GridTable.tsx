@@ -25,8 +25,6 @@ export { GridTableButtons };
  * Properties for the {@link GridTable} component.
  */
 interface GridTableProps {
-	/** Whether the grid is currently in read-only shared mode. */
-	sharedGrid: boolean;
 	/** Whether an optimization solve is currently active. */
 	solving: boolean;
 }
@@ -34,28 +32,26 @@ interface GridTableProps {
 /**
  * GridTable component.
  */
-export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(
-	({ sharedGrid, solving }, ref) => {
-		const gridHeight = useGridStore((state) => state.grid.height);
-		const deferredHeight = React.useDeferredValue(gridHeight);
-		const gridWidth = useGridStore((state) => state.grid.width);
-		const deferredWidth = React.useDeferredValue(gridWidth);
+export const GridTable = React.forwardRef<HTMLDivElement, GridTableProps>(({ solving }, ref) => {
+	const gridHeight = useGridStore((state) => state.grid.height);
+	const deferredHeight = React.useDeferredValue(gridHeight);
+	const gridWidth = useGridStore((state) => state.grid.width);
+	const deferredWidth = React.useDeferredValue(gridWidth);
 
-		if (!deferredHeight || !deferredWidth) {
-			return <div className="gridTable-empty" ref={ref}></div>;
-		}
-
-		return (
-			<GridProvider gridRef={ref as React.RefObject<HTMLDivElement | null>}>
-				<GridTableRoot>
-					<GridTableGrid gridHeight={deferredHeight} gridRef={ref} solving={solving}>
-						<GridTableContent gridHeight={deferredHeight} sharedGrid={sharedGrid} />
-					</GridTableGrid>
-					<GridTableButtons solving={solving} />
-				</GridTableRoot>
-			</GridProvider>
-		);
+	if (!deferredHeight || !deferredWidth) {
+		return <div className="gridTable-empty" ref={ref}></div>;
 	}
-);
+
+	return (
+		<GridProvider gridRef={ref as React.RefObject<HTMLDivElement | null>}>
+			<GridTableRoot>
+				<GridTableGrid gridHeight={deferredHeight} gridRef={ref} solving={solving}>
+					<GridTableContent gridHeight={deferredHeight} />
+				</GridTableGrid>
+				<GridTableButtons solving={solving} />
+			</GridTableRoot>
+		</GridProvider>
+	);
+});
 
 GridTable.displayName = "GridTable";
