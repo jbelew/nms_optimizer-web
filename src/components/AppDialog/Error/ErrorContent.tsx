@@ -37,7 +37,9 @@ import "./ErrorContent.scss";
 const ErrorContent: React.FC = () => {
 	const { t } = useTranslation();
 	const { sendEvent } = useAnalytics();
-	const error = useOptimizeStore((state) => state.error);
+	const error = useOptimizeStore((state) =>
+		state.status.type === "error" ? state.status.details : null
+	);
 
 	/**
 	 * Manages the error-boundary CSS class and sends analytics events on mount.

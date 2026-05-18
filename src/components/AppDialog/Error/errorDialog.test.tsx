@@ -59,23 +59,23 @@ describe("ErrorDialog", () => {
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
 			const state = {
 				setShowError: mockSetShowError,
-				showError: false,
+				status: { type: "idle" },
 			};
 
 			return selector ? selector(state) : state;
 		});
 	});
 
-	test("should not render when showError is false", () => {
+	test("should not render when status is not error", () => {
 		const { container } = render(<ErrorDialog />);
 		expect(container.firstChild).toBeNull();
 	});
 
-	test("should render when showError is true", async () => {
+	test("should render when status is error", async () => {
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
 			const state = {
 				setShowError: mockSetShowError,
-				showError: true,
+				status: { details: null, severity: "recoverable", type: "error" },
 			};
 
 			return selector ? selector(state) : state;
@@ -91,7 +91,7 @@ describe("ErrorDialog", () => {
 		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
 			const state = {
 				setShowError: mockSetShowError,
-				showError: true,
+				status: { details: null, severity: "recoverable", type: "error" },
 			};
 
 			return selector ? selector(state) : state;

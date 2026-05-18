@@ -9,54 +9,57 @@ import { create } from "zustand";
  * @category Optimization
  */
 export interface OptimizeState {
-	/** The actual error object containing details of the failure. */
-	error: Error | null;
-	/** The severity level of the active error. */
-	errorType: ErrorType | null;
-	/** The technology identifier that failed to fit using pattern solving. */
-	patternNoFitTech: null | string;
-	/** The current progress percentage (0-100). */
-	progressPercent: number;
 	/**
 	 * Sets or clears the current "Pattern No Fit" technology warning.
 	 *
 	 * @param {string | null} tech - The technology key to set, or `null` to clear.
 	 */
 	setPatternNoFitTech: (tech: null | string) => void;
+
 	/**
 	 * Updates the optimization progress percentage.
 	 *
 	 * @param {number} percent - The current progress percentage.
 	 */
 	setProgressPercent: (percent: number) => void;
+
 	/**
 	 * Updates the error visibility and metadata.
 	 *
 	 * @param {boolean} show - Whether to show the error overlay.
-	 * @param {ErrorType} [type="recoverable"] - The severity of the error.
-	 * @param {Error | null} [error=null] - The exception or error details.
+	 * @param {ErrorType} [severity="recoverable"] - The severity of the error.
+	 * @param {Error | null} [details=null] - The exception or error details.
 	 */
-	setShowError: (show: boolean, type?: ErrorType, error?: Error | null) => void;
+	setShowError: (show: boolean, severity?: ErrorType, details?: Error | null) => void;
+
 	/**
 	 * Updates the "solving" status.
 	 *
 	 * @param {boolean} solving - Whether an optimization is in progress.
 	 */
 	setSolving: (solving: boolean) => void;
-	/** Whether the global error overlay is visible. */
-	showError: boolean;
-	/** Whether an optimization is currently in progress. */
-	solving: boolean;
+
+	/** The current status of the optimization engine. */
+	status: OptimizeStatus;
 }
 
 /**
  * Types of errors that can occur during the optimization solve process.
  *
- * @see {@link useOptimizeStore}
- *
  * @category Optimization
  */
 type ErrorType = "fatal" | "recoverable";
+
+/**
+ * Discriminated union representing the various states of the optimization engine.
+ *
+ * @category Optimization
+ */
+type OptimizeStatus =
+	| { details: Error | null; severity: ErrorType; type: "error"; }
+	| { progress: number; type: "solving"; }
+	| { tech: string; type: "warning"; }
+	| { type: "idle" };
 
 /**
  * Zustand store for managing UI-blocking errors and specific solver warnings.
@@ -66,25 +69,43 @@ type ErrorType = "fatal" | "recoverable";
  *
  * @returns {import("zustand").UseBoundStore<import("zustand").StoreApi<OptimizeState>>} The Zustand hook for optimization state.
  *
- * @see {@link OptimizeState}
- * @see {@link ErrorType}
- *
  * @category Optimization
- *
- * @example
- * const { showError, error } = useOptimizeStore();
- * // returns { showError: false, error: null }
  */
 export const useOptimizeStore = create<OptimizeState>((set) => ({
-	error: null,
-	errorType: null,
-	patternNoFitTech: null,
-	progressPercent: 0,
-	setPatternNoFitTech: (tech) => set({ patternNoFitTech: tech }),
-	setProgressPercent: (percent) => set({ progressPercent: percent }),
-	setShowError: (show, type = "recoverable", error = null) =>
-		set({ error: show ? error : null, errorType: show ? type : null, showError: show }),
-	setSolving: (solving) => set({ solving }),
-	showError: false,
-	solving: false,
+	setPatternNoFitTech: (tech) =>
+		set((state) => ({
+			status: tech
+				? { tech, type: "warning" }
+				: state.status.type === "warning"
+					? { type: "idle" }
+					: state.status,
+		})),
+
+	setProgressPercent: (percent) =>
+		set((state) => ({
+			status:
+				state.status.type === "solving"
+					? { ...state.status, progress: percent }
+					: state.status,
+		})),
+
+	setShowError: (show, severity = "recoverable", details = null) =>
+		set((state) => ({
+			status: show
+				? { details, severity, type: "error" }
+				: state.status.type === "error"
+					? { type: "idle" }
+					: state.status,
+		})),
+
+	setSolving: (solving) =>
+		set((state) => ({
+			status: solving
+				? { progress: 0, type: "solving" }
+				: state.status.type === "solving"
+					? { type: "idle" }
+					: state.status,
+		})),
+
+	status: { type: "idle" },
 }));

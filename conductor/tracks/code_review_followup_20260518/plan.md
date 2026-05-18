@@ -26,23 +26,24 @@ Fixing rounding issues, potential regressions, and brittle logic.
   - Add unit tests in `sessionCoordinator.test.ts`.
 - [x] **Task 2: Fix - Ensure `switchPlatform` resets `result` (NEW6)** <!-- files: src/store/sessionCoordinator.ts, src/store/sessionCoordinator.test.ts --> e07ff8b
   - Add `setResult(null)` to `switchPlatform` in `sessionCoordinator.ts` or `gridStore.ts` to prevent stale optimization results.
-- [~] **Task 3: Refactor - Consolidate Language Derivation (N2)** <!-- files: src/hooks/useSupportedLanguages.ts, src/context/dialogContext.tsx, src/components/Seo/Seo.tsx, src/hooks/useSeoAndTitle/useSeoAndTitle.ts, src/hooks/useLanguage.ts -->
+- [x] **Task 3: Refactor - Consolidate Language Derivation (N2)** <!-- files: src/hooks/useSupportedLanguages.ts, src/context/dialogContext.tsx, src/components/Seo/Seo.tsx, src/hooks/useSeoAndTitle/useSeoAndTitle.ts, src/hooks/useLanguage.ts --> a5ddb97
   - Extract `useSupportedLanguages` hook or a shared utility to derive the language list dynamically from `i18n.services.resourceStore.data`.
   - Update `dialogContext.tsx`, `Seo.tsx`, `useSeoAndTitle.ts`, and `useLanguage.ts` to use this single source of truth.
-- [ ] **Task 4: Refactor - Optimize `dialogContext` type matching (N3)** <!-- files: src/context/dialogContext.tsx --> <!-- depends: Task 3 -->
+- [x] **Task 4: Refactor - Optimize `dialogContext` type matching (N3)** <!-- files: src/context/dialogContext.tsx --> 44cf826
   - Replace the 7-clause `||` chain with a `Set<DialogType>` lookup.
-- [ ] **Task 5: Refactor - Improve `Seo` component structure (NEW7, NEW8, NEW9)** <!-- files: src/components/Seo/Seo.tsx --> <!-- depends: Task 3 -->
+- [x] **Task 5: Refactor - Improve `Seo` component structure (NEW7, NEW8, NEW9)** <!-- files: src/components/Seo/Seo.tsx --> 7af5edc
   - Hoist `normalizePath` to module scope.
   - Memoize `useSupportedLanguages` (or its keys) instead of the entire resource data.
   - Move `baseUrl` and image constants to module scope.
-- [ ] **Task 6: Conductor - User Manual Verification 'Phase 2: Logic Improvements & Bug Fixes' (Protocol in workflow.md)**
+- [~] **Task 6: Conductor - User Manual Verification 'Phase 2: Logic Improvements & Bug Fixes' (Protocol in workflow.md)**
+
 
 ## Phase 3: Store Refactoring & Performance <!-- execution: parallel --> <!-- depends: Phase 1, Phase 2 -->
 Deeper structural changes to state management for better performance and decoupling.
 
-- [ ] **Task 1: Performance - Convert `useOptimizeStore` to per-field selectors (N1)** <!-- files: src/App.tsx, src/components/AppDialog/Error/errorDialog.tsx -->
+- [x] **Task 1: Performance - Convert `useOptimizeStore` to per-field selectors (N1)** <!-- files: src/App.tsx, src/components/AppDialog/Error/errorDialog.tsx --> f241c5c
   - Update `App.tsx` and `errorDialog.tsx` to use `useOptimizeStore((s) => s.showError)` style selectors.
-- [ ] **Task 2: Refactor - Discriminated Union for `OptimizeStore` (N4)** <!-- files: src/store/tech/optimizeStore.ts -->
+- [~] **Task 2: Refactor - Discriminated Union for `OptimizeStore` (N4)** <!-- files: src/store/tech/optimizeStore.ts -->
   - Refactor `OptimizeStore` to use a `status` field with a discriminated union (idle/solving/error/etc.).
   - Update consumers to handle the new state shape.
 - [ ] **Task 3: Refactor - Clean up `gridStore` public API (N5, N6)** <!-- files: src/store/grid/gridStore.ts -->

@@ -73,12 +73,7 @@ describe("useOptimize", () => {
 		mockCreateSocket.mockReturnValue(Promise.resolve(mockSocket as unknown as Socket));
 
 		useOptimizeStore.setState({
-			error: null,
-			errorType: null,
-			patternNoFitTech: null,
-			progressPercent: 0,
-			showError: false,
-			solving: false,
+			status: { type: "idle" },
 		});
 
 		mockUseGridStore.getState.mockReturnValue({
@@ -144,7 +139,7 @@ describe("useOptimize", () => {
 				await result.current.handleOptimize("Test Tech");
 			});
 
-			expect(useOptimizeStore.getState().showError).toBe(true);
+			expect(useOptimizeStore.getState().status.type).toBe("error");
 			expect(result.current.solving).toBe(false);
 		});
 
@@ -184,7 +179,13 @@ describe("useOptimize", () => {
 				});
 			});
 
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("Test Tech");
+			const status = useOptimizeStore.getState().status;
+			expect(status.type).toBe("warning");
+
+			if (status.type === "warning") {
+				expect(status.tech).toBe("Test Tech");
+			}
+
 			expect(result.current.solving).toBe(false);
 		});
 	});

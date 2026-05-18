@@ -32,10 +32,12 @@ export const Default: Story = {
 		(Story) => {
 			// Set error state before rendering
 			React.useEffect(() => {
-				useOptimizeStore.setState({ showError: true });
+				useOptimizeStore.setState({
+					status: { details: null, severity: "recoverable", type: "error" },
+				});
 
 				return () => {
-					useOptimizeStore.setState({ showError: false });
+					useOptimizeStore.setState({ status: { type: "idle" } });
 				};
 			}, []);
 

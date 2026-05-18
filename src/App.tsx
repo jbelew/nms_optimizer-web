@@ -92,8 +92,8 @@ const PerformanceRoute = lazy(() =>
  */
 const AppContent: FC = () => {
 	const { sendEvent } = useAnalytics();
-	const showError = useOptimizeStore((s) => s.showError);
-	const errorType = useOptimizeStore((s) => s.errorType);
+	const status = useOptimizeStore((s) => s.status);
+	const isFatal = status.type === "error" && status.severity === "fatal";
 	const { activeDialog, closeDialog, markUserVisited, shareUrl, userVisited } = useDialog();
 	const { t } = useTranslation();
 	const location = useLocation();
@@ -125,7 +125,7 @@ const AppContent: FC = () => {
 
 	// Track error screen if shown
 	useEffect(() => {
-		if (showError && errorType === "fatal") {
+		if (status.type === "error" && status.severity === "fatal") {
 			sendEvent({
 				action: "page_view",
 				category: "engagement",
@@ -135,10 +135,10 @@ const AppContent: FC = () => {
 				page_title: `NMS Optimizer: ${t("dialogs.titles.serverError")}`,
 			});
 		}
-	}, [showError, errorType, sendEvent, t, location.pathname, location.search]);
+	}, [status, sendEvent, t, location.pathname, location.search]);
 
 	// If an API error occurred during loading, don't render the main app
-	if (showError && errorType === "fatal") {
+	if (isFatal) {
 		return null;
 	}
 
@@ -226,7 +226,7 @@ const AppContent: FC = () => {
  * ```
  */
 const App: FC = () => {
-	const { showError } = useOptimizeStore();
+	const showError = useOptimizeStore((s) => s.status.type === "error");
 
 	// Initialize file handling for PWA file association
 	useFileHandling();

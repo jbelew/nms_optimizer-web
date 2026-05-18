@@ -86,10 +86,14 @@ export interface UseOptimizeReturn {
 export const useOptimize = (): UseOptimizeReturn => {
 	const setShowErrorStore = useOptimizeStore((s) => s.setShowError);
 	const setPatternNoFitTech = useOptimizeStore((s) => s.setPatternNoFitTech);
-	const patternNoFitTech = useOptimizeStore((s) => s.patternNoFitTech);
-	const solving = useOptimizeStore((s) => s.solving);
+	const patternNoFitTech = useOptimizeStore((s) =>
+		s.status.type === "warning" ? s.status.tech : null
+	);
+	const solving = useOptimizeStore((s) => s.status.type === "solving");
 	const setSolving = useOptimizeStore((s) => s.setSolving);
-	const progressPercent = useOptimizeStore((s) => s.progressPercent);
+	const progressPercent = useOptimizeStore((s) =>
+		s.status.type === "solving" ? s.status.progress : 0
+	);
 	const setProgressPercent = useOptimizeStore((s) => s.setProgressPercent);
 
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);

@@ -170,7 +170,7 @@ describe("App", () => {
 		// Reset the platform store before each test
 		usePlatformStore.setState({ selectedPlatform: "standard" });
 		// Reset the optimize store before each test to prevent state leakage
-		useOptimizeStore.setState({ error: null, errorType: null, showError: false });
+		useOptimizeStore.setState({ status: { type: "idle" } });
 		// Clear all mocks
 		vi.clearAllMocks();
 	});
@@ -235,8 +235,8 @@ describe("App", () => {
 	});
 
 	describe("AppContent component", () => {
-		test("should hide splash screen when showError is true", async () => {
-			useOptimizeStore.setState({ showError: true });
+		test("should hide splash screen when status is error", async () => {
+			useOptimizeStore.setState({ status: { details: null, severity: "recoverable", type: "error" } });
 			renderApp(["/"]);
 
 			await vi.waitFor(() => {

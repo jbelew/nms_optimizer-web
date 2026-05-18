@@ -6,294 +6,89 @@ describe("OptimizeStore", () => {
 	beforeEach(() => {
 		// Reset the store state before each test
 		useOptimizeStore.setState({
-			error: null,
-			errorType: null,
-			patternNoFitTech: null,
-			progressPercent: 0,
-			showError: false,
-			solving: false,
+			status: { type: "idle" },
 		});
 	});
 
 	describe("Initial state", () => {
-		it("should have showError set to false by default", () => {
+		it("should have status type set to 'idle' by default", () => {
 			const store = useOptimizeStore.getState();
-			expect(store.showError).toBe(false);
-		});
-
-		it("should have solving set to false by default", () => {
-			const store = useOptimizeStore.getState();
-			expect(store.solving).toBe(false);
-		});
-
-		it("should have progressPercent set to 0 by default", () => {
-			const store = useOptimizeStore.getState();
-			expect(store.progressPercent).toBe(0);
-		});
-
-		it("should have patternNoFitTech set to null by default", () => {
-			const store = useOptimizeStore.getState();
-			expect(store.patternNoFitTech).toBeNull();
+			expect(store.status.type).toBe("idle");
 		});
 	});
 
 	describe("Actions", () => {
-		it("should set solving to true", () => {
+		it("should set solving status", () => {
 			const { setSolving } = useOptimizeStore.getState();
 			setSolving(true);
-			expect(useOptimizeStore.getState().solving).toBe(true);
+			const state = useOptimizeStore.getState();
+			expect(state.status).toEqual({ progress: 0, type: "solving" });
 		});
 
-		it("should set progressPercent", () => {
+		it("should set progressPercent when in solving status", () => {
+			const { setProgressPercent, setSolving } = useOptimizeStore.getState();
+			setSolving(true);
+			setProgressPercent(50);
+			const state = useOptimizeStore.getState();
+			expect(state.status).toEqual({ progress: 50, type: "solving" });
+		});
+
+		it("should not set progressPercent when not in solving status", () => {
 			const { setProgressPercent } = useOptimizeStore.getState();
 			setProgressPercent(50);
-			expect(useOptimizeStore.getState().progressPercent).toBe(50);
-		});
-	});
-
-	describe("setShowError", () => {
-		it("should set showError to true", () => {
-			const { setShowError } = useOptimizeStore.getState();
-			setShowError(true);
-
 			const state = useOptimizeStore.getState();
-			expect(state.showError).toBe(true);
+			expect(state.status.type).toBe("idle");
 		});
 
-		it("should set showError to false", () => {
-			useOptimizeStore.setState({ showError: true });
-
+		it("should set error status", () => {
 			const { setShowError } = useOptimizeStore.getState();
-			setShowError(false);
-
-			const state = useOptimizeStore.getState();
-			expect(state.showError).toBe(false);
-		});
-
-		it("should update state immediately", () => {
-			const { setShowError } = useOptimizeStore.getState();
-
-			setShowError(true);
-			expect(useOptimizeStore.getState().showError).toBe(true);
-
-			setShowError(false);
-			expect(useOptimizeStore.getState().showError).toBe(false);
-		});
-
-		it("should handle multiple consecutive calls", () => {
-			const { setShowError } = useOptimizeStore.getState();
-
-			setShowError(true);
-			expect(useOptimizeStore.getState().showError).toBe(true);
-
-			setShowError(true);
-			expect(useOptimizeStore.getState().showError).toBe(true);
-
-			setShowError(false);
-			expect(useOptimizeStore.getState().showError).toBe(false);
-		});
-
-		it("should not affect patternNoFitTech", () => {
-			useOptimizeStore.setState({ patternNoFitTech: "test-tech" });
-
-			const { setShowError } = useOptimizeStore.getState();
-			setShowError(true);
-
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("test-tech");
-		});
-		it("should store an error object", () => {
-			const { setShowError } = useOptimizeStore.getState();
-			const testError = new Error("Test error message");
+			const testError = new Error("Test error");
 			setShowError(true, "fatal", testError);
-
 			const state = useOptimizeStore.getState();
-			expect(state.error).toBe(testError);
+			expect(state.status).toEqual({
+				details: testError,
+				severity: "fatal",
+				type: "error",
+			});
 		});
 
-		it("should clear error object when setShowError(false) is called", () => {
-			const { setShowError } = useOptimizeStore.getState();
-			const testError = new Error("Test error message");
-			setShowError(true, "fatal", testError);
-			setShowError(false);
-
-			const state = useOptimizeStore.getState();
-			expect(state.error).toBeNull();
-		});
-	});
-
-	describe("setPatternNoFitTech", () => {
-		it("should set patternNoFitTech to a string value", () => {
-			const { setPatternNoFitTech } = useOptimizeStore.getState();
-			setPatternNoFitTech("armor-plating");
-
-			const state = useOptimizeStore.getState();
-			expect(state.patternNoFitTech).toBe("armor-plating");
-		});
-
-		it("should set patternNoFitTech to null", () => {
-			useOptimizeStore.setState({ patternNoFitTech: "some-tech" });
-
-			const { setPatternNoFitTech } = useOptimizeStore.getState();
-			setPatternNoFitTech(null);
-
-			const state = useOptimizeStore.getState();
-			expect(state.patternNoFitTech).toBeNull();
-		});
-
-		it("should update state immediately", () => {
-			const { setPatternNoFitTech } = useOptimizeStore.getState();
-
-			setPatternNoFitTech("tech1");
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("tech1");
-
-			setPatternNoFitTech("tech2");
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("tech2");
-
-			setPatternNoFitTech(null);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBeNull();
-		});
-
-		it("should handle different tech values", () => {
-			const { setPatternNoFitTech } = useOptimizeStore.getState();
-
-			const techs = ["armor-plating", "hyperdrive", "warp-core", "shield"];
-
-			for (const tech of techs) {
-				setPatternNoFitTech(tech);
-				expect(useOptimizeStore.getState().patternNoFitTech).toBe(tech);
-			}
-		});
-
-		it("should not affect showError", () => {
-			useOptimizeStore.setState({ showError: true });
-
+		it("should set warning status", () => {
 			const { setPatternNoFitTech } = useOptimizeStore.getState();
 			setPatternNoFitTech("test-tech");
-
-			expect(useOptimizeStore.getState().showError).toBe(true);
+			const state = useOptimizeStore.getState();
+			expect(state.status).toEqual({ tech: "test-tech", type: "warning" });
 		});
-	});
 
-	describe("State management", () => {
-		it("should allow independent updates to both properties", () => {
-			const { setPatternNoFitTech, setShowError } = useOptimizeStore.getState();
+		it("should return to idle when clearing status", () => {
+			const { setPatternNoFitTech, setShowError, setSolving } = useOptimizeStore.getState();
+
+			setSolving(true);
+			setSolving(false);
+			expect(useOptimizeStore.getState().status.type).toBe("idle");
 
 			setShowError(true);
-			expect(useOptimizeStore.getState().showError).toBe(true);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBeNull();
-
-			setPatternNoFitTech("tech1");
-			expect(useOptimizeStore.getState().showError).toBe(true);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("tech1");
-
 			setShowError(false);
-			expect(useOptimizeStore.getState().showError).toBe(false);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("tech1");
-		});
-
-		it("should manage complex update sequences", () => {
-			const { setPatternNoFitTech, setProgressPercent, setShowError, setSolving } =
-				useOptimizeStore.getState();
-
-			// Scenario 1: Set error
-			setShowError(true);
-			setPatternNoFitTech("armor-plating");
-
-			expect(useOptimizeStore.getState()).toEqual({
-				error: null,
-				errorType: "recoverable",
-				patternNoFitTech: "armor-plating",
-				progressPercent: 0,
-				setPatternNoFitTech,
-				setProgressPercent,
-				setShowError,
-				setSolving,
-				showError: true,
-				solving: false,
-			});
-
-			// Scenario 2: Clear error
-			setShowError(false);
-
-			expect(useOptimizeStore.getState()).toEqual({
-				error: null,
-				errorType: null,
-				patternNoFitTech: "armor-plating",
-				progressPercent: 0,
-				setPatternNoFitTech,
-				setProgressPercent,
-				setShowError,
-				setSolving,
-				showError: false,
-				solving: false,
-			});
-
-			// Scenario 3: Clear tech
-			setPatternNoFitTech(null);
-
-			expect(useOptimizeStore.getState()).toEqual({
-				error: null,
-				errorType: null,
-				patternNoFitTech: null,
-				progressPercent: 0,
-				setPatternNoFitTech,
-				setProgressPercent,
-				setShowError,
-				setSolving,
-				showError: false,
-				solving: false,
-			});
-		});
-	});
-
-	describe("State immutability", () => {
-		it("should not modify previous state when updating", () => {
-			const { setShowError } = useOptimizeStore.getState();
-			const state1 = useOptimizeStore.getState();
-
-			setShowError(true);
-			const state2 = useOptimizeStore.getState();
-
-			expect(state1.showError).toBe(false);
-			expect(state2.showError).toBe(true);
-			expect(state1).not.toBe(state2);
-		});
-
-		it("should not modify previous state when patternNoFitTech changes", () => {
-			const { setPatternNoFitTech } = useOptimizeStore.getState();
-			const state1 = useOptimizeStore.getState();
+			expect(useOptimizeStore.getState().status.type).toBe("idle");
 
 			setPatternNoFitTech("tech");
-			const state2 = useOptimizeStore.getState();
-
-			expect(state1.patternNoFitTech).toBeNull();
-			expect(state2.patternNoFitTech).toBe("tech");
-			expect(state1).not.toBe(state2);
+			setPatternNoFitTech(null);
+			expect(useOptimizeStore.getState().status.type).toBe("idle");
 		});
 	});
 
-	describe("Integration", () => {
-		it("should work with direct setState", () => {
-			useOptimizeStore.setState({
-				patternNoFitTech: "hyperdrive",
-				showError: true,
-			});
-
-			const state = useOptimizeStore.getState();
-			expect(state.showError).toBe(true);
-			expect(state.patternNoFitTech).toBe("hyperdrive");
+	describe("Transitions", () => {
+		it("should transition from solving to error", () => {
+			const { setShowError, setSolving } = useOptimizeStore.getState();
+			setSolving(true);
+			setShowError(true, "recoverable");
+			expect(useOptimizeStore.getState().status.type).toBe("error");
 		});
 
-		it("should work with partial setState", () => {
-			useOptimizeStore.setState({ showError: true });
-
-			expect(useOptimizeStore.getState().showError).toBe(true);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBeNull();
-
-			useOptimizeStore.setState({ patternNoFitTech: "warp-core" });
-
-			expect(useOptimizeStore.getState().showError).toBe(true);
-			expect(useOptimizeStore.getState().patternNoFitTech).toBe("warp-core");
+		it("should transition from error to solving", () => {
+			const { setShowError, setSolving } = useOptimizeStore.getState();
+			setShowError(true);
+			setSolving(true);
+			expect(useOptimizeStore.getState().status.type).toBe("solving");
 		});
 	});
 });

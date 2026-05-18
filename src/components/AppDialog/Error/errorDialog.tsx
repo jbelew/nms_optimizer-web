@@ -34,10 +34,12 @@ const ErrorContent = lazy(() => import("./ErrorContent"));
  */
 export const ErrorDialog: FC = () => {
 	const { t } = useTranslation();
-	const showError = useOptimizeStore((s) => s.showError);
+	const status = useOptimizeStore((s) => s.status);
 	const setShowError = useOptimizeStore((s) => s.setShowError);
 
-	if (!showError) {
+	const isError = status.type === "error";
+
+	if (!isError) {
 		return null;
 	}
 
@@ -54,7 +56,7 @@ export const ErrorDialog: FC = () => {
 			<AppDialog
 				content={<ErrorContent />}
 				footer={footer}
-				isOpen={showError}
+				isOpen={isError}
 				onClose={() => setShowError(false)}
 				title={t("dialogs.titles.serverError")}
 				titleKey="dialogs.titles.serverError"
