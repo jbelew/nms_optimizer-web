@@ -166,13 +166,17 @@ describe("ModuleSelectionDialog", () => {
 		fireEvent.click(checkbox);
 
 		// The CheckboxGroup.Root onValueChange should be called with the new array
-		expect(defaultProps.handleValueChange).toHaveBeenCalled();
+		await vi.waitFor(() => {
+			expect(defaultProps.handleValueChange).toHaveBeenCalled();
+		});
 	});
 
 	it("calls handleSelectAllChange when 'Select All' is clicked", async () => {
 		renderDialog();
 		fireEvent.click(await screen.findByRole("checkbox", { name: "selectAll" }));
-		expect(defaultProps.handleSelectAllChange).toHaveBeenCalled();
+		await vi.waitFor(() => {
+			expect(defaultProps.handleSelectAllChange).toHaveBeenCalled();
+		});
 	});
 
 	it("disables the optimize button when no modules are checked", async () => {
@@ -185,6 +189,8 @@ describe("ModuleSelectionDialog", () => {
 		renderDialog();
 		const optimizeButton = await screen.findByRole("button", { name: "optimizeButton" });
 		fireEvent.click(optimizeButton);
-		expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
+		await vi.waitFor(() => {
+			expect(defaultProps.handleOptimizeClick).toHaveBeenCalled();
+		});
 	});
 });
