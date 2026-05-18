@@ -7,6 +7,7 @@ import { immer } from "zustand/middleware/immer";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
+import { runWhenIdle } from "@/utils/system/idle";
 import { Logger } from "@/utils/system/monitoring";
 
 /**
@@ -394,11 +395,7 @@ const debouncedStorage = {
 					}
 				};
 
-				if ("requestIdleCallback" in window) {
-					window.requestIdleCallback(performCleanup, { timeout: 2000 });
-				} else {
-					setTimeout(performCleanup, 500);
-				}
+				runWhenIdle(performCleanup, { timeout: 2000 });
 			}
 
 			const storedData = safeGetItem(name);

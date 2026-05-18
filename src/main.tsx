@@ -29,6 +29,7 @@ import {
 	initializeSentry,
 	Logger,
 } from "./utils/system/monitoring";
+import { runWhenIdle } from "./utils/system/idle";
 
 /**
  * Root component that manages global theme and provider orchestration.
@@ -183,25 +184,12 @@ const bootstrap = async () => {
 					}
 				};
 
-				if ("requestIdleCallback" in window) {
-					(
-						window as typeof window & {
-							requestIdleCallback: (
-								cb: () => void,
-								options?: { timeout: number }
-							) => void;
-						}
-					).requestIdleCallback(
-						() => {
-							void initDeferredServices();
-						},
-						{ timeout: 2000 }
-					);
-				} else {
-					setTimeout(() => {
+				runWhenIdle(
+					() => {
 						void initDeferredServices();
-					}, 100);
-				}
+					},
+					{ timeout: 2000 }
+				);
 			},
 			{ once: true }
 		);
