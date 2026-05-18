@@ -7,6 +7,18 @@ import { useSupportedLanguages } from "@/hooks/useSupportedLanguages";
 import { seoMetadata } from "../../../shared/seo-metadata.js";
 import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../../../shared/seo-schema.js";
 
+const BASE_URL = "https://nms-optimizer.app";
+const OG_IMAGE_PATH = "/assets/img/screenshots/screenshot.png";
+
+/**
+ * Normalizes a path to ensure it ends with a trailing slash.
+ *
+ * @param {string} p - The path to normalize.
+ *
+ * @returns {string} The normalized path.
+ */
+const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+
 /**
  * Declarative SEO component for React 19.
  * Handles title, meta tags, and structured data by rendering them directly in the component.
@@ -33,12 +45,7 @@ export const Seo: React.FC = () => {
 			: location.pathname;
 
 		// Normalize: ensure trailing slash for lookup (except root)
-		const currentPath =
-			basePath === "/" || basePath === ""
-				? "/"
-				: basePath.endsWith("/")
-					? basePath
-					: `${basePath}/`;
+		const currentPath = basePath === "/" || basePath === "" ? "/" : normalizePath(basePath);
 
 		// Look up metadata for the current path, falling back to root metadata
 		const metadata = seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
@@ -47,15 +54,13 @@ export const Seo: React.FC = () => {
 		const pageDescription = t(metadata.descriptionKey);
 		const pageKeywords = t("seo.keywords", { defaultValue: "" });
 
-		const baseUrl = "https://nms-optimizer.app";
-		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
 		const cleanPath = currentPath === "/" ? "" : currentPath;
 
 		const canonicalPath =
 			i18n.language === "en"
 				? normalizePath(currentPath)
 				: `/${i18n.language}${normalizePath(cleanPath)}`;
-		const canonicalUrl = `${baseUrl}${canonicalPath}`;
+		const canonicalUrl = `${BASE_URL}${canonicalPath}`;
 
 		const schemas = getLocalizedSchema(t, i18n.language, canonicalUrl);
 
@@ -70,8 +75,7 @@ export const Seo: React.FC = () => {
 		};
 	}, [location.pathname, i18n.language, t, supportedLangs]);
 
-	const baseUrl = "https://nms-optimizer.app";
-	const ogImageUrl = `${baseUrl}/assets/img/screenshots/screenshot.png`;
+	const ogImageUrl = `${BASE_URL}${OG_IMAGE_PATH}`;
 	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
 
 	return (
@@ -82,16 +86,15 @@ export const Seo: React.FC = () => {
 			<link href={canonicalUrl} rel="canonical" />
 
 			{/* hreflang tags */}
-			<link href={`${baseUrl}${cleanPath || "/"}`} hrefLang="x-default" rel="alternate" />
+			<link href={`${BASE_URL}${cleanPath || "/"}`} hrefLang="x-default" rel="alternate" />
 			{supportedLangs.map((lang) => {
-				const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
 				const path =
 					lang === "en"
 						? normalizePath(cleanPath || "/")
 						: `/${lang}${normalizePath(cleanPath)}`;
 
 				return (
-					<link href={`${baseUrl}${path}`} hrefLang={lang} key={lang} rel="alternate" />
+					<link href={`${BASE_URL}${path}`} hrefLang={lang} key={lang} rel="alternate" />
 				);
 			})}
 
