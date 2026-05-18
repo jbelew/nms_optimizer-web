@@ -13,7 +13,7 @@
  */
 
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
-import { use, useDeferredValue, useEffect, useMemo } from "react";
+import { use, useEffect, useMemo } from "react";
 
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -168,8 +168,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * ```
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
-	const deferredShipType = useDeferredValue(shipType);
-	const data = use(fetchTechTree(deferredShipType));
+	const data = use(fetchTechTree(shipType));
 
 	const maps = useMemo(() => (data ? getTechTreeMaps(data) : null), [data]);
 
