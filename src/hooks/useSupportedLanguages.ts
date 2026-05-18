@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
  * @returns {string[]} An array of supported language codes (e.g., ['en', 'es', 'fr']).
  */
 export const getSupportedLanguages = (i18nInstance: i18n): string[] => {
-	return Object.keys((i18nInstance.services.resourceStore as any).data || {});
+	return Object.keys(i18nInstance.services.resourceStore.data || {});
 };
 
 /**
