@@ -23,11 +23,11 @@ describe("socketManager", () => {
 		vi.clearAllMocks();
 	});
 
-	it("should create a socket with correct options", () => {
+	it("should create a socket with correct options", async () => {
 		const mockSocket = { on: vi.fn() } as unknown as Socket;
 		vi.mocked(io).mockReturnValue(mockSocket);
 
-		const socket = createSocket();
+		const socket = await createSocket();
 
 		expect(io).toHaveBeenCalledWith(WS_URL, SOCKET_OPTIONS);
 		expect(socket).toBe(mockSocket);
@@ -37,13 +37,13 @@ describe("socketManager", () => {
 		);
 	});
 
-	it("should return null and log error if creation fails", () => {
+	it("should return null and log error if creation fails", async () => {
 		const error = new Error("Failed to connect");
 		vi.mocked(io).mockImplementation(() => {
 			throw error;
 		});
 
-		const socket = createSocket();
+		const socket = await createSocket();
 
 		expect(socket).toBeNull();
 		expect(Logger.error).toHaveBeenCalledWith(

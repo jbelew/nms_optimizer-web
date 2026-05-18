@@ -95,12 +95,19 @@ export class OptimizationManager {
 	 * manager.start();
 	 * ```
 	 */
-	public start() {
+	public async start() {
 		const { forced, isLarge, retryCount = 0, tech } = this.options;
 		const { activeGroups, checkedModules, techGroups } = useTechStore.getState();
 		const selectedShipType = usePlatformStore.getState().selectedPlatform;
 
-		this.socket = createSocket();
+		try {
+			this.socket = await createSocket();
+		} catch (error) {
+			Logger.error("Failed to dynamically import or initialize Socket.IO", { error });
+			this.options.onError(new Error("Failed to initialize WebSocket connection"));
+
+			return;
+		}
 
 		if (!this.socket) {
 			this.options.onError(new Error("Failed to initialize WebSocket connection"));

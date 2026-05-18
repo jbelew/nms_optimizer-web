@@ -95,7 +95,7 @@ describe("useOptimize", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockSocket = createMockSocket();
-		mockCreateSocket.mockReturnValue(mockSocket as unknown as Socket);
+		mockCreateSocket.mockReturnValue(Promise.resolve(mockSocket as unknown as Socket));
 
 		// Mock store and hook return values
 		const mockOptimizeState: OptimizeState = {

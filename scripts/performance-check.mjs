@@ -10,28 +10,28 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distDir = path.join(__dirname, "../dist/assets");
+const distDir = path.join(__dirname, "../dist/build");
 
 // Parse bundle stats
 function analyzeBundle() {
 	if (!fs.existsSync(distDir)) {
-		console.warn(`⚠️ Warning: dist/assets directory not found at ${distDir}`);
+		console.warn(`⚠️ Warning: dist/build directory not found at ${distDir}`);
 
 		return [];
 	}
 
 	const files = fs
 		.readdirSync(distDir)
-		.filter((f) => f.endsWith(".br"))
+		.filter((f) => f.endsWith(".js") || f.endsWith(".css"))
 		.map((f) => {
 			const filePath = path.join(distDir, f);
 			const stat = fs.statSync(filePath);
 
 			return {
-				isCritical: !f.includes("node_modules") && !f.includes("Markdown") && !f.includes("recharts"),
-				name: f.replace(".br", ""),
+				isCritical: f.startsWith("entry-") || f.startsWith("index-") || f.startsWith("vendor-core-"),
+				name: f,
 				size: stat.size / 1024, // Convert to KB
-				type: f.includes(".js") ? "JS" : "CSS",
+				type: f.endsWith(".js") ? "JS" : "CSS",
 			};
 		})
 		.sort((a, b) => b.size - a.size);
@@ -50,7 +50,7 @@ function main() {
 	const bundles = analyzeBundle();
 
 	if (bundles.length === 0) {
-		console.log("No .br files found in dist/assets. Please run 'npm run build' first.");
+		console.log("No built files found in dist/build. Please run 'npm run build' first.");
 
 		return;
 	}

@@ -898,3 +898,36 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
     3.  **Snappy Micro-animations**: Micro-animations are highly effective in making application feedback feel premium and high-end. Utilizing fine-tuned CSS cubic-beziers gives the app a dynamic, organic texture.
     4.  **CPU Performance inside Node/Vitest**: Large string repetitions in JavaScript (e.g. `10MB` strings generated sequentially) can trigger garbage-collection pauses and process bottlenecks in constrained environments (like WSL2 and CI containers). Chunked byte-generation minimizes allocation footprints and runs infinitely faster.
 
+## 2026-05-18: Dynamic Import of WebSocket Client & Performance-Check Utility Fix
+
+### Perceive & Understand
+- **Request**: Investigate a performance score drop in Lighthouse audits and lazy-load the WebSocket client (`socket.io-client`) to reduce the critical startup bundle size. Additionally, repair the broken `performance-check.mjs` utility script to support Vite 8 / Rolldown naming conventions and outputs.
+- **Context**: 
+    - The `socket.io-client` package and its dependencies were bundled directly into the startup path, taking up ~55 KB (13.6% of the entry JS size) even though WebSockets are only required on-demand when starting an optimization solve.
+    - The local `performance-check.mjs` script targeted the legacy `dist/assets` directory instead of the current `dist/build` directory, and filtered strictly for non-existent `.br` files, rendering it broken.
+- **Safety Constraint**: Mocks and async timing inside hook and unit tests must be thoroughly aligned with any async API shifts.
+
+### Reason & Plan
+- **Plan (Dynamic Import & Code Splitting)**:
+    1. Refactor `socketManager.ts` to dynamically import `socket.io-client` inside the `createSocket` function, changing its signature to return a `Promise<Socket | null>`.
+    2. Update `OptimizationManager` (`optimizationManager.ts`) to be asynchronous, allowing it to correctly await the dynamic socket creation upon starting an optimization solve.
+    3. Update the unit test suites `optimizationManager.test.ts` and `socketManager.test.ts` to support the new async promise interface.
+    4. Fix the hook test suite `useOptimize.test.tsx` which was mocking `createSocket` synchronously, by wrapping the mock returns in `Promise.resolve()`.
+- **Plan (Performance Utility Repair)**:
+    1. Update the target path in `performance-check.mjs` to `dist/build`.
+    2. Change the scanning logic to filter for `.js` and `.css` directly instead of searching for `.br` files, ensuring it works seamlessly in development and production environments.
+    3. Refine the `isCritical` condition to match standard Vite 8 / Rolldown naming patterns (i.e. checking if filenames start with `entry-`, `index-`, or `vendor-core-`).
+    4. Run `bun run build` and local validation using `node scripts/performance-check.mjs` to ensure everything operates cleanly.
+
+### Act & Implement
+- **Action**: Modified `socketManager.ts` to use lazy dynamic imports and updated `optimizationManager.ts` to resolve sockets asynchronously.
+- **Action**: Refactored `optimizationManager.test.ts`, `socketManager.test.ts`, and `useOptimize.test.tsx` to handle the Promise return interface.
+- **Action**: Updated `scripts/performance-check.mjs` to point to `dist/build`, filter raw JS/CSS files, and dynamically determine critical-path files.
+- **Action**: Verified full compilation, zero TypeScript and linting errors, and 100% Vitest unit and Storybook test suite success.
+
+### Refine & Reflect
+- **Reflection**:
+    1. **Code-Splitting Efficacy**: Dynamic imports are an incredibly powerful way to reduce critical-path blocking time (TBT) and speed up First Contentful Paint (FCP). Moving heavy dynamic connections like WebSockets out of the entry bundle dropped the entry chunk size by ~55 KB, boosting Lighthouse audit metrics.
+    2. **Test Alignment**: When refactoring synchronous APIs to asynchronous promises, it is crucial to audit all mock-return configurations across the test suites. Synchronous mock returns of async APIs lead to subtle TypeScript compiler type mismatches and test errors.
+    3. **Robust Build Scans**: Build tools and directory layouts evolve. Ensuring checking utilities target the correct outputs (like Vite 8's `dist/build` directory) and dynamically evaluate metrics (like fallback raw file sizes if `.br` compression isn't built locally) keeps devops tooling resilient and maintainable.
+
