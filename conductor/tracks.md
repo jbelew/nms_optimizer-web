@@ -4,6 +4,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+## [~] Track: Code Review Follow-up Pass (Refactor)
+*Link: [./conductor/tracks/code_review_followup_20260518/](./conductor/tracks/code_review_followup_20260518/)*
+
+---
+
 - [~] **Track: Code Review Improvements Phase 4: UI Patterns & Modernization**
   *Link: [./tracks/code_review_improvements_phase4/](./tracks/code_review_improvements_phase4/)*
 
@@ -29,8 +34,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: Finalize Agentic-JSDoc Standards Migration
-*Link: [./conductor/tracks/jsdoc_finalization_20260407/](./conductor/tracks/jsdoc_finalization_20260407/)*
+- [x] **Track: Finalize Agentic-JSDoc Standards Migration**
+  *Link: [./conductor/tracks/jsdoc_finalization_20260407/](./conductor/tracks/jsdoc_finalization_20260407/)*
 
 ---
 
@@ -39,9 +44,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: Application Optimization & Patterns Review
-*Link: [./conductor/tracks/app_perf_view_transitions_20260517/](./conductor/tracks/app_perf_view_transitions_20260517/)*
-
+- [x] **Track: Application Optimization & Patterns Review**
+  *Link: [./conductor/tracks/app_perf_view_transitions_20260517/](./conductor/tracks/app_perf_view_transitions_20260517/)*
 
 ---
 
@@ -50,8 +54,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: Let's review my app for any missed bugs or anti-patterns.
-*Link: [./conductor/tracks/app_final_review_20260416/](./conductor/tracks/app_final_review_20260416/)*
+- [x] **Track: Let's review my app for any missed bugs or anti-patterns.**
+  *Link: [./conductor/tracks/app_final_review_20260416/](./conductor/tracks/app_final_review_20260416/)*
 
 ---
 
@@ -72,8 +76,3 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Decouple Performance Summary Cards from Chart Resolution**
   *Link: [./conductor/tracks/perf_summary_decouple_20260504/](./conductor/tracks/perf_summary_decouple_20260504/)*
-
-
-
----
-
