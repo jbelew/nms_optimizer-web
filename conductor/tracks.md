@@ -4,13 +4,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Code Review Follow-up Pass (Refactor)
-*Link: [./conductor/tracks/code_review_followup_20260518/](./conductor/tracks/code_review_followup_20260518/)*
+## [x] Track: Code Review Follow-up Pass (Refactor)
 
 ---
 
-- [~] **Track: Code Review Improvements Phase 4: UI Patterns & Modernization**
-  *Link: [./tracks/code_review_improvements_phase4/](./tracks/code_review_improvements_phase4/)*
 
 ---
 

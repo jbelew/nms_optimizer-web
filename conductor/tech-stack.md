@@ -4,6 +4,7 @@
 - **Language:** [TypeScript](https://www.typescriptlang.org/) - Provides static typing for robust and maintainable code.
 - **Frontend Framework:** [React 19](https://react.dev/) (via [Vite 8](https://vite.dev/)) - Modern, fast UI library and build tool.
 - **State Management:** [Zustand](https://github.com/pmndrs/zustand) - A small, fast, and scalable bearbones state-management solution.
+  - **Patterns:** Uses Store Orchestration via a `sessionCoordinator` and Discriminated Unions for complex status tracking.
 - **Styling:** [Tailwind CSS 4](https://tailwindcss.com/) - Utility-first CSS framework for rapid UI development.
 - **UI Components:** [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible components for building high-quality design systems.
 
