@@ -406,6 +406,7 @@ export const MainAppSidebarSection: React.FC = () => {
 			className="main-app__tech-tree-section"
 			direction="column"
 			ml={{ md: "5" }}
+			mt={{ initial: "4", md: "0" }}
 			width={!isLargeScreen && gridTableTotalWidth ? `${gridTableTotalWidth}px` : "100%"}
 		>
 			<Suspense fallback={<TechTreeSkeleton />}>

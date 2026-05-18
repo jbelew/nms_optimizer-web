@@ -193,9 +193,10 @@ describe("useBuildFileManager", () => {
 		it("should reject file that is too large", async () => {
 			const { result } = renderHook(() => useBuildFileManager());
 
-			// Create a large file (11MB, exceeds 10MB limit)
-			const largeData = new Array(11 * 1024 * 1024).fill("x").join("");
-			const file = new File([largeData], "test.nms", {
+			// Create a large file (11MB, exceeds 10MB limit) efficiently without large array allocations
+			const chunk = "x".repeat(1024 * 1024); // 1MB string
+			const parts = Array.from({ length: 11 }, () => chunk);
+			const file = new File(parts, "test.nms", {
 				type: "application/json",
 			});
 

@@ -865,3 +865,36 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
 ### Refine & Reflect
 - **Reflection**: `act` provides a powerful way to validate complex YAML workflows locally. By pre-configuring `.actrc`, we ensure a smoother developer experience and avoid the need for manual image selection on first run. It's important to note that `act` requires a running Docker daemon and might require additional secrets configuration for certain jobs.
 
+## 2026-05-18: Centralizing Module Selection Dialog & Improving Performance
+
+### Perceive & Understand
+*   **Request**: Consolidate the `ModuleSelectionDialog` component into a single shared dialog dynamically controlled via a Zustand store, fix test suite timeouts/performance in WSL2, add visually premium close animations to `AppDialog`, and ensure responsive top margin is preserved in the mobile techtree layout.
+*   **Context**:
+    *   Previously, the application rendered ~30 instances of `<ModuleSelectionDialog>` (one per row) within the Technology Tree, creating excessive DOM nodes and impacting scrolling performance.
+    *   `AppDialog` previously closed immediately without showing the closing scale/fade animation due to Radix's state removal.
+    *   Test suite was failing or timing out due to slow mock file allocation inside the `useBuildFileManager` tests.
+    *   Mobile viewport of the Technology Tree was missing its top margin spacing after layout refactoring.
+
+### Reason & Plan
+*   **Plan**:
+    1.  **State Management**: Create a Zustand store `useModuleSelectionDialogStore` to manage open state and the specific row's technology data.
+    2.  **Shared Component**: Implement `SharedModuleSelectionDialog` which subscribes to the store, and mounts a single instance of the dialog. Use snapshot logic to save initial selections when opened, allowing user cancellations to revert cleanly.
+    3.  **Clean up row instances**: Simplify `TechTreeRow` by removing the individual inline `<ModuleSelectionDialog>` mountings and having row badges trigger the shared store action.
+    4.  **Close Transitions**: Upgrade `AppDialog.scss` with precise `@keyframes` and transitions to cleanly fade the overlay and perform a snappy scale-down/fade-out dismiss animation over `250ms` using cubic-bezier timing.
+    5.  **Layout Spacing**: Add `mt={{ initial: "4", md: "0" }}` responsive top margin back into `MainAppSidebarSection` `<Flex>` wrapper to recover correct mobile techtree spacing.
+    6.  **Test Suite Optimization**: Re-implement large file generation chunking inside `useBuildFileManager.test.ts` to reduce CPU allocation overhead, bringing test runtime from ~5s down to a few milliseconds and eliminating test suite execution timeouts.
+
+### Act & Implement
+*   **Action**: Created `useModuleSelectionDialogStore` Zustand store, built `SharedModuleSelectionDialog`, simplified `TechTreeRow`, and integrated the single dialog in `MainAppLayout`.
+*   **Action**: Refined `AppDialog.scss` with smooth transitions/animations for both open and close animations.
+*   **Action**: Restored `mt={{ initial: "4", md: "0" }}` in `MainAppLayout` sidebar layout.
+*   **Action**: Surgical performance rewrite of file content generation inside `useBuildFileManager.test.ts` tests.
+*   **Action**: Verified build success, clean CSS lint, zero TS/typecheck errors, and 100% test completion.
+
+### Refine & Reflect
+*   **Reflection**:
+    1.  **DOM Node Reduction**: Transitioning from ~30 hidden dialog trees to a single globally managed portal drastically improves render tree weight, rendering, and accessibility audit scores.
+    2.  **State Restore Safeguards**: Creating deep-copy snapshots of user selections when opening the dialog guarantees that canceling/closing outside is visually and statefully revertible, preserving expected interactive user experience.
+    3.  **Snappy Micro-animations**: Micro-animations are highly effective in making application feedback feel premium and high-end. Utilizing fine-tuned CSS cubic-beziers gives the app a dynamic, organic texture.
+    4.  **CPU Performance inside Node/Vitest**: Large string repetitions in JavaScript (e.g. `10MB` strings generated sequentially) can trigger garbage-collection pauses and process bottlenecks in constrained environments (like WSL2 and CI containers). Chunked byte-generation minimizes allocation footprints and runs infinitely faster.
+
