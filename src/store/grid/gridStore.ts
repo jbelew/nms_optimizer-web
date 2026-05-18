@@ -34,6 +34,12 @@ export type ApiResponse = {
  * Each cell maintains its own state for active/inactive status, supercharged status,
  * and the specific module currently placed within it.
  *
+ * @remarks
+ * This type uses a mix of camelCase and snake_case properties intentionally.
+ * The snake_case properties (e.g., `adjacency_bonus`, `group_adjacent`) are
+ * dictated by the external Python solver API and legacy data structures, while
+ * newer/internal properties use camelCase.
+ *
  * @category State
  */
 export type Cell = {
