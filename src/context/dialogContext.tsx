@@ -8,6 +8,17 @@ import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { DialogContext } from "@/utils/system/dialogUtils";
 
+/** Set of valid routed dialog identifiers for efficient lookup. */
+const VALID_DIALOGS = new Set<DialogType>([
+	"about",
+	"changelog",
+	"instructions",
+	"performance",
+	"privacy",
+	"translation",
+	"userstats",
+]);
+
 /**
  * Provider component for managing the state and logic of routed dialogs.
  *
@@ -73,16 +84,7 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 		? (pathParts[1] as DialogType) || null
 		: (pathParts[0] as DialogType) || null;
 
-	const activeDialog: DialogType =
-		dialogPath === "about" ||
-		dialogPath === "instructions" ||
-		dialogPath === "changelog" ||
-		dialogPath === "translation" ||
-		dialogPath === "userstats" ||
-		dialogPath === "privacy" ||
-		dialogPath === "performance"
-			? dialogPath
-			: null;
+	const activeDialog: DialogType = VALID_DIALOGS.has(dialogPath) ? dialogPath : null;
 
 	/**
 	 * Navigates to a specific dialog route or sets the share URL state.
