@@ -1,3 +1,10 @@
+## [7.3.3](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.2...v7.3.3) (2026-05-18)
+
+
+### Performance Improvements
+
+* **bundle:** lazy-load shared module selection dialog and reduce critical TBT ([6826775](https://github.com/jbelew/nms_optimizer-web/commit/682677546f644ff5268827d2bb823c35e2b6962c))
+
 ## [7.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.1...v7.3.2) (2026-05-18)
 
 
