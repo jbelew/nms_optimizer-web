@@ -1,6 +1,6 @@
 import { use } from "react";
 
-import { ToastContext } from "@/context/createToastContext";
+import { ToastContext } from "@/context/CreateToastContext";
 
 export { ToastProvider } from "@/context/ToastContext";
 
@@ -13,7 +13,7 @@ export { ToastProvider } from "@/context/ToastContext";
  *
  * It is a wrapper around the `ToastContext`.
  *
- * @returns {import('@/context/createToastContext').ToastContextType} The toast context containing notification handlers.
+ * @returns {import('@/context/CreateToastContext').ToastContextType} The toast context containing notification handlers.
  *
  * @throws {Error} If called outside of a {@link import('@/context/ToastContext').ToastProvider}.
  *

@@ -18,7 +18,7 @@ import { RouterProvider } from "react-router-dom";
 import { UI_TIMING } from "@/constants";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import { TooltipManager } from "./components/TooltipManager/TooltipManager";
-import { TooltipProvider } from "./context/tooltipContext";
+import { TooltipProvider } from "./context/TooltipContext";
 import { ToastProvider } from "./hooks/useToast/useToast";
 import { routes } from "./routes";
 import { useThemeStore } from "./store/app/themeStore";

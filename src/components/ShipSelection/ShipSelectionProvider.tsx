@@ -62,8 +62,8 @@ export const ShipSelectionProvider: React.FC<{
 				startTransition(() => {
 					if (option === "corvette") {
 						showInfo(
-							t("shipSelection.corvetteWarning.title"),
-							<Trans i18nKey="shipSelection.corvetteWarning.description" />
+							t("ShipSelection.corvetteWarning.title"),
+							<Trans i18nKey="ShipSelection.corvetteWarning.description" />
 						);
 					}
 

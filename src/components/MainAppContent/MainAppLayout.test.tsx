@@ -33,7 +33,7 @@ vi.mock("@/utils/system/dialogUtils", () => ({
 }));
 
 // Mock components that might suspend or are not relevant to visibility logic
-vi.mock("@/components/LanguageSelector/languageSelector", () => ({
+vi.mock("@/components/LanguageSelector/LanguageSelector", () => ({
 	LanguageSelector: () => <div data-testid="language-selector">LanguageSelector</div>,
 }));
 vi.mock("@/hooks/useTechTree/useTechTree", () => ({

@@ -8,7 +8,7 @@ import {
 	ShipSelectionRoot,
 	ShipSelectionSkeleton,
 	ShipSelectionTrigger,
-} from "@/components/ShipSelection/shipSelection";
+} from "@/components/ShipSelection/ShipSelection";
 
 import { useMainAppGlobal, useMainAppLayout, useMainAppOptimization } from "./useMainAppContext";
 

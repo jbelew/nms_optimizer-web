@@ -9,7 +9,7 @@ import {
 	GridTableGrid,
 	GridTableRoot,
 } from "@/components/GridTable/GridTable";
-import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
+import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 

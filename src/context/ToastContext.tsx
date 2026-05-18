@@ -1,8 +1,8 @@
-import type { ToastConfig, ToastContextType } from "./createToastContext";
+import type { ToastConfig, ToastContextType } from "./CreateToastContext";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
 
-import { ToastContext } from "./createToastContext";
+import { ToastContext } from "./CreateToastContext";
 
 /**
  * Provider component for the centralized toast notification system.

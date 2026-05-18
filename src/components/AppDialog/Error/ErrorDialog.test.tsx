@@ -4,7 +4,7 @@ import { vi } from "vitest";
 
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 
-import { ErrorDialog } from "./errorDialog";
+import { ErrorDialog } from "./ErrorDialog";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({

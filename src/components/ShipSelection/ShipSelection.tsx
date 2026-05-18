@@ -1,5 +1,5 @@
-// src/components/ShipSelection/shipSelection.tsx
-import "./shipSelection.scss";
+// src/components/ShipSelection/ShipSelection.tsx
+import "./ShipSelection.scss";
 
 import React, { Suspense } from "react";
 

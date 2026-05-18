@@ -12,7 +12,7 @@
  * @category Components
  */
 
-import "./languageSelector.scss";
+import "./LanguageSelector.scss";
 
 import React, { useTransition } from "react";
 import { GlobeIcon } from "@radix-ui/react-icons";
@@ -66,7 +66,7 @@ const languageFlagPaths: LanguageFlagPaths = {
  *
  * @see {@link useTranslation} for internationalization state.
  * @see {@link useAnalytics} for event tracking.
- * @see {@link ./languageSelector.test.tsx Unit Tests}
+ * @see {@link ./LanguageSelector.test.tsx Unit Tests}
  *
  * @component
  *

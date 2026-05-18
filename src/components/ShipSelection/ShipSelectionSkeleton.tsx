@@ -15,7 +15,7 @@ export const ShipSelectionSkeleton = () => {
 		<>
 			{isSmallAndUp ? (
 				<Button
-					aria-label={t("shipSelection.ariaLabel") ?? ""}
+					aria-label={t("ShipSelection.ariaLabel") ?? ""}
 					className="p-2!"
 					disabled
 					size="2"
@@ -27,7 +27,7 @@ export const ShipSelectionSkeleton = () => {
 				</Button>
 			) : (
 				<IconButton
-					aria-label={t("shipSelection.ariaLabel") ?? ""}
+					aria-label={t("ShipSelection.ariaLabel") ?? ""}
 					className="mt-1!"
 					disabled
 					size="2"

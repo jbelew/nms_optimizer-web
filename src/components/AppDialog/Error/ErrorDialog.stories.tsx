@@ -3,7 +3,7 @@ import React from "react";
 
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 
-import { ErrorDialog } from "./errorDialog";
+import { ErrorDialog } from "./ErrorDialog";
 
 const meta = {
 	component: ErrorDialog,

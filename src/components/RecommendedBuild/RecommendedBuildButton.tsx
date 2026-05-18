@@ -27,7 +27,7 @@ export const RecommendedBuildButton: React.FC<React.ComponentProps<typeof Button
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
-					<DropdownMenu.Label className="shipSelection__header heading-styled">
+					<DropdownMenu.Label className="ShipSelection__header heading-styled">
 						{t("techTree.recommendedBuilds.selectBuildLabel")}
 					</DropdownMenu.Label>
 					{builds.map((build) => (

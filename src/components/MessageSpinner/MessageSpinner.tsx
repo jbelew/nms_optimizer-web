@@ -11,7 +11,7 @@
  * @category Components
  */
 
-import "./messageSpinner.scss";
+import "./MessageSpinner.scss";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Progress, Spinner, Text } from "@radix-ui/themes";
@@ -66,7 +66,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 	const [showRandomMessage, setShowRandomMessage] = useState<boolean>(false);
 	const { t } = useTranslation();
 
-	const i18nRandomMessages = t("messageSpinner.randomMessages", {
+	const i18nRandomMessages = t("MessageSpinner.randomMessages", {
 		returnObjects: true,
 	}) as string[];
 
@@ -131,7 +131,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 
 	return (
 		<div aria-live="polite" className={containerClasses.trim()} role="status">
-			<Spinner className="messageSpinner__spinner" />
+			<Spinner className="MessageSpinner__spinner" />
 
 			{hasMessage && (
 				<>
@@ -144,7 +144,7 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 							<div className="mb-10 lg:mb-18">
 								<Progress
 									aria-label={
-										initialMessage || t("messageSpinner.loadingProgress")
+										initialMessage || t("MessageSpinner.loadingProgress")
 									}
 									value={Math.min(
 										isNaN(progressPercent) ? 0 : progressPercent,
@@ -154,9 +154,9 @@ export const MessageSpinner: React.FC<MessageSpinnerProps> = ({
 								/>
 								<div className="flex h-12 justify-center pt-3 font-medium">
 									<Text
-										className={`messageSpinner__random w-full text-center text-xs sm:text-sm ${
+										className={`MessageSpinner__random w-full text-center text-xs sm:text-sm ${
 											showRandomMessage
-												? "messageSpinner__random--visible"
+												? "MessageSpinner__random--visible"
 												: ""
 										}`}
 									>

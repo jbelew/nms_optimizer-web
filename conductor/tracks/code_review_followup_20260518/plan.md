@@ -59,9 +59,9 @@ Deeper structural changes to state management for better performance and decoupl
 ## Phase 4: Standards & Naming Consistency <!-- depends: Phase 3 -->
 Final pass for naming conventions, magic numbers, and documentation.
 
-- [~] **Task 1: Standards - Extract Magic Numbers (N9)** <!-- files: src/constants.ts, src/components/GridCell/useGridCellInteraction.ts, src/store/grid/gridStore.ts -->
+- [x] **Task 1: Standards - Extract Magic Numbers (N9)** <!-- files: src/constants.ts, src/components/GridCell/useGridCellInteraction.ts, src/store/grid/gridStore.ts --> e7edc28
   - Identify and move magic numbers (e.g., 400ms tap threshold, 1000ms debounce, 500ms cleanup) to `src/constants.ts` or appropriate module constants.
-- [ ] **Task 2: Standards - PascalCase Renaming (N11)** <!-- files: src/components/LanguageSelector/LanguageSelector.tsx, src/components/MessageSpinner/MessageSpinner.tsx, src/components/MarkdownContentRenderer/MarkdownContentRenderer.tsx, src/context/TooltipContext.tsx, src/context/CreateToastContext.ts, src/components/AppDialog/Error/ErrorDialog.tsx, src/components/UpdatePrompt/UpdatePromptWrapper.tsx, src/components/ShipSelection/ShipSelection.tsx -->
+- [~] **Task 2: Standards - PascalCase Renaming (N11)** <!-- files: src/components/LanguageSelector/LanguageSelector.tsx, src/components/MessageSpinner/MessageSpinner.tsx, src/components/MarkdownContentRenderer/MarkdownContentRenderer.tsx, src/context/TooltipContext.tsx, src/context/CreateToastContext.ts, src/components/AppDialog/Error/ErrorDialog.tsx, src/components/UpdatePrompt/UpdatePromptWrapper.tsx, src/components/ShipSelection/ShipSelection.tsx -->
   - Rename identified files to PascalCase.
   - Update all import references.
 - [ ] **Task 3: Documentation - `Cell` field naming (N12)** <!-- files: src/types/grid.ts -->

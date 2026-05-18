@@ -11,8 +11,8 @@ import {
 	AppDialogRoot,
 	AppDialogTitle,
 } from "./components/AppDialog/Base/AppDialog";
-import { ErrorDialog } from "./components/AppDialog/Error/errorDialog";
-import { UpdatePromptWrapper } from "./components/UpdatePrompt/updatePromptWrapper";
+import { ErrorDialog } from "./components/AppDialog/Error/ErrorDialog";
+import { UpdatePromptWrapper } from "./components/UpdatePrompt/UpdatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
 import { useAnalytics } from "./hooks/useAnalytics/useAnalytics";
 import { useFileHandling } from "./hooks/useFileHandling/useFileHandling";

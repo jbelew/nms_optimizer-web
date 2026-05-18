@@ -21,7 +21,7 @@ import { useDialog } from "@/utils/system/dialogUtils";
 
 const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
 const MarkdownContentRenderer = lazy(() =>
-	import("@/components/AppDialog/Markdown/markdownContentRenderer").then((m) => ({
+	import("@/components/AppDialog/Markdown/MarkdownContentRenderer").then((m) => ({
 		default: m.MarkdownContentRenderer,
 	}))
 );

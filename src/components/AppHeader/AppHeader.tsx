@@ -13,7 +13,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import nmslogo from "@/assets/img/nms-icon.svg";
 import { ConditionalTooltip } from "@/components/ConditionalTooltip/ConditionalTooltip";
-import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
+import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 
 import { AppHeaderProvider } from "./AppHeaderProvider";
 import { useAppHeaderContext } from "./useAppHeaderContext";
@@ -75,7 +75,7 @@ const AppHeaderChangelogButton: React.FC = () => {
 				aria-label={t("buttons.changelog") ?? ""}
 				onClick={onShowChangelog}
 				onMouseEnter={() => {
-					void import("@/components/AppDialog/Markdown/markdownContentRenderer");
+					void import("@/components/AppDialog/Markdown/MarkdownContentRenderer");
 				}}
 				variant="soft"
 			>

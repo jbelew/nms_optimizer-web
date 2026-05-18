@@ -15,7 +15,7 @@ export const ShipSelectionTrigger: React.FC = () => {
 	return (
 		<DropdownMenu.Trigger disabled={isPending}>
 			<Button
-				aria-label={t("shipSelection.ariaLabel") ?? ""}
+				aria-label={t("ShipSelection.ariaLabel") ?? ""}
 				className="p-2!"
 				size="2"
 				variant="soft"

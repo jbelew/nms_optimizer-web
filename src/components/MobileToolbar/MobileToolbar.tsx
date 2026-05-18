@@ -25,7 +25,7 @@ import { Root as ToolbarRoot, ToggleGroup as ToolbarToggleGroup } from "@radix-u
 import { IconButton } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
-import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
+import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 // import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";

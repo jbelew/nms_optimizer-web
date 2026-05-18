@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, ScrollArea, Skeleton } from "@radix-ui/themes";
 
-import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
+import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 import { useBreakpoint } from "@/hooks/useBreakpoint/useBreakpoint";
 
 /**

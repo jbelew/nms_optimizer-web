@@ -4,7 +4,7 @@ import { Text } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
-import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
+import { MessageSpinner } from "@/components/MessageSpinner/MessageSpinner";
 
 import { PerformanceData } from "./performanceData";
 import { FULL_DASHBOARD_HEIGHT, PERFORMANCE_LAYOUT } from "./PerformanceUtils";

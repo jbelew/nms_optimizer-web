@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
-import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
+import { LanguageSelector } from "@/components/LanguageSelector/LanguageSelector";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
 import {
 	TechTreeList,
