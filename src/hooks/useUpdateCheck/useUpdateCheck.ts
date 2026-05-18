@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import { Logger } from "@/utils/system/monitoring";
+
 /**
  * Custom hook for detecting and validating application updates via Service Worker.
  *
@@ -63,7 +65,7 @@ export const useUpdateCheck = (
 					onUpdateAvailable(event.detail);
 				}
 			} catch (error) {
-				console.error("Error checking version:", error);
+				Logger.error("Error checking version:", error);
 
 				// Fail safe: show prompt if we can't verify
 				if (event instanceof CustomEvent) {

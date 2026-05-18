@@ -28,7 +28,6 @@ describe("handleCellDoubleTap action in GridStore", () => {
 			useGridStore.setState((state) => {
 				state.grid.cells[0][0].active = true;
 				state.grid.cells[0][0].supercharged = false;
-				state._initialCellStateForTap = { ...state.grid.cells[0][0] };
 			});
 		});
 
@@ -39,7 +38,6 @@ describe("handleCellDoubleTap action in GridStore", () => {
 		const finalCell = useGridStore.getState().grid.cells[0][0];
 		expect(finalCell.supercharged).toBe(true);
 		expect(finalCell.active).toBe(true);
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
 	});
 
 	it("should de-supercharge an active, supercharged cell on double tap", () => {
@@ -47,7 +45,6 @@ describe("handleCellDoubleTap action in GridStore", () => {
 			useGridStore.setState((state) => {
 				state.grid.cells[0][0].active = true;
 				state.grid.cells[0][0].supercharged = true;
-				state._initialCellStateForTap = { ...state.grid.cells[0][0] };
 			});
 		});
 
@@ -58,7 +55,6 @@ describe("handleCellDoubleTap action in GridStore", () => {
 		const finalCell = useGridStore.getState().grid.cells[0][0];
 		expect(finalCell.supercharged).toBe(false);
 		expect(finalCell.active).toBe(true);
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
 	});
 
 	it("should activate a cell on double tap even if it was inactive initially", () => {
@@ -66,7 +62,6 @@ describe("handleCellDoubleTap action in GridStore", () => {
 			useGridStore.setState((state) => {
 				state.grid.cells[0][0].active = false;
 				state.grid.cells[0][0].supercharged = false;
-				state._initialCellStateForTap = { ...state.grid.cells[0][0] };
 			});
 		});
 
@@ -77,40 +72,16 @@ describe("handleCellDoubleTap action in GridStore", () => {
 		const finalCell = useGridStore.getState().grid.cells[0][0];
 		expect(finalCell.active).toBe(true);
 		expect(finalCell.supercharged).toBe(true); // Should become supercharged as it was false initially
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
-	});
-
-	it("should not change cell state if initialCellStateForTap is null", () => {
-		act(() => {
-			useGridStore.setState((state) => {
-				state.grid.cells[0][0].active = true;
-				state.grid.cells[0][0].supercharged = false;
-				state._initialCellStateForTap = null; // Simulate no initial tap
-			});
-		});
-
-		act(() => {
-			useGridStore.getState().handleCellDoubleTap(0, 0);
-		});
-
-		const finalCell = useGridStore.getState().grid.cells[0][0];
-		expect(finalCell.active).toBe(true);
-		expect(finalCell.supercharged).toBe(false);
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
 	});
 
 	it("should not change cell state if cell is undefined", () => {
-		act(() => {
-			useGridStore.setState((state) => {
-				state._initialCellStateForTap = { ...state.grid.cells[0][0] };
-			});
-		});
+		const initialGrid = useGridStore.getState().grid;
 
 		act(() => {
 			useGridStore.getState().handleCellDoubleTap(99, 99); // Non-existent cell
 		});
 
-		// Expect no changes or errors
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull(); // Should remain as it was
+		// Expect no changes
+		expect(useGridStore.getState().grid).toEqual(initialGrid);
 	});
 });

@@ -1,27 +1,11 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { Box, Callout, Flex, Text } from "@radix-ui/themes";
-import { Trans, useTranslation } from "react-i18next";
+import React, { lazy, Suspense } from "react";
+import { Flex } from "@radix-ui/themes";
+import { useTranslation } from "react-i18next";
 
 import AppFooter from "@/components/AppFooter/AppFooter";
 import AppHeader from "@/components/AppHeader/AppHeader";
-import {
-	GridProvider,
-	GridTableButtons,
-	GridTableContent,
-	GridTableGrid,
-	GridTableRoot,
-} from "@/components/GridTable/GridTable";
 import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
-import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
-import {
-	ShipSelectionContent,
-	ShipSelectionProvider,
-	ShipSelectionRoot,
-	ShipSelectionSkeleton,
-	ShipSelectionTrigger,
-} from "@/components/ShipSelection/shipSelection";
 import {
 	TechTreeList,
 	TechTreeProvider,
@@ -29,11 +13,12 @@ import {
 	TechTreeRoot,
 	TechTreeSkeleton,
 } from "@/components/TechTree/TechTree";
+import { useIdleMount } from "@/hooks/useIdleMount/useIdleMount";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { useGridStore } from "@/store/grid/gridStore";
-import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 
+import { MainAppGridSection } from "./MainAppGridSection";
 import {
 	useMainAppBuildManagement,
 	useMainAppGlobal,
@@ -72,107 +57,10 @@ export const ShipTypesLoader = () => {
 };
 
 /**
- * A notification component that appears when the user is viewing a read-only shared layout.
- */
-const SharedBuildCallout: React.FC = () => {
-	const { gridTableTotalWidth } = useMainAppLayout();
-
-	return (
-		<Box
-			flexShrink="0"
-			style={{
-				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
-			}}
-		>
-			<Callout.Root mb="3" size="1" variant="surface">
-				<Callout.Icon>
-					<InfoCircledIcon />
-				</Callout.Icon>
-				<Callout.Text>
-					<span className="text-sm sm:text-base" style={{ color: "var(--gray-12)" }}>
-						<Trans i18nKey="mainApp.viewingSharedBuild" />
-					</span>
-				</Callout.Text>
-			</Callout.Root>
-		</Box>
-	);
-};
-
-/**
- * A layout component that displays the current equipment platform and its selection control.
- */
-const ShipSelectionHeading: React.FC = () => {
-	const { t } = useTranslation();
-	const { gridTableTotalWidth } = useMainAppLayout();
-	const { isSharedGrid, selectedShipType } = useMainAppGlobal();
-	const { solving } = useMainAppOptimization();
-
-	return (
-		<Flex
-			align="center"
-			className="main-app__ship-selector heading-styled"
-			gap="3"
-			style={{
-				maxWidth: gridTableTotalWidth ? `${gridTableTotalWidth}px` : undefined,
-			}}
-			wrap="wrap"
-		>
-			{!isSharedGrid && (
-				<span className="main-app__ship-selection">
-					<Suspense fallback={<ShipSelectionSkeleton />}>
-						<ShipSelectionProvider solving={solving}>
-							<ShipSelectionRoot>
-								<ShipSelectionTrigger />
-								<ShipSelectionContent />
-							</ShipSelectionRoot>
-						</ShipSelectionProvider>
-					</Suspense>
-				</span>
-			)}
-
-			<Text
-				className="main-app__ship-label"
-				style={{ opacity: solving ? 0.365 : 1 }}
-				trim="end"
-			>
-				{t("platformLabel")}
-			</Text>
-			<Text
-				className="main-app__ship-name trim-text"
-				style={{ opacity: solving ? 0.365 : 1 }}
-				trim="end"
-			>
-				{t(`platforms.${selectedShipType}`)}
-			</Text>
-		</Flex>
-	);
-};
-
-/**
  * Component that manages deferred background utilities.
  */
 const MainAppBackgroundServices: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	const [mount, setMount] = useState(false);
-
-	useEffect(() => {
-		let handle: number | undefined;
-
-		if ("requestIdleCallback" in window) {
-			handle = window.requestIdleCallback(() => setMount(true), { timeout: 2000 });
-		} else {
-			handle = setTimeout(() => setMount(true), 1000) as unknown as number;
-		}
-
-		return () => {
-			if (handle !== undefined) {
-				if ("cancelIdleCallback" in window) {
-					window.cancelIdleCallback(handle);
-				} else {
-					clearTimeout(handle);
-				}
-			}
-		};
-	}, []);
+	const mount = useIdleMount();
 
 	if (!mount) return null;
 
@@ -315,50 +203,6 @@ const MainAppFooter: React.FC<{ position: "bottom-desktop" | "bottom-mobile" }> 
 				</AppFooter.Root>
 			</AppFooter.Provider>
 		</div>
-	);
-};
-
-/**
- * Component that renders the grid section.
- */
-const MainAppGridSection: React.FC = () => {
-	const { t } = useTranslation();
-	const { containerRef, gridTableRef } = useMainAppLayout();
-	const { isSharedGrid } = useMainAppGlobal();
-	const { progressPercent, solving } = useMainAppOptimization();
-	const isTechTreeLoading = useTechTreeLoadingStore((state) => state.isLoading);
-	const gridHeight = useGridStore((state) => state.grid.height);
-
-	return (
-		<Box
-			className="main-app__grid-section relative"
-			flexShrink={{ initial: "1", md: "0" }}
-			ref={containerRef}
-		>
-			{isSharedGrid && <SharedBuildCallout />}
-
-			{!isSharedGrid && (
-				<MessageSpinner
-					initialMessage={
-						isTechTreeLoading ? t("techTree.loading") : t("gridTable.optimizing")
-					}
-					isVisible={solving}
-					progressPercent={progressPercent}
-					showProgress={!isTechTreeLoading}
-				/>
-			)}
-
-			<ShipSelectionHeading />
-
-			<GridProvider gridRef={gridTableRef as React.RefObject<HTMLDivElement | null>}>
-				<GridTableRoot>
-					<GridTableGrid gridHeight={gridHeight} gridRef={gridTableRef} solving={solving}>
-						<GridTableContent gridHeight={gridHeight} />
-					</GridTableGrid>
-					<GridTableButtons solving={solving} />
-				</GridTableRoot>
-			</GridProvider>
-		</Box>
 	);
 };
 

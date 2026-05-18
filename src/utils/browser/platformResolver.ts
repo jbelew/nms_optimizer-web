@@ -13,6 +13,8 @@
  * @category Utilities
  */
 
+import { Logger } from "@/utils/system/monitoring";
+
 import { safeGetItem } from "./environment";
 
 /**
@@ -53,7 +55,7 @@ export const getPlatformFromUrl = (): null | string => {
 	try {
 		urlParams = new URLSearchParams(window.location.search);
 	} catch (e) {
-		console.warn("platformResolver: Failed to parse URLSearchParams", e);
+		Logger.warn("platformResolver: Failed to parse URLSearchParams", { error: e });
 		urlParams = new URLSearchParams();
 	}
 

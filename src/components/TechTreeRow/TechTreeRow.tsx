@@ -1,8 +1,7 @@
 import "./TechTreeRow.scss";
 
-import type { BonusStatusData } from "@/store/tech/techBonusStore";
 import type { TechTreeRowProps } from "@/types/props";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
 	Crosshair2Icon,
 	ExclamationTriangleIcon,
@@ -30,51 +29,12 @@ import { useTechTreeRowContext } from "./useTechTreeRowContext";
  * Props for the `BonusStatusIcon` component.
  */
 interface BonusStatusIconProps {
+	/** The theoretical maximum bonus for the current configuration. */
+	_techMaxBonus: number;
 	/** Unique identifier for the technology. */
 	tech: string;
-	/** The theoretical maximum bonus for the current configuration. */
-	techMaxBonus: number;
 	/** The actual bonus achieved in the most recent solve. */
 	techSolvedBonus: number;
-}
-
-/**
- * Core logic to determine the efficiency rating and icon metadata for a technology.
- */
-function computeBonusStatusData(techMaxBonus: number, t: (key: string) => string): BonusStatusData {
-	const roundedMaxBonus = round(techMaxBonus, 2);
-
-	if (roundedMaxBonus < 100) {
-		const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
-
-		return {
-			icon: "warning",
-			iconClassName: "mt-2 inline-block cursor-pointer align-text-top",
-			iconStyle: { color: "var(--red-a8)" },
-			percent,
-			tooltipContent: `${t("techTree.tooltips.insufficientSpace")} -${percent}%`,
-		};
-	}
-
-	if (roundedMaxBonus === 100) {
-		return {
-			icon: "check",
-			iconClassName: "mt-[7px] inline-block cursor-pointer align-text-top",
-			iconStyle: { color: "var(--gray-a10)" },
-			percent: 0,
-			tooltipContent: `${t("techTree.tooltips.validSolve")} `,
-		};
-	}
-
-	const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
-
-	return {
-		icon: "lightning",
-		iconClassName: "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top",
-		iconStyle: { color: "var(--amber-a8)" },
-		percent,
-		tooltipContent: `${t("techTree.tooltips.boostedSolve")} +${percent}%`,
-	};
 }
 
 /**
@@ -98,56 +58,52 @@ function renderIcon(
 }
 
 /**
- * Rounds a numerical value to a fixed number of decimal places.
- */
-function round(value: number, decimals: number) {
-	return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
-}
-
-/**
  * A component that displays a status icon representing the optimization quality of a technology.
  */
 export const BonusStatusIcon: React.FC<BonusStatusIconProps> = ({
+	_techMaxBonus,
 	tech,
-	techMaxBonus,
 	techSolvedBonus,
 }) => {
 	const { t } = useTranslation();
-	const { getBonusStatus, setBonusStatus } = useTechBonusStore();
-	const cachedBonusStatus = getBonusStatus(tech);
+	const { getBonusStatus } = useTechBonusStore();
+	const status = getBonusStatus(tech);
 
 	const contentData = React.useMemo(() => {
-		return techMaxBonus === 0 && cachedBonusStatus
-			? {
-					...cachedBonusStatus,
-					tooltipContent:
-						cachedBonusStatus.icon === "check"
-							? t("techTree.tooltips.validSolve")
-							: cachedBonusStatus.icon === "warning"
-								? `${t("techTree.tooltips.insufficientSpace")} -${cachedBonusStatus.percent}%`
-								: `${t("techTree.tooltips.boostedSolve")} +${cachedBonusStatus.percent}%`,
-				}
-			: computeBonusStatusData(techMaxBonus, t);
-	}, [techMaxBonus, cachedBonusStatus, t]);
+		if (!status) return null;
 
-	useEffect(() => {
-		if (techSolvedBonus <= 0) {
-			return;
+		const { icon, percent } = status;
+
+		let iconClassName = "";
+		let iconStyle = {};
+		let tooltipContent = "";
+
+		switch (icon) {
+			case "check":
+				iconClassName = "mt-[7px] inline-block cursor-pointer align-text-top";
+				iconStyle = { color: "var(--gray-a10)" };
+				tooltipContent = t("techTree.tooltips.validSolve");
+				break;
+			case "lightning":
+				iconClassName = "mt-1.5 inline-block h-4 w-4 cursor-pointer align-text-top";
+				iconStyle = { color: "var(--amber-a8)" };
+				tooltipContent = `${t("techTree.tooltips.boostedSolve")} +${percent}%`;
+				break;
+			case "warning":
+				iconClassName = "mt-2 inline-block cursor-pointer align-text-top";
+				iconStyle = { color: "var(--red-a8)" };
+				tooltipContent = `${t("techTree.tooltips.insufficientSpace")} -${percent}%`;
+				break;
 		}
 
-		const cached = getBonusStatus(tech);
-		const hasChanged =
-			!cached ||
-			cached.icon !== contentData.icon ||
-			cached.percent !== contentData.percent ||
-			cached.tooltipContent !== contentData.tooltipContent;
+		return { icon, iconClassName, iconStyle, tooltipContent };
+	}, [status, t]);
 
-		if (hasChanged) {
-			setBonusStatus(tech, contentData);
-		}
-	}, [tech, contentData, setBonusStatus, getBonusStatus, techSolvedBonus]);
+	if (techSolvedBonus <= 0 && !status) {
+		return null;
+	}
 
-	if (techSolvedBonus <= 0 && !cachedBonusStatus) {
+	if (!contentData) {
 		return null;
 	}
 
@@ -320,8 +276,8 @@ const TechTreeRowBadges: React.FC = () => {
 		<>
 			{hasTechInGrid && (
 				<BonusStatusIcon
+					_techMaxBonus={techMaxBonus}
 					tech={tech}
-					techMaxBonus={techMaxBonus}
 					techSolvedBonus={techSolvedBonus}
 				/>
 			)}

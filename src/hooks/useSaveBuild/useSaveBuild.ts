@@ -5,6 +5,7 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Return type for the `useSaveBuild` hook.
@@ -126,7 +127,7 @@ export const useSaveBuild = (): UseSaveBuildReturn => {
 				value: 1,
 			});
 		} catch (error) {
-			console.error("Save failed:", error);
+			Logger.error("Save failed:", error);
 			showError(t("toast.buildSaveError.title"), t("toast.buildSaveError.description"), 5000);
 		} finally {
 			setIsSavePending(false);

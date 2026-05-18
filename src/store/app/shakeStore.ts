@@ -44,8 +44,13 @@ export const useShakeStore = create<ShakeState>((set) => ({
 	},
 }));
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	window.useShakeStore = useShakeStore;
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		__E2E_EXPOSE__?: boolean;
+		useShakeStore?: typeof useShakeStore;
+	};
+
+	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
+		w["useShakeStore"] = useShakeStore;
+	}
 }

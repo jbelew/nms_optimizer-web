@@ -8,6 +8,8 @@
  * @category Utilities
  */
 
+import { Logger } from "@/utils/system/monitoring";
+
 /**
  * A regex pattern matching the User-Agent strings of common web crawlers and bots.
  *
@@ -109,7 +111,7 @@ export const safeGetItem = (key: string): null | string => {
 			return localStorage.getItem(key);
 		}
 	} catch (e) {
-		console.warn(`Storage: Failed to get item "${key}" from localStorage.`, e);
+		Logger.warn(`Storage: Failed to get item "${key}" from localStorage`, { error: e, key });
 	}
 
 	return null;
@@ -138,7 +140,7 @@ export const safeSetItem = (key: string, value: string): boolean => {
 			return true;
 		}
 	} catch (e) {
-		console.warn(`Storage: Failed to set item "${key}" in localStorage.`, e);
+		Logger.warn(`Storage: Failed to set item "${key}" in localStorage`, { error: e, key });
 	}
 
 	return false;
@@ -166,7 +168,7 @@ export const safeRemoveItem = (key: string): boolean => {
 			return true;
 		}
 	} catch (e) {
-		console.warn(`Storage: Failed to remove item "${key}" from localStorage.`, e);
+		Logger.warn(`Storage: Failed to remove item "${key}" from localStorage`, { error: e, key });
 	}
 
 	return false;
@@ -192,7 +194,7 @@ export const safeClear = (): boolean => {
 			return true;
 		}
 	} catch (e) {
-		console.warn("Storage: Failed to clear localStorage.", e);
+		Logger.warn("Storage: Failed to clear localStorage", { error: e });
 	}
 
 	return false;

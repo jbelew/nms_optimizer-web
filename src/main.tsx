@@ -1,24 +1,6 @@
 /**
  * @file High-level application bootstrap and root rendering logic.
  */
-// Base theme tokens
-// import "@radix-ui/themes/tokens/base.css";
-// import "@radix-ui/themes/tokens/colors/cyan.css";
-// import "@radix-ui/themes/tokens/colors/slate.css";
-// import "@radix-ui/themes/tokens/colors/sage.css";
-// import "@radix-ui/themes/tokens/colors/purple.css";
-// import "@radix-ui/themes/tokens/colors/amber.css";
-// import "@radix-ui/themes/tokens/colors/blue.css";
-// import "@radix-ui/themes/tokens/colors/crimson.css";
-// import "@radix-ui/themes/tokens/colors/green.css";
-// import "@radix-ui/themes/tokens/colors/iris.css";
-// import "@radix-ui/themes/tokens/colors/jade.css";
-// import "@radix-ui/themes/tokens/colors/orange.css";
-// import "@radix-ui/themes/tokens/colors/red.css";
-// import "@radix-ui/themes/tokens/colors/sky.css";
-// import "@radix-ui/themes/tokens/colors/teal.css";
-// import "@radix-ui/themes/tokens/colors/yellow.css";
-
 import "./assets/css/radix-colors/radix-colors.css";
 import "@radix-ui/themes/components.css";
 import "@radix-ui/themes/utilities.css";
@@ -41,7 +23,12 @@ import { routes } from "./routes";
 import { useThemeStore } from "./store/app/themeStore";
 import { initializeAnalytics, initializeAnalyticsClient } from "./utils/analytics/tracking";
 import { preloadInitialState } from "./utils/api/apiPreload";
-import { captureException, createAppRouter, initializeSentry } from "./utils/system/monitoring";
+import {
+	captureException,
+	createAppRouter,
+	initializeSentry,
+	Logger,
+} from "./utils/system/monitoring";
 
 /**
  * Root component that manages global theme and provider orchestration.
@@ -146,10 +133,9 @@ const bootstrap = async () => {
 
 			if (errorMessage.includes("Importing a module script failed")) {
 				event.preventDefault();
-				console.warn(
-					"Caught and suppressed module import failure (Safari flake):",
-					errorMessage
-				);
+				Logger.warn("Caught and suppressed module import failure (Safari flake):", {
+					errorMessage,
+				});
 
 				return true;
 			}
@@ -161,11 +147,11 @@ const bootstrap = async () => {
 				return true;
 			}
 
-			console.error("Uncaught initialization error:", event.error || event.message);
+			Logger.error("Uncaught initialization error:", event.error || event.message);
 		});
 
 		window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
-			console.error("Unhandled promise rejection:", event.reason);
+			Logger.error("Unhandled promise rejection:", event.reason);
 		});
 
 		window.addEventListener(
@@ -189,7 +175,7 @@ const bootstrap = async () => {
 							await import("./utils/system/setupServiceWorker");
 						setupServiceWorkerRegistration();
 					} catch (error) {
-						console.error("Failed to initialize deferred services:", error);
+						Logger.error("Failed to initialize deferred services:", error);
 						captureException(error, {
 							level: "error",
 							tags: { area: "initialization" },
@@ -225,6 +211,13 @@ const bootstrap = async () => {
 
 	if (staticContent) {
 		staticContent.setAttribute("aria-hidden", "true");
+	}
+
+	// Cleanup pre-rendered SSG content
+	const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
+
+	if (prerendered) {
+		prerendered.remove();
 	}
 
 	createRoot(document.getElementById("root")!).render(<Root />);

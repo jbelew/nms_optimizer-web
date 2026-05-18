@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { useBuildFileManager } from "@/hooks/useBuildFileManager/useBuildFileManager";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Custom hook to handle the PWA File Handling API.
@@ -51,7 +52,7 @@ export const useFileHandling = () => {
 								}
 							} catch (error) {
 								// Fail silently but log the error for debugging
-								console.error("Failed to load file from launchQueue:", error);
+								Logger.error("Failed to load file from launchQueue:", error);
 							}
 						}
 					}

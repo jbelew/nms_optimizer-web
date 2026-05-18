@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useToast } from "@/hooks/useToast/useToast";
 import { useGridStore } from "@/store/grid/gridStore";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Return type for the `useScreenshot` hook.
@@ -214,7 +215,7 @@ export function useScreenshot(): UseScreenshotReturn {
 					value: 1,
 				});
 			} catch (error) {
-				console.error("Screenshot failed:", error);
+				Logger.error("Screenshot failed:", error);
 				showError(
 					t("toast.screenshotError.title"),
 					t("toast.screenshotError.description"),

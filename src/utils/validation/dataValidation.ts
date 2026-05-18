@@ -10,6 +10,8 @@
 
 import type { RecommendedBuild } from "@/types/tech";
 
+import { Logger } from "@/utils/system/monitoring";
+
 /**
  * Type definition for a saved build file (.nms).
  *
@@ -53,7 +55,9 @@ export type BuildFile = {
  */
 export function isValidBuildFile(obj: unknown): obj is BuildFile {
 	if (typeof obj !== "object" || obj === null) {
-		console.error("Validation Error: BuildFile is not an object or is null.", obj);
+		Logger.error("Validation Error: BuildFile is not an object or is null.", undefined, {
+			obj,
+		});
 
 		return false;
 	}
@@ -72,7 +76,9 @@ export function isValidBuildFile(obj: unknown): obj is BuildFile {
 
 	const allPropsPresent = requiredProps.every((prop) => {
 		if (!(prop in buildFile)) {
-			console.error(`Validation Error: BuildFile missing '${prop}' property.`, buildFile);
+			Logger.error(`Validation Error: BuildFile missing '${prop}' property.`, undefined, {
+				buildFile,
+			});
 
 			return false;
 		}
@@ -176,7 +182,9 @@ export const sanitizeFilename = (filename: string): string => {
  */
 export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	if (typeof obj !== "object" || obj === null) {
-		console.error("Validation Error: RecommendedBuild is not an object or is null.", obj);
+		Logger.error("Validation Error: RecommendedBuild is not an object or is null.", undefined, {
+			obj,
+		});
 
 		return false;
 	}
@@ -184,13 +192,17 @@ export function isValidRecommendedBuild(obj: unknown): obj is RecommendedBuild {
 	const recommendedBuild = obj as RecommendedBuild;
 
 	if (typeof recommendedBuild.title !== "string") {
-		console.error("Validation Error: Invalid 'title' property.", recommendedBuild);
+		Logger.error("Validation Error: Invalid 'title' property.", undefined, {
+			recommendedBuild,
+		});
 
 		return false;
 	}
 
 	if (!Array.isArray(recommendedBuild.layout)) {
-		console.error("Validation Error: 'layout' is not an array.", recommendedBuild);
+		Logger.error("Validation Error: 'layout' is not an array.", undefined, {
+			recommendedBuild,
+		});
 
 		return false;
 	}

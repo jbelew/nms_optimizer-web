@@ -4,6 +4,13 @@ import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
+import { Seo } from "./components/Seo/Seo";
+import {
+	AppDialogBody,
+	AppDialogFooter,
+	AppDialogRoot,
+	AppDialogTitle,
+} from "./components/AppDialog/Base/AppDialog";
 import { ErrorDialog } from "./components/AppDialog/Error/errorDialog";
 import { UpdatePromptWrapper } from "./components/UpdatePrompt/updatePromptWrapper";
 import { DialogProvider } from "./context/dialogContext";
@@ -33,6 +40,7 @@ const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/Shar
 /**
  * Lazy-loaded component for the base dialog structure.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
 
 /**
@@ -143,6 +151,7 @@ const AppContent: FC = () => {
 
 	return (
 		<>
+			<Seo />
 			<Outlet />
 			{shareUrl ? (
 				<Suspense fallback={null}>
@@ -171,9 +180,12 @@ const AppContent: FC = () => {
 
 			{showWelcome ? (
 				<Suspense fallback={null}>
-					<AppDialog
-						content={<WelcomeContent onClose={handleCloseWelcome} />}
-						footer={
+					<AppDialogRoot isOpen={showWelcome} onClose={handleCloseWelcome}>
+						<AppDialogTitle titleKey="dialogs.titles.welcome" />
+						<AppDialogBody>
+							<WelcomeContent onClose={handleCloseWelcome} />
+						</AppDialogBody>
+						<AppDialogFooter>
 							<div className="flex justify-end gap-2">
 								<Button
 									className="cursor-pointer"
@@ -183,12 +195,8 @@ const AppContent: FC = () => {
 									{t("dialogs.welcome.getStarted")}
 								</Button>
 							</div>
-						}
-						isOpen={showWelcome}
-						onClose={handleCloseWelcome}
-						title={t("dialogs.titles.welcome", "Welcome")}
-						titleKey="dialogs.titles.welcome"
-					/>
+						</AppDialogFooter>
+					</AppDialogRoot>
 				</Suspense>
 			) : null}
 		</>
@@ -244,13 +252,6 @@ const App: FC = () => {
 
 		if (platform) {
 			void fetchTechTree(platform);
-		}
-
-		// Cleanup pre-rendered SSG content
-		const prerendered = document.querySelector('[data-prerendered-markdown="true"]');
-
-		if (prerendered) {
-			prerendered.remove();
 		}
 	}, []);
 

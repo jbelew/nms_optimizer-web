@@ -7,6 +7,7 @@ import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGr
 import { useOptimizeStore } from "@/store/app/optimizeStore";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useTechStore } from "@/store/tech/techStore";
 import { OptimizationManager } from "@/utils/optimization/optimizationManager";
 import { Logger } from "@/utils/system/monitoring";
@@ -152,7 +153,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 			return;
 		}
 
-		const { setGrid, setResult } = useGridStore.getState();
+		const { setGrid } = useGridStore.getState();
 		const { checkedModules } = useTechStore.getState();
 
 		isOptimizingRef.current = true;
@@ -183,7 +184,7 @@ export const useOptimize = (): UseOptimizeReturn => {
 					tech,
 				});
 
-				setResult(data, tech);
+				sessionCoordinator.commitOptimizationResult(data, tech);
 				const gaTech =
 					tech === "pulse" && checkedModules[tech]?.includes("PC") ? "photonix" : tech;
 

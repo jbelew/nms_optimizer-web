@@ -85,8 +85,13 @@ export const useErrorStore = create<ErrorState>((set) => ({
 	},
 }));
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	window.useErrorStore = useErrorStore;
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		__E2E_EXPOSE__?: boolean;
+		useErrorStore?: typeof useErrorStore;
+	};
+
+	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
+		w["useErrorStore"] = useErrorStore;
+	}
 }

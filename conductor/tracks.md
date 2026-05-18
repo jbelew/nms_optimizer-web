@@ -4,6 +4,11 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+- [~] **Track: Code Review Improvements Phase 4: UI Patterns & Modernization**
+  *Link: [./tracks/code_review_improvements_phase4/](./tracks/code_review_improvements_phase4/)*
+
+---
+
 - [x] **Track: Core Web Vitals Performance Audit & Optimization**
   *Link: [./tracks/performance_audit_20260204/](./tracks/performance_audit_20260204/)*
 
@@ -31,11 +36,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Improving Test Coverage & App Stability**
   *Link: [./conductor/tracks/test_coverage_improvement_20260407/](./conductor/tracks/test_coverage_improvement_20260407/)*
-
----
-
-- [~] **Track: UI Integration & Stability**
-  *Link: [./conductor/tracks/ui_integration_stability_20260407/](./conductor/tracks/ui_integration_stability_20260407/)*
 
 ---
 

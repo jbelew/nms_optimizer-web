@@ -1,0 +1,135 @@
+import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+
+import { seoMetadata } from "../../../shared/seo-metadata.js";
+import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../../../shared/seo-schema.js";
+
+/**
+ * Declarative SEO component for React 19.
+ * Handles title, meta tags, and structured data by rendering them directly in the component.
+ * React 19 will automatically hoist these to the document head.
+ */
+export const Seo: React.FC = () => {
+	const { i18n, t } = useTranslation();
+	const location = useLocation();
+
+	const {
+		canonicalUrl,
+		cleanPath,
+		currentPath,
+		pageDescription,
+		pageKeywords,
+		pageTitle,
+		schemas,
+		supportedLangs,
+	} = useMemo(() => {
+		// Handle language-prefixed routes to determine the base path
+		const pathParts = location.pathname.split("/").filter(Boolean);
+		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
+		const basePath = supportedLangs.includes(pathParts[0])
+			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
+			: location.pathname;
+
+		// Normalize: ensure trailing slash for lookup (except root)
+		const currentPath =
+			basePath === "/" || basePath === ""
+				? "/"
+				: basePath.endsWith("/")
+					? basePath
+					: `${basePath}/`;
+
+		// Look up metadata for the current path, falling back to root metadata
+		const metadata = seoMetadata[currentPath as keyof typeof seoMetadata] || seoMetadata["/"];
+
+		const pageTitle = t(metadata.titleKey, { defaultValue: "NMS Optimizer" });
+		const pageDescription = t(metadata.descriptionKey);
+		const pageKeywords = t("seo.keywords", { defaultValue: "" });
+
+		const baseUrl = "https://nms-optimizer.app";
+		const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+		const cleanPath = currentPath === "/" ? "" : currentPath;
+
+		const canonicalPath =
+			i18n.language === "en"
+				? normalizePath(currentPath)
+				: `/${i18n.language}${normalizePath(cleanPath)}`;
+		const canonicalUrl = `${baseUrl}${canonicalPath}`;
+
+		const schemas = getLocalizedSchema(t, i18n.language, canonicalUrl);
+
+		return {
+			canonicalUrl,
+			cleanPath,
+			currentPath,
+			pageDescription,
+			pageKeywords,
+			pageTitle,
+			schemas,
+			supportedLangs,
+		};
+	}, [location.pathname, i18n.language, t, i18n.services.resourceStore.data]);
+
+	const baseUrl = "https://nms-optimizer.app";
+	const ogImageUrl = `${baseUrl}/assets/img/screenshots/screenshot.png`;
+	const ogImageAlt = t("seo.ogImageAlt", { defaultValue: "NMS Optimizer Screenshot" });
+
+	return (
+		<>
+			<title>{pageTitle}</title>
+			<meta content={pageDescription} name="description" />
+			<meta content={pageKeywords} name="keywords" />
+			<link href={canonicalUrl} rel="canonical" />
+
+			{/* hreflang tags */}
+			<link href={`${baseUrl}${cleanPath || "/"}`} hrefLang="x-default" rel="alternate" />
+			{supportedLangs.map((lang) => {
+				const normalizePath = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+				const path =
+					lang === "en"
+						? normalizePath(cleanPath || "/")
+						: `/${lang}${normalizePath(cleanPath)}`;
+
+				return (
+					<link href={`${baseUrl}${path}`} hrefLang={lang} key={lang} rel="alternate" />
+				);
+			})}
+
+			{/* Open Graph */}
+			<meta content={t("appName")} property="og:site_name" />
+			<meta content={pageTitle} property="og:title" />
+			<meta content={pageDescription} property="og:description" />
+			<meta content={ogImageUrl} property="og:image" />
+			<meta content={ogImageAlt} property="og:image:alt" />
+			<meta content={canonicalUrl} property="og:url" />
+			<meta content={getOgLocale(i18n.language)} property="og:locale" />
+			{Object.entries(OG_LOCALE_MAP).map(([code, locale]) => {
+				if (code === i18n.language) return null;
+
+				return <meta content={locale} key={code} property="og:locale:alternate" />;
+			})}
+
+			{/* Twitter */}
+			<meta content="summary_large_image" name="twitter:card" />
+			<meta content={pageTitle} name="twitter:title" />
+			<meta content={pageDescription} name="twitter:description" />
+			<meta content={ogImageUrl} name="twitter:image" />
+			<meta content={ogImageAlt} name="twitter:image:alt" />
+
+			{/* Structured Data */}
+			{schemas.map((schema, index) => {
+				const type = (schema as { "@type": string })["@type"];
+				const id = `${type?.toLowerCase()}-schema`;
+
+				// FAQ schema: Only on root route
+				if (type === "FAQPage" && currentPath !== "/") return null;
+
+				return (
+					<script id={id} key={`${type}-${index}`} type="application/ld+json">
+						{JSON.stringify(schema)}
+					</script>
+				);
+			})}
+		</>
+	);
+};

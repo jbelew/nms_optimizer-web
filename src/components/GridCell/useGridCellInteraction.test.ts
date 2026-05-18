@@ -223,7 +223,7 @@ describe("useGridCellInteraction", () => {
 			vi.runAllTimers();
 		});
 
-		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
+		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0, expect.any(Object));
 		expect(mockTriggerShake).toHaveBeenCalled();
 		expect(mockIncrementSuperchargedFixed).toHaveBeenCalled();
 	});
@@ -242,7 +242,7 @@ describe("useGridCellInteraction", () => {
 			vi.runAllTimers();
 		});
 
-		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
+		expect(mockRevertCellTap).not.toHaveBeenCalled();
 		expect(mockTriggerShake).toHaveBeenCalled();
 		expect(mockIncrementGridFixed).toHaveBeenCalled();
 	});
@@ -264,7 +264,7 @@ describe("useGridCellInteraction", () => {
 			vi.runAllTimers();
 		});
 
-		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0);
+		expect(mockRevertCellTap).toHaveBeenCalledWith(0, 0, expect.any(Object));
 		expect(mockTriggerShake).toHaveBeenCalled();
 		expect(mockIncrementSuperchargedLimit).toHaveBeenCalled();
 	});

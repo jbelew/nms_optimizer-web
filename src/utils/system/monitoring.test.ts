@@ -83,7 +83,9 @@ describe("monitoring utilities", () => {
 			const error = new Error("Test error");
 			Logger.error("Test error message", error, { extra: "context" });
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error);
+			expect(consoleErrorSpy).toHaveBeenCalledWith("[ERROR] Test error message", error, {
+				extra: "context",
+			});
 
 			expect(sentryMock.captureException).toHaveBeenCalledWith(error, {
 				extra: { extra: "context", message: "Test error message" },

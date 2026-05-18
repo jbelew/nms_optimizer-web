@@ -14,7 +14,7 @@
 import type { ErrorInfo } from "react";
 
 import { sendEvent } from "@/utils/analytics/tracking";
-import { captureException } from "@/utils/system/monitoring";
+import { captureException, Logger } from "@/utils/system/monitoring";
 
 /**
  * Reports an uncaught application error to monitoring and analytics services.
@@ -45,7 +45,7 @@ import { captureException } from "@/utils/system/monitoring";
  * ```
  */
 export const handleError = (error: Error, errorInfo?: ErrorInfo) => {
-	console.error("Uncaught error:", error, errorInfo);
+	Logger.error("Uncaught error:", error, { errorInfo });
 
 	captureException(error, {
 		extra: {

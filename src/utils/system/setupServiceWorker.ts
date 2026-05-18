@@ -14,6 +14,7 @@
 import { registerSW } from "virtual:pwa-register";
 
 import { isBot } from "@/utils/browser/environment";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * Registers the PWA service worker using Vite PWA's standard registration.
@@ -95,13 +96,13 @@ export function setupServiceWorkerRegistration() {
 						);
 					},
 					onRegisterError(error) {
-						console.error("Service Worker registration failed:", error);
+						Logger.error("Service Worker registration failed", error);
 					},
 				});
 			} catch (error) {
 				// Silently catch PWA registration errors
 				// We log it but don't re-throw.
-				console.error("Failed to register Service Worker:", error);
+				Logger.error("Failed to register Service Worker", error);
 			}
 		};
 

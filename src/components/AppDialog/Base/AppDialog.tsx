@@ -47,7 +47,7 @@ interface AppDialogProps {
 /**
  * A compound dialog component providing layout and context.
  */
-const AppDialogRoot: React.FC<AppDialogProps> = ({
+export const AppDialogRoot: React.FC<AppDialogProps> = ({
 	children,
 	className = "",
 	isOpen,
@@ -98,7 +98,7 @@ const AppDialogRoot: React.FC<AppDialogProps> = ({
 /**
  * Title component for AppDialog.
  */
-const AppDialogTitle: React.FC<{
+export const AppDialogTitle: React.FC<{
 	children?: ReactNode;
 	headerIcon?: ReactNode;
 	title?: string;
@@ -129,7 +129,7 @@ const AppDialogTitle: React.FC<{
 /**
  * Content component for AppDialog.
  */
-const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }> = ({
+export const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }> = ({
 	children,
 	titleKey,
 }) => {
@@ -147,7 +147,7 @@ const AppDialogBody: React.FC<{ children: ReactNode; titleKey?: string }> = ({
 /**
  * Footer component for AppDialog.
  */
-const AppDialogFooter: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppDialogFooter: React.FC<{ children: ReactNode }> = ({ children }) => {
 	return <div className="appDialog__footer">{children}</div>;
 };
 

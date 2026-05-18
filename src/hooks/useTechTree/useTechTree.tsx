@@ -13,13 +13,14 @@
  */
 
 import type { Module, RecommendedBuild, TechTree, TechTreeItem } from "@/types/tech";
-import { use, useEffect } from "react";
+import { use, useDeferredValue, useEffect, useMemo } from "react";
 
 import { API_URL } from "@/constants";
 import { useGridStore } from "@/store/grid/gridStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { useTechTreeLoadingStore } from "@/store/tech/techTreeLoadingStore";
 import { apiCall } from "@/utils/api/network";
+import { Logger } from "@/utils/system/monitoring";
 import { getTechTreeMaps } from "@/utils/tech/techTreeUtils";
 import { isValidRecommendedBuild } from "@/utils/validation/dataValidation";
 
@@ -106,7 +107,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 					data.recommended_builds = data.recommended_builds.filter(
 						(build: RecommendedBuild) => {
 							if (!isValidRecommendedBuild(build)) {
-								console.error(
+								Logger.error(
 									"Invalid recommended build found in tech tree:",
 									build
 								);
@@ -124,7 +125,7 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
 				return data;
 			})
 			.catch((error) => {
-				console.error("Error fetching tech tree:", error);
+				Logger.error("Error fetching tech tree:", error);
 				useTechTreeLoadingStore.getState().setLoading(false);
 
 				return {} as TechTree;
@@ -167,27 +168,26 @@ export function fetchTechTreeAsync(shipType: string = "standard"): Promise<TechT
  * ```
  */
 export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTree {
-	const data = use(fetchTechTree(shipType));
+	const deferredShipType = useDeferredValue(shipType);
+	const data = use(fetchTechTree(deferredShipType));
+
+	const maps = useMemo(() => (data ? getTechTreeMaps(data) : null), [data]);
 
 	useEffect(() => {
-		if (data && Object.keys(data).length > 0) {
-			const initStores = () => {
-				const { activeGroups, techColors, techGroups } = getTechTreeMaps(data);
-				useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
+		if (data && Object.keys(data).length > 0 && maps) {
+			const { activeGroups, techColors, techGroups } = maps;
+			useTechStore.getState().initializeTechTree(techColors, techGroups, activeGroups);
 
-				const gridStore = useGridStore.getState();
+			const gridStore = useGridStore.getState();
 
-				if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
-					gridStore.setInitialGridDefinition(data.grid_definition);
-					gridStore.setGridFromInitialDefinition(data.grid_definition);
-				}
+			if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
+				gridStore.setInitialGridDefinition(data.grid_definition);
+				gridStore.setGridFromInitialDefinition(data.grid_definition);
+			}
 
-				useTechTreeLoadingStore.getState().setLoading(false);
-			};
-
-			initStores();
+			useTechTreeLoadingStore.getState().setLoading(false);
 		}
-	}, [data, shipType]);
+	}, [data, maps]);
 
 	return data;
 }

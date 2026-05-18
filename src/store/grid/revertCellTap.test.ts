@@ -23,60 +23,38 @@ describe("revertCellTap action in GridStore", () => {
 		vi.useRealTimers();
 	});
 
-	it("should revert cell to initial state", () => {
+	it("should revert cell to provided initial state", () => {
+		const originalState = {
+			...createEmptyCell(false, true),
+			active: true,
+			supercharged: false,
+		};
+
 		act(() => {
 			useGridStore.setState((state) => {
 				state.grid.cells[0][0].active = false;
 				state.grid.cells[0][0].supercharged = true;
-				state._initialCellStateForTap = {
-					...state.grid.cells[0][0],
-					active: true,
-					supercharged: false,
-				};
 			});
 		});
 
 		act(() => {
-			useGridStore.getState().revertCellTap(0, 0);
+			useGridStore.getState().revertCellTap(0, 0, originalState);
 		});
 
 		const finalCell = useGridStore.getState().grid.cells[0][0];
 		expect(finalCell.active).toBe(true);
 		expect(finalCell.supercharged).toBe(false);
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
-	});
-
-	it("should not change cell state if initialCellStateForTap is null", () => {
-		act(() => {
-			useGridStore.setState((state) => {
-				state.grid.cells[0][0].active = false;
-				state.grid.cells[0][0].supercharged = true;
-				state._initialCellStateForTap = null;
-			});
-		});
-
-		act(() => {
-			useGridStore.getState().revertCellTap(0, 0);
-		});
-
-		const finalCell = useGridStore.getState().grid.cells[0][0];
-		expect(finalCell.active).toBe(false);
-		expect(finalCell.supercharged).toBe(true);
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull();
 	});
 
 	it("should not change cell state if cell is undefined", () => {
-		act(() => {
-			useGridStore.setState((state) => {
-				state._initialCellStateForTap = { ...state.grid.cells[0][0] };
-			});
-		});
+		const originalState = createEmptyCell(false, true);
+		const initialGrid = useGridStore.getState().grid;
 
 		act(() => {
-			useGridStore.getState().revertCellTap(99, 99); // Non-existent cell
+			useGridStore.getState().revertCellTap(99, 99, originalState); // Non-existent cell
 		});
 
 		// Expect no changes or errors
-		expect(useGridStore.getState()._initialCellStateForTap).toBeNull(); // Should remain as it was
+		expect(useGridStore.getState().grid).toEqual(initialGrid);
 	});
 });

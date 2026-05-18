@@ -957,3 +957,26 @@ The E2E test suite was brittle due to manual timeouts, incorrect asset paths, an
     2. **Direct Result**: The combined effect of lazy-loading heavy dynamic modules (`html-to-image`, `socket.io-client`), optimizing css pipelines, and centralizing layout components has successfully resolved the performance regression and achieved an elite-grade user experience.
 
 
+
+## PRAR Cycle: Codebase Cleanup & Anti-pattern Resolution (2026-05-18)
+
+### Problem
+Identified 7 anti-patterns in the NMS Optimizer Web UI, including redundant memoization, context over-engineering, module-level state leaks, and inconsistent store access.
+
+### Research
+- Audited 100+ instances of manual memoization.
+- Mapped 'MainAppProvider' and its single-hook orchestration pattern.
+- Located module-level variables in 'useGridCellInteraction.ts'.
+
+### Act
+- **Logic Refactoring**: Extracted 'getUpgradePriority' to a pure utility with unit tests.
+- **State Migration**: Moved double-tap state from hook-level variables to 'GridStore'.
+- **Architecture Simplification**: Eliminated 'createMainAppContext' and simplified 'MainAppProvider' to act as a logic-only bridge, allowing components to use direct Zustand selectors.
+- **Centralization**: Unified optimization status (solving/progress) in 'useOptimizeStore'.
+- **Documentation**: Updated JSDoc to 'agentic-jsdoc' standards across all modified files.
+
+### Review
+- Verified that 'isSharedGrid' prop drilling was successfully removed.
+- Fixed TypeScript and test regressions caused by store schema updates.
+- Ensured the React Compiler can handle remaining optimizations by removing manual 'useMemo' and 'useCallback'.
+- Confirmed all 915 unit tests pass and build/lint are green.

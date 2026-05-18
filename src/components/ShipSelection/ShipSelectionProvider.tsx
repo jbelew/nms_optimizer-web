@@ -7,7 +7,8 @@ import { useAnalytics } from "@/hooks/useAnalytics/useAnalytics";
 import { useFetchShipTypesSuspense } from "@/hooks/useShipTypes/useShipTypes";
 import { useToast } from "@/hooks/useToast/useToast";
 import { usePlatformStore } from "@/store/app/platformStore";
-import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { createGrid } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { Logger } from "@/utils/system/monitoring";
 
 import { ShipSelectionContext } from "./useShipSelectionContext";
@@ -32,9 +33,6 @@ export const ShipSelectionProvider: React.FC<{
 	const shipTypes = useFetchShipTypesSuspense();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const setSelectedShipType = usePlatformStore((state) => state.setSelectedPlatform);
-	const setGridAndResetAuxiliaryState = useGridStore(
-		(state) => state.setGridAndResetAuxiliaryState
-	);
 	const { sendDeferredEvent } = useAnalytics();
 	const { showInfo } = useToast();
 	const [isPending, startTransition] = useTransition();
@@ -71,7 +69,7 @@ export const ShipSelectionProvider: React.FC<{
 
 					setSelectedShipType(option, shipTypeKeys, true, isKnownRoute);
 					const initialGrid = createGrid(DEFAULT_GRID_HEIGHT, DEFAULT_GRID_WIDTH);
-					setGridAndResetAuxiliaryState(initialGrid);
+					sessionCoordinator.switchPlatform(initialGrid);
 				});
 
 				sendDeferredEvent({
@@ -84,15 +82,7 @@ export const ShipSelectionProvider: React.FC<{
 				});
 			}
 		},
-		[
-			isKnownRoute,
-			sendDeferredEvent,
-			setGridAndResetAuxiliaryState,
-			setSelectedShipType,
-			shipTypeKeys,
-			showInfo,
-			t,
-		]
+		[isKnownRoute, sendDeferredEvent, setSelectedShipType, shipTypeKeys, showInfo, t]
 	);
 
 	const value = useMemo(

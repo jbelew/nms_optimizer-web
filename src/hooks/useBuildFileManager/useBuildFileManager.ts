@@ -8,6 +8,7 @@ import { useModuleSelectionStore } from "@/store/tech/moduleSelectionStore";
 import { useTechBonusStore } from "@/store/tech/techBonusStore";
 import { useTechStore } from "@/store/tech/techStore";
 import { computeSHA256 } from "@/utils/system/hashUtils";
+import { Logger } from "@/utils/system/monitoring";
 import { isValidBuildFile, sanitizeFilename } from "@/utils/validation/dataValidation";
 
 /**
@@ -122,7 +123,7 @@ export const useBuildFileManager = () => {
 			document.body.removeChild(link);
 			URL.revokeObjectURL(url);
 		} catch (error) {
-			console.error("Failed to save build file:", error);
+			Logger.error("Failed to save build file:", error);
 			throw new Error("Failed to save build file", { cause: error });
 		}
 	};
@@ -229,7 +230,7 @@ export const useBuildFileManager = () => {
 				useModuleSelectionStore.setState(buildData.moduleState);
 			});
 		} catch (error) {
-			console.error("Failed to load build file:", error);
+			Logger.error("Failed to load build file:", error);
 			throw error;
 		}
 	};

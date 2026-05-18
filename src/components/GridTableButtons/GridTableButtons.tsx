@@ -22,6 +22,7 @@ import { useScreenshot } from "@/hooks/useScreenshot/useScreenshot";
 import { useScrollGridIntoView } from "@/hooks/useScrollGridIntoView/useScrollGridIntoView";
 import { useUrlSync } from "@/hooks/useUrlSync/useUrlSync";
 import { useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 import { useDialog } from "@/utils/system/dialogUtils";
 
 import { useGridContext } from "../GridTable/useGridContext";
@@ -130,7 +131,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 		sendEvent({ action: "reset_grid", category: "ui", nonInteraction: false, value: 1 });
 
 		startResetTransition(() => {
-			useGridStore.getState().resetGrid();
+			sessionCoordinator.resetSession();
 			updateUrlForReset();
 			setIsSharedGrid(false);
 		});

@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Logger } from "@/utils/system/monitoring";
+
 /**
  * Represents the state of a markdown content request.
  *
@@ -93,7 +95,7 @@ export const useMarkdownContent = (markdownFileName: string): MarkdownContentSta
 
 				setMarkdown(content);
 			} catch (e) {
-				console.error(`Error loading ${markdownFileName}.md:`, e);
+				Logger.error(`Error loading ${markdownFileName}.md:`, e);
 				setError(e instanceof Error ? e.message : "An unknown error occurred");
 				setMarkdown(`Failed to load content for ${markdownFileName}.`); // Fallback content
 			} finally {

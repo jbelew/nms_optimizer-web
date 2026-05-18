@@ -5,6 +5,7 @@ import { useLatest } from "@/hooks/useLatest/useLatest";
 import { useSessionStore } from "@/store/app/sessionStore";
 import { useShakeStore } from "@/store/app/shakeStore";
 import { useGridStore } from "@/store/grid/gridStore";
+import { useInteractionStore } from "@/store/grid/interactionStore";
 import { Logger } from "@/utils/system/monitoring";
 
 const DOUBLE_TAP_THRESHOLD = 400; // ms
@@ -28,6 +29,7 @@ const DOUBLE_TAP_THRESHOLD = 400; // ms
  * @see {@link useGridStore}
  * @see {@link useSessionStore}
  * @see {@link useShakeStore}
+ * @see {@link useInteractionStore}
  * @see {@link ./useGridCellInteraction.test.ts Unit Tests}
  *
  * @hook
@@ -96,12 +98,14 @@ export const useGridCellInteraction = (
 	const handleTouchLogic = () => {
 		const gridState = useGridStore.getState();
 		const sessionState = useSessionStore.getState();
+		const interactionState = useInteractionStore.getState();
 		const latestCell = cellRef.current;
 
-		const currentTime = new Date().getTime();
-		const timeSinceLastTap = currentTime - gridState._lastTapTime;
+		const currentTime = Date.now();
+		const timeSinceLastTap = currentTime - interactionState._lastTapTime;
 		const isSameCell =
-			gridState._lastTapCell[0] === rowIndex && gridState._lastTapCell[1] === columnIndex;
+			interactionState._lastTapCell[0] === rowIndex &&
+			interactionState._lastTapCell[1] === columnIndex;
 
 		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
 			// Double tap on the same cell - handled by handleCellDoubleTap which also resets lastTap
@@ -125,16 +129,25 @@ export const useGridCellInteraction = (
 
 				triggerShake();
 				startTransition(() => {
-					gridState.revertCellTap(rowIndex, columnIndex);
+					if (interactionState._initialCellStateForTap) {
+						gridState.revertCellTap(
+							rowIndex,
+							columnIndex,
+							interactionState._initialCellStateForTap
+						);
+					}
+
+					interactionState.clearInteractionState();
 				});
 			} else {
 				startTransition(() => {
 					gridState.handleCellDoubleTap(rowIndex, columnIndex);
+					interactionState.clearInteractionState();
 				});
 			}
 		} else {
 			// Single tap or tap on a different cell
-			gridState.setLastTap([rowIndex, columnIndex], currentTime);
+			interactionState.setLastTap([rowIndex, columnIndex], currentTime);
 			const isInvalidSingleTap =
 				gridState.gridFixed || (gridState.superchargedFixed && latestCell.supercharged);
 
@@ -147,10 +160,11 @@ export const useGridCellInteraction = (
 
 				triggerShake();
 				startTransition(() => {
-					gridState.clearInitialCellStateForTap();
+					interactionState.setInitialCellStateForTap(null);
 				});
 			} else {
 				startTransition(() => {
+					interactionState.setInitialCellStateForTap({ ...latestCell });
 					gridState.handleCellTap(rowIndex, columnIndex);
 				});
 			}

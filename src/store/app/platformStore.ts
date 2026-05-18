@@ -8,6 +8,7 @@ import {
 	PLATFORM_STORAGE_KEY,
 	resolveInitialPlatform,
 } from "@/utils/browser/platformResolver";
+import { Logger } from "@/utils/system/monitoring";
 
 /**
  * State and actions for the ship type (platform) selection.
@@ -115,7 +116,7 @@ export const usePlatformStore = create<PlatformState>((set) => ({
 	selectedPlatform: resolveInitialPlatform(), // Initialized from URL or storage
 	setSelectedPlatform: (platform, validShipTypes, _updateUrl = true, _isKnownRoute = true) => {
 		if (!validShipTypes.includes(platform)) {
-			console.warn(
+			Logger.warn(
 				`Attempted to set invalid platform: ${platform}. Falling back to standard.`
 			);
 			platform = "standard";

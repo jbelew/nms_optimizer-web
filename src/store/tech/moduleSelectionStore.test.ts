@@ -3,6 +3,7 @@ import type { TechTreeItem } from "@/hooks/useTechTree/useTechTree";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { createGrid, useGridStore } from "@/store/grid/gridStore";
+import { sessionCoordinator } from "@/store/sessionCoordinator";
 
 import { useModuleSelectionStore } from "./moduleSelectionStore";
 import { useTechBonusStore } from "./techBonusStore";
@@ -25,7 +26,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		localStorage.clear();
 	});
 
-	it("should clear module selections when switching ship types via setGridAndResetAuxiliaryState", () => {
+	it("should clear module selections when switching ship types via sessionCoordinator", () => {
 		// Start with ship 1 selections
 		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1", "module2"]);
 		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module3"]);
@@ -37,28 +38,10 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Simulate switching ship types
 		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		// Module selections should be cleared
 		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
-	});
-
-	it("should clear localStorage when switching ship types", () => {
-		// Set up initial state
-		useModuleSelectionStore.getState().setModuleSelection("tech1", ["module1"]);
-		localStorage.setItem(
-			"moduleSelectionState",
-			JSON.stringify({ moduleSelections: { tech1: ["module1"] } })
-		);
-
-		expect(localStorage.getItem("moduleSelectionState")).not.toBeNull();
-
-		// Switch ship types
-		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
-
-		// localStorage should be cleared
-		expect(localStorage.getItem("moduleSelectionState")).toBeNull();
 	});
 
 	it("should clear techGroups and checkedModules when switching ship types", () => {
@@ -88,7 +71,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch ship types
 		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		// techGroups and checkedModules should be cleared
 		expect(useTechStore.getState().techGroups).toEqual({});
@@ -120,7 +103,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch to Ship 2
 		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		// Load Ship 2 tech groups
 		const ship2Module = {
@@ -165,7 +148,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch ships (clears selections)
 		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		// Load build with different selections
 		useModuleSelectionStore.getState().setModuleSelection("tech2", ["module2", "module3"]);
@@ -180,10 +163,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		// Set some bonus state
 		const bonusData: BonusStatusData = {
 			icon: "check",
-			iconClassName: "test",
-			iconStyle: { color: "green" },
 			percent: 100,
-			tooltipContent: "Test",
 		};
 		useTechBonusStore.getState().setBonusStatus("tech1", bonusData);
 
@@ -191,7 +171,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch ship types
 		const newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		// Bonus state should be cleared
 		expect(useTechBonusStore.getState().bonusStatus).toEqual({});
@@ -214,7 +194,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch to Ship 2
 		let newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		const ship2Module = { checked: false, id: "mod2" } as unknown as TechTreeItem["modules"][0];
 		const ship2TechGroup = {
@@ -231,7 +211,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 
 		// Switch to Ship 3
 		newGrid = createGrid(10, 6);
-		useGridStore.getState().setGridAndResetAuxiliaryState(newGrid);
+		sessionCoordinator.switchPlatform(newGrid);
 
 		const ship3Module = { checked: true, id: "mod3" } as unknown as TechTreeItem["modules"][0];
 		const ship3TechGroup = {

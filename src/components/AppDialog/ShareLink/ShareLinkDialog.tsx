@@ -4,6 +4,8 @@ import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
 import { useTranslation } from "react-i18next";
 
+import { Logger } from "@/utils/system/monitoring";
+
 import { ShareLinkContent } from "./ShareLinkContent";
 
 const AppDialog = lazy(() => import("@/components/AppDialog/Base/AppDialog"));
@@ -73,7 +75,7 @@ const ShareLinkDialog: FC<ShareLinkDialogProps> = ({ isOpen, onClose, shareUrl }
 				copiedTimeoutRef.current = null;
 			}, 2000);
 		} catch (err) {
-			console.error("Failed to copy: ", err);
+			Logger.error("Failed to copy: ", err);
 		}
 	};
 

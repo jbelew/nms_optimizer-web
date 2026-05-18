@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
+import { Logger } from "@/utils/system/monitoring";
 
 type SetItemFunction = (
 	name: string,
@@ -44,7 +45,7 @@ function debounceSetItem(
 				try {
 					await setItemFn(name, value);
 				} catch (e) {
-					console.error("Failed to save TechBonusStore to localStorage", e);
+					Logger.error("Failed to save TechBonusStore to localStorage", e);
 				}
 			})();
 		}, msToWait);
@@ -73,14 +74,8 @@ const debouncedStorage = {
 export type BonusStatusData = {
 	/** Identifier for the icon to display in the UI. */
 	icon: "check" | "lightning" | "warning" | null;
-	/** CSS class name for icon styling. */
-	iconClassName: string;
-	/** Inline CSS styles for the icon. */
-	iconStyle: { color: string };
 	/** The calculated efficiency percentage. */
 	percent: number;
-	/** Localized string for the status tooltip. */
-	tooltipContent: string;
 };
 
 /**
@@ -180,8 +175,13 @@ export const useTechBonusStore = create<TechBonusStore>()(
 	)
 );
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore - for e2e testing
-	window.useTechBonusStore = useTechBonusStore;
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		__E2E_EXPOSE__?: boolean;
+		useTechBonusStore?: typeof useTechBonusStore;
+	};
+
+	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
+		w["useTechBonusStore"] = useTechBonusStore;
+	}
 }

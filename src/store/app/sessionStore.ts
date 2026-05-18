@@ -74,8 +74,13 @@ export const useSessionStore = create<SessionState>((set) => ({
 	supercharged_limit: 0,
 }));
 
-if (import.meta.env.VITE_E2E_TESTING) {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	window.useSessionStore = useSessionStore;
+if (typeof window !== "undefined") {
+	const w = window as typeof window & {
+		__E2E_EXPOSE__?: boolean;
+		useSessionStore?: typeof useSessionStore;
+	};
+
+	if (import.meta.env.VITE_E2E_TESTING || w.__E2E_EXPOSE__) {
+		w["useSessionStore"] = useSessionStore;
+	}
 }
