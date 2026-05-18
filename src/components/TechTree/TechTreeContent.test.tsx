@@ -18,7 +18,7 @@ vi.mock("./TechTreeSection", () => ({
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
-			isGridFull: () => false,
+			isGridFull: false,
 		};
 
 		return selector(mockState);

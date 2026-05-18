@@ -213,7 +213,7 @@ const MainAppSidebarContent: React.FC = () => {
 	const { isLargeScreen, selectedShipType } = useMainAppGlobal();
 	const { handleOptimize, solving } = useMainAppOptimization();
 	const techTree = useFetchTechTreeSuspense(selectedShipType);
-	const isGridFull = useGridStore((state) => state._isGridFull);
+	const isGridFull = useGridStore((state) => state.isGridFull);
 
 	const hasRecommendedBuilds =
 		!!techTree?.recommended_builds && techTree.recommended_builds.length > 0;

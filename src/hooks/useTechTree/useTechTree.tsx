@@ -180,7 +180,7 @@ export function useFetchTechTreeSuspense(shipType: string = "standard"): TechTre
 
 			const gridStore = useGridStore.getState();
 
-			if (data.grid_definition && !gridStore.selectHasModulesInGrid()) {
+			if (data.grid_definition && !gridStore.hasModulesInGrid) {
 				gridStore.setInitialGridDefinition(data.grid_definition);
 				gridStore.setGridFromInitialDefinition(data.grid_definition);
 			}

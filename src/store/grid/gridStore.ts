@@ -265,10 +265,6 @@ export interface GridActions {
 	handleCellDoubleTap: (rowIndex: number, columnIndex: number) => void;
 	/** Handles a single tap on a grid cell. */
 	handleCellTap: (rowIndex: number, columnIndex: number) => void;
-	/** Checks if a specific technology is currently present in the grid. */
-	hasTechInGrid: (tech: string) => boolean;
-	/** Checks if all active grid cells have a module assigned. */
-	isGridFull: () => boolean;
 	/** Resets the grid to its initial state or a blank grid. */
 	resetGrid: () => void;
 	/** Removes all modules of a specific technology from the grid. */
@@ -277,14 +273,6 @@ export interface GridActions {
 	restoreGridState: (savedState: Partial<GridStore>) => void;
 	/** Restores a cell to its previous state, typically after an invalid tap. */
 	revertCellTap: (rowIndex: number, columnIndex: number, originalState: Cell) => void;
-	/** Returns the index of the first row containing only inactive cells. */
-	selectFirstInactiveRowIndex: () => number;
-	/** Returns true if any cell in the grid has a module. */
-	selectHasModulesInGrid: () => boolean;
-	/** Returns the index of the last row containing at least one active cell. */
-	selectLastActiveRowIndex: () => number;
-	/** Returns the total count of supercharged cells. */
-	selectTotalSuperchargedCells: () => number;
 	/** Updates the current build name. */
 	setBuildName: (name: null | string) => void;
 	/** Sets the active status of a specific cell. */
@@ -325,18 +313,18 @@ export interface GridActions {
  * @category State
  */
 export interface GridComputed {
-	/** Index of the first row where every cell is inactive, or -1. */
-	_firstInactiveRowIndex: number;
-	/** Whether any cell in the grid has a non-null module. */
-	_hasModulesInGrid: boolean;
-	/** Whether every active cell has a module assigned. */
-	_isGridFull: boolean;
-	/** Index of the last row containing at least one active cell, or -1. */
-	_lastActiveRowIndex: number;
-	/** Count of cells where `supercharged === true`. */
-	_totalSuperchargedCells: number;
 	/** Set of technology keys currently placed in at least one grid cell. */
 	activeTechs: Set<string>;
+	/** Index of the first row where every cell is inactive, or -1. */
+	firstInactiveRowIndex: number;
+	/** Whether any cell in the grid has a non-null module. */
+	hasModulesInGrid: boolean;
+	/** Whether every active cell has a module assigned. */
+	isGridFull: boolean;
+	/** Index of the last row containing at least one active cell, or -1. */
+	lastActiveRowIndex: number;
+	/** Count of cells where `supercharged === true`. */
+	totalSuperchargedCells: number;
 }
 
 /**
@@ -507,7 +495,7 @@ const getWindowSearch = () =>
  */
 export const useGridStore = create<GridStore>()(
 	persist(
-		immer((set, get) => {
+		immer((set, _get) => {
 			/**
 			 * Applies a grid definition to the state.
 			 *
@@ -549,11 +537,11 @@ export const useGridStore = create<GridStore>()(
 			const recomputeDerivedState = (state: GridStore) => {
 				if (!state.grid) {
 					state.activeTechs = new Set();
-					state._isGridFull = false;
-					state._totalSuperchargedCells = 0;
-					state._hasModulesInGrid = false;
-					state._firstInactiveRowIndex = 0;
-					state._lastActiveRowIndex = -1;
+					state.isGridFull = false;
+					state.totalSuperchargedCells = 0;
+					state.hasModulesInGrid = false;
+					state.firstInactiveRowIndex = 0;
+					state.lastActiveRowIndex = -1;
 
 					return;
 				}
@@ -562,11 +550,11 @@ export const useGridStore = create<GridStore>()(
 
 				if (!cells) {
 					state.activeTechs = new Set();
-					state._isGridFull = false;
-					state._totalSuperchargedCells = 0;
-					state._hasModulesInGrid = false;
-					state._firstInactiveRowIndex = 0;
-					state._lastActiveRowIndex = -1;
+					state.isGridFull = false;
+					state.totalSuperchargedCells = 0;
+					state.hasModulesInGrid = false;
+					state.firstInactiveRowIndex = 0;
+					state.lastActiveRowIndex = -1;
 
 					return;
 				}
@@ -606,19 +594,14 @@ export const useGridStore = create<GridStore>()(
 				}
 
 				state.activeTechs = techs;
-				state._totalSuperchargedCells = superchargedCount;
-				state._hasModulesInGrid = hasModules;
-				state._isGridFull = activeCount > 0 && activeCount === activeWithModuleCount;
-				state._firstInactiveRowIndex = firstInactiveRow;
-				state._lastActiveRowIndex = lastActiveRow;
+				state.totalSuperchargedCells = superchargedCount;
+				state.hasModulesInGrid = hasModules;
+				state.isGridFull = activeCount > 0 && activeCount === activeWithModuleCount;
+				state.firstInactiveRowIndex = firstInactiveRow;
+				state.lastActiveRowIndex = lastActiveRow;
 			};
 
 			return {
-				_firstInactiveRowIndex: 0,
-				_hasModulesInGrid: false,
-				_isGridFull: false,
-				_lastActiveRowIndex: -1,
-				_totalSuperchargedCells: 0,
 				activateRow: (rowIndex: number) => {
 					set((state) => {
 						if (state.grid.cells[rowIndex]) {
@@ -680,6 +663,7 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
+				firstInactiveRowIndex: 0,
 				grid: createGrid(10, 6),
 				gridFixed: false,
 				handleCellDoubleTap: (rowIndex: number, columnIndex: number) => {
@@ -710,18 +694,15 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
-
-				hasTechInGrid: (tech: string): boolean => {
-					return get().activeTechs.has(tech);
-				},
+				hasModulesInGrid: false,
 
 				initialGridDefinition: undefined,
 
-				isGridFull: (): boolean => {
-					return get()._isGridFull;
-				},
+				isGridFull: false,
 
 				isSharedGrid: new URLSearchParams(getWindowSearch()).has("grid"),
+
+				lastActiveRowIndex: -1,
 
 				resetGrid: () => {
 					set((state) => {
@@ -783,22 +764,6 @@ export const useGridStore = create<GridStore>()(
 					});
 				},
 
-				selectFirstInactiveRowIndex: () => {
-					return get()._firstInactiveRowIndex;
-				},
-
-				selectHasModulesInGrid: () => {
-					return get()._hasModulesInGrid;
-				},
-
-				selectLastActiveRowIndex: () => {
-					return get()._lastActiveRowIndex;
-				},
-
-				selectTotalSuperchargedCells: () => {
-					return get()._totalSuperchargedCells;
-				},
-
 				setBuildName: (name) => set({ buildName: name }),
 
 				setCellActive: (rowIndex, columnIndex, active) => {
@@ -854,7 +819,9 @@ export const useGridStore = create<GridStore>()(
 						state.result = result;
 					});
 				},
+
 				setSuperchargedFixed: (fixed) => set({ superchargedFixed: fixed }),
+
 				superchargedFixed: false,
 
 				toggleCellActive: (rowIndex, columnIndex) => {
@@ -896,6 +863,8 @@ export const useGridStore = create<GridStore>()(
 						cell.supercharged = !cell.supercharged;
 						recomputeDerivedState(state);
 					}),
+
+				totalSuperchargedCells: 0,
 
 				triggerRecompute: () => {
 					set((state) => {

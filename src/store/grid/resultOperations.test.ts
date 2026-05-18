@@ -135,7 +135,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});
@@ -148,7 +148,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(true);
 		});
@@ -163,7 +163,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(true);
 		});
@@ -179,10 +179,10 @@ describe("GridStore - Result and Tech Operations", () => {
 			});
 
 			const state = useGridStore.getState();
-			expect(state.hasTechInGrid("defense")).toBe(true);
-			expect(state.hasTechInGrid("attack")).toBe(true);
-			expect(state.hasTechInGrid("shield")).toBe(true);
-			expect(state.hasTechInGrid("nonexistent")).toBe(false);
+			expect(state.activeTechs.has("defense")).toBe(true);
+			expect(state.activeTechs.has("attack")).toBe(true);
+			expect(state.activeTechs.has("shield")).toBe(true);
+			expect(state.activeTechs.has("nonexistent")).toBe(false);
 		});
 
 		it("should handle null tech values", () => {
@@ -193,7 +193,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});
@@ -205,7 +205,7 @@ describe("GridStore - Result and Tech Operations", () => {
 				useGridStore.getState().triggerRecompute();
 			});
 
-			const hasTech = useGridStore.getState().hasTechInGrid("defense");
+			const hasTech = useGridStore.getState().activeTechs.has("defense");
 
 			expect(hasTech).toBe(false);
 		});

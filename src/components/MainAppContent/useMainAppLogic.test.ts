@@ -90,7 +90,7 @@ vi.mock("@/hooks/useToast/useToast", () => ({
 
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: (selector: (state: unknown) => unknown) =>
-		selector({ isSharedGrid: false, selectHasModulesInGrid: () => true }),
+		selector({ hasModulesInGrid: true, isSharedGrid: false }),
 }));
 
 vi.mock("@/utils/system/splashScreen", () => ({

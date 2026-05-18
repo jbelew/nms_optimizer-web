@@ -59,7 +59,7 @@ export const useMainAppLogic = () => {
 	const isSmallScreen = !useBreakpoint("640px");
 	const isLargeScreen = useBreakpoint("1024px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const { openDialog } = useDialog();
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { forceShow, isVisible, toolbarRef } = useScrollHide(80);

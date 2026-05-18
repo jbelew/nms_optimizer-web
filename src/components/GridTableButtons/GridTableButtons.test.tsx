@@ -35,7 +35,6 @@ const { setGridStoreState, useGridStore } = vi.hoisted(() => {
 		hasModulesInGrid,
 		isSharedGrid,
 		resetGrid: mockResetGrid,
-		selectHasModulesInGrid: () => hasModulesInGrid,
 		setIsSharedGrid: mockSetIsSharedGrid,
 	};
 

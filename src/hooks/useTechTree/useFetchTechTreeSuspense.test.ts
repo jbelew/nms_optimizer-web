@@ -86,7 +86,7 @@ describe("useFetchTechTreeSuspense", () => {
 	};
 
 	type MockGridStoreState = {
-		selectHasModulesInGrid: () => boolean;
+		hasModulesInGrid: boolean;
 		setGridFromInitialDefinition: () => void;
 		setInitialGridDefinition: (def: unknown) => void;
 	};
@@ -123,7 +123,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 		vi.mocked(useGridStore).mockImplementation((selector) => {
 			const state: MockGridStoreState = {
-				selectHasModulesInGrid: () => hasGridModules,
+				hasModulesInGrid: hasGridModules,
 				setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 				setInitialGridDefinition: mockSetInitialGridDefinition,
 			};
@@ -133,7 +133,7 @@ describe("useFetchTechTreeSuspense", () => {
 
 		// Mock getState at module level
 		(useGridStore as unknown as { getState: () => MockGridStoreState }).getState = () => ({
-			selectHasModulesInGrid: () => hasGridModules,
+			hasModulesInGrid: hasGridModules,
 			setGridFromInitialDefinition: mockSetGridFromInitialDefinition,
 			setInitialGridDefinition: mockSetInitialGridDefinition,
 		});

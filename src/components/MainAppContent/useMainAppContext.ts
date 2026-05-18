@@ -78,7 +78,7 @@ export const useMainAppGlobal = () => {
 	const isSmallScreen = !useBreakpoint("640px");
 	const isLargeScreen = useBreakpoint("1024px");
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const selectedShipType = usePlatformStore((state) => state.selectedPlatform);
 	const { isVisible, toolbarRef } = useScrollHide(80);
 

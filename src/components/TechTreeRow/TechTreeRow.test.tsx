@@ -72,7 +72,6 @@ const setupMocks = (hasTechInGrid: boolean, solving = false) => {
 	mockUseGridStore.mockImplementation((selector?: (state: GridStore) => unknown) => {
 		const state: Partial<GridStore> = {
 			activeTechs: hasTechInGrid ? new Set(["testTech"]) : new Set(),
-			hasTechInGrid: () => hasTechInGrid,
 			resetGridTech: vi.fn(),
 		};
 

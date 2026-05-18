@@ -78,7 +78,7 @@ const GridControlButtons: React.FC<RowControlButtonProps> = ({ rowIndex }) => {
 	const isMediumOrLarger = useBreakpoint("640px"); // true if screen width >= 640px
 	const activateRow = useGridStore((state) => state.activateRow);
 	const deActivateRow = useGridStore((state) => state.deActivateRow);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const gridFixed = useGridStore((state) => state.gridFixed);
 	const hasAnyActiveCells = useGridStore(selectHasAnyActiveCells);
 	const isLoading = useTechTreeLoadingStore((state) => state.isLoading);

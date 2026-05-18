@@ -23,7 +23,6 @@ const mockToggleCellActive = vi.fn();
 const mockToggleCellSupercharged = vi.fn();
 const mockClearInitialCellStateForTap = vi.fn();
 const mockTriggerShake = vi.fn();
-const mockSelectTotalSuperchargedCells = vi.fn(() => 0);
 
 // Session store mocks
 const mockIncrementSuperchargedLimit = vi.fn();
@@ -44,7 +43,6 @@ describe("useGridCellInteraction", () => {
 		handleCellDoubleTap: mockHandleCellDoubleTap,
 		handleCellTap: mockHandleCellTap,
 		revertCellTap: mockRevertCellTap,
-		selectTotalSuperchargedCells: mockSelectTotalSuperchargedCells,
 		setLastTap: (cell: [number, number], time: number) => {
 			baseMockGridStoreState._lastTapCell = cell;
 			baseMockGridStoreState._lastTapTime = time;
@@ -52,6 +50,7 @@ describe("useGridCellInteraction", () => {
 		superchargedFixed: false,
 		toggleCellActive: mockToggleCellActive,
 		toggleCellSupercharged: mockToggleCellSupercharged,
+		totalSuperchargedCells: 0,
 	};
 
 	const baseMockSessionStoreState = {
@@ -250,7 +249,7 @@ describe("useGridCellInteraction", () => {
 	it("should call revertCellTap and trigger shake if totalSupercharged >= 4 on double tap", () => {
 		mockGetGridState.mockReturnValue({
 			...baseMockGridStoreState,
-			selectTotalSuperchargedCells: vi.fn(() => 4),
+			totalSuperchargedCells: 4,
 		});
 
 		const { result } = renderGridCellHook({ module: null, supercharged: false });

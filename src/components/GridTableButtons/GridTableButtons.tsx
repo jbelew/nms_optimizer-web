@@ -54,7 +54,7 @@ const GridTableButtons: React.FC<GridTableButtonsProps> = ({ solving }) => {
 
 	const { markTutorialFinished, openDialog, tutorialFinished } = useDialog();
 	const setIsSharedGrid = useGridStore((state) => state.setIsSharedGrid);
-	const hasModulesInGrid = useGridStore((state) => state.selectHasModulesInGrid());
+	const hasModulesInGrid = useGridStore((state) => state.hasModulesInGrid);
 	const isSharedGrid = useGridStore((state) => state.isSharedGrid);
 	const {
 		handleBuildNameCancel,

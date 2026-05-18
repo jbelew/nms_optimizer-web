@@ -53,7 +53,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 		customGrid.cells[1][1].tech = techName;
 		setupGridState(customGrid);
 
-		const result = useGridStore.getState().hasTechInGrid(techName);
+		const result = useGridStore.getState().activeTechs.has(techName);
 		expect(result).toBe(true);
 	});
 
@@ -64,19 +64,19 @@ describe("hasTechInGrid selector in GridStore", () => {
 		customGrid.cells[1][1].tech = "other_tech_2";
 		setupGridState(customGrid);
 
-		const result = useGridStore.getState().hasTechInGrid(techName);
+		const result = useGridStore.getState().activeTechs.has(techName);
 		expect(result).toBe(false);
 	});
 
 	it("should return false for an empty grid", () => {
 		setupGridState(createGrid(0, 0)); // Grid with 0 cells
-		const result = useGridStore.getState().hasTechInGrid("any_tech");
+		const result = useGridStore.getState().activeTechs.has("any_tech");
 		expect(result).toBe(false);
 	});
 
 	it("should return false for a grid where all cells have null tech", () => {
 		// beforeEach already sets up a grid with null tech initially
-		const result = useGridStore.getState().hasTechInGrid("any_tech");
+		const result = useGridStore.getState().activeTechs.has("any_tech");
 		expect(result).toBe(false);
 	});
 
@@ -87,7 +87,7 @@ describe("hasTechInGrid selector in GridStore", () => {
 		customGrid.cells[2][2].tech = techName;
 		setupGridState(customGrid);
 
-		const result = useGridStore.getState().hasTechInGrid(techName);
+		const result = useGridStore.getState().activeTechs.has(techName);
 		expect(result).toBe(true);
 	});
 
@@ -100,8 +100,8 @@ describe("hasTechInGrid selector in GridStore", () => {
 		customGrid.cells[2][0].tech = "another_one";
 		setupGridState(customGrid);
 
-		expect(useGridStore.getState().hasTechInGrid(presentTech)).toBe(true);
-		expect(useGridStore.getState().hasTechInGrid(absentTech)).toBe(false);
+		expect(useGridStore.getState().activeTechs.has(presentTech)).toBe(true);
+		expect(useGridStore.getState().activeTechs.has(absentTech)).toBe(false);
 	});
 
 	it("should return false if tech is null and checking for null (edge case, though techName is string)", () => {
@@ -111,11 +111,11 @@ describe("hasTechInGrid selector in GridStore", () => {
 		customGrid.cells[0][0].tech = null; // Cell has null tech
 		setupGridState(customGrid);
 
-		// Assuming hasTechInGrid(null) would try to match cell.tech === null
+		// Assuming activeTechs.has(null) would try to match cell.tech === null
 		// However, the type for techName is `string`. This test is more conceptual.
 		// The current implementation will treat `null` as a string "null" if passed.
 		// Let's test against an actual string that won't match.
-		expect(useGridStore.getState().hasTechInGrid("null")).toBe(false); // tech is actual null, not string "null"
-		expect(useGridStore.getState().hasTechInGrid("any_tech_not_present")).toBe(false);
+		expect(useGridStore.getState().activeTechs.has("null")).toBe(false); // tech is actual null, not string "null"
+		expect(useGridStore.getState().activeTechs.has("any_tech_not_present")).toBe(false);
 	});
 });

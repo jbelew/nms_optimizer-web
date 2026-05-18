@@ -37,8 +37,8 @@ const LAST_N_ROWS_THRESHOLD = 3;
  * ```
  */
 export const useGridRowState = (rowIndex: number) => {
-	const firstInactiveRowIndex = useGridStore((state) => state.selectFirstInactiveRowIndex());
-	const lastActiveRowIndex = useGridStore((state) => state.selectLastActiveRowIndex());
+	const firstInactiveRowIndex = useGridStore((state) => state.firstInactiveRowIndex);
+	const lastActiveRowIndex = useGridStore((state) => state.lastActiveRowIndex);
 	const row = useGridStore((state) => state.grid.cells[rowIndex]);
 	const totalRows = useGridStore((state) => state.grid.cells.length);
 

@@ -82,7 +82,7 @@ describe("isGridFull selector in GridStore", () => {
 			// cells[1][2] is inactive
 			// Row 2 is all inactive
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(true);
+		expect(useGridStore.getState().isGridFull).toBe(true);
 	});
 
 	it("should return false if at least one active cell does not have a module", () => {
@@ -94,7 +94,7 @@ describe("isGridFull selector in GridStore", () => {
 			cells[2][2].active = true;
 			cells[2][2].module = "mod3";
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return false if there are no active cells, even if inactive cells have modules", () => {
@@ -107,12 +107,12 @@ describe("isGridFull selector in GridStore", () => {
 			);
 			cells[0][0].module = null; // one inactive without module
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return false for a completely empty grid (0x0)", () => {
 		setupFullGridState(createGrid(0, 0));
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return false for a grid with all cells inactive and without modules", () => {
@@ -124,7 +124,7 @@ describe("isGridFull selector in GridStore", () => {
 				})
 			);
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return false when all cells are inactive, some with modules and some without", () => {
@@ -140,12 +140,12 @@ describe("isGridFull selector in GridStore", () => {
 			// Ensure all are inactive
 			cells.forEach((row) => row.forEach((cell) => (cell.active = false)));
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return false when all cells are active, but none have modules", () => {
 		// beforeEach sets this up: all active, no modules.
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 
 	it("should return true with a mix of active cells (all with modules) and inactive cells (some with/without modules)", () => {
@@ -183,7 +183,7 @@ describe("isGridFull selector in GridStore", () => {
 			cells[2][2].active = true;
 			cells[2][2].module = "modD"; // Another active cell with module
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(true);
+		expect(useGridStore.getState().isGridFull).toBe(true);
 	});
 
 	it("should return false if grid has active cells, but at least one is empty (even if others are full)", () => {
@@ -196,6 +196,6 @@ describe("isGridFull selector in GridStore", () => {
 			cells[0][2].module = "mod2";
 			cells[1][0].active = false; // Inactive, doesn't matter
 		});
-		expect(useGridStore.getState().isGridFull()).toBe(false);
+		expect(useGridStore.getState().isGridFull).toBe(false);
 	});
 });

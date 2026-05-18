@@ -109,7 +109,7 @@ export const useGridCellInteraction = (
 
 		if (isSameCell && timeSinceLastTap < DOUBLE_TAP_THRESHOLD && timeSinceLastTap > 0) {
 			// Double tap on the same cell - handled by handleCellDoubleTap which also resets lastTap
-			const totalSupercharged = gridState.selectTotalSuperchargedCells();
+			const totalSupercharged = gridState.totalSuperchargedCells;
 			const isInvalidDoubleTap =
 				gridState.superchargedFixed ||
 				gridState.gridFixed ||
@@ -351,7 +351,7 @@ export const useGridCellInteraction = (
 			}
 		} else {
 			// Normal Click: Toggle Supercharged
-			const totalSupercharged = gridState.selectTotalSuperchargedCells();
+			const totalSupercharged = gridState.totalSuperchargedCells;
 			const isInvalidSuperchargeToggle =
 				superchargedFixed ||
 				gridFixed ||

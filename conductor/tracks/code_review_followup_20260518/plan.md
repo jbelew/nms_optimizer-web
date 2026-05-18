@@ -43,10 +43,10 @@ Deeper structural changes to state management for better performance and decoupl
 
 - [x] **Task 1: Performance - Convert `useOptimizeStore` to per-field selectors (N1)** <!-- files: src/App.tsx, src/components/AppDialog/Error/errorDialog.tsx --> f241c5c
   - Update `App.tsx` and `errorDialog.tsx` to use `useOptimizeStore((s) => s.showError)` style selectors.
-- [~] **Task 2: Refactor - Discriminated Union for `OptimizeStore` (N4)** <!-- files: src/store/tech/optimizeStore.ts -->
+- [x] **Task 2: Refactor - Discriminated Union for `OptimizeStore` (N4)** <!-- files: src/store/app/optimizeStore.ts --> bc7ce2a
   - Refactor `OptimizeStore` to use a `status` field with a discriminated union (idle/solving/error/etc.).
   - Update consumers to handle the new state shape.
-- [ ] **Task 3: Refactor - Clean up `gridStore` public API (N5, N6)** <!-- files: src/store/grid/gridStore.ts -->
+- [~] **Task 3: Refactor - Clean up `gridStore` public API (N5, N6)** <!-- files: src/store/grid/gridStore.ts -->
   - Remove zero-arg getters like `isGridFull()` in favor of direct state access or dedicated selectors.
   - Ensure cache fields (starting with `_`) are not part of the public `GridStore` interface.
 - [ ] **Task 4: Refactor - Finalize `techStore` and `gridStore` decoupling (P3, NEW11)** <!-- files: src/store/tech/techStore.ts, src/store/grid/gridStore.ts, src/store/sessionCoordinator.ts --> <!-- depends: Task 3 -->

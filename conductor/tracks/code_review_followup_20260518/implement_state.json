@@ -1,7 +1,7 @@
 {
   "current_phase": "Phase 3: Store Refactoring & Performance",
   "current_phase_index": 2,
-  "current_task_index": 1,
+  "current_task_index": 2,
   "completed_phases": ["Phase 1: Cleanup & Low-Hanging Fruit", "Phase 2: Logic Improvements & Bug Fixes"],
   "last_updated": "2026-05-18T22:00:00Z",
   "status": "in_progress"

@@ -50,6 +50,7 @@ vi.mock("@/components/MessageSpinner/MessageSpinner", () => ({
 vi.mock("@/store/grid/gridStore", () => ({
 	useGridStore: vi.fn((selector) => {
 		const mockState = {
+			firstInactiveRowIndex: 0,
 			grid: {
 				cells: Array.from({ length: 5 }, () =>
 					Array.from({ length: 3 }, () => ({ active: false }))
@@ -57,8 +58,7 @@ vi.mock("@/store/grid/gridStore", () => ({
 				height: 5,
 				width: 3,
 			},
-			selectFirstInactiveRowIndex: () => 0,
-			selectLastActiveRowIndex: () => -1,
+			lastActiveRowIndex: -1,
 			superchargedFixed: false,
 		};
 
