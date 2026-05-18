@@ -42,7 +42,7 @@ export const RecommendedBuildRoot: React.FC<{ children: React.ReactNode }> = ({ 
 					/>
 				</span>
 			</Callout.Text>
-			{children}
+			<div className="flex flex-wrap items-center">{children}</div>
 		</Callout.Root>
 	);
 };
