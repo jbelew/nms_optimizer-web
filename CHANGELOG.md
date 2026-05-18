@@ -1,3 +1,15 @@
+## [7.3.2](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.1...v7.3.2) (2026-05-18)
+
+
+### Bug Fixes
+
+* **perf:** resolve ResizeObserver error and clean up MainAppLayout suspense ([63b9a4d](https://github.com/jbelew/nms_optimizer-web/commit/63b9a4d36765b8acf33bc6efeb68c14dcf0d5f57))
+
+
+### Performance Improvements
+
+* **ui:** wrap expensive grid state updates in startTransition to improve INP ([fdfef43](https://github.com/jbelew/nms_optimizer-web/commit/fdfef430d8c22a0c07496254a4eb0d89ab891f22))
+
 ## [7.3.1](https://github.com/jbelew/nms_optimizer-web/compare/v7.3.0...v7.3.1) (2026-05-16)
 
 
