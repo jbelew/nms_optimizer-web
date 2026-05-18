@@ -168,7 +168,7 @@ describe("useRecommendedBuild Adversarial Tests", () => {
 			type: "normal",
 		} as unknown as TechTreeItem;
 
-		useTechStore.getState().setTechGroups({ checked_tech: [mockTechGroup] });
+		sessionCoordinator.setTechGroups({ checked_tech: [mockTechGroup] });
 
 		// checkedModules should be populated
 		expect(useTechStore.getState().checkedModules.checked_tech).toEqual(["checked_module"]);

@@ -62,7 +62,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			tech1: [mockTechGroup],
 		};
 
-		useTechStore.getState().setTechGroups(mockTechGroups);
+		sessionCoordinator.setTechGroups(mockTechGroups);
 
 		expect(useTechStore.getState().techGroups).toEqual(mockTechGroups);
 		expect(useTechStore.getState().checkedModules).toEqual({
@@ -98,7 +98,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			ship1tech: [ship1TechGroup],
 		};
 
-		useTechStore.getState().setTechGroups(ship1Groups);
+		sessionCoordinator.setTechGroups(ship1Groups);
 		useModuleSelectionStore.getState().setModuleSelection("ship1tech", ["ship1module"]);
 
 		// Switch to Ship 2
@@ -123,7 +123,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 			ship2tech: [ship2TechGroup],
 		};
 
-		useTechStore.getState().setTechGroups(ship2Groups);
+		sessionCoordinator.setTechGroups(ship2Groups);
 
 		// Ship 2 should use API defaults, not Ship 1 selections
 		expect(useModuleSelectionStore.getState().moduleSelections).toEqual({});
@@ -189,7 +189,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		const ship1Groups = {
 			tech1: [ship1TechGroup],
 		};
-		useTechStore.getState().setTechGroups(ship1Groups);
+		sessionCoordinator.setTechGroups(ship1Groups);
 		useModuleSelectionStore.getState().setModuleSelection("tech1", ["mod1"]);
 
 		// Switch to Ship 2
@@ -206,7 +206,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		const ship2Groups = {
 			tech2: [ship2TechGroup],
 		};
-		useTechStore.getState().setTechGroups(ship2Groups);
+		sessionCoordinator.setTechGroups(ship2Groups);
 		useModuleSelectionStore.getState().setModuleSelection("tech2", ["mod2"]);
 
 		// Switch to Ship 3
@@ -223,7 +223,7 @@ describe("ModuleSelectionStore - Ship Type Switching", () => {
 		const ship3Groups = {
 			tech3: [ship3TechGroup],
 		};
-		useTechStore.getState().setTechGroups(ship3Groups);
+		sessionCoordinator.setTechGroups(ship3Groups);
 
 		// Ship 3 should only have its default selections, not Ship 1 or Ship 2
 		const selections = useModuleSelectionStore.getState().moduleSelections;

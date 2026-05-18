@@ -4,7 +4,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-import { usePlatformStore } from "@/store/app/platformStore";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { resolveInitialPlatform } from "@/utils/browser/platformResolver";
 import { runWhenIdle } from "@/utils/system/idle";
@@ -900,7 +899,7 @@ export const useGridStore = create<GridStore>()(
 					gridFixed: state.gridFixed,
 					initialGridDefinition: state.initialGridDefinition,
 					isSharedGrid: state.isSharedGrid,
-					selectedPlatform: usePlatformStore.getState().selectedPlatform,
+					selectedPlatform: resolveInitialPlatform(),
 					superchargedFixed: state.superchargedFixed,
 				};
 

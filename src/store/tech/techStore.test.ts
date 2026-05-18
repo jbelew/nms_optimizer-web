@@ -124,7 +124,7 @@ describe("TechStore", () => {
 				},
 			],
 		};
-		setTechGroups(mockTechGroups);
+		setTechGroups(mockTechGroups, { "test-tech": ["mod1"] });
 		expect(useTechStore.getState().techGroups).toEqual(mockTechGroups);
 		expect(useTechStore.getState().checkedModules["test-tech"]).toEqual(["mod1"]);
 	});
@@ -143,7 +143,7 @@ describe("TechStore", () => {
 				},
 			],
 		};
-		setTechGroups(mockTechGroups);
+		setTechGroups(mockTechGroups, { "test-tech": [] });
 		expect(useTechStore.getState().techGroups).toEqual(mockTechGroups);
 		expect(useTechStore.getState().checkedModules["test-tech"]).toEqual([]);
 	});

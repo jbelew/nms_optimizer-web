@@ -1,5 +1,6 @@
 import type { ApiResponse, Grid } from "./grid/gridStore";
 import type { BonusStatusData } from "./tech/techBonusStore";
+import type { TechTreeItem } from "@/types/tech";
 
 import { useGridStore } from "./grid/gridStore";
 import { useInteractionStore } from "./grid/interactionStore";
@@ -32,6 +33,36 @@ export function computeBonusStatus(maxBonus: number): BonusStatusData {
 	const percent = Math.round((roundedMaxBonus - 100) * 100) / 100;
 
 	return { icon: "lightning", percent };
+}
+
+/**
+ * Helper to compute initial checked modules based on persistent selection and defaults.
+ *
+ * @param {Record<string, TechTreeItem[]>} techGroups - The technology groups mapping.
+ *
+ * @returns {Record<string, string[]>} The resolved checked modules.
+ */
+function computeInitialCheckedModules(techGroups: { [key: string]: TechTreeItem[] }) {
+	const moduleSelectionStore = useModuleSelectionStore.getState();
+
+	return Object.keys(techGroups).reduce(
+		(acc, tech) => {
+			const group = techGroups[tech]?.[0];
+
+			if (group) {
+				const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
+
+				if (persistedSelection && persistedSelection.length > 0) {
+					acc[tech] = persistedSelection;
+				} else {
+					acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
+				}
+			}
+
+			return acc;
+		},
+		{} as { [key: string]: string[] }
+	);
 }
 
 /**
@@ -75,6 +106,26 @@ export const sessionCoordinator = {
 	},
 
 	/**
+	 * Initializes the technology tree metadata across relevant stores.
+	 *
+	 * Synchronizes initial module selections with persistent user preferences.
+	 *
+	 * @param {Record<string, string>} colors - Tech-to-color mapping.
+	 * @param {Record<string, TechTreeItem[]>} techGroups - Tech-to-groups mapping.
+	 * @param {Record<string, string>} activeGroups - Tech-to-active-group-ID mapping.
+	 */
+	initializeTechTree(
+		colors: { [key: string]: string },
+		techGroups: { [key: string]: TechTreeItem[] },
+		activeGroups: { [key: string]: string }
+	) {
+		const techStore = useTechStore.getState();
+		const initialCheckedModules = computeInitialCheckedModules(techGroups);
+
+		techStore.initializeTechTree(colors, techGroups, activeGroups, initialCheckedModules);
+	},
+
+	/**
 	 * Resets the entire application state to its default values.
 	 *
 	 * Orchestrates the reset of grid, tech, modules, and interaction stores,
@@ -98,6 +149,20 @@ export const sessionCoordinator = {
 
 		// 3. Reset Interaction State
 		interactionStore.clearInteractionState();
+	},
+
+	/**
+	 * Updates the available technology groups.
+	 *
+	 * Re-initializes checked modules based on the new groups and existing module selections.
+	 *
+	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
+	 */
+	setTechGroups(techGroups: { [key: string]: TechTreeItem[] }) {
+		const techStore = useTechStore.getState();
+		const initialCheckedModules = computeInitialCheckedModules(techGroups);
+
+		techStore.setTechGroups(techGroups, initialCheckedModules);
 	},
 
 	/**

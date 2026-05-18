@@ -2,8 +2,6 @@
 import type { TechTreeItem } from "@/types/tech";
 import { create } from "zustand";
 
-import { useModuleSelectionStore } from "./moduleSelectionStore";
-
 /**
  * State and actions for managing technology definitions, metadata, and solve results.
  *
@@ -65,7 +63,8 @@ export interface TechState {
 	initializeTechTree: (
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
-		activeGroups: { [key: string]: string }
+		activeGroups: { [key: string]: string },
+		initialCheckedModules: { [key: string]: string[] }
 	) => void;
 	/** Mapping of technology keys to their theoretical maximum bonus. */
 	max_bonus: { [key: string]: number };
@@ -102,7 +101,10 @@ export interface TechState {
 	 *
 	 * @param {Record<string, TechTreeItem[]>} techGroups - The new technology groups mapping.
 	 */
-	setTechGroups: (techGroups: { [key: string]: TechTreeItem[] }) => void;
+	setTechGroups: (
+		techGroups: { [key: string]: TechTreeItem[] },
+		initialCheckedModules: { [key: string]: string[] }
+	) => void;
 	/**
 	 * Sets the maximum bonus value for a technology.
 	 *
@@ -192,28 +194,9 @@ export const useTechStore = create<TechState>((set, get) => ({
 	initializeTechTree: (
 		colors: { [key: string]: string },
 		techGroups: { [key: string]: TechTreeItem[] },
-		activeGroups: { [key: string]: string }
+		activeGroups: { [key: string]: string },
+		initialCheckedModules: { [key: string]: string[] }
 	) => {
-		const moduleSelectionStore = useModuleSelectionStore.getState();
-		const initialCheckedModules = Object.keys(techGroups).reduce(
-			(acc, tech) => {
-				const group = techGroups[tech]?.[0];
-
-				if (group) {
-					const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
-
-					if (persistedSelection && persistedSelection.length > 0) {
-						acc[tech] = persistedSelection;
-					} else {
-						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
-					}
-				}
-
-				return acc;
-			},
-			{} as { [key: string]: string[] }
-		);
-
 		set({
 			activeGroups,
 			checkedModules: initialCheckedModules,
@@ -239,28 +222,10 @@ export const useTechStore = create<TechState>((set, get) => ({
 			},
 		})),
 	setTechColors: (colors) => set({ techColors: colors }),
-	setTechGroups: (techGroups) => {
-		const moduleSelectionStore = useModuleSelectionStore.getState();
-		const initialCheckedModules = Object.keys(techGroups).reduce(
-			(acc, tech) => {
-				const group = techGroups[tech]?.[0];
-
-				if (group) {
-					// Try to restore from persistent store first, otherwise use checked modules from data
-					const persistedSelection = moduleSelectionStore.getModuleSelection(tech);
-
-					if (persistedSelection && persistedSelection.length > 0) {
-						acc[tech] = persistedSelection;
-					} else {
-						acc[tech] = group.modules.filter((m) => m.checked).map((m) => m.id);
-					}
-				}
-
-				return acc;
-			},
-			{} as { [key: string]: string[] }
-		);
-
+	setTechGroups: (
+		techGroups: { [key: string]: TechTreeItem[] },
+		initialCheckedModules: { [key: string]: string[] }
+	) => {
 		set({ checkedModules: initialCheckedModules, techGroups });
 	},
 	setTechMaxBonus: (tech, max_bonus) =>
