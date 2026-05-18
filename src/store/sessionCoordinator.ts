@@ -114,6 +114,7 @@ export const sessionCoordinator = {
 
 		// 1. Update Grid
 		gridStore.setGrid(newGrid);
+		gridStore.setResult(null);
 		gridStore.setIsSharedGrid(false);
 		gridStore.setBuildName(null);
 

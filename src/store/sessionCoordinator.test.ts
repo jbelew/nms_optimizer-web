@@ -1,6 +1,61 @@
-import { describe, expect, it } from "vitest";
+import type { Grid } from "./grid/gridStore";
+import { describe, expect, it, vi } from "vitest";
 
-import { computeBonusStatus } from "./sessionCoordinator";
+import { computeBonusStatus, sessionCoordinator } from "./sessionCoordinator";
+
+const mockGridStore = {
+	setBuildName: vi.fn(),
+	setGrid: vi.fn(),
+	setIsSharedGrid: vi.fn(),
+	setResult: vi.fn(),
+};
+
+const mockTechStore = {
+	clearResult: vi.fn(),
+	clearTechGroups: vi.fn(),
+};
+
+const mockTechBonusStore = {
+	clearAllBonusStatus: vi.fn(),
+};
+
+const mockModuleSelectionStore = {
+	clearAllModuleSelections: vi.fn(),
+};
+
+const mockInteractionStore = {
+	clearInteractionState: vi.fn(),
+};
+
+vi.mock("./grid/gridStore", () => ({
+	useGridStore: {
+		getState: vi.fn(() => mockGridStore),
+	},
+}));
+
+vi.mock("./tech/techStore", () => ({
+	useTechStore: {
+		getState: vi.fn(() => mockTechStore),
+	},
+}));
+
+vi.mock("./tech/techBonusStore", () => ({
+	useTechBonusStore: {
+		getState: vi.fn(() => mockTechBonusStore),
+	},
+}));
+
+vi.mock("./tech/moduleSelectionStore", () => ({
+	useModuleSelectionStore: {
+		getState: vi.fn(() => mockModuleSelectionStore),
+	},
+}));
+
+vi.mock("./grid/interactionStore", () => ({
+	useInteractionStore: {
+		getState: vi.fn(() => mockInteractionStore),
+	},
+}));
 
 describe("computeBonusStatus rounding", () => {
 	it("correctly rounds numbers that would fail with the scientific notation hack", () => {
@@ -25,5 +80,18 @@ describe("computeBonusStatus rounding", () => {
 		// 100.01 * 100 = 10001.000000000002 sometimes
 		expect(computeBonusStatus(100.01)).toEqual({ icon: "lightning", percent: 0.01 });
 		expect(computeBonusStatus(99.99)).toEqual({ icon: "warning", percent: 0.01 });
+	});
+});
+
+describe("sessionCoordinator", () => {
+	it("switchPlatform resets the optimization result in gridStore", () => {
+		const newGrid = { cells: [] } as unknown as Grid;
+
+		sessionCoordinator.switchPlatform(newGrid);
+
+		expect(mockGridStore.setGrid).toHaveBeenCalledWith(newGrid);
+		expect(mockGridStore.setResult).toHaveBeenCalledWith(null);
+		expect(mockGridStore.setIsSharedGrid).toHaveBeenCalledWith(false);
+		expect(mockGridStore.setBuildName).toHaveBeenCalledWith(null);
 	});
 });
