@@ -6,11 +6,56 @@ import {
 	calculateSMA,
 	computeLogNormalScore,
 	formatMetricValue,
+	getFormatter,
+	getMetricColor,
 	getPerformanceSummary,
 	getStatusColor,
 	getVersionChanges,
 	transformPerformanceData,
 } from "./PerformanceUtils";
+
+// ---------------------------------------------------------------------------
+// getMetricColor
+// ---------------------------------------------------------------------------
+describe("getMetricColor", () => {
+	it("returns correct color for known metrics with default weight", () => {
+		expect(getMetricColor("LCP")).toBe("var(--red-10)");
+		expect(getMetricColor("FCP")).toBe("var(--purple-10)");
+	});
+
+	it("returns correct color for known metrics with custom weight", () => {
+		expect(getMetricColor("LCP", 11)).toBe("var(--red-11)");
+		expect(getMetricColor("INP", "a3")).toBe("var(--amber-a3)");
+	});
+
+	it("returns fallback color for unknown metrics", () => {
+		expect(getMetricColor("UNKNOWN_METRIC")).toBe("var(--accent-10)");
+		expect(getMetricColor("UNKNOWN_METRIC", 5)).toBe("var(--accent-5)");
+	});
+});
+
+// ---------------------------------------------------------------------------
+// getFormatter
+// ---------------------------------------------------------------------------
+describe("getFormatter", () => {
+	it("returns an Intl.DateTimeFormat instance", () => {
+		const formatter = getFormatter("en-US", { month: "short" });
+		expect(formatter).toBeInstanceOf(Intl.DateTimeFormat);
+		expect(formatter.format(new Date(2023, 0, 1))).toMatch(/Jan/);
+	});
+
+	it("caches formatter instances for the same locale and options", () => {
+		const f1 = getFormatter("en-US", { month: "short" });
+		const f2 = getFormatter("en-US", { month: "short" });
+		expect(f1).toBe(f2);
+	});
+
+	it("creates new instances for different options", () => {
+		const f1 = getFormatter("en-US", { month: "short" });
+		const f2 = getFormatter("en-US", { month: "long" });
+		expect(f1).not.toBe(f2);
+	});
+});
 
 // ---------------------------------------------------------------------------
 // formatMetricValue
@@ -568,6 +613,24 @@ describe("transformPerformanceData", () => {
 		expect(chartData.length).toBeGreaterThan(0);
 	});
 
+	it("preserves version changes even when drastically subsampling", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+		const maxPoints = 5;
+
+		// Create 20 data points with rapid version changes
+		const raw = Array.from({ length: 20 }, (_, i) =>
+			makeMetric(baseTs + i * hourMs, "LCP", 2500, `v${Math.floor(i / 2)}`)
+		);
+
+		const { chartData } = transformPerformanceData(raw, "en", maxPoints, 1);
+
+		// The logic forces keeping first, last, and version changes.
+		// Since there are 10 versions, there are 9 version changes + first/last.
+		// Even though maxPoints is 5, it should keep all version changes.
+		expect(chartData.length).toBeGreaterThanOrEqual(10);
+	});
+
 	it("returns high-resolution summary data independent of sampling", () => {
 		const hourMs = 3600000;
 		const baseTs = 1619370000000;
@@ -670,5 +733,41 @@ describe("transformPerformanceData", () => {
 		const lastPoint = chartData[chartData.length - 1];
 		expect(lastPoint.appVersion).toBe("LIVE");
 		expect(lastPoint.originalVersion).toBe("v1.0.0");
+	});
+
+	it("computes overall weighted scores using fallback for p50/p90 if missing", () => {
+		// Specifically omitting p50 and p90 to trigger the fallback to p75 (or original)
+		const raw = [
+			{
+				app_version: "v1",
+				average_value: 2500,
+				metric_name: "LCP",
+				p75: 2500,
+				timestamp: 1619370000000,
+			} as PerformanceMetric,
+		];
+		const { chartData } = transformPerformanceData(raw, "en", 72, 1, 3);
+
+		const dataPoint = chartData.find((p) => p.overall_p75 !== undefined);
+		expect(dataPoint).toBeDefined();
+		expect(dataPoint!.overall_p50).toBeDefined();
+		expect(dataPoint!.overall_p90).toBeDefined();
+	});
+
+	it("creates virtual LIVE version only if displayDate exists", () => {
+		const hourMs = 3600000;
+		const baseTs = 1619370000000;
+		const raw = [
+			makeMetric(baseTs, "LCP", 2000), // T-5h
+			makeMetric(baseTs + hourMs, "LCP", 2000), // T-4h
+			// Gap of 3 hours
+			makeMetric(baseTs + 5 * hourMs, "LCP", 3000), // T (latest)
+		];
+
+		const { chartData } = transformPerformanceData(raw, "en", 72, 1);
+
+		// The last point has valid data, so it gets the LIVE tag
+		const lastPoint = chartData[chartData.length - 1];
+		expect(lastPoint.appVersion).toBe("LIVE");
 	});
 });
