@@ -16,17 +16,17 @@ Focus on removing dead code and unused imports to clarify the dependency graph.
 - [x] **Task 4: Cleanup - Consolidate idle execution (P1, P2)** <!-- files: src/main.tsx, src/store/grid/gridStore.ts, src/utils/system/idle.ts --> be9664a
   - Extract `requestIdleCallback` polyfill to a shared utility `runWhenIdle(fn, { timeout })` in `src/utils/system/idle.ts`.
   - Migrate `main.tsx` and `gridStore.ts` cleanup logic to use this utility.
-- [~] **Task 5: Conductor - User Manual Verification 'Phase 1: Cleanup & Low-Hanging Fruit' (Protocol in workflow.md)**
+- [x] **Task 5: Conductor - User Manual Verification 'Phase 1: Cleanup & Low-Hanging Fruit' (Protocol in workflow.md)** fe10760
 
 ## Phase 2: Logic Improvements & Bug Fixes <!-- execution: parallel --> <!-- depends: -->
 Fixing rounding issues, potential regressions, and brittle logic.
 
-- [ ] **Task 1: Fix - Replace scientific-notation rounding in `computeBonusStatus` (NEW5)** <!-- files: src/store/sessionCoordinator.ts, src/store/sessionCoordinator.test.ts -->
+- [x] **Task 1: Fix - Replace scientific-notation rounding in `computeBonusStatus` (NEW5)** <!-- files: src/store/sessionCoordinator.ts, src/store/sessionCoordinator.test.ts --> 290018c
   - Replace scientific-notation hack with `Math.round(val * 100) / 100` or similar reliable method.
   - Add unit tests in `sessionCoordinator.test.ts`.
-- [ ] **Task 2: Fix - Ensure `switchPlatform` resets `result` (NEW6)** <!-- files: src/store/sessionCoordinator.ts, src/store/grid/gridStore.ts --> <!-- depends: Task 1 -->
+- [x] **Task 2: Fix - Ensure `switchPlatform` resets `result` (NEW6)** <!-- files: src/store/sessionCoordinator.ts, src/store/sessionCoordinator.test.ts --> e07ff8b
   - Add `setResult(null)` to `switchPlatform` in `sessionCoordinator.ts` or `gridStore.ts` to prevent stale optimization results.
-- [ ] **Task 3: Refactor - Consolidate Language Derivation (N2)** <!-- files: src/hooks/useSupportedLanguages.ts, src/context/dialogContext.tsx, src/components/Seo/Seo.tsx, src/hooks/useSeoAndTitle/useSeoAndTitle.ts, src/hooks/useLanguage.ts -->
+- [~] **Task 3: Refactor - Consolidate Language Derivation (N2)** <!-- files: src/hooks/useSupportedLanguages.ts, src/context/dialogContext.tsx, src/components/Seo/Seo.tsx, src/hooks/useSeoAndTitle/useSeoAndTitle.ts, src/hooks/useLanguage.ts -->
   - Extract `useSupportedLanguages` hook or a shared utility to derive the language list dynamically from `i18n.services.resourceStore.data`.
   - Update `dialogContext.tsx`, `Seo.tsx`, `useSeoAndTitle.ts`, and `useLanguage.ts` to use this single source of truth.
 - [ ] **Task 4: Refactor - Optimize `dialogContext` type matching (N3)** <!-- files: src/context/dialogContext.tsx --> <!-- depends: Task 3 -->

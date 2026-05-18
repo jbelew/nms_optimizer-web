@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
+import { useSupportedLanguages } from "@/hooks/useSupportedLanguages";
+
 import { seoMetadata } from "../../../shared/seo-metadata.js";
 import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../../../shared/seo-schema.js";
 
@@ -13,6 +15,7 @@ import { getLocalizedSchema, getOgLocale, OG_LOCALE_MAP } from "../../../shared/
 export const Seo: React.FC = () => {
 	const { i18n, t } = useTranslation();
 	const location = useLocation();
+	const supportedLangs = useSupportedLanguages();
 
 	const {
 		canonicalUrl,
@@ -22,11 +25,9 @@ export const Seo: React.FC = () => {
 		pageKeywords,
 		pageTitle,
 		schemas,
-		supportedLangs,
 	} = useMemo(() => {
 		// Handle language-prefixed routes to determine the base path
 		const pathParts = location.pathname.split("/").filter(Boolean);
-		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
 		const basePath = supportedLangs.includes(pathParts[0])
 			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
 			: location.pathname;
@@ -66,9 +67,8 @@ export const Seo: React.FC = () => {
 			pageKeywords,
 			pageTitle,
 			schemas,
-			supportedLangs,
 		};
-	}, [location.pathname, i18n.language, t, i18n.services.resourceStore.data]);
+	}, [location.pathname, i18n.language, t, supportedLangs]);
 
 	const baseUrl = "https://nms-optimizer.app";
 	const ogImageUrl = `${baseUrl}/assets/img/screenshots/screenshot.png`;

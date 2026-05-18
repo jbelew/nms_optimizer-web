@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { getSupportedLanguages } from "@/hooks/useSupportedLanguages";
 import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/environment";
 import { DialogContext } from "@/utils/system/dialogUtils";
-
-/** List of non-English language codes supported by the router. */
-const OTHER_LANGUAGES = ["es", "fr", "de", "pt", "it"];
 
 /**
  * Provider component for managing the state and logic of routed dialogs.
@@ -70,7 +68,8 @@ export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const pathParts = location.pathname.split("/").filter(Boolean);
 	const langCand = pathParts[0];
 
-	const dialogPath: DialogType = OTHER_LANGUAGES.includes(langCand)
+	const supportedLangs = getSupportedLanguages(i18n);
+	const dialogPath: DialogType = supportedLangs.includes(langCand)
 		? (pathParts[1] as DialogType) || null
 		: (pathParts[0] as DialogType) || null;
 

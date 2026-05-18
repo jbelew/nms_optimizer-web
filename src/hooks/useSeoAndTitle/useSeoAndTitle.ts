@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { sendEvent } from "@/utils/analytics/tracking";
 
 import { seoMetadata } from "../../../shared/seo-metadata.js";
+import { getSupportedLanguages } from "../useSupportedLanguages";
 
 /**
  * Custom hook for managing SEO side-effects like analytics and document language.
@@ -24,7 +25,7 @@ export const useSeoAndTitle = () => {
 	useEffect(() => {
 		// Handle language-prefixed routes to determine the base path
 		const pathParts = location.pathname.split("/").filter(Boolean);
-		const supportedLangs = Object.keys(i18n.services.resourceStore.data || {});
+		const supportedLangs = getSupportedLanguages(i18n);
 		const basePath = supportedLangs.includes(pathParts[0])
 			? `/${pathParts.slice(1).join("/")}${pathParts.length > 1 ? "/" : ""}`
 			: location.pathname;
