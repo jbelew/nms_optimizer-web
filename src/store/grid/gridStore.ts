@@ -102,7 +102,7 @@ type SetItemFunction = (name: string, value: StorageValue<Partial<GridStore>>) =
  * @example
  * ```typescript
  * const debouncedSet = debounceSetItem(mySetFn, 500);
- * await debouncedSet("myKey", { state: { ... }, version: 1 });
+ * await debouncedSet("myKey", { state: { ... } });
  * ```
  */
 function debounceSetItem(
@@ -360,8 +360,6 @@ export interface GridState {
 	result: ApiResponse | null;
 	/** Whether the locations of supercharged slots are locked. */
 	superchargedFixed: boolean;
-	/** Version of the persisted state schema. */
-	version: number;
 }
 
 /**
@@ -907,8 +905,6 @@ export const useGridStore = create<GridStore>()(
 						recomputeDerivedState(state);
 					});
 				},
-
-				version: 1, // Initialize version to 1
 			};
 		}),
 		{
@@ -945,7 +941,6 @@ export const useGridStore = create<GridStore>()(
 				return dataToPersist;
 			},
 			storage: debouncedStorage,
-			version: 1, // Current version of the storage schema
 		}
 	)
 );
