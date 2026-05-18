@@ -9,10 +9,15 @@ import { useTechStore } from "./tech/techStore";
 
 /**
  * Orchestrates the calculation of bonus status data based on max bonus.
+ *
+ * @param {number} maxBonus - The maximum bonus value to evaluate.
+ *
+ * @returns {BonusStatusData} The calculated icon and percentage.
+ *
+ * @internal
  */
-function computeBonusStatus(maxBonus: number): BonusStatusData {
-	const rounded = Math.round(Number(maxBonus + "e" + 2)) + "e-" + 2;
-	const roundedMaxBonus = Number(rounded);
+export function computeBonusStatus(maxBonus: number): BonusStatusData {
+	const roundedMaxBonus = Math.round(maxBonus * 100) / 100;
 
 	if (roundedMaxBonus < 100) {
 		const percent = Math.round((100 - roundedMaxBonus) * 100) / 100;
