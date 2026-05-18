@@ -38,12 +38,6 @@ const OfflineBanner = lazy(() => import("./components/OfflineBanner/OfflineBanne
 const ShareLinkDialog = lazy(() => import("./components/AppDialog/ShareLink/ShareLinkDialog"));
 
 /**
- * Lazy-loaded component for the base dialog structure.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const AppDialog = lazy(() => import("./components/AppDialog/Base/AppDialog"));
-
-/**
  * Lazy-loaded content for the initial application welcome and introduction.
  */
 const WelcomeContent = lazy(() => import("./components/AppDialog/Welcome/WelcomeContent"));
