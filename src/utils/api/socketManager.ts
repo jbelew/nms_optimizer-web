@@ -12,7 +12,6 @@
  */
 
 import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
-import { io } from "socket.io-client";
 
 import { WS_URL } from "@/constants";
 import { Logger } from "@/utils/system/monitoring";
@@ -46,7 +45,7 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  * Uses the global `WS_URL` and predefined `SOCKET_OPTIONS`. Includes
  * internal logging for connection lifecycle tracking.
  *
- * @returns {Socket | null} A new `Socket` instance, or `null` if initialization fails.
+ * @returns {Promise<Socket | null>} A new `Socket` instance, or `null` if initialization fails.
  *
  * @see {@link WS_URL}
  * @see {@link SOCKET_OPTIONS}
@@ -55,16 +54,18 @@ export const SOCKET_OPTIONS: Partial<ManagerOptions & SocketOptions> = {
  *
  * @example
  * ```ts
- * const socket = createSocket();
+ * const socket = await createSocket();
  * if (socket) {
  *   socket.on("connect", () => console.log("Connected!"));
  * }
  * // returns Socket or null
  * ```
  */
-export const createSocket = (): null | Socket => {
+export const createSocket = async (): Promise<null | Socket> => {
 	try {
 		Logger.info("Creating new WebSocket connection", { url: WS_URL });
+
+		const { io } = await import("socket.io-client");
 
 		return io(WS_URL, SOCKET_OPTIONS);
 	} catch (error) {

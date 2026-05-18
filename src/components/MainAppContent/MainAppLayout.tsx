@@ -15,7 +15,6 @@ import {
 import { LanguageSelector } from "@/components/LanguageSelector/languageSelector";
 import { MessageSpinner } from "@/components/MessageSpinner/messageSpinner";
 import { MobileToolbar } from "@/components/MobileToolbar/MobileToolbar";
-import { SharedModuleSelectionDialog } from "@/components/ModuleSelectionDialog/SharedModuleSelectionDialog";
 import {
 	ShipSelectionContent,
 	ShipSelectionProvider,
@@ -56,6 +55,11 @@ const InstallPrompt = lazy(() =>
 );
 const ToastRenderer = lazy(() =>
 	import("@/components/Toast/ToastRenderer").then((m) => ({ default: m.ToastRenderer }))
+);
+const SharedModuleSelectionDialog = lazy(() =>
+	import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog").then((m) => ({
+		default: m.SharedModuleSelectionDialog,
+	}))
 );
 
 /**
@@ -387,7 +391,9 @@ const MainAppSidebarContent: React.FC = () => {
 					</TechTreeRoot>
 				</>
 			)}
-			<SharedModuleSelectionDialog />
+			<Suspense fallback={null}>
+				<SharedModuleSelectionDialog />
+			</Suspense>
 		</TechTreeProvider>
 	);
 };

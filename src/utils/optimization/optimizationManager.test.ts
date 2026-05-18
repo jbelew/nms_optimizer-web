@@ -61,7 +61,9 @@ describe("OptimizationManager", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockCreateSocket.mockImplementation(() => createMockSocket() as unknown as Socket);
+		mockCreateSocket.mockImplementation(() =>
+			Promise.resolve(createMockSocket() as unknown as Socket)
+		);
 
 		mockUseGridStore.getState.mockReturnValue({
 			grid: {
@@ -82,7 +84,7 @@ describe("OptimizationManager", () => {
 		} as unknown as PlatformState);
 	});
 
-	it("should retry on transport error and finally fail after MAX_TRANSPORT_RETRIES", () => {
+	it("should retry on transport error and finally fail after MAX_TRANSPORT_RETRIES", async () => {
 		const onError = vi.fn();
 		const onComplete = vi.fn();
 		const onProgress = vi.fn();
@@ -96,9 +98,9 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
+		await manager.start();
 		expect(mockCreateSocket).toHaveBeenCalledTimes(1);
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 
 		// Trigger first transport error
 		const handleError1 = (
@@ -110,7 +112,7 @@ describe("OptimizationManager", () => {
 		expect(mockCreateSocket).toHaveBeenCalledTimes(2);
 
 		// Trigger second transport error on the new socket
-		const secondSocket = mockCreateSocket.mock.results[1].value as Socket;
+		const secondSocket = await mockCreateSocket.mock.results[1].value;
 		const handleError2 = (
 			(secondSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
@@ -120,7 +122,7 @@ describe("OptimizationManager", () => {
 		expect(mockCreateSocket).toHaveBeenCalledTimes(3);
 
 		// Trigger third transport error on the third socket (retryCount 2, MAX is 2)
-		const thirdSocket = mockCreateSocket.mock.results[2].value as Socket;
+		const thirdSocket = await mockCreateSocket.mock.results[2].value;
 		const handleError3 = (
 			(thirdSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "connect_error")?.[1] as (err: Error) => void;
@@ -131,7 +133,7 @@ describe("OptimizationManager", () => {
 		expect(onError).toHaveBeenCalledWith(expect.any(Error));
 	});
 
-	it("should complete successfully after a retry", () => {
+	it("should complete successfully after a retry", async () => {
 		const onComplete = vi.fn();
 		const manager = new OptimizationManager({
 			onComplete,
@@ -141,8 +143,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 
 		// Trigger transport error
 		const handleError = (
@@ -153,7 +155,7 @@ describe("OptimizationManager", () => {
 		expect(mockCreateSocket).toHaveBeenCalledTimes(2);
 
 		// Trigger success on the second attempt
-		const secondSocket = mockCreateSocket.mock.results[1].value as Socket;
+		const secondSocket = await mockCreateSocket.mock.results[1].value;
 		const handleResult = (
 			(secondSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
@@ -169,7 +171,7 @@ describe("OptimizationManager", () => {
 		expect(onComplete).toHaveBeenCalledWith(mockResponse);
 	});
 
-	it("should handle progress updates", () => {
+	it("should handle progress updates", async () => {
 		const onProgress = vi.fn();
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),
@@ -179,8 +181,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 		const handleProgress = (
 			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "progress")?.[1] as (data: {
@@ -191,7 +193,7 @@ describe("OptimizationManager", () => {
 		expect(onProgress).toHaveBeenCalledWith({ progress_percent: 50 });
 	});
 
-	it("should handle Pattern No Fit response", () => {
+	it("should handle Pattern No Fit response", async () => {
 		const onPatternNoFit = vi.fn();
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),
@@ -201,8 +203,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 		const handleResult = (
 			(firstSocket.once as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "optimization_result")?.[1] as (data: ApiResponse) => void;
@@ -216,7 +218,7 @@ describe("OptimizationManager", () => {
 		expect(onPatternNoFit).toHaveBeenCalled();
 	});
 
-	it("should handle genuine disconnect as error", () => {
+	it("should handle genuine disconnect as error", async () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),
@@ -226,8 +228,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 		const handleDisconnect = (
 			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "disconnect")?.[1] as (reason: string) => void;
@@ -238,7 +240,7 @@ describe("OptimizationManager", () => {
 		);
 	});
 
-	it("should handle transport close by calling onError (for UI state reset)", () => {
+	it("should handle transport close by calling onError (for UI state reset)", async () => {
 		const onError = vi.fn();
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),
@@ -248,8 +250,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const firstSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const firstSocket = await mockCreateSocket.mock.results[0].value;
 		const handleDisconnect = (
 			(firstSocket.on as unknown as Mock).mock.calls as unknown as [string, unknown][]
 		).find((call) => call[0] === "disconnect")?.[1] as (reason: string) => void;
@@ -260,10 +262,10 @@ describe("OptimizationManager", () => {
 		);
 	});
 
-	it("should handle socket connection if not immediately connected", () => {
+	it("should handle socket connection if not immediately connected", async () => {
 		const mockSocket = createMockSocket();
 		Object.defineProperty(mockSocket, "connected", { value: false, writable: true });
-		mockCreateSocket.mockImplementation(() => mockSocket as unknown as Socket);
+		mockCreateSocket.mockImplementation(() => Promise.resolve(mockSocket as unknown as Socket));
 
 		const manager = new OptimizationManager({
 			onComplete: vi.fn(),
@@ -273,7 +275,7 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
+		await manager.start();
 		expect(mockSocket.emit).not.toHaveBeenCalled();
 
 		const handleConnect = (
@@ -283,7 +285,7 @@ describe("OptimizationManager", () => {
 		expect(mockSocket.emit).toHaveBeenCalledWith("optimize", expect.any(Object));
 	});
 
-	it("should include modules and solve_type in the payload", () => {
+	it("should include modules and solve_type in the payload", async () => {
 		mockUseTechStore.getState.mockReturnValue({
 			activeGroups: { pulse: "group1" },
 			checkedModules: { pulse: ["module1"] },
@@ -298,8 +300,8 @@ describe("OptimizationManager", () => {
 			tech: "pulse",
 		});
 
-		manager.start();
-		const mockSocket = mockCreateSocket.mock.results[0].value as Socket;
+		await manager.start();
+		const mockSocket = await mockCreateSocket.mock.results[0].value;
 		expect(mockSocket.emit).toHaveBeenCalledWith(
 			"optimize",
 			expect.objectContaining({

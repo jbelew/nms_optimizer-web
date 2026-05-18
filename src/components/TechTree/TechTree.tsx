@@ -1,8 +1,7 @@
 // src/components/TechTree/TechTree.tsx
 import type { TechTree as TechTreeType } from "@/hooks/useTechTree/useTechTree";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 
-import { SharedModuleSelectionDialog } from "@/components/ModuleSelectionDialog/SharedModuleSelectionDialog";
 import { useFetchTechTreeSuspense } from "@/hooks/useTechTree/useTechTree";
 import { usePlatformStore } from "@/store/app/platformStore";
 import { useGridStore } from "@/store/grid/gridStore";
@@ -23,6 +22,20 @@ export { TechTreeRoot } from "./TechTreeRoot";
 export { TechTreeSkeleton } from "./TechTreeSkeleton";
 
 /**
+ * Lazy-loaded component for the shared module selection dialog.
+ *
+ * @remarks
+ * This dynamic import is critical for bundle-splitting. It extracts the heavy module
+ * selection interface and its Radix UI components (Avatar, Checkbox, Tooltip, etc.)
+ * from the critical startup chunk, reducing initial JS load size and TBT.
+ */
+const SharedModuleSelectionDialog = lazy(() =>
+	import("@/components/ModuleSelectionDialog/SharedModuleSelectionDialog").then((m) => ({
+		default: m.SharedModuleSelectionDialog,
+	}))
+);
+
+/**
  * Properties for the {@link TechTree} component.
  */
 interface TechTreeProps {
@@ -37,7 +50,25 @@ interface TechTreeProps {
 }
 
 /**
- * Composite component for the TechTree.
+ * Composite component for rendering the technology tree.
+ *
+ * @remarks
+ * The `TechTree` component acts as the high-level manager for display and interaction
+ * within the technology panel. It leverages {@link TechTreeProvider} to pass core optimization states,
+ * renders child rows, and dynamically inserts {@link SharedModuleSelectionDialog} wrapped in `Suspense`.
+ *
+ * @param {TechTreeProps} props - Component properties.
+ *
+ * @returns {JSX.Element} The rendered technology tree layout.
+ *
+ * @see {@link TechTreeProvider}
+ * @see {@link SharedModuleSelectionDialog}
+ * @see {@link ./TechTree.test.tsx Unit Tests}
+ * @see {@link ./TechTree.stories.tsx Storybook}
+ *
+ * @component
+ *
+ * @category Components
  */
 export const TechTree: React.FC<TechTreeProps> = ({
 	handleOptimize,
@@ -58,7 +89,9 @@ export const TechTree: React.FC<TechTreeProps> = ({
 				<TechTreeList techTree={techTree} />
 			</TechTreeRoot>
 			<TechTreeRecommended techTree={techTree} />
-			<SharedModuleSelectionDialog />
+			<Suspense fallback={null}>
+				<SharedModuleSelectionDialog />
+			</Suspense>
 		</TechTreeProvider>
 	);
 };
