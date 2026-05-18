@@ -92,7 +92,8 @@ const PerformanceRoute = lazy(() =>
  */
 const AppContent: FC = () => {
 	const { sendEvent } = useAnalytics();
-	const { errorType, showError } = useOptimizeStore();
+	const showError = useOptimizeStore((s) => s.showError);
+	const errorType = useOptimizeStore((s) => s.errorType);
 	const { activeDialog, closeDialog, markUserVisited, shareUrl, userVisited } = useDialog();
 	const { t } = useTranslation();
 	const location = useLocation();

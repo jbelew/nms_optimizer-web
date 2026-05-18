@@ -34,7 +34,8 @@ const ErrorContent = lazy(() => import("./ErrorContent"));
  */
 export const ErrorDialog: FC = () => {
 	const { t } = useTranslation();
-	const { setShowError, showError } = useOptimizeStore();
+	const showError = useOptimizeStore((s) => s.showError);
+	const setShowError = useOptimizeStore((s) => s.setShowError);
 
 	if (!showError) {
 		return null;

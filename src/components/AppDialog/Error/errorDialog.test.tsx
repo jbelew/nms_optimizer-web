@@ -56,9 +56,13 @@ describe("ErrorDialog", () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			setShowError: mockSetShowError,
-			showError: false,
+		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
+			const state = {
+				setShowError: mockSetShowError,
+				showError: false,
+			};
+
+			return selector ? selector(state) : state;
 		});
 	});
 
@@ -68,9 +72,13 @@ describe("ErrorDialog", () => {
 	});
 
 	test("should render when showError is true", async () => {
-		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			setShowError: mockSetShowError,
-			showError: true,
+		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
+			const state = {
+				setShowError: mockSetShowError,
+				showError: true,
+			};
+
+			return selector ? selector(state) : state;
 		});
 
 		render(<ErrorDialog />);
@@ -80,9 +88,13 @@ describe("ErrorDialog", () => {
 	});
 
 	test("should call setShowError(false) when dialog is closed", async () => {
-		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-			setShowError: mockSetShowError,
-			showError: true,
+		(useOptimizeStore as unknown as ReturnType<typeof vi.fn>).mockImplementation((selector) => {
+			const state = {
+				setShowError: mockSetShowError,
+				showError: true,
+			};
+
+			return selector ? selector(state) : state;
 		});
 
 		render(<ErrorDialog />);
