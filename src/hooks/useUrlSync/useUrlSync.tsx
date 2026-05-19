@@ -64,12 +64,14 @@ export const useUrlSync = () => {
 	const isSyncingRef = useRef(false);
 	const shipTypesRef = useRef(shipTypes);
 	const isKnownRouteRef = useRef(isKnownRoute);
+	const deserializeGridRef = useRef(deserializeGrid);
 
 	// Keep refs up to date
 	useEffect(() => {
 		shipTypesRef.current = shipTypes;
 		isKnownRouteRef.current = isKnownRoute;
-	}, [shipTypes, isKnownRoute]);
+		deserializeGridRef.current = deserializeGrid;
+	}, [shipTypes, isKnownRoute, deserializeGrid]);
 
 	// Effect to handle initial URL state and popstate events
 	useEffect(() => {
@@ -134,7 +136,7 @@ export const useUrlSync = () => {
 				// Sync grid from URL to store
 				// Grid deserialization will use the platform that was just synced above
 				if (gridFromUrl) {
-					deserializeGrid(gridFromUrl);
+					deserializeGridRef.current(gridFromUrl);
 				} else {
 					const {
 						isSharedGrid: currentIsSharedGrid,
@@ -163,9 +165,8 @@ export const useUrlSync = () => {
 	}, [
 		isKnownRoute,
 		setSelectedShipTypeInStore,
-		deserializeGrid,
-		// Removing selectedShipTypeFromStore and isSharedGrid from dependencies
-		// to break the infinite loop triggered by store persistence
+		// Removing deserializeGrid from dependencies to break the infinite loop
+		// triggered by selectedPlatform changes which re-create deserializeGrid
 	]);
 
 	/**

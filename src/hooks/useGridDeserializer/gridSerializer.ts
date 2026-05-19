@@ -15,7 +15,7 @@ const SERIALIZATION_VERSION = "v1";
 /**
  * Character codes used in the grid serialization format.
  */
-export const GRID_SERIALIZATION_CONSTANTS = {
+const GRID_SERIALIZATION_CONSTANTS = {
 	DELIMITER_CHAR: "|",
 	DELIMITER_CODE: 124,
 	MODULE_START_CODE: 65,
@@ -42,7 +42,7 @@ export const GRID_SERIALIZATION_CONSTANTS = {
  * // returns "A4B3C2"
  * ```
  */
-export const compressRLE = (input: string): string => {
+const compressRLE = (input: string): string => {
 	if (!input) return "";
 	let compressed = "";
 	let count = 1;
@@ -85,7 +85,7 @@ export const compressRLE = (input: string): string => {
  * // returns "AAAABBBCC"
  * ```
  */
-export const decompressRLE = (input: string): string => {
+const decompressRLE = (input: string): string => {
 	if (!input) return "";
 	let decompressed = "";
 	let i = 0;

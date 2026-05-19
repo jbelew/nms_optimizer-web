@@ -9,8 +9,13 @@ import { safeGetItem, safeRemoveItem, safeSetItem } from "@/utils/browser/enviro
 const SHAKE_ANIMATION_DURATION = 500;
 let lastShakeTime = 0;
 
+/**
+ * Combined type representing both the state and actions of the global UI store.
+ */
+export type UiStore = UiActions & UiState;
+
 /** Data payload describing the technology whose dialog is currently open. */
-export interface SelectedTechData {
+interface SelectedTechData {
 	/** The unique technology key (e.g., 'pulse'). */
 	tech: string;
 	/** Theme color for the technology icon/avatar. */
@@ -20,10 +25,10 @@ export interface SelectedTechData {
 }
 
 /** Valid theme appearance types. */
-export type ThemeAppearance = "dark" | "light";
+type ThemeAppearance = "dark" | "light";
 
 /** Actions shape for the UI store. */
-export interface UiActions {
+interface UiActions {
 	/** Close the module selection dialog and clear its state. */
 	closeModuleSelectionDialog: () => void;
 	/** Open the module selection dialog with specific tech data. */
@@ -39,7 +44,7 @@ export interface UiActions {
 }
 
 /** State shape for the UI store. */
-export interface UiState {
+interface UiState {
 	/** Current theme appearance. */
 	appearance: ThemeAppearance;
 	/** Whether the module selection dialog is visible. */
@@ -51,11 +56,6 @@ export interface UiState {
 	/** Incremental counter used to trigger re-renders in components observing shake. */
 	shakeCount: number;
 }
-
-/**
- * Combined type representing both the state and actions of the global UI store.
- */
-export type UiStore = UiActions & UiState;
 
 /**
  * Consolidated Zustand store managing global UI states:
@@ -132,7 +132,7 @@ export interface ShakeState {
 /**
  * Shape of the backward-compatible TechTreeLoadingState interface.
  */
-export interface TechTreeLoadingState {
+interface TechTreeLoadingState {
 	isLoading: boolean;
 	setLoading: (isLoading: boolean) => void;
 }
@@ -140,7 +140,7 @@ export interface TechTreeLoadingState {
 /**
  * Shape of the backward-compatible ThemeState interface.
  */
-export interface ThemeState {
+interface ThemeState {
 	appearance: ThemeAppearance;
 	setAppearance: (appearance: ThemeAppearance) => void;
 	toggleAppearance: () => void;
@@ -173,9 +173,7 @@ export const useShakeStore = Object.assign(
 				triggerShake: s.triggerShake,
 			};
 		},
-		subscribe: (
-			listener: (state: ShakeState) => void
-		) => {
+		subscribe: (listener: (state: ShakeState) => void) => {
 			return useUiStore.subscribe((s) => {
 				listener({
 					shakeCount: s.shakeCount,
@@ -189,9 +187,7 @@ export const useShakeStore = Object.assign(
 /**
  * Backward-compatible custom hook for the application's theme management.
  */
-export const useThemeStore = <T = ThemeState>(
-	selector?: (state: ThemeState) => T
-): T => {
+export const useThemeStore = <T = ThemeState>(selector?: (state: ThemeState) => T): T => {
 	return useUiStore(
 		useShallow((s) => {
 			const subState: ThemeState = {

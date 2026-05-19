@@ -103,4 +103,4 @@ export const useGridDeserializer = () => {
 	return { deserializeGrid, serializeGrid };
 };
 
-export { compressRLE, decompressRLE, deserialize, serialize } from "./gridSerializer";
+export { deserialize, serialize } from "./gridSerializer";

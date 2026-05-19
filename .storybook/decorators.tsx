@@ -1,7 +1,7 @@
 import React from "react";
 import { createGrid, useGridStore } from "../src/store/grid/gridStore";
 import { usePlatformStore } from "../src/store/app/platformStore";
-import { useTechTreeLoadingStore } from "../src/store/tech/techTreeLoadingStore";
+import { useTechTreeLoadingStore } from "../src/store/ui/uiStore";
 import { useTechStore } from "../src/store/tech/techStore";
 
 /**
