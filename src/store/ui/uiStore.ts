@@ -75,7 +75,7 @@ type OptimizeStatus =
  * Data payload describing the technology whose dialog is currently open.
  *
  * @remarks
- * Used by the {@link ModuleSelectionDialog} to determine which technology's
+ * Used by the `ModuleSelectionDialog` to determine which technology's
  * modules to display and how to style the header (via `techColor`).
  *
  * @category State
